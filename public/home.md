@@ -67,5 +67,3 @@ Anyway, my GitHub will mainly list all of my projects and their progress in real
 Know that I love the age of my projects; I love seeing dates that get older and older on my own repos, so it’s not out of the question that my profile repo might have a spoofed commit date! 😁
 
 Means now I'm writing blogs, and I ~~will add~~ added back my main porfolio links in another section.
-
-<span style="color: yellow">🏗 THIS article is still in construction, please wait</span>

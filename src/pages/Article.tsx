@@ -39,7 +39,11 @@ export default function Article() {
         }
         return res.text();
       })
-      .then((text) => setContent(text))
+      .then((text) => {
+        // Treating assets link
+        const processed = text.replaceAll("assets/", "/articles/assets/");
+        setContent(processed);
+      })
       .catch(() => setError(true));
 
     // fetch metadata from index.json (if available)
@@ -55,7 +59,7 @@ export default function Article() {
           setMeta(found || null);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [slug]);
 
   if (error) {
