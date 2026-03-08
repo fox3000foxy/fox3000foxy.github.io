@@ -15,13 +15,23 @@ const sanitizeSchema = {
   },
 };
 
+interface ArticleMeta {
+  slug: string;
+  title?: string;
+  description?: string;
+  date?: string;
+}
+
 export default function Article() {
   const { slug } = useParams<{ slug: string }>();
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState(false);
+  const [meta, setMeta] = useState<ArticleMeta | null>(null);
 
   useEffect(() => {
     if (!slug) return;
+
+    // fetch markdown content
     fetch(`/articles/${slug}.md`)
       .then((res) => {
         if (!res.ok) {
@@ -31,6 +41,21 @@ export default function Article() {
       })
       .then((text) => setContent(text))
       .catch(() => setError(true));
+
+    // fetch metadata from index.json (if available)
+    fetch('/articles/index.json')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const normalized: ArticleMeta[] = data.map((item: any) =>
+            typeof item === 'string' ? { slug: item } : item
+          );
+          const found = normalized.find((a) => a.slug === slug);
+          setMeta(found || null);
+        }
+      })
+      .catch(() => {});
   }, [slug]);
 
   if (error) {
@@ -43,6 +68,11 @@ export default function Article() {
 
   return (
     <article>
+      {/* display metadata if available */}
+      {meta?.date && <p className="article-date">{meta.date}</p>}
+      {meta?.description && (
+        <p className="article-description">{meta.description}</p>
+      )}
       <ReactMarkdown
         rehypePlugins={[
           rehypeRaw,
