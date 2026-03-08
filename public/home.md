@@ -21,30 +21,7 @@ So basically I have a lot of hobbies, but my main hobby is coding while listenin
 
 ## Passions
 
-I wanted to write this blog long time ago but idk, holded myself to do it :/
-
-Maybe was it because I'd like to share my life but not my private infos? Somehow that's why I guess.
-
-My passions are various tho: so I love to code, as you noticed, but also I like to draw!
-Here are some of my drawings:
-
-<table style="width:100%;border-collapse:collapse;margin-top:1rem;">
-  <tr>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/430087066_362752016741701_1789090055850910350_n.png" alt="drawing1"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/430211211_1506393849948620_2289852538544570689_n.png" alt="drawing2"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/430306739_1096266581640599_4223690919449423402_n.png" alt="drawing3"/></td>
-  </tr>
-  <tr>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/430333617_1441291393440641_3513029838453039108_n.png" alt="drawing4"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/430351528_460519246393040_8676436084581333629_n.png" alt="drawing5"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/430829334_2216111272054528_1672689474813728089_n.png" alt="drawing6"/></td>
-  </tr>
-  <tr>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/430986791_2549915025169770_2055293833870974255_n.png" alt="drawing7"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/433170570_3705959496395744_465341575681966835_n.png" alt="drawing8"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="./uploads/433200108_444443761648586_2008342869375830981_n.png" alt="drawing9"/></td>
-  </tr>
-</table>
+I wrote a whole blog post about my passions — coding, drawing, automating things, discovering old tech and more. Check it out: [My Passions](/blog/my-passions)
 
 ## Packages
 
@@ -54,16 +31,22 @@ Sometimes I write npm packages, like [fetch-tor-proxy](https://www.npmjs.com/pac
 
 I have soooooooooo much projects. right now I have 146 repositories in total, only 103 are public! I will probably present them in the Blog section tho.
 
+NB: I have a lot of private repositories, and I don't want to talk about them, but they are mostly projects that I don't want to share with the world, or that are not finished yet, or that are just for fun and not really useful for anyone else than me. I also have some projects that are not on GitHub, like some Minecraft plugins that I made for Eminium Games, or some scripts that I use for myself.
+
+You can discover projects on [Project page](https://fox3000foxy.github.io/projects) and on my [GitHub profile](https://github.com/fox3000foxy)
+
 ## I work for
 
 Basically I worked for plenty of people! I'm friend with some Discord employees, and I know some content creators, like NTTS, Squiduu, HatsuOtaku, Sciences Trash, Sushi Nihiliste, or even the french storyteller Ego. I blocked What a Fail because he blocked me for a simple "Hello". Istg, those mfs dick heads. I know Belle Delphine, and ggu.bbu2 that I salute, and more!
 
 I don't want to know TV stars tho, as I think they are out of reach, and big headed as well. I'm sure plenty are nice, but show celebrities are most of the time selfish as hell...
 
+I can also add that I have a passion for automating things, and that I appear in a few videos by well-known creators, not to brag about it, but it means I've managed to carve out a small niche for myself.
+
 ## Ending note
 
-On this page I’m going to share my progress, my thoughts, and whatever I feel like sharing. That way you’ll know how I think.
+On this blog, I’m going to share my progress, my thoughts, and whatever I feel like sharing. That way you’ll know how I think.
 Anyway, my GitHub will mainly list all of my projects and their progress in real time.
 Know that I love the age of my projects; I love seeing dates that get older and older on my own repos, so it’s not out of the question that my profile repo might have a spoofed commit date! 😁
 
-Means now I'm writing blogs, and I ~~will add~~ added back my main porfolio links in another section.
+Means now I'm writing blogs, and I added back my main porfolio links in another section.

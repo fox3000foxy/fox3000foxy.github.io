@@ -54,6 +54,28 @@ const LANGUAGE_COLORS: Record<string, string> = {
   Vue: '#41b883',
 };
 
+const LANGUAGE_PRIORITY: string[] = [
+  'TypeScript',
+  'JavaScript',
+  'Python',
+  'Java',
+  'C#',
+  'C++',
+  'C',
+  'Kotlin',
+  'Rust',
+  'Go',
+  'Swift',
+  'Ruby',
+  'PHP',
+  'Shell',
+  'Lua',
+  'Dart',
+  'HTML',
+  'CSS',
+  'Vue',
+];
+
 export default function ProjectList() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,8 +83,17 @@ export default function ProjectList() {
   useEffect(() => {
     fetchAllRepos('fox3000foxy')
       .then((data) => {
-        const nonFork = data.filter((r) => !r.fork);
-        setRepos(nonFork);
+        const filtered = data
+          .filter((r) => !r.fork && r.language)
+          .sort((a, b) => {
+            const langA = LANGUAGE_PRIORITY.indexOf(a.language!);
+            const langB = LANGUAGE_PRIORITY.indexOf(b.language!);
+            const priorityA = langA === -1 ? LANGUAGE_PRIORITY.length : langA;
+            const priorityB = langB === -1 ? LANGUAGE_PRIORITY.length : langB;
+            if (priorityA !== priorityB) return priorityA - priorityB;
+            return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+          });
+        setRepos(filtered);
       })
       .catch(() => setRepos([]))
       .finally(() => setLoading(false));
@@ -88,9 +119,9 @@ export default function ProjectList() {
             >
               <div className="project-card-body">
                 <h3 className="project-card-title">{repo.name}</h3>
-                {repo.description && (
-                  <p className="project-card-desc">{repo.description}</p>
-                )}
+                <p className="project-card-desc">
+                  {repo.description ?? <em>No description provided.</em>}
+                </p>
               </div>
               <div className="project-card-footer">
                 {repo.language && (

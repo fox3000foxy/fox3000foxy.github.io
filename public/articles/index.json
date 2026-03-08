@@ -17,5 +17,11 @@
     "description": "A deep dive into this blog's internals: React, Vite, Markdown, the CI/CD pipeline, and the article-writing workflow.",
     "date": "2026-03-08",
     "aiGenerated": true
+  },
+  {
+    "slug": "my-passions",
+    "title": "My Passions",
+    "description": "Coding, drawing, automating things, discovering old tech, and more — a look into what drives me.",
+    "date": "2026-03-08"
   }
 ]
