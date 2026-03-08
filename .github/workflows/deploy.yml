@@ -56,14 +56,27 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
+    environment:
+      name: github-pages
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v3
 
-      - name: Deploy to GitHub Pages
-        uses: fox3000foxy/deploy-from-private-to-github-pages@v1
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
-          artifact: ${{ needs.build.outputs.artifact_id }}
-          repo: fox3000foxy/fox3000foxy.github.io
-          token: ${{ secrets.GITHUB_TOKEN }}
-        # the action will auto-detect the target pages repo and use a deploy branch by default
+          name: dist
+          path: dist
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact for Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
