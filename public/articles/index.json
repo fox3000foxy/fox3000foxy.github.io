@@ -4,5 +4,11 @@
     "title": "Hello World",
     "description": "A sample post for Fox's Blog.",
     "date": "2026-03-08"
+  },
+  {
+    "slug": "about-my-github-profile",
+    "title": "About My GitHub Profile",
+    "description": "A brief introduction to my GitHub profile.",
+    "date": "2026-03-08"
   }
 ]
