@@ -40,3 +40,24 @@
 .read-the-docs {
   color: #888;
 }
+
+/* blog layout */
+main {
+  padding: 6rem 2rem 2rem; /* extra top padding for fixed header */
+  color: #fff;
+}
+
+article {
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h2 {
+  color: #fff;
+}
+
+a {
+  color: #64b5f6;
+}
+
