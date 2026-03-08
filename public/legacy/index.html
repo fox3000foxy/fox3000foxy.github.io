@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<meta property="og:title" content="Fox3000foxy | Web Developer Portfolio">
+    <meta property="og:description" content="Hi, I'm Fox3000foxy, a web and NodeJS developer. I create open source projects and simulations.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fox3000foxy.com">
+    <!-- <meta property="og:image" content="https://fox3000foxy.com/pfp.png"> -->
+    <meta property="og:image" content="https://fox3000foxy.com/favicon.png">
+    <meta property="og:image:alt" content="Fox3000foxy's Portfolio Preview">
+    <meta property="og:site_name" content="Fox3000foxy Portfolio">
+
+    <title>Fox3000foxy | Portfolio</title>
+    <style>
+:root {
+    --bg-color: #1a0500;
+    --text-color: #ffffff;
+    --accent-color: #ff6600;
+    --card-bg: rgba(51, 17, 0, 0.8);
+    --gradient: linear-gradient(135deg, #ff6600, #ff0000);
+}
+body, html {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    height: 100%;
+    overflow-x: hidden;
+}
+body {
+    background: linear-gradient(45deg, #1a0500, #3d0c00);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+#animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: var(--bg-color);
+    overflow: hidden;
+}
+.particle {
+    position: absolute;
+    background: var(--accent-color);
+    border-radius: 50%;
+    opacity: 0.5;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+header {
+    text-align: center;
+    padding: 50px 0;
+}
+h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientFlow 10s ease infinite;
+}
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.profile-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-color);
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 102, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
+}
+.card {
+    background: var(--card-bg);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background: rgba(71, 27, 0, 0.9);
+}
+h2 {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.skills-container, .tools-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.skill, .tool {
+    background: var(--gradient);
+    color: var(--text-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.skill:hover, .tool:hover {
+    transform: scale(1.05);
+}
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+.social-link {
+    font-size: 2em;
+    color: var(--text-color);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.social-link:hover {
+    color: var(--accent-color);
+    transform: scale(1.2);
+}
+.project {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    position: relative;
+}
+.project::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+}
+a {
+    color: white;
+    text-decoration: none;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ff8533;
+}
+
+.social-link svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+    </style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="animated-bg"></div>
+    <div class="container">
+<header>
+    <img src="pfp.png" alt="Fox3000foxy" class="profile-pic">
+    <h1>Fox3000foxy</h1>
+    <p>Rickroll master | JS & AI Dev | French</p>
+</header>
+
+
+<section class="card">
+    <h2>About</h2>
+    <p>Hi, I'm Fox3000foxy, a web and NodeJS developer. I like to create open source projects and simulations. My skills include <i class="fab fa-html5"></i> HTML, <i class="fab fa-css3-alt"></i> CSS, <i class="fab fa-js"></i> Javascript, <i class="fab fa-php"></i> PHP, <i class="fab fa-python"></i> Python, <i class="fab fa-microsoft"></i> C#, <i class="fas fa-robot"></i> AIML, and <i class="fas fa-globe"></i> Web development. I am also proficient with tools like <i class="fab fa-node-js"></i> Node.js, <i class="fas fa-server"></i> Express.js, <i class="fab fa-discord"></i> Discord.js, <i class="fab fa-github"></i> GitHub, <i class="fab fa-git-alt"></i> Git, <i class="fab fa-docker"></i> Docker, and various Linux distributions including <i class="fab fa-linux"></i> Debian, <i class="fab fa-linux"></i> Arch Linux, and <i class="fab fa-linux"></i> Ubuntu.<br>Check my projects below an on my <i class="fab fa-github"></i> <!-- <a style="text-decoration:underline"> -->Github<!-- </a> -->!</p>
+</section>
+		
+		<section class="card" style="opacity: 1; transform: translateX(0px); transition: opacity 0.5s ease 0s, transform 0.5s ease 0s;">
+			<h2>Skills</h2>
+			<div class="skills-container">
+				<span class="skill"><i class="fab fa-html5"></i> HTML</span>
+				<span class="skill"><i class="fab fa-css3-alt"></i> CSS</span>
+				<span class="skill"><i class="fab fa-js"></i> Javascript</span>
+				<span class="skill"><i class="fab fa-php"></i> PHP</span>
+				<span class="skill"><i class="fab fa-python"></i> Python</span>
+				<span class="skill"><i class="fab fa-microsoft"></i> C#</span>
+				<span class="skill"><i class="fas fa-robot"></i> AIML</span>
+				<span class="skill"><i class="fas fa-globe"></i> Web development</span>
+			</div>
+		</section>
+
+		<section class="card" style="opacity: 1; transform: translateX(0px); transition: opacity 0.5s ease 0s, transform 0.5s ease 0s;">
+			<h2>Tools</h2>
+			<div class="tools-container">
+				<span class="tool"><i class="fab fa-node-js"></i> Node.js</span>
+				<span class="tool"><i class="fas fa-server"></i> Express.js</span>
+				<span class="tool"><i class="fab fa-discord"></i> Discord.js</span>
+				<span class="tool"><i class="fab fa-github"></i> GitHub</span>
+				<span class="tool"><i class="fab fa-git-alt"></i> Git</span>
+				<span class="tool"><i class="fab fa-docker"></i> Docker</span>
+				<span class="tool"><i class="fab fa-linux"></i> Debian</span>
+				<span class="tool"><i class="fab fa-linux"></i> Arch Linux</span>
+				<span class="tool"><i class="fab fa-linux"></i> Ubuntu</span>
+			</div>
+		</section>
+
+        <!-- <section class="card"> -->
+            <!-- <h2>Projects</h2> -->
+            <!-- <a href="https://fox3000foxy.com/otakucompanion"><div class="project">OtakuCompanion</div></a> -->
+            <!-- <a href="https://github.com/fox3000foxy/ImmersiveManhunt"><div class="project">ImmersiveManhunt</div></a> -->
+            <!-- <a href="https://lumiantis.com"><div class="project">Lumiantis</div></a> -->
+            <!-- <a href="https://fox3000foxy.com"><div class="project">And more...</div></a> -->
+        <!-- </section> -->
+		<section class="card">
+			<h2>Projects</h2>
+			<!-- <a href="https://lumiantis.com"><div class="project">Lumiantis</div></a> -->
+			<a href="https://aperture-sciences.com"><div class="project">Aperture Sciences</div></a>
+			<!-- <a href="https://weebudesu.com/"><div class="project">WeebuDesu</div></a> -->
+			<!-- <a href="https://itsrealfortune.fr/"><div class="project">ItsRealFortune Website</div></a> -->
+			<a href="https://www.npmjs.com/package/express-middleware-honeypot"><div class="project">Express Honeypot Middleware</div></a>
+			<a href="https://nausicaa-game.github.io"><div class="project">Nausicaa Game</div></a>
+			<a href="https://github.com/fox3000foxy/foxyspoofers"><div class="project">foxyspoofers</div></a>
+			<h3>Files</h3>
+			<a href="/article-frandroid.html"><div class="project">Article Frandroid</div></a>
+			<!-- <a href="/minecraft-enchant.tff"><div class="project">Minecraft Enchantment Font</div></a> -->
+			<!-- <a href="/faq-fr.basic.json"><div class="project">FAQ JSON (Abandoned chatbot)</div></a> -->
+			<!-- <a href="/demo-starnet.mp4"><div class="project">Starnet Demo</div></a> -->
+			<!-- <a href="/ai_gameplay.mp4"><div class="project">AI Gameplay Video</div></a> -->
+			<a href="/article/fuite-du-film-super-mario-bros-le-film-2.html"><div class="project">Super Mario Bros Movie 2 Article</div></a>
+			<a href="https://fox3000foxy.com/MINECRAFT_PATHFINDING_LOGIC_AND_APPLICATIONS.pdf"><div class="project">MINECRAFT_PATHFINDING_LOGIC_AND_APPLICATIONS.pdf</div></a>
+			<!-- <a href="/roblox-scraper.zip"><div class="project">Roblox Cosmetics Scraper</div></a> -->
+			<!-- <a href="/roblox-scraper-tutorial.mp4"><div class="project">Roblox Scraper Tutorial</div></a> -->
+			<!-- <a href="https://gist.github.com/fox3000foxy/3065173ab7bc4f34a7fb693611cfc5c2"><div class="project">ExpressJS Honeypot Middleware</div></a> -->
+			<a href="https://gist.github.com/fox3000foxy/a47adb4bfa347d89751897ab27cae1ec"><div class="project">Licence Key System Generator</div></a>
+
+            <h3>Favorite Repositories</h3>
+            <a href="https://github.com/fox3000foxy/2gf"><div class="project">2gf</div></a>
+            <a href="https://github.com/p2r3/bareiron"><div class="project">bareiron</div></a>
+            <a href="https://github.com/fox3000foxy/email-autoreply"><div class="project">email-autoreply</div></a>
+            <a href="https://github.com/fox3000foxy/foxyspoofers"><div class="project">foxyspoofers</div></a>
+            <a href="https://github.com/fox3000foxy/tor-fetch"><div class="project">tor-fetch</div></a>
+            <a href="https://github.com/fox3000foxy/hologram-smart-miku"><div class="project">hologram-smart-miku</div></a>
+            <a href="https://github.com/fox3000foxy/ImmersiveManhunt"><div class="project">ImmersiveManhunt</div></a>
+            <a href="https://github.com/Croissant-API/OVPN-Configs-scraper"><div class="project">OVPN-Configs-scraper</div></a>
+            <a href="https://github.com/fox3000foxy/redondancy-systems"><div class="project">redondancy-systems</div></a>
+            <a href="https://github.com/fox3000foxy/VPN-GUI"><div class="project">VPN-GUI</div></a>
+            <a href="https://github.com/fox3000foxy/weights.gg-api"><div class="project">weights.gg-api</div></a>
+            <a href="https://github.com/Nausicaa-game/nausicaa-game.github.io"><div class="project">nausicaa-game.github.io</div></a>
+            <a href="https://github.com/Eminium-Games/SMPsystm"><div class="project">SMPsystm</div></a>
+            <a href="https://github.com/Eminium-Games/DungeonsInstances"><div class="project">DungeonsInstances</div></a>
+            <a href="https://github.com/Eminium-Games/AutoUnloadWorlds"><div class="project">AutoUnloadWorlds</div></a>
+            <a href="https://github.com/fox3000foxy/deploy-from-private-to-github-pages"><div class="project">deploy-from-private-to-github-pages</div></a>
+            <a href="https://github.com/fox3000foxy/FakeData-npm"><div class="project">FakeData-npm</div></a>
+
+            <h3>All Gists</h3>
+            <a href="https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a"><div class="project">setup-ssh-signing.sh</div></a>
+            <a href="https://gist.github.com/fox3000foxy/2007e7a0b4d22ed7d603cdcac02c0083"><div class="project">pokerManager.ts</div></a>
+            <a href="https://gist.github.com/fox3000foxy/a47adb4bfa347d89751897ab27cae1ec"><div class="project">key-sys.js</div></a>
+            <a href="https://gist.github.com/fox3000foxy/bded543ec13532af8ddc2de614b74055"><div class="project">createProxy.js</div></a>
+            <!-- <a href="https://gist.github.com/fox3000foxy/74e70923ea9bff8455dd57dcc1464cbb"><div class="project">weights-api.ts</div></a> -->
+            <!-- <a href="https://gist.github.com/fox3000foxy/e0606c9cfdd979589b6ff24b6692e1bc"><div class="project">buld-download-url.js</div></a> -->
+            <a href="https://gist.github.com/fox3000foxy/3065173ab7bc4f34a7fb693611cfc5c2"><div class="project">honeypotMiddleware.js</div></a>
+            <!-- <a href="https://gist.github.com/fox3000foxy/2a686153d959195141bf448d4c465546"><div class="project">gistfile1.txt</div></a>
+            <a href="https://gist.github.com/fox3000foxy/496077730d940eb933c2ff6d8ae62403"><div class="project">Discord Experiments.js</div></a>
+            <a href="https://gist.github.com/fox3000foxy/2d085403c7d403736308f86acc4011bd"><div class="project">ruin_for_ai.py / ruin_move.py</div></a>
+            <a href="https://gist.github.com/fox3000foxy/48a2d27fc65b65b9993600c4b46bffb6"><div class="project">project.py</div></a>
+            <a href="https://gist.github.com/fox3000foxy/fcbd41e9c3de584be1f9fd6e15134bb5"><div class="project">eratz.py / main.py / mainpy.py</div></a> -->
+
+			<h3>Serverless Modules</h3>
+			<a href="/reactionsmaker"><div class="project">ReactionsMarker - Discord super reactions creator</div></a>
+			<a href="/fakesinvites"><div class="project">FakesInvites - Discord invite/gift link creator</div></a>
+			<a href="/discordavatars"><div class="project">Discord Avatars - Avatar decoration creator (Deprecated)</div></a>
+			<a href="/fsvc"><div class="project">FSVC - Unused vtubing agency</div></a>
+			<a href="/vm"><div class="project">VM - Customized Windows 11 React clone</div></a>
+			<a href="/android"><div class="project">Android - Android in React clone</div></a>
+			<a href="/server-subs"><div class="project">Server Subs - Discord and Patreon subscription tool</div></a>
+			<a href="/discord-patreons"><div class="project">Discord Patreons - Server subscriptions page</div></a>
+			<a href="/store"><div class="project">Store - Alternative server subscriptions page</div></a>
+			<a href="/fake-meeting"><div class="project">Fake Meeting - Video conference simulator</div></a>
+			<a href="/bsod.html"><div class="project">BSOD - Fake blue screen of death</div></a>
+			<a href="/srt-gen.html"><div class="project">SRT Generator - Live subtitle file generator</div></a>
+			<a href="/demonslayer"><div class="project">Demon Slayer Card style demo</div></a>
+			<a href="/Poker.io"><div class="project">Poker.io - Offline JavaScript poker game</div></a>
+
+			<!-- <h3>Modules</h3>
+			<a href="/vtube"><div class="project">VTube - Homemade vtubing software</div></a>
+			<a href="/ptb-vtube"><div class="project">PTB VTube - VTube game concept</div></a>
+			<a href="/fake-chat"><div class="project">Fake Chat - Twitch chat simulator</div></a>
+			<a href="/fake-chat-v2"><div class="project">Fake Chat V2 - Improved Twitch chat simulator</div></a>
+			<a href="/lt_editor"><div class="project">LT Editor - Minecraft loot table editor</div></a>
+			<a href="/otakucompanion"><div class="project">OtakuCompanion - Waifu mobile app</div></a>
+			<a href="/hologram-smart-miku/"><div class="project">Hologram Smart Miku</div></a> -->
+			<!-- <a href="/face"><div class="project">FaceGen - Voire https://fox3000foxy.com/oldIndex2.html</div></a> -->
+			<!-- <a href="/poney/xxxxx.png"><div class="project">PoneyGen - Voire https://fox3000foxy.com/oldIndex2.html</div></a> -->
+
+			<h3>Other Projects</h3>
+			<a href="https://github.com/fox3000foxy/ImmersiveManhunt"><div class="project">ImmersiveManhunt</div></a>
+			<a href="https://dmon.fr"><div class="project">Dmon.fr, Docker monitoring project</div></a>
+			<!-- <a href="https://lumiantis.com"><div class="project">Lumiantis</div></a> -->
+			<!-- <a href="https://fox3000foxy.com"><div class="project">And more...</div></a> -->
+		</section>
+
+        <!-- <div class="social-links"> -->
+            <!-- <a href="https://github.com/fox3000foxy/" target="_blank" class="social-link" title="GitHub"> -->
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+            <!-- </a> -->
+            <!-- <a href="https://www.linkedin.com/in/lucas-sannier-400a54279/" target="_blank" class="social-link" title="LinkedIn"> -->
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> -->
+            <!-- </a> -->
+        <!-- </div> -->
+<footer>
+    <div class="social-links">
+        <a href="https://www.tiktok.com/@fox3000foxy1" target="_blank" class="social-link" title="TikTok">
+            <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.xbox.com/fr-FR/play/user/Fox3000foxy" target="_blank" class="social-link" title="Xbox">
+            <i class="fab fa-xbox"></i>
+        </a>
+        <a href="https://github.com/fox3000foxy" target="_blank" class="social-link" title="GitHub">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.reddit.com/u/Fox3000foxy" target="_blank" class="social-link" title="Reddit">
+            <i class="fab fa-reddit-alien"></i>
+        </a>
+        <a href="https://open.spotify.com/user/31edcol2wbacqrb6komkwr4hsmle" target="_blank" class="social-link" title="Spotify (Stella)">
+            <i class="fab fa-spotify"></i>
+        </a>
+        <a href="https://steamcommunity.com/profiles/76561198380754195" target="_blank" class="social-link" title="Steam">
+            <i class="fab fa-steam"></i>
+        </a>
+        <a href="https://www.twitch.tv/fox3000foxy" target="_blank" class="social-link" title="Twitch">
+            <i class="fab fa-twitch"></i>
+        </a>
+        <a href="https://www.youtube.com/channel/UCUM9i9jQSJiQh6NWY8Kbujg" target="_blank" class="social-link" title="YouTube (Fox3000foxy)">
+            <i class="fab fa-youtube"></i>
+        </a>
+    </div>
+</footer>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation des cartes au défilement
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateX(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => {
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(10%)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
+
+    // Création du fond animé
+    const bg = document.getElementById('animated-bg');
+    const particleCount = 50;
+
+    for (let i = 0; i < particleCount; i++) {
+        createParticle();
+    }
+
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 5 + 1;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        const startPositionX = Math.random() * window.innerWidth;
+        const startPositionY = Math.random() * window.innerHeight;
+        particle.style.left = `${startPositionX}px`;
+        particle.style.top = `${startPositionY}px`;
+        
+        bg.appendChild(particle);
+        
+        animateParticle(particle);
+    }
+
+    function animateParticle(particle) {
+        const duration = Math.random() * 3 + 2;
+        const angle = Math.random() * 360;
+        const distance = Math.random() * 100 + 50;
+        
+        particle.animate([
+            { transform: 'translate(0, 0)' },
+            { transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)` }
+        ], {
+            duration: duration * 1000,
+            iterations: Infinity,
+            direction: 'alternate',
+            easing: 'ease-in-out'
+        });
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FSVC - Agence de vtubing</title>
+  <style>
+    /* Réinitialisation des styles */
+    body, h1, h2, h3, p, ul, li {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #333;
+    }
+
+    /* En-tête */
+    header {
+      background-color: #F28500;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Logo */
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* Navigation */
+    nav {
+      background-color: #FFA500;
+      text-align: center;
+      padding: 10px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+    }
+
+    /* Section principale */
+    .main-section {
+      padding: 20px;
+      margin-bottom: 150px; /* Pour laisser de l'espace pour le footer */
+      text-align: center; /* Centrer tous les textes */
+    }
+
+    /* Titres */
+    h2,h3 {
+      color: #F28500;
+      font-family: "Konosuba", Arial, sans-serif;
+      text-align: center;
+      margin-bottom: 30px; /* Espace entre les débuts de titres et les fins de textes */
+    }
+	
+	h2{
+      font-size: 32px;
+	}
+	
+	h3{
+      font-size: 24px;
+	}
+	
+    /* Liens */
+    a {
+      color: #F28500;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #FFA500;
+    }
+
+    /* Pied de page */
+    footer {
+      background-color: #F28500;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    /* Mise en forme des images */
+    .main-section img {
+      max-width: 100%;
+      margin: 20px 0;
+    }
+
+    /* Mise en forme des listes */
+    .main-section ul {
+      list-style: none; /* Supprimer les puces */
+    }
+
+    .main-section li {
+      margin-bottom: 10px;
+    }
+
+    /* Alignement alterné des images à droite et à gauche */
+    .main-section .service-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .main-section .service-text {
+      flex: 1;
+    }
+
+    .main-section .service-img {
+      flex: 1;
+      margin: 0 20px;
+    }
+
+    .service {
+      /*max-width: 100%;*/
+      object-fit: cover;
+      object-position: 50% 0;
+      overflow: clip;
+      /*height:50%;*/
+      /*width:50%;*/
+      /*width:1550px;*/
+      /*display: none;*/
+    }
+    
+    .bgVideo {
+        object-fit: cover;
+        position: fixed;
+        top:0;
+        left:0;
+        width:0;
+        height: 0;
+        width: 100%;
+        height: 100%;
+        z-index:-1;
+        filter: blur(0.5);
+    }
+    @font-face{
+        font-family:'konosuba';
+        src: url(GROBOLD.ttf)
+    }
+    *{
+        color:white;
+        font-family: 'konosuba';
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Konosuba&display=swap">
+	<meta property="og:url" content="http://stella.jsannier.fr">
+	<meta property="og:type" content="document">
+	<meta property="og:title" content="Fox3000foxy Studios Vtube Corp.">
+	<meta property="og:description" content="Fans d'animes et de gaming, aventuriers intrépides et passionnés de mondes fantastiques, permettez-moi de vous présenter un projet tout droit sortie de nos rêves les plus épiques : bienvenue chez la merveilleuse équipe de vtubing proposé par l'intrépide bande de Fox: la FSVC!">
+
+	<meta property="og:image" content="http://stella.jsannier.fr/fsvc/logo.png">
+</head>
+<body>
+    <!--<video autoplay="" src="./op_full.mp4" class="bgVideo"></video>-->
+    
+    
+  <header>
+    <a class="logo" href="#"><img src="banner.png"></a><br><br>
+    <p>Fox3000foxy Studios Vtube Corp.</p>
+  </header>
+
+  <!--<nav>
+    <a href="#">Accueil</a>
+    <a href="#">À propos</a>
+    <a href="#">Services</a>
+    <a href="#">Contact</a>
+  </nav>-->
+
+  <div class="main-section">
+    <h2>Fans d'animes et de gaming,</h2>
+	<h3>aventuriers intrépides et passionnés de mondes fantastiques, permettez-moi de vous présenter un projet tout droit sortie de nos rêves les plus épiques : bienvenue chez la merveilleuse équipe de vtubing proposé par l'intrépide bande de Fox: la FSVC!</h3>
+
+    <p>Dans ce monde merveilleux, où le réel et la magie s'entremêlent, on vous offre une expérience inédite, inspirée du légendaire anime "Konosuba" ! Vous vous êtes jamais demandés ce que ça fait d'embarquer dans une quête pleine de comédie, de magie et d'amitié ?<br>
+	Eh bien, avec la FSVC, on vous offre cette chance !</p>
+	<br><br>
+    <h2>Laissez-moi vous présenter notre équipe incroyable de VTubers, chacun d'entre eux étant un personnage merveilleux à part entière :</h2>
+
+    <div class="service-container">
+      <div class="service-text">
+        <h3>1. Kazuma, l'intrépide :</h3>
+        <p>Doté d'un charisme inégalable et d'un humour sans fin, il est notre aventurier principal, prêt à embarquer dans des quêtes époustouflantes et à affronter des monstres légendaires !</p>
+      </div>
+      <div class="service-img">
+        <img src="kazuma_standard.png" alt="Image 1" class="service">
+      </div>
+    </div>
+
+    <div class="service-container">
+      <div class="service-img">
+        <img src="aqua_standard.png" alt="Image 2" class="service">
+      </div>
+      <div class="service-text">
+        <h3>2. Aqua, la déesse espiègle :</h3>
+        <p>Avec ses pouvoirs magiques désastreux et son étrange amour pour les problèmes, Aqua est notre atout comique, garantissant des situations hilarantes et des moments mémorables, que vous n'oublierez pas, du coup!</p>
+      </div>
+    </div>
+
+    <div class="service-container">
+      <div class="service-text">
+        <h3>3. Megumin, magicienne explosive :</h3>
+        <p>Aucun ennemi ne résiste à la puissance dévastatrice de mes explosions ! J'apporterai une touche d'action, de rage et de puissance à chaque live !</p>
+      </div>
+      <div class="service-img">
+        <img src="megumin_standard.png" alt="Image 3"  class="service">
+      </div>
+    </div>
+
+    <div class="service-container">
+      <div class="service-img">
+        <img src="darkness_standard.png" alt="Image 4" class="service">
+      </div>
+      <div class="service-text">
+        <h3>4. Darkness, croisée passionnée :</h3>
+        <p>Toujours prête à se battre pour la justice et l'égalité, Darkness nous ajoutera une touche de dévotion et de bravoure à notre équipe, avec une touche d'excitation qui ne manque jamais ! Elle s'occupera aussi de reverser une partie des dons à une association.</p>
+      </div>
+    </div>
+	<br><br>
+    <b>Avec ces personnages hauts en couleur, on vous promet des émissions de streaming inoubliables, des moments de rire, de suspense, et d'émotions intenses ! Que vous soyez fan de Konosuba ou simplement à la recherche d'une aventure unique, un stream de la FSVC est l'endroit où vous devez être !</b>
+
+	<br><br>
+    <h2>Caractéristiques de notre logiciel de vtubing :</h2>
+    <ul>
+      <li><b>• Mode multijoueur:</b> On affiche les avatars de toute la team en même temps sur tout nos streams ou vidéos !</li>
+      <li><b>• Microphone virtuel:</b> Parlons en français, la sortie sera en japonais ! Et sous-titré bien sûr !</li>
+      <li><b>• Modèles Konosuba:</b> Celui-là est peut-être un détail pour vous, mais pour moi ça veut dire beaucoup. Il y'a pour le moment 128 modèles !</li>
+      <li><b>• Cross-platform:</b> Disponible sur téléphone, ainsi que sur PC, Mac et Linux après rebuild si jamais vous voulez essayer.</li>
+      <li><b>• Compatible avec les invitations de groupe Discord:</b> Rejoindre le lobby d'un copain ? Cliquez sur un bouton !</li>
+      <li><b>• Prise en charge de modèles custom:</b> Oui, vous allez même pouvoir importer vos propres modèles !</li>
+    </ul>
+
+	<br><br>
+    <h3>Rejoignez-nous lors de nos diffusions en direct, où vous pourrez interagir avec nos VTubers préférés, participer à des quêtes interactives et même influencer le cours de nos aventures à travers et des tempêtes de chatvote!</h3>
+
+    <p>Mais FSVC, ce n'est pas que du divertissement: c'est aussi une communauté soudée et chaleureuse, où des fans du monde entier se rassemblent pour partager leur passion pour l'animation, les jeux et la culture geek. Ensemble, nous formons une véritable famille d'aventuriers, inséparables et pret à tout pour aider l'autre!</p><br>
+    <p>Alors, n'attendez plus et embarquez dans cette aventure extraordinaire avec la FSVC, inspirée de l'univers de Konosuba ! Suivez-nous sur nos plateformes de streaming, nos réseaux, rejoignez notre Discord et plongez-vous dans un monde où votre imagination devient réalité !</p>
+
+	<br><br>
+    <h2><i>FSVC - Amitié, magie et humour ingrédients de streams incroyables ! En avant, rejoignez nous pour l'aventure ultime !</i></h2>
+  </div>
+
+  <footer style="position:fixed">
+    <p>&copy; 2023 FSVC. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>

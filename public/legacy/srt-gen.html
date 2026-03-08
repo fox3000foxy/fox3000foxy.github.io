@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconnaissance vocale avec Timers et Export SRT</title>
+</head>
+<body>
+    <h1>Reconnaissance vocale avec Timers et Export SRT</h1>
+    <button id="exportBtn" style="display:none;">Exporter en SRT</button>
+    <div id="result"></div>
+
+    <script>
+        // Enregistrer le timestamp de début global au chargement de la page
+        const pageStartTime = new Date().getTime();
+
+        // Vérifier si l'API Web Speech est prise en charge par le navigateur
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            // Créer l'objet de reconnaissance vocale
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+            // Paramètres supplémentaires facultatifs
+            recognition.interimResults = true; // Afficher les résultats partiels en temps réel
+
+            // Variables pour le suivi des timestamps des sous-titres
+            let startTime;
+            let endTime;
+            let subtitleCounter = 1; // Compteur de sous-titres
+            let subtitlesString = ""; // Chaîne de caractères pour les sous-titres au format SRT
+
+            // Fonction pour formater les millisecondes avec trois chiffres
+            function formatMilliseconds(ms) {
+                return ms.toString().padStart(3, '0');
+            }
+
+            // Gérer les événements
+            recognition.onstart = () => {
+                console.log("Reconnaissance vocale démarrée");
+            };
+
+            recognition.onresult = (event) => {
+                // Mesurer le startTime uniquement lorsque le premier résultat est obtenu et que c'est final
+                if (!startTime) {
+                    startTime = new Date().getTime();
+                }
+
+                const result = event.results[event.results.length - 1][0].transcript;
+                document.getElementById('result').textContent = result;
+            };
+
+            recognition.onend = () => {
+                console.log("Reconnaissance vocale terminée");
+                // Fin du timer
+                endTime = new Date().getTime();
+
+                // Si startTime est défini, cela signifie qu'un sous-titre final a été généré
+                if (startTime) {
+                    // Calcul de la durée de la reconnaissance vocale relative au lancement de la page
+                    const relativeStartTime = startTime - pageStartTime;
+                    const relativeEndTime = endTime - pageStartTime;
+
+                    // Convertir le timestamp relatif en temps (HH:MM:SS,mmm)
+                    const formattedRelativeStartTime = new Date(relativeStartTime).toISOString().substr(11, 12);
+                    const formattedRelativeEndTime = new Date(relativeEndTime).toISOString().substr(11, 12);
+
+                    // Formater les millisecondes avec trois chiffres
+                    const startMs = formatMilliseconds(relativeStartTime % 1000);
+                    const endMs = formatMilliseconds(relativeEndTime % 1000);
+
+                    // Ajouter le sous-titre à la chaîne SRT
+                    subtitlesString += `${subtitleCounter}\n${formattedRelativeStartTime.replace(".",",")} --> ${formattedRelativeEndTime.replace(".",",")}\n${document.getElementById('result').textContent}\n\n`;
+
+                    // Incrémenter le compteur de sous-titres
+                    subtitleCounter++;
+                }
+
+                // Réinitialiser startTime pour le prochain sous-titre
+                startTime = null;
+
+                // Redémarrer la reconnaissance automatiquement lorsque celle-ci se termine
+                recognition.start();
+
+                // Afficher le bouton d'exportation lorsque le premier sous-titre est généré
+                if (subtitleCounter === 2) {
+                    document.getElementById('exportBtn').style.display = 'block';
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Erreur de reconnaissance vocale :", event.error);
+            };
+
+            // Démarrer la reconnaissance vocale automatiquement au chargement de la page
+            recognition.start();
+
+            // Fonction pour exporter la chaîne de sous-titres au format SRT
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                const element = document.createElement('a');
+                const file = new Blob([subtitlesString], {type: 'text/plain'});
+                element.href = URL.createObjectURL(file);
+                element.download = 'sous-titres.srt';
+                document.body.appendChild(element);
+                element.click();
+            });
+        } else {
+            alert("Désolé, l'API de reconnaissance vocale n'est pas prise en charge par votre navigateur.");
+        }
+    </script>
+</body>
+</html>

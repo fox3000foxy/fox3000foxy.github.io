@@ -1,0 +1,142 @@
+.wrapper-buttons {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px;
+}
+
+.wrapper-buttons > * {
+  margin-bottom: 10px;
+}
+
+.wrapper-buttons > *:first-child {
+  margin-top: 10px;
+}
+
+.wrapper-buttons > *:last-child {
+  margin-bottom: 0px;
+}
+
+.wrapper-nitro-buttons {
+  margin: 0 auto !important;
+  width: 60%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: block;
+}
+
+button {
+  display: inline-block;
+  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
+  display: inline-block;
+  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 11pt;
+  border-radius: 3px;
+  cursor: pointer;
+  width: 100%;
+  height: 45px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  /* text-transform: uppercase; */
+}
+
+button {
+  color: #fff;
+  transition: 100ms linear;
+}
+
+#logotxtdmf
+{
+  filter: brightness(100%);
+  transition: 100ms linear;
+  image-rendering: pixelated;
+  width: 73px
+}
+
+#logotxtdmf:hover
+{
+  filter: brightness(80%);
+}
+
+button:active {
+  /*transform: translateX(0px);*/
+}
+
+button {
+  /* outline: transparent !important; */
+}
+
+button{
+  background-color: #7289da;
+  border: 2px solid #7289da;
+}
+
+.green {
+  background-color: #3BA55D;
+  border: 2px solid #3BA55D;
+}
+
+.green:hover {
+  /*transform: translateY(0px);*/
+  background-color: #3BA55D;
+  border: 2px solid #3BA55D;
+}
+
+.red {
+  background-color: #f94339;
+  border: 2px solid #f94339;
+}
+
+.red:hover {
+  /*transform: translateY(0px);*/
+  background-color: #f82b20;
+  border: 2px solid #f82b20;
+}
+
+.gray {
+  background-color: #4f545c;
+  border: 2px solid #4f545c;
+}
+
+.gray:hover {
+  /*transform: translateY(0px);*/
+  background-color: #5d6269;
+  border: 2px solid #5d6269;
+}
+/* .yellow { */
+  /* background-color: #FEE75C; */
+  /* border: 2px solid #FEE75C; */
+/* } */
+
+/* .yellow:hover { */
+  /* background-color: #FEE75C; */
+  /* border: 2px solid #FEE75C; */
+/* } */
+
+.yellow {
+  background-color: #ddc846;
+  border: 2px solid #ddc846;
+  /* color:#bbb; */
+}
+
+.yellow:hover {
+  /*transform: translateY(0px);*/
+  background-color: #c7ac09;
+  border: 2px solid #c7ac09;
+  color:white;
+}
+
+button:hover {
+  /*transform: translateY(0px);*/
+  background-color: #5e77d4;
+  /* border: 2px solid #5e77d4; */
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
