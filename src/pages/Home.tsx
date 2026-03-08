@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import './Home.css';
+import '../styles/Home.css';
 
 // extend the default schema to permit `class` and `style` on all elements
 // (so markdown authors can add classes or inline styles to wrappers, tables, etc.)

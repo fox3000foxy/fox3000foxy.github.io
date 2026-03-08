@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './ProjectList.css';
+import '../styles/ProjectList.css';
 
 interface Repo {
   name: string;
