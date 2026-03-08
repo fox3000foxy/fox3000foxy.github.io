@@ -46,6 +46,9 @@ jobs:
       - name: Build project
         run: pnpm run build
 
+      - name: Copy index to be 404
+        run: cp dist/index.html dist/404.html
+
       - name: Upload build output
         id: upload
         uses: actions/upload-artifact@v4
