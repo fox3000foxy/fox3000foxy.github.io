@@ -2,7 +2,7 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-> **Fox's Blog** – a simple Markdown‑powered blog extension built on top of the starter. Articles live in `public/articles` and are fetched at runtime via `/blog/:slug`. A 404 page is rendered when a post is missing or the route is unknown.
+> **Fox's Blog** – a simple Markdown‑powered site built on top of the starter. The **home page** is also written in Markdown (`public/home.md`) and loaded at `/`. Blog articles live in `public/articles` and are fetched at runtime via `/blog/:slug`. A 404 page is rendered when a post is missing or the route is unknown.
 
 
 

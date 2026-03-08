@@ -1,0 +1,65 @@
+.home {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+  color: #eee;
+}
+
+.home h2,
+.home h3 {
+  color: #fff;
+}
+
+.home p {
+  line-height: 1.6;
+}
+
+.home .lang-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.home .lang-list li {
+  background: #111;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.home .repos ul {
+  list-style: disc inside;
+}
+
+.home a {
+  color: #64b5f6;
+}
+
+.home a:hover {
+  color: #81c784;
+}
+
+.home table.gallery {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.home table.gallery td {
+  padding: 0.5rem;
+}
+
+.home table.gallery img {
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* square ratio */
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+}
+.home .gallery img {
+  width: 100%;
+  border-radius: 4px;
+  display: block;
+}
