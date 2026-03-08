@@ -13,6 +13,11 @@ I also love to find workarounds to not pay things that are paid, or that you wou
 So I mainly code in Typescript and React now, but back in time I was coding launchers in pure HTML, CSS and JavaScript. Crazy? I was crazy once! They put me in a room. Nahhh I'm kinding. I also know Python, C# but i hate it, Java, but it's rare, now I use it to code Minecraft plugins for [Eminium Games](https://github.com/Eminium-Games/). I know C++ from a while but can't code in it actually. Also I'm learning C with the [bareiron project](https://github.com/p2r3/bareiron). And so on, I don't know Rust or Go at the moment, but I would enjoy to learn.
 
 I kinda master Javascript principles since I code in Javascript since I was 8. 😄
+Not to brag tho, I'm aware that some devs are better than me with a worse status than mine, and some are better paid than me while being litterals frauds.
+
+## Hobbies
+
+So basically I have a lot of hobbies, but my main hobby is coding while listening to music. I also do drawing like i said above, and I kinda like to walk now, I don't know why 😕.
 
 ## Passions
 
@@ -41,18 +46,26 @@ Here are some of my drawings:
   </tr>
 </table>
 
-# Hobbies
-
-So basically I have a lot of hobbies, but my main hobby is coding while listening to music. I also do drawing like i said above, and I kinda like to walk now, I don't know why 😕.
-
-# Packages
+## Packages
 
 Sometimes I write npm packages, like [fetch-tor-proxy](https://www.npmjs.com/package/fetch-tor-proxy) or even [fake-data-npm](https://www.npmjs.com/package/fake-data-npm). They both are not used by anyone, including me, nut I hope one day they will explode!
 
-# Projects
+## Projects
 
 I have soooooooooo much projects. right now I have 146 repositories in total, only 103 are public! I will probably present them in the Blog section tho.
 
-# I work for
+## I work for
 
-🏗 THIS article is still in construction, please wait
+Basically I worked for plenty of people! I'm friend with some Discord employees, and I know some content creators, like NTTS, Squiduu, HatsuOtaku, Sciences Trash, Sushi Nihiliste, or even the french storyteller Ego. I blocked What a Fail because he blocked me for a simple "Hello". Istg, those mfs dick heads. I know Belle Delphine, and ggu.bbu2 that I salute, and more!
+
+I don't want to know TV stars tho, as I think they are out of reach, and big headed as well. I'm sure plenty are nice, but show celebrities are most of the time selfish as hell...
+
+## Ending note
+
+On this page I’m going to share my progress, my thoughts, and whatever I feel like sharing. That way you’ll know how I think.
+Anyway, my GitHub will mainly list all of my projects and their progress in real time.
+Know that I love the age of my projects; I love seeing dates that get older and older on my own repos, so it’s not out of the question that my profile repo might have a spoofed commit date! 😁
+
+Means now I'm writing blogs, and I will add back my main porfolio links in another section.
+
+<span style="color: yellow">🏗 THIS article is still in construction, please wait</span>
