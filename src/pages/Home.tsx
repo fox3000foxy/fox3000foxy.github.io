@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import './Home.css';
@@ -42,6 +43,7 @@ export default function Home() {
         rehypePlugins={[
           rehypeRaw,
           [rehypeSanitize, sanitizeSchema],
+          rehypeHighlight,
         ]}
       >
         {content}

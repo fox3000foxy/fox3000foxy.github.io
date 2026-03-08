@@ -8,6 +8,7 @@ interface ArticleMeta {
   title?: string;
   description?: string;
   date?: string;
+  aiGenerated?: boolean;
 }
 
 export default function BlogList() {
@@ -36,12 +37,15 @@ export default function BlogList() {
       <h2>Blog Posts</h2>
       {articles.length > 0 ? (
         <div className="blog-grid">
-          {articles.map(({ slug, title, description, date }) => (
+          {articles.map(({ slug, title, description, date, aiGenerated }) => (
             <Link to={`/blog/${slug}`} key={slug} className="blog-card">
               <div className="blog-card-body">
                 <h3 className="blog-card-title">
                   {title ?? slug.replace(/-/g, ' ')}
                 </h3>
+                {aiGenerated && (
+                  <span className="ai-badge">✨ AI Generated Article</span>
+                )}
                 {description && (
                   <p className="blog-card-desc">{description}</p>
                 )}

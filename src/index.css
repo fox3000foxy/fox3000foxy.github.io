@@ -75,3 +75,6 @@ button:focus-visible {
 }
 
 /* intentionally blank: we force dark theme */
+img {
+  max-width: 800px;
+}
