@@ -1,7 +1,19 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import NotFound from './NotFound';
+
+// extend the default schema to permit class and style on all elements
+// this allows authors to write inline styles in markdown HTML
+const sanitizeSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    '*': [...(defaultSchema.attributes?.['*'] || []), 'class', 'style'],
+  },
+};
 
 export default function Article() {
   const { slug } = useParams<{ slug: string }>();
@@ -31,7 +43,14 @@ export default function Article() {
 
   return (
     <article>
-      <ReactMarkdown>{content}</ReactMarkdown>
+      <ReactMarkdown
+        rehypePlugins={[
+          rehypeRaw,
+          [rehypeSanitize, sanitizeSchema],
+        ]}
+      >
+        {content}
+      </ReactMarkdown>
     </article>
   );
 }
