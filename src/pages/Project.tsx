@@ -46,10 +46,12 @@ export default function Project() {
         );
       })
       .then((res) => {
-        if (!res.ok) throw new Error('No README');
-        return res.text();
+        if (!res.ok) {
+          setContent('');
+          return;
+        }
+        return res.text().then((text) => setContent(text));
       })
-      .then((text) => setContent(text))
       .catch(() => setError(true));
   }, [slug]);
 
@@ -98,7 +100,7 @@ export default function Project() {
           return url;
         }}
       >
-        {content}
+        {content || '*This project does not have a README.*'}
       </ReactMarkdown>
     </article>
   );
