@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './BlogList.css';
+import '../styles/BlogList.css';
 
 // article metadata fetched from index.json
 interface ArticleMeta {

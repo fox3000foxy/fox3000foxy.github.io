@@ -1,5 +1,4 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import Article from './pages/Article';
@@ -9,6 +8,7 @@ import NotFound from './pages/NotFound';
 import Portfolio from './pages/Portfolio';
 import Project from './pages/Project';
 import ProjectList from './pages/ProjectList';
+import './styles/App.css';
 
 function App() {
   return (

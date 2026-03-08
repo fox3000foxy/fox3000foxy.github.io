@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import './Home.css';
+import '../styles/Home.css';
 
 // reuse the same schema as Home so that authors can add classes and styles
 const sanitizeSchema = {
