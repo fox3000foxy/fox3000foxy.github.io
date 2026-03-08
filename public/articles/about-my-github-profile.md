@@ -1,19 +1,19 @@
-Mon profil Github est un peu arrangé comme une librairie.
+My GitHub profile is a bit arranged like a library.
 
-En première section on a un header avec des liens, classique je dirais:
+In the first section there’s a header with links, pretty standard I’d say:
 
 ![](assets/20260308_123527_image.png)
 
-Donc comme vous le voyez, y'a des liens, bon bah c'est cool hein, je sais pas quoi dire de plus.
+So as you can see, there are links, well that’s cool I guess, I don’t know what else to say.
 
-Y'a une section "About me" aussi:
+There’s also an “About me” section:
 
 ![](assets/20260308_123913_image.png)
 
-Cette section on peut voir ce que je fais en direct! Si vous me voyez écouter de la musique bah c'est ça.
-Je vais mettre l'indicateur ici aussi:
+In this section you can see what I’m doing live! If you see me listening to music, that’s what it is.
+I’m going to put the indicator here too:
 
 [![Discord Presence](https://lanyard.cnrad.dev/api/724847846897221642?showDisplayName=true)](https://discord.com/users/724847846897221642)
 
 
-<span style="color: yellow">🏗 THIS article is still in construction, please wait</span>
+<span style="color: yellow">🏗 THIS article is still under construction, please wait</span>
