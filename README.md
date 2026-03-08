@@ -2,6 +2,10 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+> **Fox's Blog** – a simple Markdown‑powered blog extension built on top of the starter. Articles live in `public/articles` and are fetched at runtime via `/blog/:slug`. A 404 page is rendered when a post is missing or the route is unknown.
+
+
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
