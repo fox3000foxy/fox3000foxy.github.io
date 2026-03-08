@@ -23,5 +23,12 @@
     "title": "My Passions",
     "description": "Coding, drawing, automating things, discovering old tech, and more — a look into what drives me.",
     "date": "2026-03-08"
+  },
+  {
+    "slug": "ssh-signing-script",
+    "title": "SSH commit signing script explained",
+    "description": "A walkthrough of the SSH commit‑signing helper and why I wanted stylish commits.",
+    "date": "2026-03-08",
+    "aiGenerated": true
   }
 ]
