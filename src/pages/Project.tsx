@@ -86,12 +86,32 @@ export default function Project() {
           </p>
         </div>
       )}
+      {/* external links open in new tab */}
       <ReactMarkdown
         rehypePlugins={[
           rehypeRaw,
           [rehypeSanitize, sanitizeSchema],
           rehypeHighlight,
         ]}
+        components={{
+          a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+            const { href, children, ...rest } = props;
+            if (!href) return <a {...rest}>{children}</a>;
+            const isExternal = /^https?:\/\//.test(href);
+            if (isExternal) {
+              return (
+                <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
+                  {children}
+                </a>
+              );
+            }
+            return (
+              <a href={href} {...rest}>
+                {children}
+              </a>
+            );
+          },
+        }}
         urlTransform={(url) => {
           // resolve relative image/link URLs against the GitHub raw content
           if (repo && url && !url.startsWith('http') && !url.startsWith('#') && !url.startsWith('mailto:')) {
