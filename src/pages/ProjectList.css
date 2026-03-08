@@ -1,38 +1,44 @@
-.blog-list {
+.project-list {
   max-width: 100%;
   margin: 0 auto;
   text-align: left;
 }
 
-.blog-list h2 {
+.project-list h2 {
+  margin-bottom: 0.25rem;
+}
+
+.project-subtitle {
+  color: #888;
+  font-size: 0.9rem;
   margin-bottom: 1.5rem;
 }
 
-.blog-grid {
+.project-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
 @media (max-width: 1024px) {
-  .blog-grid {
+  .project-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .blog-grid {
+  .project-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
-  .blog-grid {
+  .project-grid {
     grid-template-columns: 1fr;
   }
 }
 
-.blog-card {
+.project-card {
   display: flex;
   flex-direction: column;
   background: #111;
@@ -46,17 +52,17 @@
   overflow: hidden;
 }
 
-.blog-card:hover {
+.project-card:hover {
   border-color: #64b5f6;
   box-shadow: 0 0 12px rgba(100, 181, 246, 0.15);
   transform: translateY(-2px);
 }
 
-.blog-card-body {
+.project-card-body {
   flex: 1;
 }
 
-.blog-card-title {
+.project-card-title {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
   color: #64b5f6;
@@ -65,11 +71,11 @@
   white-space: nowrap;
 }
 
-.blog-card:hover .blog-card-title {
+.project-card:hover .project-card-title {
   color: #90caf9;
 }
 
-.blog-card-desc {
+.project-card-desc {
   margin: 0;
   font-size: 0.95rem;
   color: #aaa;
@@ -81,26 +87,31 @@
   -webkit-box-orient: vertical;
 }
 
-.blog-card-footer {
+.project-card-footer {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid #222;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.blog-card-footer time {
-  font-size: 0.8rem;
-  color: #777;
-  text-transform: capitalize;
+.project-lang {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: #aaa;
 }
 
-.ai-badge {
+.lang-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 999px;
-  padding: 0.2rem 0.75rem;
-  margin-bottom: 0.5rem;
+}
+
+.project-stars {
+  font-size: 0.85rem;
+  color: #aaa;
 }

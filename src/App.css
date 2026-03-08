@@ -1,5 +1,6 @@
 #root {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -63,6 +64,41 @@ article {
   font-size: 1rem;
   color: #ddd;
   margin-bottom: 1rem;
+}
+
+.project-back {
+  margin-bottom: 1rem;
+}
+
+.project-back a {
+  color: #64b5f6;
+  text-decoration: none;
+}
+
+.project-back a:hover {
+  text-decoration: underline;
+}
+
+.project-header-meta {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #222;
+}
+
+.project-meta-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.project-meta-links a {
+  color: #64b5f6;
+}
+
+.project-meta-lang {
+  color: #aaa;
 }
 
 .ai-badge {
