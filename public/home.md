@@ -2,12 +2,17 @@
 
 ## About me
 
-So my name is Fox, my pronouns are not decided actually, and I'm a software engineer who enjoys working with TypeScript, Node.js and React, and discover new technologies anyways. Most of my projects are open‑source and live on GitHub under the `fox3000foxy` account.
+So my name is Fox, my pronouns are not defined actually, because I'm still finding myself, and I'm a software engineer who enjoys working with TypeScript, Node.js and React, and discover new technologies anyways. Most of my projects are open‑source and live on GitHub under the `fox3000foxy` account.
+
 I'm someone who loooooooves the open source concept, because I love sharing things. Also I like to discover old technologies like UTAU one, I find the concept pretty fascinating. I love Vtubers as well, and I would love to be one, but unfortunately I'm shy.
+
+I also love to find workarounds to not pay things that are paid, or that you would have to pay if you don't think out of the box. As an example [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) was one of my last creation that I found free workaround for commands handling, database management, and daemons. And oh God, playing with Github Actions and workflows is one of the best feeling I've got. I also started to sign my commits with an SSH Key, and you can find the script I made on [this gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Languages & Tech
 
-So I mainly code in Typescript and React now, but back in time I was coding launchers in pure HTML, CSS and JavaScript. Crazy? I was crazy once! They put me in a room. Nahhh I'm kinding
+So I mainly code in Typescript and React now, but back in time I was coding launchers in pure HTML, CSS and JavaScript. Crazy? I was crazy once! They put me in a room. Nahhh I'm kinding. I also know Python, C# but i hate it, Java, but it's rare, now I use it to code Minecraft plugins for [Eminium Games](https://github.com/Eminium-Games/). I know C++ from a while but can't code in it actually. Also I'm learning C with the [bareiron project](https://github.com/p2r3/bareiron). And so on, I don't know Rust or Go at the moment, but I would enjoy to learn.
+
+I kinda master Javascript principles since I code in Javascript since I was 8. 😄
 
 ## Passions
 
@@ -36,4 +41,18 @@ Here are some of my drawings:
   </tr>
 </table>
 
-# 🏗 THIS article is still in construction, please wait 
+# Hobbies
+
+So basically I have a lot of hobbies, but my main hobby is coding while listening to music. I also do drawing like i said above, and I kinda like to walk now, I don't know why 😕.
+
+# Packages
+
+Sometimes I write npm packages, like [fetch-tor-proxy](https://www.npmjs.com/package/fetch-tor-proxy) or even [fake-data-npm](https://www.npmjs.com/package/fake-data-npm). They both are not used by anyone, including me, nut I hope one day they will explode!
+
+# Projects
+
+I have soooooooooo much projects. right now I have 146 repositories in total, only 103 are public! I will probably present them in the Blog section tho.
+
+# I work for
+
+🏗 THIS article is still in construction, please wait
