@@ -6,6 +6,7 @@ import Article from './pages/Article';
 import BlogList from './pages/BlogList';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import Portfolio from './pages/Portfolio';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<Article />} />
+          <Route path="/portfolio" element={<Portfolio />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
