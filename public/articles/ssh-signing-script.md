@@ -128,5 +128,3 @@ This script is a small utility, but it encapsulates a few nice ideas:
 - and document the whole process in a blog post because why not.
 
 If you’re tempted to add signatures to your own commits, give it a spin! And if you’re just here for the style points, same. 😎
-
-*(AI generated)*
