@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
+import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import NotFound from './NotFound';
@@ -20,6 +21,7 @@ interface ArticleMeta {
   title?: string;
   description?: string;
   date?: string;
+  aiGenerated?: boolean;
 }
 
 export default function Article() {
@@ -73,6 +75,9 @@ export default function Article() {
   return (
     <article>
       {/* display metadata if available */}
+      {meta?.aiGenerated && (
+        <span className="ai-badge">✨ AI Generated Article</span>
+      )}
       {meta?.date && <p className="article-date">{meta.date}</p>}
       {meta?.description && (
         <p className="article-description">{meta.description}</p>
@@ -81,6 +86,7 @@ export default function Article() {
         rehypePlugins={[
           rehypeRaw,
           [rehypeSanitize, sanitizeSchema],
+          rehypeHighlight,
         ]}
       >
         {content}
