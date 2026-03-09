@@ -1,0 +1,392 @@
+[
+    {
+        "name": "Reyna",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353599858806785.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #d9a5a2 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#d9a5a2",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357897451995146"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-reyna",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/reyna_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Brimstone",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353563284607007.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #d1d9de 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#d1d9de",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356413007990887"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-brimstone",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/brimstone_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Viper",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353613452808192.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #d9a531 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#d9a531",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340358355130126510"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-viper",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/viper_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Astra",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353514437869728.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #020103 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#020103",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356093104226354"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-astra",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/astra_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Vyse",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353683388502016.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #ffefbe 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#ffefbe",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340358492787314758"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-vyse",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/vyse_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Yoru",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353557567766640.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #a23312 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#a23312",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340358549980581909"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-yoru",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/yoru_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Skye",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353604535455855.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #030305 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#030305",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340358204915187742"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-skye",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/skye_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Sova",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353607383388250.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #b96712 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#b96712",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340358238008512533"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-sova",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/sova_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Tejo",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353610579705918.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #040305 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#040305",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340358294371434636"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-tejo",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/tejo_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Sage",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353681778016409.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #efbf75 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#efbf75",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340358088640696410"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-sage",
+        "author": "724847846897221642", 
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/sage_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Iso",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353581642940476.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #12126e 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#12126e",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357201189142618"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-iso",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/iso_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Jett",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353583983624202.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #c27b12 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#c27b12",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357364573802496"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-jett",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/jett_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "KAY/O",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353585355034717.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #020204 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#020204",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357407049650246"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-kayo",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/kayo_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Killjoy",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353587363975328.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #c17f12 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#c17f12",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357520702832771"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-killjoy",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/killjoy_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Neon",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353589004210308.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #ffffff 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#ffffff",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357561299239002"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-neon",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/neon_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Omen",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353680037117982.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #f5cd12 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#f5cd12",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357634423001138"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-omen",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/omen_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Phoenix",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353594381308026.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #7d1212 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#7d1212",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357766476333208"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-phoenix",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/phoenix_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Raze",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353596889366578.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #ffffd7 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#ffffd7",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357854682419255"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-raze",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/raze_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Harbor",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353579164106864.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #121212 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#121212",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357086202036286"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-harbor",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/harbor_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Breach",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353560487002217.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #ba6c12 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#ba6c12",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356166382911508"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-breach",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/breach_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Chamber",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353565427761162.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #030304 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#030304",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356469807120486"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-chamber",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/chamber_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Clove",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353567554408449.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #6e1212 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#6e1212",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356613248126996"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-clove",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/clove_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Cypher",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353571002126356.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #12a5e8 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#12a5e8",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356659859554364"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-cypher",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/cypher_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Deadlock",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353572436578435.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #a11212 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#a11212",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356731410321428"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-deadlock",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/deadlock_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Fade",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353575582175376.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #12127c 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#12127c",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340356804349136987"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-fade",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/fade_simple.onnx",
+        "styleKey": ""
+    },
+    {
+        "name": "Gekko",
+        "iconURL": "https://cdn.discordapp.com/emojis/1340353577599766650.webp?size=512",
+        "splashGradient": "radial-gradient(circle, #040405 0%, rgba(0,0,0,0) 100%)",
+        "baseColor": "#040405",
+        "previewSoundURLs": [
+            "https://cdn.discordapp.com/soundboard-sounds/1340357044506591315"
+        ],
+        "available": true,
+        "temporarilyAvailable": false,
+        "id": "724847846897221642-gekko",
+        "author": "724847846897221642",
+        "onnxFileUrl": "https://fox3000foxy.com/voices_models/gekko_simple.onnx",
+        "styleKey": ""
+    }
+]

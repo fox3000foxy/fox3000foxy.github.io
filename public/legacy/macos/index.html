@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>macOS in HTML</title>
+    </head>
+    <body>
+
+        <div class="menubar">
+
+            <div class="menubarleft">
+
+                <pre>&#xF8FF;</pre>
+                <p style="font-weight: bold;">Finder</p>
+                <p>File</p>
+                <p>Edit</p>
+                <p>Go</p>
+                <p>Window</p>
+                <p>Help</p>
+
+            </div>
+
+            <div class="menubarright">
+
+                <img src="img/controlcenter.png">
+                <p class="menubardate"></p>
+                <p class="menubartime"></p>
+
+            </div>
+
+        </div>
+
+        <div class="launchpad">
+
+            <div class="launchpadbackground"></div>
+
+            <div class="launchpadentries">
+
+            </div>
+
+        </div>
+
+        <div class="dockcontainer">
+
+            <div class="dock">
+
+                <img src="img/finder.png" class="dockicons">
+
+                <img src="img/launchpad.png" class="dockicons launchpadicon">
+                
+                <img src="img/safari.png" class="dockicons safaridockicon">
+
+                <img src="img/messages.png" class="dockicons messagesdockicon">
+
+                <img src="img/mail.png" class="dockicons">
+
+                <img src="img/maps.png" class="dockicons">
+
+                <img src="img/photos.png" class="dockicons">
+
+                <img src="img/facetime.png" class="dockicons">
+
+                <img src="img/calendar.png" class="dockicons">
+
+                <img src="img/contacts.png" class="dockicons">
+
+                <img src="img/reminders.png" class="dockicons">
+
+                <img src="img/notes.png" class="dockicons">
+
+                <img src="img/tv.png" class="dockicons">
+
+                <img src="img/music.png" class="dockicons">
+
+                <img src="img/podcasts.png" class="dockicons">
+
+                <img src="img/news.png" class="dockicons">
+
+                <img src="img/appstore.png" class="dockicons">
+
+                <img src="img/systempreferences.png" class="dockicons">
+
+            </div>
+            
+        </div>
+
+        <div class="safariapp app">
+
+            <div class="safariresizer resizer top-left"></div>
+            <div class="safariresizer resizer top-right"></div>
+            <div class="safariresizer resizer bottom-left"></div>
+            <div class="safariresizer resizer bottom-right"></div>
+            <div class="safariresizer resizer resizertopbottom top"></div>
+            <div class="safariresizer resizer resizerleftright left"></div>
+            <div class="safariresizer resizer resizertopbottom bottom"></div>
+            <div class="safariresizer resizer resizerleftright right"></div>
+
+            <div class="safariappheader appheader">
+
+                    <div class="safariclose close"></div>
+                    <div class="safariminimize minimize"></div>
+                    <div class="safarimaximize maximize"></div>
+                    <div class="safarimaxmin maxmin"></div>
+
+                    <img class="safariforwardandback" src="img/backarrow.png" onclick="goBack()">
+                    <img class="safariforwardandback" src="img/forwardarrow.png" onclick="goForward()">
+
+                <div class="safariurlarea">
+                    <input type="text" value="https://google.com/?igu=1" class="safariurlbar safariURL" id="URL">
+                    <img class="safarireloadimg" src="img/reload.png" onclick="safarireload()">
+                </div>
+            </div>
+
+            <iframe class="safariappIframe appIframe" id="safariIframe"> </iframe>
+
+        </div>
+
+        <script>
+            var zIndex = 1
+            zIndex = zIndex + 2
+            zIndex = zIndex - 2
+        </script>
+        <script>
+            document.querySelectorAll("img").forEach(elmnt =>{
+                elmnt.ondragstart = () => {
+                    return false;
+                };
+            });
+        </script>
+        <script src="scripts/clock.js"></script>
+        <script src="scripts/launchpad.js"></script>
+        <script src="scripts/appcreater.js"></script>
+        <script src="scripts/safariscript.js"></script>
+        <script src="scripts/applist.js"></script>
+
+    </body>
+</html>

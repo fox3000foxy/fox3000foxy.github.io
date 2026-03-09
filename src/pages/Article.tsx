@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
+import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import NotFound from './NotFound';
@@ -15,13 +16,24 @@ const sanitizeSchema = {
   },
 };
 
+interface ArticleMeta {
+  slug: string;
+  title?: string;
+  description?: string;
+  date?: string;
+  aiGenerated?: boolean;
+}
+
 export default function Article() {
   const { slug } = useParams<{ slug: string }>();
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState(false);
+  const [meta, setMeta] = useState<ArticleMeta | null>(null);
 
   useEffect(() => {
     if (!slug) return;
+
+    // fetch markdown content
     fetch(`/articles/${slug}.md`)
       .then((res) => {
         if (!res.ok) {
@@ -29,8 +41,27 @@ export default function Article() {
         }
         return res.text();
       })
-      .then((text) => setContent(text))
+      .then((text) => {
+        // Treating assets link
+        const processed = text.replaceAll("assets/", "/articles/assets/");
+        setContent(processed);
+      })
       .catch(() => setError(true));
+
+    // fetch metadata from index.json (if available)
+    fetch('/articles/index.json')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const normalized: ArticleMeta[] = data.map((item: any) =>
+            typeof item === 'string' ? { slug: item } : item
+          );
+          const found = normalized.find((a) => a.slug === slug);
+          setMeta(found || null);
+        }
+      })
+      .catch(() => { });
   }, [slug]);
 
   if (error) {
@@ -41,13 +72,43 @@ export default function Article() {
     return <p>Loading…</p>;
   }
 
+  const components = {
+    a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+      const { href, children, ...rest } = props;
+      if (!href) return <a {...rest}>{children}</a>;
+      const isExternal = /^https?:\/\//.test(href);
+      if (isExternal) {
+        return (
+          <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
+            {children}
+          </a>
+        );
+      }
+      return (
+        <a href={href} {...rest}>
+          {children}
+        </a>
+      );
+    },
+  };
+
   return (
     <article>
+      {/* display metadata if available */}
+      {meta?.aiGenerated && (
+        <span className="ai-badge">✨ AI Generated Article</span>
+      )}
+      {meta?.date && <p className="article-date">{meta.date}</p>}
+      {meta?.description && (
+        <p className="article-description">{meta.description}</p>
+      )}
       <ReactMarkdown
         rehypePlugins={[
           rehypeRaw,
           [rehypeSanitize, sanitizeSchema],
+          rehypeHighlight,
         ]}
+        components={components}
       >
         {content}
       </ReactMarkdown>

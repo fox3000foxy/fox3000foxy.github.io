@@ -1,3 +1,34 @@
 [
-  "hello-world"
+  {
+    "slug": "hello-world",
+    "title": "Hello World",
+    "description": "A sample post for Fox's Blog.",
+    "date": "2026-03-08"
+  },
+  {
+    "slug": "about-my-github-profile",
+    "title": "About My GitHub Profile",
+    "description": "A brief introduction to my GitHub profile.",
+    "date": "2026-03-08"
+  },
+  {
+    "slug": "how-this-blog-works",
+    "title": "How Does This Blog Work?",
+    "description": "A deep dive into this blog's internals: React, Vite, Markdown, the CI/CD pipeline, and the article-writing workflow.",
+    "date": "2026-03-08",
+    "aiGenerated": true
+  },
+  {
+    "slug": "my-passions",
+    "title": "My Passions",
+    "description": "Coding, drawing, automating things, discovering old tech, and more — a look into what drives me.",
+    "date": "2026-03-08"
+  },
+  {
+    "slug": "ssh-signing-script",
+    "title": "SSH commit signing script explained",
+    "description": "A walkthrough of the SSH commit‑signing helper and why I wanted stylish commits.",
+    "date": "2026-03-08",
+    "aiGenerated": true
+  }
 ]

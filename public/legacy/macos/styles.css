@@ -1,0 +1,308 @@
+body{
+    background-image: url("img/background.jpg");
+    overflow: hidden;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: all .2s ease;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+}
+
+*{
+  font-family: -apple-system;
+}
+
+.menubar{
+  width: 100%;
+  background-color: hsla(240, 24%, 100%,.3);
+  padding: 0px 7.5px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+.menubar p{
+  font-size: 12.5px;
+}
+
+.menubarleft{
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.menubarleft p{
+  margin: 0px 7.5px;
+}
+
+.menubarleft pre{
+  font-size: 20px;
+  margin: 0px 7.5px;
+}
+
+.menubarright{
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.menubarright p{
+  margin: 2.5px;
+}
+
+.menubarright img{
+  width: 15px;
+  margin: 7.5px;
+}
+
+.dockcontainer{
+    display: flex;
+    justify-content: center;
+}
+
+.dock{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    margin: 0;
+    padding: 2px;
+    box-shadow: inset 0 0 0 .2px hsla(0, 0%, 96%,.7),0 0 0 .2px hsla(0, 0%, 13%,.7),#0000004d 2px 5px 19px 7px;
+    background-color: hsla(240, 24%, 100%,.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
+    z-index: 10000000000000;
+}
+
+.dockicons{
+    border-radius: 3px;
+    width:  60px;
+    margin: 5px 3px;
+}
+
+.launchpad{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 10000000000000;
+}
+
+.launchpadbackground{
+  position: absolute;
+  background-image: url("img/background.jpg");
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: rgba(160,160,160,.8);
+  background-blend-mode: multiply;
+  filter: blur(20px);
+  -webkit-filter: blur(20px);
+  width: 100%;
+  height: 100%;
+}
+
+.launchpadentries{
+  padding: 2.5% 10%;
+  width: 100%;
+  height: calc(100% - 70px);
+  display: grid;
+  box-sizing: border-box;
+  grid-template-rows: auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto auto auto;
+}
+
+.launchpadentry{
+  position: relative;
+}
+
+.launchpadentry img{
+  display: block;
+  margin: 0 auto;
+  width: 100px;
+}
+
+.launchpadentry p{
+  margin: 3px 0px;
+  font-size: 14px;
+  color: white;
+}
+
+.app{
+    position: fixed;
+    box-shadow: 0px 8.5px 10px rgba(0, 0, 0, .28);
+    border: .5px solid #7698a9;
+    border-radius: 10px;
+    background: lightgray;
+    overflow: hidden;
+    width: 60%;
+    height: 75%;
+    top: 8%;
+    left: 20%;
+    transition: all .17s cubic-bezier(.85,.14,.14,.85), opacity 80ms linear;
+    display: none;
+    z-index: 1;
+}
+
+.appheader{
+    width: calc(100% - 20px);
+    height: 30px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 7.5px 10px;
+}
+
+.close{
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
+    border-radius: 10px;
+    background-color: #ff5f57;
+    border: 1px solid #e4433b;
+    margin: 0px 4px;
+}
+
+.minimize{
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 10px;
+    background-color: #febc2e;
+    border: 1px solid #c29c56;
+    margin: 0px 4px;
+}
+
+.maximize{
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 10px;
+  background-color: #29c840;
+  border: 1px solid #25a32d;
+  margin: 0px 4px;
+}
+
+.maxmin{
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 10px;
+  background-color: #29c840;
+  border: 1px solid #25a32d;
+  margin: 0px 4px;
+  display: none;
+}
+
+.safariurlarea{
+    width: calc(100% - 65px);
+    display: flex;
+    justify-content: center;
+}
+
+.safariforwardandback{
+  width: 25px;
+  margin-left: 10px;
+}
+
+.safariurlbar{
+    height: 30px;
+    margin: 0;
+    width: 60%;
+    border-radius: 7.5px;
+    border: none;
+    background-color: #D7D7D7;
+    text-align: center;
+}
+
+.safariurlbar:focus::before{
+  outline: 0;
+  border: solid #5984e1;
+}
+
+.safariurlbar:focus{
+  border-radius: 6.25px;
+}
+
+.safarireloadimg{
+  margin-left: -25px;
+  width: 15px;
+  height: 17.5px;
+  margin-top: 6.25px;
+}
+
+.appIframe{
+    height: calc(100% - 44px);
+    min-height: calc(100% - 44px);
+    width: 100%;
+    border-width: 0px;
+}
+
+.resizer {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+  }
+  .resizer.top-left {
+    top: -1px;
+    left: -1px;
+    cursor: nw-resize;
+    z-index: 2;
+  }
+  .resizer.top-right {
+    top: -1px;
+    right: -1px;
+    cursor: ne-resize;
+    z-index: 2;
+  }
+  .resizer.bottom-left {
+    bottom: -1px;
+    left: -1px;
+    cursor: sw-resize;
+    z-index: 2;
+  }
+  .resizer.bottom-right {
+    bottom: -1px;
+    right: -1px;
+    cursor: se-resize;
+    z-index: 2;
+  }
+  .resizer.top{
+    top: -1px;
+    cursor: n-resize;
+  }
+  .resizer.left{
+    left: -1px;
+    cursor: w-resize;
+  }
+  .resizer.bottom{
+    bottom: -1px;
+    cursor: s-resize;
+  }
+  .resizer.right{
+    right: -1px;
+    cursor: e-resize;
+  }
+  .resizertopbottom{
+    width: 100%;
+    z-index: 1;
+    height: 5px;
+  }
+  .resizerleftright{
+    height: 100%;
+    z-index: 1;
+    width: 5px;
+}

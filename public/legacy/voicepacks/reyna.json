@@ -1,0 +1,16 @@
+{
+    "name": "Reyna",
+    "iconURL": "https://cdn.discordapp.com/emojis/1340353599858806785.webp?size=512",
+    "splashGradient": "radial-gradient(circle, #d9a5a2 0%, rgba(0,0,0,0) 100%)",
+    "baseColor": "#d9a5a2",
+    "previewSoundURLs": [
+        "https://cdn.discordapp.com/soundboard-sounds/1340357897451995146"
+    ],
+    "available": true,
+    "temporarilyAvailable": false,
+    "styleKey": "skye",
+    
+    "id": "724847846897221642-reyna",
+    "author": "724847846897221642",
+    "onnxFileUrl": "https://cdn.discordapp.com/attachments/1264847846897221642/1264847846897221642/reyna.onnx"
+}

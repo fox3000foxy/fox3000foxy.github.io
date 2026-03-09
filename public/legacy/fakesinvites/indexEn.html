@@ -1,0 +1,458 @@
+<html class="full-motion disable-forced-colors theme-dark platform-web font-size-16">
+	<head>
+		<link rel="stylesheet" href='discord.css'>
+		<link rel="stylesheet" href='style2.css'>
+		<link rel="stylesheet" href='style.css'>
+		<link rel="stylesheet" href='buttons.css'>
+		<link rel="stylesheet" href='select.css'>
+		<script src="html2canvas.min.js"></script>
+		<script src="jquery-2.1.1.min.js"></script>
+    <meta content="Fakes Invites" property="og:title">
+    <meta content="Create fakes invites box here !" property="og:description">
+    <meta content="FakesInvites" property="og:site_name">
+    <meta content='https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png' property='og:image'>
+	</head>
+	<body style="color:white;">
+		<div style="
+		position:absolute;
+		left:5%;
+		right:5%;
+		top:5%;
+		width:90%;
+		height:95%;
+		text-align:center
+	">
+        <!-- padding:15% -->
+		<a href="index.html">Français ?</a><br>
+        <a href="nitrosEn.html">Searching gifts pranks ?</a><br>
+        <input id="codeId" value="SkW9j8xzyF" class="inputDefault-_djjkz input-cIJ7To" style="width:20%"><br>
+        <button onclick="fecthInvite(codeId.value)" class="red" style="width:20%">Get the target</button><button onclick="update()" class="green" style="width:20%">Update</button>
+        <br><br>
+        <form id="options">
+            <fieldset>
+                <legend>Options</legend>
+                Badge: <br>
+                <select name="badge" class="inputDefault-_djjkz input-cIJ7To" style="width:20%;overflow:hidden" size=1>
+                    <option value="none">No badge</option>
+                    <option value="verified">Certified</option>
+                    <option value="partner">Partnership</option>
+                </select><br>
+
+                <!-- <div class="dropdown" onclick="if(this.classList.contains('open')==true){this.classList.remove('open');}else{this.classList.add('open');}" style="width:30%"> -->
+                <!-- <div class="control item"> -->
+                <!-- <span class="left"> -->
+                <!-- <i class="prefix icon hashtag"> </i> -->
+                <!-- <span class="name" id="valueOfSelect">Pas de badge</span> -->
+                <!-- </span> -->
+                <!-- <span class="right"> -->
+                <!-- <i class="icon chevron-down"></i> -->
+                <!-- </span> -->
+                <!-- </div> -->
+                <!-- <div class="menu"> -->
+                <!-- <div class="item"  onclick='document.getElementById("valueOfSelect").innerHTML=this.childNodes[3].innerHTML'> -->
+                <!-- <i class="prefix icon hashtag"> </i> -->
+                <!-- <span class="name">Pas de badge</span> -->
+                <!-- </div> -->
+                <!-- <div class="item"  onclick='document.getElementById("valueOfSelect").innerHTML=this.childNodes[3].innerHTML'> -->
+                <!-- <i class="prefix icon hashtag"> </i> -->
+                <!-- <span class="name">Certifié</span> -->
+                <!-- </div> -->
+                <!-- <div class="item"  onclick='document.getElementById("valueOfSelect").innerHTML=this.childNodes[3].innerHTML'> -->
+                <!-- <i class="prefix icon hashtag"> </i> -->
+                <!-- <span class="name">Partenaire</span> -->
+                <!-- </div> -->
+                <!-- </div> -->
+                <!-- </div> -->
+                Boosts number: <input class="inputDefault-_djjkz input-cIJ7To" type="number" style="width:15%" name="boostsNumber"><br>
+                Online members: <input class="inputDefault-_djjkz input-cIJ7To" type="number" style="width:15%" name="onlineMembersInp"><br>
+                All members: <input class="inputDefault-_djjkz input-cIJ7To" type="number" style="width:15%" name="allMembersInp"><br>
+                URL Splash : <input class="inputDefault-_djjkz input-cIJ7To" style="width:15%" name="splashURLInp"><br>
+            </fieldset>
+        </form><br><br>
+        Original:
+        <div id="invite" style="text-align:left;width:432px;left:0;right:0;margin:auto;"></div><br>
+        Picture:<br>
+        <div id="resultImage"></div>
+        <br>
+        <!-- <span>N'oublies pas de copier cette image en donnant le lien entre chevrons pour désactiver l'apercu original ( < et > )</span><br> -->
+        <span>Dont forget to copy this picture with giving invite link between chevrons for disable original invite view ( < and >)</span><br>
+        <button onclick="downloadURI(dataURIToSave,codeId.value)" class="green" style="width:20%">Save</button>
+        <script>
+            function update() {
+                setTimeout(() => {
+                    boosts = !!options.boostsNumber.value ? parseInt(options.boostsNumber.value) : parseInt(options.boostsNumber.placeholder)
+                    params.boostLvl = boosts >= 14 ? 3 :
+                        boosts >= 7 ? 2 :
+                        boosts >= 2 ? 1 : 0;
+                    params.firstBadge = options.badge.value
+                    params.onlineMembers = !!options.onlineMembersInp.value ?
+                        numStr(parseInt(options.onlineMembersInp.value.replaceAll(" ", ""))) :
+                        numStr(parseInt(options.onlineMembersInp.placeholder.replaceAll(" ", "")))
+                    params.allMembers = !!options.allMembersInp.value ?
+                        numStr(parseInt(options.allMembersInp.value.replaceAll(" ", ""))) :
+                        numStr(parseInt(options.allMembersInp.placeholder.replaceAll(" ", "")))
+                    params.splashURL = options.splashURLInp.value || options.splashURLInp.placeholder || false
+                    params.oldsplashURL = options.splashURLInp.value || options.splashURLInp.placeholder || false
+                    fetchInviteImgs()
+                })
+            }
+
+            params = {
+                name: "SpotiRose",
+                iconURL: 'https://media.discordapp.net/attachments/919513032487501854/958983257070895114/pinkSpot.png?width=150&height=150',
+                splashURL: null,
+                firstBadge: "",
+                boosts: 0,
+                boostLvl: 0,
+                onlineMembers: "5 566",
+                allMembers: "15 588",
+                joinText: 'Join',
+            }
+            datasURLFETCHED = false;
+
+            function fecthInvite(code) {
+                datasURLFETCHED = false;
+                fetch("https://discord.com/api/v7/invites/" + code + "?with_counts=true").then(res => res.json())
+                    .then(res => {
+                        console.log("fetching", "https://discord.com/api/v7/invites/" + code + "?with_counts=true")
+                        console.log(`https://cdn.discordapp.com/splashes/${res.guild.id}/${res.guild.splash}.jpg?size=480`)
+                        boosts = res.guild.premium_subscription_count
+                        boostLvl = boosts >= 14 ? 3 :
+                            boosts >= 7 ? 2 :
+                            boosts >= 2 ? 1 : 0
+                        partner = res.guild.features.indexOf('PARTNERED') != -1 ? 'partner' : null
+                        verified = res.guild.features.indexOf('VERIFIED') != -1 ? 'verified' : null
+                        console.log(verified)
+                        params = {
+							name: res.guild.name,
+							iconURL: `https://cdn.discordapp.com/icons/${res.guild.id}/${res.guild.icon}.webp?size=56`,
+							oldsplashURL: res.guild.splash ? `https://cdn.discordapp.com/splashes/${res.guild.id}/${res.guild.splash}.jpg?size=480` : null,
+							splashURL: res.guild.splash ? `https://cdn.discordapp.com/splashes/${res.guild.id}/${res.guild.splash}.jpg?size=480` : null,
+							firstBadge: verified != null ? verified : partner != null ? partner : 'none',
+							boosts,
+							boostLvl,
+							onlineMembers: numStr(res.approximate_presence_count),
+							allMembers: numStr(res.approximate_member_count),
+							joinText: 'Join',
+						}
+						fetchInviteImgs()
+                    })
+            }
+
+            function numStr(a, b) {
+                a = '' + a;
+                b = b || ' ';
+                var c = '',
+                    d = 0;
+                while (a.match(/^0[0-9]/)) {
+                    a = a.substr(1);
+                }
+                for (var i = a.length - 1; i >= 0; i--) {
+                    c = (d != 0 && d % 3 == 0) ? a[i] + b + c : a[i] + c;
+                    d++;
+                }
+                return c;
+            }
+
+            //my guild : GVkVPgUABc
+            function setInvite() {
+                options.boostsNumber.placeholder = params.boosts
+                options.badge.selectedIndex = params.firstBadge == 'verified' ? 1 :
+                    params.firstBadge == 'partner' ? 2 : 0
+                options.onlineMembersInp.placeholder = params.onlineMembers
+                options.allMembersInp.placeholder = params.allMembers
+                options.splashURLInp.placeholder = params.oldsplashURL || 'https://'
+				/*invite.innerHTML = `
+				<!-- <div id="message-accessories-958715535082807306" class="container-2sjPya"> -->
+					<div class="wrapper-1HIH0j userSelectNone-3AtPzf cursorDefault-2KkZ5q">
+					<!-- Splash -->
+					${(params.splashURL&&params.splashURL!='https://'&&params.boostLvl>0)?`
+						<div class="inviteSplash-2nkLRX"><img src="data:," alt="" class="inviteSplashImage-3f6SDQ inviteSplashImageLoaded-PnU-4Q" style="	background-image: url('${params.splashURL}');"></div>
+					`:''}
+					<b><h5 class="colorStandard-21JIj7 size14-3fJ-ot h5-2RwDNl title-3hptVQ header-3anOjb">You've been invited to join a server</h5></b>
+					<div class="content-1r-J1r">
+						<div class="icon-1zKOXL guildIconImage-74OdmM guildIcon-3ZfRfI iconSizeLarge-_r2zCK iconActiveLarge-ac-EDu" style="background-image: url('${params.iconURL}');"></div>
+						<div class="flex-2S1XBF flex-3BkGQD vertical-3aLnqW flex-3BkGQD directionColumn-3pi1nm justifyCenter-rrurWZ alignStretch-Uwowzr noWrap-hBpHBz guildInfo-UCKhrV" style="flex: 1 1 auto;">
+							<h3 class="inviteDestination-1rM5rX base-21yXnu size16-rrJ6ag"><span class="infoTitle-367C0l">
+									<div class="guildNameWrapper-OUvDrW">
+										
+										${params.firstBadge=="verifie"?`
+										<!-- Certifié -->
+										<div class="flowerStarContainer-1QeD-L verified-1Jv_7P background-3Da2vZ guildBadge-3FaJzP" style="width: 16px; height: 16px;"><svg aria-label="Vérifié" class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+												<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+											</svg>
+											<div class="childContainer-U_a6Yh"><svg class="icon-3BYlXK" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+													<path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="currentColor"></path>
+												</svg></div></div>
+										`:""}
+										
+										${params.firstBadge=="partne"?`
+										<!-- Partner -->
+										<div class="flowerStarContainer-1QeD-L partnered-23cXFN background-3Da2vZ guildBadge-3FaJzP" style="width: 16px; height: 16px;"><svg aria-label="Partenaire de Discord" class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+												<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+											</svg>
+											<div class="childContainer-U_a6Yh"><svg class="icon-3BYlXK" aria-hidden="false" width="16" height="16" viewBox="0 0 16 16">
+													<path d="M10.5906 6.39993L9.19223 7.29993C8.99246 7.39993 8.89258 7.39993 8.69281 7.29993C8.59293 7.19993 8.39317 7.09993 8.29328 6.99993C7.89375 6.89993 7.5941 6.99993 7.29445 7.19993L6.79504 7.49993L4.29797 9.19993C3.69867 9.49993 2.99949 9.39993 2.69984 8.79993C2.30031 8.29993 2.50008 7.59993 2.99949 7.19993L5.99598 5.19993C6.79504 4.69993 7.79387 4.49993 8.69281 4.69993C9.49188 4.89993 10.0912 5.29993 10.5906 5.89993C10.7904 6.09993 10.6905 6.29993 10.5906 6.39993Z" fill="currentColor"></path>
+													<path d="M13.4871 7.79985C13.4871 8.19985 13.2874 8.59985 12.9877 8.79985L9.89135 10.7999C9.29206 11.1999 8.69276 11.3999 7.99358 11.3999C7.69393 11.3999 7.49417 11.3999 7.19452 11.2999C6.39545 11.0999 5.79616 10.6999 5.29674 10.0999C5.19686 9.89985 5.29674 9.69985 5.39663 9.59985L6.79499 8.69985C6.89487 8.59985 7.09463 8.59985 7.19452 8.69985C7.39428 8.79985 7.59405 8.89985 7.69393 8.99985C8.09346 8.99985 8.39311 8.99985 8.69276 8.79985L9.39194 8.39985L11.3896 6.99985L11.6892 6.79985C12.1887 6.49985 12.9877 6.59985 13.2874 7.09985C13.4871 7.39985 13.4871 7.59985 13.4871 7.79985Z" fill="currentColor"></path>
+												</svg></div></div>
+										`:""}
+										<!-- Serveur name -->
+										<span class="guildName-3G4jq-">${params.name}</span>
+									</div>
+																${options.badge.value=='none' && params.boostLvl==1?`
+									<!-- Boost lvl1 -->
+									<span class="infoBadge-3DRXxE">
+											<div class="guildIconContainer-3QvE6w">
+												<div class="" aria-label="Niveau&nbsp;1" role="button" tabindex="0">
+													<div class="flowerStarContainer-1QeD-L iconBackgroundTierOne-1S68CI" style="width: 16px; height: 16px;"><svg class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+															<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+														</svg>
+														<div class="childContainer-U_a6Yh"><svg class="boostedGuildIconGem-u5aHBL iconTierOne-2h4ba6" aria-hidden="false" width="6" height="11" viewBox="0 0 6 11">
+																<path fill="currentColor" d="M3 0.625244L0 3.62524V7.62524L3 10.6252L6 7.62524V3.62524L3 0.625244ZM5 7.24524L3 9.24524L1 7.24524V4.04524L3 2.04524L5 4.04524V7.24524Z"></path>
+															</svg></div>
+													</div>
+												</div>
+											</div>
+										</span>
+									`:''}
+									${options.badge.value=='none' && params.boostLvl==2?`
+									<!-- Boost lvl2 -->
+									<span class="infoBadge-3DRXxE">
+										<div class="guildIconContainer-3QvE6w">
+											<div class="" aria-label="Niveau&nbsp;2" role="button" tabindex="0">
+												<div class="flowerStarContainer-1QeD-L iconBackgroundTierTwo-2XoNXD" style="width: 16px; height: 16px;"><svg class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+														<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+													</svg>
+													<div class="childContainer-U_a6Yh"><svg class="boostedGuildIconGem-u5aHBL iconTierTwo-3MBPlM" aria-hidden="false" width="6" height="11" viewBox="0 0 6 11">
+															<g fill="currentColor" fill-rule="evenodd">
+																<path d="M2 4.42007V6.79007L3 7.79007L4 6.79007V4.42007L3.01 3.42007L2 4.42007Z"></path>
+																<path d="M3 0.590088L0 3.59009V7.59009L3 10.5901L6 7.59009V3.59009L3 0.590088ZM5 7.21009L3 9.21009L1 7.21009V4.00009L3 2.00009L5 4.00009V7.21009Z"></path>
+															</g>
+														</svg></div>
+												</div>
+											</div>
+										</div>
+									</span>
+									`:''}
+									${options.badge.value=='none' && params.boostLvl==3?`
+									<!-- Boost lvl3 -->
+									<span class="infoBadge-3DRXxE">
+											<div class="guildIconContainer-3QvE6w">
+												<div class="" aria-label="Niveau&nbsp;3" role="button" tabindex="0">
+													<div class="flowerStarContainer-1QeD-L iconBackgroundTierThree-2hfNBO" style="width: 16px; height: 16px;"><svg class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+															<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+														</svg>
+														<div class="childContainer-U_a6Yh"><svg class="boostedGuildIconGem-u5aHBL iconTierThree-n2n0gX" aria-hidden="false" width="6" height="11" viewBox="0 0 6 11">
+																<g fill="currentColor" fill-rule="evenodd">
+																	<path d="M3 0.625305L0 3.62531V7.62531L3 10.6253L6 7.62531V3.62531L3 0.625305ZM5 7.24531L3 9.24531L1 7.24531V4.04531L3 2.04531L5 4.04531V7.24531Z"></path>
+																	<path d="M3.76 4.21526L3 3.45526L2 4.45526V5.97526L3.76 4.21526Z"></path>
+																	<path d="M2.28003 7.11532L3.00003 7.83532L4.00003 6.83532V5.39532L2.28003 7.11532Z"></path>
+																</g>
+															</svg></div>
+													</div>
+												</div>
+											</div>
+										</span>
+									`:''}
+									${options.badge.value=='partner'?`
+									<!-- Partenaire -->
+									<span class="infoBadge-3DRXxE"><div class="guildIconContainer-3QvE6w"><div class="flowerStarContainer-1QeD-L partnered-23cXFN background-3Da2vZ guildBadge-3_UK6z disableColor-1nVFoH" style="width: 16px; height: 16px;"><svg aria-label="Partenaire de Discord" class="flowerStar-2tNFCR" aria-hidden="false" role="img" width="16" height="16" viewBox="0 0 16 15.2"><path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path></svg><div class="childContainer-U_a6Yh"><svg class="icon-3BYlXK" aria-hidden="true" role="img" width="16" height="16" viewBox="0 0 16 16"><path d="M10.5906 6.39993L9.19223 7.29993C8.99246 7.39993 8.89258 7.39993 8.69281 7.29993C8.59293 7.19993 8.39317 7.09993 8.29328 6.99993C7.89375 6.89993 7.5941 6.99993 7.29445 7.19993L6.79504 7.49993L4.29797 9.19993C3.69867 9.49993 2.99949 9.39993 2.69984 8.79993C2.30031 8.29993 2.50008 7.59993 2.99949 7.19993L5.99598 5.19993C6.79504 4.69993 7.79387 4.49993 8.69281 4.69993C9.49188 4.89993 10.0912 5.29993 10.5906 5.89993C10.7904 6.09993 10.6905 6.29993 10.5906 6.39993Z" fill="currentColor"></path><path d="M13.4871 7.79985C13.4871 8.19985 13.2874 8.59985 12.9877 8.79985L9.89135 10.7999C9.29206 11.1999 8.69276 11.3999 7.99358 11.3999C7.69393 11.3999 7.49417 11.3999 7.19452 11.2999C6.39545 11.0999 5.79616 10.6999 5.29674 10.0999C5.19686 9.89985 5.29674 9.69985 5.39663 9.59985L6.79499 8.69985C6.89487 8.59985 7.09463 8.59985 7.19452 8.69985C7.39428 8.79985 7.59405 8.89985 7.69393 8.99985C8.09346 8.99985 8.39311 8.99985 8.69276 8.79985L9.39194 8.39985L11.3896 6.99985L11.6892 6.79985C12.1887 6.49985 12.9877 6.59985 13.2874 7.09985C13.4871 7.39985 13.4871 7.59985 13.4871 7.79985Z" fill="currentColor"></path></svg></div></div></div></span>
+									`:''}
+									${options.badge.value=='verified'?`
+									<!-- VERIFIED -->
+									<span class="infoBadge-3DRXxE"><div class="guildIconContainer-3QvE6w"><div class="flowerStarContainer-1QeD-L verified-1Jv_7P background-3Da2vZ guildBadge-3_UK6z disableColor-1nVFoH" style="width: 16px; height: 16px;"><svg aria-label="Vérifié et partenaire" class="flowerStar-2tNFCR" aria-hidden="false" role="img" width="16" height="16" viewBox="0 0 16 15.2"><path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path></svg><div class="childContainer-U_a6Yh"><svg class="icon-3BYlXK" aria-hidden="true" role="img" width="16" height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="currentColor"></path></svg></div></div></div></span>
+									`:''}
+								</span></h3><strong class="colorStandard-21JIj7 size14-3fJ-ot guildDetail-3EJhW_">
+								<div class="statusCounts-3GLDH6">
+								<i class="statusOnline-Iw3r2o status-JIDx3x"></i><span class="count-62gVQ0" id="onlineLabels" style="width:80px;">${params.onlineMembers} Online</span>
+								<i class="statusOffline-2R-ArP status-JIDx3x"></i><span class="count-62gVQ0" id="membersLabels">${params.allMembers} Members</span>
+								</div>
+							</strong>
+						</div>
+						<br>
+						<div class="button-2b4VEQ height20-WSMpPs button-f2h6uQ lookFilled-yCfaCM colorGreen-3y-Z79 buttonSize-3QlBTl grow-2sR_-F"  style="background-color:rgb(45, 125, 70)">
+							${params.joinText}
+						</span>
+					</div>
+				`*/
+				
+				invite.innerHTML = `
+					<div id="message-accessories-1049277204569280602" class="container-2sjPya">
+					<div class="wrapper-1HIH0j userSelectNone-3AtPzf cursorDefault-2KkZ5q">
+					${(params.splashURL&&params.splashURL!='https://'&&params.boostLvl>0)?`
+						<div class="inviteSplash-2nkLRX"><img src="data:," alt="" class="inviteSplashImage-3f6SDQ inviteSplashImageLoaded-PnU-4Q" style="	background-image: url('${params.splashURL}');"></div>
+					`:''}
+						<h3 class="h5-2RwDNl eyebrow-I4BG42 header-3anOjb">You've been invited to join a server</h3>
+						<div class="content-1r-J1r">
+							<div class="headerLine-2AIsUj">
+								<div class="icon-1zKOXL guildIconImage-74OdmM guildIcon-3ZfRfI iconSizeLarge-_r2zCK iconActiveLarge-ac-EDu" style="background-image: url('${params.iconURL}');"></div>
+								<div class="flex-2S1XBF flex-3BkGQD vertical-3aLnqW flex-3BkGQD directionColumn-3pi1nm justifyCenter-rrurWZ alignStretch-Uwowzr noWrap-hBpHBz guildInfo-UCKhrV" style="flex: 1 1 auto;">
+									<h3 class="defaultColor-24IHKz heading-md-semibold-3sznX7 defaultColor-HXu-5n inviteDestination-1rM5rX" data-text-variant="heading-md/semibold"><span class="infoTitle-367C0l">
+											<div class="guildNameWrapper-OUvDrW"><span class="guildName-3G4jq-">${params.name}</span></div>									${options.badge.value=='none' && params.boostLvl==1?`
+									<!-- Boost lvl1 -->
+									<span class="infoBadge-3DRXxE">
+											<div class="guildIconContainer-3QvE6w">
+												<div class="" aria-label="Niveau&nbsp;1" role="button" tabindex="0">
+													<div class="flowerStarContainer-1QeD-L iconBackgroundTierOne-1S68CI" style="width: 16px; height: 16px;"><svg class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+															<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+														</svg>
+														<div class="childContainer-U_a6Yh"><svg class="boostedGuildIconGem-u5aHBL iconTierOne-2h4ba6" aria-hidden="false" width="6" height="11" viewBox="0 0 6 11">
+																<path fill="currentColor" d="M3 0.625244L0 3.62524V7.62524L3 10.6252L6 7.62524V3.62524L3 0.625244ZM5 7.24524L3 9.24524L1 7.24524V4.04524L3 2.04524L5 4.04524V7.24524Z"></path>
+															</svg></div>
+													</div>
+												</div>
+											</div>
+										</span>
+									`:''}
+									${options.badge.value=='none' && params.boostLvl==2?`
+									<!-- Boost lvl2 -->
+									<span class="infoBadge-3DRXxE">
+										<div class="guildIconContainer-3QvE6w">
+											<div class="" aria-label="Niveau&nbsp;2" role="button" tabindex="0">
+												<div class="flowerStarContainer-1QeD-L iconBackgroundTierTwo-2XoNXD" style="width: 16px; height: 16px;"><svg class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+														<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+													</svg>
+													<div class="childContainer-U_a6Yh"><svg class="boostedGuildIconGem-u5aHBL iconTierTwo-3MBPlM" aria-hidden="false" width="6" height="11" viewBox="0 0 6 11">
+															<g fill="currentColor" fill-rule="evenodd">
+																<path d="M2 4.42007V6.79007L3 7.79007L4 6.79007V4.42007L3.01 3.42007L2 4.42007Z"></path>
+																<path d="M3 0.590088L0 3.59009V7.59009L3 10.5901L6 7.59009V3.59009L3 0.590088ZM5 7.21009L3 9.21009L1 7.21009V4.00009L3 2.00009L5 4.00009V7.21009Z"></path>
+															</g>
+														</svg></div>
+												</div>
+											</div>
+										</div>
+									</span>
+									`:''}
+									${options.badge.value=='none' && params.boostLvl==3?`
+									<!-- Boost lvl3 -->
+									<span class="infoBadge-3DRXxE">
+											<div class="guildIconContainer-3QvE6w">
+												<div class="" aria-label="Niveau&nbsp;3" role="button" tabindex="0">
+													<div class="flowerStarContainer-1QeD-L iconBackgroundTierThree-2hfNBO" style="width: 16px; height: 16px;"><svg class="flowerStar-2tNFCR" aria-hidden="false" width="16" height="16" viewBox="0 0 16 15.2">
+															<path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path>
+														</svg>
+														<div class="childContainer-U_a6Yh"><svg class="boostedGuildIconGem-u5aHBL iconTierThree-n2n0gX" aria-hidden="false" width="6" height="11" viewBox="0 0 6 11">
+																<g fill="currentColor" fill-rule="evenodd">
+																	<path d="M3 0.625305L0 3.62531V7.62531L3 10.6253L6 7.62531V3.62531L3 0.625305ZM5 7.24531L3 9.24531L1 7.24531V4.04531L3 2.04531L5 4.04531V7.24531Z"></path>
+																	<path d="M3.76 4.21526L3 3.45526L2 4.45526V5.97526L3.76 4.21526Z"></path>
+																	<path d="M2.28003 7.11532L3.00003 7.83532L4.00003 6.83532V5.39532L2.28003 7.11532Z"></path>
+																</g>
+															</svg></div>
+													</div>
+												</div>
+											</div>
+										</span>
+									`:''}
+									${options.badge.value=='partner'?`
+									<!-- Partenaire -->
+									<span class="infoBadge-3DRXxE"><div class="guildIconContainer-3QvE6w"><div class="flowerStarContainer-1QeD-L partnered-23cXFN background-3Da2vZ guildBadge-3_UK6z disableColor-1nVFoH" style="width: 16px; height: 16px;"><svg aria-label="Partenaire de Discord" class="flowerStar-2tNFCR" aria-hidden="false" role="img" width="16" height="16" viewBox="0 0 16 15.2"><path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path></svg><div class="childContainer-U_a6Yh"><svg class="icon-3BYlXK" aria-hidden="true" role="img" width="16" height="16" viewBox="0 0 16 16"><path d="M10.5906 6.39993L9.19223 7.29993C8.99246 7.39993 8.89258 7.39993 8.69281 7.29993C8.59293 7.19993 8.39317 7.09993 8.29328 6.99993C7.89375 6.89993 7.5941 6.99993 7.29445 7.19993L6.79504 7.49993L4.29797 9.19993C3.69867 9.49993 2.99949 9.39993 2.69984 8.79993C2.30031 8.29993 2.50008 7.59993 2.99949 7.19993L5.99598 5.19993C6.79504 4.69993 7.79387 4.49993 8.69281 4.69993C9.49188 4.89993 10.0912 5.29993 10.5906 5.89993C10.7904 6.09993 10.6905 6.29993 10.5906 6.39993Z" fill="currentColor"></path><path d="M13.4871 7.79985C13.4871 8.19985 13.2874 8.59985 12.9877 8.79985L9.89135 10.7999C9.29206 11.1999 8.69276 11.3999 7.99358 11.3999C7.69393 11.3999 7.49417 11.3999 7.19452 11.2999C6.39545 11.0999 5.79616 10.6999 5.29674 10.0999C5.19686 9.89985 5.29674 9.69985 5.39663 9.59985L6.79499 8.69985C6.89487 8.59985 7.09463 8.59985 7.19452 8.69985C7.39428 8.79985 7.59405 8.89985 7.69393 8.99985C8.09346 8.99985 8.39311 8.99985 8.69276 8.79985L9.39194 8.39985L11.3896 6.99985L11.6892 6.79985C12.1887 6.49985 12.9877 6.59985 13.2874 7.09985C13.4871 7.39985 13.4871 7.59985 13.4871 7.79985Z" fill="currentColor"></path></svg></div></div></div></span>
+									`:''}
+									${options.badge.value=='verified'?`
+									<!-- VERIFIED -->
+									<span class="infoBadge-3DRXxE"><div class="guildIconContainer-3QvE6w"><div class="flowerStarContainer-1QeD-L verified-1Jv_7P background-3Da2vZ guildBadge-3_UK6z disableColor-1nVFoH" style="width: 16px; height: 16px;"><svg aria-label="Vérifié et partenaire" class="flowerStar-2tNFCR" aria-hidden="false" role="img" width="16" height="16" viewBox="0 0 16 15.2"><path fill="currentColor" fill-rule="evenodd" d="m16 7.6c0 .79-1.28 1.38-1.52 2.09s.44 2 0 2.59-1.84.35-2.46.8-.79 1.84-1.54 2.09-1.67-.8-2.47-.8-1.75 1-2.47.8-.92-1.64-1.54-2.09-2-.18-2.46-.8.23-1.84 0-2.59-1.54-1.3-1.54-2.09 1.28-1.38 1.52-2.09-.44-2 0-2.59 1.85-.35 2.48-.8.78-1.84 1.53-2.12 1.67.83 2.47.83 1.75-1 2.47-.8.91 1.64 1.53 2.09 2 .18 2.46.8-.23 1.84 0 2.59 1.54 1.3 1.54 2.09z"></path></svg><div class="childContainer-U_a6Yh"><svg class="icon-3BYlXK" aria-hidden="true" role="img" width="16" height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="currentColor"></path></svg></div></div></div></span>
+									`:''}
+										</span></h3><strong class="defaultColor-24IHKz text-sm-normal-3Zj3Iv guildDetail-3EJhW_" data-text-variant="text-sm/normal">
+										<div class="statusCounts-3GLDH6">
+											<div class="statusWrapper-3CHb8F"><i class="statusOnline-Iw3r2o status-JIDx3x"></i><span class="count-62gVQ0">${params.onlineMembers} Online</span></div>
+											<div class="statusWrapper-3CHb8F"><i class="statusOffline-2R-ArP status-JIDx3x"></i><span class="count-62gVQ0">${params.allMembers} Members</span></div>
+										</div>
+									</strong>
+								</div>
+							</div><button type="button" class="button-2b4VEQ height20-WSMpPs button-f2h6uQ lookFilled-yCfaCM colorGreen-3y-Z79 buttonSize-3QlBTl grow-2sR_-F" style="position:relative;right:6px">
+								<div class="contents-3ca1mk">Join</div>
+							</button>
+						</div>
+					</div>
+				</div>
+				`
+				dataURIToSave =''
+                $('#onlineLabels').renderedText()
+                $('#membersLabels').renderedText()
+                html2canvas(invite, {
+                        backgroundColor: null,
+                        scale: 2,
+                    })
+                    .then(canvas => {
+                        dataURIToSave = canvas.toDataURL()
+						resultImage.innerHTML = ''
+                        resultImage.appendChild(canvas)
+                    });
+            }
+
+            function fetchInviteImgs() {
+				fetch(params.iconURL)
+					.then(res => res.arrayBuffer())
+					.then(res => _arrayBufferToBase64(res))
+					.then(iconURL => {
+						if (params.splashURL != 'https://' && !!params.splashURL) {
+							fetch(params.splashURL)
+							.then(res => res.arrayBuffer())
+							.then(res => _arrayBufferToBase64(res))
+							.then(splashURL => {
+								iconURLFetch = iconURL
+								splashURLFetch = splashURL
+								params.iconURL = iconURL
+								params.splashURL = splashURL
+								setInvite()
+							})
+						}
+						else {
+							params.iconURL = iconURL
+							setInvite()
+						}
+					})
+            }
+
+            fetchInviteImgs()
+
+            function _arrayBufferToBase64(buffer) {
+                var binary = '';
+                var bytes = new Uint8Array(buffer);
+                var len = bytes.byteLength;
+                for (var i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                } 
+				return "data:image/png;base64," + btoa(binary);
+            }
+
+            $.fn.doOverflow = function() {
+                return this[0].scrollWidth > this.innerWidth()
+            }
+            $.fn.renderedText = function() {
+                    var o = s = this.text();
+                    console.log(s);
+                    console.log(s.length);
+                    while (s.length && this.doOverflow()) {
+                        s = s.slice(0, -1);
+                        //  console.log(s);
+                        this.text(s + "…");
+                        //  console.log(this.text());
+                    }
+                    return s;
+                }
+
+            function downloadURI(uri, name) {
+              var link = document.createElement("a");
+              link.download = name;
+              link.href = uri;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              delete link;
+            }
+        </script>
+        <style>
+            .inviteSplashImage-3f6SDQ {
+                background-position: center center;
+                background-size: cover;
+            }
+
+            fieldset {
+				padding:15px;
+                border: 1px solid white
+            }
+        </style>
+    </div>
+</body>
+
+</html>
