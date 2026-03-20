@@ -4,6 +4,7 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import '../styles/Home.css';
+import { fetchMarkdown, getCachedArticleMarkdown } from '../utils/articleCache';
 
 // reuse the same schema as Home so that authors can add classes and styles
 const sanitizeSchema = {
@@ -19,12 +20,22 @@ export default function Portfolio() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch('/portfolio.md')
-      .then((res) => {
-        if (!res.ok) throw new Error('Not found');
-        return res.text();
+    const cached = getCachedArticleMarkdown('portfolio');
+    if (cached !== null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setContent(cached);
+      setError(false);
+      return;
+    }
+
+    fetchMarkdown('portfolio', '/portfolio.md')
+      .then((text) => {
+        if (text === null) {
+          setError(true);
+          return;
+        }
+        setContent(text);
       })
-      .then((text) => setContent(text))
       .catch(() => setError(true));
   }, []);
 
