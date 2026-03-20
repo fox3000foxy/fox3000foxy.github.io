@@ -1,15 +1,16 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import './styles/App.css';
-const Article = lazy(() => import('./pages/Article'));
-const BlogList = lazy(() => import('./pages/BlogList'));
-const Home = lazy(() => import('./pages/Home'));
-const NotFound = lazy(() => import('./pages/NotFound'));
-const Portfolio = lazy(() => import('./pages/Portfolio'));
-const Project = lazy(() => import('./pages/Project'));
-const ProjectList = lazy(() => import('./pages/ProjectList'));
+
+import Article from './pages/Article';
+import BlogList from './pages/BlogList';
+import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import Portfolio from './pages/Portfolio';
+import Project from './pages/Project';
+import ProjectList from './pages/ProjectList';
 
 function App() {
   return (
