@@ -109,7 +109,6 @@ interface RepoCache {
 }
 
 const CACHE_KEY = 'fox3000foxy-project-list';
-const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 function formatRelativeDate(dateString: string): string {
   const date = new Date(dateString);
@@ -164,13 +163,17 @@ export default function ProjectList() {
   const [gists, setGists] = useState<Gist[]>(cachedData?.gists ?? []);
 
   useEffect(() => {
-    const needFetch = !cachedData || Date.now() - cachedData.fetchedAt >= CACHE_TTL_MS;
-    if (!needFetch) {
-      return;
+    if (cachedData) {
+      setLoading(false);
     }
 
-    Promise.all([fetchAllRepos('fox3000foxy'), fetchAllGists('fox3000foxy')])
-      .then(([repoData, gistData]) => {
+    const refreshData = async () => {
+      try {
+        const [repoData, gistData] = await Promise.all([
+          fetchAllRepos('fox3000foxy'),
+          fetchAllGists('fox3000foxy'),
+        ]);
+
         const filtered = repoData
           .filter((r) => !r.fork && r.language)
           .sort((a, b) => {
@@ -188,16 +191,19 @@ export default function ProjectList() {
           CACHE_KEY,
           JSON.stringify({ repos: filtered, gists: gistData, fetchedAt: Date.now() })
         );
-      })
-      .catch(() => {
+      } catch {
         if (!cachedData?.repos?.length) {
           setRepos([]);
         }
         if (!cachedData?.gists?.length) {
           setGists([]);
         }
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    refreshData();
   }, [cachedData]);
 
   if (loading) {
