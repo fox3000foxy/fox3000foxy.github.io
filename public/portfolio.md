@@ -23,9 +23,9 @@ Linux · Ubuntu
 
 ### Files
 
-- [Article Frandroid](/legacy/article-frandroid.html)
-- [Super Mario Bros Movie 2 Article](/legacy/article/fuite-du-film-super-mario-bros-le-film-2.html)
-- [MINECRAFT_PATHFINDING_LOGIC_AND_APPLICATIONS.pdf](/legacy/MINECRAFT_PATHFINDING_LOGIC_AND_APPLICATIONS.pdf)
+- [Article Frandroid](https://legacy.fox3000foxy.com/article-frandroid.html)
+- [Super Mario Bros Movie 2 Article](https://legacy.fox3000foxy.com/article/fuite-du-film-super-mario-bros-le-film-2.html)
+- [MINECRAFT_PATHFINDING_LOGIC_AND_APPLICATIONS.pdf](https://legacy.fox3000foxy.com/MINECRAFT_PATHFINDING_LOGIC_AND_APPLICATIONS.pdf)
 - [Licence Key System Generator (gist)](https://gist.github.com/fox3000foxy/a47adb4bfa347d89751897ab27cae1ec)
 
 ### Favorite repositories
@@ -52,16 +52,16 @@ Linux · Ubuntu
 
 ### Serverless modules / small sites
 
-- [ReactionsMarker – Discord super reactions creator](/legacy/reactionsmaker)
-- [FakesInvites – Discord invite/gift link creator](/legacy/fakesinvites)
-- [Discord Avatars (deprecated)](/legacy/discordavatars)
-- [FSVC – unused vtubing agency](/legacy/fsvc)
-- [VM – Windows 11 React clone](/legacy/vm)
-- [Android – Android in React clone](/legacy/android)
-- [Server Subs – Discord/Patreon subscription tool](/legacy/server-subs)
-- [Discord Patreons – server subscriptions page](/legacy/discord-patreons)
-- [Store – alternative subscriptions page](/legacy/store)
-- [Fake Meeting – video conference simulator](/legacy/fake-meeting)
+- [ReactionsMarker – Discord super reactions creator](https://legacy.fox3000foxy.com/reactionsmaker)
+- [FakesInvites – Discord invite/gift link creator](https://legacy.fox3000foxy.com/fakesinvites)
+- [Discord Avatars (deprecated)](https://legacy.fox3000foxy.com/discordavatars)
+- [FSVC – unused vtubing agency](https://legacy.fox3000foxy.com/fsvc)
+- [VM – Windows 11 React clone](https://legacy.fox3000foxy.com/vm)
+- [Android – Android in React clone](https://legacy.fox3000foxy.com/android)
+- [Server Subs – Discord/Patreon subscription tool](https://legacy.fox3000foxy.com/server-subs)
+- [Discord Patreons – server subscriptions page](https://legacy.fox3000foxy.com/discord-patreons)
+- [Store – alternative subscriptions page](https://legacy.fox3000foxy.com/store)
+- [Fake Meeting – video conference simulator](https://legacy.fox3000foxy.com/fake-meeting)
 
 ### Other projects & links
 
