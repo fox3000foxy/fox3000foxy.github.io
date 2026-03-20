@@ -1,3 +1,0 @@
-//- add input for modify values
-//- div to canvas to data url
-- gif support (last time !)
