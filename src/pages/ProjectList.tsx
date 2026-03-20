@@ -104,6 +104,7 @@ const LANGUAGE_PRIORITY: string[] = [
 
 interface RepoCache {
   repos: Repo[];
+  gists: Gist[];
   fetchedAt: number;
 }
 
@@ -147,7 +148,7 @@ export default function ProjectList() {
 
     try {
       const parsed: RepoCache = JSON.parse(cache);
-      if (Array.isArray(parsed.repos)) {
+      if (Array.isArray(parsed.repos) && Array.isArray(parsed.gists)) {
         return parsed;
       }
     } catch {
@@ -160,7 +161,7 @@ export default function ProjectList() {
   const [repos, setRepos] = useState<Repo[]>(cachedData?.repos ?? []);
   const [loading, setLoading] = useState<boolean>(!cachedData?.repos?.length);
 
-  const [gists, setGists] = useState<Gist[]>([]);
+  const [gists, setGists] = useState<Gist[]>(cachedData?.gists ?? []);
 
   useEffect(() => {
     const needFetch = !cachedData || Date.now() - cachedData.fetchedAt >= CACHE_TTL_MS;
@@ -191,6 +192,9 @@ export default function ProjectList() {
       .catch(() => {
         if (!cachedData?.repos?.length) {
           setRepos([]);
+        }
+        if (!cachedData?.gists?.length) {
+          setGists([]);
         }
       })
       .finally(() => setLoading(false));
