@@ -38,6 +38,8 @@ Sometimes I write npm packages, like [fetch-tor-proxy](https://www.npmjs.com/pac
 
 I have soooooooooo much projects. right now I have 146 repositories in total, only 103 are public! I will probably present them in the Blog section tho.
 
+Update: I now have 158 repositories, 108 public. I will probably present them in the Blog section tho. But not now ^^".
+
 NB: I have a lot of private repositories, and I don't want to talk about them, but they are mostly projects that I don't want to share with the world, or that are not finished yet, or that are just for fun and not really useful for anyone else than me. I also have some projects that are not on GitHub, like some Minecraft plugins that I made for Eminium Games, or some scripts that I use for myself.
 
 You can discover projects on [Project page](https://fox3000foxy.github.io/projects) and on my [GitHub profile](https://github.com/fox3000foxy)
