@@ -4,6 +4,10 @@ import { useParams } from 'react-router-dom';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import {
+  fetchArticleMarkdown,
+  getCachedArticleMarkdown,
+} from '../utils/articleCache';
 import NotFound from './NotFound';
 
 // extend the default schema to permit class and style on all elements
@@ -33,20 +37,25 @@ export default function Article() {
   useEffect(() => {
     if (!slug) return;
 
-    // fetch markdown content
-    fetch(`/articles/${slug}.md`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Not found');
-        }
-        return res.text();
-      })
-      .then((text) => {
-        // Treating assets link
-        const processed = text.replaceAll("assets/", "/articles/assets/");
-        setContent(processed);
-      })
-      .catch(() => setError(true));
+    const fromCache = getCachedArticleMarkdown(slug);
+    if (fromCache !== null) {
+      const processed = fromCache.replaceAll('assets/', '/articles/assets/');
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setContent(processed);
+      setError(false);
+    } else {
+      fetchArticleMarkdown(slug)
+        .then((text) => {
+          if (!text) {
+            setError(true);
+            return;
+          }
+          const processed = text.replaceAll('assets/', '/articles/assets/');
+          setContent(processed);
+          setError(false);
+        })
+        .catch(() => setError(true));
+    }
 
     // fetch metadata from index.json (if available)
     fetch('/articles/index.json')
@@ -61,7 +70,9 @@ export default function Article() {
           setMeta(found || null);
         }
       })
-      .catch(() => { });
+      .catch(() => {
+        /* no-op */
+      });
   }, [slug]);
 
   if (error) {

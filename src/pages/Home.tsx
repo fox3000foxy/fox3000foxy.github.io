@@ -4,6 +4,7 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import '../styles/Home.css';
+import { fetchMarkdown, getCachedArticleMarkdown } from '../utils/articleCache';
 
 // extend the default schema to permit `class` and `style` on all elements
 // (so markdown authors can add classes or inline styles to wrappers, tables, etc.)
@@ -21,12 +22,22 @@ export default function Home() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch('/home.md')
-      .then((res) => {
-        if (!res.ok) throw new Error('Not found');
-        return res.text();
+    const cached = getCachedArticleMarkdown('home');
+    if (cached !== null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setContent(cached);
+      setError(false);
+      return;
+    }
+
+    fetchMarkdown('home', '/home.md')
+      .then((text) => {
+        if (text === null) {
+          setError(true);
+          return;
+        }
+        setContent(text);
       })
-      .then((text) => setContent(text))
       .catch(() => setError(true));
   }, []);
 

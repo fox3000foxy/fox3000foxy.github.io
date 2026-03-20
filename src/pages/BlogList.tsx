@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/BlogList.css';
+import { prefetchArticleMarkdown, prefetchMarkdownEntries } from '../utils/articleCache';
 
 // article metadata fetched from index.json
 interface ArticleMeta {
@@ -25,6 +26,18 @@ export default function BlogList() {
             typeof item === 'string' ? { slug: item } : item
           );
           setArticles(normalized);
+
+          // prefetch all markdown files for fast navigation
+          const slugs = normalized
+            .map((item) => item.slug)
+            .filter(Boolean);
+          prefetchArticleMarkdown(slugs);
+
+          // also prefetch home and portfolio pages
+          prefetchMarkdownEntries([
+            { key: 'home', url: '/home.md' },
+            { key: 'portfolio', url: '/portfolio.md' },
+          ]);
         } else {
           setArticles([]);
         }
