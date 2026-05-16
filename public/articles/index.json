@@ -1,5 +1,12 @@
 [
   {
+    "slug": "character-factory",
+    "title": "Building character-factory: avatars with genetics",
+    "description": "A TypeScript module on top of DiceBear: coherent country/ethnicity-based generation, a small genetics engine for projecting children, and the engineering details that made it usable in a card game.",
+    "date": "2026-05-16",
+    "aiGenerated": true
+  },
+  {
     "slug": "hello-world",
     "title": "Hello World",
     "description": "A sample post for Fox's Blog.",
