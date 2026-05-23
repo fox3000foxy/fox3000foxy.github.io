@@ -163,10 +163,6 @@ export default function ProjectList() {
   const [gists, setGists] = useState<Gist[]>(cachedData?.gists ?? []);
 
   useEffect(() => {
-    if (cachedData) {
-      setLoading(false);
-    }
-
     const refreshData = async () => {
       try {
         const [repoData, gistData] = await Promise.all([
