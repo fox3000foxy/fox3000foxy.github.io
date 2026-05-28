@@ -1,85 +1,84 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/BlogList.css';
-import { prefetchArticleMarkdown, prefetchMarkdownEntries } from '../utils/articleCache';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import "../styles/BlogList.css";
+import {
+	prefetchArticleMarkdown,
+	prefetchMarkdownEntries,
+} from "../utils/articleCache";
 
 // article metadata fetched from index.json
 interface ArticleMeta {
-  slug: string;
-  title?: string;
-  description?: string;
-  date?: string;
-  aiGenerated?: boolean;
+	slug: string;
+	title?: string;
+	description?: string;
+	date?: string;
+	aiGenerated?: boolean;
 }
 
 export default function BlogList() {
-  const [articles, setArticles] = useState<ArticleMeta[]>([]);
+	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 
-  useEffect(() => {
-    fetch('/articles/index.json')
-      .then((res) => res.ok ? res.json() : [])
-      .then((data) => {
-        if (Array.isArray(data)) {
-          // normalize legacy array of strings
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const normalized: ArticleMeta[] = (data as any[]).map((item) =>
-            typeof item === 'string' ? { slug: item } : item
-          );
-          setArticles(normalized);
+	useEffect(() => {
+		fetch("/articles/index.json")
+			.then((res) => (res.ok ? res.json() : []))
+			.then((data) => {
+				if (Array.isArray(data)) {
+					// normalize legacy array of strings
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					const normalized: ArticleMeta[] = (data as any[]).map((item) =>
+						typeof item === "string" ? { slug: item } : item
+					);
+					setArticles(normalized);
 
-          // prefetch all markdown files for fast navigation
-          const slugs = normalized
-            .map((item) => item.slug)
-            .filter(Boolean);
-          prefetchArticleMarkdown(slugs);
+					// prefetch all markdown files for fast navigation
+					const slugs = normalized.map((item) => item.slug).filter(Boolean);
+					prefetchArticleMarkdown(slugs);
 
-          // also prefetch home and portfolio pages
-          prefetchMarkdownEntries([
-            { key: 'home', url: '/home.md' },
-            { key: 'portfolio', url: '/portfolio.md' },
-          ]);
-        } else {
-          setArticles([]);
-        }
-      })
-      .catch(() => setArticles([]));
-  }, []);
+					// also prefetch home and portfolio pages
+					prefetchMarkdownEntries([
+						{ key: "home", url: "/home.md" },
+						{ key: "portfolio", url: "/portfolio.md" },
+					]);
+				} else {
+					setArticles([]);
+				}
+			})
+			.catch(() => setArticles([]));
+	}, []);
 
-  return (
-    <div className="blog-list">
-      <h2>Blog Posts</h2>
-      {articles.length > 0 ? (
-        <div className="blog-grid">
-          {articles.map(({ slug, title, description, date, aiGenerated }) => (
-            <Link to={`/blog/${slug}`} key={slug} className="blog-card">
-              <div className="blog-card-body">
-                <h3 className="blog-card-title">
-                  {title ?? slug.replace(/-/g, ' ')}
-                </h3>
-                {aiGenerated && (
-                  <span className="ai-badge">✨ AI Generated Article</span>
-                )}
-                {description && (
-                  <p className="blog-card-desc">{description}</p>
-                )}
-              </div>
-              {date && (
-                <div className="blog-card-footer">
-                  <time dateTime={date}>
-                    {new Date(date + 'T00:00:00').toLocaleDateString('fr-FR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </time>
-                </div>
-              )}
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p>No articles found.</p>
-      )}
-    </div>
-  );
+	return (
+		<div className="blog-list">
+			<h2>Blog Posts</h2>
+			{articles.length > 0 ? (
+				<div className="blog-grid">
+					{articles.map(({ slug, title, description, date, aiGenerated }) => (
+						<Link to={`/blog/${slug}`} key={slug} className="blog-card">
+							<div className="blog-card-body">
+								<h3 className="blog-card-title">
+									{title ?? slug.replace(/-/g, " ")}
+								</h3>
+								{aiGenerated && (
+									<span className="ai-badge">✨ AI Generated Article</span>
+								)}
+								{description && <p className="blog-card-desc">{description}</p>}
+							</div>
+							{date && (
+								<div className="blog-card-footer">
+									<time dateTime={date}>
+										{new Date(date + "T00:00:00").toLocaleDateString("fr-FR", {
+											year: "numeric",
+											month: "long",
+											day: "numeric",
+										})}
+									</time>
+								</div>
+							)}
+						</Link>
+					))}
+				</div>
+			) : (
+				<p>No articles found.</p>
+			)}
+		</div>
+	);
 }
