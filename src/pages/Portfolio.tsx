@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -28,7 +29,7 @@ export default function Portfolio() {
 			return;
 		}
 
-		fetchMarkdown("portfolio", "/portfolio.md")
+		Promise.resolve(fetchMarkdown("portfolio", "/portfolio.md"))
 			.then((text) => {
 				if (text === null) {
 					setError(true);
@@ -69,6 +70,7 @@ export default function Portfolio() {
 	return (
 		<article className="home">
 			<ReactMarkdown
+				remarkPlugins={[remarkGfm]}
 				rehypePlugins={[
 					rehypeRaw,
 					[rehypeSanitize, sanitizeSchema],

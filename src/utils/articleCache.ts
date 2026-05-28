@@ -4,7 +4,7 @@ const pendingFetch = new Map<string, Promise<string | null>>();
 export function fetchMarkdown(
 	key: string,
 	url: string
-): string | null | Promise<string | null> {
+): string | Promise<string | null> {
 	if (articleCache.has(key)) {
 		return articleCache.get(key)!;
 	}
@@ -36,7 +36,7 @@ export function fetchMarkdown(
 
 export function fetchArticleMarkdown(
 	slug: string
-): string | null | Promise<string | null> {
+): string | Promise<string | null> {
 	return fetchMarkdown(slug, `/articles/${encodeURIComponent(slug)}.md`);
 }
 

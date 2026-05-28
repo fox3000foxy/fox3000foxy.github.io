@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
+import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -90,6 +91,7 @@ export default function Project() {
 			)}
 			{/* external links open in new tab */}
 			<ReactMarkdown
+				remarkPlugins={[remarkGfm]}
 				rehypePlugins={[
 					rehypeRaw,
 					[rehypeSanitize, sanitizeSchema],
