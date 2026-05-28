@@ -25,7 +25,7 @@ export default function BlogList() {
 				if (Array.isArray(data)) {
 					// normalize legacy array of strings
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					const normalized: ArticleMeta[] = (data as any[]).map((item) =>
+					const normalized: ArticleMeta[] = (data as string[]).map((item) =>
 						typeof item === "string" ? { slug: item } : item
 					);
 					setArticles(normalized);

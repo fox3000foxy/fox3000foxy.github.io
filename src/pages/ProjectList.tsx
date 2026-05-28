@@ -206,7 +206,7 @@ export default function ProjectList() {
 			}
 		};
 
-		refreshData();
+		refreshData().catch(() => {});
 	}, [cachedData]);
 
 	if (loading) {
