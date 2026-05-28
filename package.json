@@ -10,6 +10,7 @@
     "format": "bunx --bun @biomejs/biome format --write ./src",
     "check": "bunx --bun @biomejs/biome check ./src",
     "lint": "bunx --bun @biomejs/biome lint ./src",
+    "deploy": "bunx gh-pages -d dist --nojekyll",
     "lint:write": "bunx --bun @biomejs/biome lint --write ./src"
   },
   "dependencies": {
