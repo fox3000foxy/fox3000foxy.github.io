@@ -24,7 +24,7 @@ export default function NotFound({ message }: Props) {
 	useEffect(() => {
 		fetch("/404.md")
 			.then((res) => {
-				if (!res.ok) throw new Error("not found");
+				if (!res.ok) { throw new Error("not found"); }
 				return res.text();
 			})
 			.then((text) => setMarkdown(text))
@@ -39,7 +39,7 @@ export default function NotFound({ message }: Props) {
 	const components = {
 		a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
 			const { href, children, ...rest } = props;
-			if (!href) return <a {...rest}>{children}</a>;
+			if (!href) { return <a {...rest}>{children}</a>; }
 			const isExternal = /^https?:\/\//.test(href);
 			if (isExternal) {
 				return (

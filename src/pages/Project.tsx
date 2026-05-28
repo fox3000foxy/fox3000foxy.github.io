@@ -30,14 +30,14 @@ export default function Project() {
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
-		if (!slug) return;
+		if (!slug) { return; }
 
 		// fetch repo metadata to get default branch
 		fetch(
 			`https://api.github.com/repos/fox3000foxy/${encodeURIComponent(slug)}`
 		)
 			.then((res) => {
-				if (!res.ok) throw new Error("Not found");
+				if (!res.ok) { throw new Error("Not found"); }
 				return res.json();
 			})
 			.then((data: RepoMeta) => {
@@ -98,7 +98,7 @@ export default function Project() {
 				components={{
 					a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
 						const { href, children, ...rest } = props;
-						if (!href) return <a {...rest}>{children}</a>;
+						if (!href) { return <a {...rest}>{children}</a>; }
 						const isExternal = /^https?:\/\//.test(href);
 						if (isExternal) {
 							return (
