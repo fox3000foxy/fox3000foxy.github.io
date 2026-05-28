@@ -30,7 +30,7 @@ export default function Home() {
 			return;
 		}
 
-		fetchMarkdown("home", "/home.md")
+		Promise.resolve(fetchMarkdown("home", "/home.md"))
 			.then((text) => {
 				if (text === null) {
 					setError(true);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
+import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -122,6 +123,7 @@ export default function Article() {
 				<p className="article-description">{meta.description}</p>
 			)}
 			<ReactMarkdown
+				remarkPlugins={[remarkGfm]}
 				rehypePlugins={[
 					rehypeRaw,
 					[rehypeSanitize, sanitizeSchema],
