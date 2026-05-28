@@ -715,7 +715,7 @@ OK so here's where things get interesting. After cataloguing all the families ab
 
 Nobody had built a complete, programmatic, Node-native Linux environment with real SSH, real permissions, real virtual networking, and a typed TypeScript API. So she built it.
 
-Quick intro since this is the first time I mention her properly: `typescript-virtual-container` was built by [Chloé Rolzhausen](https://itsrealfortune.fr), a French developer who goes by **Fortune** (or ItsRealFortune) online. You can find her on her [website](https://itsrealfortune.fr) and on [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen/). The whole project -- 56k lines of TypeScript, 247 files, 170 commands -- was a solo effort by one person. I'll be calling her Fortune for the rest of the article. And yeah, it's kinda wild. Go check out her stuff!
+Quick intro since this is the first time I mention her properly: `typescript-virtual-container` was built by [Chloé Rolzhausen](https://itsrealfortune.fr), a French developer who goes by **Fortune** (or ItsRealFortune) online. You can find her on her [website](https://itsrealfortune.fr) and on [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316//). The whole project -- 56k lines of TypeScript, 247 files, 170 commands -- was a solo effort by one person. I'll be calling her Fortune for the rest of the article. And yeah, it's kinda wild. Go check out her stuff!
 
 ### What it actually is
 
