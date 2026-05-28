@@ -35,11 +35,11 @@ async function fetchAllRepos(username: string): Promise<Repo[]> {
 		const res = await fetch(
 			`https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=${perPage}&page=${page}&sort=updated`
 		);
-		if (!res.ok) break;
+		if (!res.ok) { break; }
 		const data: Repo[] = await res.json();
-		if (data.length === 0) break;
+		if (data.length === 0) { break; }
 		repos.push(...data);
-		if (data.length < perPage) break;
+		if (data.length < perPage) { break; }
 		page++;
 	}
 
@@ -143,7 +143,7 @@ export default function ProjectList() {
 		}
 
 		const cache = localStorage.getItem(CACHE_KEY);
-		if (!cache) return null;
+		if (!cache) { return null; }
 
 		try {
 			const parsed: RepoCache = JSON.parse(cache);
@@ -177,7 +177,7 @@ export default function ProjectList() {
 						const langB = LANGUAGE_PRIORITY.indexOf(b.language!);
 						const priorityA = langA === -1 ? LANGUAGE_PRIORITY.length : langA;
 						const priorityB = langB === -1 ? LANGUAGE_PRIORITY.length : langB;
-						if (priorityA !== priorityB) return priorityA - priorityB;
+						if (priorityA !== priorityB) { return priorityA - priorityB; }
 						return (
 							new Date(b.updated_at).getTime() -
 							new Date(a.updated_at).getTime()

@@ -15,7 +15,7 @@ export async function fetchMarkdown(
 
 	const fetchPromise = fetch(url)
 		.then((res) => {
-			if (!res.ok) return null;
+			if (!res.ok) { return null; }
 			return res.text();
 		})
 		.then((text) => {

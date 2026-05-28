@@ -49,7 +49,7 @@ export default function Portfolio() {
 	const components = {
 		a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
 			const { href, children, ...rest } = props;
-			if (!href) return <a {...rest}>{children}</a>;
+			if (!href) { return <a {...rest}>{children}</a>; }
 			const isExternal = /^https?:\/\//.test(href);
 			if (isExternal) {
 				return (

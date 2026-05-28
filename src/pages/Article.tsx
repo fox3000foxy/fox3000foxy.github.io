@@ -35,15 +35,10 @@ export default function Article() {
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
 
 	useEffect(() => {
-		if (!slug) return;
+		if (!slug) { return; }
 
 		const fromCache = getCachedArticleMarkdown(slug);
-		if (fromCache !== null) {
-			const processed = fromCache.replaceAll("assets/", "/articles/assets/");
-			// eslint-disable-next-line react-hooks/set-state-in-effect
-			setContent(processed);
-			setError(false);
-		} else {
+		if (fromCache === null) {
 			fetchArticleMarkdown(slug)
 				.then((text) => {
 					if (!text) {
@@ -55,6 +50,11 @@ export default function Article() {
 					setError(false);
 				})
 				.catch(() => setError(true));
+		} else {
+			const processed = fromCache.replaceAll("assets/", "/articles/assets/");
+			// eslint-disable-next-line react-hooks/set-state-in-effect
+			setContent(processed);
+			setError(false);
 		}
 
 		// fetch metadata from index.json (if available)
@@ -86,7 +86,7 @@ export default function Article() {
 	const components = {
 		a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
 			const { href, children, ...rest } = props;
-			if (!href) return <a {...rest}>{children}</a>;
+			if (!href) { return <a {...rest}>{children}</a>; }
 			const isExternal = /^https?:\/\//.test(href);
 			if (isExternal) {
 				return (
