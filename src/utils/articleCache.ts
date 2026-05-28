@@ -1,10 +1,10 @@
 const articleCache = new Map<string, string>();
 const pendingFetch = new Map<string, Promise<string | null>>();
 
-export async function fetchMarkdown(
+export function fetchMarkdown(
 	key: string,
 	url: string
-): Promise<string | null> {
+): string | null | Promise<string | null> {
 	if (articleCache.has(key)) {
 		return articleCache.get(key)!;
 	}
@@ -34,9 +34,9 @@ export async function fetchMarkdown(
 	return fetchPromise;
 }
 
-export async function fetchArticleMarkdown(
+export function fetchArticleMarkdown(
 	slug: string
-): Promise<string | null> {
+): string | null | Promise<string | null> {
 	return fetchMarkdown(slug, `/articles/${encodeURIComponent(slug)}.md`);
 }
 

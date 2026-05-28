@@ -39,17 +39,24 @@ export default function Article() {
 
 		const fromCache = getCachedArticleMarkdown(slug);
 		if (fromCache === null) {
-			fetchArticleMarkdown(slug)
-				.then((text) => {
-					if (!text) {
-						setError(true);
-						return;
-					}
-					const processed = text.replaceAll("assets/", "/articles/assets/");
-					setContent(processed);
-					setError(false);
-				})
-				.catch(() => setError(true));
+			const fetchPromise = fetchArticleMarkdown(slug);
+			if (typeof fetchPromise === "string") {
+				const processed = fetchPromise.replaceAll("assets/", "/articles/assets/");
+				setContent(processed);
+				setError(false);
+			} else if (fetchPromise instanceof Promise) {
+				fetchPromise
+					.then((text) => {
+						if (!text) {
+							setError(true);
+							return;
+						}
+						const processed = text.replaceAll("assets/", "/articles/assets/");
+						setContent(processed);
+						setError(false);
+					})
+					.catch(() => setError(true));
+			}
 		} else {
 			const processed = fromCache.replaceAll("assets/", "/articles/assets/");
 			// eslint-disable-next-line react-hooks/set-state-in-effect
@@ -63,6 +70,7 @@ export default function Article() {
 			.then((data) => {
 				if (Array.isArray(data)) {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					// biome-ignore lint/suspicious/noExplicitAny: need to handle legacy string format
 					const normalized: ArticleMeta[] = data.map((item: any) =>
 						typeof item === "string" ? { slug: item } : item
 					);
