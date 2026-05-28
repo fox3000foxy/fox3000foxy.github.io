@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint src --ext .ts,.tsx",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "bunx --bun @biomejs/biome format --write ./src",
+    "check": "bunx --bun @biomejs/biome check ./src",
+    "lint": "bunx --bun @biomejs/biome lint ./src",
+    "lint:write": "bunx --bun @biomejs/biome lint --write ./src"
   },
   "dependencies": {
     "highlight.js": "^11.11.1",
