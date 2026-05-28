@@ -49,6 +49,9 @@ jobs:
       - name: Build project
         run: bun run build
 
+      - name: Copy index.html to 404.html
+        run: cp dist/index.html dist/404.html
+
       - name: Upload build output
         id: upload
         uses: actions/upload-artifact@v4
