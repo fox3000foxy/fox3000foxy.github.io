@@ -19,6 +19,7 @@ function main() {
 	const entries: { loc: string; priority: string; lastmod?: string }[] = [
 		{ loc: "/", priority: "1.0" },
 		{ loc: "/blog", priority: "0.9" },
+		{ loc: "/archive", priority: "0.7" },
 		{ loc: "/projects", priority: "0.8" },
 		{ loc: "/portfolio", priority: "0.7" },
 	];
