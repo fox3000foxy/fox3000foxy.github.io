@@ -29,12 +29,12 @@ export default function Article() {
 	const [allArticles, setAllArticles] = useState<ArticleMeta[]>([]);
 
 	useEffect(() => {
-		if (!slug) { return; }
+		if (!slug) {
+			return;
+		}
 
 		const cached = getCachedArticleMarkdown(slug, lang);
-		if (cached !== null) {
-			setContent(processArticleContent(cached));
-		} else {
+		if (cached === null) {
 			Promise.resolve(fetchArticleMarkdown(slug, lang))
 				.then((text) => {
 					if (!text) {
@@ -44,14 +44,18 @@ export default function Article() {
 					setContent(processArticleContent(text));
 				})
 				.catch(() => setError(true));
+		} else {
+			setContent(processArticleContent(cached));
 		}
 
 		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang !== "en" ? "/articles/en/index.json" : null;
+		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 
 		async function loadIndex() {
 			let res = await fetch(indexUrl);
-			if (!res.ok && fallbackUrl) { res = await fetch(fallbackUrl); }
+			if (!res.ok && fallbackUrl) {
+				res = await fetch(fallbackUrl);
+			}
 			if (!res.ok) return;
 
 			const data: unknown = await res.json();
@@ -77,9 +81,7 @@ export default function Article() {
 
 	return (
 		<article>
-			{meta?.aiGenerated && (
-				<span className="ai-badge">{t("article.ai")}</span>
-			)}
+			{meta?.aiGenerated && <span className="ai-badge">{t("article.ai")}</span>}
 			<p className="article-date">
 				{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
 				{meta?.date && <span className="article-sep">·</span>}
@@ -91,7 +93,9 @@ export default function Article() {
 			{meta?.tags && meta.tags.length > 0 && (
 				<div className="article-tags">
 					{meta.tags.map((tag) => (
-						<span key={tag} className="tag-badge">{tag}</span>
+						<span key={tag} className="tag-badge">
+							{tag}
+						</span>
 					))}
 				</div>
 			)}

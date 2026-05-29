@@ -28,7 +28,9 @@ export default function SuggestedArticles({
 		.sort((a, b) => b.score - a.score)
 		.slice(0, 3);
 
-	if (scored.length === 0) { return null; }
+	if (scored.length === 0) {
+		return null;
+	}
 
 	return (
 		<section className="suggested-articles">

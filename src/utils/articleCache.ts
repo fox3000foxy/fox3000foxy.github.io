@@ -19,7 +19,9 @@ export function fetchMarkdown(
 
 	const fetchPromise = fetch(url)
 		.then((res) => {
-			if (!res.ok) { return null; }
+			if (!res.ok) {
+				return null;
+			}
 			return res.text();
 		})
 		.then((text) => {
@@ -48,16 +50,24 @@ function fetchWithFallback(
 	slug: string
 ): string | Promise<string | null> {
 	const cached = articleCache.get(key);
-	if (cached !== undefined) { return cached; }
-	if (pendingFetch.has(key)) { return pendingFetch.get(key)!; }
+	if (cached !== undefined) {
+		return cached;
+	}
+	if (pendingFetch.has(key)) {
+		return pendingFetch.get(key)!;
+	}
 
 	const primaryUrl = articleUrl(lang, slug);
-	const fallbackUrl = lang !== "en" ? articleUrl("en", slug) : null;
+	const fallbackUrl = lang === "en" ? null : articleUrl("en", slug);
 
 	const fetchPromise = fetch(primaryUrl)
 		.then((res) => {
-			if (res.ok) { return res.text(); }
-			if (fallbackUrl) { return fetch(fallbackUrl).then((r) => (r.ok ? r.text() : null)); }
+			if (res.ok) {
+				return res.text();
+			}
+			if (fallbackUrl) {
+				return fetch(fallbackUrl).then((r) => (r.ok ? r.text() : null));
+			}
 			return null;
 		})
 		.then((text) => {
@@ -85,7 +95,9 @@ export function getCachedArticleMarkdown(
 	slug: string,
 	lang?: string
 ): string | null {
-	if (lang) { return articleCache.get(cacheKey(lang, slug)) ?? null; }
+	if (lang) {
+		return articleCache.get(cacheKey(lang, slug)) ?? null;
+	}
 	return articleCache.get(slug) ?? null;
 }
 
@@ -93,12 +105,13 @@ export function getCachedMarkdown(key: string): string | null {
 	return articleCache.get(key) ?? null;
 }
 
-export function prefetchArticleMarkdown(
-	slugs: string[],
-	lang: string
-): void {
+export function prefetchArticleMarkdown(slugs: string[], lang: string): void {
 	for (const slug of slugs) {
-		if (slug && !articleCache.has(cacheKey(lang, slug)) && !pendingFetch.has(cacheKey(lang, slug))) {
+		if (
+			slug &&
+			!articleCache.has(cacheKey(lang, slug)) &&
+			!pendingFetch.has(cacheKey(lang, slug))
+		) {
 			void fetchArticleMarkdown(slug, lang);
 		}
 	}

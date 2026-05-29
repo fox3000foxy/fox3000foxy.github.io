@@ -21,13 +21,17 @@ export default function Project() {
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
-		if (!slug) { return; }
+		if (!slug) {
+			return;
+		}
 
 		fetch(
 			`https://api.github.com/repos/fox3000foxy/${encodeURIComponent(slug)}`
 		)
 			.then((res) => {
-				if (!res.ok) { throw new Error("Not found"); }
+				if (!res.ok) {
+					throw new Error("Not found");
+				}
 				return res.json();
 			})
 			.then((data: RepoMeta) => {

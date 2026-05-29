@@ -16,16 +16,21 @@ export default function BlogList() {
 
 	useEffect(() => {
 		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang !== "en" ? "/articles/en/index.json" : null;
+		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 
 		async function load() {
 			let res = await fetch(indexUrl);
-			if (!res.ok && fallbackUrl) { res = await fetch(fallbackUrl); }
-			if (!res.ok) { setArticles([]); return; }
+			if (!res.ok && fallbackUrl) {
+				res = await fetch(fallbackUrl);
+			}
+			if (!res.ok) {
+				setArticles([]);
+				return;
+			}
 
 			const data: unknown = await res.json();
 			if (Array.isArray(data)) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: legacy string format
 				const normalized: ArticleMeta[] = (data as any[]).map((item) =>
 					typeof item === "string" ? { slug: item } : item
 				);
@@ -33,7 +38,9 @@ export default function BlogList() {
 
 				const slugs = normalized.map((item) => item.slug).filter(Boolean);
 				prefetchArticleMarkdown(slugs, lang);
-				if (lang !== "en") { prefetchArticleMarkdown(slugs, "en"); }
+				if (lang !== "en") {
+					prefetchArticleMarkdown(slugs, "en");
+				}
 
 				prefetchMarkdownEntries([
 					{ key: "home", url: "/home.md" },
@@ -54,8 +61,12 @@ export default function BlogList() {
 	);
 
 	const filtered = articles.filter((a) => {
-		if (activeTag && !a.tags?.includes(activeTag)) { return false; }
-		if (!query) { return true; }
+		if (activeTag && !a.tags?.includes(activeTag)) {
+			return false;
+		}
+		if (!query) {
+			return true;
+		}
 		return (
 			a.title?.toLowerCase().includes(query) ||
 			a.description?.toLowerCase().includes(query) ||
@@ -112,11 +123,7 @@ export default function BlogList() {
 				<div className="blog-grid">
 					{filtered.map(
 						({ slug, title, description, date, aiGenerated, tags }) => (
-							<Link
-								to={`/blog/${slug}`}
-								key={slug}
-								className="blog-card"
-							>
+							<Link to={`/blog/${slug}`} key={slug} className="blog-card">
 								<div className="blog-card-body">
 									<h3 className="blog-card-title">
 										{title ?? slug.replace(/-/g, " ")}

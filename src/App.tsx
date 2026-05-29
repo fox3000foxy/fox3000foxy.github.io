@@ -19,25 +19,25 @@ function App() {
 	const langCtx = useLangState();
 	return (
 		<LangContext.Provider value={langCtx}>
-		<Router>
-			<Header />
-			<BackToTop />
-			<main>
-				<Suspense fallback={<div>Loading...</div>}>
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/blog" element={<BlogList />} />
-						<Route path="/blog/:slug" element={<Article />} />
-						<Route path="/archive" element={<Archive />} />
-						<Route path="/projects" element={<ProjectList />} />
-						<Route path="/projects/:slug" element={<Project />} />
-						<Route path="/portfolio" element={<Portfolio />} />
-						<Route path="*" element={<NotFound />} />
-					</Routes>
-				</Suspense>
-			</main>
-			<Footer />
-		</Router>
+			<Router>
+				<Header />
+				<BackToTop />
+				<main>
+					<Suspense fallback={<div>Loading...</div>}>
+						<Routes>
+							<Route path="/" element={<Home />} />
+							<Route path="/blog" element={<BlogList />} />
+							<Route path="/blog/:slug" element={<Article />} />
+							<Route path="/archive" element={<Archive />} />
+							<Route path="/projects" element={<ProjectList />} />
+							<Route path="/projects/:slug" element={<Project />} />
+							<Route path="/portfolio" element={<Portfolio />} />
+							<Route path="*" element={<NotFound />} />
+						</Routes>
+					</Suspense>
+				</main>
+				<Footer />
+			</Router>
 		</LangContext.Provider>
 	);
 }
