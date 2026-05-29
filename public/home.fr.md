@@ -28,7 +28,7 @@ J'ai beaucoup de hobbies, mais mon hobby principal c'est coder en écoutant de l
 
 ## Passions
 
-J'ai écrit tout un article de blog sur mes passions — le code, le dessin, l'automatisation, la découverte des vieilles technos et plus encore. À lire ici : [Mes Passions](/blog/my-passions)
+J'ai écrit tout un article de blog sur mes passions -- le code, le dessin, l'automatisation, la découverte des vieilles technos et plus encore. À lire ici : [Mes Passions](/blog/my-passions)
 
 ## Paquets
 

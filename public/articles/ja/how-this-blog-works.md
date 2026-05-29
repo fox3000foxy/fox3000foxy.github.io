@@ -6,12 +6,12 @@
 
 このブログはモダンなWeb技術で作られている：
 
-- **React 19** — ユーザーインターフェース
-- **TypeScript** — 型付きでより信頼性の高いコード
-- **Vite** — 超高速ビルドツール
-- **React Router v7** — ページ間のナビゲーション
-- **react-markdown** — MarkdownをHTMLに変換
-- **rehype-raw + rehype-sanitize** — Markdown内で生のHTMLを安全に許可
+- **React 19** -- ユーザーインターフェース
+- **TypeScript** -- 型付きでより信頼性の高いコード
+- **Vite** -- 超高速ビルドツール
+- **React Router v7** -- ページ間のナビゲーション
+- **react-markdown** -- MarkdownをHTMLに変換
+- **rehype-raw + rehype-sanitize** -- Markdown内で生のHTMLを安全に許可
 
 すべては**GitHub Pages**でホストされていて、`fox3000foxy.github.io`リポジトリから直接配信されている。
 
@@ -86,10 +86,10 @@
 ]
 ```
 
-- **slug** — 一意の識別子。URLで使われる（`/blog/hello-world`）
-- **title** — 一覧に表示されるタイトル
-- **description** — 短い要約
-- **date** — 公開日
+- **slug** -- 一意の識別子。URLで使われる（`/blog/hello-world`）
+- **title** -- 一覧に表示されるタイトル
+- **description** -- 短い要約
+- **date** -- 公開日
 
 ### 2. Markdownファイル
 
@@ -129,7 +129,7 @@
 
 ## ダークテーマ
 
-サイトは**常にダークモード**だ——ライト/ダーク切り替えはない。これは意図的な選択：グローバルスタイルで`color-scheme: dark`が設定されていて、背景は黒`#000`、テキストは白`#fff`。リンクは青（`#64b5f6`）で、ホバー時に緑（`#81c784`）に変わる。
+サイトは**常にダークモード**だ----ライト/ダーク切り替えはない。これは意図的な選択：グローバルスタイルで`color-scheme: dark`が設定されていて、背景は黒`#000`、テキストは白`#fff`。リンクは青（`#64b5f6`）で、ホバー時に緑（`#81c784`）に変わる。
 
 ## 記事の書き方
 
@@ -199,15 +199,15 @@ on:
 
 ビルドジョブは`ubuntu-latest`で実行され、以下のステップを経る：
 
-1. **Checkout** — 完全な履歴でリポジトリをクローン（`fetch-depth: 0`）
-2. **Setup pnpm** — `pnpm/action-setup@v4`を使って最新版のpnpmをインストール
-3. **Setup Node.js 20** — pnpmキャッシュを有効にしてNodeを設定、高速インストール
-4. **Install dependencies** — `pnpm install --frozen-lockfile`で再現可能なビルドを確保（ロックファイルの変更不可）
-5. **Lint** — `pnpm run lint`（ESLint）でコード品質をチェック
-6. **Build** — `pnpm run build`を実行。まずTypeScriptの型をチェック（`tsc -b`）、それからViteでバンドル
-7. **Upload artifact** — `dist/`フォルダをビルド成果物としてアップロード
+1. **Checkout** -- 完全な履歴でリポジトリをクローン（`fetch-depth: 0`）
+2. **Setup pnpm** -- `pnpm/action-setup@v4`を使って最新版のpnpmをインストール
+3. **Setup Node.js 20** -- pnpmキャッシュを有効にしてNodeを設定、高速インストール
+4. **Install dependencies** -- `pnpm install --frozen-lockfile`で再現可能なビルドを確保（ロックファイルの変更不可）
+5. **Lint** -- `pnpm run lint`（ESLint）でコード品質をチェック
+6. **Build** -- `pnpm run build`を実行。まずTypeScriptの型をチェック（`tsc -b`）、それからViteでバンドル
+7. **Upload artifact** -- `dist/`フォルダをビルド成果物としてアップロード
 
-いずれかのステップが失敗すると——lintエラー、型エラー、ビルドエラー——パイプライン全体が停止し、何もデプロイされない。これで本番サイトが壊れたコードから守られる。
+いずれかのステップが失敗すると----lintエラー、型エラー、ビルドエラー----パイプライン全体が停止し、何もデプロイされない。これで本番サイトが壊れたコードから守られる。
 
 ### ジョブ2：Deploy
 
@@ -223,10 +223,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 そして：
 
-1. **ビルド成果物をダウンロード** — ビルドジョブが生成した`dist/`フォルダを取得
-2. **GitHub Pagesを設定** — Pages環境をセットアップ
-3. **Pagesにアップロード** — `dist/`フォルダをGitHub Pages用にパッケージ
-4. **デプロイ** — `actions/deploy-pages@v4`でサイトを公開
+1. **ビルド成果物をダウンロード** -- ビルドジョブが生成した`dist/`フォルダを取得
+2. **GitHub Pagesを設定** -- Pages環境をセットアップ
+3. **Pagesにアップロード** -- `dist/`フォルダをGitHub Pages用にパッケージ
+4. **デプロイ** -- `actions/deploy-pages@v4`でサイトを公開
 
 ### 全体像
 
@@ -263,14 +263,14 @@ VS Codeで記事を書く
     GitHub Pagesで公開！
 ```
 
-プッシュから公開まで約1分。手動デプロイ不要、FTP不要、SSH不要——`git push`だけで完了だ。
+プッシュから公開まで約1分。手動デプロイ不要、FTP不要、SSH不要----`git push`だけで完了だ。
 
 ## プロダクションビルド
 
 内部では、`pnpm build`コマンドが以下を実行する：
 
-1. `tsc -b` — TypeScriptの型をチェック
-2. `vite build` — 全コードをバンドルして最適化
+1. `tsc -b` -- TypeScriptの型をチェック
+2. `vite build` -- 全コードをバンドルして最適化
 
 Viteは自動コード分割で最小化・最適化されたファイルを生成する。結果は爆速の静的サイトだ。
 
@@ -278,12 +278,12 @@ Viteは自動コード分割で最小化・最適化されたファイルを生�
 
 CMSやHugo、Jekyllのような静的サイトジェネレーター、Next.jsを使うこともできた。でもなぜこのアプローチを選んだか：
 
-- **シンプルさ** — Markdownで書いてGitHubにプッシュするだけで公開
-- **完全な制御** — CMSやデータベースに依存しない
-- **パフォーマンス** — Vite + React = 高速読み込み
-- **柔軟性** — MarkdownとHTMLを好きなように混ぜられる
-- **学習** — ReactとTypeScriptを極めるのに最適なプロジェクト
-- **CI/CD** — GitHub Actionsによる自動品質チェックとデプロイ
+- **シンプルさ** -- Markdownで書いてGitHubにプッシュするだけで公開
+- **完全な制御** -- CMSやデータベースに依存しない
+- **パフォーマンス** -- Vite + React = 高速読み込み
+- **柔軟性** -- MarkdownとHTMLを好きなように混ぜられる
+- **学習** -- ReactとTypeScriptを極めるのに最適なプロジェクト
+- **CI/CD** -- GitHub Actionsによる自動品質チェックとデプロイ
 
 ## 結論
 

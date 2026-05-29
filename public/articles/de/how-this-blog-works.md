@@ -6,12 +6,12 @@ Schon mal gefragt, wie dieser Blog unter der Haube funktioniert? In diesem Artik
 
 Dieser Blog wurde mit modernen Web-Technologien gebaut:
 
-- **React 19** — für die Benutzeroberfläche
-- **TypeScript** — für typisierten und zuverlässigeren Code
-- **Vite** — als ultraschnelles Build-Tool
-- **React Router v7** — für die Navigation zwischen Seiten
-- **react-markdown** — um Markdown in HTML zu verwandeln
-- **rehype-raw + rehype-sanitize** — um rohes HTML in Markdown zu erlauben, dabei aber sicher zu bleiben
+- **React 19** -- für die Benutzeroberfläche
+- **TypeScript** -- für typisierten und zuverlässigeren Code
+- **Vite** -- als ultraschnelles Build-Tool
+- **React Router v7** -- für die Navigation zwischen Seiten
+- **react-markdown** -- um Markdown in HTML zu verwandeln
+- **rehype-raw + rehype-sanitize** -- um rohes HTML in Markdown zu erlauben, dabei aber sicher zu bleiben
 
 Alles wird auf **GitHub Pages** direkt aus dem Repository `fox3000foxy.github.io` gehostet.
 
@@ -86,10 +86,10 @@ Alle Artikel werden in `public/articles/index.json` referenziert. Jeder Eintrag 
 ]
 ```
 
-- **slug** — die eindeutige Kennung, die in der URL verwendet wird (`/blog/hello-world`)
-- **title** — der Titel, der in der Liste angezeigt wird
-- **description** — eine kurze Zusammenfassung
-- **date** — das Veröffentlichungsdatum
+- **slug** -- die eindeutige Kennung, die in der URL verwendet wird (`/blog/hello-world`)
+- **title** -- der Titel, der in der Liste angezeigt wird
+- **description** -- eine kurze Zusammenfassung
+- **date** -- das Veröffentlichungsdatum
 
 ### 2. Die Markdown-Datei
 
@@ -129,7 +129,7 @@ Der Footer ist minimalistisch: nur ein Copyright mit dem aktuellen Jahr, dynamis
 
 ## Das dunkle Design
 
-Die Seite ist **immer im Dark Mode** — kein Hell/Dunkel-Umschalter. Das ist eine bewusste Entscheidung: `color-scheme: dark` ist in den globalen Styles gesetzt, mit schwarzem Hintergrund `#000` und weißem Text `#fff`. Links sind blau (`#64b5f6`) und werden beim Überfahren grün (`#81c784`).
+Die Seite ist **immer im Dark Mode** -- kein Hell/Dunkel-Umschalter. Das ist eine bewusste Entscheidung: `color-scheme: dark` ist in den globalen Styles gesetzt, mit schwarzem Hintergrund `#000` und weißem Text `#fff`. Links sind blau (`#64b5f6`) und werden beim Überfahren grün (`#81c784`).
 
 ## Wie ich einen Artikel schreibe
 
@@ -199,15 +199,15 @@ Die Pipeline läuft bei jedem **Push** auf `main` und bei jedem **Pull Request**
 
 Der Build-Job läuft auf `ubuntu-latest` und durchläuft diese Schritte:
 
-1. **Checkout** — Klont das Repository mit vollständiger Historie (`fetch-depth: 0`)
-2. **Setup pnpm** — Installiert die neueste Version von pnpm mit `pnpm/action-setup@v4`
-3. **Setup Node.js 20** — Konfiguriert Node mit pnpm-Caching für schnellere Installationen
-4. **Abhängigkeiten installieren** — Führt `pnpm install --frozen-lockfile` aus, um reproduzierbare Builds zu gewährleisten (keine Lockfile-Änderungen erlaubt)
-5. **Lint** — Führt `pnpm run lint` (ESLint) aus, um Code-Qualitätsprobleme vor dem Build zu erkennen
-6. **Build** — Führt `pnpm run build` aus, das zuerst TypeScript-Typen prüft (`tsc -b`) und dann alles mit Vite bündelt
-7. **Artifact hochladen** — Lädt den `dist/`-Ordner als Build-Artefakt für den Deploy-Job hoch
+1. **Checkout** -- Klont das Repository mit vollständiger Historie (`fetch-depth: 0`)
+2. **Setup pnpm** -- Installiert die neueste Version von pnpm mit `pnpm/action-setup@v4`
+3. **Setup Node.js 20** -- Konfiguriert Node mit pnpm-Caching für schnellere Installationen
+4. **Abhängigkeiten installieren** -- Führt `pnpm install --frozen-lockfile` aus, um reproduzierbare Builds zu gewährleisten (keine Lockfile-Änderungen erlaubt)
+5. **Lint** -- Führt `pnpm run lint` (ESLint) aus, um Code-Qualitätsprobleme vor dem Build zu erkennen
+6. **Build** -- Führt `pnpm run build` aus, das zuerst TypeScript-Typen prüft (`tsc -b`) und dann alles mit Vite bündelt
+7. **Artifact hochladen** -- Lädt den `dist/`-Ordner als Build-Artefakt für den Deploy-Job hoch
 
-Wenn einer der Schritte fehlschlägt — ein Lint-Fehler, ein Typ-Fehler, ein Build-Fehler — stoppt die gesamte Pipeline und es wird nichts deployed. Das schützt die Live-Seite vor fehlerhaftem Code.
+Wenn einer der Schritte fehlschlägt -- ein Lint-Fehler, ein Typ-Fehler, ein Build-Fehler -- stoppt die gesamte Pipeline und es wird nichts deployed. Das schützt die Live-Seite vor fehlerhaftem Code.
 
 ### Job 2: Deploy
 
@@ -223,10 +223,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 Dann:
 
-1. **Build-Artefakt herunterladen** — Holt den `dist/`-Ordner aus dem Build-Job
-2. **GitHub Pages konfigurieren** — Richtet die Pages-Umgebung ein
-3. **Zu Pages hochladen** — Packt den `dist/`-Ordner für GitHub Pages
-4. **Deployen** — Veröffentlicht die Seite mit `actions/deploy-pages@v4`
+1. **Build-Artefakt herunterladen** -- Holt den `dist/`-Ordner aus dem Build-Job
+2. **GitHub Pages konfigurieren** -- Richtet die Pages-Umgebung ein
+3. **Zu Pages hochladen** -- Packt den `dist/`-Ordner für GitHub Pages
+4. **Deployen** -- Veröffentlicht die Seite mit `actions/deploy-pages@v4`
 
 ### Das vollständige Bild
 
@@ -263,14 +263,14 @@ Artikel in VS Code schreiben
     Live auf GitHub Pages!
 ```
 
-Der gesamte Vorgang dauert etwa eine Minute vom Push bis zur Live-Schaltung. Kein manuelles Deployment, kein FTP, kein SSH — nur `git push` und es ist erledigt.
+Der gesamte Vorgang dauert etwa eine Minute vom Push bis zur Live-Schaltung. Kein manuelles Deployment, kein FTP, kein SSH -- nur `git push` und es ist erledigt.
 
 ## Der Production Build
 
 Unter der Haube führt `pnpm build` Folgendes aus:
 
-1. `tsc -b` — Prüft TypeScript-Typen
-2. `vite build` — Bündelt und optimiert den gesamten Code
+1. `tsc -b` -- Prüft TypeScript-Typen
+2. `vite build` -- Bündelt und optimiert den gesamten Code
 
 Vite produziert minifizierte und optimierte Dateien mit automatischem Code-Splitting. Das Ergebnis ist eine blitzschnelle statische Website.
 
@@ -278,12 +278,12 @@ Vite produziert minifizierte und optimierte Dateien mit automatischem Code-Split
 
 Ich hätte ein CMS, einen Static-Site-Generator wie Hugo oder Jekyll oder sogar Next.js verwenden können. Aber hier ist, warum ich mich für diesen Ansatz entschieden habe:
 
-- **Einfachheit** — In Markdown schreiben, auf GitHub pushen, es ist live
-- **Volle Kontrolle** — Keine Abhängigkeit von einem CMS oder einer Datenbank
-- **Leistung** — Vite + React = schnelles Laden
-- **Flexibilität** — Ich kann Markdown und HTML nach Belieben mischen
-- **Lernen** — Es ist ein großartiges Projekt, um React und TypeScript zu meistern
-- **CI/CD** — Automatisierte Qualitätschecks und Deployment mit GitHub Actions
+- **Einfachheit** -- In Markdown schreiben, auf GitHub pushen, es ist live
+- **Volle Kontrolle** -- Keine Abhängigkeit von einem CMS oder einer Datenbank
+- **Leistung** -- Vite + React = schnelles Laden
+- **Flexibilität** -- Ich kann Markdown und HTML nach Belieben mischen
+- **Lernen** -- Es ist ein großartiges Projekt, um React und TypeScript zu meistern
+- **CI/CD** -- Automatisierte Qualitätschecks und Deployment mit GitHub Actions
 
 ## Fazit
 

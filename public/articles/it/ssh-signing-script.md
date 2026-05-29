@@ -13,7 +13,7 @@ Ho sempre amato ottimizzare il mio flusso di lavoro Git, e dopo aver visto altre
 
 In realtà, il bisogno era principalmente vanità. Non c'è alcun requisito tecnico per le firme nei miei progetti personali, ma avere un badge verde "Verified" su un commit è figo, e scrivere lo script è stato un esercizio divertente di shell scripting.
 
-> Cioè, firmare i tuoi commit è come indossare un giubbotto di pelle a una code review — totalmente inutile, ma ti fa sentire un hacker.
+> Cioè, firmare i tuoi commit è come indossare un giubbotto di pelle a una code review -- totalmente inutile, ma ti fa sentire un hacker.
 
 ## Cosa fa lo script
 

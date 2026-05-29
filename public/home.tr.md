@@ -28,7 +28,7 @@ Birçok hobim var ama ana hobim müzik dinlerken kod yazmak. Ayrıca yukarıda s
 
 ## Tutkular
 
-Tutkularım hakkında tam bir blog yazısı yazdım — kodlama, çizim, otomasyon, eski teknolojileri keşfetme ve daha fazlası. Okumak için burada: [Tutkularım](/blog/my-passions)
+Tutkularım hakkında tam bir blog yazısı yazdım -- kodlama, çizim, otomasyon, eski teknolojileri keşfetme ve daha fazlası. Okumak için burada: [Tutkularım](/blog/my-passions)
 
 ## Paketler
 

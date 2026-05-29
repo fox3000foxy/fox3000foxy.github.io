@@ -2,7 +2,7 @@
 
 ## Header e Link
 
-Benvenuto sul mio profilo GitHub — organizzato come una biblioteca ben curata.
+Benvenuto sul mio profilo GitHub -- organizzato come una biblioteca ben curata.
 Nella prima sezione c'è un header con dei link, abbastanza standard direi:
 ![](assets/20260308_123527_image.png)
 
@@ -39,7 +39,7 @@ E poi ci sono i miei commit che giocano a PacMan per passatempo xD
 
 ## Progetti
 
-Qui sotto ho tutti i miei repository organizzati per categoria. Sentiti libero di visitarli se sei interessato — sappi comunque che quasi ognuno avrà un post dedicato sul blog:
+Qui sotto ho tutti i miei repository organizzati per categoria. Sentiti libero di visitarli se sei interessato -- sappi comunque che quasi ognuno avrà un post dedicato sul blog:
 
 ![](assets/20260308_145026_image.png)
 

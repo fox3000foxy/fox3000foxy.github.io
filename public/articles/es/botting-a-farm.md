@@ -1,4 +1,4 @@
-> **Nota (2026):** Este proyecto ya no tiene mantenimiento. Microsoft ha endurecido significativamente su detección de bots — lo que funcionaba antes ya no funciona hoy. El código y el enfoque descritos a continuación se conservan solo con fines educativos/de archivo.
+> **Nota (2026):** Este proyecto ya no tiene mantenimiento. Microsoft ha endurecido significativamente su detección de bots -- lo que funcionaba antes ya no funciona hoy. El código y el enfoque descritos a continuación se conservan solo con fines educativos/de archivo.
 
 ### Introducción
 
@@ -67,7 +67,7 @@ Ahora que entiendes el propósito de este programa, pasemos al botting.
 
 ## Primeras pruebas
 
-Antes de construir mi bot, quería asegurarme de que no me marcarían la IP por usar cientos de cuentas desde la misma dirección. Me conoces, voy a usar Tor con un proxy rotatorio. Y no quiero alojar mi bot en un VPS — quiero que se ejecute en una GitHub Action.
+Antes de construir mi bot, quería asegurarme de que no me marcarían la IP por usar cientos de cuentas desde la misma dirección. Me conoces, voy a usar Tor con un proxy rotatorio. Y no quiero alojar mi bot en un VPS -- quiero que se ejecute en una GitHub Action.
 
 Así que escribí un workflow simple:
 
@@ -130,7 +130,7 @@ Las estadísticas de tiempo fueron:
 Una segunda ejecución dio este resultado:  
 ![Segunda ejecución Tor curl](assets/20260313_140928_image.png)
 
-Como puedes ver, las IPs son diferentes, así que no nos marcarán por uso abusivo desde la misma IP. Esas son buenas noticias — podemos seguir desarrollando el bot de cultivo.
+Como puedes ver, las IPs son diferentes, así que no nos marcarán por uso abusivo desde la misma IP. Esas son buenas noticias -- podemos seguir desarrollando el bot de cultivo.
 
 ---
 

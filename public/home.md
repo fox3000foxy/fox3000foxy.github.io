@@ -28,7 +28,7 @@ So basically I have a lot of hobbies, but my main hobby is coding while listenin
 
 ## Passions
 
-I wrote a whole blog post about my passions — coding, drawing, automating things, discovering old tech and more. Check it out: [My Passions](/blog/my-passions)
+I wrote a whole blog post about my passions -- coding, drawing, automating things, discovering old tech and more. Check it out: [My Passions](/blog/my-passions)
 
 ## Packages
 

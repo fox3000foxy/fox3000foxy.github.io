@@ -6,12 +6,12 @@ Ti sei mai chiesto come funziona questo blog sotto il cofano? In questo articolo
 
 Questo blog è costruito con tecnologie web moderne:
 
-- **React 19** — per l'interfaccia utente
-- **TypeScript** — per codice tipizzato e più affidabile
-- **Vite** — come strumento di build ultra-veloce
-- **React Router v7** — per la navigazione tra le pagine
-- **react-markdown** — per trasformare Markdown in HTML
-- **rehype-raw + rehype-sanitize** — per permettere HTML grezzo in Markdown rimanendo sicuri
+- **React 19** -- per l'interfaccia utente
+- **TypeScript** -- per codice tipizzato e più affidabile
+- **Vite** -- come strumento di build ultra-veloce
+- **React Router v7** -- per la navigazione tra le pagine
+- **react-markdown** -- per trasformare Markdown in HTML
+- **rehype-raw + rehype-sanitize** -- per permettere HTML grezzo in Markdown rimanendo sicuri
 
 Tutto è ospitato su **GitHub Pages** direttamente dal repository `fox3000foxy.github.io`.
 
@@ -86,10 +86,10 @@ Tutti gli articoli sono referenziati in `public/articles/index.json`. Ogni voce 
 ]
 ```
 
-- **slug** — l'identificatore univoco, usato nell'URL (`/blog/hello-world`)
-- **title** — il titolo mostrato nell'elenco
-- **description** — un breve riassunto
-- **date** — la data di pubblicazione
+- **slug** -- l'identificatore univoco, usato nell'URL (`/blog/hello-world`)
+- **title** -- il titolo mostrato nell'elenco
+- **description** -- un breve riassunto
+- **date** -- la data di pubblicazione
 
 ### 2. Il File Markdown
 
@@ -129,7 +129,7 @@ Il Footer è minimalista: solo un copyright con l'anno corrente calcolato dinami
 
 ## Il Tema Scuro
 
-Il sito è **sempre in modalità scura** — niente interruttore chiaro/scuro. È una scelta deliberata: `color-scheme: dark` è impostato negli stili globali, con sfondo nero `#000` e testo bianco `#fff`. I link sono blu (`#64b5f6`) e diventano verdi al passaggio del mouse (`#81c784`).
+Il sito è **sempre in modalità scura** -- niente interruttore chiaro/scuro. È una scelta deliberata: `color-scheme: dark` è impostato negli stili globali, con sfondo nero `#000` e testo bianco `#fff`. I link sono blu (`#64b5f6`) e diventano verdi al passaggio del mouse (`#81c784`).
 
 ## Come Scrivo un Articolo
 
@@ -199,15 +199,15 @@ La pipeline viene eseguita a ogni **push** su `main` e a ogni **pull request** c
 
 Il job di build viene eseguito su `ubuntu-latest` e passa attraverso questi step:
 
-1. **Checkout** — Clona il repository con tutta la storia (`fetch-depth: 0`)
-2. **Setup pnpm** — Installa l'ultima versione di pnpm usando `pnpm/action-setup@v4`
-3. **Setup Node.js 20** — Configura Node con la cache di pnpm per installazioni più veloci
-4. **Installa dipendenze** — Esegue `pnpm install --frozen-lockfile` per garantire build riproducibili (niente modifiche al lockfile)
-5. **Lint** — Esegue `pnpm run lint` (ESLint) per individuare problemi di qualità del codice prima del build
-6. **Build** — Esegue `pnpm run build`, che prima controlla i tipi TypeScript (`tsc -b`) poi impacchetta tutto con Vite
-7. **Carica artefatto** — Carica la cartella `dist/` come artefatto di build per il job di deploy
+1. **Checkout** -- Clona il repository con tutta la storia (`fetch-depth: 0`)
+2. **Setup pnpm** -- Installa l'ultima versione di pnpm usando `pnpm/action-setup@v4`
+3. **Setup Node.js 20** -- Configura Node con la cache di pnpm per installazioni più veloci
+4. **Installa dipendenze** -- Esegue `pnpm install --frozen-lockfile` per garantire build riproducibili (niente modifiche al lockfile)
+5. **Lint** -- Esegue `pnpm run lint` (ESLint) per individuare problemi di qualità del codice prima del build
+6. **Build** -- Esegue `pnpm run build`, che prima controlla i tipi TypeScript (`tsc -b`) poi impacchetta tutto con Vite
+7. **Carica artefatto** -- Carica la cartella `dist/` come artefatto di build per il job di deploy
 
-Se uno qualsiasi degli step fallisce — un errore di lint, un errore di tipo, un errore di build — l'intera pipeline si ferma e nulla viene pubblicato. Questo protegge il sito live da codice rotto.
+Se uno qualsiasi degli step fallisce -- un errore di lint, un errore di tipo, un errore di build -- l'intera pipeline si ferma e nulla viene pubblicato. Questo protegge il sito live da codice rotto.
 
 ### Job 2: Deploy
 
@@ -223,10 +223,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 Poi:
 
-1. **Scarica l'artefatto di build** — Prende la cartella `dist/` prodotta dal job di build
-2. **Configura GitHub Pages** — Prepara l'ambiente Pages
-3. **Carica su Pages** — Impacchetta la cartella `dist/` per GitHub Pages
-4. **Pubblica** — Pubblica il sito usando `actions/deploy-pages@v4`
+1. **Scarica l'artefatto di build** -- Prende la cartella `dist/` prodotta dal job di build
+2. **Configura GitHub Pages** -- Prepara l'ambiente Pages
+3. **Carica su Pages** -- Impacchetta la cartella `dist/` per GitHub Pages
+4. **Pubblica** -- Pubblica il sito usando `actions/deploy-pages@v4`
 
 ### Il Quadro Completo
 
@@ -263,14 +263,14 @@ Scrivi articolo in VS Code
     Live su GitHub Pages!
 ```
 
-L'intero processo richiede circa un minuto dal push alla pubblicazione. Nessun deploy manuale, niente FTP, niente SSH — solo `git push` ed è fatta.
+L'intero processo richiede circa un minuto dal push alla pubblicazione. Nessun deploy manuale, niente FTP, niente SSH -- solo `git push` ed è fatta.
 
 ## Il Build di Produzione
 
 Sotto il cofano, il comando `pnpm build` esegue:
 
-1. `tsc -b` — Controlla i tipi TypeScript
-2. `vite build` — Impacchetta e ottimizza tutto il codice
+1. `tsc -b` -- Controlla i tipi TypeScript
+2. `vite build` -- Impacchetta e ottimizza tutto il codice
 
 Vite produce file minificati e ottimizzati con code-splitting automatico. Il risultato è un sito statico velocissimo.
 
@@ -278,12 +278,12 @@ Vite produce file minificati e ottimizzati con code-splitting automatico. Il ris
 
 Avrei potuto usare un CMS, un generatore di siti statici come Hugo o Jekyll, o persino Next.js. Ma ecco perché ho scelto questo approccio:
 
-- **Semplicità** — Scrivi in Markdown, fai push su GitHub, è live
-- **Controllo totale** — Nessuna dipendenza da un CMS o database
-- **Performance** — Vite + React = caricamento veloce
-- **Flessibilità** — Posso mischiare Markdown e HTML come voglio
-- **Apprendimento** — È un bel progetto per padroneggiare React e TypeScript
-- **CI/CD** — Controlli di qualità automatici e deploy con GitHub Actions
+- **Semplicità** -- Scrivi in Markdown, fai push su GitHub, è live
+- **Controllo totale** -- Nessuna dipendenza da un CMS o database
+- **Performance** -- Vite + React = caricamento veloce
+- **Flessibilità** -- Posso mischiare Markdown e HTML come voglio
+- **Apprendimento** -- È un bel progetto per padroneggiare React e TypeScript
+- **CI/CD** -- Controlli di qualità automatici e deploy con GitHub Actions
 
 ## Conclusione
 

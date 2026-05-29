@@ -36,7 +36,7 @@
   {
     "slug": "my-passions",
     "title": "내 열정들",
-    "description": "코딩, 그림, 자동화, 올드 테크 발견 등 — 나를 움직이는 것들",
+    "description": "코딩, 그림, 자동화, 올드 테크 발견 등 -- 나를 움직이는 것들",
     "date": "2026-03-08",
     "tags": [
       "personal"
@@ -78,7 +78,7 @@
   {
     "slug": "botting-a-farm",
     "title": "Microsoft Rewards 팜 봇 만들기",
-    "description": "대규모로 Microsoft Rewards 포인트를 농사짓는 봇을 코딩한 방법 — 그리고 Microsoft의 안티봇 탐지가 따라잡은 이유",
+    "description": "대규모로 Microsoft Rewards 포인트를 농사짓는 봇을 코딩한 방법 -- 그리고 Microsoft의 안티봇 탐지가 따라잡은 이유",
     "date": "2026-03-13",
     "tags": [
       "automation",

@@ -36,7 +36,7 @@
   {
     "slug": "my-passions",
     "title": "Mis Pasiones",
-    "description": "Programar, dibujar, automatizar cosas, descubrir tecnología antigua y más — una mirada a lo que me mueve.",
+    "description": "Programar, dibujar, automatizar cosas, descubrir tecnología antigua y más -- una mirada a lo que me mueve.",
     "date": "2026-03-08",
     "tags": [
       "personal"
@@ -78,7 +78,7 @@
   {
     "slug": "botting-a-farm",
     "title": "Automatizando una Granja de Microsoft Rewards",
-    "description": "Cómo programé un bot para cultivar puntos de Microsoft Rewards a escala — y por qué la detección antibots de Microsoft ya se ha puesto al día.",
+    "description": "Cómo programé un bot para cultivar puntos de Microsoft Rewards a escala -- y por qué la detección antibots de Microsoft ya se ha puesto al día.",
     "date": "2026-03-13",
     "tags": [
       "automation",

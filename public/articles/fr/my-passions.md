@@ -8,11 +8,11 @@ Peut-être parce que j'aimerais partager ma vie mais pas mes infos personnelles 
 
 Mes passions sont variées : j'adore coder, comme vous l'avez probablement remarqué sur le reste de ce blog. Il y a quelque chose de profondément satisfaisant à construire des choses de zéro, résoudre des problèmes, et voir sa création prendre vie. Que ce soit un petit outil en ligne de commande ou une application web complète, le processus ne se démode jamais.
 
-J'ai un amour particulier pour l'**open source** — partager c'est aimer, et j'apprécie sincèrement l'idée que quelqu'un d'autre puisse trouver mon code utile. La plupart de mes projets vivent sur [mon GitHub](https://github.com/fox3000foxy), et vous pouvez les parcourir sur la [page Projets](/projects).
+J'ai un amour particulier pour l'**open source** -- partager c'est aimer, et j'apprécie sincèrement l'idée que quelqu'un d'autre puisse trouver mon code utile. La plupart de mes projets vivent sur [mon GitHub](https://github.com/fox3000foxy), et vous pouvez les parcourir sur la [page Projets](/projects).
 
 ## Le Dessin
 
-Mais le code n'est pas ma seule passion — j'adore aussi dessiner ! Voici quelques-uns de mes dessins :
+Mais le code n'est pas ma seule passion -- j'adore aussi dessiner ! Voici quelques-uns de mes dessins :
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
@@ -34,13 +34,13 @@ Mais le code n'est pas ma seule passion — j'adore aussi dessiner ! Voici quelq
 
 ## Automatiser Tout ce qui Bouge
 
-J'ai aussi une passion pour l'automatisation. Jouer avec GitHub Actions et les workflows est l'un des meilleurs sentiments que j'aie jamais connus. Dès que je peux remplacer un processus manuel par un script ou un pipeline, je le fais — sans me poser de questions.
+J'ai aussi une passion pour l'automatisation. Jouer avec GitHub Actions et les workflows est l'un des meilleurs sentiments que j'aie jamais connus. Dès que je peux remplacer un processus manuel par un script ou un pipeline, je le fais -- sans me poser de questions.
 
 J'ai aussi récemment commencé à signer mes commits avec une clé SSH, et j'ai fait un script pour ça que vous pouvez trouver sur [ce gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Découvrir les Vieilles Technologies
 
-J'adore découvrir les vieilles technologies comme UTAU — je trouve le concept assez fascinant. Il y a quelque chose de spécial à comprendre comment les gens construisaient les choses avant l'ère moderne de l'IA et du cloud computing.
+J'adore découvrir les vieilles technologies comme UTAU -- je trouve le concept assez fascinant. Il y a quelque chose de spécial à comprendre comment les gens construisaient les choses avant l'ère moderne de l'IA et du cloud computing.
 
 ## Les Vtubers
 
@@ -52,7 +52,7 @@ Mon passe-temps principal, c'est coder en écoutant de la musique. Rien de mieux
 
 ## Trouver des Solutions de Contournement
 
-J'adore aussi trouver des solutions de contournement pour éviter de payer pour des choses — ou du moins penser hors des sentiers battus. Par exemple, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) était l'une de mes dernières créations où j'ai trouvé des solutions gratuites pour la gestion des commandes, la gestion de base de données, et les démons. Ce n'est pas une question d'être radin — c'est le défi qui compte !
+J'adore aussi trouver des solutions de contournement pour éviter de payer pour des choses -- ou du moins penser hors des sentiers battus. Par exemple, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) était l'une de mes dernières créations où j'ai trouvé des solutions gratuites pour la gestion des commandes, la gestion de base de données, et les démons. Ce n'est pas une question d'être radin -- c'est le défi qui compte !
 
 ## Pourquoi Ce Blog
 

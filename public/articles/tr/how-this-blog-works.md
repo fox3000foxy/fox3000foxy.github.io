@@ -6,12 +6,12 @@ Hiç bu blogun perde arkasında nasıl çalıştığını merak ettin mi? Bu yaz
 
 Bu blog, modern web teknolojileriyle inşa edildi:
 
-- **React 19** — kullanıcı arayüzü için
-- **TypeScript** — tipli ve daha güvenilir kod için
-- **Vite** — ultra hızlı bir derleme aracı olarak
-- **React Router v7** — sayfalar arası navigasyon için
-- **react-markdown** — Markdown'ı HTML'ye dönüştürmek için
-- **rehype-raw + rehype-sanitize** — Markdown'da ham HTML'e izin verirken güvenli kalmak için
+- **React 19** -- kullanıcı arayüzü için
+- **TypeScript** -- tipli ve daha güvenilir kod için
+- **Vite** -- ultra hızlı bir derleme aracı olarak
+- **React Router v7** -- sayfalar arası navigasyon için
+- **react-markdown** -- Markdown'ı HTML'ye dönüştürmek için
+- **rehype-raw + rehype-sanitize** -- Markdown'da ham HTML'e izin verirken güvenli kalmak için
 
 Her şey **GitHub Pages** üzerinde doğrudan `fox3000foxy.github.io` reposundan barındırılıyor.
 
@@ -85,10 +85,10 @@ Tüm makaleler `public/articles/index.json` dosyasında referanslanır. Her gird
 ]
 ```
 
-- **slug** — benzersiz tanımlayıcı, URL'de kullanılır (`/blog/hello-world`)
-- **title** — listede görüntülenen başlık
-- **description** — kısa bir özet
-- **date** — yayınlanma tarihi
+- **slug** -- benzersiz tanımlayıcı, URL'de kullanılır (`/blog/hello-world`)
+- **title** -- listede görüntülenen başlık
+- **description** -- kısa bir özet
+- **date** -- yayınlanma tarihi
 
 ### 2. Markdown Dosyası
 
@@ -128,7 +128,7 @@ Alt bilgi minimalisttir: sadece dinamik olarak hesaplanan güncel yılı içeren
 
 ## Karanlık Tema
 
-Site **her zaman karanlık moddadır** — açık/karanlık geçişi yoktur. Bu bilinçli bir seçimdir: global stillerde siyah arka plan `#000` ve beyaz metin `#fff` ile `color-scheme: dark` ayarlanmıştır. Bağlantılar mavidir (`#64b5f6`) ve üzerine gelindiğinde yeşile döner (`#81c784`).
+Site **her zaman karanlık moddadır** -- açık/karanlık geçişi yoktur. Bu bilinçli bir seçimdir: global stillerde siyah arka plan `#000` ve beyaz metin `#fff` ile `color-scheme: dark` ayarlanmıştır. Bağlantılar mavidir (`#64b5f6`) ve üzerine gelindiğinde yeşile döner (`#81c784`).
 
 ## Bir Makaleyi Nasıl Yazıyorum
 
@@ -198,15 +198,15 @@ Pipeline, `main` branch'ine her **push**ta ve `main`'i hedefleyen her **pull req
 
 Build job'ı `ubuntu-latest` üzerinde çalışır ve şu adımlardan geçer:
 
-1. **Checkout** — Repoyu tam geçmişiyle klonlar (`fetch-depth: 0`)
-2. **Setup pnpm** — `pnpm/action-setup@v4` kullanarak en son pnpm sürümünü kurar
-3. **Setup Node.js 20** — Node'u pnpm önbelleği etkinken yapılandırır (daha hızlı kurulum için)
-4. **Install dependencies** — Tekrarlanabilir derlemeler için `pnpm install --frozen-lockfile` çalıştırır (lockfile değişikliklerine izin verilmez)
-5. **Lint** — Derlemeden önce kod kalitesi sorunlarını yakalamak için `pnpm run lint` (ESLint) çalıştırır
-6. **Build** — Önce TypeScript türlerini kontrol eden (`tsc -b`) ardından her şeyi Vite ile paketleyen `pnpm run build` çalıştırır
-7. **Upload artifact** — `dist/` klasörünü deploy job'ı için bir build yapıtı olarak yükler
+1. **Checkout** -- Repoyu tam geçmişiyle klonlar (`fetch-depth: 0`)
+2. **Setup pnpm** -- `pnpm/action-setup@v4` kullanarak en son pnpm sürümünü kurar
+3. **Setup Node.js 20** -- Node'u pnpm önbelleği etkinken yapılandırır (daha hızlı kurulum için)
+4. **Install dependencies** -- Tekrarlanabilir derlemeler için `pnpm install --frozen-lockfile` çalıştırır (lockfile değişikliklerine izin verilmez)
+5. **Lint** -- Derlemeden önce kod kalitesi sorunlarını yakalamak için `pnpm run lint` (ESLint) çalıştırır
+6. **Build** -- Önce TypeScript türlerini kontrol eden (`tsc -b`) ardından her şeyi Vite ile paketleyen `pnpm run build` çalıştırır
+7. **Upload artifact** -- `dist/` klasörünü deploy job'ı için bir build yapıtı olarak yükler
 
-Herhangi bir adım başarısız olursa — bir lint hatası, bir tür hatası, bir derleme hatası — tüm pipeline durur ve hiçbir şey dağıtılmaz. Bu, canlı siteyi bozuk koddan korur.
+Herhangi bir adım başarısız olursa -- bir lint hatası, bir tür hatası, bir derleme hatası -- tüm pipeline durur ve hiçbir şey dağıtılmaz. Bu, canlı siteyi bozuk koddan korur.
 
 ### Job 2: Deploy
 
@@ -222,10 +222,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 Ardından:
 
-1. **Build yapıtını indirir** — Build job'ının ürettiği `dist/` klasörünü alır
-2. **GitHub Pages'i yapılandırır** — Pages ortamını kurar
-3. **Pages'e yükler** — `dist/` klasörünü GitHub Pages için paketler
-4. **Dağıtır** — `actions/deploy-pages@v4` kullanarak siteyi yayınlar
+1. **Build yapıtını indirir** -- Build job'ının ürettiği `dist/` klasörünü alır
+2. **GitHub Pages'i yapılandırır** -- Pages ortamını kurar
+3. **Pages'e yükler** -- `dist/` klasörünü GitHub Pages için paketler
+4. **Dağıtır** -- `actions/deploy-pages@v4` kullanarak siteyi yayınlar
 
 ### Tam Resim
 
@@ -262,14 +262,14 @@ VS Code'da makaleyi yaz
     GitHub Pages'de canlı!
 ```
 
-Tüm süreç, push'tan canlı yayına kadar yaklaşık bir dakika sürer. Manuel dağıtım yok, FTP yok, SSH yok — sadece `git push` ve iş tamam.
+Tüm süreç, push'tan canlı yayına kadar yaklaşık bir dakika sürer. Manuel dağıtım yok, FTP yok, SSH yok -- sadece `git push` ve iş tamam.
 
 ## Production Derlemesi
 
 Perde arkasında, `pnpm build` komutu şunları çalıştırır:
 
-1. `tsc -b` — TypeScript türlerini kontrol eder
-2. `vite build` — Tüm kodu paketler ve optimize eder
+1. `tsc -b` -- TypeScript türlerini kontrol eder
+2. `vite build` -- Tüm kodu paketler ve optimize eder
 
 Vite, otomatik kod bölme ile küçültülmüş ve optimize edilmiş dosyalar üretir. Sonuç, uçuk hızlı bir statik sitedir.
 
@@ -277,12 +277,12 @@ Vite, otomatik kod bölme ile küçültülmüş ve optimize edilmiş dosyalar ü
 
 Bir CMS, Hugo veya Jekyll gibi bir statik site oluşturucu, hatta Next.js kullanabilirdim. Ama bu yaklaşımı seçmemin nedeni şu:
 
-- **Basitlik** — Markdown yaz, GitHub'a pushla, canlıya çıksın
-- **Tam kontrol** — Bir CMS veya veritabanına bağımlılık yok
-- **Performans** — Vite + React = hızlı yükleme
-- **Esneklik** — Markdown ve HTML'i dilediğim gibi karıştırabilirim
-- **Öğrenme** — React ve TypeScript'i ustalaşmak için harika bir proje
-- **CI/CD** — GitHub Actions ile otomatik kalite kontrolleri ve dağıtım
+- **Basitlik** -- Markdown yaz, GitHub'a pushla, canlıya çıksın
+- **Tam kontrol** -- Bir CMS veya veritabanına bağımlılık yok
+- **Performans** -- Vite + React = hızlı yükleme
+- **Esneklik** -- Markdown ve HTML'i dilediğim gibi karıştırabilirim
+- **Öğrenme** -- React ve TypeScript'i ustalaşmak için harika bir proje
+- **CI/CD** -- GitHub Actions ile otomatik kalite kontrolleri ve dağıtım
 
 ## Sonuç
 

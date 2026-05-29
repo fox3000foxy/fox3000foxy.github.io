@@ -1,16 +1,16 @@
 # 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교
 
-그래서 나는 한동안 이 토끼굴에 완전히 빠져 있었어. [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) — Fortune의 프로젝트 (그녀에 대해선 나중에 더 얘기할게) — 를 도와주다 보니, 계속 "잠만, 이거 `v86`이랑 뭐가 다른데?" 또는 "그냥 `vm2` 쓰면 안 돼?"라는 질문을 받게 됐어. 그리고 나는 생태계 전체를 먼저 매핑하지 않고는 깔끔한 답변을 할 수 없겠다는 걸 깨달았지. 그래서 여기까지 왔어 lol.
+그래서 나는 한동안 이 토끼굴에 완전히 빠져 있었어. [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- Fortune의 프로젝트 (그녀에 대해선 나중에 더 얘기할게) -- 를 도와주다 보니, 계속 "잠만, 이거 `v86`이랑 뭐가 다른데?" 또는 "그냥 `vm2` 쓰면 안 돼?"라는 질문을 받게 됐어. 그리고 나는 생태계 전체를 먼저 매핑하지 않고는 깔끔한 답변을 할 수 없겠다는 걸 깨달았지. 그래서 여기까지 왔어 lol.
 
-알고 보니 네 가지 뚜렷한 계열이 있어 — JS 샌드박스, Linux 에뮬레이터, Linux 시뮬레이터, 허니팟 — 그리고 이들은 거의 겹치지 않는데, 항상 같은 맥락에서 언급되더라. 플러그인 시스템을 만드는 사람은 `isolated-vm`을 찾고, CLI 도구를 데모하는 사람은 `v86`을 찾고, SSH 위협 인텔리전스를 하는 사람은 Cowrie를 찾아. "코드를 상자 안에서 실행한다"는 모호한 우산 아래에서 완전히 다른 문제를 해결하고 있어.
+알고 보니 네 가지 뚜렷한 계열이 있어 -- JS 샌드박스, Linux 에뮬레이터, Linux 시뮬레이터, 허니팟 -- 그리고 이들은 거의 겹치지 않는데, 항상 같은 맥락에서 언급되더라. 플러그인 시스템을 만드는 사람은 `isolated-vm`을 찾고, CLI 도구를 데모하는 사람은 `v86`을 찾고, SSH 위협 인텔리전스를 하는 사람은 Cowrie를 찾아. "코드를 상자 안에서 실행한다"는 모호한 우산 아래에서 완전히 다른 문제를 해결하고 있어.
 
-이 글을 쓰기 위해 소스 코드, CVE 보고서, 아키텍처 문서, npm 페이지를 읽는 데 엄청난 시간을 썼어. 엄청 길 거야 — 진짜 커피 한 잔 해. 아니면 두 잔.
+이 글을 쓰기 위해 소스 코드, CVE 보고서, 아키텍처 문서, npm 페이지를 읽는 데 엄청난 시간을 썼어. 엄청 길 거야 -- 진짜 커피 한 잔 해. 아니면 두 잔.
 
 > 빠른 면책: `typescript-virtual-container`가 이 글에서 많이 등장하는데, 이 연구를 촉발했기 때문이야. 다른 것들에도 공정하게 쓰려고 노력했지만, 그 맥락을 염두에 둬 줘.
 
 ---
 
-## 파트 0 — 먼저, 너는 어떤 문제를 해결하려는 거야?
+## 파트 0 -- 먼저, 너는 어떤 문제를 해결하려는 거야?
 
 들어가기 전에, 각 계열이 무엇을 위한 것인지 정확히 아는 게 중요해. 용어가 쉽게 헷갈리거든 (내가 직접 앉아서 매핑하기 전에는 나도 포함해서).
 
@@ -34,11 +34,11 @@ Linux 시뮬레이터:   typescript-virtual-container (이 공간에서 유일�
 
 ---
 
-## 파트 1 — JavaScript 샌드박스
+## 파트 1 -- JavaScript 샌드박스
 
-### 1.1 `vm` — Node.js 내장 (네 생각만큼 안전하지 않아)
+### 1.1 `vm` -- Node.js 내장 (네 생각만큼 안전하지 않아)
 
-Node에서 "신뢰할 수 없는 JS를 실행"하는 가장 오래된 답변은 내장 `vm` 모듈이야. v0.1부터 있었어서 많은 사람들이 먼저 찾는데 — 그리고 나서 당하지.
+Node에서 "신뢰할 수 없는 JS를 실행"하는 가장 오래된 답변은 내장 `vm` 모듈이야. v0.1부터 있었어서 많은 사람들이 먼저 찾는데 -- 그리고 나서 당하지.
 
 ```js
 const vm = require("vm");
@@ -48,12 +48,12 @@ vm.runInContext("answer = 6 * 7", sandbox);
 console.log(sandbox.answer); // 42
 ```
 
-`vm`이 실제로 하는 일: 새로운 V8 컨텍스트(새로운 빌트인 생성자 세트 — `Object`, `Array`, `Function` 등)를 만들고 그 안에서 코드를 실행해, `sandbox`에 넣은 모든 것에 대한 공유 참조를 가져. V8 엔진은 변하지 않아. 프로세스도 변하지 않아. 메모리는 공유돼.
+`vm`이 실제로 하는 일: 새로운 V8 컨텍스트(새로운 빌트인 생성자 세트 -- `Object`, `Array`, `Function` 등)를 만들고 그 안에서 코드를 실행해, `sandbox`에 넣은 모든 것에 대한 공유 참조를 가져. V8 엔진은 변하지 않아. 프로세스도 변하지 않아. 메모리는 공유돼.
 
 `vm`이 보안을 제공하지 않는 이유: JavaScript의 프로토타입 체인은 모든 것을 `Object.prototype`에 연결하는 DAG야. 호스트 영역의 어떤 객체든 샌드박스에 넣으면, 게스트는 프로토타입 체인을 타고 올라가 호스트 생성자에 도달할 수 있어. `Function`에서 `Function("return process")()`를 호출하면 실제 `process` 객체를 되찾을 수 있어. 게임 오버. 바로 끝이야.
 
 ```js
-// 이건 vm에서 아주 잘 실행돼 — 실제 process 객체를 되찾아와
+// 이건 vm에서 아주 잘 실행돼 -- 실제 process 객체를 되찾아와
 vm.runInNewContext(`({}).__proto__.constructor("return process")()`);
 ```
 
@@ -61,12 +61,12 @@ vm.runInNewContext(`({}).__proto__.constructor("return process")()`);
 
 **평결**: 샌드박스가 아니라 스코프 메커니즘이야. 격리된 변수 스코프가 필요할 때 사용해 (템플릿 엔진, 코드를 제어하는 `eval` 같은 기능). 절대 신뢰할 수 없는 입력에 사용하지 마.
 
-**메모리**: 무시할 만한 오버헤드 — 호스트 프로세스와 같은 V8 힙.
+**메모리**: 무시할 만한 오버헤드 -- 호스트 프로세스와 같은 V8 힙.
 **보안**: 동기 있는 공격자에게는 없음.
 
 ---
 
-### 1.2 `vm2` — 커뮤니티의 시도, 그리고 아주 긴 죽음
+### 1.2 `vm2` -- 커뮤니티의 시도, 그리고 아주 긴 죽음
 
 `vm2`는 `vm`의 탈출 문제에 대한 커뮤니티의 답변이었어. 핵심 아이디어: 샌드박스 경계를 넘는 모든 객체를 `Proxy`로 감싸서 속성 접근을 가로채고, 프로토타입 클라이밍을 막고, 위험한 참조를 걸러내. 이론상 영리한 아이디어야! 실제로는 별로 안 통했어, 곧 알게 되겠지만.
 
@@ -76,7 +76,7 @@ const vm = new VM({ timeout: 1000, sandbox: {} });
 vm.run("process.exit(1)"); // VMError 발생, process에 접근 불가
 ```
 
-몇 년 동안 이건 꽤 잘 작동했어. 하지만 JavaScript `Proxy`의 공격 표면은 엄청나. 모든 새로운 JS 언어 기능 — 제너레이터, 비동기 이터레이터, `Symbol.toPrimitive`, `Error.prepareStackTrace`, `Promise` 내부 슬롯 — 은 잠재적 우회 벡터야.
+몇 년 동안 이건 꽤 잘 작동했어. 하지만 JavaScript `Proxy`의 공격 표면은 엄청나. 모든 새로운 JS 언어 기능 -- 제너레이터, 비동기 이터레이터, `Symbol.toPrimitive`, `Error.prepareStackTrace`, `Promise` 내부 슬롯 -- 은 잠재적 우회 벡터야.
 
 CVE 타임라인은... 정말 대단해. 이걸 봐:
 
@@ -94,13 +94,13 @@ CVE 타임라인은... 정말 대단해. 이걸 봐:
 
 유지보수자는 2025년 10월에 버전 3.10.0으로 부활시켰고, 당시 알려진 모든 것을 고쳤다고 주장했어. 2026년 1월에 새로운 치명적 탈출(CVE-2026-22709, CVSS 9.8)이 공개되었고, 2026년 5월에는 11개가 더 이어졌어. 열하나. 패턴은 변하지 않았고 솔직히 앞으로도 변하지 않을 거야.
 
-근본적인 문제는 아키텍처적이야 — 그리고 이게 생태계 전체가 배우는 데 오래 걸린 교훈이야. 샌드박스하는 것과 같은 언어로, 같은 엔진으로, 같은 프로세스 안에서 안전한 샌드박스를 만들 수 없어. 탈출 표면은 전체 V8 구현인데 — V8은 수백만 줄의 C++로 계속 변하고 있어. 모든 새로운 JS 기능이 잠재적으로 새로운 공격 경로를 열어.
+근본적인 문제는 아키텍처적이야 -- 그리고 이게 생태계 전체가 배우는 데 오래 걸린 교훈이야. 샌드박스하는 것과 같은 언어로, 같은 엔진으로, 같은 프로세스 안에서 안전한 샌드박스를 만들 수 없어. 탈출 표면은 전체 V8 구현인데 -- V8은 수백만 줄의 C++로 계속 변하고 있어. 모든 새로운 JS 기능이 잠재적으로 새로운 공격 경로를 열어.
 
 **평결**: 보안에 민감한 애플리케이션에는 사용하지 마. 최신 버전에서도 몇 달마다 새로운 우회가 발견돼. 유지보수자 자신도 공개적으로 인정했어.
 
 ---
 
-### 1.3 `isolated-vm` — 실제로 작동하는 것
+### 1.3 `isolated-vm` -- 실제로 작동하는 것
 
 `isolated-vm`은 올바른 접근 방식을 취해: V8 자체의 격리 프리미티브인 Isolate를 사용해. 각 V8 Isolate는 자신의 힙, 자신의 가비지 컬렉터, 자신의 빌트인 세트를 가지고 있고, 다른 Isolate와 공유 참조가 전혀 없어.
 
@@ -128,9 +128,9 @@ await script.run(context);
 isolate.dispose(); // 전체 힙 해제
 ```
 
-`Reference`와 `ExternalCopy` 타입이 명시적 통신 브리지야. `Reference`는 isolate에 호스트 함수에 대한 호출 가능한 핸들을 줘 — isolate는 호출할 수 있지만 클로저나 프로토타입은 검사할 수 없어. `ExternalCopy`는 값을 힙 경계를 넘어 직렬화(구조적 클론)해. 이 명시적 브리지 모델은 편리하지는 않지만, 격리를 실제로 만들어내는 거야.
+`Reference`와 `ExternalCopy` 타입이 명시적 통신 브리지야. `Reference`는 isolate에 호스트 함수에 대한 호출 가능한 핸들을 줘 -- isolate는 호출할 수 있지만 클로저나 프로토타입은 검사할 수 없어. `ExternalCopy`는 값을 힙 경계를 넘어 직렬화(구조적 클론)해. 이 명시적 브리지 모델은 편리하지는 않지만, 격리를 실제로 만들어내는 거야.
 
-하드 리소스 제한을 설정할 수 있어: 메모리(제한 초과 시 isolate 종료), 벽시계 타임아웃, CPU 타임아웃. 종료는 실제야 — `while(true)`로 우회할 수 있는 JS 타임아웃이 아니라, V8 Isolate 전체를 죽여.
+하드 리소스 제한을 설정할 수 있어: 메모리(제한 초과 시 isolate 종료), 벽시계 타임아웃, CPU 타임아웃. 종료는 실제야 -- `while(true)`로 우회할 수 있는 JS 타임아웃이 아니라, V8 Isolate 전체를 죽여.
 
 **한계**: JS 전용이야. 내부에서 bash를 실행할 수 없어. 파일, 권한, 네트워크, 프로세스 개념이 없어. 사용자 제출 JS(플러그인, 공식, 스크립트 훅)에는 정확히 맞는 도구이고, 다른 모든 것에는 틀린 도구야. `typescript-virtual-container`의 작성자가 초기에 고려했다가 "셸 명령 실행"과 "JavaScript 격리"가 근본적으로 다른 문제라는 걸 깨달았다고 언급했어.
 
@@ -141,11 +141,11 @@ isolate.dispose(); // 전체 힙 해제
 
 ---
 
-### 1.4 `quickjs-emscripten` — Wasm으로 컴파일된 별도의 JS 엔진
+### 1.4 `quickjs-emscripten` -- Wasm으로 컴파일된 별도의 JS 엔진
 
 다른 접근 방식: V8 내에서 격리하는 대신, WebAssembly로 컴파일된 완전히 별도의 JavaScript 엔진을 실행해. 호스트는 V8/Node에서 실행돼. 게스트는 QuickJS-내부-Wasm에서 실행돼. Wasm 샌드박스가 격리 경계를 제공해.
 
-QuickJS는 Fabrice Bellard의 또 다른 작품이야 (QEMU, FFmpeg, JSLinux, TinyEMU의 그 사람 — 이 사람은 진짜가 아니야, 어떻게 한 사람이 이걸 다 하지?). C로 작성된 작고 스펙 준수하는 ES2023 JS 엔진이고, Wasm으로 컴파일하면 ~500 KB밖에 안 돼.
+QuickJS는 Fabrice Bellard의 또 다른 작품이야 (QEMU, FFmpeg, JSLinux, TinyEMU의 그 사람 -- 이 사람은 진짜가 아니야, 어떻게 한 사람이 이걸 다 하지?). C로 작성된 작고 스펙 준수하는 ES2023 JS 엔진이고, Wasm으로 컴파일하면 ~500 KB밖에 안 돼.
 
 ```js
 import { getQuickJS } from "quickjs-emscripten";
@@ -169,7 +169,7 @@ if (result.error) {
 vm.dispose();
 ```
 
-QuickJS는 C로 작성된 작고 스펙 준수하는 ES2023 JavaScript 엔진이야. Wasm으로 컴파일하면 동기 변형은 ~500 KB, 비동기(Asyncify) 변형은 ~1 MB. 메모리 관리는 수동이야 — VM에서 추출한 모든 값을 명시적으로 폐기해야 해, 좀 귀찮지만 경계 간 GC 문제를 방지해. 재미있는 트레이드오프지!
+QuickJS는 C로 작성된 작고 스펙 준수하는 ES2023 JavaScript 엔진이야. Wasm으로 컴파일하면 동기 변형은 ~500 KB, 비동기(Asyncify) 변형은 ~1 MB. 메모리 관리는 수동이야 -- VM에서 추출한 모든 값을 명시적으로 폐기해야 해, 좀 귀찮지만 경계 간 GC 문제를 방지해. 재미있는 트레이드오프지!
 
 `@sebastianwessel/quickjs` 래퍼는 더 인체공학적인 API를 추가하고, 선택적 가상 파일시스템, fetch 지원, Node.js 모듈 스텁을 제공해:
 
@@ -199,9 +199,9 @@ const result = await runSandboxed(
 
 ---
 
-### 1.5 Deno — 권한 우선 런타임
+### 1.5 Deno -- 권한 우선 런타임
 
-Deno는 완전히 다른 철학을 취해: Node 내에서 샌드박싱하는 대신, 기본적으로 안전한 새 런타임을 만들어. 나는 이 접근 방식이 정말 마음에 들어 — 솔직히 Node.js가 처음부터 그랬어야 했어. Ryan Dahl(원래 Node.js 창시자)은 말 그대로 몇 가지 Node.js 디자인 결정을 후회해서 Deno를 만들었어. 생각해보면 꽤 놀라운 일이야.
+Deno는 완전히 다른 철학을 취해: Node 내에서 샌드박싱하는 대신, 기본적으로 안전한 새 런타임을 만들어. 나는 이 접근 방식이 정말 마음에 들어 -- 솔직히 Node.js가 처음부터 그랬어야 했어. Ryan Dahl(원래 Node.js 창시자)은 말 그대로 몇 가지 Node.js 디자인 결정을 후회해서 Deno를 만들었어. 생각해보면 꽤 놀라운 일이야.
 
 모든 민감한 기능(파일 읽기, 파일 쓰기, 네트워크, 환경 변수, 서브프로세스)에는 명시적인 `--allow-*` 플래그가 필요해:
 
@@ -216,17 +216,17 @@ deno run --allow-net=api.example.com script.ts
 deno run untrusted.ts # 읽기, 쓰기, 네트워크, spawn 불가
 ```
 
-권한 모델은 Rust/OS 수준에서 구현돼 — JS 트릭이 아니야. Deno 코드가 `Deno.readFile()`을 호출하면, Rust op를 통해 권한 테이블을 확인한 후에야 파일시스템에 접근해. 권한이 부여되지 않으면 시스템 콜이 아예 발생하지 않기 때문에 JS에서 우회할 수 없어.
+권한 모델은 Rust/OS 수준에서 구현돼 -- JS 트릭이 아니야. Deno 코드가 `Deno.readFile()`을 호출하면, Rust op를 통해 권한 테이블을 확인한 후에야 파일시스템에 접근해. 권한이 부여되지 않으면 시스템 콜이 아예 발생하지 않기 때문에 JS에서 우회할 수 없어.
 
 진짜 신뢰할 수 없는 코드를 실행하려면, Deno Workers(웹 워커)가 같은 프로세스 내에서 두 번째 isolate를 제공하고, 각각 자체 권한 세트를 가져. 권한이 0인 워커를 생성하고 `postMessage`로 통신할 수 있어.
 
 Deno 2(2024년 10월 출시)는 완전한 npm 호환성과 Node.js 호환성 심을 추가해서 서버 측 사용 사례에서 채택을 크게 개선했어.
 
-**트레이드오프**: Deno의 보안 모델은 부분적으로 신뢰할 수 있는 코드에 탁월해. 완전히 신뢰할 수 없고 적대적일 수 있는 코드의 경우, 권한 모델만으로는 충분하지 않아 — Isolate 경계(`isolated-vm`)나 다른 엔진(`quickjs-emscripten`)이 필요해. Deno도 여전히 V8을 실행하고 정교한 공격자는 V8 수준의 버그를 찾을 수 있기 때문이야.
+**트레이드오프**: Deno의 보안 모델은 부분적으로 신뢰할 수 있는 코드에 탁월해. 완전히 신뢰할 수 없고 적대적일 수 있는 코드의 경우, 권한 모델만으로는 충분하지 않아 -- Isolate 경계(`isolated-vm`)나 다른 엔진(`quickjs-emscripten`)이 필요해. Deno도 여전히 V8을 실행하고 정교한 공격자는 V8 수준의 버그를 찾을 수 있기 때문이야.
 
 ---
 
-### 1.6 TC39 ShadowRealm — 표준 답변 (언젠가는)
+### 1.6 TC39 ShadowRealm -- 표준 답변 (언젠가는)
 
 JavaScript 표준 기구(TC39)는 ShadowRealm이라는 제안을 가지고 있어서 `vm`과 `vm2`가 하려고 했던 것을 표준화하려고 하지만, 올바른 보안 모델을 가져. ShadowRealm은 자체 인트린직을 가진 격리된 JS 실행 컨텍스트를 만들고, 외부 영역에 접근할 수 없으며, 신중하게 제어된 import/export 인터페이스를 가져.
 
@@ -257,22 +257,22 @@ ShadowRealm은 브라우저에(Chrome 90+, Firefox 105+) 있지만 2026년 현�
 | **상태** | 안정 | 위험 (새 CVE) | ✅ 활동 중 | ✅ 활동 중 | ✅ 활동 중 |
 | **RAM 오버헤드** | ~1 MB | ~5–20 MB | ~3–10 MB | ~5–15 MB | ~10–30 MB |
 
-핵심: 보안을 중요하게 생각한다면, 실제로 두 가지 옵션만 있어 — `isolated-vm` (네이티브 애드온, V8 Isolate, 전체 JS 속도)과 `quickjs-emscripten` (Wasm, 브라우저 호환, 계산 집약적 코드에서 ~10배 느림). 나머지는 "제발 쓰지 마"(`vm`, `vm2`)거나 완전히 다른 문제를 해결하는 런타임(Deno)이야. ShadowRealm이 언젠가 이 그림을 바꿀 수도 있지만, 아직은 아니야.
+핵심: 보안을 중요하게 생각한다면, 실제로 두 가지 옵션만 있어 -- `isolated-vm` (네이티브 애드온, V8 Isolate, 전체 JS 속도)과 `quickjs-emscripten` (Wasm, 브라우저 호환, 계산 집약적 코드에서 ~10배 느림). 나머지는 "제발 쓰지 마"(`vm`, `vm2`)거나 완전히 다른 문제를 해결하는 런타임(Deno)이야. ShadowRealm이 언젠가 이 그림을 바꿀 수도 있지만, 아직은 아니야.
 
 ---
 
-## 파트 2 — JavaScript의 Linux 에뮬레이터
+## 파트 2 -- JavaScript의 Linux 에뮬레이터
 
-여기서부터 진짜 흥미로워지기 시작해. 이것들은 *진짜* 에뮬레이터야 — JavaScript나 WebAssembly로 CPU 명령어 세트를 구현하고, 실제 Linux 커널 이미지를 부팅하고, 실제 사용자 공간 바이너리를 실행해. 격리는 게스트와 호스트가 아무것도 공유하지 않는다는 점에서 온다: 다른 메모리 공간, 다른 명령어 스트림.
+여기서부터 진짜 흥미로워지기 시작해. 이것들은 *진짜* 에뮬레이터야 -- JavaScript나 WebAssembly로 CPU 명령어 세트를 구현하고, 실제 Linux 커널 이미지를 부팅하고, 실제 사용자 공간 바이너리를 실행해. 격리는 게스트와 호스트가 아무것도 공유하지 않는다는 점에서 온다: 다른 메모리 공간, 다른 명령어 스트림.
 
 지불하는 비용은 엄청나지만, 얻는 것은 진정으로 놀라워: 실제 Linux가, 실제로, 브라우저나 Node 프로세스 안에서 실행돼. 생각해보면 꽤 정신없지 않아?
 
-### 2.1 `v86` — JS + Wasm JIT의 x86 PC 에뮬레이터
+### 2.1 `v86` -- JS + Wasm JIT의 x86 PC 에뮬레이터
 
 Fabrice의 `v86` (GitHub의 copy)은 JavaScript에서 가장 강력한 오픈 소스 x86 에뮬레이터야. 2013년경 순수 JS 인터프리터로 시작해서 x86 기본 블록을 즉시 WebAssembly로 변환하는 JIT 컴파일 시스템으로 진화했어, 성능이 극적으로 향상됐지.
 
 에뮬레이트하는 것:
-- **CPU**: x86-32 (IA-32), 명령어 세트는 대략 Pentium 1 수준. 64비트(x86-64) 지원 없음 — 이건 빠진 기능이 아니라 하드 아키텍처적 한계야.
+- **CPU**: x86-32 (IA-32), 명령어 세트는 대략 Pentium 1 수준. 64비트(x86-64) 지원 없음 -- 이건 빠진 기능이 아니라 하드 아키텍처적 한계야.
 - **FPU**: JavaScript의 `Float64Array`를 통해. x87은 80비트 확장 정밀도; JS 더블은 64비트. 이건 부동소수점 결과가 실제 CPU와 약간 다를 수 있다는 뜻이야.
 - **메모리**: 설정 가능, JS 힙의 `SharedArrayBuffer` 또는 `ArrayBuffer`에 매핑.
 - **하드웨어**: 8254 PIT (타이머), 8259 PIC (인터럽트 컨트롤러), 8042 키보드 컨트롤러 (PS/2), CMOS RTC, SVGA 확장 및 Bochs VBE가 있는 VGA, IDE 컨트롤러, 플로피 컨트롤러 (8272A), NE2000 네트워크 카드.
@@ -303,57 +303,57 @@ emulator.serial0_send("ls /\n");
 
 **지원 OS**: Alpine Linux (훌륭함), Ubuntu 16.04/18.04 (i386만), Arch Linux 32, ReactOS, FreeDOS, Windows 9x/2000 (제약 있음), MS-DOS.
 
-**부팅 시간**: 클린 이미지에서 Alpine Linux 15–40초. 이건 실제 커널 초기화에 내재된 거야 — 건너뛸 수 없어. 네, 사용자들은 브라우저에서 커널 부팅 시퀀스를 지켜보고 앉아 있어야 해. 그게 조건이야 xD
+**부팅 시간**: 클린 이미지에서 Alpine Linux 15–40초. 이건 실제 커널 초기화에 내재된 거야 -- 건너뛸 수 없어. 네, 사용자들은 브라우저에서 커널 부팅 시퀀스를 지켜보고 앉아 있어야 해. 그게 조건이야 xD
 
 **메모리**: 인스턴스당 100–256 MB. 바쁜 Linux 인스턴스의 경우 Wasm JIT 코드 캐시만 수십 MB에 도달할 수 있어.
 
-**Node.js 사용**: 완전 지원. DOM 불필요 — 시리얼만 필요하면 VGA 출력은 버려도 돼.
+**Node.js 사용**: 완전 지원. DOM 불필요 -- 시리얼만 필요하면 VGA 출력은 버려도 돼.
 
 **할 수 없는 것**: 64비트 바이너리 실행, 최신 커널 기능(eBPF, io_uring 등) 사용, 메모리 제한에 부딪히지 않고 동시에 소수 인스턴스 이상 실행.
 
-**npm**: [v86](https://www.npmjs.com/package/v86) — 지속적으로 업데이트, 작성 시점 기준 최근 1일 이내에 최신 버전 게시됨.
+**npm**: [v86](https://www.npmjs.com/package/v86) -- 지속적으로 업데이트, 작성 시점 기준 최근 1일 이내에 최신 버전 게시됨.
 **GitHub**: [copy/v86](https://github.com/copy/v86)
 **데모**: [copy.sh/v86](https://copy.sh/v86)
 
 ---
 
-### 2.2 JSLinux와 TinyEMU — Bellard의 작업, 두 번
+### 2.2 JSLinux와 TinyEMU -- Bellard의 작업, 두 번
 
-JSLinux는 Fabrice Bellard 자신의 JavaScript Linux 에뮬레이터야 — 최초로, 2011년에 발표됐어. 이 글에서 계속 Bellard를 언급하는 이유는 계속 나타나거든: QuickJS, TinyEMU, JSLinux, QEMU, FFmpeg. 이 사람은 정말 대단해. 과장 없이 소프트웨어 역사상 가장 인상적인 솔로 기술 기여 중 하나야.
+JSLinux는 Fabrice Bellard 자신의 JavaScript Linux 에뮬레이터야 -- 최초로, 2011년에 발표됐어. 이 글에서 계속 Bellard를 언급하는 이유는 계속 나타나거든: QuickJS, TinyEMU, JSLinux, QEMU, FFmpeg. 이 사람은 정말 대단해. 과장 없이 소프트웨어 역사상 가장 인상적인 솔로 기술 기여 중 하나야.
 
-원래 JSLinux는 순수 JS x86 인터프리터였어. 2016년에 Bellard가 TinyEMU(C로 작성된 RISC-V 에뮬레이터)를 작성하고 Emscripten으로 JavaScript로 컴파일했고, 그게 현재 JSLinux의 기초가 됐어. 그래서 현재 JSLinux는 실제로 JavaScript를 생성하는 C 코드야 — 손으로 작성된 JS가 전혀 아니야.
+원래 JSLinux는 순수 JS x86 인터프리터였어. 2016년에 Bellard가 TinyEMU(C로 작성된 RISC-V 에뮬레이터)를 작성하고 Emscripten으로 JavaScript로 컴파일했고, 그게 현재 JSLinux의 기초가 됐어. 그래서 현재 JSLinux는 실제로 JavaScript를 생성하는 C 코드야 -- 손으로 작성된 JS가 전혀 아니야.
 
-Bellard 사이트의 기술 노트는 읽을 가치가 있어: 현재 JSLinux는 32 또는 64비트 RISC-V CPU(x86이 아님)를 실행하고, VirtIO 콘솔, VirtIO 네트워크, VirtIO 블록 디바이스, 호스트와 파일 공유를 위한 9P 파일시스템을 에뮬레이트해. JS 데모는 C를 Emscripten으로 컴파일한 거야 — 손으로 작성된 JS가 아니야.
+Bellard 사이트의 기술 노트는 읽을 가치가 있어: 현재 JSLinux는 32 또는 64비트 RISC-V CPU(x86이 아님)를 실행하고, VirtIO 콘솔, VirtIO 네트워크, VirtIO 블록 디바이스, 호스트와 파일 공유를 위한 9P 파일시스템을 에뮬레이트해. JS 데모는 C를 Emscripten으로 컴파일한 거야 -- 손으로 작성된 JS가 아니야.
 
 TinyEMU 자체는 지원:
 - RISC-V RV32IMAFDQC 및 RV64IMAFDQC (32 및 64비트, 부동소수점, 곱셈, 압축 명령어 포함)
-- KVM을 통한 x86 (네이티브 전용, 에뮬레이션 없음 — 그래서 JS 버전은 RISC-V 전용)
+- KVM을 통한 x86 (네이티브 전용, 에뮬레이션 없음 -- 그래서 JS 버전은 RISC-V 전용)
 - VirtIO 콘솔, 네트워크, 블록, 입력, 9P 파일시스템
 
 TinyEMU는 Emscripten을 통해 제공되는 JavaScript 데모가 있어. JSLinux의 기반이고 `container2wasm`에서도 사용돼 (섹션 2.5 참조).
 
-**JSLinux 상태**: npm 패키지 없음, 프로그래밍 API 없음. 브라우저에서 여는 데모야. 역사적 의의는 높아 — 개념을 증명했지. 라이브러리로서의 실용적 사용: 없음.
+**JSLinux 상태**: npm 패키지 없음, 프로그래밍 API 없음. 브라우저에서 여는 데모야. 역사적 의의는 높아 -- 개념을 증명했지. 라이브러리로서의 실용적 사용: 없음.
 
 **TinyEMU**: npm에 없음, C 소스는 [bellard.org/tinyemu](https://bellard.org/tinyemu/)에서 가능.
 
 ---
 
-### 2.3 jor1k — OR1K 에뮬레이터
+### 2.3 jor1k -- OR1K 에뮬레이터
 
-jor1k는 Sebastian Macke가 JavaScript로 작성한 OpenRISC 1000 (OR1K) 에뮬레이터야. 역사적으로 jor1k가 VirtIO 9P 파일시스템 지원을 도입했고, Bellard가 나중에 TinyEMU와 JSLinux에 통합했기 때문에 흥미로워. 이 프로젝트들 간의 교차 수분은 긴밀해 — 모두 서로에게서 차용해. 오픈 소스 에뮬레이션 작업에서 가장 멋진 점 중 하나야.
+jor1k는 Sebastian Macke가 JavaScript로 작성한 OpenRISC 1000 (OR1K) 에뮬레이터야. 역사적으로 jor1k가 VirtIO 9P 파일시스템 지원을 도입했고, Bellard가 나중에 TinyEMU와 JSLinux에 통합했기 때문에 흥미로워. 이 프로젝트들 간의 교차 수분은 긴밀해 -- 모두 서로에게서 차용해. 오픈 소스 에뮬레이션 작업에서 가장 멋진 점 중 하나야.
 
-**상태**: 더 이상 적극적으로 유지보수되지 않음, npm 패키지 없음. 지금은 보관됨. 주로 역사적 맥락으로 알아두면 좋아 — 누군가 jor1k를 언급하면, 뭔지 알게 되는 거지 :)
+**상태**: 더 이상 적극적으로 유지보수되지 않음, npm 패키지 없음. 지금은 보관됨. 주로 역사적 맥락으로 알아두면 좋아 -- 누군가 jor1k를 언급하면, 뭔지 알게 되는 거지 :)
 
 ---
 
-### 2.4 CheerpX — 브라우저용 상용 x86 에뮬레이터
+### 2.4 CheerpX -- 브라우저용 상용 x86 에뮬레이터
 
 Leaning Technologies의 CheerpX는 상용 프로덕션 등급 x86 Linux 에뮬레이터야. 오픈 소스가 아니지만, 실제 Debian/Ubuntu 사용자 공간을 실행하는 데 v86보다 훨씬 강력해. 브라우저에서 실제 VSCode가 필요하다면 이걸 찾아.
 
 v86과의 주요 차이점:
 - 더 넓은 ISA 지원 (더 많은 x86 확장, 더 나은 glibc 호환성)
 - 브라우저의 IndexedDB 기반 파일시스템 (페이지 로드 간 지속)
-- `SharedArrayBuffer`를 통한 pthread 지원 (COOP/COEP 헤더 필요 — 네 그 성가신 보안 헤더)
+- `SharedArrayBuffer`를 통한 pthread 지원 (COOP/COEP 헤더 필요 -- 네 그 성가신 보안 헤더)
 - 최소 OS 이미지가 아닌 VSCode, Python, Node.js 및 기타 실제 애플리케이션 실행용으로 설계됨
 - 전문 지원 및 SLA 사용 가능 (깨지면 누군가에게 소리칠 수 있음)
 
@@ -369,17 +369,17 @@ await cx.run("/bin/bash");
 
 **Node.js 스토리**: CheerpX는 브라우저 우선이야. 기본 에뮬레이터는 이론적으로 Node에서 작동할 수 있지만(Wasm이니까), API와 문서는 전적으로 브라우저 사용에 맞춰져 있어. 서버 측 사용은 지원되지 않아.
 
-**메모리**: v86과 비슷 — 실제 Debian 인스턴스의 경우 200+ MB.
+**메모리**: v86과 비슷 -- 실제 Debian 인스턴스의 경우 200+ MB.
 **가격**: 오픈 소스 프로젝트에는 무료, 프로덕션 SaaS에는 상용 라이선스.
 **문서**: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview)
 
 ---
 
-### 2.5 WebContainers (StackBlitz) — Wasm의 Node.js, Linux 에뮬레이션이 아님
+### 2.5 WebContainers (StackBlitz) -- Wasm의 Node.js, Linux 에뮬레이션이 아님
 
 WebContainers는 종종 Linux 에뮬레이터와 함께 묶이지만 아키텍처가 달라. x86을 에뮬레이트하지 않아. Linux를 부팅하지 않아. WASI를 사용해 WebAssembly로 컴파일된 Node.js를 실행해. 이 차이는 중요하고 나도 한동안 혼란스러웠어 lol.
 
-혼란은 마케팅에서 오는 것 같아 — "브라우저에서 Node.js 실행"은 에뮬레이션처럼 들리지만, 실제로는 VM 안에서 Node.js를 실행하는 Linux 에뮬레이션이 아니라 Node.js 자체가 Wasm으로 컴파일된 거야. 완전히 다른 거야.
+혼란은 마케팅에서 오는 것 같아 -- "브라우저에서 Node.js 실행"은 에뮬레이션처럼 들리지만, 실제로는 VM 안에서 Node.js를 실행하는 Linux 에뮬레이션이 아니라 Node.js 자체가 Wasm으로 컴파일된 거야. 완전히 다른 거야.
 
 아키텍처:
 1. Node.js가 Wasm으로 컴파일됨 (특히 커스텀 WASI 런타임)
@@ -403,7 +403,7 @@ const proc = await webcontainer.spawn("node", ["index.js"]);
 proc.output.pipeTo(new WritableStream({ write: chunk => console.log(chunk) }));
 ```
 
-실제 Node.js(Wasm 컴파일)를 실행하기 때문에, 실제 npm, 실제 Node.js API, 실제 모듈 해석을 얻어. 일반적인 Linux 사용자 공간은 얻지 못해 — `apt`로 시스템 패키지를 설치하거나, 임의의 컴파일된 바이너리를 실행하거나, Node.js 생태계 밖에서 많은 것을 할 수 없어.
+실제 Node.js(Wasm 컴파일)를 실행하기 때문에, 실제 npm, 실제 Node.js API, 실제 모듈 해석을 얻어. 일반적인 Linux 사용자 공간은 얻지 못해 -- `apt`로 시스템 패키지를 설치하거나, 임의의 컴파일된 바이너리를 실행하거나, Node.js 생태계 밖에서 많은 것을 할 수 없어.
 
 **브라우저 요구 사항**: SharedArrayBuffer (COOP/COEP 헤더 필요), Service Worker 지원, 최신 Wasm.
 
@@ -414,7 +414,7 @@ proc.output.pipeTo(new WritableStream({ write: chunk => console.log(chunk) }));
 
 ---
 
-### 2.6 container2wasm — Wasm으로 컴파일된 Docker 컨테이너
+### 2.6 container2wasm -- Wasm으로 컴파일된 Docker 컨테이너
 
 `container2wasm`은 Docker 컨테이너 이미지를 가져와서 모든 Wasm 호스트(브라우저 포함)에서 실행할 수 있는 WebAssembly 바이너리로 변환하는 도구야 (npm 패키지가 아님). 처음 봤을 때 진짜 작동한다고 믿기지 않았어.
 
@@ -435,7 +435,7 @@ wasmtime out.wasm uname -a
 c2w --to-js ubuntu:22.04 /tmp/htdocs/
 ```
 
-결과 `.wasm`은 크다 — 최소 Ubuntu는 수백 MB — 하지만 완전히 자급자족해. 누군가에게 `.wasm`을 이메일로 보내면 그들이 브라우저에서 Ubuntu를 실행할 수 있어. 그 문장은 말이 안 되야 하지만, 여기까지 왔어.
+결과 `.wasm`은 크다 -- 최소 Ubuntu는 수백 MB -- 하지만 완전히 자급자족해. 누군가에게 `.wasm`을 이메일로 보내면 그들이 브라우저에서 Ubuntu를 실행할 수 있어. 그 문장은 말이 안 되야 하지만, 여기까지 왔어.
 
 **GitHub**: [container2wasm/container2wasm](https://github.com/container2wasm/container2wasm)
 
@@ -456,15 +456,15 @@ c2w --to-js ubuntu:22.04 /tmp/htdocs/
 | **오픈 소스** | ✅ | ✅ | ✅ | ❌ | 부분적 | ✅ |
 | **상태** | ✅ 매우 활동적 | ✅ 안정 | ⚠️ 보관됨 | ✅ 상용 | ✅ 활동적 | ✅ 활동적 |
 
-이 표에서 눈에 띄는 점: `v86`은 npm 패키지이면서 브라우저와 Node 모두에서 실행되고 오픈 소스인 유일한 거야. 그래서 "JavaScript Linux 에뮬레이터" 대화를 지배하는 거지. 다른 것들은 각자 제약이 있어 — JSLinux는 API가 없고, jor1k는 보관됐고, CheerpX는 돈이 들고, WebContainers는 브라우저 전용이고 Node 전용이며, container2wasm은 빌드 단계와 CLI가 필요해. 그냥 "JavaScript로 Linux 부팅"이 필요하면, `v86`이 거의 항상 올바른 출발점이야.
+이 표에서 눈에 띄는 점: `v86`은 npm 패키지이면서 브라우저와 Node 모두에서 실행되고 오픈 소스인 유일한 거야. 그래서 "JavaScript Linux 에뮬레이터" 대화를 지배하는 거지. 다른 것들은 각자 제약이 있어 -- JSLinux는 API가 없고, jor1k는 보관됐고, CheerpX는 돈이 들고, WebContainers는 브라우저 전용이고 Node 전용이며, container2wasm은 빌드 단계와 CLI가 필요해. 그냥 "JavaScript로 Linux 부팅"이 필요하면, `v86`이 거의 항상 올바른 출발점이야.
 
 ---
 
-## 파트 3 — 터미널 스택: xterm.js와 node-pty
+## 파트 3 -- 터미널 스택: xterm.js와 node-pty
 
-셸 같은 경험을 만들 때 두 패키지가 계속 등장해. 샌드박스나 에뮬레이터가 아니라 — UI와 PTY 배관이야 — 하지만 너무 인접해서 빼면 섭섭할 것 같아. 그리고 둘 다 써봤는데 정말 좋아.
+셸 같은 경험을 만들 때 두 패키지가 계속 등장해. 샌드박스나 에뮬레이터가 아니라 -- UI와 PTY 배관이야 -- 하지만 너무 인접해서 빼면 섭섭할 것 같아. 그리고 둘 다 써봤는데 정말 좋아.
 
-### 3.1 `xterm.js` — 터미널 렌더러
+### 3.1 `xterm.js` -- 터미널 렌더러
 
 xterm.js는 브라우저용 터미널 에뮬레이터야. `<canvas>` 요소에 터미널 화면(VT100/xterm 이스케이프 시퀀스)을 렌더링하고, 키보드 입력을 처리하며, 데이터를 주고받기 위한 API를 노출해.
 
@@ -483,23 +483,23 @@ fitAddon.fit();
 // 터미널에 데이터 전송 (텍스트로 렌더링됨)
 term.write("$ ");
 term.onData(data => {
-  // data는 키스트로크 — 백엔드로 전송
+  // data는 키스트로크 -- 백엔드로 전송
   socket.send(data);
 });
 socket.onmessage(msg => {
-  // 백엔드의 출력 — 표시
+  // 백엔드의 출력 -- 표시
   term.write(msg.data);
 });
 ```
 
-xterm.js는 렌더링 레이어일 뿐이야. 셸을 실행하지 않아. 명령을 해석하지 않아. 원하는 백엔드에 연결하는 디스플레이 위젯이야. 많은 사람들이 xterm.js가 "터미널을 처리한다"고 생각하지만, 실제로는 화면만 담당해 — 명령을 실제로 실행하는 무언가에 연결해야 해.
+xterm.js는 렌더링 레이어일 뿐이야. 셸을 실행하지 않아. 명령을 해석하지 않아. 원하는 백엔드에 연결하는 디스플레이 위젯이야. 많은 사람들이 xterm.js가 "터미널을 처리한다"고 생각하지만, 실제로는 화면만 담당해 -- 명령을 실제로 실행하는 무언가에 연결해야 해.
 
 **npm**: [@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)
 **GitHub**: [xtermjs/xterm.js](https://github.com/xtermjs/xterm.js)
 
 ---
 
-### 3.2 `node-pty` — PTY 생성
+### 3.2 `node-pty` -- PTY 생성
 
 `node-pty`는 Node.js에서 의사 터미널(PTY)을 생성하고 읽기/쓰기 핸들을 제공해. xterm.js와 함께 사용하면, 서버에서 실행 중인 실제 셸(bash, zsh, fish)과 대화하는 브라우저 터미널을 만들 수 있어.
 
@@ -533,15 +533,15 @@ ws.on("message", data => {
 
 ---
 
-## 파트 4 — SSH 허니팟
+## 파트 4 -- SSH 허니팟
 
-허니팟은 공격받도록 설계됐어. 목표는 공격자가 상호작용할 만큼 실제처럼 보이면서, 그들이 하는 모든 것을 위협 인텔리전스용으로 기록하는 거야. SSH가 주요 대상이야 — 인터넷에서 가장 많이 공격받는 서비스니까. 공용 IP에서 22번 포트를 열면 말 그대로 몇 분 안에 자동화된 스캐닝 시도를 볼 거야. 한번 해봐, 얼마나 빨리 일어나는지 소름 끼칠 거야.
+허니팟은 공격받도록 설계됐어. 목표는 공격자가 상호작용할 만큼 실제처럼 보이면서, 그들이 하는 모든 것을 위협 인텔리전스용으로 기록하는 거야. SSH가 주요 대상이야 -- 인터넷에서 가장 많이 공격받는 서비스니까. 공용 IP에서 22번 포트를 열면 말 그대로 몇 분 안에 자동화된 스캐닝 시도를 볼 거야. 한번 해봐, 얼마나 빨리 일어나는지 소름 끼칠 거야.
 
 허니팟의 품질은 두 가지로 측정돼: **충실도**(얼마나 설득력 있게 실제 시스템인 척하는지)와 **원격 측정**(얼마나 많은 유용한 데이터를 캡처하는지). 이 둘은 상충 관계야. 충실도가 높은 허니팟은 만들기 더 어렵고 운영하기 더 위험해.
 
 이 섹션이 결국 `typescript-virtual-container`에 `HoneyPot` 모듈을 만들게 한 계기라서, 여기에 몇 가지 의견이 있어.
 
-### 4.1 Cowrie — 황금 표준
+### 4.1 Cowrie -- 황금 표준
 
 Cowrie는 Python 기반의 중간-높은 상호작용 SSH 및 Telnet 허니팟이야. 연구 및 보안 커뮤니티에서 가장 널리 배포된 SSH 허니팟이야.
 
@@ -549,7 +549,7 @@ Cowrie는 Python 기반의 중간-높은 상호작용 SSH 및 Telnet 허니팟�
 - **프로토콜 레이어**: 실제 SSH 프로토콜 구현 (Twisted Conch), 그래서 공격자는 실제 핸드셰이크, 실제 키 교환, 실제 인증을 경험
 - **셸 레이어**: 가짜 파일시스템 (Debian 5.0 유사)과 일반적인 명령에 응답하는 부분적인 셸 인터프리터
 - **프록시 모드**: 뒤에 있는 실제 시스템으로 전달 가능 (높은 상호작용 모드), 통과하는 모든 것을 기록
-- **LLM 모드** (최근 추가): 처리 방법을 모르는 명령에 동적 응답을 생성하기 위해 언어 모델 사용 — 네, Cowrie에 이제 AI 모드가 있어. 정신없는 시대야.
+- **LLM 모드** (최근 추가): 처리 방법을 모르는 명령에 동적 응답을 생성하기 위해 언어 모델 사용 -- 네, Cowrie에 이제 AI 모드가 있어. 정신없는 시대야.
 
 ```python
 # Cowrie가 캡처하는 것
@@ -572,26 +572,26 @@ Cowrie는 Python 기반의 중간-높은 상호작용 SSH 및 Telnet 허니팟�
 
 Cowrie는 다운로드된 파일(wget/curl/SFTP/SCP 통해)을 악성코드 분석용으로 저장해. Splunk, Elasticsearch 및 기타 SIEM 플랫폼과 통합돼.
 
-**충실도**: 중간-높음. 자동화된 봇을 속이기에 충분히 설득력 있음 (SSH 공격자의 99%는 — 대부분은 그냥 `root`/`password`를 시도하는 멍청한 스크립트야). 정교한 인간은 지문을 찾을 수 있지만, 보통 꽤 빠르게.
+**충실도**: 중간-높음. 자동화된 봇을 속이기에 충분히 설득력 있음 (SSH 공격자의 99%는 -- 대부분은 그냥 `root`/`password`를 시도하는 멍청한 스크립트야). 정교한 인간은 지문을 찾을 수 있지만, 보통 꽤 빠르게.
 
 **언어**: Python (Twisted)
 **GitHub**: [cowrie/cowrie](https://github.com/cowrie/cowrie)
 
 ---
 
-### 4.2 Kippo — Cowrie의 전신
+### 4.2 Kippo -- Cowrie의 전신
 
-Kippo는 Cowrie의 기반이 된 원래 중간 상호작용 SSH 허니팟이야. 같은 기본 아이디어: 실제 SSH 프로토콜, 가짜 파일시스템, 부분적 셸. Cowrie가 지금은 완전히 대체했어 — Kippo는 보관됐고 2026년에 아무도 실행하면 안 돼. 역사적 완전성을 위해 여기서 언급할 뿐, 오래된 블로그 글과 보안 논문에서 참조되는 걸 볼 수 있으니까.
+Kippo는 Cowrie의 기반이 된 원래 중간 상호작용 SSH 허니팟이야. 같은 기본 아이디어: 실제 SSH 프로토콜, 가짜 파일시스템, 부분적 셸. Cowrie가 지금은 완전히 대체했어 -- Kippo는 보관됐고 2026년에 아무도 실행하면 안 돼. 역사적 완전성을 위해 여기서 언급할 뿐, 오래된 블로그 글과 보안 논문에서 참조되는 걸 볼 수 있으니까.
 
-**GitHub**: [desaster/kippo](https://github.com/desaster/kippo) — 보관됨
+**GitHub**: [desaster/kippo](https://github.com/desaster/kippo) -- 보관됨
 
 ---
 
-### 4.3 endlessh — SSH 타르핏
+### 4.3 endlessh -- SSH 타르핏
 
-endlessh는 변태 허니팟이야: 배너 데이터를 초당 1바이트(또는 더 느리게)로 천천히 흘려보내 SSH 연결을 열린 상태로 유지해. 연결하는 SSH 클라이언트는 무기한 대기하게 돼 — 서버가 배너 전송을 끝내지 못해서 인증 단계에 절대 도달하지 못해.
+endlessh는 변태 허니팟이야: 배너 데이터를 초당 1바이트(또는 더 느리게)로 천천히 흘려보내 SSH 연결을 열린 상태로 유지해. 연결하는 SSH 클라이언트는 무기한 대기하게 돼 -- 서버가 배너 전송을 끝내지 못해서 인증 단계에 절대 도달하지 못해.
 
-목표는 위협 인텔리전스가 아니라 순수한 자원 거부야: 공격자 스캐너 스레드를 묶어서 실제 대상을 빠르게 공격하지 못하게 하는 거야. 가장 좋은 방법으로 사악하다고 생각해. 공격자로부터 아무것도 배우는 게 아니라 — 그냥 시간을 낭비하는 거야. 거기에 깊은 만족감이 있어.
+목표는 위협 인텔리전스가 아니라 순수한 자원 거부야: 공격자 스캐너 스레드를 묶어서 실제 대상을 빠르게 공격하지 못하게 하는 거야. 가장 좋은 방법으로 사악하다고 생각해. 공격자로부터 아무것도 배우는 게 아니라 -- 그냥 시간을 낭비하는 거야. 거기에 깊은 만족감이 있어.
 
 ```c
 // endlessh의 전체 프로토콜 동작:
@@ -607,7 +607,7 @@ endlessh는 변태 허니팟이야: 배너 데이터를 초당 1바이트(또는
 
 ---
 
-### 4.4 sshesame — "모두 들여보내" 허니팟
+### 4.4 sshesame -- "모두 들여보내" 허니팟
 
 sshesame는 모든 SSH 연결을 수락하고 (모든 사용자 이름, 모든 비밀번호, 모든 키) 모든 것을 기록해. 제로 상호작용 허니팟이야: 명령에 응답하지 않고, 공격자를 "들여보내고" 그들이 입력하는 모든 키스트로크를 기록해.
 
@@ -627,9 +627,9 @@ sshesame는 모든 SSH 연결을 수락하고 (모든 사용자 이름, 모든 �
 
 ---
 
-### 4.5 Lyrebird — Docker 기반 허니팟 프레임워크
+### 4.5 Lyrebird -- Docker 기반 허니팟 프레임워크
 
-`lyrebird/honeypot-base`는 네트워크 서비스 허니팟 구축을 위한 Docker 베이스 이미지야. 구체적으로 SSH 허니팟이 아니라 — 모든 프로토콜 허니팟 구축을 위한 프레임워크야.
+`lyrebird/honeypot-base`는 네트워크 서비스 허니팟 구축을 위한 Docker 베이스 이미지야. 구체적으로 SSH 허니팟이 아니라 -- 모든 프로토콜 허니팟 구축을 위한 프레임워크야.
 
 베이스 이미지는 로깅 프레임워크, 프로토콜용 플러그인 시스템, 다중 서비스 허니팟용 Docker Compose 설정을 제공해. 특정 서비스를 가짜로 만들기 위해 확장해.
 
@@ -637,7 +637,7 @@ sshesame는 모든 SSH 연결을 수락하고 (모든 사용자 이름, 모든 �
 
 ---
 
-### 4.6 Node.js에서 SSH 허니팟 구축 — 순진한 방식, 그리고 실패하는 이유
+### 4.6 Node.js에서 SSH 허니팟 구축 -- 순진한 방식, 그리고 실패하는 이유
 
 `typescript-virtual-container` 이전에, Node.js에서 SSH 허니팟을 구축하는 것은 실제 `ssh2` 라이브러리와 수동 명령 가짜 구현을 결합하는 것을 의미했어. 매우 지루하고, 매우 불완전하지만, 이쯤에서 통과 의례 같은 거야:
 
@@ -681,7 +681,7 @@ new Server({ hostKeys: [hostKey] }, client => {
 
 이것은 자격 증명과 명령을 캡처한다는 의미에서 "작동"해. 하지만 정교한 공격자가 찔러보는 순간 분명히 가짜야. `uname -a`가 올바른 문자열을 반환하지만 `ls /etc`가 "command not found"를 반환하는 건 바로 드러나. 파일시스템이 존재하지 않아. 명령이 체인되지 않아. 파이프가 작동하지 않아. 변수가 확장되지 않아.
 
-숙련된 공격자는 처음 다섯 개의 명령 안에 허니팟을 식별할 거야. Cowrie 같은 동작을 확인하는 자동화된 스크립트도 즉시 감지할 거야. 이것이 `typescript-virtual-container` 작성자가 명령을 실제로 해석하는 무언가를 만들게 된 동기인 것 같아 — 파트 5에서 더 자세히.
+숙련된 공격자는 처음 다섯 개의 명령 안에 허니팟을 식별할 거야. Cowrie 같은 동작을 확인하는 자동화된 스크립트도 즉시 감지할 거야. 이것이 `typescript-virtual-container` 작성자가 명령을 실제로 해석하는 무언가를 만들게 된 동기인 것 같아 -- 파트 5에서 더 자세히.
 
 ---
 
@@ -701,11 +701,11 @@ new Server({ hostKeys: [hostKey] }, client => {
 | **Node.js 네이티브** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **상태** | ✅ 매우 활동적 | ⚠️ 보관됨 | ✅ 활동적 | ✅ 활동적 | ✅ 활동적 | DIY |
 
-여기서 패턴은 꽤 명확해: 더 많은 충실도를 원할수록, 더 많은 Python을 작성해야 해. Cowrie가 진지하게 한다면 확실한 승자야 — 수년간 전투 테스트를 거쳤고 자격 증명 이상의 것을 캡처해. endlessh와 sshesame은 진지한 위협 인텔 도구보다는 재미있는 사이드 프로젝트에 가까워. 그리고 순진한 Node.js 접근 방식은 벽에 부딪히기 전에 20% 정도밖에 못 가.
+여기서 패턴은 꽤 명확해: 더 많은 충실도를 원할수록, 더 많은 Python을 작성해야 해. Cowrie가 진지하게 한다면 확실한 승자야 -- 수년간 전투 테스트를 거쳤고 자격 증명 이상의 것을 캡처해. endlessh와 sshesame은 진지한 위협 인텔 도구보다는 재미있는 사이드 프로젝트에 가까워. 그리고 순진한 Node.js 접근 방식은 벽에 부딪히기 전에 20% 정도밖에 못 가.
 
 ---
 
-## 파트 5 — `typescript-virtual-container`: 무엇이 간극을 채우는가
+## 파트 5 -- `typescript-virtual-container`: 무엇이 간극을 채우는가
 
 자, 여기부터 흥미로워져. 위의 모든 계열을 정리한 후, 빠진 사분면이 분명해져:
 
@@ -715,7 +715,7 @@ new Server({ hostKeys: [hostKey] }, client => {
 
 아무도 완전하고, 프로그래밍 가능하며, Node 네이티브인 실제 SSH, 실제 권한, 실제 가상 네트워킹, 타입 있는 TypeScript API를 가진 Linux 환경을 만들지 않았어. 그래서 그녀가 만들었지.
 
-간단한 소개 — 이 글에서 처음으로 제대로 언급하니까: `typescript-virtual-container`는 **Chloé Rolzhausen**이 만들었어. 프랑스 개발자로, 온라인에서는 **Fortune**(또는 ItsRealFortune)으로 알려져 있어. 그녀의 [웹사이트](https://itsrealfortune.fr)와 [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316/)에서 찾을 수 있어. 전체 프로젝트 — 56,000줄의 TypeScript, 247개 파일, 170개 명령 — 은 한 사람의 단독 작업이었어. 이 글의 나머지에서는 Fortune이라고 부를게. 그리고 맞아, 꽤 정신없어. 그녀의 작업을 확인해 봐!
+간단한 소개 -- 이 글에서 처음으로 제대로 언급하니까: `typescript-virtual-container`는 **Chloé Rolzhausen**이 만들었어. 프랑스 개발자로, 온라인에서는 **Fortune**(또는 ItsRealFortune)으로 알려져 있어. 그녀의 [웹사이트](https://itsrealfortune.fr)와 [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316/)에서 찾을 수 있어. 전체 프로젝트 -- 56,000줄의 TypeScript, 247개 파일, 170개 명령 -- 은 한 사람의 단독 작업이었어. 이 글의 나머지에서는 Fortune이라고 부를게. 그리고 맞아, 꽤 정신없어. 그녀의 작업을 확인해 봐!
 
 ### 실제로 무엇인가
 
@@ -733,7 +733,7 @@ new Server({ hostKeys: [hostKey] }, client => {
 
 ### VirtualFileSystem
 
-VFS는 타입이 있는 노드의 메모리 내 트리야 — 명시적으로 `"fs"` 영속성 모드를 활성화하지 않는 한 디스크 I/O가 없어:
+VFS는 타입이 있는 노드의 메모리 내 트리야 -- 명시적으로 `"fs"` 영속성 모드를 활성화하지 않는 한 디스크 I/O가 없어:
 
 ```ts
 // 간소화된 내부 표현
@@ -745,17 +745,17 @@ type InternalNode =
   | { type: "stub" }; // 지연 로드된 플레이스홀더
 ```
 
-모든 경로 연산은 `normalizePath` (`.`, `..`, 심링크 해석)과 `enforceAccess` (요청 uid/gid에 대한 읽기/쓰기/실행 권한 확인)을 통과해. `chmod`, `chown`, 스티키 비트, setuid가 모두 구현되어 있고 실제로 적용돼. uid 1000으로 실행되는 프로세스가 root 소유의 mode 0600 파일을 읽으려고 하면, EACCES를 받아 — 가짜 EACCES가 아니라 권한 검사에서 던져진 실제 JavaScript `Error`. 그 부분은 꽤 우아해.
+모든 경로 연산은 `normalizePath` (`.`, `..`, 심링크 해석)과 `enforceAccess` (요청 uid/gid에 대한 읽기/쓰기/실행 권한 확인)을 통과해. `chmod`, `chown`, 스티키 비트, setuid가 모두 구현되어 있고 실제로 적용돼. uid 1000으로 실행되는 프로세스가 root 소유의 mode 0600 파일을 읽으려고 하면, EACCES를 받아 -- 가짜 EACCES가 아니라 권한 검사에서 던져진 실제 JavaScript `Error`. 그 부분은 꽤 우아해.
 
 VFS는 다음으로 직렬화돼:
-- `.vfsb` — 컴팩트한 바이너리 형식 (커스텀, fflate 압축 사용) — 이게 기본값
-- JSON 스냅샷 — 사람이 읽을 수 있음, 디버깅에 좋음
-- TAR 아카이브 — 실제 tar 형식으로 가져오기/내보내기 가능, 그래서 `tar -xf` 하면 VFS에... 그 파일들이 생겨
-- SquashFS 이미지 — 읽기 전용 가져오기
+- `.vfsb` -- 컴팩트한 바이너리 형식 (커스텀, fflate 압축 사용) -- 이게 기본값
+- JSON 스냅샷 -- 사람이 읽을 수 있음, 디버깅에 좋음
+- TAR 아카이브 -- 실제 tar 형식으로 가져오기/내보내기 가능, 그래서 `tar -xf` 하면 VFS에... 그 파일들이 생겨
+- SquashFS 이미지 -- 읽기 전용 가져오기
 
-`"fs"` 영속성 모드에서는 충돌 복구를 위한 write-ahead journal (WAL)을 유지해 — 쓰기는 먼저 저널로 간 다음, 플러시 시 스냅샷으로 감. Node가 작업 중에 충돌하면, 저널이 마지막 완전한 상태를 재구성할 수 있게 해.
+`"fs"` 영속성 모드에서는 충돌 복구를 위한 write-ahead journal (WAL)을 유지해 -- 쓰기는 먼저 저널로 간 다음, 플러시 시 스냅샷으로 감. Node가 작업 중에 충돌하면, 저널이 마지막 완전한 상태를 재구성할 수 있게 해.
 
-디스크 I/O 지연 시간을 시뮬레이션하는 `FileCache` 레이어도 있어. `NVME_DISK_IO`나 `HDD_DISK_IO` 같은 프로필을 구성하면 VFS가 현실적인 타이밍과 일치하도록 파일 연산을 인위적으로 지연시켜. 소프트웨어가 의도적으로 느려져서 하드웨어를 시뮬레이션하는 게 좀 웃기긴 하지만 — 벤치마킹에 매우 유용해.
+디스크 I/O 지연 시간을 시뮬레이션하는 `FileCache` 레이어도 있어. `NVME_DISK_IO`나 `HDD_DISK_IO` 같은 프로필을 구성하면 VFS가 현실적인 타이밍과 일치하도록 파일 연산을 인위적으로 지연시켜. 소프트웨어가 의도적으로 느려져서 하드웨어를 시뮬레이션하는 게 좀 웃기긴 하지만 -- 벤치마킹에 매우 유용해.
 
 ### 셸 인터프리터
 
@@ -789,7 +789,7 @@ VFS는 다음으로 직렬화돼:
 - 변수의 경우, `$VAR`, `${VAR:-default}`, `${#VAR}`, 산술 `$((expr))` 확장
 - 중괄호 확장(`{a,b,c}`, `{1..5}`)의 경우, 실행 전 전체 확장 목록 생성
 
-이 모든 것은 실제 POSIX 셸 동작이야. 파서는 히어독, 프로세스 치환, 글롭(`*`, `?`, `[abc]`), 따옴표 처리(작은따옴표, 보간이 있는 큰따옴표, 백슬래시 이스케이프)를 처리해. 완벽하지는 않아 — 엣지 케이스가 존재해 — 하지만 TypeScript 프로젝트에서 기대하는 것보다 훨씬 뛰어나.
+이 모든 것은 실제 POSIX 셸 동작이야. 파서는 히어독, 프로세스 치환, 글롭(`*`, `?`, `[abc]`), 따옴표 처리(작은따옴표, 보간이 있는 큰따옴표, 백슬래시 이스케이프)를 처리해. 완벽하지는 않아 -- 엣지 케이스가 존재해 -- 하지만 TypeScript 프로젝트에서 기대하는 것보다 훨씬 뛰어나.
 
 ### ~170개의 내장 명령
 
@@ -815,11 +815,11 @@ cron (시뮬레이션), systemctl (스텁), journalctl (스텁),
 ...그 외 ~130개 더
 ```
 
-"스텁"(git, python3, node)은 일반적인 호출에 현실적으로 응답해 — `python3 --version`은 그럴듯한 버전 문자열을 반환하고, `git status`는 가짜 저장소 상태를 보여줘 — 실제 작업을 수행하지 않고. 허니팟의 경우, 실제보다 더 유용해. 공격자가 실행하려는 것을 관찰할 수 있으면서 아무것도 실행하지 않기 때문이야.
+"스텁"(git, python3, node)은 일반적인 호출에 현실적으로 응답해 -- `python3 --version`은 그럴듯한 버전 문자열을 반환하고, `git status`는 가짜 저장소 상태를 보여줘 -- 실제 작업을 수행하지 않고. 허니팟의 경우, 실제보다 더 유용해. 공격자가 실행하려는 것을 관찰할 수 있으면서 아무것도 실행하지 않기 때문이야.
 
 ### SSH 서버
 
-SSH 레이어는 실제 `ssh2` npm 패키지를 사용해 — 실제 SSH 프로토콜, 실제 키 교환, 실제 암호화. `SSHMimic`이それを 감싸:
+SSH 레이어는 실제 `ssh2` npm 패키지를 사용해 -- 실제 SSH 프로토콜, 실제 키 교환, 실제 암호화. `SSHMimic`이それを 감싸:
 
 ```ts
 import { VirtualSshServer } from "typescript-virtual-container";
@@ -839,7 +839,7 @@ await ssh.start();
 // 실제 SCP: scp -P 2222 file root@localhost:/tmp/
 ```
 
-`shellProperties`는 `uname -a`, `lsb_release -a`, `neofetch`, `/proc/version`, `/etc/os-release`가 보고하는 내용을 결정해. 어떤 Linux 배포판과 커널 버전이든 설득력 있게 사칭할 수 있어 — 실제 SSH 클라이언트에게는 말 그대로 차이를 알 방법이 없어.
+`shellProperties`는 `uname -a`, `lsb_release -a`, `neofetch`, `/proc/version`, `/etc/os-release`가 보고하는 내용을 결정해. 어떤 Linux 배포판과 커널 버전이든 설득력 있게 사칭할 수 있어 -- 실제 SSH 클라이언트에게는 말 그대로 차이를 알 방법이 없어.
 
 ### HoneyPot 모듈
 
@@ -871,7 +871,7 @@ const diff = diffSnapshots(before, after);
 */
 ```
 
-이것은 질적으로 Cowrie와 달라. Cowrie의 가짜 파일시스템은 `ls`에 응답할 수 있지만, 공격자가 어떤 파일을 만들었고 무엇을 변경했는지 구조화된 diff로 추적할 수 없어. `typescript-virtual-container`는 가능해. VFS가 라이브 데이터 구조이기 때문이야 — 모든 쓰기가 추적돼. 공격자가 방금 추가한 cron 항목? diff에 있어. 그 `.hidden` 폴더? diff에 있어. 악성코드 분석에 꽤 유용해.
+이것은 질적으로 Cowrie와 달라. Cowrie의 가짜 파일시스템은 `ls`에 응답할 수 있지만, 공격자가 어떤 파일을 만들었고 무엇을 변경했는지 구조화된 diff로 추적할 수 없어. `typescript-virtual-container`는 가능해. VFS가 라이브 데이터 구조이기 때문이야 -- 모든 쓰기가 추적돼. 공격자가 방금 추가한 cron 항목? diff에 있어. 그 `.hidden` 폴더? diff에 있어. 악성코드 분석에 꽤 유용해.
 
 ### 가상 네트워크 스택
 
@@ -879,7 +879,7 @@ const diff = diffSnapshots(before, after);
 
 `VirtualNetworkManager`는 각 `VirtualShell` 인스턴스에 설정 가능한 IP 주소, 라우팅 테이블, 소프트웨어 방화벽(conntrack 및 NAT가 있는 iptables 스타일 규칙)이 있는 가상 네트워크 인터페이스를 제공해. `ip addr`, `ip route`, `iptables -L`, `netstat -rn` 모두 가상 네트워크 상태를 보여줘.
 
-`VirtualSwitch` (Baie라고 이름 붙여짐 — 프랑스어로 서버 랙 베이를 뜻하는 "baie informatique"에서 유래)는 공유 서브넷에서 여러 셸을 연결해. 다음을 구현해:
+`VirtualSwitch` (Baie라고 이름 붙여짐 -- 프랑스어로 서버 랙 베이를 뜻하는 "baie informatique"에서 유래)는 공유 서브넷에서 여러 셸을 연결해. 다음을 구현해:
 - MAC 학습과 ARP
 - 서브넷 간 IP 라우팅
 - NAT (아웃바운드 masquerade)
@@ -909,7 +909,7 @@ baie.addFirewallRule({ src: "192.168.0.2", dst: "192.168.0.4", proto: "tcp", act
 baie.setInterface("192.168.0.2", { latencyMs: 50, jitterMs: 10, packetLoss: 0.001 });
 ```
 
-`VirtualVpn`은 Baie 인스턴스 사이에 암호화된 터널을 생성해 — 사이트 간 VPN 상호 연결로 다중 사이트 네트워크를 시뮬레이션할 수 있어.
+`VirtualVpn`은 Baie 인스턴스 사이에 암호화된 터널을 생성해 -- 사이트 간 VPN 상호 연결로 다중 사이트 네트워크를 시뮬레이션할 수 있어.
 
 `VirtualProxy`는 포트 포워딩과 SOCKS5 프록시를 구현해.
 
@@ -968,11 +968,11 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
   → 사용 사례: 빠른 데모, 로컬 실험
 ```
 
-### 폴리필 — Wasm 없이 브라우저 빌드가 작동하는 방식
+### 폴리필 -- Wasm 없이 브라우저 빌드가 작동하는 방식
 
 자, 이게 내가 진짜 영리하다고 생각하고 특히 강조하고 싶었던 부분이야.
 
-Node.js 라이브러리를 브라우저에서 실행하게 만드는 건 보통 악몽이야. Wasm 런타임(무겁고, 로드 느림)을 사용하거나 모든 `node:*` import를 브라우저 호환 대안으로 수동으로 바꾸는 데 몇 주를 보내야 해. Fortune은 두 번째 방법을 선택했어 — 하지만 매우 깔끔하게, 저장소의 `polyfills/` 디렉토리에 있는 커스텀 폴리필 세트를 작성함으로써.
+Node.js 라이브러리를 브라우저에서 실행하게 만드는 건 보통 악몽이야. Wasm 런타임(무겁고, 로드 느림)을 사용하거나 모든 `node:*` import를 브라우저 호환 대안으로 수동으로 바꾸는 데 몇 주를 보내야 해. Fortune은 두 번째 방법을 선택했어 -- 하지만 매우 깔끔하게, 저장소의 `polyfills/` 디렉토리에 있는 커스텀 폴리필 세트를 작성함으로써.
 
 빌드 파이프라인은 `alias` 항목 더미가 있는 esbuild일 뿐이야:
 
@@ -1006,7 +1006,7 @@ esbuild.build({
 
 Wasm 없음. 외부 폴리필 라이브러리 없음. `webpack-node-externals` 넌센스 없음. 그냥 별칭된 모듈과 몇 가지 주입된 전역 변수야. 각각을 살펴보자. 일부는 진짜 인상적이야.
 
-**`node:fs` — 가짜 파일시스템으로서의 IndexedDB**
+**`node:fs` -- 가짜 파일시스템으로서의 IndexedDB**
 
 이게 내가 가장 좋아하는 거야. `node:fs` 폴리필은 동기 Node.js fs API(`readFileSync`, `writeFileSync`, `existsSync`, `readdirSync`, `mkdirSync`, `unlinkSync`, `statSync`...)를 구현하는데, 두 레이어로 뒷받침돼: 동기 읽기를 위한 메모리 내 `Map`, 페이지 로드 간 영속성을 위한 IndexedDB. 쓰기는 즉시 Map에 기록되고(`writeFileSync` 직후 `readFileSync`가 항상 작동하도록), 그 다음 비동기적으로 백그라운드에서 IndexedDB로 플러시돼.
 
@@ -1027,15 +1027,15 @@ openDB().then(db => {
 });
 ```
 
-이게 브라우저에서 페이지 로드 간 VFS 스냅샷이 살아남는 이유야 — 전체 `.vfsb` 바이너리가 이 폴리필을 통해 IndexedDB에 기록되고, 다음 로드 시 다시 읽혀. Wasm 없음. 서버 없음. 그냥 IndexedDB, 2011년부터 모든 브라우저에 있었어.
+이게 브라우저에서 페이지 로드 간 VFS 스냅샷이 살아남는 이유야 -- 전체 `.vfsb` 바이너리가 이 폴리필을 통해 IndexedDB에 기록되고, 다음 로드 시 다시 읽혀. Wasm 없음. 서버 없음. 그냥 IndexedDB, 2011년부터 모든 브라우저에 있었어.
 
-**`node:crypto` — 순수 JS의 SHA-256**
+**`node:crypto` -- 순수 JS의 SHA-256**
 
-Wasm 암호화 라이브러리를 가져오는 대신, crypto 폴리필은 FIPS 180-4 라운드 상수를 사용하여 SHA-256을 처음부터 구현해. 완전한 hex/base64/Uint8Array 출력 지원이 있는 166줄의 순수 JS. 라이브러리의 모든 해싱이 이를 통해 간다 — SSH 호스트 키 지문, 내부 체크섬, 모든 것. 컴팩트하고, 제로 의존성, 그냥 작동해.
+Wasm 암호화 라이브러리를 가져오는 대신, crypto 폴리필은 FIPS 180-4 라운드 상수를 사용하여 SHA-256을 처음부터 구현해. 완전한 hex/base64/Uint8Array 출력 지원이 있는 166줄의 순수 JS. 라이브러리의 모든 해싱이 이를 통해 간다 -- SSH 호스트 키 지문, 내부 체크섬, 모든 것. 컴팩트하고, 제로 의존성, 그냥 작동해.
 
-**`node:os` — 브라우저의 실제 하드웨어 읽기**
+**`node:os` -- 브라우저의 실제 하드웨어 읽기**
 
-이건 좋은 터치야. 하드코딩된 플레이스홀더 값 대신, `node:os`는 총 RAM에 `navigator.deviceMemory`를, CPU 수에 `navigator.hardwareConcurrency`를 읽어. 그래서 브라우저 빌드 내부의 `neofetch`가 실제 머신에 해당하는 것을 보고해 — 만들어진 `2코어, 2GB RAM` 스텁이 아니야.
+이건 좋은 터치야. 하드코딩된 플레이스홀더 값 대신, `node:os`는 총 RAM에 `navigator.deviceMemory`를, CPU 수에 `navigator.hardwareConcurrency`를 읽어. 그래서 브라우저 빌드 내부의 `neofetch`가 실제 머신에 해당하는 것을 보고해 -- 만들어진 `2코어, 2GB RAM` 스텁이 아니야.
 
 ```js
 export function totalmem(){
@@ -1050,17 +1050,17 @@ export function cpus(){
 }
 ```
 
-**`node:net`, `ssh2`, `roxify` — 정직한 스텁**
+**`node:net`, `ssh2`, `roxify` -- 정직한 스텁**
 
-브라우저는 TCP 소켓을 열거나 실제 SSH를 실행할 수 없어서, 이들은 명확한 메시지와 함께 `NotImplemented` 오류를 던지는 스텁이야. 조용한 실패 없음, 객체가 예상되는 곳에 `undefined` 반환 없음. 그냥 시끄럽고 명확한 "이건 브라우저에서 작동하지 않아" — 정확히 원하는 거야.
+브라우저는 TCP 소켓을 열거나 실제 SSH를 실행할 수 없어서, 이들은 명확한 메시지와 함께 `NotImplemented` 오류를 던지는 스텁이야. 조용한 실패 없음, 객체가 예상되는 곳에 `undefined` 반환 없음. 그냥 시끄럽고 명확한 "이건 브라우저에서 작동하지 않아" -- 정확히 원하는 거야.
 
-**`process.js`와 `buffer.js` — 주입된 전역 변수**
+**`process.js`와 `buffer.js` -- 주입된 전역 변수**
 
-이 둘은 esbuild의 `inject` 옵션을 통해 모든 번들 파일의 상단에 주입돼. 그래서 `process`와 `Buffer`가 명시적인 import 없이 전역적으로 사용 가능해. `process.js`는 작아: `env`, `version`, `platform: 'browser'`, `queueMicrotask`를 통한 `nextTick`, `performance.now()`를 통한 `uptime`. `buffer.js`는 `Uint8Array` 위의 완전한 `Buffer` 재구현이야 — SSH 구현과 VFS가 의존하는 모든 `readUInt32BE`, `writeInt16LE`, hex/base64 인코딩 메서드.
+이 둘은 esbuild의 `inject` 옵션을 통해 모든 번들 파일의 상단에 주입돼. 그래서 `process`와 `Buffer`가 명시적인 import 없이 전역적으로 사용 가능해. `process.js`는 작아: `env`, `version`, `platform: 'browser'`, `queueMicrotask`를 통한 `nextTick`, `performance.now()`를 통한 `uptime`. `buffer.js`는 `Uint8Array` 위의 완전한 `Buffer` 재구현이야 -- SSH 구현과 VFS가 의존하는 모든 `readUInt32BE`, `writeInt16LE`, hex/base64 인코딩 메서드.
 
 ---
 
-전체 폴리필 세트는 약 640줄의 손으로 작성된 JS야. npm 패키지 없음. Wasm 없음. 그리고 결과는 라이브러리 그 자체인 브라우저 번들이야. 네이티브로 실행되며, Node 우선 라이브러리에서 흔히 있는 "근데 브라우저에서 실제로 작동해?" 불안이 전혀 없어. 궁금하다면 저장소의 `polyfills/` 폴더를 확인해 봐 — 각 파일이 잘 포함되어 있고 그 자체로 읽을 수 있어. 내가 많이 감사하는 스타일 선택이야.
+전체 폴리필 세트는 약 640줄의 손으로 작성된 JS야. npm 패키지 없음. Wasm 없음. 그리고 결과는 라이브러리 그 자체인 브라우저 번들이야. 네이티브로 실행되며, Node 우선 라이브러리에서 흔히 있는 "근데 브라우저에서 실제로 작동해?" 불안이 전혀 없어. 궁금하다면 저장소의 `polyfills/` 폴더를 확인해 봐 -- 각 파일이 잘 포함되어 있고 그 자체로 읽을 수 있어. 내가 많이 감사하는 스타일 선택이야.
 
 | | `vm` | `isolated-vm` | `quickjs-emscripten` | `v86` | CheerpX | WebContainers | Cowrie | `typescript-virtual-container` |
 |---|---|---|---|---|---|---|---|---|
@@ -1090,8 +1090,8 @@ export function cpus(){
 
 ## 언제 무엇을 써야 할까
 
-**신뢰할 수 없는 JavaScript를 실행해야 함 — 사용자가 제출한 공식, 플러그인, 스크립트 훅.**
-→ `isolated-vm`. 실제 V8 Isolate, 하드 메모리 제한, 명시적 통신 브리지. `vm2`는 피해 — CVE 목록이 계속 늘어나고 있어, 진짜 몇 달마다 새로운 거야. `vm`도 피해 — 전혀 샌드박스가 아니야, 제발.
+**신뢰할 수 없는 JavaScript를 실행해야 함 -- 사용자가 제출한 공식, 플러그인, 스크립트 훅.**
+→ `isolated-vm`. 실제 V8 Isolate, 하드 메모리 제한, 명시적 통신 브리지. `vm2`는 피해 -- CVE 목록이 계속 늘어나고 있어, 진짜 몇 달마다 새로운 거야. `vm`도 피해 -- 전혀 샌드박스가 아니야, 제발.
 
 **JS를 샌드박스해야 하는데 네이티브 애드온을 원하지 않거나 브라우저 호환성이 필요함.**
 → `quickjs-emscripten`. Wasm 경계, ~500 KB 모듈, 브라우저와 Node에서 작동. V8보다 느리지만 진정으로 격리됨.
@@ -1100,7 +1100,7 @@ export function cpus(){
 → 32비트 Linux는 `v86`, 기존 Docker 이미지가 있으면 `container2wasm`. 150 MB+ RAM과 30초 부팅을 받아들여야 해, 그게 조건이야. 64비트가 필요하면 CheerpX를 보거나 그냥 실제 컨테이너 런타임을 사용해.
 
 **백엔드 없이 웹 앱에 Linux 같은 터미널을 내장해야 함.**
-→ `v86` (전체 OS, 무거움, 시작 느림) 또는 `typescript-virtual-container`의 브라우저 번들 (시뮬레이터, 더 가벼움, 즉시 부팅, 완전한 데스크톱을 위한 `startxfce4` 포함 — 인정하건대 꽤 멋져).
+→ `v86` (전체 OS, 무거움, 시작 느림) 또는 `typescript-virtual-container`의 브라우저 번들 (시뮬레이터, 더 가벼움, 즉시 부팅, 완전한 데스크톱을 위한 `startxfce4` 포함 -- 인정하건대 꽤 멋져).
 
 **대화형 온라인 코딩 튜토리얼이나 브라우저 IDE가 필요함.**
 → Node.js 생태계 중심이면 WebContainers. 실제 Linux 사용자 공간이 필요하면 CheerpX. 더 가벼운 옵션과 타입 있는 API를 원하면 `typescript-virtual-container`의 브라우저 번들.
@@ -1124,11 +1124,11 @@ export function cpus(){
 
 ## 할 수 없는 것 (그리고 솔직하게 말하고 싶어)
 
-네이티브 x86 바이너리를 실행할 수 없어. C 코드를 컴파일하거나, 실제 Python 인터프리터를 실행하거나, Linux용으로 컴파일된 소프트웨어를 사용해야 한다면, 그 시스템 콜을 뒷받침할 커널 ABI가 없어. `gcc`, `python3`, `node` 같은 명령은 스텁이야 — `--version`과 일반적인 호출에 응답하지만, 실제로 아무것도 실행하지 않아.
+네이티브 x86 바이너리를 실행할 수 없어. C 코드를 컴파일하거나, 실제 Python 인터프리터를 실행하거나, Linux용으로 컴파일된 소프트웨어를 사용해야 한다면, 그 시스템 콜을 뒷받침할 커널 ABI가 없어. `gcc`, `python3`, `node` 같은 명령은 스텁이야 -- `--version`과 일반적인 호출에 응답하지만, 실제로 아무것도 실행하지 않아.
 
 이게 근본적인 트레이드오프야: 10–50배 낮은 메모리, 즉시 부팅, 브라우저 호환성, 타입 있는 API, 실제 SSH, 가상 네트워킹을 얻는 대신 Linux 사용자 공간과의 바이너리 호환성을 포기해.
 
-Fortune은 프로젝트를 설계할 때 이것에 대해 많이 생각했어. 그녀가 대상으로 한 사용 사례 — 허니팟, 테스트, 내장 터미널, CI 환경 — 에서는 컴파일된 바이너리를 실행할 필요가 전혀 없어. 셸 파이프라인, 파일 조작, 네트워크 라우팅, SSH로 모든 걸 커버해. 하지만 사용 사례에 실제 컴파일된 소프트웨어가 필요하다면, `v86`이나 Docker가 올바른 답이지, 이건 아니야.
+Fortune은 프로젝트를 설계할 때 이것에 대해 많이 생각했어. 그녀가 대상으로 한 사용 사례 -- 허니팟, 테스트, 내장 터미널, CI 환경 -- 에서는 컴파일된 바이너리를 실행할 필요가 전혀 없어. 셸 파이프라인, 파일 조작, 네트워크 라우팅, SSH로 모든 걸 커버해. 하지만 사용 사례에 실제 컴파일된 소프트웨어가 필요하다면, `v86`이나 Docker가 올바른 답이지, 이건 아니야.
 
 ---
 
@@ -1136,19 +1136,19 @@ Fortune은 프로젝트를 설계할 때 이것에 대해 많이 생각했어. �
 
 그래, 그래. 이 생태계는 겉에서 보이는 것보다 더 넓고 더 파편화되어 있어. `vm`은 스코프 분리자이지 샌드박스가 아니야. `vm2`는 계속 CVE를 축적하고 있어 (진짜, 이번 달 권고 사항만 확인해 봐). `isolated-vm`은 올바른 JS 샌드박싱 답변이지만 JS 전용이야. `quickjs-emscripten`은 브라우저 호환이 필요하거나 네이티브 애드온을 피하려고 할 때 올바른 선택이야. `v86`과 CheerpX는 실제 바이너리 호환성이 필요할 때 진짜 에뮬레이터야. WebContainers는 Wasm의 Node.js이지 일반적인 Linux 환경이 아니야. Cowrie는 SSH 허니팟의 황금 표준이지만 Python이고 Node 네이티브가 아니야.
 
-그리고 `typescript-virtual-container` — Fortune의 프로젝트 — 가 그 사이에 있어. 에뮬레이터도, JS 샌드박스도, 수동적 허니팟도 아니야. 그 모든 것 사이에 있는 무언가로, 다른 것들이 할 수 없는 많은 일에 놀라울 정도로 유용하다는 게 드러났어.
+그리고 `typescript-virtual-container` -- Fortune의 프로젝트 -- 가 그 사이에 있어. 에뮬레이터도, JS 샌드박스도, 수동적 허니팟도 아니야. 그 모든 것 사이에 있는 무언가로, 다른 것들이 할 수 없는 많은 일에 놀라울 정도로 유용하다는 게 드러났어.
 
-`typescript-virtual-container`는 다른 어떤 것도 건드리지 않는 간극을 채워: 완전하고, 프로그래밍 가능한 Linux 셸 환경으로, 실제 SSH, SFTP, POSIX 권한, 사용자 관리, 가상 네트워킹, 타입 있는 TypeScript API를 가지고 — ~10 MB에서 실행되고, 1초 안에 부팅되며, Node.js와 브라우저 모두에서 작동해.
+`typescript-virtual-container`는 다른 어떤 것도 건드리지 않는 간극을 채워: 완전하고, 프로그래밍 가능한 Linux 셸 환경으로, 실제 SSH, SFTP, POSIX 권한, 사용자 관리, 가상 네트워킹, 타입 있는 TypeScript API를 가지고 -- ~10 MB에서 실행되고, 1초 안에 부팅되며, Node.js와 브라우저 모두에서 작동해.
 
 직접 써보고 싶다면: 소스는 [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)에 있고, 라이브 데모 (완전한 데스크톱을 위한 `startxfce4` 포함, 진짜 sick이야)는 [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)에 있어. 확인해 보고 Fortune에게 GitHub에서 별 좀 줘, 그녀는 받을 자격이 있어!
 
-읽어줘서 고마워 — 내 기준에서도 정말 긴 글이었어 :) 도움이 됐길 바라!
+읽어줘서 고마워 -- 내 기준에서도 정말 긴 글이었어 :) 도움이 됐길 바라!
 
 ---
 
 ## 출처
 
-모든 주장을 출처 — CVE 권고, 공식 문서, GitHub 저장소, 유지보수자의 블로그 글 — 에 연결하려고 노력했어. 몇 가지 참고: vm2 CVE 목록은 계속 늘어나서 FortiGuard 링크는 네가 읽을 때쯤이면 오래됐을 수 있어 (최신 정보는 GitHub advisories 페이지를 확인해). Bellard 링크는 모두 안정적이야 — 그의 개인 사이트는 계속 유지되고 콘텐츠는 변하지 않아. 그리고 폴리필에 대해 더 깊이 알고 싶다면, `typescript-virtual-container` 저장소의 `polyfills/` 폴더를 직접 살펴봐 — 내가 여기에 쓸 수 있는 어떤 설명보다 더 읽기 쉬워.
+모든 주장을 출처 -- CVE 권고, 공식 문서, GitHub 저장소, 유지보수자의 블로그 글 -- 에 연결하려고 노력했어. 몇 가지 참고: vm2 CVE 목록은 계속 늘어나서 FortiGuard 링크는 네가 읽을 때쯤이면 오래됐을 수 있어 (최신 정보는 GitHub advisories 페이지를 확인해). Bellard 링크는 모두 안정적이야 -- 그의 개인 사이트는 계속 유지되고 콘텐츠는 변하지 않아. 그리고 폴리필에 대해 더 깊이 알고 싶다면, `typescript-virtual-container` 저장소의 `polyfills/` 폴더를 직접 살펴봐 -- 내가 여기에 쓸 수 있는 어떤 설명보다 더 읽기 쉬워.
 
 ### JavaScript 샌드박스
 

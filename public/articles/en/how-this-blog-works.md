@@ -6,12 +6,12 @@ Ever wondered how this blog works under the hood? In this article, I'll walk you
 
 This blog is built with modern web technologies:
 
-- **React 19** — for the user interface
-- **TypeScript** — for typed and more reliable code
-- **Vite** — as an ultra-fast build tool
-- **React Router v7** — for navigation between pages
-- **react-markdown** — to transform Markdown into HTML
-- **rehype-raw + rehype-sanitize** — to allow raw HTML in Markdown while staying secure
+- **React 19** -- for the user interface
+- **TypeScript** -- for typed and more reliable code
+- **Vite** -- as an ultra-fast build tool
+- **React Router v7** -- for navigation between pages
+- **react-markdown** -- to transform Markdown into HTML
+- **rehype-raw + rehype-sanitize** -- to allow raw HTML in Markdown while staying secure
 
 Everything is hosted on **GitHub Pages** directly from the `fox3000foxy.github.io` repository.
 
@@ -86,10 +86,10 @@ All articles are referenced in `public/articles/index.json`. Each entry contains
 ]
 ```
 
-- **slug** — the unique identifier, used in the URL (`/blog/hello-world`)
-- **title** — the title displayed in the list
-- **description** — a short summary
-- **date** — the publication date
+- **slug** -- the unique identifier, used in the URL (`/blog/hello-world`)
+- **title** -- the title displayed in the list
+- **description** -- a short summary
+- **date** -- the publication date
 
 ### 2. The Markdown File
 
@@ -129,7 +129,7 @@ The Footer is minimalist: just a copyright with the current year calculated dyna
 
 ## The Dark Theme
 
-The site is **always in dark mode** — no light/dark toggle. This is a deliberate choice: `color-scheme: dark` is set in the global styles, with a black background `#000` and white text `#fff`. Links are blue (`#64b5f6`) and turn green on hover (`#81c784`).
+The site is **always in dark mode** -- no light/dark toggle. This is a deliberate choice: `color-scheme: dark` is set in the global styles, with a black background `#000` and white text `#fff`. Links are blue (`#64b5f6`) and turn green on hover (`#81c784`).
 
 ## How I Write an Article
 
@@ -199,15 +199,15 @@ The pipeline runs on every **push** to `main` and on every **pull request** targ
 
 The build job runs on `ubuntu-latest` and goes through these steps:
 
-1. **Checkout** — Clones the repository with full history (`fetch-depth: 0`)
-2. **Setup pnpm** — Installs the latest version of pnpm using `pnpm/action-setup@v4`
-3. **Setup Node.js 20** — Configures Node with pnpm caching enabled for faster installs
-4. **Install dependencies** — Runs `pnpm install --frozen-lockfile` to ensure reproducible builds (no lockfile changes allowed)
-5. **Lint** — Runs `pnpm run lint` (ESLint) to catch code quality issues before building
-6. **Build** — Runs `pnpm run build`, which first checks TypeScript types (`tsc -b`) then bundles everything with Vite
-7. **Upload artifact** — Uploads the `dist/` folder as a build artifact for the deploy job
+1. **Checkout** -- Clones the repository with full history (`fetch-depth: 0`)
+2. **Setup pnpm** -- Installs the latest version of pnpm using `pnpm/action-setup@v4`
+3. **Setup Node.js 20** -- Configures Node with pnpm caching enabled for faster installs
+4. **Install dependencies** -- Runs `pnpm install --frozen-lockfile` to ensure reproducible builds (no lockfile changes allowed)
+5. **Lint** -- Runs `pnpm run lint` (ESLint) to catch code quality issues before building
+6. **Build** -- Runs `pnpm run build`, which first checks TypeScript types (`tsc -b`) then bundles everything with Vite
+7. **Upload artifact** -- Uploads the `dist/` folder as a build artifact for the deploy job
 
-If any step fails — a lint error, a type error, a build error — the whole pipeline stops and nothing gets deployed. This keeps the live site safe from broken code.
+If any step fails -- a lint error, a type error, a build error -- the whole pipeline stops and nothing gets deployed. This keeps the live site safe from broken code.
 
 ### Job 2: Deploy
 
@@ -223,10 +223,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 It then:
 
-1. **Downloads the build artifact** — Grabs the `dist/` folder produced by the build job
-2. **Configures GitHub Pages** — Sets up the Pages environment
-3. **Uploads to Pages** — Packages the `dist/` folder for GitHub Pages
-4. **Deploys** — Publishes the site using `actions/deploy-pages@v4`
+1. **Downloads the build artifact** -- Grabs the `dist/` folder produced by the build job
+2. **Configures GitHub Pages** -- Sets up the Pages environment
+3. **Uploads to Pages** -- Packages the `dist/` folder for GitHub Pages
+4. **Deploys** -- Publishes the site using `actions/deploy-pages@v4`
 
 ### The Full Picture
 
@@ -263,14 +263,14 @@ Write article in VS Code
     Live on GitHub Pages!
 ```
 
-The entire process takes about a minute from push to live. No manual deploy, no FTP, no SSH — just `git push` and it's done.
+The entire process takes about a minute from push to live. No manual deploy, no FTP, no SSH -- just `git push` and it's done.
 
 ## The Production Build
 
 Under the hood, the `pnpm build` command runs:
 
-1. `tsc -b` — Checks TypeScript types
-2. `vite build` — Bundles and optimizes all the code
+1. `tsc -b` -- Checks TypeScript types
+2. `vite build` -- Bundles and optimizes all the code
 
 Vite produces minified and optimized files with automatic code-splitting. The result is a blazing-fast static site.
 
@@ -278,12 +278,12 @@ Vite produces minified and optimized files with automatic code-splitting. The re
 
 I could have used a CMS, a static site generator like Hugo or Jekyll, or even Next.js. But here's why I chose this approach:
 
-- **Simplicity** — Write in Markdown, push to GitHub, it's live
-- **Full control** — No dependency on a CMS or database
-- **Performance** — Vite + React = fast loading
-- **Flexibility** — I can mix Markdown and HTML however I want
-- **Learning** — It's a great project to master React and TypeScript
-- **CI/CD** — Automated quality checks and deployment with GitHub Actions
+- **Simplicity** -- Write in Markdown, push to GitHub, it's live
+- **Full control** -- No dependency on a CMS or database
+- **Performance** -- Vite + React = fast loading
+- **Flexibility** -- I can mix Markdown and HTML however I want
+- **Learning** -- It's a great project to master React and TypeScript
+- **CI/CD** -- Automated quality checks and deployment with GitHub Actions
 
 ## Conclusion
 

@@ -36,7 +36,7 @@
   {
     "slug": "my-passions",
     "title": "Tutkularım",
-    "description": "Kod yazmak, çizim yapmak, her şeyi otomatikleştirmek, eski teknolojileri keşfetmek ve daha fazlası — beni neyin yönlendirdiğine bir bakış.",
+    "description": "Kod yazmak, çizim yapmak, her şeyi otomatikleştirmek, eski teknolojileri keşfetmek ve daha fazlası -- beni neyin yönlendirdiğine bir bakış.",
     "date": "2026-03-08",
     "tags": [
       "personal"
@@ -78,7 +78,7 @@
   {
     "slug": "botting-a-farm",
     "title": "Bir Microsoft Rewards Çiftliğini Botlamak",
-    "description": "Ölçekli olarak Microsoft Rewards puanı toplamak için nasıl bir bot kodladığım — ve Microsoft'un anti-bot tespitinin neden artık işe yaramadığı.",
+    "description": "Ölçekli olarak Microsoft Rewards puanı toplamak için nasıl bir bot kodladığım -- ve Microsoft'un anti-bot tespitinin neden artık işe yaramadığı.",
     "date": "2026-03-13",
     "tags": [
       "automation",

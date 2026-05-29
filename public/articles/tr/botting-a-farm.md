@@ -1,4 +1,4 @@
-> **Not (2026):** Bu proje artık bakılmıyor. Microsoft, anti-bot tespitini önemli ölçüde güçlendirdi — o zamanlar işe yarayan şey artık çalışmıyor. Aşağıda açıklanan kod ve yaklaşım sadece arşiv/eğitim amaçlı saklanmaktadır.
+> **Not (2026):** Bu proje artık bakılmıyor. Microsoft, anti-bot tespitini önemli ölçüde güçlendirdi -- o zamanlar işe yarayan şey artık çalışmıyor. Aşağıda açıklanan kod ve yaklaşım sadece arşiv/eğitim amaçlı saklanmaktadır.
 
 ### Giriş
 
@@ -67,7 +67,7 @@ Artık bu programın amacını anladığına göre, bot işine bakalım.
 
 ## İlk testler
 
-Botumu inşa etmeden önce, aynı adresten yüzlerce hesap kullandığım için IP'nin işaretlenmeyeceğinden emin olmak istedim. Beni tanırsın, dönen proxy ile Tor kullanacağım. Ve botumu bir VPS'de barındırmak istemiyorum — bir GitHub Action'da çalışmasını istiyorum.
+Botumu inşa etmeden önce, aynı adresten yüzlerce hesap kullandığım için IP'nin işaretlenmeyeceğinden emin olmak istedim. Beni tanırsın, dönen proxy ile Tor kullanacağım. Ve botumu bir VPS'de barındırmak istemiyorum -- bir GitHub Action'da çalışmasını istiyorum.
 
 Basit bir workflow yazdım:
 
@@ -130,7 +130,7 @@ Zaman istatistikleri şöyleydi:
 İkinci çalıştırma şu sonucu verdi:  
 ![Tor curl ikinci çalıştırma](assets/20260313_140928_image.png)
 
-Gördüğün gibi, IP'ler farklı, bu yüzden aynı IP'den aşırı kullanım nedeniyle işaretlenmeyiz. Bu iyi haber—çiftlik botunu geliştirmeye devam edebiliriz.
+Gördüğün gibi, IP'ler farklı, bu yüzden aynı IP'den aşırı kullanım nedeniyle işaretlenmeyiz. Bu iyi haber--çiftlik botunu geliştirmeye devam edebiliriz.
 
 ---
 

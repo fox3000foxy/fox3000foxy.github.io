@@ -13,7 +13,7 @@ Siempre me ha encantado ajustar mi flujo de trabajo de Git, y después de ver a 
 
 En realidad, la necesidad era principalmente vanidad. No hay ningún requisito técnico para las firmas en mis proyectos personales, pero tener un «Verified» verde en un commit se siente genial, y escribir el script fue un ejercicio divertido de scripting en shell.
 
-> Digo, firmar tus commits es como usar una chaqueta de cuero en una revisión de código — totalmente innecesario, pero te hace sentir como un hacker.
+> Digo, firmar tus commits es como usar una chaqueta de cuero en una revisión de código -- totalmente innecesario, pero te hace sentir como un hacker.
 
 ## Lo que hace el script
 
