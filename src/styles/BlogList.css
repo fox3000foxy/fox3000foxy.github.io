@@ -109,6 +109,79 @@
   color: var(--text-muted);
 }
 
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-bar input[type="search"] {
+  width: 100%;
+  max-width: 320px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
+  border-radius: 999px;
+  padding: 0.5rem 2.2rem 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-bar input[type="search"]:focus {
+  border-color: var(--accent);
+}
+
+.search-bar input[type="search"]::placeholder {
+  color: var(--text-dim);
+}
+
+.search-clear {
+  position: absolute;
+  left: 288px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  line-height: 1;
+}
+
+.search-clear:hover {
+  color: var(--text);
+}
+
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
+  color: var(--text-muted);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.tag-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.tag-btn.active {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+
 .blog-card-authors {
   display: flex;
   gap: 0.25rem;
