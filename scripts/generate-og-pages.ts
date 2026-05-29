@@ -117,19 +117,10 @@ function main() {
 				/<meta property="og:image" content="[^"]*" \/>/,
 				`<meta property="og:image" content="${escapeXml(ogImageUrl)}" />`
 			)
-			.replace(
-				/<meta property="og:image:width" content="[^"]*" \/>/,
-				'<meta property="og:image:width" content="1200" />'
-			)
-			.replace(
-				/<meta property="og:image:height" content="[^"]*" \/>/
-			,
-				'<meta property="og:image:height" content="630" />'
-			)
 			.replace(/<title>[^<]*<\/title>/, `<title>${escapeXml(info.title)} | Fox's Blog</title>`)
 			.replace(
 				"</head>",
-				`<link rel="canonical" href="${escapeXml(url)}" />\n${hreflangTags}\n<script type="application/ld+json">${jsonLd}</script>\n</head>`
+				`<link rel="canonical" href="${escapeXml(url)}" />\n${hreflangTags}\n<meta name="twitter:card" content="summary_large_image" />\n<meta property="og:image:width" content="1200" />\n<meta property="og:image:height" content="630" />\n<script type="application/ld+json">${jsonLd}</script>\n</head>`
 			);
 
 		const ogDir = path.join(root, "dist", "og");
