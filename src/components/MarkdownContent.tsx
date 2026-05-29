@@ -94,7 +94,7 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	const { t } = useLang();
 
 	const isMermaid = rest.className === "mermaid-code";
-	const dataId = rest["data-id"] as string | undefined;
+	const dataId = (rest as Record<string, string>)["data-id"];
 
 	if (isMermaid && dataId) {
 		const idx = Number.parseInt(dataId.replace("MERMAID_", ""), 10);
