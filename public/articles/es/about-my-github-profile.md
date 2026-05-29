@@ -41,7 +41,7 @@ Y luego están mis commits jugando al PacMan xD
 
 ## Proyectos
 
-Más abajo tengo todos mis repositorios organizados por categoría. Siéntete libre de visitarlos si te interesa — solo ten en cuenta que casi cada uno tendrá su propia entrada en el blog:
+Más abajo tengo todos mis repositorios organizados por categoría. Siéntete libre de visitarlos si te interesa -- solo ten en cuenta que casi cada uno tendrá su propia entrada en el blog:
 
 ![](assets/20260308_145026_image.png)
 

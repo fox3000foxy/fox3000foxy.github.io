@@ -6,12 +6,12 @@
 
 这个博客是用现代 Web 技术构建的：
 
-- **React 19** — 用户界面
-- **TypeScript** — 类型安全、更可靠的代码
-- **Vite** — 超快的构建工具
-- **React Router v7** — 页面导航
-- **react-markdown** — 将 Markdown 转换为 HTML
-- **rehype-raw + rehype-sanitize** — 在 Markdown 中安全使用原始 HTML
+- **React 19** -- 用户界面
+- **TypeScript** -- 类型安全、更可靠的代码
+- **Vite** -- 超快的构建工具
+- **React Router v7** -- 页面导航
+- **react-markdown** -- 将 Markdown 转换为 HTML
+- **rehype-raw + rehype-sanitize** -- 在 Markdown 中安全使用原始 HTML
 
 一切托管在 **GitHub Pages** 上，直接从 `fox3000foxy.github.io` 仓库部署。
 
@@ -86,10 +86,10 @@
 ]
 ```
 
-- **slug** — 唯一标识符，用于 URL（`/blog/hello-world`）
-- **title** — 列表中显示的标题
-- **description** — 简短摘要
-- **date** — 发布日期
+- **slug** -- 唯一标识符，用于 URL（`/blog/hello-world`）
+- **title** -- 列表中显示的标题
+- **description** -- 简短摘要
+- **date** -- 发布日期
 
 ### 2. Markdown 文件
 
@@ -129,7 +129,7 @@
 
 ## 深色主题
 
-网站**始终处于深色模式**——没有亮/暗切换。这是刻意的选择：全局样式中设置了 `color-scheme: dark`，黑色背景 `#000`，白色文字 `#fff`。链接为蓝色（`#64b5f6`），悬停时变为绿色（`#81c784`）。
+网站**始终处于深色模式**----没有亮/暗切换。这是刻意的选择：全局样式中设置了 `color-scheme: dark`，黑色背景 `#000`，白色文字 `#fff`。链接为蓝色（`#64b5f6`），悬停时变为绿色（`#81c784`）。
 
 ## 我是如何写文章的
 
@@ -199,15 +199,15 @@ on:
 
 构建任务在 `ubuntu-latest` 上运行，包含以下步骤：
 
-1. **检出代码** — 克隆仓库，包含完整历史（`fetch-depth: 0`）
-2. **设置 pnpm** — 使用 `pnpm/action-setup@v4` 安装最新版 pnpm
-3. **设置 Node.js 20** — 配置 Node，启用 pnpm 缓存以加快安装速度
-4. **安装依赖** — 运行 `pnpm install --frozen-lockfile` 确保可重现构建（不允许更改锁文件）
-5. **代码检查** — 运行 `pnpm run lint`（ESLint）在构建前检查代码质量
-6. **构建** — 运行 `pnpm run build`，先检查 TypeScript 类型（`tsc -b`），然后用 Vite 打包
-7. **上传产物** — 将 `dist/` 文件夹作为构建产物上传，供部署任务使用
+1. **检出代码** -- 克隆仓库，包含完整历史（`fetch-depth: 0`）
+2. **设置 pnpm** -- 使用 `pnpm/action-setup@v4` 安装最新版 pnpm
+3. **设置 Node.js 20** -- 配置 Node，启用 pnpm 缓存以加快安装速度
+4. **安装依赖** -- 运行 `pnpm install --frozen-lockfile` 确保可重现构建（不允许更改锁文件）
+5. **代码检查** -- 运行 `pnpm run lint`（ESLint）在构建前检查代码质量
+6. **构建** -- 运行 `pnpm run build`，先检查 TypeScript 类型（`tsc -b`），然后用 Vite 打包
+7. **上传产物** -- 将 `dist/` 文件夹作为构建产物上传，供部署任务使用
 
-如果任何一步失败——代码检查错误、类型错误、构建错误——整个流水线停止，不会部署任何内容。这样可以防止问题代码上线。
+如果任何一步失败----代码检查错误、类型错误、构建错误----整个流水线停止，不会部署任何内容。这样可以防止问题代码上线。
 
 ### 任务 2：部署
 
@@ -223,10 +223,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 然后它：
 
-1. **下载构建产物** — 获取构建任务生成的 `dist/` 文件夹
-2. **配置 GitHub Pages** — 设置 Pages 环境
-3. **上传到 Pages** — 打包 `dist/` 文件夹供 GitHub Pages 使用
-4. **部署** — 使用 `actions/deploy-pages@v4` 发布网站
+1. **下载构建产物** -- 获取构建任务生成的 `dist/` 文件夹
+2. **配置 GitHub Pages** -- 设置 Pages 环境
+3. **上传到 Pages** -- 打包 `dist/` 文件夹供 GitHub Pages 使用
+4. **部署** -- 使用 `actions/deploy-pages@v4` 发布网站
 
 ### 全景图
 
@@ -263,14 +263,14 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     在 GitHub Pages 上线！
 ```
 
-从推送到上线，整个过程大约需要一分钟。无需手动部署、无需 FTP、无需 SSH——只需 `git push` 就完成了。
+从推送到上线，整个过程大约需要一分钟。无需手动部署、无需 FTP、无需 SSH----只需 `git push` 就完成了。
 
 ## 生产构建
 
 在底层，`pnpm build` 命令运行：
 
-1. `tsc -b` — 检查 TypeScript 类型
-2. `vite build` — 打包和优化所有代码
+1. `tsc -b` -- 检查 TypeScript 类型
+2. `vite build` -- 打包和优化所有代码
 
 Vite 生成经过压缩和优化的文件，并自动进行代码分割。最终成果是一个极快的静态网站。
 
@@ -278,12 +278,12 @@ Vite 生成经过压缩和优化的文件，并自动进行代码分割。最终
 
 我本可以使用 CMS、像 Hugo 或 Jekyll 这样的静态站点生成器，甚至 Next.js。但我选择这个方案的原因如下：
 
-- **简单** — 用 Markdown 写，推送到 GitHub，自动上线
-- **完全掌控** — 不依赖 CMS 或数据库
-- **性能** — Vite + React = 加载飞快
-- **灵活** — 我可以随意混用 Markdown 和 HTML
-- **学习** — 这是一个掌握 React 和 TypeScript 的好项目
-- **CI/CD** — 通过 GitHub Actions 实现自动化质量检查和部署
+- **简单** -- 用 Markdown 写，推送到 GitHub，自动上线
+- **完全掌控** -- 不依赖 CMS 或数据库
+- **性能** -- Vite + React = 加载飞快
+- **灵活** -- 我可以随意混用 Markdown 和 HTML
+- **学习** -- 这是一个掌握 React 和 TypeScript 的好项目
+- **CI/CD** -- 通过 GitHub Actions 实现自动化质量检查和部署
 
 ## 总结
 

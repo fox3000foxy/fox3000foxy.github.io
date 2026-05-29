@@ -2,7 +2,7 @@
 
 ## En-tête & Liens
 
-Bienvenue sur mon profil GitHub — organisé comme une bibliothèque bien rangée.
+Bienvenue sur mon profil GitHub -- organisé comme une bibliothèque bien rangée.
 Dans la première section il y a un en-tête avec des liens, assez standard je dirais :
 ![](assets/20260308_123527_image.png)
 
@@ -39,7 +39,7 @@ Et voici mes commits qui jouent à PacMan tranquillement xD
 ![](assets/20260308_144956_image.png)
 
 ## Projets
-Plus bas j'ai tous mes dépôts organisés par catégorie. N'hésitez pas à aller voir si ça vous intéresse — sachez que presque chacun aura son propre article de blog :
+Plus bas j'ai tous mes dépôts organisés par catégorie. N'hésitez pas à aller voir si ça vous intéresse -- sachez que presque chacun aura son propre article de blog :
 
 ![](assets/20260308_145026_image.png)
 

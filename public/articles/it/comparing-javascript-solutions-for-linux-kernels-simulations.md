@@ -1,16 +1,16 @@
-# Ogni sandbox, emulatore, simulatore e honeypot JavaScript — a confronto
+# Ogni sandbox, emulatore, simulatore e honeypot JavaScript -- a confronto
 
-Allora, sono stato fin troppo in fondo a questa tana del coniglio per un bel po'. È iniziato perché stavo aiutando con [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) — un progetto di Fortune (ne parleremo tra poco) — e continuavo a sentirmi chiedere "aspetta, in cosa è diverso da `v86`?" o "perché non usare semplicemente `vm2`?" — e ho realizzato che non potevo dare una risposta chiara senza mappare prima l'intero ecosistema. Quindi eccoci qui, suppongo lol.
+Allora, sono stato fin troppo in fondo a questa tana del coniglio per un bel po'. È iniziato perché stavo aiutando con [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- un progetto di Fortune (ne parleremo tra poco) -- e continuavo a sentirmi chiedere "aspetta, in cosa è diverso da `v86`?" o "perché non usare semplicemente `vm2`?" -- e ho realizzato che non potevo dare una risposta chiara senza mappare prima l'intero ecosistema. Quindi eccoci qui, suppongo lol.
 
-A quanto pare ci sono quattro famiglie distinte — sandbox JS, emulatori Linux, simulatori Linux e honeypot — e non si sovrappongono quasi mai, anche se vengono costantemente menzionate nello stesso discorso. Chi costruisce un sistema di plugin usa `isolated-vm`. Chi fa una demo di un tool CLI usa `v86`. Chi fa threat intelligence SSH usa Cowrie. Risolvono problemi completamente diversi sotto lo stesso vago ombrello di "eseguire codice in una scatola."
+A quanto pare ci sono quattro famiglie distinte -- sandbox JS, emulatori Linux, simulatori Linux e honeypot -- e non si sovrappongono quasi mai, anche se vengono costantemente menzionate nello stesso discorso. Chi costruisce un sistema di plugin usa `isolated-vm`. Chi fa una demo di un tool CLI usa `v86`. Chi fa threat intelligence SSH usa Cowrie. Risolvono problemi completamente diversi sotto lo stesso vago ombrello di "eseguire codice in una scatola."
 
-Ho passato un sacco di tempo a leggere codice sorgente, rapporti CVE, documentazione di architettura e pagine npm per scrivere questo. Sarà lunghissimo — prenditi un caffè, sul serio. O due.
+Ho passato un sacco di tempo a leggere codice sorgente, rapporti CVE, documentazione di architettura e pagine npm per scrivere questo. Sarà lunghissimo -- prenditi un caffè, sul serio. O due.
 
 > Breve disclaimer: `typescript-virtual-container` è ampiamente citato in questo articolo perché è ciò che ha scatenato questa ricerca. Ho cercato di essere equo con tutto il resto, ma tieni presente questo contesto.
 
 ---
 
-## Parte 0 — Prima di tutto, che problema stai risolvendo?
+## Parte 0 -- Prima di tutto, che problema stai risolvendo?
 
 Prima di immergerci, vale la pena essere precisi su a cosa serve ogni famiglia, perché la terminologia diventa rapidamente confusa e le persone le mischiano continuamente (compreso me, prima che mi sedessi e le mappassi per bene).
 
@@ -20,7 +20,7 @@ Prima di immergerci, vale la pena essere precisi su a cosa serve ogni famiglia, 
 
 **Simulatori Linux** fingono il *comportamento* di un sistema Linux senza eseguire un kernel reale. Implementano un interprete di shell, un filesystem virtuale e abbastanza semantica Unix da ingannare programmi e umani. Nessun kernel. Nessun Wasm. Nessuna emulazione CPU. Sovraccarico molto inferiore.
 
-**Honeypot** sono costruiti per attirare attaccanti e registrare cosa fanno. Non sono principalmente ambienti di esecuzione — sono strumenti di osservabilità. La fedeltà al comportamento Linux reale conta solo nella misura in cui impedisce all'attaccante di rilevare la trappola.
+**Honeypot** sono costruiti per attirare attaccanti e registrare cosa fanno. Non sono principalmente ambienti di esecuzione -- sono strumenti di osservabilità. La fedeltà al comportamento Linux reale conta solo nella misura in cui impedisce all'attaccante di rilevare la trappola.
 
 Con questa premessa, ecco dove si colloca ogni progetto in questo articolo:
 
@@ -34,11 +34,11 @@ Stack terminale:   xterm.js + node-pty (non un isolatore, ma affine)
 
 ---
 
-## Parte 1 — Sandbox JavaScript
+## Parte 1 -- Sandbox JavaScript
 
-### 1.1 `vm` — il modulo integrato di Node.js (non è quello che pensi)
+### 1.1 `vm` -- il modulo integrato di Node.js (non è quello che pensi)
 
-La risposta più vecchia a "esegui JS non fidato" in Node è il modulo `vm` integrato. C'è fin dalla v0.1, quindi molte persone lo usano per prime — e poi vengono scottate.
+La risposta più vecchia a "esegui JS non fidato" in Node è il modulo `vm` integrato. C'è fin dalla v0.1, quindi molte persone lo usano per prime -- e poi vengono scottate.
 
 ```js
 const vm = require("vm");
@@ -48,12 +48,12 @@ vm.runInContext("answer = 6 * 7", sandbox);
 console.log(sandbox.answer); // 42
 ```
 
-Cosa fa realmente `vm`: crea un nuovo contesto V8 (un set fresco di costruttori built-in — `Object`, `Array`, `Function`, ecc.) ed esegue codice al suo interno, con un riferimento condiviso a ciò che metti in `sandbox`. Il tuo motore V8 non cambia. Il tuo processo non cambia. La memoria è condivisa.
+Cosa fa realmente `vm`: crea un nuovo contesto V8 (un set fresco di costruttori built-in -- `Object`, `Array`, `Function`, ecc.) ed esegue codice al suo interno, con un riferimento condiviso a ciò che metti in `sandbox`. Il tuo motore V8 non cambia. Il tuo processo non cambia. La memoria è condivisa.
 
 Il motivo per cui `vm` non fornisce sicurezza: la catena di prototipi di JavaScript è un DAG che collega tutto a `Object.prototype`. Se metti un qualsiasi oggetto dal realm host nella sandbox, l'ospite può risalire la sua catena di prototipi e raggiungere i costruttori host. Da `Function`, puoi chiamare `Function("return process")()` e recuperare il vero oggetto `process`. Game over. Immediatamente.
 
 ```js
-// Questo funziona perfettamente in vm — ottieni il vero oggetto process
+// Questo funziona perfettamente in vm -- ottieni il vero oggetto process
 vm.runInNewContext(`({}).__proto__.constructor("return process")()`);
 ```
 
@@ -61,12 +61,12 @@ Cioè, la documentazione di Node.js stessa dice: "Il modulo vm non è un meccani
 
 **Verdetto**: un meccanismo di scope, non una sandbox. Usalo quando ti serve un ambito di variabili isolato (template engine, funzioni simili a `eval` dove controlli il codice). Mai per input non fidato.
 
-**Memoria**: overhead trascurabile — stesso heap V8 del processo host.  
+**Memoria**: overhead trascurabile -- stesso heap V8 del processo host.  
 **Sicurezza**: nessuna contro un attaccante motivato.
 
 ---
 
-### 1.2 `vm2` — il tentativo della community, e la sua lunghissima morte
+### 1.2 `vm2` -- il tentativo della community, e la sua lunghissima morte
 
 `vm2` era la risposta della community al problema di fuga di `vm`. L'idea centrale: avvolgere ogni oggetto che attraversa il confine della sandbox in un `Proxy` che intercetta l'accesso alle proprietà, blocca la risalita del prototipo e filtra i riferimenti pericolosi. Idea intelligente in teoria! Non così tanto nella pratica, come vedremo.
 
@@ -76,7 +76,7 @@ const vm = new VM({ timeout: 1000, sandbox: {} });
 vm.run("process.exit(1)"); // throws VMError, process not accessible
 ```
 
-Per diversi anni ha funzionato ragionevolmente bene. Ma la superficie d'attacco di un `Proxy` JavaScript è enorme. Ogni nuova funzionalità del linguaggio JS — generatori, iteratori asincroni, `Symbol.toPrimitive`, `Error.prepareStackTrace`, slot interni di `Promise` — è un potenziale vettore di bypass.
+Per diversi anni ha funzionato ragionevolmente bene. Ma la superficie d'attacco di un `Proxy` JavaScript è enorme. Ogni nuova funzionalità del linguaggio JS -- generatori, iteratori asincroni, `Symbol.toPrimitive`, `Error.prepareStackTrace`, slot interni di `Promise` -- è un potenziale vettore di bypass.
 
 La timeline delle CVE è... qualcosa. Tipo, guarda questa:
 
@@ -94,13 +94,13 @@ Tre CVE critiche nello stesso mese (aprile 2023). TRE. IN UN MESE. Dopo CVE-2023
 
 Il maintainer l'ha resuscitata nell'ottobre 2025 con la versione 3.10.0, sostenendo di aver risolto tutto ciò che era noto all'epoca. Una nuova fuga critica (CVE-2026-22709, CVSS 9.8) è stata divulgata nel gennaio 2026, seguita da un lotto di altre undici nel maggio 2026. Undici. Il modello non è cambiato e onestamente non credo che cambierà mai.
 
-Il problema fondamentale è architetturale — e questa è la lezione che l'intero ecosistema ha impiegato un po' per imparare. Non puoi costruire una sandbox sicura usando lo stesso linguaggio che stai sandboxando, sullo stesso motore, nello stesso processo. La superficie di fuga è l'intera implementazione di V8 — e V8 sono diversi milioni di righe di C++ che continuano a cambiare. Ogni nuova funzionalità JS apre potenzialmente un nuovo percorso d'attacco.
+Il problema fondamentale è architetturale -- e questa è la lezione che l'intero ecosistema ha impiegato un po' per imparare. Non puoi costruire una sandbox sicura usando lo stesso linguaggio che stai sandboxando, sullo stesso motore, nello stesso processo. La superficie di fuga è l'intera implementazione di V8 -- e V8 sono diversi milioni di righe di C++ che continuano a cambiare. Ogni nuova funzionalità JS apre potenzialmente un nuovo percorso d'attacco.
 
 **Verdetto**: Non usare per applicazioni sensibili alla sicurezza. Anche nell'ultima versione, nuovi bypass vengono scoperti ogni pochi mesi. Il maintainer stesso lo ha riconosciuto apertamente.
 
 ---
 
-### 1.3 `isolated-vm` — quello che funziona davvero
+### 1.3 `isolated-vm` -- quello che funziona davvero
 
 `isolated-vm` adotta l'approccio corretto: usare il primitivo di isolamento di V8, l'Isolate. Ogni V8 Isolate ha il proprio heap, il proprio garbage collector, il proprio set di built-in e zero riferimenti condivisi con altri Isolate.
 
@@ -128,9 +128,9 @@ await script.run(context);
 isolate.dispose(); // frees the entire heap
 ```
 
-I tipi `Reference` e `ExternalCopy` sono il ponte di comunicazione esplicito. Una `Reference` dà all'isolate un handle chiamabile a una funzione host — l'isolate può chiamarla ma non può ispezionare la sua closure o il suo prototipo. Un `ExternalCopy` serializza un valore (structured clone) attraverso il confine dell'heap. Questo modello a ponte esplicito non è comodo, ma è ciò che rende reale l'isolamento.
+I tipi `Reference` e `ExternalCopy` sono il ponte di comunicazione esplicito. Una `Reference` dà all'isolate un handle chiamabile a una funzione host -- l'isolate può chiamarla ma non può ispezionare la sua closure o il suo prototipo. Un `ExternalCopy` serializza un valore (structured clone) attraverso il confine dell'heap. Questo modello a ponte esplicito non è comodo, ma è ciò che rende reale l'isolamento.
 
-Puoi impostare limiti di risorse rigidi: memoria (l'isolate viene terminato se supera il limite), timeout a tempo reale e timeout CPU. La terminazione è reale — uccide l'intero V8 Isolate, non solo un timeout JS che può essere bypassato con un `while(true)`.
+Puoi impostare limiti di risorse rigidi: memoria (l'isolate viene terminato se supera il limite), timeout a tempo reale e timeout CPU. La terminazione è reale -- uccide l'intero V8 Isolate, non solo un timeout JS che può essere bypassato con un `while(true)`.
 
 **Limitazioni**: solo JS. Non puoi eseguire bash al suo interno. Non c'è concetto di file, permessi, rete o processi. È esattamente lo strumento giusto per JS inviato dall'utente (plugin, formule, script hook), e lo strumento sbagliato per tutto il resto. L'autrice di `typescript-virtual-container` ha menzionato di averlo considerato all'inizio prima di rendersi conto che "eseguire comandi shell" e "isolare JavaScript" sono problemi fondamentalmente diversi.
 
@@ -141,11 +141,11 @@ Puoi impostare limiti di risorse rigidi: memoria (l'isolate viene terminato se s
 
 ---
 
-### 1.4 `quickjs-emscripten` — un motore JS separato compilato in Wasm
+### 1.4 `quickjs-emscripten` -- un motore JS separato compilato in Wasm
 
 Un approccio diverso: invece di isolare all'interno di V8, esegui un motore JavaScript completamente separato compilato in WebAssembly. L'host esegue V8/Node. L'ospite esegue QuickJS-in-Wasm. La sandbox Wasm fornisce il confine di isolamento.
 
-QuickJS è di nuovo lavoro di Fabrice Bellard (lo stesso tizio dietro QEMU, FFmpeg, JSLinux, TinyEMU — questa persona non è reale, come fa una singola persona a fare tutto questo?). È un motore JS piccolo e conforme alle specifiche ES2023 scritto in C, e quando compilato in Wasm è solo ~500 KB.
+QuickJS è di nuovo lavoro di Fabrice Bellard (lo stesso tizio dietro QEMU, FFmpeg, JSLinux, TinyEMU -- questa persona non è reale, come fa una singola persona a fare tutto questo?). È un motore JS piccolo e conforme alle specifiche ES2023 scritto in C, e quando compilato in Wasm è solo ~500 KB.
 
 ```js
 import { getQuickJS } from "quickjs-emscripten";
@@ -169,7 +169,7 @@ if (result.error) {
 vm.dispose();
 ```
 
-QuickJS è un motore JavaScript ES2023 piccolo e conforme alle specifiche scritto in C. Compilato in Wasm, è ~500 KB per la variante sincrona, ~1 MB per quella asincrona (Asyncify). La gestione della memoria è manuale — ogni valore che estrai dalla VM deve essere esplicitamente smaltito, il che è un po' fastidioso ma previene sorprese GC oltre il confine. Un compromesso interessante!
+QuickJS è un motore JavaScript ES2023 piccolo e conforme alle specifiche scritto in C. Compilato in Wasm, è ~500 KB per la variante sincrona, ~1 MB per quella asincrona (Asyncify). La gestione della memoria è manuale -- ogni valore che estrai dalla VM deve essere esplicitamente smaltito, il che è un po' fastidioso ma previene sorprese GC oltre il confine. Un compromesso interessante!
 
 Il wrapper `@sebastianwessel/quickjs` aggiunge un'API più ergonomica sopra, con filesystem virtuale opzionale, supporto fetch e stub dei moduli Node.js:
 
@@ -199,9 +199,9 @@ Il problema: QuickJS non ha lo stesso livello di ottimizzazione di V8. Per caric
 
 ---
 
-### 1.5 Deno — runtime con permessi come priorità
+### 1.5 Deno -- runtime con permessi come priorità
 
-Deno adotta una filosofia completamente diversa: invece di creare sandbox in Node, costruisci un nuovo runtime che sia sicuro per impostazione predefinita. Mi piace molto questo approccio — è ciò che Node.js avrebbe dovuto essere fin dall'inizio, onestamente. Ryan Dahl (il creatore originale di Node.js) ha letteralmente creato Deno perché si rammaricava di alcune decisioni di design di Node.js, il che è piuttosto pazzesco se ci pensi.
+Deno adotta una filosofia completamente diversa: invece di creare sandbox in Node, costruisci un nuovo runtime che sia sicuro per impostazione predefinita. Mi piace molto questo approccio -- è ciò che Node.js avrebbe dovuto essere fin dall'inizio, onestamente. Ryan Dahl (il creatore originale di Node.js) ha letteralmente creato Deno perché si rammaricava di alcune decisioni di design di Node.js, il che è piuttosto pazzesco se ci pensi.
 
 Ogni capacità sensibile (lettura file, scrittura file, rete, env, sotto-processi) richiede un flag `--allow-*` esplicito:
 
@@ -216,17 +216,17 @@ deno run --allow-net=api.example.com script.ts
 deno run untrusted.ts # can't read, write, network, spawn
 ```
 
-Il modello di permessi è implementato a livello Rust/OS — non è un trucco JS. Quando il codice Deno chiama `Deno.readFile()`, passa attraverso un'op Rust che controlla la tabella dei permessi prima di toccare il filesystem. Non puoi bypassarlo da JS perché la syscall non avviene mai se il permesso non è concesso.
+Il modello di permessi è implementato a livello Rust/OS -- non è un trucco JS. Quando il codice Deno chiama `Deno.readFile()`, passa attraverso un'op Rust che controlla la tabella dei permessi prima di toccare il filesystem. Non puoi bypassarlo da JS perché la syscall non avviene mai se il permesso non è concesso.
 
 Per eseguire codice veramente non fidato, i Deno Workers (Web Workers) forniscono un secondo isolate all'interno dello stesso processo, ognuno con il proprio set di permessi. Puoi spawnare un worker con zero permessi e comunicare con esso tramite `postMessage`.
 
 Deno 2 (rilasciato nell'ottobre 2024) ha aggiunto la piena compatibilità npm e shim di compatibilità Node.js, migliorando significativamente la sua adozione per casi d'uso lato server.
 
-**Il compromesso**: il modello di sicurezza di Deno è eccellente per codice di cui potresti fidarti parzialmente. Per codice completamente non fidato che potrebbe essere ostile, il modello di permessi non aiuta — hai bisogno di un confine Isolate (`isolated-vm`) o di un motore diverso (`quickjs-emscripten`), perché Deno esegue ancora V8 e attaccanti sofisticati possono trovare bug a livello V8.
+**Il compromesso**: il modello di sicurezza di Deno è eccellente per codice di cui potresti fidarti parzialmente. Per codice completamente non fidato che potrebbe essere ostile, il modello di permessi non aiuta -- hai bisogno di un confine Isolate (`isolated-vm`) o di un motore diverso (`quickjs-emscripten`), perché Deno esegue ancora V8 e attaccanti sofisticati possono trovare bug a livello V8.
 
 ---
 
-### 1.6 TC39 ShadowRealm — la risposta standard (alla fine)
+### 1.6 TC39 ShadowRealm -- la risposta standard (alla fine)
 
 L'organismo di standardizzazione JavaScript (TC39) ha una proposta chiamata ShadowRealm che tenta di standardizzare ciò che `vm` e `vm2` cercavano di fare, ma con un modello di sicurezza corretto. Uno ShadowRealm crea un contesto di esecuzione JS isolato con il proprio set di intrinsic, nessun accesso al realm esterno e un'interfaccia import/export attentamente controllata.
 
@@ -257,22 +257,22 @@ ShadowRealm è nei browser (Chrome 90+, Firefox 105+) ma a partire dal 2026 non 
 | **Stato** | stabile | rischioso (nuove CVE) | ✅ attivo | ✅ attivo | ✅ attivo |
 | **Overhead RAM** | ~1 MB | ~5–20 MB | ~3–10 MB | ~5–15 MB | ~10–30 MB |
 
-Il messaggio da portare a casa: se ti interessa la sicurezza, ci sono esattamente due opzioni reali — `isolated-vm` (addon nativo, V8 Isolate, piena velocità JS) e `quickjs-emscripten` (Wasm, compatibile browser, ~10x più lento per codice compute-intensive). Tutto il resto è o "per favore non farlo" (`vm`, `vm2`) o un runtime che risolve un problema completamente diverso (Deno). ShadowRealm potrebbe cambiare questo quadro eventualmente, ma non è ancora pronto.
+Il messaggio da portare a casa: se ti interessa la sicurezza, ci sono esattamente due opzioni reali -- `isolated-vm` (addon nativo, V8 Isolate, piena velocità JS) e `quickjs-emscripten` (Wasm, compatibile browser, ~10x più lento per codice compute-intensive). Tutto il resto è o "per favore non farlo" (`vm`, `vm2`) o un runtime che risolve un problema completamente diverso (Deno). ShadowRealm potrebbe cambiare questo quadro eventualmente, ma non è ancora pronto.
 
 ---
 
-## Parte 2 — Emulatori Linux in JavaScript
+## Parte 2 -- Emulatori Linux in JavaScript
 
-Qui è dove le cose diventano davvero interessanti per me. Questi sono *veri* emulatori — implementano un set di istruzioni CPU in JavaScript o WebAssembly, avviano una vera immagine del kernel Linux, ed eseguono veri binari userland. L'isolamento deriva dal fatto che ospite e host non condividono nulla: diversi spazi di memoria, diversi flussi di istruzioni.
+Qui è dove le cose diventano davvero interessanti per me. Questi sono *veri* emulatori -- implementano un set di istruzioni CPU in JavaScript o WebAssembly, avviano una vera immagine del kernel Linux, ed eseguono veri binari userland. L'isolamento deriva dal fatto che ospite e host non condividono nulla: diversi spazi di memoria, diversi flussi di istruzioni.
 
 Il prezzo che paghi è enorme, ma la cosa che ottieni è genuinamente notevole: vero Linux, che gira davvero, nel tuo browser o processo Node. Cioè, è piuttosto pazzesco se ci pensi, no?
 
-### 2.1 `v86` — Emulatore PC x86 in JS + JIT Wasm
+### 2.1 `v86` -- Emulatore PC x86 in JS + JIT Wasm
 
 `v86` di Fabrice (copy su GitHub) è l'emulatore x86 open-source più capace in JavaScript. È iniziato come un interprete JS puro intorno al 2013 e si è evoluto in un sistema JIT dove i blocchi di base x86 vengono tradotti in WebAssembly al volo, migliorando drasticamente le prestazioni.
 
 Cosa emula:
-- **CPU**: x86-32 (IA-32), set di istruzioni approssimativamente a livello Pentium 1. Nessun supporto 64-bit (x86-64) — questo è un limite architetturale, non una funzionalità mancante.
+- **CPU**: x86-32 (IA-32), set di istruzioni approssimativamente a livello Pentium 1. Nessun supporto 64-bit (x86-64) -- questo è un limite architetturale, non una funzionalità mancante.
 - **FPU**: tramite `Float64Array` di JavaScript. x87 è a precisione estesa 80-bit; i double JS sono a 64-bit. Questo significa che i risultati in virgola mobile possono differire leggermente da una CPU reale.
 - **Memoria**: configurabile, mappata a un `SharedArrayBuffer` o `ArrayBuffer` nell'heap JS.
 - **Hardware**: 8254 PIT (timer), 8259 PIC (controllore interrupt), 8042 controller tastiera (PS/2), CMOS RTC, VGA con estensioni SVGA e Bochs VBE, controller IDE, controller floppy (8272A), scheda di rete NE2000.
@@ -303,58 +303,58 @@ emulator.serial0_send("ls /\n");
 
 **Sistemi operativi supportati**: Alpine Linux (eccellente), Ubuntu 16.04/18.04 (solo i386), Arch Linux 32, ReactOS, FreeDOS, Windows 9x/2000 (con limitazioni), MS-DOS.
 
-**Tempo di avvio**: 15–40 secondi per Alpine Linux da un'immagine pulita. Questo è inerente all'inizializzazione reale del kernel — non puoi saltarla. Sì, i tuoi utenti rimarranno seduti a guardare una sequenza di boot del kernel nel loro browser. È così xD
+**Tempo di avvio**: 15–40 secondi per Alpine Linux da un'immagine pulita. Questo è inerente all'inizializzazione reale del kernel -- non puoi saltarla. Sì, i tuoi utenti rimarranno seduti a guardare una sequenza di boot del kernel nel loro browser. È così xD
 
 **Consumo memoria**: 100–256 MB per istanza. La cache JIT Wasm da sola può raggiungere decine di MB per un'istanza Linux attiva.
 
-**Uso in Node.js**: pienamente supportato. Nessun DOM necessario — l'output VGA può essere scartato se ti interessa solo la seriale.
+**Uso in Node.js**: pienamente supportato. Nessun DOM necessario -- l'output VGA può essere scartato se ti interessa solo la seriale.
 
 **Cosa non puoi fare**: eseguire binari 64-bit, usare funzionalità moderne del kernel (eBPF, io_uring, ecc.), o eseguire più di una manciata di istanze contemporaneamente senza raggiungere i limiti di memoria.
 
-**npm**: [v86](https://www.npmjs.com/package/v86) — aggiornato continuamente, ultima pubblicazione entro l'ultimo giorno al momento della scrittura.  
+**npm**: [v86](https://www.npmjs.com/package/v86) -- aggiornato continuamente, ultima pubblicazione entro l'ultimo giorno al momento della scrittura.  
 **GitHub**: [copy/v86](https://github.com/copy/v86)  
 **Demo**: [copy.sh/v86](https://copy.sh/v86)
 
 ---
 
-### 2.2 JSLinux e TinyEMU — il lavoro di Bellard, due volte
+### 2.2 JSLinux e TinyEMU -- il lavoro di Bellard, due volte
 
-JSLinux è l'emulatore Linux JavaScript di Fabrice Bellard — il primo in assoluto, pubblicato nel 2011. Continuo a menzionare Bellard in questo articolo perché continua a spuntare fuori: QuickJS, TinyEMU, JSLinux, QEMU, FFmpeg. Quest'uomo è qualcosa d'altro. Genuinaramente uno dei contributi tecnici individuali più impressionanti nella storia del software, senza esagerazione.
+JSLinux è l'emulatore Linux JavaScript di Fabrice Bellard -- il primo in assoluto, pubblicato nel 2011. Continuo a menzionare Bellard in questo articolo perché continua a spuntare fuori: QuickJS, TinyEMU, JSLinux, QEMU, FFmpeg. Quest'uomo è qualcosa d'altro. Genuinaramente uno dei contributi tecnici individuali più impressionanti nella storia del software, senza esagerazione.
 
-L'originale JSLinux era un interprete x86 JS puro. Nel 2016, Bellard ha scritto TinyEMU (un emulatore RISC-V in C), lo ha compilato in JavaScript tramite Emscripten, e questo è diventato la base per l'attuale JSLinux. Quindi l'attuale JSLinux è in realtà codice C che genera JavaScript — non JS scritto a mano.
+L'originale JSLinux era un interprete x86 JS puro. Nel 2016, Bellard ha scritto TinyEMU (un emulatore RISC-V in C), lo ha compilato in JavaScript tramite Emscripten, e questo è diventato la base per l'attuale JSLinux. Quindi l'attuale JSLinux è in realtà codice C che genera JavaScript -- non JS scritto a mano.
 
-Le note tecniche sul sito di Bellard meritano una lettura: l'attuale JSLinux esegue una CPU RISC-V a 32 o 64-bit (non x86), emulando VirtIO console, VirtIO network, VirtIO block device e un filesystem 9P per la condivisione di file con l'host. La demo JS è compilata da C usando Emscripten — non è JS scritto a mano.
+Le note tecniche sul sito di Bellard meritano una lettura: l'attuale JSLinux esegue una CPU RISC-V a 32 o 64-bit (non x86), emulando VirtIO console, VirtIO network, VirtIO block device e un filesystem 9P per la condivisione di file con l'host. La demo JS è compilata da C usando Emscripten -- non è JS scritto a mano.
 
 TinyEMU stesso supporta:
 - RISC-V RV32IMAFDQC e RV64IMAFDQC (32 e 64-bit, con float, moltiplicazione, istruzioni compresse)
-- x86 tramite KVM (solo nativo, nessuna emulazione — quindi la versione JS è solo RISC-V)
+- x86 tramite KVM (solo nativo, nessuna emulazione -- quindi la versione JS è solo RISC-V)
 - VirtIO console, network, block, input, filesystem 9P
 
 TinyEMU ha una demo JavaScript fornita tramite Emscripten. È la base per JSLinux ed è anche usato da `container2wasm` (vedi sezione 2.5).
 
-**Stato JSLinux**: nessun pacchetto npm, nessuna API programmatica. È una demo che apri nel browser. Il significato storico è alto — ha dimostrato il concetto. Utilizzo pratico come libreria: nessuno.
+**Stato JSLinux**: nessun pacchetto npm, nessuna API programmatica. È una demo che apri nel browser. Il significato storico è alto -- ha dimostrato il concetto. Utilizzo pratico come libreria: nessuno.
 
 **TinyEMU**: non su npm, sorgente C disponibile su [bellard.org/tinyemu](https://bellard.org/tinyemu/).
 
 ---
 
-### 2.3 jor1k — Emulatore OR1K
+### 2.3 jor1k -- Emulatore OR1K
 
-jor1k è un emulatore OpenRISC 1000 (OR1K) scritto in JavaScript da Sebastian Macke. È interessante storicamente perché jor1k ha introdotto il supporto VirtIO 9P, che Bellard ha successivamente incorporato in TinyEMU e JSLinux. L'impollinazione incrociata tra questi progetti è stretta — si prendono in prestito a vicenda, che è onestamente una delle cose più fighe del lavoro di emulazione open source.
+jor1k è un emulatore OpenRISC 1000 (OR1K) scritto in JavaScript da Sebastian Macke. È interessante storicamente perché jor1k ha introdotto il supporto VirtIO 9P, che Bellard ha successivamente incorporato in TinyEMU e JSLinux. L'impollinazione incrociata tra questi progetti è stretta -- si prendono in prestito a vicenda, che è onestamente una delle cose più fighe del lavoro di emulazione open source.
 
-**Stato**: non più mantenuto attivamente, nessun pacchetto npm. Archiviato a questo punto. Vale la pena conoscerlo principalmente per contesto storico — tipo se qualcuno menziona jor1k in una conversazione, ora sai cos'è :)
+**Stato**: non più mantenuto attivamente, nessun pacchetto npm. Archiviato a questo punto. Vale la pena conoscerlo principalmente per contesto storico -- tipo se qualcuno menziona jor1k in una conversazione, ora sai cos'è :)
 
 ---
 
-### 2.4 CheerpX — Emulatore x86 commerciale per browser
+### 2.4 CheerpX -- Emulatore x86 commerciale per browser
 
 CheerpX di Leaning Technologies è l'emulatore Linux x86 commerciale di livello produzione. Non è open source, ma è significativamente più capace di v86 per eseguire un vero userland Debian/Ubuntu. Se hai bisogno di un vero VSCode nel browser, è questo che usi.
 
 Differenze chiave da v86:
 - Supporta un ISA più ampio (più estensioni x86, migliore compatibilità glibc)
 - Filesystem basato su IndexedDB nel browser (persistente tra ricariche di pagina)
-- Supporto pthread tramite `SharedArrayBuffer` (che richiede header COOP/COEP — sì, quei fastidiosi header di sicurezza)
-- Progettato per eseguire VSCode, Python, Node.js e altre applicazioni reali — non solo immagini OS minime
+- Supporto pthread tramite `SharedArrayBuffer` (che richiede header COOP/COEP -- sì, quei fastidiosi header di sicurezza)
+- Progettato per eseguire VSCode, Python, Node.js e altre applicazioni reali -- non solo immagini OS minime
 - Supporto professionale e SLA disponibile (ovvero puoi urlare a qualcuno se si rompe)
 
 Il caso d'uso tipico è "esegui una vera applicazione Linux nel browser senza server." Le aziende lo usano per IDE basati su browser, tutorial di programmazione e documentazione interattiva.
@@ -369,17 +369,17 @@ await cx.run("/bin/bash");
 
 **Storia Node.js**: CheerpX è browser-first. L'emulatore sottostante potrebbe teoricamente funzionare in Node (è Wasm), ma l'API e la documentazione sono orientate interamente all'uso nel browser. L'uso lato server non è supportato.
 
-**Memoria**: simile a v86 — 200+ MB per un'istanza Debian reale.  
+**Memoria**: simile a v86 -- 200+ MB per un'istanza Debian reale.  
 **Prezzi**: gratuito per progetti open source, licenza commerciale per SaaS di produzione.  
 **Documentazione**: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview)
 
 ---
 
-### 2.5 WebContainers (StackBlitz) — Node.js in Wasm, non emulazione Linux
+### 2.5 WebContainers (StackBlitz) -- Node.js in Wasm, non emulazione Linux
 
 I WebContainers sono spesso raggruppati con gli emulatori Linux ma sono architetturalmente diversi. Non emulano x86. Non avviano Linux. Eseguono Node.js compilato in WebAssembly usando WASI. Questa distinzione conta molto e ci sono rimasto confuso per troppo tempo lol.
 
-Penso che la confusione venga dal marketing — "esegui Node.js nel tuo browser" suona come emulazione, ma in realtà è Node.js stesso compilato in Wasm, non emulazione Linux che esegue Node.js dentro una VM. Roba completamente diversa.
+Penso che la confusione venga dal marketing -- "esegui Node.js nel tuo browser" suona come emulazione, ma in realtà è Node.js stesso compilato in Wasm, non emulazione Linux che esegue Node.js dentro una VM. Roba completamente diversa.
 
 L'architettura:
 1. Node.js è compilato in Wasm (specificamente un runtime WASI personalizzato)
@@ -403,7 +403,7 @@ const proc = await webcontainer.spawn("node", ["index.js"]);
 proc.output.pipeTo(new WritableStream({ write: chunk => console.log(chunk) }));
 ```
 
-Poiché esegue Node.js reale (compilato in Wasm), ottieni vero npm, vere API Node.js e vera risoluzione dei moduli. Non ottieni un userland Linux per uso generico — non puoi installare pacchetti di sistema con `apt`, eseguire binari compilati arbitrari o fare molto al di fuori dell'ecosistema Node.js.
+Poiché esegue Node.js reale (compilato in Wasm), ottieni vero npm, vere API Node.js e vera risoluzione dei moduli. Non ottieni un userland Linux per uso generico -- non puoi installare pacchetti di sistema con `apt`, eseguire binari compilati arbitrari o fare molto al di fuori dell'ecosistema Node.js.
 
 **Requisiti browser**: SharedArrayBuffer (richiede header COOP/COEP), supporto Service Worker, Wasm moderno.
 
@@ -414,9 +414,9 @@ Poiché esegue Node.js reale (compilato in Wasm), ottieni vero npm, vere API Nod
 
 ---
 
-### 2.6 container2wasm — Container Docker compilati in Wasm
+### 2.6 container2wasm -- Container Docker compilati in Wasm
 
-`container2wasm` è uno strumento (non un pacchetto npm) di NTT che prende un'immagine container Docker e la converte in un binary WebAssembly che può essere eseguito in qualsiasi host Wasm — incluso un browser. Quando l'ho visto per la prima volta, non credevo davvero funzionasse.
+`container2wasm` è uno strumento (non un pacchetto npm) di NTT che prende un'immagine container Docker e la converte in un binary WebAssembly che può essere eseguito in qualsiasi host Wasm -- incluso un browser. Quando l'ho visto per la prima volta, non credevo davvero funzionasse.
 
 Il meccanismo:
 - Per container x86_64: incorpora Bochs (un emulatore x86, compilato in Wasm) + il filesystem root del container
@@ -435,7 +435,7 @@ wasmtime out.wasm uname -a
 c2w --to-js ubuntu:22.04 /tmp/htdocs/
 ```
 
-Il `.wasm` risultante è grande — un'Ubuntu minima è diverse centinaia di MB — ma è completamente autonomo. Puoi inviare via email un `.wasm` a qualcuno e loro possono eseguire Ubuntu nel loro browser. Questa frase non dovrebbe avere senso ma eccoci qui.
+Il `.wasm` risultante è grande -- un'Ubuntu minima è diverse centinaia di MB -- ma è completamente autonomo. Puoi inviare via email un `.wasm` a qualcuno e loro possono eseguire Ubuntu nel loro browser. Questa frase non dovrebbe avere senso ma eccoci qui.
 
 **GitHub**: [container2wasm/container2wasm](https://github.com/container2wasm/container2wasm)
 
@@ -456,15 +456,15 @@ Il `.wasm` risultante è grande — un'Ubuntu minima è diverse centinaia di MB 
 | **Open source** | ✅ | ✅ | ✅ | ❌ | parziale | ✅ |
 | **Stato** | ✅ molto attivo | ✅ stabile | ⚠️ archiviato | ✅ commerciale | ✅ attivo | ✅ attivo |
 
-La cosa che salta all'occhio da questa tabella: `v86` è l'unico che è un pacchetto npm, funziona sia in browser che Node, ed è open source. Ecco perché domina la conversazione sugli "emulatori Linux JavaScript." Tutto il resto ha qualche intoppo — JSLinux non ha API, jor1k è archiviato, CheerpX costa soldi, WebContainers è solo browser e specifico per Node, container2wasm richiede un passaggio di build e una CLI. Se hai solo bisogno di "avviare Linux in JavaScript", `v86` è quasi sempre il punto di partenza giusto.
+La cosa che salta all'occhio da questa tabella: `v86` è l'unico che è un pacchetto npm, funziona sia in browser che Node, ed è open source. Ecco perché domina la conversazione sugli "emulatori Linux JavaScript." Tutto il resto ha qualche intoppo -- JSLinux non ha API, jor1k è archiviato, CheerpX costa soldi, WebContainers è solo browser e specifico per Node, container2wasm richiede un passaggio di build e una CLI. Se hai solo bisogno di "avviare Linux in JavaScript", `v86` è quasi sempre il punto di partenza giusto.
 
 ---
 
-## Parte 3 — Stack terminale: xterm.js e node-pty
+## Parte 3 -- Stack terminale: xterm.js e node-pty
 
-Due pacchetti compaiono costantemente quando le persone costruiscono esperienze shell-like. Non sono sandbox o emulatori — sono l'interfaccia utente e la componentistica PTY — ma sono così affini che mi sentirei male a escluderli. Inoltre li ho usati entrambi e sono davvero buoni.
+Due pacchetti compaiono costantemente quando le persone costruiscono esperienze shell-like. Non sono sandbox o emulatori -- sono l'interfaccia utente e la componentistica PTY -- ma sono così affini che mi sentirei male a escluderli. Inoltre li ho usati entrambi e sono davvero buoni.
 
-### 3.1 `xterm.js` — il renderer di terminale
+### 3.1 `xterm.js` -- il renderer di terminale
 
 xterm.js è un emulatore di terminale per il browser. Renderizza una schermata di terminale (sequenze di escape VT100/xterm) in un elemento `<canvas>`, gestisce l'input da tastiera ed espone un'API per il piping dei dati in entrata e in uscita.
 
@@ -492,14 +492,14 @@ socket.onmessage(msg => {
 });
 ```
 
-xterm.js è solo il livello di rendering. Non esegue una shell. Non interpreta comandi. È un widget di visualizzazione che colleghi a qualsiasi backend tu voglia. Molte persone pensano che xterm.js "faccia il terminale" ma in realtà è solo lo schermo — devi comunque collegarlo a qualcosa che esegue effettivamente i comandi.
+xterm.js è solo il livello di rendering. Non esegue una shell. Non interpreta comandi. È un widget di visualizzazione che colleghi a qualsiasi backend tu voglia. Molte persone pensano che xterm.js "faccia il terminale" ma in realtà è solo lo schermo -- devi comunque collegarlo a qualcosa che esegue effettivamente i comandi.
 
 **npm**: [@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)  
 **GitHub**: [xtermjs/xterm.js](https://github.com/xtermjs/xterm.js)
 
 ---
 
-### 3.2 `node-pty` — Spawn PTY
+### 3.2 `node-pty` -- Spawn PTY
 
 `node-pty` spawna uno pseudoterminale (PTY) in Node.js e ti dà un handle di lettura/scrittura. Usato con xterm.js, ti permette di costruire un terminale browser che parla con una shell reale (bash, zsh, fish) in esecuzione sul server.
 
@@ -533,15 +533,15 @@ Questo è lo schema standard per cloud IDE e terminali web: xterm.js (browser) �
 
 ---
 
-## Parte 4 — Honeypot SSH
+## Parte 4 -- Honeypot SSH
 
-Gli honeypot sono progettati per essere attaccati. L'obiettivo è sembrare abbastanza reali che gli attaccanti interagiscano con loro, registrando tutto ciò che fanno per intelligence sulle minacce. SSH è il bersaglio principale perché è il servizio più attaccato su internet — se esponi la porta 22 su un IP pubblico, vedrai tentativi di scansione automatica nel giro di pochi minuti. Provaci qualche volta, è piuttosto inquietante quanto velocemente accada.
+Gli honeypot sono progettati per essere attaccati. L'obiettivo è sembrare abbastanza reali che gli attaccanti interagiscano con loro, registrando tutto ciò che fanno per intelligence sulle minacce. SSH è il bersaglio principale perché è il servizio più attaccato su internet -- se esponi la porta 22 su un IP pubblico, vedrai tentativi di scansione automatica nel giro di pochi minuti. Provaci qualche volta, è piuttosto inquietante quanto velocemente accada.
 
 La qualità di un honeypot si misura con due cose: **fedeltà** (quanto convincentemente finge di essere un sistema reale) e **telemetria** (quanti dati utili cattura). Queste sono in tensione. Un honeypot ad alta fedeltà è più difficile da costruire e più rischioso da operare.
 
 Questa sezione è ciò che alla fine mi ha portato a costruire il modulo `HoneyPot` in `typescript-virtual-container`, quindi ho qualche opinione qui.
 
-### 4.1 Cowrie — lo standard aureo
+### 4.1 Cowrie -- lo standard aureo
 
 Cowrie è un honeypot SSH e Telnet a interazione medio-alta basato su Python. È l'honeypot SSH più ampiamente distribuito nella comunità della ricerca e sicurezza.
 
@@ -549,7 +549,7 @@ Architettura:
 - **Livello protocollo**: implementazione reale del protocollo SSH (Twisted Conch), quindi gli attaccanti ottengono handshake reali, scambio di chiavi reale, autenticazione reale
 - **Livello shell**: un filesystem finto (simile a Debian 5.0) e un interprete di shell parziale che risponde ai comandi comuni
 - **Modalità proxy**: può inoltrare a un sistema reale dietro di esso (modalità ad alta interazione), registrando tutto ciò che passa
-- **Modalità LLM** (aggiunta recente): usa un modello linguistico per generare risposte dinamiche a comandi che non sa gestire — sì, Cowrie ora ha una modalità AI. Tempi selvaggi.
+- **Modalità LLM** (aggiunta recente): usa un modello linguistico per generare risposte dinamiche a comandi che non sa gestire -- sì, Cowrie ora ha una modalità AI. Tempi selvaggi.
 
 ```python
 # What Cowrie captures
@@ -572,26 +572,26 @@ Architettura:
 
 Cowrie salva i file scaricati (tramite wget/curl/SFTP/SCP) per l'analisi del malware. Si integra con Splunk, Elasticsearch e altre piattaforme SIEM.
 
-**Fedeltà**: medio-alta. Abbastanza convincente da ingannare i bot automatici (che è il 99% degli attaccanti SSH — la maggior parte sono solo stupidi script che provano `root`/`password`). Gli umani sofisticati possono comunque fingerprintarlo, di solito abbastanza rapidamente.
+**Fedeltà**: medio-alta. Abbastanza convincente da ingannare i bot automatici (che è il 99% degli attaccanti SSH -- la maggior parte sono solo stupidi script che provano `root`/`password`). Gli umani sofisticati possono comunque fingerprintarlo, di solito abbastanza rapidamente.
 
 **Linguaggio**: Python (Twisted)  
 **GitHub**: [cowrie/cowrie](https://github.com/cowrie/cowrie)
 
 ---
 
-### 4.2 Kippo — il predecessore di Cowrie
+### 4.2 Kippo -- il predecessore di Cowrie
 
-Kippo è l'honeypot SSH a interazione media originale su cui si basava Cowrie. Stessa idea di base: vero protocollo SSH, filesystem finto, shell parziale. Cowrie lo ha completamente sostituito a questo punto — Kippo è archiviato e nessuno dovrebbe usarlo nel 2026. Menzionato qui puramente per completezza storica, dato che potresti vederlo citato in vecchi post del blog e articoli di sicurezza.
+Kippo è l'honeypot SSH a interazione media originale su cui si basava Cowrie. Stessa idea di base: vero protocollo SSH, filesystem finto, shell parziale. Cowrie lo ha completamente sostituito a questo punto -- Kippo è archiviato e nessuno dovrebbe usarlo nel 2026. Menzionato qui puramente per completezza storica, dato che potresti vederlo citato in vecchi post del blog e articoli di sicurezza.
 
-**GitHub**: [desaster/kippo](https://github.com/desaster/kippo) — archiviato
+**GitHub**: [desaster/kippo](https://github.com/desaster/kippo) -- archiviato
 
 ---
 
-### 4.3 endlessh — il tarpit SSH
+### 4.3 endlessh -- il tarpit SSH
 
-endlessh è un honeypot degenerato: mantiene le connessioni SSH aperte gocciolando lentamente dati del banner a 1 byte al secondo (o più lentamente). Un client SSH che si connette rimarrà in sospeso indefinitamente — non arriverà mai all'autenticazione perché il server non finisce mai di inviare il banner.
+endlessh è un honeypot degenerato: mantiene le connessioni SSH aperte gocciolando lentamente dati del banner a 1 byte al secondo (o più lentamente). Un client SSH che si connette rimarrà in sospeso indefinitamente -- non arriverà mai all'autenticazione perché il server non finisce mai di inviare il banner.
 
-L'obiettivo non è l'intelligence sulle minacce ma la pura negazione di risorse: bloccare i thread di scansione degli attaccanti così non possono colpire bersagli reali altrettanto velocemente. È onestamente piuttosto malvagio nel miglior modo possibile. Non impari nulla dall'attaccante — stai solo sprecando il loro tempo. C'è qualcosa di profondamente soddisfacente in questo.
+L'obiettivo non è l'intelligence sulle minacce ma la pura negazione di risorse: bloccare i thread di scansione degli attaccanti così non possono colpire bersagli reali altrettanto velocemente. È onestamente piuttosto malvagio nel miglior modo possibile. Non impari nulla dall'attaccante -- stai solo sprecando il loro tempo. C'è qualcosa di profondamente soddisfacente in questo.
 
 ```c
 // endlessh's entire protocol behavior:
@@ -607,7 +607,7 @@ Nessun comando viene catturato. Nessuna autenticazione viene testata. Solo tempo
 
 ---
 
-### 4.4 sshesame — l'honeypot "fai entrare tutti"
+### 4.4 sshesame -- l'honeypot "fai entrare tutti"
 
 sshesame accetta ogni connessione SSH (qualsiasi username, qualsiasi password, qualsiasi chiave) e registra tutto. È un honeypot a interazione zero: non risponde ai comandi, lascia semplicemente "entrare" gli attaccanti e registra ogni tasto che digitano.
 
@@ -627,9 +627,9 @@ Utile per la raccolta di credenziali: accumuli rapidamente gli username e le pas
 
 ---
 
-### 4.5 Lyrebird — Framework honeypot basato su Docker
+### 4.5 Lyrebird -- Framework honeypot basato su Docker
 
-`lyrebird/honeypot-base` è un'immagine Docker base per costruire honeypot di servizi di rete. Non è uno specifico honeypot SSH — è un framework per costruire honeypot per qualsiasi protocollo.
+`lyrebird/honeypot-base` è un'immagine Docker base per costruire honeypot di servizi di rete. Non è uno specifico honeypot SSH -- è un framework per costruire honeypot per qualsiasi protocollo.
 
 L'immagine base fornisce un framework di logging, un sistema di plugin per i protocolli e configurazioni Docker Compose per honeypot multi-servizio. La estendi per fingere servizi specifici.
 
@@ -637,7 +637,7 @@ L'immagine base fornisce un framework di logging, un sistema di plugin per i pro
 
 ---
 
-### 4.6 Costruire un honeypot SSH in Node.js — il modo ingenuo, e perché fallisce
+### 4.6 Costruire un honeypot SSH in Node.js -- il modo ingenuo, e perché fallisce
 
 Prima di `typescript-virtual-container`, costruire un honeypot SSH in Node.js significava combinare la vera libreria `ssh2` con la falsificazione manuale dei comandi. Molto tedioso, molto incompleto, ma tipo... è un rito di passaggio a questo punto:
 
@@ -681,7 +681,7 @@ new Server({ hostKeys: [hostKey] }, client => {
 
 Questo "funziona" nel senso che cattura credenziali e comandi. Ma è ovviamente falso nel momento in cui un attaccante sofisticato ci prova. `uname -a` restituisce la stringa giusta ma `ls /etc` restituisce "command not found" è un giveaway. Il filesystem non esiste. I comandi non si incatenano. Le pipe non funzionano. Le variabili non si espandono.
 
-Un attaccante esperto fingerprinterà il tuo honeypot nei primi cinque comandi. Anche gli script automatizzati che cercano comportamenti simili a Cowrie lo rileveranno immediatamente. Questo è apparentemente ciò che ha spinto l'autrice di `typescript-virtual-container` verso la costruzione di qualcosa che interpreta effettivamente i comandi per davvero — più su questo nella Parte 5.
+Un attaccante esperto fingerprinterà il tuo honeypot nei primi cinque comandi. Anche gli script automatizzati che cercano comportamenti simili a Cowrie lo rileveranno immediatamente. Questo è apparentemente ciò che ha spinto l'autrice di `typescript-virtual-container` verso la costruzione di qualcosa che interpreta effettivamente i comandi per davvero -- più su questo nella Parte 5.
 
 ---
 
@@ -701,11 +701,11 @@ Un attaccante esperto fingerprinterà il tuo honeypot nei primi cinque comandi. 
 | **Node.js nativo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Stato** | ✅ molto attivo | ⚠️ archiviato | ✅ attivo | ✅ attivo | ✅ attivo | Fai da te |
 
-Il modello qui è piuttosto chiaro: più fedeltà vuoi, più Python devi scrivere. Cowrie è il chiaro vincitore se stai facendo questo seriamente — è stato testato sul campo per anni e cattura molto più delle sole credenziali. endlessh e sshesame sono progetti divertenti più che strumenti seri di threat intelligence. E l'approccio Node.js ingenuo ti porta forse al 20% del percorso prima di colpire un muro.
+Il modello qui è piuttosto chiaro: più fedeltà vuoi, più Python devi scrivere. Cowrie è il chiaro vincitore se stai facendo questo seriamente -- è stato testato sul campo per anni e cattura molto più delle sole credenziali. endlessh e sshesame sono progetti divertenti più che strumenti seri di threat intelligence. E l'approccio Node.js ingenuo ti porta forse al 20% del percorso prima di colpire un muro.
 
 ---
 
-## Parte 5 — `typescript-virtual-container`: cosa colma il divario
+## Parte 5 -- `typescript-virtual-container`: cosa colma il divario
 
 OK, quindi qui è dove le cose diventano interessanti. Dopo aver catalogato tutte le famiglie di cui sopra, il quadrante mancante diventa piuttosto ovvio:
 
@@ -715,7 +715,7 @@ OK, quindi qui è dove le cose diventano interessanti. Dopo aver catalogato tutt
 
 Nessuno aveva costruito un ambiente Linux completo, programmatico, Node-nativo con vero SSH, veri permessi, vera rete virtuale e un'API TypeScript tipizzata. Quindi lei l'ha costruito.
 
-Breve introduzione dato che è la prima volta che la menziono propriamente: `typescript-virtual-container` è stato costruito da [Chloé Rolzhausen](https://itsrealfortune.fr), una sviluppatrice francese che si fa chiamare **Fortune** (o ItsRealFortune) online. Puoi trovarla sul suo [sito web](https://itsrealfortune.fr) e su [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316//). L'intero progetto — 56k righe di TypeScript, 247 file, 170 comandi — è stato uno sforzo solitario di una singola persona. La chiamerò Fortune per il resto dell'articolo. E sì, è piuttosto pazzesco. Dai un'occhiata alle sue cose!
+Breve introduzione dato che è la prima volta che la menziono propriamente: `typescript-virtual-container` è stato costruito da [Chloé Rolzhausen](https://itsrealfortune.fr), una sviluppatrice francese che si fa chiamare **Fortune** (o ItsRealFortune) online. Puoi trovarla sul suo [sito web](https://itsrealfortune.fr) e su [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316//). L'intero progetto -- 56k righe di TypeScript, 247 file, 170 comandi -- è stato uno sforzo solitario di una singola persona. La chiamerò Fortune per il resto dell'articolo. E sì, è piuttosto pazzesco. Dai un'occhiata alle sue cose!
 
 ### Cosa è realmente
 
@@ -733,7 +733,7 @@ Tutto questo è realizzabile in puro TypeScript senza coinvolgimento del kernel.
 
 ### Il VirtualFileSystem
 
-Il VFS è un albero in memoria di nodi tipizzati — nessun I/O su disco a meno che non abiliti esplicitamente la modalità di persistenza `"fs"`:
+Il VFS è un albero in memoria di nodi tipizzati -- nessun I/O su disco a meno che non abiliti esplicitamente la modalità di persistenza `"fs"`:
 
 ```ts
 // Simplified internal representation
@@ -745,17 +745,17 @@ type InternalNode =
   | { type: "stub" }; // lazy-loaded placeholder
 ```
 
-Ogni operazione sui percorsi passa attraverso `normalizePath` (risolve `.`, `..`, symlink) e `enforceAccess` (controlla i permessi di lettura/scrittura/esecuzione rispetto all'uid/gid richiedente). `chmod`, `chown`, sticky bit e setuid sono tutti implementati e realmente imposti. Se un processo in esecuzione come uid 1000 tenta di leggere un file di proprietà di root con modalità 0600, ottiene EACCES — non un finto EACCES, un vero `Error` JavaScript lanciato dal controllo dei permessi. Quella parte è piuttosto elegante onestamente.
+Ogni operazione sui percorsi passa attraverso `normalizePath` (risolve `.`, `..`, symlink) e `enforceAccess` (controlla i permessi di lettura/scrittura/esecuzione rispetto all'uid/gid richiedente). `chmod`, `chown`, sticky bit e setuid sono tutti implementati e realmente imposti. Se un processo in esecuzione come uid 1000 tenta di leggere un file di proprietà di root con modalità 0600, ottiene EACCES -- non un finto EACCES, un vero `Error` JavaScript lanciato dal controllo dei permessi. Quella parte è piuttosto elegante onestamente.
 
 Il VFS si serializza in:
-- `.vfsb` — un formato binario compatto (personalizzato, con compressione fflate) — questo è il predefinito
-- Snapshot JSON — leggibile dall'umano, buono per il debug
-- Archivio TAR — import/export con vero formato tar, quindi puoi `tar -xf` qualcosa e il VFS ha... quei file
-- Immagine SquashFS — import di sola lettura
+- `.vfsb` -- un formato binario compatto (personalizzato, con compressione fflate) -- questo è il predefinito
+- Snapshot JSON -- leggibile dall'umano, buono per il debug
+- Archivio TAR -- import/export con vero formato tar, quindi puoi `tar -xf` qualcosa e il VFS ha... quei file
+- Immagine SquashFS -- import di sola lettura
 
-In modalità di persistenza `"fs"`, mantiene un journal write-ahead (WAL) per il recupero da crash — le scritture vanno prima al journal, poi allo snapshot durante il flush. Se Node si blocca a metà operazione, il journal ti permette di ricostruire l'ultimo stato completo.
+In modalità di persistenza `"fs"`, mantiene un journal write-ahead (WAL) per il recupero da crash -- le scritture vanno prima al journal, poi allo snapshot durante il flush. Se Node si blocca a metà operazione, il journal ti permette di ricostruire l'ultimo stato completo.
 
-C'è anche un livello `FileCache` che simula la latenza I/O del disco. Configuri profili come `NVME_DISK_IO` o `HDD_DISK_IO` e il VFS ritarda artificialmente le operazioni sui file per corrispondere a tempistiche realistiche. Il che è piuttosto divertente — software che si rallenta intenzionalmente per simulare hardware — ma in realtà molto utile per il benchmarking.
+C'è anche un livello `FileCache` che simula la latenza I/O del disco. Configuri profili come `NVME_DISK_IO` o `HDD_DISK_IO` e il VFS ritarda artificialmente le operazioni sui file per corrispondere a tempistiche realistiche. Il che è piuttosto divertente -- software che si rallenta intenzionalmente per simulare hardware -- ma in realtà molto utile per il benchmarking.
 
 ### L'interprete di shell
 
@@ -789,7 +789,7 @@ L'esecutore percorre questo AST:
 - Per variabili, espande `$VAR`, `${VAR:-default}`, `${#VAR}`, e aritmetica `$((expr))`
 - Per espansione di parentesi (`{a,b,c}`, `{1..5}`), genera la lista di espansione completa prima di eseguire
 
-Tutto questo è vero comportamento POSIX della shell. Il parser gestisce heredoc, sostituzione di processo, globbing (`*`, `?`, `[abc]`) e gestione delle virgolette (virgolette singole, virgolette doppie con interpolazione, escaping con backslash). Non è perfetto — esistono casi limite — ma è molto oltre ciò che ti aspetteresti da un progetto TypeScript.
+Tutto questo è vero comportamento POSIX della shell. Il parser gestisce heredoc, sostituzione di processo, globbing (`*`, `?`, `[abc]`) e gestione delle virgolette (virgolette singole, virgolette doppie con interpolazione, escaping con backslash). Non è perfetto -- esistono casi limite -- ma è molto oltre ciò che ti aspetteresti da un progetto TypeScript.
 
 ### ~170 comandi integrati
 
@@ -815,11 +815,11 @@ cron (simulated), systemctl (stubbed), journalctl (stubbed),
 ...and ~130 more
 ```
 
-Gli "stub" (git, python3, node) rispondono realisticamente a invocazioni comuni — `python3 --version` restituisce una stringa di versione credibile, `git status` mostra uno stato del repo finto — senza fare lavoro reale. Per un honeypot, questi sono in realtà più utili delle cose reali, perché ti permettono di osservare cosa gli attaccanti cercano di eseguire senza effettivamente eseguire nulla di dannoso.
+Gli "stub" (git, python3, node) rispondono realisticamente a invocazioni comuni -- `python3 --version` restituisce una stringa di versione credibile, `git status` mostra uno stato del repo finto -- senza fare lavoro reale. Per un honeypot, questi sono in realtà più utili delle cose reali, perché ti permettono di osservare cosa gli attaccanti cercano di eseguire senza effettivamente eseguire nulla di dannoso.
 
 ### Il server SSH
 
-Il livello SSH usa il vero pacchetto npm `ssh2` — vero protocollo SSH, vero scambio di chiavi, vera crittografia. `SSHMimic` lo avvolge:
+Il livello SSH usa il vero pacchetto npm `ssh2` -- vero protocollo SSH, vero scambio di chiavi, vera crittografia. `SSHMimic` lo avvolge:
 
 ```ts
 import { VirtualSshServer } from "typescript-virtual-container";
@@ -839,7 +839,7 @@ await ssh.start();
 // Real SCP: scp -P 2222 file root@localhost:/tmp/
 ```
 
-Le `shellProperties` determinano cosa riportano `uname -a`, `lsb_release -a`, `neofetch`, `/proc/version` e `/etc/os-release`. Puoi impersonare qualsiasi distribuzione Linux e versione del kernel in modo convincente — per un vero client SSH non c'è letteralmente modo di notare la differenza.
+Le `shellProperties` determinano cosa riportano `uname -a`, `lsb_release -a`, `neofetch`, `/proc/version` e `/etc/os-release`. Puoi impersonare qualsiasi distribuzione Linux e versione del kernel in modo convincente -- per un vero client SSH non c'è letteralmente modo di notare la differenza.
 
 ### Il modulo HoneyPot
 
@@ -871,7 +871,7 @@ const diff = diffSnapshots(before, after);
 */
 ```
 
-Questo è qualitativamente diverso da Cowrie. Il filesystem finto di Cowrie può rispondere a `ls` ma non può effettivamente tracciare quali file un attaccante ha creato e quali modifiche ha apportato come diff strutturato. `typescript-virtual-container` può farlo, perché il VFS è una struttura dati viva — ogni scrittura è tracciata. Quella voce cron che l'attaccante ha appena aggiunto? È nel diff. Quella cartella `.hidden`? Nel diff. Abbastanza utile per l'analisi del malware.
+Questo è qualitativamente diverso da Cowrie. Il filesystem finto di Cowrie può rispondere a `ls` ma non può effettivamente tracciare quali file un attaccante ha creato e quali modifiche ha apportato come diff strutturato. `typescript-virtual-container` può farlo, perché il VFS è una struttura dati viva -- ogni scrittura è tracciata. Quella voce cron che l'attaccante ha appena aggiunto? È nel diff. Quella cartella `.hidden`? Nel diff. Abbastanza utile per l'analisi del malware.
 
 ### Lo stack di rete virtuale
 
@@ -879,7 +879,7 @@ Questa è probabilmente la parte più impressionante dell'intero progetto, e non
 
 `VirtualNetworkManager` dà a ogni istanza `VirtualShell` interfacce di rete virtuali con indirizzi IP configurabili, tabelle di routing e un firewall software (regole in stile iptables con conntrack e NAT). `ip addr`, `ip route`, `iptables -L`, `netstat -rn` mostrano tutti lo stato della rete virtuale.
 
-`VirtualSwitch` (chiamato Baie — dalla parola francese per un rack di server, "baie informatique") collega più shell su una subnet condivisa. Implementa:
+`VirtualSwitch` (chiamato Baie -- dalla parola francese per un rack di server, "baie informatique") collega più shell su una subnet condivisa. Implementa:
 - Apprendimento MAC e ARP
 - Routing IP tra subnet
 - NAT (masquerade in uscita)
@@ -909,7 +909,7 @@ baie.addFirewallRule({ src: "192.168.0.2", dst: "192.168.0.4", proto: "tcp", act
 baie.setInterface("192.168.0.2", { latencyMs: 50, jitterMs: 10, packetLoss: 0.001 });
 ```
 
-`VirtualVpn` crea tunnel crittografati tra istanze Baie — puoi simulare una rete multi-sito con interconnessioni VPN tra siti.
+`VirtualVpn` crea tunnel crittografati tra istanze Baie -- puoi simulare una rete multi-sito con interconnessioni VPN tra siti.
 
 `VirtualProxy` implementa port forwarding e un proxy SOCKS5.
 
@@ -968,11 +968,11 @@ Modalità 3: CLI standalone
   → Caso d'uso: demo rapide, sperimentazione locale
 ```
 
-### I polyfill — come funziona il build browser senza Wasm
+### I polyfill -- come funziona il build browser senza Wasm
 
 OK, questa è la parte che trovo genuinamente intelligente e volevo evidenziare specificamente.
 
-Far funzionare una libreria Node.js nel browser è di solito un incubo. O usi un runtime Wasm (pesante, lento da caricare) o passi settimane a sostituire manualmente ogni import `node:*` con un'alternativa compatibile con il browser. Fortune ha fatto la seconda cosa — ma molto pulitamente, scrivendo un set di polyfill personalizzati che vivono nella directory `polyfills/` del repository.
+Far funzionare una libreria Node.js nel browser è di solito un incubo. O usi un runtime Wasm (pesante, lento da caricare) o passi settimane a sostituire manualmente ogni import `node:*` con un'alternativa compatibile con il browser. Fortune ha fatto la seconda cosa -- ma molto pulitamente, scrivendo un set di polyfill personalizzati che vivono nella directory `polyfills/` del repository.
 
 La pipeline di build è semplicemente esbuild con un mucchio di alias:
 
@@ -1006,7 +1006,7 @@ esbuild.build({
 
 Niente Wasm. Nessuna libreria polyfill esterna. Nessuna assurdità `webpack-node-externals`. Solo moduli aliasati e un paio di globali iniettati. Lascia che li analizzi uno per uno perché alcuni sono genuinamente impressionanti.
 
-**`node:fs` — IndexedDB come filesystem finto**
+**`node:fs` -- IndexedDB come filesystem finto**
 
 Questo è il mio preferito. Il polyfill `node:fs` implementa l'API fs sincrona di Node.js (`readFileSync`, `writeFileSync`, `existsSync`, `readdirSync`, `mkdirSync`, `unlinkSync`, `statSync`...) supportata da due livelli: una `Map` in memoria per le letture sincrone e IndexedDB per la persistenza tra ricariche di pagina. Le scritture colpiscono la Map immediatamente (quindi `readFileSync` subito dopo `writeFileSync` funziona sempre), poi vengono scaricate in IndexedDB in modo asincrono in background.
 
@@ -1027,15 +1027,15 @@ openDB().then(db => {
 });
 ```
 
-Questa è la ragione per cui lo snapshot VFS sopravvive alle ricariche di pagina nel browser — l'intero binario `.vfsb` viene scritto in IndexedDB tramite questo polyfill e riletto al caricamento successivo. Nessun Wasm. Nessun server. Solo IndexedDB, che è in ogni browser da circa il 2011.
+Questa è la ragione per cui lo snapshot VFS sopravvive alle ricariche di pagina nel browser -- l'intero binario `.vfsb` viene scritto in IndexedDB tramite questo polyfill e riletto al caricamento successivo. Nessun Wasm. Nessun server. Solo IndexedDB, che è in ogni browser da circa il 2011.
 
-**`node:crypto` — SHA-256 in puro JS**
+**`node:crypto` -- SHA-256 in puro JS**
 
-Invece di tirare dentro una libreria crittografica Wasm, il polyfill crypto implementa SHA-256 da zero usando le costanti di round FIPS 180-4. 166 righe di puro JS con supporto completo per output hex/base64/Uint8Array. Tutto l'hashing nella libreria passa attraverso questo — fingerprinting della chiave host SSH, checksum interni, tutto. Compatto, zero dipendenze, semplicemente funziona.
+Invece di tirare dentro una libreria crittografica Wasm, il polyfill crypto implementa SHA-256 da zero usando le costanti di round FIPS 180-4. 166 righe di puro JS con supporto completo per output hex/base64/Uint8Array. Tutto l'hashing nella libreria passa attraverso questo -- fingerprinting della chiave host SSH, checksum interni, tutto. Compatto, zero dipendenze, semplicemente funziona.
 
-**`node:os` — legge l'hardware reale del browser**
+**`node:os` -- legge l'hardware reale del browser**
 
-Questo è un bel tocco. Invece di restituire valori fittizi, `node:os` legge `navigator.deviceMemory` per la RAM totale e `navigator.hardwareConcurrency` per il conteggio CPU. Quindi `neofetch` all'interno del build browser riporta effettivamente qualcosa che corrisponde alla tua macchina reale — non uno stub inventato `2 core, 2GB RAM`.
+Questo è un bel tocco. Invece di restituire valori fittizi, `node:os` legge `navigator.deviceMemory` per la RAM totale e `navigator.hardwareConcurrency` per il conteggio CPU. Quindi `neofetch` all'interno del build browser riporta effettivamente qualcosa che corrisponde alla tua macchina reale -- non uno stub inventato `2 core, 2GB RAM`.
 
 ```js
 export function totalmem(){
@@ -1050,17 +1050,17 @@ export function cpus(){
 }
 ```
 
-**`node:net`, `ssh2`, `roxify` — stub onesti**
+**`node:net`, `ssh2`, `roxify` -- stub onesti**
 
-Il browser non può aprire socket TCP o eseguire vero SSH, quindi questi sono stub che lanciano un errore `NotImplemented` con un messaggio chiaro se qualcosa cerca di usarli. Nessun fallimento silenzioso, nessun `undefined` restituito dove ci si aspetta un oggetto. Solo un forte e chiaro "questo non funziona nel browser" — che è esattamente ciò che vuoi.
+Il browser non può aprire socket TCP o eseguire vero SSH, quindi questi sono stub che lanciano un errore `NotImplemented` con un messaggio chiaro se qualcosa cerca di usarli. Nessun fallimento silenzioso, nessun `undefined` restituito dove ci si aspetta un oggetto. Solo un forte e chiaro "questo non funziona nel browser" -- che è esattamente ciò che vuoi.
 
-**`process.js` e `buffer.js` — globali iniettati**
+**`process.js` e `buffer.js` -- globali iniettati**
 
-Questi due sono iniettati all'inizio di ogni file bundled tramite l'opzione `inject` di esbuild, quindi `process` e `Buffer` sono disponibili globalmente senza alcun import esplicito. `process.js` è minuscolo: `env`, `version`, `platform: 'browser'`, `nextTick` tramite `queueMicrotask`, `uptime` tramite `performance.now()`. `buffer.js` è una piena reimplementazione di `Buffer` sopra `Uint8Array` — tutti i metodi `readUInt32BE`, `writeInt16LE`, codifica hex/base64 da cui dipendono l'implementazione SSH e il VFS.
+Questi due sono iniettati all'inizio di ogni file bundled tramite l'opzione `inject` di esbuild, quindi `process` e `Buffer` sono disponibili globalmente senza alcun import esplicito. `process.js` è minuscolo: `env`, `version`, `platform: 'browser'`, `nextTick` tramite `queueMicrotask`, `uptime` tramite `performance.now()`. `buffer.js` è una piena reimplementazione di `Buffer` sopra `Uint8Array` -- tutti i metodi `readUInt32BE`, `writeInt16LE`, codifica hex/base64 da cui dipendono l'implementazione SSH e il VFS.
 
 ---
 
-L'intero set di polyfill è circa 640 righe di JS scritto a mano in totale. Nessun pacchetto npm. Nessun Wasm. E il risultato è un bundle browser che è solo la libreria, funzionante nativamente, con nessuna della solita ansia "ma funziona davvero nel browser?" che si ha con le librerie Node-first. Vale uno sguardo alla cartella `polyfills/` nel repository se sei curioso — ogni file è ben contenuto e leggibile da solo, che è una scelta di stile che apprezzo molto.
+L'intero set di polyfill è circa 640 righe di JS scritto a mano in totale. Nessun pacchetto npm. Nessun Wasm. E il risultato è un bundle browser che è solo la libreria, funzionante nativamente, con nessuna della solita ansia "ma funziona davvero nel browser?" che si ha con le librerie Node-first. Vale uno sguardo alla cartella `polyfills/` nel repository se sei curioso -- ogni file è ben contenuto e leggibile da solo, che è una scelta di stile che apprezzo molto.
 
 | | `vm` | `isolated-vm` | `quickjs-emscripten` | `v86` | CheerpX | WebContainers | Cowrie | `typescript-virtual-container` |
 |---|---|---|---|---|---|---|---|---|
@@ -1090,8 +1090,8 @@ L'intero set di polyfill è circa 640 righe di JS scritto a mano in totale. Ness
 
 ## Quando usare cosa
 
-**Devi eseguire JavaScript non fidato — una formula inviata dall'utente, un plugin, uno script hook.**  
-→ `isolated-vm`. Vero V8 Isolate, limiti di memoria rigidi, ponte di comunicazione esplicito. Evita `vm2` — la lista CVE continua a crescere, seriamente è come una nuova ogni pochi mesi. Evita `vm` — non è affatto una sandbox, per favore.
+**Devi eseguire JavaScript non fidato -- una formula inviata dall'utente, un plugin, uno script hook.**  
+→ `isolated-vm`. Vero V8 Isolate, limiti di memoria rigidi, ponte di comunicazione esplicito. Evita `vm2` -- la lista CVE continua a crescere, seriamente è come una nuova ogni pochi mesi. Evita `vm` -- non è affatto una sandbox, per favore.
 
 **Devi fare sandboxing JS e non vuoi un addon nativo, o hai bisogno di compatibilità browser.**  
 → `quickjs-emscripten`. Confine Wasm, modulo ~500 KB, funziona in browser e Node. Più lento di V8 ma genuinamente isolato.
@@ -1124,11 +1124,11 @@ L'intero set di polyfill è circa 640 righe di JS scritto a mano in totale. Ness
 
 ## Cosa non può fare (e voglio essere onesto su questo)
 
-Non può eseguire binari x86 nativi. Se hai bisogno di compilare codice C, eseguire un vero interprete Python o usare software compilato per Linux, non c'è un ABI del kernel per supportare quelle syscall. Comandi come `gcc`, `python3` e `node` sono stub — rispondono a `--version` e invocazioni comuni, ma non eseguono nulla di reale.
+Non può eseguire binari x86 nativi. Se hai bisogno di compilare codice C, eseguire un vero interprete Python o usare software compilato per Linux, non c'è un ABI del kernel per supportare quelle syscall. Comandi come `gcc`, `python3` e `node` sono stub -- rispondono a `--version` e invocazioni comuni, ma non eseguono nulla di reale.
 
-Questo è il compromesso fondamentale: guadagni 10–50x meno memoria, avvio istantaneo, compatibilità browser, un'API tipizzata, vero SSH e rete virtuale — e rinunci alla compatibilità binaria con l'userland Linux.
+Questo è il compromesso fondamentale: guadagni 10–50x meno memoria, avvio istantaneo, compatibilità browser, un'API tipizzata, vero SSH e rete virtuale -- e rinunci alla compatibilità binaria con l'userland Linux.
 
-Fortune ci ha pensato molto quando ha progettato il progetto. Per i casi d'uso a cui mirava — honeypot, test, terminali incorporati, ambienti CI — eseguire un binario compilato non è mai realmente necessario. Pipeline di shell, manipolazione di file, routing di rete e SSH coprono tutto. Ma se il tuo caso d'uso richiede vero software compilato, `v86` o Docker sono la risposta giusta, non questo.
+Fortune ci ha pensato molto quando ha progettato il progetto. Per i casi d'uso a cui mirava -- honeypot, test, terminali incorporati, ambienti CI -- eseguire un binario compilato non è mai realmente necessario. Pipeline di shell, manipolazione di file, routing di rete e SSH coprono tutto. Ma se il tuo caso d'uso richiede vero software compilato, `v86` o Docker sono la risposta giusta, non questo.
 
 ---
 
@@ -1136,19 +1136,19 @@ Fortune ci ha pensato molto quando ha progettato il progetto. Per i casi d'uso a
 
 Quindi sì. Questo ecosistema è più ampio e frammentato di quanto sembri dall'esterno. `vm` è un separatore di scope, non una sandbox. `vm2` continua ad accumulare CVE (davvero, controlla gli advisory di questo mese). `isolated-vm` è la risposta corretta per il sandboxing JS ma solo JS. `quickjs-emscripten` è la scelta giusta quando hai bisogno di compatibilità browser o vuoi evitare addon nativi. `v86` e CheerpX sono veri emulatori quando hai bisogno di vera compatibilità binaria. WebContainers è Node.js in Wasm, non un ambiente Linux generico. Cowrie è lo standard aureo per honeypot SSH, ma è Python e non Node-nativo.
 
-E poi c'è `typescript-virtual-container` — il progetto di Fortune — che vive un po' in una categoria propria. Non un emulatore, non una sandbox JS, non un honeypot passivo. Qualcosa di mezzo tra tutti loro che si è rivelato sorprendentemente utile per molte cose che nessuno degli altri può fare.
+E poi c'è `typescript-virtual-container` -- il progetto di Fortune -- che vive un po' in una categoria propria. Non un emulatore, non una sandbox JS, non un honeypot passivo. Qualcosa di mezzo tra tutti loro che si è rivelato sorprendentemente utile per molte cose che nessuno degli altri può fare.
 
-`typescript-virtual-container` colma il divario che nessun altro tocca: un ambiente shell Linux completo e programmatico con vero SSH, SFTP, permessi POSIX, gestione utenti, rete virtuale e un'API TypeScript tipizzata — che funziona in ~10 MB, si avvia in meno di un secondo, funziona sia in Node.js che nel browser.
+`typescript-virtual-container` colma il divario che nessun altro tocca: un ambiente shell Linux completo e programmatico con vero SSH, SFTP, permessi POSIX, gestione utenti, rete virtuale e un'API TypeScript tipizzata -- che funziona in ~10 MB, si avvia in meno di un secondo, funziona sia in Node.js che nel browser.
 
 Se vuoi provarlo: il sorgente è su [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) e c'è una demo live (incluso `startxfce4` per un desktop completo, che è onestamente pazzesco) su [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo). Dai un'occhiata e lascia qualche stella a Fortune su GitHub, se lo merita!
 
-Grazie per aver letto — questo è stato lungo anche per i miei standard :) spero sia stato utile!
+Grazie per aver letto -- questo è stato lungo anche per i miei standard :) spero sia stato utile!
 
 ---
 
 ## Fonti
 
-Ho cercato di collegare ogni affermazione a una fonte primaria — advisory CVE, documentazione ufficiale, repository GitHub, post di blog dei maintainer. Un paio di note: la lista CVE di vm2 continua a crescere quindi il link FortiGuard potrebbe essere obsoleto quando lo leggerai (controlla la pagina degli advisory GitHub per gli ultimi). I link di Bellard sono tutti stabili — il suo sito personale è attivo da sempre e il contenuto non cambia. E se vuoi approfondire uno qualsiasi dei polyfill, sfoglia direttamente la cartella `polyfills/` nel repository `typescript-virtual-container` — è più leggibile di qualsiasi descrizione che potrei scrivere qui.
+Ho cercato di collegare ogni affermazione a una fonte primaria -- advisory CVE, documentazione ufficiale, repository GitHub, post di blog dei maintainer. Un paio di note: la lista CVE di vm2 continua a crescere quindi il link FortiGuard potrebbe essere obsoleto quando lo leggerai (controlla la pagina degli advisory GitHub per gli ultimi). I link di Bellard sono tutti stabili -- il suo sito personale è attivo da sempre e il contenuto non cambia. E se vuoi approfondire uno qualsiasi dei polyfill, sfoglia direttamente la cartella `polyfills/` nel repository `typescript-virtual-container` -- è più leggibile di qualsiasi descrizione che potrei scrivere qui.
 
 ### Sandbox JavaScript
 

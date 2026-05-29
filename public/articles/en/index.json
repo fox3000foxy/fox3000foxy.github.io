@@ -36,7 +36,7 @@
   {
     "slug": "my-passions",
     "title": "My Passions",
-    "description": "Coding, drawing, automating things, discovering old tech, and more — a look into what drives me.",
+    "description": "Coding, drawing, automating things, discovering old tech, and more -- a look into what drives me.",
     "date": "2026-03-08",
     "tags": [
       "personal"
@@ -78,7 +78,7 @@
   {
     "slug": "botting-a-farm",
     "title": "Botting a Microsoft Rewards Farm",
-    "description": "How I coded a bot to farm Microsoft Rewards points at scale — and why Microsoft's anti-bot detection has since caught up.",
+    "description": "How I coded a bot to farm Microsoft Rewards points at scale -- and why Microsoft's anti-bot detection has since caught up.",
     "date": "2026-03-13",
     "tags": [
       "automation",

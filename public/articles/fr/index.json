@@ -24,7 +24,7 @@
   {
     "slug": "my-passions",
     "title": "Mes Passions",
-    "description": "Coder, dessiner, automatiser, découvrir les vieilles technos, et plus encore — un aperçu de ce qui me motive.",
+    "description": "Coder, dessiner, automatiser, découvrir les vieilles technos, et plus encore -- un aperçu de ce qui me motive.",
     "date": "2026-03-08",
     "tags": [
       "personal"
@@ -78,7 +78,7 @@
   {
     "slug": "botting-a-farm",
     "title": "Botter une ferme Microsoft Rewards",
-    "description": "Comment j'ai codé un bot pour farmer des points Microsoft Rewards à grande échelle — et pourquoi Microsoft a depuis renforcé ses défenses.",
+    "description": "Comment j'ai codé un bot pour farmer des points Microsoft Rewards à grande échelle -- et pourquoi Microsoft a depuis renforcé ses défenses.",
     "date": "2026-03-13",
     "tags": [
       "automation",

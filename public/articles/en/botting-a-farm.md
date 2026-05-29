@@ -1,4 +1,4 @@
-> **Note (2026):** This project is no longer maintained. Microsoft has significantly hardened its anti-bot detection — what worked back then no longer works today. The code and approach described below are kept for archival/educational purposes only.
+> **Note (2026):** This project is no longer maintained. Microsoft has significantly hardened its anti-bot detection -- what worked back then no longer works today. The code and approach described below are kept for archival/educational purposes only.
 
 ## 🇬🇧 English Translation of the Article
 
@@ -69,7 +69,7 @@ Now that you understand the point of this program, let’s look into botting.
 
 ## First tests
 
-Before building my bot, I wanted to make sure I wouldn’t get IP flagged for using hundreds of accounts from the same address. You know me, I’m going to use Tor with a rotating proxy. And I don’t want to host my bot on a VPS—I want it to run in a GitHub Action.
+Before building my bot, I wanted to make sure I wouldn’t get IP flagged for using hundreds of accounts from the same address. You know me, I’m going to use Tor with a rotating proxy. And I don’t want to host my bot on a VPS--I want it to run in a GitHub Action.
 
 So I wrote a simple workflow:
 
@@ -132,7 +132,7 @@ The time stats were:
 A second run gave this result:  
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-As you can see, the IPs are different, so we won’t get flagged for abusive usage from the same IP. That’s good news—we can keep developing the farming bot.
+As you can see, the IPs are different, so we won’t get flagged for abusive usage from the same IP. That’s good news--we can keep developing the farming bot.
 
 ---
 

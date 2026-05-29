@@ -8,11 +8,11 @@ Belki hayatımı paylaşmak istemem ama özel bilgilerimi vermek istemememle ilg
 
 Tutkularım çeşitli: kod yazmayı seviyorum, muhtemelen blogun geri kalanından da fark etmişsindir. Bir şeyleri sıfırdan inşa etmek, problemleri çözmek ve yarattığının canlandığını görmek gibi derin bir tatmin duygusu var. İster küçük bir CLI aracı olsun ister tam bir web uygulaması, bu süreç asla eskimez.
 
-**Açık kaynağa** karşı özel bir sevgim var — paylaştıkça güzelleşir ve başka birinin kodumu faydalı bulması fikri gerçekten hoşuma gidiyor. Projelerimin çoğu [GitHub'ımda](https://github.com/fox3000foxy) yaşıyor ve onlara [Projeler sayfasından](/projects) göz atabilirsin.
+**Açık kaynağa** karşı özel bir sevgim var -- paylaştıkça güzelleşir ve başka birinin kodumu faydalı bulması fikri gerçekten hoşuma gidiyor. Projelerimin çoğu [GitHub'ımda](https://github.com/fox3000foxy) yaşıyor ve onlara [Projeler sayfasından](/projects) göz atabilirsin.
 
 ## Çizim Yapmak
 
-Ama tek tutkum kod yazmak değil — çizim yapmayı da çok seviyorum! İşte bazı çizimlerim:
+Ama tek tutkum kod yazmak değil -- çizim yapmayı da çok seviyorum! İşte bazı çizimlerim:
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
@@ -40,7 +40,7 @@ Yakın zamanda commit'lerimi SSH anahtarıyla imzalamaya başladım ve bunun iç
 
 ## Eski Teknolojileri Keşfetmek
 
-UTAU gibi eski teknolojileri keşfetmeyi seviyorum — konsepti oldukça büyüleyici buluyorum. İnsanların yapay zeka ve bulut bilişim çağından önce işleri nasıl inşa ettiğini anlamanın özel bir yanı var.
+UTAU gibi eski teknolojileri keşfetmeyi seviyorum -- konsepti oldukça büyüleyici buluyorum. İnsanların yapay zeka ve bulut bilişim çağından önce işleri nasıl inşa ettiğini anlamanın özel bir yanı var.
 
 ## Vtuber'lar
 
@@ -52,7 +52,7 @@ Ana hobim müzik dinlerken kod yazmak. Doğru çalma listesiyle akış durumuna 
 
 ## İşin Kestirmesini Bulmak
 
-Ayrıca bir şeylere para ödememek için işin kestirmesini bulmayı — ya da en azından kalıpların dışında düşünmeyi seviyorum. Örneğin, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) son yaratıklarımdan biriydi ve komut yönetimi, veritabanı yönetimi ve daemon'lar için ücretsiz çözümler buldum. Cimrilikle ilgili değil — bu işin zorluğuyla ilgili!
+Ayrıca bir şeylere para ödememek için işin kestirmesini bulmayı -- ya da en azından kalıpların dışında düşünmeyi seviyorum. Örneğin, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) son yaratıklarımdan biriydi ve komut yönetimi, veritabanı yönetimi ve daemon'lar için ücretsiz çözümler buldum. Cimrilikle ilgili değil -- bu işin zorluğuyla ilgili!
 
 ## Bu Blog Neden Var?
 

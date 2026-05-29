@@ -8,11 +8,11 @@ Maybe it's because I'd like to share my life but not my private info? Somehow th
 
 My passions are various: I love to code, as you probably noticed from the rest of this blog. There's something deeply satisfying about building things from scratch, solving problems, and seeing your creation come to life. Whether it's a small CLI tool or a full web app, the process never gets old.
 
-I have a special love for **open source** — sharing is caring, and I genuinely enjoy the idea that someone else might find my code useful. Most of my projects live on [my GitHub](https://github.com/fox3000foxy), and you can browse them on the [Projects page](/projects).
+I have a special love for **open source** -- sharing is caring, and I genuinely enjoy the idea that someone else might find my code useful. Most of my projects live on [my GitHub](https://github.com/fox3000foxy), and you can browse them on the [Projects page](/projects).
 
 ## Drawing
 
-But coding isn't my only passion — I also love to draw! Here are some of my drawings:
+But coding isn't my only passion -- I also love to draw! Here are some of my drawings:
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
@@ -34,13 +34,13 @@ But coding isn't my only passion — I also love to draw! Here are some of my dr
 
 ## Automating Everything
 
-I also have a passion for automating things. Playing with GitHub Actions and workflows is one of the best feelings I've ever had. Whenever I can replace a manual process with a script or a pipeline, I do it — no questions asked.
+I also have a passion for automating things. Playing with GitHub Actions and workflows is one of the best feelings I've ever had. Whenever I can replace a manual process with a script or a pipeline, I do it -- no questions asked.
 
 I also recently started signing my commits with an SSH key, and I made a script for it that you can find on [this gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Discovering Old Tech
 
-I love discovering old technologies like UTAU — I find the concept pretty fascinating. There's something special about understanding how people built things before the modern era of AI and cloud computing.
+I love discovering old technologies like UTAU -- I find the concept pretty fascinating. There's something special about understanding how people built things before the modern era of AI and cloud computing.
 
 ## Vtubers
 
@@ -52,7 +52,7 @@ My main hobby is coding while listening to music. There's nothing better than ge
 
 ## Finding Workarounds
 
-I also love finding workarounds to avoid paying for things — or at least thinking outside the box. As an example, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) was one of my latest creations where I found free workarounds for command handling, database management, and daemons. It's not about being cheap — it's about the challenge!
+I also love finding workarounds to avoid paying for things -- or at least thinking outside the box. As an example, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) was one of my latest creations where I found free workarounds for command handling, database management, and daemons. It's not about being cheap -- it's about the challenge!
 
 ## Why This Blog
 

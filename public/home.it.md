@@ -28,7 +28,7 @@ Ho molti hobby, ma il mio hobby principale è programmare ascoltando musica. Dis
 
 ## Passioni
 
-Ho scritto un intero articolo del blog sulle mie passioni — programmazione, disegno, automazione, scoperta di vecchie tecnologie e altro. Da leggere qui: [Le Mie Passioni](/blog/my-passions)
+Ho scritto un intero articolo del blog sulle mie passioni -- programmazione, disegno, automazione, scoperta di vecchie tecnologie e altro. Da leggere qui: [Le Mie Passioni](/blog/my-passions)
 
 ## Pacchetti
 

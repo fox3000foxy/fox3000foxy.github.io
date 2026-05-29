@@ -2,7 +2,7 @@
 
 ## Başlık ve Bağlantılar
 
-GitHub profiliME hoş geldin—iyi düzenlenmiş bir kütüphane gibi organize edilmiş.
+GitHub profiliME hoş geldin--iyi düzenlenmiş bir kütüphane gibi organize edilmiş.
 İlk bölümde bağlantıların olduğu bir başlık var, oldukça standart diyebilirim:
 ![](assets/20260308_123527_image.png)
 
@@ -38,7 +38,7 @@ Ve işte commit'lerim gayet rahat bir şekilde PacMan oynuyor xD
 ![](assets/20260308_144956_image.png)
 
 ## Projeler
-Aşağıda tüm repolarım kategorilere ayrılmış halde duruyor. İlgini çekerlerse ziyaret etmekten çekinme—sadece şunu bil ki neredeyse her biri için ayrı bir blog yazısı olacak:
+Aşağıda tüm repolarım kategorilere ayrılmış halde duruyor. İlgini çekerlerse ziyaret etmekten çekinme--sadece şunu bil ki neredeyse her biri için ayrı bir blog yazısı olacak:
 
 ![](assets/20260308_145026_image.png)
 

@@ -1,4 +1,4 @@
-# Script de signature SSH pour commits — explication
+# Script de signature SSH pour commits -- explication
 
 Cet article décortique le script `setup-ssh-signing.sh` que j'ai publié sur [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). On va voir ce que chaque partie fait, comment ça rend la signature SSH locale à un dépot complètement indolore, et, oui, pourquoi j'ai même pris la peine de l'écrire (spoiler : je voulais juste que mes commits aient de la **gueule**).
 
@@ -13,7 +13,7 @@ J'ai toujours adoré bricoler mon workflow Git, et après avoir vu des gens avec
 
 Franchement, le besoin était surtout de la vanity. Y'a pas d'exigence technique de signature dans mes projets perso, mais voir un badge vert « Verified » sur un commit, ça fait son petit effet, et écrire le script était un kiff en shell.
 
-> Bon, signer ses commits, c'est un peu comme mettre un blouson en cuir pour une review de code — totalement inutile, mais ça te donne l'impression d'être un hacker.
+> Bon, signer ses commits, c'est un peu comme mettre un blouson en cuir pour une review de code -- totalement inutile, mais ça te donne l'impression d'être un hacker.
 
 ## Ce que fait le script
 

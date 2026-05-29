@@ -3,7 +3,7 @@
 ## Header & Links
 
 
-Welcome to my GitHub profile—organized like a well-curated library.
+Welcome to my GitHub profile--organized like a well-curated library.
 In the first section there’s a header with links, pretty standard I’d say:
 ![](assets/20260308_123527_image.png)
 
@@ -39,7 +39,7 @@ Then there are my commits playing PacMan casually xD
 ![](assets/20260308_144956_image.png)
 
 ## Projects
-Below I have all my repositories organized by category. Feel free to visit them if you're interested—just know that almost each one will have a dedicated blog post:
+Below I have all my repositories organized by category. Feel free to visit them if you're interested--just know that almost each one will have a dedicated blog post:
 
 ![](assets/20260308_145026_image.png)
 

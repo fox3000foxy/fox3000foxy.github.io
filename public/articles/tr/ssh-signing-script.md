@@ -13,7 +13,7 @@ Git iş akışımı özelleştirmeyi her zaman sevmişimdir ve başkalarının c
 
 Aslında ihtiyaç tamamen kibirden ibaretti. Kişisel projelerimde imzaların teknik bir gerekliliği yok, ama commit'te yeşil bir "Doğrulandı" rozeti görmek havalı hissettiriyor ve scripti yazmak da shell script yazma açısından eğlenceli bir alıştırmaydı.
 
-> Yani, commit'lerini imzalamak, kod incelemesine deri ceketle gitmek gibi — tamamen gereksiz, ama kendini hacker gibi hissettiriyor.
+> Yani, commit'lerini imzalamak, kod incelemesine deri ceketle gitmek gibi -- tamamen gereksiz, ama kendini hacker gibi hissettiriyor.
 
 ## Script ne yapıyor
 

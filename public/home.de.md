@@ -28,7 +28,7 @@ Ich habe viele Hobbys, aber mein Haupt-Hobby ist Programmieren beim Musikhören.
 
 ## Leidenschaften
 
-Ich habe einen ganzen Blog-Artikel über meine Leidenschaften geschrieben — Programmieren, Zeichnen, Automatisierung, Entdeckung alter Technologien und mehr. Hier zu lesen: [Meine Leidenschaften](/blog/my-passions)
+Ich habe einen ganzen Blog-Artikel über meine Leidenschaften geschrieben -- Programmieren, Zeichnen, Automatisierung, Entdeckung alter Technologien und mehr. Hier zu lesen: [Meine Leidenschaften](/blog/my-passions)
 
 ## Pakete
 

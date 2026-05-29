@@ -6,12 +6,12 @@
 
 이 블로그는 최신 웹 기술로 만들어졌어:
 
-- **React 19** — 사용자 인터페이스용
-- **TypeScript** — 타입이 있는 더 안정적인 코드
-- **Vite** — 초고속 빌드 도구
-- **React Router v7** — 페이지 간 네비게이션
-- **react-markdown** — Markdown을 HTML로 변환
-- **rehype-raw + rehype-sanitize** — 보안을 유지하면서 Markdown에서 원시 HTML 허용
+- **React 19** -- 사용자 인터페이스용
+- **TypeScript** -- 타입이 있는 더 안정적인 코드
+- **Vite** -- 초고속 빌드 도구
+- **React Router v7** -- 페이지 간 네비게이션
+- **react-markdown** -- Markdown을 HTML로 변환
+- **rehype-raw + rehype-sanitize** -- 보안을 유지하면서 Markdown에서 원시 HTML 허용
 
 모든 건 **GitHub Pages**에서 `fox3000foxy.github.io` 저장소에서 직접 호스팅되고 있어.
 
@@ -85,10 +85,10 @@
 ]
 ```
 
-- **slug** — 고유 식별자, URL에 사용됨 (`/blog/hello-world`)
-- **title** — 목록에 표시되는 제목
-- **description** — 짧은 요약
-- **date** — 발행일
+- **slug** -- 고유 식별자, URL에 사용됨 (`/blog/hello-world`)
+- **title** -- 목록에 표시되는 제목
+- **description** -- 짧은 요약
+- **date** -- 발행일
 
 ### 2. Markdown 파일
 
@@ -128,7 +128,7 @@ rehype-raw 덕분에 제목, 목록, 이미지, 테이블, 심지어 원시 HTML
 
 ## 다크 테마
 
-사이트는 **항상 다크 모드**야 — 라이트/다크 토글이 없어. 의도적인 선택이지: 전역 스타일에 `color-scheme: dark`가 설정되어 있고, 검은 배경 `#000`에 흰색 텍스트 `#fff`를 사용해. 링크는 파란색(`#64b5f6`)이고 호버 시 초록색(`#81c784`)으로 변해.
+사이트는 **항상 다크 모드**야 -- 라이트/다크 토글이 없어. 의도적인 선택이지: 전역 스타일에 `color-scheme: dark`가 설정되어 있고, 검은 배경 `#000`에 흰색 텍스트 `#fff`를 사용해. 링크는 파란색(`#64b5f6`)이고 호버 시 초록색(`#81c784`)으로 변해.
 
 ## 내가 글을 쓰는 방법
 
@@ -198,15 +198,15 @@ on:
 
 Build 작업은 `ubuntu-latest`에서 실행되며 다음 단계를 거쳐:
 
-1. **Checkout** — 전체 히스토리로 저장소 클론 (`fetch-depth: 0`)
-2. **Setup pnpm** — `pnpm/action-setup@v4`로 최신 pnpm 설치
-3. **Setup Node.js 20** — 더 빠른 설치를 위해 pnpm 캐싱 활성화하여 Node 설정
-4. **Install dependencies** — `pnpm install --frozen-lockfile` 실행 (락파일 변경 불가)
-5. **Lint** — `pnpm run lint` (ESLint)로 코드 품질 확인
-6. **Build** — `pnpm run build` 실행, 먼저 TypeScript 타입 검사(`tsc -b`) 후 Vite로 번들링
-7. **Upload artifact** — `dist/` 폴더를 빌드 아티팩트로 업로드
+1. **Checkout** -- 전체 히스토리로 저장소 클론 (`fetch-depth: 0`)
+2. **Setup pnpm** -- `pnpm/action-setup@v4`로 최신 pnpm 설치
+3. **Setup Node.js 20** -- 더 빠른 설치를 위해 pnpm 캐싱 활성화하여 Node 설정
+4. **Install dependencies** -- `pnpm install --frozen-lockfile` 실행 (락파일 변경 불가)
+5. **Lint** -- `pnpm run lint` (ESLint)로 코드 품질 확인
+6. **Build** -- `pnpm run build` 실행, 먼저 TypeScript 타입 검사(`tsc -b`) 후 Vite로 번들링
+7. **Upload artifact** -- `dist/` 폴더를 빌드 아티팩트로 업로드
 
-어느 단계든 실패하면 — 린트 에러, 타입 에러, 빌드 에러 — 전체 파이프라인이 중단되고 아무것도 배포되지 않아. 이렇게 라이브 사이트가 깨진 코드로부터 안전해.
+어느 단계든 실패하면 -- 린트 에러, 타입 에러, 빌드 에러 -- 전체 파이프라인이 중단되고 아무것도 배포되지 않아. 이렇게 라이브 사이트가 깨진 코드로부터 안전해.
 
 ### 작업 2: Deploy
 
@@ -222,10 +222,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 그러면:
 
-1. **빌드 아티팩트 다운로드** — Build 작업이 만든 `dist/` 폴더를 가져와
-2. **GitHub Pages 설정** — Pages 환경 구성
-3. **Pages에 업로드** — GitHub Pages용으로 `dist/` 폴더 패키징
-4. **배포** — `actions/deploy-pages@v4`로 사이트 게시
+1. **빌드 아티팩트 다운로드** -- Build 작업이 만든 `dist/` 폴더를 가져와
+2. **GitHub Pages 설정** -- Pages 환경 구성
+3. **Pages에 업로드** -- GitHub Pages용으로 `dist/` 폴더 패키징
+4. **배포** -- `actions/deploy-pages@v4`로 사이트 게시
 
 ### 전체 그림
 
@@ -262,14 +262,14 @@ VS Code에서 글 작성
     GitHub Pages에 라이브!
 ```
 
-푸시부터 라이브까지 전체 과정은 약 1분 정도 걸려. 수동 배포, FTP, SSH 없음 — 그냥 `git push`면 끝이야.
+푸시부터 라이브까지 전체 과정은 약 1분 정도 걸려. 수동 배포, FTP, SSH 없음 -- 그냥 `git push`면 끝이야.
 
 ## 프로덕션 빌드
 
 내부적으로 `pnpm build` 명령은 다음을 실행해:
 
-1. `tsc -b` — TypeScript 타입 검사
-2. `vite build` — 모든 코드 번들링 및 최적화
+1. `tsc -b` -- TypeScript 타입 검사
+2. `vite build` -- 모든 코드 번들링 및 최적화
 
 Vite는 자동 코드 분할로 축소 및 최적화된 파일을 생성해. 결과는 엄청 빠른 정적 사이트야.
 
@@ -277,12 +277,12 @@ Vite는 자동 코드 분할로 축소 및 최적화된 파일을 생성해. 결
 
 CMS, Hugo나 Jekyll 같은 정적 사이트 생성기, 또는 Next.js를 사용할 수도 있었어. 하지만 이 방식을 선택한 이유는:
 
-- **단순함** — Markdown으로 작성하고 GitHub에 푸시하면 바로 라이브
-- **완전한 제어** — CMS나 데이터베이스에 의존하지 않음
-- **성능** — Vite + React = 빠른 로딩
-- **유연성** — Markdown과 HTML을 원하는 대로 섞어 쓸 수 있음
-- **학습** — React와 TypeScript를 마스터하기 좋은 프로젝트
-- **CI/CD** — GitHub Actions로 자동화된 품질 검사 및 배포
+- **단순함** -- Markdown으로 작성하고 GitHub에 푸시하면 바로 라이브
+- **완전한 제어** -- CMS나 데이터베이스에 의존하지 않음
+- **성능** -- Vite + React = 빠른 로딩
+- **유연성** -- Markdown과 HTML을 원하는 대로 섞어 쓸 수 있음
+- **학습** -- React와 TypeScript를 마스터하기 좋은 프로젝트
+- **CI/CD** -- GitHub Actions로 자동화된 품질 검사 및 배포
 
 ## 결론
 

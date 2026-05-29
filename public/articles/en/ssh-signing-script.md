@@ -13,7 +13,7 @@ I’ve always loved tweaking my Git workflow, and after seeing other people with
 
 Really, the need was mostly vanity. There’s no technical requirement for signatures in my personal projects, but having a green “Verified” on a commit feels cool, and writing the script was a fun exercise in shell scripting.
 
-> I mean, signing your commits is like wearing a leather jacket to a code review — totally unnecessary, but it makes you feel like a hacker.
+> I mean, signing your commits is like wearing a leather jacket to a code review -- totally unnecessary, but it makes you feel like a hacker.
 
 ## What the script does
 

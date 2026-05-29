@@ -36,7 +36,7 @@
   {
     "slug": "my-passions",
     "title": "俺の情熱",
-    "description": "コーディング、絵を描くこと、自動化、古い技術の発見など——僕を動かすものたち。",
+    "description": "コーディング、絵を描くこと、自動化、古い技術の発見など----僕を動かすものたち。",
     "date": "2026-03-08",
     "tags": [
       "personal"
@@ -78,7 +78,7 @@
   {
     "slug": "botting-a-farm",
     "title": "Microsoft Rewardsファームのボット化",
-    "description": "Microsoft Rewardsのポイントを大規模に稼ぐボットをコードした方法——そしてMicrosoftのアンチボット検出が追いついた理由。",
+    "description": "Microsoft Rewardsのポイントを大規模に稼ぐボットをコードした方法----そしてMicrosoftのアンチボット検出が追いついた理由。",
     "date": "2026-03-13",
     "tags": [
       "automation",

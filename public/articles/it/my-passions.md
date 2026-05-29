@@ -8,11 +8,11 @@ Forse perché mi piacerebbe condividere la mia vita ma non le mie informazioni p
 
 Le mie passioni sono varie: amo programmare, come avrai probabilmente notato dal resto di questo blog. C'è qualcosa di profondamente soddisfacente nel costruire cose da zero, risolvere problemi e vedere la propria creazione prendere vita. Che sia un piccolo strumento CLI o un'app web completa, il processo non stanca mai.
 
-Ho un amore speciale per l'**open source** — condividere è prendersi cura, e mi piace davvero l'idea che qualcun altro possa trovare utile il mio codice. La maggior parte dei miei progetti vive su [il mio GitHub](https://github.com/fox3000foxy), e puoi sfogliarli nella [pagina Progetti](/projects).
+Ho un amore speciale per l'**open source** -- condividere è prendersi cura, e mi piace davvero l'idea che qualcun altro possa trovare utile il mio codice. La maggior parte dei miei progetti vive su [il mio GitHub](https://github.com/fox3000foxy), e puoi sfogliarli nella [pagina Progetti](/projects).
 
 ## Disegno
 
-Ma la programmazione non è la mia unica passione — amo anche disegnare! Ecco alcuni dei miei disegni:
+Ma la programmazione non è la mia unica passione -- amo anche disegnare! Ecco alcuni dei miei disegni:
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
@@ -34,13 +34,13 @@ Ma la programmazione non è la mia unica passione — amo anche disegnare! Ecco 
 
 ## Automatizzare Tutto
 
-Ho anche una passione per l'automazione. Giocare con GitHub Actions e i workflow è una delle migliori sensazioni che abbia mai provato. Ogni volta che posso sostituire un processo manuale con uno script o una pipeline, lo faccio — senza farmi domande.
+Ho anche una passione per l'automazione. Giocare con GitHub Actions e i workflow è una delle migliori sensazioni che abbia mai provato. Ogni volta che posso sostituire un processo manuale con uno script o una pipeline, lo faccio -- senza farmi domande.
 
 Di recente ho anche iniziato a firmare i miei commit con una chiave SSH, e ho creato uno script che puoi trovare in [questo gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Scoprire Vecchie Tecnologie
 
-Adoro scoprire tecnologie vecchie come UTAU — trovo il concetto piuttosto affascinante. C'è qualcosa di speciale nel capire come le persone costruivano le cose prima dell'era moderna dell'AI e del cloud computing.
+Adoro scoprire tecnologie vecchie come UTAU -- trovo il concetto piuttosto affascinante. C'è qualcosa di speciale nel capire come le persone costruivano le cose prima dell'era moderna dell'AI e del cloud computing.
 
 ## Vtuber
 
@@ -52,7 +52,7 @@ Il mio hobby principale è programmare ascoltando musica. Non c'è niente di meg
 
 ## Trovare Scorciatoie
 
-Adoro anche trovare scorciatoie per evitare di pagare per le cose — o almeno pensare fuori dagli schemi. Per esempio, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) è stata una delle mie creazioni più recenti in cui ho trovato soluzioni gratuite per la gestione dei comandi, la gestione del database e i demoni. Non si tratta di essere tirchi — è la sfida!
+Adoro anche trovare scorciatoie per evitare di pagare per le cose -- o almeno pensare fuori dagli schemi. Per esempio, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) è stata una delle mie creazioni più recenti in cui ho trovato soluzioni gratuite per la gestione dei comandi, la gestione del database e i demoni. Non si tratta di essere tirchi -- è la sfida!
 
 ## Perché Questo Blog
 

@@ -24,7 +24,7 @@
   {
     "slug": "my-passions",
     "title": "我的热爱",
-    "description": "编程、画画、自动化、发现老技术等等——带你了解我的动力源泉。",
+    "description": "编程、画画、自动化、发现老技术等等----带你了解我的动力源泉。",
     "date": "2026-03-08",
     "tags": [
       "personal"
@@ -78,7 +78,7 @@
   {
     "slug": "botting-a-farm",
     "title": "给 Microsoft Rewards 刷分农场写个机器人",
-    "description": "我如何编写了一个机器人来规模化刷 Microsoft Rewards 积分——以及微软的反机器人检测后来是如何追上来的。",
+    "description": "我如何编写了一个机器人来规模化刷 Microsoft Rewards 积分----以及微软的反机器人检测后来是如何追上来的。",
     "date": "2026-03-13",
     "tags": [
       "automation",

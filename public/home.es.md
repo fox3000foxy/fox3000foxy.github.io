@@ -28,7 +28,7 @@ Tengo muchos pasatiempos, pero mi pasatiempo principal es programar escuchando m
 
 ## Pasiones
 
-Escribí un artículo completo del blog sobre mis pasiones — programación, dibujo, automatización, descubrimiento de tecnologías antiguas y más. Para leerlo aquí: [Mis Pasiones](/blog/my-passions)
+Escribí un artículo completo del blog sobre mis pasiones -- programación, dibujo, automatización, descubrimiento de tecnologías antiguas y más. Para leerlo aquí: [Mis Pasiones](/blog/my-passions)
 
 ## Paquetes
 
