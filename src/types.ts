@@ -4,4 +4,5 @@ export interface ArticleMeta {
 	description?: string;
 	date?: string;
 	aiGenerated?: boolean;
+	tags?: string[];
 }
