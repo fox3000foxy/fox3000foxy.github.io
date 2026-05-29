@@ -274,7 +274,7 @@ Beim ersten Run werden sie runtergeladen und installiert. Bei späteren Runs wer
 
 Und erinnerst du dich an das `git clean -fdx -e .apt-cache` von vorhin? Das hängt damit zusammen. Der Ordner `.apt-cache` wird vor dem Putzen geschützt, damit die Pakete, die du während deiner Session installierst, zumindest minimal überleben können.
 
-Alles hängt zusammen. Der Typ hat über den kompletten Lebenszyklus nachgedacht.
+Alles hängt zusammen. Ich habe über den kompletten Lebenszyklus nachgedacht.
 
 ---
 
@@ -299,7 +299,7 @@ Aber das Script braucht sie während der Session noch (um das README bei jedem t
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Das ist so 'n Bug, der dir um die Ohren fliegt, wenn du nicht dran denkst: "warum ist mein Script verschwunden?". Er hat dran gedacht.
+Das ist so 'n Bug, der dir um die Ohren fliegt, wenn du nicht dran denkst: "warum ist mein Script verschwunden?". Ich hab dran gedacht.
 
 ---
 

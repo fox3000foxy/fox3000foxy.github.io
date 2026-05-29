@@ -274,7 +274,7 @@ On the first run, it downloads and installs. On subsequent runs, it's restored f
 
 And remember the `git clean -fdx -e .apt-cache` from earlier? It's related. The `.apt-cache` folder is protected from cleanup precisely so the packages you install during your session can persist a bit.
 
-Everything is connected. The guy thought through the entire lifecycle.
+Everything is connected. I thought through the entire lifecycle.
 
 ---
 

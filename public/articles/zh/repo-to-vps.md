@@ -274,7 +274,7 @@ tmate和inotify-tools是通过一个 **缓存APT包** 的action安装的。
 
 还记得之前说的 `git clean -fdx -e .apt-cache` 吗？这是一起的。`.apt-cache` 文件夹受到保护不被清理，就是为了让你在session期间安装的包能尽量持久化。
 
-一切都是有联系的。写这代码的人考虑了完整的生命周期。
+一切都是有联系的。我考虑了完整的生命周期。
 
 ---
 
@@ -299,7 +299,7 @@ cp -r .github/scripts "$RUNNER_SCRIPTS_DIR/"
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-这种bug如果你没想到会在你脸上炸开："为什么我的脚本不见了？"。他想到了。
+这种bug如果你没想到会在你脸上炸开："为什么我的脚本不见了？"。我想到了。
 
 ---
 

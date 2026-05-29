@@ -274,7 +274,7 @@ tmate랑 inotify-tools는 **APT 패키지를 캐싱**하는 액션으로 설치�
 
 아까 `git clean -fdx -e .apt-cache` 기억나? 연결되는 거야. `.apt-cache` 폴더가 청소에서 보호되는 이유는, 세션 중에 설치한 패키지가 최소한 유지되도록 하기 위해서야.
 
-전부 다 연결되어 있어. 이 사람은 전체 라이프사이클을 생각했어.
+전부 다 연결되어 있어. 전체 라이프사이클을 생각했어.
 
 ---
 
@@ -299,7 +299,7 @@ cp -r .github/scripts "$RUNNER_SCRIPTS_DIR/"
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-이걸 생각 안 하면 뒤통수 맞는 버그야: "내 스크립트 왜 사라졌지?". 이 사람은 생각했어.
+이걸 생각 안 하면 뒤통수 맞는 버그야: "내 스크립트 왜 사라졌지?". 내가 생각했어.
 
 ---
 

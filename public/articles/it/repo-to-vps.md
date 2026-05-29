@@ -274,7 +274,7 @@ Al primo run, scarica e installa. Ai run successivi, viene ripristinato dalla ca
 
 E ti ricordi il `git clean -fdx -e .apt-cache` di prima? È collegato. La cartella `.apt-cache` è protetta dalla pulizia proprio perché i pacchetti che installi durante la sessione possano persistere un minimo.
 
-Tutto è connesso. Il tipo ha pensato all'intero ciclo di vita.
+Tutto è connesso. Ho pensato all'intero ciclo di vita.
 
 ---
 
@@ -299,7 +299,7 @@ Ma lo script ne ha ancora bisogno durante la sessione (per aggiornare il README 
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-È il genere di bug che ti scoppia in faccia se non ci pensi: "perché il mio script è scomparso?". Lui ci ha pensato.
+È il genere di bug che ti scoppia in faccia se non ci pensi: "perché il mio script è scomparso?". Io ci ho pensato.
 
 ---
 
