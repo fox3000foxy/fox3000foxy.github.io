@@ -9,6 +9,7 @@ import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
+import ArticleSchema from "../components/ArticleSchema";
 import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
 import ShareButtons from "../components/ShareButtons";
@@ -96,67 +97,82 @@ export default function Article() {
 	}
 
 	return (
-		<article>
-			<ReadingProgress />
-			{meta?.aiGenerated && <span className="ai-badge">{t("article.ai")}</span>}
-			<p className="article-date">
-				{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
-				{meta?.date && <span className="article-sep">·</span>}
-				<span>{t("article.minRead", { n: estimateReadingTime(content) })}</span>
-			</p>
-			{meta?.description && (
-				<p className="article-description">{meta.description}</p>
-			)}
-			{meta?.tags && meta.tags.length > 0 && (
-				<div className="article-tags">
-					{meta.tags.map((tag) => (
-						<Link key={tag} to={`/tags/${tag}`} className="tag-badge">
-							{tag}
-						</Link>
-					))}
+		<>
+			{meta && slug && <ArticleSchema meta={meta} slug={slug} />}
+			<article>
+				<ReadingProgress />
+				{meta?.aiGenerated && (
+					<span className="ai-badge">{t("article.ai")}</span>
+				)}
+				<p className="article-date">
+					{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
+					{meta?.date && <span className="article-sep">·</span>}
+					<span>
+						{t("article.minRead", { n: estimateReadingTime(content) })}
+					</span>
+				</p>
+				{meta?.description && (
+					<p className="article-description">{meta.description}</p>
+				)}
+				{meta?.tags && meta.tags.length > 0 && (
+					<div className="article-tags">
+						{meta.tags.map((tag) => (
+							<Link key={tag} to={`/tags/${tag}`} className="tag-badge">
+								{tag}
+							</Link>
+						))}
+					</div>
+				)}
+				<ShareButtons
+					url={window.location.href}
+					title={meta?.title ?? slug ?? ""}
+				/>
+				<div className="article-layout">
+					<TableOfContents content={content} />
+					<div className="article-content">
+						<MarkdownContent content={content} />
+						{meta?.tags && meta.tags.length > 0 && (
+							<SuggestedArticles
+								currentSlug={slug!}
+								currentTags={meta.tags}
+								allArticles={allArticles}
+								lang={lang}
+							/>
+						)}
+						{(prevArticle || nextArticle) && (
+							<nav className="article-nav">
+								{prevArticle && (
+									<Link
+										to={`/blog/${prevArticle.slug}`}
+										className="article-nav-link prev"
+									>
+										<span className="article-nav-label">
+											{t("article.prev")}
+										</span>
+										<span className="article-nav-title">
+											{prevArticle.title}
+										</span>
+									</Link>
+								)}
+								{nextArticle && (
+									<Link
+										to={`/blog/${nextArticle.slug}`}
+										className="article-nav-link next"
+									>
+										<span className="article-nav-label">
+											{t("article.next")}
+										</span>
+										<span className="article-nav-title">
+											{nextArticle.title}
+										</span>
+									</Link>
+								)}
+							</nav>
+						)}
+						<GiscusComments lang={lang} />
+					</div>
 				</div>
-			)}
-			<ShareButtons
-				url={window.location.href}
-				title={meta?.title ?? slug ?? ""}
-			/>
-			<div className="article-layout">
-				<TableOfContents content={content} />
-				<div className="article-content">
-					<MarkdownContent content={content} />
-					{meta?.tags && meta.tags.length > 0 && (
-						<SuggestedArticles
-							currentSlug={slug!}
-							currentTags={meta.tags}
-							allArticles={allArticles}
-							lang={lang}
-						/>
-					)}
-					{(prevArticle || nextArticle) && (
-						<nav className="article-nav">
-							{prevArticle && (
-								<Link
-									to={`/blog/${prevArticle.slug}`}
-									className="article-nav-link prev"
-								>
-									<span className="article-nav-label">{t("article.prev")}</span>
-									<span className="article-nav-title">{prevArticle.title}</span>
-								</Link>
-							)}
-							{nextArticle && (
-								<Link
-									to={`/blog/${nextArticle.slug}`}
-									className="article-nav-link next"
-								>
-									<span className="article-nav-label">{t("article.next")}</span>
-									<span className="article-nav-title">{nextArticle.title}</span>
-								</Link>
-							)}
-						</nav>
-					)}
-					<GiscusComments lang={lang} />
-				</div>
-			</div>
-		</article>
+			</article>
+		</>
 	);
 }
