@@ -12,7 +12,9 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 	const observerRef = useRef<IntersectionObserver | null>(null);
 
 	useEffect(() => {
-		if (headings.length === 0) { return; }
+		if (headings.length === 0) {
+			return;
+		}
 
 		const ids = headings.map((h) => h.id);
 		observerRef.current = new IntersectionObserver(
@@ -27,13 +29,17 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
 		for (const id of ids) {
 			const el = document.getElementById(id);
-			if (el) { observerRef.current.observe(el); }
+			if (el) {
+				observerRef.current.observe(el);
+			}
 		}
 
 		return () => observerRef.current?.disconnect();
 	}, [headings]);
 
-	if (headings.length < 2) { return null; }
+	if (headings.length < 2) {
+		return null;
+	}
 
 	return (
 		<nav className="toc">
