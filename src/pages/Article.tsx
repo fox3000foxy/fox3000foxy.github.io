@@ -6,6 +6,7 @@ import {
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
 import MarkdownContent from "../components/MarkdownContent";
+import TableOfContents from "../components/TableOfContents";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -74,6 +75,7 @@ export default function Article() {
 					))}
 				</div>
 			)}
+			<TableOfContents content={content} />
 			<MarkdownContent content={content} />
 		</article>
 	);
