@@ -56,7 +56,7 @@ export default function Article() {
 			if (!res.ok && fallbackUrl) {
 				res = await fetch(fallbackUrl);
 			}
-			if (!res.ok) return;
+			if (!res.ok) { return; }
 
 			const data: unknown = await res.json();
 			if (Array.isArray(data)) {
