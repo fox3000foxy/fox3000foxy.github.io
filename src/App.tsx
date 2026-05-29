@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import BackToTop from "./components/BackToTop";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import "./styles/App.css";
@@ -16,6 +17,7 @@ function App() {
 	return (
 		<Router>
 			<Header />
+			<BackToTop />
 			<main>
 				<Suspense fallback={<div>Loading...</div>}>
 					<Routes>
