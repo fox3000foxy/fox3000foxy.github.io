@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nausicaa-ai",
+    "title": "L'IA de Nausicaa : comment j'ai codé un cerveau mythologique",
+    "description": "Une IA à coefficients heuristiques, des hyper-paramètres qui changent tous les 5 tours, et un Oracle qui fuit -- plongée dans le cerveau d'un jeu de plateau stratégique.",
+    "date": "2026-05-29",
+    "tags": ["game-dev", "ai", "javascript", "open-source"]
+  },
+  {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "Discord bot 100% serverless : Hono + Cloudflare Workers",
     "description": "Comment j'ai remplacé un bot Discord qui me coûtait 50€/mois par zéro euro -- interaction endpoints, Hono, Workers, rendu d'image en temps réel, et un jeu complet sans WebSocket.",
