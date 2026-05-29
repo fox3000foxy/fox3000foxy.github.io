@@ -57,17 +57,25 @@ GitHub Actions — это бесплатно. Можно запускать cron
 
 Идея: при каждом запуске бот читает последний обработанный UID письма из **git-тега**. Обрабатывает новые письма. А затем пушит тег с новым UID.
 
-```
-Run #1: читает тег "lastid" → пусто
-        обрабатывает письма 1-50
-        push тега "lastid" = 50
-
-Run #2: читает тег "lastid" → 50
-        обрабатывает письма 51-73
-        push тега "lastid" = 73
-
-Run #3: читает тег "lastid" → 73
-        ...
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP Сервер
+    
+    Note over GH: Run #1
+    GH->>GIT: читает тег "lastid"
+    GIT-->>GH: пусто (первый запуск)
+    GH->>IMAP: fetch mails 1-50
+    IMAP-->>GH: 50 mails
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: читает тег "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: fetch mails 51-73
+    IMAP-->>GH: 23 mails
+    GH->>GIT: push tag "lastid" = 73
 ```
 
 Git-тег И ЕСТЬ база данных. Одно значение, но этого достаточно.

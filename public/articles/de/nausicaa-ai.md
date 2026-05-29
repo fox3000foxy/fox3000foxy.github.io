@@ -136,6 +136,25 @@ So entscheidet die KI:
 7. Wenn genug Mana (> 2), Dash (Doppelzug) um noch näher ranzukommen
 8. Wenn die Einheit der Oracle ist → fliehen
 
+```mermaid
+flowchart TD
+    A[CPU-Zug beginnt] --> B{Orakel lebt?}
+    B -->|Nein| C[Neues Orakel platzieren]
+    B -->|Ja| D[Angriffskoeffizienten\nfür jedes\nEinheitenpaar berechnen]
+    D --> E[Bestes Paar wählen\nAngreifer → Ziel]
+    E --> F{Angriff von\nder Position\nmöglich?}
+    F -->|Ja| G[Ziel angreifen]
+    F -->|Nein| H{Weniger als 4\nEinheiten?}
+    H -->|Ja| I[Günstigste verfügbare\naus Hand beschwören]
+    H -->|Nein| J[Zum Ziel bewegen\nnächstes Feld]
+    J --> K{Mana > 2?}
+    K -->|Ja| L[Dash: Doppelzug\nzum Ziel]
+    K -->|Nein| M[Zug beenden]
+    G --> M
+    I --> M
+    L --> M
+```
+
 ```javascript
 async makeAction(dash=false) {
     // das Ganze in Sequence

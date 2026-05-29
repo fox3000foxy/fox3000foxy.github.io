@@ -192,6 +192,20 @@ f(n) = g(n) + 1.5 × h(n)
 
 L'A* normale usa `f(n) = g(n) + h(n)`. MOJANG HA AGGIUNTO UN MOLTIPLICATORE 1.5. Perché? Così l'algoritmo punta dritto alla destinazione più velocemente e pota meno rami di ricerca. Risultato: il percorso è "abbastanza buono" ma non sempre ottimale. È un A* ubriaco.
 
+```mermaid
+flowchart LR
+    A[Nodo partenza] --> B{Vicini da\nvalutare?}
+    B -->|Sì| C[Calcola f = g + 1,5×h\nper ogni vicino]
+    C --> D[Seleziona il vicino\ncon f più piccolo]
+    D --> E{Destinazione\nraggiunta?}
+    E -->|No| B
+    E -->|Sì| F[Percorso trovato!]
+    B -->|No| G[Nessun percorso\npossibile]
+    
+    style F color:#4caf50
+    style G color:#f44336
+```
+
 Limitazione chiave: **un mob può fare pathfinding solo per 16 blocchi** (il suo *follow range*). Se la destinazione è troppo lontana, sceglie il blocco raggiungibile più vicino. Questo significa che puoi costruire un monolito fuori portata e il mob farà pathfinding verso il blocco più vicino che lo avvicina -- rendendo il suo movimento completamente prevedibile.
 
 ### I due exploit che rompono il gioco

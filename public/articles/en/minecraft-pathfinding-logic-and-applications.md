@@ -191,6 +191,20 @@ f(n) = g(n) + 1.5 × h(n)
 
 Normal A* uses `f(n) = g(n) + h(n)`. MOJANG ADDED A 1.5 MULTIPLIER. Why? So the algorithm homes in on the destination faster and prunes fewer search branches. Result: the path is "good enough" but not always optimal. It's a drunk A*.
 
+```mermaid
+flowchart LR
+    A[Start node] --> B{Neighbors to\nevaluate?}
+    B -->|Yes| C[Calculate f = g + 1.5×h\nfor each neighbor]
+    C --> D[Select neighbor\nwith smallest f]
+    D --> E{Reached\ndestination?}
+    E -->|No| B
+    E -->|Yes| F[Path found!]
+    B -->|No| G[No path\npossible]
+    
+    style F color:#4caf50
+    style G color:#f44336
+```
+
 Key limitation: **a mob can only pathfind 16 blocks** (its *follow range*). If the destination is too far, it picks the closest reachable block. This means you can build a monolith out of range and the mob will path toward the closest block that gets it closer -- making its movement completely predictable.
 
 ### The two exploits that break the game

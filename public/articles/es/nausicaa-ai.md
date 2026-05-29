@@ -136,6 +136,25 @@ Así decide la IA:
 7. Si tengo suficiente maná (> 2), dash (doble movimiento) para acercarse más
 8. Si la unidad es el Oráculo → huir
 
+```mermaid
+flowchart TD
+    A[Inicio del turno CPU] --> B{¿Oráculo vivo?}
+    B -->|No| C[Colocar nuevo Oráculo]
+    B -->|Sí| D[Calcular coeficientes\nde ataque para\ncada par de unidades]
+    D --> E[Elegir mejor par\natacante → objetivo]
+    E --> F{¿Ataque posible\ndesde la posición?}
+    F -->|Sí| G[Atacar objetivo]
+    F -->|No| H{¿Menos de 4\nunidades?}
+    H -->|Sí| I[Invocar desde la mano\nla más barata disp.]
+    H -->|No| J[Moverse hacia el objetivo\ncasilla más cercana]
+    J --> K{Mana > 2?}
+    K -->|Sí| L[Dash: doble movimiento\nhacia el objetivo]
+    K -->|No| M[Fin del turno]
+    G --> M
+    I --> M
+    L --> M
+```
+
 ```javascript
 async makeAction(dash=false) {
     // todo eso en secuencia

@@ -192,6 +192,20 @@ f(n) = g(n) + 1.5 × h(n)
 
 Normal A* `f(n) = g(n) + h(n)` kullanır. MOJANG 1.5 ÇARPANI EKLEMİŞ. Neden mi? Algoritma hedefe daha hızlı kilitlensin ve daha az dal araştırsın diye. Sonuç: yol "yeterince iyi" ama her zaman optimal değil. Sarhoş bir A* yani.
 
+```mermaid
+flowchart LR
+    A[Başlangıç düğümü] --> B{Komşular\ndeğerlendirilsin mi?}
+    B -->|Evet| C[Her komşu için\nf = g + 1,5×h hesapla]
+    C --> D[En küçük f'li\nkomşuyu seç]
+    D --> E{Hedefe\nulaşıldı mı?}
+    E -->|Hayır| B
+    E -->|Evet| F[Yol bulundu!]
+    B -->|Hayır| G[Yol\nmümkün değil]
+    
+    style F color:#4caf50
+    style G color:#f44336
+```
+
 Ana sınırlama: **bir mob sadece 16 blok öteye pathfind yapabilir** (follow range'i). Hedef çok uzaktaysa, ulaşabileceği en yakın bloğu seçer. Bu, menzil dışında bir anıt inşa edebileceğin ve mob'un kendisine en yakın bloka doğru yol alacağı anlamına gelir -- hareketini tamamen tahmin edilebilir kılar.
 
 ### Oyunu kıran iki exploit

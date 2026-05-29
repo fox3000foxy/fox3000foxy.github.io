@@ -77,11 +77,6 @@ sequenceDiagram
     IMAP-->>GH: 23 mails
     GH->>GIT: push tag "lastid" = 73
 ```
-        push tag "lastid" = 73
-
-Run #3: lit tag "lastid" → 73
-        ...
-```
 
 Le tag git EST la base de données. Une seule valeur, mais c'est tout ce dont on a besoin.
 

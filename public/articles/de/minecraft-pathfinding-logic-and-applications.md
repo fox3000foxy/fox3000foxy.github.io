@@ -192,6 +192,20 @@ f(n) = g(n) + 1,5 × h(n)
 
 Normales A* benutzt `f(n) = g(n) + h(n)`. MOJANG HAT EINEN 1,5-MULTIPLIKATOR EINGEBAUT. Warum? Damit der Algorithmus schneller aufs Ziel zusteuert und weniger Such-Äste beschneidet. Ergebnis: der Pfad ist "gut genug" aber nicht immer optimal. Es ist ein betrunkenes A*.
 
+```mermaid
+flowchart LR
+    A[Startknoten] --> B{Nachbarn zu\nbewerten?}
+    B -->|Ja| C[Berechne f = g + 1,5×h\nfür jeden Nachbarn]
+    C --> D[Nachbarn mit\nkleinstem f wählen]
+    D --> E{Ziel\nerreicht?}
+    E -->|Nein| B
+    E -->|Ja| F[Pfad gefunden!]
+    B -->|Nein| G[Kein Pfad\nmöglich]
+    
+    style F color:#4caf50
+    style G color:#f44336
+```
+
 Wichtige Einschränkung: **ein Mob kann nur 16 Blöcke weit pathen** (seine *Follow Range*). Wenn das Ziel zu weit weg ist, nimmt es den nächstgelegenen erreichbaren Block. Das heißt, du kannst einen Monolithen außerhalb der Reichweite bauen und der Mob patht zum nächstgelegenen Block, der ihn näher bringt — was seine Bewegung komplett vorhersagbar macht.
 
 ### Die zwei Exploits die das Spiel zerstören

@@ -55,17 +55,25 @@ GitHubリポジトリはもう永続ストレージだ。無料で。バージ�
 
 アイデア：実行ごとに、botが**gitタグ**から最後に処理したメールのUIDを読む。新しいメールを処理する。それから新しいUIDでタグを再pushする。
 
-```
-Run #1: タグ "lastid" を読む → 空
-        メール 1-50 を処理
-        タグ "lastid" = 50 をpush
-
-Run #2: タグ "lastid" を読む → 50
-        メール 51-73 を処理
-        タグ "lastid" = 73 をpush
-
-Run #3: タグ "lastid" を読む → 73
-        ...
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAPサーバー
+    
+    Note over GH: Run #1
+    GH->>GIT: タグ "lastid" を読む
+    GIT-->>GH: 空（初回実行）
+    GH->>IMAP: fetch mails 1-50
+    IMAP-->>GH: 50 mails
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: タグ "lastid" を読む
+    GIT-->>GH: 50
+    GH->>IMAP: fetch mails 51-73
+    IMAP-->>GH: 23 mails
+    GH->>GIT: push tag "lastid" = 73
 ```
 
 gitタグがデータベースなんだ。たった一つの値だけど、それだけで十分。
