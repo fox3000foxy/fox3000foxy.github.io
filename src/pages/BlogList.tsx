@@ -34,6 +34,10 @@ export default function BlogList() {
 				const normalized: ArticleMeta[] = (data as any[]).map((item) =>
 					typeof item === "string" ? { slug: item } : item
 				);
+				normalized.sort(
+					(a, b) =>
+						new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
+				);
 				setArticles(normalized);
 
 				const slugs = normalized.map((item) => item.slug).filter(Boolean);
