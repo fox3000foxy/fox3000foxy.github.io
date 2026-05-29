@@ -400,6 +400,56 @@ Et boom, tu calcules les dégâts, tu updates la base, tu regenere l'image, tu e
 
 C'est un jeu turn-based complet sans aucune persistence de connection. Juste HTTP stateless. Complètement pété xD
 
+## Supabase : la DB faite pour les Workers
+
+Les bases de données classiques (PostgreSQL, MySQL, MongoDB) sont conçues pour des connexions TCP persistantes. Tu ouvres un socket, tu gardes la connexion ouverte, tu envoies des requêtes. Problème : **Cloudflare Workers ne supporte pas les connexions TCP persistantes**. Chaque requête est un processus éphémère. Dès que tu réponds au client, le Worker disparaît.
+
+Tu peux pas faire ça :
+
+```typescript
+// Ça marche PAS sur Workers
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();  // connexion TCP persistante = dead
+```
+
+Et même les drivers PostgreSQL natifs comme `pg` ou `postgres.js` utilisent des connexions TCP. Sur Workers, ils plantent.
+
+**Supabase résout tout ça.**
+
+Supabase c'est une API REST au-dessus de PostgreSQL. Tu fais des requêtes HTTP normales. Chaque appel est indépendant, pas de connexion persistante, pas d'état à gérer. C'est parfaitement adapté au modèle serverless.
+
+```typescript
+// Ça marche PARFAITEMENT sur Workers
+const { data, error } = await supabase
+  .from('players')
+  .select('*')
+  .eq('discord_id', userId)
+  .single();
+```
+
+Le client Supabase (`@supabase/supabase-js`) utilise `fetch` sous le capot. Et `fetch` est natif sur Workers. Zéro configuration, zéro driver, zéro connexion persistante.
+
+| Base de données | Compatible Workers ? | Pourquoi |
+| --- | --- | --- |
+| **Supabase** | ✅ Oui | REST API sans état, HTTP pur |
+| **PlanetScale (MySQL)** | ⚠️ Partiel | Connexion HTTPS uniquement, pas de transactions longues |
+| **Neon** | ⚠️ Partiel | Branches serverless mais driver TCP nécessaire |
+| **Turso (libSQL)** | ⚠️ Partiel | HTTP possible mais limogé |
+| **Prisma/Prisma Postgres** | ❌ Non | Nécessite TCP persistant |
+| **MongoDB Atlas** | ❌ Non | Driver TCP, pas de REST API native |
+| **Redis (Upstash)** | ✅ Oui | REST API HTTP |
+
+Le vrai avantage de Supabase c'est pas juste la DB -- c'est tout l'écosystème qui est pensé edge-first :
+
+- **Auth** : API REST pour gérer les sessions, fonctionne sans état
+- **Storage** : Upload/download de fichiers via HTTP
+- **Realtime** : WebSocket optionnel, mais tu peux aussi poller via REST
+- **Row Level Security** : les règles de sécurité sont dans la DB, pas dans ton backend
+
+Pour un bot Discord serverless, Supabase c'est le choix le plus simple et le plus fiable. Pas de driver à configurer, pas de connexion à maintenir, pas de timeouts. Juste des requêtes HTTP.
+
+Si tu veux un vrai exemple, regarde Nibi plus haut : le code de persistance c'est littéralement du `readJson()` et `writeJson()` sur Supabase. Pas de migrations, pas de schémas complexes, pas de config de ouf. Ça marche direct. Et si ton bot devient gros, tu migres vers des vraies requêtes SQL sans changer de provider.
+
 ## Polyfills : quand Node veut tourner sur Workers
 
 Certains packages s'attendent à des APIs Node. Kuromoji (parser kanji) utilise `XMLHttpRequest`. Les Workers ont `fetch`, pas `XMLHttpRequest`.

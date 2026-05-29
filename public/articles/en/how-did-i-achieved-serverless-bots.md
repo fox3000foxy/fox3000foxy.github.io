@@ -400,6 +400,56 @@ And boom, you calculate damage, update the database, regenerate the image, send 
 
 It's a complete turn-based game with zero persistent connection. Just stateless HTTP. Completely busted xD
 
+## Supabase: the database built for Workers
+
+Traditional databases (PostgreSQL, MySQL, MongoDB) are designed around persistent TCP connections. You open a socket, keep it alive, send queries. Problem: **Cloudflare Workers don't support persistent TCP connections**. Every request is an ephemeral process. The moment you respond to the client, the Worker disappears.
+
+You can't do this:
+
+```typescript
+// This WON'T work on Workers
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();  // persistent TCP connection = dead
+```
+
+Even native PostgreSQL drivers like `pg` or `postgres.js` rely on TCP connections. On Workers, they crash.
+
+**Supabase solves all of this.**
+
+Supabase is a REST API on top of PostgreSQL. You make normal HTTP requests. Every call is independent, no persistent connection, no state to manage. It's perfectly suited for the serverless model.
+
+```typescript
+// This works PERFECTLY on Workers
+const { data, error } = await supabase
+  .from('players')
+  .select('*')
+  .eq('discord_id', userId)
+  .single();
+```
+
+The Supabase client (`@supabase/supabase-js`) uses `fetch` under the hood. And `fetch` is native on Workers. Zero config, zero driver, zero persistent connection.
+
+| Database | Workers compatible? | Why |
+| --- | --- | --- |
+| **Supabase** | ✅ Yes | Stateless REST API, pure HTTP |
+| **PlanetScale (MySQL)** | ⚠️ Partial | HTTPS-only connection, no long transactions |
+| **Neon** | ⚠️ Partial | Serverless branches but TCP driver needed |
+| **Turso (libSQL)** | ⚠️ Partial | HTTP possible but limited |
+| **Prisma/Prisma Postgres** | ❌ No | Requires persistent TCP |
+| **MongoDB Atlas** | ❌ No | TCP driver, no native REST API |
+| **Redis (Upstash)** | ✅ Yes | REST API over HTTP |
+
+The real advantage of Supabase isn't just the DB -- it's the whole ecosystem being designed edge-first:
+
+- **Auth**: REST API for sessions, works without state
+- **Storage**: File upload/download via HTTP
+- **Realtime**: Optional WebSocket, but you can also poll via REST
+- **Row Level Security**: security rules live in the DB, not your backend
+
+For a serverless Discord bot, Supabase is the simplest and most reliable choice. No driver to configure, no connection to maintain, no timeouts. Just HTTP requests.
+
+If you want a real example, look at Nibi above: its persistence code is literally `readJson()` and `writeJson()` on Supabase. No migrations, no complex schemas, no crazy config. It works out of the box. And if your bot gets big, you can migrate to real SQL queries without changing providers.
+
 ## Polyfills: when Node wants to run on Workers
 
 Some packages expect Node APIs. Kuromoji (kanji parser) uses `XMLHttpRequest`. Workers have `fetch`, not `XMLHttpRequest`.

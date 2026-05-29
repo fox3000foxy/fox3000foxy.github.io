@@ -400,6 +400,56 @@ if (interaction.type === 3) {
 
 接続の永続化ゼロの完全ターン制ゲーム。ただのステートレスHTTP。完全にぶっ壊れてる xD
 
+## Supabase: Workersのために作られたデータベース
+
+従来のデータベース（PostgreSQL、MySQL、MongoDB）は永続的なTCP接続のために設計されている。ソケットを開いて、接続を維持して、クエリを送る。問題：**Cloudflare Workersは永続的なTCP接続をサポートしていない**。各リクエストは一時的なプロセスで、クライアントに応答した瞬間にWorkerは消える。
+
+こんなことはできない：
+
+```typescript
+// これはWorkersでは動かない
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();  // 永続TCP接続 = 死
+```
+
+`pg`や`postgres.js`のようなネイティブなPostgreSQLドライバーでさえTCP接続を使っている。Workersではクラッシュする。
+
+**Supabaseが全部解決する。**
+
+SupabaseはPostgreSQLの上にあるREST API。普通のHTTPリクエストを送るだけ。各呼び出しは独立していて、永続接続不要、管理する状態もなし。サーバーレスモデルに完全に適合してる。
+
+```typescript
+// これはWorkersで完全に動く
+const { data, error } = await supabase
+  .from('players')
+  .select('*')
+  .eq('discord_id', userId)
+  .single();
+```
+
+Supabaseクライアント（`@supabase/supabase-js`）は内部で`fetch`を使ってる。そして`fetch`はWorkersでネイティブ。設定ゼロ、ドライバーゼロ、永続接続ゼロ。
+
+| データベース | Workers対応？ | 理由 |
+| --- | --- | --- |
+| **Supabase** | ✅ はい | ステートレスREST API、純粋HTTP |
+| **PlanetScale (MySQL)** | ⚠️ 一部 | HTTPSのみ、長いトランザクション不可 |
+| **Neon** | ⚠️ 一部 | サーバーレスブランチだがTCPドライバーが必要 |
+| **Turso (libSQL)** | ⚠️ 一部 | HTTP可能だが制限あり |
+| **Prisma/Prisma Postgres** | ❌ いいえ | 永続TCPが必要 |
+| **MongoDB Atlas** | ❌ いいえ | TCPドライバー、ネイティブREST APIなし |
+| **Redis (Upstash)** | ✅ はい | HTTP上のREST API |
+
+Supabaseの本当の利点はDBだけじゃない -- エコシステム全体がエッジファーストで設計されてること：
+
+- **Auth**: セッション用REST API、ステートレスで動作
+- **Storage**: HTTP経由でファイルアップロード/ダウンロード
+- **Realtime**: オプションのWebSocket、REST経由のポーリングも可能
+- **Row Level Security**: セキュリティルールはDB側にあり、バックエンドには不要
+
+サーバーレスDiscordボットには、Supabaseが最もシンプルで信頼できる選択肢。設定するドライバーなし、維持する接続なし、タイムアウトなし。ただのHTTPリクエスト。
+
+実際の例が見たいなら、上のNibiを見てみて：その永続化コードは文字通りSupabase上の`readJson()`と`writeJson()`。マイグレーションなし、複雑なスキーマなし、狂った設定なし。箱から出してすぐ動く。そしてボットが大きくなったら、プロバイダーを変えずに本物のSQLクエリに移行できる。
+
 ## ポリフィル : NodeがWorkersで動こうとする時
 
 一部のパッケージはNode APIを期待してる。Kuromoji（漢字パーサー）は `XMLHttpRequest` を使ってる。Workersには `fetch` はあるけど `XMLHttpRequest` はない。
