@@ -11,6 +11,7 @@ import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
 import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
+import ShareButtons from "../components/ShareButtons";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -115,6 +116,10 @@ export default function Article() {
 					))}
 				</div>
 			)}
+			<ShareButtons
+				url={window.location.href}
+				title={meta?.title ?? slug ?? ""}
+			/>
 			<div className="article-layout">
 				<TableOfContents content={content} />
 				<div className="article-content">
