@@ -10,6 +10,7 @@ import MarkdownContent from "../components/MarkdownContent";
 import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
 import ArticleSchema from "../components/ArticleSchema";
+import AuthorBio from "../components/AuthorBio";
 import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
 import ShareButtons from "../components/ShareButtons";
@@ -169,6 +170,7 @@ export default function Article() {
 								)}
 							</nav>
 						)}
+						<AuthorBio />
 						<GiscusComments lang={lang} />
 					</div>
 				</div>

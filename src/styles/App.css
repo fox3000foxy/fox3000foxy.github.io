@@ -131,11 +131,63 @@ article {
   border-top: 1px solid var(--border);
 }
 
-.giscus-comments {
+.author-bio {
+  display: flex;
+  gap: 1rem;
   margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  min-height: 200px;
+  padding: 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  align-items: flex-start;
+}
+
+.author-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.author-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.author-name {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+
+.author-name a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.author-name a:hover {
+  color: var(--accent-hover);
+}
+
+.author-desc {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.author-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.author-links a {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.author-links a:hover {
+  color: var(--accent);
 }
 
 .suggested-articles h3 {
