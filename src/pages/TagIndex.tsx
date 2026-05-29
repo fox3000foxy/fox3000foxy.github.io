@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
+import BookmarkButton from "../components/BookmarkButton";
+import { getAuthors } from "../utils/authors";
 
 export default function TagIndex() {
 	const { tag } = useParams<{ tag: string }>();
@@ -46,14 +48,25 @@ export default function TagIndex() {
 
 	return (
 		<div className="blog-list">
-			<h2>
-				{t("blog.filter.all")} / {tag}
-			</h2>
+			<div className="tag-page-header">
+				<Link to="/blog" className="tag-page-back">
+					← {t("blog.title")}
+				</Link>
+				<h2>#{tag}</h2>
+			</div>
 
 			{articles.length > 0 ? (
 				<div className="blog-grid">
 					{articles.map(
-						({ slug, title, description, date, aiGenerated, tags }) => (
+						({
+							slug,
+							title,
+							description,
+							date,
+							aiGenerated,
+							tags,
+							authors,
+						}) => (
 							<Link to={`/blog/${slug}`} key={slug} className="blog-card">
 								<div className="blog-card-body">
 									<h3 className="blog-card-title">
@@ -75,8 +88,8 @@ export default function TagIndex() {
 										</div>
 									)}
 								</div>
-								{date && (
-									<div className="blog-card-footer">
+								<div className="blog-card-footer">
+									{date && (
 										<time dateTime={date}>
 											{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
 												year: "numeric",
@@ -84,8 +97,20 @@ export default function TagIndex() {
 												day: "numeric",
 											})}
 										</time>
+									)}
+									<div className="blog-card-authors">
+										{getAuthors(authors).map((a) => (
+											<img
+												key={a.id}
+												className="blog-card-author-avatar"
+												src={a.avatar ?? `https://github.com/${a.id}.png`}
+												alt={a.name}
+												title={a.name}
+											/>
+										))}
 									</div>
-								)}
+									<BookmarkButton slug={slug} />
+								</div>
 							</Link>
 						)
 					)}

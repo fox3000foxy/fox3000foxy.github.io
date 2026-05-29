@@ -9,6 +9,7 @@ import {
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 import BookmarkButton from "../components/BookmarkButton";
+import { getAuthors } from "../utils/authors";
 
 const PAGE_SIZE = 15;
 
@@ -148,7 +149,15 @@ export default function BlogList() {
 				<>
 					<div className="blog-grid">
 						{paged.map(
-							({ slug, title, description, date, aiGenerated, tags }) => (
+							({
+								slug,
+								title,
+								description,
+								date,
+								aiGenerated,
+								tags,
+								authors,
+							}) => (
 								<Link to={`/blog/${slug}`} key={slug} className="blog-card">
 									<div className="blog-card-body">
 										<h3 className="blog-card-title">
@@ -170,8 +179,8 @@ export default function BlogList() {
 											</div>
 										)}
 									</div>
-									{date && (
-										<div className="blog-card-footer">
+									<div className="blog-card-footer">
+										{date && (
 											<time dateTime={date}>
 												{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
 													year: "numeric",
@@ -179,9 +188,20 @@ export default function BlogList() {
 													day: "numeric",
 												})}
 											</time>
-											<BookmarkButton slug={slug} />
+										)}
+										<div className="blog-card-authors">
+											{getAuthors(authors).map((a) => (
+												<img
+													key={a.id}
+													className="blog-card-author-avatar"
+													src={a.avatar ?? `https://github.com/${a.id}.png`}
+													alt={a.name}
+													title={a.name}
+												/>
+											))}
 										</div>
-									)}
+										<BookmarkButton slug={slug} />
+									</div>
 								</Link>
 							)
 						)}
