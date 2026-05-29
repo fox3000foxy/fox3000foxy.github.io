@@ -1,25 +1,25 @@
 [
   {
-    "slug": "hello-world",
-    "title": "Hallo Welt",
-    "description": "Ein Beispielartikel für Fox' Blog.",
-    "date": "2026-03-08",
-    "tags": ["meta", "blog"]
-  },
-  {
     "slug": "character-factory",
     "title": "Character-Factory bauen: Avatare mit Genetik",
     "description": "Ein TypeScript-Modul auf Basis von DiceBear: kohärente länder-/ethniebasierte Generierung, eine kleine Genetik-Engine zum Projizieren von Kindern und die technischen Details, die es in einem Kartenspiel nutzbar gemacht haben.",
     "date": "2026-05-16",
     "aiGenerated": true,
-    "tags": ["typescript", "npm", "open-source"]
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ]
   },
   {
     "slug": "about-my-github-profile",
     "title": "Über mein GitHub-Profil",
     "description": "Eine kurze Vorstellung meines GitHub-Profils.",
     "date": "2026-03-08",
-    "tags": ["meta", "github"]
+    "tags": [
+      "meta",
+      "github"
+    ]
   },
   {
     "slug": "how-this-blog-works",
@@ -27,14 +27,20 @@
     "description": "Ein tiefer Einblick in die Interna dieses Blogs: React, Vite, Markdown, die CI/CD-Pipeline und der Workflow zum Schreiben von Artikeln.",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["react", "meta", "blog"]
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ]
   },
   {
     "slug": "my-passions",
     "title": "Meine Leidenschaften",
     "description": "Programmieren, Zeichnen, Dinge automatisieren, alte Technik entdecken und mehr – ein Blick darauf, was mich antreibt.",
     "date": "2026-03-08",
-    "tags": ["personal"]
+    "tags": [
+      "personal"
+    ]
   },
   {
     "slug": "ssh-signing-script",
@@ -42,27 +48,42 @@
     "description": "Eine Erklärung des SSH-Commit-Signing-Helfers und warum ich stylische Commits haben wollte.",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["git", "security", "shell"]
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ]
   },
   {
     "slug": "working-on-a-new-project",
     "title": "Arbeiten an einem neuen Projekt",
     "description": "Ein Blick auf den Prozess des Startens und Entwickelns einer neuen Website.",
     "date": "2026-03-13",
-    "tags": ["meta", "webdev"]
+    "tags": [
+      "meta",
+      "webdev"
+    ]
   },
   {
     "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
     "title": "JavaScript-Lösungen für Linux-Kernel-Simulationen im Vergleich",
     "description": "Eine tiefgehende Analyse von Linux-Umgebungs-Nachbildungen in JavaScript/TypeScript.",
     "date": "2026-05-28",
-    "tags": ["javascript", "linux", "analysis"]
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ]
   },
   {
     "slug": "botting-a-farm",
     "title": "Eine Microsoft-Rewards-Farm boten",
     "description": "Wie ich einen Bot programmiert habe, der Microsoft-Rewards-Punkte in großem Stil farmt – und warum Microsofts Anti-Bot-Erkennung inzwischen nachgezogen hat.",
     "date": "2026-03-13",
-    "tags": ["automation", "javascript", "reverse-engineering"]
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ]
   }
 ]
