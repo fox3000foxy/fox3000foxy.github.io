@@ -9,6 +9,7 @@ import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
+import ReadingProgress from "../components/ReadingProgress";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -83,6 +84,7 @@ export default function Article() {
 
 	return (
 		<article>
+			<ReadingProgress />
 			{meta?.aiGenerated && <span className="ai-badge">{t("article.ai")}</span>}
 			<p className="article-date">
 				{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
