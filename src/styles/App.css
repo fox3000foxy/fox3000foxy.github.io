@@ -125,6 +125,45 @@ article {
   color: var(--accent-hover);
 }
 
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+a.tag-badge,
+.tag-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--tag-text);
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+a.tag-badge:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+
+.ai-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ai-badge-text);
+  background: var(--ai-badge-bg);
+  border: 1px solid var(--ai-badge-border);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
 .author-bio-top {
   display: flex;
   gap: 1rem;
