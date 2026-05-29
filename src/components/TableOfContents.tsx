@@ -39,7 +39,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 	}, [headings]);
 
 	useEffect(() => {
-		if (!activeId || !listRef.current) {
+		if (!(activeId && listRef.current)) {
 			return;
 		}
 		const link = listRef.current.querySelector(`[href="#${activeId}"]`);

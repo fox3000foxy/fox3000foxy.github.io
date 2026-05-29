@@ -1,6 +1,6 @@
 # Welcome to my blog
 
-[![Profile Views](https://komarev.com/ghpvc/?username=fox3000foxy&label=Profile%20Views&color=blueviolet&style=for-the-badge)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
 
 ## About me
 
@@ -58,6 +58,12 @@ On this blog, I’m going to share my progress, my thoughts, and whatever I feel
 
 Means now I'm writing blogs, and I added back my main porfolio links in another section.
 
+## Subscribe to the RSS Feed
+
+Stay up to date with new articles by subscribing to the [RSS feed](/feed.xml). The feed includes articles in all available languages.
+
+<a href="/feed.xml" style="display:inline-flex;align-items:center;gap:0.5rem;background:#ff6600;color:#fff;padding:0.5rem 1rem;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.9rem;">📡 Subscribe to RSS</a>
+
 ## Socials:
 Here are my social media links:<br><br>
-<a href="https://fox3000foxy.com"><img src="https://cdn.simpleicons.org/googlechrome/7c3aed" width="40" alt="Website" /></a> &nbsp;&nbsp;&nbsp; <a href="https://github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/github/ffffff" width="40" alt="GitHub" /></a> &nbsp;&nbsp;&nbsp; <a href="https://www.youtube.com/channel/UCUM9i9jQSJiQh6NWY8Kbujg"><img src="https://cdn.simpleicons.org/youtube/ff0000" width="40" alt="YouTube" /></a> &nbsp;&nbsp;&nbsp; <a href="https://discord.com/users/724847846897221642"><img src="https://cdn.simpleicons.org/discord/5865F2" width="40" alt="Discord" /></a> &nbsp;&nbsp;&nbsp; <a href="https://gist.github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/git/ffffff" width="40" alt="Gists" /></a> &nbsp;&nbsp;&nbsp; <a href="https://instagram.com/fox3000foxy"><img src="https://cdn.simpleicons.org/instagram/E4405F" width="40" alt="Instagram" /></a> &nbsp;&nbsp;&nbsp; <a href="https://twitch.tv/fox3000foxy"><img src="https://cdn.simpleicons.org/twitch/9146ff" width="40" alt="Twitch" /></a>
+<a href="https://fox3000foxy.com"><img src="https://cdn.simpleicons.org/googlechrome/7c3aed" width="40" alt="Website" /></a> &nbsp;&nbsp;&nbsp; <a href="https://github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/github/ffffff" width="40" alt="GitHub" /></a> &nbsp;&nbsp;&nbsp; <a href="https://www.youtube.com/channel/UCUM9i9jQSJiQh6NWY8Kbujg"><img src="https://cdn.simpleicons.org/youtube/ff0000" width="40" alt="YouTube" /></a> &nbsp;&nbsp;&nbsp; <a href="https://discord.com/users/724847846897221642"><img src="https://cdn.simpleicons.org/discord/5865F2" width="40" alt="Discord" /></a> &nbsp;&nbsp;&nbsp; <a href="https://gist.github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/git/ffffff" width="40" alt="Gists" /></a> &nbsp;&nbsp;&nbsp; <a href="https://instagram.com/fox3000foxy"><img src="https://cdn.simpleicons.org/instagram/E4405F" width="40" alt="Instagram" /></a> &nbsp;&nbsp;&nbsp; <a href="https://twitch.tv/fox3000foxy"><img src="https://cdn.simpleicons.org/twitch/9146ff" width="40" alt="Twitch" /></a> &nbsp;&nbsp;&nbsp; <a href="https://www.npmjs.com/~fox3000foxy"><img src="https://cdn.simpleicons.org/npm/CB3837" width="40" alt="npm" /></a>
