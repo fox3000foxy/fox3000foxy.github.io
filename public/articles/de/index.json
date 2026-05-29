@@ -1,5 +1,12 @@
 [
   {
+    "slug": "email-autoreply",
+    "title": "Ich habe git als Datenbank benutzt, um einen Bot kostenlos auf GitHub Actions zu betreiben",
+    "description": "Wie ich einen KI-E-Mail-Autoresponder codiert habe, der auf GitHub Actions für 0€/Monat läuft -- mit git-Tags als Datenbank und vorcompilierten Runtimes.",
+    "date": "2026-05-29",
+    "tags": ["automation", "javascript", "serverless", "ai", "git"]
+  },
+  {
     "slug": "nausicaa-ai",
     "title": "Meine bescheuerte KI für Nausicaa",
     "description": "Eine heuristische KI mit Koeffizienten, Hyperparametern die sich alle 5 Runden ändern, und einem Oracle das wegläuft -- ein Tauchgang ins Gehirn eines mythologischen Strategiespiels.",

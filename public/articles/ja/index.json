@@ -1,5 +1,12 @@
 [
   {
+    "slug": "email-autoreply",
+    "title": "gitをデータベースとして使い、GitHub Actionsで無料でボットを動かした話",
+    "description": "GitHub Actionsで月0€で動くAIメール自動返信ボットをどうやって作ったか -- gitタグをデータベースとして使い、プリコンパイル済みランタイムスナップショットをruntimeタグに保存する方法。",
+    "date": "2026-05-29",
+    "tags": ["automation", "javascript", "serverless", "ai", "git"]
+  },
+  {
     "slug": "nausicaa-ai",
     "title": "Nausicaa用のクソAI",
     "description": "ヒューリスティック係数ベースのAI、5ターンごとにランダムに変わるハイパーパラメータ、逃げるオラクル -- 神話ストラテジーボードゲームの脳内に潜入。",

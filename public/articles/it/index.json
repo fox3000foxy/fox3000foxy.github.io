@@ -1,5 +1,12 @@
 [
   {
+    "slug": "email-autoreply",
+    "title": "Ho usato git come database per far girare un bot gratis su GitHub Actions",
+    "description": "Come ho codificato un auto-risponditore email con IA che gira su GitHub Actions per 0€/mese -- usando tag git come database e snapshot pre-compilati in un tag runtime.",
+    "date": "2026-05-29",
+    "tags": ["automation", "javascript", "serverless", "ai", "git"]
+  },
+  {
     "slug": "nausicaa-ai",
     "title": "La mia IA del cazzo per Nausicaa",
     "description": "Un'IA basata su coefficienti euristici, iperparametri che cambiano casualmente ogni 5 turni e un Oracolo che scappa -- tuffo nel cervello di un gioco da tavolo strategico mitologico.",
