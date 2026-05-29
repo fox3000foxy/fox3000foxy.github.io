@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { useLang } from "../hooks/useLang";
@@ -21,6 +22,11 @@ const LANG_LABELS: Record<Lang, string> = {
 export default function Header() {
 	const { t, lang, setLang } = useLang();
 	const { theme, toggleTheme } = useTheme();
+	const [menuOpen, setMenuOpen] = useState(false);
+
+	function closeMenu() {
+		setMenuOpen(false);
+	}
 
 	return (
 		<header>
@@ -37,12 +43,32 @@ export default function Header() {
 						{t("site.title")}
 					</Link>
 				</h1>
-				<nav>
-					<Link to="/">{t("nav.home")}</Link>
-					<Link to="/blog">{t("nav.blog")}</Link>
-					<Link to="/archive">{t("nav.archive")}</Link>
-					<Link to="/projects">{t("nav.projects")}</Link>
-					<Link to="/legacy">{t("nav.portfolio")}</Link>
+				<button
+					type="button"
+					className={`hamburger${menuOpen ? " open" : ""}`}
+					onClick={() => setMenuOpen(!menuOpen)}
+					aria-label="Toggle menu"
+				>
+					<span />
+					<span />
+					<span />
+				</button>
+				<nav className={menuOpen ? "open" : ""}>
+					<Link to="/" onClick={closeMenu}>
+						{t("nav.home")}
+					</Link>
+					<Link to="/blog" onClick={closeMenu}>
+						{t("nav.blog")}
+					</Link>
+					<Link to="/archive" onClick={closeMenu}>
+						{t("nav.archive")}
+					</Link>
+					<Link to="/projects" onClick={closeMenu}>
+						{t("nav.projects")}
+					</Link>
+					<Link to="/legacy" onClick={closeMenu}>
+						{t("nav.portfolio")}
+					</Link>
 					<select
 						className="lang-select"
 						value={lang}
@@ -57,7 +83,10 @@ export default function Header() {
 					<button
 						type="button"
 						className="theme-toggle"
-						onClick={toggleTheme}
+						onClick={() => {
+							toggleTheme();
+							closeMenu();
+						}}
 						aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
 					>
 						{theme === "dark" ? "☀️" : "🌙"}
