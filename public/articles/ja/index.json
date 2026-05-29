@@ -1,5 +1,13 @@
 [
   {
+    "slug": "typescript-virtual-container-polyfills",
+    "title": "WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群",
+    "description": "Fortuneがnode:fs、node:crypto、その他十数個のNodeモジュールを640行のJavaScriptで手書き再実装して、Wasmなしでコンテナをブラウザで動かす方法",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+  },
+  {
     "slug": "character-factory",
     "title": "character-factoryの構築：遺伝子を持つアバター",
     "description": "DiceBear上に構築したTypeScriptモジュール：国・民族に基づいた一貫性のある生成、子供を投影する小さな遺伝子エンジン、そしてカードゲームで使えるようにしたエンジニアリングの詳細。",

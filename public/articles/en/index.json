@@ -1,5 +1,13 @@
 [
   {
+    "slug": "typescript-virtual-container-polyfills",
+    "title": "Running a Node.js library in the browser without Wasm -- typescript-virtual-container's polyfills",
+    "description": "How Fortune hand-rewrote node:fs, node:crypto, and a dozen more Node modules in 640 lines of JavaScript so the container runs in the browser without Wasm.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+  },
+  {
     "slug": "character-factory",
     "title": "Building character-factory: avatars with genetics",
     "description": "A TypeScript module on top of DiceBear: coherent country/ethnicity-based generation, a small genetics engine for projecting children, and the engineering details that made it usable in a card game.",

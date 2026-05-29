@@ -1,5 +1,13 @@
 [
   {
+    "slug": "typescript-virtual-container-polyfills",
+    "title": "Faire tourner une bibliothèque Node.js dans le navigateur sans Wasm -- les polyfills de typescript-virtual-container",
+    "description": "Comment Fortune a réimplémenté à la main node:fs, node:crypto et une douzaine de modules Node en 640 lignes de JavaScript pour que le conteneur tourne dans le navigateur sans Wasm.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+  },
+  {
     "slug": "about-my-github-profile",
     "title": "À propos de mon profil GitHub",
     "description": "Une brève présentation de mon profil GitHub.",
