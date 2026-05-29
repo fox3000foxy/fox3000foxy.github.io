@@ -10,6 +10,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 	const headings = parseHeadings(content);
 	const [activeId, setActiveId] = useState<string | null>(null);
 	const observerRef = useRef<IntersectionObserver | null>(null);
+	const listRef = useRef<HTMLUListElement>(null);
 
 	useEffect(() => {
 		if (headings.length === 0) {
@@ -37,6 +38,16 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 		return () => observerRef.current?.disconnect();
 	}, [headings]);
 
+	useEffect(() => {
+		if (!activeId || !listRef.current) {
+			return;
+		}
+		const link = listRef.current.querySelector(`[href="#${activeId}"]`);
+		if (link) {
+			link.scrollIntoView({ block: "nearest", behavior: "smooth" });
+		}
+	}, [activeId]);
+
 	if (headings.length < 2) {
 		return null;
 	}
@@ -44,7 +55,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 	return (
 		<nav className="toc">
 			<h4 className="toc-title">Contents</h4>
-			<ul className="toc-list">
+			<ul className="toc-list" ref={listRef}>
 				{headings.map((h) => (
 					<li
 						key={h.id}
