@@ -23,6 +23,11 @@ export function useThemeState() {
 	useEffect(() => {
 		document.documentElement.classList.toggle("light", theme === "light");
 		localStorage.setItem("theme", theme);
+
+		const meta = document.querySelector('meta[name="theme-color"]');
+		if (meta) {
+			meta.setAttribute("content", theme === "dark" ? "#000000" : "#f8f9fa");
+		}
 	}, [theme]);
 
 	function toggleTheme() {
