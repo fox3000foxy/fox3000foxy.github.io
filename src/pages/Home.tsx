@@ -2,6 +2,7 @@ import "../styles/Home.css";
 import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import GitHubActivity from "../components/GitHubActivity";
+import NewsletterSignup from "../components/NewsletterSignup";
 import { useMarkdown } from "../hooks/useMarkdown";
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
 		<article className="home">
 			<MarkdownContent content={content} />
 			<GitHubActivity />
+			<NewsletterSignup />
 		</article>
 	);
 }
