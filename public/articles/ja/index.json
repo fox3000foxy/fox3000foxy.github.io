@@ -1,5 +1,12 @@
 [
   {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "title": "100%サーバーレスDiscordボット：Hono + Cloudflare Workers",
+    "description": "月50€かかってたDiscordボットをゼロユーロにした方法 -- インタラクションエンドポイント、Hono、Workers、リアルタイム画像レンダリング、WebSocketなしの完全なゲーム。",
+    "date": "2026-05-29",
+    "tags": ["discord", "cloudflare", "serverless", "typescript", "bots"]
+  },
+  {
     "slug": "minecraft-pathfinding-logic-and-applications",
     "title": "Minecraftの経路探索ロジックとその応用",
     "description": "A*アルゴリズム、ブロックのペナルティ、POIメカニズムを使って、mobの動きをコントロール、予測、悪用する方法 -- ワイヤレスレッドストーンから最適化された農場まで。",
