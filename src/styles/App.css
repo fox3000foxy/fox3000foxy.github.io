@@ -97,6 +97,34 @@ article {
   color: #aaa;
 }
 
+.share-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #aaa;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.share-btn:hover {
+  border-color: #64b5f6;
+  color: #90caf9;
+  background: #222;
+}
+
 .article-tags {
   display: flex;
   flex-wrap: wrap;
