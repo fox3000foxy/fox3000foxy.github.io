@@ -1,3 +1,19 @@
+---
+title: Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions
+description: Cómo codifiqué un auto-respondedor de email con IA que funciona en
+  GitHub Actions por 0€/mes -- usando tags de git como base de datos y snapshots
+  pre-compilados en un tag runtime.
+date: 2026-05-29
+tags:
+  - automation
+  - javascript
+  - serverless
+  - ai
+  - git
+authors:
+  - fox3000foxy
+---
+
 # Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions
 
 Tengo un respondedor de email automático que funciona 24/7.

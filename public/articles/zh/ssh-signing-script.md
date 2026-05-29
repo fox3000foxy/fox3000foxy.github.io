@@ -1,3 +1,16 @@
+---
+title: SSH 提交签名脚本详解
+description: SSH 提交签名辅助工具的详细解析，以及为什么我想要有格调的提交。
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - git
+  - security
+  - shell
+authors:
+  - fox3000foxy
+---
+
 # SSH 提交签名脚本详解
 
 这篇文章深入解析了我发布在 [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) 上的 `setup-ssh-signing.sh` 脚本。我们来看看每部分的作用、它如何让仓库级别的 SSH 提交签名变得轻松无痛，以及，是的，我为什么一开始要费劲写它（剧透：我只是想让我的提交看起来**很酷**）。

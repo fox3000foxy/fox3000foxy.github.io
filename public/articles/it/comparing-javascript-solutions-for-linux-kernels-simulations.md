@@ -1,3 +1,16 @@
+---
+title: Confronto tra Soluzioni JavaScript per la Simulazione di Kernel Linux
+description: Un'analisi approfondita delle ricreazioni di ambienti Linux in
+  JavaScript/TypeScript.
+date: 2026-05-28
+tags:
+  - javascript
+  - linux
+  - analysis
+authors:
+  - fox3000foxy
+---
+
 # Ogni sandbox, emulatore, simulatore e honeypot JavaScript -- a confronto
 
 Allora, sono stato fin troppo in fondo a questa tana del coniglio per un bel po'. È iniziato perché stavo aiutando con [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- un progetto di Fortune (ne parleremo tra poco) -- e continuavo a sentirmi chiedere "aspetta, in cosa è diverso da `v86`?" o "perché non usare semplicemente `vm2`?" -- e ho realizzato che non potevo dare una risposta chiara senza mappare prima l'intero ecosistema. Quindi eccoci qui, suppongo lol.

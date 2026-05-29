@@ -1,3 +1,18 @@
+---
+title: Mi puta IA para Nausicaä
+description: Una IA basada en coeficientes heurísticos, hiperparámetros que
+  cambian aleatoriamente cada 5 turnos y un Oráculo que huye -- inmersión en el
+  cerebro de un juego de mesa estratégico mitológico.
+date: 2026-05-29
+tags:
+  - game-dev
+  - ai
+  - javascript
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 ## Mi puta IA para Nausicaä
 
 Hay proyectos que empiezan con "oye, ¿y si hiciera un juego de ajedrez con mitologías?" y terminan con una IA que se cambia sus propios hiperparámetros cada 5 turnos.

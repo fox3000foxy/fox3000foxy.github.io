@@ -1,3 +1,16 @@
+---
+title: SSH 커밋 서명 스크립트 설명
+description: SSH 커밋 서명 헬퍼의 분석과 내가 스타일리시한 커밋을 원했던 이유
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - git
+  - security
+  - shell
+authors:
+  - fox3000foxy
+---
+
 # SSH 커밋 서명 스크립트 설명
 
 이 글은 내가 [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a)에 올린 `setup-ssh-signing.sh` 스크립트를 자세히 살펴본다. 각 부분이 무엇을 하는지, 어떻게 저장소-로컬 SSH 커밋 서명을 간편하게 만드는지, 그리고 솔직히 말해서 내가 왜 이걸 만들었는지까지 살펴볼 거야 (스포일러: 그냥 내 커밋을 **스타일리시하게** 만들고 싶었어).

@@ -1,3 +1,16 @@
+---
+title: 이 블로그는 어떻게 동작하나요?
+description: "이 블로그의 내부 동작에 대한 심층 분석: React, Vite, Markdown, CI/CD 파이프라인, 글 작성 워크플로우"
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - react
+  - meta
+  - blog
+authors:
+  - fox3000foxy
+---
+
 # 이 블로그는 어떻게 동작하나요?
 
 이 블로그가 내부적으로 어떻게 돌아가는지 궁금했어? 이 글에서는 앱의 전체 아키텍처를 기술 스택부터 글을 쓰는 과정까지 모두 설명할게. 그리고 맞아, VS Code에서 어떻게 글을 쓰는지도 보여줄 거야!

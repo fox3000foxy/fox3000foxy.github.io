@@ -1,3 +1,18 @@
+---
+title: Nausicaa için salaş yapay zekâm
+description: Sezgisel katsayı tabanlı bir yapay zeka, her 5 turda rastgele
+  değişen hiperparametreler ve kaçan bir Kahin -- mitolojik bir strateji tahta
+  oyununun beynine dalış.
+date: 2026-05-29
+tags:
+  - game-dev
+  - ai
+  - javascript
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 ## Nausicaa için Salak Yapay Zekam
 
 "Bi' satranç oyunu yapsam mitolojilerle falan?" diye başlayıp her 5 turda kendi hiper-parametrelerine karar veren bi' yapay zekayla biten projeler vardır ya.

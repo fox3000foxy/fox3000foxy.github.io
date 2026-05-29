@@ -1,3 +1,14 @@
+---
+title: Working on a New Project
+description: A look at the process of starting and developing a new website.
+date: 2026-03-13
+tags:
+  - meta
+  - webdev
+authors:
+  - fox3000foxy
+---
+
 # The Project
 
 The project I'm working on is named LLJT:

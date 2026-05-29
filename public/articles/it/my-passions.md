@@ -1,3 +1,14 @@
+---
+title: Le Mie Passioni
+description: Programmazione, disegno, automazione, scoperta di vecchie
+  tecnologie e altro -- uno sguardo a ciò che mi guida.
+date: 2026-03-08
+tags:
+  - personal
+authors:
+  - fox3000foxy
+---
+
 # Le Mie Passioni
 
 Volevo scrivere questo blog da tanto tempo ma continuavo a trattenermi :/

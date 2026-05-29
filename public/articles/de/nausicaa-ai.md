@@ -1,3 +1,18 @@
+---
+title: Meine bescheuerte KI für Nausicaa
+description: Eine heuristische KI mit Koeffizienten, Hyperparametern die sich
+  alle 5 Runden ändern, und einem Oracle das wegläuft -- ein Tauchgang ins
+  Gehirn eines mythologischen Strategiespiels.
+date: 2026-05-29
+tags:
+  - game-dev
+  - ai
+  - javascript
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 ## Meine bekloppte KI für Nausicaa
 
 Es gibt Projekte, die fangen an mit "hey, was wenn ich ein Schachspiel mit Mythologien mach?" und enden mit einem Ding, bei dem eine KI alle 5 Runden ihre eigenen Hyperparameter neu würfelt.

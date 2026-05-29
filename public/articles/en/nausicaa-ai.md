@@ -1,3 +1,18 @@
+---
+title: My dumb AI for Nausicaa
+description: A heuristic coefficient-based AI with hyperparameters that randomly
+  change every 5 turns, and an Oracle that runs away -- diving into the brain of
+  a mythological strategy board game.
+date: 2026-05-29
+tags:
+  - game-dev
+  - ai
+  - javascript
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 ## My dumb AI for Nausicaa
 
 You know those projects that start with "hey what if I made a chess game with mythologies?" and end with a thing where the AI decides its own hyper-parameters every 5 turns?

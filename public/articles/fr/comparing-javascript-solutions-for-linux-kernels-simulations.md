@@ -1,3 +1,16 @@
+---
+title: Comparaison des solutions JavaScript pour la simulation de noyaux Linux
+description: Une analyse approfondie des reconstitutions d'environnements Linux
+  en JavaScript/TypeScript.
+date: 2026-05-28
+tags:
+  - javascript
+  - linux
+  - analysis
+authors:
+  - fox3000foxy
+---
+
 # Chaque sandbox JavaScript, émulateur, simulateur et honeypot Linux -- comparé
 
 Bon, alors ça fait un moment que je suis bien trop loin dans ce terrier de lapin lol. Tout a commencé parce que j'aidais sur [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- un projet de Fortune (j'y reviens dans un instant) -- et on me demandait tout le temps "attends, c'est quoi la différence avec `v86` ?" ou "pourquoi ne pas utiliser `vm2` ?" -- et je me suis rendu compte que je pouvais pas donner une réponse claire sans cartographier tout l'écosystème d'abord. Donc voilà, on y est je suppose xD

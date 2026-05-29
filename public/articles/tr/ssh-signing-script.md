@@ -1,3 +1,17 @@
+---
+title: SSH commit imzalama scripti açıklaması
+description: SSH commit imzalama yardımcısının adım adım açıklaması ve neden şık
+  commit'ler istediğim.
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - git
+  - security
+  - shell
+authors:
+  - fox3000foxy
+---
+
 # SSH commit imzalama scripti açıklaması
 
 Bu yazı, [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) üzerinde yayınladığım `setup-ssh-signing.sh` scriptini derinlemesine inceliyor. Her bir parçanın ne yaptığına, repository bazlı SSH commit imzalamayı nasıl acısız hale getirdiğine ve evet, neden bunu yazma zahmetine girdiğime bakacağız (spoiler: sadece commit'lerimin **şık** görünmesini istedim).

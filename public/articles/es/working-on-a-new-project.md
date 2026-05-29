@@ -1,3 +1,14 @@
+---
+title: Trabajando en un Nuevo Proyecto
+description: Una mirada al proceso de iniciar y desarrollar un nuevo sitio web.
+date: 2026-03-13
+tags:
+  - meta
+  - webdev
+authors:
+  - fox3000foxy
+---
+
 # El Proyecto
 
 El proyecto en el que estoy trabajando se llama LLJT:

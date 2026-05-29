@@ -1,3 +1,16 @@
+---
+title: JavaScript Çözümlerini Linux Çekirdek Simülasyonları İçin Karşılaştırma
+description: JavaScript/TypeScript ile Linux ortamı yeniden oluşturmalarının
+  derinlemesine analizi.
+date: 2026-05-28
+tags:
+  - javascript
+  - linux
+  - analysis
+authors:
+  - fox3000foxy
+---
+
 # Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı
 
 Uzun süredir bu tavşan deliğinde çok ama çok derinlere dalmış durumdayım. Her şey [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) projesine yardım ederken başladı -- Fortune'un projesi (birazdan ondan daha fazla bahsedeceğim) -- ve sürekli "bekle, bunun `v86`'dan farkı ne?" veya "neden sadece `vm2` kullanmıyorsun?" gibi sorular alıyordum -- ve önce tüm ekosistemi haritalandırmadan temiz bir cevap veremeyeceğimi fark ettim. İşte buradayız işte lol.

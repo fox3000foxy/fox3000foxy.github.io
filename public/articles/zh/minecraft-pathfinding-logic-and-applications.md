@@ -1,3 +1,15 @@
+---
+title: Minecraft寻路逻辑及其应用
+description: A*算法、方块惩罚和POI机制如何让你控制、预测和利用生物移动 -- 从无线红石到优化农场。
+date: 2026-05-29
+tags:
+  - minecraft
+  - pathfinding
+  - reverse-engineering
+authors:
+  - fox3000foxy
+---
+
 ## 引言
 
 我花了几个钟头看绵羊撞墙。

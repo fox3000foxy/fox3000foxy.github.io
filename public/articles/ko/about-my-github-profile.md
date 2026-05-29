@@ -1,3 +1,14 @@
+---
+title: 내 GitHub 프로필 소개
+description: 내 GitHub 프로필에 대한 간단한 소개
+date: 2026-03-08
+tags:
+  - meta
+  - github
+authors:
+  - fox3000foxy
+---
+
 # 내 GitHub 프로필
 
 ## 헤더 & 링크

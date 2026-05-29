@@ -1,3 +1,18 @@
+---
+title: Mon IA à la con pour Nausicaa
+description: Une IA à coefficients heuristiques, des hyper-paramètres qui
+  changent tous les 5 tours, et un Oracle qui fuit -- plongée dans le cerveau
+  d'un jeu de plateau stratégique.
+date: 2026-05-29
+tags:
+  - game-dev
+  - ai
+  - javascript
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 ## Mon IA à la con pour Nausicaa
 
 Y'a des projets qui commencent par "tiens si je faisais un jeu d'échecs avec des mythologies ?" et qui finissent par un truc avec une IA qui décide de ses propres hyper-paramètres tous les 5 tours.

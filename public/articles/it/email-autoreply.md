@@ -1,3 +1,19 @@
+---
+title: Ho usato git come database per far girare un bot gratis su GitHub Actions
+description: Come ho codificato un auto-risponditore email con IA che gira su
+  GitHub Actions per 0€/mese -- usando tag git come database e snapshot
+  pre-compilati in un tag runtime.
+date: 2026-05-29
+tags:
+  - automation
+  - javascript
+  - serverless
+  - ai
+  - git
+authors:
+  - fox3000foxy
+---
+
 # Ho usato git come database per far girare un bot gratis su GitHub Actions
 
 Ho un risponditore automatico email che gira 24/7.

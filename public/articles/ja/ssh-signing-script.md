@@ -1,3 +1,16 @@
+---
+title: SSHコミット署名スクリプトの解説
+description: SSHコミット署名ヘルパーのウォークスルーと、なぜスタイリッシュなコミットにこだわったのか。
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - git
+  - security
+  - shell
+authors:
+  - fox3000foxy
+---
+
 # SSHコミット署名スクリプトの解説
 
 この記事では、[Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a)で公開した`setup-ssh-signing.sh`スクリプトを詳しく見ていく。各部分が何をするのか、どうやってリポジトリローカルなSSHコミット署名を簡単にするのか、そしてそもそもなぜこんなのを書いたのか（ネタバレ：コミットを**スタイリッシュ**に見せたかっただけ）を説明する。

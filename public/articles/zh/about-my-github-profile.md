@@ -1,3 +1,14 @@
+---
+title: 关于我的 GitHub 个人主页
+description: 我的 GitHub 个人主页的简要介绍。
+date: 2026-03-08
+tags:
+  - meta
+  - github
+authors:
+  - fox3000foxy
+---
+
 # 我的 GitHub 个人主页
 
 ## 头部与链接

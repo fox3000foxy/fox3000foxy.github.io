@@ -1,3 +1,16 @@
+---
+title: 这个博客是如何运作的？
+description: 深入解析这个博客的内部架构：React、Vite、Markdown、CI/CD 流水线和文章写作流程。
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - react
+  - meta
+  - blog
+authors:
+  - fox3000foxy
+---
+
 # 这个博客是如何运作的？
 
 想知道这个博客在底层是如何运作的吗？在这篇文章中，我会带你了解整个应用的架构，从技术栈到写文章的全流程。没错，我甚至还会展示我是如何从 VS Code 里写文章的！

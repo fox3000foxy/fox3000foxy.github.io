@@ -1,3 +1,14 @@
+---
+title: О моём GitHub-профиле
+description: Краткое введение в мой GitHub-профиль.
+date: 2026-03-08
+tags:
+  - meta
+  - github
+authors:
+  - fox3000foxy
+---
+
 # Мой GitHub Профиль
 
 ## Шапка и ссылки

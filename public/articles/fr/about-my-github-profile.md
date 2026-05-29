@@ -1,3 +1,14 @@
+---
+title: À propos de mon profil GitHub
+description: Une brève présentation de mon profil GitHub.
+date: 2026-03-08
+tags:
+  - meta
+  - github
+authors:
+  - fox3000foxy
+---
+
 # Mon Profil GitHub
 
 ## En-tête & Liens

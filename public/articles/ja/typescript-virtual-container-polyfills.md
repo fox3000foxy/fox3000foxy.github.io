@@ -1,3 +1,18 @@
+---
+title: WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群
+description: Fortuneがnode:fs、node:crypto、その他十数個のNodeモジュールを640行のJavaScriptで手書き再実装して、Wasmなしでコンテナをブラウザで動かす方法
+date: 2026-05-29
+aiGenerated: true
+tags:
+  - typescript
+  - node.js
+  - polyfills
+  - browser
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群
 
 最近、[typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)のソースコードをじっくり読んでたんだ。[Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr)のプロジェクトでね。で、一番驚いたのは、VFSでも仮想ネットワークでも、TypeScriptで再実装された170のUnixコマンドでもない。`polyfills/`ディレクトリだ。

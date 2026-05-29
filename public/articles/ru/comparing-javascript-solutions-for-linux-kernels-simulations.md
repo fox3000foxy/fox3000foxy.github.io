@@ -1,3 +1,15 @@
+---
+title: Сравнение JavaScript-решений для симуляции ядра Linux
+description: Глубокий анализ воссоздания Linux-окружений на JavaScript/TypeScript.
+date: 2026-05-28
+tags:
+  - javascript
+  - linux
+  - analysis
+authors:
+  - fox3000foxy
+---
+
 # Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение
 
 Короче, я залез в эту кроличью нору ОЧЕНЬ глубоко и надолго. Всё началось с того, что я помогал с [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- проектом Fortune (о ней чуть позже) -- и меня постоянно спрашивали «а чем это отличается от `v86`?» или «почему бы не использовать `vm2`?» -- и я понял, что не могу дать внятного ответа, не составив сначала карту всей экосистемы. Так что вот, мы здесь, лол.

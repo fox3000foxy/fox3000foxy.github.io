@@ -1,3 +1,16 @@
+---
+title: Automatizando una Granja de Microsoft Rewards
+description: Cómo programé un bot para cultivar puntos de Microsoft Rewards a
+  escala -- y por qué la detección antibots de Microsoft ya se ha puesto al día.
+date: 2026-03-13
+tags:
+  - automation
+  - javascript
+  - reverse-engineering
+authors:
+  - fox3000foxy
+---
+
 > **Nota (2026):** Este proyecto ya no tiene mantenimiento. Microsoft ha endurecido significativamente su detección de bots -- lo que funcionaba antes ya no funciona hoy. El código y el enfoque descritos a continuación se conservan solo con fines educativos/de archivo.
 
 ### Introducción

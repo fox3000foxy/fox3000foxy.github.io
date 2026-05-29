@@ -1,3 +1,14 @@
+---
+title: About My GitHub Profile
+description: A brief introduction to my GitHub profile.
+date: 2026-03-08
+tags:
+  - meta
+  - github
+authors:
+  - fox3000foxy
+---
+
 # My GitHub Profile
 
 ## Header & Links

@@ -1,3 +1,21 @@
+---
+title: Hacer funcionar una biblioteca Node.js en el navegador sin Wasm -- los
+  polyfills de typescript-virtual-container
+description: Cómo Fortune reimplementó a mano node:fs, node:crypto y una docena
+  de módulos Node más en 640 líneas de JavaScript para que el contenedor
+  funcione en el navegador sin Wasm.
+date: 2026-05-29
+aiGenerated: true
+tags:
+  - typescript
+  - node.js
+  - polyfills
+  - browser
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # Hacer funcionar una biblioteca Node.js en el navegador sin Wasm -- los polyfills de typescript-virtual-container
 
 Recientemente pasé bastante tiempo analizando el código fuente de [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), el proyecto de [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Y la parte que más me sorprendió no es el VFS, no es la red virtual, no son los 170 comandos Unix reimplementados en TypeScript. Es la carpeta `polyfills/`.

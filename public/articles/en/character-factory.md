@@ -1,3 +1,18 @@
+---
+title: "Building character-factory: avatars with genetics"
+description: "A TypeScript module on top of DiceBear: coherent
+  country/ethnicity-based generation, a small genetics engine for projecting
+  children, and the engineering details that made it usable in a card game."
+date: 2026-05-16
+aiGenerated: true
+tags:
+  - typescript
+  - npm
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # Building character-factory: avatars with genetics
 
 I needed thousands of believable, distinct avatars for [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- a private card game project where every card holds a character "DNA" that the renderer turns into a portrait. Buying a stock pack would have looked stock. Generating one-off DiceBear avatars per seed felt random in the wrong way: a Japanese-flavored card could land on a Scandinavian blonde, and two "siblings" looked like strangers.
