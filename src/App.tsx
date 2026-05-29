@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import KeyboardShortcuts from "./components/KeyboardShortcuts";
 import Lightbox from "./components/Lightbox";
+import WebmentionLinks from "./components/WebmentionLinks";
 import { LangContext, useLangState } from "./hooks/useLang";
 import { ThemeContext, useThemeState } from "./hooks/useTheme";
 import "./styles/App.css";
@@ -32,6 +33,7 @@ function App() {
 		<LangContext.Provider value={langCtx}>
 			<ThemeContext.Provider value={themeCtx}>
 				<Router>
+					<WebmentionLinks />
 					<Header />
 					<KeyboardShortcuts />
 					<Lightbox />

@@ -42,21 +42,9 @@ export default function ArticleSchema({
 		link.href = url;
 		document.head.appendChild(link);
 
-		const wm = document.createElement("link");
-		wm.rel = "webmention";
-		wm.href = "https://webmention.io/fox3000foxy/webmention";
-		document.head.appendChild(wm);
-
-		const pingback = document.createElement("link");
-		pingback.rel = "pingback";
-		pingback.href = "https://webmention.io/fox3000foxy/xmlrpc";
-		document.head.appendChild(pingback);
-
 		return () => {
 			script.remove();
 			link.remove();
-			wm.remove();
-			pingback.remove();
 		};
 	}, [meta, slug, url]);
 

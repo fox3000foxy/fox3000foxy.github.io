@@ -120,7 +120,7 @@ function main() {
 			.replace(/<title>[^<]*<\/title>/, `<title>${escapeXml(info.title)} | Fox's Blog</title>`)
 			.replace(
 				"</head>",
-				`<link rel="canonical" href="${escapeXml(url)}" />\n${hreflangTags}\n<meta name="twitter:card" content="summary_large_image" />\n<meta property="og:image:width" content="1200" />\n<meta property="og:image:height" content="630" />\n<script type="application/ld+json">${jsonLd}</script>\n</head>`
+				`<link rel="canonical" href="${escapeXml(url)}" />\n${hreflangTags}\n<meta name="twitter:card" content="summary_large_image" />\n<meta property="og:image:width" content="1200" />\n<meta property="og:image:height" content="630" />\n<link rel="webmention" href="https://webmention.io/fox3000foxy/webmention" />\n<link rel="pingback" href="https://webmention.io/fox3000foxy/xmlrpc" />\n<link rel="authorization_endpoint" href="https://indieauth.com/auth" />\n<link rel="token_endpoint" href="https://tokens.indieauth.com/token" />\n<link rel="me" href="https://github.com/fox3000foxy" />\n<script type="application/ld+json">${jsonLd}</script>\n</head>`
 			);
 
 		const ogDir = path.join(root, "dist", "og");
