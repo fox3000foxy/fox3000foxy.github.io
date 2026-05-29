@@ -102,6 +102,15 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	const { t } = useLang();
 	const code = textContent(children);
 
+	// Extract language from <code> child className
+	const codeEl = Array.isArray(children) ? children[0] : children;
+	// biome-ignore lint/suspicious/noExplicitAny: need className from child
+	const lang = ((codeEl as any)?.props?.className ?? "").replace(
+		/^language-/,
+		""
+	);
+	const showLang = lang && lang !== "mermaid" ? lang : "";
+
 	const handleCopy = async () => {
 		try {
 			await navigator.clipboard.writeText(code);
@@ -114,13 +123,16 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 
 	return (
 		<div className="code-block-wrapper">
-			<button
-				type="button"
-				className={`code-copy-btn${copied ? " copied" : ""}`}
-				onClick={handleCopy}
-			>
-				{copied ? t("code.copied") : t("code.copy")}
-			</button>
+			<div className="code-block-header">
+				{showLang && <span className="code-lang-label">{showLang}</span>}
+				<button
+					type="button"
+					className={`code-copy-btn${copied ? " copied" : ""}`}
+					onClick={handleCopy}
+				>
+					{copied ? t("code.copied") : t("code.copy")}
+				</button>
+			</div>
 			<pre {...rest}>{children}</pre>
 		</div>
 	);
