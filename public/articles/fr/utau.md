@@ -1,3 +1,17 @@
+---
+title: "UTAU : comment un logiciel en Visual Basic 6 a démocratisé la voix synthétique"
+description: Comment UTAU, un logiciel gratuit en VB6 de 2008, a permis à tout le monde de créer des voix chantées par synthèse concaténative — et pourquoi ça compte encore aujourd'hui.
+date: 2026-05-29
+tags:
+  - utau
+  - vocaloid
+  - music
+  - synthesis
+  - vb6
+authors:
+  - fox3000foxy
+---
+
 ## UTAU : comment un logiciel en Visual Basic 6 a démocratisé la voix synthétique
 
 J'en avais touché un mot sur ma page principale : j'aime UTAU. Voici pourquoi.
