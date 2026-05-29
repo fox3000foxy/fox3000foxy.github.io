@@ -25,8 +25,13 @@ function processArticleContent(text: string): string {
 }
 
 function estimateReadingTime(text: string): number {
-	const words = text.trim().split(/\s+/).length;
-	return Math.max(1, Math.ceil(words / 200));
+	// Remove code blocks (backtick-fenced code)
+	const noCode = text.replace(/```[\s\S]*?```/g, "");
+	// Remove inline code
+	const clean = noCode.replace(/`[^`]+`/g, "");
+	const words = clean.trim().split(/\s+/).length;
+	// Technical text is read slower; use 150 wpm
+	return Math.max(1, Math.ceil(words / 150));
 }
 
 export default function Article() {
