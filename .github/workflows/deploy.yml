@@ -38,6 +38,7 @@ jobs:
 
       - name: Create CNAME and 404
         run: |
+          bun run create-cname
           cp dist/index.html dist/404.html
 
       - name: Deploy to GitHub Pages
