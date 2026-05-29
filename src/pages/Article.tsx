@@ -110,6 +110,7 @@ export default function Article() {
 							currentSlug={slug!}
 							currentTags={meta.tags}
 							allArticles={allArticles}
+							lang={lang}
 						/>
 					)}
 				</div>
