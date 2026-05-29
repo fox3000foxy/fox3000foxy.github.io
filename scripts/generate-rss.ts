@@ -1,6 +1,9 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
+import * as fs from "node:fs";
+import * as path from "node:path";
+
 const SITE_URL = "https://fox3000foxy.com";
 const ARTICLES_DIR = "public/articles";
 const OUTPUT = "dist/feed.xml";
@@ -26,42 +29,44 @@ function toRssDate(dateStr: string): string {
 	return new Date(`${dateStr}T00:00:00`).toUTCString();
 }
 
-function readMarkdownTitle(filePath: string): string | null {
-	try {
-		const content = fs.readFileSync(filePath, "utf8");
-		const match = content.match(/^#\s+(.+)$/m);
-		return match ? match[1].trim() : null;
-	} catch {
-		return null;
+interface LangArticles {
+	lang: string;
+	articles: ArticleMeta[];
+}
+
+function loadAllLanguages(root: string): LangArticles[] {
+	const langs: LangArticles[] = [];
+	const entries = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
+	for (const entry of entries) {
+		if (!entry.isDirectory()) { continue; }
+		const indexPath = path.join(root, ARTICLES_DIR, entry.name, "index.json");
+		if (!fs.existsSync(indexPath)) { continue; }
+		const raw = fs.readFileSync(indexPath, "utf8");
+		const articles: ArticleMeta[] = JSON.parse(raw);
+		if (Array.isArray(articles)) {
+			langs.push({ lang: entry.name, articles });
+		}
 	}
+	return langs;
 }
 
 function main() {
 	const root = process.cwd();
-	const indexPath = path.join(root, ARTICLES_DIR, "index.json");
-	const raw = fs.readFileSync(indexPath, "utf8");
-	const articles: ArticleMeta[] = JSON.parse(raw);
+	const allLangs = loadAllLanguages(root);
 
-	if (!Array.isArray(articles)) {
-		console.error("index.json is not an array");
-		process.exit(1);
-	}
-
-	const sorted = [...articles].sort(
-		(a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
-	);
-
-	const items = sorted
-		.map((article) => {
+	const items: string[] = [];
+	for (const { lang, articles } of allLangs) {
+		const sorted = [...articles].sort(
+			(a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+		);
+		for (const article of sorted) {
 			const slug = article.slug;
-			const mdPath = path.join(root, ARTICLES_DIR, `${slug}.md`);
-			const mdTitle = readMarkdownTitle(mdPath);
-			const title = article.title || mdTitle || slug;
 			const link = `${SITE_URL}/blog/${encodeURIComponent(slug)}`;
 			const pubDate = article.date ? toRssDate(article.date) : "";
 			const tags = article.tags || [];
+			const title = article.title || slug;
 
-			return `
+			items.push(`
     <item>
       <title>${escapeXml(title)}</title>
       <link>${escapeXml(link)}</link>
@@ -69,9 +74,9 @@ function main() {
       <description>${escapeXml(article.description || "")}</description>
       <pubDate>${pubDate}</pubDate>
       ${tags.map((t) => `      <category>${escapeXml(t)}</category>`).join("\n")}
-    </item>`;
-		})
-		.join("\n");
+    </item>`);
+		}
+	}
 
 	const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -82,14 +87,14 @@ function main() {
     <language>en</language>
     <lastBuildDate>${toRssDate(new Date().toISOString().split("T")[0])}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
-    ${items}
+    ${items.join("\n")}
   </channel>
 </rss>`;
 
 	const outPath = path.join(root, OUTPUT);
 	fs.mkdirSync(path.dirname(outPath), { recursive: true });
 	fs.writeFileSync(outPath, feed);
-	console.log(`RSS feed generated: ${OUTPUT} (${sorted.length} items)`);
+	console.log(`RSS feed generated: ${OUTPUT} (${items.length} items across ${allLangs.length} languages)`);
 }
 
 main();
