@@ -6,4 +6,5 @@ export interface ArticleMeta {
 	aiGenerated?: boolean;
 	tags?: string[];
 	series?: string;
+	authors?: string[];
 }
