@@ -17,6 +17,8 @@ const ru: TranslationMap = {
 	"article.ai": "✨ Статья создана ИИ",
 	"article.toc": "Содержание",
 	"article.related": "Похожие статьи",
+	"article.prev": "Предыдущая статья",
+	"article.next": "Следующая статья",
 	"project.back": "← Назад к проектам",
 	"project.viewOnGh": "Смотреть на GitHub ↗",
 	"project.noReadme": "У этого проекта нет README.",

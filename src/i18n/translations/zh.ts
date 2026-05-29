@@ -17,6 +17,8 @@ const zh: TranslationMap = {
 	"article.ai": "✨ AI 生成文章",
 	"article.toc": "目录",
 	"article.related": "相关文章",
+	"article.prev": "上一篇",
+	"article.next": "下一篇",
 	"project.back": "← 返回项目",
 	"project.viewOnGh": "在 GitHub 上查看 ↗",
 	"project.noReadme": "该项目没有 README。",
