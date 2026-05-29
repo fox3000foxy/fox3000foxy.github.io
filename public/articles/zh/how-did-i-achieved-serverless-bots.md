@@ -400,6 +400,56 @@ if (interaction.type === 3) {
 
 这是一个完整的回合制游戏，没有任何持久连接。纯 HTTP 无状态。彻底离谱 xD
 
+## Supabase：为 Workers 而生的数据库
+
+传统数据库（PostgreSQL、MySQL、MongoDB）都是为持久 TCP 连接设计的。你打开一个 socket，保持连接，发送查询。问题在于：**Cloudflare Workers 不支持持久 TCP 连接**。每个请求都是一个短暂的进程。一旦你响应客户端，Worker 就消失了。
+
+你不能这样做：
+
+```typescript
+// 这在 Workers 上不 ⚠️ 工作
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();  // 持久 TCP 连接 = 死
+```
+
+就连 `pg` 或 `postgres.js` 这样的原生 PostgreSQL 驱动也都使用 TCP 连接。在 Workers 上它们会崩溃。
+
+**Supabase 解决了一切问题。**
+
+Supabase 是在 PostgreSQL 之上的 REST API。你发起普通的 HTTP 请求。每次调用都是独立的，没有持久连接，没有需要管理的状态。它完美适配 serverless 模型。
+
+```typescript
+// 这在 Workers 上完美工作
+const { data, error } = await supabase
+  .from('players')
+  .select('*')
+  .eq('discord_id', userId)
+  .single();
+```
+
+Supabase 客户端（`@supabase/supabase-js`）底层使用的是 `fetch`。而 `fetch` 在 Workers 上是原生支持的。零配置、零驱动、零持久连接。
+
+| 数据库 | Workers 兼容？ | 原因 |
+| --- | --- | --- |
+| **Supabase** | ✅ 是 | 无状态 REST API，纯 HTTP |
+| **PlanetScale (MySQL)** | ⚠️ 部分 | 仅 HTTPS 连接，不支持长事务 |
+| **Neon** | ⚠️ 部分 | Serverless 分支但需要 TCP 驱动 |
+| **Turso (libSQL)** | ⚠️ 部分 | HTTP 可行但有限制 |
+| **Prisma/Prisma Postgres** | ❌ 否 | 需要持久 TCP |
+| **MongoDB Atlas** | ❌ 否 | TCP 驱动，没有原生 REST API |
+| **Redis (Upstash)** | ✅ 是 | 基于 HTTP 的 REST API |
+
+Supabase 的真正优势不仅仅是数据库——而是整个生态系统都是为边缘计算设计的：
+
+- **Auth**：用于会话的 REST API，无状态运行
+- **Storage**：通过 HTTP 上传/下载文件
+- **Realtime**：可选的 WebSocket，但也可以通过 REST 轮询
+- **Row Level Security**：安全规则存在于数据库中，不在你的后端
+
+对于 serverless Discord 机器人来说，Supabase 是最简单、最可靠的选择。无需配置驱动，无需维护连接，无需超时。只需要 HTTP 请求。
+
+如果你想看实际例子，看看上面的 Nibi：它的持久化代码就是 Supabase 上的 `readJson()` 和 `writeJson()`。无需迁移、无需复杂 schema、无需疯狂配置。开箱即用。而且如果你的机器人做大了，你可以在不更换提供商的情况下迁移到真正的 SQL 查询。
+
 ## Polyfills : 当 Node 想在 Workers 上跑的时候
 
 有些包依赖 Node 的 API。Kuromoji（日语解析器）用了 `XMLHttpRequest`。Workers 有 `fetch`，没有 `XMLHttpRequest`。

@@ -400,6 +400,56 @@ Ve boom, hasarı hesaplarsın, veritabanını güncellersin, görseli yeniden ol
 
 Hiçbir bağlantı kalıcılığı olmayan komple bir sıra tabanlı oyun. Sadece HTTP stateless. Tamamen kırık xD
 
+## Supabase: Workers için yapılmış veritabanı
+
+Geleneksel veritabanları (PostgreSQL, MySQL, MongoDB) kalıcı TCP bağlantıları için tasarlanmıştır. Bir soket açarsın, bağlantıyı canlı tutarsın, sorgular gönderirsin. Sorun: **Cloudflare Workers kalıcı TCP bağlantılarını desteklemez**. Her istek geçici bir süreçtir. İstemciye yanıt verdiğin an Worker kaybolur.
+
+Bunu yapamazsın:
+
+```typescript
+// Bu Workers'ta ÇALIŞMAZ
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();  // kalıcı TCP bağlantısı = ölü
+```
+
+`pg` veya `postgres.js` gibi native PostgreSQL sürücüleri bile TCP bağlantıları kullanır. Workers'ta çökerler.
+
+**Supabase her şeyi çözüyor.**
+
+Supabase, PostgreSQL üzerinde bir REST API'sidir. Normal HTTP istekleri yaparsın. Her çağrı bağımsızdır, kalıcı bağlantı yok, yönetilecek durum yok. Serverless modeli için mükemmel.
+
+```typescript
+// Bu Workers'ta MÜKEMMEL çalışır
+const { data, error } = await supabase
+  .from('players')
+  .select('*')
+  .eq('discord_id', userId)
+  .single();
+```
+
+Supabase istemcisi (`@supabase/supabase-js`) altında `fetch` kullanır. Ve `fetch` Workers'ta native. Sıfır yapılandırma, sıfır sürücü, sıfır kalıcı bağlantı.
+
+| Veritabanı | Workers uyumlu mu? | Neden |
+| --- | --- | --- |
+| **Supabase** | ✅ Evet | Durumsuz REST API, saf HTTP |
+| **PlanetScale (MySQL)** | ⚠️ Kısmen | Yalnızca HTTPS bağlantısı, uzun işlemler yok |
+| **Neon** | ⚠️ Kısmen | Serverless dallanma ama TCP sürücüsü gerekli |
+| **Turso (libSQL)** | ⚠️ Kısmen | HTTP mümkün ama sınırlı |
+| **Prisma/Prisma Postgres** | ❌ Hayır | Kalıcı TCP gerektirir |
+| **MongoDB Atlas** | ❌ Hayır | TCP sürücüsü, native REST API yok |
+| **Redis (Upstash)** | ✅ Evet | HTTP üzerinden REST API |
+
+Supabase'in gerçek avantajı sadece DB değil -- tüm ekosistemin edge-first düşünülerek tasarlanmış olması:
+
+- **Auth**: Oturumlar için REST API, durumsuz çalışır
+- **Storage**: HTTP ile dosya yükleme/indirme
+- **Realtime**: İsteğe bağlı WebSocket, ama REST ile de poll yapabilirsin
+- **Row Level Security**: güvenlik kuralları DB'de yaşar, backend'inde değil
+
+Serverless bir Discord botu için Supabase en basit ve en güvenilir seçimdir. Yapılandırılacak sürücü yok, korunacak bağlantı yok, zaman aşımı yok. Sadece HTTP istekleri.
+
+Gerçek bir örnek istersen, yukarıdaki Nibi'ye bak: kalıcılık kodu tam anlamıyla Supabase üzerinde `readJson()` ve `writeJson()`. Migration yok, karmaşık şema yok, çılgın yapılandırma yok. Kutudan çıktığı gibi çalışır. Ve botun büyürse, sağlayıcı değiştirmeden gerçek SQL sorgularına geçebilirsin.
+
 ## Polyfill'ler : Node Workers'ta çalışmak istediğinde
 
 Bazı paketler Node API'leri bekler. Kuromoji (kanji parser) `XMLHttpRequest` kullanır. Workers'ta `XMLHttpRequest` değil `fetch` var.

@@ -400,6 +400,56 @@ if (interaction.type === 3) {
 
 연결 유지 하나 없이 완전한 턴제 게임임. 그냥 HTTP stateless. 완전 개쩔어 xD
 
+## Supabase: Workers를 위해 만들어진 DB
+
+전통적인 DB들(PostgreSQL, MySQL, MongoDB)은 지속적인 TCP 연결을 위해 설계됐어. 소켓 열고, 연결 유지하고, 쿼리 보내고. 문제: **Cloudflare Workers는 지속적인 TCP 연결을 지원하지 않음**. 각 요청은 임시 프로세스라서, 클라이언트에 응답하는 순간 Worker가 사라짐.
+
+이런 건 안 됨:
+
+```typescript
+// 이건 Workers에서 작동 안 함
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();  // 지속적 TCP 연결 = 죽음
+```
+
+`pg`나 `postgres.js` 같은 네이티브 PostgreSQL 드라이버도 TCP 연결을 씀. Workers에서 죽음.
+
+**Supabase가 다 해결함.**
+
+Supabase는 PostgreSQL 위에 있는 REST API임. 평범한 HTTP 요청을 보내면 됨. 각 호출은 독립적이고, 지속 연결 없고, 관리할 상태도 없음. 서버리스 모델에 완벽함.
+
+```typescript
+// 이건 Workers에서 완벽하게 작동함
+const { data, error } = await supabase
+  .from('players')
+  .select('*')
+  .eq('discord_id', userId)
+  .single();
+```
+
+Supabase 클라이언트(`@supabase/supabase-js`)는 내부적으로 `fetch`를 씀. 그리고 `fetch`는 Workers에서 네이티브임. 설정 제로, 드라이버 제로, 지속 연결 제로.
+
+| DB | Workers 호환? | 이유 |
+| --- | --- | --- |
+| **Supabase** | ✅ 예 | 무상태 REST API, 순수 HTTP |
+| **PlanetScale (MySQL)** | ⚠️ 부분적 | HTTPS 전용, 긴 트랜잭션 불가 |
+| **Neon** | ⚠️ 부분적 | 서버리스 브랜치지만 TCP 드라이버 필요 |
+| **Turso (libSQL)** | ⚠️ 부분적 | HTTP 가능하지만 제한적 |
+| **Prisma/Prisma Postgres** | ❌ 아니오 | 지속적 TCP 필요 |
+| **MongoDB Atlas** | ❌ 아니오 | TCP 드라이버, 네이티브 REST API 없음 |
+| **Redis (Upstash)** | ✅ 예 | HTTP 기반 REST API |
+
+Supabase의 진짜 장점은 DB만이 아님 -- 생태계 전체가 edge-first로 설계됐다는 거:
+
+- **Auth**: 세션용 REST API, 무상태로 작동
+- **Storage**: HTTP로 파일 업로드/다운로드
+- **Realtime**: 선택적 WebSocket, REST로 폴링도 가능
+- **Row Level Security**: 보안 규칙이 DB에 있고, 백엔드에는 없음
+
+서버리스 Discord 봇에는 Supabase가 가장 간단하고 믿을 수 있는 선택임. 설정할 드라이버 없음, 유지할 연결 없음, 타임아웃 없음. 그냥 HTTP 요청.
+
+실제 예시를 보고 싶으면 위에 Nibi를 봐: 그 영속성 코드는 말 그대로 Supabase에서 `readJson()`하고 `writeJson()`임. 마이그레이션 없음, 복잡한 스키마 없음, 미친 설정 없음. 바로 작동함. 그리고 봇이 커지면, 제공자 변경 없이 진짜 SQL 쿼리로 마이그레이션 가능함.
+
 ## Polyfills: Node 라이브러리를 Workers에서 돌릴 때
 
 어떤 패키지들은 Node API를 기대함. Kuromoji (칸지 파서)는 `XMLHttpRequest`를 씀. Workers는 `fetch`는 있어도 `XMLHttpRequest`는 없음.
