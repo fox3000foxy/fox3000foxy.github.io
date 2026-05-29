@@ -1,3 +1,14 @@
+---
+title: 私のGitHubプロフィール
+description: 私のGitHubプロフィールの簡単な紹介。
+date: 2026-03-08
+tags:
+  - meta
+  - github
+authors:
+  - fox3000foxy
+---
+
 # 私のGitHubプロフィール
 
 ## ヘッダーとリンク

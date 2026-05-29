@@ -23,5 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# Generated at build time
+public/articles/*/index.json
+
 # Internal
 ROADMAP.md

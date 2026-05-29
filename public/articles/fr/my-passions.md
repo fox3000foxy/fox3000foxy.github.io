@@ -1,3 +1,14 @@
+---
+title: Mes Passions
+description: Coder, dessiner, automatiser, découvrir les vieilles technos, et
+  plus encore -- un aperçu de ce qui me motive.
+date: 2026-03-08
+tags:
+  - personal
+authors:
+  - fox3000foxy
+---
+
 # Mes Passions
 
 Je voulais écrire ce blog depuis longtemps mais je n'arrêtais pas de me retenir :/

@@ -1,3 +1,14 @@
+---
+title: Mis Pasiones
+description: Programar, dibujar, automatizar cosas, descubrir tecnología antigua
+  y más -- una mirada a lo que me mueve.
+date: 2026-03-08
+tags:
+  - personal
+authors:
+  - fox3000foxy
+---
+
 # Mis Pasiones
 
 Quería escribir este blog desde hace mucho tiempo pero siempre me detenía :/

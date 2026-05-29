@@ -1,3 +1,17 @@
+---
+title: Come Funziona Questo Blog?
+description: "Un'analisi approfondita degli interni di questo blog: React, Vite,
+  Markdown, la pipeline CI/CD e il flusso di scrittura degli articoli."
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - react
+  - meta
+  - blog
+authors:
+  - fox3000foxy
+---
+
 # Come Funziona Questo Blog?
 
 Ti sei mai chiesto come funziona questo blog sotto il cofano? In questo articolo, ti guiderò attraverso l'intera architettura dell'applicazione, dal tech stack fino al processo di scrittura di un articolo. E sì, ti mostrerò anche come scrivo i miei articoli da VS Code!

@@ -1,3 +1,16 @@
+---
+title: このブログの仕組み
+description: このブログの内部構造を深掘り：React、Vite、Markdown、CI/CDパイプライン、記事作成ワークフロー。
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - react
+  - meta
+  - blog
+authors:
+  - fox3000foxy
+---
+
 # このブログの仕組み
 
 このブログが内部でどう動いてるか気になったことはない？この記事では、技術スタックから記事の執筆プロセスまで、アプリケーションのアーキテクチャ全体を解説する。そう、VS Codeからどうやって記事を書いてるかまで見せるよ！

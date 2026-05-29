@@ -1,3 +1,17 @@
+---
+title: Script di firma commit SSH spiegato
+description: Una panoramica dell'helper per la firma dei commit SSH e perché
+  volevo commit eleganti.
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - git
+  - security
+  - shell
+authors:
+  - fox3000foxy
+---
+
 # Script di firma commit SSH spiegato
 
 Questo post analizza lo script `setup-ssh-signing.sh` che ho pubblicato su [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). Vedremo cosa fa ogni parte, come rende semplice la firma SSH dei commit a livello di repository e, sì, perché mi sono preso la briga di scriverlo (spoiler: volevo solo che i miei commit avessero un aspetto **stiloso**).

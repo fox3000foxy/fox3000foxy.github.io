@@ -1,3 +1,14 @@
+---
+title: 새 프로젝트 작업 중
+description: 새 웹사이트를 시작하고 개발하는 과정 살펴보기
+date: 2026-03-13
+tags:
+  - meta
+  - webdev
+authors:
+  - fox3000foxy
+---
+
 # 프로젝트
 
 내가 작업 중인 프로젝트는 LLJT라고 해:

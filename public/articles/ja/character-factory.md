@@ -1,3 +1,16 @@
+---
+title: character-factoryの構築：遺伝子を持つアバター
+description: DiceBear上に構築したTypeScriptモジュール：国・民族に基づいた一貫性のある生成、子供を投影する小さな遺伝子エンジン、そしてカードゲームで使えるようにしたエンジニアリングの詳細。
+date: 2026-05-16
+aiGenerated: true
+tags:
+  - typescript
+  - npm
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # character-factoryの構築：遺伝子を持つアバター
 
 [Kurekuta](https://github.com/fox3000foxy/kurekuta/)のために、何千もの信憑性のある個性的なアバターが必要だった----これは非公開のカードゲームプロジェクトで、各カードにキャラクターの「DNA」が入っていて、レンダラーがそれを肖像画に変換する仕組みだ。ストックパックを買うと、どうしてもありきたりに見えてしまう。DiceBearのシードごとのアバターを1回限り生成すると、変な方向にランダムすぎる：日本風のカードなのにスカンジナビアのブロンドが出てきたり、「兄弟」なのにまったくの他人に見えたりする。

@@ -1,3 +1,18 @@
+---
+title: "character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma"
+description: "DiceBear üzerine bir TypeScript modülü: tutarlı ülke/etnisite
+  tabanlı oluşturma, çocukları yansıtmak için küçük bir genetik motoru ve bir
+  kart oyununda kullanışlı hale getiren mühendislik detayları."
+date: 2026-05-16
+aiGenerated: true
+tags:
+  - typescript
+  - npm
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma
 
 [Kurekuta](https://github.com/fox3000foxy/kurekuta/) için binlerce inandırıcı, farklı avatara ihtiyacım vardı -- her kartın bir karakter "DNA"sı taşıdığı ve renderleyicinin bunu bir portreye dönüştürdüğü özel bir kart oyunu projesi. Hazır bir paket satın almak stok gibi görünürdü. Tohum başına tek seferlik DiceBear avatarları üretmek yanlış şekilde rastgele hissettiriyordu: Japon temalı bir kart İskandinav sarışınına düşebiliyordu ve iki "kardeş" birbirine yabancı gibi görünüyordu.

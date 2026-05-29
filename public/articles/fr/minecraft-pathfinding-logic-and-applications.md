@@ -1,3 +1,17 @@
+---
+title: Logique de pathfinding Minecraft et ses applications
+description: Comment l'algorithme A*, les malus de blocs et les POI permettent
+  de contrôler, prédire et exploiter le déplacement des mobs -- de la redstone
+  sans fil aux fermes optimisées.
+date: 2026-05-29
+tags:
+  - minecraft
+  - pathfinding
+  - reverse-engineering
+authors:
+  - fox3000foxy
+---
+
 ## Introduction
 
 J'ai passé des heures à regarder des moutons se cogner dans des murs.

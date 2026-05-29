@@ -1,3 +1,21 @@
+---
+title: Как заставить Node.js библиотеку работать в браузере без Wasm --
+  полифиллы typescript-virtual-container
+description: Как Fortune вручную переписала node:fs, node:crypto и дюжину других
+  Node-модулей в 640 строках JavaScript, чтобы контейнер работал в браузере без
+  Wasm.
+date: 2026-05-29
+aiGenerated: true
+tags:
+  - typescript
+  - node.js
+  - polyfills
+  - browser
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container
 
 Я недавно потратил немало времени, изучая исходный код [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), проект [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). И часть, которая удивила меня больше всего — это не VFS, не виртуальная сеть, не 170 команд Unix, переписанных на TypeScript. Это папка `polyfills/`.

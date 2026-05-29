@@ -1,3 +1,14 @@
+---
+title: Meine Leidenschaften
+description: Programmieren, Zeichnen, Dinge automatisieren, alte Technik
+  entdecken und mehr – ein Blick darauf, was mich antreibt.
+date: 2026-03-08
+tags:
+  - personal
+authors:
+  - fox3000foxy
+---
+
 # Meine Leidenschaften
 
 Ich wollte diesen Blog schon vor langer Zeit schreiben, aber ich habe mich immer zurückgehalten :/

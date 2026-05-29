@@ -1,3 +1,15 @@
+---
+title: Linux 内核模拟的 JavaScript 方案横向对比
+description: 深入分析 JavaScript/TypeScript 中 Linux 环境模拟的各种实现。
+date: 2026-05-28
+tags:
+  - javascript
+  - linux
+  - analysis
+authors:
+  - fox3000foxy
+---
+
 # 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比
 
 我在这条兔子洞里已经陷得太深太久了。起因是我在帮 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 这个项目----由 Fortune（后面会详细介绍她）开发的----然后不断有人问"等等，这个和 `v86` 有什么不同？"或"为什么不用 `vm2`？"----我意识到不先把整个生态系统的地图画清楚，我根本没法给出一个清晰的答案。所以现在就有了这篇文章，哈哈。

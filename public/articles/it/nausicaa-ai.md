@@ -1,3 +1,18 @@
+---
+title: La mia IA del cazzo per Nausicaa
+description: Un'IA basata su coefficienti euristici, iperparametri che cambiano
+  casualmente ogni 5 turni e un Oracolo che scappa -- tuffo nel cervello di un
+  gioco da tavolo strategico mitologico.
+date: 2026-05-29
+tags:
+  - game-dev
+  - ai
+  - javascript
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 ## La mia IA sballata per Nausicaa
 
 Ci sono progetti che iniziano con "e se facessi un gioco di scacchi con mitologie?" e finiscono con un coso dotato di IA che si cambia gli iper-parametri da sola ogni 5 turni.

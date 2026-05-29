@@ -1,3 +1,14 @@
+---
+title: My Passions
+description: Coding, drawing, automating things, discovering old tech, and more
+  -- a look into what drives me.
+date: 2026-03-08
+tags:
+  - personal
+authors:
+  - fox3000foxy
+---
+
 # My Passions
 
 I wanted to write this blog a long time ago but I kept holding myself back :/

@@ -1,3 +1,17 @@
+---
+title: Logica di pathfinding di Minecraft e le sue applicazioni
+description: Come l'algoritmo A*, le penalità dei blocchi e i POI permettono di
+  controllare, prevedere e sfruttare il movimento dei mob -- dalla redstone
+  senza fili alle fattorie ottimizzate.
+date: 2026-05-29
+tags:
+  - minecraft
+  - pathfinding
+  - reverse-engineering
+authors:
+  - fox3000foxy
+---
+
 ## Introduzione
 
 Ho passato ore a guardare pecore sbattere contro i muri.

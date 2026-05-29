@@ -1,3 +1,14 @@
+---
+title: 正在开发一个新项目
+description: 瞥一眼开始和开发一个新网站的过程。
+date: 2026-03-13
+tags:
+  - meta
+  - webdev
+authors:
+  - fox3000foxy
+---
+
 # 项目
 
 我正在做的项目叫 LLJT：

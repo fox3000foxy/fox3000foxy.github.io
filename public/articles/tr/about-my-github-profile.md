@@ -1,3 +1,14 @@
+---
+title: GitHub Profilim Hakkında
+description: GitHub profilime kısa bir giriş.
+date: 2026-03-08
+tags:
+  - meta
+  - github
+authors:
+  - fox3000foxy
+---
+
 # GitHub Profilim
 
 ## Başlık ve Bağlantılar

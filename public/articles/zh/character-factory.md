@@ -1,3 +1,16 @@
+---
+title: 构建 character-factory：带遗传基因的头像生成器
+description: 基于 DiceBear 的 TypeScript 模块：按国家和地区合理生成一致性头像、用于预测后代的小型遗传引擎，以及使其在卡牌游戏中可用的工程细节。
+date: 2026-05-16
+aiGenerated: true
+tags:
+  - typescript
+  - npm
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # 构建 character-factory：带遗传基因的头像生成器
 
 我需要为 [Kurekuta](https://github.com/fox3000foxy/kurekuta/) 生成成千上万个可信、各不相同的头像----这是一个私有的卡牌游戏项目，每张卡牌都包含一个角色"DNA"，渲染器将其转化为肖像。购买现成套图看起来千篇一律。按种子生成一次性 DiceBear 头像又感觉随机得不对劲：一张日式卡牌可能生成一个斯堪的纳维亚金发碧眼角色，而两个"兄弟姐妹"看起来像陌生人。

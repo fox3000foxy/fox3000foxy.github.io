@@ -1,3 +1,17 @@
+---
+title: Script de signature SSH expliqué
+description: Décortiquage du helper de signature de commits SSH et pourquoi je
+  voulais des commits stylés.
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - git
+  - security
+  - shell
+authors:
+  - fox3000foxy
+---
+
 # Script de signature SSH pour commits -- explication
 
 Cet article décortique le script `setup-ssh-signing.sh` que j'ai publié sur [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). On va voir ce que chaque partie fait, comment ça rend la signature SSH locale à un dépot complètement indolore, et, oui, pourquoi j'ai même pris la peine de l'écrire (spoiler : je voulais juste que mes commits aient de la **gueule**).

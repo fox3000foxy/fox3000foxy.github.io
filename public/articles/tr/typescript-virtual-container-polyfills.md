@@ -1,3 +1,21 @@
+---
+title: Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak --
+  typescript-virtual-container polyfill'leri
+description: Fortune'un, konteynerin Wasm olmadan tarayıcıda çalışması için
+  node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript'te
+  elle nasıl yeniden uyguladığı.
+date: 2026-05-29
+aiGenerated: true
+tags:
+  - typescript
+  - node.js
+  - polyfills
+  - browser
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri
 
 Geçenlerde [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr)'un projesi olan [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)'ın kaynak kodunu incelemeye epey zaman harcadım. Ve beni en çok şaşırtan kısım VFS değil, sanal ağ değil, TypeScript'te yeniden uygulanmış 170 Unix komutu değil. `polyfills/` klasörüydü.

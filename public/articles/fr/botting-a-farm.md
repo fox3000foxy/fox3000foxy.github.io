@@ -1,3 +1,16 @@
+---
+title: Botter une ferme Microsoft Rewards
+description: Comment j'ai codé un bot pour farmer des points Microsoft Rewards à
+  grande échelle -- et pourquoi Microsoft a depuis renforcé ses défenses.
+date: 2026-03-13
+tags:
+  - automation
+  - javascript
+  - reverse-engineering
+authors:
+  - fox3000foxy
+---
+
 > **Note (2026) :** Ce projet n'est plus maintenu. Microsoft a considérablement renforcé sa détection anti-bot -- ce qui marchait à l'époque ne fonctionne plus aujourd'hui. Le code et l'approche décrits ci-dessous sont conservés à des fins d'archivage et de démonstration uniquement.
 
 ## Introduction

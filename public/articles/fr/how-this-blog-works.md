@@ -1,3 +1,17 @@
+---
+title: Comment fonctionne ce blog ?
+description: "Les coulisses du blog : React, Vite, Markdown, la pipeline CI/CD
+  et le flux de rédaction."
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - react
+  - meta
+  - blog
+authors:
+  - fox3000foxy
+---
+
 # Comment Fonctionne Ce Blog ?
 
 Tu t'es déjà demandé comment ce blog fonctionne sous le capot ? Dans cet article, je vais te détailler toute l'architecture de l'application, de la stack technique jusqu'au processus de rédaction d'un article. Et oui, je vais même te montrer comment j'écris mes articles depuis VS Code !

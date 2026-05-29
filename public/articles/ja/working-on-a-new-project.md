@@ -1,3 +1,14 @@
+---
+title: 新しいプロジェクト
+description: 新しいWebサイトの開始と開発のプロセスについて。
+date: 2026-03-13
+tags:
+  - meta
+  - webdev
+authors:
+  - fox3000foxy
+---
+
 # 新しいプロジェクト
 
 今やってるプロジェクトはLLJTって名前なんだ：

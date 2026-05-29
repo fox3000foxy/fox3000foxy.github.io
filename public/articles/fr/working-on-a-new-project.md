@@ -1,3 +1,14 @@
+---
+title: Travail sur un Nouveau Projet
+description: Un aperçu du processus de démarrage et développement d'un nouveau site web.
+date: 2026-03-13
+tags:
+  - meta
+  - webdev
+authors:
+  - fox3000foxy
+---
+
 # Le Projet
 
 Le projet sur lequel je travaille s'appelle LLJT :

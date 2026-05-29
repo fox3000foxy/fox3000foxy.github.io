@@ -1,3 +1,17 @@
+---
+title: SSH commit signing script explained
+description: A walkthrough of the SSH commit‑signing helper and why I wanted
+  stylish commits.
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - git
+  - security
+  - shell
+authors:
+  - fox3000foxy
+---
+
 # SSH commit signing script explained
 
 This post dives into the `setup-ssh-signing.sh` script I published on [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). We'll look at what each part does, how it makes repository‑local SSH commit signing painless, and, yes, why I even bothered to write it in the first place (spoiler: I just wanted my commits to look **stylish**).

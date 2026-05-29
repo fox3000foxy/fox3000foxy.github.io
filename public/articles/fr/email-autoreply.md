@@ -1,3 +1,20 @@
+---
+title: J'ai utilisé git comme base de données pour faire tourner un bot gratos
+  sur GitHub Actions
+description: Comment j'ai codé un auto-répondeur email IA qui tourne sur GitHub
+  Actions pour 0€/mois -- en utilisant des tags git comme base de données et du
+  pré-compile dans un tag runtime.
+date: 2026-05-29
+tags:
+  - automation
+  - javascript
+  - serverless
+  - ai
+  - git
+authors:
+  - fox3000foxy
+---
+
 # J'ai utilisé git comme base de données pour faire tourner un bot gratos sur GitHub Actions
 
 J'ai un répondeur email automatique qui tourne 24/7.

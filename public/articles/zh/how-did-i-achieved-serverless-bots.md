@@ -1,3 +1,17 @@
+---
+title: 100% 无服务 Discord 机器人：Hono + Cloudflare Workers
+description: 如何将我每月50欧元的Discord机器人替换为零成本 -- 交互端点、Hono、Workers、实时图像渲染以及无需WebSocket的完整游戏。
+date: 2026-05-29
+tags:
+  - discord
+  - cloudflare
+  - serverless
+  - typescript
+  - bots
+authors:
+  - fox3000foxy
+---
+
 ## Discord bot 100% 无服务器 : Hono + Cloudflare Workers = 💸 零成本
 
 我花了几个月在自己的机器上维护传统的 Discord bot。

@@ -1,3 +1,15 @@
+---
+title: JavaScript Linux 커널 시뮬레이션 솔루션 비교
+description: JavaScript/TypeScript로 Linux 환경을 재현하는 방법에 대한 심층 분석
+date: 2026-05-28
+tags:
+  - javascript
+  - linux
+  - analysis
+authors:
+  - fox3000foxy
+---
+
 # 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교
 
 그래서 나는 한동안 이 토끼굴에 완전히 빠져 있었어. [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- Fortune의 프로젝트 (그녀에 대해선 나중에 더 얘기할게) -- 를 도와주다 보니, 계속 "잠만, 이거 `v86`이랑 뭐가 다른데?" 또는 "그냥 `vm2` 쓰면 안 돼?"라는 질문을 받게 됐어. 그리고 나는 생태계 전체를 먼저 매핑하지 않고는 깔끔한 답변을 할 수 없겠다는 걸 깨달았지. 그래서 여기까지 왔어 lol.

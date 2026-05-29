@@ -1,3 +1,19 @@
+---
+title: Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들
+description: Fortune이 node:fs, node:crypto, 그리고 수십 개의 Node 모듈을 640줄의 JavaScript로
+  손수 재구현해서 Wasm 없이 컨테이너를 브라우저에서 돌리는 방법
+date: 2026-05-29
+aiGenerated: true
+tags:
+  - typescript
+  - node.js
+  - polyfills
+  - browser
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들
 
 최근에 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 소스 코드를 열심히 뜯어봤어. [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr)의 프로젝트인데. 가장 놀라웠던 부분은 VFS도, 가상 네트워크도, TypeScript로 재구현한 170개의 Unix 명령어도 아니야. `polyfills/` 디렉토리였어.

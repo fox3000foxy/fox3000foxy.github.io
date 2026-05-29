@@ -1,3 +1,15 @@
+---
+title: JavaScriptによるLinuxカーネルシミュレーションソリューションの比較
+description: JavaScript/TypeScriptによるLinux環境再現の詳細分析。
+date: 2026-05-28
+tags:
+  - javascript
+  - linux
+  - analysis
+authors:
+  - fox3000foxy
+---
+
 # あらゆるJavaScriptサンドボックス、エミュレーター、シミュレーター、ハニーポット----比較
 
 このウサギの穴にはもうずっと深くハマりすぎてたんだ。きっかけは[typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)を手伝ってたこと----Fortune（彼女については後で詳しく）のプロジェクトだ----で、「ちょっと待って、これって`v86`とどう違うの？」とか「なんで`vm2`じゃないの？」って何度も聞かれるようになって、まずエコシステム全体をマッピングしないとクリーンな答えが出せないって気づいたんだ。ってわけで、こんな感じになったよ lol。

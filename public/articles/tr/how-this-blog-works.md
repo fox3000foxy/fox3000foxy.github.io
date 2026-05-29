@@ -1,3 +1,17 @@
+---
+title: Bu Blog Nasıl Çalışıyor?
+description: "Bu blogun iç işleyişine derin bir dalış: React, Vite, Markdown,
+  CI/CD pipeline'ı ve makale yazma iş akışı."
+date: 2026-03-08
+aiGenerated: true
+tags:
+  - react
+  - meta
+  - blog
+authors:
+  - fox3000foxy
+---
+
 # Bu Blog Nasıl Çalışıyor?
 
 Hiç bu blogun perde arkasında nasıl çalıştığını merak ettin mi? Bu yazıda, uygulamanın tüm mimarisini, teknoloji yığınından makale yazma sürecine kadar adım adım anlatacağım. Ve evet, makalelerimi VS Code'dan nasıl yazdığımı bile göstereceğim!

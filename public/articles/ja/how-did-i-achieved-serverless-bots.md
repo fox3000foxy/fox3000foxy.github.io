@@ -1,3 +1,18 @@
+---
+title: 100%サーバーレスDiscordボット：Hono + Cloudflare Workers
+description: 月50€かかってたDiscordボットをゼロユーロにした方法 --
+  インタラクションエンドポイント、Hono、Workers、リアルタイム画像レンダリング、WebSocketなしの完全なゲーム。
+date: 2026-05-29
+tags:
+  - discord
+  - cloudflare
+  - serverless
+  - typescript
+  - bots
+authors:
+  - fox3000foxy
+---
+
 ## Discord bot 完全サーバーレス : Hono + Cloudflare Workers = 💸 ゼロ
 
 何ヶ月か自宅マシンで普通のDiscord botを動かし続けてたんだよね。

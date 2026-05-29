@@ -1,3 +1,16 @@
+---
+title: 내가 Nausicaa용으로 만든 좆같은 AI
+description: 휴리스틱 계수 기반 AI, 5턴마다 랜덤으로 바뀌는 하이퍼파라미터, 도망치는 오라클 -- 신화 전략 보드 게임의 두뇌 속으로.
+date: 2026-05-29
+tags:
+  - game-dev
+  - ai
+  - javascript
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 ## 내 막장 AI for Nausicaa
 
 "에에... 신화 테마로 체스 게임 한 번 만들어볼까?" 에서 시작한 프로젝트가 5턴마다 자기 파라미터를 바꾸는 AI를 달고 끝났다 xD

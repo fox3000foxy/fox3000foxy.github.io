@@ -1,3 +1,19 @@
+---
+title: 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
+description: Fortune 如何用 640 行 JavaScript 手动重新实现了 node:fs、node:crypto 等一打 Node
+  模块，让容器在浏览器中无需 Wasm 即可运行。
+date: 2026-05-29
+aiGenerated: true
+tags:
+  - typescript
+  - node.js
+  - polyfills
+  - browser
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
 
 我最近花了不少时间阅读 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 的源代码，这是 [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr) 的项目。最让我惊讶的部分不是 VFS，不是虚拟网络，也不是用 TypeScript 重写的 170 个 Unix 命令，而是 `polyfills/` 文件夹。

@@ -1,3 +1,17 @@
+---
+title: "character-factory 만들기: 유전학을 가진 아바타"
+description: "DiceBear 기반 TypeScript 모듈: 국가/민족별 일관된 생성, 자식 투영을 위한 작은 유전학 엔진, 카드
+  게임에서 사용할 수 있게 만든 엔지니어링 세부사항"
+date: 2026-05-16
+aiGenerated: true
+tags:
+  - typescript
+  - npm
+  - open-source
+authors:
+  - fox3000foxy
+---
+
 # character-factory 만들기: 유전학을 가진 아바타
 
 [Kurekuta](https://github.com/fox3000foxy/kurekuta/)를 위해 수천 개의 그럴듯하고 구별되는 아바타가 필요했어 -- 모든 카드가 캐릭터 "DNA"를 가지고 있고 렌더러가 그걸 초상화로 바꿔주는 개인 카드 게임 프로젝트야. 스톡 팩을 사면 평범해 보였을 거야. 시드별로 일회성 DiceBear 아바타를 생성하는 건 잘못된 방식으로 랜덤하다고 느껴졌어: 일본풍 카드가 스칸디나비아 금발이 나올 수 있고, 두 "형제자매"가 전혀陌生人처럼 보였거든.

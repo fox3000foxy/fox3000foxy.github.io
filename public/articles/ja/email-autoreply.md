@@ -1,3 +1,18 @@
+---
+title: gitをデータベースとして使い、GitHub Actionsで無料でボットを動かした話
+description: GitHub Actionsで月0€で動くAIメール自動返信ボットをどうやって作ったか --
+  gitタグをデータベースとして使い、プリコンパイル済みランタイムスナップショットをruntimeタグに保存する方法。
+date: 2026-05-29
+tags:
+  - automation
+  - javascript
+  - serverless
+  - ai
+  - git
+authors:
+  - fox3000foxy
+---
+
 # GitHub Actionsでgitをデータベース代わりに使って無料botを動かした話
 
 24時間365日動いてる自動メール返信botがあるんだ。

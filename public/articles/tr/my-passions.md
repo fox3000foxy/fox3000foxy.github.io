@@ -1,3 +1,15 @@
+---
+title: Tutkularım
+description: Kod yazmak, çizim yapmak, her şeyi otomatikleştirmek, eski
+  teknolojileri keşfetmek ve daha fazlası -- beni neyin yönlendirdiğine bir
+  bakış.
+date: 2026-03-08
+tags:
+  - personal
+authors:
+  - fox3000foxy
+---
+
 # Tutkularım
 
 Bu blogu uzun zaman önce yazmak istemiştim ama hep kendimi tuttum :/

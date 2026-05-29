@@ -1,3 +1,14 @@
+---
+title: Yeni Bir Proje Üzerinde Çalışmak
+description: Yeni bir web sitesi geliştirme ve başlatma sürecine bir bakış.
+date: 2026-03-13
+tags:
+  - meta
+  - webdev
+authors:
+  - fox3000foxy
+---
+
 # Proje
 
 Üzerinde çalıştığım projenin adı LLJT:
