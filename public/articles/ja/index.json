@@ -1,25 +1,25 @@
 [
   {
-    "slug": "hello-world",
-    "title": "ハローワールド",
-    "description": "Fox's Blogのサンプル記事です。",
-    "date": "2026-03-08",
-    "tags": ["meta", "blog"]
-  },
-  {
     "slug": "character-factory",
     "title": "character-factoryの構築：遺伝子を持つアバター",
     "description": "DiceBear上に構築したTypeScriptモジュール：国・民族に基づいた一貫性のある生成、子供を投影する小さな遺伝子エンジン、そしてカードゲームで使えるようにしたエンジニアリングの詳細。",
     "date": "2026-05-16",
     "aiGenerated": true,
-    "tags": ["typescript", "npm", "open-source"]
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ]
   },
   {
     "slug": "about-my-github-profile",
     "title": "私のGitHubプロフィール",
     "description": "私のGitHubプロフィールの簡単な紹介。",
     "date": "2026-03-08",
-    "tags": ["meta", "github"]
+    "tags": [
+      "meta",
+      "github"
+    ]
   },
   {
     "slug": "how-this-blog-works",
@@ -27,14 +27,20 @@
     "description": "このブログの内部構造を深掘り：React、Vite、Markdown、CI/CDパイプライン、記事作成ワークフロー。",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["react", "meta", "blog"]
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ]
   },
   {
     "slug": "my-passions",
     "title": "俺の情熱",
     "description": "コーディング、絵を描くこと、自動化、古い技術の発見など——僕を動かすものたち。",
     "date": "2026-03-08",
-    "tags": ["personal"]
+    "tags": [
+      "personal"
+    ]
   },
   {
     "slug": "ssh-signing-script",
@@ -42,27 +48,42 @@
     "description": "SSHコミット署名ヘルパーのウォークスルーと、なぜスタイリッシュなコミットにこだわったのか。",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["git", "security", "shell"]
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ]
   },
   {
     "slug": "working-on-a-new-project",
     "title": "新しいプロジェクト",
     "description": "新しいWebサイトの開始と開発のプロセスについて。",
     "date": "2026-03-13",
-    "tags": ["meta", "webdev"]
+    "tags": [
+      "meta",
+      "webdev"
+    ]
   },
   {
     "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
     "title": "JavaScriptによるLinuxカーネルシミュレーションソリューションの比較",
     "description": "JavaScript/TypeScriptによるLinux環境再現の詳細分析。",
     "date": "2026-05-28",
-    "tags": ["javascript", "linux", "analysis"]
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ]
   },
   {
     "slug": "botting-a-farm",
     "title": "Microsoft Rewardsファームのボット化",
     "description": "Microsoft Rewardsのポイントを大規模に稼ぐボットをコードした方法——そしてMicrosoftのアンチボット検出が追いついた理由。",
     "date": "2026-03-13",
-    "tags": ["automation", "javascript", "reverse-engineering"]
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ]
   }
 ]

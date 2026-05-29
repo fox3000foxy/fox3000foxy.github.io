@@ -1,25 +1,25 @@
 [
   {
-    "slug": "hello-world",
-    "title": "Merhaba Dünya",
-    "description": "Fox'un Blog'u için örnek bir makale.",
-    "date": "2026-03-08",
-    "tags": ["meta", "blog"]
-  },
-  {
     "slug": "character-factory",
     "title": "character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma",
     "description": "DiceBear üzerine bir TypeScript modülü: tutarlı ülke/etnisite tabanlı oluşturma, çocukları yansıtmak için küçük bir genetik motoru ve bir kart oyununda kullanışlı hale getiren mühendislik detayları.",
     "date": "2026-05-16",
     "aiGenerated": true,
-    "tags": ["typescript", "npm", "open-source"]
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ]
   },
   {
     "slug": "about-my-github-profile",
     "title": "GitHub Profilim Hakkında",
     "description": "GitHub profilime kısa bir giriş.",
     "date": "2026-03-08",
-    "tags": ["meta", "github"]
+    "tags": [
+      "meta",
+      "github"
+    ]
   },
   {
     "slug": "how-this-blog-works",
@@ -27,14 +27,20 @@
     "description": "Bu blogun iç işleyişine derin bir dalış: React, Vite, Markdown, CI/CD pipeline'ı ve makale yazma iş akışı.",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["react", "meta", "blog"]
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ]
   },
   {
     "slug": "my-passions",
     "title": "Tutkularım",
     "description": "Kod yazmak, çizim yapmak, her şeyi otomatikleştirmek, eski teknolojileri keşfetmek ve daha fazlası — beni neyin yönlendirdiğine bir bakış.",
     "date": "2026-03-08",
-    "tags": ["personal"]
+    "tags": [
+      "personal"
+    ]
   },
   {
     "slug": "ssh-signing-script",
@@ -42,27 +48,42 @@
     "description": "SSH commit imzalama yardımcısının adım adım açıklaması ve neden şık commit'ler istediğim.",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["git", "security", "shell"]
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ]
   },
   {
     "slug": "working-on-a-new-project",
     "title": "Yeni Bir Proje Üzerinde Çalışmak",
     "description": "Yeni bir web sitesi geliştirme ve başlatma sürecine bir bakış.",
     "date": "2026-03-13",
-    "tags": ["meta", "webdev"]
+    "tags": [
+      "meta",
+      "webdev"
+    ]
   },
   {
     "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
     "title": "JavaScript Çözümlerini Linux Çekirdek Simülasyonları İçin Karşılaştırma",
     "description": "JavaScript/TypeScript ile Linux ortamı yeniden oluşturmalarının derinlemesine analizi.",
     "date": "2026-05-28",
-    "tags": ["javascript", "linux", "analysis"]
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ]
   },
   {
     "slug": "botting-a-farm",
     "title": "Bir Microsoft Rewards Çiftliğini Botlamak",
     "description": "Ölçekli olarak Microsoft Rewards puanı toplamak için nasıl bir bot kodladığım — ve Microsoft'un anti-bot tespitinin neden artık işe yaramadığı.",
     "date": "2026-03-13",
-    "tags": ["automation", "javascript", "reverse-engineering"]
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ]
   }
 ]

@@ -1,25 +1,25 @@
 [
   {
-    "slug": "hello-world",
-    "title": "헬로 월드",
-    "description": "Fox's Blog의 샘플 게시글입니다.",
-    "date": "2026-03-08",
-    "tags": ["meta", "blog"]
-  },
-  {
     "slug": "character-factory",
     "title": "character-factory 만들기: 유전학을 가진 아바타",
     "description": "DiceBear 기반 TypeScript 모듈: 국가/민족별 일관된 생성, 자식 투영을 위한 작은 유전학 엔진, 카드 게임에서 사용할 수 있게 만든 엔지니어링 세부사항",
     "date": "2026-05-16",
     "aiGenerated": true,
-    "tags": ["typescript", "npm", "open-source"]
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ]
   },
   {
     "slug": "about-my-github-profile",
     "title": "내 GitHub 프로필 소개",
     "description": "내 GitHub 프로필에 대한 간단한 소개",
     "date": "2026-03-08",
-    "tags": ["meta", "github"]
+    "tags": [
+      "meta",
+      "github"
+    ]
   },
   {
     "slug": "how-this-blog-works",
@@ -27,14 +27,20 @@
     "description": "이 블로그의 내부 동작에 대한 심층 분석: React, Vite, Markdown, CI/CD 파이프라인, 글 작성 워크플로우",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["react", "meta", "blog"]
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ]
   },
   {
     "slug": "my-passions",
     "title": "내 열정들",
     "description": "코딩, 그림, 자동화, 올드 테크 발견 등 — 나를 움직이는 것들",
     "date": "2026-03-08",
-    "tags": ["personal"]
+    "tags": [
+      "personal"
+    ]
   },
   {
     "slug": "ssh-signing-script",
@@ -42,27 +48,42 @@
     "description": "SSH 커밋 서명 헬퍼의 분석과 내가 스타일리시한 커밋을 원했던 이유",
     "date": "2026-03-08",
     "aiGenerated": true,
-    "tags": ["git", "security", "shell"]
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ]
   },
   {
     "slug": "working-on-a-new-project",
     "title": "새 프로젝트 작업 중",
     "description": "새 웹사이트를 시작하고 개발하는 과정 살펴보기",
     "date": "2026-03-13",
-    "tags": ["meta", "webdev"]
+    "tags": [
+      "meta",
+      "webdev"
+    ]
   },
   {
     "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
     "title": "JavaScript Linux 커널 시뮬레이션 솔루션 비교",
     "description": "JavaScript/TypeScript로 Linux 환경을 재현하는 방법에 대한 심층 분석",
     "date": "2026-05-28",
-    "tags": ["javascript", "linux", "analysis"]
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ]
   },
   {
     "slug": "botting-a-farm",
     "title": "Microsoft Rewards 팜 봇 만들기",
     "description": "대규모로 Microsoft Rewards 포인트를 농사짓는 봇을 코딩한 방법 — 그리고 Microsoft의 안티봇 탐지가 따라잡은 이유",
     "date": "2026-03-13",
-    "tags": ["automation", "javascript", "reverse-engineering"]
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ]
   }
 ]
