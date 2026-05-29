@@ -1,5 +1,12 @@
 [
   {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "title": "Discord bot 100% serverless : Hono + Cloudflare Workers",
+    "description": "Comment j'ai remplacé un bot Discord qui me coûtait 50€/mois par zéro euro -- interaction endpoints, Hono, Workers, rendu d'image en temps réel, et un jeu complet sans WebSocket.",
+    "date": "2026-05-29",
+    "tags": ["discord", "cloudflare", "serverless", "typescript", "bots"]
+  },
+  {
     "slug": "minecraft-pathfinding-logic-and-applications",
     "title": "Logique de pathfinding Minecraft et ses applications",
     "description": "Comment l'algorithme A*, les malus de blocs et les POI permettent de contrôler, prédire et exploiter le déplacement des mobs -- de la redstone sans fil aux fermes optimisées.",
