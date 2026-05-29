@@ -1,3 +1,17 @@
+---
+title: "UTAU: Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가"
+description: 2008년 VB6으로 만들어진 무료 프로그램 UTAU가 어떻게 ⁉이나 합성 노래 목소리를 만들 수 있게 했는지 — 그리고 오늘날에도 여전히 중요한 이유.
+date: 2026-05-29
+tags:
+  - utau
+  - vocaloid
+  - music
+  - synthesis
+  - vb6
+authors:
+  - fox3000foxy
+---
+
 ## UTAU : Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가
 
 내 메인 페이지에서 한마디 했었는데: 나는 UTAU를 좋아해. 이유를 설명해줄게.

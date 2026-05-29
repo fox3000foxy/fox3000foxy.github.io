@@ -1,3 +1,17 @@
+---
+title: "Repo to VPS: превращаем GitHub Actions в бесплатный VPS с постоянным хранилищем"
+description: Как превратить runner GitHub Actions в постоянно работающий VPS, используя git в качестве постоянного хранилища — tmate, inotify и commit --amend.
+date: 2026-05-29
+tags:
+  - github
+  - devops
+  - vps
+  - actions
+  - automation
+authors:
+  - fox3000foxy
+---
+
 ## GitHub даёт тебе VPS бесплатно на 6ч. Я нашёл, как сделать его постоянным.
 
 GitHub Actions даёт тебе бесплатные Linux-машины.
