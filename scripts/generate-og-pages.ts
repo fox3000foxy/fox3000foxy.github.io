@@ -1,6 +1,7 @@
 // @ts-nocheck
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { Resvg } from "@resvg/resvg-js";
 
 const SITE_URL = "https://fox3000foxy.com";
 const ARTICLES_DIR = "public/articles";
@@ -96,7 +97,9 @@ function main() {
 			mainEntityOfPage: { "@type": "WebPage", "@id": url },
 		});
 
-		const ogImageUrl = `${SITE_URL}/og/${encodeURIComponent(slug)}.svg`;
+		const ogImageUrl = `${SITE_URL}/og/${encodeURIComponent(slug)}.png`;
+		const svgContent = ogImageSvg(info.title, slug);
+		const pngBuffer = new Resvg(svgContent, { fitTo: { mode: "original" } }).render().asPng();
 		const html = baseHtml
 			.replace(
 				/<meta property="og:title" content="[^"]*" \/>/,
@@ -131,7 +134,8 @@ function main() {
 
 		const ogDir = path.join(root, "dist", "og");
 		fs.mkdirSync(ogDir, { recursive: true });
-		fs.writeFileSync(path.join(ogDir, `${slug}.svg`), ogImageSvg(info.title, slug));
+		fs.writeFileSync(path.join(ogDir, `${slug}.svg`), svgContent);
+		fs.writeFileSync(path.join(ogDir, `${slug}.png`), pngBuffer);
 
 		const outDir = path.join(root, "dist", "blog", slug);
 		fs.mkdirSync(outDir, { recursive: true });
