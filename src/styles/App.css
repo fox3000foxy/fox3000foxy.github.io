@@ -31,6 +31,13 @@ article {
   font-size: 0.9rem;
   color: #ccc;
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.article-sep {
+  color: #555;
 }
 
 .article-description {
