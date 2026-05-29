@@ -4,50 +4,58 @@
     "title": "Building character-factory: avatars with genetics",
     "description": "A TypeScript module on top of DiceBear: coherent country/ethnicity-based generation, a small genetics engine for projecting children, and the engineering details that made it usable in a card game.",
     "date": "2026-05-16",
-    "aiGenerated": true
+    "aiGenerated": true,
+    "tags": ["typescript", "npm", "open-source"]
   },
   {
     "slug": "hello-world",
     "title": "Hello World",
     "description": "A sample post for Fox's Blog.",
-    "date": "2026-03-08"
+    "date": "2026-03-08",
+    "tags": ["meta", "blog"]
   },
   {
     "slug": "about-my-github-profile",
     "title": "About My GitHub Profile",
     "description": "A brief introduction to my GitHub profile.",
-    "date": "2026-03-08"
+    "date": "2026-03-08",
+    "tags": ["meta", "github"]
   },
   {
     "slug": "how-this-blog-works",
     "title": "How Does This Blog Work?",
     "description": "A deep dive into this blog's internals: React, Vite, Markdown, the CI/CD pipeline, and the article-writing workflow.",
     "date": "2026-03-08",
-    "aiGenerated": true
+    "aiGenerated": true,
+    "tags": ["react", "meta", "blog"]
   },
   {
     "slug": "my-passions",
     "title": "My Passions",
     "description": "Coding, drawing, automating things, discovering old tech, and more — a look into what drives me.",
-    "date": "2026-03-08"
+    "date": "2026-03-08",
+    "tags": ["personal"]
   },
   {
     "slug": "ssh-signing-script",
     "title": "SSH commit signing script explained",
     "description": "A walkthrough of the SSH commit‑signing helper and why I wanted stylish commits.",
     "date": "2026-03-08",
-    "aiGenerated": true
+    "aiGenerated": true,
+    "tags": ["git", "security", "shell"]
   },
   {
     "slug": "working-on-a-new-project",
     "title": "Working on a New Project",
     "description": "A look at the process of starting and developing a new website.",
-    "date": "2026-03-13"
-  } ,
+    "date": "2026-03-13",
+    "tags": ["meta", "webdev"]
+  },
   {
     "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
     "title": "Comparing Javascript Solutions For Linux Kernels Simulation",
     "description": "A deep analysis of Linux environnements recreations in Javacript/Typescript.",
-    "date": "2026-05-28"
-  } 
+    "date": "2026-05-28",
+    "tags": ["javascript", "linux", "analysis"]
+  }
 ]

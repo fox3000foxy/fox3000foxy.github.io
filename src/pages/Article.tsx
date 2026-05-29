@@ -67,6 +67,13 @@ export default function Article() {
 			{meta?.description && (
 				<p className="article-description">{meta.description}</p>
 			)}
+			{meta?.tags && meta.tags.length > 0 && (
+				<div className="article-tags">
+					{meta.tags.map((tag) => (
+						<span key={tag} className="tag-badge">{tag}</span>
+					))}
+				</div>
+			)}
 			<MarkdownContent content={content} />
 		</article>
 	);

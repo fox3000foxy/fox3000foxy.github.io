@@ -74,6 +74,13 @@ article {
   color: #aaa;
 }
 
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
 .ai-badge {
   display: inline-block;
   font-size: 0.75rem;
