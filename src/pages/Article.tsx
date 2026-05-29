@@ -95,15 +95,19 @@ export default function Article() {
 					))}
 				</div>
 			)}
-			<TableOfContents content={content} />
-			<MarkdownContent content={content} />
-			{meta?.tags && meta.tags.length > 0 && (
-				<SuggestedArticles
-					currentSlug={slug!}
-					currentTags={meta.tags}
-					allArticles={allArticles}
-				/>
-			)}
+			<div className="article-layout">
+				<TableOfContents content={content} />
+				<div className="article-content">
+					<MarkdownContent content={content} />
+					{meta?.tags && meta.tags.length > 0 && (
+						<SuggestedArticles
+							currentSlug={slug!}
+							currentTags={meta.tags}
+							allArticles={allArticles}
+						/>
+					)}
+				</div>
+			</div>
 		</article>
 	);
 }
