@@ -1,3 +1,5 @@
+> **Note (2026):** This project is no longer maintained. Microsoft has significantly hardened its anti-bot detection — what worked back then no longer works today. The code and approach described below are kept for archival/educational purposes only.
+
 ## 🇬🇧 English Translation of the Article
 
 ### Introduction
@@ -210,5 +212,4 @@ Page loaded, sign in button found: Se connecter
 ```
 
 Okay, that means we’re not logged in yet, so now we’ll build the login request and see if we can sign in to our Microsoft Rewards account to do the activities.
-
-## THIS ARTICLE IS STILL A WORK IN PROGRESS, I’LL UPDATE IT WITH THE LOGIN STEPS AND ACTIVITY BOTTING STEPS SOON! STAY TUNED.
+<!-- ## THIS ARTICLE IS STILL A WORK IN PROGRESS, I’LL UPDATE IT WITH THE LOGIN STEPS AND ACTIVITY BOTTING STEPS SOON! STAY TUNED. -->
