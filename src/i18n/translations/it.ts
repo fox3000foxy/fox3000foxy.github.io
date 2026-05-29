@@ -6,7 +6,7 @@ const it: TranslationMap = {
 	"nav.blog": "Blog",
 	"nav.archive": "Archivio",
 	"nav.projects": "Progetti",
-	"nav.portfolio": "Portfolio",
+	"nav.portfolio": "Legacy",
 	"blog.title": "Articoli",
 	"blog.search": "Cerca articoli…",
 	"blog.filter.all": "Tutti",

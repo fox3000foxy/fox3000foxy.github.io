@@ -6,7 +6,7 @@ const ja: TranslationMap = {
 	"nav.blog": "ブログ",
 	"nav.archive": "アーカイブ",
 	"nav.projects": "プロジェクト",
-	"nav.portfolio": "ポートフォリオ",
+	"nav.portfolio": "Legacy",
 	"blog.title": "ブログ記事",
 	"blog.search": "記事を検索…",
 	"blog.filter.all": "すべて",

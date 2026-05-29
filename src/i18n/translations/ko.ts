@@ -6,7 +6,7 @@ const ko: TranslationMap = {
 	"nav.blog": "블로그",
 	"nav.archive": "아카이브",
 	"nav.projects": "프로젝트",
-	"nav.portfolio": "포트폴리오",
+	"nav.portfolio": "Legacy",
 	"blog.title": "블로그 글",
 	"blog.search": "글 검색…",
 	"blog.filter.all": "전체",

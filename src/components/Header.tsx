@@ -42,7 +42,7 @@ export default function Header() {
 					<Link to="/blog">{t("nav.blog")}</Link>
 					<Link to="/archive">{t("nav.archive")}</Link>
 					<Link to="/projects">{t("nav.projects")}</Link>
-					<Link to="/portfolio">{t("nav.portfolio")}</Link>
+					<Link to="/legacy">{t("nav.portfolio")}</Link>
 					<select
 						className="lang-select"
 						value={lang}

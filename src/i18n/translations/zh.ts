@@ -6,7 +6,7 @@ const zh: TranslationMap = {
 	"nav.blog": "博客",
 	"nav.archive": "归档",
 	"nav.projects": "项目",
-	"nav.portfolio": "作品集",
+	"nav.portfolio": "Legacy",
 	"blog.title": "博客文章",
 	"blog.search": "搜索文章…",
 	"blog.filter.all": "全部",

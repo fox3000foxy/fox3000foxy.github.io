@@ -6,7 +6,7 @@ const tr: TranslationMap = {
 	"nav.blog": "Blog",
 	"nav.archive": "Arşiv",
 	"nav.projects": "Projeler",
-	"nav.portfolio": "Portföy",
+	"nav.portfolio": "Legacy",
 	"blog.title": "Blog Yazıları",
 	"blog.search": "Makale ara…",
 	"blog.filter.all": "Tümü",
