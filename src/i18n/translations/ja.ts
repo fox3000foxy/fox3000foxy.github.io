@@ -17,6 +17,8 @@ const ja: TranslationMap = {
 	"article.ai": "✨ AI 生成記事",
 	"article.toc": "目次",
 	"article.related": "関連記事",
+	"article.prev": "前の記事",
+	"article.next": "次の記事",
 	"project.back": "← プロジェクトに戻る",
 	"project.viewOnGh": "GitHub で見る ↗",
 	"project.noReadme": "このプロジェクトには README がありません。",

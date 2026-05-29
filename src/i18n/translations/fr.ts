@@ -17,6 +17,8 @@ const fr: TranslationMap = {
 	"article.ai": "✨ Article généré par IA",
 	"article.toc": "Table des matières",
 	"article.related": "Articles similaires",
+	"article.prev": "Article précédent",
+	"article.next": "Article suivant",
 	"project.back": "← Retour aux projets",
 	"project.viewOnGh": "Voir sur GitHub ↗",
 	"project.noReadme": "Ce projet n'a pas de README.",

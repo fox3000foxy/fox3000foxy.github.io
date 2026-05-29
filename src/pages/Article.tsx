@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import {
 	fetchArticleMarkdown,
 	getCachedArticleMarkdown,
@@ -74,6 +74,17 @@ export default function Article() {
 		void loadIndex();
 	}, [slug, lang]);
 
+	const sorted = useMemo(() => {
+		return [...allArticles].sort(
+			(a, b) =>
+				new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+		);
+	}, [allArticles]);
+
+	const idx = sorted.findIndex((a) => a.slug === slug);
+	const prevArticle = idx < sorted.length - 1 ? sorted[idx + 1] : null;
+	const nextArticle = idx > 0 ? sorted[idx - 1] : null;
+
 	if (error) {
 		return <NotFound message={t("notFound.article", { slug: slug || "" })} />;
 	}
@@ -114,6 +125,28 @@ export default function Article() {
 							allArticles={allArticles}
 							lang={lang}
 						/>
+					)}
+					{(prevArticle || nextArticle) && (
+						<nav className="article-nav">
+							{prevArticle && (
+								<Link
+									to={`/blog/${prevArticle.slug}`}
+									className="article-nav-link prev"
+								>
+									<span className="article-nav-label">{t("article.prev")}</span>
+									<span className="article-nav-title">{prevArticle.title}</span>
+								</Link>
+							)}
+							{nextArticle && (
+								<Link
+									to={`/blog/${nextArticle.slug}`}
+									className="article-nav-link next"
+								>
+									<span className="article-nav-label">{t("article.next")}</span>
+									<span className="article-nav-title">{nextArticle.title}</span>
+								</Link>
+							)}
+						</nav>
 					)}
 				</div>
 			</div>

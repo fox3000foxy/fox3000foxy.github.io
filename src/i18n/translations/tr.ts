@@ -17,6 +17,8 @@ const tr: TranslationMap = {
 	"article.ai": "✨ Yapay Zeka ile Oluşturuldu",
 	"article.toc": "İçindekiler",
 	"article.related": "Benzer Makaleler",
+	"article.prev": "Önceki makale",
+	"article.next": "Sonraki makale",
 	"project.back": "← Projelere dön",
 	"project.viewOnGh": "GitHub'da görüntüle ↗",
 	"project.noReadme": "Bu projenin README'si yok.",

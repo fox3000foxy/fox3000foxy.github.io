@@ -17,6 +17,8 @@ const ko: TranslationMap = {
 	"article.ai": "✨ AI 생성 글",
 	"article.toc": "목차",
 	"article.related": "관련 글",
+	"article.prev": "이전 글",
+	"article.next": "다음 글",
 	"project.back": "← 프로젝트로 돌아가기",
 	"project.viewOnGh": "GitHub에서 보기 ↗",
 	"project.noReadme": "이 프로젝트에는 README가 없습니다.",
