@@ -5,6 +5,7 @@ import {
 	getCachedArticleMarkdown,
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
+import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
@@ -21,6 +22,7 @@ function estimateReadingTime(text: string): number {
 
 export default function Article() {
 	const { slug } = useParams<{ slug: string }>();
+	const { t } = useLang();
 	const [content, setContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
@@ -60,22 +62,22 @@ export default function Article() {
 	}, [slug]);
 
 	if (error) {
-		return <NotFound message={`Article "${slug}" not found`} />;
+		return <NotFound message={t("notFound.article", { slug: slug || "" })} />;
 	}
 
 	if (content === null) {
-		return <p>Loading…</p>;
+		return <p>{t("article.error")}</p>;
 	}
 
 	return (
 		<article>
 			{meta?.aiGenerated && (
-				<span className="ai-badge">✨ AI Generated Article</span>
+				<span className="ai-badge">{t("article.ai")}</span>
 			)}
 			<p className="article-date">
 				{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
 				{meta?.date && <span className="article-sep">·</span>}
-				<span>{estimateReadingTime(content)} min read</span>
+				<span>{t("article.minRead", { n: estimateReadingTime(content) })}</span>
 			</p>
 			{meta?.description && (
 				<p className="article-description">{meta.description}</p>

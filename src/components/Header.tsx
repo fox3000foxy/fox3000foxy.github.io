@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
+import { useLang } from "../hooks/useLang";
 
 export default function Header() {
+	const { t, lang, setLang } = useLang();
+
 	return (
 		<header>
 			<div className="container">
@@ -14,15 +17,32 @@ export default function Header() {
 				</Link>
 				<h1 className="site-title">
 					<Link to="/" className="title-link">
-						Fox's Blog
+						{t("site.title")}
 					</Link>
 				</h1>
 				<nav>
-					<Link to="/">Home</Link>
-					<Link to="/blog">Blog</Link>
-					<Link to="/archive">Archive</Link>
-					<Link to="/projects">Projects</Link>
-					<Link to="/portfolio">Portfolio</Link>
+					<Link to="/">{t("nav.home")}</Link>
+					<Link to="/blog">{t("nav.blog")}</Link>
+					<Link to="/archive">{t("nav.archive")}</Link>
+					<Link to="/projects">{t("nav.projects")}</Link>
+					<Link to="/portfolio">{t("nav.portfolio")}</Link>
+					<span className="lang-switcher">
+						<button
+							type="button"
+							className={`lang-btn${lang === "fr" ? " active" : ""}`}
+							onClick={() => setLang("fr")}
+						>
+							FR
+						</button>
+						<span className="lang-sep">/</span>
+						<button
+							type="button"
+							className={`lang-btn${lang === "en" ? " active" : ""}`}
+							onClick={() => setLang("en")}
+						>
+							EN
+						</button>
+					</span>
 				</nav>
 			</div>
 		</header>

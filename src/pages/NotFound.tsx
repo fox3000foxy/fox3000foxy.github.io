@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import { useMarkdown } from "../hooks/useMarkdown";
 
@@ -7,10 +8,11 @@ interface Props {
 }
 
 export default function NotFound({ message }: Props) {
+	const { t } = useLang();
 	const { content } = useMarkdown("/404.md", "404");
 
 	if (content === null) {
-		return <p>Loading…</p>;
+		return <p>{t("notFound.loading")}</p>;
 	}
 
 	if (content) {
@@ -24,9 +26,9 @@ export default function NotFound({ message }: Props) {
 	return (
 		<div>
 			<h2>404</h2>
-			<p>{message || "Page not found."}</p>
+			<p>{message || t("notFound.title")}</p>
 			<p>
-				<Link to="/">Return home</Link>
+				<Link to="/">{t("notFound.return")}</Link>
 			</p>
 		</div>
 	);

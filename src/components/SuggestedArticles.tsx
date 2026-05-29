@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { ArticleMeta } from "../types";
+import { useLang } from "../hooks/useLang";
 
 interface SuggestedArticlesProps {
 	currentSlug: string;
@@ -16,6 +17,7 @@ export default function SuggestedArticles({
 	currentTags,
 	allArticles,
 }: SuggestedArticlesProps) {
+	const { t } = useLang();
 	const scored = allArticles
 		.filter((a) => a.slug !== currentSlug)
 		.map((a) => ({
@@ -30,7 +32,7 @@ export default function SuggestedArticles({
 
 	return (
 		<section className="suggested-articles">
-			<h3>Related Articles</h3>
+			<h3>{t("article.related")}</h3>
 			<div className="suggested-grid">
 				{scored.map(({ article }) => (
 					<Link

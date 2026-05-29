@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/ProjectList.css";
+import { useLang } from "../hooks/useLang";
 
 interface Repo {
 	name: string;
@@ -137,6 +138,7 @@ function formatRelativeDate(dateString: string): string {
 }
 
 export default function ProjectList() {
+	const { t } = useLang();
 	const cachedData = useMemo(() => {
 		if (typeof localStorage === "undefined") {
 			return null;
@@ -210,14 +212,14 @@ export default function ProjectList() {
 	}, [cachedData]);
 
 	if (loading) {
-		return <p>Loading projects…</p>;
+		return <p>{t("project.loading")}</p>;
 	}
 
 	return (
 		<div className="project-list">
 			<h2>Projects</h2>
 			<p className="project-subtitle">
-				{repos.length} public repositories fetched from GitHub
+				{t("project.repoCount", { n: repos.length })}
 			</p>
 			{repos.length > 0 ? (
 				<div className="project-grid">
@@ -269,7 +271,7 @@ export default function ProjectList() {
 			<section className="gist-list">
 				<h2>Gists</h2>
 				<p className="project-subtitle">
-					{gists.length} public gists fetched from GitHub
+					{t("project.gistCount", { n: gists.length })}
 				</p>
 				{gists.length > 0 ? (
 					<div className="project-grid">

@@ -6,6 +6,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { slugify } from "../utils/headings";
+import { useLang } from "../hooks/useLang";
 
 const sanitizeSchema = {
 	...defaultSchema,
@@ -51,6 +52,7 @@ function HeadingRenderer({ Tag, children, ...rest }: HTMLAttributes<HTMLHeadingE
 
 function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	const [copied, setCopied] = useState(false);
+	const { t } = useLang();
 	const code = textContent(children);
 
 	const handleCopy = async () => {
@@ -70,7 +72,7 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 				className={`code-copy-btn${copied ? " copied" : ""}`}
 				onClick={handleCopy}
 			>
-				{copied ? "Copied!" : "Copy"}
+				{copied ? t("code.copied") : t("code.copy")}
 			</button>
 			<pre {...rest}>{children}</pre>
 		</div>

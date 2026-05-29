@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import NotFound from "./NotFound";
 
@@ -14,6 +15,7 @@ interface RepoMeta {
 
 export default function Project() {
 	const { slug } = useParams<{ slug: string }>();
+	const { t } = useLang();
 	const [content, setContent] = useState<string | null>(null);
 	const [repo, setRepo] = useState<RepoMeta | null>(null);
 	const [error, setError] = useState(false);
@@ -45,17 +47,17 @@ export default function Project() {
 	}, [slug]);
 
 	if (error) {
-		return <NotFound message={`Project "${slug}" not found`} />;
+		return <NotFound message={t("notFound.project", { slug: slug || "" })} />;
 	}
 
 	if (content === null) {
-		return <p>Loading…</p>;
+		return <p>{t("project.error")}</p>;
 	}
 
 	return (
 		<article>
 			<p className="project-back">
-				<Link to="/projects">← Back to projects</Link>
+				<Link to="/projects">{t("project.back")}</Link>
 			</p>
 			{repo && (
 				<div className="project-header-meta">
@@ -64,7 +66,7 @@ export default function Project() {
 					)}
 					<p className="project-meta-links">
 						<a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-							View on GitHub ↗
+							{t("project.viewOnGh")}
 						</a>
 						{repo.language && (
 							<span className="project-meta-lang">{repo.language}</span>
@@ -76,7 +78,7 @@ export default function Project() {
 				</div>
 			)}
 			<MarkdownContent
-				content={content || "*This project does not have a README.*"}
+				content={content || t("project.noReadme")}
 				urlTransform={(url) => {
 					if (
 						repo &&
