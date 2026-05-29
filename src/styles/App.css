@@ -285,6 +285,55 @@ pre {
   color: #666;
 }
 
+.archive {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.archive-group {
+  margin-bottom: 2rem;
+}
+
+.archive-month {
+  font-size: 1.1rem;
+  color: #64b5f6;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #222;
+}
+
+.archive-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.archive-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.4rem 0;
+}
+
+.archive-day {
+  font-size: 0.85rem;
+  color: #666;
+  min-width: 2ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.archive-link {
+  font-size: 0.95rem;
+  color: #ddd;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.archive-link:hover {
+  color: #64b5f6;
+}
+
 h2 {
   color: #fff;
 }
