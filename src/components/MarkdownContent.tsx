@@ -172,6 +172,30 @@ export default function MarkdownContent({
 }: MarkdownContentProps) {
 	const segments = useMemo(() => splitContent(content), [content]);
 
+	const hasMermaid = segments.some((s) => s.type === "mermaid");
+
+	if (!hasMermaid) {
+		return (
+			<ReactMarkdown
+				remarkPlugins={[remarkGfm]}
+				rehypePlugins={[
+					rehypeRaw,
+					[rehypeSanitize, sanitizeSchema],
+					rehypeHighlight,
+				]}
+				components={{
+					a: ExternalLinkRenderer,
+					h2: (props) => <HeadingRenderer Tag="h2" {...props} />,
+					h3: (props) => <HeadingRenderer Tag="h3" {...props} />,
+					pre: CodeBlock,
+				}}
+				urlTransform={urlTransform}
+			>
+				{content}
+			</ReactMarkdown>
+		);
+	}
+
 	return (
 		<>
 			{segments.map((seg) => {
