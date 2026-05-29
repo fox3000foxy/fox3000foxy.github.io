@@ -8,11 +8,14 @@ import {
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 
+const PAGE_SIZE = 15;
+
 export default function BlogList() {
 	const { t, lang } = useLang();
 	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 	const [activeTag, setActiveTag] = useState<string | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
+	const [page, setPage] = useState(0);
 
 	useEffect(() => {
 		const indexUrl = `/articles/${lang}/index.json`;
@@ -78,6 +81,18 @@ export default function BlogList() {
 		);
 	});
 
+	const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
+	const safePage = Math.min(page, Math.max(0, pageCount - 1));
+	const paged = filtered.slice(
+		safePage * PAGE_SIZE,
+		(safePage + 1) * PAGE_SIZE
+	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: reset page when filters change
+	useEffect(() => {
+		setPage(0);
+	}, [activeTag, searchQuery]);
+
 	return (
 		<div className="blog-list">
 			<h2>{t("blog.title")}</h2>
@@ -124,45 +139,68 @@ export default function BlogList() {
 			)}
 
 			{filtered.length > 0 ? (
-				<div className="blog-grid">
-					{filtered.map(
-						({ slug, title, description, date, aiGenerated, tags }) => (
-							<Link to={`/blog/${slug}`} key={slug} className="blog-card">
-								<div className="blog-card-body">
-									<h3 className="blog-card-title">
-										{title ?? slug.replace(/-/g, " ")}
-									</h3>
-									{aiGenerated && (
-										<span className="ai-badge">{t("article.ai")}</span>
-									)}
-									{description && (
-										<p className="blog-card-desc">{description}</p>
-									)}
-									{tags && tags.length > 0 && (
-										<div className="blog-card-tags">
-											{tags.map((tag) => (
-												<span key={tag} className="tag-badge">
-													{tag}
-												</span>
-											))}
+				<>
+					<div className="blog-grid">
+						{paged.map(
+							({ slug, title, description, date, aiGenerated, tags }) => (
+								<Link to={`/blog/${slug}`} key={slug} className="blog-card">
+									<div className="blog-card-body">
+										<h3 className="blog-card-title">
+											{title ?? slug.replace(/-/g, " ")}
+										</h3>
+										{aiGenerated && (
+											<span className="ai-badge">{t("article.ai")}</span>
+										)}
+										{description && (
+											<p className="blog-card-desc">{description}</p>
+										)}
+										{tags && tags.length > 0 && (
+											<div className="blog-card-tags">
+												{tags.map((tag) => (
+													<span key={tag} className="tag-badge">
+														{tag}
+													</span>
+												))}
+											</div>
+										)}
+									</div>
+									{date && (
+										<div className="blog-card-footer">
+											<time dateTime={date}>
+												{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
+													year: "numeric",
+													month: "long",
+													day: "numeric",
+												})}
+											</time>
 										</div>
 									)}
-								</div>
-								{date && (
-									<div className="blog-card-footer">
-										<time dateTime={date}>
-											{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
-												year: "numeric",
-												month: "long",
-												day: "numeric",
-											})}
-										</time>
-									</div>
-								)}
-							</Link>
-						)
+								</Link>
+							)
+						)}
+					</div>
+					{pageCount > 1 && (
+						<div className="pagination">
+							<button
+								type="button"
+								disabled={page === 0}
+								onClick={() => setPage(page - 1)}
+							>
+								←
+							</button>
+							<span>
+								{page + 1} / {pageCount}
+							</span>
+							<button
+								type="button"
+								disabled={page >= pageCount - 1}
+								onClick={() => setPage(page + 1)}
+							>
+								→
+							</button>
+						</div>
 					)}
-				</div>
+				</>
 			) : (
 				<p>
 					{searchQuery
