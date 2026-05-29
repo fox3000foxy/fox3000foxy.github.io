@@ -1,5 +1,12 @@
 [
   {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "title": "Minecraft Pathfinding Logic and Applications",
+    "description": "How A*, block malice, and POI mechanics let you control, predict, and exploit mob movement -- from wireless redstone to optimized farms.",
+    "date": "2026-05-29",
+    "tags": ["minecraft", "pathfinding", "reverse-engineering"]
+  },
+  {
     "slug": "typescript-virtual-container-polyfills",
     "title": "Running a Node.js library in the browser without Wasm -- typescript-virtual-container's polyfills",
     "description": "How Fortune hand-rewrote node:fs, node:crypto, and a dozen more Node modules in 640 lines of JavaScript so the container runs in the browser without Wasm.",

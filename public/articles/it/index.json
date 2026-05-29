@@ -1,5 +1,12 @@
 [
   {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "title": "Logica di pathfinding di Minecraft e le sue applicazioni",
+    "description": "Come l'algoritmo A*, le penalità dei blocchi e i POI permettono di controllare, prevedere e sfruttare il movimento dei mob -- dalla redstone senza fili alle fattorie ottimizzate.",
+    "date": "2026-05-29",
+    "tags": ["minecraft", "pathfinding", "reverse-engineering"]
+  },
+  {
     "slug": "typescript-virtual-container-polyfills",
     "title": "Far funzionare una libreria Node.js nel browser senza Wasm -- i polyfill di typescript-virtual-container",
     "description": "Come Fortune ha reimplementato a mano node:fs, node:crypto e una dozzina di altri moduli Node in 640 righe di JavaScript per far funzionare il container nel browser senza Wasm.",
