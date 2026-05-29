@@ -1,6 +1,21 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { useLang } from "../hooks/useLang";
+import type { Lang } from "../i18n/types";
+import { ALL_LANGS } from "../i18n/types";
+
+const LANG_LABELS: Record<Lang, string> = {
+	en: "English",
+	fr: "Français",
+	zh: "中文",
+	ja: "日本語",
+	ko: "한국어",
+	tr: "Türkçe",
+	it: "Italiano",
+	de: "Deutsch",
+	ru: "Русский",
+	es: "Español",
+};
 
 export default function Header() {
 	const { t, lang, setLang } = useLang();
@@ -26,23 +41,17 @@ export default function Header() {
 					<Link to="/archive">{t("nav.archive")}</Link>
 					<Link to="/projects">{t("nav.projects")}</Link>
 					<Link to="/portfolio">{t("nav.portfolio")}</Link>
-					<span className="lang-switcher">
-						<button
-							type="button"
-							className={`lang-btn${lang === "fr" ? " active" : ""}`}
-							onClick={() => setLang("fr")}
-						>
-							FR
-						</button>
-						<span className="lang-sep">/</span>
-						<button
-							type="button"
-							className={`lang-btn${lang === "en" ? " active" : ""}`}
-							onClick={() => setLang("en")}
-						>
-							EN
-						</button>
-					</span>
+					<select
+						className="lang-select"
+						value={lang}
+						onChange={(e) => setLang(e.target.value as Lang)}
+					>
+						{ALL_LANGS.map((l) => (
+							<option key={l} value={l}>
+								{LANG_LABELS[l]}
+							</option>
+						))}
+					</select>
 				</nav>
 			</div>
 		</header>

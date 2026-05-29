@@ -9,35 +9,42 @@ import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 
 export default function BlogList() {
-	const { t } = useLang();
+	const { t, lang } = useLang();
 	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 	const [activeTag, setActiveTag] = useState<string | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
-		fetch("/articles/index.json")
-			.then((res) => (res.ok ? res.json() : []))
-			.then((data) => {
-				if (Array.isArray(data)) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					const normalized: ArticleMeta[] = (data as any[]).map((item) =>
-						typeof item === "string" ? { slug: item } : item
-					);
-					setArticles(normalized);
+		const indexUrl = `/articles/${lang}/index.json`;
+		const fallbackUrl = lang !== "en" ? "/articles/en/index.json" : null;
 
-					const slugs = normalized.map((item) => item.slug).filter(Boolean);
-					prefetchArticleMarkdown(slugs);
+		async function load() {
+			let res = await fetch(indexUrl);
+			if (!res.ok && fallbackUrl) { res = await fetch(fallbackUrl); }
+			if (!res.ok) { setArticles([]); return; }
 
-					prefetchMarkdownEntries([
-						{ key: "home", url: "/home.md" },
-						{ key: "portfolio", url: "/portfolio.md" },
-					]);
-				} else {
-					setArticles([]);
-				}
-			})
-			.catch(() => setArticles([]));
-	}, []);
+			const data: unknown = await res.json();
+			if (Array.isArray(data)) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const normalized: ArticleMeta[] = (data as any[]).map((item) =>
+					typeof item === "string" ? { slug: item } : item
+				);
+				setArticles(normalized);
+
+				const slugs = normalized.map((item) => item.slug).filter(Boolean);
+				prefetchArticleMarkdown(slugs, lang);
+				if (lang !== "en") { prefetchArticleMarkdown(slugs, "en"); }
+
+				prefetchMarkdownEntries([
+					{ key: "home", url: "/home.md" },
+					{ key: "portfolio", url: "/portfolio.md" },
+				]);
+			} else {
+				setArticles([]);
+			}
+		}
+		load();
+	}, [lang]);
 
 	const query = searchQuery.toLowerCase().trim();
 

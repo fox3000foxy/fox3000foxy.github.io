@@ -35,18 +35,24 @@ export default function Archive() {
 	const [groups, setGroups] = useState<Group[]>([]);
 
 	useEffect(() => {
-		fetch("/articles/index.json")
-			.then((res) => (res.ok ? res.json() : []))
-			.then((data) => {
-				if (Array.isArray(data)) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					const normalized: ArticleMeta[] = (data as any[]).map((item) =>
-						typeof item === "string" ? { slug: item } : item
-					);
-					setGroups(groupByYearMonth(normalized, lang));
-				}
-			})
-			.catch(() => setGroups([]));
+		const indexUrl = `/articles/${lang}/index.json`;
+		const fallbackUrl = lang !== "en" ? "/articles/en/index.json" : null;
+
+		async function load() {
+			let res = await fetch(indexUrl);
+			if (!res.ok && fallbackUrl) { res = await fetch(fallbackUrl); }
+			if (!res.ok) { setGroups([]); return; }
+
+			const data: unknown = await res.json();
+			if (Array.isArray(data)) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const normalized: ArticleMeta[] = (data as any[]).map((item) =>
+					typeof item === "string" ? { slug: item } : item
+				);
+				setGroups(groupByYearMonth(normalized, lang));
+			}
+		}
+		load();
 	}, [lang]);
 
 	if (groups.length === 0) {
