@@ -22,6 +22,18 @@ interface MarkdownContentProps {
 	urlTransform?: (url: string) => string;
 }
 
+// Replace ```mermaid blocks with <pre class="mermaid-code"> so rehypeHighlight doesn't touch them
+function preprocessMermaid(content: string, mermaidBlocks: string[]): string {
+	return content.replace(
+		/```mermaid\n([\s\S]*?)```/g,
+		(_match, code: string) => {
+			const id = `MERMAID_${mermaidBlocks.length}`;
+			mermaidBlocks.push(code.trim());
+			return `<pre class="mermaid-code" data-id="${id}"></pre>`;
+		}
+	);
+}
+
 function textContent(node: ReactNode): string {
 	if (typeof node === "string") {
 		return node;
@@ -76,15 +88,22 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	const [copied, setCopied] = useState(false);
 	const { t } = useLang();
 
-	const codeEl = Array.isArray(children) ? children[0] : children;
-	// biome-ignore lint/suspicious/noExplicitAny: need to access className from child code element
-	const className = (codeEl as any)?.props?.className ?? "";
-	const lang = className.replace("language-", "");
-	const code = textContent(children);
+	// biome-ignore lint/suspicious/noExplicitAny: accessing props from children
+	const preProps = (children as any)?.props as
+		| Record<string, unknown>
+		| undefined;
+	const isMermaid = preProps?.className === "mermaid-code";
+	const dataId = preProps?.["data-id"] as string | undefined;
 
-	if (lang === "mermaid") {
-		return <MermaidBlock code={code} />;
+	if (isMermaid && dataId) {
+		const idx = Number.parseInt(dataId.replace("MERMAID_", ""), 10);
+		const code = mermaidBlocksRef.current[idx];
+		if (code) {
+			return <MermaidBlock code={code} />;
+		}
 	}
+
+	const code = textContent(children);
 
 	const handleCopy = async () => {
 		try {
@@ -110,10 +129,15 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	);
 }
 
+const mermaidBlocksRef = { current: [] as string[] };
+
 export default function MarkdownContent({
 	content,
 	urlTransform,
 }: MarkdownContentProps) {
+	mermaidBlocksRef.current = [];
+	const processed = preprocessMermaid(content, mermaidBlocksRef.current);
+
 	return (
 		<ReactMarkdown
 			remarkPlugins={[remarkGfm]}
@@ -130,7 +154,7 @@ export default function MarkdownContent({
 			}}
 			urlTransform={urlTransform}
 		>
-			{content}
+			{processed}
 		</ReactMarkdown>
 	);
 }
