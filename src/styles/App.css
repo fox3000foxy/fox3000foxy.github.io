@@ -577,6 +577,72 @@ a {
 
 :root.light .hljs-built_in { color: var(--hljs-built-in); }
 
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.shortcuts-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+}
+
+.shortcuts-modal h3 {
+  margin: 0 0 1rem;
+  color: var(--text);
+}
+
+.shortcuts-modal dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  align-items: center;
+}
+
+.shortcuts-modal dt kbd {
+  display: inline-block;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+  font-family: monospace;
+  color: var(--text);
+}
+
+.shortcuts-modal dd {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.shortcuts-close {
+  margin-top: 1rem;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.shortcuts-close:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
 @media (max-width: 768px) {
   #root {
     padding: 1rem;

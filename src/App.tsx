@@ -8,6 +8,7 @@ import {
 import BackToTop from "./components/BackToTop";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import KeyboardShortcuts from "./components/KeyboardShortcuts";
 import { LangContext, useLangState } from "./hooks/useLang";
 import { ThemeContext, useThemeState } from "./hooks/useTheme";
 import "./styles/App.css";
@@ -31,6 +32,7 @@ function App() {
 			<ThemeContext.Provider value={themeCtx}>
 				<Router>
 					<Header />
+					<KeyboardShortcuts />
 					<BackToTop />
 					<main>
 						<Suspense fallback={<div>Loading...</div>}>
