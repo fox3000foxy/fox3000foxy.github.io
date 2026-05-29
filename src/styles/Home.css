@@ -162,3 +162,45 @@
 .newsletter-error {
   color: #ef5350 !important;
 }
+
+.rss-subscribe {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  align-items: center;
+}
+
+.rss-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ff6600;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: opacity 0.15s;
+}
+
+.rss-btn:hover {
+  opacity: 0.85;
+  color: #fff;
+}
+
+.rss-copy-btn {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.rss-copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}

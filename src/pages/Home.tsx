@@ -3,6 +3,7 @@ import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import GitHubActivity from "../components/GitHubActivity";
 import NewsletterSignup from "../components/NewsletterSignup";
+import RssSubscribe from "../components/RssSubscribe";
 import { useMarkdown } from "../hooks/useMarkdown";
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
 	return (
 		<article className="home">
 			<MarkdownContent content={content} />
+			<RssSubscribe />
 			<GitHubActivity />
 			<NewsletterSignup />
 		</article>
