@@ -432,6 +432,51 @@ a {
 
 :root.light .hljs-built_in { color: var(--hljs-built-in); }
 
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  main {
+    padding: 5rem 1rem 1rem;
+  }
+
+  article {
+    max-width: 100%;
+  }
+
+  .article-content {
+    max-width: 100%;
+  }
+
+  .article-nav {
+    flex-direction: column;
+  }
+
+  .article-nav-link {
+    max-width: 100%;
+  }
+
+  .article-nav-link.next {
+    text-align: left;
+    margin-left: 0;
+  }
+
+  .share-buttons {
+    flex-wrap: wrap;
+  }
+
+  .author-bio {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .author-links {
+    justify-content: center;
+  }
+}
+
 .giscus-comments {
   margin-top: 2rem;
   padding-top: 1.5rem;
