@@ -1,5 +1,12 @@
 [
   {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "title": "Lógica de pathfinding de Minecraft y sus aplicaciones",
+    "description": "Cómo el algoritmo A*, los malus de bloques y los POI permiten controlar, predecir y explotar el movimiento de los mobs -- desde redstone inalámbrica hasta granjas optimizadas.",
+    "date": "2026-05-29",
+    "tags": ["minecraft", "pathfinding", "reverse-engineering"]
+  },
+  {
     "slug": "typescript-virtual-container-polyfills",
     "title": "Hacer funcionar una biblioteca Node.js en el navegador sin Wasm -- los polyfills de typescript-virtual-container",
     "description": "Cómo Fortune reimplementó a mano node:fs, node:crypto y una docena de módulos Node más en 640 líneas de JavaScript para que el contenedor funcione en el navegador sin Wasm.",

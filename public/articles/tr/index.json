@@ -1,5 +1,12 @@
 [
   {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "title": "Minecraft Pathfinding Mantığı ve Uygulamaları",
+    "description": "A* algoritması, blok cezaları ve POI mekanikleri ile mob hareketlerini nasıl kontrol edebileceğin, tahmin edebileceğin ve sömürebileceğin -- kablosuz redstone'dan optimize edilmiş çiftliklere.",
+    "date": "2026-05-29",
+    "tags": ["minecraft", "pathfinding", "reverse-engineering"]
+  },
+  {
     "slug": "typescript-virtual-container-polyfills",
     "title": "Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri",
     "description": "Fortune'un, konteynerin Wasm olmadan tarayıcıda çalışması için node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript'te elle nasıl yeniden uyguladığı.",

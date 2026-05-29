@@ -1,5 +1,12 @@
 [
   {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "title": "Minecraft寻路逻辑及其应用",
+    "description": "A*算法、方块惩罚和POI机制如何让你控制、预测和利用生物移动 -- 从无线红石到优化农场。",
+    "date": "2026-05-29",
+    "tags": ["minecraft", "pathfinding", "reverse-engineering"]
+  },
+  {
     "slug": "typescript-virtual-container-polyfills",
     "title": "如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill",
     "description": "Fortune 如何用 640 行 JavaScript 手动重新实现了 node:fs、node:crypto 等一打 Node 模块，让容器在浏览器中无需 Wasm 即可运行。",
