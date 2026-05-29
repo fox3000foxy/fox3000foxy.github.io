@@ -4,8 +4,10 @@ import MarkdownContent from "../components/MarkdownContent";
 import { useMarkdown } from "../hooks/useMarkdown";
 
 export default function Home() {
-	const { t } = useLang();
-	const { content, error } = useMarkdown("/home.md", "home");
+	const { t, lang } = useLang();
+	const url = lang === "en" ? "/home.md" : `/home.${lang}.md`;
+	const fallbackUrl = lang === "en" ? undefined : "/home.md";
+	const { content, error } = useMarkdown(url, `home:${lang}`, fallbackUrl);
 
 	if (error) {
 		return <p>{t("home.error")}</p>;

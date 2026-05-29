@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchMarkdown, getCachedMarkdown } from "../utils/articleCache";
 
-export function useMarkdown(url: string, key: string) {
+export function useMarkdown(url: string, key: string, fallbackUrl?: string) {
 	const [content, setContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 
@@ -13,16 +13,19 @@ export function useMarkdown(url: string, key: string) {
 			return;
 		}
 
-		Promise.resolve(fetchMarkdown(key, url))
-			.then((text) => {
-				if (text === null) {
-					setError(true);
-					return;
-				}
-				setContent(text);
-			})
-			.catch(() => setError(true));
-	}, [url, key]);
+		async function load() {
+			let text = await fetchMarkdown(key, url);
+			if (text === null && fallbackUrl) {
+				text = await fetchMarkdown(key, fallbackUrl);
+			}
+			if (text === null) {
+				setError(true);
+				return;
+			}
+			setContent(text);
+		}
+		load().catch(() => setError(true));
+	}, [url, key, fallbackUrl]);
 
 	return { content, error, loading: content === null };
 }
