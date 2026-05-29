@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "character-factory",
+    "title": "Construyendo character-factory: avatares con genética",
+    "description": "Un módulo de TypeScript sobre DiceBear: generación coherente basada en país/etnia, un pequeño motor genético para proyectar hijos, y los detalles de ingeniería que lo hicieron usable en un juego de cartas.",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "tags": ["typescript", "npm", "open-source"]
+  },
+  {
+    "slug": "hello-world",
+    "title": "Hola Mundo",
+    "description": "Una publicación de ejemplo para el Blog de Fox.",
+    "date": "2026-03-08",
+    "tags": ["meta", "blog"]
+  },
+  {
+    "slug": "about-my-github-profile",
+    "title": "Sobre Mi Perfil de GitHub",
+    "description": "Una breve introducción a mi perfil de GitHub.",
+    "date": "2026-03-08",
+    "tags": ["meta", "github"]
+  },
+  {
+    "slug": "how-this-blog-works",
+    "title": "¿Cómo Funciona Este Blog?",
+    "description": "Una exploración a fondo de los internos de este blog: React, Vite, Markdown, el pipeline de CI/CD y el flujo de trabajo para escribir artículos.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": ["react", "meta", "blog"]
+  },
+  {
+    "slug": "my-passions",
+    "title": "Mis Pasiones",
+    "description": "Programar, dibujar, automatizar cosas, descubrir tecnología antigua y más — una mirada a lo que me mueve.",
+    "date": "2026-03-08",
+    "tags": ["personal"]
+  },
+  {
+    "slug": "ssh-signing-script",
+    "title": "Script de firma de commits SSH explicado",
+    "description": "Un recorrido por el ayudante de firma de commits SSH y por qué quería commits con estilo.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": ["git", "security", "shell"]
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "title": "Trabajando en un Nuevo Proyecto",
+    "description": "Una mirada al proceso de iniciar y desarrollar un nuevo sitio web.",
+    "date": "2026-03-13",
+    "tags": ["meta", "webdev"]
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "title": "Comparando Soluciones JavaScript para Simulaciones de Kernels Linux",
+    "description": "Un análisis profundo de recreaciones de entornos Linux en JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "tags": ["javascript", "linux", "analysis"]
+  },
+  {
+    "slug": "botting-a-farm",
+    "title": "Automatizando una Granja de Microsoft Rewards",
+    "description": "Cómo programé un bot para cultivar puntos de Microsoft Rewards a escala — y por qué la detección antibots de Microsoft ya se ha puesto al día.",
+    "date": "2026-03-13",
+    "tags": ["automation", "javascript", "reverse-engineering"]
+  }
+]
