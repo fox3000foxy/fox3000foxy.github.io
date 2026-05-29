@@ -6,6 +6,7 @@ import {
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
 import MarkdownContent from "../components/MarkdownContent";
+import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
 import NotFound from "./NotFound";
 
@@ -23,6 +24,7 @@ export default function Article() {
 	const [content, setContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
+	const [allArticles, setAllArticles] = useState<ArticleMeta[]>([]);
 
 	useEffect(() => {
 		if (!slug) { return; }
@@ -50,6 +52,7 @@ export default function Article() {
 					const normalized: ArticleMeta[] = data.map((item: any) =>
 						typeof item === "string" ? { slug: item } : item
 					);
+					setAllArticles(normalized);
 					setMeta(normalized.find((a) => a.slug === slug) || null);
 				}
 			})
@@ -86,6 +89,13 @@ export default function Article() {
 			)}
 			<TableOfContents content={content} />
 			<MarkdownContent content={content} />
+			{meta?.tags && meta.tags.length > 0 && (
+				<SuggestedArticles
+					currentSlug={slug!}
+					currentTags={meta.tags}
+					allArticles={allArticles}
+				/>
+			)}
 		</article>
 	);
 }
