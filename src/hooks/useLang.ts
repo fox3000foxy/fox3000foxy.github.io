@@ -1,18 +1,20 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import type { Lang } from "../i18n/translations";
-import { translations } from "../i18n/translations";
+import type { Lang } from "../i18n/types";
+import { ALL_LANGS } from "../i18n/types";
+import { translations } from "../i18n";
 
 const LANG_KEY = "fox-blog-lang";
 
 function detectLang(): Lang {
 	if (typeof localStorage !== "undefined") {
-		const stored = localStorage.getItem(LANG_KEY);
-		if (stored === "en" || stored === "fr") { return stored; }
+		const stored = localStorage.getItem(LANG_KEY) as Lang | null;
+		if (stored && ALL_LANGS.includes(stored)) { return stored; }
 	}
 	if (typeof navigator !== "undefined") {
 		const prefs = navigator.languages ?? [navigator.language];
 		for (const pref of prefs) {
-			if (pref.startsWith("fr")) { return "fr"; }
+			const code = pref.split("-")[0] as Lang;
+			if (ALL_LANGS.includes(code)) { return code; }
 		}
 	}
 	return "en";

@@ -50,34 +50,20 @@ nav a:hover {
   text-decoration: underline;
 }
 
-.lang-switcher {
+.lang-select {
   margin-left: 1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-}
-
-.lang-btn {
-  background: none;
-  border: none;
-  color: #555;
-  font-size: 0.75rem;
-  font-weight: 600;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #ccc;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 0.15rem 0.25rem;
-  transition: color 0.15s;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
-.lang-btn.active {
-  color: #64b5f6;
-}
-
-.lang-btn:hover {
-  color: #90caf9;
-}
-
-.lang-sep {
-  color: #444;
-  font-size: 0.75rem;
-  padding: 0 0.1rem;
+.lang-select:hover,
+.lang-select:focus {
+  border-color: #64b5f6;
 }

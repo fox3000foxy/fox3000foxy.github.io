@@ -22,7 +22,7 @@ function estimateReadingTime(text: string): number {
 
 export default function Article() {
 	const { slug } = useParams<{ slug: string }>();
-	const { t } = useLang();
+	const { t, lang } = useLang();
 	const [content, setContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
@@ -31,11 +31,11 @@ export default function Article() {
 	useEffect(() => {
 		if (!slug) { return; }
 
-		const cached = getCachedArticleMarkdown(slug);
+		const cached = getCachedArticleMarkdown(slug, lang);
 		if (cached !== null) {
 			setContent(processArticleContent(cached));
 		} else {
-			Promise.resolve(fetchArticleMarkdown(slug))
+			Promise.resolve(fetchArticleMarkdown(slug, lang))
 				.then((text) => {
 					if (!text) {
 						setError(true);
@@ -46,20 +46,26 @@ export default function Article() {
 				.catch(() => setError(true));
 		}
 
-		fetch("/articles/index.json")
-			.then((res) => (res.ok ? res.json() : []))
-			.then((data) => {
-				if (Array.isArray(data)) {
-					// biome-ignore lint/suspicious/noExplicitAny: need to handle legacy string format
-					const normalized: ArticleMeta[] = data.map((item: any) =>
-						typeof item === "string" ? { slug: item } : item
-					);
-					setAllArticles(normalized);
-					setMeta(normalized.find((a) => a.slug === slug) || null);
-				}
-			})
-			.catch(() => {});
-	}, [slug]);
+		const indexUrl = `/articles/${lang}/index.json`;
+		const fallbackUrl = lang !== "en" ? "/articles/en/index.json" : null;
+
+		async function loadIndex() {
+			let res = await fetch(indexUrl);
+			if (!res.ok && fallbackUrl) { res = await fetch(fallbackUrl); }
+			if (!res.ok) return;
+
+			const data: unknown = await res.json();
+			if (Array.isArray(data)) {
+				// biome-ignore lint/suspicious/noExplicitAny: need to handle legacy string format
+				const normalized: ArticleMeta[] = data.map((item: any) =>
+					typeof item === "string" ? { slug: item } : item
+				);
+				setAllArticles(normalized);
+				setMeta(normalized.find((a) => a.slug === slug) || null);
+			}
+		}
+		loadIndex();
+	}, [slug, lang]);
 
 	if (error) {
 		return <NotFound message={t("notFound.article", { slug: slug || "" })} />;
