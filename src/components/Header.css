@@ -5,8 +5,8 @@ header {
   width: 100%;
 
   /* the inner container constrains content */
-  background-color: #000;
-  color: #fff;
+  background-color: var(--bg);
+  color: var(--text);
   z-index: 1000;
 }
 
@@ -41,7 +41,7 @@ nav {
 }
 
 nav a {
-  color: #fff;
+  color: var(--text);
   margin: 0 0.75rem;
   text-decoration: none;
 }
@@ -52,9 +52,9 @@ nav a:hover {
 
 .lang-select {
   margin-left: 1rem;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #ccc;
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
+  color: var(--text-secondary);
   font-size: 0.8rem;
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
@@ -65,5 +65,21 @@ nav a:hover {
 
 .lang-select:hover,
 .lang-select:focus {
-  border-color: #64b5f6;
+  border-color: var(--accent);
+}
+
+.theme-toggle {
+  margin-left: 0.5rem;
+  background: none;
+  border: 1px solid var(--border-hover);
+  border-radius: 6px;
+  padding: 0.2rem 0.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: border-color 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
 }

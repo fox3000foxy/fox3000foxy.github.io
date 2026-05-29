@@ -36,7 +36,7 @@
   display: flex;
   flex-direction: column;
   background: #111;
-  border: 1px solid #222;
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
   text-decoration: none;
@@ -47,7 +47,7 @@
 }
 
 .blog-card:hover {
-  border-color: #64b5f6;
+  border-color: var(--accent);
   box-shadow: 0 0 12px rgba(100, 181, 246, 0.15);
   transform: translateY(-2px);
 }
@@ -66,13 +66,13 @@
 }
 
 .blog-card:hover .blog-card-title {
-  color: #90caf9;
+  color: var(--accent-hover);
 }
 
 .blog-card-desc {
   margin: 0;
   font-size: 0.95rem;
-  color: #aaa;
+  color: var(--text-muted);
   line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,12 +84,12 @@
 .blog-card-footer {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #222;
+  border-top: 1px solid var(--border);
 }
 
 .blog-card-footer time {
   font-size: 0.8rem;
-  color: #777;
+  color: var(--text-muted);
 }
 
 .ai-badge {
@@ -114,22 +114,22 @@
 .search-bar input[type="search"] {
   width: 100%;
   max-width: 320px;
-  background: #1a1a1a;
-  border: 1px solid #333;
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
   border-radius: 999px;
   padding: 0.5rem 2.2rem 0.5rem 1rem;
   font-size: 0.9rem;
-  color: #eee;
+  color: var(--text);
   outline: none;
   transition: border-color 0.2s;
 }
 
 .search-bar input[type="search"]:focus {
-  border-color: #64b5f6;
+  border-color: var(--accent);
 }
 
 .search-bar input[type="search"]::placeholder {
-  color: #666;
+  color: var(--text-dim);
 }
 
 .search-clear {
@@ -137,7 +137,7 @@
   left: 288px;
   background: none;
   border: none;
-  color: #888;
+  color: var(--text-muted);
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0 0.4rem;
@@ -145,7 +145,7 @@
 }
 
 .search-clear:hover {
-  color: #eee;
+  color: var(--text);
 }
 
 .tag-filter {
@@ -156,9 +156,9 @@
 }
 
 .tag-btn {
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #aaa;
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
+  color: var(--text-muted);
   border-radius: 999px;
   padding: 0.3rem 0.85rem;
   font-size: 0.8rem;
@@ -167,14 +167,14 @@
 }
 
 .tag-btn:hover {
-  border-color: #64b5f6;
-  color: #90caf9;
+  border-color: var(--accent);
+  color: var(--accent-hover);
 }
 
 .tag-btn.active {
-  background: rgba(100, 181, 246, 0.15);
-  border-color: #64b5f6;
-  color: #90caf9;
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-hover);
 }
 
 .blog-card-tags {
@@ -193,9 +193,9 @@
 }
 
 .pagination button {
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #aaa;
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
+  color: var(--text-muted);
   border-radius: 6px;
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
@@ -204,8 +204,8 @@
 }
 
 .pagination button:hover:not(:disabled) {
-  border-color: #64b5f6;
-  color: #90caf9;
+  border-color: var(--accent);
+  color: var(--accent-hover);
 }
 
 .pagination button:disabled {
@@ -215,7 +215,7 @@
 
 .pagination span {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-dim);
   font-variant-numeric: tabular-nums;
 }
 
@@ -223,9 +223,9 @@
   display: inline-block;
   font-size: 0.7rem;
   font-weight: 500;
-  color: #81c784;
-  background: rgba(129, 199, 132, 0.1);
-  border: 1px solid rgba(129, 199, 132, 0.25);
+  color: var(--tag-text);
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
   border-radius: 999px;
   padding: 0.15rem 0.6rem;
 }

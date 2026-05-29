@@ -1,0 +1,49 @@
+:root {
+  --bg: #000;
+  --bg-secondary: #111;
+  --bg-card: #0d0d0d;
+  --bg-hover: #1a1a1a;
+  --border: #222;
+  --border-hover: #333;
+  --text: #fff;
+  --text-secondary: #ccc;
+  --text-muted: #888;
+  --text-dim: #666;
+  --accent: #64b5f6;
+  --accent-hover: #90caf9;
+  --accent-bg: rgba(100, 181, 246, 0.15);
+  --ai-badge-bg: rgba(139, 92, 246, 0.15);
+  --ai-badge-border: rgba(139, 92, 246, 0.3);
+  --ai-badge-text: #c4b5fd;
+  --tag-bg: rgba(129, 199, 132, 0.1);
+  --tag-border: rgba(129, 199, 132, 0.25);
+  --tag-text: #81c784;
+  --copy-btn-bg: #2a2a2a;
+  --input-bg: #1a1a1a;
+  --skeleton: #1a1a1a;
+}
+
+:root.light {
+  --bg: #f8f9fa;
+  --bg-secondary: #fff;
+  --bg-card: #fff;
+  --bg-hover: #f0f0f0;
+  --border: #e0e0e0;
+  --border-hover: #ccc;
+  --text: #111;
+  --text-secondary: #333;
+  --text-muted: #666;
+  --text-dim: #999;
+  --accent: #1565c0;
+  --accent-hover: #0d47a1;
+  --accent-bg: rgba(21, 101, 192, 0.1);
+  --ai-badge-bg: rgba(139, 92, 246, 0.1);
+  --ai-badge-border: rgba(139, 92, 246, 0.2);
+  --ai-badge-text: #7c3aed;
+  --tag-bg: rgba(76, 175, 80, 0.1);
+  --tag-border: rgba(76, 175, 80, 0.25);
+  --tag-text: #2e7d32;
+  --copy-btn-bg: #eee;
+  --input-bg: #fff;
+  --skeleton: #e0e0e0;
+}
