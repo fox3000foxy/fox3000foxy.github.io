@@ -1,32 +1,15 @@
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import {
 	fetchArticleMarkdown,
 	getCachedArticleMarkdown,
 } from "../utils/articleCache";
+import type { ArticleMeta } from "../types";
+import MarkdownContent from "../components/MarkdownContent";
 import NotFound from "./NotFound";
 
-// extend the default schema to permit class and style on all elements
-// this allows authors to write inline styles in markdown HTML
-const sanitizeSchema = {
-	...defaultSchema,
-	attributes: {
-		...defaultSchema.attributes,
-		"*": [...(defaultSchema.attributes?.["*"] || []), "class", "style"],
-	},
-};
-
-interface ArticleMeta {
-	slug: string;
-	title?: string;
-	description?: string;
-	date?: string;
-	aiGenerated?: boolean;
+function processArticleContent(text: string): string {
+	return text.replaceAll("assets/", "/articles/assets/");
 }
 
 export default function Article() {
@@ -38,50 +21,33 @@ export default function Article() {
 	useEffect(() => {
 		if (!slug) { return; }
 
-		const fromCache = getCachedArticleMarkdown(slug);
-		if (fromCache === null) {
-			const fetchPromise = fetchArticleMarkdown(slug);
-			if (typeof fetchPromise === "string") {
-				const processed = fetchPromise.replaceAll("assets/", "/articles/assets/");
-				setContent(processed);
-				setError(false);
-			} else if (fetchPromise instanceof Promise) {
-				fetchPromise
-					.then((text) => {
-						if (!text) {
-							setError(true);
-							return;
-						}
-						const processed = text.replaceAll("assets/", "/articles/assets/");
-						setContent(processed);
-						setError(false);
-					})
-					.catch(() => setError(true));
-			}
+		const cached = getCachedArticleMarkdown(slug);
+		if (cached !== null) {
+			setContent(processArticleContent(cached));
 		} else {
-			const processed = fromCache.replaceAll("assets/", "/articles/assets/");
-			// eslint-disable-next-line react-hooks/set-state-in-effect
-			setContent(processed);
-			setError(false);
+			Promise.resolve(fetchArticleMarkdown(slug))
+				.then((text) => {
+					if (!text) {
+						setError(true);
+						return;
+					}
+					setContent(processArticleContent(text));
+				})
+				.catch(() => setError(true));
 		}
 
-		// fetch metadata from index.json (if available)
 		fetch("/articles/index.json")
 			.then((res) => (res.ok ? res.json() : []))
 			.then((data) => {
 				if (Array.isArray(data)) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					// biome-ignore lint/suspicious/noExplicitAny: need to handle legacy string format
 					const normalized: ArticleMeta[] = data.map((item: any) =>
 						typeof item === "string" ? { slug: item } : item
 					);
-					const found = normalized.find((a) => a.slug === slug);
-					setMeta(found || null);
+					setMeta(normalized.find((a) => a.slug === slug) || null);
 				}
 			})
-			.catch(() => {
-				/* no-op */
-			});
+			.catch(() => {});
 	}, [slug]);
 
 	if (error) {
@@ -92,29 +58,8 @@ export default function Article() {
 		return <p>Loading…</p>;
 	}
 
-	const components = {
-		a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
-			const { href, children, ...rest } = props;
-			if (!href) { return <a {...rest}>{children}</a>; }
-			const isExternal = /^https?:\/\//.test(href);
-			if (isExternal) {
-				return (
-					<a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
-						{children}
-					</a>
-				);
-			}
-			return (
-				<a href={href} {...rest}>
-					{children}
-				</a>
-			);
-		},
-	};
-
 	return (
 		<article>
-			{/* display metadata if available */}
 			{meta?.aiGenerated && (
 				<span className="ai-badge">✨ AI Generated Article</span>
 			)}
@@ -122,17 +67,7 @@ export default function Article() {
 			{meta?.description && (
 				<p className="article-description">{meta.description}</p>
 			)}
-			<ReactMarkdown
-				remarkPlugins={[remarkGfm]}
-				rehypePlugins={[
-					rehypeRaw,
-					[rehypeSanitize, sanitizeSchema],
-					rehypeHighlight,
-				]}
-				components={components}
-			>
-				{content}
-			</ReactMarkdown>
+			<MarkdownContent content={content} />
 		</article>
 	);
 }
