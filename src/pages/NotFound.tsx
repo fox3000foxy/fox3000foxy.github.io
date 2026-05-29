@@ -1,77 +1,26 @@
-import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+import MarkdownContent from "../components/MarkdownContent";
+import { useMarkdown } from "../hooks/useMarkdown";
 
 interface Props {
 	message?: string;
 }
 
-// extend default schema to allow class/style (used elsewhere)
-const sanitizeSchema = {
-	...defaultSchema,
-	attributes: {
-		...defaultSchema.attributes,
-		"*": [...(defaultSchema.attributes?.["*"] || []), "class", "style"],
-	},
-};
-
 export default function NotFound({ message }: Props) {
-	const [markdown, setMarkdown] = useState<string | null>(null);
-	const [loading, setLoading] = useState(true);
+	const { content } = useMarkdown("/404.md", "404");
 
-	useEffect(() => {
-		fetch("/404.md")
-			.then((res) => {
-				if (!res.ok) { throw new Error("not found"); }
-				return res.text();
-			})
-			.then((text) => setMarkdown(text))
-			.catch(() => setMarkdown(null))
-			.finally(() => setLoading(false));
-	}, []);
-
-	if (loading) {
+	if (content === null) {
 		return <p>Loading…</p>;
 	}
 
-	const components = {
-		a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
-			const { href, children, ...rest } = props;
-			if (!href) { return <a {...rest}>{children}</a>; }
-			const isExternal = /^https?:\/\//.test(href);
-			if (isExternal) {
-				return (
-					<a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
-						{children}
-					</a>
-				);
-			}
-			return (
-				<a href={href} {...rest}>
-					{children}
-				</a>
-			);
-		},
-	};
-
-	if (markdown) {
+	if (content) {
 		return (
 			<article>
-				<ReactMarkdown
-					remarkPlugins={[remarkGfm]}
-					rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
-					components={components}
-				>
-					{markdown}
-				</ReactMarkdown>
+				<MarkdownContent content={content} />
 			</article>
 		);
 	}
 
-	// fallback to hard‑coded content
 	return (
 		<div>
 			<h2>404</h2>

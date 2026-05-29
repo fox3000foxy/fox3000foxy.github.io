@@ -1,19 +1,7 @@
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+import MarkdownContent from "../components/MarkdownContent";
 import NotFound from "./NotFound";
-
-const sanitizeSchema = {
-	...defaultSchema,
-	attributes: {
-		...defaultSchema.attributes,
-		"*": [...(defaultSchema.attributes?.["*"] || []), "class", "style"],
-	},
-};
 
 interface RepoMeta {
 	name: string;
@@ -33,7 +21,6 @@ export default function Project() {
 	useEffect(() => {
 		if (!slug) { return; }
 
-		// fetch repo metadata to get default branch
 		fetch(
 			`https://api.github.com/repos/fox3000foxy/${encodeURIComponent(slug)}`
 		)
@@ -43,7 +30,6 @@ export default function Project() {
 			})
 			.then((data: RepoMeta) => {
 				setRepo(data);
-				// fetch README from the default branch
 				return fetch(
 					`https://raw.githubusercontent.com/fox3000foxy/${encodeURIComponent(slug)}/${data.default_branch}/README.md`
 				);
@@ -89,40 +75,9 @@ export default function Project() {
 					</p>
 				</div>
 			)}
-			{/* external links open in new tab */}
-			<ReactMarkdown
-				remarkPlugins={[remarkGfm]}
-				rehypePlugins={[
-					rehypeRaw,
-					[rehypeSanitize, sanitizeSchema],
-					rehypeHighlight,
-				]}
-				components={{
-					a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
-						const { href, children, ...rest } = props;
-						if (!href) { return <a {...rest}>{children}</a>; }
-						const isExternal = /^https?:\/\//.test(href);
-						if (isExternal) {
-							return (
-								<a
-									href={href}
-									target="_blank"
-									rel="noopener noreferrer"
-									{...rest}
-								>
-									{children}
-								</a>
-							);
-						}
-						return (
-							<a href={href} {...rest}>
-								{children}
-							</a>
-						);
-					},
-				}}
+			<MarkdownContent
+				content={content || "*This project does not have a README.*"}
 				urlTransform={(url) => {
-					// resolve relative image/link URLs against the GitHub raw content
 					if (
 						repo &&
 						url &&
@@ -134,9 +89,7 @@ export default function Project() {
 					}
 					return url;
 				}}
-			>
-				{content || "*This project does not have a README.*"}
-			</ReactMarkdown>
+			/>
 		</article>
 	);
 }
