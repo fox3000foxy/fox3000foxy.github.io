@@ -56,17 +56,25 @@ So why not store state in it?
 
 The idea: each run, the bot reads the last processed email UID from a **git tag**. It processes new emails. Then it re-pushes the tag with the new UID.
 
-```
-Run #1: reads tag "lastid" → empty
-        processes emails 1-50
-        push tag "lastid" = 50
-
-Run #2: reads tag "lastid" → 50
-        processes emails 51-73
-        push tag "lastid" = 73
-
-Run #3: reads tag "lastid" → 73
-        ...
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP Server
+    
+    Note over GH: Run #1
+    GH->>GIT: read tag "lastid"
+    GIT-->>GH: empty (first run)
+    GH->>IMAP: fetch emails 1-50
+    IMAP-->>GH: 50 emails
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: read tag "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: fetch emails 51-73
+    IMAP-->>GH: 23 emails
+    GH->>GIT: push tag "lastid" = 73
 ```
 
 The git tag IS the database. A single value, but that's all you need.

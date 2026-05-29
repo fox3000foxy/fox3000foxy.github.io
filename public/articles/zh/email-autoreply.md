@@ -54,17 +54,25 @@ GitHub Actions 是免费的。你可以每 5 分钟跑一个 cron，跑你的代
 
 思路：每次运行时，bot 从 **git tag** 读取已处理的上一个邮件 UID。处理新邮件。然后把 tag 更新为新 UID 再 push 回去。
 
-```
-Run #1: 读取 tag "lastid" → 空
-        处理邮件 1-50
-        push tag "lastid" = 50
-
-Run #2: 读取 tag "lastid" → 50
-        处理邮件 51-73
-        push tag "lastid" = 73
-
-Run #3: 读取 tag "lastid" → 73
-        ...
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP服务器
+    
+    Note over GH: Run #1
+    GH->>GIT: 读取标签 "lastid"
+    GIT-->>GH: 空（首次运行）
+    GH->>IMAP: fetch mails 1-50
+    IMAP-->>GH: 50 mails
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: 读取标签 "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: fetch mails 51-73
+    IMAP-->>GH: 23 mails
+    GH->>GIT: push tag "lastid" = 73
 ```
 
 git tag 就是数据库。只有一个值，但这就是我们需要的全部。

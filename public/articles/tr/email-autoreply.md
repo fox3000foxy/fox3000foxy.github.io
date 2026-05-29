@@ -57,17 +57,25 @@ O zaman neden durumu orada saklamıyorsun?
 
 Fikir: her run'da bot son işlenen email UID'sini bir **git tag**'inden okuyor. Yeni mailleri işliyor. Sonra tag'i yeni UID ile tekrar push'luyor.
 
-```
-Run #1: lit tag "lastid" → vide
-        traite mails 1-50
-        push tag "lastid" = 50
-
-Run #2: lit tag "lastid" → 50
-        traite mails 51-73
-        push tag "lastid" = 73
-
-Run #3: lit tag "lastid" → 73
-        ...
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP Sunucusu
+    
+    Note over GH: Run #1
+    GH->>GIT: okur tag'ı "lastid"
+    GIT-->>GH: boş (ilk çalıştırma)
+    GH->>IMAP: fetch mails 1-50
+    IMAP-->>GH: 50 mails
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: okur tag'ı "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: fetch mails 51-73
+    IMAP-->>GH: 23 mails
+    GH->>GIT: push tag "lastid" = 73
 ```
 
 Git tag'i veritabanının TA KENDİSİ. Tek bir değer, ama ihtiyacın olan tek şey bu.

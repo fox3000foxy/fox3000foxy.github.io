@@ -56,17 +56,25 @@ Entonces, ¿por qué no guardar el estado ahí?
 
 La idea: en cada ejecución, el bot lee el último UID de email procesado desde un **git tag**. Procesa los mails nuevos. Luego vuelve a hacer push del tag con el nuevo UID.
 
-```
-Run #1: lee tag "lastid" → vacío
-        procesa mails 1-50
-        push tag "lastid" = 50
-
-Run #2: lee tag "lastid" → 50
-        procesa mails 51-73
-        push tag "lastid" = 73
-
-Run #3: lee tag "lastid" → 73
-        ...
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as Servidor IMAP
+    
+    Note over GH: Run #1
+    GH->>GIT: lee tag "lastid"
+    GIT-->>GH: vacío (primer run)
+    GH->>IMAP: fetch mails 1-50
+    IMAP-->>GH: 50 mails
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: lee tag "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: fetch mails 51-73
+    IMAP-->>GH: 23 mails
+    GH->>GIT: push tag "lastid" = 73
 ```
 
 El tag git ES la base de datos. Un solo valor, pero es todo lo que necesitas.

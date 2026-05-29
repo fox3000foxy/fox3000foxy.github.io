@@ -55,17 +55,25 @@ GitHub Actions는 공짜야. 5분마다 cron 돌려서 코드 실행시켜도 �
 
 아이디어: 매 실행마다 봇이 **git tag**에서 마지막으로 처리한 이메일 UID를 읽어. 새 메일을 처리하고. 그리고 새 UID로 태그를 다시 푸시해.
 
-```
-Run #1: lit tag "lastid" → vide
-        traite mails 1-50
-        push tag "lastid" = 50
-
-Run #2: lit tag "lastid" → 50
-        traite mails 51-73
-        push tag "lastid" = 73
-
-Run #3: lit tag "lastid" → 73
-        ...
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP 서버
+    
+    Note over GH: Run #1
+    GH->>GIT: 태그 읽음 "lastid"
+    GIT-->>GH: 비어있음 (첫 실행)
+    GH->>IMAP: fetch mails 1-50
+    IMAP-->>GH: 50 mails
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: 태그 읽음 "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: fetch mails 51-73
+    IMAP-->>GH: 23 mails
+    GH->>GIT: push tag "lastid" = 73
 ```
 
 git 태그가 곧 데이터베이스야. 하나의 값만 저장하지만, 그게 전부야.

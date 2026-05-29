@@ -136,6 +136,25 @@ Here's how the AI decides:
 7. If enough mana (> 2), dash (double move) to get even closer
 8. If the unit is the Oracle → flee
 
+```mermaid
+flowchart TD
+    A[CPU turn starts] --> B{Oracle alive?}
+    B -->|No| C[Place new Oracle]
+    B -->|Yes| D[Calculate attack\ncoefficients for\neach unit pair]
+    D --> E[Pick best pair\nattacker → target]
+    E --> F{Can attack\nfrom position?}
+    F -->|Yes| G[Attack target]
+    F -->|No| H{Fewer than 4\nunits?}
+    H -->|Yes| I[Summon cheapest\navailable from hand]
+    H -->|No| J[Move toward target\nnearest square]
+    J --> K{Mana > 2?}
+    K -->|Yes| L[Dash: double move\ntoward target]
+    K -->|No| M[End turn]
+    G --> M
+    I --> M
+    L --> M
+```
+
 ```javascript
 async makeAction(dash=false) {
     // all of this in sequence
