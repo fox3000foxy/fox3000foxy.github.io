@@ -21,10 +21,13 @@ function formatEvent(event: GitHubEvent) {
 			const count = event.payload.commits?.length ?? 0;
 			const msg = event.payload.commits?.[0]?.message ?? "";
 			const short = msg.length > 60 ? `${msg.slice(0, 60)}…` : msg;
-			return `${count} commit${count > 1 ? "s" : ""} → ${repo}: ${short}`;
+			if (count > 0 && msg) {
+				return `${count} commit${count > 1 ? "s" : ""} → ${repo}: ${short}`;
+			}
+			return `Pushed to → ${repo}`;
 		}
 		case "CreateEvent":
-			return `Created ${event.payload.ref_type} → ${repo}`;
+			return `Created ${event.payload.ref_type ?? ""} → ${repo}`;
 		case "IssuesEvent":
 			return `${event.payload.action === "opened" ? "Opened" : "Closed"} issue → ${repo}`;
 		case "WatchEvent":
@@ -53,14 +56,23 @@ function timeAgo(date: string): string {
 }
 
 export default function GitHubActivity() {
-	const [events, setEvents] = useState<GitHubEvent[]>([]);
+	const [events, setEvents] = useState<GitHubEvent[] | null>(null);
 
 	useEffect(() => {
 		fetch(`https://api.github.com/users/${USERNAME}/events?per_page=10`)
-			.then((r) => (r.ok ? r.json() : []))
+			.then((r) => (r.ok ? r.json() : null))
 			.then((data) => setEvents(Array.isArray(data) ? data : []))
-			.catch(() => {});
+			.catch(() => setEvents([]));
 	}, []);
+
+	if (events === null) {
+		return (
+			<div className="github-activity">
+				<h3>Recent GitHub Activity</h3>
+				<p className="github-loading">Loading…</p>
+			</div>
+		);
+	}
 
 	if (events.length === 0) {
 		return null;

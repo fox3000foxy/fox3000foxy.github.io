@@ -85,3 +85,8 @@
 .github-view-all:hover {
   color: var(--accent-hover);
 }
+
+.github-loading {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
