@@ -9,6 +9,7 @@ import BackToTop from "./components/BackToTop";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import KeyboardShortcuts from "./components/KeyboardShortcuts";
+import Lightbox from "./components/Lightbox";
 import { LangContext, useLangState } from "./hooks/useLang";
 import { ThemeContext, useThemeState } from "./hooks/useTheme";
 import "./styles/App.css";
@@ -33,6 +34,7 @@ function App() {
 				<Router>
 					<Header />
 					<KeyboardShortcuts />
+					<Lightbox />
 					<BackToTop />
 					<main>
 						<Suspense fallback={<div>Loading...</div>}>
