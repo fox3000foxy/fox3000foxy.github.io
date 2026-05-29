@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -48,6 +49,34 @@ function HeadingRenderer({ Tag, children, ...rest }: HTMLAttributes<HTMLHeadingE
 	return <Tag id={slugify(textContent(children))} {...rest}>{children}</Tag>;
 }
 
+function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
+	const [copied, setCopied] = useState(false);
+	const code = textContent(children);
+
+	const handleCopy = async () => {
+		try {
+			await navigator.clipboard.writeText(code);
+			setCopied(true);
+			setTimeout(() => setCopied(false), 2000);
+		} catch {
+			// clipboard not available
+		}
+	};
+
+	return (
+		<div className="code-block-wrapper">
+			<button
+				type="button"
+				className={`code-copy-btn${copied ? " copied" : ""}`}
+				onClick={handleCopy}
+			>
+				{copied ? "Copied!" : "Copy"}
+			</button>
+			<pre {...rest}>{children}</pre>
+		</div>
+	);
+}
+
 export default function MarkdownContent({ content, urlTransform }: MarkdownContentProps) {
 	return (
 		<ReactMarkdown
@@ -61,6 +90,7 @@ export default function MarkdownContent({ content, urlTransform }: MarkdownConte
 				a: ExternalLinkRenderer,
 				h2: (props) => <HeadingRenderer Tag="h2" {...props} />,
 				h3: (props) => <HeadingRenderer Tag="h3" {...props} />,
+				pre: CodeBlock,
 			}}
 			urlTransform={urlTransform}
 		>
