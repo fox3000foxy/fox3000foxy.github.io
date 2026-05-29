@@ -75,9 +75,9 @@
 }
 
 .toc-active > .toc-link {
-  color: #64b5f6;
+  color: var(--accent);
   font-weight: 700;
-  border-left-color: #64b5f6;
+  border-left-color: var(--accent);
 }
 
 @media (max-width: 900px) {

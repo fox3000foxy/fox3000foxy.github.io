@@ -4,6 +4,7 @@ import BackToTop from "./components/BackToTop";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { LangContext, useLangState } from "./hooks/useLang";
+import { ThemeContext, useThemeState } from "./hooks/useTheme";
 import "./styles/App.css";
 
 const Archive = lazy(() => import("./pages/Archive"));
@@ -18,28 +19,31 @@ const TagIndex = lazy(() => import("./pages/TagIndex"));
 
 function App() {
 	const langCtx = useLangState();
+	const themeCtx = useThemeState();
 	return (
 		<LangContext.Provider value={langCtx}>
-			<Router>
-				<Header />
-				<BackToTop />
-				<main>
-					<Suspense fallback={<div>Loading...</div>}>
-						<Routes>
-							<Route path="/" element={<Home />} />
-							<Route path="/blog" element={<BlogList />} />
-							<Route path="/blog/:slug" element={<Article />} />
-							<Route path="/tags/:tag" element={<TagIndex />} />
-							<Route path="/archive" element={<Archive />} />
-							<Route path="/projects" element={<ProjectList />} />
-							<Route path="/projects/:slug" element={<Project />} />
-							<Route path="/portfolio" element={<Portfolio />} />
-							<Route path="*" element={<NotFound />} />
-						</Routes>
-					</Suspense>
-				</main>
-				<Footer />
-			</Router>
+			<ThemeContext.Provider value={themeCtx}>
+				<Router>
+					<Header />
+					<BackToTop />
+					<main>
+						<Suspense fallback={<div>Loading...</div>}>
+							<Routes>
+								<Route path="/" element={<Home />} />
+								<Route path="/blog" element={<BlogList />} />
+								<Route path="/blog/:slug" element={<Article />} />
+								<Route path="/tags/:tag" element={<TagIndex />} />
+								<Route path="/archive" element={<Archive />} />
+								<Route path="/projects" element={<ProjectList />} />
+								<Route path="/projects/:slug" element={<Project />} />
+								<Route path="/portfolio" element={<Portfolio />} />
+								<Route path="*" element={<NotFound />} />
+							</Routes>
+						</Suspense>
+					</main>
+					<Footer />
+				</Router>
+			</ThemeContext.Provider>
 		</LangContext.Provider>
 	);
 }

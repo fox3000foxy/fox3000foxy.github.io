@@ -30,7 +30,7 @@
 /* blog layout */
 main {
   padding: 6rem 2rem 2rem; /* extra top padding for fixed header */
-  color: #fff;
+  color: var(--text);
 }
 
 article {
@@ -45,7 +45,7 @@ article {
 
 .article-date {
   font-size: 0.9rem;
-  color: #ccc;
+  color: var(--text-secondary);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -58,7 +58,7 @@ article {
 
 .article-description {
   font-size: 1rem;
-  color: #ddd;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
 }
 
@@ -67,7 +67,7 @@ article {
 }
 
 .project-back a {
-  color: #64b5f6;
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -78,7 +78,7 @@ article {
 .project-header-meta {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid var(--border);
 }
 
 .project-meta-links {
@@ -86,15 +86,15 @@ article {
   align-items: center;
   gap: 1rem;
   font-size: 0.9rem;
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 .project-meta-links a {
-  color: #64b5f6;
+  color: var(--accent);
 }
 
 .project-meta-lang {
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 .share-buttons {
@@ -110,9 +110,9 @@ article {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #1a1a1a;
+  background: var(--bg-hover);
   border: 1px solid #333;
-  color: #aaa;
+  color: var(--text-muted);
   font-size: 0.85rem;
   cursor: pointer;
   text-decoration: none;
@@ -120,9 +120,9 @@ article {
 }
 
 .share-btn:hover {
-  border-color: #64b5f6;
-  color: #90caf9;
-  background: #222;
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: var(--bg-hover);
 }
 
 .article-tags {
@@ -136,9 +136,9 @@ article {
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--ai-badge-text);
+  background: var(--ai-badge-bg);
+  border: 1px solid var(--ai-badge-border);
   border-radius: 999px;
   padding: 0.2rem 0.75rem;
   margin-bottom: 0.5rem;
@@ -158,9 +158,9 @@ article {
   right: 0.5rem;
   opacity: 0;
   transition: opacity 0.2s, background 0.2s;
-  background: #2a2a2a;
-  border: 1px solid #444;
-  color: #aaa;
+  background: var(--copy-btn-bg);
+  border: 1px solid var(--border-hover);
+  color: var(--text-muted);
   border-radius: 6px;
   padding: 0.25rem 0.6rem;
   font-size: 0.75rem;
@@ -176,8 +176,8 @@ article {
 
 .code-copy-btn.copied {
   background: rgba(129, 199, 132, 0.15);
-  border-color: #81c784;
-  color: #81c784;
+  border-color: var(--tag-text);
+  color: var(--tag-text);
 }
 
 pre {
@@ -191,9 +191,9 @@ pre {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #222;
-  border: 1px solid #444;
-  color: #aaa;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-hover);
+  color: var(--text-muted);
   font-size: 1.2rem;
   cursor: pointer;
   opacity: 0;
@@ -214,8 +214,8 @@ pre {
 
 .back-to-top:hover {
   background: #333;
-  border-color: #64b5f6;
-  color: #90caf9;
+  border-color: var(--accent);
+  color: var(--accent-hover);
 }
 
 .article-nav {
@@ -224,7 +224,7 @@ pre {
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #222;
+  border-top: 1px solid var(--border);
 }
 
 .article-nav-link {
@@ -232,15 +232,15 @@ pre {
   flex: 1;
   max-width: 50%;
   padding: 0.75rem 1rem;
-  border: 1px solid #222;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: #111;
+  background: var(--bg-secondary);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .article-nav-link:hover {
-  border-color: #64b5f6;
-  box-shadow: 0 0 10px rgba(100, 181, 246, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .article-nav-link.next {
@@ -251,7 +251,7 @@ pre {
 .article-nav-label {
   display: block;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.25rem;
@@ -260,30 +260,30 @@ pre {
 .article-nav-title {
   display: block;
   font-size: 0.9rem;
-  color: #64b5f6;
+  color: var(--accent);
   line-height: 1.4;
 }
 
 .article-nav-link:hover .article-nav-title {
-  color: #90caf9;
+  color: var(--accent-hover);
 }
 
 .suggested-articles {
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid #222;
+  border-top: 1px solid var(--border);
 }
 
 .giscus-comments {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #222;
+  border-top: 1px solid var(--border);
   min-height: 200px;
 }
 
 .suggested-articles h3 {
   font-size: 1.1rem;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 1rem;
 }
 
@@ -302,8 +302,8 @@ pre {
 .suggested-card {
   display: flex;
   flex-direction: column;
-  background: #111;
-  border: 1px solid #222;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.85rem 1rem;
   text-decoration: none;
@@ -312,24 +312,24 @@ pre {
 }
 
 .suggested-card:hover {
-  border-color: #64b5f6;
-  box-shadow: 0 0 10px rgba(100, 181, 246, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .suggested-title {
   margin: 0 0 0.35rem;
   font-size: 0.95rem;
-  color: #64b5f6;
+  color: var(--accent);
 }
 
 .suggested-card:hover .suggested-title {
-  color: #90caf9;
+  color: var(--accent-hover);
 }
 
 .suggested-desc {
   margin: 0 0 0.5rem;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--text-muted);
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -340,7 +340,7 @@ pre {
 
 .suggested-date {
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-dim);
 }
 
 .archive {
@@ -355,10 +355,10 @@ pre {
 
 .archive-month {
   font-size: 1.1rem;
-  color: #64b5f6;
+  color: var(--accent);
   margin-bottom: 0.75rem;
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid var(--border);
 }
 
 .archive-list {
@@ -376,27 +376,27 @@ pre {
 
 .archive-day {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-dim);
   min-width: 2ch;
   font-variant-numeric: tabular-nums;
 }
 
 .archive-link {
   font-size: 0.95rem;
-  color: #ddd;
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.15s;
 }
 
 .archive-link:hover {
-  color: #64b5f6;
+  color: var(--accent);
 }
 
 h2 {
-  color: #fff;
+  color: var(--text);
 }
 
 a {
-  color: #64b5f6;
+  color: var(--accent);
 }
 

@@ -3,18 +3,19 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /* always dark; mimic Next.js dark layout */
   color-scheme: dark;
-  color: #fff;
-  background-color: #000;
+  color: var(--text);
+  background-color: var(--bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}  
+}
 
-/* remove light mode adjustments entirely */
+:root.light {
+  color-scheme: light;
+}
 
 /* make width calculations include padding so fixed header with padding doesn't overflow */
 *, *::before, *::after {
@@ -28,11 +29,11 @@ body {
 
 a {
   font-weight: 500;
-  color: #64b5f6;
+  color: var(--accent);
   text-decoration: inherit;
 }
 a:hover {
-  color: #81c784;
+  color: var(--tag-text);
 }
 
 body {

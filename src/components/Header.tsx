@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { useLang } from "../hooks/useLang";
+import { useTheme } from "../hooks/useTheme";
 import type { Lang } from "../i18n/types";
 import { ALL_LANGS } from "../i18n/types";
 
@@ -19,6 +20,7 @@ const LANG_LABELS: Record<Lang, string> = {
 
 export default function Header() {
 	const { t, lang, setLang } = useLang();
+	const { theme, toggleTheme } = useTheme();
 
 	return (
 		<header>
@@ -52,6 +54,14 @@ export default function Header() {
 							</option>
 						))}
 					</select>
+					<button
+						type="button"
+						className="theme-toggle"
+						onClick={toggleTheme}
+						aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+					>
+						{theme === "dark" ? "☀️" : "🌙"}
+					</button>
 				</nav>
 			</div>
 		</header>
