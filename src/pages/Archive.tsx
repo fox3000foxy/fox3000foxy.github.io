@@ -12,20 +12,27 @@ function groupByYearMonth(articles: ArticleMeta[], locale: string): Group[] {
 	const map = new Map<string, ArticleMeta[]>();
 
 	for (const a of articles) {
-		if (!a.date) { continue; }
+		if (!a.date) {
+			continue;
+		}
 		const d = new Date(`${a.date}T00:00:00`);
 		const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-		if (!map.has(key)) { map.set(key, []); }
+		if (!map.has(key)) {
+			map.set(key, []);
+		}
 		map.get(key)!.push(a);
 	}
 
 	const sorted = [...map.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 	return sorted.map(([key, arts]) => {
 		const [year, month] = key.split("-");
-		const label = new Date(Number(year), Number(month) - 1).toLocaleDateString(locale, {
-			year: "numeric",
-			month: "long",
-		});
+		const label = new Date(Number(year), Number(month) - 1).toLocaleDateString(
+			locale,
+			{
+				year: "numeric",
+				month: "long",
+			}
+		);
 		return { label, articles: arts };
 	});
 }
@@ -36,16 +43,21 @@ export default function Archive() {
 
 	useEffect(() => {
 		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang !== "en" ? "/articles/en/index.json" : null;
+		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 
 		async function load() {
 			let res = await fetch(indexUrl);
-			if (!res.ok && fallbackUrl) { res = await fetch(fallbackUrl); }
-			if (!res.ok) { setGroups([]); return; }
+			if (!res.ok && fallbackUrl) {
+				res = await fetch(fallbackUrl);
+			}
+			if (!res.ok) {
+				setGroups([]);
+				return;
+			}
 
 			const data: unknown = await res.json();
 			if (Array.isArray(data)) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: legacy string format
 				const normalized: ArticleMeta[] = (data as any[]).map((item) =>
 					typeof item === "string" ? { slug: item } : item
 				);

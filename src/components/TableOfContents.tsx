@@ -44,7 +44,9 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 						key={h.id}
 						className={`toc-item toc-level-${h.level}${activeId === h.id ? " toc-active" : ""}`}
 					>
-						<a href={`#${h.id}`} className="toc-link">{h.text}</a>
+						<a href={`#${h.id}`} className="toc-link">
+							{h.text}
+						</a>
 					</li>
 				))}
 			</ul>
