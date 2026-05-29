@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -13,12 +13,7 @@ const sanitizeSchema = {
 	...defaultSchema,
 	attributes: {
 		...defaultSchema.attributes,
-		"*": [
-			...(defaultSchema.attributes?.["*"] || []),
-			"class",
-			"style",
-			"data-id",
-		],
+		"*": [...(defaultSchema.attributes?.["*"] || []), "class", "style"],
 	},
 };
 
@@ -27,16 +22,33 @@ interface MarkdownContentProps {
 	urlTransform?: (url: string) => string;
 }
 
-// Replace ```mermaid blocks with <pre class="mermaid-code"> so rehypeHighlight doesn't touch them
-function preprocessMermaid(content: string, mermaidBlocks: string[]): string {
-	return content.replace(
-		/```mermaid\n([\s\S]*?)```/g,
-		(_match, code: string) => {
-			const id = `MERMAID_${mermaidBlocks.length}`;
-			mermaidBlocks.push(code.trim());
-			return `<pre class="mermaid-code" data-id="${id}"></pre>`;
+interface Segment {
+	type: "md" | "mermaid";
+	content: string;
+}
+
+function splitContent(content: string): Segment[] {
+	const segments: Segment[] = [];
+	const re = /```mermaid\n([\s\S]*?)```/g;
+	let last = 0;
+
+	let m: RegExpExecArray | null;
+	// biome-ignore lint/suspicious/noAssignInExpressions: regex iteration
+	while ((m = re.exec(content)) !== null) {
+		if (m.index > last) {
+			segments.push({ type: "md", content: content.slice(last, m.index) });
 		}
-	);
+		segments.push({ type: "mermaid", content: m[1].trim() });
+		last = m.index + m[0].length;
+	}
+	if (last < content.length) {
+		segments.push({ type: "md", content: content.slice(last) });
+	}
+	if (last < content.length) {
+		segments.push({ type: "md", content: content.slice(last) });
+	}
+
+	return segments;
 }
 
 function textContent(node: ReactNode): string {
@@ -70,11 +82,7 @@ function ExternalLinkRenderer(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
 			</a>
 		);
 	}
-	return (
-		<a href={href} {...rest}>
-			{children}
-		</a>
-	);
+	return <a {...rest}>{children}</a>;
 }
 
 function HeadingRenderer({
@@ -92,18 +100,6 @@ function HeadingRenderer({
 function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	const [copied, setCopied] = useState(false);
 	const { t } = useLang();
-
-	const isMermaid = rest.className === "mermaid-code";
-	const dataId = (rest as Record<string, string>)["data-id"];
-
-	if (isMermaid && dataId) {
-		const idx = Number.parseInt(dataId.replace("MERMAID_", ""), 10);
-		const code = mermaidBlocksRef.current[idx];
-		if (code) {
-			return <MermaidBlock code={code} />;
-		}
-	}
-
 	const code = textContent(children);
 
 	const handleCopy = async () => {
@@ -130,15 +126,13 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	);
 }
 
-const mermaidBlocksRef = { current: [] as string[] };
-
-export default function MarkdownContent({
+function MarkdownSection({
 	content,
 	urlTransform,
-}: MarkdownContentProps) {
-	mermaidBlocksRef.current = [];
-	const processed = preprocessMermaid(content, mermaidBlocksRef.current);
-
+}: {
+	content: string;
+	urlTransform?: (url: string) => string;
+}) {
 	return (
 		<ReactMarkdown
 			remarkPlugins={[remarkGfm]}
@@ -155,7 +149,31 @@ export default function MarkdownContent({
 			}}
 			urlTransform={urlTransform}
 		>
-			{processed}
+			{content}
 		</ReactMarkdown>
+	);
+}
+
+export default function MarkdownContent({
+	content,
+	urlTransform,
+}: MarkdownContentProps) {
+	const segments = useMemo(() => splitContent(content), [content]);
+
+	return (
+		<>
+			{segments.map((seg) => {
+				const key = `${seg.type}-${seg.content.slice(0, 40)}`;
+				return seg.type === "mermaid" ? (
+					<MermaidBlock key={key} code={seg.content} />
+				) : (
+					<MarkdownSection
+						key={key}
+						content={seg.content}
+						urlTransform={urlTransform}
+					/>
+				);
+			})}
+		</>
 	);
 }
