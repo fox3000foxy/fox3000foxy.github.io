@@ -12,7 +12,6 @@ import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
 import ArticleSchema from "../components/ArticleSchema";
 import AuthorBio from "../components/AuthorBio";
-import ReactionBar from "../components/ReactionBar";
 import SeriesNav from "../components/SeriesNav";
 import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
@@ -241,7 +240,6 @@ export default function Article() {
 								)}
 							</nav>
 						)}
-						<ReactionBar slug={slug!} />
 						<GiscusComments lang={lang} />
 					</div>
 				</div>

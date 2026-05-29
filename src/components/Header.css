@@ -36,7 +36,7 @@ header .title-link {
   text-decoration: none;
 }
 
-nav {
+header nav {
   margin-left: auto;
   display: flex;
   align-items: center;
@@ -47,18 +47,18 @@ nav {
   scrollbar-width: none;
 }
 
-nav::-webkit-scrollbar {
+header nav::-webkit-scrollbar {
   display: none;
 }
 
-nav a {
+header nav a {
   color: var(--text);
   margin: 0 0.75rem;
   text-decoration: none;
   font-size: 0.9rem;
 }
 
-nav a:hover {
+header nav a:hover {
   text-decoration: underline;
 }
 
@@ -112,7 +112,7 @@ nav a:hover {
     width: 100%;
   }
 
-  nav a {
+  header nav a {
     font-size: 0.8rem;
     margin: 0 0.35rem;
   }
