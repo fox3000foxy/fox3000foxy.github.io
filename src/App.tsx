@@ -1,5 +1,10 @@
 import { lazy, Suspense } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+	Navigate,
+	Route,
+	BrowserRouter as Router,
+	Routes,
+} from "react-router-dom";
 import BackToTop from "./components/BackToTop";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -12,7 +17,7 @@ const Article = lazy(() => import("./pages/Article"));
 const BlogList = lazy(() => import("./pages/BlogList"));
 const Home = lazy(() => import("./pages/Home"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Portfolio = lazy(() => import("./pages/Portfolio"));
+const Legacy = lazy(() => import("./pages/Legacy"));
 const Project = lazy(() => import("./pages/Project"));
 const ProjectList = lazy(() => import("./pages/ProjectList"));
 const TagIndex = lazy(() => import("./pages/TagIndex"));
@@ -36,7 +41,11 @@ function App() {
 								<Route path="/archive" element={<Archive />} />
 								<Route path="/projects" element={<ProjectList />} />
 								<Route path="/projects/:slug" element={<Project />} />
-								<Route path="/portfolio" element={<Portfolio />} />
+								<Route path="/legacy" element={<Legacy />} />
+								<Route
+									path="/portfolio"
+									element={<Navigate to="/legacy" replace />}
+								/>
 								<Route path="*" element={<NotFound />} />
 							</Routes>
 						</Suspense>

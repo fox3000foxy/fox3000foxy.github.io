@@ -6,7 +6,7 @@ const ru: TranslationMap = {
 	"nav.blog": "Блог",
 	"nav.archive": "Архив",
 	"nav.projects": "Проекты",
-	"nav.portfolio": "Портфолио",
+	"nav.portfolio": "Legacy",
 	"blog.title": "Статьи",
 	"blog.search": "Поиск…",
 	"blog.filter.all": "Все",

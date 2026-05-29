@@ -1,6 +1,6 @@
-# Portfolio
+# Legacy
 
-## About
+Old projects, gists, and random stuff from the before times.
 
 Hi, I'm **Fox3000foxy**, a web and NodeJS developer. I like to create open
 source projects and simulations. My skills include HTML, CSS, JavaScript, PHP,
