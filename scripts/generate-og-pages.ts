@@ -80,7 +80,7 @@ function main() {
 			.replace(/<title>[^<]*<\/title>/, `<title>${escapeXml(info.title)} | Fox's Blog</title>`)
 			.replace(
 				"</head>",
-				`${hreflangTags}\n<script type="application/ld+json">${jsonLd}</script>\n</head>`
+				`<link rel="canonical" href="${escapeXml(url)}" />\n${hreflangTags}\n<script type="application/ld+json">${jsonLd}</script>\n</head>`
 			);
 
 		const outDir = path.join(root, "dist", "blog", slug);

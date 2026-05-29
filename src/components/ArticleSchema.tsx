@@ -10,6 +10,8 @@ export default function ArticleSchema({
 	meta: ArticleMeta;
 	slug: string;
 }) {
+	const url = `${SITE_URL}/blog/${slug}`;
+
 	useEffect(() => {
 		const script = document.createElement("script");
 		script.type = "application/ld+json";
@@ -24,20 +26,27 @@ export default function ArticleSchema({
 				name: "Fox3000foxy",
 				url: "https://github.com/fox3000foxy",
 			},
-			url: `${SITE_URL}/blog/${slug}`,
+			url,
 			inLanguage: "multiple",
 			isAccessibleForFree: true,
 			mainEntityOfPage: {
 				"@type": "WebPage",
-				"@id": `${SITE_URL}/blog/${slug}`,
+				"@id": url,
 			},
 		});
 
 		document.head.appendChild(script);
+
+		const link = document.createElement("link");
+		link.rel = "canonical";
+		link.href = url;
+		document.head.appendChild(link);
+
 		return () => {
 			script.remove();
+			link.remove();
 		};
-	}, [meta, slug]);
+	}, [meta, slug, url]);
 
 	return null;
 }
