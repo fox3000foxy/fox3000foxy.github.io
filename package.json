@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "create-cname": "echo fox3000foxy.com > dist/CNAME",
     "build": "tsc -b && vite build && bun run scripts/generate-rss.ts && bun run scripts/generate-sitemap.ts && bun run scripts/generate-og-pages.ts",
     "preview": "vite preview",
     "format": "bunx --bun @biomejs/biome format --write ./src",
     "check": "bunx --bun @biomejs/biome check ./src",
     "lint": "bunx --bun @biomejs/biome lint ./src",
-    "deploy-page": "bun run build && cp dist/index.html dist/404.html && bunx gh-pages -d dist --nojekyll",
+    "deploy-page": "bun run build && bun run create-cname && cp dist/index.html dist/404.html && bunx gh-pages -d dist --nojekyll",
     "lint:write": "bunx --bun @biomejs/biome lint --write ./src"
   },
   "dependencies": {
