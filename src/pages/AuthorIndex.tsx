@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
+import BookmarkButton from "../components/BookmarkButton";
+import { getAuthors } from "../utils/authors";
 
 export default function AuthorIndex() {
 	const { id } = useParams<{ id: string }>();
@@ -44,16 +46,38 @@ export default function AuthorIndex() {
 		void load();
 	}, [id, lang]);
 
+	const author = id ? getAuthors([id])[0] : null;
+
 	return (
 		<div className="blog-list">
-			<h2>
-				{t("blog.filter.all")} / @{id}
-			</h2>
+			<div className="tag-page-header">
+				<Link to="/blog" className="tag-page-back">
+					← {t("blog.title")}
+				</Link>
+				<div className="author-page-title">
+					{author && (
+						<img
+							className="author-page-avatar"
+							src={author.avatar ?? `https://github.com/${author.id}.png`}
+							alt={author.name}
+						/>
+					)}
+					<h2>{author?.name ?? id}</h2>
+				</div>
+			</div>
 
 			{articles.length > 0 ? (
 				<div className="blog-grid">
 					{articles.map(
-						({ slug, title, description, date, aiGenerated, tags }) => (
+						({
+							slug,
+							title,
+							description,
+							date,
+							aiGenerated,
+							tags,
+							authors,
+						}) => (
 							<Link to={`/blog/${slug}`} key={slug} className="blog-card">
 								<div className="blog-card-body">
 									<h3 className="blog-card-title">
@@ -75,8 +99,8 @@ export default function AuthorIndex() {
 										</div>
 									)}
 								</div>
-								{date && (
-									<div className="blog-card-footer">
+								<div className="blog-card-footer">
+									{date && (
 										<time dateTime={date}>
 											{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
 												year: "numeric",
@@ -84,8 +108,20 @@ export default function AuthorIndex() {
 												day: "numeric",
 											})}
 										</time>
+									)}
+									<div className="blog-card-authors">
+										{getAuthors(authors).map((a) => (
+											<img
+												key={a.id}
+												className="blog-card-author-avatar"
+												src={a.avatar ?? `https://github.com/${a.id}.png`}
+												alt={a.name}
+												title={a.name}
+											/>
+										))}
 									</div>
-								)}
+									<BookmarkButton slug={slug} />
+								</div>
 							</Link>
 						)
 					)}
