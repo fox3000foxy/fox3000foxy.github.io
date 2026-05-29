@@ -105,6 +105,50 @@
   margin-bottom: 0.5rem;
 }
 
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-bar input[type="search"] {
+  width: 100%;
+  max-width: 320px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 999px;
+  padding: 0.5rem 2.2rem 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #eee;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-bar input[type="search"]:focus {
+  border-color: #64b5f6;
+}
+
+.search-bar input[type="search"]::placeholder {
+  color: #666;
+}
+
+.search-clear {
+  position: absolute;
+  left: 288px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  line-height: 1;
+}
+
+.search-clear:hover {
+  color: #eee;
+}
+
 .tag-filter {
   display: flex;
   flex-wrap: wrap;
