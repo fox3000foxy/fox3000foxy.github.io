@@ -3,8 +3,6 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-
-  /* the inner container constrains content */
   background-color: var(--bg);
   color: var(--text);
   z-index: 1000;
@@ -17,7 +15,6 @@ header .container {
   align-items: center;
   padding: 1rem 2rem;
 }
-
 
 header img.avatar {
   width: 40px;
@@ -36,19 +33,45 @@ header .title-link {
   text-decoration: none;
 }
 
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 1001;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 header nav {
   margin-left: auto;
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  overflow-x: auto;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-header nav::-webkit-scrollbar {
-  display: none;
 }
 
 header nav a {
@@ -101,23 +124,54 @@ header nav a:hover {
 @media (max-width: 768px) {
   header .container {
     padding: 0.75rem 1rem;
-    gap: 0.5rem;
   }
 
   header .site-title {
     font-size: 1.1rem;
   }
 
-  nav {
-    width: 100%;
+  .hamburger {
+    display: flex;
+  }
+
+  header nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 260px;
+    height: 100vh;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 5rem 1.5rem 2rem;
+    margin-left: 0;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border);
+    box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+    z-index: 999;
+    overflow-y: auto;
+  }
+
+  header nav.open {
+    display: flex;
   }
 
   header nav a {
-    font-size: 0.8rem;
-    margin: 0 0.35rem;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    width: 100%;
   }
 
   .lang-select {
-    font-size: 0.7rem;
+    margin-left: 0;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: none;
+  }
+
+  .theme-toggle {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    align-self: flex-start;
   }
 }
