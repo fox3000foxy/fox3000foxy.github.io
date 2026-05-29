@@ -9,7 +9,7 @@
 }
 
 .project-subtitle {
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
 }
@@ -41,8 +41,8 @@
 .project-card {
   display: flex;
   flex-direction: column;
-  background: #111;
-  border: 1px solid #222;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
   text-decoration: none;
@@ -53,7 +53,7 @@
 }
 
 .project-card:hover {
-  border-color: #64b5f6;
+  border-color: var(--accent);
   box-shadow: 0 0 12px rgba(100, 181, 246, 0.15);
   transform: translateY(-2px);
 }
@@ -65,20 +65,20 @@
 .project-card-title {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
-  color: #64b5f6;
+  color: var(--accent);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .project-card:hover .project-card-title {
-  color: #90caf9;
+  color: var(--accent-hover);
 }
 
 .project-card-desc {
   margin: 0;
   font-size: 0.95rem;
-  color: #aaa;
+  color: var(--text-muted);
   line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,7 +91,7 @@
 .project-card-footer {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #222;
+  border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -102,7 +102,7 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.85rem;
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 .lang-dot {
@@ -114,7 +114,7 @@
 
 .project-stars {
   font-size: 0.85rem;
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 .project-section {
@@ -125,15 +125,15 @@
   font-size: 1.3rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid var(--border-hover);
 }
 
 .see-more-btn {
   display: block;
   margin: 1rem auto 0;
   background: #1a1a2e;
-  color: #64b5f6;
-  border: 1px solid #64b5f6;
+  color: var(--accent);
+  border: 1px solid var(--accent);
   border-radius: 8px;
   padding: 0.6rem 1.5rem;
   font-size: 0.95rem;
@@ -142,8 +142,8 @@
 }
 
 .see-more-btn:hover {
-  background: #64b5f6;
-  color: #111;
+  background: var(--accent);
+  color: var(--text);
 }
 
 .org-section {
@@ -166,7 +166,7 @@
 .org-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #64b5f6;
+  color: var(--accent);
   text-decoration: none;
 }
 

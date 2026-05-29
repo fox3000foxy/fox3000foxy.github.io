@@ -46,4 +46,18 @@
   --copy-btn-bg: #eee;
   --input-bg: #fff;
   --skeleton: #e0e0e0;
+
+  /* highlight.js light mode overrides */
+  --hljs-bg: #f5f5f5;
+  --hljs-text: #333;
+  --hljs-keyword: #d73a49;
+  --hljs-string: #032f62;
+  --hljs-number: #005cc5;
+  --hljs-title: #6f42c1;
+  --hljs-comment: #6a737d;
+  --hljs-meta: #005cc5;
+  --hljs-literal: #005cc5;
+  --hljs-attr: #22863a;
+  --hljs-selector: #22863a;
+  --hljs-built-in: #6f42c1;
 }
