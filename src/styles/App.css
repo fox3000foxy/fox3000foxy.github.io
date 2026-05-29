@@ -246,6 +246,13 @@ pre {
   border-top: 1px solid #222;
 }
 
+.giscus-comments {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #222;
+  min-height: 200px;
+}
+
 .suggested-articles h3 {
   font-size: 1.1rem;
   color: #fff;
