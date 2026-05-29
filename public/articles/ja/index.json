@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nausicaa-ai",
+    "title": "Nausicaa用のクソAI",
+    "description": "ヒューリスティック係数ベースのAI、5ターンごとにランダムに変わるハイパーパラメータ、逃げるオラクル -- 神話ストラテジーボードゲームの脳内に潜入。",
+    "date": "2026-05-29",
+    "tags": ["game-dev", "ai", "javascript", "open-source"]
+  },
+  {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "100%サーバーレスDiscordボット：Hono + Cloudflare Workers",
     "description": "月50€かかってたDiscordボットをゼロユーロにした方法 -- インタラクションエンドポイント、Hono、Workers、リアルタイム画像レンダリング、WebSocketなしの完全なゲーム。",

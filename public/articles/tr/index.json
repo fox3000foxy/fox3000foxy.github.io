@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nausicaa-ai",
+    "title": "Nausicaa için salaş yapay zekâm",
+    "description": "Sezgisel katsayı tabanlı bir yapay zeka, her 5 turda rastgele değişen hiperparametreler ve kaçan bir Kahin -- mitolojik bir strateji tahta oyununun beynine dalış.",
+    "date": "2026-05-29",
+    "tags": ["game-dev", "ai", "javascript", "open-source"]
+  },
+  {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "%100 sunucusuz Discord botu: Hono + Cloudflare Workers",
     "description": "Bana ayda 50€'ya mal olan bir Discord botunu sıfır euro ile nasıl değiştirdim -- etkileşim uç noktaları, Hono, Workers, gerçek zamanlı görüntü oluşturma ve WebSocket olmadan eksiksiz bir oyun.",

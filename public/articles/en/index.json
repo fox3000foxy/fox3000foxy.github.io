@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nausicaa-ai",
+    "title": "My dumb AI for Nausicaa",
+    "description": "A heuristic coefficient-based AI with hyperparameters that randomly change every 5 turns, and an Oracle that runs away -- diving into the brain of a mythological strategy board game.",
+    "date": "2026-05-29",
+    "tags": ["game-dev", "ai", "javascript", "open-source"]
+  },
+  {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "Discord bot 100% serverless: Hono + Cloudflare Workers",
     "description": "How I replaced a Discord bot that cost me 50€/month with zero euros -- interaction endpoints, Hono, Workers, real-time image rendering, and a full game without WebSocket.",
