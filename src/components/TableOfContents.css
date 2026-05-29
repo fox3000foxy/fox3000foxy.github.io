@@ -13,9 +13,24 @@
   position: sticky;
   top: 5rem;
   width: 200px;
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
   flex-shrink: 0;
   border-left: 2px solid #222;
   padding-left: 1rem;
+}
+
+.toc::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
 }
 
 .toc-title {
@@ -73,6 +88,8 @@
   .toc {
     position: static;
     width: auto;
+    max-height: none;
+    overflow-y: visible;
     border-left: none;
     border-bottom: 1px solid #222;
     padding: 0 0 1rem;
