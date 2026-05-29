@@ -175,6 +175,14 @@ a.tag-badge:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.author-bio-item:hover {
+  background: var(--bg-hover);
 }
 
 .author-avatar-small {

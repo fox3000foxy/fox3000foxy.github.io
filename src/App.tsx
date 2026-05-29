@@ -14,6 +14,7 @@ import "./styles/App.css";
 
 const Archive = lazy(() => import("./pages/Archive"));
 const Article = lazy(() => import("./pages/Article"));
+const AuthorIndex = lazy(() => import("./pages/AuthorIndex"));
 const BlogList = lazy(() => import("./pages/BlogList"));
 const Home = lazy(() => import("./pages/Home"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -38,6 +39,7 @@ function App() {
 								<Route path="/blog" element={<BlogList />} />
 								<Route path="/blog/:slug" element={<Article />} />
 								<Route path="/tags/:tag" element={<TagIndex />} />
+								<Route path="/authors/:id" element={<AuthorIndex />} />
 								<Route path="/archive" element={<Archive />} />
 								<Route path="/projects" element={<ProjectList />} />
 								<Route path="/projects/:slug" element={<Project />} />
