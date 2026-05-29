@@ -21,3 +21,67 @@
 .home a:hover {
   color: var(--tag-text);
 }
+
+.github-activity {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.github-activity h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.github-events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.github-event {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.github-event:last-child {
+  border-bottom: none;
+}
+
+.github-event-icon {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.github-event-desc {
+  flex: 1;
+  color: var(--text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.github-event-time {
+  flex-shrink: 0;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.github-view-all {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.github-view-all:hover {
+  color: var(--accent-hover);
+}
