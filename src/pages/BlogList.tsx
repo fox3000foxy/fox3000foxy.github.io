@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/BlogList.css";
 import {
+	getCachedArticleMarkdown,
 	prefetchArticleMarkdown,
 	prefetchMarkdownEntries,
 } from "../utils/articleCache";
@@ -74,10 +75,14 @@ export default function BlogList() {
 		if (!query) {
 			return true;
 		}
+		const text =
+			getCachedArticleMarkdown(a.slug, lang) ??
+			getCachedArticleMarkdown(a.slug, "en");
 		return (
 			a.title?.toLowerCase().includes(query) ||
 			a.description?.toLowerCase().includes(query) ||
-			a.tags?.some((t) => t.toLowerCase().includes(query))
+			a.tags?.some((t) => t.toLowerCase().includes(query)) ||
+			(text?.toLowerCase().includes(query) ?? false)
 		);
 	});
 
