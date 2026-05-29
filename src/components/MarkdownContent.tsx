@@ -13,7 +13,12 @@ const sanitizeSchema = {
 	...defaultSchema,
 	attributes: {
 		...defaultSchema.attributes,
-		"*": [...(defaultSchema.attributes?.["*"] || []), "class", "style"],
+		"*": [
+			...(defaultSchema.attributes?.["*"] || []),
+			"class",
+			"style",
+			"data-id",
+		],
 	},
 };
 
@@ -88,12 +93,8 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	const [copied, setCopied] = useState(false);
 	const { t } = useLang();
 
-	// biome-ignore lint/suspicious/noExplicitAny: accessing props from children
-	const preProps = (children as any)?.props as
-		| Record<string, unknown>
-		| undefined;
-	const isMermaid = preProps?.className === "mermaid-code";
-	const dataId = preProps?.["data-id"] as string | undefined;
+	const isMermaid = rest.className === "mermaid-code";
+	const dataId = rest["data-id"] as string | undefined;
 
 	if (isMermaid && dataId) {
 		const idx = Number.parseInt(dataId.replace("MERMAID_", ""), 10);
