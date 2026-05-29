@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nausicaa-ai",
+    "title": "Meine bescheuerte KI für Nausicaa",
+    "description": "Eine heuristische KI mit Koeffizienten, Hyperparametern die sich alle 5 Runden ändern, und einem Oracle das wegläuft -- ein Tauchgang ins Gehirn eines mythologischen Strategiespiels.",
+    "date": "2026-05-29",
+    "tags": ["game-dev", "ai", "javascript", "open-source"]
+  },
+  {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "Discord-Bot 100% serverless: Hono + Cloudflare Workers",
     "description": "Wie ich einen Discord-Bot, der mich 50€/Monat kostete, durch null Euro ersetzt habe -- Interaction Endpoints, Hono, Workers, Echtzeit-Bildrendering und ein komplettes Spiel ohne WebSocket.",

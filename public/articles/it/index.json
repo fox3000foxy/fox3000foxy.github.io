@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nausicaa-ai",
+    "title": "La mia IA del cazzo per Nausicaa",
+    "description": "Un'IA basata su coefficienti euristici, iperparametri che cambiano casualmente ogni 5 turni e un Oracolo che scappa -- tuffo nel cervello di un gioco da tavolo strategico mitologico.",
+    "date": "2026-05-29",
+    "tags": ["game-dev", "ai", "javascript", "open-source"]
+  },
+  {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "Bot Discord 100% serverless: Hono + Cloudflare Workers",
     "description": "Come ho sostituito un bot Discord che mi costava 50€/mese con zero euro -- interaction endpoints, Hono, Workers, rendering di immagini in tempo reale e un gioco completo senza WebSocket.",

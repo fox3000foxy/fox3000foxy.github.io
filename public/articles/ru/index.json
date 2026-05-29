@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nausicaa-ai",
+    "title": "Мой тупой ИИ для Nausicaa",
+    "description": "Эвристический ИИ на коэффициентах, гиперпараметры которых меняются каждые 5 ходов, и Оракул который убегает -- погружение в мозг мифологической стратегической настолки.",
+    "date": "2026-05-29",
+    "tags": ["game-dev", "ai", "javascript", "open-source"]
+  },
+  {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "100% serverless бот Discord: Hono + Cloudflare Workers",
     "description": "Как я заменил Discord-бота, который обходился мне в 50€/месяц, на ноль евро -- interaction endpoints, Hono, Workers, рендеринг изображений в реальном времени и полноценная игра без WebSocket.",
