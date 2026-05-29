@@ -82,9 +82,26 @@
 }
 
 .blog-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--border);
+}
+
+.blog-card-footer .bookmark-btn {
+  width: 28px;
+  height: 28px;
+  font-size: 1rem;
+  margin: 0;
+  background: none;
+  border: 1px solid transparent;
+}
+
+.blog-card-footer .bookmark-btn:hover,
+.blog-card-footer .bookmark-btn.active {
+  border-color: #fdd835;
 }
 
 .blog-card-footer time {

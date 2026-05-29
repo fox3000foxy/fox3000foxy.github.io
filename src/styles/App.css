@@ -125,6 +125,62 @@ article {
   color: var(--accent-hover);
 }
 
+.share-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.share-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: var(--bg-secondary);
+}
+
+.bookmark-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.bookmark-btn:hover {
+  border-color: #fdd835;
+  color: #fdd835;
+  background: rgba(253, 216, 53, 0.1);
+}
+
+.bookmark-btn.active {
+  color: #fdd835;
+  border-color: #fdd835;
+  background: rgba(253, 216, 53, 0.1);
+}
+
 .suggested-articles {
   margin-top: 3rem;
   padding-top: 2rem;

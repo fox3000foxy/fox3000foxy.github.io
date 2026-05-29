@@ -8,6 +8,7 @@ import {
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
+import BookmarkButton from "../components/BookmarkButton";
 
 const PAGE_SIZE = 15;
 
@@ -178,6 +179,7 @@ export default function BlogList() {
 													day: "numeric",
 												})}
 											</time>
+											<BookmarkButton slug={slug} />
 										</div>
 									)}
 								</Link>

@@ -14,6 +14,7 @@ import AuthorBio from "../components/AuthorBio";
 import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
 import ShareButtons from "../components/ShareButtons";
+import BookmarkButton from "../components/BookmarkButton";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -128,6 +129,7 @@ export default function Article() {
 					url={window.location.href}
 					title={meta?.title ?? slug ?? ""}
 				/>
+				<BookmarkButton slug={slug!} />
 				<div className="article-layout">
 					<TableOfContents content={content} />
 					<div className="article-content">
