@@ -1,5 +1,13 @@
 [
   {
+    "slug": "typescript-virtual-container-polyfills",
+    "title": "Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container",
+    "description": "Как Fortune вручную переписала node:fs, node:crypto и дюжину других Node-модулей в 640 строках JavaScript, чтобы контейнер работал в браузере без Wasm.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+  },
+  {
     "slug": "character-factory",
     "title": "Создание character-factory: аватары с генетикой",
     "description": "TypeScript-модуль на основе DiceBear: согласованная генерация на основе страны/этничности, небольшой движок генетики для проекции детей и инженерные детали, сделавшие его пригодным для карточной игры.",

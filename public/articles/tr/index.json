@@ -1,5 +1,13 @@
 [
   {
+    "slug": "typescript-virtual-container-polyfills",
+    "title": "Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri",
+    "description": "Fortune'un, konteynerin Wasm olmadan tarayıcıda çalışması için node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript'te elle nasıl yeniden uyguladığı.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+  },
+  {
     "slug": "character-factory",
     "title": "character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma",
     "description": "DiceBear üzerine bir TypeScript modülü: tutarlı ülke/etnisite tabanlı oluşturma, çocukları yansıtmak için küçük bir genetik motoru ve bir kart oyununda kullanışlı hale getiren mühendislik detayları.",

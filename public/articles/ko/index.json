@@ -1,5 +1,13 @@
 [
   {
+    "slug": "typescript-virtual-container-polyfills",
+    "title": "Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들",
+    "description": "Fortune이 node:fs, node:crypto, 그리고 수십 개의 Node 모듈을 640줄의 JavaScript로 손수 재구현해서 Wasm 없이 컨테이너를 브라우저에서 돌리는 방법",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+  },
+  {
     "slug": "character-factory",
     "title": "character-factory 만들기: 유전학을 가진 아바타",
     "description": "DiceBear 기반 TypeScript 모듈: 국가/민족별 일관된 생성, 자식 투영을 위한 작은 유전학 엔진, 카드 게임에서 사용할 수 있게 만든 엔지니어링 세부사항",
