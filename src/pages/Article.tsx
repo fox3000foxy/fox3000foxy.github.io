@@ -6,6 +6,7 @@ import {
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
+import { parseFrontMatter } from "../utils/frontmatter";
 import MarkdownContent from "../components/MarkdownContent";
 import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
@@ -40,6 +41,14 @@ export default function Article() {
 			return;
 		}
 
+		function process(text: string): {
+			clean: string;
+			frontMeta: Partial<ArticleMeta>;
+		} {
+			const { meta, content } = parseFrontMatter(text);
+			return { clean: processArticleContent(content), frontMeta: meta };
+		}
+
 		const cached = getCachedArticleMarkdown(slug, lang);
 		if (cached === null) {
 			Promise.resolve(fetchArticleMarkdown(slug, lang))
@@ -48,11 +57,25 @@ export default function Article() {
 						setError(true);
 						return;
 					}
-					setContent(processArticleContent(text));
+					const { clean, frontMeta } = process(text);
+					setContent(clean);
+					setMeta((prev) =>
+						prev
+							? { ...prev, ...frontMeta }
+							: ({ slug: slug!, ...frontMeta } as ArticleMeta)
+					);
 				})
 				.catch(() => setError(true));
 		} else {
-			setContent(processArticleContent(cached));
+			const { clean, frontMeta } = process(cached);
+			setContent(clean);
+			setTimeout(() => {
+				setMeta((prev) =>
+					prev
+						? { ...prev, ...frontMeta }
+						: ({ slug: slug!, ...frontMeta } as ArticleMeta)
+				);
+			}, 0);
 		}
 
 		const indexUrl = `/articles/${lang}/index.json`;
@@ -74,7 +97,10 @@ export default function Article() {
 					typeof item === "string" ? { slug: item } : item
 				);
 				setAllArticles(normalized);
-				setMeta(normalized.find((a) => a.slug === slug) || null);
+				setMeta((prev) => {
+					const fromIndex = normalized.find((a) => a.slug === slug) || null;
+					return prev ? { ...fromIndex, ...prev } : fromIndex;
+				});
 			}
 		}
 		void loadIndex();

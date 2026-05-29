@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "create-cname": "echo fox3000foxy.com > dist/CNAME",
-    "build": "tsc -b && vite build && bun run scripts/generate-rss.ts && bun run scripts/generate-sitemap.ts && bun run scripts/generate-news-sitemap.ts && bun run scripts/generate-og-pages.ts",
+    "build": "tsc -b && bun run scripts/generate-index.ts && vite build && bun run scripts/generate-rss.ts && bun run scripts/generate-sitemap.ts && bun run scripts/generate-news-sitemap.ts && bun run scripts/generate-og-pages.ts",
     "preview": "vite preview",
     "format": "bunx --bun @biomejs/biome format --write ./src",
     "check": "bunx --bun @biomejs/biome check ./src",
@@ -25,7 +25,8 @@
     "rehype-highlight": "^7.0.2",
     "rehype-raw": "^7.0.0",
     "rehype-sanitize": "^6.0.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",

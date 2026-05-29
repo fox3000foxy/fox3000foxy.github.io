@@ -1,31 +1,52 @@
 [
   {
-    "slug": "email-autoreply",
-    "title": "Я использовал git как базу данных, чтобы запустить бота бесплатно на GitHub Actions",
-    "description": "Как я написал автоответчик на ИИ, который работает на GitHub Actions за 0€/месяц -- используя git-теги как базу данных и предварительно скомпилированные снимки в теге runtime.",
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "title": "Логика поиска пути в Minecraft и её применение",
+    "description": "Как алгоритм A*, штрафы блоков и механика POI позволяют контролировать, предсказывать и эксплуатировать движение мобов -- от беспроводного редстоуна до оптимизированных ферм.",
     "date": "2026-05-29",
-    "tags": ["automation", "javascript", "serverless", "ai", "git"]
-  },
-  {
-    "slug": "nausicaa-ai",
-    "title": "Мой тупой ИИ для Nausicaa",
-    "description": "Эвристический ИИ на коэффициентах, гиперпараметры которых меняются каждые 5 ходов, и Оракул который убегает -- погружение в мозг мифологической стратегической настолки.",
-    "date": "2026-05-29",
-    "tags": ["game-dev", "ai", "javascript", "open-source"]
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ]
   },
   {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "100% serverless бот Discord: Hono + Cloudflare Workers",
     "description": "Как я заменил Discord-бота, который обходился мне в 50€/месяц, на ноль евро -- interaction endpoints, Hono, Workers, рендеринг изображений в реальном времени и полноценная игра без WebSocket.",
     "date": "2026-05-29",
-    "tags": ["discord", "cloudflare", "serverless", "typescript", "bots"]
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ]
   },
   {
-    "slug": "minecraft-pathfinding-logic-and-applications",
-    "title": "Логика поиска пути в Minecraft и её применение",
-    "description": "Как алгоритм A*, штрафы блоков и механика POI позволяют контролировать, предсказывать и эксплуатировать движение мобов -- от беспроводного редстоуна до оптимизированных ферм.",
+    "slug": "email-autoreply",
+    "title": "Я использовал git как базу данных, чтобы запустить бота бесплатно на GitHub Actions",
+    "description": "Как я написал автоответчик на ИИ, который работает на GitHub Actions за 0€/месяц -- используя git-теги как базу данных и предварительно скомпилированные снимки в теге runtime.",
     "date": "2026-05-29",
-    "tags": ["minecraft", "pathfinding", "reverse-engineering"]
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ]
+  },
+  {
+    "slug": "nausicaa-ai",
+    "title": "Мой тупой ИИ для Nausicaa",
+    "description": "Эвристический ИИ на коэффициентах, гиперпараметры которых меняются каждые 5 ходов, и Оракул который убегает -- погружение в мозг мифологической стратегической настолки.",
+    "date": "2026-05-29",
+    "tags": [
+      "game-dev",
+      "ai",
+      "javascript",
+      "open-source"
+    ]
   },
   {
     "slug": "typescript-virtual-container-polyfills",
@@ -33,7 +54,24 @@
     "description": "Как Fortune вручную переписала node:fs, node:crypto и дюжину других Node-модулей в 640 строках JavaScript, чтобы контейнер работал в браузере без Wasm.",
     "date": "2026-05-29",
     "aiGenerated": true,
-    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+    "tags": [
+      "typescript",
+      "node.js",
+      "polyfills",
+      "browser",
+      "open-source"
+    ]
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "title": "Сравнение JavaScript-решений для симуляции ядра Linux",
+    "description": "Глубокий анализ воссоздания Linux-окружений на JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ]
   },
   {
     "slug": "character-factory",
@@ -45,6 +83,36 @@
       "typescript",
       "npm",
       "open-source"
+    ]
+  },
+  {
+    "slug": "botting-a-farm",
+    "title": "Боттинг фермы Microsoft Rewards",
+    "description": "Как я написал бота для массового фарма очков Microsoft Rewards -- и почему их антибот-защита с тех пор ужесточилась.",
+    "date": "2026-03-13",
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ]
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "title": "Работа над новым проектом",
+    "description": "Взгляд на процесс запуска и разработки нового сайта.",
+    "date": "2026-03-13",
+    "tags": [
+      "meta",
+      "webdev"
+    ]
+  },
+  {
+    "slug": "my-passions",
+    "title": "Мои увлечения",
+    "description": "Программирование, рисование, автоматизация, изучение старого железа и многое другое -- взгляд на то, что мной движет.",
+    "date": "2026-03-08",
+    "tags": [
+      "personal"
     ]
   },
   {
@@ -70,15 +138,6 @@
     ]
   },
   {
-    "slug": "my-passions",
-    "title": "Мои увлечения",
-    "description": "Программирование, рисование, автоматизация, изучение старого железа и многое другое -- взгляд на то, что мной движет.",
-    "date": "2026-03-08",
-    "tags": [
-      "personal"
-    ]
-  },
-  {
     "slug": "ssh-signing-script",
     "title": "Скрипт подписи коммитов SSH -- объяснение",
     "description": "Разбор помощника для подписи коммитов через SSH и почему я хотел стильные коммиты.",
@@ -88,38 +147,6 @@
       "git",
       "security",
       "shell"
-    ]
-  },
-  {
-    "slug": "working-on-a-new-project",
-    "title": "Работа над новым проектом",
-    "description": "Взгляд на процесс запуска и разработки нового сайта.",
-    "date": "2026-03-13",
-    "tags": [
-      "meta",
-      "webdev"
-    ]
-  },
-  {
-    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
-    "title": "Сравнение JavaScript-решений для симуляции ядра Linux",
-    "description": "Глубокий анализ воссоздания Linux-окружений на JavaScript/TypeScript.",
-    "date": "2026-05-28",
-    "tags": [
-      "javascript",
-      "linux",
-      "analysis"
-    ]
-  },
-  {
-    "slug": "botting-a-farm",
-    "title": "Боттинг фермы Microsoft Rewards",
-    "description": "Как я написал бота для массового фарма очков Microsoft Rewards -- и почему их антибот-защита с тех пор ужесточилась.",
-    "date": "2026-03-13",
-    "tags": [
-      "automation",
-      "javascript",
-      "reverse-engineering"
     ]
   }
 ]
