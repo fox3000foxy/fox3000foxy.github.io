@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "hello-world",
+    "title": "你好，世界",
+    "description": "Fox 博客的一篇示例 Markdown 文章。",
+    "date": "2026-03-08",
+    "tags": ["meta", "blog"]
+  },
+  {
+    "slug": "about-my-github-profile",
+    "title": "关于我的 GitHub 个人主页",
+    "description": "我的 GitHub 个人主页的简要介绍。",
+    "date": "2026-03-08",
+    "tags": ["meta", "github"]
+  },
+  {
+    "slug": "how-this-blog-works",
+    "title": "这个博客是如何运作的？",
+    "description": "深入解析这个博客的内部架构：React、Vite、Markdown、CI/CD 流水线和文章写作流程。",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": ["react", "meta", "blog"]
+  },
+  {
+    "slug": "my-passions",
+    "title": "我的热爱",
+    "description": "编程、画画、自动化、发现老技术等等——带你了解我的动力源泉。",
+    "date": "2026-03-08",
+    "tags": ["personal"]
+  },
+  {
+    "slug": "ssh-signing-script",
+    "title": "SSH 提交签名脚本详解",
+    "description": "SSH 提交签名辅助工具的详细解析，以及为什么我想要有格调的提交。",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": ["git", "security", "shell"]
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "title": "正在开发一个新项目",
+    "description": "瞥一眼开始和开发一个新网站的过程。",
+    "date": "2026-03-13",
+    "tags": ["meta", "webdev"]
+  },
+  {
+    "slug": "character-factory",
+    "title": "构建 character-factory：带遗传基因的头像生成器",
+    "description": "基于 DiceBear 的 TypeScript 模块：按国家和地区合理生成一致性头像、用于预测后代的小型遗传引擎，以及使其在卡牌游戏中可用的工程细节。",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "tags": ["typescript", "npm", "open-source"]
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "title": "Linux 内核模拟的 JavaScript 方案横向对比",
+    "description": "深入分析 JavaScript/TypeScript 中 Linux 环境模拟的各种实现。",
+    "date": "2026-05-28",
+    "tags": ["javascript", "linux", "analysis"]
+  },
+  {
+    "slug": "botting-a-farm",
+    "title": "给 Microsoft Rewards 刷分农场写个机器人",
+    "description": "我如何编写了一个机器人来规模化刷 Microsoft Rewards 积分——以及微软的反机器人检测后来是如何追上来的。",
+    "date": "2026-03-13",
+    "tags": ["automation", "javascript", "reverse-engineering"]
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "hello-world",
+    "title": "Привет, мир",
+    "description": "Пример статьи в формате Markdown для блога Fox.",
+    "date": "2026-03-08",
+    "tags": ["meta", "blog"]
+  },
+  {
+    "slug": "character-factory",
+    "title": "Создание character-factory: аватары с генетикой",
+    "description": "TypeScript-модуль на основе DiceBear: согласованная генерация на основе страны/этничности, небольшой движок генетики для проекции детей и инженерные детали, сделавшие его пригодным для карточной игры.",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "tags": ["typescript", "npm", "open-source"]
+  },
+  {
+    "slug": "about-my-github-profile",
+    "title": "О моём GitHub-профиле",
+    "description": "Краткое введение в мой GitHub-профиль.",
+    "date": "2026-03-08",
+    "tags": ["meta", "github"]
+  },
+  {
+    "slug": "how-this-blog-works",
+    "title": "Как работает этот блог?",
+    "description": "Глубокое погружение во внутреннее устройство блога: React, Vite, Markdown, CI/CD пайплайн и процесс написания статей.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": ["react", "meta", "blog"]
+  },
+  {
+    "slug": "my-passions",
+    "title": "Мои увлечения",
+    "description": "Программирование, рисование, автоматизация, изучение старого железа и многое другое — взгляд на то, что мной движет.",
+    "date": "2026-03-08",
+    "tags": ["personal"]
+  },
+  {
+    "slug": "ssh-signing-script",
+    "title": "Скрипт подписи коммитов SSH — объяснение",
+    "description": "Разбор помощника для подписи коммитов через SSH и почему я хотел стильные коммиты.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": ["git", "security", "shell"]
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "title": "Работа над новым проектом",
+    "description": "Взгляд на процесс запуска и разработки нового сайта.",
+    "date": "2026-03-13",
+    "tags": ["meta", "webdev"]
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "title": "Сравнение JavaScript-решений для симуляции ядра Linux",
+    "description": "Глубокий анализ воссоздания Linux-окружений на JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "tags": ["javascript", "linux", "analysis"]
+  },
+  {
+    "slug": "botting-a-farm",
+    "title": "Боттинг фермы Microsoft Rewards",
+    "description": "Как я написал бота для массового фарма очков Microsoft Rewards — и почему их антибот-защита с тех пор ужесточилась.",
+    "date": "2026-03-13",
+    "tags": ["automation", "javascript", "reverse-engineering"]
+  }
+]
