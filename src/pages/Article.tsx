@@ -9,6 +9,7 @@ import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
+import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
 import NotFound from "./NotFound";
 
@@ -148,6 +149,7 @@ export default function Article() {
 							)}
 						</nav>
 					)}
+					<GiscusComments lang={lang} />
 				</div>
 			</div>
 		</article>
