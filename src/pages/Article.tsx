@@ -13,6 +13,11 @@ function processArticleContent(text: string): string {
 	return text.replaceAll("assets/", "/articles/assets/");
 }
 
+function estimateReadingTime(text: string): number {
+	const words = text.trim().split(/\s+/).length;
+	return Math.max(1, Math.ceil(words / 200));
+}
+
 export default function Article() {
 	const { slug } = useParams<{ slug: string }>();
 	const [content, setContent] = useState<string | null>(null);
@@ -64,7 +69,11 @@ export default function Article() {
 			{meta?.aiGenerated && (
 				<span className="ai-badge">✨ AI Generated Article</span>
 			)}
-			{meta?.date && <p className="article-date">{meta.date}</p>}
+			<p className="article-date">
+				{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
+				{meta?.date && <span className="article-sep">·</span>}
+				<span>{estimateReadingTime(content)} min read</span>
+			</p>
 			{meta?.description && (
 				<p className="article-description">{meta.description}</p>
 			)}
