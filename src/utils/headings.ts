@@ -18,7 +18,9 @@ export function parseHeadings(markdown: string): TocEntry[] {
 	const entries: TocEntry[] = [];
 	for (;;) {
 		const match = regex.exec(markdown);
-		if (match === null) { break; }
+		if (match === null) {
+			break;
+		}
 		const level = match[1].length;
 		const text = match[2].trim();
 		entries.push({ level, text, id: slugify(text) });
