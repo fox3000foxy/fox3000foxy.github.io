@@ -194,13 +194,3 @@
   font-variant-numeric: tabular-nums;
 }
 
-.tag-badge {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--tag-text);
-  background: var(--tag-bg);
-  border: 1px solid var(--tag-border);
-  border-radius: 999px;
-  padding: 0.15rem 0.6rem;
-}
