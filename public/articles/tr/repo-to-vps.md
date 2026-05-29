@@ -274,7 +274,7 @@ tmate ve inotify-tools, **APT paketlerini önbelleğe alan** bir action ile kuru
 
 Az önceki `git clean -fdx -e .apt-cache`'i hatırladın mı? İşte bağlantılı. `.apt-cache` klasörü, oturum sırasında kurduğun paketlerin bir şekilde kalıcı olabilmesi için temizlikten korunuyor.
 
-Her şey birbirine bağlı. Adam tüm yaşam döngüsünü düşünmüş.
+Her şey birbirine bağlı. Tüm yaşam döngüsünü düşündüm.
 
 ---
 
@@ -299,7 +299,7 @@ Ama script'e oturum sırasında hâlâ ihtiyaç vardır (her tmate yeniden başl
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Düşünmezsen suratına patlayacak türden bir hata: "script'im neden kayboldu?". O düşünmüş.
+Düşünmezsen suratına patlayacak türden bir hata: "script'im neden kayboldu?". Ben düşündüm.
 
 ---
 
