@@ -114,6 +114,7 @@ export default function Article() {
 						{t("article.minRead", { n: estimateReadingTime(content) })}
 					</span>
 				</p>
+				<AuthorBio authors={meta?.authors} />
 				{meta?.description && (
 					<p className="article-description">{meta.description}</p>
 				)}
@@ -182,7 +183,6 @@ export default function Article() {
 								)}
 							</nav>
 						)}
-						<AuthorBio />
 						<GiscusComments lang={lang} />
 					</div>
 				</div>

@@ -125,6 +125,49 @@ article {
   color: var(--accent-hover);
 }
 
+.author-bio-top {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.author-bio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.author-avatar-small {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.author-info-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.author-name-top {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.author-link-top {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.author-link-top:hover {
+  color: var(--accent);
+}
+
 .code-block-wrapper {
   position: relative;
 }
