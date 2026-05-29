@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
 	fetchArticleMarkdown,
 	getCachedArticleMarkdown,
@@ -31,6 +31,7 @@ function estimateReadingTime(text: string): number {
 export default function Article() {
 	const { slug } = useParams<{ slug: string }>();
 	const { t, lang } = useLang();
+	const location = useLocation();
 	const [content, setContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
@@ -105,6 +106,25 @@ export default function Article() {
 		}
 		void loadIndex();
 	}, [slug, lang]);
+
+	// Scroll to anchor hash when content is loaded
+	useEffect(() => {
+		if (!(content && location.hash)) {
+			return;
+		}
+		const id = decodeURIComponent(location.hash.slice(1));
+		let attempts = 0;
+		const tryScroll = () => {
+			const el = document.getElementById(id);
+			if (el) {
+				el.scrollIntoView({ behavior: "smooth", block: "start" });
+			} else if (attempts < 10) {
+				attempts++;
+				setTimeout(tryScroll, 200);
+			}
+		};
+		setTimeout(tryScroll, 100);
+	}, [content, location.hash]);
 
 	const sorted = useMemo(() => {
 		return [...allArticles].sort(
