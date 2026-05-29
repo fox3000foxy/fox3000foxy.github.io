@@ -18,9 +18,17 @@ export default defineConfig({
         display: 'standalone',
         scope: '/',
         start_url: '/',
+        categories: ['blog', 'technology', 'gaming'],
+        orientation: 'any',
         icons: [
           { src: '/icons/android-icon-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/android-icon-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+          { src: '/icons/ms-icon-310x310.png', sizes: '310x310', type: 'image/png' },
+          { src: '/icons/apple-icon-152x152.png', sizes: '152x152', type: 'image/png' },
+          { src: '/icons/apple-icon.png', sizes: '120x120', type: 'image/png' },
+        ],
+        screenshots: [
+          { src: '/icons/android-icon-192x192.png', sizes: '192x192', type: 'image/png' },
         ],
       },
       workbox: {
