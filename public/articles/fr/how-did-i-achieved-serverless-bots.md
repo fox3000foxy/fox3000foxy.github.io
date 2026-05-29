@@ -66,7 +66,7 @@ import { verifyKey } from 'discord-interactions';
 
 const app = new Hono();
 
-app.post('/interactions', async (c) =&gt; {
+app.post('/interactions', async (c) => {
   // 1. Récupère les headers
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
@@ -251,7 +251,7 @@ const DatabaseUtils = new DatabaseUtils({
 });
 
 const users = await DatabaseUtils.readJson('users');
-const user = users.find(u =&gt; u.id === interaction.member.user.id);
+const user = users.find(u => u.id === interaction.member.user.id);
 
 if (!user) {
   // Ajouter l'utilisateur
@@ -450,14 +450,14 @@ const handler = createDiscordHandler({
   commands: [
     {
       name: 'ping',
-      execute: async (interaction) =&gt; ({
+      execute: async (interaction) => ({
         type: 4,
         data: { content: 'Pong!' }
       })
     },
     {
       name: 'hello',
-      execute: async (interaction) =&gt; ({
+      execute: async (interaction) => ({
         type: 4,
         data: { content: `Hi ${interaction.member.user.username}!` }
       })
