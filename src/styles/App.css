@@ -164,6 +164,20 @@ a.tag-badge:hover {
   margin-bottom: 0.5rem;
 }
 
+.mermaid-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+:root.light .mermaid-wrapper {
+  background: #f5f5ff;
+}
+
 .author-bio-top {
   display: flex;
   gap: 1rem;

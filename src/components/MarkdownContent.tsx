@@ -7,6 +7,7 @@ import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { slugify } from "../utils/headings";
 import { useLang } from "../hooks/useLang";
+import MermaidBlock from "./MermaidBlock";
 
 const sanitizeSchema = {
 	...defaultSchema,
@@ -32,8 +33,9 @@ function textContent(node: ReactNode): string {
 		return node.map(textContent).join("");
 	}
 	if (node && typeof node === "object" && "props" in node) {
-		const el = node as { props: { children?: ReactNode } };
-		return textContent(el.props.children);
+		return textContent(
+			(node as { props: { children?: ReactNode } }).props.children
+		);
 	}
 	return "";
 }
@@ -73,7 +75,16 @@ function HeadingRenderer({
 function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 	const [copied, setCopied] = useState(false);
 	const { t } = useLang();
+
+	const codeEl = Array.isArray(children) ? children[0] : children;
+	// biome-ignore lint/suspicious/noExplicitAny: need to access className from child code element
+	const className = (codeEl as any)?.props?.className ?? "";
+	const lang = className.replace("language-", "");
 	const code = textContent(children);
+
+	if (lang === "mermaid") {
+		return <MermaidBlock code={code} />;
+	}
 
 	const handleCopy = async () => {
 		try {
