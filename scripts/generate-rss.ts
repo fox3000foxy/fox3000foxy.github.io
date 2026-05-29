@@ -1,9 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import * as fs from "node:fs";
-import * as path from "node:path";
-
 const SITE_URL = "https://fox3000foxy.com";
 const ARTICLES_DIR = "public/articles";
 const OUTPUT = "dist/feed.xml";
@@ -55,7 +52,7 @@ function main() {
 	const allLangs = loadAllLanguages(root);
 
 	const items: string[] = [];
-	for (const { lang, articles } of allLangs) {
+	for (const { articles } of allLangs) {
 		const sorted = [...articles].sort(
 			(a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
 		);
