@@ -35,7 +35,7 @@
 .blog-card {
   display: flex;
   flex-direction: column;
-  background: #111;
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
@@ -48,7 +48,7 @@
 
 .blog-card:hover {
   border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(100, 181, 246, 0.15);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 15%, transparent);
   transform: translateY(-2px);
 }
 
@@ -59,7 +59,7 @@
 .blog-card-title {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
-  color: #64b5f6;
+  color: var(--accent);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -96,9 +96,9 @@
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--ai-badge-text);
+  background: var(--ai-badge-bg);
+  border: 1px solid var(--ai-badge-border);
   border-radius: 999px;
   padding: 0.2rem 0.75rem;
   margin-bottom: 0.5rem;

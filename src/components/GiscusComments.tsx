@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTheme } from "../hooks/useTheme";
 
 const GISCUS_CONFIG = {
 	repo: "fox3000foxy/fox3000foxy.github.io" as const,
@@ -9,7 +10,9 @@ const GISCUS_CONFIG = {
 
 export default function GiscusComments({ lang }: { lang: string }) {
 	const ref = useRef<HTMLDivElement>(null);
+	const { theme } = useTheme();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: theme only used for initial render; updates via postMessage below
 	useEffect(() => {
 		const script = document.createElement("script");
 		script.src = "https://giscus.app/client.js";
@@ -24,7 +27,7 @@ export default function GiscusComments({ lang }: { lang: string }) {
 		script.setAttribute("data-reactions-enabled", "1");
 		script.setAttribute("data-emit-metadata", "0");
 		script.setAttribute("data-input-position", "bottom");
-		script.setAttribute("data-theme", "dark");
+		script.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
 		script.setAttribute("data-lang", lang);
 		ref.current?.appendChild(script);
 
@@ -32,6 +35,22 @@ export default function GiscusComments({ lang }: { lang: string }) {
 			script.remove();
 		};
 	}, [lang]);
+
+	useEffect(() => {
+		const iframe = ref.current?.querySelector("iframe");
+		if (iframe) {
+			iframe.contentWindow?.postMessage(
+				{
+					giscus: {
+						setConfig: {
+							theme: theme === "dark" ? "dark" : "light",
+						},
+					},
+				},
+				"https://giscus.app"
+			);
+		}
+	}, [theme]);
 
 	return <div ref={ref} className="giscus-comments" />;
 }

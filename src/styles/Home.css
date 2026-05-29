@@ -2,12 +2,12 @@
   max-width: 800px;
   margin: 0 auto;
   text-align: left;
-  color: #eee;
+  color: var(--text-secondary);
 }
 
 .home h2,
 .home h3 {
-  color: #fff;
+  color: var(--text);
 }
 
 .home p {
@@ -15,9 +15,9 @@
 }
 
 .home a {
-  color: #64b5f6;
+  color: var(--accent);
 }
 
 .home a:hover {
-  color: #81c784;
+  color: var(--tag-text);
 }
