@@ -194,6 +194,20 @@ f(n) = g(n) + 1.5 × h(n)
 
 Normalement A* utilise `f(n) = g(n) + h(n)`. MOJANG A AJOUTÉ UN FACTEUR 1.5. Pourquoi ? Pour que l'algo aille plus vite vers la destination et coupe moins de branches de recherche. Résultat : le chemin trouvé est "bon" mais pas toujours le meilleur. C'est un A* un peu bourré.
 
+```mermaid
+flowchart LR
+    A[Nœud départ] --> B{Voisins à\névaluer ?}
+    B -->|Oui| C[Calculer f = g + 1.5×h\npour chaque voisin]
+    C --> D[Sélectionner le voisin\navec le plus petit f]
+    D --> E{Destination\natteinte ?}
+    E -->|Non| B
+    E -->|Oui| F[Chemin trouvé !]
+    B -->|Non| G[Aucun chemin\npossible]
+    
+    style F color:#4caf50
+    style G color:#f44336
+```
+
 Détail important : **un mob ne peut pathfinder que sur 16 blocs** (sa *follow range*). Si la destination est trop loin, il choisit le bloc le plus proche qu'il PEUT atteindre. Ça veut dire que tu peux créer un monolithe hors de portée, et le mob va pathfinder vers le bloc le plus proche qui le rapproche de ce monolithe -- making ses mouvements complètement prévisibles.
 
 ### Les deux exploits qui cassent le jeu

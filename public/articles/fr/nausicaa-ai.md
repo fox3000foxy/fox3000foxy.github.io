@@ -136,6 +136,25 @@ Voilà comment l'IA décide :
 7. Si assez de mana (> 2), dash (double mouvement) pour se rapprocher encore
 8. Si l'unité est l'Oracle → fuir
 
+```mermaid
+flowchart TD
+    A[Début du tour CPU] --> B{Oracle en vie ?}
+    B -->|Non| C[Placer nouvel Oracle]
+    B -->|Oui| D[Calculer coefficients\nd'attaque pour chaque\npaire d'unités]
+    D --> E[Choisir la meilleure paire\nattaquant → cible]
+    E --> F{Attaque possible\ndepuis la position ?}
+    F -->|Oui| G[Attaquer la cible]
+    F -->|Non| H{Moins de 4\nunités ?}
+    H -->|Oui| I[Invoquer depuis la main\nla moins chère dispo]
+    H -->|Non| J[Se déplacer vers la cible\ncase la plus proche]
+    J --> K{Mana > 2 ?}
+    K -->|Oui| L[Dash : double mouvement\nvers la cible]
+    K -->|Non| M[Fin du tour]
+    G --> M
+    I --> M
+    L --> M
+```
+
 ```javascript
 async makeAction(dash=false) {
     // tout ça en séquence
