@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 import BookmarkButton from "../components/BookmarkButton";
@@ -8,6 +8,7 @@ import { getAuthors } from "../utils/authors";
 export default function TagIndex() {
 	const { tag } = useParams<{ tag: string }>();
 	const { t, lang } = useLang();
+	const navigate = useNavigate();
 	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 
 	useEffect(() => {
@@ -49,9 +50,19 @@ export default function TagIndex() {
 	return (
 		<div className="blog-list">
 			<div className="tag-page-header">
-				<Link to="/blog" className="tag-page-back">
+				<button
+					type="button"
+					className="tag-page-back"
+					onClick={() => {
+						if (window.history.length > 1) {
+							void navigate(-1);
+						} else {
+							void navigate("/blog");
+						}
+					}}
+				>
 					← {t("blog.title")}
-				</Link>
+				</button>
 				<h2>#{tag}</h2>
 			</div>
 
