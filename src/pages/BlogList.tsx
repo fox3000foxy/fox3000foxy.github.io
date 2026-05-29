@@ -6,8 +6,10 @@ import {
 	prefetchMarkdownEntries,
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
+import { useLang } from "../hooks/useLang";
 
 export default function BlogList() {
+	const { t } = useLang();
 	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 	const [activeTag, setActiveTag] = useState<string | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -56,12 +58,12 @@ export default function BlogList() {
 
 	return (
 		<div className="blog-list">
-			<h2>Blog Posts</h2>
+			<h2>{t("blog.title")}</h2>
 
 			<div className="search-bar">
 				<input
 					type="search"
-					placeholder="Search articles…"
+					placeholder={t("blog.search")}
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
 				/>
@@ -70,6 +72,7 @@ export default function BlogList() {
 						type="button"
 						className="search-clear"
 						onClick={() => setSearchQuery("")}
+						aria-label={t("search.clear")}
 					>
 						×
 					</button>
@@ -83,7 +86,7 @@ export default function BlogList() {
 						className={`tag-btn${activeTag === null ? " active" : ""}`}
 						onClick={() => setActiveTag(null)}
 					>
-						All
+						{t("blog.filter.all")}
 					</button>
 					{allTags.map((tag) => (
 						<button
@@ -112,7 +115,7 @@ export default function BlogList() {
 										{title ?? slug.replace(/-/g, " ")}
 									</h3>
 									{aiGenerated && (
-										<span className="ai-badge">✨ AI Generated Article</span>
+										<span className="ai-badge">{t("article.ai")}</span>
 									)}
 									{description && (
 										<p className="blog-card-desc">{description}</p>
@@ -148,10 +151,10 @@ export default function BlogList() {
 			) : (
 				<p>
 					{searchQuery
-						? `No articles matching "${searchQuery}".`
+						? t("blog.no.match", { query: searchQuery })
 						: activeTag
-							? `No articles tagged "${activeTag}".`
-							: "No articles found."}
+							? t("blog.no.tag", { tag: activeTag })
+							: t("blog.no.articles")}
 				</p>
 			)}
 		</div>

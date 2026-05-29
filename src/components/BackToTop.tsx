@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useLang } from "../hooks/useLang";
 
 export default function BackToTop() {
 	const [visible, setVisible] = useState(false);
+	const { t } = useLang();
 
 	useEffect(() => {
 		const onScroll = () => setVisible(window.scrollY > 300);
@@ -18,7 +20,7 @@ export default function BackToTop() {
 			type="button"
 			className={`back-to-top${visible ? " visible" : ""}`}
 			onClick={scrollToTop}
-			aria-label="Back to top"
+			aria-label={t("backToTop.aria")}
 		>
 			↑
 		</button>

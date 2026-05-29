@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { ArticleMeta } from "../types";
+import { useLang } from "../hooks/useLang";
 
 interface Group {
 	label: string;
 	articles: ArticleMeta[];
 }
 
-function groupByYearMonth(articles: ArticleMeta[]): Group[] {
+function groupByYearMonth(articles: ArticleMeta[], locale: string): Group[] {
 	const map = new Map<string, ArticleMeta[]>();
 
 	for (const a of articles) {
@@ -21,7 +22,7 @@ function groupByYearMonth(articles: ArticleMeta[]): Group[] {
 	const sorted = [...map.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 	return sorted.map(([key, arts]) => {
 		const [year, month] = key.split("-");
-		const label = new Date(Number(year), Number(month) - 1).toLocaleDateString("en-US", {
+		const label = new Date(Number(year), Number(month) - 1).toLocaleDateString(locale, {
 			year: "numeric",
 			month: "long",
 		});
@@ -30,6 +31,7 @@ function groupByYearMonth(articles: ArticleMeta[]): Group[] {
 }
 
 export default function Archive() {
+	const { t, lang } = useLang();
 	const [groups, setGroups] = useState<Group[]>([]);
 
 	useEffect(() => {
@@ -41,19 +43,19 @@ export default function Archive() {
 					const normalized: ArticleMeta[] = (data as any[]).map((item) =>
 						typeof item === "string" ? { slug: item } : item
 					);
-					setGroups(groupByYearMonth(normalized));
+					setGroups(groupByYearMonth(normalized, lang));
 				}
 			})
 			.catch(() => setGroups([]));
-	}, []);
+	}, [lang]);
 
 	if (groups.length === 0) {
-		return <p>Loading archive…</p>;
+		return <p>{t("archive.loading")}</p>;
 	}
 
 	return (
 		<div className="archive">
-			<h2>Archive</h2>
+			<h2>{t("archive.title")}</h2>
 			{groups.map((group) => (
 				<section key={group.label} className="archive-group">
 					<h3 className="archive-month">{group.label}</h3>

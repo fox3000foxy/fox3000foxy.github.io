@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import BackToTop from "./components/BackToTop";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import { LangContext, useLangState } from "./hooks/useLang";
 import "./styles/App.css";
 
 import Archive from "./pages/Archive";
@@ -15,7 +16,9 @@ import Project from "./pages/Project";
 import ProjectList from "./pages/ProjectList";
 
 function App() {
+	const langCtx = useLangState();
 	return (
+		<LangContext.Provider value={langCtx}>
 		<Router>
 			<Header />
 			<BackToTop />
@@ -35,6 +38,7 @@ function App() {
 			</main>
 			<Footer />
 		</Router>
+		</LangContext.Provider>
 	);
 }
 
