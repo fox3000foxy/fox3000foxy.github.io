@@ -57,5 +57,12 @@
     "description": "A deep analysis of Linux environnements recreations in Javacript/Typescript.",
     "date": "2026-05-28",
     "tags": ["javascript", "linux", "analysis"]
+  },
+  {
+    "slug": "botting-a-farm",
+    "title": "Botting a Microsoft Rewards Farm",
+    "description": "How I coded a bot to farm Microsoft Rewards points at scale — and why Microsoft's anti-bot detection has since caught up.",
+    "date": "2026-03-13",
+    "tags": ["automation", "javascript", "reverse-engineering"]
   }
 ]
