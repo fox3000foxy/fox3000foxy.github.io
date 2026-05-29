@@ -22,7 +22,7 @@ Quand tu lances un workflow GitHub Actions, GitHub te file une VM.
 
 C'est fait pour build ton code, lancer tes tests, deploy. Le workflow tourne, fait son taf, et la machine est détruite.
 
-Mais rien ne t'empêche de... faire autre chose avec cette VM. Genre, ouvrir un shell SSH dessus et l'utiliser comme un serveur.
+Mais rien ne t'empêche de faire autre chose avec cette VM. Genre, ouvrir un shell SSH dessus et l'utiliser comme un serveur.
 
 Le truc, c'est que ces machines sont **stateless** et **temporaires** :
 - Temporaire : 6h max par run (`timeout-minutes: 360`, le plafond de GitHub)
@@ -32,7 +32,7 @@ Donc pour en faire un VPS utilisable, faut résoudre deux problèmes :
 1. **Comment se connecter dessus en temps réel ?**
 2. **Comment garder le disque entre deux runs ?**
 
-C'est là que ça devient un sale hack de génie.
+Là ça devient un sale hack.
 
 ---
 
@@ -128,7 +128,7 @@ Mais les `-e` (exclude) protègent certains trucs :
 
 Si tu nettoyais ces fichiers-là, tu casserais la session active ou tu perdrais ton cache. Donc on les épargne pendant le reset.
 
-C'est le genre de détail qu'on voit pas au premier coup d'œil, mais qui fait la différence entre "ça marche" et "ça marche vraiment".
+Un détail con à première vue, mais sans ça tout pète.
 
 ---
 
@@ -155,7 +155,7 @@ autosave &
 
 Décortiquons les flags inotify, parce que chacun compte :
 - `-r` → récursif, surveille tous les sous-dossiers
-- `-e modify,create,delete,move` → réagit à ces 4 types d'événements (modif, création, suppression, déplacement)
+- `-e modify,create,delete,move` → réagit à ces 4 types d'événements
 - `--exclude '...'` → une regex pour ignorer certains fichiers
 
 Le `--exclude` est crucial. Regarde ce qu'il ignore :
@@ -202,7 +202,7 @@ Ceinture ET bretelles. On veut surtout pas perdre l'état du disque.
 
 ## Le détail malin : un seul commit
 
-Si tu commit à chaque changement de fichier, tu vas accumuler... des milliers de commits. En une heure de session, ton historique git explose. Le repo devient énorme. C'est dégueulasse.
+Si tu commit à chaque changement de fichier, tu vas accumuler des milliers de commits. En une heure de session, ton historique git explose. Le repo devient énorme. C'est dégueulasse.
 
 La solution est élégante : **on amende le commit existant** au lieu d'en créer un nouveau.
 
@@ -274,7 +274,7 @@ Au premier run, ça télécharge et installe. Aux runs suivants, c'est restauré
 
 Et tu te souviens du `git clean -fdx -e .apt-cache` de tout à l'heure ? C'est lié. Le dossier `.apt-cache` est protégé du nettoyage justement pour que les paquets que tu installes pendant ta session puissent persister un minimum.
 
-Tout est connecté. J'ai pensé au cycle de vie complet.
+Tout se tient. J'ai pensé au cycle de vie complet.
 
 ---
 
@@ -293,19 +293,19 @@ Les scripts (`update_readme.py`, etc.) sont copiés dans `/tmp` AVANT de toucher
 
 Pourquoi ? Parce que quand tu fais le `git reset --hard` vers la branche `filesystem` (qui est vide au début, ou qui contient ton disque), les fichiers `.github/scripts` du repo source disparaissent du workspace.
 
-Mais le script en a encore besoin pendant la session (pour update le README à chaque relance de tmate). Donc il les planque dans `/tmp`, hors de portée de git, pour pouvoir les rappeler plus tard :
+Mais le script en a encore besoin pendant la session (pour update le README à chaque relance de tmate). Donc il les planque dans `/tmp`, hors de portée de git :
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-C'est le genre de bug qui te pète à la gueule si t'y penses pas : "pourquoi mon script a disparu ?". J'y ai pensé.
+Si t'y penses pas, tu galères 30 minutes à comprendre pourquoi ton script a disparu. J'y ai pensé.
 
 ---
 
 ## Le shell sur-mesure
 
-Petit confort de fin : la session te file un shell configuré, pas un bash tout nu.
+Petit confort : la session te file un shell configuré, pas un bash tout nu.
 
 Le `prestart.sh` copie un `.bashrc` custom :
 
@@ -313,10 +313,10 @@ Le `prestart.sh` copie un `.bashrc` custom :
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
   cp .github/scripts/remote_bashrc "$HOME/.bashrc"
 fi
-sudo cp "$HOME/.bashrc" /root/.bashrc   # pareil pour root via sudo
+sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
-Et ce `.bashrc` contient un prompt coloré, des alias (`ll`, `lla`, `rm -i`), et surtout un truc futé : un override de `exit` :
+Et ce `.bashrc` contient un prompt coloré, des alias (`ll`, `lla`, `rm -i`), et surtout un override de `exit` :
 
 ```bash
 exit() {
@@ -328,7 +328,7 @@ exit() {
 bind -x '"\C-d": "exit"'
 ```
 
-Quand tu tape `exit` (ou Ctrl+D), ça kill proprement les process tmate avant de fermer. Ça évite de laisser des sessions tmate zombies traîner sur la machine.
+Quand tu tape `exit` (ou Ctrl+D), ça kill proprement les process tmate avant de fermer. Ça évite de laisser des sessions tmate zombies.
 
 Y'a aussi une fonction `tmate-detach` si tu veux te déconnecter SANS tuer la session (pour te reconnecter plus tard). Détail de confort, mais ça montre le niveau de soin.
 
@@ -343,20 +343,16 @@ Sauf qu'ici, tmate est dans une boucle `while true` :
 ```bash
 while true; do
   tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
-  # ... génère les liens, update le README ...
-
-  # attend que la session tmate meure
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
-
   echo "tmate session ended; restarting..."
 done
 ```
 
-Tu `exit` ? La session redémarre toute seule. Tu peux te reconnecter avec le même lien. Reconnexion stable, même après une déco.
+Tu `exit` ? La session redémarre toute seule. Tu te reconnectes avec le même lien.
 
-C'est le genre de détail qui transforme un hack bricolé en truc réellement utilisable.
+C'est débile, mais ça rend le truc utilisable.
 
 ---
 
@@ -364,7 +360,7 @@ C'est le genre de détail qui transforme un hack bricolé en truc réellement ut
 
 Comment tu te reconnectes après une déco, sans aller fouiller dans les logs du run à chaque fois ?
 
-L'adresse SSH de tmate est écrite dans un fichier `host.conf`, lui-même committé dans la branche `filesystem` :
+L'adresse SSH de tmate est écrite dans un fichier `host.conf`, committé dans la branche `filesystem` :
 
 ```bash
 printf '%s' "${tmate_ssh#ssh }" > host.conf
@@ -377,17 +373,14 @@ ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
   "/repos/USER/REPO/contents/host.conf?ref=filesystem" | tr -d '\r\n')"
 ```
 
-Tu lance ça, ça va chercher l'adresse SSH actuelle dans le repo, et te connecte directement. Même si l'adresse a changé entre deux sessions.
-
-C'est lisse comme tout.
+Tu lance ça, ça va chercher l'adresse SSH actuelle dans le repo, et te connecte. Même si l'adresse a changé entre deux sessions.
 
 ---
 
 ## Le flow complet
 
-Récapitulons le bail :
+Récapitulons :
 
-```
 1. Tu déclenche le workflow (push ou bouton manuel)
 2. GitHub te file une VM Ubuntu
 3. Le script restore le disque depuis la branche "filesystem"
@@ -396,14 +389,12 @@ Récapitulons le bail :
 6. tmate démarre → génère les liens SSH/web
 7. Les liens sont écrits dans le README + host.conf
 8. Tu te connecte avec ssh ou le terminal web
-9. Tu fais ce que tu veux (coder, installer, debug...)
-   └── chaque changement de fichier = autosave instantané vers git
+9. Tu fais ce que tu veux -- chaque changement de fichier = autosave
 10. 6h plus tard, GitHub tue la VM
-11. Mais ton disque est intact dans la branche "filesystem"
+11. Ton disque est intact dans la branche "filesystem"
 12. Tu relance le workflow → retour à l'étape 3, tout est encore là
-```
 
-Un VPS. Gratuit. Avec disque persistant. Juste avec git et GitHub Actions.
+Un VPS gratuit avec disque persistant. Juste avec git et GitHub Actions.
 
 ---
 
@@ -419,9 +410,7 @@ C'est un hack, pas un vrai VPS. Donc :
 
 ### Le vrai talon d'Achille : git déteste les gros fichiers
 
-Y'a une limite plus technique, et c'est la plus importante à comprendre.
-
-**Git c'est fait pour du texte, pas pour un filesystem.**
+Git c'est fait pour du texte, pas pour un filesystem.
 
 Le disque persistant vit dans une branche git. Donc tout ce que tu sauvegardes passe par git. Et git :
 - gère mal les gros fichiers binaires (une image Docker de 2 Go dans git ? oublie)
@@ -480,9 +469,9 @@ Dès que t'as un système stateless (GitHub Actions, un Worker, une fonction ser
 
 Même pattern, deux échelles. Une valeur d'un côté, un disque de l'autre.
 
-Et le `git commit --amend` + force-push c'est la technique commune : **tu gardes un seul commit qui représente l'état actuel, écrasé à chaque update.** Pas d'historique qui gonfle, juste un snapshot vivant.
+Et le `git commit --amend` + force-push c'est la technique commune : **tu gardes un seul commit qui représente l'état actuel, écrasé à chaque update.**
 
-C'est pas fait pour ça à l'origine. Mais ça marche. Et c'est gratuit. Et c'est ça qui est beau.
+C'est pas fait pour ça. Mais ça marche. Et c'est gratuit.
 
 ---
 

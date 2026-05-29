@@ -18,7 +18,7 @@ Ich hab Stunden damit verbracht, Schafen beim Rennen gegen Wände zuzuschauen.
 
 Beste Investition meines Lebens xD
 
-Je mehr du dir diese Mobs anschaust, desto mehr merkst du: Nichts an ihrer Bewegung ist zufällig. Jeder Schritt ist programmiert, vorhersagbar, und vor allem — ausnutzbar. Ich hab den Minecraft-Sourcecode durchgewühlt um genau zu verstehen, wie Pathfinding funktioniert, und was ich gefunden hab ist, dass du Mobs buchstäblich mit Gedanken kontrollieren kannst. So à la zwing sie dahin zu gehen, wo DU willst, nicht wo der Zufall entscheidet.
+Je mehr du dir diese Mobs anschaust, desto mehr merkst du: Nichts an ihrer Bewegung ist zufällig. Jeder Schritt ist programmiert, vorhersagbar, und vor allem -- ausnutzbar. Ich hab den Minecraft-Sourcecode durchgewühlt um genau zu verstehen, wie Pathfinding funktioniert, und was ich gefunden hab ist, dass du Mobs buchstäblich mit Gedanken kontrollieren kannst. So à la zwing sie dahin zu gehen, wo DU willst, nicht wo der Zufall entscheidet.
 
 Dieser Guide ist alles, was ich beim Graben gefunden hab. Das KI-System, der A*-Algorithmus, die versteckten Malice-Werte, die Exploits die du im Überlebensmodus ziehen kannst. Hol deine Spitzhacke.
 
@@ -45,7 +45,7 @@ Das Goal, das uns eigentlich interessiert, ist `WaterAvoidingRandomStrollGoal`, 
 
 ### Bewegung (oder "wie ein Random Walk eine 1-zu-60-Chance pro Tick hat")
 
-Jeden Tick (alle 0,05 Sekunden) ruft das Spiel `canUse()` auf, um zu checken ob der Mob überhaupt Bock hat, sich zu bewegen. 1 zu 60 Chance pro Tick. Unfassbar ineffizientes Design — und ich liebe es.
+Jeden Tick (alle 0,05 Sekunden) ruft das Spiel `canUse()` auf, um zu checken ob der Mob überhaupt Bock hat, sich zu bewegen. 1 zu 60 Chance pro Tick. Unfassbar ineffizientes Design -- und ich liebe es.
 
 ```java
 public boolean canUse() {
@@ -91,7 +91,7 @@ protected Vec3 getPosition() {
 }
 ```
 
-Die zwei Zahlen am Ende? XZ-Radius und Y-Radius. Im Wasser sucht der Mob weiter (15 vs 10). Wenn er kein Land findet, fallbackt er auf `super.getPosition()` — das Wasser akzeptiert. **Ergebnis: Mobs WOLLEN aus dem Wasser raus.** Deshalb schwimmen deine Tiere wie Verrückte Richtung Ufer.
+Die zwei Zahlen am Ende? XZ-Radius und Y-Radius. Im Wasser sucht der Mob weiter (15 vs 10). Wenn er kein Land findet, fallbackt er auf `super.getPosition()` -- das Wasser akzeptiert. **Ergebnis: Mobs WOLLEN aus dem Wasser raus.** Deshalb schwimmen deine Tiere wie Verrückte Richtung Ufer.
 
 Lustiges Detail: es gibt buchstäblich eine 0,1%-Chance, dass der Mob `super.getPosition()` statt `LandRandomPos` nimmt. Eins zu tausend. Mojang halt xD
 
@@ -174,7 +174,7 @@ public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
 
 Monster sind praktisch "wenn's hell ist, negativ-Score, ich bin raus." Die kriegen einen KRAMPF bei Licht xD
 
-Du kannst also — buchstäblich — Tiere mit Gras und Licht lenken, und Monster mit Dunkelheit. Es ist dumm und genial zugleich.
+Du kannst also -- buchstäblich -- Tiere mit Gras und Licht lenken, und Monster mit Dunkelheit. Es ist dumm und genial zugleich.
 
 ---
 
@@ -206,7 +206,7 @@ flowchart LR
     style G color:#f44336
 ```
 
-Wichtige Einschränkung: **ein Mob kann nur 16 Blöcke weit pathen** (seine *Follow Range*). Wenn das Ziel zu weit weg ist, nimmt es den nächstgelegenen erreichbaren Block. Das heißt, du kannst einen Monolithen außerhalb der Reichweite bauen und der Mob patht zum nächstgelegenen Block, der ihn näher bringt — was seine Bewegung komplett vorhersagbar macht.
+Wichtige Einschränkung: **ein Mob kann nur 16 Blöcke weit pathen** (seine *Follow Range*). Wenn das Ziel zu weit weg ist, nimmt es den nächstgelegenen erreichbaren Block. Das heißt, du kannst einen Monolithen außerhalb der Reichweite bauen und der Mob patht zum nächstgelegenen Block, der ihn näher bringt -- was seine Bewegung komplett vorhersagbar macht.
 
 ### Die zwei Exploits die das Spiel zerstören
 
@@ -278,7 +278,7 @@ Ein Dorfbewohner ist quasi ein Taschenrechner mit Beinen xD
 Ein Dorfbewohner: "Feuer? NOPE TSCHÜSS"
 Ein Zombie: "Feuer? OK Boomer *läuft brennend durch*"
 
-Du kannst buchstäblich Highways bauen, die Dorfbewohner nehmen und Zombies nicht — oder umgekehrt.
+Du kannst buchstäblich Highways bauen, die Dorfbewohner nehmen und Zombies nicht -- oder umgekehrt.
 
 ---
 
@@ -303,7 +303,7 @@ Das Gehirn eines Dorfbewohners ist in Aktivitätspakete unterteilt, die je nach 
 | **Idle** | 6-8 Uhr, 17-18 Uhr | "Gelangweilt" -- läuft rum, vermehrt sich, springt auf Betten |
 | **Panic** | Verletzt / Feind | "RENN" -- FLIEHT |
 
-**Panic** ist das einzige Paket, das ALLE anderen unterbrechen kann. Selbst wenn der Dorfbewohner schläft oder arbeitet — wenn ein Zombie da ist, PANIK-MODUS.
+**Panic** ist das einzige Paket, das ALLE anderen unterbrechen kann. Selbst wenn der Dorfbewohner schläft oder arbeitet -- wenn ein Zombie da ist, PANIK-MODUS.
 
 ### POI akquirieren: der Mechanismus der drahtloses Redstone ermöglicht
 
@@ -326,7 +326,7 @@ Du siehst, worauf das hinausläuft?
 
 1. Setz einen Dorfbewohner in eine Lore mit Pfad zu einem Komposter
 2. Er akquiriert den Komposter (Slot belegt, niemand sonst kann ihn nutzen)
-3. Der Dorfbewohner ist zu weit weg um zu klicken — Knochenmehl bleibt
+3. Der Dorfbewohner ist zu weit weg um zu klicken -- Knochenmehl bleibt
 4. BEWEGE diesen Dorfbewohner IRGENDWOHIN in der Welt, er behält den Slot
 5. Wenn du dein Ding aktivieren willst, TÖTE den Dorfbewohner
 6. Slot wird frei, ein anderer Dorfbewohner akquiriert den Komposter, entfernt Knochenmehl
@@ -354,8 +354,8 @@ Mob-Pathfinding in Minecraft ist nicht zufällig. Es ist ein deterministisches, 
 
 **Drei Dinge zum Merken:**
 
-1. **Solide Blöcke drunter = Höhen-Bias** — füll oder leere den Untergrund um Mobs zu lenken
-2. **Malice ist unterschiedlich pro Mob** — erstelle Routen, die manche nehmen und andere nicht
-3. **POI-Slots werden auf Distanz reserviert** — kostenloses drahtloses Redstone, Teleportation, alles dabei
+1. **Solide Blöcke drunter = Höhen-Bias** -- füll oder leere den Untergrund um Mobs zu lenken
+2. **Malice ist unterschiedlich pro Mob** -- erstelle Routen, die manche nehmen und andere nicht
+3. **POI-Slots werden auf Distanz reserviert** -- kostenloses drahtloses Redstone, Teleportation, alles dabei
 
 Minecrafts Sourcecode ist eine Goldgrube an unterausgenutzten Mechaniken. Ich hab Stunden damit verbracht, dekompiliertes Java zu lesen und ehrlich? Jede Zeile ist ein funktionales Easter Egg. Nur dass diese im Überlebensmodus für drahtloses Redstone mit Dorfbewohnern funktionieren. Bestes Game bestätigt xD

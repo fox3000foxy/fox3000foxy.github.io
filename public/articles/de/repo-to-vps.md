@@ -22,7 +22,7 @@ Wenn du 'nen GitHub Actions Workflow startest, gibt dir GitHub 'ne VM.
 
 Die ist dazu da, deinen Code zu builden, Tests zu starten, zu deployen. Der Workflow läuft, macht seinen Job, und die Maschine wird zerstört.
 
-Aber nichts hält dich davon ab... was anderes mit dieser VM zu machen. So wie, 'nen SSH-Shell drauf zu öffnen und sie als Server zu benutzen.
+Aber nichts hält dich davon ab, was anderes mit dieser VM zu machen. 'Ne SSH-Shell öffnen und als Server benutzen.
 
 Der Punkt ist, diese Maschinen sind **zustandslos** und **temporär**:
 - Temporär: max 6h pro Run (`timeout-minutes: 360`, das GitHub-Limit)
@@ -32,7 +32,7 @@ Also um daraus 'nen brauchbaren VPS zu machen, musst du zwei Probleme lösen:
 1. **Wie verbinde ich mich in Echtzeit damit?**
 2. **Wie behalte ich die Platte zwischen zwei Runs?**
 
-Und hier wird's zu 'nem sicken genialen Hack.
+Und hier wird's zu 'nem Hack.
 
 ---
 
@@ -51,8 +51,6 @@ Der Workflow startet also tmate:
 ```bash
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
-
-# holt die Verbindungslinks
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
@@ -73,11 +71,7 @@ Beim Start stellt das Script den Zustand aus diesem Branch wieder her:
 
 ```bash
 filesystem_branch="filesystem"
-
-# holt den filesystem-Branch vom Remote
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
-
-# stellt das Workspace aus diesem Branch wieder her
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
@@ -128,7 +122,7 @@ Aber die `-e` (exclude) schützen bestimmte Dinge:
 
 Wenn du diese Dateien putzen würdest, würdest du die aktive Session killen oder deinen Cache verlieren. Also werden sie beim Reset verschont.
 
-Das ist so 'n Detail, das man auf den ersten Blick nicht sieht, aber den Unterschied zwischen "es funktioniert" und "es funktioniert richtig" ausmacht.
+'n blödes Detail auf den ersten Blick, aber ohne das geht alles kaputt.
 
 ---
 
@@ -146,7 +140,7 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1   # Debounce bei vielen Änderungen auf einmal
+    sleep 1
   done
 }
 
@@ -187,7 +181,7 @@ Falls inotify mal was verpassen sollte, gibt's auch noch 'nen Save alle 5 Sekund
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote   # holt mögliche Remote-Änderungen
+    sync_from_remote
     sleep 5
     commit_and_push
   done
@@ -209,14 +203,14 @@ Die Lösung ist elegant: **wir amendieren den existierenden Commit**, statt 'nen
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return   # Lock, damit nicht zwei Saves gleichzeitig laufen
+    flock -n 200 || return
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/   # fass die Scripts nicht an
+    git reset -- .github/workflows/ .github/scripts/
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit    # AMEND: überschreibt den vorherigen Commit
+        git commit --amend --no-edit
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -274,7 +268,7 @@ Beim ersten Run werden sie runtergeladen und installiert. Bei späteren Runs wer
 
 Und erinnerst du dich an das `git clean -fdx -e .apt-cache` von vorhin? Das hängt damit zusammen. Der Ordner `.apt-cache` wird vor dem Putzen geschützt, damit die Pakete, die du während deiner Session installierst, zumindest minimal überleben können.
 
-Alles hängt zusammen. Ich habe über den kompletten Lebenszyklus nachgedacht.
+Alles hält sich.
 
 ---
 
@@ -293,13 +287,13 @@ Die Scripts (`update_readme.py`, etc.) werden nach `/tmp` kopiert, BEVOR der Bra
 
 Warum? Weil wenn du `git reset --hard` auf den Branch `filesystem` machst (der am Anfang leer ist oder deine Platte enthält), verschwinden die `.github/scripts`-Dateien des Quell-Repos aus dem Workspace.
 
-Aber das Script braucht sie während der Session noch (um das README bei jedem tmate-Neustart zu updaten). Also versteckt es sie in `/tmp`, außerhalb von Git, um sie später wieder aufrufen zu können:
+Aber das Script braucht sie, um das README zu updaten. Also versteckt es sie in `/tmp`:
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Das ist so 'n Bug, der dir um die Ohren fliegt, wenn du nicht dran denkst: "warum ist mein Script verschwunden?". Ich hab dran gedacht.
+Wenn du nicht dran denkst, fliegt's dir um die Ohren. Ich hab dran gedacht.
 
 ---
 
@@ -313,7 +307,7 @@ Das `prestart.sh` kopiert 'ne custom `.bashrc`:
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
   cp .github/scripts/remote_bashrc "$HOME/.bashrc"
 fi
-sudo cp "$HOME/.bashrc" /root/.bashrc   # gleiches für Root via sudo
+sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
 Und diese `.bashrc` enthält 'nen farbigen Prompt, Aliase (`ll`, `lla`, `rm -i`), und vor allem 'nen cleveren Override von `exit`:
@@ -324,7 +318,6 @@ exit() {
     builtin exit "$@"
 }
 
-# Ctrl+D macht dasselbe wie exit
 bind -x '"\C-d": "exit"'
 ```
 
@@ -343,9 +336,6 @@ Aber hier ist tmate in 'ner `while true`-Schleife:
 ```bash
 while true; do
   tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
-  # ... generiert Links, updated README ...
-
-  # wartet, bis die tmate-Session stirbt
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
@@ -356,7 +346,7 @@ done
 
 Du `exit`? Die Session startet von selbst neu. Du kannst dich mit demselben Link neu verbinden. Stabile Wiederverbindung, sogar nach 'ner Trennung.
 
-Das ist so 'n Detail, das aus 'nem zusammengebastelten Hack 'nen wirklich nutzbaren Ding macht.
+Ist bescheuert, aber macht's nutzbar.
 
 ---
 
@@ -379,13 +369,13 @@ ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
 
 Du gibst das ein, es holt die aktuelle SSH-Adresse aus dem Repo und verbindet dich direkt. Selbst wenn die Adresse zwischen zwei Sessions gewechselt hat.
 
-So glatt wie alles.
+Erledigt.
 
 ---
 
 ## Der komplette Flow
 
-Fassen wir das Ganze zusammen:
+Fassen wir zusammen:
 
 ```
 1. Du startest den Workflow (Push oder manueller Button)
@@ -463,7 +453,7 @@ Das Lustige ist, dass der GitHub-Runner bei den Rohdaten (RAM, CPU) oft BESSER i
 
 Zum Lernen, Testen, schnellen Linux-Debuggen in 'ner wiederherstellbaren Umgebung? Perfekt. Um irgendwas Ernsthaftes zu hosten? Hol dir 'nen echten VPS.
 
-Aber für 'ne temporäre Linux-Umgebung, die du nach Belieben wiederherstellen kannst? Es ist einfach genial.
+Aber für 'ne temporäre Linux-Umgebung, die du nach Belieben wiederherstellen kannst? Einfach genial.
 
 ---
 
@@ -480,9 +470,9 @@ Sobald du 'n zustandsloses System hast (GitHub Actions, 'n Worker, 'ne Serverles
 
 Gleiches Muster, zwei Größenordnungen. Ein Wert auf der einen Seite, 'ne Platte auf der anderen.
 
-Und das `git commit --amend` + Force-Push ist die gemeinsame Technik: **du behältst 'nen einzigen Commit, der den aktuellen Zustand repräsentiert, der bei jedem Update überschrieben wird.** Keine aufblasende History, nur 'n lebendiger Snapshot.
+Und das `git commit --amend` + Force-Push ist die gemeinsame Technik: **du behältst 'nen einzigen Commit, der den aktuellen Zustand repräsentiert, der bei jedem Update überschrieben wird.**
 
-Es war ursprünglich nicht dafür gedacht. Aber es funktioniert. Und es ist kostenlos. Und das ist das Schöne daran.
+War nicht dafür gedacht. Aber es funktioniert. Und ist kostenlos.
 
 ---
 

@@ -4,7 +4,7 @@ GitHub Actions가 공짜 Linux 머신을 줘.
 
 그니까, 진짜 Ubuntu 서버임. 2코어, 7GB RAM, 14GB 디스크. 공짜. 실행당 6시간.
 
-유일한 "문제"는: 실행이 끝나면 모든 게 지워진다는 거야. 머신은 일회용이야. 뭐 설치하고, 코딩하고, 설정하고... 그리고 푸, 끝나면 다 사라져. 아무것도 한 게 없는 것처럼.
+유일한 "문제"는: 실행이 끝나면 모든 게 지워진다는 거야. 머신은 일회용이야. 뭐 설치하고, 코딩하고, 설정하고, 그리고 푸, 끝나면 다 사라져. 아무것도 한 게 없는 것처럼.
 
 근데 말이지.
 
@@ -22,7 +22,7 @@ GitHub Actions 워크플로우를 실행하면, GitHub가 VM을 하나 줘.
 
 원래는 코드 빌드하고, 테스트 돌리고, 배포하라고 있는 거야. 워크플로우가 돌고, 일 끝나면 머신은 파괴됨.
 
-근데 아무도 못하게 하는 건 없어... 이 VM으로 **다른 걸** 하는 걸. 예를 들어, SSH 셸을 열어서 서버처럼 쓰는 거.
+근데 아무도 못하게 하는 건 없어. 이 VM으로 **다른 걸** 하는 걸. 예를 들어, SSH 셸을 열어서 서버처럼 쓰는 거.
 
 요점은, 이 머신들은 **stateless**이고 **임시**라는 거야:
 - 임시: 실행당 최대 6시간 (`timeout-minutes: 360`, GitHub 상한선)
@@ -52,7 +52,6 @@ GitHub Actions 워크플로우를 실행하면, GitHub가 VM을 하나 줘.
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
 
-# récupère les liens de connexion
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
@@ -74,10 +73,8 @@ tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```bash
 filesystem_branch="filesystem"
 
-# récupère la branche filesystem depuis le remote
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
 
-# restore le workspace depuis cette branche
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
@@ -108,7 +105,7 @@ ensure_filesystem_branch() {
 
 왜 orphan이냐고? 니 영구 디스크에 소스 코드 전체 역사를 끌고 오고 싶지 않으니까. 디스크는 별개의 것이고, 자기만의 삶이 있어. 깨끗하게 시작하는 거야.
 
-그리고 앞에 있는 `git ls-remote --exit-code`는 그냥 깔끔한 체크야: "이 브랜치가 remote에 이미 있나?" 있으면 건드리지 않음. 없으면 만듦. 멱등성, 우리가 좋아하는 거.
+앞의 `git ls-remote --exit-code`는 그냥 깔끔한 체크야: "이 브랜치가 remote에 이미 있나?" 있으면 건드리지 않음. 없으면 만듦. 멱등성.
 
 ### 선택적 git clean: 캐시 보호하기
 
@@ -146,7 +143,7 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1   # debounce si plein de changements d'un coup
+    sleep 1
   done
 }
 
@@ -187,7 +184,7 @@ inotify가 놓칠 경우를 대비해서, 5초마다 저장하는 것도 있어:
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote   # récupère les changements distants éventuels
+    sync_from_remote
     sleep 5
     commit_and_push
   done
@@ -202,21 +199,21 @@ periodic_save &
 
 ## 똑똑한 디테일: 단일 commit
 
-파일이 바뀔 때마다 commit하면... 수천 개의 commit이 쌓일 거야. 한 시간 세션만 해도 git 역사가 폭발해. repo가 엄청나게 커짐. 개더러움.
+파일이 바뀔 때마다 commit하면 수천 개의 commit이 쌓일 거야. 한 시간 세션만 해도 git 역사가 폭발해. repo가 엄청나게 커짐. 개더러움.
 
 해결책은 우아해: **새 commit을 만드는 대신 기존 commit을 수정(amend)하는 거야.**
 
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return   # lock pour pas que deux saves tournent en même temps
+    flock -n 200 || return
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/   # touche pas aux scripts
+    git reset -- .github/workflows/ .github/scripts/
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit    # AMEND : écrase le commit précédent
+        git commit --amend --no-edit
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -313,7 +310,7 @@ python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
   cp .github/scripts/remote_bashrc "$HOME/.bashrc"
 fi
-sudo cp "$HOME/.bashrc" /root/.bashrc   # pareil pour root via sudo
+sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
 이 `.bashrc`에는 컬러 프롬프트, alias (`ll`, `lla`, `rm -i`), 그리고 특히 똑똑한 게 하나 있어: `exit` 오버라이드:
@@ -324,7 +321,6 @@ exit() {
     builtin exit "$@"
 }
 
-# Ctrl+D fait pareil que exit
 bind -x '"\C-d": "exit"'
 ```
 
@@ -343,9 +339,6 @@ bind -x '"\C-d": "exit"'
 ```bash
 while true; do
   tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
-  # ... génère les liens, update le README ...
-
-  # attend que la session tmate meure
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
@@ -354,9 +347,9 @@ while true; do
 done
 ```
 
-`exit`을 쳐? 세션이 자동으로 다시 시작돼. 같은 링크로 다시 접속할 수 있어. 연결 끊겨도 안정적인 재접속.
+`exit`을 쳐? 세션이 자동으로 다시 시작돼. 같은 링크로 다시 접속할 수 있어.
 
-이런 디테일이 대충 만든 핵을 실제로 쓸만한 걸로 바꿔주는 거야.
+멍청하지만 이걸 쓸만하게 만든다.
 
 ---
 
@@ -396,7 +389,7 @@ ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
 6. tmate 시작 → SSH/웹 링크 생성
 7. 링크가 README + host.conf에 기록됨
 8. SSH나 웹 터미널로 접속
-9. 하고 싶은 거 다 함 (코딩, 설치, 디버그...)
+9. 하고 싶은 거 다 함 (코딩, 설치, 디버그)
    └── 모든 파일 변경 = 즉시 git으로 autosave
 10. 6시간 후, GitHub가 VM을 죽임
 11. 하지만 디스크는 "filesystem" 브랜치에 그대로 있음
