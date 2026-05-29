@@ -590,6 +590,39 @@ a {
 
 :root.light .hljs-built_in { color: var(--hljs-built-in); }
 
+:root.reading-mode .article-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+:root.reading-mode .article-content p {
+  margin-bottom: 1.2rem;
+}
+
+.reading-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  font-family: serif;
+}
+
+.reading-mode-btn:hover,
+.reading-mode-btn.active {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+
 .shortcuts-overlay {
   position: fixed;
   inset: 0;

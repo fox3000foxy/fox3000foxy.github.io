@@ -17,6 +17,7 @@ import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
 import ShareButtons from "../components/ShareButtons";
 import BookmarkButton from "../components/BookmarkButton";
+import { useReadingMode } from "../hooks/useReadingMode";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -32,6 +33,7 @@ export default function Article() {
 	const { slug } = useParams<{ slug: string }>();
 	const { t, lang } = useLang();
 	const location = useLocation();
+	const readingMode = useReadingMode();
 	const [content, setContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
@@ -179,6 +181,15 @@ export default function Article() {
 						title={meta?.title ?? slug ?? ""}
 					/>
 					<BookmarkButton slug={slug!} />
+					<button
+						type="button"
+						className={`reading-mode-btn${readingMode.enabled ? " active" : ""}`}
+						onClick={readingMode.toggle}
+						aria-label="Toggle reading mode"
+						title="Reading mode"
+					>
+						{readingMode.enabled ? "Aa" : "Aa"}
+					</button>
 				</div>
 				<div className="article-layout">
 					<TableOfContents content={content} />
