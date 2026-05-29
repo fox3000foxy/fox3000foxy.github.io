@@ -14,6 +14,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const Project = lazy(() => import("./pages/Project"));
 const ProjectList = lazy(() => import("./pages/ProjectList"));
+const TagIndex = lazy(() => import("./pages/TagIndex"));
 
 function App() {
 	const langCtx = useLangState();
@@ -28,6 +29,7 @@ function App() {
 							<Route path="/" element={<Home />} />
 							<Route path="/blog" element={<BlogList />} />
 							<Route path="/blog/:slug" element={<Article />} />
+							<Route path="/tags/:tag" element={<TagIndex />} />
 							<Route path="/archive" element={<Archive />} />
 							<Route path="/projects" element={<ProjectList />} />
 							<Route path="/projects/:slug" element={<Project />} />

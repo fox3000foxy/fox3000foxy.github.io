@@ -13,6 +13,7 @@ const en: TranslationMap = {
 	"blog.no.articles": "No articles found.",
 	"blog.no.match": 'No articles matching "{query}".',
 	"blog.no.tag": 'No articles tagged "{tag}".',
+	"blog.tag": 'Tag "{tag}"',
 	"article.minRead": "{n} min read",
 	"article.ai": "✨ AI Generated Article",
 	"article.toc": "Table of Contents",

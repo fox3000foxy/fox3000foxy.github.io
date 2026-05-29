@@ -109,9 +109,9 @@ export default function Article() {
 			{meta?.tags && meta.tags.length > 0 && (
 				<div className="article-tags">
 					{meta.tags.map((tag) => (
-						<span key={tag} className="tag-badge">
+						<Link key={tag} to={`/tags/${tag}`} className="tag-badge">
 							{tag}
-						</span>
+						</Link>
 					))}
 				</div>
 			)}
