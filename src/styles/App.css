@@ -125,10 +125,51 @@ article {
   color: var(--accent-hover);
 }
 
+.code-block-wrapper {
+  position: relative;
+}
+
+.code-block-wrapper:hover .code-copy-btn {
+  opacity: 1;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  background: var(--copy-btn-bg);
+  border: 1px solid var(--border-hover);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  line-height: 1.4;
+  z-index: 1;
+}
+
+.code-copy-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+.code-copy-btn.copied {
+  background: var(--tag-bg);
+  border-color: var(--tag-border);
+  color: var(--tag-text);
+}
+
+pre {
+  position: relative;
+}
+
 .share-buttons {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  padding: 0.75rem 0;
+  margin-bottom: 0.5rem;
   align-items: center;
 }
 
