@@ -64,7 +64,7 @@ export default function Archive() {
 				setGroups(groupByYearMonth(normalized, lang));
 			}
 		}
-		load();
+		void load();
 	}, [lang]);
 
 	if (groups.length === 0) {

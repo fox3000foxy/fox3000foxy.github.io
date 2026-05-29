@@ -50,7 +50,7 @@ export default function BlogList() {
 				setArticles([]);
 			}
 		}
-		load();
+		void load();
 	}, [lang]);
 
 	const query = searchQuery.toLowerCase().trim();
