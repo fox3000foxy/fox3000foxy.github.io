@@ -11,6 +11,7 @@ import SuggestedArticles from "../components/SuggestedArticles";
 import TableOfContents from "../components/TableOfContents";
 import ArticleSchema from "../components/ArticleSchema";
 import AuthorBio from "../components/AuthorBio";
+import SeriesNav from "../components/SeriesNav";
 import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
 import ShareButtons from "../components/ShareButtons";
@@ -134,6 +135,13 @@ export default function Article() {
 					<TableOfContents content={content} />
 					<div className="article-content">
 						<MarkdownContent content={content} />
+						{meta?.series && (
+							<SeriesNav
+								series={meta.series}
+								currentSlug={slug!}
+								allArticles={allArticles}
+							/>
+						)}
 						{meta?.tags && meta.tags.length > 0 && (
 							<SuggestedArticles
 								currentSlug={slug!}
