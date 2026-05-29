@@ -22,7 +22,7 @@ export default function ShareButtons({
 	}
 
 	return (
-		<div className="share-buttons">
+		<>
 			<a
 				href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
 				target="_blank"
@@ -49,6 +49,6 @@ export default function ShareButtons({
 			>
 				{copied ? t("code.copied") : "🔗"}
 			</button>
-		</div>
+		</>
 	);
 }

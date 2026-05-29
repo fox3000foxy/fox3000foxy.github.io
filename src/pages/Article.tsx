@@ -126,11 +126,13 @@ export default function Article() {
 						))}
 					</div>
 				)}
-				<ShareButtons
-					url={window.location.href}
-					title={meta?.title ?? slug ?? ""}
-				/>
-				<BookmarkButton slug={slug!} />
+				<div className="share-buttons">
+					<ShareButtons
+						url={window.location.href}
+						title={meta?.title ?? slug ?? ""}
+					/>
+					<BookmarkButton slug={slug!} />
+				</div>
 				<div className="article-layout">
 					<TableOfContents content={content} />
 					<div className="article-content">
