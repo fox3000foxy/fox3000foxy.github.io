@@ -69,7 +69,7 @@ const UNITS_ATTRACTIVENESS = {
 };
 ```
 
-Oráculo en 100 — lógico, es la win condition. Titán en 95 porque revienta todo lo que tenga al lado al invocarse. Goblin en 20, es un soldado raso, nos la suda.
+Oráculo en 100 -- lógico, es la win condition. Titán en 95 porque revienta todo lo que tenga al lado al invocarse. Goblin en 20, es un soldado raso, nos la suda.
 
 Después, para cada par de unidades (una aliada, una enemiga), calculo:
 
@@ -104,7 +104,7 @@ if (this.turnCount % 5 === 0) {
 
 Un turno la IA va hiper agresiva (atract 95, distancia 5), atraviesa todo para reventar a tu Oráculo. Al siguiente prioriza la distancia y se recoloca.
 
-Está sacado de los fantasmas de Pac-Man — Blinky caza, Pinky embosca. Acá la IA cambia de "personalidad" cada fase.
+Está sacado de los fantasmas de Pac-Man -- Blinky caza, Pinky embosca. Acá la IA cambia de "personalidad" cada fase.
 
 **Resultado: imposible predecir a la IA en una partida entera.** La CPU nunca hace dos veces la misma partida.
 
@@ -225,8 +225,8 @@ El código está en [GitHub](https://github.com/nausicaa-game/nausicaa-game.gith
 
 **3 claves:**
 
-1. **Coeficientes heurísticos** — nada de minimax, cada unidad tiene una atractividad
-2. **Coeficientes que cambian cada 5 turnos** — la IA alterna agresividad y control, estilo Pac-Man
-3. **El Oráculo huye** — calcula la dirección opuesta a la amenaza y se larga
+1. **Coeficientes heurísticos** -- nada de minimax, cada unidad tiene una atractividad
+2. **Coeficientes que cambian cada 5 turnos** -- la IA alterna agresividad y control, estilo Pac-Man
+3. **El Oráculo huye** -- calcula la dirección opuesta a la amenaza y se larga
 
 Si tenés ideas para hacer la IA más viciosa, abrí un issue. Tengo planes para una versión que aprende de sus derrotas, pero eso será para otro artículo xD

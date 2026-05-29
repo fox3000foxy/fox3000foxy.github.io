@@ -22,7 +22,7 @@ When you launch a GitHub Actions workflow, GitHub hands you a VM.
 
 It's meant to build your code, run your tests, deploy. The workflow runs, does its thing, and the machine gets destroyed.
 
-But nothing's stopping you from... doing something else with that VM. Like, opening an SSH shell on it and using it as a server.
+But nothing's stopping you from doing something else with that VM. Like, opening an SSH shell on it and using it as a server.
 
 The thing is, these machines are **stateless** and **temporary**:
 - Temporary: 6h max per run (`timeout-minutes: 360`, GitHub's ceiling)
@@ -32,7 +32,7 @@ So to turn it into a usable VPS, you gotta solve two problems:
 1. **How do you connect to it in real time?**
 2. **How do you keep the disk between runs?**
 
-That's where it becomes a dirty genius hack.
+That's where it becomes a dirty hack.
 
 ---
 
@@ -128,7 +128,7 @@ But the `-e` (exclude) flags protect certain things:
 
 If you cleaned those files, you'd break the active session or lose your cache. So they get spared during the reset.
 
-It's the kind of detail you don't notice at first glance, but makes the difference between "it works" and "it actually works".
+A stupid detail, but without it everything breaks.
 
 ---
 
@@ -155,7 +155,7 @@ autosave &
 
 Let's break down the inotify flags, because each one matters:
 - `-r` → recursive, watches all subdirectories
-- `-e modify,create,delete,move` → reacts to these 4 event types (modify, create, delete, move)
+- `-e modify,create,delete,move` → reacts to these 4 event types
 - `--exclude '...'` → a regex to ignore certain files
 
 The `--exclude` is crucial. Look what it ignores:
@@ -202,7 +202,7 @@ Belt AND suspenders. We really don't want to lose the disk state.
 
 ## The clever detail: a single commit
 
-If you commit on every file change, you'll pile up... thousands of commits. After an hour of session, your git history explodes. The repo gets huge. It's disgusting.
+If you commit on every file change, you'll pile up thousands of commits. After an hour of session, your git history explodes. The repo gets huge. It's disgusting.
 
 The solution is elegant: **we amend the existing commit** instead of creating a new one.
 
@@ -274,7 +274,7 @@ On the first run, it downloads and installs. On subsequent runs, it's restored f
 
 And remember the `git clean -fdx -e .apt-cache` from earlier? It's related. The `.apt-cache` folder is protected from cleanup precisely so the packages you install during your session can persist a bit.
 
-Everything is connected. I thought through the entire lifecycle.
+It all holds together. I thought through the entire lifecycle.
 
 ---
 
@@ -293,13 +293,13 @@ The scripts (`update_readme.py`, etc.) are copied to `/tmp` BEFORE touching the 
 
 Why? Because when you do the `git reset --hard` to the `filesystem` branch (which is empty at first, or contains your disk), the `.github/scripts` files from the source repo disappear from the workspace.
 
-But the script still needs them during the session (to update the README each time tmate restarts). So it stashes them in `/tmp`, out of git's reach, ready to be called later:
+But the script still needs them during the session (to update the README each time tmate restarts). So it stashes them in `/tmp`, out of git's reach:
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-This is the kind of bug that bites you in the ass if you don't think about it: "why did my script disappear?" He thought about it.
+If you don't think of it, you'll spend 30 minutes wondering why your script disappeared. I thought of it.
 
 ---
 
@@ -343,20 +343,16 @@ Except here, tmate is in a `while true` loop:
 ```bash
 while true; do
   tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
-  # ... generates links, updates README ...
-
-  # wait for the tmate session to die
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
-
   echo "tmate session ended; restarting..."
 done
 ```
 
-You `exit`? The session restarts by itself. You can reconnect with the same link. Stable reconnection, even after a disconnect.
+You `exit`? The session restarts by itself. You can reconnect with the same link.
 
-It's the kind of detail that transforms a scrappy hack into something actually usable.
+That's stupid, but it makes it usable.
 
 ---
 

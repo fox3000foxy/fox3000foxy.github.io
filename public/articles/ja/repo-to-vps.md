@@ -22,7 +22,7 @@ GitHub Actionsのワークフローを起動すると、GitHubがVMをくれる�
 
 コードをビルドして、テストして、デプロイするためのもの。ワークフローが動いて仕事をして、マシンは破棄される。
 
-でも、そのVMで…別のことだってできる。SSHシェルを開いてサーバーとして使うとか。
+でも、そのVMで別のことだってできる。SSHシェルを開いてサーバーとして使うとか。
 
 ただ、これらのマシンは **ステートレス** で **一時的** だ：
 - 一時的：1runあたり最大6時間（`timeout-minutes: 360`、GitHubの上限）
@@ -52,7 +52,6 @@ GitHub Actionsのワークフローを起動すると、GitHubがVMをくれる�
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
 
-# 接続リンクを取得
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
@@ -74,10 +73,8 @@ runごとにマシンは消される。だから **ファイルシステムを�
 ```bash
 filesystem_branch="filesystem"
 
-# リモートからfilesystemブランチを取得
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
 
-# そのブランチからワークスペースを復元
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
@@ -108,7 +105,7 @@ ensure_filesystem_branch() {
 
 なぜ孤立ブランチか？永続ディスクにソースコードの全履歴を引きずらせたくないからだ。ディスクは独立したもので、独自の人生がある。真っさらから始まる。
 
-冒頭の `git ls-remote --exit-code` は単なるクリーンなチェック：「このブランチはリモートに既にあるか？」あれば何もしない。なければ作る。いい感じの冪等性だ。
+`git ls-remote --exit-code` は単なるクリーンなチェック：「このブランチはリモートに既にあるか？」あれば何もしない。なければ作る。冪等性。
 
 ### 選択的git clean：キャッシュを守る
 
@@ -146,7 +143,7 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1   # 一度に大量の変更がある場合のデバウンス
+    sleep 1
   done
 }
 
@@ -187,7 +184,7 @@ inotifyが何かを逃した場合に備えて、5秒ごとの保存もある：
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote   # リモートの変更があれば取得
+    sync_from_remote
     sleep 5
     commit_and_push
   done
@@ -202,21 +199,21 @@ periodic_save &
 
 ## 賢い詳細：たった1つのcommit
 
-ファイルが変わるたびにcommitすると…数千のcommitが溜まる。1時間のセッションでgit履歴が爆発する。リポジトリが巨大になる。汚い。
+ファイルが変わるたびにcommitすると数千のcommitが溜まる。1時間のセッションでgit履歴が爆発する。リポジトリが巨大になる。汚い。
 
 解決策はエレガント：**新しいcommitを作る代わりに、既存のcommitをamendする**。
 
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return   # 2つの保存が同時に実行されないようにロック
+    flock -n 200 || return
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/   # スクリプトには触らない
+    git reset -- .github/workflows/ .github/scripts/
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit    # AMEND：前のcommitを上書き
+        git commit --amend --no-edit
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -313,7 +310,7 @@ python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
   cp .github/scripts/remote_bashrc "$HOME/.bashrc"
 fi
-sudo cp "$HOME/.bashrc" /root/.bashrc   # sudoでrootにも同様に
+sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
 この `.bashrc` にはカラフルなプロンプト、エイリアス（`ll`、`lla`、`rm -i`）、そして何より賢い仕掛けが入ってる：`exit` のオーバーライド：
@@ -324,7 +321,6 @@ exit() {
     builtin exit "$@"
 }
 
-# Ctrl+Dはexitと同じ動作
 bind -x '"\C-d": "exit"'
 ```
 
@@ -343,9 +339,6 @@ bind -x '"\C-d": "exit"'
 ```bash
 while true; do
   tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
-  # ... リンクを生成してREADMEを更新 ...
-
-  # tmateセッションが終わるのを待つ
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
@@ -354,9 +347,9 @@ while true; do
 done
 ```
 
-`exit` した？セッションが自動で再起動する。同じリンクで再接続できる。切断後も安定した再接続。
+`exit` した？セッションが自動で再起動する。同じリンクで再接続できる。
 
-これが、アドホックハックを本当に使えるものに変える細部だ。
+馬鹿げてるけど、これで使えるものになる。
 
 ---
 
@@ -396,7 +389,7 @@ ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
 6. tmate起動 → SSH/Webリンクを生成
 7. リンクがREADME + host.confに書き込まれる
 8. SSHまたはWebターミナルで接続
-9. 好きなことをする（コーディング、インストール、デバッグ...）
+9. 好きなことをする（コーディング、インストール、デバッグ）
    └── ファイル変更ごと = gitへの即時autosave
 10. 6時間後、GitHubがVMを停止
 11. でもディスクは "filesystem" ブランチに無傷で残っている

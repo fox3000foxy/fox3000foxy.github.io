@@ -22,7 +22,7 @@ Bir GitHub Actions workflow'u başlattığında, GitHub sana bir VM verir.
 
 Kodunu build etmen, testlerini çalıştırman, deploy etmen için yapılmıştır. Workflow çalışır, işini yapar ve makine yok edilir.
 
-Ama bu VM ile... başka şeyler yapmanı engelleyen hiçbir şey yok. Mesela, üzerinde bir SSH shell açıp sunucu gibi kullanmak.
+Ama bu VM ile başka şeyler yapmanı engelleyen hiçbir şey yok. SSH shell açıp sunucu gibi kullanmak.
 
 Olay şu ki, bu makineler **statesiz** ve **geçici**:
 - Geçici: run başına maksimum 6 saat (`timeout-minutes: 360`, GitHub'ın tavanı)
@@ -32,7 +32,7 @@ Yani bunu kullanılabilir bir VPS yapmak için iki sorunu çözmek gerek:
 1. **Gerçek zamanlı olarak nasıl bağlanılır?**
 2. **İki run arasında disk nasıl korunur?**
 
-İşte burada işler çılgın bir hack'e dönüşüyor.
+İşte burada işler hack'e dönüşüyor.
 
 ---
 
@@ -51,8 +51,6 @@ Workflow tmate'i şöyle başlatır:
 ```bash
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
-
-# bağlantı linklerini al
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
@@ -73,11 +71,7 @@ Başlangıçta, script durumu bu daldan geri yükler:
 
 ```bash
 filesystem_branch="filesystem"
-
-# filesystem dalını remote'dan çek
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
-
-# workspace'i bu daldan geri yükle
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
@@ -128,7 +122,7 @@ Ama `-e` (exclude) bazı şeyleri korur:
 
 Bu dosyaları temizlersen, aktif oturumu bozar veya önbelleğini kaybedersin. O yüzden reset sırasında onları atlıyoruz.
 
-İlk bakışta göze çarpmayan ama "çalışıyor" ile "gerçekten çalışıyor" arasındaki farkı yaratan türden bir detay.
+İlk bakışta aptal bir detay, ama bunlar olmadan her şey patlar.
 
 ---
 
@@ -146,7 +140,7 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1   # bir anda çok fazla değişiklik olursa diye debounce
+    sleep 1
   done
 }
 
@@ -187,7 +181,7 @@ Her ihtimale karşı, inotify bir şey kaçırırsa diye her 5 saniyede bir de k
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote   # olası uzak değişiklikleri al
+    sync_from_remote
     sleep 5
     commit_and_push
   done
@@ -209,14 +203,14 @@ Her dosya değişikliğinde commit atarsan... binlerce commit birikir. Bir saatl
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return   # iki kaydetme aynı anda çalışmasın diye kilit
+    flock -n 200 || return
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/   # script'lere dokunma
+    git reset -- .github/workflows/ .github/scripts/
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit    # AMEND: önceki commit'in üzerine yaz
+        git commit --amend --no-edit
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -274,7 +268,7 @@ tmate ve inotify-tools, **APT paketlerini önbelleğe alan** bir action ile kuru
 
 Az önceki `git clean -fdx -e .apt-cache`'i hatırladın mı? İşte bağlantılı. `.apt-cache` klasörü, oturum sırasında kurduğun paketlerin bir şekilde kalıcı olabilmesi için temizlikten korunuyor.
 
-Her şey birbirine bağlı. Tüm yaşam döngüsünü düşündüm.
+Her şey birbirini tutuyor.
 
 ---
 
@@ -293,13 +287,13 @@ Script'ler (`update_readme.py` vb.) `filesystem` dalına dokunmadan ÖNCE `/tmp`
 
 Neden? Çünkü `git reset --hard` ile `filesystem` dalına geçtiğinde (başlangıçta boş veya diskin neyse o), kaynak repodaki `.github/scripts` dosyaları workspace'ten kaybolur.
 
-Ama script'e oturum sırasında hâlâ ihtiyaç vardır (her tmate yeniden başlatmasında README'i güncellemek için). O yüzden onları git'in erişemeyeceği `/tmp`'ye saklar, sonra çağırmak için:
+Ama README'i güncellemek için hâlâ gereklidir. O yüzden `/tmp`'ye saklar:
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Düşünmezsen suratına patlayacak türden bir hata: "script'im neden kayboldu?". Ben düşündüm.
+Düşünmezsen script'in kaybolur. Ben düşündüm.
 
 ---
 
@@ -313,7 +307,7 @@ Son bir konfor: oturum sana çıplak bir bash değil, yapılandırılmış bir s
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
   cp .github/scripts/remote_bashrc "$HOME/.bashrc"
 fi
-sudo cp "$HOME/.bashrc" /root/.bashrc   # root için de aynı, sudo ile
+sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
 Ve bu `.bashrc` renkli bir prompt, alias'lar (`ll`, `lla`, `rm -i`) ve işte akıllı bir şey içerir: `exit` override'ı:
@@ -324,7 +318,6 @@ exit() {
     builtin exit "$@"
 }
 
-# Ctrl+D, exit ile aynı şeyi yapar
 bind -x '"\C-d": "exit"'
 ```
 
@@ -343,9 +336,6 @@ Ama burada tmate bir `while true` döngüsü içinde:
 ```bash
 while true; do
   tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
-  # ... linkleri oluştur, README'i güncelle ...
-
-  # tmate oturumunun ölmesini bekle
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
@@ -356,7 +346,7 @@ done
 
 `exit` yaparsın? Oturum kendi kendine yeniden başlar. Aynı linkle tekrar bağlanabilirsin. Düşüşten sonra bile istikrarlı bağlantı.
 
-Derme çatma bir hack'i gerçekten kullanılabilir bir şeye dönüştüren türden bir detay.
+Aptalca ama kullanışlı hale getiriyor.
 
 ---
 
@@ -379,13 +369,13 @@ ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
 
 Bunu çalıştırırsın, repo'daki güncel SSH adresini alır ve direkt bağlanır. İki oturum arasında adres değişmiş olsa bile.
 
-Yemek gibi düz.
+Tamam.
 
 ---
 
 ## Tam akış
 
-Olayı özetleyelim:
+Özetleyelim:
 
 ```
 1. Workflow'u tetiklersin (push veya manuel buton)
@@ -463,7 +453,7 @@ Komik olan şu ki ham özelliklerde (RAM, CPU) GitHub runner genelde 5€'luk bi
 
 Öğrenmek, test etmek, kurtarılabilir bir ortamda hızlıca bir Linux şeyini debug etmek için? Mükemmel. Ciddi bir şey barındırmak için? Gerçek bir VPS al.
 
-Ama dilediğin gibi geri yükleyebileceğin geçici bir Linux ortamı için? Sadece harika.
+Ama dilediğin gibi geri yükleyebileceğin geçici bir Linux ortamı için? Harika.
 
 ---
 
@@ -480,9 +470,9 @@ Statesiz bir sistemin (GitHub Actions, bir Worker, serverless fonksiyon) olduğu
 
 Aynı desen, iki farklı ölçek. Bir tarafta bir değer, diğer tarafta bir disk.
 
-Ve `git commit --amend` + force-push ortak teknik: **her güncellemede üzerine yazılan, mevcut durumu temsil eden tek bir commit tutuyorsun.** Şişen geçmiş yok, sadece yaşayan bir anlık görüntü.
+Ve `git commit --amend` + force-push ortak teknik: **her güncellemede üzerine yazılan, mevcut durumu temsil eden tek bir commit tutuyorsun.**
 
-Aslında bunun için yapılmadı. Ama çalışıyor. Ve ücretsiz. İşte güzel olan da bu.
+Bunun için yapılmadı. Ama çalışıyor. Ve ücretsiz.
 
 ---
 

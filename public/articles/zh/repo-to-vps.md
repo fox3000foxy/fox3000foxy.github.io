@@ -22,7 +22,7 @@ GitHub Actions会白送你Linux机器。
 
 它的本意是帮你编译代码、跑测试、部署的。工作流跑完，机器就被销毁。
 
-但没人拦着你……拿这台VM干别的。比如，在上面开一个SSH shell，当成服务器用。
+但没人拦着你拿这台VM干别的。比如，在上面开一个SSH shell，当成服务器用。
 
 问题是，这些机器是 **无状态** 和 **临时** 的：
 - 临时：每次运行最多6小时（`timeout-minutes: 360`，GitHub的上限）
@@ -52,7 +52,6 @@ GitHub Actions会白送你Linux机器。
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
 
-# 获取连接链接
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
@@ -74,10 +73,8 @@ tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```bash
 filesystem_branch="filesystem"
 
-# 从远程获取 filesystem 分支
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
 
-# 从该分支恢复工作区
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
@@ -108,7 +105,7 @@ ensure_filesystem_branch() {
 
 为什么要孤儿分支？因为你 **不** 想让你的持久硬盘带着你源代码的完整历史。硬盘是独立的东西，有自己的生命。它从空白开始。
 
-而开头的 `git ls-remote --exit-code` 只是一个干净检查："远程上这个分支存在吗？" 存在就什么都不干。不存在就创建它。幂等操作，as we like。
+开头的 `git ls-remote --exit-code` 只是一个干净检查："远程上这个分支存在吗？" 存在就什么都不干。不存在就创建它。幂等操作。
 
 ### 选择性git clean：保护缓存
 
@@ -146,7 +143,7 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1   # debounce，防止一堆变更同时触发
+    sleep 1
   done
 }
 
@@ -187,7 +184,7 @@ autosave &
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote   # 获取可能的远程变更
+    sync_from_remote
     sleep 5
     commit_and_push
   done
@@ -202,21 +199,21 @@ periodic_save &
 
 ## 一个小聪明：只有一个提交
 
-如果你每次文件变更都提交，你会积累……成千上万的提交。一小时的session下来，你的git历史炸了。仓库变得巨大。恶心。
+如果你每次文件变更都提交，你会积累成千上万的提交。一小时的session下来，你的git历史炸了。仓库变得巨大。恶心。
 
 解决方案很优雅：**我们修改已有的提交**，而不是创建新提交。
 
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return   # 加锁，防止两个保存同时运行
+    flock -n 200 || return
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/   # 别碰脚本
+    git reset -- .github/workflows/ .github/scripts/
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit    # AMEND：覆盖之前的提交
+        git commit --amend --no-edit
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -313,7 +310,7 @@ python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
   cp .github/scripts/remote_bashrc "$HOME/.bashrc"
 fi
-sudo cp "$HOME/.bashrc" /root/.bashrc   # 同样给root用sudo放一份
+sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
 这个 `.bashrc` 包含彩色提示符、别名（`ll`、`lla`、`rm -i`），还有一个最关键的小聪明：`exit` 的覆盖：
@@ -324,7 +321,6 @@ exit() {
     builtin exit "$@"
 }
 
-# Ctrl+D 和 exit 一样
 bind -x '"\C-d": "exit"'
 ```
 
@@ -343,9 +339,6 @@ bind -x '"\C-d": "exit"'
 ```bash
 while true; do
   tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
-  # ... 生成链接，更新 README ...
-
-  # 等待tmate会话死亡
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
@@ -354,9 +347,9 @@ while true; do
 done
 ```
 
-你 `exit` 了？会话自动重启。你可以用同一个链接重新连上。稳定重连，就算断开了也一样。
+你 `exit` 了？会话自动重启。用同一个链接重新连上。
 
-这种细节把一个拼凑的hack变成了真正可用的东西。
+这很蠢，但让这东西能用。
 
 ---
 
@@ -396,7 +389,7 @@ ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
 6. tmate启动 → 生成SSH/Web链接
 7. 链接被写入README + host.conf
 8. 你用ssh或web终端连上
-9. 你想干嘛干嘛（写代码、装东西、调试……）
+9. 你想干嘛干嘛（写代码、装东西、调试）
    └── 每次文件变更 = 自动保存到git
 10. 6小时后，GitHub杀掉VM
 11. 但你的硬盘完好无损地留在"filesystem"分支里

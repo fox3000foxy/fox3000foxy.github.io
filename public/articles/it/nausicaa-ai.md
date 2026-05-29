@@ -69,7 +69,7 @@ const UNITS_ATTRACTIVENESS = {
 };
 ```
 
-Oracle a 100 — logico, è la win condition. Titano a 95 perché OS tutto a lato all'evocazione. Goblin a 20, è un soldato semplice, chissene.
+Oracle a 100 -- logico, è la win condition. Titano a 95 perché OS tutto a lato all'evocazione. Goblin a 20, è un soldato semplice, chissene.
 
 Poi per ogni coppia di unità (una alleata, una nemica), calcolo:
 
@@ -104,7 +104,7 @@ if (this.turnCount % 5 === 0) {
 
 Un colpo l'IA è iper aggressiva (attr a 95, distanza a 5), attraversa tutto per fottere il tuo Oracle. Il colpo dopo prioritizza la distanza e si riposiziona.
 
-Sta roba è rubata ai fantasmi di Pac-Man — Blinky insegue, Pinky tende agguati. Qui l'IA cambia "personalità" ogni fase.
+Sta roba è rubata ai fantasmi di Pac-Man -- Blinky insegue, Pinky tende agguati. Qui l'IA cambia "personalità" ogni fase.
 
 **Risultato: impossibile prevedere l'IA in un'intera partita.** Il CPU non fa mai due volte la stessa partita.
 
@@ -225,8 +225,8 @@ Il codice è su [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.i
 
 **3 cose:**
 
-1. **Coefficienti euristici** — niente minimax, ogni unità ha un'attrattività
-2. **Coefficienti che cambiano ogni 5 turni** — l'IA alterna aggressività e controllo, stile Pac-Man
-3. **L'Oracle scappa** — calcola la direzione opposta alla minaccia e se la squaglia
+1. **Coefficienti euristici** -- niente minimax, ogni unità ha un'attrattività
+2. **Coefficienti che cambiano ogni 5 turni** -- l'IA alterna aggressività e controllo, stile Pac-Man
+3. **L'Oracle scappa** -- calcola la direzione opposta alla minaccia e se la squaglia
 
 Se hai idee per rendere l'IA ancora più bastarda, apri una issue. Ho dei piani per una versione che impara dalle sconfitte, ma sarà per il prossimo articolo xD
