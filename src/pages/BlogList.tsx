@@ -10,6 +10,7 @@ import type { ArticleMeta } from "../types";
 export default function BlogList() {
 	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 	const [activeTag, setActiveTag] = useState<string | null>(null);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		fetch("/articles/index.json")
@@ -36,18 +37,44 @@ export default function BlogList() {
 			.catch(() => setArticles([]));
 	}, []);
 
+	const query = searchQuery.toLowerCase().trim();
+
 	const allTags = useMemo(
 		() => [...new Set(articles.flatMap((a) => a.tags ?? []))].sort(),
 		[articles]
 	);
 
-	const filtered = activeTag
-		? articles.filter((a) => a.tags?.includes(activeTag))
-		: articles;
+	const filtered = articles.filter((a) => {
+		if (activeTag && !a.tags?.includes(activeTag)) { return false; }
+		if (!query) { return true; }
+		return (
+			a.title?.toLowerCase().includes(query) ||
+			a.description?.toLowerCase().includes(query) ||
+			a.tags?.some((t) => t.toLowerCase().includes(query))
+		);
+	});
 
 	return (
 		<div className="blog-list">
 			<h2>Blog Posts</h2>
+
+			<div className="search-bar">
+				<input
+					type="search"
+					placeholder="Search articles…"
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
+				/>
+				{searchQuery && (
+					<button
+						type="button"
+						className="search-clear"
+						onClick={() => setSearchQuery("")}
+					>
+						×
+					</button>
+				)}
+			</div>
 
 			{allTags.length > 0 && (
 				<div className="tag-filter">
@@ -120,9 +147,11 @@ export default function BlogList() {
 				</div>
 			) : (
 				<p>
-					{activeTag
-						? `No articles tagged "${activeTag}".`
-						: "No articles found."}
+					{searchQuery
+						? `No articles matching "${searchQuery}".`
+						: activeTag
+							? `No articles tagged "${activeTag}".`
+							: "No articles found."}
 				</p>
 			)}
 		</div>
