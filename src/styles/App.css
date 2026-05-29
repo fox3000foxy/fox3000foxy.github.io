@@ -93,6 +93,49 @@ article {
   margin-bottom: 0.5rem;
 }
 
+.toc {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.toc-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-item {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.toc-level-3 {
+  padding-left: 1rem;
+}
+
+.toc-link {
+  font-size: 0.9rem;
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.toc-link:hover {
+  color: #64b5f6;
+}
+
 h2 {
   color: #fff;
 }
