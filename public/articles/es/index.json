@@ -1,31 +1,52 @@
 [
   {
-    "slug": "email-autoreply",
-    "title": "Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions",
-    "description": "Cómo codifiqué un auto-respondedor de email con IA que funciona en GitHub Actions por 0€/mes -- usando tags de git como base de datos y snapshots pre-compilados en un tag runtime.",
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "title": "Lógica de pathfinding de Minecraft y sus aplicaciones",
+    "description": "Cómo el algoritmo A*, los malus de bloques y los POI permiten controlar, predecir y explotar el movimiento de los mobs -- desde redstone inalámbrica hasta granjas optimizadas.",
     "date": "2026-05-29",
-    "tags": ["automation", "javascript", "serverless", "ai", "git"]
-  },
-  {
-    "slug": "nausicaa-ai",
-    "title": "Mi puta IA para Nausicaä",
-    "description": "Una IA basada en coeficientes heurísticos, hiperparámetros que cambian aleatoriamente cada 5 turnos y un Oráculo que huye -- inmersión en el cerebro de un juego de mesa estratégico mitológico.",
-    "date": "2026-05-29",
-    "tags": ["game-dev", "ai", "javascript", "open-source"]
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ]
   },
   {
     "slug": "how-did-i-achieved-serverless-bots",
     "title": "Bot de Discord 100% serverless: Hono + Cloudflare Workers",
     "description": "Cómo reemplacé un bot de Discord que me costaba 50€/mes por cero euros -- endpoints de interacción, Hono, Workers, renderizado de imágenes en tiempo real y un juego completo sin WebSocket.",
     "date": "2026-05-29",
-    "tags": ["discord", "cloudflare", "serverless", "typescript", "bots"]
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ]
   },
   {
-    "slug": "minecraft-pathfinding-logic-and-applications",
-    "title": "Lógica de pathfinding de Minecraft y sus aplicaciones",
-    "description": "Cómo el algoritmo A*, los malus de bloques y los POI permiten controlar, predecir y explotar el movimiento de los mobs -- desde redstone inalámbrica hasta granjas optimizadas.",
+    "slug": "email-autoreply",
+    "title": "Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions",
+    "description": "Cómo codifiqué un auto-respondedor de email con IA que funciona en GitHub Actions por 0€/mes -- usando tags de git como base de datos y snapshots pre-compilados en un tag runtime.",
     "date": "2026-05-29",
-    "tags": ["minecraft", "pathfinding", "reverse-engineering"]
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ]
+  },
+  {
+    "slug": "nausicaa-ai",
+    "title": "Mi puta IA para Nausicaä",
+    "description": "Una IA basada en coeficientes heurísticos, hiperparámetros que cambian aleatoriamente cada 5 turnos y un Oráculo que huye -- inmersión en el cerebro de un juego de mesa estratégico mitológico.",
+    "date": "2026-05-29",
+    "tags": [
+      "game-dev",
+      "ai",
+      "javascript",
+      "open-source"
+    ]
   },
   {
     "slug": "typescript-virtual-container-polyfills",
@@ -33,7 +54,24 @@
     "description": "Cómo Fortune reimplementó a mano node:fs, node:crypto y una docena de módulos Node más en 640 líneas de JavaScript para que el contenedor funcione en el navegador sin Wasm.",
     "date": "2026-05-29",
     "aiGenerated": true,
-    "tags": ["typescript", "node.js", "polyfills", "browser", "open-source"]
+    "tags": [
+      "typescript",
+      "node.js",
+      "polyfills",
+      "browser",
+      "open-source"
+    ]
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "title": "Comparando Soluciones JavaScript para Simulaciones de Kernels Linux",
+    "description": "Un análisis profundo de recreaciones de entornos Linux en JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ]
   },
   {
     "slug": "character-factory",
@@ -45,6 +83,36 @@
       "typescript",
       "npm",
       "open-source"
+    ]
+  },
+  {
+    "slug": "botting-a-farm",
+    "title": "Automatizando una Granja de Microsoft Rewards",
+    "description": "Cómo programé un bot para cultivar puntos de Microsoft Rewards a escala -- y por qué la detección antibots de Microsoft ya se ha puesto al día.",
+    "date": "2026-03-13",
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ]
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "title": "Trabajando en un Nuevo Proyecto",
+    "description": "Una mirada al proceso de iniciar y desarrollar un nuevo sitio web.",
+    "date": "2026-03-13",
+    "tags": [
+      "meta",
+      "webdev"
+    ]
+  },
+  {
+    "slug": "my-passions",
+    "title": "Mis Pasiones",
+    "description": "Programar, dibujar, automatizar cosas, descubrir tecnología antigua y más -- una mirada a lo que me mueve.",
+    "date": "2026-03-08",
+    "tags": [
+      "personal"
     ]
   },
   {
@@ -70,15 +138,6 @@
     ]
   },
   {
-    "slug": "my-passions",
-    "title": "Mis Pasiones",
-    "description": "Programar, dibujar, automatizar cosas, descubrir tecnología antigua y más -- una mirada a lo que me mueve.",
-    "date": "2026-03-08",
-    "tags": [
-      "personal"
-    ]
-  },
-  {
     "slug": "ssh-signing-script",
     "title": "Script de firma de commits SSH explicado",
     "description": "Un recorrido por el ayudante de firma de commits SSH y por qué quería commits con estilo.",
@@ -88,38 +147,6 @@
       "git",
       "security",
       "shell"
-    ]
-  },
-  {
-    "slug": "working-on-a-new-project",
-    "title": "Trabajando en un Nuevo Proyecto",
-    "description": "Una mirada al proceso de iniciar y desarrollar un nuevo sitio web.",
-    "date": "2026-03-13",
-    "tags": [
-      "meta",
-      "webdev"
-    ]
-  },
-  {
-    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
-    "title": "Comparando Soluciones JavaScript para Simulaciones de Kernels Linux",
-    "description": "Un análisis profundo de recreaciones de entornos Linux en JavaScript/TypeScript.",
-    "date": "2026-05-28",
-    "tags": [
-      "javascript",
-      "linux",
-      "analysis"
-    ]
-  },
-  {
-    "slug": "botting-a-farm",
-    "title": "Automatizando una Granja de Microsoft Rewards",
-    "description": "Cómo programé un bot para cultivar puntos de Microsoft Rewards a escala -- y por qué la detección antibots de Microsoft ya se ha puesto al día.",
-    "date": "2026-03-13",
-    "tags": [
-      "automation",
-      "javascript",
-      "reverse-engineering"
     ]
   }
 ]
