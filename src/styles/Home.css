@@ -90,3 +90,75 @@
   font-size: 0.85rem;
   color: var(--text-dim);
 }
+
+.newsletter-signup {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.newsletter-signup h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.newsletter-signup p {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.newsletter-input {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+}
+
+.newsletter-input:focus {
+  border-color: var(--accent);
+}
+
+.newsletter-btn {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.newsletter-btn:hover {
+  background: var(--accent-hover);
+}
+
+.newsletter-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.newsletter-success {
+  color: var(--tag-text) !important;
+  font-weight: 600;
+}
+
+.newsletter-error {
+  color: #ef5350 !important;
+}
