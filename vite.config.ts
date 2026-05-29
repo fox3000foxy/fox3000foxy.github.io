@@ -33,7 +33,8 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,md,xml,json,ico,png,svg,txt}'],
-        globIgnores: ['**/articles/assets/*.png'],
+        globIgnores: ['**/articles/assets/*.png', '**/assets/vendor-*.js'],
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       },
     }),
   ],
@@ -43,6 +44,9 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            if (id.includes('mermaid') || id.includes('d3') || id.includes('dagre') || id.includes('khroma') || id.includes('dompurify') || id.includes('cytoscape') || id.includes('marked') || id.includes('stylis') || id.includes('ts-dedent') || id.includes('uuid')) {
+              return 'mermaid';
+            }
             return 'vendor';
           }
         },
