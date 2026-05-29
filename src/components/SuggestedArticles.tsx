@@ -133,10 +133,11 @@ export default function SuggestedArticles({
 						)}
 						{article.date && (
 							<time className="suggested-date" dateTime={article.date}>
-								{new Date(`${article.date}T00:00:00`).toLocaleDateString(
-									"fr-FR",
-									{ year: "numeric", month: "long", day: "numeric" }
-								)}
+								{new Date(`${article.date}T00:00:00`).toLocaleDateString(lang, {
+									year: "numeric",
+									month: "long",
+									day: "numeric",
+								})}
 							</time>
 						)}
 					</Link>

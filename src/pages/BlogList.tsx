@@ -151,14 +151,11 @@ export default function BlogList() {
 								{date && (
 									<div className="blog-card-footer">
 										<time dateTime={date}>
-											{new Date(`${date}T00:00:00`).toLocaleDateString(
-												"fr-FR",
-												{
-													year: "numeric",
-													month: "long",
-													day: "numeric",
-												}
-											)}
+											{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
+												year: "numeric",
+												month: "long",
+												day: "numeric",
+											})}
 										</time>
 									</div>
 								)}
