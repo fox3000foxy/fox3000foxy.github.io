@@ -21,6 +21,8 @@ I did. And the answer is yes. Literally.
 
 There's a project called [Bareiron](https://github.com/p2r3/bareiron/), by p2r3, and it's probably one of the most fascinating things I've seen in the Minecraft open-source world in years. A binary that fits in **300 KB**, **6800 lines of C**, zero external dependencies, no malloc, no threading, running on an **ESP32 that costs a single dollar**.
 
+![The ESP32-C3 microcontroller powering the server](/images/bareiron/esp32-board.jpg)
+
 Infinite terrain generation. Biomes. Caves. Crafting. Mining. Mobs. Hunger. Chests. Everything you'd expect from a survival server.
 
 On a chip drawing **0.5 Watts** clocked at **160 MHz**.
@@ -28,6 +30,8 @@ On a chip drawing **0.5 Watts** clocked at **160 MHz**.
 To put things in perspective : a vanilla Minecraft server needs gigabytes of RAM. The ESP32-C3 has **520 KB of SRAM** (about 400 KB available after boot). Processors from 20 years ago already ran at gigahertz speeds -- this one tops out at 160 MHz. That's roughly a **20,000x gap** in raw power.
 
 So how is this possible ? p2r3 didn't write a Minecraft server in C -- he reinvented every single component so it fits within these constraints. Let me show you the actual code.
+
+![Video thumbnail for Bareiron by p2r3 on YouTube](/images/bareiron/title-card.jpg)
 
 ## The brain of the project : terrain generation without memory
 
@@ -63,6 +67,18 @@ uint8_t getHeightAt (int x, int z) {
 
 Standard bilinear interpolation : 4 corners, weights from position, one `uint8_t` output. CHUNK_SIZE is 8, so it's all integer multiplication, no floats.
 
+p2r3 walks through it step by step in the video : first the 4 chunk corners, each with a height seeded by the RNG.
+
+![The 4 chunk corners, each seeded by the deterministic RNG](/images/bareiron/gen-four-corners.jpg)
+
+Then interpolation between those 4 points creates a continuous surface.
+
+![Applying bilinear interpolation between the 4 corners](/images/bareiron/gen-interpolate.jpg)
+
+And repeating the pattern across adjacent chunks produces infinite terrain.
+
+![Final result : continuous irregular terrain](/images/bareiron/gen-result.jpg)
+
 ### The deterministic RNG
 
 The key that makes this possible is the seeding. Every corner of every chunk needs a unique, reproducible pseudo-random value.
@@ -83,6 +99,22 @@ It packs 16 bits of X, 16 bits of Z, and 32 bits of seed into an 8-byte buffer, 
 
 The server doesn't need to store terrain. It recomputes on the fly when a player moves into a new area, getting the exact same result every time.
 
+`splitmix64` is the PRNG powering the hashing -- a fast 64-bit mixer designed for integer hashing :
+
+```c
+// worldgen.c (simplified)
+
+static uint32_t splitmix64 (uint64_t state) {
+  state += 0x9E3779B97F4A7C15ull;
+  uint64_t z = state;
+  z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9ull;
+  z = (z ^ (z >> 27)) * 0x94D049BB133111EBull;
+  return (z ^ (z >> 31)) >> 32;
+}
+```
+
+3 operations : addition, xor/shift, multiply, xor/shift, multiply, xor/shift. No lookup tables, no loops. It takes the 8-byte buffer (X + Z + seed), treats it as a 64-bit integer, and returns 32 bits of hash. Deterministic, fast, 5 lines.
+
 ### Why this isn't Perlin noise
 
 p2r3 explains : "the more digits of the random number you add, the more regular the terrain becomes, like more coin flips approaching 50/50". Each biome chooses how many bit extractions to combine :
@@ -96,7 +128,15 @@ h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
 h = (hash % 5) + ((hash >> 4) % 5);
 ```
 
-More factors = smoother distribution. Fewer factors = stronger local variation.
+Each biome picks how many bit extractions to combine. More factors = closer to 50/50 distribution, smoother terrain. Fewer factors = stronger local variation, rougher terrain.
+
+![Rough terrain -- few factors, strong variation](/images/bareiron/terrain-irregular.jpg)
+
+With only 2 factors, snowy plains produces hilly, almost mountainous terrain. Frequent peaks and valleys.
+
+![Smooth terrain -- multiple factors, flat surface](/images/bareiron/terrain-regular.jpg)
+
+With 4 factors, plains stay flat and predictable. Distribution stabilizes.
 
 Generating a chunk takes **200 ms** on ESP32 -- versus unmeasurable (too expensive) with actual Perlin noise on the same hardware.
 
@@ -108,6 +148,25 @@ With bilinear interpolation, you query **any point** directly from coordinates. 
 
 p2r3 : "what I want is a magic function that can tell me what block sits at a given coordinate, without referring to memory or calculating expensive noise maps." Exactly what he built.
 
+Here's how height becomes actual block types :
+
+```c
+// worldgen.c (simplified)
+
+uint8_t getTerrainBlock (int x, uint8_t y, int z) {
+  uint8_t surface = getHeightAt(x, z);
+
+  if (y > surface)             return B_air;
+  if (y == surface)            return biome_top[getChunkBiome(x, z)];
+  if (y > surface - 4)         return B_dirt;
+  if (y > surface - 16)        return B_stone;
+  if (y > CAVE_BASE_DEPTH)     return B_deepslate;
+                               return B_bedrock;
+}
+```
+
+5 conditions. A grass/dirt/stone/deepslate/bedrock cascade. The surface block depends on biome via `biome_top[]` -- grass for plains, sand for desert. No loops, no switches, a waterfall of ifs that falls into the right layer.
+
 ### Caves : the laziest mirror
 
 ```c
@@ -115,6 +174,10 @@ cave_y = CAVE_BASE_DEPTH - (surface_height - y);
 ```
 
 Mirrors surface height underground. Produces deepslate-like cavities. One line.
+
+![Caves generated by mirroring surface terrain](/images/bareiron/cave-mirror.jpg)
+
+![Surface mirroring diagram for cave generation](/images/bareiron/cave-diagram.jpg)
 
 ### Ores : XOR edition
 
@@ -127,13 +190,184 @@ XOR of coordinates guarantees one candidate per column. Type depends on Y level.
 
 ### Biomes as a tile map
 
-Each biome is a circular island in a grid, type determined by a seed-derived repeating pattern. Gridded, predictable, free. Each biome adjusts height parameters :
+Each biome is a circular island in a grid, type determined by a seed-derived repeating pattern. Gridded, predictable, free.
 
-- **Plains** : 4 factors, flat
-- **Desert** : max 6 blocks variation, never below sea level
-- **Snowy plains** : 2 factors, up to 14 blocks, hillier
+![Biome tile map -- each island is a different biome](/images/bareiron/biome-tilemap.jpg)
 
-Surface elements (trees, cacti) use the same corner RNG hashes. Zero overhead.
+Each biome has its own parameter set encoded in lookup tables :
+
+```c
+// worldgen.c (simplified)
+
+static const uint8_t biome_base[] = {
+  [BIOME_PLAINS]  = 48,   // base height : 48
+  [BIOME_DESERT]  = 52,   // slightly higher
+  [BIOME_FOREST]  = 50,   // in between
+  [BIOME_TAIGA]   = 46,   // a bit lower
+  [BIOME_SNOWY]   = 40,   // lowest
+};
+
+static const uint8_t biome_top[] = {
+  [BIOME_PLAINS]  = B_grass,
+  [BIOME_DESERT]  = B_sand,
+  [BIOME_FOREST]  = B_grass,
+  [BIOME_TAIGA]   = B_grass,
+  [BIOME_SNOWY]   = B_snow_block,
+};
+
+static const uint8_t biome_factors[] = {
+  [BIOME_PLAINS]  = 4,   // 4 extractions → very smooth
+  [BIOME_DESERT]  = 3,   // 3 extractions → moderate
+  [BIOME_FOREST]  = 4,   // 4 extractions → smooth, rolling hills
+  [BIOME_TAIGA]   = 3,   // 3 extractions → moderate
+  [BIOME_SNOWY]   = 2,   // 2 extractions → very rough
+};
+```
+
+**Plains** : height 48, 4 factors → very flat, grass.
+
+```c
+h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
+// Result : ±4 blocks variation max
+```
+
+**Desert** : height 52, 3 factors, surface block = sand. Never below sea level.
+
+```c
+h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3);
+// Result : ±6 blocks variation max, clamped to SEA_LEVEL+1
+```
+
+**Forest** : height 50, 4 factors like plains but higher base → wooded hills.
+
+**Taiga** : height 46, 3 factors → moderate variation, cold terrain.
+
+**Snowy plains** : height 40, only 2 factors → the roughest terrain.
+
+```c
+h = (hash % 5) + ((hash >> 4) % 5);
+// Result : ±14 blocks variation max
+```
+
+Each biome is encoded in **3 arrays of 5 entries** : base height, surface block, factor count. When `getHeightAtFromHash` receives the biome, it consults these arrays to shape the terrain. 15 bytes of data replacing Minecraft's entire biome system.
+
+The biome detector uses the seed to determine which biome each chunk belongs to :
+
+```c
+// worldgen.c (simplified)
+
+static const uint8_t biome_pattern[] = {
+  BIOME_PLAINS, BIOME_FOREST, BIOME_PLAINS, BIOME_DESERT,
+  BIOME_FOREST, BIOME_TAIGA,  BIOME_PLAINS, BIOME_SNOWY,
+  BIOME_PLAINS, BIOME_FOREST, BIOME_DESERT,  BIOME_PLAINS,
+  BIOME_SNOWY,  BIOME_PLAINS, BIOME_FOREST, BIOME_TAIGA,
+};
+
+uint8_t getChunkBiome (short cx, short cz) {
+  uint32_t h = splitmix64(cx * 31 + cz * 97 + world_seed);
+  uint8_t index = h % 16;
+  return biome_pattern[index];
+}
+```
+
+A 16-entry pattern, an index seeded by chunk coordinates. It produces a gridded but visually consistent biome layout. 4 lines of code replacing vanilla Minecraft's entire biome parameter system.
+
+### getHeightAtFromHash : the terrain assembler
+
+The function at the heart of generation combines the 4 seeded corners per biome :
+
+```c
+// worldgen.c (simplified)
+
+static uint8_t getHeightAtFromHash (int rx, int rz, short cx, short cz,
+                                    uint32_t h, uint8_t biome) {
+  // 4 corners extracted from hash, different shift per corner
+  uint8_t h1 = biome_base[biome] + (h & 0x0F);
+  uint8_t h2 = biome_base[biome] + ((h >> 4) & 0x0F);
+  uint8_t h3 = biome_base[biome] + ((h >> 8) & 0x0F);
+  uint8_t h4 = biome_base[biome] + ((h >> 12) & 0x0F);
+
+  // Biome constraint : desert never below sea level
+  if (biome == BIOME_DESERT) {
+    h1 = max(h1, SEA_LEVEL + 1);
+    h2 = max(h2, SEA_LEVEL + 1);
+    h3 = max(h3, SEA_LEVEL + 1);
+    h4 = max(h4, SEA_LEVEL + 1);
+  }
+
+  // Interpolate from the 4 corners
+  return interpolate(h1, h2, h3, h4, rx, rz);
+}
+```
+
+Each biome has a `biome_base` shifting the reference height, and the 4 corners are extracted from the hash at different offsets. Desert clamps to above sea level -- one constraint line that avoids water without extra biome computation.
+
+### Trees and cacti : probabilistic placement
+
+Surface generation reuses the same chunk hash to decide where to plant :
+
+```c
+// worldgen.c (simplified)
+
+static void genFoliage (uint8_t *chunk_data, short cx, short cz,
+                        uint32_t hash, uint8_t biome) {
+  if (biome == BIOME_DESERT) {
+    // Cactus : one candidate per chunk, hash determines position
+    int tx = (hash >> 8) & 7;
+    int tz = (hash >> 12) & 7;
+    int ty = getHeightAt(cx * 8 + tx, cz * 8 + tz);
+    if (chunk_data[ty * 64 + tz * 8 + tx] == B_sand)
+      placeCactus(chunk_data, tx, ty + 1, tz);
+  } else {
+    // Trees : hash determines count and position
+    int tree_count = (hash & 3);  // 0-3 trees per chunk
+    for (int i = 0; i < tree_count; i ++) {
+      int tx = ((hash >> (4 + i * 4)) & 7);
+      int tz = ((hash >> (6 + i * 4)) & 7);
+      int ty = getHeightAt(cx * 8 + tx, cz * 8 + tz);
+      placeTree(chunk_data, tx, ty + 1, tz);
+    }
+  }
+}
+```
+
+0-3 trees per chunk for green biomes, max 1 cactus for desert. The chunk hash is the only entropy source -- `& 7` for in-chunk position, `& 3` for the counter. Everything deterministic, nothing stored.
+
+### generateChunk : putting it all together
+
+The function that assembles everything into a complete 8×8×256 chunk :
+
+```c
+// worldgen.c (simplified)
+
+void generateChunk (uint8_t *chunk, short cx, short cz) {
+  uint32_t hash = getChunkHash(cx, cz);
+  uint8_t biome = getChunkBiome(cx, cz);
+
+  // For every column in the chunk (8×8 = 64)
+  for (int x = 0; x < 8; x ++) {
+    for (int z = 0; z < 8; z ++) {
+      // Absolute world coordinates
+      int wx = cx * 8 + x;
+      int wz = cz * 8 + z;
+
+      // Column height
+      uint8_t height = getHeightAt(wx, wz);
+
+      // Fill column bottom-up
+      for (int y = 0; y < height; y ++) {
+        uint8_t block = getTerrainBlock(wx, y, wz);
+        chunk[y * 64 + z * 8 + x] = block;
+      }
+    }
+  }
+
+  // Place surface elements (trees, cacti)
+  genFoliage(chunk, cx, cz, hash, biome);
+}
+```
+
+That's it. 3 nested loops : for each column, get its height, fill in blocks, move on. Output is a `uint8_t[16384]` (8 × 8 × 256) representing the complete chunk. No caching, no lazy loading, no compression -- the chunk is generated and sent straight to the client.
 
 ## Storage : static arrays everywhere
 
@@ -154,6 +388,8 @@ typedef struct {
 
 20,000 entries, roughly **25,000 changes** -- about 1.5 chunks fully dug out. The `block` field at `0xFF` marks a free entry. Search is a linear scan :
 
+![Block change array memory layout -- 6 bytes per entry](/images/bareiron/memory-layout.jpg)
+
 ```c
 // procedures.c
 
@@ -169,6 +405,23 @@ uint8_t getBlockChange (short x, uint8_t y, short z) {
   return 0xFF;
 }
 ```
+
+Adding a change is just as direct :
+
+```c
+static uint8_t changes_count = 0;
+
+void addBlockChange (short x, short z, uint8_t y, uint8_t block) {
+  if (changes_count >= MAX_CHANGES) return;
+  block_changes[changes_count].x = x;
+  block_changes[changes_count].z = z;
+  block_changes[changes_count].y = y;
+  block_changes[changes_count].block = block;
+  changes_count ++;
+}
+```
+
+A counter, an index, a write. No sorting, no compaction, no memory management. When the array fills up, new changes are ignored -- terrain reverts to its generated state.
 
 The author on the 256 block limit : "I don't plan on implementing Waxed Lightly Weathered Cut Copper Stairs any time soon."
 
@@ -256,6 +509,89 @@ No dynamic jump table, no vtable, no map. A switch compiles to a static jump tab
 
 Case `0x1D-0x20` is the largest -- it handles position updates, fall damage, chunk boundary crossings, mob spawning, chunk generation, AND hunger. All in one giant fall-through.
 
+![Bareiron server source code -- 6800 lines of C](/images/bareiron/code-shot.jpg)
+
+## Server tick and mob AI
+
+`handleServerTick` runs every 50 ms (20 TPS). It manages the world while the main loop handles players :
+
+```c
+// main.c (simplified)
+
+void handleServerTick (uint32_t delta) {
+  // Update every mob
+  for (int i = 0; i < MOB_COUNT; i ++) {
+    if (mobs[i].type == 0 || mobs[i].data == 0) continue;  // dead or empty
+
+    MobData *mob = &mobs[i];
+    int px, pz;
+    getNearestPlayer(mob->x, mob->z, &px, &pz);
+
+    if (mob->type == MOB_ZOMBIE) {
+      // Hostile : walk toward nearest player
+      if (px < mob->x) mob->x --;
+      else if (px > mob->x) mob->x ++;
+      if (pz < mob->z) mob->z --;
+      else if (pz > mob->z) mob->z ++;
+      // Contact damage at 2 blocks
+      if (abs(px - mob->x) <= 2 && abs(pz - mob->z) <= 2)
+        damagePlayer(getNearestPlayerId(mob->x, mob->z), 3);
+    } else {
+      // Passive : 8 random directions
+      uint8_t dir = getMobDir(mob);
+      mob->x += dir_lookup[dir][0];
+      mob->z += dir_lookup[dir][1];
+      // Change direction every ~40 ticks
+      if (mob->data >> 6 < 1) setMobDir(mob, rand() & 7);
+      mob->data = (mob->data & 0x3F) | ((mob->data - 0x40) & 0xC0);
+    }
+
+    // Wake chunks around the mob
+    setChunkGenerated(mob->x / 8, mob->z / 8);
+  }
+}
+```
+
+Hostile mob AI is a coordinate comparison. Literally `if (px < x) x--`. No pathfinding, no A*, no obstacle avoidance. The zombie adjusts X and Z independently toward the player -- it walks through walls if there are any.
+
+Contact damage is set at 3 hearts/sec. p2r3 deliberately made it high because the lack of pathfinding makes zombies easy to kite.
+
+The armor formula is pre-combat-update -- the simplest possible :
+
+```c
+// main.c (simplified)
+
+static uint8_t applyArmor (uint8_t damage, uint16_t armor_value) {
+  // Pre-1.9 formula : linear reduction
+  // Each armor point = 4% reduction, max 80%
+  uint8_t reduction = (armor_value * 4);
+  if (reduction > 80) reduction = 80;
+  return damage * (100 - reduction) / 100;
+}
+```
+
+Full diamond = 80% reduction. A 3-heart zombie hit becomes 0.6 hearts. p2r3 chose this old formula because it computes in 2 operations -- no thresholds, no curves, just a linear percentage.
+
+Passive mobs : 8 directions from a lookup table, course change every ~40 ticks. The `data` field encodes the current direction in the top 2 bits and the direction change timer in the remaining 6 bits.
+
+![Mobs in Bareiron -- zombies, pigs, sheep](/images/bareiron/mobs.jpg)
+
+### Mob respawning
+
+Mobs don't spawn from random ticks. They appear when the server tick detects a new chunk boundary :
+
+```c
+if (player crossed chunk boundary) {
+  for (int i = 0; i < MOB_COUNT; i ++) {
+    if (mobs[i].type != 0) continue;
+    spawnMob(&mobs[i], new_chunk_coords, getChunkHash(cx, cz));
+    break;
+  }
+}
+```
+
+Same RNG as the terrain, same chunk seed. If a mob slot is free, the spawn is deterministic.
+
 ## Crafting : no matrices, just if/else
 
 ```c
@@ -297,6 +633,8 @@ if (count == 8 && first == cobblestone && all_identical && center_empty)
 ```
 
 Complex shapes use the first item's index to check relative positions. Recipes share one matching function -- material determines output.
+
+![Crafting and chest interface in Bareiron](/images/bareiron/crafting.jpg)
 
 ## Chests : the real memory hack
 
@@ -348,6 +686,8 @@ uint8_t *p_count = storage_ptr + (slot - 41) * 3 + 2;
 
 It recovers the pointer from the craft buffer and accesses slots with an offset. Chest data is stored at 3 bytes per slot (2 for item ID, 1 for count), packed sequentially in the block array.
 
+![Chest data stored inside the block change array -- a memory hack](/images/bareiron/chest-hack.jpg)
+
 ## Hunger : 5 lines of genius
 
 ```c
@@ -373,6 +713,67 @@ damage = last_y_on_ground - current_y;
 ```
 
 A subtraction.
+
+## Mining and placing blocks
+
+When you click on a block, the `0x28` (Player Action) packet lands in the switch. The handler figures out what block is there, removes it, and puts the item in your inventory :
+
+```c
+// main.c, case 0x28 (simplified)
+
+void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z) {
+  switch (action) {
+    case START_DESTROY_BLOCK: {
+      uint8_t block = getBlockAt(x, y, z);
+
+      if (block == B_chest) {
+        openChest(client_fd, x, y, z);
+        break;
+      }
+
+      // Add to block_changes
+      addBlockChange(x, z, y, 0);  // 0 = air
+
+      // Give item to player (trust the client)
+      addItemToPlayer(client_fd, block_to_item(block), 1);
+
+      // Send update to client
+      sc_blockChange(client_fd, x, y, z, 0);
+      sc_ackBlockChange(client_fd, x, y, z, 0);
+      break;
+    }
+    case PLACE_BLOCK: {
+      uint16_t item = getHeldItem(client_fd);
+      uint8_t block = item_to_block(item);
+      addBlockChange(x, z, y, block);
+      removeItemFromPlayer(client_fd, item, 1);
+      sc_blockChange(client_fd, x, y, z, block);
+      break;
+    }
+  }
+}
+```
+
+`getBlockAt` combines terrain generation AND player changes :
+
+```c
+uint8_t getBlockAt (int x, uint8_t y, int z) {
+  // Check player changes first
+  uint8_t change = getBlockChange(x, y, z);
+  if (change != 0xFF) return change;
+
+  // Otherwise read from generated terrain
+  return getTerrainBlock(x, y, z);
+}
+```
+
+Changes first, terrain as fallback. Zero debate, zero cache, zero overhead. Under the hood, `getTerrainBlock` is `getHeightAt` plus stone/dirt/grass/coal layers.
+
+### The instant furnace
+
+The best part : the furnace doesn't exist as an entity. Put cobblestone in the "smelt" slot and coal in "fuel", the result appears immediately. No timer, no chunk ticking. It's just an inventory slot that empties when you put the right items in.
+
+![Instant furnace -- put ingredients in, result out immediately](/images/bareiron/furnace.jpg)
 
 ## The ESP32 boot : a Minecraft server in 4 KB of stack
 
@@ -417,7 +818,11 @@ ESP32-specific code is behind `#ifdef ESP_PLATFORM`. On desktop, it compiles as 
 Ryzen 5 3600 : ~0.5 ms per chunk.
 ESP32-C3 at $1 : ~200 ms per chunk. Playable.
 
+![Chunk generation benchmark -- Ryzen vs ESP32](/images/bareiron/performance.jpg)
+
 3+ players : lag. Author compares it to 2b2t peak hours.
+
+![Multiple players connected to the same Bareiron server](/images/bareiron/multiplayer.jpg)
 
 ## The philosophy
 
