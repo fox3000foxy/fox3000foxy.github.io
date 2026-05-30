@@ -12,18 +12,19 @@ interface ArticleMeta {
 	title?: string;
 	description?: string;
 	date?: string;
+	tags?: string[];
 }
 
 function escapeXml(text: string): string {
 	return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function ogImageSvg(title: string, slug: string): string {
+function wrapText(text: string, maxLen: number): string[] {
 	const lines: string[] = [];
-	const words = title.split(" ");
+	const words = text.split(" ");
 	let line = "";
 	for (const word of words) {
-		if ((line + " " + word).length > 35) {
+		if ((line + " " + word).length > maxLen) {
 			lines.push(line);
 			line = word;
 		} else {
@@ -31,22 +32,46 @@ function ogImageSvg(title: string, slug: string): string {
 		}
 	}
 	if (line) lines.push(line);
-	if (lines.length > 4) {
-		lines.splice(3, lines.length - 3, "...");
+	return lines;
+}
+
+function ogImageSvg(title: string, description: string, tags: string[]): string {
+	const titleLines = wrapText(title, 35);
+	if (titleLines.length > 3) {
+		titleLines.splice(2, titleLines.length - 2, "...");
 	}
 
-	const textY = lines.map((_, i) => 340 + i * 55);
-	const textElements = lines
-		.map((l, i) => `<text x="600" y="${textY[i]}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="38" font-weight="700" fill="#ffffff">${escapeXml(l)}</text>`)
+	const descLines = wrapText(description, 80);
+	if (descLines.length > 2) {
+		descLines.splice(1, descLines.length - 1, "...");
+	}
+
+	const titleStartY = 270;
+	const titleElements = titleLines
+		.map((l, i) => `<text x="600" y="${titleStartY + i * 55}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="38" font-weight="700" fill="#ffffff">${escapeXml(l)}</text>`)
 		.join("\n");
+
+	const descY = titleStartY + Math.min(titleLines.length, 3) * 55 + 25;
+	const descElements = descLines
+		.map((l, i) => `<text x="600" y="${descY + i * 28}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" fill="#8b949e">${escapeXml(l)}</text>`)
+		.join("\n");
+
+	const tagY = descY + Math.min(descLines.length, 2) * 28 + 30;
+	const tagElements = tags.slice(0, 5).map((t, i) => {
+		const cx = 600 + (i - Math.min(tags.length, 5) / 2) * 110 + 55;
+		return `<rect x="${cx - 48}" y="${tagY - 14}" width="96" height="28" rx="14" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="${cx}" y="${tagY + 5}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64b5f6">${escapeXml(t)}</text>`;
+	}).join("\n");
 
 	return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#0d1117"/>
   <rect x="0" y="0" width="1200" height="4" fill="#64b5f6"/>
-  <text x="600" y="200" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" font-weight="600" fill="#64b5f6" letter-spacing="4">FOX3000FOXY.COM</text>
-  <rect x="540" y="215" width="120" height="1" fill="#30363d"/>
-${textElements}
-  <text x="600" y="520" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#8b949e">fox3000foxy · Blog</text>
+  <text x="600" y="180" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" font-weight="600" fill="#64b5f6" letter-spacing="4">FOX3000FOXY.COM</text>
+  <rect x="540" y="195" width="120" height="1" fill="#30363d"/>
+${titleElements}
+${descElements}
+${tagElements}
+  <text x="600" y="600" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#8b949e">fox3000foxy · Blog</text>
 </svg>`;
 }
 
@@ -57,7 +82,7 @@ function main() {
 	let count = 0;
 
 	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
-	const bySlug = new Map<string, { slug: string; title: string; description: string; date?: string; langs: string[] }>();
+	const bySlug = new Map<string, { slug: string; title: string; description: string; date?: string; tags: string[]; langs: string[] }>();
 	for (const entry of langs) {
 		if (!entry.isDirectory()) { continue; }
 		const lang = entry.name;
@@ -69,12 +94,13 @@ function main() {
 		for (const article of articles) {
 			const slug = article.slug;
 			if (!bySlug.has(slug)) {
-				bySlug.set(slug, { slug, title: article.title || slug.replace(/-/g, " "), description: article.description || "", langs: [] });
+				bySlug.set(slug, { slug, title: article.title || slug.replace(/-/g, " "), description: article.description || "", tags: [], langs: [] });
 			}
 			const entry = bySlug.get(slug)!;
 			if (lang === "en") {
 				entry.title = article.title || entry.title;
 				entry.description = article.description || entry.description;
+				if (article.tags) entry.tags = article.tags;
 			}
 			entry.langs.push(lang);
 			if (lang === "en" && article.date) {
@@ -110,7 +136,7 @@ function main() {
 		});
 
 		const ogImageUrl = `${SITE_URL}/og/${encodeURIComponent(slug)}.png`;
-		const svgContent = ogImageSvg(info.title, slug);
+		const svgContent = ogImageSvg(info.title, info.description, info.tags);
 		const pngBuffer = new Resvg(svgContent, { fitTo: { mode: "original" } }).render().asPng();
 		const html = baseHtml
 			.replace(
