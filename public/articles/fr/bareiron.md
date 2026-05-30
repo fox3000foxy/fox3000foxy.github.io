@@ -1,5 +1,5 @@
 ---
-title: Bareiron — le serveur Minecraft qui tourne sur un microcontrôleur à 1$
+title: Bareiron -- le serveur Minecraft qui tourne sur un microcontrôleur à 1$
 description: 6800 lignes de C, zéro malloc, du Perlin noise remplacé par de la
   bilinear interpolation, des biomes en tile map, et tout ça sur une puce à 1$.
 date: 2026-05-30
@@ -25,7 +25,7 @@ Génération de terrain infinie. Des biomes. Des grottes. Du craft. De la mine. 
 
 Sur une puce qui consomme **0.5 Watt** et qui a **160 MHz** de clock.
 
-Pour donner un ordre d'idée : un serveur Minecraft vanilla a besoin de plusieurs gigas de RAM. L'ESP32-C3, c'est **520 KB de SRAM** (400 dispo après le boot). Les processeurs y'a 20 ans tournaient déjà en gigahertz — celui-ci plafonne à 160 MHz. Le facteur entre les deux en puissance pure, c'est environ **20 000**.
+Pour donner un ordre d'idée : un serveur Minecraft vanilla a besoin de plusieurs gigas de RAM. L'ESP32-C3, c'est **520 KB de SRAM** (400 dispo après le boot). Les processeurs y'a 20 ans tournaient déjà en gigahertz -- celui-ci plafonne à 160 MHz. Le facteur entre les deux en puissance pure, c'est environ **20 000**.
 
 p2r3 a pas écrit un serveur Minecraft en C, il a réinventé chaque brique du serveur pour que ça tienne dans ces contraintes. On va regarder comment, en ouvrant le code source.
 
@@ -99,7 +99,7 @@ h = (hash % 5) + ((hash >> 4) % 5);
 
 Chaque biome choisit combien de extractions de bits il combine. Plus y en a, plus la distribution se stabilise. Moins y en a, plus les variations locales sont fortes.
 
-Un chunk se génère en **200 ms** sur ESP32 — contre un temps non mesurable sur le même hardware avec Perlin noise tellement c'est cher.
+Un chunk se génère en **200 ms** sur ESP32 -- contre un temps non mesurable sur le même hardware avec Perlin noise tellement c'est cher.
 
 ### Le détail qui tue : interroger un bloc sans générer tout le chunk
 
@@ -148,14 +148,14 @@ Tout est dans des tableaux globaux de taille fixe.
 // globals.h, lignes 191-196
 
 typedef struct {
-  short x;      // 2 bytes — limite à 32 000 blocs horizontal
+  short x;      // 2 bytes -- limite à 32 000 blocs horizontal
   short z;      // 2 bytes
-  uint8_t y;    // 1 byte — limite à 256 blocs vertical
-  uint8_t block; // 1 byte — limite à 256 types de blocs
+  uint8_t y;    // 1 byte -- limite à 256 blocs vertical
+  uint8_t block; // 1 byte -- limite à 256 types de blocs
 } BlockChange;
 ```
 
-20 000 entrées, soit environ **25 000 changements** — l'équivalent d'un chunk et demi entièrement déterré. Le champ `block` à `0xFF` marque une entrée libre. La recherche est une scan linéaire :
+20 000 entrées, soit environ **25 000 changements** -- l'équivalent d'un chunk et demi entièrement déterré. Le champ `block` à `0xFF` marque une entrée libre. La recherche est une scan linéaire :
 
 ```c
 // procedures.c
@@ -193,7 +193,7 @@ typedef struct {
 
 ### Les joueurs : packés serré
 
-Les données joueurs utilisent `#pragma pack(push, 1)` aussi — coordonnées en `short` + `uint8_t`, inventaires en tableaux fixes de `uint16_t` + `uint8_t`, et un champ `flags` qui encode à la fois le cooldown d'attaque, l'état de spawn, sneak, sprint, eat, load, movement cooldown, et le lock de craft. Tout ça dans des bits individuels.
+Les données joueurs utilisent `#pragma pack(push, 1)` aussi -- coordonnées en `short` + `uint8_t`, inventaires en tableaux fixes de `uint16_t` + `uint8_t`, et un champ `flags` qui encode à la fois le cooldown d'attaque, l'état de spawn, sneak, sprint, eat, load, movement cooldown, et le lock de craft. Tout ça dans des bits individuels.
 
 ## La boucle principale : while(true) et du non-bloquant
 
@@ -231,7 +231,7 @@ while (true) {
 }
 ```
 
-Un seul client est traité par itération de la boucle, et un seul packet est lu à la fois. Le `task_yield()` au début de la boucle laisse le FreeRTOS idle task respirer sur ESP32 — sans ça, le watchdog timer te reset la puce.
+Un seul client est traité par itération de la boucle, et un seul packet est lu à la fois. Le `task_yield()` au début de la boucle laisse le FreeRTOS idle task respirer sur ESP32 -- sans ça, le watchdog timer te reset la puce.
 
 Le dispatch des packets, c'est un switch monstrueux de **400 lignes** :
 
@@ -257,7 +257,7 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
 
 Pas de jump table dynamique, pas de vtable, pas de map. Un switch compile en jump table statique. Parfait pour de l'embarqué.
 
-Le cas `0x1D-0x20` est le plus gros — il gère les mises à jour de position, les dégâts de chute, les traversées de frontières de chunk, le spawn de mobs, la génération de chunks, ET la faim. Tout en un seul gros fall-through.
+Le cas `0x1D-0x20` est le plus gros -- il gère les mises à jour de position, les dégâts de chute, les traversées de frontières de chunk, le spawn de mobs, la génération de chunks, ET la faim. Tout en un seul gros fall-through.
 
 ## Le craft : pas de matrices, du if/else
 
@@ -301,7 +301,7 @@ if (count == 8 && first == cobblestone && all_identical && center_empty)
     return furnace;
 ```
 
-Pour les formes complexes, il utilise l'index du premier item et check la position relative. Les recettes partagent une même fonction de matching — le matériau détermine le résultat.
+Pour les formes complexes, il utilise l'index du premier item et check la position relative. Les recettes partagent une même fonction de matching -- le matériau détermine le résultat.
 
 ## Les coffres : le hack en vrai
 
@@ -341,7 +341,7 @@ if (target == B_chest) {
 
 Et le commentaire dans le code : `// Terrible memory hack!!1!`
 
-C'est exactement ça. Il prend l'adresse mémoire de l'entrée suivante dans `block_changes[]`, il la copie dans `player->craft_items` (qui est un `uint16_t[9]`, donc 18 bytes — assez pour stocker un pointeur 32 bits), et il lève le flag pour que personne essaie de craft pendant ce temps.
+C'est exactement ça. Il prend l'adresse mémoire de l'entrée suivante dans `block_changes[]`, il la copie dans `player->craft_items` (qui est un `uint16_t[9]`, donc 18 bytes -- assez pour stocker un pointeur 32 bits), et il lève le flag pour que personne essaie de craft pendant ce temps.
 
 Sur chaque clic dans l'inventaire du coffre :
 
@@ -424,12 +424,12 @@ Tout le code spécifique ESP32 est protégé par des `#ifdef ESP_PLATFORM`. Sur 
 
 Pour que tout ça tienne, y'a des features vanilla qui existent pas :
 
-- **Pas de compression réseau** — zlib trop cher. Le serveur génère des chunks vite, mais les envoyer est le bottleneck.
-- **Pas de random ticks** — les arbres poussent avec de la bone meal ou pas. Les mobs spawnent aux frontières de chunk.
-- **Pas d'entités item** — les blocs minés vont direct dans l'inventaire. L'animation est purement visuelle.
-- **Aucune vérification d'inventaire** — trust the client. 64 diamants ? OK. Un chunk miné en 1 sec ? OK. À utiliser entre gens de confiance.
-- **Pas de lumière serveur** — les torches sont envoyées après tout le reste, le client calcule.
-- **Pas de fluides progressifs** — état final instantané.
+- **Pas de compression réseau** -- zlib trop cher. Le serveur génère des chunks vite, mais les envoyer est le bottleneck.
+- **Pas de random ticks** -- les arbres poussent avec de la bone meal ou pas. Les mobs spawnent aux frontières de chunk.
+- **Pas d'entités item** -- les blocs minés vont direct dans l'inventaire. L'animation est purement visuelle.
+- **Aucune vérification d'inventaire** -- trust the client. 64 diamants ? OK. Un chunk miné en 1 sec ? OK. À utiliser entre gens de confiance.
+- **Pas de lumière serveur** -- les torches sont envoyées après tout le reste, le client calcule.
+- **Pas de fluides progressifs** -- état final instantané.
 
 ## Le résultat final
 
@@ -452,8 +452,8 @@ Chaque feature absente permet à une autre d'exister dans les limites du hardwar
 
 **Les 3 trucs à retenir :**
 
-1. **Interpolation + RNG** — 4 points seedés, terrain infini, zéro stockage, query sans regénérer le chunk, 200 ms de génération. C'est le move de génie qui rend tout le reste possible.
-2. **Chaque feature a un coût** — Pas de compression, pas de random ticks, pas de validation. C'est pas des oublis, c'est ce qui permet de tenir dans 520 KB.
-3. **Les hacks dégueus sont les plus intelligents** — Coffres dans le tableau de blocs via memcpy, faim par packets de mouvement, fourneau instantané. La solution propre aurait été trop chère.
+1. **Interpolation + RNG** -- 4 points seedés, terrain infini, zéro stockage, query sans regénérer le chunk, 200 ms de génération. C'est le move de génie qui rend tout le reste possible.
+2. **Chaque feature a un coût** -- Pas de compression, pas de random ticks, pas de validation. C'est pas des oublis, c'est ce qui permet de tenir dans 520 KB.
+3. **Les hacks dégueus sont les plus intelligents** -- Coffres dans le tableau de blocs via memcpy, faim par packets de mouvement, fourneau instantané. La solution propre aurait été trop chère.
 
 Si le projet t'intéresse, tout est sur [GitHub en GPLv3](https://github.com/p2r3/bareiron/). C'est du C bien sale, et j'ai rarement pris autant de plaisir à lire un code source xD
