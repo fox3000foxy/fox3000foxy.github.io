@@ -172,9 +172,19 @@ a.tag-badge:hover {
   background: #e53935;
   border-radius: 4px;
   padding: 0.1rem 0.4rem;
-  margin-left: 0.5rem;
-  vertical-align: middle;
   letter-spacing: 0.5px;
+}
+
+.blog-card-badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.blog-card-badges .ai-badge {
+  margin-bottom: 0;
 }
 
 .mermaid-wrapper {

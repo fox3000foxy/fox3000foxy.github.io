@@ -31,13 +31,15 @@ export default function BlogCard({ article }: BlogCardProps) {
 			onClick={() => markAsRead(slug)}
 		>
 			<div className="blog-card-body">
-				<h3 className="blog-card-title">
-					{title ?? slug?.replace(/-/g, " ")}
-					{isNew(date) && !isRead(slug) && (
-						<span className="new-badge">NEW</span>
-					)}
-				</h3>
-				{aiGenerated && <span className="ai-badge">{t("article.ai")}</span>}
+				<h3 className="blog-card-title">{title ?? slug?.replace(/-/g, " ")}</h3>
+				{((isNew(date) && !isRead(slug)) || aiGenerated) && (
+					<div className="blog-card-badges">
+						{isNew(date) && !isRead(slug) && (
+							<span className="new-badge">NEW</span>
+						)}
+						{aiGenerated && <span className="ai-badge">{t("article.ai")}</span>}
+					</div>
+				)}
 				{description && <p className="blog-card-desc">{description}</p>}
 				{tags && tags.length > 0 && (
 					<div className="blog-card-tags">
