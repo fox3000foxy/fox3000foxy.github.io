@@ -800,28 +800,50 @@ a {
 
 .tags-index {
   text-align: left;
-  max-width: 700px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
+.tags-index h2 {
+  margin-bottom: 1.5rem;
+}
+
 .tags-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
 }
 
 .tag-cloud-item {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 0.95rem;
   text-decoration: none;
-  padding: 0.4rem 0.9rem;
+  padding: 1.25rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.tag-cloud-item:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 15%, transparent);
+  transform: translateY(-2px);
+  color: var(--accent);
+}
+
+.tag-cloud-item .tag-label {
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .tag-count {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--text-dim);
   font-weight: 400;
 }
