@@ -162,7 +162,7 @@ Le commentaire dans le code source :
 
 ```c
 // Terrible memory hack!!1!
-}
+```
 
 Franchement, je pouvais pas le dire mieux.
 
