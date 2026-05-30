@@ -1,6 +1,6 @@
 # Security contact
 Contact: https://github.com/fox3000foxy
-Contact: mailto:fox3000foxy@users.noreply.github.com
+Contact: mailto:fox3000foxy@gmail.com
 
 # Policy
 # Please report security vulnerabilities via GitHub Issues or email.
