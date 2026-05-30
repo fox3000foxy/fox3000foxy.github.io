@@ -8,10 +8,19 @@ interface ArticleMeta {
 	title?: string;
 	description?: string;
 	date?: string;
+	lastmod?: string;
+	readingTime?: number;
 	aiGenerated?: boolean;
 	tags?: string[];
 	series?: string;
 	authors?: string[];
+}
+
+function estimateReadingTime(text: string): number {
+	const noCode = text.replace(/```[\s\S]*?```/g, "");
+	const clean = noCode.replace(/`[^`]+`/g, "");
+	const words = clean.trim().split(/\s+/).length;
+	return Math.max(1, Math.ceil(words / 150));
 }
 
 function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: string } {
@@ -66,10 +75,11 @@ function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: 
 		for (const file of files) {
 			const slug = file.replace(/\.md$/, "");
 			const text = fs.readFileSync(path.join(langPath, file), "utf8");
-			const { meta } = parseFrontMatter(text);
+			const { meta, content } = parseFrontMatter(text);
+			const readingTime = estimateReadingTime(content);
 			// Merge: front matter overrides existing index.json data
 			const existingMeta = existingBySlug.get(slug) || {};
-			articles.push({ slug, ...existingMeta, ...meta });
+			articles.push({ slug, readingTime, ...existingMeta, ...meta });
 		}
 
 		articles.sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());

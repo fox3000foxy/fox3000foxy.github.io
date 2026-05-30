@@ -28,11 +28,11 @@ const LANG_META: Record<string, { title: string; description: string }> = {
 	},
 	ja: {
 		title: "Fox's Blog",
-		description: "Fox3000foxyのブログ — Web開発、自動化、オープンソースについて",
+		description: "Fox3000foxyのブログ -- Web開発、自動化、オープンソースについて",
 	},
 	ko: {
 		title: "Fox's Blog",
-		description: "Fox3000foxy의 블로그 — 웹 개발, 자동화, 오픈소스",
+		description: "Fox3000foxy의 블로그 -- 웹 개발, 자동화, 오픈소스",
 	},
 	tr: {
 		title: "Fox'un Blogu",

@@ -25,6 +25,8 @@ export function parseFrontMatter(text: string): {
 					meta.description = val.replace(/^["']|["']$/g, "");
 				} else if (key === "date") {
 					meta.date = val;
+				} else if (key === "lastmod") {
+					meta.lastmod = val;
 				} else if (key === "aiGenerated") {
 					meta.aiGenerated = val === "true";
 				} else if (key === "series") {

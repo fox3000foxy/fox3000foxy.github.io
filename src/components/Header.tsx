@@ -60,8 +60,14 @@ export default function Header() {
 					<Link to="/blog" onClick={closeMenu}>
 						{t("nav.blog")}
 					</Link>
+					<Link to="/tags" onClick={closeMenu}>
+						{t("nav.tags")}
+					</Link>
 					<Link to="/archive" onClick={closeMenu}>
 						{t("nav.archive")}
+					</Link>
+					<Link to="/about" onClick={closeMenu}>
+						{t("nav.about")}
 					</Link>
 					<Link to="/projects" onClick={closeMenu}>
 						{t("nav.projects")}
