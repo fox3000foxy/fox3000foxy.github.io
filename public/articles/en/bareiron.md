@@ -1,7 +1,7 @@
 ---
 title: Bareiron — a Minecraft server running on a $1 microcontroller
 description: 6800 lines of C, zero malloc, Perlin noise replaced by bilinear
-  interpolation, biomes as a tile map, all on a $1 ESP32 chip.
+  interpolation, biomes as a tile map, from the project creator's own words.
 date: 2026-05-30
 tags:
   - minecraft
@@ -19,29 +19,27 @@ Ever wondered if you could run a Minecraft server on a $1 microcontroller ?
 
 I did. And the answer is yes. Literally.
 
-There's a project called [Bareiron](https://github.com/p2r3/bareiron/), by p2r3, and it's probably one of the most fascinating things I've seen in the Minecraft open-source world in years. **6800 lines of C**, zero external dependencies, no malloc, no threading, and it runs on an **ESP32 that costs a single dollar**.
+There's a project called [Bareiron](https://github.com/p2r3/bareiron/), by p2r3, and it's probably one of the most fascinating things I've seen in the Minecraft open-source world in years. A binary that fits in **300 KB**, **6800 lines of C**, zero external dependencies, no malloc, no threading, running on an **ESP32 that costs a single dollar**.
 
 Infinite terrain generation. Biomes. Caves. Crafting. Mining. Mobs. Hunger. Chests. Everything you'd expect from a survival server.
 
 On a chip drawing **0.5 Watts** clocked at **160 MHz**.
 
-To put things in perspective : a vanilla Minecraft server needs gigabytes of RAM and a CPU that doesn't break a sweat. The ESP32-C3 has **520 KB of SRAM** (about 400 KB available after boot). That's roughly a **20,000x gap** in raw power.
+To put things in perspective : a vanilla Minecraft server needs gigabytes of RAM and a CPU that doesn't break a sweat. The ESP32-C3 has **520 KB of SRAM** (about 400 KB available after boot). Processors from 20 years ago already ran at gigahertz speeds — this one tops out at 160 MHz. That's roughly a **20,000x gap** in raw power.
 
-So how is this possible ? p2r3 didn't write a Minecraft server in C — he reinvented every single component so it fits within these constraints. And honestly, the way he did it is an engineering lesson in itself.
+So how is this possible ? p2r3 didn't write a Minecraft server in C — he reinvented every single component so it fits within these constraints.
 
 ## The brain of the project : terrain generation without memory
 
 The biggest challenge when building an embedded Minecraft server is terrain generation.
 
-In vanilla Minecraft, the world is generated using **Perlin noise**. It's an algorithm that produces a smooth, continuous gradient — kinda like a blurry cloud — by stacking multiple layers called octaves. The more octaves you add, the more natural the terrain looks. Then you throw in 6 biome parameters — temperature, humidity, continentalness, erosion, weirdness, depth — to shape the landscape.
+In vanilla Minecraft, the world is generated using **Perlin noise**. It stacks multiple layers called octaves to create natural-looking randomness, then applies 6 biome parameters — temperature, humidity, continentalness, erosion, weirdness, depth — to shape the landscape.
 
-The result is gorgeous. But it's expensive in compute, and it requires RAM to cache generated chunks.
+The result is gorgeous. Expensive in compute, memory-hungry for chunk caching.
 
-Bareiron's approach is radically different. Instead of stacking noise, it uses **bilinear interpolation**.
+Bareiron's approach is radically different. Instead of stacking noise, it uses **bilinear interpolation** — the same algorithm image software uses when you upscale a pixelated picture and the edges go blurry.
 
-You know when you upscale a tiny pixelated image and the edges get all blurry ? That's bilinear interpolation. A dead-simple algorithm that takes 4 points and fills the space between them with a smooth gradient.
-
-Here's how Bareiron applies it to terrain :
+Here's how it works :
 
 ```c
 height = bilinear_interpolate(
@@ -53,33 +51,39 @@ height = bilinear_interpolate(
 );
 ```
 
-The 4 reference points for each chunk are its corners. Their coordinates are used as **seeds** for a random number generator. And since the RNG is deterministic, the same coordinates always produce the same result.
+The 4 reference points for each chunk are its corners. Their coordinates feed into an RNG as **seeds**. Deterministic RNG means the same coordinates always produce the same result.
 
-See the beauty of it ? The server doesn't need to store terrain anywhere. It can recompute it on the fly whenever a player moves into a new area. And it'll be exactly the same every time.
+The server doesn't need to store terrain anywhere. It recomputes on the fly when a player moves into a new area, getting the exact same result.
 
-Adjacent chunks share 2 corners, so the interpolation is continuous across chunk boundaries. No cracks, no ugly seams.
+Adjacent chunks share 2 corners, keeping interpolation continuous across boundaries. No cracks, no ugly seams.
 
-You can control the look by adjusting how many RNG bits you combine. More bits = smoother terrain (like more coin flips giving a distribution closer to 50/50). Fewer bits = rougher, more chaotic terrain.
+You can control terrain look by adjusting how many RNG bits you combine. More bits = smoother terrain (like more coin flips approaching 50/50). Fewer bits = rougher terrain.
 
 With this method, generating one chunk on the ESP32 takes about **200 milliseconds**. Perfectly playable.
 
-### Caves : the art of not overcomplicating things
+### Querying blocks without regenerating the chunk
 
-Caves in vanilla Minecraft have their own generation algorithm. Separate noise layers, underground biomes, the whole deal.
+Say you're playing on this server. You see a block, you click to mine it. The server needs to know what item to give you.
 
-Bareiron's answer is a single line of code :
+Naively, you'd regenerate the whole chunk just to find the height at that specific spot. But bilinear interpolation lets you query **any point** on the plane directly. Corner coordinates come from the player's position, interpolation returns the height at any offset. A handful of math operations, no chunk generation needed.
+
+p2r3 described the goal as "a magic function that can tell me what block sits at a given coordinate, without referring to memory or calculating expensive noise maps." That's exactly what he built.
+
+### Caves : the mirror trick
+
+Vanilla caves have their own separate algorithm with underground biomes and everything.
+
+Bareiron's answer :
 
 ```c
 cave_y = CAVE_BASE_DEPTH - (surface_height - y);
 ```
 
-It takes the surface height above and **mirrors** it underground. This produces cavities that look like the big deepslate caves you're familiar with.
-
-Not as varied as vanilla caves, sure. But it cost zero extra compute and literally one line of code.
+Mirrors the surface underground. Produces cavities that look like deepslate caves. One line of code, zero extra compute.
 
 ### Ores : XOR edition
 
-Same story for ores. No complex vein generation. An XOR of the column coordinates guarantees exactly one ore candidate per column. The ore type depends on Y level.
+No vein generation. An XOR of column coordinates guarantees one candidate per column. Type depends on Y level.
 
 ```c
 candidate = (chunk_x ^ col_x ^ col_z) % 100;
@@ -88,75 +92,70 @@ if (candidate < 15 && y < 32) -> gold
 // etc.
 ```
 
-That's it. A single math operation. Zero storage.
+Diamonds are hidden under the lowest point of each cave volume, so mining stays rewarding despite the lack of proper veins.
 
-### The biome tile map
+### Biome tile map
 
-Biomes are the kind of feature that could cost you dearly. A noise layer on top of your terrain noise, parameters everywhere, and suddenly you've doubled your compute.
+Layering biome noise on top of terrain noise would double the compute. Instead, Bareiron uses a **tile map** : each biome is a circular island in a grid, its type determined by a seed-derived repeating pattern.
 
-Bareiron takes a more rustic but brutally efficient approach : a **tile map**. Each biome is a circular island arranged in a grid. Each island's type comes from a small repeating pattern calculated from the world seed.
+Gridded. Predictable. **Free.**
 
-Yes, it's gridded. Yes, it's predictable. But it costs nothing, and the result is convincing enough.
+Each biome adjusts height parameters :
+- **Plains / forests** : 4 factors, mostly flat
+- **Desert** : max 6 blocks variation, never below sea level
+- **Snowy plains** : 2 factors, up to 14 blocks variation, hillier
 
-Each biome tweaks the height generation parameters :
-- **Plains and forests** : 4 height factors, mostly flat with occasional features
-- **Desert** : max 6 blocks of variation, never below sea level
-- **Snowy plains** : only 2 factors, but up to 14 blocks of variation — hillier
+Surface elements (trees, cacti, bushes) use the same chunk corner RNG values. Zero overhead.
 
-Surface elements like trees, cacti, or bushes use the same random numbers generated from chunk corners. Zero extra overhead.
+## Block change storage : accepting limits
 
-## Crafting : when the ugly solution is the best one
+Since terrain generates on the fly, the server only stores player-made changes : a flat array of **6-byte entries** :
 
-In an ideal world, crafting is implemented with 3x3 matrices for each recipe and a kernel-fitting algorithm to match patterns. Clean, maintainable, extensible.
+- 2 bytes for X (32,000 block horizontal limit)
+- 1 byte for Y (256 block vertical limit)
+- 2 bytes for Z
+- 1 byte for block ID (256 block type limit)
 
-Also memory-hungry.
+This layout fits about **25,000 block changes** — roughly **1.5 chunks** fully dug out. Larger data types would halve that capacity.
 
-p2r3 went with a much more... pragmatic approach. His crafting function starts by counting filled slots, noting the first item, and checking whether all other items are identical.
+As for the 256 block limit : p2r3's words : "I don't plan on implementing Waxed Lightly Weathered Cut Copper Stairs any time soon."
 
-With just that, you can already match simple recipes in a handful of operations :
+## Crafting : when the ugly solution is best
+
+The clean approach : 3x3 matrices per recipe, kernel-fitting algorithm. Maintainable, extensible, memory-hungry.
+
+p2r3 went pragmatic. The function counts filled slots, notes the first item, checks if the rest are identical.
+
+Some recipes match in 4 operations :
 
 ```c
 if (count == 8 && first == cobblestone && all_identical && center_empty)
     return furnace;
 ```
 
-4 conditions and you've matched the furnace recipe. Change one condition and you've got the chest recipe.
+Complex shapes use the first item's index to check relative positions. Similar recipes share one matching function — output changes based on detected material.
 
-For more complex shapes like tools, the code uses the first item's index to determine the relative positions of the others. Shears for example : 2 iron items positioned diagonally from each other.
-
-Recipes that share a shape (all pickaxes, all swords) use the same matching function — the output just changes based on the material.
-
-The code is less readable than a clean recipe table. But it takes zero memory and executes in a laughably small number of instructions. On an ESP32, that's what counts.
+Ugly code. Zero memory. Fast.
 
 ## The furnace that cheats
 
-The furnace in vanilla Minecraft is a whole mechanic. A running timer, input items, a result cooking, fuel to manage. It takes memory to track the state of every active furnace.
+Vanilla furnaces : timer, input/output storage, fuel management.
 
-Bareiron says : nope. The furnace works like a crafting table. Put ingredients in, get the result out. **Instant.**
+Bareiron : put ingredients in, get result out. **Instant.**
 
-It's not realistic. But it's efficient, takes zero memory, and avoids having to manage timers and persistent states for every block.
+No memory, no timers, no persistent state per block.
 
-## Chests : the nastiest memory hack I've ever seen
+## Chests : the nastiest memory hack
 
-When p2r3 started getting testers on his project, people asked for chests. Without chests, there's no way to share items between players. Result : people were starving while others had stacks of food.
+Testers wanted chests for sharing items. Without them, people starved while others had food. But 27 inventory slots per chest means storage, and on an ESP32 you can't `malloc` on demand — heap fragmentation will crash the program.
 
-But adding chests means storing 27 inventory slots per chest. And on an ESP32, you can't just `malloc` whenever you feel like it. You need to know ahead of time exactly how much memory you'll use.
+The block change array uses 6-byte entries. Bareiron stores items as 16 bit ID + 8 bit stack size.
 
-The solution he came up with is so twisted it's beautiful.
+By pure coincidence, each 6-byte entry fits **exactly 2 items**.
 
-The array that stores block changes uses tiny 6-byte entries :
-- 2 bytes for X
-- 1 byte for Y
-- 2 bytes for Z
-- 1 byte for the block ID
+Each chest takes 15 entries : 1 for the block, 14 for 27 slots (2 items per entry, 3 bytes per slot).
 
-And the way Bareiron stores an item is : 16 bits for the item ID, 8 bits for the stack size.
-
-By pure coincidence, each 6-byte entry can store **exactly 2 items**.
-
-So each chest takes 15 entries in the block array — 1 for the chest block itself, 14 for the 27 inventory slots (2 items per entry, 3 bytes per slot, with 1 byte of waste).
-
-When a player opens a chest, the server **memcpy**s the slot memory region directly into the player's crafting buffer. That buffer is normally used for crafting, but you can't craft with a chest open, so it gets recycled. A special flag is set to block any crafting attempts.
+When a player opens a chest, the server **memcpy**s the slot region into the player's crafting buffer — recycled because you can't craft with a chest open. A flag blocks crafting attempts.
 
 The source code comment :
 
@@ -164,83 +163,79 @@ The source code comment :
 // Terrible memory hack!!1!
 ```
 
-I couldn't have said it better myself.
+Couldn't have put it better.
 
-## Hunger that tracks itself for free
+## Hunger tracked for free
 
-There's one thing I absolutely love about this project : the way hunger is implemented.
+Modern hunger mechanics are complex. Health, hunger, saturation, timers.
 
-Modern Minecraft hunger mechanics are complex. Health, hunger, saturation, timers ticking, calculations based on what the player is doing.
+p2r3 noticed : when a player moves, their client sends movement packets at ~20/sec. When they don't move : one packet.
 
-p2r3 noticed something obvious. When a player moves, their client sends movement packets at roughly 20 per second. When they don't move, they send one.
+The server processes these anyway. Free activity counter.
 
-The server has to process these packets anyway. It's work it's already doing, regardless of anything else.
+Movement packet received → counter drops. Counter hits zero → hunger drops. Player eats → counter rises.
 
-So he turned it into a free activity counter.
+Zero timers. Zero memory. Zero dedicated compute. Implemented by piggybacking on an existing system.
 
-Every movement packet received, the counter goes down. When it hits zero, the player's hunger drops. When the player eats, the counter goes back up.
+### Fall damage : the simplest damage type
 
-Zero allocated timers. Zero memory used. Zero dedicated compute cycles. Hunger implemented by piggybacking on a system that already exists.
+The server tracks the last Y level where the player left the ground. When they touch ground again, it subtracts current Y from stored Y. Difference equals damage.
 
-I find that brilliant.
+First damage system p2r3 implemented, because it's trivial.
 
 ## Mobs on a budget
 
-Every mob in Bareiron is **8 bytes**. Literally :
-- 1 byte for the type
-- 2 bytes for X
-- 1 byte for Y
-- 2 bytes for Z
-- 1 byte for data (health, sheared state, panic timer)
+Each mob fits in **8 bytes** :
+- 1 byte type
+- 2 bytes X
+- 1 byte Y
+- 2 bytes Z
+- 1 byte data (health, sheared, panic timer)
 
-Passive mobs wander randomly in one of 8 directions. Hostiles walk straight toward the nearest player. No pathfinding, no A*, no obstacle avoidance. They just go toward you in a straight line.
+Passives wander 8 random directions. Hostiles walk straight toward nearest player. No pathfinding, no A*, no obstacle avoidance.
 
-When a zombie gets within 2 blocks, it hits for 3 hearts per second. That's deliberately higher than normal, because without pathfinding players can easily kite them. Armor reduces damage using the pre-combat-update formula.
+Zombie at 2 blocks : 3 hearts/sec (deliberately high — no pathfinding means easy kiting).
 
-Mobs spawn when you cross a chunk boundary. No random ticks, no complex spawn management system. You cross into a new chunk, a mob has a chance to appear.
+Armor uses the pre-combat-update formula. Full diamond absorbs almost all damage. Fair compensation for lag on a microcontroller.
+
+Mobs spawn when crossing chunk boundaries. No random ticks, no spawn management.
 
 ## What got sacrificed
 
-For all this to fit, some vanilla features don't exist. And it's not laziness — it's conscious choices.
+**No network compression.** zlib is too CPU-heavy for an ESP32. Generating chunks is fast, sending them is the bottleneck. Bad internet = unplayable.
 
-**No network compression.** The Minecraft protocol uses zlib to compress large packets. But compressing data on an ESP32 is too expensive CPU-wise. Result : the server can generate chunks quickly, but the network becomes the bottleneck.
+**No random ticks.** Trees grow with bone meal or not at all. Mobs don't spawn randomly — they appear at chunk boundaries.
 
-**No random ticks.** Trees don't grow on their own. Want a tree ? Use bone meal from a composter, or nothing.
+**No item entities.** Mined blocks go straight to inventory. Visual animation exists, but the server doesn't check distance.
 
-**No item entities.** When you mine a block, the loot goes straight to your inventory. There's even a visual animation to make it look legit, but the server doesn't check distance. Items always reach you.
+**No inventory validation.** Server trusts the client entirely. Client says 64 diamonds, it's 64 diamonds. Client says it just mined an entire chunk in one second, server accepts it. Don't use this with strangers.
 
-**No inventory validation.** The server trusts the client. If your client says you've got 64 diamonds in your pocket, the server says "OK". No calculation to verify, too expensive.
+**No server-side lighting.** Torches sent after other blocks, client calculates lighting.
 
-**No server-side lighting.** Torches are sent after every other block, forcing the client to calculate lighting on its own.
+**No gradual fluid flow.** Water and lava reach final state instantly. No block update queues.
 
-**No gradual fluid flow.** Water and lava reach their final state instantly. No block update queues to manage.
+## The result
 
-## The end result
+Desktop Ryzen 5 3600 : ~0.5 ms per chunk.
 
-On a desktop PC with a Ryzen 5 3600, Bareiron generates a chunk in about 0.5 milliseconds.
+ESP32-C3 at under $1 : ~200 ms per chunk. Playable.
 
-On an ESP32-C3 you can find for under a buck on Aliexpress, it's about 200 milliseconds per chunk. And it's playable.
-
-With more than 3 players online, things start lagging. The author compares it to 2b2t during peak hours, and honestly, that's a compliment.
-
-Of course, this isn't a server you want to hand to strangers. Without inventory validation, anyone can give themselves stacks of diamonds. And without network compression, a bad connection makes it unplayable.
-
-But the fact that it works at all is already incredible.
+More than 3 players : lag kicks in. Author compares it to 2b2t peak hours. That's a compliment.
 
 ## The philosophy
 
-What makes Bareiron fascinating is that every single line of code is a conscious tradeoff. Nothing is there by accident.
+Why spend a month building an embedded Minecraft server ?
 
-Perlin noise was replaced with bilinear interpolation : the terrain isn't as pretty, but it's 200 times faster and takes zero memory. Crafting matrices were replaced with hardcoded matching : the code is ugly, but it doesn't consume a single extra byte. zlib compression was removed : people with bad connections can't play, but the server can run on a 160 MHz chip. Inventory validation was disabled : security doesn't exist, but there's zero computation overhead.
+p2r3's answer : "I just really like the idea that this tiny little chip that costs one friggin' dollar and consumes half a Watt can run something as advanced as Minecraft. Science isn't about 'why', it's about 'why not.'"
 
-Every missing feature is the price paid for another feature to exist within the hardware's limits.
+Every line is a conscious tradeoff. Perlin noise replaced with bilinear interpolation : uglier terrain, 200x faster, zero memory. Crafting matrices replaced with hardcoded matching : disgusting code, zero byte overhead. zlib removed : bad connections can't play, server runs on 160 MHz. Inventory validation disabled : no security, zero compute overhead.
 
-It's not "a Minecraft server written in C". It's "a Minecraft server that fits on a $1 microcontroller because the right sacrifices were made."
+Every missing feature pays for another to exist within the hardware limits.
 
 **3 things to remember :**
 
-1. **Interpolation + RNG instead of Perlin noise** -- 4 seeded points, interpolated between them, and you get infinite terrain that takes zero memory and generates in 200 ms. That's the genius move that makes everything else possible.
-2. **Every feature has a cost, nothing is free** -- No compression, no random ticks, no inventory validation. These aren't oversights, they're what allows the rest to fit in 520 KB of SRAM.
-3. **The nastiest solutions are sometimes the smartest** -- Chests stored in the block array, hunger tracked by movement packets, instant-smelting furnace. The "clean" and "maintainable" solution would have been too expensive, so p2r3 did what works within the constraints.
+1. **Interpolation + RNG instead of Perlin noise** — 4 seeded points, infinite terrain, zero storage, 200 ms generation. And you can query any block without regenerating a chunk.
+2. **Every feature costs something** — No compression, no random ticks, no validation. These aren't oversights, they're what keeps the whole thing in 520 KB of SRAM.
+3. **The nastiest solutions are often the smartest** — Chests in the block array, hunger via movement packets, instant furnace. The "clean" approach would have been too expensive.
 
-If the project interests you, everything's on [GitHub under GPLv3](https://github.com/p2r3/bareiron/). It's some beautifully dirty C, and I haven't had this much fun reading source code in a long time xD
+The [repo](https://github.com/p2r3/bareiron/) is GPLv3. Go check it out. It's beautiful dirty C xD
