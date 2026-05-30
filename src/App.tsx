@@ -15,6 +15,7 @@ import { LangContext, useLangState } from "./hooks/useLang";
 import { ThemeContext, useThemeState } from "./hooks/useTheme";
 import "./styles/App.css";
 
+const About = lazy(() => import("./pages/About"));
 const Archive = lazy(() => import("./pages/Archive"));
 const Article = lazy(() => import("./pages/Article"));
 const AuthorIndex = lazy(() => import("./pages/AuthorIndex"));
@@ -25,6 +26,7 @@ const Legacy = lazy(() => import("./pages/Legacy"));
 const Project = lazy(() => import("./pages/Project"));
 const ProjectList = lazy(() => import("./pages/ProjectList"));
 const TagIndex = lazy(() => import("./pages/TagIndex"));
+const TagsIndex = lazy(() => import("./pages/TagsIndex"));
 
 function App() {
 	const langCtx = useLangState();
@@ -44,8 +46,10 @@ function App() {
 								<Route path="/" element={<Home />} />
 								<Route path="/blog" element={<BlogList />} />
 								<Route path="/blog/:slug" element={<Article />} />
+								<Route path="/tags" element={<TagsIndex />} />
 								<Route path="/tags/:tag" element={<TagIndex />} />
 								<Route path="/authors/:id" element={<AuthorIndex />} />
+								<Route path="/about" element={<About />} />
 								<Route path="/archive" element={<Archive />} />
 								<Route path="/projects" element={<ProjectList />} />
 								<Route path="/projects/:slug" element={<Project />} />

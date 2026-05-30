@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/BlogList.css";
 import {
 	getCachedArticleMarkdown,
@@ -8,13 +8,24 @@ import {
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
+import { useReadStatus } from "../hooks/useReadStatus";
 import BookmarkButton from "../components/BookmarkButton";
 import { getAuthors } from "../utils/authors";
 
 const PAGE_SIZE = 15;
 
+function isNew(dateStr?: string): boolean {
+	if (!dateStr) {
+		return false;
+	}
+	const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+	return new Date(`${dateStr}T12:00:00Z`).getTime() > sevenDaysAgo;
+}
+
 export default function BlogList() {
 	const { t, lang } = useLang();
+	const navigate = useNavigate();
+	const { markAsRead, isRead } = useReadStatus();
 	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 	const [activeTag, setActiveTag] = useState<string | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -100,9 +111,24 @@ export default function BlogList() {
 		setPage(0);
 	}, [activeTag, searchQuery]);
 
+	function randomArticle() {
+		if (filtered.length === 0) {
+			return;
+		}
+		const slug = filtered[Math.floor(Math.random() * filtered.length)].slug;
+		void navigate(`/blog/${slug}`);
+	}
+
 	return (
 		<div className="blog-list">
-			<h2>{t("blog.title")}</h2>
+			<div className="blog-list-header">
+				<h2>{t("blog.title")}</h2>
+				{filtered.length > 0 && (
+					<button type="button" className="random-btn" onClick={randomArticle}>
+						🎲 {t("blog.random")}
+					</button>
+				)}
+			</div>
 
 			<div className="search-bar">
 				<input
@@ -154,14 +180,21 @@ export default function BlogList() {
 								title,
 								description,
 								date,
+								readingTime,
 								aiGenerated,
 								tags,
 								authors,
 							}) => (
-								<Link to={`/blog/${slug}`} key={slug} className="blog-card">
+								<Link
+									to={`/blog/${slug}`}
+									key={slug}
+									className={`blog-card${isRead(slug) ? " read" : ""}`}
+									onClick={() => markAsRead(slug)}
+								>
 									<div className="blog-card-body">
 										<h3 className="blog-card-title">
 											{title ?? slug.replace(/-/g, " ")}
+											{isNew(date) && <span className="new-badge">NEW</span>}
 										</h3>
 										{aiGenerated && (
 											<span className="ai-badge">{t("article.ai")}</span>
@@ -180,15 +213,25 @@ export default function BlogList() {
 										)}
 									</div>
 									<div className="blog-card-footer">
-										{date && (
-											<time dateTime={date}>
-												{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
-													year: "numeric",
-													month: "long",
-													day: "numeric",
-												})}
-											</time>
-										)}
+										<div className="blog-card-meta">
+											{date && (
+												<time dateTime={date}>
+													{new Date(`${date}T00:00:00`).toLocaleDateString(
+														lang,
+														{
+															year: "numeric",
+															month: "long",
+															day: "numeric",
+														}
+													)}
+												</time>
+											)}
+											{readingTime && (
+												<span className="blog-card-reading-time">
+													{t("article.minRead", { n: readingTime })}
+												</span>
+											)}
+										</div>
 										<div className="blog-card-authors">
 											{getAuthors(authors).map((a) => (
 												<img

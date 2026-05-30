@@ -798,3 +798,68 @@ a {
   color: var(--accent);
 }
 
+.tags-index {
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.tag-cloud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+  padding: 0.4rem 0.9rem;
+}
+
+.tag-count {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.about-page {
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.about-page h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-page ul {
+  padding-left: 1.5rem;
+}
+
+.about-page li {
+  margin-bottom: 0.3rem;
+}
+
+.back-home {
+  display: inline-block;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.back-home:hover {
+  color: var(--accent);
+}
+
+.article-updated {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+

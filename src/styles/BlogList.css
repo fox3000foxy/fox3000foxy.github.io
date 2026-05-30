@@ -298,3 +298,63 @@
   font-variant-numeric: tabular-nums;
 }
 
+.blog-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.blog-list-header h2 {
+  margin: 0;
+}
+
+.random-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--border-hover);
+  color: var(--text-muted);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  font-family: inherit;
+}
+
+.random-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.blog-card.read {
+  opacity: 0.6;
+}
+
+.blog-card.read:hover {
+  opacity: 1;
+}
+
+.new-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  background: #e53935;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+}
+
+.blog-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.blog-card-reading-time {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+

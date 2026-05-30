@@ -18,6 +18,7 @@ import ReadingProgress from "../components/ReadingProgress";
 import ShareButtons from "../components/ShareButtons";
 import BookmarkButton from "../components/BookmarkButton";
 import { useReadingMode } from "../hooks/useReadingMode";
+import { useReadStatus } from "../hooks/useReadStatus";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -39,6 +40,7 @@ export default function Article() {
 	const { t, lang } = useLang();
 	const location = useLocation();
 	const readingMode = useReadingMode();
+	const { markAsRead } = useReadStatus();
 	const [content, setContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
@@ -48,6 +50,7 @@ export default function Article() {
 		if (!slug) {
 			return;
 		}
+		markAsRead(slug);
 
 		function process(text: string): {
 			clean: string;
@@ -112,7 +115,7 @@ export default function Article() {
 			}
 		}
 		void loadIndex();
-	}, [slug, lang]);
+	}, [slug, lang, markAsRead]);
 
 	// Scroll to anchor hash when content is loaded
 	useEffect(() => {
@@ -162,6 +165,14 @@ export default function Article() {
 				)}
 				<p className="article-date">
 					{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
+					{meta?.lastmod && meta.lastmod !== meta.date && (
+						<>
+							<span className="article-sep">·</span>
+							<span className="article-updated">
+								{t("article.updated", { date: meta.lastmod })}
+							</span>
+						</>
+					)}
 					{meta?.date && <span className="article-sep">·</span>}
 					<span>
 						{t("article.minRead", { n: estimateReadingTime(content) })}
