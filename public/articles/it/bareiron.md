@@ -131,11 +131,11 @@ h = (hash % 5) + ((hash >> 4) % 5);
 
 Ogni bioma sceglie quante estrazioni di bit combinare. Più ce ne sono, più la distribuzione si stabilizza -- come più lanci di moneta che si avvicinano al 50/50. Meno ce ne sono, più forti sono le variazioni locali.
 
-![Terreno irregolare — pochi fattori, variazioni forti](/images/bareiron/terrain-irregular.jpg)
+![Terreno irregolare -- pochi fattori, variazioni forti](/images/bareiron/terrain-irregular.jpg)
 
 Con solo 2 fattori, la snowy plains produce un terreno collinare, quasi montuoso. Picchi e avvallamenti sono frequenti.
 
-![Terreno regolare — fattori multipli, superficie liscia](/images/bareiron/terrain-regular.jpg)
+![Terreno regolare -- fattori multipli, superficie liscia](/images/bareiron/terrain-regular.jpg)
 
 Con 4 fattori, le pianure rimangono piatte e prevedibili. La distribuzione si stabilizza.
 

@@ -130,11 +130,11 @@ h = (hash % 5) + ((hash >> 4) % 5);
 
 各バイオームが、いくつのビット抽出を組み合わせるかを選ぶ。多ければ多いほど分布が安定する -- コイン投げの回数が増えて50/50に近づくのと同じ。少なければ少ないほど、局所的な変動が大きくなる。
 
-![Terrain irrégulier — peu de facteurs, variations fortes](/images/bareiron/terrain-irregular.jpg)
+![Terrain irrégulier -- peu de facteurs, variations fortes](/images/bareiron/terrain-irregular.jpg)
 
 たった2要素で、氷雪平原は丘陵地帯、ほとんど山岳のような地形になる。ピークと窪みが頻繁に現れる。
 
-![Terrain régulier — facteurs multiples, surface lisse](/images/bareiron/terrain-regular.jpg)
+![Terrain régulier -- facteurs multiples, surface lisse](/images/bareiron/terrain-regular.jpg)
 
 4要素では、平原は平坦で予測可能なまま。分布が安定する。
 

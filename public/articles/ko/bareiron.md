@@ -131,11 +131,11 @@ h = (hash % 5) + ((hash >> 4) % 5);
 
 각 바이옴은 몇 개의 비트 추출을 결합할지 선택해. 많을수록 분포가 안정화되지 -- 동전 던지기를 많이 할수록 50/50에 가까워지는 것처럼. 적을수록 지역 변동이 더 커져.
 
-![불규칙 지형 — 적은 요소, 강한 변동](/images/bareiron/terrain-irregular.jpg)
+![불규칙 지형 -- 적은 요소, 강한 변동](/images/bareiron/terrain-irregular.jpg)
 
 2개 요소만 사용하면, 설원은 구릉지에 가깝고 거의 산지 같은 지형을 만들어. 봉우리와 골짜기가 빈번해.
 
-![규칙적인 지형 — 여러 요소, 부드러운 표면](/images/bareiron/terrain-regular.jpg)
+![규칙적인 지형 -- 여러 요소, 부드러운 표면](/images/bareiron/terrain-regular.jpg)
 
 4개 요소를 사용하면, 평원은 평탄하고 예측 가능하게 유지돼. 분포가 안정화되지.
 

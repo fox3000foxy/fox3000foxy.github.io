@@ -131,11 +131,11 @@ h = (hash % 5) + ((hash >> 4) % 5);
 
 Jedes Biom wählt, wie viele Bit-Extraktionen es kombiniert. Je mehr, desto stabiler wird die Verteilung -- wie mehr Münzwürfe, die sich 50/50 annähern. Je weniger, desto stärker die lokalen Variationen.
 
-![Unregelmäßiges Gelände — wenige Faktoren, starke Schwankungen](/images/bareiron/terrain-irregular.jpg)
+![Unregelmäßiges Gelände -- wenige Faktoren, starke Schwankungen](/images/bareiron/terrain-irregular.jpg)
 
 Mit nur 2 Faktoren erzeugen die verschneiten Ebenen ein hügeliges, fast bergiges Gelände. Spitzen und Täler sind häufig.
 
-![Regelmäßiges Gelände — viele Faktoren, glatte Oberfläche](/images/bareiron/terrain-regular.jpg)
+![Regelmäßiges Gelände -- viele Faktoren, glatte Oberfläche](/images/bareiron/terrain-regular.jpg)
 
 Mit 4 Faktoren bleiben die Ebenen flach und vorhersagbar. Die Verteilung stabilisiert sich.
 

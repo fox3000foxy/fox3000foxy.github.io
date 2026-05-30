@@ -131,11 +131,11 @@ h = (hash % 5) + ((hash >> 4) % 5);
 
 Chaque biome choisit combien de extractions de bits il combine. Plus y en a, plus la distribution se stabilise -- comme plus de lancers de pièces qui approchent 50/50. Moins y en a, plus les variations locales sont fortes.
 
-![Terrain irrégulier — peu de facteurs, variations fortes](/images/bareiron/terrain-irregular.jpg)
+![Terrain irrégulier -- peu de facteurs, variations fortes](/images/bareiron/terrain-irregular.jpg)
 
 Avec seulement 2 facteurs, le snowy plains produit un terrain vallonné, presque montagneux. Les pics et les creux sont fréquents.
 
-![Terrain régulier — facteurs multiples, surface lisse](/images/bareiron/terrain-regular.jpg)
+![Terrain régulier -- facteurs multiples, surface lisse](/images/bareiron/terrain-regular.jpg)
 
 Avec 4 facteurs, les plaines restent plates et prévisibles. La distribution se stabilise.
 

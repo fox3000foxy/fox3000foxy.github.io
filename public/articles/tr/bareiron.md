@@ -131,11 +131,11 @@ h = (hash % 5) + ((hash >> 4) % 5);
 
 Her biyom kaç bit çıkarımı birleştireceğini seçiyor. Ne kadar çok olursa, dağılım o kadar dengelenir -- tıpkı 50/50'ye yaklaşan daha fazla yazı tura atışı gibi. Az olduğunda, yerel varyasyonlar daha güçlü olur.
 
-![Düzensiz arazi — az faktör, güçlü varyasyonlar](/images/bareiron/terrain-irregular.jpg)
+![Düzensiz arazi -- az faktör, güçlü varyasyonlar](/images/bareiron/terrain-irregular.jpg)
 
 Sadece 2 faktörle, snowy plains neredeyse dağlık, inişli çıkışlı bir arazi üretiyor. Tepe ve çukurlar sık.
 
-![Düzenli arazi — çoklu faktörler, pürüzsüz yüzey](/images/bareiron/terrain-regular.jpg)
+![Düzenli arazi -- çoklu faktörler, pürüzsüz yüzey](/images/bareiron/terrain-regular.jpg)
 
 4 faktörle, ovalar düz ve tahmin edilebilir kalıyor. Dağılım dengeleniyor.
 
