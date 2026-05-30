@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
-import BookmarkButton from "../components/BookmarkButton";
-import { getAuthors } from "../utils/authors";
+import BlogCard from "../components/BlogCard";
 
 export default function TagIndex() {
 	const { tag } = useParams<{ tag: string }>();
@@ -68,63 +67,9 @@ export default function TagIndex() {
 
 			{articles.length > 0 ? (
 				<div className="blog-grid">
-					{articles.map(
-						({
-							slug,
-							title,
-							description,
-							date,
-							aiGenerated,
-							tags,
-							authors,
-						}) => (
-							<Link to={`/blog/${slug}`} key={slug} className="blog-card">
-								<div className="blog-card-body">
-									<h3 className="blog-card-title">
-										{title ?? slug.replace(/-/g, " ")}
-									</h3>
-									{aiGenerated && (
-										<span className="ai-badge">{t("article.ai")}</span>
-									)}
-									{description && (
-										<p className="blog-card-desc">{description}</p>
-									)}
-									{tags && tags.length > 0 && (
-										<div className="blog-card-tags">
-											{tags.map((t) => (
-												<span key={t} className="tag-badge">
-													{t}
-												</span>
-											))}
-										</div>
-									)}
-								</div>
-								<div className="blog-card-footer">
-									{date && (
-										<time dateTime={date}>
-											{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
-												year: "numeric",
-												month: "long",
-												day: "numeric",
-											})}
-										</time>
-									)}
-									<div className="blog-card-authors">
-										{getAuthors(authors).map((a) => (
-											<img
-												key={a.id}
-												className="blog-card-author-avatar"
-												src={a.avatar ?? `https://github.com/${a.id}.png`}
-												alt={a.name}
-												title={a.name}
-											/>
-										))}
-									</div>
-									<BookmarkButton slug={slug} />
-								</div>
-							</Link>
-						)
-					)}
+					{articles.map((article) => (
+						<BlogCard key={article.slug} article={article} />
+					))}
 				</div>
 			) : (
 				<p>{t("blog.no.tag", { tag: tag || "" })}</p>

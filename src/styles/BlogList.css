@@ -334,19 +334,6 @@
   opacity: 1;
 }
 
-.new-badge {
-  display: inline-block;
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: #fff;
-  background: #e53935;
-  border-radius: 4px;
-  padding: 0.1rem 0.4rem;
-  margin-left: 0.5rem;
-  vertical-align: middle;
-  letter-spacing: 0.5px;
-}
-
 .blog-card-meta {
   display: flex;
   flex-direction: column;

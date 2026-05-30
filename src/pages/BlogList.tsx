@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/BlogList.css";
 import {
 	getCachedArticleMarkdown,
@@ -8,24 +8,13 @@ import {
 } from "../utils/articleCache";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
-import { useReadStatus } from "../hooks/useReadStatus";
-import BookmarkButton from "../components/BookmarkButton";
-import { getAuthors } from "../utils/authors";
+import BlogCard from "../components/BlogCard";
 
 const PAGE_SIZE = 15;
-
-function isNew(dateStr?: string): boolean {
-	if (!dateStr) {
-		return false;
-	}
-	const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-	return new Date(`${dateStr}T12:00:00Z`).getTime() > sevenDaysAgo;
-}
 
 export default function BlogList() {
 	const { t, lang } = useLang();
 	const navigate = useNavigate();
-	const { markAsRead, isRead } = useReadStatus();
 	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 	const [activeTag, setActiveTag] = useState<string | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -174,80 +163,9 @@ export default function BlogList() {
 			{filtered.length > 0 ? (
 				<>
 					<div className="blog-grid">
-						{paged.map(
-							({
-								slug,
-								title,
-								description,
-								date,
-								readingTime,
-								aiGenerated,
-								tags,
-								authors,
-							}) => (
-								<Link
-									to={`/blog/${slug}`}
-									key={slug}
-									className={`blog-card${isRead(slug) ? " read" : ""}`}
-									onClick={() => markAsRead(slug)}
-								>
-									<div className="blog-card-body">
-										<h3 className="blog-card-title">
-											{title ?? slug.replace(/-/g, " ")}
-											{isNew(date) && <span className="new-badge">NEW</span>}
-										</h3>
-										{aiGenerated && (
-											<span className="ai-badge">{t("article.ai")}</span>
-										)}
-										{description && (
-											<p className="blog-card-desc">{description}</p>
-										)}
-										{tags && tags.length > 0 && (
-											<div className="blog-card-tags">
-												{tags.map((tag) => (
-													<span key={tag} className="tag-badge">
-														{tag}
-													</span>
-												))}
-											</div>
-										)}
-									</div>
-									<div className="blog-card-footer">
-										<div className="blog-card-meta">
-											{date && (
-												<time dateTime={date}>
-													{new Date(`${date}T00:00:00`).toLocaleDateString(
-														lang,
-														{
-															year: "numeric",
-															month: "long",
-															day: "numeric",
-														}
-													)}
-												</time>
-											)}
-											{readingTime && (
-												<span className="blog-card-reading-time">
-													{t("article.minRead", { n: readingTime })}
-												</span>
-											)}
-										</div>
-										<div className="blog-card-authors">
-											{getAuthors(authors).map((a) => (
-												<img
-													key={a.id}
-													className="blog-card-author-avatar"
-													src={a.avatar ?? `https://github.com/${a.id}.png`}
-													alt={a.name}
-													title={a.name}
-												/>
-											))}
-										</div>
-										<BookmarkButton slug={slug} />
-									</div>
-								</Link>
-							)
-						)}
+						{paged.map((article) => (
+							<BlogCard key={article.slug} article={article} />
+						))}
 					</div>
 					{pageCount > 1 && (
 						<div className="pagination">
