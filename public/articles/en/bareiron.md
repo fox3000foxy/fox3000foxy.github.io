@@ -1,5 +1,5 @@
 ---
-title: Bareiron — a Minecraft server running on a $1 microcontroller
+title: Bareiron -- a Minecraft server running on a $1 microcontroller
 description: 6800 lines of C, zero malloc, Perlin noise replaced by bilinear
   interpolation, biomes as a tile map, all on a $1 ESP32 chip.
 date: 2026-05-30
@@ -122,7 +122,7 @@ Items are: 16 bit ID + 8 bit stack size.
 
 **By pure coincidence**, each block entry fits exactly 2 items.
 
-Each chest takes 15 entries. When you open one, the server **memcpy**'s the region into the player's craft buffer (recycled — you can't craft with a chest open). A `0x80` flag blocks crafting.
+Each chest takes 15 entries. When you open one, the server **memcpy**'s the region into the player's craft buffer (recycled -- you can't craft with a chest open). A `0x80` flag blocks crafting.
 
 The code comment:
 
@@ -183,8 +183,8 @@ Validation → trust: zero security, zero overhead.
 
 **3 things to remember:**
 
-1. **Bilinear interpolation + RNG** — 4 seeded points, infinite terrain, zero storage.
-2. **Everything costs something** — The features that got cut make room for the ones that remain in 520 KB.
-3. **Nasty hacks are the smartest** — Chests in the block array, hunger via movement packets, instant furnace.
+1. **Bilinear interpolation + RNG** -- 4 seeded points, infinite terrain, zero storage.
+2. **Everything costs something** -- The features that got cut make room for the ones that remain in 520 KB.
+3. **Nasty hacks are the smartest** -- Chests in the block array, hunger via movement packets, instant furnace.
 
 The [repo](https://github.com/p2r3/bareiron/) is GPLv3. Go check it out. It's some dirty C and I love it xD

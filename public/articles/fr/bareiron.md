@@ -1,5 +1,5 @@
 ---
-title: Bareiron — le serveur Minecraft qui tourne sur un microcontrôleur à 1$
+title: Bareiron -- le serveur Minecraft qui tourne sur un microcontrôleur à 1$
 description: 6800 lignes de C, zéro malloc, du Perlin noise remplacé par de la
   bilinear interpolation, des biomes en tile map, et tout ça sur une puce à 1$.
 date: 2026-05-30
@@ -185,8 +185,8 @@ Validation → trust : zéro sécurité, zéro overhead.
 
 **Les 3 trucs à retenir :**
 
-1. **Bilinear interpolation + RNG** — 4 points seedés, terrain infini, zéro stockage.
-2. **Tout coûte, tout se paye** — Les features qui sautent permettent à celles qui restent de tenir dans 520 KB.
-3. **Les hacks dégueus sont les plus intelligents** — Coffres dans le buffer de craft, faim par packets, fourneau instantané.
+1. **Bilinear interpolation + RNG** -- 4 points seedés, terrain infini, zéro stockage.
+2. **Tout coûte, tout se paye** -- Les features qui sautent permettent à celles qui restent de tenir dans 520 KB.
+3. **Les hacks dégueus sont les plus intelligents** -- Coffres dans le buffer de craft, faim par packets, fourneau instantané.
 
 Le [repo](https://github.com/p2r3/bareiron/) est en GPLv3. Vas-y jeter un oeil. C'est du gros C bien sale et j'adore xD
