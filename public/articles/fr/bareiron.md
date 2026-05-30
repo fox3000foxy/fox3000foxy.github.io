@@ -1,5 +1,5 @@
 ---
-title: Bareiron — le serveur Minecraft qui tourne sur un microcontrôleur à 1$
+title: Bareiron -- le serveur Minecraft qui tourne sur un microcontrôleur à 1$
 description: 6800 lignes de C, zéro malloc, du Perlin noise remplacé par de la
   bilinear interpolation, des biomes en tile map, et tout ça sur une puce à 1$.
 date: 2026-05-30
@@ -25,7 +25,7 @@ Génération de terrain infinie. Des biomes. Des grottes. Du craft. De la mine. 
 
 Sur une puce qui consomme **0.5 Watt** et qui a **160 MHz** de clock.
 
-Pour donner un ordre d'idée : un serveur Minecraft vanilla a besoin de plusieurs gigas de RAM et d'un processeur qui pleure pas. L'ESP32-C3, c'est **520 KB de SRAM** (400 dispo après le boot). Les processeurs y'a 20 ans tournaient déjà en gigahertz — celui-ci plafonne à 160 MHz. On est sur un facteur ~20 000 entre les deux en puissance pure.
+Pour donner un ordre d'idée : un serveur Minecraft vanilla a besoin de plusieurs gigas de RAM et d'un processeur qui pleure pas. L'ESP32-C3, c'est **520 KB de SRAM** (400 dispo après le boot). Les processeurs y'a 20 ans tournaient déjà en gigahertz -- celui-ci plafonne à 160 MHz. On est sur un facteur ~20 000 entre les deux en puissance pure.
 
 Alors comment c'est possible ? p2r3 a pas écrit un serveur Minecraft en C, il a réinventé chaque brique du serveur pour que ça tienne dans ces contraintes. Et franchement, la manière dont il s'y est pris, c'est un cours d'ingénierie à lui tout seul.
 
@@ -33,7 +33,7 @@ Alors comment c'est possible ? p2r3 a pas écrit un serveur Minecraft en C, il a
 
 Le plus gros problème quand tu veux faire un serveur MC embarqué, c'est la génération de terrain.
 
-Dans Minecraft vanilla, le monde est généré avec du **Perlin noise**. C'est un algorithme qui produit un bruit continu, un peu comme un nuage flou, en superposant plusieurs couches (on appelle ça des octaves). Plus tu ajoutes d'octaves, plus le terrain devient réaliste. Ensuite, t'appliques 6 paramètres biomiques — température, humidité, continentalité, érosion, weirdness, profondeur — pour déterminer à quoi ressemble le paysage.
+Dans Minecraft vanilla, le monde est généré avec du **Perlin noise**. C'est un algorithme qui produit un bruit continu, un peu comme un nuage flou, en superposant plusieurs couches (on appelle ça des octaves). Plus tu ajoutes d'octaves, plus le terrain devient réaliste. Ensuite, t'appliques 6 paramètres biomiques -- température, humidité, continentalité, érosion, weirdness, profondeur -- pour déterminer à quoi ressemble le paysage.
 
 Le résultat est magnifique. Mais c'est cher en calcul, et ça prend de la RAM pour stocker les chunks générés.
 
@@ -59,7 +59,7 @@ Tu captes la puissance du truc ? Le serveur n'a pas besoin de stocker le terrain
 
 Les chunks adjacents partagent 2 coins entre eux, donc l'interpolation est continue d'un chunk à l'autre. Pas de fissures, pas de cassures nettes entre deux zones générées.
 
-Et tu peux régler le rendu en ajustant le nombre de bits du RNG que tu combines. Plus tu prends de bits, plus le terrain est régulier — un peu comme plus tu lances de pièces, plus la distribution se rapproche de 50/50. Moins de bits, le terrain devient plus accidenté.
+Et tu peux régler le rendu en ajustant le nombre de bits du RNG que tu combines. Plus tu prends de bits, plus le terrain est régulier -- un peu comme plus tu lances de pièces, plus la distribution se rapproche de 50/50. Moins de bits, le terrain devient plus accidenté.
 
 Avec cette méthode, générer un chunk sur l'ESP32 prend environ **200 millisecondes**. C'est parfaitement jouable.
 
@@ -113,13 +113,13 @@ Oui, c'est griddé. Oui, c'est prévisible. Mais ça coûte rien, et au final le
 Chaque biome ajuste ensuite les paramètres de la génération de hauteur :
 - **Plains et forest** : 4 facteurs de hauteur, terrain plutôt plat avec des reliefs
 - **Desert** : variation limitée à 6 blocs, jamais sous l'eau
-- **Snowy plains** : seulement 2 facteurs, mais variation jusqu'à 14 blocs — plus vallonné
+- **Snowy plains** : seulement 2 facteurs, mais variation jusqu'à 14 blocs -- plus vallonné
 
 Les éléments de surface comme les arbres, les cactus ou les buissons, ils utilisent les mêmes nombres aléatoires générés à partir des coins du chunk. Zero overhead supplémentaire.
 
 ## Le stockage des changements de blocs : des limites assumées
 
-Puisque le terrain est généré à la volée, le serveur n'a pas besoin de stocker les chunks. Par contre, il doit bien stocker les blocs que les joueurs posent ou cassent — sinon tout disparaît au reload.
+Puisque le terrain est généré à la volée, le serveur n'a pas besoin de stocker les chunks. Par contre, il doit bien stocker les blocs que les joueurs posent ou cassent -- sinon tout disparaît au reload.
 
 Pour ça, Bareiron utilise un tableau d'entrées de **6 bytes** chacune :
 - 2 bytes pour X (limite à 32 000 blocs horizontalement)
@@ -180,7 +180,7 @@ Et la manière dont Bareiron stocke un item dans le code, c'est : 16 bits pour l
 
 Par pure coïncidence, chaque entrée de 6 bytes peut stocker **exactement 2 items**.
 
-Du coup, chaque coffre prend 15 entrées dans le tableau des blocs — 1 pour le bloc coffre, 14 pour les 27 slots de son inventaire (à raison de 2 items par entrée, 3 bytes par slot).
+Du coup, chaque coffre prend 15 entrées dans le tableau des blocs -- 1 pour le bloc coffre, 14 pour les 27 slots de son inventaire (à raison de 2 items par entrée, 3 bytes par slot).
 
 Quand un joueur ouvre un coffre, le serveur copie la zone mémoire qui contient les slots directement dans le buffer de craft du joueur. Ce buffer est normalement utilisé pour crafter, mais tu peux pas crafter avec un coffre ouvert, donc il est recyclé. Et pour être sûr que personne essaie de crafter pendant que le coffre est ouvert, un flag spécial est levé qui bloque toute tentative de craft.
 
@@ -229,7 +229,7 @@ Les mobs passifs errent dans 8 directions au hasard. Les hostiles marchent droit
 
 Quand un zombie arrive à 2 blocs, il tape à 3 coeurs par seconde. C'est délibérément plus que la normale, parce que sans pathfinding les joueurs peuvent les kiter facilement.
 
-L'armure réduit les dégâts avec l'ancienne formule d'avant le combat update. Résultat : un set complet en diamant absorbe presque tout l'impact. Et c'est voulu — sur un microcontrôleur, le lag peut être violent même après toutes ces optimisations, donc avoir une armure qui protège vraiment, c'est une forme de compensation.
+L'armure réduit les dégâts avec l'ancienne formule d'avant le combat update. Résultat : un set complet en diamant absorbe presque tout l'impact. Et c'est voulu -- sur un microcontrôleur, le lag peut être violent même après toutes ces optimisations, donc avoir une armure qui protège vraiment, c'est une forme de compensation.
 
 Les mobs apparaissent quand tu traverses une frontière de chunk. Pas de random ticks, pas de spawn géré par un système complexe. Tu passes d'un chunk à l'autre, paf, un mob a une chance de spawner.
 
@@ -275,8 +275,8 @@ C'est pas "un serveur Minecraft en C". C'est "un serveur Minecraft qui tient sur
 
 **Les 3 trucs à retenir :**
 
-1. **Interpolation + RNG plutôt que Perlin noise** — 4 points seedés, interpolés entre eux, et t'as un terrain infini qui prend zéro mémoire et se génère en 200 ms. Sans même avoir à regénérer un chunk pour savoir quel bloc s'y trouve. C'est le move de génie qui rend tout le reste possible.
-2. **Chaque feature a un coût, rien n'est gratuit** — Pas de compression, pas de random ticks, pas de validation d'inventaire. Ces absences sont pas des oublis, c'est ce qui permet au reste de tenir dans 520 KB de SRAM.
-3. **Les solutions les plus dégueulasses sont parfois les plus intelligentes** — Les coffres stockés dans le tableau des blocs, la faim trackée par les packets de mouvement, le fourneau qui cuit instantanément. La solution "propre" et "maintenable" aurait été trop chère, alors p2r3 a fait ce qui marche dans les contraintes.
+1. **Interpolation + RNG plutôt que Perlin noise** -- 4 points seedés, interpolés entre eux, et t'as un terrain infini qui prend zéro mémoire et se génère en 200 ms. Sans même avoir à regénérer un chunk pour savoir quel bloc s'y trouve. C'est le move de génie qui rend tout le reste possible.
+2. **Chaque feature a un coût, rien n'est gratuit** -- Pas de compression, pas de random ticks, pas de validation d'inventaire. Ces absences sont pas des oublis, c'est ce qui permet au reste de tenir dans 520 KB de SRAM.
+3. **Les solutions les plus dégueulasses sont parfois les plus intelligentes** -- Les coffres stockés dans le tableau des blocs, la faim trackée par les packets de mouvement, le fourneau qui cuit instantanément. La solution "propre" et "maintenable" aurait été trop chère, alors p2r3 a fait ce qui marche dans les contraintes.
 
 Si le projet t'intéresse, tout est sur [GitHub en GPLv3](https://github.com/p2r3/bareiron/). C'est du C bien sale, c'est un boulot d'orfèvre, et j'ai rarement pris autant de plaisir à lire un code source xD

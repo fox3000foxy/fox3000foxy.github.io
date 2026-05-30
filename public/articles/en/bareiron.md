@@ -1,5 +1,5 @@
 ---
-title: Bareiron — a Minecraft server running on a $1 microcontroller
+title: Bareiron -- a Minecraft server running on a $1 microcontroller
 description: 6800 lines of C, zero malloc, Perlin noise replaced by bilinear
   interpolation, biomes as a tile map, from the project creator's own words.
 date: 2026-05-30
@@ -25,19 +25,19 @@ Infinite terrain generation. Biomes. Caves. Crafting. Mining. Mobs. Hunger. Ches
 
 On a chip drawing **0.5 Watts** clocked at **160 MHz**.
 
-To put things in perspective : a vanilla Minecraft server needs gigabytes of RAM and a CPU that doesn't break a sweat. The ESP32-C3 has **520 KB of SRAM** (about 400 KB available after boot). Processors from 20 years ago already ran at gigahertz speeds — this one tops out at 160 MHz. That's roughly a **20,000x gap** in raw power.
+To put things in perspective : a vanilla Minecraft server needs gigabytes of RAM and a CPU that doesn't break a sweat. The ESP32-C3 has **520 KB of SRAM** (about 400 KB available after boot). Processors from 20 years ago already ran at gigahertz speeds -- this one tops out at 160 MHz. That's roughly a **20,000x gap** in raw power.
 
-So how is this possible ? p2r3 didn't write a Minecraft server in C — he reinvented every single component so it fits within these constraints.
+So how is this possible ? p2r3 didn't write a Minecraft server in C -- he reinvented every single component so it fits within these constraints.
 
 ## The brain of the project : terrain generation without memory
 
 The biggest challenge when building an embedded Minecraft server is terrain generation.
 
-In vanilla Minecraft, the world is generated using **Perlin noise**. It stacks multiple layers called octaves to create natural-looking randomness, then applies 6 biome parameters — temperature, humidity, continentalness, erosion, weirdness, depth — to shape the landscape.
+In vanilla Minecraft, the world is generated using **Perlin noise**. It stacks multiple layers called octaves to create natural-looking randomness, then applies 6 biome parameters -- temperature, humidity, continentalness, erosion, weirdness, depth -- to shape the landscape.
 
 The result is gorgeous. Expensive in compute, memory-hungry for chunk caching.
 
-Bareiron's approach is radically different. Instead of stacking noise, it uses **bilinear interpolation** — the same algorithm image software uses when you upscale a pixelated picture and the edges go blurry.
+Bareiron's approach is radically different. Instead of stacking noise, it uses **bilinear interpolation** -- the same algorithm image software uses when you upscale a pixelated picture and the edges go blurry.
 
 Here's how it works :
 
@@ -116,7 +116,7 @@ Since terrain generates on the fly, the server only stores player-made changes :
 - 2 bytes for Z
 - 1 byte for block ID (256 block type limit)
 
-This layout fits about **25,000 block changes** — roughly **1.5 chunks** fully dug out. Larger data types would halve that capacity.
+This layout fits about **25,000 block changes** -- roughly **1.5 chunks** fully dug out. Larger data types would halve that capacity.
 
 As for the 256 block limit : p2r3's words : "I don't plan on implementing Waxed Lightly Weathered Cut Copper Stairs any time soon."
 
@@ -133,7 +133,7 @@ if (count == 8 && first == cobblestone && all_identical && center_empty)
     return furnace;
 ```
 
-Complex shapes use the first item's index to check relative positions. Similar recipes share one matching function — output changes based on detected material.
+Complex shapes use the first item's index to check relative positions. Similar recipes share one matching function -- output changes based on detected material.
 
 Ugly code. Zero memory. Fast.
 
@@ -147,7 +147,7 @@ No memory, no timers, no persistent state per block.
 
 ## Chests : the nastiest memory hack
 
-Testers wanted chests for sharing items. Without them, people starved while others had food. But 27 inventory slots per chest means storage, and on an ESP32 you can't `malloc` on demand — heap fragmentation will crash the program.
+Testers wanted chests for sharing items. Without them, people starved while others had food. But 27 inventory slots per chest means storage, and on an ESP32 you can't `malloc` on demand -- heap fragmentation will crash the program.
 
 The block change array uses 6-byte entries. Bareiron stores items as 16 bit ID + 8 bit stack size.
 
@@ -155,7 +155,7 @@ By pure coincidence, each 6-byte entry fits **exactly 2 items**.
 
 Each chest takes 15 entries : 1 for the block, 14 for 27 slots (2 items per entry, 3 bytes per slot).
 
-When a player opens a chest, the server **memcpy**s the slot region into the player's crafting buffer — recycled because you can't craft with a chest open. A flag blocks crafting attempts.
+When a player opens a chest, the server **memcpy**s the slot region into the player's crafting buffer -- recycled because you can't craft with a chest open. A flag blocks crafting attempts.
 
 The source code comment :
 
@@ -194,7 +194,7 @@ Each mob fits in **8 bytes** :
 
 Passives wander 8 random directions. Hostiles walk straight toward nearest player. No pathfinding, no A*, no obstacle avoidance.
 
-Zombie at 2 blocks : 3 hearts/sec (deliberately high — no pathfinding means easy kiting).
+Zombie at 2 blocks : 3 hearts/sec (deliberately high -- no pathfinding means easy kiting).
 
 Armor uses the pre-combat-update formula. Full diamond absorbs almost all damage. Fair compensation for lag on a microcontroller.
 
@@ -204,7 +204,7 @@ Mobs spawn when crossing chunk boundaries. No random ticks, no spawn management.
 
 **No network compression.** zlib is too CPU-heavy for an ESP32. Generating chunks is fast, sending them is the bottleneck. Bad internet = unplayable.
 
-**No random ticks.** Trees grow with bone meal or not at all. Mobs don't spawn randomly — they appear at chunk boundaries.
+**No random ticks.** Trees grow with bone meal or not at all. Mobs don't spawn randomly -- they appear at chunk boundaries.
 
 **No item entities.** Mined blocks go straight to inventory. Visual animation exists, but the server doesn't check distance.
 
@@ -234,8 +234,8 @@ Every missing feature pays for another to exist within the hardware limits.
 
 **3 things to remember :**
 
-1. **Interpolation + RNG instead of Perlin noise** — 4 seeded points, infinite terrain, zero storage, 200 ms generation. And you can query any block without regenerating a chunk.
-2. **Every feature costs something** — No compression, no random ticks, no validation. These aren't oversights, they're what keeps the whole thing in 520 KB of SRAM.
-3. **The nastiest solutions are often the smartest** — Chests in the block array, hunger via movement packets, instant furnace. The "clean" approach would have been too expensive.
+1. **Interpolation + RNG instead of Perlin noise** -- 4 seeded points, infinite terrain, zero storage, 200 ms generation. And you can query any block without regenerating a chunk.
+2. **Every feature costs something** -- No compression, no random ticks, no validation. These aren't oversights, they're what keeps the whole thing in 520 KB of SRAM.
+3. **The nastiest solutions are often the smartest** -- Chests in the block array, hunger via movement packets, instant furnace. The "clean" approach would have been too expensive.
 
 The [repo](https://github.com/p2r3/bareiron/) is GPLv3. Go check it out. It's beautiful dirty C xD
