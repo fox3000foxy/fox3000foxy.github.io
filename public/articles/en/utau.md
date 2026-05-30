@@ -1,6 +1,6 @@
 ---
 title: "UTAU: How a Visual Basic 6 app democratized synthetic singing"
-description: How UTAU, a free VB6 app from 2008, let anyone create synthetic singing voices with concatenative synthesis — and why it still matters today.
+description: How UTAU, a free VB6 app from 2008, let anyone create synthetic singing voices with concatenative synthesis -- and why it still matters today.
 date: 2026-05-29
 tags:
   - utau
@@ -22,7 +22,7 @@ Then some Japanese guy, Ameya/Ayame, dropped a thing he'd made in his corner. A 
 
 This thing is called **UTAU** (歌う, "to sing" in Japanese). And for its time, it was magic.
 
-I've always found this software fascinating. Not because it was technically clean (spoiler: actually yeah, you really had to be something else to make this thing — it's a beautiful mess, I'm crying over this chicken), but because it did something nobody else did: it put voice synthesis in the hands of the public. Like you, me, anyone with a mic.
+I've always found this software fascinating. Not because it was technically clean (spoiler: actually yeah, you really had to be something else to make this thing -- it's a beautiful mess, I'm crying over this chicken), but because it did something nobody else did: it put voice synthesis in the hands of the public. Like you, me, anyone with a mic.
 
 Let me explain why this was awesome.
 
@@ -42,7 +42,7 @@ UTAU uses the older, smarter method: **concatenative synthesis**.
 
 The idea is dead simple: you record little chunks of voice and glue them together to form words. "hello" = sample "heh" + "low", chained together. A sound puzzle driven by a score.
 
-It's the same principle as YouTube Poop where you cut up a character's words to make them say random stuff — except here it's clean and automated.
+It's the same principle as YouTube Poop where you cut up a character's words to make them say random stuff -- except here it's clean and automated.
 
 And UTAU literally comes from that. Before it, there was **"Jinriki Vocaloid"** (人力ボーカロイド, "Manual Vocaloid"): people manually cut up vocal tracks, extracted phonemes, repitched them, and reassembled everything in an audio editor to mimic a VOCALOID voice. By hand. Imagine the work.
 
@@ -58,7 +58,7 @@ With VOCALOID, you bought a voice. Miku, Luka, etc. Made by pros, sold by Yamaha
 
 CV mode (the simplest) is: you record the ~100 basic Japanese syllables ("a", "ka", "sa", "ta"...), configure the cut points, and there's your voicebank. A few hours of work.
 
-Result: the ecosystem exploded. Thousands of community-created voicebanks — fan voices, friends' voices, made-up characters. A whole universe of virtual singers, free. And the software came with **Defoko** (Utane Uta), a default voice generated via the AquesTalk TTS engine, so you could start even without a mic.
+Result: the ecosystem exploded. Thousands of community-created voicebanks -- fan voices, friends' voices, made-up characters. A whole universe of virtual singers, free. And the software came with **Defoko** (Utane Uta), a default voice generated via the AquesTalk TTS engine, so you could start even without a mic.
 
 ---
 
@@ -72,7 +72,7 @@ How does UTAU know where to cut and glue sounds? Through a config file per voice
 - **Fixed region** → the part that should NOT be stretched on a long note (typically the consonant)
 - **Cutoff** → where to cut the end
 
-The **preutterance** is the smartest parameter. A syllable always has a bit of consonant before the vowel. For your note to land on the beat, the *vowel* needs to hit exactly, not the consonant. So UTAU shifts the sample backward: the "a" of "sa" lands on the beat, the "s" spills just before. Like a drummer who anticipates their hit so the sound lands on time — except it's in a `.ini`.
+The **preutterance** is the smartest parameter. A syllable always has a bit of consonant before the vowel. For your note to land on the beat, the *vowel* needs to hit exactly, not the consonant. So UTAU shifts the sample backward: the "a" of "sa" lands on the beat, the "s" spills just before. Like a drummer who anticipates their hit so the sound lands on time -- except it's in a `.ini`.
 
 Visually, on a "ka" sample, the `oto.ini` zones break down like this:
 
@@ -101,7 +101,7 @@ Five values per sound across all your samples, and UTAU assembles any word clean
 
 The base mode, **CV** (Consonant-Vowel), is one sound per syllable. Simple but a bit robotic: syllable joints are crude.
 
-In 2010 the community invented **VCV** (Vowel-Consonant-Vowel). Instead of recording "ka" alone, you record "a ka" — with the tail of the previous vowel. The transition becomes natural because it's *in* the recording, not calculated afterward.
+In 2010 the community invented **VCV** (Vowel-Consonant-Vowel). Instead of recording "ka" alone, you record "a ka" -- with the tail of the previous vowel. The transition becomes natural because it's *in* the recording, not calculated afterward.
 
 The spicy detail: **VOCALOID didn't get VCV until VOCALOID3 in 2011.** The VB6 freeware coded by one guy on his own beat Yamaha by a year on realistic transitions. A fan community faster than the multinational.
 
@@ -121,7 +121,7 @@ flowchart TD
     D -->|"glues the pieces<br/>back together"| E["Final audio"]
 ```
 
-The **resampler** is the centerpiece: it takes your "ka" sample recorded at a given pitch and stretches/repitches it to match the target note — only stretching the stretchable zone while keeping the consonant intact (hence `oto.ini`).
+The **resampler** is the centerpiece: it takes your "ka" sample recorded at a given pitch and stretches/repitches it to match the target note -- only stretching the stretchable zone while keeping the consonant intact (hence `oto.ini`).
 
 And it's **modular**. UTAU came with a basic resampler, but the community made others (moresampler, TIPS...), each with its own sound signature. You swapped synthesis engines like a plugin. In 2008. On a freeware.
 
@@ -146,7 +146,7 @@ The best example: **Kasane Teto**. A character created in 2008 and dropped as an
 
 UTAU is the perfect example of a "poor" tech that wins through openness.
 
-VOCALOID was technically superior, better funded, more pro. But closed. UTAU was janky, ugly, in VB6 — but it let everyone participate. Create voices, create resamplers, create plugins, create recording methods. The community did the rest.
+VOCALOID was technically superior, better funded, more pro. But closed. UTAU was janky, ugly, in VB6 -- but it let everyone participate. Create voices, create resamplers, create plugins, create recording methods. The community did the rest.
 
 And the concept fully survives today. **OpenUtau**, a modern open-source successor, takes the idea and dusts it off (cross-platform, UTF-8, support for both modern resamplers AND AI). Concatenative synthesis still holds its own next to deep learning models, because it has something they don't: you understand exactly what's happening, and you control every millisecond.
 

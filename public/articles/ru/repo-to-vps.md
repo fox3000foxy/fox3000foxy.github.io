@@ -1,6 +1,6 @@
 ---
 title: "Repo to VPS: превращаем GitHub Actions в бесплатный VPS с постоянным хранилищем"
-description: Как превратить runner GitHub Actions в постоянно работающий VPS, используя git в качестве постоянного хранилища — tmate, inotify и commit --amend.
+description: Как превратить runner GitHub Actions в постоянно работающий VPS, используя git в качестве постоянного хранилища -- tmate, inotify и commit --amend.
 date: 2026-05-29
 tags:
   - github

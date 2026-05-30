@@ -26,13 +26,13 @@ authors:
 
 ## 基本问题
 
-Node.js 库使用了浏览器中不存在的 API。当你写 `import { readFileSync } from 'node:fs'` 时，这是 Node 端的系统调用 —-- 通过 libuv 的真实磁盘访问。在浏览器中，`node:fs` 根本不存在。
+Node.js 库使用了浏览器中不存在的 API。当你写 `import { readFileSync } from 'node:fs'` 时，这是 Node 端的系统调用 ---- 通过 libuv 的真实磁盘访问。在浏览器中，`node:fs` 根本不存在。
 
 常见的解决方案：
 
-- **Wasm 运行时**（如 Emscripten、WASIp1/WASIp2）—-- 你把 Node.js 编译成 Wasm 然后运行它。结果：10-50 MB 的 bundle，明显的加载时间，显著的部署复杂度。
-- **通用 polyfill**（如 `browserify`、`webpack node: polyfills`）—-- 提供每个 Node 模块近似实现的 npm 库。通常过于臃肿，不适合特定场景。
-- **手写 polyfill** —-- 工作量更大，但结果最优。
+- **Wasm 运行时**（如 Emscripten、WASIp1/WASIp2）---- 你把 Node.js 编译成 Wasm 然后运行它。结果：10-50 MB 的 bundle，明显的加载时间，显著的部署复杂度。
+- **通用 polyfill**（如 `browserify`、`webpack node: polyfills`）---- 提供每个 Node 模块近似实现的 npm 库。通常过于臃肿，不适合特定场景。
+- **手写 polyfill** ---- 工作量更大，但结果最优。
 
 Fortune 选择了第三个方案。结果就是：一个纯粹的浏览器端 bundle，即刻启动，不依赖任何外部基础设施。
 
@@ -76,7 +76,7 @@ esbuild.build({
 
 ## `buffer.js` -- 基于 `Uint8Array` 的 `Buffer`
 
-这是两个全局注入文件之一。`Buffer` 在代码中被大量使用 —-- 每次 SSH 操作、每个 VFS 快照、每次二进制读写都经过它。
+这是两个全局注入文件之一。`Buffer` 在代码中被大量使用 ---- 每次 SSH 操作、每个 VFS 快照、每次二进制读写都经过它。
 
 解决方案：一个继承 `Uint8Array` 并实现 Node.js 全部 `Buffer` API 的 `BrowserBuffer` 类。
 
@@ -128,7 +128,7 @@ writeUInt32BE(val, offset = 0) {
 
 ## `process.js` -- 最小的全局 `process`
 
-另一个全局注入文件。很小但必不可少 —-- 代码经常检查 `process.env.NODE_ENV`、`process.platform`、`process.nextTick` 等。
+另一个全局注入文件。很小但必不可少 ---- 代码经常检查 `process.env.NODE_ENV`、`process.platform`、`process.nextTick` 等。
 
 ```js
 globalThis.startedat = Date.now();
@@ -147,7 +147,7 @@ export const process = {
 globalThis.process = process;
 ```
 
-`nextTick` → `queueMicrotask` 的映射是最重要的细节。Node.js 中的 `process.nextTick` 在当前事件循环阶段结束时、I/O 之前调度一个回调。浏览器中的 `queueMicrotask` 在语义上非常接近 —-- 它调度一个微任务，在下次渲染或事件之前执行。这不完全相同，但对于使用 `nextTick` 的所有代码来说，已经足够在浏览器中正常运行。
+`nextTick` → `queueMicrotask` 的映射是最重要的细节。Node.js 中的 `process.nextTick` 在当前事件循环阶段结束时、I/O 之前调度一个回调。浏览器中的 `queueMicrotask` 在语义上非常接近 ---- 它调度一个微任务，在下次渲染或事件之前执行。这不完全相同，但对于使用 `nextTick` 的所有代码来说，已经足够在浏览器中正常运行。
 
 ---
 
@@ -197,7 +197,7 @@ function idbSet(path, value) {
 
 暴露的 API 很完整：`readFileSync`、`writeFileSync`、`appendFileSync`、`existsSync`、`unlinkSync`、`rmSync`（支持 `recursive` 选项）、`mkdirSync`（支持 `recursive` 选项）、`readdirSync`、`statSync`、`renameSync`。
 
-甚至还有一个文件描述符管理层（`openSync`、`writeSync`、`closeSync`），让 VFS 的 WAL 日志在浏览器模式下工作 —-- 日志打开一个 fd，写入数据，关闭它，数据最终存入 IndexedDB。
+甚至还有一个文件描述符管理层（`openSync`、`writeSync`、`closeSync`），让 VFS 的 WAL 日志在浏览器模式下工作 ---- 日志打开一个 fd，写入数据，关闭它，数据最终存入 IndexedDB。
 
 导出 `ready` 属性，让代码知道初始预加载何时完成：
 
@@ -313,7 +313,7 @@ export function arch() {
 
 ## `node:net` -- 干净的存根
 
-浏览器无法访问原始 TCP 套接字（WebSocket 不算 —-- 这是一个不同的应用层协议）。所以 `node:net` 是一个存根，但是一个*写得很好*的存根。
+浏览器无法访问原始 TCP 套接字（WebSocket 不算 ---- 这是一个不同的应用层协议）。所以 `node:net` 是一个存根，但是一个*写得很好*的存根。
 
 ```js
 export class Socket {
@@ -371,7 +371,7 @@ export const posix = {
 
 ## `node:url` -- 委托给浏览器 API
 
-这个因其简洁性而优雅。`URL` 和 `URLSearchParams` API 已经原生存在于浏览器中 —-- 只需重新导出它们即可。
+这个因其简洁性而优雅。`URL` 和 `URLSearchParams` API 已经原生存在于浏览器中 ---- 只需重新导出它们即可。
 
 ```js
 const _URL = globalThis.URL;
@@ -401,7 +401,7 @@ export function gunzipSync(buf) { return buf; }
 export default { gzipSync, gunzipSync };
 ```
 
-两行代码。库使用 `fflate` 进行实际的压缩（它在浏览器中原生工作）。`node:zlib` 只在不会在浏览器上下文中执行的代码路径中被导入 —-- 因此透传就足够了。
+两行代码。库使用 `fflate` 进行实际的压缩（它在浏览器中原生工作）。`node:zlib` 只在不会在浏览器上下文中执行的代码路径中被导入 ---- 因此透传就足够了。
 
 有时候正确的实现就是两行代码。
 
@@ -448,9 +448,9 @@ export class Client {
 }
 ```
 
-SSH 服务器不在浏览器中运行（这没有意义 —-- 谁会连接进来？）。但是*在客户端侧谈论 SSH* 的代码 —-- 构建 SSH 包的类、协议解析器 —-- 存在于库中。这些存根让所有这些代码能够被打包而不会出错，同时确保如果有人尝试调用需要真实套接字的方法，会抛出明确的错误。
+SSH 服务器不在浏览器中运行（这没有意义 ---- 谁会连接进来？）。但是*在客户端侧谈论 SSH* 的代码 ---- 构建 SSH 包的类、协议解析器 ---- 存在于库中。这些存根让所有这些代码能够被打包而不会出错，同时确保如果有人尝试调用需要真实套接字的方法，会抛出明确的错误。
 
-`roxify` 是一种专有压缩格式，用于 Node 模式下的 VFS 快照。在浏览器中，使用 `fflate` 替代 —-- polyfill 只是在 `roxify` 被直接调用时抛出一个错误。
+`roxify` 是一种专有压缩格式，用于 Node 模式下的 VFS 快照。在浏览器中，使用 `fflate` 替代 ---- polyfill 只是在 `roxify` 被直接调用时抛出一个错误。
 
 ---
 
@@ -501,13 +501,13 @@ export const parentPort = null;
 
 1. **找出实际使用的内容。** 如果代码只使用 `on`、`emit` 和 `removeListener`，就无需实现完整的 `EventEmitter`。
 
-2. **尽可能委托给浏览器 API。** `URL`、`URLSearchParams`、`MessageChannel`、`MessagePort`、`crypto.getRandomValues` —-- 浏览器已经有了，直接使用它们。
+2. **尽可能委托给浏览器 API。** `URL`、`URLSearchParams`、`MessageChannel`、`MessagePort`、`crypto.getRandomValues` ---- 浏览器已经有了，直接使用它们。
 
 3. **在异步 API 前加同步缓存。** `Map` + IndexedDB 用于 `node:fs` 的方案是整个文件夹中最可复用的模式。
 
-4. **诚实的存根胜过沉默的不完整实现。** 明确的 `throw new Error('not implemented in browser')` —-- 比让 bug 在 10 个调用后才显现的 `return undefined` 有用无数倍。
+4. **诚实的存根胜过沉默的不完整实现。** 明确的 `throw new Error('not implemented in browser')` ---- 比让 bug 在 10 个调用后才显现的 `return undefined` 有用无数倍。
 
-5. **esbuild 的 `alias` + `inject` 被低估了。** 这是进行此类移植的完美工具 —-- 零 webpack 配置、零插件，只是一个替换列表。
+5. **esbuild 的 `alias` + `inject` 被低估了。** 这是进行此类移植的完美工具 ---- 零 webpack 配置、零插件，只是一个替换列表。
 
 ---
 

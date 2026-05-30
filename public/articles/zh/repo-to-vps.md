@@ -1,6 +1,6 @@
 ---
 title: "Repo to VPS：将GitHub Actions变成免费持久化VPS"
-description: 如何将GitHub Actions runner变成永久VPS，用git作为持久化存储——tmate、inotify和commit --amend。
+description: 如何将GitHub Actions runner变成永久VPS，用git作为持久化存储----tmate、inotify和commit --amend。
 date: 2026-05-29
 tags:
   - github
@@ -93,7 +93,7 @@ git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
 
-`filesystem` 分支就是你的硬盘。你的文件、你装的东西、你的配置——全在里面。
+`filesystem` 分支就是你的硬盘。你的文件、你装的东西、你的配置----全在里面。
 
 你懂我意思吗？机器是一次性的，但硬盘活在git里。你重新启动工作流，硬盘被恢复，你直接从上次停下的地方继续。
 
@@ -115,7 +115,7 @@ ensure_filesystem_branch() {
 }
 ```
 
-`git checkout --orphan` 是关键。孤儿分支就是一个 **没有任何历史** 的分支——就像从一个空仓库重新开始。
+`git checkout --orphan` 是关键。孤儿分支就是一个 **没有任何历史** 的分支----就像从一个空仓库重新开始。
 
 为什么要孤儿分支？因为你 **不** 想让你的持久硬盘带着你源代码的完整历史。硬盘是独立的东西，有自己的生命。它从空白开始。
 
@@ -129,7 +129,7 @@ ensure_filesystem_branch() {
 git clean -fdx -e .apt-cache -e .cache -e host.conf -e tmate.sock
 ```
 
-`git clean -fdx` 会删除所有不被git追踪的东西。一般来说这很暴力——它会彻底清理工作区。
+`git clean -fdx` 会删除所有不被git追踪的东西。一般来说这很暴力----它会彻底清理工作区。
 
 但 `-e`（排除）保护了某些东西：
 - `.apt-cache` → APT包的缓存（后面会讲到，很聪明）
@@ -179,7 +179,7 @@ autosave &
 
 你改了一个文件？inotify立刻检测到，提交，推送。不到一秒钟，你的变更就到了 `filesystem` 分支。
 
-你装了个东西、写了段代码、改了个配置——一切都是实时、自动保存的，你什么都不用做。
+你装了个东西、写了段代码、改了个配置----一切都是实时、自动保存的，你什么都不用做。
 
 你literally有了一个全盘自动保存系统。炸裂。
 
@@ -281,7 +281,7 @@ sync_from_remote() {
 
 tmate和inotify-tools是通过一个 **缓存APT包** 的action安装的。
 
-第一次运行时下载安装。之后的运行就从GitHub Actions缓存恢复——更快，不用重新下载。
+第一次运行时下载安装。之后的运行就从GitHub Actions缓存恢复----更快，不用重新下载。
 
 还记得之前说的 `git clean -fdx -e .apt-cache` 吗？这是一起的。`.apt-cache` 文件夹受到保护不被清理，就是为了让你在session期间安装的包能尽量持久化。
 

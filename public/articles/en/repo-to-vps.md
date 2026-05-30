@@ -1,6 +1,6 @@
 ---
 title: "Repo to VPS: Turn GitHub Actions into a free VPS with persistent storage"
-description: How to turn a GitHub Actions runner into an always-on VPS using git as persistent storage — tmate, inotify, and commit --amend.
+description: How to turn a GitHub Actions runner into an always-on VPS using git as persistent storage -- tmate, inotify, and commit --amend.
 date: 2026-05-29
 tags:
   - github

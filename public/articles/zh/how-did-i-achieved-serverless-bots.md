@@ -453,7 +453,7 @@ Supabase 客户端（`@supabase/supabase-js`）底层使用的是 `fetch`。而 
 | **MongoDB Atlas** | ❌ 否 | TCP 驱动，没有原生 REST API |
 | **Redis (Upstash)** | ✅ 是 | 基于 HTTP 的 REST API |
 
-Supabase 的真正优势不仅仅是数据库——而是整个生态系统都是为边缘计算设计的：
+Supabase 的真正优势不仅仅是数据库----而是整个生态系统都是为边缘计算设计的：
 
 - **Auth**：用于会话的 REST API，无状态运行
 - **Storage**：通过 HTTP 上传/下载文件
@@ -604,9 +604,9 @@ Hono 哪里都能跑。你可以把同一份代码部署到 Cloudflare 和 Verce
 
 **局限**
 
-*   没有实时服务器事件（成员加入、角色添加、消息删除等）——你只收到交互（斜杠命令、按钮、弹窗）
-*   3 秒超时来回复——否则 Discord 显示 "Application did not respond"
-*   如果你需要真正的事件——需要单独的 HTTP webhook 或辅助 WebSocket 连接
+*   没有实时服务器事件（成员加入、角色添加、消息删除等）----你只收到交互（斜杠命令、按钮、弹窗）
+*   3 秒超时来回复----否则 Discord 显示 "Application did not respond"
+*   如果你需要真正的事件----需要单独的 HTTP webhook 或辅助 WebSocket 连接
 
 对 90% 的 bot（都基于斜杠命令）来说？够用了。
 
