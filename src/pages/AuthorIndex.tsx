@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import "../styles/BlogList.css";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 import BlogCard from "../components/BlogCard";
