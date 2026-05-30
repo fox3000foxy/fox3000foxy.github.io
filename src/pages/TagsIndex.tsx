@@ -47,12 +47,8 @@ export default function TagsIndex() {
 			) : (
 				<div className="tags-cloud">
 					{tagCounts.map(([tag, count]) => (
-						<Link
-							key={tag}
-							to={`/tags/${tag}`}
-							className="tag-badge tag-cloud-item"
-						>
-							{tag}
+						<Link key={tag} to={`/tags/${tag}`} className="tag-cloud-item">
+							<span className="tag-label">{tag}</span>
 							<span className="tag-count">{count}</span>
 						</Link>
 					))}
