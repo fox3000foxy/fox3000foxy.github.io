@@ -11,6 +11,7 @@ interface ArticleMeta {
 	slug: string;
 	title?: string;
 	description?: string;
+	date?: string;
 }
 
 function escapeXml(text: string): string {
@@ -56,7 +57,7 @@ function main() {
 	let count = 0;
 
 	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
-	const bySlug = new Map<string, { slug: string; title: string; description: string; langs: string[] }>();
+	const bySlug = new Map<string, { slug: string; title: string; description: string; date?: string; langs: string[] }>();
 	for (const entry of langs) {
 		if (!entry.isDirectory()) { continue; }
 		const lang = entry.name;
@@ -76,6 +77,9 @@ function main() {
 				entry.description = article.description || entry.description;
 			}
 			entry.langs.push(lang);
+			if (lang === "en" && article.date) {
+				entry.date = article.date;
+			}
 		}
 	}
 
@@ -91,6 +95,7 @@ function main() {
 			"@type": "Article",
 			headline: info.title,
 			description: info.description,
+			datePublished: info.date || undefined,
 			author: { "@type": "Person", name: "Fox3000foxy", url: "https://github.com/fox3000foxy" },
 			url,
 			isAccessibleForFree: true,
