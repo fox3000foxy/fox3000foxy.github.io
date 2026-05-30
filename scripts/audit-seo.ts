@@ -132,8 +132,8 @@ function checkNewsSitemap() {
 			warn("NewsSitemap", `"${titleMatch[1].slice(0, 40)}..." published ${dateMatch[1]}. Google News only accepts articles < 48h old.`);
 		}
 
-		if (!langMatch || langMatch[1] !== "en") {
-			warn("NewsSitemap", `"${titleMatch[1].slice(0, 40)}..." has language="${langMatch?.[1] || 'missing'}". Only "en" accepted by Google News.`);
+		if (!langMatch) {
+			warn("NewsSitemap", `"${titleMatch[1].slice(0, 40)}..." missing <news:language>.`);
 		}
 
 		if (locMatch && !locMatch[1].startsWith(SITE_URL)) {
@@ -228,7 +228,7 @@ function checkSpaSeo() {
 	}
 
 	// JSON-LD
-	if (!html.includes('"@type":"Article"')) warn("SPA", "No Article JSON-LD in index.html");
+	if (!html.includes('"@type":"Blog"') && !html.includes('"@type":["Blog"') && !html.includes('"@type": "Blog"')) warn("SPA", "No Blog JSON-LD in index.html");
 	if (!html.includes('"@context":"https://schema.org"')) warn("SPA", "No schema.org context in JSON-LD");
 
 	// OG tags

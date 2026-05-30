@@ -22,28 +22,31 @@ function main() {
 
 	const urlTags: string[] = [];
 
-	// Only English articles for Google News (Google News primarily supports English)
-	const enIndex = path.join(root, ARTICLES_DIR, "en", "index.json");
-	if (fs.existsSync(enIndex)) {
-		const articles: ArticleMeta[] = JSON.parse(fs.readFileSync(enIndex, "utf8"));
-		if (Array.isArray(articles)) {
-			for (const a of articles) {
-				if (!a.date || !a.title) { continue; }
-				const pubDate = new Date(`${a.date}T12:00:00Z`);
-				if (pubDate < twoDaysAgo) { continue; }
+	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
+	for (const entry of langs) {
+		if (!entry.isDirectory()) { continue; }
+		const lang = entry.name;
+		const indexPath = path.join(root, ARTICLES_DIR, lang, "index.json");
+		if (!fs.existsSync(indexPath)) { continue; }
+		const articles: ArticleMeta[] = JSON.parse(fs.readFileSync(indexPath, "utf8"));
+		if (!Array.isArray(articles)) { continue; }
+		for (const a of articles) {
+			if (!a.date || !a.title) { continue; }
+			const pubDate = new Date(`${a.date}T12:00:00Z`);
+			if (pubDate < twoDaysAgo) { continue; }
 
-				urlTags.push(`  <url>
-    <loc>${SITE_URL}/blog/${encodeURIComponent(a.slug)}</loc>
+			const loc = lang === "en" ? `/blog/${encodeURIComponent(a.slug)}` : `/blog/${encodeURIComponent(a.slug)}?lang=${lang}`;
+		urlTags.push(`  <url>
+    <loc>${SITE_URL}${loc}</loc>
     <news:news>
       <news:publication>
         <news:name>Fox's Blog</news:name>
-        <news:language>en</news:language>
+        <news:language>${lang}</news:language>
       </news:publication>
       <news:publication_date>${a.date}</news:publication_date>
       <news:title>${escapeXml(a.title)}</news:title>
     </news:news>
   </url>`);
-			}
 		}
 	}
 
