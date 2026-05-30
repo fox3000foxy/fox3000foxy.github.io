@@ -1,5 +1,5 @@
 ---
-title: Bareiron -- le serveur Minecraft qui tourne sur un microcontrôleur à 1$
+title: Bareiron — le serveur Minecraft qui tourne sur un microcontrôleur à 1$
 description: 6800 lignes de C, zéro malloc, du Perlin noise remplacé par de la
   bilinear interpolation, des biomes en tile map, et tout ça sur une puce à 1$.
 date: 2026-05-30
@@ -15,178 +15,217 @@ authors:
 
 ## Introduction
 
-Y'a une puce à 1$ qui fait tourner un serveur Minecraft.
+Y'a un microcontrôleur à 1$ qui fait tourner un serveur Minecraft.
 
-Génération infinie, biomes, grottes, craft, mine, mobs, faim, coffres. Sur un microcontrôleur à **160 MHz** qui consomme **0.5 Watt**.
+Pas un "monde plat avec steve qui cligne des yeux". Génération infinie, biomes, grottes, craft, mine, mobs, faim, coffres. Sur une puce à **160 MHz** qui consomme **0.5 Watt**.
 
-C'est [Bareiron](https://github.com/p2r3/bareiron/), par p2r3.
+Le projet c'est [Bareiron](https://github.com/p2r3/bareiron/), par p2r3.
 
-J'vais pas te mentir : c'est un des projets les plus wtf que j'aie vus. Pas parce que "haha serveur en C". Mais parce que **chaque ligne** est un tradeoff conscient pour faire tenir l'impossible dans 520 KB de SRAM.
+Et c'est pas "j'ai écrit un serveur en C". C'est "j'ai réfléchi à chaque byte et tordu le protocole Minecraft dans tous les sens pour faire tenir l'impossible dans 520 KB de SRAM".
 
-## Le problème de ouf
+## Le problème de base
 
-Serveur Notchian : gigas de RAM, Perlin noise, 6 paramètres biomiques, zlib, millions de chunks en mémoire.
+Le serveur Notchian c'est un monstre. Gigas de RAM, Perlin noise à plusieurs octaves, 6 paramètres biomiques (température, humidité, continentalité, érosion, weirdness, profondeur), compression zlib, millions de chunks en mémoire.
 
-ESP32-C3 : **520 KB de SRAM**, **160 MHz**, **0.5 Watt**.
+L'ESP32-C3 c'est :
+- **520 KB de SRAM** (400 dispo après boot)
+- **160 MHz**
+- **0.5 Watt**
 
-Facteur ~20 000.
+Le facteur entre les deux ? Environ **20 000**.
 
-p2r3 a pas optimisé. Il a **tout réinventé**.
+p2r3 a pas optimisé le serveur vanilla. Il a tout réinventé depuis zéro.
 
-## La génération de terrain
+## La génération de terrain : le move le plus intelligent du projet
 
-Perlin noise c'est cher. Plusieurs octaves, ça douille en CPU.
+Le cœur du problème : générer un terrain infini sans stockage mémoire et sans compute cher.
 
-Lui il fait de la **bilinear interpolation** avec un RNG seedé par les coordonnées.
+La solution du Notchian c'est le Perlin noise : plusieurs octaves de bruit superposées, des paramètres biomiques partout. Ça marche, c'est joli, c'est cher.
+
+La solution de Bareiron c'est de la **bilinear interpolation** sur des points générés par un **RNG déterministe**.
+
+Tu vois le principe de la bilinear interpolation ? C'est ce que fait un logiciel d'image quand tu agrandis une icône pixelisée — les bords deviennent flous, tu obtiens un gradient continu.
+
+Bareiron applique ça au terrain :
 
 ```c
 hauteur = interpoler_bilineaire(
-  RNG(chunk_x,     chunk_z),
-  RNG(chunk_x + 1, chunk_z),
-  RNG(chunk_x,     chunk_z + 1),
-  RNG(chunk_x + 1, chunk_z + 1),
+  RNG(chunk_x,     chunk_z),     // coin haut-gauche
+  RNG(chunk_x + 1, chunk_z),     // coin haut-droit
+  RNG(chunk_x,     chunk_z + 1), // coin bas-gauche
+  RNG(chunk_x + 1, chunk_z + 1), // coin bas-droit
   offset_x, offset_z
 );
 ```
 
-Chunks adjacents = 2 coins en commun. Interpolation continue. Pas de fissures.
+Le RNG est seedé par les coordonnées du chunk. Pour les mêmes coordonnées, il donne toujours le même résultat. C'est déterministe. Du coup t'as pas besoin de stocker le terrain — tu peux le recalculer à la volée, et ça donne le même résultat à chaque fois.
 
-En ajustant le nombre de bits du RNG tu rends le terrain plus ou moins accidenté.
+Magic : les chunks adjacents partagent 2 coins. Donc l'interpolation est **continue entre chunks**. Pas de fissures, pas de raccords moches.
 
-Et tout ça **sans stocker un seul chunk**.
+En ajustant le nombre de bits du RNG que tu combines, tu contrôles la régularité du terrain. Plus de bits = plus de facteurs qui se combinent = terrain plus régulier (comme plus de lancers de pièces donnent une distribution plus proche de 50/50). Moins de bits = terrain plus accidenté.
 
-Tu vois le truc ?
+Résultat : terrain infini, zéro stockage mémoire, et un chunk généré en **200 ms** sur ESP32.
 
-### Grottes : le mirror de la mort
+### Les grottes : le mirror le plus paresseux
+
+Les grottes vanilla ont leur propre générateur complexe. Bareiron fait ça :
 
 ```c
 altitude_grotte = CAVE_BASE_DEPTH - (hauteur_surface - y);
 ```
 
-Il mirror la surface sous terre. Ça ressemble aux grandes cavités deepslate. Simple, efficace, 0 compute.
+Il prend la hauteur de la surface et la mirror sous le niveau des grottes. Le résultat ressemble aux grandes cavités deepslate que tu croises dans le monde normal.
 
-### Minerais : un XOR
+C'est pas aussi varié que les grottes vanilla. Mais ça a coûté littéralement 1 ligne de code et zéro compute supplémentaire.
 
-Pas de veines. Un XOR des coordonnées. Un candidat par colonne. Point.
+### Les minerais : pas de veines, une opération par colonne
+
+Dans vanilla, les minerais sont générés en veines avec des algorithmes de bruit spéciaux. Bareiron prend un raccourci : un XOR des coordonnées de la colonne garantit exactement un candidat par colonne, et le type dépend de l'altitude.
 
 ```c
-candidat = (chunk_x ^ colonne_x ^ colonne_z) % 100;
+candidat = (chunk_x ^ col_x ^ col_z) % 100;
 if (candidat < 5 && y < 16) -> diamond
+if (candidat < 15 && y < 32) -> gold
+// etc.
 ```
 
-### Biomes : des îles dans une grille
+Zéro stockage, zéro Perlin, une opération mathématique.
 
-Une tile map. Chaque biome est une île circulaire. Le type vient d'un pattern répété depuis la seed.
+### Le système de biomes : des îles dans une grille
 
-Gridé ? Oui. Prévisible ? Oui. **Gratuit ? Oui.**
+Les biomes auraient pu être une couche de noise par-dessus le terrain. Mais ça doublerait le compute nécessaire. p2r3 a donc pris une approche plus radicale : une **tile map** où chaque biome est une île circulaire disposée dans une grille.
 
-Chaque biome tweake les paramètres de génération :
-- **Plains** : 4 facteurs, plat
-- **Desert** : max 6 blocs de variation
-- **Snowy plains** : 2 facteurs, 14 blocs de variation
+Le type de chaque île est déterminé par un petit pattern répété, calculé depuis la seed du monde. C'est griddé, c'est prévisible, mais ça coûte **rien**.
 
-Arbres, cactus, buissons : seedés par les mêmes coins RNG. Overhead = 0.
+Chaque biome ajuste ensuite les paramètres de la génération :
+- **Plains/Forest** : 4 facteurs de hauteur, terrain plat avec reliefs
+- **Desert** : variation limitée à 6 blocs, jamais sous la mer
+- **Snowy plains** : 2 facteurs, variation jusqu'à 14 blocs, plus vallonné
 
-## Le craft : code immonde, zéro mémoire
+Pour les éléments de surface (arbres dans la forêt, cactus dans le désert, buissons dans la neige), ils utilisent les mêmes nombres aléatoires issus des coins du chunk. Donc zéro overhead supplémentaire.
 
-La solution propre c'est des matrices 3x3 + kernel-fitting. Belle. Maintenable. **Chère en mémoire.**
+## Le craft : quand le code moche est plus intelligent
 
-Lui il count les slots, note le premier item, check si les autres sont identiques. 4 ops pour matcher un fourneau :
+La manière propre d'implémenter le craft, ce serait de définir des matrices 3x3 pour chaque recette, et d'utiliser un algorithme de kernel-fitting pour matcher sur la grille. C'est propre, maintenable, extensible.
+
+C'est aussi cher en mémoire. p2r3 a choisi une autre voie.
+
+La fonction de craft commence par compter les slots remplis, noter le premier item rencontré, et vérifier si tous les autres sont identiques.
+
+Avec ça, certaines recettes se matchent en 4 opérations :
 
 ```c
 if (count == 8 && first == cobblestone && all_identical && center_empty)
     return furnace;
 ```
 
-Pour les formes : index du premier + position relative.
+Pour les formes plus complexes, le code utilise l'index du premier item et vérifie la position relative des autres. Par exemple, les cisailles : 2 items en fer positionnés en diagonale, peu importe où dans la grille.
 
-Le code est dégueu. Zéro mémoire. Rapide.
+Les recettes similaires partagent la même fonction de matching. Une seule forme pour toutes les pioches, le matériau détermine le résultat.
 
-## Le fourneau
+Le résultat est un code beaucoup moins lisible qu'une belle table de recettes. Mais il prend zéro mémoire et il s'exécute en un nombre d'instructions ridicule.
 
-Vanilla : timer, stockage, fuel.
+## Le fourneau : un crafting table sans timer
 
-Bareiron : tu mets, tu prends. Instantané.
+Dans vanilla, le fourneau prend du temps. Il faut stocker le timer, gérer l'input et l'output, gérer le fuel. Ça veut dire de la mémoire et du compute pour chaque fourneau actif.
 
-Moins réaliste. Beaucoup plus efficace.
+Bareiron dit non. Le fourneau fonctionne comme la table de craft : tu poses les ingrédients, tu récupères le résultat. Instantané.
 
-## Les coffres : le hack le plus dégueu que t'aies vu
+Moins réaliste. Beaucoup plus efficace. Et honnêtement, sur une ESP32, qui a envie d'attendre que son minerai cuise ?
 
-Quand les testeurs ont demandé les coffres, fallait stocker 27 slots. Problème.
+## Les coffres : le hack de mémoire le plus dégueu que t'aies vu
 
-Le tableau des changements de blocs c'est des entrées de 6 bytes :
-- 2 bytes X
-- 1 byte Y
-- 2 bytes Z
-- 1 byte block ID
+Quand les testeurs ont demandé les coffres, p2r3 s'est retrouvé avec un problème concret : où stocker les 27 slots d'inventaire sans allouer de mémoire dynamique ?
 
-Les items c'est : 16 bits ID + 8 bits stack size.
+Le tableau des changements de blocs, c'est des entrées de 6 bytes :
+- 2 bytes pour X
+- 1 byte pour Y
+- 2 bytes pour Z
+- 1 byte pour l'ID du bloc
 
-**Par pure coïncidence**, chaque entrée de bloc peut stocker 2 items.
+Et les items dans Bareiron, c'est : 16 bits pour l'ID, 8 bits pour la taille de la stack.
 
-Chaque coffre prend 15 entrées. Quand tu l'ouvres, le serveur **memcpy** la zone dans le buffer de craft du joueur (recyclé, vu que tu craftes pas avec un coffre ouvert). Un flag `0x80` bloque le craft.
+Par pure coïncidence, chaque entrée de bloc peut stocker **exactement 2 items**.
 
-Le code dit :
+Du coup chaque coffre prend 15 entrées dans le tableau des changements de blocs : 1 pour le bloc coffre lui-même, et 14 pour les 27 slots (2 slots par entrée, 3 bytes par slot, 1 byte de perte).
+
+Quand un joueur ouvre un coffre, le serveur **copie la mémoire** des slots dans le buffer de craft du joueur. Le buffer est recyclé parce que tu peux pas crafter avec un coffre ouvert. Pour bloquer le craft, un flag `0x80` est levé.
+
+Le commentaire dans le code source :
 
 ```c
 // Terrible memory hack!!1!
 ```
 
-xD
+Je pouvais pas le dire mieux.
 
-## La faim gratuite
+## La faim qui se calcule gratuitement
 
-Quand tu bouges, le client envoie des packets à 20/sec. Quand tu bouges pas : 1.
+La mécanique de faim de Minecraft moderne est complexe. Santé, faim, saturation, tout un système de timers.
 
-Le serveur les traite déjà. Donc c'est un compteur gratuit.
+p2r3 a réalisé un truc. Quand un joueur bouge, son client envoie des packets de mouvement au serveur à environ 20 par seconde. Quand il ne bouge pas, il en envoie juste un.
+
+Le serveur doit de toute façon traiter ces packets. Donc p2r3 en a fait un compteur d'activité gratuit.
 
 ```c
-// Packet reçu → compteur--
-// Compteur à 0 → faim baisse
-// Manger → compteur++
+// Chaque packet de mouvement reçu → compteur--
+// Quand le compteur atteint 0 → la faim baisse de 1
+// Quand le joueur mange → le compteur augmente
 ```
 
-Zéro timer, zéro stockage, zéro compute en plus.
+Zéro timer, zéro mémoire allouée, zéro compute dédié. La faim est implémentée sans rien coûter.
 
-## Les mobs en 8 bytes
+## Les mobs dans 8 bytes
 
-- 1 byte type
-- 2 bytes X
-- 1 byte Y
-- 2 bytes Z
-- 1 byte data
+Chaque mob tient dans 8 bytes :
+- 1 byte pour le type (zombie, poule, vache, cochon, mouton)
+- 2 bytes pour X
+- 1 byte pour Y
+- 2 bytes pour Z
+- 1 byte pour le data (santé, état de tonte, timer de panique)
 
-Passifs : 8 directions au hasard.
-Hostiles : marche vers le joueur.
-Pas de pathfinding, pas d'évitement d'obstacles.
+Les passifs errent dans 8 directions au hasard. Les hostiles marchent droit vers le joueur le plus proche. Pas de pathfinding, pas d'obstacle avoidance, pas de A*. Rien.
 
-Zombie à 2 blocs : 3 coeurs/sec (compense l'IA débile).
-Spawn : aux frontières de chunk.
+Quand un zombie est à 2 blocs, il inflige 3 coeurs par seconde — sciemment plus que vanilla, pour compenser le fait que son IA est débile et prévisible. L'armure réduit les dégâts avec l'ancienne formule pré-1.9 du combat update.
 
-Rien d'autre.
+Les mobs apparaissent quand un joueur traverse une frontière de chunk, plutôt qu'avec des random ticks. Zéro overhead de spawn, zéro stockage.
 
-## Ce qui a sauté
+## Les trucs qui ont sauté
 
-- **Pas de compression** : zlib trop cher. Générer des chunks c'est rapide, les envoyer c'est le bottleneck.
-- **Pas de random ticks** : arbres à la bone meal ou rien.
-- **Pas d'entités item** : les blocs vont direct dans l'inventaire.
-- **Pas de vérification inventaire** : client dit 64 diamants → 64 diamants. Trust the client.
-- **Pas de lumière serveur** : torches envoyées après, client calcule.
-- **Pas de fluides progressifs** : état final instantané.
+Tout ça a un prix. Y'a des features vanilla qui existent pas :
 
-**Avec 3 potes sur une ESP32 à 1€ c'est jouable.** Ça lag un peu, mais ça marche.
+- **Aucune compression réseau** — zlib est trop cher en CPU. Résultat : le serveur peut générer des chunks rapidement, mais les envoyer devient le goulot d'étranglement.
+- **Aucun random tick** — les arbres poussent avec de la bone meal ou pas du tout.
+- **Aucune entité item** — les blocs minés vont directement dans l'inventaire. Y'a une animation visuelle de vol, mais le serveur vérifie pas la distance.
+- **Aucune vérification d'inventaire** — le serveur trust le client. Si ton client dit que t'as 64 diamants, t'as 64 diamants.
+- **Aucune lumière calculée par le serveur** — les torches sont envoyées après tous les autres blocs, ce qui force le client à calculer la lumière tout seul.
+- **Aucun fluide progressif** — l'eau et la lave atteignent leur état final instantanément.
 
-## La philosophie
+## Le résultat
 
-Perlin → bilinear interpolation : moins joli, 200x plus rapide.
-Matrices → pattern hardcodé : dégueu, zéro mémoire.
-zlib → rien : connexion pourrie = mort, mais jouable.
-Validation → trust : zéro sécurité, zéro overhead.
+Sur un PC desktop avec un Ryzen 5 3600, Bareiron génère un chunk en ~0.5 ms.
+
+Sur une ESP32-C3 à moins d'1$, c'est ~200 ms par chunk. C'est jouable.
+
+Avec plus de 3 joueurs, ça commence à laguer — comparable à 2b2t aux heures de pointe, dixit l'auteur. Mais ça marche.
+
+Et c'est open source, GPLv3, sur [GitHub](https://github.com/p2r3/bareiron/).
+
+## La philosophie du projet
+
+Chaque décision dans Bareiron est un tradeoff conscient entre fonctionnalité et performance. Rien n'est là par hasard.
+
+Perlin noise → bilinear interpolation : le rendu est moins joli, mais 200x plus rapide et zéro mémoire.
+Matrices de craft → matching hardcodé : le code est dégueu, mais prend pas un byte.
+zlib → rien : impossible à hoster sur une connexion pourrie, mais jouable.
+Validation inventaire → trust : zéro sécurité, zéro compute.
+
+C'est pas "faire un serveur Minecraft en C". C'est "faire un serveur Minecraft qui tient sur un microcontrôleur en faisant les bons sacrifices".
 
 **Les 3 trucs à retenir :**
 
-1. **Bilinear interpolation + RNG** -- 4 points seedés, terrain infini, zéro stockage.
-2. **Tout coûte, tout se paye** -- Les features qui sautent permettent à celles qui restent de tenir dans 520 KB.
-3. **Les hacks dégueus sont les plus intelligents** -- Coffres dans le buffer de craft, faim par packets, fourneau instantané.
+1. **Bilinear interpolation + RNG déterministe** — Remplacer Perlin noise par 4 points seedés et interpolés, c'est le move qui rend tout le reste possible. Terrain infini sans stockage, génération en 200 ms.
+2. **Chaque feature a un coût** — Pas de compression, pas de random ticks, pas de validation. Ces sacrifices sont pas du "j'ai la flemme", c'est ce qui permet au reste de tenir dans 520 KB.
+3. **Les solutions les plus dégueus sont parfois les plus intelligentes** — Les coffres dans le tableau de blocs, la faim trackée par les packets de mouvement, le fourneau instantané. La solution "propre" aurait été trop coûteuse.
 
-Le [repo](https://github.com/p2r3/bareiron/) est en GPLv3. Vas-y jeter un oeil. C'est du gros C bien sale et j'adore xD
+Va jeter un oeil au repo si tu veux voir du C bien sale. Ça vaut le détour xD
