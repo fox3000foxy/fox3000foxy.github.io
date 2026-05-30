@@ -166,13 +166,13 @@ a.tag-badge:hover {
 
 .new-badge {
   display: inline-block;
-  font-size: 0.6rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: #fff;
   background: #e53935;
-  border-radius: 4px;
-  padding: 0.1rem 0.4rem;
-  letter-spacing: 0.5px;
+  border: 1px solid #c62828;
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
 }
 
 .blog-card-badges {
