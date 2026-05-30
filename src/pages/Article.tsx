@@ -19,6 +19,7 @@ import ShareButtons from "../components/ShareButtons";
 import BookmarkButton from "../components/BookmarkButton";
 import { useReadingMode } from "../hooks/useReadingMode";
 import { useReadStatus } from "../hooks/useReadStatus";
+import { isNew } from "../utils/isNew";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -160,6 +161,7 @@ export default function Article() {
 			{meta && slug && <ArticleSchema meta={meta} slug={slug} />}
 			<article>
 				<ReadingProgress />
+				{isNew(meta?.date) && <span className="new-badge">NEW</span>}
 				{meta?.aiGenerated && (
 					<span className="ai-badge">{t("article.ai")}</span>
 				)}
