@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -18,37 +17,34 @@ function escapeXml(text: string): string {
 
 function main() {
 	const root = process.cwd();
-	const seen = new Map<string, { title: string; date: string }>();
 
-	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
-	for (const entry of langs) {
-		if (!entry.isDirectory()) { continue; }
-		const lang = entry.name;
-		const indexPath = path.join(root, ARTICLES_DIR, lang, "index.json");
-		if (!fs.existsSync(indexPath)) { continue; }
-		const articles: ArticleMeta[] = JSON.parse(fs.readFileSync(indexPath, "utf8"));
-		if (!Array.isArray(articles)) { continue; }
-		for (const a of articles) {
-			if (!a.date || !a.title) { continue; }
-			if (!seen.has(a.slug) || lang === "en") {
-				seen.set(a.slug, { title: a.title, date: a.date });
-			}
-		}
-	}
+	const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000);
 
 	const urlTags: string[] = [];
-	for (const [slug, info] of seen) {
-		urlTags.push(`  <url>
-    <loc>${SITE_URL}/blog/${encodeURIComponent(slug)}</loc>
+
+	// Only English articles for Google News (Google News primarily supports English)
+	const enIndex = path.join(root, ARTICLES_DIR, "en", "index.json");
+	if (fs.existsSync(enIndex)) {
+		const articles: ArticleMeta[] = JSON.parse(fs.readFileSync(enIndex, "utf8"));
+		if (Array.isArray(articles)) {
+			for (const a of articles) {
+				if (!a.date || !a.title) { continue; }
+				const pubDate = new Date(`${a.date}T12:00:00Z`);
+				if (pubDate < twoDaysAgo) { continue; }
+
+				urlTags.push(`  <url>
+    <loc>${SITE_URL}/blog/${encodeURIComponent(a.slug)}</loc>
     <news:news>
       <news:publication>
         <news:name>Fox's Blog</news:name>
         <news:language>en</news:language>
       </news:publication>
-      <news:publication_date>${info.date}</news:publication_date>
-      <news:title>${escapeXml(info.title)}</news:title>
+      <news:publication_date>${a.date}</news:publication_date>
+      <news:title>${escapeXml(a.title)}</news:title>
     </news:news>
   </url>`);
+			}
+		}
 	}
 
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -60,7 +56,7 @@ ${urlTags.join("\n")}
 	const outPath = path.join(root, OUTPUT);
 	fs.mkdirSync(path.dirname(outPath), { recursive: true });
 	fs.writeFileSync(outPath, sitemap);
-	console.log(`Google News sitemap generated: ${OUTPUT} (${seen.size} articles)`);
+	console.log(`Google News sitemap generated: ${OUTPUT} (${urlTags.length} articles < 48h)`);
 }
 
 main();
