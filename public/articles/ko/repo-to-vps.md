@@ -1,6 +1,6 @@
 ---
 title: "Repo to VPS: GitHub Actions를 무료 영구 VPS로 바꾸는 방법"
-description: GitHub Actions 러너를 git을 영구 저장소로 사용하여 항상 커져 있는 VPS로 바꾸는 방법 — tmate, inotify, commit --amend.
+description: GitHub Actions 러너를 git을 영구 저장소로 사용하여 항상 커져 있는 VPS로 바꾸는 방법 -- tmate, inotify, commit --amend.
 date: 2026-05-29
 tags:
   - github

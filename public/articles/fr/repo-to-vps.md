@@ -1,6 +1,6 @@
 ---
 title: "Repo to VPS : transformer GitHub Actions en VPS gratuit avec stockage persistant"
-description: Comment transformer un runner GitHub Actions en VPS permanent avec git comme stockage persistant — tmate, inotify et commit --amend.
+description: Comment transformer un runner GitHub Actions en VPS permanent avec git comme stockage persistant -- tmate, inotify et commit --amend.
 date: 2026-05-29
 tags:
   - github
