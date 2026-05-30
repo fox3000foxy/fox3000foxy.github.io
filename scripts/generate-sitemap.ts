@@ -21,18 +21,30 @@ function main() {
 		{ loc: "/portfolio", priority: "0.7" },
 	];
 
+	const bySlug = new Map<string, { date?: string; langs: Set<string> }>();
 	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
 	for (const entry of langs) {
 		if (!entry.isDirectory()) { continue; }
-		const indexPath = path.join(root, ARTICLES_DIR, entry.name, "index.json");
+		const lang = entry.name;
+		const indexPath = path.join(root, ARTICLES_DIR, lang, "index.json");
 		if (!fs.existsSync(indexPath)) { continue; }
 		const articles: ArticleMeta[] = JSON.parse(fs.readFileSync(indexPath, "utf8"));
 		if (!Array.isArray(articles)) { continue; }
 		for (const a of articles) {
+			if (!bySlug.has(a.slug)) {
+				bySlug.set(a.slug, { date: a.date, langs: new Set() });
+			}
+			bySlug.get(a.slug)!.langs.add(lang);
+		}
+	}
+
+	for (const [slug, info] of bySlug) {
+		const baseLoc = `/blog/${encodeURIComponent(slug)}`;
+		for (const lang of info.langs) {
 			entries.push({
-				loc: `/blog/${encodeURIComponent(a.slug)}`,
+				loc: lang === "en" ? baseLoc : `${baseLoc}?lang=${lang}`,
 				priority: "0.6",
-				lastmod: a.date || undefined,
+				lastmod: info.date || undefined,
 			});
 		}
 	}
