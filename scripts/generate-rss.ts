@@ -56,8 +56,8 @@ const LANG_META: Record<string, { title: string; description: string }> = {
 	},
 };
 
-function escapeXml(text: string): string {
-	return text
+function escapeXml(text: string | number): string {
+	return String(text)
 		.replace(/&/g, "&amp;")
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")

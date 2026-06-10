@@ -15,8 +15,8 @@ interface ArticleMeta {
 	tags?: string[];
 }
 
-function escapeXml(text: string): string {
-	return text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function escapeXml(text: string | number): string {
+	return String(text).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function wrapText(text: string, maxLen: number): string[] {
