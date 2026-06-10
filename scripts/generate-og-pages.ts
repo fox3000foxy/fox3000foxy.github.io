@@ -109,6 +109,11 @@ function main() {
 		}
 	}
 
+	const ogDir = path.join(root, "dist", "og");
+	fs.mkdirSync(ogDir, { recursive: true });
+	let rendered = 0;
+	let skipped = 0;
+
 	for (const [slug, info] of bySlug) {
 		const url = `${SITE_URL}/blog/${encodeURIComponent(slug)}`;
 
@@ -137,7 +142,17 @@ function main() {
 
 		const ogImageUrl = `${SITE_URL}/og/${encodeURIComponent(slug)}.png`;
 		const svgContent = ogImageSvg(info.title, info.description, info.tags);
-		const pngBuffer = new Resvg(svgContent, { fitTo: { mode: "original" } }).render().asPng();
+
+		const pngPath = path.join(ogDir, `${slug}.png`);
+		if (!fs.existsSync(pngPath)) {
+			const pngBuffer = new Resvg(svgContent, { fitTo: { mode: "original" } }).render().asPng();
+			fs.writeFileSync(pngPath, pngBuffer);
+			rendered++;
+		} else {
+			skipped++;
+		}
+		fs.writeFileSync(path.join(ogDir, `${slug}.svg`), svgContent);
+
 		const html = baseHtml
 			.replace(
 				/<meta property="og:title" content="[^"]*" \/>/,
@@ -161,17 +176,12 @@ function main() {
 				`<link rel="canonical" href="${escapeXml(url)}" />\n${hreflangTags}\n<meta name="twitter:card" content="summary_large_image" />\n<meta property="og:image:width" content="1200" />\n<meta property="og:image:height" content="630" />\n<link rel="webmention" href="https://webmention.io/fox3000foxy/webmention" />\n<link rel="pingback" href="https://webmention.io/fox3000foxy/xmlrpc" />\n<link rel="authorization_endpoint" href="https://indieauth.com/auth" />\n<link rel="token_endpoint" href="https://tokens.indieauth.com/token" />\n<link rel="me" href="https://github.com/fox3000foxy" />\n<script type="application/ld+json">${jsonLd}</script>\n</head>`
 			);
 
-		const ogDir = path.join(root, "dist", "og");
-		fs.mkdirSync(ogDir, { recursive: true });
-		fs.writeFileSync(path.join(ogDir, `${slug}.svg`), svgContent);
-		fs.writeFileSync(path.join(ogDir, `${slug}.png`), pngBuffer);
-
 		const outDir = path.join(root, "dist", "blog", slug);
 		fs.mkdirSync(outDir, { recursive: true });
 		fs.writeFileSync(path.join(outDir, "index.html"), html);
 		count++;
 	}
-	console.log(`OG pages generated for ${count} articles`);
+	console.log(`Generated ${count} pages (${rendered} PNGs rendered, ${skipped} cached)`);
 }
 
 main();
