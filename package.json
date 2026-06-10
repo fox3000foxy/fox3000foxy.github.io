@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "create-cname": "echo fox3000foxy.com > dist/CNAME",
-    "build": "bun run scripts/generate-index.ts && tsc -b && vite build && bun run scripts/generate-rss.ts && bun run scripts/generate-sitemap.ts && bun run scripts/generate-news-sitemap.ts && bun run scripts/generate-og-pages.ts && bun run scripts/audit-seo.ts",
+    "build-indexes": "bun run scripts/generate-index.ts && bun run scripts/generate-rss.ts && bun run scripts/generate-sitemap.ts && bun run scripts/generate-news-sitemap.ts && bun run scripts/generate-og-pages.ts && bun run scripts/audit-seo.ts",
+    "build": "npm run build-indexes && tsc -b && vite build",
     "preview": "vite preview",
     "format": "bunx --bun @biomejs/biome format --write ./src",
     "check": "bunx --bun @biomejs/biome check ./src",
