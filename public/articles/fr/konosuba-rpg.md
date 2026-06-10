@@ -1,8 +1,30 @@
+---
+title: "J'ai passé un week-end à lire le code de konosuba-rpg et voilà ce que j'ai trouvé"
+description: "Un RPG tour par tour Discord où chaque action génère une image WebP
+  à la volée : URL comme état de jeu, RNG déterministe, pipeline WASM, cache 5
+  niveaux, bot serverless."
+date: 2026-06-10
+tags:
+  - discord
+  - rpg
+  - typescript
+  - hono
+  - cloudflare-workers
+  - supabase
+  - wasm
+  - gaming
+  - serverless
+authors:
+  - fox3000foxy
+---
+
 # J'ai passé un week-end à lire le code de konosuba-rpg et voilà ce que j'ai trouvé
 
 Je maintiens ce projet depuis un moment, mais relire son propre code à tête reposée c'est toujours instructif. konosuba-rpg c'est un RPG tour par tour Discord où chaque action génère une image WebP à la volée. Pas un embed texte. Une vraie image composée, avec les sprites, les barres de vie, les messages de combat -- tout.
 
 La stack : TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Hébergement entièrement gratuit. Et le bot Discord fonctionne sans serveur persistant. Ce post explique comment tout ça tient ensemble.
+
+![État initial du jeu](/images/konosuba-rpg/game_init.webp)
 
 ---
 
@@ -135,7 +157,7 @@ Les deux Maps en mémoire (`tokenToSession`, `latestTurnByBattle`) utilisent le 
 
 ## Le pipeline de rendu d'image
 
-![Début de combat contre un Slime](shot_01_start.webp)
+![Début de combat contre un Slime](/images/konosuba-rpg/shot_01_start.webp)
 
 La route `/konosuba-rpg/:lang/*` ne renvoie pas du JSON. Elle renvoie une image WebP générée à la demande.
 
@@ -176,7 +198,11 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 
 **UI overlay** : c'est la partie lourde. Le JSX de l'interface (barres de vie, textes, icônes) est décrit en React-like avec Satori, rendu en SVG, converti en PNG par `@cf-wasm/resvg`, puis importé dans Photon pour la composition finale. Satori + resvg sont deux modules WASM compilés spécifiquement pour Cloudflare Workers avec le flag `edge-light`.
 
-![Combat en cours](shot_02_combat.webp)
+![Action Défense](/images/konosuba-rpg/shot_03_defend.webp)
+
+![Combat en cours](/images/konosuba-rpg/shot_02_combat.webp)
+
+![Action Câlin](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
@@ -283,7 +309,7 @@ Rien de révolutionnaire, mais dans un contexte serverless où chaque millisecon
 
 ## Le bot Discord sans serveur persistant
 
-![Victoire](shot_05_win.webp)
+![Victoire](/images/konosuba-rpg/shot_05_win.webp)
 
 Point souvent mal compris : un bot Discord ne nécessite pas forcément une connexion WebSocket persistante. Discord propose une alternative : les **Interactions Endpoint URL**. Tu fournis une URL HTTPS à Discord, et Discord t'envoie un POST pour chaque interaction (slash command, bouton, autocomplete).
 
@@ -319,6 +345,8 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 
 Ce délai volontaire de 3 secondes est documenté dans STRIPPER.md comme intentionnel. L'attaque spéciale de Megumin (Explosion) a une animation côté Discord -- le message est d'abord mis à jour avec un visuel intermédiaire, puis modifié 3 secondes plus tard avec le résultat. C'est le seul cas où une fonction Vercel tourne volontairement plus longtemps que nécessaire.
 
+![Attaque spéciale](/images/konosuba-rpg/shot_08_special.webp)
+
 ---
 
 ## La déployabilité sur deux plateformes
@@ -347,7 +375,7 @@ Les WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) ont des builds sépar�
 
 ## La progression : XP, niveaux, affinité
 
-![Un boss, 650 HP](shot_06_boss.webp)
+![Un boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
 La meta-progression repose sur Supabase free tier. Le schéma comporte une table `players` (XP global, niveau, gold), `character_progress` (XP/niveau/affinité par perso pour Darkness, Aqua, Megumin), `runs` (historique des combats), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions`.
 
@@ -370,6 +398,8 @@ export function getAffinityFactor(affinity: number): number {
 ```
 
 Ces facteurs sont appliqués aux stats des persos au début de chaque `processGame`. Kazuma suit le niveau global du joueur, les trois autres ont chacun leur propre XP/niveau. L'affinité (gagnée en récupérant des drops liés à un perso) multiplie ses stats indépendamment.
+
+![Soin](/images/konosuba-rpg/shot_07_heal.webp)
 
 Le système de drops utilise des loot tables pondérées par difficulté :
 
