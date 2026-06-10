@@ -17,6 +17,10 @@ const LANG_LABELS: Record<Lang, string> = {
 	de: "Deutsch",
 	ru: "Русский",
 	es: "Español",
+	pt: "Português",
+	id: "Indonesia",
+	hi: "हिन्दी",
+	ar: "العربية",
 };
 
 export default function Header() {
