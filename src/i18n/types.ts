@@ -8,7 +8,11 @@ export type Lang =
 	| "it"
 	| "de"
 	| "ru"
-	| "es";
+	| "es"
+	| "pt"
+	| "id"
+	| "hi"
+	| "ar";
 
 export const ALL_LANGS: Lang[] = [
 	"en",
@@ -21,6 +25,10 @@ export const ALL_LANGS: Lang[] = [
 	"de",
 	"ru",
 	"es",
+	"pt",
+	"id",
+	"hi",
+	"ar",
 ];
 
 export type TranslationMap = Record<string, string>;
