@@ -13,6 +13,8 @@ import pt from "./translations/pt";
 import id from "./translations/id";
 import hi from "./translations/hi";
 import ar from "./translations/ar";
+import vi from "./translations/vi";
+import th from "./translations/th";
 
 export const translations: Record<Lang, Record<string, string>> = {
 	en,
@@ -29,4 +31,6 @@ export const translations: Record<Lang, Record<string, string>> = {
 	id,
 	hi,
 	ar,
+	vi,
+	th,
 };
