@@ -184,6 +184,10 @@
   transition: opacity 0.15s;
 }
 
+.rss-btn:visited {
+  color: #fff;
+}
+
 .rss-btn:hover {
   opacity: 0.85;
   color: #fff;
