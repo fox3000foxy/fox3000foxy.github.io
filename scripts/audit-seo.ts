@@ -113,12 +113,12 @@ function checkNewsSitemap() {
 	}
 
 	const urls = xml.match(/<url>[\s\S]*?<\/url>/g);
-	// if (!urls) { fail("NewsSitemap", "No URLs found"); return; }
+	if (!urls) { fail("NewsSitemap", "No URLs found"); return; }
 
 	const today = new Date();
 	const twoDaysAgo = new Date(today.getTime() - 48 * 60 * 60 * 1000);
 
-	for (const urlBlock of urls!) {
+	for (const urlBlock of urls) {
 		const dateMatch = urlBlock.match(/<news:publication_date>(.+?)<\/news:publication_date>/);
 		const titleMatch = urlBlock.match(/<news:title>(.+?)<\/news:title>/);
 		const langMatch = urlBlock.match(/<news:language>(.+?)<\/news:language>/);
