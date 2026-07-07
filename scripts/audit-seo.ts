@@ -113,7 +113,7 @@ function checkNewsSitemap() {
 	}
 
 	const urls = xml.match(/<url>[\s\S]*?<\/url>/g);
-	if (!urls) { fail("NewsSitemap", "No URLs found"); return; }
+	if (!urls) { ok("NewsSitemap", "No articles < 48h old"); return; }
 
 	const today = new Date();
 	const twoDaysAgo = new Date(today.getTime() - 48 * 60 * 60 * 1000);
