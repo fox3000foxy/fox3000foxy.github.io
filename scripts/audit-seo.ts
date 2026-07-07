@@ -118,7 +118,7 @@ function checkNewsSitemap() {
 	const today = new Date();
 	const twoDaysAgo = new Date(today.getTime() - 48 * 60 * 60 * 1000);
 
-	for (const urlBlock of urls) {
+	for (const urlBlock of urls!) {
 		const dateMatch = urlBlock.match(/<news:publication_date>(.+?)<\/news:publication_date>/);
 		const titleMatch = urlBlock.match(/<news:title>(.+?)<\/news:title>/);
 		const langMatch = urlBlock.match(/<news:language>(.+?)<\/news:language>/);
@@ -141,7 +141,7 @@ function checkNewsSitemap() {
 		}
 	}
 
-	ok("NewsSitemap", `${urls.length} URLs checked`);
+	ok("NewsSitemap", `${urls!.length} URLs checked`);
 }
 
 // ── 3. Main Sitemap ──────────────────────────────────────
