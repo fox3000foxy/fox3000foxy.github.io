@@ -28,3 +28,6 @@ public/articles/*/index.json
 
 # Internal
 ROADMAP.md
+
+# Environment variables
+.env

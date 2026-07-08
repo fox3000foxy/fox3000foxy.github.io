@@ -27,6 +27,10 @@ const Project = lazy(() => import("./pages/Project"));
 const ProjectList = lazy(() => import("./pages/ProjectList"));
 const TagIndex = lazy(() => import("./pages/TagIndex"));
 const TagsIndex = lazy(() => import("./pages/TagsIndex"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Photos = lazy(() => import("./pages/Photos"));
+const Uses = lazy(() => import("./pages/Uses"));
+const SearchPage = lazy(() => import("./pages/SearchPage"));
 
 function App() {
 	const langCtx = useLangState();
@@ -58,6 +62,10 @@ function App() {
 									path="/portfolio"
 									element={<Navigate to="/legacy" replace />}
 								/>
+								<Route path="/contact" element={<Contact />} />
+								<Route path="/photos" element={<Photos />} />
+								<Route path="/uses" element={<Uses />} />
+								<Route path="/search" element={<SearchPage />} />
 								<Route path="*" element={<NotFound />} />
 							</Routes>
 						</Suspense>

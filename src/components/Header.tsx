@@ -78,6 +78,18 @@ export default function Header() {
 					<Link to="/projects" onClick={closeMenu}>
 						{t("nav.projects")}
 					</Link>
+					<Link to="/search" onClick={closeMenu}>
+						{t("nav.search")}
+					</Link>
+					<Link to="/photos" onClick={closeMenu}>
+						{t("nav.photos")}
+					</Link>
+					<Link to="/uses" onClick={closeMenu}>
+						{t("nav.uses")}
+					</Link>
+					<Link to="/contact" onClick={closeMenu}>
+						{t("nav.contact")}
+					</Link>
 					<Link to="/legacy" onClick={closeMenu}>
 						{t("nav.portfolio")}
 					</Link>
