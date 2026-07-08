@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { CONFIG } from "../utils/config";
+
+const API_URL = CONFIG.newsletterApiUrl ?? "/api/subscribe";
 
 export default function NewsletterSignup() {
 	const [email, setEmail] = useState("");
@@ -14,7 +17,7 @@ export default function NewsletterSignup() {
 		setStatus("loading");
 
 		try {
-			const res = await fetch("/api/subscribe", {
+			const res = await fetch(API_URL, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ email }),
