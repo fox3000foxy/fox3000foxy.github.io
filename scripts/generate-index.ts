@@ -54,6 +54,19 @@ function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: 
 		.readdirSync(articlesDir, { withFileTypes: true })
 		.filter((d) => d.isDirectory() && d.name !== "assets");
 
+	// Build English index first so other languages can fall back
+	const enPath = path.join(articlesDir, "en");
+	const enFiles = fs.readdirSync(enPath).filter((f) => f.endsWith(".md") && f !== "index.json");
+	const enArticles: ArticleMeta[] = [];
+	for (const file of enFiles) {
+		const slug = file.replace(/\.md$/, "");
+		const text = fs.readFileSync(path.join(enPath, file), "utf8");
+		const { meta, content } = parseFrontMatter(text);
+		const readingTime = estimateReadingTime(content);
+		enArticles.push({ slug, readingTime, ...meta });
+	}
+	const enBySlug = new Map(enArticles.map((a) => [a.slug, a]));
+
 	for (const entry of langDirs) {
 		const lang = entry.name;
 		const langPath = path.join(articlesDir, lang);
@@ -72,14 +85,25 @@ function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: 
 
 		const articles: ArticleMeta[] = [];
 
+		// Process markdown files present in this language
 		for (const file of files) {
 			const slug = file.replace(/\.md$/, "");
 			const text = fs.readFileSync(path.join(langPath, file), "utf8");
 			const { meta, content } = parseFrontMatter(text);
 			const readingTime = estimateReadingTime(content);
-			// Merge: front matter overrides existing index.json data
 			const existingMeta = existingBySlug.get(slug) || {};
 			articles.push({ slug, readingTime, ...existingMeta, ...meta });
+		}
+
+		// Fall back to English articles for any slugs missing in this language
+		if (lang !== "en") {
+			const presentSlugs = new Set(articles.map((a) => a.slug));
+			for (const [slug, enMeta] of enBySlug) {
+				if (!presentSlugs.has(slug)) {
+					const existingMeta = existingBySlug.get(slug) || {};
+					articles.push({ slug, readingTime: enMeta.readingTime!, ...existingMeta, ...enMeta });
+				}
+			}
 		}
 
 		articles.sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());
