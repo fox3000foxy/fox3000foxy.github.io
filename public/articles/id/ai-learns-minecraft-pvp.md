@@ -1,6 +1,6 @@
 ---
 title: AI Belajar Minecraft PvP -- Imitation Learning, Reinforcement Learning, dan 30 Variabel yang Penting
-description: 1.000 duel direkam, jaringan saraf dilatih pada piksel, akurasi penekanan tombol 90% : dan bot berjalan lurus ke tembok. Kemudian datang RL, curriculum learning, dan 60 jam pelatihan.
+description: "1.000 duel direkam, jaringan saraf dilatih pada piksel, akurasi penekanan tombol 90% : dan bot berjalan lurus ke tembok. Kemudian datang RL, curriculum learning, dan 60 jam pelatihan."
 date: 2026-07-09
 tags:
   - minecraft
