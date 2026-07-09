@@ -4,10 +4,9 @@ Here are the tools, software, and hardware I use daily.
 
 ## Editor & Terminal
 
-- **Editor:** VS Code / Neovim
-- **Terminal:** kitty / Alacritty
-- **Shell:** zsh + starship prompt
-- **Font:** JetBrains Mono / Fira Code
+- **Editor:** VS Code / VS Codium
+- **Terminal:** xterm
+- **Shell:** bash
 
 ## Languages & Runtimes
 
@@ -30,15 +29,15 @@ Here are the tools, software, and hardware I use daily.
 
 ## Hardware
 
-- **Laptop:** ThinkPad X1 Carbon
+- **Laptop:** Dell Inspiron 15 7000 (Intel i7, NVIDIA)
 - **Desktop:** Custom build (AMD Ryzen, NVIDIA)
-- **Keyboard:** Keychron Q1 / HHKB
+<!-- - **Keyboard:** Keychron Q1 / HHKB
 - **Mouse:** Logitech MX Master 3
-- **Audio:** Beyerdynamic DT 770 Pro
+- **Audio:** Beyerdynamic DT 770 Pro -->
 
 ## Misc
 
-- **OS:** Arch Linux / Fedora
+- **OS:** Arch Linux / Fedora / Windows 10
 - **Browser:** Firefox / Chromium
-- **Notes:** Obsidian / markdown files
-- **Backup:** Borg + rsync
+<!-- - **Notes:** Obsidian / markdown files -->
+- **Backup:** GitHub / rsync / external HDD
