@@ -1,6 +1,6 @@
 ---
 title: IA Aprende PvP no Minecraft -- Aprendizagem por Imitação, Reinforcement Learning e as 30 variáveis que importam
-description: 1.000 duelos gravados, rede neural treinada em pixels, 90% de precisão nas teclas : e o bot foi direto para uma parede. Depois vieram RL, curriculum learning e 60 horas de treinamento.
+description: "1.000 duelos gravados, rede neural treinada em pixels, 90% de precisão nas teclas : e o bot foi direto para uma parede. Depois vieram RL, curriculum learning e 60 horas de treinamento."
 date: 2026-07-09
 tags:
   - minecraft

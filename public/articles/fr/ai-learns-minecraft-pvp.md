@@ -1,6 +1,6 @@
 ---
 title: L'IA apprend le PvP Minecraft -- Imitation Learning, Reinforcement Learning, et les 30 variables qui comptaient
-description: 1 000 duels enregistrés, réseau neuronal entraîné sur des pixels, 90 % de précision des frappes : et le bot fonçait droit dans un mur. Puis sont venus le RL, l'apprentissage curriculaire et 60 heures d'entraînement.
+description: "1 000 duels enregistrés, réseau neuronal entraîné sur des pixels, 90 % de précision des frappes : et le bot fonçait droit dans un mur. Puis sont venus le RL, l'apprentissage curriculaire et 60 heures d'entraînement."
 date: 2026-07-09
 tags:
   - minecraft
