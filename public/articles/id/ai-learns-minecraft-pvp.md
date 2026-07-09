@@ -237,19 +237,6 @@ Setelah berlatih dengan bot dan kemudian berduel dengan pemain yang menyebutnya 
 
 Di mana bot PvP (Kadambi) belajar dari piksel dan ANNA bernalar melalui pohon tugas, bot Master Gumbo mencapai kecerdasan melalui **transisi keadaan acak** : pendekatan command block murni yang membuktikan Anda tidak perlu jaringan saraf untuk membangun lawan PvP yang meyakinkan.
 
-## Altoclef : Baritone + task tree at scale
-
-If ANNA is a symbolic bot that *reads* to know what to do, and the Mace Bot randomizes decisions, **Altoclef** is a full autonomous agent that *plans* its way through the entire game. Built by gaucho-matero as a Fabric mod and powered by **Baritone** pathfinding, Altoclef decomposes any Minecraft goal into a task tree and executes it without human input.
-
-The interface is deceptively simple : type `@gamer` in chat, and Altoclef begins the beat-the-game task from a survival world. It gathers wood, crafts tools, mines iron and diamond, builds a Nether portal, collects blaze rods and ender pearls, finds the stronghold, and kills the Ender Dragon. All autonomously, all through the native Minecraft client, on any vanilla server.
-
-Under the hood, this is achieved through a **recursive task tree system** where each high-level goal (e.g., "craft a diamond pickaxe") is decomposed into prerequisite tasks : mine diamonds → smelt them → craft sticks → combine. The tree walks the full Minecraft recipe graph, handling production chains, mob drops, loot tables, and container access. Unlike ANNA's hand-authored tree, Altoclef's tasks are **programmable Java classes** that can implement arbitrary logic : combat strategies, bartering with piglins, exploration patterns.
-
-The key architectural insight is the separation of **what** (the task tree) from **how** (Baritone pathfinding). Baritone handles the low-level movement : pathfinding, obstacle avoidance, block breaking, inventory management — while the task system orchestrates the high-level plan. This modularity means neither component needs to be AI : they're both deterministic algorithms, yet their combination produces complex, goal-directed behavior that rivals learned approaches.
-
-Altoclef represents the limit of **pure symbolic Minecraft AI** : it can beat the game from scratch with zero training, zero GPUs, and zero human data, but it cannot adapt to tasks its programmers didn't anticipate, and it cannot learn from experience. It knows how to craft a diamond pickaxe because a Java class tells it exactly how, not because it figured it out.
-
-
 ## Apa yang menyatukan mereka
 
 | Pendekatan | Metode inti | Data | Komputasi | Hasil |
@@ -259,7 +246,6 @@ Altoclef represents the limit of **pure symbolic Minecraft AI** : it can beat th
 | VPT | IL semi-supervised | 70K jam YouTube + IDM | 720 GPU, 9 hari | Alat diamond |
 | DreamerV3 | World model RL | Lintasan impian | 1 GPU, 9 hari | Diamond dari awal |
 | **ANNA** | **NLP simbolik + pohon tugas** | **Resep buatan tangan** | **1 laptop, instan** | **Item apa pun yang bisa dibuat** |
-| **Altoclef** | **Baritone + task tree FS** | **Java task classes** | **Fabric mod, no GPU** | **Beat the entire game** |
 | **Mace Bot** | **State machine command block** | **Keputusan acak** | **Vanilla MC, tanpa GPU** | **Pelatihan Mace PvP** |
 
 Bot dalam video adalah yang paling terbatas sumber dayanya tetapi yang paling jujur tentang prosesnya. Ia gagal dulu, lalu berulang. Ia melupakan apa yang dipelajarinya, lalu belajar kembali. Ia berakhir dengan kombo 100 pukulan : tapi juga dengan pertanyaan tentang apakah yang dibangunnya itu curang.
@@ -275,7 +261,5 @@ Bot dalam video adalah yang paling terbatas sumber dayanya tetapi yang paling ju
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, NLP Prancis, pohon tugas)
-
-**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Active fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, beats game)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) oleh Master Gumbo · (Command blocks, Carpet Mod, state machine)
