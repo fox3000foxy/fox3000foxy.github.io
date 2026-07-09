@@ -208,6 +208,35 @@ Where the video's PvP bot learns from experience, ANNA works from knowledge. It 
 
 ANNA's approach mirrors a different era of AI : before end-to-end learning dominated, when the promise was that symbolic reasoning + careful engineering could produce intelligent behavior. Today, projects like ANNA and the PvP bot represent two poles of Minecraft AI : one reasons about the world, the other perceives it.
 
+## Master Gumbo's Mace Bot : AI with command blocks only
+
+![The Mace PvP training arena with the bot](assets/mace-bot-arena.png)
+
+In a completely different corner of Minecraft AI, YouTuber **Master Gumbo** built a PvP training bot using **only command blocks** : no mods, no plugins, no external code. Just vanilla Minecraft commands, redstone, and a carpet mod for player replica entities. The result is an AI mace PvP opponent that practices breach swapping, wind charging, and shield mechanics with the player.
+
+The bot starts as a zombie with unbreakable gear and a totem in its off-hand (refilled every tick via `/item replace`), making it effectively immortal. Later, Master Gumbo switches to **Carpet Mod's player replica** bots, which support human-like mechanics (shield raising, item switching) that zombies can't do.
+
+![The settings center : buttons to configure bot behavior](assets/mace-settings-center.png)
+
+The core innovation is a **state machine driven by randomness**. An armor stand is teleported above a circle of colored concrete blocks using the `/spreadplayers` command, which scatters entities randomly. Where the armor stand lands determines the bot's next action :
+
+- **Red concrete** → strafe backwards
+- **Blue concrete** → wind charge upward (attack)
+- **Green concrete** → raise shield
+- **White concrete** → pause (adds delay between actions)
+
+![The AI decision system : an armor stand on colored concrete](assets/mace-ai-system.png)
+
+The armor stand's position is read by command blocks that detect the block beneath it and activate the corresponding mechanism. A redstone block is placed or removed to enable/disable each behavior. Because `/spreadplayers` runs on repeat, the bot continuously makes new decisions, creating unpredictable but structured behavior.
+
+Master Gumbo calls this "a very simple and basic form of AI" : it doesn't learn from interactions like neural networks, but the randomness + state machine produces realistic PvP behavior that's harder to predict than a scripted bot. The settings center includes a book interface to toggle AI on/off, adjust difficulty, and configure movement patterns.
+
+After training with the bot and then dueling the player who called him bad (in the video's intro), Master Gumbo wins. The map is shared via Discord with Carpet Mod required.
+
+![The bot in a duel, practicing mace PvP techniques](assets/mace-final-duel.png)
+
+Where the PvP bot (Kadambi) learns from pixels and ANNA reasons through a task tree, Master Gumbo's bot achieves intelligence through **randomized state transitions** : a pure command block approach that proves you don't need neural networks to build a convincing PvP opponent.
+
 ## What ties these together
 
 | Approach | Core method | Data | Compute | Result |
@@ -217,6 +246,7 @@ ANNA's approach mirrors a different era of AI : before end-to-end learning domin
 | VPT | Semi-supervised IL | 70K hrs YouTube + IDM | 720 GPUs, 9 days | Diamond tools |
 | DreamerV3 | World model RL | Dreamed trajectories | 1 GPU, 9 days | Diamond from scratch |
 | **ANNA** | **Symbolic NLP + task tree** | **Hand-authored recipes** | **1 laptop, instant** | **Any craftable item** |
+| **Mace Bot** | **Command block state machine** | **Randomized decisions** | **Vanilla MC, no GPU** | **Mace PvP training** |
 
 The video's bot is the most resource-constrained but the most honest about the process. It fails first, then iterates. It forgets what it learned, then re-learns. It ends with a 100-hit combo : but also with a question about whether what it built is cheating.
 
@@ -231,3 +261,5 @@ The video's bot is the most resource-constrained but the most honest about the p
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, French NLP, task tree)
+
+**Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) by Master Gumbo · (Command blocks, Carpet Mod, state machine)
