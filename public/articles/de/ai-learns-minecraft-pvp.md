@@ -237,6 +237,19 @@ Nach dem Training mit dem Bot und dann einem Duell gegen den Spieler, der ihn (i
 
 Wo der PvP-Bot (Kadambi) aus Pixeln lernt und ANNA durch Aufgabenbäume überlegt, erreicht Master Gambos Bot Intelligenz durch **zufällige Zustandsübergänge**: eine reine Befehlsblock-Ansatz, der beweist, dass man keine neuronalen Netzwerke braucht, um einen überzeugenden PvP-Gegner zu bauen.
 
+## Altoclef : Baritone + task tree at scale
+
+If ANNA is a symbolic bot that *reads* to know what to do, and the Mace Bot randomizes decisions, **Altoclef** is a full autonomous agent that *plans* its way through the entire game. Built by gaucho-matero as a Fabric mod and powered by **Baritone** pathfinding, Altoclef decomposes any Minecraft goal into a task tree and executes it without human input.
+
+The interface is deceptively simple : type `@gamer` in chat, and Altoclef begins the beat-the-game task from a survival world. It gathers wood, crafts tools, mines iron and diamond, builds a Nether portal, collects blaze rods and ender pearls, finds the stronghold, and kills the Ender Dragon. All autonomously, all through the native Minecraft client, on any vanilla server.
+
+Under the hood, this is achieved through a **recursive task tree system** where each high-level goal (e.g., "craft a diamond pickaxe") is decomposed into prerequisite tasks : mine diamonds → smelt them → craft sticks → combine. The tree walks the full Minecraft recipe graph, handling production chains, mob drops, loot tables, and container access. Unlike ANNA's hand-authored tree, Altoclef's tasks are **programmable Java classes** that can implement arbitrary logic : combat strategies, bartering with piglins, exploration patterns.
+
+The key architectural insight is the separation of **what** (the task tree) from **how** (Baritone pathfinding). Baritone handles the low-level movement : pathfinding, obstacle avoidance, block breaking, inventory management — while the task system orchestrates the high-level plan. This modularity means neither component needs to be AI : they're both deterministic algorithms, yet their combination produces complex, goal-directed behavior that rivals learned approaches.
+
+Altoclef represents the limit of **pure symbolic Minecraft AI** : it can beat the game from scratch with zero training, zero GPUs, and zero human data, but it cannot adapt to tasks its programmers didn't anticipate, and it cannot learn from experience. It knows how to craft a diamond pickaxe because a Java class tells it exactly how, not because it figured it out.
+
+
 ## Was sie verbindet
 
 | Ansatz | Kernmethode | Daten | Berechnung | Ergebnis |
@@ -246,6 +259,7 @@ Wo der PvP-Bot (Kadambi) aus Pixeln lernt und ANNA durch Aufgabenbäume überleg
 | VPT | Semiüberwachten IL | 70K h YouTube – IDM | 720 GPUs, 9 Tage | Diamantwerkzeuge |
 | DreamerV3 | Weltmodell RL | Geträumte Bahnen | 1 GPU, 9 Tage | Diamanten von Null |
 | **ANTA** | **Symbol NLP + Aufgabenbaum** | **Manuelle Rezepte** | **1 Laptop, sofort** | **Jedes herstellbare Item** |
+| **Altoclef** | **Baritone + task tree FS** | **Java task classes** | **Fabric mod, no GPU** | **Beat the entire game** |
 | **Mace Bot** | **Befehlblock Zustandmaschine** | **Zufalls-Entscheidungen** | **Vanilla MC, kein GPU** | **Netz PvP Training** |
 
 Der Bot aus dem Video hat die geringsten Ressourcen, ist aber am ehrlichsten über den Prozess. Er scheitert zuerst, dann iteriert er. Er vergisst, was er gelernt hat, dann lernt er neu. Er endet mit einer 100-Treffer-Kombo: aber auch mit der Frage, ob das, was er gebaut hat, Betrug ist.
@@ -261,5 +275,7 @@ Der Bot aus dem Video hat die geringsten Ressourcen, ist aber am ehrlichsten üb
 **DreamerV3** : [Papier](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, französisches NLP, can Aufgabbaum)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Active fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, beats game)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) von Master Gumbo · (Befehlsblöcke, Carpet Mod, Zustandsmaschine)
