@@ -237,6 +237,18 @@ Nach dem Training mit dem Bot und dann einem Duell gegen den Spieler, der ihn (i
 
 Wo der PvP-Bot (Kadambi) aus Pixeln lernt und ANNA durch Aufgabenbäume überlegt, erreicht Master Gambos Bot Intelligenz durch **zufällige Zustandsübergänge**: eine reine Befehlsblock-Ansatz, der beweist, dass man keine neuronalen Netzwerke braucht, um einen überzeugenden PvP-Gegner zu bauen.
 
+## Altoclef : Baritone + Aufgabenbaum im großen Maßstab
+
+Wenn ANNA ein symbolischer Bot ist, der *liest*, um zu wissen, was zu tun ist, und der Mace Bot Entscheidungen randomisiert, dann ist **Altoclef** ein vollständig autonomer Agent, der seinen Weg durch das gesamte Spiel *plant*. Gebaut von gaucho-matero als Fabric-Mod und angetrieben von **Baritone** Pathfinding, zerlegt Altoclef jedes Minecraft-Ziel in einen Aufgabenbaum und führt ihn ohne menschliches Zutun aus.
+
+Die Schnittstelle ist täuschend einfach : gib `@gamer` im Chat ein, und Altoclef beginnt die Beat-the-Game-Aufgabe in einer Überlebenswelt. Es sammelt Holz, craftet Werkzeuge, baut Eisen und Diamant ab, errichtet ein Nether-Portal, sammelt Lohenruten und Enderperlen, findet die Festung und tötet den Enderdrachen. Völlig autonom, durch den nativen Minecraft-Client, auf jedem Vanilla-Server.
+
+Unter der Haube wird dies durch ein **rekursives Task-Tree-System** erreicht, bei dem jedes hochrangige Ziel (z. B. »craft eine Diamantspitzhacke«) in Vorbedingungen zerlegt wird : Diamant abbauen → schmelzen → Stöcke craften → kombinieren. Der Baum durchläuft den vollständigen Minecraft-Rezeptgraphen und verarbeitet Produktionsketten, Mob-Drops, Loot-Tabellen und Containerzugriff. Anders als ANNAs handgeschriebener Baum sind Altoclefs Aufgaben **programmierbare Java-Klassen**, die beliebige Logik implementieren können : Kampfstrategien, Handeln mit Piglins, Erkundungsmuster.
+
+Die entscheidende architektonische Erkenntnis ist die Trennung von **Was** (dem Aufgabenbaum) und **Wie** (Baritone Pathfinding). Baritone übernimmt die niedrige Bewegungssteuerung : Pfadfindung, Hindernisvermeidung, Blockabbau, Inventarverwaltung — während das Task-System den hochrangigen Plan orchestriert. Diese Modularität bedeutet, dass keine der Komponenten KI sein muss : beide sind deterministische Algorithmen, doch ihre Kombination erzeugt komplexes, zielgerichtetes Verhalten, das mit gelernten Ansätzen konkurriert.
+
+Altoclef repräsentiert die Grenze der **reinen symbolischen Minecraft-KI** : es kann das Spiel von Grund auf schlagen, mit null Training, null GPUs und null menschlichen Daten, aber es kann sich nicht an Aufgaben anpassen, die seine Programmierer nicht vorausgesehen haben, und es kann nicht aus Erfahrung lernen. Es weiß, wie man eine Diamantspitzhacke herstellt, weil eine Java-Klasse ihm genau sagt, wie, nicht weil es selbst darauf gekommen ist.
+
 ## Was sie verbindet
 
 | Ansatz | Kernmethode | Daten | Berechnung | Ergebnis |
@@ -246,6 +258,7 @@ Wo der PvP-Bot (Kadambi) aus Pixeln lernt und ANNA durch Aufgabenbäume überleg
 | VPT | Semiüberwachten IL | 70K h YouTube – IDM | 720 GPUs, 9 Tage | Diamantwerkzeuge |
 | DreamerV3 | Weltmodell RL | Geträumte Bahnen | 1 GPU, 9 Tage | Diamanten von Null |
 | **ANTA** | **Symbol NLP + Aufgabenbaum** | **Manuelle Rezepte** | **1 Laptop, sofort** | **Jedes herstellbare Item** |
+| **Altoclef** | **Baritone + Task-Tree-FS** | **Java-Task-Klassen** | **Fabric-Mod, keine GPU** | **Schlägt das ganze Spiel** |
 | **Mace Bot** | **Befehlblock Zustandmaschine** | **Zufalls-Entscheidungen** | **Vanilla MC, kein GPU** | **Netz PvP Training** |
 
 Der Bot aus dem Video hat die geringsten Ressourcen, ist aber am ehrlichsten über den Prozess. Er scheitert zuerst, dann iteriert er. Er vergisst, was er gelernt hat, dann lernt er neu. Er endet mit einer 100-Treffer-Kombo: aber auch mit der Frage, ob das, was er gebaut hat, Betrug ist.
@@ -261,5 +274,7 @@ Der Bot aus dem Video hat die geringsten Ressourcen, ist aber am ehrlichsten üb
 **DreamerV3** : [Papier](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, französisches NLP, can Aufgabbaum)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Active fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, Task-Tree, schlägt Spiel)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) von Master Gumbo · (Befehlsblöcke, Carpet Mod, Zustandsmaschine)

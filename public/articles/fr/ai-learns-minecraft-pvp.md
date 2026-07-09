@@ -237,6 +237,18 @@ Après leur entraînement avec le bot puis en duel contre le joueur qui l'avait 
 
 Là où le bot PvP (Kadambi) apprend à partir de pixels et ANNA raisonne à travers un arbre de tâches, le bot de Master Gumbo atteint l'intelligence par des **transitions d'états aléatoires** : une approche pur command block qui prouve que vous n'avez pas besoin de réseaux neuronaux pour construire un adversaire PvP convaincant.
 
+## Altoclef : Baritone + arbre de tâches à grande échelle
+
+Si ANNA est un bot symbolique qui *lit* pour savoir quoi faire, et que le Mace Bot randomise les décisions, **Altoclef** est un agent autonome complet qui *planifie* son chemin à travers le jeu entier. Construit par gaucho-matero comme un mod Fabric et propulsé par le pathfinding **Baritone**, Altoclef décompose n'importe quel objectif Minecraft en un arbre de tâches et l'exécute sans intervention humaine.
+
+L'interface est trompeusement simple : tapez `@gamer` dans le chat, et Altoclef commence la tâche « finir le jeu » depuis un monde survival. Il récolte du bois, craft des outils, mine du fer et du diamant, construit un portail du Nether, collecte des bâtons Blaze et des perles de l'Ender, trouve le stronghold, et tue l'Ender Dragon. Le tout en autonomie, via le client Minecraft natif, sur n'importe quel serveur vanilla.
+
+Sous le capot, ceci est réalisé grâce à un **système d'arbre de tâches récursif** où chaque objectif de haut niveau (par exemple, « craft une pioche en diamant ») est décomposé en tâches prérequises : miner du diamant → le fondre → craft des bâtons → les combiner. L'arbre parcourt le graphe complet des recettes Minecraft, gérant les chaînes de production, les drops de monstres, les tables de butin et l'accès aux conteneurs. Contrairement à l'arbre écrit à la main d'ANNA, les tâches d'Altoclef sont des **classes Java programmables** qui peuvent implémenter une logique arbitraire : stratégies de combat, troc avec les piglins, motifs d'exploration.
+
+L'idée architecturale clé est la séparation du **quoi** (l'arbre de tâches) du **comment** (le pathfinding Baritone). Baritone gère les déplacements de bas niveau : pathfinding, évitement d'obstacles, cassage de blocs, gestion d'inventaire — tandis que le système de tâches orchestre le plan de haut niveau. Cette modularité signifie qu'aucun composant n'a besoin d'être une IA : ce sont tous deux des algorithmes déterministes, mais leur combinaison produit un comportement complexe et orienté vers un but qui rivalise avec les approches par apprentissage.
+
+Altoclef représente la limite de **l'IA Minecraft symbolique pure** : il peut finir le jeu de zéro sans entraînement, sans GPU, et sans données humaines, mais il ne peut pas s'adapter à des tâches que ses programmeurs n'ont pas anticipées, et il ne peut pas apprendre de l'expérience. Il sait craft une pioche en diamant parce qu'une classe Java lui dit exactement comment, pas parce qu'il l'a découvert tout seul.
+
 ## Ce qui les relie
 
 | Approche | Méthode principale | Données | Calcul | Résultat | |
@@ -246,6 +258,7 @@ Là où le bot PvP (Kadambi) apprend à partir de pixels et ANNA raisonne à tra
 | VPT | IL semi-supervisé | 70K h YouTube + IDM | 720 GPUs, 9 jours | Outils en diamant | |
 | DreamerV3 | RL monde model | Trajets rêvés | 1 GPU, 9 jours | Diamant de zéro | |
 | **ANNA** | **NLP symbolique + arbre de tâches** | **Recettes écrites** | **1 laptop, instant** | **Tout objet craftable** | |
+| **Altoclef** | **Baritone + task tree FS** | **Java task classes** | **Fabric mod, no GPU** | **Beat the entire game** | |
 | **Mace Bot** | **Machine d'états Command block** | **Décisions aléatoires** | **Vanilla MC, sans GPU** | **Entraînelent PvP mace** | |
 
 Le bot de la vidéo est le plus contraint en ressources mais le plus honnête sur le processus. Il échoue d'abord, puis itère. Il oublie ce qu'il a appris, puis l'apprend à nouveau. Il se termine par un combo de 100 coups : mais aussi par une question sur ce qu'il a construit en triche.
@@ -261,5 +274,7 @@ Le bot de la vidéo est le plus contraint en ressources mais le plus honnête su
 **DreamerV3** : [Article](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, NLP français, arbre de tâches)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Active fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, beats game)
 
 **Mace Bot** : [Vidéo](https://www.youtube.com/watch?v=Fmp2Il70IF8) par Master Gumbo · (Command blocks, Carpet Mod, machine d'états)

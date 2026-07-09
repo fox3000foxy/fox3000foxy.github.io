@@ -233,6 +233,33 @@ Master Gumbo称其为"一种非常简单和基础的AI形式"：它不像神经�
 
 PvP机器人（Kadambi）从像素中学习，ANNA通过任务树推理，而Master Gumbo的机器人则通过**随机化的状态转换**实现智能：一种纯命令方块的方法，证明了你不需要神经网络就能构建一个令人信服的PvP对手。
 
+## Altoclef：自主通关Minecraft的Fabric机器人
+
+![Altoclef的BeatMinecraft任务树分解](assets/altoclef-task-tree.png)
+
+如果说上述项目各自专注于Minecraft的一个侧面，那么**Altoclef**则采取了一种截然不同的雄心：**完全自主通关Minecraft**。2021年5月24日，Altoclef成为首个从零开始、无需人类干预就击败末影龙、通关Minecraft的机器人。
+
+Altoclef是一个**Fabric客户端mod**，使用**Java**编写，核心路径规划基于**Baritone**。与视频中PvP机器人从像素学习不同，Altoclef不处理屏幕图像，也不使用GPU或神经网络。它通过与原版Minecraft Java类的深度集成来直接读取游戏状态：坐标、方块ID、物品栏内容、实体列表——所有这些都通过Fabric API和Mixin注入来获取。输入不是像素，而是结构化的游戏数据。
+
+**任务树系统**是Altoclef的核心。用户通过聊天命令（如`@gamer`开始通关、`@get diamond_sword`获取钻石剑）给出高级目标，Altoclef将其递归拆解为子任务：
+
+- 目标：通关游戏 → 前往末地 → 激活末地传送门 → 获取末影珍珠 → 击杀烈焰人 → 前往下界要塞 → 获取烈焰棒 → …
+
+每棵任务树都是一个有向无环图（DAG），其中的节点代表具体子任务（`MineTask`、`CraftTask`、`SmeltTask`、`FightTask`、`TravelTask`等），边代表依赖关系。一个Java类层次结构定义了任务的生命周期：`onStart()`、`onTick()`、`onStop()`、`isFinished()`。Baritone负责底层路径规划（移动、挖掘、交互），而Altoclef的任务调度器则决定下一步该运行哪个子任务。
+
+截至2025–2026年，社区fork（如drmcbride12和MiranCZ的版本）已将Altoclef更新至Minecraft 26.1.2，并继续优化`BeatMinecraftTask`，修复了路径扫描器、投掷物追踪、合成路径等数十个问题。
+
+| 技术 | 说明 |
+|------|------|
+| 核心技术 | **任务树（DAG）+ Baritone路径规划** |
+| AI范式 | **符号式AI**：无学习、无神经网络、无GPU |
+| 数据来源 | **游戏API**（坐标、方块、物品、实体） |
+| 架构 | **Fabric Mod**（Java类 + Mixin注入） |
+| 定位 | **纯客户端**，无需服务端安装 |
+| 关键成就 | **首个自主通关Minecraft的机器人** |
+
+如果说PvP机器人是通过感知和运动学习来玩，ANNA是通过符号推理来理解，那么Altoclef则是通过工程化来执行：它不学习，它**完成任务**。它的成功不是来自训练，而是来自递归分解、健壮的Baritone路径规划以及精心编排的Java任务类。
+
 ## 这些项目的共同点
 
 | 方法 | 核心技术 |数据 | 计算资源 | 结果 |
@@ -242,6 +269,7 @@ PvP机器人（Kadambi）从像素中学习，ANNA通过任务树推理，而Mas
 | VPT | 半监督模仿学习 | 7万小时YouTube + IDM | 720张GPU、9天 | 钻石工具 |
 | DreamerV3 | 世界模型RL | 梦想轨迹 | 1张GPU、9天 | 从零获得钻石 |
 | **ANNA** | **符号NLP + 任务树** | **手工编写合成配方** | **1台笔记本、即时** | **任何可合成物品** |
+| **Altoclef** | **任务树（DAG）+ Baritone** | **游戏API读取** | **1台笔记本、即时** | **自主通关MC** |
 | **钉锤机器人** | **命令方块状态机** | **随机化决策** | **原版MC、无GPU** | **钉锤PvP练习** |
 
 视频中的机器人在资源上受限最大，但对过程的描述最为诚实。它先经历失败，然后迭代。它忘记所学，再重新学习。它以百连击收场：但也留下了关于自己所造之物是否为作弊的疑问。
@@ -257,5 +285,7 @@ PvP机器人（Kadambi）从像素中学习，ANNA通过任务树推理，而Mas
 **DreamerV3** : [论文](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, 法语NLP, 任务树)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [drmcbride12 fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, 任务树DAG, 自主通关)
 
 **钉锤机器人** : [视频](https://www.youtube.com/watch?v=Fmp2Il70IF8) by Master Gumbo · (命令方块, Carpet Mod, 状态机)
