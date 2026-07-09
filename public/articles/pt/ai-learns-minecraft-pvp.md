@@ -4,7 +4,7 @@ description: "1.000 duelos gravados, rede neural treinada em pixels, 90% de prec
 date: 2026-07-09
 tags:
   - minecraft
-  - ia
+  - ai
   - reinforcement-learning
   - imitation-learning
   - python
