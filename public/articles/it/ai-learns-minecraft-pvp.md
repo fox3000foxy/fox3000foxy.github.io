@@ -154,7 +154,7 @@ Il video è su [youtube.com/watch?v=j5nxDKAjg6U](https://www.youtube.com/watch?v
 
 ## VPT : Behavior Cloning su larga scala
 
-![Diagramma del progetto VPT di OpenAI: il modello di dinamica inversa predice le azioni da coppie di fotogrammi](assets/vpt-idm-diagram.png)
+![Diagramma del progetto VPT di OpenAI: il modello di dinamica inversa predice le azioni da coppie di fotogrammi](assets/vpt-overview.svg)
 
 L'approccio di "behavior cloning" del video (Fase 1) è la stessa tecnica usata da OpenAI nel progetto **Video PreTraining (VPT)**, ma agli estremi opposti dello spettro di risorse. VPT ha dimostrato che l'apprendimento per imitazione funziona per Minecraft quando hai 70.000 ore di video, 720 GPU e un modello di dinamica inversa per pseudo-etichettare dati non etichettati. Il creatore qui ha dimostrato che fallisce con un laptop e 1.000 duelli: ma per la stessa ragione fondamentale: l'apprendimento per imitazione è limitato dalla qualità delle sue dimostrazioni.
 

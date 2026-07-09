@@ -152,7 +152,7 @@ for frame, action in dataset:
 
 ## VPT：大规模行为克隆
 
-![OpenAI的VPT项目图示：逆向动力学模型从帧对预测动作](assets/vpt-idm-diagram.png)
+![OpenAI的VPT项目图示：逆向动力学模型从帧对预测动作](assets/vpt-overview.svg)
 
 视频中的"行为克隆"方法（阶段1）与OpenAI在其VPT项目中使用的技术完全相同，但处于资源光谱的两端。VPT证明，当你拥有7万小时视频、720块GPU和用于伪标记未标注数据的逆向动力学模型时，模仿学习对Minecraft是有效的。而这位创作者的实验证明，用一台笔记本电脑和1000场对决，它会失败。但基本原因相同：模仿学习受限于其演示的质量。
 
