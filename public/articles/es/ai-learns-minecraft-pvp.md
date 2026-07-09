@@ -4,9 +4,9 @@ description: "1.000 duelos grabados, red neuronal entrenada en píxeles, 90% de 
 date: 2026-07-09
 tags:
   - minecraft
-  - ia
-  - aprendizaje-por-refuerzo
-  - aprendizaje-por-imitation
+  - ai
+  - reinforcement-learning
+  - imitation-learning
   - python
 authors:
   - fox3000foxy

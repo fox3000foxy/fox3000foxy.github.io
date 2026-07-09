@@ -4,9 +4,9 @@ description: "1.000 düello kaydedildi, pikseller üzerinde eğitilen sinir ağ�
 date: 2026-07-09
 tags:
   - minecraft
-  - yapay-zeka
-  - pekistirmeli-ogrenme
-  - taklit-ogrenimi
+  - ai
+  - reinforcement-learning
+  - imitation-learning
   - python
 authors:
   - fox3000foxy

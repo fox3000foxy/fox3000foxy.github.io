@@ -4,9 +4,9 @@ description: "1 000 duels enregistrés, réseau neuronal entraîné sur des pixe
 date: 2026-07-09
 tags:
   - minecraft
-  - ia
-  - apprentissage-par-renforcement
-  - apprentissage-par-imitation
+  - ai
+  - reinforcement-learning
+  - imitation-learning
   - python
 authors:
   - fox3000foxy

@@ -4,7 +4,7 @@ description: "1.000 Duelle aufgezeichnet, neuronales Netzwerk auf Pixeln trainie
 date: 2026-07-09
 tags:
   - minecraft
-  - ki
+  - ai
   - reinforcement-learning
   - imitation-learning
   - python
