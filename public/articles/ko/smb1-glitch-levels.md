@@ -7,7 +7,7 @@ tags:
   - reverse-engineering
   - nintendo
   - nes
-  - 6502
+  - "6502"
   - mario
 authors:
   - fox3000foxy
