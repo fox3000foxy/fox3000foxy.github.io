@@ -237,6 +237,19 @@ Master Gumbo เรียกสิ่งนี้ว่า "รูปแบบ A
 
 ในขณะที่บอท PvP (Kadambi) เรียนรู้จากพิกเซลและ ANNA ให้เหตุผลผ่าน task tree บอทของ Master Gumbo บรรลุความฉลาดผ่าน **การเปลี่ยนสถานะแบบสุ่ม** : แนวทาง command block บริสุทธิ์ที่พิสูจน์ว่าคุณไม่จำเป็นต้องมีโครงข่ายประสาทเพื่อสร้างคู่ต่อสู้ PvP ที่น่าเชื่อถือ
 
+## Altoclef : Baritone + task tree at scale
+
+If ANNA is a symbolic bot that *reads* to know what to do, and the Mace Bot randomizes decisions, **Altoclef** is a full autonomous agent that *plans* its way through the entire game. Built by gaucho-matero as a Fabric mod and powered by **Baritone** pathfinding, Altoclef decomposes any Minecraft goal into a task tree and executes it without human input.
+
+The interface is deceptively simple : type `@gamer` in chat, and Altoclef begins the beat-the-game task from a survival world. It gathers wood, crafts tools, mines iron and diamond, builds a Nether portal, collects blaze rods and ender pearls, finds the stronghold, and kills the Ender Dragon. All autonomously, all through the native Minecraft client, on any vanilla server.
+
+Under the hood, this is achieved through a **recursive task tree system** where each high-level goal (e.g., "craft a diamond pickaxe") is decomposed into prerequisite tasks : mine diamonds → smelt them → craft sticks → combine. The tree walks the full Minecraft recipe graph, handling production chains, mob drops, loot tables, and container access. Unlike ANNA's hand-authored tree, Altoclef's tasks are **programmable Java classes** that can implement arbitrary logic : combat strategies, bartering with piglins, exploration patterns.
+
+The key architectural insight is the separation of **what** (the task tree) from **how** (Baritone pathfinding). Baritone handles the low-level movement : pathfinding, obstacle avoidance, block breaking, inventory management — while the task system orchestrates the high-level plan. This modularity means neither component needs to be AI : they're both deterministic algorithms, yet their combination produces complex, goal-directed behavior that rivals learned approaches.
+
+Altoclef represents the limit of **pure symbolic Minecraft AI** : it can beat the game from scratch with zero training, zero GPUs, and zero human data, but it cannot adapt to tasks its programmers didn't anticipate, and it cannot learn from experience. It knows how to craft a diamond pickaxe because a Java class tells it exactly how, not because it figured it out.
+
+
 ## อะไรที่เชื่อมโยงพวกเขาเข้าด้วยกัน
 
 | แนวทาง | วิธีหลัก | ข้อมูล | คอมพิวต์ | ผลลัพธ์ |
@@ -246,6 +259,7 @@ Master Gumbo เรียกสิ่งนี้ว่า "รูปแบบ A
 | VPT | IL แบบกึ่งมีผู้สอน | 70K ชม. YouTube + IDM | 720 GPU, 9 วัน | เครื่องมือเพชร |
 | DreamerV3 | World model RL | วิถีที่ฝัน | 1 GPU, 9 วัน | เพชรจากศูนย์ |
 | **ANNA** | **NLP เชิงสัญลักษณ์ + task tree** | **สูตรที่เขียนด้วยมือ** | **1 แล็ปท็อป, ทันที** | **ไอเทมที่คราฟต์ได้ใดๆ** |
+| **Altoclef** | **Baritone + task tree FS** | **Java task classes** | **Fabric mod, no GPU** | **Beat the entire game** |
 | **Mace Bot** | **State machine command block** | **การตัดสินใจแบบสุ่ม** | **Vanilla MC, ไม่มี GPU** | **ฝึก Mace PvP** |
 
 บอทในวิดีโอเป็นบอทที่มีทรัพยากรจำกัดมากที่สุดแต่ซื่อสัตย์ที่สุดเกี่ยวกับกระบวนการ มันล้มเหลวก่อน แล้วจึงทำซ้ำ มันลืมสิ่งที่เรียนรู้ แล้วเรียนรู้ใหม่ มันจบลงด้วยคอมโบ 100 ครั้ง : แต่ยังมีคำถามว่าสิ่งที่มันสร้างขึ้นมานั้นโกงหรือไม่
@@ -261,5 +275,7 @@ Master Gumbo เรียกสิ่งนี้ว่า "รูปแบบ A
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, NLP ฝรั่งเศส, task tree)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Active fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, beats game)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) โดย Master Gumbo · (Command blocks, Carpet Mod, state machine)
