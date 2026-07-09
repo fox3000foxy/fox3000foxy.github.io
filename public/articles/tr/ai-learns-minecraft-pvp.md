@@ -154,7 +154,7 @@ Video [youtube.com/watch?v=j5nxDKAjg6U](https://www.youtube.com/watch?v=j5nxDKAj
 
 ## VPT : Ölçekte Davranış Klonlama
 
-![OpenAI'in VPT proje diyagramı: Ters Dinamik Modeli, kare çiftlerinden eylemleri tahmin eder](assets/vpt-idm-diagram.png)
+![OpenAI'in VPT proje diyagramı: Ters Dinamik Modeli, kare çiftlerinden eylemleri tahmin eder](assets/vpt-overview.svg)
 
 Videonun "davranış klonlama" yaklaşımı (Aşama 1), OpenAI'in **Video PreTraining (VPT)** projesinde kullandığı tekniğin aynısıdır, ancak kaynak spektrumunun zıt uçlarındadır. VPT, 70.000 saat video, 720 GPU ve etiketlenmemiş verileri pseudo-etiketlemek için bir ters dinamik modeliniz olduğunda taklit öğreniminin Minecraft için işe yaradığını kanıtladı. Buradaki yaratıcı, bir dizüstü bilgisayar ve 1.000 düelloyla başarısız olduğunu kanıtladı: ancak aynı temel nedenle: taklit öğrenimi, gösterimlerinin kalitesiyle sınırlıdır.
 

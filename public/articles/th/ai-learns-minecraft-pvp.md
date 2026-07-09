@@ -154,7 +154,7 @@ OCR มาตรฐานมีปัญหากับข้อความโ�
 
 ## VPT : Behavior cloning ในระดับใหญ่
 
-![แผนภาพโปรเจกต์ VPT ของ OpenAI: Inverse Dynamics Model ทำนายการกระทำจากคู่ของเฟรม](assets/vpt-idm-diagram.png)
+![แผนภาพโปรเจกต์ VPT ของ OpenAI: Inverse Dynamics Model ทำนายการกระทำจากคู่ของเฟรม](assets/vpt-overview.svg)
 
 แนวทาง "behavior cloning" ของวิดีโอ (เฟส 1) เป็นเทคนิคเดียวกับที่ OpenAI ใช้ในโปรเจกต์ **Video PreTraining (VPT)** แต่คนละขั้วของสเปกตรัมทรัพยากร VPT พิสูจน์ว่า imitation learning ใช้ได้กับ Minecraft เมื่อคุณมีวิดีโอ 70,000 ชั่วโมง, 720 GPU, และ inverse dynamics model เพื่อ pseudo-label ข้อมูลที่ไม่มีป้ายกำกับ ผู้สร้างที่นี่พิสูจน์ว่ามันล้มเหลวกับแล็ปท็อปเครื่องเดียวและ 1,000 ดวล : แต่ด้วยเหตุผลพื้นฐานเดียวกัน: imitation learning ถูกจำกัดด้วยคุณภาพของการสาธิต
 
