@@ -14,7 +14,7 @@ authors:
 
 ## Introduction
 
-![AI Learns Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.jpg)
+![AI Learns Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.png)
 
 There's a video called [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) by Kadambi | AI Engineering, and it's one of the most honest accounts of training a game-playing AI I've seen.
 
@@ -24,7 +24,7 @@ What makes the video interesting isn't the final result. It's the journey: the i
 
 ## Phase 1 : Imitation Learning (the failure)
 
-![The bot during imitation learning: facing a wall, jumping up and down](assets/ai-pvp-imitation-fail.jpg)
+![The bot during imitation learning: facing a wall, jumping up and down](assets/ai-pvp-imitation-fail.png)
 
 The creator started with a sensible approach: record 1,000 duels of their own gameplay, map every mouse click and key press to the corresponding frame, and train a neural network to predict actions from pixels.
 
@@ -50,7 +50,7 @@ Why?
 
 ## Phase 2 : Reinforcement Learning with Curriculum
 
-![The bot learning to track horizontally during RL training](assets/ai-pvp-rl-training.jpg)
+![The bot learning to track horizontally during RL training](assets/ai-pvp-rl-horizontal.png)
 
 Ditching imitation learning, the creator switched to RL. But dropping a fresh agent into a full PvP duel is useless : there's too much happening at once for random exploration to find anything.
 
@@ -96,6 +96,8 @@ This gives the network temporal context : without it, the bot has no idea whethe
 
 ### Step 3 : Vertical aim (another 7 hours)
 
+![The bot learning to aim up and down during RL training](assets/ai-pvp-rl-vertical.png)
+
 Adding vertical mouse movement was "a total disaster" at first. The initial performance was broken.
 
 After another hour in the sandbox, the bot figured out how to look up and down. But in the process, it completely forgot how to track horizontally.
@@ -105,6 +107,8 @@ This is **catastrophic forgetting** : a classic machine learning problem where o
 It took **6 additional hours** to regain horizontal tracking while keeping vertical control. The bot then maintained good crosshair placement thanks to the OCR group extracting camera pitch.
 
 ### Step 4 : Keyboard control
+
+![The bot toggling the W key constantly, learning to commit to movement](assets/ai-pvp-keyboard.png)
 
 Giving the bot permission to use the keyboard made the time-based features even more critical. At first, the W key was constantly toggled on and off : rapid switching because the network hadn't learned to commit.
 
@@ -130,7 +134,7 @@ The creator's take: it depends on intent. If both parties know it's a bot, it's 
 
 ## The result
 
-![The bot executing a 100-hit combo](assets/ai-pvp-final-combo.jpg)
+![The bot executing a 100-hit combo](assets/ai-pvp-final-combo.png)
 
 A Minecraft PvP bot trained on a **laptop with no GPU**, built on a custom training pipeline with:
 
@@ -150,13 +154,19 @@ The video is at [youtube.com/watch?v=j5nxDKAjg6U](https://www.youtube.com/watch?
 
 ## VPT : Behavior cloning at scale
 
+![OpenAI's VPT project diagram : the Inverse Dynamics Model predicts actions from pairs of frames](assets/vpt-idm-diagram.png)
+
 The video's "behavior cloning" approach (Phase 1) is the same technique OpenAI used in their **Video PreTraining (VPT)** project, but at opposite ends of the resource spectrum. VPT proved that imitation learning works for Minecraft when you have 70,000 hours of video, 720 GPUs, and an inverse dynamics model to pseudo-label unlabeled data. The creator here proved it fails with one laptop and 1,000 duels : but for the same fundamental reason: imitation learning is bounded by the quality of its demonstrations.
+
+![OpenAI's VPT agent mining a tree in Minecraft](assets/vpt-minecraft.jpg)
 
 The VPT pipeline solves the data problem by training an **Inverse Dynamics Model (IDM)** that looks at frame t-1 and frame t+1 to predict the action at frame t. Because the IDM is non-causal (it sees future frames), the task is easier than behavioral cloning and requires far less labeled data. They paid contractors ~$2,000 for 2,000 hours of labeled data, then used the IDM to pseudo-label 70,000 hours of YouTube Minecraft videos.
 
 The resulting 0.5B parameter foundation model achieved zero-shot capabilities that were impossible with RL alone : chopping trees, crafting tables, pillar jumping : and fine-tuned with RL, became the first AI to craft diamond tools.
 
 ## OpenAI Five : The reward shaping problem
+
+![OpenAI Five playing Dota 2 against human professionals](assets/openai-five-dota2.jpg)
 
 OpenAI Five (2019) defeated the Dota 2 world champions using pure self-play RL : no imitation learning. 256 GPUs, 128,000 CPU cores, 180 years of gameplay per day, 10 months of training.
 
@@ -166,7 +176,11 @@ The video's bot faces the same problem: its reward function encodes the creator'
 
 ## DreamerV3 : World models and sparse rewards
 
+![DreamerV3 benchmark scores across over 150 diverse tasks with a single configuration](assets/dreamerv3-benchmarks.png)
+
 DeepMind's DreamerV3 (2023) takes a third approach. Instead of behavior cloning or shaped RL, it learns a **world model** : a neural network that predicts future states and rewards from past actions : and plans by dreaming about possible futures. It was the first algorithm to collect diamonds in Minecraft from scratch without human data or curricula, published in Nature in 2025.
+
+![DreamerV3 learns a world model to imagine future trajectories](assets/dreamerv3-header.png)
 
 The diamond environment defines a sparse reward over 12 milestones (log → planks → stick → crafting table → wooden pickaxe → cobblestone → stone pickaxe → iron ore → furnace → iron ingot → iron pickaxe → diamond), each giving +1 exactly once. Plus a small health reward (±0.01 per hp). Total achievable: 11.1 in a 36,000-step episode.
 
