@@ -15,6 +15,7 @@ import AuthorBio from "../components/AuthorBio";
 import SeriesNav from "../components/SeriesNav";
 import GiscusComments from "../components/GiscusComments";
 import ReadingProgress from "../components/ReadingProgress";
+import AudioPlayer from "../components/AudioPlayer";
 import ShareButtons from "../components/ShareButtons";
 import BookmarkButton from "../components/BookmarkButton";
 import { useReadingMode } from "../hooks/useReadingMode";
@@ -193,6 +194,7 @@ export default function Article() {
 						))}
 					</div>
 				)}
+				<AudioPlayer slug={slug!} lang={lang} />
 				<div className="share-buttons">
 					<ShareButtons
 						url={window.location.href}
