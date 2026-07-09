@@ -237,6 +237,25 @@ Dopo essersi addestrato con il bot e aver poi duellato contro il giocatore che l
 
 Mentre il bot PvP (Kadambi) impara dai pixel e ANNA ragiona con un albero dei compiti, il bot di Master Gumbo raggiunge l'intelligenza attraverso **transizioni di stato randomizzate**: un approccio puro con command block che dimostra che non servono reti neurali per costruire un avversario PvP convincente.
 
+## Altoclef : Un mineratore IA con pianificazione basata su goal
+
+Mentre tutti i progetti precedenti si concentrano sul combattimento o sulla sopravvivenza di base, **Altoclef** di **Ga13c** risolve un problema diverso: estrarre qualsiasi risorsa in Minecraft dato un obiettivo testuale. Non è un bot PvP e non usa pixel: è un agente IA strutturato che opera attraverso **Fabric API** direttamente nel client di Minecraft, controllando il giocatore attraverso il codice Java piuttosto che attraverso il riconoscimento dello schermo.
+
+L'architettura di Altoclef è un **task tree** con un sistema di pianificazione inverso. Date una risorsa obiettivo (ad esempio *"netherite ingot"*), l'agente percorre all'indietro il grafo delle ricette e delle azioni di Minecraft: ha bisogno di un lingotto di netherite → servono frammenti di netherite grezzi e oro → serve un piccone di diamante per la netherite → servono diamanti → serve un piccone di ferro per i diamanti. Il sistema si ferma solo quando raggiunge risorse ottenibili direttamente (legno, pietra, terra) e a quel punto esegue i compiti con **Baritone**, un pathfinding algorithm open-source che naviga nel mondo e interagisce con i blocchi.
+
+L'agente gestisce:
+
+- **Inferenza automatica delle ricette**: a partire da un obiettivo testuale, Altoclef costruisce l'intera catena di crafting senza alcuna codifica manuale.
+- **Task progress tracking**: utilizza lo stato del mondo e dell'inventario letti direttamente dalle classi Java di Minecraft per sapere se un sotto-compito è completo o fallito.
+- **Pianificazione adattiva**: se un componente della ricetta non è disponibile, l'albero dei compiti si espande automaticamente per estrarlo o craftarlo.
+- **Esecuzione parallela**: compiti indipendenti (ad esempio raccogliere legno e pietra contemporaneamente) possono essere eseguiti insieme per risparmiare tempo.
+
+A differenza di ANNA, che opera tramite Mineflayer su un server esterno e usa NLP francese per l'interpretazione dei comandi, Altoclef gira come mod Fabric nel client di Minecraft vero e proprio. Non cattura schermate, non elabora pixel, non addestra reti neurali: legge direttamente lo stato del gioco dalle classi Java e invoca Baritone per la navigazione. È il più vicino a un "vero giocatore automatico" tra tutti i progetti qui discussi.
+
+Tuttavia, Altoclef ha dei limiti. Non impara dall'esperienza (non usa RL), non riconosce oggetti visivamente e non è progettato per il PvP. La sua forza è la pianificazione sistematica della progressione. Per survival automation e speedrunning di progressione tecnologica è eccellente, ma non ti aiuterà in un duello.
+
+Altoclef rappresenta il polo **simbolico-procedurale** dello spettro dell'IA di Minecraft: conoscenza codificata come albero dei compiti, esecuzione affidata a un pathfinding terzo, percezione tramite API di gioco anziché visione artificiale.
+
 ## Cosa li unisce
 
 | Approccio | Metodo principale | Dati | Calcolo | Risultato |
@@ -246,6 +265,7 @@ Mentre il bot PvP (Kadambi) impara dai pixel e ANNA ragiona con un albero dei co
 | VPT | IL semi-supervisionato | 70K ore YouTube + IDM | 720 GPU, 9 giorni | Strumenti di diamante |
 | DreamerV3 | World model RL | Traiettorie sognate | 1 GPU, 9 giorni | Diamante da zero |
 | **ANNA** | **NLP simbolico + albero compiti** | **Ricette scritte a mano** | **1 laptop, istantaneo** | **Qualsiasi oggetto creabile** |
+| **Altoclef** | **Task tree con Baritone + Fabric** | **Goal testuale → catena ricette** | **Client Minecraft, nessuna GPU** | **Estrazione automatica di risorse** |
 | **Mace Bot** | **Macchina a stati con command block** | **Decisioni randomizzate** | **MC vanilla, nessuna GPU** | **Addestramento Mace PvP** |
 
 Il bot del video è il più vincolato dalle risorse ma il più onesto riguardo al processo. Prima fallisce, poi itera. Dimentica ciò che ha imparato, poi re-impara. Finisce con una combo da 100 colpi: ma anche con una domanda su se ciò che ha costruito sia barare.
@@ -261,5 +281,7 @@ Il bot del video è il più vincolato dalle risorse ma il più onesto riguardo a
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, French NLP, task tree)
+
+**Altoclef** : [GitHub](https://github.com/ga13c/Altoclef) · (Fabric mod, Baritone, task tree, goal-oriented mining)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) di Master Gumbo · (Command blocks, Carpet Mod, state machine)

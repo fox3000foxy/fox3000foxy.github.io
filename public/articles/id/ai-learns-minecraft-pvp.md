@@ -237,6 +237,18 @@ Setelah berlatih dengan bot dan kemudian berduel dengan pemain yang menyebutnya 
 
 Di mana bot PvP (Kadambi) belajar dari piksel dan ANNA bernalar melalui pohon tugas, bot Master Gumbo mencapai kecerdasan melalui **transisi keadaan acak** : pendekatan command block murni yang membuktikan Anda tidak perlu jaringan saraf untuk membangun lawan PvP yang meyakinkan.
 
+## Altoclef : Baritone + task tree dalam skala besar
+
+Jika ANNA adalah bot simbolik yang *membaca* untuk tahu apa yang harus dilakukan, dan Mace Bot mengacak keputusan, **Altoclef** adalah agen otonom penuh yang *merencanakan* jalannya melalui seluruh game. Dibangun oleh gaucho-matero sebagai mod Fabric dan didukung oleh **Baritone** pathfinding, Altoclef mendekomposisi tujuan Minecraft apa pun ke dalam task tree dan mengeksekusinya tanpa input manusia.
+
+Antarmukanya sangat sederhana : ketik `@gamer` di chat, dan Altoclef memulai tugas beat-the-game dari world survival. Ia mengumpulkan kayu, membuat tools, menambang besi dan diamond, membangun Nether portal, mengumpulkan blaze rods dan ender pearls, menemukan stronghold, dan membunuh Ender Dragon. Semuanya otonom, semuanya melalui Minecraft client asli, di server vanilla mana pun.
+
+Di balik layar, ini dicapai melalui **sistem recursive task tree** di mana setiap tujuan tingkat tinggi (misalnya, "buat diamond pickaxe") didekomposisi menjadi tugas prasyarat : tambang diamond → smelt → buat sticks → gabungkan. Pohon ini menelusuri seluruh grafik resep Minecraft, menangani production chain, mob drops, loot tables, dan akses container. Tidak seperti pohon ANNA yang dibuat dengan tangan, tugas Altoclef adalah **Java class yang dapat diprogram** yang bisa mengimplementasikan logika arbitrer : strategi tempur, barter dengan piglin, pola eksplorasi.
+
+Wawasan arsitektur utamanya adalah pemisahan antara **apa** (task tree) dari **bagaimana** (Baritone pathfinding). Baritone menangani pergerakan tingkat rendah : pathfinding, penghindaran rintangan, pemecahan blok, manajemen inventory — sementara sistem tugas mengoordinasikan rencana tingkat tinggi. Modularitas ini berarti tidak ada komponen yang perlu menjadi AI : keduanya adalah algoritma deterministik, namun kombinasinya menghasilkan perilaku kompleks yang diarahkan oleh tujuan dan menyaingi pendekatan yang dipelajari.
+
+Altoclef mewakili batas dari **AI Minecraft simbolik murni** : ia bisa menyelesaikan game dari awal tanpa pelatihan, tanpa GPU, dan tanpa data manusia, tetapi ia tidak bisa beradaptasi dengan tugas yang tidak diantisipasi oleh programmernya, dan ia tidak bisa belajar dari pengalaman. Ia tahu cara membuat diamond pickaxe karena sebuah Java class memberitahunya persis bagaimana, bukan karena ia mengetahuinya sendiri.
+
 ## Apa yang menyatukan mereka
 
 | Pendekatan | Metode inti | Data | Komputasi | Hasil |
@@ -246,6 +258,7 @@ Di mana bot PvP (Kadambi) belajar dari piksel dan ANNA bernalar melalui pohon tu
 | VPT | IL semi-supervised | 70K jam YouTube + IDM | 720 GPU, 9 hari | Alat diamond |
 | DreamerV3 | World model RL | Lintasan impian | 1 GPU, 9 hari | Diamond dari awal |
 | **ANNA** | **NLP simbolik + pohon tugas** | **Resep buatan tangan** | **1 laptop, instan** | **Item apa pun yang bisa dibuat** |
+| **Altoclef** | **Baritone + task tree FS** | **Java task classes** | **Fabric mod, tanpa GPU** | **Menyelesaikan seluruh game** |
 | **Mace Bot** | **State machine command block** | **Keputusan acak** | **Vanilla MC, tanpa GPU** | **Pelatihan Mace PvP** |
 
 Bot dalam video adalah yang paling terbatas sumber dayanya tetapi yang paling jujur tentang prosesnya. Ia gagal dulu, lalu berulang. Ia melupakan apa yang dipelajarinya, lalu belajar kembali. Ia berakhir dengan kombo 100 pukulan : tapi juga dengan pertanyaan tentang apakah yang dibangunnya itu curang.
@@ -261,5 +274,7 @@ Bot dalam video adalah yang paling terbatas sumber dayanya tetapi yang paling ju
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, NLP Prancis, pohon tugas)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Active fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, beat game)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) oleh Master Gumbo · (Command blocks, Carpet Mod, state machine)

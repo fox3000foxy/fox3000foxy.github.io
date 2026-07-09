@@ -237,6 +237,18 @@ Sau khi huấn luyện với bot và sau đó đấu tay đôi với người ch
 
 Trong khi bot PvP (Kadambi) học từ pixel và ANNA lý luận qua cây nhiệm vụ, bot của Master Gumbo đạt được trí thông minh thông qua **các chuyển đổi trạng thái ngẫu nhiên** : một cách tiếp cận command block thuần túy chứng minh bạn không cần mạng nơ-ron để xây dựng một đối thủ PvP thuyết phục.
 
+## Altoclef : Baritone + task tree ở quy mô lớn
+
+Nếu ANNA là bot biểu tượng *đọc* để biết phải làm gì, và Mace Bot ngẫu nhiên hóa quyết định, thì **Altoclef** là một tác nhân tự động hoàn chỉnh *lập kế hoạch* xuyên suốt toàn bộ trò chơi. Được xây dựng bởi gaucho-matero dưới dạng mod Fabric và chạy trên **Baritone** pathfinding, Altoclef phân rã bất kỳ mục tiêu Minecraft nào thành một cây nhiệm vụ và thực thi nó mà không cần đầu vào của con người.
+
+Giao diện đơn giản đến bất ngờ : gõ `@gamer` trong chat, và Altoclef bắt đầu nhiệm vụ beat-the-game từ một thế giới survival. Nó thu thập gỗ, chế tạo công cụ, khai thác sắt và kim cương, xây cổng Nether, thu thập blaze rods và ender pearls, tìm stronghold, và giết Ender Dragon. Hoàn toàn tự động, qua Minecraft client gốc, trên bất kỳ máy chủ vanilla nào.
+
+Bên dưới, điều này được thực hiện qua một **hệ thống task tree đệ quy**, nơi mỗi mục tiêu cấp cao (vd: "chế tạo diamond pickaxe") được phân rã thành các nhiệm vụ tiên quyết : khai thác kim cương → nấu chảy → chế tạo sticks → kết hợp. Cây đi qua toàn bộ đồ thị công thức Minecraft, xử lý chuỗi sản xuất, mob drops, loot table, và container access. Không giống cây viết tay của ANNA, các task của Altoclef là **Java classes có thể lập trình** mà có thể thực thi bất kỳ logic tùy ý : chiến lược chiến đấu, đổi đồ với piglin, mô hình thám hiểm.
+
+Điểm mấu chốt trong kiến trúc là sự tách biệt giữa **what** (task tree) và **how** (Baritone pathfinding). Baritone xử lý chuyển động cấp thấp : pathfinding, tránh chướng ngại vật, đập block, quản lý inventory — trong khi hệ thống task điều phối kế hoạch cấp cao. Sự mô-đun này đồng nghĩa không thành phần nào cần AI : cả hai đều là thuật toán xác định, nhưng sự kết hợp của chúng tạo ra hành vi phức tạp, hướng đến mục tiêu, sánh ngang với các phương pháp học.
+
+Altoclef đại diện cho giới hạn của **AI Minecraft thuần biểu tượng** : nó có thể beat game từ đầu với 0 giờ huấn luyện, 0 GPU, và 0 dữ liệu con người, nhưng nó không thể thích nghi với các tác vụ mà người lập trình không lường trước, và nó không thể học từ kinh nghiệm. Nó biết cách chế tạo một diamond pickaxe vì một Java class chỉ cho nó chính xác cách làm, không phải vì nó tự tìm ra.
+
 ## Điều gì kết nối chúng lại với nhau
 
 | Cách tiếp cận | Phương pháp cốt lõi | Dữ liệu | Tính toán | Kết quả |
@@ -246,6 +258,7 @@ Trong khi bot PvP (Kadambi) học từ pixel và ANNA lý luận qua cây nhiệ
 | VPT | IL bán giám sát | 70K giờ YouTube + IDM | 720 GPU, 9 ngày | Công cụ kim cương |
 | DreamerV3 | World model RL | Quỹ đạo mơ ước | 1 GPU, 9 ngày | Kim cương từ đầu |
 | **ANNA** | **NLP biểu tượng + cây nhiệm vụ** | **Công thức viết tay** | **1 laptop, tức thì** | **Bất kỳ vật phẩm chế tạo được** |
+| **Altoclef** | **Baritone + task tree đệ quy** | **Java classes** | **Mod Fabric, không GPU** | **Beat toàn bộ game** |
 | **Mace Bot** | **State machine command block** | **Quyết định ngẫu nhiên** | **Vanilla MC, không GPU** | **Huấn luyện Mace PvP** |
 
 Bot trong video là bot bị giới hạn tài nguyên nhất nhưng trung thực nhất về quá trình. Nó thất bại trước, sau đó lặp lại. Nó quên những gì đã học, sau đó học lại. Nó kết thúc với một combo 100 đòn : nhưng cũng với một câu hỏi về việệu liệu thứ nó xây dựng có phải là gian lận hay không.
@@ -261,5 +274,7 @@ Bot trong video là bot bị giới hạn tài nguyên nhất nhưng trung thự
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, NLP tiếng Pháp, cây nhiệm vụ)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Fork hoạt động](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, beat game)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) bởi Master Gumbo · (Command blocks, Carpet Mod, state machine)

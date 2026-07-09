@@ -232,6 +232,43 @@ Master Gumboは、これを「非常にシンプルで基本的なAIの形」と
 
 PvPボット（Kadambi）がピクセルから学習し、ANNAがタスクツリーを通じて推論するのに対し、Master Gumboのボットは**ランダム化された状態遷移**を通じて知能を達成している。これはニューラルネットワークなしでも説得力のあるPvP対戦相手を構築できることを証明する、ピュアコマンドブロックアプローチである。
 
+## Altoclef：Java + BaritoneでMinecraftを自動化する
+
+![Altoclefのタスクツリー：JavaクラスがTaskSystemに登録される](assets/altoclef-task-system.png)
+
+Altoclefは、ANNAやVPTとはまったく異なる哲学で構築されたMinecraftボットである。KadambiのPvPボットがピクセルから学習するのでも、ANNAのようにNLPからコマンドを解釈するのでもなく、Altoclefは**Javaクラスとして定義されたタスクツリー**と**Baritone**のpathfindingエンジンを組み合わせて、Minecraftのあらゆるタスクを自動化する。
+
+2021年に**gaucho-matero**によって作成されたAltoclefは、Fabric上で動作するクライアントサイドMODであり、Javaで記述されている。2021年5月24日には**完全自律でMinecraftをクリアした最初のボット**となった。エンダードラゴンを倒すまでの一連のタスク（木を切り、作業台を作り、石のツルハシを入手し、鉄を採掘し、ネザーに入り、ブレイズロッドを集め、エンダーアイをクラフトし、エンドポータルを見つけ、エンダードラゴンを倒す）を、一切の人間の介入なしに実行した。
+
+中核となるのは**TaskSystem**である。すべてのタスクは`adris.altoclef.tasks`パッケージのJavaクラスとして実装され、それぞれが単一の責任を持つ：
+- `ChopTreeTask`：木を伐採する
+- `MineTask`：指定された鉱石を採掘する
+- `CraftInTableTask`：作業台でアイテムをクラフトする
+- `SmeltTask`：かまどで精錬する
+- `EnterNetherTask`：ネザーに入る
+- `KillEntityTask`：特定のMobを倒す
+
+タスクは**内部でBaritone**を呼び出して移動や採掘を実行する。Baritoneはブロックの破壊、階段の設置、水バケツMLG、はしごやツタの昇降まで理解する高度なpathfindingエンジンであり、Altoclefはこれに「何をすべきか」という高レベルの判断力を追加する。
+
+```java
+// Altoclefのタスクシステムの概念：各タスクはJavaクラス
+public class CraftInTableTask extends Task {
+    public boolean isExecutable() { /* 材料は十分か */ }
+    public void execute() { 
+        baritone.moveTo(作業台の位置);
+        baritone.rightClick(作業台);
+        inventory.craft(レシピ);
+    }
+    public boolean isDone() { /* 結果がインベントリにあるか */ }
+}
+```
+
+AltoclefがANNAと異なるのは、その**実行の確実性**である。ANNAはNLPパーサーを通じてコマンドを解釈し、Mineflayer（JavaScript）で実行する。AltoclefはFabric MODとしてMinecraftの内部に直接アクセスし、Javaクラスとして定義されたタスクをBaritoneで実行する。これにより、ブロックの対話、インベントリ管理、エンティティとの戦闘など、より信頼性の高い操作が可能になる。
+
+ただし、AltoclefもANNAと同様に**事前定義された知識**に依存している。新しいスキルを学習することはできず、コード化されたタスクの範囲内でのみ動作する。PvPのような動的な環境では、KadambiのRLベースのボットほどの適応性はない。Altoclefの強みは**広さ**にある—400以上のアイテムを入手でき、ゲーム全体を攻略できるが、その行動は事前にプログラムされた範囲を超えない。
+
+Altoclefは、学習ベースのアプローチとシンボリックエンジニアリングの間の架け橋のような存在である。Baritoneという洗練されたpathfindingライブラリを土台に、Javaのタスクシステムで高レベルの計画を積み上げる。学習はしないが、その確実な実行力は、Minecraft AIの実用的な側面を示している。
+
 ## これらを結び付けるもの
 
 | アプローチ | コア手法 | データ | 計算リソース | 結果 |
@@ -241,6 +278,7 @@ PvPボット（Kadambi）がピクセルから学習し、ANNAがタスクツリ
 | VPT | 半教師ありIL | 7万時間YouTube + IDM | 720GPU、9日間 | ダイヤモンド道具 |
 | DreamerV3 | 世界モデルRL | 夢の軌道 | 1GPU、9日間 | ゼロからダイヤモンド |
 | **ANNA** | **シンボリックNLP + タスクツリー** | **手書きレシピ** | **ノートPC1台、瞬時** | **任意のクラフト可能アイテム** |
+| **Altoclef** | **Javaタスクツリー + Baritone** | **事前定義タスククラス** | **ノートPC1台、Fabric** | **完全自律クリア、400+アイテム** |
 | **メイスボット** | **コマンドブロックステートマシン** | **ランダム化決定** | **バニラMC、GPU不要** | **メイスPvP練習** |
 
 この動画のボットは最もリソース制約があるが、プロセスについて最も正直である。まず失敗し、そして反復する。学んだことを忘れ、再学習する。100ヒットコンボで終わる：しかし同時に、構築したものがチートなのかという疑問も残す。
@@ -256,5 +294,7 @@ PvPボット（Kadambi）がピクセルから学習し、ANNAがタスクツリ
 **DreamerV3** : [論文](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js、Mineflayer、フランス語NLP、タスクツリー)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · (Fabric、Baritone、Javaタスクツリー、完全自律クリア)
 
 **メイスボット** : [動画](https://www.youtube.com/watch?v=Fmp2Il70IF8) by Master Gumbo · (コマンドブロック、Carpet Mod、ステートマシン)

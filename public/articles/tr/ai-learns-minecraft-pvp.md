@@ -237,6 +237,16 @@ Botla eğitim aldıktan ve ardından (videonun girişinde) kendisine kötü diye
 
 PvP botu (Kadambi) piksellerden öğrenir ve ANNA bir görev ağacı aracılığıyla akıl yürütürken, Master Gumbo'nun botu **rasgeleleştirilmiş durum geçişleri** aracılığıyla zeka elde eder: ikna edici bir PvP rakibi oluşturmak için sinir ağlarına ihtiyacınız olmadığını kanıtlayan saf bir komut bloğu yaklaşımı.
 
+## Altoclef : Görev Odaklı Minecraft YZ'si
+
+Minecraft YZ'sinin bir başka köşesinde, **Altoclef** adlı bir bot tamamen farklı bir yaklaşım sunar. PvP yerine, oyuncuya yardım etmek için karmaşık görevleri otonom olarak tamamlamaya odaklanır. Altoclef, **Fabric** modu olarak çalışır ve **Baritone** kütüphanesini pathfinding için kullanır.
+
+Altoclef'in kalbi, **görev ağacı (task tree)** sistemidir. Bir hedef verildiğinde (örneğin, "elmas kazma yap"), bot bunu adım adım alt görevlere ayırır: odun kes → tahtalar yap → çubuklar yap → tahta kazma yap → taş çıkar → taş kazma yap → demir cevheri çıkar → demir külçeler erit → elmas bul → elmas kazma yap. Her adım, Baritone'un pathfinding ve blok etkileşim yeteneklerini kullanarak yürütülür.
+
+ANNA'dan farkı, Altoclef'in **Java sınıfları (Java classes)** ile doğrudan Minecraft'ın içinde çalışmasıdır. Bu, ona daha hızlı ve daha güvenilir blok etkileşimi sağlar. Baritone sayesinde, Altoclef karmaşık arazide gezinirken ANNA'dan daha yeteneklidir: mağaraları keşfedebilir, merdivenler çıkabilir ve su altında yüzebilir. Altoclef, birden fazla görevi aynı anda yürütmek için **multithreading** kullanır: bir iş parçacığı pathfinding ile ilgilenirken, diğeri envanter yönetimini ve işçilik tariflerini işler.
+
+PvP botu piksellerden öğrenir, ANNA bir ayrıştırıcı aracılığıyla akıl yürütür, Mace Botu komut bloklarıyla çalışırken, Altoclef **görev odaklı otomasyon** ile Minecraft YZ'sine pratik bir yaklaşım getirir: sizin için eşyaları üreten, kaynakları toplayan ve yapılar inşa eden bir yardımcı.
+
 ## Bunları birbirine bağlayan şey
 
 | Yaklaşım | Temel yöntem | Veri | Hesaplama | Sonuç |
@@ -246,6 +256,7 @@ PvP botu (Kadambi) piksellerden öğrenir ve ANNA bir görev ağacı aracılığ
 | VPT | Yarı denetimli IL | 70K saat YouTube + IDM | 720 GPU, 9 gün | Elmas araçlar |
 | DreamerV3 | Dünya modeli RL | Hayal edilen yörüngeler | 1 GPU, 9 gün | Sıfırdan elmas |
 | **ANNA** | **Sembolik NLP + görev ağacı** | **Elle yazılmış tarifler** | **1 dizüstü, anında** | **Üretilebilir her eşya** |
+| **Altoclef** | **Baritone + task tree** | **Minecraft tarifleri** | **1 sunucu, anında** | **Otonom görev tamamlama** |
 | **Mace Botu** | **Komut bloğu durum makinesi** | **Rastgele kararlar** | **Vanilla MC, GPU yok** | **Mace PvP eğitimi** |
 
 Videonun botu kaynak açısından en kısıtlı olanıdır, ancak süreç hakkında en dürüst olanıdır. Önce başarısız olur, sonra yineler. Öğrendiklerini unutur, sonra yeniden öğrenir. 100 vuruşluk bir combo ile biter: ancak aynı zamanda inşa ettiği şeyin hile olup olmadığına dair bir soruyla.
@@ -261,5 +272,7 @@ Videonun botu kaynak açısından en kısıtlı olanıdır, ancak süreç hakkı
 **DreamerV3** : [Makale](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, French NLP, task tree)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · (Fabric mod, Baritone, task tree)
 
 **Mace Botu** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) - Master Gumbo · (Command blocks, Carpet Mod, state machine)

@@ -237,6 +237,16 @@ Após treinar com o bot e depois duelar contra o jogador que o chamou de ruim (n
 
 Enquanto o bot PvP (Kadambi) aprende a partir de pixels e a ANNA raciocina através de uma árvore de tarefas, o bot do Master Gumbo alcança inteligência através de **transições de estado randomizadas**: uma abordagem pura de command blocks que prova que você não precisa de redes neurais para construir um oponente PvP convincente.
 
+## Altoclef : Baritone + task tree em grande escala
+
+Se a ANNA é um bot simbólico que *lê* para saber o que fazer, e o Mace Bot randomiza decisões, **Altoclef** é um agente totalmente autônomo que *planeja* seu caminho através do jogo inteiro. Construído por gaucho-matero como um mod Fabric e alimentado pelo pathfinding **Baritone**, Altoclef decompõe qualquer objetivo do Minecraft em uma task tree e o executa sem intervenção humana.
+
+A interface é enganosamente simples : digite `@gamer` no chat, e Altoclef começa a tarefa "zerar o jogo" a partir de um mundo survival. Ele coleta madeira, crafta ferramentas, minera ferro e diamante, constrói um portal do Nether, coleta blaze rods e ender pearls, encontra a stronghold e mata o Ender Dragon. Tudo autonomamente, através do cliente nativo do Minecraft, em qualquer servidor vanilla.
+
+Por baixo dos panos, isso é alcançado através de um **sistema recursivo de task tree** onde cada objetivo de alto nível (por exemplo, "craft uma picareta de diamante") é decomposto em tarefas pré-requisito : minerar diamantes → fundi-los → craftar gravetos → combinar. A árvore percorre o grafo completo de receitas do Minecraft, lidando com production chains, mob drops, loot tables e acesso a contêineres. Diferente da árvore escrita à mão da ANNA, as tarefas do Altoclef são **classes Java programáveis** que podem implementar lógica arbitrária : estratégias de combate, troca com piglins, padrões de exploração.
+
+Altoclef representa o limite da **IA Minecraft simbólica pura** : ele pode zerar o jogo do zero sem treinamento, sem GPU e sem dados humanos, mas não consegue se adaptar a tarefas que seus programadores não anteciparam, e não pode aprender com a experiência. Ele sabe craftar uma picareta de diamante porque uma classe Java diz exatamente como, não porque ele descobriu sozinho.
+
 ## O que os une
 
 | Abordagem | Método principal | Dados | Computação | Resultado |
@@ -246,6 +256,7 @@ Enquanto o bot PvP (Kadambi) aprende a partir de pixels e a ANNA raciocina atrav
 | VPT | IL semissupervisionada | 70K horas YouTube + IDM | 720 GPUs, 9 dias | Ferramentas de diamante |
 | DreamerV3 | World model RL | Trajetórias sonhadas | 1 GPU, 9 dias | Diamante do zero |
 | **ANNA** | **NLP simbólico + árvore tarefas** | **Receitas escritas à mão** | **1 laptop, instantâneo** | **Qualquer item fabricável** |
+| **Altoclef** | **Baritone + task tree** | **Classes Java de tarefas** | **Fabric mod, sem GPU** | **Zera o jogo inteiro** |
 | **Mace Bot** | **Máquina estados c/ command block** | **Decisões randomizadas** | **MC vanilla, sem GPU** | **Treinamento Mace PvP** |
 
 O bot do vídeo é o mais limitado em recursos, mas o mais honesto sobre o processo. Ele falha primeiro, depois itera. Esquece o que aprendeu, depois reaprende. Termina com um combo de 100 golpes: mas também com uma pergunta sobre se o que construiu é trapaça.
@@ -261,5 +272,7 @@ O bot do vídeo é o mais limitado em recursos, mas o mais honesto sobre o proce
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
 **ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, French NLP, task tree)
+
+**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · [Active fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, beats game)
 
 **Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) por Master Gumbo · (Command blocks, Carpet Mod, state machine)
