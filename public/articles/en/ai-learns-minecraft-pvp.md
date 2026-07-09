@@ -188,14 +188,35 @@ DreamerV3's world model lets it imagine trajectories and evaluate them internall
 
 Across 40 seeds trained for 100M environment steps, 24 of 40 collected at least one diamond. The first diamond appeared after 29M steps (~9 days on one GPU).
 
+## ANNA : Symbolic AI meets Minecraft
+
+![ANNA's task tree decomposition for a flint-and-steel](assets/anna-task-tree.png)
+
+Before the video's PvP bot, before VPT and DreamerV3, there was **ANNA** : a Minecraft bot built with a different philosophy entirely. Instead of learning from pixels or rewards, ANNA uses a **symbolic state machine** with a **French NLP parser** and a hand-authored **task dependency tree**.
+
+Created in 2022 (before "vibe coding" was a term), ANNA connects to a Minecraft server via Mineflayer and understands natural language commands in French. Say *"obtiens un briquet"* (get a flint-and-steel), and ANNA's parser identifies the verb (*obtien* → obtain), looks up the item recipe, and recursively decomposes it into subtasks : mine oak logs → craft planks → craft sticks → craft a crafting table → craft a wooden pickaxe → mine stone → craft a stone pickaxe → mine iron ore → smelt iron ingots → craft the flint-and-steel.
+
+![ANNA's NLP parser architecture for French command recognition](assets/anna-nlp-diagram.png)
+
+The NLP layer (`utils/id_parser.js`) splits commands on *"et"* (and) to handle parallel orders, maps French verbs to task types (*craft*, *mine*, *tue*, *suis moi*), and translates French item names to Minecraft IDs through a 5,000-entry dictionary. Unrecognized commands fall through to a GPT-based conversation system that casts ANNA as a sentient Minecraft companion.
+
+The **task tree** (`mc-tasks-tree/`) is the core : a recursive algorithm that walks the Minecraft item graph (crafting recipes, mining yields, mob drops, furnace recipes) to produce a step-by-step plan. For a diamond helmet, it generates a 40+ step breakdown spanning wood, stone, iron, and diamond tiers.
+
+![ANNA's diamond helmet task tree : a 40+ step breakdown](assets/anna-diamond-helmet.png)
+
+Where the video's PvP bot learns from experience, ANNA works from knowledge. It doesn't need 1,000 duels or 60 hours of training : it needs the tree, the parser, and the server. But it also can't generalize beyond what its tree encodes. No amount of state machine engineering would teach it to PvP.
+
+ANNA's approach mirrors a different era of AI : before end-to-end learning dominated, when the promise was that symbolic reasoning + careful engineering could produce intelligent behavior. Today, projects like ANNA and the PvP bot represent two poles of Minecraft AI : one reasons about the world, the other perceives it.
+
 ## What ties these together
 
-| Approach | Data | Reward | Compute | Result |
-|----------|------|--------|---------|--------|
-| Video's PvP bot | 1,000 duels | Shaped (hits, damage) | 1 laptop, 60h | 100-hit combo |
-| OpenAI Five | Self-play | 28 hand-picked features | 256 GPUs, 10mo | World champ Dota 2 |
-| VPT | 70K hrs YouTube + IDM | Human demo labels | 720 GPUs, 9 days | Diamond tools |
-| DreamerV3 | World model dreams | 12 sparse milestones | 1 GPU, 9 days | Diamond from scratch |
+| Approach | Core method | Data | Compute | Result |
+|----------|------------|------|---------|--------|
+| Video's PvP bot | RL + imitation learning | 1,000 duels | 1 laptop, 60h | 100-hit combo |
+| OpenAI Five | Self-play RL | 180 yrs gameplay/day | 256 GPUs, 10mo | World champ Dota 2 |
+| VPT | Semi-supervised IL | 70K hrs YouTube + IDM | 720 GPUs, 9 days | Diamond tools |
+| DreamerV3 | World model RL | Dreamed trajectories | 1 GPU, 9 days | Diamond from scratch |
+| **ANNA** | **Symbolic NLP + task tree** | **Hand-authored recipes** | **1 laptop, instant** | **Any craftable item** |
 
 The video's bot is the most resource-constrained but the most honest about the process. It fails first, then iterates. It forgets what it learned, then re-learns. It ends with a 100-hit combo : but also with a question about whether what it built is cheating.
 
@@ -208,3 +229,5 @@ The video's bot is the most resource-constrained but the most honest about the p
 **OpenAI Five** : [Paper](https://arxiv.org/abs/1912.06680) · [Blog](https://openai.com/index/dota-2/)
 
 **DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
+
+**ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, French NLP, task tree)
