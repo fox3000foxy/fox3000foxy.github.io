@@ -14,6 +14,8 @@ authors:
 
 ## Introduction
 
+![AI Learns Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.jpg)
+
 There's a video called [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) by Kadambi | AI Engineering, and it's one of the most honest accounts of training a game-playing AI I've seen.
 
 The premise: build a bot that plays Minecraft PvP (sword kit, fully enchanted diamond armor) by watching the screen and outputting mouse and keyboard commands. No reading game memory, no macros, no mods : just pixels in, actions out.
@@ -21,6 +23,8 @@ The premise: build a bot that plays Minecraft PvP (sword kit, fully enchanted di
 What makes the video interesting isn't the final result. It's the journey: the imitation learning failure, the feature engineering pivot, the catastrophic forgetting cycles, and the 60+ hours of training on a laptop with no GPU.
 
 ## Phase 1 : Imitation Learning (the failure)
+
+![The bot during imitation learning: facing a wall, jumping up and down](assets/ai-pvp-imitation-fail.jpg)
 
 The creator started with a sensible approach: record 1,000 duels of their own gameplay, map every mouse click and key press to the corresponding frame, and train a neural network to predict actions from pixels.
 
@@ -45,6 +49,8 @@ Why?
 **Inconsistent demonstrations.** The creator's own gameplay varied : sometimes strafing with keyboard, sometimes aiming with mouse in identical situations. This conflicting input confused the network.
 
 ## Phase 2 : Reinforcement Learning with Curriculum
+
+![The bot learning to track horizontally during RL training](assets/ai-pvp-rl-training.jpg)
 
 Ditching imitation learning, the creator switched to RL. But dropping a fresh agent into a full PvP duel is useless : there's too much happening at once for random exploration to find anything.
 
@@ -123,6 +129,8 @@ The argument for: a bot can process faster than a human, and if the opponent thi
 The creator's take: it depends on intent. If both parties know it's a bot, it's a fair match. The bot goes on to combo the enemy into the void with a 100-hit streak.
 
 ## The result
+
+![The bot executing a 100-hit combo](assets/ai-pvp-final-combo.jpg)
 
 A Minecraft PvP bot trained on a **laptop with no GPU**, built on a custom training pipeline with:
 
