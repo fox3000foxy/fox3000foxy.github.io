@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "create-cname": "echo fox3000foxy.com > dist/CNAME",
+    "generate-audio": "python3 scripts/generate-audio.py",
     "build-indexes": "bun run scripts/generate-index.ts",
     "build": "npm run build-indexes && tsc -b && vite build && bun run scripts/generate-rss.ts && bun run scripts/generate-sitemap.ts && bun run scripts/generate-news-sitemap.ts && bun run scripts/generate-og-pages.ts && bun run scripts/audit-seo.ts",
     "preview": "vite preview",
