@@ -10,6 +10,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIHvHvKnFXGbnU1cHoJy10vEosiEWwmG3gUk3+QB5GyO/AiBk01mNQNKmXv9Spsbl6VBnI9KmaYxfLKcO7bC5JvnnEw=="
 ---
 
 ## ذكائي الاصطناعي التافه من أجل Nausicaa

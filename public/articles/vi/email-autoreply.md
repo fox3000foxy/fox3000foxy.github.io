@@ -11,6 +11,8 @@ tags:
   - git
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIQC1vpzJrA4dbSZK0J6DLIfAk874q0qGh7nQ3X5HsI1/tQIgJAKv4RiF0wQemxusaEJXd8bKP9+cWqJPmDW94ivhCSs="
 ---
 
 # Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions

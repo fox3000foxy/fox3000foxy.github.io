@@ -9,6 +9,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQD2kqHiBWeax9rYXTjU9Qwxir8oWZnL742Ik3fgTiekvgIhAJJLad4W6Oc2FvpBdJ7bT822Zu44vmddwaTH16GPwwQA"
 ---
 
 # Script ký commit SSH -- giải thích chi tiết

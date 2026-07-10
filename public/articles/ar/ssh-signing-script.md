@@ -9,6 +9,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIDQDE2V+F1jGeAmANGyo6UHnW4dOLeJthFhxvQM18RY/AiEA1MWj9TBBsVCHoTvNmdyb+PIANdUYAScTwYv/qj+13dg="
 ---
 
 # سكريبت توقيع SSH للـ commits — شرح

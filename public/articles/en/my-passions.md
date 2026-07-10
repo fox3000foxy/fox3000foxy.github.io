@@ -7,6 +7,8 @@ tags:
   - personal
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDqmNovWY8SDgfw8fKvHe9PlXtnX7mZlHnDVO/zSlSD3gIhAMYQpRP98t3TqEodC4pW6fPxprAPxACPt25pNm2edYyL"
 ---
 
 # My Passions

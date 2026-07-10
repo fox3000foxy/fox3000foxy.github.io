@@ -10,6 +10,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIEn+vuGiEP3Xsmwp9BHIN27CmMT9yoEPzpOfjzv3gO4jAiEAyZauNaGxp48DpMmxDDnLJ0zI/84ZKFHOk2GJXbpRbVY="
 ---
 
 ## Nausicaa के लिए मेरा बेवकूफी भरा AI

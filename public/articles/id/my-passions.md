@@ -7,6 +7,8 @@ tags:
   - personal
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCH3CKjOYgvBkNfj3SrmqfXoEdHasY9ixLnYd0kgEOYgYCIQD2Mcq/sSxKfG/LEfUpOuZ0YJ6c2rGH5j/kGyT1fvTXtQ=="
 ---
 
 # Hobi Saya

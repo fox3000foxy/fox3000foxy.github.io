@@ -11,6 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQCFfYNp3qBNtdlO3ng1o+LXD+RHvpXJO1G2DvTzB+myowIhAJnunNtE6jH/wP2CnEZM0w6EB9t2BBu9o75atI1nu0EP"
 ---
 
 # สร้าง character-factory : อวาตาร์ที่มีระบบพันธุกรรม

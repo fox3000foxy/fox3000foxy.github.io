@@ -12,6 +12,8 @@ tags:
   - git
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDgK6XYHOMSccTUMHnNjAqSiyXMkLQGj6Vf4QHMruHPoAIhAM9cdn0fsZhGp5litjAypbWvGWRwRNeKql5AqaXyp+vB"
 ---
 
 # Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions

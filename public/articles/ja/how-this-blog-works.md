@@ -9,6 +9,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQCKVr+xwWULHMiJFm4kTm8K/y7sHv2/h65jDRj/oDUSowIhANyOrlnbCdxk1nA/puF7lEt6qjv/yx8z/qatxuojpeV6"
 ---
 
 # このブログの仕組み

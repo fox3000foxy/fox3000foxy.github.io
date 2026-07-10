@@ -5,7 +5,11 @@ interface Env {
   GITHUB_USERNAME: string;
   GITHUB_EMAIL: string;
   WORKER_URL: string;
+  SIGNING_PRIVATE_KEY: string;
 }
+
+const AUTHOR_PUBKEY =
+  "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA==";
 
 interface DeviceFlowResponse {
   device_code: string;
@@ -76,6 +80,9 @@ export default {
       }
       if (path === "/articles" && request.method === "POST") {
         return submitArticle(request, env);
+      }
+      if (path === "/pubkey" && request.method === "GET") {
+        return json({ pubkey: AUTHOR_PUBKEY });
       }
       return json({ error: "Not found" }, 404);
     } catch (err) {
@@ -168,6 +175,35 @@ async function getCurrentUser(request: Request): Promise<Response> {
   return json({ login: user.login, id: user.id, avatar_url: user.avatar_url, name: user.name });
 }
 
+async function signArticle(
+  privateKeyBase64: string,
+  slug: string,
+  author: string,
+  date: string,
+  content: string,
+): Promise<string> {
+  const msg = `${slug}|${author}|${date}|${content}`;
+  const encoder = new TextEncoder();
+  const msgBytes = encoder.encode(msg);
+
+  const keyData = Uint8Array.from(atob(privateKeyBase64), (c) => c.charCodeAt(0));
+  const key = await crypto.subtle.importKey(
+    "pkcs8",
+    keyData,
+    { name: "ECDSA", namedCurve: "P-256" },
+    false,
+    ["sign"],
+  );
+
+  const sig = await crypto.subtle.sign(
+    { name: "ECDSA", hash: "SHA-256" },
+    key,
+    msgBytes,
+  );
+
+  return btoa(String.fromCharCode(...new Uint8Array(sig)));
+}
+
 async function submitArticle(request: Request, env: Env): Promise<Response> {
   const auth = request.headers.get("Authorization");
   if (!auth?.startsWith("Bearer ")) {
@@ -194,6 +230,13 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   }
 
   const articleDate = new Date().toISOString().split("T")[0];
+  const authorSig = await signArticle(
+    env.SIGNING_PRIVATE_KEY,
+    article.slug,
+    user.login,
+    articleDate,
+    article.content,
+  );
   const frontmatter = [
     "---",
     `title: "${article.title.replace(/"/g, '\\"')}"`,
@@ -202,6 +245,8 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
     article.tags?.length ? `tags: [${article.tags.map((t) => `"${t}"`).join(", ")}]` : "tags: []",
     `authors: ["${user.login}"]`,
     `lang: "${article.lang || "en"}"`,
+    `author_pubkey: "${AUTHOR_PUBKEY}"`,
+    `author_sig: "${authorSig}"`,
     ...(article.images?.length
       ? [`images:\n${article.images.map((img) => `  - ${img.filename}`).join("\n")}`]
       : []),

@@ -10,6 +10,8 @@ tags:
   - python
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIEr06OongJWGeBn9PWzvqyNQPNGqLQourlxIgHZGw9uFAiEA3xoNhZ8JZrpz6D96oQjqqWvYgCiSZnRoADZi3XTvgdc="
 ---
 
 ## Introduction

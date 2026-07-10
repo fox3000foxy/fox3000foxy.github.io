@@ -6,6 +6,8 @@ tags:
   - personal
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIHyklRupXnzP7W31oR8dDITOiWvpO8PgPWeylVX1PS89AiAr3l/t4ZWD+0R/Gm2KYfwpx+6yLoym5FdFOIZAVVobcQ=="
 ---
 
 # 내 열정들

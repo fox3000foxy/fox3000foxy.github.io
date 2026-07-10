@@ -9,6 +9,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIB4xKXozowORnot4iPInHHOJ8j2gJ5nu0JY61RuDXW1SAiBFqwqGH6T7z+hZaM1d3SXxN/zOC0XsTjoEi9e7pieVNA=="
 ---
 
 # Ogni sandbox, emulatore, simulatore e honeypot JavaScript -- a confronto

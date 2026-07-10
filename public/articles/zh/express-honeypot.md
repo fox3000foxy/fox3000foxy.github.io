@@ -10,6 +10,8 @@ tags:
   - honeypot
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIHk9YzHTjxNtMPa7CAYqbSWVzN/VfrgQ6pKDTxnTXWUyAiBbSUhLr09ulj/2g/yY+7TfOuKS41Tqirc3sBeiGRFicQ=="
 ---
 
 ## 想法

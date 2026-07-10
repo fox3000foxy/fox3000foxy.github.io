@@ -9,6 +9,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIAJVTY1/PceiNkt1nbJRNNr6MyZCNmxBojitJ/g7uXg0AiEA/SbF6afRRgnHEKlm/jsMjdJpD5w5pemuq6bOJ9oTYmQ="
 ---
 
 # Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh

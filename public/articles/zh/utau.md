@@ -10,6 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIBYbIZNEKOFD8rR5KBkAeO7ffCvrdbS6KRyS4CSkjyAAAiAzZvUcuHRS18AVBLlA/D3l1iAnrekE6mSRkclOFfWXLw=="
 ---
 
 ## UTAU：一个VB6软件如何让人人都能玩合成音声

@@ -10,6 +10,8 @@ tags:
   - git
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIDC3oQ8diQEFvMAdebz8gwd4EZ0yNkp+EwVGX1xmwlvOAiA5197huIWW8Dp0rDwoa7P0mwJrmEoRxaoq4mDhFEe1iw=="
 ---
 
 # 我用 git 当数据库，在 GitHub Actions 上白嫖跑了个 bot

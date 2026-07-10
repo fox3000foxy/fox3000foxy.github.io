@@ -2,6 +2,8 @@
 title: "Ho costruito un honeypot Express ultra-realistico"
 description: "328 endpoint fittizi con risposte generate al volo, spoofing di intestazioni, registrazione del traffico bot — un'analisi approfondita di un middleware honeypot Express progettato per ingannare gli scanner."
 aiGenerated: true
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIByzadnw7ESmHb3borrA3MNJ3Bw8R8UOfB2PMouUhdG6AiBeGinHC3mugESngk+Mfuacl5YZ2HUoiaKYBvUEkZ/swg=="
 ---
 
 ## Cos'è un honeypot Express?

@@ -7,6 +7,8 @@ tags:
   - github
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIBNcOd6jpPHcr8m5maB7U4KTZWqNkIyYAvyVxIzOZCBeAiBZW1UNAknecrYlCb5n5CFkPvEC1th07CtTBdqd8vNrxg=="
 ---
 
 # Il Mio Profilo GitHub

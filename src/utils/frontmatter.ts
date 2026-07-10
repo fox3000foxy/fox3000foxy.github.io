@@ -42,6 +42,10 @@ export function parseFrontMatter(text: string): {
 					} else {
 						meta.authors = arr;
 					}
+				} else if (key === "author_pubkey") {
+					meta.author_pubkey = val;
+				} else if (key === "author_sig") {
+					meta.author_sig = val;
 				}
 			}
 		}

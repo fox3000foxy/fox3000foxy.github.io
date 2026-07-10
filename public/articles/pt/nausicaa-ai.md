@@ -11,6 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCICrtsmJHsfGsUarFgpws5IBFV/jdDNSGWAeU7k1YMYgBAiEA/mE5UdqRTTs22bYfEGvz0wLFca29/UHAMYRuCMcU8r0="
 ---
 
 ## Minha IA idiota para Nausicaa

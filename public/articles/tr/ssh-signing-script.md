@@ -10,6 +10,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIAa579akRHzC9z2T7vvFJlQJmYCqL30y/mxwQt/UO1fiAiBVAJClPtPoADR6yCEFlxu1aCQr59xHxbqTUu3oRYYEDw=="
 ---
 
 # SSH commit imzalama scripti açıklaması

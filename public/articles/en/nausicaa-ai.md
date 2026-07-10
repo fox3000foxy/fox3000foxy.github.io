@@ -11,6 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCICSkXLyIbWkMCkpF/bypLPCX2+gwhsrr0H+K/Otz72L4AiEA+R6Qrs8EQ9Qht+IZiYuiXjpGsFd8rzvcYhmgdvZqzlA="
 ---
 
 ## My dumb AI for Nausicaa
