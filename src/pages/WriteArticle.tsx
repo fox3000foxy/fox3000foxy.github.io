@@ -255,9 +255,14 @@ export default function WriteArticle() {
 				editor
 					.chain()
 					.focus()
-					.insertContent(
-						`<img src="${dataUrl}" data-filename="${finalName}" />`
-					)
+					.insertContent({
+						type: "image",
+						attrs: {
+							src: dataUrl,
+							alt: finalName,
+							"data-filename": finalName,
+						},
+					})
 					.run();
 				return [...prev, { filename: finalName, dataUrl }];
 			});
