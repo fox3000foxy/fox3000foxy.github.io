@@ -61,6 +61,8 @@ const pt: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "Escrever",
+	"nav.more": "Mais",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

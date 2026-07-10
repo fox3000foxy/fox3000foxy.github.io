@@ -61,6 +61,8 @@ const vi: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "Viết",
+	"nav.more": "Thêm",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

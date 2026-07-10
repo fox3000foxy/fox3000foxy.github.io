@@ -53,6 +53,8 @@ const fr: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Recherche",
+	"nav.write": "Écrire",
+	"nav.more": "Plus",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.github": "GitHub",

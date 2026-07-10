@@ -53,6 +53,8 @@ const es: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "Escribir",
+	"nav.more": "Más",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

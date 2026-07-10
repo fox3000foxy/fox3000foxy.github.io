@@ -61,6 +61,8 @@ const ar: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "كتابة",
+	"nav.more": "المزيد",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

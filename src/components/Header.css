@@ -162,6 +162,28 @@ header nav a:hover {
     width: 100%;
   }
 
+  .nav-dropdown {
+    width: 100%;
+    margin: 0;
+  }
+
+  .nav-dropdown-toggle {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    border: none;
+    box-shadow: none;
+    padding-left: 1rem;
+  }
+
+  .nav-dropdown-menu a {
+    margin: 0.25rem 0;
+  }
+
   .lang-select {
     margin-left: 0;
     margin-top: 1rem;
