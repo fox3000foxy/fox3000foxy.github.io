@@ -56,7 +56,7 @@ function slugify(text: string): string {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  fetch(request: Request, env: Env): Response | Promise<Response> {
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders });
     }
@@ -174,8 +174,6 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
     return json({ error: "Unauthorized" }, 401);
   }
 
-  const token = auth.slice(7);
-
   const userRes = await fetch("https://api.github.com/user", {
     headers: {
       Authorization: auth,
@@ -191,7 +189,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   const user: GitHubUser = await userRes.json();
   const article: ArticleDraft = await request.json();
 
-  if (!article.title || !article.content || !article.slug) {
+  if (!((article.title && article.content ) && article.slug)) {
     return json({ error: "title, slug, and content are required" }, 400);
   }
 
@@ -215,8 +213,6 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   const branchName = `article-${slugify(article.slug)}-${Date.now().toString(36)}`;
 
   const repo = env.GITHUB_REPO;
-  const owner = repo.split("/")[0];
-  const repoName = repo.split("/")[1];
 
   const headers: Record<string, string> = {
     Authorization: auth,
@@ -277,11 +273,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   }
 
   if (article.images?.length) {
-    const imagesDir = `public/articles/assets/`;
-    const assetsRef = await fetch(
-      `https://api.github.com/repos/${repo}/contents/${imagesDir}`,
-      { method: "GET", headers },
-    );
+    const imagesDir = "public/articles/assets/";
 
     for (let i = 0; i < article.images.length; i++) {
       const img = article.images[i];
