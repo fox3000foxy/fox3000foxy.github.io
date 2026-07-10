@@ -27,7 +27,9 @@ type LoginState =
 	  }
 	| { phase: "error"; message: string };
 
-const API_URL = import.meta.env.VITE_WRITER_API_URL || "https://writer-worker.fox3000foxy.workers.devs";
+const API_URL =
+	import.meta.env.VITE_WRITER_API_URL ||
+	"https://writer-worker.fox3000foxy.workers.devs";
 
 const turndown = new TurndownService({
 	headingStyle: "atx",
