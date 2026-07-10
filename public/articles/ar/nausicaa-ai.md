@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "S/WRsbbaE6aM+KeBf0ooKTZrjioZzkr0J+mHSaFvNxAJ0oC5mdeIGDYacNIzP7EGsc5zPp8g1FaRngvNKWlSkA=="
+author_sig: "7g4m0JYYj2Zg0+xvwLZhzZD1vdJXxnTwnlCmYLcF20l6Rx0+crFLKN/72rtDdRSicmPp6XQDa6HUVbkPsd7YMA=="
 ---
 
 ## ذكائي الاصطناعي التافه من أجل Nausicaa

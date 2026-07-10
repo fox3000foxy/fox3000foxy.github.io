@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GpCQvsNKhq8M+EDT5KhpQWFrrCf3dXFxsdy4I/59hp+nEHcVc3XaiqXtmPkw/FNjmRH0nz0yDgK0ZjOJl9L8Bg=="
+author_sig: "ue1oakIFtuJOB6GFQPqDBmnPqroKVmDaWZ+nyC8pv8gbSdcZ5x/9Zrof2p9zhtAvBBB+v9R4fcSinnIHlOB04g=="
 ---
 
 ## Introduzione

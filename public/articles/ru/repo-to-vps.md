@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BJudZ09xgTaY7x9egQZEp60BoxM95LR5fIKoQoT/3o2CQCcHmYJtYxYmmvnSZMTBc2n91ahd3TOAfmyL/iurHw=="
+author_sig: "SCZXqMmGPPysEndm/pTXOvU50Fn8uTHXaQKIvMEjOeJb0M3Fh/ckqaR2ETUaOjzS1caJVr6JaPVOJ/6cgvZHwQ=="
 ---
 
 ## GitHub даёт тебе VPS бесплатно на 6ч. Я нашёл, как сделать его постоянным.

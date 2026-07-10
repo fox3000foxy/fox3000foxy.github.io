@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pyIWKYi/Hndk5jLQXlyjP3Wg9qPDF+xpRDHzIJzRKiobM/7rQjRm6u0pHS3yDvkPQ/8l4mAIn/NBQu7d2guc+A=="
+author_sig: "r9/poJQ60bPXFHBe8g63rjbthvFy3FiPDYQn+bifewUeWRlWnnpzHYOZ1QbNLKACh2p6tobmcmtp/47PlQKJsQ=="
 ---
 
 # मेरे जुनून

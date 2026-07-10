@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "L0pg88dJGxz/nqPHs7ZXmJmTsOv/iKqT2Hl5j/t2yI1iFvOldUgaFV+kgcOBS1imXYS48bNu+izUisFdO/1P4Q=="
+author_sig: "ctH2VvGCGrlRsYRFnNVRq+YHobTv3+t744pZQ3DA1S4Rqnz+x/Zs3e/ohREsvnxMqoONuLeGVMUeVBRcZPMcEQ=="
 ---
 
 # Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container

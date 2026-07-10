@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Z3mIr/d4b0OgSk3NWVxkbS/lqXG9c13qOc9aBU1m42u33stHT8jjfSgQOBk2qHf0bOhvBgf4yeHwJKRUZdU1QQ=="
+author_sig: "CyjvjRu5SnmyXU92gF68vGhSf/jsoWIqzDw2MdgUH8FojUMVu/sR0nYJSeysp3chWXh5WbRnEmkD2pwVUEHgNA=="
 ---
 
 # บล็อกนี้ทำงานอย่างไร ?

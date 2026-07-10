@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sxe5JuGflTL24G5RNwpR0bFeFs8UBGDqwYtoUwHWRkM9Fe9oiIwlu0OiE6oreIhQCPIJEhbusCzQQexop3EhJg=="
+author_sig: "xfsOWTzE1Mn3WvPvYHycv+eoRUKVOzgkKSyDOX1M3OPpJtwjHlgB/Au0oMafate8jAozxpHlKcMRlgQd9Pj/lg=="
 ---
 
 # 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比

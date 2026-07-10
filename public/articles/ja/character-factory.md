@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WWwoVJ1BdqPcedDZgz/X8QHZcurBAGrso/0CTRJvPp52Vz8o5UT9hPRKvo5pibBIyhxZFIGTW0iYzFY3xxKo9g=="
+author_sig: "4nwtir0veqKNoX8Yq4VGYUw4xtIMmA7jha2uq5jMqXegxwv7dtVUN8OdjOIne4Ry6LcPmr7udTDE3s+6U9Tl6g=="
 ---
 
 # character-factoryの構築：遺伝子を持つアバター

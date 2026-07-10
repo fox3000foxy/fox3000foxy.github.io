@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8QF7inOqFNW+3uI7C5hZkZCcLa0G7s0TF2W+OnpOe5WtHnKkownLBoVd1J0ZhRmNiRjZLLH0JmOtNrq309fcYQ=="
+author_sig: "sMGIsACbBkNjCZsT8s1m4UL8Q4BAxOTcYh4b49qsGdJIgQmRExQS9BFvoul+Fc+Gd/hC0KLoUtLICNQRQ7jXnA=="
 ---
 
 # Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri

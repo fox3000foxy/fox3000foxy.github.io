@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "p+e5mui2d7A515r8SrjSRp/Sthdi+9KTqyHLRI+5f64AWXpLzrvOmd1ICrKUYR/XoC3tedWnRGcps6qLDH8CHg=="
+author_sig: "4q8tu9NfsWnJyxUkUEnMYm9L4suovPDKYvV4meOHGs+N/+xSVMyNu9Ts5RS5+AINs+/ec6s64yLoADOaiF2c8w=="
 ---
 
 # 이 블로그는 어떻게 동작하나요?

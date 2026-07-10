@@ -17,7 +17,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "lh1C7CRtnWOuuFhKmSEWBgsf+btxpfjp8leRX03Wgur3zZG1N8S4F4KLScfDktD+2Zo9fUu5QXYcETpZVYRdgg=="
+author_sig: "oy4NF6oSwcnXn7lFgVg1g9TuRNyVrXvHSkSTbN5Fy6sU4be78eG1diTec36THc8XHC07lAuuN9Sq5kmWNcGczA=="
 ---
 
 # Я провёл выходные за чтением кода konosuba-rpg и вот что я нашёл

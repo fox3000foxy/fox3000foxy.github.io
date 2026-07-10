@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/erDh/kXTMqgEnX/J62SUzySNE1GPWu3Lnj5JOiPfE0Yu8ko4Z+HOiVrK4wvZDob0YnhFhPpN1gl82ce78wVXw=="
+author_sig: "ZtlEL1aYkTq7Aj96rLxA4BvwGW3dFFNX5Q5xzSBWd2o+ojFUo3DJ+9Q88AcnDUELAnG0hQKdnXVlhWXH+YfDTg=="
 ---
 
 # Script ký commit SSH -- giải thích chi tiết

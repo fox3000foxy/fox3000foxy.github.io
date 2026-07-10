@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8ALlRg8Gx8Lv1054gpPH38mbz488kRdgO7dbOaQAyMA3lrZ1aIKD8AFtCy/CT8iIPI3kCpJgWlHlCxjb9zu8yw=="
+author_sig: "71slg2ymCSkmf4JgKUmmXv6ybJZ99+ELdFaHkowlnFNZPOBWCDAAXLaIyEaov3I4/YvM4FZVuZu3edl0MAuImw=="
 ---
 
 # Membangun character-factory: avatar dengan sistem genetika

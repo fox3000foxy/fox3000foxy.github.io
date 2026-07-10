@@ -3,7 +3,7 @@ title: "بنيت شرك Express فائق الواقعية"
 description: "328 نقطة نهاية وهمية مع ردود تُنشأ فورياً، تزوير الرؤوس، تسجيل حركة البوتات — غوص عميق في برمجية وسيطة لـ Express مصممة لخداع الماسحات الضوئية."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "S1e3VmsaWUotLWI69y8MgrlPRQdmL+yjU40tphM7vhmvBawnjdRrbeXgfwp7HqXzlryCtZhyyBtyQrzFNv9tBA=="
+author_sig: "MUjyIb3CL+7wAuglBbRn+OcedBJoPedHeT/aeGgOS1O9iws2eAiI2OEpmpT/kcJorv4AGtQubmGuA1epfMAENQ=="
 ---
 
 ## الفكرة

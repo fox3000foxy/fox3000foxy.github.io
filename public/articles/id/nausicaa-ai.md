@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Jnix5nBxsHddvjrsc/FK//8R8Vj2AalQcQRpQ/zhYl3kKUFY8kRzckBQIq+lV1poFrDQTP5Z0fGOHTtebtlRSA=="
+author_sig: "Y3lcoNXtt7GRD5bELh3VnIoFbzKAejjwbjStCcWQHwQ5fozRE5vcxuPxCjlmpsJm53ce3Tp3pBuiudBdGF8Pbw=="
 ---
 
 ## AI Konyolku untuk Nausicaa

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QYlJmVPYkYlQekFNQ+6ElaSOo67MccikDXJ26HEmokyca8UEqhogIRIeJNqWezY3y5AVuTnFKtpglU7ZpC7SjQ=="
+author_sig: "73/4kXZ923/FWAXZOLHLp+Zs0GSxRBlgMwqR/UCwRQlZjepYw+jlyFp/Vdb5TWE25G1jaJkoTOEBGnN2xmdLfw=="
 ---
 
 ## 俺のクソAI for Nausicaa

@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0PaJRMy1whmyKG7MeB2aM7aDiWZXgQ5gcPcj+fRpJQ+DxdcUN15uGqHmZnCWJoVystGk6NFFVDXJnEIjXhX12A=="
+author_sig: "esOnxWlgX/g2nbFZ7wBYBDq1NcPLwFFM6+2K7bn+Pm0rUW4yIb8yw9B8Ya3id5M80W4nkFyNhkNyln2HxGpxWA=="
 ---
 
 ## บทนำ

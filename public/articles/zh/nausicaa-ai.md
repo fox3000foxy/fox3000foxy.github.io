@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QYbT2QZPUER+I78LG1xsN0ZtQHg8J87BJ/SE1VnWJuTPhTm+X50E8uHOsvXoZUHGOnO9wK4dIMb/vuqpEzdltw=="
+author_sig: "fvyYp7akMsYEagabUjw9KbUzn/4jYN1nagc/ynt7gj2luaOcsNDF2T8Q0iAbiCQE+Nu7O7LCIFBqWql+YJXhSA=="
 ---
 
 ## 我给 Nausicaa 写的那个沙雕 AI
