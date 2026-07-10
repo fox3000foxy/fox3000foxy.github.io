@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import LinkExtension from "@tiptap/extension-link";
 import ImageExtension from "@tiptap/extension-image";
+import LinkExtension from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useCallback, useEffect, useRef, useState } from "react";
 import TurndownService from "turndown";
 
 interface GitHubUser {
@@ -27,7 +27,7 @@ type LoginState =
 	  }
 	| { phase: "error"; message: string };
 
-const API_URL = import.meta.env.VITE_WRITER_API_URL || "http://localhost:8787";
+const API_URL = import.meta.env.VITE_WRITER_API_URL || "https://writer-worker.fox3000foxy.workers.devs";
 
 const turndown = new TurndownService({
 	headingStyle: "atx",
