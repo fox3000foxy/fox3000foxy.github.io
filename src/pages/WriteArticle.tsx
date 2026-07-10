@@ -44,10 +44,11 @@ function formatDate() {
 function imageNameFromFile(file: File): string {
 	const base = file.name.replace(/\.[^.]+$/, "").toLowerCase();
 	const ext = file.name.split(".").pop() || "png";
+	const id = crypto.randomUUID().slice(0, 8);
 	return `${base
 		.replace(/[^a-z0-9-]+/g, "-")
 		.replace(/^-|-$/g, "")
-		.slice(0, 40)}.${ext}`;
+		.slice(0, 40)}-${id}.${ext}`;
 }
 
 export default function WriteArticle() {
@@ -270,24 +271,19 @@ export default function WriteArticle() {
 		reader.onload = () => {
 			const dataUrl = reader.result as string;
 			const filename = imageNameFromFile(file);
-			setImages((prev) => {
-				const finalName = prev.some((i) => i.filename === filename)
-					? `${filename.replace(/\.\w+$/, "")}-${Date.now().toString(36)}.${filename.split(".").pop()}`
-					: filename;
-				editor
-					.chain()
-					.focus()
-					.insertContent({
-						type: "image",
-						attrs: {
-							src: dataUrl,
-							alt: finalName,
-							"data-filename": finalName,
-						},
-					})
-					.run();
-				return [...prev, { filename: finalName, dataUrl }];
-			});
+			editor
+				.chain()
+				.focus()
+				.insertContent({
+					type: "image",
+					attrs: {
+						src: dataUrl,
+						alt: filename,
+						"data-filename": filename,
+					},
+				})
+				.run();
+			setImages((prev) => [...prev, { filename, dataUrl }]);
 		};
 		reader.readAsDataURL(file);
 	}
