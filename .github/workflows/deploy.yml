@@ -35,6 +35,8 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          VITE_BUILD_ID: ${{ github.sha }}
 
       - name: Create CNAME and 404
         run: |

@@ -6,6 +6,7 @@ import {
 	prefetchArticleMarkdown,
 	prefetchMarkdownEntries,
 } from "../utils/articleCache";
+import { cacheBust } from "../utils/cacheBust";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 import BlogCard from "../components/BlogCard";
@@ -25,9 +26,9 @@ export default function BlogList() {
 		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 
 		async function load() {
-			let res = await fetch(indexUrl);
+			let res = await fetch(cacheBust(indexUrl));
 			if (!res.ok && fallbackUrl) {
-				res = await fetch(fallbackUrl);
+				res = await fetch(cacheBust(fallbackUrl));
 			}
 			if (!res.ok) {
 				setArticles([]);

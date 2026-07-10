@@ -19,6 +19,7 @@ import {
 	fetchArticleMarkdown,
 	getCachedArticleMarkdown,
 } from "../utils/articleCache";
+import { cacheBust } from "../utils/cacheBust";
 import { parseFrontMatter } from "../utils/frontmatter";
 import { isNew } from "../utils/isNew";
 import { verifyArticle } from "../utils/verify";
@@ -105,9 +106,9 @@ export default function Article() {
 		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 
 		async function loadIndex() {
-			let res = await fetch(indexUrl);
+			let res = await fetch(cacheBust(indexUrl));
 			if (!res.ok && fallbackUrl) {
-				res = await fetch(fallbackUrl);
+				res = await fetch(cacheBust(fallbackUrl));
 			}
 			if (!res.ok) {
 				return;
