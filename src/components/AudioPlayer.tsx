@@ -67,7 +67,7 @@ export default function AudioPlayer({
 	}
 
 	function handleSeek(
-		e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+		e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
 	) {
 		const audio = audioRef.current;
 		if (!audio) {
@@ -79,21 +79,11 @@ export default function AudioPlayer({
 		let fraction: number;
 		if ("clientX" in e) {
 			const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-			fraction = Math.max(
-				0,
-				Math.min(1, (e.clientX - rect.left) / rect.width),
-			);
+			fraction = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
 		} else {
 			const step =
-				e.key === "ArrowRight"
-					? 0.05
-					: e.key === "ArrowLeft"
-						? -0.05
-						: 0;
-			fraction = Math.max(
-				0,
-				Math.min(1, audio.currentTime / duration + step),
-			);
+				e.key === "ArrowRight" ? 0.05 : e.key === "ArrowLeft" ? -0.05 : 0;
+			fraction = Math.max(0, Math.min(1, audio.currentTime / duration + step));
 		}
 		audio.currentTime = fraction * duration;
 	}
@@ -140,9 +130,7 @@ export default function AudioPlayer({
 				<div
 					className="audio-progress-bar"
 					style={{
-						width: duration
-							? `${(currentTime / duration) * 100}%`
-							: "0%",
+						width: duration ? `${(currentTime / duration) * 100}%` : "0%",
 					}}
 				/>
 			</div>
