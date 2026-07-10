@@ -9,6 +9,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCICJwboAlXEiNttgtcT1RcGmJIKUQIJeGNKnx2DU6MVdZAiEAqKe+YLXRA+6pN3bVlIxATdRVQfh8oHzZd1CT3OXDWyE="
 ---
 
 # Blog Này Hoạt Động Như Thế Nào ?

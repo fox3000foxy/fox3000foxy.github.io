@@ -11,6 +11,8 @@ tags:
   - mario
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIB9FfbXA1fobw38Ju7E0kE5ITNZ6d2FnRtOe+wc57t6PAiEAkK8FQ2TXZYGQ09WbEkTWpN4Dn3V10a2a3Xc1b1VpsSA="
 ---
 
 ## Pengantar

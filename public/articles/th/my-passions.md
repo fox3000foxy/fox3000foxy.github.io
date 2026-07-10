@@ -7,6 +7,8 @@ tags:
   - personal
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIQDCjdQ3LSDH8UsMiiJqeR3YAYCJr1skCln0+Oyko8c4qQIgBb7yHf752BQKEg2x8IzER2qJUt1OWsv1i/GZeOWTYao="
 ---
 
 # ความหลงใหลของฉัน

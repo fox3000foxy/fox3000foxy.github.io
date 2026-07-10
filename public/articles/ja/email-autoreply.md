@@ -11,6 +11,8 @@ tags:
   - git
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIFN0TOxRWdnbxNPjJEtI6KnkawwjdcThI8n7Qrj0EGE3AiBPB5+Hc1IgRpeG9i4v+TqlOyBqHZXL/uVQ7Xl5nokGmQ=="
 ---
 
 # GitHub Actionsでgitをデータベース代わりに使って無料botを動かした話

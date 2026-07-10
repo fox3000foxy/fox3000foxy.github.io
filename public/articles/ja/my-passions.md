@@ -6,6 +6,8 @@ tags:
   - personal
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDqNCm/BS9Ga4CxTh5f6LCq6OyDTDl5GTcsJxV9Jp/cmQIhAPq5WJtI0fbXL3hRq5be+l0xT0vWKokzLf1zisz2yNw8"
 ---
 
 # 俺の情熱

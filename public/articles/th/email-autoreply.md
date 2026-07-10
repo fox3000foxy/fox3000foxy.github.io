@@ -11,6 +11,8 @@ tags:
   - git
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDmGG4XOFB5rMgQEff2OCLTDeAsFzS7kB6YqO5jAhSTtAIhAJV0BPYLHNgIS6pFixjBhvmVXD0WUQ9tkxyDS8cP0sv8"
 ---
 
 # ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions

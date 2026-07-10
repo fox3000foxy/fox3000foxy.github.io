@@ -21,6 +21,7 @@ import BookmarkButton from "../components/BookmarkButton";
 import { useReadingMode } from "../hooks/useReadingMode";
 import { useReadStatus } from "../hooks/useReadStatus";
 import { isNew } from "../utils/isNew";
+import { verifyArticle } from "../utils/verify";
 import NotFound from "./NotFound";
 
 function processArticleContent(text: string): string {
@@ -47,6 +48,7 @@ export default function Article() {
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
 	const [allArticles, setAllArticles] = useState<ArticleMeta[]>([]);
+	const [verified, setVerified] = useState(false);
 
 	useEffect(() => {
 		if (!slug) {
@@ -138,6 +140,18 @@ export default function Article() {
 		setTimeout(tryScroll, 100);
 	}, [content, location.hash]);
 
+	// Verify article signature
+	useEffect(() => {
+		if (!(slug && meta?.author_sig && content)) {
+			return;
+		}
+		const author = meta.authors?.[0] || "";
+		const date = meta.date || "";
+		verifyArticle(slug, author, date, content, meta.author_sig).then(
+			setVerified,
+		);
+	}, [slug, meta, content]);
+
 	const sorted = useMemo(() => {
 		return [...allArticles].sort(
 			(a, b) =>
@@ -182,6 +196,7 @@ export default function Article() {
 					</span>
 				</p>
 				<AuthorBio authors={meta?.authors} />
+				{verified && <span className="verified-badge">✓ Verified</span>}
 				{meta?.description && (
 					<p className="article-description">{meta.description}</p>
 				)}

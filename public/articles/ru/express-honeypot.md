@@ -2,6 +2,8 @@
 title: "Я создал ultra-реалистичный Express honeypot"
 description: "328 поддельных endpoint'ов с генерируемыми на лету ответами, подмена заголовков, запись трафика ботов — погружение в код middleware-ловушки для Express, созданной для обмана сканеров."
 aiGenerated: true
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIAOBhx6StarsjmnwDnn5VA824ASiorfVsPG/57w1rIexAiBmQp4Yh2jD6OLCHVyOwg2Qqhv4jCrcOl9jJ/eji85BsQ=="
 ---
 
 ## Идея

@@ -10,6 +10,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIQDDmPfaJjCIviIc9sCkMiuGQm+5Rlx4LI9dRg/qcuJufwIgKJDYucY8LyjCEXlgNJkfj0Chk+GVnTdlbzYMCQuoPag="
 ---
 
 # Wie funktioniert dieser Blog?

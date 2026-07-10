@@ -9,6 +9,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIBhj6jBofjvfO3Nbr7OWhYI6lrx99BcpNMXNVhLYML0IAiB1q1dHbsDPZuhinQSnV1v0UiS+I8gbymhXTK/90TuidQ=="
 ---
 
 # Setiap JavaScript sandbox, emulator, simulator, dan honeypot Linux -- dibandingkan

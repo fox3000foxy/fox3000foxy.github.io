@@ -10,6 +10,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDMNByiWYN6/AZUMEHb8VgTFtkN+IQvzX5OgnD6IYB5zQIhANzgKLSIp6RzPjqCtc2xTSs4P71qPftakmmLgX3NgyOn"
 ---
 
 ## AI Konyolku untuk Nausicaa

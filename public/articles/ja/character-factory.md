@@ -9,6 +9,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIQC824DTRYSz5hBWsqNetznIclVIF3BUDn/djRRhjGDL5AIgSYmxjArLQZH5sml3wNpGUstTMKRaEbvi+5y0cs3XZvc="
 ---
 
 # character-factoryの構築：遺伝子を持つアバター

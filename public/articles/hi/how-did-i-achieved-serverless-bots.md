@@ -12,6 +12,8 @@ tags:
   - bots
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQD/Zuni2L2DM3Y5AGdBe5lCoc23hnX6pDJ6cf4P/lskdwIhAK0M0RI3w2pTWLhoTP1hKuJaJE1mEnyzNWpDjGEAT+LY"
 ---
 
 ## Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers = 💸 शून्य

@@ -8,6 +8,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIQCZ2MSpwiUgj/aQOEZh/uuOl1q8KmzVM70BXxhqd7+BLgIgUWAgWRjP9BqJDZ5GbNKXljoJBg0juPLFmO69TJFZGeY="
 ---
 
 # 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比

@@ -11,6 +11,8 @@ tags:
   - mario
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQCnKv8nX8DZWPbbVY/YCFuJiKeWjYMeg9BdQI3bZNNXmwIhAJmUiipPa3UfRzcibLMww3aNvdxHJdNwkt+SNAld8AUZ"
 ---
 
 ## المقدمة

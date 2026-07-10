@@ -11,6 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIQDbAZXqAAi2tsJWSU280wz3ddSuxauNINOoeNNYvmUa/wIge3b1WTa5Y8dPDrAfWku+Ywvr1136z59lgiyby0sq4Gk="
 ---
 
 ## La mia IA sballata per Nausicaa

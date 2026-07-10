@@ -10,6 +10,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQCalP38GbNEwXxuwxYiuy6irvDPRxK9WS2NYHRLZCuu4gIhAOb1IOSOWN1yc3D8AkG4kEoii0RY4pFLpwn8uyxiJzHs"
 ---
 
 ## GitHub te file un VPS gratuit pendant 6h. J'ai trouvé comment le rendre permanent.

@@ -10,6 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIF2jkvyJWtSLpL9XSzBVjojPv0CJW/RE5I1lSyhGT9PYAiAKX357QNe8RkY6kGWb2T39L1RlAayO0AiFtV8vBklePw=="
 ---
 
 ## UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp

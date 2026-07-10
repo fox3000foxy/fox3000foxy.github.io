@@ -16,6 +16,8 @@ tags:
   - serverless
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDA+/vUL60Y7H1p/jetAJ8ijdtYI96o7BT90jU/t1djxAIhAMOnNYUs/B5I99Levb9osRMqhO7KNHSZGRAE5aXC1iIG"
 ---
 
 # Ich habe ein Wochenende damit verbracht, den Code von konosuba-rpg zu lesen, und das hier habe ich gefunden

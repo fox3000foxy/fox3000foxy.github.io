@@ -9,6 +9,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEUCIQDrLY1A1HYZCK2NxHkIYRLUEjXW459Tk2ZUZ0e7GTwJwAIgAqOlyjymVwqbsbWle3zC/tpLbY/PzSw7+mbuER3dv4E="
 ---
 
 ## 我给 Nausicaa 写的那个沙雕 AI

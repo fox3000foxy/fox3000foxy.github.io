@@ -10,6 +10,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEQCIDmaPT7breb4bBP6/0v1FoMKuO45qu+WG2wdvOVQbnNiAiB/3EzcxYxn9YYLTQ47zubxeYwNSlzgpIECytZFAVKztA=="
 ---
 
 ## Introducción

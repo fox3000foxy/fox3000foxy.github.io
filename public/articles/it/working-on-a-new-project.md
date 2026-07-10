@@ -7,6 +7,8 @@ tags:
   - webdev
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDJ2GT2/OUZDnPyPNxISq5CXjtPV/Qgl3rsOd9N7UcbDAIhAKYZzuCX3hOF14sYgw/nw4qhIiKec9doLT9XssBIwOvg"
 ---
 
 # Il Progetto

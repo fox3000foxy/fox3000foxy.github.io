@@ -9,4 +9,6 @@ export interface ArticleMeta {
 	tags?: string[];
 	series?: string;
 	authors?: string[];
+	author_pubkey?: string;
+	author_sig?: string;
 }

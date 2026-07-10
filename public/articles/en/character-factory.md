@@ -11,6 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
+author_sig: "MEYCIQDi0HtptCrV+gkQszLe50gxsdvEK7zYDUssvU5tiKZMRwIhAK+gHhg40QJavH0sLoFfopzlpm8//nIzZngNxSvRefNG"
 ---
 
 # Building character-factory: avatars with genetics
