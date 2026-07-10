@@ -45,6 +45,7 @@ export default function Article() {
 	const readingMode = useReadingMode();
 	const { markAsRead } = useReadStatus();
 	const [content, setContent] = useState<string | null>(null);
+	const [rawContent, setRawContent] = useState<string | null>(null);
 	const [error, setError] = useState(false);
 	const [meta, setMeta] = useState<ArticleMeta | null>(null);
 	const [allArticles, setAllArticles] = useState<ArticleMeta[]>([]);
@@ -58,10 +59,11 @@ export default function Article() {
 
 		function process(text: string): {
 			clean: string;
+			raw: string;
 			frontMeta: Partial<ArticleMeta>;
 		} {
 			const { meta, content } = parseFrontMatter(text);
-			return { clean: processArticleContent(content), frontMeta: meta };
+			return { clean: processArticleContent(content), raw: content, frontMeta: meta };
 		}
 
 		const cached = getCachedArticleMarkdown(slug, lang);
@@ -72,8 +74,9 @@ export default function Article() {
 						setError(true);
 						return;
 					}
-					const { clean, frontMeta } = process(text);
+					const { clean, raw, frontMeta } = process(text);
 					setContent(clean);
+					setRawContent(raw);
 					setMeta((prev) =>
 						prev
 							? { ...prev, ...frontMeta }
@@ -82,8 +85,9 @@ export default function Article() {
 				})
 				.catch(() => setError(true));
 		} else {
-			const { clean, frontMeta } = process(cached);
+			const { clean, raw, frontMeta } = process(cached);
 			setContent(clean);
+			setRawContent(raw);
 			setTimeout(() => {
 				setMeta((prev) =>
 					prev
@@ -142,15 +146,15 @@ export default function Article() {
 
 	// Verify article signature
 	useEffect(() => {
-		if (!(slug && meta?.author_sig && content)) {
+		if (!(slug && meta?.author_sig && rawContent)) {
 			return;
 		}
 		const author = meta.authors?.[0] || "";
 		const date = meta.date || "";
-		verifyArticle(slug, author, date, content, meta.author_sig).then(
+		verifyArticle(slug, author, date, rawContent, meta.author_sig).then(
 			setVerified,
-		);
-	}, [slug, meta, content]);
+		).catch(() => setVerified(false));
+	}, [slug, meta, rawContent]);
 
 	const sorted = useMemo(() => {
 		return [...allArticles].sort(
