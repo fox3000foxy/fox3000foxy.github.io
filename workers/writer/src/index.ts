@@ -60,7 +60,7 @@ function slugify(text: string): string {
 }
 
 export default {
-  fetch(request: Request, env: Env): Response | Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders });
     }
@@ -70,16 +70,16 @@ export default {
 
     try {
       if (path === "/auth/device" && request.method === "POST") {
-        return startDeviceFlow(env);
+        return await startDeviceFlow(env);
       }
       if (path === "/auth/poll" && request.method === "POST") {
-        return pollDeviceFlow(request, env);
+        return await pollDeviceFlow(request, env);
       }
       if (path === "/auth/user" && request.method === "GET") {
-        return getCurrentUser(request);
+        return await getCurrentUser(request);
       }
       if (path === "/articles" && request.method === "POST") {
-        return submitArticle(request, env);
+        return await submitArticle(request, env);
       }
       if (path === "/pubkey" && request.method === "GET") {
         return json({ pubkey: AUTHOR_PUBKEY });
