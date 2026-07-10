@@ -88,10 +88,7 @@ export default function Header() {
 							tabIndex={0}
 							onClick={() => setMoreOpen(!moreOpen)}
 							onKeyDown={(e) => {
-								if (
-									e.key === "Enter" ||
-									e.key === " "
-								) {
+								if (e.key === "Enter" || e.key === " ") {
 									setMoreOpen(!moreOpen);
 								}
 							}}
