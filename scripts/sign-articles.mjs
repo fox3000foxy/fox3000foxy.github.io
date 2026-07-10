@@ -1,11 +1,30 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import { createSign, createPrivateKey } from "crypto";
 import { globSync } from "glob";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = resolve(__dirname, "..");
+
+// Load .env if present
+const envPath = resolve(root, ".env");
+if (existsSync(envPath)) {
+  for (const line of readFileSync(envPath, "utf-8").split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const val = trimmed.slice(eq + 1).trim();
+    if (!process.env[key]) process.env[key] = val;
+  }
+}
 
 const PRIVATE_KEY_BASE64 = process.env.SIGNING_PRIVATE_KEY;
 if (!PRIVATE_KEY_BASE64) {
-  console.error("ERROR: SIGNING_PRIVATE_KEY env var not set");
+  console.error("ERROR: SIGNING_PRIVATE_KEY env var not set (add it to .env or export it)");
   process.exit(1);
 }
 
