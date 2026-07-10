@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCICLEV1WQ454aqQPE2yAV+2FHukEKApmWMfFLgjxJwYRtAiAh87Ho4beTzyK11hdZRYwZpDL8ORDsVueXT70HGwnUWA=="
+author_sig: "KqeBcJa5FjaLIXhfah3Pryl0+vj1gyHLmyqdFtKDIj29BfWnY96CiKCbf5KQF+T3ULHPViXgTI17ChV5qbd2jA=="
 ---
 
 ## GitHubが6時間だけ無料のVPSをくれる。俺はそれを永久にする方法を見つけた。

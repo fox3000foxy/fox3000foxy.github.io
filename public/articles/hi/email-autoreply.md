@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQC7JQyGprQ++7mULxtYBx4DNgxiDb3BcYb8hvlW8LOq9QIgWf9doV5vdpiOdHhvcjLqgWffWGP7CuyfwzwYU/MX9Vc="
+author_sig: "+lg6z0ujo9rNRtP4kQdnxFxvmHWqzXeF2KWpgZ8+uj8XtY2OydSA2/QJZu3KVRhoUYIEAf4XKzsQeoJjhL/h6A=="
 ---
 
 # मैंने git को डेटाबेस की तरह इस्तेमाल करके GitHub Actions पर मुफ्त बॉट बनाया

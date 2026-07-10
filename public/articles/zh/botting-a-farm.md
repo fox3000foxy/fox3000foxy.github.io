@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIAdUNMsCDESdavIqHr8WsfVo40fp6NEvxzn4y92rezVXAiEAocFh72JCn5klVLq+psRCfMbamhDyHIJLiMaHNpZ7/3c="
+author_sig: "smaJkyDAiGoVC95QuH7cOh96jDMLPdYAEjyJQwrMKWD6r9uCYyc9XMvlnEozsDxhWfoX0nzYeKxQW8yceNzUQQ=="
 ---
 
 > **备注（2026 年）：** 该项目已不再维护。微软显著加强了反机器人检测----当年有效的方法今天已经行不通了。下面描述的代码和方法仅用于存档/教育目的。

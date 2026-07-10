@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIHjXW+dtEexy5VceK9bYQdOgoeZgaQsTOO4wr+BYRgOEAiEAy4m26ewmZ2I8en5WNoFJayi9HZt+qAkEFmSdM8W3s64="
+author_sig: "WSxQYx7YiT/dRquSs9B1+/q9SydeO+sbS1MlkKnodUw4Cs07ZHMxyOB/q09+deFe0aPW8bK2LzKoyUYduvEA5A=="
 ---
 
 # Menjalankan Pustaka Node.js di Browser Tanpa Wasm -- polyfill typescript-virtual-container

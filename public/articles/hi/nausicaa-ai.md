@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIEOGX/9i7qFbhkSY93IvMANeS6g0le69hOLRTVLie2+QAiEA1yeZI8HhURhgKOrKtAHubHdqpL9ttF+OWDQ8VO/CAa8="
+author_sig: "XoPu8z7KTyQuRv1wfwLblCKwYUpXrskdwWDVUmEVj1cPc2hI7LS64xjFVzz2YpnJ5OWbOGf/XEiTLY1rk5IG0A=="
 ---
 
 ## Nausicaa के लिए मेरा बेवकूफी भरा AI

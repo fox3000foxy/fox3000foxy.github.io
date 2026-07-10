@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCWIAx7luZDUJBpg700gXSVTSPNj6CPRrzVQnVgtw/DOgIgNyKGDyxzWH1AMBjazrNGHzOTDpmzJgV6R49oRlzS3X4="
+author_sig: "fZMZOKT5zy5P9xXDgSaqegJyh7+SX3LaN5Vdok33cddtf6AjS9l8aPrvJ12a/5TTHfwggytNYO6Yzo4DLpfgqA=="
 ---
 
 ## GitHub แจก VPS ฟรีให้คุณ 6 ชั่วโมง ฉันหาวิธีทำให้มันถาวรได้แล้ว

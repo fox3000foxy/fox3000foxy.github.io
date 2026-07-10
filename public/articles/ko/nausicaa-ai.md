@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIH5Y08RB1p2eQX0Z6o6/Mz4fmLLzrOKlhKSsxTLw9yXNAiEA7BeHV8b2MHFUZblZccuhMWP4h4rIKoHDAc+OaXKJgVE="
+author_sig: "rvTWcJKD95cNG3dM4KSL/N4HyBkrchVbBuokCuk8+8jIi246YeL5F4GqsDxbo3Z903aaQ5xSZcdP1+nnvU4c6Q=="
 ---
 
 ## 내 막장 AI for Nausicaa

@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDxLs0hbplgvK3z2ZlP9PVVCw39AmZ5qEwmbADWE7srygIgQadYTnqIubkHfYbFKjd/d8mc4YXfamsfDcINEdPu2RE="
+author_sig: "tkvOtxCVgDgVZnDrWNQgPOyZfGsnzFVcTIvQub8dFjUJWdoUST69cWruAfegJy6px2xuoKi45lDiGsIg9WbCiw=="
 ---
 
 # 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교

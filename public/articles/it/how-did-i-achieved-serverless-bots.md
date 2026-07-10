@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIFZIij4BxlgiwARcKiRpfzl3e5XtnNbMXD7uEbroJc+2AiAEeBzOrRNqFiToQ4ftq4arC3r4knhXROC54zJEvunwLQ=="
+author_sig: "q2YmdaFqUm1kyGcm7SkEEpI/HE8/bKHHy9/Riu/rLBZawDF2/WtpkwyDCnoqgswPXfV6i8qVjap3pBxOhRtdzw=="
 ---
 
 ## Discord bot 100% serverless : Hono + Cloudflare Workers = 💸 zero

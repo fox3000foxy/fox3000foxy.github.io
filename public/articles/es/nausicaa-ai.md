@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDiWnbliqVR6ROwbw+7mD55e0w3LpFEf2rTyP5Kk2voAQIgN8kqLhzArT8mnWbCklBpWMIFmpiSQHzqElIkOKE8M+A="
+author_sig: "kYHKu6KyO3FpBCxtVLdr6mrGdKpQmP+zQRE3e58bZgTkxKrxDxoXIS5eghAwUfUhYrCMNllrqB3XhGtYHCQnug=="
 ---
 
 ## Mi puta IA para Nausicaä

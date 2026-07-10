@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIAYipPqMo3ZmWO1r+zFTn+7Udi7sQDkiL9HGtLTcLJSVAiEAjObxdF3fQNCYBtyWHny6cjDe4nWx7HhYJ2Zc8KMAxyE="
+author_sig: "UuTmTU8XxyZR61msF9AZRMtBBFA/XHdOmT2VX7uvWzC8OB1GZzt5nXRevsiY0qMRQWEgDfTP2GMngtwA+2ze1w=="
 ---
 
 ## UTAU : cómo un software en Visual Basic 6 democratizó la voz sintética

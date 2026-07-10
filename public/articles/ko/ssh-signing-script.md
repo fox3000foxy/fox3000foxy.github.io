@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQD9ua3tFpc68chZUAVJI7zm7WILcmN+shGWo9EgMM2XNQIhAPypqx/QWF6JZ0fTY+42s79I8SJFFbSRwmRrEfC6fYJ0"
+author_sig: "ldGEMiik0uf6HXdV80XVqgjbfZ9SXcYHr4Uwxh/J1xY37AKS9KG0l4t7KGsyR0lmu950SCaJZ2c0uHfUcTNCOw=="
 ---
 
 # SSH 커밋 서명 스크립트 설명

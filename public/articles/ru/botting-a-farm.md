@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIHG8F4As+ciUGiAynz+T1CwisWsw5Rug0N3WWblGVtzSAiAiMQ7jlh7BLbRgVl2JqOZGdN/3zWNRtKBAl8NZnVgB1A=="
+author_sig: "k/qyRxMCB7gNsKSOdng9VUXl7v1Y86tEP++bACWtRi0SaAuGxBl8y+6C5m63J7lE0b6LehpphrY3BhChr9AW2A=="
 ---
 
 > **Примечание (2026):** Этот проект больше не поддерживается. Microsoft значительно усилила свою антибот-защиту -- то, что работало тогда, сегодня уже не работает. Код и подход, описанные ниже, сохранены только в архивных/образовательных целях.

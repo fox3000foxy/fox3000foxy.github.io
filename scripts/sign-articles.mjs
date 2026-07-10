@@ -20,7 +20,7 @@ function signArticle(slug, author, date, content) {
   const sign = createSign("SHA256");
   sign.update(msg);
   sign.end();
-  return sign.sign(privateKey, "base64");
+  return sign.sign({ key: privateKey, dsaEncoding: "ieee-p1363" }, "base64");
 }
 
 const files = globSync("public/articles/*/*.md", {

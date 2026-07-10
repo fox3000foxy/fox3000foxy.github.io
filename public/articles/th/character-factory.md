@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIFTZbKsxHKh4gNN6iLSxMvrFIYm8p7vBJ8CmcNEuKGO5AiEA0T9InoxBkUBTiyn3eRXMlzINMUaAJay15ccnLLXJtvY="
+author_sig: "Hy2M4NxGJ5SjLe0f7LrullxtlIBELMBNLxxgumAsWpQwroqWqZ61YGHaoj/QuQHdU4lvV5BtGwzQX7MBaYZyqA=="
 ---
 
 # สร้าง character-factory : อวาตาร์ที่มีระบบพันธุกรรม

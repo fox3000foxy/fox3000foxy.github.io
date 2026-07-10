@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIFKxFdDOvoQeUBQQVjHDWeP9r9Q/iScu4As6IRnKWvClAiAvfKh/wz7E+yjpftEs/HMS/u4MCUpgJbs/bwdJJS96KA=="
+author_sig: "fpFHGcAifQkBiVgXRIJr8wPnhaGzOYbMtaFxbVGuJ86i4g5F5afQL9qgcy/DCq/ajBHqH+UZ9vHA/a5iJHtRwA=="
 ---
 
 ## GitHub gibt dir 'nen kostenlosen VPS für 6h. Ich hab rausgefunden, wie du ihn permanent machst.

@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDwWxmwDThheejkCbFzLLeOK+k/VP2fYmoNZ0e/N4I6vQIgcAdSgcJ3VJCQ9DBLhWlSdYG+xZhyTjxVsi3lsF6FR+M="
+author_sig: "0k/W25lH/wrdlcThHUKEnZ0TflWZju6UIgGU0RBuQRw5TX/zfB58g7IL4Jn0Elh5kuXc6sBdLE2W2VsAYOBC1w=="
 ---
 
 # Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들

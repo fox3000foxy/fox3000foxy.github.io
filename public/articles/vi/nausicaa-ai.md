@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCDhPUiGrRdwS5Qqc89k3N2uEBhBI9a1GB261YOd0mqHwIgIMzqyKeMJZ3NrH2spFFfO5Xudq8GsYvIOKDtod3PHRg="
+author_sig: "zfA7mHpwqbNY9TLmEi7X9EgIMx4IUo99agYwcUlPx1jveA16XcfOUTAWaqtstykgs+Dk9s9pMXXMSMtFQkwqhw=="
 ---
 
 ## AI Nhảm Nhí Của Tôi Cho Nausicaa

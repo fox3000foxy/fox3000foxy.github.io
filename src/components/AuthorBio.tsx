@@ -4,7 +4,10 @@ import { getAuthors, type Author } from "../utils/authors";
 export default function AuthorBio({
 	authors,
 	verified,
-}: { authors?: string[]; verified?: boolean }) {
+}: {
+	authors?: string[];
+	verified?: boolean;
+}) {
 	const list = getAuthors(authors);
 
 	return (
@@ -23,7 +26,7 @@ export default function AuthorBio({
 					<div className="author-info-top">
 						<span className="author-name-top">
 							{author.name}
-							{verified && <span className="verified-badge">✓ Verified</span>}
+							{verified && <span className="verified-badge">Verified</span>}
 						</span>
 						<span className="author-link-top">@{author.id}</span>
 					</div>

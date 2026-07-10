@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIAJr6otnUCBReRA3zUe/dF5RaB9Ee/emdFsdKvN+9RDKAiARmReug+PzHhnQJTyL47EvqApnO+61CLlK1NNJGjaAzg=="
+author_sig: "4ZkvtpaqD4njecuihlTE9h9SbDJ7L6diZ9dK8KphEjibWGhVuE84fpNpm84P7OBHRXhCV39hZcUJbg7QxJ9+Mw=="
 ---
 
 ## Meine bekloppte KI für Nausicaa

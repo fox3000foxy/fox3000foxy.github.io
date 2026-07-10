@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIGTvlAvOubp7yz/CZD1RS6jR0gzHe1do/m/G3SQn/KnIAiEAkU+KRNQmGfBCNCjJpbbjmeBZMt98zU5wivslkqAlH2M="
+author_sig: "KpB003Tip+d9krSNgBiwLj5ktBsVUYJpS3Fkwx9/VyCIsjQksY18wDdO7LhaYu8ngOMf0Kh09hgpXo116+Eoag=="
 ---
 
 ## My dumb AI for Nausicaa

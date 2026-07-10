@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCxVZt0JB/Fvtwox2nVLOmnwi5xHa0lnNE4LUuFDqMmZAIgAsREciVyQxlVMlQMSkxOHvLLBCQbitmGpaM4U7rgyS0="
+author_sig: "80mFtoYtuWLkAm8x0UVTtvaGc/Xesh/S8d8UB8K8ICb/dJF1gbzugye4YtadiXlirkuUIGAy+Oo2GgMFY2/K8g=="
 ---
 
 ## Giới thiệu

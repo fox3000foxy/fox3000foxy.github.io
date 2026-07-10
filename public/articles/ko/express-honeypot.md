@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQDmaMgPxDkjemIDZVLQUwnvWntmvYAa1zyojlVHqCjjBAIhAJq+sZjQaXA7r5r1bmdWE0zsTBSlNY4oBHlndLf4lc2T"
+author_sig: "fplSUVZswe5g5uVUZ49DrNB7F2hoefVXJATi/6Zh3hjUhgpHBjZmKZLp9/kMVRTTsIcN32bcoxwtcqNo+QEOHg=="
 ---
 
 ## 아이디어

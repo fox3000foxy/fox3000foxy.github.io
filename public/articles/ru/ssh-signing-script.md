@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDQIhs99uWsKNX/RFzzd70iVXC10XIwMt+GKpRQqBZY9QIgNjKV3mhyER1U1HpJRE0nEZufwacGdOUwZG3wbreHiPQ="
+author_sig: "OCQE46I5BaaJVLizuk62BUFJi2Hg+lF59IwDXsULsNmFAuSqL6YW6tr5l750Ofu68iK/AP825QpPs3vGJaqTHA=="
 ---
 
 # Скрипт подписи коммитов SSH -- объяснение

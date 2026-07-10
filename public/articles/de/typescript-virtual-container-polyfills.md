@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIBWlt548luaK7yi8zvqqjx9uqWRKUy+30RB1rx9oJkLGAiEAiBTItdBaISqmgYG67dpzoTITvTdjVuUWuqxcGrlfGQo="
+author_sig: "27fIl+8ShZb5m9OKWycazp1xmNZpFJDjn5CsI52Oj6DF6UMfGe16vo/vmfaxq7o1PTeJg7EvmQ+c84a5YowK3Q=="
 ---
 
 # Eine Node.js-Bibliothek ohne Wasm im Browser zum Laufen bringen -- die Polyfills von typescript-virtual-container

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIEzIqtZvMo/5qFvRXtCKSDJ7Mhg+IJo8TF0eib5BH3ZCAiBpMMkVEvOeLM/BjBKWMbPPc/gUR/Obfdl5J9K6aury6A=="
+author_sig: "a6Yv4pIio+DrUQfQI7TYisnnDPfndRf0GmxEVVVzqI6b+fJSqcZNaqSfnno1yDhmn73Z0QlYbUSWDGu65/SCww=="
 ---
 
 ## GitHub kasih kamu VPS gratis selama 6 jam. Aku nemu cara bikinnya permanen.

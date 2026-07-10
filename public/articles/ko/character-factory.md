@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIE9JYC/8nDp/RaxG93IH26kl2HwzCypI0tn2iWkA9ZLVAiAT0DPwNyJjlUM926wbUDLs6z0RdqXtZY2ohQIAzxKpTw=="
+author_sig: "ZZeia/mVSvH6NrArzDDCnAZACZqSK7mhPrMGsg5w00lUHjt6O2onag5gN7/LiGrOcq9sESvkybn14TFWtbxOfA=="
 ---
 
 # character-factory 만들기: 유전학을 가진 아바타

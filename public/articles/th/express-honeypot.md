@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIE4dvFFKMQ5SG1Z0ZgLXJM/DWQWp5HNgFa+wbo8NlcWPAiEA+ZIWetZ7j3rojRWZAUa8jSzHTxUOcSCZ5Y3cAuyiLpo="
+author_sig: "yBPflhf7Eewds8MJj1Tb27Y2bTrlmtoyIY2saUTOE7SVbYRMNBDDOzwYkF1JIYSl6lc1x1Pdgsw4sTt2IHdl3A=="
 ---
 
 ## แนวคิด

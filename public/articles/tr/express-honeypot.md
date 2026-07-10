@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIEXMONz0kI08bX5+8ZQRMaoM4Vu3Gk8uAvTxK1BWgjRqAiASbslTnL/GBWKeH6Fzsb4SrXbp+j3+NLgUA7nFzaqePQ=="
+author_sig: "usyMKpSUItvUidxJmMBa7LijP47ngLPs62TGI3YsRP/8wjLnvfJZGWIqhGXqRRN//AI/7Pg6d7NhiX9jBNvwlA=="
 ---
 
 ## Fikir

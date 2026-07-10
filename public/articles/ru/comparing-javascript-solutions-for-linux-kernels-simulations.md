@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCW74TkKpJsYcOxpAXXUl2SzULJrHwx/c3MYt61hHYJaQIgWgfVdfxE+J/jG24irF45NJKd+cnUBGR8LjhuTE7TSAA="
+author_sig: "DiX+OS6WBuG82CKKxf8lV0SdvN+rM/wIfWkYxghhX7YwYa84uuRIeHh5KNFAL4o8kA5ztzMjvWxwMA+hBDvOAA=="
 ---
 
 # Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение

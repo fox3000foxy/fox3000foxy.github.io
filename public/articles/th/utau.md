@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCa8RvjZcFkebr7R5rlvja1/6Pz1F3dRhm1qAFccgIkgAIgYvYswiURv5ZIC4oTpnzebKpNfAbSwOqzRGNjHqdLEHA="
+author_sig: "t3gGCwxNMXeaTH957la3rnGYnDLJvVvTile3pxFL4Jrx8w5faZBD9nqukxPrTCObQQPXwPiI9ATD6QzJixB1sw=="
 ---
 
 ## UTAU: ซอฟต์แวร์ Visual Basic 6 ที่ทำให้เสียงสังเคราะห์เป็นของทุกคน

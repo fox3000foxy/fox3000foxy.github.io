@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCICeLtJY2Xwc/zt7MJRX5jp2xosaha+NhpkZfq28UM4Z0AiAP/cTQGmC1GVLQCQgwJpf7GWsLUMkQ1Fx8EOP7D0NtMQ=="
+author_sig: "WGa/XG29AhrPmk/h3XK7+9gtqJ9BDhESs1MBkj4U/9W1xny1r5ikhyshFWlFdwTz5BZR7elSJzSmnUMBbPVYxQ=="
 ---
 
 # Hacer funcionar una biblioteca Node.js en el navegador sin Wasm -- los polyfills de typescript-virtual-container

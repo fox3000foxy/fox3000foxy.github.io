@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIHPPf1wToRrpWJclX3QHAoHSrXFetF4QBVo5BYIQCLqBAiEA8aSsgGmc8pSnv8JfL3jdu7O9Sg4/v7upUmi1+vq6z3Y="
+author_sig: "u0Zcl/snXVflkbO3bVmuRiycktHdc2y7n0g8/+Yp5PzPDYzo4aqa5TjmVe+LB3VGp/zwj9TOWfJ+epm02pHJUA=="
 ---
 
 > **Note (2026) :** Ce projet n'est plus maintenu. Microsoft a considérablement renforcé sa détection anti-bot -- ce qui marchait à l'époque ne fonctionne plus aujourd'hui. Le code et l'approche décrits ci-dessous sont conservés à des fins d'archivage et de démonstration uniquement.
