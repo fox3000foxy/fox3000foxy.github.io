@@ -53,6 +53,8 @@ const ko: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "쓰기",
+	"nav.more": "더보기",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

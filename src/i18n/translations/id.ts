@@ -61,6 +61,8 @@ const id: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "Menulis",
+	"nav.more": "Lainnya",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

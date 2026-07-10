@@ -61,6 +61,8 @@ const th: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "เขียน",
+	"nav.more": "เพิ่มเติม",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

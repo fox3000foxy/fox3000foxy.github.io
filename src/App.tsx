@@ -31,6 +31,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Photos = lazy(() => import("./pages/Photos"));
 const Uses = lazy(() => import("./pages/Uses"));
 const SearchPage = lazy(() => import("./pages/SearchPage"));
+const WriteArticle = lazy(() => import("./pages/WriteArticle"));
 
 function App() {
 	const langCtx = useLangState();
@@ -66,6 +67,7 @@ function App() {
 								<Route path="/photos" element={<Photos />} />
 								<Route path="/uses" element={<Uses />} />
 								<Route path="/search" element={<SearchPage />} />
+								<Route path="/write" element={<WriteArticle />} />
 								<Route path="*" element={<NotFound />} />
 							</Routes>
 						</Suspense>

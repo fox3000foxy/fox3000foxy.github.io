@@ -29,9 +29,11 @@ export default function Header() {
 	const { t, lang, setLang } = useLang();
 	const { theme, toggleTheme } = useTheme();
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [moreOpen, setMoreOpen] = useState(false);
 
 	function closeMenu() {
 		setMenuOpen(false);
+		setMoreOpen(false);
 	}
 
 	return (
@@ -66,33 +68,57 @@ export default function Header() {
 					<Link to="/blog" onClick={closeMenu}>
 						{t("nav.blog")}
 					</Link>
-					<Link to="/tags" onClick={closeMenu}>
-						{t("nav.tags")}
-					</Link>
-					<Link to="/archive" onClick={closeMenu}>
-						{t("nav.archive")}
-					</Link>
 					<Link to="/about" onClick={closeMenu}>
 						{t("nav.about")}
 					</Link>
 					<Link to="/projects" onClick={closeMenu}>
 						{t("nav.projects")}
 					</Link>
+					<Link to="/write" onClick={closeMenu}>
+						{t("nav.write")}
+					</Link>
 					<Link to="/search" onClick={closeMenu}>
 						{t("nav.search")}
 					</Link>
-					<Link to="/photos" onClick={closeMenu}>
-						{t("nav.photos")}
-					</Link>
-					<Link to="/uses" onClick={closeMenu}>
-						{t("nav.uses")}
-					</Link>
-					<Link to="/contact" onClick={closeMenu}>
-						{t("nav.contact")}
-					</Link>
-					<Link to="/legacy" onClick={closeMenu}>
-						{t("nav.portfolio")}
-					</Link>
+					<div className={`nav-dropdown${moreOpen || menuOpen ? " open" : ""}`}>
+						{/* biome-ignore lint/a11y/useButtonType: span styled as nav link */}
+						<span
+							className="nav-dropdown-toggle"
+							role="button"
+							tabIndex={0}
+							onClick={() => setMoreOpen(!moreOpen)}
+							onKeyDown={(e) => {
+								if (
+									e.key === "Enter" ||
+									e.key === " "
+								) {
+									setMoreOpen(!moreOpen);
+								}
+							}}
+						>
+							{t("nav.more")}
+						</span>
+						<div className="nav-dropdown-menu">
+							<Link to="/tags" onClick={closeMenu}>
+								{t("nav.tags")}
+							</Link>
+							<Link to="/archive" onClick={closeMenu}>
+								{t("nav.archive")}
+							</Link>
+							<Link to="/photos" onClick={closeMenu}>
+								{t("nav.photos")}
+							</Link>
+							<Link to="/uses" onClick={closeMenu}>
+								{t("nav.uses")}
+							</Link>
+							<Link to="/contact" onClick={closeMenu}>
+								{t("nav.contact")}
+							</Link>
+							<Link to="/legacy" onClick={closeMenu}>
+								{t("nav.portfolio")}
+							</Link>
+						</div>
+					</div>
 					<select
 						className="lang-select"
 						value={lang}

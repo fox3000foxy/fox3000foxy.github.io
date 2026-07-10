@@ -61,6 +61,8 @@ const hi: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "लिखें",
+	"nav.more": "और",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

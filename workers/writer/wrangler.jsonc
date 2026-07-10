@@ -1,0 +1,13 @@
+{
+  "name": "writer-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "account_id": "b2c38416a35db1cdf2968dc3a2e742bf",
+  "vars": {
+    "GITHUB_REPO": "fox3000foxy/fox3000foxy.github.io",
+    "GITHUB_USERNAME": "fox3000foxy",
+    "GITHUB_EMAIL": "fox3000foxy@users.noreply.github.com",
+    "WORKER_URL": "https://writer-worker.fox3000foxy.workers.dev"
+  }
+}

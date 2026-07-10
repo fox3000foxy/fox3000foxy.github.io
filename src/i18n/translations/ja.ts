@@ -53,6 +53,8 @@ const ja: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "書く",
+	"nav.more": "もっと",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",

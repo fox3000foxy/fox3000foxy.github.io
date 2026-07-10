@@ -53,6 +53,8 @@ const zh: TranslationMap = {
 	"nav.photos": "Photos",
 	"nav.uses": "Uses",
 	"nav.search": "Search",
+	"nav.write": "写文章",
+	"nav.more": "更多",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.form.name": "Name",
