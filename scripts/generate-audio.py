@@ -151,6 +151,13 @@ async def generate_async_wrapper(voice: str, text: str, output_path: Path, lang:
                 data = chunk.get("data")
                 if chunk["type"] == "audio" and data:
                     f.write(data)
+        # Re-encode to 16kbps mono to drastically reduce file size
+        tmp = output_path.with_suffix(".tmp.mp3")
+        ret = os.system(
+            f'ffmpeg -y -i "{output_path}" -codec:a libmp3lame -b:a 16k -ac 1 -ar 22050 "{tmp}" 2>/dev/null'
+        )
+        if ret == 0 and tmp.exists():
+            tmp.replace(output_path)
         size = output_path.stat().st_size / 1024 / 1024
         print(f"  ✓ {size:.1f} MB")
         return True
