@@ -204,6 +204,20 @@ async function signArticle(
   return btoa(String.fromCharCode(...new Uint8Array(sig)));
 }
 
+async function isCollaborator(repo: string, username: string, auth: string): Promise<boolean> {
+  const res = await fetch(
+    `https://api.github.com/repos/${repo}/collaborators/${username}`,
+    {
+      headers: {
+        Authorization: auth,
+        Accept: "application/vnd.github.v3+json",
+        "User-Agent": "fox3000foxy-writer",
+      },
+    },
+  );
+  return res.status === 204;
+}
+
 async function submitArticle(request: Request, env: Env): Promise<Response> {
   const auth = request.headers.get("Authorization");
   if (!auth?.startsWith("Bearer ")) {
@@ -254,8 +268,6 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
     article.content,
   ].join("\n");
 
-  const branchName = `article-${slugify(article.slug)}-${Date.now().toString(36)}`;
-
   const repo = env.GITHUB_REPO;
 
   const headers: Record<string, string> = {
@@ -265,29 +277,34 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
     "Content-Type": "application/json",
   };
 
-  const mainRef = await fetch(
-    `https://api.github.com/repos/${repo}/git/refs/heads/main`,
-    { headers },
-  );
-  if (!mainRef.ok) {
-    return json({ error: "Failed to get main branch" }, 502);
-  }
-  const { object: { sha: mainSha } } = await mainRef.json() as { object: { sha: string } };
+  const collab = await isCollaborator(repo, user.login, auth);
+  const targetBranch = collab ? "main" : `article-${slugify(article.slug)}-${Date.now().toString(36)}`;
 
-  const createBranchRes = await fetch(
-    `https://api.github.com/repos/${repo}/git/refs`,
-    {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        ref: `refs/heads/${branchName}`,
-        sha: mainSha,
-      }),
-    },
-  );
-  if (!createBranchRes.ok) {
-    const err = await createBranchRes.text();
-    return json({ error: `Failed to create branch: ${err}` }, 502);
+  if (!collab) {
+    const mainRef = await fetch(
+      `https://api.github.com/repos/${repo}/git/refs/heads/main`,
+      { headers },
+    );
+    if (!mainRef.ok) {
+      return json({ error: "Failed to get main branch" }, 502);
+    }
+    const { object: { sha: mainSha } } = await mainRef.json() as { object: { sha: string } };
+
+    const createBranchRes = await fetch(
+      `https://api.github.com/repos/${repo}/git/refs`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          ref: `refs/heads/${targetBranch}`,
+          sha: mainSha,
+        }),
+      },
+    );
+    if (!createBranchRes.ok) {
+      const err = await createBranchRes.text();
+      return json({ error: `Failed to create branch: ${err}` }, 502);
+    }
   }
 
   const langDir = article.lang || "en";
@@ -303,7 +320,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
       body: JSON.stringify({
         message: `New article: ${article.title}`,
         content: contentEncoded,
-        branch: branchName,
+        branch: targetBranch,
         author: {
           name: env.GITHUB_USERNAME,
           email: env.GITHUB_EMAIL,
@@ -333,7 +350,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
           body: JSON.stringify({
             message: `Add image for article ${article.slug}`,
             content: base64Data,
-            branch: branchName,
+            branch: targetBranch,
             author: {
               name: env.GITHUB_USERNAME,
               email: env.GITHUB_EMAIL,
@@ -342,6 +359,14 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
         },
       );
     }
+  }
+
+  if (collab) {
+    return json({
+      success: true,
+      mode: "direct",
+      message: "Article pushed directly to main",
+    });
   }
 
   const prRes = await fetch(
@@ -365,7 +390,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
         ]
           .filter(Boolean)
           .join("\n"),
-        head: branchName,
+        head: targetBranch,
         base: "main",
       }),
     },
@@ -380,8 +405,9 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
 
   return json({
     success: true,
+    mode: "pr",
     pr_url: pr.html_url,
     pr_number: pr.number,
-    branch: branchName,
+    branch: targetBranch,
   });
 }
