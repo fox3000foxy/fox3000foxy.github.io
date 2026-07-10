@@ -344,6 +344,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
 
   if (article.images?.length) {
     const imagesDir = "public/articles/assets/";
+    const failedImages: string[] = [];
 
     for (let i = 0; i < article.images.length; i++) {
       const img = article.images[i];
@@ -351,7 +352,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
         ? img.dataUrl.split("base64,")[1]
         : img.dataUrl;
 
-      await fetch(
+      const imgRes = await fetch(
         `https://api.github.com/repos/${repo}/contents/${imagesDir}${img.filename}`,
         {
           method: "PUT",
@@ -367,6 +368,13 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
           }),
         },
       );
+      if (!imgRes.ok) {
+        failedImages.push(img.filename);
+      }
+    }
+
+    if (failedImages.length) {
+      return json({ error: `Failed to upload images: ${failedImages.join(", ")}` }, 502);
     }
   }
 
