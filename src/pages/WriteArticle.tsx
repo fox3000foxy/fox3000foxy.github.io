@@ -61,8 +61,10 @@ export default function WriteArticle() {
 	const [lang, setLang] = useState("en");
 	const [submitting, setSubmitting] = useState(false);
 	const [result, setResult] = useState<{
-		pr_url: string;
-		pr_number: number;
+		mode: "direct" | "pr";
+		pr_url?: string;
+		pr_number?: number;
+		message?: string;
 	} | null>(null);
 	const [error, setError] = useState("");
 	const [images, setImages] = useState<UploadedImage[]>([]);
@@ -367,8 +369,10 @@ export default function WriteArticle() {
 			})
 			.then((data) => {
 				setResult({
+					mode: data.mode || "pr",
 					pr_url: data.pr_url,
 					pr_number: data.pr_number,
+					message: data.message,
 				});
 			})
 			.catch((e: Error) => {
@@ -380,6 +384,15 @@ export default function WriteArticle() {
 	};
 
 	if (result) {
+		if (result.mode === "direct") {
+			return (
+				<div className="write-article">
+					<h1>Article Published!</h1>
+					<p>Your article has been pushed directly to main.</p>
+					<p>It will be live once the deployment completes.</p>
+				</div>
+			);
+		}
 		return (
 			<div className="write-article">
 				<h1>Article Submitted!</h1>
