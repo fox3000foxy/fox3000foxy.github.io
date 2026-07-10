@@ -94,7 +94,12 @@ export default function WriteArticle() {
 		],
 		editorProps: {
 			handleKeyDown: (_view, event) => {
-				if (event.key === "t" && !event.ctrlKey && !event.metaKey && !event.altKey) {
+				if (
+					event.key === "t" &&
+					!event.ctrlKey &&
+					!event.metaKey &&
+					!event.altKey
+				) {
 					const { state, dispatch } = _view;
 					const tr = state.tr.insertText("t");
 					dispatch(tr);
