@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDstckjaV5YHoIZTiaEVzofu1wgULt0RnNMYKdiEvZZxAIgYjUM9U3ZIJyM+2sFJpwUyzkhTHEjvd7DlhQcV0iBNT0="
+author_sig: "WtPzy5O1LKwyYPVguD6+HfVHAQhnEW/3fSJzMWoNOzO40oRtu4LI3tRBxY/iEAkm4PvaAaa7EWe9w6eK0TPKkQ=="
 ---
 
 # Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh

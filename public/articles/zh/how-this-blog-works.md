@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIHmHYRMJiHBcdWjQJWOTvPSkDp+DMaDlVGgLBeXafh1cAiA4iqNQ14BLHPuJkS3aPHHTg+fXr9MGRLVsLqL7p2kZyg=="
+author_sig: "x6Q32SQ5D/Ap8XT7giitLvzUkaDNAnhibm4G5kc9yuFaMzxOvf8fT09WDUlm1G/Qu4ngsfUOwD+XRRzNVwaaxw=="
 ---
 
 # 这个博客是如何运作的？

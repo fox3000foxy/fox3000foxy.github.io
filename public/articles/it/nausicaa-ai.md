@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQD8tpRUOKgb072EJeXFLwYYXe9GmUaO6yTJaAbJ6H6VSAIhAOV/AUYr4MFj2NbDGClUe/YHBiKyIO5cBdXlKyoSD9Jb"
+author_sig: "UcnRlL4LImojsF7Wq84XH+dOK0alcGfEmSU2b19kcXogD+vXtek1SRoMw4G1otgWCiSJP/3z/ovbZIRbnF51Pg=="
 ---
 
 ## La mia IA sballata per Nausicaa

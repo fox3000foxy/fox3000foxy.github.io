@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQCfXAtsz3wCm5P5427duPv2CDgUnRQNR0PLV7yoPxWemAIhAKkCi6poVENgxoP79q6wWzi5iC/R5F7xSlflMgHOw+qT"
+author_sig: "uX8MmH+KAER3ZW+5shGH0aoJYiy+9MMdlhnMZ6H1YuXvDqBVkI6KIcrhMFlrcPyNhTOXGNH5XfMQNpxmx7Hdfg=="
 ---
 
 # GitHub Actionsでgitをデータベース代わりに使って無料botを動かした話

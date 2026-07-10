@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCICbwj26PRyuklop5OLir4EES5S4cuLTa9uhXNqfOv1d8AiEAjkyJx6x6sX0IHlBeWVmlPN1tUMRHVOkzIMM3x1CeiTk="
+author_sig: "bFbXmB1PbXgRN9Gmux1Ka/kscO5Y72LvR6JHRs+jCQRu7CcFEB0lo9cq6jj8AArSpvDrLiQDh13ZKaQ4fu9l4A=="
 ---
 
 # كل صندوق رمل JavaScript، ومحاكٍ، ومقلد، ومصيدة تفاعل Linux -- مقارنة

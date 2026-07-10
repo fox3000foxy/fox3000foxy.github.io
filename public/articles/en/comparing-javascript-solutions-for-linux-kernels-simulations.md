@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCIiOfmvPFYaGGXz2BOHNlM1lardvzEzIY/bmNwIkv+SAIgNz1vcSjKkj9bmYh+uwzK3X1gSzUOzVUPCHyWQgh632A="
+author_sig: "PpTXt5e9mEI3qFBp49iwKXekWRsfD8CJAMRF934IDiXcJsBzfaGIPwsKtF8sGo8rnnT0fc6ZyzRNatQSyMMMdQ=="
 ---
 
 # Every JavaScript sandbox, emulator, simulator and honeypot -- compared

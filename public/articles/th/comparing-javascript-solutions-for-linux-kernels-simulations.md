@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCICyxAw+54WRd71IrmRpj3kXG4RtFCfqS7tZyChCcLhDHAiEAgBT1VZ2D2X2NPOH/aYXihoYyGbOsouoOhw1/2nfP998="
+author_sig: "DrkUOwa5q5VVaXSS6pnqwM2UEhKnER/dYYv4CUXwn5aKhiy6o79cIo2tvXjlZq67SSd6cvzzGiM0KrpzDuBFLw=="
 ---
 
 # ทุก sandbox JavaScript, เอมิวเลเตอร์, ซีมิวเลเตอร์ และ honeypot Linux -- เปรียบเทียบ

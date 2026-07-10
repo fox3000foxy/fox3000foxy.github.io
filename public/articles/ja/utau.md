@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQCkJQPknxK//2iOZiTIswg6PdRruLauo9ghct50dOUI/wIhAIogipKf+IRWgBJXVlcupk/a5anIxJOkUs7EPaji4xx5"
+author_sig: "PhupdmJzZbfHjfZcWV7fQrquCJYMHMYyYhXhW4Pj+unb62j7RJdpEr13CX6oeXEANGL22DC6jj3VBRN3LdIVeA=="
 ---
 
 ## UTAU : Visual Basic 6で作られたソフトがどうやって合成音声を民主化したか

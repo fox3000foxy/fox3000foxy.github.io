@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCICmFY+g7/TkBMpo7YSO9gnMWNShKIAQIsjgnKqI6NJP3AiABZRLFAmpUERkvOlqOoBncWOe7vcB/MRdE/sicm0EbTw=="
+author_sig: "b545fa29XfKSBjHvh4+V/c2urW25d2gwjqgWsPpSutyLZwNLcWFLMhHKRlURYj8ta2YabhBHOnzqbUur6J4Qlg=="
 ---
 
 # character-factory का निर्माण : आनुवंशिक प्रणाली के साथ अवतार

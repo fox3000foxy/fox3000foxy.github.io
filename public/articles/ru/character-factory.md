@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIDH1WIe6MVfzIQ7REQxYWJNDy7OwEcbfecWbl+FU5E1SAiAy4hKevTMAnnWVgriFk8+1C/Qf9BLUqpMO5EQpYUa/mA=="
+author_sig: "SePWQ5l7+IKTKTHZWQyQ+/TMNihMv8F3C+usQfFW6Qzf3gYfFLXlM9sIltbGSxEmvvikUfvMWWlL1j/yuKpfMA=="
 ---
 
 # Создание character-factory: аватары с генетикой

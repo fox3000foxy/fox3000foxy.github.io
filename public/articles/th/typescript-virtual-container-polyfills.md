@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQCHvZPMjKx5cpgCERb0WAKnphcltOF1L4cXa71Un0vBrAIhAJlA4huL6ZOsG3/bVz6kGOvG3a0Ut3Ceh9wwqi2JCEkg"
+author_sig: "u+u+wX5GP3d/x8DAU6Bps0S11DNzM5L0AyKKS7OAdPRIExTcrTlXCTHmpfMbXlQen6k+e/132VkFLAUuykZ8gw=="
 ---
 
 # ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm -- polyfills ของ typescript-virtual-container

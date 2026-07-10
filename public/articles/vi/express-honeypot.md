@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIBrskcehgBXANgK0UbHrdm2zdMyqzjpVXq5Q1WNHmFddAiBqbf594L+fwv6dz0OeO2JKLEfbgvnKimJvBXkEikKYWw=="
+author_sig: "kxmgdMm3QiKxW3f5mYSzaBWkqMHunGEEhyA4Rs9aRjvQuD+4SH/dv/dNWAfp1SkpSxBmL3OBltJNVqqy+ElLcA=="
 ---
 
 ## Ý tưởng

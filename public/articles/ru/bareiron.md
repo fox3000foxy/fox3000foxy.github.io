@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDCWSdAYLhiBzII+wuIk3FY2PH323q8xfYtZXKe0cjMHgIgEhPwkmXpGozi2JRoWOPIDb+a8upNPdYxduSRPEZkrz0="
+author_sig: "w/HBhQZko6ht4c650ZWVW6c9gBrNQ0GAPhM54FbspCuqKnII9qB2VqEwcJjKeewMb2TD2MQ22fonKHIkIoyG0w=="
 ---
 
 ## Введение

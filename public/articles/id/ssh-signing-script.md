@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIBkEHiNfRtGaYq6PXA3mkF9ObQYXvWug/1yQbJnXa2r+AiEAh1BCWq7M5UfMZytoNnj5E1RxhaChhBgkrJE0iKAC4zw="
+author_sig: "TVYait4/4xTSwCCh3jmrXQ15qCJWFa2WTBnI8LXs3hh1ZeRV2GCqZWh8mnzQxh6hjbox6QIPYRo+GLnYZSwrSw=="
 ---
 
 # Skrip Penandatanganan SSH untuk Komit -- Penjelasan

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIDl11p1Qs6VcLb23Dsea+kZDRUcQHh2l5zYWdATakD9VAiEAkOfb/67s9Kld7qvqDMpbokJRVSSpOL9fnrqYeGyStWI="
+author_sig: "FrWRfow7Ymgl0cODPKCK/r2fSarxeK+Rn34y5GJVnnhdoCYiKidqcUy6bq1SitigAnnVM1gmh0ahBUxSQlk8mA=="
 ---
 
 ## 소개

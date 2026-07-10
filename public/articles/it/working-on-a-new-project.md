@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQCld1xSXP2nVZU8yk2DkjjFcyJnM9rBxL5b09ZkGPcAzgIhAPZ8A5mvGirfeZ2owkZ8ApBDxZJg4CFNCPriOr5/9oG6"
+author_sig: "coBm2h9+lIrPTBIEjFiaMj/x4PwfjzPgsXyz584HzUC8N2iu91dc8qK7cxoB0NMczH6vX4OanH3Zc2Yuw0FiPw=="
 ---
 
 # Il Progetto

@@ -63,7 +63,11 @@ export default function Article() {
 			frontMeta: Partial<ArticleMeta>;
 		} {
 			const { meta, content } = parseFrontMatter(text);
-			return { clean: processArticleContent(content), raw: content, frontMeta: meta };
+			return {
+				clean: processArticleContent(content),
+				raw: content,
+				frontMeta: meta,
+			};
 		}
 
 		const cached = getCachedArticleMarkdown(slug, lang);
@@ -151,9 +155,9 @@ export default function Article() {
 		}
 		const author = meta.authors?.[0] || "";
 		const date = meta.date || "";
-		verifyArticle(slug, author, date, rawContent, meta.author_sig).then(
-			setVerified,
-		).catch(() => setVerified(false));
+		verifyArticle(slug, author, date, rawContent, meta.author_sig)
+			.then(setVerified)
+			.catch(() => setVerified(false));
 	}, [slug, meta, rawContent]);
 
 	const sorted = useMemo(() => {

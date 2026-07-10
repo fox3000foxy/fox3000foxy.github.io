@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDj/8DqccYVQZezsKh30kw6mzoA7zHopZBAhjjYS3ADwwIgGQS81UQQ5C9h3YdDzDcL4epYHhWGCvJ0Rm9+ZUKCPTs="
+author_sig: "6D9/Oym6S5pm62KPAExiKxFaMoUOcFsYHehncXKehdM5fyCyMekJI/ZXgFgjY+ju6/ggzo/+NZ+7675vbla83A=="
 ---
 
 # SSH 提交签名脚本详解

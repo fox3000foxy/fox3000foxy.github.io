@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIBPACQ/4/ILcnpYn8eM0J6dUQsTBYaV1Uvv8nF8J4egzAiAZaUKTfyfj1kZKBUE1jHeeCHKiVmaJIJcjmRCBDrdUgA=="
+author_sig: "l69Cc7CA5/VrqyKPPNdswr4OYh56D5jVns5rwZzktUfsgPcQGbxfZV7H0TLkQTXWIg+oicWOKnGG3hcIcv8yWw=="
 ---
 
 ## Introdução

@@ -16,7 +16,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDms0dcqIeY4UEojyTdYD4eKFJQJFKMbpKH6C1ufbnbQgIgFGovJN5GueQnFDw4QzWxHWpkewY8i8Bn7h4RivHASG0="
+author_sig: "ZJUTWxAnSmlEqeUPc2dg6oQP0i+u2ihRj1uYUr+G+HpoqyE1aUrUEYap6qpKSH3vG02PHgJ9MoNd1rSKcUJh/A=="
 ---
 
 # ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ

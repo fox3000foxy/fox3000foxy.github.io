@@ -7,7 +7,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDRlDUR6BaUcstGGNQHT9S8drMSnAVZIvWFtfABBrgGYgIgVNgirfZXnmLtpGUqzAvZ/tUx0C9ZA19ojWKjon76PUY="
+author_sig: "gvrBeJAscHCIQreW1j4D3wesxK6Fr5xntSYc99shwRWQob4LC3z7jb/wa9ILBH5U72DHW025pRrvuyjN17DNWg=="
 ---
 
 # 내 열정들

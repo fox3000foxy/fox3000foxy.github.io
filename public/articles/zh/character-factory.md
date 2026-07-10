@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIC8VxGDaks+3oqvjXrBAAQ0D6zfoW2FUYCCWgpEgZBS7AiBzMUnlwiFvhzhaFhWu48U5BdF3KUBN4JGlWGnHfqEC1w=="
+author_sig: "N4acO0SFSd9rEhrAxvWvevxlAgioFHz5jBNArjzhusOwxOPm9IK5Sb/iez++lIwhsbp5RKEhDruQQ+NeT08ehw=="
 ---
 
 # 构建 character-factory：带遗传基因的头像生成器

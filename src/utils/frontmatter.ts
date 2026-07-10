@@ -40,8 +40,11 @@ export function parseFrontMatter(text: string): {
 							.filter(Boolean);
 						if (!(arr.length || val)) {
 							listKey = key;
-							if (key === "tags") meta.tags = [];
-							else meta.authors = [];
+							if (key === "tags") {
+								meta.tags = [];
+							} else {
+								meta.authors = [];
+							}
 						} else if (key === "tags") {
 							meta.tags = arr;
 						} else {

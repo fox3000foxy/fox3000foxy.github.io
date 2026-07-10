@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQCf7Ks20fdGUikUpWKwIM/iMaL8noIIlbtQy90PquwpGwIhAJbxWhp7abOkBuI6Eoq5fnFn+a4TTJ/DpAjqvlxZHwQl"
+author_sig: "9WHwKuSxf40RAU+YN6MPSqrjjOUgokDlX0ZG1qtdjgDjvDw1/98Z1j8Nep6m3z1cRuprrY/TFqlvFT4VWioGRg=="
 ---
 
 # Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions
