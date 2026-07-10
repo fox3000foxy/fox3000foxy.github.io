@@ -29,7 +29,7 @@ type LoginState =
 
 const API_URL =
 	import.meta.env.VITE_WRITER_API_URL ||
-	"https://writer-worker.fox3000foxy.workers.devs";
+	"https://writer-worker.fox3000foxy.workers.dev";
 
 const turndown = new TurndownService({
 	headingStyle: "atx",
