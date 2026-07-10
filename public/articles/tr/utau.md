@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIHK5UZLXrSxqW6rGa+/HoeheKv2SH+JT6E9PFRMcogsPAiB61sjidItFTwDDYNyuZgS0ijCaaKA6zo3S5GlvXv42GA=="
+author_sig: "MEUCIQCgqdFPKfPs4HWhUC6sIhr70s1QTL+RJ7tDahDhKu0x8wIgJHeCkDf4TebODqxekLyTyfBl+ODyAfGH2TAddJ4eYRI="
 ---
 
 ## UTAU : Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi

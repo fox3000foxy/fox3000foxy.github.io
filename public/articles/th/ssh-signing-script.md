@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQCxU+18B0C9SqgkLqdZpxYY4ntW7/onZeILLrvOMQ3dUgIhAObhFBAWRT+gf0lwfqlA+EFchXfogSzQ1T7+32uhY5y9"
+author_sig: "MEUCIG6xdElwIKWThDbLJ7m0HrOKz5gZvmxKLUhf6sI3j4J0AiEA1pZqjFpgL8IzRq/BDOcdQlbkZXFQHz58jVScSyemRqA="
 ---
 
 # สคริปต์เซ็นชื่อ SSH สำหรับคอมมิต -- คำอธิบาย

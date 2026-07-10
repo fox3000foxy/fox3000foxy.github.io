@@ -34,12 +34,6 @@ let fail = 0;
 for (const file of files) {
   const text = readFileSync(file, "utf-8");
 
-  // Check if already signed
-  if (text.includes("author_sig:")) {
-    skip++;
-    continue;
-  }
-
   // Parse frontmatter
   if (!text.startsWith("---\n")) {
     fail++;
@@ -59,31 +53,44 @@ for (const file of files) {
   // Extract fields
   let title = "",
     date = "",
-    authors = [];
+    authors = [],
+    listKey = null;
 
   for (const line of frontmatter.split("\n")) {
     const colonIdx = line.indexOf(":");
-    if (colonIdx === -1) continue;
-    const key = line.slice(0, colonIdx).trim();
-    const val = line.slice(colonIdx + 1).trim();
-    if (key === "title") title = val.replace(/^["']|["']$/g, "");
-    else if (key === "date") date = val;
-    else if (key === "authors") {
-      authors = val
-        .replace(/^\[|\]$/g, "")
-        .split(",")
-        .map((s) => s.trim().replace(/^["']|["']$/g, ""))
-        .filter(Boolean);
+    if (colonIdx !== -1) {
+      listKey = null;
+      const key = line.slice(0, colonIdx).trim();
+      const val = line.slice(colonIdx + 1).trim();
+      if (key === "title") title = val.replace(/^["']|["']$/g, "");
+      else if (key === "date") date = val;
+      else if (key === "authors") {
+        authors = val
+          .replace(/^\[|\]$/g, "")
+          .split(",")
+          .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+          .filter(Boolean);
+        if (!authors.length && !val) listKey = "authors";
+      }
+    } else if (listKey === "authors" && /^\s+-\s+/.test(line)) {
+      const item = line.replace(/^\s+-\s+/, "").trim();
+      if (item) authors.push(item);
     }
   }
 
   const author = authors[0] || "";
   const slug = file.split("/").pop().replace(/\.md$/, "");
 
+  // Strip any existing author_pubkey/author_sig lines
+  const cleanFrontmatter = frontmatter
+    .split("\n")
+    .filter((l) => !l.startsWith("author_pubkey:") && !l.startsWith("author_sig:"))
+    .join("\n");
+
   const sig = signArticle(slug, author, date, content);
 
   const newFrontmatter =
-    frontmatter + `\nauthor_pubkey: "${PUBLIC_KEY_BASE64}"\nauthor_sig: "${sig}"`;
+    cleanFrontmatter + `\nauthor_pubkey: "${PUBLIC_KEY_BASE64}"\nauthor_sig: "${sig}"`;
   const newText = `---\n${newFrontmatter}\n---\n${content}`;
   writeFileSync(file, newText);
   ok++;

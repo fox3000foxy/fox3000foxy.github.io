@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDifzOrowm6fkA7k7UJw0GuZ+VCrTp8EtlOeeiD0Lnv3QIgZ25tCyovfmmkzBn14UDMudFtpxE1E4Ms5S/q5SxMBx8="
+author_sig: "MEYCIQDbdNgieYhM4HhyI19QxmUMGjXJET1AuMAiIi43WUIXDQIhAL94nsCCBVVHXO1fyJZlhAcwdf8PU1PBHSOvsGtW8xs6"
 ---
 
 ## Discord bot 100% 无服务器 : Hono + Cloudflare Workers = 💸 零成本

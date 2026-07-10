@@ -1,25 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import ArticleSchema from "../components/ArticleSchema";
+import AudioPlayer from "../components/AudioPlayer";
+import AuthorBio from "../components/AuthorBio";
+import BookmarkButton from "../components/BookmarkButton";
+import GiscusComments from "../components/GiscusComments";
+import MarkdownContent from "../components/MarkdownContent";
+import ReadingProgress from "../components/ReadingProgress";
+import SeriesNav from "../components/SeriesNav";
+import ShareButtons from "../components/ShareButtons";
+import SuggestedArticles from "../components/SuggestedArticles";
+import TableOfContents from "../components/TableOfContents";
+import { useLang } from "../hooks/useLang";
+import { useReadingMode } from "../hooks/useReadingMode";
+import { useReadStatus } from "../hooks/useReadStatus";
+import type { ArticleMeta } from "../types";
 import {
 	fetchArticleMarkdown,
 	getCachedArticleMarkdown,
 } from "../utils/articleCache";
-import type { ArticleMeta } from "../types";
-import { useLang } from "../hooks/useLang";
 import { parseFrontMatter } from "../utils/frontmatter";
-import MarkdownContent from "../components/MarkdownContent";
-import SuggestedArticles from "../components/SuggestedArticles";
-import TableOfContents from "../components/TableOfContents";
-import ArticleSchema from "../components/ArticleSchema";
-import AuthorBio from "../components/AuthorBio";
-import SeriesNav from "../components/SeriesNav";
-import GiscusComments from "../components/GiscusComments";
-import ReadingProgress from "../components/ReadingProgress";
-import AudioPlayer from "../components/AudioPlayer";
-import ShareButtons from "../components/ShareButtons";
-import BookmarkButton from "../components/BookmarkButton";
-import { useReadingMode } from "../hooks/useReadingMode";
-import { useReadStatus } from "../hooks/useReadStatus";
 import { isNew } from "../utils/isNew";
 import { verifyArticle } from "../utils/verify";
 import NotFound from "./NotFound";

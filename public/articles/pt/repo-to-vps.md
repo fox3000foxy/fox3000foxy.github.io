@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIHGCuQQMKizT6QjAwYCBH3no/6E5d6gMm7Nvyeyfju9fAiEAkgg4UgijZaAxAVI4OffUTe6xjfQcQCetDz0bAlwCokU="
+author_sig: "MEUCIHT0W3eNLbveKtRJgf/qCj4ho4C+TSfJQDAqLWMeyCJBAiEA8z9yGCjdqt4Ki1pBi0z7Qf/Aide8SO6mFoSm5bt3oH4="
 ---
 
 ## GitHub te dá um VPS grátis por 6h. Descobri como torná-lo permanente.

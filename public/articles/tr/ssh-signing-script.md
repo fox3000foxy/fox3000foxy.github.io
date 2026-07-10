@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIAa579akRHzC9z2T7vvFJlQJmYCqL30y/mxwQt/UO1fiAiBVAJClPtPoADR6yCEFlxu1aCQr59xHxbqTUu3oRYYEDw=="
+author_sig: "MEQCIGCg4JyjdigMW05ZU+djrzmZLfwxcGK0lVWHGxEgo/hJAiACfgH6sh8ekXclxxFYEELxuCYal1sT6zg4nz721P+nAg=="
 ---
 
 # SSH commit imzalama scripti açıklaması

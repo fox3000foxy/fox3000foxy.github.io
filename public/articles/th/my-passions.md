@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDCjdQ3LSDH8UsMiiJqeR3YAYCJr1skCln0+Oyko8c4qQIgBb7yHf752BQKEg2x8IzER2qJUt1OWsv1i/GZeOWTYao="
+author_sig: "MEUCICaryXgONCmP3ayE2WWW4JqqZVi8ZoHnvlQzH38zuOp0AiEA8qcq4S+gMN0TVK/YLBMZTOWf2KkceD8+vLt6ayvdiUk="
 ---
 
 # ความหลงใหลของฉัน

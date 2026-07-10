@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCICAozVzvT2taiBE4jATp+1JSPWBBkWWBjAVi2g3IY5t0AiEA0t9++vU23HaHJj8Vd8zbuNHznMGJl6+sGm7uRm/lwOA="
+author_sig: "MEYCIQDfo8Tz70ec8QQClL9bb0BDk5EDxiMvO60zFiUdS0rqgQIhAKCzfumc/pmqL2TwmoASE89YFqbLVTtDvAKVEkOUVPmy"
 ---
 
 > **Ghi chú (2026):** Dự án này không còn được bảo trì nữa. Microsoft đã tăng cường đáng kể khả năng phát hiện chống bot -- những gì từng hoạt động trước đây giờ không còn hiệu quả. Mã và cách tiếp cận được mô tả dưới đây được giữ lại chỉ với mục đích lưu trữ và minh họa.

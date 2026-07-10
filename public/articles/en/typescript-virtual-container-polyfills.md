@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDyf5GF3VfdNNlWmZMrP/L6URYU0KyniHtfds6D2ISjdAIga2wU8bRgNc7WwZ4EWbb2VSRbMTlja5fNOFC29Exlt3U="
+author_sig: "MEUCIQCT+J2GQnITN5nKxdm6cpEScuThZciLDfp9tfjIlRBatgIgYbqEpoYGM5AvmcY4FyhfB4l8appOHKDlNKQSV+vT+Y4="
 ---
 
 # Running a Node.js library in the browser without Wasm -- typescript-virtual-container's polyfills

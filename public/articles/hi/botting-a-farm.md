@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDLvqVaOf5ejkf54QzDZrVL8QXuNgO4ts0sa1QDKSHKMwIgB5qgN8u8fqpkqzPXLob2ZZGgDD9cJXuJh6l7Iu+ICD0="
+author_sig: "MEYCIQCPHDT4x1AfgcNMCYvD7QRbRUUqug7gciirTUR8esFMMwIhAL89m4kHnD88+PfPWMHNrTCSTe5JGNN+OA6mXEv46BT+"
 ---
 
 > **नोट (2026):** यह प्रोजेक्ट अब मेंटेन नहीं किया जाता। माइक्रोसॉफ्ट ने अपनी एंटी-बॉट डिटेक्शन को काफी मजबूत कर लिया है -- जो उस समय काम करता था वह आज काम नहीं करता। नीचे वर्णित कोड और दृष्टिकोण केवल आर्काइव और प्रदर्शन उद्देश्यों के लिए संरक्षित किए गए हैं।
