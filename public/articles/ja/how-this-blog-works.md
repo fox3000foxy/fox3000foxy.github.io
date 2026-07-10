@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xJldAl01MTHuGaLbc2aeMU8+i4ghkAlQi6+6Z4mqhFd/IcFGELw+mzHK45oG3M5CwbWrYA6pcrxtwmc908mRGg=="
+author_sig: "gZxvbTp0EDTWAUr5kK+uqt9igpPsG1QnZeE3Q9uMPzdTkhTU+Bu4BdFaL8JKxH/o9+Lm+c3NNt7MBqo9VmQ2AA=="
 ---
 
 # このブログの仕組み

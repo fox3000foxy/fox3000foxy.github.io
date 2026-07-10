@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bd5+Z2BL7IFX5dwNzSTQHeFxmWZr64j8+mLOmNdD6si87A6GeBWkpMGCQIYyRtw6RtHRzHDue2a0H6qYtJ2c6Q=="
+author_sig: "vjo82odVFu5FQAD5vlr1S4yRw+BXYWPYGVDPayYw5aKS1h52bQRSwfeKnXaZpsmsBGhdcUZh3AXHNYb8+bHNIg=="
 ---
 
 # Le Mie Passioni

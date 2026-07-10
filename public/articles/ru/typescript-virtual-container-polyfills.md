@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "R71+gfy0Dl4RSWIqFy5SP9Cy22S91mDfLWaEIEjaf9miczSPfuCA0grj3FNYuG3cws5fFyzQe8/la6WmPGSbCQ=="
+author_sig: "lOgwwlIPLfx12Ic7qj2vQn6pnZZs4ke0dC8tYQDxaxDGDQAWKyNXCELfz/fZsCpKcQyoszfKVvdJoh1UEJNoHg=="
 ---
 
 # Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container

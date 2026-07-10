@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RK7sNfGcRaTU3BfKIJxE+7Tl88q/X6Hqp7xO78yti5psIqZne4SLe6qtaI7/bKMGgKFCCZRfbfRsPN/2WrQFVA=="
+author_sig: "Fe3LPASJvd0q+bMwOdcMJPzVqkx0MdiK8Y/6fr1CtIIpwRYqaFRYi4iI8HIZv93HV3zbvAaMZ1y34LXgrX41Gg=="
 ---
 
 ## UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis

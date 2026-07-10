@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+iqqIwC3bzcnnZd0grc64ojf5PXdvf2AsZN/BIqdLfDUNWwRiLGK5s+sH9AwvDsDW57lOUPnTV59pKKcBtAQlg=="
+author_sig: "0mcw4fH+KVmKsPfvtZLc8TqLEQPmMyMcn4ioc15Neup59gXehNdd5vMh74LMCefR4nNq+aKHYAuu7LFZ+01BSg=="
 ---
 
 > **ملاحظة (2026):** هذا المشروع لم يعد قيد الصيانة. مايكروسوفت عززت بشكل كبير اكتشافها لمكافحة البوتات — ما كان يعمل في ذلك الوقت لم يعد يعمل اليوم. الكود والمنهجية الموصوفة أدناه مُحتفظ بها لأغراض الأرشفة والتوضيح فقط.

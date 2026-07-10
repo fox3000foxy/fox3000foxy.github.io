@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "AHU1jHYRyKF0WdjtWdd0/htpgpO+HzqbeKMAYwdXGbHdoI2RmK37oWnJ+39QrVGWMGY3aN+23/z08OcQLevX8Q=="
+author_sig: "hEzS0OSzeRtzz4KlGv6Vl6kb9JMfOHImX3lf+HbAfQ0fK/Lr1dGp8mqyQW5yfNplIJP/7PEgCaJqgko4Z5V+lA=="
 ---
 
 ## บทนำ

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kW/IYxtNAd1ipt0LWpnFbQQKectZqJfsXhbHEgtjVXH4cqRDL+55E+o8B7nBDn36u/Gjm8vz8ZOXzAYlAIp27w=="
+author_sig: "mB2Xp8Vz6VpZRYin4xUHMBOaa0qZQk7jfGv94P+3MtrfmI4xRvQ4ggiYlgxhWKX4fsWjxKxpmtl/V9dCwzakyw=="
 ---
 
 ## GitHub आपको 6 घंटे के लिए मुफ़्त VPS देता है। मैंने इसे स्थायी बनाने का तरीका ढूंढ लिया।

@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "r2qukVxqu4DtMCHGYRgtQroUVEzWEqkyp4NEYUzo9cZEizweuhij/goZUfEtkMOE01lgMVG3gSaCQi5lCDDidA=="
+author_sig: "h6gcEdoBw6SJQC5neWVHnTWTLBgBXKpV2u+jUHNmxi/h63ybX+6JFGQvrSYdXkQZKYuwf+HSAPZP4UGyrR81vg=="
 ---
 
 > **Note (2026):** このプロジェクトはもはやメンテナンスされていません。Microsoftはアンチボット検出を大幅に強化しており、当時有効だった手法は現在では機能しません。以下で説明するコードとアプローチは、アーカイブおよび教育目的のみで残されています。

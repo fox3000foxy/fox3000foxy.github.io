@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "98O2eIs6H6FD/gHnOVYenZy+XZ0eWcVlmekCgHZTIVnzHagUyEzMgUI6m/QrHtbJXegQ8vnKy3044tg+/yLFaw=="
+author_sig: "tNLm0dA+FTtAf3iVAXcY4B6IQS3bkLtLfQThy3xMBJTLZClZ8WwKib5LcOL94AFgaf/2MBnuV1U4ErRKL7DiNg=="
 ---
 
 ## UTAU: how a Visual Basic 6 app democratized synthetic singing

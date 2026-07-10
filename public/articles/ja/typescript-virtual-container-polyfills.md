@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PrKQ46AP5XYEGDmckXfHwF97xmIOYBDT/N9d5cb9ybJjCP6+rXc+lfLJ2nBvBpPuSOV6AtEVZZP91wUiSlknnA=="
+author_sig: "TzCq2FXB+qYpy9CvVXbrt7QvkIBmSM3bxDvPLYwPcCwZTKgufFOPSzimMA+Q66JYQVvN+5yVye86fKtlKyOmSw=="
 ---
 
 # WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群

@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "51x0BsLz6ZDUZ3t65v0lkr3lRA6M73V4kD11C7kRORQOW3eq2IZ/sAhtBKlv/r7RZRfo6LzS5r1sPKRaC06ZUA=="
+author_sig: "dC4gVnqxpoaK/naPBGTxBv8gPyxJ/weOBo47k74Z3CdxZ64kf+odfbDoV3+UXiiVLaU/byX8DuMN+S0l1QTlkQ=="
 ---
 
 # ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions

@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NXc/WCK2PYkZl0FeDWCPk9pDP7Wxof11T2DmTsi0vzW8OxLVHKr+1wrItuur0Vxfa8lb+CHufyW6kDCoEOEBKA=="
+author_sig: "A9axyhk2VPHfBQQatr9zMJiKhGoMbK6b7lVMRyjh8OUNazUu82WHw8znAR7/O6+GcrZ2q0iNngwZBWXbLCXZ6A=="
 ---
 
 # استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions

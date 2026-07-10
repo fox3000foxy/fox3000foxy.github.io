@@ -3,7 +3,7 @@ title: "Ich habe einen ultra-realistischen Express-Honeypot gebaut"
 description: "328 gefälschte Endpoints mit spontan generierten Antworten, Header-Spoofing, Bot-Traffic-Aufzeichnung — ein tiefer Einblick in eine Express-Honeypot-Middleware, die Scanner täuschen soll."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "G6QcTUkTS4PmhDF9o3sG23VAbzmB/uSs4teqgkmoB2WVZBLBrYOOrhNj3nq8pfixtJdrLGvaQZFrzmA21tJj6Q=="
+author_sig: "bmQr9hMKWt3r8PZpOyDL9Xfy7UhKmwiBketopU5tMskP/x95TLg9uA76ap0NjeQaYL6TYN09tKrO4YbHvcaAVg=="
 ---
 
 ## Was ist ein Express-Honeypot?

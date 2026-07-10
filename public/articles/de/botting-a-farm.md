@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "I1fpaiRZSz9iTUy1xkUxHb0F2ZSgeE90GbXQpu0wMks1jxYlmmspPxFDuwjsJ6u3bNvLp5NGiftIhwj0hMksrQ=="
+author_sig: "UDj36mJ9UHBmgxoChcFmwgst7tntt/NRDyxJxbup30t9Ox/QFzG+2VW+Xp+7UtBoF4jkZv+8YZr7jGK9pHAHFA=="
 ---
 
 > **Hinweis (2026):** Dieses Projekt wird nicht mehr gewartet. Microsoft hat seine Anti-Bot-Erkennung deutlich verschärft – was damals funktioniert hat, funktioniert heute nicht mehr. Der Code und der unten beschriebene Ansatz werden nur zu Archivierungs-/Bildungszwecken aufbewahrt.

@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9zzmtE/y5+cl4qUmWrnPqos+TWtEWfruzjzM0nBIw3O4sFUg/vdSARW8sxquBjdha3Ms/4ZSur1ZBviDzXUeUQ=="
+author_sig: "CgjwT2iey0Qg0egY2zGGYMKzq3jKEnG2afvHKHhaqJAx12ue14mkIxhojMfnXEi8l1UPGFfD4L+7BPBc06agEg=="
 ---
 
 # Mis Pasiones

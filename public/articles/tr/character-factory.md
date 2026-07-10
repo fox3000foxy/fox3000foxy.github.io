@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qKKSWqvbFEeYhaFI04gTewcGU16pH52qPx7bC0kl/vq4c2ye1v/mYNdvhRBHzxof7aNPGCZ4U039oZt5QsOolA=="
+author_sig: "Lej3VrDQ3N7y4W9AbJGKGgn/pnGWYvF+Wa+8Fwoze+/qHDP063TX8QJNvsosC5MDW4cCi7gCLPZVe8z0Q0mkKA=="
 ---
 
 # character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma

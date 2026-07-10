@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sO0C36l10kGLxqZnyoSZxntycDRjzF7/rX5JGl5pXsKJ9qE2tkYWpxJvfdZ0YOAVPjY+tuggVvC8lvM/01JWlg=="
+author_sig: "N0NmwI9VuNuzk1SIjpFTkCFGoKY47awEcHbbRKlSR8kGojgwPVPtgpu476jTIwz9NEfuD7FjmA4VbGvUJUlc/A=="
 ---
 
 ## Nausicaa için Salak Yapay Zekam

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Mj8+N8ovIZqjCNRwbqJHThpnBsSjP957bpUjDJZBs222XgSbNhSErlckaChJ3CxsNO7WBBbACqmPIOtCzY0xNA=="
+author_sig: "WYPGPFcsMmte4GBdejEFdlE+ACkyRP2rbPPf8CgSNBUsj7yep08+9tQb+oBiVuwfY8CRYTd50Pk4NvQHG+CD/A=="
 ---
 
 # Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı

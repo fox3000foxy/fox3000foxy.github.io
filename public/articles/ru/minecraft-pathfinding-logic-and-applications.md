@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FuNJ/bG+aq3kkYAWdMAoZGjfizs/oIt9rjxCc8A3PCHnXrVxxAvHuQ3MLOgo2Aa0OqeAhNP2ZzrvArPTbQrMwg=="
+author_sig: "nSm9NaNmEQY7K1akqX+fEOWSPJEUdfNUWOglOwypZYFiaUm5ClQqfzO/FYgzQBC0Zj+R37LDnoPiSzWfS+i61g=="
 ---
 
 ## Вступление

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "r0QsXnMnfAVxIvgQd4p/gJgi4M39FyW9t5Qpsmi1qfZACT9zG1zfPImbvTJ+OBTYvhs4fNA4CF7nJ2opZ7VmAw=="
+author_sig: "kiMlrR2YP0cHhkmB10thRG9GRk/SQF76bghujVw4e2RIz9CR6umgGPhYuFjPOQ3YNBHxnnPMr1JUesQlCVfJVA=="
 ---
 
 ## UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp

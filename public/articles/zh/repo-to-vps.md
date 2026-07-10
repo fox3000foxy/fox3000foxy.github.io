@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YGU6rMwO/Dt3Cpgs9+ghWn3FUDy3b/prH7UF0LRUppAHwa3QXJMELo2gcAAQfXARZ5Xv77rzFwYJQvMCi9j7QA=="
+author_sig: "dao4GxTD7b0oI06wGdgcZ+RrEinojsDcTWKn0S1IRdi4ek2kqbXagIjPnjhDzM5Scvqm7BKW+LfYR+1iv/bwHQ=="
 ---
 
 ## GitHub白送你6小时的免费VPS。我找到了让它永续的方法。

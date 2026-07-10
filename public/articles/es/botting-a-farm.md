@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "AZIGr+AqxzLdm4a2XndQ8y3vJixehLUvOwgmcugIjbckvX5w73/6QWDnKc7d6pNxgS6GdSBS4NH09M19uwbhhg=="
+author_sig: "fVDaDNsT8s53fjdzAgpLnPqneASwmwZ8DLLADANUjcCfu+Z71/h7RlgdL/ytKrNxVbkfkFDFyBbIQk8wddHWqw=="
 ---
 
 > **Nota (2026):** Este proyecto ya no tiene mantenimiento. Microsoft ha endurecido significativamente su detección de bots -- lo que funcionaba antes ya no funciona hoy. El código y el enfoque descritos a continuación se conservan solo con fines educativos/de archivo.

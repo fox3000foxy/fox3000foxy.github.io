@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ppwvM7tuiIcyCVamBQQCx1RtgK3jH+G0ny7QvXXGjKoK4l3rBk0vH17HzQaI6FvlDt6EZkhUoxdnOpLTr6rc0g=="
+author_sig: "7c3qLV7wJCcLNbosO6SzfoO6VWU0oxjE/HSHBqZ1SfGoWLPUJjFyCOqbMhH6S/SCuMN8hD/vzS7/iyngs1QqWQ=="
 ---
 
 > **Catatan (2026) :** Proyek ini tidak lagi dipertahankan. Microsoft telah secara signifikan memperkuat deteksi anti-bot mereka -- apa yang dulu berhasil sekarang sudah tidak berfungsi lagi. Kode dan pendekatan yang dijelaskan di bawah ini disimpan untuk tujuan arsip dan demonstrasi saja.

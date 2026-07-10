@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tLzTvDs+uI7R5maig/n3R1YbW1oABZAEK4KKTQTdNqezgS5uUnFHpBaAQav16IeLTdhyf4n8TE0ZN+T+Uv2tGQ=="
+author_sig: "g0VT+1bLYMwTfzPwVtNSjmbn1iOvAAlfAZwYUy1zqsSlBhgSy094oSmXMgRj76XzR650gTqWpOUh6Cota3N4fw=="
 ---
 
 # سكريبت توقيع SSH للـ commits — شرح

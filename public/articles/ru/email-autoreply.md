@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WcIwb7+QPdVw5z2lHamlWzuYdmAcvrVJFxr0QwLN9BPARjvFXjQ42a3M23rPaVyaZNtjrzFEDJbpkK6gobVBBw=="
+author_sig: "c0ucIAEZYm6xY1LIg8hxXplX+UeZ6f+ClioikN+NnMw4bgYst22RiAVy9R+WDORYxsp1sQPbBQ6ZTXqcokvFZA=="
 ---
 
 # Я использую git как базу данных, чтобы крутить бота на GitHub Actions бесплатно

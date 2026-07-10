@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hILmmXrTZmzwHxvJFuSzH+5x+c0gxCu5I4k+1f+ONxR8366s3t0fMTMqFZHFj+yiH0z7E4HToRo19MLjLdQrLQ=="
+author_sig: "pFdaN21fzqU+RuHRhVlfVHBdXN4/IF6HJoJrVENvESnc2FlY7i0IGrKXwU/RvCNcr8wgRFeyV88nywgzrG3Fuw=="
 ---
 
 # Usei git como banco de dados pra rodar um bot de graça no GitHub Actions

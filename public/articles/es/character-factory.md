@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "VAuUtSnfnF8I+0BjUJua0diCWRxAqxPRwMfglBCjThcRK+FCxW3tErB+h3XKvGNy5e8MiEvVuMidMIkys+1VTw=="
+author_sig: "YR6KJmJ0fXd2QiWBiN4aCQX34gFMyGL7CR6/TC9nPcXfAi8dwC48A4ItEKktaJMK+SuKR7Lak9jU2MX+0AtpsQ=="
 ---
 
 # Construyendo character-factory: avatares con genética

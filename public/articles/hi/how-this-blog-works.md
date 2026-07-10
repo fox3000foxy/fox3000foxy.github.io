@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1mjB9Ymp82y/4Ixrup6ITmKB+L+hvuvMLB2YvbSYavqA0Ng806cCUcO7OOgjv6TbPdyj4loiTVyrG7VuPugqAQ=="
+author_sig: "e5gC6+tiGOpqN04XdKXT54BpiQT3eQxkPxd88ihy93vJYqiqfVKnjyobwgwWO5Ox7bmsuynDaEQ1CeM35GP76A=="
 ---
 
 # यह ब्लॉग कैसे काम करता है?
