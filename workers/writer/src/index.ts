@@ -251,7 +251,6 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
       ? [`images:\n${article.images.map((img) => `  - ${img.filename}`).join("\n")}`]
       : []),
     "---",
-    "",
     article.content,
   ].join("\n");
 
