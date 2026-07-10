@@ -218,6 +218,57 @@ async function isCollaborator(repo: string, username: string, auth: string): Pro
   return res.status === 204;
 }
 
+async function ensureFork(repo: string, username: string, headers: Record<string, string>): Promise<string> {
+  const userFork = `${username}/${repo.split("/")[1]}`;
+  const res = await fetch(`https://api.github.com/repos/${userFork}`, { headers });
+  if (res.ok) {
+    return userFork;
+  }
+  const forkRes = await fetch(`https://api.github.com/repos/${repo}/forks`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ default_branch_only: true }),
+  });
+
+  if (forkRes.status >= 300 && forkRes.status < 400) {
+    const location = forkRes.headers.get("Location") || "";
+    return location.split("/").slice(-2).join("/").replace(/\.git$/, "");
+  }
+  if (!forkRes.ok) {
+    const err = await forkRes.text();
+    throw new Error(`Failed to fork repo: ${err}`);
+  }
+  const fork = await forkRes.json() as { full_name: string };
+  return fork.full_name;
+}
+
+async function createBranch(repo: string, branch: string, headers: Record<string, string>): Promise<void> {
+  const repoRes = await fetch(`https://api.github.com/repos/${repo}`, { headers });
+  if (!repoRes.ok) throw new Error("Failed to get repo info");
+  const repoInfo = await repoRes.json() as { default_branch: string };
+  const defaultBranch = repoInfo.default_branch;
+
+  const mainRef = await fetch(
+    `https://api.github.com/repos/${repo}/git/refs/heads/${defaultBranch}`,
+    { headers },
+  );
+  if (!mainRef.ok) throw new Error("Failed to get default branch ref");
+  const { object: { sha: mainSha } } = await mainRef.json() as { object: { sha: string } };
+
+  const createBranchRes = await fetch(
+    `https://api.github.com/repos/${repo}/git/refs`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: mainSha }),
+    },
+  );
+  if (!createBranchRes.ok) {
+    const err = await createBranchRes.text();
+    throw new Error(`Failed to create branch: ${err}`);
+  }
+}
+
 async function submitArticle(request: Request, env: Env): Promise<Response> {
   const auth = request.headers.get("Authorization");
   if (!auth?.startsWith("Bearer ")) {
@@ -295,58 +346,8 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
     targetBranch = "main";
   } else {
     targetBranch = `article-${slugify(article.slug)}-${Date.now().toString(36)}`;
-
-    // Fork the repo under the user's account
-    const forkRes = await fetch(
-      `https://api.github.com/repos/${repo}/forks`,
-      {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ default_branch_only: true }),
-      },
-    );
-    if (!forkRes.ok) {
-      const err = await forkRes.text();
-      return json({ error: `Failed to fork repo: ${err}` }, 502);
-    }
-    const fork = await forkRes.json() as { full_name: string };
-    targetRepo = fork.full_name;
-
-    // Get the fork's default branch SHA
-    const defaultBranchRes = await fetch(
-      `https://api.github.com/repos/${targetRepo}`,
-      { headers },
-    );
-    if (!defaultBranchRes.ok) {
-      return json({ error: "Failed to get fork info" }, 502);
-    }
-    const forkInfo = await defaultBranchRes.json() as { default_branch: string };
-    const defaultBranch = forkInfo.default_branch;
-
-    const mainRef = await fetch(
-      `https://api.github.com/repos/${targetRepo}/git/refs/heads/${defaultBranch}`,
-      { headers },
-    );
-    if (!mainRef.ok) {
-      return json({ error: "Failed to get fork default branch" }, 502);
-    }
-    const { object: { sha: mainSha } } = await mainRef.json() as { object: { sha: string } };
-
-    const createBranchRes = await fetch(
-      `https://api.github.com/repos/${targetRepo}/git/refs`,
-      {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          ref: `refs/heads/${targetBranch}`,
-          sha: mainSha,
-        }),
-      },
-    );
-    if (!createBranchRes.ok) {
-      const err = await createBranchRes.text();
-      return json({ error: `Failed to create branch: ${err}` }, 502);
-    }
+    targetRepo = await ensureFork(repo, user.login, headers);
+    await createBranch(targetRepo, targetBranch, headers);
   }
 
   const langDir = article.lang || "en";
