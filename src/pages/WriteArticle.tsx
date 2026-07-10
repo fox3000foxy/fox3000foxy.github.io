@@ -93,6 +93,15 @@ export default function WriteArticle() {
 			}),
 		],
 		editorProps: {
+			handleKeyDown: (_view, event) => {
+				if (event.key === "t" && !event.ctrlKey && !event.metaKey && !event.altKey) {
+					const { state, dispatch } = _view;
+					const tr = state.tr.insertText("t");
+					dispatch(tr);
+					return true;
+				}
+				return false;
+			},
 			handlePaste: (_view, event) => {
 				const items = event.clipboardData?.items;
 				if (!items) {
