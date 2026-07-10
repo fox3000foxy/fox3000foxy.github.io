@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { getAuthors, type Author } from "../utils/authors";
 
-export default function AuthorBio({ authors }: { authors?: string[] }) {
+export default function AuthorBio({
+	authors,
+	verified,
+}: { authors?: string[]; verified?: boolean }) {
 	const list = getAuthors(authors);
 
 	return (
@@ -18,7 +21,10 @@ export default function AuthorBio({ authors }: { authors?: string[] }) {
 						alt={author.name}
 					/>
 					<div className="author-info-top">
-						<span className="author-name-top">{author.name}</span>
+						<span className="author-name-top">
+							{author.name}
+							{verified && <span className="verified-badge">✓ Verified</span>}
+						</span>
 						<span className="author-link-top">@{author.id}</span>
 					</div>
 				</Link>

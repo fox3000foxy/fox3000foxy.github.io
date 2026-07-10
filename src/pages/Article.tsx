@@ -195,8 +195,7 @@ export default function Article() {
 						{t("article.minRead", { n: estimateReadingTime(content) })}
 					</span>
 				</p>
-				<AuthorBio authors={meta?.authors} />
-				{verified && <span className="verified-badge">✓ Verified</span>}
+				<AuthorBio authors={meta?.authors} verified={verified} />
 				{meta?.description && (
 					<p className="article-description">{meta.description}</p>
 				)}
