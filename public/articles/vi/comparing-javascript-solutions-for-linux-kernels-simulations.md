@@ -9,8 +9,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "WtPzy5O1LKwyYPVguD6+HfVHAQhnEW/3fSJzMWoNOzO40oRtu4LI3tRBxY/iEAkm4PvaAaa7EWe9w6eK0TPKkQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "ch9lTkY8ip6zzFFt2tSBHKOvGGwhK77ymodk4xtnFSZi0sRr8/YVaHflzGfWAEgyEfvjwsseSi2otdyvzEfS2g=="
 ---
 
 # Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh

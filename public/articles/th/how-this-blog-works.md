@@ -10,8 +10,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "2YGSty3OkIgE4JUb1NURlt5T4TwfK0IY2IvdYhC/5Rbc49GiSwV+1S58wEXj/EbfvXqo3fpoI6G1alOpxJUBHA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "Z3mIr/d4b0OgSk3NWVxkbS/lqXG9c13qOc9aBU1m42u33stHT8jjfSgQOBk2qHf0bOhvBgf4yeHwJKRUZdU1QQ=="
 ---
 
 # บล็อกนี้ทำงานอย่างไร ?

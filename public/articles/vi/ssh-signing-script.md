@@ -9,8 +9,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "s4iolAcocGKgF0roNck2mhnV2tJsBgoGOUF7IOufnZw1+c6rm/BgaIeIswaaEQiZnbIfyFT6U4ES6ut9gwLC9w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "/erDh/kXTMqgEnX/J62SUzySNE1GPWu3Lnj5JOiPfE0Yu8ko4Z+HOiVrK4wvZDob0YnhFhPpN1gl82ce78wVXw=="
 ---
 
 # Script ký commit SSH -- giải thích chi tiết

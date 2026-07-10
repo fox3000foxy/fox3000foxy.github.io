@@ -9,8 +9,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "6D9/Oym6S5pm62KPAExiKxFaMoUOcFsYHehncXKehdM5fyCyMekJI/ZXgFgjY+ju6/ggzo/+NZ+7675vbla83A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "DSGWVXbO0Ha9dveGavOALz+qfbONURz6zBoYuPsv7YDpBYLV2LOLyXvDP8tLJQ+QDcwklHNtQ56WF4KGkOcUhQ=="
 ---
 
 # SSH 提交签名脚本详解

@@ -10,8 +10,8 @@ tags:
   - python
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "Shv6aDWcsRnWiYry743yZRHX8Gbd/uL84moQH7UTT9VZOIU0+I5GBmtZDuEa5xXPvE+mqsNU58AZ1OntPjRdbg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "bCxZtHuCbQ3JniCB3/sso7a2NNOGA5//UHHqcA5h9/dRDCPWK5jPP02C/SqjgJyaN4PijmVeBNR2Py6Ty938pg=="
 ---
 
 ## はじめに

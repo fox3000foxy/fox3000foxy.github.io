@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "b545fa29XfKSBjHvh4+V/c2urW25d2gwjqgWsPpSutyLZwNLcWFLMhHKRlURYj8ta2YabhBHOnzqbUur6J4Qlg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "+LSnUz5agdb1KK57GQMLbRPN7ZFrQJKbcvZ5Stld0j8JWZJTW2LjkC7v7RzJOFuFXG28+CwFWAJgABNILa9ZWA=="
 ---
 
 # character-factory का निर्माण : आनुवंशिक प्रणाली के साथ अवतार

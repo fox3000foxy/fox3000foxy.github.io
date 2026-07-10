@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "sm5Vk1VcfiWASTETxF6ypWPkbEwIMiqFQ2vlwQu2uvhIMksvq3s5zRi2cQUE4r3TuKQgjdG1Cwlso9HyGYbF1w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "PrKQ46AP5XYEGDmckXfHwF97xmIOYBDT/N9d5cb9ybJjCP6+rXc+lfLJ2nBvBpPuSOV6AtEVZZP91wUiSlknnA=="
 ---
 
 # WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群

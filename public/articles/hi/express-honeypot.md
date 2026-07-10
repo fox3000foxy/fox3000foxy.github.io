@@ -2,8 +2,8 @@
 title: "मैंने एक अति-यथार्थवादी Express हनीपॉट बनाया"
 description: "328 नकली एंडपॉइंट जिनके जवाब तुरंत जनरेट होते हैं, हेडर स्पूफिंग, बॉट ट्रैफ़िक रिकॉर्डिंग — एक Express हनीपॉट मिडलवेयर के कोड में गहराई से जाना जो स्कैनर्स को धोखा देने के लिए डिज़ाइन किया गया है।"
 aiGenerated: true
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "bBws/tx056Ff/zomOUC3s9/0fMdXHXP07hq6wuSfgOepS7jwV5kx1eRTOhYmJqwuLP1VmNJ+crzehWUBTOje9Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "mSV0kBZSQ1QWiL7pKkkya8B5vDZVcD4mshUKictuBZwgyaZwkrmebCAmwBrpmmXGFot+i6bU/qeOPV1ypTfCCQ=="
 ---
 
 ## विचार

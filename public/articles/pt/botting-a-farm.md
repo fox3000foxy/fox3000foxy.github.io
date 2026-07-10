@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "JmshpMIm78gKVPvt5EmM+KkKr6CqeHPmI9d5OnFTFCjZC+vfHKfF1jhcisqtzQIbRnmx88yB+f21L8HFn3KhrA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "eHZmqWLPkN/lz4wnfnr8CCkzq0yFJN/x+AENuIa5uzuWS6FMrZqZABpK4PG99e88Qchd6uKqmrPmPNq0x34TNQ=="
 ---
 
 > **Nota (2026):** Este projeto não é mais mantido. A Microsoft reforçou consideravelmente sua detecção anti-bot — o que funcionava na época não funciona mais hoje. O código e a abordagem descritos abaixo são mantidos apenas para fins de arquivo e demonstração.

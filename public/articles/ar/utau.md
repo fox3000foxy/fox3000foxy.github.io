@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "uvso7X1FXkd66gXV2tSEmHZSMPrni4DV0ZI0J8+AF85Kc2keXQ7hhai22eIpf+8QtjA02/R9wW3SCtWvd92d9w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "OETCDLhfsR2Z5Csnvsw8oS7dpXFbY85ty9BcrBcpxbrKrMSp1+s/9ofJsjw8yLuISxQFU1Ev9wWaaGjc2Y0h9w=="
 ---
 
 ## UTAU : كيف أضفى برنامج بلغة Visual Basic 6 الطابع الديمقراطي على الصوت الاصطناعي

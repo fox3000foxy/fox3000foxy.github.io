@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "t3gGCwxNMXeaTH957la3rnGYnDLJvVvTile3pxFL4Jrx8w5faZBD9nqukxPrTCObQQPXwPiI9ATD6QzJixB1sw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "8hXGnXeNk+nGdZcF/QqcnZ+9YK7PLFcJBgXN14L8rYLEKZz+AxQB+RJvU+0mwlStprX9VHgm8AczGzJx+XTYPw=="
 ---
 
 ## UTAU: ซอฟต์แวร์ Visual Basic 6 ที่ทำให้เสียงสังเคราะห์เป็นของทุกคน

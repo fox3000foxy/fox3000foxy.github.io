@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "Q3S/5BNKuAg3tMbKb2VehQ9Ql1lbwQKnO7n7A5cIWAbnaj5M+xT4LJGtI55eGX2UbMXPgUoPvHQj62j61Z6+bw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "/JiF+sm0zx2g6yxZOqLPZdjEgTIWTIYUnv+w1YuS+5oBPlQUtJX1bJVYxx4CaX/34O1Qqe98bqvkqW2x10P3uw=="
 ---
 
 # Construire character-factory : des avatars avec un système génétique

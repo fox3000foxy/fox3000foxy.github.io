@@ -10,8 +10,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "Bv/yvGzxGOcBWrOfP3AurPK7uoa4+E6IuZkyuNF6821sZOmndlNUzUH8hGC4thNsF+QrbvKbpdrOHTR+WEokhg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "GpCQvsNKhq8M+EDT5KhpQWFrrCf3dXFxsdy4I/59hp+nEHcVc3XaiqXtmPkw/FNjmRH0nz0yDgK0ZjOJl9L8Bg=="
 ---
 
 ## Introduzione

@@ -10,8 +10,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "zfA7mHpwqbNY9TLmEi7X9EgIMx4IUo99agYwcUlPx1jveA16XcfOUTAWaqtstykgs+Dk9s9pMXXMSMtFQkwqhw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "LH+P9NFG0fCKSIlw8Gyy9Xg8+6hJ3SjzQrIP1m8GXymY+mjnsipHEKqKb5yugAM13ivLRlpQHHlBv95DDeq9LQ=="
 ---
 
 ## AI Nhảm Nhí Của Tôi Cho Nausicaa

@@ -9,8 +9,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "DrkUOwa5q5VVaXSS6pnqwM2UEhKnER/dYYv4CUXwn5aKhiy6o79cIo2tvXjlZq67SSd6cvzzGiM0KrpzDuBFLw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "lULIFPDd2SAyAQR9tfU4wZBAoN80Z0jMJ7BKWdS7+wID2i2Jtb5L6n17E4aFVN6KprpVnU7ymVlSN+kpk5AIsA=="
 ---
 
 # ทุก sandbox JavaScript, เอมิวเลเตอร์, ซีมิวเลเตอร์ และ honeypot Linux -- เปรียบเทียบ

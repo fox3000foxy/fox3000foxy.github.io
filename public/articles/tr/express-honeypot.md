@@ -10,8 +10,8 @@ tags:
   - honeypot
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "usyMKpSUItvUidxJmMBa7LijP47ngLPs62TGI3YsRP/8wjLnvfJZGWIqhGXqRRN//AI/7Pg6d7NhiX9jBNvwlA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "aJ+TjE8f3xQtBXutr6bklQLAAL/fLASiPzaolCqBHrZvJXAR04J2sE+82PxCIa1AHblVvxk1xrF0nvlYbQx+6g=="
 ---
 
 ## Fikir

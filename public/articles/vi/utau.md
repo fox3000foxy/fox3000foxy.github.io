@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "7/26PimyyFxR2ZUeQ8Cgc5cCVgHY0Rkhor/ldJRO0oGm4JAkXcOqueqGpKImODcM+cltiEEwzSHuaeEgmxPgdg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "r0QsXnMnfAVxIvgQd4p/gJgi4M39FyW9t5Qpsmi1qfZACT9zG1zfPImbvTJ+OBTYvhs4fNA4CF7nJ2opZ7VmAw=="
 ---
 
 ## UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp

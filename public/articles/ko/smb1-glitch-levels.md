@@ -11,8 +11,8 @@ tags:
   - mario
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "sOc/mzNqk5Mj2vBLLkwhy+3rdrtCGH2n4yobah83wf8NNGTptc1iDYwc7jb0GwqnnVkwSsjzC2gPj9WrJBIATA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "DHa5AYDya6WL4JceHIDdey8t19TR01IyWyfTwKZCuNWnb8hjZDlfbKjIWNi5NHLxUtKqxTs+Rk9gOdsq7Y10bA=="
 ---
 
 ## 소개

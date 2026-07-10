@@ -9,8 +9,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "7oOq9GYtYHDYFdx1Q8nWX9NUnm6tH5TBdyJ9ldfUuFJRrSNGP1oGjSLylcYm6TGnS1Zye5+XLKLNNnNjEqyQ9Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "SC1jfaE1xSyL9B95CKLUgwaAfDTVXMZZ6wpiqOskR2mHglxSgZhka/KgkAj5d9IbaUTMe1m3pQ5Op3W/27Foeg=="
 ---
 
 # Bagaimana Cara Kerja Blog Ini?

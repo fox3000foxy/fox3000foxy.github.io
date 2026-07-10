@@ -10,8 +10,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "OCQE46I5BaaJVLizuk62BUFJi2Hg+lF59IwDXsULsNmFAuSqL6YW6tr5l750Ofu68iK/AP825QpPs3vGJaqTHA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "iYGf4KqQV8IzxTXzgXiGSPLJaOGaE8XPoHafoiUQaIrsm8R1baVTxKxPG2knQ/vWl32BFAOhPkrNKdj5qfWfmg=="
 ---
 
 # Скрипт подписи коммитов SSH -- объяснение

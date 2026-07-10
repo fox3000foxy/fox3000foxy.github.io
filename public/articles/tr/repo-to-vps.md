@@ -10,8 +10,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "ZtDjbMy4leYmNpUxpnLoEWsR0WozXSG0xTTvi5oPbHZ9hYDX8LE12mvkHjUBcHMEBLWskW49pwuPX5Ijmicptg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "HNfvwc81wx+Am8v+GEZZZmuEB/jH3yc96cV3iPSepumHXjNGBrwSr4ti8uurND+exYx4xuPBoiJyNpw1tkB+OQ=="
 ---
 
 ## GitHub sana 6 saatliğine ücretsiz VPS veriyor. Kalıcı hale getirmenin yolunu buldum.

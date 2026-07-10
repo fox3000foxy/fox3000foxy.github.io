@@ -10,8 +10,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "ZZeia/mVSvH6NrArzDDCnAZACZqSK7mhPrMGsg5w00lUHjt6O2onag5gN7/LiGrOcq9sESvkybn14TFWtbxOfA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "M0L4kRpAHQlAJ2rDLQegwo2kiqSe4n8HbGO2sfjZEED/9K1u7WMURcMpmLxnwgARcjWgbrgu+bTODHEKCrkAwQ=="
 ---
 
 # character-factory 만들기: 유전학을 가진 아바타

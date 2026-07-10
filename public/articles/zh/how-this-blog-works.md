@@ -9,8 +9,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "x6Q32SQ5D/Ap8XT7giitLvzUkaDNAnhibm4G5kc9yuFaMzxOvf8fT09WDUlm1G/Qu4ngsfUOwD+XRRzNVwaaxw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "mqvnb264QnQNH3vhf4gYDjeb4wbYBIbAWrVd/nX415r6zZcn1MZvdeSYHj2WxFhEYf81ingyY/RMn2uh/IE7hA=="
 ---
 
 # 这个博客是如何运作的？

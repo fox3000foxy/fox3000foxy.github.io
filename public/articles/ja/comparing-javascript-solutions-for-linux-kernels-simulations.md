@@ -8,8 +8,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "x8oQ3B8HtTYuXJpGqApJgOJYimmUU7/7EW/LX3l3HS2pCUBG4R8DEgV3LtWHuA9rVwWHo8cN2tFjfdCmZ8nDNw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "jfuLofGTWiFdJcOq84ck7/DuXKPwVCSj/KswpCkm4PEj9eVx7qQlGdUe3ZdcSt/aD0GpSgpvLoxMOlVuOxa0+A=="
 ---
 
 # あらゆるJavaScriptサンドボックス、エミュレーター、シミュレーター、ハニーポット----比較

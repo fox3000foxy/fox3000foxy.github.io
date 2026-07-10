@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "+7meGno4eBP79zSea0zfOIN2JYLSed9vMfZutxGjeGPbHyVKVRPbgEdNMiLBZwmfshU4HX3yCxkcAe80sG9bNA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "FGizg8+CycSmxeUev7mrhcBUktx2hnMr1bwtu6U9LOXsFzwEqZ/0c17/6n0hg9r0TATWtKQqsFzxRTGIkINMlw=="
 ---
 
 # تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills لـ typescript-virtual-container

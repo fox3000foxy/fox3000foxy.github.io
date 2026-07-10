@@ -8,8 +8,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "6YjxGupD7e4wlpLRMkwYHB59PUw/8ryD439upaa1ofIwlmUEBK491vLp63sM7xdIsY8DC1+7OtGLuH5PnymwIA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "ZMY6/ZA1w5XoK/w5KykdUReYceNLUjDBmfkwwTa42HPZLc+GMmAyfNR7ydO2AX4TPL4Eu59UHdfD1Ue9MC5XMQ=="
 ---
 
 > **참고 (2026년):** 이 프로젝트는 더 이상 유지보수되지 않습니다. Microsoft가 안티봇 탐지를 크게 강화해서 -- 예전에 통했던 방법이 지금은 더 이상 작동하지 않습니다. 아래 설명된 코드와 접근 방식은 기록/교육 목적으로만 보관됩니다.

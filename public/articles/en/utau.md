@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "1oUtkB0FTU2RlMZzvjEgvVQ72HEMSpOUzG9mNJwx2fQrtWniY0AE9HVp57ax1nK3cH2xh0OxkyYVSsYCid3b9A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "98O2eIs6H6FD/gHnOVYenZy+XZ0eWcVlmekCgHZTIVnzHagUyEzMgUI6m/QrHtbJXegQ8vnKy3044tg+/yLFaw=="
 ---
 
 ## UTAU: how a Visual Basic 6 app democratized synthetic singing

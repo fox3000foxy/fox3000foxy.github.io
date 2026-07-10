@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "5haLCG1JrzqHn5btb+qFcjwH1i5NbUMQIdKyiVYVO3Q9Jp5xbJoeaSvbHa3ace1G7uEvWtR/K/YcRodkjAu3YQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "rjgwfgAKN6GDhS4wbTvD4v40smX5fgHW/wiGf+D0rswdyhv4g6XAOBILkSzFn10I+JSuzIK5qmOPtJt+vJFFjw=="
 ---
 
 ## UTAU : Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가

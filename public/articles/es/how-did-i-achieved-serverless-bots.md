@@ -12,8 +12,8 @@ tags:
   - bots
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "RkoMlFyG9bhE5mew+8qd0MrUpaZAoC6CitHFMq7h+kW/fEw73YkZ+E+riDDR9kQBzlLun74mCIlgSWlQrcDgmw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "g1PFIWP93afRmLS6E6VBQUolO397RWgeIZTvNNS1YkIti11xBO59wOIQ4/EVVXR3IVQnkmjQNCr9VbagPsEdFQ=="
 ---
 
 ## Discord bot 100% serverless : Hono + Cloudflare Workers = 💸 cero

@@ -9,8 +9,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "jBGPZ8aqBwXXc0p8Od/s/9RkK7b6hms2aiP7eRphuoj0TibyTDM+BE+Cdu3W9dhF3lfgS3RrOOQjRB61fSVjDg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "PW19RUU4lXwfX0QVelWrFNSv/HnUNCOGS01fPMA60D/nS5vSzqKcXDL56SEJOFZgCbgZlo7D99C6PLlGvqn52w=="
 ---
 
 # SSHコミット署名スクリプトの解説

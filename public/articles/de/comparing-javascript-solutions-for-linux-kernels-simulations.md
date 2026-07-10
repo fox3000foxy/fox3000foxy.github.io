@@ -9,8 +9,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "hvOpA4oLeQWP71hzL9WaiTl+iVBqFLKTh5dRENjD74F6GkQgYVcRsriScLOGNk/2ZMqQdi9XeDlcw/z18C4XNQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "zqKCIccFhAExsB/SMXf4t/Ett6veHbh4Nw2dYSxX3+OhjcoZlIRImJa1fTNjqj1e8wIGH7u0zg7UvppcwvNzjQ=="
 ---
 
 # Jede JavaScript-Sandbox, Emulator, Simulator und Honeypot – im Vergleich

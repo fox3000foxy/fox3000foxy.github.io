@@ -9,8 +9,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "rvTWcJKD95cNG3dM4KSL/N4HyBkrchVbBuokCuk8+8jIi246YeL5F4GqsDxbo3Z903aaQ5xSZcdP1+nnvU4c6Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "aUoW8g4sQBl/nDyJBOw2MO5+JANdHXbWTTMfFuLXAK+eQbFDnluJhJiC4yAL0Zv1rbtC72Dl743N7H46h1T1eQ=="
 ---
 
 ## 내 막장 AI for Nausicaa

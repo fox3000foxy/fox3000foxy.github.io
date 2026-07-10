@@ -10,8 +10,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "TVYait4/4xTSwCCh3jmrXQ15qCJWFa2WTBnI8LXs3hh1ZeRV2GCqZWh8mnzQxh6hjbox6QIPYRo+GLnYZSwrSw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "rrxKezS08UW+Cvaa5aoe8Cqx2aK33Sk3y+bJeRU7kas4gEpp6+e206phWPp5D7Du2A73i12M1W35c1CkeMcqzQ=="
 ---
 
 # Skrip Penandatanganan SSH untuk Komit -- Penjelasan

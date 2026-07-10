@@ -12,8 +12,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "3NrDRjo5bOJPapeVwyE3rgP59xh7LWqe3n6VzPCa6MyozTbFArbRyjo+AQL+JhflDK6A8iuXHZg5v4l9BsMBOQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "mdLZ3KhSMG4d3bX3tDgPJuYAAHKw93yuVTP32c1JVzipPZFsn6kIkVr1LK4Al39Hcm/C9Al+pOX/LxQPsRCJ5Q=="
 ---
 
 # 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill

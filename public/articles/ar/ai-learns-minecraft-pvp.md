@@ -10,8 +10,8 @@ tags:
   - python
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "YHA/iQEscAVAcvJudTk1JEaiLxK9wcPW3RnPBbu0p06/8pkpCj61BRp2C9RNHfeA8X+NRDHsav22F1W+F5Y/AQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "9WTt2ZhrQB/nqiuBJgrGCNs7U5UL0jye/lYWFASeihsGh3P4xLyj0BBT4TnU6uq6WeiMyghD+i7WTo471+g4SA=="
 ---
 
 ## مقدمة

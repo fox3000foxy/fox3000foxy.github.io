@@ -11,8 +11,8 @@ tags:
   - mario
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "rHFZPOU9OfpmXcAz6EAuYjTe/HxkfBZzKRr3G633tQ/Vi+49wMUZpcTgyQcGzvEKzGlIm7PXWtE3PhT5GajloA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "o3XjoiU54kLMZg2Eh1bXthhf0CLZH9hXJ+o/UVDunvwnyc+8gcdLdtriOE3oL2n0tS+uieAJsPnHNfQeWT33gA=="
 ---
 
 ## 引言

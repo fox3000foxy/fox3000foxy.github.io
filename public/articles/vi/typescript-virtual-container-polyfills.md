@@ -14,8 +14,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "caSrxylnmoY9/ry8PmRiotjyOuDEl9CbW0qHmNWMEL34uiOac5ITqEgNfI3EQd72OixfBj+M/qG6hvSQqkyy7w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "L0pg88dJGxz/nqPHs7ZXmJmTsOv/iKqT2Hl5j/t2yI1iFvOldUgaFV+kgcOBS1imXYS48bNu+izUisFdO/1P4Q=="
 ---
 
 # Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container

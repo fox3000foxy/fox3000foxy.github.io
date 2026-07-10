@@ -13,8 +13,8 @@ tags:
   - git
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "rTW9DneaYHOKQJpvYqNAcY6iT8cv8PSR6nH24Y+RWgmJ2s1/RDqD0nlRSxUqjUkgSc8CUrFawbE0OtpZy+g+Dw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "WcIwb7+QPdVw5z2lHamlWzuYdmAcvrVJFxr0QwLN9BPARjvFXjQ42a3M23rPaVyaZNtjrzFEDJbpkK6gobVBBw=="
 ---
 
 # Я использую git как базу данных, чтобы крутить бота на GitHub Actions бесплатно

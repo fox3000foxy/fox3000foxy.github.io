@@ -9,8 +9,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "YbZgv14C5Q1O2Cyc374/ASnmy0J6SmLUHtLeBO3ReNROW9FYR+ymIeHcGPGBI10UDAEenz9kec7n2h2ByKQfKA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "bIznWV8BIWYmtglObEJpq7ySzkdBFFgecptbscMFdJkcBC2r/5jThTwQ+jVrggHgOxYXGHIedMG5c3ZTl54Pug=="
 ---
 
 # SSH कमिट हस्ताक्षर स्क्रिप्ट -- व्याख्या

@@ -11,8 +11,8 @@ tags:
   - git
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "+lg6z0ujo9rNRtP4kQdnxFxvmHWqzXeF2KWpgZ8+uj8XtY2OydSA2/QJZu3KVRhoUYIEAf4XKzsQeoJjhL/h6A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "hXTVYFzeEgO2dq0a9SZQ3ju0KeBJjuoaVPvsFo3xSb/1jl0hVr3iyQtDWc+GPjy/R0xU8juveegc1cBmqxF0Jg=="
 ---
 
 # मैंने git को डेटाबेस की तरह इस्तेमाल करके GitHub Actions पर मुफ्त बॉट बनाया

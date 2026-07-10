@@ -12,8 +12,8 @@ tags:
   - git
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "PDTTHFYOsyKx6Im9jIyE/5iFpOuRb08iKFeQHibhs3iR+XjNTxASrq+S5/a3JpayTil5hqSPgZ5CPfxPixnuZA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "NXc/WCK2PYkZl0FeDWCPk9pDP7Wxof11T2DmTsi0vzW8OxLVHKr+1wrItuur0Vxfa8lb+CHufyW6kDCoEOEBKA=="
 ---
 
 # استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions

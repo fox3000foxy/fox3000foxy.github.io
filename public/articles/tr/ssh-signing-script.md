@@ -10,8 +10,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "1r9O1e16FB0oO+Pb/P0BN7L5psfhWc75lBmSkQWVGbDhGWBtB8mqpYbMBS9znpFVHPRCBKiZTvbgHAc4ird8Kg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "Tt5ZPq19uAXTfQ52f6Dzy8H72VYM+tYUWOFPmD6xlYVFTmpbYCtPVhnYRvAxEjuogErykpX5ZhZIccWA36Snuw=="
 ---
 
 # SSH commit imzalama scripti açıklaması

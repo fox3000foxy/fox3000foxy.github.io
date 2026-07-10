@@ -16,8 +16,8 @@ tags:
   - serverless
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "FbU/A6NXarhYhifn+0iMtrQA8o6VKR1cmfxNx+ytKly7/1qpJDHtgz+LkSDVNUwGUn7lExcjckddB3roU63tAQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "KZ4sQvKukPiOLMS2maH6DuWTq5ktguq9fYh0G4fITejxS9fSKwqJmW3n7S0rx3880tRP5SyQT//9kq6/0dCg3g=="
 ---
 
 # Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım

@@ -10,8 +10,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "KqeBcJa5FjaLIXhfah3Pryl0+vj1gyHLmyqdFtKDIj29BfWnY96CiKCbf5KQF+T3ULHPViXgTI17ChV5qbd2jA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "wfiqUcxE8Q95x+K+r9dB3XkTkKWgB3MkhtWuadcsMmaqkHAEc5cWXgt6/gpWPG3eLaVmJ212r1HNgz8jrw01EQ=="
 ---
 
 ## GitHubが6時間だけ無料のVPSをくれる。俺はそれを永久にする方法を見つけた。

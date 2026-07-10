@@ -8,8 +8,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "XCF1uPGocEq88zWj5QDNiOdbLVWn+ygZDON6FmuKmrEZRVLPdMrM3nPNfDKl5ewATzoeBoYnuSD0mEIzEcBs8g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "l/aC9+o8Nm6znodMvvdCbMxNIY28DXQxqv7k8oAAMduoTbodbrBkPfUKHBfK6iKC80j1bOtAMywijpbHolQt4w=="
 ---
 
 # हर जावास्क्रिप्ट सैंडबॉक्स, एमुलेटर, सिमुलेटर और लिनक्स हनीपॉट -- तुलना

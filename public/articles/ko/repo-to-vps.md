@@ -10,8 +10,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "osEpl/Ppln8hSKImT99bIQDb31SKDrbBkxDMGFTrdAIS4+arQq/UaKro6Zag+S5GxLvtfrWKcOjoOLPd6cTPdQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "BAjk0J6vx53MQxCtXuDzrByhDWDmAVoFiWkCgKx4Z6i+WYhFsoEUQNj67/F/fBimleSFVx4k28vN3sONapVPlg=="
 ---
 
 ## GitHub가 6시간 동안 공짜 VPS를 준다. 영구적으로 만드는 법을 찾았음.

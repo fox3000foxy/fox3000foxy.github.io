@@ -11,8 +11,8 @@ tags:
   - esp32
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "Z7b/UEpJbRVqnh9kUe5Zdn0rq3vK/nt7tjOLnCLVzfaHGovxjr99YNZpQMExiTwwA4B2ISJ8kdBCKAfwSjTYeg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "Cp8+ND916xm6ug2Hjwb/w79OAW7P5MyFgiVHAGpqOGV1WDz5tF8eQfo3vc2vVkisFmI+J2MDBQhoirIM2ZUPzg=="
 ---
 
 ## परिचय

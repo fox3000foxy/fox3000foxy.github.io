@@ -15,8 +15,8 @@ tags:
   - serverless
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "ZJUTWxAnSmlEqeUPc2dg6oQP0i+u2ihRj1uYUr+G+HpoqyE1aUrUEYap6qpKSH3vG02PHgJ9MoNd1rSKcUJh/A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "1vg5zuscMpvzTAHH8b4H/jcwhIw/1e7W2ZiUlg6oMDWRI4tInj8NshxBTL6PRE3C4XUf06k73Utf/AAuHlhtaw=="
 ---
 
 # ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ

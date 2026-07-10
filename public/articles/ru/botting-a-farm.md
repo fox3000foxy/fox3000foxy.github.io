@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "k/qyRxMCB7gNsKSOdng9VUXl7v1Y86tEP++bACWtRi0SaAuGxBl8y+6C5m63J7lE0b6LehpphrY3BhChr9AW2A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "G2HYu0VS5ILszVWiHQ1Xf95Nw5sPniT4gKbFYoVzkmTu7bWuSlAnBvs87t6R9h9ZDGTDSN8F70m9ciKRuA4Y3g=="
 ---
 
 > **Примечание (2026):** Этот проект больше не поддерживается. Microsoft значительно усилила свою антибот-защиту -- то, что работало тогда, сегодня уже не работает. Код и подход, описанные ниже, сохранены только в архивных/образовательных целях.
