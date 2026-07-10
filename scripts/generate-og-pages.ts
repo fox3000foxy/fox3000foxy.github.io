@@ -105,6 +105,8 @@ function main() {
 			entry.langs.push(lang);
 			if (lang === "en" && article.date) {
 				entry.date = article.date;
+			} else if (!entry.date && article.date) {
+				entry.date = article.date;
 			}
 		}
 	}
