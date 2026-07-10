@@ -51,6 +51,15 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
+function utf8ToBase64(str: string): string {
+  const bytes = new TextEncoder().encode(str);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -353,7 +362,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   const langDir = article.lang || "en";
   const filePath = `public/articles/${langDir}/${article.slug}.md`;
 
-  const contentEncoded = btoa(frontmatter);
+  const contentEncoded = utf8ToBase64(frontmatter);
 
   const createFileRes = await fetch(
     `https://api.github.com/repos/${targetRepo}/contents/${filePath}`,
