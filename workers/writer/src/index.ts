@@ -100,7 +100,7 @@ async function startDeviceFlow(env: Env): Promise<Response> {
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
       client_id: env.GITHUB_CLIENT_ID,
-      scope: "public_repo",
+      scope: "repo",
     }),
   });
 
@@ -287,20 +287,53 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   };
 
   const collab = await isCollaborator(repo, user.login, auth);
-  const targetBranch = collab ? "main" : `article-${slugify(article.slug)}-${Date.now().toString(36)}`;
 
-  if (!collab) {
+  let targetRepo = repo;
+  let targetBranch: string;
+
+  if (collab) {
+    targetBranch = "main";
+  } else {
+    targetBranch = `article-${slugify(article.slug)}-${Date.now().toString(36)}`;
+
+    // Fork the repo under the user's account
+    const forkRes = await fetch(
+      `https://api.github.com/repos/${repo}/forks`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ default_branch_only: true }),
+      },
+    );
+    if (!forkRes.ok) {
+      const err = await forkRes.text();
+      return json({ error: `Failed to fork repo: ${err}` }, 502);
+    }
+    const fork = await forkRes.json() as { full_name: string };
+    targetRepo = fork.full_name;
+
+    // Get the fork's default branch SHA
+    const defaultBranchRes = await fetch(
+      `https://api.github.com/repos/${targetRepo}`,
+      { headers },
+    );
+    if (!defaultBranchRes.ok) {
+      return json({ error: "Failed to get fork info" }, 502);
+    }
+    const forkInfo = await defaultBranchRes.json() as { default_branch: string };
+    const defaultBranch = forkInfo.default_branch;
+
     const mainRef = await fetch(
-      `https://api.github.com/repos/${repo}/git/refs/heads/main`,
+      `https://api.github.com/repos/${targetRepo}/git/refs/heads/${defaultBranch}`,
       { headers },
     );
     if (!mainRef.ok) {
-      return json({ error: "Failed to get main branch" }, 502);
+      return json({ error: "Failed to get fork default branch" }, 502);
     }
     const { object: { sha: mainSha } } = await mainRef.json() as { object: { sha: string } };
 
     const createBranchRes = await fetch(
-      `https://api.github.com/repos/${repo}/git/refs`,
+      `https://api.github.com/repos/${targetRepo}/git/refs`,
       {
         method: "POST",
         headers,
@@ -322,7 +355,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   const contentEncoded = btoa(frontmatter);
 
   const createFileRes = await fetch(
-    `https://api.github.com/repos/${repo}/contents/${filePath}`,
+    `https://api.github.com/repos/${targetRepo}/contents/${filePath}`,
     {
       method: "PUT",
       headers,
@@ -353,7 +386,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
         : img.dataUrl;
 
       const imgRes = await fetch(
-        `https://api.github.com/repos/${repo}/contents/${imagesDir}${img.filename}`,
+        `https://api.github.com/repos/${targetRepo}/contents/${imagesDir}${img.filename}`,
         {
           method: "PUT",
           headers,
@@ -407,7 +440,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
         ]
           .filter(Boolean)
           .join("\n"),
-        head: targetBranch,
+        head: `${user.login}:${targetBranch}`,
         base: "main",
       }),
     },
