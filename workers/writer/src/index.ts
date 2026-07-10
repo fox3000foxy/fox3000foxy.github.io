@@ -244,13 +244,22 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
   }
 
   const articleDate = new Date().toISOString().split("T")[0];
+
+  let content = article.content;
+  if (article.images?.length) {
+    for (const img of article.images) {
+      content = content.replaceAll(img.filename, `assets/${img.filename}`);
+    }
+  }
+
   const authorSig = await signArticle(
     env.SIGNING_PRIVATE_KEY,
     article.slug,
     user.login,
     articleDate,
-    article.content,
+    content,
   );
+
   const frontmatter = [
     "---",
     `title: "${article.title.replace(/"/g, '\\"')}"`,
@@ -265,7 +274,7 @@ async function submitArticle(request: Request, env: Env): Promise<Response> {
       ? [`images:\n${article.images.map((img) => `  - ${img.filename}`).join("\n")}`]
       : []),
     "---",
-    article.content,
+    content,
   ].join("\n");
 
   const repo = env.GITHUB_REPO;
