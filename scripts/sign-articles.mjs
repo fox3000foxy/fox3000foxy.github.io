@@ -3,11 +3,14 @@ import { readFileSync, writeFileSync } from "fs";
 import { createSign, createPrivateKey } from "crypto";
 import { globSync } from "glob";
 
-const PRIVATE_KEY_BASE64 =
-  "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgzkN4fVhQw60koTjbCAbF02ozk186oExSGu36F5HDTe+hRANCAASpXzk6hiZ+vDRskYx5njj+pKS4xopPZCnqh9YraVd18v5B/ww8D/o3TaZxrf+t+JUcE1ZdlFEVEidsxj/DwWq0";
+const PRIVATE_KEY_BASE64 = process.env.SIGNING_PRIVATE_KEY;
+if (!PRIVATE_KEY_BASE64) {
+  console.error("ERROR: SIGNING_PRIVATE_KEY env var not set");
+  process.exit(1);
+}
 
 const PUBLIC_KEY_BASE64 =
-  "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA==";
+  "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A==";
 
 const privateKey = createPrivateKey({
   key: Buffer.from(PRIVATE_KEY_BASE64, "base64"),
