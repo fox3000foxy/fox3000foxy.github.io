@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "kYHKu6KyO3FpBCxtVLdr6mrGdKpQmP+zQRE3e58bZgTkxKrxDxoXIS5eghAwUfUhYrCMNllrqB3XhGtYHCQnug=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "m45kADbkhRyCuLG+E72IBDC9oxSwRWW1cj3ZO1y+Gg4xsK9lZHmbgcEWPsrW94pwajqBDLOK1mud6l3gxzKr1g=="
 ---
 
 ## Mi puta IA para Nausicaä

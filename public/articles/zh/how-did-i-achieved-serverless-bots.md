@@ -10,8 +10,8 @@ tags:
   - bots
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "OwrgD14aXPW1bw00NbQKnGNg08/k0/UJJGgEa7ua/RzlcGwT6cFntN8ysQ1PWIyCgd8+tokGuLSS96V+Yq3dog=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "5Dcy6C71HSomWsOLJHC7aeFaEAzeJ0ZRINiLtfOcNxveE2pzgOFqvakkvBNgBwm3b1sjccAXA3s335R2ziuN3g=="
 ---
 
 ## Discord bot 100% 无服务器 : Hono + Cloudflare Workers = 💸 零成本

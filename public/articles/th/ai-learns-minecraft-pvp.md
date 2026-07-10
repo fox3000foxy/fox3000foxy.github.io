@@ -10,8 +10,8 @@ tags:
   - python
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "mwM0qO1rCkhwzKcohlJC25PIKoyBWC1Ke/Ev5+Udc+mcyThvWpVPs/UjuS2tK8Jl37SJJlZApLxdlQY8Tgd9Ow=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "AHU1jHYRyKF0WdjtWdd0/htpgpO+HzqbeKMAYwdXGbHdoI2RmK37oWnJ+39QrVGWMGY3aN+23/z08OcQLevX8Q=="
 ---
 
 ## บทนำ

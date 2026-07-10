@@ -9,8 +9,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "KKBufp5/i777IwzNTsSsr798EY7DYjt8EQYH5wmhbGurEjzV9v7ogXrOGiZpOEPyHY3Xa/EiHPVVcCsuRHm9+A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "p+e5mui2d7A515r8SrjSRp/Sthdi+9KTqyHLRI+5f64AWXpLzrvOmd1ICrKUYR/XoC3tedWnRGcps6qLDH8CHg=="
 ---
 
 # 이 블로그는 어떻게 동작하나요?

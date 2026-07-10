@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "jjuxs1Uhv0yYLyFMM49J99rJptAdJzIk8lCAjwYAGEZd6KUuMnL3SkHXvpdf5JWbKZh+fm9c84bW9is8Gnlwlg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "odA8NXBEX484rPQV+wyGJ4oFyiCSMbs1SGIEdqT502imHnqx6hdO53MKy0P7t1j6j4V2+18AjwJ5K3PpC3bfjg=="
 ---
 
 ## Моя долбанутая ИИ для Nausicaa

@@ -9,8 +9,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "ldGEMiik0uf6HXdV80XVqgjbfZ9SXcYHr4Uwxh/J1xY37AKS9KG0l4t7KGsyR0lmu950SCaJZ2c0uHfUcTNCOw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "m7zS70DyOOLp9oeUzi25uD9CsDc/xAFKztY1VXUM08oaNCjIjaWGs1WqFEvlvLSFmx6MHQmFH7xgONVU2yPIOg=="
 ---
 
 # SSH 커밋 서명 스크립트 설명

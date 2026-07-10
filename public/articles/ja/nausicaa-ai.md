@@ -9,8 +9,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "HL6rfQX8YMG0Je5Bxd1eHrD8os1cREjKu56r0qpuC3Xbtj7+vtWrYZv6BmyNtQ39v5YtihZ2EYsxR5DPgMJPVg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "QYlJmVPYkYlQekFNQ+6ElaSOo67MccikDXJ26HEmokyca8UEqhogIRIeJNqWezY3y5AVuTnFKtpglU7ZpC7SjQ=="
 ---
 
 ## 俺のクソAI for Nausicaa

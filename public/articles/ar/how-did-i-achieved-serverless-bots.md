@@ -11,8 +11,8 @@ tags:
   - bots
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "TF5OVBkk1kDDGuI/H9mZmDNaUlsc2Mf+2+Jzt6fv8L41nw1t/Fs2J6cd6HC5xCokT5Ar9htfyPxQBHAvUaI/Og=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "RJ66+poL07psJu/P6AXEXuSaQdGC6o/wjGjiHOMyp0WvNr1PN57pAGpu/tUSaTafXXshgznKqqaSZ88bw1oOYw=="
 ---
 
 ## بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers = 💸 صفر

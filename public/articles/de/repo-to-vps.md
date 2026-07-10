@@ -10,8 +10,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "fpFHGcAifQkBiVgXRIJr8wPnhaGzOYbMtaFxbVGuJ86i4g5F5afQL9qgcy/DCq/ajBHqH+UZ9vHA/a5iJHtRwA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "GDs4T5mHte0OweK0YqjQKe9m2HHOnW4YH2CjgyOqcQnJ6LBIlRHqjSp+6iD9p57APMlgW5Z61wjmV37UNgH+bA=="
 ---
 
 ## GitHub gibt dir 'nen kostenlosen VPS für 6h. Ich hab rausgefunden, wie du ihn permanent machst.

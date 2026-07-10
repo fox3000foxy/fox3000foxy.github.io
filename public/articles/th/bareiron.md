@@ -11,8 +11,8 @@ tags:
   - esp32
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "tgp/wc4mGPjd4P4evaC7l9EJ9juMOECXPV0JDVZVPmlKD6GNLqoZd8kjN5iUnSL24DVFgMcx2gmz3J4cCszwwA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "0PaJRMy1whmyKG7MeB2aM7aDiWZXgQ5gcPcj+fRpJQ+DxdcUN15uGqHmZnCWJoVystGk6NFFVDXJnEIjXhX12A=="
 ---
 
 ## บทนำ

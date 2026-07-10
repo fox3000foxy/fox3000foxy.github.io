@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "nUlotSyLgFWEdRD+y+MpStqM1N6Urd8VEg/Qf2P/2/cSxYrplW7tOKE9OGv1Rm51UNw4jtK1Fe1vTDlfBLDA0g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "wgJyRXm/hc0oSeE0QHdh25I4DpPuX4iWY22rA/nZ8F/wQcvo612nkPcqQZVH1wf0SSKqtriGS2gghdEOetsWjg=="
 ---
 
 # Xây dựng character-factory: avatar với hệ thống di truyền

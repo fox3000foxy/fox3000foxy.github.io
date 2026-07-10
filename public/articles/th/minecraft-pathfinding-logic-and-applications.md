@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "P/7ZFTvzt7/c3wleRlYV4rkpfQmHex0AaMrsFjukrvb4Qo1htUYBIy8qiEm5hknp02Dk5jzdsB3XpL8hS9J1cA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "9qDr+HAhPCPhYNn9Clu6nZ3OOKgCpUxyhaaUPWk2hDYvGsHIIDShD7eiPr0aVILLCY7DTUWOilvlA3ESaF9IoA=="
 ---
 
 ## บทนำ

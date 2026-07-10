@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "21VGRYqCe5yATUBzZrTvPXm7AjrkdJM5JbzzuVqBpQx9SFam+QZBsKuRBqLy09mFIVWvPIUcNCuPwfcQOxxgoQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "qKKSWqvbFEeYhaFI04gTewcGU16pH52qPx7bC0kl/vq4c2ye1v/mYNdvhRBHzxof7aNPGCZ4U039oZt5QsOolA=="
 ---
 
 # character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma

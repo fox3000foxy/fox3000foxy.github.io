@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "Z1EVTlYIRXodoDCurZG24YvKI7ZDWhWP0wH+bH607L0nhKVE7vJ8obf0akO6X4RQOByGHLYtEjPDMYKM08ftCA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "8ALlRg8Gx8Lv1054gpPH38mbz488kRdgO7dbOaQAyMA3lrZ1aIKD8AFtCy/CT8iIPI3kCpJgWlHlCxjb9zu8yw=="
 ---
 
 # Membangun character-factory: avatar dengan sistem genetika

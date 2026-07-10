@@ -10,8 +10,8 @@ tags:
   - shell
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "Xs1gBNpMwvse06wpp/fq5kCguygWrRD8AP3ggB1OQrZCF6Giy11TG81HchjU6ivnS7294p2Zy6lPG07Ee5kgsQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "z9slj21CNQIEuJWYCVlRXVLmex+6EmmlW7R1JX9e7hjHlRruxYRe6O3skBSGDwxGA888e4QbpBqaIpAinnxe1Q=="
 ---
 
 # Script de signature SSH pour commits -- explication

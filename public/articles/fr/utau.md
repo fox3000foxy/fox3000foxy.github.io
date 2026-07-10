@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "cFA/OqSQG/4IbwZb5c7R1tp6iNkPk0TBpTk0lZYar3+YBLfP9ySEgSkd8Pxkdg1tQ25NHhVY41mpteG1+zsEkA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "M1qZUOYEmQj+nfWpo/SfKWIUEUnl6MljRDdj58SBLq2cqP8FkwvGLANpDTLE/KOuRQ8+U+0rvOj4PU8Wg25m4w=="
 ---
 
 ## UTAU : comment un logiciel en Visual Basic 6 a démocratisé la voix synthétique

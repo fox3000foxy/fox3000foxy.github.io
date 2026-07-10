@@ -8,8 +8,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "bFbXmB1PbXgRN9Gmux1Ka/kscO5Y72LvR6JHRs+jCQRu7CcFEB0lo9cq6jj8AArSpvDrLiQDh13ZKaQ4fu9l4A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "e4uotsFMm3gVMSriugxAvqg5/n8vbaMRZF6SGztVyeVt9If1GuS4fFXMW15MKNG9P1A7WaF8juWO82Xt31d13A=="
 ---
 
 # كل صندوق رمل JavaScript، ومحاكٍ، ومقلد، ومصيدة تفاعل Linux -- مقارنة

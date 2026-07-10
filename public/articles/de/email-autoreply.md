@@ -13,8 +13,8 @@ tags:
   - git
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "jvJLe9qjQjVpDFg+r7oAq+ypopQJR5PLvQ4tNVoCj7w44fd65/SWgMFrlA3DdU+VgPE7QOOw2j9GBxgJK1DXuw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "5choncY9/pbEWuDhXj70FyzSd90oVs1/k35gEdUnxFhZxBpIB1mbZdCFsqEr5/FTXRLodM9nnAWKwLlTn2TYpg=="
 ---
 
 # Ich hab git als Datenbank benutzt, um einen kostenlosen Bot auf GitHub Actions laufen zu lassen

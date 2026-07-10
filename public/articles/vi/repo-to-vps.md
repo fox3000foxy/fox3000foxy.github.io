@@ -10,8 +10,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "Tbju0YcgbXGsH6Lt1iyvf8yUxGffoAutLzXec2q/b3la7DPiAqnX+Zrj6bPDNATPQDv13L+y+EwgNGLfHIxY+w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "kpweIlaLNukqcR9LxyskQE841T2qAxKEga7bufPx7jU1RXpU4LJJ+qwWbjQ6LNPHKnNAHpke0ttqnGOZUQ+InA=="
 ---
 
 ## GitHub cho bạn một VPS miễn phí trong 6h. Tôi đã tìm ra cách biến nó thành vĩnh viễn.

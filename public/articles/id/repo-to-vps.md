@@ -10,8 +10,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "a6Yv4pIio+DrUQfQI7TYisnnDPfndRf0GmxEVVVzqI6b+fJSqcZNaqSfnno1yDhmn73Z0QlYbUSWDGu65/SCww=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "E2GOu49FQDaWuxB/n9rhkI3ZJOVh7ALXFDMw39V7v1Om0hpgpqZiHoeMwzSzjQm6OVSptpxi6TfzptuFhPL62w=="
 ---
 
 ## GitHub kasih kamu VPS gratis selama 6 jam. Aku nemu cara bikinnya permanen.

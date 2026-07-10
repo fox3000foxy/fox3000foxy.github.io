@@ -9,8 +9,8 @@ tags:
   - blog
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "yDNPtNXeyHkwBCAEq8Z6OOxm0VExQIMhM8NKh9hvdDV8Y2y0dQNUcy2uHm1wSkK6mWBuBr9sOu0l+zt3UmnHLw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "1mjB9Ymp82y/4Ixrup6ITmKB+L+hvuvMLB2YvbSYavqA0Ng806cCUcO7OOgjv6TbPdyj4loiTVyrG7VuPugqAQ=="
 ---
 
 # यह ब्लॉग कैसे काम करता है?

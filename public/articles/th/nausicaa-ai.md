@@ -10,8 +10,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "vDjGLu3bxZkzJBM4/UxBbKnV0KLy/+GTHVnAAOsTOaJG6gymBL2C+3RsPB0YyH8P5wfDUiQEfWucwwPhQ46l+w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "T0dfgl/y0IS80zsEeDQBQdEzcw6zo2+3vDwoIisO5idpCcFc0Yq4lt19aH2IesU2WkjrTEQXBDhPjE4RbsjoXg=="
 ---
 
 ## AI ขี้โกงของฉันสำหรับ Nausicaa

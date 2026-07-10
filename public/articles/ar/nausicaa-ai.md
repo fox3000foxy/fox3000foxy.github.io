@@ -10,8 +10,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "N8U8ASC2435Pe3joXTDI2N+JmixK3py2vlMbMS+4MLMFlcXB/xL8bn4SvL6s/THMweMcYt738mLhftf0jdGEBQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "S/WRsbbaE6aM+KeBf0ooKTZrjioZzkr0J+mHSaFvNxAJ0oC5mdeIGDYacNIzP7EGsc5zPp8g1FaRngvNKWlSkA=="
 ---
 
 ## ذكائي الاصطناعي التافه من أجل Nausicaa

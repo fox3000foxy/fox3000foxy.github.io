@@ -16,8 +16,8 @@ tags:
   - serverless
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "GCT/LKkzq0oVQxYe5ifpbSjnO5GpobDrjA1mLElBFs/pST82+hPPGMQQvpK9/G5Yl1wIm2M5B7Y1Q7O9OwOCow=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "VpHUl89L+ZDQGEvl7js0KYPrNeow3C72qyMx2d7Mi8oYM4nKV8tjpjDaFVHFYZV2BqQYMbnOITkckpYXnX0yKA=="
 ---
 
 # Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan

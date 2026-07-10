@@ -8,8 +8,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "DiX+OS6WBuG82CKKxf8lV0SdvN+rM/wIfWkYxghhX7YwYa84uuRIeHh5KNFAL4o8kA5ztzMjvWxwMA+hBDvOAA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "12r73khddVKadsUOdZlQT3pu3BYuCqgfTQFWywkBCgH5p87BzR/2S3euSAaQEfuxo0CbEmoB3CFtiiriCUArLg=="
 ---
 
 # Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение

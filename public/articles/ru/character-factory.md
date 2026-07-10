@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "SePWQ5l7+IKTKTHZWQyQ+/TMNihMv8F3C+usQfFW6Qzf3gYfFLXlM9sIltbGSxEmvvikUfvMWWlL1j/yuKpfMA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "L0B2I0K60dN0R8r0Fr5COmeGNRYb5MMczqZ+G+g+yDWyLLxS9LNzDJ4fnwRtSJ+vEGn9KecaSMRyxuiBdgzSbw=="
 ---
 
 # Создание character-factory: аватары с генетикой

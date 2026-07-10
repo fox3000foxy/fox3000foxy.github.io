@@ -11,8 +11,8 @@ tags:
   - esp32
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "80mFtoYtuWLkAm8x0UVTtvaGc/Xesh/S8d8UB8K8ICb/dJF1gbzugye4YtadiXlirkuUIGAy+Oo2GgMFY2/K8g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "vTXsAQTXN97XARqnKRDvyUsAgzk73f2u1EitQXDZo82TY1NoM9LirwVtTrSc0mfy9kxTRepvflqlJJDVeKAZFw=="
 ---
 
 ## Giới thiệu

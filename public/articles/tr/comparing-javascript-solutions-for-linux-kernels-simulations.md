@@ -9,8 +9,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "iEcGgxihHIveldrgL08y/ZtFP9wL3nnbEutNPtstchKdGpHYmGr8Ut6lRhHPMayw6nBd2Or9MfBguWJZEKOBcw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "Mj8+N8ovIZqjCNRwbqJHThpnBsSjP957bpUjDJZBs222XgSbNhSErlckaChJ3CxsNO7WBBbACqmPIOtCzY0xNA=="
 ---
 
 # Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı

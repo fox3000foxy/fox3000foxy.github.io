@@ -11,8 +11,8 @@ tags:
   - mario
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "jTrSpxadxWT5LFpQHwysUgN+pIupkg6LrbK3+lm4dQoQjkNyAU7kh/GuVYSRntWF1WvWY/FLeq/n8K9bq16asA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "irF7vUQidDbRgBaJ/vIcZYRedwheJxYUhpudE6rTj8M/KIbmifyESg/dyocuEdDdsAmDdiR04Bwi1Cb3Le4lqw=="
 ---
 
 ## Введение

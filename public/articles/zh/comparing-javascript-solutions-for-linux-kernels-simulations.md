@@ -8,8 +8,8 @@ tags:
   - analysis
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "tKg4vZj5M7dtGfz1jNBfA1ow3JLrqoezp3mKup7946CPeAVaKAeQ0aTNwKCfNh/CpkuWAHi7lxoob2Mseg/93w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "sxe5JuGflTL24G5RNwpR0bFeFs8UBGDqwYtoUwHWRkM9Fe9oiIwlu0OiE6oreIhQCPIJEhbusCzQQexop3EhJg=="
 ---
 
 # 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比

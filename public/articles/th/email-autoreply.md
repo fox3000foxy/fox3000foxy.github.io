@@ -11,8 +11,8 @@ tags:
   - git
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "4tdkzNbrOIqL4c5wDG7GS5nmE7wkiF/VHEZtOBjd8HrpX0XB2iLBQvqEez9vZOntbqhc2UyelYkRNuvQxpcu6g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "51x0BsLz6ZDUZ3t65v0lkr3lRA6M73V4kD11C7kRORQOW3eq2IZ/sAhtBKlv/r7RZRfo6LzS5r1sPKRaC06ZUA=="
 ---
 
 # ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions

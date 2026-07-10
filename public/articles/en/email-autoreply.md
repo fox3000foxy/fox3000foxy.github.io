@@ -12,8 +12,8 @@ tags:
   - git
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "22vBfWw8fv1pTpNOQ7o7ZFGmsQuLi4Bx9mfwpPnErpfIUIUulDlhPgkg/5JZVUrJSjSV6SXjrIotyrx2lFCy+g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "EzaHUXxzNbfcF5EfH8WrNeECeZPLD/jQglF9KPNRfucjM/ODEfzlLf/vOAuljfa29SacYX4N8wegE6FZDa+rFw=="
 ---
 
 # I used git as a database to run a free bot on GitHub Actions

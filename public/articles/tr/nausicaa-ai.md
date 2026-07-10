@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MrDkKtcCwzF1PO1R+DJ17i/+M2vdlJ2X2yXWAfo1THvLFOxRdm9n/5YhPmOX0drxQgCwr4T02M6sb/jfAX976A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "sO0C36l10kGLxqZnyoSZxntycDRjzF7/rX5JGl5pXsKJ9qE2tkYWpxJvfdZ0YOAVPjY+tuggVvC8lvM/01JWlg=="
 ---
 
 ## Nausicaa için Salak Yapay Zekam

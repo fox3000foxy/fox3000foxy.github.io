@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "PhupdmJzZbfHjfZcWV7fQrquCJYMHMYyYhXhW4Pj+unb62j7RJdpEr13CX6oeXEANGL22DC6jj3VBRN3LdIVeA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "y70iAX6YFa4v7MpUPF+6qOMlA24RAaflXFW982X2tmpyWKlOZpqzTkYTPWe/aOpNUNYiWiT6tFPC7WfwKVy5EQ=="
 ---
 
 ## UTAU : Visual Basic 6で作られたソフトがどうやって合成音声を民主化したか

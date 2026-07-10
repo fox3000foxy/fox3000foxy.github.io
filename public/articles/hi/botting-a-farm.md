@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "VU7v8quCFuH8SeAhJ4b/NIb0rrcUgdGR+BMbfleobDrlz8AgjpRN1sA5eVyIwD5TuBLrPoUvOSRqg+QVk2r3wg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "Rjd9qBkmMoRspIj+UFam3p55cC8WM7N6rQ5E6ACMSvb+QHZM2p7wdKr9b5L6vuYCAaXSUadQB3xg/cSf+b2duw=="
 ---
 
 > **नोट (2026):** यह प्रोजेक्ट अब मेंटेन नहीं किया जाता। माइक्रोसॉफ्ट ने अपनी एंटी-बॉट डिटेक्शन को काफी मजबूत कर लिया है -- जो उस समय काम करता था वह आज काम नहीं करता। नीचे वर्णित कोड और दृष्टिकोण केवल आर्काइव और प्रदर्शन उद्देश्यों के लिए संरक्षित किए गए हैं।

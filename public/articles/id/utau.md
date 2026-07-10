@@ -10,8 +10,8 @@ tags:
   - vb6
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "vuZgVQq8Z0KBuwCNKdMtLNuH71t5/QhE1cBKM6/kfTUpMCNzslXLIM3xnvHjhdYt0qoExZSfQOSvXSAhQW6Yjg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "RK7sNfGcRaTU3BfKIJxE+7Tl88q/X6Hqp7xO78yti5psIqZne4SLe6qtaI7/bKMGgKFCCZRfbfRsPN/2WrQFVA=="
 ---
 
 ## UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis
