@@ -1,3 +1,5 @@
+import { cacheBust } from "./cacheBust";
+
 const articleCache = new Map<string, string>();
 const pendingFetch = new Map<string, Promise<string | null>>();
 
@@ -17,7 +19,7 @@ export function fetchMarkdown(
 		return pendingFetch.get(key)!;
 	}
 
-	const fetchPromise = fetch(url)
+	const fetchPromise = fetch(cacheBust(url))
 		.then((res) => {
 			if (!res.ok) {
 				return null;
@@ -60,13 +62,15 @@ function fetchWithFallback(
 	const primaryUrl = articleUrl(lang, slug);
 	const fallbackUrl = lang === "en" ? null : articleUrl("en", slug);
 
-	const fetchPromise = fetch(primaryUrl)
+	const fetchPromise = fetch(cacheBust(primaryUrl))
 		.then((res) => {
 			if (res.ok) {
 				return res.text();
 			}
 			if (fallbackUrl) {
-				return fetch(fallbackUrl).then((r) => (r.ok ? r.text() : null));
+				return fetch(cacheBust(fallbackUrl)).then((r) =>
+					r.ok ? r.text() : null
+				);
 			}
 			return null;
 		})

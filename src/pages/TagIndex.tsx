@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/BlogList.css";
 import type { ArticleMeta } from "../types";
+import { cacheBust } from "../utils/cacheBust";
 import { useLang } from "../hooks/useLang";
 import BlogCard from "../components/BlogCard";
 
@@ -20,9 +21,9 @@ export default function TagIndex() {
 		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 
 		async function load() {
-			let res = await fetch(indexUrl);
+			let res = await fetch(cacheBust(indexUrl));
 			if (!res.ok && fallbackUrl) {
-				res = await fetch(fallbackUrl);
+				res = await fetch(cacheBust(fallbackUrl));
 			}
 			if (!res.ok) {
 				return;

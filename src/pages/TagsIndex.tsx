@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { ArticleMeta } from "../types";
+import { cacheBust } from "../utils/cacheBust";
 import { useLang } from "../hooks/useLang";
 
 export default function TagsIndex() {
@@ -12,9 +13,9 @@ export default function TagsIndex() {
 		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 
 		async function load() {
-			let res = await fetch(indexUrl);
+			let res = await fetch(cacheBust(indexUrl));
 			if (!res.ok && fallbackUrl) {
-				res = await fetch(fallbackUrl);
+				res = await fetch(cacheBust(fallbackUrl));
 			}
 			if (!res.ok) {
 				return;
