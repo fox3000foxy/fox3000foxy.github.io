@@ -177,15 +177,16 @@ a.tag-badge:hover {
 
 .verified-badge {
   display: inline;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  color: #fff;
-  background: #43a047;
-  border: 1px solid #2e7d32;
+  color: #3fb950;
+  background: transparent;
+  border: 1px solid #3fb950;
   border-radius: 999px;
-  padding: 0.1rem 0.5rem;
+  padding: 0.05rem 0.4rem;
   margin-left: 0.4rem;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .blog-card-badges {
