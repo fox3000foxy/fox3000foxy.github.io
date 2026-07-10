@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCl17ME2anT7i7wGOSJ6wn0vCxSs9Jmmtz0/fHeviYpCAIgWo0gya0MJFlV6q5WKD/9ZvNxpdPnG3uMCtTZWTR82Tg="
+author_sig: "MEUCIH2DxZsXA7jjhACqq5y1kgH6cYQHCHwTj/op+pDcc8rpAiEA5ETYSSpksD37vPPgGcXlFPn7H+n8xtRnrj5YqY8YgG4="
 ---
 
 # SSHコミット署名スクリプトの解説

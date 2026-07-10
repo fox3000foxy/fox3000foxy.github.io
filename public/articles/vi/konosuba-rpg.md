@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQDQm/epWusoxr93mg5ddcbY5Wb3WmjJH2VIP04YNGA6WAIgMJ/ZTM2r7VwZtx8mbFfzvMnw3HXhhmvmUmHypHll22Y="
+author_sig: "MEUCIQCacDUtPIHd2WUJgJ0E7nYELgq4v3JRWZzljjJjOe3VzwIgaE3WhHvAJTu4bH8qqpa+ti+8pygBXNyHpohK7d2Fbr8="
 ---
 
 # Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy

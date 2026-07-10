@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIBoZ2gzUBosHPSWe4aiHWtJFtf7UDQcqFDjXURd7OuHFAiB+5u4CxVaBjS3QiQbRkcUViHAedKm6uwEHHZ9dFm9XDg=="
+author_sig: "MEUCIF5UeViRq7XaWHq/G/nxbOX14ZCGeJcm2RqTeAY02yvaAiEAuWoGvsWHz1/y6p7NUfUHuu0POFgf0xH96Su8pW1QVGQ="
 ---
 
 # SSH कमिट हस्ताक्षर स्क्रिप्ट -- व्याख्या

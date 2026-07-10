@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQDZcQtq1um2i8phz3dZ8en8N/uXfuC/BN8uWMt0l28IPAIhAIUaMuNUGSoHLuIlH7okDKG0hs8GPU6V9LdRDbHK8WQU"
+author_sig: "MEUCIH244+bQwYeAEXOzIXUTcMfAYdpqpht43P2qZhP1adI3AiEAySivFfg2RRs9Bb3Zvn9jfJHX3we3QGEFOupiP/oSCrs="
 ---
 
 > **Not (2026):** Bu proje artık bakılmıyor. Microsoft, anti-bot tespitini önemli ölçüde güçlendirdi -- o zamanlar işe yarayan şey artık çalışmıyor. Aşağıda açıklanan kod ve yaklaşım sadece arşiv/eğitim amaçlı saklanmaktadır.

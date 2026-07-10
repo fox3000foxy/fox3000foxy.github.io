@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCxGUSWpvfMS2euaPuvkLmcOu3ElSQOavn3XbAuhyT5mwIgJKBrURxoO3aU0UA7Jqybi2ar9pg7M9RFUQE/HVwcpfA="
+author_sig: "MEUCIQCkZwa+KUizaB0Ri3hb0NrJ0m2lOrG3I9E+1E1+jOYfCgIgV5wYoOmUCity7aR1vR62987TQ6hLML6b9WDQjw/ZfVQ="
 ---
 
 # konosuba-rpgのコードを週末に読んでみた結果

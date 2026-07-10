@@ -3,7 +3,7 @@ title: "मैंने एक अति-यथार्थवादी Express 
 description: "328 नकली एंडपॉइंट जिनके जवाब तुरंत जनरेट होते हैं, हेडर स्पूफिंग, बॉट ट्रैफ़िक रिकॉर्डिंग — एक Express हनीपॉट मिडलवेयर के कोड में गहराई से जाना जो स्कैनर्स को धोखा देने के लिए डिज़ाइन किया गया है।"
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIHbkh4Ymuwanmato6mvZOAwkZ66mWRUM6+o0vT35osoLAiBVvTDOo0tvbA/DoYzPkpXjdXM4QSfaW9rvOCqF03xpRQ=="
+author_sig: "MEUCIFRkJ5LUhWWxXaqLySS+u84GEYeH3xDf9pBfN5TXWhUlAiEA4vmZzRUNhS2XiRyS3Bw3FmX42QwK5Tx8rB5S0d3Ev+8="
 ---
 
 ## विचार

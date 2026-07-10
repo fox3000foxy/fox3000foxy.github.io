@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIEDY0cxP8fV2SEbPAaup2I40Ma6qo7KeNO3cok4ipK8IAiEA53KpAY0xBPUpY8oQd193sly0XdJlLzXY/8rEoAHkMYI="
+author_sig: "MEUCIQDNpT3zkA8EIh19eCuWE+CyCHODslqNIphR232Cg9nnEAIgOTEtLdWlhpSsxryJQoByGgrvmbKiAc4uvzI8DfXv0lM="
 ---
 
 ## Pendahuluan

@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEQCIF9R3ijbhuEh3TemshYMg0G3Jx2vzj7jgw8CiojRTf0WAiAnvZhFBtfVuiwgmYxeNW19pBfby1EI7S6GscbaJ6frig=="
+author_sig: "MEYCIQDf+falfiQKXQQ1zVBckrYW41nhJt4i78V0paZHnKsJngIhAMm33q8h/NgwsgNG7b64JcehqZ5Xwij7XfHhxvSZ/QrS"
 ---
 
 # 주말 동안 konosuba-rpg 코드를 읽고 알게 된 것들

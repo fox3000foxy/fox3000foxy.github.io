@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQD1B0xFmLVWntSQqTWMzhb2PV9MoU8wR2/APFpt1CNH3wIhAJkqb32WtfsUYSdhaIQacj5WfnelImt7szgFV+zrFZTL"
+author_sig: "MEQCIFyTB8LavO9+PIdBbudkcANAZTou7+ymGYfM41oJelGLAiBtj7uxCjdgodzv4IqW+021k3TlhA4niENTeIn/TVRh0Q=="
 ---
 
 ## GitHub sana 6 saatliğine ücretsiz VPS veriyor. Kalıcı hale getirmenin yolunu buldum.

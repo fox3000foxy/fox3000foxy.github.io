@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEYCIQC9xN3l4lxQyc20jUtT/nHf8lEwn8Dv9frXYjABkP7X4QIhALO/rCxvkNUQ4KCePwIQVvth1I9iGeXV+crTCjJQZ72L"
+author_sig: "MEUCIHaINEpM1ZAEavheipl8BuN5eKkzw54bBxpA5ZOKutvbAiEA2Qt5td+Bli4uCi4Fe+RZhWLoiXiY1i12KeLpBCTJeJk="
 ---
 
 # J'ai utilisé git comme base de données pour faire tourner un bot gratos sur GitHub Actions

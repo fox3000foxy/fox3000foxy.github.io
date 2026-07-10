@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqV85OoYmfrw0bJGMeZ44/qSkuMaKT2Qp6ofWK2lXdfL+Qf8MPA/6N02mca3/rfiVHBNWXZRRFRInbMY/w8FqtA=="
-author_sig: "MEUCIQCL3RUySg/TUnoqPwMiECp4dZPg0i2L2v49Gl2+3ecZ7wIgS3zHdfk1I+bQiJ8vGWzu6I7Gv1s5/Mvf3OdzxlP3ZvI="
+author_sig: "MEYCIQDcOmQ3rU0lOuY7G3go+iejIEEAIYWjIisLZNp08o7MMQIhAL4z3vP5RDqPKrxukV/yO9vagouzwywVqjEU5pFzl6P3"
 ---
 
 # Tutkularım
