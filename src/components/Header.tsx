@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Header.css";
 import { useLang } from "../hooks/useLang";
 import { useTheme } from "../hooks/useTheme";
 import type { Lang } from "../i18n/types";
 import { ALL_LANGS } from "../i18n/types";
+import "./Header.css";
 
 const LANG_LABELS: Record<Lang, string> = {
 	en: "English",
@@ -81,7 +81,7 @@ export default function Header() {
 						{t("nav.search")}
 					</Link>
 					<div className={`nav-dropdown${moreOpen || menuOpen ? " open" : ""}`}>
-						{/* biome-ignore lint/a11y/useButtonType: span styled as nav link */}
+						{/** biome-ignore lint/a11y/useSemanticElements: biome lint error */}
 						<span
 							className="nav-dropdown-toggle"
 							role="button"

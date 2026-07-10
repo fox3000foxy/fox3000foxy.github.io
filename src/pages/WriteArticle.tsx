@@ -93,7 +93,7 @@ export default function WriteArticle() {
 		editorProps: {
 			handlePaste: (_view, event) => {
 				const items = event.clipboardData?.items;
-				if (!items) return false;
+				if (!items) { return false; }
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
 					if (item.type.startsWith("image/")) {
@@ -108,7 +108,7 @@ export default function WriteArticle() {
 			},
 			handleDrop: (_view, event) => {
 				const files = event.dataTransfer?.files;
-				if (!files) return false;
+				if (!files) { return false; }
 				let handled = false;
 				for (let i = 0; i < files.length; i++) {
 					if (files[i].type.startsWith("image/")) {
