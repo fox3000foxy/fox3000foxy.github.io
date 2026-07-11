@@ -17,7 +17,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "t/cvQafZaK38umLdmQ3nEWfUDZg64OETJWUHHh9Jo9gJR3JtODaR3u69w7RyqsOROW9Aw98Wot5yhU5+q7fgNA=="
+author_sig: "MEAEsk0xUqsbwxASYQlWGJmdZmI2Ex/L9XiR6iyuNWjflmByatiiVgC2Xe9bWk006uwH+yUABbY7F2KwZScKIw=="
 ---
 
 # J'ai créé une IA qui joue à Super Mario World toute seule -- comment ça marche
@@ -27,6 +27,8 @@ Laupok a créé une intelligence artificielle qui joue à **Super Mario World** 
 Ce qui rend ce projet fascinant, c'est qu'il repose sur des concepts biologiques appliqués à l'informatique : la **théorie de l'évolution de Darwin**, les **réseaux de neurones artificiels**, et surtout un algorithme spécifique appelé **NEAT** (NeuroEvolution of Augmenting Topologies). L'IA ne connaît rien au jeu au départ. Elle teste des trucs au hasard, échoue des milliers de fois, et petit à petit, elle comprend comment avancer, sauter, et survivre.
 
 Dans cet article, on va décortiquer tout ça -- concept par concept, ligne de code par ligne de code.
+
+![Laupok introduit l'algorithme NEAT devant la caméra](/images/laupok-mario-ai/neat-title.jpg)
 
 ---
 
@@ -67,6 +69,8 @@ La position des sprites utilise deux octets : un octet "bas" et un octet "haut",
 
 Pour les tiles, c'est plus complexe : l'adresse de base est `0x1C800`, et on calcule l'offset en fonction des coordonnées `x` et `y` de la tile dans le monde, avec un pas de 16 pixels par tile.
 
+![Super Mario World avec overlay de débogage montrant les adresses mémoire des sprites et la position de Mario](/images/laupok-mario-ai/memory-debug.jpg)
+
 ---
 
 ## Les bases : algorithmes génétiques et réseaux de neurones
@@ -81,6 +85,9 @@ Laupok illustre ça avec une analogie de **Kirby** :
 - Une population de Kirby apparaît sur un terrain avec des piques et des tomates
 - Les piques enlèvent des points de vie, les tomates en redonnent
 - Chaque Kirby a des gènes : taille, vitesse, points de vie, comportement (fuir, chercher des tomates, foncer n'importe où)
+
+![Double hélice d'ADN avec les étiquettes "le bébé", "taille", "vitesse", "couleur" -- les gènes qui composent un individu](/images/laupok-mario-ai/dna-genes.jpg)
+
 - Après 15 secondes, on regarde qui a survécu le plus longtemps
 - Le meilleur Kirby se reproduit avec les autres : les bébés héritent de la moitié des gènes du meilleur et de la moitié du "pire"
 - Les bébés subissent des **mutations** aléatoires (un peu plus grand, un peu plus rapide...)
@@ -88,6 +95,12 @@ Laupok illustre ça avec une analogie de **Kirby** :
 - On relance
 
 Après 180 générations (~15 heures), les Kirby passent de 15 secondes de survie à **15 minutes**. Ils sont devenus petits (zone de collision réduite), rapides, et fuient le danger en permanence.
+
+![Simulation Kirby génération 0 : des cercles colorés dispersés aléatoirement sur un fond noir, tous de taille similaire](/images/laupok-mario-ai/kirby-gen0.jpg)
+
+![Simulation Kirby génération 1866 : les Kirby sont plus petits, plus rapides, et fuient systématiquement les dangers](/images/laupok-mario-ai/kirby-gen1866.jpg)
+
+![Statistiques de la simulation Kirby : fitness, nombre de points de vie, comportement de chaque individu classés par performance](/images/laupok-mario-ai/kirby-stats.jpg)
 
 Le point crucial : **on ne définit pas la solution**. L'algorithme la **trouve tout seul**. Et c'est exactement ça qui le rend puissant pour des problèmes où on ne sait pas quelle combinaison de paramètres serait optimale.
 
@@ -106,6 +119,8 @@ Dans l'analogie de Laupok avec Mario et le bout de la souris :
 - Le neurone de sortie = Mario crie ou pas
 
 Plus le bout est proche, plus la valeur d'entrée est élevée. Si le poids est fort, le signal envoyé en sortie est fort, et Mario crierait. En modifiant le poids, on modifie la sensibilité de Mario.
+
+![Démo "Mario a peur" : Mario face à un Boo avec une barre de synapse affichant le poids de la connexion entre l'entrée et la sortie](/images/laupok-mario-ai/mario-fear-demo.jpg)
 
 Dans le vrai réseau de neurones de l'IA, c'est la même logique, mais à une échelle massive :
 - **99 neurones d'entrée** (11×9 tiles de la vue de Mario)
@@ -149,6 +164,9 @@ Concrètement, quand un bébé est créé par crossover, il hérite des innovati
 ### Le crossover
 
 Quand deux réseaux de neurones se reproduisent, le **crossover** fonctionne ainsi :
+
+![Laupok explique le concept de crossover avec le texte "CROSSOVER" en overlay](/images/laupok-mario-ai/crossover-label.jpg)
+
 1. Le réseau le plus performant devient le "parent dominant"
 2. Le bébé hérite de toutes les connexions du dominant
 3. Pour chaque connexion partageant la même innovation, l'autre parent peut la remplacer (50% de chances)
@@ -159,6 +177,8 @@ Quand deux réseaux de neurones se reproduisent, le **crossover** fonctionne ain
 ### Les mutations
 
 Après le crossover, le bébé subit des mutations avec des probabilités configurables :
+
+![Laupok explique les mutations avec le texte "(petite modif = mutation)" en overlay](/images/laupok-mario-ai/mutation-label.jpg)
 
 | Mutation | Probabilité | Effet |
 |----------|------------|-------|
@@ -703,6 +723,8 @@ Au fil des heures (et des jours) d'exécution, l'IA a découvert par elle-même 
 2. **Sauter par-dessus les ennemis** : en connectant un input "ennemi détecté" au bouton A ou B
 3. **Éviter les obstacles** : certains réseaux ont appris à reculer temporairement pour mieux avancer
 4. **Finir des niveaux** : le meilleur individu a pu terminer le premier niveau de Super Mario World
+
+![Mario contrôlé par l'IA face à un Boo dans un niveau de Super Mario World -- le réseau de neurones décide des actions en temps réel](/images/laupok-mario-ai/mario-ai-playing.jpg)
 
 ### Les Limitations
 
