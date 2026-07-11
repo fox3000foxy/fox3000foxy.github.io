@@ -17,7 +17,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "TmM5J0KYGEVcFetrbe+loWQKP725Lk4oW6Ui2blAdxf10rgdkroD0zsKgMvp994zLZ2To/gXsGzqHVTrnmPTMw=="
+author_sig: "t/cvQafZaK38umLdmQ3nEWfUDZg64OETJWUHHh9Jo9gJR3JtODaR3u69w7RyqsOROW9Aw98Wot5yhU5+q7fgNA=="
 ---
 
 # J'ai créé une IA qui joue à Super Mario World toute seule -- comment ça marche
@@ -108,7 +108,7 @@ Dans l'analogie de Laupok avec Mario et le bout de la souris :
 Plus le bout est proche, plus la valeur d'entrée est élevée. Si le poids est fort, le signal envoyé en sortie est fort, et Mario crierait. En modifiant le poids, on modifie la sensibilité de Mario.
 
 Dans le vrai réseau de neurones de l'IA, c'est la même logique, mais à une échelle massive :
-- **176 neurones d'entrée** (11×16 tiles de la vue de Mario)
+- **99 neurones d'entrée** (11×9 tiles de la vue de Mario)
 - **8 neurones de sortie** (A, B, X, Y, Haut, Bas, Gauche, Droite)
 - Des **neurones cachés** (hidden) entre les deux
 - Des centaines de connexions avec des poids variés
