@@ -1,9 +1,6 @@
 ---
 title: "Ho creato un'IA che gioca da sola a Super Mario World -- come funziona"
-description: >
-  Un approfondimento sul progetto di Laupok: un'IA basata su NEAT che impara
-  a giocare a Super Mario World in modo autonomo. Algoritmi genetici, reti
-  neurali, neuroevoluzione di topologie crescenti e 4200 righe di Lua.
+description: "Un approfondimento sul progetto di Laupok: un'IA basata su NEAT che impara a giocare a Super Mario World in modo autonomo. Algoritmi genetici, reti neurali, neuroevoluzione di topologie crescenti e 4200 righe di Lua."
 date: 2026-07-11
 tags:
   - artificial-intelligence

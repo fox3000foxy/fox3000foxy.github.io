@@ -1,9 +1,6 @@
 ---
 title: "Tôi đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động"
-description: >
-  Phân tích chi tiết dự án của Laupok: một AI dựa trên NEAT học chơi
-  Super Mario World một cách tự chủ. Thuật toán di truyền, mạng nơ-ron,
-  tiến hóa nơ-ron mở rộngtopologies, và 4200 dòng Lua.
+description: "Phân tích chi tiết dự án của Laupok: một AI dựa trên NEAT học chơi Super Mario World một cách tự chủ. Thuật toán di truyền, mạng nơ-ron, tiến hóa nơ-ron mở rộngtopologies, và 4200 dòng Lua."
 date: 2026-07-11
 tags:
   - artificial-intelligence

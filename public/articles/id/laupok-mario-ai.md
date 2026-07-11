@@ -1,9 +1,6 @@
 ---
 title: "Saya membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya"
-description: >
-  Penjelasan mendalam tentang proyek Laupok: AI berbasis NEAT yang belajar
-  bermain Super Mario World secara otonom. Algoritma genetika, jaringan saraf
-  tiruan, neuroevolution of augmenting topologies, dan 4200 baris Lua.
+description: "Penjelasan mendalam tentang proyek Laupok: AI berbasis NEAT yang belajar bermain Super Mario World secara otonom. Algoritma genetika, jaringan saraf tiruan, neuroevolution of augmenting topologies, dan 4200 baris Lua."
 date: 2026-07-11
 tags:
   - artificial-intelligence

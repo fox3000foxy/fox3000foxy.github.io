@@ -1,9 +1,6 @@
 ---
 title: "I built an AI that plays Super Mario World by itself -- how it works"
-description: >
-  A deep dive into Laupok's project: a NEAT-based AI that learns to play
-  Super Mario World autonomously. Genetic algorithms, neural networks,
-  neuroevolution of augmenting topologies, and 4200 lines of Lua.
+description: "A deep dive into Laupok's project: a NEAT-based AI that learns to play Super Mario World autonomously. Genetic algorithms, neural networks, neuroevolution of augmenting topologies, and 4200 lines of Lua."
 date: 2026-07-11
 tags:
   - artificial-intelligence
