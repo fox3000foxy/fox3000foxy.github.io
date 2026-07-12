@@ -547,6 +547,61 @@ export default function WriteArticle() {
 						/>
 					</label>
 
+					<div className="write-import">
+						<strong>Import markdown (.md)</strong>
+						<input
+							type="file"
+							accept=".md"
+							onChange={(e) => {
+								const file = e.target.files?.[0];
+								if (!file) {
+									return;
+								}
+								const reader = new FileReader();
+								reader.onload = (ev) => {
+									const text = ev.target?.result;
+									if (typeof text !== "string") {
+										return;
+									}
+									let body = text;
+									if (text.startsWith("---")) {
+										const end = text.indexOf("\n---\n", 4);
+										if (end !== -1) {
+											const raw = text.slice(4, end);
+											body = text.slice(end + 5);
+											for (const line of raw.split("\n")) {
+												const ci = line.indexOf(":");
+												if (ci === -1) {
+													continue;
+												}
+												const k = line.slice(0, ci).trim();
+												const v = line.slice(ci + 1).trim().replace(/^["']|["']$/g, "");
+												if (k === "title") {
+													setTitle(v);
+												} else if (k === "slug") {
+													setSlug(v);
+												} else if (k === "description") {
+													setDescription(v);
+												} else if (k === "tags") {
+													setTagsInput(v.replace(/^\[|\]$/g, ""));
+												}
+											}
+										}
+									}
+									const html = body
+										.split("\n\n")
+										.map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`)
+										.join("");
+									if (editor) {
+										editor.commands.setContent(html);
+									}
+								};
+								reader.readAsText(file);
+							}}
+							style={{ marginTop: "0.3rem" }}
+						/>
+					</div>
+
 					<div className="editor-section">
 						<div className="editor-toolbar">
 							<button

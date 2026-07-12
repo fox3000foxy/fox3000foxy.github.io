@@ -1101,6 +1101,14 @@ a {
   margin-bottom: 1rem;
 }
 
+.write-import {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+}
+
 .button-outline {
   background: transparent;
   border: 1px solid var(--border);
