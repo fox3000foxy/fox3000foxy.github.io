@@ -584,9 +584,7 @@ export default function WriteArticle() {
 											} else if (k === "description") {
 												setDescription(v);
 											} else if (k === "tags") {
-												setTagsInput(
-													v.replace(/^\[|\]$/g, ""),
-												);
+												setTagsInput(v.replace(/^\[|\]$/g, ""));
 											}
 										}
 									}

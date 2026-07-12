@@ -39,7 +39,9 @@ export default function BlogCard({ article }: BlogCardProps) {
 							<span className="new-badge">NEW</span>
 						)}
 						{aiGenerated && <span className="ai-badge">{t("article.ai")}</span>}
-						{sponsored && <span className="sponsored-badge">💕 Sponsorisé</span>}
+						{sponsored && (
+							<span className="sponsored-badge">💕 Sponsorisé</span>
+						)}
 					</div>
 				)}
 				{description && <p className="blog-card-desc">{description}</p>}
