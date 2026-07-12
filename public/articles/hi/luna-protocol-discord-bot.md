@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "l2WBVyFFsGyjJ5ikEa05xahCi2fx0yVW7ZWRdQo3X9PkhLcu0Yj+hKFiFEq7GwjH0MBR2ZCB2AFTOy7zIi0dQQ=="
+author_sig: "tI9aauTZQdlYWPKRigJdfc+fHoh35Kt737zY8XIaESZ5FDXVI5NfYsv6lQOBx89zVpaCqfJQ4HAXaBD+mw+xMw=="
 ---
 
 # Luna Protocol: मैंने एक स्वायत्त Discord बॉट बनाया जो इंसान की नकल करता है
@@ -25,12 +25,12 @@ author_sig: "l2WBVyFFsGyjJ5ikEa05xahCi2fx0yVW7ZWRdQo3X9PkhLcu0Yj+hKFiFEq7GwjH0MB
 
 ## वास्तुकला: एक टाइप किया गया इवेंट बस
 
-Le cœur de Luna est un **TypedBus** -- un bus d'événements générique fortement typé en TypeScript. C'est la brique fondamentale sur laquelle tout repose.
+Luna의 핵심은 **유형dBus** -- 강한 타입이 지정된 제네릭 이벤트 버스(유형Script)입니다. 모든 것의 기본이 되는 블록입니다.
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
 
-export class TypedBus<Events extends EventMap> {
+export class 유형dBus<Events extends EventMap> {
   private listeners = new Map<keyof Events, Set<(...args: unknown[]) => void>>();
 
   on<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): void {
@@ -46,15 +46,15 @@ export class TypedBus<Events extends EventMap> {
 }
 ```
 
-Deux buses principaux en découlent :
+여기서 두 개의 메인 버스가 파생됩니다:
 
-- **`llmBus`** -- gère les tokens LLM, les erreurs, les crashes, le reset
-- **`stateBus`** -- gère les changements d'état avec persistence automatique
+- **`llmBus`** -- LLM 토큰, 오류, 충돌, 리셋 관리
+- **`stateBus`** -- 자동 영속성과 함께 상태 변경 관리
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   core/bus.ts                        │
-│  TypedBus<K, V> -- on / off / once / emit            │
+│  유형dBus<K, V> -- on / off / once / emit            │
 ├──────────────────┬──────────────────────────────────┤
 │   core/llm-bus   │       state/state-bus             │
 │  token / done /  │     state:changed                 │
@@ -75,32 +75,32 @@ Deux buses principaux en découlent :
 └──────────────────┘  └────────────────────────────┘
 ```
 
-L'avantage de cette approche : chaque module est **déconnecté** du reste. Le LLM émet des tokens sur le bus, le bot les consomme, le state se met à jour automatiquement. Aucune dépendance circulaire.
+이 접근 방식의 장점: 각 모듈은 나머지와 **분리**됩니다. LLM은 버스에 토큰을 발행하고, 봇이 소비하며, 상태가 자동으로 업데이트됩니다. 순환 의존성이 없습니다.
 
 ---
 
-![Message Processing -- flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
+![Message Processing -- 메시지 처리의 완전한 흐름](/images/luna-protocol/02-message-processing.svg)
 
-## Le système de déclenchement : qui décide quand Luna répond ?
+## 트리거 시스템: Luna가 언제 응답하는지 누가 결정하는가
 
-Chaque message entrant est évalué par `evaluateMessage()` qui retourne un `TriggerResult` avec une raison de déclenchement. L'ordre de priorité est critique :
+각 수신 메시지는 `evaluateMessage()`에 의해 평가되며, 트리거 이유와 함께 `TriggerResult`를 반환합니다. 우선순위 순서가 중요합니다:
 
-| # | Raison | Conditions | Bypass ignore | Bypass pause |
+| # | 이유 | 조건 | Bypass ignore | Bypass pause |
 |---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | Oui (0%) | Oui |
-| 2 | `dm` | MP avec `replyInDM = true` | Oui (0%) | Non |
-| 3 | `name` | "Luna"/"Pixie"/alias (mot entier) | Non (8%) | Non |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (mot entier) | Non (8%) | Non |
+| 1 | `mention` | @bot | 예 (0%) | 예 |
+| 2 | `dm` | MP avec `replyInDM = true` | 예 (0%) | 아니오 |
+| 3 | `name` | "Luna"/"Pixie"/alias (단어 전체) | 아니오 (8%) | 아니오 |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (단어 전체) | 아니오 (8%) | 아니오 |
 | 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | Non (8%) | Non |
+| 6 | `random` | 1.5% de chance sur les messages non correspondants | 아니오 (8%) | 아니오 |
 
-Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+매칭은 **단어 전체** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
 
-![Trigger evaluation -- décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+![Trigger evaluation -- 각 메시지의 진입 결정](/images/luna-protocol/03-trigger-evaluation.svg)
 
-### Le mécanisme de follow-up
+### 팔로업 메커니즘
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+Luna가 메시지에 응답하면 `lastSpeaker`로 등록됩니다. 15초 이내의 후속 메시지는 **즉각적인** 응답을 트리거합니다 -- 타이머 없음, 키워드 확인 없음. 예산: 60초 윈도우당 3개의 팔로업.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -111,17 +111,17 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 }
 ```
 
-### Le cooldown
+### 쿨다운
 
-8 secondes entre deux réponses dans le même canal. Contourné par les mentions et les follow-ups.
+동일한 채널에서 두 응답 사이의 8초. 멘션과 팔로업으로 우회.
 
 ---
 
-## Les comportements humains : la concentration variable
+## 인간적 행동: 가변 집중도
 
-C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses propres **seuils de concentration** : un délai min/max, une chance d'ignorer, et une chance de réagir.
+여기서 Luna는 흥미로워집니다. 각 트리거 유형에는 고유한 **집중 임계값**이 있습니다: 최소/최대 지연, 무시할 확률, 반응할 확률.
 
-| Trigger | Délai min | Délai max | Ignore | Réaction |
+| Trigger | 최소 지연 | 최대 지연 | 무시 | 반응 |
 |---------|----------|----------|--------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
@@ -130,7 +130,7 @@ C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses pr
 | `follow-up` | 500ms | 2000ms | 0% | 3% |
 | `random` | 1500ms | 5000ms | 15% | 2% |
 
-Le calcul du délai prend aussi en compte :
+지연 계산은 다음도 고려합니다:
 - **La longueur du message** : plus le message est long, plus Luna met de temps à "lire"
 - **L'inactivité** : si Luna n'a pas été active depuis 10 minutes, le délai est multiplié par 2 (simulation du "réveil")
 - **Le sommeil** : en mode `slow`, le délai est multiplié par 3 à 5
@@ -151,7 +151,7 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // jitter agressif
+  delay *= 0.5 + Math.random() * 1.5; // 공격적인 지터
   return delay;
 }
 ```
@@ -160,7 +160,7 @@ export function computeDelay(
 
 ## नींद का समय
 
-Luna peut dormir. Configurable via `config.yml` :
+Luna는 잘 수 있습니다. `config.yml`로 구성 가능:
 
 ```yaml
 timezone: "Europe/Paris"
@@ -176,64 +176,64 @@ time_schedules:
     behavior: short
 ```
 
-| Mode | Effet |
+| 모드 | 효과 |
 |------|-------|
-| `sleep` | Seules les mentions et MP passent |
-| `slow` | Délai ×3-5, réactions quasi nulles |
-| `short` | Chance d'ignore +30%, réactions quasi nulles |
+| `sleep` | 仅提及和私信通过 |
+| `slow` | 延迟 ×3-5，反应几乎为零 |
+| `short` | 忽略概率 +30%，反应几乎为零 |
 
-Pendant les heures de sommeil, le statut Discord passe en `invisible`.
+수면 시간 동안 Discord 상태가 `invisible`로 변경됩니다.
 
 ---
 
 ## टाइपिंग गलतियाँ
 
-Luna peut faire des fautes de frappe -- et les corriger après 2-4 secondes. Le layout clavier est configurable (AZERTY ou QWERTY).
+Luna는 오타를 낼 수 있습니다 -- 2-4초 후에 수정합니다. 키보드 레이아웃은 구성 가능(AZERTY 또는 QWERTY).
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
   a: ["z", "q", "w"],
   z: ["a", "e", "s", "x"],
   e: ["z", "r", "d", "s"],
-  // ... toutes les touches adjacentes
+  // ... 인접한 모든 키
 };
 ```
 
-Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+AZERTY 예: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
 
-Trois styles de correction :
+세 가지 수정 스타일:
 
-| Style | Comportement |
+| 스타일 | 동작 |
 |-------|-------------|
-| `edit` | Édite le message |
-| `message` | Nouveau message : `word*` |
-| `mixed` | 50/50 aléatoire (défaut) |
+| `edit` | 메시지 편집 |
+| `message` | 새 메시지: `word*` |
+| `mixed` | 50/50 무작위(기본값) |
 
 ---
 
 ## हिचकिचाहट और भूलने
 
-**Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**망설임** : 채우기 단어로 시작할 확률 15% (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
+**망각** : 트리거 매치 후에도 Luna는 3% 확률로 응답을 "잊을" 수 있습니다. 메시지 없음, 리액션 없음 -- 아무것도 보지 못한 것처럼.
 
-**Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
+**주제별 피로** : 최근 10개 메시지에서 단어가 너무 자주 나타나면(임계값: 3회), 지연이 곱해지고 무시할 확률이 15% 증가합니다.
 
 ---
 
 ## LLM पाइपलाइन: दो मोड
 
-### Mode `direct` (défaut)
+### 모드 `direct` (défaut)
 
-Le bot envoie directement les requêtes à un `llama-server` local en HTTP. Le modèle est partagé, avec prompt cache et 4 slots concurrents. Deux processus PM2 : le serveur LLM et le client bot.
+Bot सीधे स्थानीय `llama-server` को HTTP पर अनुरोध भेजता है। मॉडल साझा है, प्रॉम्प्ट कैश और 4 समवर्ती स्लॉट्स के साथ। दो PM2 प्रक्रियाएँ: LLM सर्वर और बॉट क्लाइंट।
 
-### Mode `online`
+### 모드 `online`
 
 Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq, Together...). Pas de LLM local nécessaire.
 
-### Le streaming en temps réel
+### 실시간 스트리밍
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+LLM은 응답을 한 줄씩 스트리밍합니다 (`\n`). 각 줄은 단어로 분할되고, `llmBus.emit("token", word)`. 각 `\n`마다 `flush` 이벤트가 발행됩니다 -- 봇은 축적된 메시지를 즉시 전송합니다. 지연 시뮬레이션 없음: 리듬은 LLM의 것입니다.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -255,13 +255,13 @@ function emitWordTokens(chunk: string): void {
 }
 ```
 
-La file d'attente (`requestQueue`) traite les requêtes une par une, avec nettoyage automatique quand la file dépasse 100 éléments.
+큐(`requestQueue`)는 요청을 하나씩 처리하며, 100개 요소를 초과하면 자동 정리됩니다.
 
 ---
 
 ## स्वतः संदेश
 
-Toutes les 5 minutes, 12% de chance que Luna poste un message de son propre chef. Le serveur est sélectionné par un système de **poids linéaire** : le serveur le plus actif a N× plus de chances que le dernier.
+5분마다, Luna가 자체적으로 메시지를 게시할 확률은 12%입니다. 서버는 **선형 가중치** 시스템으로 선택됩니다: 가장 활발한 서버가 마지막 서버보다 N× 많은 확률을 가집니다.
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -272,19 +272,19 @@ for (let i = 0; i < ranked.length; i++) {
 }
 ```
 
-Le contexte des 5 derniers messages est lu, et Luna joint la conversation "naturellement".
+지난 5개 메시지의 컨텍스트가 읽히고, Luna가 "자연스럽게" 대화에 참여합니다.
 
 ---
 
 ## TTS पाइपलाइन: वॉइस संदेश
 
-Avec 8% de chance, Luna envoie un message vocal au lieu de texte. La pipeline complète :
+8% 확률로 Luna는 텍스트 대신 음성 메시지를 보냅니다. 완전한 파이프라인:
 
-1. **Piper TTS** synthétise le texte en WAV
-2. **ffmpeg** convertit en OGG
-3. Le waveform est calculé pour l'aperçu Discord
-4. Le fichier est uploadé via l'API Discord CDN
-5. Le message vocal est envoyé
+1. **Piper TTS** 将文本合成为 WAV
+2. **ffmpeg** 转换为 OGG
+3. 计算波形用于 Discord 预览
+4. 通过 Discord CDN API 上传文件
+5. 发送语音消息
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -301,7 +301,7 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS Pipeline -- 합성된 텍스트에서 Discord 음성 메시지까지](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
@@ -309,23 +309,23 @@ export async function sendTextAsVoiceMessage(
 
 ### Anti-spam
 
-File d'attente par `channelId:userId`. Un seul message en file par utilisateur par canal. Traité dès que la réponse en cours se termine.
+`channelId:userId`별 큐. 사용자당 채널당 큐에 하나의 메시지만. 현재 응답이 완료되면 즉시 처리됩니다.
 
 ### Limites de session
 
-Après 8 échanges, Luna fait une pause de 30 secondes. Le compteur se réinitialise après 3 minutes d'inactivité.
+8번의 교환 후, Luna는 30초의 휴식을 취합니다. 카운터는 3분의 비활성화 후 재설정됩니다.
 
 ### Persistence automatique
 
-Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounce 500ms). Plus besoin d'appels `saveAllState()` manuels. L'état persisté inclut : pendingMessages, paused, cooldowns, timestamps, lastSpeaker, compteurs de follow-up.
+각 상태 변경은 `stateBus`에 발행됩니다 → 자동 저장(debounce 500ms). 수동 `saveAllState()` 호출이 더 이상 필요하지 않습니다. 영속화되는 상태: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, 팔로업 카운터.
 
 ---
 
 ## हॉट-रीलोड कॉन्फ़िगरेशन
 
-Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** -- les changements sont pris en compte sans redémarrage.
+`config.yml` 파일 하나. 대부분의 값은 **핫 리로드 가능** -- 재시작 없이 변경 사항이 적용됩니다.
 
-| Catégorie | Hot-reload |
+| 카테고리 | Hot-reload |
 |-----------|-----------|
 | Triggers, keywords, noms | ✅ |
 | Concentration, délais | ✅ |
@@ -335,7 +335,7 @@ Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** -- 
 | Discord token, LLM mode | ❌ (redémarrage requis) |
 
 ```typescript
-// config.ts -- les getters retournent des valeurs live
+// config.ts -- 게터가 실시간 값을 반환합니다
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -347,31 +347,31 @@ export const config = {
 
 ## डेटासेट: Discord-Dialogues
 
-Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. Des vraies conversations Discord printemps-été 2025, filtrées (PII, ToS, bots, commandes). Apache 2.0.
+모델은 다음에서 파인튜닝되었습니다: [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. 2025년 봄-여름의 실제 Discord 대화, 필터링됨(PII, ToS, 봇, 명령). Apache 2.0.
 
-| Métrique | Valeur |
+| 메트릭 | 값 |
 |----------|--------|
-| Échantillons | 7 303 464 |
-| Tours totaux | 16 881 010 |
-| Mots totaux | 139 922 950 |
-| Tokens moyens | 32.8 |
+| 샘플 수 | 7 303 464 |
+| 총 턴 수 | 16 881 010 |
+| 총 단어 수 | 139 922 950 |
+| 평균 토큰 | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
-Le modèle quantifié utilisé est un GGUF (par exemple `Discord-Hermes-3-8B.Q3_K_M.gguf`).
+사용된 양자화 모델은 GGUF입니다(예: `Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
-![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+![Discord-Dialogues 데이터셋 분포](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
+![Complete Lifecycle -- 메시지부터 응답까지의 완전한 봇 동작, 타이머와 엣지 케이스 포함](/images/luna-protocol/22-complete-lifecycle.svg)
 
-## Les diagrammes d'architecture
+## 아키텍처 다이어그램
 
-Le dossier `state-machines/` contient **24 diagrammes Mermaid** couvrant l'ensemble du code source. Chaque diagramme a une explication détaillée en langage humain.
+`state-machines/` फ़ोल्डर में **24 Mermaid डायग्राम** हैं जो पूरे स्रोत कोड को कवर करते हैं। प्रत्येक डायग्राम का मानव भाषा में विस्तृत विवरण है।
 
 Parmi les plus importants :
 
-| # | Diagramme | Type |
+| # | 다이어그램 | 유형 |
 |---|-----------|------|
 | 01 | Architecture Overview | `graph` |
 | 02 | Message Processing (complet) | `stateDiagram` |
@@ -386,9 +386,9 @@ Ces diagrammes sont une mine d'or pour comprendre le flux complet : du message e
 
 ---
 
-## Le code de déclenchement en détail
+## 트리거 상세 코드
 
-Le trigger est évalué par `evaluateMessage()` dans `state/trigger.ts`. Voici la logique complète :
+트리거는 `state/trigger.ts`의 `evaluateMessage()`에 의해 평가됩니다. 전체 로직:
 
 ```typescript
 export function evaluateMessage(
@@ -409,15 +409,15 @@ export function evaluateMessage(
 }
 ```
 
-Le cache de regex (`hasWordCache`) évite de recompiler les patterns à chaque message.
+정규식 캐시(`hasWordCache`)는 각 메시지에서 패턴 재컴파일을 방지합니다.
 
 ---
 
 ## प्रतिक्रियाएँ
 
-Luna réagit aux messages avec des emojis. 30% de chance d'utiliser un emoji custom du serveur, 70% un emoji unicode. La réaction est déclenchée après le délai de concentration, pas immédiatement.
+Luna는 이모지로 메시지에 반응합니다. 서버 사용자 정의 이모지를 사용할 확률 30%, 유니코드 이모지 70%. 리액션은 집중 지연 후에 트리거되며 즉시는 아닙니다.
 
-Les commandes par réaction sur les messages de Luna :
+Luna 메시지에 대한 리액션 명령:
 - ❌ → Stop
 - ▶️ → Start
 - 🗑️ → Clear
@@ -426,33 +426,33 @@ Les commandes par réaction sur les messages de Luna :
 
 ## उत्तर शैली
 
-Le style de réponse est pondéré selon l'activité récente de Luna dans le canal :
+응답 스타일은 Luna의 최근 채널 활동에 따라 가중치가 부여됩니다:
 
-| Contexte | messageReference | mentionRepliedUser | Poids |
+| 컨텍스트 | messageReference | mentionRepliedUser | 가중치 |
 |----------|-----------------|-------------------|-------|
-| Froid | true | false | 70% |
-| Froid | true | true | 20% |
-| Froid | false | false | 10% |
-| Actif | true | false | 50% |
-| Actif | true | true | 15% |
-| Actif | false | false | 30% |
-| Actif | false | true | 5% |
+| 냉 | true | false | 70% |
+| 냉 | true | true | 20% |
+| 냉 | false | false | 10% |
+| 활성 | true | false | 50% |
+| 활성 | true | true | 15% |
+| 활성 | false | false | 30% |
+| 활성 | false | true | 5% |
 
-En MP, `messageReference` est toujours `false`.
-
----
-
-## Les messages en rafale
-
-Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
-
-![Timing Gantt -- temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
+DM에서는 `messageReference`가 항상 `false`입니다.
 
 ---
 
-## Le statut dynamique
+## 버스트 메시지
 
-Le statut Discord de Luna alterne entre plusieurs presets configurés, tournant toutes les 15 minutes. Types supportés : Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Pendant le sommeil, le statut passe en `invisible`.
+15% 확률로 응답은 인간의 리듬(각 조각 사이 1.5-4초)으로 2-3개의 조각으로 분할되어 전송됩니다. 여러 번에 걸쳐 타이핑하는 사람을 시뮬레이션합니다.
+
+![Timing Gantt -- 지연, 반응, LLM 스트리밍, 수정의 실제 대기 시간](/images/luna-protocol/21-timing-gantt.svg)
+
+---
+
+## 동적 상태
+
+Luna의 Discord 상태는 구성된 여러 프리셋을 15분마다 전환합니다. 지원되는 유형: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). 수면 중 상태가 `invisible`로 변경됩니다.
 
 ```yaml
 dynamic_status_presets:
@@ -464,11 +464,11 @@ dynamic_status_presets:
     type: 2       # Listening
 ```
 
-Un jitter aléatoire (×0.5-1.0) évite les rotations prévisibles. 10% des tentatives sont sautées pour éviter la répétition.
+무작위 지터(×0.5-1.0)는 예측 가능한 회전을 방지합니다. 반복을 피하기 위해 10%의 시도가 건너뜁니다.
 
-## L'indicateur de frappe
+## 타이핑 표시기
 
-Avant d'appeler le LLM, Luna appelle `startTyping()`. Un `setInterval` rafraîchit l'indicateur toutes les 8 secondes pendant la génération. Nettoyé dans le `finally` (`clearInterval`).
+LLM을 호출하기 전에 Luna는 `startTyping()`을 호출합니다. `setInterval`이 생성 중 8초마다 인디케이터를 새로고침합니다. `finally`에서 정리됩니다(`clearInterval`).
 
 ```typescript
 const startTyping = () => {
@@ -482,13 +482,13 @@ const startTyping = () => {
 };
 ```
 
-## La récupération après crash
+## 크래시 후 복구
 
-Si le LLM crash (processus `llama-server` qui meurt), Luna détecte l'événement via `llmBus.emit("crash", code)` et tente de redémarrer avec un backoff exponentiel. Évite les boucles de redémarrage infini.
+LLM이 크래시되면(`llama-server` 프로세스가 중지), Luna는 `llmBus.emit("crash", code)`를 통해 이벤트를 감지하고 지수 백오프로 재시작을 시도합니다. 무한 재시작 루프를 방지합니다.
 
 ## LLM पैरामीटर
 
-Les paramètres sont hardcodés dans `src/config.ts` :
+매개변수가 `src/config.ts`에 하드코딩되어 있습니다:
 
 ```yaml
 temp: 0.75
@@ -504,7 +504,7 @@ ubatch: 256
 context: 4096
 ```
 
-Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
+ChatML 템플릿 (`<|im_start|>/<|im_end|>`) est utilisé. 스레드 수는 `os.cpus().length`.
 
 ---
 
@@ -513,36 +513,36 @@ Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de thread
 ```bash
 npm install
 cp config.example.yml config.yml
-# éditer config.yml
+# config.yml 편집
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
 | Script | Description |
 |--------|-------------|
-| `build` | Bundle CLI autonome |
-| `start` | Lance le bot |
+| `build` | 독립형 CLI 번들 |
+| `start` | 봇 시작 |
 | `lint` / `format` / `check` | Biome |
 | `test` | Tests (Bun) |
-| `download-model` | GGUF depuis HuggingFace |
-| `diagrams` | Exporte les diagrammes Mermaid en SVG/PNG |
+| `download-model` | GGUF from HuggingFace |
+| `diagrams` | Mermaid 다이어그램을 SVG/PNG로 내보내기 |
 
 ### Déploiement PM2
 
 ```bash
-./start.sh   # lance llm-server + llm-client sous PM2
+./start.sh   # PM2에서 llm-server + llm-client 시작
 ```
 
 ---
 
 ## निष्कर्ष
 
-Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
+Luna Protocol 는 단순한 LLM이 탑재된 Discord 봇이 아닙니다. 이것은 인간의 불완전성 -- 망각, 오타, 수면, 망설임, 피로 -- 을 시뮬레이션하는 **완전한 행동 시스템**입니다. 모든 것이 타입화된 이벤트 버스를 중심으로 구축되었으며, 24개의 Mermaid 다이어그램이 각 흐름을 문서화합니다.
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
+코드는 오픈소스이고, 데이터셋은 공개적이며, 구성은 핫 리로드 가능합니다. 이 주제에 관심이 있다면 코드를 살펴보세요 -- 생각보다 접근하기 쉽습니다.
 
-| Ressource | Lien |
+| 리소스 | 링크 |
 |-----------|------|
-| Dépôt GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| GitHub 저장소 | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |

@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "U1e4uYPw6GU5mjJW+tHdeE3T7r7Fj3Gn8qbOt0kUJzMmo7cHs+w2DVkWh7cmh5xTDxUV25C/k8E14KioEeIpGw=="
+author_sig: "aX5DC3IO5XGGSVVWmAqLJKtVDtQeNrLjq6vhqxaunH+LGRUxEY7RlTQPi5VDiC9Tp2bZGwLvSxMk6qycmQrDiw=="
 ---
 
 # Luna Protocol : creé un bot Discord autónomo que simula un ser humano
@@ -79,28 +79,28 @@ La ventaja de este enfoque: cada módulo está **desconectado** del resto. El LL
 
 ---
 
-![Message Processing -- flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
+![Procesamiento de mensajes -- flujo completo de procesamiento de un mensaje](/images/luna-protocol/02-message-processing.svg)
 
 ## El sistema de activación: ¿quién decide cuándo responde Luna?
 
-Chaque message entrant est évalué par `evaluateMessage()` qui retourne un `TriggerResult` avec une raison de déclenchement. L'ordre de priorité est critique :
+Cada mensaje entrante es evaluado por `evaluateMessage()` que devuelve un `TriggerResult` con una razón de activación. El orden de prioridad es crítico:
 
-| # | Raison | Conditions | Bypass ignore | Bypass pause |
-|---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | Oui (0%) | Oui |
-| 2 | `dm` | MP avec `replyInDM = true` | Oui (0%) | Non |
-| 3 | `name` | "Luna"/"Pixie"/alias (mot entier) | Non (8%) | Non |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (mot entier) | Non (8%) | Non |
-| 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | Non (8%) | Non |
+| # | Razón | Condiciones | Bypass ignore | Bypass pausa |
+|---|-------|-------------|---------------|--------------|
+| 1 | `mention` | @bot | Sí (0%) | Sí |
+| 2 | `dm` | MP con `replyInDM = true` | Sí (0%) | No |
+| 3 | `name` | "Luna"/"Pixie"/alias (palabra completa) | No (8%) | No |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (palabra completa) | No (8%) | No |
+| 5 | `follow-up` | Bot fue el último en hablar + < 15s + < 3 / 60s | -- | -- |
+| 6 | `random` | 1.5% de probabilidad en mensajes no coincidentes | No (8%) | No |
 
-Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+El matching es por **palabra completa** (`\b`): "ai" no coincide con "mais", "vrai", "lait".
 
-![Trigger evaluation -- décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+![Evaluación de activación -- decisión de entrada para cada mensaje](/images/luna-protocol/03-trigger-evaluation.svg)
 
 ### El mecanismo de follow-up
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+Cuando Luna responde a un mensaje, se registra como `lastSpeaker`. Todo mensaje siguiente en los 15 segundos desencadena una respuesta **inmediata** -- sin temporizador, sin verificación de keyword. Presupuesto: 3 follow-ups por ventana de 60 segundos.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -119,10 +119,10 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 
 ## Los comportamientos humanos: la concentración variable
 
-C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses propres **seuils de concentration** : un délai min/max, une chance d'ignorer, et une chance de réagir.
+Aquí es donde Luna se vuelve interesante. Cada tipo de activación tiene sus propios **umbrales de concentración**: un retraso min/max, una probabilidad de ignorar, y una probabilidad de reaccionar.
 
-| Trigger | Délai min | Délai max | Ignore | Réaction |
-|---------|----------|----------|--------|----------|
+| Activación | Retraso min | Retraso max | Ignorar | Reacción |
+|------------|-------------|-------------|---------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
 | `name` | 800ms | 4000ms | 5% | 6% |
@@ -176,11 +176,11 @@ time_schedules:
     behavior: short
 ```
 
-| Mode | Effet |
-|------|-------|
-| `sleep` | Seules les mentions et MP passent |
-| `slow` | Délai ×3-5, réactions quasi nulles |
-| `short` | Chance d'ignore +30%, réactions quasi nulles |
+| Modo | Efecto |
+|------|--------|
+| `sleep` | Solo pasan menciones y MP |
+| `slow` | Retraso ×3-5, reacciones casi nulas |
+| `short` | Probabilidad de ignorar +30%, reacciones casi nulas |
 
 Durante las horas de sueño, el estado de Discord cambia a `invisible`.
 
@@ -199,25 +199,25 @@ const azertyAdjacent: Record<string, string[]> = {
 };
 ```
 
-Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+Ejemplo AZERTY: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
 
 Tres estilos de corrección:
 
-| Style | Comportement |
-|-------|-------------|
-| `edit` | Édite le message |
-| `message` | Nouveau message : `word*` |
-| `mixed` | 50/50 aléatoire (défaut) |
+| Estilo | Comportamiento |
+|--------|----------------|
+| `edit` | Edita el mensaje |
+| `message` | Nuevo mensaje: `word*` |
+| `mixed` | 50/50 aleatorio (predeterminado) |
 
 ---
 
 ## Las vacilaciones y los olvidos
 
-**Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**Vacilaciones**: 15% de probabilidad de empezar con una palabra de relleno (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
+**Olvidos**: incluso después de haber coincidido con un trigger, Luna puede "olvidar" responder con una probabilidad de 3%. Sin mensaje, sin reacción -- como si no hubiera visto nada.
 
-**Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
+**Fatiga temática**: si una palabra aparece demasiado a menudo en los últimos 10 mensajes (umbral: 3 ocurrencias), los retrasos se multiplican y la probabilidad de ignorar aumenta un 15%.
 
 ---
 
@@ -233,7 +233,7 @@ El bot llama a cualquier API compatible con OpenAI (OpenAI, OpenRouter, Groq, To
 
 ### El streaming en tiempo real
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+El LLM emite su respuesta línea por línea (`\n`). Cada línea se divide en palabras, emitidas una por una en `llmBus.emit("token", word)`. Con cada `\n`, se emite un evento `flush` -- el bot envía inmediatamente el mensaje acumulado. Sin retraso simulado: el ritmo es el del LLM.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -261,7 +261,7 @@ La cola (`requestQueue`) procesa las solicitudes una por una, con limpieza autom
 
 ## Los mensajes espontáneos
 
-Toutes les 5 minutes, 12% de chance que Luna poste un message de son propre chef. El servidor se selecciona mediante un sistema de **pesos lineales**: el servidor más activo tiene N× más de probabilidades que el último.
+Cada 5 minutos, 12% de probabilidad de que Luna publique un mensaje por su propia cuenta. El servidor se selecciona mediante un sistema de **pesos lineales**: el servidor más activo tiene N× más de probabilidades que el último.
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -301,7 +301,7 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+![Pipeline TTS -- del texto sintetizado al mensaje de voz de Discord](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
@@ -317,7 +317,7 @@ Después de 8 intercambios, Luna hace una pausa de 30 segundos. El contador se r
 
 ### Persistencia automática
 
-Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounce 500ms). Plus besoin d'appels `saveAllState()` manuels. L'état persisté inclut : pendingMessages, paused, cooldowns, timestamps, lastSpeaker, compteurs de follow-up.
+Cada mutación de estado se emite en `stateBus` → guardado automático (debounce 500ms). Ya no se necesitan llamadas `saveAllState()` manuales. El estado persistido incluye: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, contadores de follow-up.
 
 ---
 
@@ -325,14 +325,14 @@ Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounc
 
 Un solo archivo `config.yml`. La mayoría de los valores son **recargables en caliente** -- los cambios se aplican sin reinicio.
 
-| Catégorie | Hot-reload |
+| Categoría | Hot-reload |
 |-----------|-----------|
-| Triggers, keywords, noms | ✅ |
-| Concentration, délais | ✅ |
-| Typos, burst, fatigue | ✅ |
-| Sleep schedules | ✅ |
-| TTS, voice messages | ✅ |
-| Discord token, LLM mode | ❌ (redémarrage requis) |
+| Triggers, keywords, nombres | ✅ |
+| Concentración, retrasos | ✅ |
+| Typos, burst, fatiga | ✅ |
+| Horarios de sueño | ✅ |
+| TTS, mensajes de voz | ✅ |
+| Token de Discord, modo LLM | ❌ (reinicio necesario) |
 
 ```typescript
 // config.ts -- los getters devuelven valores en vivo
@@ -347,23 +347,23 @@ export const config = {
 
 ## El dataset: Discord-Dialogues
 
-Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. Des vraies conversations Discord printemps-été 2025, filtrées (PII, ToS, bots, commandes). Apache 2.0.
+El modelo se fine-tunea con [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues): **7.3M intercambios**, **17M turnos**, **140M palabras**. Conversaciones reales de Discord primavera-verano 2025, filtradas (PII, ToS, bots, comandos). Apache 2.0.
 
-| Métrique | Valeur |
-|----------|--------|
-| Échantillons | 7 303 464 |
-| Tours totaux | 16 881 010 |
-| Mots totaux | 139 922 950 |
-| Tokens moyens | 32.8 |
+| Métrica | Valor |
+|---------|-------|
+| Muestras | 7 303 464 |
+| Turnos totales | 16 881 010 |
+| Palabras totales | 139 922 950 |
+| Tokens promedio | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
 El modelo cuantizado utilizado es un GGUF (por ejemplo, `Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
-![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+![Distribución del dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
+![Ciclo de vida completo -- comportamiento completo del bot desde el mensaje hasta la respuesta, incluyendo temporizadores y casos límite](/images/luna-protocol/22-complete-lifecycle.svg)
 
 ## Los diagramas de arquitectura
 
@@ -371,8 +371,8 @@ La carpeta `state-machines/` contiene **24 diagramas Mermaid** que cubren todo e
 
 Entre los más importantes:
 
-| # | Diagramme | Type |
-|---|-----------|------|
+| # | Diagrama | Tipo |
+|---|----------|------|
 | 01 | Architecture Overview | `graph` |
 | 02 | Message Processing (complet) | `stateDiagram` |
 | 03 | Trigger Evaluation | `flowchart` |
@@ -428,15 +428,15 @@ Las comandos por reacción en los mensajes de Luna:
 
 El estilo de respuesta se pondera según la actividad reciente de Luna en el canal:
 
-| Contexte | messageReference | mentionRepliedUser | Poids |
-|----------|-----------------|-------------------|-------|
-| Froid | true | false | 70% |
-| Froid | true | true | 20% |
-| Froid | false | false | 10% |
-| Actif | true | false | 50% |
-| Actif | true | true | 15% |
-| Actif | false | false | 30% |
-| Actif | false | true | 5% |
+| Contexto | messageReference | mentionRepliedUser | Peso |
+|----------|-----------------|-------------------|------|
+| Frío | true | false | 70% |
+| Frío | true | true | 20% |
+| Frío | false | false | 10% |
+| Activo | true | false | 50% |
+| Activo | true | true | 15% |
+| Activo | false | false | 30% |
+| Activo | false | true | 5% |
 
 En MP, `messageReference` siempre es `false`.
 
@@ -444,9 +444,9 @@ En MP, `messageReference` siempre es `false`.
 
 ## Los mensajes en ráfaga
 
-Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
+Con un 15% de probabilidad, una respuesta se divide en 2-3 fragmentos enviados al ritmo humano (1.5-4 segundos entre cada fragmento). Simula a alguien que escribe en varias veces.
 
-![Timing Gantt -- temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
+![Timing Gantt -- tiempos de espera reales para retrasos, reacciones, streaming LLM y correcciones](/images/luna-protocol/21-timing-gantt.svg)
 
 ---
 
@@ -484,7 +484,7 @@ const startTyping = () => {
 
 ## La recuperación después de crash
 
-Si le LLM crash (processus `llama-server` qui meurt), Luna détecte l'événement via `llmBus.emit("crash", code)` et tente de redémarrer avec un backoff exponentiel. Évite les boucles de redémarrage infini.
+Si el LLM falla (proceso `llama-server` que muere), Luna detecta el evento via `llmBus.emit("crash", code)` e intenta reiniciar con un backoff exponencial. Evita bucles de reinicio infinitos.
 
 ## Los parámetros LLM
 
@@ -504,7 +504,7 @@ ubatch: 256
 context: 4096
 ```
 
-Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
+La plantilla ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
 
 ---
 
@@ -513,36 +513,36 @@ Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de thread
 ```bash
 npm install
 cp config.example.yml config.yml
-# éditer config.yml
+# editar config.yml
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
 | Script | Description |
 |--------|-------------|
-| `build` | Bundle CLI autonome |
-| `start` | Lance le bot |
+| `build` | Bundle CLI autónomo |
+| `start` | Inicia el bot |
 | `lint` / `format` / `check` | Biome |
 | `test` | Tests (Bun) |
 | `download-model` | GGUF depuis HuggingFace |
-| `diagrams` | Exporte les diagrammes Mermaid en SVG/PNG |
+| `diagrams` | Exporta diagramas Mermaid en SVG/PNG |
 
 ### Despliegue PM2
 
 ```bash
-./start.sh   # lance llm-server + llm-client sous PM2
+./start.sh   # inicia llm-server + llm-client bajo PM2
 ```
 
 ---
 
 ## Conclusión
 
-Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
+Luna Protocol no es solo un bot Discord con un LLM. Es un **sistema comportamental completo** que simula las imperfecciones humanas: los olvidos, los errores de escritura, el sueño, las vacilaciones, la fatiga. Todo ello arquitecturado alrededor de un bus de eventos tipado, con 24 diagramas Mermaid documentando cada flujo.
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
+El código es open source, el dataset es público, y la configuración es recargable en caliente. Si el tema te interesa, sumérgete en el código -- es más accesible de lo que parece.
 
-| Ressource | Lien |
+| Recurso | Enlace |
 |-----------|------|
-| Dépôt GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| Repositorio GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |

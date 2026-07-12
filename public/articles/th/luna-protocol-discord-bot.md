@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MUilKHy5c/Qk27QAGrgNw7lTW8Teb+J9jXsXpG7924YyK5w8UN7ZjwIAmcOr4Dn7Bitz7IQ9xjbOyhJiYHlo3g=="
+author_sig: "UcSnQWh/mPVIr2Etqlc67CYJ+B3IxpUif99fFk8fK8yaNiWqr2dqlO7dEkrTkl8lEmtcOJSs6ON9U0sn2I2KBQ=="
 ---
 
 # Luna Protocol: ฉันสร้างบ็อต Discord อิสระที่จำลองมนุษย์
@@ -25,7 +25,7 @@ author_sig: "MUilKHy5c/Qk27QAGrgNw7lTW8Teb+J9jXsXpG7924YyK5w8UN7ZjwIAmcOr4Dn7Bit
 
 ## สถาปัตยกรรม: บัสเหตุการณ์ที่มีการพิมพ์
 
-Le cœur de Luna est un **TypedBus** -- un bus d'événements générique fortement typé en TypeScript. C'est la brique fondamentale sur laquelle tout repose.
+แกนหลักของ Luna คือ **TypedBus** -- อีเวนต์บัสแบบเจน릭ที่มีการพิมพ์ที่เข้มงวด (TypeScript) นี่คือบล็อกพื้นฐานของทุกสิ่ง
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
@@ -46,10 +46,10 @@ export class TypedBus<Events extends EventMap> {
 }
 ```
 
-Deux buses principaux en découlent :
+จากที่นี่ บัสหลักสองตัวถูกสร้างขึ้น:
 
-- **`llmBus`** -- gère les tokens LLM, les erreurs, les crashes, le reset
-- **`stateBus`** -- gère les changements d'état avec persistence automatique
+- **`llmBus`** -- จัดการโทเค็น LLM ข้อผิดพลาด การล่ม และการรีเซ็ต
+- **`stateBus`** -- จัดการการเปลี่ยนแปลงสถานะพร้อมการเก็บถาวรอัตโนมัติ
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -75,32 +75,32 @@ Deux buses principaux en découlent :
 └──────────────────┘  └────────────────────────────┘
 ```
 
-L'avantage de cette approche : chaque module est **déconnecté** du reste. Le LLM émet des tokens sur le bus, le bot les consomme, le state se met à jour automatiquement. Aucune dépendance circulaire.
+ข้อดีของวิธีนี้: แต่ละโมดูล**แยกจาก**ส่วนที่เหลือ LLM จะตีพิมพ์โทเค็นไปยังบัส บ็อตจะบริโภค และสถานะจะอัปเดตโดยอัตโนมัติ ไม่มีการพึ่งพาอาศัยแบบวงจร
 
 ---
 
-![Message Processing -- flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
+![Message Processing -- กระแสข้อมูลการประมวลผลข้อความที่สมบูรณ์](/images/luna-protocol/02-message-processing.svg)
 
-## Le système de déclenchement : qui décide quand Luna répond ?
+## ระบบทริกเกอร์: ใครเป็นตัวตัดสินใจว่า Luna จะตอบเมื่อใด
 
-Chaque message entrant est évalué par `evaluateMessage()` qui retourne un `TriggerResult` avec une raison de déclenchement. L'ordre de priorité est critique :
+ข้อความที่เข้ามาแต่ละรายการจะถูกประเมินโดย `evaluateMessage()` ซึ่งจะส่งคืน `TriggerResult` พร้อมเหตุผลในการทริกเกอร์ ลำดับความสำคัญมีความสำคัญ:
 
-| # | Raison | Conditions | Bypass ignore | Bypass pause |
+| # | เหตุผล | เงื่อนไข | Bypass ignore | Bypass pause |
 |---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | Oui (0%) | Oui |
-| 2 | `dm` | MP avec `replyInDM = true` | Oui (0%) | Non |
-| 3 | `name` | "Luna"/"Pixie"/alias (mot entier) | Non (8%) | Non |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (mot entier) | Non (8%) | Non |
-| 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | Non (8%) | Non |
+| 1 | `mention` | @bot | ใช่ (0%) | ใช่ |
+| 2 | `dm` | DM ที่มี `replyInDM = true` | ใช่ (0%) | ไม่ |
+| 3 | `name` | "Luna"/"Pixie"/alias (คำทั้งหมด) | ไม่ (8%) | ไม่ |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (คำทั้งหมด) | ไม่ (8%) | ไม่ |
+| 5 | `follow-up` | บอตเป็นผู้พูดล่าสุด + < 15 วินาที + < 3 / 60 วินาที | -- | -- |
+| 6 | `random` | โอกาส 1.5% ในข้อความที่ไม่ตรงกัน | ไม่ (8%) | ไม่ |
 
-Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+การจับคู่เป็น**คำทั้งหมด** (`\b`) : "ai" ไม่ตรงกับ "mais", "vrai", "lait"
 
-![Trigger evaluation -- décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+![Trigger evaluation -- การตัดสินใจทางเข้าของแต่ละข้อความ](/images/luna-protocol/03-trigger-evaluation.svg)
 
-### Le mécanisme de follow-up
+### กลไกการติดตาม
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+เมื่อ Luna ตอบข้อความ จะลงทะเบียนเป็น `lastSpeaker` ข้อความที่ตามมาภายใน 15 วินาทีจะทริกเกอร์การตอบ**ทันที** -- ไม่มีตั้งเวลา ไม่มีการตรวจสอบคำหลัก งบประมาณ: การติดตามสูงสุด 3 ครั้งต่อหน้าต่าง 60 วินาที
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -111,17 +111,17 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 }
 ```
 
-### Le cooldown
+### ระบายความร้อน
 
-8 secondes entre deux réponses dans le même canal. Contourné par les mentions et les follow-ups.
+8 วินาทีระหว่างการตอบสองครั้งในช่องเดียวกัน หลีกเลี่ยงได้ด้วยการmentionและการติดตาม
 
 ---
 
-## Les comportements humains : la concentration variable
+## พฤติกรรมของมนุษย์: ระดับสมาธิที่เปลี่ยนแปลงได้
 
-C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses propres **seuils de concentration** : un délai min/max, une chance d'ignorer, et une chance de réagir.
+ที่นี่ Luna น่าสนใจยิ่งขึ้น แต่ละประเภททริกเกอร์มี**เกณฑ์สมาธิ**เฉพาะ: หน่วงต่ำสุด/สูงสุด โอกาสที่จะเพิกเฉย และโอกาสที่จะตอบสนอง
 
-| Trigger | Délai min | Délai max | Ignore | Réaction |
+| ทริกเกอร์ | หน่วงต่ำสุด | หน่วงสูงสุด | เพิกเฉย | ตอบสนอง |
 |---------|----------|----------|--------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
@@ -130,10 +130,10 @@ C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses pr
 | `follow-up` | 500ms | 2000ms | 0% | 3% |
 | `random` | 1500ms | 5000ms | 15% | 2% |
 
-Le calcul du délai prend aussi en compte :
-- **La longueur du message** : plus le message est long, plus Luna met de temps à "lire"
-- **L'inactivité** : si Luna n'a pas été active depuis 10 minutes, le délai est multiplié par 2 (simulation du "réveil")
-- **Le sommeil** : en mode `slow`, le délai est multiplié par 3 à 5
+การคำนวณหน่วงยังพิจารณา:
+- **ความยาวของข้อความ**: ยิ่งข้อความยาว Luna ยิ่งใช้เวลา "อ่าน"
+- **ความไม่ใช้งาน**: ถ้า Luna ไม่ได้ใช้งานมา 10 นาที หน่วงจะเพิ่มเป็น 2 เท่า (จำลองการ "ตื่น")
+- **การนอนหลับ**: ในโหมด `slow` หน่วงจะเพิ่มเป็น 3 ถึง 5 เท่า
 
 ```typescript
 export function computeDelay(
@@ -151,16 +151,16 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // jitter agressif
+  delay *= 0.5 + Math.random() * 1.5; // jitter รุนแรง
   return delay;
 }
 ```
 
 ---
 
-## กำหนดการนอน
+## กำหนดการนอนหลับ
 
-Luna peut dormir. Configurable via `config.yml` :
+Luna สามารถนอนหลับได้ กำหนดค่าผ่าน `config.yml`:
 
 ```yaml
 timezone: "Europe/Paris"
@@ -176,64 +176,64 @@ time_schedules:
     behavior: short
 ```
 
-| Mode | Effet |
+| โหมด | ผลลัพธ์ |
 |------|-------|
-| `sleep` | Seules les mentions et MP passent |
-| `slow` | Délai ×3-5, réactions quasi nulles |
-| `short` | Chance d'ignore +30%, réactions quasi nulles |
+| `sleep` | เฉพาะการmentionและDM เท่านั้นที่ผ่าน |
+| `slow` | หน่วง ×3-5, การตอบสนองแทบเป็นศูนย์ |
+| `short` | โอกาสเพิกเฉย +30%, การตอบสนองแทบเป็นศูนย์ |
 
-Pendant les heures de sommeil, le statut Discord passe en `invisible`.
+ระหว่างเวลาเข้านอน สถานะ Discord จะเปลี่ยนเป็น `invisible`
 
 ---
 
 ## ข้อผิดพลาดในการพิมพ์
 
-Luna peut faire des fautes de frappe -- et les corriger après 2-4 secondes. Le layout clavier est configurable (AZERTY ou QWERTY).
+Luna สามารถพิมพ์ผิดได้ -- แก้ไขหลัง 2-4 วินาที ผังแป้นพิมพ์กำหนดค่าได้ (AZERTY หรือ QWERTY)
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
   a: ["z", "q", "w"],
   z: ["a", "e", "s", "x"],
   e: ["z", "r", "d", "s"],
-  // ... toutes les touches adjacentes
+  // ... แป้นพิมพ์ที่อยู่ติดกันทั้งหมด
 };
 ```
 
-Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+ตัวอย่าง AZERTY: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`
 
-Trois styles de correction :
+สามสไตล์การแก้ไข:
 
-| Style | Comportement |
+| สไตล์ | การทำงาน |
 |-------|-------------|
-| `edit` | Édite le message |
-| `message` | Nouveau message : `word*` |
-| `mixed` | 50/50 aléatoire (défaut) |
+| `edit` | แก้ไขข้อความ |
+| `message` | ข้อความใหม่: `word*` |
+| `mixed` | สุ่ม 50/50 (ค่าเริ่มต้น) |
 
 ---
 
 ## ความลังเลและการหลงลืม
 
-**Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**ความลังเล**: โอกาสเริ่มต้นด้วยคำเติม 15% (`uh...`, `um...`, `well...`, `hmm...`, `so...`)
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
+**ความลืม**: แม้จะตรงกับทริกเกอร์แล้ว Luna ยังมีโอกาส 3% ที่จะ "ลืม" ตอบ ไม่มีข้อความ ไม่มีการตอบสนอง -- เหมือนไม่เห็นอะไรเลย
 
-**Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
+**ความเหนื่อยล้าตามหัวข้อ**: ถ้าคำปรากฏบ่อยเกินไปใน 10 ข้อความล่าสุด (เกณฑ์: 3 ครั้ง) หน่วงจะถูกคูณและโอกาสเพิกเฉยจะเพิ่มขึ้น 15%
 
 ---
 
 ## ไปป์ไลน์ LLM: สองโหมด
 
-### Mode `direct` (défaut)
+### โหมด `direct` (ค่าเริ่มต้น)
 
-Le bot envoie directement les requêtes à un `llama-server` local en HTTP. Le modèle est partagé, avec prompt cache et 4 slots concurrents. Deux processus PM2 : le serveur LLM et le client bot.
+บ็อตส่งคำขอโดยตรงไปยัง `llama-server` ท้องถิ่นผ่าน HTTP โมเดลถูกแชร์ พร้อม prompt cache และ 4 สล็อตพร้อมกัน สองโปรเซส PM2: เซิร์ฟเวอร์ LLM และลูกค้าบ็อต
 
-### Mode `online`
+### โหมด `online`
 
-Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq, Together...). Pas de LLM local nécessaire.
+บ็อตเรียก API ใดก็ได้ที่เข้ากันได้กับ OpenAI (OpenAI, OpenRouter, Groq, Together...) ไม่จำเป็นต้องมี LLM ท้องถิ่น
 
-### Le streaming en temps réel
+### การสตรีมแบบเรียลไทม์
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+LLM สตรีมคำตอบทีละบรรทัด (`\n`) แต่ละบรรทัดจะถูกแบ่งเป็นคำ และ `llmBus.emit("token", word)` ทุก `\n` จะมีการตีพิมพ์เหตุการณ์ `flush` -- บ็อตจะส่งข้อความที่สะสมทันที ไม่มีการจำลองหน่วง: จังหวะเป็นของ LLM
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -255,13 +255,13 @@ function emitWordTokens(chunk: string): void {
 }
 ```
 
-La file d'attente (`requestQueue`) traite les requêtes une par une, avec nettoyage automatique quand la file dépasse 100 éléments.
+คิว (`requestQueue`) จัดการคำขอทีละรายการ และล้างโดยอัตโนมัติเมื่อเกิน 100 รายการ
 
 ---
 
 ## ข้อความที่เกิดขึ้นเอง
 
-Toutes les 5 minutes, 12% de chance que Luna poste un message de son propre chef. Le serveur est sélectionné par un système de **poids linéaire** : le serveur le plus actif a N× plus de chances que le dernier.
+ทุก 5 นาที บ็อตมีโอกาส 12% ที่จะโพสต์ข้อความด้วยตนเอง เซิร์ฟเวอร์จะถูกเลือกโดยระบบ**น้ำหนักเชิงเส้น**: เซิร์ฟเวอร์ที่ใช้งานมากที่สุดจะมีโอกาสมากกว่าเซิร์ฟเวอร์สุดท้าย N เท่า
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -272,19 +272,19 @@ for (let i = 0; i < ranked.length; i++) {
 }
 ```
 
-Le contexte des 5 derniers messages est lu, et Luna joint la conversation "naturellement".
+บริบทของ 5 ข้อความล่าสุดจะถูกอ่าน และ Luna จะเข้าร่วมการสนทนา "อย่างเป็นธรรมชาติ"
 
 ---
 
 ## ไปป์ไลน์ TTS: ข้อความเสียง
 
-Avec 8% de chance, Luna envoie un message vocal au lieu de texte. La pipeline complète :
+8% ของเวลา Luna จะส่งข้อความเสียงแทนข้อความ ไปป์ไลน์ที่สมบูรณ์:
 
-1. **Piper TTS** synthétise le texte en WAV
-2. **ffmpeg** convertit en OGG
-3. Le waveform est calculé pour l'aperçu Discord
-4. Le fichier est uploadé via l'API Discord CDN
-5. Le message vocal est envoyé
+1. **Piper TTS** สังเคราะห์ข้อความเป็น WAV
+2. **ffmpeg** แปลงเป็น OGG
+3. คำนวณ waveform สำหรับตัวอย่าง Discord
+4. อัปโหลดไฟล์ผ่าน API Discord CDN
+5. ส่งข้อความเสียง
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -301,41 +301,41 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS Pipeline -- จากข้อความที่สังเคราะห์ไปยังข้อความเสียง Discord](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
 ## ป้องกันสแปมและการเก็บรักษา
 
-### Anti-spam
+### ป้องกันสแปม
 
-File d'attente par `channelId:userId`. Un seul message en file par utilisateur par canal. Traité dès que la réponse en cours se termine.
+คิวตาม `channelId:userId` หนึ่งข้อความต่อคิวต่อผู้ใช้ต่อช่อง จะประมวลผลทันทีเมื่อการตอบปัจจุบันเสร็จสิ้น
 
-### Limites de session
+### จำกัดเซสชัน
 
-Après 8 échanges, Luna fait une pause de 30 secondes. Le compteur se réinitialise après 3 minutes d'inactivité.
+หลังการแลกเปลี่ยน 8 ครั้ง Luna จะหยุดพัก 30 วินาที ตัวนับจะรีเซ็ตหลังไม่ใช้งาน 3 นาที
 
-### Persistence automatique
+### การเก็บถาวรอัตโนมัติ
 
-Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounce 500ms). Plus besoin d'appels `saveAllState()` manuels. L'état persisté inclut : pendingMessages, paused, cooldowns, timestamps, lastSpeaker, compteurs de follow-up.
+การเปลี่ยนแปลงสถานะแต่ละครั้งจะถูกตีพิมพ์ไปยัง `stateBus` → บันทึกอัตโนมัติ (debounce 500ms) ไม่จำเป็นต้องเรียก `saveAllState()` ด้วยตนเองอีกต่อไป สถานะที่เก็บถาวร: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, ตัวนับการติดตาม
 
 ---
 
 ## การกำหนดค่าแบบรีโหลดร้อน
 
-Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** -- les changements sont pris en compte sans redémarrage.
+ไฟล์ `config.yml` หนึ่งไฟล์ ค่าส่วนใหญ่**สามารถรีโหลดได้** -- การเปลี่ยนแปลงจะมีผลทันทีโดยไม่ต้องรีสตาร์ท
 
-| Catégorie | Hot-reload |
+| หมวดหมู่ | รีโหลดร้อน |
 |-----------|-----------|
-| Triggers, keywords, noms | ✅ |
-| Concentration, délais | ✅ |
-| Typos, burst, fatigue | ✅ |
-| Sleep schedules | ✅ |
-| TTS, voice messages | ✅ |
-| Discord token, LLM mode | ❌ (redémarrage requis) |
+| ทริกเกอร์, คำหลัก, ชื่อ | ✅ |
+| สมาธิ, หน่วง | ✅ |
+| ข้อผิดพลาด, burst, ความเหนื่อยล้า | ✅ |
+| กำหนดการนอนหลับ | ✅ |
+| TTS, ข้อความเสียง | ✅ |
+| Discord token, โหมด LLM | ❌ (ต้องรีสตาร์ท) |
 
 ```typescript
-// config.ts -- les getters retournent des valeurs live
+// config.ts -- getter จะคืนค่าแบบเรียลไทม์
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -347,34 +347,34 @@ export const config = {
 
 ## ชุดข้อมูล: Discord-Dialogues
 
-Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. Des vraies conversations Discord printemps-été 2025, filtrées (PII, ToS, bots, commandes). Apache 2.0.
+โมเดลได้รับการ fine-tune จาก: [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M การแลกเปลี่ยน**, **17M รอบ**, **140M คำ** การสนทนา Discord จริงจากฤดูใบไม้ผลิ-ฤดูร้อน 2025 กรองแล้ว (PII, ToS, บ็อต, คำสั่ง) Apache 2.0
 
-| Métrique | Valeur |
+| เมตริก | ค่า |
 |----------|--------|
-| Échantillons | 7 303 464 |
-| Tours totaux | 16 881 010 |
-| Mots totaux | 139 922 950 |
-| Tokens moyens | 32.8 |
+| จำนวนตัวอย่าง | 7 303 464 |
+| จำนวนรอบทั้งหมด | 16 881 010 |
+| จำนวนคำทั้งหมด | 139 922 950 |
+| โทเค็นเฉลี่ย | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
-Le modèle quantifié utilisé est un GGUF (par exemple `Discord-Hermes-3-8B.Q3_K_M.gguf`).
+โมเดลที่ใช้คือ GGUF แบบ quantized (เช่น `Discord-Hermes-3-8B.Q3_K_M.gguf`)
 
-![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+![การกระจายข้อมูลชุด Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
+![Complete Lifecycle -- พฤติกรรมบ็อตที่สมบูรณ์จากข้อความไปจนถึงคำตอบ รวมถึงตั้งเวลาและกรณีขอบ](/images/luna-protocol/22-complete-lifecycle.svg)
 
-## Les diagrammes d'architecture
+## แผนภาพสถาปัตยกรรม
 
-Le dossier `state-machines/` contient **24 diagrammes Mermaid** couvrant l'ensemble du code source. Chaque diagramme a une explication détaillée en langage humain.
+โฟลเดอร์ `state-machines/` มี**แผนภาพ Mermaid 24 แผนภาพ**ครอบคลุมซอร์สโค้ดทั้งหมด แต่ละแผนภาพมีคำอธิบายโดยละเอียดในภาษาที่เข้าใจง่าย
 
-Parmi les plus importants :
+แผนภาพที่สำคัญที่สุด:
 
-| # | Diagramme | Type |
+| # | แผนภาพ | ประเภท |
 |---|-----------|------|
 | 01 | Architecture Overview | `graph` |
-| 02 | Message Processing (complet) | `stateDiagram` |
+| 02 | Message Processing (สมบูรณ์) | `stateDiagram` |
 | 03 | Trigger Evaluation | `flowchart` |
 | 04 | LLM Core Queue (3 backends) | `stateDiagram` |
 | 10 | TTS Pipeline | `flowchart` |
@@ -382,13 +382,13 @@ Parmi les plus importants :
 | 21 | Timing Gantt | `gantt` |
 | 22 | Complete Lifecycle | `stateDiagram` |
 
-Ces diagrammes sont une mine d'or pour comprendre le flux complet : du message entrant à la réponse, en passant par les timers et les cas limites.
+แผนภาพเหล่านี้เป็นเหมืองทองสำหรับการทำความเข้าใจกระแสที่สมบูรณ์: จากข้อความที่เข้ามาไปจนถึงคำตอบ ผ่านตั้งเวลาและกรณีขอบ
 
 ---
 
-## Le code de déclenchement en détail
+## โค้ดทริกเกอร์โดยละเอียด
 
-Le trigger est évalué par `evaluateMessage()` dans `state/trigger.ts`. Voici la logique complète :
+ทริกเกอร์จะถูกประเมินโดย `evaluateMessage()` ใน `state/trigger.ts` ลอจิกทั้งหมด:
 
 ```typescript
 export function evaluateMessage(
@@ -405,54 +405,54 @@ export function evaluateMessage(
   if (isPaused()) return { shouldRespond: false, reason: null, botName: "" };
   if (isOnCooldown(channelId)) return { shouldRespond: false, reason: null, botName };
 
-  // ... matching par nom, keyword, follow-up, random
+  // ... การจับคู่ตามชื่อ, คำหลัก, การติดตาม, สุ่ม
 }
 ```
 
-Le cache de regex (`hasWordCache`) évite de recompiler les patterns à chaque message.
+แคชรูปแบบ (`hasWordCache`) ป้องกันการคอมไพล์ใหม่ของรูปแบบในแต่ละข้อความ
 
 ---
 
-## Les réactions
+## การตอบสนอง
 
-Luna réagit aux messages avec des emojis. 30% de chance d'utiliser un emoji custom du serveur, 70% un emoji unicode. La réaction est déclenchée après le délai de concentration, pas immédiatement.
+Luna ตอบข้อความด้วยอิโมจิ โอกาสใช้อิโมจิที่กำหนดเองของเซิร์ฟเวอร์ 30% อิโมจิยูนิคอร์ด 70% การตอบสนองจะทริกเกอร์หลังจากหน่วงสมาธิ ไม่ใช่ทันที
 
-Les commandes par réaction sur les messages de Luna :
-- ❌ → Stop
-- ▶️ → Start
-- 🗑️ → Clear
+คำสั่งการตอบสนองต่อข้อความ Luna:
+- ❌ → หยุด
+- ▶️ → เริ่ม
+- 🗑️ → ล้าง
 
 ---
 
 ## สไตล์การตอบกลับ
 
-Le style de réponse est pondéré selon l'activité récente de Luna dans le canal :
+น้ำหนักของสไตล์การตอบกลับขึ้นอยู่กับกิจกรรมล่าสุดของ Luna ในช่อง:
 
-| Contexte | messageReference | mentionRepliedUser | Poids |
+| บริบท | messageReference | mentionRepliedUser | น้ำหนัก |
 |----------|-----------------|-------------------|-------|
-| Froid | true | false | 70% |
-| Froid | true | true | 20% |
-| Froid | false | false | 10% |
-| Actif | true | false | 50% |
-| Actif | true | true | 15% |
-| Actif | false | false | 30% |
-| Actif | false | true | 5% |
+| เย็น | true | false | 70% |
+| เย็น | true | true | 20% |
+| เย็น | false | false | 10% |
+| ใช้งาน | true | false | 50% |
+| ใช้งาน | true | true | 15% |
+| ใช้งาน | false | false | 30% |
+| ใช้งาน | false | true | 5% |
 
-En MP, `messageReference` est toujours `false`.
-
----
-
-## Les messages en rafale
-
-Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
-
-![Timing Gantt -- temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
+ใน DM `messageReference` จะเป็น `false` เสมอ
 
 ---
 
-## Le statut dynamique
+## ข้อความแบบ burst
 
-Le statut Discord de Luna alterne entre plusieurs presets configurés, tournant toutes les 15 minutes. Types supportés : Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Pendant le sommeil, le statut passe en `invisible`.
+15% ของเวลา คำตอบจะถูกแบ่งเป็น 2-3 ส่วนด้วยจังหวะของมนุษย์ (1.5-4 วินาทีระหว่างแต่ละส่วน) จำลองการพิมพ์หลายครั้ง
+
+![Timing Gantt -- เวลาแฝงจริงของการหน่วง การตอบสนอง การสตรี밍 LLM และการแก้ไข](/images/luna-protocol/21-timing-gantt.svg)
+
+---
+
+## สถานะแบบไดนามิก
+
+สถานะ Discord ของ Luna จะสลับระหว่างหลายพรีเซ็ตที่กำหนดค่าไว้ทุก 15 นาที ประเภทที่รองรับ: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5) สถานะจะเปลี่ยนเป็น `invisible` ระหว่างการนอนหลับ
 
 ```yaml
 dynamic_status_presets:
@@ -464,11 +464,11 @@ dynamic_status_presets:
     type: 2       # Listening
 ```
 
-Un jitter aléatoire (×0.5-1.0) évite les rotations prévisibles. 10% des tentatives sont sautées pour éviter la répétition.
+Jitter แบบสุ่ม (×0.5-1.0) ป้องกันการหมุนเวียนที่คาดเดาได้ 10% ของความพยายามจะข้ามเพื่อหลีกเลี่ยงการทำซ้ำ
 
-## L'indicateur de frappe
+## ตัวแสดงการพิมพ์
 
-Avant d'appeler le LLM, Luna appelle `startTyping()`. Un `setInterval` rafraîchit l'indicateur toutes les 8 secondes pendant la génération. Nettoyé dans le `finally` (`clearInterval`).
+ก่อนเรียก LLM Luna จะเรียก `startTyping()` `setInterval` จะรีเฟรชตัวแสดงทุก 8 วินาทีระหว่างการสร้าง จะถูกล้างใน `finally` (`clearInterval`)
 
 ```typescript
 const startTyping = () => {
@@ -482,13 +482,13 @@ const startTyping = () => {
 };
 ```
 
-## La récupération après crash
+## การกู้คืนหลังล่ม
 
-Si le LLM crash (processus `llama-server` qui meurt), Luna détecte l'événement via `llmBus.emit("crash", code)` et tente de redémarrer avec un backoff exponentiel. Évite les boucles de redémarrage infini.
+เมื่อ LLM ล่ม (โปรเซส `llama-server` หยุด) Luna จะตรวจจับเหตุการณ์ผ่าน `llmBus.emit("crash", code)` และพยายามรีสตาร์ทด้วย exponential backoff ป้องกันลูปรีสตาร์ทที่ไม่มีที่สิ้นสุด
 
 ## พารามิเตอร์ LLM
 
-Les paramètres sont hardcodés dans `src/config.ts` :
+พารามิเตอร์ถูก hardcode ใน `src/config.ts`:
 
 ```yaml
 temp: 0.75
@@ -504,7 +504,7 @@ ubatch: 256
 context: 4096
 ```
 
-Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
+เทมเพลต ChatML (`<|im_start|>/<|im_start|>`) ถูกใช้ จำนวนเธรดคือ `os.cpus().length`
 
 ---
 
@@ -513,36 +513,36 @@ Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de thread
 ```bash
 npm install
 cp config.example.yml config.yml
-# éditer config.yml
+# แก้ไข config.yml
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
-| Script | Description |
+| สคริปต์ | คำอธิบาย |
 |--------|-------------|
-| `build` | Bundle CLI autonome |
-| `start` | Lance le bot |
+| `build` | บันเดิล CLI อิสระ |
+| `start` | เริ่มบ็อต |
 | `lint` / `format` / `check` | Biome |
-| `test` | Tests (Bun) |
-| `download-model` | GGUF depuis HuggingFace |
-| `diagrams` | Exporte les diagrammes Mermaid en SVG/PNG |
+| `test` | ทดสอบ (Bun) |
+| `download-model` | GGUF จาก HuggingFace |
+| `diagrams` | ส่งออกแผนภาพ Mermaid เป็น SVG/PNG |
 
-### Déploiement PM2
+### การ部署 PM2
 
 ```bash
-./start.sh   # lance llm-server + llm-client sous PM2
+./start.sh   # เริ่ม llm-server + llm-client ด้วย PM2
 ```
 
 ---
 
 ## สรุป
 
-Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
+Luna Protocol ไม่ใช่แค่บ็อต Discord ที่มี LLM นี่คือ**ระบบพฤติกรรมที่สมบูรณ์**ที่จำลองความไม่สมบูรณ์แบบของมนุษย์ -- ความลืม ข้อผิดพลาดในการพิมพ์ การนอนหลับ ความลังเล ความเหนื่อยล้า -- ทุกสิ่งสร้างขึ้นรอบบัสอีเวนต์ที่มีการพิมพ์ แผนภาพ Mermaid 24 แผนภาพเอกสารกระแสแต่ละรายการ
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
+โค้ดเป็นโอเพ่นซอร์ส ชุดข้อมูลเป็นสาธารณะ และกำหนดค่าได้แบบรีโหลดร้อน ถ้าคุณสนใจหัวข้อนี้ ลองดูโค้ด -- เข้าถึงได้ง่ายกว่าที่คุณคิด
 
-| Ressource | Lien |
+| ทรัพยากร | ลิงก์ |
 |-----------|------|
-| Dépôt GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
-| Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
+| คลัง GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| ชุดข้อมูล | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |
