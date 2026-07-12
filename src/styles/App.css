@@ -177,6 +177,19 @@ a.tag-badge:hover {
   margin-bottom: 0.5rem;
 }
 
+.sponsored-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sponsored-badge-text);
+  background: var(--sponsored-badge-bg);
+  border: 1px solid var(--sponsored-badge-border);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+}
+
 .new-badge {
   display: inline-block;
   font-size: 0.75rem;

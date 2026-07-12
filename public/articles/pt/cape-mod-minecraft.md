@@ -12,6 +12,7 @@ tags:
   - seguranca
 authors:
   - fox3000foxy
+sponsored: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
 author_sig: "ftVXuO3Twsdu7DyO7RdysDtXOVsC9HGA78eaBpPxEoRZWfFO5iz7cJ0LphoSwP7ibJCYXtmQw+AcclSWPMprKQ=="
 ---

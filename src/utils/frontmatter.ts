@@ -30,6 +30,8 @@ export function parseFrontMatter(text: string): {
 						meta.lastmod = val;
 					} else if (key === "aiGenerated") {
 						meta.aiGenerated = val === "true";
+					} else if (key === "sponsored") {
+						meta.sponsored = val === "true";
 					} else if (key === "series") {
 						meta.series = val;
 					} else if (key === "tags" || key === "authors") {
