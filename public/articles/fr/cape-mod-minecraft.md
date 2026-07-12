@@ -147,6 +147,30 @@ Quand les amis du host rejoignent via LAN, ils reçoivent le `ClientboundPlayerI
 4. Passe le filtre `!isRemote || ps.secure()` → ✅ passe
 5. **Télécharge et affiche la cape de Jeb_**
 
+## Résultat en jeu : la cape sur ton skin
+
+Voici ce que ça donne in-game. D'abord, vue de face avec la cape de Jeb_ affichée sur le host :
+
+![Cape Mod -- Jeb_ cape affichée sur le host](/images/cape-mod/cape-01-jeb-cape.png)
+
+On voit clairement le motif rouge/blanc de la cape officielle Mojang Studios. Aucune différence avec un vrai Jeb_ qui aurait sa propre cape -- le client télécharge exactement la même texture depuis `textures.minecraft.net`.
+
+Et en vue immersive, dans une vraie partie :
+
+![Cape Mod -- vue en jeu avec cape visible](/images/cape-mod/cape-02-lava-cape.png)
+
+La cape flotte derrière le joueur, ondule avec le mouvement. Parfaitement indistinguible d'un skin authentique avec cape officielle.
+
+Autre angle, dans un monde avec lave et terrain :
+
+![Cape Mod -- cape dans un environnement naturel](/images/cape-mod/cape-03-local-game.png)
+
+Et une dernier vue rapprochée du gameplay réel, où on voit la cape en action :
+
+![Cape Mod -- cape en gameplay classique Minecraft](/images/cape-mod/cape-04-real-gameplay.png)
+
+Pour quelqu'un qui rejoindrait un LAN sans savoir que le host a un mod, il n'y a absolument aucun moyen de distinguer ça d'une vraie cape Mojang. C'est précisément le point : **la signature est valide**, le client n'a aucune raison de douter.
+
 ## Pourquoi c'est une faille (et pourquoi ce n'en est pas une)
 
 C'est ironique : l'exploit fonctionne **précisément parce que la signature est valide**. Il n'y a pas de bypass cryptographique ici -- c'est pire, c'est une **faille logique** dans le modèle de confiance.
