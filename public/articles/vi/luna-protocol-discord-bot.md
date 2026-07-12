@@ -1,36 +1,40 @@
 ---
 title: "Luna Protocol: Tôi đã tạo một bot Discord tự trị mô phỏng con người"
-description: "Luna Protocol là một bot Discord hoàn toàn tự trị với LLM cục bộ, có khả năng trò chuyện tự nhiên với giấc ngủ, lỗi đánh máy, do dự, quên lãng, mệt mỏi theo chủ đề và tin nhắn tự phát."
+description: "Luna Protocol là một bot Discord hoàn toàn tự trị được hỗ trợ bởi LLM cục bộ, có khả năng trò chuyện tự nhiên với giấc ngủ, lỗi đánh máy, do dự, quên lãng, mệt mỏi theo chủ đề và tin nhắn tự phát."
 date: 2026-07-11
 tags:
   - discord-bot
   - llm
   - typescript
-  - kiến-trúc-sự-kiện
-  - trí-tuệ-nhân-tạo
-  - nguồn-mở
+  - kien-truc-su-kien
+  - tri-tue-nhan-tao
+  - nguon-mo
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
 author_sig: "T8+YSdhoghLJijdqgTdkrm07EE3rdk91DR39uX1pt3+a7yfqPUwmYq1DdMromqPkuw8SD4O1xywPsS0IS3b4tg=="
 ---
 
-# Luna Protocol: Tôi đã tạo một bot Discord tự chủ mô phỏng con người
-Nếu một bot Discord có thể **ngủ**, **lỗi chính tả**, **ngần ngại**, **quên** trả lời, và đôi khi tự gửi tin nhắn cho bạn thì sao? Đó chính xác là những gì **Luna Protocol** làm: một bot Discord hoàn toàn tự chủ chạy LLM cục bộ (llama.cpp) và trò chuyện như một con người không hoàn hảo.
-Không có prompt cứng nhắc, không có câu trả lời máy móc. Luna có **hệ thống trigger ưu tiên**, **độ trễ thay đổi**, **lịch ngủ**, **tin nhắn tự phát**, thậm chí cả **pipeline TTS** để gửi tin nhắn thoại. Tất cả được cấu hình qua một file `config.yml` đơn giản có thể tải lại nóng.
-Trong bài viết này, chúng ta phân tích kiến trúc hoàn chỉnh: từ bus sự kiện tổng quát đến pipeline TTS, bao gồm hệ thống trigger, các thành phần con người và tập dữ liệu fine-tuning.
-![Tổng quan Kiến trúc -- các thành phần toàn cục và luồng dữ liệu](/images/luna-protocol/01-architecture-overview.svg)
+# Luna Protocol: Tôi đã tạo một bot Discord tự trị mô phỏng con người
+
+Nếu một bot Discord có thể **ngủ**, **đánh sai chính tả**, **do dự**, **quên** trả lời, và đôi khi tự gửi tin nhắn cho bạn thì sao? Đó chính xác là những gì **Luna Protocol** làm: một bot Discord hoàn toàn tự trị chạy LLM cục bộ (llama.cpp) và trò chuyện như một con người không hoàn hảo.
+
+Không có prompt cứng nhắc, không có câu trả lời máy móc. Luna có **hệ thống kích hoạt ưu tiên**, **độ trễ thay đổi**, **lịch ngủ**, **tin nhắn tự phát**, và thậm chí cả **pipeline TTS** để gửi tin nhắn thoại. Tất cả được cấu hình qua một file `config.yml` đơn giản có thể tải lại nóng.
+
+Trong bài viết này, chúng ta phân tích kiến trúc hoàn chỉnh: từ bus sự kiện tổng quát đến pipeline TTS, bao gồm hệ thống kích hoạt, các hành vi giống người, và tập dữ liệu fine-tuning.
+
+![Tổng quan kiến trúc -- các thành phần toàn cục và luồng dữ liệu](/images/luna-protocol/01-architecture-overview.svg)
 
 ---
 
-## Kiến trúc: bus sự kiện được đánh.유형d
+## Kiến trúc: Bus sự kiện được đánh kiểu
 
-Luna의 핵심은 **유형dBus** -- 강한 타입이 지정된 제네릭 이벤트 버스(유형Script)입니다. 모든 것의 기본이 되는 블록입니다.
+Tại trung tâm của Luna là **TypedBus** -- một bus sự kiện tổng quát được đánh kiểu mạnh mẽ trong TypeScript. Đây là khối cơ bản mà mọi thứ đều dựa vào.
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
 
-export class 유형dBus<Events extends EventMap> {
+export class TypedBus<Events extends EventMap> {
   private listeners = new Map<keyof Events, Set<(...args: unknown[]) => void>>();
 
   on<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): void {
@@ -46,15 +50,15 @@ export class 유형dBus<Events extends EventMap> {
 }
 ```
 
-여기서 두 개의 메인 버스가 파생됩니다:
+Hai bus chính xuất phát từ đây:
 
-- **`llmBus`** -- LLM 토큰, 오류, 충돌, 리셋 관리
-- **`stateBus`** -- 자동 영속성과 함께 상태 변경 관리
+- **`llmBus`** -- xử lý token LLM, lỗi, crash, reset
+- **`stateBus`** -- xử lý thay đổi trạng thái với khả năng lưu trữ tự động
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   core/bus.ts                        │
-│  유형dBus<K, V> -- on / off / once / emit            │
+│  TypedBus<K, V> -- on / off / once / emit            │
 ├──────────────────┬──────────────────────────────────┤
 │   core/llm-bus   │       state/state-bus             │
 │  token / done /  │     state:changed                 │
@@ -75,32 +79,32 @@ export class 유형dBus<Events extends EventMap> {
 └──────────────────┘  └────────────────────────────┘
 ```
 
-이 접근 방식의 장점: 각 모듈은 나머지와 **분리**됩니다. LLM은 버스에 토큰을 발행하고, 봇이 소비하며, 상태가 자동으로 업데이트됩니다. 순환 의존성이 없습니다.
+Ưu điểm của cách tiếp cận này: mỗi module được **tách rời** khỏi phần còn lại. LLM phát token lên bus, bot tiêu thụ, và trạng thái được cập nhật tự động. Không có phụ thuộc vòng tròn.
 
 ---
 
-![Message Processing -- 메시지 처리의 완전한 흐름](/images/luna-protocol/02-message-processing.svg)
+![Xử lý tin nhắn -- luồng xử lý hoàn chỉnh của một tin nhắn](/images/luna-protocol/02-message-processing.svg)
 
-## 트리거 시스템: Luna가 언제 응답하는지 누가 결정하는가
+## Hệ thống kích hoạt: Ai quyết định khi nào Luna phản hồi?
 
-각 수신 메시지는 `evaluateMessage()`에 의해 평가되며, 트리거 이유와 함께 `TriggerResult`를 반환합니다. 우선순위 순서가 중요합니다:
+Mỗi tin nhắn đến được đánh giá bởi `evaluateMessage()` trả về `TriggerResult` với lý do kích hoạt. Thứ tự ưu tiên là quan trọng:
 
-| # | 이유 | 조건 | Bypass ignore | Bypass pause |
+| # | Lý do | Điều kiện | Bỏ qua ignored | Bypass pause |
 |---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | 예 (0%) | 예 |
-| 2 | `dm` | MP avec `replyInDM = true` | 예 (0%) | 아니오 |
-| 3 | `name` | "Luna"/"Pixie"/alias (단어 전체) | 아니오 (8%) | 아니오 |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (단어 전체) | 아니오 (8%) | 아니오 |
-| 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | 아니오 (8%) | 아니오 |
+| 1 | `mention` | @bot | Có (0%) | Có |
+| 2 | `dm` | Tin nhắn riêng với `replyInDM = true` | Có (0%) | Không |
+| 3 | `name` | "Luna"/"Pixie"/alias (từ đầy đủ) | Không (8%) | Không |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (từ đầy đủ) | Không (8%) | Không |
+| 5 | `follow-up` | Bot là người nói cuối cùng + < 15s + < 3 / 60s | -- | -- |
+| 6 | `random` | 1.5% xác suất trên các tin nhắn không khớp | Không (8%) | Không |
 
-매칭은 **단어 전체** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+Khớp theo **từ đầy đủ** (`\b`): "ai" không khớp với "mais", "vrai", "lait".
 
-![Trigger evaluation -- 각 메시지의 진입 결정](/images/luna-protocol/03-trigger-evaluation.svg)
+![Đánh giá kích hoạt -- quyết định nhập cho mỗi tin nhắn](/images/luna-protocol/03-trigger-evaluation.svg)
 
-### 팔로업 메커니즘
+### Cơ chế phản hồi tiếp theo
 
-Luna가 메시지에 응답하면 `lastSpeaker`로 등록됩니다. 15초 이내의 후속 메시지는 **즉각적인** 응답을 트리거합니다 -- 타이머 없음, 키워드 확인 없음. 예산: 60초 윈도우당 3개의 팔로업.
+Khi Luna trả lời tin nhắn, cô ấy đăng ký mình là `lastSpeaker`. Bất kỳ tin nhắn tiếp theo nào trong vòng 15 giây sẽ kích hoạt phản hồi **ngay lập tức** -- không có bộ đếm thời gian, không kiểm tra từ khóa. Ngân sách: 3 phản hồi tiếp theo trong cửa sổ 60 giây.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -111,17 +115,17 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 }
 ```
 
-### 쿨다운
+### Thời gian chờ
 
-동일한 채널에서 두 응답 사이의 8초. 멘션과 팔로업으로 우회.
+8 giây giữa hai phản hồi trong cùng một kênh. Bị bỏ qua bởi các đề cập và phản hồi tiếp theo.
 
 ---
 
-## 인간적 행동: 가변 집중도
+## Hành vi con người: Sự tập trung thay đổi
 
-여기서 Luna는 흥미로워집니다. 각 트리거 유형에는 고유한 **집중 임계값**이 있습니다: 최소/최대 지연, 무시할 확률, 반응할 확률.
+Đây là nơi Luna trở nên thú vị. Mỗi loại kích hoạt có **ngưỡng tập trung riêng**: độ trễ tối thiểu/tối đa, xác suất bỏ qua, và xác suất phản hồi.
 
-| Trigger | 최소 지연 | 최대 지연 | 무시 | 반응 |
+| Kích hoạt | Delay tối thiểu | Delay tối đa | Bỏ qua | Phản hồi |
 |---------|----------|----------|--------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
@@ -130,10 +134,10 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 | `follow-up` | 500ms | 2000ms | 0% | 3% |
 | `random` | 1500ms | 5000ms | 15% | 2% |
 
-지연 계산은 다음도 고려합니다:
-- **La longueur du message** : plus le message est long, plus Luna met de temps à "lire"
-- **L'inactivité** : si Luna n'a pas été active depuis 10 minutes, le délai est multiplié par 2 (simulation du "réveil")
-- **Le sommeil** : en mode `slow`, le délai est multiplié par 3 à 5
+Tính toán delay cũng tính đến:
+- **Độ dài tin nhắn**: tin nhắn càng dài, Luna càng mất thời gian để "đọc"
+- **Sự không hoạt động**: nếu Luna không hoạt động trong 10 phút, delay được nhân lên 2 lần (mô phỏng "tỉnh dậy")
+- **Giấc ngủ**: trong chế độ `slow`, delay được nhân lên 3 đến 5 lần
 
 ```typescript
 export function computeDelay(
@@ -151,16 +155,16 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // 공격적인 지터
+  delay *= 0.5 + Math.random() * 1.5; // jitter mạnh
   return delay;
 }
 ```
 
 ---
 
-## Lịch trình ngủ
+## Lịch ngủ
 
-Luna는 잘 수 있습니다. `config.yml`로 구성 가능:
+Luna có thể ngủ. Cấu hình qua `config.yml`:
 
 ```yaml
 timezone: "Europe/Paris"
@@ -176,64 +180,64 @@ time_schedules:
     behavior: short
 ```
 
-| 모드 | 효과 |
+| Chế độ | Hiệu ứng |
 |------|-------|
-| `sleep` | 仅提及和私信通过 |
-| `slow` | 延迟 ×3-5，反应几乎为零 |
-| `short` | 忽略概率 +30%，反应几乎为零 |
+| `sleep` | Chỉ có đề cập và tin nhắn riêng mới được xử lý |
+| `slow` | Delay x3-5, phản hồi gần như bằng không |
+| `short` | Xác suất bỏ qua +30%, phản hồi gần như bằng không |
 
-수면 시간 동안 Discord 상태가 `invisible`로 변경됩니다.
+Trong giờ ngủ, trạng thái Discord chuyển sang `invisible`.
 
 ---
 
 ## Lỗi đánh máy
 
-Luna는 오타를 낼 수 있습니다 -- 2-4초 후에 수정합니다. 키보드 레이아웃은 구성 가능(AZERTY 또는 QWERTY).
+Luna có thể mắc lỗi đánh máy -- và sửa chúng sau 2-4 giây. Bố cục bàn phím có thể cấu hình (AZERTY hoặc QWERTY).
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
   a: ["z", "q", "w"],
   z: ["a", "e", "s", "x"],
   e: ["z", "r", "d", "s"],
-  // ... 인접한 모든 키
+  // ... tất cả các phím liền kề
 };
 ```
 
-AZERTY 예: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+Ví dụ AZERTY: `bonjour -> bonjpur`, `salut -> slaut`, `comment -> cpmment`.
 
-세 가지 수정 스타일:
+Ba kiểu sửa lỗi:
 
-| 스타일 | 동작 |
+| Kiểu | Hành vi |
 |-------|-------------|
-| `edit` | 메시지 편집 |
-| `message` | 새 메시지: `word*` |
-| `mixed` | 50/50 무작위(기본값) |
+| `edit` | Chỉnh sửa tin nhắn |
+| `message` | Tin nhắn mới: `word*` |
+| `mixed` | 50/50 ngẫu nhiên (mặc định) |
 
 ---
 
 ## Do dự và quên lãng
 
-**망설임** : 채우기 단어로 시작할 확률 15% (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**Do dự**: 15% xác suất bắt đầu bằng từ đệm (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**망각** : 트리거 매치 후에도 Luna는 3% 확률로 응답을 "잊을" 수 있습니다. 메시지 없음, 리액션 없음 -- 아무것도 보지 못한 것처럼.
+**Quên lãng**: ngay cả sau khi khớp một kích hoạt, Luna có thể "quên" phản hồi với xác suất 3%. Không tin nhắn, không phản hồi -- như thể cô ấy không thấy gì cả.
 
-**주제별 피로** : 최근 10개 메시지에서 단어가 너무 자주 나타나면(임계값: 3회), 지연이 곱해지고 무시할 확률이 15% 증가합니다.
+**Mệt mỏi theo chủ đề**: nếu một từ xuất hiện quá thường xuyên trong 10 tin nhắn gần nhất (ngưỡng: 3 lần), delay được nhân lên và xác suất bỏ qua tăng thêm 15%.
 
 ---
 
-## Pipeline LLM: hai chế độ
+## Pipeline LLM: Hai chế độ
 
-### 모드 `direct` (défaut)
+### Chế độ `direct` (mặc định)
 
 Bot gửi trực tiếp yêu cầu đến `llama-server` cục bộ qua HTTP. Mô hình được chia sẻ, với prompt cache và 4 slot đồng thời. Hai tiến trình PM2: server LLM và client bot.
 
-### 모드 `online`
+### Chế độ `online`
 
-Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq, Together...). Pas de LLM local nécessaire.
+Bot gọi bất kỳ API tương thích OpenAI nào (OpenAI, OpenRouter, Groq, Together...). Không cần LLM cục bộ.
 
-### 실시간 스트리밍
+### Streaming thời gian thực
 
-LLM은 응답을 한 줄씩 스트리밍합니다 (`\n`). 각 줄은 단어로 분할되고, `llmBus.emit("token", word)`. 각 `\n`마다 `flush` 이벤트가 발행됩니다 -- 봇은 축적된 메시지를 즉시 전송합니다. 지연 시뮬레이션 없음: 리듬은 LLM의 것입니다.
+LLM streaming phản hồi theo từng dòng (`\n`). Mỗi dòng được tách thành các từ, phát từng cái một lên `llmBus.emit("token", word)`. Với mỗi `\n`, sự kiện `flush` được phát -- bot ngay lập tức gửi tin nhắn đã tích lũy. Không có độ trễ mô phỏng: nhịp độ là của LLM.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -255,13 +259,13 @@ function emitWordTokens(chunk: string): void {
 }
 ```
 
-큐(`requestQueue`)는 요청을 하나씩 처리하며, 100개 요소를 초과하면 자동 정리됩니다.
+Hàng đợi (`requestQueue`) xử lý các yêu cầu từng cái một, với khả năng dọn dẹp tự động khi hàng đợi vượt quá 100 phần tử.
 
 ---
 
 ## Tin nhắn tự phát
 
-5분마다, Luna가 자체적으로 메시지를 게시할 확률은 12%입니다. 서버는 **선형 가중치** 시스템으로 선택됩니다: 가장 활발한 서버가 마지막 서버보다 N× 많은 확률을 가집니다.
+Mỗi 5 phút, có 12% xác suất Luna tự đăng tin nhắn. Máy chủ được chọn bằng hệ thống **trọng số tuyến tính**: máy chủ hoạt động nhiều nhất có N lần xác suất nhiều hơn máy chủ ít hoạt động nhất.
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -272,19 +276,19 @@ for (let i = 0; i < ranked.length; i++) {
 }
 ```
 
-지난 5개 메시지의 컨텍스트가 읽히고, Luna가 "자연스럽게" 대화에 참여합니다.
+Ngữ cảnh của 5 tin nhắn cuối cùng được đọc, và Luna tham gia cuộc trò chuyện một cách "tự nhiên".
 
 ---
 
-## Pipeline TTS: tin nhắn thoại
+## Pipeline TTS: Tin nhắn thoại
 
-8% 확률로 Luna는 텍스트 대신 음성 메시지를 보냅니다. 완전한 파이프라인:
+Với 8% xác suất, Luna gửi tin nhắn thoại thay vì văn bản. Pipeline hoàn chỉnh:
 
-1. **Piper TTS** 将文本合成为 WAV
-2. **ffmpeg** 转换为 OGG
-3. 计算波形用于 Discord 预览
-4. 通过 Discord CDN API 上传文件
-5. 发送语音消息
+1. **Piper TTS** tổng hợp văn bản thành WAV
+2. **ffmpeg** chuyển đổi sang OGG
+3. Biểu đồ sóng được tính toán cho Discord preview
+4. Tải tệp lên qua Discord CDN API
+5. Gửi tin nhắn thoại
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -301,41 +305,41 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- 합성된 텍스트에서 Discord 음성 메시지까지](/images/luna-protocol/10-tts-pipeline.svg)
+![Pipeline TTS -- từ văn bản được tổng hợp đến tin nhắn thoại Discord](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
-## Chống spam và tính bền vững
+## Chống spam và Lưu trữ
 
-### Anti-spam
+### Chống spam
 
-`channelId:userId`별 큐. 사용자당 채널당 큐에 하나의 메시지만. 현재 응답이 완료되면 즉시 처리됩니다.
+Hàng đợi theo `channelId:userId`. Chỉ một tin nhắn được xếp hàng mỗi người dùng mỗi kênh. Xử lý ngay khi phản hồi hiện tại hoàn thành.
 
-### Limites de session
+### Giới hạn phiên
 
-8번의 교환 후, Luna는 30초의 휴식을 취합니다. 카운터는 3분의 비활성화 후 재설정됩니다.
+Sau 8 cuộc trao đổi, Luna nghỉ 30 giây. Bộ đếm được đặt lại sau 3 phút không hoạt động.
 
-### Persistence automatique
+### Lưu trữ tự động
 
-각 상태 변경은 `stateBus`에 발행됩니다 → 자동 저장(debounce 500ms). 수동 `saveAllState()` 호출이 더 이상 필요하지 않습니다. 영속화되는 상태: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, 팔로업 카운터.
+Mỗi thay đổi trạng thái phát lên `stateBus` -> lưu tự động (debounce 500ms). Không còn cần gọi `saveAllState()` thủ công. Trạng thái được lưu trữ bao gồm: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, bộ đếm phản hồi tiếp theo.
 
 ---
 
-## Cấu hình hot-reload
+## Cấu hình tải lại nóng
 
-`config.yml` 파일 하나. 대부분의 값은 **핫 리로드 가능** -- 재시작 없이 변경 사항이 적용됩니다.
+Một file `config.yml`. Hầu hết các giá trị đều **có thể tải lại nóng** -- thay đổi có hiệu lực mà không cần khởi động lại.
 
-| 카테고리 | Hot-reload |
+| Danh mục | Hot-reload |
 |-----------|-----------|
-| Triggers, keywords, noms | ✅ |
-| Concentration, délais | ✅ |
-| Typos, burst, fatigue | ✅ |
-| Sleep schedules | ✅ |
-| TTS, voice messages | ✅ |
-| Discord token, LLM mode | ❌ (redémarrage requis) |
+| Kích hoạt, từ khóa, tên | ✅ |
+| Tập trung, delay | ✅ |
+| Lỗi đánh máy, burst, mệt mỏi | ✅ |
+| Lịch ngủ | ✅ |
+| TTS, tin nhắn thoại | ✅ |
+| Discord token, chế độ LLM | ❌ (cần khởi động lại) |
 
 ```typescript
-// config.ts -- 게터가 실시간 값을 반환합니다
+// config.ts -- getter trả về giá trị thời gian thực
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -347,48 +351,48 @@ export const config = {
 
 ## Tập dữ liệu: Discord-Dialogues
 
-모델은 다음에서 파인튜닝되었습니다: [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. 2025년 봄-여름의 실제 Discord 대화, 필터링됨(PII, ToS, 봇, 명령). Apache 2.0.
+Mô hình được fine-tune trên [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues): **7.3M cuộc trao đổi**, **17M lượt**, **140M từ**. Các cuộc trò chuyện Discord thực tế mùa xuân-hè 2025, đã lọc (PII, ToS, bot, lệnh). Apache 2.0.
 
-| 메트릭 | 값 |
+| Chỉ số | Giá trị |
 |----------|--------|
-| 샘플 수 | 7 303 464 |
-| 총 턴 수 | 16 881 010 |
-| 총 단어 수 | 139 922 950 |
-| 평균 토큰 | 32.8 |
+| Số mẫu | 7 303 464 |
+| Tổng số lượt | 16 881 010 |
+| Tổng số từ | 139 922 950 |
+| Token trung bình | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
-사용된 양자화 모델은 GGUF입니다(예: `Discord-Hermes-3-8B.Q3_K_M.gguf`).
+Mô hình được lượng tử hóa sử dụng là GGUF (ví dụ `Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
-![Discord-Dialogues 데이터셋 분포](/images/luna-protocol/dataset-distribution.svg)
+![Phân bố tập dữ liệu Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- 메시지부터 응답까지의 완전한 봇 동작, 타이머와 엣지 케이스 포함](/images/luna-protocol/22-complete-lifecycle.svg)
+![Vòng đời hoàn chỉnh -- hành vi hoàn chỉnh của bot từ tin nhắn đến phản hồi, bao gồm bộ đếm thời gian và trường hợp biên](/images/luna-protocol/22-complete-lifecycle.svg)
 
-## 아키텍처 다이어그램
+## Sơ đồ kiến trúc
 
 Thư mục `state-machines/` chứa **24 sơ đồ Mermaid** bao phủ toàn bộ mã nguồn. Mỗi sơ đồ có giải thích chi tiết bằng ngôn ngữ tự nhiên.
 
-Parmi les plus importants :
+Trong số quan trọng nhất:
 
-| # | 다이어그램 | 유형 |
+| # | Sơ đồ | Loại |
 |---|-----------|------|
 | 01 | Architecture Overview | `graph` |
-| 02 | Message Processing (complet) | `stateDiagram` |
+| 02 | Message Processing (hoàn chỉnh) | `stateDiagram` |
 | 03 | Trigger Evaluation | `flowchart` |
-| 04 | LLM Core Queue (3 backends) | `stateDiagram` |
+| 04 | LLM Core Queue (3 backend) | `stateDiagram` |
 | 10 | TTS Pipeline | `flowchart` |
 | 13 | State Persistence | `flowchart` |
 | 21 | Timing Gantt | `gantt` |
 | 22 | Complete Lifecycle | `stateDiagram` |
 
-Ces diagrammes sont une mine d'or pour comprendre le flux complet : du message entrant à la réponse, en passant par les timers et les cas limites.
+Các sơ đồ này là mỏ vàng để hiểu luồng hoàn chỉnh: từ tin nhắn đến phản hồi, bao gồm bộ đếm thời gian và trường hợp biên.
 
 ---
 
-## 트리거 상세 코드
+## Mã kích hoạt chi tiết
 
-트리거는 `state/trigger.ts`의 `evaluateMessage()`에 의해 평가됩니다. 전체 로직:
+Kích hoạt được đánh giá bởi `evaluateMessage()` trong `state/trigger.ts`. Đây là logic hoàn chỉnh:
 
 ```typescript
 export function evaluateMessage(
@@ -405,70 +409,70 @@ export function evaluateMessage(
   if (isPaused()) return { shouldRespond: false, reason: null, botName: "" };
   if (isOnCooldown(channelId)) return { shouldRespond: false, reason: null, botName };
 
-  // ... matching par nom, keyword, follow-up, random
+  // ... khớp theo tên, từ khóa, phản hồi tiếp theo, ngẫu nhiên
 }
 ```
 
-정규식 캐시(`hasWordCache`)는 각 메시지에서 패턴 재컴파일을 방지합니다.
+Bộ nhớ đệm regex (`hasWordCache`) tránh biên dịch lại các mẫu tại mỗi tin nhắn.
 
 ---
 
-## Phản ứng
+## Phản hồi
 
-Luna는 이모지로 메시지에 반응합니다. 서버 사용자 정의 이모지를 사용할 확률 30%, 유니코드 이모지 70%. 리액션은 집중 지연 후에 트리거되며 즉시는 아닙니다.
+Luna phản hồi tin nhắn bằng emoji. 30% xác suất sử dụng emoji tùy chỉnh của máy chủ, 70% emoji unicode. Phản hồi được kích hoạt sau độ trễ tập trung, không phải ngay lập tức.
 
-Luna 메시지에 대한 리액션 명령:
-- ❌ → Stop
-- ▶️ → Start
-- 🗑️ → Clear
+Các lệnh phản hồi trên tin nhắn của Luna:
+- ❌ -> Dừng
+- ▶️ -> Bắt đầu
+- 🗑️ -> Xóa
 
 ---
 
-## Phong cách trả lời
+## Kiểu phản hồi
 
-응답 스타일은 Luna의 최근 채널 활동에 따라 가중치가 부여됩니다:
+Kiểu phản hồi được tính trọng số theo hoạt động gần đây của Luna trong kênh:
 
-| 컨텍스트 | messageReference | mentionRepliedUser | 가중치 |
+| Ngữ cảnh | messageReference | mentionRepliedUser | Trọng số |
 |----------|-----------------|-------------------|-------|
-| 냉 | true | false | 70% |
-| 냉 | true | true | 20% |
-| 냉 | false | false | 10% |
-| 활성 | true | false | 50% |
-| 활성 | true | true | 15% |
-| 활성 | false | false | 30% |
-| 활성 | false | true | 5% |
+| Lạnh | true | false | 70% |
+| Lạnh | true | true | 20% |
+| Lạnh | false | false | 10% |
+| Hoạt động | true | false | 50% |
+| Hoạt động | true | true | 15% |
+| Hoạt động | false | false | 30% |
+| Hoạt động | false | true | 5% |
 
-DM에서는 `messageReference`가 항상 `false`입니다.
-
----
-
-## 버스트 메시지
-
-15% 확률로 응답은 인간의 리듬(각 조각 사이 1.5-4초)으로 2-3개의 조각으로 분할되어 전송됩니다. 여러 번에 걸쳐 타이핑하는 사람을 시뮬레이션합니다.
-
-![Timing Gantt -- 지연, 반응, LLM 스트리밍, 수정의 실제 대기 시간](/images/luna-protocol/21-timing-gantt.svg)
+Trong tin nhắn riêng, `messageReference` luôn là `false`.
 
 ---
 
-## 동적 상태
+## Tin nhắn burst
 
-Luna의 Discord 상태는 구성된 여러 프리셋을 15분마다 전환합니다. 지원되는 유형: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). 수면 중 상태가 `invisible`로 변경됩니다.
+Với 15% xác suất, một phản hồi được chia thành 2-3 mảnh gửi theo nhịp người (1.5-4 giây giữa mỗi mảnh). Mô phỏng người nào đó gõ nhiều lần.
+
+![Timing Gantt -- thời gian chờ thực tế cho delay, phản hồi, streaming LLM và sửa lỗi](/images/luna-protocol/21-timing-gantt.svg)
+
+---
+
+## Trạng thái động
+
+Trạng thái Discord của Luna luân phiên giữa các preset được cấu hình, quay mỗi 15 phút. Các loại được hỗ trợ: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Trong giấc ngủ, trạng thái chuyển sang `invisible`.
 
 ```yaml
 dynamic_status_presets:
   - status: online
-    text: "avec les pixels"
+    text: "với các pixel"
     type: 0       # Playing
   - status: idle
-    text: "du bruit blanc"
+    text: "tiếng ồn trắng"
     type: 2       # Listening
 ```
 
-무작위 지터(×0.5-1.0)는 예측 가능한 회전을 방지합니다. 반복을 피하기 위해 10%의 시도가 건너뜁니다.
+Jitter ngẫu nhiên (x0.5-1.0) tránh các lượt quay có thể dự đoán. 10% các lần thử bị bỏ qua để tránh lặp lại.
 
-## 타이핑 표시기
+## Chỉ báo đang gõ
 
-LLM을 호출하기 전에 Luna는 `startTyping()`을 호출합니다. `setInterval`이 생성 중 8초마다 인디케이터를 새로고침합니다. `finally`에서 정리됩니다(`clearInterval`).
+Trước khi gọi LLM, Luna gọi `startTyping()`. `setInterval` làm mới chỉ báo mỗi 8 giây trong quá trình tạo. Được dọn dẹp trong `finally` (`clearInterval`).
 
 ```typescript
 const startTyping = () => {
@@ -482,13 +486,13 @@ const startTyping = () => {
 };
 ```
 
-## 크래시 후 복구
+## Khôi phục sau crash
 
-LLM이 크래시되면(`llama-server` 프로세스가 중지), Luna는 `llmBus.emit("crash", code)`를 통해 이벤트를 감지하고 지수 백오프로 재시작을 시도합니다. 무한 재시작 루프를 방지합니다.
+Nếu LLM crash (tiến trình `llama-server` bị dừng), Luna phát hiện sự kiện qua `llmBus.emit("crash", code)` và thử khởi động lại với backoff mũ. Tránh các vòng lặp khởi động lại vô hạn.
 
 ## Tham số LLM
 
-매개변수가 `src/config.ts`에 하드코딩되어 있습니다:
+Các tham số được hardcode trong `src/config.ts`:
 
 ```yaml
 temp: 0.75
@@ -504,45 +508,45 @@ ubatch: 256
 context: 4096
 ```
 
-ChatML 템플릿 (`<|im_start|>/<|im_end|>`) est utilisé. 스레드 수는 `os.cpus().length`.
+Mẫu ChatML được sử dụng. Số lượng thread được tự động phát hiện qua `os.cpus().length`.
 
 ---
 
-## Thiết lập
+## Bắt đầu
 
 ```bash
 npm install
 cp config.example.yml config.yml
-# config.yml 편집
+# chỉnh sửa config.yml
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
-| Script | Description |
+| Script | Mô tả |
 |--------|-------------|
-| `build` | 독립형 CLI 번들 |
-| `start` | 봇 시작 |
+| `build` | Bundle CLI tự động |
+| `start` | Khởi chạy bot |
 | `lint` / `format` / `check` | Biome |
 | `test` | Tests (Bun) |
-| `download-model` | GGUF from HuggingFace |
-| `diagrams` | Mermaid 다이어그램을 SVG/PNG로 내보내기 |
+| `download-model` | GGUF từ HuggingFace |
+| `diagrams` | Xuất sơ đồ Mermaid ra SVG/PNG |
 
-### Déploiement PM2
+### Triển khai PM2
 
 ```bash
-./start.sh   # PM2에서 llm-server + llm-client 시작
+./start.sh   # khởi chạy llm-server + llm-client dưới PM2
 ```
 
 ---
 
 ## Kết luận
 
-Luna Protocol 는 단순한 LLM이 탑재된 Discord 봇이 아닙니다. 이것은 인간의 불완전성 -- 망각, 오타, 수면, 망설임, 피로 -- 을 시뮬레이션하는 **완전한 행동 시스템**입니다. 모든 것이 타입화된 이벤트 버스를 중심으로 구축되었으며, 24개의 Mermaid 다이어그램이 각 흐름을 문서화합니다.
+Luna Protocol không chỉ là một bot Discord với LLM. Đó là một **hệ thống hành vi hoàn chỉnh** mô phỏng các khiếm khuyết con người: sự quên lãng, lỗi đánh máy, giấc ngủ, do dự, mệt mỏi. Tất cả được kiến trúc xoay quanh một bus sự kiện được đánh kiểu, với 24 sơ đồ Mermaid tài liệu hóa từng luồng.
 
-코드는 오픈소스이고, 데이터셋은 공개적이며, 구성은 핫 리로드 가능합니다. 이 주제에 관심이 있다면 코드를 살펴보세요 -- 생각보다 접근하기 쉽습니다.
+Mã nguồn là open source, tập dữ liệu là công khai, và cấu hình có thể tải lại nóng. Nếu chủ đề này quan tâm bạn, hãy xem mã nguồn -- nó dễ tiếp cận hơn bạn tưởng.
 
-| 리소스 | 링크 |
+| Tài nguyên | Liên kết |
 |-----------|------|
-| GitHub 저장소 | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| GitHub Repository | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |
