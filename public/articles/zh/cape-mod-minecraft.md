@@ -11,17 +11,17 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6JuRxHJ/JsgdR6l73NwcuIGL2KGwBQhHZMeM+rhbklr0NU32tRH63xYRB99jawfrSdBFQsQ3zX6xHPBTuPgCWg=="
+author_sig: "LZXv3z5B8r0KZA+RnVJr5A2DJXOpY4RGabfhZ8QjV+KgS3vhSKMKunLylDp95iDpHGsPst0/PLzxxYjlrqa+yg=="
 ---
 
 # Cape Mod：如何通过 RSA 签名注入窃取 Jeb_ 的披风
 
 ![alt text](assets/xbox-profile.png)
-如果我告诉你，只需要一个有效的 RSA 签名——但属于**错误的账户**——就能让你的朋友相信你穿着 Mojang 的官方披风？欢迎来到 `cape-mod`，一个 Fabric 漏洞利用模组，展示 Minecraft 如何信任签名而不验证该签名所属的配置文件是否确实是你的。
+如果我告诉你，只需要一个有效的 RSA 签名----但属于**错误的账户**----就能让你的朋友相信你穿着 Mojang 的官方披风？欢迎来到 `cape-mod`，一个 Fabric 漏洞利用模组，展示 Minecraft 如何信任签名而不验证该签名所属的配置文件是否确实是你的。
 
 ## 背景：Minecraft 如何处理皮肤和披风
 
-在 Java Edition 中，有一个我们通常不会问的问题：**谁负责显示玩家的皮肤和披风——客户端还是服务器？**
+在 Java Edition 中，有一个我们通常不会问的问题：**谁负责显示玩家的皮肤和披风----客户端还是服务器？**
 
 答案是微妙的：
 
@@ -68,7 +68,7 @@ public boolean isSignatureValid(PublicKey publicKey) {
 }
 ```
 
-对于远程玩家（非本地），客户端只接受**标记为 `secure`** 的皮肤——即有有效签名的皮肤：
+对于远程玩家（非本地），客户端只接受**标记为 `secure`** 的皮肤----即有有效签名的皮肤：
 
 ```java
 // SkinManager.createLookup() -- 简化
@@ -83,7 +83,7 @@ PlayerSkin skin = optional
 
 客户端验证 RSA 签名**是否有效**。但客户端**从不**检查 JSON 中的 `profileId` 是否与玩家的实际 UUID 匹配。
 
-换句话说：从一个**现有的 Mojang 账户**（例如 Mojang 员工的账户）获取的 `textures` 属性可以重放到任意其他玩家身上。签名仍然有效——它确实是 Mojang 签署的——只是它来自另一个账户。
+换句话说：从一个**现有的 Mojang 账户**（例如 Mojang 员工的账户）获取的 `textures` 属性可以重放到任意其他玩家身上。签名仍然有效----它确实是 Mojang 签署的----只是它来自另一个账户。
 
 ### 如何提取真实签名？
 
@@ -109,11 +109,11 @@ curl -s "https://sessionserver.mojang.com/session/minecraft/profile/853c80ef-3c3
 }
 ```
 
-这个 `value` 字段的 `signature` 是由 Mojang 生成的。它是 RSA-2048 SHA-1 签名。即使你将其重放到另一个 UUID 上，它也**绝对**有效——因为 Jeb_ 的签名始终是 Jeb_ 的签名，而客户端从不验证它**本应是**你的签名。
+这个 `value` 字段的 `signature` 是由 Mojang 生成的。它是 RSA-2048 SHA-1 签名。即使你将其重放到另一个 UUID 上，它也**绝对**有效----因为 Jeb_ 的签名始终是 Jeb_ 的签名，而客户端从不验证它**本应是**你的签名。
 
 ## 代码：模组如何工作
 
-`cape-mod` 模组很小——只有 65 行 Java 代码。核心如下：
+`cape-mod` 模组很小----只有 65 行 Java 代码。核心如下：
 
 ```java
 @Mixin(Player.class)
@@ -151,13 +151,13 @@ public class ServerPlayerMixin {
 ```
 
 **步骤**：
-1. **Mixin** `Player.getGameProfile()`——返回玩家配置文件的方法
+1. **Mixin** `Player.getGameProfile()`----返回玩家配置文件的方法
 2. 检查是否为本地服务器（Integrated Server）
 3. 检查是否为主机（LAN 世界）
 4. **替换** `textures` 属性为 Jeb_ 的（硬编码）
 5. 返回一个新的 `GameProfile`，其中包含注入的纹理
 
-`GameProfile` 因此是**伪造的**：这是一个人工构建的配置文件，与实际玩家不符。`textures` 属性是从 Jeb_ **重放**的——RSA 签名是真实的，但应用到了错误的配置文件上。网络数据包本身是合法的：服务器正常发送 `ClientboundPlayerInfoUpdatePacket`，其中包含这个被修改过的配置文件。被伪造的是配置文件，而不是数据包。
+`GameProfile` 因此是**伪造的**：这是一个人工构建的配置文件，与实际玩家不符。`textures` 属性是从 Jeb_ **重放**的----RSA 签名是真实的，但应用到了错误的配置文件上。网络数据包本身是合法的：服务器正常发送 `ClientboundPlayerInfoUpdatePacket`，其中包含这个被修改过的配置文件。被伪造的是配置文件，而不是数据包。
 
 当主机的朋友通过 LAN 加入时，他们会收到包含修改后配置文件的 `ClientboundPlayerInfoUpdatePacket`。客户端：
 1. 解码 base64 payload
@@ -172,7 +172,7 @@ public class ServerPlayerMixin {
 
 ![Cape Mod -- Jeb_ 的披风显示在主机上](/images/cape-mod/cape-01-jeb-cape.png)
 
-可以清晰地看到官方 Mojang Studios 披风的红白图案。与真正的 Jeb_ 拥有自己的披风没有任何区别——客户端从 `textures.minecraft.net` 下载完全相同的纹理。
+可以清晰地看到官方 Mojang Studios 披风的红白图案。与真正的 Jeb_ 拥有自己的披风没有任何区别----客户端从 `textures.minecraft.net` 下载完全相同的纹理。
 
 沉浸式视角，在真实游戏中：
 
@@ -192,7 +192,7 @@ public class ServerPlayerMixin {
 
 ## 为什么这是一个漏洞（以及为什么又不是）
 
-具有讽刺意味的是：这个漏洞之所以有效，**恰恰是因为签名是有效的**。这里没有加密绕过——更糟糕的是，这是一个信任模型中的**逻辑漏洞**。
+具有讽刺意味的是：这个漏洞之所以有效，**恰恰是因为签名是有效的**。这里没有加密绕过----更糟糕的是，这是一个信任模型中的**逻辑漏洞**。
 
 | 检查项 | 结果 |
 |---|---|
@@ -200,7 +200,7 @@ public class ServerPlayerMixin {
 | **payload 中的 `profileId` 是否匹配主机 UUID？** | ❌ 不匹配（Jeb_ 的 UUID ≠ 主机的 UUID） |
 | **客户端是否检查匹配？** | ❌ **不检查。只验证 RSA 签名。** |
 
-Minecraft 信任**签名**，而不是携带签名者的身份。只要签名来自 Mojang，客户端就接受。这就像出示一份由政府签署的假护照——印章是合法的，即使护照不属于你。
+Minecraft 信任**签名**，而不是携带签名者的身份。只要签名来自 Mojang，客户端就接受。这就像出示一份由政府签署的假护照----印章是合法的，即使护照不属于你。
 
 ## 安全影响
 
@@ -220,7 +220,7 @@ Minecraft 信任**签名**，而不是携带签名者的身份。只要签名来
 
 ### 为什么 Mojang 可能不会修复
 
-严格来说，这不算"漏洞"——签名是有效的。要修复这个问题，Mojang 需要修改完整的认证模型，这非常复杂。目前，这只是一个边缘情况：LAN 玩家本应彼此信任。
+严格来说，这不算"漏洞"----签名是有效的。要修复这个问题，Mojang 需要修改完整的认证模型，这非常复杂。目前，这只是一个边缘情况：LAN 玩家本应彼此信任。
 
 ## 哲学陷阱
 
@@ -228,15 +228,15 @@ Cape Mod 是一个绝佳的**概念验证**，揭示了一个更广泛的真理�
 
 这是基础密码学的一课。RSA 签署的是**消息**，而不是**身份**。如果我给你一个 Mojang 的有效 RSA 签名，你知道 Mojang 签署了*某个东西*。但你不知道是为谁签署的，也不能仅仅通过查看消息来假设。
 
-这与 2000 年代 SSL/TLS 证书的情况完全一样——当时 CA 接受任何请求——签名有效，但它应用到了错误的域名上。
+这与 2000 年代 SSL/TLS 证书的情况完全一样----当时 CA 接受任何请求----签名有效，但它应用到了错误的域名上。
 
 ## 结论
 
-Cape Mod 不是传统意义上的黑客攻击——它是对 Minecraft 中缺乏逻辑验证的优雅利用。它表明：
+Cape Mod 不是传统意义上的黑客攻击----它是对 Minecraft 中缺乏逻辑验证的优雅利用。它表明：
 
 1. **有效的签名并不保证携带者的身份**
 2. **在 LAN 环境中，信任比想象中更脆弱**
-3. **Minecraft 的 `textures` 属性本质上是注入的内容**——需要验证它们是否与携带它们的玩家匹配
+3. **Minecraft 的 `textures` 属性本质上是注入的内容**----需要验证它们是否与携带它们的玩家匹配
 
 如果你加入一个"陌生"LAN 世界（或者说，主机安装了可疑模组的世界），你在披风问题之前就已经有了安全问题。但这具有警示意义：Minecraft 假设 LAN 上的所有人都互相信任。这通常是成立的……直到不再成立。
 
@@ -250,6 +250,6 @@ Cape Mod 不是传统意义上的黑客攻击——它是对 Minecraft 中缺乏
 
 **3 个关键点**
 
-1. RSA 签名验证的是消息，而不是身份——这个细节曾让许多系统付出代价。
-2. Minecraft 不验证玩家配置文件是否与收到的签名匹配——这是一个逻辑漏洞，而非加密漏洞。
+1. RSA 签名验证的是消息，而不是身份----这个细节曾让许多系统付出代价。
+2. Minecraft 不验证玩家配置文件是否与收到的签名匹配----这是一个逻辑漏洞，而非加密漏洞。
 3. 在 LAN 或隧道中，对于控制集成服务器的模组来说，一切皆可为之。
