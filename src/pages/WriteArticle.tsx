@@ -77,7 +77,7 @@ export default function WriteArticle() {
 	const editor = useEditor({
 		extensions: [
 			StarterKit.configure({
-				heading: { levels: [2, 3] },
+				heading: { levels: [1, 2, 3] },
 			}),
 			LinkExtension.configure({
 				openOnClick: false,
@@ -120,7 +120,7 @@ export default function WriteArticle() {
 				if (text && /[#*`\->\d+.]/.test(text[0])) {
 					event.preventDefault();
 					marked.parse(text).then((html) => {
-						editor?.commands.setContent(html);
+						editor?.commands.insertContent(html);
 					});
 					return true;
 				}
