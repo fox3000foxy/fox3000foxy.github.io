@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1UcU0pBEZg+0KXNCTpdbyeBoxDb+UM5i/s+RicxIwXmyWnzuha2pHmgA+jOECs1lEDWV0ufyaMTp3eG8saqIKA=="
+author_sig: "s+BUdYN03ZeeMUppPXDk+E1zhnO84RhXC06dGmhQva9qhzeSU2T4qwwp7YyaR+em7M1G1PTR3ly46Ln3v56chg=="
 ---
 
 # Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım

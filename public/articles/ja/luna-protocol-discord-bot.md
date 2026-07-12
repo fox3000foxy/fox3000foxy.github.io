@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "K1yQ/taAb7gzGaZixy7lIFk895VHhxxVsRqUgZLDcUZ8FXXhpwEsk8ZQeRq40hbw9Vf6EhpfO9wBKqsFNi8QjQ=="
+author_sig: "7xfAtGMJMcWEZUB7otUh06s72Ixe/Qd0wKxI9H/Ck8Jfuc+gfvre5A8lu5nVGQMXaq0iwrqsCPmdLMGHY06RJQ=="
 ---
 
 # Luna Protocol: 自律型Discordボットが人間らしい会話を実現

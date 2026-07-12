@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cdFik530GvJALZDej7bTfJ72DmFnsAPimgQfltwEAtInuu2JgY35j6TBRPjAR6LoCP/3RQwy6r46edJg8hhdpA=="
+author_sig: "GzW8oPf0+9k++D52y1GlHq1rRX6f2OrhfVOMyL6opUDSBCo8GdUiflrO4v68Uh7ku278EkCoaPbO3UF9EFRWRQ=="
 ---
 
 # Luna Protocol: tôi đã tạo một bot Discord tự động mô phỏng con người

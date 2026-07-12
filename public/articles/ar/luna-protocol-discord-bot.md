@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "r7YDygxu+F4y7VRsbZ+HrBZoDa3dHUn95c8TyDZnwLrTUp8d1eTl6GI3Si7i04bq2pcjDt4I3vtsQy3Ofbt9/Q=="
+author_sig: "rnc5Sy+umxNYVpi+5K8ygGvr6dtFPSFYEz0gHmOxr0WF3Pef20hFgszhRBdWVGyUIeSf3vXKUJASc0qdLdlMwQ=="
 ---
 
 # Luna Protocol: أنشأت بوت Discord مستقل يحاكي إنسانًا

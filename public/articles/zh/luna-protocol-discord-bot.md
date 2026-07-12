@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Q+ZA+IP37Plw/DXCNWDsWYfVPwN2pzCN14z0lSbKTWtjQIc7wr2u3XNtBCvg1XY9t7fu5SJa55aYE/iB787tYw=="
+author_sig: "DrP1/o6xcK7abLqR3q4DtXe4y42q3bntx9AjMrjOf0078Y+V0yKkVkxid2nBCxjnfKpj3RpI06J5+UA2rp8Kcg=="
 ---
 
 # Luna Protocol：我创建了一个模拟人类的自主 Discord 机器人
