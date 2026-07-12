@@ -227,6 +227,10 @@ a.tag-badge:hover {
   margin-bottom: 0;
 }
 
+.blog-card-badges .sponsored-badge {
+  margin-bottom: 0;
+}
+
 .mermaid-wrapper {
   display: flex;
   justify-content: center;

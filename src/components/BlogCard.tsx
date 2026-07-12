@@ -20,6 +20,7 @@ export default function BlogCard({ article }: BlogCardProps) {
 		date,
 		readingTime,
 		aiGenerated,
+		sponsored,
 		tags,
 		authors,
 	} = article;
@@ -32,12 +33,13 @@ export default function BlogCard({ article }: BlogCardProps) {
 		>
 			<div className="blog-card-body">
 				<h3 className="blog-card-title">{title ?? slug?.replace(/-/g, " ")}</h3>
-				{((isNew(date) && !isRead(slug)) || aiGenerated) && (
+				{((isNew(date) && !isRead(slug)) || aiGenerated || sponsored) && (
 					<div className="blog-card-badges">
 						{isNew(date) && !isRead(slug) && (
 							<span className="new-badge">NEW</span>
 						)}
 						{aiGenerated && <span className="ai-badge">{t("article.ai")}</span>}
+						{sponsored && <span className="sponsored-badge">💕 Sponsorisé</span>}
 					</div>
 				)}
 				{description && <p className="blog-card-desc">{description}</p>}
