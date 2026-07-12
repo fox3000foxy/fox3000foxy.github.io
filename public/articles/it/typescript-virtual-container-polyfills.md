@@ -5,7 +5,8 @@ description: Come Fortune ha reimplementato a mano node:fs, node:crypto e una
   dozzina di altri moduli Node in 640 righe di JavaScript per far funzionare il
   container nel browser senza Wasm.
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -14,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "T9WyY0BhsdrAAtWmlx2YcPNeegKlUrbabtwhzlbzXWKNUWqZlEFHo3uNAKMA8L9aJKr/oDpM8lXJXayoj8ECyw=="
+author_sig: "u51lXINDxdmJN2NDtKoYacMomZW6MvbIgh4LByHPOtrAnsOB59yYZEhcedueXfwn8KJn1l+w9OGNNUyKxNPHOQ=="
 ---
 
 # Far funzionare una libreria Node.js nel browser senza Wasm -- i polyfill di typescript-virtual-container

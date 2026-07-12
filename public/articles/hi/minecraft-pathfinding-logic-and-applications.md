@@ -2,14 +2,15 @@
 title: Minecraft पाथफ़ाइंडिंग तर्क और इसके अनुप्रयोग
 description: कैसे A* एल्गोरिदम, ब्लॉक मैलस और POI मॉब्स की गति को नियंत्रित,
   भविष्यवाणी और दोहन करने देते हैं -- वायरलेस रेडस्टोन से लेकर ऑप्टिमाइज़्ड फार्म तक।
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jAbuD+CWxmdPUQrdPkzTBanjNJdQ+Dmxi2SeIUR0/Eg1ZKMszvIrfjZ0zoICy+Q8xf0/WfOsjCd57/POdPpT4w=="
+author_sig: "LaFVAY1rMq/0rNbBmgNorB/UtEFodmNSZHrOx5cyaM/oFQNrC8taqjTSd8xuQhFKUU3ZQ6h5bPlX+pTIoCknFw=="
 ---
 
 ## परिचय

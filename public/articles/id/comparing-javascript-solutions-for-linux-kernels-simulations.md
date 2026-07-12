@@ -2,14 +2,15 @@
 title: Perbandingan Solusi JavaScript untuk Simulasi Kernel Linux
 description: Analisis mendalam tentang rekonstruksi lingkungan Linux dalam
   JavaScript/TypeScript.
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hw4McfoxdDQrEqdnI+GD900MO16BQW48QgrJRAG6YveSz6sQP6mBtFFXrpeCs/DKCNxM0lc9oVLUs8xJDkjSug=="
+author_sig: "5rwsoVbY3RadDIYShNcoqkwo44hw2NY3a4oAW6O1aigAz8S+D52Z9PmZS3zGBQIxMjI1HMLf0Ab1TdNi5mk0Yg=="
 ---
 
 # Setiap JavaScript sandbox, emulator, simulator, dan honeypot Linux -- dibandingkan

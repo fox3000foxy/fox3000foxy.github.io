@@ -2,14 +2,15 @@
 title: شرح سكريبت التوقيع SSH
 description: تحليل مساعد توقيع commits SSH ولماذا أردت commits أنيقة.
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cOVkMzEaPwyS5x+KadtqtA9xvQmHOX/YjvAy95WsL6UucM99iNxCbVsEpDSimu2fHFslK6UMEBIBfa+WtrVdNg=="
+author_sig: "Znl5YOPVGAOyLuSi1VTgkINrjDXFC854GhUf4SLAP5T7yqJhG3cvvr6Ae1XZ9naErpgoRcPxkTq2SD/fHTLuYw=="
 ---
 
 # سكريبت توقيع SSH للـ commits -- شرح

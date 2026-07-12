@@ -2,12 +2,13 @@
 title: Мои увлечения
 description: Программирование, рисование, автоматизация, изучение старого железа
   и многое другое -- взгляд на то, что мной движет.
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/4bQ+ig13yeHMK3ZusXiBQqHlee0/P1z1glBKNBm2F1O3T2iun3lyyztEEt+SG2qATjubXUkdI14Yy2uPK0enQ=="
+author_sig: "UhWdkBzRH5Za1qRZKTmORx4dnvWBDdQRiZ0dvyv6MIcUjPu38dTtVKtlsyN1DJAUCYCqZEQf+VYBjZ0aGPIZqQ=="
 ---
 
 # Мои увлечения

@@ -1,13 +1,14 @@
 ---
 title: العمل على مشروع جديد
 description: نظرة عامة على عملية بدء وتطوير موقع ويب جديد.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - meta
   - webdev
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "vrfo70i26SrPH98hxeVbalETxW3aSszBiisXcNrB1NWzPBkNUo9BUGsmomOvDPBKFYQBywYYEvqHbX69pP4tmg=="
+author_sig: "dYV7Hpi09y+UhKxgr8vGzz8wuYdn01Ck3I7QR2OO0gzXJoednUEIpy1kvHT/SSxNW1qNe/RGndJ8KGrE+BVbRA=="
 ---
 
 # المشروع

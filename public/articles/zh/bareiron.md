@@ -1,7 +1,8 @@
 ---
 title: Bareiron----在1美元的微控制器上运行的Minecraft服务器
 description: 6800行C代码，零malloc，用双线性插值替代Perlin噪声，瓦片地图式的生物群系，全都跑在1美元的芯片上。
-date: 2026-05-30authors:
+date: 2026-05-30
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -10,7 +11,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xBtVZaPF/UZipvCHwe5OwogoFYBGTR1wvITTZ54eq1JVyiHgTTfbwK0wOOiADuXABlIl93n4Hs9r3ebZlrVfDg=="
+author_sig: "XFtpgdJR92mQvHnSz9AJl9lDA5l/mM9fcyw4LopvZqakus9t2nl/GRl9FLHqQqu3RXXWHuZ2Af0LgRWtzMOPzQ=="
 ---
 
 ## 引言

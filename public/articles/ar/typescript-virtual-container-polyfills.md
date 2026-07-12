@@ -4,7 +4,8 @@ title: تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfi
 description: كيف أعادت Fortune تنفيذ node:fs و node:crypto وعشرات وحدات Node
   النمطية في 640 سطرًا من JavaScript لجعل الحاوية تعمل في المتصفح بدون Wasm.
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -13,7 +14,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ksp2zq6uZxkTFnPOPDVRJgrrKa3HBwNKf+6qxRFcP7o4VIsBEvrZRLSsV+kxntIzT8HdC/7fxi02wKPK/WxiRg=="
+author_sig: "MtxJx/27/Dvh/JFsiA49Wtyj9AWjq71f7CwILbGKB7ct7pWffioijTegM0KUZ0EdYv0XEtgxeZI7eXT00RoLfQ=="
 ---
 
 # تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills لـ typescript-virtual-container

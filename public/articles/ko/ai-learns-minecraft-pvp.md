@@ -1,14 +1,15 @@
 ---
 title: AI가 Minecraft PvP를 배우다 -- 모방 학습, 강화 학습, 그리고 중요했던 30개의 변수
 description: 1,000회의 결투 녹화, 픽셀 기반 신경망 훈련, 90% 키스트로크 정확도 -- 그리고 봇은 벽을 향해 돌진했다. 그 후 RL, 커리큘럼 학습, 60시간의 훈련이 시작되었다.
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9pCTNiL+puefXmmi5b6OcxdYGB5ndpxdUkW23EDHIoDV0o/f/LQ3zREQMDVk3p1Geiq6iM/SEfy5l+BIWlXbSA=="
+author_sig: "oZ5JgYqni0SYrbMkZxtvLyO3f/a+Rpo1pnPy3pKSrIsUzZS+H82I4dy6V5ZkOGWRjvBpTYXuzpT8lNOezeujlQ=="
 ---
 
 ## 소개

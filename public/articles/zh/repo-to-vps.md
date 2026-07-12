@@ -1,14 +1,15 @@
 ---
 title: "Repo to VPS：将GitHub Actions变成免费持久化VPS"
 description: 如何将GitHub Actions runner变成永久VPS，用git作为持久化存储----tmate、inotify和commit --amend。
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - github
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+5lrcaBQY5+InJbFJa0jycb87vP/vO1WpxgXh0QQcApgXMfG0COQ2m86qmZadMSfEvlUbNi+gB29xynK63PBnw=="
+author_sig: "pKvSeCblJen9k8SeQDxVhCfnB9QgUyIRRAn78A1ol2OPD4G0HVchxX0Ulf/Mnf2aOAIs5N1edvpqiqneWHGuAQ=="
 ---
 
 ## GitHub白送你6小时的免费VPS。我找到了让它永续的方法。

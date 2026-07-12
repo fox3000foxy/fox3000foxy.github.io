@@ -1,13 +1,14 @@
 ---
 title: "Super Mario Bros.: تنسيق المستوى، المؤشرات، و256 عالم خلل"
 description: "كيف يتسع 128 مستوى × 4 أنواع منطقة في 40 كيلوبايت من ROM، ولماذا ي Exists Minus World، وكيف يمكن لمباراة تنس NES أن تحمّل عوالم الخلل."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - retro
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Jy5ZotjVtegQiaD0cZ7QUKNZBF/e0ptraukbuTKLrQykMDY1SfuooLfuFtg2rvkx5747LibtaVLVrPtv4oYPyg=="
+author_sig: "fHl8SAYXftJ17UUYthe21OunuuweqJNvX4KBuY4cu3Rvi8BUYT5X7IxRZ5ifkQxQp+Am88H9cdITj/EvZHCnOg=="
 ---
 
 ## المقدمة

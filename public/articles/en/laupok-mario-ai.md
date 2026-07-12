@@ -1,6 +1,7 @@
 ---
 title: "Laupok built an AI that plays Super Mario World by itself -- how it works"
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - ai
@@ -8,7 +9,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KzpLZDBVsB9jDicAIir/rer6GZqgNutdQfr2+5jOH7aYmdIyYSvbKqPEVpF+/h0lBNUgOV0ropXGehnIWshD/Q=="
+author_sig: "SFhY1hZ/NiwrW89qxhZ5DxarbKTJZLRf2EYNgcbdbXlFSzm7IYFMlgrUm2K5dlrDGOMTq/eZcRj5W0giTWcJsg=="
 ---
 
 # Laupok built an AI that plays Super Mario World by itself -- how it works

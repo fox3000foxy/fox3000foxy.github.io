@@ -1,14 +1,15 @@
 ---
 title: "Repo to VPS: biến GitHub Actions thành VPS miễn phí với bộ nhớ liên tục"
 description: Cách biến một runner GitHub Actions thành VPS vĩnh viễn với git làm bộ nhớ liên tục -- tmate, inotify và commit --amend.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - github
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Swd3QY00/T5mzZtfc9uZ+XHLTDjM/xJs5lOBGh/RZY2L7dde/2kHhTMDiX64prTwydtsySUelctzQSEz15pLhw=="
+author_sig: "qZydTNFNUvAVcpGBM34Qs0hBT6+3bm+IajTsvhcG8AoQuIWQHlQq0rWVuh68QUp4S6zzPOCCYwGN930uiX4NDg=="
 ---
 
 ## GitHub cho bạn một VPS miễn phí trong 6h. Tôi đã tìm ra cách biến nó thành vĩnh viễn.

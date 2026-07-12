@@ -1,14 +1,15 @@
 ---
 title: JavaScriptによるLinuxカーネルシミュレーションソリューションの比較
 description: JavaScript/TypeScriptによるLinux環境再現の詳細分析。
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "y7oiSiXEnIZ3P+LV0/6hA3zvxQzNQ7cToGmix7dVq+Z+OvDNAvOIwfQ9PxdgEK8cYmrXY/e0L2VGSbybho6npQ=="
+author_sig: "1TtZhr0LjbUYbP91Aaq3uMngxy/PSOyg6fwiRlTz+FkbtdRFrzPx9kQQ4tukhHaBLT1j2mLAOzxBTjotF3D/+Q=="
 ---
 
 # あらゆるJavaScriptサンドボックス、エミュレーター、シミュレーター、ハニーポット----比較

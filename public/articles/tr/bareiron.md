@@ -2,7 +2,8 @@
 title: Bareiron -- 1$'lık bir mikrodenetleyicide çalışan Minecraft sunucusu
 description: 6800 satır C, sıfır malloc, bilinear interpolasyonla değiştirilmiş
   Perlin gürültüsü, tile map'te biyomlar ve bunların hepsi 1$'lık bir çipte.
-date: 2026-05-30authors:
+date: 2026-05-30
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -11,7 +12,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+xv8CVwoEZ40j6fEIxkKq6kIevq5uU0ERaeUfvlJe1ljPF9OOeornUriHhU7AtHFxcECsSW7ImDwRsfaB9ay+Q=="
+author_sig: "KcXnA9apIRJDH4D1+NsFQS1Smi8zVtNeI0bjNbj1uuLr1aThR/clpq2iSRMOXPBBYcw4rkLHXgNhIFc7pDIlEw=="
 ---
 
 ## Giriş

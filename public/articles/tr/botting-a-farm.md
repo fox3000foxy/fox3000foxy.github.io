@@ -2,14 +2,15 @@
 title: Bir Microsoft Rewards Çiftliğini Botlamak
 description: Ölçekli olarak Microsoft Rewards puanı toplamak için nasıl bir bot
   kodladığım -- ve Microsoft'un anti-bot tespitinin neden artık işe yaramadığı.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "rqKHir+v9JIZJer5scIOPWc0ej+TXaHRve2oQB5BMv+TLgUxRM+9mU19e9DcwP74aIrQTmWWz6aUEFSmv3zfFA=="
+author_sig: "eIZN+cExY2rGycddmDL92eDDmCSJmeXSnzyBzPZWDgJy5DezXScE/EXKnKY00MdTmfKspBPaeullUVReWba+Ag=="
 ---
 
 > **Not (2026):** Bu proje artık bakılmıyor. Microsoft, anti-bot tespitini önemli ölçüde güçlendirdi -- o zamanlar işe yarayan şey artık çalışmıyor. Aşağıda açıklanan kod ve yaklaşım sadece arşiv/eğitim amaçlı saklanmaktadır.

@@ -3,14 +3,15 @@ title: Script de assinatura SSH explicado
 description: Detalhamento do helper de assinatura de commits SSH e por que eu
   queria commits estilosos.
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fYMu/6d17qG7GdIznBvuIgLk76RMAJuKxi/hOohR/y3O2aAevF8eGIYugewzMVVHo4ETkm4hVbCfaBgqj7fqiw=="
+author_sig: "+C5w5oHDWh6B71Wen+q4fN1o3F7TOhxMmbEiZMEErhHvYcUNwxrLsuCXh0Fe+LCmBKHd/aX73dNouANIHe0roQ=="
 ---
 
 # Script de assinatura SSH para commits -- explicação

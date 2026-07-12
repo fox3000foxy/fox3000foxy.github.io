@@ -1,13 +1,14 @@
 ---
 title: "Super Mario Bros.: 레벨 포맷, 포인터, 그리고 256개의 글리치 월드"
 description: "128개 레벨 × 4가지 영역 타입이 40KB ROM에 어떻게 들어가는지, Minus World가 왜 존재하는지, 그리고 NES 테니스 경기가 글리치 월드를 로드할 수 있는 이유."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - retro
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "w5MVenvWirmnOQSW6h3IBqqBHFIzlrJysxWU+7V4+amIEhtkTKoaDtobKif9V/P+Rr2wDJse+km2BkTREsK3bg=="
+author_sig: "SagZ9wyRLN5P1wenFulzJHbROp0o1NeOWl4APsjVxh0x3ruFJzEs/dMFveJdok1Ku2UwngbJtQmUCNpMw3LmMw=="
 ---
 
 ## 소개

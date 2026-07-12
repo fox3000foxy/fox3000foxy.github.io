@@ -4,7 +4,8 @@ title: ไลบรารี Node.js ทำงานในเบราว์เ�
 description: Fortune ได้สร้าง node:fs, node:crypto และโมดูล Node อีกกว่าสิบโมดูล
   ขึ้นมาใหม่ด้วย JavaScript 640 บรรทัดเพื่อให้คอนเทนเนอร์ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -13,7 +14,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3shvHNJfKjaaeNEf0DaxWTe/IA34GJuaNePcjBnZxm4jXNZ2dvYJlw4ymNi796JNfdWknFoIaYvDyWFrIxvuhg=="
+author_sig: "VAVGk46ZA/Cdb/rdvkSF1I8QoIxFLS0Ui49mNwIiI3cujaOTdutuFdQHFSay/skhUciCRyiaIipnIR74jcZnyQ=="
 ---
 
 # ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm -- polyfills ของ typescript-virtual-container

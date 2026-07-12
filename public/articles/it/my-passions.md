@@ -2,12 +2,13 @@
 title: Le Mie Passioni
 description: Programmazione, disegno, automazione, scoperta di vecchie
   tecnologie e altro -- uno sguardo a ciò che mi guida.
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "lBo6KavHej+fXrQWiNj8F7YjYjlmQpKFAxK1hnvUtou5C2RdZEudjPBbi0ec8AvzPlGMJtNqiIHG/Ww/itggBA=="
+author_sig: "pk2uzY5+bZepTp9fPRXeFZ6epyFexcjAQ/6hPVIsTyk72VwY/n2N5Mh0DWyDt+bfroKwpk7BXO/aoyMG0mGXJQ=="
 ---
 
 # Le Mie Passioni

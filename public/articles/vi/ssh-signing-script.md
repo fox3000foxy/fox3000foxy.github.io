@@ -2,14 +2,15 @@
 title: Script ký commit SSH được giải thích
 description: Phân tích helper ký commit SSH và tại sao tôi muốn commit có phong cách.
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DUZVJf1H7C4BsoO+7Dbp9QcRTsb853QL2UTxeqZ6sTmFKWF5uP/mxQht9iMg17WBIdVbUI8vkCOB2nG6gI2+8w=="
+author_sig: "ov/5u80jRG2iAZNjXpqu5rTLtqiK/4GkeiZoy7o4mC9gCbUEBp18JrA8kiXSAp5w8zMp+TH4tNEKlhARiee9Lg=="
 ---
 
 # Script ký commit SSH -- giải thích chi tiết

@@ -1,14 +1,15 @@
 ---
 title: บอทฟาร์ม Microsoft Rewards
 description: วิธีที่ผมเขียนบอทเพื่อฟาร์มคะแนน Microsoft Rewards แบบ規模ใหญ่ -- และเหตุใด Microsoft จึงเสริมการป้องกันตั้งแต่ตอนนั้น
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "B1DdNsouKn8OuzUnOC6fiYGX9H0aSux+8urMlK2SM8SPfYlrNvNOuEhgcMTKzN5OzrlnSbAwT8S/yCbpNaC3Zw=="
+author_sig: "8nblS5OUSxH2BooR/STkspZX3mazJOIajQs5FwPWxbFrvEV3YY3kgwQGvv12aIs4EDlZpJdLiB4GODGXn9TinA=="
 ---
 
 > **หมายเหตุ (2026):** โปรเจกต์นี้ไม่ได้ดูแลอีกต่อไปแล้ว Microsoft ได้เสริมการตรวจจับแอนตี้บอทอย่างมาก -- สิ่งที่เคยใช้ได้ในตอนนั้นไม่สามารถใช้ได้อีกแล้วในวันนี้ โค้ดและแนวทางที่อธิบายไว้ด้านล่างนี้เก็บไว้เพื่อวัตถุประสงค์ในการเก็บถาวรและสาธิตเท่านั้น

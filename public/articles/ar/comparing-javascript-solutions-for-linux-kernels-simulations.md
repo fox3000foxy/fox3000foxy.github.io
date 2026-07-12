@@ -1,14 +1,15 @@
 ---
 title: مقارنة حلول JavaScript لمحاكاة أنوية Linux
 description: تحليل متعمق لإعادة بناء بيئات Linux في JavaScript/TypeScript.
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "j+BQMxOYo8N53W/OmqwtxaX4xzJUI7LNk2jQfym+pRCjIaaVH3otlNqxLjmm9XVm/2EFyzV/CjAgIYvPOdEAXA=="
+author_sig: "4DFTuyWXz7gS0PpVWYTyqbP2AEFGumTB2CfqlGr9Mq9UUGAfqqBPFrjcikzde+kom73CBD0nXSjMo+beEJw9Bg=="
 ---
 
 # كل صندوق رمل JavaScript، ومحاكٍ، ومقلد، ومصيدة تفاعل Linux -- مقارنة

@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol: أنشأت بوت Discord مستقل يحاكي إنسانًا"
 description: "Luna Protocol هو بوت Discord مستقل بالكامل مزود بـ LLM محلي، قادر على محادثة طبيعية مع النوم، الأخطاء الإملائية، التردد، النسيان، التعب الموضوعي، والرسائل العفوية."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kIpU4kDr0NitCgkv+CGS3VtbbGYquomJ+6aogmK1zX3l+t0Sh24dISwyNuso9/rxAQ+RoXe8t3FrBWQyZk2cfw=="
+author_sig: "CtpkDOR+IvTvCkG1nC9uhANzalu9BMxSk2nXhPYTOUfWC+bTxU+S3UzIlRV0U2BWa/gx8SBMMJp108BuGBCS/A=="
 ---
 
 # Luna Protocol: أنشأت بوت Discord مستقل يحاكي إنسانًا

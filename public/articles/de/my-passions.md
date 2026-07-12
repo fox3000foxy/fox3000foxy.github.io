@@ -2,12 +2,13 @@
 title: Meine Leidenschaften
 description: Programmieren, Zeichnen, Dinge automatisieren, alte Technik
   entdecken und mehr – ein Blick darauf, was mich antreibt.
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "wRYPaaIfh+Oplhn5dMJSy3L64DN8qSNiJltWh7OknmPX2XG9ZqYZzVTJARPjw3nisAOnwSzqEGSM4NuS48my1Q=="
+author_sig: "QcRAl2nrzpct3ZzW7qcRMTrk6J1B8lyz2Qu+qFXGClSJ0+6kMr+WIpDpk/ZXoKN84rqCmGRZz0CpgQYcpteRFg=="
 ---
 
 # Meine Leidenschaften

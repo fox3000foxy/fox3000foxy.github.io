@@ -1,14 +1,15 @@
 ---
 title: Minecraft 경로찾기 로직과 응용
 description: A* 알고리즘, 블록 패널티, POI 메커니즘으로 몹의 움직임을 제어, 예측, 활용하는 방법 -- 무선 레드스톤부터 최적화된 농장까지.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/bpGoEqCkhBgKYuTgdQ8+OEqf7tOzpbKp9wkyMsCbPeKwnMWJZTedz+O4UoW2eM+9tLtmNnOhcIrx6dXTVDXFw=="
+author_sig: "8KoQOeYJAH8ULKQaez31GJw1asKrRESBwGWmEMNWn0oVOdN7BRtbdDrg6PNSE4gkysunOPn4uBaBdlPUgfh5Yg=="
 ---
 
 ## 소개

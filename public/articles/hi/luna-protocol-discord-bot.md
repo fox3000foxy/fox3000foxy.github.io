@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol : मैंने एक पूरी तरह से स्वायत्त Discord बॉट बनाया जो एक इंसान का अनुकरण करता है"
 description: "Luna Protocol एक पूरी तरह से स्वायत्त Discord बॉट है जिसमें स्थानीय LLM है, जो नींद, टाइपिंग गलतियाँ, हिचकिचाहट, भूलने की आदत, विषयगत थकान और स्वतःस्फूर्त संदेशों के साथ स्वाभाविक बातचीत करने में सक्षम है।"
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Tc4Bzx2ZdmXqvcqPqR0w7jj7gU5J/1LCkkEvKYtkLIXTjrR/Zw0pqdV4igkqPm4DcLjl/UGORjJ0TxE2xQuIPA=="
+author_sig: "tdgM4J83Jbaplmsc4u2/8PiFtrNzkbzzEIYnTOhLstDhUayqQ8QNh10jYCPR6r7VaJZdwQ6YHFkHnmfwAnVElA=="
 ---
 
 # Luna Protocol : मैंने एक पूरी तरह से स्वायत्त Discord बॉट बनाया जो एक इंसान का अनुकरण करता है

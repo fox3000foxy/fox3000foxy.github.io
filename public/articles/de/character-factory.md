@@ -5,14 +5,15 @@ description: "Ein TypeScript-Modul auf Basis von DiceBear: kohärente
   von Kindern und die technischen Details, die es in einem Kartenspiel nutzbar
   gemacht haben."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "VMwoLAoDoBGMFW/ASP+gySR6JAGhndWSf1Nd/NRE+7T1+L91vP5/L9Hctu8MbWU6ljeX0GMR+6tMsyCCFStqbA=="
+author_sig: "7RS1vyJ8uNynP5ZsRItCA5k9kFawms+RoTSDbWqdYWDqXUsimcdKExeiEtDo4y4/1V9mu5ozqmizQZ2+MgO6ZA=="
 ---
 
 # character-factory bauen: Avatare mit Genetik

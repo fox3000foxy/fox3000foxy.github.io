@@ -1,13 +1,14 @@
 ---
 title: मेरे GitHub प्रोफ़ाइल के बारे में
 description: मेरे GitHub प्रोफ़ाइल का एक संक्षिप्त परिचय।
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "mMncgpULgtZmW0lXOqElKb1FTVA2s1J3aNUR1e8QEyqUTmQrvPuqe9E5DRxNEEjhWVm/yRqRYvicul8Wfa0ZWA=="
+author_sig: "7gMkhSwQbq+dM9YX4R2D1cby0imGckipGcTHgyVcpdr9d1OmofycdfslhkWE5F3bqA1RYD+XcGCPDKShYmahOg=="
 ---
 
 # मेरा GitHub प्रोफ़ाइल

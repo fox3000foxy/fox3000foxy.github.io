@@ -3,7 +3,8 @@ title: Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Ac
 description: Cara saya membuat auto-reply email AI yang berjalan di GitHub Actions
   untuk 0€/bulan -- menggunakan git tags sebagai database dan pre-compile
   dalam tag runtime.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - automation
@@ -12,7 +13,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "nSXNcD3I3Xccid6gHzoOU2GJKR3qzqgypOeV5b0Wl5vXxs6h4ZPRdeOsmvdCBP6x29uhMGcm4tAOZIwtUc13lg=="
+author_sig: "d5Nfa+98fTPWgpKBLFxvgm6npGr3FPmF1EfoV9Ui7edFAlXbmuc1AIaQhQ4N+VE7c1SFJ5BQ+kwNlq4hQQGfEg=="
 ---
 
 # Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions

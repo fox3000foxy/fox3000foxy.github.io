@@ -1,7 +1,8 @@
 ---
 title: "مود الكيب: كيف تسرق كيب Jeb_ بحقن توقيع RSA"
 description: "مود Fabric يستغل ثغرة منطقية في نظام الثقة في ماينكرافت: توقيع RSA صحيح من Mojang لكنه معاد استخدامه على حساب خاطئ. شرح الكود، تداعيات أمنية ودروس تشفيرية."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -10,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "eS3Q/6n7xn/SAaZTR5gt4R60hueyapZYudKm0kckAeQoz6nB2hmi+mJdFNUcZ6aQ3rqVE30BkHFIQ4KGPmsstA=="
+author_sig: "JP2jwSez7yuZ/bxf+EeLykETMPVzyAkKMiVdq3bzsOCBl1w+Xv+SDjiIBBN39fZ230r11ofVly/bA5/vdhH0zw=="
 ---
 
 # مود الكيب: كيف تسرق كيب Jeb_ بحقن توقيع RSA

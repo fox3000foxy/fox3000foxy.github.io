@@ -3,7 +3,8 @@ title: "Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers"
 description: कैसे मैंने एक Discord बॉट को जो मुझे 50€/माह खर्च कराता था, शून्य
   यूरो में बदल दिया -- इंटरैक्शन एंडपॉइंट्स, Hono, Workers, रीयल-टाइम
   इमेज रेंडरिंग, और WebSocket के बिना एक पूरा गेम।
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -12,7 +13,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "g/E5r6hO8lz5iSg+97w4KNC4f4uA2DeMX6tIXMxZf6qszqdb7QJgEJKMdZfRnqoc8eRzwT8A/6lzNLWOgMd+BA=="
+author_sig: "oyExdpwN8ilb7qpbOA+Ab0ZTM6C28kDZZvLjfC6Jo8nRwyMBBmtyzkX17VE1E7vDSkob6g5UGLK7P2k09685/w=="
 ---
 
 ## Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers = 💸 शून्य

@@ -1,13 +1,14 @@
 ---
 title: 关于我的 GitHub 个人主页
 description: 我的 GitHub 个人主页的简要介绍。
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "f/v3zgKndKVFLHM5EAYB5nwfkHuhPV9c84RFb9uRzRBQsdChHbYKzqg59le6shMelQxtnuNF/Z/VodD4OzaY/w=="
+author_sig: "WNFkeBEj4UIyb8Gx64IZAACuIfEFJAmrxPI0rnW02DLj9zeR5olX09ey6o6ffYxzLtaCcMYumhT6wHw9b5DTcg=="
 ---
 
 # 我的 GitHub 个人主页

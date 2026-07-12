@@ -2,14 +2,15 @@
 title: เปรียบเทียบโซลูชัน JavaScript สำหรับการจำลองเคอร์เนล Linux
 description: การวิเคราะห์เชิงลึกของการจำลองสภาพแวดล้อม Linux
   ใน JavaScript/TypeScript
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "wATip2VWNaruqP6Ivvp9DXuHN6p8i60Kfrmh6OxlxDz8WAa2Qkrtx23wL40rPebk0eYmW4wf3eV4fzrdTHiakA=="
+author_sig: "8HNSvCBfl6ACjtpbkQUzDqC/GjTvJRs8L59ihx1EgJbwrN6SON4605Ajoo6+WBkYXESeMyzjL2d/2w9S3hW6GA=="
 ---
 
 # ทุก sandbox JavaScript, เอมิวเลเตอร์, ซีมิวเลเตอร์ และ honeypot Linux -- เปรียบเทียบ

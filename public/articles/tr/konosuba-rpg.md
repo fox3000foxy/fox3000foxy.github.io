@@ -3,7 +3,8 @@ title: "Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bul
 description: "Her eylemin anında WebP görüntüsü oluşturduğu sıra tabanlı bir Discord RPG'si:
   URL oyun durumu olarak, deterministik RNG, WASM hattı, 5 seviyeli önbellek,
   sunucusuz bot."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -16,7 +17,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Cbnw4D6XGdSb/SOaGXsUQ6UA3foMp3XFsfQ7scMUL+sHELqIvFcoEOuSwEHibKtVAdJdqmbscseHQiSz1kIqyA=="
+author_sig: "fhIRM4G4cyUe7GG7mhgknrVYdqlmiRLZ8Jke5ARPgUwNGE4BP+cbppaZ9EI9xAuPwNMQuLot08QH0sV3Y2hxGg=="
 ---
 
 # Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım

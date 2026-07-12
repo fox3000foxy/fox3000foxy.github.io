@@ -2,12 +2,13 @@
 title: Đam Mê Của Tôi
 description: Lập trình, vẽ vời, tự động hóa, khám phá công nghệ cũ, và hơn
   thế nữa -- một cái nhìn về những điều thúc đẩy tôi.
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "IiwK+TirolK5ovmEw2UlR+rQPrI63MCc3BpSl6XtbQbyjHoN8KSfSalrI4Vtdz/YfYPSO9vA7vLCb1YRWBDKyQ=="
+author_sig: "K9LvKq/MfuXEK5ma4vNm4KlYUJZJNaboV6Eaijcaq60xT8ae2u988iaCJSma7StVnISnkr9ENiz1xC3SR91p2g=="
 ---
 
 # Đam Mê Của Tôi

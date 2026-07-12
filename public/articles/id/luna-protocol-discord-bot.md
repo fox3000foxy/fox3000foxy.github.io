@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol: Saya Membuat Bot Discord Otonom yang Mensimulasikan Manusia"
 description: "Luna Protocol adalah bot Discord sepenuhnya otonom dengan LLM lokal, mampu melakukan percakapan alami dengan tidur, salah ketik, keraguan, kelupaan, kelelahan tematik, dan pesan spontan."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Jy0hbdXmxwemikmGKwibV9i/ke8+q3zFDpEnFAfJYY/52JtCnBVy+BG5EEgloovHhbGTcSBO7foPat2vOR0puQ=="
+author_sig: "PxkJJ0gNAm9gh/R1rfVp4OHA3yjB/5tyEb9Jfs+8KrfswU3FdzrIe0M1BOFMuW8d5xR0I8J7VXOF0d0AIj7z1w=="
 ---
 
 # Luna Protocol: Saya Membuat Bot Discord Otonom yang Mensimulasikan Manusia

@@ -1,14 +1,15 @@
 ---
 title: ИИ учится PvP в Minecraft -- имитационное обучение, обучение с подкреплением и 30 важных переменных
 description: 1000 записанных дуэлей, нейросеть, обученная на пикселях, 90% точность нажатий клавиш... и бот упёрся в стену. Затем пришли RL, куррикулум-обучение и 60 часов тренировок.
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "CzsbmgdtV8MWxkydfR/1cPXql8eQWouciiEjhDMut8mCYXmiPCxbc2lrVy2cpxWGI6+3KPLxqu4/jCPfZMOVNw=="
+author_sig: "o8xm2fU6lM4CkMuwz8iAfv9yg1pz8Y+KEYPAV/Jdqlh1QgDaHbgokOEgvKtxePU2pvSoaQiWcI+YujKqboTPgA=="
 ---
 
 ## Введение

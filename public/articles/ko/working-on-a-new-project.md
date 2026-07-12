@@ -1,13 +1,14 @@
 ---
 title: 새 프로젝트 작업 중
 description: 새 웹사이트를 시작하고 개발하는 과정 살펴보기
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - meta
   - webdev
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "V7Ivz6hNKAZ5ZNkewDQyG5sp93jpmKVSAKQIw8vfMGkb7C5PIM9BENzjiAg9aHUDB6qvwEg/ublqlD0P8OwbVw=="
+author_sig: "+a7pH35RGDIlSwwo+RjcjrPY1BxF+tOO0fU8g0L93XwBj3HpnYD3icnkChGeW2fY9pzW1AEcwqt28Ds9KCKqyQ=="
 ---
 
 # 프로젝트

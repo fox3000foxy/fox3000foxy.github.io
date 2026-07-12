@@ -4,14 +4,15 @@ description: "DiceBear üzerine bir TypeScript modülü: tutarlı ülke/etnisite
   tabanlı oluşturma, çocukları yansıtmak için küçük bir genetik motoru ve bir
   kart oyununda kullanışlı hale getiren mühendislik detayları."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cuigfz4MHQ01I/lxB5slLwvciaYluQx8Kg7Cm5aj+Qc/Q7cJugawvsC5dDeQ4hhqtDyVdP1NPUWy8h3aGv9rGQ=="
+author_sig: "4I218fCLXoJ/2EMV1GZ2hx7VKxh+gKnqU6X662oY0doz8YjcRMST0NTYDvCZ218yE6SRZt+aM5e/XWh98fjTvg=="
 ---
 
 # character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma

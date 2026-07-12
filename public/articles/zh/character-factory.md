@@ -2,14 +2,15 @@
 title: 构建 character-factory：带遗传基因的头像生成器
 description: 基于 DiceBear 的 TypeScript 模块：按国家和地区合理生成一致性头像、用于预测后代的小型遗传引擎，以及使其在卡牌游戏中可用的工程细节。
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RBymQFMMP+uN4dtYQwcI6eeWwEuAE5FddjaylmI8tpkbnlHKhLkO3BEVoOsjAxU4RlfkywoReovj6IhOIVa0Xg=="
+author_sig: "McYKJI/UAr5/zjpJl1546w/3JAAWYk4gmYNax96HNlffn2l0AmwTE3zrt/aFX8JAHXSGivHcvQPJ7gY5Wt9i4A=="
 ---
 
 # 构建 character-factory：带遗传基因的头像生成器

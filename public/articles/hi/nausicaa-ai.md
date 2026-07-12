@@ -2,7 +2,8 @@
 title: Nausicaa के लिए मेरा बेवकूफी भरा AI
 description: एक ह्युरिस्टिक गुणांक वाला AI, हर 5 बारी पर बदलने वाले हाइपर-पैरामीटर,
   और एक Oracle जो भागता है -- एक स्ट्रैटेजिक बोर्ड गेम के दिमाग में गोता।
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -10,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "LC1H9K2NH6rlcwpJPVNmlQrq+awzTFGHcHU9tRceihU3oauruqh/tOPqM1ID7fP8DzFt9B4BE7MQhBG0he1Iig=="
+author_sig: "zgL8/goCcClFHeHonBVlZdUjTa3wR1q6Tslw+hnXnpkhFJNbMTnr6B6UJB86SU/GQN9uhNH7C03RJ23YbUCsAQ=="
 ---
 
 ## Nausicaa के लिए मेरा बेवकूफी भरा AI

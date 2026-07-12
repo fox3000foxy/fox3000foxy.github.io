@@ -1,7 +1,8 @@
 ---
 title: "Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy"
 description: "Một RPG theo lượt trên Discord nơi mỗi hành động tạo ra một hình ảnh WebP ngay lập tức: URL như trạng thái trò chơi, RNG xác định, pipeline WASM, bộ nhớ đệm 5 tầng, bot serverless."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -14,7 +15,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GymI/ECyZt+NMeDZKgsT+Sm+el4Tw4y45Wpj4NFWyRWGFALaRTw2E4G67gH11mS+R/s+liCeZ0iF7bqDYQof6g=="
+author_sig: "g1CBfe9lERuLdONk3+f52a9pFtlwZKft3xA7HIJRXsIUPf4VzMyLkw+4SgUcAUflXidrCqM2avThX8frumUydw=="
 ---
 
 # Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy

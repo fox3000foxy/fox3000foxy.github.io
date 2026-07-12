@@ -1,14 +1,15 @@
 ---
 title: Microsoft Rewardsファームのボット化
 description: Microsoft Rewardsのポイントを大規模に稼ぐボットをコードした方法----そしてMicrosoftのアンチボット検出が追いついた理由。
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7lw9euQTAA4MRUF6+NL3BkXj0NTUk5Ulcz7DQi5+SBBR5fgBEqSnsbPfagorfbRNJyZM9TuJ/vL077wNumJ3VA=="
+author_sig: "KaWLpWtH7L8TNr0R44XIFh644ud5ue2SZo5V0X0vB0sqI0AC956KEtYDn82CQ06ck7USnHULF1Qpsktc4VMPxw=="
 ---
 
 > **Note (2026):** このプロジェクトはもはやメンテナンスされていません。Microsoftはアンチボット検出を大幅に強化しており、当時有効だった手法は現在では機能しません。以下で説明するコードとアプローチは、アーカイブおよび教育目的のみで残されています。

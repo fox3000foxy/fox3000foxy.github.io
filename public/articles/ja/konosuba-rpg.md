@@ -1,7 +1,8 @@
 ---
 title: "konosuba-rpgのコードを週末に読んでみた結果"
 description: "Discord用ターン制RPG。各アクションがWebP画像をリアルタイム生成：URLをゲーム状態として使用、決定論的RNG、WASMパイプライン、5層キャッシュ、サーバーレスボット。"
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -14,7 +15,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Hr843hncq2QycANKZimY4pWMuSB/bmYH9ssVIvWpnd1BnUxQVaPNQuAKbT5sqvAvR895sjR/Mu/D8ciz9m6Rww=="
+author_sig: "oRxo0tXxNLChi/wV4yddlYyFCY0EwSaGa1CAb48OJdPYsw+4MQ9ZS1QAJ+mZ9p69uA/HakmdpGMRvbgMlD/dzw=="
 ---
 
 # konosuba-rpgのコードを週末に読んでみた結果

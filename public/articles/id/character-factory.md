@@ -4,14 +4,15 @@ description: "Modul TypeScript di atas DiceBear: generasi konsisten per
   negara/etnis, mesin genetika kecil untuk memproyeksikan anak, dan
   detail rekayasa yang membuatnya dapat digunakan dalam permainan kartu."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sqD6cwpH91OZXEGP69nPfp9HgUUDRSr/vCP+lvzTDMk/NKvZ6Kqfja7lNdgvTq5hYGizlYHu7DWVb5W75PFsRg=="
+author_sig: "uq5b15ptLiR/4xejSr/3xrtGd1LxfBsnAq0qY1YK0IoSX5CaGNrhjy3OpHrrdtsDORn3YoA2yitdL7+5PSxk+Q=="
 ---
 
 # Membangun character-factory: avatar dengan sistem genetika

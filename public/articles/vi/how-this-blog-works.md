@@ -2,14 +2,15 @@
 title: Blog này hoạt động như thế nào ?
 description: "Hậu trường của blog: React, Vite, Markdown, pipeline CI/CD và quy trình viết bài."
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - react
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BIX1SIybZcKcbXJIDSK2Aai7sMRxLTEa44KJX2+HnF/k1v8aJd7OsVbvm19TuJsJhu7lyriEh+TnC49FNfLbbw=="
+author_sig: "I3ELWCVydzEABep6Bky4E4ESwxqFLso9VsQy5H71KrvVg1UWLqgX8VQ+YkBxlOCBE6pKtQT0qwNbALetEVVW3g=="
 ---
 
 # Blog Này Hoạt Động Như Thế Nào ?

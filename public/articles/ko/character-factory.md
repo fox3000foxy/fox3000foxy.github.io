@@ -3,14 +3,15 @@ title: "character-factory 만들기: 유전학을 가진 아바타"
 description: "DiceBear 기반 TypeScript 모듈: 국가/민족별 일관된 생성, 자식 투영을 위한 작은 유전학 엔진, 카드
   게임에서 사용할 수 있게 만든 엔지니어링 세부사항"
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "XMy3Itka0C0llkQ+NNiZ7hsT/bpfy5K1WCnVQVLmRPCaoB2atOp2/HzJ0SIhp2ZkVfYfiLGQ3tWoAg4rsjK0gw=="
+author_sig: "Q2h9Nw2VGTF25D6FQOjwiI44WpqIvYdxWjMGqMsseY/a+FOuAN8YDMMFeb0P5uCJG8qLT79Fy7LrAzblh+sVIw=="
 ---
 
 # character-factory 만들기: 유전학을 가진 아바타

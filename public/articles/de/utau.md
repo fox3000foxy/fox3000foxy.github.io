@@ -1,7 +1,8 @@
 ---
 title: "UTAU: wie ein Visual-Basic-6-Programm die synthetische Stimme demokratisiert hat"
 description: Wie UTAU, eine kostenlose VB6-Software von 2008, es jedem ermöglichte, synthetische Singstimmen zu erstellen -- und warum es heute noch relevant ist.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - utau
@@ -10,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "60F9GmvDhEzvVMKnReJDsDICYIUAUhQDnM0L8zzWIjCwQ2oMUpV6Gd/J4ptKZMjT2iBinNVZdJKe62FFss1WRA=="
+author_sig: "hL0LAPBSQpeB13Atv8p+L55owttJ4AqTSSD+oEFiDKTEDPSTj2sCVdEbrNuuPmNC2/VEpjVO5/4bHGdIw5Hxxg=="
 ---
 
 ## UTAU : wie ein Visual-Basic-6-Programm die synthetische Stimme demokratisiert hat

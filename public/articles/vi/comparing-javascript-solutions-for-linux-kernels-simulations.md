@@ -2,14 +2,15 @@
 title: So sánh các giải pháp JavaScript cho mô phỏng nhân Linux
 description: Một phân tích chuyên sâu về các bản tái hiện môi trường Linux
   bằng JavaScript/TypeScript.
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "yRR5+Zpa/LQk716EHPp2mOYQmoBxiZkEcyXCGJjDk8e9TmBvtQR9fijpLQTnLiTSlm+fgAMd9dqx4Mt4jn+HVA=="
+author_sig: "MGJFxihv4SCyGPesfm9dZcTdE1ym6HeJ0msmRJZ66WIidk5h5JwO5UxE9f3zfkjKU6MB97gRJg7dS+2cMZhLew=="
 ---
 
 # Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh

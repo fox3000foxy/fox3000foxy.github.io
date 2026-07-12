@@ -2,7 +2,8 @@
 title: Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions
 description: Cách tôi code một auto-répondeur email AI chạy trên GitHub Actions với
   giá 0€/tháng -- dùng git tags làm cơ sở dữ liệu và pre-compile trong tag runtime.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - automation
@@ -11,7 +12,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "r938hTb0ota9go608UFrSi6SoPldikilzY7lhFSLZbPMaiUguMdPUhylR4KxDFrziNABDfj2pplnDSks6Wghgg=="
+author_sig: "RWopnIHUhcjtr30jqPvwCgg41BN9kUU5sJF56LBwQiTyd2IdEKhuFFNuBWAlUfDUWVVKd15K9PaKqzqxBvNlTA=="
 ---
 
 # Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions

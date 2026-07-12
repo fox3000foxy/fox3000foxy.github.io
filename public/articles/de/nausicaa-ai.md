@@ -3,7 +3,8 @@ title: Meine bescheuerte KI für Nausicaa
 description: Eine heuristische KI mit Koeffizienten, Hyperparametern die sich
   alle 5 Runden ändern, und einem Oracle das wegläuft -- ein Tauchgang ins
   Gehirn eines mythologischen Strategiespiels.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -11,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/gdi+j0qQ6sApizvxnR3+9OXW3nOQ1hW7iyha4uzoQPjU7+G/Ls3LJAU3xAy7r3iZkoj2MjMSaphMBIT5dEBWA=="
+author_sig: "Nj/KSINEfpqIeWyCPum6SWb9tDNOU+iplwAMCTKE9kBYXE3F5sgABGFMhw66oQzq2feDl+xd7loQpvxNe8aFiA=="
 ---
 
 ## Meine bekloppte KI für Nausicaa

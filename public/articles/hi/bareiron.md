@@ -2,7 +2,8 @@
 title: Bareiron -- वह Minecraft सर्वर जो 1$ के माइक्रोकंट्रोलर पर चलता है
 description: C की 6800 लाइनें, शून्य malloc, bilinear interpolation से बदला गया Perlin noise,
   tile map में biomes, और यह सब एक 1$ की चिप पर।
-date: 2026-05-30authors:
+date: 2026-05-30
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -11,7 +12,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+k0J02ceNvAM+d2gE1C17SPeM42iyAHVX2F1YD/KzHdo7Ra3yB1GogTOWUgbHeUMsSXRaIz9AkAZyagg+ycyPQ=="
+author_sig: "79BnBgmva3FMOtelOlpfLnVegWhXvxTEkExsSFzEOReVa8aqdQnH3YaJkEsE3J9jXSuuofix939GHFzoU2cdCQ=="
 ---
 
 ## परिचय

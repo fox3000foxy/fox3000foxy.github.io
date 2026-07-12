@@ -1,14 +1,15 @@
 ---
 title: AI Học Minecraft PvP -- Imitation Learning, Reinforcement Learning và 30 biến quan trọng
 description: "1.000 trận đấu được ghi lại, mạng nơ-ron được huấn luyện trên pixel, độ chính xác gõ phím 90% : và bot chạy thẳng vào tường. Rồi đến RL, curriculum learning và 60 giờ huấn luyện."
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "gK7u0Xx1r5M0GNrHeZK+oJdDNVxTNRtPTnjDdv8zT0SmdyqeqaZMPN1gbQ4CdDAk4X6h8Zxe71HqfrHWJWQR7Q=="
+author_sig: "a1ffhpXPIN5JRk1HpziPrgFJhaHQL3bdsOmJboxv4j5n8FAzPgYGABu4MgIQaFnYqJghOlc5Rwti0iVyXI2D2g=="
 ---
 
 ## Giới thiệu

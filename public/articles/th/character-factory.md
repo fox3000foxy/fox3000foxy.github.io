@@ -4,14 +4,15 @@ description: "โมดูล TypeScript ที่ทำงานบน DiceBear
 กันตามประเทศ/เชื้อชาติ, เอนจินพันธุกรรมขนาดเล็กสำหรับสร้างลูกหลาน, และ
 รายละเอียดทางวิศวกรรมที่ทำให้มันใช้งานได้จริงในเกมการ์ด"
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xNI+U5DON2e2J35y06ixfuoZjlSxcaqTwq6QKrHfM9pghbTXnoPh4EXuzEOXuj96uGTV6VFoKyEJPrxpqwWhlg=="
+author_sig: "Zfz632FL4sO9WeZTKb5VgFlHf5Hc1BZTinKxirZzhxFvf17aCpVCxBsb7RObrN+VWofy1fnOlogimu3AAJnmgQ=="
 ---
 
 # สร้าง character-factory : อวาตาร์ที่มีระบบพันธุกรรม

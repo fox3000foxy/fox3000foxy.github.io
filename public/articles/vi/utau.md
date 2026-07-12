@@ -1,7 +1,8 @@
 ---
 title: "UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp"
 description: UTAU, một phần mềm miễn phí viết bằng VB6 ra mắt năm 2008, đã cho phép bất kỳ ai tạo giọng hát bằng tổng hợp ngưng kết -- và tại sao điều đó vẫn còn quan trọng đến ngày nay.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - utau
@@ -10,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "87W5UDLEKhlDP29C8PuGoPv8T1RilLNGInIT96kAOQ0WJT9gDn72IGW8QafGFGL+lGGw8smr1JdtXUQWZxi6Zg=="
+author_sig: "AtFE7FpZEV1ptL3wYxNTg43/v48m+7Cp0zYZbPwtmPTFvNATWC0HxykoiWfCew328wTZLscGuxm8qhwmGjqiZA=="
 ---
 
 ## UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp

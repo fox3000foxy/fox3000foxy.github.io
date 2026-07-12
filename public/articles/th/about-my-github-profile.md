@@ -1,13 +1,14 @@
 ---
 title: เกี่ยวกับโปรไฟล์ GitHub ของฉัน
 description: การแนะนำโปรไฟล์ GitHub ของฉันโดยสังเขป
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "yX3F8E1TKEdJiCUHDz15uZ5YWZp5DCMy9nL6/hVMAWxo3/7IwwDyzmq91A5dIRwBewvPaOtt5ZqCgAXftMEC4w=="
+author_sig: "YSD/BNGUVnLmgFbn4xLy30Ya+TGmak0Njtqi8mD10HsuzBeEnvJUEroM0HAYIGxRSqxW2/aLHrHEmz2PavQFuw=="
 ---
 
 # โปรไฟล์ GitHub ของฉัน

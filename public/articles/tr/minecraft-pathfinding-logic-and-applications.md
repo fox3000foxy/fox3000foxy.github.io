@@ -3,14 +3,15 @@ title: Minecraft Pathfinding Mantığı ve Uygulamaları
 description: A* algoritması, blok cezaları ve POI mekanikleri ile mob
   hareketlerini nasıl kontrol edebileceğin, tahmin edebileceğin ve
   sömürebileceğin -- kablosuz redstone'dan optimize edilmiş çiftliklere.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ENehmT62UMZmjQuS3iua0ZMRpUaMPFtkcGsh4xOABbWWqtFhr5eIraYm4F7ihHJCyCtnoRFa5lJLBSNCTCFkCA=="
+author_sig: "lpFOXVslmGSXKLPamZ3ZKlUI7OJMG2D9+dmx/FdHBP1yg0kHh59K84YWnUDnNHTBQZdPyrWCKPXrSsDpOM6+5Q=="
 ---
 
 ## Giriş

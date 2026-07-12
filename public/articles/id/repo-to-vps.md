@@ -1,14 +1,15 @@
 ---
 title: "Repo to VPS : mengubah GitHub Actions menjadi VPS gratis dengan penyimpanan persisten"
 description: Cara mengubah runner GitHub Actions menjadi VPS permanen dengan git sebagai penyimpanan persisten -- tmate, inotify dan commit --amend.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - github
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "g2ZyJETKm1A2aSGgN8AJCfjS3GHCBnjAadI/t1ziqJUzGkLSgGHcC8HpIXMBB/aQQML7I+el1ATDm7PX1/0iKg=="
+author_sig: "L3BGdqjkKLCDE1I3h0KO4hrBg6lSa3FfCpMpVlqsYB+oZox66ReZEAInm8fN25OI0C98zLU7OtuSTecLVzwmQA=="
 ---
 
 ## GitHub kasih kamu VPS gratis selama 6 jam. Aku nemu cara bikinnya permanen.

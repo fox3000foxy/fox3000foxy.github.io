@@ -2,7 +2,8 @@
 title: "I built an ultra-realistic Express honeypot"
 description: "328 fake endpoints with on-the-fly generated responses, header spoofing, bot traffic logging -- a deep dive into an Express honeypot middleware designed to fool scanners."
 date: 2026-06-10
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - express
@@ -10,7 +11,7 @@ tags:
   - security
   - honeypot
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GHbn4z8JtNNPgYxH8nvZBw4Bf30RPQtRqe5hnY5FwdHUYouqwA1MBoBumvZT2tAV0zQC27IcLrQ3VvE+XnUVBQ=="
+author_sig: "WqjpJ2n17xO4JW8btJacW8FgI9+MrtIY0zOIerSqW4Xpy/hoHWjvCOaFg0i3ZF5Bm1/lrRaJ7GiGOSVv4Ujuvw=="
 ---
 
 ## TL;DR

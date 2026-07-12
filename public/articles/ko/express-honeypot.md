@@ -2,7 +2,8 @@
 title: "초현실적인 Express 허니팟을 구축했습니다"
 description: "328개의 가짜 엔드포인트, 즉석에서 생성되는 응답, 헤더 스푸핑, 봇 트래픽 기록 -- 스캐너를 속이기 위해 설계된 Express 허니팟 미들웨어 코드 분석."
 date: "2026-06-10"
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - express
@@ -10,7 +11,7 @@ tags:
   - security
   - honeypot
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2ofm+HVd2aIO+thfFEZdZ4thivyGhCMu02FvqFUrBGBMhCI1gRvl0WBacg7iU7NL+ZWdK9LeK/xAb0qwo8U//w=="
+author_sig: "UGXHgwAltQCwUCNrc6N7zOGXa7BXvgpkLU45PbKgLy2o7i+nskZo22c+AyNMOm37K+m9f5XORxDDLC69R5biIA=="
 ---
 
 ## 아이디어

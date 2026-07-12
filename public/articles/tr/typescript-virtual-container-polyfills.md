@@ -5,7 +5,8 @@ description: Fortune'un, konteynerin Wasm olmadan tarayıcıda çalışması iç
   node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript'te
   elle nasıl yeniden uyguladığı.
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -14,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "COp54WUObT6vOa97jMsvz6TwttjLna+DkHC4Rnbw21ZR6kZfC5sPN1H1TYNifgNFKnG+rGDsg8wZA3AZScFSkg=="
+author_sig: "DRMbqnudCwJX6rS6KNTFlIyqRe5Ym3KN9DeaJRCpy9BQpI4c0vGhu5+j+sEKUmtkCSlDSkEHnjMmtwIceBWg4g=="
 ---
 
 # Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri

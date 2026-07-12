@@ -1,14 +1,15 @@
 ---
 title: "Repo to VPS: GitHub Actions를 무료 영구 VPS로 바꾸는 방법"
 description: GitHub Actions 러너를 git을 영구 저장소로 사용하여 항상 커져 있는 VPS로 바꾸는 방법 -- tmate, inotify, commit --amend.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - github
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UmcN/AyiJhVIvjnjDQanNaNoGhW3XUrCkSIpN5N+jGraiaY+4M5i+FeDfZ5yFCl+TGxipjLJj3txtcx79z/9Og=="
+author_sig: "2Phoaa14hjWxwrXgs7JQCK73KgqAEepauK4ZwvG2MMynbaj7d7hQAXpyJTPhOZUfXc0yWA6Sqlq8njwWUvfTCg=="
 ---
 
 ## GitHub가 6시간 동안 공짜 VPS를 준다. 영구적으로 만드는 법을 찾았음.

@@ -2,7 +2,8 @@
 title: मैंने git को डेटाबेस की तरह इस्तेमाल करके GitHub Actions पर मुफ्त बॉट बनाया
 description: कैसे मैंने एक AI ईमेल ऑटो-रिप्लायर कोड किया जो GitHub Actions पर 0€/महीने
   चलता है -- git टैग को डेटाबेस और प्री-कंपाइल को runtime टैग में इस्तेमाल करके।
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - automation
@@ -11,7 +12,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Epeze7tHObqztQEAPr14ukMtn8pwDM2Iuxdrr/hPWwz7qVW4YpIfJvlEkkzD1cEkRCx6IenAu1G6QEHf4mHO0Q=="
+author_sig: "XzFkYWlBckucr4IPv0jmEC0pgllZn8YsYUSIwipMM5DmvO2pzPEmKqNw+J81cfH78DUWRxPWtLrJm9Pi0b9LVw=="
 ---
 
 # मैंने git को डेटाबेस की तरह इस्तेमाल करके GitHub Actions पर मुफ्त बॉट बनाया

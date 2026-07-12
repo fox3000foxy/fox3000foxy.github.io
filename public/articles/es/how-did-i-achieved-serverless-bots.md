@@ -3,7 +3,8 @@ title: "Bot de Discord 100% serverless: Hono + Cloudflare Workers"
 description: Cómo reemplacé un bot de Discord que me costaba 50€/mes por cero
   euros -- endpoints de interacción, Hono, Workers, renderizado de imágenes en
   tiempo real y un juego completo sin WebSocket.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -12,7 +13,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WK7aX+nqvT/FwFanvBvbO62fke/ZpyH4SRI6eMMy1S6vzabYMMGRuFh4eA7jkALib3BvanZRvpAo1NW+yCkjfQ=="
+author_sig: "oWPbIt6eL0tYa82NHDNYGQ/SeGFMhKhMtLVKQVJrcmPkcCwYCrvzAqZXxV9KC03bRXtmQRURwKAHsifewcGyCw=="
 ---
 
 ## Discord bot 100% serverless : Hono + Cloudflare Workers = 💸 cero

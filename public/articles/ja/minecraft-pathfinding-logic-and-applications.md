@@ -2,14 +2,15 @@
 title: Minecraftの経路探索ロジックとその応用
 description: A*アルゴリズム、ブロックのペナルティ、POIメカニズムを使って、mobの動きをコントロール、予測、悪用する方法 --
   ワイヤレスレッドストーンから最適化された農場まで。
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ig4jb3wYlcJOdG2R2MnHZ7bwqWV89m7oHN82WeTBj23374tq965OR3KVHqXLy4rmAExTyflOhzKkJC420o/2PQ=="
+author_sig: "zQct9FIsLlwCliqL4H9NivvgAsEHqkq71qH6JAZMzYagbkadWMLjC/iT+KrrbBKDsuuKObkzN6ObayqSNhXe9A=="
 ---
 
 ## 導入

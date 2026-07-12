@@ -1,13 +1,14 @@
 ---
 title: Bekerja pada Proyek Baru
 description: Gambaran umum tentang proses memulai dan mengembangkan situs web baru.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - meta
   - webdev
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "VsXGZgN7zx2CpAKn1QONTODfdoO0ThJSye32V4D/xz76mtEipc5jhRTYDYaefSChMPlm2YAkgw6r13F3S85o6w=="
+author_sig: "2z/QMZWaJfaT80pKdcacPQzJU1rO32hTFTvRgTpv/L1LzT5XgwjI1RVOA2VPap9EQLRn+GIxvEH5Zrv1lIC30A=="
 ---
 
 # Proyek

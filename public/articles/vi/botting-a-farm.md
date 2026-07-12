@@ -1,14 +1,15 @@
 ---
 title: Bot một trang trại Microsoft Rewards
 description: Cách tôi đã viết bot để farm điểm Microsoft Rewards trên quy mô lớn -- và tại sao Microsoft từ đó đã tăng cường phòng thủ.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NOFx/W4Oq6tAelMKpsUWyoUTEdKo6guEYPJ2/p5rXho8+6HGs1EwpCDHVnZzdR2xIfJtPAcDNeFQjmbp3As1lw=="
+author_sig: "UTNoJZSnyXquUj9+GOr452M5UtEb3FfaLLVjcVnuSWhiB13IPrlrxhl5F94/bZWQ5m7r36yJCcEfUJ2JEcmdgg=="
 ---
 
 > **Ghi chú (2026):** Dự án này không còn được bảo trì nữa. Microsoft đã tăng cường đáng kể khả năng phát hiện chống bot -- những gì từng hoạt động trước đây giờ không còn hiệu quả. Mã và cách tiếp cận được mô tả dưới đây được giữ lại chỉ với mục đích lưu trữ và minh họa.

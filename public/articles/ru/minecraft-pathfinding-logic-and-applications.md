@@ -3,14 +3,15 @@ title: Логика поиска пути в Minecraft и её применен�
 description: Как алгоритм A*, штрафы блоков и механика POI позволяют
   контролировать, предсказывать и эксплуатировать движение мобов -- от
   беспроводного редстоуна до оптимизированных ферм.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Dl2iBr45k3mzjGt1IqKDGQJoPnWxLHyeBfM6kiBmAcOL/modeuJIHeIyyYnyLbSxaMK1PuDw6bqHK1zigc9E9Q=="
+author_sig: "HhObobw43x1KXWK/Ryqx6wbooBz/qWlbnJyfUi0zdRg7O01cIKHQP2tnkmkNvx8REBLF2lYp/LB5L1DA99Zrrw=="
 ---
 
 ## Вступление

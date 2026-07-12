@@ -1,13 +1,14 @@
 ---
 title: "Super Mario Bros.: format level, penunjuk, dan 256 glitch world"
 description: "Bagaimana 128 level × 4 tipe zona muat dalam 40KB ROM, mengapa Minus World ada, dan bagaimana pertandingan Tennis NES bisa memuat glitch world."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - retro
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PLGuTMWQk2hMfQdr5S6WGyB8IIJKK+8A17pjPWZvTsNmI1E74wp8pL8nfJhmq1E9EOXTAUq9N1SkiKtA0GN2Fg=="
+author_sig: "XqDjyubcOZLDOlNmjW+hWMD4yr4Vo6Ez3mC8duTwJZ6fWZDQk7CW7l6yPJgiuC6iFJFZJChdCg/97jWCwgM+ig=="
 ---
 
 ## Pengantar

@@ -1,7 +1,8 @@
 ---
 title: "UTAU: Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi"
 description: 2008'de VB6 ile yazılmış ücretsiz bir yazılım olan UTAU, birleştirmeli sentez kullanarak herkesin sentetik şarkı sesi oluşturmasını nasıl sağladı -- ve bugün hala neden önemli.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - utau
@@ -10,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "U7170f9TouxiDgnN7DilZw4zpWGyv5dwhGCYr0sH6G/5nGlDR/ixw37kU5b99u7oWRWk3cqCaEdEfyPBghmFag=="
+author_sig: "gzeNUhu8qG83OiJS60W5u0oby26t3Mu3zaQl9vD6n9qOSeK4vnSGnqb30mQPSh5vFj+9t+1+EvJ7Yj8OvBO8KQ=="
 ---
 
 ## UTAU : Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi

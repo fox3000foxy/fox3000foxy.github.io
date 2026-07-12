@@ -3,7 +3,8 @@ title: Minha IA idiota para Nausicaa
 description: Uma IA com coeficientes heurísticos, hiperparâmetros que mudam a
   cada 5 turnos, e um Oráculo que foge -- mergulho no cérebro de um jogo de
   tabuleiro estratégico.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -11,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Oy3PjiwxF3p2bxJLDvGx+UslGp8Nd7VvjQmpb3o2CunY0tqMGFpSBX7eqagm/t2m9w7dA9BRkN848BFc/uuB1A=="
+author_sig: "Q63wQDjw0doRvnMrBECTLdNJ0a2u0Rs/rGEUv6ZrTfHyLxPr9jTHg7uSQvE/Zo6AgyS1GMSWfzXvafjLOGT04Q=="
 ---
 
 ## Minha IA idiota para Nausicaa

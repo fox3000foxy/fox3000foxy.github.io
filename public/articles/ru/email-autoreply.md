@@ -4,7 +4,8 @@ title: Я использовал git как базу данных, чтобы з
 description: Как я написал автоответчик на ИИ, который работает на GitHub
   Actions за 0€/месяц -- используя git-теги как базу данных и предварительно
   скомпилированные снимки в теге runtime.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - automation
@@ -13,7 +14,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1d6qyKvW+kLfwShYHORXSRDcb2EGm108iPZyg+fXjVHim3PGNd/b4d3CfqQltLb1bECBk9cX5xt08GlaRu8H7w=="
+author_sig: "YiVUtnmfHhmNao3s2ltLadrQUSeRDlc2+PNmbRzrsDNY29cnWQ9OLMBOQPFmjZ/sWzZb2B5WLivuFUlNDLhlOg=="
 ---
 
 # Я использую git как базу данных, чтобы крутить бота на GitHub Actions бесплатно

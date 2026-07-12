@@ -3,14 +3,15 @@ title: SSH-Commit-Signing-Skript erklärt
 description: Eine Erklärung des SSH-Commit-Signing-Helfers und warum ich
   stylische Commits haben wollte.
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cqwZbweDcxWtoc+lYerjPusQKPp+iEaQcfTb/dx9LLN/ciVEfR+JCmFu53GHEV+xR7QU4B9EPe0rJlNE7Iv6cA=="
+author_sig: "k6ObrgoIWqSMFFayXQ0yE8y2dE+kJZ+9MqmmY2zp37ut04CQmIHvaQINwZPHJFbgBJv1hIU4FlDPFQQUxJPHnw=="
 ---
 
 # SSH-Commit-Signing-Skript erklärt

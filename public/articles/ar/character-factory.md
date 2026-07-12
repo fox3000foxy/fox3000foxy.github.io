@@ -4,14 +4,15 @@ description: "وحدة TypeScript فوق DiceBear: توليد متسق حسب ا
   محرك وراثي صغير لإسقاط الأطفال، وتفاصيل هندسية جعلته قابلًا
   للاستخدام في لعبة ورق."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "L53MmYf+5dtC8OyWDu9q6y6r/fYilnYKOvneV0f1nXB1sB+qwAg/f9ct4VVjtMrVG0ShAh2QUTt2XaU3FYk3fg=="
+author_sig: "/zP2qZepOA7tup+I9gw4EARDrWoFRZoBsBEQSlKVPaBrsTwOQteryz6WmsEF0p7n7LDvVBxolYucyA3doXQv+Q=="
 ---
 
 # بناء character-factory: صور رمزية بنظام وراثي

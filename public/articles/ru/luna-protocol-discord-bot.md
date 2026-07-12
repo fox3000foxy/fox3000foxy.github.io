@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol: я создал автономного Discord-бота, который симулирует человека"
 description: "Luna Protocol -- это полностью автономный Discord-бот с локальным LLM, способный к естественному общению со сном, опечатками, колебаниями, забывчивостью, тематической усталостью и спонтанными сообщениями."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GNVcTpuvVxwnGBUEoBaHZ0wU29lWkKYRbPxzTQWxw2+8wsGAfwLMwOJIftaHNROLgETiwTOguLW8Wd+V0HAZTg=="
+author_sig: "H7KGSm1qSgmQ4QzD2tl5Ee7j7PF0s+RwA1dFPM3ySE4WU4tihIAEsTGR+KykGNVIYAmVNVpeqgw2oDnB7OkAAg=="
 ---
 
 # Luna Protocol: я создал автономного Discord-бота, который симулирует человека

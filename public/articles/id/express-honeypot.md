@@ -2,7 +2,8 @@
 title: "Saya membangun honeypot Express yang sangat realistis"
 description: "328 endpoint palsu dengan respons yang dihasilkan saat itu juga, spoofing header, pencatatan lalu lintas bot -- menyelami kode middleware honeypot Express yang dirancang untuk menipu pemindai."
 date: "2026-06-10"
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - express
@@ -10,7 +11,7 @@ tags:
   - security
   - honeypot
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "spw+sfTg/qIlHPOAoPOynSarPBZmCjee5vaTL/Zh1hcBXkiFdEevvGhoqYfn7VbegyA05G51PQvKXFa0RkT8BA=="
+author_sig: "rpJrrPjLqKayDDoHYsqdPlyUkXEvE1HfMtvLL/yAVM0AWg4B7i1d+AVq+QBVDzf0bkgIGLKm3P0kx1vpl3sAkA=="
 ---
 
 ## Idenya

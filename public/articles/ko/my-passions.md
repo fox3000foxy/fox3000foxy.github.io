@@ -1,12 +1,13 @@
 ---
 title: 내 열정들
 description: 코딩, 그림, 자동화, 올드 테크 발견 등 -- 나를 움직이는 것들
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "OKtu9ktXt/TAkZf0IWcnWc1JEwHKWXmqVsGfPXGamTlnkNPfQh9JZActDU4z89yTpxkuF06qO58dk2em2hir5Q=="
+author_sig: "LLHZeXGu9fPvwqHqRtv5u44jQs6a3mHd/8/8CoYhPxe2uVRySdpHIh+ofc4vmQmCzjd5Hda2ibjLC2WUc9Disg=="
 ---
 
 # 내 열정들

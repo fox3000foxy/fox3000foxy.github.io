@@ -4,14 +4,15 @@ description: "TypeScript-модуль на основе DiceBear: согласо
   основе страны/этничности, небольшой движок генетики для проекции детей и
   инженерные детали, сделавшие его пригодным для карточной игры."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "di7hZL9GU72JTiE9TbJpmTHk9uD98acuRxnp+uV/zgOnq6dJdNeEDFPgDxKUQocc79+AeGF9HVVfm0ecHhemhg=="
+author_sig: "sha298cH8+W/F9tmFrYrBG8cIza6gtaV8nDRemQqVRdrB+fjCIdwl568z7hFsy6iCggDe6G9DnMItedk9/ofnQ=="
 ---
 
 # Создание character-factory: аватары с генетикой

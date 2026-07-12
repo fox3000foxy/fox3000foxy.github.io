@@ -3,7 +3,8 @@ title: "Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang 
 description: "RPG giliran Discord di mana setiap tindakan menghasilkan gambar WebP
   secara instan: URL sebagai status permainan, RNG deterministik, pipeline WASM, cache 5
   level, bot serverless."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -16,7 +17,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RM61L3k/Wu6BlmMA4PGguI5fYEw6rnXu5+syONyW3cIjGviikKR2dBarvc3NF5gsw2xnptzrfEyRHKrUONYWMw=="
+author_sig: "DZkZ54Zy0XHD783QlT2Dgbg+BwYPDElu7iN/HViOk2Cf6FmM4l+/QX29Q7fzEjnLAnHwCRWYQ8t5ARCVBTB41g=="
 ---
 
 # Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan

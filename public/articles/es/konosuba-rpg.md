@@ -3,7 +3,8 @@ title: "Pasé un fin de semana leyendo el código de konosuba-rpg y esto es lo q
 description: "Un RPG por turnos de Discord donde cada acción genera una imagen WebP
   sobre la marcha: URL como estado del juego, RNG determinista, pipeline WASM, caché
   de 5 niveles, bot serverless."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -16,7 +17,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JD9/afFCRtBjXtYKXI/82fn/++c46ekjbSiEa4dhX/VA6iJFlFvlGZvfj/DOxG6821hy0H6OiLzkjBOothImZQ=="
+author_sig: "sssvPyaO7K//7AA9O/6XwnwkoYLLKK48gIqZ9TFrViNfBEOnH8JFA6zQtlDughmWciujawx6F1JyQwQUaM0E1Q=="
 ---
 
 # Pasé un fin de semana leyendo el código de konosuba-rpg y esto es lo que encontré

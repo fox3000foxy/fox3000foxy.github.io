@@ -1,7 +1,8 @@
 ---
 title: "Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động"
 description: "Phân tích chi tiết dự án của Laupok: một AI dựa trên NEAT học chơi Super Mario World một cách tự chủ. Thuật toán di truyền, mạng nơ-ron, tiến hóa nơ-ron mở rộngtopologies, và 4200 dòng Lua."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - ai
@@ -9,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "X2lK6mQqcMqj3hNGN05ZbQmuW9F58zyFTJVn+H9YUkI4hR3KD9iyBvG9eDul9nIcLw4lBMFzowIqsfcTIsyTFw=="
+author_sig: "WzTX5OdL3eaSRZCk6Sp/bszUYfJtBKntzaG6LwXXLGeJTAjkbip13Pe2VRpIVwmp2MZ++KiqgPO4Yf7nHtfV3Q=="
 ---
 
 # Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động

@@ -2,14 +2,15 @@
 title: Боттинг фермы Microsoft Rewards
 description: Как я написал бота для массового фарма очков Microsoft Rewards -- и
   почему их антибот-защита с тех пор ужесточилась.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/3AyGPgfhgFWbvtRWYcnBuR1O02ECKM5M2MKwasRjrnrVxALFE1Lc86zim/y4qRSIql3zWRVyn3FiUv7/GGlUg=="
+author_sig: "wrDkSyaP44XoJyXPOcW5rlZ+eXOuTIuoN18XUXYfJqYK+N6bqTCN7glI/BlozcHXiILMO4enSUGVUYU+tR38tQ=="
 ---
 
 > **Примечание (2026):** Этот проект больше не поддерживается. Microsoft значительно усилила свою антибот-защиту -- то, что работало тогда, сегодня уже не работает. Код и подход, описанные ниже, сохранены только в архивных/образовательных целях.

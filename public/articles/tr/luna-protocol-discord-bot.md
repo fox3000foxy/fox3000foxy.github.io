@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım"
 description: "Luna Protocol, yerel bir LLM ile çalışan, tamamen otonom bir Discord botudur. Uyuma, yazım hatası yapma, tereddüt etme, unutma, konu yorgunluğu çekme ve kendiliğinden mesaj gönderme gibi doğal konuşma yeteneklerine sahiptir."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/UxACpx1fFoj6XfAfn6wGk2hRj0+WdirVbep9LrZp+Ac9LKGdDDDj5CrkQ66vQHCe1fISqZfNKLUkhSdj/xKcw=="
+author_sig: "gXR2nwPhVNTlXhqiZ/srloIvvh4VyveAWE/DPiSfGbFtcV5ybra0YCS+p+h0g5YzuZ+Y4pEqDtCAmhRX83Uk8w=="
 ---
 
 # Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım
