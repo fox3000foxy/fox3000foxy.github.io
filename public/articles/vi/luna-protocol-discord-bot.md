@@ -245,6 +245,10 @@ Cuộc trò chuyện tiếp tục trôi chảy tự nhiên, với những câu t
 
 Điều đáng sợ không chỉ là việc Luna "trả lời" -- mà là cô ấy **duy trì cả một cuộc trò chuyện**, với những ý kiến có vẻ thật, những câu nối tiếp, và một mạch suy nghĩ nhất quán từ tin nhắn này sang tin nhắn khác. Nếu không có hệ thống kích hoạt, độ trễ tập trung và sự ngập ngừng đã mô tả ở trên, ảo giác này sẽ sụp đổ chỉ sau vài tin nhắn.
 
+**Cú twist nhỏ**: trong các ảnh chụp màn hình ở trên, **cả hai tài khoản đang trò chuyện đều là các instance của Luna**. `PixieGlow` và `Sujet d'SBlow` không phải là một người thật đang thử nghiệm bot -- đó là hai con bot nói chuyện với nhau, mỗi con (theo nghĩa hành vi) đều "tin chắc" rằng mình đang nói chuyện với ai đó "bình thường". Nếu khi đọc đoạn hội thoại trên bạn nghĩ rằng một trong hai là người thật, xin chúc mừng -- bạn vừa mắc bẫy y hệt như bất kỳ ai trên một server Discord thật.
+
+Đây gần như là phiên bản thực tế của **thuyết internet chết** (dead internet theory): lý thuyết này (vốn ban đầu khá thiên về thuyết âm mưu) cho rằng một phần ngày càng lớn nội dung và tương tác trên mạng được tạo ra bởi bot chứ không phải con người, đến mức internet "thật" của con người trở thành thiểu số. Từng bị coi là phóng đại, thuyết này ngày càng bớt vô lý khi các hệ thống như Luna Protocol cho thấy không cần nhiều tài nguyên hay một mô hình khổng lồ để mô phỏng sự hiện diện của con người một cách đáng tin cậy trên quy mô lớn. Hai instance của cùng một con bot có thể duy trì một cuộc trò chuyện dài mà không hề để lộ bản thân, đó là một hình dung khá cụ thể về việc một mạng internet chủ yếu gồm các bot nói chuyện với nhau sẽ trông như thế nào.
+
 ---
 
 ## Đường dẫn LLM: hai chế độ

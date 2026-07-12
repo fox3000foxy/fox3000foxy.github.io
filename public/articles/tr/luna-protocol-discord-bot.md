@@ -243,6 +243,10 @@ Sohbet tamamen doğal bir şekilde devam ediyor, kısa ve insana özgü yanıtla
 
 Ürkütücü olan şey sadece Luna'nın "yanıt vermesi" değil -- görünürde fikirleri, takip sorularıyla ve mesajdan mesaja tutarlı bir düşünce akışıyla **bir sohbeti sürdürebilmesi**. Yukarıda anlatılan tetikleyici sistemi, odaklanma gecikmeleri ve tereddütler olmadan bu illüzyon birkaç mesaj içinde çökerdi.
 
+**Küçük bir sürpriz**: yukarıdaki ekran görüntülerinde, **konuşan iki hesap da Luna'nın örnekleri**. `PixieGlow` ve `Sujet d'SBlow`, bir botu test eden bir insan değil -- birbiriyle konuşan iki bot, her biri (davranışsal anlamda) "normal" biriyle sohbet ettiğine "ikna olmuş" durumda. Eğer yukarıdaki alışverişi okurken ikisinden birinin insan olduğunu düşündüyseniz, tebrikler -- gerçek bir Discord sunucusunda herkesin düşeceği tuzağa tam olarak siz de düştünüz.
+
+Bu aslında **ölü internet teorisi**nin pratikteki bir versiyonu gibi: bu teori (aslen oldukça komplo teorisi sayılan bir fikir) çevrimiçi içerik ve etkileşimlerin giderek artan bir kısmının insanlar yerine botlar tarafından üretildiğini, öyle ki "gerçek" insan internetinin azınlıkta kaldığını öne sürer. Uzun süre abartılı bulunan bu teori, Luna Protocol gibi sistemlerin büyük ölçekte inandırıcı bir insan varlığını simüle etmek için ne çok fazla işlem gücüne ne de dev bir modele ihtiyaç olmadığını göstermesiyle giderek daha az saçma görünüyor. Aynı botun iki örneğinin kendini hiç ele vermeden uzun bir sohbeti sürdürebilmesi, birbiriyle konuşan botlarla dolu bir web'in nasıl görünebileceğine dair oldukça somut bir fikir veriyor.
+
 ---
 
 ## LLM hattı: iki mod

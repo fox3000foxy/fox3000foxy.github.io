@@ -243,6 +243,10 @@ Percakapan terus mengalir secara alami, dengan balasan singkat dan manusiawi ("o
 
 Yang mengerikan bukan cuma karena Luna "membalas" -- tapi karena dia **mempertahankan sebuah percakapan**, dengan opini yang tampak nyata, tanggapan lanjutan, dan alur pemikiran yang koheren dari satu pesan ke pesan berikutnya. Tanpa sistem trigger, jeda konsentrasi, dan keraguan yang dijelaskan di atas, ilusi ini akan runtuh hanya dalam beberapa pesan.
 
+**Sedikit plot twist**: dalam tangkapan layar di atas, **kedua akun yang mengobrol sama-sama merupakan instance dari Luna**. `PixieGlow` dan `Sujet d'SBlow` bukan manusia yang sedang menguji bot -- keduanya adalah dua bot yang saling berbicara, masing-masing "yakin" (secara perilaku) bahwa mereka sedang mengobrol dengan seseorang yang "normal". Jika saat membaca percakapan di atas kamu mengira salah satunya manusia, selamat -- kamu baru saja terjebak persis seperti siapa pun yang akan terjebak di server Discord sungguhan.
+
+Ini pada dasarnya adalah versi praktis dari **dead internet theory**: teori ini (yang awalnya cukup bersifat teori konspirasi) menyatakan bahwa porsi konten dan interaksi online yang dihasilkan oleh bot, bukan manusia, terus meningkat, sampai-sampai internet "asli" milik manusia menjadi minoritas. Lama dianggap berlebihan, teori ini menjadi semakin tidak absurd seiring sistem seperti Luna Protocol menunjukkan bahwa tidak dibutuhkan banyak daya komputasi atau model raksasa untuk mensimulasikan kehadiran manusia yang meyakinkan dalam skala besar. Dua instance dari bot yang sama yang mampu mempertahankan percakapan panjang tanpa pernah ketahuan memberikan gambaran yang cukup konkret tentang seperti apa web yang sebagian besar dihuni oleh bot-bot yang saling berbicara.
+
 ---
 
 ## Pipeline LLM: Dua Mode
