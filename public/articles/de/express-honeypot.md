@@ -1,16 +1,16 @@
 ---
 title: "Ich habe einen ultra-realistischen Express-Honeypot gebaut"
-description: "328 gefälschte Endpoints mit spontan generierten Antworten, Header-Spoofing, Bot-Traffic-Aufzeichnung — ein tiefer Einblick in eine Express-Honeypot-Middleware, die Scanner täuschen soll."
+description: "328 gefälschte Endpoints mit spontan generierten Antworten, Header-Spoofing, Bot-Traffic-Aufzeichnung -- ein tiefer Einblick in eine Express-Honeypot-Middleware, die Scanner täuschen soll."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bmQr9hMKWt3r8PZpOyDL9Xfy7UhKmwiBketopU5tMskP/x95TLg9uA76ap0NjeQaYL6TYN09tKrO4YbHvcaAVg=="
+author_sig: "8MP98sMNmsy/ehtVlbabUQaK+CZvDI4ypfCZPjasnByYuRILnm8NkUS3Id10hB7GOf1f2caovT1hIq304pTaSw=="
 ---
 
 ## Was ist ein Express-Honeypot?
 
 Ein Honeypot ist ein Köder, der ein echtes System nachahmt, um Angreifer anzulocken und zu erkennen. Im Kontext einer Express-Webanwendung ist es eine Middleware, die verdächtige Anfragen abfängt und mit glaubwürdigen gefälschten Inhalten antwortet, sodass das Verhalten von Bots und Scannern analysiert werden kann, ohne echte Daten preiszugeben.
 
-**express-middleware-honeypot** ist ein npm-Paket, das Ihre Express-Anwendung in einen echten Honeypot verwandelt. Es legt **328 Endpoints** frei, die eine breite Palette typischer Angriffsziele abdecken — Konfigurationsdateien, Anmeldedaten, Administrationsseiten, API-Endpoints, Bank-Phishing-Seiten und vieles mehr.
+**express-middleware-honeypot** ist ein npm-Paket, das Ihre Express-Anwendung in einen echten Honeypot verwandelt. Es legt **328 Endpoints** frei, die eine breite Palette typischer Angriffsziele abdecken -- Konfigurationsdateien, Anmeldedaten, Administrationsseiten, API-Endpoints, Bank-Phishing-Seiten und vieles mehr.
 
 Jeder Endpoint generiert eine Antwort **spontan**, mit frischen Zeitstempeln und Anfrage-IDs, was jede Antwort einzigartig und glaubwürdig macht.
 
@@ -24,7 +24,7 @@ npm install express-middleware-honeypot
 
 ### Automatische Registrierung mit `register()`
 
-Der einfachste Weg, den Honeypot zu nutzen, ist der Aufruf von `register()` auf Ihrer Express-Anwendung. Damit werden alle Middleware-Komponenten — Logging, Header, 404-Handler — auf einmal registriert:
+Der einfachste Weg, den Honeypot zu nutzen, ist der Aufruf von `register()` auf Ihrer Express-Anwendung. Damit werden alle Middleware-Komponenten -- Logging, Header, 404-Handler -- auf einmal registriert:
 
 ```js
 const express = require("express");
@@ -83,7 +83,7 @@ app.all('/wp-admin', instance.mocks['/wp-admin']);
 
 ## Header-Spoofing
 
-Die Header-Middleware (`instance.headersMiddleware`) setzt realistische Antwort-Header — `Server: nginx/1.24.0`, `X-Frame-Options`, `X-XSS-Protection`, und insbesondere einen dynamischen `X-Powered-By`-Header basierend auf der Dateierweiterung:
+Die Header-Middleware (`instance.headersMiddleware`) setzt realistische Antwort-Header -- `Server: nginx/1.24.0`, `X-Frame-Options`, `X-XSS-Protection`, und insbesondere einen dynamischen `X-Powered-By`-Header basierend auf der Dateierweiterung:
 
 - `.php` → `X-Powered-By: PHP/8.1.12`
 - `.jsp` → `X-Powered-By: JSP/3.0`
@@ -127,12 +127,12 @@ Damit können Sie eine echte WordPress/PHP-Anwendung lokal ausführen und den Bo
 | `additionalEndpoints` | `string[]` | `["/not_covered_endpoint_test"]` | Zusätzliche Endpoints über die 328 integrierten hinaus |
 | `enrichResponses` | `boolean` | `true` | Reichert JSON-Antworten mit Zeitstempel/Version an |
 
-## Die Mocks — 328 Endpoints in zwei Varianten
+## Die Mocks -- 328 Endpoints in zwei Varianten
 
 Der Mock-Generator (`src/services/mockupGenerator.ts`) produziert Antworten **spontan** für 328 Endpoints, jeder in zwei Varianten:
 
-- **Default** — knapp aber glaubwürdig (`{ code: 0, message: "ok", data: {...} }`)
-- **Complete** — reichhaltige Antworten mit Zeitstempeln, Anfrage-ID, Metadaten, Versions-Headern, etc.
+- **Default** -- knapp aber glaubwürdig (`{ code: 0, message: "ok", data: {...} }`)
+- **Complete** -- reichhaltige Antworten mit Zeitstempeln, Anfrage-ID, Metadaten, Versions-Headern, etc.
 
 Um Mocks auf die Festplatte zu schreiben (Debugging):
 

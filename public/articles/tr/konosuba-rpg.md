@@ -17,7 +17,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Ryc5T1UoM0WR0bARNgfqdfg0Yvg5E8Ryo7pfkt62ym/cKF+1hbhBA3vd4GSd+1YOi7k8LM0vBVm/G+Kh4GVPjQ=="
+author_sig: "uLiCscMwj4YPxsyAnZaem23+O01Z8Ody7cXZABby0Rnp8uAXo2y/OX79v2AbwnMNjXtSsgLExB1F1iFtb9y3Og=="
 ---
 
 # Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım

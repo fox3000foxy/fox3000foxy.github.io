@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4fcnEVq02JPo4Hd9DdCUp+/Wl7OEQbvITL6NmQIB2w+/T1u/Ohi70DbiWoQEG+5Pezaj7fofell/0rI2qdIwQA=="
+author_sig: "9QpLb9QWl9XWQ0r8mrtRuhb5qUQWP+9NICIvFDiI/MQR1RJROfTR9F1IrXz3PdVIOYhpG9AxQ1e2/jx6J4N2Hw=="
 ---
 
 ## AI ขี้โกงของฉันสำหรับ Nausicaa

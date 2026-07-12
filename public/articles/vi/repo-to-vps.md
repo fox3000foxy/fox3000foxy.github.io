@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cHV9Elb+AHVY/J282yin1X070N1yQyH/Von4EGsIfEHGxb7X2eg84MY+ToiaCCisZiVhl6frooubFOqmh72HNw=="
+author_sig: "yKYS0XKKzNGtmUBOYSrdrOKAVtYJ2l30SK6KHonIKPyfmEYlVmkd1H2omo3cUqZ9qAoYChceoTdteM4GzIZfeg=="
 ---
 
 ## GitHub cho bạn một VPS miễn phí trong 6h. Tôi đã tìm ra cách biến nó thành vĩnh viễn.

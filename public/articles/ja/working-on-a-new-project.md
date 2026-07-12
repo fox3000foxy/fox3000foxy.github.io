@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DCtO6j+A3bTr1GxF6D3FtVF0zLv5wBUEowr3Fxn+ZC7fkkgxozMKBceLWxUVAyhn/EYfnO/VDmdTRjx1+cvgcw=="
+author_sig: "R5gT9qxJpnLqXruZn2XjiL/ajPa0g5D4BrC8xouBdBJ5DvsE57kY3hlktWVfArLwoTsnsLhcju5NgF2ajDvCMw=="
 ---
 
 # 新しいプロジェクト

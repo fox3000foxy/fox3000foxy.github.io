@@ -17,12 +17,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QsMFG5Nw7RfmERgoLwAZWDZ9Y1Syy6Ns7atk3Otp5c+X1HK00A88xMjZ0aS6dTZvxyDHIH78S+VMsHpddwGfYQ=="
+author_sig: "tx4MghcuhMvR9kO1Ic512F8SJqcNf/YDrqY6A4wEGLdRu3w1I6FOWXHfpKAw8eQorZzA4+it4BRVlDB2MPequw=="
 ---
 
 # Ho passato un fine settimana a leggere il codice di konosuba-rpg ed ecco cosa ho trovato
 
-Mantengo questo progetto da un po', ma rileggere il proprio codice a mente fresca è sempre istruttivo. konosuba-rpg è un RPG a turni Discord dove ogni azione genera un'immagine WebP al volo. Non un embed testuale. Una vera immagine composta, con gli sprite, le barre della vita, i messaggi di combattimento — tutto.
+Mantengo questo progetto da un po', ma rileggere il proprio codice a mente fresca è sempre istruttivo. konosuba-rpg è un RPG a turni Discord dove ogni azione genera un'immagine WebP al volo. Non un embed testuale. Una vera immagine composta, con gli sprite, le barre della vita, i messaggi di combattimento -- tutto.
 
 La stack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Hosting completamente gratuito. E il bot Discord funziona senza server persistente. Questo post spiega come tutto funziona insieme.
 
@@ -40,12 +40,12 @@ La prima cosa che colpisce: non c'è alcuno stato lato server per il gameplay. L
 
 Ogni segmento dopo il seed è un'azione giocata. Il server riceve questo URL, riparte dall'inizio, riesegue tutte le azioni in ordine, e restituisce un'immagine del combattimento in quell'istante preciso. Nessuna sessione, nessuno stato in RAM legato a un utente.
 
-Discord funziona con pulsanti interattivi — quando il giocatore preme "Attacca", Discord invia al server il `custom_id` del pulsante. Questo custom_id contiene l'URL compressa del combattimento con la nuova azione aggiunta. Il server ricalcola tutto da zero e restituisce l'immagine aggiornata.
+Discord funziona con pulsanti interattivi -- quando il giocatore preme "Attacca", Discord invia al server il `custom_id` del pulsante. Questo custom_id contiene l'URL compressa del combattimento con la nuova azione aggiunta. Il server ricalcola tutto da zero e restituisce l'immagine aggiornata.
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// Precompilato fuori dalla funzione — non ricreato a ogni chiamata
+// Precompilato fuori dalla funzione -- non ricreato a ogni chiamata
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -125,7 +125,7 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-Semplice, ma quando il giocatore spamma Attacco x10 passa da `aaaaaaaaaa` (10 char) a `a10` (3 char). I pulsanti "Attacca x4" e "Attacca x10" nell'interfaccia esistono proprio per questo — accelerare il combattimento comprimendo bene il payload.
+Semplice, ma quando il giocatore spamma Attacco x10 passa da `aaaaaaaaaa` (10 char) a `a10` (3 char). I pulsanti "Attacca x4" e "Attacca x10" nell'interfaccia esistono proprio per questo -- accelerare il combattimento comprimendo bene il payload.
 
 ### 2. Session token quando la compressione non basta più
 
@@ -151,7 +151,7 @@ export async function decodeGameplayPayloadWithStatus(encodedPayload: string, us
 }
 ```
 
-Le sessioni hanno un TTL di 7 giorni e un pruning automatico ogni 10 minuti. La verifica `turnVersion` impedisce di riprodurre uno stato obsoleto se il giocatore è avanzato nella partita — una protezione discreta contro il "tornare indietro" accidentale.
+Le sessioni hanno un TTL di 7 giorni e un pruning automatico ogni 10 minuti. La verifica `turnVersion` impedisce di riprodurre uno stato obsoleto se il giocatore è avanzato nella partita -- una protezione discreta contro il "tornare indietro" accidentale.
 
 Le due `Map` in memoria (`tokenToSession`, `latestTurnByBattle`) usano lo stesso pattern `globalThis as unknown as GameSessionGlobals` delle cache d'immagine, per le stesse ragioni che vedremo più avanti.
 
@@ -179,7 +179,7 @@ WebP output
 
 **Background**: due immagini fisse (la plancia e la cornice), caricate dal filesystem e composte una volta.
 
-**Characters layer**: gli sprite sono posizionati secondo coordinate calcolate. I giocatori morti sono esclusi (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Gli sprite nemici sono specchiati orizzontalmente con un `flipX` personalizzato — un ciclo pixel per pixel invece di una dipendenza esterna.
+**Characters layer**: gli sprite sono posizionati secondo coordinate calcolate. I giocatori morti sono esclusi (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Gli sprite nemici sono specchiati orizzontalmente con un `flipX` personalizzato -- un ciclo pixel per pixel invece di una dipendenza esterna.
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -208,7 +208,7 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 
 ---
 
-## Il sistema di cache — la parte più elaborata
+## Il sistema di cache -- la parte più elaborata
 
 Ci sono 5 livelli di cache distinti. Ognuno ha come target una granularità diversa della pipeline.
 
@@ -237,7 +237,7 @@ function freePhoton(_key: string, img: Photon.PhotonImage): void {
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` è un oggetto WASM con memoria allocata nel linear memory WASM, fuori dal GC di JavaScript. Senza chiamata esplicita a `.free()`, questa memoria non viene mai liberata. L'evizione del LRU triggera `.free()` automaticamente — è RAII portato in JavaScript.
+`Photon.PhotonImage` è un oggetto WASM con memoria allocata nel linear memory WASM, fuori dal GC di JavaScript. Senza chiamata esplicita a `.free()`, questa memoria non viene mai liberata. L'evizione del LRU triggera `.free()` automaticamente -- è RAII portato in JavaScript.
 
 ### Le chiavi di cache sono intenzionalmente lossy
 
@@ -248,7 +248,7 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-La chiave del characters layer non codifica il valore esatto degli HP — solo `1` (vivo) o `0` (morto). Perché lo sprite di un giocatore a 40 HP e un giocatore a 15 HP è identico. Un cache hit sopravvive quindi a qualsiasi danno finché nessuno cade.
+La chiave del characters layer non codifica il valore esatto degli HP -- solo `1` (vivo) o `0` (morto). Perché lo sprite di un giocatore a 40 HP e un giocatore a 15 HP è identico. Un cache hit sopravvive quindi a qualsiasi danno finché nessuno cade.
 
 La chiave UI invece codifica gli HP esatti (la barra della vita cambia a ogni colpo) e un hash dei messaggi:
 
@@ -281,15 +281,15 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)` può causare uno stack overflow sulle immagini grandi perché gli argomenti sono passati sulla call stack. Il chunking a 32KB lo evita. Il risultato è messo in cache — la conversione base64 di una stessa immagine è fatta una sola volta per istanza del worker.
+`String.fromCharCode(...largeArray)` può causare uno stack overflow sulle immagini grandi perché gli argomenti sono passati sulla call stack. Il chunking a 32KB lo evita. Il risultato è messo in cache -- la conversione base64 di una stessa immagine è fatta una sola volta per istanza del worker.
 
 ---
 
-## STRIPPER.md — audit degli await sequenziali
+## STRIPPER.md -- audit degli await sequenziali
 
 C'è un file `STRIPPER.md` nel repo che documenta un audit di parallelizzazione degli `await`. Qualche esempio di ciò che è registrato:
 
-- Il caricamento del profilo giocatore faceva 3 richieste Supabase in serie (progressione, riepilogo run, achievement). Sono state messe in `Promise.all` — nessuna dipendenza tra loro.
+- Il caricamento del profilo giocatore faceva 3 richieste Supabase in serie (progressione, riepilogo run, achievement). Sono state messe in `Promise.all` -- nessuna dipendenza tra loro.
 - La distribuzione delle ricompense di fine combattimento (accessori + consumabili) era sequenziale. Parallelizzata allo stesso modo.
 - La creazione dei token di sessione per i pulsanti avveniva gruppo per gruppo. I gruppi indipendenti sono ora creati in parallelo.
 
@@ -332,9 +332,9 @@ export async function handleInteractions(c: Context) {
 
 Discord invia un POST, il handler gira 50-200ms su una funzione Vercel o un Cloudflare Worker, risponde, e finisce qui. Nessuna connessione permanente da mantenere, nessun server da tenere acceso. L'intero bot Discord è ospitato sul free tier di Vercel.
 
-La verifica Ed25519 (`verifyKey` da `discord-interactions`) è obbligatoria — Discord invia una firma negli header che devi validare, altrimenti rifiuta l'endpoint.
+La verifica Ed25519 (`verifyKey` da `discord-interactions`) è obbligatoria -- Discord invia una firma negli header che devi validare, altrimenti rifiuta l'endpoint.
 
-### L'animazione speciale — l'unico await intenzionale
+### L'animazione speciale -- l'unico await intenzionale
 
 ```typescript
 // handleSpecialButton.ts
@@ -345,7 +345,7 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-Questo ritardo volontario di 3 secondi è documentato in STRIPPER.md come intenzionale. L'attacco speciale di Megumin (Esplosione) ha un'animazione lato Discord — il messaggio viene prima aggiornato con un'immagine intermedia, poi modificato 3 secondi dopo con il risultato. È l'unico caso in cui una funzione Vercel gira volutamente più a lungo del necessario.
+Questo ritardo volontario di 3 secondi è documentato in STRIPPER.md come intenzionale. L'attacco speciale di Megumin (Esplosione) ha un'animazione lato Discord -- il messaggio viene prima aggiornato con un'immagine intermedia, poi modificato 3 secondi dopo con il risultato. È l'unico caso in cui una funzione Vercel gira volutamente più a lungo del necessario.
 
 ![Attacco speciale](/images/konosuba-rpg/shot_08_special.webp)
 
@@ -371,7 +371,7 @@ if (!isVercelRuntime) { start(); }
 
 La differenza principale: gli asset statici. Su Vercel, vengono letti dal filesystem (`/var/task/assets/`). Su Cloudflare Workers, passano attraverso un binding `ASSETS` (asset statici CF) con fallback verso un mirror HTTPS (`fox3000foxy.com/konosuba-rpg/assets`). Il `getAssetBytes` in `assetLoader.ts` gestisce entrambi i percorsi provando prima il filesystem, poi fetch.
 
-I WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) hanno build separate per ogni runtime. Il flag `edge-light` nel nome del package designa la build compatibile con Cloudflare Workers, che non permette `new WebAssembly.Module()` a runtime — il WASM deve essere pre-compilato.
+I WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) hanno build separate per ogni runtime. Il flag `edge-light` nel nome del package designa la build compatibile con Cloudflare Workers, che non permette `new WebAssembly.Module()` a runtime -- il WASM deve essere pre-compilato.
 
 ---
 
@@ -474,20 +474,20 @@ export async function withPerf(scope: string, label: string, work: () => Promise
 - **Cloudflare Workers free tier**: 100K richieste/giorno, 10ms CPU time per richiesta (il render può superarlo sui Workers, da qui Vercel come primario).
 - **Supabase free tier**: 500MB di database, 5GB di banda. Sufficiente per migliaia di giocatori.
 
-L'intero backend funziona a costo zero fino a volumi significativi. L'unico punto d'attrito è il limite CPU di Cloudflare Workers — il render dell'immagine è CPU-intensive a causa di WASM, da qui la strategia di Vercel come primario e Workers come CDN di failover.
+L'intero backend funziona a costo zero fino a volumi significativi. L'unico punto d'attrito è il limite CPU di Cloudflare Workers -- il render dell'immagine è CPU-intensive a causa di WASM, da qui la strategia di Vercel come primario e Workers come CDN di failover.
 
 ---
 
 ## Le 3 cose che meritano di essere ricordate
 
-1. **L'URL come stato di gioco** non è solo un trucco carino — è un vincolo imposto da Discord (i pulsanti hanno un limite di 100 char) che ha forzato un'architettura stateless con compressione RLE + token di sessione come fallback. Il vincolo ha dettato il design.
+1. **L'URL come stato di gioco** non è solo un trucco carino -- è un vincolo imposto da Discord (i pulsanti hanno un limite di 100 char) che ha forzato un'architettura stateless con compressione RLE + token di sessione come fallback. Il vincolo ha dettato il design.
 
 2. **La cache WASM con evizione esplicita**: i `PhotonImage` allocano fuori dallo heap JavaScript e non saranno mai GC'd senza `.free()`. Collegare `freePhoton` all'evizione del LRU è RAII in JavaScript. È discreto nel codice, ma senza di esso il worker perderebbe memoria in produzione.
 
-3. **Un bot Discord serverless senza WebSocket**: è meno conosciuto dell'approccio WebSocket gateway, ma per un bot che fa elaborazione stateless (ogni interazione è indipendente), l'Interactions Endpoint è strettamente superiore — nessuna riconnessione, nessun heartbeat, nessun processo da mantenere. Discord gestisce la disponibilità dalla propria infrastruttura.
+3. **Un bot Discord serverless senza WebSocket**: è meno conosciuto dell'approccio WebSocket gateway, ma per un bot che fa elaborazione stateless (ogni interazione è indipendente), l'Interactions Endpoint è strettamente superiore -- nessuna riconnessione, nessun heartbeat, nessun processo da mantenere. Discord gestisce la disponibilità dalla propria infrastruttura.
 
 ---
 
 *Repo: [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
 
-*Licenza source-available personalizzata — nessuna ridistribuzione, free to use.*
+*Licenza source-available personalizzata -- nessuna ridistribuzione, free to use.*

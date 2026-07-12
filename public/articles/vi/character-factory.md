@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "k04mry9w6Y/WLCzFO9pJzHEXxHY+/WMUbVthsgtbmBjlFUECxwy1a3VZ7q8Jz83mE1XWPtzcinSLNpC9BG3bEQ=="
+author_sig: "g0VAwWZHoFOURSaSPJ5f2ybiaPUmHGf9FspcYPKnODLCgr2YeztDOu2zTbI4/qsTs/mRFHpNUCxiPigA3Zw4nQ=="
 ---
 
 # Xây dựng character-factory: avatar với hệ thống di truyền

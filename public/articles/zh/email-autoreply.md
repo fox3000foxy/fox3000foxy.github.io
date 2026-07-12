@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DQKa4mod27fLCud7DQjDeEVwW9hblHMdAW+yjZB9vFFGgTfUHdpheJQjy0LJbXyKoSLVUVzKPHb1DivT8bViVg=="
+author_sig: "hMYZdSiGW8v7IT4Fwgd99bz0xKDsDii7r5GDf40CO5+CUB53LQo68vEG2YPNiQbIpciX+Y56W3LgGnM1fLlCRQ=="
 ---
 
 # 我用 git 当数据库，在 GitHub Actions 上白嫖跑了个 bot

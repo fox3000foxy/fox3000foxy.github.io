@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dylIxP7XJ80ZnM72QveoIoxiQPHXeQx2MyS8TW/AHBP2WmPb9qeT5aKoyYi/SQVu2ZY+3cR1ugevzhDqO01+KQ=="
+author_sig: "mCIHAneKDqZREGzs2IqTMF5sBK3oVsbRbrqjxCgTtgSFFIxOoQdnyW0NZIANHooSVEAbtoae5agnMl69mOgE6A=="
 ---
 
 # قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته

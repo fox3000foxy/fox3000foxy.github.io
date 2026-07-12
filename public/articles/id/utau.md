@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Fe3LPASJvd0q+bMwOdcMJPzVqkx0MdiK8Y/6fr1CtIIpwRYqaFRYi4iI8HIZv93HV3zbvAaMZ1y34LXgrX41Gg=="
+author_sig: "eOWmc1wk8UZj5ZXi0//WMMUTFyKyf8Rx3GwPJIX/IzDi12fe3JSEIWTi22gyWRkPLFQCf5kcL7G1JgbWd5AvxQ=="
 ---
 
 ## UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis
@@ -24,7 +24,7 @@ Lalu ada seorang pria Jepang, Ameya/Ayame, yang merilis sesuatu buatannya sendir
 
 Benda itu bernama **UTAU** (歌う, "bernyanyi" dalam bahasa Jepang). Dan untuk zamannya, itu adalah sihir.
 
-Aku selalu merasa perangkat lunak ini mempesona. Bukan karena ia bersih secara teknis (spoiler: sebenarnya ya, butuh pemikiran sungguhan untuk membuat benda ini—pokoknya berantakan, aku menangisi ayam ini), tapi karena ia melakukan sesuatu yang tidak dilakukan orang lain: ia memberikan sintesis suara kepada masyarakat umum. Kayak kamu, aku, siapa pun yang punya mikrofon.
+Aku selalu merasa perangkat lunak ini mempesona. Bukan karena ia bersih secara teknis (spoiler: sebenarnya ya, butuh pemikiran sungguhan untuk membuat benda ini--pokoknya berantakan, aku menangisi ayam ini), tapi karena ia melakukan sesuatu yang tidak dilakukan orang lain: ia memberikan sintesis suara kepada masyarakat umum. Kayak kamu, aku, siapa pun yang punya mikrofon.
 
 Biarkan aku jelaskan kenapa ini keren.
 

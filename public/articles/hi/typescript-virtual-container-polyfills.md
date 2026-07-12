@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PTosC5ySm27H9n0bY7rVdjLTcEdYLj4PdyvJef12Ralop1Cdc89NHHyKroCS5vv8ZmqWZNkw8sqjDqvbeG9cPA=="
+author_sig: "vubS8rpus51/bppTHmHaXg0orb9scRL1a2TDGeAToIKRR7O4Kfye83OJ6Y90+tPpfqNZ4kStlfSanWg3aTWvuA=="
 ---
 
 # बिना Wasm के ब्राउज़र में Node.js लाइब्रेरी चलाना -- typescript-virtual-container के polyfills

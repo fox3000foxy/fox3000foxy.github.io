@@ -1,6 +1,6 @@
 ---
 title: "Gerçeküstü bir Express honeypot'u inşa ettim"
-description: "Anında oluşturulan yanıtlar, başlık sahteciliği, bot trafiği kaydı ile 328 sahte uç nokta — tarayıcıları kandırmak için tasarlanmış bir Express honeypot middleware'inin koduna derinlemesine bir dalış."
+description: "Anında oluşturulan yanıtlar, başlık sahteciliği, bot trafiği kaydı ile 328 sahte uç nokta -- tarayıcıları kandırmak için tasarlanmış bir Express honeypot middleware'inin koduna derinlemesine bir dalış."
 date: "2026-06-10"
 aiGenerated: true
 tags:
@@ -11,12 +11,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "TdBX8lwnoY1StnEJmsBYXzJNQaIRyl9UDOtCc5GX5+h53HJ31UYRfd1w0gthaEf9CGBT5R6UYPJae6XMllEasg=="
+author_sig: "pI25RzfsFwp0fDoblZAPpMSexvHr7gWIYuYVsjNzoxHotx0WVRVw25nL589l4+fDeJvl47AtGofpNhFhVR/qMw=="
 ---
 
 ## Fikir
 
-Botlar ve otomatik tarayıcılar, güvenlik açıkları bulmak için web uygulamalarını sürekli tarar. `.env` dosyaları, yönetici panelleri, veritabanı yedekleri, SSH kimlik bilgileri — istismar edilebilecek her şeyi ararlar.
+Botlar ve otomatik tarayıcılar, güvenlik açıkları bulmak için web uygulamalarını sürekli tarar. `.env` dosyaları, yönetici panelleri, veritabanı yedekleri, SSH kimlik bilgileri -- istismar edilebilecek her şeyi ararlar.
 
 Sadece 404 döndürmek yerine daha ilginç bir şey yapmak istedim: saldırganların savunmasız bir hedef bulduklarına inanmalarını sağlayacak **inandırıcı içerikle yanıt veren bir Express honeypot'u**.
 

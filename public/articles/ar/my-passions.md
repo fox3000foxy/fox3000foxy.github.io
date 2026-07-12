@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UtJ/95dV9Sah3662HD1+F5tcBoo+oAPKzhtZHLWKgyMCupQUd+AEirQjah5m9qEWoM4CePOaaO6xY14G7HDCiw=="
+author_sig: "wyjy6f+DDqG1GBRkQVrkbqqzAXNkoAD+zqQD7pPkwsUy5YVJ0eIPAwnNuNFcO/TgwNindFT54tT5tEeJmakSnw=="
 ---
 
 # شغفي

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hEzS0OSzeRtzz4KlGv6Vl6kb9JMfOHImX3lf+HbAfQ0fK/Lr1dGp8mqyQW5yfNplIJP/7PEgCaJqgko4Z5V+lA=="
+author_sig: "G6oBTS76YnPVqPR8mp/2R+qvBzuqf7tHnIKt8F3u+lxzLXmFJFydu8r3P1YgGApXW6r+CdjvpcaLnKt30GMr2w=="
 ---
 
 ## บทนำ
@@ -247,7 +247,7 @@ Master Gumbo เรียกสิ่งนี้ว่า "รูปแบบ A
 
 เบื้องหลังสิ่งนี้สำเร็จได้ด้วยระบบ **recursive task tree** ที่แต่ละเป้าหมายระดับสูง (เช่น "คราฟต์ diamond pickaxe") ถูกแยกย่อยเป็นงานที่ต้องทำก่อน: ขุดเพชร → ถลุงมัน → คราฟต์ sticks → รวมกัน ต้นไม้เดินกราฟสูตรคราฟต์ทั้งหมดของ Minecraft จัดการห่วงโซ่การผลิต ดร็อปจากม็อบ loot tables และการเข้าถึง container ต่างจาก tree ที่เขียนด้วยมือของ ANNA งานของ Altoclef คือ **Java classes ที่ตั้งโปรแกรมได้** ซึ่งสามารถใช้ตรรกะใดๆ ก็ได้: กลยุทธ์การต่อสู้ การแลกกับ Piglins รูปแบบการสำรวจ
 
-ข้อมูลเชิงลึกทางสถาปัตยกรรมที่สำคัญคือการแยก **อะไร** (task tree) ออกจาก **อย่างไร** (Baritone pathfinding) Baritone จัดการการเคลื่อนที่ระดับต่ำ: pathfinding, การหลีกเลี่ยงสิ่งกีดขวาง, การทำลายบล็อก, การจัดการ inventory — ในขณะที่ระบบ task จัดการแผนระดับสูง ความเป็นโมดูลาร์นี้หมายความว่าไม่มีส่วนประกอบใดที่ต้องเป็น AI: ทั้งคู่เป็น deterministic algorithms แต่การรวมกันของพวกมันสร้างพฤติกรรมที่ซับซ้อนและมุ่งเป้าหมายซึ่งเทียบเท่ากับแนวทางที่เรียนรู้ได้
+ข้อมูลเชิงลึกทางสถาปัตยกรรมที่สำคัญคือการแยก **อะไร** (task tree) ออกจาก **อย่างไร** (Baritone pathfinding) Baritone จัดการการเคลื่อนที่ระดับต่ำ: pathfinding, การหลีกเลี่ยงสิ่งกีดขวาง, การทำลายบล็อก, การจัดการ inventory -- ในขณะที่ระบบ task จัดการแผนระดับสูง ความเป็นโมดูลาร์นี้หมายความว่าไม่มีส่วนประกอบใดที่ต้องเป็น AI: ทั้งคู่เป็น deterministic algorithms แต่การรวมกันของพวกมันสร้างพฤติกรรมที่ซับซ้อนและมุ่งเป้าหมายซึ่งเทียบเท่ากับแนวทางที่เรียนรู้ได้
 
 Altoclef เป็นตัวแทนของขีดจำกัดของ **pure symbolic Minecraft AI**: มันสามารถเอาชนะเกมตั้งแต่เริ่มต้นโดยไม่ต้องฝึก ไม่ต้องใช้ GPU และไม่มีข้อมูลมนุษย์ แต่มันไม่สามารถปรับตัวให้เข้ากับงานที่โปรแกรมเมอร์ไม่ได้คาดการณ์ไว้ และมันไม่สามารถเรียนรู้จากประสบการณ์ มันรู้วิธีคราฟต์ diamond pickaxe เพราะ Java class บอกมันอย่างแม่นยำว่าต้องทำอย่างไร ไม่ใช่เพราะมันคิดออกเอง
 

@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "e93gPQV3dzeRG4iM7QZQEnYZW5tO2YHpitVtmgVD3SO7QNa1+zpCda9yDlhdFHQG9jdLEEIFvJAbZdp81oY7nw=="
+author_sig: "HFZ3qn5rT++3vymWCu0yWwayCmL7k7yI8vQudWd6LyL4C0d51uv8XhpRwFh3+kAvMlC9tKRiVviHES2zN//hBA=="
 ---
 
 # Мой GitHub Профиль

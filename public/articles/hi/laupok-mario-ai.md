@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "OENSpvqzuHNg/5LX3EZspO7Ru/tsVYgC50Lzq9mm3jpigdnbm7HExxopvhxUDXat2SKhA8YgsEnb8NMI68i0Ow=="
+author_sig: "s/4nmlNRfBHiSOdkOSR8Pd12IOaPyCa5fZGM6Dc+cLuqtPaP8gEtO8T4VJXqA/uQQUbNe1sDcpFlhjsgdmIuxQ=="
 ---
 
 # मैंने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है

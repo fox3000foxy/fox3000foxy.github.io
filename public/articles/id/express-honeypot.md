@@ -1,6 +1,6 @@
 ---
 title: "Saya membangun honeypot Express yang sangat realistis"
-description: "328 endpoint palsu dengan respons yang dihasilkan saat itu juga, spoofing header, pencatatan lalu lintas bot — menyelami kode middleware honeypot Express yang dirancang untuk menipu pemindai."
+description: "328 endpoint palsu dengan respons yang dihasilkan saat itu juga, spoofing header, pencatatan lalu lintas bot -- menyelami kode middleware honeypot Express yang dirancang untuk menipu pemindai."
 date: "2026-06-10"
 aiGenerated: true
 tags:
@@ -11,12 +11,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "11J1OOm5V3D7RbnTc5l/lk+icun+n5Tddlk0X8aSENqSbb0vXI9/8qXNAm7P5eNt2BecUmsUnxwa7xL2fhuC/A=="
+author_sig: "7un8azkRQKLfYVoNorv3LaaRC0FFl7+xWXWJy51AFl7uwUFdsB09HUMDX0wWroL8gdxvoSs1+1RMyqkJK8Sgyg=="
 ---
 
 ## Idenya
 
-Bot dan pemindai otomatis terus-menerus memindai aplikasi web untuk mencari kerentanan. Mereka mencari file `.env`, panel admin, cadangan basis data, kredensial SSH — apa pun yang dapat dieksploitasi.
+Bot dan pemindai otomatis terus-menerus memindai aplikasi web untuk mencari kerentanan. Mereka mencari file `.env`, panel admin, cadangan basis data, kredensial SSH -- apa pun yang dapat dieksploitasi.
 
 Alih-alih hanya mengembalikan 404, saya ingin membuat sesuatu yang lebih menarik: sebuah **honeypot Express** yang merespons dengan konten kredibel, membuat penyerang percaya bahwa mereka telah menemukan target yang rentan.
 

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "af63dNaKZSS7amtxBKbjX2AQitlzU+oydNloVuCoIgD2H+ngYhu5ipN0l10iPTWaojtjlKok/M8cvX6nQeQIKA=="
+author_sig: "01TQaggBGtkT5XTT4Pp5UT+uhXmAIiOb4Jd8tsQ842PBnhg5Mwp54q3FbFoK9/sREbbaRqscES0Vy7k89PWLjg=="
 ---
 
 ## Introduction
@@ -247,7 +247,7 @@ L'interface est trompeusement simple : tapez `@gamer` dans le chat, et Altoclef 
 
 Sous le capot, ceci est réalisé grâce à un **système d'arbre de tâches récursif** où chaque objectif de haut niveau (par exemple, « craft une pioche en diamant ») est décomposé en tâches prérequises : miner du diamant → le fondre → craft des bâtons → les combiner. L'arbre parcourt le graphe complet des recettes Minecraft, gérant les chaînes de production, les drops de monstres, les tables de butin et l'accès aux conteneurs. Contrairement à l'arbre écrit à la main d'ANNA, les tâches d'Altoclef sont des **classes Java programmables** qui peuvent implémenter une logique arbitraire : stratégies de combat, troc avec les piglins, motifs d'exploration.
 
-L'idée architecturale clé est la séparation du **quoi** (l'arbre de tâches) du **comment** (le pathfinding Baritone). Baritone gère les déplacements de bas niveau : pathfinding, évitement d'obstacles, cassage de blocs, gestion d'inventaire — tandis que le système de tâches orchestre le plan de haut niveau. Cette modularité signifie qu'aucun composant n'a besoin d'être une IA : ce sont tous deux des algorithmes déterministes, mais leur combinaison produit un comportement complexe et orienté vers un but qui rivalise avec les approches par apprentissage.
+L'idée architecturale clé est la séparation du **quoi** (l'arbre de tâches) du **comment** (le pathfinding Baritone). Baritone gère les déplacements de bas niveau : pathfinding, évitement d'obstacles, cassage de blocs, gestion d'inventaire -- tandis que le système de tâches orchestre le plan de haut niveau. Cette modularité signifie qu'aucun composant n'a besoin d'être une IA : ce sont tous deux des algorithmes déterministes, mais leur combinaison produit un comportement complexe et orienté vers un but qui rivalise avec les approches par apprentissage.
 
 Altoclef représente la limite de **l'IA Minecraft symbolique pure** : il peut finir le jeu de zéro sans entraînement, sans GPU, et sans données humaines, mais il ne peut pas s'adapter à des tâches que ses programmeurs n'ont pas anticipées, et il ne peut pas apprendre de l'expérience. Il sait craft une pioche en diamant parce qu'une classe Java lui dit exactement comment, pas parce qu'il l'a découvert tout seul.
 

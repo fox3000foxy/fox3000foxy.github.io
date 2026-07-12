@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6mPxhvZ0qW8SYYRbWXojyYhFp2I43/lZZV4R7vFGI7lRXJmQNZMHNFZp6h46zSM1PY/WQzvQfhieo2mWA7HIUQ=="
+author_sig: "g7o2lI7JofICuhEnD6drhR2rJhM7Nn1V+Oi4ptXVY9K8DhIo1Zlf4v5uonQ0BU6qr0wNuF9LrClLtZgmYsIkhA=="
 ---
 
 ## 소개
@@ -180,7 +180,7 @@ OpenAI Five는 순수 자기 대결 RL로 Dota 2 세계 챔피언을 물리쳤�
 
 ![단일 구성으로 150개 이상의 다양한 태스크에서 DreamerV3 벤치마크 점수](assets/dreamerv3-benchmarks.png)
 
-DeepMind의 DreamerV3는 세 번째 접근법을 취한다. 행동 클로닝이나 설계된 RL 대신 **세계 모델**을 학습한다: 과거 액션에서 미래 상태와 보상을 예측하는 신경망 — 그리고 가능한 미래에 대해 꿈을 꾸며 계획한다. 인간 데이터나 커리큘럼 없이 Minecraft에서 다이아몬드를 수집한 최초의 알고리즘이며, 2025년 Nature에 발표되었다.
+DeepMind의 DreamerV3는 세 번째 접근법을 취한다. 행동 클로닝이나 설계된 RL 대신 **세계 모델**을 학습한다: 과거 액션에서 미래 상태와 보상을 예측하는 신경망 -- 그리고 가능한 미래에 대해 꿈을 꾸며 계획한다. 인간 데이터나 커리큘럼 없이 Minecraft에서 다이아몬드를 수집한 최초의 알고리즘이며, 2025년 Nature에 발표되었다.
 
 ![DreamerV3가 세계 모델을 학습하여 미래 궤적을 상상한다](assets/dreamerv3-header.png)
 

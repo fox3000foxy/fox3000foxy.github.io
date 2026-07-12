@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NKeireckV2f47n3ZluyLFWu2+zr2VZ0qrINAZglXw/GEuQEWt6ELIQPFjEi8htoQ7xZhst+cefnfNLmn/D4S0Q=="
+author_sig: "tytpcbVx2ygJjpZkgmy+WpYEYtF2qJKivN4voJVzYe/zJe6+6AfMbfFtXFRBBBGlplBiFOcboXMkGsIj2mDsRw=="
 ---
 
 ## UTAU : wie ein Visual-Basic-6-Programm die synthetische Stimme demokratisiert hat

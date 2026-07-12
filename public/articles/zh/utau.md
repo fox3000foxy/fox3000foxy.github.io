@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "OfZY3v8x9C0KedIId7P74RvP2xyX4VElM+Qj8DBT27cvTqC0M8Qv6l16Q+8gZsmZ12DoXOeeijpTswgwBAIeqg=="
+author_sig: "g9sju8SdLotkAHKmYpHExsBn5zID3AYzGBIJvC13bljPDqgY65zt4/iud+CGY8/ZV/pqLiKQ71vjV/69ZGg7mg=="
 ---
 
 ## UTAU：一个VB6软件如何让人人都能玩合成音声

@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "V+46Nal1/AfyN/yaPvgseOpCtGfiOZBI42mPOpPQ/mqvdzM3weFMkuNmFmc8P2BWn26EKYxsoTKVkmBHHg1I4w=="
+author_sig: "gVWdx9pGLDhcs1elm3+hWrtZFjU8k84NbTVkgVqKZuZk82Crn6DBsMOf1EcloyMQdaB4i3QiSSjELQU945lDeg=="
 ---
 
 > **หมายเหตุ (2026):** โปรเจกต์นี้ไม่ได้ดูแลอีกต่อไปแล้ว Microsoft ได้เสริมการตรวจจับแอนตี้บอทอย่างมาก -- สิ่งที่เคยใช้ได้ในตอนนั้นไม่สามารถใช้ได้อีกแล้วในวันนี้ โค้ดและแนวทางที่อธิบายไว้ด้านล่างนี้เก็บไว้เพื่อวัตถุประสงค์ในการเก็บถาวรและสาธิตเท่านั้น

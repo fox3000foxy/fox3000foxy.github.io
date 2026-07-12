@@ -1,16 +1,16 @@
 ---
 title: "Construí un honeypot Express ultrarealista"
-description: "328 endpoints falsos con respuestas generadas sobre la marcha, spoofing de cabeceras, registro de tráfico de bots — inmersión en un middleware honeypot Express diseñado para engañar a escáneres."
+description: "328 endpoints falsos con respuestas generadas sobre la marcha, spoofing de cabeceras, registro de tráfico de bots -- inmersión en un middleware honeypot Express diseñado para engañar a escáneres."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qcejC+PaAqL1yzbd9NzvtFkuDbjoM2bV7++zW7p65PMgshFn4Mbf0ab+hhXNPLjHmCyZTgkcjrpX/3fpknvMnA=="
+author_sig: "xFUokQ5YHCrgI/XL9AoGp/c20JCY5LdALfWb25KtWiLOFKzNvlQfLBVjgbD5rNuuwTCk7XbvUciesV0vIlErEA=="
 ---
 
 ## ¿Qué es un honeypot Express?
 
 Un honeypot es un señuelo que imita un sistema real para atraer y detectar atacantes. En el contexto de una aplicación web Express, es un middleware que intercepta peticiones sospechosas y responde con contenidos falsos creíbles, permitiendo analizar el comportamiento de bots y escáneres sin exponer datos reales.
 
-**express-middleware-honeypot** es un paquete npm que convierte tu aplicación Express en un auténtico señuelo. Expone **328 endpoints** que cubren una amplia gama de objetivos de ataque típicos — archivos de configuración, credenciales, páginas de administración, endpoints API, páginas de phishing bancario, y mucho más.
+**express-middleware-honeypot** es un paquete npm que convierte tu aplicación Express en un auténtico señuelo. Expone **328 endpoints** que cubren una amplia gama de objetivos de ataque típicos -- archivos de configuración, credenciales, páginas de administración, endpoints API, páginas de phishing bancario, y mucho más.
 
 Cada endpoint genera una respuesta **sobre la marcha**, con marcas de tiempo e identificadores de solicitud frescos, haciendo que cada respuesta sea única y creíble.
 
@@ -24,7 +24,7 @@ npm install express-middleware-honeypot
 
 ### Registro automático con `register()`
 
-La forma más sencilla de usar el honeypot es llamando a `register()` en tu aplicación Express. Esto registra todos los middlewares — logging, cabeceras, manejador 404 — de una sola vez:
+La forma más sencilla de usar el honeypot es llamando a `register()` en tu aplicación Express. Esto registra todos los middlewares -- logging, cabeceras, manejador 404 -- de una sola vez:
 
 ```js
 const express = require("express");
@@ -83,7 +83,7 @@ app.all('/wp-admin', instance.mocks['/wp-admin']);
 
 ## Spoofing de cabeceras
 
-El middleware de cabeceras (`instance.headersMiddleware`) establece cabeceras de respuesta realistas — `Server: nginx/1.24.0`, `X-Frame-Options`, `X-XSS-Protection`, y especialmente una cabecera `X-Powered-By` dinámica basada en la extensión del archivo:
+El middleware de cabeceras (`instance.headersMiddleware`) establece cabeceras de respuesta realistas -- `Server: nginx/1.24.0`, `X-Frame-Options`, `X-XSS-Protection`, y especialmente una cabecera `X-Powered-By` dinámica basada en la extensión del archivo:
 
 - `.php` → `X-Powered-By: PHP/8.1.12`
 - `.jsp` → `X-Powered-By: JSP/3.0`
@@ -127,12 +127,12 @@ Esto permite ejecutar una aplicación WordPress/PHP real en local y servir pági
 | `additionalEndpoints` | `string[]` | `["/not_covered_endpoint_test"]` | Endpoints adicionales más allá de los 328 integrados |
 | `enrichResponses` | `boolean` | `true` | Enriquece respuestas JSON con timestamp/versión |
 
-## Los mocks — 328 endpoints en dos variantes
+## Los mocks -- 328 endpoints en dos variantes
 
 El generador de mocks (`src/services/mockupGenerator.ts`) produce respuestas **sobre la marcha** para 328 endpoints, cada uno en dos variantes:
 
-- **Default** — sucinto pero creíble (`{ code: 0, message: "ok", data: {...} }`)
-- **Complete** — respuestas ricas con marcas de tiempo, ID de solicitud, metadatos, cabeceras de versión, etc.
+- **Default** -- sucinto pero creíble (`{ code: 0, message: "ok", data: {...} }`)
+- **Complete** -- respuestas ricas con marcas de tiempo, ID de solicitud, metadatos, cabeceras de versión, etc.
 
 Para escribir los mocks a disco (depuración):
 

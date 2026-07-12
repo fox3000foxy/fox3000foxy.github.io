@@ -1,6 +1,6 @@
 ---
 title: "Tôi đã xây dựng một honeypot Express siêu thực"
-description: "328 điểm cuối giả với phản hồi được tạo ngay lập tức, giả mạo tiêu đề, ghi lại lưu lượng bot — đi sâu vào mã của một middleware honeypot Express được thiết kế để đánh lừa các trình quét."
+description: "328 điểm cuối giả với phản hồi được tạo ngay lập tức, giả mạo tiêu đề, ghi lại lưu lượng bot -- đi sâu vào mã của một middleware honeypot Express được thiết kế để đánh lừa các trình quét."
 date: "2026-06-10"
 aiGenerated: true
 tags:
@@ -11,12 +11,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cLo5SwXXMwmEsEoF5Sp5g58+hXhKQZ5g76rXYT0RdXaFLtfGQZhh/mPFllr+V91wC8rsKD4e1izB86IAH0N6gg=="
+author_sig: "2RP1SixoooPbjb7y6tRItBPml3zHsbmG5mOaAQ00ct0HuIpKYJcZaS0dGFtp4E68o4Qi0QsS2RdpeBPggVOAzA=="
 ---
 
 ## Ý tưởng
 
-Bot và các trình quét tự động liên tục quét các ứng dụng web để tìm lỗ hổng. Chúng tìm kiếm các tệp `.env`, bảng quản trị, bản sao lưu cơ sở dữ liệu, thông tin đăng nhập SSH — bất cứ thứ gì có thể bị khai thác.
+Bot và các trình quét tự động liên tục quét các ứng dụng web để tìm lỗ hổng. Chúng tìm kiếm các tệp `.env`, bảng quản trị, bản sao lưu cơ sở dữ liệu, thông tin đăng nhập SSH -- bất cứ thứ gì có thể bị khai thác.
 
 Thay vì chỉ trả về 404, tôi muốn tạo ra thứ gì đó thú vị hơn: một **honeypot Express** phản hồi bằng nội dung đáng tin cậy, khiến những kẻ tấn công tin rằng chúng đã tìm thấy một mục tiêu dễ bị tổn thương.
 

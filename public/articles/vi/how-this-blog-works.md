@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Fyw0zlgA85xA0R3QCydkpH8d4PzeiDSxPL6U0WOuy0bWCHUk1S1XPt/YxVfDmMtIV98LqHb12xLM5xJVQL7xQw=="
+author_sig: "pwWKaVsfea9LUcuCqtcmbglxge4EfTkxHpsYYSE78KEHb6C8FQQzK4OAyjPtJLRgYA4LT2H5ftPWmxskXlEdmQ=="
 ---
 
 # Blog Này Hoạt Động Như Thế Nào ?

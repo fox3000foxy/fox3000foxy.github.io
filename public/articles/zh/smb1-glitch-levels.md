@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WMkak/BURhECgEAzf0+f+IxkcYCXFHCwLu4JV0i0HeJqL2DIH04n4PTTXa1xWCT37INjv50+VCtmJCjkXmHrog=="
+author_sig: "wswMhQva24rgBa4ChrW5khjh+9HsD4WMtdGS5JI9pnDYe+V1ikE62pVCVm/vVwXtcfQR7TvgC8zuyBJ3Doz5Kw=="
 ---
 
 ## 引言
@@ -23,7 +23,7 @@ Super Mario Bros.，只有40KB ROM。八个世界，32个关卡，敌人、音�
 
 这些glitch world存在的原因很简单：SMB1的关卡存储系统是8位优化的杰作，而当你强制游戏在不该读取的地方读取数据时，就会产生令人着迷的结果。
 
-Retro Game Mechanics Explained制作了一个4集系列视频——我们将把它们整合为一次对这个时代最畅销游戏6502代码的深入探索。
+Retro Game Mechanics Explained制作了一个4集系列视频----我们将把它们整合为一次对这个时代最畅销游戏6502代码的深入探索。
 
 ![GLITCH OBJECTS -- RGMechEx关于SMB1隐藏机制的系列标题](/images/smb1-glitch-levels/title-card.jpg)
 
@@ -154,7 +154,7 @@ Tile格式使用**游程编码**（RLE-like）系统：
   $82 $01    ; 重复tile $01 (brick) 3次
 ```
 
-每个关卡包含13行 × 16列的图块（13×16 = 208个可见图块）。但压缩格式可以大幅减少数据量——例如天空和空白列几乎不占空间。
+每个关卡包含13行 × 16列的图块（13×16 = 208个可见图块）。但压缩格式可以大幅减少数据量----例如天空和空白列几乎不占空间。
 
 6502的渲染循环：
 
@@ -304,7 +304,7 @@ Tile指针的顺序：
   索引 28-33 : Castle (6个关卡)
 ```
 
-为什么顺序不同？没有技术原因——可能只是开发过程中数据的组织方式。但这产生了一个令人着迷的后果：当关卡ID无效时，tile和sprite指针会加载*不同的*关卡，创造出**Frankenstein关卡**。
+为什么顺序不同？没有技术原因----可能只是开发过程中数据的组织方式。但这产生了一个令人着迷的后果：当关卡ID无效时，tile和sprite指针会加载*不同的*关卡，创造出**Frankenstein关卡**。
 
 为了在这两个列表之间导航，游戏使用小型**偏移表**（就像目录一样）：
 
@@ -364,7 +364,7 @@ TileOffsetTable:
   .byte $25, $28, $29, $26, $24, ... ; 36个Level ID
 ```
 
-当试图加载world 9时，游戏读取WorldIndexTable的第9个字节……但它不存在。它溢出1个字节到LevelIDTable，读取值$25，然后将$25作为LevelIDTable中的索引（第37个条目）——这又溢出2个字节到SpriteOffsetTable，读取值6。
+当试图加载world 9时，游戏读取WorldIndexTable的第9个字节……但它不存在。它溢出1个字节到LevelIDTable，读取值$25，然后将$25作为LevelIDTable中的索引（第37个条目）----这又溢出2个字节到SpriteOffsetTable，读取值6。
 
 ```asm
 ; World 9：
@@ -388,7 +388,7 @@ TileOffsetTable:
 
 ## 故障世界为何存在
 
-游戏有32个"合法"关卡（8个世界 × 4个关卡）。但指针表每个区域类型有128个条目。第32个关卡之后的条目包含ROM中这些地址处的数据——有时是另一个关卡，有时是音效数据，有时是RAM，有时是任何东西。
+游戏有32个"合法"关卡（8个世界 × 4个关卡）。但指针表每个区域类型有128个条目。第32个关卡之后的条目包含ROM中这些地址处的数据----有时是另一个关卡，有时是音效数据，有时是RAM，有时是任何东西。
 
 ![Level ID $01 Water (Minus World) -- tile指针 $AE45, sprite指针 $A171](/images/smb1-glitch-levels/minus-world.png)
 
@@ -478,7 +478,7 @@ RGMechEx编写了一个脚本，生成**所有关卡**的地图，覆盖4种区�
 | Underground (2) | ~15 | ~65 | ~48  |
 | Castle (3)   | ~25  | ~58  | ~45  |
 
-许多ID指向相同的关卡，因为指针落在相同的ROM地址上。例如Level ID $28（Overworld）——tile指针 $A7CD (2-1)——出现在**38个不同的故障世界**中，因为其sprite指针 $9F51指向一个被用作填充/音效数据的ROM区域，许多ID共用这段数据。
+许多ID指向相同的关卡，因为指针落在相同的ROM地址上。例如Level ID $28（Overworld）----tile指针 $A7CD (2-1)----出现在**38个不同的故障世界**中，因为其sprite指针 $9F51指向一个被用作填充/音效数据的ROM区域，许多ID共用这段数据。
 
 ![关卡 ID $28 (Overworld) 的地图 -- 2-1 tiles 加上正常sprites，38个故障世界](/images/smb1-glitch-levels/level-28-overworld.png)
 
@@ -835,7 +835,7 @@ Lost Levels改变了许多东西：
    - 文件4：世界A-D（完全不同的指针表）
 4. **相同Level ID = 根据加载的文件有4种可能的关卡**
 5. **没有Tennis glitch**：continue选项（game over后继续到相同世界）使warm start变得不必要，如果world > 9游戏会**立即重置**
-6. **新物体**：毒蘑菇、隐形方块、隐形火力花方块、倒置水管、风——但插入在现有列表中间 → **与SMB1不兼容**
+6. **新物体**：毒蘑菇、隐形方块、隐形火力花方块、倒置水管、风----但插入在现有列表中间 → **与SMB1不兼容**
 7. **Piranha Plants在world 4后总是红色的**，**springboards只在world 2/B/3/C/7是绿色的**
 
 ### Super Mario All-Stars (SNES)
@@ -910,8 +910,8 @@ Loop关卡（8-4, 7-4）如何工作？关卡有**检查点**，包含硬编码�
 
 2. **Minus World是warp bug加上损坏** -- 1-2中的左侧水管，如果在文本出现前激活，会加载world 36 (0x24)。这个world指向Level ID $01（2-2的水下），一个没有flagpole的关卡。由于world 36没有水管过渡，关卡无限循环。缺少验证创造了这个标志性的glitch。
 
-3. **Tennis → Mario，比OoT → Paper Mario早15年** -- NES的RAM在卡带交换中存活，得益于电容器和SMB1的warm start / cold start系统。Tennis的脚步计数器（通过播放脚步音效递增RAM字节）恰好落在世界编号的地址上。需要最高分数字保持为0、$A5字节完好、且游戏检测到warm start——一个只与Tennis一起成功的完美巧合。
+3. **Tennis → Mario，比OoT → Paper Mario早15年** -- NES的RAM在卡带交换中存活，得益于电容器和SMB1的warm start / cold start系统。Tennis的脚步计数器（通过播放脚步音效递增RAM字节）恰好落在世界编号的地址上。需要最高分数字保持为0、$A5字节完好、且游戏检测到warm start----一个只与Tennis一起成功的完美巧合。
 
-[Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) 的原始视频是令人叹为观止的细致工作——6502反汇编的详细程度、所有关卡的自动地图、卡带交换和warm start的解释。如果你还没看过这个系列，去看，很短，每一分钟都是干货。
+[Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) 的原始视频是令人叹为观止的细致工作----6502反汇编的详细程度、所有关卡的自动地图、卡带交换和warm start的解释。如果你还没看过这个系列，去看，很短，每一分钟都是干货。
 
 地图的源代码在 [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html) 上，SMB1的完整反汇编是开源的，在多个仓库中。40年前，日本程序员用6502编写了这个关卡系统，没有单元测试，没有bug追踪器，而我们今天打开他们的代码仍然能学到东西。

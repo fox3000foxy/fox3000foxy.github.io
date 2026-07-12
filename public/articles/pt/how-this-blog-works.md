@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "TKkvxP/pTwCXIK/JJsyEEpTxWCb2LH/tZXccaVHGzitOUVnX/ijb37XJirgeNvdHeq/H63FTlrGK5EemxwU2xQ=="
+author_sig: "SrYhvi+tvtrKcwFYR3FE4tiVNQSbXszdAfv+N0KGvPwFjzvMsHjno1vNqaoQ6+Y80fSaiZYDpYVvezHBOjbhjw=="
 ---
 
 # Como Este Blog Funciona?

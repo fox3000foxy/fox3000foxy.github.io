@@ -1,16 +1,16 @@
 ---
 title: "Ho costruito un honeypot Express ultra-realistico"
-description: "328 endpoint fittizi con risposte generate al volo, spoofing di intestazioni, registrazione del traffico bot — un'analisi approfondita di un middleware honeypot Express progettato per ingannare gli scanner."
+description: "328 endpoint fittizi con risposte generate al volo, spoofing di intestazioni, registrazione del traffico bot -- un'analisi approfondita di un middleware honeypot Express progettato per ingannare gli scanner."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Q9SDcXN6y1sBE7RlIXXLB/biL7ZeM9X8lgbd3UKe8XCdC7cP8FfPYX2lj1gB8JWumDW4AXeWgY5FhO4dtIh0rA=="
+author_sig: "5jmSc5wS8vLPvFAFRF2osMNyClQ+aU6rvzK0nxUNsnOnJKWTY05X4hrer1Vy0Pbvx6atvtcy0RGhYWM1CyXqZw=="
 ---
 
 ## Cos'è un honeypot Express?
 
 Un honeypot è un'esca che imita un sistema reale per attrarre e rilevare gli aggressori. Nel contesto di un'applicazione web Express, è un middleware che intercetta richieste sospette e risponde con contenuti fittizi credibili, permettendo di analizzare il comportamento di bot e scanner senza esporre dati reali.
 
-**express-middleware-honeypot** è un pacchetto npm che trasforma la tua applicazione Express in un vero e proprio vaso di miele. Espone **328 endpoint** che coprono un'ampia gamma di tipici bersagli d'attacco — file di configurazione, credenziali, pagine di amministrazione, endpoint API, pagine di phishing bancario, e molto altro.
+**express-middleware-honeypot** è un pacchetto npm che trasforma la tua applicazione Express in un vero e proprio vaso di miele. Espone **328 endpoint** che coprono un'ampia gamma di tipici bersagli d'attacco -- file di configurazione, credenziali, pagine di amministrazione, endpoint API, pagine di phishing bancario, e molto altro.
 
 Ogni endpoint genera una risposta **al volo**, con timestamp e ID di richiesta freschi, rendendo ogni risposta unica e credibile.
 
@@ -24,7 +24,7 @@ npm install express-middleware-honeypot
 
 ### Registrazione automatica con `register()`
 
-Il modo più semplice per usare l'honeypot è chiamare `register()` sulla tua applicazione Express. Questo registra tutti i middleware — logging, intestazioni, gestore 404 — in una sola volta:
+Il modo più semplice per usare l'honeypot è chiamare `register()` sulla tua applicazione Express. Questo registra tutti i middleware -- logging, intestazioni, gestore 404 -- in una sola volta:
 
 ```js
 const express = require("express");
@@ -83,7 +83,7 @@ app.all('/wp-admin', instance.mocks['/wp-admin']);
 
 ## Spoofing delle intestazioni
 
-Il middleware delle intestazioni (`instance.headersMiddleware`) imposta intestazioni di risposta realistiche — `Server: nginx/1.24.0`, `X-Frame-Options`, `X-XSS-Protection`, e specialmente un'intestazione `X-Powered-By` dinamica basata sull'estensione del file:
+Il middleware delle intestazioni (`instance.headersMiddleware`) imposta intestazioni di risposta realistiche -- `Server: nginx/1.24.0`, `X-Frame-Options`, `X-XSS-Protection`, e specialmente un'intestazione `X-Powered-By` dinamica basata sull'estensione del file:
 
 - `.php` → `X-Powered-By: PHP/8.1.12`
 - `.jsp` → `X-Powered-By: JSP/3.0`
@@ -127,12 +127,12 @@ Questo permette di eseguire una vera applicazione WordPress/PHP in locale e serv
 | `additionalEndpoints` | `string[]` | `["/not_covered_endpoint_test"]` | Endpoint aggiuntivi oltre ai 328 integrati |
 | `enrichResponses` | `boolean` | `true` | Arricchisce risposte JSON con timestamp/versione |
 
-## I mock — 328 endpoint in due varianti
+## I mock -- 328 endpoint in due varianti
 
 Il generatore di mock (`src/services/mockupGenerator.ts`) produce risposte **al volo** per 328 endpoint, ciascuno in due varianti:
 
-- **Default** — succinto ma credibile (`{ code: 0, message: "ok", data: {...} }`)
-- **Complete** — risposte ricche con timestamp, ID richiesta, metadati, intestazioni di versione, ecc.
+- **Default** -- succinto ma credibile (`{ code: 0, message: "ok", data: {...} }`)
+- **Complete** -- risposte ricche con timestamp, ID richiesta, metadati, intestazioni di versione, ecc.
 
 Per scrivere i mock su disco (debug):
 

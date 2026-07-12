@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Ub5N3ohiNQMYyWlsjW0ZugD2cFuntJpULuYHQG2ht5vmd5SCn9qK857HmsB8sp0AzLt798/8Vr2sbYTUaRv01Q=="
+author_sig: "HxCZiNAK5kXTo0c13RUgJoJ8FTxepj8tEhBVznOmXwSylGtSER6FITmW2N+h/eufQk09I8V+CtRYufdDQvIc4w=="
 ---
 
 ## UTAU : Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8gTR5DV4qT8lyYKIAhHAUsIBLrd76spAEUb6qRp/8KmqmCofPRmX93cZwNrky/PrU8vIG5xnMemj5WDdXBgb9Q=="
+author_sig: "Kxx5ExUDhmgnrQUFdGFm+bfwlN8wwf+6DskM5t5qyIyXffsQwKHUZGeoarJ6wSnXb2wiUKNwNB5dnj/MFqJbCQ=="
 ---
 
 ## परिचय

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "lKuecFYGNCzrtSBDN4tAfak3klSGSpZkDBxg6eXfX7WqCJODIZqkfXiUCNHZdN9CAMFha8YK2WnD686HEonYeQ=="
+author_sig: "f93TV+A9UVFssGhUITHGrlnK+J7FFVuZ8kK/t4IKij1dOny1yjFKU/QxVVd+yLomowm80I8kkSx2MY8DN1v/+g=="
 ---
 
 # Bagaimana Cara Kerja Blog Ini?

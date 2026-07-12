@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ryecu5Jgrmel1Y5sXh1IKfp2TzdH7SO4n0m0UWxaga03J8zNRtT9Ogua0ITNzPX/F0FDagWLp9TFiRDDXy27MA=="
+author_sig: "1BjivPWjT4zsST8JJf1voMQgaJHbjgYGLvA6/8LCYEpqMRFVoMRrkmIM+XXkpSuOsUyWkRUTubPu9jtAweU/AQ=="
 ---
 
 ## UTAU : كيف أضفى برنامج بلغة Visual Basic 6 الطابع الديمقراطي على الصوت الاصطناعي

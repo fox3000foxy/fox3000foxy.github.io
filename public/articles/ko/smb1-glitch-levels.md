@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "k3KXZEVjwR3juaukrPa59Khw+H+g54ZonpvWeyjakdULg4K9dSuGy8UzpNp0DWFQX3/JwiZmmrJpzApunN0Qgg=="
+author_sig: "cR2W2gBwASHrccL40p7mhktBUy7slj8PjyVP9M+seZK3kagEBLNpR40zk4m/3L8LE4RwXGgimwUhVOb1lZ7Hwg=="
 ---
 
 ## 소개

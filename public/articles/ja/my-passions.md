@@ -7,7 +7,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FZ3box8JN6F7E9k7ATdBRN8RoLX4aCQ4A7Zscrctotv+xXi9ZGCNmmmCnzuDAcJ2i0RAca4echXAec4aNv/+Ww=="
+author_sig: "KgQiYVwrWmFqEb/Bj50kU8tDi12JpZH3Hg8KOZonzSWyzV9jBoZb7JDnu65SAfsrMgRcYSoJwNKm6zvIP3LoDA=="
 ---
 
 # 俺の情熱

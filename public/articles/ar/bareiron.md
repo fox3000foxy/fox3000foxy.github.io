@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Ppwaz0lXNONnNqAKqICFrQ9WbmnxaseLmam9uDsFU61EzSBK4a3tdRNJZcOZQJ/RHQhH1Hsgi62pslO4r/xSsA=="
+author_sig: "3MFdBRfd3sLWVYewIsk+re3z+9b6ujIMr3K69G5/p4ulBTMD5cWmx6C6qWnd9xHvgkYRA4IUYO05Mg3R98c/tg=="
 ---
 
 ## مقدمة

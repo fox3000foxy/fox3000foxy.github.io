@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SykuRj2bE1mFkdkmSNd+Ljvx068z0AjPhPOq6MAKKWgEsSV5Gd0cIs6Fmmh5bHsq2xn15mgLkoftYLay09rodg=="
+author_sig: "YjqHOv38KhF2bDhj2JYZKty+qIyg6CTVlnM5YNIyIgXzZAaU3DjVfl5+hOYvx3b1/VaPFL8uK5VFEKFLxJR/dA=="
 ---
 
 # بنيت ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل
