@@ -1,5 +1,5 @@
 ---
-itle: Mi puta IA para Nausicaä
+title: Mi puta IA para Nausicaä
 description: Una IA basada en coeficientes heurísticos, hiperparámetros que
   cambian aleatoriamente cada 5 turnos y un Oráculo que huye -- inmersión en el
   cerebro de un juego de mesa estratégico mitológico.

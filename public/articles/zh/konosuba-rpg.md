@@ -1,5 +1,5 @@
 ---
-itle: "我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切"
+title: "我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切"
 description: "一个 Discord 回合制 RPG，每次操作都实时生成 WebP 图片：URL 即游戏状态、确定性 RNG、WASM 管线、5 级缓存、无服务器 bot。"
 date: 2026-06-10authors:
   - fox3000foxy

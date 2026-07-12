@@ -1,5 +1,5 @@
 ---
-itle: "I built an ultra-realistic Express honeypot"
+title: "I built an ultra-realistic Express honeypot"
 description: "328 fake endpoints with on-the-fly generated responses, header spoofing, bot traffic logging -- a deep dive into an Express honeypot middleware designed to fool scanners."
 date: 2026-06-10
 aiGenerated: trueauthors:

@@ -1,5 +1,5 @@
 ---
-itle: Meine bescheuerte KI für Nausicaa
+title: Meine bescheuerte KI für Nausicaa
 description: Eine heuristische KI mit Koeffizienten, Hyperparametern die sich
   alle 5 Runden ändern, und einem Oracle das wegläuft -- ein Tauchgang ins
   Gehirn eines mythologischen Strategiespiels.

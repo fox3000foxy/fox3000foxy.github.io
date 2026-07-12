@@ -1,5 +1,5 @@
 ---
-itle: Logika Pathfinding Minecraft dan Aplikasinya
+title: Logika Pathfinding Minecraft dan Aplikasinya
 description: Bagaimana algoritma A*, malus blok, dan POI memungkinkan kita
   mengontrol, memprediksi, dan mengeksploitasi pergerakan mob -- dari redstone
   nirkabel hingga farm yang dioptimalkan.

@@ -1,5 +1,5 @@
 ---
-itle: Arbeiten an einem neuen Projekt
+title: Arbeiten an einem neuen Projekt
 description: Ein Blick auf den Prozess des Startens und Entwickelns einer neuen Website.
 date: 2026-03-13authors:
   - fox3000foxy

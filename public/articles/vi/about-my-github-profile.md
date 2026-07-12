@@ -1,5 +1,5 @@
 ---
-itle: Về Hồ Sơ GitHub Của Tôi
+title: Về Hồ Sơ GitHub Của Tôi
 description: Một bài giới thiệu ngắn về hồ sơ GitHub của tôi.
 date: 2026-03-08authors:
   - fox3000foxy

@@ -1,5 +1,5 @@
 ---
-itle: SSH commit signing script explained
+title: SSH commit signing script explained
 description: A walkthrough of the SSH commit‑signing helper and why I wanted
   stylish commits.
 date: 2026-03-08

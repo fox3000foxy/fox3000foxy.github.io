@@ -1,5 +1,5 @@
 ---
-itle: "100% 서버리스 Discord 봇: Hono + Cloudflare Workers"
+title: "100% 서버리스 Discord 봇: Hono + Cloudflare Workers"
 description: 월 50€나 들던 Discord 봇을 0원으로 교체한 방법 -- 인터랙션 엔드포인트, Hono, Workers, 실시간
   이미지 렌더링, WebSocket 없는 완전한 게임.
 date: 2026-05-29authors:

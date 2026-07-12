@@ -1,5 +1,5 @@
 ---
-itle: بوتنة مزرعة Microsoft Rewards
+title: بوتنة مزرعة Microsoft Rewards
 description: كيف برمجت بوتًا لجني نقاط Microsoft Rewards على نطاق واسع -- ولماذا عززت
   مايكروسوفت دفاعاتها منذ ذلك الحين.
 date: 2026-03-13authors:

@@ -1,5 +1,5 @@
 ---
-itle: Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions
+title: Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions
 description: Cara saya membuat auto-reply email AI yang berjalan di GitHub Actions
   untuk 0€/bulan -- menggunakan git tags sebagai database dan pre-compile
   dalam tag runtime.

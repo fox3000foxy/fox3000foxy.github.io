@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- el servidor de Minecraft que corre en un microcontrolador de 1$
+title: Bareiron -- el servidor de Minecraft que corre en un microcontrolador de 1$
 description: 6800 líneas de C, cero malloc, Perlin noise reemplazado por
   interpolación bilineal, biomas en tile map, y todo eso en un chip de 1$.
 date: 2026-05-30authors:

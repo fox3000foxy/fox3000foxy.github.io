@@ -1,5 +1,5 @@
 ---
-itle: 내 GitHub 프로필 소개
+title: 내 GitHub 프로필 소개
 description: 내 GitHub 프로필에 대한 간단한 소개
 date: 2026-03-08authors:
   - fox3000foxy

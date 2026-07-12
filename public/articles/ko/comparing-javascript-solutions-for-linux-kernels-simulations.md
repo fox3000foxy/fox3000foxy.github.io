@@ -1,5 +1,5 @@
 ---
-itle: JavaScript Linux 커널 시뮬레이션 솔루션 비교
+title: JavaScript Linux 커널 시뮬레이션 솔루션 비교
 description: JavaScript/TypeScript로 Linux 환경을 재현하는 방법에 대한 심층 분석
 date: 2026-05-28authors:
   - fox3000foxy

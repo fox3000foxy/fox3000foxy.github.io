@@ -1,5 +1,5 @@
 ---
-itle: Làm việc trên một Dự án Mới
+title: Làm việc trên một Dự án Mới
 description: Tổng quan về quy trình khởi động và phát triển một trang web mới.
 date: 2026-03-13authors:
   - fox3000foxy

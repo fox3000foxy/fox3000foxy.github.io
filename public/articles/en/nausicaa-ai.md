@@ -1,5 +1,5 @@
 ---
-itle: My dumb AI for Nausicaa
+title: My dumb AI for Nausicaa
 description: A heuristic coefficient-based AI with hyperparameters that randomly
   change every 5 turns, and an Oracle that runs away -- diving into the brain of
   a mythological strategy board game.

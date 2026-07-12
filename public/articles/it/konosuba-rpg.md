@@ -1,5 +1,5 @@
 ---
-itle: "Ho passato un fine settimana a leggere il codice di konosuba-rpg ed ecco cosa ho trovato"
+title: "Ho passato un fine settimana a leggere il codice di konosuba-rpg ed ecco cosa ho trovato"
 description: "Un RPG a turni Discord dove ogni azione genera un'immagine WebP
   al volo: URL come stato di gioco, RNG deterministico, pipeline WASM, cache a 5
   livelli, bot serverless."

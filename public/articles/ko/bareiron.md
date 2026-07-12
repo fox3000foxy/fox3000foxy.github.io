@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- 1$ 마이크로컨트롤러에서 돌아가는 마인크래프트 서버
+title: Bareiron -- 1$ 마이크로컨트롤러에서 돌아가는 마인크래프트 서버
 description: C 언어 6800줄, malloc 제로, Perlin noise 대신 bilinear interpolation,
   타일 맵 바이옴, 그리고 이 모든 게 1$ 칩 위에서.
 date: 2026-05-30authors:

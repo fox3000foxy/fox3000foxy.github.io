@@ -1,5 +1,5 @@
 ---
-itle: "Xây dựng character-factory: avatar với hệ thống di truyền"
+title: "Xây dựng character-factory: avatar với hệ thống di truyền"
 description: "Một module TypeScript xây trên DiceBear: tạo nhất quán theo quốc gia/sắc tộc,
   một engine di truyền nhỏ để mô phỏng con cái, và các chi tiết kỹ thuật giúp nó
   dùng được trong một game bài."

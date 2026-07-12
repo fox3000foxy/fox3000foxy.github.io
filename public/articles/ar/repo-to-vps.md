@@ -1,5 +1,5 @@
 ---
-itle: "Repo to VPS : تحويل GitHub Actions إلى VPS مجاني مع تخزين دائم"
+title: "Repo to VPS : تحويل GitHub Actions إلى VPS مجاني مع تخزين دائم"
 description: كيفية تحويل مشغل GitHub Actions إلى VPS دائم باستخدام git كتخزين دائم -- tmate و inotify و commit --amend.
 date: 2026-05-29authors:
   - fox3000foxy

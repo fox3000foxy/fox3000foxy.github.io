@@ -1,5 +1,5 @@
 ---
-itle: Eine Node.js-Bibliothek ohne Wasm im Browser zum Laufen bringen -- die
+title: Eine Node.js-Bibliothek ohne Wasm im Browser zum Laufen bringen -- die
   Polyfills von typescript-virtual-container
 description: Wie Fortune node:fs, node:crypto und ein Dutzend weiterer
   Node-Module in 640 Zeilen JavaScript von Hand neu implementiert hat, damit der

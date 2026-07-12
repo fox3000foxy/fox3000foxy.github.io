@@ -1,5 +1,5 @@
 ---
-itle: "Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리"
+title: "Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리"
 description: "Laupok 프로젝트 심층 분석: 슈퍼 마리오 월드를 자율적으로 플레이하는 NEAT 기반 AI. 유전 알고리즘, 신경망, 증강 토폴로지의 신경 진화, 그리고 4200줄의 Lua."
 date: 2026-07-11authors:
   - fox3000foxy

@@ -1,5 +1,5 @@
 ---
-itle: 俺の情熱
+title: 俺の情熱
 description: コーディング、絵を描くこと、自動化、古い技術の発見など----僕を動かすものたち。
 date: 2026-03-08authors:
   - fox3000foxy

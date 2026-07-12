@@ -1,5 +1,5 @@
 ---
-itle: Membot sebuah Farm Microsoft Rewards
+title: Membot sebuah Farm Microsoft Rewards
 description: Bagaimana saya membuat bot untuk memanen poin Microsoft Rewards secara
   besar-besaran -- dan mengapa Microsoft sejak itu telah memperkuat pertahanannya.
 date: 2026-03-13authors:

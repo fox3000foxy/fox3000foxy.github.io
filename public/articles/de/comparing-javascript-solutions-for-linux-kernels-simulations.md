@@ -1,5 +1,5 @@
 ---
-itle: JavaScript-Lösungen für Linux-Kernel-Simulationen im Vergleich
+title: JavaScript-Lösungen für Linux-Kernel-Simulationen im Vergleich
 description: Eine tiefgehende Analyse von Linux-Umgebungs-Nachbildungen in
   JavaScript/TypeScript.
 date: 2026-05-28authors:

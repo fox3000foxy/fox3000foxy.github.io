@@ -1,5 +1,5 @@
 ---
-itle: Ich habe git als Datenbank benutzt, um einen Bot kostenlos auf GitHub
+title: Ich habe git als Datenbank benutzt, um einen Bot kostenlos auf GitHub
   Actions zu betreiben
 description: Wie ich einen KI-E-Mail-Autoresponder codiert habe, der auf GitHub
   Actions für 0€/Monat läuft -- mit git-Tags als Datenbank und vorcompilierten

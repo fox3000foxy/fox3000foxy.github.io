@@ -1,5 +1,5 @@
 ---
-itle: Боттинг фермы Microsoft Rewards
+title: Боттинг фермы Microsoft Rewards
 description: Как я написал бота для массового фарма очков Microsoft Rewards -- и
   почему их антибот-защита с тех пор ужесточилась.
 date: 2026-03-13authors:

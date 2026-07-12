@@ -1,5 +1,5 @@
 ---
-itle: "Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers"
+title: "Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers"
 description: कैसे मैंने एक Discord बॉट को जो मुझे 50€/माह खर्च कराता था, शून्य
   यूरो में बदल दिया -- इंटरैक्शन एंडपॉइंट्स, Hono, Workers, रीयल-टाइम
   इमेज रेंडरिंग, और WebSocket के बिना एक पूरा गेम।

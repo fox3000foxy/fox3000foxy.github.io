@@ -1,5 +1,5 @@
 ---
-itle: Как заставить Node.js библиотеку работать в браузере без Wasm --
+title: Как заставить Node.js библиотеку работать в браузере без Wasm --
   полифиллы typescript-virtual-container
 description: Как Fortune вручную переписала node:fs, node:crypto и дюжину других
   Node-модулей в 640 строках JavaScript, чтобы контейнер работал в браузере без

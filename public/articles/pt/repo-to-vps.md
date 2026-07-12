@@ -1,5 +1,5 @@
 ---
-itle: "Repo to VPS : transformar GitHub Actions em VPS gratuito com armazenamento persistente"
+title: "Repo to VPS : transformar GitHub Actions em VPS gratuito com armazenamento persistente"
 description: Como transformar um runner do GitHub Actions em um VPS permanente com git como armazenamento persistente -- tmate, inotify e commit --amend.
 date: 2026-05-29authors:
   - fox3000foxy

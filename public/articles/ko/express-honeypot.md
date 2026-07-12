@@ -1,5 +1,5 @@
 ---
-itle: "초현실적인 Express 허니팟을 구축했습니다"
+title: "초현실적인 Express 허니팟을 구축했습니다"
 description: "328개의 가짜 엔드포인트, 즉석에서 생성되는 응답, 헤더 스푸핑, 봇 트래픽 기록 -- 스캐너를 속이기 위해 설계된 Express 허니팟 미들웨어 코드 분석."
 date: "2026-06-10"
 aiGenerated: trueauthors:

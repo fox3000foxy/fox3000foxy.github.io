@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- वह Minecraft सर्वर जो 1$ के माइक्रोकंट्रोलर पर चलता है
+title: Bareiron -- वह Minecraft सर्वर जो 1$ के माइक्रोकंट्रोलर पर चलता है
 description: C की 6800 लाइनें, शून्य malloc, bilinear interpolation से बदला गया Perlin noise,
   tile map में biomes, और यह सब एक 1$ की चिप पर।
 date: 2026-05-30authors:

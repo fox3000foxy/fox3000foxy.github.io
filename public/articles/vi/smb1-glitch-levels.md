@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: Định dạng level, con trỏ và 256 glitch world"
+title: "Super Mario Bros.: Định dạng level, con trỏ và 256 glitch world"
 description: "Cách 128 level × 4 loại khu vực vừa trong 40KB ROM, tại sao Minus World tồn tại, và cách một trận Tennis NES có thể tải glitch world."
 date: 2026-06-10authors:
   - fox3000foxy

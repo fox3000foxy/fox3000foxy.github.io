@@ -1,5 +1,5 @@
 ---
-itle: Automatizando una Granja de Microsoft Rewards
+title: Automatizando una Granja de Microsoft Rewards
 description: Cómo programé un bot para cultivar puntos de Microsoft Rewards a
   escala -- y por qué la detección antibots de Microsoft ya se ha puesto al día.
 date: 2026-03-13authors:

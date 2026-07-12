@@ -1,5 +1,5 @@
 ---
-itle: "%100 sunucusuz Discord botu: Hono + Cloudflare Workers"
+title: "%100 sunucusuz Discord botu: Hono + Cloudflare Workers"
 description: Bana ayda 50€'ya mal olan bir Discord botunu sıfır euro ile nasıl
   değiştirdim -- etkileşim uç noktaları, Hono, Workers, gerçek zamanlı görüntü
   oluşturma ve WebSocket olmadan eksiksiz bir oyun.

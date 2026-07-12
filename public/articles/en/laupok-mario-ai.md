@@ -1,5 +1,5 @@
 ---
-itle: "Laupok built an AI that plays Super Mario World by itself -- how it works"
+title: "Laupok built an AI that plays Super Mario World by itself -- how it works"
 date: 2026-07-11authors:
   - fox3000foxy
 tags:

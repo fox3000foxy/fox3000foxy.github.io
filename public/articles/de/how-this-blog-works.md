@@ -1,5 +1,5 @@
 ---
-itle: Wie funktioniert dieser Blog?
+title: Wie funktioniert dieser Blog?
 description: "Ein tiefer Einblick in die Interna dieses Blogs: React, Vite,
   Markdown, die CI/CD-Pipeline und der Workflow zum Schreiben von Artikeln."
 date: 2026-03-08

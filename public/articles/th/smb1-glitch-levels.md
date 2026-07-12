@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: รูปแบบของเลเวล, พอยน์เตอร์ และ 256 glitch worlds"
+title: "Super Mario Bros.: รูปแบบของเลเวล, พอยน์เตอร์ และ 256 glitch worlds"
 description: "วิธีที่ 128 เลเวล × 4 ประเภทพื้นที่บรรจุอยู่ใน ROM 40KB ทำไม Minus World ถึงมีอยู่ และวิธีที่การแข่งขันเทนนิส NES สามารถโหลด glitch worlds"
 date: 2026-06-10authors:
   - fox3000foxy

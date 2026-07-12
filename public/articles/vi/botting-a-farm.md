@@ -1,5 +1,5 @@
 ---
-itle: Bot một trang trại Microsoft Rewards
+title: Bot một trang trại Microsoft Rewards
 description: Cách tôi đã viết bot để farm điểm Microsoft Rewards trên quy mô lớn -- và tại sao Microsoft từ đó đã tăng cường phòng thủ.
 date: 2026-03-13authors:
   - fox3000foxy

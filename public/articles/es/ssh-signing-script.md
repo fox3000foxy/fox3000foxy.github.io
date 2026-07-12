@@ -1,5 +1,5 @@
 ---
-itle: Script de firma de commits SSH explicado
+title: Script de firma de commits SSH explicado
 description: Un recorrido por el ayudante de firma de commits SSH y por qué
   quería commits con estilo.
 date: 2026-03-08

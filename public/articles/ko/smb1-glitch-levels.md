@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: 레벨 포맷, 포인터, 그리고 256개의 글리치 월드"
+title: "Super Mario Bros.: 레벨 포맷, 포인터, 그리고 256개의 글리치 월드"
 description: "128개 레벨 × 4가지 영역 타입이 40KB ROM에 어떻게 들어가는지, Minus World가 왜 존재하는지, 그리고 NES 테니스 경기가 글리치 월드를 로드할 수 있는 이유."
 date: 2026-06-10authors:
   - fox3000foxy

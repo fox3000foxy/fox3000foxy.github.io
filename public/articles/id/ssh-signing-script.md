@@ -1,5 +1,5 @@
 ---
-itle: Skrip Penandatanganan SSH Dijelaskan
+title: Skrip Penandatanganan SSH Dijelaskan
 description: Menguraikan helper penandatanganan komit SSH dan mengapa saya ingin
   komit yang bergaya.
 date: 2026-03-08

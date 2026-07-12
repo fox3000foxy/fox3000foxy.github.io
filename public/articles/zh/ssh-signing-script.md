@@ -1,5 +1,5 @@
 ---
-itle: SSH 提交签名脚本详解
+title: SSH 提交签名脚本详解
 description: SSH 提交签名辅助工具的详细解析，以及为什么我想要有格调的提交。
 date: 2026-03-08
 aiGenerated: trueauthors:

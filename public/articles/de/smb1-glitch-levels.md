@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: Das Level-Format, die Zeiger und die 256 Glitch Worlds"
+title: "Super Mario Bros.: Das Level-Format, die Zeiger und die 256 Glitch Worlds"
 description: "Wie 128 Levels × 4 Zonentypen in 40KB ROM passen, warum die Minus World existiert, und wie ein NES-Tennis-Match Glitch Worlds laden kann."
 date: 2026-06-10authors:
   - fox3000foxy

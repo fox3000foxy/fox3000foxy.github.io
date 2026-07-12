@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: the level format, pointers, and 256 glitch worlds"
+title: "Super Mario Bros.: the level format, pointers, and 256 glitch worlds"
 description: "How 128 levels x 4 area types fit in 40KB of ROM, why the Minus World exists, and how a NES Tennis cartridge swap can load glitch worlds."
 date: 2026-06-10authors:
   - fox3000foxy

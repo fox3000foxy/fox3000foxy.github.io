@@ -1,5 +1,5 @@
 ---
-itle: Running a Node.js library in the browser without Wasm --
+title: Running a Node.js library in the browser without Wasm --
   typescript-virtual-container's polyfills
 description: How Fortune hand-rewrote node:fs, node:crypto, and a dozen more
   Node modules in 640 lines of JavaScript so the container runs in the browser

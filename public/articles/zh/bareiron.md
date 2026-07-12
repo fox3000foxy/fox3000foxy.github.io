@@ -1,5 +1,5 @@
 ---
-itle: Bareiron----在1美元的微控制器上运行的Minecraft服务器
+title: Bareiron----在1美元的微控制器上运行的Minecraft服务器
 description: 6800行C代码，零malloc，用双线性插值替代Perlin噪声，瓦片地图式的生物群系，全都跑在1美元的芯片上。
 date: 2026-05-30authors:
   - fox3000foxy

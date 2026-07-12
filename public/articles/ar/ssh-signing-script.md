@@ -1,5 +1,5 @@
 ---
-itle: شرح سكريبت التوقيع SSH
+title: شرح سكريبت التوقيع SSH
 description: تحليل مساعد توقيع commits SSH ولماذا أردت commits أنيقة.
 date: 2026-03-08
 aiGenerated: trueauthors:

@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- il server Minecraft che gira su un microcontrollore da 1$
+title: Bareiron -- il server Minecraft che gira su un microcontrollore da 1$
 description: 6800 righe di C, zero malloc, Perlin noise sostituito da interpolazione
   bilineare, biomi in tile map, e tutto su un chip da 1$.
 date: 2026-05-30authors:

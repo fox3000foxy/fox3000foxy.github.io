@@ -1,5 +1,5 @@
 ---
-itle: Microsoft Rewards 팜 봇 만들기
+title: Microsoft Rewards 팜 봇 만들기
 description: 대규모로 Microsoft Rewards 포인트를 농사짓는 봇을 코딩한 방법 -- 그리고 Microsoft의 안티봇 탐지가 따라잡은 이유
 date: 2026-03-13authors:
   - fox3000foxy

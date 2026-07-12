@@ -1,5 +1,5 @@
 ---
-itle: "Repo to VPS : mengubah GitHub Actions menjadi VPS gratis dengan penyimpanan persisten"
+title: "Repo to VPS : mengubah GitHub Actions menjadi VPS gratis dengan penyimpanan persisten"
 description: Cara mengubah runner GitHub Actions menjadi VPS permanen dengan git sebagai penyimpanan persisten -- tmate, inotify dan commit --amend.
 date: 2026-05-29authors:
   - fox3000foxy

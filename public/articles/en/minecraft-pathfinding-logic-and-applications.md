@@ -1,5 +1,5 @@
 ---
-itle: Minecraft Pathfinding Logic and Applications
+title: Minecraft Pathfinding Logic and Applications
 description: How A*, block malice, and POI mechanics let you control, predict,
   and exploit mob movement -- from wireless redstone to optimized farms.
 date: 2026-05-29authors:

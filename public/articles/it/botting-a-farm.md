@@ -1,5 +1,5 @@
 ---
-itle: Botting di una Microsoft Rewards Farm
+title: Botting di una Microsoft Rewards Farm
 description: Come ho programmato un bot per farmare punti Microsoft Rewards su
   larga scala -- e perché il rilevamento anti-bot di Microsoft ci ha raggiunto.
 date: 2026-03-13authors:

@@ -1,5 +1,5 @@
 ---
-itle: Blog này hoạt động như thế nào ?
+title: Blog này hoạt động như thế nào ?
 description: "Hậu trường của blog: React, Vite, Markdown, pipeline CI/CD và quy trình viết bài."
 date: 2026-03-08
 aiGenerated: trueauthors:

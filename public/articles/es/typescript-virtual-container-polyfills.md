@@ -1,5 +1,5 @@
 ---
-itle: Hacer funcionar una biblioteca Node.js en el navegador sin Wasm -- los
+title: Hacer funcionar una biblioteca Node.js en el navegador sin Wasm -- los
   polyfills de typescript-virtual-container
 description: Cómo Fortune reimplementó a mano node:fs, node:crypto y una docena
   de módulos Node más en 640 líneas de JavaScript para que el contenedor

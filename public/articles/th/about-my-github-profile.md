@@ -1,5 +1,5 @@
 ---
-itle: เกี่ยวกับโปรไฟล์ GitHub ของฉัน
+title: เกี่ยวกับโปรไฟล์ GitHub ของฉัน
 description: การแนะนำโปรไฟล์ GitHub ของฉันโดยสังเขป
 date: 2026-03-08authors:
   - fox3000foxy

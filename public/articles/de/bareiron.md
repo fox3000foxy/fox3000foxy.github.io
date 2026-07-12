@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- der Minecraft-Server auf einem 1$-Mikrocontroller
+title: Bareiron -- der Minecraft-Server auf einem 1$-Mikrocontroller
 description: 6800 Zeilen C, null malloc, Perlin Noise ersetzt durch bilineare
   Interpolation, Biome als Tilemap, und das alles auf einem 1$-Chip.
 date: 2026-05-30authors:

@@ -1,5 +1,5 @@
 ---
-itle: تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills
+title: تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills
   typescript-virtual-container
 description: كيف أعادت Fortune تنفيذ node:fs و node:crypto وعشرات وحدات Node
   النمطية في 640 سطرًا من JavaScript لجعل الحاوية تعمل في المتصفح بدون Wasm.

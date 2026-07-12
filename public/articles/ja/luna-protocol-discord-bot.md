@@ -1,5 +1,5 @@
 ---
-itle: "Luna Protocol: 自律型Discordボットが人間らしい会話を実現"
+title: "Luna Protocol: 自律型Discordボットが人間らしい会話を実現"
 description: "Luna Protocolは、ローカルLLMを搭載した完全自律型Discordボット。睡眠、タイプミス、ためらい、物忘れ、テーマ疲れ、自発的なメッセージなど、人間らしい不完全な会話を実現します。"
 date: 2026-07-11authors:
   - fox3000foxy

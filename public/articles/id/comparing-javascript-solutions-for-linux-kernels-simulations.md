@@ -1,5 +1,5 @@
 ---
-itle: Perbandingan Solusi JavaScript untuk Simulasi Kernel Linux
+title: Perbandingan Solusi JavaScript untuk Simulasi Kernel Linux
 description: Analisis mendalam tentang rekonstruksi lingkungan Linux dalam
   JavaScript/TypeScript.
 date: 2026-05-28authors:

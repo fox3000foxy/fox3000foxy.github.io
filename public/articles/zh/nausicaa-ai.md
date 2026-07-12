@@ -1,5 +1,5 @@
 ---
-itle: 我给 Nausicaa 写的那个沙雕 AI
+title: 我给 Nausicaa 写的那个沙雕 AI
 description: 一个基于启发式系数的 AI，超参数每 5 回合随机变化，还有会逃跑的神谕 -- 深入一款神话策略棋盘游戏的大脑。
 date: 2026-05-29authors:
   - fox3000foxy

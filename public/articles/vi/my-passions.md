@@ -1,5 +1,5 @@
 ---
-itle: Đam Mê Của Tôi
+title: Đam Mê Của Tôi
 description: Lập trình, vẽ vời, tự động hóa, khám phá công nghệ cũ, và hơn
   thế nữa -- một cái nhìn về những điều thúc đẩy tôi.
 date: 2026-03-08authors:

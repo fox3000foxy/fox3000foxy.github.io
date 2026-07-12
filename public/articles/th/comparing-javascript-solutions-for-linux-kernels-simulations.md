@@ -1,5 +1,5 @@
 ---
-itle: เปรียบเทียบโซลูชัน JavaScript สำหรับการจำลองเคอร์เนล Linux
+title: เปรียบเทียบโซลูชัน JavaScript สำหรับการจำลองเคอร์เนล Linux
 description: การวิเคราะห์เชิงลึกของการจำลองสภาพแวดล้อม Linux
   ใน JavaScript/TypeScript
 date: 2026-05-28authors:

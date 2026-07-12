@@ -1,5 +1,5 @@
 ---
-itle: Bagaimana Cara Kerja Blog Ini?
+title: Bagaimana Cara Kerja Blog Ini?
 description: "Di balik layar blog: React, Vite, Markdown, pipeline CI/CD dan alur penulisan."
 date: 2026-03-08
 aiGenerated: trueauthors:

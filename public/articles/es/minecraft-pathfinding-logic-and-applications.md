@@ -1,5 +1,5 @@
 ---
-itle: Lógica de pathfinding de Minecraft y sus aplicaciones
+title: Lógica de pathfinding de Minecraft y sus aplicaciones
 description: Cómo el algoritmo A*, los malus de bloques y los POI permiten
   controlar, predecir y explotar el movimiento de los mobs -- desde redstone
   inalámbrica hasta granjas optimizadas.

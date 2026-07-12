@@ -1,5 +1,5 @@
 ---
-itle: Logica di pathfinding di Minecraft e le sue applicazioni
+title: Logica di pathfinding di Minecraft e le sue applicazioni
 description: Come l'algoritmo A*, le penalità dei blocchi e i POI permettono di
   controllare, prevedere e sfruttare il movimento dei mob -- dalla redstone
   senza fili alle fattorie ottimizzate.

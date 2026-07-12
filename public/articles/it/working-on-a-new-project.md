@@ -1,5 +1,5 @@
 ---
-itle: Lavorando a un Nuovo Progetto
+title: Lavorando a un Nuovo Progetto
 description: Uno sguardo al processo di avvio e sviluppo di un nuovo sito web.
 date: 2026-03-13authors:
   - fox3000foxy

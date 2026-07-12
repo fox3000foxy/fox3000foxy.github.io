@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- сервер Minecraft, работающий на микроконтроллере за 1$
+title: Bareiron -- сервер Minecraft, работающий на микроконтроллере за 1$
 description: 6800 строк на C, ни одного malloc, Perlin noise заменён билинейной
   интерполяцией, биомы в tile map, и всё это на чипе за 1$.
 date: 2026-05-30authors:

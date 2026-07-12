@@ -1,5 +1,5 @@
 ---
-itle: Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions
+title: Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions
 description: Cách tôi code một auto-répondeur email AI chạy trên GitHub Actions với
   giá 0€/tháng -- dùng git tags làm cơ sở dữ liệu và pre-compile trong tag runtime.
 date: 2026-05-29authors:

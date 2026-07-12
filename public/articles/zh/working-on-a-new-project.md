@@ -1,5 +1,5 @@
 ---
-itle: 正在开发一个新项目
+title: 正在开发一个新项目
 description: 瞥一眼开始和开发一个新网站的过程。
 date: 2026-03-13authors:
   - fox3000foxy

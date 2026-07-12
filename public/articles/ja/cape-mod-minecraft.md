@@ -1,5 +1,5 @@
 ---
-itle: "Cape Mod：RSA署名注入でJeb_のケープを奪う方法"
+title: "Cape Mod：RSA署名注入でJeb_のケープを奪う方法"
 description: "Minecraftの信頼システムにおける論理的欠陥を悪用するFabric Mod：Mojangの正当なRSA署名を別のアカウントで使い回す。コードの解説、セキュリティへの影響、暗号の教訓。"
 date: 2026-07-11authors:
   - fox3000foxy

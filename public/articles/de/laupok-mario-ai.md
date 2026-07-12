@@ -1,5 +1,5 @@
 ---
-itle: "Laupok hat eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie"
+title: "Laupok hat eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie"
 description: "Ein tiefer Einblick in Laupoks Projekt: Eine NEAT-basierte KI, die lernt, Super Mario World autonom zu spielen. Genetische Algorithmen, neuronale Netze, Neuroevolution augmentierender Topologien und 4200 Zeilen Lua."
 date: 2026-07-11authors:
   - fox3000foxy

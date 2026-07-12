@@ -1,5 +1,5 @@
 ---
-itle: AI Konyolku untuk Nausicaa
+title: AI Konyolku untuk Nausicaa
 description: AI dengan koefisien heuristik, hyper-parameter yang berubah setiap 5
   giliran, dan Oracle yang kabur -- menyelami otak game papan strategis.
 date: 2026-05-29authors:

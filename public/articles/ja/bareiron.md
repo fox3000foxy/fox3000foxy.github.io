@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- 1ドルのマイコンで動くMinecraftサーバー
+title: Bareiron -- 1ドルのマイコンで動くMinecraftサーバー
 description: C言語6800行、mallocゼロ、パーリンノイズをバイリニア補間に置き換え、タイルマップ式バイオーム、すべて1ドルのチップで
 date: 2026-05-30authors:
   - fox3000foxy

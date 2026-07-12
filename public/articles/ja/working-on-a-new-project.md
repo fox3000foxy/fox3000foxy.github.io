@@ -1,5 +1,5 @@
 ---
-itle: 新しいプロジェクト
+title: 新しいプロジェクト
 description: 新しいWebサイトの開始と開発のプロセスについて。
 date: 2026-03-13authors:
   - fox3000foxy

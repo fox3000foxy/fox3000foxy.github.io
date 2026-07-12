@@ -1,5 +1,5 @@
 ---
-itle: 我用 git 当数据库在 GitHub Actions 上免费跑了一个机器人
+title: 我用 git 当数据库在 GitHub Actions 上免费跑了一个机器人
 description: 如何编写一个在 GitHub Actions 上以 0€/月运行的 AI 邮件自动回复器 -- 使用 git 标签作为数据库和预编译的运行时快照。
 date: 2026-05-29authors:
   - fox3000foxy

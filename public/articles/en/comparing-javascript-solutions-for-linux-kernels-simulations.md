@@ -1,5 +1,5 @@
 ---
-itle: Comparing Javascript Solutions For Linux Kernels Simulation
+title: Comparing Javascript Solutions For Linux Kernels Simulation
 description: A deep analysis of Linux environnements recreations in Javacript/Typescript.
 date: 2026-05-28authors:
   - fox3000foxy

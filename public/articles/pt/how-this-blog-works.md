@@ -1,5 +1,5 @@
 ---
-itle: Como este blog funciona?
+title: Como este blog funciona?
 description: "Os bastidores do blog: React, Vite, Markdown, o pipeline CI/CD
   e o fluxo de redação."
 date: 2026-03-08

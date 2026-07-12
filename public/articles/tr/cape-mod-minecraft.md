@@ -1,5 +1,5 @@
 ---
-itle: "Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak"
+title: "Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak"
 description: "Minecraft'ın güven sistemindeki mantıksal bir açığı sömüren bir Fabric modu: Mojang'dan geçerli bir RSA imzası ama yanlış hesaba replay edilmiş. Kod açıklaması, güvenlik etkileri ve kriptografik dersler."
 date: 2026-07-11authors:
   - fox3000foxy

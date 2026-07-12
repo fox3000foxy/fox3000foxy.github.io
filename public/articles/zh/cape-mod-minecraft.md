@@ -1,5 +1,5 @@
 ---
-itle: "Cape Mod：如何通过 RSA 签名注入窃取 Jeb_ 的披风"
+title: "Cape Mod：如何通过 RSA 签名注入窃取 Jeb_ 的披风"
 description: "一个 Fabric Mod，利用 Minecraft 信任系统中的逻辑漏洞：将 Mojang 的有效 RSA 签名重放到错误的账户上。代码解析、安全影响及加密学教训。"
 date: 2026-07-11authors:
   - fox3000foxy

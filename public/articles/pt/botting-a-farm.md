@@ -1,5 +1,5 @@
 ---
-itle: Automatizando uma Farm do Microsoft Rewards
+title: Automatizando uma Farm do Microsoft Rewards
 description: Como eu codei um bot para farmar pontos do Microsoft Rewards em grande
   escala -- e por que a Microsoft reforçou suas defesas desde então.
 date: 2026-03-13authors:

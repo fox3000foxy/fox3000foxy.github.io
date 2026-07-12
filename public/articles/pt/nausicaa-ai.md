@@ -1,5 +1,5 @@
 ---
-itle: Minha IA idiota para Nausicaa
+title: Minha IA idiota para Nausicaa
 description: Uma IA com coeficientes heurísticos, hiperparâmetros que mudam a
   cada 5 turnos, e um Oráculo que foge -- mergulho no cérebro de um jogo de
   tabuleiro estratégico.

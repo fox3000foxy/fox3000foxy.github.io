@@ -1,5 +1,5 @@
 ---
-itle: "Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım"
+title: "Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım"
 description: "Her eylemin anında WebP görüntüsü oluşturduğu sıra tabanlı bir Discord RPG'si:
   URL oyun durumu olarak, deterministik RNG, WASM hattı, 5 seviyeli önbellek,
   sunucusuz bot."

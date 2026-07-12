@@ -1,5 +1,5 @@
 ---
-itle: Usei git como banco de dados pra rodar um bot de graça no GitHub Actions
+title: Usei git como banco de dados pra rodar um bot de graça no GitHub Actions
 description: Como eu programei um auto-respondedor de email IA que roda no GitHub
   Actions por 0€/mês -- usando tags git como banco de dados e
   pré-compilação numa tag runtime.

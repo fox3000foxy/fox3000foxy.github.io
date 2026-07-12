@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- เซิร์ฟเวอร์ Minecraft ที่รันบนไมโครคอนโทรลเลอร์ราคา 1$
+title: Bareiron -- เซิร์ฟเวอร์ Minecraft ที่รันบนไมโครคอนโทรลเลอร์ราคา 1$
 description: โค้ด C 6800 บรรทัด, zero malloc, Perlin noise ถูกแทนที่ด้วย bilinear
   interpolation, ไบโอมแบบ tile map, และทั้งหมดนี้บนชิปราคา 1$
 date: 2026-05-30authors:

@@ -1,5 +1,5 @@
 ---
-itle: Il Mio Profilo GitHub
+title: Il Mio Profilo GitHub
 description: Una breve introduzione al mio profilo GitHub.
 date: 2026-03-08authors:
   - fox3000foxy

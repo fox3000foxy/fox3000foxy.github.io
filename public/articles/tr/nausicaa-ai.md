@@ -1,5 +1,5 @@
 ---
-itle: Nausicaa için salaş yapay zekâm
+title: Nausicaa için salaş yapay zekâm
 description: Sezgisel katsayı tabanlı bir yapay zeka, her 5 turda rastgele
   değişen hiperparametreler ve kaçan bir Kahin -- mitolojik bir strateji tahta
   oyununun beynine dalış.

@@ -1,5 +1,5 @@
 ---
-itle: "Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA"
+title: "Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA"
 description: "Un mod Fabric que explota una falla lógica en el sistema de confianza de Minecraft: una firma RSA válida de Mojang pero reutilizada en la cuenta equivocada. Explicación del código, implicaciones de seguridad y lecciones criptográficas."
 date: 2026-07-11authors:
   - fox3000foxy

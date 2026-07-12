@@ -1,5 +1,5 @@
 ---
-itle: ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions
+title: ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions
 description: วิธีที่ผมเขียน AI auto-reply email ที่รันบน GitHub Actions ด้วยค่าใช้จ่าย 0€/เดือน -- โดยใช้ git tags เป็นฐานข้อมูลและ
   pre-compile ใน runtime tag
 date: 2026-05-29authors:

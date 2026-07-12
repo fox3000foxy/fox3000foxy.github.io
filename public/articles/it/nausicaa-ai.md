@@ -1,5 +1,5 @@
 ---
-itle: La mia IA del cazzo per Nausicaa
+title: La mia IA del cazzo per Nausicaa
 description: Un'IA basata su coefficienti euristici, iperparametri che cambiano
   casualmente ogni 5 turni e un Oracolo che scappa -- tuffo nel cervello di un
   gioco da tavolo strategico mitologico.

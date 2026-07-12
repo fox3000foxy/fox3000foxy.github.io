@@ -1,5 +1,5 @@
 ---
-itle: SSHコミット署名スクリプトの解説
+title: SSHコミット署名スクリプトの解説
 description: SSHコミット署名ヘルパーのウォークスルーと、なぜスタイリッシュなコミットにこだわったのか。
 date: 2026-03-08
 aiGenerated: trueauthors:

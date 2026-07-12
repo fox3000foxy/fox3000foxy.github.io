@@ -1,5 +1,5 @@
 ---
-itle: "Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor"
+title: "Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor"
 description: "Laupok'un projesinin detaylı bir analizi: Super Mario World'ü bağımsız olarak oynamayı öğrenen bir NEAT tabanlı yapay zeka. Genetik algoritmalar, sinir ağları, artırılmış topolojilerin nöroevrimi ve 4200 satırlık Lua kodu."
 date: 2026-07-11authors:
   - fox3000foxy

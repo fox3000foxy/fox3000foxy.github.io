@@ -1,5 +1,5 @@
 ---
-itle: Minhas Paixões
+title: Minhas Paixões
 description: Codar, desenhar, automatizar, descobrir tecnologias antigas, e
   muito mais -- uma visão geral do que me motiva.
 date: 2026-03-08authors:

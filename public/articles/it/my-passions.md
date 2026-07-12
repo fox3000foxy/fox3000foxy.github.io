@@ -1,5 +1,5 @@
 ---
-itle: Le Mie Passioni
+title: Le Mie Passioni
 description: Programmazione, disegno, automazione, scoperta di vecchie
   tecnologie e altro -- uno sguardo a ciò che mi guida.
 date: 2026-03-08authors:

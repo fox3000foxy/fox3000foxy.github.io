@@ -1,5 +1,5 @@
 ---
-itle: 내가 Nausicaa용으로 만든 좆같은 AI
+title: 내가 Nausicaa용으로 만든 좆같은 AI
 description: 휴리스틱 계수 기반 AI, 5턴마다 랜덤으로 바뀌는 하이퍼파라미터, 도망치는 오라클 -- 신화 전략 보드 게임의 두뇌 속으로.
 date: 2026-05-29authors:
   - fox3000foxy

@@ -1,5 +1,5 @@
 ---
-itle: JavaScriptによるLinuxカーネルシミュレーションソリューションの比較
+title: JavaScriptによるLinuxカーネルシミュレーションソリューションの比較
 description: JavaScript/TypeScriptによるLinux環境再現の詳細分析。
 date: 2026-05-28authors:
   - fox3000foxy
