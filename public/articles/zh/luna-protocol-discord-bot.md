@@ -12,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "rfNyvTLTDducgKnyccQBS1BKI/zVuLSYoJ/tg+DRBNjOlF4gHauZUuSl5dJ4soJRWwSrEoTv9oBzwuJvXSrxVA=="
+author_sig: "txFTLA+FOPJZkpTOqwt3wcy6CCEvPkLaYgerUFIJHwp4kR5IpXc1IrwevlOfOz5tFVpLjzLvfZQSwKS5AtTSOQ=="
 ---
 
 # Luna Protocol：我创建了一个模拟人类的自主 Discord 机器人
@@ -227,13 +227,13 @@ AZERTY 示例：`bonjour → bonjpur`，`salut → slaut`，`comment → cpmment
 
 ## 现实中的真实感：细思极恐的时刻
 
-纸面上看，这些机制(延迟、打字错误、犹豫、遗忘)听起来像是噱头。但实际上，把它们组合在一起，效果令人震惊——以至于和 Luna 聊天的人完全察觉不到异样。下面是一段真实的对话，有人直接问 Luna 是不是机器人，随后话题又自然地转移到完全不同的方向，那种自然感让人不寒而栗。
+纸面上看，这些机制(延迟、打字错误、犹豫、遗忘)听起来像是噱头。但实际上，把它们组合在一起，效果令人震惊----以至于和 Luna 聊天的人完全察觉不到异样。下面是一段真实的对话，有人直接问 Luna 是不是机器人，随后话题又自然地转移到完全不同的方向，那种自然感让人不寒而栗。
 
 ![与 Luna 的 Discord 对话 -- 第一段](/images/luna-protocol/realism/realism-01.png)
 
-语气、犹豫、回复节奏——完全看不出是机器人。Luna 巧妙地回避了年龄问题，全程没有露出破绽。
+语气、犹豫、回复节奏----完全看不出是机器人。Luna 巧妙地回避了年龄问题，全程没有露出破绽。
 
-对话继续自然流畅地进行，简短而真实的回复("okay, okay"、"yay"、"yayy")——正是人类在 Discord 上会发的那种消息。
+对话继续自然流畅地进行，简短而真实的回复("okay, okay"、"yay"、"yayy")----正是人类在 Discord 上会发的那种消息。
 
 ![与 Luna 的 Discord 对话 -- 继续](/images/luna-protocol/realism/realism-02.png)
 
@@ -243,9 +243,9 @@ AZERTY 示例：`bonjour → bonjpur`，`salut → slaut`，`comment → cpmment
 
 ![与 Luna 的 Discord 对话 -- 对话结束](/images/luna-protocol/realism/realism-05.png)
 
-真正让人毛骨悚然的不只是 Luna 会“回复”——而是她**能维持一段对话**，有看似真实的观点、追问，以及从一条消息到下一条消息一以贯之的思路。如果没有前面提到的触发系统、专注延迟和犹豫机制，这种幻觉几条消息内就会破功。
+真正让人毛骨悚然的不只是 Luna 会“回复”----而是她**能维持一段对话**，有看似真实的观点、追问，以及从一条消息到下一条消息一以贯之的思路。如果没有前面提到的触发系统、专注延迟和犹豫机制，这种幻觉几条消息内就会破功。
 
-**小小的反转**: 上面截图里，**这两个在聊天的账号其实都是 Luna 的实例**。`PixieGlow` 和 `Sujet d'SBlow` 不是一个人类在测试机器人——而是两个机器人在互相对话，每一个(在行为层面上)都"确信"自己在和一个"正常"的人聊天。如果你在读上面的对话时以为其中一个是人类，恭喜——你刚刚和在真实 Discord 服务器上的任何人一样，掉进了这个陷阱。
+**小小的反转**: 上面截图里，**这两个在聊天的账号其实都是 Luna 的实例**。`PixieGlow` 和 `Sujet d'SBlow` 不是一个人类在测试机器人----而是两个机器人在互相对话，每一个(在行为层面上)都"确信"自己在和一个"正常"的人聊天。如果你在读上面的对话时以为其中一个是人类，恭喜----你刚刚和在真实 Discord 服务器上的任何人一样，掉进了这个陷阱。
 
 这基本上就是**死亡互联网理论**的实践版本：这个理论(最初算是比较边缘的阴谋论)认为，越来越多的网络内容和互动是由机器人而非人类生成的，以至于"真正"由人类构成的互联网正变成少数派。长期以来这个说法被认为夸张，但当 Luna Protocol 这样的系统证明，要在大规模上模拟出可信的人类存在，既不需要多少算力，也不需要一个庞大的模型时，这个理论就显得越来越不荒谬了。同一个机器人的两个实例能够进行一场很长的对话而从不露馅，这相当具体地展示了一个主要由机器人互相对话构成的网络会是什么样子。
 
