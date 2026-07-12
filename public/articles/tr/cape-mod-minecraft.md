@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GL6u0wtsp+GORzvNnnPwtCgwEEtRcgmJsRp5rI7zvboP3bAumIcSseAWdmr/fChd7qn61nFN5i+gK0O2EgjJDQ=="
+author_sig: "yQAJ4dlAtVx/kmLWQN6wdpKD2N115X7Xu3Ub0tw2030DG68RbQnRdA9UVJn3J69YbOeatsjvcjHwIlUBw83R1g=="
 ---
 
 # Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak
 
+![alt text](assets/xbox-profile.png)
 Sana geçerli bir RSA imzasının -- ama **yanlış hesap** için -- arkadaşlarını resmi Mojang capesi taktığına inandırmaya yettiğini söylesem? `cape-mod`'a hoş geldin, Minecraft'ın bir imzaya güvendiğini ama imzanın ait olduğu profilin gerçekten senin olup olmadığını kontrol etmediğini gösteren bir Fabric exploit'i.
 
 ## Arka plan : Minecraft skin ve capeleri nasıl yönetiyor?

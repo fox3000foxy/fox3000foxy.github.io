@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2fL4hHjAgSkT+JcgoFwBiFIBPc9d8MIr4gyUpzLS3i8QyL5lWsuVuPJfj5/f5JqIdOoWJJ6J26hi2k/1K7eb7g=="
+author_sig: "vfbW6ZqXy069zcqFMnnGzAO8iTcsG9q2Dk+l8FWk7UYJFtW6C5rgCdWfXGwVB+7qGi8i+E+8aWID6gMfdamIlg=="
 ---
 
 # Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA
 
+![alt text](assets/xbox-profile.png)
 Что если я скажу тебе, что достаточно одной действительной подписи RSA — но для **неправильной учётной записи** — чтобы убедить друзей, что ты носишь официальный плащ Mojang? Добро пожаловать в `cape-mod`, эксплойт для Fabric, показывающий, как Minecraft доверяет подписи, не проверяя, принадлежит ли профиль, для которого она создана, действительно тебе.
 
 ## Контекст: как Minecraft управляет скинами и плащами

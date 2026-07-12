@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9baRaTYEPIIjO5/xJ6pRuuI0oVlqtq9rGNbkaPpvSgs3V1JOWnVb1tWtI2tECNxABIm9oT6Cg/g2yVThB9EFdA=="
+author_sig: "KPqIYZGv6Q62Mjin6EvgIEH3yBbxQEY4v4vpBrYdwApRo4LxlJOJyH6e9OuAAkFwCHxaG+ELK5G2RqOCupN5kA=="
 ---
 
 # Cape Mod：RSA署名注入でJeb_のケープを奪う方法
 
+![alt text](assets/xbox-profile.png)
 もし、有効なRSA署名が1つあれば――ただし**誤ったアカウントのもの**でも――友達にあなたがMojangの公式ケープを着けていると思い込ませられるとしたら？ `cape-mod`へようこそ。これは、Minecraftが署名を信頼する一方で、その署名が本当に自分のプロフィールに属するものかを検証しないことを利用したFabricのエクスプロイトです。
 
 ## 背景：Minecraftはスキンとケープをどう扱うか

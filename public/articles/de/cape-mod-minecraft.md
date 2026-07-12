@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "zs3Ned3mqfW6X9BD0o4B15WOfc/m1/P4tYDaWSFyME374ms/W3G9WHhzRKnxMkvqbKOHdmVkcivUIzHgA4A1qA=="
+author_sig: "f9zmYGHsTLNDUD2hrFZAtLRovWlw5crntsII0TddyeQhGVmlDQY2czRjaxVExoSm80cZXyIcocI6OvNnO22mcQ=="
 ---
 
 # Cape Mod: Wie man Jeb_s Cape mit einer RSA-Signatur-Injektion stiehlt
 
+![alt text](assets/xbox-profile.png)
 Was wäre, wenn ich dir sagte, dass eine gültige RSA-Signatur -- aber für den **falschen Account** -- völlig ausreicht, um deine Freunde glauben zu lassen, du trägst den offiziellen Mojang-Umhang? Willkommen bei `cape-mod`, einem Fabric-Exploit, der zeigt, wie Minecraft einer Signatur vertraut, ohne zu überprüfen, ob das Profil, zu dem sie gehört, tatsächlich deines ist.
 
 ## Der Kontext: Wie Minecraft Skins und Capes verwaltet

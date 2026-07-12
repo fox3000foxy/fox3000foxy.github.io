@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "U1O+oaLlz78o3xcei2YqMdvCOztrWu7UT7H+lZV4WZVnqXQRbVUplPIBAUre3VIA2xdImhfWbldnMXaScsAa3g=="
+author_sig: "17W1Lx8GgntHy+0r0ZlSNuJxGpEyEHr7PoLGW/yBRjwMUTQ9iaSHVneu137RKCaosbjN+kW8ECuaUzVUbf7zuA=="
 ---
 
 # Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA
 
+![alt text](assets/xbox-profile.png)
 Bagaimana jika cukup dengan tanda tangan RSA yang valid -- tetapi untuk **akun yang salah** -- untuk membuat teman-temanmu percaya bahwa kamu memakai cape resmi Mojang? Selamat datang di `cape-mod`, sebuah eksploitasi Fabric yang menunjukkan bagaimana Minecraft mempercayai tanda tangan tanpa memverifikasi bahwa profil yang dimilikinya benar-benar milikmu.
 
 ## Konteks : bagaimana Minecraft mengelola skin dan cape

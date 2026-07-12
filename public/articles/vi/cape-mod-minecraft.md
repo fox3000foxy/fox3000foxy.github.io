@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "vXJF/X7qwucvNLqEDnqWJjD7wUmNomrJIveek0Tk7h26X0PkIVOPb/8/KnxJ0HnmTjeRsNOoLno2r6tS3mqXIQ=="
+author_sig: "8j0mcdD/MPK2OidGyHMOGkvjw5FcVpwhr3TdENt9EhtNZXur2J48yCIrA6edJcPjSV52TEijkSE/E+tLrAldGQ=="
 ---
 
 # Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA
 
+![alt text](assets/xbox-profile.png)
 Nếu tôi nói với bạn rằng chỉ cần một chữ ký RSA hợp lệ -- nhưng dành cho **tài khoản sai** -- để khiến bạn bè tin rằng bạn đang đeo cape chính thức của Mojang? Chào mừng đến với `cape-mod`, một exploit Fabric cho thấy cách Minecraft tin tưởng một chữ ký mà không kiểm tra xem hồ sơ sở hữu nó có thực sự là của bạn hay không.
 
 ## Bối cảnh: Minecraft quản lý skin và cape như thế nào

@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "twsgty+Lw3eVXMwaTcVgm6iWn0tSIGfglvpHw4V9quXZCZYPItv1W2MbtAPlPRJf0+1/my7ORZ9n41GdIFYbDw=="
+author_sig: "KHZfWFO3JLcm8r4Phg01N7foYMO7jrM2N2ilMLbP9aN1ehsnTQZqteA+L1HQKA1IjTzxC5mtMLxKx+jr4h7EIg=="
 ---
 
 # Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법
 
+![alt text](assets/xbox-profile.png)
 유효한 RSA 서명 하나면 -- 비록 **잘못된 계정**의 것이라도 -- 친구들에게 내가 공식 Mojang 망토를 착용하고 있는 것처럼 속일 수 있다면? `cape-mod`에 오신 것을 환영합니다. 이 Fabric 익스플로잇은 Minecraft가 서명 자체는 신뢰하면서 정작 그 서명이 속한 프로필이 실제로 자신의 것인지는 확인하지 않는 방식을 보여줍니다.
 
 ## 배경: Minecraft가 스킨과 망토를 처리하는 방식

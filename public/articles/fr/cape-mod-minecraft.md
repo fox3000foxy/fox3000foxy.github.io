@@ -13,10 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4DEbA5ECrdqY1QBRwHGiorqz/btdFS5pAEnXwSpq1+LwkIwiybli3Q9YL9wC8F5EpnnubrKIWHQTHQ9gco+0EA=="
+author_sig: "dGW8MMQZGCB5Dq5xOf9QCAQeC4dSsK2+CsNVXZLAklvR5WI9iV35PajqWzAPC+w18L+pLylchjTyH6B6cvnXLg=="
 ---
 
 # Cape Mod : comment voler la cape de Jeb_ avec une injection de signature RSA
+
+![alt text](assets/xbox-profile.png)
 
 Et si je te disais qu'il suffisait d'une signature RSA valide -- mais pour le **mauvais compte** -- pour faire croire à tes amis que tu portes la cape officielle de Mojang ? Bienvenue dans `cape-mod`, un exploit Fabric qui montre comment Minecraft fait confiance à une signature sans vérifier que le profil auquel elle appartient est effectivement le tien.
 

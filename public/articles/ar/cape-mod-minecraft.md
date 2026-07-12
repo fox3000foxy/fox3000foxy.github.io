@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7LJQ3Iib9Sc5qkzxYuWVYq1yTW7uMu23nrBRXoxIt5HCRldiL+5snDnqIH8lbBmHntuynj4zOPTSWephpjKLdQ=="
+author_sig: "uM/dIKrKnHebDiZM5o0PXse8R80HKYf0ai+vSS1DLbCaYEtE6Z/ChylFxBRFhp0vFot5PXaqmQeCjroFOj44ig=="
 ---
 
 # مود الكيب: كيف تسرق كيب Jeb_ بحقن توقيع RSA
 
+![alt text](assets/xbox-profile.png)
 ماذا لو أخبرتك أن توقيع RSA صحيحًا واحدًا -- لكن **للحساب الخطأ** -- يكفي لجعل أصدقائك يعتقدون أنك ترتدي الكيب الرسمي من Mojang؟ مرحبًا بك في `cape-mod`، exploit من نوع Fabric يوضح كيف تثق ماينكرافت بالتوقيع دون التحقق من أن الملف الشخصي الذي ينتمي إليه هو ملفك بالفعل.
 
 ## السياق: كيف تدير ماينكرافت skins والكيب

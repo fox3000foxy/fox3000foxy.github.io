@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Cz3g/mbSmDZV4giiQm6kKyLDMcdNjnZJtjnvMAuhrM8/0djEuDOc2+anvTbe4uSTByXM99EYBM/eUoW5/m22QQ=="
+author_sig: "gPV+rwfpt0bJXQW5ELATNpAZdjEwjrPRNNbOyWcezdYYYcoyLjJHSL3srEilnJUNJ8LVoL0/tDcAYKo3CzDU1g=="
 ---
 
 # Cape Mod：如何通过 RSA 签名注入窃取 Jeb_ 的披风
 
+![alt text](assets/xbox-profile.png)
 如果我告诉你，只需要一个有效的 RSA 签名——但属于**错误的账户**——就能让你的朋友相信你穿着 Mojang 的官方披风？欢迎来到 `cape-mod`，一个 Fabric 漏洞利用模组，展示 Minecraft 如何信任签名而不验证该签名所属的配置文件是否确实是你的。
 
 ## 背景：Minecraft 如何处理皮肤和披风

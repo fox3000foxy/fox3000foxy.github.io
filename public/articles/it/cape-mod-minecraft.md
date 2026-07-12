@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "wFN6LSjgAafPvlomQjDAk/ZT9bahe6zhOYOQU2A0KwfXDzZg9ukmhKqexaZkYk6UwwaQXnfqfk9Qro0SJ/GVSA=="
+author_sig: "9OLEa4RpDghG0o1k1SzmGuQwpPVB/Ht2iJn3UBnHyG7/+C3kNLflAtxpnE5HX1Xwc79sMrZGphWlDFjCwCfdhg=="
 ---
 
 # Cape Mod: come rubare il mantello di Jeb_ con un'iniezione di firma RSA
 
+![alt text](assets/xbox-profile.png)
 E se ti dicessi che basta una firma RSA valida -- ma per l'**account sbagliato** -- per far credere ai tuoi amici che indossi il mantello ufficiale di Mojang? Benvenuto in `cape-mod`, un exploit Fabric che mostra come Minecraft si fidi di una firma senza verificare che il profilo a cui appartiene sia effettivamente il tuo.
 
 ## Il contesto: come Minecraft gestisce skin e mantelli
