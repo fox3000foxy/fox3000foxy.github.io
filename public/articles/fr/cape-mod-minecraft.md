@@ -1,3 +1,21 @@
+---
+title: "Cape Mod : comment voler la cape de Jeb_ avec une injection de signature RSA"
+description: "Un mod Fabric qui exploite une faille logique dans le système de confiance de Minecraft : une signature RSA valide de Mojang mais replayée sur un mauvais compte. Explication du code, implications de sécurité et leçons cryptographiques."
+date: 2026-07-11
+tags:
+  - minecraft
+  - fabric
+  - java
+  - rsa
+  - signature
+  - reverse-engineering
+  - securite
+authors:
+  - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "zB0m9GIIXFYr86d+iz0m1pnsqsatr7upcMdnrvdzDY/eN4WOpC1Q7wTkX2I/mGrmoaJvhqC2MLnXpKTs2+/Wng=="
+---
+
 # Cape Mod : comment voler la cape de Jeb_ avec une injection de signature RSA
 
 Et si je te disais qu'il suffisait d'une signature RSA valide -- mais pour le **mauvais compte** -- pour faire croire à tes amis que tu portes la cape officielle de Mojang ? Bienvenue dans `cape-mod`, un exploit Fabric qui montre comment Minecraft fait confiance à une signature sans vérifier que le profil auquel elle appartient est effectivement le tien.
