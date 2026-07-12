@@ -245,6 +245,10 @@ La conversación sigue fluyendo con total naturalidad, con respuestas cortas y h
 
 Lo inquietante no es solo que Luna "responda" -- es que **mantiene una conversación**, con opiniones aparentes, réplicas y un hilo de pensamiento coherente de un mensaje a otro. Sin el sistema de disparadores, los retrasos de concentración y las dudas descritos antes, esta ilusión se derrumbaría en pocos mensajes.
 
+**Pequeño giro final**: en las capturas de arriba, **las dos cuentas que conversan son instancias de Luna**. `PixieGlow` y `Sujet d'SBlow` no son un humano probando a un bot -- son dos bots hablando entre sí, cada uno "convencido" (en sentido conductual) de estar charlando con alguien "normal". Si al leer el intercambio pensaste que uno de los dos era humano, felicidades -- acabas de caer en la trampa, tal como le pasaría a cualquiera en un servidor real de Discord.
+
+Es básicamente una versión práctica de la **dead internet theory**: esta teoría (originalmente bastante conspirativa) sostiene que una parte cada vez mayor del contenido e interacciones en línea es generada por bots en lugar de humanos, hasta el punto de que el internet "real" humano se habría vuelto minoritario. Durante mucho tiempo considerada exagerada, resulta cada vez menos absurda cuando sistemas como Luna Protocol demuestran que no hace falta mucha potencia ni un modelo enorme para simular una presencia humana creíble a gran escala. Dos instancias del mismo bot capaces de mantener una conversación larga sin delatarse nunca dan una idea bastante concreta de cómo podría ser una web poblada mayoritariamente por bots que hablan entre sí.
+
 ---
 
 ## El pipeline LLM: dos modos
