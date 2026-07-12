@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "zB0m9GIIXFYr86d+iz0m1pnsqsatr7upcMdnrvdzDY/eN4WOpC1Q7wTkX2I/mGrmoaJvhqC2MLnXpKTs2+/Wng=="
+author_sig: "4DEbA5ECrdqY1QBRwHGiorqz/btdFS5pAEnXwSpq1+LwkIwiybli3Q9YL9wC8F5EpnnubrKIWHQTHQ9gco+0EA=="
 ---
 
 # Cape Mod : comment voler la cape de Jeb_ avec une injection de signature RSA
@@ -157,6 +157,8 @@ public class ServerPlayerMixin {
 3. Vérifie que c'est le host (LAN world)
 4. **Remplace** la propriété `textures` par celle de Jeb_ (hardcodée)
 5. Retourne un nouveau `GameProfile` avec les textures injectées
+
+Le `GameProfile` est donc **forgé** : c'est un profil construit artificiellement, qui ne correspond pas au vrai joueur. Les propriétés `textures` sont **replayées** depuis Jeb_ -- la signature RSA est authentique mais appliquée au mauvais profil. Le paquet réseau, lui, est légitime : le serveur envoie normalement le `ClientboundPlayerInfoUpdatePacket` avec ce profil modifié. C'est le profil qui est forgé, pas le paquet.
 
 Quand les amis du host rejoignent via LAN, ils reçoivent le `ClientboundPlayerInfoUpdatePacket` avec le profil modifié. Le client :
 1. Décode le payload base64
