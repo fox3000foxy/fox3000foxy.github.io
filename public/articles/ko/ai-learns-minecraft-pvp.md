@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "g7o2lI7JofICuhEnD6drhR2rJhM7Nn1V+Oi4ptXVY9K8DhIo1Zlf4v5uonQ0BU6qr0wNuF9LrClLtZgmYsIkhA=="
+author_sig: "oAnpd+VrK6kCi6gCehpJ+7k6vZIlwKvMGL3rK3nNSZcH8NSC8/FgAootGbfT+rPzf4jt3EE82uyAQzS7du/33A=="
 ---
 
 ## 소개
@@ -165,6 +165,40 @@ for frame, action in dataset:
 VPT 파이프라인은 **역동역학 모델(IDM)** 을 훈련하여 데이터 문제를 해결한다. IDM은 프레임 t-1과 프레임 t+1을 보고 프레임 t에서의 액션을 예측한다. IDM은 비인과적이므로(미래 프레임을 봄), 태스크가 행동 클로닝보다 쉽고 훨씬 적은 라벨 데이터가 필요하다. 그들은 계약자에게 2,000시간 분량의 라벨 데이터에 대해 약 2,000달러를 지불한 후, IDM을 사용하여 YouTube의 70,000시간 분량 Minecraft 동영상을 의사 라벨링했다.
 
 결과적으로 0.5B 파라미터 파운데이션 모델은 RL만으로는 불가능했던 제로샷 능력(나무 자르기, 테이블 만들기, 필라 점프)을 달성했고, RL로 파인튜닝하여 다이아몬드 도구를 만든 최초의 AI가 되었다.
+
+![VPT의 사전 학습 데이터 규모에 따른 제작/수집 비율(로그 스케일): 제작대, 나무 도구, 돌 도구](assets/vpt-stone-pickaxe-sequence.svg)
+
+규모의 효과는 명확하다: 1시간에서 100,000시간까지의 사전 학습 데이터 로그 축에서, 모델이 제작대, 나무 도구, 돌 도구를 제작하는 비율이 단계적으로 상승한다. 계약자가 라벨링한 2,000시간 데이터만으로 훈련된 모델은 제작대에서 정체된다; IDM이 의사 라벨링한 70,000시간을 추가함으로써(그래프의 점선), RL 없이도 제로샷으로 돌 도구가 등장한다.
+
+![RL 훈련 에피소드 수에 따른 보상: 무작위 초기화 네트워크 vs VPT 사전 학습 모델](assets/vpt-diamond-pickaxe-sequence.svg)
+
+이 그래프는 사전 학습이 다운스트림 RL에 얼마나 중요한 변화를 가져오는지 보여준다. 무작위 초기화 네트워크에서 출발한 RL(주황색)은 거의 백만 에피소드 동안 0 근처에 머문다: "다이아몬드 획득" 태스크는 보상이 너무 희소하여 순수 탐색으로는 도달할 수 없다. VPT 사전 학습 모델에서 파인튜닝된 RL(초록색)은 이미 기본 행동(채굴, 제작, 탐험)을 갖추고 시작하며 약 25의 보상까지 꾸준히 상승하는데, 이는 다이아몬드 곡괭이로 가는 전체 경로에 해당한다.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*OpenAI VPT 프로젝트의 공식 비디오 데모, 에이전트의 플레이 장면.*
 
 ## OpenAI Five: 보상 설계 문제
 

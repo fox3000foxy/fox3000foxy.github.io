@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "O+1AIgGz+s4c8TUNtVcK1JEzQQ0OQS25vxTALNLFHnmFqlWcRIOs2nPIF/xbVtFc8O2b/AdVPUo/DZcc1IqIOQ=="
+author_sig: "oApcbax4iMLucVwLeSX47vP3bx3xRNdlEIdxYjbclP8Kj4ZryZiDHC1HVCYJE6aQ6U59no7vFVgBv1KFfDeRBw=="
 ---
 
 ## Pendahuluan
@@ -165,6 +165,40 @@ Pendekatan "behavior cloning" video (Fase 1) adalah teknik yang sama yang diguna
 Pipeline VPT memecahkan masalah data dengan melatih **Inverse Dynamics Model (IDM)** yang melihat frame t-1 dan frame t+1 untuk memprediksi aksi pada frame t. Karena IDM bersifat non-kausal (ia melihat frame masa depan), tugasnya lebih mudah daripada behavioral cloning dan membutuhkan lebih sedikit data berlabel. Mereka membayar kontraktor ~$2.000 untuk 2.000 jam data berlabel, lalu menggunakan IDM untuk memberi pseudo-label pada 70.000 jam video YouTube Minecraft.
 
 Model fondasi 0,5B parameter yang dihasilkan mencapai kemampuan zero-shot yang mustahil dengan RL saja : menebang pohon, membuat meja kerajinan, pillar jumping : dan setelah fine-tuning dengan RL, menjadi AI pertama yang membuat alat diamond.
+
+![Tingkat kerajinan/koleksi berdasarkan volume data prapelatihan (skala log): meja kerajinan, alat kayu, alat batu](assets/vpt-stone-pickaxe-sequence.svg)
+
+Efek skalanya jelas: pada sumbu log dari 1 jam hingga 100.000 jam data prapelatihan, tingkat di mana model membuat meja kerajinan, alat kayu, lalu alat batu meningkat secara bertahap. Model yang dilatih hanya pada 2.000 jam data berlabel dari kontraktor mencapai puncak pada meja kerajinan; dengan menambahkan 70.000 jam data pseudo-berlabel dari IDM (garis putus-putus pada grafik), alat batu muncul secara zero-shot, tanpa satu pun langkah RL.
+
+![Reward berdasarkan jumlah episode pelatihan RL: memulai dari model yang diinisialisasi acak vs memulai dari model VPT yang sudah diprapelatih](assets/vpt-diamond-pickaxe-sequence.svg)
+
+Grafik ini menunjukkan mengapa prapelatihan mengubah segalanya untuk RL hilir. RL yang dimulai dari jaringan yang diinisialisasi acak (oranye) tetap datar mendekati 0 selama hampir satu juta episode: tugas "mendapatkan diamond" memiliki reward yang terlalu jarang untuk agen naif menemukannya melalui eksplorasi acak. RL yang di-fine-tune dari model VPT yang sudah diprapelatih (hijau) sudah dimulai dengan perilaku dasar (menambang, membuat, menjelajah) dan meningkat secara stabil hingga reward sekitar 25, yang sesuai dengan jalur lengkap menuju beliung diamond.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*Demo video resmi proyek VPT OpenAI, menunjukkan agen sedang beraksi.*
 
 ## OpenAI Five : Masalah reward shaping
 

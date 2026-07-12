@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0jOrzp+ROcIhOvNcVmvfrAhhSussTyLiBle0YW1W1n5HWFO1YPi6XZiomokBH5m4klBh6jb8y5Dheo2+m6j03Q=="
+author_sig: "uzG9/RQ5lfGe5d3Omm/jAa2lMsQ0ntsLvEoxm+jdSlRWe/xfJPOdNiNk8NPFBviwRsdwuz3q/+YmYGrp4ihCeA=="
 ---
 
 ## Giới thiệu
@@ -164,7 +164,41 @@ Cách tiếp cận "behavior cloning" của video (Giai đoạn 1) là kỹ thu�
 
 Pipeline VPT giải quyết vấn đề dữ liệu bằng cách huấn luyện một **Inverse Dynamics Model (IDM)** nhìn vào khung t-1 và khung t+1 để dự đoán hành động tại khung t. Vì IDM là non-causal (nó thấy các khung hình tương lai), nhiệm vụ này dễ dàng hơn behavioral cloning và cần ít dữ liệu được gắn nhãn hơn nhiều. Họ đã trả cho các nhà thầu ~$2.000 cho 2.000 giờ dữ liệu có nhãn, sau đó sử dụng IDM để gán nhãn giả cho 70.000 giờ video YouTube Minecraft.
 
+![Tỷ lệ chế tạo/thu thập theo khối lượng dữ liệu tiền huấn luyện (thang log): bàn chế tạo, công cụ gỗ, công cụ đá](assets/vpt-stone-pickaxe-sequence.svg)
+
+Hiệu ứng tỷ lệ rất rõ ràng: trên trục log từ 1 giờ đến 100.000 giờ dữ liệu tiền huấn luyện, tỷ lệ mô hình chế tạo bàn chế tạo, công cụ gỗ, rồi công cụ đá tăng dần theo từng bậc. Mô hình chỉ được huấn luyện trên 2.000 giờ dữ liệu có nhãn từ các nhà thầu đạt tối đa ở bàn chế tạo; chính nhờ thêm 70.000 giờ được gán nhãn giả bởi IDM (đường chấm trên biểu đồ) mà công cụ đá xuất hiện zero-shot, không cần một bước RL nào.
+
 Mô hình nền tảng 0,5B tham số kết quả đạt được khả năng zero-shot mà không thể có với RL đơn thuần : chặt cây, chế tạo bàn, pillar jumping : và được fine-tuning với RL, trở thành AI đầu tiên chế tạo công cụ kim cương.
+
+![Phần thưởng theo số tập huấn luyện RL: khởi tạo ngẫu nhiên vs khởi tạo từ mô hình VPT tiền huấn luyện](assets/vpt-diamond-pickaxe-sequence.svg)
+
+Biểu đồ này cho thấy tại sao tiền huấn luyện thay đổi mọi thứ cho RL hạ nguồn. RL khởi tạo từ mạng ngẫu nhiên (cam) vẫn bằng phẳng gần 0 qua gần một triệu tập: nhiệm vụ "lấy kim cương" có phần thưởng quá thưa thớt để một tác nhân ngây thơ tình cờ tìm thấy nó qua khám phá ngẫu nhiên. RL fine-tune từ mô hình VPT tiền huấn luyện (xanh lá) đã bắt đầu với hành vi cơ bản (đào, chế tạo, khám phá) và tăng đều đặn lên phần thưởng khoảng 25, tương ứng với con đường hoàn chỉnh đến một cái cuốc kim cương.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="Demo gameplay tác nhân VPT 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="Demo gameplay tác nhân VPT 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="Demo gameplay tác nhân VPT 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="Demo gameplay tác nhân VPT 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*Các bản demo video chính thức của dự án VPT của OpenAI, cho thấy tác nhân trong hành động.*
 
 ## OpenAI Five : Vấn đề reward shaping
 

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sONz5hptPKPg4xM11rRaQigR/M8/jJiRXIsV7wGkkSLy1BfW8JzSjJt+mbUKLYK/8+r74V394VrN+QbLxHnDcw=="
+author_sig: "+nJMZyunxqRymXLz6Eh15cQ6v+D/NaWMS1rNbu0doDkQujBunNhhgAIWSBYwzKhMoXVrzibRLkw9kbjYp0nOdA=="
 ---
 
 ## Introducción
@@ -164,7 +164,41 @@ El enfoque de «behavior cloning» del video (Fase 1) es la misma técnica que O
 
 El pipeline VPT resuelve el problema de datos entrenando un **Inverse Dynamics Model (IDM)** que mira el fotograma t-1 y el fotograma t+1 para predecir la acción en el fotograma t. Como el IDM es no causal (ve fotogramas futuros), la tarea es más fácil que el behavior cloning y requiere muchos menos datos etiquetados. Pagaron a contratistas ~2.000 $ por 2.000 horas de datos etiquetados, luego usaron el IDM para pseudo-etiquetar 70.000 horas de videos de Minecraft en YouTube.
 
+![Tasa de fabricación/recolección según el volumen de datos de preentrenamiento (escala log): mesas de trabajo, herramientas de madera, herramientas de piedra](assets/vpt-stone-pickaxe-sequence.svg)
+
+El efecto de escala es claro: en un eje log de 1 hora a 100.000 horas de datos de preentrenamiento, la tasa a la que el modelo fabrica una mesa de trabajo, herramientas de madera y luego herramientas de piedra aumenta por escalones. El modelo entrenado solo con las 2.000 horas etiquetadas por contratistas se estanca en las mesas de trabajo; es al añadir las 70.000 horas pseudo-etiquetadas por el IDM (línea punteada en el gráfico) que las herramientas de piedra emergen en zero-shot, sin una sola etapa de RL.
+
 El modelo fundamental de 0,5B parámetros resultante logró capacidades zero-shot imposibles solo con RL: cortar árboles, fabricar mesas, saltos : y refinado con RL, se convirtió en la primera IA en fabricar herramientas de diamante.
+
+![Recompensa en función del número de episodios de entrenamiento RL: partir de un modelo inicializado aleatoriamente vs partir del modelo VPT preentrenado](assets/vpt-diamond-pickaxe-sequence.svg)
+
+Este gráfico muestra por qué el preentrenamiento lo cambia todo para el RL posterior. El RL que parte de una red inicializada aleatoriamente (naranja) se mantiene plano cerca de 0 durante casi un millón de episodios: la tarea «obtener un diamante» tiene una recompensa demasiado dispersa para que un agente ingenuo la encuentre mediante exploración aleatoria. El RL ajustado a partir del modelo VPT preentrenado (verde) ya parte con el comportamiento base (minar, fabricar, explorar) y sube regularmente hasta una recompensa de aproximadamente 25, lo que corresponde al camino completo hacia un pico de diamante.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*Demostraciones en video oficiales del proyecto VPT de OpenAI, mostrando al agente en acción.*
 
 ## OpenAI Five : El problema del moldeado de recompensas
 

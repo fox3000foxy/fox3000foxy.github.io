@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "glm9IHpT23+ziGNTk9WW3HtefPHFKopOB0Rj92g3vEej0Uj9ot2qPrTJ5NVNMkNeYbAdUxpEIjWME/S6ERkJCg=="
+author_sig: "B+iFAB2GFgURH2GHZseCrTRJR6LwcvMiulQMOF6+43dKTvDgmB5HunrSngAc0NQ5/TRS5wEyE4iBO9UKxDMQ7g=="
 ---
 
 ## はじめに
@@ -160,6 +160,40 @@ for frame, action in dataset:
 VPTパイプラインはデータ問題を、**逆力学モデル**を訓練することで解決する。これはフレームt-1とフレームt+1を見て、フレームtでのアクションを予測する。IDMは非因果的であり（将来のフレームを見る）、タスクは行動クローニングよりも簡単で、はるかに少ないラベルデータを必要とする。彼らは請負業者に2,000時間のラベルデータに対して約2,000ドルを支払い、IDMを使ってYouTubeのMinecraft動画70,000時間を擬似ラベル付けした。
 
 結果として得られた0.5Bパラメータの基盤モデルは、RLだけでは不可能だったゼロショット能力を達成した：木を切り、テーブルを作り、ピラージャンプ----そしてRLでファインチューニングすることで、ダイヤモンド道具を作った最初のAIとなった。
+
+![プレトレーニングデータ量に対するクラフト/収集率（対数スケール）：作業台、木の道具、石の道具](assets/vpt-stone-pickaxe-sequence.svg)
+
+スケーリング効果は明らかだ：1時間から10万時間までの対数軸上で、モデルが作業台、木の道具、そして石の道具を作る割合は段階的に上昇する。請負業者がラベル付けした2,000時間のみで訓練されたモデルは作業台で頭打ちになるが、IDMによって擬似ラベル付けされた7万時間を追加することで（グラフの点線）、RLを一切使わずに石の道具がゼロショットで出現する。
+
+![RL訓練エピソード数に対する報酬：ランダム初期化から始めた場合とVPT事前学習モデルから始めた場合の比較](assets/vpt-diamond-pickaxe-sequence.svg)
+
+このグラフは、事前学習が下流のRLに与える影響の大きさを示している。ランダム初期化から始めたRL（オレンジ）は、100万エピソード近くにわたってほぼ0のままである：「ダイヤモンドを入手する」タスクは報酬がまばらすぎて、素のエージェントがランダム探索で遭遇することはほとんどない。一方、VPTモデルからファインチューニングされたRL（緑）は、すでに基本的な行動（採掘、クラフト、探索）を備えてスタートし、報酬約25まで着実に上昇する。これはダイヤモンドのツルハシへの完全なパスに相当する。
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPTエージェントのゲームプレイデモ1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPTエージェントのゲームプレイデモ2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPTエージェントのゲームプレイデモ3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPTエージェントのゲームプレイデモ4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*OpenAIのVPTプロジェクトの公式ビデオデモ。エージェントの動作を示している。*
 
 ## OpenAI Five：報酬設計問題
 

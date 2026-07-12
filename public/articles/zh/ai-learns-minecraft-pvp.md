@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Pqqo/TQdv3Oo7vmyfYHRZ3nEV76I/kkfXuUDehPsnq9xhqKeRX2mke9+W41cH4s0BJeSTAEtT0nMl7uljoTEjQ=="
+author_sig: "QAlTvkq30CJ4XKv1kr44XB6vWsJbUBEKXYruA9sIR/aNv6lhO1egjVpmlx3J+ASRCoUfnnlHyZB+JmQvHrh9qw=="
 ---
 
 ## 介绍
@@ -162,7 +162,41 @@ for frame, action in dataset:
 
 VPT流程通过训练一个**逆向动力学模型（IDM）**来解决数据问题，该模型观察帧t-1和帧t+1来预测帧t的动作。由于IDM是非因果的（它能看到未来帧），该任务比行为克隆更容易，所需标注数据也更少。他们向承包商支付了约2,000美元，用于2000小时标注数据，然后使用IDM为7万小时YouTube Minecraft视频进行伪标注。
 
+![预训练数据量对合成/采集率的影响（对数刻度）：工作台、木工具、石工具](assets/vpt-stone-pickaxe-sequence.svg)
+
+缩放效应非常明显：在对数坐标轴上，从1小时到10万小时预训练数据，模型制作工作台、木工具和石工具的成功率逐级提升。仅使用承包商标注的2000小时数据训练的模型止步于工作台；只有在添加了IDM伪标注的7万小时数据（图表中的虚线）后，石工具才零样本涌现，无需任何RL步骤。
+
 由此产生的5亿参数基础模型实现了仅靠强化学习无法做到的零样本能力：砍树、合成工作台、搭柱跳----并通过强化学习微调，成为第一个合成钻石工具的人工智能。
+
+![RL训练奖励随回合数的变化：随机初始化模型 vs 预训练VPT模型](assets/vpt-diamond-pickaxe-sequence.svg)
+
+该图展示了预训练如何改变下游RL的一切。从随机初始化网络开始的RL（橙色）在近百万回合内保持接近零的平直状态：「获取钻石」任务的奖励过于稀疏，初学者不可能通过随机探索碰巧得到。而从预训练VPT模型微调的RL（绿色）已经具备了基础行为（挖矿、合成、探索），并稳定上升至约25的奖励，对应了通往钻石镐的完整路径。
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*OpenAI VPT项目的官方演示视频，展示智能体在游戏中的实际表现。*
 
 ## OpenAI Five：奖励塑造问题
 
