@@ -11,9 +11,20 @@ import MermaidBlock from "./MermaidBlock";
 
 const sanitizeSchema = {
 	...defaultSchema,
+	tagNames: [...(defaultSchema.tagNames || []), "iframe"],
 	attributes: {
 		...defaultSchema.attributes,
 		"*": [...(defaultSchema.attributes?.["*"] || []), "class", "style"],
+		iframe: [
+			"src",
+			"width",
+			"height",
+			"frameBorder",
+			"allow",
+			"allowFullScreen",
+			"title",
+			"loading",
+		],
 	},
 };
 
