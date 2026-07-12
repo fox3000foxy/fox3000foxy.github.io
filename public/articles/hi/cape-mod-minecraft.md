@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YfjMFmtwflTdE+Rzx/fxSY5MzWXOneji5GCjCV9S/aDkV9G8Dd5Kj/t9oZpaRFSYutecQHBMXHJJDHqyyvZBHA=="
+author_sig: "UrG2hV/mLdMfL3Ig5I0U9IykbLuizVAAGfI3rqUakuvn8I5e6fmdK/gGN1yGoIHusRkp2NhIcr3VMBjFym2ivA=="
 ---
 
 # Cape Mod : RSA हस्ताक्षर इंजेक्शन से Jeb_ की केप कैसे चुराएं
 
+![alt text](assets/xbox-profile.png)
 क्या होगा अगर मैं तुमसे कहूँ कि बस एक वैध RSA हस्ताक्षर -- लेकिन **गलत खाते** के लिए -- तुम्हारे दोस्तों को यकीन दिलाने के लिए काफी है कि तुम Mojang की आधिकारिक केप पहन रहे हो? आओ मिलते हैं `cape-mod` से, एक Fabric एक्सप्लॉइट जो दिखाता है कि Minecraft बिना यह जाँचे हस्ताक्षर पर भरोसा कैसे करता है कि जिस प्रोफ़ाइल से वह संबंधित है वह वास्तव में तुम्हारी है।
 
 ## संदर्भ : Minecraft स्किन और केप कैसे प्रबंधित करता है

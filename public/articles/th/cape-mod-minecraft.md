@@ -13,11 +13,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "mJ6ulX92XCQSE0sbiZp4HHWNGqTwJdtLfY+/bN9nGlkoeIgSXo4aZW7euWO47DvroJUUMd/2zJySm2hftg7g/w=="
+author_sig: "PkONZzmCKa7hMSoNnKaKIgI17W6Nd+cYxtLhY0WiSjH27pVpVEJlUXdPCjVUCG4EsO5iUC4IzTi9LLansSYuZw=="
 ---
 
 # Cape Mod : วิธีขโมยเคปของ Jeb_ ด้วยการฉีดลายเซ็น RSA
 
+![alt text](assets/xbox-profile.png)
 จะเกิดอะไรขึ้นถ้าบอกว่า แค่มีลายเซ็น RSA ที่ถูกต้อง -- แต่สำหรับ**บัญชีผิด** -- ก็ทำให้เพื่อนคุณเชื่อว่าคุณสวมเคปทางการของ Mojang ได้แล้ว ยินดีต้อนรับสู่ `cape-mod` เอ็กซ์พลอยต์ Fabric ที่แสดงให้เห็นว่า Minecraft เชื่อถือลายเซ็นโดยไม่ตรวจสอบว่าโปรไฟล์ที่เป็นเจ้าของลายเซ็นนั้นเป็นของคุณจริงหรือไม่
 
 ## บริบท : Minecraft จัดการสกินและเคปอย่างไร
