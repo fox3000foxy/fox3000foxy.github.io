@@ -119,9 +119,14 @@ export default function WriteArticle() {
 				const text = event.clipboardData?.getData("text/plain");
 				if (text && /[#*`\->\d+.]/.test(text[0])) {
 					event.preventDefault();
-					marked.parse(text).then((html) => {
-						editor?.commands.insertContent(html);
-					});
+					const result = marked.parse(text);
+					if (result instanceof Promise) {
+						result.then((html: string) => {
+							editor?.commands.insertContent(html);
+						});
+					} else {
+						editor?.commands.insertContent(result);
+					}
 					return true;
 				}
 				return false;
