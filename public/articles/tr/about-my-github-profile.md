@@ -1,13 +1,14 @@
 ---
 title: GitHub Profilim Hakkında
 description: GitHub profilime kısa bir giriş.
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kyC8pQthk3BITBL4SerKwwQQcqbzJKtVYkgHyiCzXOarsvqsT/17kF+fDMis1R10TZdCB0JZ9zuf0Pga7uiuQw=="
+author_sig: "T9dfV/GW2kLFQZQhvJpnsM+fzNwdU2PecAwLGi6wSafqqk6dMkGbsb29NuOJWEwyRsj21lWfmWdmUJkL2T9O2Q=="
 ---
 
 # GitHub Profilim

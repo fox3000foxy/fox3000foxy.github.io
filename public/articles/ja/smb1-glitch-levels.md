@@ -1,13 +1,14 @@
 ---
 title: "Super Mario Bros.：レベルフォーマット、ポインタ、そして256のグリッチワールド"
 description: "128レベル × 4タイプのエリアがどうやって40KBのROMに収まるのか、Minus Worldがなぜ存在するのか、そしてNESテニスのカートリッジ交換でグリッチワールドをロードできる仕組み。"
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - retro
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "swJueZ92SAdNfQPw9vEYs6ABLfHTyW3hCqkAnM98q+9o3dh/Ory93IpUKVg9Z7QGm8iyauV9E4f5lEqTh0fL/w=="
+author_sig: "z5TZ61x4JBea6+wqW9o/pK+19dzs0QjyDxg/GkUkz65aYoLn4PQzdHX3YCQcAAkJmUoRRgEzHytMJr6DxcfnRw=="
 ---
 
 ## はじめに

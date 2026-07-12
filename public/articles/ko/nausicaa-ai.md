@@ -1,7 +1,8 @@
 ---
 title: 내가 Nausicaa용으로 만든 좆같은 AI
 description: 휴리스틱 계수 기반 AI, 5턴마다 랜덤으로 바뀌는 하이퍼파라미터, 도망치는 오라클 -- 신화 전략 보드 게임의 두뇌 속으로.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -9,7 +10,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "T6NXznWl5+vOst3Xh3AulVd+iRtfV1PRccOgW8XJmcRlQTXOaksu4W4e72dti9Zgi/Gs9I8JJkwfSxym3pBvZQ=="
+author_sig: "crmxXek9zSRUx8gWmRb9uXudrHeFxmBuLJbrf2QCDZGT652mJMXtx8FaQUbOcIDajHSzqLyt6UCOkJ+dMw1gSA=="
 ---
 
 ## 내 막장 AI for Nausicaa

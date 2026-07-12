@@ -2,7 +2,8 @@
 title: WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群
 description: Fortuneがnode:fs、node:crypto、その他十数個のNodeモジュールを640行のJavaScriptで手書き再実装して、Wasmなしでコンテナをブラウザで動かす方法
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -11,7 +12,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YO2dVaDLUeiAgMS3oT5MDZhzXsW8QQYAWYEvToUy5OJkqZXX/tKvr4RLYHpr3ew95V8p56VZcbDanfcqv5JcWg=="
+author_sig: "pYWTGCtggaG5XLSjovqMNq9dWoR1WAHONlFG0eGKqYVhESVGSm7SvKpuv6r3WNU92gH2RiAMPv3G4HqrRNkDew=="
 ---
 
 # WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群

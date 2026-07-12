@@ -1,14 +1,15 @@
 ---
 title: Yapay Zeka Minecraft PvP Öğreniyor -- Taklit Öğrenimi, Pekiştirmeli Öğrenme ve Önemli Olan 30 Değişken
 description: "1.000 düello kaydedildi, pikseller üzerinde eğitilen sinir ağı, %90 tuş doğruluğu : ve bot bir duvara doğru koştu. Sonra RL, müfredat öğrenimi ve 60 saatlik eğitim geldi."
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fQ5fopn1PG2N3B8wlfwYF4/xU2r2NVz1dp0YPnpaeIyh/a93nOUgdra+Y8yRJoeuESRCcq5eJWnm1PIIr/nMFg=="
+author_sig: "tXuePtYfmwnyCKNZ5HvPhs4wVV0m/6LrDUzewcOD+m/sk7OF7TACJJYy8rsCM5Mb+G9dzOFC6MTi2IcSupuObw=="
 ---
 
 ## Giriş

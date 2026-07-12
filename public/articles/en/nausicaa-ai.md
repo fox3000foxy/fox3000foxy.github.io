@@ -3,7 +3,8 @@ title: My dumb AI for Nausicaa
 description: A heuristic coefficient-based AI with hyperparameters that randomly
   change every 5 turns, and an Oracle that runs away -- diving into the brain of
   a mythological strategy board game.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -11,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Gte6uLMl0q4asNni/8gwhZ+OyskX6g4VnqMTYibSYfWS8K7CeYKFT6zcc6e2sEHchfrb7MCOtACQPEQIT5Qr7Q=="
+author_sig: "M9dbHrn/QTvIeXryxMt5x6HKPN+3TvoGxIRsfB+A4cu03c/INh/PR9A/8sPtyBBEICfBpqft7d5hKxplG/gkoQ=="
 ---
 
 ## My dumb AI for Nausicaa

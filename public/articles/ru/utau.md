@@ -1,7 +1,8 @@
 ---
 title: "UTAU: как программа на Visual Basic 6 демократизировала синтетический голос"
 description: Как UTAU, бесплатная программа на VB6 2008 года, позволила любому создавать синтетические певческие голоса с помощью конкатенативного синтеза -- и почему это всё ещё важно сегодня.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - utau
@@ -10,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4xjU4+jA8Rg1V2lvLD4dXoAbd5yPa1JLSdlcMMjC/5yOv01pWmo185doq7piNiQVGEB1B8cl4yJ7L3XL2EFcTw=="
+author_sig: "UUCxfuEUeHqRlAUdOqHhpi0bv19SSXMCUziyplISmKe5rO1KVG45QouHAeMdwH8ukHRNLqAuO9gP5opGg2lyRA=="
 ---
 
 ## UTAU : как программа на Visual Basic 6 демократизировала синтетический голос

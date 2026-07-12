@@ -1,13 +1,14 @@
 ---
 title: Yeni Bir Proje Üzerinde Çalışmak
 description: Yeni bir web sitesi geliştirme ve başlatma sürecine bir bakış.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - meta
   - webdev
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NHZRGBUccEkvisZu8i8xnObnoECIxxNbC9czO4Gb38gV/n4vHzN8x2tvJnhP+i3I4ONEEYx/rvQPvOg0scwqAg=="
+author_sig: "FAK+ongMjXJqc7eJ85UcXh1mHDzGd7SP8srwzbpn6JVD0NiZeo3b03zx1/6AtwtX4LFmTNZUj6+6ii3P8WG2UA=="
 ---
 
 # Proje

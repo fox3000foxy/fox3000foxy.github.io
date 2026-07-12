@@ -1,7 +1,8 @@
 ---
 title: 我用 git 当数据库在 GitHub Actions 上免费跑了一个机器人
 description: 如何编写一个在 GitHub Actions 上以 0€/月运行的 AI 邮件自动回复器 -- 使用 git 标签作为数据库和预编译的运行时快照。
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - automation
@@ -10,7 +11,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RTUtbmkx/9USW4Ip4lG7woGlBRsQph0ZsuC7lbWbWppmeo7WmddLbMj2jHVDcOksmrPJxF7F+fUx25YOtNbnow=="
+author_sig: "3MtIPtga4qHpBftNzYOrNklPKX14gCVoSsmek/ooudZoS/RCbXnokBhDgBAMnj6rI1/UBtVcbcs/19YLKEf0/Q=="
 ---
 
 # 我用 git 当数据库，在 GitHub Actions 上白嫖跑了个 bot

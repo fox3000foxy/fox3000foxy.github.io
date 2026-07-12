@@ -3,7 +3,8 @@ title: "मैंने एक सप्ताहांत konosuba-rpg का �
 description: "एक Discord टर्न-बेस्ड RPG जहाँ हर क्रिया तुरंत एक WebP इमेज जनरेट करती है:
   URL गेम स्टेट के रूप में, डिटरमिनिस्टिक RNG, WASM पाइपलाइन, 5-लेवल कैश,
   सर्वरलेस बॉट।"
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -16,7 +17,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BC285U1UgMZjEWws6/Qln06q78cgHyCWsbeWiL1ZCUc8IHHOxMaF0ASMRXCEq5/u/Op5PEEVIcdYD9u4JbAymg=="
+author_sig: "ejA0nya5V/cEhZltjjnXARWVlWd4V2W4mz3wZurm2BPQReO40RFXy1YQ5PSA4GG3gs4d2JvekI48PPBy9OYWaQ=="
 ---
 
 # मैंने एक सप्ताहांत konosuba-rpg का कोड पढ़ा और यहाँ बताया कि मुझे क्या मिला

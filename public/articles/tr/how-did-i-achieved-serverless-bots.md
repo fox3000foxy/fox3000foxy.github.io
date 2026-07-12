@@ -3,7 +3,8 @@ title: "%100 sunucusuz Discord botu: Hono + Cloudflare Workers"
 description: Bana ayda 50€'ya mal olan bir Discord botunu sıfır euro ile nasıl
   değiştirdim -- etkileşim uç noktaları, Hono, Workers, gerçek zamanlı görüntü
   oluşturma ve WebSocket olmadan eksiksiz bir oyun.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -12,7 +13,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hZHkCN0Bgfy8OYutFd2Fmgmq17TRk1agA5nN6X3nInEevdudKnCKdIUtg86J9DpTZzxJCGr/pJ6qbiiexMP1uQ=="
+author_sig: "dIxSIb+AppWtRX7fMslL+VL0ruwFK5wJDX8sbc4q5eYgYByjA1fUOUY5m5hrD6XDbPxcFJcZhWugv+GE9hQxaQ=="
 ---
 
 ## Discord bot %100 serverless : Hono + Cloudflare Workers = 💸 sıfır

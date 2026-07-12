@@ -5,7 +5,8 @@ description: Cách Fortune tự tay tái hiện node:fs, node:crypto và hàng t
   module Node trong 640 dòng JavaScript để container chạy trong trình duyệt
   không cần Wasm.
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -14,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "15AXlsovGPsMUIgPeg3W7lq2Wlupxd2T2/el90rwsLKYMibc233H+w0zCDzK5a0J6+eeq5b/GkpJCcvvfSCLvA=="
+author_sig: "x1ucvNjbeoJfX+7dKnU/WT7NkaxIdXc/f8ODL7t96G6oC3pjs8Pwa55iCmNVKkJEsAx4+2ssys21rieIwyLHEA=="
 ---
 
 # Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container

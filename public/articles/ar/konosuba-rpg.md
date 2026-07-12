@@ -1,7 +1,8 @@
 ---
 title: "قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته"
 description: "لعبة تقمّص أدوار (RPG) بنظام الأدوار على Discord حيث كل حركة تولّد صورة WebP فوراً: URL كحالة اللعبة، RNG حتمي، خط أنابيب WASM، 5 مستويات تخزين مؤقت، بوت بدون خادم."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -14,7 +15,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RinlRvcbh0TKPrscX8kuXKrcexjmvEqyOloYf5jzx+zql8ftzYRKZIiMyKOGK3wlliFI4PGWh3Up21rm7lf/3w=="
+author_sig: "EN7wEFfpj+A7k/IT4/hjo7yrMazcSyQD3D9jrGnCSQzWLaU18bo87QFiX5XIb2Xsa4ZhW85ZFChhczEykkVeEA=="
 ---
 
 # قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته

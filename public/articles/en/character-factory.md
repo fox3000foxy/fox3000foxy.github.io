@@ -4,14 +4,15 @@ description: "A TypeScript module on top of DiceBear: coherent
   country/ethnicity-based generation, a small genetics engine for projecting
   children, and the engineering details that made it usable in a card game."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0pZWLreHFHAjxzMWrni5XqfdxzDk+TsmwIdrV3WRyrj93I0VfZO99bRTLL4KI7Zhx2+aZnjbuzVKLzhHZ+Ssog=="
+author_sig: "/n6pqm+353MnbjNbh3O1gT2jTizYL6fJAEGFodufq+LGCqHnszN63Kiv2+jtIfjCK3c8Ar0n3cw7JYzbv643Yw=="
 ---
 
 # Building character-factory: avatars with genetics

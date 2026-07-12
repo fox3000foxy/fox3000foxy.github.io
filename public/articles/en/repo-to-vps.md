@@ -1,14 +1,15 @@
 ---
 title: "Repo to VPS: Turn GitHub Actions into a free VPS with persistent storage"
 description: How to turn a GitHub Actions runner into an always-on VPS using git as persistent storage -- tmate, inotify, and commit --amend.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - github
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PxUio2HtZcPwpwQOpkny0DnY0EBJh2xz7cV/kVqw00T9iTymZijmnf0GfA7jgsnXIgIKc4CKCgKFMAJi8ks2BA=="
+author_sig: "Bgh2HZ7UNzjphoaQz92XrYMZ8lSqJq26cw5k5dkjZdOkcDfn4rbX7sHBQdkrbWaYUEgeYbvqKJ5vkB3VReI2ag=="
 ---
 
 ## GitHub gives you a free VPS for 6h. I found how to make it permanent.

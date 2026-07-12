@@ -1,14 +1,15 @@
 ---
 title: "Repo to VPS：GitHub Actionsを無料の永続VPSにする方法"
 description: GitHub Actionsランナーを永続的なVPSに変える方法----gitをストレージとして使い、tmate、inotify、commit --amendを活用。
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - github
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "EEWzPGfkW1xVRQC+Bjb5JIY8Ed0b9tcfGa9hIUN25IPeDKH8c1JpiHEqwlZoxJqVBohl5JwUx0w+uV2UYFQRew=="
+author_sig: "HUJPfz7j83TTsQXReHbkDnchVHwJwSWKfmxFlM4+OjIE7IOgljRhhjGF6F9Q3uaLzWhKLyj3JgseD3021MAKpQ=="
 ---
 
 ## GitHubが6時間だけ無料のVPSをくれる。俺はそれを永久にする方法を見つけた。

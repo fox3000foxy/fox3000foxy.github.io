@@ -3,7 +3,8 @@ title: Mi puta IA para Nausicaä
 description: Una IA basada en coeficientes heurísticos, hiperparámetros que
   cambian aleatoriamente cada 5 turnos y un Oráculo que huye -- inmersión en el
   cerebro de un juego de mesa estratégico mitológico.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -11,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sdGef99YAaQ9Bq1PUkpZ0i4ZQ9sPCVw+LtJtCCEyH34m/gOzPFX//eqmDgqpYG9g6Y0R/hcwmLXDBpZ7L41o0g=="
+author_sig: "KUL1xIZ2OnL2ISqx0cxC2Rr/kHK2cdg01V/551L7nUOmRvp7a28PSFc80846UhZYT6P1qEZwEIG113JQrwuzVA=="
 ---
 
 ## Mi puta IA para Nausicaä

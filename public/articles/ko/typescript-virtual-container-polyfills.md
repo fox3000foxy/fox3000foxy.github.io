@@ -3,7 +3,8 @@ title: Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- ty
 description: Fortune이 node:fs, node:crypto, 그리고 수십 개의 Node 모듈을 640줄의 JavaScript로
   손수 재구현해서 Wasm 없이 컨테이너를 브라우저에서 돌리는 방법
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -12,7 +13,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "TBbT102IynYDB4kASzh2OEKvv6jnXCL04ePeQmAXCmJ0NJp7r141G2CBUJ9uGqnJ6ftmJP92Tq4drd8DoazhIg=="
+author_sig: "Tzz0Dm7ku4WP9ir1FXF0J2Rz1hJKNZr/rWUaQ6yQtw7DNdJsa3rucOzZdjr4NyDbDtjpODRbQWRWQ8z7Nl92Pw=="
 ---
 
 # Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들

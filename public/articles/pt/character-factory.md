@@ -4,14 +4,15 @@ description: "Um módulo TypeScript sobre o DiceBear: geração consistente
   por país/etnia, um pequeno motor de genética para projetar crianças, e
   os detalhes de engenharia que o tornaram utilizável em um jogo de cartas."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "O3VhEB5OODdG6ANlm1Q/SdFn0SvCC8OZgAkwmFn1uMolFFe1LmBxlTfDHDGINgHHNv0CH+0vxzkm/GzTtoTxjQ=="
+author_sig: "7iL5pZVGNNnWm2l8t6qunyE9SIf7cBiUPMnz6lo/KcnGs7bsjnR/EwEyS4zK8pwPX06Ruv4mAIXbEZ0haT8oKA=="
 ---
 
 # Construindo character-factory: avatares com um sistema genético

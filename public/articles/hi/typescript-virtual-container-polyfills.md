@@ -5,7 +5,8 @@ description: कैसे Fortune ने node:fs, node:crypto और एक द�
   640 लाइनों JavaScript में हाथ से रीइम्प्लीमेंट किया ताकि कंटेनर
   बिना Wasm के ब्राउज़र में चले।
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -14,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "VeXCFgaes8AIr/KiVi8YhGjy/jstNgzl/eJuWiAseBgrZG1NW/u4cIa6BkTb708zWa58Ae0moBN42cdINtL2Ew=="
+author_sig: "I+9Gh8HPdap6jJHIBfHYhBitk1Ag9dhmkmiIG4eKbgaJe4RZ7xzbANOhnZM2Drr6421/4trKXmXxhaPfjmCWrA=="
 ---
 
 # बिना Wasm के ब्राउज़र में Node.js लाइब्रेरी चलाना -- typescript-virtual-container के polyfills

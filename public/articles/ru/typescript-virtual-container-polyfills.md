@@ -5,7 +5,8 @@ description: Как Fortune вручную переписала node:fs, node:cr
   Node-модулей в 640 строках JavaScript, чтобы контейнер работал в браузере без
   Wasm.
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -14,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Os+Rg+EklXqNSAn5Yc/9g5AkObxaabMIboylhMN42c+XXx84npyCOyjgqj/fzt80l+s9QIN/5Ot4EBS+Z12KXQ=="
+author_sig: "37kqVk5qI4oGY1G52DB4HD81ew4ygUdyRXxI1ohPaGX5u/uPJXLz6+5XBPUisnfTHZLX9dO4/RXsunFR7GeCGg=="
 ---
 
 # Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container

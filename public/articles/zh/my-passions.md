@@ -1,12 +1,13 @@
 ---
 title: 我的热爱
 description: 编程、画画、自动化、发现老技术等等----带你了解我的动力源泉。
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "B2Wjl20DljJh3/OG6OnygqnmRiVfasVuqwNB4o5VBuoyZ5cgcqU0qh8SmsmYBvFG9mPA8yvpXVEID1ROvCn7PQ=="
+author_sig: "idoJqyLnlu4HHt0JDaRgeCXMJWElUoZHZMtUK6fdGin8SJR2wl3s+K5dC/jSEyRaZA6BHPQHL9mZLPFu+E07Cg=="
 ---
 
 # 我的热爱

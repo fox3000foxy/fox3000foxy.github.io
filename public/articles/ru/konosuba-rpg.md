@@ -3,7 +3,8 @@ title: "Я провёл выходные за чтением кода konosuba-r
 description: "Пошаговая RPG для Discord, где каждое действие генерирует изображение WebP
   на лету: URL как состояние игры, детерминированный ГСЧ, конвейер WASM, кеш 5
   уровней, бот без сервера."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -16,7 +17,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5RXbqnV4KWv9wQuw1F3J/ZVYZa9hYe+eYtMDs2UHd9Z7b6A+QlN8+uq4PWr+aHIZEWcAOsF4UJhKRIdXDd1lvQ=="
+author_sig: "vtDW7Fs+KSM40hDSi/nPo7fi6EFS0FAZGlcJI3XtYf3k4ToBEGwyUN1SlWEfy5n9IvaDY0b+WRLk2FqtMnIkEA=="
 ---
 
 # Я провёл выходные за чтением кода konosuba-rpg и вот что я нашёл

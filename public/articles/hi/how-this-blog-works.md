@@ -2,14 +2,15 @@
 title: यह ब्लॉग कैसे काम करता है?
 description: "ब्लॉग के पर्दे के पीछे: React, Vite, Markdown, CI/CD पाइपलाइन और लेखन प्रक्रिया।"
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - react
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "d1Qf2wXbrkIXi+XHkd/lLibas0Qb4cSew7ddfQk0Qc42ewVHaO5TcuAYHHFR6X19pvC9OCOkPGHmf8tePN3ZJQ=="
+author_sig: "rHTwp19LxCTwOPcjrJGw/1oFkS+rRduGTJB7iC4JcUKTUeE6XcYtZlXC1aQRipeB0SV9LcE6qnklRbrH3NE6jg=="
 ---
 
 # यह ब्लॉग कैसे काम करता है?

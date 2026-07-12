@@ -2,14 +2,15 @@
 title: อธิบายสคริปต์เซ็นชื่อ SSH
 description: เจาะลึก helper สำหรับเซ็นชื่อคอมมิต SSH และว่าทำไมฉันถึงอยากได้คอมมิตที่ดูเท่
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "k++rlq5ZUKaEptuE0EGdO/2eq+m793oRtFCCu4gpterScgUpqSGHybUdaEwPbrqCDCQ6Qy3Qls8qyjoaxJGBpQ=="
+author_sig: "2bNc8S++GED3f7V/CxBrlutvIPjpWvTOBfmjOm5GQ1D/M5dU4rWCM8sonInuJSyP7ix/engDExOxJk4AG9eo3A=="
 ---
 
 # สคริปต์เซ็นชื่อ SSH สำหรับคอมมิต -- คำอธิบาย

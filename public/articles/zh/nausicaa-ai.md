@@ -1,7 +1,8 @@
 ---
 title: 我给 Nausicaa 写的那个沙雕 AI
 description: 一个基于启发式系数的 AI，超参数每 5 回合随机变化，还有会逃跑的神谕 -- 深入一款神话策略棋盘游戏的大脑。
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -9,7 +10,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "mk/WVvHviL5PJ4TxXj75gZv+Cix5mJGyEXpD5dXOQQRv3phhfezgIIK8XgpujuyQ9/3R7ix9hyuAeNknh9aFhQ=="
+author_sig: "GbnANyoivzSGnoN1KXIrhr8eqoMF0P/TWhaI2pouLsMumTknJUgdDs9mCcZRvvgFHnFy55AMb9ylDVAAzrqE5A=="
 ---
 
 ## 我给 Nausicaa 写的那个沙雕 AI

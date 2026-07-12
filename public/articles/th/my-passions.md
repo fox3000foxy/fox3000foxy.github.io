@@ -2,12 +2,13 @@
 title: ความหลงใหลของฉัน
 description: การเขียนโค้ด การวาดรูป การทำให้เป็นอัตโนมัติ การค้นพบเทคโนโลยีเก่าๆ
   และอีกมากมาย -- ภาพรวมของสิ่งที่ขับเคลื่อนฉัน
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YJN484FY4RnW+RLv/DuByD1MQMZDS7NAMmKo7xrn30eemGIhKTm2ej0sMS5IbJXfjB9KIIFnWkI3QeDva+UJsA=="
+author_sig: "wAlkk2LxhzF8RrTE3cfflj7tYe+5X1Wmnp6GNg6iwefvtVorhbylosZOQAWotavcHb+BsKUODdznAcQ6xiQVlQ=="
 ---
 
 # ความหลงใหลของฉัน

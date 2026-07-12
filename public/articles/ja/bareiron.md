@@ -1,7 +1,8 @@
 ---
 title: Bareiron -- 1ドルのマイコンで動くMinecraftサーバー
 description: C言語6800行、mallocゼロ、パーリンノイズをバイリニア補間に置き換え、タイルマップ式バイオーム、すべて1ドルのチップで
-date: 2026-05-30authors:
+date: 2026-05-30
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -10,7 +11,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ohS2ODqp94h65rhwnWehjDcmHhg6LRiZ0OKamJtoBoKzaB1Z/WhChHBwK0zz6dirdI2dDo7qSQOdOizs+yT9cg=="
+author_sig: "C/dH3qUPvup8q6TePtjSxemfkJOo6qiuaywy5nX6oCG7IqXQcmRhvpLyvfz6oQRDr+riL09JKHqgJd0OKHcb6w=="
 ---
 
 ## はじめに

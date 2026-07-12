@@ -1,14 +1,15 @@
 ---
 title: Una IA aprende PvP de Minecraft -- Imitation Learning, Reinforcement Learning y las 30 variables que importaban
 description: "1.000 duelos grabados, red neuronal entrenada en píxeles, 90% de precisión en teclas : y el bot fue directo a una pared. Luego llegaron RL, aprendizaje curricular y 60 horas de entrenamiento."
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HADJlPMiIjVUep1fZKJU46limRrpU5ZIB7Chia8zC6PaFdwIxkaOwsuuv48lWNP9rtHECWSvdFbbBDexBGiMLQ=="
+author_sig: "hWMhg21+qQg+sQGVm74h7pbeWcYGWXCHWfPenJl3HO8VtTpPLWJNCbKqCDTXElxfRQ9xmypRoVj76Wg8QMnPHQ=="
 ---
 
 ## Introducción

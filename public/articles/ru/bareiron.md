@@ -2,7 +2,8 @@
 title: Bareiron -- сервер Minecraft, работающий на микроконтроллере за 1$
 description: 6800 строк на C, ни одного malloc, Perlin noise заменён билинейной
   интерполяцией, биомы в tile map, и всё это на чипе за 1$.
-date: 2026-05-30authors:
+date: 2026-05-30
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -11,7 +12,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "K0QqvkCj4YMD+NZS3opTHQG+Mb+wyaUnROOgpVGEXnu27UG83SvraCnyC5wvp2OPadKYMzvKuyisE+KHJ6m2kA=="
+author_sig: "mkQwSsnqzDSwu33p7r1hrS58mkoBlcAPDyivaacFJl+yjZ5uXpyFJP+yoXbB/krmBznVlogFjQ4DbFkcBGiztA=="
 ---
 
 ## Введение

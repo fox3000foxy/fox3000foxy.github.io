@@ -1,7 +1,8 @@
 ---
 title: "Laupok membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya"
 description: "Penjelasan mendalam tentang proyek Laupok: AI berbasis NEAT yang belajar bermain Super Mario World secara otonom. Algoritma genetika, jaringan saraf tiruan, neuroevolution of augmenting topologies, dan 4200 baris Lua."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - ai
@@ -9,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "z1Qau1s38pElkiam+Qy5CBh0Em44rgfQDfkJjuilcl6NcEo+xo/ZcQyC4XM/1lVbQqJ9Xeedb2LFzbxSrGpSCg=="
+author_sig: "aLmrPA75DS2B/agoeK4uoiMgs0Y3psUZZ/Xrms1dPS7D6R8RB76DhOEBCtq7LK6coRLOXBEFtfgSPny3GzPESA=="
 ---
 
 # Laupok membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya

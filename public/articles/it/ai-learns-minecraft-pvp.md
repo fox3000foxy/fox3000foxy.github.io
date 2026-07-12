@@ -1,14 +1,15 @@
 ---
 title: L'IA impara il PvP di Minecraft -- Apprendimento per Imitazione, Reinforcement Learning e le 30 variabili che contano
 description: "1.000 duelli registrati, rete neurale addestrata sui pixel, 90% di precisione nei tasti : e il bot correva dritto contro un muro. Poi sono arrivati RL, curriculum learning e 60 ore di addestramento."
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "h+cMQ/FioWZJsgQILFoHas7+sTEfbG1gqHun1xICL5H1v5khcOqi2DFpPqIvdO9aAHUtk2ux6MM14+Sf1UU9Zw=="
+author_sig: "yIwWuKLtUQyzs6IpR+qM3y3PgLqpiu3mE0VDM6V1rNMUwno+Hdp5DnvlzaL9O1XVJuIB/1Y6Cmm5ioEPFt5nfw=="
 ---
 
 ## Introduzione

@@ -2,7 +2,8 @@
 title: AI Nhảm Nhí Của Tôi Cho Nausicaa
 description: Một AI với hệ số heuristic, các siêu tham số thay đổi mỗi 5 lượt,
   và một Oracle chạy trốn -- đào sâu vào bộ não của một game chiến thuật bàn cờ.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -10,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BqXvdt4WBZEELIkjP3BTTX8GIRF4ooLf6K2DOcIX7J+ChyuXUqG/95we/SvO5YF73/qfs6TVN43HdSUA7xpzxQ=="
+author_sig: "nn+HvX4506TLlyldJmsZlfDqffruovQ4MqD2CDhQ2gNywkFBDaJDa94PUhJmkyFM13ogFetftXDPVjsCcemTrg=="
 ---
 
 ## AI Nhảm Nhí Của Tôi Cho Nausicaa

@@ -1,7 +1,8 @@
 ---
 title: "Laupok construyó una IA que juega Super Mario World sola -- cómo funciona"
 description: "Un análisis profundo del proyecto de Laupok: una IA basada en NEAT que aprende a jugar Super Mario World de forma autónoma. Algoritmos genéticos, redes neuronales, neuroevolución de topologías crecientes y 4200 líneas de Lua."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - ai
@@ -9,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SpOqeMM8rRp7+v3ztVaPON/2iax/HIWx9RcIuWsbXujD6BrRdRt2Q1yRKnnWZKmT2s4CqY9oMhB4LCllEXf8Sw=="
+author_sig: "vAlloZkxrcJX8NRViRw9uEG45kUoeAeE1E3BWvfHRewUrBC3wbAtYBuNxzlbrx7wC78bUW+tPs4YOe5j35OI5w=="
 ---
 
 # Laupok construyó una IA que juega Super Mario World sola -- cómo funciona

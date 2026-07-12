@@ -2,14 +2,15 @@
 title: 这个博客是如何运作的？
 description: 深入解析这个博客的内部架构：React、Vite、Markdown、CI/CD 流水线和文章写作流程。
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - react
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0H17ohiE28nrYgU10eJ3OBOBf4AqYPWsApbAIt/An6YTyMFDlKFkYet4SkEs+xplmsfjGnZNFTuxAUnpWjw9Ug=="
+author_sig: "peA8RtWfI4II5TS61h0PHQIslh+YXrxi9NuNWbPjGCLcjLPDk3vNk1n/GoNcL/MZjD+yafiD98OhQoSMdCQtsw=="
 ---
 
 # 这个博客是如何运作的？

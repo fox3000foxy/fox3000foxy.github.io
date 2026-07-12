@@ -2,14 +2,15 @@
 title: माइक्रोसॉफ्ट रिवॉर्ड्स फार्मिंग बॉट
 description: मैंने कैसे एक बॉट कोड किया जो बड़े पैमाने पर माइक्रोसॉफ्ट रिवॉर्ड्स पॉइंट्स
   फार्म करता है -- और माइक्रोसॉफ्ट ने तब से अपनी सुरक्षा कैसे मजबूत की।
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6zBDZYUUlnGV71MYn7tHokGkCrQSP5chrJF2iQTsQDxXVQPcfkw7oGVSD4Be5E0Irai15pl+uES2xGdSC/4szA=="
+author_sig: "OsBKlUiH4Q+NxlV/8DFMVuz027W/gOIK+V8wSw0Wlf7vIKtY/2D6oktxwoJ6Lu7ANXUb49txDIuY86HPMVse6g=="
 ---
 
 > **नोट (2026):** यह प्रोजेक्ट अब मेंटेन नहीं किया जाता। माइक्रोसॉफ्ट ने अपनी एंटी-बॉट डिटेक्शन को काफी मजबूत कर लिया है -- जो उस समय काम करता था वह आज काम नहीं करता। नीचे वर्णित कोड और दृष्टिकोण केवल आर्काइव और प्रदर्शन उद्देश्यों के लिए संरक्षित किए गए हैं।

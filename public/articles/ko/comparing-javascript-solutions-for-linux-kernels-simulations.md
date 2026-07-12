@@ -1,14 +1,15 @@
 ---
 title: JavaScript Linux 커널 시뮬레이션 솔루션 비교
 description: JavaScript/TypeScript로 Linux 환경을 재현하는 방법에 대한 심층 분석
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3jmuB22bN4lTQMIEt8cJnJXiAcJhd5kcgUe0mgKXa67wLFVJ0De1lBgAYS2JYdSZvPHTs36CakNMrtE2V0icqQ=="
+author_sig: "KbKK0wBTDNnFoEZR1x1NFbjQ3u/uhUTo6jp9eG4R1mwEjY0lpG/9PVeQdcJ4SStvcSn+3XeVfNEQzayIw+BBAg=="
 ---
 
 # 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교

@@ -1,13 +1,14 @@
 ---
 title: Sobre Mi Perfil de GitHub
 description: Una breve introducción a mi perfil de GitHub.
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KNntZlO6RJrK7QmN9CtuT72hpDRzdryIt9Q/AyEo69ecbp03RjQ5STI0bMy9rY71jWgQpx/z+S+ixaALZ/BdjA=="
+author_sig: "OI32g18/nnOeWHvQQQ6ZehnjSyHQL9ldWbW4G8m/9WWe7fBERBnTdjUQdKsrNeCzRO0gUmFhuUIJ8lNYGd8XXg=="
 ---
 
 # Mi Perfil de GitHub

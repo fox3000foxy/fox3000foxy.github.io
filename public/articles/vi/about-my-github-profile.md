@@ -1,13 +1,14 @@
 ---
 title: Về Hồ Sơ GitHub Của Tôi
 description: Một bài giới thiệu ngắn về hồ sơ GitHub của tôi.
-date: 2026-03-08authors:
+date: 2026-03-08
+authors:
   - fox3000foxy
 tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "EnHcyJ7KoPiTX3cnMWhJetitQCdpOEo/bsmhFevPmqpJWwwRJvHStXn4rIkYwbgoB1ej3KYdYY+T7eipoz1BIg=="
+author_sig: "gKAoPD9TP1wvD7AQkUF41CtIjEMLOqb9o5IKTfrDCj174bg8ZtaieS5IElY8LucAth5BLF/CNardb0qJiARizQ=="
 ---
 
 # Hồ Sơ GitHub Của Tôi

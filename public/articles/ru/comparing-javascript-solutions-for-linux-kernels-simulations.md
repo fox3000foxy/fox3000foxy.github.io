@@ -1,14 +1,15 @@
 ---
 title: Сравнение JavaScript-решений для симуляции ядра Linux
 description: Глубокий анализ воссоздания Linux-окружений на JavaScript/TypeScript.
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Z3Ijv1Vm+7gE9YKmc9sQhadIGLft1R/4sfms0+0BUnUzIJS2Lpc+3MXzkskRf3zULGYW91FGYxHKBKYYPyZ0LQ=="
+author_sig: "/dgSMg2ya5C95q19HbB9MyNVVSIO8aZSU4LMk3oGzzW1V5PccX4IdlUbDteVJjylCP/Q2uOZ8YHNHuzO0ixxcw=="
 ---
 
 # Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение

@@ -4,14 +4,15 @@ description: "Một module TypeScript xây trên DiceBear: tạo nhất quán th
   một engine di truyền nhỏ để mô phỏng con cái, và các chi tiết kỹ thuật giúp nó
   dùng được trong một game bài."
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YIciDaM04UPlUKWmbDdJqNjOBuPA4VCtIQOr2hOgUDBzSDWgIuAAxOAgGW+9QFrCr/hxESOyEk+3F/888hvc3w=="
+author_sig: "R8cqFHoYWs/G+N7rL0gRy9/SH7Cp4tWHDt9mzLexH2zynXjB3sUggAmxvx9qBAv3Oebsfm+4dWyDrrsx7V9ODA=="
 ---
 
 # Xây dựng character-factory: avatar với hệ thống di truyền

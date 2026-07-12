@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol: tôi đã tạo một bot Discord tự động mô phỏng con người"
 description: "Luna Protocol là một bot Discord hoàn toàn tự động với LLM cục bộ, có khả năng trò chuyện tự nhiên với giấc ngủ, lỗi gõ, ngập ngừng, quên, mệt mỏi chủ đề và tin nhắn tự phát."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "O9aIFwOFIftRTGV0l8qaejAcxYSXq4FjqgpphEKiw6g4RtCyP4vK4AkzlR+c5mClVQDHIR10hGcPpXgi24ch0w=="
+author_sig: "SwhyN3W2mdN9S0HWMljvoCKrVCYwuTRJxNzG0DP0EmHczHBoUVGTvHGIwd6Lqo/h6fuuxsPbbHOYRsn996mzoQ=="
 ---
 
 # Luna Protocol: tôi đã tạo một bot Discord tự động mô phỏng con người

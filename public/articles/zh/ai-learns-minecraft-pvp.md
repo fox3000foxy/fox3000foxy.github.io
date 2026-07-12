@@ -1,14 +1,15 @@
 ---
 title: AI学习Minecraft PvP----模仿学习、强化学习，以及30个关键变量
 description: 录制了1000场决斗，在像素之上训练神经网络，达到90%的按键准确率----但机器人却径直撞墙。随后是强化学习、课程学习和60小时训练。
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xATDLDHD7xNEEgrA5OUwkHAB25zxa0nXUGeMQrtDNy67F9lNDrRtz0kIAYx66GJk9XbRBCRHnZZQaTtdf2ESfw=="
+author_sig: "iqYDiCfWDnOfX4BvLNCHj8MafHa4MgOejvijESTcb/H4qdZOf4ohRgtwwkULziMNBCit3o3WbyoAtwHOUqD6/w=="
 ---
 
 ## 介绍

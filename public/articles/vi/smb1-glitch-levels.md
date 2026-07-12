@@ -1,13 +1,14 @@
 ---
 title: "Super Mario Bros.: Định dạng level, con trỏ và 256 glitch world"
 description: "Cách 128 level × 4 loại khu vực vừa trong 40KB ROM, tại sao Minus World tồn tại, và cách một trận Tennis NES có thể tải glitch world."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - retro
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4mvjXADFY5RC7IO4Cn58BFvrHM8OmyM3RvpD8vYe8SV8PhbQ2kpNAILU7ie30L+B88hQn/20IjGXkK6h8os6fw=="
+author_sig: "tScYrXs/U8W7LtlAoTkPnabbgRvrmlJ21W3zGLgWVizNkAAcQstHM5oMV7ijMZbX5JXDcQRVm6oVHnmUdTsTJw=="
 ---
 
 ## Giới thiệu

@@ -1,7 +1,8 @@
 ---
 title: Nausicaa用のクソAI
 description: ヒューリスティック係数ベースのAI、5ターンごとにランダムに変わるハイパーパラメータ、逃げるオラクル -- 神話ストラテジーボードゲームの脳内に潜入。
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -9,7 +10,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tA8zd/NO/QxUq+zz55f9yTM9V1FH4r1oJi2aicChpdstAF2yMDbPieKXyjo2vs8gC3i4iYuIXNGN5r7Cw7mOCA=="
+author_sig: "YNTURKo5pD+keEp1zS8pbqxGPRNN6nGeaaXEO2v5Yy60GpGFziooVhuR67sm/ep/ASjxRz2LuAI0AqdaoNfU5w=="
 ---
 
 ## 俺のクソAI for Nausicaa

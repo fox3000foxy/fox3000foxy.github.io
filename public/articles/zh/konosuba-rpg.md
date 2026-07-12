@@ -1,7 +1,8 @@
 ---
 title: "我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切"
 description: "一个 Discord 回合制 RPG，每次操作都实时生成 WebP 图片：URL 即游戏状态、确定性 RNG、WASM 管线、5 级缓存、无服务器 bot。"
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -14,7 +15,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "i5P0uFxbyvShabJSUfvQZO7wcpnAqlSUtD2K48oU5dQPCupOuIJFjx8eiZueXgCn7LPejQN26xLMnNjRr8uaWw=="
+author_sig: "iN49Gfz9cBnlgQeS2/yqQSyRz6VU39AOm7EX3vUSOHAvBntPTAa/kzDJcBCYPDb68lZ0kfxgm9m+IZ5uaGvs0w=="
 ---
 
 # 我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切

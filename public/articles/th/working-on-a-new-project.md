@@ -1,13 +1,14 @@
 ---
 title: ทำงานในโปรเจกต์ใหม่
 description: ภาพรวมของกระบวนการเริ่มต้นและพัฒนาเว็บไซต์ใหม่
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - meta
   - webdev
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9YpB2afImqHgr60mJF5s2kvdUHMn9mStLW/GHJJb746BkZR1ma4pMuuAk2/HFI1rgF6qTbQkVJTo3vFJC+nLxA=="
+author_sig: "QRfdgHBvnwWXa2RMw1HDznaA75WhEBewbL1irNsADNc5HicgqR3TM5UvaV9oQNDseEGDkAfNr9cJbaGuv76O3A=="
 ---
 
 # โปรเจกต์

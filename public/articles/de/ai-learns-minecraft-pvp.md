@@ -1,14 +1,15 @@
 ---
 title: KI lernt Minecraft PvP -- Imitation Learning, Reinforcement Learning und die 30 Variablen, die zählten
 description: "1.000 Duelle aufgezeichnet, neuronales Netzwerk auf Pixeln trainiert, 90 % Tastaturgenauigkeit : und der Bot rannte gegen eine Wand. Dann kamen RL, Curriculum Learning und 60 Stunden Training."
-date: 2026-07-09authors:
+date: 2026-07-09
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "omItBB5Vulr6fw2/M66JyHUmZUeSkLVusKIOXvQdhIn7oohFKN+FJNDqmZWh6N6g0Fh7zKkgYF2YcSVhw7rguw=="
+author_sig: "ot5DJc46Jz+4goLeuuXcSFyg8BdhJrnWrguMZVJCG3AmDxtbpSXgNmwUkTSsxAV5LBRNdJBZWvy5tjWi+siV/g=="
 ---
 
 ## Einführung

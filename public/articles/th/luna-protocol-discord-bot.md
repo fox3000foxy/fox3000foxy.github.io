@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol: ฉันสร้างบอท Discord อัตโนมัติที่จำลองความเป็นมนุษย์"
 description: "Luna Protocol คือบอท Discord อัตโนมัติเต็มรูปแบบที่ขับเคลื่อนด้วย LLM ในเครื่อง สามารถสนทนาอย่างเป็นธรรมชาติ พร้อมการนอน พิมพ์ผิด การลังเล การลืม ความเหนื่อยล้าตามหัวข้อ และข้อความที่ส่งเองตามธรรมชาติ"
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Zm0JGZMvDQ/8YqFxqBM590UEF19c847YQhR0mx5ArEsyTTifVXX1BAwpb9zM/MqJziEPszQ3LNOiTaUVB89UkA=="
+author_sig: "wBCrFtDZKIfy2lVkicsGecem4nONtoVn2u10/OLnca74XQHaaJlhpqv6gytFDikdZc4INww2QELUPKfMhrmObA=="
 ---
 
 # Luna Protocol: ฉันสร้างบอท Discord อัตโนมัติที่จำลองความเป็นมนุษย์

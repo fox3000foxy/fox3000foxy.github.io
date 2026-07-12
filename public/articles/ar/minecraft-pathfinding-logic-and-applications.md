@@ -2,14 +2,15 @@
 title: منطق تحديد المسار في ماينكرافت وتطبيقاته
 description: كيف تتيح خوارزمية A* وعقوبات الكتل ونقاط الاهتمام (POI) التحكم
   في حركة الموبات والتنبؤ بها واستغلالها -- من ريدستون لاسلكية إلى مزارع محسّنة.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QTSSj4xKA7+07GOpwBqa5RTezFVEyweIoG3IZoNQqF6iqaS6+myXdX4MKWXLvR+fmzgamSOQHOhgQn3gSSBSpQ=="
+author_sig: "0wr/rrZ3h4MHqOhfDO55aSoFgVug5PsbZgcvy+FvKWaxmw8KcDKJwbr8zLNJv1G968J1wSHokWWwnXxBEcSy4Q=="
 ---
 
 ## مقدمة

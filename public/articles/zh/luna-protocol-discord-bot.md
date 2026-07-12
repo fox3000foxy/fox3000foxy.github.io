@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol：我创建了一个模拟人类的自主 Discord 机器人"
 description: "Luna Protocol 是一个完全自主的 Discord 机器人，配备本地 LLM，能够进行自然对话，具备睡眠、打字错误、犹豫、遗忘、主题疲劳和自发消息等人类特征。"
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fnzwZ84l2wauEYnLSqcbRCn394YENvLuDtDIGwwyFwXTZx63Oa1vE1y1HhOakIndItql6aRLTJT+rr1IMPxYhQ=="
+author_sig: "rfNyvTLTDducgKnyccQBS1BKI/zVuLSYoJ/tg+DRBNjOlF4gHauZUuSl5dJ4soJRWwSrEoTv9oBzwuJvXSrxVA=="
 ---
 
 # Luna Protocol：我创建了一个模拟人类的自主 Discord 机器人

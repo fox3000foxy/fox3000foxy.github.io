@@ -2,14 +2,15 @@
 title: SSHコミット署名スクリプトの解説
 description: SSHコミット署名ヘルパーのウォークスルーと、なぜスタイリッシュなコミットにこだわったのか。
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/jS0S03Tcj/lOKoAXOZodro8hDvaCPJ7LAq/Y5umQwKdOANt7AGLkwLDxP5VaD9bo4KGrpLgkyPP17+LbLxhlg=="
+author_sig: "GO6un8bs/0xnmFObjwtw7lInkzfUeeUH3lwzyxkCL4nNnbkgtDjmGc6TRqeqxWPIboEOIa7/cfy/uCfAGyu+JA=="
 ---
 
 # SSHコミット署名スクリプトの解説

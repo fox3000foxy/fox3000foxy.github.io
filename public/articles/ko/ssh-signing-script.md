@@ -2,14 +2,15 @@
 title: SSH 커밋 서명 스크립트 설명
 description: SSH 커밋 서명 헬퍼의 분석과 내가 스타일리시한 커밋을 원했던 이유
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jIn+2FMw3Pp6tCXDIbS1bwo1c7bxWpmLEld6M5GyvM7Ga+Xj9kyPKne0uKGjRPsDxt5A0MXZ7kTcEVDZ+TRoVw=="
+author_sig: "NrJPjVRNpFMT2wcPdyQupVWJGBe5KiuefnYhNSP+8/7WRGBXfgE8Kf2/s6sYKAybEJ5LX2umppXcD+u0lcoisQ=="
 ---
 
 # SSH 커밋 서명 스크립트 설명

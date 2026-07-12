@@ -1,13 +1,14 @@
 ---
 title: Работа над новым проектом
 description: Взгляд на процесс запуска и разработки нового сайта.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - meta
   - webdev
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1T/T+eMqsc/vllU9FSYtk8Ol2ZxCrGqujuAKpp4Jge5eUhrCnuXQMXNG7QoYjOth/gt9whmRksLlkSz2ksOP6A=="
+author_sig: "ov4xjsHxJoMdO8cMgNzAyRgPtp9BBW4mTjGuU75TsvyWUVskZIOH2TnrtQHl5S1FaGBwPtdcpj1gkU09fcvmag=="
 ---
 
 # Проект

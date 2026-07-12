@@ -4,14 +4,15 @@ description: "DiceBear के ऊपर एक TypeScript मॉड्यूल 
   पीढ़ी, बच्चों को प्रोजेक्ट करने के लिए एक छोटा आनुवंशिकी इंजन, और
   इंजीनियरिंग विवरण जिसने इसे कार्ड गेम में उपयोगी बनाया।"
 date: 2026-05-16
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GCrATHkckOyxxhNWkaIprX3Z6RjQODtHr9v26POTAAvVc9tYqkGgPGTO9EZNKdswdK+/7EaYylYKprD7UBnrhg=="
+author_sig: "hwiAYwDM2dKx6HvVI7WcdZ1edhBTg68ielbauQKmY15KBn4qfX1h2Bc+TxugkXmVn45oQ7fH9pvnNEGZHbxSBQ=="
 ---
 
 # character-factory का निर्माण : आनुवंशिक प्रणाली के साथ अवतार

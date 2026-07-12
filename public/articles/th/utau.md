@@ -1,7 +1,8 @@
 ---
 title: "UTAU: ซอฟต์แวร์ Visual Basic 6 ที่ทำให้เสียงสังเคราะห์เป็นของทุกคน"
 description: UTAU ซอฟต์แวร์ฟรีที่เขียนด้วย VB6 ในปี 2008 ทำให้ทุกคนสามารถสร้างเสียงร้องเพลงด้วยการสังเคราะห์แบบต่อเนื่อง -- และทำไมมันถึงยังสำคัญจนถึงทุกวันนี้
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - utau
@@ -10,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "AA1Y8tE3sheAA5r1vUyUPrdHon4fKlr1QPQYliljuC3g7LlSVlWdpNqMD6GpVgmDr6NZUgUkTjvDvv6xgqMPxg=="
+author_sig: "/RiAwEpKfwBbDCKff3JdMNBamKrjpcaQMkhm/UBLFvVD7SD/sukPRwvbbPJCgAsUFvDpVNnT3plufprsnwyCag=="
 ---
 
 ## UTAU: ซอฟต์แวร์ Visual Basic 6 ที่ทำให้เสียงสังเคราะห์เป็นของทุกคน

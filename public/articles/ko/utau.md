@@ -1,7 +1,8 @@
 ---
 title: "UTAU: Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가"
 description: 2008년 VB6으로 만들어진 무료 프로그램 UTAU가 어떻게 ⁉이나 합성 노래 목소리를 만들 수 있게 했는지 -- 그리고 오늘날에도 여전히 중요한 이유.
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - utau
@@ -10,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "V401zbgxES29YYFb9aFUIlqkUvM7/qTQ1a9B+Js5Iq/dhYBGR/kf19ffPQrlJHFBrfS245LtUuTR7xMfwm4AFQ=="
+author_sig: "efnNPRTaj/GiWXV2kBJXQ1SE07WIqN1cOSKjj80eXLcGbYQ9RzzoRhpnkW8kGud3K5B+wyLmOAHTGCYWD9/LaQ=="
 ---
 
 ## UTAU : Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가

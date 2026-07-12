@@ -2,14 +2,15 @@
 title: JavaScript-Lösungen für Linux-Kernel-Simulationen im Vergleich
 description: Eine tiefgehende Analyse von Linux-Umgebungs-Nachbildungen in
   JavaScript/TypeScript.
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MrmfdR/lV+B4tdPZhzU8B5r8srEJbuwKA1RVhXX5K1bfjaVg+/QHduN6Y3uaNs01QLf2Lzy7ZDRhcB3u5yRwtw=="
+author_sig: "Pqjd2SH6Poo7QiPxQP3yqvmKLHzoykGzOuDQHI35GVVcBWE4RPzJoEHYoRmiR+SzRvwXzXX8AkSPCxe6G4B2HA=="
 ---
 
 # Jede JavaScript-Sandbox, Emulator, Simulator und Honeypot – im Vergleich

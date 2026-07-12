@@ -1,7 +1,8 @@
 ---
 title: "Cape Mod : วิธีขโมยเคปของ Jeb_ ด้วยการฉีดลายเซ็น RSA"
 description: "ม็อด Fabric ที่ใช้ประโยชน์จากช่องโหว่เชิงตรรกะในระบบความเชื่อถือของ Minecraft : ลายเซ็น RSA ที่ถูกต้องของ Mojang แต่ถูกนำมาใช้ซ้ำกับบัญชีผิด คำอธิบายโค้ด, ผลกระทบด้านความปลอดภัย และบทเรียนด้านการเข้ารหัส"
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -10,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "g4uDNHxqgshcyK9wxvic03tWmPXfOvbEG8wGG9VoVAS1cOoRMZqvMYBHqXer3j+FQzdeiFeLMnOxGHAXhv7kig=="
+author_sig: "Fyt0voEf+pKo77b5CZD42r7lfsVjEGEQuNITCNRiFQx/dMFvAygEAwR4wvPRAk0c8jGmdcZ5pbfPHOKHfgALkQ=="
 ---
 
 # Cape Mod : วิธีขโมยเคปของ Jeb_ ด้วยการฉีดลายเซ็น RSA

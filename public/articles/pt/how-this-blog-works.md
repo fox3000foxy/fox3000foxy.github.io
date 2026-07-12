@@ -3,14 +3,15 @@ title: Como este blog funciona?
 description: "Os bastidores do blog: React, Vite, Markdown, o pipeline CI/CD
   e o fluxo de redação."
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - react
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JSc9BHbkGTJmoIUnoflXl4HrCqpAvKULRBHPeRZsajUy6oE9XOBmWqCwrR0k4l46eHpis0JDZbtWlhcblrhr7g=="
+author_sig: "ZO20jUc5Tiulg97ASzhDHnIGBfsZQOc5F+4Q9t1eMxHnIxdLcmDxOohO92jybrAPoWVyHnIoFQH50lGqjvtK4g=="
 ---
 
 # Como Este Blog Funciona?

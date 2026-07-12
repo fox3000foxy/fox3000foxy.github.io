@@ -1,7 +1,8 @@
 ---
 title: "Laupokが作ったスーパーマリオワールドを一人でプレイするAI――その仕組み"
 description: "Laupokのプロジェクトの詳細: NEATベースのAIがスーパーマリオワールドを自律的にプレイする方法。遺伝的アルゴリズム、ニューラルネットワーク、拡張トポロジーのニューロ進化、そして4200行のLua。"
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - ai
@@ -9,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NyoPUUfMKil4Izv0FHy0bdLhBgdJz0a0XdvmgWSMUoeOUlNmmJbqi0hEKyLYyF8N7ZmM0cS5cmq56smpZveM/w=="
+author_sig: "5ufBfGvQ+1L6oIVITt67uWpNAT75rfDogGK4QRvEdotZV95DK75kA40+4GAPJExx8kZiBDBWfE460lEOkru4dw=="
 ---
 
 # Laupokが作ったスーパーマリオワールドを一人でプレイするAI――その仕組み

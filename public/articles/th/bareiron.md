@@ -2,7 +2,8 @@
 title: Bareiron -- เซิร์ฟเวอร์ Minecraft ที่รันบนไมโครคอนโทรลเลอร์ราคา 1$
 description: โค้ด C 6800 บรรทัด, zero malloc, Perlin noise ถูกแทนที่ด้วย bilinear
   interpolation, ไบโอมแบบ tile map, และทั้งหมดนี้บนชิปราคา 1$
-date: 2026-05-30authors:
+date: 2026-05-30
+authors:
   - fox3000foxy
 tags:
   - minecraft
@@ -11,7 +12,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HKGGBNn8izs1co1BxG8HDMiPScGjfJxFuqtbPDyyTqQVvO818uVXuIuCL2oel7BjPLMnSSBPx4GId1i2R5jIyQ=="
+author_sig: "GUegDhuMSA8L2x43NqUYD5ODM9gvh36PzYgfVuE6P/l+trm7ivmLW8J4l2go/F7IeqjSshUJno4ysWaJD3HuSA=="
 ---
 
 ## บทนำ

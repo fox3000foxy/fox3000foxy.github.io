@@ -2,14 +2,15 @@
 title: بوتنة مزرعة Microsoft Rewards
 description: كيف برمجت بوتًا لجني نقاط Microsoft Rewards على نطاق واسع -- ولماذا عززت
   مايكروسوفت دفاعاتها منذ ذلك الحين.
-date: 2026-03-13authors:
+date: 2026-03-13
+authors:
   - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "X2f1UQXCrDIqC4bBouezjXp3ipO61b5Uez73FUo/E2yS6ejS4FT5PmPFW/9bZtSIhbB8w5JaUw8nQal9AQE/0w=="
+author_sig: "9W6fdVNlQZHaTyzINGCNBBH32+g0FgwRZ5pJPsEzlNZNxmM0TiZbDOiISYelIEOjQD8NG0dmPVZog5A0d6o1xg=="
 ---
 
 > **ملاحظة (2026):** هذا المشروع لم يعد قيد الصيانة. مايكروسوفت عززت بشكل كبير اكتشافها لمكافحة البوتات -- ما كان يعمل في ذلك الوقت لم يعد يعمل اليوم. الكود والمنهجية الموصوفة أدناه مُحتفظ بها لأغراض الأرشفة والتوضيح فقط.

@@ -5,7 +5,8 @@ description: How Fortune hand-rewrote node:fs, node:crypto, and a dozen more
   Node modules in 640 lines of JavaScript so the container runs in the browser
   without Wasm.
 date: 2026-05-29
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - typescript
@@ -14,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "LWbwBtsfUnrroU9bA+924AGFNM3huXhbPmi8+2KQytAyltUxQrIOsDGmcl/xqDMpVXNI3WBvwxUYD855BuG8Pw=="
+author_sig: "ol6JEZPIOJpuVCbnwp+TEi/ALYjonNeBFzmqIL3p58BsVjg2dgCO3uRbjyfSMwPDE2qrcJvZBTvYQROU/4EIng=="
 ---
 
 # Running a Node.js library in the browser without Wasm -- typescript-virtual-container's polyfills

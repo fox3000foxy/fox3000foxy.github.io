@@ -3,14 +3,15 @@ title: Skrip Penandatanganan SSH Dijelaskan
 description: Menguraikan helper penandatanganan komit SSH dan mengapa saya ingin
   komit yang bergaya.
 date: 2026-03-08
-aiGenerated: trueauthors:
+aiGenerated: true
+authors:
   - fox3000foxy
 tags:
   - git
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "p4TfFIGGIyI+H0ZxXiCyjX26cB3djVVCwMp1hu4DywDHOsokB8/d1R/dBjjdJqIb1+nC/NOrHT6/J8hQtvZRyw=="
+author_sig: "8GdVhbdfLandOulIvVosc2cr078e3Ag7ZNqmxeW1rREkD1sI8z3mj3Cw6wzMEePr8iP7il+7dUrzrfX5xUoHUA=="
 ---
 
 # Skrip Penandatanganan SSH untuk Komit -- Penjelasan

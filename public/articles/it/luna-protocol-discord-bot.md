@@ -1,7 +1,8 @@
 ---
 title: "Luna Protocol: ho creato un bot Discord autonomo che simula un essere umano"
 description: "Luna Protocol è un bot Discord completamente autonomo dotato di un LLM locale, capace di conversazione naturale con sonno, errori di battitura, esitazioni, dimenticanze, stanchezza tematica e messaggi spontanei."
-date: 2026-07-11authors:
+date: 2026-07-11
+authors:
   - fox3000foxy
 tags:
   - discord
@@ -11,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8WunmMveyY2rjroLIuo2GGyK0mHsZqGyKRUL247+xYJO6H6Gb6Fu4E5AB7/FB7lBHXBXScOnQTtX2Z5kcU3+GA=="
+author_sig: "6tef1dDnDlCukrkvs7TIhZ6y6n2voJbYcQzWh2A5fv5cTgW703Rt1G+/MpinfHQQUFxBLANd82Ibk6GbEv0Gtw=="
 ---
 
 # Luna Protocol: ho creato un bot Discord autonomo che simula un essere umano

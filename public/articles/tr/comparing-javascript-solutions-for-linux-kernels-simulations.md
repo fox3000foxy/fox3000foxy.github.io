@@ -2,14 +2,15 @@
 title: JavaScript Çözümlerini Linux Çekirdek Simülasyonları İçin Karşılaştırma
 description: JavaScript/TypeScript ile Linux ortamı yeniden oluşturmalarının
   derinlemesine analizi.
-date: 2026-05-28authors:
+date: 2026-05-28
+authors:
   - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "EaLaEhpl3oHINfwKzieuetE91RKP3vDfwPQH0n88IB/Uoj/0SzMLfHe7foxpNQ1JJFZRk3BKhmmeGYguiS4qtw=="
+author_sig: "TcwBZ4AkqrleZgMBEET/6kqaJ8parFssq1zeFox2PdEmvzgJ7sIbnVplAItrLJbmM1ykBOsLJGNYtOmIqZVrTw=="
 ---
 
 # Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı

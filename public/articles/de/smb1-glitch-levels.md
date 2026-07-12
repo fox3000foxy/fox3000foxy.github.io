@@ -1,13 +1,14 @@
 ---
 title: "Super Mario Bros.: Das Level-Format, die Zeiger und die 256 Glitch Worlds"
 description: "Wie 128 Levels × 4 Zonentypen in 40KB ROM passen, warum die Minus World existiert, und wie ein NES-Tennis-Match Glitch Worlds laden kann."
-date: 2026-06-10authors:
+date: 2026-06-10
+authors:
   - fox3000foxy
 tags:
   - retro
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DQo3P8W/j76hqSc/+NicD/Je3nMJ5ybmXD9DxoVG8KRtffW+arEzclzLKZXAeVMd7evOi5qEg12bNcr9aY66FQ=="
+author_sig: "vwkDlMgDoyC5fuNBpbEPB2VyWw8cXX49VujJutc/VW7PV6d7q4kDYf6oYKN2hagiGaaFoeo2YwWLFThvBYJA3g=="
 ---
 
 ## Einführung

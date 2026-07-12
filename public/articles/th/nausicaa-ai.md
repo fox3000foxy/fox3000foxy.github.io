@@ -2,7 +2,8 @@
 title: AI ขี้โกงของฉันสำหรับ Nausicaa
 description: AI ที่ใช้ค่าสัมประสิทธิ์ฮิวริสติก ไฮเปอร์พารามิเตอร์ที่เปลี่ยนทุก
   5 เทิร์น และ Oracle ที่หนี -- ดำดิ่งสู่สมองของเกมกระดานเชิงกลยุทธ์
-date: 2026-05-29authors:
+date: 2026-05-29
+authors:
   - fox3000foxy
 tags:
   - gaming
@@ -10,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PHWoiJnkCkFYddkqnKfXMwO/KKUdCK1Ju+Xhf4KVHj3d9s15ooY8T8xc+p40IzQ1E4v4Kg4Jfu8eaQW5tptWfg=="
+author_sig: "4L2cqVASmXU6A8jPIyvYA4Ej0UObvbzghJGHUm3pzHpwWwPtjcUPcUJTl1pR1fxuB/LVQxWK05ZexdvMtF7IWQ=="
 ---
 
 ## AI ขี้โกงของฉันสำหรับ Nausicaa
