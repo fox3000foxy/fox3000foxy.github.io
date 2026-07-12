@@ -126,24 +126,6 @@ export default function WriteArticle() {
 				}
 				return false;
 			},
-			handlePaste: (_view, event) => {
-				const items = event.clipboardData?.items;
-				if (!items) {
-					return false;
-				}
-				let handled = false;
-				for (let i = 0; i < items.length; i++) {
-					const item = items[i];
-					if (item.type.startsWith("image/")) {
-						const file = item.getAsFile();
-						if (file) {
-							handleImageFile(file);
-							handled = true;
-						}
-					}
-				}
-				return handled;
-			},
 			handleDrop: (_view, event) => {
 				const files = event.dataTransfer?.files;
 				if (!files) {
