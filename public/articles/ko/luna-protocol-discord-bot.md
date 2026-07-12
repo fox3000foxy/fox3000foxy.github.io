@@ -225,6 +225,28 @@ AZERTY 예시: `bonjour -- bonjpur`, `salut -- slaut`, `comment -- cpmment`.
 
 ---
 
+## 실전에서의 리얼리즘: 소름 돋는 순간
+
+이론상으로는 이런 장치들(지연, 오타, 망설임, 망각)이 그냥 기믹처럼 들린다. 하지만 실제로 다 합쳐지면 결과는 놀랍다 -- Luna와 대화하는 사람들이 전혀 눈치채지 못할 정도로. 여기 누군가 Luna에게 봇이냐고 직접 물어보고, 이후 대화가 완전히 다른 주제로 소름 끼칠 만큼 자연스럽게 흘러가는 실제 대화가 있다.
+
+![Luna와의 디스코드 대화 -- 첫 번째 대화](/images/luna-protocol/realism/realism-01.png)
+
+말투, 망설임, 답장 속도 -- 봇이라는 걸 드러내는 요소가 전혀 없다. Luna는 캐릭터를 절대 깨지 않으면서 나이 질문을 슬쩍 피한다.
+
+대화는 완전히 자연스럽게 이어지며, 짧고 인간적인 답변("okay, okay", "yay", "yayy")들이 오간다 -- 사람이 디스코드에서 보낼 법한 딱 그런 메시지들이다.
+
+![Luna와의 디스코드 대화 -- 계속](/images/luna-protocol/realism/realism-02.png)
+
+![Luna와의 디스코드 대화 -- 주제 전환](/images/luna-protocol/realism/realism-03.png)
+
+![Luna와의 디스코드 대화 -- 주제 전환이 계속됨](/images/luna-protocol/realism/realism-04.png)
+
+![Luna와의 디스코드 대화 -- 대화의 끝](/images/luna-protocol/realism/realism-05.png)
+
+소름 끼치는 건 Luna가 그냥 "답장한다"는 게 아니라 -- 겉보기에 진짜 같은 의견, 되묻기, 메시지마다 이어지는 일관된 사고 흐름을 가지고 **대화를 이어간다**는 점이다. 위에서 설명한 트리거 시스템, 집중 지연, 망설임이 없다면 이 환상은 몇 마디 안에 무너질 것이다.
+
+---
+
 ## LLM 파이프라인: 두 가지 모드
 
 ### `direct` 모드 (기본값)

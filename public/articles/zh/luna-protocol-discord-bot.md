@@ -222,6 +222,28 @@ AZERTY 示例：`bonjour → bonjpur`，`salut → slaut`，`comment → cpmment
 
 ---
 
+## 现实中的真实感：细思极恐的时刻
+
+纸面上看，这些机制(延迟、打字错误、犹豫、遗忘)听起来像是噱头。但实际上，把它们组合在一起，效果令人震惊——以至于和 Luna 聊天的人完全察觉不到异样。下面是一段真实的对话，有人直接问 Luna 是不是机器人，随后话题又自然地转移到完全不同的方向，那种自然感让人不寒而栗。
+
+![与 Luna 的 Discord 对话 -- 第一段](/images/luna-protocol/realism/realism-01.png)
+
+语气、犹豫、回复节奏——完全看不出是机器人。Luna 巧妙地回避了年龄问题，全程没有露出破绽。
+
+对话继续自然流畅地进行，简短而真实的回复("okay, okay"、"yay"、"yayy")——正是人类在 Discord 上会发的那种消息。
+
+![与 Luna 的 Discord 对话 -- 继续](/images/luna-protocol/realism/realism-02.png)
+
+![与 Luna 的 Discord 对话 -- 话题转移](/images/luna-protocol/realism/realism-03.png)
+
+![与 Luna 的 Discord 对话 -- 话题继续转移](/images/luna-protocol/realism/realism-04.png)
+
+![与 Luna 的 Discord 对话 -- 对话结束](/images/luna-protocol/realism/realism-05.png)
+
+真正让人毛骨悚然的不只是 Luna 会“回复”——而是她**能维持一段对话**，有看似真实的观点、追问，以及从一条消息到下一条消息一以贯之的思路。如果没有前面提到的触发系统、专注延迟和犹豫机制，这种幻觉几条消息内就会破功。
+
+---
+
 ## LLM 管道：两种模式
 
 ### `direct` 模式（默认）

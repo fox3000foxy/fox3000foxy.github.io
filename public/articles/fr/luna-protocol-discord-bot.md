@@ -225,6 +225,28 @@ Trois styles de correction :
 
 ---
 
+## Le réalisme en pratique : quand ça devient flippant
+
+Sur le papier, tous ces systèmes (délais, fautes de frappe, hésitations, oublis) ça a l'air gadget. En vrai, mis bout à bout, le résultat est bluffant -- au point que des gens en conversation avec Luna ne se doutent de rien. Voici un échange réel où quelqu'un demande directement à Luna si c'est un bot, et où la conversation dérive ensuite sur un tout autre sujet, avec un naturel qui fait froid dans le dos.
+
+![Conversation Discord avec Luna -- premier échange](/images/luna-protocol/realism/realism-01.png)
+
+Le ton, les hésitations, le rythme des réponses -- rien ne trahit un bot. Luna botte en touche sur la question de l'âge sans jamais casser le personnage.
+
+![Conversation Discord avec Luna -- suite de l'échange](/images/luna-protocol/realism/realism-02.png)
+
+La conversation continue de façon totalement fluide, avec des réponses courtes et naturelles ("okay, okay", "yay", "yayy") -- exactement le genre de messages qu'un humain enverrait sur Discord.
+
+![Conversation Discord avec Luna -- dérive du sujet](/images/luna-protocol/realism/realism-03.png)
+
+![Conversation Discord avec Luna -- suite de la dérive](/images/luna-protocol/realism/realism-04.png)
+
+![Conversation Discord avec Luna -- fin de l'échange](/images/luna-protocol/realism/realism-05.png)
+
+Ce qui est terrifiant, ce n'est pas juste que Luna "répond" -- c'est qu'elle **tient une conversation**, avec des opinions apparentes, des relances, un fil de pensée cohérent d'un message à l'autre. Sans le système de déclenchement, les délais de concentration et les hésitations décrits plus haut, cette illusion s'effondrerait en quelques messages.
+
+---
+
 ## Le pipeline LLM : deux modes
 
 ### Mode `direct` (défaut)

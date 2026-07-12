@@ -223,6 +223,28 @@ Tiga gaya koreksi:
 
 ---
 
+## Realisme dalam praktik: saat semuanya jadi mengerikan
+
+Di atas kertas, semua sistem ini (jeda, typo, keraguan, kelupaan) terdengar seperti gimmick belaka. Namun dalam praktiknya, saat digabungkan, hasilnya sangat mengejutkan -- sampai-sampai orang yang mengobrol dengan Luna tidak curiga sama sekali. Berikut percakapan nyata di mana seseorang langsung bertanya kepada Luna apakah dia bot, dan percakapan kemudian bergeser ke topik yang sama sekali berbeda dengan kealamian yang bikin merinding.
+
+![Percakapan Discord dengan Luna -- bagian pertama](/images/luna-protocol/realism/realism-01.png)
+
+Nada bicara, keraguan, ritme balasan -- tidak ada yang mengkhianati identitasnya sebagai bot. Luna mengelak dari pertanyaan usia tanpa pernah keluar dari karakternya.
+
+Percakapan terus mengalir secara alami, dengan balasan singkat dan manusiawi ("okay, okay", "yay", "yayy") -- persis jenis pesan yang akan dikirim manusia di Discord.
+
+![Percakapan Discord dengan Luna -- lanjutan](/images/luna-protocol/realism/realism-02.png)
+
+![Percakapan Discord dengan Luna -- pergeseran topik](/images/luna-protocol/realism/realism-03.png)
+
+![Percakapan Discord dengan Luna -- pergeseran topik berlanjut](/images/luna-protocol/realism/realism-04.png)
+
+![Percakapan Discord dengan Luna -- akhir percakapan](/images/luna-protocol/realism/realism-05.png)
+
+Yang mengerikan bukan cuma karena Luna "membalas" -- tapi karena dia **mempertahankan sebuah percakapan**, dengan opini yang tampak nyata, tanggapan lanjutan, dan alur pemikiran yang koheren dari satu pesan ke pesan berikutnya. Tanpa sistem trigger, jeda konsentrasi, dan keraguan yang dijelaskan di atas, ilusi ini akan runtuh hanya dalam beberapa pesan.
+
+---
+
 ## Pipeline LLM: Dua Mode
 
 ### Mode `direct` (default)

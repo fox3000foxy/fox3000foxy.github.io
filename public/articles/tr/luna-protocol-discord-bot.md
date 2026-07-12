@@ -223,6 +223,28 @@ AZERTY örneği: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`
 
 ---
 
+## Pratikte gerçekçilik: iş ürpertici hale geldiğinde
+
+Kağıt üzerinde, tüm bu sistemler (gecikmeler, yazım hataları, tereddütler, unutkanlık) bir gimmick gibi görünür. Pratikte ise, hepsi bir araya geldiğinde sonuç şaşırtıcıdır -- öyle ki Luna ile konuşan insanlar hiçbir şeyden şüphelenmez. İşte birinin Luna'ya doğrudan bot olup olmadığını sorduğu, ardından sohbetin tamamen başka bir konuya ürkütücü bir doğallıkla kaydığı gerçek bir alışveriş.
+
+![Luna ile Discord sohbeti -- ilk kısım](/images/luna-protocol/realism/realism-01.png)
+
+Ton, tereddütler, yanıt temposu -- hiçbir şey bot olduğunu ele vermiyor. Luna, karakterinden hiç çıkmadan yaş sorusunu ustaca geçiştiriyor.
+
+Sohbet tamamen doğal bir şekilde devam ediyor, kısa ve insana özgü yanıtlarla ("okay, okay", "yay", "yayy") -- tam olarak bir insanın Discord'da göndereceği türden mesajlar.
+
+![Luna ile Discord sohbeti -- devamı](/images/luna-protocol/realism/realism-02.png)
+
+![Luna ile Discord sohbeti -- konu kayması](/images/luna-protocol/realism/realism-03.png)
+
+![Luna ile Discord sohbeti -- konu kayması devam ediyor](/images/luna-protocol/realism/realism-04.png)
+
+![Luna ile Discord sohbeti -- sohbetin sonu](/images/luna-protocol/realism/realism-05.png)
+
+Ürkütücü olan şey sadece Luna'nın "yanıt vermesi" değil -- görünürde fikirleri, takip sorularıyla ve mesajdan mesaja tutarlı bir düşünce akışıyla **bir sohbeti sürdürebilmesi**. Yukarıda anlatılan tetikleyici sistemi, odaklanma gecikmeleri ve tereddütler olmadan bu illüzyon birkaç mesaj içinde çökerdi.
+
+---
+
 ## LLM hattı: iki mod
 
 ### `direct` modu (varsayılan)

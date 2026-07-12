@@ -225,6 +225,28 @@ Ba kiểu sửa lỗi:
 
 ---
 
+## Tính chân thực trong thực tế: khi nó trở nên rùng rợn
+
+Trên lý thuyết, tất cả các cơ chế này (độ trễ, lỗi gõ phím, ngập ngừng, hay quên) nghe có vẻ chỉ là chiêu trò. Nhưng trong thực tế, khi kết hợp lại, kết quả thật đáng kinh ngạc -- đến mức người trò chuyện với Luna không hề nghi ngờ gì. Đây là một đoạn hội thoại thật, nơi ai đó hỏi thẳng Luna có phải là bot không, rồi cuộc trò chuyện chuyển sang một chủ đề hoàn toàn khác với sự tự nhiên đến rùng mình.
+
+![Cuộc trò chuyện Discord với Luna -- đoạn đầu](/images/luna-protocol/realism/realism-01.png)
+
+Giọng điệu, sự ngập ngừng, nhịp độ trả lời -- không có gì tố cáo đây là bot. Luna né tránh câu hỏi về tuổi mà không hề lộ vai.
+
+Cuộc trò chuyện tiếp tục trôi chảy tự nhiên, với những câu trả lời ngắn, rất con người ("okay, okay", "yay", "yayy") -- đúng kiểu tin nhắn mà một người thật sẽ gửi trên Discord.
+
+![Cuộc trò chuyện Discord với Luna -- tiếp theo](/images/luna-protocol/realism/realism-02.png)
+
+![Cuộc trò chuyện Discord với Luna -- chuyển chủ đề](/images/luna-protocol/realism/realism-03.png)
+
+![Cuộc trò chuyện Discord với Luna -- chủ đề tiếp tục trôi](/images/luna-protocol/realism/realism-04.png)
+
+![Cuộc trò chuyện Discord với Luna -- kết thúc đoạn hội thoại](/images/luna-protocol/realism/realism-05.png)
+
+Điều đáng sợ không chỉ là việc Luna "trả lời" -- mà là cô ấy **duy trì cả một cuộc trò chuyện**, với những ý kiến có vẻ thật, những câu nối tiếp, và một mạch suy nghĩ nhất quán từ tin nhắn này sang tin nhắn khác. Nếu không có hệ thống kích hoạt, độ trễ tập trung và sự ngập ngừng đã mô tả ở trên, ảo giác này sẽ sụp đổ chỉ sau vài tin nhắn.
+
+---
+
 ## Đường dẫn LLM: hai chế độ
 
 ### Chế độ `direct` (mặc định)

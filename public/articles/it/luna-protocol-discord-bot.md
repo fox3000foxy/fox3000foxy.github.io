@@ -225,6 +225,28 @@ Tre stili di correzione:
 
 ---
 
+## Il realismo in pratica: quando diventa inquietante
+
+Sulla carta, tutti questi sistemi (ritardi, refusi, esitazioni, dimenticanze) sembrano trovate. Nella pratica, messi insieme, il risultato è sorprendente -- al punto che le persone che parlano con Luna non sospettano nulla. Ecco uno scambio reale in cui qualcuno chiede direttamente a Luna se è un bot, e la conversazione poi scivola su un argomento completamente diverso con una naturalezza che fa venire i brividi.
+
+![Conversazione Discord con Luna -- primo scambio](/images/luna-protocol/realism/realism-01.png)
+
+Il tono, le esitazioni, il ritmo delle risposte -- niente tradisce un bot. Luna schiva la domanda sull'età senza mai uscire dal personaggio.
+
+La conversazione prosegue in modo del tutto naturale, con risposte brevi e umane ("okay, okay", "yay", "yayy") -- esattamente il tipo di messaggi che una persona invierebbe su Discord.
+
+![Conversazione Discord con Luna -- continua](/images/luna-protocol/realism/realism-02.png)
+
+![Conversazione Discord con Luna -- cambio di argomento](/images/luna-protocol/realism/realism-03.png)
+
+![Conversazione Discord con Luna -- il cambio di argomento prosegue](/images/luna-protocol/realism/realism-04.png)
+
+![Conversazione Discord con Luna -- fine dello scambio](/images/luna-protocol/realism/realism-05.png)
+
+Ciò che è inquietante non è solo che Luna "risponde" -- è che **sostiene una conversazione**, con opinioni apparenti, rilanci e un filo di pensiero coerente da un messaggio all'altro. Senza il sistema di trigger, i ritardi di concentrazione e le esitazioni descritti sopra, questa illusione crollerebbe dopo pochi messaggi.
+
+---
+
 ## La pipeline LLM: due modalità
 
 ### Modalità `direct` (predefinita)
