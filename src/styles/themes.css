@@ -15,6 +15,9 @@
   --ai-badge-bg: rgba(139, 92, 246, 0.15);
   --ai-badge-border: rgba(139, 92, 246, 0.3);
   --ai-badge-text: #c4b5fd;
+  --sponsored-badge-bg: rgba(255, 152, 0, 0.15);
+  --sponsored-badge-border: rgba(255, 152, 0, 0.3);
+  --sponsored-badge-text: #ffb74d;
   --tag-bg: rgba(129, 199, 132, 0.1);
   --tag-border: rgba(129, 199, 132, 0.25);
   --tag-text: #81c784;
@@ -40,6 +43,9 @@
   --ai-badge-bg: rgba(139, 92, 246, 0.1);
   --ai-badge-border: rgba(139, 92, 246, 0.2);
   --ai-badge-text: #7c3aed;
+  --sponsored-badge-bg: rgba(255, 152, 0, 0.1);
+  --sponsored-badge-border: rgba(255, 152, 0, 0.2);
+  --sponsored-badge-text: #e65100;
   --tag-bg: rgba(76, 175, 80, 0.1);
   --tag-border: rgba(76, 175, 80, 0.25);
   --tag-text: #2e7d32;

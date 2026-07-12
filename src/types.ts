@@ -6,6 +6,7 @@ export interface ArticleMeta {
 	lastmod?: string;
 	readingTime?: number;
 	aiGenerated?: boolean;
+	sponsored?: boolean;
 	tags?: string[];
 	series?: string;
 	authors?: string[];

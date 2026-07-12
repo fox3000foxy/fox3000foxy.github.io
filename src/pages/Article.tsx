@@ -189,6 +189,9 @@ export default function Article() {
 				{meta?.aiGenerated && (
 					<span className="ai-badge">{t("article.ai")}</span>
 				)}
+				{meta?.sponsored && (
+					<span className="sponsored-badge">💕 Sponsorisé</span>
+				)}
 				<h1 className="article-title">{meta?.title ?? slug ?? ""}</h1>
 				<p className="article-date">
 					{meta?.date && <time dateTime={meta.date}>{meta.date}</time>}
