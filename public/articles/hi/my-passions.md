@@ -1,14 +1,13 @@
 ---
-title: मेरे जुनून
+itle: मेरे जुनून
 description: कोडिंग, ड्राइंग, ऑटोमेशन, पुरानी तकनीकों की खोज, और भी बहुत
   कुछ -- एक झलक कि मुझे क्या प्रेरित करता है।
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "a7kIBTmoAW92sKyYwXC8trz1kTxhIzXzRSr0t/1f/z8H0tj09pR0DlmxfH2xDgM7lemHG+weOL8UKlh6AX0bwg=="
+author_sig: "GsoX32WKCs5KDq12l3v8Q8LcIMSYga6oS2bhsEWHqAe5r0EJe+RtS5hfC3bSF+0c4097G/Vu7Xz5dLjlqodhDw=="
 ---
 
 # मेरे जुनून

@@ -1,18 +1,17 @@
 ---
-title: "100% 서버리스 Discord 봇: Hono + Cloudflare Workers"
+itle: "100% 서버리스 Discord 봇: Hono + Cloudflare Workers"
 description: 월 50€나 들던 Discord 봇을 0원으로 교체한 방법 -- 인터랙션 엔드포인트, Hono, Workers, 실시간
   이미지 렌더링, WebSocket 없는 완전한 게임.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RXpwHv3H4Lr1Cq6iJGCn1gFCoaKT6z2WxI11GnAaLRKV8qR0CTY5A3xu2dWHpEZbDZ65/e4EwCEif+6AZocOxA=="
+author_sig: "/SnZnu/TsTGICytHAQq0f/DM5xNlgQDpSlwqm4egqc/EkFgIQaCw5JNjtFq3qyjLtaPFP9D625GsuKtsXFDW/w=="
 ---
 
 ## Discord bot 100% serverless: Hono + Cloudflare Workers = 💸 제로

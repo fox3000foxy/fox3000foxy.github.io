@@ -1,21 +1,20 @@
 ---
-title: Executando uma biblioteca Node.js no navegador sem Wasm -- os polyfills
+itle: Executando uma biblioteca Node.js no navegador sem Wasm -- os polyfills
   do typescript-virtual-container
 description: Como Fortune reimplementou manualmente node:fs, node:crypto e uma
   dúzia de módulos Node em 640 linhas de JavaScript para fazer o contêiner
   rodar no navegador sem Wasm.
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4+CgANO6tGFkq428nvAX8fWjfNN7Sqp1zHsNSdBQmf0ZGeyrc2Di6eN4VuI0oVsGeMQ1sg13IIuCW2aObtA6nw=="
+author_sig: "8xA1humZCUrUse+o3HsIBONHlCff/ErwsnarN9N6RbuYJuSNsW2WD9laN5fK8HENhUEWTzewA6mba6uaSkjhSA=="
 ---
 
 # Executando uma biblioteca Node.js no navegador sem Wasm -- os polyfills do typescript-virtual-container

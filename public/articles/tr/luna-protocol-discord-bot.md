@@ -1,18 +1,17 @@
 ---
-title: "Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım"
+itle: "Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım"
 description: "Luna Protocol, yerel bir LLM ile çalışan, tamamen otonom bir Discord botudur. Uyuma, yazım hatası yapma, tereddüt etme, unutma, konu yorgunluğu çekme ve kendiliğinden mesaj gönderme gibi doğal konuşma yeteneklerine sahiptir."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - discord-bot
+  - discord
   - llm
   - typescript
   - event-driven-architecture
-  - artificial-intelligence
+  - ai
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "s+BUdYN03ZeeMUppPXDk+E1zhnO84RhXC06dGmhQva9qhzeSU2T4qwwp7YyaR+em7M1G1PTR3ly46Ln3v56chg=="
+author_sig: "/UxACpx1fFoj6XfAfn6wGk2hRj0+WdirVbep9LrZp+Ac9LKGdDDDj5CrkQ66vQHCe1fISqZfNKLUkhSdj/xKcw=="
 ---
 
 # Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım

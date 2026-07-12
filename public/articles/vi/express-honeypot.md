@@ -1,17 +1,16 @@
 ---
-title: "Tôi đã xây dựng một honeypot Express siêu thực"
+itle: "Tôi đã xây dựng một honeypot Express siêu thực"
 description: "328 điểm cuối giả với phản hồi được tạo ngay lập tức, giả mạo tiêu đề, ghi lại lưu lượng bot -- đi sâu vào mã của một middleware honeypot Express được thiết kế để đánh lừa các trình quét."
 date: "2026-06-10"
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - express
   - nodejs
   - security
   - honeypot
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2RP1SixoooPbjb7y6tRItBPml3zHsbmG5mOaAQ00ct0HuIpKYJcZaS0dGFtp4E68o4Qi0QsS2RdpeBPggVOAzA=="
+author_sig: "7f4+TH7wT9OJy7SiMmPvjPqUAt0kojxqktCIHitxhkb7/Vddm5MOr9QzPE1AC994EyiWyfrvjvl2dqlwLBdr5Q=="
 ---
 
 ## Ý tưởng

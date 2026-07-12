@@ -1,16 +1,15 @@
 ---
-title: 이 블로그는 어떻게 동작하나요?
+itle: 이 블로그는 어떻게 동작하나요?
 description: "이 블로그의 내부 동작에 대한 심층 분석: React, Vite, Markdown, CI/CD 파이프라인, 글 작성 워크플로우"
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7SYpJXrRCyEuX5Zn58MVGMtlWihEqEQAG+UtsqBToeyTTUGiugMKaRNHuLwOQbCa/jnoyO4MCSbAmEXSmh3heQ=="
+author_sig: "r3L6B0KbMWxD0/zMbXndTyNoCdUBW5rFDjb2BtgCESy4xORnC2UsVNPxN9mWwPpFjTf9waS4ptG0K5HkKiEM4A=="
 ---
 
 # 이 블로그는 어떻게 동작하나요?

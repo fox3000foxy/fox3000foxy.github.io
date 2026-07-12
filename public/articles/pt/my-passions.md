@@ -1,14 +1,13 @@
 ---
-title: Minhas Paixões
+itle: Minhas Paixões
 description: Codar, desenhar, automatizar, descobrir tecnologias antigas, e
   muito mais -- uma visão geral do que me motiva.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6r7IsGvImijVltUR8PPSe9vt1liZrAsZAwv/OZnlnLZi5vAGGiqnliKtVFurO2VL+ThtzNy9Y28mLNwwKcZF3g=="
+author_sig: "r/dqMV2Fz+JUT+SqcB28VlKMADAaZ8JjIz92kp112QjEbyJZDrDVuinmZLa475+pB/51Uo0gTQh3BQZSV+xBpQ=="
 ---
 
 # Minhas Paixões

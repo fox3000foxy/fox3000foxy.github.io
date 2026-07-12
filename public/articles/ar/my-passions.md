@@ -1,14 +1,13 @@
 ---
-title: شغفي
+itle: شغفي
 description: البرمجة، الرسم، الأتمتة، اكتشاف التقنيات القديمة، وأكثر --
   لمحة عن ما يحفزني.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "wyjy6f+DDqG1GBRkQVrkbqqzAXNkoAD+zqQD7pPkwsUy5YVJ0eIPAwnNuNFcO/TgwNindFT54tT5tEeJmakSnw=="
+author_sig: "wc8cqAtZ9enUVnB/H/Pab6hwt+MkaqmLfx10m1N2MYDlhWWuOUJ3TQlzZ5OFNsecNjmJFmHPK3Wg+gQU/5wbDg=="
 ---
 
 # شغفي

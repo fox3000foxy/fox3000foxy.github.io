@@ -1,14 +1,13 @@
 ---
-title: Hobi Saya
+itle: Hobi Saya
 description: Mengode, menggambar, mengotomatisasi, menemukan teknologi lama, dan
   masih banyak lagi -- sekilas tentang apa yang memotivasi saya.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "LhLgeSZqmecL+EMQ94M2grq/O6U8CIjyIwb9m0pb6rNL+fBuo7PySrjb9IrI/UUBBDGQYpPjj2b8ULywj3bShw=="
+author_sig: "TRpEjHkEbubMmdeCINbH37gs2cgXIWAVdTS++iM4LtFoqKE8JirdPe+LmJIq0JjKhJQwl2YakAvQUG8T88PZBw=="
 ---
 
 # Hobi Saya

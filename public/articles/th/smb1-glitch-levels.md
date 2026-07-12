@@ -1,18 +1,13 @@
 ---
-title: "Super Mario Bros.: รูปแบบของเลเวล, พอยน์เตอร์ และ 256 glitch worlds"
+itle: "Super Mario Bros.: รูปแบบของเลเวล, พอยน์เตอร์ และ 256 glitch worlds"
 description: "วิธีที่ 128 เลเวล × 4 ประเภทพื้นที่บรรจุอยู่ใน ROM 40KB ทำไม Minus World ถึงมีอยู่ และวิธีที่การแข่งขันเทนนิส NES สามารถโหลด glitch worlds"
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
-  - nintendo
-  - nes
-  - "6502"
-  - mario
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ulvLfnJtwzfHQXieizVfcTrj96ftHVXhE67+0KrQqaIBKlggiYVDMshsmH/LcxYMhf0SoLOx5xCCTp5ZrdGVUA=="
+author_sig: "KoRjoRgOzdKaOw6ERBBEHrIHtBmGk3S2lecbCYEm3WbMoVGvcd+VHU1HZQ2ZreoOlrhga0O4t+bCIG/Wd6NymA=="
 ---
 
 ## บทนำ

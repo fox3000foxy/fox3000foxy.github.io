@@ -1,17 +1,14 @@
 ---
-title: "Repo to VPS: GitHub Actions'ı ücretsiz kalıcı VPS'ye dönüştürün"
+itle: "Repo to VPS: GitHub Actions'ı ücretsiz kalıcı VPS'ye dönüştürün"
 description: Bir GitHub Actions runner'ı git'i kalıcı depolama olarak kullanarak sürekli açık bir VPS'ye dönüştürme -- tmate, inotify ve commit --amend.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - github
   - devops
-  - vps
-  - actions
   - automation
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WY26ZPhKrCPeff1eW0+jQp8cWLhJnMthz6CoMgIwt5bj3Ed9N4tT82gZrHd+ewhdkO8LzBTlVx9KRMGBCJNyjw=="
+author_sig: "4ju3z6//nRshuDx5c2hipKCopliZpWLiUZi2ZZ+WaAt7Mq3EHXmwOo+yu9vQlsmECA1bakei7qMX09izlzsoUw=="
 ---
 
 ## GitHub sana 6 saatliğine ücretsiz VPS veriyor. Kalıcı hale getirmenin yolunu buldum.

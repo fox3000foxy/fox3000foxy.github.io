@@ -1,14 +1,13 @@
 ---
-title: Tentang Profil GitHub Saya
+itle: Tentang Profil GitHub Saya
 description: Perkenalan singkat tentang profil GitHub saya.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - meta
   - github
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "62EbOAr2UNS0G3i7cWAKKF6zhtlHP26q1RSkHiTkA2NnpDHvTLtzARUMKbJfns4+9Xm1m+fuaGQppoJYx+moyQ=="
+author_sig: "G2jsbL1LuLLF/ooOqaq92EqdePivt+y2JGuOJsf8Wlo0DKmfMz8k0spciHB9ZLyc7qpG6sskEh39Qeekuj/cEw=="
 ---
 
 # Profil GitHub Saya

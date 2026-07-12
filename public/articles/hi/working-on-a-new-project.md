@@ -1,14 +1,13 @@
 ---
-title: एक नए प्रोजेक्ट पर काम करना
+itle: एक नए प्रोजेक्ट पर काम करना
 description: एक नई वेबसाइट शुरू करने और विकसित करने की प्रक्रिया का एक अवलोकन।
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - meta
   - webdev
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WJu768a4RcxGTgvgRj+0iSnt4Dj0NxJRcvrmNwXolihLTY4u/bz22l6fEMTrXFnodgAGlZ+vfPLv9vi5AnDw7w=="
+author_sig: "H38ODVk0a/OICu7yH6nFzkNPqA2ud1qRFRjSXr5euE/YwEqN6kddpr6SR7st4GgHAhyWOtP0k+Wj2VijPKBhIQ=="
 ---
 
 # प्रोजेक्ट

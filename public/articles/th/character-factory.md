@@ -1,18 +1,17 @@
 ---
-title: "สร้าง character-factory : อวาตาร์ที่มีพันธุกรรม"
+itle: "สร้าง character-factory : อวาตาร์ที่มีพันธุกรรม"
 description: "โมดูล TypeScript ที่ทำงานบน DiceBear: สร้างอวาตาร์ที่สอดคล้อง
 กันตามประเทศ/เชื้อชาติ, เอนจินพันธุกรรมขนาดเล็กสำหรับสร้างลูกหลาน, และ
 รายละเอียดทางวิศวกรรมที่ทำให้มันใช้งานได้จริงในเกมการ์ด"
 date: 2026-05-16
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "zhsRhF/bpx3TicZ1yT2pVervydp6bXQBEGJuhHvyocG/+dHwtNyRbgo5O6+9N2WB169klIj2yFpZ0Gyw7T0oKg=="
+author_sig: "xNI+U5DON2e2J35y06ixfuoZjlSxcaqTwq6QKrHfM9pghbTXnoPh4EXuzEOXuj96uGTV6VFoKyEJPrxpqwWhlg=="
 ---
 
 # สร้าง character-factory : อวาตาร์ที่มีระบบพันธุกรรม

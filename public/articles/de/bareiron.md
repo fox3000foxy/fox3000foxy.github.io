@@ -1,18 +1,17 @@
 ---
-title: Bareiron -- der Minecraft-Server auf einem 1$-Mikrocontroller
+itle: Bareiron -- der Minecraft-Server auf einem 1$-Mikrocontroller
 description: 6800 Zeilen C, null malloc, Perlin Noise ersetzt durch bilineare
   Interpolation, Biome als Tilemap, und das alles auf einem 1$-Chip.
-date: 2026-05-30
+date: 2026-05-30authors:
+  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8h7SdJq1yxAYj3O++KOsmmAkLJWdoCXi77c/N+EAtWfPtKii0SBTyV3zUnDgoxy3IYH85Nv+f1qfwCuwMfUiCQ=="
+author_sig: "JXYj7psugUhm0H1DJI1ByCP+T5OPxPs4IgLIteZLYpUPHDc43paJTYjr4lxb6Gz+zPt0IaC+7vfAvadDQLwG4A=="
 ---
 
 ## Einleitung

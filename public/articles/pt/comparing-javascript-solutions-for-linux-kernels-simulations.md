@@ -1,16 +1,15 @@
 ---
-title: Comparação das soluções JavaScript para simulação de kernels Linux
+itle: Comparação das soluções JavaScript para simulação de kernels Linux
 description: Uma análise aprofundada das reconstituições de ambientes Linux
   em JavaScript/TypeScript.
-date: 2026-05-28
+date: 2026-05-28authors:
+  - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cZPcO98/xMKjlv/pqz/qguedEjjdG8dwlLY/rFJFqX7pPAHP38+kosBmtpMqahEyVU+2M2Ehvg4gg8zezA5cmA=="
+author_sig: "RP3ofKM/6BMjW2TQ2S1Rw+CLC+dG1a31bwaAnLwZIss4SdglydAQ//MEVJ4UshQl3FGaHuTsqe1USxqC9e4BVw=="
 ---
 
 # Cada sandbox JavaScript, emulador, simulador e honeypot Linux -- comparado

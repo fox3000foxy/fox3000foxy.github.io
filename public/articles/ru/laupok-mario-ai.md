@@ -1,19 +1,15 @@
 ---
-title: "Laupok создал ИИ, который играет в Super Mario World сам -- как это работает"
+itle: "Laupok создал ИИ, который играет в Super Mario World сам -- как это работает"
 description: "Подробный разбор проекта Laupok: ИИ на основе алгоритма NEAT, который учится играть в Super Mario World автономно. Генетические алгоритмы, нейронные сети, нейроэволюция расширяющих топологий и 4200 строк на Lua."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - artificial-intelligence
+  - ai
   - lua
-  - genetic-algorithm
-  - neural-network
-  - neat
   - emulation
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "yoOcfS5J3bvJocmuO1BFZhUz4JMu9q0BwgvRQMKghgWKbETgvtc3BsW7Hu4BoV4iWWw895kBIHLjGv7qPW3N3Q=="
+author_sig: "qSAfnuFFH2iRTO1V0iStghrK9iBZ0qbdPTPjKdsA//cPeh15Eg0/fZOlGCvukzLqVTfMXOzi83YaARhRLfJscw=="
 ---
 
 # Laupok создал ИИ, который играет в Super Mario World сам -- как это работает

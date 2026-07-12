@@ -1,19 +1,15 @@
 ---
-title: "Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor"
+itle: "Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor"
 description: "Laupok'un projesinin detaylı bir analizi: Super Mario World'ü bağımsız olarak oynamayı öğrenen bir NEAT tabanlı yapay zeka. Genetik algoritmalar, sinir ağları, artırılmış topolojilerin nöroevrimi ve 4200 satırlık Lua kodu."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - artificial-intelligence
+  - ai
   - lua
-  - genetic-algorithm
-  - neural-network
-  - neat
   - emulation
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xQT4NrMH0i0BXvTSGssY8pFlQ0wV6wkMOog7C4BGv1l7qRpmVtC/K6n/6Px7YhwxtTQxwCQExhOpKuNi6ZKPzg=="
+author_sig: "tCHTQAAqx0zGkCLN3tBPCLxeVdAMROfGZhqrmZmIvLNJsdj/BNvgWblennB1BW98t5Z1DfbU3UfUSxW5dW6TJA=="
 ---
 
 # Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor

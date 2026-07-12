@@ -3,11 +3,8 @@ title: "Laupok a créé une IA qui joue à Super Mario World toute seule -- comm
 
 date: 2026-07-11
 tags:
-  - artificial-intelligence
+  - ai
   - lua
-  - genetic-algorithm
-  - neural-network
-  - neat
   - emulation
   - reverse-engineering
 authors:

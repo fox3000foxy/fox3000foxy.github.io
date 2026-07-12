@@ -1,14 +1,13 @@
 ---
-title: 正在开发一个新项目
+itle: 正在开发一个新项目
 description: 瞥一眼开始和开发一个新网站的过程。
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - meta
   - webdev
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KIDejx5uiEWVbMlnhKtANSc0YtzcCRVXdpdUz8ZJn0JrhRa3IbZjkSnMZkJXRN6Iiw248m88tUx3RLluQRsWxg=="
+author_sig: "eD2BS2CZIWuLxeCE72syocvIFwq1V7XqcX0fFlRtfXKMS5PY+jRALiMN97gme3wAMepYjLLYkAC6cikE8YORzw=="
 ---
 
 # 项目

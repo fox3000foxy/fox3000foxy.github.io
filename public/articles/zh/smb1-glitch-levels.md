@@ -1,18 +1,13 @@
 ---
-title: "Super Mario Bros.：关卡格式、指针与256个故障世界"
+itle: "Super Mario Bros.：关卡格式、指针与256个故障世界"
 description: "128个关卡 × 4种区域类型如何装进40KB ROM、Minus World为何存在，以及一场NES Tennis卡带交换如何能加载故障世界。"
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
-  - nintendo
-  - nes
-  - "6502"
-  - mario
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "wswMhQva24rgBa4ChrW5khjh+9HsD4WMtdGS5JI9pnDYe+V1ikE62pVCVm/vVwXtcfQR7TvgC8zuyBJ3Doz5Kw=="
+author_sig: "jIolDRPGjxP+jmCzPSQj8FLgejTP/xETM/btexjtna7A1DsgXcNpr/MWD+QBA1nk/3rSA+qehtC1UUCuIu3Pzw=="
 ---
 
 ## 引言

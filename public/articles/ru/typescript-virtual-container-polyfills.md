@@ -1,21 +1,20 @@
 ---
-title: Как заставить Node.js библиотеку работать в браузере без Wasm --
+itle: Как заставить Node.js библиотеку работать в браузере без Wasm --
   полифиллы typescript-virtual-container
 description: Как Fortune вручную переписала node:fs, node:crypto и дюжину других
   Node-модулей в 640 строках JavaScript, чтобы контейнер работал в браузере без
   Wasm.
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "N0KmvNM0jd2mB7CYipUInc0oM35eugfk2eZyd0SKlfCaaXkfQQ9aKqTtAYWP13KYl/VtEsZI/EbJ6b7fMzq0rQ=="
+author_sig: "Os+Rg+EklXqNSAn5Yc/9g5AkObxaabMIboylhMN42c+XXx84npyCOyjgqj/fzt80l+s9QIN/5Ot4EBS+Z12KXQ=="
 ---
 
 # Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container

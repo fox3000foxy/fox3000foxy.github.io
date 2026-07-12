@@ -1,17 +1,16 @@
 ---
-title: Logika Pathfinding Minecraft dan Aplikasinya
+itle: Logika Pathfinding Minecraft dan Aplikasinya
 description: Bagaimana algoritma A*, malus blok, dan POI memungkinkan kita
   mengontrol, memprediksi, dan mengeksploitasi pergerakan mob -- dari redstone
   nirkabel hingga farm yang dioptimalkan.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JRPnIvXM0UXlxwx+S9btunpd+ZL0kFluAi/+EnkmcWfhLwRvMgxvKRd7wOa7OJshsAk/4ow4PSB+mTsipc/guQ=="
+author_sig: "Uv7LjL+lWncq+isbt9EO3x2EWtVd5rw2BI3sOshL8c7tgaXUirwhJmjIo+rbJjnIiuqw5VB2Qq/BcMq99bDdDQ=="
 ---
 
 ## Pendahuluan

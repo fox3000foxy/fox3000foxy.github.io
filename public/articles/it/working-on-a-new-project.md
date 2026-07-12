@@ -1,14 +1,13 @@
 ---
-title: Lavorando a un Nuovo Progetto
+itle: Lavorando a un Nuovo Progetto
 description: Uno sguardo al processo di avvio e sviluppo di un nuovo sito web.
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - meta
   - webdev
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "k00t6eD/d+KEgElAQoYr4ntVGkaAIGD+GbWY2RSMb1royD/2kaNTqW+jHR0msxBxfG1hwVTnlpNeRvzCDAXAMw=="
+author_sig: "HhVHE/tWJ5xpQMKkeTSo2hcdpNDi403UrZaXD60PC+NOy8OWJUwJEvi7Br18hbda/P3GD9BpwBoWmjsDGqhZdA=="
 ---
 
 # Il Progetto

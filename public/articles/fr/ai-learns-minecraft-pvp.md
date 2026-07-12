@@ -5,8 +5,6 @@ date: 2026-07-09
 tags:
   - minecraft
   - ai
-  - reinforcement-learning
-  - imitation-learning
   - python
 authors:
   - fox3000foxy

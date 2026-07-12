@@ -1,17 +1,16 @@
 ---
-title: ذكائي الاصطناعي التافه من أجل Nausicaa
+itle: ذكائي الاصطناعي التافه من أجل Nausicaa
 description: ذكاء اصطناعي بمعاملات استدلالية، معلمات فائقة تتغير كل 5 أدوار،
   وأوراكل (Oracle) يهرب -- غوص في دماغ لعبة استراتيجية على رقعة.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
-  - game-dev
+  - gaming
   - ai
   - javascript
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "62tpfk6fsQ4llql5o5zhxzYsolKsqnLa+bau2hYJNN8rYjTqbFK38w5L8AU1Oa6fHApYxx064eHgkXYXDk6h5g=="
+author_sig: "fXefkhsxbEpRZVs0PxzDYQuvBTTlRGspen4a5nMSmCdkg8l2mrdoAl21naXnSEfFsG4ET1GaLC9dQ9vNk8dmrQ=="
 ---
 
 ## ذكائي الاصطناعي التافه من أجل Nausicaa

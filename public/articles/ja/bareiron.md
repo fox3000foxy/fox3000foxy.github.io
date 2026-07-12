@@ -1,17 +1,16 @@
 ---
-title: Bareiron -- 1ドルのマイコンで動くMinecraftサーバー
+itle: Bareiron -- 1ドルのマイコンで動くMinecraftサーバー
 description: C言語6800行、mallocゼロ、パーリンノイズをバイリニア補間に置き換え、タイルマップ式バイオーム、すべて1ドルのチップで
-date: 2026-05-30
+date: 2026-05-30authors:
+  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "v93EzqIFPhrFFkx2xbpdzxCZEWlcBf+erxn2XmVIPCzYanZjz2iirBnWFfiT3ZWeKrH+oeU5rZ8+C+KwPfnckA=="
+author_sig: "ohS2ODqp94h65rhwnWehjDcmHhg6LRiZ0OKamJtoBoKzaB1Z/WhChHBwK0zz6dirdI2dDo7qSQOdOizs+yT9cg=="
 ---
 
 ## はじめに

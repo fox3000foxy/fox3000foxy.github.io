@@ -1,16 +1,15 @@
 ---
-title: character-factoryの構築：遺伝子を持つアバター
+itle: character-factoryの構築：遺伝子を持つアバター
 description: DiceBear上に構築したTypeScriptモジュール：国・民族に基づいた一貫性のある生成、子供を投影する小さな遺伝子エンジン、そしてカードゲームで使えるようにしたエンジニアリングの詳細。
 date: 2026-05-16
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "AYKgGpJpsFWEndQbjBwXUg9iPHFHuw9DnjCNE8jI0jHiqafetyiLrj6TJ9vZ+nltyv3968kdOc5ADrT0HvwGcA=="
+author_sig: "WzzO+2r1qr8flR5iNqQPfWbHAqEgqmM5Ed3vcwLviALV23OAUKvK37ed27L5qodhSEehGeXSg4dUhttfyRUSkQ=="
 ---
 
 # character-factoryの構築：遺伝子を持つアバター

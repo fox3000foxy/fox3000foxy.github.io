@@ -1,17 +1,16 @@
 ---
-title: "UTAU : कैसे Visual Basic 6 के एक सॉफ़्टवेयर ने सिंथेटिक आवाज़ को लोकतांत्रिक बनाया"
+itle: "UTAU : कैसे Visual Basic 6 के एक सॉफ़्टवेयर ने सिंथेटिक आवाज़ को लोकतांत्रिक बनाया"
 description: कैसे UTAU, 2008 का एक मुफ़्त VB6 सॉफ़्टवेयर, ने हर किसी को कॉन्केटेनेटिव सिंथेसिस से गायी हुई आवाज़ें बनाने दिया -- और यह आज भी क्यों मायने रखता है।
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - utau
   - vocaloid
   - music
   - synthesis
   - vb6
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hkC73/INd7DhWBcXuy9cEaxGgy2OjF+HBkXMkWOh3o3rMrLqrR1iXhJyhvzBPUGAMyARRqbYxPfEAdnoDeF8BQ=="
+author_sig: "S258WtDwQXJk4cvDDtE5A5LRO3TUBoJZpxRCfn3rIJp4s00q+46Fhwnp1RvtNeDrc/qiSuHNBcGJmIRUtu+IVw=="
 ---
 
 ## UTAU : कैसे Visual Basic 6 के एक सॉफ़्टवेयर ने सिंथेटिक आवाज़ को लोकतांत्रिक बनाया

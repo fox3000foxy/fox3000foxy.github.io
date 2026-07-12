@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법"
+itle: "Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법"
 description: "Fabric 모드로, Mojang의 유효한 RSA 서명을 다른 계정에 재사용하는 Minecraft 신뢰 시스템의 논리적 허점을 파헤친다. 코드 설명, 보안 영향, 암호학적 교훈."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - signature
-  - reverse-engineering
   - security
-authors:
-  - fox3000foxy
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KHZfWFO3JLcm8r4Phg01N7foYMO7jrM2N2ilMLbP9aN1ehsnTQZqteA+L1HQKA1IjTzxC5mtMLxKx+jr4h7EIg=="
+author_sig: "fPzt/Uyb0cxxHaFWtKbXiS+7YjkKsYB1KJ3WPlNhzMesPidiu+xmk6P0laJq8tCYMPv5D2PKd1h0AietFoGH/w=="
 ---
 
 # Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법

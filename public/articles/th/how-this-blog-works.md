@@ -1,17 +1,16 @@
 ---
-title: บล็อกนี้ทำงานอย่างไร ?
+itle: บล็อกนี้ทำงานอย่างไร ?
 description: "เบื้องหลังของบล็อก: React, Vite, Markdown, CI/CD Pipeline
   และขั้นตอนการเขียนบทความ"
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JkiayyhqcMbXmjmP+CirVax/QYQtUtHXpkNT/7FeOLwXcmQbitH5ZgPe/ZcAtzbV8mzkGwagme9kPnBQXGBrdw=="
+author_sig: "eoPfv+ipdxZUXnngLmXc8OKqSyU8Bre4HFhj8GZrQHzhA2kee+qqwJnEiBIHvkgAfu6hDWasRGcHN1JkAZPP4w=="
 ---
 
 # บล็อกนี้ทำงานอย่างไร ?

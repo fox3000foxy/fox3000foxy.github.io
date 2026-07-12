@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA"
+itle: "Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA"
 description: "Một mod Fabric khai thác lỗ hổng logic trong hệ thống tin cậy của Minecraft: chữ ký RSA hợp lệ từ Mojang nhưng được phát lại trên tài khoản sai. Giải thích code, tác động bảo mật và bài học về mật mã."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - signature
-  - reverse-engineering
   - security
-authors:
-  - fox3000foxy
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8j0mcdD/MPK2OidGyHMOGkvjw5FcVpwhr3TdENt9EhtNZXur2J48yCIrA6edJcPjSV52TEijkSE/E+tLrAldGQ=="
+author_sig: "cSsVMqapHapJP/HDQQuUIlVtgAAIstloKnctSKA2X/zpPF6lKrlYqUoUKWtwXZ7jLX2OJEbeazFTrX8qsYa6kQ=="
 ---
 
 # Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA

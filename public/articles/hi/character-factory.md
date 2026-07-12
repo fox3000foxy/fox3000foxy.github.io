@@ -1,18 +1,17 @@
 ---
-title: "character-factory का निर्माण : आनुवंशिकी के साथ अवतार"
+itle: "character-factory का निर्माण : आनुवंशिकी के साथ अवतार"
 description: "DiceBear के ऊपर एक TypeScript मॉड्यूल : देश/जातीयता के अनुसार सुसंगत
   पीढ़ी, बच्चों को प्रोजेक्ट करने के लिए एक छोटा आनुवंशिकी इंजन, और
   इंजीनियरिंग विवरण जिसने इसे कार्ड गेम में उपयोगी बनाया।"
 date: 2026-05-16
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FwSSvdhixt6ImqaoDrk3flY2GV4OAlr4e13vvYvkwQ31V4Jo77iJo57lgTPl9kThLV58EVUVDLixG+gZN728kA=="
+author_sig: "GCrATHkckOyxxhNWkaIprX3Z6RjQODtHr9v26POTAAvVc9tYqkGgPGTO9EZNKdswdK+/7EaYylYKprD7UBnrhg=="
 ---
 
 # character-factory का निर्माण : आनुवंशिक प्रणाली के साथ अवतार

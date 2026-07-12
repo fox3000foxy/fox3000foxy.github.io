@@ -1,17 +1,16 @@
 ---
-title: "UTAU: How a Visual Basic 6 app democratized synthetic singing"
+itle: "UTAU: How a Visual Basic 6 app democratized synthetic singing"
 description: How UTAU, a free VB6 app from 2008, let anyone create synthetic singing voices with concatenative synthesis -- and why it still matters today.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - utau
   - vocaloid
   - music
   - synthesis
   - vb6
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JZn81L8y5WtuZoNtxUeMl3YNwWdOqJcTtkCek2/fHhJSJbqk0hbdiOOanUtQantf2AFO7runCB8B7q3DcSNFMA=="
+author_sig: "JypFr/MQ1poZx8BOycdRonezuJFvh9ipxLxHQgXkkCsD+VRhmuOv79aKBqmrLq2uxN1u8cM8YOKJWHDl4QSAjQ=="
 ---
 
 ## UTAU: how a Visual Basic 6 app democratized synthetic singing

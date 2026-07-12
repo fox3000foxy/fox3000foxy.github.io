@@ -1,17 +1,16 @@
 ---
-title: "我构建了一个超逼真的 Express 蜜罐"
+itle: "我构建了一个超逼真的 Express 蜜罐"
 description: "328 个虚假端点，响应即时生成，头部伪装，机器人流量记录 -- 深入一个旨在欺骗扫描器的 Express 蜜罐中间件的代码。"
 date: "2026-06-10"
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - express
   - nodejs
   - security
   - honeypot
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "XrBZUgGDE0S6nofmvGBKajQsmpjn3vyrEQP/DrFQO8BnCEM1vpS3IVCRR9ZxFQYEUktv5l3v4gKsP2Fm/BHLyw=="
+author_sig: "c8O6I++A5pjUB73YSYbkpzI2x33fo2kRDhj3b91BTIH0E0IGfV55ldZ0W/f06nbTCLu9j0tNEcwfMIdSWFd7hw=="
 ---
 
 ## 想法

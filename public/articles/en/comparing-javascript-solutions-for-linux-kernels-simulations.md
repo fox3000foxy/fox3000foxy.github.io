@@ -1,15 +1,14 @@
 ---
-title: Comparing Javascript Solutions For Linux Kernels Simulation
+itle: Comparing Javascript Solutions For Linux Kernels Simulation
 description: A deep analysis of Linux environnements recreations in Javacript/Typescript.
-date: 2026-05-28
+date: 2026-05-28authors:
+  - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "rn8EgWQ1lY/jgxGkIElHoEUkJSg0SSBGffRbGm9v230jNMe6B6gtn4n/Anp8NHntHrLuSEWxULaIRdD4iS6e6w=="
+author_sig: "XFrPSfdb0sxBhI31tLXmDHxIFD3Z4SU6caJkS7C0VpVEIhpYOkJJ3b4kuFMTDrbQo9765Qi6dgCpiVNaV/WlBg=="
 ---
 
 # Every JavaScript sandbox, emulator, simulator and honeypot -- compared

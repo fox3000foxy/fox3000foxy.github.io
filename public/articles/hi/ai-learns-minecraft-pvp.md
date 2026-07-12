@@ -1,17 +1,14 @@
 ---
-title: AI Minecraft PvP सीखता है -- इमिटेशन लर्निंग, रीइन्फोर्समेंट लर्निंग और 30 वेरिएबल जो मायने रखते हैं
+itle: AI Minecraft PvP सीखता है -- इमिटेशन लर्निंग, रीइन्फोर्समेंट लर्निंग और 30 वेरिएबल जो मायने रखते हैं
 description: "1,000 द्वंद्व रिकॉर्ड किए गए, पिक्सल पर प्रशिक्षित न्यूरल नेटवर्क, 90% कीस्ट्रोक सटीकता : और बॉट सीधे दीवार में जा घुसा। फिर आए RL, करिकुलम लर्निंग और 60 घंटे का प्रशिक्षण।"
-date: 2026-07-09
+date: 2026-07-09authors:
+  - fox3000foxy
 tags:
   - minecraft
   - ai
-  - reinforcement-learning
-  - imitation-learning
   - python
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "M9najn8H+5KFuVkiE0lRXXumZFeTyEvnrPTwlzEGLW7Zo8yf3RCLT8LBhXhGnQtNPIfsu0u2vLW7m6PXLux3ZA=="
+author_sig: "eV10O8kKaWuxjbO9yCDVbK0rWO9TPvE0p/2GhoX/kPLJtDjlmVMxnCS/31FluSKsuugfLkvyOqSzbjQS0NAZHQ=="
 ---
 
 ## परिचय

@@ -1,21 +1,20 @@
 ---
-title: "قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته"
+itle: "قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته"
 description: "لعبة تقمّص أدوار (RPG) بنظام الأدوار على Discord حيث كل حركة تولّد صورة WebP فوراً: URL كحالة اللعبة، RNG حتمي، خط أنابيب WASM، 5 مستويات تخزين مؤقت، بوت بدون خادم."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "mCIHAneKDqZREGzs2IqTMF5sBK3oVsbRbrqjxCgTtgSFFIxOoQdnyW0NZIANHooSVEAbtoae5agnMl69mOgE6A=="
+author_sig: "RinlRvcbh0TKPrscX8kuXKrcexjmvEqyOloYf5jzx+zql8ftzYRKZIiMyKOGK3wlliFI4PGWh3Up21rm7lf/3w=="
 ---
 
 # قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته

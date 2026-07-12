@@ -1,15 +1,14 @@
 ---
-title: Tutkularım
+itle: Tutkularım
 description: Kod yazmak, çizim yapmak, her şeyi otomatikleştirmek, eski
   teknolojileri keşfetmek ve daha fazlası -- beni neyin yönlendirdiğine bir
   bakış.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tC2BD+0qU5KJ8EE3/Ka3LgPG2S+c4zvDs8PrNRXALZBwtviCUG3Nn1UNhX7HYFIG3H+deKAPCXIa2+FDBUOKoA=="
+author_sig: "Dz4FMnDaS6LZUkUnEVeb37WYalBYPPU+hyOWQsdn4z2kOBKPIHC801l6TUVF4HRlbDYxPoIHHO/ZRvz/zck4Fg=="
 ---
 
 # Tutkularım

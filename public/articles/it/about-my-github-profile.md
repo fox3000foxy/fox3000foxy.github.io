@@ -1,14 +1,13 @@
 ---
-title: Il Mio Profilo GitHub
+itle: Il Mio Profilo GitHub
 description: Una breve introduzione al mio profilo GitHub.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - meta
   - github
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ISffr3v+cml7/zxfCh8tWGfSMs7O2mNA8FOAREVoYA3UWfB3D+W+wJxMwnHdMq3WirK+Zni/tLeyfEVqfGbaIw=="
+author_sig: "Jr21+HwDY5yFRUboz9TJZuiZSrPk2pNzGvoNbZidPW+tQMqLLsoguLTXpT2gjp2HbIV/nvYblVRmDyD50/kNsw=="
 ---
 
 # Il Mio Profilo GitHub

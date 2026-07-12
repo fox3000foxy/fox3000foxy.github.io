@@ -1,21 +1,20 @@
 ---
-title: Chạy thư viện Node.js trong trình duyệt không cần Wasm --
+itle: Chạy thư viện Node.js trong trình duyệt không cần Wasm --
   các polyfill của typescript-virtual-container
 description: Cách Fortune tự tay tái hiện node:fs, node:crypto và hàng tá
   module Node trong 640 dòng JavaScript để container chạy trong trình duyệt
   không cần Wasm.
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4vvNoChVRkCVxmHVaWJAKusgYqbdffaKnjy7yzZ0roKbCnPkn6mka3FfsItyrnbVCFZESdxeaCn1d2oVRv/gEg=="
+author_sig: "15AXlsovGPsMUIgPeg3W7lq2Wlupxd2T2/el90rwsLKYMibc233H+w0zCDzK5a0J6+eeq5b/GkpJCcvvfSCLvA=="
 ---
 
 # Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container

@@ -1,17 +1,16 @@
 ---
-title: SSH commit imzalama scripti açıklaması
+itle: SSH commit imzalama scripti açıklaması
 description: SSH commit imzalama yardımcısının adım adım açıklaması ve neden şık
   commit'ler istediğim.
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - git
   - security
   - shell
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dhLJF9TN+ggN16tpTXWi9LC7hziltCNTdFD6rlejPT81A2DuAtDPhWn3lBe8AOWgXzi/wJT9poJM6M0zatBmmw=="
+author_sig: "P2JXJzCERExBDQSkKVU9bh7rrfwzl2a24HfTyn699X+QBN0zoGIm/CgGmi2eRiniaY7/lNCVmy1Mf4b2n1vTqw=="
 ---
 
 # SSH commit imzalama scripti açıklaması

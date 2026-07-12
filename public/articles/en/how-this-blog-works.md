@@ -1,17 +1,16 @@
 ---
-title: How Does This Blog Work?
+itle: How Does This Blog Work?
 description: "A deep dive into this blog's internals: React, Vite, Markdown, the
   CI/CD pipeline, and the article-writing workflow."
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "k6uFSgVtqPec/lQJirjXUMkN3LPnL/7v5gX8B+6MSseL5JFsYPofAfmm4lEsoDiLDiPGaTbiIWRXD4Cwf/0LDg=="
+author_sig: "aTJea+6uRFV0qGXkP4LIEuqhU+IvartPEbBxK0hJJYbSNMab6DKIDbIuVEqmKmehhth1QWX4Iq/7pnokv0ZfsA=="
 ---
 
 # How Does This Blog Work?

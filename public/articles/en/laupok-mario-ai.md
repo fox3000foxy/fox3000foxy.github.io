@@ -1,18 +1,14 @@
 ---
-title: "Laupok built an AI that plays Super Mario World by itself -- how it works"
-date: 2026-07-11
+itle: "Laupok built an AI that plays Super Mario World by itself -- how it works"
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - artificial-intelligence
+  - ai
   - lua
-  - genetic-algorithm
-  - neural-network
-  - neat
   - emulation
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Pc/5QfjqisACLBkIXhrgJQ1MENjWHs3GmtQsPydmPA4qYYOASvrU5L6VwjrM0VQX2vwwdEnczMdfV9XuXaAU0g=="
+author_sig: "KzpLZDBVsB9jDicAIir/rer6GZqgNutdQfr2+5jOH7aYmdIyYSvbKqPEVpF+/h0lBNUgOV0ropXGehnIWshD/Q=="
 ---
 
 # Laupok built an AI that plays Super Mario World by itself -- how it works

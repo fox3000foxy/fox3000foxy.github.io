@@ -1,14 +1,13 @@
 ---
-title: 新しいプロジェクト
+itle: 新しいプロジェクト
 description: 新しいWebサイトの開始と開発のプロセスについて。
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - meta
   - webdev
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "R5gT9qxJpnLqXruZn2XjiL/ajPa0g5D4BrC8xouBdBJ5DvsE57kY3hlktWVfArLwoTsnsLhcju5NgF2ajDvCMw=="
+author_sig: "MZsUjhD40Jko4SvR0Gd5U6+s4mJhEjIRD61Yp5UC6D+uRi5oW0/JKUkbaR86dTelopE2UAU13aXuFm8NepPKgA=="
 ---
 
 # 新しいプロジェクト

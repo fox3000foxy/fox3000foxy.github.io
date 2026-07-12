@@ -1,16 +1,15 @@
 ---
-title: SSH हस्ताक्षर स्क्रिप्ट समझाया गया
+itle: SSH हस्ताक्षर स्क्रिप्ट समझाया गया
 description: SSH कमिट हस्ताक्षर हेल्पर का विश्लेषण और मैं स्टाइलिश कमिट क्यों चाहता था।
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - git
   - security
   - shell
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qK2CroBjUAWNYAuYB1rR83TflyGoqpo/+Lvlo7YiY7pvsY8eALkvyhrayjvNt0gZmQX4p+WbJdD4DdmcUSGAlw=="
+author_sig: "jRizfKS9PbN2LpGM56yQCgn1nSUmLr0VKGdIE5ilevAqP+JBUo7LuTOO++MaEsaDd8ivVxHJQS3ND1Hk4OR/kQ=="
 ---
 
 # SSH कमिट हस्ताक्षर स्क्रिप्ट -- व्याख्या

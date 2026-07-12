@@ -1,18 +1,13 @@
 ---
-title: "Super Mario Bros.: формат уровней, указатели и 256 глитч-миров"
+itle: "Super Mario Bros.: формат уровней, указатели и 256 глитч-миров"
 description: "Как 128 уровней × 4 типа зон влезают в 40КБ ROM, почему существует Minus World, и как матч в теннис на NES может загружать глитч-миры."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
-  - nintendo
-  - nes
-  - "6502"
-  - mario
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FJVQ6B0ODpcK8cIrNyyAGQ99qRdWMWA/Ptj9ZE2RpHXXhORnESktEYM+hfVK7BTTkNk0KEMo6EpZ08Wg5u5UmA=="
+author_sig: "Y5h/uu/g3jGMR9uVDgu9MKmznwer43q5ePfnJ7ZLCDe27m8iSzFkfYwuSiMOcWn9RkqXdMZzLkhD2PHBkRgUWA=="
 ---
 
 ## Введение

@@ -5,7 +5,7 @@ description: Une IA à coefficients heuristiques, des hyper-paramètres qui
   d'un jeu de plateau stratégique.
 date: 2026-05-29
 tags:
-  - game-dev
+  - gaming
   - ai
   - javascript
   - open-source

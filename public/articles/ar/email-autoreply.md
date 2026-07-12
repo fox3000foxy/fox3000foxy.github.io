@@ -1,19 +1,18 @@
 ---
-title: استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions
+itle: استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions
 description: كيف برمجت ردّادًا آليًا للبريد الإلكتروني بالذكاء الاصطناعي يعمل على GitHub
   Actions بـ 0€/شهر -- باستخدام وسم git كقاعدة بيانات و
   التجميع المسبق في وسم تشغيل.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "XeC8LJeR/JypNalqfayPKNAVSb/pmkdrBqdnYglUOZZyk087O7zS/joYfqf0Fd7mF276WpN9F818vimvj9Jx7w=="
+author_sig: "IOK3LO2C5t8A4K7MZp2YJwNIdvd2w6SmuKKBiQl++/pAImytiimg7dNDy/dVzeLivtXZWh1aC1pEkLT0BlwA7w=="
 ---
 
 # استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions

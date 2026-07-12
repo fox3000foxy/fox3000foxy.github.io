@@ -1,20 +1,19 @@
 ---
-title: Я использовал git как базу данных, чтобы запустить бота бесплатно на
+itle: Я использовал git как базу данных, чтобы запустить бота бесплатно на
   GitHub Actions
 description: Как я написал автоответчик на ИИ, который работает на GitHub
   Actions за 0€/месяц -- используя git-теги как базу данных и предварительно
   скомпилированные снимки в теге runtime.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fYKs8B0f0z3RZkMiSyBYHk0Q14jyYAE4U3AqA8iOQzM04kltp6vnGLIQiKrFvNxwJVrIS1HH5OoAcFImf+O1rg=="
+author_sig: "1d6qyKvW+kLfwShYHORXSRDcb2EGm108iPZyg+fXjVHim3PGNd/b4d3CfqQltLb1bECBk9cX5xt08GlaRu8H7w=="
 ---
 
 # Я использую git как базу данных, чтобы крутить бота на GitHub Actions бесплатно

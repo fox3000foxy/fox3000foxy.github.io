@@ -1,14 +1,13 @@
 ---
-title: 내 GitHub 프로필 소개
+itle: 내 GitHub 프로필 소개
 description: 내 GitHub 프로필에 대한 간단한 소개
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - meta
   - github
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+pcGualEWw6Raz/Xi13hDR9vWTYyV8QxoNWQw9kxNa4eqc4GfiaswBRYKJaAnI1Uh6kCrtAHRZYOhnoXphysjw=="
+author_sig: "SWrAOdSzjBIqSqvzq0dJXYZXIcXh5my45FUyUqRF0hgbBK3NiER01B47s72ubTSrUmKJhYaIZNsXzY7JzHytSA=="
 ---
 
 # 내 GitHub 프로필

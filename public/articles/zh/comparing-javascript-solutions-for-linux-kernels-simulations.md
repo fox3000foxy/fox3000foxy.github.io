@@ -1,15 +1,14 @@
 ---
-title: Linux 内核模拟的 JavaScript 方案横向对比
+itle: Linux 内核模拟的 JavaScript 方案横向对比
 description: 深入分析 JavaScript/TypeScript 中 Linux 环境模拟的各种实现。
-date: 2026-05-28
+date: 2026-05-28authors:
+  - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4o0PExSMpYR6U8Q0oninNdarY7IGWrAkBPOVME8jLDRL3HNUYSugZbjxuqydg9HEet4Sw+n1+CgQCOmwOkM11Q=="
+author_sig: "yrAfvR0Npnuh9Z04apmOw03fHoLTlZD1p2O+7rK1jHBpp7qXdG2Hhfu/rxgYrfrT0yh+Qv6t6tJbuKRV2xfiLQ=="
 ---
 
 # 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比

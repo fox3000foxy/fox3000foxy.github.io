@@ -1,16 +1,15 @@
 ---
-title: Automatizando uma Farm do Microsoft Rewards
+itle: Automatizando uma Farm do Microsoft Rewards
 description: Como eu codei um bot para farmar pontos do Microsoft Rewards em grande
   escala -- e por que a Microsoft reforçou suas defesas desde então.
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Nr3OS/zplYfYDTg1c8vnwqPAUHwJ5sD6//Zn4nIC2xWnbdshopBjKCqsEZjS1WPfBjYMvUU5XtrYNZ2+NtV9GQ=="
+author_sig: "FmQ6RzbZwEAuF90ICyQTRCeXgMRDcLbvEzZROJg2AlV1E/sI3316ng2bJbaSnNrZKjJviV6Jexkz2DZBNZ+IzQ=="
 ---
 
 > **Nota (2026):** Este projeto não é mais mantido. A Microsoft reforçou consideravelmente sua detecção anti-bot -- o que funcionava na época não funciona mais hoje. O código e a abordagem descritos abaixo são mantidos apenas para fins de arquivo e demonstração.

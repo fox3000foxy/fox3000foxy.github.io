@@ -1,16 +1,15 @@
 ---
-title: Bagaimana Cara Kerja Blog Ini?
+itle: Bagaimana Cara Kerja Blog Ini?
 description: "Di balik layar blog: React, Vite, Markdown, pipeline CI/CD dan alur penulisan."
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "f93TV+A9UVFssGhUITHGrlnK+J7FFVuZ8kK/t4IKij1dOny1yjFKU/QxVVd+yLomowm80I8kkSx2MY8DN1v/+g=="
+author_sig: "y8Ajhm5DEuiqUWfy2hxXwzNUzRHGxKhYs4hygONIYhCDlxC8yO/ekj+/ZlzLRLSLd7r2IleM8qJBVqkedFGuKw=="
 ---
 
 # Bagaimana Cara Kerja Blog Ini?

@@ -1,20 +1,19 @@
 ---
-title: GitHub Actions'ta ücretsiz bot çalıştırmak için git'i veritabanı olarak
+itle: GitHub Actions'ta ücretsiz bot çalıştırmak için git'i veritabanı olarak
   kullandım
 description: GitHub Actions'ta ayda 0€'ya çalışan bir yapay zeka e-posta
   otomatik cevaplayıcısını nasıl kodladım -- git tag'lerini veritabanı olarak ve
   önceden derlenmiş runtime anlık görüntülerini kullanarak.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "oq5raaebn7cpkPrYVL4Wb28X7u1ka2+oH/EnYUepqCwGdREhIjuham8DuGRCkfmmm7ODZv/n1pSCQDrN+N7YNQ=="
+author_sig: "wGVwy+qnifi9GM7XE3/2GgzzWVg9riiU+W0zJcrHkXzGHQl/j8VbWnG4cslGwVj1uc211qkjz5c4ORGCtVXeXA=="
 ---
 
 # Git'i veritabanı olarak kullandım ve GitHub Actions'da bedavaya bir bot çalıştırdım

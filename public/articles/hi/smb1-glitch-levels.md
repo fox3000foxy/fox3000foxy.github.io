@@ -1,18 +1,13 @@
 ---
-title: "Super Mario Bros. : लेवल फ़ॉर्मेट, पॉइंटर्स और 256 ग्लिच वर्ल्ड्स"
+itle: "Super Mario Bros. : लेवल फ़ॉर्मेट, पॉइंटर्स और 256 ग्लिच वर्ल्ड्स"
 description: "128 लेवल्स × 4 ज़ोन टाइप्स 40KB ROM में कैसे समाते हैं, Minus World क्यों मौजूद है, और NES Tennis के एक मैच से ग्लिच वर्ल्ड्स कैसे लोड होते हैं।"
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
-  - nintendo
-  - nes
-  - "6502"
-  - mario
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/6PkVEDeURqtZ/BVjfgEy/uzhQEgo79jWWRJ3nLHA/zvmCQCfg9DDDcym+Or/MqrN0jWT+xhxnvWrFA73Ku02w=="
+author_sig: "v/lmndL5CNfvNxBPO2kGd5xHcPNVmDrsYA1FqzIzo3xr9GGFeoPFu+a/yDAzKcUwh+SI69Ia5LykKdSOanrVbQ=="
 ---
 
 ## परिचय

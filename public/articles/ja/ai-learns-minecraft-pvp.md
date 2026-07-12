@@ -1,17 +1,14 @@
 ---
-title: AIがMinecraft PvPを学習する -- 模倣学習、強化学習、そして重要だった30の変数
+itle: AIがMinecraft PvPを学習する -- 模倣学習、強化学習、そして重要だった30の変数
 description: 記録された1,000回の決闘、ピクセルから学習するニューラルネットワーク、90%のキーストローク精度----そしてボットは壁に向かって一直線。その後、RL、カリキュラム学習、60時間のトレーニングが始まった。
-date: 2026-07-09
+date: 2026-07-09authors:
+  - fox3000foxy
 tags:
   - minecraft
   - ai
-  - reinforcement-learning
-  - imitation-learning
   - python
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "B+iFAB2GFgURH2GHZseCrTRJR6LwcvMiulQMOF6+43dKTvDgmB5HunrSngAc0NQ5/TRS5wEyE4iBO9UKxDMQ7g=="
+author_sig: "eiMryYeaemqBugyMPkPkkuFhOH/hGL7Ed+/9XgjkwKhdq6+HGP4H1+0BvL+8SS33llSQqv8qRSCJ6+rOUUilbQ=="
 ---
 
 ## はじめに

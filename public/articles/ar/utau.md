@@ -1,17 +1,16 @@
 ---
-title: "UTAU : كيف أضفى برنامج بلغة Visual Basic 6 الطابع الديمقراطي على الصوت الاصطناعي"
+itle: "UTAU : كيف أضفى برنامج بلغة Visual Basic 6 الطابع الديمقراطي على الصوت الاصطناعي"
 description: كيف سمح UTAU، وهو برنامج مجاني بلغة VB6 من عام 2008، لأي شخص بإنشاء أصوات غنائية عبر التركيب التجميعي -- ولماذا لا يزال مهمًا حتى اليوم.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - utau
   - vocaloid
   - music
   - synthesis
   - vb6
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1BjivPWjT4zsST8JJf1voMQgaJHbjgYGLvA6/8LCYEpqMRFVoMRrkmIM+XXkpSuOsUyWkRUTubPu9jtAweU/AQ=="
+author_sig: "chK0MhL1dtpmHrbtC1djKulIcy1mGsEHeqLom0Cg4ZJ3pki11R9BiVjOVuO/qWv7JbmF2qrPnRW3XmmkuEKudA=="
 ---
 
 ## UTAU : كيف أضفى برنامج بلغة Visual Basic 6 الطابع الديمقراطي على الصوت الاصطناعي

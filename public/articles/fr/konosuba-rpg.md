@@ -9,7 +9,7 @@ tags:
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming

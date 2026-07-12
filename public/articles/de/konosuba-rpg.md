@@ -1,23 +1,22 @@
 ---
-title: "Ich habe ein Wochenende damit verbracht, den Code von konosuba-rpg zu lesen, und das hier habe ich gefunden"
+itle: "Ich habe ein Wochenende damit verbracht, den Code von konosuba-rpg zu lesen, und das hier habe ich gefunden"
 description: "Ein Discord-Runden-RPG, bei dem jede Aktion ein WebP-Bild auf
   Anfrage erzeugt: URL als Spielzustand, deterministischer RNG, WASM-Pipeline,
   5-stufiger Cache, serverloser Bot."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "vCf1oV7g4H2wgd9agK8w0iFz7rkB/uLk20jGTqV+ySfaw0kO/uWSL+U5+Q//o3eR2vW6GQpSXi8leWwUEi7DlQ=="
+author_sig: "7aZCzhtf9LJulmTzxb3nSZM3Q5tioxfulFD5fw8O+j1JfsAKjxh/bx92PQ2yZ57YvqkgpgEflVdX8AScvSz5HA=="
 ---
 
 # Ich habe ein Wochenende damit verbracht, den Code von konosuba-rpg zu lesen, und das hier habe ich gefunden

@@ -1,21 +1,20 @@
 ---
-title: "我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切"
+itle: "我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切"
 description: "一个 Discord 回合制 RPG，每次操作都实时生成 WebP 图片：URL 即游戏状态、确定性 RNG、WASM 管线、5 级缓存、无服务器 bot。"
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "P13XLASFglwr0iZfjTAroS8ZDvGM6niuOuUgKehWlMUlBPjntFWDbFKVvDyQP06Q9GSY9DzakbcfNfUt0ficCQ=="
+author_sig: "i5P0uFxbyvShabJSUfvQZO7wcpnAqlSUtD2K48oU5dQPCupOuIJFjx8eiZueXgCn7LPejQN26xLMnNjRr8uaWw=="
 ---
 
 # 我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切

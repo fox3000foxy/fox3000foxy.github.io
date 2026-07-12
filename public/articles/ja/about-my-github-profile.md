@@ -1,14 +1,13 @@
 ---
-title: 私のGitHubプロフィール
+itle: 私のGitHubプロフィール
 description: 私のGitHubプロフィールの簡単な紹介。
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - meta
   - github
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7/F6ebySd4FvWQAB8ckXRWaMwthRig5pgXslRnVFDBWUHCNVddJdcYaGsjz9ycm7H8caXLx7wLmunknxC8RQgw=="
+author_sig: "IXRT3/tDj2aeOP8Ztqzx38PUNTRKozWV5mWu7Ooa15qoaYtkQoGTS5LYnjxt08qiRR+uOfuz1Y4uW904nOjbrg=="
 ---
 
 # 私のGitHubプロフィール

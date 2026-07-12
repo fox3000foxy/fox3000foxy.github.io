@@ -1,21 +1,20 @@
 ---
-title: Menjalankan Pustaka Node.js di Browser Tanpa Wasm --
+itle: Menjalankan Pustaka Node.js di Browser Tanpa Wasm --
   polyfill typescript-virtual-container
 description: Bagaimana Fortune mengimplementasikan ulang node:fs, node:crypto, dan
   belasan modul Node secara manual dalam 640 baris JavaScript agar kontainer
   berjalan di browser tanpa Wasm.
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "c66cej96LkiNRWN/yWzSkfI0WsrpyLXyzNNGmmmRJjTindijKbsYc4YrBxbeX/9yPzc6nCkBUPligch3h9g9Rg=="
+author_sig: "nPW8rGAvPIJpwXu8q9Ivb3780U1p3Rq0QBnGAT+hAfGvYHsG3I5bNzBWmXIen3W0LGQm+cGd5DyKZOTBqDpaHQ=="
 ---
 
 # Menjalankan Pustaka Node.js di Browser Tanpa Wasm -- polyfill typescript-virtual-container

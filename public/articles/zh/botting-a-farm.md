@@ -1,15 +1,14 @@
 ---
-title: 给 Microsoft Rewards 刷分农场写个机器人
+itle: 给 Microsoft Rewards 刷分农场写个机器人
 description: 我如何编写了一个机器人来规模化刷 Microsoft Rewards 积分----以及微软的反机器人检测后来是如何追上来的。
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "XQeZb3k6AQnDoo0/YciNh5zuqatCNRztZakvvlS2Kc1axJi1Y+T2se1lW5rG/hLYtf/5EQY1bKZ+vQOEDwNlXA=="
+author_sig: "fBakcjhsCngZg2/lycNdgIOJYIOY/rxnGWs7QDOYSxsO6DTVLSs9qPGOfAxADmUZC8jXluC+mu0D6xeKKhGAXA=="
 ---
 
 > **备注（2026 年）：** 该项目已不再维护。微软显著加强了反机器人检测----当年有效的方法今天已经行不通了。下面描述的代码和方法仅用于存档/教育目的。

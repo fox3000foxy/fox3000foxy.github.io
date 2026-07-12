@@ -1,18 +1,17 @@
 ---
-title: Bareiron -- máy chủ Minecraft chạy trên vi điều khiển giá 1$
+itle: Bareiron -- máy chủ Minecraft chạy trên vi điều khiển giá 1$
 description: 6800 dòng C, zero malloc, Perlin noise được thay thế bằng bilinear
   interpolation, biome dạng tile map, và tất cả trên một con chip 1$.
-date: 2026-05-30
+date: 2026-05-30authors:
+  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "F+U1QwjV6br9xNaJwTtHc2UspfAsAXVtAyg/9eWt3K3sPUEzht6kocIopumeHmABnfs15GlFQnCVxyKcY4vj4Q=="
+author_sig: "7CgBN9SDGoR/zcyEFF/bB2z8DmGeMdHohP6PmyRCmJt2Cm0XNAqpELAjpBSwlaxrD3p6xxXDG2Rlz6/lLqC8Vg=="
 ---
 
 ## Giới thiệu

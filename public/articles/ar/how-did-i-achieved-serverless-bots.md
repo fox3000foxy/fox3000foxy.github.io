@@ -1,18 +1,17 @@
 ---
-title: "بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers"
+itle: "بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers"
 description: كيف استبدلت بوت Discord كان يكلفني 50€/شهر بصفر يورو -- نقاط التفاعل،
   Hono، Workers، عرض الصور في الوقت الفعلي، ولعبة كاملة بدون WebSocket.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6YJO2DAVLuawlfBqRessJ3tpKmug2e1EqDkH4CkSBjd+TmpDoGOQJ3qmuvSxzrYCb5gleHiAFl9FGsgw+6H2Sw=="
+author_sig: "myP+Axk6wPKYgCjI/4bvjwnTJw222nOXvJbCxzNAOuXQ0GoIKgXa7HuL6/hc9hVPJmcdlCDa2RPPjuvxOioyZA=="
 ---
 
 ## بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers = 💸 صفر

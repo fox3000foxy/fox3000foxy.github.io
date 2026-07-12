@@ -1,18 +1,17 @@
 ---
-title: Bareiron -- 1$ 마이크로컨트롤러에서 돌아가는 마인크래프트 서버
+itle: Bareiron -- 1$ 마이크로컨트롤러에서 돌아가는 마인크래프트 서버
 description: C 언어 6800줄, malloc 제로, Perlin noise 대신 bilinear interpolation,
   타일 맵 바이옴, 그리고 이 모든 게 1$ 칩 위에서.
-date: 2026-05-30
+date: 2026-05-30authors:
+  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UBq+IUTV51JowPw5eVyvjdIPmfJ1pVOQgNNBmLS03KhKXZI8qsn/GYU4HkOtJ3YeSS87gWN2VxFQddz4dEQHBw=="
+author_sig: "euidJ7Y0p5UxIE/AtNOXYYGOUegEvT5Vug4/3edxRbNZx956/Oxi3pDRgR2uT7U5yi6Si8qjnOYflpGI0U7Z7w=="
 ---
 
 ## 서론
