@@ -1,5 +1,5 @@
 ---
-itle: My Passions
+title: My Passions
 description: Coding, drawing, automating things, discovering old tech, and more
   -- a look into what drives me.
 date: 2026-03-08authors:

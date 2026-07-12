@@ -1,5 +1,5 @@
 ---
-itle: Tutkularım
+title: Tutkularım
 description: Kod yazmak, çizim yapmak, her şeyi otomatikleştirmek, eski
   teknolojileri keşfetmek ve daha fazlası -- beni neyin yönlendirdiğine bir
   bakış.

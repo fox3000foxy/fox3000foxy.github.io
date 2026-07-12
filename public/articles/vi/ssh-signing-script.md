@@ -1,5 +1,5 @@
 ---
-itle: Script ký commit SSH được giải thích
+title: Script ký commit SSH được giải thích
 description: Phân tích helper ký commit SSH và tại sao tôi muốn commit có phong cách.
 date: 2026-03-08
 aiGenerated: trueauthors:

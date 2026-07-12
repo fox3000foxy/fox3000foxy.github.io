@@ -1,5 +1,5 @@
 ---
-itle: Script de assinatura SSH explicado
+title: Script de assinatura SSH explicado
 description: Detalhamento do helper de assinatura de commits SSH e por que eu
   queria commits estilosos.
 date: 2026-03-08

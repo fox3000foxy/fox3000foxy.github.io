@@ -1,5 +1,5 @@
 ---
-itle: Mis Pasiones
+title: Mis Pasiones
 description: Programar, dibujar, automatizar cosas, descubrir tecnología antigua
   y más -- una mirada a lo que me mueve.
 date: 2026-03-08authors:

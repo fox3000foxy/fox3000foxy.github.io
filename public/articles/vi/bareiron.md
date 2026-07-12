@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- máy chủ Minecraft chạy trên vi điều khiển giá 1$
+title: Bareiron -- máy chủ Minecraft chạy trên vi điều khiển giá 1$
 description: 6800 dòng C, zero malloc, Perlin noise được thay thế bằng bilinear
   interpolation, biome dạng tile map, và tất cả trên một con chip 1$.
 date: 2026-05-30authors:

@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.：レベルフォーマット、ポインタ、そして256のグリッチワールド"
+title: "Super Mario Bros.：レベルフォーマット、ポインタ、そして256のグリッチワールド"
 description: "128レベル × 4タイプのエリアがどうやって40KBのROMに収まるのか、Minus Worldがなぜ存在するのか、そしてNESテニスのカートリッジ交換でグリッチワールドをロードできる仕組み。"
 date: 2026-06-10authors:
   - fox3000foxy

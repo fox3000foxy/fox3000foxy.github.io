@@ -1,5 +1,5 @@
 ---
-itle: Logic pathfinding Minecraft và các ứng dụng
+title: Logic pathfinding Minecraft và các ứng dụng
 description: Cách thuật toán A*, điểm phạt khối và POI cho phép điều khiển, dự đoán và khai thác
   di chuyển của mob -- từ redstone không dây đến các trang trại tối ưu.
 date: 2026-05-29authors:

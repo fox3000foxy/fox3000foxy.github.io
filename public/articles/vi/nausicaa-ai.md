@@ -1,5 +1,5 @@
 ---
-itle: AI Nhảm Nhí Của Tôi Cho Nausicaa
+title: AI Nhảm Nhí Của Tôi Cho Nausicaa
 description: Một AI với hệ số heuristic, các siêu tham số thay đổi mỗi 5 lượt,
   và một Oracle chạy trốn -- đào sâu vào bộ não của một game chiến thuật bàn cờ.
 date: 2026-05-29authors:

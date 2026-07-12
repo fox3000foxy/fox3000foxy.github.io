@@ -1,5 +1,5 @@
 ---
-itle: 100%サーバーレスDiscordボット：Hono + Cloudflare Workers
+title: 100%サーバーレスDiscordボット：Hono + Cloudflare Workers
 description: 月50€かかってたDiscordボットをゼロユーロにした方法 --
   インタラクションエンドポイント、Hono、Workers、リアルタイム画像レンダリング、WebSocketなしの完全なゲーム。
 date: 2026-05-29authors:

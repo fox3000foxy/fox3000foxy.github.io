@@ -1,5 +1,5 @@
 ---
-itle: "character-factory 만들기: 유전학을 가진 아바타"
+title: "character-factory 만들기: 유전학을 가진 아바타"
 description: "DiceBear 기반 TypeScript 모듈: 국가/민족별 일관된 생성, 자식 투영을 위한 작은 유전학 엔진, 카드
   게임에서 사용할 수 있게 만든 엔지니어링 세부사항"
 date: 2026-05-16

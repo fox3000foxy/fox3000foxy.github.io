@@ -1,5 +1,5 @@
 ---
-itle: อธิบายสคริปต์เซ็นชื่อ SSH
+title: อธิบายสคริปต์เซ็นชื่อ SSH
 description: เจาะลึก helper สำหรับเซ็นชื่อคอมมิต SSH และว่าทำไมฉันถึงอยากได้คอมมิตที่ดูเท่
 date: 2026-03-08
 aiGenerated: trueauthors:

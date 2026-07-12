@@ -1,5 +1,5 @@
 ---
-itle: Eine Microsoft-Rewards-Farm boten
+title: Eine Microsoft-Rewards-Farm boten
 description: Wie ich einen Bot programmiert habe, der Microsoft-Rewards-Punkte
   in großem Stil farmt – und warum Microsofts Anti-Bot-Erkennung inzwischen
   nachgezogen hat.

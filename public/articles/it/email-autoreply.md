@@ -1,5 +1,5 @@
 ---
-itle: Ho usato git come database per far girare un bot gratis su GitHub Actions
+title: Ho usato git come database per far girare un bot gratis su GitHub Actions
 description: Come ho codificato un auto-risponditore email con IA che gira su
   GitHub Actions per 0€/mese -- usando tag git come database e snapshot
   pre-compilati in un tag runtime.

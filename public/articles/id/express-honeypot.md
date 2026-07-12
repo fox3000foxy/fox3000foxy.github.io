@@ -1,5 +1,5 @@
 ---
-itle: "Saya membangun honeypot Express yang sangat realistis"
+title: "Saya membangun honeypot Express yang sangat realistis"
 description: "328 endpoint palsu dengan respons yang dihasilkan saat itu juga, spoofing header, pencatatan lalu lintas bot -- menyelami kode middleware honeypot Express yang dirancang untuk menipu pemindai."
 date: "2026-06-10"
 aiGenerated: trueauthors:

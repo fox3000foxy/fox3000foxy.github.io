@@ -1,5 +1,5 @@
 ---
-itle: AI Learns Minecraft PvP -- Imitation Learning, Reinforcement Learning, and the 30 variables that mattered
+title: AI Learns Minecraft PvP -- Imitation Learning, Reinforcement Learning, and the 30 variables that mattered
 description: "1,000 duels recorded, neural network trained on pixels, 90% keystroke accuracy : and the bot beelined into a wall. Then came RL, curriculum learning, and 60 hours of training."
 date: 2026-07-09authors:
   - fox3000foxy

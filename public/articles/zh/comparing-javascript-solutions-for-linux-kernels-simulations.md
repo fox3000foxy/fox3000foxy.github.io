@@ -1,5 +1,5 @@
 ---
-itle: Linux 内核模拟的 JavaScript 方案横向对比
+title: Linux 内核模拟的 JavaScript 方案横向对比
 description: 深入分析 JavaScript/TypeScript 中 Linux 环境模拟的各种实现。
 date: 2026-05-28authors:
   - fox3000foxy

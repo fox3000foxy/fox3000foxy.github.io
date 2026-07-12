@@ -1,5 +1,5 @@
 ---
-itle: SSH commit imzalama scripti açıklaması
+title: SSH commit imzalama scripti açıklaması
 description: SSH commit imzalama yardımcısının adım adım açıklaması ve neden şık
   commit'ler istediğim.
 date: 2026-03-08

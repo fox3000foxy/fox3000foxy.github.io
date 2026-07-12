@@ -1,5 +1,5 @@
 ---
-itle: "Ich habe einen ultra-realistischen Express-Honeypot gebaut"
+title: "Ich habe einen ultra-realistischen Express-Honeypot gebaut"
 description: "328 gefälschte Endpoints mit spontan generierten Antworten, Header-Spoofing, Bot-Traffic-Aufzeichnung -- ein tiefer Einblick in eine Express-Honeypot-Middleware, die Scanner täuschen soll."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="

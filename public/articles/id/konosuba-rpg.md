@@ -1,5 +1,5 @@
 ---
-itle: "Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan"
+title: "Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan"
 description: "RPG giliran Discord di mana setiap tindakan menghasilkan gambar WebP
   secara instan: URL sebagai status permainan, RNG deterministik, pipeline WASM, cache 5
   level, bot serverless."

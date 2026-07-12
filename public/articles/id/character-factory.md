@@ -1,5 +1,5 @@
 ---
-itle: "Membangun character-factory: avatar dengan genetika"
+title: "Membangun character-factory: avatar dengan genetika"
 description: "Modul TypeScript di atas DiceBear: generasi konsisten per
   negara/etnis, mesin genetika kecil untuk memproyeksikan anak, dan
   detail rekayasa yang membuatnya dapat digunakan dalam permainan kartu."

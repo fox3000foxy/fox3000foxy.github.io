@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- a Minecraft server running on a $1 microcontroller
+title: Bareiron -- a Minecraft server running on a $1 microcontroller
 description: 6800 lines of C, zero malloc, Perlin noise replaced by bilinear
   interpolation, biomes as a tile map -- here's the actual source code.
 date: 2026-05-30authors:

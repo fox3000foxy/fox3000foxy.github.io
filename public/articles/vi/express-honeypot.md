@@ -1,5 +1,5 @@
 ---
-itle: "Tôi đã xây dựng một honeypot Express siêu thực"
+title: "Tôi đã xây dựng một honeypot Express siêu thực"
 description: "328 điểm cuối giả với phản hồi được tạo ngay lập tức, giả mạo tiêu đề, ghi lại lưu lượng bot -- đi sâu vào mã của một middleware honeypot Express được thiết kế để đánh lừa các trình quét."
 date: "2026-06-10"
 aiGenerated: trueauthors:

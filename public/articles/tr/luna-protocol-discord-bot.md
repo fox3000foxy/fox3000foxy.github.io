@@ -1,5 +1,5 @@
 ---
-itle: "Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım"
+title: "Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım"
 description: "Luna Protocol, yerel bir LLM ile çalışan, tamamen otonom bir Discord botudur. Uyuma, yazım hatası yapma, tereddüt etme, unutma, konu yorgunluğu çekme ve kendiliğinden mesaj gönderme gibi doğal konuşma yeteneklerine sahiptir."
 date: 2026-07-11authors:
   - fox3000foxy

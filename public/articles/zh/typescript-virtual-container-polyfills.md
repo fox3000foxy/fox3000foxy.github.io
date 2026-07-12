@@ -1,5 +1,5 @@
 ---
-itle: 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
+title: 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
 description: Fortune 如何用 640 行 JavaScript 手动重新实现了 node:fs、node:crypto 等一打 Node
   模块，让容器在浏览器中无需 Wasm 即可运行。
 date: 2026-05-29

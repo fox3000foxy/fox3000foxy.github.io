@@ -1,5 +1,5 @@
 ---
-itle: "Construindo character-factory: avatares com genética"
+title: "Construindo character-factory: avatares com genética"
 description: "Um módulo TypeScript sobre o DiceBear: geração consistente
   por país/etnia, um pequeno motor de genética para projetar crianças, e
   os detalhes de engenharia que o tornaram utilizável em um jogo de cartas."

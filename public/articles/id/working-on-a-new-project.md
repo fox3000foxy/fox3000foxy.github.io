@@ -1,5 +1,5 @@
 ---
-itle: Bekerja pada Proyek Baru
+title: Bekerja pada Proyek Baru
 description: Gambaran umum tentang proses memulai dan mengembangkan situs web baru.
 date: 2026-03-13authors:
   - fox3000foxy

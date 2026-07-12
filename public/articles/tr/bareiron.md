@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- 1$'lık bir mikrodenetleyicide çalışan Minecraft sunucusu
+title: Bareiron -- 1$'lık bir mikrodenetleyicide çalışan Minecraft sunucusu
 description: 6800 satır C, sıfır malloc, bilinear interpolasyonla değiştirilmiş
   Perlin gürültüsü, tile map'te biyomlar ve bunların hepsi 1$'lık bir çipte.
 date: 2026-05-30authors:

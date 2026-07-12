@@ -1,5 +1,5 @@
 ---
-itle: GitHub Actions'ta ücretsiz bot çalıştırmak için git'i veritabanı olarak
+title: GitHub Actions'ta ücretsiz bot çalıştırmak için git'i veritabanı olarak
   kullandım
 description: GitHub Actions'ta ayda 0€'ya çalışan bir yapay zeka e-posta
   otomatik cevaplayıcısını nasıl kodladım -- git tag'lerini veritabanı olarak ve

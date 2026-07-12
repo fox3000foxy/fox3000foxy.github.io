@@ -1,5 +1,5 @@
 ---
-itle: 这个博客是如何运作的？
+title: 这个博客是如何运作的？
 description: 深入解析这个博客的内部架构：React、Vite、Markdown、CI/CD 流水线和文章写作流程。
 date: 2026-03-08
 aiGenerated: trueauthors:

@@ -1,5 +1,5 @@
 ---
-itle: Working on a New Project
+title: Working on a New Project
 description: A look at the process of starting and developing a new website.
 date: 2026-03-13authors:
   - fox3000foxy

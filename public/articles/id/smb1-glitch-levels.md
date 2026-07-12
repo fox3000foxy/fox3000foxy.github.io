@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: format level, penunjuk, dan 256 glitch world"
+title: "Super Mario Bros.: format level, penunjuk, dan 256 glitch world"
 description: "Bagaimana 128 level × 4 tipe zona muat dalam 40KB ROM, mengapa Minus World ada, dan bagaimana pertandingan Tennis NES bisa memuat glitch world."
 date: 2026-06-10authors:
   - fox3000foxy

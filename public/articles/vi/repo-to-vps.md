@@ -1,5 +1,5 @@
 ---
-itle: "Repo to VPS: biến GitHub Actions thành VPS miễn phí với bộ nhớ liên tục"
+title: "Repo to VPS: biến GitHub Actions thành VPS miễn phí với bộ nhớ liên tục"
 description: Cách biến một runner GitHub Actions thành VPS vĩnh viễn với git làm bộ nhớ liên tục -- tmate, inotify và commit --amend.
 date: 2026-05-29authors:
   - fox3000foxy

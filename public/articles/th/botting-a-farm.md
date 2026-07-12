@@ -1,5 +1,5 @@
 ---
-itle: บอทฟาร์ม Microsoft Rewards
+title: บอทฟาร์ม Microsoft Rewards
 description: วิธีที่ผมเขียนบอทเพื่อฟาร์มคะแนน Microsoft Rewards แบบ規模ใหญ่ -- และเหตุใด Microsoft จึงเสริมการป้องกันตั้งแต่ตอนนั้น
 date: 2026-03-13authors:
   - fox3000foxy

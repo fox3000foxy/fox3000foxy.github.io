@@ -1,5 +1,5 @@
 ---
-itle: عن ملفي الشخصي على GitHub
+title: عن ملفي الشخصي على GitHub
 description: نبذة مختصرة عن ملفي الشخصي على GitHub.
 date: 2026-03-08authors:
   - fox3000foxy

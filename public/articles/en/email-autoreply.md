@@ -1,5 +1,5 @@
 ---
-itle: I used git as a database to run a bot for free on GitHub Actions
+title: I used git as a database to run a bot for free on GitHub Actions
 description: How I coded an AI email auto-responder that runs on GitHub Actions
   for 0€/month -- using git tags as a database and pre-compiled runtime
   snapshots.

@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.：关卡格式、指针与256个故障世界"
+title: "Super Mario Bros.：关卡格式、指针与256个故障世界"
 description: "128个关卡 × 4种区域类型如何装进40KB ROM、Minus World为何存在，以及一场NES Tennis卡带交换如何能加载故障世界。"
 date: 2026-06-10authors:
   - fox3000foxy

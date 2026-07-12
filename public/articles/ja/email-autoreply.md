@@ -1,5 +1,5 @@
 ---
-itle: gitをデータベースとして使い、GitHub Actionsで無料でボットを動かした話
+title: gitをデータベースとして使い、GitHub Actionsで無料でボットを動かした話
 description: GitHub Actionsで月0€で動くAIメール自動返信ボットをどうやって作ったか --
   gitタグをデータベースとして使い、プリコンパイル済みランタイムスナップショットをruntimeタグに保存する方法。
 date: 2026-05-29authors:

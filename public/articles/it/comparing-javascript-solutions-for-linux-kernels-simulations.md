@@ -1,5 +1,5 @@
 ---
-itle: Confronto tra Soluzioni JavaScript per la Simulazione di Kernel Linux
+title: Confronto tra Soluzioni JavaScript per la Simulazione di Kernel Linux
 description: Un'analisi approfondita delle ricreazioni di ambienti Linux in
   JavaScript/TypeScript.
 date: 2026-05-28authors:

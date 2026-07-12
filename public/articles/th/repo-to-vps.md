@@ -1,5 +1,5 @@
 ---
-itle: "Repo to VPS : เปลี่ยน GitHub Actions เป็น VPS ฟรีพร้อมพื้นที่เก็บข้อมูลถาวร"
+title: "Repo to VPS : เปลี่ยน GitHub Actions เป็น VPS ฟรีพร้อมพื้นที่เก็บข้อมูลถาวร"
 description: วิธีเปลี่ยน GitHub Actions runner ให้เป็น VPS ถาวรโดยใช้ git เป็นพื้นที่เก็บข้อมูลถาวร -- tmate, inotify และ commit --amend
 date: 2026-05-29authors:
   - fox3000foxy

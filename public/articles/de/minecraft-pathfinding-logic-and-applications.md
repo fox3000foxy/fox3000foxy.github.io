@@ -1,5 +1,5 @@
 ---
-itle: Minecraft Pathfinding-Logik und ihre Anwendungen
+title: Minecraft Pathfinding-Logik und ihre Anwendungen
 description: Wie A*, Block-Malus und POI-Mechaniken es dir ermöglichen,
   Mob-Bewegungen zu kontrollieren, vorherzusagen und auszunutzen -- von
   drahtlosem Redstone bis zu optimierten Farmen.

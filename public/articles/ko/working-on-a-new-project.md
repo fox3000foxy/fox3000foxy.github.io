@@ -1,5 +1,5 @@
 ---
-itle: 새 프로젝트 작업 중
+title: 새 프로젝트 작업 중
 description: 새 웹사이트를 시작하고 개발하는 과정 살펴보기
 date: 2026-03-13authors:
   - fox3000foxy

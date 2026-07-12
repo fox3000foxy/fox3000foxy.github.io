@@ -1,5 +1,5 @@
 ---
-itle: SSH 커밋 서명 스크립트 설명
+title: SSH 커밋 서명 스크립트 설명
 description: SSH 커밋 서명 헬퍼의 분석과 내가 스타일리시한 커밋을 원했던 이유
 date: 2026-03-08
 aiGenerated: trueauthors:

@@ -1,5 +1,5 @@
 ---
-itle: Script di firma commit SSH spiegato
+title: Script di firma commit SSH spiegato
 description: Una panoramica dell'helper per la firma dei commit SSH e perché
   volevo commit eleganti.
 date: 2026-03-08

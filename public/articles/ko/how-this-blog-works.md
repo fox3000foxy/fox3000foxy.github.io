@@ -1,5 +1,5 @@
 ---
-itle: 이 블로그는 어떻게 동작하나요?
+title: 이 블로그는 어떻게 동작하나요?
 description: "이 블로그의 내부 동작에 대한 심층 분석: React, Vite, Markdown, CI/CD 파이프라인, 글 작성 워크플로우"
 date: 2026-03-08
 aiGenerated: trueauthors:

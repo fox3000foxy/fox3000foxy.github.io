@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- server Minecraft yang berjalan di mikrokontroler $1
+title: Bareiron -- server Minecraft yang berjalan di mikrokontroler $1
 description: 6800 baris C, nol malloc, Perlin noise diganti dengan bilinear
   interpolation, biome di tile map, dan semuanya di chip $1.
 date: 2026-05-30authors:

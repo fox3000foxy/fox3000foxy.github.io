@@ -1,5 +1,5 @@
 ---
-itle: 私のGitHubプロフィール
+title: 私のGitHubプロフィール
 description: 私のGitHubプロフィールの簡単な紹介。
 date: 2026-03-08authors:
   - fox3000foxy

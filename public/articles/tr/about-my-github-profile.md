@@ -1,5 +1,5 @@
 ---
-itle: GitHub Profilim Hakkında
+title: GitHub Profilim Hakkında
 description: GitHub profilime kısa bir giriş.
 date: 2026-03-08authors:
   - fox3000foxy

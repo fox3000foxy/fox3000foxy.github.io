@@ -1,5 +1,5 @@
 ---
-itle: "Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA"
+title: "Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA"
 description: "Một mod Fabric khai thác lỗ hổng logic trong hệ thống tin cậy của Minecraft: chữ ký RSA hợp lệ từ Mojang nhưng được phát lại trên tài khoản sai. Giải thích code, tác động bảo mật và bài học về mật mã."
 date: 2026-07-11authors:
   - fox3000foxy

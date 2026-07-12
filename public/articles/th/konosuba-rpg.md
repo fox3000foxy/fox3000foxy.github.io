@@ -1,5 +1,5 @@
 ---
-itle: "ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ"
+title: "ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ"
 description: "RPG ผลัดกันเล่นบน Discord ที่ทุกการกระทำสร้างภาพ WebP ทันที: URL เป็นสถานะเกม,
   RNG แน่นอน, pipeline WASM, แคช 5 ระดับ, บอทแบบ serverless"
 date: 2026-06-10authors:

@@ -1,5 +1,5 @@
 ---
-itle: บล็อกนี้ทำงานอย่างไร ?
+title: บล็อกนี้ทำงานอย่างไร ?
 description: "เบื้องหลังของบล็อก: React, Vite, Markdown, CI/CD Pipeline
   และขั้นตอนการเขียนบทความ"
 date: 2026-03-08

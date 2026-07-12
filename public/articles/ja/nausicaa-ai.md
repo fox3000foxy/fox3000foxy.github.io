@@ -1,5 +1,5 @@
 ---
-itle: Nausicaa用のクソAI
+title: Nausicaa用のクソAI
 description: ヒューリスティック係数ベースのAI、5ターンごとにランダムに変わるハイパーパラメータ、逃げるオラクル -- 神話ストラテジーボードゲームの脳内に潜入。
 date: 2026-05-29authors:
   - fox3000foxy

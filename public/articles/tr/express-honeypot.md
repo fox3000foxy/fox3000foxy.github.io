@@ -1,5 +1,5 @@
 ---
-itle: "Gerçeküstü bir Express honeypot'u inşa ettim"
+title: "Gerçeküstü bir Express honeypot'u inşa ettim"
 description: "Anında oluşturulan yanıtlar, başlık sahteciliği, bot trafiği kaydı ile 328 sahte uç nokta -- tarayıcıları kandırmak için tasarlanmış bir Express honeypot middleware'inin koduna derinlemesine bir dalış."
 date: "2026-06-10"
 aiGenerated: trueauthors:

@@ -1,5 +1,5 @@
 ---
-itle: Bir Microsoft Rewards Çiftliğini Botlamak
+title: Bir Microsoft Rewards Çiftliğini Botlamak
 description: Ölçekli olarak Microsoft Rewards puanı toplamak için nasıl bir bot
   kodladığım -- ve Microsoft'un anti-bot tespitinin neden artık işe yaramadığı.
 date: 2026-03-13authors:

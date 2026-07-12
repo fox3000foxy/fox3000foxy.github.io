@@ -1,5 +1,5 @@
 ---
-itle: "Ho costruito un honeypot Express ultra-realistico"
+title: "Ho costruito un honeypot Express ultra-realistico"
 description: "328 endpoint fittizi con risposte generate al volo, spoofing di intestazioni, registrazione del traffico bot -- un'analisi approfondita di un middleware honeypot Express progettato per ingannare gli scanner."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="

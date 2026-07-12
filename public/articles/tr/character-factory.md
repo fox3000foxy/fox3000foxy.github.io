@@ -1,5 +1,5 @@
 ---
-itle: "character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma"
+title: "character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma"
 description: "DiceBear üzerine bir TypeScript modülü: tutarlı ülke/etnisite
   tabanlı oluşturma, çocukları yansıtmak için küçük bir genetik motoru ve bir
   kart oyununda kullanışlı hale getiren mühendislik detayları."

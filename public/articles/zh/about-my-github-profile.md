@@ -1,5 +1,5 @@
 ---
-itle: 关于我的 GitHub 个人主页
+title: 关于我的 GitHub 个人主页
 description: 我的 GitHub 个人主页的简要介绍。
 date: 2026-03-08authors:
   - fox3000foxy

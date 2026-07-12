@@ -1,5 +1,5 @@
 ---
-itle: Tentang Profil GitHub Saya
+title: Tentang Profil GitHub Saya
 description: Perkenalan singkat tentang profil GitHub saya.
 date: 2026-03-08authors:
   - fox3000foxy

@@ -1,5 +1,5 @@
 ---
-itle: SSH-Commit-Signing-Skript erklärt
+title: SSH-Commit-Signing-Skript erklärt
 description: Eine Erklärung des SSH-Commit-Signing-Helfers und warum ich
   stylische Commits haben wollte.
 date: 2026-03-08

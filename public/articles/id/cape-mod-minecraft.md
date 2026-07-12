@@ -1,5 +1,5 @@
 ---
-itle: "Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA"
+title: "Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA"
 description: "Mod Fabric yang mengeksploitasi celah logika dalam sistem kepercayaan Minecraft: tanda tangan RSA Mojang yang valid tetapi diputar ulang pada akun yang salah. Penjelasan kode, implikasi keamanan, dan pelajaran kriptografi."
 date: 2026-07-11authors:
   - fox3000foxy

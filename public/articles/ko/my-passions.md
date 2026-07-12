@@ -1,5 +1,5 @@
 ---
-itle: 내 열정들
+title: 내 열정들
 description: 코딩, 그림, 자동화, 올드 테크 발견 등 -- 나를 움직이는 것들
 date: 2026-03-08authors:
   - fox3000foxy

@@ -1,5 +1,5 @@
 ---
-itle: مقارنة حلول JavaScript لمحاكاة أنوية Linux
+title: مقارنة حلول JavaScript لمحاكاة أنوية Linux
 description: تحليل متعمق لإعادة بناء بيئات Linux في JavaScript/TypeScript.
 date: 2026-05-28authors:
   - fox3000foxy

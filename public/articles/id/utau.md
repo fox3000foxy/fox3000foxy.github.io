@@ -1,5 +1,5 @@
 ---
-itle: "UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis"
+title: "UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis"
 description: Bagaimana UTAU, perangkat lunak gratis berbasis VB6 dari tahun 2008, memungkinkan siapa saja membuat suara nyanyian melalui sintesis konkatenatif -- dan mengapa hal itu masih berarti hingga hari ini.
 date: 2026-05-29authors:
   - fox3000foxy

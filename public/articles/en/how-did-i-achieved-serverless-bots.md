@@ -1,5 +1,5 @@
 ---
-itle: "Discord bot 100% serverless: Hono + Cloudflare Workers"
+title: "Discord bot 100% serverless: Hono + Cloudflare Workers"
 description: How I replaced a Discord bot that cost me 50€/month with zero euros
   -- interaction endpoints, Hono, Workers, real-time image rendering, and a full
   game without WebSocket.

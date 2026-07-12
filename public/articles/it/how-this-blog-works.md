@@ -1,5 +1,5 @@
 ---
-itle: Come Funziona Questo Blog?
+title: Come Funziona Questo Blog?
 description: "Un'analisi approfondita degli interni di questo blog: React, Vite,
   Markdown, la pipeline CI/CD e il flusso di scrittura degli articoli."
 date: 2026-03-08

@@ -1,5 +1,5 @@
 ---
-itle: 我的热爱
+title: 我的热爱
 description: 编程、画画、自动化、发现老技术等等----带你了解我的动力源泉。
 date: 2026-03-08authors:
   - fox3000foxy

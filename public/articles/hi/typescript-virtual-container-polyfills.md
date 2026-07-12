@@ -1,5 +1,5 @@
 ---
-itle: बिना Wasm के ब्राउज़र में Node.js लाइब्रेरी चलाना --
+title: बिना Wasm के ब्राउज़र में Node.js लाइब्रेरी चलाना --
   typescript-virtual-container के polyfills
 description: कैसे Fortune ने node:fs, node:crypto और एक दर्जन Node मॉड्यूल को
   640 लाइनों JavaScript में हाथ से रीइम्प्लीमेंट किया ताकि कंटेनर

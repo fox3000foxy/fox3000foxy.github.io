@@ -1,5 +1,5 @@
 ---
-itle: Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions
+title: Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions
 description: Cómo codifiqué un auto-respondedor de email con IA que funciona en
   GitHub Actions por 0€/mes -- usando tags de git como base de datos y snapshots
   pre-compilados en un tag runtime.

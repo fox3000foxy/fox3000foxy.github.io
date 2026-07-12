@@ -1,5 +1,5 @@
 ---
-itle: 构建 character-factory：带遗传基因的头像生成器
+title: 构建 character-factory：带遗传基因的头像生成器
 description: 基于 DiceBear 的 TypeScript 模块：按国家和地区合理生成一致性头像、用于预测后代的小型遗传引擎，以及使其在卡牌游戏中可用的工程细节。
 date: 2026-05-16
 aiGenerated: trueauthors:

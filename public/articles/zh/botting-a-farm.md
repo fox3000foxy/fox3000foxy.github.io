@@ -1,5 +1,5 @@
 ---
-itle: 给 Microsoft Rewards 刷分农场写个机器人
+title: 给 Microsoft Rewards 刷分农场写个机器人
 description: 我如何编写了一个机器人来规模化刷 Microsoft Rewards 积分----以及微软的反机器人检测后来是如何追上来的。
 date: 2026-03-13authors:
   - fox3000foxy

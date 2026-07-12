@@ -1,5 +1,5 @@
 ---
-itle: "我构建了一个超逼真的 Express 蜜罐"
+title: "我构建了一个超逼真的 Express 蜜罐"
 description: "328 个虚假端点，响应即时生成，头部伪装，机器人流量记录 -- 深入一个旨在欺骗扫描器的 Express 蜜罐中间件的代码。"
 date: "2026-06-10"
 aiGenerated: trueauthors:

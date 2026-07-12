@@ -1,5 +1,5 @@
 ---
-itle: "Repo to VPS : GitHub Actions को मुफ़्त VPS में बदलें स्थायी स्टोरेज के साथ"
+title: "Repo to VPS : GitHub Actions को मुफ़्त VPS में बदलें स्थायी स्टोरेज के साथ"
 description: GitHub Actions रनर को स्थायी स्टोरेज के साथ एक स्थायी VPS में कैसे बदलें -- tmate, inotify और commit --amend.
 date: 2026-05-29authors:
   - fox3000foxy

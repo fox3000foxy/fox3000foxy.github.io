@@ -1,5 +1,5 @@
 ---
-itle: Сравнение JavaScript-решений для симуляции ядра Linux
+title: Сравнение JavaScript-решений для симуляции ядра Linux
 description: Глубокий анализ воссоздания Linux-окружений на JavaScript/TypeScript.
 date: 2026-05-28authors:
   - fox3000foxy

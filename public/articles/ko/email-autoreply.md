@@ -1,5 +1,5 @@
 ---
-itle: git을 데이터베이스로 써서 GitHub Actions에서 공짜로 봇 돌린 썰
+title: git을 데이터베이스로 써서 GitHub Actions에서 공짜로 봇 돌린 썰
 description: GitHub Actions에서 월 0€로 돌아가는 AI 이메일 자동응답 봇을 어떻게 만들었는지 -- git 태그를
   데이터베이스로 사용하고 런타임 태그에 미리 컴파일된 스냅샷을 저장하는 방법.
 date: 2026-05-29authors:

@@ -1,5 +1,5 @@
 ---
-itle: Bareiron -- خادم Minecraft الذي يعمل على متحكم دقيق بـ 1$
+title: Bareiron -- خادم Minecraft الذي يعمل على متحكم دقيق بـ 1$
 description: 6800 سطر من C، بدون malloc، استبدال Perlin noise بـ bilinear interpolation،
   biomes في tile map، وكل هذا على شريحة بـ 1$.
 date: 2026-05-30authors:

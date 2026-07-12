@@ -1,5 +1,5 @@
 ---
-itle: मेरे GitHub प्रोफ़ाइल के बारे में
+title: मेरे GitHub प्रोफ़ाइल के बारे में
 description: मेरे GitHub प्रोफ़ाइल का एक संक्षिप्त परिचय।
 date: 2026-03-08authors:
   - fox3000foxy

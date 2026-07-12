@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: تنسيق المستوى، المؤشرات، و256 عالم خلل"
+title: "Super Mario Bros.: تنسيق المستوى، المؤشرات، و256 عالم خلل"
 description: "كيف يتسع 128 مستوى × 4 أنواع منطقة في 40 كيلوبايت من ROM، ولماذا ي Exists Minus World، وكيف يمكن لمباراة تنس NES أن تحمّل عوالم الخلل."
 date: 2026-06-10authors:
   - fox3000foxy

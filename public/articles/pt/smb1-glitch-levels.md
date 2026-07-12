@@ -1,5 +1,5 @@
 ---
-itle: "Super Mario Bros.: o formato de nível, os ponteiros e as 256 glitch worlds"
+title: "Super Mario Bros.: o formato de nível, os ponteiros e as 256 glitch worlds"
 description: "Como 128 níveis × 4 tipos de zona cabem em 40KB de ROM, por que o Minus World existe, e como uma partida de Tennis NES pode carregar glitch worlds."
 date: 2026-06-10authors:
   - fox3000foxy

@@ -1,5 +1,5 @@
 ---
-itle: Microsoft Rewardsファームのボット化
+title: Microsoft Rewardsファームのボット化
 description: Microsoft Rewardsのポイントを大規模に稼ぐボットをコードした方法----そしてMicrosoftのアンチボット検出が追いついた理由。
 date: 2026-03-13authors:
   - fox3000foxy

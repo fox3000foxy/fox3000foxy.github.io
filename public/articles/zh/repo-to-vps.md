@@ -1,5 +1,5 @@
 ---
-itle: "Repo to VPS：将GitHub Actions变成免费持久化VPS"
+title: "Repo to VPS：将GitHub Actions变成免费持久化VPS"
 description: 如何将GitHub Actions runner变成永久VPS，用git作为持久化存储----tmate、inotify和commit --amend。
 date: 2026-05-29authors:
   - fox3000foxy

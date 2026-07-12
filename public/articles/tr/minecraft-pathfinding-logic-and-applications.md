@@ -1,5 +1,5 @@
 ---
-itle: Minecraft Pathfinding Mantığı ve Uygulamaları
+title: Minecraft Pathfinding Mantığı ve Uygulamaları
 description: A* algoritması, blok cezaları ve POI mekanikleri ile mob
   hareketlerini nasıl kontrol edebileceğin, tahmin edebileceğin ve
   sömürebileceğin -- kablosuz redstone'dan optimize edilmiş çiftliklere.

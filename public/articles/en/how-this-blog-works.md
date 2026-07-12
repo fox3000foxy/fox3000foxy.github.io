@@ -1,5 +1,5 @@
 ---
-itle: How Does This Blog Work?
+title: How Does This Blog Work?
 description: "A deep dive into this blog's internals: React, Vite, Markdown, the
   CI/CD pipeline, and the article-writing workflow."
 date: 2026-03-08

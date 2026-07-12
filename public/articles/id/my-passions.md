@@ -1,5 +1,5 @@
 ---
-itle: Hobi Saya
+title: Hobi Saya
 description: Mengode, menggambar, mengotomatisasi, menemukan teknologi lama, dan
   masih banyak lagi -- sekilas tentang apa yang memotivasi saya.
 date: 2026-03-08authors:

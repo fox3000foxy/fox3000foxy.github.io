@@ -1,5 +1,5 @@
 ---
-itle: Bu Blog Nasıl Çalışıyor?
+title: Bu Blog Nasıl Çalışıyor?
 description: "Bu blogun iç işleyişine derin bir dalış: React, Vite, Markdown,
   CI/CD pipeline'ı ve makale yazma iş akışı."
 date: 2026-03-08

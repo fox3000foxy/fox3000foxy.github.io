@@ -1,5 +1,5 @@
 ---
-itle: このブログの仕組み
+title: このブログの仕組み
 description: このブログの内部構造を深掘り：React、Vite、Markdown、CI/CDパイプライン、記事作成ワークフロー。
 date: 2026-03-08
 aiGenerated: trueauthors:

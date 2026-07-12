@@ -1,5 +1,5 @@
 ---
-itle: "Character-Factory bauen: Avatare mit Genetik"
+title: "Character-Factory bauen: Avatare mit Genetik"
 description: "Ein TypeScript-Modul auf Basis von DiceBear: kohärente
   länder-/ethniebasierte Generierung, eine kleine Genetik-Engine zum Projizieren
   von Kindern und die technischen Details, die es in einem Kartenspiel nutzbar

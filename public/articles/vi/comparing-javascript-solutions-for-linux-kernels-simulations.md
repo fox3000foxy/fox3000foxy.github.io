@@ -1,5 +1,5 @@
 ---
-itle: So sánh các giải pháp JavaScript cho mô phỏng nhân Linux
+title: So sánh các giải pháp JavaScript cho mô phỏng nhân Linux
 description: Một phân tích chuyên sâu về các bản tái hiện môi trường Linux
   bằng JavaScript/TypeScript.
 date: 2026-05-28authors:

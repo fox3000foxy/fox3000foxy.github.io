@@ -1,5 +1,5 @@
 ---
-itle: यह ब्लॉग कैसे काम करता है?
+title: यह ब्लॉग कैसे काम करता है?
 description: "ब्लॉग के पर्दे के पीछे: React, Vite, Markdown, CI/CD पाइपलाइन और लेखन प्रक्रिया।"
 date: 2026-03-08
 aiGenerated: trueauthors:

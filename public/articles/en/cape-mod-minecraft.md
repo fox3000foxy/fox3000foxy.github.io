@@ -1,5 +1,5 @@
 ---
-itle: "Cape Mod: how to steal Jeb_'s cape with RSA signature injection"
+title: "Cape Mod: how to steal Jeb_'s cape with RSA signature injection"
 description: "A Fabric mod that exploits a logical flaw in Minecraft's trust system: a valid Mojang RSA signature but replayed on a wrong account. Code explanation, security implications, and cryptographic lessons."
 date: 2026-07-11authors:
   - fox3000foxy

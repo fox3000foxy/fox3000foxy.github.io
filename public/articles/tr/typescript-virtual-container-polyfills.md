@@ -1,5 +1,5 @@
 ---
-itle: Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak --
+title: Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak --
   typescript-virtual-container polyfill'leri
 description: Fortune'un, konteynerin Wasm olmadan tarayıcıda çalışması için
   node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript'te

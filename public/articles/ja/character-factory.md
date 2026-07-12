@@ -1,5 +1,5 @@
 ---
-itle: character-factoryの構築：遺伝子を持つアバター
+title: character-factoryの構築：遺伝子を持つアバター
 description: DiceBear上に構築したTypeScriptモジュール：国・民族に基づいた一貫性のある生成、子供を投影する小さな遺伝子エンジン、そしてカードゲームで使えるようにしたエンジニアリングの詳細。
 date: 2026-05-16
 aiGenerated: trueauthors:

@@ -1,5 +1,5 @@
 ---
-itle: Yeni Bir Proje Üzerinde Çalışmak
+title: Yeni Bir Proje Üzerinde Çalışmak
 description: Yeni bir web sitesi geliştirme ve başlatma sürecine bir bakış.
 date: 2026-03-13authors:
   - fox3000foxy

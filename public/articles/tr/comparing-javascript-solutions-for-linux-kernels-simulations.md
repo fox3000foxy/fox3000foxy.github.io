@@ -1,5 +1,5 @@
 ---
-itle: JavaScript Çözümlerini Linux Çekirdek Simülasyonları İçin Karşılaştırma
+title: JavaScript Çözümlerini Linux Çekirdek Simülasyonları İçin Karşılaştırma
 description: JavaScript/TypeScript ile Linux ortamı yeniden oluşturmalarının
   derinlemesine analizi.
 date: 2026-05-28authors:

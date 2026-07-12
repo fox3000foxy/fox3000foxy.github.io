@@ -1,5 +1,5 @@
 ---
-itle: ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm --
+title: ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm --
   polyfills ของ typescript-virtual-container
 description: Fortune ได้สร้าง node:fs, node:crypto และโมดูล Node อีกกว่าสิบโมดูล
   ขึ้นมาใหม่ด้วย JavaScript 640 บรรทัดเพื่อให้คอนเทนเนอร์ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm
