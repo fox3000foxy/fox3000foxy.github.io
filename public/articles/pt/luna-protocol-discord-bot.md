@@ -225,6 +225,28 @@ Três estilos de correção:
 
 ---
 
+## O realismo na prática: quando fica assustador
+
+No papel, todos esses sistemas (atrasos, erros de digitação, hesitações, esquecimentos) parecem só um truque. Na prática, juntando tudo, o resultado é impressionante -- a ponto de quem conversa com a Luna não desconfiar de nada. Aqui está uma troca real em que alguém pergunta diretamente à Luna se ela é um bot, e a conversa depois desvia para um assunto totalmente diferente, com uma naturalidade de arrepiar.
+
+![Conversa no Discord com a Luna -- primeira troca](/images/luna-protocol/realism/realism-01.png)
+
+O tom, as hesitações, o ritmo das respostas -- nada denuncia um bot. A Luna desvia da pergunta sobre a idade sem nunca sair do personagem.
+
+A conversa continua fluindo naturalmente, com respostas curtas e humanas ("okay, okay", "yay", "yayy") -- exatamente o tipo de mensagem que uma pessoa mandaria no Discord.
+
+![Conversa no Discord com a Luna -- continuação](/images/luna-protocol/realism/realism-02.png)
+
+![Conversa no Discord com a Luna -- mudança de assunto](/images/luna-protocol/realism/realism-03.png)
+
+![Conversa no Discord com a Luna -- a mudança de assunto continua](/images/luna-protocol/realism/realism-04.png)
+
+![Conversa no Discord com a Luna -- fim da troca](/images/luna-protocol/realism/realism-05.png)
+
+O que é assustador não é só a Luna "responder" -- é ela **manter uma conversa**, com opiniões aparentes, réplicas e uma linha de pensamento coerente de uma mensagem para outra. Sem o sistema de gatilhos, os atrasos de concentração e as hesitações descritos acima, essa ilusão desmoronaria em poucas mensagens.
+
+---
+
 ## A pipeline LLM: dois modos
 
 ### Modo `direct` (padrão)

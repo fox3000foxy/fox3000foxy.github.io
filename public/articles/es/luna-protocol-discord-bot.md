@@ -225,6 +225,28 @@ Tres estilos de corrección:
 
 ---
 
+## El realismo en la práctica: cuando da escalofríos
+
+Sobre el papel, todos estos sistemas (retrasos, erratas, dudas, olvidos) suenan a truco. En la práctica, combinados, el resultado es impresionante -- hasta el punto de que quienes hablan con Luna no sospechan nada. Aquí un intercambio real donde alguien le pregunta directamente a Luna si es un bot, y la conversación deriva luego hacia otro tema con una naturalidad escalofriante.
+
+![Conversación de Discord con Luna -- primer intercambio](/images/luna-protocol/realism/realism-01.png)
+
+El tono, las dudas, el ritmo de las respuestas -- nada delata a un bot. Luna esquiva la pregunta sobre su edad sin salirse nunca del personaje.
+
+La conversación sigue fluyendo con total naturalidad, con respuestas cortas y humanas ("okay, okay", "yay", "yayy") -- justo el tipo de mensajes que enviaría una persona en Discord.
+
+![Conversación de Discord con Luna -- continuación](/images/luna-protocol/realism/realism-02.png)
+
+![Conversación de Discord con Luna -- cambio de tema](/images/luna-protocol/realism/realism-03.png)
+
+![Conversación de Discord con Luna -- continúa el cambio de tema](/images/luna-protocol/realism/realism-04.png)
+
+![Conversación de Discord con Luna -- final del intercambio](/images/luna-protocol/realism/realism-05.png)
+
+Lo inquietante no es solo que Luna "responda" -- es que **mantiene una conversación**, con opiniones aparentes, réplicas y un hilo de pensamiento coherente de un mensaje a otro. Sin el sistema de disparadores, los retrasos de concentración y las dudas descritos antes, esta ilusión se derrumbaría en pocos mensajes.
+
+---
+
 ## El pipeline LLM: dos modos
 
 ### Modo `direct` (predeterminado)

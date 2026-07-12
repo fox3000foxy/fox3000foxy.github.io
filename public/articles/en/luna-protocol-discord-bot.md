@@ -225,6 +225,28 @@ Three correction styles:
 
 ---
 
+## Realism in practice: when it gets unsettling
+
+On paper, all these systems (delays, typos, hesitations, forgetfulness) sound like gimmicks. In practice, combined together, the result is startling -- to the point that people talking with Luna have no idea. Here's a real exchange where someone directly asks Luna if she's a bot, and the conversation then drifts into a completely different topic with a naturalness that's honestly unsettling.
+
+![Discord conversation with Luna -- first exchange](/images/luna-protocol/realism/realism-01.png)
+
+The tone, the hesitations, the pacing of the replies -- nothing gives away a bot. Luna deflects the age question without ever breaking character.
+
+The conversation keeps flowing naturally, with short, human replies ("okay, okay", "yay", "yayy") -- exactly the kind of messages a person would send on Discord.
+
+![Discord conversation with Luna -- continuing exchange](/images/luna-protocol/realism/realism-02.png)
+
+![Discord conversation with Luna -- topic drift](/images/luna-protocol/realism/realism-03.png)
+
+![Discord conversation with Luna -- topic drift continues](/images/luna-protocol/realism/realism-04.png)
+
+![Discord conversation with Luna -- end of exchange](/images/luna-protocol/realism/realism-05.png)
+
+What's unsettling isn't just that Luna "replies" -- it's that she **holds a conversation**, with apparent opinions, follow-ups, and a coherent train of thought from one message to the next. Without the trigger system, the concentration delays, and the hesitations described above, this illusion would collapse within a few messages.
+
+---
+
 ## The LLM pipeline: two modes
 
 ### `direct` mode (default)

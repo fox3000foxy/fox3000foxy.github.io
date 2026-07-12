@@ -225,6 +225,28 @@ Drei Korrekturstile:
 
 ---
 
+## Realismus in der Praxis: wenn es gruselig wird
+
+Auf dem Papier klingen all diese Systeme (Verzögerungen, Tippfehler, Zögern, Vergesslichkeit) nach Spielerei. In der Praxis, alles zusammen, ist das Ergebnis verblüffend -- so sehr, dass Leute, die mit Luna reden, nichts ahnen. Hier ein echter Austausch, bei dem jemand Luna direkt fragt, ob sie ein Bot ist, und das Gespräch danach zu einem ganz anderen Thema abdriftet, mit einer Natürlichkeit, die einem einen Schauer über den Rücken jagt.
+
+![Discord-Gespräch mit Luna -- erster Austausch](/images/luna-protocol/realism/realism-01.png)
+
+Der Ton, das Zögern, das Tempo der Antworten -- nichts verrät einen Bot. Luna weicht der Altersfrage aus, ohne je aus der Rolle zu fallen.
+
+Das Gespräch läuft völlig flüssig weiter, mit kurzen, menschlichen Antworten ("okay, okay", "yay", "yayy") -- genau die Art von Nachrichten, die ein Mensch auf Discord schreiben würde.
+
+![Discord-Gespräch mit Luna -- Fortsetzung](/images/luna-protocol/realism/realism-02.png)
+
+![Discord-Gespräch mit Luna -- Themenwechsel](/images/luna-protocol/realism/realism-03.png)
+
+![Discord-Gespräch mit Luna -- Themenwechsel geht weiter](/images/luna-protocol/realism/realism-04.png)
+
+![Discord-Gespräch mit Luna -- Ende des Austauschs](/images/luna-protocol/realism/realism-05.png)
+
+Das Beunruhigende ist nicht nur, dass Luna "antwortet" -- sondern dass sie ein **Gespräch führt**, mit scheinbaren Meinungen, Anschlussfragen und einem kohärenten Gedankengang von Nachricht zu Nachricht. Ohne das oben beschriebene Trigger-System, die Konzentrationsverzögerungen und das Zögern würde diese Illusion nach wenigen Nachrichten zusammenbrechen.
+
+---
+
 ## Die LLM-Pipeline: Zwei Modi
 
 ### Modus `direct` (Standard)

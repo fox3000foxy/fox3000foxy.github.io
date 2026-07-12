@@ -225,6 +225,28 @@ AZERTYの例: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`
 
 ---
 
+## 実際の再現度:ぞっとする瞬間
+
+紙の上では、これらの仕組み(遅延、タイプミス、ためらい、忘却)はただのギミックに聞こえる。だが実際に組み合わさると、その結果は驚くほどで、Lunaと会話している人はまったく気づかない。以下は、誰かがLunaに直接「ボットなのか」と尋ね、その後会話がまったく別の話題へと、ぞっとするほど自然に流れていった実際のやり取りだ。
+
+![LunaとのDiscord会話 -- 最初のやり取り](/images/luna-protocol/realism/realism-01.png)
+
+口調、ためらい、返信のテンポ -- ボットだとわかる要素は一切ない。Lunaは年齢の質問をキャラクターを崩さずに巧みにかわす。
+
+会話はまったく自然に続き、「okay, okay」「yay」「yayy」といった短く人間らしい返信が続く -- まさに人がDiscordで送るようなメッセージだ。
+
+![LunaとのDiscord会話 -- 続き](/images/luna-protocol/realism/realism-02.png)
+
+![LunaとのDiscord会話 -- 話題の転換](/images/luna-protocol/realism/realism-03.png)
+
+![LunaとのDiscord会話 -- 話題転換の続き](/images/luna-protocol/realism/realism-04.png)
+
+![LunaとのDiscord会話 -- やり取りの終わり](/images/luna-protocol/realism/realism-05.png)
+
+恐ろしいのはLunaが「返信する」ことだけではない -- 一貫した意見や相槌、メッセージごとに筋の通った思考の流れを持って**会話を成立させている**ことだ。上で説明したトリガーシステム、集中遅延、ためらいがなければ、この幻想は数メッセージで崩れてしまうだろう。
+
+---
+
 ## LLMパイプライン: 2つのモード
 
 ### `direct`モード（デフォルト）
