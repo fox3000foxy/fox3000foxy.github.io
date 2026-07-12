@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync, existsSync } from "fs";
-import { createSign, createPrivateKey } from "crypto";
+import { createSign, createVerify, createPrivateKey } from "crypto";
 import { globSync } from "glob";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -45,6 +45,53 @@ function signArticle(slug, author, date, content) {
   return sign.sign({ key: privateKey, dsaEncoding: "ieee-p1363" }, "base64");
 }
 
+function verifySignature(slug, author, date, content, sigBase64) {
+  const msg = `${slug}|${author}|${date}|${content}`;
+  const verify = createVerify("SHA256");
+  verify.update(msg);
+  verify.end();
+  try {
+    return verify.verify(
+      { key: Buffer.from(PUBLIC_KEY_BASE64, "base64"), type: "spki", format: "der", dsaEncoding: "ieee-p1363" },
+      sigBase64,
+      "base64"
+    );
+  } catch {
+    return false;
+  }
+}
+
+function parseFrontmatter(text) {
+  if (!text.startsWith("---\n")) return null;
+  const end = text.indexOf("\n---\n", 4);
+  if (end === -1) return null;
+  return { frontmatter: text.slice(4, end), content: text.slice(end + 5) };
+}
+
+function extractFields(frontmatter) {
+  let title = "", date = "", authors = [], pubkey = "", sig = "", listKey = null;
+  for (const line of frontmatter.split("\n")) {
+    const colonIdx = line.indexOf(":");
+    if (colonIdx !== -1) {
+      listKey = null;
+      const key = line.slice(0, colonIdx).trim();
+      const val = line.slice(colonIdx + 1).trim();
+      if (key === "title") title = val.replace(/^["']|["']$/g, "");
+      else if (key === "date") date = val;
+      else if (key === "author_pubkey") pubkey = val.replace(/^["']|["']$/g, "");
+      else if (key === "author_sig") sig = val.replace(/^["']|["']$/g, "");
+      else if (key === "authors") {
+        authors = val.replace(/^\[|\]$/g, "").split(",").map((s) => s.trim().replace(/^["']|["']$/g, "")).filter(Boolean);
+        if (!authors.length && !val) listKey = "authors";
+      }
+    } else if (listKey === "authors" && /^\s+-\s+/.test(line)) {
+      const item = line.replace(/^\s+-\s+/, "").trim();
+      if (item) authors.push(item);
+    }
+  }
+  return { title, date, authors, pubkey, sig };
+}
+
 const files = globSync("public/articles/*/*.md", {
   ignore: "public/articles/*/index.json",
 });
@@ -56,63 +103,36 @@ let fail = 0;
 for (const file of files) {
   const text = readFileSync(file, "utf-8");
 
-  // Parse frontmatter
-  if (!text.startsWith("---\n")) {
+  const parsed = parseFrontmatter(text);
+  if (!parsed) {
     fail++;
-    console.error(`FAIL: ${file} - no frontmatter`);
-    continue;
-  }
-  const end = text.indexOf("\n---\n", 4);
-  if (end === -1) {
-    fail++;
-    console.error(`FAIL: ${file} - bad frontmatter`);
+    console.error(`FAIL: ${file} - no/bad frontmatter`);
     continue;
   }
 
-  const frontmatter = text.slice(4, end);
-  const content = text.slice(end + 5);
-
-  // Extract fields
-  let title = "",
-    date = "",
-    authors = [],
-    listKey = null;
-
-  for (const line of frontmatter.split("\n")) {
-    const colonIdx = line.indexOf(":");
-    if (colonIdx !== -1) {
-      listKey = null;
-      const key = line.slice(0, colonIdx).trim();
-      const val = line.slice(colonIdx + 1).trim();
-      if (key === "title") title = val.replace(/^["']|["']$/g, "");
-      else if (key === "date") date = val;
-      else if (key === "authors") {
-        authors = val
-          .replace(/^\[|\]$/g, "")
-          .split(",")
-          .map((s) => s.trim().replace(/^["']|["']$/g, ""))
-          .filter(Boolean);
-        if (!authors.length && !val) listKey = "authors";
-      }
-    } else if (listKey === "authors" && /^\s+-\s+/.test(line)) {
-      const item = line.replace(/^\s+-\s+/, "").trim();
-      if (item) authors.push(item);
-    }
-  }
-
+  const { frontmatter, content } = parsed;
+  const { date, authors, pubkey, sig } = extractFields(frontmatter);
   const author = authors[0] || "";
   const slug = file.split("/").pop().replace(/\.md$/, "");
 
-  // Strip any existing author_pubkey/author_sig lines
+  // Check if existing signature is valid
+  if (pubkey === PUBLIC_KEY_BASE64 && sig) {
+    if (verifySignature(slug, author, date, content, sig)) {
+      skip++;
+      console.log(`– ${file} (signature valid)`);
+      continue;
+    }
+  }
+
+  // Re-sign
   const cleanFrontmatter = frontmatter
     .split("\n")
     .filter((l) => !l.startsWith("author_pubkey:") && !l.startsWith("author_sig:"))
     .join("\n");
 
-  const sig = signArticle(slug, author, date, content);
-
+  const newSig = signArticle(slug, author, date, content);
   const newFrontmatter =
-    cleanFrontmatter + `\nauthor_pubkey: "${PUBLIC_KEY_BASE64}"\nauthor_sig: "${sig}"`;
+    cleanFrontmatter + `\nauthor_pubkey: "${PUBLIC_KEY_BASE64}"\nauthor_sig: "${newSig}"`;
   const newText = `---\n${newFrontmatter}\n---\n${content}`;
   writeFileSync(file, newText);
   ok++;
