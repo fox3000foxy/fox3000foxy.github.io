@@ -3,6 +3,7 @@ import LinkExtension from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { marked } from "marked";
 import { useCallback, useEffect, useRef, useState } from "react";
 import TurndownService from "turndown";
 
@@ -96,19 +97,34 @@ export default function WriteArticle() {
 			}),
 		],
 		editorProps: {
-			handleKeyDown: (_view, event) => {
-				if (
-					event.key === "t" &&
-					!event.ctrlKey &&
-					!event.metaKey &&
-					!event.altKey
-				) {
-					const { state, dispatch } = _view;
-					const tr = state.tr.insertText("t");
-					dispatch(tr);
+			handlePaste: (_view, event) => {
+				const items = event.clipboardData?.items;
+				if (!items) {
+					return false;
+				}
+				let handled = false;
+				for (let i = 0; i < items.length; i++) {
+					const item = items[i];
+					if (item.type.startsWith("image/")) {
+						const file = item.getAsFile();
+						if (file) {
+							handleImageFile(file);
+							handled = true;
+						}
+					}
+				}
+				if (handled) {
 					return true;
 				}
-				return false;
+				const text = event.clipboardData?.getData("text/plain");
+				if (text && /[#*`\-\d+.]/.test(text[0])) {
+					event.preventDefault();
+					marked.parse(text).then((html) => {
+						editor?.commands.setContent(html);
+					});
+					return true;
+				}
+				return handled;
 			},
 			handlePaste: (_view, event) => {
 				const items = event.clipboardData?.items;
@@ -552,51 +568,46 @@ export default function WriteArticle() {
 						<input
 							type="file"
 							accept=".md"
-							onChange={(e) => {
+							onChange={async (e) => {
 								const file = e.target.files?.[0];
 								if (!file) {
 									return;
 								}
-								const reader = new FileReader();
-								reader.onload = (ev) => {
-									const text = ev.target?.result;
-									if (typeof text !== "string") {
-										return;
-									}
-									let body = text;
-									if (text.startsWith("---")) {
-										const end = text.indexOf("\n---\n", 4);
-										if (end !== -1) {
-											const raw = text.slice(4, end);
-											body = text.slice(end + 5);
-											for (const line of raw.split("\n")) {
-												const ci = line.indexOf(":");
-												if (ci === -1) {
-													continue;
-												}
-												const k = line.slice(0, ci).trim();
-												const v = line.slice(ci + 1).trim().replace(/^["']|["']$/g, "");
-												if (k === "title") {
-													setTitle(v);
-												} else if (k === "slug") {
-													setSlug(v);
-												} else if (k === "description") {
-													setDescription(v);
-												} else if (k === "tags") {
-													setTagsInput(v.replace(/^\[|\]$/g, ""));
-												}
+								const text = await file.text();
+								let body = text;
+								if (text.startsWith("---")) {
+									const end = text.indexOf("\n---\n", 4);
+									if (end !== -1) {
+										const raw = text.slice(4, end);
+										body = text.slice(end + 5);
+										for (const line of raw.split("\n")) {
+											const ci = line.indexOf(":");
+											if (ci === -1) {
+												continue;
+											}
+											const k = line.slice(0, ci).trim();
+											const v = line
+												.slice(ci + 1)
+												.trim()
+												.replace(/^["']|["']$/g, "");
+											if (k === "title") {
+												setTitle(v);
+											} else if (k === "slug") {
+												setSlug(v);
+											} else if (k === "description") {
+												setDescription(v);
+											} else if (k === "tags") {
+												setTagsInput(
+													v.replace(/^\[|\]$/g, ""),
+												);
 											}
 										}
 									}
-									const html = body
-										.split("\n\n")
-										.map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`)
-										.join("");
-									if (editor) {
-										editor.commands.setContent(html);
-									}
-								};
-								reader.readAsText(file);
+								}
+								const html = await marked.parse(body);
+								if (editor) {
+									editor.commands.setContent(html);
+								}
 							}}
 							style={{ marginTop: "0.3rem" }}
 						/>
