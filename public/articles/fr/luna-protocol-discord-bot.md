@@ -12,12 +12,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UOMPsTOCr0iehMRuA3Oc9IsfNJ0KkmeXSXhByO9IMg7bgw0YJ65dRPqep/G+MsexZzcKAhiezJB8eAYup83oSg=="
+author_sig: "i0STFEnGHxpcAkosAotFegYI7nzo17M7PXrtKdF3Ei/10Zbf5wIi1MK3EhBaAJ3rhu36Oj6RsB3AsGnp0oXjoQ=="
 ---
 
 # Luna Protocol : j'ai créé un bot Discord autonome qui simule un être humain
 
-Et si un bot Discord pouvait **dormir**, faire des **fautes de frappe**, **hésiter**, **oublier** de répondre, et parfois vous envoyer un message de son propre chef ? C'est exactement ce que fait **Luna Protocol** : un bot Discord entièrement autonomie qui fait tourner un LLM local (llama.cpp) et conversé comme un être humain imparfait.
+Et si un bot Discord pouvait **dormir**, faire des **fautes de frappe**, **hésiter**, **oublier** de répondre, et parfois vous envoyer un message de son propre chef ? C'est exactement ce que fait **Luna Protocol** : un bot Discord entièrement autonome qui fait tourner un LLM local (llama.cpp) et converse comme un être humain imparfait.
 
 Pas de prompts rigides, pas de réponses robotiques. Luna a un **système de déclenchement prioritaire**, des **délais variables**, des **horaires de sommeil**, des **messages spontanés**, et même une **pipeline TTS** pour envoyer des messages vocaux. Le tout configuré via un simple fichier `config.yml` hot-reloadable.
 
@@ -213,7 +213,7 @@ Trois styles de correction :
 
 **Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oblis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction — comme si elle n'avait rien vu.
+**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction — comme si elle n'avait rien vu.
 
 **Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
 
@@ -294,7 +294,7 @@ export async function sendTextAsVoiceMessage(
   const durationSecs = await getAudioDuration(oggBuf);
   const waveform = buildWaveformBase64();
   const { uploadUrl, uploadFilename } = await requestUploadUrl(channelId, oggBuf.byteLength, durationSecs);
-  await putFileToDisk(uploadUrl, oggBuf);
+  await putFileToUploadUrl(uploadUrl, oggBuf);
   await postVoiceMessage(channelId, uploadFilename, durationSecs, waveform, replyToMessageId);
 }
 ```
@@ -424,8 +424,11 @@ Le style de réponse est pondéré selon l'activité récente de Luna dans le ca
 |----------|-----------------|-------------------|-------|
 | Froid | true | false | 70% |
 | Froid | true | true | 20% |
+| Froid | false | false | 10% |
 | Actif | true | false | 50% |
+| Actif | true | true | 15% |
 | Actif | false | false | 30% |
+| Actif | false | true | 5% |
 
 En MP, `messageReference` est toujours `false`.
 
@@ -434,6 +437,64 @@ En MP, `messageReference` est toujours `false`.
 ## Les messages en rafale
 
 Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
+
+---
+
+## Le statut dynamique
+
+Le statut Discord de Luna alterne entre plusieurs presets configurés, tournant toutes les 15 minutes. Types supportés : Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Pendant le sommeil, le statut passe en `invisible`.
+
+```yaml
+dynamic_status_presets:
+  - status: online
+    text: "avec les pixels"
+    type: 0       # Playing
+  - status: idle
+    text: "du bruit blanc"
+    type: 2       # Listening
+```
+
+Un jitter aléatoire (×0.5-1.0) évite les rotations prévisibles. 10% des tentatives sont sautées pour éviter la répétition.
+
+## L'indicateur de frappe
+
+Avant d'appeler le LLM, Luna appelle `startTyping()`. Un `setInterval` rafraîchit l'indicateur toutes les 8 secondes pendant la génération. Nettoyé dans le `finally` (`clearInterval`).
+
+```typescript
+const startTyping = () => {
+  client.sendChannelTyping(message.channel.id);
+  typingIntervals.set(
+    message.channel.id,
+    setInterval(() => {
+      client.sendChannelTyping(message.channel.id);
+    }, 8000)
+  );
+};
+```
+
+## La récupération après crash
+
+Si le LLM crash (processus `llama-server` qui meurt), Luna détecte l'événement via `llmBus.emit("crash", code)` et tente de redémarrer avec un backoff exponentiel. Évite les boucles de redémarrage infini.
+
+## Les paramètres LLM
+
+Les paramètres sont hardcodés dans `src/config.ts` :
+
+```yaml
+temp: 0.75
+dynatemp-range: 0.15
+top-k: 40
+top-p: 0.95
+min-p: 0.05
+repeat-penalty: 1.12
+repeat-last-n: 256
+presence-penalty: 0.1
+batch: 4096
+ubatch: 256
+context: 4096
+```
+
+Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
 
 ---
 
