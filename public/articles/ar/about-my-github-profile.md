@@ -1,14 +1,13 @@
 ---
-title: عن ملفي الشخصي على GitHub
+itle: عن ملفي الشخصي على GitHub
 description: نبذة مختصرة عن ملفي الشخصي على GitHub.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - meta
   - github
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jV3CFzpay11vhgPQ1f7ShNdg7uEwT+c+MNDE+Kcmv1ql4SncNRebuulxB6CBzKnmd+e2dexgCv40aj1LK4YS6w=="
+author_sig: "WFXpNoa4QBKmHTZKp/0l+WTPLI8XQHJqU/NGuZnpPF+yAQUwS9+U9YIOokNpg8JuWpmuf99q4mY1vgJWBA14/Q=="
 ---
 
 # ملفي الشخصي على GitHub

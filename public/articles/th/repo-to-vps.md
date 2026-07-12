@@ -1,17 +1,14 @@
 ---
-title: "Repo to VPS : เปลี่ยน GitHub Actions เป็น VPS ฟรีพร้อมพื้นที่เก็บข้อมูลถาวร"
+itle: "Repo to VPS : เปลี่ยน GitHub Actions เป็น VPS ฟรีพร้อมพื้นที่เก็บข้อมูลถาวร"
 description: วิธีเปลี่ยน GitHub Actions runner ให้เป็น VPS ถาวรโดยใช้ git เป็นพื้นที่เก็บข้อมูลถาวร -- tmate, inotify และ commit --amend
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - github
   - devops
-  - vps
-  - actions
   - automation
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MGIfR6TtrYxJKxQ0TC5zGGCgVlMTuuAGif9kLJpSrK7IIK4SCUqsXKkX9WI4udSEd4Cp/Jl+BSvdhbl/QCD8GQ=="
+author_sig: "cxdShyQZxjnKYC57YTS0+OqGInOTmDvT/PJgQUoWhoGrlI4acJf8KLRj3qZY72U1KjNhg+kz5tAoaA68KdPgaQ=="
 ---
 
 ## GitHub แจก VPS ฟรีให้คุณ 6 ชั่วโมง ฉันหาวิธีทำให้มันถาวรได้แล้ว

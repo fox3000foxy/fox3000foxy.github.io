@@ -1,16 +1,15 @@
 ---
-title: SSH 提交签名脚本详解
+itle: SSH 提交签名脚本详解
 description: SSH 提交签名辅助工具的详细解析，以及为什么我想要有格调的提交。
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - git
   - security
   - shell
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bDrV3sbPSaDitOLbR5dVVIsPj3dJCfGt3dF4r4qZE/GBRSvypSWhyF8oMswnyIUioG3nz3GqaLjVrKcfSwcLEg=="
+author_sig: "DZL2xPqxijkdXBCU8mciOMg5/L/LYxN88jM9V7xAGy6zPvpfhEBdoCCOOi23z2s5oFBVgMhEEdPeQZiJu873Tw=="
 ---
 
 # SSH 提交签名脚本详解

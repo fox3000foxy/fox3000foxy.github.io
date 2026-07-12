@@ -6,10 +6,8 @@ tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - signature
+  - security
   - reverse-engineering
-  - securite
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="

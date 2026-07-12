@@ -1,16 +1,15 @@
 ---
-title: ตรรกะการหาเส้นทางของ Minecraft และการประยุกต์ใช้
+itle: ตรรกะการหาเส้นทางของ Minecraft และการประยุกต์ใช้
 description: อัลกอริทึม A*, ค่าปรับของบล็อก และ POI ช่วยให้คุณควบคุม, ทำนาย และใช้ประโยชน์
   การเคลื่อนที่ของม็อบได้ -- จากเรดสโตนไร้สายไปจนถึงฟาร์มที่ปรับแต่งแล้ว
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0uKoC/PCWPqA5/Jq74IW8hYZ/pm7UsZk+r2wXOgfHpGjE03qLwOo/Gk7VhKNcWlkLL5Seo3HFj0EcKgytXFBWA=="
+author_sig: "deuVX4ul/Qt24n6DsQYbNcYDsy/XKdd+5ORge5BKzkH1acFqrbAD814aj+sDpnt/wu23jChrbuQfqtqAgUS3UQ=="
 ---
 
 ## บทนำ

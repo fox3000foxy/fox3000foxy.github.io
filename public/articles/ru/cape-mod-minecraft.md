@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA"
+itle: "Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA"
 description: "Мод Fabric, эксплуатирующий логическую уязвимость в системе доверия Minecraft: действительная подпись RSA от Mojang, но воспроизведённая на чужой учётной записи. Объяснение кода, последствия для безопасности и криптографические уроки."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - podpis
+  - security
   - reverse-engineering
-  - bezopasnost
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "vfbW6ZqXy069zcqFMnnGzAO8iTcsG9q2Dk+l8FWk7UYJFtW6C5rgCdWfXGwVB+7qGi8i+E+8aWID6gMfdamIlg=="
+author_sig: "FWelB8UtmMIe0j6HDiD9l048SqPb7vu2X+NWwa4CTNdRn6SLJDPUdpzJQ8DQdHtzuScD00iJjxpzzLuGKrxqMg=="
 ---
 
 # Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA

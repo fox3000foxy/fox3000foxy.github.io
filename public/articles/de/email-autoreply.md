@@ -1,20 +1,19 @@
 ---
-title: Ich habe git als Datenbank benutzt, um einen Bot kostenlos auf GitHub
+itle: Ich habe git als Datenbank benutzt, um einen Bot kostenlos auf GitHub
   Actions zu betreiben
 description: Wie ich einen KI-E-Mail-Autoresponder codiert habe, der auf GitHub
   Actions für 0€/Monat läuft -- mit git-Tags als Datenbank und vorcompilierten
   Runtimes.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "LeWAKrwuOAzsCXyPzhNUXqU2LedoADg/eVDblYMazmQmrTKuSXsDXxM0AI9MQCqTJ1DdH1mhW8MyVqbLZ1qp8g=="
+author_sig: "85QQR7lFhy9mGdB912w2/58S/5ZsTF4P8FFRf386wMDmxrqmWeIIr73OhWztFAIjEFDasWErIjFYkZ8vQSYyXA=="
 ---
 
 # Ich hab git als Datenbank benutzt, um einen kostenlosen Bot auf GitHub Actions laufen zu lassen

@@ -1,18 +1,17 @@
 ---
-title: ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions
+itle: ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions
 description: วิธีที่ผมเขียน AI auto-reply email ที่รันบน GitHub Actions ด้วยค่าใช้จ่าย 0€/เดือน -- โดยใช้ git tags เป็นฐานข้อมูลและ
   pre-compile ใน runtime tag
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "EDFmxxV5Ajv6lU6BndljCMweRWTpRCdHRB2FxaglwA9zAbDVMqNubhJq4roKEQjKXgRn2JhgvcFf/fxBRHxHkQ=="
+author_sig: "FO/nIl7uaqnBgFZrzW3tmqjuS+uajdvV0RIWI2P1kIGfbzXhcQ+GelPaO/QvwDD7/631BcYsSVdxYqEZElkAMQ=="
 ---
 
 # ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions

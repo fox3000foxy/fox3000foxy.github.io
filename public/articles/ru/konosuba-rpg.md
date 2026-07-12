@@ -1,23 +1,22 @@
 ---
-title: "Я провёл выходные за чтением кода konosuba-rpg и вот что я нашёл"
+itle: "Я провёл выходные за чтением кода konosuba-rpg и вот что я нашёл"
 description: "Пошаговая RPG для Discord, где каждое действие генерирует изображение WebP
   на лету: URL как состояние игры, детерминированный ГСЧ, конвейер WASM, кеш 5
   уровней, бот без сервера."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+Z+t1czHDNANu5YGVVZ5is8rQhhmYwpzzjbqzgk3Xdf+WqmHJfdKP60mfr7r0g+yrCbJM8G8yGUt4oBxv1HmCg=="
+author_sig: "5RXbqnV4KWv9wQuw1F3J/ZVYZa9hYe+eYtMDs2UHd9Z7b6A+QlN8+uq4PWr+aHIZEWcAOsF4UJhKRIdXDd1lvQ=="
 ---
 
 # Я провёл выходные за чтением кода konosuba-rpg и вот что я нашёл

@@ -1,18 +1,17 @@
 ---
-title: Nausicaa için salaş yapay zekâm
+itle: Nausicaa için salaş yapay zekâm
 description: Sezgisel katsayı tabanlı bir yapay zeka, her 5 turda rastgele
   değişen hiperparametreler ve kaçan bir Kahin -- mitolojik bir strateji tahta
   oyununun beynine dalış.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
-  - game-dev
+  - gaming
   - ai
   - javascript
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HuRdxDaCFvkxTLdZxoKItoIQ7rVaNvFruqq0jx5AJ32RBNMnr76vz2fFKTjY1ASxAkBZ4HgYHFdOhqvuTnta1A=="
+author_sig: "yjWDQ+b+OYRiP5yAnzjc8VlOeErFCb+hp7ZQIrt+UmGtyfsFp9pcpzZ3Ry6/7Z+JaOeb49L6Est39cLF0nsD1w=="
 ---
 
 ## Nausicaa için Salak Yapay Zekam

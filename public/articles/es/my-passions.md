@@ -1,14 +1,13 @@
 ---
-title: Mis Pasiones
+itle: Mis Pasiones
 description: Programar, dibujar, automatizar cosas, descubrir tecnología antigua
   y más -- una mirada a lo que me mueve.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HmRYbr9M1uRCvRzVHzZYwb5UrmN/fYPU5gLkyPpbHLNyHjCrmGv2NKLLrn7L/FUTWJ0jAgEH60+FMPSTGysEUw=="
+author_sig: "eHB+1toonAWf1W2oJeGM5s3y6fKgsejl/5BjehwM0gYsvRus+FW+Lavzq6NFlcZQyrb2FWPE9GNcyahVbDHktQ=="
 ---
 
 # Mis Pasiones

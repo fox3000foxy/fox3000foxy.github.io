@@ -1,22 +1,21 @@
 ---
-title: "ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ"
+itle: "ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ"
 description: "RPG ผลัดกันเล่นบน Discord ที่ทุกการกระทำสร้างภาพ WebP ทันที: URL เป็นสถานะเกม,
   RNG แน่นอน, pipeline WASM, แคช 5 ระดับ, บอทแบบ serverless"
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Tkxv9+LZ0j3lI17CcJfmwrkL3fsdmtaAlt7VVDnRNcc87gFWC8D4aA+WjZHqxDnvg5WpPpQp1WaNlGtgUyTuzQ=="
+author_sig: "XtINLoJydKrEy/wzWhIApSKDUHekcp8MF92CVz8sBuuCZ2Y0bbncgI5C2KXIcJHdKcd5Kep4khG5SVosvaLN4Q=="
 ---
 
 # ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ

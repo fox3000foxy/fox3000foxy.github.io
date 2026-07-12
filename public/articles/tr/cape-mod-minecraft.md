@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak"
+itle: "Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak"
 description: "Minecraft'ın güven sistemindeki mantıksal bir açığı sömüren bir Fabric modu: Mojang'dan geçerli bir RSA imzası ama yanlış hesaba replay edilmiş. Kod açıklaması, güvenlik etkileri ve kriptografik dersler."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - signature
-  - reverse-engineering
   - security
-authors:
-  - fox3000foxy
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "yQAJ4dlAtVx/kmLWQN6wdpKD2N115X7Xu3Ub0tw2030DG68RbQnRdA9UVJn3J69YbOeatsjvcjHwIlUBw83R1g=="
+author_sig: "o3GwSNYaO4OMetXswEOKrn2d0zgh9TaEBcjhwlg3ziA0Txy53FOynvpMfOuNWxZDxKlYWxFxykKruLPGCtk1Qw=="
 ---
 
 # Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak

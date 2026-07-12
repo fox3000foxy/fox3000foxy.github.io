@@ -1,9 +1,14 @@
 ---
-title: "मैंने एक अति-यथार्थवादी Express हनीपॉट बनाया"
+itle: "मैंने एक अति-यथार्थवादी Express हनीपॉट बनाया"
 description: "328 नकली एंडपॉइंट जिनके जवाब तुरंत जनरेट होते हैं, हेडर स्पूफिंग, बॉट ट्रैफ़िक रिकॉर्डिंग -- एक Express हनीपॉट मिडलवेयर के कोड में गहराई से जाना जो स्कैनर्स को धोखा देने के लिए डिज़ाइन किया गया है।"
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
 author_sig: "9uhYG/mZ0It5he6NgTAlhIQ0yKUAmOBrE3gyV/cXy4RGK08DkW+m0uHkPk0XxH1zoQ3rwcW9WpluPe1RjjG0Mw=="
+tags:
+  - express
+  - nodejs
+  - security
+  - honeypot
 ---
 
 ## विचार

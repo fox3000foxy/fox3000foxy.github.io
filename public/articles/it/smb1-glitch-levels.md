@@ -1,18 +1,13 @@
 ---
-title: "Super Mario Bros.: il formato dei livelli, i puntatori e i 256 glitch worlds"
+itle: "Super Mario Bros.: il formato dei livelli, i puntatori e i 256 glitch worlds"
 description: "Come 128 livelli × 4 tipi di zona stanno in 40KB di ROM, perché esiste il Minus World, e come una partita di Tennis NES può caricare dei glitch worlds."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
-  - nintendo
-  - nes
-  - "6502"
-  - mario
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1VONMO/qNMkTaqEIZO2UscsqWfegzIZzqeecrvH6itUTLwdhQ2298T72HIRgkJuzlcW2ZrZ3mlAK6wLbqnVOug=="
+author_sig: "mK5yGy3fGI3QROrq0OnrWMnzzJUJJ55eMIqmu739CUOkgYYhwVnqMP6ebfIpsPAdPHz2NwXCZssSoTBHA+dQ8g=="
 ---
 
 ## Introduzione

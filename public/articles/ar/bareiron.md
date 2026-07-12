@@ -1,18 +1,17 @@
 ---
-title: Bareiron -- خادم Minecraft الذي يعمل على متحكم دقيق بـ 1$
+itle: Bareiron -- خادم Minecraft الذي يعمل على متحكم دقيق بـ 1$
 description: 6800 سطر من C، بدون malloc، استبدال Perlin noise بـ bilinear interpolation،
   biomes في tile map، وكل هذا على شريحة بـ 1$.
-date: 2026-05-30
+date: 2026-05-30authors:
+  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3MFdBRfd3sLWVYewIsk+re3z+9b6ujIMr3K69G5/p4ulBTMD5cWmx6C6qWnd9xHvgkYRA4IUYO05Mg3R98c/tg=="
+author_sig: "MzDmudvAMDaDhcCSKWqD7XZ6bHllIu8eXNZKM4AqEPl7tijvM21RAwzzyYMA1yFlBIuZgH6v+o4wPRuwdtDg6Q=="
 ---
 
 ## مقدمة

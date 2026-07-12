@@ -1,15 +1,14 @@
 ---
-title: Microsoft Rewards 팜 봇 만들기
+itle: Microsoft Rewards 팜 봇 만들기
 description: 대규모로 Microsoft Rewards 포인트를 농사짓는 봇을 코딩한 방법 -- 그리고 Microsoft의 안티봇 탐지가 따라잡은 이유
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "gok0zQKKvuSGWxT/MA90bYK1VzA4w00Iwjl/D3pLFvMJRPgmoe/mVJe/DwFdfWshVxy1H0uTkkKcRCEg6gn4Fw=="
+author_sig: "rccJWf2XW0H8R++jCs7LpIGoHSF9GP/QPFEXe8uL3AkxEcP84aM5H7gZzl78oWWvNawxeKCMAQWBFG9ujDuTjQ=="
 ---
 
 > **참고 (2026년):** 이 프로젝트는 더 이상 유지보수되지 않습니다. Microsoft가 안티봇 탐지를 크게 강화해서 -- 예전에 통했던 방법이 지금은 더 이상 작동하지 않습니다. 아래 설명된 코드와 접근 방식은 기록/교육 목적으로만 보관됩니다.

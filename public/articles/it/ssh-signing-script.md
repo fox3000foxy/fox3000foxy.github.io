@@ -1,17 +1,16 @@
 ---
-title: Script di firma commit SSH spiegato
+itle: Script di firma commit SSH spiegato
 description: Una panoramica dell'helper per la firma dei commit SSH e perché
   volevo commit eleganti.
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - git
   - security
   - shell
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MSZY7zEMsg2JJSKyWDsYdmGXwkgDw5ckND5qA9jOSqAsXW4VlCXXNjyFh3f04OO03dFK6l6/Q+tB2wnTbZxpMg=="
+author_sig: "7uiy7ltbqRvnthSjbGeYYnG/RrFaHKnSC1mh1W2sb2NqLYiE3U5SyF/C5F+8KlSwIetQ8WuKEEC0MfGcPMl35g=="
 ---
 
 # Script di firma commit SSH spiegato

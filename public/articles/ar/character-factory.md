@@ -1,18 +1,17 @@
 ---
-title: "بناء character-factory: صور رمزية بعلم الوراثة"
+itle: "بناء character-factory: صور رمزية بعلم الوراثة"
 description: "وحدة TypeScript فوق DiceBear: توليد متسق حسب البلد/العرق،
   محرك وراثي صغير لإسقاط الأطفال، وتفاصيل هندسية جعلته قابلًا
   للاستخدام في لعبة ورق."
 date: 2026-05-16
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UyL91nxw88+T/xyxx+/RQQ9L3rkGlNJ0BUMWlloBD9qhcGYrzbGC2WafqhPlRX+wbR/vMReXyVVs/LmM3L9d7g=="
+author_sig: "L53MmYf+5dtC8OyWDu9q6y6r/fYilnYKOvneV0f1nXB1sB+qwAg/f9ct4VVjtMrVG0ShAh2QUTt2XaU3FYk3fg=="
 ---
 
 # بناء character-factory: صور رمزية بنظام وراثي

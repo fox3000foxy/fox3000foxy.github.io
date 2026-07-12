@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod：RSA署名注入でJeb_のケープを奪う方法"
+itle: "Cape Mod：RSA署名注入でJeb_のケープを奪う方法"
 description: "Minecraftの信頼システムにおける論理的欠陥を悪用するFabric Mod：Mojangの正当なRSA署名を別のアカウントで使い回す。コードの解説、セキュリティへの影響、暗号の教訓。"
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - signature
-  - reverse-engineering
   - security
-authors:
-  - fox3000foxy
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KPqIYZGv6Q62Mjin6EvgIEH3yBbxQEY4v4vpBrYdwApRo4LxlJOJyH6e9OuAAkFwCHxaG+ELK5G2RqOCupN5kA=="
+author_sig: "MKunduP3h0wXi1WZVJEWaz1ymlDFvSmyU1rUFc7XYGzV8JYQLS5l8p7Y1AHINORWAA9v82Thk79N1g3bG9xB+A=="
 ---
 
 # Cape Mod：RSA署名注入でJeb_のケープを奪う方法

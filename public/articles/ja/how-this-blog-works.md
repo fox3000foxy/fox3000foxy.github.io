@@ -1,16 +1,15 @@
 ---
-title: このブログの仕組み
+itle: このブログの仕組み
 description: このブログの内部構造を深掘り：React、Vite、Markdown、CI/CDパイプライン、記事作成ワークフロー。
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ba3aDhpMPTU9jZAmWPDK9yBI+RjPbXlda61YjHD8RoiJoRdELvUudmfaV5CF73GCor+1bWHleYRd02Nm4/uwkQ=="
+author_sig: "XRGrH8JfMGwblmFjhWlzkUzLYXnoYTHklPTR71CV5KQSqsDn3UAxNd3KZFNXo2D9J/fx6BQ94VTu6SVCL8wiBQ=="
 ---
 
 # このブログの仕組み

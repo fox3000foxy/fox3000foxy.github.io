@@ -1,18 +1,17 @@
 ---
-title: "Xây dựng character-factory: avatar với hệ thống di truyền"
+itle: "Xây dựng character-factory: avatar với hệ thống di truyền"
 description: "Một module TypeScript xây trên DiceBear: tạo nhất quán theo quốc gia/sắc tộc,
   một engine di truyền nhỏ để mô phỏng con cái, và các chi tiết kỹ thuật giúp nó
   dùng được trong một game bài."
 date: 2026-05-16
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "g0VAwWZHoFOURSaSPJ5f2ybiaPUmHGf9FspcYPKnODLCgr2YeztDOu2zTbI4/qsTs/mRFHpNUCxiPigA3Zw4nQ=="
+author_sig: "YIciDaM04UPlUKWmbDdJqNjOBuPA4VCtIQOr2hOgUDBzSDWgIuAAxOAgGW+9QFrCr/hxESOyEk+3F/888hvc3w=="
 ---
 
 # Xây dựng character-factory: avatar với hệ thống di truyền

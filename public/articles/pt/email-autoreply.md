@@ -1,19 +1,18 @@
 ---
-title: Usei git como banco de dados pra rodar um bot de graça no GitHub Actions
+itle: Usei git como banco de dados pra rodar um bot de graça no GitHub Actions
 description: Como eu programei um auto-respondedor de email IA que roda no GitHub
   Actions por 0€/mês -- usando tags git como banco de dados e
   pré-compilação numa tag runtime.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qeC4XXQEsv9WI2FtzI8xH1PrQBz6qJRISj7e9cSymcp5nwMfOLfMooX4B/59akF+ephHM6ZhG2mMnXPnkehF3g=="
+author_sig: "fkDLCENx4aOic9snOriICoREl2rPqtWPV/f9L72ksyOKu+TnLyoDEhon+OfAjKkRIijjF60Lw3cFsuEfDo3M+w=="
 ---
 
 # Usei git como banco de dados pra rodar um bot de graça no GitHub Actions

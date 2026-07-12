@@ -1,21 +1,20 @@
 ---
-title: Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak --
+itle: Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak --
   typescript-virtual-container polyfill'leri
 description: Fortune'un, konteynerin Wasm olmadan tarayıcıda çalışması için
   node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript'te
   elle nasıl yeniden uyguladığı.
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2iWVMpOsSqt79HW/tgzgwYv+qN35qmi22Q5r9Q2U/YX39wfywcJJ5dn33vuYEwYnqcDxloIMxXOXdjXhhxylUA=="
+author_sig: "COp54WUObT6vOa97jMsvz6TwttjLna+DkHC4Rnbw21ZR6kZfC5sPN1H1TYNifgNFKnG+rGDsg8wZA3AZScFSkg=="
 ---
 
 # Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri

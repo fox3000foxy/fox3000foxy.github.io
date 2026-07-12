@@ -1,17 +1,16 @@
 ---
-title: AI Konyolku untuk Nausicaa
+itle: AI Konyolku untuk Nausicaa
 description: AI dengan koefisien heuristik, hyper-parameter yang berubah setiap 5
   giliran, dan Oracle yang kabur -- menyelami otak game papan strategis.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
-  - game-dev
+  - gaming
   - ai
   - javascript
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JFsBRNsG5L/US18RBzD2B2yGs3c/YKqtZ8bqORYsTLFUFWIFgt6uOPccQ9DBtKHo1pEwoA1fMl45cBWMC0HiKw=="
+author_sig: "zNKSbyCgUu91vRHe6qoIv3q+Q6GjoC1gn/UBmWxmlGC9ZLG7UX1oZ1krRfgsCtrP89I7tsmP7Ghk4RTY7pe1qA=="
 ---
 
 ## AI Konyolku untuk Nausicaa

@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod : RSA हस्ताक्षर इंजेक्शन से Jeb_ की केप कैसे चुराएं"
+itle: "Cape Mod : RSA हस्ताक्षर इंजेक्शन से Jeb_ की केप कैसे चुराएं"
 description: "एक Fabric मॉड जो Minecraft के विश्वास मॉडल में एक तार्किक खामी का शोषण करता है : Mojang का एक वैध RSA हस्ताक्षर लेकिन गलत खाते पर रीप्ले किया गया। कोड स्पष्टीकरण, सुरक्षा निहितार्थ और क्रिप्टोग्राफ़िक सबक।"
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - signature
-  - reverse-engineering
   - security
-authors:
-  - fox3000foxy
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UrG2hV/mLdMfL3Ig5I0U9IykbLuizVAAGfI3rqUakuvn8I5e6fmdK/gGN1yGoIHusRkp2NhIcr3VMBjFym2ivA=="
+author_sig: "BflWK1VjdBXYMzGGhWRqu+P32l8oYrNZ9kX569xMf52OWMlvYR/dTlhOwdX5D9bExKhkkszcFH26AvrcbHv1ZA=="
 ---
 
 # Cape Mod : RSA हस्ताक्षर इंजेक्शन से Jeb_ की केप कैसे चुराएं

@@ -1,17 +1,16 @@
 ---
-title: كيف يعمل هذه المدونة؟
+itle: كيف يعمل هذه المدونة؟
 description: "وراء كواليس المدونة: React، Vite، Markdown، خط أنابيب CI/CD
   وسير عمل الكتابة."
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "m4ohNrt3h2q//H1/spyCJuikMGp4n5/jhKOHSMZhJ7vdRIDlrcTbiY9lfaZCk1o0PN/sz1+K33aSMuzfWgdjWA=="
+author_sig: "QXQjuyiOgq7NdHXLO/vFd7b1Eyd901Ym5diLY0nM+PftZfXRex25XF62j9rrBfg2Os2aZFHpGJRFjT4aDRM6zw=="
 ---
 
 # كيف يعمل هذه المدونة؟

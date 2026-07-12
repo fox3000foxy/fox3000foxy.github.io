@@ -1,14 +1,13 @@
 ---
-title: Làm việc trên một Dự án Mới
+itle: Làm việc trên một Dự án Mới
 description: Tổng quan về quy trình khởi động và phát triển một trang web mới.
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - meta
   - webdev
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FuwXIa7fPPuHqgNSMN3neZ+PAhkzy53M7Okgu+r0cOFobmQFRdXauOEHHWYdxgf6LL1L3ja40x4Mt2SCRTzcoA=="
+author_sig: "DmR2VQpQT2vQngQBU6IK2p/vXLSoFpzJHNh88hJwyz3xLQcJZvWUfVDZ4Yrk3bSr/Y7VMS79jDFT2wgAg88IGA=="
 ---
 
 # Dự án

@@ -1,17 +1,16 @@
 ---
-title: SSH commit signing script explained
+itle: SSH commit signing script explained
 description: A walkthrough of the SSH commit‑signing helper and why I wanted
   stylish commits.
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - git
   - security
   - shell
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hbUgI6AAKoWkKvrVUbGts8RgglPv2t5CrqIOGEc7LCCaIKhvYUi7YZUWr8J2DQg/K2ghJO1wd5EKjUg9wvu3PA=="
+author_sig: "YlGT91B/C3pIpVEWGexZeIIoDL0V/w0FOddMof74XPnUkKJBLuA+fvtRWT7dUsEkcNMMCYOG4phQv2Wn+AG/hg=="
 ---
 
 # SSH commit signing script explained

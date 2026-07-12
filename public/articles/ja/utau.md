@@ -1,17 +1,16 @@
 ---
-title: "UTAU：Visual Basic 6で作られたソフトがどうやって合成音声を民主化したか"
+itle: "UTAU：Visual Basic 6で作られたソフトがどうやって合成音声を民主化したか"
 description: 2008年にVB6で書かれたフリーソフトUTAUが、どうやって誰でも合成歌声を作れるようにしたか----そして今でもなぜ重要なのか。
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - utau
   - vocaloid
   - music
   - synthesis
   - vb6
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MKlqKFzGOKm1KlKkHpVvZYVtaf10uyBa0C5zaBND/84H1BacNA5VdtHD8/mASZ3uFxt4vMImDg1RaWX71OI9+g=="
+author_sig: "JeteMKfaIfNvJDFIJUCVIRomS2fjF8T5zDzO18s0+AfRctSY/db60Mm4vszW2DPj1NmijuvstxDhjC2P3a4inw=="
 ---
 
 ## UTAU : Visual Basic 6で作られたソフトがどうやって合成音声を民主化したか

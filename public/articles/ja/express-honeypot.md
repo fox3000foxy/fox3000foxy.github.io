@@ -1,17 +1,16 @@
 ---
-title: "超リアルなExpressハニーポットを構築しました"
+itle: "超リアルなExpressハニーポットを構築しました"
 description: "328の偽エンドポイント、その場で生成されるレスポンス、ヘッダースプーフィング、ボットトラフィック記録 -- スキャナーを欺くために設計されたExpressハニーポットミドルウェアのコードに深く潜る。"
 date: "2026-06-10"
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - express
   - nodejs
   - security
   - honeypot
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "abmz+s4QnLVf9pCXDWdfMe/59bcebqKuDIXJe901jm+UnTyK0Ixu/MLTX+NQwHxKZzSdoMX4JRGhG96MN8XuRw=="
+author_sig: "0pIxq2D6jJbCkrZVEvIe5b2483SISk+qHzAn0waTrNSugnaAxk0R85FAVE+2QTUZuEex5THZCPPHpBKhEWGgSw=="
 ---
 
 ## アイデア

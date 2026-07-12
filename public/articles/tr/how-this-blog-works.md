@@ -1,17 +1,16 @@
 ---
-title: Bu Blog Nasıl Çalışıyor?
+itle: Bu Blog Nasıl Çalışıyor?
 description: "Bu blogun iç işleyişine derin bir dalış: React, Vite, Markdown,
   CI/CD pipeline'ı ve makale yazma iş akışı."
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "s7FoAyXNhpxKrKpxfPCo5+l3nijJLmh8nQHcbDwpWll26R41paWKSRBNlutiIj1nc5a2v05Gc4PTCdLM3JZjmw=="
+author_sig: "24deRHemDR+r3R+epJM/Yc07uIESzVmtnqh37/CbQGbNxMRqPXsDdDdXQ8eh7UAsB1PB0h5g7qccWfCNCj9aDg=="
 ---
 
 # Bu Blog Nasıl Çalışıyor?

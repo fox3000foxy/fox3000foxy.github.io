@@ -1,17 +1,14 @@
 ---
-title: "Repo to VPS : تحويل GitHub Actions إلى VPS مجاني مع تخزين دائم"
+itle: "Repo to VPS : تحويل GitHub Actions إلى VPS مجاني مع تخزين دائم"
 description: كيفية تحويل مشغل GitHub Actions إلى VPS دائم باستخدام git كتخزين دائم -- tmate و inotify و commit --amend.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - github
   - devops
-  - vps
-  - actions
   - automation
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ZU0D66flXzil2IA2MQ2OAGEwZhJ5MNF5Oruva0c/MzuS+cWUkVdg08C2l8t64I++3YBGNUbvygoIvjmpWGI3FQ=="
+author_sig: "kEGJXBSD/W3pCZH+y8ismIPqLKZldDZ9+tP5dMUqj3GoKJL8RT5vsxnqwYuvQEQV3qjOqoEsll0AS9Oae04uNg=="
 ---
 
 ## GitHub يعطيك VPS مجاني لمدة 6 ساعات. لقد وجدت كيف أجعله دائماً.

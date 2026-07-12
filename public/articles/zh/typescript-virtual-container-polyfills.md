@@ -1,19 +1,18 @@
 ---
-title: 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
+itle: 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
 description: Fortune 如何用 640 行 JavaScript 手动重新实现了 node:fs、node:crypto 等一打 Node
   模块，让容器在浏览器中无需 Wasm 即可运行。
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Dt0TBvTlpd2LWVZENO8tC4947ruJPENOEhLUdcwfAvgzmrgtjYvf7OzCjx3BI4PG3kq8z1AGAyi4bEmJlBShUQ=="
+author_sig: "1dqAc+Q2PKmwXcb8IRg4juyt0aE+xegjDOcVcFsEXGZc8UaWEnNCdZ6UZ4M0bigLI2IzXLRiVkBUCrrMSuITZg=="
 ---
 
 # 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill

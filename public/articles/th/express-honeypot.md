@@ -1,17 +1,16 @@
 ---
-title: "ฉันสร้าง honeypot Express ที่สมจริงอย่างยิ่ง"
+itle: "ฉันสร้าง honeypot Express ที่สมจริงอย่างยิ่ง"
 description: "328 ปลายทางปลอมพร้อมการตอบสนองที่สร้างขึ้นทันที การปลอมแปลงส่วนหัว การบันทึกทราฟฟิกบอท -- เจาะลึกโค้ดของมิดเดิลแวร์ honeypot Express ที่ออกแบบมาเพื่อหลอกลวงสแกนเนอร์"
 date: "2026-06-10"
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - express
   - nodejs
   - security
   - honeypot
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3XLbDhUCWbTuV6uCRJdK8C2DneA+KNCP6MytsoXDb/POC1Yd0hqpmnPIV+BnVZXTzD3OZNZCjfPi39dGQIgmvA=="
+author_sig: "SU06ZY5GcM1crseEo3BH8LQn9FnFzob9QIV3ufkwdhf2Y1hzeMrtHrnUOyHDDaPkCLnBK6LNZDZhDtOHw/fttA=="
 ---
 
 ## แนวคิด

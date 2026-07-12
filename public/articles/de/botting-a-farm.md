@@ -1,17 +1,16 @@
 ---
-title: Eine Microsoft-Rewards-Farm boten
+itle: Eine Microsoft-Rewards-Farm boten
 description: Wie ich einen Bot programmiert habe, der Microsoft-Rewards-Punkte
   in großem Stil farmt – und warum Microsofts Anti-Bot-Erkennung inzwischen
   nachgezogen hat.
-date: 2026-03-13
+date: 2026-03-13authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "LYoGLwhRzZq6i8oV1IRgWARLf1L0foGlOLX+NUFZ/x/OUwt1RJ7c5yp/I4hs4cXqzG7pQ1eN5Zt93G+iepmehQ=="
+author_sig: "FHKWLKGxxoOvu4ahrAWnPWf4EFYQxkkm1f8H2w5PSE9m7mP5vhej+5H+576gvr2usqe6Fr4mdLgzp0C6Wc40WA=="
 ---
 
 > **Hinweis (2026):** Dieses Projekt wird nicht mehr gewartet. Microsoft hat seine Anti-Bot-Erkennung deutlich verschärft – was damals funktioniert hat, funktioniert heute nicht mehr. Der Code und der unten beschriebene Ansatz werden nur zu Archivierungs-/Bildungszwecken aufbewahrt.

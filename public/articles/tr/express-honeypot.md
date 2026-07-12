@@ -1,17 +1,16 @@
 ---
-title: "Gerçeküstü bir Express honeypot'u inşa ettim"
+itle: "Gerçeküstü bir Express honeypot'u inşa ettim"
 description: "Anında oluşturulan yanıtlar, başlık sahteciliği, bot trafiği kaydı ile 328 sahte uç nokta -- tarayıcıları kandırmak için tasarlanmış bir Express honeypot middleware'inin koduna derinlemesine bir dalış."
 date: "2026-06-10"
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - express
   - nodejs
   - security
   - honeypot
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pI25RzfsFwp0fDoblZAPpMSexvHr7gWIYuYVsjNzoxHotx0WVRVw25nL589l4+fDeJvl47AtGofpNhFhVR/qMw=="
+author_sig: "Aq8rFuGHBVEtcBbo1hzJWZHUBkOjspm41QXnRiPBn1xqmZBJ9rjfnmaNgZ0c51TdvLJi1oYy8wp/tIj9rLlqxw=="
 ---
 
 ## Fikir

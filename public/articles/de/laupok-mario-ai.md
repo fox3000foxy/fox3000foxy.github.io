@@ -1,19 +1,15 @@
 ---
-title: "Laupok hat eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie"
+itle: "Laupok hat eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie"
 description: "Ein tiefer Einblick in Laupoks Projekt: Eine NEAT-basierte KI, die lernt, Super Mario World autonom zu spielen. Genetische Algorithmen, neuronale Netze, Neuroevolution augmentierender Topologien und 4200 Zeilen Lua."
-date: 2026-07-11
-tags:
-  - kuenstliche-intelligenz
-  - lua
-  - genetischer-algorithmus
-  - neuronales-netz
-  - neat
-  - emulierung
-  - reverse-engineering
-authors:
+date: 2026-07-11authors:
   - fox3000foxy
+tags:
+  - ai
+  - lua
+  - emulation
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dMmUyzeWVqpu02ccl4LY1oNOofPbB4YodSuwa4z96vxzOCYRjuDIy6lpkGKiwI9/249AAD5x0VhyBrs6Nu/zeQ=="
+author_sig: "hpXsVnmAfX3qNc+tPcNnKJ/7ws+CEf5X7+vBDn9YPaq0yfsXIdeCshdUxxIJ8tHhDAWE8zhf2xv1Sw5aFBNpDA=="
 ---
 
 # Laupok hat eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie

@@ -1,18 +1,17 @@
 ---
-title: "Membangun character-factory: avatar dengan genetika"
+itle: "Membangun character-factory: avatar dengan genetika"
 description: "Modul TypeScript di atas DiceBear: generasi konsisten per
   negara/etnis, mesin genetika kecil untuk memproyeksikan anak, dan
   detail rekayasa yang membuatnya dapat digunakan dalam permainan kartu."
 date: 2026-05-16
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bFZ7GWhnuND1kNJs4PDkY/rYrFoOVtJsEHjbGvwXqwQfisGNLs+wy3l0P9e0rCD2C0vk5UxpR8dQlxkcIDfIbA=="
+author_sig: "sqD6cwpH91OZXEGP69nPfp9HgUUDRSr/vCP+lvzTDMk/NKvZ6Kqfja7lNdgvTq5hYGizlYHu7DWVb5W75PFsRg=="
 ---
 
 # Membangun character-factory: avatar dengan sistem genetika

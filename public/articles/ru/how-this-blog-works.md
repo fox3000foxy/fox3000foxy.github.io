@@ -1,17 +1,16 @@
 ---
-title: Как работает этот блог?
+itle: Как работает этот блог?
 description: "Глубокое погружение во внутреннее устройство блога: React, Vite,
   Markdown, CI/CD пайплайн и процесс написания статей."
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - react
   - meta
   - blog
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "zTrtqGgQIwLTWaZERDpuSHdqDEZw2XTmJo6bQqWRAKLlGRDAkbCUktHttWRtqz1lDeJvj/XRkdzPqy/Gng69zQ=="
+author_sig: "Riu3C8pTN/+8VtAYeDlqDgzlGDHPXgZh7jJCl09qkRW4ZlFTpEZdHVOc8k8wAjjsUOrv/QUrpqTLHVlBcTvF2g=="
 ---
 
 # Как работает этот блог?

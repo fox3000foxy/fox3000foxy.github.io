@@ -1,19 +1,15 @@
 ---
-title: "Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل"
+itle: "Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل"
 description: "استعمق في مشروع لاوبوك: ذكاء اصطناعي مبني على خوارزمية NEAT يتعلم لعب سوبر ماريو وورلد بشكل مستقل. الخوارزميات الجينية، والشبكات العصبية، والتطور العصبي لل;topologies المتميزة، و4200 سطر من لوكا."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - artificial-intelligence
+  - ai
   - lua
-  - genetic-algorithm
-  - neural-network
-  - neat
   - emulation
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6qvO9bQUH+knrUK5iTxQu7ufh1g7gkaxtnRjQcpg1a5Z3eRFdysd1NarCxCdNpYE3qxCFtMUjUpkj1ZLZw06sw=="
+author_sig: "cFzWwxf8/MukNR5IL8S1RuShO0EOOcMhCPMXDTYOTnd1s2uSMKEyRsQjiZ9VC0Ehwe/faG5rsUO0EyeyzK1Xaw=="
 ---
 
 # Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل

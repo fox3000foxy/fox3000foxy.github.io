@@ -5,8 +5,6 @@ date: 2026-05-29
 tags:
   - github
   - devops
-  - vps
-  - actions
   - automation
 authors:
   - fox3000foxy

@@ -1,18 +1,17 @@
 ---
-title: Мой тупой ИИ для Nausicaa
+itle: Мой тупой ИИ для Nausicaa
 description: Эвристический ИИ на коэффициентах, гиперпараметры которых меняются
   каждые 5 ходов, и Оракул который убегает -- погружение в мозг мифологической
   стратегической настолки.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
-  - game-dev
+  - gaming
   - ai
   - javascript
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Ic5aOQsEodMShrl2vVOeogTZ9B7NDeW9QM8isiRNhfrsgp2s8JomR2nRs7vxGqRMsbRL5b3EimoslaNl5Y/7FQ=="
+author_sig: "lhkCWtzYzH5MWs7UX7UAPXKZmDC2y+sIcS2T8Vh7txbIIuIvPsBaQ5dnExu4XzbgybNzl3WLyNopUpv5jM844g=="
 ---
 
 ## Моя долбанутая ИИ для Nausicaa

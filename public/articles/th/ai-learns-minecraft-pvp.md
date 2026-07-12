@@ -1,17 +1,14 @@
 ---
-title: AI เรียนรู้ Minecraft PvP -- Imitation Learning, Reinforcement Learning และ 30 ตัวแปรที่สำคัญ
+itle: AI เรียนรู้ Minecraft PvP -- Imitation Learning, Reinforcement Learning และ 30 ตัวแปรที่สำคัญ
 description: "บันทึก 1,000 ดวล, ฝึกโครงข่ายประสาทเทียมบนพิกเซล, ความแม่นยำในการกดแป้นพิมพ์ 90% : และบอทเดินตรงไปชนกำแพง จากนั้นมา RL, curriculum learning และ 60 ชั่วโมงของการฝึก"
-date: 2026-07-09
+date: 2026-07-09authors:
+  - fox3000foxy
 tags:
   - minecraft
   - ai
-  - reinforcement-learning
-  - imitation-learning
   - python
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2jA9nT69ak6jCmGTQwfGWbE6+RJpu385oHTKf8sHWOOGtOC1ayrua7jOvIz5jOuwJa5W8BQktGMhw1rLW8anjQ=="
+author_sig: "meRW0g28XR12oGg5sRFmewReb2fYWtxRVh/xcQUOiRpLRkA2XrRt/dbXBR8eE2G3ySpcWa6ZShupo4EiihEXaA=="
 ---
 
 ## บทนำ

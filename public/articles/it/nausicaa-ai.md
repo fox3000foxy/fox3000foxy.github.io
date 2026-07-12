@@ -1,18 +1,17 @@
 ---
-title: La mia IA del cazzo per Nausicaa
+itle: La mia IA del cazzo per Nausicaa
 description: Un'IA basata su coefficienti euristici, iperparametri che cambiano
   casualmente ogni 5 turni e un Oracolo che scappa -- tuffo nel cervello di un
   gioco da tavolo strategico mitologico.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
-  - game-dev
+  - gaming
   - ai
   - javascript
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PgUJnw7HQOaI10LXst1LdOaeiBpCNZ6p+YACOkThk0nXnBOEOdenBXVCkbVPJ1JAkrC/gZm1BLsjiihMgc6aTA=="
+author_sig: "vfYdL4APYpHvSr/oVtpBYA+ipXi64114i2tFOlksz6sI60CPwZ/GtjtyhkRLW4x+Y/u+0jaBn1p8lHqbn3m1WA=="
 ---
 
 ## La mia IA sballata per Nausicaa

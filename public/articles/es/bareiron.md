@@ -1,18 +1,17 @@
 ---
-title: Bareiron -- el servidor de Minecraft que corre en un microcontrolador de 1$
+itle: Bareiron -- el servidor de Minecraft que corre en un microcontrolador de 1$
 description: 6800 líneas de C, cero malloc, Perlin noise reemplazado por
   interpolación bilineal, biomas en tile map, y todo eso en un chip de 1$.
-date: 2026-05-30
+date: 2026-05-30authors:
+  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UA0C9K41H9UtwCgjdhZw5GkiPwNAKXn+ZBQfx8SFlA6eU8yuTSM/GdGCadg5HF4K3FQzhpzr9u3vXKMN0E5w7Q=="
+author_sig: "JkmSV9KQyoS5G0oQVDaymkOeFJYDheSdlgu/ew/iNAw+eMkBE6qizFzWRS7nimyOITTod3KuH2gAKudddq7RAg=="
 ---
 
 ## Introducción

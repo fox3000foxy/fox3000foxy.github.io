@@ -1,21 +1,20 @@
 ---
-title: Far funzionare una libreria Node.js nel browser senza Wasm -- i polyfill
+itle: Far funzionare una libreria Node.js nel browser senza Wasm -- i polyfill
   di typescript-virtual-container
 description: Come Fortune ha reimplementato a mano node:fs, node:crypto e una
   dozzina di altri moduli Node in 640 righe di JavaScript per far funzionare il
   container nel browser senza Wasm.
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qGRLW7HV+5rV2h7J4oAUEmMpT8K5RDA1e+E/I6bDM2db5sH3648fLslq0Vr4iJ125FI1/pRwA6r3AQ2JxTZP4g=="
+author_sig: "T9WyY0BhsdrAAtWmlx2YcPNeegKlUrbabtwhzlbzXWKNUWqZlEFHo3uNAKMA8L9aJKr/oDpM8lXJXayoj8ECyw=="
 ---
 
 # Far funzionare una libreria Node.js nel browser senza Wasm -- i polyfill di typescript-virtual-container

@@ -1,19 +1,15 @@
 ---
-title: "Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร"
+itle: "Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร"
 description: "บทความเชิงลึกเกี่ยวกับโปรเจกต์ของ Laupok: AI ที่ใช้ NEAT เรียนรู้การเล่น Super Mario World ได้อย่างอิสระ อัลกอริทึมพันธุกรรม โครงข่ายประสาทเทียม การวิวัฒน์โครงข่ายประสาทแบบเพิ่มขยาย และ Lua 4200 บรรทัด"
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - artificial-intelligence
+  - ai
   - lua
-  - genetic-algorithm
-  - neural-network
-  - neat
   - emulation
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tDBgjMK3WUmWKqGwbtsgEF06sVA6EBUzVgfBV7d74aQsrw3lq2xRIXI3PsslLPj3OWetYi/NUhGPNhyhKa+lFw=="
+author_sig: "BzoYojRHs/eeWesvfuOnoAXEwmpIRpxLecGZZONlAzdekhYnkZnG0abMVKvMoC7YtQySOdF0Q6lIDnKTbfQmNQ=="
 ---
 
 # Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร

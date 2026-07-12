@@ -1,14 +1,13 @@
 ---
-title: My Passions
+itle: My Passions
 description: Coding, drawing, automating things, discovering old tech, and more
   -- a look into what drives me.
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bOoUArxXgjwOjhuwmqXtJXWhBiDW+XzQDKUgN5metDOZaVinZorhWb+mAl1+NgMkl90eMbdBqngAol+0cULdbA=="
+author_sig: "t0OTM4Znr6OHytm+FGIb2l+bI+PZG77GQJ03jlNNiKlvQ2WA2xO+JtRyDftueC6q8WcURWbuTcu+dUJ9Y129YA=="
 ---
 
 # My Passions

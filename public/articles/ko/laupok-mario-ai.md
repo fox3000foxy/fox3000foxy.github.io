@@ -1,19 +1,15 @@
 ---
-title: "Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리"
+itle: "Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리"
 description: "Laupok 프로젝트 심층 분석: 슈퍼 마리오 월드를 자율적으로 플레이하는 NEAT 기반 AI. 유전 알고리즘, 신경망, 증강 토폴로지의 신경 진화, 그리고 4200줄의 Lua."
-date: 2026-07-11
-tags:
-  - 인공지능
-  - lua
-  - 유전 알고리즘
-  - 신경망
-  - neat
-  - 에ミュ레이션
-  - 리버스 엔지니어링
-authors:
+date: 2026-07-11authors:
   - fox3000foxy
+tags:
+  - ai
+  - lua
+  - emulation
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BBn0JTONKPlvzEEJOHCp7/pgn+oKCdd4Hyu6TZgv5QrLL9WY3RShyvv3egW+aZk5VSYNQUoY8xAJDclIVojIAQ=="
+author_sig: "bvzyQMeCIoPboJkt7nyxgzAFckABtZxTBXkwVYcZqy6uN6QlbqcHlrT9i9B3Z8w1I5z2ygczzaOUEpyNqSHHUg=="
 ---
 
 # Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리

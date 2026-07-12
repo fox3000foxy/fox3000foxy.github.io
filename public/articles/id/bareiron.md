@@ -1,18 +1,17 @@
 ---
-title: Bareiron -- server Minecraft yang berjalan di mikrokontroler $1
+itle: Bareiron -- server Minecraft yang berjalan di mikrokontroler $1
 description: 6800 baris C, nol malloc, Perlin noise diganti dengan bilinear
   interpolation, biome di tile map, dan semuanya di chip $1.
-date: 2026-05-30
+date: 2026-05-30authors:
+  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PkhyOMLEhZ4QTpWgmJzY7FCuxasA9bD1xveRooZ3K9ZD9Ouyx8p9pWtyIG59H5m5U1X4751nNN/gJwyElUVVWw=="
+author_sig: "tYVA0rN5LEpOF2rPwLT3jWn/oY5ZcRqwwYPCSGSEj94WKr5QWLoyvlEqECNGhDCKqUfRnIo3hQBaVjjer67MLg=="
 ---
 
 ## Pendahuluan

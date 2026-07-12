@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod: Wie man Jeb_s Cape mit einer RSA-Signatur-Injektion stiehlt"
+itle: "Cape Mod: Wie man Jeb_s Cape mit einer RSA-Signatur-Injektion stiehlt"
 description: "Ein Fabric-Mod, der eine logische Schwachstelle im Vertrauenssystem von Minecraft ausnutzt: eine gültige RSA-Signatur von Mojang, die jedoch auf das falsche Konto replayiert wird. Code-Erklärung, Sicherheitsimplikationen und kryptografische Lektionen."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - signatur
+  - security
   - reverse-engineering
-  - sicherheit
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "f9zmYGHsTLNDUD2hrFZAtLRovWlw5crntsII0TddyeQhGVmlDQY2czRjaxVExoSm80cZXyIcocI6OvNnO22mcQ=="
+author_sig: "cSgUcPXxYznTew8PnL8MzfgOY9z540Uhj+8jnzoWOwbQqdjkaWLua8bADPowcQv89vxqjoT3hfrWc+5EtUOpkw=="
 ---
 
 # Cape Mod: Wie man Jeb_s Cape mit einer RSA-Signatur-Injektion stiehlt

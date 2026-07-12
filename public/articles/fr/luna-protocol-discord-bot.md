@@ -3,11 +3,11 @@ title: "Luna Protocol : j'ai créé un bot Discord autonome qui simule un être 
 description: "Luna Protocol est un bot Discord entièrement autonome doté d'un LLM local, capable de conversation naturelle avec sommeil, fautes de frappe, hésitations, oublis, fatigue thématique et messages spontanés."
 date: 2026-07-11
 tags:
-  - discord-bot
+  - discord
   - llm
   - typescript
   - event-driven-architecture
-  - artificial-intelligence
+  - ai
   - open-source
 authors:
   - fox3000foxy

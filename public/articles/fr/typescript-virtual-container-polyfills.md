@@ -8,7 +8,7 @@ date: 2026-05-29
 aiGenerated: true
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source

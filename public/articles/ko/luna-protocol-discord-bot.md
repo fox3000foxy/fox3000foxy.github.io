@@ -1,18 +1,17 @@
 ---
-title: "Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다"
+itle: "Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다"
 description: "Luna Protocol은 로컬 LLM을 탑재한 완전 자율 Discord 봇으로, 수면, 오타, 망설임, 건망증, 주제 피로, 자발적 메시지 등이 포함된 자연스러운 대화가 가능합니다."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - discord-bot
+  - discord
   - llm
   - typescript
   - event-driven-architecture
-  - artificial-intelligence
+  - ai
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tTzIO2BKY4ONq0ixw7Ib3ULTue9tuBmGjvMVrCUmhycsVU1RBN8axKwAzJqZ5N3ax4T/jbDA7G8Ik2QHJY2wZg=="
+author_sig: "oxVaQ4UYUCdG7Sk6aIuYaXPYBwFOUZypEQLo6G6rejtwU3EXVkxOYJr/n71l80mrZ88CdbFwRDwjR7kQeCDIYg=="
 ---
 
 # Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다

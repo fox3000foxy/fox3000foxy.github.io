@@ -1,19 +1,15 @@
 ---
-title: "Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解"
+itle: "Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解"
 description: "深入解析 Laupok 的项目：一个基于 NEAT 算法的 AI，能够自主学习并通关《超级马里奥世界》。遗传算法、神经网络、增强拓扑的神经进化，以及约 4200 行 Lua 代码。"
-date: 2026-07-11
-tags:
-  - 人工智能
-  - lua
-  - 遗传算法
-  - 神经网络
-  - neat
-  - 模拟器
-  - 逆向工程
-authors:
+date: 2026-07-11authors:
   - fox3000foxy
+tags:
+  - ai
+  - lua
+  - emulation
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "U5rc93ILzGi7mF1tPZwaIEbYRMM7W3zZxqHYMaJ2295O9P5gZ+xd1FunpvwV4d8tCKaF61mpr6Me3oQpQgdWFg=="
+author_sig: "MvL0n/RiMWkNHb93TCXUcPysfP0JVVXfu0hY/HDEm2nbgVjhkjCMgsyujV2bjIKWCiKIw9spP4JCRC/UU1yShg=="
 ---
 
 # Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解

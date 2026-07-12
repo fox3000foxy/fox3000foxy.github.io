@@ -1,21 +1,20 @@
 ---
-title: Eine Node.js-Bibliothek ohne Wasm im Browser zum Laufen bringen -- die
+itle: Eine Node.js-Bibliothek ohne Wasm im Browser zum Laufen bringen -- die
   Polyfills von typescript-virtual-container
 description: Wie Fortune node:fs, node:crypto und ein Dutzend weiterer
   Node-Module in 640 Zeilen JavaScript von Hand neu implementiert hat, damit der
   Container ohne Wasm im Browser läuft.
 date: 2026-05-29
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
-  - node.js
+  - nodejs
   - polyfills
   - browser
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "H9jzHo6RDywg4po90u9xgi6saNVmuXeOf1RSZ57Td/WugVqKAOkYnr7zlBbGI0e/i2FFfXa8a2ObodtuMnfYYg=="
+author_sig: "WrJFKnm78qqZO2itzKshxX+fkCT9zmHqS/OPk+H6qQOzTx6gjXmzQK1yPtKQcvCtoPGd9bPXp2309ZcS9y+liQ=="
 ---
 
 # Eine Node.js-Bibliothek ohne Wasm im Browser zum Laufen bringen -- die Polyfills von typescript-virtual-container

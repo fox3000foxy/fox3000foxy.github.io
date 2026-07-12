@@ -1,16 +1,15 @@
 ---
-title: Minecraft Pathfinding Logic and Applications
+itle: Minecraft Pathfinding Logic and Applications
 description: How A*, block malice, and POI mechanics let you control, predict,
   and exploit mob movement -- from wireless redstone to optimized farms.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "mZw1CkUZu4vYsOm21Z1ScvhIK3KgnfBL7A8nVuR5rpuSkpFo00o/XZTWN4k6KH/5B3a0SG19uChp7Ajgj1rZ3Q=="
+author_sig: "PXAs6JoCxXH8npy73LZLwRij1+EDx644ETfTqRKx6iyHac/0r8iZXygSVWigDT7hP5BgsHXRbQgAj3lLjYajmA=="
 ---
 
 ## Introduction

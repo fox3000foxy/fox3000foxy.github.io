@@ -1,17 +1,14 @@
 ---
-title: "Repo to VPS : GitHub Actions को मुफ़्त VPS में बदलें स्थायी स्टोरेज के साथ"
+itle: "Repo to VPS : GitHub Actions को मुफ़्त VPS में बदलें स्थायी स्टोरेज के साथ"
 description: GitHub Actions रनर को स्थायी स्टोरेज के साथ एक स्थायी VPS में कैसे बदलें -- tmate, inotify और commit --amend.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - github
   - devops
-  - vps
-  - actions
   - automation
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cEXYWLWj64m4g/hQbqkakM8Bxn/p2weF5jcrUI2+JKg3H6s483vhBRloDMeRi9J3K4MxzHeFcLkOd/VIqnNKiw=="
+author_sig: "okYNEXE0jaL0lhGen0aCA08wtCd+iX+OTpM0LaARK9X/irmGjoUDY/uS5TEcA9U+3wJC3v/rM/CR1/Y5sWoplg=="
 ---
 
 ## GitHub आपको 6 घंटे के लिए मुफ़्त VPS देता है। मैंने इसे स्थायी बनाने का तरीका ढूंढ लिया।

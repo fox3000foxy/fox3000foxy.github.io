@@ -1,19 +1,15 @@
 ---
-title: "Laupok ने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है"
+itle: "Laupok ने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है"
 description: "Laupok के प्रोजेक्ट पर गहरी नज़र: एक NEAT-आधारित AI जो सुपर मारियो वर्ल्ड को स्वायत्त रूप से खेलना सीखता है। जेनेटिक एल्गोरिदम, न्यूरल नेटवर्क, न्यूरोएवोल्यूशन ऑफ ऑगमेंटिंग टोपोलॉजीज़, और 4200 लाइनें Lua की।"
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
-  - artificial-intelligence
+  - ai
   - lua
-  - genetic-algorithm
-  - neural-network
-  - neat
   - emulation
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "nZHTqLveX4yHDnkfrsrsium9zau8aynHtt/bGDw1lt1cG/oV85KMlq+XW6kvAq1GqBKJKPK95grKNdXOBWSuGQ=="
+author_sig: "hNxvxWYuz+W2gthtHEu4KAQxpBhERiXLCzQTrQ3a2chfNSvUC97cBAchZJ4O/cs+4/GQ9E/mnZPXPEVckoccWg=="
 ---
 
 # Laupok ने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है

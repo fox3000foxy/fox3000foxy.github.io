@@ -1,17 +1,16 @@
 ---
-title: Скрипт подписи коммитов SSH -- объяснение
+itle: Скрипт подписи коммитов SSH -- объяснение
 description: Разбор помощника для подписи коммитов через SSH и почему я хотел
   стильные коммиты.
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - git
   - security
   - shell
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jfbJzpozRglUgAOKi7T+5XIGjlGj0xaOyVeEiJhn4/x3iQYc6lIGM/4ljkxt4jLu+0Q0+B/zUF6n9ZgyRvC3xw=="
+author_sig: "9rrV4L7+hr3da7X6y0v9CTT9Buj9AqNXw15Bm4PrsQ8TAUJu6KoA5RQztkQHm5Zv6FPArIMGt0s0QXc1M7FgRw=="
 ---
 
 # Скрипт подписи коммитов SSH -- объяснение

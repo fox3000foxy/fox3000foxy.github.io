@@ -1,23 +1,22 @@
 ---
-title: "Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım"
+itle: "Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım"
 description: "Her eylemin anında WebP görüntüsü oluşturduğu sıra tabanlı bir Discord RPG'si:
   URL oyun durumu olarak, deterministik RNG, WASM hattı, 5 seviyeli önbellek,
   sunucusuz bot."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "uLiCscMwj4YPxsyAnZaem23+O01Z8Ody7cXZABby0Rnp8uAXo2y/OX79v2AbwnMNjXtSsgLExB1F1iFtb9y3Og=="
+author_sig: "Cbnw4D6XGdSb/SOaGXsUQ6UA3foMp3XFsfQ7scMUL+sHELqIvFcoEOuSwEHibKtVAdJdqmbscseHQiSz1kIqyA=="
 ---
 
 # Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım

@@ -1,15 +1,14 @@
 ---
-title: लिनक्स कर्नेल सिमुलेशन के लिए जावास्क्रिप्ट समाधानों की तुलना
+itle: लिनक्स कर्नेल सिमुलेशन के लिए जावास्क्रिप्ट समाधानों की तुलना
 description: जावास्क्रिप्ट/टाइपस्क्रिप्ट में लिनक्स वातावरण पुनर्निर्माणों का गहन विश्लेषण।
-date: 2026-05-28
+date: 2026-05-28authors:
+  - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "u3TI+gHDsF+LMOooP+IXUbqFjqYrQnm+3GRxpM4+lzB8DIdlDcOr+LD/LxZVJpFOxiKUl8np6Cd5b08KgxpqPA=="
+author_sig: "IL2vn5udVPwvL3mkMefHyTzoxuGkCr9fRqUJNnhZ81R7oZCVFRcPPrqAboRo316bZpzGj/g7WlRCuD4Z1g92zA=="
 ---
 
 # हर जावास्क्रिप्ट सैंडबॉक्स, एमुलेटर, सिमुलेटर और लिनक्स हनीपॉट -- तुलना

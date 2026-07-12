@@ -1,19 +1,18 @@
 ---
-title: Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions
+itle: Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions
 description: Cómo codifiqué un auto-respondedor de email con IA que funciona en
   GitHub Actions por 0€/mes -- usando tags de git como base de datos y snapshots
   pre-compilados en un tag runtime.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Z0GjjjWiVrl3WcLem9CZ1DYpDa3kY9fn3+kVq9PCSQisFcwuYtnuSd9vGGRs67C3a/ryzvUuBR8ub8/ipNPkbg=="
+author_sig: "Qdv+cpff/zwPAiBtEtVrHFbvzGZuQyNmqyhuiGxCBuUbjXUsPSoyslkdxGUttJon8RUE0GRokzWez+wR8Ux1OA=="
 ---
 
 # Usé git como base de datos para hacer funcionar un bot gratis en GitHub Actions

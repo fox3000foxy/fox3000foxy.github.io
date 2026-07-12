@@ -1,18 +1,17 @@
 ---
-title: "Construyendo character-factory: avatares con genética"
+itle: "Construyendo character-factory: avatares con genética"
 description: "Un módulo de TypeScript sobre DiceBear: generación coherente
   basada en país/etnia, un pequeño motor genético para proyectar hijos, y los
   detalles de ingeniería que lo hicieron usable en un juego de cartas."
 date: 2026-05-16
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FQPAr6cpm2qYxEZG4DKzr3FiyAufAVvbnh+d9jusrB61fXX1/TE2yXdSeZdHWlbn3n+ypHkX7u5uw6PuCpbIMw=="
+author_sig: "dwULZCnxhJ0CRqC6xXu8js2L8tQzGQYIBSJDitBmRIP327LT3mKZ3yKA1caDPE74MedIfxeOeKnH+m/j3MyCCA=="
 ---
 
 # Construyendo character-factory: avatares con genética

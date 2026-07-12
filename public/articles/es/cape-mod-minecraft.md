@@ -1,19 +1,16 @@
 ---
-title: "Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA"
+itle: "Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA"
 description: "Un mod Fabric que explota una falla lógica en el sistema de confianza de Minecraft: una firma RSA válida de Mojang pero reutilizada en la cuenta equivocada. Explicación del código, implicaciones de seguridad y lecciones criptográficas."
-date: 2026-07-11
+date: 2026-07-11authors:
+  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
-  - rsa
-  - firma
-  - ingenieria-inversa
-  - seguridad
-authors:
-  - fox3000foxy
+  - security
+  - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3q94wSyi7OvjWNO64t3sUeZNJelLclsn28YAudpkab0EkHRw670ndxwgyXMTnKPtV75lllM8JZKSUs9xJJ4TtA=="
+author_sig: "Zbxja01igoRWivL0Qe6PzKR0Er1DtHkCBdhgGZRyB2phhF08K85qISAaStEqDms42o4hoJ270LK+bVv7MTuVSA=="
 ---
 
 # Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA

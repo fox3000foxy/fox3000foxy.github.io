@@ -1,23 +1,22 @@
 ---
-title: "मैंने एक सप्ताहांत konosuba-rpg का कोड पढ़ा और यहाँ बताया कि मुझे क्या मिला"
+itle: "मैंने एक सप्ताहांत konosuba-rpg का कोड पढ़ा और यहाँ बताया कि मुझे क्या मिला"
 description: "एक Discord टर्न-बेस्ड RPG जहाँ हर क्रिया तुरंत एक WebP इमेज जनरेट करती है:
   URL गेम स्टेट के रूप में, डिटरमिनिस्टिक RNG, WASM पाइपलाइन, 5-लेवल कैश,
   सर्वरलेस बॉट।"
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5A0erVZQEcRWiX4EToKkJqNEwqdmj6XTicwA978/NvXd7koVso8BsfiGPT0Oj4eurTOcDnyh/c3afkLYMOtBKw=="
+author_sig: "BC285U1UgMZjEWws6/Qln06q78cgHyCWsbeWiL1ZCUc8IHHOxMaF0ASMRXCEq5/u/Op5PEEVIcdYD9u4JbAymg=="
 ---
 
 # मैंने एक सप्ताहांत konosuba-rpg का कोड पढ़ा और यहाँ बताया कि मुझे क्या मिला

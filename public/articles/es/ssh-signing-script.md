@@ -1,17 +1,16 @@
 ---
-title: Script de firma de commits SSH explicado
+itle: Script de firma de commits SSH explicado
 description: Un recorrido por el ayudante de firma de commits SSH y por qué
   quería commits con estilo.
 date: 2026-03-08
-aiGenerated: true
+aiGenerated: trueauthors:
+  - fox3000foxy
 tags:
   - git
   - security
   - shell
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xxgf/Tc0ZTZ27wxWXZzvJNumYQ9+QAYShHe/GrL3R38ocUd7foAgEnINUs+ZZuH3eYawdyEO+vkFFvvFqjen3Q=="
+author_sig: "t2F6wEl5mgThWJbaTD/eidhd7V8R3zGZ63yQzsbXHs6if8+Grm37WwbLzEKDVBXb6pYUHd0AkOnQLmglrl5paQ=="
 ---
 
 # Script de firma de commits SSH explicado

@@ -1,13 +1,12 @@
 ---
-title: 俺の情熱
+itle: 俺の情熱
 description: コーディング、絵を描くこと、自動化、古い技術の発見など----僕を動かすものたち。
-date: 2026-03-08
+date: 2026-03-08authors:
+  - fox3000foxy
 tags:
   - personal
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KgQiYVwrWmFqEb/Bj50kU8tDi12JpZH3Hg8KOZonzSWyzV9jBoZb7JDnu65SAfsrMgRcYSoJwNKm6zvIP3LoDA=="
+author_sig: "vOa31DjzH96qOtD8kaklfA/YaFAFvaJQecOAiOUlmom/9KKJKewRZR/fifmz2O0TzJtnxKwFyf/FSQOiFboQEg=="
 ---
 
 # 俺の情熱

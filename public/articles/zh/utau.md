@@ -1,17 +1,16 @@
 ---
-title: "UTAU：一个VB6软件如何让人人都能玩合成音声"
+itle: "UTAU：一个VB6软件如何让人人都能玩合成音声"
 description: UTAU，一个2008年用VB6写的免费软件，如何通过拼接合成让人人都能创建合成歌声----以及它为什么今天仍然重要。
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - utau
   - vocaloid
   - music
   - synthesis
   - vb6
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "g9sju8SdLotkAHKmYpHExsBn5zID3AYzGBIJvC13bljPDqgY65zt4/iud+CGY8/ZV/pqLiKQ71vjV/69ZGg7mg=="
+author_sig: "YT/XdZFtvmfp2b4mmm2bx/l7NprKFz8lskwd149h5x60yV4jK3FZvS0klOfJuKgWzkX7kpUZXKj947Wn6VqUFw=="
 ---
 
 ## UTAU：一个VB6软件如何让人人都能玩合成音声

@@ -1,16 +1,15 @@
 ---
-title: Logic pathfinding Minecraft và các ứng dụng
+itle: Logic pathfinding Minecraft và các ứng dụng
 description: Cách thuật toán A*, điểm phạt khối và POI cho phép điều khiển, dự đoán và khai thác
   di chuyển của mob -- từ redstone không dây đến các trang trại tối ưu.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "swGVPRmRD4/V4tmtn9zHbVWvJLJJ6E0UiYz1ZNhIZ7WHmG5hA2nGJD9/iuNGM3w8Byxi1QyD6X5c8e/5BH2L8Q=="
+author_sig: "cI4gg0muOU9kPzHoT9fMIorHxy9UtQe7oVrQ7NB1Osnu22w1XSGMAA/4l6D5iYh7oPFpST+p+A0OGYAzF6BIBQ=="
 ---
 
 ## Giới thiệu

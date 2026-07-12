@@ -1,17 +1,16 @@
 ---
-title: Lógica de pathfinding de Minecraft y sus aplicaciones
+itle: Lógica de pathfinding de Minecraft y sus aplicaciones
 description: Cómo el algoritmo A*, los malus de bloques y los POI permiten
   controlar, predecir y explotar el movimiento de los mobs -- desde redstone
   inalámbrica hasta granjas optimizadas.
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "E8AyzE15d02/mBoFTjH1gbSFU6QlN9KRLZ3Q1AtnVZN6xN+PQ3l3ajGvfdBS7n6HyE1reAhyrsWKtAAKQnYtRw=="
+author_sig: "eV8tk/smxwPwBLFcP6YzcuxTAi3Is5h1DfrckHWsyv0T2zcsfu+jGc2dYMpXflZWFktC9nbCUSnLoDVdSLUe3w=="
 ---
 
 ## Introducción

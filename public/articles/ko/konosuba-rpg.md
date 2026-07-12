@@ -1,21 +1,20 @@
 ---
-title: "주말 동안 konosuba-rpg 코드를 읽고 알게 된 것들"
+itle: "주말 동안 konosuba-rpg 코드를 읽고 알게 된 것들"
 description: "턴제 Discord RPG로, 각 액션마다 WebP 이미지를 실시간 생성합니다: URL을 게임 상태로 사용, 결정론적 RNG, WASM 파이프라인, 5단계 캐시, 서버리스 봇."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0xPiItJWUjzPnEU+w3+sAgx7zoe/B2dW8CwMmaT+vjTcOm2XmhNsgEan2IcJ2QxFarqByZ1kKy0AdlWC2R4W4w=="
+author_sig: "JFmsZQu82LCaCkgdy1tdvQJWxufsvzjXHgsbC2/tx+nvqJA6oUAKsGRhuKAPpr5c8dkJU0+6tzNmKcMx6d98PQ=="
 ---
 
 # 주말 동안 konosuba-rpg 코드를 읽고 알게 된 것들

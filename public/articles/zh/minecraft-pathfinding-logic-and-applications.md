@@ -1,15 +1,14 @@
 ---
-title: Minecraft寻路逻辑及其应用
+itle: Minecraft寻路逻辑及其应用
 description: A*算法、方块惩罚和POI机制如何让你控制、预测和利用生物移动 -- 从无线红石到优化农场。
-date: 2026-05-29
+date: 2026-05-29authors:
+  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bKG8MhZ3F8yJAKlZTBIoqtpHLn0yaccoxwGljGDWF33a1hvgWZrklnHP0B8zSu+YaD2CjOObxeIYrkWtSHt2lg=="
+author_sig: "pubygPDRygwkBm8xbDqTENIEYBfAeA2DariVAEYJ54eHeV1Jf6PhEWwINuXvNoheSSJGJUcyYT3F9DHjJNIN+A=="
 ---
 
 ## 引言

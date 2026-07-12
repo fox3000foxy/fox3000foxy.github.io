@@ -1,21 +1,20 @@
 ---
-title: "Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy"
+itle: "Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy"
 description: "Một RPG theo lượt trên Discord nơi mỗi hành động tạo ra một hình ảnh WebP ngay lập tức: URL như trạng thái trò chơi, RNG xác định, pipeline WASM, bộ nhớ đệm 5 tầng, bot serverless."
-date: 2026-06-10
+date: 2026-06-10authors:
+  - fox3000foxy
 tags:
   - discord
   - rpg
   - typescript
   - hono
-  - cloudflare-workers
+  - cloudflare
   - supabase
   - wasm
   - gaming
   - serverless
-authors:
-  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "x5VyFUJbyeZg2PoePEEKLY5NDlp7d14LzzQgJGOjeSVMCPwH+9+S/9GbGolgE93+AqOSkLRHBJ6nJeEEKfHfXQ=="
+author_sig: "GymI/ECyZt+NMeDZKgsT+Sm+el4Tw4y45Wpj4NFWyRWGFALaRTw2E4G67gH11mS+R/s+liCeZ0iF7bqDYQof6g=="
 ---
 
 # Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy
