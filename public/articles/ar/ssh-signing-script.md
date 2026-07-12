@@ -10,10 +10,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "g0VT+1bLYMwTfzPwVtNSjmbn1iOvAAlfAZwYUy1zqsSlBhgSy094oSmXMgRj76XzR650gTqWpOUh6Cota3N4fw=="
+author_sig: "lL4mPq6B69YMdo2WqV7NtkBupF7+KTuP6O2rPLuAkwJblkQYjovFuKbUpGX+AqRxVxEpv3vXJn94NfMycfwqxg=="
 ---
 
-# سكريبت توقيع SSH للـ commits — شرح
+# سكريبت توقيع SSH للـ commits -- شرح
 
 هذا المقال يحلل السكريبت `setup-ssh-signing.sh` الذي نشرته على [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). سنرى ما يفعله كل جزء، كيف يجعل التوقيع SSH المحلي لمستودع أمرًا سلسًا تمامًا، ونعم، لماذا تكبدت عناء كتابته (تنبيه: كنت أريد فقط أن تكون لـ commits الخاصة بي **شكلاً** رائعًا).
 
@@ -28,7 +28,7 @@ author_sig: "g0VT+1bLYMwTfzPwVtNSjmbn1iOvAAlfAZwYUy1zqsSlBhgSy094oSmXMgRj76XzR65
 
 بصراحة، كانت الحاجة للتباهي بشكل أساسي. لا توجد متطلبات تقنية للتوقيع في مشاريعي الشخصية، لكن رؤية شارة خضراء «Verified» على commit يعطي تأثيرًا لطيفًا، وكانت كتابة السكريبت متعة في shell.
 
-> حسنًا، توقيع commitsك يشبه ارتداء سترة جلدية لمراجعة كود — غير ضروري تمامًا، لكنه يجعلك تشعر وكأنك هاكر.
+> حسنًا، توقيع commitsك يشبه ارتداء سترة جلدية لمراجعة كود -- غير ضروري تمامًا، لكنه يجعلك تشعر وكأنك هاكر.
 
 ## ما يفعله السكريبت
 

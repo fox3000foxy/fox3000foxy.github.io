@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "wRs9X4sG0EsY1hDbVt8P1V5PtexBfYQ2paUYseDX94voCmwPWn6JgtJa17IrHtlTmZbp1yd4M94V53zL3A6n3A=="
+author_sig: "LzJrU23nH/v2Y5i2fLgJfUUWI32rCs+rQlHQnvfXNPAqV4zOLPEfY9Qza+Z5x/OQirEsAFQfQzCmYuN5F5Q0Yg=="
 ---
 
 # GitHub Actions에서 깃을 데이터베이스로 써서 봇을 공짜로 돌린 썰

@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0/1YnWq3roeu5hC/QMwxCAiZRPqA9xxf7EGUeD33DJNZCaDxxGLvF0oS6MTCPtI7iQlkz1AIPCtls2+MOgSW1w=="
+author_sig: "u3TI+gHDsF+LMOooP+IXUbqFjqYrQnm+3GRxpM4+lzB8DIdlDcOr+LD/LxZVJpFOxiKUl8np6Cd5b08KgxpqPA=="
 ---
 
 # हर जावास्क्रिप्ट सैंडबॉक्स, एमुलेटर, सिमुलेटर और लिनक्स हनीपॉट -- तुलना

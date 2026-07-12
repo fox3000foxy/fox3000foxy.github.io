@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "buhH5CCPQpKZ39VtjAenkJze+fR7CjLonpP90guXs/katEGb7nOunRCyeUM+P+JgF5FOgbMsnwOhxY8H4vDpnA=="
+author_sig: "O+1AIgGz+s4c8TUNtVcK1JEzQQ0OQS25vxTALNLFHnmFqlWcRIOs2nPIF/xbVtFc8O2b/AdVPUo/DZcc1IqIOQ=="
 ---
 
 ## Pendahuluan
@@ -247,7 +247,7 @@ Antarmukanya sangat sederhana : ketik `@gamer` di chat, dan Altoclef memulai tug
 
 Di balik layar, ini dicapai melalui **sistem recursive task tree** di mana setiap tujuan tingkat tinggi (misalnya, "buat diamond pickaxe") didekomposisi menjadi tugas prasyarat : tambang diamond → smelt → buat sticks → gabungkan. Pohon ini menelusuri seluruh grafik resep Minecraft, menangani production chain, mob drops, loot tables, dan akses container. Tidak seperti pohon ANNA yang dibuat dengan tangan, tugas Altoclef adalah **Java class yang dapat diprogram** yang bisa mengimplementasikan logika arbitrer : strategi tempur, barter dengan piglin, pola eksplorasi.
 
-Wawasan arsitektur utamanya adalah pemisahan antara **apa** (task tree) dari **bagaimana** (Baritone pathfinding). Baritone menangani pergerakan tingkat rendah : pathfinding, penghindaran rintangan, pemecahan blok, manajemen inventory — sementara sistem tugas mengoordinasikan rencana tingkat tinggi. Modularitas ini berarti tidak ada komponen yang perlu menjadi AI : keduanya adalah algoritma deterministik, namun kombinasinya menghasilkan perilaku kompleks yang diarahkan oleh tujuan dan menyaingi pendekatan yang dipelajari.
+Wawasan arsitektur utamanya adalah pemisahan antara **apa** (task tree) dari **bagaimana** (Baritone pathfinding). Baritone menangani pergerakan tingkat rendah : pathfinding, penghindaran rintangan, pemecahan blok, manajemen inventory -- sementara sistem tugas mengoordinasikan rencana tingkat tinggi. Modularitas ini berarti tidak ada komponen yang perlu menjadi AI : keduanya adalah algoritma deterministik, namun kombinasinya menghasilkan perilaku kompleks yang diarahkan oleh tujuan dan menyaingi pendekatan yang dipelajari.
 
 Altoclef mewakili batas dari **AI Minecraft simbolik murni** : ia bisa menyelesaikan game dari awal tanpa pelatihan, tanpa GPU, dan tanpa data manusia, tetapi ia tidak bisa beradaptasi dengan tugas yang tidak diantisipasi oleh programmernya, dan ia tidak bisa belajar dari pengalaman. Ia tahu cara membuat diamond pickaxe karena sebuah Java class memberitahunya persis bagaimana, bukan karena ia mengetahuinya sendiri.
 

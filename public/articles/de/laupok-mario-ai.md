@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "eJm1fJ2mQB+dOrI6yEHD+IlcZeFtdtXG24sr9L5PhsEjUS2FeDHw8RUPTNmdNUsqxPFHCgc0xWm8B4Rv5HVrXA=="
+author_sig: "AlAuwrJ08Tymp8FYe9OKa1o4phMXgRoaToIt/vlkH4WK92eC/V7uTJ1hm4hIsVF7htnrtNMkqSgDKodV/IhTtQ=="
 ---
 
 # Ich habe eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie

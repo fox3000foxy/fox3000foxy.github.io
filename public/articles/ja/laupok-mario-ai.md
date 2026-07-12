@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "U3EI3zbxcAqkPhOeI0kbW8cqmsponGbRvtQV3lPY0M+mw7A6esjj7OWJCIIZBcFBG9wgCKJHz9NrO1AkabqsaA=="
+author_sig: "5CfYBj0VCNemob8OWC74GLToSCHLH9U4zr9jMQiENEZ3ClglGCciGghVuTXN1/xir9J8qFn4ir82FU4o7lfDRQ=="
 ---
 
 # スーパーマリオワールドを一人でプレイするAIを作った――その仕組み

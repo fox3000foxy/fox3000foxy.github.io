@@ -1,16 +1,16 @@
 ---
 title: "بنيت شرك Express فائق الواقعية"
-description: "328 نقطة نهاية وهمية مع ردود تُنشأ فورياً، تزوير الرؤوس، تسجيل حركة البوتات — غوص عميق في برمجية وسيطة لـ Express مصممة لخداع الماسحات الضوئية."
+description: "328 نقطة نهاية وهمية مع ردود تُنشأ فورياً، تزوير الرؤوس، تسجيل حركة البوتات -- غوص عميق في برمجية وسيطة لـ Express مصممة لخداع الماسحات الضوئية."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MUjyIb3CL+7wAuglBbRn+OcedBJoPedHeT/aeGgOS1O9iws2eAiI2OEpmpT/kcJorv4AGtQubmGuA1epfMAENQ=="
+author_sig: "7ja9gl+RFfE+JKLEFvDNxriAvxcVSHt8znn+vsUxS23rQdYQFz84BRa3lnxzYAhCyuF8mHvXmc1WULLsYUKqkA=="
 ---
 
 ## الفكرة
 
 هل سبق لك أن نظرت إلى سجلات خادم Express ورأيت طلبات غريبة إلى `/wp-admin`، `/.env`، `/etc/shadow`؟ هذه هي البوتات والماسحات الضوئية والفضوليون الذين يختبرون تطبيقك بحثاً عن نقاط الضعف.
 
-لذلك قررت بناء **برمجية وسيطة (middleware) من نوع honeypot لـ Express** — شرك يستجيب لهذه الطلبات بردود فائقة الواقعية، كما لو كانت كل نقطة نهاية خدمة حقيقية مكشوفة.
+لذلك قررت بناء **برمجية وسيطة (middleware) من نوع honeypot لـ Express** -- شرك يستجيب لهذه الطلبات بردود فائقة الواقعية، كما لو كانت كل نقطة نهاية خدمة حقيقية مكشوفة.
 
 ## لماذا honeypot بدلاً من 404 فقط
 
@@ -86,7 +86,7 @@ function generateMockResponse(endpoint: string): MockResponse {
 
 ## تزوير الرؤوس
 
-جانب حاسم للمصداقية — رؤوس HTTP. تختارها البرمجية الوسيطة ديناميكياً حسب امتداد الملف المطلوب:
+جانب حاسم للمصداقية -- رؤوس HTTP. تختارها البرمجية الوسيطة ديناميكياً حسب امتداد الملف المطلوب:
 
 | الامتداد | `X-Powered-By` |
 |---|---|
@@ -132,7 +132,7 @@ const instance = createHoneypot({ logTraffic: true });
 instance.register(app);
 ```
 
-### استخدام متقدم — نقاط نهاية فردية
+### استخدام متقدم -- نقاط نهاية فردية
 
 ```js
 const instance = createHoneypot({});
@@ -167,7 +167,7 @@ bun run scripts/generate-mockups.ts --list-uncategorized
 - **أكثر من 5000 طلب مشبوه** تم تسجيلها في 48 ساعة
 - **بوتات جديدة** تُكتشف يومياً عبر المسارات غير المغطاة
 - **أنماط هجوم ناشئة** تم تحديدها (C2 جديدة، تقنيات مسح)
-- **صفر نتائج إيجابية خاطئة** — المستخدمون الحقيقيون لا يزورون هذه المسار أبداً
+- **صفر نتائج إيجابية خاطئة** -- المستخدمون الحقيقيون لا يزورون هذه المسار أبداً
 
 ## الخاتمة
 

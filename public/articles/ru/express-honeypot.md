@@ -1,16 +1,16 @@
 ---
 title: "Я создал ultra-реалистичный Express honeypot"
-description: "328 поддельных endpoint'ов с генерируемыми на лету ответами, подмена заголовков, запись трафика ботов — погружение в код middleware-ловушки для Express, созданной для обмана сканеров."
+description: "328 поддельных endpoint'ов с генерируемыми на лету ответами, подмена заголовков, запись трафика ботов -- погружение в код middleware-ловушки для Express, созданной для обмана сканеров."
 aiGenerated: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "gcXRWGUlVVu/z2mRzdEKJZWpkga0jTlTtkD+m8faeug/x0hwVQ3DgrhhDoy5ou2tw+9H+Ql3snP5U6SsYJrE4Q=="
+author_sig: "SpbK/Rxx/PrB7zQJ0Tc7EXN/BE+DLSuuuIlO+qfqZrEteXbhM3K9bTfGT37upe71VxaoC0Wyok0PIWj6BjwTig=="
 ---
 
 ## Идея
 
 Вы когда-нибудь смотрели логи своего Express-сервера и видели странные запросы к `/wp-admin`, `/.env`, `/etc/shadow`? Это боты, сканеры и любопытные, проверяющие ваше приложение на уязвимости.
 
-Поэтому я решил создать **middleware-honeypot для Express** — приманку, которая отвечает на такие запросы ультра-реалистичными ответами, как будто каждая конечная точка — настоящий открытый сервис.
+Поэтому я решил создать **middleware-honeypot для Express** -- приманку, которая отвечает на такие запросы ультра-реалистичными ответами, как будто каждая конечная точка -- настоящий открытый сервис.
 
 ## Зачем honeypot, а не просто 404
 
@@ -86,7 +86,7 @@ function generateMockResponse(endpoint: string): MockResponse {
 
 ## Подмена заголовков
 
-Критический аспект правдоподобия — HTTP-заголовки. Middleware выбирает их динамически в зависимости от расширения запрашиваемого файла:
+Критический аспект правдоподобия -- HTTP-заголовки. Middleware выбирает их динамически в зависимости от расширения запрашиваемого файла:
 
 | Расширение | `X-Powered-By` |
 |---|---|
@@ -98,7 +98,7 @@ function generateMockResponse(endpoint: string): MockResponse {
 
 ## PHP Spoofer
 
-Интересный компонент — `phpSpoofer`. Вместо статического ответа он может **проксировать `.php`-запросы на локальный PHP-сервер**:
+Интересный компонент -- `phpSpoofer`. Вместо статического ответа он может **проксировать `.php`-запросы на локальный PHP-сервер**:
 
 1. Перехватывает запросы с `.php` в пути
 2. Удаляет суффикс `.php` и проксирует на `http://localhost:<port>/<base>`
@@ -132,7 +132,7 @@ const instance = createHoneypot({ logTraffic: true });
 instance.register(app);
 ```
 
-### Продвинутое — отдельные endpoint'ы
+### Продвинутое -- отдельные endpoint'ы
 
 ```js
 const instance = createHoneypot({});
@@ -167,7 +167,7 @@ bun run scripts/generate-mockups.ts --list-uncategorized
 - **Более 5000 подозрительных запросов** записано за 48 часов
 - **Новые боты** обнаруживаются ежедневно через неохваченные маршруты
 - **Выявлены новые паттерны атак** (новые C2, техники сканирования)
-- **Ноль ложных срабатываний** — реальные пользователи никогда не заходят на эти пути
+- **Ноль ложных срабатываний** -- реальные пользователи никогда не заходят на эти пути
 
 ## Заключение
 

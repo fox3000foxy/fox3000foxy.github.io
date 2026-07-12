@@ -1,6 +1,6 @@
 ---
-title: AI学习Minecraft PvP——模仿学习、强化学习，以及30个关键变量
-description: 录制了1000场决斗，在像素之上训练神经网络，达到90%的按键准确率——但机器人却径直撞墙。随后是强化学习、课程学习和60小时训练。
+title: AI学习Minecraft PvP----模仿学习、强化学习，以及30个关键变量
+description: 录制了1000场决斗，在像素之上训练神经网络，达到90%的按键准确率----但机器人却径直撞墙。随后是强化学习、课程学习和60小时训练。
 date: 2026-07-09
 tags:
   - minecraft
@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "80G20jQ+kCYJaIRDySVgZMUNzG7bS8ZxnVR1SbJVP2L0MG3XZGLmu/yrfHs0vjSb0Wb/m6c4NdRFrBK/q9Sjpg=="
+author_sig: "Pqqo/TQdv3Oo7vmyfYHRZ3nEV76I/kkfXuUDehPsnq9xhqKeRX2mke9+W41cH4s0BJeSTAEtT0nMl7uljoTEjQ=="
 ---
 
 ## 介绍
@@ -162,7 +162,7 @@ for frame, action in dataset:
 
 VPT流程通过训练一个**逆向动力学模型（IDM）**来解决数据问题，该模型观察帧t-1和帧t+1来预测帧t的动作。由于IDM是非因果的（它能看到未来帧），该任务比行为克隆更容易，所需标注数据也更少。他们向承包商支付了约2,000美元，用于2000小时标注数据，然后使用IDM为7万小时YouTube Minecraft视频进行伪标注。
 
-由此产生的5亿参数基础模型实现了仅靠强化学习无法做到的零样本能力：砍树、合成工作台、搭柱跳——并通过强化学习微调，成为第一个合成钻石工具的人工智能。
+由此产生的5亿参数基础模型实现了仅靠强化学习无法做到的零样本能力：砍树、合成工作台、搭柱跳----并通过强化学习微调，成为第一个合成钻石工具的人工智能。
 
 ## OpenAI Five：奖励塑造问题
 
@@ -170,7 +170,7 @@ VPT流程通过训练一个**逆向动力学模型（IDM）**来解决数据问�
 
 OpenAI Five（2019年）使用纯自我对战的强化学习击败了Dota 2世界冠军：没有模仿学习。256张GPU、128,000个CPU核心、每天180年的游戏经验、10个月的训练。
 
-但奖励函数是由Dota专家手工制作的：从**20,000个可用特征中选出了28个**，每个都配有手动调整的权重。净资产、击杀数、死亡数、防御塔生命值、分路安排——全部由人类选择和加权。没有这种精心设计，智能体能几乎学不到什么（实验：仅以输赢作为奖励→在半职业水平停滞）。
+但奖励函数是由Dota专家手工制作的：从**20,000个可用特征中选出了28个**，每个都配有手动调整的权重。净资产、击杀数、死亡数、防御塔生命值、分路安排----全部由人类选择和加权。没有这种精心设计，智能体能几乎学不到什么（实验：仅以输赢作为奖励→在半职业水平停滞）。
 
 视频中的机器人面临同样的问题：其奖励函数编码了创作者对PvP关键因素的理解（击中敌人好，受伤不好，保持准星正确），这是不可避免的：强化学习需要一个奖励信号，而设计这一信号就融入了人类的偏见。
 
@@ -178,7 +178,7 @@ OpenAI Five（2019年）使用纯自我对战的强化学习击败了Dota 2世�
 
 ![DreamerV3在超过150个不同任务下的基准分数，单一配置](assets/dreamerv3-benchmarks.png)
 
-DeepMind的DreamerV3（2023年）采取了第三种方法。它不采用行为克隆或精心设计的强化学习，而是学习一个**世界模型**——从过往动作预测未来状态和奖励的神经网络——并通过"梦想"可能的未来来规划。它是首个无需人类数据或课程就在Minecraft中从头收集钻石的算法，2025年发表于《自然》杂志。
+DeepMind的DreamerV3（2023年）采取了第三种方法。它不采用行为克隆或精心设计的强化学习，而是学习一个**世界模型**----从过往动作预测未来状态和奖励的神经网络----并通过"梦想"可能的未来来规划。它是首个无需人类数据或课程就在Minecraft中从头收集钻石的算法，2025年发表于《自然》杂志。
 
 ![DreamerV3学习世界模型以想象未来轨迹](assets/dreamerv3-header.png)
 
@@ -241,7 +241,7 @@ PvP机器人（Kadambi）从像素中学习，ANNA通过任务树推理，而Mas
 
 如果说上述项目各自专注于Minecraft的一个侧面，那么**Altoclef**则采取了一种截然不同的雄心：**完全自主通关Minecraft**。2021年5月24日，Altoclef成为首个从零开始、无需人类干预就击败末影龙、通关Minecraft的机器人。
 
-Altoclef是一个**Fabric客户端mod**，使用**Java**编写，核心路径规划基于**Baritone**。与视频中PvP机器人从像素学习不同，Altoclef不处理屏幕图像，也不使用GPU或神经网络。它通过与原版Minecraft Java类的深度集成来直接读取游戏状态：坐标、方块ID、物品栏内容、实体列表——所有这些都通过Fabric API和Mixin注入来获取。输入不是像素，而是结构化的游戏数据。
+Altoclef是一个**Fabric客户端mod**，使用**Java**编写，核心路径规划基于**Baritone**。与视频中PvP机器人从像素学习不同，Altoclef不处理屏幕图像，也不使用GPU或神经网络。它通过与原版Minecraft Java类的深度集成来直接读取游戏状态：坐标、方块ID、物品栏内容、实体列表----所有这些都通过Fabric API和Mixin注入来获取。输入不是像素，而是结构化的游戏数据。
 
 **任务树系统**是Altoclef的核心。用户通过聊天命令（如`@gamer`开始通关、`@get diamond_sword`获取钻石剑）给出高级目标，Altoclef将其递归拆解为子任务：
 

@@ -1,7 +1,7 @@
 ---
 title: Automatizando uma Farm do Microsoft Rewards
 description: Como eu codei um bot para farmar pontos do Microsoft Rewards em grande
-  escala — e por que a Microsoft reforçou suas defesas desde então.
+  escala -- e por que a Microsoft reforçou suas defesas desde então.
 date: 2026-03-13
 tags:
   - automation
@@ -10,10 +10,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6MZcI3JjT/NQ1DHaD4VD/HpOkaK6TNm7/AcXzibxQCSqXmGGYgAZnLLEgseWFXybxemGEZPa1qOw7FEKl48CCQ=="
+author_sig: "Nr3OS/zplYfYDTg1c8vnwqPAUHwJ5sD6//Zn4nIC2xWnbdshopBjKCqsEZjS1WPfBjYMvUU5XtrYNZ2+NtV9GQ=="
 ---
 
-> **Nota (2026):** Este projeto não é mais mantido. A Microsoft reforçou consideravelmente sua detecção anti-bot — o que funcionava na época não funciona mais hoje. O código e a abordagem descritos abaixo são mantidos apenas para fins de arquivo e demonstração.
+> **Nota (2026):** Este projeto não é mais mantido. A Microsoft reforçou consideravelmente sua detecção anti-bot -- o que funcionava na época não funciona mais hoje. O código e a abordagem descritos abaixo são mantidos apenas para fins de arquivo e demonstração.
 
 ## Introdução
 
@@ -81,7 +81,7 @@ Agora que você entende o valor do programa, vamos nos concentrar no botting.
 
 ## Primeiros testes
 
-Antes de construir meu bot, eu queria ter certeza de que meu IP não seria marcado por ter usado centenas de contas do mesmo endereço. Você me conhece, vou usar Tor com um proxy rotativo. E não quero hospedar meu bot em um VPS — quero que ele rode em uma GitHub Action.
+Antes de construir meu bot, eu queria ter certeza de que meu IP não seria marcado por ter usado centenas de contas do mesmo endereço. Você me conhece, vou usar Tor com um proxy rotativo. E não quero hospedar meu bot em um VPS -- quero que ele rode em uma GitHub Action.
 
 Então escrevi um workflow simples:
 
@@ -144,7 +144,7 @@ As estatísticas de tempo foram:
 Uma segunda execução deu este resultado:  
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-Como você pode ver, os IPs são diferentes, então não seremos sinalizados por uso abusivo do mesmo IP. Boa notícia — podemos continuar desenvolvendo o bot de farming.
+Como você pode ver, os IPs são diferentes, então não seremos sinalizados por uso abusivo do mesmo IP. Boa notícia -- podemos continuar desenvolvendo o bot de farming.
 
 ---
 

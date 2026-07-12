@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "R/ZAumW4K646s0LWIJ8O0YOzEDctj4/I7Mk1/MygvfMv2gknipeSYwSipptHnZFfXMfwgmK+qV+DZx438YlX7w=="
+author_sig: "fS2+0YEzJwuGzIGcetCCupqHhHETEHfPMrRWxUVJOzhZAuOo6FzSv3iDpxIX1awPTa0Mn2a7VB/AQJSEhMo9zg=="
 ---
 
 ## GitHub가 6시간 동안 공짜 VPS를 준다. 영구적으로 만드는 법을 찾았음.

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NY1EcTZzxAFhiw5EzL8oSKtnOHO6vRnKjQO9WwafiCenOhbcblCY1N0DR2VvA7EQY8AKKQpDgIE/8JjupMcunQ=="
+author_sig: "0btl1MmLnp0Cpn/qd3xwbJf8G54LNDU+Nyt9kq3ik5KzKfUxY091ANcWF1mjWhUvA+yIxXecrOkCcUXCWCESgw=="
 ---
 
 # Todos los sandboxes, emuladores, simuladores y honeypots de JavaScript -- comparados

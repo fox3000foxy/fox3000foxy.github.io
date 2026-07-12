@@ -16,12 +16,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "J+zfdSDUzkUT56ELAGwqeDiB1gEmfGpxhT9e2rhxdZsVV+XlTBVHep44WyS7o7s9qpWqa03T5smefgiYj9DdPQ=="
+author_sig: "Tkxv9+LZ0j3lI17CcJfmwrkL3fsdmtaAlt7VVDnRNcc87gFWC8D4aA+WjZHqxDnvg5WpPpQp1WaNlGtgUyTuzQ=="
 ---
 
 # ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ
 
-ฉันดูแลโปรเจกต์นี้มาระยะหนึ่งแล้ว แต่การอ่านโค้ดของตัวเองอีกครั้งอย่างใจเย็นก็ให้บทเรียนเสมอ konosuba-rpg คือ RPG ผลัดกันเล่นบน Discord ที่ทุกการกระทำสร้างภาพ WebP ทันที ไม่ใช่ embed ข้อความ แต่เป็นภาพจริงที่ประกอบด้วยสไปรต์, แถบพลังชีวิต, ข้อความต่อสู้ — ทุกอย่าง
+ฉันดูแลโปรเจกต์นี้มาระยะหนึ่งแล้ว แต่การอ่านโค้ดของตัวเองอีกครั้งอย่างใจเย็นก็ให้บทเรียนเสมอ konosuba-rpg คือ RPG ผลัดกันเล่นบน Discord ที่ทุกการกระทำสร้างภาพ WebP ทันที ไม่ใช่ embed ข้อความ แต่เป็นภาพจริงที่ประกอบด้วยสไปรต์, แถบพลังชีวิต, ข้อความต่อสู้ -- ทุกอย่าง
 
 stack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase โฮสต์ฟรีทั้งหมด และบอท Discord ทำงานโดยไม่ต้องมีเซิร์ฟเวอร์ถาวร โพสต์นี้อธิบายว่าทุกอย่างทำงานร่วมกันอย่างไร
 
@@ -39,12 +39,12 @@ stack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase โฮสต์ฟ
 
 แต่ละ segment หลังจาก seed คือการกระทำที่เล่นแล้ว เซิร์ฟเวอร์ได้รับ URL นี้ เริ่มต้นใหม่ เล่นการกระทำทั้งหมดตามลำดับ และส่งคืนภาพของการต่อสู้ ณ ขณะนั้น ไม่มี session, ไม่มีสถานะใน RAM ที่ผูกกับผู้ใช้
 
-Discord ทำงานด้วยปุ่มโต้ตอบ — เมื่อผู้เล่นกด "โจมตี" Discord จะส่ง `custom_id` ของปุ่มไปยังเซิร์ฟเวอร์ custom_id นี้มี URL ที่บีบอัดของการต่อสู้พร้อมการกระทำใหม่ที่เพิ่มเข้าไป เซิร์ฟเวอร์คำนวณทุกอย่างใหม่ตั้งแต่ต้นและส่งคืนภาพที่อัปเดต
+Discord ทำงานด้วยปุ่มโต้ตอบ -- เมื่อผู้เล่นกด "โจมตี" Discord จะส่ง `custom_id` ของปุ่มไปยังเซิร์ฟเวอร์ custom_id นี้มี URL ที่บีบอัดของการต่อสู้พร้อมการกระทำใหม่ที่เพิ่มเข้าไป เซิร์ฟเวอร์คำนวณทุกอย่างใหม่ตั้งแต่ต้นและส่งคืนภาพที่อัปเดต
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// Precompiled outside function — not recreated on every call
+// Precompiled outside function -- not recreated on every call
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -124,7 +124,7 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-ง่าย แต่เมื่อผู้เล่นกดโจมตี x10 มันเปลี่ยนจาก `aaaaaaaaaa` (10 ตัวอักษร) เป็น `a10` (3 ตัวอักษร) ปุ่ม "โจมตี x4" และ "โจมตี x10" ใน UI มีไว้เพื่อสิ่งนี้ — เร่งการต่อสู้ในขณะที่บีบอัด payload ได้ดี
+ง่าย แต่เมื่อผู้เล่นกดโจมตี x10 มันเปลี่ยนจาก `aaaaaaaaaa` (10 ตัวอักษร) เป็น `a10` (3 ตัวอักษร) ปุ่ม "โจมตี x4" และ "โจมตี x10" ใน UI มีไว้เพื่อสิ่งนี้ -- เร่งการต่อสู้ในขณะที่บีบอัด payload ได้ดี
 
 ### 2. Session tokens เมื่อการบีบอัดไม่พอ
 
@@ -150,7 +150,7 @@ export async function decodeGameplayPayloadWithStatus(encodedPayload: string, us
 }
 ```
 
-Session มี TTL 7 วัน และการ pruning อัตโนมัติทุก 10 นาที การตรวจสอบ `turnVersion` ป้องกันการเล่นซ้ำสถานะที่ล้าสมัยหากผู้เล่นได้ดำเนินการในเกมต่อไปแล้ว — การป้องกันเล็กน้อยต่อการ "ย้อนกลับ" โดยไม่ตั้งใจ
+Session มี TTL 7 วัน และการ pruning อัตโนมัติทุก 10 นาที การตรวจสอบ `turnVersion` ป้องกันการเล่นซ้ำสถานะที่ล้าสมัยหากผู้เล่นได้ดำเนินการในเกมต่อไปแล้ว -- การป้องกันเล็กน้อยต่อการ "ย้อนกลับ" โดยไม่ตั้งใจ
 
 Map ในหน่วยความจำทั้งสอง (`tokenToSession`, `latestTurnByBattle`) ใช้ pattern `globalThis as unknown as GameSessionGlobals` เดียวกับแคชภาพ ด้วยเหตุผลเดียวกับที่จะกล่าวถึงด้านล่าง
 
@@ -178,7 +178,7 @@ WebP output
 
 **Background**: ภาพคงที่สองภาพ (กระดานและกรอบ) โหลดจาก filesystem และประกอบครั้งเดียว
 
-**Characters layer**: สไปรต์ถูกวางตามพิกัดที่คำนวณ ผู้เล่นที่ตายจะถูกแยกออก (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`) สไปรต์ศัตรูถูกสะท้อนแนวนอนด้วย `flipX` แบบกำหนดเอง — วนลูปทีละพิกเซลแทนการพึ่งพาภายนอก
+**Characters layer**: สไปรต์ถูกวางตามพิกัดที่คำนวณ ผู้เล่นที่ตายจะถูกแยกออก (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`) สไปรต์ศัตรูถูกสะท้อนแนวนอนด้วย `flipX` แบบกำหนดเอง -- วนลูปทีละพิกเซลแทนการพึ่งพาภายนอก
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -207,12 +207,12 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 
 ---
 
-## ระบบแคช — ส่วนที่ถูกพัฒนามากที่สุด
+## ระบบแคช -- ส่วนที่ถูกพัฒนามากที่สุด
 
 มีแคช 5 ระดับ แต่ละระดับกำหนดเป้าหมาย granularity ที่แตกต่างกันของ pipeline
 
 ```typescript
-// renderImage.ts — all on globalThis
+// renderImage.ts -- all on globalThis
 G.__imageCache  ??= {} as Record; // raw assets
 G.__base64Cache ??= {} as Record;       // base64 of assets (for Satori)
 G.__fontCache   ??= {} as Record; // fonts
@@ -236,7 +236,7 @@ function freePhoton(_key: string, img: Photon.PhotonImage): void {
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` คือออบเจกต์ WASM ที่มีหน่วยความจำที่จัดสรรไว้ใน linear memory ของ WASM อยู่นอก GC ของ JavaScript หากไม่เรียก `.free()` อย่างชัดเจน หน่วยความจำนี้จะไม่มีวันถูกปลดปล่อย การ eviction ของ LRU จะ trigger `.free()` โดยอัตโนมัติ — มันคือ RAII ที่นำมาใช้ใน JavaScript
+`Photon.PhotonImage` คือออบเจกต์ WASM ที่มีหน่วยความจำที่จัดสรรไว้ใน linear memory ของ WASM อยู่นอก GC ของ JavaScript หากไม่เรียก `.free()` อย่างชัดเจน หน่วยความจำนี้จะไม่มีวันถูกปลดปล่อย การ eviction ของ LRU จะ trigger `.free()` โดยอัตโนมัติ -- มันคือ RAII ที่นำมาใช้ใน JavaScript
 
 ### คีย์แคชตั้งใจให้ lossy
 
@@ -247,7 +247,7 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-คีย์ของ characters layer ไม่ได้เข้ารหัสค่า HP ที่แน่นอน — แค่ `1` (มีชีวิต) หรือ `0` (ตาย) เพราะสไปรต์ของผู้เล่นที่ 40 HP กับผู้เล่นที่ 15 HP นั้นเหมือนกัน cache hit จึงอยู่รอดจากการถูกโจมตีใด ๆ ตราบใดที่ไม่มีใครตาย
+คีย์ของ characters layer ไม่ได้เข้ารหัสค่า HP ที่แน่นอน -- แค่ `1` (มีชีวิต) หรือ `0` (ตาย) เพราะสไปรต์ของผู้เล่นที่ 40 HP กับผู้เล่นที่ 15 HP นั้นเหมือนกัน cache hit จึงอยู่รอดจากการถูกโจมตีใด ๆ ตราบใดที่ไม่มีใครตาย
 
 ส่วนคีย์ UI กลับเข้ารหัส HP ที่แน่นอน (แถบชีวิตเปลี่ยนทุกครั้งที่ถูกโจมตี) และ hash ของข้อความ:
 
@@ -280,20 +280,20 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)` อาจทำให้เกิด stack overflow บนภาพขนาดใหญ่เพราะ argument ถูกส่งผ่าน call stack การแบ่งเป็น chunk 32KB ช่วยหลีกเลี่ยงปัญหา ผลลัพธ์ถูกเก็บในแคช — การแปลง base64 ของภาพเดียวกันจะทำเพียงครั้งเดียวต่อ instance ของ worker
+`String.fromCharCode(...largeArray)` อาจทำให้เกิด stack overflow บนภาพขนาดใหญ่เพราะ argument ถูกส่งผ่าน call stack การแบ่งเป็น chunk 32KB ช่วยหลีกเลี่ยงปัญหา ผลลัพธ์ถูกเก็บในแคช -- การแปลง base64 ของภาพเดียวกันจะทำเพียงครั้งเดียวต่อ instance ของ worker
 
 ---
 
-## STRIPPER.md — การตรวจสอบ await แบบตามลำดับ
+## STRIPPER.md -- การตรวจสอบ await แบบตามลำดับ
 
 มีไฟล์ `STRIPPER.md` ใน repo ที่บันทึกการตรวจสอบการทำ `await` แบบขนาน ตัวอย่างบางส่วนที่บันทึกไว้:
 
-- การโหลดโปรไฟล์ผู้เล่นเคยทำ 3 คำขอ Supabase แบบเรียงต่อกัน (progression, run summary, achievements) ถูกเปลี่ยนเป็น `Promise.all` — ไม่มีการพึ่งพากันระหว่างคำขอ
+- การโหลดโปรไฟล์ผู้เล่นเคยทำ 3 คำขอ Supabase แบบเรียงต่อกัน (progression, run summary, achievements) ถูกเปลี่ยนเป็น `Promise.all` -- ไม่มีการพึ่งพากันระหว่างคำขอ
 - การแจกจ่ายรางวัลหลังจบการต่อสู้ (accessories + consumables) เคยเป็นแบบตามลำดับ ถูกทำให้ขนานเช่นกัน
 - การสร้าง token session สำหรับปุ่มเคยทำทีละกลุ่ม กลุ่มที่เป็นอิสระตอนนี้ถูกสร้างแบบขนาน
 
 ```typescript
-// progressionService.ts — before (sequential)
+// progressionService.ts -- before (sequential)
 await grantAccessoryDropRewards(...);
 await grantConsumableDropRewards(...);
 
@@ -331,9 +331,9 @@ export async function handleInteractions(c: Context) {
 
 Discord ส่ง POST, handler ทำงาน 50-200ms บนฟังก์ชัน Vercel หรือ Cloudflare Worker, ตอบกลับ, แล้วจบ ไม่ต้องรักษาการเชื่อมต่อถาวร, ไม่ต้องมีเซิร์ฟเวอร์ที่เปิดทิ้งไว้ บอท Discord ทั้งหมดโฮสต์บน free tier ของ Vercel
 
-การตรวจสอบ Ed25519 (`verifyKey` จาก `discord-interactions`) เป็นสิ่งจำเป็น — Discord ส่งลายเซ็นใน header ที่คุณต้องตรวจสอบ มิฉะนั้นมันจะปฏิเสธ endpoint
+การตรวจสอบ Ed25519 (`verifyKey` จาก `discord-interactions`) เป็นสิ่งจำเป็น -- Discord ส่งลายเซ็นใน header ที่คุณต้องตรวจสอบ มิฉะนั้นมันจะปฏิเสธ endpoint
 
-### ท่าพิเศษ — await ที่ตั้งใจเพียงอันเดียว
+### ท่าพิเศษ -- await ที่ตั้งใจเพียงอันเดียว
 
 ```typescript
 // handleSpecialButton.ts
@@ -344,7 +344,7 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-การหน่วงเวลา 3 วินาทีโดยตั้งใจนี้ถูกบันทึกใน STRIPPER.md ว่าตั้งใจ ท่าพิเศษของ Megumin (Explosion) มี animation ฝั่ง Discord — ข้อความจะถูกอัปเดตด้วยภาพระหว่างกลางก่อน จากนั้นจึงเปลี่ยน 3 วินาทีต่อมาด้วยผลลัพธ์ นี่เป็นกรณีเดียวที่ฟังก์ชัน Vercel ทำงานนานเกินความจำเป็นโดยตั้งใจ
+การหน่วงเวลา 3 วินาทีโดยตั้งใจนี้ถูกบันทึกใน STRIPPER.md ว่าตั้งใจ ท่าพิเศษของ Megumin (Explosion) มี animation ฝั่ง Discord -- ข้อความจะถูกอัปเดตด้วยภาพระหว่างกลางก่อน จากนั้นจึงเปลี่ยน 3 วินาทีต่อมาด้วยผลลัพธ์ นี่เป็นกรณีเดียวที่ฟังก์ชัน Vercel ทำงานนานเกินความจำเป็นโดยตั้งใจ
 
 ![ท่าพิเศษ](/images/konosuba-rpg/shot_08_special.webp)
 
@@ -355,7 +355,7 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 codebase เดียวกันทำงานบน Vercel (Node.js) และ Cloudflare Workers (V8 isolates) โดยไม่ต้องแก้ไข:
 
 ```typescript
-// worker.ts — Cloudflare entrypoint
+// worker.ts -- Cloudflare entrypoint
 export default {
   fetch(request: Request, env: WorkerBindings): Promise {
     syncBindingsToProcessEnv(env); // injects CF secrets into process.env
@@ -363,14 +363,14 @@ export default {
   }
 };
 
-// index.ts — Vercel/Node entrypoint
+// index.ts -- Vercel/Node entrypoint
 const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
 
 ความแตกต่างหลัก: static assets บน Vercel อ่านจาก filesystem (`/var/task/assets/`) บน Cloudflare Workers ผ่าน binding `ASSETS` (CF static assets) โดยมี fallback ไปยัง HTTPS mirror (`fox3000foxy.com/konosuba-rpg/assets`) `getAssetBytes` ใน `assetLoader.ts` จัดการทั้งสองเส้นทางโดยลอง filesystem ก่อน แล้วค่อย fetch
 
-WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) มี builds แยกสำหรับแต่ละ runtime flag `edge-light` ในชื่อ package ระบุ build ที่เข้ากันได้กับ Cloudflare Workers ซึ่งไม่อนุญาต `new WebAssembly.Module()` ใน runtime — WASM ต้องถูก pre-compiled
+WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) มี builds แยกสำหรับแต่ละ runtime flag `edge-light` ในชื่อ package ระบุ build ที่เข้ากันได้กับ Cloudflare Workers ซึ่งไม่อนุญาต `new WebAssembly.Module()` ใน runtime -- WASM ต้องถูก pre-compiled
 
 ---
 
@@ -473,20 +473,20 @@ export async function withPerf(scope: string, label: string, work: () => Promise
 - **Cloudflare Workers free tier**: 100K คำขอ/วัน, 10ms CPU time ต่อคำขอ (การเรนเดอร์อาจเกินนี้บน Workers ดังนั้น Vercel จึงเป็น primary)
 - **Supabase free tier**: 500MB database, 5GB bandwidth เพียงพอสำหรับผู้เล่นหลายพันคน
 
-backend ทั้งหมดทำงานด้วยต้นทุนศูนย์จนถึงปริมาณที่มีนัยสำคัญ จุดเสียดทานเดียวคือขีดจำกัด CPU ของ Cloudflare Workers — การเรนเดอร์ภาพใช้ CPU มากเนื่องจาก WASM ดังนั้นกลยุทธ์คือใช้ Vercel เป็น primary และ Workers เป็น CDN failover
+backend ทั้งหมดทำงานด้วยต้นทุนศูนย์จนถึงปริมาณที่มีนัยสำคัญ จุดเสียดทานเดียวคือขีดจำกัด CPU ของ Cloudflare Workers -- การเรนเดอร์ภาพใช้ CPU มากเนื่องจาก WASM ดังนั้นกลยุทธ์คือใช้ Vercel เป็น primary และ Workers เป็น CDN failover
 
 ---
 
 ## 3 สิ่งที่น่าจดจำ
 
-1. **URL เป็นสถานะเกม** ไม่ใช่แค่เทคนิคเจ๋ง ๆ — มันเป็นข้อจำกัดที่ถูกบังคับโดย Discord (ปุ่มมีขีดจำกัด 100 ตัวอักษร) ซึ่งบังคับให้มีสถาปัตยกรรมแบบ stateless พร้อมการบีบอัด RLE และ token session เป็นตัวสำรอง ข้อจำกัดกำหนดการออกแบบ
+1. **URL เป็นสถานะเกม** ไม่ใช่แค่เทคนิคเจ๋ง ๆ -- มันเป็นข้อจำกัดที่ถูกบังคับโดย Discord (ปุ่มมีขีดจำกัด 100 ตัวอักษร) ซึ่งบังคับให้มีสถาปัตยกรรมแบบ stateless พร้อมการบีบอัด RLE และ token session เป็นตัวสำรอง ข้อจำกัดกำหนดการออกแบบ
 
 2. **แคช WASM พร้อม eviction แบบชัดเจน**: `PhotonImage` จัดสรรหน่วยความจำนอก heap ของ JavaScript และจะไม่มีวันถูก GC หากไม่มี `.free()` การเชื่อม `freePhoton` เข้ากับการ eviction ของ LRU คือ RAII ใน JavaScript มันดูเล็กน้อยในโค้ด แต่ถ้าไม่มีมัน worker จะรั่วใน production
 
-3. **บอท Discord แบบ serverless โดยไม่ต้องใช้ WebSocket**: วิธีการนี้รู้จักกันน้อยกว่าวิธี WebSocket gateway แต่สำหรับบอทที่ทำงานแบบ stateless (แต่ละ interaction เป็นอิสระ) การใช้ Interactions Endpoint เหนือกว่าอย่างชัดเจน — ไม่ต้อง reconnect, ไม่ต้อง heartbeat, ไม่ต้องรักษา process Discord จัดการความพร้อมใช้งานฝั่งโครงสร้างพื้นฐานของพวกเขา
+3. **บอท Discord แบบ serverless โดยไม่ต้องใช้ WebSocket**: วิธีการนี้รู้จักกันน้อยกว่าวิธี WebSocket gateway แต่สำหรับบอทที่ทำงานแบบ stateless (แต่ละ interaction เป็นอิสระ) การใช้ Interactions Endpoint เหนือกว่าอย่างชัดเจน -- ไม่ต้อง reconnect, ไม่ต้อง heartbeat, ไม่ต้องรักษา process Discord จัดการความพร้อมใช้งานฝั่งโครงสร้างพื้นฐานของพวกเขา
 
 ---
 
 *Repo : [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
 
-*Licence source-available custom — ห้ามแจกจ่าย ใช้ได้ฟรี*
+*Licence source-available custom -- ห้ามแจกจ่าย ใช้ได้ฟรี*

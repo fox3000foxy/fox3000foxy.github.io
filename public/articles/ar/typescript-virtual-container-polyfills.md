@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qezRUJLEUUc4yXYnDXTSWF+JRlf5JVvnVzkshwJHrTZU2QCcsIWw2tjPut6ibYuJRTuBNdBNHZteZO7TOp1EXw=="
+author_sig: "wYe/DYscvRwcXxVV4e755gKmQMbgLrxvRgDYWQ+P5Iqvt7WO6DZ1LmBAxGWZs6HMOlcyJ2RvjcdxsOp0ZitTUA=="
 ---
 
 # تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills لـ typescript-virtual-container

@@ -1,7 +1,7 @@
 ---
 title: ذكائي الاصطناعي التافه من أجل Nausicaa
 description: ذكاء اصطناعي بمعاملات استدلالية، معلمات فائقة تتغير كل 5 أدوار،
-  وأوراكل (Oracle) يهرب — غوص في دماغ لعبة استراتيجية على رقعة.
+  وأوراكل (Oracle) يهرب -- غوص في دماغ لعبة استراتيجية على رقعة.
 date: 2026-05-29
 tags:
   - game-dev
@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7g4m0JYYj2Zg0+xvwLZhzZD1vdJXxnTwnlCmYLcF20l6Rx0+crFLKN/72rtDdRSicmPp6XQDa6HUVbkPsd7YMA=="
+author_sig: "62tpfk6fsQ4llql5o5zhxzYsolKsqnLa+bau2hYJNN8rYjTqbFK38w5L8AU1Oa6fHApYxx064eHgkXYXDk6h5g=="
 ---
 
 ## ذكائي الاصطناعي التافه من أجل Nausicaa
@@ -70,7 +70,7 @@ const UNITS_ATTRACTIVENESS = {
 };
 ```
 
-الأوراكل 100 — منطقي، هو شرط الفوز. التايتن 95 لأنه يدمر كل شيء مجاور عند الاستدعاء. القوبلين 20، جندي مشاة، لا يهم.
+الأوراكل 100 -- منطقي، هو شرط الفوز. التايتن 95 لأنه يدمر كل شيء مجاور عند الاستدعاء. القوبلين 20، جندي مشاة، لا يهم.
 
 ثم لكل زوج من الوحدات (واحدة حليفة وواحدة معادية)، أحسب:
 
@@ -105,7 +105,7 @@ if (this.turnCount % 5 === 0) {
 
 مرة يصبح الذكاء الاصطناعي عدوانياً جداً (جاذبية 95، مسافة 5)، يعبر كل شيء ليقضي على أوراكلك. المرة التالية يعطي أولوية للمسافة ويعيد التموضع.
 
-هذا مقتبس من أشباح Pac-Man — Blinky يطارد، Pinky يكمُن. هنا الذكاء الاصطناعي يغير "شخصيته" كل مرحلة.
+هذا مقتبس من أشباح Pac-Man -- Blinky يطارد، Pinky يكمُن. هنا الذكاء الاصطناعي يغير "شخصيته" كل مرحلة.
 
 **النتيجة: من المستحيل توقع الذكاء الاصطناعي خلال مباراة كاملة.** المعالج لا يكرر نفس المباراة أبداً.
 

@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SBQngtEtdWuZrsh5/VHQhXEtAI328IIew1GxH2LLZlOMSUH7+wGuzoYvDGb8k3kfHG4esOD4tliAXV25h4NzrQ=="
+author_sig: "OvOxK6wLOnsSe4WNbO18ntVgjVUexQ9NmgEADq7neL2qSW5UQu6XX5Cd5bAfxcEM/t7mJsixxFGFCB3LHDvGPA=="
 ---
 
 # I used git as a database to run a free bot on GitHub Actions

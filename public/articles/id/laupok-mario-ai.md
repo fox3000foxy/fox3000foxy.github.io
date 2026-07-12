@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FqIaAoXvF5Xl+TdnGb+K1oBKK+lNF/nliUEETQSpHwNbt/nQkvwQ6MfUcGJKo8Ye+eXtSaE3Tc2YoowKGrTkug=="
+author_sig: "X7D9SL0wIvFZyzdnHZGbnzlgVGwbpAehno6TW6L1IhmRqZNBk+G1sZLVwmJ+ko0VUHocREaHDkQHhtIo733EiA=="
 ---
 
 # Saya membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya

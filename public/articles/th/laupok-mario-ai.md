@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Sc2f+ru+WRs7lwkNImYndfeUuZjw3bJxOQvLvd8dgobIFxADaMNWULd2mDQcwNZz2EFp62bNlcBw7+EVhx3aDw=="
+author_sig: "NRn8R4efQrIJa8Mp5ewMkv1sXNCuLkRngLzEpMq9hbOeMuzi7yNG7wnM3Y/9meDij6xfEKOKdvrtLzXmaNdQRQ=="
 ---
 
 # ผมสร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร

@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "yq1EVkodZSjHyYjjrRfDd1+Yb2dF/PZx5Dnrp53DXxtESn/OmpgrAhSx+pEQC0hgo8FIWVSWAgNsTRioYYzdBQ=="
+author_sig: "o2Uz2J1VsjGUXRePBjkOMMxOrUXHHNdbbGMi6ghZ5x/4D9uaBECHOGpeZZauQd2SZRcsShdXaQmKU9PuprA2ew=="
 ---
 
 # Ho creato un'IA che gioca da sola a Super Mario World -- come funziona

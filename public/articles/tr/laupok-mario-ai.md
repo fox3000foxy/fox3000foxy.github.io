@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "a4HMv0DMZf5N4M0Q6NMNHyCeKPTd+H+t9xh1KjWl+jWwUMrn/uaKufIBfwwJPqXLiwH0zCY04obXXJRQVbVUTA=="
+author_sig: "n25UIsQ/BCgXuUL4Nkl2WDi1mnfJ8RGyp/ElOwIkKmI8EQ2Tb4m1jZsbi50YaFeFbma0hEEIvxxEuPD3RGXZGA=="
 ---
 
 # Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdum -- nasıl çalışıyor

@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0kZXNePzVp5cukt3RHrnahbwvHAGBPaaRtja6Ub4xsldtIZnfD0/R0O+Cxjt9tRbroeTFj6F1ke1riEfhgxpfg=="
+author_sig: "6YJO2DAVLuawlfBqRessJ3tpKmug2e1EqDkH4CkSBjd+TmpDoGOQJ3qmuvSxzrYCb5gleHiAFl9FGsgw+6H2Sw=="
 ---
 
 ## بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers = 💸 صفر

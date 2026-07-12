@@ -15,12 +15,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7ZFUajdWQy+E7ARDut4tDMfH0Q5aWgNyQZEQPWxbSYLC0UJmxsnIFlnkk3GZ2YkEmDYeGcavu1j4GPG5wFikGg=="
+author_sig: "Q1g4brmz/qPLqWRS2a1VUCiRQ1vgVw2RdwpI8GNo1GFch/RHsrWNZ/QzfLPK1c3BWdzeWCYsiwpZe9KNzOxtbA=="
 ---
 
 # konosuba-rpgのコードを週末に読んでみた結果
 
-このプロジェクトをしばらくメンテナンスしてきたが、自分のコードを落ち着いて読み返すのはいつだって勉強になる。konosuba-rpgはDiscord用のターン制RPGで、各アクションごとにWebP画像をリアルタイム生成する。テキスト埋め込みではない。スプライト、HPバー、戦闘メッセージ——すべてを含んだ本物の画像が合成される。
+このプロジェクトをしばらくメンテナンスしてきたが、自分のコードを落ち着いて読み返すのはいつだって勉強になる。konosuba-rpgはDiscord用のターン制RPGで、各アクションごとにWebP画像をリアルタイム生成する。テキスト埋め込みではない。スプライト、HPバー、戦闘メッセージ----すべてを含んだ本物の画像が合成される。
 
 スタックは：TypeScript、Hono、Vercel、Cloudflare Workers、Supabase。ホスティングはすべて無料。そしてDiscordボットは永続サーバーなしで動作する。この記事では、それらがどのように連携しているかを説明する。
 
@@ -38,12 +38,12 @@ author_sig: "7ZFUajdWQy+E7ARDut4tDMfH0Q5aWgNyQZEQPWxbSYLC0UJmxsnIFlnkk3GZ2YkEmDY
 
 シード以降の各セグメントは実行されたアクションを表す。サーバーはこのURLを受け取り、最初からやり直し、すべてのアクションを順番に再生し、その時点の戦闘画像を返す。セッションも、ユーザーに関連するRAM上の状態も存在しない。
 
-Discordはインタラクティブボタンで動作する——プレイヤーが「攻撃」を押すと、Discordはボタンの`custom_id`をサーバーに送信する。このcustom_idには新しいアクションが追加された圧縮済み戦闘URLが含まれている。サーバーはゼロからすべてを再計算し、更新された画像を返す。
+Discordはインタラクティブボタンで動作する----プレイヤーが「攻撃」を押すと、Discordはボタンの`custom_id`をサーバーに送信する。このcustom_idには新しいアクションが追加された圧縮済み戦闘URLが含まれている。サーバーはゼロからすべてを再計算し、更新された画像を返す。
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// 関数外で事前コンパイル——呼び出しごとに再生成されない
+// 関数外で事前コンパイル----呼び出しごとに再生成されない
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -123,7 +123,7 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-シンプルだが、プレイヤーが攻撃を10連打すると`aaaaaaaaaa`（10文字）が`a10`（3文字）になる。UIの「4回攻撃」「10回攻撃」ボタンはまさにこのためのものだ——戦闘を加速しつつペイロードも圧縮する。
+シンプルだが、プレイヤーが攻撃を10連打すると`aaaaaaaaaa`（10文字）が`a10`（3文字）になる。UIの「4回攻撃」「10回攻撃」ボタンはまさにこのためのものだ----戦闘を加速しつつペイロードも圧縮する。
 
 ### 2. 圧縮でも足りない場合のセッショントークン
 
@@ -149,7 +149,7 @@ export async function decodeGameplayPayloadWithStatus(encodedPayload: string, us
 }
 ```
 
-セッションのTTLは7日間で、10分ごとに自動削除される。`turnVersion`のチェックにより、プレイヤーがゲームを進めた後に古い状態を再実行するのを防ぐ——うっかり「巻き戻し」を防ぐさりげない保護機構だ。
+セッションのTTLは7日間で、10分ごとに自動削除される。`turnVersion`のチェックにより、プレイヤーがゲームを進めた後に古い状態を再実行するのを防ぐ----うっかり「巻き戻し」を防ぐさりげない保護機構だ。
 
 2つのインメモリMap（`tokenToSession`、`latestTurnByBattle`）は画像キャッシュと同じ`globalThis as unknown as GameSessionGlobals`パターンを使用しており、理由は後述する。
 
@@ -177,7 +177,7 @@ WebP出力
 
 **背景**：2枚の固定画像（ボードとフレーム）、ファイルシステムから読み込んで1回合成される。
 
-**キャラクターレイヤー**：計算された座標にスプライトが配置される。死亡したプレイヤーは除外される（`activeSlots = slots.filter(s => playerHp[s.i] > 0)`）。敵スプライトはカスタム`flipX`で水平反転される——外部依存ではなくピクセル単位のループ処理である。
+**キャラクターレイヤー**：計算された座標にスプライトが配置される。死亡したプレイヤーは除外される（`activeSlots = slots.filter(s => playerHp[s.i] > 0)`）。敵スプライトはカスタム`flipX`で水平反転される----外部依存ではなくピクセル単位のループ処理である。
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -206,7 +206,7 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 
 ---
 
-## キャッシュシステム——最も手の込んだ部分
+## キャッシュシステム----最も手の込んだ部分
 
 5つの異なるキャッシュレベルがある。それぞれがパイプラインの異なる粒度を対象としている。
 
@@ -235,7 +235,7 @@ function freePhoton(_key: string, img: Photon.PhotonImage): void {
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage`はWASMオブジェクトであり、JavaScriptのGCの外部にあるWASM線形メモリ側にメモリが割り当てられる。明示的な`.free()`呼び出しなしには、このメモリは決して解放されない。LRUの削除が自動的に`.free()`をトリガーする——JavaScriptにおけるRAIIのようなものだ。
+`Photon.PhotonImage`はWASMオブジェクトであり、JavaScriptのGCの外部にあるWASM線形メモリ側にメモリが割り当てられる。明示的な`.free()`呼び出しなしには、このメモリは決して解放されない。LRUの削除が自動的に`.free()`をトリガーする----JavaScriptにおけるRAIIのようなものだ。
 
 ### キャッシュキーは意図的にロッシー
 
@@ -279,15 +279,15 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)`は大きな画像の場合、引数がコールスタックに渡されるためスタックオーバーフローを引き起こす可能性がある。32KB単位のチャンク化でこれを回避している。結果はキャッシュされる——同じ画像のbase64変換はワーカーインスタンスごとに1回だけ実行される。
+`String.fromCharCode(...largeArray)`は大きな画像の場合、引数がコールスタックに渡されるためスタックオーバーフローを引き起こす可能性がある。32KB単位のチャンク化でこれを回避している。結果はキャッシュされる----同じ画像のbase64変換はワーカーインスタンスごとに1回だけ実行される。
 
 ---
 
-## STRIPPER.md——逐次awaitの監査
+## STRIPPER.md----逐次awaitの監査
 
 リポジトリには`STRIPPER.md`というファイルがあり、`await`の並列化に関する監査が文書化されている。記録されている例をいくつか：
 
-- プレイヤープロフィールの読み込みでは、3つのSupabaseクエリ（進行度、ランの概要、実績）が直列に実行されていた。これらは`Promise.all`に変更された——相互に依存関係はない。
+- プレイヤープロフィールの読み込みでは、3つのSupabaseクエリ（進行度、ランの概要、実績）が直列に実行されていた。これらは`Promise.all`に変更された----相互に依存関係はない。
 - 戦闘終了時の報酬配布（アクセサリー＋消耗品）は逐次的だった。同様に並列化された。
 - ボタン用のセッショントークン作成はグループごとに逐次行われていた。独立したグループは現在並列で作成されている。
 
@@ -330,9 +330,9 @@ export async function handleInteractions(c: Context) {
 
 DiscordがPOSTを送信し、ハンドラがVercel関数またはCloudflare Worker上で50〜200ms実行され、応答して終了する。永続的な接続を維持する必要も、サーバーを起動したままにする必要もない。Discordボット全体がVercelのfree tier上でホストされている。
 
-`discord-interactions`からの`verifyKey`によるEd25519署名検証は必須である——Discordはヘッダーに署名を送り、それを検証しないとエンドポイントが拒否される。
+`discord-interactions`からの`verifyKey`によるEd25519署名検証は必須である----Discordはヘッダーに署名を送り、それを検証しないとエンドポイントが拒否される。
 
-### 特殊アニメーション——唯一の意図的なawait
+### 特殊アニメーション----唯一の意図的なawait
 
 ```typescript
 // handleSpecialButton.ts
@@ -343,7 +343,7 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-この意図的な3秒の遅延はSTRIPPER.mdに意図的と文書化されている。めぐみんの特殊攻撃（爆裂魔法）はDiscord側でアニメーションを持ち——メッセージがまず中間ビジュアルで更新され、3秒後に結果で変更される。Vercel関数が意図的に必要以上に長く実行される唯一のケースだ。
+この意図的な3秒の遅延はSTRIPPER.mdに意図的と文書化されている。めぐみんの特殊攻撃（爆裂魔法）はDiscord側でアニメーションを持ち----メッセージがまず中間ビジュアルで更新され、3秒後に結果で変更される。Vercel関数が意図的に必要以上に長く実行される唯一のケースだ。
 
 ![特殊攻撃](/images/konosuba-rpg/shot_08_special.webp)
 
@@ -369,7 +369,7 @@ if (!isVercelRuntime) { start(); }
 
 主な違いは静的アセットだ。Vercelではファイルシステム（`/var/task/assets/`）から読み込まれる。Cloudflare Workersでは、`ASSETS`バインディング（CF静的アセット）を経由し、フォールバックとしてHTTPSミラー（`fox3000foxy.com/konosuba-rpg/assets`）を使用する。`assetLoader.ts`の`getAssetBytes`は、まずファイルシステム、次にfetchを試みることで両方のパスを処理する。
 
-WASM（`@cf-wasm/photon/edge-light`、`@cf-wasm/resvg`）はランタイムごとに別々のビルドがある。パッケージ名の`edge-light`フラグはCloudflare Workers互換のビルドを示しており、ランタイムでの`new WebAssembly.Module()`を許可しない——WASMは事前コンパイルされている必要がある。
+WASM（`@cf-wasm/photon/edge-light`、`@cf-wasm/resvg`）はランタイムごとに別々のビルドがある。パッケージ名の`edge-light`フラグはCloudflare Workers互換のビルドを示しており、ランタイムでの`new WebAssembly.Module()`を許可しない----WASMは事前コンパイルされている必要がある。
 
 ---
 
@@ -472,20 +472,20 @@ export async function withPerf(scope: string, label: string, work: () => Promise
 - **Cloudflare Workers free tier**：日10万リクエスト、リクエストあたり10ms CPU時間（Workerではレンダリングがこれを超える可能性があるため、Vercelをプライマリとしている）。
 - **Supabase free tier**：500MBデータベース、5GB帯域幅。数千人のプレイヤーに十分な容量だ。
 
-バックエンド全体が、有意なトラフィック量まではゼロコストで動作する。唯一の摩擦点はCloudflare WorkersのCPU制限だ——画像レンダリングはWASMのためにCPU集約型であり、そのためVercelをプライマリ、WorkersをCDNフォールバックとする戦略をとっている。
+バックエンド全体が、有意なトラフィック量まではゼロコストで動作する。唯一の摩擦点はCloudflare WorkersのCPU制限だ----画像レンダリングはWASMのためにCPU集約型であり、そのためVercelをプライマリ、WorkersをCDNフォールバックとする戦略をとっている。
 
 ---
 
 ## 覚えておくべき3つのこと
 
-1. **URLをゲーム状態として使う**ことは単なる気の利いたトリックではない——Discordによって課された制約（ボタンは100文字制限）であり、RLE圧縮＋セッショントークンをフォールバックとするステートレスアーキテクチャを強制した。制約が設計を決定づけたのだ。
+1. **URLをゲーム状態として使う**ことは単なる気の利いたトリックではない----Discordによって課された制約（ボタンは100文字制限）であり、RLE圧縮＋セッショントークンをフォールバックとするステートレスアーキテクチャを強制した。制約が設計を決定づけたのだ。
 
 2. **明示的な解放処理付きWASMキャッシュ**：`PhotonImage`はJavaScriptヒープ外にメモリを割り当て、`.free()`なしではGCされない。LRUの削除に`freePhoton`を結びつけることは、JavaScriptにおけるRAIIである。コード内では控えめだが、これがないとワーカーは本番でメモリリークする。
 
-3. **WebSocketなしのサーバーレスDiscordボット**：WebSocketゲートウェイ方式ほど知られていないが、ステートレスな処理（各インタラクションは独立）を行うボットには、Interactions Endpointが厳密に優れている——再接続不要、ハートビート不要、プロセス維持不要。Discordがインフラ側で可用性を管理する。
+3. **WebSocketなしのサーバーレスDiscordボット**：WebSocketゲートウェイ方式ほど知られていないが、ステートレスな処理（各インタラクションは独立）を行うボットには、Interactions Endpointが厳密に優れている----再接続不要、ハートビート不要、プロセス維持不要。Discordがインフラ側で可用性を管理する。
 
 ---
 
 *リポジトリ： [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
 
-*ソース利用可能なカスタムライセンス——再配布禁止、自由に使用可能。*
+*ソース利用可能なカスタムライセンス----再配布禁止、自由に使用可能。*

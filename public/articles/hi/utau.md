@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jCKOXIS6iDJxhzPwjmwu+Jp3rjekPaIBkFmESKVj3ASTT2G1btNQ9YybwSiiQKkVXQVfuGqGk/8G/YNYMCuYmw=="
+author_sig: "hkC73/INd7DhWBcXuy9cEaxGgy2OjF+HBkXMkWOh3o3rMrLqrR1iXhJyhvzBPUGAMyARRqbYxPfEAdnoDeF8BQ=="
 ---
 
 ## UTAU : कैसे Visual Basic 6 के एक सॉफ़्टवेयर ने सिंथेटिक आवाज़ को लोकतांत्रिक बनाया

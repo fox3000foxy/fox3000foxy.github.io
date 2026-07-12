@@ -1,14 +1,14 @@
 ---
 title: Minhas Paixões
 description: Codar, desenhar, automatizar, descobrir tecnologias antigas, e
-  muito mais — uma visão geral do que me motiva.
+  muito mais -- uma visão geral do que me motiva.
 date: 2026-03-08
 tags:
   - personal
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "y1Xy29DC3wUUmPGbMdb2tL56/Iqbnoo+Dp4msHuge3Lx4YpwigSDPYBWU0Pvi3RM7S+H7999zuvbJE6gz8/IpQ=="
+author_sig: "6r7IsGvImijVltUR8PPSe9vt1liZrAsZAwv/OZnlnLZi5vAGGiqnliKtVFurO2VL+ThtzNy9Y28mLNwwKcZF3g=="
 ---
 
 # Minhas Paixões
@@ -21,11 +21,11 @@ Talvez porque eu queira compartilhar minha vida, mas não minhas informações p
 
 Minhas paixões são variadas: eu amo codar, como você provavelmente já notou no resto deste blog. Há algo profundamente satisfatório em construir coisas do zero, resolver problemas, e ver a sua criação ganhar vida. Seja uma pequena ferramenta de linha de comando ou uma aplicação web completa, o processo nunca fica velho.
 
-Eu tenho um amor especial pelo **open source** — compartilhar é amar, e eu realmente aprecio a ideia de que outra pessoa possa achar meu código útil. A maioria dos meus projetos vive no [meu GitHub](https://github.com/fox3000foxy), e você pode explorá-los na [página Projetos](/projects).
+Eu tenho um amor especial pelo **open source** -- compartilhar é amar, e eu realmente aprecio a ideia de que outra pessoa possa achar meu código útil. A maioria dos meus projetos vive no [meu GitHub](https://github.com/fox3000foxy), e você pode explorá-los na [página Projetos](/projects).
 
 ## Desenho
 
-Mas o código não é minha única paixão — eu também amo desenhar! Aqui estão alguns dos meus desenhos:
+Mas o código não é minha única paixão -- eu também amo desenhar! Aqui estão alguns dos meus desenhos:
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
@@ -47,13 +47,13 @@ Mas o código não é minha única paixão — eu também amo desenhar! Aqui est
 
 ## Automatizar Tudo que se Move
 
-Eu também tenho uma paixão por automação. Brincar com GitHub Actions e workflows é um dos melhores sentimentos que já experimentei. Sempre que posso substituir um processo manual por um script ou pipeline, eu o faço — sem questionar.
+Eu também tenho uma paixão por automação. Brincar com GitHub Actions e workflows é um dos melhores sentimentos que já experimentei. Sempre que posso substituir um processo manual por um script ou pipeline, eu o faço -- sem questionar.
 
 Recentemente também comecei a assinar meus commits com uma chave SSH, e fiz um script para isso que você pode encontrar neste [gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Descobrir Tecnologias Antigas
 
-Eu amo descobrir tecnologias antigas como UTAU — acho o conceito bastante fascinante. Há algo de especial em entender como as pessoas construíam as coisas antes da era moderna da IA e da computação em nuvem.
+Eu amo descobrir tecnologias antigas como UTAU -- acho o conceito bastante fascinante. Há algo de especial em entender como as pessoas construíam as coisas antes da era moderna da IA e da computação em nuvem.
 
 ## Vtubers
 
@@ -65,7 +65,7 @@ Meu passatempo principal é codar ouvindo música. Nada melhor do que entrar em 
 
 ## Encontrar Soluções Alternativas
 
-Eu também adoro encontrar soluções alternativas para evitar pagar por coisas — ou pelo menos pensar fora da caixa. Por exemplo, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) foi uma das minhas últimas criações onde encontrei soluções gratuitas para gerenciamento de comandos, gerenciamento de banco de dados, e daemons. Não é questão de ser pão-duro — é o desafio que importa!
+Eu também adoro encontrar soluções alternativas para evitar pagar por coisas -- ou pelo menos pensar fora da caixa. Por exemplo, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) foi uma das minhas últimas criações onde encontrei soluções gratuitas para gerenciamento de comandos, gerenciamento de banco de dados, e daemons. Não é questão de ser pão-duro -- é o desafio que importa!
 
 ## Por que Este Blog
 

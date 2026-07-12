@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NFZWnlnGaqsWmmj8aVbdzSMdB/PgjRV8jIs6mvYyJ8lsVa/OBY06yqsrjcG+FSYxBMJK33JQuRiRr4h2JmPrww=="
+author_sig: "GK5/4ANy+fkrFUeA4AugT/vEoR9ZHm6F4G4DGea6JcdIXFZrRDuwN83EYwdL8mNFdtz/kunw/N6SeiCbTEWWTw=="
 ---
 
 # 슈퍼 마리오 월드를 혼자서 플레이하는 AI를 만들었다 -- 작동 원리

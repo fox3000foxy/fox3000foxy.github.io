@@ -1,6 +1,6 @@
 ---
 title: "ฉันสร้าง honeypot Express ที่สมจริงอย่างยิ่ง"
-description: "328 ปลายทางปลอมพร้อมการตอบสนองที่สร้างขึ้นทันที การปลอมแปลงส่วนหัว การบันทึกทราฟฟิกบอท — เจาะลึกโค้ดของมิดเดิลแวร์ honeypot Express ที่ออกแบบมาเพื่อหลอกลวงสแกนเนอร์"
+description: "328 ปลายทางปลอมพร้อมการตอบสนองที่สร้างขึ้นทันที การปลอมแปลงส่วนหัว การบันทึกทราฟฟิกบอท -- เจาะลึกโค้ดของมิดเดิลแวร์ honeypot Express ที่ออกแบบมาเพื่อหลอกลวงสแกนเนอร์"
 date: "2026-06-10"
 aiGenerated: true
 tags:
@@ -11,12 +11,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "woIYLOEh/m+rSkUbfIQcwIFGdiXZaFLsT9b+yhlEj+ZdvRoK2ql3+2/3Tqt48y1TWVViPt91Y2Y69lS0tdL9Sw=="
+author_sig: "3XLbDhUCWbTuV6uCRJdK8C2DneA+KNCP6MytsoXDb/POC1Yd0hqpmnPIV+BnVZXTzD3OZNZCjfPi39dGQIgmvA=="
 ---
 
 ## แนวคิด
 
-บอทและสแกนเนอร์อัตโนมัติสแกนเว็บแอปพลิเคชันอย่างต่อเนื่องเพื่อหาช่องโหว่ พวกมันมองหาไฟล์ `.env` แผงผู้ดูแลระบบ การสำรองฐานข้อมูล ข้อมูลประจำตัว SSH — อะไรก็ตามที่สามารถนำไปใช้ประโยชน์ได้
+บอทและสแกนเนอร์อัตโนมัติสแกนเว็บแอปพลิเคชันอย่างต่อเนื่องเพื่อหาช่องโหว่ พวกมันมองหาไฟล์ `.env` แผงผู้ดูแลระบบ การสำรองฐานข้อมูล ข้อมูลประจำตัว SSH -- อะไรก็ตามที่สามารถนำไปใช้ประโยชน์ได้
 
 แทนที่จะส่งคืน 404 ธรรมดา ฉันต้องการสร้างสิ่งที่สนุกกว่า: **honeypot Express** ที่ตอบสนองด้วยเนื้อหาที่น่าเชื่อถือ ทำให้ผู้โจมตีเชื่อว่าพวกเขาพบเป้าหมายที่มีช่องโหว่
 

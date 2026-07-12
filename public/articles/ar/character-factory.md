@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hWR/kWIiii3do4hs2nKXzD781xrHit1rKmVph2usKymr3Ofkk1nSOw6zFfUlCFvG3gFK7gQs6PGTkkIBQCHNwQ=="
+author_sig: "UyL91nxw88+T/xyxx+/RQQ9L3rkGlNJ0BUMWlloBD9qhcGYrzbGC2WafqhPlRX+wbR/vMReXyVVs/LmM3L9d7g=="
 ---
 
 # بناء character-factory: صور رمزية بنظام وراثي

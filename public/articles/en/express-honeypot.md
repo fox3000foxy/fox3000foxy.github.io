@@ -1,6 +1,6 @@
 ---
 title: "I built an ultra-realistic Express honeypot"
-description: "328 fake endpoints with on-the-fly generated responses, header spoofing, bot traffic logging — a deep dive into an Express honeypot middleware designed to fool scanners."
+description: "328 fake endpoints with on-the-fly generated responses, header spoofing, bot traffic logging -- a deep dive into an Express honeypot middleware designed to fool scanners."
 date: 2026-06-10
 aiGenerated: true
 tags:
@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "I0iRhvJJyO2Wa+Rhm1iH+1F+T2nebeuKx3xqycFUTZVpyKutbYvZILd0Hc3iec1q8DN3Zy13B6dDnTFo7DhifA=="
+author_sig: "JzoVqjr+MpTKGx1LtqGGnFzZN6NMvmvPTFOqvqkib4D4F7KrUzqbZRJFhaA58MZDyeaGu9L6wqtsAltcHfhafA=="
 ---
 
 ## TL;DR
@@ -29,7 +29,7 @@ Security bots, scrapers, and malicious actors constantly scan web servers for co
 - configuration files: `dump.sql`, `.git/config`, `docker-compose.yml`
 - banking phishing pages: `/lander/sberbank*`, `/index_sber.php`
 
-A typical approach is to block these requests, return a 404 or 403. But that immediately gives the scanner valuable information — the route doesn't exist, so it moves on. A honeypot does the opposite: **it makes the scanner believe everything exists**, wasting its time processing fake responses while your real server is protected behind known routes.
+A typical approach is to block these requests, return a 404 or 403. But that immediately gives the scanner valuable information -- the route doesn't exist, so it moves on. A honeypot does the opposite: **it makes the scanner believe everything exists**, wasting its time processing fake responses while your real server is protected behind known routes.
 
 ## The architecture
 
@@ -37,13 +37,13 @@ A typical approach is to block these requests, return a 404 or 403. But that imm
 
 The core is a `classify()` function in `src/services/mockupGenerator.ts` that takes an endpoint path and returns a response generator. This function uses hierarchical rules:
 
-1. **Exact matches** — the most common endpoints have dedicated generators
-2. **Pattern matches** — regex on the path to detect patterns like `id_rsa`, `wp-admin`, `sitemap.xml`
-3. **Smart classification** — paths like `/262LBNFp` (6+ random characters) are classified as "C2 heartbeats"
-4. **Catchall rules** — API paths, `.php`, `.html`, `.js`, `.json` and `.asmx` files have generic generators
-5. **Final catchall** — `genCatchall()` produces a generic JSON response with metadata
+1. **Exact matches** -- the most common endpoints have dedicated generators
+2. **Pattern matches** -- regex on the path to detect patterns like `id_rsa`, `wp-admin`, `sitemap.xml`
+3. **Smart classification** -- paths like `/262LBNFp` (6+ random characters) are classified as "C2 heartbeats"
+4. **Catchall rules** -- API paths, `.php`, `.html`, `.js`, `.json` and `.asmx` files have generic generators
+5. **Final catchall** -- `genCatchall()` produces a generic JSON response with metadata
 
-This approach means responses are **fresh per request** — no static files, no caching, every response looks like it came from a real server with its own timestamp.
+This approach means responses are **fresh per request** -- no static files, no caching, every response looks like it came from a real server with its own timestamp.
 
 ### 2. The dual-variant system
 
@@ -53,7 +53,7 @@ Every generator supports two variants:
 type Variant = "default" | "complete";
 ```
 
-- **`default`** — concise yet credible responses. Example for `.env`:
+- **`default`** -- concise yet credible responses. Example for `.env`:
   ```
   DB_HOST=localhost
   DB_USER=root
@@ -62,7 +62,7 @@ type Variant = "default" | "complete";
   APP_DEBUG=true
   ```
 
-- **`complete`** — highly detailed responses. Example for `.env`:
+- **`complete`** -- highly detailed responses. Example for `.env`:
   ```
   # Database
   DB_CONNECTION=mysql
@@ -85,7 +85,7 @@ type Variant = "default" | "complete";
   ...
   ```
 
-The `complete` variant also includes full HTML pages with styled CSS — admin panels, WordPress login screens, Russian banking phishing pages, and so on.
+The `complete` variant also includes full HTML pages with styled CSS -- admin panels, WordPress login screens, Russian banking phishing pages, and so on.
 
 ### 3. On-the-fly generation
 
@@ -125,7 +125,7 @@ else if (path.endsWith(".do") || path.endsWith(".action"))
   res.setHeader("X-Powered-By", "Servlet/3.0");
 ```
 
-This makes responses far more credible — a `.php` endpoint with `X-Powered-By: PHP/8.1.12` and `Server: nginx/1.24.0` looks exactly like a real WordPress server.
+This makes responses far more credible -- a `.php` endpoint with `X-Powered-By: PHP/8.1.12` and `Server: nginx/1.24.0` looks exactly like a real WordPress server.
 
 ### 5. The PHP Spoofer
 
@@ -145,7 +145,7 @@ const phpSpoofer = async (req, res, next) => {
 };
 ```
 
-This allows developers running WordPress locally to have the honeypot serve **real** WordPress pages to bots — the ultimate in realism.
+This allows developers running WordPress locally to have the honeypot serve **real** WordPress pages to bots -- the ultimate in realism.
 
 ### 6. Traffic logging and analysis
 
@@ -161,7 +161,7 @@ app.get("/newBotsRoute", async (_req, res) => {
 });
 ```
 
-This feedback loop means the longer you run the honeypot, the more you learn about what bots are looking for — and you can add those paths to your known endpoints.
+This feedback loop means the longer you run the honeypot, the more you learn about what bots are looking for -- and you can add those paths to your known endpoints.
 
 ### 7. Known paths and exclusion
 
@@ -193,11 +193,11 @@ Here's how they are classified (excerpt from the classifier):
 
 The classifier contains specialized generators for edge cases:
 
-- **`genLanding()`** — Russian banking phishing pages for СберБанк, Тинькофф, Газпромбанк
-- **`genC2Heartbeat()`** — realistic C2 heartbeat response with `agent_id`, `group`, `version`
-- **`genScannerPath()`** — traps for specific scanners (nmap nice ports, Hazelcast, CGI)
-- **`genChineseApi()`** — Chinese API responses with `msg: "成功"` (success)
-- **`genMerchant()`** — merchant profiles with `balance`, `fee_rate`, `tier`
+- **`genLanding()`** -- Russian banking phishing pages for СберБанк, Тинькофф, Газпромбанк
+- **`genC2Heartbeat()`** -- realistic C2 heartbeat response with `agent_id`, `group`, `version`
+- **`genScannerPath()`** -- traps for specific scanners (nmap nice ports, Hazelcast, CGI)
+- **`genChineseApi()`** -- Chinese API responses with `msg: "成功"` (success)
+- **`genMerchant()`** -- merchant profiles with `balance`, `fee_rate`, `tier`
 
 ## How to use it
 

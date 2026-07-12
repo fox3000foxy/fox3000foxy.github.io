@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HVngmlFxJRLXuXwx4xkFzeeXesCzMuzAL+eFhW/aoVWQrgOh/hea6j93AeAa65KgVwG8U5MQsDFfFilMsNoBWA=="
+author_sig: "0jOrzp+ROcIhOvNcVmvfrAhhSussTyLiBle0YW1W1n5HWFO1YPi6XZiomokBH5m4klBh6jb8y5Dheo2+m6j03Q=="
 ---
 
 ## Giới thiệu
@@ -247,7 +247,7 @@ Giao diện đơn giản đến bất ngờ : gõ `@gamer` trong chat, và Altoc
 
 Bên dưới, điều này được thực hiện qua một **hệ thống task tree đệ quy**, nơi mỗi mục tiêu cấp cao (vd: "chế tạo diamond pickaxe") được phân rã thành các nhiệm vụ tiên quyết : khai thác kim cương → nấu chảy → chế tạo sticks → kết hợp. Cây đi qua toàn bộ đồ thị công thức Minecraft, xử lý chuỗi sản xuất, mob drops, loot table, và container access. Không giống cây viết tay của ANNA, các task của Altoclef là **Java classes có thể lập trình** mà có thể thực thi bất kỳ logic tùy ý : chiến lược chiến đấu, đổi đồ với piglin, mô hình thám hiểm.
 
-Điểm mấu chốt trong kiến trúc là sự tách biệt giữa **what** (task tree) và **how** (Baritone pathfinding). Baritone xử lý chuyển động cấp thấp : pathfinding, tránh chướng ngại vật, đập block, quản lý inventory — trong khi hệ thống task điều phối kế hoạch cấp cao. Sự mô-đun này đồng nghĩa không thành phần nào cần AI : cả hai đều là thuật toán xác định, nhưng sự kết hợp của chúng tạo ra hành vi phức tạp, hướng đến mục tiêu, sánh ngang với các phương pháp học.
+Điểm mấu chốt trong kiến trúc là sự tách biệt giữa **what** (task tree) và **how** (Baritone pathfinding). Baritone xử lý chuyển động cấp thấp : pathfinding, tránh chướng ngại vật, đập block, quản lý inventory -- trong khi hệ thống task điều phối kế hoạch cấp cao. Sự mô-đun này đồng nghĩa không thành phần nào cần AI : cả hai đều là thuật toán xác định, nhưng sự kết hợp của chúng tạo ra hành vi phức tạp, hướng đến mục tiêu, sánh ngang với các phương pháp học.
 
 Altoclef đại diện cho giới hạn của **AI Minecraft thuần biểu tượng** : nó có thể beat game từ đầu với 0 giờ huấn luyện, 0 GPU, và 0 dữ liệu con người, nhưng nó không thể thích nghi với các tác vụ mà người lập trình không lường trước, và nó không thể học từ kinh nghiệm. Nó biết cách chế tạo một diamond pickaxe vì một Java class chỉ cho nó chính xác cách làm, không phải vì nó tự tìm ra.
 

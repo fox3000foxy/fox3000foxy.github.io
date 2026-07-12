@@ -1,6 +1,6 @@
 ---
 title: "J'ai construit un honeypot Express ultra-réaliste"
-description: "328 faux endpoints avec réponses générées à la volée, spoofing d'en-têtes, logging du trafic bot — plongée au cœur d'un middleware honeypot Express conçu pour leurrer les scanners."
+description: "328 faux endpoints avec réponses générées à la volée, spoofing d'en-têtes, logging du trafic bot -- plongée au cœur d'un middleware honeypot Express conçu pour leurrer les scanners."
 date: 2026-06-10
 aiGenerated: true
 tags:
@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "lBkyY7tA9woBaTSCgeg+VegKuyx+1WlLlymqtcv1y8ZlcN9ux8jkToUAN6of+gLt05gJig0755lmOouaHAubwg=="
+author_sig: "ramfB/EvbGmlAe1RAeAYjwnlMF5X3LXaLbuHcoDNRUCvkeVpEJTtSTRtYtXs5QIHtjLPAR9iGbNJ5nN/5Jiyiw=="
 ---
 
 ## TL;DR
@@ -37,13 +37,13 @@ Une approche typique consiste à bloquer ces requêtes, à renvoyer un 404 ou un
 
 La pièce maîtresse est une fonction `classify()` dans `src/services/mockupGenerator.ts` qui prend un chemin d'endpoint et retourne un générateur de réponse. Cette fonction contient des règles hiérarchiques :
 
-1. **Correspondances exactes** — les endpoints les plus courants ont des générateurs dédiés
-2. **Correspondances par motif** — regex sur le chemin pour détecter des motifs comme `id_rsa`, `wp-admin`, `sitemap.xml`
-3. **Classification intelligente** — chemins comme `/262LBNFp` (6+ caractères aléatoires) sont classifiés comme "battements de cœur C2"
-4. **Règles fourre-tout** — les chemins d'API, les fichiers `.php`, `.html`, `.js`, `.json` et `.asmx` ont des générateurs génériques
-5. **Catchall final** — `genCatchall()` produit une réponse JSON générique avec des métadonnées
+1. **Correspondances exactes** -- les endpoints les plus courants ont des générateurs dédiés
+2. **Correspondances par motif** -- regex sur le chemin pour détecter des motifs comme `id_rsa`, `wp-admin`, `sitemap.xml`
+3. **Classification intelligente** -- chemins comme `/262LBNFp` (6+ caractères aléatoires) sont classifiés comme "battements de cœur C2"
+4. **Règles fourre-tout** -- les chemins d'API, les fichiers `.php`, `.html`, `.js`, `.json` et `.asmx` ont des générateurs génériques
+5. **Catchall final** -- `genCatchall()` produit une réponse JSON générique avec des métadonnées
 
-Cette approche signifie que les réponses sont **fraîches à chaque requête** — pas de fichiers statiques, pas de mise en cache, chaque réponse semble provenir d'un vrai serveur avec son propre timestamp.
+Cette approche signifie que les réponses sont **fraîches à chaque requête** -- pas de fichiers statiques, pas de mise en cache, chaque réponse semble provenir d'un vrai serveur avec son propre timestamp.
 
 ### 2. Le système de double variante
 
@@ -53,7 +53,7 @@ Chaque générateur supporte deux variantes :
 type Variant = "default" | "complete";
 ```
 
-- **`default`** — réponses concises mais crédibles. Exemple pour `.env` :
+- **`default`** -- réponses concises mais crédibles. Exemple pour `.env` :
   ```
   DB_HOST=localhost
   DB_USER=root
@@ -62,7 +62,7 @@ type Variant = "default" | "complete";
   APP_DEBUG=true
   ```
 
-- **`complete`** — réponses très détaillées. Exemple pour `.env` :
+- **`complete`** -- réponses très détaillées. Exemple pour `.env` :
   ```
   # Database
   DB_CONNECTION=mysql
@@ -85,7 +85,7 @@ type Variant = "default" | "complete";
   ...
   ```
 
-La variante `complete` inclut également des pages HTML complètes avec CSS stylisé — pages d'administration, écrans de connexion WordPress, pages de phishing bancaire en russe, etc.
+La variante `complete` inclut également des pages HTML complètes avec CSS stylisé -- pages d'administration, écrans de connexion WordPress, pages de phishing bancaire en russe, etc.
 
 ### 3. Génération à la volée
 
@@ -125,7 +125,7 @@ else if (path.endsWith(".do") || path.endsWith(".action"))
   res.setHeader("X-Powered-By", "Servlet/3.0");
 ```
 
-Cela rend les réponses beaucoup plus crédibles — un endpoint `.php` avec `X-Powered-By: PHP/8.1.12` et `Server: nginx/1.24.0` ressemble exactement à un vrai serveur WordPress.
+Cela rend les réponses beaucoup plus crédibles -- un endpoint `.php` avec `X-Powered-By: PHP/8.1.12` et `Server: nginx/1.24.0` ressemble exactement à un vrai serveur WordPress.
 
 ### 5. Le PHP Spoofer
 
@@ -145,7 +145,7 @@ const phpSpoofer = async (req, res, next) => {
 };
 ```
 
-Cela permet aux développeurs qui exécutent WordPress en local d'avoir le honeypot qui sert de **vraies** pages WordPress aux bots — le nec plus ultra du réalisme.
+Cela permet aux développeurs qui exécutent WordPress en local d'avoir le honeypot qui sert de **vraies** pages WordPress aux bots -- le nec plus ultra du réalisme.
 
 ### 6. Journalisation et analyse du trafic
 
@@ -161,7 +161,7 @@ app.get("/newBotsRoute", async (_req, res) => {
 });
 ```
 
-Cette boucle de rétroaction signifie que plus vous laissez tourner le honeypot, plus vous apprenez sur ce que les bots recherchent — et vous pouvez ajouter ces chemins à vos endpoints connus.
+Cette boucle de rétroaction signifie que plus vous laissez tourner le honeypot, plus vous apprenez sur ce que les bots recherchent -- et vous pouvez ajouter ces chemins à vos endpoints connus.
 
 ### 7. Endpoints connus et exclusion
 
@@ -193,11 +193,11 @@ Voici comment ils sont classifiés (extrait du classifieur) :
 
 Le classifieur contient des générateurs spécialisés pour des cas particuliers :
 
-- **`genLanding()`** — pages de phishing bancaire en russe pour СберБанк, Тинькофф, Газпромбанк
-- **`genC2Heartbeat()`** — réponse de battement de cœur C2 réaliste avec `agent_id`, `group`, `version`
-- **`genScannerPath()`** — pièges pour scanners spécifiques (ports nmap NICE, Hazelcast, CGI)
-- **`genChineseApi()`** — réponses d'API chinoises avec `msg: "成功"` (succès)
-- **`genMerchant()`** — profils de commerçants avec `balance`, `fee_rate`, `tier`
+- **`genLanding()`** -- pages de phishing bancaire en russe pour СберБанк, Тинькофф, Газпромбанк
+- **`genC2Heartbeat()`** -- réponse de battement de cœur C2 réaliste avec `agent_id`, `group`, `version`
+- **`genScannerPath()`** -- pièges pour scanners spécifiques (ports nmap NICE, Hazelcast, CGI)
+- **`genChineseApi()`** -- réponses d'API chinoises avec `msg: "成功"` (succès)
+- **`genMerchant()`** -- profils de commerçants avec `balance`, `fee_rate`, `tier`
 
 ## Comment l'utiliser
 

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2fKJ3j35O+rznBMihebAqgQM8Vpqj96Ov68OE98kupg6lI/AM+Dhrat1HPofa/trCXVsV81S+DefR9x8Ux18gg=="
+author_sig: "xxgf/Tc0ZTZ27wxWXZzvJNumYQ9+QAYShHe/GrL3R38ocUd7foAgEnINUs+ZZuH3eYawdyEO+vkFFvvFqjen3Q=="
 ---
 
 # Script de firma de commits SSH explicado

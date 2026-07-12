@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6HvgZG4DuL1McpGusmvhfbNpo6O8RXOnzgVwiQRw6ExSLRXrIMycLqNc1aqrgqsRF+DBjPkcmEU+EYBPqsYBQg=="
+author_sig: "oq5raaebn7cpkPrYVL4Wb28X7u1ka2+oH/EnYUepqCwGdREhIjuham8DuGRCkfmmm7ODZv/n1pSCQDrN+N7YNQ=="
 ---
 
 # Git'i veritabanı olarak kullandım ve GitHub Actions'da bedavaya bir bot çalıştırdım

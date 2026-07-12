@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Oc+6/Ca9rbJ4CmNj0DBu5+TuIrmcBAWz2LLfXu5jLj2dW83f7tO8XaFwxoH1EBgfi1yqnFItflzL/Hf9w6qRRA=="
+author_sig: "tEYsgZRcRfY8WCDBwqXd5lce9HAwqlf46MfUMahhxvKutzWKS2SW7D75u4eYERO4uiQbGrzX13eYzHvIIeV4aA=="
 ---
 
 # I built an AI that plays Super Mario World by itself -- how it works

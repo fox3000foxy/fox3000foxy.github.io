@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jtzC6hRY12TseDcxUuRmMeaPUFKMKS51QqEn5Fi9UjsWyD9JCbJJsoP8j3T4g8exCXuTKPonEpW9vdKHc3e0iw=="
+author_sig: "x8BovR5OAyfXu620TbPHAsYO47PgheUKfMgGkm4ziiMaFHKsXrCkOLwVDKM7hZdmpLHsPKwAgAud9SKN+QPE+w=="
 ---
 
 ## UTAU : как программа на Visual Basic 6 демократизировала синтетический голос

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4tkKxKbCDrSUhGRpsdbV1RgbIBfpHNy0CBzxa7Rjb6r5J6BD417jJWBptNFQqpM1s5UBZRZSVr1AGzHCzw9dQg=="
+author_sig: "Ki9NZ1V9ECoE81H86IoqqvJyHbG0edphyDQkVgh9VHYyGaUyQyupTuJEHvLX3XmhGcCEIRqmESSQbcbq9AwNjg=="
 ---
 
 ## Einführung
@@ -247,7 +247,7 @@ Die Schnittstelle ist täuschend einfach : gib `@gamer` im Chat ein, und Altocle
 
 Unter der Haube wird dies durch ein **rekursives Task-Tree-System** erreicht, bei dem jedes hochrangige Ziel (z. B. »craft eine Diamantspitzhacke«) in Vorbedingungen zerlegt wird : Diamant abbauen → schmelzen → Stöcke craften → kombinieren. Der Baum durchläuft den vollständigen Minecraft-Rezeptgraphen und verarbeitet Produktionsketten, Mob-Drops, Loot-Tabellen und Containerzugriff. Anders als ANNAs handgeschriebener Baum sind Altoclefs Aufgaben **programmierbare Java-Klassen**, die beliebige Logik implementieren können : Kampfstrategien, Handeln mit Piglins, Erkundungsmuster.
 
-Die entscheidende architektonische Erkenntnis ist die Trennung von **Was** (dem Aufgabenbaum) und **Wie** (Baritone Pathfinding). Baritone übernimmt die niedrige Bewegungssteuerung : Pfadfindung, Hindernisvermeidung, Blockabbau, Inventarverwaltung — während das Task-System den hochrangigen Plan orchestriert. Diese Modularität bedeutet, dass keine der Komponenten KI sein muss : beide sind deterministische Algorithmen, doch ihre Kombination erzeugt komplexes, zielgerichtetes Verhalten, das mit gelernten Ansätzen konkurriert.
+Die entscheidende architektonische Erkenntnis ist die Trennung von **Was** (dem Aufgabenbaum) und **Wie** (Baritone Pathfinding). Baritone übernimmt die niedrige Bewegungssteuerung : Pfadfindung, Hindernisvermeidung, Blockabbau, Inventarverwaltung -- während das Task-System den hochrangigen Plan orchestriert. Diese Modularität bedeutet, dass keine der Komponenten KI sein muss : beide sind deterministische Algorithmen, doch ihre Kombination erzeugt komplexes, zielgerichtetes Verhalten, das mit gelernten Ansätzen konkurriert.
 
 Altoclef repräsentiert die Grenze der **reinen symbolischen Minecraft-KI** : es kann das Spiel von Grund auf schlagen, mit null Training, null GPUs und null menschlichen Daten, aber es kann sich nicht an Aufgaben anpassen, die seine Programmierer nicht vorausgesehen haben, und es kann nicht aus Erfahrung lernen. Es weiß, wie man eine Diamantspitzhacke herstellt, weil eine Java-Klasse ihm genau sagt, wie, nicht weil es selbst darauf gekommen ist.
 

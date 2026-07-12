@@ -673,7 +673,7 @@ export default function WriteArticle() {
 								}
 								title="Horizontal rule"
 							>
-								—
+								--
 							</button>
 							<span className="toolbar-sep" />
 							<button

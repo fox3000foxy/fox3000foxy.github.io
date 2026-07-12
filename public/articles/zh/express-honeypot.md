@@ -1,6 +1,6 @@
 ---
 title: "我构建了一个超逼真的 Express 蜜罐"
-description: "328 个虚假端点，响应即时生成，头部伪装，机器人流量记录 — 深入一个旨在欺骗扫描器的 Express 蜜罐中间件的代码。"
+description: "328 个虚假端点，响应即时生成，头部伪装，机器人流量记录 -- 深入一个旨在欺骗扫描器的 Express 蜜罐中间件的代码。"
 date: "2026-06-10"
 aiGenerated: true
 tags:
@@ -11,12 +11,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0sdXNR+8sfEw6DZKBT3hs0QaFpY2WjL1zRxivXerboBz9pjgj1GNWWIoNJqc3ygBsfWU19yDin54atgxcyz9lg=="
+author_sig: "XrBZUgGDE0S6nofmvGBKajQsmpjn3vyrEQP/DrFQO8BnCEM1vpS3IVCRR9ZxFQYEUktv5l3v4gKsP2Fm/BHLyw=="
 ---
 
 ## 想法
 
-机器人和自动扫描器不断探测 Web 应用程序以寻找漏洞。它们寻找 `.env` 文件、管理面板、数据库备份、SSH 凭据——任何可能被利用的东西。
+机器人和自动扫描器不断探测 Web 应用程序以寻找漏洞。它们寻找 `.env` 文件、管理面板、数据库备份、SSH 凭据----任何可能被利用的东西。
 
 我不想简单地返回 404，而是想创建更有趣的东西：一个 **Express 蜜罐**，它用可信的内容进行响应，让攻击者相信他们找到了一个易受攻击的目标。
 

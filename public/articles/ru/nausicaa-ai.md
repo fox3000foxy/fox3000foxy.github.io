@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HVJ6qo13lzChZOqFU2aMLu47kFfKXFBBSuljlcI/xJEIxZOc/Pxr0cPzggbM33kl1gsRv48D1Lq5TP6YXm+Lsg=="
+author_sig: "Ic5aOQsEodMShrl2vVOeogTZ9B7NDeW9QM8isiRNhfrsgp2s8JomR2nRs7vxGqRMsbRL5b3EimoslaNl5Y/7FQ=="
 ---
 
 ## Моя долбанутая ИИ для Nausicaa

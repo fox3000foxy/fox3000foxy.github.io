@@ -1,6 +1,6 @@
 ---
 title: "초현실적인 Express 허니팟을 구축했습니다"
-description: "328개의 가짜 엔드포인트, 즉석에서 생성되는 응답, 헤더 스푸핑, 봇 트래픽 기록 — 스캐너를 속이기 위해 설계된 Express 허니팟 미들웨어 코드 분석."
+description: "328개의 가짜 엔드포인트, 즉석에서 생성되는 응답, 헤더 스푸핑, 봇 트래픽 기록 -- 스캐너를 속이기 위해 설계된 Express 허니팟 미들웨어 코드 분석."
 date: "2026-06-10"
 aiGenerated: true
 tags:
@@ -11,12 +11,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fp6VmlJP48GHz1wtZVnLTbXn9ecWr0+OQW9AwSeTikHCrqqmhd5zabwAq1sDEB/aB2NhS3vZ6uMisst+EnxolA=="
+author_sig: "tWbp6xnPxzTXx/Q/P33TRGHr34hkr4XAvGDW6FgUMrBVNx0RFIv2q8Y1I0dG14WvAk25t1zO4gf91BGUKEDUCg=="
 ---
 
 ## 아이디어
 
-봇과 자동 스캐너는 취약점을 찾기 위해 웹 애플리케이션을 끊임없이 스캔합니다. `.env` 파일, 관리자 패널, 데이터베이스 백업, SSH 자격 증명 — 악용할 수 있는 모든 것을 찾습니다.
+봇과 자동 스캐너는 취약점을 찾기 위해 웹 애플리케이션을 끊임없이 스캔합니다. `.env` 파일, 관리자 패널, 데이터베이스 백업, SSH 자격 증명 -- 악용할 수 있는 모든 것을 찾습니다.
 
 단순히 404를 반환하는 대신, 더 흥미로운 것을 만들고 싶었습니다: 공격자가 취약한 대상을 찾았다고 믿게 만드는 **신뢰할 수 있는 콘텐츠로 응답하는 Express 허니팟**입니다.
 
