@@ -1,5 +1,5 @@
 ---
-title: "Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdum -- nasıl çalışıyor"
+title: "Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor"
 description: "Laupok'un projesinin detaylı bir analizi: Super Mario World'ü bağımsız olarak oynamayı öğrenen bir NEAT tabanlı yapay zeka. Genetik algoritmalar, sinir ağları, artırılmış topolojilerin nöroevrimi ve 4200 satırlık Lua kodu."
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "n25UIsQ/BCgXuUL4Nkl2WDi1mnfJ8RGyp/ElOwIkKmI8EQ2Tb4m1jZsbi50YaFeFbma0hEEIvxxEuPD3RGXZGA=="
+author_sig: "xQT4NrMH0i0BXvTSGssY8pFlQ0wV6wkMOog7C4BGv1l7qRpmVtC/K6n/6Px7YhwxtTQxwCQExhOpKuNi6ZKPzg=="
 ---
 
-# Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdum -- nasıl çalışıyor
+# Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor
 
 Laupok, **Super Mario World**'ü tamamen bağımsız olarak oynayan bir yapay zeka oluşturdu. Önceden programlanmış girdiler, kaydedilmiş kareler yok. Yapay zeka, rastgele mutasyonlar ve doğal seleksiyon aracılığıyla oyunun bölümlerini bitirmeyi kendi başına öğreniyor. Proje, yaklaşık **4200 satırlık** bir Lua betiği aracılığıyla **BizHawk** çoklu platform emülatöründe çalışır.
 

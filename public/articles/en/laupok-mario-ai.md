@@ -1,6 +1,5 @@
 ---
-title: "I built an AI that plays Super Mario World by itself -- how it works"
-description: "A deep dive into Laupok's project: a NEAT-based AI that learns to play Super Mario World autonomously. Genetic algorithms, neural networks, neuroevolution of augmenting topologies, and 4200 lines of Lua."
+title: "Laupok built an AI that plays Super Mario World by itself -- how it works"
 date: 2026-07-11
 tags:
   - artificial-intelligence
@@ -13,10 +12,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tEYsgZRcRfY8WCDBwqXd5lce9HAwqlf46MfUMahhxvKutzWKS2SW7D75u4eYERO4uiQbGrzX13eYzHvIIeV4aA=="
+author_sig: "Pc/5QfjqisACLBkIXhrgJQ1MENjWHs3GmtQsPydmPA4qYYOASvrU5L6VwjrM0VQX2vwwdEnczMdfV9XuXaAU0g=="
 ---
 
-# I built an AI that plays Super Mario World by itself -- how it works
+# Laupok built an AI that plays Super Mario World by itself -- how it works
 
 Laupok built an artificial intelligence that plays **Super Mario World** completely autonomously. No pre-scripted inputs, no recorded frames. The AI learns on its own, through random mutations and natural selection, to finish the game's levels. The project runs on **BizHawk**, a multi-platform emulator, via a Lua script of about **4200 lines**.
 

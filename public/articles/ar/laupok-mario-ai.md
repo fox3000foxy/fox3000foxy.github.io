@@ -1,5 +1,5 @@
 ---
-title: "بنيت ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل"
+title: "Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل"
 description: "استعمق في مشروع لاوبوك: ذكاء اصطناعي مبني على خوارزمية NEAT يتعلم لعب سوبر ماريو وورلد بشكل مستقل. الخوارزميات الجينية، والشبكات العصبية، والتطور العصبي لل;topologies المتميزة، و4200 سطر من لوكا."
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YjqHOv38KhF2bDhj2JYZKty+qIyg6CTVlnM5YNIyIgXzZAaU3DjVfl5+hOYvx3b1/VaPFL8uK5VFEKFLxJR/dA=="
+author_sig: "6qvO9bQUH+knrUK5iTxQu7ufh1g7gkaxtnRjQcpg1a5Z3eRFdysd1NarCxCdNpYE3qxCFtMUjUpkj1ZLZw06sw=="
 ---
 
-# بنيت ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل
+# Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل
 
 أنشأ لاوبوك ذكاءً اصطناعياً يلعب **سوبر ماريو وورلد** بشكل كامل ومستقل. لا مدخلات مبرمجة مسبقاً، ولا إطارات مسجلة. الذكاء الاصطناعي يتعلم بمفرده، من خلال الطفرات العشوائية والانتقاء الطبيعي، لإتمام مراحل اللعبة. يعمل المشروع على **BizHawk**، محاكي متعدد المنصات، عبر سكربت لوكا يتكون من حوالي **4200 سطر**.
 

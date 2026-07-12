@@ -1,5 +1,5 @@
 ---
-title: "スーパーマリオワールドを一人でプレイするAIを作った――その仕組み"
+title: "Laupokが作ったスーパーマリオワールドを一人でプレイするAI――その仕組み"
 description: "Laupokのプロジェクトの詳細: NEATベースのAIがスーパーマリオワールドを自律的にプレイする方法。遺伝的アルゴリズム、ニューラルネットワーク、拡張トポロジーのニューロ進化、そして4200行のLua。"
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5CfYBj0VCNemob8OWC74GLToSCHLH9U4zr9jMQiENEZ3ClglGCciGghVuTXN1/xir9J8qFn4ir82FU4o7lfDRQ=="
+author_sig: "HKNKftgs+WJzb6GW65/jYXwAAKWQ27uQtacFyxqTJK0mFIbh3V8I7CUZQyKgfvHSVFLxpydw0sppAX0GDvTYwg=="
 ---
 
-# スーパーマリオワールドを一人でプレイするAIを作った――その仕組み
+# Laupokが作ったスーパーマリオワールドを一人でプレイするAI――その仕組み
 
 Laupokは**スーパーマリオワールド**を完全に自律的にプレイする人工知能を作った。事前定義された入力も、記録されたフレームもない。AIは独学で、ランダムな突然変異と自然選択を通じて、ゲームのステージをクリアする方法を学ぶ。プロジェクトは**BizHawk**というマルチプラットフォームエミュレーター上で、約**4200行**のLuaスクリプトで動作する。
 

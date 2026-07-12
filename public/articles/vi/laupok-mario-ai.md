@@ -1,5 +1,5 @@
 ---
-title: "Tôi đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động"
+title: "Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động"
 description: "Phân tích chi tiết dự án của Laupok: một AI dựa trên NEAT học chơi Super Mario World một cách tự chủ. Thuật toán di truyền, mạng nơ-ron, tiến hóa nơ-ron mở rộngtopologies, và 4200 dòng Lua."
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "rXD+r3SBdAIEmTloWwQpv25ppZyOdQjZeRSdplwTXCA67Hg2kelMS/4FWMlI+2/Y2BrIyB4Lt9KrJAy0y5dArg=="
+author_sig: "RM4GXj5C0UejXw1LkSq4R+fyuddlTNNSpyWoeXVBHRQs1EYZpYuMloRZSDpsQsmNPygXWVa5lhpoVVQdP7vagA=="
 ---
 
-# Tôi đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động
+# Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động
 
 Laupok đã tạo ra một trí tuệ nhân tạo tự chơi **Super Mario World** hoàn toàn tự chủ. Không có đầu vào được lập trình sẵn, không có khung hình được ghi lại. AI tự học, thông qua đột biến ngẫu nhiên và chọn lọc tự nhiên, để vượt qua các màn chơi. Dự án chạy trên **BizHawk**, một trình giả lập đa nền tảng, thông qua một script Lua khoảng **4200 dòng**.
 

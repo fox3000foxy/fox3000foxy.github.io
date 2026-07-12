@@ -1,5 +1,5 @@
 ---
-title: "Ich habe eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie"
+title: "Laupok hat eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie"
 description: "Ein tiefer Einblick in Laupoks Projekt: Eine NEAT-basierte KI, die lernt, Super Mario World autonom zu spielen. Genetische Algorithmen, neuronale Netze, Neuroevolution augmentierender Topologien und 4200 Zeilen Lua."
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "AlAuwrJ08Tymp8FYe9OKa1o4phMXgRoaToIt/vlkH4WK92eC/V7uTJ1hm4hIsVF7htnrtNMkqSgDKodV/IhTtQ=="
+author_sig: "dMmUyzeWVqpu02ccl4LY1oNOofPbB4YodSuwa4z96vxzOCYRjuDIy6lpkGKiwI9/249AAD5x0VhyBrs6Nu/zeQ=="
 ---
 
-# Ich habe eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie
+# Laupok hat eine KI gebaut, die Super Mario World alleine spielt -- so funktioniert sie
 
 Laupok hat eine künstliche Intelligenz gebaut, die **Super Mario World** vollständig autonom spielt. Keine vordefinierten Eingaben, keine aufgezeichneten Frames. Die KI lernt eigenständig, durch zufällige Mutationen und natürliche Selektion, die Level des Spiels zu absolvieren. Das Projekt läuft auf **BizHawk**, einem Multiplattform-Emulator, über ein Lua-Skript von etwa **4200 Zeilen**.
 

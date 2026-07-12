@@ -1,5 +1,5 @@
 ---
-title: "我做了一个能自动玩《超级马里奥世界》的AI----它的原理详解"
+title: "Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解"
 description: "深入解析 Laupok 的项目：一个基于 NEAT 算法的 AI，能够自主学习并通关《超级马里奥世界》。遗传算法、神经网络、增强拓扑的神经进化，以及约 4200 行 Lua 代码。"
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "E9R2rgTwCjO7uGnGrl35pgeBEystgeatPsV6ijbwO8AY+w/HEwVQT2DfKkHDNU09atiGU//WE7cItwS/r0fPNg=="
+author_sig: "U5rc93ILzGi7mF1tPZwaIEbYRMM7W3zZxqHYMaJ2295O9P5gZ+xd1FunpvwV4d8tCKaF61mpr6Me3oQpQgdWFg=="
 ---
 
-# 我做了一个能自动玩《超级马里奥世界》的AI----它的原理详解
+# Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解
 
 Laupok 制作了一个能够完全自主游玩**《超级马里奥世界》**的人工智能。没有任何预先编写的脚本，没有录制的帧数据。AI 通过自身的随机突变和自然选择，学会了如何通关游戏的各个关卡。这个项目运行在 **BizHawk**（一个多平台模拟器）上，通过一个约 **4200 行**的 Lua 脚本实现。
 
