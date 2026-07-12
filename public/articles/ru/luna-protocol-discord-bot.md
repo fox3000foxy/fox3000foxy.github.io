@@ -6,8 +6,8 @@ tags:
   - discord-bot
   - llm
   - typescript
-  - sobytiynaya-arhitektura
-  - iskusstvennyy-intellekt
+  - event-driven-architecture
+  - artificial-intelligence
   - open-source
 authors:
   - fox3000foxy
