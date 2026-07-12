@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xEBE0Yv04AxOLUv4GZiXfHNSMMZCaA+48hJtjjAf9bnUB7Zm6z2Ceqt8PZOLxnrkkANCS9KFdoPxvs5vm6mbhA=="
+author_sig: "0dRtOeoM4+FOnYEO58d1rY4ZK4iZoBYrigpuoO88ExXZMh1cj7gb06uGP/bPhoF97FlVccC9K3wjQCcJtuD88A=="
 ---
 
 # Luna Protocol: I created an autonomous Discord bot that simulates a human being

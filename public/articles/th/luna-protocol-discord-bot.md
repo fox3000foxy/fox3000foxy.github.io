@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "vyPtEy+EbAaQCYwypHzL4t3AtD+3S15miIxvQGWVv8LXtEPV4x2r8f2GUKXDnKaUKR7bnGN+JciATzQ7lSQldQ=="
+author_sig: "43eV7uM1V1V3YSNXz7sxnd8tT4J5eUWRWPSpFprvGnLPqk2sz+I796H/DrPE4PCtFZGhUmyB5x3MPlfiD/66wg=="
 ---
 
 # Luna Protocol: ฉันสร้างบอท Discord อัตโนมัติที่จำลองความเป็นมนุษย์

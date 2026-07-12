@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "zxiazHOCoXG8lCsxql2gG9fEJKjD1CKYwdfNH5e5f1rmVPB5rl+CIn0kK/lq0JfEPKaV2sFIArrhfZTrokKkzw=="
+author_sig: "tTzIO2BKY4ONq0ixw7Ib3ULTue9tuBmGjvMVrCUmhycsVU1RBN8axKwAzJqZ5N3ax4T/jbDA7G8Ik2QHJY2wZg=="
 ---
 
 # Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "R3OXD42MRb48aHu3i1pQYETqzcLQDVM/956BJUNeWs++LjgslzjY2a7ADELG03dzveEEj8WpS0mE6DLAqDDtqA=="
+author_sig: "DquBqC3HAlvyqIFOLtcInPNRc+1R2vJ+tFt+hX1AV/pZO7KLwNjTwHGW7VmFI9M2TP1enRP9lxlHUTtmXgX1BQ=="
 ---
 
 # Luna Protocol: Saya Membuat Bot Discord Otonom yang Mensimulasikan Manusia

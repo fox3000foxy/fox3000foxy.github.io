@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RPnZi4ePDBMLaWy5zfhqCJpDHROGmFIzzYMHisXKpun7d4/24hvYsj+M38e0FwCxiCrc+u7jv7gpG1BLIIgtGg=="
+author_sig: "F7fSzMcTr+hmade7+0pGGaWqOz7JLFpBbRXaMWuNCBE7DYZrQM/nzkryEnOGQoELEEt2+SzdTQq6POyHcdriIw=="
 ---
 
 # Luna Protocol : मैंने एक पूरी तरह से स्वायत्त Discord बॉट बनाया जो एक इंसान का अनुकरण करता है
