@@ -164,7 +164,41 @@ L'approche « behavior cloning » de la vidéo (Phase 1) est la même technique 
 
 Le pipeline VPT résout le problème des données en entraînant un **Inverse Dynamics Model (IDM)** qui regarde l'image t-1 et l'image t+1 pour prédire l'action à l'image t. Parce que l'IDM est non causal (il voit les images futures), la tâche est plus facile que le behavior cloning et nécessite beaucoup moins de données labellisées. Ils ont payé des contracteurs environ 2 000 $ pour 2 000 heures de données labellisées, puis ont utilisé l'IDM pour pseudo-étiqueter 70 000 heures de vidéos YouTube Minecraft.
 
+![Taux de crafting/collecte en fonction du volume de données de pré-entraînement (échelle log) : tables de craft, outils en bois, outils en pierre](assets/vpt-stone-pickaxe-sequence.svg)
+
+L'effet d'échelle est net : sur un axe log de 1 heure à 100 000 heures de données de pré-entraînement, le taux auquel le modèle fabrique une table de craft, des outils en bois, puis des outils en pierre grimpe par paliers. Le modèle entraîné uniquement sur les 2 000 heures labellisées par des contracteurs plafonne aux tables de craft ; c'est en ajoutant les 70 000 heures pseudo-étiquetées par l'IDM (ligne pointillée sur le graphique) que les outils en pierre émergent en zero-shot, sans une seule étape de RL.
+
 Le modèle fondamental de 0,5B paramètres résultant a atteint des capacités zero-shot impossibles avec le RL seul : couper des arbres, fabriquer des tables, saut en colonne : et fine-tuné avec du RL, il est devenu la première IA à fabriquer des outils en diamant.
+
+![Récompense en fonction du nombre d'épisodes d'entraînement RL : partir d'un modèle initialisé aléatoirement vs partir du modèle VPT pré-entraîné](assets/vpt-diamond-pickaxe-sequence.svg)
+
+Ce graphique montre pourquoi le pré-entraînement change tout pour le RL en aval. Le RL parti d'un réseau initialisé aléatoirement (orange) reste plat près de 0 sur près d'un million d'épisodes : la tâche « obtenir un diamant » a une récompense trop éparse pour qu'un agent naïf en tombe dessus par exploration aléatoire. Le RL fine-tuné à partir du modèle VPT pré-entraîné (vert) part déjà avec le comportement de base (miner, fabriquer, explorer) et grimpe régulièrement jusqu'à une récompense d'environ 25, ce qui correspond au chemin complet vers une pioche en diamant.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*Démos vidéo officielles du projet VPT d'OpenAI, montrant l'agent en action.*
 
 ## OpenAI Five : Le problème du reward shaping
 
