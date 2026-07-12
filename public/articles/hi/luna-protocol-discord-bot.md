@@ -6,31 +6,35 @@ tags:
   - discord-bot
   - llm
   - typescript
-  - घटना-संचालित-वास्तुकला
-  - कृत्रिम-बुद्धिमत्ता
-  - ओपन-सोर्स
+  - architecture-evenementielle
+  - intelligence-artificielle
+  - open-source
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tI9aauTZQdlYWPKRigJdfc+fHoh35Kt737zY8XIaESZ5FDXVI5NfYsv6lQOBx89zVpaCqfJQ4HAXaBD+mw+xMw=="
+author_sig: "jeget+tzBVZQxF4ZF+xkctgZgRi62QBqoE4ASiJWMirpGsTrsf7EG8YFGHVbd+qaEK30bG5rmXpltKHDLiw5DQ=="
 ---
 
 # Luna Protocol: मैंने एक स्वायत्त Discord बॉट बनाया जो इंसान की नकल करता है
+
 अगर एक Discord बॉट **सो सकता**, **टाइपिंग गलतियाँ कर सकता**, **हिचकिचा सकता**, **जवाब देना भूल सकता**, और कभी-कभी अपनी ओर से आपको संदेश भेज सकता तो? यही **Luna Protocol** करता है: एक पूरी तरह से स्वायत्त Discord बॉट जो एक स्थानीय LLM (llama.cpp) चलाता है और एक अपूर्ण इंसान की तरह बातचीत करता है।
-कठोर प्रॉम्प्ट नहीं, रोबोटिक उत्तर नहीं। Luna के पास एक **प्राथमिकता ट्रिगर सिस्टम**, **परिवर्तनशील विलंब**, **नींद का समय**, **स्वचालित संदेश**, और यहाँ तक कि वॉयस संदेश भेजने के लिए एक **TTS पाइपलाइन** भी है। सब कुछ एक साधारण `config.yml` फ़ाइल के माध्यम से हॉट-रीलोडेबल कॉन्फ़िगर किया जा सकता है।
-इस लेख में, हम पूरी वास्तुकला को तोड़ते हैं: जेनेरिक इवेंट बस से लेकर TTS पाइपलाइन तक, ट्रिगर सिस्टम, मानव घटकों और फाइन-ट्यूनिंग डेटासेट को शामिल करते हुए।
+
+कठोर प्रॉम्प्ट नहीं, रोबोटिक उत्तर नहीं। Luna के पास एक **प्राथमिकता ट्रिगर सिस्टम**, **परिवर्तनशील विलंब**, **नींद का समय**, **स्वचालित संदेश**, और यहाँ तक कि वॉयस संदेश भेजने के लिए एक **TTS पाइपलाइन** भी है। सब कुछ एक साधारण हॉट-रीलोडेबल `config.yml` फ़ाइल के माध्यम से कॉन्फ़िगर किया जा सकता है।
+
+इस लेख में, हम पूरी वास्तुकला को तोड़ते हैं: जेनेरिक इवेंट बस से लेकर TTS पाइपलाइन तक, ट्रिगर सिस्टम, मानव-जैसे व्यवहार, और फाइन-ट्यूनिंग डेटासेट तक।
+
 ![वास्तुकला अवलोकन -- वैश्विक घटक और डेटा प्रवाह](/images/luna-protocol/01-architecture-overview.svg)
 
 ---
 
 ## वास्तुकला: एक टाइप किया गया इवेंट बस
 
-Luna의 핵심은 **유형dBus** -- 강한 타입이 지정된 제네릭 이벤트 버스(유형Script)입니다. 모든 것의 기본이 되는 블록입니다.
+Luna के कोर में एक **TypedBus** है -- TypeScript में एक मजबूत रूप से टाइप किया गया जेनेरिक इवेंट बस। यह वह मूलभूत ब्लॉक है जिस पर सब कुछ निर्भर करता है।
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
 
-export class 유형dBus<Events extends EventMap> {
+export class TypedBus<Events extends EventMap> {
   private listeners = new Map<keyof Events, Set<(...args: unknown[]) => void>>();
 
   on<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): void {
@@ -46,15 +50,15 @@ export class 유형dBus<Events extends EventMap> {
 }
 ```
 
-여기서 두 개의 메인 버스가 파생됩니다:
+इससे दो मुख्य बस निकलती हैं:
 
-- **`llmBus`** -- LLM 토큰, 오류, 충돌, 리셋 관리
-- **`stateBus`** -- 자동 영속성과 함께 상태 변경 관리
+- **`llmBus`** -- LLM टोकन, त्रुटियाँ, क्रैश, रीसेट को संभालता है
+- **`stateBus`** -- स्वचालित स्थायित्व के साथ स्थिति परिवर्तन को संभालता है
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   core/bus.ts                        │
-│  유형dBus<K, V> -- on / off / once / emit            │
+│  TypedBus<K, V> -- on / off / once / emit            │
 ├──────────────────┬──────────────────────────────────┤
 │   core/llm-bus   │       state/state-bus             │
 │  token / done /  │     state:changed                 │
@@ -75,32 +79,32 @@ export class 유형dBus<Events extends EventMap> {
 └──────────────────┘  └────────────────────────────┘
 ```
 
-이 접근 방식의 장점: 각 모듈은 나머지와 **분리**됩니다. LLM은 버스에 토큰을 발행하고, 봇이 소비하며, 상태가 자동으로 업데이트됩니다. 순환 의존성이 없습니다.
+इस दृष्टिकोण का लाभ: प्रत्येक मॉड्यूल बाकी से **अलग** है। LLM बस पर टोकन उत्सर्जित करता है, बॉट उन्हें उपभोग करता है, और स्थिति स्वचालित रूप से अपडेट होती है। कोई चक्रीय निर्भरता नहीं है।
 
 ---
 
-![Message Processing -- 메시지 처리의 완전한 흐름](/images/luna-protocol/02-message-processing.svg)
+![संदेश प्रसंस्करण -- एक संदेश का पूर्ण प्रवाह](/images/luna-protocol/02-message-processing.svg)
 
-## 트리거 시스템: Luna가 언제 응답하는지 누가 결정하는가
+## ट्रिगर सिस्टम: Luna कब जवाब देता है यह कौन तय करता है?
 
-각 수신 메시지는 `evaluateMessage()`에 의해 평가되며, 트리거 이유와 함께 `TriggerResult`를 반환합니다. 우선순위 순서가 중요합니다:
+आने वाले प्रत्येक संदेश का `evaluateMessage()` द्वारा मूल्यांकन किया जाता है जो एक ट्रिगर कारण के साथ `TriggerResult` लौटाता है। प्राथमिकता क्रम महत्वपूर्ण है:
 
-| # | 이유 | 조건 | Bypass ignore | Bypass pause |
+| # | कारण | शर्तें | Bypass ignore | Bypass pause |
 |---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | 예 (0%) | 예 |
-| 2 | `dm` | MP avec `replyInDM = true` | 예 (0%) | 아니오 |
-| 3 | `name` | "Luna"/"Pixie"/alias (단어 전체) | 아니오 (8%) | 아니오 |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (단어 전체) | 아니오 (8%) | 아니오 |
-| 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | 아니오 (8%) | 아니오 |
+| 1 | `mention` | @bot | हाँ (0%) | हाँ |
+| 2 | `dm` | `replyInDM = true` के साथ DM | हाँ (0%) | नहीं |
+| 3 | `name` | "Luna"/"Pixie"/उपनाम (पूरा शब्द) | नहीं (8%) | नहीं |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (पूरा शब्द) | नहीं (8%) | नहीं |
+| 5 | `follow-up` | बॉट अंतिम वक्ता था + < 15s + < 3 / 60s | -- | -- |
+| 6 | `random` | गैर-मैचिंग संदेशों पर 1.5% संभावना | नहीं (8%) | नहीं |
 
-매칭은 **단어 전체** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+मिलान **पूरा शब्द** (`\b`) के अनुसार होता है: "ai" का "mais", "vrai", "lait" से मिलान नहीं होता।
 
-![Trigger evaluation -- 각 메시지의 진입 결정](/images/luna-protocol/03-trigger-evaluation.svg)
+![ट्रिगर मूल्यांकन -- प्रत्येक संदेश के लिए प्रवेश निर्णय](/images/luna-protocol/03-trigger-evaluation.svg)
 
-### 팔로업 메커니즘
+### फॉलो-अप मैकेनिज्म
 
-Luna가 메시지에 응답하면 `lastSpeaker`로 등록됩니다. 15초 이내의 후속 메시지는 **즉각적인** 응답을 트리거합니다 -- 타이머 없음, 키워드 확인 없음. 예산: 60초 윈도우당 3개의 팔로업.
+जब Luna किसी संदेश का जवाब देता है, तो वह खुद को `lastSpeaker` के रूप में दर्ज करता है। 15 सेकंड के भीतर कोई भी बाद का संदेश **तत्काल** प्रतिक्रिया को ट्रिगर करता है -- कोई टाइमर नहीं, कोई कीवर्ड जाँच नहीं। बजट: 60-सेकंड विंडो में 3 फॉलो-अप।
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -111,17 +115,17 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 }
 ```
 
-### 쿨다운
+### कूलडाउन
 
-동일한 채널에서 두 응답 사이의 8초. 멘션과 팔로업으로 우회.
+एक ही चैनल में दो प्रतिक्रियाओं के बीच 8 सेकंड। मेंशन और फॉलो-अप से बाइपास।
 
 ---
 
-## 인간적 행동: 가변 집중도
+## मानव व्यवहार: परिवर्तनशील एकाग्रता
 
-여기서 Luna는 흥미로워집니다. 각 트리거 유형에는 고유한 **집중 임계값**이 있습니다: 최소/최대 지연, 무시할 확률, 반응할 확률.
+यहीं पर Luna दिलचस्प हो जाता है। प्रत्येक ट्रिगर प्रकार की अपनी **एकाग्रता सीमा** होती है: न्यूनतम/अधिकतम विलंब, अनदेखा करने की संभावना, और प्रतिक्रिया की संभावना।
 
-| Trigger | 최소 지연 | 최대 지연 | 무시 | 반응 |
+| ट्रिगर | न्यूनतम विलंब | अधिकतम विलंब | अनदेखा | प्रतिक्रिया |
 |---------|----------|----------|--------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
@@ -130,10 +134,10 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 | `follow-up` | 500ms | 2000ms | 0% | 3% |
 | `random` | 1500ms | 5000ms | 15% | 2% |
 
-지연 계산은 다음도 고려합니다:
-- **La longueur du message** : plus le message est long, plus Luna met de temps à "lire"
-- **L'inactivité** : si Luna n'a pas été active depuis 10 minutes, le délai est multiplié par 2 (simulation du "réveil")
-- **Le sommeil** : en mode `slow`, le délai est multiplié par 3 à 5
+विलंब गणना में निम्नलिखित भी शामिल हैं:
+- **संदेश की लंबाई** : संदेश जितना लंबा होगा, Luna को "पढ़ने" में उतना समय लगेगा
+- **निष्क्रियता** : अगर Luna 10 मिनट से सक्रिय नहीं है, तो विलंब 2 गुना हो जाता है ("जागने" का सिमुलेशन)
+- **नींद** : `slow` मोड में, विलंब 3 से 5 गुना हो जाता है
 
 ```typescript
 export function computeDelay(
@@ -151,7 +155,7 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // 공격적인 지터
+  delay *= 0.5 + Math.random() * 1.5; // आक्रामक जिटर
   return delay;
 }
 ```
@@ -160,7 +164,7 @@ export function computeDelay(
 
 ## नींद का समय
 
-Luna는 잘 수 있습니다. `config.yml`로 구성 가능:
+Luna सो सकता है। `config.yml` के माध्यम से कॉन्फ़िगर करने योग्य:
 
 ```yaml
 timezone: "Europe/Paris"
@@ -176,64 +180,64 @@ time_schedules:
     behavior: short
 ```
 
-| 모드 | 효과 |
+| मोड | प्रभाव |
 |------|-------|
-| `sleep` | 仅提及和私信通过 |
-| `slow` | 延迟 ×3-5，反应几乎为零 |
-| `short` | 忽略概率 +30%，反应几乎为零 |
+| `sleep` | केवल मेंशन और DM पास होते हैं |
+| `slow` | विलंब ×3-5, प्रतिक्रियाएँ लगभग शून्य |
+| `short` | अनदेखा करने की संभावना +30%, प्रतिक्रियाएँ लगभग शून्य |
 
-수면 시간 동안 Discord 상태가 `invisible`로 변경됩니다.
+नींद के घंटों के दौरान, Discord स्थिति `invisible` में बदल जाती है।
 
 ---
 
 ## टाइपिंग गलतियाँ
 
-Luna는 오타를 낼 수 있습니다 -- 2-4초 후에 수정합니다. 키보드 레이아웃은 구성 가능(AZERTY 또는 QWERTY).
+Luna टाइपिंग गलतियाँ कर सकता है -- और उन्हें 2-4 सेकंड बाद ठीक कर सकता है। कीबोर्ड लेआउट कॉन्फ़िगर करने योग्य है (AZERTY या QWERTY)।
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
   a: ["z", "q", "w"],
   z: ["a", "e", "s", "x"],
   e: ["z", "r", "d", "s"],
-  // ... 인접한 모든 키
+  // ... सभी आसन्न कुंजियाँ
 };
 ```
 
-AZERTY 예: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+उदाहरण AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`।
 
-세 가지 수정 스타일:
+तीन सुधार शैलियाँ:
 
-| 스타일 | 동작 |
+| शैली | व्यवहार |
 |-------|-------------|
-| `edit` | 메시지 편집 |
-| `message` | 새 메시지: `word*` |
-| `mixed` | 50/50 무작위(기본값) |
+| `edit` | संदेश संपादित करता है |
+| `message` | नया संदेश : `word*` |
+| `mixed` | 50/50 यादृच्छिक (डिफ़ॉल्ट) |
 
 ---
 
-## हिचकिचाहट और भूलने
+## हिचकिचाहट और भूलने की प्रवृत्ति
 
-**망설임** : 채우기 단어로 시작할 확률 15% (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**हिचकिचाहट** : 15% संभावना कि भराव शब्द से शुरू हो (`uh...`, `um...`, `well...`, `hmm...`, `so...`)।
 
-**망각** : 트리거 매치 후에도 Luna는 3% 확률로 응답을 "잊을" 수 있습니다. 메시지 없음, 리액션 없음 -- 아무것도 보지 못한 것처럼.
+**भूलना** : ट्रिगर मिलान के बाद भी, Luna 3% संभावना से जवाब देना "भूल" सकता है। कोई संदेश नहीं, कोई प्रतिक्रिया नहीं -- जैसे उसने कुछ देखा ही न हो।
 
-**주제별 피로** : 최근 10개 메시지에서 단어가 너무 자주 나타나면(임계값: 3회), 지연이 곱해지고 무시할 확률이 15% 증가합니다.
+**विषय-थकान** : अगर पिछले 10 संदेशों में कोई शब्द बहुत बार आता है (सीमा: 3 घटनाएँ), तो विलंब गुना हो जाता है और अनदेखा करने की संभावना 15% बढ़ जाती है।
 
 ---
 
 ## LLM पाइपलाइन: दो मोड
 
-### 모드 `direct` (défaut)
+### `direct` मोड (डिफ़ॉल्ट)
 
-Bot सीधे स्थानीय `llama-server` को HTTP पर अनुरोध भेजता है। मॉडल साझा है, प्रॉम्प्ट कैश और 4 समवर्ती स्लॉट्स के साथ। दो PM2 प्रक्रियाएँ: LLM सर्वर और बॉट क्लाइंट।
+बॉट सीधे एक स्थानीय `llama-server` को HTTP पर अनुरोध भेजता है। मॉडल साझा है, प्रॉम्प्ट कैश और 4 समवर्ती स्लॉट्स के साथ। दो PM2 प्रक्रियाएँ: LLM सर्वर और बॉट क्लाइंट।
 
-### 모드 `online`
+### `online` मोड
 
-Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq, Together...). Pas de LLM local nécessaire.
+बॉट किसी भी OpenAI-संगत API को कॉल करता है (OpenAI, OpenRouter, Groq, Together...)। कोई स्थानीय LLM आवश्यक नहीं।
 
-### 실시간 스트리밍
+### रियल-टाइम स्ट्रीमिंग
 
-LLM은 응답을 한 줄씩 스트리밍합니다 (`\n`). 각 줄은 단어로 분할되고, `llmBus.emit("token", word)`. 각 `\n`마다 `flush` 이벤트가 발행됩니다 -- 봇은 축적된 메시지를 즉시 전송합니다. 지연 시뮬레이션 없음: 리듬은 LLM의 것입니다.
+LLM अपनी प्रतिक्रिया पंक्ति दर पंक्ति (`\n`) स्ट्रीम करता है। प्रत्येक पंक्ति को शब्दों में विभाजित किया जाता है, `llmBus.emit("token", word)` पर एक-एक करके उत्सर्जित किया जाता है। प्रत्येक `\n` पर, एक `flush` इवेंट उत्सर्जित होता है -- बॉट संचित संदेश तुरंत भेज देता है। कोई विलंब सिमुलेशन नहीं: लय LLM की है।
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -255,13 +259,13 @@ function emitWordTokens(chunk: string): void {
 }
 ```
 
-큐(`requestQueue`)는 요청을 하나씩 처리하며, 100개 요소를 초과하면 자동 정리됩니다.
+कतार (`requestQueue`) अनुरोधों को एक-एक करके संसाधित करती है, और जब कतार 100 तत्वों से अधिक हो जाती है तो स्वचालित सफाई होती है。
 
 ---
 
 ## स्वतः संदेश
 
-5분마다, Luna가 자체적으로 메시지를 게시할 확률은 12%입니다. 서버는 **선형 가중치** 시스템으로 선택됩니다: 가장 활발한 서버가 마지막 서버보다 N× 많은 확률을 가집니다.
+हर 5 मिनट में, 12% संभावना है कि Luna स्वयं एक संदेश पोस्ट करेगा। सर्वर एक **रैखिक भार** प्रणाली का उपयोग करके चुना जाता है: सबसे सक्रिय सर्वर के पास सबसे कम सक्रिय सर्वर की तुलना में N गुना अधिक संभावना है।
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -272,19 +276,19 @@ for (let i = 0; i < ranked.length; i++) {
 }
 ```
 
-지난 5개 메시지의 컨텍스트가 읽히고, Luna가 "자연스럽게" 대화에 참여합니다.
+पिछले 5 संदेशों का संदर्भ पढ़ा जाता है, और Luna "प्राकृतिक रूप से" बातचीत में शामिल होता है。
 
 ---
 
-## TTS पाइपलाइन: वॉइस संदेश
+## TTS पाइपलाइन: वॉयस संदेश
 
-8% 확률로 Luna는 텍스트 대신 음성 메시지를 보냅니다. 완전한 파이프라인:
+8% संभावना से, Luna पाठ के बजाय एक वॉयस संदेश भेजता है। पूरी पाइपलाइन:
 
-1. **Piper TTS** 将文本合成为 WAV
-2. **ffmpeg** 转换为 OGG
-3. 计算波形用于 Discord 预览
-4. 通过 Discord CDN API 上传文件
-5. 发送语音消息
+1. **Piper TTS** पाठ को WAV में संश्लेषित करता है
+2. **ffmpeg** को OGG में बदलता है
+3. Discord पूर्वावलोकन के लिए वेवफॉर्म की गणना की जाती है
+4. फ़ाइल Discord CDN API के माध्यम से अपलोड की जाती है
+5. वॉयस संदेश भेजा जाता है
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -301,41 +305,41 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- 합성된 텍스트에서 Discord 음성 메시지까지](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS पाइपलाइन -- संश्लेषित पाठ से Discord वॉयस संदेश तक](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
-## स्पैम विरोधी और स्थायित्व
+## स्पैम-रोधी और स्थायित्व
 
-### Anti-spam
+### स्पैम-रोधी
 
-`channelId:userId`별 큐. 사용자당 채널당 큐에 하나의 메시지만. 현재 응답이 완료되면 즉시 처리됩니다.
+`channelId:userId` अनुसार कतार। प्रति उपयोगकर्ता प्रति चैनल कतार में केवल एक संदेश। वर्तमान प्रतिक्रिया समाप्त होते ही संसाधित।
 
-### Limites de session
+### सत्र सीमाएँ
 
-8번의 교환 후, Luna는 30초의 휴식을 취합니다. 카운터는 3분의 비활성화 후 재설정됩니다.
+8 विनिमय के बाद, Luna 30 सेकंड का ब्रेक लेता है। काउंटर 3 मिनट की निष्क्रियता के बाद रीसेट होता है।
 
-### Persistence automatique
+### स्वचालित स्थायित्व
 
-각 상태 변경은 `stateBus`에 발행됩니다 → 자동 저장(debounce 500ms). 수동 `saveAllState()` 호출이 더 이상 필요하지 않습니다. 영속화되는 상태: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, 팔로업 카운터.
+प्रत्येक स्थिति परिवर्तन `stateBus` पर उत्सर्जित होता है → स्वचालित सहेजना (500ms डिबाउंस)। अब मैनुअल `saveAllState()` कॉल की आवश्यकता नहीं है। स्थायी स्थिति में शामिल हैं: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, फॉलो-अप काउंटर।
 
 ---
 
 ## हॉट-रीलोड कॉन्फ़िगरेशन
 
-`config.yml` 파일 하나. 대부분의 값은 **핫 리로드 가능** -- 재시작 없이 변경 사항이 적용됩니다.
+एक ही `config.yml` फ़ाइल। अधिकांश मान **हॉट-रीलोडेबल** हैं -- बिना रीस्टार्ट के परिवर्तन लागू हो जाते हैं।
 
-| 카테고리 | Hot-reload |
+| श्रेणी | हॉट-रीलोड |
 |-----------|-----------|
-| Triggers, keywords, noms | ✅ |
-| Concentration, délais | ✅ |
-| Typos, burst, fatigue | ✅ |
-| Sleep schedules | ✅ |
-| TTS, voice messages | ✅ |
-| Discord token, LLM mode | ❌ (redémarrage requis) |
+| ट्रिगर, कीवर्ड, नाम | ✅ |
+| एकाग्रता, विलंब | ✅ |
+| टाइपिंग गलतियाँ, बर्स्ट, थकान | ✅ |
+| नींद का समय | ✅ |
+| TTS, वॉयस संदेश | ✅ |
+| Discord टोकन, LLM मोड | ❌ (रीस्टार्ट आवश्यक) |
 
 ```typescript
-// config.ts -- 게터가 실시간 값을 반환합니다
+// config.ts -- गेटर लाइव मान लौटाते हैं
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -347,48 +351,48 @@ export const config = {
 
 ## डेटासेट: Discord-Dialogues
 
-모델은 다음에서 파인튜닝되었습니다: [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. 2025년 봄-여름의 실제 Discord 대화, 필터링됨(PII, ToS, 봇, 명령). Apache 2.0.
+मॉडल [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) पर फाइन-ट्यून किया गया है: **7.3M विनिमय**, **17M चक्र**, **140M शब्द**। वास्तविक Discord बातचीत वसंत-ग्रीष्म 2025, फ़िल्टर किया गया (PII, ToS, बॉट, कमांड)। Apache 2.0।
 
-| 메트릭 | 값 |
+| मेट्रिक | मान |
 |----------|--------|
-| 샘플 수 | 7 303 464 |
-| 총 턴 수 | 16 881 010 |
-| 총 단어 수 | 139 922 950 |
-| 평균 토큰 | 32.8 |
-| Tokenizer | Hermes-3-Llama-3.1-8B |
+| नमूने | 7 303 464 |
+| कुल चक्र | 16 881 010 |
+| कुल शब्द | 139 922 950 |
+| औसत टोकन | 32.8 |
+| टोकनाइज़र | Hermes-3-Llama-3.1-8B |
 
-사용된 양자화 모델은 GGUF입니다(예: `Discord-Hermes-3-8B.Q3_K_M.gguf`).
+उपयोग किया गया क्वांटाइज़्ड मॉडल एक GGUF है (जैसे `Discord-Hermes-3-8B.Q3_K_M.gguf`)।
 
-![Discord-Dialogues 데이터셋 분포](/images/luna-protocol/dataset-distribution.svg)
+![Discord-Dialogues डेटासेट वितरण](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- 메시지부터 응답까지의 완전한 봇 동작, 타이머와 엣지 케이스 포함](/images/luna-protocol/22-complete-lifecycle.svg)
+![पूर्ण जीवनचक्र -- संदेश से प्रतिक्रिया तक पूर्ण बॉट व्यवहार, टाइमर और सीमा मामलों सहित](/images/luna-protocol/22-complete-lifecycle.svg)
 
-## 아키텍처 다이어그램
+## वास्तुकला आरेख
 
-`state-machines/` फ़ोल्डर में **24 Mermaid डायग्राम** हैं जो पूरे स्रोत कोड को कवर करते हैं। प्रत्येक डायग्राम का मानव भाषा में विस्तृत विवरण है।
+`state-machines/` फ़ोल्डर में **24 Mermaid आरेख** हैं जो पूरे स्रोत कोड को कवर करते हैं। प्रत्येक आरेख का मानव भाषा में विस्तृत विवरण है।
 
-Parmi les plus importants :
+सबसे महत्वपूर्ण में से:
 
-| # | 다이어그램 | 유형 |
+| # | आरेख | प्रकार |
 |---|-----------|------|
 | 01 | Architecture Overview | `graph` |
-| 02 | Message Processing (complet) | `stateDiagram` |
+| 02 | Message Processing (पूर्ण) | `stateDiagram` |
 | 03 | Trigger Evaluation | `flowchart` |
-| 04 | LLM Core Queue (3 backends) | `stateDiagram` |
+| 04 | LLM Core Queue (3 बैकएंड) | `stateDiagram` |
 | 10 | TTS Pipeline | `flowchart` |
 | 13 | State Persistence | `flowchart` |
 | 21 | Timing Gantt | `gantt` |
 | 22 | Complete Lifecycle | `stateDiagram` |
 
-Ces diagrammes sont une mine d'or pour comprendre le flux complet : du message entrant à la réponse, en passant par les timers et les cas limites.
+ये आरेख पूरे प्रवाह को समझने के लिए एक स्वर्ण खदान हैं: आने वाले संदेश से लेकर प्रतिक्रिया तक, टाइमर और सीमा मामलों से गुजरते हुए।
 
 ---
 
-## 트리거 상세 코드
+## ट्रिगर कोड विस्तार से
 
-트리거는 `state/trigger.ts`의 `evaluateMessage()`에 의해 평가됩니다. 전체 로직:
+ट्रिगर का मूल्यांकन `state/trigger.ts` में `evaluateMessage()` द्वारा किया जाता है। यहाँ पूरी तर्क है:
 
 ```typescript
 export function evaluateMessage(
@@ -405,54 +409,54 @@ export function evaluateMessage(
   if (isPaused()) return { shouldRespond: false, reason: null, botName: "" };
   if (isOnCooldown(channelId)) return { shouldRespond: false, reason: null, botName };
 
-  // ... matching par nom, keyword, follow-up, random
+  // ... नाम, कीवर्ड, फॉलो-अप, यादृच्छिक द्वारा मिलान
 }
 ```
 
-정규식 캐시(`hasWordCache`)는 각 메시지에서 패턴 재컴파일을 방지합니다.
+रेगुलर एक्सप्रेशन कैश (`hasWordCache`) प्रत्येक संदेश में पैटर्न को फिर से संकलित करने से रोकता है।
 
 ---
 
 ## प्रतिक्रियाएँ
 
-Luna는 이모지로 메시지에 반응합니다. 서버 사용자 정의 이모지를 사용할 확률 30%, 유니코드 이모지 70%. 리액션은 집중 지연 후에 트리거되며 즉시는 아닙니다.
+Luna इमोजी के साथ संदेशों पर प्रतिक्रिया करता है। सर्वर के कस्टम इमोजी का उपयोग करने की 30% संभावना, यूनिकोड इमोजी की 70%। प्रतिक्रिया एकाग्रता विलंब के बाद ट्रिगर होती है, तुरंत नहीं।
 
-Luna 메시지에 대한 리액션 명령:
+Luna के संदेशों पर प्रतिक्रिया कमांड:
 - ❌ → Stop
 - ▶️ → Start
 - 🗑️ → Clear
 
 ---
 
-## उत्तर शैली
+## प्रतिक्रिया शैली
 
-응답 스타일은 Luna의 최근 채널 활동에 따라 가중치가 부여됩니다:
+प्रतिक्रिया शैली Luna की हाल की चैनल गतिविधि के अनुसार भारित होती है:
 
-| 컨텍스트 | messageReference | mentionRepliedUser | 가중치 |
+| संदर्भ | messageReference | mentionRepliedUser | भार |
 |----------|-----------------|-------------------|-------|
-| 냉 | true | false | 70% |
-| 냉 | true | true | 20% |
-| 냉 | false | false | 10% |
-| 활성 | true | false | 50% |
-| 활성 | true | true | 15% |
-| 활성 | false | false | 30% |
-| 활성 | false | true | 5% |
+| ठंडा | true | false | 70% |
+| ठंडा | true | true | 20% |
+| ठंडा | false | false | 10% |
+| सक्रिय | true | false | 50% |
+| सक्रिय | true | true | 15% |
+| सक्रिय | false | false | 30% |
+| सक्रिय | false | true | 5% |
 
-DM에서는 `messageReference`가 항상 `false`입니다.
-
----
-
-## 버스트 메시지
-
-15% 확률로 응답은 인간의 리듬(각 조각 사이 1.5-4초)으로 2-3개의 조각으로 분할되어 전송됩니다. 여러 번에 걸쳐 타이핑하는 사람을 시뮬레이션합니다.
-
-![Timing Gantt -- 지연, 반응, LLM 스트리밍, 수정의 실제 대기 시간](/images/luna-protocol/21-timing-gantt.svg)
+DM में, `messageReference` हमेशा `false` होता है。
 
 ---
 
-## 동적 상태
+## बर्स्ट संदेश
 
-Luna의 Discord 상태는 구성된 여러 프리셋을 15분마다 전환합니다. 지원되는 유형: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). 수면 중 상태가 `invisible`로 변경됩니다.
+15% संभावना से, प्रतिक्रिया को 2-3 टुकड़ों में मानव लय (1.5-4 सेकंड) में विभाजित करके भेजा जाता है। कई बार टाइप करने वाले व्यक्ति का सिमुलेश।
+
+![टाइमिंग गांट -- विलंब, प्रतिक्रियों, LLM स्ट्रीमिंग और सुधारों के लिए वास्तविक प्रतीक्षा समय](/images/luna-protocol/21-timing-gantt.svg)
+
+---
+
+## गतिशील स्थिति
+
+Luna की Discord स्थिति कॉन्फ़िगर किए गए प्रीसेट के बीच बदलती है, हर 15 मिनट में चक्रित। समर्थित प्रकार: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5)। नींद के दौरान, स्थिति `invisible` में बदल जाती है।
 
 ```yaml
 dynamic_status_presets:
@@ -464,11 +468,11 @@ dynamic_status_presets:
     type: 2       # Listening
 ```
 
-무작위 지터(×0.5-1.0)는 예측 가능한 회전을 방지합니다. 반복을 피하기 위해 10%의 시도가 건너뜁니다.
+यादृच्हिक जिटर (×0.5-1.0) अनुमानित चक्रण को रोकता है। दोहराव से बचने के लिए 10% प्रयास छोड़ दिए जाते हैं।
 
-## 타이핑 표시기
+## टाइपिंग इंडिकेटर
 
-LLM을 호출하기 전에 Luna는 `startTyping()`을 호출합니다. `setInterval`이 생성 중 8초마다 인디케이터를 새로고침합니다. `finally`에서 정리됩니다(`clearInterval`).
+LLM को कॉल करने से पहले, Luna `startTyping()` कॉल करता है। `setInterval` जनरेशन के दौरान हर 8 सेकंड में इंडिकेटर को रीफ्रेश करता है। `finally` (`clearInterval`) में साफ़ किया जाता है।
 
 ```typescript
 const startTyping = () => {
@@ -482,13 +486,13 @@ const startTyping = () => {
 };
 ```
 
-## 크래시 후 복구
+## क्रैश से पुनर्प्राप्ति
 
-LLM이 크래시되면(`llama-server` 프로세스가 중지), Luna는 `llmBus.emit("crash", code)`를 통해 이벤트를 감지하고 지수 백오프로 재시작을 시도합니다. 무한 재시작 루프를 방지합니다.
+अगर LLM क्रैश होता है (`llama-server` प्रक्रिया मरती है), तो Luna `llmBus.emit("crash", code)` के माध्यम से इवेंट का पता लगाता है और एक्स्पोनेशियल बैकऑफ के साथ पुनरारंभ का प्रयास करता है। अनंत पुनरारंभ लूप से बचाता है।
 
 ## LLM पैरामीटर
 
-매개변수가 `src/config.ts`에 하드코딩되어 있습니다:
+पैरामीटर `src/config.ts` में हार्डकोड किए गए हैं:
 
 ```yaml
 temp: 0.75
@@ -504,7 +508,7 @@ ubatch: 256
 context: 4096
 ```
 
-ChatML 템플릿 (`<|im_start|>/<|im_end|>`) est utilisé. 스레드 수는 `os.cpus().length`.
+ChatML टेम्पलेट (›im_start‹/›im_end‹) का उपयोग किया जाता है। थ्रेड्स संख्या `os.cpus().length` से स्वचालित।
 
 ---
 
@@ -513,36 +517,36 @@ ChatML 템플릿 (`<|im_start|>/<|im_end|>`) est utilisé. 스레드 수는 `os.
 ```bash
 npm install
 cp config.example.yml config.yml
-# config.yml 편집
+# config.yml संपादित करें
+cd config.yml
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
-| Script | Description |
+| स्क्रिप्ट | विवरण |
 |--------|-------------|
-| `build` | 독립형 CLI 번들 |
-| `start` | 봇 시작 |
+| `build` | स्वायत्न कला CLI बंडल |
+| `start` | बॉट सुरू करता है |
 | `lint` / `format` / `check` | Biome |
-| `test` | Tests (Bun) |
-| `download-model` | GGUF from HuggingFace |
-| `diagrams` | Mermaid 다이어그램을 SVG/PNG로 내보내기 |
+| `test` | टेस्ट (Bun) |
+| `download-model` | HuggingFace से GGUF |
+| `diagrams` | Mermaid आरेखों को SVG/PNG में निर्यात |
 
-### Déploiement PM2
+### PM2 तैनाव
 
 ```bash
-./start.sh   # PM2에서 llm-server + llm-client 시작
+./start.sh   # PM2 में llm-server + llm-client सुरू करें
+d:
 ```
 
 ---
 
 ## निष्कर्ष
 
-Luna Protocol 는 단순한 LLM이 탑재된 Discord 봇이 아닙니다. 이것은 인간의 불완전성 -- 망각, 오타, 수면, 망설임, 피로 -- 을 시뮬레이션하는 **완전한 행동 시스템**입니다. 모든 것이 타입화된 이벤트 버스를 중심으로 구축되었으며, 24개의 Mermaid 다이어그램이 각 흐름을 문서화합니다.
+Luna Protocol सिर्फ LLM से लैस Discord बॉट नहीं है। यह एक पूर्ण व्वहार स्मूहिया है जो इंसानी अपूर्णताओं -- भूलना, टाइपिंग गलतियां, नींद, हिचकिचाहट, थकान -- को सिमुलेट करता है। सब एक याता टायप बसब बनाया गया है: टाइप किया जाने वाले इवेंट बस, बाकी से टायप होता है।
 
-코드는 오픈소스이고, 데이터셋은 공개적이며, 구성은 핫 리로드 가능합니다. 이 주제에 관심이 있다면 코드를 살펴보세요 -- 생각보다 접근하기 쉽습니다.
-
-| 리소스 | 링크 |
+| सहायता | लिंक |
 |-----------|------|
-| GitHub 저장소 | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| GitHub रिपो | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |
