@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "i0STFEnGHxpcAkosAotFegYI7nzo17M7PXrtKdF3Ei/10Zbf5wIi1MK3EhBaAJ3rhu36Oj6RsB3AsGnp0oXjoQ=="
+author_sig: "SillnjuoccilYsb8PWl8IYlvtMl8t7hubXcH4E2rTru0Rck0voyX16FWwRh2TNJ/4n9ze6D3nEMx3MyG2rZiCA=="
 ---
 
 # Luna Protocol : j'ai créé un bot Discord autonome qui simule un être humain
@@ -21,13 +21,15 @@ Et si un bot Discord pouvait **dormir**, faire des **fautes de frappe**, **hési
 
 Pas de prompts rigides, pas de réponses robotiques. Luna a un **système de déclenchement prioritaire**, des **délais variables**, des **horaires de sommeil**, des **messages spontanés**, et même une **pipeline TTS** pour envoyer des messages vocaux. Le tout configuré via un simple fichier `config.yml` hot-reloadable.
 
-Dans cet article, on décortique l'architecture complète : du bus d'événements générique au pipeline TTS, en passant par le système de déclenchement, les comportements humains, et le dataset de fine-tuning.
+Dans cet article, on décortique l'architecture complète : du bus d'événements générique au pipeline TTS, en passant par le système de déclenchement, les composants humains, et le dataset de fine-tuning.
+
+![Architecture Overview -- composants globaux et flux de données](/images/luna-protocol/01-architecture-overview.svg)
 
 ---
 
 ## L'architecture : un bus d'événements typé
 
-Le cœur de Luna est un **TypedBus** — un bus d'événements générique fortement typé en TypeScript. C'est la brique fondamentale sur laquelle tout repose.
+Le cœur de Luna est un **TypedBus** -- un bus d'événements générique fortement typé en TypeScript. C'est la brique fondamentale sur laquelle tout repose.
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
@@ -50,8 +52,8 @@ export class TypedBus<Events extends EventMap> {
 
 Deux buses principaux en découlent :
 
-- **`llmBus`** — gère les tokens LLM, les erreurs, les crashes, le reset
-- **`stateBus`** — gère les changements d'état avec persistence automatique
+- **`llmBus`** -- gère les tokens LLM, les erreurs, les crashes, le reset
+- **`stateBus`** -- gère les changements d'état avec persistence automatique
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -96,9 +98,11 @@ Chaque message entrant est évalué par `evaluateMessage()` qui retourne un `Tri
 
 Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
 
+![Trigger evaluation -- décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+
 ### Le mécanisme de follow-up
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** — pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -186,7 +190,7 @@ Pendant les heures de sommeil, le statut Discord passe en `invisible`.
 
 ## Les fautes de frappe
 
-Luna peut faire des fautes de frappe — et les corriger après 2-4 secondes. Le layout clavier est configurable (AZERTY ou QWERTY).
+Luna peut faire des fautes de frappe -- et les corriger après 2-4 secondes. Le layout clavier est configurable (AZERTY ou QWERTY).
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
@@ -213,7 +217,7 @@ Trois styles de correction :
 
 **Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction — comme si elle n'avait rien vu.
+**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
 
 **Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
 
@@ -231,7 +235,7 @@ Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq,
 
 ### Le streaming en temps réel
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis — le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -299,6 +303,8 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
+![TTS Pipeline -- du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+
 ---
 
 ## L'anti-spam et la persistence
@@ -319,7 +325,7 @@ Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounc
 
 ## La configuration hot-reload
 
-Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** — les changements sont pris en compte sans redémarrage.
+Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** -- les changements sont pris en compte sans redémarrage.
 
 | Catégorie | Hot-reload |
 |-----------|-----------|
@@ -331,7 +337,7 @@ Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** —
 | Discord token, LLM mode | ❌ (redémarrage requis) |
 
 ```typescript
-// config.ts — les getters retournent des valeurs live
+// config.ts -- les getters retournent des valeurs live
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -529,7 +535,7 @@ npm run build && npm start     # production
 
 Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code — c'est plus accessible qu'il n'y paraît.
+Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
 
 | Ressource | Lien |
 |-----------|------|
