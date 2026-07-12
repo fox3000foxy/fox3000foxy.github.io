@@ -117,14 +117,14 @@ export default function WriteArticle() {
 					return true;
 				}
 				const text = event.clipboardData?.getData("text/plain");
-				if (text && /[#*`\-\d+.]/.test(text[0])) {
+				if (text && /[#*`\->\d+.]/.test(text[0])) {
 					event.preventDefault();
 					marked.parse(text).then((html) => {
 						editor?.commands.setContent(html);
 					});
 					return true;
 				}
-				return handled;
+				return false;
 			},
 			handlePaste: (_view, event) => {
 				const items = event.clipboardData?.items;
