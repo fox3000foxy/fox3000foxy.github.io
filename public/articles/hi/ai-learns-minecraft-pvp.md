@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "odPaSdP/2L1y2dV/+HCjN7FGHQ3YbGQg+V7yZ7qfICsqf0k9dnitx/Q8DU7kXKUNQk0B2IoZfbuss8gVyZEd6A=="
+author_sig: "M9najn8H+5KFuVkiE0lRXXumZFeTyEvnrPTwlzEGLW7Zo8yf3RCLT8LBhXhGnQtNPIfsu0u2vLW7m6PXLux3ZA=="
 ---
 
 ## परिचय
@@ -163,6 +163,42 @@ for frame, action in dataset:
 ![OpenAI का VPT एजेंट Minecraft में पेड़ काटता हुआ](assets/vpt-minecraft.jpg)
 
 VPT पाइपलाइन एक **इनवर्स डायनेमिक्स मॉडल (IDM)** को प्रशिक्षित करके डेटा समस्या को हल करता है जो फ्रेम t-1 और फ्रेम t+1 को देखकर फ्रेम t पर क्रिया की भविष्यवाणी करता है। चूंकि IDM कारणात्मक नहीं है (यह भविष्य के फ्रेम देखता है), कार्य व्यवहार क्लोनिंग की तुलना में आसान है और बहुत कम लेबल वाले डेटा की आवश्यकता होती है। उन्होंने लेबल डेटा के 2,000 घंटों के लिए ठेकेदारों को लगभग $2,000 का भुगतान किया, फिर YouTube Minecraft वीडियो के 70,000 घंटों को स्यूडो-लेबल करने के लिए IDM का उपयोग किया।
+
+![प्री-ट्रेनिंग डेटा मात्रा के अनुसार क्राफ्टिंग/संग्रह दर (लॉग स्केल): क्राफ्टिंग टेबल, लकड़ी के उपकरण, पत्थर के उपकरण](assets/vpt-stone-pickaxe-sequence.svg)
+
+स्केलिंग प्रभाव स्पष्ट है: 1 घंटे से 100,000 घंटे के प्री-ट्रेनिंग डेटा के लॉग अक्ष पर, मॉडल द्वारा क्राफ्टिंग टेबल, लकड़ी के उपकरण और फिर पत्थर के उपकरण बनाने की दर चरणों में बढ़ती है। केवल ठेकेदारों द्वारा लेबल किए गए 2,000 घंटों पर प्रशिक्षित मॉडल क्राफ्टिंग टेबल पर अटक जाता है; IDM द्वारा स्यूडो-लेबल किए गए 70,000 घंटे (ग्राफ़ पर बिंदीदार रेखा) जोड़ने पर ही पत्थर के उपकरण बिना एक भी RL चरण के जीरो-शॉट में उभरते हैं।
+
+परिणामी 0.5B पैरामीटर वाला आधार मॉडल RL अकेले से असंभव जीरो-शॉट क्षमताएँ प्राप्त करता है: पेड़ काटना, टेबल बनाना, कॉलम जंप करना -- और RL से फाइन-ट्यून करने पर, यह हीरे के उपकरण बनाने वाला पहला AI बन गया।
+
+![RL प्रशिक्षण एपिसोड की संख्या के अनुसार रीवार्ड: यादृच्छिक रूप से आरंभित मॉडल बनाम पूर्व-प्रशिक्षित VPT मॉडल](assets/vpt-diamond-pickaxe-sequence.svg)
+
+यह ग्राफ़ दिखाता है कि प्री-ट्रेनिंग डाउनस्ट्रीम RL के लिए सब कुछ क्यों बदल देती है। यादृच्छिक रूप से आरंभित नेटवर्क से शुरू होने वाला RL (नारंगी) लगभग दस लाख एपिसोड तक 0 के करीब सपाट रहता है: "हीरा प्राप्त करें" कार्य का रीवार्ड इतना विरल है कि एक नौसिखिया एजेंट यादृच्छिक अन्वेषण द्वारा उस पर ठोकर नहीं खा सकता। पूर्व-प्रशिक्षित VPT मॉडल से फाइन-ट्यून किया गया RL (हरा) पहले से ही बुनियादी व्यवहार (खनन, क्राफ्टिंग, अन्वेषण) के साथ शुरू होता है और लगातार लगभग 25 के रीवार्ड तक बढ़ता है, जो हीरे की पिकैक्स तक के पूर्ण पथ के अनुरूप है।
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*OpenAI के VPT प्रोजेक्ट की आधिकारिक वीडियो डेमो, एजेंट को क्रिया में दिखाती हुई।*
 
 ## OpenAI Five: रीवार्ड शेपिंग समस्या
 

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JsohNBuaUj9fV4+Wx7ktpWJNJJklN1n0Svjj6FEhOWeAOKk1IvYgQ5gOfz1OxqHDL32zWfUuDdAPKQH8stcBkg=="
+author_sig: "gv99bukvnsURRqwMujVaLeFD0hCt1MuSvEqwPaqHi4NCUxPiZwH4YHKiYQUDRjJfpoO2Yuyw7IEOf1KXsLMu6g=="
 ---
 
 ## Introduction
@@ -164,7 +164,41 @@ The video's "behavior cloning" approach (Phase 1) is the same technique OpenAI u
 
 The VPT pipeline solves the data problem by training an **Inverse Dynamics Model (IDM)** that looks at frame t-1 and frame t+1 to predict the action at frame t. Because the IDM is non-causal (it sees future frames), the task is easier than behavioral cloning and requires far less labeled data. They paid contractors ~$2,000 for 2,000 hours of labeled data, then used the IDM to pseudo-label 70,000 hours of YouTube Minecraft videos.
 
+![Scaling effect: craft/collection rate vs pre-training data volume (log scale): crafting tables, wooden tools, stone tools](assets/vpt-stone-pickaxe-sequence.svg)
+
+The scaling effect is clear: on a log axis from 1 hour to 100,000 hours of pre-training data, the rate at which the model crafts a crafting table, wooden tools, and then stone tools climbs in stages. The model trained only on the 2,000 hours labeled by contractors plateaus at crafting tables; it's by adding the 70,000 hours pseudo-labeled by the IDM (dashed line on the chart) that stone tools emerge zero-shot, without a single RL step.
+
 The resulting 0.5B parameter foundation model achieved zero-shot capabilities that were impossible with RL alone : chopping trees, crafting tables, pillar jumping : and fine-tuned with RL, became the first AI to craft diamond tools.
+
+![Reward vs RL training episodes: random init vs VPT pre-trained init](assets/vpt-diamond-pickaxe-sequence.svg)
+
+This chart shows why pre-training changes everything for downstream RL. RL from a randomly initialized network (orange) stays flat near 0 for nearly a million episodes: the "obtain a diamond" task has a reward too sparse for a naive agent to stumble upon through random exploration. RL fine-tuned from the VPT pre-trained model (green) already starts with basic behavior (mining, crafting, exploring) and climbs steadily to a reward of about 25, corresponding to the full path to a diamond pickaxe.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*Official OpenAI VPT project demo videos showing the agent in action.*
 
 ## OpenAI Five : The reward shaping problem
 

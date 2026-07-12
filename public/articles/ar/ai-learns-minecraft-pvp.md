@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Hx+WUmNONKl0c1hzqpt674ad8bvH4U2cqo3/Trbm6uvP3ZjGIPKqBdbu0qkVTcGDiNxA+NwpAdyPHXhTA1UbNA=="
+author_sig: "SO7hbw39ZzZSjvCD5kJTSfLLbSLcq8YExIbcdnu1yn2IAADsd7hn4NB+Wt0VujUpVxEeSy0lrbQnhSMWGBbEwA=="
 ---
 
 ## مقدمة
@@ -163,6 +163,42 @@ for frame, action in dataset:
 ![عميل VPT من أوبن إي آي يقطف شجرة في ماينكرافت](assets/vpt-minecraft.jpg)
 
 حلل خط أنابيب VPT مشكلة البيانات من خلال تدريب **نموذج الديناميات العكسية (IDM)** الذي ينظر إلى إطار t-1 وإطار t+1 للتنبؤ بالإجراء في إطار t. لأن IDM غير سببي (يرى إطارات مستقبلية)، المهمة أسهل من الاستنساخ السلوكي وتتطلب بيانات موسومة أقل بكثير. دفعوا للمتعاقدين ~2000 دولار مقابل 2000 ساعة من البيانات الموسومة، ثم استخدموا IDM لتسمية 70,000 ساعة من فيديوهات يوتيوب ماينكرافت.
+
+![معدل الصنع/الجمع مقابل حجم بيانات ما قبل التدريب (مقياس لوغاريتمي): طاولات الصنع، أدوات خشبية، أدوات حجرية](assets/vpt-stone-pickaxe-sequence.svg)
+
+تأثير الحجم واضح: على محور لوغاريتمي من ساعة إلى 100,000 ساعة من بيانات ما قبل التدريب، يرتفع المعدل الذي يصنع به النموذج طاولة صنع وأدوات خشبية ثم أدوات حجرية بشكل متدرج. النموذج المدرب فقط على 2,000 ساعة الموسومة من قبل المتعاقدين يتوقف عند طاولات الصنع؛ بإضافة 70,000 ساعة الموسومة زائفًا بواسطة IDM (الخط المنقط على الرسم البياني) تظهر الأدوات الحجرية بشكل zero-shot، بدون خطوة RL واحدة.
+
+النموذج الأساسي الناتج بـ 0.5 مليار معلمة حقق قدرات zero-shot مستحيلة مع RL وحده: قطع الأشجار، صنع الطاولات، القفز العمودي: وبالضبط الدقيق مع RL، أصبح أول ذكاء اصطناعي يصنع أدوات ألماس.
+
+![المكافأة مقابل عدد حلقات تدريب RL: البدء من شبكة مهيأة عشوائيًا مقابل البدء من نموذج VPT المدرب مسبقًا](assets/vpt-diamond-pickaxe-sequence.svg)
+
+يوضح هذا الرسم البياني لماذا يغير ما قبل التدريب كل شيء لـ RL اللاحق. يظل RL المنطلق من شبكة مهيأة عشوائيًا (برتقالي) قريبًا من الصفر لحوالي مليون حلقة: مهمة «الحصول على ألماسة» لها مكافأة متناثرة جدًا لدرجة أن وكيلًا ساذجًا لا يمكنه العثور عليها بالاستكشاف العشوائي. RL المضبوط بدقة من نموذج VPT المدرب مسبقًا (أخضر) يبدأ بالفعل بالسلوك الأساسي (التعدين، الصنع، الاستكشاف) ويرتفع بانتظام حتى مكافأة حوالي 25، وهو ما يتوافق مع المسار الكامل لفأس ألماس.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*عروض فيديو رسمية من مشروع VPT من أوبن إي آي، تُظهر الوكيل أثناء العمل.*
 
 ## أوبن إي آي فايف: مشكلة تشكيل المكافأة
 

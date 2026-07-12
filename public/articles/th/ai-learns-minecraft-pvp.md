@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "G6oBTS76YnPVqPR8mp/2R+qvBzuqf7tHnIKt8F3u+lxzLXmFJFydu8r3P1YgGApXW6r+CdjvpcaLnKt30GMr2w=="
+author_sig: "2jA9nT69ak6jCmGTQwfGWbE6+RJpu385oHTKf8sHWOOGtOC1ayrua7jOvIz5jOuwJa5W8BQktGMhw1rLW8anjQ=="
 ---
 
 ## บทนำ
@@ -165,6 +165,40 @@ OCR มาตรฐานมีปัญหากับข้อความโ�
 ไปป์ไลน์ VPT แก้ปัญหาข้อมูลด้วยการฝึก **Inverse Dynamics Model (IDM)** ที่ดูเฟรม t-1 และเฟรม t+1 เพื่อทำนายการกระทำที่เฟรม t เนื่องจาก IDM เป็น non-causal (มันเห็นเฟรมในอนาคต) งานนี้จึงง่ายกว่า behavioral cloning และต้องการข้อมูลที่มีป้ายกำกับน้อยกว่ามาก พวกเขาจ้างผู้รับเหมา ~$2,000 สำหรับข้อมูลที่มีป้ายกำกับ 2,000 ชั่วโมง จากนั้นใช้ IDM เพื่อ pseudo-label วิดีโอ YouTube Minecraft 70,000 ชั่วโมง
 
 โมเดลพื้นฐาน 0.5B พารามิเตอร์ที่ได้มาบรรลุความสามารถ zero-shot ที่เป็นไปไม่ได้ด้วย RL เพียงอย่างเดียว : ตัดต้นไม้, สร้างโต๊ะคราฟต์, pillar jumping : และปรับแต่งด้วย RL กลายเป็น AI แรกที่สร้างเครื่องมือเพชร
+
+![อัตราการคราฟต์/เก็บเกี่ยวตามปริมาณข้อมูล pre-training (สเกล log): โต๊ะคราฟต์, เครื่องมือไม้, เครื่องมือหิน](assets/vpt-stone-pickaxe-sequence.svg)
+
+ผลของ scaling เห็นได้ชัด: บนแกน log จาก 1 ชั่วโมงถึง 100,000 ชั่วโมงของข้อมูล pre-training อัตราที่โมเดลสร้างโต๊ะคราฟต์ เครื่องมือไม้ และเครื่องมือหินเพิ่มขึ้นเป็นขั้น โมเดลที่ฝึกเฉพาะบน 2,000 ชั่วโมงที่มีป้ายกำกับโดยผู้รับเหมาจะ plateau ที่โต๊ะคราฟต์; เมื่อเพิ่ม 70,000 ชั่วโมงที่ pseudo-label โดย IDM (เส้นประบนกราฟ) เครื่องมือหินจึง emerge ใน zero-shot โดยไม่ต้อง RL แม้แต่ขั้นตอนเดียว
+
+![รางวัลตามจำนวน episodes การฝึก RL: เริ่มจากโมเดลสุ่มเทียบกับเริ่มจากโมเดล VPT ที่ pre-trained](assets/vpt-diamond-pickaxe-sequence.svg)
+
+กราฟนี้แสดงว่า pre-training เปลี่ยนทุกอย่างสำหรับ RL ในขั้นถัดไป RL ที่เริ่มจากโครงข่ายที่สุ่มเริ่มต้น (สีส้ม) ยังคงราบใกล้ 0 เกือบล้าน episodes: ภารกิจ "ได้เพชร" มีรางวัล sparse เกินไปที่เอเจนต์ไร้เดียงสาจะเจอโดยการสำรวจสุ่ม RL ที่ fine-tune จากโมเดล VPT ที่ pre-trained (สีเขียว) เริ่มต้นด้วยพฤติกรรมพื้นฐาน (ขุด, คราฟต์, สำรวจ) และไต่ระดับขึ้นถึงรางวัลประมาณ 25 ซึ่งสอดคล้องกับเส้นทางสมบูรณ์สู่ pickaxe เพชร
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*วิดีโอตัวอย่างอย่างเป็นทางการของโปรเจกต์ VPT โดย OpenAI แสดงเอเจนต์ในปฏิบัติการ*
 
 ## OpenAI Five : ปัญหา reward shaping
 

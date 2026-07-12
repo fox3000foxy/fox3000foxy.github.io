@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "f1AKCjJl/bTkQ0ydi5qI8L0dBcngXocJ3tW3xBSSjN4lSwz5w0N6Ouy9bFwXfgNiOd3PsybFnCbuacL/mKYJjQ=="
+author_sig: "oLYGs8/yEDuww9/2cqe3Ii2RaqKtRIQXpnPGwa85r+ubDiGRjrev4vjeCWJEKqPRHsKuy1aZp6dsfK1W5JilCg=="
 ---
 
 ## Введение
@@ -163,6 +163,42 @@ for frame, action in dataset:
 ![Агент VPT от OpenAI добывает дерево в Minecraft](assets/vpt-minecraft.jpg)
 
 Пайплайн VPT решает проблему данных, обучая **модель обратной динамики (IDM)**, которая смотрит кадр t-1 и кадр t+1, чтобы предсказать действие в кадре t. Поскольку IDM не является причинной (она видит будущие кадры), задача проще, чем поведенческое клонирование, и требует гораздо меньше размеченных данных. Они заплатили подрядчикам ~$2000 за 2000 часов размеченных данных, затем использовали IDM для псевдомаркировки 70 000 часов видео Minecraft с YouTube.
+
+![Скорость крафта/добычи в зависимости от объёма данных предобучения (логарифмическая шкала): верстаки, деревянные инструменты, каменные инструменты](assets/vpt-stone-pickaxe-sequence.svg)
+
+Эффект масштабирования очевиден: на логарифмической оси от 1 часа до 100 000 часов данных предобучения скорость, с которой модель создаёт верстак, деревянные инструменты, а затем каменные инструменты, растёт ступенчато. Модель, обученная только на 2000 часах размеченных подрядчиками данных, останавливается на верстаках; только добавление 70 000 часов псевдоразмеченных IDM данных (пунктирная линия на графике) позволяет каменным инструментам появиться zero-shot, без единого этапа RL.
+
+Базовая модель на 0,5B параметров достигла zero-shot способностей, невозможных при использовании только RL: рубка деревьев, создание верстаков, прыжки-столбики; а после дообучения с RL она стала первым ИИ, создавшим алмазные инструменты.
+
+![Награда в зависимости от количества эпизодов RL-тренировки: случайно инициализированная модель против предобученной модели VPT](assets/vpt-diamond-pickaxe-sequence.svg)
+
+Этот график показывает, почему предобучение меняет всё для последующего RL. RL, запущенный со случайно инициализированной сетью (оранжевый), остаётся около нуля почти миллион эпизодов: задача «добыть алмаз» даёт слишком разреженную награду, чтобы наивный агент наткнулся на неё случайным исследованием. RL, дообученный с предобученной модели VPT (зелёный), уже стартует с базовым поведением (добыча, крафт, исследование) и стабильно растёт до награды около 25, что соответствует полному пути к алмазной кирке.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*Официальные видео-демонстрации проекта VPT от OpenAI, показывающие агента в действии.*
 
 ## OpenAI Five: Проблема формирования награды
 

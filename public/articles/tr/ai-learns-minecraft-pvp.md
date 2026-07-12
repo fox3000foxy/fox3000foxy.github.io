@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3qWpAOL0/VD3Ehkx/ZP6pJwU9xhHsGkP/dyhqGPhpxyMBwfVnM/Na2geoSiuOZvR1TZW2G54NmNI/z4bkM6Pzg=="
+author_sig: "fT0ALcrigpq7JzE/rMWuvRi6KRiP/qQcZ4gQ3iV1Z2+ezOUlp7LOZezPtislgs+4UJjuKn9EyKEKusLpS6ocPA=="
 ---
 
 ## Giriş
@@ -164,7 +164,41 @@ Videonun "davranış klonlama" yaklaşımı (Aşama 1), OpenAI'in **Video PreTra
 
 VPT hattı, t-1 karesine ve t+1 karesine bakarak t karesindeki eylemi tahmin eden bir **Ters Dinamik Modeli (IDM)** eğiterek veri sorununu çözer. IDM nedensel olmadığı için (gelecek kareleri görür), görev davranış klonlamadan daha kolaydır ve çok daha az etiketli veri gerektirir. 2.000 saatlik etiketli veri için yüklenicilere ~$2.000 ödediler, ardından 70.000 saatlik YouTube Minecraft videosunu pseudo-etiketlemek için IDM'yi kullandılar.
 
+![Ön eğitim verisi hacmine göre crafting/toplama oranı (log ölçek) : tezgahlar, tahta araçlar, taş araçlar](assets/vpt-stone-pickaxe-sequence.svg)
+
+Ölçek etkisi nettir: 1 saatten 100.000 saate kadar ön eğitim verisinin log ölçeğinde, modelin tezgah, tahta araç ve taş araç üretme oranı kademeli olarak artar. Yalnızca yükleniciler tarafından etiketlenmiş 2.000 saat üzerinde eğitilen model, tezgahlarda takılı kalır; IDM tarafından pseudo-etiketlenmiş 70.000 saatin (grafikte kesikli çizgi) eklenmesiyle taş araçlar, tek bir RL adımı olmadan, sıfır atışla ortaya çıkar.
+
 Ortaya çıkan 0,5B parametreli temel model, yalnızca RL ile imkansız olan sıfır atış yetenekleri elde etti: ağaç kesme, tezgah yapma, sütun atlama: ve RL ile ince ayar yapılarak elmas araçlar üreten ilk YZ oldu.
+
+![RL eğitim bölümlerine göre ödül : rastgele başlatılmış modele karşı ön eğitimli VPT modeli](assets/vpt-diamond-pickaxe-sequence.svg)
+
+Bu grafik, ön eğitimin sonraki RL için neden her şeyi değiştirdiğini gösterir. Rastgele başlatılmış bir ağdan başlayan RL (turuncu), neredeyse bir milyon bölüm boyunca 0'a yakın düz kalır: "elmas elde et" görevinin ödülü, saf bir ajanın rastgele keşifle denk gelmesi için çok seyrektir. Ön eğitimli VPT modelinden ince ayar yapılan RL (yeşil), zaten temel davranışla (madencilik, üretim, keşif) başlar ve yaklaşık 25 ödüle kadar istikrarlı bir şekilde yükselir; bu, elmas kazmaya giden tam yola karşılık gelir.
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT ajan oynanış demosu 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT ajan oynanış demosu 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT ajan oynanış demosu 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<div style="max-width: 100%; margin: 1.5em 0;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT ajan oynanış demosu 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+  </div>
+</div>
+
+*OpenAI'in VPT projesinin resmi video demoları, ajanı eylem halinde gösteriyor.*
 
 ## OpenAI Five : Ödül şekillendirme sorunu
 
