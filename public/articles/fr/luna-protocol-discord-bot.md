@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SillnjuoccilYsb8PWl8IYlvtMl8t7hubXcH4E2rTru0Rck0voyX16FWwRh2TNJ/4n9ze6D3nEMx3MyG2rZiCA=="
+author_sig: "4vfBwYvMIClW7wE1hhtL39sLN6MTzS5EhTiDQ2P2CID7VXi+ztvQ+I1IHAP3yzLgThXNohQtbTFntOq4hdDlNw=="
 ---
 
 # Luna Protocol : j'ai créé un bot Discord autonome qui simule un être humain
@@ -82,6 +82,8 @@ Deux buses principaux en découlent :
 L'avantage de cette approche : chaque module est **déconnecté** du reste. Le LLM émet des tokens sur le bus, le bot les consomme, le state se met à jour automatiquement. Aucune dépendance circulaire.
 
 ---
+
+![Message Processing -- flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
 
 ## Le système de déclenchement : qui décide quand Luna répond ?
 
@@ -361,7 +363,11 @@ Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/dataset
 
 Le modèle quantifié utilisé est un GGUF (par exemple `Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
+![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+
 ---
+
+![Complete Lifecycle -- comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
 
 ## Les diagrammes d'architecture
 
@@ -443,6 +449,8 @@ En MP, `messageReference` est toujours `false`.
 ## Les messages en rafale
 
 Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
+
+![Timing Gantt -- temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
 
 ---
 
