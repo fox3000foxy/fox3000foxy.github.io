@@ -12,11 +12,11 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ymnxOFGc7UN1HF8oUAOFjxejS9tCFSpCUWHkdHIjgk4aXXwVdbWXyhesroNSe18Q+gfLifpxljcqlAFeVVWkhA=="
+author_sig: "zJRm2OAw4I8tnjDnaJ9IqO8lWWVtx8/4Q4PlYN5zjb3DAruBpzkXuGIKeY7sMTXgO+tIhtinMifD/MUCoNolAQ=="
 ---
 
 # Luna Protocol: 人間を模倣する自律型Discordボットを作った
-Discordボットが**眠ったり**、**タイプミスをしたり**、**躊躇したり**、**返答を忘れたり**、ときには自発的にメッセージを送ったりしたらどうでしょうか? それが**Luna Protocol**がactly doing: ローカルLLM (llama.cpp) を動作させ、不完全な人間のように会話する完全自律型Discordボットです。
+Discordボットが**眠ったり**、**タイプミスをしたり**、**躊躇したり**、**返答を忘れたり**、ときには自発的にメッセージを送ったりしたらどうでしょうか? それが**Luna Protocol**がやっていることです: ローカルLLM (llama.cpp) を動作させ、不完全な人間のように会話する完全自律型Discordボットです。
 堅いプロンプトもロボット的な回答もありません。Lunaには**優先度付きトリガーシステム**、**可変遅延**、**スリープスケジュール**、**自発メッセージ**、さらには音声メッセージを送る**TTSパイプライン**があります。すべてシンプルな`config.yml`ファイルでホットリロード可能に設定できます。
 この記事では、完全なアーキテクチャを分解します: 汎用イベントバスからTTSパイプラインまで、トリガーシステム、人間コンポーネント、ファインチューニングデータセットを含めて。
 ![アーキテクチャ概要 -- グローバルコンポーネントとデータフロー](/images/luna-protocol/01-architecture-overview.svg)
@@ -25,12 +25,12 @@ Discordボットが**眠ったり**、**タイプミスをしたり**、**躊躇
 
 ## アーキテクチャ: 型付きイベントバス
 
-Lunaの心臓は**TypedBus** -- 強い型付けされた汎用イベントバス（TypeScript）。すべての基盤となる基本ブロックです。
+Lunaの心臓は**タイプdBus** -- 強い型付けされた汎用イベントバス（タイプScript）。すべての基盤となる基本ブロックです。
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
 
-export class TypedBus<Events extends EventMap> {
+export class タイプdBus<Events extends EventMap> {
   private listeners = new Map<keyof Events, Set<(...args: unknown[]) => void>>();
 
   on<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): void {
@@ -54,20 +54,20 @@ export class TypedBus<Events extends EventMap> {
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   core/bus.ts                        │
-│  TypedBus<K, V> -- on / off / once / emit            │
+│  タイプdBus<K, V> -- on / off / once / emit            │
 ├──────────────────┬──────────────────────────────────┤
 │   core/llm-bus   │       state/state-bus             │
 │  token / done /  │     state:changed                 │
-│  error / crash / │     → persistence auto            │
+│  error / crash / │     → 自動永続化            │
 │  flush / ready / │                                   │
 │  reset           │                                   │
 └────────┬─────────┴────────┬─────────────────────────┘
          │                  │
 ┌──────────────────┐  ┌────▼──────────────────────┐
 │ core/llm-core.ts │  │ bot.ts (Eris)             │
-│ mode direct      │  │ bot/pending.ts             │
+│ ダイレクトモード      │  │ bot/pending.ts             │
 │   llama-server   │  │ bot/reactions.ts           │
-│ mode online      │  │ state/trigger.ts           │
+│ オンラインモード      │  │ state/trigger.ts           │
 │   OpenAI API     │  │ state/state.ts             │
 │                  │  │ behavior/*                 │
 │                  │  │ tts/*                      │
@@ -79,28 +79,28 @@ export class TypedBus<Events extends EventMap> {
 
 ---
 
-![Message Processing -- flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
+![Message Processing -- メッセージ処理の完全なフロー](/images/luna-protocol/02-message-processing.svg)
 
-## Le système de déclenchement : qui décide quand Luna répond ?
+## トリガーシステム：Lunaがいつ応答するか誰が決めるのか
 
-Chaque message entrant est évalué par `evaluateMessage()` qui retourne un `TriggerResult` avec une raison de déclenchement. L'ordre de priorité est critique :
+各受信メッセージは`evaluateMessage()`で評価され、トリガー理由付きの`TriggerResult`を返します。優先順位の順序は重要です：
 
-| # | Raison | Conditions | Bypass ignore | Bypass pause |
+| # | 理由 | 条件 | Bypass ignore | Bypass pause |
 |---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | Oui (0%) | Oui |
-| 2 | `dm` | MP avec `replyInDM = true` | Oui (0%) | Non |
-| 3 | `name` | "Luna"/"Pixie"/alias (mot entier) | Non (8%) | Non |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (mot entier) | Non (8%) | Non |
-| 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | Non (8%) | Non |
+| 1 | `mention` | @bot | はい (0%) | はい |
+| 2 | `dm` | DM (`replyInDM = true`) | はい (0%) | いいえ |
+| 3 | `name` | "Luna"/"Pixie"/alias (単語全体) | いいえ (8%) | いいえ |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (単語全体) | いいえ (8%) | いいえ |
+| 5 | `follow-up` | Botが最後の発言者 + < 15秒 + < 3 / 60秒 | -- | -- |
+| 6 | `random` | 非一致メッセージに対する1.5%の確率 | いいえ (8%) | いいえ |
 
-Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+マッチングは**単語全体** (`\b`) : "ai"は"mais"、"vrai"、"lait"に一致しません.
 
-![Trigger evaluation -- décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+![Trigger evaluation -- 各メッセージのエントリ決定](/images/luna-protocol/03-trigger-evaluation.svg)
 
 ### フォローアップメカニズム
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+Lunaがメッセージに応答すると、`lastSpeaker`として登録されます。15秒以内の後のメッセージは**即座の**応答をトリガーします -- タイマーなし、キーワードチェックなし。予算：60秒のウィンドウで3フォローアップ。
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -119,9 +119,9 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 
 ## 人間的行動: 可変コンセントレーション
 
-C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses propres **seuils de concentration** : un délai min/max, une chance d'ignorer, et une chance de réagir.
+ここでLunaは興味深くなります。各トリガータイプには独自の**集中閾値**があります：最小/最大遅延、無視する確率、反応する確率。
 
-| Trigger | Délai min | Délai max | Ignore | Réaction |
+| Trigger | 最小遅延 | 最大遅延 | 無視 | 反応 |
 |---------|----------|----------|--------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
@@ -151,7 +151,7 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // jitter agressif
+  delay *= 0.5 + Math.random() * 1.5; // アグレッシブなジッター
   return delay;
 }
 ```
@@ -176,11 +176,11 @@ time_schedules:
     behavior: short
 ```
 
-| Mode | Effet |
+| モード | 効果 |
 |------|-------|
-| `sleep` | Seules les mentions et MP passent |
-| `slow` | Délai ×3-5, réactions quasi nulles |
-| `short` | Chance d'ignore +30%, réactions quasi nulles |
+| `sleep` | メンションとDMのみ通過 |
+| `slow` | 遅延×3-5、リアクションほぼなし |
+| `short` | 無視率+30%、リアクションほぼなし |
 
 睡眠時間中、Discordのステータスは`invisible`に変わります。
 
@@ -199,25 +199,25 @@ const azertyAdjacent: Record<string, string[]> = {
 };
 ```
 
-Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+AZERTYの例： `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
 
 3つの修正スタイル：
 
-| Style | Comportement |
+| スタイル | 動作 |
 |-------|-------------|
-| `edit` | Édite le message |
-| `message` | Nouveau message : `word*` |
-| `mixed` | 50/50 aléatoire (défaut) |
+| `edit` | メッセージを編集 |
+| `message` | 新しいメッセージ： `word*` |
+| `mixed` | 50/50ランダム（デフォルト） |
 
 ---
 
 ## 犹予と忘却
 
-**Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**ためらい**：フィリングワードで始まる確率15% (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
+**忘却**：トリガーマッチ後でも、Lunaは3%の確率で応答を「忘れる」ことがあります。メッセージなし、リアクションなし -- 見ていなかったかのように。
 
-**Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
+**テーマ疲労**：直近10メッセージで単語が頻繁に出現する場合（閾値：3回）、遅延が乗算され、無視する確率が15%増加します。
 
 ---
 
@@ -233,7 +233,7 @@ Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`
 
 ### リアルタイムストリーミング
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+LLMは回答を1行ずつストリーミングします (`\n`). 各行は単語に分割され、 `llmBus.emit("token", word)`. 各行の`\n`ごとに`flush`イベントが発行され -- ボットは蓄積されたメッセージを即座に送信します。遅延のシミュレーションなし：リズムはLLMのものです。
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -261,7 +261,7 @@ function emitWordTokens(chunk: string): void {
 
 ## 自発的なメッセージ
 
-Toutes les 5 minutes, 12% de chance que Luna poste un message de son propre chef. サーバーは**線形重み付け**システムで選択されます：最もアクティブなサーバーは最後のサーバーよりN×多くの確率を持ちます。
+5ごとに、Lunaが自らメッセージを投稿する確率は12%です。 サーバーは**線形重み付け**システムで選択されます：最もアクティブなサーバーは最後のサーバーよりN×多くの確率を持ちます。
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -278,13 +278,13 @@ for (let i = 0; i < ranked.length; i++) {
 
 ## TTSパイプライン: ボイスメッセージ
 
-Avec 8% de chance, Luna envoie un message vocal au lieu de texte. La pipeline complète :
+8%の確率で、Lunaはテキストの代わりにボイスメッセージを送信します。完全なパイプライン：
 
-1. **Piper TTS** synthétise le texte en WAV
-2. **ffmpeg** convertit en OGG
-3. Le waveform est calculé pour l'aperçu Discord
-4. Le fichier est uploadé via l'API Discord CDN
-5. Le message vocal est envoyé
+1. **Piper TTS** テキストをWAVに合成
+2. **ffmpeg** OGGに変換
+3. 波形を計算してDiscordのプレビュー用に生成
+4. ファイルをDiscord CDN APIでアップロード
+5. 音声メッセージを送信
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -301,7 +301,7 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS Pipeline -- 合成テキストからDiscordボイスメッセージへ](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
@@ -317,7 +317,7 @@ export async function sendTextAsVoiceMessage(
 
 ### 自動永続化
 
-Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounce 500ms). Plus besoin d'appels `saveAllState()` manuels. L'état persisté inclut : pendingMessages, paused, cooldowns, timestamps, lastSpeaker, compteurs de follow-up.
+各状態変更は`stateBus`に発行されます → 自動保存（debounce 500ms）。手動の`saveAllState()`呼び出しは不要です。永続化される状態：pendingMessages, paused, cooldowns, timestamps, lastSpeaker, フォローアップカウンター。
 
 ---
 
@@ -325,14 +325,14 @@ Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounc
 
 `config.yml`が1つのファイル。ほとんどの値は**ホットリロード可能** -- 再起動なしで変更が適用されます。
 
-| Catégorie | Hot-reload |
+| カテゴリ | Hot-reload |
 |-----------|-----------|
-| Triggers, keywords, noms | ✅ |
-| Concentration, délais | ✅ |
-| Typos, burst, fatigue | ✅ |
-| Sleep schedules | ✅ |
-| TTS, voice messages | ✅ |
-| Discord token, LLM mode | ❌ (redémarrage requis) |
+| トリガー、キーワード、名前 | ✅ |
+| 集中度、遅延 | ✅ |
+| タイプミス、バースト、疲労 | ✅ |
+| スリープスケジュール | ✅ |
+| TTS、音声メッセージ | ✅ |
+| Discordトークン、LLMモード | ❌ (再起動が必要) |
 
 ```typescript
 // config.ts -- ゲッターはライブ値を返します
@@ -347,23 +347,23 @@ export const config = {
 
 ## データセット: Discord-Dialogues
 
-Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. Des vraies conversations Discord printemps-été 2025, filtrées (PII, ToS, bots, commandes). Apache 2.0.
+モデルは以下でファインチューニングされています： [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M会話**, **17Mターン**, **140M単語**. 2025年春〜夏の本物のDiscord会話、フィルタリング済み（PII、ToS、ボット、コマンド）。Apache 2.0。
 
-| Métrique | Valeur |
+| メトリック | 値 |
 |----------|--------|
-| Échantillons | 7 303 464 |
-| Tours totaux | 16 881 010 |
-| Mots totaux | 139 922 950 |
-| Tokens moyens | 32.8 |
+| サンプル数 | 7 303 464 |
+| 総ターン数 | 16 881 010 |
+| 総単語数 | 139 922 950 |
+| 平均トークン | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
 使用されている量子化モデルはGGUFです（例：`Discord-Hermes-3-8B.Q3_K_M.gguf`）。
 
-![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+![Discord-Dialoguesデータセットの分布](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
+![Complete Lifecycle -- メッセージから応答までのボットの完全な動作、タイマーとエッジケースを含む](/images/luna-protocol/22-complete-lifecycle.svg)
 
 ## アーキテクチャ図
 
@@ -371,10 +371,10 @@ Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/dataset
 
 重要なパラメータ：
 
-| # | Diagramme | Type |
+| # | ダイアグラム | タイプ |
 |---|-----------|------|
 | 01 | Architecture Overview | `graph` |
-| 02 | Message Processing (complet) | `stateDiagram` |
+| 02 | Message Processing (完全版) | `stateDiagram` |
 | 03 | Trigger Evaluation | `flowchart` |
 | 04 | LLM Core Queue (3 backends) | `stateDiagram` |
 | 10 | TTS Pipeline | `flowchart` |
@@ -409,7 +409,7 @@ export function evaluateMessage(
 }
 ```
 
-Le cache de regex (`hasWordCache`) évite de recompiler les patterns à chaque message.
+正規表現キャッシュ（`hasWordCache`）は各メッセージでのパターン再コンパイルを防ぎます。
 
 ---
 
@@ -428,15 +428,15 @@ Lunaのメッセージに対するリアクションコマンド：
 
 レスポンススタイルはLunaの最近のチャンネル活動に応じて重み付けされます：
 
-| Contexte | messageReference | mentionRepliedUser | Poids |
+| コンテキスト | messageReference | mentionRepliedUser | 重み |
 |----------|-----------------|-------------------|-------|
-| Froid | true | false | 70% |
-| Froid | true | true | 20% |
-| Froid | false | false | 10% |
-| Actif | true | false | 50% |
-| Actif | true | true | 15% |
-| Actif | false | false | 30% |
-| Actif | false | true | 5% |
+| 冷 | true | false | 70% |
+| 冷 | true | true | 20% |
+| 冷 | false | false | 10% |
+| アクティブ | true | false | 50% |
+| アクティブ | true | true | 15% |
+| アクティブ | false | false | 30% |
+| アクティブ | false | true | 5% |
 
 DMでは、`messageReference`は常に`false`です。
 
@@ -444,9 +444,9 @@ DMでは、`messageReference`は常に`false`です。
 
 ## バーストメッセージ
 
-Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
+15%の確率で、回答は人間のリズム（各フラグメント間1.5-4秒）で2-3のフラグメントに分割されて送信されます。複数回に分けてタイピングする人をシミュレートします。
 
-![Timing Gantt -- temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
+![Timing Gantt -- 遅延、リアクション、LLMストリーミング、修正の実際の待ち時間](/images/luna-protocol/21-timing-gantt.svg)
 
 ---
 
@@ -468,7 +468,7 @@ dynamic_status_presets:
 
 ## タイピングインジケーター
 
-Avant d'appeler le LLM, Luna appelle `startTyping()`. Un `setInterval` rafraîchit l'indicateur toutes les 8 secondes pendant la génération. Nettoyé dans le `finally` (`clearInterval`).
+LLMを呼び出す前に、Lunaは`startTyping()`を呼び出します。`setInterval`が生成中8秒ごとにインジケーターを更新します。`finally`でクリーンアップ（`clearInterval`）。
 
 ```typescript
 const startTyping = () => {
@@ -484,7 +484,7 @@ const startTyping = () => {
 
 ## クラッシュ後の復旧
 
-Si le LLM crash (processus `llama-server` qui meurt), Luna détecte l'événement via `llmBus.emit("crash", code)` et tente de redémarrer avec un backoff exponentiel. Évite les boucles de redémarrage infini.
+LLMがクラッシュした場合（`llama-server`プロセスが停止）、Lunaは`llmBus.emit("crash", code)`でイベントを検出し、指数バックオフで再起動を試みます。無限の再起動ループを防ぎます。
 
 ## LLMパラメータ
 
@@ -504,7 +504,7 @@ ubatch: 256
 context: 4096
 ```
 
-Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
+ChatMLテンプレート (`<|im_start|>/<|im_end|>`) が使用されます。 スレッド数は `os.cpus().length`.
 
 ---
 
@@ -513,36 +513,36 @@ Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de thread
 ```bash
 npm install
 cp config.example.yml config.yml
-# éditer config.yml
+# config.ymlを編集
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
-| Script | Description |
+| スクリプト | 説明 |
 |--------|-------------|
-| `build` | Bundle CLI autonome |
-| `start` | Lance le bot |
+| `build` | 独立したCLIバンドル |
+| `start` | ボットを起動 |
 | `lint` / `format` / `check` | Biome |
-| `test` | Tests (Bun) |
-| `download-model` | GGUF depuis HuggingFace |
-| `diagrams` | Exporte les diagrammes Mermaid en SVG/PNG |
+| `test` | テスト (Bun) |
+| `download-model` | HuggingFaceからGGUFをダウンロード |
+| `diagrams` | MermaidダイアグラムをSVG/PNGにエクスポート |
 
 ### PM2デプロイ
 
 ```bash
-./start.sh   # lance llm-server + llm-client sous PM2
+./start.sh   # PM2でllm-server + llm-clientを起動
 ```
 
 ---
 
 ## まとめ
 
-Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
+Luna Protocol は単なるLLM搭載Discordボットではありません。これは人間の不完全さ -- 忘却、タイプミス、睡眠、ためらい、疲労 -- をシミュレートする**完全な行動システム**です。すべて型付きイベントバスを中心に構築され、24のMermaidダイアグラムが各フローを文書化しています。
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
+コードはオープンソース、データセットは公開、設定はホットリロード可能。興味があるなら、コードを深く掘り下げてみてください -- 見るほど-accessibleです。
 
-| Ressource | Lien |
+| リソース | リンク |
 |-----------|------|
-| Dépôt GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| GitHubリポジトリ | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |

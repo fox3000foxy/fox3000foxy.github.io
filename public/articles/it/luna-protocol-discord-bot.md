@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QO2fgM67+0g8yDOWyjStB3EmIFrcMRP6k8T+UABf15JCROXjnnyhK/kHaO6F7MMLgX9chtIFh86aVz+OzDG+pg=="
+author_sig: "TJh31IUIHudiSZx4y1w9kxZL+ttPcOVB5BTawpONfne29hpe2NKq0I23msTjYzbP++6KFENbokmTU7BxTAbGaQ=="
 ---
 
 # Luna Protocol: Ho creato un bot Discord autonomo che simula un essere umano
@@ -25,12 +25,12 @@ In questo articolo, analizziamo l'architettura completa: dal bus di eventi gener
 
 ## Architettura: un bus di eventi tipizzato
 
-Le cœur de Luna est un **TypedBus** -- un bus d'événements générique fortement typé en TypeScript. C'est la brique fondamentale sur laquelle tout repose.
+Il cuore di Luna è un **TypedBus** -- un bus di eventi generico fortemente tipizzato in TypeScript. È il mattone fondamentale su cui tutto si basa.
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
 
-export class TypedBus<Events extends EventMap> {
+export class TipodBus<Events extends EventMap> {
   private listeners = new Map<keyof Events, Set<(...args: unknown[]) => void>>();
 
   on<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): void {
@@ -46,15 +46,15 @@ export class TypedBus<Events extends EventMap> {
 }
 ```
 
-Deux buses principaux en découlent :
+Da qui derivano due bus principali:
 
-- **`llmBus`** -- gère les tokens LLM, les erreurs, les crashes, le reset
-- **`stateBus`** -- gère les changements d'état avec persistence automatique
+- **`llmBus`** -- gestisce token LLM, errori, crash, reset
+- **`stateBus`** -- gestisce le modifiche di stato con persistenza automatica
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   core/bus.ts                        │
-│  TypedBus<K, V> -- on / off / once / emit            │
+│  TipodBus<K, V> -- on / off / once / emit            │
 ├──────────────────┬──────────────────────────────────┤
 │   core/llm-bus   │       state/state-bus             │
 │  token / done /  │     state:changed                 │
@@ -75,32 +75,32 @@ Deux buses principaux en découlent :
 └──────────────────┘  └────────────────────────────┘
 ```
 
-L'avantage de cette approche : chaque module est **déconnecté** du reste. Le LLM émet des tokens sur le bus, le bot les consomme, le state se met à jour automatiquement. Aucune dépendance circulaire.
+Il vantaggio di questo approccio: ogni modulo è **scollegato** dal resto. Il LLM emette token sul bus, il bot li consuma, lo stato si aggiorna automaticamente. Nessuna dipendenza circolare.
 
 ---
 
-![Message Processing -- flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
+![Message Processing -- Flusso completo di elaborazione dei messaggi](/images/luna-protocol/02-message-processing.svg)
 
-## Le système de déclenchement : qui décide quand Luna répond ?
+## Sistema di trigger: chi decide quando Luna risponde?
 
-Chaque message entrant est évalué par `evaluateMessage()` qui retourne un `TriggerResult` avec une raison de déclenchement. L'ordre de priorité est critique :
+Ogni messaggio in entrata viene valutato da `evaluateMessage()` che restituisce un `TriggerResult` con un motivo di attivazione. L'ordine di priorità è critico:
 
-| # | Raison | Conditions | Bypass ignore | Bypass pause |
+| # | Motivo | Condizioni | Bypass ignore | Bypass pause |
 |---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | Oui (0%) | Oui |
-| 2 | `dm` | MP avec `replyInDM = true` | Oui (0%) | Non |
-| 3 | `name` | "Luna"/"Pixie"/alias (mot entier) | Non (8%) | Non |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (mot entier) | Non (8%) | Non |
-| 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | Non (8%) | Non |
+| 1 | `mention` | @bot | Sì (0%) | Sì |
+| 2 | `dm` | DM con `replyInDM = true` | Sì (0%) | No |
+| 3 | `name` | "Luna"/"Pixie"/alias (parola intera) | No (8%) | No |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (parola intera) | No (8%) | No |
+| 5 | `follow-up` | Bot era l'ultimo interlocutore + < 15s + < 3 / 60s | -- | -- |
+| 6 | `random` | 1.5% di possibilità sui messaggi non corrispondenti | No (8%) | No |
 
-Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+Il matching è a **parola intera** (`\b`) : "ai" non corrisponde a "mais", "vrai", "lait".
 
-![Trigger evaluation -- décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+![Trigger evaluation -- Decisione di ingresso per ogni messaggio](/images/luna-protocol/03-trigger-evaluation.svg)
 
-### Le mécanisme de follow-up
+### Meccanismo di follow-up
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+Quando Luna risponde a un messaggio, si registra come `lastSpeaker`. Ogni messaggio successivo entro 15 secondi attiva una risposta **immediata** -- nessun timer, nessuna verifica keyword. Budget: 3 follow-up per finestra di 60 secondi.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -111,17 +111,17 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 }
 ```
 
-### Le cooldown
+### Cooldown
 
-8 secondes entre deux réponses dans le même canal. Contourné par les mentions et les follow-ups.
+8 secondi tra due risposte nello stesso canale. Eluso da menzioni e follow-up.
 
 ---
 
-## Les comportements humains : la concentration variable
+## Comportamenti umani: concentrazione variabile
 
-C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses propres **seuils de concentration** : un délai min/max, une chance d'ignorer, et une chance de réagir.
+È qui che Luna diventa interessante. Ogni tipo di trigger ha le proprie **soglie di concentrazione**: un ritardo min/max, una probabilità di ignorare, e una probabilità di reagire.
 
-| Trigger | Délai min | Délai max | Ignore | Réaction |
+| Trigger | Ritardo min | Ritardo max | Ignora | 반응 |
 |---------|----------|----------|--------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
@@ -130,7 +130,7 @@ C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses pr
 | `follow-up` | 500ms | 2000ms | 0% | 3% |
 | `random` | 1500ms | 5000ms | 15% | 2% |
 
-Le calcul du délai prend aussi en compte :
+Il calcolo del ritardo tiene anche conto di:
 - **La longueur du message** : plus le message est long, plus Luna met de temps à "lire"
 - **L'inactivité** : si Luna n'a pas été active depuis 10 minutes, le délai est multiplié par 2 (simulation du "réveil")
 - **Le sommeil** : en mode `slow`, le délai est multiplié par 3 à 5
@@ -151,7 +151,7 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // jitter agressif
+  delay *= 0.5 + Math.random() * 1.5; // jitter aggressivo
   return delay;
 }
 ```
@@ -160,7 +160,7 @@ export function computeDelay(
 
 ## Orari di sonno
 
-Luna peut dormir. Configurable via `config.yml` :
+Luna può dormire. Configurabile tramite `config.yml`:
 
 ```yaml
 timezone: "Europe/Paris"
@@ -176,64 +176,64 @@ time_schedules:
     behavior: short
 ```
 
-| Mode | Effet |
+| Modo | Effetto |
 |------|-------|
-| `sleep` | Seules les mentions et MP passent |
-| `slow` | Délai ×3-5, réactions quasi nulles |
-| `short` | Chance d'ignore +30%, réactions quasi nulles |
+| `sleep` | Solo menzioni e MP passano |
+| `slow` | Ritardo ×3-5, reazioni quasi nulle |
+| `short` | Probabilità di ignorare +30%, reazioni quasi nulle |
 
-Pendant les heures de sommeil, le statut Discord passe en `invisible`.
+Durante le ore di sonno, lo stato Discord passa a `invisible`.
 
 ---
 
 ## Errori di battitura
 
-Luna peut faire des fautes de frappe -- et les corriger après 2-4 secondes. Le layout clavier est configurable (AZERTY ou QWERTY).
+Luna può fare errori di digitazione -- e correggerli dopo 2-4 secondi. Il layout della tastiera è configurabile (AZERTY o QWERTY).
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
   a: ["z", "q", "w"],
   z: ["a", "e", "s", "x"],
   e: ["z", "r", "d", "s"],
-  // ... toutes les touches adjacentes
+  // ... tutti i tasti adiacenti
 };
 ```
 
-Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+Esempio AZERTY: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
 
-Trois styles de correction :
+Tre stili di correzione:
 
-| Style | Comportement |
+| Stile | Comportamento |
 |-------|-------------|
-| `edit` | Édite le message |
-| `message` | Nouveau message : `word*` |
-| `mixed` | 50/50 aléatoire (défaut) |
+| `edit` | Modifica il messaggio |
+| `message` | Nuovo messaggio: `word*` |
+| `mixed` | 50/50 casuale (predefinito) |
 
 ---
 
 ## Esitazioni e dimenticanze
 
-**Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**Esitazioni**: 15% di possibilità di iniziare con una parola di riempimento (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
+**Oblì**: anche dopo aver abbinate un trigger, Luna può "dimenticare" di rispondere con una probabilità del 3%. Nessun messaggio, nessuna reazione -- come se non avesse visto nulla.
 
-**Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
+**Affaticamento tematico**: se una parola ricorre troppo spesso negli ultimi 10 messaggi (soglia: 3 occorrenze), i ritardi vengono moltiplicati e la probabilità di ignorare aumenta del 15%.
 
 ---
 
 ## Pipeline LLM: due modalità
 
-### Mode `direct` (défaut)
+### Modo `direct` (défaut)
 
-Le bot envoie directement les requêtes à un `llama-server` local en HTTP. Le modèle est partagé, avec prompt cache et 4 slots concurrents. Deux processus PM2 : le serveur LLM et le client bot.
+Il bot invia direttamente le richieste a un `llama-server` locale in HTTP. Il modello è condiviso, con prompt cache e 4 slot concorrenti. Due processi PM2: il server LLM e il client bot.
 
-### Mode `online`
+### Modo `online`
 
 Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq, Together...). Pas de LLM local nécessaire.
 
-### Le streaming en temps réel
+### Streaming in tempo reale
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+Il LLM trasmette la risposta riga per riga (`\n`). Ogni riga viene suddivisa in parole, emesse una per una su `llmBus.emit("token", word)`. Ad ogni `\n`, viene emesso un evento `flush` -- il bot invia immediatamente il messaggio accumulato. Nessun ritardo simulato: il ritmo è quello del LLM.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -255,13 +255,13 @@ function emitWordTokens(chunk: string): void {
 }
 ```
 
-La file d'attente (`requestQueue`) traite les requêtes une par une, avec nettoyage automatique quand la file dépasse 100 éléments.
+La coda (`requestQueue`) elabora le richieste una per una, con pulizia automatica quando la coda supera 100 elementi.
 
 ---
 
 ## Messaggi spontanei
 
-Toutes les 5 minutes, 12% de chance que Luna poste un message de son propre chef. Le serveur est sélectionné par un système de **poids linéaire** : le serveur le plus actif a N× plus de chances que le dernier.
+Ogni 5 minuti, il 12% di possibilità che Luna pubblichi un messaggio di sua iniziativa. Il server è selezionato da un sistema di **peso lineare**: il server più attivo ha N× più possibilità dell'ultimo.
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -272,19 +272,19 @@ for (let i = 0; i < ranked.length; i++) {
 }
 ```
 
-Le contexte des 5 derniers messages est lu, et Luna joint la conversation "naturellement".
+Il contesto degli ultimi 5 messaggi viene letto, e Luna si unisce alla conversazione "naturalmente".
 
 ---
 
 ## Pipeline TTS: messaggi vocali
 
-Avec 8% de chance, Luna envoie un message vocal au lieu de texte. La pipeline complète :
+Con l'8% di possibilità, Luna invia un messaggio vocale invece del testo. La pipeline completa:
 
-1. **Piper TTS** synthétise le texte en WAV
-2. **ffmpeg** convertit en OGG
-3. Le waveform est calculé pour l'aperçu Discord
-4. Le fichier est uploadé via l'API Discord CDN
-5. Le message vocal est envoyé
+1. **Piper TTS** sintetizza il testo in WAV
+2. **ffmpeg** converte in OGG
+3. La forma d'onda viene calcolata per l'anteprima Discord
+4. Il file viene caricato tramite l'API Discord CDN
+5. Il messaggio vocale viene inviato
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -301,7 +301,7 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS Pipeline -- Dal testo sintetizzato al messaggio vocale Discord](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
@@ -309,23 +309,23 @@ export async function sendTextAsVoiceMessage(
 
 ### Anti-spam
 
-File d'attente par `channelId:userId`. Un seul message en file par utilisateur par canal. Traité dès que la réponse en cours se termine.
+Coda per `channelId:userId`. Un solo messaggio in coda per utente per canale. Elaborato non appena la risposta corrente termina.
 
 ### Limites de session
 
-Après 8 échanges, Luna fait une pause de 30 secondes. Le compteur se réinitialise après 3 minutes d'inactivité.
+Dopo 8 scambi, Luna fa una pausa di 30 secondi. Il contatore si resetta dopo 3 minuti di inattività.
 
 ### Persistence automatique
 
-Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounce 500ms). Plus besoin d'appels `saveAllState()` manuels. L'état persisté inclut : pendingMessages, paused, cooldowns, timestamps, lastSpeaker, compteurs de follow-up.
+Ogni mutazione di stato viene emessa su `stateBus` → salvataggio automatico (debounce 500ms). Non servono più chiamate manuali a `saveAllState()`. Lo stato persistente include: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, contatori follow-up.
 
 ---
 
 ## Configurazione hot-reload
 
-Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** -- les changements sont pris en compte sans redémarrage.
+Un solo file `config.yml`. La maggior parte dei valori è **hot-reloadable** -- le modifiche vengono applicate senza riavvio.
 
-| Catégorie | Hot-reload |
+| Categoria | Hot-reload |
 |-----------|-----------|
 | Triggers, keywords, noms | ✅ |
 | Concentration, délais | ✅ |
@@ -335,7 +335,7 @@ Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** -- 
 | Discord token, LLM mode | ❌ (redémarrage requis) |
 
 ```typescript
-// config.ts -- les getters retournent des valeurs live
+// config.ts -- i getter restituiscono valori live
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -347,31 +347,31 @@ export const config = {
 
 ## Dataset: Discord-Dialogues
 
-Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. Des vraies conversations Discord printemps-été 2025, filtrées (PII, ToS, bots, commandes). Apache 2.0.
+Il modello è fine-tuned su [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. Vere conversazioni Discord primavera-estate 2025, filtrate (PII, ToS, bot, comandi). Apache 2.0.
 
-| Métrique | Valeur |
+| Metrica | Valore |
 |----------|--------|
-| Échantillons | 7 303 464 |
-| Tours totaux | 16 881 010 |
-| Mots totaux | 139 922 950 |
-| Tokens moyens | 32.8 |
+| Campioni | 7 303 464 |
+| Turni totali | 16 881 010 |
+| Parole totali | 139 922 950 |
+| Token medi | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
-Le modèle quantifié utilisé est un GGUF (par exemple `Discord-Hermes-3-8B.Q3_K_M.gguf`).
+Il modello quantizzato utilizzato è un GGUF (per esempio `Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
-![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+![Distribuzione del dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
+![Complete Lifecycle -- Comportamento completo del bot dal messaggio alla risposta, incluse timer e casi limite](/images/luna-protocol/22-complete-lifecycle.svg)
 
-## Les diagrammes d'architecture
+## Diagrammi di architettura
 
-Le dossier `state-machines/` contient **24 diagrammes Mermaid** couvrant l'ensemble du code source. Chaque diagramme a une explication détaillée en langage humain.
+La cartella `state-machines/` contiene **24 diagrammi Mermaid** che coprono l'intero codice sorgente. Ogni diagramma ha una spiegazione dettagliata in linguaggio umano.
 
 Parmi les plus importants :
 
-| # | Diagramme | Type |
+| # | Diagramma | Tipo |
 |---|-----------|------|
 | 01 | Architecture Overview | `graph` |
 | 02 | Message Processing (complet) | `stateDiagram` |
@@ -382,13 +382,13 @@ Parmi les plus importants :
 | 21 | Timing Gantt | `gantt` |
 | 22 | Complete Lifecycle | `stateDiagram` |
 
-Ces diagrammes sont une mine d'or pour comprendre le flux complet : du message entrant à la réponse, en passant par les timers et les cas limites.
+Questi diagrammi sono una miniera d'oro per comprendere il flusso completo: dal messaggio in entrata alla risposta, passando per i timer e i casi limite.
 
 ---
 
-## Le code de déclenchement en détail
+## Codice di trigger in dettaglio
 
-Le trigger est évalué par `evaluateMessage()` dans `state/trigger.ts`. Voici la logique complète :
+Il trigger viene valutato da `evaluateMessage()` in `state/trigger.ts`. Ecco la logica completa:
 
 ```typescript
 export function evaluateMessage(
@@ -409,15 +409,15 @@ export function evaluateMessage(
 }
 ```
 
-Le cache de regex (`hasWordCache`) évite de recompiler les patterns à chaque message.
+La cache regex (`hasWordCache`) evita di ricompilare i pattern ad ogni messaggio.
 
 ---
 
 ## Reazioni
 
-Luna réagit aux messages avec des emojis. 30% de chance d'utiliser un emoji custom du serveur, 70% un emoji unicode. La réaction est déclenchée après le délai de concentration, pas immédiatement.
+Luna reagisce ai messaggi con le emoji. 30% di possibilità di usare un'emoji personalizzata del server, 70% un'emoji unicode. La reazione viene attivata dopo il ritardo di concentrazione, non immediatamente.
 
-Les commandes par réaction sur les messages de Luna :
+Comandi per reazione sui messaggi di Luna:
 - ❌ → Stop
 - ▶️ → Start
 - 🗑️ → Clear
@@ -426,33 +426,33 @@ Les commandes par réaction sur les messages de Luna :
 
 ## Stile di risposta
 
-Le style de réponse est pondéré selon l'activité récente de Luna dans le canal :
+Lo stile di risposta è ponderato in base all'attività recente di Luna nel canale:
 
-| Contexte | messageReference | mentionRepliedUser | Poids |
+| Contesto | messageReference | mentionRepliedUser | Peso |
 |----------|-----------------|-------------------|-------|
-| Froid | true | false | 70% |
-| Froid | true | true | 20% |
-| Froid | false | false | 10% |
-| Actif | true | false | 50% |
-| Actif | true | true | 15% |
-| Actif | false | false | 30% |
-| Actif | false | true | 5% |
+| Freddo | true | false | 70% |
+| Freddo | true | true | 20% |
+| Freddo | false | false | 10% |
+| Attivo | true | false | 50% |
+| Attivo | true | true | 15% |
+| Attivo | false | false | 30% |
+| Attivo | false | true | 5% |
 
-En MP, `messageReference` est toujours `false`.
-
----
-
-## Les messages en rafale
-
-Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
-
-![Timing Gantt -- temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
+Nelle DM, `messageReference` è sempre `false`.
 
 ---
 
-## Le statut dynamique
+## Messaggi in raffica
 
-Le statut Discord de Luna alterne entre plusieurs presets configurés, tournant toutes les 15 minutes. Types supportés : Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Pendant le sommeil, le statut passe en `invisible`.
+Con il 15% di possibilità, una risposta viene suddivisa in 2-3 frammenti inviati a ritmo umano (1.5-4 secondi tra ogni frammento). Simula qualcuno che digita più volte.
+
+![Timing Gantt -- Tempi di attesa reali per ritardi, reazioni, streaming LLM e correzioni](/images/luna-protocol/21-timing-gantt.svg)
+
+---
+
+## Stato dinamico
+
+Lo stato Discord di Luna alterna tra più preset configurati, ruotando ogni 15 minuti. Tipi supportati: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Durante il sonno, lo stato passa a `invisible`.
 
 ```yaml
 dynamic_status_presets:
@@ -464,11 +464,11 @@ dynamic_status_presets:
     type: 2       # Listening
 ```
 
-Un jitter aléatoire (×0.5-1.0) évite les rotations prévisibles. 10% des tentatives sont sautées pour éviter la répétition.
+Un jitter casuale (×0.5-1.0) evita rotazioni prevedibili. Il 10% dei tentativi viene saltato per evitare la ripetizione.
 
-## L'indicateur de frappe
+## Indicatore di digitazione
 
-Avant d'appeler le LLM, Luna appelle `startTyping()`. Un `setInterval` rafraîchit l'indicateur toutes les 8 secondes pendant la génération. Nettoyé dans le `finally` (`clearInterval`).
+Prima di chiamare il LLM, Luna chiama `startTyping()`. Un `setInterval` aggiorna l'indicatore ogni 8 secondi durante la generazione. Pulito nel `finally` (`clearInterval`).
 
 ```typescript
 const startTyping = () => {
@@ -482,13 +482,13 @@ const startTyping = () => {
 };
 ```
 
-## La récupération après crash
+## Ripristino dopo crash
 
-Si le LLM crash (processus `llama-server` qui meurt), Luna détecte l'événement via `llmBus.emit("crash", code)` et tente de redémarrer avec un backoff exponentiel. Évite les boucles de redémarrage infini.
+Se il LLM crasha (il processo `llama-server` muore), Luna rileva l'evento tramite `llmBus.emit("crash", code)` e tenta di riavviare con backoff esponenziale. Evita loop di riavvio infiniti.
 
 ## Parametri LLM
 
-Les paramètres sont hardcodés dans `src/config.ts` :
+I parametri sono hardcoded in `src/config.ts`:
 
 ```yaml
 temp: 0.75
@@ -504,7 +504,7 @@ ubatch: 256
 context: 4096
 ```
 
-Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
+Il template ChatML (`<|im_start|>/<|im_end|>`) è utilizzato. Il numero di thread viene auto-rilevato tramite `os.cpus().length`.
 
 ---
 
@@ -513,36 +513,36 @@ Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de thread
 ```bash
 npm install
 cp config.example.yml config.yml
-# éditer config.yml
+# modifica config.yml
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
 | Script | Description |
 |--------|-------------|
-| `build` | Bundle CLI autonome |
-| `start` | Lance le bot |
+| `build` | Bundle CLI autonomo |
+| `start` | Avvia il bot |
 | `lint` / `format` / `check` | Biome |
 | `test` | Tests (Bun) |
-| `download-model` | GGUF depuis HuggingFace |
-| `diagrams` | Exporte les diagrammes Mermaid en SVG/PNG |
+| `download-model` | GGUF from HuggingFace |
+| `diagrams` | Esporta i diagrammi Mermaid in SVG/PNG |
 
 ### Déploiement PM2
 
 ```bash
-./start.sh   # lance llm-server + llm-client sous PM2
+./start.sh   # avvia llm-server + llm-client sotto PM2
 ```
 
 ---
 
 ## Conclusione
 
-Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
+Luna Protocol non è solo un bot Discord con un LLM. È un **sistema comportamentale completo** che simula le imperfezioni umane: gli obli, gli errori di digitazione, il sonno, le esitazioni, la fatica. Il tutto architettato attorno a un bus di eventi tipizzato, con 24 diagrammi Mermaid che documentano ogni flusso.
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
+Il codice è open source, il dataset è pubblico, e la configurazione è hot-reloadable. Se l'argomento vi interessa, immergetevi nel codice -- è più accessibile di quanto sembri.
 
-| Ressource | Lien |
+| Risorse | Link |
 |-----------|------|
-| Dépôt GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| Repository GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |

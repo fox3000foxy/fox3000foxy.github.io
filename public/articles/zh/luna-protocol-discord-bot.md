@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JscRarONTPuqLmtJjx3Oh+K2FOPD+O3ivcpoUVGDTparGdwQkqVip/bEjTVm+R7wZFLIyYie2rA0RrE2NjvQiw=="
+author_sig: "01QY1EWYTydHOWsGEAqGP6AFhiqJ4oy79voej5VT/1c0X3Iyak44lmMxhkuu9EwArhfBMf9c7H5H/ANt/BQQkg=="
 ---
 
 # Luna Protocol: 我创建了一个模拟人类的自主Discord机器人
@@ -25,12 +25,12 @@ author_sig: "JscRarONTPuqLmtJjx3Oh+K2FOPD+O3ivcpoUVGDTparGdwQkqVip/bEjTVm+R7wZFL
 
 ## 架构：类型化事件总线
 
-Luna的核心是**TypedBus** -- 一个强类型的通用事件总线(TypeScript)。它是所有功能的基础构建块。
+Luna的核心是**类型dBus** -- 一个强类型的通用事件总线(类型Script)。它是所有功能的基础构建块。
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
 
-export class TypedBus<Events extends EventMap> {
+export class 类型dBus<Events extends EventMap> {
   private listeners = new Map<keyof Events, Set<(...args: unknown[]) => void>>();
 
   on<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): void {
@@ -54,7 +54,7 @@ export class TypedBus<Events extends EventMap> {
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   core/bus.ts                        │
-│  TypedBus<K, V> -- on / off / once / emit            │
+│  类型dBus<K, V> -- on / off / once / emit            │
 ├──────────────────┬──────────────────────────────────┤
 │   core/llm-bus   │       state/state-bus             │
 │  token / done /  │     state:changed                 │
@@ -79,28 +79,28 @@ export class TypedBus<Events extends EventMap> {
 
 ---
 
-![Message Processing -- flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
+![Message Processing -- 消息处理的完整流程](/images/luna-protocol/02-message-processing.svg)
 
 ## 触发系统：谁决定Luna何时回复
 
-Chaque message entrant est évalué par `evaluateMessage()` qui retourne un `TriggerResult` avec une raison de déclenchement. L'ordre de priorité est critique :
+每条传入消息都由`evaluateMessage()`评估，该函数返回带有触发原因的`TriggerResult`。优先顺序至关重要：
 
-| # | Raison | Conditions | Bypass ignore | Bypass pause |
+| # | 原因 | 条件 | Bypass ignore | Bypass pause |
 |---|--------|-----------|---------------|--------------|
-| 1 | `mention` | @bot | Oui (0%) | Oui |
-| 2 | `dm` | MP avec `replyInDM = true` | Oui (0%) | Non |
-| 3 | `name` | "Luna"/"Pixie"/alias (mot entier) | Non (8%) | Non |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (mot entier) | Non (8%) | Non |
-| 5 | `follow-up` | Bot était dernier locuteur + < 15s + < 3 / 60s | -- | -- |
-| 6 | `random` | 1.5% de chance sur les messages non correspondants | Non (8%) | Non |
+| 1 | `mention` | @bot | 是 (0%) | 是 |
+| 2 | `dm` | 私信 (`replyInDM = true`) | 是 (0%) | 否 |
+| 3 | `name` | "Luna"/"Pixie"/alias (整词) | 否 (8%) | 否 |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (整词) | 否 (8%) | 否 |
+| 5 | `follow-up` | Bot是最后发言者 + < 15秒 + < 3 / 60秒 | -- | -- |
+| 6 | `random` | 不匹配消息的1.5%概率 | 否 (8%) | 否 |
 
-Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai", "lait".
+匹配是**整词匹配** (`\b`) : "ai"不匹配"mais"、"vrai"、"lait".
 
-![Trigger evaluation -- décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+![Trigger evaluation -- 每条消息的入口决策](/images/luna-protocol/03-trigger-evaluation.svg)
 
 ### 跟进机制
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+当Luna回复消息时，它会注册为`lastSpeaker`。15秒内的后续消息触发**立即**响应 -- 没有计时器，没有关键词检查。预算：60秒窗口内3个跟进。
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -119,9 +119,9 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 
 ## 人类行为：可变注意力
 
-C'est ici que Luna devient intéressante. Chaque type de déclenchement a ses propres **seuils de concentration** : un délai min/max, une chance d'ignorer, et une chance de réagir.
+这就是Luna变得有趣的地方。每种触发类型都有自己的**注意力阈值**：最小/最大延迟、忽略概率和反应概率。
 
-| Trigger | Délai min | Délai max | Ignore | Réaction |
+| Trigger | 最小延迟 | 最大延迟 | 忽略 | 反应 |
 |---------|----------|----------|--------|----------|
 | `mention` | 300ms | 1500ms | 0% | 8% |
 | `dm` | 400ms | 1800ms | 0% | 5% |
@@ -151,7 +151,7 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // jitter agressif
+  delay *= 0.5 + Math.random() * 1.5; // 激进抖动
   return delay;
 }
 ```
@@ -176,11 +176,11 @@ time_schedules:
     behavior: short
 ```
 
-| Mode | Effet |
+| 模式 | 效果 |
 |------|-------|
-| `sleep` | Seules les mentions et MP passent |
-| `slow` | Délai ×3-5, réactions quasi nulles |
-| `short` | Chance d'ignore +30%, réactions quasi nulles |
+| `sleep` | 仅提及和私信通过 |
+| `slow` | 延迟 ×3-5，反应几乎为零 |
+| `short` | 忽略概率 +30%，反应几乎为零 |
 
 在睡眠期间，Discord状态变为`invisible`。
 
@@ -199,25 +199,25 @@ const azertyAdjacent: Record<string, string[]> = {
 };
 ```
 
-Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
+AZERTY示例： `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
 
 三种纠正风格：
 
-| Style | Comportement |
+| 风格 | 行为 |
 |-------|-------------|
-| `edit` | Édite le message |
-| `message` | Nouveau message : `word*` |
-| `mixed` | 50/50 aléatoire (défaut) |
+| `edit` | 编辑消息 |
+| `message` | 新消息： `word*` |
+| `mixed` | 50/50随机（默认） |
 
 ---
 
 ## 犹豫和遗忘
 
-**Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
+**犹豫**：以填充词开头的概率15% (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
+**遗忘**：即使匹配触发器后，Luna也有3%的概率“忘记”回复。没有消息，没有反应 -- 就像什么都没看到一样。
 
-**Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
+**主题疲劳**：如果一个词在最近10条消息中出现太频繁（阈值：3次），延迟会乘以倍数，忽略概率增加15%。
 
 ---
 
@@ -233,7 +233,7 @@ Exemple AZERTY : `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`
 
 ### 实时流式传输
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+LLM逐行流式传输其响应 (`\n`). 每行被分割成单词，逐一发出 `llmBus.emit("token", word)`. 每个`\n`时，触发`flush`事件 -- 机器人立即发送累积的消息。没有模拟延迟：节奏就是LLM的节奏。
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -261,7 +261,7 @@ function emitWordTokens(chunk: string): void {
 
 ## 自发消息
 
-Toutes les 5 minutes, 12% de chance que Luna poste un message de son propre chef. 服务器通过**线性权重**系统选择：最活跃的服务器比最后一个服务器有N×更多的机会。
+每5分钟，Luna主动发布消息的概率为12%。 服务器通过**线性权重**系统选择：最活跃的服务器比最后一个服务器有N×更多的机会。
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -278,13 +278,13 @@ for (let i = 0; i < ranked.length; i++) {
 
 ## TTS管道：语音消息
 
-Avec 8% de chance, Luna envoie un message vocal au lieu de texte. La pipeline complète :
+有8%的概率，Luna发送语音消息而非文本。完整流程：
 
-1. **Piper TTS** synthétise le texte en WAV
-2. **ffmpeg** convertit en OGG
-3. Le waveform est calculé pour l'aperçu Discord
-4. Le fichier est uploadé via l'API Discord CDN
-5. Le message vocal est envoyé
+1. **Piper TTS** 将文本合成为 WAV
+2. **ffmpeg** 转换为 OGG
+3. 计算波形用于 Discord 预览
+4. 通过 Discord CDN API 上传文件
+5. 发送语音消息
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -301,7 +301,7 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Pipeline -- du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS Pipeline -- 从合成文本到Discord语音消息](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
@@ -317,7 +317,7 @@ export async function sendTextAsVoiceMessage(
 
 ### 自动持久化
 
-Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounce 500ms). Plus besoin d'appels `saveAllState()` manuels. L'état persisté inclut : pendingMessages, paused, cooldowns, timestamps, lastSpeaker, compteurs de follow-up.
+每次状态变更都会在`stateBus`上发出 → 自动保存(debounce 500ms)。不再需要手动调用`saveAllState()`。持久化的状态包括：pendingMessages, paused, cooldowns, timestamps, lastSpeaker, 跟进计数器。
 
 ---
 
@@ -325,7 +325,7 @@ Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounc
 
 `config.yml`一个文件。大多数值**可热重载** -- 更改无需重启即可生效。
 
-| Catégorie | Hot-reload |
+| 类别 | Hot-reload |
 |-----------|-----------|
 | Triggers, keywords, noms | ✅ |
 | Concentration, délais | ✅ |
@@ -347,23 +347,23 @@ export const config = {
 
 ## 数据集：Discord-Dialogues
 
-Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. Des vraies conversations Discord printemps-été 2025, filtrées (PII, ToS, bots, commandes). Apache 2.0.
+模型经过微调的数据集： [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) : **7.3M échanges**, **17M tours**, **140M mots**. 2025年春季-夏季的真实Discord对话，已过滤(PII、ToS、机器人、命令)。Apache 2.0。
 
-| Métrique | Valeur |
+| 指标 | 值 |
 |----------|--------|
-| Échantillons | 7 303 464 |
-| Tours totaux | 16 881 010 |
-| Mots totaux | 139 922 950 |
-| Tokens moyens | 32.8 |
+| 样本数 | 7 303 464 |
+| 总轮次 | 16 881 010 |
+| 总词数 | 139 922 950 |
+| 平均令牌 | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
 使用的量化模型是GGUF（例如`Discord-Hermes-3-8B.Q3_K_M.gguf`）。
 
-![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+![Discord-Dialogues数据集分布](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Complete Lifecycle -- comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
+![Complete Lifecycle -- 从消息到回复的完整机器人行为，包括计时器和边缘情况](/images/luna-protocol/22-complete-lifecycle.svg)
 
 ## 架构图
 
@@ -371,7 +371,7 @@ Le modèle est fine-tuné sur [Discord-Dialogues](https://huggingface.co/dataset
 
 最重要的参数：
 
-| # | Diagramme | Type |
+| # | 图表 | 类型 |
 |---|-----------|------|
 | 01 | Architecture Overview | `graph` |
 | 02 | Message Processing (complet) | `stateDiagram` |
@@ -428,15 +428,15 @@ Luna用表情符号对消息做出反应。使用服务器自定义表情的概�
 
 回复风格根据Luna在频道中的最近活动加权：
 
-| Contexte | messageReference | mentionRepliedUser | Poids |
+| 上下文 | messageReference | mentionRepliedUser | 权重 |
 |----------|-----------------|-------------------|-------|
-| Froid | true | false | 70% |
-| Froid | true | true | 20% |
-| Froid | false | false | 10% |
-| Actif | true | false | 50% |
-| Actif | true | true | 15% |
-| Actif | false | false | 30% |
-| Actif | false | true | 5% |
+| 冷 | true | false | 70% |
+| 冷 | true | true | 20% |
+| 冷 | false | false | 10% |
+| 活跃 | true | false | 50% |
+| 活跃 | true | true | 15% |
+| 活跃 | false | false | 30% |
+| 活跃 | false | true | 5% |
 
 在私信中，`messageReference`始终为`false`。
 
@@ -444,9 +444,9 @@ Luna用表情符号对消息做出反应。使用服务器自定义表情的概�
 
 ## 突发消息
 
-Avec 15% de chance, une réponse est découpée en 2-3 fragments envoyés au rythme humain (1.5-4 secondes entre chaque fragment). Simule quelqu'un qui tape en plusieurs fois.
+有15%的概率，回复被分成2-3个片段，按人类节奏发送（每个片段之间1.5-4秒）。模拟某人分多次打字。
 
-![Timing Gantt -- temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
+![Timing Gantt -- 延迟、反应、LLM流式传输和修正的实际等待时间](/images/luna-protocol/21-timing-gantt.svg)
 
 ---
 
@@ -484,7 +484,7 @@ const startTyping = () => {
 
 ## 崩溃后恢复
 
-Si le LLM crash (processus `llama-server` qui meurt), Luna détecte l'événement via `llmBus.emit("crash", code)` et tente de redémarrer avec un backoff exponentiel. Évite les boucles de redémarrage infini.
+如果LLM崩溃（`llama-server`进程死亡），Luna通过`llmBus.emit("crash", code)`检测事件，并尝试以指数退避重新启动。防止无限重启循环。
 
 ## LLM参数
 
@@ -504,7 +504,7 @@ ubatch: 256
 context: 4096
 ```
 
-Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de threads est auto-détecté via `os.cpus().length`.
+ChatML模板 (`<|im_start|>/<|im_end|>`) est utilisé. 线程数通过 `os.cpus().length`.
 
 ---
 
@@ -513,36 +513,36 @@ Le template ChatML (`<|im_start|>/<|im_end|>`) est utilisé. Le nombre de thread
 ```bash
 npm install
 cp config.example.yml config.yml
-# éditer config.yml
+# 编辑config.yml
 npm run dev                    # dev (hot reload)
 npm run build && npm start     # production
 ```
 
 | Script | Description |
 |--------|-------------|
-| `build` | Bundle CLI autonome |
-| `start` | Lance le bot |
+| `build` | 独立CLI包 |
+| `start` | 启动机器人 |
 | `lint` / `format` / `check` | Biome |
 | `test` | Tests (Bun) |
-| `download-model` | GGUF depuis HuggingFace |
-| `diagrams` | Exporte les diagrammes Mermaid en SVG/PNG |
+| `download-model` | GGUF from HuggingFace |
+| `diagrams` | 将Mermaid图表导出为SVG/PNG |
 
 ### PM2部署
 
 ```bash
-./start.sh   # lance llm-server + llm-client sous PM2
+./start.sh   # 在PM2下启动llm-server + llm-client
 ```
 
 ---
 
 ## 结论
 
-Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
+Luna Protocol 不仅仅是一个带LLM的Discord机器人。它是一个**完整的行为系统**，模拟人类的不完美：遗忘、打字错误、睡眠、犹豫、疲劳。所有这些都围绕类型化事件总线构建，24个Mermaid图表记录每个流程。
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
+代码是开源的，数据集是公开的，配置是热重载的。如果这个主题让你感兴趣，深入代码 -- 它比看起来更容易访问。
 
-| Ressource | Lien |
+| 资源 | 链接 |
 |-----------|------|
-| Dépôt GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| GitHub仓库 | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Map | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |
