@@ -12,7 +12,6 @@ tags:
   - seguridad
 authors:
   - fox3000foxy
-sponsored: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
 author_sig: "3q94wSyi7OvjWNO64t3sUeZNJelLclsn28YAudpkab0EkHRw670ndxwgyXMTnKPtV75lllM8JZKSUs9xJJ4TtA=="
 ---

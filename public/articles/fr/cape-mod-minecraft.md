@@ -12,7 +12,6 @@ tags:
   - securite
 authors:
   - fox3000foxy
-sponsored: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
 author_sig: "dGW8MMQZGCB5Dq5xOf9QCAQeC4dSsK2+CsNVXZLAklvR5WI9iV35PajqWzAPC+w18L+pLylchjTyH6B6cvnXLg=="
 ---

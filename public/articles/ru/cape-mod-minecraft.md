@@ -12,7 +12,6 @@ tags:
   - bezopasnost
 authors:
   - fox3000foxy
-sponsored: true
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
 author_sig: "vfbW6ZqXy069zcqFMnnGzAO8iTcsG9q2Dk+l8FWk7UYJFtW6C5rgCdWfXGwVB+7qGi8i+E+8aWID6gMfdamIlg=="
 ---
