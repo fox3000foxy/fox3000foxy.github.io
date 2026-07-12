@@ -6,8 +6,8 @@ tags:
   - discord-bot
   - llm
   - typescript
-  - ereignisgesteuerte-architektur
-  - kunstliche-intelligenz
+  - event-driven-architecture
+  - artificial-intelligence
   - open-source
 authors:
   - fox3000foxy

@@ -6,7 +6,7 @@ tags:
   - discord-bot
   - llm
   - typescript
-  - event-architecture
+  - event-driven-architecture
   - artificial-intelligence
   - open-source
 authors:
