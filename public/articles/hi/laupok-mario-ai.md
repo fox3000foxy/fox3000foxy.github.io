@@ -1,5 +1,5 @@
 ---
-title: "मैंने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है"
+title: "Laupok ने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है"
 description: "Laupok के प्रोजेक्ट पर गहरी नज़र: एक NEAT-आधारित AI जो सुपर मारियो वर्ल्ड को स्वायत्त रूप से खेलना सीखता है। जेनेटिक एल्गोरिदम, न्यूरल नेटवर्क, न्यूरोएवोल्यूशन ऑफ ऑगमेंटिंग टोपोलॉजीज़, और 4200 लाइनें Lua की।"
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "s/4nmlNRfBHiSOdkOSR8Pd12IOaPyCa5fZGM6Dc+cLuqtPaP8gEtO8T4VJXqA/uQQUbNe1sDcpFlhjsgdmIuxQ=="
+author_sig: "nZHTqLveX4yHDnkfrsrsium9zau8aynHtt/bGDw1lt1cG/oV85KMlq+XW6kvAq1GqBKJKPK95grKNdXOBWSuGQ=="
 ---
 
-# मैंने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है
+# Laupok ने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है
 
 Laupok ने एक कृत्रिम बुद्धिमत्ता बनाई जो **सुपर मारियो वर्ल्ड** को पूरी तरह से स्वायत्त रूप से खेलती है। कोई पूर्व-स्क्रिप्टेड इनपुट नहीं, कोई रिकॉर्डेड फ्रेम नहीं। AI अपने आप सीखता है, यादृच्छिक उत्परिवर्तन और प्राकृतिक चयन के माध्यम से, गेम के लेवल को पूरा करना। यह प्रोजेक्ट **BizHawk** पर चलता है, जो एक मल्टी-प्लेटफॉर्म एम्यूलेटर है, लगभग **4200 लाइनों** की Lua स्क्रिप्ट के माध्यम से।
 

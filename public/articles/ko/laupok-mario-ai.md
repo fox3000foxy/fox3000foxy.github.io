@@ -1,5 +1,5 @@
 ---
-title: "슈퍼 마리오 월드를 혼자서 플레이하는 AI를 만들었다 -- 작동 원리"
+title: "Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리"
 description: "Laupok 프로젝트 심층 분석: 슈퍼 마리오 월드를 자율적으로 플레이하는 NEAT 기반 AI. 유전 알고리즘, 신경망, 증강 토폴로지의 신경 진화, 그리고 4200줄의 Lua."
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GK5/4ANy+fkrFUeA4AugT/vEoR9ZHm6F4G4DGea6JcdIXFZrRDuwN83EYwdL8mNFdtz/kunw/N6SeiCbTEWWTw=="
+author_sig: "BBn0JTONKPlvzEEJOHCp7/pgn+oKCdd4Hyu6TZgv5QrLL9WY3RShyvv3egW+aZk5VSYNQUoY8xAJDclIVojIAQ=="
 ---
 
-# 슈퍼 마리오 월드를 혼자서 플레이하는 AI를 만들었다 -- 작동 원리
+# Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리
 
 Laupok는 **슈퍼 마리오 월드**를 완전히 자율적으로 플레이하는 인공 지능을 만들었다. 사전 정의된 입력도, 녹화된 프레임도 없다. AI는 혼자서, 무작위 돌연변이와 자연 선택을 통해 게임 레벨을 클리어하는 방법을 배운다. 프로젝트는 **BizHawk**라는 멀티 플랫폼 에뮬레이터에서 약 **4200줄**의 Lua 스크립트로 작동한다.
 

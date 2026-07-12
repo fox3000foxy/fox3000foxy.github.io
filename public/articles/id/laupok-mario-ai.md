@@ -1,5 +1,5 @@
 ---
-title: "Saya membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya"
+title: "Laupok membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya"
 description: "Penjelasan mendalam tentang proyek Laupok: AI berbasis NEAT yang belajar bermain Super Mario World secara otonom. Algoritma genetika, jaringan saraf tiruan, neuroevolution of augmenting topologies, dan 4200 baris Lua."
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "X7D9SL0wIvFZyzdnHZGbnzlgVGwbpAehno6TW6L1IhmRqZNBk+G1sZLVwmJ+ko0VUHocREaHDkQHhtIo733EiA=="
+author_sig: "iX3ZPJzm3MSsgbkzbGqDilEjwrG11UcCUOjgxtGlIxIPMTiU1fWhYYmSLtt30ejPBsVSckcW/3xbUdPGOJVDIQ=="
 ---
 
-# Saya membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya
+# Laupok membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya
 
 Laupok membangun kecerdasan buatan yang bermain **Super Mario World** sepenuhnya secara otonom. Tidak ada input yang sudah diatur sebelumnya, tidak ada frame yang direkam. AI itu belajar sendiri, melalui mutasi acak dan seleksi alam, untuk menyelesaikan level-level dalam permainan. Proyek ini berjalan di **BizHawk**, sebuah emulator multi-platform, melalui skrip Lua sekitar **4200 baris**.
 

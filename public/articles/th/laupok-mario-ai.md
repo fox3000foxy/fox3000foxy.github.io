@@ -1,5 +1,5 @@
 ---
-title: "ผมสร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร"
+title: "Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร"
 description: "บทความเชิงลึกเกี่ยวกับโปรเจกต์ของ Laupok: AI ที่ใช้ NEAT เรียนรู้การเล่น Super Mario World ได้อย่างอิสระ อัลกอริทึมพันธุกรรม โครงข่ายประสาทเทียม การวิวัฒน์โครงข่ายประสาทแบบเพิ่มขยาย และ Lua 4200 บรรทัด"
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NRn8R4efQrIJa8Mp5ewMkv1sXNCuLkRngLzEpMq9hbOeMuzi7yNG7wnM3Y/9meDij6xfEKOKdvrtLzXmaNdQRQ=="
+author_sig: "tDBgjMK3WUmWKqGwbtsgEF06sVA6EBUzVgfBV7d74aQsrw3lq2xRIXI3PsslLPj3OWetYi/NUhGPNhyhKa+lFw=="
 ---
 
-# ผมสร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร
+# Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร
 
 Laupok สร้างปัญญาประดิษฐ์ที่เล่น **Super Mario World** ได้อย่างสมบูรณ์แบบอิสระ ไม่มีการบันทึกอินพุตล่วงหน้า ไม่มีเฟรมที่บันทึกไว้ AI เรียนรู้ด้วยตัวเอง ผ่านการกลายพันธุ์แบบสุ่มและการคัดเลือกโดยธรรมชาติ เพื่อผ่านด่านต่างๆ ของเกม โปรเจกต์นี้รันบน **BizHawk** ซึ่งเป็นอิมิวเลเตอร์หลายแพลตฟอร์ม ผ่านสคริปต์ Lua ประมาณ **4200 บรรทัด**
 

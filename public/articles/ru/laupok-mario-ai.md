@@ -1,5 +1,5 @@
 ---
-title: "Я создал ИИ, который играет в Super Mario World сам -- как это работает"
+title: "Laupok создал ИИ, который играет в Super Mario World сам -- как это работает"
 description: "Подробный разбор проекта Laupok: ИИ на основе алгоритма NEAT, который учится играть в Super Mario World автономно. Генетические алгоритмы, нейронные сети, нейроэволюция расширяющих топологий и 4200 строк на Lua."
 date: 2026-07-11
 tags:
@@ -13,10 +13,10 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "R81rjVGk4kdWENonqP+IvimGXGlIm2Z2WCic9AipAspJoc0ZXked+HcuDRFhf10ygfSBpz69I1UlPaG3mW+5nQ=="
+author_sig: "yoOcfS5J3bvJocmuO1BFZhUz4JMu9q0BwgvRQMKghgWKbETgvtc3BsW7Hu4BoV4iWWw895kBIHLjGv7qPW3N3Q=="
 ---
 
-# Я создал ИИ, который играет в Super Mario World сам -- как это работает
+# Laupok создал ИИ, который играет в Super Mario World сам -- как это работает
 
 Laupok создал искусственный интеллект, который играет в **Super Mario World** полностью автономно. Без заранее запрограммированных входных данных, без записанных кадров. ИИ учится сам, через случайные мутации и естественный отбор, проходить уровни игры. Проект работает на **BizHawk** -- мультиплатформенном эмуляторе -- с помощью Lua-скрипта объёмом около **4200 строк**.
 
