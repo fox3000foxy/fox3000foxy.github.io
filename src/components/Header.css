@@ -168,20 +168,20 @@ header nav a:hover {
   }
 
   .nav-dropdown-toggle {
-    font-size: 1rem;
-    margin: 0.5rem 0;
-    width: 100%;
+    display: none;
   }
 
   .nav-dropdown-menu {
+    display: block;
     position: static;
     border: none;
     box-shadow: none;
-    padding-left: 1rem;
+    padding-left: 0;
   }
 
   .nav-dropdown-menu a {
     margin: 0.25rem 0;
+    white-space: normal;
   }
 
   .lang-select {
