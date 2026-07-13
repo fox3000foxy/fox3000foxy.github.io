@@ -22,14 +22,24 @@ function main() {
 	];
 
 	const bySlug = new Map<string, { date?: string; langs: Set<string> }>();
-	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
+	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), {
+		withFileTypes: true,
+	});
 	for (const entry of langs) {
-		if (!entry.isDirectory()) { continue; }
+		if (!entry.isDirectory()) {
+			continue;
+		}
 		const lang = entry.name;
 		const indexPath = path.join(root, ARTICLES_DIR, lang, "index.json");
-		if (!fs.existsSync(indexPath)) { continue; }
-		const articles: ArticleMeta[] = JSON.parse(fs.readFileSync(indexPath, "utf8"));
-		if (!Array.isArray(articles)) { continue; }
+		if (!fs.existsSync(indexPath)) {
+			continue;
+		}
+		const articles: ArticleMeta[] = JSON.parse(
+			fs.readFileSync(indexPath, "utf8")
+		);
+		if (!Array.isArray(articles)) {
+			continue;
+		}
 		for (const a of articles) {
 			if (!bySlug.has(a.slug)) {
 				bySlug.set(a.slug, { date: a.date, langs: new Set() });

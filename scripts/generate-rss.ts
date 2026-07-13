@@ -16,11 +16,13 @@ interface ArticleMeta {
 const LANG_META: Record<string, { title: string; description: string }> = {
 	en: {
 		title: "Fox's Blog",
-		description: "Fox3000foxy's blog about web development, automation, and open-source",
+		description:
+			"Fox3000foxy's blog about web development, automation, and open-source",
 	},
 	fr: {
 		title: "Fox's Blog",
-		description: "Le blog de Fox3000foxy sur le développement web, l'automatisation et l'open-source",
+		description:
+			"Le blog de Fox3000foxy sur le développement web, l'automatisation et l'open-source",
 	},
 	zh: {
 		title: "Fox's Blog",
@@ -28,7 +30,8 @@ const LANG_META: Record<string, { title: string; description: string }> = {
 	},
 	ja: {
 		title: "Fox's Blog",
-		description: "Fox3000foxyのブログ -- Web開発、自動化、オープンソースについて",
+		description:
+			"Fox3000foxyのブログ -- Web開発、自動化、オープンソースについて",
 	},
 	ko: {
 		title: "Fox's Blog",
@@ -36,23 +39,28 @@ const LANG_META: Record<string, { title: string; description: string }> = {
 	},
 	tr: {
 		title: "Fox'un Blogu",
-		description: "Fox3000foxy'nin web geliştirme, otomasyon ve açık kaynak blogu",
+		description:
+			"Fox3000foxy'nin web geliştirme, otomasyon ve açık kaynak blogu",
 	},
 	it: {
 		title: "Fox's Blog",
-		description: "Il blog di Fox3000foxy su sviluppo web, automazione e open-source",
+		description:
+			"Il blog di Fox3000foxy su sviluppo web, automazione e open-source",
 	},
 	de: {
 		title: "Fox's Blog",
-		description: "Fox3000foxys Blog über Webentwicklung, Automatisierung und Open-Source",
+		description:
+			"Fox3000foxys Blog über Webentwicklung, Automatisierung und Open-Source",
 	},
 	ru: {
 		title: "Fox's Blog",
-		description: "Блог Fox3000foxy о веб-разработке, автоматизации и открытом исходном коде",
+		description:
+			"Блог Fox3000foxy о веб-разработке, автоматизации и открытом исходном коде",
 	},
 	es: {
 		title: "Fox's Blog",
-		description: "El blog de Fox3000foxy sobre desarrollo web, automatización y código abierto",
+		description:
+			"El blog de Fox3000foxy sobre desarrollo web, automatización y código abierto",
 	},
 };
 
@@ -76,18 +84,18 @@ function generateFeed(lang: string, articles: ArticleMeta[]): string {
 	);
 
 	const meta = LANG_META[lang] || LANG_META.en;
-	const feedUrl = lang === "en" ? `${SITE_URL}/feed.xml` : `${SITE_URL}/${lang}/feed.xml`;
+	const feedUrl =
+		lang === "en" ? `${SITE_URL}/feed.xml` : `${SITE_URL}/${lang}/feed.xml`;
 	const siteLink = SITE_URL;
 
-	const items = sorted.map(
-		(article) => {
-			const slug = article.slug;
-			const link = `${SITE_URL}/blog/${encodeURIComponent(slug)}`;
-			const pubDate = article.date ? toRssDate(article.date) : "";
-			const tags = article.tags || [];
-			const title = article.title || slug;
+	const items = sorted.map((article) => {
+		const slug = article.slug;
+		const link = `${SITE_URL}/blog/${encodeURIComponent(slug)}`;
+		const pubDate = article.date ? toRssDate(article.date) : "";
+		const tags = article.tags || [];
+		const title = article.title || slug;
 
-			return `
+		return `
     <item>
       <title>${escapeXml(title)}</title>
       <link>${escapeXml(link)}</link>
@@ -96,8 +104,7 @@ function generateFeed(lang: string, articles: ArticleMeta[]): string {
       <pubDate>${pubDate}</pubDate>
       ${tags.map((t) => `      <category>${escapeXml(t)}</category>`).join("\n")}
     </item>`;
-		}
-	);
+	});
 
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -125,11 +132,17 @@ function main() {
 	const root = process.cwd();
 	const langs: { lang: string; articles: ArticleMeta[] }[] = [];
 
-	const entries = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
+	const entries = fs.readdirSync(path.join(root, ARTICLES_DIR), {
+		withFileTypes: true,
+	});
 	for (const entry of entries) {
-		if (!entry.isDirectory()) { continue; }
+		if (!entry.isDirectory()) {
+			continue;
+		}
 		const indexPath = path.join(root, ARTICLES_DIR, entry.name, "index.json");
-		if (!fs.existsSync(indexPath)) { continue; }
+		if (!fs.existsSync(indexPath)) {
+			continue;
+		}
 		const raw = fs.readFileSync(indexPath, "utf8");
 		const articles: ArticleMeta[] = JSON.parse(raw);
 		if (Array.isArray(articles)) {
@@ -139,7 +152,10 @@ function main() {
 
 	for (const { lang, articles } of langs) {
 		const feed = generateFeed(lang, articles);
-		const outDir = lang === "en" ? path.join(root, OUTPUT_DIR) : path.join(root, OUTPUT_DIR, lang);
+		const outDir =
+			lang === "en"
+				? path.join(root, OUTPUT_DIR)
+				: path.join(root, OUTPUT_DIR, lang);
 		fs.mkdirSync(outDir, { recursive: true });
 		const outPath = path.join(outDir, "feed.xml");
 		fs.writeFileSync(outPath, feed);

@@ -138,9 +138,9 @@
 			"style": {
 				"noShoutyConstants": "warn",
 				"noNonNullAssertion": "off",
-			"useNamingConvention": {
-				"level": "off",
-				"options": {
+				"useNamingConvention": {
+					"level": "off",
+					"options": {
 						"conventions": [
 							{
 								"selector": {

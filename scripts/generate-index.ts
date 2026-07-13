@@ -23,7 +23,10 @@ function estimateReadingTime(text: string): number {
 	return Math.max(1, Math.ceil(words / 150));
 }
 
-function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: string } {
+function parseFrontMatter(text: string): {
+	meta: Partial<ArticleMeta>;
+	content: string;
+} {
 	const meta: Partial<ArticleMeta> = {};
 	let content = text;
 
@@ -46,7 +49,7 @@ function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: 
 	return { meta, content };
 }
 
-	function main() {
+function main() {
 	const root = process.cwd();
 	const articlesDir = path.join(root, "public/articles");
 
@@ -56,7 +59,9 @@ function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: 
 
 	// Build English index first so other languages can fall back
 	const enPath = path.join(articlesDir, "en");
-	const enFiles = fs.readdirSync(enPath).filter((f) => f.endsWith(".md") && f !== "index.json");
+	const enFiles = fs
+		.readdirSync(enPath)
+		.filter((f) => f.endsWith(".md") && f !== "index.json");
 	const enArticles: ArticleMeta[] = [];
 	for (const file of enFiles) {
 		const slug = file.replace(/\.md$/, "");
@@ -70,14 +75,18 @@ function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: 
 	for (const entry of langDirs) {
 		const lang = entry.name;
 		const langPath = path.join(articlesDir, lang);
-		const files = fs.readdirSync(langPath).filter((f) => f.endsWith(".md") && f !== "index.json");
+		const files = fs
+			.readdirSync(langPath)
+			.filter((f) => f.endsWith(".md") && f !== "index.json");
 
 		// Read existing index.json to preserve metadata for articles without front matter yet
 		const indexPath = path.join(langPath, "index.json");
 		let existing: ArticleMeta[] = [];
 		try {
 			existing = JSON.parse(fs.readFileSync(indexPath, "utf8"));
-			if (!Array.isArray(existing)) existing = [];
+			if (!Array.isArray(existing)) {
+				existing = [];
+			}
 		} catch {
 			existing = [];
 		}
@@ -101,15 +110,25 @@ function parseFrontMatter(text: string): { meta: Partial<ArticleMeta>; content: 
 			for (const [slug, enMeta] of enBySlug) {
 				if (!presentSlugs.has(slug)) {
 					const existingMeta = existingBySlug.get(slug) || {};
-					articles.push({ slug, readingTime: enMeta.readingTime!, ...existingMeta, ...enMeta });
+					articles.push({
+						slug,
+						readingTime: enMeta.readingTime!,
+						...existingMeta,
+						...enMeta,
+					});
 				}
 			}
 		}
 
-		articles.sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());
+		articles.sort(
+			(a, b) =>
+				new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
+		);
 
-		fs.writeFileSync(indexPath, JSON.stringify(articles, null, 2) + "\n");
-		console.log(`Generated index.json for ${lang}: ${articles.length} articles`);
+		fs.writeFileSync(indexPath, `${JSON.stringify(articles, null, 2)}\n`);
+		console.log(
+			`Generated index.json for ${lang}: ${articles.length} articles`
+		);
 	}
 }
 

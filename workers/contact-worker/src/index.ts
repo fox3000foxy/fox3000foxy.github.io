@@ -32,7 +32,7 @@ async function handleRequest(request: Request, ip: string): Promise<Response> {
 		return jsonResponse({ error: "Invalid JSON" }, 400);
 	}
 
-	if (!body.name || !body.email || !body.message) {
+	if (!(body.name && body.email && body.message)) {
 		return jsonResponse({ error: "Missing fields" }, 400);
 	}
 
@@ -45,7 +45,7 @@ async function handleRequest(request: Request, ip: string): Promise<Response> {
 					method: "POST",
 					body: `secret=${TURNSTILE_SECRET_KEY}&response=${turnstileToken}&remoteip=${ip}`,
 					headers: { "Content-Type": "application/x-www-form-urlencoded" },
-				},
+				}
 			);
 			const outcome: { success?: boolean } = await verify.json();
 			if (!outcome.success) {
@@ -99,7 +99,7 @@ function corsHeaders(): Record<string, string> {
 function jsonResponse(
 	data: unknown,
 	status: number,
-	extra?: Record<string, string>,
+	extra?: Record<string, string>
 ): Response {
 	const headers: Record<string, string> = {
 		"Content-Type": "application/json",
