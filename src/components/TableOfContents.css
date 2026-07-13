@@ -86,19 +86,6 @@
   }
 
   .toc {
-    position: static;
-    width: auto;
-    max-height: none;
-    overflow-y: visible;
-    border-left: none;
-    border-bottom: 1px solid var(--border);
-    padding: 0 0 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .toc-link {
-    border-left: none;
-    margin-left: 0;
-    padding-left: 0;
+    display: none;
   }
 }
