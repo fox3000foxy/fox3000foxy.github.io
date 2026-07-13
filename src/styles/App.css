@@ -43,10 +43,20 @@ article {
   max-width: 700px;
 }
 
+.article-content > * {
+  max-width: 100%;
+}
+
 .article-content img {
   max-width: 100%;
   height: auto;
   border-radius: 6px;
+}
+
+.article-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .article-title {
@@ -346,6 +356,8 @@ a.tag-badge:hover {
   border-radius: 0 0 8px 8px;
   border: 1px solid var(--border);
   border-top: none;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .audio-player {
