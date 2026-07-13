@@ -12,7 +12,12 @@ interface ArticleMeta {
 }
 
 function escapeXml(text: string | number): string {
-	return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+	return String(text)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
 }
 
 function main() {
@@ -22,21 +27,38 @@ function main() {
 
 	const urlTags: string[] = [];
 
-	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), { withFileTypes: true });
+	const langs = fs.readdirSync(path.join(root, ARTICLES_DIR), {
+		withFileTypes: true,
+	});
 	for (const entry of langs) {
-		if (!entry.isDirectory()) { continue; }
+		if (!entry.isDirectory()) {
+			continue;
+		}
 		const lang = entry.name;
 		const indexPath = path.join(root, ARTICLES_DIR, lang, "index.json");
-		if (!fs.existsSync(indexPath)) { continue; }
-		const articles: ArticleMeta[] = JSON.parse(fs.readFileSync(indexPath, "utf8"));
-		if (!Array.isArray(articles)) { continue; }
+		if (!fs.existsSync(indexPath)) {
+			continue;
+		}
+		const articles: ArticleMeta[] = JSON.parse(
+			fs.readFileSync(indexPath, "utf8")
+		);
+		if (!Array.isArray(articles)) {
+			continue;
+		}
 		for (const a of articles) {
-			if (!a.date || !a.title) { continue; }
+			if (!(a.date && a.title)) {
+				continue;
+			}
 			const pubDate = new Date(`${a.date}T12:00:00Z`);
-			if (pubDate < twoDaysAgo) { continue; }
+			if (pubDate < twoDaysAgo) {
+				continue;
+			}
 
-			const loc = lang === "en" ? `/blog/${encodeURIComponent(a.slug)}` : `/blog/${encodeURIComponent(a.slug)}?lang=${lang}`;
-		urlTags.push(`  <url>
+			const loc =
+				lang === "en"
+					? `/blog/${encodeURIComponent(a.slug)}`
+					: `/blog/${encodeURIComponent(a.slug)}?lang=${lang}`;
+			urlTags.push(`  <url>
     <loc>${SITE_URL}${loc}</loc>
     <news:news>
       <news:publication>
@@ -59,7 +81,9 @@ ${urlTags.join("\n")}
 	const outPath = path.join(root, OUTPUT);
 	fs.mkdirSync(path.dirname(outPath), { recursive: true });
 	fs.writeFileSync(outPath, sitemap);
-	console.log(`Google News sitemap generated: ${OUTPUT} (${urlTags.length} articles < 48h)`);
+	console.log(
+		`Google News sitemap generated: ${OUTPUT} (${urlTags.length} articles < 48h)`
+	);
 }
 
 main();

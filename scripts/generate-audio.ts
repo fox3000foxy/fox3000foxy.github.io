@@ -59,25 +59,38 @@ function stripMarkdown(md: string): string {
 	return text.trim();
 }
 
-function generateAudio(voice: string, text: string, outputPath: string): boolean {
+function generateAudio(
+	voice: string,
+	text: string,
+	outputPath: string
+): boolean {
 	const tmpFile = path.join(root, `tmp_tts_${Date.now()}.txt`);
 	fs.writeFileSync(tmpFile, text, "utf8");
 
 	try {
-		execSync(`edge-tts --voice "${voice}" -f "${tmpFile}" --write-media "${outputPath}"`, {
-			timeout: 300000,
-			encoding: "utf8",
-			maxBuffer: 100 * 1024 * 1024,
-			stdio: ["ignore", "pipe", "pipe"],
-		});
+		execSync(
+			`edge-tts --voice "${voice}" -f "${tmpFile}" --write-media "${outputPath}"`,
+			{
+				timeout: 300000,
+				encoding: "utf8",
+				maxBuffer: 100 * 1024 * 1024,
+				stdio: ["ignore", "pipe", "pipe"],
+			}
+		);
 		return true;
 	} catch (e: unknown) {
 		const err = e as { stderr?: string; message?: string };
-		console.error(`  ✗ ${err.stderr?.split("\n")[0] || err.message || "unknown error"}`);
-		try { fs.unlinkSync(outputPath); } catch { }
+		console.error(
+			`  ✗ ${err.stderr?.split("\n")[0] || err.message || "unknown error"}`
+		);
+		try {
+			fs.unlinkSync(outputPath);
+		} catch {}
 		return false;
 	} finally {
-		try { fs.unlinkSync(tmpFile); } catch { }
+		try {
+			fs.unlinkSync(tmpFile);
+		} catch {}
 	}
 }
 
@@ -137,7 +150,9 @@ function main() {
 		}
 	}
 
-	console.log(`\nDone: ${totalFiles} files, ${totalOk} ok, ${totalSkip} skipped, ${totalFail} failed`);
+	console.log(
+		`\nDone: ${totalFiles} files, ${totalOk} ok, ${totalSkip} skipped, ${totalFail} failed`
+	);
 }
 
 main();
