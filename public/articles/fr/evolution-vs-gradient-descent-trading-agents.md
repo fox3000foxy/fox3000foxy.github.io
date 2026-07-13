@@ -2,7 +2,7 @@
 title: "J'ai fait évoluer un réseau de neurones par sélection naturelle plutôt que par descente de gradient"
 description: "Comment j'ai remplacé l'entraînement classique par descente de gradient par un algorithme génétique NSGA-II pour faire évoluer des agents DQN de trading : quatre versions, du surapprentissage à l'évolution lamarckienne des poids."
 date: 2026-07-13
-tags: ["machine-learning", "algorithme-génétique", "nsga-ii", "reinforcement-learning", "dqn", "trading-algorithmique", "typescript", "evolutionary-computation"]
+tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
