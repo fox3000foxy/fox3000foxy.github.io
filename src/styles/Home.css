@@ -208,3 +208,13 @@
   border-color: var(--accent);
   color: var(--accent-hover);
 }
+
+@media (max-width: 500px) {
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-signup {
+    padding: 1.5rem 1rem;
+  }
+}
