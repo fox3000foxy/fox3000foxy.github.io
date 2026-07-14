@@ -19,7 +19,7 @@ const slug = Astro.params.slug as string;
 let readme = "";
 if (repo) {
   try {
-    readme = await fetchReadme(repo.name, repo.default_branch);
+    readme = await fetchReadme(repo.name, repo.default_branch, repo.owner);
   } catch {}
 }
 ---
