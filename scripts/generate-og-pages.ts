@@ -112,6 +112,15 @@ function main() {
   let rendered = 0;
   let skipped = 0;
 
+  // Generate default home.png
+  const homeSvg = ogImageSvg("Fox's Blog", "Articles about web development, automation, and open-source", ["blog", "dev", "open-source"]);
+  const homePngPath = path.join(root, OG_DIR, "home.png");
+  if (!fs.existsSync(homePngPath)) {
+    const buf = new Resvg(homeSvg, { fitTo: { mode: "original" } }).render().asPng();
+    fs.writeFileSync(homePngPath, buf);
+    rendered++;
+  }
+
   for (const [slug, info] of bySlug) {
     const svgContent = ogImageSvg(info.title, info.description, info.tags);
     const pngPath = path.join(root, OG_DIR, `${slug}.png`);

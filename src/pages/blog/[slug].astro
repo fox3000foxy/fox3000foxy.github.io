@@ -268,8 +268,8 @@ const extraHead = articleMetaTags + articleJsonLd;
   // Mermaid rendering
   if (document.querySelector('.mermaid')) {
     var s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
-    s.onload = function() { mermaid.initialize({ startOnLoad: true, theme: 'default' }); mermaid.run({ nodes: document.querySelectorAll('.mermaid') }); };
+    s.src = 'https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.min.js';
+    s.onload = function() { mermaid.initialize({ startOnLoad: true }); };
     document.head.appendChild(s);
   }
 })();
