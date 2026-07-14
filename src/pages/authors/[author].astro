@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { readAllArticleIndexes } from "../../lib/langContent";
+import { getAuthor } from "../../utils/authors";
+import type { ArticleMeta } from "../../types";
+import "../../styles/BlogList.css";
+
+export async function getStaticPaths() {
+  const allIndexes = readAllArticleIndexes();
+  const enIndex = (allIndexes.en ?? []) as { authors?: string[]; slug: string }[];
+  const authors = new Set<string>();
+  for (const entry of enIndex) {
+    if (entry.authors) {
+      for (const a of entry.authors) authors.add(a);
+    }
+  }
+  return [...authors].map((author) => ({ params: { author } }));
+}
+
+const { author: authorId } = Astro.params;
+const allIndexes = readAllArticleIndexes();
+const enIndex = (allIndexes.en ?? []) as ArticleMeta[];
+const articles = enIndex
+  .filter((a) => a.authors?.includes(authorId!))
+  .sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());
+
+const authorInfo = getAuthor(authorId!);
+---
+
+<BaseLayout title={authorInfo.name} description={`Articles by ${authorInfo.name}`}>
+  <div class="blog-list">
+    <div class="tag-page-header">
+      <a href="/blog" class="tag-page-back">← Blog</a>
+      <div class="author-page-title">
+        <img class="author-page-avatar" src={authorInfo.avatar ?? `https://github.com/${authorInfo.id}.png`} alt={authorInfo.name} />
+        <h2>{authorInfo.name}</h2>
+      </div>
+    </div>
+    {articles.length > 0 ? (
+      <div class="blog-grid">
+        {articles.map((article) => (
+          <a href={`/blog/${article.slug}`} class="blog-card">
+            <h3>{article.title ?? article.slug}</h3>
+            {article.description && <p>{article.description}</p>}
+            <div class="blog-card-meta">
+              {article.date && <time>{article.date}</time>}
+              {article.tags && article.tags.length > 0 && (
+                <div class="blog-card-tags">
+                  {article.tags.map((tag) => (
+                    <span class="tag-badge">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p>No articles found for this author.</p>
+    )}
+  </div>
+</BaseLayout>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export function useReadingMode() {
 	const [enabled, setEnabled] = useState(
-		() => localStorage.getItem("readingMode") === "true"
+		() => typeof localStorage !== "undefined" && localStorage.getItem("readingMode") === "true"
 	);
 
 	useEffect(() => {

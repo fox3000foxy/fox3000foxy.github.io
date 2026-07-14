@@ -1,52 +1,34 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useNavigate, useParams } from "../lib/navigation";
 import "../styles/BlogList.css";
-import type { ArticleMeta } from "../types";
-import { cacheBust } from "../utils/cacheBust";
 import { useLang } from "../hooks/useLang";
+import type { ArticleMeta } from "../types";
 import BlogCard from "../components/BlogCard";
 
-export default function TagIndex() {
+interface TagIndexProps {
+	allIndexes?: Record<string, unknown[]>;
+}
+
+export default function TagIndex({ allIndexes }: TagIndexProps) {
 	const { tag } = useParams<{ tag: string }>();
 	const { t, lang } = useLang();
 	const navigate = useNavigate();
-	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 
-	useEffect(() => {
+	const articles = useMemo(() => {
 		if (!tag) {
-			return;
+			return [];
 		}
-
-		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
-
-		async function load() {
-			let res = await fetch(cacheBust(indexUrl));
-			if (!res.ok && fallbackUrl) {
-				res = await fetch(cacheBust(fallbackUrl));
-			}
-			if (!res.ok) {
-				return;
-			}
-
-			const data: unknown = await res.json();
-			if (Array.isArray(data)) {
-				// biome-ignore lint/suspicious/noExplicitAny: legacy string format
-				const normalized: ArticleMeta[] = (data as any[]).map(
-					// biome-ignore lint/suspicious/noExplicitAny: legacy string format
-					(item: any) => (typeof item === "string" ? { slug: item } : item)
-				);
-				const filtered = normalized
-					.filter((a) => a.tags?.includes(tag!))
-					.sort(
-						(a, b) =>
-							new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
-					);
-				setArticles(filtered);
-			}
-		}
-		void load();
-	}, [tag, lang]);
+		const data = allIndexes?.[lang] ?? allIndexes?.en ?? [];
+		const normalized = (data as { slug?: string }[]).map((item) =>
+			typeof item === "string" ? { slug: item } : item
+		) as ArticleMeta[];
+		return normalized
+			.filter((a) => a.tags?.includes(tag!))
+			.sort(
+				(a, b) =>
+					new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
+			);
+	}, [allIndexes, lang, tag]);
 
 	return (
 		<div className="blog-list">

@@ -3,24 +3,43 @@ import fs from "node:fs";
 import path from "node:path";
 import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { createT } from "../lib/i18n";
+import { ALL_LANGS, createT } from "../lib/i18n";
 
 const t = createT("en");
-let html = "";
-const mdPath = path.resolve("public/404.md");
-if (fs.existsSync(mdPath)) {
-  html = renderMarkdown(fs.readFileSync(mdPath, "utf-8"));
+
+const allContent: Record<string, string> = {};
+for (const lang of ALL_LANGS) {
+  const filePath = path.resolve(`public/404.${lang}.md`);
+  if (fs.existsSync(filePath)) {
+    allContent[lang] = renderMarkdown(fs.readFileSync(filePath, "utf-8"));
+  }
 }
+if (!allContent["en"]) {
+  const fallback = path.resolve("public/404.md");
+  if (fs.existsSync(fallback)) {
+    allContent["en"] = renderMarkdown(fs.readFileSync(fallback, "utf-8"));
+  }
+}
+const en = allContent["en"] ?? "";
+for (const lang of ALL_LANGS) {
+  if (!allContent[lang]) allContent[lang] = en;
+}
+const redirectScript = `(function(){var ls=${JSON.stringify(ALL_LANGS)};var p=location.pathname;for(var i=0;i<ls.length;i++){var pref='/'+ls[i];if(p===pref||p===pref+'/'){location.replace('/');return}if(p.indexOf(pref+'/')===0){location.replace(p.slice(pref.length));return}}})()`;
 ---
 
 <BaseLayout title="404" description="Page not found">
-  {html ? (
-    <article set:html={html} />
-  ) : (
-    <div>
-      <h2>404</h2>
-      <p>{t("notFound.title")}</p>
-      <p><a href="/">{t("notFound.return")}</a></p>
+  <script set:html={redirectScript} />
+  {ALL_LANGS.map((l) => (
+    <div class="lang-content" data-lang={l}>
+      {allContent[l] ? (
+        <article set:html={allContent[l]} />
+      ) : (
+        <div>
+          <h2>404</h2>
+          <p>{t("notFound.title")}</p>
+          <p><a href="/">{t("notFound.return")}</a></p>
+        </div>
+      )}
     </div>
-  )}
+  ))}
 </BaseLayout>

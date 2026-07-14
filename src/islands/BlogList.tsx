@@ -1,68 +1,40 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "../lib/navigation";
 import "../styles/BlogList.css";
-import {
-	getCachedArticleMarkdown,
-	prefetchArticleMarkdown,
-	prefetchMarkdownEntries,
-} from "../utils/articleCache";
-import { cacheBust } from "../utils/cacheBust";
-import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 import BlogCard from "../components/BlogCard";
+import type { ArticleMeta } from "../types";
 
 const PAGE_SIZE = 15;
 
-export default function BlogList() {
+interface BlogListProps {
+	allIndexes?: Record<string, unknown[]>;
+}
+
+function normalizeArticles(data: unknown[]): ArticleMeta[] {
+	return (data as { slug?: string }[]).map((item) =>
+		typeof item === "string" ? { slug: item } : item
+	) as ArticleMeta[];
+}
+
+export default function BlogList({ allIndexes }: BlogListProps) {
 	const { t, lang } = useLang();
 	const navigate = useNavigate();
-	const [articles, setArticles] = useState<ArticleMeta[]>([]);
 	const [activeTag, setActiveTag] = useState<string | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [page, setPage] = useState(0);
 
-	useEffect(() => {
-		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
-
-		async function load() {
-			let res = await fetch(cacheBust(indexUrl));
-			if (!res.ok && fallbackUrl) {
-				res = await fetch(cacheBust(fallbackUrl));
-			}
-			if (!res.ok) {
-				setArticles([]);
-				return;
-			}
-
-			const data: unknown = await res.json();
-			if (Array.isArray(data)) {
-				// biome-ignore lint/suspicious/noExplicitAny: legacy string format
-				const normalized: ArticleMeta[] = (data as any[]).map((item) =>
-					typeof item === "string" ? { slug: item } : item
-				);
-				normalized.sort(
-					(a, b) =>
-						new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
-				);
-				setArticles(normalized);
-
-				const slugs = normalized.map((item) => item.slug).filter(Boolean);
-				prefetchArticleMarkdown(slugs, lang);
-				if (lang !== "en") {
-					prefetchArticleMarkdown(slugs, "en");
-				}
-
-				prefetchMarkdownEntries([
-					{ key: "home", url: "/home.md" },
-					{ key: "portfolio", url: "/portfolio.md" },
-				]);
-			} else {
-				setArticles([]);
-			}
-		}
-		void load();
-	}, [lang]);
+	const langArticles = allIndexes?.[lang] ?? allIndexes?.en ?? [];
+	const enArticles = allIndexes?.en ?? [];
+	const articles = useMemo(() => {
+		const raw = langArticles.length > 0 ? langArticles : enArticles;
+		const list = normalizeArticles(raw);
+		list.sort(
+			(a, b) =>
+				new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
+		);
+		return list;
+	}, [langArticles, enArticles]);
 
 	const query = searchQuery.toLowerCase().trim();
 
@@ -80,17 +52,13 @@ export default function BlogList() {
 				if (!query) {
 					return true;
 				}
-				const text =
-					getCachedArticleMarkdown(a.slug, lang) ??
-					getCachedArticleMarkdown(a.slug, "en");
 				return (
 					a.title?.toLowerCase().includes(query) ||
 					a.description?.toLowerCase().includes(query) ||
-					a.tags?.some((t) => t.toLowerCase().includes(query)) ||
-					(text?.toLowerCase().includes(query) ?? false)
+					a.tags?.some((t) => t.toLowerCase().includes(query))
 				);
 			}),
-		[articles, activeTag, query, lang]
+		[articles, activeTag, query]
 	);
 
 	const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
@@ -100,25 +68,20 @@ export default function BlogList() {
 		(safePage + 1) * PAGE_SIZE
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: reset page when filters change
-	useEffect(() => {
-		setPage(0);
-	}, [activeTag, searchQuery]);
-
-	function randomArticle() {
-		if (filtered.length === 0) {
-			return;
-		}
-		const slug = filtered[Math.floor(Math.random() * filtered.length)].slug;
-		void navigate(`/blog/${slug}`);
-	}
-
 	return (
 		<div className="blog-list">
 			<div className="blog-list-header">
 				<h2>{t("blog.title")}</h2>
 				{filtered.length > 0 && (
-					<button type="button" className="random-btn" onClick={randomArticle}>
+					<button
+						type="button"
+						className="random-btn"
+						onClick={() => {
+							const slug =
+								filtered[Math.floor(Math.random() * filtered.length)].slug;
+							void navigate(`/blog/${slug}`);
+						}}
+					>
 						🎲 {t("blog.random")}
 					</button>
 				)}
@@ -129,7 +92,10 @@ export default function BlogList() {
 					type="search"
 					placeholder={t("blog.search")}
 					value={searchQuery}
-					onChange={(e) => setSearchQuery(e.target.value)}
+					onChange={(e) => {
+						setSearchQuery(e.target.value);
+						setPage(0);
+					}}
 				/>
 				{searchQuery && (
 					<button
@@ -148,7 +114,10 @@ export default function BlogList() {
 					<button
 						type="button"
 						className={`tag-btn${activeTag === null ? " active" : ""}`}
-						onClick={() => setActiveTag(null)}
+						onClick={() => {
+							setActiveTag(null);
+							setPage(0);
+						}}
 					>
 						{t("blog.filter.all")}
 					</button>
@@ -157,7 +126,10 @@ export default function BlogList() {
 							type="button"
 							key={tag}
 							className={`tag-btn${activeTag === tag ? " active" : ""}`}
-							onClick={() => setActiveTag(tag)}
+							onClick={() => {
+								setActiveTag(tag);
+								setPage(0);
+							}}
 						>
 							{tag}
 						</button>
