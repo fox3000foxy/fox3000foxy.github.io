@@ -1,8 +1,67 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ProjectList from "../islands/ProjectList.tsx";
+
+interface Repo {
+  name: string;
+  description: string;
+  html_url: string;
+  stargazers_count: number;
+  fork: boolean;
+  language: string;
+  pushed_at: string;
+}
+
+let repos: Repo[] = [];
+try {
+  const res = await fetch("https://api.github.com/users/fox3000foxy/repos?sort=updated&per_page=50");
+  if (res.ok) {
+    const all: Repo[] = await res.json();
+    repos = all.filter((r) => !r.fork);
+  }
+} catch {}
 ---
 
 <BaseLayout title="Projects" description="My open-source projects" wide>
-  <ProjectList client:only="react" />
+  <div class="projects-page">
+    <h1>Projects</h1>
+    {repos.length === 0 ? (
+      <p>Loading projects from GitHub... (build-time fetch failed)</p>
+    ) : (
+      <div class="projects-grid">
+        {repos.map((repo) => (
+          <a href={`/projects/${repo.name}`} class="project-card">
+            <h3>{repo.name}</h3>
+            {repo.description && <p>{repo.description}</p>}
+            <div class="project-meta">
+              {repo.language && <span class="project-lang">{repo.language}</span>}
+              <span class="project-stars">★ {repo.stargazers_count}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
 </BaseLayout>
+
+<style>
+  .projects-page { max-width: 960px; margin: 0 auto; }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .project-card {
+    display: block;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s;
+  }
+  .project-card:hover { border-color: var(--accent); }
+  .project-card h3 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--accent); }
+  .project-card p { margin: 0 0 0.75rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+  .project-meta { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-dim); }
+</style>

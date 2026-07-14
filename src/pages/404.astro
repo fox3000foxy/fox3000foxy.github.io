@@ -1,8 +1,26 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import NotFound from "../islands/NotFound.tsx";
+import { createT } from "../lib/i18n";
+
+const t = createT("en");
+let html = "";
+const mdPath = path.resolve("public/404.md");
+if (fs.existsSync(mdPath)) {
+  html = renderMarkdown(fs.readFileSync(mdPath, "utf-8"));
+}
 ---
 
-<BaseLayout title="404" description="Page not found" wide>
-  <NotFound client:only="react" />
+<BaseLayout title="404" description="Page not found">
+  {html ? (
+    <article set:html={html} />
+  ) : (
+    <div>
+      <h2>404</h2>
+      <p>{t("notFound.title")}</p>
+      <p><a href="/">{t("notFound.return")}</a></p>
+    </div>
+  )}
 </BaseLayout>

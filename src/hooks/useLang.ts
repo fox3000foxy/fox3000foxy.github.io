@@ -12,6 +12,12 @@ import { translations } from "../i18n";
 const LANG_KEY = "fox-blog-lang";
 
 function detectLang(): Lang {
+	if (typeof window !== "undefined") {
+		const match = window.location.pathname.match(/^\/([a-z]{2})\//);
+		if (match && ALL_LANGS.includes(match[1] as Lang)) {
+			return match[1] as Lang;
+		}
+	}
 	if (typeof localStorage !== "undefined") {
 		const stored = localStorage.getItem(LANG_KEY) as Lang | null;
 		if (stored && ALL_LANGS.includes(stored)) {
