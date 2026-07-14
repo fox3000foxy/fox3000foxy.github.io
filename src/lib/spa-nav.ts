@@ -294,46 +294,58 @@ async function navigate(url: string, isPopState = false) {
 	}
 }
 
+function closeMobileMenu() {
+  const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("nav-menu");
+  const navDropdown = document.getElementById("nav-dropdown");
+  
+  hamburger?.classList.remove("open");
+  navMenu?.classList.remove("open");
+  navDropdown?.classList.remove("open");
+}
+
 function handleClick(e: MouseEvent) {
-	if (
-		e.defaultPrevented ||
-		e.button !== 0 ||
-		e.metaKey ||
-		e.ctrlKey ||
-		e.shiftKey ||
-		e.altKey
-	) {
-		return;
-	}
+  if (
+    e.defaultPrevented ||
+    e.button !== 0 ||
+    e.metaKey ||
+    e.ctrlKey ||
+    e.shiftKey ||
+    e.altKey
+  ) {
+    return;
+  }
 
-	const link = (e.target as Element).closest("a");
-	if (!link) {
-		return;
-	}
-	if (shouldSkip(link as HTMLAnchorElement)) {
-		return;
-	}
+  const link = (e.target as Element).closest("a");
+  if (!link) {
+    return;
+  }
+  if (shouldSkip(link as HTMLAnchorElement)) {
+    return;
+  }
 
-	e.preventDefault();
-	const href = (link as HTMLAnchorElement).getAttribute("href")!;
-	const url = new URL(href, location.origin).href;
+  e.preventDefault();
+  const href = (link as HTMLAnchorElement).getAttribute("href")!;
+  const url = new URL(href, location.origin).href;
 
-	if (url === location.href) {
-		const hash = new URL(url).hash;
-		if (hash) {
-			const target = document.querySelector(hash);
-			if (target) {
-				target.scrollIntoView({ behavior: "smooth" });
-			}
-		}
-		return;
-	}
+  if (url === location.href) {
+    const hash = new URL(url).hash;
+    if (hash) {
+      const target = document.querySelector(hash);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+    return;
+  }
 
-	void navigate(url);
+  closeMobileMenu();
+  void navigate(url);
 }
 
 function handlePopState() {
-	void navigate(location.href, true);
+  closeMobileMenu();
+  void navigate(location.href, true);
 }
 
 export function initSpaNav() {
