@@ -14,7 +14,7 @@ También me encanta encontrar soluciones para no pagar por cosas que son de pago
 
 Ahora programo principalmente en TypeScript y React, pero antes programaba launchers en HTML, CSS y JavaScript puro. También sé Python, C# (que odio), Java (raro, lo uso para programar plugins de Minecraft para [Eminium Games](https://github.com/Eminium-Games/)). Sé un poco de C++ pero ya no recuerdo cómo programar con él. Y estoy aprendiendo C con el proyecto [bareiron](https://github.com/p2r3/bareiron). Y así sucesivamente, no sé Rust ni Go por ahora, pero me gustaría aprender.
 
-También tengo algunas nociones de dibujo, pero no soy muy bueno, lo hago solo por diversión. También hago un poco de producción musical, pero no soy muy bueno tampoco, lo hago solo por diversión también. También tengo algunas nociones de edición de video, pero no soy muy bueno tampoco.
+También tengo algunas nociones de dibujo, producción musical y edición de video — pero no soy muy bueno en ninguna, solo las hago por diversión.
 
 Uso frameworks y bibliotecas como Node.js, Express.js, React, Discord.js, y más. También uso herramientas como Git, Docker, y distribuciones Linux como Debian, Arch Linux y Ubuntu. También tengo conocimientos en bases de datos como MongoDB y MySQL.
 

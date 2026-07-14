@@ -14,7 +14,7 @@ Saya juga suka menemukan cara untuk tidak membayar hal-hal yang dibayar, atau ya
 
 Jadi, saya sebagian besar menulis kode dalam TypeScript dan React sekarang, tapi di masa lalu saya menulis launcher dalam HTML, CSS, dan JavaScript murni. Crazy? Saya pernah gila! Mereka memasukkanku ke dalam ruangan. Nahhh saya tidak benar. Saya juga tahu Python, C#, tapi saya benci, Java, tapi jarang, sekarang saya menggunakan untuk kode Minecraft plugin untuk Eminium Games. Saya tahu C++ dari waktu lalu tapi tidak bisa menulis kode dalam bahasa itu. Saya juga sedang belajar C dengan proyek bareiron. Dan seterusnya, saya tidak tahu Rust atau Go pada saat ini, tapi saya ingin belajar.
 
-Saya juga memiliki pengetahuan dalam menggambar, tapi saya tidak benar-benar baik di dalamnya, saya hanya melakukannya untuk kesenangan. Saya juga melakukan produksi musik, tapi saya tidak benar-benar baik di dalamnya juga, saya hanya melakukannya untuk kesenangan juga. Saya juga memiliki pengetahuan dalam editing video, tapi saya tidak benar-benar baik di dalamnya juga, saya hanya melakukannya untuk kesenangan juga.
+Saya juga memiliki pengetahuan dalam menggambar, produksi musik, dan editing video — tapi saya tidak benar-benar baik di dalamnya, saya hanya melakukannya untuk kesenangan.
 
 Saya menggunakan beberapa framework dan library seperti Node.js, Express.js, React, Discord.js, dan lain-lain. Saya juga menggunakan beberapa tools seperti Git, Docker, dan distribusi Linux seperti Debian, Arch Linux, dan Ubuntu. Saya juga memiliki pengetahuan dalam database seperti MongoDB dan MySQL.
 

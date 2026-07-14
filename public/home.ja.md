@@ -14,7 +14,7 @@
 
 今は主に TypeScript と React でコードを書いてるけど、昔は生の HTML、CSS、JavaScript でランチャーを書いてた。Python、C#（大嫌い）、Java（たまに [Eminium Games](https://github.com/Eminium-Games/) の Minecraft プラグインを書くのに使う）もできる。C++ も少しできるけど、今はもう書き方を忘れちゃった。そして [bareiron](https://github.com/p2r3/bareiron) プロジェクトで C を勉強中。そんな感じで、今は Rust も Go もできないけど、いつか覚えたい。
 
-絵を描くのも少しできるけど、上手じゃないよ。ただの趣味。音楽制作もちょっとやるけど、それも上手じゃない。ただの趣味。動画編集も少しできるけど、それも上手じゃない。
+絵を描くのと、音楽制作と、動画編集が少しできるけど、どれも上手じゃない。ただの趣味。
 
 使ってるフレームワークやライブラリは Node.js、Express.js、React、Discord.js など。ツールは Git、Docker、Debian、Arch Linux、Ubuntu などの Linux ディストリビューションを使ってる。データベースは MongoDB と MySQL の知識がある。
 

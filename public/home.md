@@ -14,7 +14,7 @@ I also love to find workarounds to not pay things that are paid, or that you wou
 
 So I mainly code in Typescript and React now, but back in time I was coding launchers in pure HTML, CSS and JavaScript. Crazy? I was crazy once! They put me in a room. Nahhh I'm kinding. I also know Python, C# but i hate it, Java, but it's rare, now I use it to code Minecraft plugins for [Eminium Games](https://github.com/Eminium-Games/). I know C++ from a while but can't code in it actually. Also I'm learning C with the [bareiron project](https://github.com/p2r3/bareiron). And so on, I don't know Rust or Go at the moment, but I would enjoy to learn.
 
-I do also have some knowledge in drawing, but I'm not really good at it, I just do it for fun. I also do some music production, but I'm not really good at it either, I just do it for fun as well. I also have some knowledge in video editing, but I'm not really good at it either, I just do it for fun as well.
+I also have some knowledge in drawing, music production, and video editing — but I'm not particularly good at any of them, I just do them for fun.
 
 I use some frameworks and libraries like Node.js, Express.js, React, Discord.js, and more. I also use some tools like Git, Docker, and Linux distributions like Debian, Arch Linux and Ubuntu. I also have some knowledge in databases like MongoDB and MySQL.
 

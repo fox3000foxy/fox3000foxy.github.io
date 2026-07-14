@@ -14,7 +14,7 @@ Eu também amo encontrar soluções para não pagar coisas que são pagas, ou qu
 
 Então eu crio principalmente em Typescript e React agora, mas antigamente eu criava lançadores em HTML puro, CSS e JavaScript. Louco? Eu fui louco uma vez! Eles me colocaram em uma sala. Nahhh eu estava brincando. Eu também sei Python, C# mas eu odeio, Java, mas é raro, agora eu uso para codificar plugins do Minecraft para [Eminium Games](https://github.com/Eminium-Games/). Eu sei C++ de um tempo atrás, mas não consigo codificar em ele, na verdade. Além disso, estou aprendendo C com o [projeto bareiron](https://github.com/p2r3/bareiron). E assim por diante, eu não sei Rust ou Go no momento, mas eu gostaria de aprender.
 
-Eu também tenho algum conhecimento em desenho, mas eu não sou muito bom nisso, eu apenas faço isso por diversão. Eu também faço produção de música, mas eu não sou muito bom nisso também, eu apenas faço isso por diversão também. Eu também tenho algum conhecimento em edição de vídeo, mas eu não sou muito bom nisso também, eu apenas faço isso por diversão também.
+Eu também tenho algum conhecimento em desenho, produção musical e edição de vídeo — mas não sou muito bom em nenhum, apenas faço por diversão.
 
 Eu uso algumas frameworks e bibliotecas como Node.js, Express.js, React, Discord.js, e mais. Eu também uso algumas ferramentas como Git, Docker, e distribuições de Linux como Debian, Arch Linux e Ubuntu. Eu também tenho algum conhecimento em bancos de dados como MongoDB e MySQL.
 
