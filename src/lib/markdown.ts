@@ -26,10 +26,22 @@ function slugify(text: string): string {
 }
 
 export function renderMarkdown(content: string): string {
-  let html = marked(content) as string;
+  let processed = content.replace(
+    /```mermaid\n([\s\S]*?)```/g,
+    (_, code) => `<div class="mermaid">\n${code.trim()}\n</div>`
+  );
+
+  let html = marked(processed) as string;
+
   html = html.replace(
     /<h([23])>(.*?)<\/h\1>/g,
     (_, level, text) => `<h${level} id="${slugify(text.replace(/<[^>]*>/g, ""))}">${text}</h${level}>`
   );
+
+  html = html.replace(
+    /<a\s+href="(https?:\/\/[^"]+)"([^>]*)>/g,
+    (_, href, rest) => `<a href="${href}" target="_blank" rel="noopener noreferrer"${rest}>`
+  );
+
   return html;
 }

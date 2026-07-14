@@ -147,6 +147,7 @@ const extraHead = articleMetaTags + articleJsonLd;
               <div class="share-buttons article-share-top">
                 <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(meta.title ?? slug ?? "")}&url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on Twitter">𝕏</a>
                 <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on LinkedIn">in</a>
+                <button type="button" class="share-btn reading-mode-btn" aria-label="Toggle reading mode" title="Reading mode">Aa</button>
               </div>
               <div class="article-layout">
                 {headings.length >= 2 && (
@@ -178,6 +179,101 @@ const extraHead = articleMetaTags + articleJsonLd;
     <p>Article not found.</p>
   )}
 </BaseLayout>
+
+<script is:inline>
+(function(){
+  // Reading progress bar
+  var progress = document.createElement('div');
+  progress.className = 'reading-progress';
+  progress.style.cssText = 'position:fixed;top:0;left:0;width:0;height:3px;background:var(--accent,#7c3aed);z-index:9999;transition:width 0.1s linear';
+  document.body.appendChild(progress);
+  var updateProgress = function() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (h > 0 ? Math.min(window.scrollY / h * 100, 100) : 0) + '%';
+  };
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress, { passive: true });
+  updateProgress();
+
+  // TOC active heading tracking
+  var tocLinks = document.querySelectorAll('.toc-link');
+  if (tocLinks.length > 0) {
+    var headings = [];
+    tocLinks.forEach(function(link) {
+      var id = link.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (el) headings.push({ el: el, link: link.parentElement });
+    });
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(function(l) { l.parentElement.classList.remove('toc-active'); });
+          var match = headings.find(function(h) { return h.el === entry.target; });
+          if (match) match.link.classList.add('toc-active');
+        }
+      });
+    }, { rootMargin: '-80px 0px -70% 0px' });
+    headings.forEach(function(h) { observer.observe(h.el); });
+  }
+
+  // Reading mode toggle
+  var readBtn = document.querySelector('.reading-mode-btn');
+  if (readBtn) {
+    var rm = localStorage.getItem('readingMode') === 'true';
+    if (rm) document.documentElement.classList.add('reading-mode');
+    readBtn.addEventListener('click', function() {
+      var on = document.documentElement.classList.toggle('reading-mode');
+      localStorage.setItem('readingMode', String(on));
+      readBtn.classList.toggle('active', on);
+    });
+  }
+
+  // Copy buttons on code blocks
+  document.querySelectorAll('.article-body pre').forEach(function(pre) {
+    var wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+    var header = document.createElement('div');
+    header.className = 'code-block-header';
+    var lang = '';
+    var codeEl = pre.querySelector('code');
+    if (codeEl) {
+      for (var i = 0; i < codeEl.classList.length; i++) {
+        var cls = codeEl.classList[i];
+        if (cls.startsWith('language-')) { lang = cls.slice(9); break; }
+      }
+    }
+    if (lang) {
+      var label = document.createElement('span');
+      label.className = 'code-lang-label';
+      label.textContent = lang;
+      header.appendChild(label);
+    }
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'code-copy-btn';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code') || pre;
+      navigator.clipboard.writeText(code.textContent || '').then(function() {
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+      })['catch'](function() {});
+    });
+    header.appendChild(btn);
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(header);
+    wrapper.appendChild(pre);
+  });
+
+  // Mermaid rendering
+  if (document.querySelector('.mermaid')) {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+    s.onload = function() { mermaid.initialize({ startOnLoad: true, theme: 'default' }); mermaid.run({ nodes: document.querySelectorAll('.mermaid') }); };
+    document.head.appendChild(s);
+  }
+})();
+</script>
 
 <style>
   .article-body { line-height: 1.8; }
@@ -226,4 +322,16 @@ const extraHead = articleMetaTags + articleJsonLd;
   .article-nav-link.permalink { text-align: center; color: var(--text-dim); font-size: 0.85rem; }
   .article-nav-label { display: block; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.25rem; }
   .article-nav-title { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+  .code-block-wrapper { position: relative; margin: 1.5rem 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .code-block-header { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+  .code-lang-label { color: var(--text-dim); font-weight: 600; text-transform: uppercase; font-size: 0.7rem; }
+  .code-copy-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.75rem; cursor: pointer; color: var(--text-muted); transition: border-color 0.2s, color 0.2s; }
+  .code-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .code-block-wrapper pre { margin: 0; border-radius: 0; border: none; }
+  .reading-mode .article-body { max-width: 700px; margin: 0 auto; font-size: 1.15rem; line-height: 2; }
+  .reading-mode .article-body img { max-width: 100%; }
+  .reading-mode .article-header, .reading-mode .share-buttons, .reading-mode .article-tags, .reading-mode .author-bio-top,
+  .reading-mode .article-nav, .reading-mode .article-footer, .reading-mode .article-description { max-width: 700px; margin-left: auto; margin-right: auto; }
+  .reading-mode .toc { display: none; }
+  .toc-active > .toc-link { color: var(--accent); border-left-color: var(--accent); font-weight: 700; }
 </style>
