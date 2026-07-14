@@ -14,7 +14,7 @@ Ayrıca ücretli olan şeyler için ödeme yapmamak için geçici çözümler bu
 
 Şimdi çoğunlukla TypeScript ve React ile kod yazıyorum, ama eskiden saf HTML, CSS ve JavaScript ile launcher'lar kodluyordum. Ayrıca Python, C#'ı (nefret ederim), Java'yı (nadiren, [Eminium Games](https://github.com/Eminium-Games/) için Minecraft eklentileri kodlamak için kullanıyorum) biliyorum. Biraz C++ biliyorum ama şu an onunla nasıl kod yazacağımı hatırlamıyorum. Ve [bareiron](https://github.com/p2r3/bareiron) projesiyle C öğreniyorum. Ve böyle devam ediyor, şu an için Rust ve Go bilmiyorum ama öğrenmek isterim.
 
-Ayrıca biraz çizim, müzik prodüksiyonu ve video düzenleme bilgim var — ama hiçbirinde çok iyi değilim, sadece eğlence için yapıyorum.
+Ayrıca biraz çizim, müzik prodüksiyonu ve video düzenleme bilgim var -- ama hiçbirinde çok iyi değilim, sadece eğlence için yapıyorum.
 
 Node.js, Express.js, React, Discord.js gibi framework ve kütüphaneler kullanıyorum. Ayrıca Git, Docker ve Debian, Arch Linux, Ubuntu gibi Linux dağıtımları gibi araçlar kullanıyorum. MongoDB ve MySQL gibi veritabanları hakkında da bilgim var.
 

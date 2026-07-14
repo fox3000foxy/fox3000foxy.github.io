@@ -61,7 +61,7 @@ Second addition in v3: a **persistent Pareto archive**. Without it, a good genom
 
 V3 had a structural blind spot: the genome described the architecture, but the weights learned during training disappeared at each new generation. A child born from crossover of two good parents inherited their architecture, but had to relearn from scratch; no trace of the weights that had made its parents performant.
 
-V4 introduces **Lamarckian evolution**: trained weights are fed back into the genome after training, and transmitted (with mutation) to the offspring. This is deliberate biological heresy; Lamarck was wrong for living organisms — inheritance of acquired characteristics doesn't exist in biology — but nothing stops a digital GA from cheating intelligently: here, transmitting acquired knowledge radically accelerates convergence, since each generation restarts from an already-informed initialization rather than random weights.
+V4 introduces **Lamarckian evolution**: trained weights are fed back into the genome after training, and transmitted (with mutation) to the offspring. This is deliberate biological heresy; Lamarck was wrong for living organisms -- inheritance of acquired characteristics doesn't exist in biology -- but nothing stops a digital GA from cheating intelligently: here, transmitting acquired knowledge radically accelerates convergence, since each generation restarts from an already-informed initialization rather than random weights.
 
 Three other structural changes in this version:
 

@@ -61,7 +61,7 @@ Zweite Ergänzung in v3: ein **persistentes Pareto-Archiv**. Ohne dieses kann ei
 
 V3 hatte einen strukturellen blinden Fleck: Das Genom beschrieb die Architektur, aber die während des Trainings gelernten Gewichte verschwanden bei jeder neuen Generation. Ein aus dem Crossover zweier guter Eltern geborenes Kind erbte deren Architektur, musste aber von Grund auf neu lernen; keine Spur der Gewichte, die seine Eltern leistungsfähig gemacht hatten.
 
-V4 führt die **Lamarck'sche Evolution** ein: trainierte Gewichte werden nach dem Training zurück in das Genom eingespeist und (mit Mutation) an die Nachkommen weitergegeben. Dies ist eine bewusste biologische Häresie; Lamarck lag bei Lebewesen falsch — die Vererbung erworbener Eigenschaften gibt es in der Biologie nicht — aber nichts hindert einen digitalen GA daran, intelligent zu betrügen: Hier beschleunigt die Weitergabe erworbener Kenntnisse die Konvergenz radikal, da jede Generation von einer bereits informierten Initialisierung statt von zufälligen Gewichten ausgeht.
+V4 führt die **Lamarck'sche Evolution** ein: trainierte Gewichte werden nach dem Training zurück in das Genom eingespeist und (mit Mutation) an die Nachkommen weitergegeben. Dies ist eine bewusste biologische Häresie; Lamarck lag bei Lebewesen falsch -- die Vererbung erworbener Eigenschaften gibt es in der Biologie nicht -- aber nichts hindert einen digitalen GA daran, intelligent zu betrügen: Hier beschleunigt die Weitergabe erworbener Kenntnisse die Konvergenz radikal, da jede Generation von einer bereits informierten Initialisierung statt von zufälligen Gewichten ausgeht.
 
 Drei weitere strukturelle Änderungen in dieser Version:
 

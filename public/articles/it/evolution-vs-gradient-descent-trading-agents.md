@@ -61,7 +61,7 @@ Seconda aggiunta in v3: un **archivio di Pareto persistente**. Senza di esso, un
 
 V3 aveva un punto cieco strutturale: il genoma descriveva l'architettura, ma i pesi appresi durante l'addestramento scomparivano a ogni nuova generazione. Un figlio nato dal crossover di due buoni genitori ereditava la loro architettura, ma doveva reimparare da zero; nessuna traccia dei pesi che avevano reso performanti i suoi genitori.
 
-V4 introduce l'**evoluzione lamarckiana**: i pesi addestrati vengono reimmessi nel genoma dopo l'addestramento e trasmessi (con mutazione) alla prole. Questa è una deliberata eresia biologica; Lamarck aveva torto per gli organismi viventi — l'ereditarietà dei caratteri acquisiti non esiste in biologia — ma nulla impedisce a un GA digitale di barare intelligentemente: qui, trasmettere conoscenza acquisita accelera radicalmente la convergenza, poiché ogni generazione riparte da un'inizializzazione già informata anziché da pesi casuali.
+V4 introduce l'**evoluzione lamarckiana**: i pesi addestrati vengono reimmessi nel genoma dopo l'addestramento e trasmessi (con mutazione) alla prole. Questa è una deliberata eresia biologica; Lamarck aveva torto per gli organismi viventi -- l'ereditarietà dei caratteri acquisiti non esiste in biologia -- ma nulla impedisce a un GA digitale di barare intelligentemente: qui, trasmettere conoscenza acquisita accelera radicalmente la convergenza, poiché ogni generazione riparte da un'inizializzazione già informata anziché da pesi casuali.
 
 Tre altri cambiamenti strutturali in questa versione:
 
