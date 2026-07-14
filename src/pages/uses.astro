@@ -1,0 +1,28 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ALL_LANGS } from "../lib/i18n";
+
+const allContent: Record<string, string> = {};
+for (const lang of ALL_LANGS) {
+  const filePath = path.resolve(`public/uses.${lang}.md`);
+  if (fs.existsSync(filePath)) {
+    allContent[lang] = renderMarkdown(fs.readFileSync(filePath, "utf-8"));
+  }
+}
+if (!allContent["en"]) {
+  allContent["en"] = renderMarkdown(fs.readFileSync(path.resolve("public/uses.md"), "utf-8"));
+}
+const en = allContent["en"] ?? "";
+for (const lang of ALL_LANGS) {
+  if (!allContent[lang]) allContent[lang] = en;
+}
+---
+
+<BaseLayout title="Uses" description="Tools and software I use">
+  {ALL_LANGS.map((l) => (
+    <article class="lang-content" data-lang={l} set:html={allContent[l]} />
+  ))}
+</BaseLayout>

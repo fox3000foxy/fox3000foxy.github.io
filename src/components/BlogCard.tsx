@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../lib/navigation";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 import { useReadStatus } from "../hooks/useReadStatus";
@@ -24,6 +24,7 @@ export default function BlogCard({ article }: BlogCardProps) {
 		sponsored,
 		tags,
 		authors,
+		image,
 	} = article;
 
 	const formattedDate = useMemo(
@@ -60,6 +61,9 @@ export default function BlogCard({ article }: BlogCardProps) {
 			className={`blog-card${isRead(slug) ? " read" : ""}`}
 			onClick={() => markAsRead(slug)}
 		>
+			{image && (
+				<img className="blog-card-img" src={image} alt="" loading="lazy" />
+			)}
 			<div className="blog-card-body">
 				<h3 className="blog-card-title">{title ?? slug?.replace(/-/g, " ")}</h3>
 				{((isNew(date) && !isRead(slug)) || aiGenerated || sponsored) && (

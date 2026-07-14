@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Photos" description="Photo gallery" wide>
+  <h1>Photos</h1>
+  <div class="photos-grid">
+    <p>Photo gallery coming soon.</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+</style>

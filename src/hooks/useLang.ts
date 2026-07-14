@@ -36,10 +36,39 @@ interface LangCtx {
 	t: (key: string, params?: Record<string, string | number>) => string;
 }
 
-export const LangContext = createContext<LangCtx>(null!);
+function translate(
+	lang: Lang,
+	key: string,
+	params?: Record<string, string | number>
+): string {
+	let msg = translations[lang]?.[key] ?? translations.en[key] ?? key;
+	if (params) {
+		for (const [k, v] of Object.entries(params)) {
+			msg = msg.replace(`{${k}}`, String(v));
+		}
+	}
+	return msg;
+}
 
-export function useLang() {
-	return useContext(LangContext);
+const FALLBACK_CTX: LangCtx = {
+	lang: "en",
+	setLang: () => {},
+	t: (key, params) => translate("en", key, params),
+};
+
+export const LangContext = createContext<LangCtx>(FALLBACK_CTX);
+
+export function useLang(): LangCtx {
+	const ctx = useContext(LangContext);
+	if (ctx === FALLBACK_CTX) {
+		const lang = detectLang();
+		return {
+			lang,
+			setLang: () => {},
+			t: (key, params) => translate(lang, key, params),
+		};
+	}
+	return ctx;
 }
 
 export function useLangState(): LangCtx {
@@ -53,15 +82,8 @@ export function useLangState(): LangCtx {
 	const setLang = useCallback((l: Lang) => setLangState(l), []);
 
 	const t = useCallback(
-		(key: string, params?: Record<string, string | number>): string => {
-			let msg = translations[lang]?.[key] ?? translations.en[key] ?? key;
-			if (params) {
-				for (const [k, v] of Object.entries(params)) {
-					msg = msg.replace(`{${k}}`, String(v));
-				}
-			}
-			return msg;
-		},
+		(key: string, params?: Record<string, string | number>): string =>
+			translate(lang, key, params),
 		[lang]
 	);
 

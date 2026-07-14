@@ -15,7 +15,14 @@ function getInitialTheme(): Theme {
 export const ThemeContext = createContext<{
 	theme: Theme;
 	toggleTheme: () => void;
-}>({ theme: "dark", toggleTheme: () => {} });
+}>({
+	theme:
+		typeof document !== "undefined" &&
+		document.documentElement.classList.contains("light")
+			? "light"
+			: "dark",
+	toggleTheme: () => {},
+});
 
 export function useThemeState() {
 	const [theme, setTheme] = useState<Theme>(getInitialTheme);

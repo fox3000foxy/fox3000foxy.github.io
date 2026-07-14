@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE_DESCRIPTION } from "../config";
+import { ALL_LANGS } from "../lib/i18n";
+import type { Lang } from "../lib/i18n";
+import { readAllHomeContent } from "../lib/langContent";
+
+const allContent = readAllHomeContent();
+---
+
+<BaseLayout title="Home" description={SITE_DESCRIPTION}>
+  {ALL_LANGS.map((l) => (
+    <article class="home lang-content" data-lang={l} set:html={allContent[l as Lang]} />
+  ))}
+</BaseLayout>

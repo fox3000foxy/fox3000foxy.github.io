@@ -1,0 +1,34 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ALL_LANGS, createT } from "../lib/i18n";
+import type { Lang } from "../lib/i18n";
+
+const t = createT("en");
+
+const allContent: Record<string, string> = {};
+for (const lang of ALL_LANGS) {
+  const filePath = path.resolve(`public/about.${lang}.md`);
+  if (fs.existsSync(filePath)) {
+    allContent[lang] = renderMarkdown(fs.readFileSync(filePath, "utf-8"));
+  }
+}
+if (!allContent["en"]) {
+  allContent["en"] = renderMarkdown(fs.readFileSync(path.resolve("public/about.md"), "utf-8"));
+}
+const en = allContent["en"] ?? "";
+for (const lang of ALL_LANGS) {
+  if (!allContent[lang]) allContent[lang] = en;
+}
+---
+
+<BaseLayout title="About" description="About Fox3000foxy">
+  {ALL_LANGS.map((l) => (
+    <div class="about-page lang-content" data-lang={l}>
+      <div set:html={allContent[l]} />
+      <a href="/" class="back-home">← {t("notFound.return")}</a>
+    </div>
+  ))}
+</BaseLayout>

@@ -1,0 +1,304 @@
+---
+import { SITE_TITLE } from "../config";
+import { ALL_LANGS, LANG_LABELS, createT } from "../lib/i18n";
+import type { Lang } from "../lib/i18n";
+
+export interface Props {
+  locale?: Lang;
+}
+
+const { locale } = Astro.props;
+const lang = locale || "en";
+const t = createT(lang);
+---
+
+<header>
+  <div class="container">
+    <a href="/">
+      <img
+        class="avatar"
+        src="https://github.com/fox3000foxy.png"
+        alt="GitHub avatar"
+        width="40"
+        height="40"
+      />
+    </a>
+    <h1 class="site-title">
+      <a href="/" class="title-link">{t("site.title")}</a>
+    </h1>
+    <button type="button" class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav id="nav-menu">
+      <a href="/blog">{t("nav.blog")}</a>
+      <a href="/about">{t("nav.about")}</a>
+      <a href="/projects">{t("nav.projects")}</a>
+      <a href="/write">{t("nav.write")}</a>
+      <a href="/search">{t("nav.search")}</a>
+      <div class="nav-dropdown" id="nav-dropdown">
+        <span
+          class="nav-dropdown-toggle"
+          id="nav-dropdown-toggle"
+          role="button"
+          tabindex="0"
+        >{t("nav.more")}</span>
+        <div class="nav-dropdown-menu">
+          <a href="/tags">{t("nav.tags")}</a>
+          <a href="/archive">{t("nav.archive")}</a>
+          <a href="/photos">{t("nav.photos")}</a>
+          <a href="/uses">{t("nav.uses")}</a>
+          <a href="/contact">{t("nav.contact")}</a>
+          <a href="/legacy">{t("nav.portfolio")}</a>
+        </div>
+      </div>
+      <select class="lang-select" id="lang-select">
+        {ALL_LANGS.map((l) => (
+          <option value={l}>{LANG_LABELS[l]}</option>
+        ))}
+      </select>
+      <button type="button" class="theme-toggle" id="theme-toggle-header" aria-label="Toggle theme">
+        <span id="theme-icon-header">☀️</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("nav-menu");
+  const navDropdown = document.getElementById("nav-dropdown");
+  const navDropdownToggle = document.getElementById("nav-dropdown-toggle");
+  const langSelect = document.getElementById("lang-select");
+  const themeToggle = document.getElementById("theme-toggle-header");
+  const themeIcon = document.getElementById("theme-icon-header");
+
+  function closeMenu() {
+    hamburger?.classList.remove("open");
+    navMenu?.classList.remove("open");
+    navDropdown?.classList.remove("open");
+  }
+
+  hamburger?.addEventListener("click", () => {
+    hamburger.classList.toggle("open");
+    navMenu?.classList.toggle("open");
+  });
+
+  navDropdownToggle?.addEventListener("click", () => {
+    navDropdown?.classList.toggle("open");
+  });
+  navDropdownToggle?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      navDropdown?.classList.toggle("open");
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (navDropdown && !navDropdown.contains(e.target as Node)) {
+      navDropdown.classList.remove("open");
+    }
+  });
+
+  navMenu?.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", closeMenu);
+  });
+
+  if (langSelect) {
+    var currentLang = localStorage.getItem("fox-blog-lang");
+    if (!currentLang || !["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"].includes(currentLang)) {
+      var prefs = navigator.languages || [navigator.language];
+      for (var i = 0; i < prefs.length; i++) {
+        var code = prefs[i].split("-")[0];
+        if (["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"].indexOf(code) !== -1) { currentLang = code; break; }
+      }
+    }
+    langSelect.value = currentLang || "en";
+    langSelect.addEventListener("change", function () {
+      localStorage.setItem("fox-blog-lang", this.value);
+      location.reload();
+    });
+  }
+
+  if (themeToggle && themeIcon) {
+    themeToggle.addEventListener("click", () => {
+      const isLight = document.documentElement.classList.toggle("light");
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+      themeIcon.textContent = isLight ? "🌙" : "☀️";
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", isLight ? "#f8f9fa" : "#000000");
+    });
+    const initialLight = document.documentElement.classList.contains("light");
+    themeIcon.textContent = initialLight ? "🌙" : "☀️";
+  }
+</script>
+
+<style>
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg);
+    color: var(--text);
+    z-index: 1000;
+  }
+  header .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+  header img.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  header .site-title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  header .title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 1001;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  header nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  header nav a {
+    color: var(--text);
+    margin: 0 0.75rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  header nav a:hover { text-decoration: underline; }
+  .lang-select {
+    margin-left: 0.5rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border-hover);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+    max-width: 100px;
+  }
+  .lang-select:hover,
+  .lang-select:focus { border-color: var(--accent); }
+  .theme-toggle {
+    margin-left: 0.25rem;
+    background: none;
+    border: 1px solid var(--border-hover);
+    border-radius: 4px;
+    padding: 0.15rem 0.3rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-toggle {
+    color: var(--text);
+    margin: 0 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .nav-dropdown-toggle:hover { text-decoration: underline; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem;
+    min-width: 160px;
+    z-index: 200;
+    flex-direction: column;
+    gap: 0.25rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .nav-dropdown.open .nav-dropdown-menu { display: flex; }
+  .nav-dropdown-menu a {
+    border: none;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+    margin: 0;
+    white-space: nowrap;
+    border-radius: 4px;
+  }
+  .nav-dropdown-menu a:hover { background: var(--bg-hover); }
+
+  @media (max-width: 768px) {
+    header .container { padding: 0.75rem 1rem; }
+    header .site-title { font-size: 1.1rem; }
+    .hamburger { display: flex; }
+    header nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100vh;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 5rem 1.5rem 2rem;
+      margin-left: 0;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+      z-index: 999;
+      overflow-y: auto;
+    }
+    header nav.open { display: flex; }
+    header nav a { font-size: 1rem; margin: 0.5rem 0; width: 100%; }
+    .nav-dropdown { width: 100%; margin: 0; }
+    .nav-dropdown-toggle { display: none; }
+    .nav-dropdown-menu {
+      display: flex;
+      position: static;
+      border: none;
+      box-shadow: none;
+      padding-left: 0;
+      background: transparent;
+    }
+    .nav-dropdown-menu a { margin: 0.25rem 0; white-space: normal; }
+    .lang-select { margin-left: 0; margin-top: 1rem; width: 100%; max-width: none; }
+    .theme-toggle { margin-left: 0; margin-top: 0.5rem; align-self: flex-start; }
+  }
+</style>

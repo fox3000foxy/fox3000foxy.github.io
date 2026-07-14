@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { fetchRepos, fetchReadme } from "../../lib/github";
+import type { Repo } from "../../lib/github";
+import { renderMarkdown } from "../../lib/markdown";
+
+export async function getStaticPaths() {
+  let repos: Repo[] = [];
+  try {
+    repos = await fetchRepos();
+  } catch {
+    return [{ params: { slug: "placeholder" } }];
+  }
+  return repos.map((repo) => ({ params: { slug: repo.name }, props: { repo } }));
+}
+
+const { repo } = Astro.props as { repo?: Repo };
+const slug = Astro.params.slug as string;
+
+let readme = "";
+if (repo) {
+  try {
+    readme = await fetchReadme(repo.name, repo.default_branch, repo.owner);
+  } catch {}
+}
+---
+
+<BaseLayout title={repo?.name ?? slug} description={repo?.description ?? ""} wide>
+  <article>
+    <p class="project-back"><a href="/projects">← Back to projects</a></p>
+    {repo ? (
+      <>
+        <div class="project-header-meta">
+          {repo.description && <p class="article-description">{repo.description}</p>}
+          <p class="project-meta-links">
+            <a href={repo.html_url} target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            {repo.language && <span class="project-meta-lang">{repo.language}</span>}
+            {repo.stargazers_count > 0 && <span>★ {repo.stargazers_count}</span>}
+          </p>
+        </div>
+        <div class="project-readme" set:html={readme ? renderMarkdown(readme) : "<p>No README available.</p>"} />
+      </>
+    ) : (
+      <p>Project not found.</p>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .project-back { margin-bottom: 1rem; }
+  .project-back a { color: var(--accent); text-decoration: none; }
+  .project-back a:hover { text-decoration: underline; }
+  .project-header-meta { margin-bottom: 2rem; }
+  .project-meta-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; font-size: 0.9rem; }
+  .project-meta-links a { color: var(--accent); text-decoration: none; }
+  .project-meta-links a:hover { text-decoration: underline; }
+  .project-meta-lang { color: var(--text-muted); background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.8rem; }
+  .project-readme { line-height: 1.8; }
+  .project-readme h1 { font-size: 1.5rem; margin-top: 2rem; }
+  .project-readme h2 { font-size: 1.25rem; margin-top: 1.5rem; }
+  .project-readme h3 { font-size: 1.1rem; margin-top: 1.25rem; }
+  .project-readme p { margin: 0.75rem 0; }
+  .project-readme code { font-size: 0.875em; padding: 0.15em 0.3em; border-radius: 4px; background: var(--bg-code); }
+  .project-readme pre { background: var(--bg-code); border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
+  .project-readme pre code { padding: 0; background: none; }
+  .project-readme img { max-width: 100%; border-radius: 8px; }
+  .project-readme a { color: var(--accent); }
+  .project-readme table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  .project-readme th, .project-readme td { border: 1px solid var(--border); padding: 0.5rem; }
+  .project-readme th { background: var(--bg-secondary); }
+</style>

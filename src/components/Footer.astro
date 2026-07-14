@@ -1,0 +1,33 @@
+---
+import { SITE_TITLE } from "../config";
+---
+
+<footer>
+  <p>&copy; {new Date().getFullYear()} {SITE_TITLE}. All rights reserved.</p>
+  <nav>
+    <a href="/feed.xml">RSS</a>
+    <a href="https://github.com/fox3000foxy">GitHub</a>
+  </nav>
+</footer>
+
+<style>
+  footer {
+    text-align: center;
+    padding: 1rem 0;
+    color: var(--text-muted);
+    background-color: var(--bg);
+    margin-top: auto;
+    font-size: 0.875rem;
+  }
+  footer nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  footer a:hover { color: var(--accent-hover); }
+</style>

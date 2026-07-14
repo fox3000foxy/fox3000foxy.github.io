@@ -1,0 +1,28 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TagIndex from "../../islands/TagIndex.tsx";
+import { readAllArticleIndexes } from "../../lib/langContent";
+
+export async function getStaticPaths() {
+  const indexPath = path.resolve("public/articles/en/index.json");
+  if (!fs.existsSync(indexPath)) return [];
+  const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+  const tags = new Set<string>();
+  for (const entry of index) {
+    if (entry.tags) {
+      for (const tag of entry.tags) {
+        tags.add(tag);
+      }
+    }
+  }
+  return [...tags].map((tag) => ({ params: { tag } }));
+}
+
+const allIndexes = readAllArticleIndexes();
+---
+
+<BaseLayout title="Tag" description="" wide>
+  <TagIndex client:only="react" allIndexes={allIndexes} />
+</BaseLayout>

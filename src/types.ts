@@ -12,4 +12,5 @@ export interface ArticleMeta {
 	authors?: string[];
 	author_pubkey?: string;
 	author_sig?: string;
+	image?: string;
 }
