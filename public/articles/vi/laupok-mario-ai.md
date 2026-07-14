@@ -33,7 +33,7 @@ BizHawk là một trình giả lập mã nguồn mở hỗ trợ rất nhiều l
 
 Cụ thể, điều này có nghĩa là bạn có thể:
 - Đọc vị trí của Mario trong màn chơi
-- Biết哪些sprite (kẻ thù, vật phẩm) đang ở trên màn hình
+- Biết sprite nào (kẻ thù, vật phẩm) đang ở trên màn hình
 - Biết trạng thái của mỗi ô (khối) xung quanh Mario
 - Điều khiển bộ điều khiển -- nhấn bất kỳ nút nào
 

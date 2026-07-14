@@ -129,7 +129,7 @@ ensure_filesystem_branch() {
 git clean -fdx -e .apt-cache -e .cache -e host.conf -e tmate.sock
 ```
 
-`git clean -fdx`는 git이 추적 안 하는 건 **다** 지워버려. 보통은 존나粗暴한 거야 -- workspace를 싹 밀어버림.
+`git clean -fdx`는 git이 추적 안 하는 건 **다** 지워버려. 보통은 존나 거친 거야 -- workspace를 싹 밀어버림.
 
 근데 `-e` (exclude)로 몇 가지는 보호해:
 - `.apt-cache` → APT 패키지 캐시 (뒤에 다시 나옴, 똑똑한 거임)

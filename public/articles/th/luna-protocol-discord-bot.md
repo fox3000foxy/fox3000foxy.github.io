@@ -387,7 +387,7 @@ export const config = {
 | โทเค็นเฉลี่ย | 32.8 |
 | Tokenizer | Hermes-3-Llama-3.1-8B |
 
-โมเดลที่ถูก量化ที่ใช้คือ GGUF (เช่น `Discord-Hermes-3-8B.Q3_K_M.gguf`)
+โมเดลที่ถูกควอนไทซ์ที่ใช้คือ GGUF (เช่น `Discord-Hermes-3-8B.Q3_K_M.gguf`)
 
 ![การกระจายของชุดข้อมูล Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
 

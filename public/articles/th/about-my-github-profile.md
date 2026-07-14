@@ -47,7 +47,7 @@ author_sig: "YSD/BNGUVnLmgFbn4xLy30Ya+TGmak0Njtqi8mD10HsuzBeEnvJUEroM0HAYIGxRSqx
 ![](assets/20260308_144915_image.png)
 ![](assets/20260308_144933_image.png)
 
-### Heatmap การ貢獻
+### Heatmap การมีส่วนร่วม
 และนี่คือ commits ของฉันที่เล่น PacMan อย่างสบายใจ xD
 ![](assets/20260308_144956_image.png)
 

@@ -117,7 +117,7 @@ globalThis.Buffer = BrowserBuffer;
 
 这只有 116 行。考虑到它替代的内容，相当紧凑。
 
-主要的技巧是使用 `DataView` 进行多字节访问，它正确处��了字节序，无需为每种类型手动操作位：
+主要的技巧是使用 `DataView` 进行多字节访问，它正确处理了字节序，无需为每种类型手动操作位：
 
 ```js
 writeUInt32BE(val, offset = 0) {
