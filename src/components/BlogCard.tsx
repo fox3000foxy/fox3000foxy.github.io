@@ -12,19 +12,20 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ article }: BlogCardProps) {
-	const { t, lang } = useLang();
-	const { markAsRead, isRead } = useReadStatus();
-	const {
-		slug,
-		title,
-		description,
-		date,
-		readingTime,
-		aiGenerated,
-		sponsored,
-		tags,
-		authors,
-	} = article;
+  const { t, lang } = useLang();
+  const { markAsRead, isRead } = useReadStatus();
+  const {
+    slug,
+    title,
+    description,
+    date,
+    readingTime,
+    aiGenerated,
+    sponsored,
+    tags,
+    authors,
+    image,
+  } = article;
 
 	const formattedDate = useMemo(
 		() =>
@@ -55,12 +56,13 @@ export default function BlogCard({ article }: BlogCardProps) {
 	);
 
 	return (
-		<Link
-			to={`/blog/${slug}`}
-			className={`blog-card${isRead(slug) ? " read" : ""}`}
-			onClick={() => markAsRead(slug)}
-		>
-			<div className="blog-card-body">
+        <Link
+          to={`/blog/${slug}`}
+          className={`blog-card${isRead(slug) ? " read" : ""}`}
+          onClick={() => markAsRead(slug)}
+        >
+          {image && <img className="blog-card-img" src={image} alt="" loading="lazy" />}
+          <div className="blog-card-body">
 				<h3 className="blog-card-title">{title ?? slug?.replace(/-/g, " ")}</h3>
 				{((isNew(date) && !isRead(slug)) || aiGenerated || sponsored) && (
 					<div className="blog-card-badges">
