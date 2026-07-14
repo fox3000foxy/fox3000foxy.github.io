@@ -6,16 +6,21 @@ import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 
+const langAliases: Record<string, string> = {
+	asm: "x86asm",
+};
+
 marked.use(
 	markedHighlight({
 		langPrefix: "hljs language-",
 		highlight(code, lang) {
-			if (lang && hljs.getLanguage(lang)) {
+			const resolvedLang = lang ? langAliases[lang] || lang : null;
+			if (resolvedLang && hljs.getLanguage(resolvedLang)) {
 				try {
-					return hljs.highlight(code, { language: lang }).value;
+					return hljs.highlight(code, { language: resolvedLang }).value;
 				} catch {}
 			}
-			return hljs.highlightAuto(code).value;
+			return code;
 		},
 	})
 );
