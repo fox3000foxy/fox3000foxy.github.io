@@ -1,36 +1,26 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-// import { VitePWA } from 'vite-plugin-pwa'
+import type { Plugin } from "vite";
+
+function removeMermaidPreload(): Plugin {
+	return {
+		name: "remove-mermaid-preload",
+		enforce: "post",
+		transformIndexHtml(html) {
+			return html.replace(
+				/<link rel="modulepreload"[^>]*href="[^"]*mermaid[^"]*"[^>]*>/g,
+				""
+			);
+		},
+	};
+}
 
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [
 		react(),
-		// VitePWA({
-		//   registerType: 'autoUpdate',
-		//   includeAssets: ['icons/*.png', 'manifest.json'],
-		//   manifest: {
-		//     name: "Fox's Blog",
-		//     short_name: 'FoxBlog',
-		//     description: 'A blog about code, games, and reverse engineering',
-		//     theme_color: '#000000',
-		//     background_color: '#000000',
-		//     display: 'standalone',
-		//     scope: '/',
-		//     start_url: '/',
-		//     categories: ['blog', 'technology', 'gaming'],
-		//     orientation: 'any',
-		//     icons: [
-		//       { src: '/icons/android-icon-192x192.png', sizes: '192x192', type: 'image/png' },
-		//       { src: '/icons/android-icon-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
-		//     ],
-		//   },
-		//   workbox: {
-		//     globPatterns: ['**/*.{js,css,html,md,xml,json,ico,png,svg,txt}'],
-		//     globIgnores: ['**/articles/assets/*.png', '**/assets/vendor-*.js'],
-		//     maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-		//   },
-		// }),
+		removeMermaidPreload(),
+		// VitePWA({...
 	],
 	build: {
 		chunkSizeWarningLimit: 800,
@@ -52,7 +42,35 @@ export default defineConfig({
 						) {
 							return "mermaid";
 						}
-						return "vendor";
+						if (id.includes("react-dom") || id.includes("react/") || id.includes("scheduler")) {
+							return "vendor-core";
+						}
+						if (
+							id.includes("react-router") ||
+							id.includes("react-markdown") ||
+							id.includes("remark-") ||
+							id.includes("rehype-") ||
+							id.includes("hast-") ||
+							id.includes("unified") ||
+							id.includes("highlight.js") ||
+							id.includes("property-information") ||
+							id.includes("space-separated-tokens") ||
+							id.includes("comma-separated-tokens") ||
+							id.includes("html-void-elements") ||
+							id.includes("micromark") ||
+							id.includes("decode-named-character-reference") ||
+							id.includes("character-entities") ||
+							id.includes("trim-lines") ||
+							id.includes("lowlight") ||
+							id.includes("refractor") ||
+							id.includes("fault") ||
+							id.includes("ccount") ||
+							id.includes("escape-string-regexp") ||
+							id.includes("@tiptap")
+						) {
+							return "vendor-content";
+						}
+						return "vendor-other";
 					}
 				},
 			},

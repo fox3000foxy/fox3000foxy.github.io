@@ -56,8 +56,8 @@ h1 {
   line-height: 1.1;
 }
 
-/* intentionally blank: we force dark theme */
 img {
   max-width: 100%;
   height: auto;
+  aspect-ratio: attr(width) / attr(height);
 }

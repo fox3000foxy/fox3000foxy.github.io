@@ -71,23 +71,27 @@ export default function BlogList() {
 		[articles]
 	);
 
-	const filtered = articles.filter((a) => {
-		if (activeTag && !a.tags?.includes(activeTag)) {
-			return false;
-		}
-		if (!query) {
-			return true;
-		}
-		const text =
-			getCachedArticleMarkdown(a.slug, lang) ??
-			getCachedArticleMarkdown(a.slug, "en");
-		return (
-			a.title?.toLowerCase().includes(query) ||
-			a.description?.toLowerCase().includes(query) ||
-			a.tags?.some((t) => t.toLowerCase().includes(query)) ||
-			(text?.toLowerCase().includes(query) ?? false)
-		);
-	});
+	const filtered = useMemo(
+		() =>
+			articles.filter((a) => {
+				if (activeTag && !a.tags?.includes(activeTag)) {
+					return false;
+				}
+				if (!query) {
+					return true;
+				}
+				const text =
+					getCachedArticleMarkdown(a.slug, lang) ??
+					getCachedArticleMarkdown(a.slug, "en");
+				return (
+					a.title?.toLowerCase().includes(query) ||
+					a.description?.toLowerCase().includes(query) ||
+					a.tags?.some((t) => t.toLowerCase().includes(query)) ||
+					(text?.toLowerCase().includes(query) ?? false)
+				);
+			}),
+		[articles, activeTag, query, lang]
+	);
 
 	const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
 	const safePage = Math.min(page, Math.max(0, pageCount - 1));

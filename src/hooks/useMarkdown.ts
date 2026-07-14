@@ -6,6 +6,7 @@ export function useMarkdown(url: string, key: string, fallbackUrl?: string) {
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
+		let cancelled = false;
 		const cached = getCachedMarkdown(key);
 		if (cached !== null) {
 			setContent(cached);
@@ -18,13 +19,23 @@ export function useMarkdown(url: string, key: string, fallbackUrl?: string) {
 			if (text === null && fallbackUrl) {
 				text = await fetchMarkdown(key, fallbackUrl);
 			}
+			if (cancelled) {
+				return;
+			}
 			if (text === null) {
 				setError(true);
 				return;
 			}
 			setContent(text);
 		}
-		load().catch(() => setError(true));
+		load().catch(() => {
+			if (!cancelled) {
+				setError(true);
+			}
+		});
+		return () => {
+			cancelled = true;
+		};
 	}, [url, key, fallbackUrl]);
 
 	return { content, error, loading: content === null };

@@ -187,10 +187,22 @@ export default function GitHubActivity() {
 	const [events, setEvents] = useState<GitHubEvent[] | null>(null);
 
 	useEffect(() => {
-		fetch(`https://api.github.com/users/${USERNAME}/events?per_page=10`)
+		const controller = new AbortController();
+		fetch(`https://api.github.com/users/${USERNAME}/events?per_page=10`, {
+			signal: controller.signal,
+		})
 			.then((r) => (r.ok ? r.json() : null))
-			.then((data) => setEvents(Array.isArray(data) ? data : []))
-			.catch(() => setEvents([]));
+			.then((data) => {
+				if (!controller.signal.aborted) {
+					setEvents(Array.isArray(data) ? data : []);
+				}
+			})
+			.catch(() => {
+				if (!controller.signal.aborted) {
+					setEvents([]);
+				}
+			});
+		return () => controller.abort();
 	}, []);
 
 	const processed = useMemo(

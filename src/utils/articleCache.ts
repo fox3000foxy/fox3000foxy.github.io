@@ -1,7 +1,18 @@
 import { cacheBust } from "./cacheBust";
 
+const MAX_CACHE = 100;
 const articleCache = new Map<string, string>();
 const pendingFetch = new Map<string, Promise<string | null>>();
+
+function cacheSet(key: string, value: string): void {
+	if (articleCache.size >= MAX_CACHE) {
+		const first = articleCache.keys().next().value;
+		if (first !== undefined) {
+			articleCache.delete(first);
+		}
+	}
+	articleCache.set(key, value);
+}
 
 function cacheKey(lang: string, slug: string): string {
 	return `${lang}:${slug}`;
@@ -28,7 +39,7 @@ export function fetchMarkdown(
 		})
 		.then((text) => {
 			if (typeof text === "string") {
-				articleCache.set(key, text);
+				cacheSet(key, text);
 				return text;
 			}
 			return null;
@@ -76,7 +87,7 @@ function fetchWithFallback(
 		})
 		.then((text) => {
 			if (typeof text === "string") {
-				articleCache.set(key, text);
+				cacheSet(key, text);
 				return text;
 			}
 			return null;

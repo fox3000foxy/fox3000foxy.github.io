@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLang } from "../hooks/useLang";
 
 export default function ShareButtons({
@@ -14,10 +14,17 @@ export default function ShareButtons({
 	const encodedUrl = encodeURIComponent(url);
 	const encodedTitle = encodeURIComponent(title);
 
+	useEffect(() => {
+		if (!copied) {
+			return;
+		}
+		const t = setTimeout(() => setCopied(false), 2000);
+		return () => clearTimeout(t);
+	}, [copied]);
+
 	function handleCopy() {
 		void navigator.clipboard.writeText(url).then(() => {
 			setCopied(true);
-			setTimeout(() => setCopied(false), 2000);
 		});
 	}
 

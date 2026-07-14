@@ -5,6 +5,37 @@
   color: var(--text-secondary);
 }
 
+.home-skeleton {
+  min-height: 60vh;
+}
+
+.skeleton-title {
+  height: 2.5rem;
+  width: 60%;
+  margin-bottom: 1.5rem;
+  background: var(--bg-hover);
+  border-radius: 6px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line {
+  height: 1rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  background: var(--bg-hover);
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line--short {
+  width: 75%;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
 .home h2,
 .home h3 {
   color: var(--text);

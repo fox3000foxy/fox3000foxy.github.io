@@ -56,6 +56,8 @@ export default function Article() {
 		if (!slug) {
 			return;
 		}
+		let cancelled = false;
+		let metaTimer: ReturnType<typeof setTimeout>;
 		markAsRead(slug);
 
 		function process(text: string): {
@@ -75,6 +77,9 @@ export default function Article() {
 		if (cached === null) {
 			Promise.resolve(fetchArticleMarkdown(slug, lang))
 				.then((text) => {
+					if (cancelled) {
+						return;
+					}
 					if (!text) {
 						setError(true);
 						return;
@@ -88,46 +93,66 @@ export default function Article() {
 							: ({ slug: slug!, ...frontMeta } as ArticleMeta)
 					);
 				})
-				.catch(() => setError(true));
+				.catch(() => {
+					if (!cancelled) {
+						setError(true);
+					}
+				});
 		} else {
 			const { clean, raw, frontMeta } = process(cached);
 			setContent(clean);
 			setRawContent(raw);
-			setTimeout(() => {
-				setMeta((prev) =>
-					prev
-						? { ...prev, ...frontMeta }
-						: ({ slug: slug!, ...frontMeta } as ArticleMeta)
-				);
+			metaTimer = setTimeout(() => {
+				if (!cancelled) {
+					setMeta((prev) =>
+						prev
+							? { ...prev, ...frontMeta }
+							: ({ slug: slug!, ...frontMeta } as ArticleMeta)
+					);
+				}
 			}, 0);
 		}
 
-		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
+		const controller = new AbortController();
 
 		async function loadIndex() {
-			let res = await fetch(cacheBust(indexUrl));
-			if (!res.ok && fallbackUrl) {
-				res = await fetch(cacheBust(fallbackUrl));
-			}
-			if (!res.ok) {
-				return;
-			}
+			const indexUrl = `/articles/${lang}/index.json`;
+			const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
+			try {
+				let res = await fetch(cacheBust(indexUrl), { signal: controller.signal });
+				if (!res.ok && fallbackUrl) {
+					res = await fetch(cacheBust(fallbackUrl), { signal: controller.signal });
+				}
+				if (!res.ok) {
+					return;
+				}
 
-			const data: unknown = await res.json();
-			if (Array.isArray(data)) {
-				// biome-ignore lint/suspicious/noExplicitAny: need to handle legacy string format
-				const normalized: ArticleMeta[] = data.map((item: any) =>
-					typeof item === "string" ? { slug: item } : item
-				);
-				setAllArticles(normalized);
-				setMeta((prev) => {
-					const fromIndex = normalized.find((a) => a.slug === slug) || null;
-					return prev ? { ...fromIndex, ...prev } : fromIndex;
-				});
+				const data: unknown = await res.json();
+				if (cancelled) {
+					return;
+				}
+				if (Array.isArray(data)) {
+					// biome-ignore lint/suspicious/noExplicitAny: need to handle legacy string format
+					const normalized: ArticleMeta[] = data.map((item: any) =>
+						typeof item === "string" ? { slug: item } : item
+					);
+					setAllArticles(normalized);
+					setMeta((prev) => {
+						const fromIndex = normalized.find((a) => a.slug === slug) || null;
+						return prev ? { ...fromIndex, ...prev } : fromIndex;
+					});
+				}
+			} catch {
+				// aborted or network error
 			}
 		}
 		void loadIndex();
+
+		return () => {
+			cancelled = true;
+			clearTimeout(metaTimer);
+			controller.abort();
+		};
 	}, [slug, lang, markAsRead]);
 
 	// Scroll to anchor hash when content is loaded
@@ -135,9 +160,13 @@ export default function Article() {
 		if (!(content && location.hash)) {
 			return;
 		}
+		let cancelled = false;
 		const id = decodeURIComponent(location.hash.slice(1));
 		let attempts = 0;
 		const tryScroll = () => {
+			if (cancelled) {
+				return;
+			}
 			const el = document.getElementById(id);
 			if (el) {
 				el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -146,7 +175,11 @@ export default function Article() {
 				setTimeout(tryScroll, 200);
 			}
 		};
-		setTimeout(tryScroll, 100);
+		const t = setTimeout(tryScroll, 100);
+		return () => {
+			cancelled = true;
+			clearTimeout(t);
+		};
 	}, [content, location.hash]);
 
 	// Verify article signature
