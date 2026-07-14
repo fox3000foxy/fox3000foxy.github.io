@@ -12,9 +12,5 @@ export default function LazyVisible({
 }) {
 	const { ref, isVisible } = useWhenVisible(rootMargin);
 
-	return (
-		<div ref={ref}>
-			{isVisible ? children : placeholder ?? <div />}
-		</div>
-	);
+	return <div ref={ref}>{isVisible ? children : (placeholder ?? <div />)}</div>;
 }

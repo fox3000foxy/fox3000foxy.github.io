@@ -70,8 +70,8 @@ export default function SuggestedArticles({
 		async function fetchRecommendations(slugs: string[]) {
 			const results = await Promise.all(
 				slugs.map((slug) =>
-					Promise.resolve(fetchArticleMarkdown(slug, lang)).then(
-						(text) => (text === null ? null : ({ slug, text } as const))
+					Promise.resolve(fetchArticleMarkdown(slug, lang)).then((text) =>
+						text === null ? null : ({ slug, text } as const)
 					)
 				)
 			);

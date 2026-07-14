@@ -120,9 +120,13 @@ export default function Article() {
 			const indexUrl = `/articles/${lang}/index.json`;
 			const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
 			try {
-				let res = await fetch(cacheBust(indexUrl), { signal: controller.signal });
+				let res = await fetch(cacheBust(indexUrl), {
+					signal: controller.signal,
+				});
 				if (!res.ok && fallbackUrl) {
-					res = await fetch(cacheBust(fallbackUrl), { signal: controller.signal });
+					res = await fetch(cacheBust(fallbackUrl), {
+						signal: controller.signal,
+					});
 				}
 				if (!res.ok) {
 					return;
