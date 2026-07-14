@@ -29,7 +29,7 @@ author_sig: "YhpPxcJ+zThPGOBIeFuw36aBRJMu6DMuR5GOAoQim8pdXpk7pH9Of8oeqknaV2ndtm4
 
 ![다른 대사, 말하는 에이전트에 따라 자막 색상 변경](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-이 쇼츠 실물: [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). 채널 영상들은 1.2~1.5k 뷰 정도 나온다. 대단한 숫자는 아니지만, 처음부터 완전 자동으로 돌아가는 채널이라는 게 포인트. 진짜 중요한 숫자는 0이다 -- 크론 한 번 돌려놓은 이후로 투자한 시간 0분.
+이 쇼츠 실물: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). 채널 영상들은 1.2~1.5k 뷰 정도 나온다. 대단한 숫자는 아니지만, 처음부터 완전 자동으로 돌아가는 채널이라는 게 포인트. 진짜 중요한 숫자는 0이다 -- 크론 한 번 돌려놓은 이후로 투자한 시간 0분.
 
 ## 파이프라인 순서대로
 

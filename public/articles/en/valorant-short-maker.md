@@ -29,15 +29,15 @@ Three frames pulled from the video generated for "Duelist Debate" (Phoenix, Yoru
 
 ![Another line, subtitle color changes based on which agent is speaking](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-The result live on this Short: [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). On the channel, Shorts sit around 1.2 to 1.5k views. Nothing huge, but it's a channel that runs entirely on its own from day one, so the number that really matters is zero — zero minutes spent on it once the cron job is launched.
+The result live on this Short: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). On the channel, Shorts sit around 1.2 to 1.5k views. Nothing huge, but it's a channel that runs entirely on its own from day one, so the number that really matters is zero -- zero minutes spent on it once the cron job is launched.
 
 ## The pipeline, in order
 
-### 1. Writing the script — Groq + Llama 3.3
+### 1. Writing the script -- Groq + Llama 3.3
 
 Each run picks 3 to 4 random agents out of the 26 available, and sends Llama 3.3 70B (via Groq) a system prompt containing, for each chosen agent, a compact summary of their personality and their relationships with the other agents in the scene (these personas live in `src/lore/`, one file per agent). The prompt enforces strict rules: one short, punchy sentence per line, fair rotation between characters, humor first, and above all, pauses.
 
-Concrete example with "Duelist Debate" — Phoenix, Yoru, and Jett argue over who gets to play duelist, generated on July 6, 2026:
+Concrete example with "Duelist Debate" -- Phoenix, Yoru, and Jett argue over who gets to play duelist, generated on July 6, 2026:
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -72,21 +72,21 @@ jett: I'll take you both down, no problem.
 
 The pauses are the detail that makes the rhythm natural: `[0.3]` inserted mid-line creates a 0.3s silence in the audio without cutting off the agent's circle on screen, while a standalone `pause: 1.0` line creates a real silence between two speakers, circle hidden. Without them, a TTS chaining lines back to back without breathing sounds robotic.
 
-### 2. Giving it a voice — Piper, one model per agent
+### 2. Giving it a voice -- Piper, one model per agent
 
-Each agent has their own specifically trained Piper model (`.onnx`), stored in `voices/<agent>/`. The generated text goes through the matching model, which spits out a WAV. It's the same tech I use for custom voice training in general (see the Piper/Kaggle pipeline article) — here applied directly in production, on the fly, on every video generation.
+Each agent has their own specifically trained Piper model (`.onnx`), stored in `voices/<agent>/`. The generated text goes through the matching model, which spits out a WAV. It's the same tech I use for custom voice training in general (see the Piper/Kaggle pipeline article) -- here applied directly in production, on the fly, on every video generation.
 
-### 3. Karaoke subtitles — generated ASS, color pulled from the icon
+### 3. Karaoke subtitles -- generated ASS, color pulled from the icon
 
-The subtitling isn't a plain `.srt`. It's an `.ass` (Advanced SubStation Alpha) file generated word by word, with a karaoke effect: each word lights up in a color as it's spoken, while the rest of the text stays in a neutral color. The accent color isn't fixed — it's dynamically extracted from the icon of the speaking agent (a Python script runs PIL on the icon PNG, samples the non-transparent pixels, and returns the dominant colors). Result: Killjoy's subtitle lights up in purple, Jett's in teal, without a single color ever being hardcoded anywhere.
+The subtitling isn't a plain `.srt`. It's an `.ass` (Advanced SubStation Alpha) file generated word by word, with a karaoke effect: each word lights up in a color as it's spoken, while the rest of the text stays in a neutral color. The accent color isn't fixed -- it's dynamically extracted from the icon of the speaking agent (a Python script runs PIL on the icon PNG, samples the non-transparent pixels, and returns the dominant colors). Result: Killjoy's subtitle lights up in purple, Jett's in teal, without a single color ever being hardcoded anywhere.
 
-### 4. The audio-reactive circle — one FFmpeg expression per frame
+### 4. The audio-reactive circle -- one FFmpeg expression per frame
 
 This is the trickiest part of the pipeline, and probably the one I'm most proud of. The round icon of the speaking agent doesn't stay static: it subtly zooms in and out to the rhythm of its own voice.
 
 The computation reads the raw WAV of the line, calculates the RMS envelope (root mean square, a measure of signal energy) frame by frame at 60 fps, normalizes by the maximum, then smooths over a 3-frame window to avoid jerkiness. Each envelope value is then converted into a scale factor bounded by `MAX_ZOOM_VARIATION` (0.2, so ±20% around the base size).
 
-The result of that computation is not applied through pixel-manipulating code — it's translated into a massive FFmpeg conditional expression (`lt(n,K)*val + between(n,K,K')*val + ...`, one branch per frame group) that directly drives the `scale` parameter of the video filter. FFmpeg evaluates this expression on every render frame. For a line lasting a few seconds at 60 fps, that's quickly hundreds of branches in a single expression — hence the `STEP` parameter that groups frames to limit depth.
+The result of that computation is not applied through pixel-manipulating code -- it's translated into a massive FFmpeg conditional expression (`lt(n,K)*val + between(n,K,K')*val + ...`, one branch per frame group) that directly drives the `scale` parameter of the video filter. FFmpeg evaluates this expression on every render frame. For a line lasting a few seconds at 60 fps, that's quickly hundreds of branches in a single expression -- hence the `STEP` parameter that groups frames to limit depth.
 
 ### 5. Rendering per segment, then fisheye on the intro
 
@@ -96,7 +96,7 @@ The very first segment gets special treatment: a fisheye distortion that gradual
 
 ### 6. Concatenation and final mix
 
-All segments are concatenated end to end, and the background music (Sneaky Snitch, Kevin MacLeod, Creative Commons license) is mixed in on top with **audio ducking** — a sidechain compression that automatically lowers the music volume while an agent is speaking, and raises it back during silences. Everything runs in 60 fps from beginning to end, no framerate conversion between steps.
+All segments are concatenated end to end, and the background music (Sneaky Snitch, Kevin MacLeod, Creative Commons license) is mixed in on top with **audio ducking** -- a sidechain compression that automatically lowers the music volume while an agent is speaking, and raises it back during silences. Everything runs in 60 fps from beginning to end, no framerate conversion between steps.
 
 ### 7. Automatic publishing
 
@@ -104,11 +104,11 @@ The `run-cron.sh` script, launched by a standard cron job, activates the Python 
 
 ## Why TypeScript/Bun instead of an all-Python thing
 
-The choice isn't ideological — it's that Bun gives direct, fast access to `Bun.spawn` to drive FFmpeg as a subprocess, strong typing on the pipeline's data structures (`Phrase`, `SegmentInfo`), and a runtime that starts much faster than Node for a script that runs on cron every few hours. The only two Python bits in the project are where Python is genuinely the best tool: PIL for color extraction, and the upload APIs (`google-api-python-client` for YouTube, the Instagram Graph API stack for IG).
+The choice isn't ideological -- it's that Bun gives direct, fast access to `Bun.spawn` to drive FFmpeg as a subprocess, strong typing on the pipeline's data structures (`Phrase`, `SegmentInfo`), and a runtime that starts much faster than Node for a script that runs on cron every few hours. The only two Python bits in the project are where Python is genuinely the best tool: PIL for color extraction, and the upload APIs (`google-api-python-client` for YouTube, the Instagram Graph API stack for IG).
 
 ## What this illustrates
 
-This project is a good example of what you can build today with entirely free or open-source building blocks: a fast, free LLM through the Groq API, a local TTS engine that runs without a dedicated GPU, FFmpeg for all the video rendering — and the glue is just a few hundred lines of TypeScript. None of these blocks are new individually. What makes the pipeline is the arrangement: generating a coherent script with real character relationships, turning it into expressive audio with natural pauses, syncing a visual render to the energy of that audio frame by frame, and automating the entire chain up to publication.
+This project is a good example of what you can build today with entirely free or open-source building blocks: a fast, free LLM through the Groq API, a local TTS engine that runs without a dedicated GPU, FFmpeg for all the video rendering -- and the glue is just a few hundred lines of TypeScript. None of these blocks are new individually. What makes the pipeline is the arrangement: generating a coherent script with real character relationships, turning it into expressive audio with natural pauses, syncing a visual render to the energy of that audio frame by frame, and automating the entire chain up to publication.
 
 ---
 
@@ -120,5 +120,5 @@ This project is a good example of what you can build today with entirely free or
 **3 key points**
 
 1. The script is generated by an LLM (Groq/Llama 3.3) with per-agent personas and relationships, not a simple list of pre-written jokes.
-2. The agent circle zoom is driven by an FFmpeg expression computed frame by frame from the WAV's RMS envelope — no classic keyframe animation.
+2. The agent circle zoom is driven by an FFmpeg expression computed frame by frame from the WAV's RMS envelope -- no classic keyframe animation.
 3. The entire chain, from prompt to YouTube/Instagram post, runs through a single cron job without any human intervention.

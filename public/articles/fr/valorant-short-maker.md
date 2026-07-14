@@ -29,7 +29,7 @@ Trois frames extraites de la vidéo générée pour "Duelist Debate" (Phoenix, Y
 
 ![Une autre réplique, la couleur du sous-titre change selon l'agent](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-Le résultat en live sur ce Short : [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Sur la chaîne, les Shorts tournent autour de 1,2 à 1,5k vues. Rien d'énorme, mais c'est une chaîne qui tourne toute seule depuis le début, donc le nombre qui compte vraiment c'est zéro -- zéro minute passée dessus une fois le cron lancé.
+Le résultat en live sur ce Short : [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Sur la chaîne, les Shorts tournent autour de 1,2 à 1,5k vues. Rien d'énorme, mais c'est une chaîne qui tourne toute seule depuis le début, donc le nombre qui compte vraiment c'est zéro -- zéro minute passée dessus une fois le cron lancé.
 
 ## Le pipeline, dans l'ordre
 

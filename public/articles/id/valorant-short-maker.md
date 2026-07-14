@@ -29,15 +29,15 @@ Tiga frame diambil dari video yang dihasilkan untuk "Duelist Debate" (Phoenix, Y
 
 ![Dialog lain, warna subtitle berubah sesuai agen yang berbicara](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-Hasil langsung di Short ini: [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Di channel, Shorts berkisar di 1,2 sampai 1,5k views. Bukan apa-apa, tapi ini channel yang berjalan sendiri sejak awal, jadi angka yang benar-benar penting adalah nol — nol menit yang dihabiskan sejak cron dinyalakan.
+Hasil langsung di Short ini: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Di channel, Shorts berkisar di 1,2 sampai 1,5k views. Bukan apa-apa, tapi ini channel yang berjalan sendiri sejak awal, jadi angka yang benar-benar penting adalah nol -- nol menit yang dihabiskan sejak cron dinyalakan.
 
 ## Pipeline-nya, berurutan
 
-### 1. Menulis skrip — Groq + Llama 3.3
+### 1. Menulis skrip -- Groq + Llama 3.3
 
-Setiap run mengambil 3 sampai 4 agen secara acak dari 26 yang tersedia, dan mengirim ke Llama 3.3 70B (via Groq) sebuah prompt sistem yang berisi, untuk setiap agen yang dipilih, ringkasan singkat tentang kepribadiannya dan hubungannya dengan agen lain yang ada di adegan (persona ini disimpan di `src/lore/`, satu file per agen). Prompt memberlakukan aturan ketat: satu kalimat pendek dan tajam per dialog, rotasi adil antar karakter, humor diprioritaskan, dan yang terpenting — jeda.
+Setiap run mengambil 3 sampai 4 agen secara acak dari 26 yang tersedia, dan mengirim ke Llama 3.3 70B (via Groq) sebuah prompt sistem yang berisi, untuk setiap agen yang dipilih, ringkasan singkat tentang kepribadiannya dan hubungannya dengan agen lain yang ada di adegan (persona ini disimpan di `src/lore/`, satu file per agen). Prompt memberlakukan aturan ketat: satu kalimat pendek dan tajam per dialog, rotasi adil antar karakter, humor diprioritaskan, dan yang terpenting -- jeda.
 
-Contoh nyata dengan "Duelist Debate" — Phoenix, Yoru, dan Jett berdebat siapa yang akan main duelist, dihasilkan 6 Juli 2026:
+Contoh nyata dengan "Duelist Debate" -- Phoenix, Yoru, dan Jett berdebat siapa yang akan main duelist, dihasilkan 6 Juli 2026:
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -72,21 +72,21 @@ jett: I'll take you both down, no problem.
 
 Jeda adalah detail yang membuat ritme terasa natural: `[0.3]` yang disisipkan di tengah dialog menciptakan keheningan 0,3 detik di audio tanpa memotong lingkaran agen di layar, sementara baris `pause: 1.0` yang utuh menciptakan keheningan nyata antara dua pembicara, lingkaran disembunyikan. Tanpa ini, TTS yang membacakan dialog tanpa jeda terdengar seperti robot.
 
-### 2. Memberi suara — Piper, satu model per agen
+### 2. Memberi suara -- Piper, satu model per agen
 
-Setiap agen punya model Piper (`.onnx`) sendiri yang dilatih khusus, disimpan di `voices/<agent>/`. Teks yang dihasilkan melewati model yang sesuai, yang menghasilkan WAV. Teknologi yang sama yang saya gunakan untuk training suara kustom secara umum (lihat artikel pipeline Piper/Kaggle) — di sini diterapkan langsung di production, on-the-fly, setiap kali generasi video.
+Setiap agen punya model Piper (`.onnx`) sendiri yang dilatih khusus, disimpan di `voices/<agent>/`. Teks yang dihasilkan melewati model yang sesuai, yang menghasilkan WAV. Teknologi yang sama yang saya gunakan untuk training suara kustom secara umum (lihat artikel pipeline Piper/Kaggle) -- di sini diterapkan langsung di production, on-the-fly, setiap kali generasi video.
 
-### 3. Subtitle karaoke — ASS dihasilkan, warna diekstrak dari ikon
+### 3. Subtitle karaoke -- ASS dihasilkan, warna diekstrak dari ikon
 
-Subtitling bukan sekadar `.srt`. Ini adalah file `.ass` (Advanced SubStation Alpha) yang dihasilkan kata per kata, dengan efek karaoke: setiap kata menyala dalam satu warna saat diucapkan, sementara teks lainnya tetap dalam warna netral. Warna aksen tidak tetap — diekstrak secara dinamis dari ikon agen yang berbicara (script Python menjalankan PIL pada PNG ikon, mengambil sampel piksel non-transparan, dan mengembalikan warna dominan). Hasilnya: subtitle Killjoy menyala ungu, Jett menyala biru kehijauan, tanpa ada satu warna pun yang di-hardcode di mana pun.
+Subtitling bukan sekadar `.srt`. Ini adalah file `.ass` (Advanced SubStation Alpha) yang dihasilkan kata per kata, dengan efek karaoke: setiap kata menyala dalam satu warna saat diucapkan, sementara teks lainnya tetap dalam warna netral. Warna aksen tidak tetap -- diekstrak secara dinamis dari ikon agen yang berbicara (script Python menjalankan PIL pada PNG ikon, mengambil sampel piksel non-transparan, dan mengembalikan warna dominan). Hasilnya: subtitle Killjoy menyala ungu, Jett menyala biru kehijauan, tanpa ada satu warna pun yang di-hardcode di mana pun.
 
-### 4. Lingkaran reaktif audio — satu ekspresi FFmpeg per frame
+### 4. Lingkaran reaktif audio -- satu ekspresi FFmpeg per frame
 
 Ini bagian paling rumit dari pipeline, dan mungkin yang paling saya banggakan. Ikon bulat agen yang berbicara tidak diam: dia zoom sedikit mengikuti irama suaranya sendiri.
 
 Perhitungannya membaca WAV mentah dari dialog, menghitung envelope RMS (root mean square, ukuran energi sinyal) frame demi frame pada 60 fps, dinormalisasi dengan nilai maksimum, lalu dihaluskan pada jendela 3 frame untuk menghindari sentakan. Setiap nilai envelope kemudian dikonversi menjadi faktor skala yang dibatasi oleh `MAX_ZOOM_VARIATION` (0,2, atau ±20% dari ukuran dasar).
 
-Hasil perhitungan ini tidak diterapkan lewat kode yang memanipulasi piksel — melainkan diterjemahkan menjadi ekspresi kondisional FFmpeg raksasa (`lt(n,K)*val + between(n,K,K')*val + ...`, satu cabang per kelompok frame) yang langsung mengendalikan parameter `scale` dari filter video. FFmpeg mengevaluasi ekspresi ini di setiap frame render. Untuk dialog beberapa detik pada 60 fps, dengan cepat terbentuk ratusan cabang dalam satu ekspresi — makanya ada parameter `STEP` yang mengelompokkan frame untuk membatasi kedalaman.
+Hasil perhitungan ini tidak diterapkan lewat kode yang memanipulasi piksel -- melainkan diterjemahkan menjadi ekspresi kondisional FFmpeg raksasa (`lt(n,K)*val + between(n,K,K')*val + ...`, satu cabang per kelompok frame) yang langsung mengendalikan parameter `scale` dari filter video. FFmpeg mengevaluasi ekspresi ini di setiap frame render. Untuk dialog beberapa detik pada 60 fps, dengan cepat terbentuk ratusan cabang dalam satu ekspresi -- makanya ada parameter `STEP` yang mengelompokkan frame untuk membatasi kedalaman.
 
 ### 5. Render per segmen, lalu fisheye di intro
 
@@ -96,7 +96,7 @@ Segmen pertama mendapat perlakuan khusus: distorsi fisheye yang perlahan menghil
 
 ### 6. Konkatenasi dan mixing final
 
-Semua segmen disambung dari ujung ke ujung, musik latar (Sneaky Snitch, Kevin MacLeod, lisensi Creative Commons) dicampur di atasnya dengan **audio ducking** — kompresi sidechain yang otomatis menurunkan volume musik saat agen berbicara, dan menaikkannya kembali saat hening. Semuanya berjalan dalam 60 fps dari awal hingga akhir, tidak ada konversi framerate antar langkah.
+Semua segmen disambung dari ujung ke ujung, musik latar (Sneaky Snitch, Kevin MacLeod, lisensi Creative Commons) dicampur di atasnya dengan **audio ducking** -- kompresi sidechain yang otomatis menurunkan volume musik saat agen berbicara, dan menaikkannya kembali saat hening. Semuanya berjalan dalam 60 fps dari awal hingga akhir, tidak ada konversi framerate antar langkah.
 
 ### 7. Publikasi otomatis
 
@@ -104,11 +104,11 @@ Script `run-cron.sh`, dijalankan oleh cron biasa, mengaktifkan environment Pytho
 
 ## Kenapa TypeScript/Bun bukan semuanya Python
 
-Pilihannya bukan ideologis — Bun memberi akses langsung dan cepat ke `Bun.spawn` untuk mengendalikan FFmpeg sebagai subproses, strong typing pada struktur data pipeline (`Phrase`, `SegmentInfo`), dan runtime yang mulai jauh lebih cepat daripada Node untuk script yang berjalan di cron setiap beberapa jam. Dua potongan Python satu-satunya di proyek ini adalah di tempat Python benar-benar alat terbaik: PIL untuk ekstraksi warna, dan API upload (`google-api-python-client` untuk YouTube, stack Instagram Graph API untuk IG).
+Pilihannya bukan ideologis -- Bun memberi akses langsung dan cepat ke `Bun.spawn` untuk mengendalikan FFmpeg sebagai subproses, strong typing pada struktur data pipeline (`Phrase`, `SegmentInfo`), dan runtime yang mulai jauh lebih cepat daripada Node untuk script yang berjalan di cron setiap beberapa jam. Dua potongan Python satu-satunya di proyek ini adalah di tempat Python benar-benar alat terbaik: PIL untuk ekstraksi warna, dan API upload (`google-api-python-client` untuk YouTube, stack Instagram Graph API untuk IG).
 
 ## Apa yang diilustrasikan
 
-Proyek ini adalah contoh bagus tentang apa yang bisa dibangun hari ini dengan blok bangunan yang sepenuhnya gratis atau open source: LLM cepat dan gratis via Groq API, mesin TTS lokal yang berjalan tanpa GPU khusus, FFmpeg untuk semua rendering video — dan perekatnya hanya beberapa ratus baris TypeScript. Tak satu pun dari blok-blok ini baru secara individual. Yang membuat pipeline adalah pengaturannya: menghasilkan skrip yang koheren dengan hubungan karakter nyata, mengubahnya menjadi audio ekspresif dengan jeda alami, menyinkronkan render visual ke energi audio itu frame demi frame, dan mengotomatiskan seluruh rantai sampai publikasi.
+Proyek ini adalah contoh bagus tentang apa yang bisa dibangun hari ini dengan blok bangunan yang sepenuhnya gratis atau open source: LLM cepat dan gratis via Groq API, mesin TTS lokal yang berjalan tanpa GPU khusus, FFmpeg untuk semua rendering video -- dan perekatnya hanya beberapa ratus baris TypeScript. Tak satu pun dari blok-blok ini baru secara individual. Yang membuat pipeline adalah pengaturannya: menghasilkan skrip yang koheren dengan hubungan karakter nyata, mengubahnya menjadi audio ekspresif dengan jeda alami, menyinkronkan render visual ke energi audio itu frame demi frame, dan mengotomatiskan seluruh rantai sampai publikasi.
 
 ---
 
@@ -120,5 +120,5 @@ Proyek ini adalah contoh bagus tentang apa yang bisa dibangun hari ini dengan bl
 **3 poin kunci**
 
 1. Skrip dihasilkan oleh LLM (Groq/Llama 3.3) dengan persona dan hubungan per agen, bukan sekadar daftar lelucon yang sudah ditulis sebelumnya.
-2. Zoom lingkaran agen dikendalikan oleh ekspresi FFmpeg yang dihitung frame demi frame dari envelope RMS WAV — bukan animasi keyframe klasik.
+2. Zoom lingkaran agen dikendalikan oleh ekspresi FFmpeg yang dihitung frame demi frame dari envelope RMS WAV -- bukan animasi keyframe klasik.
 3. Seluruh rantai, dari prompt hingga posting YouTube/Instagram, berjalan lewat satu cron job tanpa campur tangan manusia.

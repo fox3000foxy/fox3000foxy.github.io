@@ -29,7 +29,7 @@ author_sig: "ATZ9Zoe2oVIKonlNPlVw9aMqOSGZ5j0/I9khR+MgG/skSdFOJZv3/VnfhbPufe4NcD+
 
 ![อีกบทพูด สีซับเปลี่ยนตามเอเจนต์ที่พูด](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-ผลลัพธ์ของจริงใน Shorts นี้: [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU) Shorts ในช่องมียอดวิวประมาณ 1.2 ถึง 1.5k วิว ไม่ได้เยอะอะไร แต่เป็นช่องที่เดินเองตั้งแต่แรก ดังนั้นตัวเลขที่สำคัญจริง ๆ คือศูนย์ -- ศูนย์นาทีที่ใช้ไปกับมันตั้งแต่ cron ทำงาน
+ผลลัพธ์ของจริงใน Shorts นี้: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU) Shorts ในช่องมียอดวิวประมาณ 1.2 ถึง 1.5k วิว ไม่ได้เยอะอะไร แต่เป็นช่องที่เดินเองตั้งแต่แรก ดังนั้นตัวเลขที่สำคัญจริง ๆ คือศูนย์ -- ศูนย์นาทีที่ใช้ไปกับมันตั้งแต่ cron ทำงาน
 
 ## ไปป์ไลน์ ตามลำดับ
 

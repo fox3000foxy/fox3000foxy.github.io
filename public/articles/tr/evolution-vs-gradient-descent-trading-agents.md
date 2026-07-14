@@ -61,7 +61,7 @@ v3'teki ikinci ekleme: **kalıcı bir Pareto arşivi**. Onsuz, 12. nesilde bulun
 
 V3'ün yapısal bir kör noktası vardı: genom mimariyi tanımlıyordu, ancak eğitim sırasında öğrenilen ağırlıklar her yeni nesilde kayboluyordu. İki iyi ebeveynin çaprazlanmasından doğan bir çocuk, onların mimarisini miras aldı, ancak sıfırdan yeniden öğrenmek zorundaydı; ebeveynlerini performanslı yapan ağırlıkların hiçbir izi yoktu.
 
-V4, **Lamarckçı evrimi** getiriyor: eğitilmiş ağırlıklar, eğitimden sonra genoma geri beslenir ve (mutasyonla birlikte) yavrulara iletilir. Bu, kasıtlı bir biyolojik sapkınlıktır; Lamarck canlı organizmalar için yanılmıştı — edinilmiş karakteristiklerin kalıtımı biyolojide mevcut değildir — ancak dijital bir GA'nın akıllıca hile yapmasını hiçbir şey engelleyemez: burada, edinilmiş bilgiyi iletmek, yakınsamayı radikal bir şekilde hızlandırır, çünkü her nesil rastgele ağırlıklar yerine zaten bilgilendirilmiş bir başlangıçtan yeniden başlar.
+V4, **Lamarckçı evrimi** getiriyor: eğitilmiş ağırlıklar, eğitimden sonra genoma geri beslenir ve (mutasyonla birlikte) yavrulara iletilir. Bu, kasıtlı bir biyolojik sapkınlıktır; Lamarck canlı organizmalar için yanılmıştı -- edinilmiş karakteristiklerin kalıtımı biyolojide mevcut değildir -- ancak dijital bir GA'nın akıllıca hile yapmasını hiçbir şey engelleyemez: burada, edinilmiş bilgiyi iletmek, yakınsamayı radikal bir şekilde hızlandırır, çünkü her nesil rastgele ağırlıklar yerine zaten bilgilendirilmiş bir başlangıçtan yeniden başlar.
 
 Bu sürümdeki diğer üç yapısal değişiklik:
 

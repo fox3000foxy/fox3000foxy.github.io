@@ -29,7 +29,7 @@ author_sig: "4UEXH2siqcUMGWgIL0JXzfBKKTLjakkE+ciV6LavRjw7GnIrLLBi5LThk/r+82GHFoK
 
 ![別のセリフ、話しているエージェントによって字幕の色が変わる](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-このショートの実物: [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU)。チャンネルのショートは大体1.2〜1.5kビューくらい。大した数字じゃないけど、最初から完全自動で回ってるチャンネルだから、本当に大事な数字はゼロだ -- cronを起動してから費やした時間ゼロ分。
+このショートの実物: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU)。チャンネルのショートは大体1.2〜1.5kビューくらい。大した数字じゃないけど、最初から完全自動で回ってるチャンネルだから、本当に大事な数字はゼロだ -- cronを起動してから費やした時間ゼロ分。
 
 ## パイプライン、順を追って
 

@@ -61,7 +61,7 @@ Segunda adição na v3: um **arquivo Pareto persistente**. Sem ele, um bom genom
 
 A v3 tinha um ponto cego estrutural: o genoma descrevia a arquitetura, mas os pesos aprendidos durante o treinamento desapareciam a cada nova geração. Um filho nascido do cruzamento de dois bons pais herdava sua arquitetura, mas tinha que reaprender do zero; nenhum traço dos pesos que tornaram seus pais eficientes.
 
-A v4 introduz a **evolução Lamarckiana**: os pesos treinados são realimentados no genoma após o treinamento e transmitidos (com mutação) para a prole. Isso é uma heresia biológica deliberada; Lamarck estava errado para organismos vivos — a herança de características adquiridas não existe na biologia — mas nada impede um AG digital de trapacear inteligentemente: aqui, transmitir conhecimento adquirido acelera radicalmente a convergência, já que cada geração reinicia a partir de uma inicialização já informada em vez de pesos aleatórios.
+A v4 introduz a **evolução Lamarckiana**: os pesos treinados são realimentados no genoma após o treinamento e transmitidos (com mutação) para a prole. Isso é uma heresia biológica deliberada; Lamarck estava errado para organismos vivos -- a herança de características adquiridas não existe na biologia -- mas nada impede um AG digital de trapacear inteligentemente: aqui, transmitir conhecimento adquirido acelera radicalmente a convergência, já que cada geração reinicia a partir de uma inicialização já informada em vez de pesos aleatórios.
 
 Outras três mudanças estruturais nesta versão:
 
