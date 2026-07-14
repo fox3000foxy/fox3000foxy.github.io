@@ -15,7 +15,7 @@ author_sig: "T9dfV/GW2kLFQZQhvJpnsM+fzNwdU2PecAwLGi6wSafqqk6dMkGbsb29NuOJWEwyRsj
 
 ## Başlık ve Bağlantılar
 
-GitHub profiliME hoş geldin--iyi düzenlenmiş bir kütüphane gibi organize edilmiş.
+GitHub profilime hoş geldin--iyi düzenlenmiş bir kütüphane gibi organize edilmiş.
 İlk bölümde bağlantıların olduğu bir başlık var, oldukça standart diyebilirim:
 ![](assets/20260308_123527_image.png)
 
