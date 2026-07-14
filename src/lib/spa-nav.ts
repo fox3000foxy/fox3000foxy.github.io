@@ -348,12 +348,4 @@ export function initSpaNav() {
 	history.replaceState({ spa: true }, "", location.href);
 }
 
-if (typeof window === "undefined") {
-	// SSR guard
-} else if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", () => {
-		initSpaNav();
-	});
-} else {
-	initSpaNav();
-}
+// Auto-initialization removed - call initSpaNav() explicitly from your layout
