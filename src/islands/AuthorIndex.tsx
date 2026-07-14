@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "../lib/navigation";
 import "../styles/BlogList.css";
 import type { ArticleMeta } from "../types";
 import { cacheBust } from "../utils/cacheBust";

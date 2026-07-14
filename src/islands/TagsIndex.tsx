@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../lib/navigation";
 import type { ArticleMeta } from "../types";
 import { cacheBust } from "../utils/cacheBust";
 import { useLang } from "../hooks/useLang";

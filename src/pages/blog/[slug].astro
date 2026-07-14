@@ -1,50 +1,19 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
-import { renderMarkdown } from "../../lib/markdown";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Header from "../../components/Header.astro";
-import Footer from "../../components/Footer.astro";
-import { SITE_URL } from "../../config";
+import Article from "../../islands/Article.tsx";
 
 export async function getStaticPaths() {
-  const articlesDir = path.resolve("public/articles/en");
-  const files = fs.readdirSync(articlesDir).filter((f) => f.endsWith(".md") && f !== "index.json");
-  const indexRaw = fs.readFileSync(path.join(articlesDir, "index.json"), "utf-8");
-  const index = JSON.parse(indexRaw);
-
-  return index
-    .filter((entry) => files.includes(`${entry.slug}.md`))
-    .map((entry) => ({
-      params: { slug: entry.slug },
-      props: { entry },
-    }));
+  const indexPath = path.resolve("public/articles/en/index.json");
+  if (!fs.existsSync(indexPath)) return [];
+  const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+  return index.map((entry: { slug: string }) => ({
+    params: { slug: entry.slug },
+  }));
 }
-
-const { entry } = Astro.props;
-
-const mdPath = path.resolve(`public/articles/en/${entry.slug}.md`);
-const mdContent = fs.readFileSync(mdPath, "utf-8");
-const html = await renderMarkdown(mdContent);
 ---
 
-<BaseLayout
-  title={entry.title}
-  description={entry.description}
-  canonical={`${SITE_URL}/blog/${entry.slug}`}
->
-  <Header />
-  <main>
-    <article>
-      <header>
-        <h1>{entry.title}</h1>
-        {entry.date && <time datetime={entry.date}>{entry.date}</time>}
-        {entry.tags && entry.tags.length > 0 && (
-          <p>Tags: {entry.tags.join(", ")}</p>
-        )}
-      </header>
-      <div set:html={html} />
-    </article>
-  </main>
-  <Footer />
+<BaseLayout title="Article" description="" wide>
+  <Article client:only="react" />
 </BaseLayout>

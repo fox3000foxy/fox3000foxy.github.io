@@ -1,51 +1,8 @@
 ---
-import fs from "node:fs";
-import path from "node:path";
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const indexRaw = fs.readFileSync(path.resolve("public/articles/en/index.json"), "utf-8");
-const articles = JSON.parse(indexRaw);
-
-const byYear: Record<string, { month: string; items: typeof articles }[]> = {};
-for (const a of articles) {
-  if (!a.date) continue;
-  const d = new Date(a.date);
-  const year = d.getFullYear().toString();
-  const month = d.toLocaleString("en", { month: "long" });
-  if (!byYear[year]) byYear[year] = [];
-  let mGroup = byYear[year].find((g) => g.month === month);
-  if (!mGroup) {
-    mGroup = { month, items: [] };
-    byYear[year].push(mGroup);
-  }
-  mGroup.items.push(a);
-}
+import Archive from "../islands/Archive.tsx";
 ---
 
-<BaseLayout title="Archive" description="All articles by date">
-  <h1>Archive</h1>
-  <div class="archive">
-    {Object.entries(byYear).reverse().map(([year, months]) => (
-      <div class="archive-group">
-        <h2>{year}</h2>
-        {months.reverse().map((m) => (
-          <div>
-            <h3 class="archive-month">{m.month}</h3>
-            <ul class="archive-list">
-              {m.items.map((a) => {
-                const d = a.date ? new Date(a.date) : null;
-                const day = d ? d.getDate() : "";
-                return (
-                  <li class="archive-item">
-                    <span class="archive-day">{day}</span>
-                    <a href={`/blog/${a.slug}`} class="archive-link">{a.title}</a>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </div>
-    ))}
-  </div>
+<BaseLayout title="Archive" description="All articles by date" wide>
+  <Archive client:only="react" />
 </BaseLayout>

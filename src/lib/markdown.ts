@@ -17,5 +17,5 @@ marked.use(
 );
 
 export function renderMarkdown(content: string): string {
-  return marked(content) as string;
+	return marked(content) as string;
 }

@@ -36,7 +36,14 @@ interface LangCtx {
 	t: (key: string, params?: Record<string, string | number>) => string;
 }
 
-export const LangContext = createContext<LangCtx>(null!);
+const FALLBACK_T = (key: string, _params?: Record<string, string | number>) =>
+	key;
+
+export const LangContext = createContext<LangCtx>({
+	lang: "en",
+	setLang: () => {},
+	t: FALLBACK_T,
+});
 
 export function useLang() {
 	return useContext(LangContext);

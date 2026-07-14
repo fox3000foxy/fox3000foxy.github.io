@@ -31,3 +31,4 @@ ROADMAP.md
 
 # Environment variables
 .env
+*.tsbuildinfo

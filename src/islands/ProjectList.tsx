@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../lib/navigation";
 import "../styles/ProjectList.css";
 import { useLang } from "../hooks/useLang";
 

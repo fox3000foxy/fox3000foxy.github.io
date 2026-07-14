@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../lib/navigation";
 
 export default function KeyboardShortcuts() {
 	const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../lib/navigation";
 import "../styles/BlogList.css";
 import {
 	getCachedArticleMarkdown,

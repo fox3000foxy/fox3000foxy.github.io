@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "../lib/navigation";
 import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import { useMarkdown } from "../hooks/useMarkdown";

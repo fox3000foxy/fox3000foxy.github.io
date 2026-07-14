@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "../lib/navigation";
 import { useLang } from "../hooks/useLang";
 import MarkdownContent from "../components/MarkdownContent";
 import NotFound from "./NotFound";
