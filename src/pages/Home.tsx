@@ -32,10 +32,10 @@ export default function Home() {
 		<article className="home">
 			<MarkdownContent content={content} />
 			<RssSubscribe />
-			<LazyVisible>
+			<LazyVisible height="270px">
 				<GitHubActivity />
 			</LazyVisible>
-			<LazyVisible>
+			<LazyVisible height="220px">
 				<NewsletterSignup />
 			</LazyVisible>
 		</article>

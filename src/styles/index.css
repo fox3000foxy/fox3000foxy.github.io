@@ -59,5 +59,12 @@ h1 {
 img {
   max-width: 100%;
   height: auto;
+}
+
+img[width][height] {
   aspect-ratio: attr(width) / attr(height);
+}
+
+img:not([height]) {
+  min-height: 20px;
 }

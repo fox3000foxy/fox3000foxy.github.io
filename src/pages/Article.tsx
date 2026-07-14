@@ -288,7 +288,7 @@ export default function Article() {
 							/>
 						)}
 						{meta?.tags && meta.tags.length > 0 && (
-							<LazyVisible rootMargin="400px">
+							<LazyVisible rootMargin="400px" height="200px">
 								<SuggestedArticles
 									currentSlug={slug!}
 									currentTags={meta.tags}
@@ -327,7 +327,7 @@ export default function Article() {
 								)}
 							</nav>
 						)}
-						<LazyVisible rootMargin="400px">
+						<LazyVisible rootMargin="400px" height="350px">
 							<GiscusComments lang={lang} />
 						</LazyVisible>
 					</div>
