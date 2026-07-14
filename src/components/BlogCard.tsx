@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
@@ -24,6 +25,34 @@ export default function BlogCard({ article }: BlogCardProps) {
 		tags,
 		authors,
 	} = article;
+
+	const formattedDate = useMemo(
+		() =>
+			date
+				? new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
+						year: "numeric",
+						month: "long",
+						day: "numeric",
+					})
+				: null,
+		[date, lang]
+	);
+
+	const authorElements = useMemo(
+		() =>
+			getAuthors(authors).map((a) => (
+				<img
+					key={a.id}
+					className="blog-card-author-avatar"
+					src={a.avatar ?? `https://github.com/${a.id}.png`}
+					alt={a.name}
+					title={a.name}
+					width="20"
+					height="20"
+				/>
+			)),
+		[authors]
+	);
 
 	return (
 		<Link
@@ -57,34 +86,14 @@ export default function BlogCard({ article }: BlogCardProps) {
 			</div>
 			<div className="blog-card-footer">
 				<div className="blog-card-meta">
-					{date && (
-						<time dateTime={date}>
-							{new Date(`${date}T00:00:00`).toLocaleDateString(lang, {
-								year: "numeric",
-								month: "long",
-								day: "numeric",
-							})}
-						</time>
-					)}
+					{formattedDate && <time dateTime={date!}>{formattedDate}</time>}
 					{readingTime && (
 						<span className="blog-card-reading-time">
 							{t("article.minRead", { n: readingTime })}
 						</span>
 					)}
 				</div>
-				<div className="blog-card-authors">
-					{getAuthors(authors).map((a) => (
-						<img
-							key={a.id}
-							className="blog-card-author-avatar"
-							src={a.avatar ?? `https://github.com/${a.id}.png`}
-							alt={a.name}
-							title={a.name}
-							width="20"
-							height="20"
-						/>
-					))}
-				</div>
+				<div className="blog-card-authors">{authorElements}</div>
 				<BookmarkButton slug={slug} />
 			</div>
 		</Link>

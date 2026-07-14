@@ -210,6 +210,11 @@ export default function Article() {
 	const prevArticle = idx < sorted.length - 1 ? sorted[idx + 1] : null;
 	const nextArticle = idx > 0 ? sorted[idx - 1] : null;
 
+	const readingTime = useMemo(
+		() => estimateReadingTime(content ?? ""),
+		[content]
+	);
+
 	if (error) {
 		return <NotFound message={t("notFound.article", { slug: slug || "" })} />;
 	}
@@ -242,9 +247,7 @@ export default function Article() {
 						</>
 					)}
 					{meta?.date && <span className="article-sep">·</span>}
-					<span>
-						{t("article.minRead", { n: estimateReadingTime(content) })}
-					</span>
+					<span>{t("article.minRead", { n: readingTime })}</span>
 				</p>
 				<AuthorBio authors={meta?.authors} verified={verified} />
 				{meta?.description && (
