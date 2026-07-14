@@ -14,7 +14,7 @@ Tôi cũng yêu thích tìm ra các cách giải quyết để không phải tr�
 
 Vậy tôi chủ yếu lập trình bằng TypeScript và React bây giờ, nhưng vào thời gian trước, tôi lập trình các launcher bằng HTML, CSS và JavaScript thuần túy. Crazy? Tôi từng điên một lần! Họ cho tôi vào một phòng. Nahhh tôi đang nói đùa. Tôi cũng biết Python, C# nhưng tôi ghét nó, Java, nhưng nó hiếm khi được sử dụng, bây giờ tôi sử dụng nó để lập trình các plugin Minecraft cho Eminium Games. Tôi biết C++ từ trước nhưng không thể lập trình bằng nó thực sự. Tôi cũng đang học C với dự án bareiron. Và vân vân, tôi không biết Rust hoặc Go vào lúc này, nhưng tôi sẽ thích học.
 
-Tôi cũng có một số kiến thức về vẽ tranh, nhưng tôi không thực sự giỏi, tôi chỉ vẽ cho vui. Tôi cũng làm một số sản xuất âm nhạc, nhưng tôi không thực sự giỏi, tôi chỉ làm cho vui. Tôi cũng có một số kiến thức về chỉnh sửa video, nhưng tôi không thực sự giỏi, tôi chỉ làm cho vui.
+Tôi cũng có một số kiến thức về vẽ tranh, sản xuất âm nhạc và chỉnh sửa video — nhưng tôi không thực sự giỏi cái nào, tôi chỉ làm cho vui.
 
 Tôi sử dụng một số framework và thư viện như Node.js, Express.js, React, Discord.js, và nhiều hơn nữa. Tôi cũng sử dụng một số công cụ như Git, Docker, và các phân phối Linux như Debian, Arch Linux và Ubuntu. Tôi cũng có một số kiến thức về các cơ sở dữ liệu như MongoDB và MySQL.
 
