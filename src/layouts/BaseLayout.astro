@@ -84,11 +84,12 @@ const hreflangLinks = ALL_LANGS.map((l) =>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
     <script set:html={`(function(){var t=localStorage.getItem('theme');if(t==='light'||(!t&&window.matchMedia('(prefers-color-scheme:light)').matches))document.documentElement.classList.add('light');var l=localStorage.getItem('fox-blog-lang');if(!l){var p=navigator.languages||[navigator.language],c=${JSON.stringify(ALL_LANGS)};for(var i=0;i<p.length;i++){var x=p[i].split('-')[0];if(c.indexOf(x)!==-1){l=x;break}}}if(l&&l!=='en')document.documentElement.dataset.lang=l})()`} />
+    <script>import "../lib/spa-nav";</script>
   </head>
   <body>
     <div id="root">
       <Header locale={lang} />
-      <main class={wide ? "" : "article-content"} style={wide ? "" : "max-width:700px;margin:0 auto;"}>
+      <main id="main-content" class={wide ? "" : "article-content"} style={wide ? "" : "max-width:700px;margin:0 auto;"}>
         <slot />
       </main>
       <Footer />
