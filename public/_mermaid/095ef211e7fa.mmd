@@ -1,0 +1,11 @@
+flowchart LR
+    A[Nút bắt đầu] --> B{Có láng giềng\ncần đánh giá?}
+    B -->|Có| C[Tính f = g + 1.5×h\ncho mỗi láng giềng]
+    C --> D[Chọn láng giềng\ncó f nhỏ nhất]
+    D --> E{Đã tới\nđích?}
+    E -->|Không| B
+    E -->|Có| F[Đã tìm thấy đường!]
+    B -->|Không| G[Không có đường\nkhả thi]
+    
+    style F color:#4caf50
+    style G color:#f44336

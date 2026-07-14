@@ -1,0 +1,5 @@
+flowchart TD
+    A["Partisyon<br/>(notalar + sözler)"] --> B[Phonemizer]
+    B -->|"birleştirilecek<br/>birimlere ayır"| C[Resampler]
+    C -->|"WAV'ı yükle,<br/>süre + perdeyi değiştir,<br/>flag'leri uygula"| D[Wavtool]
+    D -->|"parçaları birleştir"| E["Final ses"]
