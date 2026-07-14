@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "th"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "49b/We1Du9DsbKdG9FElPX0kpvs1prkzt0mYGf0cavoKiS5Ia9lQddig8OmNJuys+7xoqpAwyYpvgGi9OOuJZw=="
+author_sig: "sLVpn9XJlQnIFxpnGFU+ZUUKepqvNlYnVwHdUhB0t9gJDA9TGdAcwOQ2hZSAVOzkB8l4VFmtV4IcuLXl73OmaA=="
 ---
 
 ## ปัญหาของเกรเดียนต์ดีเซนต์เพียงอย่างเดียว

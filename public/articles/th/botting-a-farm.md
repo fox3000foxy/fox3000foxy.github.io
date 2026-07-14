@@ -9,7 +9,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8nblS5OUSxH2BooR/STkspZX3mazJOIajQs5FwPWxbFrvEV3YY3kgwQGvv12aIs4EDlZpJdLiB4GODGXn9TinA=="
+author_sig: "9VCkurUB57RF0O/6+/wJOraCCBzMFRALmXFkjGkVKY+wEG6gui8744wz0jU2BF7CIiKmlBp513MLZKiaB2JjNg=="
 ---
 
 > **หมายเหตุ (2026):** โปรเจกต์นี้ไม่ได้ดูแลอีกต่อไปแล้ว Microsoft ได้เสริมการตรวจจับแอนตี้บอทอย่างมาก -- สิ่งที่เคยใช้ได้ในตอนนั้นไม่สามารถใช้ได้อีกแล้วในวันนี้ โค้ดและแนวทางที่อธิบายไว้ด้านล่างนี้เก็บไว้เพื่อวัตถุประสงค์ในการเก็บถาวรและสาธิตเท่านั้น
