@@ -49,7 +49,11 @@ function shouldSkip(link: HTMLAnchorElement): boolean {
 	if (!href) {
 		return true;
 	}
-	if (href.startsWith("mailto:") || href.startsWith("tel:")) {
+	if (
+		href.startsWith("#") ||
+		href.startsWith("mailto:") ||
+		href.startsWith("tel:")
+	) {
 		return true;
 	}
 	try {
@@ -177,19 +181,31 @@ function swapMeta(doc: Document) {
 		});
 }
 
-function swapContent(doc: Document): boolean {
-	const main = document.getElementById("main-content");
-	const newMain = doc.getElementById("main-content");
-	if (!(main && newMain)) {
-		return false;
+function getPageScripts(doc: Document): HTMLScriptElement[] {
+	const inMain = doc.getElementById("main-content");
+	const results: HTMLScriptElement[] = [];
+
+	if (inMain) {
+		results.push(...Array.from(inMain.querySelectorAll("script")));
 	}
 
-	const scripts = Array.from(newMain.querySelectorAll("script"));
-	scripts.forEach((s) => {
-		s.remove();
+	doc.body.querySelectorAll("script").forEach((s) => {
+		if (s.closest("header") || s.closest("footer")) {
+			return;
+		}
+		if (inMain?.contains(s)) {
+			return;
+		}
+		results.push(s);
 	});
 
-	main.innerHTML = newMain.innerHTML;
+	return results;
+}
+
+function executeScripts(container: HTMLElement, scripts: HTMLScriptElement[]) {
+	for (const oldScript of scripts) {
+		oldScript.remove();
+	}
 
 	for (const oldScript of scripts) {
 		const newScript = document.createElement("script");
@@ -197,8 +213,21 @@ function swapContent(doc: Document): boolean {
 			newScript.setAttribute(attr.name, attr.value);
 		}
 		newScript.textContent = oldScript.textContent;
-		main.appendChild(newScript);
+		container.appendChild(newScript);
 	}
+}
+
+function swapContent(doc: Document): boolean {
+	const main = document.getElementById("main-content");
+	const newMain = doc.getElementById("main-content");
+	if (!(main && newMain)) {
+		return false;
+	}
+
+	const scripts = getPageScripts(doc);
+
+	main.innerHTML = newMain.innerHTML;
+	executeScripts(main, scripts);
 
 	return true;
 }
