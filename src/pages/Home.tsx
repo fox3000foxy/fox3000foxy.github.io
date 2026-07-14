@@ -17,7 +17,14 @@ export default function Home() {
 	}
 
 	if (content === null) {
-		return <p>{t("home.loading")}</p>;
+		return (
+			<article className="home home-skeleton">
+				<div className="skeleton-title" />
+				<div className="skeleton-line" />
+				<div className="skeleton-line" />
+				<div className="skeleton-line skeleton-line--short" />
+			</article>
+		);
 	}
 
 	return (

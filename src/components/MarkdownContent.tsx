@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -7,7 +7,8 @@ import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { slugify } from "../utils/headings";
 import { useLang } from "../hooks/useLang";
-import MermaidBlock from "./MermaidBlock";
+
+const MermaidBlock = lazy(() => import("./MermaidBlock"));
 
 const sanitizeSchema = {
 	...defaultSchema,
@@ -51,9 +52,6 @@ function splitContent(content: string): Segment[] {
 		}
 		segments.push({ type: "mermaid", content: m[1].trim() });
 		last = m.index + m[0].length;
-	}
-	if (last < content.length) {
-		segments.push({ type: "md", content: content.slice(last) });
 	}
 	if (last < content.length) {
 		segments.push({ type: "md", content: content.slice(last) });
@@ -126,11 +124,18 @@ function CodeBlock({ children, ...rest }: HTMLAttributes<HTMLPreElement>) {
 		try {
 			await navigator.clipboard.writeText(code);
 			setCopied(true);
-			setTimeout(() => setCopied(false), 2000);
 		} catch {
 			// clipboard not available
 		}
 	};
+
+	useEffect(() => {
+		if (!copied) {
+			return;
+		}
+		const t = setTimeout(() => setCopied(false), 2000);
+		return () => clearTimeout(t);
+	}, [copied]);
 
 	return (
 		<div className="code-block-wrapper">
@@ -212,7 +217,9 @@ export default function MarkdownContent({
 			{segments.map((seg) => {
 				const key = `${seg.type}-${seg.content.slice(0, 40)}`;
 				return seg.type === "mermaid" ? (
-					<MermaidBlock key={key} code={seg.content} />
+					<Suspense key={key} fallback={<div className="mermaid-loading">Loading diagram...</div>}>
+						<MermaidBlock code={seg.content} />
+					</Suspense>
 				) : (
 					<MarkdownSection
 						key={key}

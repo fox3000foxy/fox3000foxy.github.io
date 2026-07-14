@@ -44,6 +44,8 @@ export default function Header() {
 						className="avatar"
 						src="https://github.com/fox3000foxy.png"
 						alt="GitHub avatar"
+						width="40"
+						height="40"
 					/>
 				</Link>
 				<h1 className="site-title">

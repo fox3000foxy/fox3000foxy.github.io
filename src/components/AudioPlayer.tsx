@@ -20,9 +20,19 @@ export default function AudioPlayer({
 		setPlaying(false);
 		setCurrentTime(0);
 		setDuration(0);
-		fetch(audioUrl, { method: "HEAD" })
-			.then((res) => setAudioAvailable(res.ok))
-			.catch(() => setAudioAvailable(false));
+		const controller = new AbortController();
+		fetch(audioUrl, { method: "HEAD", signal: controller.signal })
+			.then((res) => {
+				if (!controller.signal.aborted) {
+					setAudioAvailable(res.ok);
+				}
+			})
+			.catch(() => {
+				if (!controller.signal.aborted) {
+					setAudioAvailable(false);
+				}
+			});
+		return () => controller.abort();
 	}, [audioUrl]);
 
 	function togglePlay() {

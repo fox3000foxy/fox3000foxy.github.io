@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const RSS_URL = "https://fox3000foxy.com/feed.xml";
 
 export default function RssSubscribe() {
 	const [copied, setCopied] = useState(false);
 
+	useEffect(() => {
+		if (!copied) {
+			return;
+		}
+		const t = setTimeout(() => setCopied(false), 2000);
+		return () => clearTimeout(t);
+	}, [copied]);
+
 	const handleCopy = async () => {
 		try {
 			await navigator.clipboard.writeText(RSS_URL);
 			setCopied(true);
-			setTimeout(() => setCopied(false), 2000);
 		} catch {
 			// fallback
 		}

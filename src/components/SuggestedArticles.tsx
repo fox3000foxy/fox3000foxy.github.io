@@ -68,14 +68,19 @@ export default function SuggestedArticles({
 		}
 
 		async function fetchRecommendations(slugs: string[]) {
-			const entries: { slug: string; text: string }[] = [];
-			for (const slug of slugs) {
-				const text = await fetchArticleMarkdown(slug, lang);
-				if (text !== null) {
-					entries.push({ slug, text });
-				}
-			}
-			const own = await fetchArticleMarkdown(currentSlug, lang);
+			const results = await Promise.all(
+				slugs.map((slug) =>
+					Promise.resolve(fetchArticleMarkdown(slug, lang)).then(
+						(text) => (text === null ? null : ({ slug, text } as const))
+					)
+				)
+			);
+			const entries: { slug: string; text: string }[] = results.filter(
+				(r): r is { slug: string; text: string } => r !== null
+			);
+			const own = await Promise.resolve(
+				fetchArticleMarkdown(currentSlug, lang)
+			);
 			if (own !== null) {
 				entries.push({ slug: currentSlug, text: own });
 			}

@@ -353,24 +353,22 @@ export default function ProjectList() {
 		refreshData().catch(() => {});
 	}, [cachedData]);
 
-	const now = Date.now();
+	const cutoff = useMemo(() => Date.now() - ONE_YEAR_MS, []);
 
 	const activeRepos = useMemo(
 		() =>
 			ownerRepos.filter(
-				(r) =>
-					!r.archived && new Date(r.pushed_at).getTime() > now - ONE_YEAR_MS
+				(r) => !r.archived && new Date(r.pushed_at).getTime() > cutoff
 			),
-		[ownerRepos, now]
+		[ownerRepos, cutoff]
 	);
 
 	const lessActiveRepos = useMemo(
 		() =>
 			ownerRepos.filter(
-				(r) =>
-					!r.archived && new Date(r.pushed_at).getTime() <= now - ONE_YEAR_MS
+				(r) => !r.archived && new Date(r.pushed_at).getTime() <= cutoff
 			),
-		[ownerRepos, now]
+		[ownerRepos, cutoff]
 	);
 
 	const archivedRepos = useMemo(

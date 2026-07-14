@@ -80,6 +80,8 @@ export default function BlogCard({ article }: BlogCardProps) {
 							src={a.avatar ?? `https://github.com/${a.id}.png`}
 							alt={a.name}
 							title={a.name}
+							width="20"
+							height="20"
 						/>
 					))}
 				</div>
