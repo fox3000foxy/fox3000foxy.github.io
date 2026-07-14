@@ -5,6 +5,7 @@ import AudioPlayer from "../components/AudioPlayer";
 import AuthorBio from "../components/AuthorBio";
 import BookmarkButton from "../components/BookmarkButton";
 import GiscusComments from "../components/GiscusComments";
+import LazyVisible from "../components/LazyVisible";
 import MarkdownContent from "../components/MarkdownContent";
 import ReadingProgress from "../components/ReadingProgress";
 import SeriesNav from "../components/SeriesNav";
@@ -283,12 +284,14 @@ export default function Article() {
 							/>
 						)}
 						{meta?.tags && meta.tags.length > 0 && (
-							<SuggestedArticles
-								currentSlug={slug!}
-								currentTags={meta.tags}
-								allArticles={allArticles}
-								lang={lang}
-							/>
+							<LazyVisible rootMargin="400px">
+								<SuggestedArticles
+									currentSlug={slug!}
+									currentTags={meta.tags}
+									allArticles={allArticles}
+									lang={lang}
+								/>
+							</LazyVisible>
 						)}
 						{(prevArticle || nextArticle) && (
 							<nav className="article-nav">
@@ -320,7 +323,9 @@ export default function Article() {
 								)}
 							</nav>
 						)}
-						<GiscusComments lang={lang} />
+						<LazyVisible rootMargin="400px">
+							<GiscusComments lang={lang} />
+						</LazyVisible>
 					</div>
 				</div>
 			</article>
