@@ -217,7 +217,10 @@ export default function MarkdownContent({
 			{segments.map((seg) => {
 				const key = `${seg.type}-${seg.content.slice(0, 40)}`;
 				return seg.type === "mermaid" ? (
-					<Suspense key={key} fallback={<div className="mermaid-loading">Loading diagram...</div>}>
+					<Suspense
+						key={key}
+						fallback={<div className="mermaid-loading">Loading diagram...</div>}
+					>
 						<MermaidBlock code={seg.content} />
 					</Suspense>
 				) : (
