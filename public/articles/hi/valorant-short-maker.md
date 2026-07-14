@@ -9,6 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "11ToycZLtWo9aNItiURqhfS3KnWo8YEsZzqtM+DdmzAR3/ZKS+bOijtOGzhTKsIx52IDQJFLX0PHajpyHiIdfw=="
 ---
 
 # valorant-short-maker: वह पाइपलाइन जो खुद-ब-खुद मेरे Valorant शॉर्ट्स बनाती है

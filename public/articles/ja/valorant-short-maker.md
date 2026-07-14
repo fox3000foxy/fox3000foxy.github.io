@@ -9,6 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "4UEXH2siqcUMGWgIL0JXzfBKKTLjakkE+ciV6LavRjw7GnIrLLBi5LThk/r+82GHFoKPHBr5BwjgZBXnkyzEgA=="
 ---
 
 # valorant-short-maker: Valorantのショート動画を自動生成するパイプライン
