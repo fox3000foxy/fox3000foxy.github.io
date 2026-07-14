@@ -19,10 +19,7 @@ export default function LazyVisible({
 	}
 
 	return (
-		<div
-			ref={ref}
-			style={height ? { minHeight: height } : undefined}
-		>
+		<div ref={ref} style={height ? { minHeight: height } : undefined}>
 			{placeholder ?? <div />}
 		</div>
 	);

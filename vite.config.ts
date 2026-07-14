@@ -1,25 +1,10 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import type { Plugin } from "vite";
-
-function removeMermaidPreload(): Plugin {
-	return {
-		name: "remove-mermaid-preload",
-		enforce: "post",
-		transformIndexHtml(html) {
-			return html.replace(
-				/<link rel="modulepreload"[^>]*href="[^"]*mermaid[^"]*"[^>]*>/g,
-				""
-			);
-		},
-	};
-}
 
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [
 		react(),
-		removeMermaidPreload(),
 		// VitePWA({...
 	],
 	build: {
@@ -28,20 +13,6 @@ export default defineConfig({
 			output: {
 				manualChunks(id) {
 					if (id.includes("node_modules")) {
-						if (
-							id.includes("mermaid") ||
-							id.includes("d3") ||
-							id.includes("dagre") ||
-							id.includes("khroma") ||
-							id.includes("dompurify") ||
-							id.includes("cytoscape") ||
-							id.includes("marked") ||
-							id.includes("stylis") ||
-							id.includes("ts-dedent") ||
-							id.includes("uuid")
-						) {
-							return "mermaid";
-						}
 						if (id.includes("react-dom") || id.includes("react/") || id.includes("scheduler")) {
 							return "vendor-core";
 						}
