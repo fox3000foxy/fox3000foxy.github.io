@@ -11,6 +11,11 @@ const AUTHORS: Record<string, Author> = {
 		name: "Fox3000foxy",
 		github: "https://github.com/fox3000foxy",
 	},
+	"9stown": {
+		id: "9stown",
+		name: "9stown",
+		github: "https://github.com/9stown",
+	},
 };
 
 export function getAuthor(id: string): Author {
