@@ -1,0 +1,29 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../../lib/markdown";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { ALL_LANGS, createT } from "../../lib/i18n";
+import type { Lang } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return ALL_LANGS.filter((l) => l !== "en").map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const { locale } = Astro.params as { locale: Lang };
+const t = createT(locale);
+
+const mdPath = path.resolve(`public/legacy.${locale}.md`);
+const fallbackPath = path.resolve("public/legacy.md");
+const content = fs.readFileSync(
+  fs.existsSync(mdPath) ? mdPath : fallbackPath,
+  "utf-8",
+);
+const html = await renderMarkdown(content);
+---
+
+<BaseLayout title={t("nav.portfolio")} description="" locale={locale}>
+  <div class="about-page" set:html={html} />
+</BaseLayout>

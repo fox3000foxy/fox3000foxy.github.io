@@ -1,0 +1,17 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import { SITE_DESCRIPTION } from "../config";
+
+const homePath = path.resolve("public/home.md");
+const homeContent = fs.readFileSync(homePath, "utf-8");
+const homeHtml = await renderMarkdown(homeContent);
+---
+
+<BaseLayout title="Home" description={SITE_DESCRIPTION}>
+  <Header />
+  <main set:html={homeHtml} />
+</BaseLayout>

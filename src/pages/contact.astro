@@ -1,0 +1,8 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Contact from "../islands/Contact.tsx";
+---
+
+<BaseLayout title="Contact" description="Contact me" wide>
+  <Contact client:only="react" />
+</BaseLayout>

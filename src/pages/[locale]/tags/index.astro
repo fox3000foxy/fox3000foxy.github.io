@@ -1,0 +1,47 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { ALL_LANGS, createT } from "../../../lib/i18n";
+import type { Lang } from "../../../lib/i18n";
+
+function loadArticles(locale: string) {
+  const indexPath = path.resolve(`public/articles/${locale}/index.json`);
+  if (fs.existsSync(indexPath)) {
+    return JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+  }
+  const enIndex = path.resolve("public/articles/en/index.json");
+  if (fs.existsSync(enIndex)) return JSON.parse(fs.readFileSync(enIndex, "utf-8"));
+  return [];
+}
+
+export function getStaticPaths() {
+  return ALL_LANGS.filter((l) => l !== "en").map((l) => ({ params: { locale: l } }));
+}
+
+const { locale } = Astro.params as { locale: Lang };
+const t = createT(locale);
+const articles = loadArticles(locale);
+
+const tagCounts: Record<string, number> = {};
+for (const a of articles) {
+  for (const tag of (a.tags as string[]) || []) {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  }
+}
+const sorted = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title={t("tags.title")} description="" locale={locale}>
+  <div class="tags-index">
+    <h1>{t("tags.title")}</h1>
+    <div class="tags-cloud">
+      {sorted.map(([tag, count]) => (
+        <a href={`/${locale}/tags/${encodeURIComponent(tag)}`} class="tag-cloud-item">
+          <span class="tag-label">{tag}</span>
+          <span class="tag-count">{count} article{count > 1 ? "s" : ""}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

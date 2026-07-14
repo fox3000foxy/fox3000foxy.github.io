@@ -1,0 +1,8 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SearchPage from "../islands/SearchPage.tsx";
+---
+
+<BaseLayout title="Search" description="Search articles" wide>
+  <SearchPage client:only="react" />
+</BaseLayout>

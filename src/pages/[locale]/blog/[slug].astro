@@ -1,0 +1,80 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../../../lib/markdown";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { ALL_LANGS, createT, LANG_LABELS, SITE_URL } from "../../../lib/i18n";
+import type { Lang } from "../../../lib/i18n";
+
+function loadArticles(locale: string): Record<string, unknown>[] {
+  const indexPath = path.resolve(`public/articles/${locale}/index.json`);
+  if (fs.existsSync(indexPath)) {
+    return JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+  }
+  const enIndex = path.resolve("public/articles/en/index.json");
+  if (fs.existsSync(enIndex)) {
+    return JSON.parse(fs.readFileSync(enIndex, "utf-8"));
+  }
+  return [];
+}
+
+export function getStaticPaths() {
+  function load(locale: string) {
+    const indexPath = path.resolve(`public/articles/${locale}/index.json`);
+    if (fs.existsSync(indexPath)) {
+      return JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+    }
+    const enIndex = path.resolve("public/articles/en/index.json");
+    if (fs.existsSync(enIndex)) return JSON.parse(fs.readFileSync(enIndex, "utf-8"));
+    return [];
+  }
+
+  const paths: { params: { locale: string; slug: string }; props: { article: Record<string, unknown> } }[] = [];
+  for (const locale of ALL_LANGS) {
+    if (locale === "en") continue;
+    const articles = load(locale);
+    for (const article of articles) {
+      const slug = article.slug as string;
+      const mdPath = path.resolve(`public/articles/${locale}/${slug}.md`);
+      if (fs.existsSync(mdPath)) {
+        paths.push({ params: { locale, slug }, props: { article } });
+      }
+    }
+  }
+  return paths;
+}
+
+const { locale } = Astro.params as { locale: Lang };
+const { article } = Astro.props;
+const slug = article.slug as string;
+const t = createT(locale);
+
+const mdPath = path.resolve(`public/articles/${locale}/${slug}.md`);
+const mdContent = fs.readFileSync(mdPath, "utf-8");
+const html = await renderMarkdown(mdContent);
+const langDir = locale === "ar" ? "rtl" : "ltr";
+
+const hreflangLinks = ALL_LANGS.map((l) => {
+  const lang = l === "en" ? "" : `/${l}`;
+  return `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${lang}/blog/${slug}" />`;
+}).join("\n");
+---
+
+<BaseLayout
+  title={String(article.title || slug)}
+  description={String(article.description || "")}
+  canonical={`${SITE_URL}/${locale}/blog/${slug}`}
+  locale={locale}
+  extraHead={hreflangLinks}
+>
+  <article dir={langDir}>
+    <header>
+      <h1>{String(article.title || "")}</h1>
+      {article.date && <time datetime={String(article.date)}>{String(article.date)}</time>}
+      {article.tags && Array.isArray(article.tags) && (
+        <p>{article.tags.join(", ")}</p>
+      )}
+    </header>
+    <div set:html={html} />
+  </article>
+</BaseLayout>
