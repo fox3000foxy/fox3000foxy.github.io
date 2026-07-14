@@ -138,46 +138,68 @@ export function readAllArticleData(slug: string) {
 			e !== null &&
 			(e as { slug?: string }).slug === slug
 	) as { author_sig?: string; authors?: string[]; date?: string } | undefined;
-  const verified = enEntry?.author_sig
-    ? verifyArticle(slug, enEntry.authors?.[0] || "", enEntry.date || "", enContent, enEntry.author_sig)
-    : false;
+	const verified = enEntry?.author_sig
+		? verifyArticle(
+				slug,
+				enEntry.authors?.[0] || "",
+				enEntry.date || "",
+				enContent,
+				enEntry.author_sig
+			)
+		: false;
 
-  const firstImage = extractFirstImage(enContent);
+	const firstImage = extractFirstImage(enContent);
 
-  return { raw, content, allIndexes, verified, firstImage };
+	return { raw, content, allIndexes, verified, firstImage };
 }
 
 function extractFirstImage(markdown: string): string {
-  const m = markdown.match(/!\[.*?\]\(([^)]+)\)/);
-  if (m) {
-    let url = m[1];
-    if (url.startsWith("http")) return url;
-    if (url.startsWith("/")) return `https://fox3000foxy.com${url}`;
-    if (url.startsWith("assets/")) url = url.replace("assets/", "/articles/assets/");
-    else url = `/${url}`;
-    return `https://fox3000foxy.com${url}`;
-  }
-  return "";
+	const m = markdown.match(/!\[.*?\]\(([^)]+)\)/);
+	if (m) {
+		let url = m[1];
+		if (url.startsWith("http")) {
+			return url;
+		}
+		if (url.startsWith("/")) {
+			return `https://fox3000foxy.com${url}`;
+		}
+		if (url.startsWith("assets/")) {
+			url = url.replace("assets/", "/articles/assets/");
+		} else {
+			url = `/${url}`;
+		}
+		return `https://fox3000foxy.com${url}`;
+	}
+	return "";
 }
 
+let cachedIndexes: Record<Lang, unknown[]> | null = null;
+
 export function readAllArticleIndexes(): Record<Lang, unknown[]> {
-  const result = {} as Record<Lang, unknown[]>;
-  for (const lang of ALL_LANGS) {
-    const filePath = path.resolve(`public/articles/${lang}/index.json`);
-    if (fs.existsSync(filePath)) {
-      const index = JSON.parse(fs.readFileSync(filePath, "utf-8")) as Record<string, unknown>[];
-      result[lang] = index.map((entry) => {
-        const slug = entry.slug as string;
-        const mdPath = path.resolve(`public/articles/en/${slug}.md`);
-        if (fs.existsSync(mdPath)) {
-          const text = fs.readFileSync(mdPath, "utf-8");
-          const content = stripFrontmatter(text);
-          const img = extractFirstImage(content);
-          return { ...entry, image: img };
-        }
-        return entry;
-      });
-    }
-  }
-  return result;
+	if (cachedIndexes) {
+		return cachedIndexes;
+	}
+	const result = {} as Record<Lang, unknown[]>;
+	for (const lang of ALL_LANGS) {
+		const filePath = path.resolve(`public/articles/${lang}/index.json`);
+		if (fs.existsSync(filePath)) {
+			const index = JSON.parse(fs.readFileSync(filePath, "utf-8")) as Record<
+				string,
+				unknown
+			>[];
+			result[lang] = index.map((entry) => {
+				const slug = entry.slug as string;
+				const mdPath = path.resolve(`public/articles/en/${slug}.md`);
+				if (fs.existsSync(mdPath)) {
+					const text = fs.readFileSync(mdPath, "utf-8");
+					const content = stripFrontmatter(text);
+					const img = extractFirstImage(content);
+					return { ...entry, image: img };
+				}
+				return entry;
+			});
+		}
+	}
+	cachedIndexes = result;
+	return result;
 }

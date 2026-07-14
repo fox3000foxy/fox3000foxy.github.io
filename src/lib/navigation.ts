@@ -17,7 +17,9 @@ type NavigateFn = (to: number | string) => void;
 
 export function useNavigate(): NavigateFn {
 	return (to) => {
-		if (typeof window === "undefined") return;
+		if (typeof window === "undefined") {
+			return;
+		}
 		if (typeof to === "number") {
 			window.history.go(to);
 		} else {
@@ -27,7 +29,9 @@ export function useNavigate(): NavigateFn {
 }
 
 export function useParams<T extends Record<string, string>>(): T {
-	if (typeof window === "undefined") return {} as T;
+	if (typeof window === "undefined") {
+		return {} as T;
+	}
 	const path = window.location.pathname;
 	const blogMatch = path.match(/\/blog\/([^/]+)/);
 	const tagMatch = path.match(/\/tags\/([^/]+)/);
@@ -41,6 +45,8 @@ export function useParams<T extends Record<string, string>>(): T {
 }
 
 export function useLocation() {
-	if (typeof window === "undefined") return { hash: "", pathname: "", search: "" } as Location;
+	if (typeof window === "undefined") {
+		return { hash: "", pathname: "", search: "" } as Location;
+	}
 	return window.location;
 }
