@@ -19,23 +19,56 @@ Voici comment ça marche, étape par étape.
 
 ## Ce que ça donne
 
-Trois frames prises directement dans `demo_outputs/demo.mp4`, le rendu de démo du repo :
+Trois frames extraites de la vidéo générée pour "Duelist Debate" (Phoenix, Yoru et Jett) :
 
 ![Intro d'un short, cercle d'agent avec le titre de la scène](/images/valorant-short-maker/vsm-01-intro.png)
 
-![Une réplique en cours, sous-titre karaoké en orange qui s'illumine mot par mot](/images/valorant-short-maker/vsm-02-dialogue.png)
+![Une réplique en cours, sous-titre karaoké qui s'illumine](/images/valorant-short-maker/vsm-02-dialogue.png)
 
-![Une autre réplique, la couleur du sous-titre change selon l'agent qui parle](/images/valorant-short-maker/vsm-03-dialogue.png)
+![Une autre réplique, la couleur du sous-titre change selon l'agent](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-Sur la chaîne, les Shorts qui marchent le mieux en ce moment tournent autour de 1,2 à 1,5k vues -- "Ghost vs Sheriff Debate" en tête, suivi de près par "Duelist Debate", "Rush B or Regret", "Worst Shot in Squad?" et "MOLLY SAVES THE ROUND!". Rien d'énorme, mais c'est une chaîne qui tourne toute seule depuis le début, donc le nombre qui compte vraiment c'est zéro -- zéro minute passée dessus une fois le cron lancé.
+Le résultat en live sur ce Short : [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Sur la chaîne, les Shorts tournent autour de 1,2 à 1,5k vues. Rien d'énorme, mais c'est une chaîne qui tourne toute seule depuis le début, donc le nombre qui compte vraiment c'est zéro -- zéro minute passée dessus une fois le cron lancé.
 
 ## Le pipeline, dans l'ordre
 
 ### 1. Écrire le script -- Groq + Llama 3.3
 
-Chaque run pioche 3 à 4 agents au hasard parmi les 26 disponibles, et envoie à Llama 3.3 70B (via Groq) un prompt système qui contient, pour chaque agent choisi, un résumé compact de sa personnalité et de ses relations avec les autres agents présents dans la scène (ces personas vivent dans `src/lore/`, un fichier par agent). Le prompt impose des règles précises : exactement 25 lignes, une phrase courte et percutante par réplique, rotation équitable entre les personnages, humour en priorité, et surtout des pauses.
+Chaque run pioche 3 à 4 agents au hasard parmi les 26 disponibles, et envoie à Llama 3.3 70B (via Groq) un prompt système qui contient, pour chaque agent choisi, un résumé compact de sa personnalité et de ses relations avec les autres agents présents dans la scène (ces personas vivent dans `src/lore/`, un fichier par agent). Le prompt impose des règles précises : une phrase courte et percutante par réplique, rotation équitable entre les personnages, humour en priorité, et surtout des pauses.
 
-Les pauses, justement, sont le détail qui rend le rythme naturel : `[0.3]` inséré au milieu d'une réplique crée un silence de 0.3s dans le fichier audio sans couper le cercle de l'agent à l'écran, alors qu'une ligne `pause: 1.0` à part entière crée un vrai silence entre deux locuteurs, cercle caché. Sans ça, un TTS qui enchaîne 25 répliques sans respirer sonne robotique.
+Exemple concret avec "Duelist Debate" -- Phoenix, Yoru et Jett se disputent pour savoir qui jouera duelist, généré le 6 juillet 2026 :
+
+```
+phoenix: I'm telling you, I've got the skills to play duelist this match.
+yoru: Skills, you call burning things skills, Phoenix.
+jett: I'm the fastest one here, I should play duelist.
+phoenix: Fastest, but can you handle the heat, Jett [0.3] I doubt it.
+yoru: Heat, ha, you think your flames are hotter than my rifts.
+jett: This isn't about heat or flames, it's about speed and agility.
+phoenix: Oh, I see, so now you're an expert on duelists, Yoru [0.3] that's rich.
+yoru: At least I don't rely on cheap fire tricks.
+jett: Cheap fire tricks, that's what you call Phoenix's abilities.
+phoenix: Hey, my fire tricks have gotten us out of tight spots before [0.3] can't say the same for your rifts, Yoru.
+yoru: Tight spots, you mean like the time I rifted us out of that trap.
+jett: Enough, this is getting nowhere, let's just decide already.
+phoenix: Fine, but I'm still saying I'm the best duelist here.
+yoru: Please, you think you can take on the enemy team alone [0.3] I doubt it.
+jett: I can take them on, no problem, I'm the fastest.
+phoenix: Fastest, yeah, but can you outmaneuver them [0.3] that's the question.
+yoru: Outmaneuver, ha, you think you can outmaneuver anyone, Phoenix.
+jett: This is stupid, we're not going to agree on this.
+phoenix: Fine, let's just play and see who comes out on top [0.3] I'm game if you are.
+yoru: Bring it on, I'll show you what a real duelist looks like.
+jett: I'm not backing down, I'm playing duelist.
+phoenix: Oh, this should be good [0.3] let's see how you two do.
+yoru: We'll see who comes out on top, won't we, Jett.
+jett: Yeah, let's end this debate once and for all.
+pause: 0.3
+phoenix: Alright, let's get started then [0.3] may the best duelist win.
+yoru: I'll make sure to burn you, Phoenix, not with fire, but with my rifts.
+jett: I'll take you both down, no problem.
+```
+
+Les pauses sont le détail qui rend le rythme naturel : `[0.3]` inséré au milieu d'une réplique crée un silence de 0.3s dans le fichier audio sans couper le cercle de l'agent à l'écran, alors qu'une ligne `pause: 1.0` à part entière crée un vrai silence entre deux locuteurs, cercle caché. Sans ça, un TTS qui enchaîne les répliques sans respirer sonne robotique.
 
 ### 2. Donner une voix -- Piper, un modèle par agent
 
