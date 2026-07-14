@@ -265,12 +265,12 @@ const extraHead = articleMetaTags + articleJsonLd;
     wrapper.appendChild(pre);
   });
 
-  // Mermaid rendering
+  // Mermaid rendering (pre-rendered at build time)
   if (document.querySelector('.mermaid')) {
-    var s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.min.js';
-    s.onload = function() { mermaid.initialize({ startOnLoad: true }); };
-    document.head.appendChild(s);
+    document.querySelectorAll('.mermaid').forEach(function(el) {
+      var code = el.textContent || '';
+      el.outerHTML = '<pre class=\"mermaid-fallback\">' + code.replace(/</g, '&lt;') + '</pre>';
+    });
   }
 })();
 </script>
