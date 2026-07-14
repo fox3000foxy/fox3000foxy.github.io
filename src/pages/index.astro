@@ -1,9 +1,15 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Home from "../islands/Home.tsx";
 import { SITE_DESCRIPTION } from "../config";
+
+const homePath = path.resolve("public/home.md");
+const homeContent = fs.readFileSync(homePath, "utf-8");
+const homeHtml = renderMarkdown(homeContent);
 ---
 
-<BaseLayout title="Home" description={SITE_DESCRIPTION} wide>
-  <Home client:only="react" />
+<BaseLayout title="Home" description={SITE_DESCRIPTION}>
+  <article class="home" set:html={homeHtml} />
 </BaseLayout>

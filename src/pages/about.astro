@@ -1,8 +1,19 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import About from "../islands/About.tsx";
+import { createT } from "../lib/i18n";
+
+const mdPath = path.resolve("public/about.md");
+const content = fs.readFileSync(mdPath, "utf-8");
+const html = renderMarkdown(content);
+const t = createT("en");
 ---
 
-<BaseLayout title="About" description="About Fox3000foxy" wide>
-  <About client:only="react" />
+<BaseLayout title="About" description="About Fox3000foxy">
+  <div class="about-page">
+    <div set:html={html} />
+    <a href="/" class="back-home">← {t("notFound.return")}</a>
+  </div>
 </BaseLayout>

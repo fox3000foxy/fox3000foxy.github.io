@@ -1,6 +1,8 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../../lib/markdown";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Home from "../../islands/Home.tsx";
 import { ALL_LANGS } from "../../lib/i18n";
 import type { Lang } from "../../lib/i18n";
 
@@ -11,10 +13,14 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params as { locale: Lang };
-const title = locale === "fr" ? "Accueil" : "Home";
-const desc = locale === "fr" ? "Blog de Fox3000foxy" : "Fox3000foxy's blog about web development, automation, and open-source";
+
+const homePath = path.resolve(`public/home.${locale}.md`);
+const fallbackPath = path.resolve("public/home.md");
+const mdPath = fs.existsSync(homePath) ? homePath : fallbackPath;
+const content = fs.readFileSync(mdPath, "utf-8");
+const html = renderMarkdown(content);
 ---
 
-<BaseLayout title={title} description={desc} locale={locale} wide>
-  <Home client:only="react" />
+<BaseLayout title="Home" description="" locale={locale}>
+  <article class="home" set:html={html} />
 </BaseLayout>

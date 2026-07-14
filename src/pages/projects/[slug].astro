@@ -1,8 +1,17 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Project from "../../islands/Project.tsx";
+import type { GetStaticPathsItem } from "astro";
 
-export async function getStaticPaths() {
+interface RepoInfo {
+  name: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  html_url: string;
+  default_branch: string;
+}
+
+export async function getStaticPaths(): Promise<GetStaticPathsItem[]> {
   try {
     const res = await fetch("https://api.github.com/users/fox3000foxy/repos?sort=updated&per_page=100");
     if (res.ok) {
@@ -14,8 +23,36 @@ export async function getStaticPaths() {
   } catch {}
   return [{ params: { slug: "placeholder" } }];
 }
+
+const { slug } = Astro.params as { slug: string };
+
+let repo: RepoInfo | null = null;
+let readme = "";
+try {
+  const res = await fetch(`https://api.github.com/repos/fox3000foxy/${encodeURIComponent(slug)}`);
+  if (res.ok) {
+    repo = await res.json() as RepoInfo;
+    const readmeRes = await fetch(`https://raw.githubusercontent.com/fox3000foxy/${encodeURIComponent(slug)}/${repo.default_branch}/README.md`);
+    if (readmeRes.ok) {
+      readme = await readmeRes.text();
+    }
+  }
+} catch {}
 ---
 
-<BaseLayout title="Project" description="" wide>
-  <Project client:only="react" />
+<BaseLayout title={repo?.name ?? slug} description={repo?.description ?? ""} wide>
+  <article>
+    <p class="project-back"><a href="/projects">← Back to projects</a></p>
+    {repo && (
+      <div class="project-header-meta">
+        {repo.description && <p class="article-description">{repo.description}</p>}
+        <p class="project-meta-links">
+          <a href={repo.html_url} target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          {repo.language && <span class="project-meta-lang">{repo.language}</span>}
+          {repo.stargazers_count > 0 && <span>★ {repo.stargazers_count}</span>}
+        </p>
+      </div>
+    )}
+    <pre set:html={readme || "No README available."} />
+  </article>
 </BaseLayout>

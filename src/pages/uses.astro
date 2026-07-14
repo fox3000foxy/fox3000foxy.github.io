@@ -1,8 +1,14 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Uses from "../islands/Uses.tsx";
+
+const mdPath = path.resolve("public/uses.md");
+const content = fs.readFileSync(mdPath, "utf-8");
+const html = renderMarkdown(content);
 ---
 
-<BaseLayout title="Uses" description="Tools and software I use" wide>
-  <Uses client:only="react" />
+<BaseLayout title="Uses" description="Tools and software I use">
+  <article set:html={html} />
 </BaseLayout>

@@ -1,7 +1,9 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../../lib/markdown";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import About from "../../islands/About.tsx";
-import { ALL_LANGS } from "../../lib/i18n";
+import { ALL_LANGS, createT } from "../../lib/i18n";
 import type { Lang } from "../../lib/i18n";
 
 export function getStaticPaths() {
@@ -11,8 +13,18 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params as { locale: Lang };
+const t = createT(locale);
+
+const mdPath = path.resolve(`public/about.${locale}.md`);
+const fallbackPath = path.resolve("public/about.md");
+const filePath = fs.existsSync(mdPath) ? mdPath : fallbackPath;
+const content = fs.readFileSync(filePath, "utf-8");
+const html = renderMarkdown(content);
 ---
 
-<BaseLayout title="About" description="" locale={locale} wide>
-  <About client:only="react" />
+<BaseLayout title="About" description="" locale={locale}>
+  <div class="about-page">
+    <div set:html={html} />
+    <a href={`/${locale === "en" ? "" : locale}`} class="back-home">← {t("notFound.return")}</a>
+  </div>
 </BaseLayout>
