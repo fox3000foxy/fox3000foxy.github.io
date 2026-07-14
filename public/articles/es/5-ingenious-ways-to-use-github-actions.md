@@ -8,6 +8,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "FdzlEEG4g8mxzBJ+/blQVPCV17G82n+N+EwpIxsSjyayt97XcX9wQS5VF+rAZWh9Sf+npDdNJwkxM0ZDabT+eg=="
 ---
 
 # 5 formas ingeniosas de usar GitHub Actions

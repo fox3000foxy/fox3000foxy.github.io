@@ -9,6 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "VZ7cf+sp52Tx5EmZp8/DSwQ2AzYxp4s8ulfmoWfXV0x3Dw6RGPbhv5w00xAt6EnhPPDAwpn6nL7r/o3MJyMfWw=="
 ---
 
 # valorant-short-maker : le pipeline qui génère mes shorts Valorant tout seul
