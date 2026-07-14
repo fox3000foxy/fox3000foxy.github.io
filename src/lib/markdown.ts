@@ -50,7 +50,9 @@ function renderMermaidToSvg(code: string): string {
 }
 
 export function renderMarkdown(content: string): string {
-	const mermaidBlocks: { code: string; svg: string }[] = [];
+  content = content.replace(/\r\n/g, "\n");
+
+  const mermaidBlocks: { code: string; svg: string }[] = [];
 
 	const processed = content.replace(
 		/```mermaid\n([\s\S]*?)```/g,
