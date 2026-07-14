@@ -90,7 +90,7 @@ L'OCR standard fa fatica con il testo trasparente di Minecraft, quindi i dati cr
 **Tempo (finestra di contesto)** :
 - Tempo dall'ultimo colpo al nemico
 - Tempo dall'ultimo colpo subito
-- Buffer滚动 delle azioni precedenti del bot
+- Buffer scorrevole delle azioni precedenti del bot
 
 Questo fornisce alla rete un contesto temporale: senza di esso, il bot non ha idea se sia nel mezzo di una combo o stia appena iniziando un combattimento.
 

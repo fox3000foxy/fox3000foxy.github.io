@@ -19,7 +19,7 @@ author_sig: "BchwSgSVwd3KtEOxhOw11iYigdnugxeYekYP7vU/TNEourNOVmZ/zJf6LnIaDL5K/j7
 첫 번째 섹션에는 링크가 있는 헤더가 있어, 꽤 평범하다고 생각해:
 ![](assets/20260308_123527_image.png)
 
-보시다시피 링크들이 있어, 음, 괜찮은 것 같아. 뭐 더 말할 게 있나 싶네.
+보다시피 링크들이 있어, 음, 괜찮은 것 같아. 뭐 더 말할 게 있나 싶네.
 ## About Me
 
 "About me" 섹션도 있어:

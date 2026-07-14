@@ -833,7 +833,7 @@ cron (시뮬레이션), systemctl (스텁), journalctl (스텁),
 
 ### SSH 서버
 
-SSH 레이어는 실제 `ssh2` npm 패키지를 사용해 -- 실제 SSH 프로토콜, 실제 키 교환, 실제 암호화. `SSHMimic`이それを 감싸:
+SSH 레이어는 실제 `ssh2` npm 패키지를 사용해 -- 실제 SSH 프로토콜, 실제 키 교환, 실제 암호화. `SSHMimic`이 그것을 감싸:
 
 ```ts
 import { VirtualSshServer } from "typescript-virtual-container";

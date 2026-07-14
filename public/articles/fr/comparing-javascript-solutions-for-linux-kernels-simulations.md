@@ -550,7 +550,7 @@ C'est le schéma standard pour les IDE cloud et les terminaux web : xterm.js (na
 
 ## Partie 4 -- Les honeypots SSH
 
-Les honeypots sont conçus pour être attaqués. Le but est d'avoir l'air assez réel pour que les attaquants interagissent avec eux, tout en enregistrant tout ce qu'ils font pour le renseignement de menaces. SSH est la cible principale parce que c'est le service le plus attaqué sur internet -- si tu exposes le port 22 sur une IP publique, tu verras des tentatives de扫描 automatisées en quelques minutes littéralement. Essaye un jour, c'est assez horrifiant à quel point ça arrive vite.
+Les honeypots sont conçus pour être attaqués. Le but est d'avoir l'air assez réel pour que les attaquants interagissent avec eux, tout en enregistrant tout ce qu'ils font pour le renseignement de menaces. SSH est la cible principale parce que c'est le service le plus attaqué sur internet -- si tu exposes le port 22 sur une IP publique, tu verras des tentatives de scan automatisées en quelques minutes littéralement. Essaye un jour, c'est assez horrifiant à quel point ça arrive vite.
 
 La qualité d'un honeypot se mesure à deux choses : la **fidélité** (à quel point il imite de manière convaincante un vrai système) et la **télémétrie** (quelle quantité de données utiles il capture). Ces deux choses sont en tension. Un honeypot haute-fidélité est plus difficile à construire et plus risqué à opérer.
 
