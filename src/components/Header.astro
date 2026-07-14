@@ -1,0 +1,157 @@
+---
+import { SITE_TITLE } from "../config";
+import { ALL_LANGS, LANG_LABELS, RTLLangs, createT } from "../lib/i18n";
+import type { Lang } from "../lib/i18n";
+
+export interface Props {
+  locale?: Lang;
+}
+
+const { locale } = Astro.props;
+const lang = locale || "en";
+const t = createT(lang);
+
+const localizedPath = (path: string) => {
+  if (lang === "en") return path;
+  return `/${lang}${path}`;
+};
+
+const otherLangs = ALL_LANGS.filter((l) => l !== lang);
+---
+
+<header>
+  <nav>
+    <a href={localizedPath("/")} class="logo">{SITE_TITLE}</a>
+    <div class="nav-links">
+      <a href={localizedPath("/blog")}>{t("nav.blog")}</a>
+      <a href={localizedPath("/about")}>{t("nav.about")}</a>
+      <a href={localizedPath("/projects")}>Projects</a>
+      <a href={localizedPath("/archive")}>{t("nav.archive")}</a>
+      <a href={localizedPath("/tags")}>Tags</a>
+      <a href={localizedPath("/search")}>{t("nav.search")}</a>
+      <a href={localizedPath("/contact")}>{t("nav.contact")}</a>
+      <a href={localizedPath("/photos")}>{t("nav.photos")}</a>
+      <a href={localizedPath("/uses")}>{t("nav.uses")}</a>
+    </div>
+    <div class="lang-switcher">
+      {otherLangs.slice(0, 5).map((l) => (
+        <a href={l === "en" ? "/" : `/${l}/`} class="lang-link" title={LANG_LABELS[l]}>
+          {l.toUpperCase()}
+        </a>
+      ))}
+      <details class="lang-more">
+        <summary>⋯</summary>
+        <div class="lang-dropdown">
+          {otherLangs.slice(5).map((l) => (
+            <a href={l === "en" ? "/" : `/${l}/`} class="lang-link">
+              {LANG_LABELS[l]}
+            </a>
+          ))}
+        </div>
+      </details>
+    </div>
+  </nav>
+</header>
+
+<style>
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 0.75rem 2rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .logo:hover { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .lang-switcher {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    margin-left: auto;
+  }
+  .lang-link {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 0.15rem 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .lang-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .lang-more {
+    position: relative;
+    display: inline-block;
+  }
+  .lang-more summary {
+    list-style: none;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 0.15rem 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .lang-more summary:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem;
+    min-width: 160px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .lang-dropdown .lang-link {
+    border: none;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  @media (max-width: 768px) {
+    header { padding: 0.5rem 1rem; }
+    nav { gap: 1rem; }
+    .nav-links { gap: 0.5rem; }
+    .nav-links a { font-size: 0.8rem; }
+  }
+</style>

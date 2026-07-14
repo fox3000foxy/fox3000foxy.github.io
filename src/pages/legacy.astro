@@ -1,0 +1,14 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import { renderMarkdown } from "../lib/markdown";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const mdPath = path.resolve("public/legacy.md");
+const content = fs.readFileSync(mdPath, "utf-8");
+const html = await renderMarkdown(content);
+---
+
+<BaseLayout title="Legacy Portfolio" description="Legacy portfolio page">
+  <div class="about-page" set:html={html} />
+</BaseLayout>

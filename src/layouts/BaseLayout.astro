@@ -1,0 +1,103 @@
+---
+import "../styles/themes.css";
+import "../styles/index.css";
+import "../styles/App.css";
+import "highlight.js/styles/github-dark.min.css";
+import { SITE_URL, SITE_DESCRIPTION } from "../config";
+import { ALL_LANGS, LANG_LABELS, RTLLangs, createT } from "../lib/i18n";
+import type { Lang } from "../lib/i18n";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  locale?: Lang;
+  extraHead?: string;
+  wide?: boolean;
+}
+
+const { title, description, image, canonical, locale, extraHead, wide } = Astro.props;
+const lang = locale || "en";
+const canonicalUrl = canonical || Astro.url.pathname;
+const ogImage = image || `${SITE_URL}/og/home.png`;
+const metaDesc = description || SITE_DESCRIPTION;
+const t = createT(lang);
+const dir = RTLLangs.has(lang) ? "rtl" : "ltr";
+
+const hreflangLinks = ALL_LANGS.map((l) => {
+  const path = l === "en" ? "" : `/${l}`;
+  return `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${path}${Astro.url.pathname.replace(/^\/[a-z]{2}(\/|$)/, "/")}" />`;
+}).join("\n");
+---
+<!doctype html>
+<html lang={lang} dir={dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Fox's Blog</title>
+    <meta name="description" content={metaDesc} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={metaDesc} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Fox's Blog" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <link rel="alternate" type="application/rss+xml" title="Fox's Blog RSS Feed" href="/feed.xml" />
+    <link rel="webmention" href="https://webmention.io/fox3000foxy/webmention" />
+    <link rel="pingback" href="https://webmention.io/fox3000foxy/xmlrpc" />
+    <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+    <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+    <link rel="me" href="https://github.com/fox3000foxy" />
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+
+    {extraHead && <Fragment set:html={extraHead} />}
+    {extraHead === undefined && <Fragment set:html={hreflangLinks} />}
+
+    <script data-goatcounter="https://fox3000foxy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <script>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || (!theme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+          document.documentElement.classList.add('light');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <Header locale={lang} />
+      <main class={wide ? "" : "article-content"} style={wide ? "" : "max-width:700px;margin:0 auto;"}>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>
