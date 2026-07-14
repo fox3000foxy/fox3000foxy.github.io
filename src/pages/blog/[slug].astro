@@ -68,9 +68,34 @@ function processArticleContent(text: string): string {
 
 const bodyEn = data?.content?.["en"] ? renderMarkdown(processArticleContent(data.content["en"])) : "";
 const rawBodyEn = data?.content?.["en"] ? processArticleContent(data.content["en"]) : "";
+
+const articleUrl = `https://fox3000foxy.com/blog/${slug}`;
+const ogImage = data?.firstImage || "";
+const articleMetaTags = enMeta.date ? `
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="${enMeta.date}" />
+  ${enMeta.lastmod ? `<meta property="article:modified_time" content="${enMeta.lastmod}" />` : ""}
+  ${(enMeta.tags || []).map((t: string) => `<meta property="article:tag" content="${t}" />`).join("\n  ")}
+` : "";
+const articleJsonLd = data ? `<script type="application/ld+json">${JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: enMeta.title || slug,
+  description: enMeta.description || "",
+  datePublished: enMeta.date || "",
+  dateModified: enMeta.lastmod || enMeta.date || "",
+  author: (enMeta.authors || ["fox3000foxy"]).map((a: string) => ({
+    "@type": "Person", name: a, url: `https://github.com/${a}`
+  })),
+  url: articleUrl,
+  inLanguage: "multiple",
+  isAccessibleForFree: true,
+  mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl }
+})}</script>` : "";
+const extraHead = articleMetaTags + articleJsonLd;
 ---
 
-<BaseLayout title={title} description={description} wide>
+<BaseLayout title={title} description={description} canonical={articleUrl} extraHead={extraHead} image={ogImage} wide>
   {data ? (
     <>
       {ALL_LANGS.map((l) => {

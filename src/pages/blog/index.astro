@@ -1,9 +1,34 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogList from "../../islands/BlogList.tsx";
 import { readAllArticleIndexes } from "../../lib/langContent";
 
 const allIndexes = readAllArticleIndexes();
+
+// Augment indexes with first image from article content
+for (const lang of Object.keys(allIndexes)) {
+  allIndexes[lang] = (allIndexes[lang] as Record<string, unknown>[]).map((entry) => {
+    if (entry.image) return entry;
+    const slug = entry.slug as string;
+    try {
+      const mdPath = path.resolve(`public/articles/en/${slug}.md`);
+      const text = fs.readFileSync(mdPath, "utf-8");
+      const body = text.startsWith("---\n") ? text.slice(text.indexOf("\n---\n", 4) + 5) : text;
+      const m = body.match(/!\[.*?\]\(([^)]+)\)/);
+      if (m) {
+        let url = m[1];
+        if (url.startsWith("http")) return { ...entry, image: url };
+        if (url.startsWith("/")) return { ...entry, image: `https://fox3000foxy.com${url}` };
+        if (url.startsWith("assets/")) url = url.replace("assets/", "/articles/assets/");
+        else url = `/${url}`;
+        return { ...entry, image: `https://fox3000foxy.com${url}` };
+      }
+    } catch {}
+    return entry;
+  });
+}
 ---
 
 <BaseLayout title="Blog" description="Articles about web development, automation, and open-source" wide>
