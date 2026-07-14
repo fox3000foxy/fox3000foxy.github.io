@@ -1,0 +1,16 @@
+graph LR
+    subgraph Host["Host Machine (modded)"]
+        MC["Minecraft Client<br/>+ Fabric Mod"]
+        IS["Integrated Server"]
+        MC <--> IS
+    end
+    
+    subgraph Tunnel["NGROK / playit.gg / Radmin VPN"]
+        T["TCP Tunnel"]
+    end
+    
+    subgraph Friend["Friend Machine (vanilla)"]
+        VC["Minecraft Client<br/>No mods"]
+    end
+    
+    IS --> T --> VC

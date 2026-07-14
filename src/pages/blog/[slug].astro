@@ -265,13 +265,8 @@ const extraHead = articleMetaTags + articleJsonLd;
     wrapper.appendChild(pre);
   });
 
-  // Mermaid rendering (pre-rendered at build time)
-  if (document.querySelector('.mermaid')) {
-    document.querySelectorAll('.mermaid').forEach(function(el) {
-      var code = el.textContent || '';
-      el.outerHTML = '<pre class=\"mermaid-fallback\">' + code.replace(/</g, '&lt;') + '</pre>';
-    });
-  }
+  // Mermaid rendering (pre-rendered as SVG images at build time)
+  // No client-side mermaid loading needed
 })();
 </script>
 
