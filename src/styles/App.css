@@ -877,6 +877,39 @@ a {
   color: var(--accent-hover);
 }
 
+.lang-content { display: none; }
+.lang-content[data-lang="en"] { display: block; }
+html[data-lang="fr"] .lang-content { display: none; }
+html[data-lang="fr"] .lang-content[data-lang="fr"] { display: block; }
+html[data-lang="zh"] .lang-content { display: none; }
+html[data-lang="zh"] .lang-content[data-lang="zh"] { display: block; }
+html[data-lang="ja"] .lang-content { display: none; }
+html[data-lang="ja"] .lang-content[data-lang="ja"] { display: block; }
+html[data-lang="ko"] .lang-content { display: none; }
+html[data-lang="ko"] .lang-content[data-lang="ko"] { display: block; }
+html[data-lang="tr"] .lang-content { display: none; }
+html[data-lang="tr"] .lang-content[data-lang="tr"] { display: block; }
+html[data-lang="it"] .lang-content { display: none; }
+html[data-lang="it"] .lang-content[data-lang="it"] { display: block; }
+html[data-lang="de"] .lang-content { display: none; }
+html[data-lang="de"] .lang-content[data-lang="de"] { display: block; }
+html[data-lang="ru"] .lang-content { display: none; }
+html[data-lang="ru"] .lang-content[data-lang="ru"] { display: block; }
+html[data-lang="es"] .lang-content { display: none; }
+html[data-lang="es"] .lang-content[data-lang="es"] { display: block; }
+html[data-lang="pt"] .lang-content { display: none; }
+html[data-lang="pt"] .lang-content[data-lang="pt"] { display: block; }
+html[data-lang="id"] .lang-content { display: none; }
+html[data-lang="id"] .lang-content[data-lang="id"] { display: block; }
+html[data-lang="hi"] .lang-content { display: none; }
+html[data-lang="hi"] .lang-content[data-lang="hi"] { display: block; }
+html[data-lang="ar"] .lang-content { display: none; }
+html[data-lang="ar"] .lang-content[data-lang="ar"] { display: block; }
+html[data-lang="vi"] .lang-content { display: none; }
+html[data-lang="vi"] .lang-content[data-lang="vi"] { display: block; }
+html[data-lang="th"] .lang-content { display: none; }
+html[data-lang="th"] .lang-content[data-lang="th"] { display: block; }
+
 @media (max-width: 768px) {
   #root {
     padding: 1rem;

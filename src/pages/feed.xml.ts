@@ -14,6 +14,7 @@ export function GET() {
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		site: SITE_URL,
+		xmlns: { atom: "http://www.w3.org/2005/Atom" },
 		items: articles.map((article: Record<string, unknown>) => {
 			const slug = article.slug as string;
 			const mdPath = path.resolve(`public/articles/en/${slug}.md`);

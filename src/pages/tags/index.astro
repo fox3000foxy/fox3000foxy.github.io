@@ -1,8 +1,11 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TagsIndex from "../../islands/TagsIndex.tsx";
+import { readAllArticleIndexes } from "../../lib/langContent";
+
+const allIndexes = readAllArticleIndexes();
 ---
 
 <BaseLayout title="Tags" description="All tags" wide>
-  <TagsIndex client:only="react" />
+  <TagsIndex client:only="react" allIndexes={allIndexes} />
 </BaseLayout>

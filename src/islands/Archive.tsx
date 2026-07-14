@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "../lib/navigation";
-import type { ArticleMeta } from "../types";
-import { cacheBust } from "../utils/cacheBust";
 import { useLang } from "../hooks/useLang";
+import type { ArticleMeta } from "../types";
 
 interface Group {
 	label: string;
 	articles: ArticleMeta[];
 }
 
+interface ArchiveProps {
+	allIndexes?: Record<string, unknown[]>;
+}
+
 function groupByYearMonth(articles: ArticleMeta[], locale: string): Group[] {
 	const map = new Map<string, ArticleMeta[]>();
-
 	for (const a of articles) {
 		if (!a.date) {
 			continue;
@@ -23,7 +25,6 @@ function groupByYearMonth(articles: ArticleMeta[], locale: string): Group[] {
 		}
 		map.get(key)!.push(a);
 	}
-
 	const sorted = [...map.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 	return sorted.map(([key, arts]) => {
 		const [year, month] = key.split("-");
@@ -38,35 +39,16 @@ function groupByYearMonth(articles: ArticleMeta[], locale: string): Group[] {
 	});
 }
 
-export default function Archive() {
+export default function Archive({ allIndexes }: ArchiveProps) {
 	const { t, lang } = useLang();
-	const [groups, setGroups] = useState<Group[]>([]);
 
-	useEffect(() => {
-		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
-
-		async function load() {
-			let res = await fetch(cacheBust(indexUrl));
-			if (!res.ok && fallbackUrl) {
-				res = await fetch(cacheBust(fallbackUrl));
-			}
-			if (!res.ok) {
-				setGroups([]);
-				return;
-			}
-
-			const data: unknown = await res.json();
-			if (Array.isArray(data)) {
-				// biome-ignore lint/suspicious/noExplicitAny: legacy string format
-				const normalized: ArticleMeta[] = (data as any[]).map((item) =>
-					typeof item === "string" ? { slug: item } : item
-				);
-				setGroups(groupByYearMonth(normalized, lang));
-			}
-		}
-		void load();
-	}, [lang]);
+	const groups = useMemo(() => {
+		const data = allIndexes?.[lang] ?? allIndexes?.en ?? [];
+		const normalized = (data as { slug?: string }[]).map((item) =>
+			typeof item === "string" ? { slug: item } : item
+		) as ArticleMeta[];
+		return groupByYearMonth(normalized, lang);
+	}, [allIndexes, lang]);
 
 	if (groups.length === 0) {
 		return <p>{t("archive.loading")}</p>;

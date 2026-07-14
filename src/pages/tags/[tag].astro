@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TagIndex from "../../islands/TagIndex.tsx";
+import { readAllArticleIndexes } from "../../lib/langContent";
 
 export async function getStaticPaths() {
   const indexPath = path.resolve("public/articles/en/index.json");
@@ -18,8 +19,10 @@ export async function getStaticPaths() {
   }
   return [...tags].map((tag) => ({ params: { tag } }));
 }
+
+const allIndexes = readAllArticleIndexes();
 ---
 
 <BaseLayout title="Tag" description="" wide>
-  <TagIndex client:only="react" />
+  <TagIndex client:only="react" allIndexes={allIndexes} />
 </BaseLayout>

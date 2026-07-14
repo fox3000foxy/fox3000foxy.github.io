@@ -12,12 +12,6 @@ import { translations } from "../i18n";
 const LANG_KEY = "fox-blog-lang";
 
 function detectLang(): Lang {
-	if (typeof window !== "undefined") {
-		const match = window.location.pathname.match(/^\/([a-z]{2})\//);
-		if (match && ALL_LANGS.includes(match[1] as Lang)) {
-			return match[1] as Lang;
-		}
-	}
 	if (typeof localStorage !== "undefined") {
 		const stored = localStorage.getItem(LANG_KEY) as Lang | null;
 		if (stored && ALL_LANGS.includes(stored)) {
@@ -42,17 +36,39 @@ interface LangCtx {
 	t: (key: string, params?: Record<string, string | number>) => string;
 }
 
-const FALLBACK_T = (key: string, _params?: Record<string, string | number>) =>
-	key;
+function translate(
+	lang: Lang,
+	key: string,
+	params?: Record<string, string | number>
+): string {
+	let msg = translations[lang]?.[key] ?? translations.en[key] ?? key;
+	if (params) {
+		for (const [k, v] of Object.entries(params)) {
+			msg = msg.replace(`{${k}}`, String(v));
+		}
+	}
+	return msg;
+}
 
-export const LangContext = createContext<LangCtx>({
+const FALLBACK_CTX: LangCtx = {
 	lang: "en",
 	setLang: () => {},
-	t: FALLBACK_T,
-});
+	t: (key, params) => translate("en", key, params),
+};
 
-export function useLang() {
-	return useContext(LangContext);
+export const LangContext = createContext<LangCtx>(FALLBACK_CTX);
+
+export function useLang(): LangCtx {
+	const ctx = useContext(LangContext);
+	if (ctx === FALLBACK_CTX) {
+		const lang = detectLang();
+		return {
+			lang,
+			setLang: () => {},
+			t: (key, params) => translate(lang, key, params),
+		};
+	}
+	return ctx;
 }
 
 export function useLangState(): LangCtx {
@@ -66,15 +82,8 @@ export function useLangState(): LangCtx {
 	const setLang = useCallback((l: Lang) => setLangState(l), []);
 
 	const t = useCallback(
-		(key: string, params?: Record<string, string | number>): string => {
-			let msg = translations[lang]?.[key] ?? translations.en[key] ?? key;
-			if (params) {
-				for (const [k, v] of Object.entries(params)) {
-					msg = msg.replace(`{${k}}`, String(v));
-				}
-			}
-			return msg;
-		},
+		(key: string, params?: Record<string, string | number>): string =>
+			translate(lang, key, params),
 		[lang]
 	);
 

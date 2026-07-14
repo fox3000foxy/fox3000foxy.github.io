@@ -1,31 +1,22 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { fetchRepos } from "../lib/github";
 
-interface Repo {
-  name: string;
-  description: string;
-  html_url: string;
-  stargazers_count: number;
-  fork: boolean;
-  language: string;
-  pushed_at: string;
-}
-
-let repos: Repo[] = [];
+let repos: Awaited<ReturnType<typeof fetchRepos>> = [];
+let error = "";
 try {
-  const res = await fetch("https://api.github.com/users/fox3000foxy/repos?sort=updated&per_page=50");
-  if (res.ok) {
-    const all: Repo[] = await res.json();
-    repos = all.filter((r) => !r.fork);
-  }
-} catch {}
+  repos = await fetchRepos();
+} catch (e) {
+  error = (e as Error).message;
+}
 ---
 
 <BaseLayout title="Projects" description="My open-source projects" wide>
   <div class="projects-page">
     <h1>Projects</h1>
+    {error && <p class="projects-error">⚠️ {error}</p>}
     {repos.length === 0 ? (
-      <p>Loading projects from GitHub... (build-time fetch failed)</p>
+      <p>No projects found.</p>
     ) : (
       <div class="projects-grid">
         {repos.map((repo) => (
@@ -45,6 +36,7 @@ try {
 
 <style>
   .projects-page { max-width: 960px; margin: 0 auto; }
+  .projects-error { color: var(--accent); font-size: 0.85rem; }
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

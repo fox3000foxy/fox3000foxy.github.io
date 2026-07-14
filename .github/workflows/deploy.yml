@@ -40,11 +40,10 @@ jobs:
         run: bun run build
         env:
           VITE_BUILD_ID: ${{ github.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create CNAME and 404
-        run: |
-          bun run create-cname
-          cp dist/index.html dist/404.html
+      - name: Create CNAME
+        run: bun run create-cname
 
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

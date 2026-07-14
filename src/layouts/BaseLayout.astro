@@ -27,10 +27,11 @@ const metaDesc = description || SITE_DESCRIPTION;
 const t = createT(lang);
 const dir = RTLLangs.has(lang) ? "rtl" : "ltr";
 
-const hreflangLinks = ALL_LANGS.map((l) => {
-  const path = l === "en" ? "" : `/${l}`;
-  return `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${path}${Astro.url.pathname.replace(/^\/[a-z]{2}(\/|$)/, "/")}" />`;
-}).join("\n");
+const ALL_LANG_CODES = ALL_LANGS.join(",");
+
+const hreflangLinks = ALL_LANGS.map((l) =>
+  `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${Astro.url.pathname}" />`
+).join("\n");
 ---
 <!doctype html>
 <html lang={lang} dir={dir}>
@@ -82,14 +83,7 @@ const hreflangLinks = ALL_LANGS.map((l) => {
     <script data-goatcounter="https://fox3000foxy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-    <script>
-      (function() {
-        var theme = localStorage.getItem('theme');
-        if (theme === 'light' || (!theme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-          document.documentElement.classList.add('light');
-        }
-      })();
-    </script>
+    <script set:html={`(function(){var t=localStorage.getItem('theme');if(t==='light'||(!t&&window.matchMedia('(prefers-color-scheme:light)').matches))document.documentElement.classList.add('light');var l=localStorage.getItem('fox-blog-lang');if(!l){var p=navigator.languages||[navigator.language],c=${JSON.stringify(ALL_LANGS)};for(var i=0;i<p.length;i++){var x=p[i].split('-')[0];if(c.indexOf(x)!==-1){l=x;break}}}if(l&&l!=='en')document.documentElement.dataset.lang=l})()`} />
   </head>
   <body>
     <div id="root">

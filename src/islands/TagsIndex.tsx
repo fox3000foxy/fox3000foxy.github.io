@@ -1,34 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "../lib/navigation";
-import type { ArticleMeta } from "../types";
-import { cacheBust } from "../utils/cacheBust";
 import { useLang } from "../hooks/useLang";
+import type { ArticleMeta } from "../types";
 
-export default function TagsIndex() {
+interface TagsIndexProps {
+	allIndexes?: Record<string, unknown[]>;
+}
+
+export default function TagsIndex({ allIndexes }: TagsIndexProps) {
 	const { t, lang } = useLang();
-	const [articles, setArticles] = useState<ArticleMeta[]>([]);
-
-	useEffect(() => {
-		const indexUrl = `/articles/${lang}/index.json`;
-		const fallbackUrl = lang === "en" ? null : "/articles/en/index.json";
-
-		async function load() {
-			let res = await fetch(cacheBust(indexUrl));
-			if (!res.ok && fallbackUrl) {
-				res = await fetch(cacheBust(fallbackUrl));
-			}
-			if (!res.ok) {
-				return;
-			}
-			const data: unknown = await res.json();
-			if (Array.isArray(data)) {
-				setArticles(
-					data.map((item) => (typeof item === "string" ? { slug: item } : item))
-				);
-			}
-		}
-		void load();
-	}, [lang]);
+	const articles = useMemo(() => {
+		const data = allIndexes?.[lang] ?? allIndexes?.en ?? [];
+		return (data as { slug?: string }[]).map((item) =>
+			typeof item === "string" ? { slug: item } : item
+		) as ArticleMeta[];
+	}, [allIndexes, lang]);
 
 	const tagCounts = useMemo(() => {
 		const counts = new Map<string, number>();
