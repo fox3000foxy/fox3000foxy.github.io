@@ -1,0 +1,18 @@
+export const ALL_LANGS = [
+    "en",
+    "fr",
+    "zh",
+    "ja",
+    "ko",
+    "tr",
+    "it",
+    "de",
+    "ru",
+    "es",
+    "pt",
+    "id",
+    "hi",
+    "ar",
+    "vi",
+    "th",
+];
