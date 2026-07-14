@@ -1,5 +1,6 @@
 import "../styles/Home.css";
 import { useLang } from "../hooks/useLang";
+import LazyVisible from "../components/LazyVisible";
 import MarkdownContent from "../components/MarkdownContent";
 import GitHubActivity from "../components/GitHubActivity";
 import NewsletterSignup from "../components/NewsletterSignup";
@@ -31,8 +32,12 @@ export default function Home() {
 		<article className="home">
 			<MarkdownContent content={content} />
 			<RssSubscribe />
-			<GitHubActivity />
-			<NewsletterSignup />
+			<LazyVisible>
+				<GitHubActivity />
+			</LazyVisible>
+			<LazyVisible>
+				<NewsletterSignup />
+			</LazyVisible>
 		</article>
 	);
 }
