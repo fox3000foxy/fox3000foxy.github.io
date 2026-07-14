@@ -17,12 +17,13 @@ const localizedPath = (path: string) => {
 };
 
 const otherLangs = ALL_LANGS.filter((l) => l !== lang);
+const isRTL = RTLLangs.has(lang);
 ---
 
 <header>
   <nav>
     <a href={localizedPath("/")} class="logo">{SITE_TITLE}</a>
-    <div class="nav-links">
+    <div class="nav-links" id="nav-links">
       <a href={localizedPath("/blog")}>{t("nav.blog")}</a>
       <a href={localizedPath("/about")}>{t("nav.about")}</a>
       <a href={localizedPath("/projects")}>Projects</a>
@@ -32,26 +33,62 @@ const otherLangs = ALL_LANGS.filter((l) => l !== lang);
       <a href={localizedPath("/contact")}>{t("nav.contact")}</a>
       <a href={localizedPath("/photos")}>{t("nav.photos")}</a>
       <a href={localizedPath("/uses")}>{t("nav.uses")}</a>
-    </div>
-    <div class="lang-switcher">
-      {otherLangs.slice(0, 5).map((l) => (
-        <a href={l === "en" ? "/" : `/${l}/`} class="lang-link" title={LANG_LABELS[l]}>
-          {l.toUpperCase()}
-        </a>
-      ))}
-      <details class="lang-more">
-        <summary>⋯</summary>
-        <div class="lang-dropdown">
-          {otherLangs.slice(5).map((l) => (
-            <a href={l === "en" ? "/" : `/${l}/`} class="lang-link">
-              {LANG_LABELS[l]}
+      <div class="nav-actions">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <span id="theme-icon">{isRTL ? "🌙" : "☀️"}</span>
+        </button>
+        <div class="lang-switcher">
+          {otherLangs.slice(0, 5).map((l) => (
+            <a href={l === "en" ? "/" : `/${l}/`} class="lang-link" title={LANG_LABELS[l]}>
+              {l.toUpperCase()}
             </a>
           ))}
+          <details class="lang-more">
+            <summary>⋯</summary>
+            <div class="lang-dropdown">
+              {otherLangs.slice(5).map((l) => (
+                <a href={l === "en" ? "/" : `/${l}/`} class="lang-link">
+                  {LANG_LABELS[l]}
+                </a>
+              ))}
+            </div>
+          </details>
         </div>
-      </details>
+      </div>
     </div>
+    <button type="button" class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 </header>
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("nav-links");
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+
+  if (hamburger && navLinks) {
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("open");
+      navLinks.classList.toggle("open");
+    });
+  }
+
+  if (themeToggle && themeIcon) {
+    themeToggle.addEventListener("click", () => {
+      const isLight = document.documentElement.classList.toggle("light");
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+      themeIcon.textContent = isLight ? "🌙" : "☀️";
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", isLight ? "#f8f9fa" : "#000000");
+    });
+    const initialLight = document.documentElement.classList.contains("light");
+    themeIcon.textContent = initialLight ? "🌙" : "☀️";
+  }
+</script>
 
 <style>
   header {
@@ -81,8 +118,9 @@ const otherLangs = ALL_LANGS.filter((l) => l !== lang);
   .logo:hover { color: var(--accent); }
   .nav-links {
     display: flex;
+    align-items: center;
     gap: 1rem;
-    flex-wrap: wrap;
+    flex: 1;
   }
   .nav-links a {
     color: var(--text-muted);
@@ -90,13 +128,30 @@ const otherLangs = ALL_LANGS.filter((l) => l !== lang);
     font-size: 0.9rem;
     font-weight: 500;
     transition: color 0.15s;
+    white-space: nowrap;
   }
   .nav-links a:hover { color: var(--accent); }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.2rem 0.35rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color 0.2s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
   .lang-switcher {
     display: flex;
     gap: 0.25rem;
     align-items: center;
-    margin-left: auto;
   }
   .lang-link {
     font-size: 0.75rem;
@@ -112,10 +167,7 @@ const otherLangs = ALL_LANGS.filter((l) => l !== lang);
     color: var(--accent);
     border-color: var(--accent);
   }
-  .lang-more {
-    position: relative;
-    display: inline-block;
-  }
+  .lang-more { position: relative; display: inline-block; }
   .lang-more summary {
     list-style: none;
     font-size: 0.75rem;
@@ -148,10 +200,52 @@ const otherLangs = ALL_LANGS.filter((l) => l !== lang);
     padding: 0.3rem 0.5rem;
     font-size: 0.85rem;
   }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
   @media (max-width: 768px) {
     header { padding: 0.5rem 1rem; }
     nav { gap: 1rem; }
-    .nav-links { gap: 0.5rem; }
-    .nav-links a { font-size: 0.8rem; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100vh;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 5rem 1.5rem 2rem;
+      margin-left: 0;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+      z-index: 99;
+      overflow-y: auto;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 1rem; margin: 0.5rem 0; width: 100%; }
+    .nav-actions { margin-left: 0; margin-top: 1rem; width: 100%; }
+    .hamburger { display: flex; z-index: 100; }
   }
 </style>

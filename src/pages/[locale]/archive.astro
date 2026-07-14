@@ -1,68 +1,18 @@
 ---
-import fs from "node:fs";
-import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { ALL_LANGS, createT } from "../../lib/i18n";
+import Archive from "../../islands/Archive.tsx";
+import { ALL_LANGS } from "../../lib/i18n";
 import type { Lang } from "../../lib/i18n";
 
-function loadArticles(locale: string) {
-  const indexPath = path.resolve(`public/articles/${locale}/index.json`);
-  if (fs.existsSync(indexPath)) {
-    return JSON.parse(fs.readFileSync(indexPath, "utf-8"));
-  }
-  const enIndex = path.resolve("public/articles/en/index.json");
-  if (fs.existsSync(enIndex)) return JSON.parse(fs.readFileSync(enIndex, "utf-8"));
-  return [];
-}
-
 export function getStaticPaths() {
-  return ALL_LANGS.filter((l) => l !== "en").map((l) => ({ params: { locale: l } }));
+  return ALL_LANGS.filter((l) => l !== "en").map((locale) => ({
+    params: { locale },
+  }));
 }
 
 const { locale } = Astro.params as { locale: Lang };
-const t = createT(locale);
-const articles = loadArticles(locale);
-
-const byYear: Record<string, { month: string; items: typeof articles }[]> = {};
-for (const a of articles) {
-  if (!a.date) continue;
-  const d = new Date(a.date as string);
-  const year = d.getFullYear().toString();
-  const month = d.toLocaleString(locale, { month: "long" });
-  if (!byYear[year]) byYear[year] = [];
-  let m = byYear[year].find((g) => g.month === month);
-  if (!m) {
-    m = { month, items: [] };
-    byYear[year].push(m);
-  }
-  m.items.push(a);
-}
 ---
 
-<BaseLayout title={t("archive.title")} description="" locale={locale}>
-  <h1>{t("archive.title")}</h1>
-  <div class="archive">
-    {Object.entries(byYear).reverse().map(([year, months]) => (
-      <div class="archive-group">
-        <h2>{year}</h2>
-        {months.reverse().map((m) => (
-          <div>
-            <h3 class="archive-month">{m.month}</h3>
-            <ul class="archive-list">
-              {m.items.map((a) => {
-                const d = a.date ? new Date(a.date as string) : null;
-                const day = d ? d.getDate() : "";
-                return (
-                  <li class="archive-item">
-                    <span class="archive-day">{day}</span>
-                    <a href={`/${locale}/blog/${a.slug}`} class="archive-link">{String(a.title)}</a>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </div>
-    ))}
-  </div>
+<BaseLayout title="Archive" description="" locale={locale} wide>
+  <Archive client:only="react" />
 </BaseLayout>

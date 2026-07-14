@@ -1,14 +1,8 @@
 ---
-import fs from "node:fs";
-import path from "node:path";
-import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const mdPath = path.resolve("public/404.md");
-const content = fs.readFileSync(mdPath, "utf-8");
-const html = await renderMarkdown(content);
+import NotFound from "../islands/NotFound.tsx";
 ---
 
-<BaseLayout title="404 - Not Found" description="Page not found">
-  <div class="about-page" set:html={html} />
+<BaseLayout title="404" description="Page not found" wide>
+  <NotFound client:only="react" />
 </BaseLayout>

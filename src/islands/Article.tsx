@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "../lib/navigation";
 import ArticleSchema from "../components/ArticleSchema";
 import AudioPlayer from "../components/AudioPlayer";
 import AuthorBio from "../components/AuthorBio";

@@ -2,62 +2,35 @@
 import fs from "node:fs";
 import path from "node:path";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { ALL_LANGS, createT } from "../../../lib/i18n";
+import TagIndex from "../../../islands/TagIndex.tsx";
+import { ALL_LANGS } from "../../../lib/i18n";
 import type { Lang } from "../../../lib/i18n";
 
-function loadArticles(locale: string) {
-  const indexPath = path.resolve(`public/articles/${locale}/index.json`);
-  if (fs.existsSync(indexPath)) {
-    return JSON.parse(fs.readFileSync(indexPath, "utf-8"));
-  }
-  const enIndex = path.resolve("public/articles/en/index.json");
-  if (fs.existsSync(enIndex)) return JSON.parse(fs.readFileSync(enIndex, "utf-8"));
-  return [];
-}
-
-export function getStaticPaths() {
-  function load(locale: string) {
-    const indexPath = path.resolve(`public/articles/${locale}/index.json`);
-    if (fs.existsSync(indexPath)) {
-      return JSON.parse(fs.readFileSync(indexPath, "utf-8"));
-    }
-    const enIndex = path.resolve("public/articles/en/index.json");
-    if (fs.existsSync(enIndex)) return JSON.parse(fs.readFileSync(enIndex, "utf-8"));
-    return [];
-  }
-
-  const paths: { params: { locale: string; tag: string }; props: { tag: string } }[] = [];
+export async function getStaticPaths() {
+  const paths: { params: { locale: string; tag: string } }[] = [];
   for (const locale of ALL_LANGS) {
     if (locale === "en") continue;
-    const articles = load(locale);
+    const indexPath = path.resolve(`public/articles/${locale}/index.json`);
+    if (!fs.existsSync(indexPath)) continue;
+    const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
     const tags = new Set<string>();
-    for (const a of articles) {
-      for (const t of (a.tags as string[]) || []) tags.add(t);
+    for (const entry of index) {
+      if (entry.tags) {
+        for (const tag of entry.tags) {
+          tags.add(tag);
+        }
+      }
     }
     for (const tag of tags) {
-      paths.push({ params: { locale, tag }, props: { tag } });
+      paths.push({ params: { locale, tag } });
     }
   }
   return paths;
 }
 
 const { locale } = Astro.params as { locale: Lang };
-const { tag } = Astro.props;
-const t = createT(locale);
-const articles = loadArticles(locale).filter((a) => ((a.tags as string[]) || []).includes(tag));
 ---
 
-<BaseLayout title={`${t("blog.tag", { tag })}`} description="" locale={locale}>
-  <h1>{t("blog.tag", { tag })}</h1>
-  <p><a href={`/${locale}/tags`}>← {t("tags.title")}</a></p>
-  <ul>
-    {articles.map((a) => (
-      <li>
-        <a href={`/${locale}/blog/${a.slug}`}>
-          <h2>{String(a.title)}</h2>
-          {a.date && <time datetime={String(a.date)}>{String(a.date)}</time>}
-        </a>
-      </li>
-    ))}
-  </ul>
+<BaseLayout title="Tag" description="" locale={locale} wide>
+  <TagIndex client:only="react" />
 </BaseLayout>

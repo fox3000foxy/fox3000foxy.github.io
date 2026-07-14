@@ -1,48 +1,21 @@
 ---
-import { renderMarkdown } from "../../lib/markdown";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Project from "../../islands/Project.tsx";
 
 export async function getStaticPaths() {
-  let repos: { name: string }[] = [];
   try {
-    const res = await fetch("https://api.github.com/users/fox3000foxy/repos?sort=updated&per_page=50");
+    const res = await fetch("https://api.github.com/users/fox3000foxy/repos?sort=updated&per_page=100");
     if (res.ok) {
-      const all = await res.json();
-      repos = all.filter((r) => !r.fork);
+      const repos: { name: string; fork: boolean }[] = await res.json();
+      return repos.filter((r) => !r.fork).map((repo) => ({
+        params: { slug: repo.name },
+      }));
     }
   } catch {}
-  return repos.map((r) => ({ params: { slug: r.name }, props: { slug: r.name } }));
+  return [{ params: { slug: "placeholder" } }];
 }
-
-const { slug } = Astro.props;
-
-let readme = "";
-let repoInfo: { description?: string; html_url?: string; stargazers_count?: number; language?: string; pushed_at?: string } = {};
-try {
-  const [readmeRes, repoRes] = await Promise.all([
-    fetch(`https://api.github.com/repos/fox3000foxy/${slug}/readme`, { headers: { Accept: "application/vnd.github.raw+json" } }),
-    fetch(`https://api.github.com/repos/fox3000foxy/${slug}`),
-  ]);
-  if (readmeRes.ok) readme = await readmeRes.text();
-  if (repoRes.ok) repoInfo = await repoRes.json();
-} catch {}
-const html = readme ? await renderMarkdown(readme) : "";
 ---
 
-<BaseLayout title={`${slug} | Projects`} description={repoInfo.description || slug} wide>
-  <div class="project-page">
-    <p class="project-back"><a href="/projects">← Back to projects</a></p>
-    <h1>{slug}</h1>
-    {repoInfo.description && <p class="project-desc">{repoInfo.description}</p>}
-    {repoInfo.html_url && <p><a href={repoInfo.html_url} target="_blank">View on GitHub →</a></p>}
-    {html ? <div class="project-readme" set:html={html} /> : <p>README not available.</p>}
-  </div>
+<BaseLayout title="Project" description="" wide>
+  <Project client:only="react" />
 </BaseLayout>
-
-<style>
-  .project-page { max-width: 960px; margin: 0 auto; text-align: left; }
-  .project-back a { color: var(--text-dim); text-decoration: none; }
-  .project-back a:hover { color: var(--accent); }
-  .project-desc { color: var(--text-muted); font-size: 1.05rem; }
-  .project-readme { margin-top: 2rem; }
-</style>

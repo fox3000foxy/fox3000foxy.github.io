@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../lib/navigation";
 import type { ArticleMeta } from "../types";
 import { useLang } from "../hooks/useLang";
 import { useReadStatus } from "../hooks/useReadStatus";

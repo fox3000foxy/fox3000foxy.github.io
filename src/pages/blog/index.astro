@@ -1,29 +1,8 @@
 ---
-import fs from "node:fs";
-import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Header from "../../components/Header.astro";
-import Footer from "../../components/Footer.astro";
-
-const indexRaw = fs.readFileSync(path.resolve("public/articles/en/index.json"), "utf-8");
-const articles = JSON.parse(indexRaw);
+import BlogList from "../../islands/BlogList.tsx";
 ---
 
-<BaseLayout title="Blog" description="Articles about web development, automation, and open-source">
-  <Header />
-  <main>
-    <h1>Blog</h1>
-    <ul>
-      {articles.map((article) => (
-        <li>
-          <a href={`/blog/${article.slug}`}>
-            <h2>{article.title}</h2>
-            {article.date && <time datetime={article.date}>{article.date}</time>}
-            {article.description && <p>{article.description}</p>}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </main>
-  <Footer />
+<BaseLayout title="Blog" description="Articles about web development, automation, and open-source" wide>
+  <BlogList client:only="react" />
 </BaseLayout>

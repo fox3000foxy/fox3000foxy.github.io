@@ -2,38 +2,24 @@
 import fs from "node:fs";
 import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const indexRaw = fs.readFileSync(path.resolve("public/articles/en/index.json"), "utf-8");
-const allArticles = JSON.parse(indexRaw);
+import TagIndex from "../../islands/TagIndex.tsx";
 
 export async function getStaticPaths() {
-  const raw = fs.readFileSync(path.resolve("public/articles/en/index.json"), "utf-8");
-  const articles = JSON.parse(raw);
+  const indexPath = path.resolve("public/articles/en/index.json");
+  if (!fs.existsSync(indexPath)) return [];
+  const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
   const tags = new Set<string>();
-  for (const a of articles) {
-    for (const t of a.tags || []) tags.add(t);
+  for (const entry of index) {
+    if (entry.tags) {
+      for (const tag of entry.tags) {
+        tags.add(tag);
+      }
+    }
   }
-  return Array.from(tags).map((tag) => ({
-    params: { tag },
-    props: { tag },
-  }));
+  return [...tags].map((tag) => ({ params: { tag } }));
 }
-
-const { tag } = Astro.props;
-const articles = allArticles.filter((a) => (a.tags || []).includes(tag));
 ---
 
-<BaseLayout title={`Tag: ${tag}`} description={`Articles tagged with "${tag}"`}>
-  <h1>Tag: {tag}</h1>
-  <p><a href="/tags">← All tags</a></p>
-  <ul>
-    {articles.map((a) => (
-      <li>
-        <a href={`/blog/${a.slug}`}>
-          <h2>{a.title}</h2>
-          {a.date && <time datetime={a.date}>{a.date}</time>}
-        </a>
-      </li>
-    ))}
-  </ul>
+<BaseLayout title="Tag" description="" wide>
+  <TagIndex client:only="react" />
 </BaseLayout>
