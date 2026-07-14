@@ -10,7 +10,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2bNc8S++GED3f7V/CxBrlutvIPjpWvTOBfmjOm5GQ1D/M5dU4rWCM8sonInuJSyP7ix/engDExOxJk4AG9eo3A=="
+author_sig: "Y2eZo/5bjxcgtZB0OfOQr5Wq6jHrJH7wcytVhAHa5++qbSkFAaEkmipsJPKAchfe0bB3cj99RxF+qIge+gq3LQ=="
 ---
 
 # สคริปต์เซ็นชื่อ SSH สำหรับคอมมิต -- คำอธิบาย

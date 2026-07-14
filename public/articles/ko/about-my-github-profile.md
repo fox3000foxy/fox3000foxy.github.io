@@ -8,7 +8,7 @@ tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BchwSgSVwd3KtEOxhOw11iYigdnugxeYekYP7vU/TNEourNOVmZ/zJf6LnIaDL5K/j7RW3HqCtDlDJoFC8zlUA=="
+author_sig: "n5sEvKJEPAqlobQVLWMYVqTHPDvUXUromOtnOQooLVwpfTGfYcdTnhJK1KLj6fMysq2R7TNg6+4i7sH/utDBEA=="
 ---
 
 # 내 GitHub 프로필

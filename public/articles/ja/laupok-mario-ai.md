@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5ufBfGvQ+1L6oIVITt67uWpNAT75rfDogGK4QRvEdotZV95DK75kA40+4GAPJExx8kZiBDBWfE460lEOkru4dw=="
+author_sig: "KfqufPONqYRcmsxsyHHBi9vQIm49PvOZ8oCRG04hGKZdT0L+E3kWrTgKrxGyba4YdWPvy6sKcgPRQmIMxTaCJA=="
 ---
 
 # Laupokが作ったスーパーマリオワールドを一人でプレイするAI――その仕組み
