@@ -22,7 +22,7 @@ export function GET({ params }: { params: { lang: string } }) {
 	const siteUrl = SITE_URL;
 	const label = LANG_LABELS[lang];
 	const title = `Fox's Blog (${label})`;
-	const description = `Fox3000foxy's blog about web development, automation, and open-source — ${label}`;
+	const description = `Fox3000foxy's blog about web development, automation, and open-source -- ${label}`;
 	const feedUrl = `${siteUrl}/feed.${lang}.xml`;
 	const now = new Date().toUTCString();
 

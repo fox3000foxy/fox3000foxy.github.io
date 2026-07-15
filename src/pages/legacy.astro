@@ -27,7 +27,7 @@ const legacyJsonLd = breadcrumbJsonLd([
 ]);
 ---
 
-<BaseLayout title="Portfolio" description="Legacy portfolio — projects, contributions, and open-source work by Fox3000foxy" extraHead={`<script type="application/ld+json">${legacyJsonLd}</script>`}>
+<BaseLayout title="Portfolio" description="Legacy portfolio -- projects, contributions, and open-source work by Fox3000foxy" extraHead={`<script type="application/ld+json">${legacyJsonLd}</script>`}>
   {ALL_LANGS.map((l) => (
     <article class="home lang-content" data-lang={l} set:html={allContent[l]} />
   ))}
