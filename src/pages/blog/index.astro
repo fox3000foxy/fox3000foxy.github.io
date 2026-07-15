@@ -5,6 +5,7 @@ import { ALL_LANGS, createT } from "../../lib/i18n";
 import { getAuthors } from "../../utils/authors";
 import { isNew } from "../../utils/isNew";
 import type { ArticleMeta } from "../../types";
+import "../../styles/BlogList.css";
 
 const t = createT("en");
 const allIndexes = readAllArticleIndexes();
@@ -208,8 +209,6 @@ render();
 ---
 
 <BaseLayout title="Blog" description="Articles about web development, automation, and open-source" wide>
-  <link rel="stylesheet" href="/src/styles/BlogList.css" />
-
   <div id="blog-root" class="blog-list">
     <div class="blog-list-header">
       <h2>{t("blog.title")}</h2>

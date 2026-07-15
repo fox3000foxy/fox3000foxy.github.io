@@ -3,8 +3,6 @@ import { Image } from "astro:assets";
 import fs from "node:fs";
 import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import BookmarkButton from "../../components/BookmarkButton";
-import GiscusComments from "../../components/GiscusComments";
 import type { ArticleMeta } from "../../types";
 import { ALL_LANGS, createT } from "../../lib/i18n";
 import type { Lang } from "../../lib/i18n";
@@ -175,7 +173,7 @@ const suggested = allArticles
                 <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(meta.title ?? slug ?? "")}&url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on Twitter">𝕏</a>
                 <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on LinkedIn">in</a>
                 <button type="button" class="share-btn reading-mode-btn" aria-label="Toggle reading mode" title="Reading mode">Aa</button>
-                <BookmarkButton client:load slug={slug!} />
+                <button type="button" class="bookmark-btn" data-slug={slug} aria-label="Add bookmark">☆</button>
               </div>
               <div class="article-layout">
                 {headings.length >= 2 && (
@@ -236,7 +234,7 @@ const suggested = allArticles
             )}
           </nav>
         )}
-        <GiscusComments client:load lang="en" />
+        <div class="giscus-comments" data-lang="en"></div>
       </div>
     </>
   ) : (
@@ -324,6 +322,55 @@ const suggested = allArticles
     wrapper.appendChild(header);
     wrapper.appendChild(pre);
   });
+
+  var bookmarkBtn = document.querySelector('.bookmark-btn[data-slug]');
+  if (bookmarkBtn) {
+    var BOOKMARK_KEY = 'bookmarks';
+    var bSlug = bookmarkBtn.getAttribute('data-slug');
+    var bStored = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
+    if (bStored.indexOf(bSlug) !== -1) bookmarkBtn.classList.add('active');
+    bookmarkBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var s = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
+      var idx = s.indexOf(bSlug);
+      if (idx === -1) s.push(bSlug); else s.splice(idx, 1);
+      localStorage.setItem(BOOKMARK_KEY, JSON.stringify(s));
+      this.classList.toggle('active');
+      this.setAttribute('aria-label', this.classList.contains('active') ? 'Remove bookmark' : 'Add bookmark');
+      this.textContent = this.classList.contains('active') ? '\u2605' : '\u2606';
+    });
+  }
+
+  var gc = document.querySelector('.giscus-comments');
+  if (gc) {
+    var gcl = gc.getAttribute('data-lang') || 'en';
+    var gs = document.createElement('script');
+    gs.src = 'https://giscus.app/client.js';
+    gs.async = true;
+    gs.crossOrigin = 'anonymous';
+    gs.setAttribute('data-repo', 'fox3000foxy/fox3000foxy.github.io');
+    gs.setAttribute('data-repo-id', 'R_kgDORhZXLg');
+    gs.setAttribute('data-category', 'Announcements');
+    gs.setAttribute('data-category-id', 'DIC_kwDORhZXLs4C-FFI');
+    gs.setAttribute('data-mapping', 'pathname');
+    gs.setAttribute('data-strict', '0');
+    gs.setAttribute('data-reactions-enabled', '1');
+    gs.setAttribute('data-emit-metadata', '0');
+    gs.setAttribute('data-input-position', 'bottom');
+    var themeCheckbox = document.getElementById('theme-toggle');
+    gs.setAttribute('data-theme', themeCheckbox && themeCheckbox.checked ? 'light' : 'dark');
+    gs.setAttribute('data-lang', gcl);
+    gc.appendChild(gs);
+
+    document.addEventListener('change', function(ev) {
+      if (ev.target && ev.target.id === 'theme-toggle') {
+        var iframe = gc.querySelector('iframe');
+        if (iframe) {
+          iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: ev.target.checked ? 'light' : 'dark' } } }, 'https://giscus.app');
+        }
+      }
+    });
+  }
 })();
 </script>
 

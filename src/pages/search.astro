@@ -1,11 +1,112 @@
 ---
-import SearchPage from "../islands/SearchPage";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { readAllArticleIndexes } from "../lib/langContent";
+import { ALL_LANGS } from "../lib/i18n";
+import type { ArticleMeta } from "../types";
+import "../styles/SearchPage.css";
 
 const allIndexes = readAllArticleIndexes();
+
+function normalize(data: unknown[]): ArticleMeta[] {
+  const items = data.map((item) => (typeof item === "string" ? { slug: item } : item));
+  return items as ArticleMeta[];
+}
+
+const langsData = Object.fromEntries(
+  ALL_LANGS.map((l) => [l, normalize(allIndexes[l] ?? [])])
+);
+const articlesJson = JSON.stringify(langsData);
+
+const t = (key: string) => key;
 ---
 
 <BaseLayout title="Search" description="Search articles" wide>
-  <SearchPage client:only="react" allIndexes={allIndexes} />
+  <div class="search-page">
+    <h2>Search</h2>
+    <div class="search-input-wrap">
+      <input type="search" class="search-input" id="search-input" placeholder="Search articles, tags, content..." />
+      <button type="button" class="search-clear-btn" id="search-clear" aria-label="Clear" style="display:none">×</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <script is:inline id="search-data" type="application/json" set:html={articlesJson}></script>
+
+  <script is:inline>
+  (function() {
+    var data = JSON.parse(document.getElementById('search-data').textContent);
+    var currentLang = 'en';
+    var query = '';
+    var input = document.getElementById('search-input');
+    var clearBtn = document.getElementById('search-clear');
+    var resultsEl = document.getElementById('search-results');
+
+    function detectLang() {
+      var stored = localStorage.getItem('fox-blog-lang');
+      if (stored && data[stored]) return stored;
+      var prefs = navigator.languages || [navigator.language];
+      for (var i = 0; i < prefs.length; i++) {
+        var code = prefs[i].split('-')[0];
+        if (data[code]) return code;
+      }
+      return 'en';
+    }
+
+    function render() {
+      var q = query.trim().toLowerCase();
+      if (!q) { resultsEl.innerHTML = ''; return; }
+
+      var articles = data[currentLang] || data.en || [];
+      var results = articles
+        .filter(function(a) {
+          var title = (a.title || '').toLowerCase();
+          var desc = (a.description || '').toLowerCase();
+          var tags = (a.tags || []).join(' ').toLowerCase();
+          return title.indexOf(q) !== -1 || desc.indexOf(q) !== -1 || tags.indexOf(q) !== -1 || (a.slug || '').toLowerCase().indexOf(q) !== -1;
+        })
+        .sort(function(a, b) {
+          var aScore = (a.title || '').toLowerCase().indexOf(q) !== -1 ? 2 : 1;
+          var bScore = (b.title || '').toLowerCase().indexOf(q) !== -1 ? 2 : 1;
+          return bScore - aScore;
+        });
+
+      var html = '';
+      if (results.length === 0) {
+        html = '<p class="search-no-results">No results found for "' + q + '".</p>';
+      } else {
+        for (var i = 0; i < results.length; i++) {
+          var a = results[i];
+          html += '<a href="/blog/' + a.slug + '" class="search-result-card">';
+          html += '<h3 class="search-result-title">' + (a.title || a.slug) + '</h3>';
+          if (a.description) html += '<p class="search-result-desc">' + a.description + '</p>';
+          html += '<div class="search-result-meta">';
+          if (a.date) html += '<time>' + a.date + '</time>';
+          if (a.tags && a.tags.length > 0) {
+            html += '<span class="search-result-tags">';
+            for (var j = 0; j < a.tags.length; j++) html += '#' + a.tags[j] + ' ';
+            html += '</span>';
+          }
+          html += '</div></a>';
+        }
+      }
+      resultsEl.innerHTML = html;
+    }
+
+    currentLang = detectLang();
+
+    input.addEventListener('input', function(e) {
+      query = e.target.value;
+      clearBtn.style.display = query ? '' : 'none';
+      render();
+    });
+
+    clearBtn.addEventListener('click', function() {
+      input.value = '';
+      query = '';
+      clearBtn.style.display = 'none';
+      render();
+      input.focus();
+    });
+  })();
+  </script>
 </BaseLayout>
