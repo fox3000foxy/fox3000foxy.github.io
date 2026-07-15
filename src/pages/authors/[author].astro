@@ -32,7 +32,7 @@ const authorInfo = getAuthor(authorId!);
     <div class="tag-page-header">
       <a href="/blog" class="tag-page-back">← Blog</a>
       <div class="author-page-title">
-        <img class="author-page-avatar" src={authorInfo.avatar ?? `https://github.com/${authorInfo.id}.png`} alt={authorInfo.name} />
+        <img class="author-page-avatar" src={authorInfo.avatar ?? `https://github.com/${authorInfo.id}.png`} alt={authorInfo.name} width="64" height="64" />
         <h2>{authorInfo.name}</h2>
       </div>
     </div>

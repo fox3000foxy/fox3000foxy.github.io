@@ -57,7 +57,7 @@ const articles = tag
           return (
             <a href={`/blog/${slug}`} class="blog-card">
               {image && (
-                <img class="blog-card-img" src={image} alt="" loading="lazy" />
+                <img class="blog-card-img" src={image} alt="" loading="lazy" decoding="async" />
               )}
               <div class="blog-card-body">
                 <h3 class="blog-card-title">{title ?? slug?.replace(/-/g, " ")}</h3>
@@ -89,7 +89,7 @@ const articles = tag
                 </div>
                 <div class="blog-card-authors">
                   {authorList.map((a) => (
-                    <img class="blog-card-author-avatar" src={a.avatar ?? `https://github.com/${a.id}.png`} alt={a.name} title={a.name} width="20" height="20" />
+                    <img class="blog-card-author-avatar" src={a.avatar ?? `https://github.com/${a.id}.png`} alt={a.name} title={a.name} width="20" height="20" decoding="async" />
                   ))}
                 </div>
               </div>

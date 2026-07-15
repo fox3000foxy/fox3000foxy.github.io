@@ -149,7 +149,7 @@ const suggested = allArticles
                   <div class="author-bio-top">
                     {getAuthors(meta.authors).map((author) => (
                       <a href={`/authors/${author.id}`} class="author-bio-item">
-                        <img class="author-avatar-small" src={author.avatar ?? `https://github.com/${author.id}.png`} alt={author.name} width="24" height="24" />
+                        <img class="author-avatar-small" src={author.avatar ?? `https://github.com/${author.id}.png`} alt={author.name} width="24" height="24" decoding="async" />
                         <div class="author-info-top">
                           <span class="author-name-top">
                             {author.name}

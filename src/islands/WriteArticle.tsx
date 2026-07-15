@@ -466,7 +466,7 @@ export default function WriteArticle() {
 
 			{user && (
 				<div className="write-header">
-					<img src={user.avatar_url} alt="" width={32} height={32} />
+					<img src={user.avatar_url} alt="" width={32} height={32} decoding="async" />
 					<span>{user.name || user.login}</span>
 					<button
 						type="button"
@@ -750,7 +750,7 @@ export default function WriteArticle() {
 						<div className="image-list">
 							{images.map((img) => (
 								<div key={img.filename} className="image-item">
-									<img src={img.dataUrl} alt={img.filename} />
+									<img src={img.dataUrl} alt={img.filename} loading="lazy" />
 									<span className="image-name" title={img.filename}>
 										{img.filename}
 									</span>

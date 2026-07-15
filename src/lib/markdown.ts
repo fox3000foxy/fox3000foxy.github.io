@@ -84,7 +84,7 @@ export function renderMarkdown(content: string): string {
 		(_, code: string) => {
 			const svgPath = renderMermaidSvg(code.trim());
 			if (svgPath) {
-				return `<img src="/_mermaid/${path.basename(svgPath)}" alt="mermaid diagram" loading="lazy" class="mermaid-svg" />`;
+				return `<img src="/_mermaid/${path.basename(svgPath)}" alt="mermaid diagram" loading="lazy" decoding="async" class="mermaid-svg" />`;
 			}
 			const escaped = code.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 			return `<pre class="mermaid-fallback">${escaped}</pre>`;

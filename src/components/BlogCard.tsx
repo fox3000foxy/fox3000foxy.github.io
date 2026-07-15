@@ -42,15 +42,16 @@ export default function BlogCard({ article }: BlogCardProps) {
 	const authorElements = useMemo(
 		() =>
 			getAuthors(authors).map((a) => (
-				<img
-					key={a.id}
-					className="blog-card-author-avatar"
-					src={a.avatar ?? `https://github.com/${a.id}.png`}
-					alt={a.name}
-					title={a.name}
-					width="20"
-					height="20"
-				/>
+			<img
+				key={a.id}
+				className="blog-card-author-avatar"
+				src={a.avatar ?? `https://github.com/${a.id}.png`}
+				alt={a.name}
+				title={a.name}
+				width="20"
+				height="20"
+				decoding="async"
+			/>
 			)),
 		[authors]
 	);
@@ -62,7 +63,7 @@ export default function BlogCard({ article }: BlogCardProps) {
 			onClick={() => markAsRead(slug)}
 		>
 			{image && (
-				<img className="blog-card-img" src={image} alt="" loading="lazy" />
+				<img className="blog-card-img" src={image} alt="" loading="lazy" decoding="async" />
 			)}
 			<div className="blog-card-body">
 				<h3 className="blog-card-title">{title ?? slug?.replace(/-/g, " ")}</h3>
