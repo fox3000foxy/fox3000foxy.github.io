@@ -9,20 +9,23 @@ export async function getStaticPaths() {
   try {
     repos = await fetchRepos();
   } catch {
-    return [{ params: { slug: "placeholder" } }];
+    return [{ params: { slug: "placeholder" }, props: { repo: null, readme: "" } }];
   }
-  return repos.map((repo) => ({ params: { slug: repo.name }, props: { repo } }));
+
+  const readmes = await Promise.all(
+    repos.map((r) =>
+      fetchReadme(r.name, r.default_branch, r.owner).catch(() => "")
+    )
+  );
+
+  return repos.map((repo, i) => ({
+    params: { slug: repo.name },
+    props: { repo, readme: readmes[i] },
+  }));
 }
 
-const { repo } = Astro.props as { repo?: Repo };
+const { repo, readme } = Astro.props as { repo?: Repo | null; readme?: string };
 const slug = Astro.params.slug as string;
-
-let readme = "";
-if (repo) {
-  try {
-    readme = await fetchReadme(repo.name, repo.default_branch, repo.owner);
-  } catch {}
-}
 ---
 
 <BaseLayout title={repo?.name ?? slug} description={repo?.description ?? ""} wide>
