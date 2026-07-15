@@ -27,7 +27,7 @@ export function GET() {
 		.filter((a) => a.date)
 		.filter((a) => {
 			const d = new Date(a.date as string).getTime();
-			return !isNaN(d) && d >= twoDaysAgo;
+			return !Number.isNaN(d) && d >= twoDaysAgo;
 		})
 		.map(
 			(a) => `  <url>

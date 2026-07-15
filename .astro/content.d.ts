@@ -11,7 +11,7 @@ declare module 'astro:content' {
 	export interface RenderedContent {
 		html: string;
 		metadata?: {
-			imagePaths: Array<string>;
+			imagePaths: string[];
 			[key: string]: unknown;
 		};
 	}
@@ -23,18 +23,18 @@ declare module 'astro:content' {
 
 	type AllValuesOf<T> = T extends any ? T[keyof T] : never;
 
-	export type ReferenceDataEntry<
+	export interface ReferenceDataEntry<
 		C extends CollectionKey,
 		E extends keyof DataEntryMap[C] = string,
-	> = {
+	> {
 		collection: C;
 		id: E;
-	};
+	}
 
-	export type ReferenceLiveEntry<C extends keyof LiveContentConfig['collections']> = {
+	export interface ReferenceLiveEntry<C extends keyof LiveContentConfig['collections']> {
 		collection: C;
 		id: string;
-	};
+	}
 
 	export function getCollection<C extends keyof DataEntryMap, E extends CollectionEntry<C>>(
 		collection: C,
@@ -123,7 +123,7 @@ declare module 'astro:content' {
 		? import('astro/zod').infer<L['schema']>
 		: any;
 
-	type DataEntryMap = {
+	interface DataEntryMap {
 		"ar": Record<string, {
   id: string;
   body?: string;
@@ -253,7 +253,7 @@ declare module 'astro:content' {
   filePath?: string;
 }>;
 
-	};
+	}
 
 	type ExtractLoaderTypes<T> = T extends import('astro/loaders').LiveLoader<
 		infer TData,
