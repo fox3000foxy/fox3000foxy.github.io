@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import preact from "@astrojs/preact";
+import sitemap from "@astrojs/sitemap";
 
 const SITE_URL = "https://fox3000foxy.com";
 
@@ -7,6 +8,7 @@ export default defineConfig({
   site: SITE_URL,
   output: "static",
   integrations: [
+    sitemap({ filter: (page) => !page.includes("/write") && !page.includes("/api/"), changefreq: "weekly", priority: 0.7, lastmod: new Date() }),
     preact({ compat: true }),
   ],
   image: {
