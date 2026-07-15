@@ -79,7 +79,7 @@ const articleMetaTags = enMeta.date ? `
   ${enMeta.lastmod ? `<meta property="article:modified_time" content="${enMeta.lastmod}" />` : ""}
   ${(enMeta.tags || []).map((t: string) => `<meta property="article:tag" content="${t}" />`).join("\n  ")}
 ` : "";
-const articleJsonLdStr = data ? articleJsonLd({
+const articleSchemaJson = data ? articleJsonLd({
   slug: slug || "",
   title: enMeta.title || slug || "",
   description: enMeta.description || "",
@@ -91,13 +91,13 @@ const articleJsonLdStr = data ? articleJsonLd({
   inLanguage: "en",
   wordCount: rawBodyEn ? rawBodyEn.split(/\s+/).length : undefined,
 }) : "";
-const breadcrumbStr = breadcrumbJsonLd([
+const breadcrumbSchemaJson = breadcrumbJsonLd([
   { name: "Home", url: "/" },
   { name: "Blog", url: "/blog" },
   { name: title, url: `/blog/${slug}` },
 ]);
-const articleJsonLd = articleJsonLdStr ? `<script type="application/ld+json">${articleJsonLdStr}</script><script type="application/ld+json">${breadcrumbStr}</script>` : "";
-const extraHead = articleMetaTags + articleJsonLd;
+const articleJsonLdHtml = articleSchemaJson ? `<script type="application/ld+json">${articleSchemaJson}</script><script type="application/ld+json">${breadcrumbSchemaJson}</script>` : "";
+const extraHead = articleMetaTags + articleJsonLdHtml;
 
 // Compute prev/next article navigation
 const allIndexes = data?.allIndexes ?? readAllArticleIndexes();
