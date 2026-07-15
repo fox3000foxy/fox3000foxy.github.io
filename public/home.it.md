@@ -4,7 +4,9 @@
 
 ## Su di me
 
-Mi chiamo Fox, i miei pronomi non sono ancora definiti perché mi sto ancora scoprendo. Sono un ingegnere del software e amo lavorare con TypeScript, Node.js e React, e scoprire nuove tecnologie. La maggior parte dei miei progetti sono open‑source e vivono su GitHub sotto l'account `fox3000foxy`.
+Mi chiamo Fox. Sono un ingegnere del software e amo lavorare con TypeScript, Node.js e React, e scoprire nuove tecnologie. La maggior parte dei miei progetti sono open‑source e vivono su GitHub sotto l'account `fox3000foxy`.
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
 
 Sono una persona che adoraaaaa il concetto di open source, perché amo condividere le cose. Mi piace anche scoprire tecnologie vecchie come UTAU, trovo il concetto piuttosto affascinante. Amo anche i Vtuber, e mi piacerebbe diventarne uno, ma purtroppo sono timido.
 

@@ -4,7 +4,9 @@
 
 ## Tentang Saya
 
-Jadi, nama saya adalah Fox, dan saya tidak memiliki kata benda yang ditetapkan karena saya masih mencari diri saya sendiri, dan saya adalah seorang insinyur perangkat lunak yang menikmati bekerja dengan TypeScript, Node.js, dan React, serta menemukan teknologi baru lainnya. Sebagian besar proyek saya adalah terbuka dan berada di GitHub di bawah akun fox3000foxy.
+Jadi, nama saya adalah Fox, dan saya adalah seorang insinyur perangkat lunak yang menikmati bekerja dengan TypeScript, Node.js, dan React, serta menemukan teknologi baru lainnya. Sebagian besar proyek saya adalah terbuka dan berada di GitHub di bawah akun fox3000foxy.
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
 
 Saya adalah seseorang yang mencintai konsep open source karena saya mencintai berbagi. Saya juga suka menemukan teknologi kuno seperti UTAU, saya menemukan konsepnya sangat menarik. Saya juga suka Vtuber, dan saya ingin menjadi salah satu di antara mereka, tapi sayangnya saya sangat malu.
 

@@ -4,7 +4,9 @@
 
 ## Về tôi
 
-Vậy tên tôi là Fox, nhưng tôi không xác định được các từ ngữ để chỉ tôi, vì tôi vẫn đang tìm kiếm bản thân và tôi là một kỹ sư phần mềm yêu thích làm việc với TypeScript, Node.js và React, và khám phá các công nghệ mới. Hầu hết các dự án của tôi đều là mã nguồn mở và sống trên GitHub dưới tài khoản fox3000foxy.
+Vậy tên tôi là Fox, và tôi là một kỹ sư phần mềm yêu thích làm việc với TypeScript, Node.js và React, và khám phá các công nghệ mới. Hầu hết các dự án của tôi đều là mã nguồn mở và sống trên GitHub dưới tài khoản fox3000foxy.
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
 
 Tôi là người yêu thích khái niệm mã nguồn mở, vì tôi yêu thích chia sẻ mọi thứ. Tôi cũng thích khám phá các công nghệ cũ như UTAU, tôi thấy khái niệm này rất thú vị. Tôi yêu Vtubers và tôi muốn trở thành một Vtuber, nhưng tôi quá nhút nhát.
 

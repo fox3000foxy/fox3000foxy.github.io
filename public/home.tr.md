@@ -4,7 +4,9 @@
 
 ## Hakkımda
 
-Ben Fox, zamirlerim henüz belirlenmedi çünkü hala kendimi keşfediyorum. Bir yazılım mühendisiyim ve TypeScript, Node.js ve React ile çalışmayı ve yeni teknolojiler keşfetmeyi seviyorum. Projelerimin çoğu açık kaynak ve GitHub'da `fox3000foxy` hesabı altında yaşıyor.
+Ben Fox. Bir yazılım mühendisiyim ve TypeScript, Node.js ve React ile çalışmayı ve yeni teknolojiler keşfetmeyi seviyorum. Projelerimin çoğu açık kaynak ve GitHub'da `fox3000foxy`
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. hesabı altında yaşıyor.
 
 Açık kaynak konseptini çooooook seven biriyim, çünkü bir şeyleri paylaşmayı seviyorum. Ayrıca UTAU gibi eski teknolojileri keşfetmeyi seviyorum, konsepti oldukça büyüleyici buluyorum. Vtuberları da çok seviyorum ve bir tane olmak isterdim ama ne yazık ki utangaçım.
 

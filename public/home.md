@@ -4,7 +4,9 @@
 
 ## About me
 
-So my name is Fox, my pronouns are not defined actually, because I'm still finding myself, and I'm a software engineer who enjoys working with TypeScript, Node.js and React, and discover new technologies anyways. Most of my projects are open‑source and live on GitHub under the `fox3000foxy` account.
+So my name is Fox, and I'm a software engineer who enjoys working with TypeScript, Node.js and React, and discover new technologies anyways. Most of my projects are open‑source and live on GitHub under the `fox3000foxy` account.
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
 
 I'm someone who loooooooves the open source concept, because I love sharing things. Also I like to discover old technologies like UTAU one, I find the concept pretty fascinating. I love Vtubers as well, and I would love to be one, but unfortunately I'm shy.
 

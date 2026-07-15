@@ -4,7 +4,9 @@
 
 ## عني
 
-فأنا اسمه فوكس، وأني ما عرفش ميعاد لي، لأنني ما عرفتش ميعاد وغادي أكون، وأنا مهندس برمجيات أحب العمل مع TypeScript، Node.js و React، وأكتشفني مفيش تكنولوجيا جديدة. أغلب مشاريعي مفتوحين وموجودة على GitHub تحت حساب fox3000foxy.
+فأنا اسمه فوكس، وأنا مهندس برمجيات أحب العمل مع TypeScript، Node.js و React، وأكتشفني مفيش تكنولوجيا جديدة. أغلب مشاريعي مفتوحين وموجودة على GitHub تحت حساب fox3000foxy.
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
 
 أنا شخص يهب للفكرة مفتوحة المصدر، لأنني أحب التشارك. وأنا أحب اكتشاف تكنولوجيا قديمة مثل UTAU، لأنني أجد الفكرة مفيش بديل عنها. وأنا أحب VTubers، وأنا أحب أكون VTuber، لكنني مفيش شجاع.
 

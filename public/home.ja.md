@@ -4,7 +4,9 @@
 
 ## 自己紹介
 
-フォックスです。代名詞はまだ決めてないんだ。まだ自分探し中だからね。ソフトウェアエンジニアをやっていて、TypeScript、Node.js、React で作業するのと、新しい技術を発見するのが大好き。プロジェクトのほとんどはオープンソースで、GitHub の `fox3000foxy` アカウントで公開してる。
+フォックスです。ソフトウェアエンジニアをやっていて、TypeScript、Node.js、React で作業するのと、新しい技術を発見するのが大好き。プロジェクトのほとんどはオープンソースで、GitHub の `fox3000foxy`
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. アカウントで公開してる。
 
 オープンソースのコンセプトがもう大好きで大好きで仕方ないんだ。だって人と共有するのが好きだからね。UTAU みたいな古い技術を発見するのも好きで、そのコンセプトにすごく魅了されてる。Vtuber も大好きで、自分もなりたいけど、残念ながらシャイなんだ。
 

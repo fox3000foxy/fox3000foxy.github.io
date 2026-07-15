@@ -4,7 +4,9 @@
 
 ## 나에 대해서
 
-나는 Fox야. 아직 나 자신을 탐구하는 중이라 대명사는 아직 정하지 않았어. 소프트웨어 엔지니어고 TypeScript, Node.js, React로 작업하는 걸 좋아하고 새로운 기술을 발견하는 것도 좋아해. 내 프로젝트 대부분은 오픈소스고 GitHub의 `fox3000foxy` 계정에 있어.
+나는 Fox야. 소프트웨어 엔지니어고 TypeScript, Node.js, React로 작업하는 걸 좋아하고 새로운 기술을 발견하는 것도 좋아해. 내 프로젝트 대부분은 오픈소스고 GitHub의 `fox3000foxy`
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. 계정에 있어.
 
 오픈소스 개념을 진짜 진짜 사랑하는 사람이야. 왜냐하면 뭔가를 공유하는 게 좋으니까. UTAU 같은 오래된 기술을 발견하는 것도 좋아해. 개념이 꽤 매력적이더라. Vtuber도 엄청 좋아하고 나도 되고 싶은데 아쉽게도 부끄러움이 많아.
 

@@ -4,7 +4,9 @@
 
 ## 关于我
 
-我叫 Fox，我的代词还没确定，因为我还在探索自我。我是一名软件工程师，热爱使用 TypeScript、Node.js 和 React，并喜欢发现新技术。我的大部分项目都是开源的，存放在 GitHub 的 `fox3000foxy` 账户下。
+我叫 Fox。我是一名软件工程师，热爱使用 TypeScript、Node.js 和 React，并喜欢发现新技术。我的大部分项目都是开源的，存放在 GitHub 的 `fox3000foxy`
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. 账户下。
 
 我是一个超超超超级喜欢开源概念的人，因为我喜欢分享东西。我也喜欢发现像 UTAU 这样的老技术，觉得这个概念相当迷人。我也很喜欢 Vtuber，想成为其中之一，但不幸的是我很害羞。
 

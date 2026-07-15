@@ -4,7 +4,9 @@
 
 ## Обо мне
 
-Меня зовут Фокс, мои местоимения ещё не определены, потому что я всё ещё познаю себя. Я инженер-программист и обожаю работать с TypeScript, Node.js и React, а также открывать новые технологии. Большинство моих проектов с открытым исходным кодом и живут на GitHub под аккаунтом `fox3000foxy`.
+Меня зовут Фокс. Я инженер-программист и обожаю работать с TypeScript, Node.js и React, а также открывать новые технологии. Большинство моих проектов с открытым исходным кодом и живут на GitHub под аккаунтом `fox3000foxy`.
+
+Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
 
 Я человек, который обожааааает концепцию открытого исходного кода, потому что я люблю делиться вещами. Мне также нравится открывать старые технологии, такие как UTAU, я нахожу эту концепцию довольно захватывающей. Я также люблю Vtubers и хотел бы стать одним из них, но, к сожалению, я стеснительный.
 
