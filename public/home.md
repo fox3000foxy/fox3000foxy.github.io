@@ -10,11 +10,13 @@ Despite what some might assume, I'm not a furry. I've been using the name Fox300
 
 I'm someone who loooooooves the open source concept, because I love sharing things. Also I like to discover old technologies like UTAU one, I find the concept pretty fascinating. I love Vtubers as well, and I would love to be one, but unfortunately I'm shy.
 
-I also love to find workarounds to not pay things that are paid, or that you would have to pay if you don't think out of the box. As an example [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) was one of my last creation that I found free workaround for commands handling, database management, and daemons. And oh God, playing with Github Actions and workflows is one of the best feeling I've got. I also started to sign my commits with an SSH Key, and you can find the script I made on [this gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
+I'm resourceful — I always find niche free solutions that I invent myself, instead of going for the obvious but expensive alternatives. I also love to find workarounds to not pay things that are paid, or that you would have to pay if you don't think out of the box. As an example [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) was one of my last creation that I found free workaround for commands handling, database management, and daemons. And oh God, playing with Github Actions and workflows is one of the best feeling I've got. I also started to sign my commits with an SSH Key, and you can find the script I made on [this gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Languages & Technologies
 
 So I mainly code in Typescript and React now, but back in time I was coding launchers in pure HTML, CSS and JavaScript. Crazy? I was crazy once! They put me in a room. Nahhh I'm kinding. I also know Python, C# but i hate it, Java, but it's rare, now I use it to code Minecraft plugins for [Eminium Games](https://github.com/Eminium-Games/). I know C++ from a while but can't code in it actually. Also I'm learning C with the [bareiron project](https://github.com/p2r3/bareiron). And so on, I don't know Rust or Go at the moment, but I would enjoy to learn.
+
+Low-level programming fascinates me — I love micro-performance optimizations and perfecting every detail of what I build. I'm the kind of person who will spend hours shaving off a few milliseconds just because it can be done.
 
 I also have some knowledge in drawing, music production, and video editing -- but I'm not particularly good at any of them, I just do them for fun.
 
