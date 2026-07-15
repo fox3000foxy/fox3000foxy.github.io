@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { ALL_LANGS, LANG_LABELS, createT } from "../lib/i18n";
 import type { Lang } from "../lib/i18n";
 
@@ -14,13 +15,12 @@ const t = createT(lang);
 <header>
   <div class="container">
     <a href="/">
-      <img
+      <Image
         class="avatar"
         src="https://github.com/fox3000foxy.png"
         alt="GitHub avatar"
-        width="40"
-        height="40"
-        decoding="async"
+        width={40}
+        height={40}
       />
     </a>
     <h1 class="site-title">

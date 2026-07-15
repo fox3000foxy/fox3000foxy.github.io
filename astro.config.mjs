@@ -13,6 +13,9 @@ export default defineConfig({
       filter: (page) => !page.includes("/write") && !page.includes("/legacy"),
     }),
   ],
+  image: {
+    domains: ["avatars.githubusercontent.com"],
+  },
   i18n: {
     locales: ["en", "fr", "de", "es", "pt", "it", "ru", "ja", "ko", "zh", "ar", "hi", "id", "th", "tr", "vi"],
     defaultLocale: "en",
