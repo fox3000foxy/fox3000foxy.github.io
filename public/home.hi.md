@@ -1,6 +1,6 @@
 # मेरा ब्लॉग में आपका स्वागत है
 
-[![प्रोफ़ाइल व्यू](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=प्रोफ़ाइल+व्यू&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![गिटहब फॉलोवर्स](https://img.shields.io/github/followers/fox3000foxy?label=फॉलोवर्स&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![गिटहब स्टार्स](https://img.shields.io/github/stars/fox3000foxy?label=कुल+स्टार्स&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![प्रोफ़ाइल व्यू](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=प्रोफ़ाइल+व्यू&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![गिटहब फॉलोवर्स](https://img.shields.io/github/followers/fox3000foxy?label=फॉलोवर्स&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![गिटहब स्टार्स](https://img.shields.io/github/stars/fox3000foxy?label=कुल+स्टार्स&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## मेरे बारे में
 

@@ -1,6 +1,6 @@
 # ยินดีต้อนรับสู่บล็อกของฉัน
 
-[![การดูโปรไฟล์](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=การดูโปรไฟล์&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![ผู้ติดตามของ GitHub](https://img.shields.io/github/followers/fox3000foxy?label=ผู้ติดตาม&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=ดาวทั้งหมด&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![การดูโปรไฟล์](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=การดูโปรไฟล์&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![ผู้ติดตามของ GitHub](https://img.shields.io/github/followers/fox3000foxy?label=ผู้ติดตาม&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=ดาวทั้งหมด&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## เกี่ยวกับฉัน
 

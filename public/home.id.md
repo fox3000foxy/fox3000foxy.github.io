@@ -1,6 +1,6 @@
 # Selamat Datang di Blogku
 
-[![Tampilan Profil](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Tampilan+Profil&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![Pengikut GitHub](https://img.shields.io/github/followers/fox3000foxy?label=Pengikut&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![Bintang GitHub](https://img.shields.io/github/stars/fox3000foxy?label=Total+Bintang&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Tampilan Profil](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Tampilan+Profil&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![Pengikut GitHub](https://img.shields.io/github/followers/fox3000foxy?label=Pengikut&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![Bintang GitHub](https://img.shields.io/github/stars/fox3000foxy?label=Total+Bintang&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## Tentang Saya
 

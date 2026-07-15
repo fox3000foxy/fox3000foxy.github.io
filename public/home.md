@@ -1,6 +1,6 @@
 # Welcome to my blog
 
-[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## About me
 

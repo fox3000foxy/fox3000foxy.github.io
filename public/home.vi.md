@@ -1,6 +1,6 @@
 # Chào mừng đến với blog của tôi
 
-[![Số lượng người xem](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Số+lượng+người+xem&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![Số lượng người theo dõi trên GitHub](https://img.shields.io/github/followers/fox3000foxy?label=Số+lượng+người+theo+dõi&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![Số lượng sao trên GitHub](https://img.shields.io/github/stars/fox3000foxy?label=Tổng+số+sao&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Số lượng người xem](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Số+lượng+người+xem&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![Số lượng người theo dõi trên GitHub](https://img.shields.io/github/followers/fox3000foxy?label=Số+lượng+người+theo+dõi&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![Số lượng sao trên GitHub](https://img.shields.io/github/stars/fox3000foxy?label=Tổng+số+sao&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## Về tôi
 
