@@ -24,4 +24,10 @@ export default defineConfig({
   build: {
     format: "directory",
   },
+  vite: {
+    build: {
+      minify: "esbuild",
+      cssMinify: true,
+    },
+  },
 });
