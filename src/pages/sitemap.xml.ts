@@ -12,7 +12,7 @@ function escapeXml(s: string): string {
 }
 
 interface ArticleMeta {
-  tags?: string[];
+	tags?: string[];
 	slug?: string;
 	date?: string;
 	lastmod?: string;
@@ -57,7 +57,9 @@ export function GET() {
 				articleUrls.set(a.slug, lastmod);
 			}
 			if (a.tags) {
-				for (const tag of a.tags) { allTags.add(tag); }
+				for (const tag of a.tags) {
+					allTags.add(tag);
+				}
 			}
 		}
 	}
