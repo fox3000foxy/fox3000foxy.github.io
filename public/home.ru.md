@@ -1,6 +1,6 @@
 # Добро пожаловать в мой блог
 
-[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## Обо мне
 
@@ -14,7 +14,7 @@
 
 Сейчас я пишу в основном на TypeScript и React, но раньше я писал лаунчеры на чистом HTML, CSS и JavaScript. Я также знаю Python, C# (который ненавижу), Java (редко, использую для написания плагинов для Minecraft для [Eminium Games](https://github.com/Eminium-Games/)). Я немного знаю C++, но сейчас уже не помню, как на нём писать. И я изучаю C с проектом [bareiron](https://github.com/p2r3/bareiron). И так далее, я пока не знаю ни Rust, ни Go, но хотел бы научиться.
 
-У меня также есть некоторые навыки рисования, но я не очень хорош, я делаю это просто для удовольствия. Я также немного занимаюсь музыкальным продюсированием, но тоже не очень хорош, я делаю это тоже просто для удовольствия. У меня также есть некоторые навыки видеомонтажа, но я тоже не очень хорош.
+У меня также есть некоторые навыки рисования, музыкального продюсирования и видеомонтажа -- но я не очень хорош ни в одном, я делаю это просто для удовольствия.
 
 Я использую фреймворки и библиотеки, такие как Node.js, Express.js, React, Discord.js и другие. Я также использую такие инструменты, как Git, Docker и дистрибутивы Linux, такие как Debian, Arch Linux и Ubuntu. У меня также есть знания баз данных, таких как MongoDB и MySQL.
 

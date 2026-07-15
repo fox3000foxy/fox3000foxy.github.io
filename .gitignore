@@ -31,3 +31,8 @@ ROADMAP.md
 
 # Environment variables
 .env
+*.tsbuildinfo
+.astro/data-store.json
+.astro/dev.json
+.astro/settings.json
+.astro/

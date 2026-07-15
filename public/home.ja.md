@@ -1,6 +1,6 @@
 # ブログへようこそ
 
-[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## 自己紹介
 
@@ -14,7 +14,7 @@
 
 今は主に TypeScript と React でコードを書いてるけど、昔は生の HTML、CSS、JavaScript でランチャーを書いてた。Python、C#（大嫌い）、Java（たまに [Eminium Games](https://github.com/Eminium-Games/) の Minecraft プラグインを書くのに使う）もできる。C++ も少しできるけど、今はもう書き方を忘れちゃった。そして [bareiron](https://github.com/p2r3/bareiron) プロジェクトで C を勉強中。そんな感じで、今は Rust も Go もできないけど、いつか覚えたい。
 
-絵を描くのも少しできるけど、上手じゃないよ。ただの趣味。音楽制作もちょっとやるけど、それも上手じゃない。ただの趣味。動画編集も少しできるけど、それも上手じゃない。
+絵を描くのと、音楽制作と、動画編集が少しできるけど、どれも上手じゃない。ただの趣味。
 
 使ってるフレームワークやライブラリは Node.js、Express.js、React、Discord.js など。ツールは Git、Docker、Debian、Arch Linux、Ubuntu などの Linux ディストリビューションを使ってる。データベースは MongoDB と MySQL の知識がある。
 

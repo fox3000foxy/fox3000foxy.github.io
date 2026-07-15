@@ -4,8 +4,9 @@ import "../styles/index.css";
 import "../styles/App.css";
 import "highlight.js/styles/github-dark.min.css";
 import { SITE_URL, SITE_DESCRIPTION } from "../config";
-import { ALL_LANGS, LANG_LABELS, RTLLangs, createT } from "../lib/i18n";
+import { ALL_LANGS, RTLLangs } from "../lib/i18n";
 import type { Lang } from "../lib/i18n";
+import { ogLocale } from "../lib/schema";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
@@ -21,16 +22,15 @@ export interface Props {
 
 const { title, description, image, canonical, locale, extraHead, wide } = Astro.props;
 const lang = locale || "en";
-const canonicalUrl = canonical || Astro.url.pathname;
+const canonicalUrl = `${SITE_URL}${canonical || Astro.url.pathname}`;
 const ogImage = image || `${SITE_URL}/og/home.png`;
 const metaDesc = description || SITE_DESCRIPTION;
-const t = createT(lang);
 const dir = RTLLangs.has(lang) ? "rtl" : "ltr";
+const localeStr = ogLocale(lang);
 
-const hreflangLinks = ALL_LANGS.map((l) => {
-  const path = l === "en" ? "" : `/${l}`;
-  return `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${path}${Astro.url.pathname.replace(/^\/[a-z]{2}(\/|$)/, "/")}" />`;
-}).join("\n");
+const hreflangLinks = ALL_LANGS.map((l) =>
+  `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${Astro.url.pathname}" />`
+).join("\n") + `\n<link rel="alternate" hreflang="x-default" href="${SITE_URL}${Astro.url.pathname}" />`;
 ---
 <!doctype html>
 <html lang={lang} dir={dir}>
@@ -48,7 +48,14 @@ const hreflangLinks = ALL_LANGS.map((l) => {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Fox's Blog" />
+    <meta property="og:locale" content={localeStr} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@fox3000foxy" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={metaDesc} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="author" content="Fox3000foxy" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href={canonicalUrl} />
 
     <link rel="alternate" type="application/rss+xml" title="Fox's Blog RSS Feed" href="/feed.xml" />
@@ -73,31 +80,45 @@ const hreflangLinks = ALL_LANGS.map((l) => {
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#000000" />
 
-    {extraHead && <Fragment set:html={extraHead} />}
-    {extraHead === undefined && <Fragment set:html={hreflangLinks} />}
+    {extraHead !== undefined && <Fragment set:html={extraHead} />}
+    <Fragment set:html={hreflangLinks} />
 
     <script data-goatcounter="https://fox3000foxy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
-    <script>
-      (function() {
-        var theme = localStorage.getItem('theme');
-        if (theme === 'light' || (!theme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-          document.documentElement.classList.add('light');
-        }
-      })();
-    </script>
+    <script set:html={`(function(){var t=localStorage.getItem('theme');if(t==='light'||(!t&&window.matchMedia('(prefers-color-scheme:light)').matches))document.documentElement.classList.add('light');var l=localStorage.getItem('fox-blog-lang');if(!l){var p=navigator.languages||[navigator.language],c=${JSON.stringify(["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"])};for(var i=0;i<p.length;i++){var x=p[i].split('-')[0];if(c.indexOf(x)!==-1){l=x;break}}}if(l&&l!=='en')document.documentElement.dataset.lang=l})()`} />
   </head>
   <body>
+    <input type="checkbox" id="theme-toggle" class="theme-checkbox" aria-label="Toggle theme" />
     <div id="root">
       <Header locale={lang} />
-      <main class={wide ? "" : "article-content"} style={wide ? "" : "max-width:700px;margin:0 auto;"}>
+      <main id="main-content" class={wide ? "" : "article-content"} style={wide ? "" : "max-width:700px;margin:0 auto;"}>
         <slot />
       </main>
       <Footer />
     </div>
+
+    <script>
+    (function(){
+      var t = localStorage.getItem("theme");
+      var cb = document.getElementById("theme-toggle");
+      if (cb instanceof HTMLInputElement) {
+        if (t === "light") cb.checked = true;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        function updateMeta(checked: boolean) {
+          if (meta) meta.setAttribute("content", checked ? "#f8f9fa" : "#000000");
+        }
+        updateMeta(cb.checked);
+        cb.addEventListener("change", function() {
+          var el = document.getElementById("theme-toggle");
+          var checked = el instanceof HTMLInputElement && el.checked;
+          localStorage.setItem("theme", checked ? "light" : "dark");
+          updateMeta(checked);
+        });
+      }
+    })();
+    </script>
   </body>
 </html>

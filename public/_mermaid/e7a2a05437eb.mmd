@@ -1,0 +1,5 @@
+flowchart TD
+    A["Partition<br/>(notes + paroles)"] --> B[Phonemizer]
+    B -->|"découpe en unités<br/>à concaténer"| C[Resampler]
+    C -->|"charge le WAV,<br/>change durée + pitch,<br/>applique les flags"| D[Wavtool]
+    D -->|"recolle les bouts"| E["Audio final"]

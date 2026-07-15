@@ -1,17 +1,23 @@
 ---
-import fs from "node:fs";
-import path from "node:path";
-import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Header from "../components/Header.astro";
 import { SITE_DESCRIPTION } from "../config";
+import { ALL_LANGS } from "../lib/i18n";
+import type { Lang } from "../lib/i18n";
+import { readAllHomeContent } from "../lib/langContent";
+import { webSiteJsonLd, personJsonLd, siteNavigationJsonLd, breadcrumbJsonLd } from "../lib/schema";
 
-const homePath = path.resolve("public/home.md");
-const homeContent = fs.readFileSync(homePath, "utf-8");
-const homeHtml = await renderMarkdown(homeContent);
+const allContent = readAllHomeContent();
+
+const homeJsonLd = [
+  webSiteJsonLd(),
+  personJsonLd(),
+  siteNavigationJsonLd(),
+  breadcrumbJsonLd([{ name: "Home", url: "/" }]),
+].map((s) => `<script type="application/ld+json">${s}</script>`).join("\n");
 ---
 
-<BaseLayout title="Home" description={SITE_DESCRIPTION}>
-  <Header />
-  <main set:html={homeHtml} />
+<BaseLayout title="Home" description={SITE_DESCRIPTION} extraHead={homeJsonLd}>
+  {ALL_LANGS.map((l) => (
+    <article class="home lang-content" data-lang={l} set:html={allContent[l as Lang]} />
+  ))}
 </BaseLayout>

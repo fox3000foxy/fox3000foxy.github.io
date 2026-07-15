@@ -61,7 +61,7 @@ Penambahan kedua di v3: **arsip Pareto persisten**. Tanpanya, genom bagus yang d
 
 V3 memiliki titik buta struktural: genom menggambarkan arsitektur, tetapi bobot yang dipelajari selama pelatihan menghilang di setiap generasi baru. Seorang anak yang lahir dari crossover dua orang tua yang baik mewarisi arsitektur mereka, tetapi harus belajar dari awal lagi; tidak ada jejak bobot yang membuat orang tuanya berkinerja baik.
 
-V4 memperkenalkan **evolusi Lamarckian**: bobot yang telah dilatih dimasukkan kembali ke dalam genom setelah pelatihan, dan ditransmisikan (dengan mutasi) kepada keturunannya. Ini adalah bid'ah biologis yang disengaja; Lamarck salah untuk organisme hidup — pewarisan karakteristik yang diperoleh tidak ada dalam biologi — tetapi tidak ada yang menghentikan GA digital untuk curang secara cerdas: di sini, mentransmisikan pengetahuan yang diperoleh secara radikal mempercepat konvergensi, karena setiap generasi memulai kembali dari inisialisasi yang sudah diinformasikan daripada bobot acak.
+V4 memperkenalkan **evolusi Lamarckian**: bobot yang telah dilatih dimasukkan kembali ke dalam genom setelah pelatihan, dan ditransmisikan (dengan mutasi) kepada keturunannya. Ini adalah bid'ah biologis yang disengaja; Lamarck salah untuk organisme hidup -- pewarisan karakteristik yang diperoleh tidak ada dalam biologi -- tetapi tidak ada yang menghentikan GA digital untuk curang secara cerdas: di sini, mentransmisikan pengetahuan yang diperoleh secara radikal mempercepat konvergensi, karena setiap generasi memulai kembali dari inisialisasi yang sudah diinformasikan daripada bobot acak.
 
 Tiga perubahan struktural lain dalam versi ini:
 

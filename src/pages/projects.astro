@@ -1,67 +1,155 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { fetchRepos } from "../lib/github";
+import { breadcrumbJsonLd } from "../lib/schema";
 
-interface Repo {
-  name: string;
-  description: string;
-  html_url: string;
-  stargazers_count: number;
-  fork: boolean;
-  language: string;
-  pushed_at: string;
+const LANGUAGE_COLORS: Record<string, string> = {
+  TypeScript: "#3178c6", JavaScript: "#f1e05a", Python: "#3572A5",
+  Java: "#b07219", "C#": "#178600", "C++": "#f34b7d", C: "#555555",
+  HTML: "#e34c26", CSS: "#563d7c", Rust: "#dea584", Go: "#00ADD8",
+  Kotlin: "#A97BFF", Swift: "#F05138", Ruby: "#701516", PHP: "#4F5D95",
+  Shell: "#89e051", Lua: "#000080", Dart: "#00B4AB", Vue: "#41b883",
+};
+const LANG_PRIORITY = ["TypeScript", "JavaScript", "Python", "Java", "C#", "C++", "C", "Kotlin", "Rust", "Go", "Swift", "Ruby", "PHP", "Shell", "Lua", "Dart", "HTML", "CSS", "Vue"];
+
+let repos: Awaited<ReturnType<typeof fetchRepos>> = [];
+let error = "";
+try {
+  repos = await fetchRepos();
+} catch (e) {
+  error = (e as Error).message;
 }
 
-let repos: Repo[] = [];
-try {
-  const res = await fetch("https://api.github.com/users/fox3000foxy/repos?sort=updated&per_page=50");
-  if (res.ok) {
-    const all: Repo[] = await res.json();
-    repos = all.filter((r) => !r.fork);
-  }
-} catch {}
+const sortedRepos = [...repos].sort((a, b) => {
+  const ia = LANG_PRIORITY.indexOf(a.language ?? "");
+  const ib = LANG_PRIORITY.indexOf(b.language ?? "");
+  const pa = ia === -1 ? LANG_PRIORITY.length : ia;
+  const pb = ib === -1 ? LANG_PRIORITY.length : ib;
+  if (pa !== pb) return pa - pb;
+  return new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime();
+});
+
+const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+const cutoff = Date.now() - ONE_YEAR_MS;
+const active = sortedRepos.filter((r) => !r.fork && new Date(r.pushed_at).getTime() > cutoff);
+const lessActive = sortedRepos.filter((r) => !r.fork && new Date(r.pushed_at).getTime() <= cutoff);
+const forked = sortedRepos.filter((r) => r.fork);
+
+function formatDate(d: string): string {
+  const diff = Date.now() - new Date(d).getTime();
+  const days = Math.floor(diff / 86400000);
+  if (days < 1) return "today";
+  if (days < 30) return `${days}d ago`;
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+  return `${Math.floor(days / 365)}y ago`;
+}
+const langColor = (l: string | null) => LANGUAGE_COLORS[l ?? ""] ?? "#ccc";
+const projectsJsonLd = breadcrumbJsonLd([
+  { name: "Home", url: "/" },
+  { name: "Projects", url: "/projects" },
+]);
 ---
 
-<BaseLayout title="Projects" description="My open-source projects" wide>
-  <div class="projects-page">
+<BaseLayout title="Projects" description="My open-source projects — active, less active, forks and contributions" extraHead={`<script type="application/ld+json">${projectsJsonLd}</script>`} wide>
+  <div class="project-list">
     <h1>Projects</h1>
-    {repos.length === 0 ? (
-      <p>Loading projects from GitHub... (build-time fetch failed)</p>
-    ) : (
-      <div class="projects-grid">
-        {repos.map((repo) => (
-          <a href={`/projects/${repo.name}`} class="project-card">
-            <h3>{repo.name}</h3>
-            {repo.description && <p>{repo.description}</p>}
-            <div class="project-meta">
-              {repo.language && <span class="project-lang">{repo.language}</span>}
-              <span class="project-stars">★ {repo.stargazers_count}</span>
-            </div>
-          </a>
-        ))}
-      </div>
+    <p class="project-subtitle">{repos.length} repositories</p>
+    {error && <p class="projects-error">⚠️ {error}</p>}
+
+    {active.length > 0 && (
+      <section class="project-section">
+        <h3 class="project-section-title">Active</h3>
+        <div class="project-grid">
+          {active.map((repo) => (
+            <a href={`/projects/${repo.name}`} class="project-card">
+              <div class="project-card-body">
+                <h3 class="project-card-title">{repo.name}</h3>
+                <p class="project-card-desc">{repo.description ?? <em>No description</em>}</p>
+              </div>
+              <div class="project-card-footer">
+                <div>
+                  {repo.language && <span class="project-lang"><span class="lang-dot" style={`background-color:${langColor(repo.language)}`}></span>{repo.language}</span>}
+                  {repo.stargazers_count > 0 && <span class="project-stars">⭐ {repo.stargazers_count}</span>}
+                </div>
+                <span class="repo-updated">{formatDate(repo.pushed_at)}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {lessActive.length > 0 && (
+      <section class="project-section">
+        <h3 class="project-section-title">Less active</h3>
+        <div class="project-grid">
+          {lessActive.map((repo) => (
+            <a href={`/projects/${repo.name}`} class="project-card">
+              <div class="project-card-body">
+                <h3 class="project-card-title">{repo.name}</h3>
+                <p class="project-card-desc">{repo.description ?? <em>No description</em>}</p>
+              </div>
+              <div class="project-card-footer">
+                <div>
+                  {repo.language && <span class="project-lang"><span class="lang-dot" style={`background-color:${langColor(repo.language)}`}></span>{repo.language}</span>}
+                  {repo.stargazers_count > 0 && <span class="project-stars">⭐ {repo.stargazers_count}</span>}
+                </div>
+                <span class="repo-updated">{formatDate(repo.pushed_at)}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {forked.length > 0 && (
+      <section class="project-section">
+        <h3 class="project-section-title">Forks & contributions</h3>
+        <div class="project-grid">
+          {forked.map((repo) => (
+            <a href={repo.html_url} target="_blank" rel="noopener noreferrer" class="project-card">
+              <div class="project-card-body">
+                <h3 class="project-card-title">{repo.name}</h3>
+                <p class="project-card-desc">{repo.description ?? <em>No description</em>}</p>
+              </div>
+              <div class="project-card-footer">
+                <div>
+                  {repo.language && <span class="project-lang"><span class="lang-dot" style={`background-color:${langColor(repo.language)}`}></span>{repo.language}</span>}
+                  {repo.stargazers_count > 0 && <span class="project-stars">⭐ {repo.stargazers_count}</span>}
+                </div>
+                <span class="repo-updated">{formatDate(repo.pushed_at)}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
     )}
   </div>
 </BaseLayout>
 
 <style>
-  .projects-page { max-width: 960px; margin: 0 auto; }
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
-  }
+  .project-list { max-width: 1280px; margin: 0 auto; text-align: left; }
+  .project-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .projects-error { color: var(--accent); font-size: 0.85rem; }
+  .project-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  @media (max-width: 1024px) { .project-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .project-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .project-grid { grid-template-columns: 1fr; } }
   .project-card {
-    display: block;
-    padding: 1.25rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.2s;
+    display: flex; flex-direction: column; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem 1.5rem; text-decoration: none; color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; min-width: 0; overflow: hidden;
   }
-  .project-card:hover { border-color: var(--accent); }
-  .project-card h3 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--accent); }
-  .project-card p { margin: 0 0 0.75rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
-  .project-meta { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-dim); }
+  .project-card:hover { border-color: var(--accent); box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 15%, transparent); transform: translateY(-2px); }
+  .project-card-body { flex: 1; }
+  .project-card-title { margin: 0 0 0.5rem; font-size: 1.25rem; color: var(--accent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .project-card:hover .project-card-title { color: var(--accent-hover); }
+  .project-card-desc { margin: 0; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
+  .project-card-footer { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 1rem; }
+  .project-lang { display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; color: var(--text-muted); }
+  .lang-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .project-stars { font-size: 0.85rem; color: var(--text-muted); }
+  .project-section { margin-bottom: 2.5rem; }
+  .project-section-title { font-size: 1.3rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-hover); }
+  .repo-updated { font-size: 0.8rem; color: var(--text-dim); }
 </style>

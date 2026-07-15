@@ -13,7 +13,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-:root.light {
+:root.light,
+:root:has(#theme-toggle:checked) {
   color-scheme: light;
 }
 
@@ -67,4 +68,12 @@ img[width][height] {
 
 img:not([height]) {
   min-height: 20px;
+}
+
+.theme-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }

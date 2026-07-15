@@ -1,39 +1,111 @@
 ---
+import { Image } from "astro:assets";
 import fs from "node:fs";
 import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const indexRaw = fs.readFileSync(path.resolve("public/articles/en/index.json"), "utf-8");
-const allArticles = JSON.parse(indexRaw);
+import { readAllArticleIndexes } from "../../lib/langContent";
+import { createT } from "../../lib/i18n";
+import type { ArticleMeta } from "../../types";
+import { getAuthors } from "../../utils/authors";
+import { isNew } from "../../utils/isNew";
+import { breadcrumbJsonLd } from "../../lib/schema";
 
 export async function getStaticPaths() {
-  const raw = fs.readFileSync(path.resolve("public/articles/en/index.json"), "utf-8");
-  const articles = JSON.parse(raw);
+  const indexPath = path.resolve("public/articles/en/index.json");
+  if (!fs.existsSync(indexPath)) return [];
+  const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
   const tags = new Set<string>();
-  for (const a of articles) {
-    for (const t of a.tags || []) tags.add(t);
+  for (const entry of index) {
+    if (entry.tags) {
+      for (const tag of entry.tags) {
+        tags.add(tag);
+      }
+    }
   }
-  return Array.from(tags).map((tag) => ({
-    params: { tag },
-    props: { tag },
-  }));
+  return [...tags].map((tag) => ({ params: { tag } }));
 }
 
-const { tag } = Astro.props;
-const articles = allArticles.filter((a) => (a.tags || []).includes(tag));
+const { tag } = Astro.params;
+const allIndexes = readAllArticleIndexes();
+const t = createT("en");
+
+const data = allIndexes?.en ?? [];
+const normalized = (data as { slug?: string }[]).map((item) =>
+  typeof item === "string" ? { slug: item } : item
+) as ArticleMeta[];
+
+const articles = tag
+  ? normalized
+      .filter((a) => a.tags?.includes(tag))
+      .sort(
+        (a, b) =>
+          new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
+      )
+  : [];
+const tagJsonLd = breadcrumbJsonLd([
+  { name: "Home", url: "/" },
+  { name: "Tags", url: "/tags" },
+  { name: `#${tag}`, url: `/tags/${tag}` },
+]);
 ---
 
-<BaseLayout title={`Tag: ${tag}`} description={`Articles tagged with "${tag}"`}>
-  <h1>Tag: {tag}</h1>
-  <p><a href="/tags">← All tags</a></p>
-  <ul>
-    {articles.map((a) => (
-      <li>
-        <a href={`/blog/${a.slug}`}>
-          <h2>{a.title}</h2>
-          {a.date && <time datetime={a.date}>{a.date}</time>}
-        </a>
-      </li>
-    ))}
-  </ul>
+<BaseLayout title={`#${tag}`} description={`Articles tagged with ${tag}`} extraHead={`<script type="application/ld+json">${tagJsonLd}</script>`} wide>
+  <div class="blog-list">
+    <div class="tag-page-header">
+      <a href="/blog" class="tag-page-back">← {t("blog.title")}</a>
+      <h2>#{tag}</h2>
+    </div>
+
+    {articles.length > 0 ? (
+      <div class="blog-grid">
+        {articles.map((article) => {
+          const { slug, title, description, date, tags, image, authors, aiGenerated, sponsored } = article;
+          const authorList = getAuthors(authors);
+          return (
+            <a href={`/blog/${slug}`} class="blog-card">
+              {image && (
+                <img class="blog-card-img" src={image} alt="" loading="lazy" decoding="async" />
+              )}
+              <div class="blog-card-body">
+                <h3 class="blog-card-title">{title ?? slug?.replace(/-/g, " ")}</h3>
+                {(isNew(date) || aiGenerated || sponsored) && (
+                  <div class="blog-card-badges">
+                    {isNew(date) && <span class="new-badge">NEW</span>}
+                    {aiGenerated && <span class="ai-badge">{t("article.ai")}</span>}
+                    {sponsored && <span class="sponsored-badge">💕 Sponsorisé</span>}
+                  </div>
+                )}
+                {description && <p class="blog-card-desc">{description}</p>}
+                {tags && tags.length > 0 && (
+                  <div class="blog-card-tags">
+                    {tags.map((t) => (
+                      <span class="tag-badge">{t}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div class="blog-card-footer">
+                <div class="blog-card-meta">
+                  {date && (
+                    <time datetime={date}>
+                      {new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
+                        year: "numeric", month: "long", day: "numeric",
+                      })}
+                    </time>
+                  )}
+                </div>
+                <div class="blog-card-authors">
+                  {authorList.map((a) => (
+                    <Image class="blog-card-author-avatar" src={a.avatar ?? `https://github.com/${a.id}.png`} alt={a.name} title={a.name} width={20} height={20} />
+                  ))}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    ) : (
+      <p>{t("blog.no.tag", { tag: tag || "" })}</p>
+    )}
+  </div>
 </BaseLayout>

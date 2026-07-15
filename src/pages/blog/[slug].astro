@@ -1,50 +1,440 @@
 ---
+import { Image } from "astro:assets";
 import fs from "node:fs";
 import path from "node:path";
-import { renderMarkdown } from "../../lib/markdown";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Header from "../../components/Header.astro";
-import Footer from "../../components/Footer.astro";
-import { SITE_URL } from "../../config";
+import type { ArticleMeta } from "../../types";
+import { ALL_LANGS, createT } from "../../lib/i18n";
+import type { Lang } from "../../lib/i18n";
+import { readAllArticleData, readAllArticleIndexes } from "../../lib/langContent";
+import { renderMarkdown } from "../../lib/markdown";
+import { parseFrontMatter } from "../../utils/frontmatter";
+import { getAuthors } from "../../utils/authors";
+import { isNew } from "../../utils/isNew";
+import { parseHeadings } from "../../utils/headings";
+import { articleJsonLd, breadcrumbJsonLd } from "../../lib/schema";
 
 export async function getStaticPaths() {
-  const articlesDir = path.resolve("public/articles/en");
-  const files = fs.readdirSync(articlesDir).filter((f) => f.endsWith(".md") && f !== "index.json");
-  const indexRaw = fs.readFileSync(path.join(articlesDir, "index.json"), "utf-8");
-  const index = JSON.parse(indexRaw);
-
-  return index
-    .filter((entry) => files.includes(`${entry.slug}.md`))
-    .map((entry) => ({
-      params: { slug: entry.slug },
-      props: { entry },
-    }));
+  const indexPath = path.resolve("public/articles/en/index.json");
+  if (!fs.existsSync(indexPath)) return [];
+  const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+  return index.map((entry: { slug: string }) => ({
+    params: { slug: entry.slug },
+  }));
 }
 
-const { entry } = Astro.props;
+const { slug } = Astro.params;
+const data = slug ? readAllArticleData(slug) : null;
 
-const mdPath = path.resolve(`public/articles/en/${entry.slug}.md`);
-const mdContent = fs.readFileSync(mdPath, "utf-8");
-const html = await renderMarkdown(mdContent);
+type ArticleMetaFull = {
+  title?: string; date?: string; lastmod?: string; description?: string;
+  tags?: string[]; authors?: string[]; aiGenerated?: boolean; sponsored?: boolean;
+  series?: string; slug?: string; author_pubkey?: string; author_sig?: string;
+};
+
+const allMeta: Record<string, ArticleMetaFull> = {};
+if (data) {
+  for (const lang of ALL_LANGS) {
+    const raw = data.raw[lang as Lang];
+    if (raw) {
+      const { meta } = parseFrontMatter(raw);
+      allMeta[lang] = { ...meta, slug } as ArticleMetaFull;
+    }
+  }
+  if (!allMeta["en"] && ALL_LANGS.length > 0) {
+    const first = ALL_LANGS.find(l => allMeta[l]);
+    if (first) allMeta["en"] = allMeta[first];
+  }
+  const enMeta = allMeta["en"] || {};
+  for (const lang of ALL_LANGS) {
+    if (!allMeta[lang]) allMeta[lang] = enMeta;
+  }
+}
+
+const enMeta = allMeta["en"] || {};
+const title = enMeta.title || "Article";
+const description = enMeta.description || "";
+const t = createT("en");
+
+function formatDate(date: string, _lang: string) {
+  const d = new Date(date);
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+}
+function readingTime(text: string): number {
+  const noCode = text.replace(/```[\s\S]*?```/g, "").replace(/`[^`]+`/g, "");
+  return Math.max(1, Math.ceil(noCode.trim().split(/\s+/).length / 150));
+}
+function processArticleContent(text: string): string {
+  return text.replaceAll("assets/", "/articles/assets/");
+}
+
+const bodyEn = data?.content?.["en"] ? renderMarkdown(processArticleContent(data.content["en"])) : "";
+const rawBodyEn = data?.content?.["en"] ? processArticleContent(data.content["en"]) : "";
+
+const articleUrl = `https://fox3000foxy.com/blog/${slug}`;
+const ogImage = data?.firstImage || "";
+const articleMetaTags = enMeta.date ? `
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="${enMeta.date}" />
+  ${enMeta.lastmod ? `<meta property="article:modified_time" content="${enMeta.lastmod}" />` : ""}
+  ${(enMeta.tags || []).map((t: string) => `<meta property="article:tag" content="${t}" />`).join("\n  ")}
+` : "";
+const articleSchemaJson = data ? articleJsonLd({
+  slug: slug || "",
+  title: enMeta.title || slug || "",
+  description: enMeta.description || "",
+  datePublished: enMeta.date || "",
+  dateModified: enMeta.lastmod || enMeta.date || "",
+  authors: enMeta.authors || ["fox3000foxy"],
+  tags: enMeta.tags,
+  image: ogImage || undefined,
+  inLanguage: "en",
+  wordCount: rawBodyEn ? rawBodyEn.split(/\s+/).length : undefined,
+}) : "";
+const breadcrumbSchemaJson = breadcrumbJsonLd([
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog" },
+  { name: title, url: `/blog/${slug}` },
+]);
+const articleJsonLdHtml = articleSchemaJson ? `<script type="application/ld+json">${articleSchemaJson}</script><script type="application/ld+json">${breadcrumbSchemaJson}</script>` : "";
+const extraHead = articleMetaTags + articleJsonLdHtml;
+
+// Compute prev/next article navigation
+const allIndexes = data?.allIndexes ?? readAllArticleIndexes();
+const allArticles = ((allIndexes?.en ?? []) as { slug?: string }[]).map((item) =>
+  typeof item === "string" ? { slug: item } : item
+) as ArticleMeta[];
+const sorted = [...allArticles].sort(
+  (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+);
+const idx = sorted.findIndex((a) => a.slug === slug);
+const prevArticle = idx < sorted.length - 1 ? sorted[idx + 1] : null;
+const nextArticle = idx > 0 ? sorted[idx - 1] : null;
+
+// Compute suggested articles
+const currentTags = enMeta.tags ?? [];
+const suggested = allArticles
+  .filter((a) => a.slug !== slug)
+  .map((a) => ({
+    article: a,
+    score: currentTags.filter((tag) => (a.tags ?? []).includes(tag)).length,
+  }))
+  .filter((s) => s.score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 4);
 ---
 
-<BaseLayout
-  title={entry.title}
-  description={entry.description}
-  canonical={`${SITE_URL}/blog/${entry.slug}`}
->
-  <Header />
-  <main>
-    <article>
-      <header>
-        <h1>{entry.title}</h1>
-        {entry.date && <time datetime={entry.date}>{entry.date}</time>}
-        {entry.tags && entry.tags.length > 0 && (
-          <p>Tags: {entry.tags.join(", ")}</p>
+<BaseLayout title={title} description={description} canonical={articleUrl} extraHead={extraHead} image={ogImage} wide>
+  {data ? (
+    <>
+      {ALL_LANGS.map((l) => {
+        const meta = allMeta[l] || {};
+        const body = l === "en" ? bodyEn : (data.content[l as Lang] ? renderMarkdown(processArticleContent(data.content[l as Lang])) : "");
+        const rt = readingTime(body);
+        const headings = l === "en" ? parseHeadings(rawBodyEn) : parseHeadings(data.content[l as Lang] ? processArticleContent(data.content[l as Lang]) : "");
+        return (
+          <div class="lang-content" data-lang={l}>
+            <article>
+              <div class="article-header">
+                {meta.aiGenerated && <span class="ai-badge">{t("article.ai")}</span>}
+                {meta.sponsored && <span class="sponsored-badge">💕 Sponsorisé</span>}
+                {isNew(meta.date) && <span class="new-badge">NEW</span>}
+                <h1 class="article-title">{meta.title ?? slug ?? ""}</h1>
+                <p class="article-date">
+                  {meta.date && <time datetime={meta.date}>{formatDate(meta.date, l)}</time>}
+                  {meta.lastmod && meta.lastmod !== meta.date && (
+                    <><span class="article-sep">·</span><span class="article-updated">{t("article.updated", { date: formatDate(meta.lastmod, l) })}</span></>
+                  )}
+                  {meta.date && <span class="article-sep">·</span>}
+                  <span>{t("article.minRead", { n: rt })}</span>
+                </p>
+                {meta.authors && meta.authors.length > 0 && (
+                  <div class="author-bio-top">
+                    {getAuthors(meta.authors).map((author) => (
+                      <a href={`/authors/${author.id}`} class="author-bio-item">
+                        <Image class="author-avatar-small" src={author.avatar ?? `https://github.com/${author.id}.png`} alt={author.name} width={24} height={24} />
+                        <div class="author-info-top">
+                          <span class="author-name-top">
+                            {author.name}
+                            {data.verified && <span class="verified-badge">Verified</span>}
+                          </span>
+                          <span class="author-link-top">@{author.id}</span>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+                {meta.description && <p class="article-description">{meta.description}</p>}
+                {meta.tags && meta.tags.length > 0 && (
+                  <div class="article-tags">
+                    {meta.tags.map((tag: string) => (
+                      <a href={`/tags/${tag}`} class="tag-badge">{tag}</a>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div class="share-buttons article-share-top">
+                <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(meta.title ?? slug ?? "")}&url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on Twitter">𝕏</a>
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on LinkedIn">in</a>
+                <button type="button" class="share-btn reading-mode-btn" aria-label="Toggle reading mode" title="Reading mode">Aa</button>
+                <button type="button" class="bookmark-btn" data-slug={slug} aria-label="Add bookmark">☆</button>
+              </div>
+              <div class="article-layout">
+                {headings.length >= 2 && (
+                <nav class="toc">
+                  <h4 class="toc-title">Contents</h4>
+                  <ul class="toc-list">
+                    {headings.map((h) => (
+                      <li class={`toc-item toc-level-${h.level}`}>
+                        <a href={`#${h.id}`} class="toc-link">{h.text}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+                )}
+                <div class="article-content">
+                  <div class="article-body" set:html={body} />
+                  <nav class="article-nav">
+                    <a href={`/blog/${slug}`} class="article-nav-link permalink">Permalink</a>
+                  </nav>
+                </div>
+              </div>
+            </article>
+          </div>
+        );
+      })}
+      <div class="article-widgets-bottom">
+        {suggested.length > 0 && (
+          <section class="suggested-articles">
+            <h3>{t("article.related")}</h3>
+            <div class="suggested-grid">
+              {suggested.map(({ article }) => (
+                <a href={`/blog/${article.slug}`} class="suggested-card">
+                  <h4 class="suggested-title">{article.title ?? article.slug.replace(/-/g, " ")}</h4>
+                  {article.description && <p class="suggested-desc">{article.description}</p>}
+                  {article.date && (
+                    <time class="suggested-date" datetime={article.date}>
+                      {new Date(`${article.date}T00:00:00`).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                    </time>
+                  )}
+                </a>
+              ))}
+            </div>
+          </section>
         )}
-      </header>
-      <div set:html={html} />
-    </article>
-  </main>
-  <Footer />
+        {(prevArticle || nextArticle) && (
+          <nav class="article-nav">
+            {prevArticle && (
+              <a href={`/blog/${prevArticle.slug}`} class="article-nav-link prev">
+                <span class="article-nav-label">{t("article.prev")}</span>
+                <span class="article-nav-title">{prevArticle.title}</span>
+              </a>
+            )}
+            {nextArticle && (
+              <a href={`/blog/${nextArticle.slug}`} class="article-nav-link next">
+                <span class="article-nav-label">{t("article.next")}</span>
+                <span class="article-nav-title">{nextArticle.title}</span>
+              </a>
+            )}
+          </nav>
+        )}
+        <div class="giscus-comments" data-lang="en"></div>
+      </div>
+    </>
+  ) : (
+    <p>Article not found.</p>
+  )}
 </BaseLayout>
+
+<script is:inline>
+(function(){
+  var progress = document.createElement('div');
+  progress.className = 'reading-progress';
+  progress.style.cssText = 'position:fixed;top:0;left:0;width:0;height:3px;background:var(--accent,#7c3aed);z-index:9999;transition:width 0.1s linear';
+  document.body.appendChild(progress);
+  var updateProgress = function() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (h > 0 ? Math.min(window.scrollY / h * 100, 100) : 0) + '%';
+  };
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress, { passive: true });
+  updateProgress();
+
+  var tocLinks = document.querySelectorAll('.toc-link');
+  if (tocLinks.length > 0) {
+    var headings = [];
+    tocLinks.forEach(function(link) {
+      var id = link.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (el) headings.push({ el: el, link: link.parentElement });
+    });
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(function(l) { l.parentElement.classList.remove('toc-active'); });
+          var match = headings.find(function(h) { return h.el === entry.target; });
+          if (match) match.link.classList.add('toc-active');
+        }
+      });
+    }, { rootMargin: '-80px 0px -70% 0px' });
+    headings.forEach(function(h) { observer.observe(h.el); });
+  }
+
+  var readBtn = document.querySelector('.reading-mode-btn');
+  if (readBtn) {
+    var rm = localStorage.getItem('readingMode') === 'true';
+    if (rm) document.documentElement.classList.add('reading-mode');
+    readBtn.addEventListener('click', function() {
+      var on = document.documentElement.classList.toggle('reading-mode');
+      localStorage.setItem('readingMode', String(on));
+      readBtn.classList.toggle('active', on);
+    });
+  }
+
+  document.querySelectorAll('.article-body pre').forEach(function(pre) {
+    var wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+    var header = document.createElement('div');
+    header.className = 'code-block-header';
+    var lang = '';
+    var codeEl = pre.querySelector('code');
+    if (codeEl) {
+      for (var i = 0; i < codeEl.classList.length; i++) {
+        var cls = codeEl.classList[i];
+        if (cls.startsWith('language-')) { lang = cls.slice(9); break; }
+      }
+    }
+    if (lang) {
+      var label = document.createElement('span');
+      label.className = 'code-lang-label';
+      label.textContent = lang;
+      header.appendChild(label);
+    }
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'code-copy-btn';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code') || pre;
+      navigator.clipboard.writeText(code.textContent || '').then(function() {
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+      })['catch'](function() {});
+    });
+    header.appendChild(btn);
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(header);
+    wrapper.appendChild(pre);
+  });
+
+  var bookmarkBtn = document.querySelector('.bookmark-btn[data-slug]');
+  if (bookmarkBtn) {
+    var BOOKMARK_KEY = 'bookmarks';
+    var bSlug = bookmarkBtn.getAttribute('data-slug');
+    var bStored = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
+    if (bStored.indexOf(bSlug) !== -1) bookmarkBtn.classList.add('active');
+    bookmarkBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var s = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
+      var idx = s.indexOf(bSlug);
+      if (idx === -1) s.push(bSlug); else s.splice(idx, 1);
+      localStorage.setItem(BOOKMARK_KEY, JSON.stringify(s));
+      this.classList.toggle('active');
+      this.setAttribute('aria-label', this.classList.contains('active') ? 'Remove bookmark' : 'Add bookmark');
+      this.textContent = this.classList.contains('active') ? '\u2605' : '\u2606';
+    });
+  }
+
+  var gc = document.querySelector('.giscus-comments');
+  if (gc) {
+    var gcl = gc.getAttribute('data-lang') || 'en';
+    var gs = document.createElement('script');
+    gs.src = 'https://giscus.app/client.js';
+    gs.async = true;
+    gs.crossOrigin = 'anonymous';
+    gs.setAttribute('data-repo', 'fox3000foxy/fox3000foxy.github.io');
+    gs.setAttribute('data-repo-id', 'R_kgDORhZXLg');
+    gs.setAttribute('data-category', 'Announcements');
+    gs.setAttribute('data-category-id', 'DIC_kwDORhZXLs4C-FFI');
+    gs.setAttribute('data-mapping', 'pathname');
+    gs.setAttribute('data-strict', '0');
+    gs.setAttribute('data-reactions-enabled', '1');
+    gs.setAttribute('data-emit-metadata', '0');
+    gs.setAttribute('data-input-position', 'bottom');
+    var themeCheckbox = document.getElementById('theme-toggle');
+    gs.setAttribute('data-theme', themeCheckbox && themeCheckbox.checked ? 'light' : 'dark');
+    gs.setAttribute('data-lang', gcl);
+    gc.appendChild(gs);
+
+    document.addEventListener('change', function(ev) {
+      if (ev.target && ev.target.id === 'theme-toggle') {
+        var iframe = gc.querySelector('iframe');
+        if (iframe) {
+          iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: ev.target.checked ? 'light' : 'dark' } } }, 'https://giscus.app');
+        }
+      }
+    });
+  }
+})();
+</script>
+
+<style>
+  .article-body { line-height: 1.8; }
+  .article-body img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem 0; }
+  .article-body pre { overflow-x: auto; border-radius: 8px; padding: 1rem; background: var(--bg-code); }
+  .article-body code { font-size: 0.875em; padding: 0.15em 0.3em; border-radius: 4px; background: var(--bg-code); }
+  .article-body pre code { padding: 0; background: none; }
+  .article-body blockquote { border-left: 3px solid var(--accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--text-muted); }
+  .article-body a { color: var(--accent); }
+  .article-body h2, .article-body h3 { margin-top: 2rem; }
+  .article-body p, .article-body li { margin: 0.75rem 0; }
+  .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .article-body th, .article-body td { border: 1px solid var(--border); padding: 0.5rem; }
+  .article-body th { background: var(--bg-secondary); font-weight: 600; }
+  .article-body :global(.contains-task-list) { list-style: none; padding-left: 0; }
+  .article-body :global(.contains-task-list) input[type="checkbox"] { margin-right: 0.5rem; }
+
+  .author-bio-top { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+  .author-bio-item { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; padding: 0.5rem; border-radius: 8px; transition: background 0.15s; }
+  .author-bio-item:hover { background: var(--bg-hover); }
+  .author-avatar-small { width: 24px; height: 24px; border-radius: 50%; }
+  .author-info-top { display: flex; flex-direction: column; }
+  .author-name-top { font-weight: 600; font-size: 0.9rem; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+  .author-link-top { font-size: 0.75rem; color: var(--text-dim); }
+  .verified-badge { font-size: 0.65rem; font-weight: 600; color: #3fb950; background: transparent; border: 1px solid #3fb950; border-radius: 999px; padding: 0.05rem 0.4rem; margin-left: 0.4rem; vertical-align: middle; white-space: nowrap; }
+  .article-layout { display: flex; align-items: flex-start; gap: 2rem; }
+  .article-content { flex: 1; min-width: 0; }
+  .toc { border-left: 2px solid var(--border); flex-shrink: 0; width: 200px; max-height: calc(100vh - 7rem); padding-left: 1rem; position: sticky; top: 5rem; overflow-y: auto; }
+  .toc::-webkit-scrollbar { width: 4px; }
+  .toc::-webkit-scrollbar-track { background: transparent; }
+  .toc::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 2px; }
+  .toc-title { color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 0.75rem; font-size: 0.7rem; font-weight: 700; }
+  .toc-list { margin: 0; padding: 0; list-style: none; }
+  .toc-item { margin: 0; line-height: 1.5; }
+  .toc-level-3 { padding-left: 0.75rem; }
+  .toc-link { color: var(--text-dim); border-left: 2px solid transparent; margin-left: -1rem; padding: 0.2rem 0 0.2rem 1rem; font-size: 0.8rem; text-decoration: none; transition: color 0.15s, border-color 0.15s, font-weight 0.15s; display: block; }
+  .toc-link:hover { color: var(--accent-hover); border-left-color: var(--accent-hover); }
+  @media (max-width: 900px) { .article-layout { flex-direction: column; } .toc { display: none; } }
+  .share-buttons { display: flex; gap: 0.5rem; align-items: center; }
+  .share-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 4px; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; transition: border-color 0.2s, color 0.2s; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .article-share-top { margin: 1rem 0; }
+  .article-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .article-nav-link { text-decoration: none; flex: 1; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; transition: border-color 0.2s; }
+  .article-nav-link:hover { border-color: var(--accent); }
+  .article-nav-link.permalink { text-align: center; color: var(--text-dim); font-size: 0.85rem; }
+  .article-nav-label { display: block; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.25rem; }
+  .article-nav-title { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+  .code-block-wrapper { position: relative; margin: 1.5rem 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .code-block-header { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+  .code-lang-label { color: var(--text-dim); font-weight: 600; text-transform: uppercase; font-size: 0.7rem; }
+  .code-copy-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.75rem; cursor: pointer; color: var(--text-muted); transition: border-color 0.2s, color 0.2s; }
+  .code-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .code-block-wrapper pre { margin: 0; border-radius: 0; border: none; }
+  .reading-mode .article-body { max-width: 700px; margin: 0 auto; font-size: 1.15rem; line-height: 2; }
+  .reading-mode .article-body img { max-width: 100%; }
+  .reading-mode .article-header, .reading-mode .share-buttons, .reading-mode .article-tags, .reading-mode .author-bio-top,
+  .reading-mode .article-nav, .reading-mode .article-footer, .reading-mode .article-description { max-width: 700px; margin-left: auto; margin-right: auto; }
+  .reading-mode .toc { display: none; }
+  .toc-active > .toc-link { color: var(--accent); border-left-color: var(--accent); font-weight: 700; }
+</style>

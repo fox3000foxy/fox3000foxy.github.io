@@ -18,7 +18,22 @@ import vi from "../i18n/translations/vi";
 import th from "../i18n/translations/th";
 
 const allTranslations: Record<Lang, Record<string, string>> = {
-  en, fr, zh, ja, ko, tr, it, de, ru, es, pt, id, hi, ar, vi, th,
+	en,
+	fr,
+	zh,
+	ja,
+	ko,
+	tr,
+	it,
+	de,
+	ru,
+	es,
+	pt,
+	id,
+	hi,
+	ar,
+	vi,
+	th,
 };
 
 export type { Lang };
@@ -29,24 +44,36 @@ export const RTLLangs = new Set<Lang>(["ar"]);
 export const SITE_URL = "https://fox3000foxy.com";
 
 export const LANG_LABELS: Record<Lang, string> = {
-  en: "English", fr: "Français", zh: "中文", ja: "日本語", ko: "한국어",
-  tr: "Türkçe", it: "Italiano", de: "Deutsch", ru: "Русский", es: "Español",
-  pt: "Português", id: "Bahasa Indonesia", hi: "हिन्दी", ar: "العربية",
-  vi: "Tiếng Việt", th: "ไทย",
+	en: "English",
+	fr: "Français",
+	zh: "中文",
+	ja: "日本語",
+	ko: "한국어",
+	tr: "Türkçe",
+	it: "Italiano",
+	de: "Deutsch",
+	ru: "Русский",
+	es: "Español",
+	pt: "Português",
+	id: "Bahasa Indonesia",
+	hi: "हिन्दी",
+	ar: "العربية",
+	vi: "Tiếng Việt",
+	th: "ไทย",
 };
 
 export function createT(locale: Lang) {
-  const dict = allTranslations[locale] || en;
-  return (key: string, params?: Record<string, string | number>): string => {
-    let val = dict[key];
-    if (!val) {
-      val = en[key] || key;
-    }
-    if (params) {
-      for (const [k, v] of Object.entries(params)) {
-        val = val.replace(`{${k}}`, String(v));
-      }
-    }
-    return val;
-  };
+	const dict = allTranslations[locale] || en;
+	return (key: string, params?: Record<string, string | number>): string => {
+		let val = dict[key];
+		if (!val) {
+			val = en[key] || key;
+		}
+		if (params) {
+			for (const [k, v] of Object.entries(params)) {
+				val = val.replace(`{${k}}`, String(v));
+			}
+		}
+		return val;
+	};
 }

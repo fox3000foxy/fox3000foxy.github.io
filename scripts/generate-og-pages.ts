@@ -27,7 +27,7 @@ function wrapText(text: string, maxLen: number): string[] {
       line = (line ? `${line} ` : "") + word;
     }
   }
-  if (line) lines.push(line);
+  if (line) { lines.push(line); }
   return lines;
 }
 
@@ -83,12 +83,12 @@ function main() {
   const bySlug = new Map();
 
   for (const entry of langs) {
-    if (!entry.isDirectory()) continue;
+    if (!entry.isDirectory()) { continue; }
     const lang = entry.name;
     const indexPath = path.join(root, ARTICLES_DIR, lang, "index.json");
-    if (!fs.existsSync(indexPath)) continue;
+    if (!fs.existsSync(indexPath)) { continue; }
     const articles = JSON.parse(fs.readFileSync(indexPath, "utf8"));
-    if (!Array.isArray(articles)) continue;
+    if (!Array.isArray(articles)) { continue; }
     for (const article of articles) {
       const slug = article.slug;
       if (!bySlug.has(slug)) {
@@ -103,7 +103,7 @@ function main() {
       if (lang === "en") {
         entry.title = article.title || entry.title;
         entry.description = article.description || entry.description;
-        if (article.tags) entry.tags = article.tags;
+        if (article.tags) { entry.tags = article.tags; }
       }
     }
   }
@@ -111,6 +111,15 @@ function main() {
   fs.mkdirSync(path.join(root, OG_DIR), { recursive: true });
   let rendered = 0;
   let skipped = 0;
+
+  // Generate default home.png
+  const homeSvg = ogImageSvg("Fox's Blog", "Articles about web development, automation, and open-source", ["blog", "dev", "open-source"]);
+  const homePngPath = path.join(root, OG_DIR, "home.png");
+  if (!fs.existsSync(homePngPath)) {
+    const buf = new Resvg(homeSvg, { fitTo: { mode: "original" } }).render().asPng();
+    fs.writeFileSync(homePngPath, buf);
+    rendered++;
+  }
 
   for (const [slug, info] of bySlug) {
     const svgContent = ogImageSvg(info.title, info.description, info.tags);

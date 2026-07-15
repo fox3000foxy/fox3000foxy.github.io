@@ -1,0 +1,11 @@
+flowchart LR
+    A[Nœud départ] --> B{Voisins à\névaluer ?}
+    B -->|Oui| C[Calculer f = g + 1.5×h\npour chaque voisin]
+    C --> D[Sélectionner le voisin\navec le plus petit f]
+    D --> E{Destination\natteinte ?}
+    E -->|Non| B
+    E -->|Oui| F[Chemin trouvé !]
+    B -->|Non| G[Aucun chemin\npossible]
+    
+    style F color:#4caf50
+    style G color:#f44336

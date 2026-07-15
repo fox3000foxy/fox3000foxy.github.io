@@ -1,6 +1,6 @@
 ---
-import { SITE_TITLE } from "../config";
-import { ALL_LANGS, LANG_LABELS, RTLLangs, createT } from "../lib/i18n";
+import { Image } from "astro:assets";
+import { ALL_LANGS, LANG_LABELS, createT } from "../lib/i18n";
 import type { Lang } from "../lib/i18n";
 
 export interface Props {
@@ -10,148 +10,269 @@ export interface Props {
 const { locale } = Astro.props;
 const lang = locale || "en";
 const t = createT(lang);
-
-const localizedPath = (path: string) => {
-  if (lang === "en") return path;
-  return `/${lang}${path}`;
-};
-
-const otherLangs = ALL_LANGS.filter((l) => l !== lang);
 ---
 
 <header>
-  <nav>
-    <a href={localizedPath("/")} class="logo">{SITE_TITLE}</a>
-    <div class="nav-links">
-      <a href={localizedPath("/blog")}>{t("nav.blog")}</a>
-      <a href={localizedPath("/about")}>{t("nav.about")}</a>
-      <a href={localizedPath("/projects")}>Projects</a>
-      <a href={localizedPath("/archive")}>{t("nav.archive")}</a>
-      <a href={localizedPath("/tags")}>Tags</a>
-      <a href={localizedPath("/search")}>{t("nav.search")}</a>
-      <a href={localizedPath("/contact")}>{t("nav.contact")}</a>
-      <a href={localizedPath("/photos")}>{t("nav.photos")}</a>
-      <a href={localizedPath("/uses")}>{t("nav.uses")}</a>
-    </div>
-    <div class="lang-switcher">
-      {otherLangs.slice(0, 5).map((l) => (
-        <a href={l === "en" ? "/" : `/${l}/`} class="lang-link" title={LANG_LABELS[l]}>
-          {l.toUpperCase()}
-        </a>
-      ))}
-      <details class="lang-more">
-        <summary>⋯</summary>
-        <div class="lang-dropdown">
-          {otherLangs.slice(5).map((l) => (
-            <a href={l === "en" ? "/" : `/${l}/`} class="lang-link">
-              {LANG_LABELS[l]}
-            </a>
-          ))}
+  <div class="container">
+    <a href="/">
+      <Image
+        class="avatar"
+        src="https://github.com/fox3000foxy.png"
+        alt="GitHub avatar"
+        width={40}
+        height={40}
+      />
+    </a>
+    <h1 class="site-title">
+      <a href="/" class="title-link">{t("site.title")}</a>
+    </h1>
+    <details class="mobile-menu-toggle">
+      <summary class="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </summary>
+    </details>
+    <nav id="nav-menu">
+      <a href="/blog">{t("nav.blog")}</a>
+      <a href="/projects">{t("nav.projects")}</a>
+      <a href="/write">{t("nav.write")}</a>
+      <a href="/search">{t("nav.search")}</a>
+      <details class="nav-dropdown">
+        <summary class="nav-dropdown-toggle">{t("nav.more")}</summary>
+        <div class="nav-dropdown-menu">
+          <a href="/tags">{t("nav.tags")}</a>
+          <a href="/archive">{t("nav.archive")}</a>
+          <a href="/photos">{t("nav.photos")}</a>
+          <a href="/uses">{t("nav.uses")}</a>
+          <a href="/contact">{t("nav.contact")}</a>
+          <a href="/legacy">{t("nav.portfolio")}</a>
         </div>
       </details>
-    </div>
-  </nav>
+      <select class="lang-select" id="lang-select">
+        {ALL_LANGS.map((l) => (
+          <option value={l}>{LANG_LABELS[l]}</option>
+        ))}
+      </select>
+      <label for="theme-toggle" class="theme-toggle" id="theme-toggle-label" aria-label="Toggle theme">
+        <span id="theme-icon">☀️</span>
+      </label>
+    </nav>
+  </div>
 </header>
+
+<script>
+  var langSelect = document.getElementById("lang-select");
+  var themeIcon = document.getElementById("theme-icon");
+  var themeCheckbox = document.getElementById("theme-toggle");
+
+  if (langSelect instanceof HTMLSelectElement) {
+    var currentLang = localStorage.getItem("fox-blog-lang");
+    if (!currentLang || !["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"].includes(currentLang)) {
+      var prefs = navigator.languages || [navigator.language];
+      for (var i = 0; i < prefs.length; i++) {
+        var code = prefs[i].split("-")[0];
+        if (["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"].indexOf(code) !== -1) { currentLang = code; break; }
+      }
+    }
+    langSelect.value = currentLang || "en";
+    langSelect.addEventListener("change", function () {
+      localStorage.setItem("fox-blog-lang", this.value);
+      location.reload();
+    });
+  }
+
+  if (themeCheckbox instanceof HTMLInputElement && themeIcon) {
+    themeIcon.textContent = themeCheckbox.checked ? "🌙" : "☀️";
+    themeCheckbox.addEventListener("change", function() {
+      var icon = document.getElementById("theme-icon");
+      var cb = document.getElementById("theme-toggle");
+      if (icon && cb instanceof HTMLInputElement) {
+        icon.textContent = cb.checked ? "🌙" : "☀️";
+      }
+    });
+  }
+
+
+</script>
 
 <style>
   header {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    z-index: 100;
-    padding: 0.75rem 2rem;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    width: 100%;
+    background-color: var(--bg);
+    color: var(--text);
+    z-index: 1000;
   }
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+  header .container {
     max-width: 1280px;
     margin: 0 auto;
-  }
-  .logo {
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--text);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .logo:hover { color: var(--accent); }
-  .nav-links {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    align-items: center;
+    padding: 1rem 2rem;
   }
-  .nav-links a {
-    color: var(--text-muted);
+  header img.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  header .site-title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  header .title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .mobile-menu-toggle {
+    display: none;
+    margin-left: auto;
+    border: none;
+  }
+  .mobile-menu-toggle[open] .hamburger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .mobile-menu-toggle[open] .hamburger span:nth-child(2) { opacity: 0; }
+  .mobile-menu-toggle[open] .hamburger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .hamburger::-webkit-details-marker { display: none; }
+  .hamburger::marker { display: none; content: ""; }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  header nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  header nav a {
+    color: var(--text);
+    margin: 0 0.75rem;
     text-decoration: none;
     font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.15s;
   }
-  .nav-links a:hover { color: var(--accent); }
-  .lang-switcher {
-    display: flex;
-    gap: 0.25rem;
-    align-items: center;
-    margin-left: auto;
-  }
-  .lang-link {
+  header nav a:hover { text-decoration: underline; }
+  .lang-select {
+    margin-left: 0.5rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border-hover);
+    color: var(--text-secondary);
     font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-dim);
-    text-decoration: none;
-    padding: 0.15rem 0.35rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .lang-link:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-  .lang-more {
-    position: relative;
-    display: inline-block;
-  }
-  .lang-more summary {
-    list-style: none;
-    font-size: 0.75rem;
-    color: var(--text-dim);
+    padding: 0.15rem 0.4rem;
+    border-radius: 6px;
     cursor: pointer;
-    padding: 0.15rem 0.35rem;
-    border: 1px solid var(--border);
+    outline: none;
+    transition: border-color 0.2s;
+    max-width: 100px;
+  }
+  .lang-select:hover,
+  .lang-select:focus { border-color: var(--accent); }
+  .theme-toggle {
+    margin-left: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--border-hover);
     border-radius: 4px;
+    padding: 0.15rem 0.3rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+    min-width: 28px;
+    min-height: 28px;
   }
-  .lang-more summary:hover {
-    color: var(--accent);
-    border-color: var(--accent);
+  .theme-toggle:hover { border-color: var(--accent); }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown[open] .nav-dropdown-menu { display: flex; }
+  .nav-dropdown-toggle {
+    color: var(--text);
+    margin: 0 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
   }
-  .lang-dropdown {
+  .nav-dropdown-toggle::-webkit-details-marker { display: none; }
+  .nav-dropdown-toggle::marker { display: none; content: ""; }
+  .nav-dropdown-toggle:hover { text-decoration: underline; }
+  .nav-dropdown-menu {
+    display: none;
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 0.5rem;
     min-width: 160px;
     z-index: 200;
-    display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
-  .lang-dropdown .lang-link {
+  .nav-dropdown-menu a {
     border: none;
     padding: 0.3rem 0.5rem;
     font-size: 0.85rem;
+    margin: 0;
+    white-space: nowrap;
+    border-radius: 4px;
   }
+  .nav-dropdown-menu a:hover { background: var(--bg-hover); }
+
   @media (max-width: 768px) {
-    header { padding: 0.5rem 1rem; }
-    nav { gap: 1rem; }
-    .nav-links { gap: 0.5rem; }
-    .nav-links a { font-size: 0.8rem; }
+    header .container { padding: 0.75rem 1rem; }
+    header .site-title { font-size: 1.1rem; }
+    .mobile-menu-toggle { display: block; }
+    header nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100vh;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 5rem 1.5rem 2rem;
+      margin-left: 0;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .mobile-menu-toggle[open] ~ #nav-menu { display: flex; }
+    header nav a { font-size: 1rem; margin: 0.5rem 0; width: 100%; }
+    .nav-dropdown { width: 100%; margin: 0; }
+    .nav-dropdown-toggle { display: none; }
+    .nav-dropdown .nav-dropdown-menu {
+      display: flex;
+      position: static;
+      border: none;
+      box-shadow: none;
+      padding-left: 0;
+      background: transparent;
+    }
+    .nav-dropdown-menu a { margin: 0.25rem 0; white-space: normal; }
+    .lang-select { margin-left: 0; margin-top: 1rem; width: 100%; max-width: none; }
+    .theme-toggle { margin-left: 0; margin-top: 0.5rem; align-self: flex-start; }
   }
 </style>

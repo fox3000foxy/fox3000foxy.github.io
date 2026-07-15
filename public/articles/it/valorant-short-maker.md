@@ -29,15 +29,15 @@ Tre frame presi dal video generato per "Duelist Debate" (Phoenix, Yoru e Jett):
 
 ![Un'altra battuta, il colore del sottotitolo cambia in base all'agente che parla](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-Il risultato live su questo Short: [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Sul canale, gli Short si aggirano sulle 1,2-1,5k visualizzazioni. Niente di che, ma è un canale che gira da solo dall'inizio, quindi il numero che conta davvero è zero — zero minuti spesi da quando il cron è partito.
+Il risultato live su questo Short: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Sul canale, gli Short si aggirano sulle 1,2-1,5k visualizzazioni. Niente di che, ma è un canale che gira da solo dall'inizio, quindi il numero che conta davvero è zero -- zero minuti spesi da quando il cron è partito.
 
 ## La pipeline, in ordine
 
-### 1. Scrivere la sceneggiatura — Groq + Llama 3.3
+### 1. Scrivere la sceneggiatura -- Groq + Llama 3.3
 
 Ogni esecuzione pesca 3 o 4 agenti a caso tra i 26 disponibili e invia a Llama 3.3 70B (via Groq) un prompt di sistema che contiene, per ogni agente scelto, un riassunto compatto della sua personalità e delle sue relazioni con gli altri agenti presenti nella scena (queste persona stanno in `src/lore/`, un file per agente). Il prompt impone regole precise: una frase corta e incisiva per battuta, rotazione equa tra i personaggi, umorismo prima di tutto, e soprattutto pause.
 
-Esempio concreto con "Duelist Debate" — Phoenix, Yoru e Jett litigano su chi farà il duelist, generato il 6 luglio 2026:
+Esempio concreto con "Duelist Debate" -- Phoenix, Yoru e Jett litigano su chi farà il duelist, generato il 6 luglio 2026:
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -72,21 +72,21 @@ jett: I'll take you both down, no problem.
 
 Le pause sono il dettaglio che rende naturale il ritmo: un `[0.3]` infilato a metà battuta crea 0,3 secondi di silenzio nell'audio senza tagliare il cerchio dell'agente sullo schermo, mentre una riga `pause: 1.0` a sé stante crea un vero silenzio tra due interlocutori, cerchio nascosto. Senza, un TTS che spara battute senza respirare suona robotico.
 
-### 2. Dare una voce — Piper, un modello per agente
+### 2. Dare una voce -- Piper, un modello per agente
 
-Ogni agente ha il suo modello Piper (`.onnx`) addestrato specificamente, salvato in `voices/<agent>/`. Il testo generato passa nel modello corrispondente, che sforna un WAV. È la stessa tecnologia che uso per il training di voci custom in generale (vedi l'articolo sulla pipeline Piper/Kaggle) — qui applicata direttamente in produzione, al volo, a ogni generazione di video.
+Ogni agente ha il suo modello Piper (`.onnx`) addestrato specificamente, salvato in `voices/<agent>/`. Il testo generato passa nel modello corrispondente, che sforna un WAV. È la stessa tecnologia che uso per il training di voci custom in generale (vedi l'articolo sulla pipeline Piper/Kaggle) -- qui applicata direttamente in produzione, al volo, a ogni generazione di video.
 
-### 3. Sottotitoli karaoke — ASS generato, colore estratto dall'icona
+### 3. Sottotitoli karaoke -- ASS generato, colore estratto dall'icona
 
-I sottotitoli non sono un semplice `.srt`. È un file `.ass` (Advanced SubStation Alpha) generato parola per parola, con effetto karaoke: ogni parola si illumina di un colore man mano che viene pronunciata, mentre il resto del testo resta in un colore neutro. Il colore d'accento non è fisso — viene estratto dinamicamente dall'icona dell'agente che parla (uno script Python fa girare PIL sul PNG dell'icona, campiona i pixel non trasparenti e restituisce i colori dominanti). Risultato: il sottotitolo di Killjoy si illumina in viola, quello di Jett in verde acqua, senza che nessun colore sia mai stato hardcodato da nessuna parte.
+I sottotitoli non sono un semplice `.srt`. È un file `.ass` (Advanced SubStation Alpha) generato parola per parola, con effetto karaoke: ogni parola si illumina di un colore man mano che viene pronunciata, mentre il resto del testo resta in un colore neutro. Il colore d'accento non è fisso -- viene estratto dinamicamente dall'icona dell'agente che parla (uno script Python fa girare PIL sul PNG dell'icona, campiona i pixel non trasparenti e restituisce i colori dominanti). Risultato: il sottotitolo di Killjoy si illumina in viola, quello di Jett in verde acqua, senza che nessun colore sia mai stato hardcodato da nessuna parte.
 
-### 4. Il cerchio audio-reattivo — un'espressione FFmpeg per frame
+### 4. Il cerchio audio-reattivo -- un'espressione FFmpeg per frame
 
 Questa è la parte più incasinata della pipeline, e probabilmente quella di cui vado più fiero. L'icona tonda dell'agente che parla non sta ferma: zooma leggermente al ritmo della sua stessa voce.
 
 Il calcolo legge il WAV grezzo della battuta, calcola l'inviluppo RMS (root mean square, una misura dell'energia del segnale) frame per frame a 60 fps, normalizza per il massimo e liscia su una finestra di 3 frame per evitare scatti. Ogni valore dell'inviluppo viene poi convertito in un fattore di scala limitato da `MAX_ZOOM_VARIATION` (0,2, quindi ±20% attorno alla dimensione base).
 
-Il risultato di questo calcolo non viene applicato tramite codice che manipola pixel — viene tradotto in un'enorme espressione condizionale FFmpeg (`lt(n,K)*val + between(n,K,K')*val + ...`, un ramo per gruppo di frame) che pilota direttamente il parametro `scale` del filtro video. FFmpeg valuta questa espressione a ogni frame del render. Per una battuta di qualche secondo a 60 fps, si arriva in fretta a centinaia di rami in una singola espressione — da qui il parametro `STEP` che raggruppa i frame per limitare la profondità.
+Il risultato di questo calcolo non viene applicato tramite codice che manipola pixel -- viene tradotto in un'enorme espressione condizionale FFmpeg (`lt(n,K)*val + between(n,K,K')*val + ...`, un ramo per gruppo di frame) che pilota direttamente il parametro `scale` del filtro video. FFmpeg valuta questa espressione a ogni frame del render. Per una battuta di qualche secondo a 60 fps, si arriva in fretta a centinaia di rami in una singola espressione -- da qui il parametro `STEP` che raggruppa i frame per limitare la profondità.
 
 ### 5. Rendering per segmento, poi fisheye sull'intro
 
@@ -96,7 +96,7 @@ Il primissimo segmento riceve un trattamento speciale: una distorsione fisheye c
 
 ### 6. Concatenazione e mix finale
 
-Tutti i segmenti vengono concatenati uno dopo l'altro, la musica di sottofondo (Sneaky Snitch, Kevin MacLeod, licenza Creative Commons) viene mixata sopra con **audio ducking** — una compressione sidechain che abbassa automaticamente il volume della musica mentre un agente parla, e lo rialza durante i silenzi. Tutto gira a 60 fps dall'inizio alla fine, nessuna conversione di framerate tra i passaggi.
+Tutti i segmenti vengono concatenati uno dopo l'altro, la musica di sottofondo (Sneaky Snitch, Kevin MacLeod, licenza Creative Commons) viene mixata sopra con **audio ducking** -- una compressione sidechain che abbassa automaticamente il volume della musica mentre un agente parla, e lo rialza durante i silenzi. Tutto gira a 60 fps dall'inizio alla fine, nessuna conversione di framerate tra i passaggi.
 
 ### 7. Pubblicazione automatica
 
@@ -104,11 +104,11 @@ Lo script `run-cron.sh`, lanciato da un cron normale, attiva l'ambiente Python, 
 
 ## Perché TypeScript/Bun anziché tutto Python
 
-La scelta non è ideologica — è che Bun dà accesso diretto e rapido a `Bun.spawn` per pilotare FFmpeg come sottoprocesso, un typing forte sulle strutture dati della pipeline (`Phrase`, `SegmentInfo`), e un runtime decisamente più veloce all'avvio di Node per uno script che gira in cron ogni tot ore. Gli unici due pezzetti di Python nel progetto sono dove Python è davvero lo strumento migliore: PIL per l'estrazione dei colori, e le API di upload (`google-api-python-client` per YouTube, lo stack Instagram Graph API per IG).
+La scelta non è ideologica -- è che Bun dà accesso diretto e rapido a `Bun.spawn` per pilotare FFmpeg come sottoprocesso, un typing forte sulle strutture dati della pipeline (`Phrase`, `SegmentInfo`), e un runtime decisamente più veloce all'avvio di Node per uno script che gira in cron ogni tot ore. Gli unici due pezzetti di Python nel progetto sono dove Python è davvero lo strumento migliore: PIL per l'estrazione dei colori, e le API di upload (`google-api-python-client` per YouTube, lo stack Instagram Graph API per IG).
 
 ## Cosa illustra
 
-Questo progetto è un buon esempio di cosa si può costruire oggi con mattoni completamente gratuiti o open source: un LLM veloce e gratuito via API Groq, un motore TTS locale che gira senza GPU dedicata, FFmpeg per tutto il rendering video — e il collante sono solo qualche centinaio di righe di TypeScript. Nessuno di questi mattoni è nuovo di per sé. Quello che fa la pipeline è l'assemblaggio: generare una sceneggiatura coerente con vere relazioni tra personaggi, trasformarla in audio espressivo con pause naturali, sincronizzare un rendering visivo sull'energia di quell'audio frame per frame, e automatizzare tutta la catena fino alla pubblicazione.
+Questo progetto è un buon esempio di cosa si può costruire oggi con mattoni completamente gratuiti o open source: un LLM veloce e gratuito via API Groq, un motore TTS locale che gira senza GPU dedicata, FFmpeg per tutto il rendering video -- e il collante sono solo qualche centinaio di righe di TypeScript. Nessuno di questi mattoni è nuovo di per sé. Quello che fa la pipeline è l'assemblaggio: generare una sceneggiatura coerente con vere relazioni tra personaggi, trasformarla in audio espressivo con pause naturali, sincronizzare un rendering visivo sull'energia di quell'audio frame per frame, e automatizzare tutta la catena fino alla pubblicazione.
 
 ---
 
@@ -120,5 +120,5 @@ Questo progetto è un buon esempio di cosa si può costruire oggi con mattoni co
 **3 punti chiave**
 
 1. La sceneggiatura è generata da un LLM (Groq/Llama 3.3) con persona e relazioni per agente, non una semplice lista di battute pre-scritte.
-2. Lo zoom del cerchio dell'agente è pilotato da un'espressione FFmpeg calcolata frame per frame dall'inviluppo RMS del WAV — niente animazione a keyframe classica.
+2. Lo zoom del cerchio dell'agente è pilotato da un'espressione FFmpeg calcolata frame per frame dall'inviluppo RMS del WAV -- niente animazione a keyframe classica.
 3. L'intera catena, dal prompt al post YouTube/Instagram, gira con un singolo cron job senza alcun intervento umano.

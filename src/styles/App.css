@@ -251,7 +251,8 @@ a.tag-badge:hover {
   overflow-x: auto;
 }
 
-:root.light .mermaid-wrapper {
+:root.light,
+:root:has(#theme-toggle:checked) .mermaid-wrapper {
   background: #f5f5ff;
 }
 
@@ -694,36 +695,53 @@ a {
   color: var(--accent);
 }
 
-:root.light pre {
+:root.light,
+:root:has(#theme-toggle:checked) pre {
   background: var(--hljs-bg);
 }
 
-:root.light pre code {
+:root.light,
+:root:has(#theme-toggle:checked) pre code {
   color: var(--hljs-text);
 }
 
-:root.light .hljs-keyword,
-:root.light .hljs-selector-tag,
-:root.light .hljs-type { color: var(--hljs-keyword); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-keyword,
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-selector-tag,
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-type { color: var(--hljs-keyword); }
 
-:root.light .hljs-string,
-:root.light .hljs-addition { color: var(--hljs-string); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-string,
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-addition { color: var(--hljs-string); }
 
-:root.light .hljs-number,
-:root.light .hljs-literal { color: var(--hljs-literal); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-number,
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-literal { color: var(--hljs-literal); }
 
-:root.light .hljs-title,
-:root.light .hljs-section { color: var(--hljs-title); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-title,
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-section { color: var(--hljs-title); }
 
-:root.light .hljs-comment,
-:root.light .hljs-quote { color: var(--hljs-comment); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-comment,
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-quote { color: var(--hljs-comment); }
 
-:root.light .hljs-meta { color: var(--hljs-meta); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-meta { color: var(--hljs-meta); }
 
-:root.light .hljs-attr,
-:root.light .hljs-selector-class { color: var(--hljs-attr); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-attr,
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-selector-class { color: var(--hljs-attr); }
 
-:root.light .hljs-built_in { color: var(--hljs-built-in); }
+:root.light,
+:root:has(#theme-toggle:checked) .hljs-built_in { color: var(--hljs-built-in); }
 
 :root.reading-mode .article-content {
   font-size: 1.1rem;
@@ -876,6 +894,39 @@ a {
   border-color: var(--accent);
   color: var(--accent-hover);
 }
+
+.lang-content { display: none; }
+.lang-content[data-lang="en"] { display: block; }
+html[data-lang="fr"] .lang-content { display: none; }
+html[data-lang="fr"] .lang-content[data-lang="fr"] { display: block; }
+html[data-lang="zh"] .lang-content { display: none; }
+html[data-lang="zh"] .lang-content[data-lang="zh"] { display: block; }
+html[data-lang="ja"] .lang-content { display: none; }
+html[data-lang="ja"] .lang-content[data-lang="ja"] { display: block; }
+html[data-lang="ko"] .lang-content { display: none; }
+html[data-lang="ko"] .lang-content[data-lang="ko"] { display: block; }
+html[data-lang="tr"] .lang-content { display: none; }
+html[data-lang="tr"] .lang-content[data-lang="tr"] { display: block; }
+html[data-lang="it"] .lang-content { display: none; }
+html[data-lang="it"] .lang-content[data-lang="it"] { display: block; }
+html[data-lang="de"] .lang-content { display: none; }
+html[data-lang="de"] .lang-content[data-lang="de"] { display: block; }
+html[data-lang="ru"] .lang-content { display: none; }
+html[data-lang="ru"] .lang-content[data-lang="ru"] { display: block; }
+html[data-lang="es"] .lang-content { display: none; }
+html[data-lang="es"] .lang-content[data-lang="es"] { display: block; }
+html[data-lang="pt"] .lang-content { display: none; }
+html[data-lang="pt"] .lang-content[data-lang="pt"] { display: block; }
+html[data-lang="id"] .lang-content { display: none; }
+html[data-lang="id"] .lang-content[data-lang="id"] { display: block; }
+html[data-lang="hi"] .lang-content { display: none; }
+html[data-lang="hi"] .lang-content[data-lang="hi"] { display: block; }
+html[data-lang="ar"] .lang-content { display: none; }
+html[data-lang="ar"] .lang-content[data-lang="ar"] { display: block; }
+html[data-lang="vi"] .lang-content { display: none; }
+html[data-lang="vi"] .lang-content[data-lang="vi"] { display: block; }
+html[data-lang="th"] .lang-content { display: none; }
+html[data-lang="th"] .lang-content[data-lang="th"] { display: block; }
 
 @media (max-width: 768px) {
   #root {

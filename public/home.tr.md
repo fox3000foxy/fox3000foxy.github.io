@@ -1,6 +1,6 @@
 # Blog'uma hoş geldin
 
-[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## Hakkımda
 
@@ -14,7 +14,7 @@ Ayrıca ücretli olan şeyler için ödeme yapmamak için geçici çözümler bu
 
 Şimdi çoğunlukla TypeScript ve React ile kod yazıyorum, ama eskiden saf HTML, CSS ve JavaScript ile launcher'lar kodluyordum. Ayrıca Python, C#'ı (nefret ederim), Java'yı (nadiren, [Eminium Games](https://github.com/Eminium-Games/) için Minecraft eklentileri kodlamak için kullanıyorum) biliyorum. Biraz C++ biliyorum ama şu an onunla nasıl kod yazacağımı hatırlamıyorum. Ve [bareiron](https://github.com/p2r3/bareiron) projesiyle C öğreniyorum. Ve böyle devam ediyor, şu an için Rust ve Go bilmiyorum ama öğrenmek isterim.
 
-Ayrıca biraz çizim bilgim var ama çok iyi değilim, sadece eğlence için yapıyorum. Biraz müzik prodüksiyonu da yapıyorum ama onda da çok iyi değilim, onu da sadece eğlence için yapıyorum. Biraz video düzenleme bilgim de var ama onda da çok iyi değilim.
+Ayrıca biraz çizim, müzik prodüksiyonu ve video düzenleme bilgim var -- ama hiçbirinde çok iyi değilim, sadece eğlence için yapıyorum.
 
 Node.js, Express.js, React, Discord.js gibi framework ve kütüphaneler kullanıyorum. Ayrıca Git, Docker ve Debian, Arch Linux, Ubuntu gibi Linux dağıtımları gibi araçlar kullanıyorum. MongoDB ve MySQL gibi veritabanları hakkında da bilgim var.
 

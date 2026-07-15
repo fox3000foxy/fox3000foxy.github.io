@@ -61,7 +61,7 @@ Bổ sung thứ hai trong v3: một **lưu trữ Pareto bền vững**. Nếu kh
 
 V3 có một điểm mù cấu trúc: bộ gen mô tả kiến trúc, nhưng các trọng số đã học trong quá trình huấn luyện biến mất ở mỗi thế hệ mới. Một đứa con sinh ra từ lai ghép của hai cha mẹ tốt thừa hưởng kiến trúc của họ, nhưng phải học lại từ đầu; không dấu vết nào của các trọng số đã làm cho cha mẹ nó hoạt động tốt.
 
-V4 giới thiệu **tiến hóa Lamarckian**: các trọng số đã huấn luyện được đưa trở lại vào bộ gen sau huấn luyện, và truyền lại (có đột biến) cho con cháu. Đây là dị giáo sinh học có chủ đích; Lamarck đã sai đối với sinh vật sống — di truyền các đặc tính thu được không tồn tại trong sinh học — nhưng không gì ngăn một GA kỹ thuật số gian lận một cách thông minh: ở đây, truyền lại kiến thức thu được giúp tăng tốc hội tụ triệt để, vì mỗi thế hệ khởi động lại từ một khởi tạo đã có thông tin thay vì trọng số ngẫu nhiên.
+V4 giới thiệu **tiến hóa Lamarckian**: các trọng số đã huấn luyện được đưa trở lại vào bộ gen sau huấn luyện, và truyền lại (có đột biến) cho con cháu. Đây là dị giáo sinh học có chủ đích; Lamarck đã sai đối với sinh vật sống -- di truyền các đặc tính thu được không tồn tại trong sinh học -- nhưng không gì ngăn một GA kỹ thuật số gian lận một cách thông minh: ở đây, truyền lại kiến thức thu được giúp tăng tốc hội tụ triệt để, vì mỗi thế hệ khởi động lại từ một khởi tạo đã có thông tin thay vì trọng số ngẫu nhiên.
 
 Ba thay đổi cấu trúc khác trong phiên bản này:
 

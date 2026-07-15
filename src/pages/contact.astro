@@ -1,8 +1,98 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Contact from "../islands/Contact.tsx";
+import { CONFIG } from "../utils/config";
+import "../styles/Contact.css";
 ---
 
 <BaseLayout title="Contact" description="Contact me" wide>
-  <Contact client:only="react" />
+  <article class="contact-page">
+    <h1>Contact</h1>
+
+    <form class="contact-form" id="contact-form">
+      <label>
+        Name
+        <input type="text" name="name" required />
+      </label>
+      <label>
+        Your email
+        <input type="email" name="email" required />
+      </label>
+      <label>
+        Message
+        <textarea name="message" rows={6} required />
+      </label>
+
+      <div class="cf-turnstile" data-sitekey={CONFIG.turnstileSiteKey ?? ""} data-theme="dark" data-size="normal"></div>
+
+      <button type="submit" id="contact-submit">Send</button>
+      <p id="contact-success" class="contact-success" style="display:none">Message sent! I'll get back to you soon.</p>
+      <p id="contact-error" class="contact-error" style="display:none">Something went wrong. Try again later.</p>
+    </form>
+
+    <section class="contact-social">
+      <p>You can also find me on these platforms:</p>
+      <div class="contact-links">
+        <a href="https://github.com/fox3000foxy" target="_blank" rel="noopener noreferrer" class="contact-link">GitHub ↗</a>
+        <a href="https://x.com/fox3000foxy" target="_blank" rel="noopener noreferrer" class="contact-link">Twitter / X ↗</a>
+        <a href="https://linkedin.com/in/fox3000foxy" target="_blank" rel="noopener noreferrer" class="contact-link">LinkedIn ↗</a>
+      </div>
+    </section>
+  </article>
+
+  <script is:inline>
+  (function() {
+    var form = document.getElementById('contact-form');
+    if (!form) return;
+
+    var submitBtn = document.getElementById('contact-submit');
+    var successEl = document.getElementById('contact-success');
+    var errorEl = document.getElementById('contact-error');
+    var apiUrl = '/api/contact';
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var name = form.querySelector('[name="name"]');
+      var email = form.querySelector('[name="email"]');
+      var message = form.querySelector('[name="message"]');
+      if (!(name && email && message && name.value && email.value && message.value)) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+
+      var turnstileToken = '';
+      var tsWidget = form.querySelector('.cf-turnstile');
+      if (tsWidget && window.turnstile) {
+        try { turnstileToken = window.turnstile.getResponse(tsWidget) || ''; } catch(e) {}
+      }
+
+      try {
+        var res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name.value,
+            email: email.value,
+            message: message.value,
+            'cf-turnstile-response': turnstileToken || undefined,
+          }),
+        });
+
+        if (res.ok) {
+          successEl.style.display = '';
+          name.value = ''; email.value = ''; message.value = '';
+          if (window.turnstile) try { window.turnstile.reset(tsWidget); } catch(e) {}
+        } else {
+          errorEl.style.display = '';
+        }
+      } catch(e) {
+        errorEl.style.display = '';
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send';
+    });
+  })();
+  </script>
 </BaseLayout>

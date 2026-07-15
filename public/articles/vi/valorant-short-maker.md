@@ -29,15 +29,15 @@ Ba khung hình trích từ video tạo cho "Duelist Debate" (Phoenix, Yoru và J
 
 ![Một câu khác, màu phụ đề thay đổi theo đặc vụ đang nói](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-Kết quả thực tế trên Short này: [Duelist Debate — youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Shorts trên kênh dao động khoảng 1,2 đến 1,5k lượt xem. Không có gì to tát, nhưng đó là một kênh tự chạy từ đầu, nên con số thực sự quan trọng là không — không phút nào bỏ ra kể từ khi cron được khởi động.
+Kết quả thực tế trên Short này: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). Shorts trên kênh dao động khoảng 1,2 đến 1,5k lượt xem. Không có gì to tát, nhưng đó là một kênh tự chạy từ đầu, nên con số thực sự quan trọng là không -- không phút nào bỏ ra kể từ khi cron được khởi động.
 
 ## Pipeline, theo thứ tự
 
-### 1. Viết kịch bản — Groq + Llama 3.3
+### 1. Viết kịch bản -- Groq + Llama 3.3
 
 Mỗi lần chạy chọn ngẫu nhiên 3 đến 4 đặc vụ trong số 26 có sẵn, và gửi cho Llama 3.3 70B (qua Groq) một prompt hệ thống chứa, với mỗi đặc vụ được chọn, một bản tóm tắt gọn về tính cách và quan hệ của họ với các đặc vụ khác trong cảnh (những persona này nằm trong `src/lore/`, mỗi đặc vụ một file). Prompt áp đặt các quy tắc chặt chẽ: mỗi câu thoại ngắn gọn và sắc bén, luân phiên công bằng giữa các nhân vật, hài hước ưu tiên, và trên hết là khoảng nghỉ.
 
-Ví dụ cụ thể với "Duelist Debate" — Phoenix, Yoru và Jett tranh cãi xem ai sẽ chơi duelist, tạo ngày 6 tháng 7 năm 2026:
+Ví dụ cụ thể với "Duelist Debate" -- Phoenix, Yoru và Jett tranh cãi xem ai sẽ chơi duelist, tạo ngày 6 tháng 7 năm 2026:
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -72,21 +72,21 @@ jett: I'll take you both down, no problem.
 
 Khoảng nghỉ chính là chi tiết tạo nên nhịp điệu tự nhiên: `[0.3]` chèn giữa câu thoại tạo ra 0,3 giây im lặng trong audio mà không cắt vòng tròn đặc vụ trên màn hình, còn một dòng `pause: 1.0` riêng biệt tạo khoảng lặng thực sự giữa hai người nói, vòng tròn ẩn đi. Không có chúng, TTS đọc liền tù tì không nghỉ sẽ nghe như robot.
 
-### 2. Lồng tiếng — Piper, mỗi đặc vụ một mô hình
+### 2. Lồng tiếng -- Piper, mỗi đặc vụ một mô hình
 
-Mỗi đặc vụ có mô hình Piper (`.onnx`) riêng được huấn luyện đặc biệt, lưu trong `voices/<agent>/`. Văn bản sinh ra đi qua mô hình tương ứng, đầu ra là file WAV. Cùng công nghệ tôi dùng để huấn luyện giọng tùy chỉnh nói chung (xem bài về pipeline Piper/Kaggle) — ở đây áp dụng trực tiếp trong môi trường production, on-the-fly, mỗi lần tạo video.
+Mỗi đặc vụ có mô hình Piper (`.onnx`) riêng được huấn luyện đặc biệt, lưu trong `voices/<agent>/`. Văn bản sinh ra đi qua mô hình tương ứng, đầu ra là file WAV. Cùng công nghệ tôi dùng để huấn luyện giọng tùy chỉnh nói chung (xem bài về pipeline Piper/Kaggle) -- ở đây áp dụng trực tiếp trong môi trường production, on-the-fly, mỗi lần tạo video.
 
-### 3. Phụ đề karaoke — file ASS tạo động, màu trích từ icon
+### 3. Phụ đề karaoke -- file ASS tạo động, màu trích từ icon
 
-Phụ đề không phải là file `.srt` đơn giản. Đó là file `.ass` (Advanced SubStation Alpha) được tạo từng từ một, với hiệu ứng karaoke: mỗi từ sáng lên với một màu khi được phát âm, phần còn lại của văn bản giữ màu trung tính. Màu nhấn không cố định — nó được trích xuất động từ icon của đặc vụ đang nói (một script Python dùng PIL đọc PNG của icon, lấy mẫu các pixel không trong suốt, và trả về các màu chủ đạo). Kết quả: phụ đề của Killjoy sáng màu tím, của Jett sáng màu xanh ngọc, không màu nào bị hardcode ở bất cứ đâu.
+Phụ đề không phải là file `.srt` đơn giản. Đó là file `.ass` (Advanced SubStation Alpha) được tạo từng từ một, với hiệu ứng karaoke: mỗi từ sáng lên với một màu khi được phát âm, phần còn lại của văn bản giữ màu trung tính. Màu nhấn không cố định -- nó được trích xuất động từ icon của đặc vụ đang nói (một script Python dùng PIL đọc PNG của icon, lấy mẫu các pixel không trong suốt, và trả về các màu chủ đạo). Kết quả: phụ đề của Killjoy sáng màu tím, của Jett sáng màu xanh ngọc, không màu nào bị hardcode ở bất cứ đâu.
 
-### 4. Vòng tròn phản ứng âm thanh — một biểu thức FFmpeg cho mỗi khung hình
+### 4. Vòng tròn phản ứng âm thanh -- một biểu thức FFmpeg cho mỗi khung hình
 
 Đây là phần phức tạp nhất của pipeline, và có lẽ là phần tôi tự hào nhất. Icon tròn của đặc vụ đang nói không đứng yên: nó zoom nhẹ theo nhịp giọng nói của chính mình.
 
 Quá trình tính toán đọc WAV thô của câu thoại, tính đường bao RMS (root mean square, thước đo năng lượng tín hiệu) từng khung hình ở 60 fps, chuẩn hóa theo giá trị tối đa, rồi làm mịn qua cửa sổ 3 khung hình để tránh giật. Mỗi giá trị đường bao sau đó được chuyển thành hệ số tỷ lệ giới hạn bởi `MAX_ZOOM_VARIATION` (0,2, tức ±20% quanh kích thước cơ bản).
 
-Kết quả tính toán này không được áp dụng qua code thao tác pixel — nó được dịch thành một biểu thức điều kiện FFmpeg khổng lồ (`lt(n,K)*val + between(n,K,K')*val + ...`, một nhánh cho mỗi nhóm khung hình) trực tiếp điều khiển tham số `scale` của bộ lọc video. FFmpeg đánh giá biểu thức này trên từng khung hình render. Với một câu thoại vài giây ở 60 fps, nhanh chóng có hàng trăm nhánh trong một biểu thức duy nhất — vì thế có tham số `STEP` để nhóm khung hình nhằm giới hạn độ sâu.
+Kết quả tính toán này không được áp dụng qua code thao tác pixel -- nó được dịch thành một biểu thức điều kiện FFmpeg khổng lồ (`lt(n,K)*val + between(n,K,K')*val + ...`, một nhánh cho mỗi nhóm khung hình) trực tiếp điều khiển tham số `scale` của bộ lọc video. FFmpeg đánh giá biểu thức này trên từng khung hình render. Với một câu thoại vài giây ở 60 fps, nhanh chóng có hàng trăm nhánh trong một biểu thức duy nhất -- vì thế có tham số `STEP` để nhóm khung hình nhằm giới hạn độ sâu.
 
 ### 5. Render từng phân đoạn, rồi fisheye cho intro
 
@@ -96,7 +96,7 @@ Phân đoạn đầu tiên được xử lý đặc biệt: hiệu ứng méo fi
 
 ### 6. Ghép nối và trộn âm thanh cuối cùng
 
-Tất cả phân đoạn được ghép nối tiếp nhau, nhạc nền (Sneaky Snitch, Kevin MacLeod, giấy phép Creative Commons) được trộn vào với **audio ducking** — nén sidechain tự động giảm âm lượng nhạc khi đặc vụ đang nói, và tăng trở lại khi im lặng. Toàn bộ chạy ở 60 fps từ đầu đến cuối, không chuyển đổi framerate giữa các bước.
+Tất cả phân đoạn được ghép nối tiếp nhau, nhạc nền (Sneaky Snitch, Kevin MacLeod, giấy phép Creative Commons) được trộn vào với **audio ducking** -- nén sidechain tự động giảm âm lượng nhạc khi đặc vụ đang nói, và tăng trở lại khi im lặng. Toàn bộ chạy ở 60 fps từ đầu đến cuối, không chuyển đổi framerate giữa các bước.
 
 ### 7. Đăng tải tự động
 
@@ -104,11 +104,11 @@ Script `run-cron.sh`, được cron thông thường khởi chạy, kích hoạt
 
 ## Tại sao TypeScript/Bun thay vì toàn Python
 
-Lựa chọn này không mang tính ý thức hệ — Bun cho phép truy cập trực tiếp và nhanh chóng tới `Bun.spawn` để điều khiển FFmpeg như tiến trình con, kiểu dữ liệu mạnh cho cấu trúc dữ liệu của pipeline (`Phrase`, `SegmentInfo`), và runtime khởi động nhanh hơn nhiều so với Node cho một script chạy cron mỗi vài giờ. Hai chỗ Python duy nhất trong dự án là nơi Python thực sự là công cụ tốt nhất: PIL để trích xuất màu, và các API đăng tải (`google-api-python-client` cho YouTube, stack Instagram Graph API cho IG).
+Lựa chọn này không mang tính ý thức hệ -- Bun cho phép truy cập trực tiếp và nhanh chóng tới `Bun.spawn` để điều khiển FFmpeg như tiến trình con, kiểu dữ liệu mạnh cho cấu trúc dữ liệu của pipeline (`Phrase`, `SegmentInfo`), và runtime khởi động nhanh hơn nhiều so với Node cho một script chạy cron mỗi vài giờ. Hai chỗ Python duy nhất trong dự án là nơi Python thực sự là công cụ tốt nhất: PIL để trích xuất màu, và các API đăng tải (`google-api-python-client` cho YouTube, stack Instagram Graph API cho IG).
 
 ## Điều này minh họa cho điều gì
 
-Dự án này là một ví dụ tốt về những gì có thể xây dựng ngày nay với các khối hoàn toàn miễn phí hoặc mã nguồn mở: một LLM nhanh và miễn phí qua Groq API, một engine TTS cục bộ chạy không cần GPU riêng, FFmpeg cho toàn bộ render video — và chất kết dính chỉ là vài trăm dòng TypeScript. Không khối nào trong số này là mới. Điều làm nên pipeline chính là sự sắp xếp: tạo một kịch bản mạch lạc với quan hệ nhân vật thực sự, chuyển thành audio biểu cảm với các khoảng nghỉ tự nhiên, đồng bộ render hình ảnh với năng lượng của audio đó theo từng khung hình, và tự động hóa toàn bộ chuỗi cho đến khi đăng tải.
+Dự án này là một ví dụ tốt về những gì có thể xây dựng ngày nay với các khối hoàn toàn miễn phí hoặc mã nguồn mở: một LLM nhanh và miễn phí qua Groq API, một engine TTS cục bộ chạy không cần GPU riêng, FFmpeg cho toàn bộ render video -- và chất kết dính chỉ là vài trăm dòng TypeScript. Không khối nào trong số này là mới. Điều làm nên pipeline chính là sự sắp xếp: tạo một kịch bản mạch lạc với quan hệ nhân vật thực sự, chuyển thành audio biểu cảm với các khoảng nghỉ tự nhiên, đồng bộ render hình ảnh với năng lượng của audio đó theo từng khung hình, và tự động hóa toàn bộ chuỗi cho đến khi đăng tải.
 
 ---
 
@@ -120,5 +120,5 @@ Dự án này là một ví dụ tốt về những gì có thể xây dựng ng
 **3 điểm chính**
 
 1. Kịch bản được sinh bởi LLM (Groq/Llama 3.3) với persona và quan hệ riêng cho từng đặc vụ, không phải danh sách truyện cười viết sẵn.
-2. Zoom vòng tròn đặc vụ được điều khiển bởi biểu thức FFmpeg tính toán từng khung hình từ đường bao RMS của WAV — không phải animation keyframe cổ điển.
+2. Zoom vòng tròn đặc vụ được điều khiển bởi biểu thức FFmpeg tính toán từng khung hình từ đường bao RMS của WAV -- không phải animation keyframe cổ điển.
 3. Toàn bộ chuỗi, từ prompt đến bài đăng YouTube/Instagram, chạy qua một cron job duy nhất không cần can thiệp của con người.

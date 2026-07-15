@@ -8,7 +8,9 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["astro/client"]
+    "noEmit": true,
+    "types": ["astro/client", "node"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro"],
+  "exclude": [".astro"]
 }

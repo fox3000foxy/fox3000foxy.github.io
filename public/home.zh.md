@@ -1,6 +1,6 @@
 # 欢迎来到我的博客
 
-[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## 关于我
 
@@ -14,7 +14,7 @@
 
 我现在主要用 TypeScript 和 React 编码，但以前我用纯 HTML、CSS 和 JavaScript 编写启动器。我也懂 Python、C#（我讨厌它）、Java（很少用，用来为 [Eminium Games](https://github.com/Eminium-Games/) 编写 Minecraft 插件）。我懂一点 C++ 但现在已经不记得怎么用它编程了。我正在学习 C，跟着 [bareiron](https://github.com/p2r3/bareiron) 项目。就这样，我现在还不会 Rust 或 Go，但我想学。
 
-我也有一些绘画基础，但不太擅长，只是为了好玩。我也会做一些音乐制作，但也不太擅长，也只是为了好玩。我还有一些视频编辑基础，但同样不太擅长。
+我也有一些绘画、音乐制作和视频编辑的基础----但都不太擅长，只是为了好玩。
 
 我使用 Node.js、Express.js、React、Discord.js 等框架和库。我还使用 Git、Docker 等工具，以及 Debian、Arch Linux 和 Ubuntu 等 Linux 发行版。我也有 MongoDB 和 MySQL 等数据库的知识。
 

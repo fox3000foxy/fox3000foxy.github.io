@@ -1,40 +1,115 @@
 import fs from "node:fs";
 import path from "node:path";
-import rss from "@astrojs/rss";
-import type { APIContext } from "astro";
-import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from "../config";
+import { SITE_URL } from "../lib/i18n";
+import { renderMarkdown } from "../lib/markdown";
 
-export async function GET(context: APIContext) {
-  const indexRaw = fs.readFileSync(
-    path.resolve("public/articles/en/index.json"),
-    "utf-8",
-  );
-  const articles = JSON.parse(indexRaw);
+function escapeXml(s: string): string {
+	return s
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
+}
 
-  return rss({
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    site: SITE_URL,
-    items: articles.map((article: Record<string, unknown>) => {
-      const slug = article.slug as string;
-      const mdPath = path.resolve(`public/articles/en/${slug}.md`);
-      let body = "";
-      try {
-        body = fs.readFileSync(mdPath, "utf-8");
-        const fmEnd = body.indexOf("\n---\n", 4);
-        if (fmEnd !== -1 && body.startsWith("---\n")) {
-          body = body.slice(fmEnd + 5).trim();
-        }
-      } catch {}
-      return {
-        title: (article.title as string) || slug,
-        description: (article.description as string) || "",
-        pubDate: article.date ? new Date(article.date as string) : new Date(),
-        link: `/blog/${slug}`,
-        content: body,
-        author: AUTHOR,
-      };
-    }),
-    customData: `<language>en</language><atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml" />`,
-  });
+export function GET() {
+	const siteUrl = SITE_URL;
+	const lang = "en";
+	const title = "Fox's Blog";
+	const description =
+		"Fox3000foxy's blog about web development, automation, and open-source";
+	const feedUrl = `${siteUrl}/feed.xml`;
+	const now = new Date().toUTCString();
+
+	const indexRaw = fs.readFileSync(
+		path.resolve(`public/articles/${lang}/index.json`),
+		"utf-8"
+	);
+	const articles = JSON.parse(indexRaw);
+
+	const itemsXml = articles
+		.map((article: Record<string, unknown>) => {
+			const slug = article.slug as string;
+			const mdPath = path.resolve(`public/articles/${lang}/${slug}.md`);
+			let body = "";
+			let image = "";
+			try {
+				const raw = fs.readFileSync(mdPath, "utf-8");
+				const fmEnd = raw.indexOf("\n---\n", 4);
+				body =
+					fmEnd !== -1 && raw.startsWith("---\n")
+						? raw.slice(fmEnd + 5).trim()
+						: raw;
+				const ogPath = path.resolve(`public/og/${slug}.png`);
+				if (fs.existsSync(ogPath)) {
+					image = `${siteUrl}/og/${slug}.png`;
+				} else {
+					const firstImg = body.match(/!\[.*?\]\((.*?)\)/);
+					if (firstImg) {
+						image = firstImg[1].startsWith("http")
+							? firstImg[1]
+							: `${siteUrl}${firstImg[1].replace(/^\.?\//, "/")}`;
+					}
+				}
+			} catch {}
+
+			let htmlBody = "";
+			try {
+				htmlBody = renderMarkdown(
+					body.replaceAll("assets/", "/articles/assets/")
+				);
+			} catch {
+				htmlBody = body
+					.replace(/</g, "&lt;")
+					.replace(/>/g, "&gt;")
+					.replace(/\n/g, "<br>");
+			}
+
+			const tags = (article.tags as string[]) || [];
+			const pubDate = article.date
+				? new Date(article.date as string).toUTCString()
+				: now;
+			const articleUrl = `${siteUrl}/blog/${slug}`;
+			const tagXml = tags
+				.map((t) => `      <category>${escapeXml(t)}</category>`)
+				.join("\n");
+			const enclosureXml = image
+				? `\n      <enclosure url="${escapeXml(image)}" type="image/png" length="0" />`
+				: "";
+
+			return `    <item>
+      <title>${escapeXml((article.title as string) || slug)}</title>
+      <link>${articleUrl}</link>
+      <guid isPermaLink="true">${articleUrl}</guid>
+      <description>${escapeXml((article.description as string) || "")}</description>
+      <pubDate>${pubDate}</pubDate>${enclosureXml}
+      <content:encoded><![CDATA[${htmlBody}]]></content:encoded>
+${tagXml}    </item>`;
+		})
+		.join("\n");
+
+	return new Response(
+		`<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(title)}</title>
+    <link>${siteUrl}</link>
+    <description>${escapeXml(description)}</description>
+    <language>en</language>
+    <lastBuildDate>${now}</lastBuildDate>
+    <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
+    <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
+    <generator>Astro v7</generator>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <image>
+      <url>${siteUrl}/og/home.png</url>
+      <title>${escapeXml(title)}</title>
+      <link>${siteUrl}</link>
+    </image>
+    <atom:link href="${feedUrl}" rel="self" type="application/rss+xml" />
+${itemsXml}
+  </channel>
+</rss>`,
+		{ headers: { "Content-Type": "application/xml; charset=utf-8" } }
+	);
 }

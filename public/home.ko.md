@@ -1,6 +1,6 @@
 # 내 블로그에 온 걸 환영한다
 
-[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## 나에 대해서
 
@@ -14,7 +14,7 @@
 
 요즘은 주로 TypeScript와 React로 코딩하지만, 예전에는 순수 HTML, CSS, JavaScript로 런처를 만들었어. Python, C# (싫어함), Java (드물게 [Eminium Games](https://github.com/Eminium-Games/)용 Minecraft 플러그인을 만드는 데 사용)도 할 줄 알아. C++도 조금 알지만 지금은 어떻게 코딩하는지 기억 안 나. 그리고 [bareiron](https://github.com/p2r3/bareiron) 프로젝트로 C를 배우고 있어. 뭐 그런 식이야. 아직 Rust나 Go는 모르지만 배우고 싶어.
 
-그림도 조금 할 줄 알지만 잘하진 못해. 그냥 재미로 하는 거야. 음악 프로듀싱도 조금 하는데 그것도 잘하진 못해. 그냥 재미로 하는 거야. 영상 편집도 조금 하는데 그것도 잘하진 못해.
+그림, 음악 프로듀싱, 영상 편집을 조금 할 줄 알지만 셋 다 잘하진 못해. 그냥 재미로 하는 거야.
 
 Node.js, Express.js, React, Discord.js 같은 프레임워크와 라이브러리를 사용해. Git, Docker, Debian, Arch Linux, Ubuntu 같은 Linux 배포판도 사용해. MongoDB, MySQL 같은 데이터베이스 지식도 있어.
 

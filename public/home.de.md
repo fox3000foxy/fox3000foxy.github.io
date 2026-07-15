@@ -1,6 +1,6 @@
 # Willkommen in meinem Blog
 
-[![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy)
+<!-- [![Profile Views](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=Profile+Views&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![GitHub followers](https://img.shields.io/github/followers/fox3000foxy?label=Followers&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![GitHub stars](https://img.shields.io/github/stars/fox3000foxy?label=Total%20Stars&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## Über mich
 
@@ -14,7 +14,7 @@ Ich liebe es auch, Workarounds zu finden, um nicht für Dinge zu bezahlen, die k
 
 Ich programmiere jetzt hauptsächlich in TypeScript und React, aber früher habe ich Launcher in reinem HTML, CSS und JavaScript programmiert. Ich kann auch Python, C# (das ich hasse), Java (selten, benutze ich für Minecraft-Plugins für [Eminium Games](https://github.com/Eminium-Games/)). Ich kann ein bisschen C++, aber ich weiß nicht mehr, wie man damit programmiert. Und ich lerne C mit dem Projekt [bareiron](https://github.com/p2r3/bareiron). Und so weiter, ich kann weder Rust noch Go im Moment, aber ich würde gerne lernen.
 
-Ich habe auch ein paar Zeichenkenntnisse, aber ich bin nicht sehr gut, ich mache es nur zum Spaß. Ich mache auch ein bisschen Musikproduktion, aber ich bin auch nicht sehr gut, ich mache es auch nur zum Spaß. Ich habe auch ein paar Videobearbeitungskenntnisse, aber ich bin auch nicht sehr gut.
+Ich habe auch ein paar Kenntnisse in Zeichnen, Musikproduktion und Videobearbeitung -- aber ich bin in keinem besonders gut, ich mache es nur zum Spaß.
 
 Ich benutze Frameworks und Bibliotheken wie Node.js, Express.js, React, Discord.js und mehr. Ich benutze auch Tools wie Git, Docker und Linux-Distributionen wie Debian, Arch Linux und Ubuntu. Ich habe auch Kenntnisse in Datenbanken wie MongoDB und MySQL.
 
