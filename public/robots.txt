@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /write
+Disallow: /api/
 
 Sitemap: https://fox3000foxy.com/sitemap.xml

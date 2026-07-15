@@ -4,11 +4,19 @@ import { SITE_DESCRIPTION } from "../config";
 import { ALL_LANGS } from "../lib/i18n";
 import type { Lang } from "../lib/i18n";
 import { readAllHomeContent } from "../lib/langContent";
+import { webSiteJsonLd, personJsonLd, siteNavigationJsonLd, breadcrumbJsonLd } from "../lib/schema";
 
 const allContent = readAllHomeContent();
+
+const homeJsonLd = [
+  webSiteJsonLd(),
+  personJsonLd(),
+  siteNavigationJsonLd(),
+  breadcrumbJsonLd([{ name: "Home", url: "/" }]),
+].map((s) => `<script type="application/ld+json">${s}</script>`).join("\n");
 ---
 
-<BaseLayout title="Home" description={SITE_DESCRIPTION}>
+<BaseLayout title="Home" description={SITE_DESCRIPTION} extraHead={homeJsonLd}>
   {ALL_LANGS.map((l) => (
     <article class="home lang-content" data-lang={l} set:html={allContent[l as Lang]} />
   ))}

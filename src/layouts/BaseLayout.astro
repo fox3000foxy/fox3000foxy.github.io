@@ -6,6 +6,7 @@ import "highlight.js/styles/github-dark.min.css";
 import { SITE_URL, SITE_DESCRIPTION } from "../config";
 import { ALL_LANGS, RTLLangs } from "../lib/i18n";
 import type { Lang } from "../lib/i18n";
+import { ogLocale } from "../lib/schema";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
@@ -21,14 +22,15 @@ export interface Props {
 
 const { title, description, image, canonical, locale, extraHead, wide } = Astro.props;
 const lang = locale || "en";
-const canonicalUrl = canonical || Astro.url.pathname;
+const canonicalUrl = `${SITE_URL}${canonical || Astro.url.pathname}`;
 const ogImage = image || `${SITE_URL}/og/home.png`;
 const metaDesc = description || SITE_DESCRIPTION;
 const dir = RTLLangs.has(lang) ? "rtl" : "ltr";
+const localeStr = ogLocale(lang);
 
 const hreflangLinks = ALL_LANGS.map((l) =>
   `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${Astro.url.pathname}" />`
-).join("\n");
+).join("\n") + `\n<link rel="alternate" hreflang="x-default" href="${SITE_URL}${Astro.url.pathname}" />`;
 ---
 <!doctype html>
 <html lang={lang} dir={dir}>
@@ -46,7 +48,14 @@ const hreflangLinks = ALL_LANGS.map((l) =>
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Fox's Blog" />
+    <meta property="og:locale" content={localeStr} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@fox3000foxy" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={metaDesc} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="author" content="Fox3000foxy" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href={canonicalUrl} />
 
     <link rel="alternate" type="application/rss+xml" title="Fox's Blog RSS Feed" href="/feed.xml" />
