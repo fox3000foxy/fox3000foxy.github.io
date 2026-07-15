@@ -102,7 +102,7 @@ function render() {
       for (var j = 0; j < a.tags.length; j++) html += '<span class="tag-badge">' + a.tags[j] + "</span>";
       html += "</div>";
     }
-    html += "</div><div class=\"blog-card-footer\"><div class=\"blog-card-meta\">";
+    html += '</div><div class="blog-card-footer"><div class="blog-card-meta">';
     if (date) html += '<time datetime="' + date + '">' + formattedDate + "</time>";
     if (a.readingTime) html += '<span class="blog-card-reading-time">' + a.readingTime + " min read</span>";
     html += '</div><div class="blog-card-authors">';
@@ -165,20 +165,33 @@ document.getElementById("random-btn").addEventListener("click", function () {
 });
 
 document.getElementById("blog-grid").addEventListener("click", function (e) {
-  var btn = (e.target).closest(".bookmark-btn");
-  if (!btn) return;
-  e.preventDefault();
-  var slug = btn.getAttribute("data-slug");
-  var stored = JSON.parse(localStorage.getItem("read-articles") || "[]");
-  var idx = stored.indexOf(slug);
-  if (idx === -1) stored.push(slug); else stored.splice(idx, 1);
-  localStorage.setItem("read-articles", JSON.stringify(stored));
-  render();
-});
+  var badge = (e.target).closest(".tag-badge");
+  if (badge) {
+    e.preventDefault();
+    var tag = badge.textContent;
+    activeTag = tag;
+    page = 0;
+    document.querySelectorAll("#tag-filter .tag-btn").forEach(function (b) {
+      b.classList.toggle("active", b.getAttribute("data-tag") === tag);
+    });
+    render();
+    return;
+  }
 
-document.getElementById("blog-grid").addEventListener("click", function (e) {
+  var btn = (e.target).closest(".bookmark-btn");
+  if (btn) {
+    e.preventDefault();
+    var slug = btn.getAttribute("data-slug");
+    var stored = JSON.parse(localStorage.getItem("read-articles") || "[]");
+    var idx = stored.indexOf(slug);
+    if (idx === -1) stored.push(slug); else stored.splice(idx, 1);
+    localStorage.setItem("read-articles", JSON.stringify(stored));
+    render();
+    return;
+  }
+
   var card = (e.target).closest(".blog-card");
-  if (!card || (e.target).closest(".bookmark-btn")) return;
+  if (!card) return;
   var slug = card.getAttribute("data-slug");
   if (!slug) return;
   var stored = JSON.parse(localStorage.getItem("read-articles") || "[]");
@@ -189,16 +202,6 @@ document.getElementById("blog-grid").addEventListener("click", function (e) {
 });
 
 currentLang = detectLang();
-if (currentLang !== "en") {
-  var tagBtns = document.querySelectorAll("#tag-filter .tag-btn");
-  tagBtns.forEach(function (b) { b.remove(); });
-  var allBtn = document.createElement("button");
-  allBtn.type = "button";
-  allBtn.className = "tag-btn active";
-  allBtn.setAttribute("data-tag", "");
-  allBtn.textContent = "All";
-  document.getElementById("tag-filter").appendChild(allBtn);
-}
 render();
 })();
 `;
