@@ -8,6 +8,7 @@ import { createT } from "../../lib/i18n";
 import type { ArticleMeta } from "../../types";
 import { getAuthors } from "../../utils/authors";
 import { isNew } from "../../utils/isNew";
+import { breadcrumbJsonLd } from "../../lib/schema";
 
 export async function getStaticPaths() {
   const indexPath = path.resolve("public/articles/en/index.json");
@@ -41,9 +42,14 @@ const articles = tag
           new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
       )
   : [];
+const tagJsonLd = breadcrumbJsonLd([
+  { name: "Home", url: "/" },
+  { name: "Tags", url: "/tags" },
+  { name: `#${tag}`, url: `/tags/${tag}` },
+]);
 ---
 
-<BaseLayout title={`#${tag}`} description={`Articles tagged with ${tag}`} wide>
+<BaseLayout title={`#${tag}`} description={`Articles tagged with ${tag}`} extraHead={`<script type="application/ld+json">${tagJsonLd}</script>`} wide>
   <div class="blog-list">
     <div class="tag-page-header">
       <a href="/blog" class="tag-page-back">← {t("blog.title")}</a>

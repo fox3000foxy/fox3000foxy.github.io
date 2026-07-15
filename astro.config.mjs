@@ -10,7 +10,10 @@ export default defineConfig({
   integrations: [
     preact({ compat: true }),
     sitemap({
-      filter: (page) => !page.includes("/write") && !page.includes("/legacy"),
+      filter: (page) => !page.includes("/write") && !page.includes("/api/"),
+      changefreq: "weekly",
+      priority: 0.7,
+      lastmod: new Date(),
     }),
   ],
   image: {

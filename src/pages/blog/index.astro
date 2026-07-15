@@ -5,6 +5,7 @@ import { ALL_LANGS, createT } from "../../lib/i18n";
 import { getAuthors } from "../../utils/authors";
 import { isNew } from "../../utils/isNew";
 import type { ArticleMeta } from "../../types";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "../../lib/schema";
 import "../../styles/BlogList.css";
 
 const t = createT("en");
@@ -206,9 +207,13 @@ currentLang = detectLang();
 render();
 })();
 `;
+const blogJsonLd = [
+  breadcrumbJsonLd([{ name: "Home", url: "/" }, { name: "Blog", url: "/blog" }]),
+  collectionPageJsonLd("Articles about web development, automation, and open-source"),
+].map((s) => `<script type="application/ld+json">${s}</script>`).join("\n");
 ---
 
-<BaseLayout title="Blog" description="Articles about web development, automation, and open-source" wide>
+<BaseLayout title="Blog" description="Articles about web development, automation, and open-source" extraHead={blogJsonLd} wide>
   <div id="blog-root" class="blog-list">
     <div class="blog-list-header">
       <h2>{t("blog.title")}</h2>

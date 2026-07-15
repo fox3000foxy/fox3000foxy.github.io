@@ -12,6 +12,7 @@ import { parseFrontMatter } from "../../utils/frontmatter";
 import { getAuthors } from "../../utils/authors";
 import { isNew } from "../../utils/isNew";
 import { parseHeadings } from "../../utils/headings";
+import { articleJsonLd, breadcrumbJsonLd } from "../../lib/schema";
 
 export async function getStaticPaths() {
   const indexPath = path.resolve("public/articles/en/index.json");
@@ -78,22 +79,25 @@ const articleMetaTags = enMeta.date ? `
   ${enMeta.lastmod ? `<meta property="article:modified_time" content="${enMeta.lastmod}" />` : ""}
   ${(enMeta.tags || []).map((t: string) => `<meta property="article:tag" content="${t}" />`).join("\n  ")}
 ` : "";
-const articleJsonLd = data ? `<script type="application/ld+json">${JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: enMeta.title || slug,
+const articleSchemaJson = data ? articleJsonLd({
+  slug: slug || "",
+  title: enMeta.title || slug || "",
   description: enMeta.description || "",
   datePublished: enMeta.date || "",
   dateModified: enMeta.lastmod || enMeta.date || "",
-  author: (enMeta.authors || ["fox3000foxy"]).map((a: string) => ({
-    "@type": "Person", name: a, url: `https://github.com/${a}`
-  })),
-  url: articleUrl,
-  inLanguage: "multiple",
-  isAccessibleForFree: true,
-  mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl }
-})}</script>` : "";
-const extraHead = articleMetaTags + articleJsonLd;
+  authors: enMeta.authors || ["fox3000foxy"],
+  tags: enMeta.tags,
+  image: ogImage || undefined,
+  inLanguage: "en",
+  wordCount: rawBodyEn ? rawBodyEn.split(/\s+/).length : undefined,
+}) : "";
+const breadcrumbSchemaJson = breadcrumbJsonLd([
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog" },
+  { name: title, url: `/blog/${slug}` },
+]);
+const articleJsonLdHtml = articleSchemaJson ? `<script type="application/ld+json">${articleSchemaJson}</script><script type="application/ld+json">${breadcrumbSchemaJson}</script>` : "";
+const extraHead = articleMetaTags + articleJsonLdHtml;
 
 // Compute prev/next article navigation
 const allIndexes = data?.allIndexes ?? readAllArticleIndexes();
