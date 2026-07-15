@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import fs from "node:fs";
 import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -89,7 +90,7 @@ const articles = tag
                 </div>
                 <div class="blog-card-authors">
                   {authorList.map((a) => (
-                    <img class="blog-card-author-avatar" src={a.avatar ?? `https://github.com/${a.id}.png`} alt={a.name} title={a.name} width="20" height="20" decoding="async" />
+                    <Image class="blog-card-author-avatar" src={a.avatar ?? `https://github.com/${a.id}.png`} alt={a.name} title={a.name} width={20} height={20} />
                   ))}
                 </div>
               </div>

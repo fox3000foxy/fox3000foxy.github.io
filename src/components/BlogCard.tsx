@@ -50,6 +50,7 @@ export default function BlogCard({ article }: BlogCardProps) {
 				title={a.name}
 				width="20"
 				height="20"
+				loading="lazy"
 				decoding="async"
 			/>
 			)),
