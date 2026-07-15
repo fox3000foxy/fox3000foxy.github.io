@@ -206,7 +206,7 @@ const suggested = allArticles
             <h3>{t("article.related")}</h3>
             <div class="suggested-grid">
               {suggested.map(({ article }) => (
-                <a href={`/blog/${article.slug}`} key={article.slug} class="suggested-card">
+                <a href={`/blog/${article.slug}`} class="suggested-card">
                   <h4 class="suggested-title">{article.title ?? article.slug.replace(/-/g, " ")}</h4>
                   {article.description && <p class="suggested-desc">{article.description}</p>}
                   {article.date && (

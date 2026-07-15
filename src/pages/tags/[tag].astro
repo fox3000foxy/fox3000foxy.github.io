@@ -55,7 +55,7 @@ const articles = tag
           const { slug, title, description, date, tags, image, authors, aiGenerated, sponsored } = article;
           const authorList = getAuthors(authors);
           return (
-            <a key={slug} href={`/blog/${slug}`} class="blog-card">
+            <a href={`/blog/${slug}`} class="blog-card">
               {image && (
                 <img class="blog-card-img" src={image} alt="" loading="lazy" />
               )}
@@ -72,7 +72,7 @@ const articles = tag
                 {tags && tags.length > 0 && (
                   <div class="blog-card-tags">
                     {tags.map((t) => (
-                      <span key={t} class="tag-badge">{t}</span>
+                      <span class="tag-badge">{t}</span>
                     ))}
                   </div>
                 )}
@@ -89,7 +89,7 @@ const articles = tag
                 </div>
                 <div class="blog-card-authors">
                   {authorList.map((a) => (
-                    <img key={a.id} class="blog-card-author-avatar" src={a.avatar ?? `https://github.com/${a.id}.png`} alt={a.name} title={a.name} width="20" height="20" />
+                    <img class="blog-card-author-avatar" src={a.avatar ?? `https://github.com/${a.id}.png`} alt={a.name} title={a.name} width="20" height="20" />
                   ))}
                 </div>
               </div>
