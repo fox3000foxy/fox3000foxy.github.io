@@ -95,16 +95,18 @@ const hreflangLinks = ALL_LANGS.map((l) =>
     (function(){
       var t = localStorage.getItem("theme");
       var cb = document.getElementById("theme-toggle");
-      if (cb) {
+      if (cb instanceof HTMLInputElement) {
         if (t === "light") cb.checked = true;
         var meta = document.querySelector('meta[name="theme-color"]');
-        function updateMeta() {
-          if (meta) meta.setAttribute("content", cb.checked ? "#f8f9fa" : "#000000");
+        function updateMeta(checked: boolean) {
+          if (meta) meta.setAttribute("content", checked ? "#f8f9fa" : "#000000");
         }
-        updateMeta();
+        updateMeta(cb.checked);
         cb.addEventListener("change", function() {
-          localStorage.setItem("theme", this.checked ? "light" : "dark");
-          updateMeta();
+          var el = document.getElementById("theme-toggle");
+          var checked = el instanceof HTMLInputElement && el.checked;
+          localStorage.setItem("theme", checked ? "light" : "dark");
+          updateMeta(checked);
         });
       }
     })();
