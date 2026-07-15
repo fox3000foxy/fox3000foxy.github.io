@@ -251,6 +251,7 @@ a.tag-badge:hover {
   overflow-x: auto;
 }
 
+:root.light,
 :root:has(#theme-toggle:checked) .mermaid-wrapper {
   background: #f5f5ff;
 }
@@ -694,35 +695,52 @@ a {
   color: var(--accent);
 }
 
+:root.light,
 :root:has(#theme-toggle:checked) pre {
   background: var(--hljs-bg);
 }
 
+:root.light,
 :root:has(#theme-toggle:checked) pre code {
   color: var(--hljs-text);
 }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-keyword,
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-selector-tag,
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-type { color: var(--hljs-keyword); }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-string,
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-addition { color: var(--hljs-string); }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-number,
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-literal { color: var(--hljs-literal); }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-title,
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-section { color: var(--hljs-title); }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-comment,
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-quote { color: var(--hljs-comment); }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-meta { color: var(--hljs-meta); }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-attr,
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-selector-class { color: var(--hljs-attr); }
 
+:root.light,
 :root:has(#theme-toggle:checked) .hljs-built_in { color: var(--hljs-built-in); }
 
 :root.reading-mode .article-content {

@@ -26,6 +26,7 @@
   --skeleton: #1a1a1a;
 }
 
+:root.light,
 :root:has(#theme-toggle:checked) {
   --bg: #f8f9fa;
   --bg-secondary: #fff;

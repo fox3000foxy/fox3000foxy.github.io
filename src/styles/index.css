@@ -13,6 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root.light,
 :root:has(#theme-toggle:checked) {
   color-scheme: light;
 }

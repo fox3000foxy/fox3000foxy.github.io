@@ -174,6 +174,7 @@ const suggested = allArticles
                 <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(meta.title ?? slug ?? "")}&url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on Twitter">𝕏</a>
                 <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://fox3000foxy.com/blog/${slug}`)}`} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on LinkedIn">in</a>
                 <button type="button" class="share-btn reading-mode-btn" aria-label="Toggle reading mode" title="Reading mode">Aa</button>
+                <BookmarkButton client:load slug={slug!} />
               </div>
               <div class="article-layout">
                 {headings.length >= 2 && (
@@ -200,9 +201,6 @@ const suggested = allArticles
         );
       })}
       <div class="article-widgets-bottom">
-        <div class="share-buttons widget-bookmark">
-          <BookmarkButton client:load slug={slug!} />
-        </div>
         {suggested.length > 0 && (
           <section class="suggested-articles">
             <h3>{t("article.related")}</h3>
