@@ -6,15 +6,17 @@
 
 Jadi, nama saya adalah Fox, dan saya adalah seorang insinyur perangkat lunak yang menikmati bekerja dengan TypeScript, Node.js, dan React, serta menemukan teknologi baru lainnya. Sebagian besar proyek saya adalah terbuka dan berada di GitHub di bawah akun fox3000foxy.
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
+Meskipun mungkin ada yang mengira, saya bukan seorang furry. Saya menggunakan nama Fox3000 sejak saya berusia 8 tahun, saat itu furry fandom belum terkenal di Prancis. Ketika saya bergabung dengan GitHub, seorang pengguna Norwegia sudah mengambil `Fox3000`, jadi saya menambahkan `Foxy` sebagai sufiks untuk memastikan saya unik.
 
 Saya adalah seseorang yang mencintai konsep open source karena saya mencintai berbagi. Saya juga suka menemukan teknologi kuno seperti UTAU, saya menemukan konsepnya sangat menarik. Saya juga suka Vtuber, dan saya ingin menjadi salah satu di antara mereka, tapi sayangnya saya sangat malu.
 
-Saya juga suka menemukan cara untuk tidak membayar hal-hal yang dibayar, atau yang harus dibayar jika Anda tidak berpikir di luar kotak. Contohnya, Nibi adalah salah satu karya terakhir saya yang saya temukan cara bebas untuk mengelola perintah, manajemen database, dan daemon. Dan oh Tuhan, bermain dengan GitHub Actions dan alur kerja adalah salah satu perasaan terbaik yang saya miliki. Saya juga mulai menandatangani komit saya dengan SSH Key, dan Anda dapat menemukan skrip yang saya buat di gist ini.
+Saya banyak akal -- saya selalu menemukan solusi niche gratis yang saya ciptakan sendiri, daripada alternatif yang jelas tapi mahal. Saya juga suka menemukan cara untuk tidak membayar hal-hal yang dibayar, atau yang harus dibayar jika Anda tidak berpikir di luar kotak. Contohnya, Nibi adalah salah satu karya terakhir saya yang saya temukan cara bebas untuk mengelola perintah, manajemen database, dan daemon. Dan oh Tuhan, bermain dengan GitHub Actions dan alur kerja adalah salah satu perasaan terbaik yang saya miliki. Saya juga mulai menandatangani komit saya dengan SSH Key, dan Anda dapat menemukan skrip yang saya buat di gist ini.
 
 ## Bahasa dan Teknologi
 
 Jadi, saya sebagian besar menulis kode dalam TypeScript dan React sekarang, tapi di masa lalu saya menulis launcher dalam HTML, CSS, dan JavaScript murni. Crazy? Saya pernah gila! Mereka memasukkanku ke dalam ruangan. Nahhh saya tidak benar. Saya juga tahu Python, C#, tapi saya benci, Java, tapi jarang, sekarang saya menggunakan untuk kode Minecraft plugin untuk Eminium Games. Saya tahu C++ dari waktu lalu tapi tidak bisa menulis kode dalam bahasa itu. Saya juga sedang belajar C dengan proyek bareiron. Dan seterusnya, saya tidak tahu Rust atau Go pada saat ini, tapi saya ingin belajar.
+
+Pemrograman tingkat rendah memukau saya -- saya suka optimasi mikro-kinerja dan menyempurnakan setiap detail dari apa yang saya bangun. Saya tipe orang yang menghabiskan berjam-jam untuk memangkas beberapa milidetik hanya karena itu bisa dilakukan.
 
 Saya juga memiliki pengetahuan dalam menggambar, produksi musik, dan editing video -- tapi saya tidak benar-benar baik di dalamnya, saya hanya melakukannya untuk kesenangan.
 

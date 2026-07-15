@@ -6,15 +6,17 @@
 
 Vậy tên tôi là Fox, và tôi là một kỹ sư phần mềm yêu thích làm việc với TypeScript, Node.js và React, và khám phá các công nghệ mới. Hầu hết các dự án của tôi đều là mã nguồn mở và sống trên GitHub dưới tài khoản fox3000foxy.
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
+Dù ai đó có thể nghĩ vậy, tôi không phải là furry. Tôi đã dùng tên Fox3000 từ năm 8 tuổi, vào thời điểm furry fandom chưa được biết đến nhiều ở Pháp. Khi tôi tham gia GitHub, một người Na Uy đã lấy mất `Fox3000`, nên tôi thêm `Foxy` vào làm hậu tố để đảm bảo mình là duy nhất.
 
 Tôi là người yêu thích khái niệm mã nguồn mở, vì tôi yêu thích chia sẻ mọi thứ. Tôi cũng thích khám phá các công nghệ cũ như UTAU, tôi thấy khái niệm này rất thú vị. Tôi yêu Vtubers và tôi muốn trở thành một Vtuber, nhưng tôi quá nhút nhát.
 
-Tôi cũng yêu thích tìm ra các cách giải quyết để không phải trả tiền cho các thứ mà phải trả tiền, hoặc bạn sẽ phải trả tiền nếu bạn không nghĩ ra ngoài hộp. Là một ví dụ, Nibi là một trong những dự án cuối cùng của tôi mà tôi tìm được một cách giải quyết miễn phí cho việc xử lý lệnh, quản lý dữ liệu và các daemon. Và thánh chúa, việc chơi với GitHub Actions và các quy trình làm việc là một trong những cảm giác tốt nhất mà tôi đã có. Tôi cũng bắt đầu ký tên các commit của mình bằng một khóa SSH, và bạn có thể tìm thấy script mà tôi tạo ra trên gist này.
+Tôi là người tháo vát -- tôi luôn tìm ra các giải pháp niche miễn phí do chính mình nghĩ ra, thay vì các lựa chọn hiển nhiên nhưng đắt đỏ. Tôi cũng yêu thích tìm ra các cách giải quyết để không phải trả tiền cho các thứ mà phải trả tiền, hoặc bạn sẽ phải trả tiền nếu bạn không nghĩ ra ngoài hộp. Là một ví dụ, Nibi là một trong những dự án cuối cùng của tôi mà tôi tìm được một cách giải quyết miễn phí cho việc xử lý lệnh, quản lý dữ liệu và các daemon. Và thánh chúa, việc chơi với GitHub Actions và các quy trình làm việc là một trong những cảm giác tốt nhất mà tôi đã có. Tôi cũng bắt đầu ký tên các commit của mình bằng một khóa SSH, và bạn có thể tìm thấy script mà tôi tạo ra trên gist này.
 
 ## Ngôn ngữ và Công nghệ
 
 Vậy tôi chủ yếu lập trình bằng TypeScript và React bây giờ, nhưng vào thời gian trước, tôi lập trình các launcher bằng HTML, CSS và JavaScript thuần túy. Crazy? Tôi từng điên một lần! Họ cho tôi vào một phòng. Nahhh tôi đang nói đùa. Tôi cũng biết Python, C# nhưng tôi ghét nó, Java, nhưng nó hiếm khi được sử dụng, bây giờ tôi sử dụng nó để lập trình các plugin Minecraft cho Eminium Games. Tôi biết C++ từ trước nhưng không thể lập trình bằng nó thực sự. Tôi cũng đang học C với dự án bareiron. Và vân vân, tôi không biết Rust hoặc Go vào lúc này, nhưng tôi sẽ thích học.
+
+Lập trình cấp thấp làm tôi say mê -- tôi yêu thích việc tối ưu hiệu năng vi mô và hoàn thiện từng chi tiết của những gì tôi xây dựng. Tôi là mẫu người dành hàng giờ để cắt giảm vài mili giây chỉ vì điều đó có thể làm được.
 
 Tôi cũng có một số kiến thức về vẽ tranh, sản xuất âm nhạc và chỉnh sửa video -- nhưng tôi không thực sự giỏi cái nào, tôi chỉ làm cho vui.
 

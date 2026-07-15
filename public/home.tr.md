@@ -4,17 +4,19 @@
 
 ## Hakkımda
 
-Ben Fox. Bir yazılım mühendisiyim ve TypeScript, Node.js ve React ile çalışmayı ve yeni teknolojiler keşfetmeyi seviyorum. Projelerimin çoğu açık kaynak ve GitHub'da `fox3000foxy`
+Ben Fox. Bir yazılım mühendisiyim ve TypeScript, Node.js ve React ile çalışmayı ve yeni teknolojiler keşfetmeyi seviyorum. Projelerimin çoğu açık kaynak ve GitHub'da `fox3000foxy` hesabı altında yaşıyor.
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. hesabı altında yaşıyor.
+Her ne kadar bazıları öyle sansa da, ben bir furry değilim. Fox3000 adını 8 yaşımdan beri kullanıyorum, o zamanlar Fransa'da furry fandom pek bilinmiyordu. GitHub'a katıldığımda, Norveçli bir kullanıcı zaten `Fox3000`'i almıştı, bu yüzden benzersiz olduğumdan emin olmak için `Foxy`'yi ek olarak ekledim.
 
 Açık kaynak konseptini çooooook seven biriyim, çünkü bir şeyleri paylaşmayı seviyorum. Ayrıca UTAU gibi eski teknolojileri keşfetmeyi seviyorum, konsepti oldukça büyüleyici buluyorum. Vtuberları da çok seviyorum ve bir tane olmak isterdim ama ne yazık ki utangaçım.
 
-Ayrıca ücretli olan şeyler için ödeme yapmamak için geçici çözümler bulmayı seviyorum, ya da kutu dışında düşünmezsen ödemen gereken şeyler için. Örneğin [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) komut yönetimi, veritabanı yönetimi ve daemonlar için ücretsiz geçici çözümler bulduğum son yaratımlarımdan biriydi. Ve aman Tanrım, GitHub Actions ve workflow'larla oynamak şimdiye kadar yaşadığım en iyi duygulardan biri. Ayrıca commitlerimi bir SSH anahtarıyla imzalamaya başladım ve yaptığım scripti [bu gist'te](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) bulabilirsin.
+Becerikli biriyim -- bariz ama pahalı alternatifler yerine her zaman kendi icat ettiğim ücretsiz niş çözümler bulurum. Ayrıca ücretli olan şeyler için ödeme yapmamak için geçici çözümler bulmayı seviyorum, ya da kutu dışında düşünmezsen ödemen gereken şeyler için. Örneğin [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) komut yönetimi, veritabanı yönetimi ve daemonlar için ücretsiz geçici çözümler bulduğum son yaratımlarımdan biriydi. Ve aman Tanrım, GitHub Actions ve workflow'larla oynamak şimdiye kadar yaşadığım en iyi duygulardan biri. Ayrıca commitlerimi bir SSH anahtarıyla imzalamaya başladım ve yaptığım scripti [bu gist'te](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) bulabilirsin.
 
 ## Diller ve Teknolojiler
 
 Şimdi çoğunlukla TypeScript ve React ile kod yazıyorum, ama eskiden saf HTML, CSS ve JavaScript ile launcher'lar kodluyordum. Ayrıca Python, C#'ı (nefret ederim), Java'yı (nadiren, [Eminium Games](https://github.com/Eminium-Games/) için Minecraft eklentileri kodlamak için kullanıyorum) biliyorum. Biraz C++ biliyorum ama şu an onunla nasıl kod yazacağımı hatırlamıyorum. Ve [bareiron](https://github.com/p2r3/bareiron) projesiyle C öğreniyorum. Ve böyle devam ediyor, şu an için Rust ve Go bilmiyorum ama öğrenmek isterim.
+
+Düşük seviyeli programlama beni büyülüyor -- mikro performans optimizasyonlarını ve inşa ettiğim her şeyin her detayını mükemmelleştirmeyi seviyorum. Sırf yapılabildiği için birkaç milisaniyeyi kırpmak için saatler harcayan türden bir insanım.
 
 Ayrıca biraz çizim, müzik prodüksiyonu ve video düzenleme bilgim var -- ama hiçbirinde çok iyi değilim, sadece eğlence için yapıyorum.
 

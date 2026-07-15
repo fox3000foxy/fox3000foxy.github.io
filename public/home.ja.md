@@ -4,17 +4,19 @@
 
 ## 自己紹介
 
-フォックスです。ソフトウェアエンジニアをやっていて、TypeScript、Node.js、React で作業するのと、新しい技術を発見するのが大好き。プロジェクトのほとんどはオープンソースで、GitHub の `fox3000foxy`
+フォックスです。ソフトウェアエンジニアをやっていて、TypeScript、Node.js、React で作業するのと、新しい技術を発見するのが大好き。プロジェクトのほとんどはオープンソースで、GitHub の `fox3000foxy` アカウントで公開してる。
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. アカウントで公開してる。
+誤解されるかもしれないけど、僕はファーリーじゃないよ。Fox3000 という名前は8歳の頃から使ってて、当時フランスではファーリーコミュニティはほとんど知られていなかったんだ。GitHub に登録したとき、ノルウェー人がもう `Fox3000` を取ってたから、`Foxy` をサフィックスとして追加して、自分がユニークであることを確保したんだ。
 
 オープンソースのコンセプトがもう大好きで大好きで仕方ないんだ。だって人と共有するのが好きだからね。UTAU みたいな古い技術を発見するのも好きで、そのコンセプトにすごく魅了されてる。Vtuber も大好きで、自分もなりたいけど、残念ながらシャイなんだ。
 
-あと、有料のものや、既成概念にとらわれない考え方をしないとお金を払わなきゃいけないものに対して、回避策を見つけるのも大好き。例えば [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) は、コマンド管理、データベース管理、デーモンに対して無料の回避策を見つけた最新の作品のひとつ。それに GitHub Actions とワークフローで遊ぶのは最高の気分だよ。SSH キーでコミットに署名し始めて、そのスクリプトは [この gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) で公開してる。
+私は工夫深いんです -- 高価な既存の解決策ではなく、自分で考えたニッチで無料の方法をいつも見つけ出します。あと、有料のものや、既成概念にとらわれない考え方をしないとお金を払わなきゃいけないものに対して、回避策を見つけるのも大好き。例えば [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) は、コマンド管理、データベース管理、デーモンに対して無料の回避策を見つけた最新の作品のひとつ。それに GitHub Actions とワークフローで遊ぶのは最高の気分だよ。SSH キーでコミットに署名し始めて、そのスクリプトは [この gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) で公開してる。
 
 ## 言語とテクノロジー
 
 今は主に TypeScript と React でコードを書いてるけど、昔は生の HTML、CSS、JavaScript でランチャーを書いてた。Python、C#（大嫌い）、Java（たまに [Eminium Games](https://github.com/Eminium-Games/) の Minecraft プラグインを書くのに使う）もできる。C++ も少しできるけど、今はもう書き方を忘れちゃった。そして [bareiron](https://github.com/p2r3/bareiron) プロジェクトで C を勉強中。そんな感じで、今は Rust も Go もできないけど、いつか覚えたい。
+
+低レベルのプログラミングに魅了されています -- マイクロパフォーマンスの最適化と、作るものの細部を完璧にすることが大好きです。数ミリ秒を削るためだけに何時間も費やすタイプの人間で、それができるからやるんです。
 
 絵を描くのと、音楽制作と、動画編集が少しできるけど、どれも上手じゃない。ただの趣味。
 

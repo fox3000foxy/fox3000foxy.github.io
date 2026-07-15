@@ -4,17 +4,19 @@
 
 ## 나에 대해서
 
-나는 Fox야. 소프트웨어 엔지니어고 TypeScript, Node.js, React로 작업하는 걸 좋아하고 새로운 기술을 발견하는 것도 좋아해. 내 프로젝트 대부분은 오픈소스고 GitHub의 `fox3000foxy`
+나는 Fox야. 소프트웨어 엔지니어고 TypeScript, Node.js, React로 작업하는 걸 좋아하고 새로운 기술을 발견하는 것도 좋아해. 내 프로젝트 대부분은 오픈소스고 GitHub의 `fox3000foxy` 계정에 있어.
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. 계정에 있어.
+오해할 수도 있겠지만, 나는 퍼리가 아니야. Fox3000이라는 이름은 8살 때부터 써왔고, 그 당시 프랑스에서는 퍼리 팬덤이 거의 알려져 있지 않았어. GitHub에 가입했을 때, 노르웨이 사람이 이미 `Fox3000`을 쓰고 있었어. 그래서 유일함을 보장하려고 접미사로 `Foxy`를 추가했어.
 
 오픈소스 개념을 진짜 진짜 사랑하는 사람이야. 왜냐하면 뭔가를 공유하는 게 좋으니까. UTAU 같은 오래된 기술을 발견하는 것도 좋아해. 개념이 꽤 매력적이더라. Vtuber도 엄청 좋아하고 나도 되고 싶은데 아쉽게도 부끄러움이 많아.
 
-그리고 유료인 것들에 대해 돈을 내지 않아도 되는 우회 방법을 찾는 것도 좋아해. 아니면 틀 밖에서 생각하지 않으면 내야 하는 것들. 예를 들어 [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi)는 명령 관리, 데이터베이스 관리, 데몬에 대한 무료 우회 방법을 찾아낸 내 최근 작품 중 하나야. 그리고 세상에, GitHub Actions랑 workflow로 노는 건 내가 경험한 최고의 기분 중 하나야. SSH 키로 커밋에 서명하기 시작했고, 만든 스크립트는 [이 gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a)에서 찾을 수 있어.
+나는 수완이 좋아요 -- 비싼 뻔한 대안 대신, 내가 직접 발명한 틈새 무료 해결책을 항상 찾아냅니다. 그리고 유료인 것들에 대해 돈을 내지 않아도 되는 우회 방법을 찾는 것도 좋아해. 아니면 틀 밖에서 생각하지 않으면 내야 하는 것들. 예를 들어 [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi)는 명령 관리, 데이터베이스 관리, 데몬에 대한 무료 우회 방법을 찾아낸 내 최근 작품 중 하나야. 그리고 세상에, GitHub Actions랑 workflow로 노는 건 내가 경험한 최고의 기분 중 하나야. SSH 키로 커밋에 서명하기 시작했고, 만든 스크립트는 [이 gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a)에서 찾을 수 있어.
 
 ## 언어 및 기술
 
 요즘은 주로 TypeScript와 React로 코딩하지만, 예전에는 순수 HTML, CSS, JavaScript로 런처를 만들었어. Python, C# (싫어함), Java (드물게 [Eminium Games](https://github.com/Eminium-Games/)용 Minecraft 플러그인을 만드는 데 사용)도 할 줄 알아. C++도 조금 알지만 지금은 어떻게 코딩하는지 기억 안 나. 그리고 [bareiron](https://github.com/p2r3/bareiron) 프로젝트로 C를 배우고 있어. 뭐 그런 식이야. 아직 Rust나 Go는 모르지만 배우고 싶어.
+
+로우레벨 프로그래밍은 나를 매료시켜요 -- 마이크로 성능 최적화와 내가 만드는 모든 것의 세부 사항을 완벽하게 만드는 것을 사랑합니다. 가능하기 때문에 단지 몇 밀리초를 줄이기 위해 몇 시간을 보내는 타입의 사람입니다.
 
 그림, 음악 프로듀싱, 영상 편집을 조금 할 줄 알지만 셋 다 잘하진 못해. 그냥 재미로 하는 거야.
 

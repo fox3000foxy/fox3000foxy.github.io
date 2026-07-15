@@ -4,17 +4,19 @@
 
 ## 关于我
 
-我叫 Fox。我是一名软件工程师，热爱使用 TypeScript、Node.js 和 React，并喜欢发现新技术。我的大部分项目都是开源的，存放在 GitHub 的 `fox3000foxy`
+我叫 Fox。我是一名软件工程师，热爱使用 TypeScript、Node.js 和 React，并喜欢发现新技术。我的大部分项目都是开源的，存放在 GitHub 的 `fox3000foxy` 账户下。
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique. 账户下。
+虽然有些人可能会这么想，但我不是 furry。我从8岁起就开始使用 Fox3000 这个名字，那时候 furry 社区在法国还不太出名。当我加入 GitHub 时，一个挪威人已经占用了 `Fox3000`，所以我加上了 `Foxy` 后缀来确保自己的唯一性。
 
 我是一个超超超超级喜欢开源概念的人，因为我喜欢分享东西。我也喜欢发现像 UTAU 这样的老技术，觉得这个概念相当迷人。我也很喜欢 Vtuber，想成为其中之一，但不幸的是我很害羞。
 
-我还喜欢找到变通办法来避免为付费的东西花钱，或者那些如果你不跳出框框思考就必须付钱的东西。例如，[Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) 是我最新的作品之一，我为命令管理、数据库管理和守护进程找到了免费的变通方案。哦天哪，玩弄 GitHub Actions 和工作流是我有过的最好的感觉之一。我也开始用 SSH 密钥签名我的提交了，你可以在我写的这个 [gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) 中找到相关脚本。
+我足智多谋 -- 我总是能找到自己发明的免费小众解决方案，而不是选择那些明显但昂贵的替代品。我还喜欢找到变通办法来避免为付费的东西花钱，或者那些如果你不跳出框框思考就必须付钱的东西。例如，[Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) 是我最新的作品之一，我为命令管理、数据库管理和守护进程找到了免费的变通方案。哦天哪，玩弄 GitHub Actions 和工作流是我有过的最好的感觉之一。我也开始用 SSH 密钥签名我的提交了，你可以在我写的这个 [gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) 中找到相关脚本。
 
 ## 语言和技术
 
 我现在主要用 TypeScript 和 React 编码，但以前我用纯 HTML、CSS 和 JavaScript 编写启动器。我也懂 Python、C#（我讨厌它）、Java（很少用，用来为 [Eminium Games](https://github.com/Eminium-Games/) 编写 Minecraft 插件）。我懂一点 C++ 但现在已经不记得怎么用它编程了。我正在学习 C，跟着 [bareiron](https://github.com/p2r3/bareiron) 项目。就这样，我现在还不会 Rust 或 Go，但我想学。
+
+底层编程让我着迷 -- 我热爱微性能优化和完善我所构建的每一个细节。我是那种为了减少几毫秒愿意花上几个小时的人，只因为这是能做到的。
 
 我也有一些绘画、音乐制作和视频编辑的基础----但都不太擅长，只是为了好玩。
 

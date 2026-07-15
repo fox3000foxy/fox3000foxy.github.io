@@ -6,15 +6,17 @@
 
 Mi chiamo Fox. Sono un ingegnere del software e amo lavorare con TypeScript, Node.js e React, e scoprire nuove tecnologie. La maggior parte dei miei progetti sono open‑source e vivono su GitHub sotto l'account `fox3000foxy`.
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.
+Nonostante quello che si possa pensare, non sono un furry. Uso il nome Fox3000 da quando ho 8 anni, in un'epoca in cui il furry fandom non era molto conosciuto in Francia. Quando mi sono iscritto a GitHub, un norvegese aveva già preso `Fox3000`, quindi ho aggiunto `Foxy` come suffisso per essere sicuro di essere unico.
 
 Sono una persona che adoraaaaa il concetto di open source, perché amo condividere le cose. Mi piace anche scoprire tecnologie vecchie come UTAU, trovo il concetto piuttosto affascinante. Amo anche i Vtuber, e mi piacerebbe diventarne uno, ma purtroppo sono timido.
 
-Adoro anche trovare soluzioni per non pagare cose che sono a pagamento, o che dovresti pagare se non pensassi fuori dagli schemi. Per esempio [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) è stata una delle mie ultime creazioni dove ho trovato workarounds gratuiti per la gestione dei comandi, la gestione del database e i demoni. E oh mio Dio, giocare con GitHub Actions e i workflow è una delle migliori sensazioni che abbia mai provato. Ho anche iniziato a firmare i miei commit con una chiave SSH, e puoi trovare lo script che ho fatto su [questo gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
+Sono ingegnoso -- trovo sempre soluzioni di nicchia gratuite che invento io stesso, invece di optare per le alternative ovvie ma costose. Adoro anche trovare soluzioni per non pagare cose che sono a pagamento, o che dovresti pagare se non pensassi fuori dagli schemi. Per esempio [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) è stata una delle mie ultime creazioni dove ho trovato workarounds gratuiti per la gestione dei comandi, la gestione del database e i demoni. E oh mio Dio, giocare con GitHub Actions e i workflow è una delle migliori sensazioni che abbia mai provato. Ho anche iniziato a firmare i miei commit con una chiave SSH, e puoi trovare lo script che ho fatto su [questo gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Linguaggi e Tecnologie
 
 Ora programmo principalmente in TypeScript e React, ma ai tempi programmavo launcher in HTML, CSS e JavaScript puro. Conosco anche Python, C# (che odio), Java (raramente, lo uso per programmare plugin Minecraft per [Eminium Games](https://github.com/Eminium-Games/)). Conosco un po' di C++ ma non so più programmare con esso. E sto imparando il C con il progetto [bareiron](https://github.com/p2r3/bareiron). E così via, non conosco Rust né Go per ora, ma mi piacerebbe imparare.
+
+La programmazione di basso livello mi affascina -- amo le micro-ottimizzazioni delle prestazioni e perfezionare ogni dettaglio di ciò che costruisco. Sono il tipo di persona che passa ore a grattare via millisecondi solo perché si può fare.
 
 Ho anche qualche nozione di disegno, produzione musicale e montaggio video -- ma non sono molto bravo in nessuna, le faccio solo per divertimento.
 

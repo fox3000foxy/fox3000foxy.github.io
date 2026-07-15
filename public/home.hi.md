@@ -1,20 +1,22 @@
 # मेरा ब्लॉग में आपका स्वागत है
 
-<!-- [![प्रोफ़ाइल व्यू](https://views.igorkowalczyk.dev/api/badge/fox3000foxy
-
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.?label=प्रोफ़ाइल+व्यू&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![गिटहब फॉलोवर्स](https://img.shields.io/github/followers/fox3000foxy?label=फॉलोवर्स&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![गिटहब स्टार्स](https://img.shields.io/github/stars/fox3000foxy?label=कुल+स्टार्स&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
+<!-- [![प्रोफ़ाइल व्यू](https://views.igorkowalczyk.dev/api/badge/fox3000foxy?label=प्रोफ़ाइल+व्यू&color=blueviolet&labelColor=555)](https://github.com/fox3000foxy) [![गिटहब फॉलोवर्स](https://img.shields.io/github/followers/fox3000foxy?label=फॉलोवर्स&style=for-the-badge&logo=github&color=181717)](https://github.com/fox3000foxy?tab=followers) [![गिटहब स्टार्स](https://img.shields.io/github/stars/fox3000foxy?label=कुल+स्टार्स&style=for-the-badge&logo=github&color=f5c842)](https://github.com/fox3000foxy) -->
 
 ## मेरे बारे में
 
 मेरा नाम फॉक्स है, और मैं एक सॉफ्टवेयर इंजीनियर हूं जो टाइपस्क्रिप्ट, नोड.जेएस और रिएक्ट के साथ काम करना पसंद करता हूं, और नए प्रौद्योगिकियों को खोजना पसंद करता हूं। मेरी अधिकांश परियोजनाएं गिटहब के खाते fox3000foxy के तहत खुले स्रोत में हैं।
 
+भले ही कुछ लोग ऐसा सोच सकते हैं, मैं furry नहीं हूं। मैं 8 साल की उम्र से Fox3000 नाम का उपयोग कर रहा हूं, उस समय जब फ्रांस में furry फैंडम बहुत प्रसिद्ध नहीं था। जब मैं GitHub में शामिल हुआ, एक नॉर्वेजियन उपयोगकर्ता पहले से ही `Fox3000` ले चुका था, इसलिए मैंने सुनिश्चित करने के लिए `Foxy` जोड़ा कि मैं अद्वितीय हूं।
+
 मैं खुले स्रोत की अवधारणा से प्यार करता हूं, क्योंकि मैं साझा करने का प्यार करता हूं। मैं पुरानी प्रौद्योगिकियों को खोजने का भी प्रयास करता हूं, जैसे कि UTAU एक, मुझे यह अवधारणा बहुत रोचक लगती है। मैं वीट्यूब्स का भी प्रशंसक हूं, और मैं एक वीट्यूब बनना चाहता हूं, लेकिन मैं थोड़ा शर्मीला हूं।
 
-मैं काम करने के तरीकों को खोजने का भी प्रयास करता हूं ताकि मुझे चीजों को मुफ्त में प्राप्त करना पड़े, या मुझे लगता है कि मुझे चीजों को मुफ्त में प्राप्त करना पड़े। उदाहरण के लिए, निबी मेरी हाल ही की रचना थी, जिसमें मैं कमांड हैंडलिंग, डेटाबेस मैनेजमेंट, और डेमॉन्स के लिए फ्री वर्कअराउंड खोजा था। और ओह भगवान, गिटहब एक्शन्स और वर्कफ्लो के साथ खेलना एक सबसे अच्छा अनुभव है जिसे मैंने कभी नहीं महसूस किया है। मैंने अपने कमिट्स पर एक SSH की जानकारी भी जोड़ी है, और आप इस गिस्ट में मेरे द्वारा बनाए गए स्क्रिप्ट को पा सकते हैं।
+मैं संसाधनपूर्ण हूं -- मैं हमेशा मुफ्त निच समाधान ढूंढता हूं जो मैं स्वयं आविष्कार करता हूं, स्पष्ट लेकिन महंगे विकल्पों के बजाय। मैं काम करने के तरीकों को खोजने का भी प्रयास करता हूं ताकि मुझे चीजों को मुफ्त में प्राप्त करना पड़े, या मुझे लगता है कि मुझे चीजों को मुफ्त में प्राप्त करना पड़े। उदाहरण के लिए, निबी मेरी हाल ही की रचना थी, जिसमें मैं कमांड हैंडलिंग, डेटाबेस मैनेजमेंट, और डेमॉन्स के लिए फ्री वर्कअराउंड खोजा था। और ओह भगवान, गिटहब एक्शन्स और वर्कफ्लो के साथ खेलना एक सबसे अच्छा अनुभव है जिसे मैंने कभी नहीं महसूस किया है। मैंने अपने कमिट्स पर एक SSH की जानकारी भी जोड़ी है, और आप इस गिस्ट में मेरे द्वारा बनाए गए स्क्रिप्ट को पा सकते हैं।
 
 ## भाषाएं और प्रौद्योगिकियां
 
 मैं मुख्य रूप से टाइपस्क्रिप्ट और रिएक्ट में कोड करता हूं, लेकिन पुराने समय में मैं पूरे HTML, CSS और जावास्क्रिप्ट में लॉन्चर बनाने के लिए कोड करता था। क्रेजी? मैं एक बार क्रेजी था! वे मुझे एक कमरे में डाल दिया। नाह्ह्ह मैं मजाक कर रहा हूं। मैं पाइथन, सी #, जावा, लेकिन मैं इसे पसंद नहीं करता, जावा, लेकिन यह कम है, अब मैं इसे एमिनियम गेम्स के लिए माइनक्राफ्ट प्लगइन्स कोड करने के लिए उपयोग करता हूं। मैं सी ++ से कुछ समय से जानता हूं, लेकिन मैं इसे वास्तव में कोड नहीं कर सकता। मैंने बेयर आयरन प्रोजेक्ट के साथ सी भी सीखना शुरू किया है। और इस तरह, मैं नहीं जानता कि रस्ट या गो के बारे में क्या है, लेकिन मैं इसे सीखना पसंद करूंगा।
+
+निम्न-स्तरीय प्रोग्रामिंग मुझे आकर्षित करती है -- मुझे माइक्रो-प्रदर्शन अनुकूलन और मैं जो बनाता हूं उसके हर विवरण को पूर्ण करना पसंद है। मैं उस प्रकार का व्यक्ति हूं जो कुछ मिलीसेकंड कम करने के लिए घंटों बिताता है सिर्फ इसलिए क्योंकि यह किया जा सकता है।
 
 मैं चित्रकला, संगीत उत्पादन और वीडियो संपादन की भी थोड़ी जानकारी रखता हूं, लेकिन मैं किसी में अच्छा नहीं हूं, मैं बस इन्हें शौक के लिए करता हूं।
 
@@ -30,7 +32,7 @@ Despite what some might assume, I'm not a furry. I've been using the name Fox300
 
 ## उत्साह
 
-मैंने अपने उत्साहों के बारे में एक पूरा पोस्ट लिखा है - कोडिंग, चित्रकला, कार्यों को ऑटोमेट करना, पुरानी प्रौद्योगिकियों को खोजना और अधिक। इसे पढ़ने के लिए: मेरे उत्साह।
+मैंने अपने उत्साहों के बारे में एक पूरा पोस्ट लिखा है -- कोडिंग, चित्रकला, कार्यों को ऑटोमेट करना, पुरानी प्रौद्योगिकियों को खोजना और अधिक। इसे पढ़ने के लिए: मेरे उत्साह।
 
 ## पैकेज
 
@@ -59,7 +61,6 @@ Despite what some might assume, I'm not a furry. I've been using the name Fox300
 मैंने अब ब्लॉग लिखना शुरू किया है, और मैंने अपने मुख्य पोर्टफोलियो लिंक को दूसरे सेक्शन में जोड़ दिया है।
 
 ## सोशल्स:
-यहाँ मेरे सोशल मीडिया लिंक हैं:<br><br>
-<a href="https://fox3000foxy.
 
-Despite what some might assume, I'm not a furry. I've been using the name Fox3000 since I was 8 years old, back when the furry fandom wasn't well-known in France. When I joined GitHub, a Norwegian user had already taken `Fox3000`, so I added `Foxy` as a suffix to make sure I'd be unique.com"><img src="https://cdn.simpleicons.org/googlechrome/7c3aed" width="40" alt="Website" /></a> &nbsp;&nbsp;&nbsp; <a href="https://github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/github/ffffff" width="40" alt="GitHub" /></a> &nbsp;&nbsp;&nbsp; <a href="https://www.youtube.com/channel/UCUM9i9jQSJiQh6NWY8Kbujg"><img src="https://cdn.simpleicons.org/youtube/ff0000" width="40" alt="YouTube" /></a> &nbsp;&nbsp;&nbsp; <a href="https://discord.com/users/724847846897221642"><img src="https://cdn.simpleicons.org/discord/5865F2" width="40" alt="Discord" /></a> &nbsp;&nbsp;&nbsp; <a href="https://gist.github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/git/ffffff" width="40" alt="Gists" /></a> &nbsp;&nbsp;&nbsp; <a href="https://instagram.com/fox3000foxy"><img src="https://cdn.simpleicons.org/instagram/E4405F" width="40" alt="Instagram" /></a> &nbsp;&nbsp;&nbsp; <a href="https://twitch.tv/fox3000foxy"><img src="https://cdn.simpleicons.org/twitch/9146ff" width="40" alt="Twitch" /></a> &nbsp;&nbsp;&nbsp; <a href="https://www.npmjs.com/~fox3000foxy"><img src="https://cdn.simpleicons.org/npm/CB3837" width="40" alt="npm" /></a> &nbsp;&nbsp;&nbsp; <a href="https://reddit.com/user/fox3000foxy"><img src="https://cdn.simpleicons.org/reddit/FF4500" width="40" alt="Reddit" /></a> &nbsp;&nbsp;&nbsp; <a href="https://modrinth.com/user/fox3000foxy"><img src="https://cdn.simpleicons.org/modrinth/1BD96A" width="40" alt="Modrinth" /></a> &nbsp;&nbsp;&nbsp; <a href="https://huggingface.co/fox3000foxy"><img src="https://cdn.simpleicons.org/huggingface/FFD21E" width="40" alt="Hugging Face" /></a>
+यहाँ मेरे सोशल मीडिया लिंक हैं:<br><br>
+<a href="https://fox3000foxy.com"><img src="https://cdn.simpleicons.org/googlechrome/7c3aed" width="40" alt="Website" /></a> &nbsp;&nbsp;&nbsp; <a href="https://github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/github/ffffff" width="40" alt="GitHub" /></a> &nbsp;&nbsp;&nbsp; <a href="https://www.youtube.com/channel/UCUM9i9jQSJiQh6NWY8Kbujg"><img src="https://cdn.simpleicons.org/youtube/ff0000" width="40" alt="YouTube" /></a> &nbsp;&nbsp;&nbsp; <a href="https://discord.com/users/724847846897221642"><img src="https://cdn.simpleicons.org/discord/5865F2" width="40" alt="Discord" /></a> &nbsp;&nbsp;&nbsp; <a href="https://gist.github.com/fox3000foxy"><img src="https://cdn.simpleicons.org/git/ffffff" width="40" alt="Gists" /></a> &nbsp;&nbsp;&nbsp; <a href="https://instagram.com/fox3000foxy"><img src="https://cdn.simpleicons.org/instagram/E4405F" width="40" alt="Instagram" /></a> &nbsp;&nbsp;&nbsp; <a href="https://twitch.tv/fox3000foxy"><img src="https://cdn.simpleicons.org/twitch/9146ff" width="40" alt="Twitch" /></a> &nbsp;&nbsp;&nbsp; <a href="https://www.npmjs.com/~fox3000foxy"><img src="https://cdn.simpleicons.org/npm/CB3837" width="40" alt="npm" /></a> &nbsp;&nbsp;&nbsp; <a href="https://reddit.com/user/fox3000foxy"><img src="https://cdn.simpleicons.org/reddit/FF4500" width="40" alt="Reddit" /></a> &nbsp;&nbsp;&nbsp; <a href="https://modrinth.com/user/fox3000foxy"><img src="https://cdn.simpleicons.org/modrinth/1BD96A" width="40" alt="Modrinth" /></a> &nbsp;&nbsp;&nbsp; <a href="https://huggingface.co/fox3000foxy"><img src="https://cdn.simpleicons.org/huggingface/FFD21E" width="40" alt="Hugging Face" /></a>
