@@ -3,4 +3,4 @@ Allow: /
 Disallow: /write
 Disallow: /api/
 
-Sitemap: https://fox3000foxy.com/sitemap.xml
+Sitemap: https://fox3000foxy.com/sitemap-index.xml
