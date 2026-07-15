@@ -1,8 +1,8 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
+import TagIndex from "../../islands/TagIndex";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import TagIndex from "../../islands/TagIndex.tsx";
 import { readAllArticleIndexes } from "../../lib/langContent";
 
 export async function getStaticPaths() {

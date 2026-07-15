@@ -1,14 +1,15 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
+import BlogList from "../../islands/BlogList";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import BlogList from "../../islands/BlogList.tsx";
 import { readAllArticleIndexes } from "../../lib/langContent";
+import { ALL_LANGS } from "../../lib/i18n";
 
 const allIndexes = readAllArticleIndexes();
 
 // Augment indexes with first image from article content
-for (const lang of Object.keys(allIndexes)) {
+for (const lang of ALL_LANGS) {
   allIndexes[lang] = (allIndexes[lang] as Record<string, unknown>[]).map((entry) => {
     if (entry.image) return entry;
     const slug = entry.slug as string;

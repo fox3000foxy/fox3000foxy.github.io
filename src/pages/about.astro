@@ -1,10 +1,9 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
-import { renderMarkdown } from "../lib/markdown";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { ALL_LANGS, createT } from "../lib/i18n";
-import type { Lang } from "../lib/i18n";
+import { renderMarkdown } from "../lib/markdown";
 
 const t = createT("en");
 
