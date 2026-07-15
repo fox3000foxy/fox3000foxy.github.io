@@ -4,7 +4,7 @@ import "../styles/index.css";
 import "../styles/App.css";
 import "highlight.js/styles/github-dark.min.css";
 import { SITE_URL, SITE_DESCRIPTION } from "../config";
-import { ALL_LANGS, LANG_LABELS, RTLLangs, createT } from "../lib/i18n";
+import { ALL_LANGS, RTLLangs } from "../lib/i18n";
 import type { Lang } from "../lib/i18n";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -24,7 +24,6 @@ const lang = locale || "en";
 const canonicalUrl = canonical || Astro.url.pathname;
 const ogImage = image || `${SITE_URL}/og/home.png`;
 const metaDesc = description || SITE_DESCRIPTION;
-const t = createT(lang);
 const dir = RTLLangs.has(lang) ? "rtl" : "ltr";
 
 const hreflangLinks = ALL_LANGS.map((l) =>

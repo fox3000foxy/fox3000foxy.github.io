@@ -1,5 +1,4 @@
 ---
-import { SITE_TITLE } from "../config";
 import { ALL_LANGS, LANG_LABELS, createT } from "../lib/i18n";
 import type { Lang } from "../lib/i18n";
 
@@ -67,7 +66,7 @@ const t = createT(lang);
   var themeIcon = document.getElementById("theme-icon");
   var themeCheckbox = document.getElementById("theme-toggle");
 
-  if (langSelect) {
+  if (langSelect instanceof HTMLSelectElement) {
     var currentLang = localStorage.getItem("fox-blog-lang");
     if (!currentLang || !["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"].includes(currentLang)) {
       var prefs = navigator.languages || [navigator.language];
@@ -83,12 +82,15 @@ const t = createT(lang);
     });
   }
 
-  if (themeCheckbox && themeIcon) {
-    function syncIcon() {
-      themeIcon.textContent = themeCheckbox.checked ? "🌙" : "☀️";
-    }
-    syncIcon();
-    themeCheckbox.addEventListener("change", syncIcon);
+  if (themeCheckbox instanceof HTMLInputElement && themeIcon) {
+    themeIcon.textContent = themeCheckbox.checked ? "🌙" : "☀️";
+    themeCheckbox.addEventListener("change", function() {
+      var icon = document.getElementById("theme-icon");
+      var cb = document.getElementById("theme-toggle");
+      if (icon && cb instanceof HTMLInputElement) {
+        icon.textContent = cb.checked ? "🌙" : "☀️";
+      }
+    });
   }
 
 
