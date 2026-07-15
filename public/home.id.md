@@ -10,7 +10,7 @@ Meskipun mungkin ada yang mengira, saya bukan seorang furry. Saya menggunakan na
 
 Saya adalah seseorang yang mencintai konsep open source karena saya mencintai berbagi. Saya juga suka menemukan teknologi kuno seperti UTAU, saya menemukan konsepnya sangat menarik. Saya juga suka Vtuber, dan saya ingin menjadi salah satu di antara mereka, tapi sayangnya saya sangat malu.
 
-Saya banyak akal -- saya selalu menemukan solusi niche gratis yang saya ciptakan sendiri, daripada alternatif yang jelas tapi mahal. Saya juga suka menemukan cara untuk tidak membayar hal-hal yang dibayar, atau yang harus dibayar jika Anda tidak berpikir di luar kotak. Contohnya, Nibi adalah salah satu karya terakhir saya yang saya temukan cara bebas untuk mengelola perintah, manajemen database, dan daemon. Dan oh Tuhan, bermain dengan GitHub Actions dan alur kerja adalah salah satu perasaan terbaik yang saya miliki. Saya juga mulai menandatangani komit saya dengan SSH Key, dan Anda dapat menemukan skrip yang saya buat di gist ini.
+Saya banyak akal -- saya selalu menemukan solusi niche gratis yang saya ciptakan sendiri, daripada alternatif yang jelas tapi mahal. Contohnya, Nibi adalah salah satu karya terakhir saya yang saya temukan cara bebas untuk mengelola perintah, manajemen database, dan daemon. Dan oh Tuhan, bermain dengan GitHub Actions dan alur kerja adalah salah satu perasaan terbaik yang saya miliki. Saya juga mulai menandatangani komit saya dengan SSH Key, dan Anda dapat menemukan skrip yang saya buat di gist ini.
 
 ## Bahasa dan Teknologi
 

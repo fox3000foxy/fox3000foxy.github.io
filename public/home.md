@@ -10,7 +10,7 @@ Despite what some might assume, I'm not a furry. I've been using the name Fox300
 
 I'm someone who loooooooves the open source concept, because I love sharing things. Also I like to discover old technologies like UTAU one, I find the concept pretty fascinating. I love Vtubers as well, and I would love to be one, but unfortunately I'm shy.
 
-I'm resourceful -- I always find niche free solutions that I invent myself, instead of going for the obvious but expensive alternatives. I also love to find workarounds to not pay things that are paid, or that you would have to pay if you don't think out of the box. As an example [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) was one of my last creation that I found free workaround for commands handling, database management, and daemons. And oh God, playing with Github Actions and workflows is one of the best feeling I've got. I also started to sign my commits with an SSH Key, and you can find the script I made on [this gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
+I'm resourceful -- I always find niche free solutions that I invent myself, instead of going for the obvious but expensive alternatives. As an example [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) was one of my last creation that I found free workaround for commands handling, database management, and daemons. And oh God, playing with Github Actions and workflows is one of the best feeling I've got. I also started to sign my commits with an SSH Key, and you can find the script I made on [this gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Languages & Technologies
 
