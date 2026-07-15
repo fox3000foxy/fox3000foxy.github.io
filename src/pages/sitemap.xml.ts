@@ -12,6 +12,7 @@ function escapeXml(s: string): string {
 }
 
 interface ArticleMeta {
+  tags?: string[];
 	slug?: string;
 	date?: string;
 	lastmod?: string;
