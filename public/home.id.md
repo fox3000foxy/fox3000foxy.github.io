@@ -40,13 +40,15 @@ Kadang-kadang saya menulis paket npm, seperti fetch-tor-proxy atau bahkan fake-d
 
 ## Proyek
 
-Saya memiliki banyak proyek. Saat ini saya memiliki 146 repositori total, hanya 103 yang terbuka! Saya mungkin akan menampilkan mereka di bagian Blog.
+~~Saya memiliki banyak proyek. Saat ini saya memiliki 146 repositori total, hanya 103 yang terbuka! Saya mungkin akan menampilkan mereka di bagian Blog.~~
 
-Update: Saya sekarang memiliki 158 repositori, 108 terbuka. Saya mungkin akan menampilkan mereka di bagian Blog.
+~~Update: Saya sekarang memiliki 158 repositori, 108 terbuka. Saya mungkin akan menampilkan mereka di bagian Blog.~~
 
-NB: Saya memiliki banyak repositori pribadi, dan saya tidak ingin membicarakannya, tapi mereka sebagian besar adalah proyek yang saya tidak ingin berbagi dengan dunia, atau yang belum selesai, atau yang hanya untuk kesenangan dan tidak berguna bagi orang lain selain saya. Saya juga memiliki beberapa proyek yang tidak ada di GitHub, seperti beberapa plugin Minecraft yang saya buat untuk Eminium Games, atau beberapa skrip yang saya gunakan untuk diri saya sendiri.
+~~NB: Saya memiliki banyak repositori pribadi, dan saya tidak ingin membicarakannya, tapi mereka sebagian besar adalah proyek yang saya tidak ingin berbagi dengan dunia, atau yang belum selesai, atau yang hanya untuk kesenangan dan tidak berguna bagi orang lain selain saya. Saya juga memiliki beberapa proyek yang tidak ada di GitHub, seperti beberapa plugin Minecraft yang saya buat untuk Eminium Games, atau beberapa skrip yang saya gunakan untuk diri saya sendiri.~~
 
-Anda dapat menemukan proyek di halaman Proyek dan di profil GitHub saya.
+~~Anda dapat menemukan proyek di halaman Proyek dan di profil GitHub saya.~~
+
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 ## Saya bekerja untuk
 

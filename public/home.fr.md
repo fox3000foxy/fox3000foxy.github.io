@@ -40,9 +40,11 @@ Parfois j'écris des paquets npm, comme [fetch-tor-proxy](https://www.npmjs.com/
 
 ## Projets
 
-J'ai tellement de projets. En ce moment j'ai 158 dépôts au total, dont 108 publics ! Je les présenterai probablement dans la section Blog.
+~~J'ai tellement de projets. En ce moment j'ai 158 dépôts au total, dont 108 publics ! Je les présenterai probablement dans la section Blog.~~
 
-NB : J'ai beaucoup de dépôts privés, et je ne veux pas en parler, mais ce sont surtout des projets que je ne souhaite pas partager avec le monde, ou qui ne sont pas encore terminés, ou qui sont juste pour le fun et pas vraiment utiles pour quelqu'un d'autre que moi.
+~~NB : J'ai beaucoup de dépôts privés, et je ne veux pas en parler, mais ce sont surtout des projets que je ne souhaite pas partager avec le monde, ou qui ne sont pas encore terminés, ou qui sont juste pour le fun et pas vraiment utiles pour quelqu'un d'autre que moi.~~
+
+NB 2 : En vrai je commence à avoir beaucoup de dépôts publics et privés. Le weekend du 11/07 j'ai fait un énorme tri et pas mal de mes repos ont été passés en public et archivés. J'ai 194 repos je sais pas si vous vous rendez compte, mais c'est beaucoup. J'ai 132 repos publics et donc 62 repos privés. Je vais probablement en faire un article de blog pour vous montrer mes projets. Mais j'en ai déjà fait sur ceux qui m'ont amusé le plus et que j'ai trouvé les plus intéressants.
 
 Tu peux découvrir mes projets sur la [page Projets](https://fox3000foxy.github.io/projects) et sur mon [profil GitHub](https://github.com/fox3000foxy)
 

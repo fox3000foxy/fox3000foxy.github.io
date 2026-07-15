@@ -44,11 +44,13 @@
 
 ## المشاريع
 
-أنا كمان أني بملك مشاريع كتير، وأنا بملك 146 مخزن في GitHub، و 103 مخزن مفتوح. وأنا سأقدمهم في مدونة.
+~~أنا كمان أني بملك مشاريع كتير، وأنا بملك 146 مخزن في GitHub، و 103 مخزن مفتوح. وأنا سأقدمهم في مدونة.~~
 
-تحديث: الآن أملك 158 مخزن، و 108 مخزن مفتوح. وأنا سأقدمهم في مدونة.
+~~تحديث: الآن أملك 158 مخزن، و 108 مخزن مفتوح. وأنا سأقدمهم في مدونة.~~
 
-أنا عرف مفيش مخزني في GitHub، مثل بعض مشاريعي في Minecraft، أو بعض السكريبتات اللي استخدمتها في نفسي.
+~~أنا عرف مفيش مخزني في GitHub، مثل بعض مشاريعي في Minecraft، أو بعض السكريبتات اللي استخدمتها في نفسي.~~
+
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 أنتي تلاقي المشاريع على [صفحة المشاريع](https://fox3000foxy.github.io/projects) و على [حسابي على GitHub](https://github.com/fox3000foxy)
 

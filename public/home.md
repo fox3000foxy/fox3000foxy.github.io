@@ -40,11 +40,13 @@ Sometimes I write npm packages, like [fetch-tor-proxy](https://www.npmjs.com/pac
 
 ## Projects
 
-I have soooooooooo much projects. right now I have 146 repositories in total, only 103 are public! I will probably present them in the Blog section tho.
+~~I have soooooooooo much projects. right now I have 146 repositories in total, only 103 are public! I will probably present them in the Blog section tho.~~
 
-Update: I now have 158 repositories, 108 public. I will probably present them in the Blog section tho. But not now ^^".
+~~Update: I now have 158 repositories, 108 public. I will probably present them in the Blog section tho. But not now ^^".~~
 
-NB: I have a lot of private repositories, and I don't want to talk about them, but they are mostly projects that I don't want to share with the world, or that are not finished yet, or that are just for fun and not really useful for anyone else than me. I also have some projects that are not on GitHub, like some Minecraft plugins that I made for Eminium Games, or some scripts that I use for myself.
+~~NB: I have a lot of private repositories, and I don't want to talk about them, but they are mostly projects that I don't want to share with the world, or that are not finished yet, or that are just for fun and not really useful for anyone else than me. I also have some projects that are not on GitHub, like some Minecraft plugins that I made for Eminium Games, or some scripts that I use for myself.~~
+
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 You can discover projects on [Project page](https://fox3000foxy.github.io/projects) and on my [GitHub profile](https://github.com/fox3000foxy)
 

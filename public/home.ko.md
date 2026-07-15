@@ -40,11 +40,13 @@ JavaScript 원리는 꽤 잘 알고 있어. 8살 때부터 JavaScript로 코딩�
 
 ## 프로젝트
 
-프로젝트가 진짜 많아. 지금 총 158개의 레포지토리가 있는데 그중 108개가 공개야! 아마 블로그 섹션에서 소개할 거야.
+~~프로젝트가 진짜 많아. 지금 총 158개의 레포지토리가 있는데 그중 108개가 공개야! 아마 블로그 섹션에서 소개할 거야.~~
 
-참고: 비공개 레포지토리가 많은데 그것들에 대해선 이야기하고 싶지 않아. 하지만 주로 세상과 공유하고 싶지 않은 프로젝트들이거나 아직 완성되지 않은 것들, 아니면 그냥 재미로 만든 거라 나 말고는 아무한테도 유용하지 않은 것들이야.
+~~참고: 비공개 레포지토리가 많은데 그것들에 대해선 이야기하고 싶지 않아. 하지만 주로 세상과 공유하고 싶지 않은 프로젝트들이거나 아직 완성되지 않은 것들, 아니면 그냥 재미로 만든 거라 나 말고는 아무한테도 유용하지 않은 것들이야.~~
 
-프로젝트는 [프로젝트 페이지](https://fox3000foxy.github.io/projects)와 내 [GitHub 프로필](https://github.com/fox3000foxy)에서 볼 수 있어.
+~~프로젝트는 [프로젝트 페이지](https://fox3000foxy.github.io/projects)와 내 [GitHub 프로필](https://github.com/fox3000foxy)에서 볼 수 있어.~~
+
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 ## 내가 일하는 곳
 

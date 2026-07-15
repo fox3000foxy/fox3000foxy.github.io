@@ -40,13 +40,15 @@ Tôi đã viết một bài viết toàn tập về các sở thích của tôi 
 
 ## Dự án
 
-Tôi có nhiều dự án. Vào thời điểm hiện tại, tôi có 146 dự án, chỉ có 103 dự án là công khai! Tôi sẽ có thể giới thiệu chúng trong phần Blog.
+~~Tôi có nhiều dự án. Vào thời điểm hiện tại, tôi có 146 dự án, chỉ có 103 dự án là công khai! Tôi sẽ có thể giới thiệu chúng trong phần Blog.~~
 
-Cập nhật: Tôi hiện có 158 dự án, 108 dự án công khai. Tôi sẽ có thể giới thiệu chúng trong phần Blog.
+~~Cập nhật: Tôi hiện có 158 dự án, 108 dự án công khai. Tôi sẽ có thể giới thiệu chúng trong phần Blog.~~
 
-Lưu ý: Tôi có nhiều dự án riêng tư, và tôi không muốn nói về chúng, nhưng chúng chủ yếu là các dự án mà tôi không muốn chia sẻ với thế giới, hoặc các dự án chưa hoàn thiện, hoặc các dự án chỉ để vui chơi và không thực sự hữu ích cho bất kỳ ai khác ngoài tôi. Tôi cũng có một số dự án không trên GitHub, như một số plugin Minecraft mà tôi đã tạo ra cho Eminium Games, hoặc một số script mà tôi sử dụng cho riêng mình.
+~~Lưu ý: Tôi có nhiều dự án riêng tư, và tôi không muốn nói về chúng, nhưng chúng chủ yếu là các dự án mà tôi không muốn chia sẻ với thế giới, hoặc các dự án chưa hoàn thiện, hoặc các dự án chỉ để vui chơi và không thực sự hữu ích cho bất kỳ ai khác ngoài tôi. Tôi cũng có một số dự án không trên GitHub, như một số plugin Minecraft mà tôi đã tạo ra cho Eminium Games, hoặc một số script mà tôi sử dụng cho riêng mình.~~
 
-Bạn có thể khám phá các dự án trên trang Dự án và trên tài khoản GitHub của tôi.
+~~Bạn có thể khám phá các dự án trên trang Dự án và trên tài khoản GitHub của tôi.~~
+
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 ## Tôi làm việc cho
 

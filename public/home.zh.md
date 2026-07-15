@@ -40,9 +40,11 @@
 
 ## 项目
 
-我有好多项目。目前我总共有 158 个仓库，其中 108 个是公开的！我可能会在博客部分介绍它们。
+~~我有好多项目。目前我总共有 158 个仓库，其中 108 个是公开的！我可能会在博客部分介绍它们。~~
 
-注：我有很多私有仓库，我不想谈论它们，但主要是我不想与世界分享的项目，或者还没有完成的项目，或者只是为了好玩而对别人没什么实际用处的项目。
+~~注：我有很多私有仓库，我不想谈论它们，但主要是我不想与世界分享的项目，或者还没有完成的项目，或者只是为了好玩而对别人没什么实际用处的项目。~~
+
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 你可以在[项目页面](https://fox3000foxy.github.io/projects)和我的 [GitHub 主页](https://github.com/fox3000foxy)上发现我的项目。
 

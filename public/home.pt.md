@@ -40,13 +40,15 @@ Eu escrevi um post inteiro sobre minhas paixões -- codificar, desenhar, automat
 
 ## Projetos
 
-Eu tenho muitos projetos. Agora eu tenho 146 repositórios em total, apenas 103 são públicos! Eu provavelmente vou apresentar eles na seção Blog, afinal.
+~~Eu tenho muitos projetos. Agora eu tenho 146 repositórios em total, apenas 103 são públicos! Eu provavelmente vou apresentar eles na seção Blog, afinal.~~
 
-Atualização: Agora eu tenho 158 repositórios, 108 públicos. Eu provavelmente vou apresentar eles na seção Blog, afinal. Mas não agora ^^".
+~~Atualização: Agora eu tenho 158 repositórios, 108 públicos. Eu provavelmente vou apresentar eles na seção Blog, afinal. Mas não agora ^^".~~
 
-NB: Eu tenho muitos repositórios privados, e eu não quero falar sobre eles, mas eles são principalmente projetos que eu não quero compartilhar com o mundo, ou que não estão concluídos ainda, ou que são apenas para diversão e não são realmente úteis para ninguém além de mim. Eu também tenho alguns projetos que não estão no GitHub, como alguns plugins do Minecraft que eu criei para Eminium Games, ou alguns scripts que eu uso para mim mesmo.
+~~NB: Eu tenho muitos repositórios privados, e eu não quero falar sobre eles, mas eles são principalmente projetos que eu não quero compartilhar com o mundo, ou que não estão concluídos ainda, ou que são apenas para diversão e não são realmente úteis para ninguém além de mim. Eu também tenho alguns projetos que não estão no GitHub, como alguns plugins do Minecraft que eu criei para Eminium Games, ou alguns scripts que eu uso para mim mesmo.~~
 
-Você pode descobrir projetos em [Página de Projetos](https://fox3000foxy.github.io/projects) e em meu [Perfil do GitHub](https://github.com/fox3000foxy)
+~~Você pode descobrir projetos em [Página de Projetos](https://fox3000foxy.github.io/projects) e em meu [Perfil do GitHub](https://github.com/fox3000foxy)~~
+
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 ## Eu trabalho para
 
