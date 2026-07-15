@@ -16,8 +16,10 @@ export default function GiscusComments({ lang }: { lang: string }) {
 	}, []);
 
 	useEffect(() => {
-		if (!mounted) return;
-		const cb = document.getElementById("theme-toggle") as HTMLInputElement | null;
+		if (!mounted) { return; }
+		const cb = document.getElementById(
+			"theme-toggle"
+		) as HTMLInputElement | null;
 		const isLight = cb?.checked ?? false;
 
 		const script = document.createElement("script");
@@ -40,7 +42,9 @@ export default function GiscusComments({ lang }: { lang: string }) {
 		function onThemeChange() {
 			const iframe = ref.current?.querySelector("iframe");
 			if (iframe) {
-				const checked = (document.getElementById("theme-toggle") as HTMLInputElement | null)?.checked ?? false;
+				const checked =
+					(document.getElementById("theme-toggle") as HTMLInputElement | null)
+						?.checked ?? false;
 				iframe.contentWindow?.postMessage(
 					{
 						giscus: {
