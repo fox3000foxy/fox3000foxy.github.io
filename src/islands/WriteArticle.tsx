@@ -466,7 +466,14 @@ export default function WriteArticle() {
 
 			{user && (
 				<div className="write-header">
-					<img src={user.avatar_url} alt="" width={32} height={32} loading="lazy" decoding="async" />
+					<img
+						src={user.avatar_url}
+						alt=""
+						width={32}
+						height={32}
+						loading="lazy"
+						decoding="async"
+					/>
 					<span>{user.name || user.login}</span>
 					<button
 						type="button"
