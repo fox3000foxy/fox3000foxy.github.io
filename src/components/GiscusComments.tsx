@@ -16,7 +16,9 @@ export default function GiscusComments({ lang }: { lang: string }) {
 	}, []);
 
 	useEffect(() => {
-		if (!mounted) { return; }
+		if (!mounted) {
+			return;
+		}
 		const cb = document.getElementById(
 			"theme-toggle"
 		) as HTMLInputElement | null;
