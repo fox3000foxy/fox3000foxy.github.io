@@ -1,11 +1,68 @@
 ---
-import Archive from "../islands/Archive";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { readAllArticleIndexes } from "../lib/langContent";
+import { ALL_LANGS, createT } from "../lib/i18n";
+import type { ArticleMeta } from "../types";
 
 const allIndexes = readAllArticleIndexes();
+const t = createT("en");
+const lang = "en";
+
+interface Group {
+  label: string;
+  articles: ArticleMeta[];
+}
+
+function groupByYearMonth(articles: ArticleMeta[], locale: string): Group[] {
+  const map = new Map<string, ArticleMeta[]>();
+  for (const a of articles) {
+    if (!a.date) continue;
+    const d = new Date(`${a.date}T00:00:00`);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(a);
+  }
+  const sorted = [...map.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+  return sorted.map(([key, arts]) => {
+    const [year, month] = key.split("-");
+    const label = new Date(Number(year), Number(month) - 1).toLocaleDateString(locale, {
+      year: "numeric",
+      month: "long",
+    });
+    return { label, articles: arts };
+  });
+}
+
+const data = allIndexes?.[lang] ?? allIndexes?.en ?? [];
+const normalized = (data as { slug?: string }[]).map((item) =>
+  typeof item === "string" ? { slug: item } : item
+) as ArticleMeta[];
+const groups = groupByYearMonth(normalized, ALL_LANGS[0]);
 ---
 
 <BaseLayout title="Archive" description="All articles by date" wide>
-  <Archive client:only="react" allIndexes={allIndexes} />
+  <div class="archive">
+    <h2>{t("archive.title")}</h2>
+    {groups.length === 0 ? (
+      <p>{t("archive.loading")}</p>
+    ) : (
+      groups.map((group) => (
+        <section class="archive-group">
+          <h3 class="archive-month">{group.label}</h3>
+          <ul class="archive-list">
+            {group.articles.map((a) => (
+              <li class="archive-item">
+                <time class="archive-day" datetime={a.date}>
+                  {a.date ? new Date(`${a.date}T00:00:00`).getDate() : "??"}
+                </time>
+                <a href={`/blog/${a.slug}`} class="archive-link">
+                  {a.title ?? a.slug.replace(/-/g, " ")}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    )}
+  </div>
 </BaseLayout>

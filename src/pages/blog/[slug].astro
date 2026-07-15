@@ -2,10 +2,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ArticleWidgets from "../../islands/ArticleWidgets";
+import BookmarkButton from "../../components/BookmarkButton";
+import GiscusComments from "../../components/GiscusComments";
+import type { ArticleMeta } from "../../types";
 import { ALL_LANGS, createT } from "../../lib/i18n";
 import type { Lang } from "../../lib/i18n";
-import { readAllArticleData } from "../../lib/langContent";
+import { readAllArticleData, readAllArticleIndexes } from "../../lib/langContent";
 import { renderMarkdown } from "../../lib/markdown";
 import { parseFrontMatter } from "../../utils/frontmatter";
 import { getAuthors } from "../../utils/authors";
@@ -24,19 +26,19 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const data = slug ? readAllArticleData(slug) : null;
 
-type ArticleMeta = {
+type ArticleMetaFull = {
   title?: string; date?: string; lastmod?: string; description?: string;
   tags?: string[]; authors?: string[]; aiGenerated?: boolean; sponsored?: boolean;
   series?: string; slug?: string; author_pubkey?: string; author_sig?: string;
 };
 
-const allMeta: Record<string, ArticleMeta> = {};
+const allMeta: Record<string, ArticleMetaFull> = {};
 if (data) {
   for (const lang of ALL_LANGS) {
     const raw = data.raw[lang as Lang];
     if (raw) {
       const { meta } = parseFrontMatter(raw);
-      allMeta[lang] = { ...meta, slug } as ArticleMeta;
+      allMeta[lang] = { ...meta, slug } as ArticleMetaFull;
     }
   }
   if (!allMeta["en"] && ALL_LANGS.length > 0) {
@@ -93,6 +95,30 @@ const articleJsonLd = data ? `<script type="application/ld+json">${JSON.stringif
   mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl }
 })}</script>` : "";
 const extraHead = articleMetaTags + articleJsonLd;
+
+// Compute prev/next article navigation
+const allIndexes = data?.allIndexes ?? readAllArticleIndexes();
+const allArticles = ((allIndexes?.en ?? []) as { slug?: string }[]).map((item) =>
+  typeof item === "string" ? { slug: item } : item
+) as ArticleMeta[];
+const sorted = [...allArticles].sort(
+  (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+);
+const idx = sorted.findIndex((a) => a.slug === slug);
+const prevArticle = idx < sorted.length - 1 ? sorted[idx + 1] : null;
+const nextArticle = idx > 0 ? sorted[idx - 1] : null;
+
+// Compute suggested articles
+const currentTags = enMeta.tags ?? [];
+const suggested = allArticles
+  .filter((a) => a.slug !== slug)
+  .map((a) => ({
+    article: a,
+    score: currentTags.filter((tag) => (a.tags ?? []).includes(tag)).length,
+  }))
+  .filter((s) => s.score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 4);
 ---
 
 <BaseLayout title={title} description={description} canonical={articleUrl} extraHead={extraHead} image={ogImage} wide>
@@ -173,7 +199,46 @@ const extraHead = articleMetaTags + articleJsonLd;
           </div>
         );
       })}
-      <ArticleWidgets client:load slug={slug!} allIndexes={data.allIndexes} verified={data.verified} rawMarkdown={rawBodyEn} />
+      <div class="article-widgets-bottom">
+        <div class="share-buttons widget-bookmark">
+          <BookmarkButton client:load slug={slug!} />
+        </div>
+        {suggested.length > 0 && (
+          <section class="suggested-articles">
+            <h3>{t("article.related")}</h3>
+            <div class="suggested-grid">
+              {suggested.map(({ article }) => (
+                <a href={`/blog/${article.slug}`} key={article.slug} class="suggested-card">
+                  <h4 class="suggested-title">{article.title ?? article.slug.replace(/-/g, " ")}</h4>
+                  {article.description && <p class="suggested-desc">{article.description}</p>}
+                  {article.date && (
+                    <time class="suggested-date" datetime={article.date}>
+                      {new Date(`${article.date}T00:00:00`).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                    </time>
+                  )}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+        {(prevArticle || nextArticle) && (
+          <nav class="article-nav">
+            {prevArticle && (
+              <a href={`/blog/${prevArticle.slug}`} class="article-nav-link prev">
+                <span class="article-nav-label">{t("article.prev")}</span>
+                <span class="article-nav-title">{prevArticle.title}</span>
+              </a>
+            )}
+            {nextArticle && (
+              <a href={`/blog/${nextArticle.slug}`} class="article-nav-link next">
+                <span class="article-nav-label">{t("article.next")}</span>
+                <span class="article-nav-title">{nextArticle.title}</span>
+              </a>
+            )}
+          </nav>
+        )}
+        <GiscusComments client:load lang="en" />
+      </div>
     </>
   ) : (
     <p>Article not found.</p>
@@ -182,7 +247,6 @@ const extraHead = articleMetaTags + articleJsonLd;
 
 <script is:inline>
 (function(){
-  // Reading progress bar
   var progress = document.createElement('div');
   progress.className = 'reading-progress';
   progress.style.cssText = 'position:fixed;top:0;left:0;width:0;height:3px;background:var(--accent,#7c3aed);z-index:9999;transition:width 0.1s linear';
@@ -195,7 +259,6 @@ const extraHead = articleMetaTags + articleJsonLd;
   window.addEventListener('resize', updateProgress, { passive: true });
   updateProgress();
 
-  // TOC active heading tracking
   var tocLinks = document.querySelectorAll('.toc-link');
   if (tocLinks.length > 0) {
     var headings = [];
@@ -216,7 +279,6 @@ const extraHead = articleMetaTags + articleJsonLd;
     headings.forEach(function(h) { observer.observe(h.el); });
   }
 
-  // Reading mode toggle
   var readBtn = document.querySelector('.reading-mode-btn');
   if (readBtn) {
     var rm = localStorage.getItem('readingMode') === 'true';
@@ -228,7 +290,6 @@ const extraHead = articleMetaTags + articleJsonLd;
     });
   }
 
-  // Copy buttons on code blocks
   document.querySelectorAll('.article-body pre').forEach(function(pre) {
     var wrapper = document.createElement('div');
     wrapper.className = 'code-block-wrapper';
@@ -264,9 +325,6 @@ const extraHead = articleMetaTags + articleJsonLd;
     wrapper.appendChild(header);
     wrapper.appendChild(pre);
   });
-
-  // Mermaid rendering (pre-rendered as SVG images at build time)
-  // No client-side mermaid loading needed
 })();
 </script>
 

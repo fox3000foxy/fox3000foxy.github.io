@@ -1,11 +1,40 @@
 ---
-import TagsIndex from "../../islands/TagsIndex";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { createT } from "../../lib/i18n";
 import { readAllArticleIndexes } from "../../lib/langContent";
+import type { ArticleMeta } from "../../types";
 
 const allIndexes = readAllArticleIndexes();
+const t = createT("en");
+
+const data = allIndexes?.en ?? [];
+const normalized = (data as { slug?: string }[]).map((item) =>
+  typeof item === "string" ? { slug: item } : item
+) as ArticleMeta[];
+
+const tagCounts = new Map<string, number>();
+for (const a of normalized) {
+  for (const tag of a.tags ?? []) {
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+  }
+}
+const sortedTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
 <BaseLayout title="Tags" description="All tags" wide>
-  <TagsIndex client:only="react" allIndexes={allIndexes} />
+  <div class="tags-index">
+    <h2>{t("tags.title")}</h2>
+    {sortedTags.length === 0 ? (
+      <p>{t("blog.no.articles")}</p>
+    ) : (
+      <div class="tags-cloud">
+        {sortedTags.map(([tag, count]) => (
+          <a key={tag} href={`/tags/${tag}`} class="tag-cloud-item">
+            <span class="tag-label">{tag}</span>
+            <span class="tag-count">{count}</span>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
 </BaseLayout>

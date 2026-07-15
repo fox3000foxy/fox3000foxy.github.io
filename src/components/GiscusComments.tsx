@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-import { useTheme } from "../hooks/useTheme";
+import { useEffect, useRef, useState } from "react";
 
 const GISCUS_CONFIG = {
 	repo: "fox3000foxy/fox3000foxy.github.io" as const,
@@ -10,10 +9,17 @@ const GISCUS_CONFIG = {
 
 export default function GiscusComments({ lang }: { lang: string }) {
 	const ref = useRef<HTMLDivElement>(null);
-	const { theme } = useTheme();
+	const [mounted, setMounted] = useState(false);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: theme only used for initial render; updates via postMessage below
 	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	useEffect(() => {
+		if (!mounted) return;
+		const cb = document.getElementById("theme-toggle") as HTMLInputElement | null;
+		const isLight = cb?.checked ?? false;
+
 		const script = document.createElement("script");
 		script.src = "https://giscus.app/client.js";
 		script.async = true;
@@ -27,30 +33,34 @@ export default function GiscusComments({ lang }: { lang: string }) {
 		script.setAttribute("data-reactions-enabled", "1");
 		script.setAttribute("data-emit-metadata", "0");
 		script.setAttribute("data-input-position", "bottom");
-		script.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+		script.setAttribute("data-theme", isLight ? "light" : "dark");
 		script.setAttribute("data-lang", lang);
 		ref.current?.appendChild(script);
 
-		return () => {
-			script.remove();
-		};
-	}, [lang]);
-
-	useEffect(() => {
-		const iframe = ref.current?.querySelector("iframe");
-		if (iframe) {
-			iframe.contentWindow?.postMessage(
-				{
-					giscus: {
-						setConfig: {
-							theme: theme === "dark" ? "dark" : "light",
+		function onThemeChange() {
+			const iframe = ref.current?.querySelector("iframe");
+			if (iframe) {
+				const checked = (document.getElementById("theme-toggle") as HTMLInputElement | null)?.checked ?? false;
+				iframe.contentWindow?.postMessage(
+					{
+						giscus: {
+							setConfig: {
+								theme: checked ? "light" : "dark",
+							},
 						},
 					},
-				},
-				"https://giscus.app"
-			);
+					"https://giscus.app"
+				);
+			}
 		}
-	}, [theme]);
+
+		document.addEventListener("change", onThemeChange);
+
+		return () => {
+			script.remove();
+			document.removeEventListener("change", onThemeChange);
+		};
+	}, [lang, mounted]);
 
 	return <div ref={ref} className="giscus-comments" />;
 }
