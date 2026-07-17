@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "eM7WIGNrjPFctIzlAUprWikADMJmpTYQUwWHjGeKVwiIkUhNgEUOzh2mptFSXL12cX/mtlF25a0n6XuZRGSRjg=="
+author_sig: "UKPoAX2qIVnqyKJqXkwkaXlF+44LPoAgVNNQGlWe3IFX3FCir/cgPatN6vFDVOworM51WDbgMz0ie2lU7WoHkA=="
 ---
 
 # Como conseguir cualquier capa en Minecraft Bedrock

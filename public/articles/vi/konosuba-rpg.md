@@ -15,7 +15,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PEq95OmyClJFPGW+d/0vrGHZiq3u7HVgdK0ZkB7oxV1/gLvtgWs+1GlJUduS0VLKM5CPTMGVxaQ95B2Cxv/SYw=="
+author_sig: "lxsn6ZBhNhA5j/wBfeSeY1saVvDDDh/RZZ5/AlKXA26YW2z5OsNhJBrpfXMJmFoboovtTupAh/m2tpZQ/l5WeA=="
 ---
 
 # Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy

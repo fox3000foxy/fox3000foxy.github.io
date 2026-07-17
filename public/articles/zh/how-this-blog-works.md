@@ -10,7 +10,7 @@ tags:
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "y7PwGd+d+H5nO4qKGu5YJNjxUwMNhuz7/LsksIYAriPX0Fm2nuq+wvm9vwG5ojyzKm6z04SvVQutzqdVnTqoFQ=="
+author_sig: "NKCcK+KXz/WVGKOEgGZDZH+Dp8wlsR5hGtGUmBP6mUKPZV5BaQanPoO748DjWM3rmTvS1xtGY5iEnl6HYY5x1Q=="
 ---
 
 # 这个博客是如何运作的？

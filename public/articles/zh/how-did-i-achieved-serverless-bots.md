@@ -11,7 +11,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "aHd+HIY5ACIjjJSWPbVr47zGrolEPzZNfg3HvKnQBPEIMpWJHcUMGXGbLcfLZat843QWeu3A9z5MIIbW5W6ULw=="
+author_sig: "akNqwm8yqgT+AInpCWeDFfU+WHgyx65IstEbf8trIuaqu/BWk5mn2SeErdg/PUfzKuHeOptRkOs/HPmM9LNhXw=="
 ---
 
 ## Discord bot 100% 无服务器 : Hono + Cloudflare Workers = 💸 零成本

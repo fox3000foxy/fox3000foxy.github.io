@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "OGBPtjzHwRH5q+gq+HY8UPz+8tUw/ypXzSuWqI/qoFMmkz7K/4MQFKPDAlLRomEj+uiYeFL5Fsp3EwnEyJuB1w=="
+author_sig: "VqyOTAq2cMLHIwqNKiPRa27E6keOQQyhNi4iDTk6g7FkCZ8tFwphhCJ47vgjfFij9OzD6U149s8Is2MbG6lefg=="
 ---
 
 # مود الكيب: كيف تسرق كيب Jeb_ بحقن توقيع RSA

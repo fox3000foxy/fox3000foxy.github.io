@@ -11,7 +11,7 @@ tags:
   - security
   - honeypot
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FWsFhiS5OHWbSIp31HN2nwnEo+yzzzdndhXupFhzuWTmt0EWFUbQkF5D02UBCp7rDBWV7y68e1vwnzjIk0Wf0A=="
+author_sig: "MyRa7wuoqBTC3ohR8sOzJyGBgQPGAl8pX6rsqjk9dMEio0kIYKSjH8G4ZdjFPSMvSAfTfffy3ciVqjHJkyuKLA=="
 ---
 
 ## Fikir

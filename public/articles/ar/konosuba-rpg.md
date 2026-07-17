@@ -15,7 +15,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DCHTApKb07d9pZturkf0OhjjQzcsFn+gVLr8RPmiQPz8tZurwGyebSX40zZ33jOf4v/6U3DPyDIy6OmtPnOAMQ=="
+author_sig: "fiizrKwuuggXuJBSB4ha3wYkV9AsMD8yDEQ3rRuyc1WPFFgQHL9F9vR7+3TKSRaiQeyC5+j45uCWUsb+/Yf4bg=="
 ---
 
 # قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته

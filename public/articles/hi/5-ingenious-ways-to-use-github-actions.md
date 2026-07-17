@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "nYb11BYaxj0E2KCt/VS/t0wqiOObE9H1QYd/wa2+4Gt65Tq4rikYGF7Hr9ytQxhnf9hk40QTpMKVj77/KshsIQ=="
+author_sig: "xUzMgDkUMBRlo9hhETtDquX5RH7alK9pyYS0GB7MJIEoVQjYH1/3N14HfJnDb2/uaZwRSDlkeNbnL7Yw1qBSFA=="
 ---
 
 # GitHub Actions का रचनात्मक उपयोग करने के 5 तरीके

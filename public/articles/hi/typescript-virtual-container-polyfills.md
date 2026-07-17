@@ -15,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "u+OLtaaTcVqjlgAv9jnkoOJysFh78BXpGcRZ3e9OMJ3uFy1W9UpCzcJHshGJKZXx0fga1eXwde2ne8QtY6IX6g=="
+author_sig: "d1GHSXF6knqU73P3jZ2RRaW+dqiKwMqU/MSHEJBmboBAhSe/2ao/7FGUXkaujC6uS5p8ijCbb3QGFST1qfrxvA=="
 ---
 
 # बिना Wasm के ब्राउज़र में Node.js लाइब्रेरी चलाना -- typescript-virtual-container के polyfills

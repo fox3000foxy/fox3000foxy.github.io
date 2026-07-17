@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sQcqAvYVlAFD4vti+uH2B36L121ydMT4IcPu/RPN4/fDbqadCQtnpTaB6xR/dXBOJVfv0GM/I/tWCXoloa7lKA=="
+author_sig: "V2vFokVaeC+WbjWWcBaZn5EbjKv3/uTKb4JV4gS4sIuvLWdQ3S9KTN0Q2mJFTaiV480vfNF5zyRmGgPCFA+T2Q=="
 ---
 
 # Minecraft Bedrockでどんなケープでも入手する方法

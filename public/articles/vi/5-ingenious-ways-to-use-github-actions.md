@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/2N4zqUcDzrYqITP98xp9cPqDu68EpaiySVlM24pe6Gi/l+QI0U2jJBYeReAYYRs+zwEesbE9rDzAoe3hulwKg=="
+author_sig: "M28JkBztWoHukGWD3/o+B4SNVjnqHwgWLNFJqXVKHtRbb8iAdip4X1t9rEH47pptaELOIu7N505mGBdbMawB/Q=="
 ---
 
 # 5 cách sáng tạo để dùng GitHub Actions

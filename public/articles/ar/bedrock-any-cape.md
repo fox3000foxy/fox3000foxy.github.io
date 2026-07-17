@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9BCzUIFkbfj7IvMp7LSQIGpFkXrxz44cZbhbWOZI3M5GwI7fRcM7J5T4WzE4frukM+Au6WnHV9bME4N9NAiR4Q=="
+author_sig: "LGA4l+huDcWhar/M59K2E8In7j4CTxwtmpNK0GCzJ0FT70ldRs3/Tu37uY+5jar4gGls8X7Q5xg55oMh5Z6bYg=="
 ---
 
 # كيفية الحصول على أي عباءة في Minecraft Bedrock

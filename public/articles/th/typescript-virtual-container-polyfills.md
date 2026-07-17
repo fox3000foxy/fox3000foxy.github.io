@@ -14,7 +14,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "d8+C5+RF/VwZdNvGZkLsL8emepSLxqadslAoOvY9DZhOk001DNfAGC+Cz+u62xRuLpQP0CTdaWvatX0zkW9Agw=="
+author_sig: "RYwdjye1o+PnUzKu+FoQ3kQaZ1RqoAgwwhi5lP2h/CIbbSCU5h6yuh0G7VSU3Un0SEZ+ALVd5DdtBRgJFeEVpg=="
 ---
 
 # ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm -- polyfills ของ typescript-virtual-container

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9GG+0sEDjOLRf0vhucxS2ivwiEtZ+ycAtzFVQEL66IQF4iAhk2BXT+GYdDiVrZ/aixSZ044D5aaT4Jw7v2olMw=="
+author_sig: "iAO6gfBULrXXnMB7ZgdWeuIlNfTNUooKuRBVHQ9PCfG9aySeg2RgRBQo0KCuKAYAW1k2SzScD9JdKcEqzk7wJw=="
 ---
 
 # valorant-short-maker: Valorantのショート動画を自動生成するパイプライン

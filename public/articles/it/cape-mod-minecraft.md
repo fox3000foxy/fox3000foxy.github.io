@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xBBr+988oQrGj/Ye4mtQEGGKw882gJPbca6y7sqFe7dH8Eah2Cko5jzfACAnQThLNYaqQ2OyUo6zTkNCB9AY4w=="
+author_sig: "H0QkBmct5bwEQBfnJ5peA/GcPgtAyt9kEjji4A8FNmdAHtyZ2Q0u55dpl1tBPy/9yGp2BMcSGaIndKqfAZZ4JQ=="
 ---
 
 # Cape Mod: come rubare il mantello di Jeb_ con un'iniezione di firma RSA

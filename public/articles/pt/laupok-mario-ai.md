@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bBtO+emq9a7hKICKGBQ6Lfrcmbd6UwLXRavjQKOb5K7ZLjg0cYr7YrC6a3/M1YiZ1LfjiKOx5A+/MOtBKCS7zA=="
+author_sig: "0p1OGfWdj51YP/banrW7hOiTpVHiP0vRcFd/r/x+eC6tHoqBetiE3cb6sSHYQKDNe0asFD23Hvl//AKbLqrH6w=="
 ---
 
 # Laupok construiu uma IA que joga Super Mario World sozinha -- como funciona

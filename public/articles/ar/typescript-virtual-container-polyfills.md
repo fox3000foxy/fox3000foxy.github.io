@@ -14,7 +14,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YqNaMA/tYvFdGRh37lYy9fbKBxdzFlkLrf4l0PjxBzPnv4Ha6+IHhVP97Hh2kgEeRDqljC6uJY2S+n7ei9qtXA=="
+author_sig: "+PExq8Ml57P913/wonAAuKnRg5kczeItIJo3SOkGvuRTxnEasY5RJvp/ubOTx+PGAq8J5xhtCX23wCSR/k+spQ=="
 ---
 
 # تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills لـ typescript-virtual-container

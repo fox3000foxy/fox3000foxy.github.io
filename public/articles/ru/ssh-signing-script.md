@@ -11,7 +11,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fSdDU3JaPd7QUOa6wUAzF0w+L+e7xIaueLESjLj932SeTLHY4GtI4pSwAZW+WxLTHEz4fhjK/a8i0npgJXxjVA=="
+author_sig: "ZdSw1x+vZBNXLYytb6CEfBCmVm+UQ6F7L9CDiH6Btusi/HBVhdbPnox/Fw3YHkDfzaFToF5fFo9RklSsu/TVCQ=="
 ---
 
 # Скрипт подписи коммитов SSH -- объяснение

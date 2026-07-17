@@ -10,7 +10,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "oJ9dsXaRHQ9WAOuwBGFb9WWxj1OnUtnfVI92/8rPzXFAyJQAWAL5VAtB3xRzuAmCiMwQAv343XKjeugB9XveHQ=="
+author_sig: "df08QpvkM+wfJD5a3wYorWPgTOTvvjnYZ7OLHpYTm2dDGACrcv3GTmJV9tjdIddvC0a8oPiI8Qk2oW7844Hxww=="
 ---
 
 ## 我给 Nausicaa 写的那个沙雕 AI

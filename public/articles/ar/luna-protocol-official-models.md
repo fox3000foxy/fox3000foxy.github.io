@@ -13,7 +13,7 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MhnWU7Rpi27Rb1i7yegIlLo6M4oU5XN0gdBSMEUyanEc/jeuLHSwqR68JFkIuv8YCf19R/TV2Gf6bgRJvdTtvA=="
+author_sig: "rFiFU0w4Mpt1ywk0l8/IXkFn3M2QvUY+8X0c4xup14TfWQ9qAaiKrr3OPtJ9R+9vYqjrLcp3nWPs8vriEq8w7Q=="
 ---
 
 # بروتوكول لونا: لماذا قمت بضبط نموذج 1.5B على 50k عينة من ديسكورد وجعلت التمهيد القليل من الأمثلة السلاح السري

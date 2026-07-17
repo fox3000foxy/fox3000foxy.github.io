@@ -8,7 +8,7 @@ tags:
   - security
   - honeypot
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "TSJP4d5HR7Db37nW1SSD+3uUPQezqVx9XzE8gOLF3LfMNJ3tDUcRIARy7d1yTrKkS3bNXMozwqM2zkYFeA5BuQ=="
+author_sig: "5dqNDWTXhFivlB3SvWvQwuwu19y/KX5/0Q00vfZ7fPPhI7hh1+j852Qe4B1+abdKTbvS7taQ88BFgVkNFoDyeA=="
 ---
 
 ## Was ist ein Express-Honeypot?

@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9w63ZqydI3O4bgCJN0C9MBOoLLeV1HaQE/ppls2PMORYc7cnJCAXroR/blj/xafpJr2dGqjDIkqtdATATjto6Q=="
+author_sig: "5TSGurE9aU59gOe5SkZhyUNL+xkIDwe+7//NXgGeCknRwOz2bd26ZGP0oS+VI4Ecp18lYimgvcUkD/1prbBjXw=="
 ---
 
 ## UTAU : कैसे Visual Basic 6 के एक सॉफ़्टवेयर ने सिंथेटिक आवाज़ को लोकतांत्रिक बनाया

@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jM9At6L2GUu3xfkChaA0cIHdp4K27SM5lO754Y31A/5WZ93nuLfF64on5PMkSE6oECScvWGLBtgWub/a7UPj7w=="
+author_sig: "hW25XfD/jS8mBMX2wd3oB9+PssywENmpGejX7GLUOOH3PXoa5XoQ4ia4rTwzgy5qJjFQ2be+HmMYbefdgqOAWQ=="
 ---
 
 # Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh

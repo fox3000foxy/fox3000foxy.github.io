@@ -10,7 +10,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0GUn8FTY3Kkt8tT8ltYCc6p7+3nqy6zLlIGii4aVGZWcjdbXlTC7R9jEZWeJZFGszCbtfclJtWZPps0KRT7oRA=="
+author_sig: "JOxPhf0B2m/pS/Ceqs/HDm4SQ5sAo2jbiwKvligB6hjXIjbIyzjKYmcbv8DgINCF2Ldc+LaFBjZzIsUGr16Dhg=="
 ---
 
 # سكريبت توقيع SSH للـ commits -- شرح

@@ -10,7 +10,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/AlWT/9Z4ziO3UXFj3WY6CEH6FBNkCMNoFThalLBk0FRPqtuLGSZGskbAk9tK5xdYw4Lz5eoJXdSfZinX6Btjg=="
+author_sig: "pzLVtZAui+N5jO9OqSx2Bzl5JOVg65YMVWQ1acHCahPlJ8cfhRoCVjU4DrLInqa110El0+zQaaLhAs361xV9gA=="
 ---
 
 # SSH 提交签名脚本详解

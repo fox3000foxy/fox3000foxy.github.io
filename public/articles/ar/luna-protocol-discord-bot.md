@@ -12,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SaR8257fbMaq+fkbOUwiByFqhiT7Zva0KoSkKBeUwy2BKzzA5F4Z0uoRAEQNXdXap/kaELLfpHEvuA9jlms6fQ=="
+author_sig: "QJC5JtLcEw94D0X4XdqIHnTHbEmbvPckDdDdHK44pArAt+2UH5X2n1/EtFfrWmNPA+5x33g1rYqKXEd6/SS9+w=="
 ---
 
 # Luna Protocol: أنشأت بوت Discord مستقل يحاكي إنسانًا

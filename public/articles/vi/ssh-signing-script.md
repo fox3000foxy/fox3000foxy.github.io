@@ -10,7 +10,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1dQUi8bq+62t0NtgQrHoq+Cg/ehZ0y2IUUDuH1pc59iYxr6FEWNGMOgJL2llJb8cfwT8cVRlv55bDBuQ+8V62Q=="
+author_sig: "11s1sKJOsOOTVECr3eivfQW/scMhP/YvgS4GFC23dQsFe4Zti30zBywSge7wCz7KSrP7SlhDEqgRevG3iYHM0g=="
 ---
 
 # Script ký commit SSH -- giải thích chi tiết

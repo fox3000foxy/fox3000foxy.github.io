@@ -12,7 +12,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "CwBfYqKPnIEzxIthggMnNAdBCr4pVuKaPlmTx5T1CGBdrLLKLLsUUn2j/WoJiQlndHSR3I/BRHjtNRhpVt/1Ag=="
+author_sig: "/fZ2nYXEl5R+iYiNTVo8uj1UW2SXPweFYOQ1jyo5CpwIdcL+cUO7I5n5YOeqqrr124XphHdRczcacw+F5Gwu3A=="
 ---
 
 # character-factory का निर्माण : आनुवंशिक प्रणाली के साथ अवतार

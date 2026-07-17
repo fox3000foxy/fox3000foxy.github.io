@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hZiJ0MdzJcDef83i/FzMREQmcVJmVyZdK+A9Gd3ITWULHhJXM/fDxzK96iL9N0vGEqq7Gvzem43gPc5NCxazlw=="
+author_sig: "0PzZFPoAMY1NBQFs81tOq8lgLChh0A77SXwTeq1WKMZ9YPc9KuBkH0wZJn2Q2Dy2OJYwJe0nDTyvdncZnpKU2Q=="
 ---
 
 # Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı

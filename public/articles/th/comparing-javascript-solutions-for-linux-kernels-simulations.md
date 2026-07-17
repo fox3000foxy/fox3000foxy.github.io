@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "D90QDWvgjtONANI+SEos2KBqSl5Ms8ogplXV4oQrPUL4o4ZDrmsu1I17jswQBwKHzN+gRwQ3VRNfzv7Pl31BOA=="
+author_sig: "8EaEk1iAw0Ej5z3n3ura5MiKt6c5X5BjR4KY9ybsmvbHVmDeBH4FKGBep3tKxPPfJPdnnkZwGXea1Wsxul+ApA=="
 ---
 
 # ทุก sandbox JavaScript, เอมิวเลเตอร์, ซีมิวเลเตอร์ และ honeypot Linux -- เปรียบเทียบ

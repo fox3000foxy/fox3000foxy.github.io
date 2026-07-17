@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1Z/vNp3o0oNzQyUqovf6HYFr3UFyrSyZLjbOHo/wCDh+Sgj3fOdH34hQDQvGk51ubSMHAkldXnnWZGEmI9rQWQ=="
+author_sig: "EAb46HZbnBjR0NP0fgwKeJzgv/hTDpV482uraONLSkzo6Scdd0D7SrPmw1fcJ7vdxcWJGmuCEg7B+t3233sFIg=="
 ---
 
 ## UTAU : wie ein Visual-Basic-6-Programm die synthetische Stimme demokratisiert hat

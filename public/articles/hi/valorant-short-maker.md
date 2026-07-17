@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ZcID3ONSOAaKZDZuBu2PMmuCXGE7Sos2IlUU1CYtVQU3KW8MEaZ9w8EHYa4kJtvGDjE6HhQYLBkgzCXLb0R4Pg=="
+author_sig: "eTHPlTz5k9ZbNDKqyFncekVnABVnS/yOknI5/f6B28WTlzQVP1b1V13RLUPqXNN7nKliCIN3qHJlKtG8oTePjA=="
 ---
 
 # valorant-short-maker: वह पाइपलाइन जो खुद-ब-खुद मेरे Valorant शॉर्ट्स बनाती है

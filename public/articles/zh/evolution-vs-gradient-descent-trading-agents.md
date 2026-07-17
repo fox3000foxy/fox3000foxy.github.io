@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "zh"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9XfZa2bRXRq3x90V5RCHION+BEZ5r/ZDWYXsbcQfiJLk4Sq4p72v4Ri+MyBuz2Jo+ruT4gk/jT8rT8dHCB12+A=="
+author_sig: "NbVEKIYTcbmiK2dJjs/HwqYKnE5uet74inGxfNyMSdZHBa3prVucNvRXHBQMGqpwhA4w+gVkJDZzWyFywldL6A=="
 ---
 
 ## 单独使用梯度下降的问题

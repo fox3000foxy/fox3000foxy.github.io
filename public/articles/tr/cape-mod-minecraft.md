@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bEqJGEUrGrL5nnCzTYAlOl05Lp3ymHETKBpB/0AE1FxbY/NSQmJraP7F5v2l/dPyDnewXe4d7PJzEE9DgJ7ZTw=="
+author_sig: "jURyyEXu/r/T7aJm0Lf25wCGxFls0kUANcgPQooCthJGeTgPT3FEgu9svD57600ppmLzgkPED/QIMLEX+bFrMg=="
 ---
 
 # Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak

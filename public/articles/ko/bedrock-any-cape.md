@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+YNp/B24M3AxRRou8vnaF7jP8bPuTyy0lQHZSmvInmtMwbJo6cI0JEoUaX+OJtkluMohavIAFPd792IQgksIzQ=="
+author_sig: "Jn5ukyxS3NHertvY5jnZAPfoX6Mfxry24HTicYSe12AHcx+7IB0Ly+E0bqwhy7xTmZtn1+04ZyXdRsAYNRDJyA=="
 ---
 
 # Minecraft Bedrock에서 어떤 망토든 얻는 방법

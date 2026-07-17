@@ -13,7 +13,7 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+4X4nuvn2rtneilQYfIRpo/BbvXN/waCyCreMYob+FsyrajOmPxpC+D+bkH83LNRAUph/Uhnanw9AERBq9sHUw=="
+author_sig: "aBvAKYZczG05jiQ+Oi/EAJH0/BZirBsAPUfx5oqaU7QSXLOTFCpMzlN0lYcsbwZ4yc/6vnLG/J9ZfAMxIwbmCQ=="
 ---
 
 # Luna Protocol: 5만 개의 Discord 샘플로 1.5B 모델을 파인튜닝하고 Few-Shot 프라이밍을 비밀 무기로 만든 이유

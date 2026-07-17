@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1kj/WlchvbSMQ+V3KxERSll2dshvA29Mlm8XI+19JDbee+dwHBN5FNgAZJhzkbiuJBQ1HS50LXoYn5MDTTQccA=="
+author_sig: "b4nieQ7sxLxoKKPrua4HpHvNmKSPkeJUaxJZQ9JdCo6fopINGq/pZhPIC7Z95Ny/K8pffq8YFxHtYACNlYLFJQ=="
 ---
 
 # GitHub Actions를 기발하게 활용하는 5가지 방법

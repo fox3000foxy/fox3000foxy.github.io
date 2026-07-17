@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kcKEfd7s6F7uHPL1voeyno0NDe38nrsTc4euyk5Mh+Qcc+9BhHTbDbmINwPE9lIEadb2YPvPdg6pd5nv+UYPlA=="
+author_sig: "VBLBjHgbO9QgJTsB8yY7ld3gZkLrO9hqLzwCwcco1DVX7sdwU1Q1QTjEN89YmLOiHHYtPllpFy52+fpddzD43g=="
 ---
 
 ## UTAU : Visual Basic 6で作られたソフトがどうやって合成音声を民主化したか

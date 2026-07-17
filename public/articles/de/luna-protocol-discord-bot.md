@@ -12,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NFg8JdK5QVwbI5OV2UFmj0m76x5XDN+v41aiiMyZeT59Qwqi+Wykpu0pOUoqFtizFvCSso0LnvTvva/GlGZWhw=="
+author_sig: "t/2dKfZ0LXEhl2d0d/lA6Ql2mXKPtBSlxnbtHQiisZ0syn9LHPVKZ8dqfRSow+bYFpquKf4mkGljvDVRrJFPDg=="
 ---
 
 # Luna Protocol: Ich habe einen autonomen Discord-Bot erschaffen, der einen Menschen simuliert

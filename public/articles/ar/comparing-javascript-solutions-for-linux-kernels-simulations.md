@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "XcBAhvv6+yw2qVy/FZIwB5wznEDbWyaAQpNp4MA2aMaxdaSUbRrSXJQmoFMZw2pDO/Y+ekiDpOBdUdQCb4cZcw=="
+author_sig: "Ev0bsFfiKiNh0df3oVsNtNctIvQ3TWT9ZKRwgBkWiaa+UMqvGikhUZG3Op/qcHrT7ye1qyR02OwI0PQu1aTB/g=="
 ---
 
 # كل صندوق رمل JavaScript، ومحاكٍ، ومقلد، ومصيدة تفاعل Linux -- مقارنة

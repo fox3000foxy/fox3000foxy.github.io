@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "a5/B78L8R/9hOA4K9BzCzR6S7ex7qjV8r4Ylkxw6T1iFd481uCarQybS/UozrrzOTJGTZSdcSItipw5WbF1jdQ=="
+author_sig: "aH78YEOvBTfXMOt6XQbeUq5MQs5KrGDLIQvTmbNxrNp6NU8gkUCU4PY3ZdTQKxzCVdkOQfNiAwQ/n+CB2nmzyA=="
 ---
 
 # Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA

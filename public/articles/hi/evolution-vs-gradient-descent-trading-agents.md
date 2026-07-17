@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "hi"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "y6DVTq5o44X1w45A6b1LoWbAYpDOAopjLDrAOXqliluf+sl8RJCl7Y4nhJsYXIKv1ir+iPFr/s//kEP1vh5xhA=="
+author_sig: "pv+C+PqmXyTRcd1SFFf+C/khHvU3GaKKj+nUYralrfqbxqzNdFvmjKhj1XYG2gMzri4usxTkOTe4ywr9hQmeoQ=="
 ---
 
 ## अकेले ग्रेडिएंट डिसेंट की समस्या

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5f2xPWx097D4zaqOKlc6sMefIhI4VcPUFSzaGrrzzwRJox5GVBk5Fg9tr/j1zjR1IS+r5FaJqIC2lAoEVz81jA=="
+author_sig: "+cCltIjPARTByjgmh/9vesvroi4msHk55pLIeMg3OLuf7zSZTErWi/UM7H1TlKuxsEb0/OTpj+a4O/x/f/NKwQ=="
 ---
 
 # valorant-short-maker: البنية التي تولد Shorts Valorant الخاصة بي تلقائياً

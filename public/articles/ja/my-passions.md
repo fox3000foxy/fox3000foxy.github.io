@@ -7,7 +7,7 @@ authors:
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xSqX020qDAwkvZVyW4oHfm6JEbHridx+BQxE57TwflBu+pA93mFsR4X4w36r7XlrPSpbRxFAdIjkk65ZCUWBXg=="
+author_sig: "0ASHzBs8uVjO71gZfUfHKU+vpts95MM6gjl2DeMJMYDuYKsXBKrhSbq/gIUdIDdx/RPTxl1H1C3c/tiFhnPXSg=="
 ---
 
 # 俺の情熱

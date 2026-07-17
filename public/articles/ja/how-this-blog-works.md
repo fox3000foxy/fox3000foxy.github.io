@@ -10,7 +10,7 @@ tags:
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Yy/aYlhPTh23v4ZAEPeG3pa8Bphk0pOO8fg/w7V+cqcjMfW+QatKZ+N/Oe3DqzazjJIB9gi8iTZ92zbGoq+DeQ=="
+author_sig: "dvTmTW1SemCTGzUAoVoMhOTjMRYXMLeAJfZT6jG7N4Y+32GKmw5JDn5lOtP3WY1yuwEP7GBmT5F6GHVLLFb8nw=="
 ---
 
 # このブログの仕組み

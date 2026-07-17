@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BkARuR1OhFgxUSogBKyNeHx3mHWkkHIse+pxSQ8RWsL5h7cJSz9EiNhqMAHbhNgToTBgSH1/7tksZOru9+WQhg=="
+author_sig: "9zR6V5pqIrPK6ecMH2wWbbzApHTvWLl0Mq5TmW5jfwkMN0MPUDsoLpE576yxGRA3S89Ji0mvZ0KYYJOJwm59pg=="
 ---
 
 ## UTAU : كيف أضفى برنامج بلغة Visual Basic 6 الطابع الديمقراطي على الصوت الاصطناعي

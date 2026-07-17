@@ -12,7 +12,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xfmsZUXtNmPaH9B+u4o44Bv5WT9chuzrPUK38SDu3Zo7ksQugpo3Kdws1UPnvf8RWMwi32zhF5CUBw8bnT8Viw=="
+author_sig: "586GSkZKm/YLLUZx7CM4Vek98s//JDDDIuFb1nB11Vxq9eMSeaEIhx/ktOGjX68jUXnR5VmR45or3LDQzsMbdw=="
 ---
 
 # ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions

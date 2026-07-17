@@ -13,7 +13,7 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GL4hjVW0dwZhF8OILxU/NQuMfCoOZd4gnLh/4yxUjruOxuI2IK7jJmN9HWsDvmn8m8ek0Hc4JSOUwQctPxCYNQ=="
+author_sig: "3SLA+KJgktOQE/XGDBPyNlGcQdBcZMYCemfIVxOEAXJqv7xRbyObsDCYwmCScZCM8vMkR5mF/q/mNi6PPdPiww=="
 ---
 
 # Luna Protocol：为什么我用5万条Discord样本微调了一个1.5B模型，让少样本提示成为秘密武器

@@ -14,7 +14,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Hq08fiQGQmzNAdMjoBf0iY6Y6kAzwtLLtyVnWXE61JdNqnFRzV80xrxRF718Tr+FKVbUbSMNr+MNBh3Gr6h0dA=="
+author_sig: "1WEDnotYxR+FSF4p7VTGNOLSZzwne/xNGgh05HHqk7NvSrL3MpSEBaMMsv9GpJf1279D0IXY8D3Nou2lMhcYxA=="
 ---
 
 # Ich hab git als Datenbank benutzt, um einen kostenlosen Bot auf GitHub Actions laufen zu lassen

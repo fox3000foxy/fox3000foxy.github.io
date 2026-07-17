@@ -12,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WRJi7Fsr9tfgH5SCx4RMBAaYCMtyrH8mC4SBXS5E+VLyQx14dggxZ+FtuPukHp//cP/bEwH7RIzdLoppvP3WyA=="
+author_sig: "nsZnWRcop6uMsBzK5rqljMkbb2tVUq720LuV8VbyBNnWc69lOuoOkGz5JjqshujyVUFpU+akYH25zy9BGmry/g=="
 ---
 
 ## Nausicaa için Salak Yapay Zekam

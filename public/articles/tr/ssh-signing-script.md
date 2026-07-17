@@ -11,7 +11,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "F86luA2x/kvounhb4MshQgBHa5i6KwqYHWJQiV7eFe2gNT6fm7UPryA35gDx78lMiZof9MbIeTmYXb8OZgl/UA=="
+author_sig: "m0rAN3yN1jE5hI6YzqeaCjFsHKISvrwjeq6BNPAsaQ5CVBswtkOCBXAttNSLlhQ1y9hwbdmqVavA/fKfjQhx0w=="
 ---
 
 # SSH commit imzalama scripti açıklaması

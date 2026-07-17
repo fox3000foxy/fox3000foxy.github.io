@@ -10,7 +10,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Da/NCxadaWxsCMCreXDl2iB5305n9CmW3oFqgFbW70/6vR56mME1jkwhlY8rNKucVMiHF40xMjRSOUqh2vH/IA=="
+author_sig: "+qawNbZ+c0V/ON/+0W4jF9nEhi+g67ID+/9rLX1TAVPdIdLfAWWg9Hl1Ath2PSkMVW2IVl+eTIUBim5hLI9YAg=="
 ---
 
 > **Примечание (2026):** Этот проект больше не поддерживается. Microsoft значительно усилила свою антибот-защиту -- то, что работало тогда, сегодня уже не работает. Код и подход, описанные ниже, сохранены только в архивных/образовательных целях.

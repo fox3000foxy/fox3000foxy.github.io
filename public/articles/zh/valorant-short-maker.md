@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sesASAKusWVF6nqiPFK0E03CkDM4tR7tdIDqI9mPaof4jxq77Ed7/E23Z+i32quF7KzwwF1MQPL8Bfr90yxBmQ=="
+author_sig: "tmwOEgigCWT1us24WW0KE27oHw11kiwRO0QqsiLNRG+DbllrhZoLImKN1501ckM9UTCukiYI/OxkGsVRbhhXAg=="
 ---
 
 # valorant-short-maker：自动生成我 Valorant Shorts 的流水线

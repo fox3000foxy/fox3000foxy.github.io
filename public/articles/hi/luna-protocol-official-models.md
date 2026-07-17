@@ -13,7 +13,7 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hcx7k6A4ZxX33rMiy77lxNzej1JccDo6j79rytOBn71/tTA1mqSkCU4nKFcQY/PwVFnpOFC8hfhihtVZ9pMYzg=="
+author_sig: "MPQv7yw6i07nZxpOD4Ca98LX9ihkSJsFMv3jR14gMy5qKzIwoS15stqTFEy2Ov03woFlTU0WnAMS32EGcRHFAQ=="
 ---
 
 # लूना प्रोटोकॉल: क्यों मैंने 50k Discord नमूनों पर 1.5B मॉडल को फाइन-ट्यून किया और फ्यू-शॉट प्राइमिंग को गुप्त हथियार बनाया

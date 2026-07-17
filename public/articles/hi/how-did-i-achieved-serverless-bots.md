@@ -13,7 +13,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "20xWKAL/FUlTnMkc5NFq48Qd/rDykIjqN0nvnuPnqkHn0fwQ6poeQKvSTVE1w6QNUlxtddfpi2rW4aB3XKTiZg=="
+author_sig: "uOGCiCuZQvrsEjOme7omzfGcth4ZuQR3eGkR5CPn4YAtA7PIEzyREPbltfeFSvODyN5Sf/3bgFZ/zrgQFD5g+A=="
 ---
 
 ## Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers = 💸 शून्य

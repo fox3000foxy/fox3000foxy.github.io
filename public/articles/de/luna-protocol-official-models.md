@@ -13,7 +13,7 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5Ib1jVbEJh7vPybSsC3vlqlcMTxDox5WPUVcY3NKj3LvYji1BcJFxoihs7H7NXwNVcDUmb32C2ymkQ2FUUAmjw=="
+author_sig: "jUvYDGXU/nFrhNj8MuT8+Qo3zbM6kMyKKZ6pL4s5RVqoA+m92zsadroWPGn88FX/h4uSkaWDfMl2+jmHtWhfJw=="
 ---
 
 # Luna Protocol: Warum ich ein 1,5-Milliarden-Parameter-Modell mit 50k Discord-Beispielen fine-getunt und Few-Shot-Priming zur Geheimwaffe gemacht habe

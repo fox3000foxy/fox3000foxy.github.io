@@ -11,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GnQuBMik/3ok70SB+4PqnlAZWHr4PVU9iz3OtEptqLADiMiGJEBXpoFn02h+SDxp1+y+RdC+yEeDQe2eoeMntg=="
+author_sig: "99w+3ffAgT0CrzsKaTENe4Jn3pPD/+ErDraFlzjhaXHtN9+stp8jqKY6fNK/YiJ9180KXiGk1R8yGI4rsr1DlQ=="
 ---
 
 ## Nausicaa के लिए मेरा बेवकूफी भरा AI

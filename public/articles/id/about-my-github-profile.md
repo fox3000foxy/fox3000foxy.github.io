@@ -8,7 +8,7 @@ tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "c7661QX9pjvhkWBSGkqxkG59b6risZpxPAK5i4l+pYeRf/wz3S9IbMd2sy4LYW5ACtTsTX/3IBYMxnTy6vbamQ=="
+author_sig: "YRc7U2BdddBi1/wktfxoFvKPZWYQBis8c90zeSJa16i3LMbvoAYJzyJWr0GExiDUtJxBB5JS2bmCBgWuuf8BJw=="
 ---
 
 # Profil GitHub Saya

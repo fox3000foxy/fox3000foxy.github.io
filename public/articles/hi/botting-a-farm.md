@@ -10,7 +10,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+lENq8jfTv/RpwSCE8sPt4S7/fJ6a/zunWSkwUfEsOV6BTpB2b6HRbEvnLjmgkzdCp2W5t4FsPi+rdpHoK9uWw=="
+author_sig: "jY7O26POcJvqMrQKyu1L8sES7+PBXV8D+3ZSXYdexsNvQEH61fQeEaUU+rWRKHa3veRQXloQ9t43xFwJ/RWQ+A=="
 ---
 
 > **नोट (2026):** यह प्रोजेक्ट अब मेंटेन नहीं किया जाता। माइक्रोसॉफ्ट ने अपनी एंटी-बॉट डिटेक्शन को काफी मजबूत कर लिया है -- जो उस समय काम करता था वह आज काम नहीं करता। नीचे वर्णित कोड और दृष्टिकोण केवल आर्काइव और प्रदर्शन उद्देश्यों के लिए संरक्षित किए गए हैं।

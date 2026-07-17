@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xkKelqKKB2K/s4nE6jgytZGeH+v776SF1QsANLsgM7rpZdkPz5Hz6q7LxpywvNdkIZ6fAbyWLlMDgncujuE1Zg=="
+author_sig: "2CqfhSeRHtKeofaSxtmfZKWoX+NaBzuVFYh4e2jiJrJO3WBoz/Qz4tCF/b87IzqR6rHeG0Z91wqm9G2jrK5eRw=="
 ---
 
 # 5 个巧妙利用 GitHub Actions 的方法

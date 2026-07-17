@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Sax6b68RaCPIrvrefweQEdjVsspCCxCnO0DT5WXb2b4DBvZ1hZzk13CP6jLHcNBVLlSsRtAWH9C5dPmI2sSbWg=="
+author_sig: "NT8eANNpUsKwubPIlkcSDIDQqTj0ZK6/L6Qukg/UGfLD9T+X0yA3xWTVyz9usXC887HBnmN98G/W472VPkXtXQ=="
 ---
 
 # 如何在 Minecraft 基岩版上获取任意披风

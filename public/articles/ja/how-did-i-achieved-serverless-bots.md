@@ -12,7 +12,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hp+FCL1Zp4XvqbaJ0n0zb1KI8CWoP95OZS3tu1Aw1xSRia0vntZcHbCCAN3nc6F/TzQSTVx1w30B6xBamqlgJA=="
+author_sig: "FSS2l8XwGPwxd1WYq16k4jG94iz4TLqdsasFSRFRKxOHztG1yQ87bT/FJesUtC0NihJbh0hxRzNyq0xiK63Niw=="
 ---
 
 ## Discord bot 完全サーバーレス : Hono + Cloudflare Workers = 💸 ゼロ

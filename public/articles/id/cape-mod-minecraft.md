@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "B5G6SS7Pyjb33kyw5tbdEEZegbDHVJQ9pCVjpxcVYNXxZQfllfZ/6unThDjiZHlNhtb61V3uCFWCtRU+CeO74A=="
+author_sig: "FL7JBb/Ih5tm20RqhJgySBOHs/q0nM3N9oNUZwaqhHCYLz3JvLthSAlygusGpkvdCNpaqs74ZYfzeCkMFqJpGg=="
 ---
 
 # Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA

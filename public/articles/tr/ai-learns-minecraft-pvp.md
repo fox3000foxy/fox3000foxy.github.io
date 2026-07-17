@@ -9,7 +9,7 @@ tags:
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ftBKEvgvQEbd65KWcH21/2ZqqNQk1LhqehliiT8ifStK5Y0II1/BJpMGdA6fhyMjPfXU/VJIjI25RXgbwjFriA=="
+author_sig: "K9FmYvHEeH8Bvi+MZdcIpfZIDWfDUst+71G9+PEiIn2/r4KySywmywaUdS7e+XjNlyU7BTemHKNMameK368xWw=="
 ---
 
 ## Giriş

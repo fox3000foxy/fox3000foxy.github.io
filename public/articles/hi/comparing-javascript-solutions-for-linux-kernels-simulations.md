@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "AB5Oc3CE1icEi5wQ9IjHzZKlCGwO/9sLZHTlRcRc8KLlV7/DlSwFl/M4K1Pp/wNEpjXKW9cM31H5/cCMKRebjw=="
+author_sig: "ZO+IlG4jijAplf2tx1VEKNTKSw2NOBUsdMKSHeWgNIQF95bPSzq+zTZjaomGvXB4e4A3HwYpi4zcEcy5d4uIww=="
 ---
 
 # हर जावास्क्रिप्ट सैंडबॉक्स, एमुलेटर, सिमुलेटर और लिनक्स हनीपॉट -- तुलना

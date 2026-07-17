@@ -14,7 +14,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "td80uZn5tjBl7ciKFAeE9y382J4FItRSJTLeUMiRmfyI3MVuFO6wibleQwSUtwoEmI+iSsU2aI7rXh5lJwFohw=="
+author_sig: "T9qDFNjyJKoTTppXS8mpf6/XQJyWGgTNY4cFzIZ86jf7MswtyQg/shAzZ3In6qAzwjaZ9Si3C8cQOsPvkjuYAw=="
 ---
 
 # Git'i veritabanı olarak kullandım ve GitHub Actions'da bedavaya bir bot çalıştırdım

@@ -10,7 +10,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7Ibv7Ux4Cb31FNvvIHCAKfB1HLosu5BdSk0b5tLWu+byvnvKQzFfbLp2FQYqCNwJDmBHgHYIi9VIS5CEMo5lDg=="
+author_sig: "9SPGzvm3GW4GxpvMgn9VNTuin5gf9dhTQ2oTSnFXN5jAjsPV467wj/VjYXnfr13QIlxGCqed8rlbuSseL2KdIg=="
 ---
 
 # SSH 커밋 서명 스크립트 설명
