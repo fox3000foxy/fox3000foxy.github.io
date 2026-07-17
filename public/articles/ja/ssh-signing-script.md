@@ -10,7 +10,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "eqx4ShWUaJY5sCDQSVvNK9qoq/lx7MjrS3UiljVBfvj97nU6hQ6PDUZdT4f37ro3WbU8mgMmIfTzpkBV8mpQeA=="
+author_sig: "jLLAdSK8MsvqwJRuyR93jEQ2WjOh1+eE7NF2+qw0P4dFnc92ijrt30vQrwSGcUlvcIgvIJL40G+4tYvFf4zJzQ=="
 ---
 
 # SSHコミット署名スクリプトの解説

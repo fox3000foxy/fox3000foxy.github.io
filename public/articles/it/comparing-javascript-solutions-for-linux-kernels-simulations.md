@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PGuswvzEGTVNwOKIqAZRbDOJFMcKlZl77mP/FkguLMgLrPtT+ctlN6CQdLume87wdp8A6niSCDII5gSVXnCh3w=="
+author_sig: "NfDRWSLtLJ0pN/vCJBmGDCPqtDErycm0fB1dcBDoAxcWo8Eul1ZgdHGtVf547zkHP1kyOkiu3uvesPoOgiTC0A=="
 ---
 
 # Ogni sandbox, emulatore, simulatore e honeypot JavaScript -- a confronto

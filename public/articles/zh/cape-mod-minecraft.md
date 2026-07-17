@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sVzeToZPHLCXI0DP0iuzN59fw857PLPuLWsFZkladzpL5ybOrIf/htbLNB14tHokrlr90xiW90hEtDwT6gLG+Q=="
+author_sig: "r5VkIVQSXNY6VmAn4Mx4ULjRl377Lcjz3d5Bnp7fdNm92B3wPDeE01UuxZhlPgVINZRoL2/iT9+4F2U8CRMbtg=="
 ---
 
 # Cape Mod：如何通过 RSA 签名注入窃取 Jeb_ 的披风

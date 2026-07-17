@@ -10,7 +10,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "eHdJ60TiH7fyhj6TNL5b6P0MrUOBapPWlgzROKomR/yr7rpFgm2u08lxAXLotQbmVEBixjEEGp6Oim+eK22L1g=="
+author_sig: "wzEGS3y7XqGiFpF6yhlEW5uWMSHRzkwM4IOFkex/o334SpqoJJTz1j/onPJOFc0hW8AcY5OjIr2Dkan8uKTYuA=="
 ---
 
 ## 俺のクソAI for Nausicaa

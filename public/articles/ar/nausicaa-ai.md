@@ -11,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9yP30nDAU9TePNvfJ7E6TqFhjSc6bLCamM6AJxe0+jLHMfohZJN3pdy/USUKd6SQYRTzgTxrj+xa8YSkbl0cFQ=="
+author_sig: "PUucBTJqNGw3vbj/C+tK8AA4gqVZhaqpgnX8thsJo8VkwaalYu2uSP3SSuoB3WCrMjO7FgcSN0L0LRWG2TxOLQ=="
 ---
 
 ## ذكائي الاصطناعي التافه من أجل Nausicaa

@@ -13,7 +13,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "uYxFNhnbr4aRAViuEv1xQoxftU55N9KBs4c484tdnx60iVkJpHlAl+v5rRe6TKLnngc7shtHQpl39RCYtU3BFw=="
+author_sig: "J+9rvdkjQ1DS0oe0vMkdv2G+ZRz7Im+MyQBtfLh24iAjWD4nF5YllUXDI5p2zt1bR96WUiOEZQ79zX3FUR1CYw=="
 ---
 
 # استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions

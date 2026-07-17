@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FtLEdR7wXOKQ9spneXIOVuwPzyJAYurEJHtL1c6yKCftZkdYiEg9LvAQ3W2nOlxyS6Z+IPzKec0UVjt5ZBOZFA=="
+author_sig: "yyi76kgVPewSDeJLG0JIdO8F/XLqAgt79z45Hov/2JJXF9SQ2lHWnvvNeRsuguAjfm0FEcajqYpvhAQNpKpaEA=="
 ---
 
 # 5 วิธีใช้ GitHub Actions อย่างแยบยล

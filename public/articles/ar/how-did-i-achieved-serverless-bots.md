@@ -12,7 +12,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pNAw9ARc9DgTi3jUb2RXtFGS9rx7eTMHyI75my8Ww6eSEp1sj/0tUkneEViOusx+HpJewEUHhD6iPQqBGs1lwA=="
+author_sig: "VbBEeLkrPack0rXh8NdtGeIPGWBK8jsvGQcp/TibLqI2s+dUtxyKp6flcnI2RBnBYydTq/L1tmdvoJFvQujJ4g=="
 ---
 
 ## بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers = 💸 صفر

@@ -9,7 +9,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2ypS8lwma9gIZww4HLtKZBoVPjJv6adlVGG/26GKY9wsdpSFklYA9+Z6ZHczZ1MAhFPh+46jgaeN64eShAtGWQ=="
+author_sig: "6d8wuuqbF+jOSlgAnpgniE+aObva8QQsNcdY7cE5trNNS7nB2bJCXJAwvBF2FOrFHu+1+NgCWfvDb82iHHcO+w=="
 ---
 
 > **备注（2026 年）：** 该项目已不再维护。微软显著加强了反机器人检测----当年有效的方法今天已经行不通了。下面描述的代码和方法仅用于存档/教育目的。

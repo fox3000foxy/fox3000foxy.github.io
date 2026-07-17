@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "en"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RsnUsmoZ127pyodF/nV5wq165Ptv00eLSs+TaJh32Uoun28asnRsV6I1Zh3efChr6Wbj8TIZkmFL20ik60XGGQ=="
+author_sig: "OZSi+CZpdHP/tH3/N7JS6L9MM32oAv6XrbQrN5kwrUsZZh1pSt+2fAtKrVAMY8fECxSRSQtEmM6VJZKLA5kzgw=="
 ---
 
 ## The problem with gradient descent alone

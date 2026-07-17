@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "réseau", "arc
 authors: ["docteur-turboss"]
 lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dfSjj931cuMp40aaLMUtnUYI2rURXO1XohINZdxVHWHZMrcbdcXEsAg8Dvve2YMNXB++7OAv/8FXYtTKfBQb5Q=="
+author_sig: "77p/xK4yHEJ20RihpLfLoJZi6KwHbhjHYrmDZLK3FInLWkhs+kywhuBSn4Zxpyx6gYxlbqBeEoTQYSdlfXCMrQ=="
 ---
 # Le problème : trop de sigles, pas assez de hiérarchie
 

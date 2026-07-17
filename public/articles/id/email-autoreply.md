@@ -13,7 +13,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xW1XAqzPQzoP/CT69VXCJeXIToUb3bLB2sN/Cd8zlH9YWRzRq9HNUr6JpAyzUnkMnVtsLO3tV62IcpxX0YoikA=="
+author_sig: "REiv7Ix6uRy9YXVCKbzrgj/IJrev8XJjerrA5se1uTVw6ah3lz9OLF+3LtgzMthwERud/I3BhXOzW5IA1abqaw=="
 ---
 
 # Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions

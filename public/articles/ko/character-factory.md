@@ -11,7 +11,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jPid6zf99R3NH1N7mE0JBf0qA/1WlWVv0SBbEbAmmpE0kzuQ8txhTq3H/JmndVFUVClRODmnjW6d8Qpb6IAMNA=="
+author_sig: "1oJ8EQI4y5V9Tu3tTbUs2P4hvYmGu4o/xx9xxlsWOpVUlbHPlq82J5y1wMXoCYdCQuUKQhxL5I7VT3qtcYwHFg=="
 ---
 
 # character-factory 만들기: 유전학을 가진 아바타

@@ -13,7 +13,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "481vuBkEhPQ7/c7lsHmJF0vSnWdKOHeshmqPFV21BmjStp1gspC41kgrY9M/VncMuu/Q+90ef8s7m4KUrqSYYw=="
+author_sig: "YlAN2gJplgvmScQU12tcfFTgMxJfd7NFi3zJwtCmumr1woIvP2edx+cpKUEAwrSjg/TTlQ38UmChEfGWH/0LIA=="
 ---
 
 # 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill

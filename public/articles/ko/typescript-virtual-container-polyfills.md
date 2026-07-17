@@ -13,7 +13,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kMnCDvoHIwp9wXJPfweH796A89RoFjs34tXe7i5Qw3upoOEt/SPMgdxnP9vooak7aD4lKvGVUnjWP+GxNOSqfg=="
+author_sig: "TUOVr70VnUc/NLlKboWvVegG0Vo0+UxO8NF8CpCs3dQbzYYYUV/3sOUXGNe2rxEDebPhQmox+D3wEGCreZEk0w=="
 ---
 
 # Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들

@@ -8,7 +8,7 @@ tags:
   - security
   - honeypot
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HRA2+gmwfYsYIZ+PP3lozDuKM+E41rAPUzQ6JTbuu8vz1MyQg4EUU2mpP0vCIk34VApLiQSRhfH+hqF8e5WZqg=="
+author_sig: "QeOihMc9gcFGK3DnH2zt/MUrWSXS0GkggIHcC8W+gMgVGXdRDNMRj0xPDUo8oXDhMRTYY4FrtJllBmpNXhZEVg=="
 ---
 
 ## Идея

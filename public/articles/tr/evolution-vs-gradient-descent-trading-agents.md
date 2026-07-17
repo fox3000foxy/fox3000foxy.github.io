@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "tr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "G2OzQ9glc2NvZr50oMWaWTyrD8a5A2R0IIxGDFA98Pd7KuTF5ahjuwvqAvQOPHVfquQMeUQ9M5MQ/WRYoDlhew=="
+author_sig: "hliDKw4XJ8lf1iZrG5u37rCqnd2umfvsni1ZAN1mp85OCGzj6S2OLOBRb0TK3xqfpfrYBfna1b7UoQsWBLd+HA=="
 ---
 
 ## Sadece gradyan inişinin sorunu

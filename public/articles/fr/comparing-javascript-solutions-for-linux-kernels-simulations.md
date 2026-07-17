@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/P2Y7nJU1IDDdZ6eujz19zdT8tXsjkg0pjaG6kgUCxKts7d0wq+XL57U6zjmnM5Qsp69F+QmhrgV1Mva0wDxtw=="
+author_sig: "TSuYbbnKD6owttyLMXmEyGNVSeDl16pqg98WmmZPIiCPOIIF07X3y+YK9cGzGgj3HSFB/MgNnnKv/fK7d7X3bw=="
 ---
 
 # Chaque sandbox JavaScript, émulateur, simulateur et honeypot Linux -- comparé

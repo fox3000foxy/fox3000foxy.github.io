@@ -11,7 +11,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xDbYj+1qQ4cBrHSBnp40+oZ+q32tSpKpqx0Zko8L23U2HiLDfmpijd7fLWdtp6d1ktmljNcLkdA7vPTbTS8dGw=="
+author_sig: "ct6DVKyDcbDa138HRdWM/bRty8Gf+91HURaI5pJJPmSHwnOcNDL1EXb/v0wgC8XPIY+hAMNfIUyOsGtSwTP2ng=="
 ---
 
 ## はじめに

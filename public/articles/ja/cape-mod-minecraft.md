@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fr5efJg3wLOLPd/MT4hmsqSOtOY6crRnMl/ATx/kUCnTQAOaLM7/oRAJ4laKLyNWy9OGUlTRAdJvNfGi7WFoJQ=="
+author_sig: "TzB88z36fa4x9I+B8qmIuGy2uhFg2CK6NWtkWMTIbguI4FPI7wrXqErXmMVAN/VCwoCMhmDB9XNeBB2Dkqhr5w=="
 ---
 
 # Cape Mod：RSA署名注入でJeb_のケープを奪う方法

@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ddznlWNQ1lBx2tpunj+Zcp2sDHCyKCpQTkARW7Q+DtxZYikFnIWBJsquxS77lNZE9Kt3v0s3CnQWc4pH8YNFYA=="
+author_sig: "vdsUbuDuT53cUa6OmnUIY/IpZS/8L9sqKC4bXM5jZZqUnsTXGxTHto/2DoHw6UDFDcsL0+zP4csMKXZH/BsYSA=="
 ---
 
 # Minecraft Bedrock'ta herhangi bir pelerini nasil alirsiniz

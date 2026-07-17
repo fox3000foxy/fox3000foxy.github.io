@@ -12,7 +12,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dpfYsrDG3geuhVBiNjk0Rjir2hUb2eQ1ZlbtxhQOyG8p8DzaFM5F3KrpQcHsXDBBLnqi5IJAVAkzCBCNPG2nFA=="
+author_sig: "jnkjIk622moiUSurbN3EIc/cduW4VX6KwJuzenAeX51Yu2uYRyaFLk8zndxfTo9Xms7/rl3T8hkH5nZ11Ivx4A=="
 ---
 
 # Construindo character-factory: avatares com um sistema genético

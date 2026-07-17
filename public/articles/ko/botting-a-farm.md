@@ -9,7 +9,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5GhbbxabjpxMbeke3VsB+Vq3Xbg5f1C3COUElfBbk05BvW46V9xwemhE4cAdsWdzE+gxnpcBltrIHRGK+wGtVA=="
+author_sig: "T8Zr7kQspK7u6cnGUxk5X+eZY9jaa4PQH1X7RlLFbUPtGV3M2GzHtVt5OggrCy66cUJJT55g8rxIJcj3DZ9ntg=="
 ---
 
 > **참고 (2026년):** 이 프로젝트는 더 이상 유지보수되지 않습니다. Microsoft가 안티봇 탐지를 크게 강화해서 -- 예전에 통했던 방법이 지금은 더 이상 작동하지 않습니다. 아래 설명된 코드와 접근 방식은 기록/교육 목적으로만 보관됩니다.

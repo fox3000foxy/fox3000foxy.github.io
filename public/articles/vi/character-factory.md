@@ -12,7 +12,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/MlL68L2KsFaA7mo2igM7B1YOA8Dn4MMIRDKxfw2CMUDTxEKjEuj+7HhTDdbtWKc74GwFeZKJp+T83hYNnMjyQ=="
+author_sig: "bIaywzrAVRqisSf2vZNnotAiwnVZvm2IdX17/P533bMdNKcztDjsfYeTs4CV85RmVxsCQZUMcBkjWM9PUtmj3w=="
 ---
 
 # Xây dựng character-factory: avatar với hệ thống di truyền

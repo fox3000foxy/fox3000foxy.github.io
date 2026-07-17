@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1rQhaBRY50fdgfGZghvP11tyoL2ACF0IOrui7Bp2Jbq/17EMjTrP33rOHrl+BDwS9I7d9z+u4DBtk5Z8Zi0sIg=="
+author_sig: "tMgQQzKo9crsWYp6xY/AAFgw3hsympAL0o+MQ1Hnt5iHYCam4tXyMmuBO7GsKYnnbJE4G42Byu/8xuf5MHbpMA=="
 ---
 
 # Cách lấy bất kỳ áo choàng nào trên Minecraft Bedrock

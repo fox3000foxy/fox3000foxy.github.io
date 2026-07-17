@@ -11,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+F4WIs0qwR2ic/cKNtokch5AAHshcBIkBe+UUmscB/v1o35Ry4uhGb8GQYcq43ptjCkrlIFbIudsfwV+cVVhSg=="
+author_sig: "IDlImls4wOQjdq1jL/6wuVvUXq0lyKutrlYQ1qXYB7OgCKYpeUF1k/WjZjV8Do0i419p0IovqdOsduZKDxhhwg=="
 ---
 
 ## AI Konyolku untuk Nausicaa

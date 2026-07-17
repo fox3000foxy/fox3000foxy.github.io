@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xC3y37vyTEdd+ZU8fmxo2c6LcGTPuX9QvFDvDurSjgjcApYjD08hHAFf1ukTUfx2CTo7+BWVE0G8vjAmzVM7/g=="
+author_sig: "qpt3Fp9k4ffwoFBru6wVGPpUTMwOGgeafK7B9IWIiY314XJ2ywjtxf10n6D+DVRNgg992tWUYcb8PGz/a6WACA=="
 ---
 
 ## UTAU: how a Visual Basic 6 app democratized synthetic singing

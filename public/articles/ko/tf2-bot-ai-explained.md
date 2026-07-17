@@ -9,7 +9,7 @@ tags:
   - game-ai
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "18R24yMP7bPrRs+7iQl4DfCUULfOBjLKU5jiUCoU3Pu3neXK3niuNI3kUoBNeHF/trX/28/AffWrCtoIvG2LNw=="
+author_sig: "I22qje0QBmcm49xdslir/J+HCE9lRYwfQqW9W9trCu0PMPhjsN6jj3RTFjdNiEULbnXep43ZvGhftwERa8skVA=="
 ---
 
 ## 서론

@@ -12,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+eV2Yj4wHpHHOlTlFwRkNiArt3p0YjEgsVQka2lUFK2BBTOEZtWHM0eT47FCmg6PEzdDCcfBk0juvjubUFUGSg=="
+author_sig: "KnBD9MWDCCnLABM8QBzK4O0ztwP6zLi0FYmuzNxYkiWWyJF9ha5l6VophwInOSOFWT/IcD5OY1fSnNp2/RGeQA=="
 ---
 
 # Luna Protocol: ฉันสร้างบอท Discord อัตโนมัติที่จำลองความเป็นมนุษย์

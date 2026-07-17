@@ -12,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bTtYsvGMVffgTEz6YEi4JwqytqQnELzobZ+GpeO6GS+cq6dbUsyN67NLdRSAjKeHhyWvcEKY+lASHPF1tmH9qg=="
+author_sig: "pLD9c8nzQxAPFA4qILEOLdR6afik584Zpywmyud1TNEO+kUWMzJmypXuwHLecbZyettXcU9JtFbPMJGvvPt2JA=="
 ---
 
 # Luna Protocol: 自律型Discordボットが人間らしい会話を実現

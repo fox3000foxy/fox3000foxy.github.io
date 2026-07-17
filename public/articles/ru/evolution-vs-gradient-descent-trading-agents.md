@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "ru"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YturNnvrwXbGTTv7bdtF6V7znYvP39g9R4Yr0tEfOlt/EOLxfvWghS6yJGajz/fGdBZ/rHfADR1hVEVOvtIdFg=="
+author_sig: "IDRcDq6h5Bjt/gzeyrvlwUJzpBVoqQbzNGT7yx0ueZhDqtHXDefeaEZ7F/LzlJsEOt76MK2twrS4YkLentTwEQ=="
 ---
 
 ## Проблема одного лишь градиентного спуска

@@ -9,7 +9,7 @@ tags:
   - jeu-ia
   - ingenierie-inversee
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "VtVqxj+IwIfF/U26KcstkTgtta3myfuYH+hP/tw5U90LNGVWC3n08Vb5lKsr4YNYqDjezx+vTcF3yduZ3Oj6WA=="
+author_sig: "AsRyr61i/Lpjc/pM6K60mLxiLAV+Pi26VZPq2kPArPt7McGqB9r4/GKe8ijgVKZI2lRZpl1EDxX+3+g8L7Snqg=="
 ---
 
 ## Introduction

@@ -9,7 +9,7 @@ tags:
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "uQkOsgtBHhTAKnL41tn71PdGkz585E4wL31xDmvpmQ0aSBxFwAhZIPRBzo+o0Wz23fzDG5G518OaYaRimgA6lQ=="
+author_sig: "veTfRzrdJmdKi1iH6OQaWAzUTR70y4+I+3Wq8XMS2LAxMbhOoWSefb6j1E9RqzFavHLGsnCHxho5aOWrNhWtsw=="
 ---
 
 ## GitHub kasih kamu VPS gratis selama 6 jam. Aku nemu cara bikinnya permanen.

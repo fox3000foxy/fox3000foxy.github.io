@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "nmGxyJYDoWoIjf0b/H1c1PH2uB5Y24yn9HWXApvyJ7zwR15VzZEq+rR/KpcY0YjiwnRfksRDjl9Kpk6j4NmIyQ=="
+author_sig: "Lle+PjNDblrxf2amXdTvr++bScjdNVBbyiHCdGtrtZpT5I4AZY84HHJCBTlkqayhr3a6YOAQwRdc7jTCD0MgGQ=="
 ---
 
 # Cara Mendapatkan Jubah Apapun di Minecraft Bedrock

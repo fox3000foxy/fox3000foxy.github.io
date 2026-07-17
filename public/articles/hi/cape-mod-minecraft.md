@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+2knlu1C08qfDMhvBAy/lS+a/CYhVwhxCYq3Bbr1qKg/wPzABulo4eiGM/hqYWfkDnj8LkMZOSH3PdbN9fXAig=="
+author_sig: "4C4qMnTJQU8A39BKxRwG7v3m2MwNp+ZLjgIP+tRVlDM5NZT4xxtc2spxuN4sMHP+VVwm3TnJRlmyuuvEbFerJg=="
 ---
 
 # Cape Mod : RSA हस्ताक्षर इंजेक्शन से Jeb_ की केप कैसे चुराएं

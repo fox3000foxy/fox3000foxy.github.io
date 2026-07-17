@@ -12,7 +12,7 @@ tags:
   - ai
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Z1OqNNIIQ9BpFHKOkuGa5SkskLKnjDtcbj6+8R+V3Kwn/1NaFi0j34CxvZUs51QkVZNNyHk6sym0nQDs/sDJSw=="
+author_sig: "07zBuyyB3Lowcwh5gEmc9jyBpf3vNI7m9pkCxtsnG/zkyf6Dxk7fkFKEgpJOt/dd3tl9YWTVk4pQGwQWSxiHSQ=="
 ---
 
 # Luna Protocol: tôi đã tạo một bot Discord tự động mô phỏng con người

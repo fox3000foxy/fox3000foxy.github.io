@@ -8,7 +8,7 @@ tags:
   - retro
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "o6vk9Calo/hPuwnoNlDZQiYJRtOOggZCEv0ueBa7uR4e61LE5cDdPixWgazowb7oYtFmFeTql3M8BcobY6au3Q=="
+author_sig: "pTH+eJcwl5ZLs3RvEGNa0VKgQIQAKa2FTDeF9KVFI4nQZR9o58tZGeOGajwtTxCe13tL0FHtFgdNnxnWBv5SJQ=="
 ---
 
 ## Introduction

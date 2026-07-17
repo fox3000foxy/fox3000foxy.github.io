@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qn/M+ffHsGPAM2slYRWulY1K9F6w/BSfLu2CM9mQS4Px59EEf+PjQNH3Reg8b56qb6XvjWGGRvP9BF+OXA6FQQ=="
+author_sig: "YFU/YAWX8RNqghKK7wq2GRIwr3SjphgBxM+2G9IkmncwmjEd9ig7wWHwVlniEdPgWB55A+x0A7Q7FIlKZpnWIA=="
 ---
 
 # Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리

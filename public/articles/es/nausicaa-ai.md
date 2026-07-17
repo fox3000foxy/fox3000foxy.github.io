@@ -12,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Q2W60km+QeutFcSksF0RXXYLWHBi5+wpzfxoLySGU4jhzb+DwKhH6hmpwUfJIkf+FlDkFnlHZOOTGZYV8dq2ZQ=="
+author_sig: "SHYJzorwfWEnuoOSZfSpyTuj3d0mvw/ryxw5GXeJK1qHx2pnbkWOyv1eSW5A2YKxcos1s4j/+spnMtDI+xD/5g=="
 ---
 
 ## Mi puta IA para Nausicaä

@@ -9,7 +9,7 @@ tags:
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5QH0kufy/eKSf30g5Uzv50MBOW+XBpv4Kk1lVMZ+1A+qacPCRlIQE5qWxTV9+YgqhwSVvV9VqOzcaBIFb7Gcfg=="
+author_sig: "zIAt4SGAFStrEa0yUVfgjo+cviObdd6Tia5gnKnO3/W1r0pDdkBejd7cusPt+HHei94hZzI6eZUJYNYu1p6Grw=="
 ---
 
 ## Введение

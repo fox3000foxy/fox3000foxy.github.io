@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tXEbn3DrLpKOvVm3Nu3UAJA3VN7Y0rp4yAI6c9matAfMmUtHOU9ldHnXoVFXzcMn+qk75WWz7GbHSsBx0Zke5w=="
+author_sig: "onaqqOA/oY9CVn2IToaiByWJnboo9zSDEKn2fJrOwVdZY+hZl/uwdeH6kCWHzq+oy8KW39q6AlkP5/tMY2SGgg=="
 ---
 
 # 5 cara cerdik menggunakan GitHub Actions

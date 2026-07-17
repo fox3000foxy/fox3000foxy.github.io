@@ -10,7 +10,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "6vxdH4FWMgQfWz/4PKiG91ooL4cNy8D+0Nma4LHSPqYdBUkveiOdMA4MPcKzn/gMvD/QC2lOvo8s3Y6QO7KsAA=="
+author_sig: "MeNiZab23TNjDv45z+3FhF1bgjtINa8GWwtN/qSVZnKd02BY4GICsUFIRG2kB9yi4cdWiE1FcrSPD7e19XcV5g=="
 ---
 
 # SSH कमिट हस्ताक्षर स्क्रिप्ट -- व्याख्या

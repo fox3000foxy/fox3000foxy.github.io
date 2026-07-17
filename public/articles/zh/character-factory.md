@@ -10,7 +10,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pjHq1WfgDqtk431+CwCJxSKmUh+IhnLpxaRQ3xypUUrXvNO85kcSHfUIGhOfTLwOploKL/flEmWKrNmU6iUcnw=="
+author_sig: "XoIVg48s30zTI01jlAvMX6mqOVMhnzOSDeVIsg6aJwVtbtVZkwPWzs/8IBfsriB/yoecChQrvPyKO0UGg1VIXA=="
 ---
 
 # 构建 character-factory：带遗传基因的头像生成器

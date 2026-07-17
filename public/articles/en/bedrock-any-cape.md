@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hK1MHaY92GbBMjZI1kCR39qL2t6LVo3a7k3U/uArStM41/4ge0BYABsJQIysUr/TnXMJN5s5WCEK5dSXz6J//g=="
+author_sig: "wVRJOw8xpTlQXHQCJQxQqMBW/1boROC3qGmDf7104II1F7MqD51GbehnodxnWa/5h7u1THgqX7VBTvXLcHmdfw=="
 ---
 
 # How to get any cape on Minecraft Bedrock

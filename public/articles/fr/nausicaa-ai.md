@@ -12,7 +12,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "V3T9ulNie14pQe1fqtQkIV6zk7KPxi39ORKIOaENp5vgztl1eVkihQjYUbZo4g8tte8zNq22FLfoghB+FGnHCg=="
+author_sig: "OGtq0+nGzO/q+PirT2eVD0ECmxpMIMUsqnEfI2yfkuO4fBfOm3vv9Bi468+GpSvHWu8FruK8Qu/ym6Pmf2kqOw=="
 ---
 
 ## Mon IA à la con pour Nausicaa

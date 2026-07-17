@@ -17,7 +17,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "69M/7ziVm+KSnrmSOZgYj47HUdUTH+tAl6RI3okMK1Iq61ds6Rp3wPKaMgXdpUn4XIb2vwJRBTT79VqQIh8MDA=="
+author_sig: "yCdnMrxlbMvMzMekMFrbUEW9qHzhswV7mSL2bHgl/p/nnY1wSSK0DIu28lYvPRci12U2cZ6xADBAbU8XjbfQ0Q=="
 ---
 
 # Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım

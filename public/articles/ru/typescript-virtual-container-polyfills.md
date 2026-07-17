@@ -15,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "x36zwL9Uv1RBASckOPpPj8EoSrxdmZ16u8lLvxKBc+WEZPgatuHICuPU0CmfPGTfuKqxv5vav7xgyPhGjpt36g=="
+author_sig: "wEtAQt3fg+ckA0T3ORusfXcEs1mi344nkONlx/nhMsRni4aPEY2mJ095eqdYVfMcXuPor4zWQbFuki5mj7iGVw=="
 ---
 
 # Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container

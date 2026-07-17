@@ -17,7 +17,7 @@ tags:
   - gaming
   - serverless
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ckhbdGWw4Y/rQkcBcpxGZwoUm/Yx05AdYYIfSMQcaErztkWBg0+8SU7GHeqQI25m6FeLKUnZJygdziKyZPaLrA=="
+author_sig: "o/DP77n0gpe0+pGV6aTSprkYUTVqnFNse9sPUWiuxp7VtbAHmEbonSzJdcKXZyIuBwdQ7NFplkLyApQFuItKaw=="
 ---
 
 # Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan

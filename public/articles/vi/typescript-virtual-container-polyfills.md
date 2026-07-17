@@ -15,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "WXezK6Y//QPnf6230SDvaM9zCbDz794WTad5/LIpN4nUFa0bdU21PBUkTxEFSKGEHEDlR7ASgXWg4EqXG0r12w=="
+author_sig: "xZbCIHTHonMncekpCiY5eWEPL1zmil+oln5ClKDnHJxiL/ms8gUovjhKe+4tvbf59CEf7UUX2k1rNQs+meMXyg=="
 ---
 
 # Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container

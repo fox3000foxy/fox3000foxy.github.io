@@ -11,7 +11,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GO6IGXTqH2fwWRZfLo952Xt51EF3X6bmDpmU6Xz0vPUflfYl0HErNDkfUW/gb2MO+4CwxwocWkzATlTYzC5z3A=="
+author_sig: "CttxVcTMtLPPj0vmIbvvWPThCVbRcsGVxJBzpAboGLi4fa/LiZAlh/KSahq80Ql4vYlArY7nhWFXEnBGWf1Pgw=="
 ---
 
 # SSH commit signing script explained

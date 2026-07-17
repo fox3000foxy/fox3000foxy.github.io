@@ -11,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MhVSYG6xAWWxAyIdszSsk7ZwYmgtGOs5P1DOILqSO3YRMGMOu50RqE9KBoZ5qlbqI6XSE3olHkkT2syZSkr/Vw=="
+author_sig: "IzmTKJAzj0cd71UYI9Be5EVudFb9c/33otwU1bm8qBfLZFkNhwPQ3KJuOzd9KHk3RTiKGDwTc3yAlFDPfihyjA=="
 ---
 
 ## AI Nhảm Nhí Của Tôi Cho Nausicaa

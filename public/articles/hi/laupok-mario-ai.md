@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tbUlfBbQtRyOrbQcBTS5mMXk5BA00JHVo9jy/hoJQWGtyWd19H397/oRL7RjoCsbtwAGjw2dVTH0oC555pvUHQ=="
+author_sig: "ZAmpXrUJoJH5VAHtLrqX6I+D3bJz2GJRFxPE+V+Jj/++9sypDV2RvxHCk7bctVOgR8FjA7W4jI/kWP6oOlaQEw=="
 ---
 
 # Laupok ने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है
