@@ -11,7 +11,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "xsouvDAoaEJcmqkRjm/WDX7/dzDuhzS0EhRMr8zsaWAnpWCwL4wsRfBznMdAqhjpHzrhaduvO6Kn/MZG4JaUKQ=="
+author_sig: "vLyHshy6lxNEvd4RMJ07WKPIJxWJmOjcFmG8HetHOQ85Q6TyJ37WpQx4XbcGPTzpzhnqT7yZceWPnj0u0R/jOQ=="
 ---
 
 # Script di firma commit SSH spiegato

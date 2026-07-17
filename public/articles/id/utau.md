@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KR2Fj8HEe4dNP1LyT3ksqyaBKHk+MwtzupToZypv63Qi/y3DcRTVdOyLSAsI37r+Ke3zwEe+Xi1suysnBGAJHQ=="
+author_sig: "AidiNUq14JE50DAdzm9CA3ADshzKTEK5nEoXXF/WbeQoNtffPHPPiNySwl9Qzo31j0K5tSbHZSFcj95rfGPa6g=="
 ---
 
 ## UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis

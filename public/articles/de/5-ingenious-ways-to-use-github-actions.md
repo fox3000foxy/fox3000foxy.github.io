@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "vv0/CYHq5629uzfs8zwvPOSSV2D4B6Dv9r5I+do+aJB0ZPGAHghAu/WHeKhSGPZTDZiwp7geVYSVAgv6tKDp4Q=="
+author_sig: "7rFgIjbH9AfVW7PMFctjFeez677dQmix+peMILHm+FMrWOYvzg06NauXyIYI53bmvdKogGCN1KeOBqX/bhQwgQ=="
 ---
 
 # 5 raffinierte Arten, GitHub Actions zu nutzen

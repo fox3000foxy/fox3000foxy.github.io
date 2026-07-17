@@ -12,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Nj/KSINEfpqIeWyCPum6SWb9tDNOU+iplwAMCTKE9kBYXE3F5sgABGFMhw66oQzq2feDl+xd7loQpvxNe8aFiA=="
+author_sig: "c9xgoTlUHfHTpTDYzU2xjCzU1iiwbuRfpOKc0Xmk1Dc/wgyArf2ketxNHNVwm9qCSqAEoghyMq86RTA7QoTDBA=="
 ---
 
 ## Meine bekloppte KI für Nausicaa

@@ -12,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "iAzCHYHUomZ4dmmUCtPUHjiNXxWAD8rC1HTH1Jb4wsrhyK3HuntRlwYWrxCEbDjHnwS+PuP1eGRrzR8V+K6+EA=="
+author_sig: "kuV8Y2lbrjeuFTXX+S3qbv2+PqMYNEuR06U0t37BDCCvSpQ0QPTJmsTAHH/yauAIKfnlOAVYujOFYPuD48Ittg=="
 ---
 
 ## La mia IA sballata per Nausicaa

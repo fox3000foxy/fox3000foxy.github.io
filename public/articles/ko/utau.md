@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "efnNPRTaj/GiWXV2kBJXQ1SE07WIqN1cOSKjj80eXLcGbYQ9RzzoRhpnkW8kGud3K5B+wyLmOAHTGCYWD9/LaQ=="
+author_sig: "ideC0rBIuLQ2LZ64K+vet1eZkzs3Rl+wBdmPlkRHsT/EZEzgyeVnyh5vRxR25BF4V0w2UakZEmeA1AQCk/iC6g=="
 ---
 
 ## UTAU : Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가

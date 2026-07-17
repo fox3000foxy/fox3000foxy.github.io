@@ -12,7 +12,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "miaQpKB2gAC2CtYYoUqYu6/V4+VaD6KfoAEDsFjpCKfXIs9RTXgFAZF99fLeQiaJYgUtclD6JAIOOUlloYX6tw=="
+author_sig: "Lzmy9VztG85nw8h60RS+Ip1OAlnlYjB95zuM9+Kr3iXJk+Tg8vv23L0fSTltaNq4repPt7sJW+ZLMKbf/qujNA=="
 ---
 
 # GitHub Actions에서 깃을 데이터베이스로 써서 봇을 공짜로 돌린 썰

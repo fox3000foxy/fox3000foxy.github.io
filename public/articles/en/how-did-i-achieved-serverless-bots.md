@@ -13,7 +13,7 @@ tags:
   - typescript
   - bots
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sNe+bBT4KKh2IQkAPv4K70Po221bDrt/WCEM1DH0iQzLrmp8OV2vfL5WqrmqhqQPozNj8vkr38r1YztZfeKutQ=="
+author_sig: "Wq1Y7B10v9tLybL4c5SwK4O6nAN45esH5RpumFdAj5P9CjWlIXrWQKgC/ONTJJCeW3auQC1XHx9XVV/iPkwy9A=="
 ---
 
 ## 100% serverless Discord bot: Hono + Cloudflare Workers = 💸 zero

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dGW8MMQZGCB5Dq5xOf9QCAQeC4dSsK2+CsNVXZLAklvR5WI9iV35PajqWzAPC+w18L+pLylchjTyH6B6cvnXLg=="
+author_sig: "817Z60Af4FVXDGlZ6dHupsa/BEwFPNCzzWYVEqx7StAT46Ipgm5OFBkRCdbiX43IuZx+pUB2NRMy8+sPE53cLw=="
 ---
 
 # Cape Mod : comment voler la cape de Jeb_ avec une injection de signature RSA

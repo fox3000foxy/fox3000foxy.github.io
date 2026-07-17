@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hYC6q3dkastnGFEg98H3c/7+bIJ8dU4gszHyu4M2z0/gdhMOs5T4e2KbtSDCKylGBNArNrZG9xK3AcPPUnAcAg=="
+author_sig: "DL9YnwaKGGiEP1k9KZuwiIFiP+VskkyznnDCfKB3YKICgm5GTM2ZGZgapabNlIbnLq9sZ4W54maEwRn0TYffOw=="
 ---
 
 # วิธีรับผ้าคลุมใดๆ ใน Minecraft Bedrock

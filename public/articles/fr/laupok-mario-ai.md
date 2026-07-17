@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ZEgw97SDWur8JK3X+FDD6q9RIFsvy9/ZD8QrsSmD5j8nUb1NK/itrUtHhOvFKMKSbUzi01HWyI5MAZMyWV8AmA=="
+author_sig: "uKzVnR9sB831b1uY4UFcD61Asy8b0ofIpBLuQ+IJOh0+Du7Qejr/6rtHIfWJ3PEnpVeh8gDRUi+PVjYokdlEMA=="
 ---
 
 # Laupok a créé une IA qui joue à Super Mario World toute seule -- comment ça marche

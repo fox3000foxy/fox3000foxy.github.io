@@ -15,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NfDGgFF3PSlw90YTM+fPvkKzhyZwYC47TyqqkmAa8nDxrJjG8qRKseR2YbDy4oEyNI6rVGHharXAH+EPBAkxRg=="
+author_sig: "b3ekKK3dzxiuWSgqg/fNNFH3SF30ouW9VB3qOULTy57gwP1qyWiWWJ4PeNn7CiMAFnVwSqqGxIDMZmkLCRO39Q=="
 ---
 
 # Eine Node.js-Bibliothek ohne Wasm im Browser zum Laufen bringen -- die Polyfills von typescript-virtual-container

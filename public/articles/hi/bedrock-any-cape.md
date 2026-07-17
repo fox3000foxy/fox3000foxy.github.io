@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "IJRpGLULkDpfYt2kOTwTU3Sor8bvQFDIRSpOzrMZKvui1HvBbk0bVE3tGcaUOrA+CdsHhLq1YayZobLcpIoJIQ=="
+author_sig: "FCmGVLoMqqxyFhjtLLqxT4Sl/sXqudtNbzmf2sNB3zJkYzopwzs94c/Y5Md00cQ3uBgSTBMgETizxMUZNra7cg=="
 ---
 
 # Minecraft Bedrock में कोई भी केप कैसे प्राप्त करें

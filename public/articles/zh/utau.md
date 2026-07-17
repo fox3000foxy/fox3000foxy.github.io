@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tsTCYyTR0fHTPFIEaBzajL5Id74Z/6tg9ew4lIwmKEv/qFg7ubH47xxdnVPpzwFHdj+1iJa2d8bGUHrUyGrdow=="
+author_sig: "XygNJVlq2/yYzMoIggUPHv8Pzy+KHqlclrhDu+dXBBBmO4gY/Nf6nM8txGWVlo7d2PQozYW+QDLBawLNwC9UeA=="
 ---
 
 ## UTAU：一个VB6软件如何让人人都能玩合成音声

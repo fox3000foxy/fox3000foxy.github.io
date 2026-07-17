@@ -10,7 +10,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kcu91BGBCKeRedTkZ1JSh0w+heitTY0o6f++7O+XqsA+SyU1g3rYqQRFcdyAaitcl+r2okdRTyKZYTpacHyd5g=="
+author_sig: "JZ+tsTCY5tNM2cRAYLVgYhYyg2rTmq3MJFOb7kP7uBgJsi+eR2SLAzgFEc9tYwzeNgJZnM9pu+MRFUSQDAT/VA=="
 ---
 
 # character-factoryの構築：遺伝子を持つアバター

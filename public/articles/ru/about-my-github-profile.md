@@ -8,7 +8,7 @@ tags:
   - meta
   - github
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NoFn3MDsQLEAmmK40qDa1XqdzZXLKeGaXdwnk09C/7btYvYBbePeKlQI3vkroUBjIrLIhSMpA3BcqDymydZauQ=="
+author_sig: "TLJLzinNfsgJjdrPdaVmB0s7FOceNxRN9Z+piSy/Vq6B1R2eyCBP0Kbu6+yfF2lsuuOr+sHrnu28xvuOw/ST/A=="
 ---
 
 # Мой GitHub Профиль

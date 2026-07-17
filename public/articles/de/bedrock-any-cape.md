@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GQYbejfAXvlHfz/kKSZJ4Mt1BIAtoO9NgLp9D2Ln3TaN1bJGEtxRgnI1uKrWAbjBAk4IYuyPYhGgBztMloAH6g=="
+author_sig: "Biopcq5QgwCoRbi+12vLbEZMVouL8z0RfJoBEeVUP6epXCE0+6y5ZN5hXjE3JqJ34ixzNuRAhStycsOjUoGgzA=="
 ---
 
 # Wie man jeden Umhang in Minecraft Bedrock bekommt

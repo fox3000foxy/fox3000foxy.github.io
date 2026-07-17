@@ -10,7 +10,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "crmxXek9zSRUx8gWmRb9uXudrHeFxmBuLJbrf2QCDZGT652mJMXtx8FaQUbOcIDajHSzqLyt6UCOkJ+dMw1gSA=="
+author_sig: "9hMIrnWnIXtin3iKNekQWezD0WIkQVotJ9tJTs4vYqR1ySu/+46FdSOFO/Cq+46EzAupbxxxzMFlzpNM3si4IQ=="
 ---
 
 ## 내 막장 AI for Nausicaa

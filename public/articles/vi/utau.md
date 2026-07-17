@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "AtFE7FpZEV1ptL3wYxNTg43/v48m+7Cp0zYZbPwtmPTFvNATWC0HxykoiWfCew328wTZLscGuxm8qhwmGjqiZA=="
+author_sig: "AVL5ISYl1Uuvg+kAAOz3yTIfnfzOjcMoQInRw+cbZeMDQhFsFg3iRvoNO4sGAX+hzkl93S7drPvesbxbNCxGwA=="
 ---
 
 ## UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp

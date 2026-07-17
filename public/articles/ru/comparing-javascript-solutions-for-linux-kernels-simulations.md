@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/dgSMg2ya5C95q19HbB9MyNVVSIO8aZSU4LMk3oGzzW1V5PccX4IdlUbDteVJjylCP/Q2uOZ8YHNHuzO0ixxcw=="
+author_sig: "NiOhZVgEZTxF/7X8kbw5rFZr8yPzxF/pGeop+FvdE/IX/vWTBaQz+UjOaQlCKgpL42KNTiSpt97AtOZ9QT7rqw=="
 ---
 
 # Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение

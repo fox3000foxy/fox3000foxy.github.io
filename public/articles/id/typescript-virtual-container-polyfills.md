@@ -15,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ZvjzyY0BL0AOmGUcg7LtS99taGiZtw+NC6NHuaJW/yUiXzSn7oeT9xylwyUkBC0AjbtTJvM0zB3S2O4U7O3vTA=="
+author_sig: "91gTuBEhpARMBzAC8a1+lXpn5Toj9Xq35lUphLkagZgIYn2+6+XRvQjeoTyIieSNJnfuQ23aWXhWKaEMa48mSw=="
 ---
 
 # Menjalankan Pustaka Node.js di Browser Tanpa Wasm -- polyfill typescript-virtual-container

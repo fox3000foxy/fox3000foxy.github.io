@@ -10,7 +10,7 @@ tags:
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2UpR8cjAnNaYmIPoV3JN3PLUT2ETgILuIvwQo6+szTNSdirFoREzCpZJtfc7zthG8ggBww131mNYzjaBxa1F3w=="
+author_sig: "/u7o6Y+FCFYVBiOX5TWLZmn2F9JzenlyVHW7i/hSaNIrQnH75vJ1XbEtUYe6ShNNgpNlPaQZwwX04Kb6zficfw=="
 ---
 
 # Bagaimana Cara Kerja Blog Ini?

@@ -12,7 +12,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "HK1YtWi2pdDO4en3W47HKuwf1uBEHVrqQPe8si/SlGcHXB/7HUXScqemI9ChceX8TNlZ6v7opsZCD2vaZOEp5Q=="
+author_sig: "Ad3QL3ZwIeyWWj7KZs2RVIFTlrxyjLAyndXcG2YXxs9mHuRaJbeCaps0cGxsayFmLZKI/QOMePIu8SHG6B9kmQ=="
 ---
 
 # GitHub Actionsでgitをデータベース代わりに使って無料botを動かした話

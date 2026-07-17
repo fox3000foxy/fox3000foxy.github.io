@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "it"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3HdYBSzwrOna9F8J4FtWB8kJCL/ilDqLZgELyCoEoIVUjhwTK4s0mqvS4NhqIT42Zf5zGLrHIgzlKXNo06VURw=="
+author_sig: "1nBAx6tIOJauyfM0+AcX5B0TROgeSc5u/Wg9ZibQQGhSQ520TbZBTG3nG/ePrf24QhlBZHo2aFB/le1D+JFhmQ=="
 ---
 
 ## Il problema della sola discesa del gradiente

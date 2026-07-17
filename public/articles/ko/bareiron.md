@@ -12,7 +12,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DrE6XU//cAy/6hj/sYZpz3Snwwj07gK21qdb7hEBcsN8nGeMOUhIhEbfb74gR3dK04cwuasFU/hhVNDqvAhU9w=="
+author_sig: "kwAG/2i+54dsKW6CO3FYii0pDZXs1VLx+aPcR4NP7hqXuJlKNGWzH1n7kWW/mDYpVi0WLcsD+jyAptT4ZEgJYg=="
 ---
 
 ## 서론

@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "liMCWvW3pHipwBNRFt2+9bPPnbgLX6oTYKp3LA23o55az2/L6zLHRf84O2qDyCcUi+s4mK/pX94Sgr/Bxf3xTw=="
+author_sig: "USF3yxlxLEckRVHJX75ytMJ4sJta/vNZdKjBCN7rB4bb0N4us2Sgi4jrZoSzBtxbKN0P0JI7G37w1HLCyxCboQ=="
 ---
 
 # Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解

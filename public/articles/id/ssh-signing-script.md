@@ -11,7 +11,7 @@ tags:
   - security
   - shell
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8GdVhbdfLandOulIvVosc2cr078e3Ag7ZNqmxeW1rREkD1sI8z3mj3Cw6wzMEePr8iP7il+7dUrzrfX5xUoHUA=="
+author_sig: "KKYlJzVz54eU/3VubOhVfx41wN9IDQzKtnutvBlgtOoF9CSpf9EHwsCBx47YlRO/0zjg3JMFZDDcYDZ32c9LyA=="
 ---
 
 # Skrip Penandatanganan SSH untuk Komit -- Penjelasan

@@ -9,7 +9,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "KaWLpWtH7L8TNr0R44XIFh644ud5ue2SZo5V0X0vB0sqI0AC956KEtYDn82CQ06ck7USnHULF1Qpsktc4VMPxw=="
+author_sig: "QmZ4+U5AM6Qw7TU1NpyDbPwqe3gojI+wF2A4JmqCvQ+vZ1hmL4O0P0/2hsBappYyWnhBasnx3r0Ad3hAmvnaOg=="
 ---
 
 > **Note (2026):** このプロジェクトはもはやメンテナンスされていません。Microsoftはアンチボット検出を大幅に強化しており、当時有効だった手法は現在では機能しません。以下で説明するコードとアプローチは、アーカイブおよび教育目的のみで残されています。

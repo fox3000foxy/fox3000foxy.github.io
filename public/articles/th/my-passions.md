@@ -8,7 +8,7 @@ authors:
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "wAlkk2LxhzF8RrTE3cfflj7tYe+5X1Wmnp6GNg6iwefvtVorhbylosZOQAWotavcHb+BsKUODdznAcQ6xiQVlQ=="
+author_sig: "vVgDGuTbwrF9WR6rRGltJSbZ9dQS2NPC1PUKPthbKqG7rt1JkV32CXc6n4a83pvgchsKSZH2iv/P62ZV0G0MTg=="
 ---
 
 # ความหลงใหลของฉัน

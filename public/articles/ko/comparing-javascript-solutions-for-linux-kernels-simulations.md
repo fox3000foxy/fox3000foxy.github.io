@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "8vQgQoQzAqCa4WVrAdkfhpYzjmTCKjlJVR4niufgGDN3Sig+hAalGFlrLB+pXkBM2BfeW+ssQeVK+R7YP1D3PA=="
+author_sig: "UmCh6Sc/IGFLCSgcSPpXoGDPHupwZtFZ4CzYP8zr3RQn9nDXWubzVztyFG8Ls2rF3qOa5DwOsqXP7b+vHwDCxA=="
 ---
 
 # 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교

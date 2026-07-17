@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UUCxfuEUeHqRlAUdOqHhpi0bv19SSXMCUziyplISmKe5rO1KVG45QouHAeMdwH8ukHRNLqAuO9gP5opGg2lyRA=="
+author_sig: "bB6oSK4frNdmPKidC0JldZkUtLJ6wHKIxRC8Uop09bSxJ+OJyUH53qogcK7Hrhu+cGmCLhYo+8LfPIWcRL52gA=="
 ---
 
 ## UTAU : как программа на Visual Basic 6 демократизировала синтетический голос

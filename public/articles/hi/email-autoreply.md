@@ -12,7 +12,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "XzFkYWlBckucr4IPv0jmEC0pgllZn8YsYUSIwipMM5DmvO2pzPEmKqNw+J81cfH78DUWRxPWtLrJm9Pi0b9LVw=="
+author_sig: "4eYx5GW8E0/sqdPxyfJWAyu63hKPkaKRtHXQgjDD+oBaoDRSUYrM64QbINqXCw/m6MBGd2ZCoQ6b/oqndjoKXw=="
 ---
 
 # मैंने git को डेटाबेस की तरह इस्तेमाल करके GitHub Actions पर मुफ्त बॉट बनाया

@@ -11,7 +11,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "3MtIPtga4qHpBftNzYOrNklPKX14gCVoSsmek/ooudZoS/RCbXnokBhDgBAMnj6rI1/UBtVcbcs/19YLKEf0/Q=="
+author_sig: "ITR2IiJv2SjvRvFLYLB2MixMlUKDn1HO6qZMYUNdV+4CHrgVG2sO3tiyEqHfwCQhNOpDPy5Nkls1Nw/ySbw47Q=="
 ---
 
 # 我用 git 当数据库，在 GitHub Actions 上白嫖跑了个 bot

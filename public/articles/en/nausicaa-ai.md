@@ -12,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "M9dbHrn/QTvIeXryxMt5x6HKPN+3TvoGxIRsfB+A4cu03c/INh/PR9A/8sPtyBBEICfBpqft7d5hKxplG/gkoQ=="
+author_sig: "RuSqVemZwmCPMcScCGOCuTok13sdV2li9kSqIYgq4XneBnWODwWtBXEyQZi4qyriNOWxRcvVVP3HoFoirCMb2A=="
 ---
 
 ## My dumb AI for Nausicaa

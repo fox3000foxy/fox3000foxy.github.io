@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "k25rfgWYavSEgVL20yKulijIqgh69x2PizEwSxIv7rnEhAdGJF6C7GcrrlnIhhk/UylKZtGRRsDJC7cjVSoqCw=="
+author_sig: "a/AyjKqR0x3VOiW6UA6tdhpY2pxcCeVn7UfK/sNQ8z1fGq8NGNffmtVB2Y9sH0JB2kEtpG5A4BxDM7grVJiZMw=="
 ---
 
 # Cape Mod: how to steal Jeb_'s cape with RSA signature injection

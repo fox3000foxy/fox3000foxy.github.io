@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "fQTEXDJRk5n60XgifO1sdB1Q16kozCSxznvH/fQDAjvp0TLqQrQ/gZYArP5Jf2RvfU3fk7dlTT6GLajLLJgPCw=="
+author_sig: "zcfD8BpCUK74xXL/f8kgFQsL1XAL0DaceWpu8SX+Xoxx4j8Bl2iIQ7MARfYZ+Z7TmdKUgNHgy/1gfm+kErCfTg=="
 ---
 
 # Как получить любой плащ в Minecraft Bedrock

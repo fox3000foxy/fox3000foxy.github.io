@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "D6BklsZl49vQJI3Fj7fQXugaGJOUY5RLcoIBbTg3IscU5LiXD+ZK0Mb3iG42kh79+RyO88DLC9ArQ59jFTQkHg=="
+author_sig: "wgEVwmRCRPwxFp4mWqi/lMA71wMIGqjHUnT/fswqtXPeMsgJLVsgujPT2mQcyuRyRtUntMOFaGqR0zBgcTBKrg=="
 ---
 
 # Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA

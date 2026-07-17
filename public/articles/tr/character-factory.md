@@ -12,7 +12,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "4I218fCLXoJ/2EMV1GZ2hx7VKxh+gKnqU6X662oY0doz8YjcRMST0NTYDvCZ218yE6SRZt+aM5e/XWh98fjTvg=="
+author_sig: "Th057HsgH19CRefy5SaRM6seT52fQYnIVxiwo8Qh9gudV8jCin0SVW3CEBkKFxOzhu5qu4gnLNHQtYdAMqbDXg=="
 ---
 
 # character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma

@@ -11,7 +11,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0ZgWnrWDdvMkQjLdqzZHjd1TE1J7Dhm5hO+jcbOTCxKAWGy1xSX9eKndEVUwj5GWr3r+NqGwD+X0e4PFRFgB/g=="
+author_sig: "tH2UXn8IPkhACJPAb3KkfBWqtqBDIvKJeMF5xBFhqqpIB+1Ca4LX0+7WEw8zoW32+Ythp1wuy47IrKf2BTDjDg=="
 ---
 
 ## AI ขี้โกงของฉันสำหรับ Nausicaa

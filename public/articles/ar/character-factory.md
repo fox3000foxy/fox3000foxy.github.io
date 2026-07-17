@@ -12,7 +12,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/zP2qZepOA7tup+I9gw4EARDrWoFRZoBsBEQSlKVPaBrsTwOQteryz6WmsEF0p7n7LDvVBxolYucyA3doXQv+Q=="
+author_sig: "gKf4aRwn5h63R+eRH3p5a4vib1rrryu08oBOgaE8RThWySRxcCxT08D8uXEehilrTXJmfCjM3HylIp2NYl4P4w=="
 ---
 
 # بناء character-factory: صور رمزية بنظام وراثي

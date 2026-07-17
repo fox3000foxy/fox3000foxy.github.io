@@ -9,7 +9,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UTNoJZSnyXquUj9+GOr452M5UtEb3FfaLLVjcVnuSWhiB13IPrlrxhl5F94/bZWQ5m7r36yJCcEfUJ2JEcmdgg=="
+author_sig: "vs+19z1hKE+4csxYkf+WQnsTbkuzya7XRQgpGqCaKUQXFQ6hvIHgLxvh3E3+7sAPUbB0H3GdALfNuaytbNh1IA=="
 ---
 
 > **Ghi chú (2026):** Dự án này không còn được bảo trì nữa. Microsoft đã tăng cường đáng kể khả năng phát hiện chống bot -- những gì từng hoạt động trước đây giờ không còn hiệu quả. Mã và cách tiếp cận được mô tả dưới đây được giữ lại chỉ với mục đích lưu trữ và minh họa.

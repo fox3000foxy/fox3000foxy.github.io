@@ -10,7 +10,7 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "msyVtvg6JSpJl8auMAgrL5NDHHVW/IHrh99RtgN7MG8BRw9iOjUX5GBD4KwCFCuoIYsVsRK98pWevi+iOMFltw=="
+author_sig: "CL+bcQLng4+jTw9gsaMl7kES/x9BrHXVt0EhjdLkHvBoxj8ehzMLxvHrdqn1ZmL1qOALyvG6SSnj4xlTGxs+EQ=="
 ---
 
 # Come ottenere qualsiasi mantello su Minecraft Bedrock

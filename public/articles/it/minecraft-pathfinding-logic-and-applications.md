@@ -11,7 +11,7 @@ tags:
   - pathfinding
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RY5xFn7wfIjjZ2dcIwU1Ix70KVP9PefU/RIXfFpSxmF1fSsaKAdELpua+lIE3Z5WSHLVHa36ObhdX07W7iCyfw=="
+author_sig: "5YRC5VM12GAwpfDX1vMf9R9//9Je45/U3CakcmP7Ih1G8cjGOnscd1bxtDutHJJItKDnxs14XeVjfFesqDLSuw=="
 ---
 
 ## Introduzione

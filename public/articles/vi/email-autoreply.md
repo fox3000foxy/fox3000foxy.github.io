@@ -12,7 +12,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RWopnIHUhcjtr30jqPvwCgg41BN9kUU5sJF56LBwQiTyd2IdEKhuFFNuBWAlUfDUWVVKd15K9PaKqzqxBvNlTA=="
+author_sig: "ItbtuXDQHYvPLgR0MsZeVtdadRepya200gN/JCuhoUgV+ivS5dR4L9zNpPMHwXKzme0n03tEfC8gGnt+tdkgBA=="
 ---
 
 # Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions

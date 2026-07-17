@@ -2,13 +2,13 @@
 title: "بنيت شرك Express فائق الواقعية"
 description: "328 نقطة نهاية وهمية مع ردود تُنشأ فورياً، تزوير الرؤوس، تسجيل حركة البوتات -- غوص عميق في برمجية وسيطة لـ Express مصممة لخداع الماسحات الضوئية."
 aiGenerated: true
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7ja9gl+RFfE+JKLEFvDNxriAvxcVSHt8znn+vsUxS23rQdYQFz84BRa3lnxzYAhCyuF8mHvXmc1WULLsYUKqkA=="
 tags:
   - express
   - nodejs
   - security
   - honeypot
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
+author_sig: "kOLrxV9r7gJdnsVEVrpkhxpOgjtK5m3fRBGqDWK8HTVmq+5/k11MMTFZX+eVMScwmuZhaYD57gN3P/c7BlOTFg=="
 ---
 
 ## الفكرة

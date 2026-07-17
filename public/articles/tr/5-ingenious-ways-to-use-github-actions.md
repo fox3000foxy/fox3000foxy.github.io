@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "T/lvLxs0tKi4u8fJzLLIpEKvU8b7Bc+doXcvoupg+IJddRHp3fcrhc/LfkSkg9KFPiqhzq3hpX20YzljaFtn6g=="
+author_sig: "d7hDj+XJjt3v/r/D65Q9xBXeFznT8QBXIMngYjBi98+Q8M+tYWuY/BGaqspORuEe8uKXMGvhN6Nwta8V62qQeQ=="
 ---
 
 # GitHub Actions'ı dahice kullanmanın 5 yolu

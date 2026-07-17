@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "oKvtUPDzgwar+9T5cf5J7ZKi97U1SI8hL6xDq7szT0K7rkqzoQ2zQ9um1vI75gPWq4jt6ekv38WV7WfYTRl1Ug=="
+author_sig: "cvXX0hoAH9BQaUNVutYm/U5bLfCsVwcddEeg6iiWV4qRJbPLh6tR74qXsTPVvGxeBUeNlJR+J7B8TiVItSjLBg=="
 ---
 
 # Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법

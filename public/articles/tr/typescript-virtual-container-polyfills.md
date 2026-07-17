@@ -15,7 +15,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DRMbqnudCwJX6rS6KNTFlIyqRe5Ym3KN9DeaJRCpy9BQpI4c0vGhu5+j+sEKUmtkCSlDSkEHnjMmtwIceBWg4g=="
+author_sig: "jlkhvKQyU/yzAhaYtL3PnRwJefE1EDOJORKa0A7B+3z9QtuEs3SlthUEOFWS2Xj2jrJUeSVSWVcWGlDlkSU+Ig=="
 ---
 
 # Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri

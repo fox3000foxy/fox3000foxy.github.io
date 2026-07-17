@@ -10,7 +10,7 @@ tags:
   - javascript
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9W6fdVNlQZHaTyzINGCNBBH32+g0FgwRZ5pJPsEzlNZNxmM0TiZbDOiISYelIEOjQD8NG0dmPVZog5A0d6o1xg=="
+author_sig: "hpKDkzSsleprI8vwPiPsCVSXAtsRnKHA0uHPihHXFvEme82O0nVubr3m4J9IcyydJX5LuoGJUFtIC8zomdvydQ=="
 ---
 
 > **ملاحظة (2026):** هذا المشروع لم يعد قيد الصيانة. مايكروسوفت عززت بشكل كبير اكتشافها لمكافحة البوتات -- ما كان يعمل في ذلك الوقت لم يعد يعمل اليوم. الكود والمنهجية الموصوفة أدناه مُحتفظ بها لأغراض الأرشفة والتوضيح فقط.

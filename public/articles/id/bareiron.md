@@ -12,7 +12,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hC66pTwXW1MLsy51uY18zkKsbpz2rhmV6dZDKHhVXj+ekBEYPp9Qee+3nEGaM//FCZdrAvogs30E905zCvmklA=="
+author_sig: "yOzYA3/G0yMWJAvWiVaggaBv4ryfJD4o/GUa6K6IwvUD7QsQ1uMWJFBrnU3+Zf3d64J+dH2X1leKqW8Y7lU8rg=="
 ---
 
 ## Pendahuluan

@@ -9,7 +9,7 @@ tags:
   - devops
   - automation
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pKvSeCblJen9k8SeQDxVhCfnB9QgUyIRRAn78A1ol2OPD4G0HVchxX0Ulf/Mnf2aOAIs5N1edvpqiqneWHGuAQ=="
+author_sig: "T+eUr7flbR7pc54bnaMkGPleTiYsTI8gZ301f3XH7rq1hBbzJHmuuSPQ9Gfgh6zYx2S2GJizNOqjTqTiVi1UFQ=="
 ---
 
 ## GitHub白送你6小时的免费VPS。我找到了让它永续的方法。

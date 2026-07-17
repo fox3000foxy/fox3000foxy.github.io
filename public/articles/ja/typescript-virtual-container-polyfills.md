@@ -12,7 +12,7 @@ tags:
   - browser
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pYWTGCtggaG5XLSjovqMNq9dWoR1WAHONlFG0eGKqYVhESVGSm7SvKpuv6r3WNU92gH2RiAMPv3G4HqrRNkDew=="
+author_sig: "5ySMuFMmwmjCu0jo39PjZmNYxo14x9fUQTGiJ61h1EN5J8oRtD2UfJgVz8I8zSsPDEc9QZGlqkK53fXZZr4+RA=="
 ---
 
 # WasmなしでNode.jsライブラリをブラウザで動かす -- typescript-virtual-containerのpolyfill群

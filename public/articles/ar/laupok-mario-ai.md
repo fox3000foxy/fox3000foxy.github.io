@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/eGz4etIdmlLdi57Cr0M3lx/Y0IaZNrmH3DsEZcr3QZ6dJoyworroUBQpNfQJzastGVdxyY9Fzvoa+lW5nUwZw=="
+author_sig: "QYLsKwLXStDZiF1HkvNJ93+Jav7ZtS4Z1FF3CqqaX9Hy7+aypepna9vuJrXVn+ZE4Efr3I1jOOXrvCXs9ytIcw=="
 ---
 
 # Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل

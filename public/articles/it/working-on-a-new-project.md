@@ -8,7 +8,7 @@ tags:
   - meta
   - webdev
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JDnEC5eColOysP6teuUDxNB2eoU1Gux/nNWKEsQfWG2zAXwwAhV1jZjywjfPhj481FAt1gqACH/grvN+vaWmlw=="
+author_sig: "AVzVw9pBENandJyzO+2cGwfZG9GClhKhi4dD1D0AhanK/+I8VzVGcOkqAa9nn11W+ah6GyadTu7S1SzOZlvCOg=="
 ---
 
 # Il Progetto

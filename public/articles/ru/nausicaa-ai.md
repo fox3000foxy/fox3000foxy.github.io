@@ -12,7 +12,7 @@ tags:
   - javascript
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "c2OauBl+cUr3E+YM6zucjCs/I0hHCLhjqz9/AJU+bFBkpQ+hk7F1PHX3Ylr61g4ONN/cZr4Lw4med920nU77sA=="
+author_sig: "3MNsX++OnvnLPJf6BYI+h+sz6rj6IDJi/qJ6/VActjPekmTiC1dDVBjM/yVI3CsHvHhJ6zZXS73AlEC+w17Lfw=="
 ---
 
 ## Моя долбанутая ИИ для Nausicaa

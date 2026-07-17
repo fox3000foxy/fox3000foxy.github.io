@@ -11,7 +11,7 @@ tags:
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SQAxpVDX2gFGXqr105oZCxyQxC3PzTmMyWMflopIK4hXf0m3cqoW549mj0PRbpHT1zUxgVG46xH0FqT7urxQ3g=="
+author_sig: "OfpZVUX8FAdFxpUPtfecBMyFNPlbWVrXcH6/vD3EtQo3RUj5wyvfKPH2yeRt8kFU7hNm4Ocpq0f+i4eK+fhXVg=="
 ---
 
 # Come Funziona Questo Blog?

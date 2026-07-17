@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "ar"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QsVTT0YUZmjdbKbiGTrBAMTupv3OC5hyy9gwLZrGtcBvJ2QdUobYXUGHmAt863uM0SQvNJz2yCSq5pHhnasGJQ=="
+author_sig: "4VJOJ1MNUdncL6itQl+HPYPMqmoL7ghbA0UaNaWVXpKdNVMVtdZEXTchl8a/98p8qp30KwDfjsHnO6rb+et9LQ=="
 ---
 
 ## المشكلة مع الانحدار المتدرج وحده

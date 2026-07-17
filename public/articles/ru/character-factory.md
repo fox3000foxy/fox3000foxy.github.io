@@ -12,7 +12,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sha298cH8+W/F9tmFrYrBG8cIza6gtaV8nDRemQqVRdrB+fjCIdwl568z7hFsy6iCggDe6G9DnMItedk9/ofnQ=="
+author_sig: "qSMUrx6Fsp043zpzpgKE3deLL7bC2SXcQWSfMqXt/kio5CYOSCOl/kU2Khuih3VYa6scfLPix5Ok0xkjY7S9DQ=="
 ---
 
 # Создание character-factory: аватары с генетикой

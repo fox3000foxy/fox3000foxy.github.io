@@ -6,7 +6,7 @@ tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "ko"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "q7WMCmUTA46LSxA18Ni5aD/9Le3jD7QhK3tqzQ/AoqBwX8opdhIenZSvuUNnr2OKSQG9psUrrBli2OKk1HH8Ig=="
+author_sig: "8UGIeesvLGNcR92FsAls8QviNIr0WO2g3WrlQhBgkDs4DzLX6ASZ70ntaa1Mfs/hiYNy2tVgpmYDUS8QagDpwA=="
 ---
 
 ## 경사 하강법 단독의 문제

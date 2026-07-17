@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "OPpXmerR5nM/Bz7Nin34N5hJ0OXA8C0wwATRel/tLtjW6TJScOw+k6walDkkjwCajlnyZo7hfk/OSoNAXveORQ=="
+author_sig: "4A5DZ13Skxtf3rH+LaSU1pQTNxlab/tjTUd9zOAG/II6Bnjspry7aWjvmH8121xseQax+ZxS6dbuG8h4WaSC3g=="
 ---
 
 # Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor

@@ -8,7 +8,7 @@ authors:
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "UhWdkBzRH5Za1qRZKTmORx4dnvWBDdQRiZ0dvyv6MIcUjPu38dTtVKtlsyN1DJAUCYCqZEQf+VYBjZ0aGPIZqQ=="
+author_sig: "Gyuu7La2o15zvMDVIoTFVc6N525Nb+ehruKGxXJexmP2ojlWVAh0Bi4xZ6JWiK/wl6PZ2+Up1HK0cPvqTEUPKA=="
 ---
 
 # Мои увлечения

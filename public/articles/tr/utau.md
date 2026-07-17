@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "gzeNUhu8qG83OiJS60W5u0oby26t3Mu3zaQl9vD6n9qOSeK4vnSGnqb30mQPSh5vFj+9t+1+EvJ7Yj8OvBO8KQ=="
+author_sig: "5dw75Fs1tR2X8PoH+H0w5oFSq17gT4on6ygNoak31CPq4yRDFjpsj8s2gxnweVF7WFf9UXM8hSJ28JXxFXbvcg=="
 ---
 
 ## UTAU : Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi

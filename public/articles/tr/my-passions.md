@@ -9,7 +9,7 @@ authors:
 tags:
   - personal
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BChzfjj0Mve0YQgtJH3mMfio2CfYnbbyEfaA9K3r7hvvwRHIAvLju1oocF5xcTzZDnFDiCjcMoKhs4pkXovieg=="
+author_sig: "NBrj4GvLkqLXMQxIZN79pDi43BXKW71qDniIaMKoWDhF+/4OgB7W1ZnjbCS1vd3sFtEt/HSWHs4OYGEMSFrwyw=="
 ---
 
 # Tutkularım

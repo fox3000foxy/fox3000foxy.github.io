@@ -14,7 +14,7 @@ tags:
   - ai
   - git
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YiVUtnmfHhmNao3s2ltLadrQUSeRDlc2+PNmbRzrsDNY29cnWQ9OLMBOQPFmjZ/sWzZb2B5WLivuFUlNDLhlOg=="
+author_sig: "4GqtPCTgBxm8mHvg5ZNLonfZaUcfM6+Rj3Nk5SX5S2U4e/Y4dRymU8H9gxa2mQ/A7tItB0L3EZakcsfWxTghSQ=="
 ---
 
 # Я использую git как базу данных, чтобы крутить бота на GitHub Actions бесплатно
