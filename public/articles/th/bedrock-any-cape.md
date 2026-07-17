@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1tXVuFfAUW0WTkNWy6Zv780VjpgCmrvQ+hIMgZgo3h3Vna70VSDaCZwsxFGJK2CnNMXHo2aUFoDk6LzwB4fnvw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "ytpTHFDfHqiv9EJf5cAj/b0rT2fkozFgvTQX7zePVCzpHUXb1Gpg+6l6NieQfPPg5opKs4RUkcvkwFWOFESIiA=="
 ---
 
 # วิธีรับผ้าคลุมใดๆ ใน Minecraft Bedrock

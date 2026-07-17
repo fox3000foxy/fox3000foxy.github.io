@@ -8,8 +8,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dvz955XoqaZGFqr557rT0FSTU4QomQ5FVfs4VolRR3PN9iaso/dYv0VboVDJSWzc103d6ziMMwztSFSrtecj8g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "b3Ewcb0jFwiME+v0Zg1M6h3+bHJ5mhgVMCzOSUzB6ceJBW7EkK2fsS4dd0KHgZyguoMzFd3us8028o8dtYtdKw=="
 ---
 
 # Every JavaScript sandbox, emulator, simulator and honeypot -- compared

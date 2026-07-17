@@ -8,8 +8,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QsZe2z27tO590fS10y9SHtBv545S0pGXd/BaRxTDNjQHd8ZKBila6v2TaGMbxzrFfqWGEMIQlI21dxPiXeZQuQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "9UKSVuEspjJoV5XAvtAnU4E2NFbaMl9TrptntzRUQW10qkQQJnyXB7cjiKsRKEANx/yonATn93TGDh3AawSxZQ=="
 ---
 
 # Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение

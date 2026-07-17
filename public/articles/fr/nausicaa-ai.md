@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+qZwvHS6ndhnGQndkIH3Z9cDJHZtnmq0G8SamtXl6qpPf4lrJLl61AMGUqyncm2rkKaYwmW2uRszB9Uo4zR65A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "4RWBARgTRMod1/9uY1+bTjEUN4FIVGCE3tBO3ieDgbGhg/lVKz35W350mb0G8GE5i9MxQT+Py/zbHA8TpxaphQ=="
 ---
 
 ## Mon IA à la con pour Nausicaa

@@ -9,8 +9,8 @@ tags:
   - automation
   - javascript
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "yqlq+4YvfMn7bQyfQrUauVXQdrpVm+N5p/WmFpgDWVonNtKUS2VieqKTU3sulS8TRx3bqGUJ7F02G5CaqbierQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "Xw/z+czqGIsilxsJqZBJWJfrUX2gzc6mwaW0zrA6o2ir43LnWLcvzi4USX+ccJSZFz3wJIIuvwBMBZSBlXT9Nw=="
 ---
 
 > **Not (2026):** Bu proje artık bakılmıyor. Microsoft, anti-bot tespitini önemli ölçüde güçlendirdi -- o zamanlar işe yarayan şey artık çalışmıyor. Aşağıda açıklanan kod ve yaklaşım sadece arşiv/eğitim amaçlı saklanmaktadır.

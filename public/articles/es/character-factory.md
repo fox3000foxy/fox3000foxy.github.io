@@ -11,8 +11,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "P01IpCseSr/lIcB4ko4DTgfjdZi/9XeOqNXFI7mnBzl/pkglIpVLJ8bkwP11saZahQnBcSGyXx5BYemHYuqJ9w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "S2NCzTaVdyJ2cPMsK8WNVKvyAwZBjyH3UmOEmqndNRAZW3bhYA694onRDavlk6kfLN6ZFTRNECRub2YH0ikkWg=="
 ---
 
 # Construyendo character-factory: avatares con genética

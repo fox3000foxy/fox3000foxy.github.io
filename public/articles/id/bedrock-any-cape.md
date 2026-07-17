@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9KlDDzzsJjQtEDk1fmEJv4DbWAfjrx7sxdwFEBagoo9KWnrmDc3igXzLn/WWpaRf50WFh2bgwt5nCM0JrgpC5w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "pm4tkRmUfT9MkuvjqPEFNMfBHeBMp3/hYWurqq3M8CDKqcN6w2YNZn0C+Ij3YDA8lliZYb2OehBQmiBd6nPXyw=="
 ---
 
 # Cara Mendapatkan Jubah Apapun di Minecraft Bedrock

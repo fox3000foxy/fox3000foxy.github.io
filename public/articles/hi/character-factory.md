@@ -11,8 +11,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/fZ2nYXEl5R+iYiNTVo8uj1UW2SXPweFYOQ1jyo5CpwIdcL+cUO7I5n5YOeqqrr124XphHdRczcacw+F5Gwu3A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "IRWDlW0XOXgVjSuBXNKaz+KuPYFFvuVUD3+saic9F76BwdqufOHXG2INcUdIsF0lI4gGhlk6c2OjHahZBJKNqw=="
 ---
 
 # character-factory का निर्माण : आनुवंशिक प्रणाली के साथ अवतार

@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+wBJe6VzfgF0W2255o0gLnPWpwxraf02K94/bu8SOiwBsgb9CEIaJbrVcak7ibdgWSoqWTweyhb16h7cgTJ9sA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "P9rFSrJEu29vvPesbu59RAobwb5K0vnFEcj2NiCU49H53ODKoUtw7rvP5Hzp26yQ9qI4OE/gKZI98ofL3XJOLA=="
 ---
 
 # Cape Mod : RSA हस्ताक्षर इंजेक्शन से Jeb_ की केप कैसे चुराएं

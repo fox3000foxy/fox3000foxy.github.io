@@ -10,8 +10,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "rgTCPj6aW8oYlKscWndsjvpso4nF08nAmLSa/lFjeWCD6Wg5oz6bJTSL/hrd5i9aLeKqxWinbn5qOjBV6Y5j5w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "c7PqXDUTQRpyPHS1iDRPeEwGRps9hHI4koM6q//xUXOyZrbnK/XAlSKM+j4t6MnqnFsJPbZ5TuukGaixqiO7LQ=="
 ---
 
 # Script di firma commit SSH spiegato

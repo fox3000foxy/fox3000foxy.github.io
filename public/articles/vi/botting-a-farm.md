@@ -8,8 +8,8 @@ tags:
   - automation
   - javascript
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "X+x2++0RLw9Vs8dxyliTFNSsmT65mbRcTpbtIs5pAW9uXEQumwW3JKeQdIQtpljJBm2HNDU+up7fk4eyhtgCJA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "PEqDyQrewe2yGgDmF7e/xm+ITOSUHHUxAYeHnXvB6z+rC3r26UrII82nK4Zz6hGJ/1v0HY0REyPbhRO7vW0geg=="
 ---
 
 > **Ghi chú (2026):** Dự án này không còn được bảo trì nữa. Microsoft đã tăng cường đáng kể khả năng phát hiện chống bot -- những gì từng hoạt động trước đây giờ không còn hiệu quả. Mã và cách tiếp cận được mô tả dưới đây được giữ lại chỉ với mục đích lưu trữ và minh họa.

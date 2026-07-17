@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kKqxca0aa4JAo6qIiR2TSOUd5gdTS8+48OiZwolkUX0zIsc3ICVy+rQADWtxpZ0kIlqsMuJkYwY7tIDcpEcfvg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "jwBd40w2FTMJixc5VNkXraa5XnfDgAsFJKYfLX9avDA+5zHal9hCZeUXhUg3heFvkdQYSUgXCmUOfElw40ohow=="
 ---
 
 # Cách lấy bất kỳ áo choàng nào trên Minecraft Bedrock

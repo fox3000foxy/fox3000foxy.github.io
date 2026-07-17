@@ -9,8 +9,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2AiGDCEiFMVUm0++Q6wEF8GlTr6GZWom0owrMsZ8FF7ijHVy3H2+M7KdELy4tmX+4UvU4Xt2jStJTgZEVWZ1FQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "UA3QWcDlHA/uHGRUGQ/O6mD0U5VFyiqQIYvsuhPqa/fOHnAkyT/KXbimK3H2PIEDKWCm+0a6YoewIhNl7GtD8w=="
 ---
 
 # Bagaimana Cara Kerja Blog Ini?

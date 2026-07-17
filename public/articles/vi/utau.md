@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5pquX+pbtuwsvUlvWojdUuv3gmhBakiVe8kT9vOpgW/M8EDh4b8XYw2x/EB/FwB7Krtbb+ZgCg/f/v3+kx0zYg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "CBhgItVJwUkDao1r9j6fuUe2sl5cmXaXWedtukZktVgZkkQVT5e3gj+84mRHHZOVnq8/W2+rkgCQlzeVyCeecg=="
 ---
 
 ## UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp

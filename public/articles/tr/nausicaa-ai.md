@@ -11,8 +11,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "nsZnWRcop6uMsBzK5rqljMkbb2tVUq720LuV8VbyBNnWc69lOuoOkGz5JjqshujyVUFpU+akYH25zy9BGmry/g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "K9G9wj8x+lGiyZj+OAgGC/Tp6kme7GJMMg167JQb/9yRbdnT6bHsnCRemBFnvzJoTugQR5mSJ5CPMqBvxKfglg=="
 ---
 
 ## Nausicaa için Salak Yapay Zekam

@@ -11,8 +11,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "7MoVnKIn5TLHK3uTHVThQf95MAJdRQ2mI8+8oUiUqsdJTC9GALITncQolvcLSBD7zdULiZ90YoipxBxeslb5kw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "a0gvczJMqlf43RVxXAtzGxwTuM5raGq1BtzPGqiTV3bZimkOucpiooPWZW6b0UpiTvFNgacumbqd662WIqARfg=="
 ---
 
 ## La mia IA sballata per Nausicaa

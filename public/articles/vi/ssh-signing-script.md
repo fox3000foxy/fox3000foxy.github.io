@@ -9,8 +9,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "11s1sKJOsOOTVECr3eivfQW/scMhP/YvgS4GFC23dQsFe4Zti30zBywSge7wCz7KSrP7SlhDEqgRevG3iYHM0g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "/HF+1HzbMuzuhHm5et2UQG9SY9lMLHXQ2rSzfuyluW8uMSa3q/+fqhfGX1YWiDu5hvC7R/werKysdEdV0hhR8w=="
 ---
 
 # Script ký commit SSH -- giải thích chi tiết

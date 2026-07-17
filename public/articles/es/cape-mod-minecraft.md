@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "msWtpFhAW6RQCtZoLuelddxBqM2Xo7EPWotZzASPw6IYFN78bbIqtLdgmdSwwXD21RpWvnycC0TfOjkqfP0efA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "Ij8SrCH48KJmFEyLLmG9lsdGPb+1nik006Hrsq7K3rIpZ0VbOq5lN2khrAcmN01LrRBAIIyKteNkilLfntHBrw=="
 ---
 
 # Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA

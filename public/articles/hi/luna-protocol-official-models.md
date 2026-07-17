@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "MPQv7yw6i07nZxpOD4Ca98LX9ihkSJsFMv3jR14gMy5qKzIwoS15stqTFEy2Ov03woFlTU0WnAMS32EGcRHFAQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "cB904ryp4dik4s6GhOwGalAUpLMryRQvJ2VyOZNY+TV0kpb/ifIHp+YFEfIWZ25jKZGYRcyLqfY36M5PTDmeXQ=="
 ---
 
 # लूना प्रोटोकॉल: क्यों मैंने 50k Discord नमूनों पर 1.5B मॉडल को फाइन-ट्यून किया और फ्यू-शॉट प्राइमिंग को गुप्त हथियार बनाया

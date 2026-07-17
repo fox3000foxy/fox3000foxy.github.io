@@ -8,8 +8,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "XJgHpQa9qniiu8UVzABvUj9C7wOPDJ4y5Fw2Msujn0/ptY7hXFNuw895Vam0P2T3npkK4okhm55zDh2HSQjvuw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "sZ3M4NHLDCSrNqcZ632RckJ5uLZWtH959ohNkg1XhuePI41E8CTlegBMS3aZI9T2oXrA4Yr/4QdMPNt8v6MzTQ=="
 ---
 
 # 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比

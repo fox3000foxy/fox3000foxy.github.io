@@ -12,8 +12,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1K8+2jd8oVIR7ovNt/vZJcY+8vHmdLme24Jg6RuqVqbNrKfEMCT+/TTjmVS5qhatcneR873vZ3uizijAR5KyZg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "CmMiVfbG+ZqQ/VMAl8df4jYISYlu4PY1BXSorl1azDkX9yzrfDqEK1kv6gUUWOvuLE2YQtNWkx/Um1NWluwkpg=="
 ---
 
 # Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들

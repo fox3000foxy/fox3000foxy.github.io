@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5TSGurE9aU59gOe5SkZhyUNL+xkIDwe+7//NXgGeCknRwOz2bd26ZGP0oS+VI4Ecp18lYimgvcUkD/1prbBjXw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "ADOjW8ECjapH8O46W1S3tUWNxM28Ch0YtosV9X6X0nukJ/7z3hsy5qdGfyebXilgG8vj2xJ0BgF1m6/BNzVmNQ=="
 ---
 
 ## UTAU : कैसे Visual Basic 6 के एक सॉफ़्टवेयर ने सिंथेटिक आवाज़ को लोकतांत्रिक बनाया

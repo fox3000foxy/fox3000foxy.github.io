@@ -9,8 +9,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FNDWZWRzRlh6MZ6NSlNfRwwaHqgl7pVwEbTOlB6yGAmnzvZYVcqv7RCH5muw6w38h5B1cGgaRviiDB/XubGNYw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "cNkqSL0C2EK9QqKtzjhtas4hL7525z9KbzJKuG7g0okUlj0xTJ+iUV/jevrsWGVjeiNYHtAp3NCMPrE0xDIypg=="
 ---
 
 # यह ब्लॉग कैसे काम करता है?

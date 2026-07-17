@@ -9,8 +9,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9SPGzvm3GW4GxpvMgn9VNTuin5gf9dhTQ2oTSnFXN5jAjsPV467wj/VjYXnfr13QIlxGCqed8rlbuSseL2KdIg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "jTn/DfRVn9viMn8wcvyxFz5Uk9CeYqx7X+FMVVjN/qhCqXivZojsPju86wcOeYfKzaGQ1W/tgICr/x606NCqYg=="
 ---
 
 # SSH 커밋 서명 스크립트 설명

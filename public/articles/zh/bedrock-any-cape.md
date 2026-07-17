@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NT8eANNpUsKwubPIlkcSDIDQqTj0ZK6/L6Qukg/UGfLD9T+X0yA3xWTVyz9usXC887HBnmN98G/W472VPkXtXQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "AdYRswPHqprEGrNlEyfVYH4HxwQ/G84G7OeH08blJHpcLvoLWGfAg2RtlpfkinFYaQDL5RWoia9DTXzyGch0uQ=="
 ---
 
 # 如何在 Minecraft 基岩版上获取任意披风

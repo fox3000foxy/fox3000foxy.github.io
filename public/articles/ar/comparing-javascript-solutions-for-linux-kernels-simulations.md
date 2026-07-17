@@ -8,8 +8,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Ev0bsFfiKiNh0df3oVsNtNctIvQ3TWT9ZKRwgBkWiaa+UMqvGikhUZG3Op/qcHrT7ye1qyR02OwI0PQu1aTB/g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "Jhi5yCQacgZaI+In1HFhiYpY/3lHGAu4dYvpcMDFex0je600aKIvwUP82tpny+d9jBxX2vwVdqD6yt1Nq6XaNQ=="
 ---
 
 # كل صندوق رمل JavaScript، ومحاكٍ، ومقلد، ومصيدة تفاعل Linux -- مقارنة

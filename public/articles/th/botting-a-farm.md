@@ -8,8 +8,8 @@ tags:
   - automation
   - javascript
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "/kIetMWNunk+sjJaTQYDuSBw7ngADFgTt2GJoz0WXFHSvRflUAb/D+j4jUI3ZxN+Dgv4UPzMlSBVP95I8xXzxA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "SGDKyUOp/09dFWMDqoVO/fCfykO8Bh5PNF+xC2zNGi0dT7yVTOrVcvdXrS0cnMuv6QkTQGbNjP3umCRrSPs25A=="
 ---
 
 > **หมายเหตุ (2026):** โปรเจกต์นี้ไม่ได้ดูแลอีกต่อไปแล้ว Microsoft ได้เสริมการตรวจจับแอนตี้บอทอย่างมาก -- สิ่งที่เคยใช้ได้ในตอนนั้นไม่สามารถใช้ได้อีกแล้วในวันนี้ โค้ดและแนวทางที่อธิบายไว้ด้านล่างนี้เก็บไว้เพื่อวัตถุประสงค์ในการเก็บถาวรและสาธิตเท่านั้น

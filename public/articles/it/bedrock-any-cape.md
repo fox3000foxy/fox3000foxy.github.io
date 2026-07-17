@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Lp6K//MOpsNpVKHCN8QydlaLrWMdIW65gvaTxFv+wx66p38KbhFRapJC/k/tSVprhq2fmlkNW4MD/UFUFg6e1Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "JmO+VSImr5RRuXbZqpTolGJDcQiRMbPnxSIYTBuO+eXfxos+P8RhYG/Oa5T7YVUHgxT0B1DrZEUtw4k/z+rWZw=="
 ---
 
 # Come ottenere qualsiasi mantello su Minecraft Bedrock

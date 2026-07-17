@@ -6,8 +6,8 @@ authors:
   - fox3000foxy
 tags:
   - personal
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0ASHzBs8uVjO71gZfUfHKU+vpts95MM6gjl2DeMJMYDuYKsXBKrhSbq/gIUdIDdx/RPTxl1H1C3c/tiFhnPXSg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "hh0ADqd9iNqkfqfCSJ9yMvyGOi45nWd4+uEhdY01Gfc/dByt3hUSTH5JEkDpH49nwqb/80SOa5/+laGSr9MOfA=="
 ---
 
 # 俺の情熱

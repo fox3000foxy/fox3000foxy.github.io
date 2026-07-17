@@ -13,8 +13,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+PExq8Ml57P913/wonAAuKnRg5kczeItIJo3SOkGvuRTxnEasY5RJvp/ubOTx+PGAq8J5xhtCX23wCSR/k+spQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "Qc+B1Ledwvtic0hD5hjTh8alpXBFQzY3MFaYXfmXsRy8fV40SlBYRQuPqzckczEb475brjI75y4yNoK0I8VBMg=="
 ---
 
 # تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills لـ typescript-virtual-container

@@ -5,8 +5,8 @@ date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "hi"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pv+C+PqmXyTRcd1SFFf+C/khHvU3GaKKj+nUYralrfqbxqzNdFvmjKhj1XYG2gMzri4usxTkOTe4ywr9hQmeoQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "VN2IbrzbCYq9r1b4hHy3NgDfosQqUVcgQxiyoID6ZnoOLBwJa+gLF5L7bx/vsFASwZoLhZ3oBxwnDrC/9Ec7fg=="
 ---
 
 ## अकेले ग्रेडिएंट डिसेंट की समस्या

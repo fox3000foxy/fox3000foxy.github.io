@@ -13,8 +13,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Y2+F8wA24x5bB/DaCjR0JfvJn2rxRFLPhCQYtHcid/+lGGjphYOf0GLz3gCgtPpqmRa3Ge37cn527wIJMaFOJg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "xbUvolucgdyO7FthJ/TS13L4EaCvH+lahVGOL9HUtG3we+zt0u+/msdjtcY7I1veoJjMB+bdZbSa3/todmpVrQ=="
 ---
 
 # Я использую git как базу данных, чтобы крутить бота на GitHub Actions бесплатно

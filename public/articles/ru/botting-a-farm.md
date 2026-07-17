@@ -9,8 +9,8 @@ tags:
   - automation
   - javascript
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+qawNbZ+c0V/ON/+0W4jF9nEhi+g67ID+/9rLX1TAVPdIdLfAWWg9Hl1Ath2PSkMVW2IVl+eTIUBim5hLI9YAg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "8nZyjNbyy4RWVNCw/gJTEbDOoVIp1Fn1eWnHGtqVty+uKxgUsAhmYNTdZALa1PD2niJiH3h8kqbQEvRlrRR1Wg=="
 ---
 
 > **Примечание (2026):** Этот проект больше не поддерживается. Microsoft значительно усилила свою антибот-защиту -- то, что работало тогда, сегодня уже не работает. Код и подход, описанные ниже, сохранены только в архивных/образовательных целях.

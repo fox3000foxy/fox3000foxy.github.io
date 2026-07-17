@@ -8,8 +8,8 @@ tags:
   - github
   - devops
   - automation
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "JHzw6EWNtx18GVAaGh9xGY0PE9gLig+YewPtZN39Zod2+umS9QVaoqt/a5yK6peKDbQ0vQdhe5PYTUZRBMQgvg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "cPn2D8PtGxLAteB7nKQVPXG7hlXJnF6Bv1Zj7N5bla15cfbHPh+kiKSb7gnf6ghtXflpqQz+7g+xmI3j11XOwQ=="
 ---
 
 ## GitHub sana 6 saatliğine ücretsiz VPS veriyor. Kalıcı hale getirmenin yolunu buldum.

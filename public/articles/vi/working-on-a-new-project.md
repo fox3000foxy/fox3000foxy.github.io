@@ -7,8 +7,8 @@ authors:
 tags:
   - meta
   - webdev
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ICEZeukm4BDCst7cACQAXX1g8ASu02foxLuf5NFRY2oFBSDZ4fz7/jv3CWbttg5IsiMaTARWJ1COpuftmz4cFQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "zFqSKgH+zusv9igBwVNoZIsctf2KeucJect3pxcFte8yDi4jbqVEaFGgBN7Xv/vJu7C7vQQzUOoUAd/5A7PdJQ=="
 ---
 
 # Dự án

@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "rFiFU0w4Mpt1ywk0l8/IXkFn3M2QvUY+8X0c4xup14TfWQ9qAaiKrr3OPtJ9R+9vYqjrLcp3nWPs8vriEq8w7Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "XMjQ1gJ+C5Y/wZ8n3Q0sN1m5ZZxvo+zBkbP1MURTNtzy32/0t0v7dop16alehWlOGID0+UHt0MfXrTPnmi1Gcg=="
 ---
 
 # بروتوكول لونا: لماذا قمت بضبط نموذج 1.5B على 50k عينة من ديسكورد وجعلت التمهيد القليل من الأمثلة السلاح السري

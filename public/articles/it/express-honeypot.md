@@ -7,8 +7,8 @@ tags:
   - nodejs
   - security
   - honeypot
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Xnn97TSet8j/oDv5XcKlQEmJvM1i3oZwQPIdw0FLEzFAij7xuyC2kdmFjqoS3U4WZXKEIUh3TszmtDQvGnW3Ew=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "7EkQQJ2bap3opzclNrBLzAMXwCkPCIV6Jw9UF6MTGSOzhcHFPOaI9Q9+a1CJ55A2ptw0959NiPvi2AbsKtUftQ=="
 ---
 
 ## Cos'è un honeypot Express?

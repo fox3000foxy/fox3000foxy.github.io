@@ -11,8 +11,8 @@ tags:
   - event-driven-architecture
   - ai
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "eANlBd4ptbSuIdKoewPad9Ab8HJln27BHURM1H1EfuBr9cw8WuiY4d4n3iGIeRPWFW/3eITJxVsdxQhwOO4AFw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "mYmWvIbJhnCFuNg3Yf8hLHbZJGHhSWkibLH+07tvacGYmnbPE1exul+JFgMQvxLEmcLEGpBrndyFCkBVM5nzDg=="
 ---
 
 # Luna Protocol: 自律型Discordボットが人間らしい会話を実現

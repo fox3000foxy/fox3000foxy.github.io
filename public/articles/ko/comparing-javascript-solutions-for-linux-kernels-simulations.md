@@ -8,8 +8,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FSKMkd2fqFrCX3pKkBUzOxwtMQWch8pTB+bJpPrcsn+PfIeuWF7PLYqS0P1AZ2eifxEY0m+pQfWL+8dnTWQYSg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "7GXkpEzS9hY8hufP9+myzIE4ae0fn3uXTupjWUJp5/3ULtIpM8zDWalwHjvTkohV5H0QJzAcI7+HxyQiq8mlzQ=="
 ---
 
 # 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교

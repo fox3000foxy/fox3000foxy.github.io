@@ -8,8 +8,8 @@ tags:
   - automation
   - javascript
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "un2ahcJnVeQlQUQe0AvD036yXGOsXoY0RUR9M2CNaS7z2UXqklA6rMwPBoJWoFjTj/yRmxpFGEC5HHDlUUDcuQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "mLZXI1fUpjeI/QLWJfxwMPpZBei1mk8bAaA/qpVatbROzwQQ9WgTDC6gR+GtujUoHuZsowaZocEEZKiGHysCgg=="
 ---
 
 > **备注（2026 年）：** 该项目已不再维护。微软显著加强了反机器人检测----当年有效的方法今天已经行不通了。下面描述的代码和方法仅用于存档/教育目的。

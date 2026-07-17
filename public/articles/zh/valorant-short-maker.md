@@ -9,8 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "tmwOEgigCWT1us24WW0KE27oHw11kiwRO0QqsiLNRG+DbllrhZoLImKN1501ckM9UTCukiYI/OxkGsVRbhhXAg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "rv8S8sMwuIPwPDZW1SazPKBtPs2yL+vMl6NKYA+r+kIe9dKcvVH9SYXvppvPK6kS4Z/nkFAFK59pgs3FfeqQfA=="
 ---
 
 # valorant-short-maker：自动生成我 Valorant Shorts 的流水线

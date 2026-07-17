@@ -16,8 +16,8 @@ tags:
   - wasm
   - gaming
   - serverless
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "kJRwQYbn9CKLattspqqS2PFzBZj7Qnz1z+tdmHAQcAW0nt1dVRZeUr8svUFTtsjykAWb61O1xF1YYzL/E4GUHA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "KB38tuSZmqkMB9Akbbk2X8RrsgGKL93v5uy7PbyE7DYng6Afq/Pr/4DFYNzVQrnBDGtNzWUDkAP7dca/OkntZg=="
 ---
 
 # Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan

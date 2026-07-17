@@ -11,8 +11,8 @@ tags:
   - embedded
   - c
   - esp32
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bWNfpgKeBWVzHlLlZg5DtLlUNdyTO1hCVYnxkfamZfCRXbLxvkT8JjXj6AG5Vbn4CFS+1p7z92wpuUnrGE2Ymw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "TECraOGX+Qw/D+qV9nKqYxLiMUNgX4aPPRn6Yjhp5IO9znJF+4USc/lO/gtN/4oSB80FS6oMlxl9eANhLuwhow=="
 ---
 
 ## บทนำ

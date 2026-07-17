@@ -11,8 +11,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "INShyUqYQ+ghRyUlKE5LlRDHzeTZqEaz+y+404kDtCOgCYXeSjVc8u1sEN8to3kRy85+dcKU5TwdJGG2Kv/tww=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "689+ywoqzhGsfcAuikFlPvblosOY5PObA9R6mhQpfjJTkNLsdii5VoDQPI/PjdHQ3UXgVJ9Pa0vGxuqHLKfcbQ=="
 ---
 
 # Xây dựng character-factory: avatar với hệ thống di truyền

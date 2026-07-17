@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "gjyWqo4S3O1AWnsniIlQr2Wo9qxg8Cx41pXCarLuGQbymS4ptw1Rf0ggLJHXBsSfgZhocFxMyt4+V5+75etezA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "S2KwRmWxcBz1KJ/QEdxqPPygaqNaLCro4OF0Vk9T2DFJM93wH/8DpJjFBcxAn0/TxsSXYyqeHtPlnjRs5MYdEg=="
 ---
 
 ## UTAU : Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi

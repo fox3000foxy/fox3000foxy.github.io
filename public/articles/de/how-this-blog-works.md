@@ -10,8 +10,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ntw92RI0hDk8OHYnarYksUUcpUbHwH+3y1z9ux/6wQCoXcWcTRzIQvn0aQupalJt5pSUIglBBwO3XRM75fCjFw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "y7G234LX9nYNu5pMkVRDepL+mIRC9CMatJGvTPqzJY1BznKZzbv+cF0NeuEThK+vb4g1yER48R04Tnt15L64/Q=="
 ---
 
 # Wie funktioniert dieser Blog?

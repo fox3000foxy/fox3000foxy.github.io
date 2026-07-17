@@ -11,8 +11,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "J8fN64ewO7SqEe4CssdxFSEHGxpZYMGFs0H8GezvAgVw8R0V65cI7xTBMGTy6B+zJ9KTrsZF+//Co5o6nwNBfA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "rb1BztwLAKS14NEK/r5fJtp21g8Rl45Vi8gxhAQIbiUpVHDeoQeAkhue2kb/NsoVeJd+pRT9licl9PVHKGNGqw=="
 ---
 
 # GitHub Actions에서 깃을 데이터베이스로 써서 봇을 공짜로 돌린 썰

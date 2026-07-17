@@ -11,8 +11,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dEAYmLVL6T5suvJtJuSE8kNjdrYNOg7gtRp6VCCQs9GXvlVjNKP+vOW/B0iro1N6JvIS+wRviC8/GiwRmhMBjg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "NeiEQ4D9AE3pVEwgktaBr1QjWXVkYB1oGTh8mdj5wtxnJYwm6uXj0WrTsI825IYKT69+EDz1mF6GJft6zf5jWw=="
 ---
 
 # Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions

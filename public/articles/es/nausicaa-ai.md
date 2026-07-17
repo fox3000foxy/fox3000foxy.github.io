@@ -11,8 +11,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "5hoqEw4ltXwesvoTcPzqeTiKdZL/DAG3iANC/vpW/RbQ7osv4ZwTQL4QWYICoTCIywR2VAEV7koMIw4ZshaCBQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "5P5cjJxq7fUx+hYAlrPY+hOd+qgC4FVS51s8w1iuKN8kFhEbJWePixdeURDUtqzJ6htv9EMGnhy/qS09DSktxA=="
 ---
 
 ## Mi puta IA para Nausicaä

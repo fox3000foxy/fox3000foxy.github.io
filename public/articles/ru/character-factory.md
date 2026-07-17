@@ -11,8 +11,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "BM1IkiMfsPsV+tw57ufAmzYsigpLARz5rnMZ+5O94oSvynDiQC/9LxG5JouKTIMAdDYBTpNW5soFCxrGB8ooeg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "Z8owqLkwoLqyvQIi995KI9fkMHC9sTq3E47NUYzEWoIfSyfEi6RuRdK8FkiO/uH6sEJ4TJ2I2OtNMIbpIVDWWQ=="
 ---
 
 # Создание character-factory: аватары с генетикой

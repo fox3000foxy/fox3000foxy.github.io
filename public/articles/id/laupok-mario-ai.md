@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "sj3xH30KS/IsXM4LBBjCOi7Nay6KhYnSXdUBO2QIWLZeI2OGw5+5WDc/ojbb9kfGW188DJGpLzrH+dFw/auC8A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "OYD99ZuT3CEoz1tWLgxrrZ+9RZVqmLC/qUiNAX71Yv3vj96ZZKYr1OXA1U5C+PNnnyULpl6pMRvPBE7lIPAvbg=="
 ---
 
 # Laupok membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya

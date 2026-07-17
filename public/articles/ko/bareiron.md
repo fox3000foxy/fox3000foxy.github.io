@@ -11,8 +11,8 @@ tags:
   - embedded
   - c
   - esp32
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "+YITFBSzg35MiUFNBzvOmGsl74Ti4mgAa5qMMtz7qd+DBCEIL+yxBQT98DiP7rDYJyNeUnG40EMzyMLaOsjvfQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "EpNGKumazHwGMK7egIMndYTzNy6+6qEsGjz8W2CngMxTCrairNK/h+ZnyLVLIYjsKv6RElwCvV2IIv4U6Naslg=="
 ---
 
 ## 서론

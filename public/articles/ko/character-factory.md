@@ -10,8 +10,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "GEcwEozLKpO79nIJ6qbAXSja9WMFCN6AooMQIx0l9s3u5Rv3V6uK64rBGykIf0AXO2XZY5cJxKcsmFQA4hLQHQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "7UwVFK9ElNXWmVnsyZxIsURlNy6L3H82I8r6d2gK077TJL+CiWxwJJOg9iUkiwDYz7P4sma90UELs/JXzo1pSg=="
 ---
 
 # character-factory 만들기: 유전학을 가진 아바타

@@ -13,8 +13,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RYwdjye1o+PnUzKu+FoQ3kQaZ1RqoAgwwhi5lP2h/CIbbSCU5h6yuh0G7VSU3Un0SEZ+ALVd5DdtBRgJFeEVpg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "FxEciBgqy1MHFUOEKyDhvGsrl/DCdBfVr9aI73Ow1nkxdp5chrRUTjeiTSAS+lfJX5qOAV46zLZC0cIcF0RvQA=="
 ---
 
 # ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm -- polyfills ของ typescript-virtual-container

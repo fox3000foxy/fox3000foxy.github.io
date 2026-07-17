@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "q7EMfURJu93shk28lQv035xDh9YSBylsKk//9K/W+KSSlTZzV0tqwRaix2ANDsCzrLeRea+eg3bfmI9njJ+4sw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "/whQEuF7g0BP4F2NqhwMky2nbgvaIp/b/DLHXvQvs3jwA+lMPohsYLwK6Tze/WMsfgO0dadH5sVzWzt+KkAM6Q=="
 ---
 
 # Laupok a créé une IA qui joue à Super Mario World toute seule -- comment ça marche

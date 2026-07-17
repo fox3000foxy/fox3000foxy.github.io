@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "u8wBKf/CjH5HeTpSuV5AGIGIHSvJel8/0fFeYLooFKYmcD2z8KjtK+rrkUjuyPCnSV12nYEazm/e6hIM3x6Crw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "KxgcX2z9sOyrbjEaJw6WgURf7Vi83GhjM5xfGydlDLC+esDYaAeP7I8/22FzNQX+dWgOdfYkTyLPsbLGk+d2kA=="
 ---
 
 # Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل

@@ -10,8 +10,8 @@ tags:
   - embedded
   - c
   - esp32
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "r9bn27IjWu1O54Dl2Ys7zWjzPpNsLD17AnmfA6I0kYMv/9DLnXZYlXIfbdmEt6lyd2u7ltGrVpZdH9d9xWD7Dg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "NH4D3DW2D54aOVUhVqbs2PMknvnbMGpeB/Ng75r1rZ2lZWg3i3fLpZIztRtJLiiLXvN6q0/dGPR4RoIGt04Dxw=="
 ---
 
 ## はじめに

@@ -10,8 +10,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ZdSw1x+vZBNXLYytb6CEfBCmVm+UQ6F7L9CDiH6Btusi/HBVhdbPnox/Fw3YHkDfzaFToF5fFo9RklSsu/TVCQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "arF3C2bicTjNRFKiN+Qxw5kc86wm2I1wzEC87FyLJ23YdJG8BtsObyN6sxTI2vfRLjmsV03UjmBvRkDYuWunqA=="
 ---
 
 # Скрипт подписи коммитов SSH -- объяснение

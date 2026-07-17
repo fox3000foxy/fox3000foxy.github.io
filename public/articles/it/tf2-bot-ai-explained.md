@@ -8,8 +8,8 @@ tags:
   - tf2
   - game-ai
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Jt+q/P+QjFINLBaQtN1Q3zbBX6GDrynYhzYEddVabFF0wwQc8N16vv7NxOPIU7TWB6fiYPMt/oMVLhpYMTNYBQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "o2JrAMA7HmaL9sKSP1h7Gk6lkmwMa0PXuFxKWM48w1w97i/mGSbHZhsdhufqYUxD1MHuC/2p9pSzO+OfPBiv8A=="
 ---
 
 ## Introduzione

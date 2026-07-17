@@ -5,8 +5,8 @@ date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "D5U55ejVhHuVVWB5DaUU2dAFysCPsNppVK6ncGTyZP94Ta3QRg9Ff1Q1f8/ecMOHXQsWTWuS+laS5yX2mXROug=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "LxVSQsIi2FX7dH+xF287gsh6iumd69ASkoJuUJ53zrOowGh1hMSeeOg3wE0YOgv7KTuo4F5TQE5+RZUT6neM3w=="
 ---
 
 ## Das Problem des reinen Gradientenabstiegs

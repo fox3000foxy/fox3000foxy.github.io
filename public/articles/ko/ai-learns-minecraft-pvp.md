@@ -8,8 +8,8 @@ tags:
   - minecraft
   - ai
   - python
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "PNMPHQfOoaJv8cstf7F/zv54F8Z6Z1YFfcb7ZjBa2LtDYwKrKT7kt8ckypcIJocjXdxe2HqcKqQkOi9cnyNVgQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "s0ffawx9vtfuWLSskoRr8+zQ6rp5lzh5G5YFozjfOHc9VAPLGVFXnVX4eDDlBqLUWPiXI0bxULqThivWsRd3Mw=="
 ---
 
 ## 소개

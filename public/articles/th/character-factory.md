@@ -11,8 +11,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "VHaMnjM3NY0PIXQBy0OGHRgHZZYxQgtfcS+u9vexVOGlE5HN3Ay/RIsqBGouTszETRJUlSaWEI6LX+92WxX1FA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "VCk3re/ciaFOrB/738UAuv7sUCl0qnF0WJ9qaT6o/O56nqqcimHq8DkIFocxMxSxawhJwRohWJsUSSw3Siopdw=="
 ---
 
 # สร้าง character-factory : อวาตาร์ที่มีระบบพันธุกรรม

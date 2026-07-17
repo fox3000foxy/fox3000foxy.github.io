@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "zjtQ3PVdoDgzAoGYsi2cDTVoqK/132GP29QvCqX8mOamIfmQ1jy7w3q6i2J89bYFIhJ2cjeWAmkVuYg+a7C09g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "vPNC7o4mllrYRj5d+h6VEirIhwMKeIeMpN0GlIV1Tr6nId9HMgsd9+Y6+F8YZyabBEg/82/npbICO8C+s9eXeQ=="
 ---
 
 ## UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis

@@ -11,8 +11,8 @@ tags:
   - serverless
   - typescript
   - bots
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FSS2l8XwGPwxd1WYq16k4jG94iz4TLqdsasFSRFRKxOHztG1yQ87bT/FJesUtC0NihJbh0hxRzNyq0xiK63Niw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "xpa3N7S59BZXBZpQsCUYdFd3EKNkvE+V4YIlYFKVD4QTkJ4xU1UEUHDRzC2h2B678xqPaiqCiLGRv0C3xUy13w=="
 ---
 
 ## Discord bot 完全サーバーレス : Hono + Cloudflare Workers = 💸 ゼロ

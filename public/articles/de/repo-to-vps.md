@@ -8,8 +8,8 @@ tags:
   - github
   - devops
   - automation
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Tpoa+6C4LmcjiS8YoecM/Vdjl9p7mMl++3IgnznYlNimAgHH8h6sGgiWlDUp5KNtXRP7mQ/pRlG5AUjU2dnPFg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "VUwyV0SC83zLj8fItZ2FHCETbBwq8Uc25wCjvYSuu2mLLyrZt6/OPoM321V+RFaxiRTiXt7nMcZ1FZlkoidZIQ=="
 ---
 
 ## GitHub gibt dir 'nen kostenlosen VPS für 6h. Ich hab rausgefunden, wie du ihn permanent machst.

@@ -10,8 +10,8 @@ tags:
   - embedded
   - c
   - esp32
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "vrq2y0Jy/fJs062fgxBt4yYbnRFEsl2ipIdkkFPutRzqW6a4heDGjTLARCdnIvvJAmeyCYCqNUXi2MARSUw1eA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "aloCFQ0HtIFVd4Uz9TO9Uq2zsevjhEIafCEg1sQ9c/sr02rYNaUzC4O54vJ7QMqu2kNDWRbEgJwzvall6SFu2g=="
 ---
 
 ## 引言

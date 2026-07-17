@@ -11,8 +11,8 @@ tags:
   - event-driven-architecture
   - ai
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SHTOnwV0B6cKfX2PjCe9KONQVXGxVpQt5hTEnMNcwUprC2eAAy0IpJZeJex5fhA5frR0DM3/G08BCX9NRI7CFg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "c8vE0Hvv06SBkDnFDAbAFrZR1YhU28iyDuUTw+P8SMzHviuPgyVzw5O60dl3I0ES5mC0R0gS6vYEiri1mLfaEg=="
 ---
 
 # Luna Protocol: я создал автономного Discord-бота, который симулирует человека

@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "aH78YEOvBTfXMOt6XQbeUq5MQs5KrGDLIQvTmbNxrNp6NU8gkUCU4PY3ZdTQKxzCVdkOQfNiAwQ/n+CB2nmzyA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "yV3y/BAthM28tvOQ9uG3eTuS7OXyy9fsbdvxvzN1w49JvPRK9QiuUab1CxEsZqeXW51rVRJSh4JE92xqP3AWAg=="
 ---
 
 # Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA

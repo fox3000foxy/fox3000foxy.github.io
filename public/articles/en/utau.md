@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "jaDevHtZ6sPvioII4W4/xHOyJmuxGq8UQeVOnrc7+Qb/CUUdcExtK+x7+kJ0TRTVEa3kp2DhH2+tDjsJ2yfPFA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "C/xV1d18KOs0lJ3SkAz6cK0m7zBBNOn7lLY0vHQhXqwq8FB4Ft2u0zjAY20GRjYj8p5JhzkDN348imL25Q4bQA=="
 ---
 
 ## UTAU: how a Visual Basic 6 app democratized synthetic singing

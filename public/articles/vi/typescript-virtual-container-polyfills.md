@@ -14,8 +14,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "pehppU74mTlXStwHe5GKEotZAQD/IXF6Ac2iJF+ZFaB6R5h9MIcHWh/o6v0DdNL2OU+arlRnsDP+KD8W+9INvQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "d7RET5DiH+dVps3BE382Iy7bxZjJtSlUMWFqprkIrEjOi3RstxoXJlcjV0x00KqZomNbbwaboQNbtuuq8Gqupw=="
 ---
 
 # Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container

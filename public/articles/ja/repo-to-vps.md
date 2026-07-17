@@ -8,8 +8,8 @@ tags:
   - github
   - devops
   - automation
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hS2Mjmtvw9NsT+XbFpM2NZNORgaSJiNUNB0C8fuUYQkqar92VqglEbmoC8sONXsqPNCuPEq8jQDyzZ2ztepKNg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "tnkgSwgT5yMdmFg1pqN9pxOtaKfaLwGB44jKBKskDQjqWixOrrduELw3zhk8hzno3jZ6UkoeNJHrxIM+K+iIdg=="
 ---
 
 ## GitHubが6時間だけ無料のVPSをくれる。俺はそれを永久にする方法を見つけた。

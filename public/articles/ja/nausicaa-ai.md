@@ -9,8 +9,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "cdA+JMGP1q/ZE/lFHjFEvtvaubScAtgXqJwkNUDRZB7+FftzgpTbuHna9cCD83G5TEwcUSQMdqLP3LCoGTrxhw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "mZUzJuueth3ZxJQ1hHy+mfapro6FZegbuq7/pfPvq9H5C1jYY1nTu0yYYd3GXmCwxzPi87Gooaq/UfiqPyrk2g=="
 ---
 
 ## 俺のクソAI for Nausicaa

@@ -9,8 +9,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "t4K2mDZcDtqNT+LE2FZ3JKWjUE+CU2uAkibARi9Ct6F7M71gUp+sotVliwmz+U69WDfdOL2FGbgmeoTpkwOj6A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "B4jSk/IIn74/YsPrTPzL2cffDpdRQaCzI/l9h6rXPA1Hbdcz5zaxD6HaPLsRnLxa/dJ/Yg1YEklxS6Rd2fhEcg=="
 ---
 
 # SSH कमिट हस्ताक्षर स्क्रिप्ट -- व्याख्या

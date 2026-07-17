@@ -9,8 +9,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0PzZFPoAMY1NBQFs81tOq8lgLChh0A77SXwTeq1WKMZ9YPc9KuBkH0wZJn2Q2Dy2OJYwJe0nDTyvdncZnpKU2Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "GRTDPJzbE7htdwYH9ePhCjfjRMLIJJW1nS6wVjiazA3PB9mxhlsY3jN9exgw6eWgzkgAUqg6pMrhHJCXB51O6A=="
 ---
 
 # Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı

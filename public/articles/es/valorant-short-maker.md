@@ -9,8 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "QMDQC8b8giQnXsBblPHCOuusFKVqf2NgoqGE/a03HLBEp4o1m9LEd7pZduYP/xOv7zaC322gUwb5GJW3PL4FQQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "wFxtG2yrwlMG0J5im4vqXYJe0d+cJr3MOd/60SrYKUH2ev5H3ZHjsobALw+wpsRr6+9rxSYM8oiU9ueZAB5JYg=="
 ---
 
 # valorant-short-maker: el pipeline que genera mis shorts de Valorant solito

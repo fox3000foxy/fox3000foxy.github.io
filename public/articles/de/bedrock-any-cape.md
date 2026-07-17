@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "9ceJxBU1nSZLEfPnBEIWpbaBjBpMbc6xBGRmGWa+5H3E1Tnlhb+B3uTviHFfD+HVfdNCh2soNo9S5EDYpiNBDA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "51w1Uc77BKeBA91fpRZ982A3LdtTpBNvykygtc/WrUe4rWhw3f7fE6r/mYkcFJ9SE3Bm6EojkM076yYOfoe6TA=="
 ---
 
 # Wie man jeden Umhang in Minecraft Bedrock bekommt

@@ -11,8 +11,8 @@ tags:
   - event-driven-architecture
   - ai
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "X8YLUhNvbDM2rjtT8YhM7PgVOnQFb3pCBzv4QqVQrCbSL4eYXf2KIrCp96jG5+WJg7zP2hjfulQiyOh+Ca/XRg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "ioC3Ask+cVWbH3bg+rKA/FSwgcNuEpDXHRBv4vgeUiGNOetxCupbP/7qmT7NI7IqDs5+7BTMqqphqjSkkiqudg=="
 ---
 
 # Luna Protocol : मैंने एक पूरी तरह से स्वायत्त Discord बॉट बनाया जो एक इंसान का अनुकरण करता है

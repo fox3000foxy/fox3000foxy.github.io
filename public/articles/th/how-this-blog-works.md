@@ -10,8 +10,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "2s4sfdd5bsU96RBNOuUjR8LwGyMxTYLi27QZZahGX19rwtX37EQ46FePR3EPDKserLU4iBsvzuGYG8Q9epDe6Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "c4vOoezKD8JX8PHumoaaTPfSEu89y6dykvfq0VTSjSqD/pgzgDGTqyg7bj3lS8eAVGD8joY1HAP0/K01gkpeVA=="
 ---
 
 # บล็อกนี้ทำงานอย่างไร ?

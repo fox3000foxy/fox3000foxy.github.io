@@ -10,8 +10,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "dMSI9LjonNDkG5QSqN2CJLx0AA8+MhS5kXq2pUqEPXvCj/hcVLQC1xKwJPzvUa0t3V3ZlgNbcg3bBmsGJrSAMA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "W703KA8QuA9CI9wHdV0vyRtLexIf/qYY77qeRtwuopJ8J9NhosrrjqiLBOiZ+CsLoirXFHvwLO3udksFzEN09A=="
 ---
 
 # كيف يعمل هذه المدونة؟

@@ -9,8 +9,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "0OXWSwS0+hIU+D8n1X80fqlP3oWowGDxUe0vykdMQ5j1bM9ag844QD2M+B5pjGjN6Y77pkMU+7HKpc9vQTlafg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "iu1CgTi6brgdH3CREB4LXL70zddN60UIWbZGWAXQev3GRv/Xlw/+b4V4UZ9MbUE4n6uKVt7GvHIYaWw/yXjCtQ=="
 ---
 
 ## 내 막장 AI for Nausicaa

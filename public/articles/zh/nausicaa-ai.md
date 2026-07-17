@@ -9,8 +9,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "df08QpvkM+wfJD5a3wYorWPgTOTvvjnYZ7OLHpYTm2dDGACrcv3GTmJV9tjdIddvC0a8oPiI8Qk2oW7844Hxww=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "eNr/jboT9TbjIqHBilkMcV2UurDJ2IHgIBE2j6xuCQyxt45UvFoiq1N+PBZSZpPJo0Sq54wou4qnosTKbBzGmw=="
 ---
 
 ## 我给 Nausicaa 写的那个沙雕 AI

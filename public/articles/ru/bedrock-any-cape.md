@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "Ha4QIs9Is+g2iT0XmRY7gf9/q9tFTavzHOKdulOZjXFeI2MBfecH4GhW/NS9nLrOxw9RxySRucS6TA21t/Diew=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "J0kRUkCdFN0VfxqD9G1m/DeYeYP99mcLsBpDDW3NJhlaVqrEMZ/OdOy7NM9rhaYGTqQm6VpIljFFjatahZTLxw=="
 ---
 
 # Как получить любой плащ в Minecraft Bedrock

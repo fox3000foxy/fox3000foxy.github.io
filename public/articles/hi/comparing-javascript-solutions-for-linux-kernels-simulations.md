@@ -8,8 +8,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ZO+IlG4jijAplf2tx1VEKNTKSw2NOBUsdMKSHeWgNIQF95bPSzq+zTZjaomGvXB4e4A3HwYpi4zcEcy5d4uIww=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "nzvCdPjERMwXSw4r4hw6uGUB+fuK21XM8mn9GOzcc/ZP8+7Hyzpx7/3fIqQMGVCoNhS39c1IdWa+ozZhFQvUCg=="
 ---
 
 # हर जावास्क्रिप्ट सैंडबॉक्स, एमुलेटर, सिमुलेटर और लिनक्स हनीपॉट -- तुलना

@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "LGA4l+huDcWhar/M59K2E8In7j4CTxwtmpNK0GCzJ0FT70ldRs3/Tu37uY+5jar4gGls8X7Q5xg55oMh5Z6bYg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "4sGIH0pEoySBKwssJpadOVdn/6yRGt876dysf3sDm2fgBgsHZ8rSlHMZH2jTzw1QGsku++LFNEB/q9OLVWmhXA=="
 ---
 
 # كيفية الحصول على أي عباءة في Minecraft Bedrock

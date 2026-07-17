@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "VqyOTAq2cMLHIwqNKiPRa27E6keOQQyhNi4iDTk6g7FkCZ8tFwphhCJ47vgjfFij9OzD6U149s8Is2MbG6lefg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "RAfs0x57fwy1VsRNzuB/ppZ0XfUeJuz7/Mzr03BZNGKj+Od4smigzHlUZ/fGvaZvIsWcUpu3eO4i90JKPnS3ZQ=="
 ---
 
 # مود الكيب: كيف تسرق كيب Jeb_ بحقن توقيع RSA

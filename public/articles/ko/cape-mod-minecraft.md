@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "qKJdpXUbp73VIwG76bsOrod+NILWEJp+oWXl/fKfoHAt18E7BJUapk8SMwldAepAYM4L45LOMKEjfQbV70czMw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "m6opZFJZK+5kntha02cYVlxwFJ+EOpDoVZ+bGFdcZwDfl4wN/k4G4s+HdQJOrBBsdX9OZ28E2Pg0hzQ7tu0S4Q=="
 ---
 
 # Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법

@@ -10,8 +10,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "SL6lr4QbCCysQ6RGo3MvdtFd1lqxRXQfHkJGOcPUGUByVJOrJ6wJCTLRIBYJ1otd/cVzAIYVbC74VncCw+7X+A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "hRwkyI4BWQGYSaTPY2ETUgwL1Rrdw858LQtkAUHiLI43E4ZESGd1xmXxNLiRpFrWh6tsuKDN0gp3rGkzTwdLFw=="
 ---
 
 # 我用 git 当数据库，在 GitHub Actions 上白嫖跑了个 bot

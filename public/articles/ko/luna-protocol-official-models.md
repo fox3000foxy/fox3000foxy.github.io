@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "aBvAKYZczG05jiQ+Oi/EAJH0/BZirBsAPUfx5oqaU7QSXLOTFCpMzlN0lYcsbwZ4yc/6vnLG/J9ZfAMxIwbmCQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "zWvXbYqBvr/bVYtqemvZA8/zhNjwsq/LoBJ7QM6oCbh7FM/plSLLl9lLEJnGzPWo1OYYPjhZslyajVcx9L6ecg=="
 ---
 
 # Luna Protocol: 5만 개의 Discord 샘플로 1.5B 모델을 파인튜닝하고 Few-Shot 프라이밍을 비밀 무기로 만든 이유

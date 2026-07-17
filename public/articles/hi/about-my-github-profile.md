@@ -7,8 +7,8 @@ authors:
 tags:
   - meta
   - github
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "1eM3ib6WikFDs0niPS+y3Vequ1iiXwp6CC1OFdNLWmEmZl4x76xA5JHLGcTlmLQqWN0MWvNUB7PRghQ3Ns1Qtw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "nN/+ej2B3P4rMoY+DFihUO0GHWZzfyko8OrTx+fBeHdgk3lr0P+LZT9Rt4ChR1xvdPXroCe35Gg5zFeTnAVxMA=="
 ---
 
 # मेरा GitHub प्रोफ़ाइल

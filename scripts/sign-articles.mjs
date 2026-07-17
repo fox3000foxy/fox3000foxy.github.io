@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync, existsSync } from "fs";
-import { createSign, createVerify, createPrivateKey } from "crypto";
+import { createSign, createVerify, createPrivateKey, createPublicKey } from "crypto";
 import { globSync } from "glob";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -28,14 +28,13 @@ if (!PRIVATE_KEY_BASE64) {
   process.exit(1);
 }
 
-const PUBLIC_KEY_BASE64 =
-  "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A==";
-
 const privateKey = createPrivateKey({
   key: Buffer.from(PRIVATE_KEY_BASE64, "base64"),
   type: "pkcs8",
   format: "der",
 });
+const publicKey = createPublicKey(privateKey);
+const PUBLIC_KEY_BASE64 = publicKey.export({ type: "spki", format: "der" }).toString("base64");
 
 function signArticle(slug, author, date, content) {
   const msg = `${slug}|${author}|${date}|${content}`;
@@ -45,14 +44,14 @@ function signArticle(slug, author, date, content) {
   return sign.sign({ key: privateKey, dsaEncoding: "ieee-p1363" }, "base64");
 }
 
-function verifySignature(slug, author, date, content, sigBase64) {
+function verifySignature(slug, author, date, content, sigBase64, pubkeyBase64) {
   const msg = `${slug}|${author}|${date}|${content}`;
   const verify = createVerify("SHA256");
   verify.update(msg);
   verify.end();
   try {
     return verify.verify(
-      { key: Buffer.from(PUBLIC_KEY_BASE64, "base64"), type: "spki", format: "der", dsaEncoding: "ieee-p1363" },
+      { key: Buffer.from(pubkeyBase64, "base64"), type: "spki", format: "der", dsaEncoding: "ieee-p1363" },
       sigBase64,
       "base64"
     );
@@ -116,8 +115,11 @@ for (const file of files) {
   const slug = file.split("/").pop().replace(/\.md$/, "");
 
   // Check if existing signature is valid
-  if (pubkey === PUBLIC_KEY_BASE64 && sig) {
-    if (verifySignature(slug, author, date, content, sig)) {
+  if (pubkey && sig) {
+    console.log(`Checking existing signature for ${file}...`);
+    const isValid = verifySignature(slug, author, date, content, sig, pubkey);
+    console.log(`Signature valid: ${isValid}`);
+    if (isValid) {
       skip++;
       console.log(`– ${file} (signature valid)`);
       continue;

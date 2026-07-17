@@ -14,8 +14,8 @@ tags:
   - wasm
   - gaming
   - serverless
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "lxsn6ZBhNhA5j/wBfeSeY1saVvDDDh/RZZ5/AlKXA26YW2z5OsNhJBrpfXMJmFoboovtTupAh/m2tpZQ/l5WeA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "yNdAlkgdCRCTXNo7LWy4185kHTjwU5pnR5/4eYk6U5i6Qdw5bjh6B6gTMJ9cuGmmvwMJ+vyEaBkaaDzwg1yplg=="
 ---
 
 # Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy

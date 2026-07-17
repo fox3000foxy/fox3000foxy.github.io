@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "bHMNLoSAHdsVmDmAoS1uQZYniSebgxyX5La+stv5S6Ct6MTjC/z+4bhv25L3G1itceRN7Pgr4REBlaMuW5z1kw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "xS4fnuMD8RX3WS+NaAApL30GbE9iH6w1TiutpmvvYiZhng/eXbkMm1KpGPRXiUkbltkUPfeyeeBTr0P8EYE1fQ=="
 ---
 
 # Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解

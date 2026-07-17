@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "RW47YO46GU1BNxlSNMzHncGC/ArSZzg1cUU2qpAYHD9wOyjxBvRTjQg4q6PkLib6MU7+9D+eHAhevfoAIvyIVQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "L7yCnhxSOz+Iy7/NH6WaF8BqPynW0GMWQAOMIQa8Nh6pSdbexIeGQISlZ6kftsFzWW0OgMirqVDP1CbG9NZwkA=="
 ---
 
 # Cape Mod : วิธีขโมยเคปของ Jeb_ ด้วยการฉีดลายเซ็น RSA

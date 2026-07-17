@@ -10,8 +10,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "imC2KylEOVrkDb9yFRZNRmANCshK5IIZkoK9NLZQJRqicfjOyO3IdpZxukruLXEA1qDh9rHlb16BdU6yACjbjg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "aW6CHhtJzAhup7mI9oE5IV7nrThUSzmivp3ddihVRwikgGS/2scC5nBqhJONWiTLVbcfGvENEVpGnPmUqxq9cA=="
 ---
 
 # Skrip Penandatanganan SSH untuk Komit -- Penjelasan

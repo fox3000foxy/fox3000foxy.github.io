@@ -8,8 +8,8 @@ authors:
   - fox3000foxy
 tags:
   - personal
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "expNT2COEsfD3Dm0iInPkXD0CULlImqHWtFy2v4sh6j3AsCbhzHCZurRacT29zHPEMYdIwsJdM/4din3+gusZQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "e0KZIj/UuBIVhg6nJ8d4GYJmslW0vOuXCr7+k1o16ZNQIM/0tXYKjaM1u4eNNTw47litaqcyYTej7uPk4lRpuA=="
 ---
 
 # Tutkularım

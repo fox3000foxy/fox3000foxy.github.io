@@ -9,8 +9,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "IsPKSCsPBWB2gclE0XdCA3h8k29rGJ8FjoQQ3R2dv3ptN8kiY4aX0y9KfAmW7iQ9UBja1SwU2ModZ1RdsIYvkw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "EZEm6n41HDJy27KvEOpZmGvYnMp84ytC+ig4iEUaRMZ4QzmqTqnVLNOqqKcM0Nj9ljJ0q2owvkdrREVkl2rNhg=="
 ---
 
 # สคริปต์เซ็นชื่อ SSH สำหรับคอมมิต -- คำอธิบาย

@@ -9,8 +9,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "NKCcK+KXz/WVGKOEgGZDZH+Dp8wlsR5hGtGUmBP6mUKPZV5BaQanPoO748DjWM3rmTvS1xtGY5iEnl6HYY5x1Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "Npao7ZA4M+mh3BW8vW3eqIAzTRE43Y8x6O7Y7UaAnFlsXxcptXIYm+PTPkAkueImJw8KOa86CcWSrFVVbxsCkg=="
 ---
 
 # 这个博客是如何运作的？

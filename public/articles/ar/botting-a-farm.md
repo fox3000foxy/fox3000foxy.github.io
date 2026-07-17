@@ -9,8 +9,8 @@ tags:
   - automation
   - javascript
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "hB/W2vPOlOC5GiMG17AbpRODEdPzXg2JV+ZOMTe52SUFh44vaiKLn4ydPjUd5b6uPM450U9f8t2/9Xc9j9ogvw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "Dw+n/tDUUsJIiOvIMd7WB5dQViMEmbdD4akR9ItF1Y/duTVLwjqKVC8OnJf9kGp57800/yTh2qdtG8eCX3hl/A=="
 ---
 
 > **ملاحظة (2026):** هذا المشروع لم يعد قيد الصيانة. مايكروسوفت عززت بشكل كبير اكتشافها لمكافحة البوتات -- ما كان يعمل في ذلك الوقت لم يعد يعمل اليوم. الكود والمنهجية الموصوفة أدناه مُحتفظ بها لأغراض الأرشفة والتوضيح فقط.

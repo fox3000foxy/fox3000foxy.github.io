@@ -11,8 +11,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "586GSkZKm/YLLUZx7CM4Vek98s//JDDDIuFb1nB11Vxq9eMSeaEIhx/ktOGjX68jUXnR5VmR45or3LDQzsMbdw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "m1UqguqOY4WWH2b8N1eB/2PCqDU1GmvKro79j9PXw830NRN7GRPlzv9SivaYtGD88PMQJJiFaO3xCk8tFcyMZA=="
 ---
 
 # ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions

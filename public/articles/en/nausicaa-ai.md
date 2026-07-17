@@ -11,8 +11,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ty2ZuorlZKwufz3YIuirM5G4mTZ7wT2AGykJrEky7tlzI0Pa6AYoIENC3uHA+q6KKOnULnPguRUdRPIM3tXfKg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "QZFIz3V45kjF4wkMG18aZ+cPlORjZzoxS6XlQ7KsRVWaWcFFvhjkekrscdwBIQbDi2b86/qWEa8JP8ciBSgZ8w=="
 ---
 
 ## My dumb AI for Nausicaa

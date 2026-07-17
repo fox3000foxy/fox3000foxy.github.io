@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "DfcczyqvTRgKe2FAnLT4UMO3Pj4uSGm1TbuIYeGf0fFEmkdzNBA1q7KoNCU9GFBYVYIJvNoKpiTvuNlRnNAZCg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "XNJBIj+gdEopRRMZP3VUJvZcwavh3PIvlXo8P0FvuQPAJ9z36hJGUkDCOueieiN9bxU9t9FxaEOaySOw7PUJnA=="
 ---
 
 ## UTAU : Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가

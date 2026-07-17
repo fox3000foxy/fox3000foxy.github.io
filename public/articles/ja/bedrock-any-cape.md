@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "V2vFokVaeC+WbjWWcBaZn5EbjKv3/uTKb4JV4gS4sIuvLWdQ3S9KTN0Q2mJFTaiV480vfNF5zyRmGgPCFA+T2Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "t3uFRP/DqKUdc0JuV9btWXARDKbwWgKLejENrJttzO3USWbbuDOJJHuRFhi6iFj+gZK8mmxxE/2bJP/CyrcpNA=="
 ---
 
 # Minecraft Bedrockでどんなケープでも入手する方法

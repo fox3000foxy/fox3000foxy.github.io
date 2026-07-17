@@ -14,8 +14,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "FrN9VrvzsyYIjeVUZOhrAwmLW8kM3zjig4eLpQpLlkAjfj8ZVzlqfoE+NeFNYsttnGwL/wMicOD3wPkVXrQr6A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "89opn2Fo7KFAAOU2cb+VdmCG3ty85v5TtE8qeAnPD4PGiFtW0du3mzNCNUuJTRdjmm7cE9kBOscBlohqZvii4g=="
 ---
 
 # Menjalankan Pustaka Node.js di Browser Tanpa Wasm -- polyfill typescript-virtual-container
