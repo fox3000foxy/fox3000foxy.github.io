@@ -84,14 +84,13 @@ function verifyArticle(
 	author: string,
 	date: string,
 	content: string,
-	signatureBase64: string
+	signatureBase64: string,
+	pubkeyBase64: string
 ): boolean {
 	try {
-		const AUTHOR_PUBKEY =
-			"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A==";
 		const msg = `${slug}|${author}|${date}|${content}`;
 		const key = crypto.createPublicKey({
-			key: Buffer.from(AUTHOR_PUBKEY, "base64"),
+			key: Buffer.from(pubkeyBase64, "base64"),
 			format: "der",
 			type: "spki",
 		});
@@ -137,14 +136,15 @@ export function readAllArticleData(slug: string) {
 			typeof e === "object" &&
 			e !== null &&
 			(e as { slug?: string }).slug === slug
-	) as { author_sig?: string; authors?: string[]; date?: string } | undefined;
-	const verified = enEntry?.author_sig
+	) as { author_sig?: string; authors?: string[]; date?: string; author_pubkey?: string } | undefined;
+	const verified = enEntry?.author_sig && enEntry?.author_pubkey
 		? verifyArticle(
 				slug,
 				enEntry.authors?.[0] || "",
 				enEntry.date || "",
 				enContent,
-				enEntry.author_sig
+				enEntry.author_sig,
+				enEntry.author_pubkey
 			)
 		: false;
 
