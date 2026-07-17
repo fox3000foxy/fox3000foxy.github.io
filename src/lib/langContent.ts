@@ -136,17 +136,25 @@ export function readAllArticleData(slug: string) {
 			typeof e === "object" &&
 			e !== null &&
 			(e as { slug?: string }).slug === slug
-	) as { author_sig?: string; authors?: string[]; date?: string; author_pubkey?: string } | undefined;
-	const verified = enEntry?.author_sig && enEntry?.author_pubkey
-		? verifyArticle(
-				slug,
-				enEntry.authors?.[0] || "",
-				enEntry.date || "",
-				enContent,
-				enEntry.author_sig,
-				enEntry.author_pubkey
-			)
-		: false;
+	) as
+		| {
+				author_sig?: string;
+				authors?: string[];
+				date?: string;
+				author_pubkey?: string;
+		  }
+		| undefined;
+	const verified =
+		enEntry?.author_sig && enEntry?.author_pubkey
+			? verifyArticle(
+					slug,
+					enEntry.authors?.[0] || "",
+					enEntry.date || "",
+					enContent,
+					enEntry.author_sig,
+					enEntry.author_pubkey
+				)
+			: false;
 
 	const firstImage = extractFirstImage(enContent);
 
