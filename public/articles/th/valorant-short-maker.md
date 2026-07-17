@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "ATZ9Zoe2oVIKonlNPlVw9aMqOSGZ5j0/I9khR+MgG/skSdFOJZv3/VnfhbPufe4NcD+tHspc0noDeBkedUkDsg=="
+author_sig: "8BaFmEGYj475+ij7F5HwJ3CyW3fTcigzoSeZoxVarYFOV2Wdh5xZSATXlkRQaR7NCOhq/b89jt/zctflhcCIbA=="
 ---
 
 # valorant-short-maker: ไปป์ไลน์ที่สร้าง Shorts Valorant ให้ผมแบบอัตโนมัติ

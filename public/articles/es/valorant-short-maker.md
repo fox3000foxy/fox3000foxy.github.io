@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "uYmKmXgFcrMfiV0U9o8FPFIlaxA9KDyhae+8ymCl3vq7IAkkhogN7JgXVsUKU1Qrk47s5CuzZ06OSnFiux7HCA=="
+author_sig: "dvXIgZycYo/OZn8JKK/2rVCETAOO/InDlFGiqAaX+TKEhIkCuEZeeC3uwlV86Fip4xkIMIONRj0QVAuwsuCK6w=="
 ---
 
 # valorant-short-maker: el pipeline que genera mis shorts de Valorant solito
