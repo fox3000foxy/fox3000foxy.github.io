@@ -36,6 +36,9 @@ jobs:
       - name: Lint with Biome
         run: bun run check
 
+      - name: Check language contamination
+        run: python3 scripts/check-lang-contamination.py --fail-on-error
+
       - name: Build
         run: bun run build
         env:
