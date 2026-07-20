@@ -21,30 +21,6 @@ interface ArticleMeta {
 	verified?: boolean;
 }
 
-function rawEcdsaToDer(raw: Buffer): Buffer {
-	const r = raw.subarray(0, 32);
-	const s = raw.subarray(32, 64);
-	const encInt = (buf: Buffer) => {
-		if (buf[0] & 0x80) {
-			return Buffer.concat([Buffer.from([0x00]), buf]);
-		}
-		let i = 0;
-		while (i < buf.length - 1 && buf[i] === 0) {
-			i++;
-		}
-		return buf.subarray(i);
-	};
-	const rEnc = encInt(r);
-	const sEnc = encInt(s);
-	return Buffer.concat([
-		Buffer.from([0x30, 4 + rEnc.length + sEnc.length]),
-		Buffer.from([0x02, rEnc.length]),
-		rEnc,
-		Buffer.from([0x02, sEnc.length]),
-		sEnc,
-	]);
-}
-
 function verifyArticle(
 	slug: string,
 	author: string,
@@ -60,9 +36,14 @@ function verifyArticle(
 			format: "der",
 			type: "spki",
 		});
-		const sigRaw = Buffer.from(signatureBase64, "base64");
-		const sigDer = rawEcdsaToDer(sigRaw);
-		return crypto.verify("SHA256", Buffer.from(msg), key, sigDer);
+		const verify = crypto.createVerify("SHA256");
+		verify.update(msg);
+		verify.end();
+		return verify.verify(
+			{ key, dsaEncoding: "ieee-p1363" } as crypto.VerifyOptions & { key: crypto.KeyLike },
+			signatureBase64,
+			"base64"
+		);
 	} catch {
 		return false;
 	}
@@ -177,7 +158,9 @@ function main() {
 			const { meta, content } = parseFrontMatter(text);
 			const readingTime = estimateReadingTime(content);
 			const existingMeta = existingBySlug.get(slug) || {};
-			articles.push({ slug, readingTime, ...existingMeta, ...meta });
+			const enMeta = enBySlug.get(slug);
+			const verified = enMeta?.verified ?? false;
+			articles.push({ slug, readingTime, verified, ...existingMeta, ...meta });
 		}
 
 		// Fall back to English articles for any slugs missing in this language
