@@ -6,6 +6,8 @@ import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 
+const markdownCache = new Map<string, string>();
+
 const langAliases: Record<string, string> = {
 	asm: "x86asm",
 };
@@ -77,6 +79,11 @@ function renderMermaidSvg(code: string): string {
 }
 
 export function renderMarkdown(content: string): string {
+	const cached = markdownCache.get(content);
+	if (cached) {
+		return cached;
+	}
+
 	content = content.replace(/\r\n/g, "\n");
 
 	let html = content.replace(
@@ -105,5 +112,6 @@ export function renderMarkdown(content: string): string {
 			`<a href="${href}" target="_blank" rel="noopener noreferrer"${rest}>`
 	);
 
+	markdownCache.set(content, html);
 	return html;
 }
