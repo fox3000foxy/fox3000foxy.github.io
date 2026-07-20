@@ -21,12 +21,12 @@
     "@astrojs/preact": "^6.0.1",
     "@astrojs/rss": "^4.0.19",
     "@resvg/resvg-js": "^2.6.2",
-    "@tiptap/extension-image": "^3.27.4",
-    "@tiptap/extension-link": "^3.27.4",
-    "@tiptap/extension-placeholder": "^3.27.4",
-    "@tiptap/react": "^3.27.4",
-    "@tiptap/starter-kit": "^3.27.4",
-    "astro": "^7.0.9",
+    "@tiptap/extension-image": "^3.28.0",
+    "@tiptap/extension-link": "^3.28.0",
+    "@tiptap/extension-placeholder": "^3.28.0",
+    "@tiptap/react": "^3.28.0",
+    "@tiptap/starter-kit": "^3.28.0",
+    "astro": "^7.1.1",
     "highlight.js": "^11.11.1",
     "marked": "^18.0.6",
     "marked-highlight": "^2.2.4",
@@ -42,7 +42,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/turndown": "^5.0.6",
-    "typescript": "5.8"
+    "typescript": "~7.0.2"
   },
   "overrides": {
     "picomatch": "4.0.4",
