@@ -27,23 +27,6 @@ export function readAllHomeContent(): Record<Lang, string> {
 	return result;
 }
 
-export function readAllArticleContent(slug: string): Record<Lang, string> {
-	const result = {} as Record<Lang, string>;
-	for (const lang of ALL_LANGS) {
-		const filePath = path.resolve(`public/articles/${lang}/${slug}.md`);
-		if (fs.existsSync(filePath)) {
-			result[lang] = renderMarkdown(fs.readFileSync(filePath, "utf-8"));
-		}
-	}
-	const en = result.en ?? "";
-	for (const lang of ALL_LANGS) {
-		if (!result[lang]) {
-			result[lang] = en;
-		}
-	}
-	return result;
-}
-
 function stripFrontmatter(text: string): string {
 	if (text.startsWith("---\n")) {
 		const end = text.indexOf("\n---\n", 4);
@@ -87,10 +70,9 @@ export function readAllArticleData(slug: string) {
 			typeof e === "object" &&
 			e !== null &&
 			(e as { slug?: string }).slug === slug
-	) as { verified?: boolean } | undefined;
+	) as { verified?: boolean; image?: string } | undefined;
 	const verified = enEntry?.verified ?? false;
-
-	const firstImage = extractFirstImage(enContent);
+	const firstImage = enEntry?.image || extractFirstImage(enContent);
 
 	return { raw, content, allIndexes, verified, firstImage };
 }
@@ -129,17 +111,10 @@ export function readAllArticleIndexes(): Record<Lang, unknown[]> {
 				string,
 				unknown
 			>[];
-			result[lang] = index.map((entry) => {
-				const slug = entry.slug as string;
-				const mdPath = path.resolve(`public/articles/en/${slug}.md`);
-				if (fs.existsSync(mdPath)) {
-					const text = fs.readFileSync(mdPath, "utf-8");
-					const content = stripFrontmatter(text);
-					const img = extractFirstImage(content);
-					return { ...entry, image: img };
-				}
-				return entry;
-			});
+			result[lang] = index.map((entry) => ({
+				...entry,
+				image: entry.image || "",
+			}));
 		}
 	}
 	cachedIndexes = result;

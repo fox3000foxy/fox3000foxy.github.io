@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { SITE_URL } from "../lib/i18n";
-import { renderMarkdown } from "../lib/markdown";
 
 function escapeXml(s: string): string {
 	return s
@@ -53,18 +52,6 @@ export function GET() {
 				}
 			} catch {}
 
-			let htmlBody = "";
-			try {
-				htmlBody = renderMarkdown(
-					body.replaceAll("assets/", "/articles/assets/")
-				);
-			} catch {
-				htmlBody = body
-					.replace(/</g, "&lt;")
-					.replace(/>/g, "&gt;")
-					.replace(/\n/g, "<br>");
-			}
-
 			const tags = (article.tags as string[]) || [];
 			const pubDate = article.date
 				? new Date(article.date as string).toUTCString()
@@ -83,14 +70,13 @@ export function GET() {
       <guid isPermaLink="true">${articleUrl}</guid>
       <description>${escapeXml((article.description as string) || "")}</description>
       <pubDate>${pubDate}</pubDate>${enclosureXml}
-      <content:encoded><![CDATA[${htmlBody}]]></content:encoded>
 ${tagXml}    </item>`;
 		})
 		.join("\n");
 
 	return new Response(
 		`<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(title)}</title>
     <link>${siteUrl}</link>

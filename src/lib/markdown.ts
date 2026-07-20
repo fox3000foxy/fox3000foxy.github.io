@@ -7,6 +7,7 @@ import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 
 const markdownCache = new Map<string, string>();
+const highlightCache = new Map<string, string>();
 
 const langAliases: Record<string, string> = {
 	asm: "x86asm",
@@ -16,12 +17,20 @@ marked.use(
 	markedHighlight({
 		langPrefix: "hljs language-",
 		highlight(code, lang) {
+			const key = `${lang ?? "none"}\x00${code}`;
+			const cached = highlightCache.get(key);
+			if (cached) {
+				return cached;
+			}
 			const resolvedLang = lang ? langAliases[lang] || lang : null;
 			if (resolvedLang && hljs.getLanguage(resolvedLang)) {
 				try {
-					return hljs.highlight(code, { language: resolvedLang }).value;
+					const result = hljs.highlight(code, { language: resolvedLang }).value;
+					highlightCache.set(key, result);
+					return result;
 				} catch {}
 			}
+			highlightCache.set(key, code);
 			return code;
 		},
 	})
@@ -65,7 +74,7 @@ function renderMermaidSvg(code: string): string {
 	try {
 		execSync(
 			`node_modules/.bin/mmdc -i "${mmdPath}" -o "${svgPath}" --backgroundColor transparent -q 2>/dev/null`,
-			{ timeout: 30000, stdio: "pipe" }
+			{ timeout: 10000, stdio: "pipe" }
 		);
 	} catch {
 		return "";
@@ -73,7 +82,6 @@ function renderMermaidSvg(code: string): string {
 	if (!fs.existsSync(svgPath)) {
 		return "";
 	}
-	// Persist to cache for next build
 	fs.copyFileSync(svgPath, path.join(cacheDir, `${hash}.svg`));
 	return svgPath;
 }
@@ -86,19 +94,21 @@ export function renderMarkdown(content: string): string {
 
 	content = content.replace(/\r\n/g, "\n");
 
-	let html = content.replace(
-		/```mermaid\n([\s\S]*?)```/g,
-		(_, code: string) => {
-			const svgPath = renderMermaidSvg(code.trim());
-			if (svgPath) {
-				return `<img src="/_mermaid/${path.basename(svgPath)}" alt="mermaid diagram" loading="lazy" decoding="async" class="mermaid-svg" />`;
+	if (content.includes("```mermaid")) {
+		content = content.replace(
+			/```mermaid\n([\s\S]*?)```/g,
+			(_, code: string) => {
+				const svgPath = renderMermaidSvg(code.trim());
+				if (svgPath) {
+					return `<img src="/_mermaid/${path.basename(svgPath)}" alt="mermaid diagram" loading="lazy" decoding="async" class="mermaid-svg" />`;
+				}
+				const escaped = code.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+				return `<pre class="mermaid-fallback">${escaped}</pre>`;
 			}
-			const escaped = code.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-			return `<pre class="mermaid-fallback">${escaped}</pre>`;
-		}
-	);
+		);
+	}
 
-	html = marked(html) as string;
+	let html = marked(content) as string;
 
 	html = html.replace(
 		/<h([23])>(.*?)<\/h\1>/g,

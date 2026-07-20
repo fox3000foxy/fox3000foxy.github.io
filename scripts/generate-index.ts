@@ -4,6 +4,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { parse } from "yaml";
 
+
 interface ArticleMeta {
 	slug: string;
 	title?: string;
@@ -72,6 +73,19 @@ function estimateReadingTime(text: string): number {
 	const clean = noCode.replace(/`[^`]+`/g, "");
 	const words = clean.trim().split(/\s+/).length;
 	return Math.max(1, Math.ceil(words / 150));
+}
+
+function extractFirstImage(markdown: string): string {
+	const m = markdown.match(/!\[.*?\]\(([^)]+)\)/);
+	if (m) {
+		let url = m[1];
+		if (url.startsWith("http")) return url;
+		if (url.startsWith("/")) return `https://fox3000foxy.com${url}`;
+		if (url.startsWith("assets/")) url = url.replace("assets/", "/articles/assets/");
+		else url = `/${url}`;
+		return `https://fox3000foxy.com${url}`;
+	}
+	return "";
 }
 
 function parseFrontMatter(text: string): {
@@ -186,6 +200,18 @@ function main() {
 			(a, b) =>
 				new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
 		);
+
+		// Add firstImage to index for EN articles
+		if (lang === "en") {
+			for (const article of articles) {
+				const filePath = path.join(langPath, `${article.slug}.md`);
+				if (fs.existsSync(filePath)) {
+					const text = fs.readFileSync(filePath, "utf8");
+					const { content } = parseFrontMatter(text);
+					article.image = extractFirstImage(content);
+				}
+			}
+		}
 
 		fs.writeFileSync(indexPath, `${JSON.stringify(articles, null, 2)}\n`);
 		console.log(
