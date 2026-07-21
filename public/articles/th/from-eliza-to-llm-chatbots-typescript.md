@@ -283,7 +283,7 @@ function findMatch(input: string, categories: Category[]): Match | null {
 
 ## Jabberwacky (1997) และ Cleverbot (2008) : การแตกหักทางญาณวิทยา
 
-บอทก่อนหน้านี้ทั้งหมดมีสมมติฐานร่วมกัน : **ต้องเขียนคำตอบ** ELIZA มีกฎ S-expression, PARRY มีแพทเทิร์น选择性, ALICE มีหมวดหมู่ AIML Rollo Carpenter กลับด้านโดยสิ้นเชิง : **แล้วถ้าเราไม่เขียนอะไรเลยล่ะ?**
+บอทก่อนหน้านี้ทั้งหมดมีสมมติฐานร่วมกัน : **ต้องเขียนคำตอบ** ELIZA มีกฎ S-expression, PARRY มีแพทเทิร์นแบบเลือกเฉพาะ, ALICE มีหมวดหมู่ AIML Rollo Carpenter กลับด้านโดยสิ้นเชิง : **แล้วถ้าเราไม่เขียนอะไรเลยล่ะ?**
 
 ### แนวคิด
 
