@@ -19,7 +19,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "izwynjx3Pj3toIfHXwP+dzmLPCxxd+qx3zwPk/YD5P3vLLpw5FMgVxgLKEaXkIDBnccpDD+gqlBmz/b7IELi4g=="
+author_sig: "GQ98UW/ga+eY17JLVc/8vFdZMI9J6fJTQIdUrbnCgnkkl5Ymxn+uKDUaXiVHZe5ghsslqPhB643eR4QI/FfnZQ=="
 ---
 
 # Des ELIZA aux LLM : 60 ans d'IA conversationnelle, reconstruite en TypeScript
@@ -461,6 +461,11 @@ Chaque token est échantillonné selon sa probabilité (température, top-k, top
 
 Les chatbots classiques sont **transparents mais fragiles**. Un LLM est **robuste mais opaque**. Les deux approches existent encore aujourd'hui -- pas comme concurrents, mais comme outils pour des besoins différents.
 
+Si vous voulez approfondir le fonctionnement interne des LLM, cette vidéo est une excellente ressource :
+
+Si vous voulez approfondir le fonctionnement interne des LLM, cette vidéo est une excellente ressource :
+
+[How LLMs Work — YouTube](https://www.youtube.com/watch?v=YmLp8qe87A0)
 ---
 
 ## Luna Protocol : la synthèse moderne
@@ -510,3 +515,4 @@ Le repo est open source -- vous pouvez cloner, lancer chaque bot, et voir par vo
 | Code source PARRY original | [lexcore/PARRY](https://github.com/lexcore/PARRY) |
 | AIML Free ALICE v1.6 | [drwallace/aiml-en-us-foundation-alice](https://github.com/drwallace/aiml-en-us-foundation-alice) |
 | RFC 439 originale | [PARRY Encounters the DOCTOR](https://tools.ietf.org/html/rfc439) |
+| Excellente explication du fonctionnement des LLM | [https://www.youtube.com/watch?v=YmLp8qe87A0](https://www.youtube.com/watch?v=YmLp8qe87A0) |
