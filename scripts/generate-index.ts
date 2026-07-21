@@ -19,6 +19,7 @@ interface ArticleMeta {
 	author_pubkey?: string;
 	author_sig?: string;
 	verified?: boolean;
+	body?: string;
 }
 
 function verifyArticle(
@@ -114,6 +115,7 @@ function main() {
 		const text = fs.readFileSync(path.join(enPath, file), "utf8");
 		const { meta, content } = parseFrontMatter(text);
 		const readingTime = estimateReadingTime(content);
+		const body = content.replace(/^## .+/m, "").replace(/\n{3,}/g, "\n\n").substring(0, 500).trimEnd();
 		const verified =
 			meta.author_sig && meta.author_pubkey
 				? verifyArticle(
@@ -125,7 +127,7 @@ function main() {
 						meta.author_pubkey
 					)
 				: false;
-		enArticles.push({ slug, readingTime, verified, ...meta });
+		enArticles.push({ slug, readingTime, body, verified, ...meta });
 	}
 	const enBySlug = new Map(enArticles.map((a) => [a.slug, a]));
 
@@ -160,7 +162,8 @@ function main() {
 			const existingMeta = existingBySlug.get(slug) || {};
 			const enMeta = enBySlug.get(slug);
 			const verified = enMeta?.verified ?? false;
-			articles.push({ slug, readingTime, verified, ...existingMeta, ...meta });
+			const body = content.replace(/^## .+/m, "").replace(/\n{3,}/g, "\n\n").substring(0, 500).trimEnd();
+			articles.push({ slug, readingTime, body, verified, ...existingMeta, ...meta });
 		}
 
 		// Fall back to English articles for any slugs missing in this language

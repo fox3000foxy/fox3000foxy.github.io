@@ -59,7 +59,8 @@ function filterArticles() {
     list = list.filter(function (a) {
       return (a.title && a.title.toLowerCase().indexOf(q) !== -1) ||
              (a.description && a.description.toLowerCase().indexOf(q) !== -1) ||
-             (a.tags && a.tags.some(function (t) { return t.toLowerCase().indexOf(q) !== -1; }));
+             (a.tags && a.tags.some(function (t) { return t.toLowerCase().indexOf(q) !== -1; })) ||
+             (a.body && a.body.toLowerCase().indexOf(q) !== -1);
     });
   }
   return list;

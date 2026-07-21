@@ -62,7 +62,8 @@ const t = (key: string) => key;
           var title = (a.title || '').toLowerCase();
           var desc = (a.description || '').toLowerCase();
           var tags = (a.tags || []).join(' ').toLowerCase();
-          return title.indexOf(q) !== -1 || desc.indexOf(q) !== -1 || tags.indexOf(q) !== -1 || (a.slug || '').toLowerCase().indexOf(q) !== -1;
+          var body = (a.body || '').toLowerCase();
+          return title.indexOf(q) !== -1 || desc.indexOf(q) !== -1 || tags.indexOf(q) !== -1 || body.indexOf(q) !== -1 || (a.slug || '').toLowerCase().indexOf(q) !== -1;
         })
         .sort(function(a, b) {
           var aScore = (a.title || '').toLowerCase().indexOf(q) !== -1 ? 2 : 1;
