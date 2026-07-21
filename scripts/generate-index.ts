@@ -61,10 +61,10 @@ function extractFirstImage(markdown: string): string {
 	const m = markdown.match(/!\[.*?\]\(([^)]+)\)/);
 	if (m) {
 		let url = m[1];
-		if (url.startsWith("http")) return url;
-		if (url.startsWith("/")) return `https://fox3000foxy.com${url}`;
-		if (url.startsWith("assets/")) url = url.replace("assets/", "/articles/assets/");
-		else url = `/${url}`;
+		if (url.startsWith("http")) { return url; }
+		if (url.startsWith("/")) { return `https://fox3000foxy.com${url}`; }
+		if (url.startsWith("assets/")) { url = url.replace("assets/", "/articles/assets/"); }
+		else { url = `/${url}`; }
 		return `https://fox3000foxy.com${url}`;
 	}
 	return "";
