@@ -46,7 +46,7 @@ JavaScript 원리는 꽤 잘 알고 있어. 8살 때부터 JavaScript로 코딩�
 
 ~~프로젝트는 [프로젝트 페이지](https://fox3000foxy.github.io/projects)와 내 [GitHub 프로필](https://github.com/fox3000foxy)에서 볼 수 있어.~~
 
-NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos -- can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 ## 내가 일하는 곳
 

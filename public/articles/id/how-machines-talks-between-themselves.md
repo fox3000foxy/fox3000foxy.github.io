@@ -311,7 +311,7 @@ Tiga jaminan berbeda, yang sering tertukar:
 
 TLS 1.3 (versi terkini yang direkomendasikan) telah mengurangi handshake menjadi satu kali perjalanan pulang-pergi dalam kasus biasa, dibandingkan dua kali untuk TLS 1.2, yang secara signifikan mengurangi latensi koneksi.
 
-## Level 2bis: mTLS — Otentikasi Menjadi Mutual
+## Level 2bis: mTLS -- Otentikasi Menjadi Mutual
 
 mTLS (mutual TLS) adalah TLS dengan satu batasan tambahan: server _juga_ memerlukan sertifikat dari klien, dan memverifikasinya. Kedua belah pihak membuktikan identitas mereka melalui sertifikat yang ditandatangani oleh otoritas tepercaya bersama.
 
@@ -327,7 +327,7 @@ Klien                                          Server
   │──── kunci sesi diturunkan, saluran terenkripsi ▶
 ```
 
-Konsekuensi dari mTLS bersifat operasional: diperlukan otoritas sertifikasi (CA) internal, mekanisme distribusi sertifikat ke setiap layanan, dan strategi rotasi/pencabutan. Dalam lingkungan satu mesin dengan sedikit layanan, ini terkadang lebih kompleks daripada manfaatnya — mTLS menjadi diperlukan ketika lalu lintas antar-layanan melintasi jaringan yang tidak sepenuhnya kita kendalikan (beberapa host, cloud multi-tenant), atau ketika kita menginginkan kebijakan tipe _zero trust_, di mana tidak ada layanan yang secara implisit dapat dipercaya hanya karena berada "di dalam" jaringan.
+Konsekuensi dari mTLS bersifat operasional: diperlukan otoritas sertifikasi (CA) internal, mekanisme distribusi sertifikat ke setiap layanan, dan strategi rotasi/pencabutan. Dalam lingkungan satu mesin dengan sedikit layanan, ini terkadang lebih kompleks daripada manfaatnya -- mTLS menjadi diperlukan ketika lalu lintas antar-layanan melintasi jaringan yang tidak sepenuhnya kita kendalikan (beberapa host, cloud multi-tenant), atau ketika kita menginginkan kebijakan tipe _zero trust_, di mana tidak ada layanan yang secara implisit dapat dipercaya hanya karena berada "di dalam" jaringan.
 
 # Level 3: Protokol Aplikatif di atas TCP+TLS
 
@@ -335,13 +335,13 @@ Setelah transportasi dan enkripsi terpasang, selanjutnya adalah mendefinisikan _
 
 ## HTTP / HTTPS
 
-HTTP adalah protokol request-response: klien membuka koneksi (atau menggunakan kembali yang sudah ada, dengan keep-alive), mengirim permintaan, menunggu respons, koneksi kemudian dapat ditutup atau digunakan kembali. HTTPS hanyalah HTTP di atas TLS — huruf S tidak mengubah semantik protokol, hanya fakta bahwa transportasinya dienkripsi.
+HTTP adalah protokol request-response: klien membuka koneksi (atau menggunakan kembali yang sudah ada, dengan keep-alive), mengirim permintaan, menunggu respons, koneksi kemudian dapat ditutup atau digunakan kembali. HTTPS hanyalah HTTP di atas TLS -- huruf S tidak mengubah semantik protokol, hanya fakta bahwa transportasinya dienkripsi.
 
-Model request-response memiliki batasan struktural: server tidak pernah bisa berbicara terlebih dahulu. Server hanya dapat merespons apa yang diminta klien. Untuk polling yang sering (memeriksa "apa yang baru?" setiap detik), ini berfungsi tetapi memboroskan sumber daya — setiap permintaan menciptakan overhead protokol hanya untuk, sebagian besar waktu, tidak ada hal baru yang perlu diumumkan.
+Model request-response memiliki batasan struktural: server tidak pernah bisa berbicara terlebih dahulu. Server hanya dapat merespons apa yang diminta klien. Untuk polling yang sering (memeriksa "apa yang baru?" setiap detik), ini berfungsi tetapi memboroskan sumber daya -- setiap permintaan menciptakan overhead protokol hanya untuk, sebagian besar waktu, tidak ada hal baru yang perlu diumumkan.
 
 ## WebSocket (WS / WSS)
 
-WebSocket menjawab tepat batasan ini. Koneksi dimulai sebagai permintaan HTTP biasa (dengan header `Upgrade: websocket`), tetapi setelah jabat tangan diterima, koneksi TCP yang mendasarinya bukan lagi saluran request-response HTTP — ia menjadi saluran dua arah full-duplex di mana klien dan server dapat mengirim pesan kapan saja, tanpa harus mengulangi siklus request-response setiap kali bertukar.
+WebSocket menjawab tepat batasan ini. Koneksi dimulai sebagai permintaan HTTP biasa (dengan header `Upgrade: websocket`), tetapi setelah jabat tangan diterima, koneksi TCP yang mendasarinya bukan lagi saluran request-response HTTP -- ia menjadi saluran dua arah full-duplex di mana klien dan server dapat mengirim pesan kapan saja, tanpa harus mengulangi siklus request-response setiap kali bertukar.
 
 ```
 GET /chat HTTP/1.1
@@ -357,21 +357,21 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS hanyalah WebSocket di atas TLS, persis seperti HTTPS adalah HTTP di atas TLS. Ini adalah protokol pilihan untuk segala hal yang memerlukan push server waktu nyata — chat, notifikasi, aliran trading, peristiwa game — tanpa perlu mengelola sendiri protokol biner di atas TCP telanjang.
+WSS hanyalah WebSocket di atas TLS, persis seperti HTTPS adalah HTTP di atas TLS. Ini adalah protokol pilihan untuk segala hal yang memerlukan push server waktu nyata -- chat, notifikasi, aliran trading, peristiwa game -- tanpa perlu mengelola sendiri protokol biner di atas TCP telanjang.
 
 ## gRPC
 
-Kurang dikenal di luar dunia microservice tetapi sentral dalam komunikasi service-ke-service: gRPC dibangun di atas HTTP/2 (jadi TCP + TLS opsional), men-serialisasi pesan dalam Protocol Buffers (biner, bertipe, ringkas — berbeda dengan JSON teks dari kebanyakan API REST), dan secara native mendukung streaming dua arah berkat multipleksing HTTP/2 (beberapa aliran logis pada satu koneksi TCP, tanpa head-of-line blocking yang akan terjadi pada beberapa permintaan HTTP/1.1 berurutan).
+Kurang dikenal di luar dunia microservice tetapi sentral dalam komunikasi service-ke-service: gRPC dibangun di atas HTTP/2 (jadi TCP + TLS opsional), men-serialisasi pesan dalam Protocol Buffers (biner, bertipe, ringkas -- berbeda dengan JSON teks dari kebanyakan API REST), dan secara native mendukung streaming dua arah berkat multipleksing HTTP/2 (beberapa aliran logis pada satu koneksi TCP, tanpa head-of-line blocking yang akan terjadi pada beberapa permintaan HTTP/1.1 berurutan).
 
 ## QUIC / HTTP3
 
-QUIC mengubah keadaan dengan kembali menggunakan UDP daripada TCP di level transportasi, sambil mengimplementasikan ulang di atasnya jaminan keandalan yang ditawarkan TCP secara native — tetapi aliran per aliran, bukan secara global, yang menghilangkan head-of-line blocking di level transportasi (satu paket hilang pada satu aliran tidak lagi memblokir aliran lain pada koneksi yang sama). TLS 1.3 terintegrasi langsung ke dalam QUIC, bukan ditambahkan di atasnya, yang semakin mengurangi latensi handshake. HTTP/3 adalah HTTP di atas QUIC.
+QUIC mengubah keadaan dengan kembali menggunakan UDP daripada TCP di level transportasi, sambil mengimplementasikan ulang di atasnya jaminan keandalan yang ditawarkan TCP secara native -- tetapi aliran per aliran, bukan secara global, yang menghilangkan head-of-line blocking di level transportasi (satu paket hilang pada satu aliran tidak lagi memblokir aliran lain pada koneksi yang sama). TLS 1.3 terintegrasi langsung ke dalam QUIC, bukan ditambahkan di atasnya, yang semakin mengurangi latensi handshake. HTTP/3 adalah HTTP di atas QUIC.
 
 # Gambaran Umum: Di Mana Setiap Protokol Berada
 
 Lapisan Protokol Peran Transportasi TCP, UDP Membawa byte, andal atau tidak Transportasi (generasi baru) QUIC UDP + keandalan per aliran + TLS terintegrasi Keamanan TLS, mTLS Enkripsi, integritas, otentikasi (satu arah atau mutual) Aplikasi HTTP/HTTPS, WS/WSS, gRPC Menstrukturkan pertukaran (request-response, dua arah, RPC bertipe)
 
-Contoh konkret untuk memperjelas: arsitektur microservice dengan dashboard web dan layanan internal dapat secara wajar menggabungkan HTTPS (dashboard ↔ API publik, otentikasi satu arah cukup di sisi browser), mTLS (service ↔ service secara internal, otentikasi mutual diperlukan), dan WSS (notifikasi waktu nyata yang didorong ke dashboard) — tiga protokol aplikatif yang berbeda, semuanya dibangun di atas fondasi TCP + TLS yang sama.
+Contoh konkret untuk memperjelas: arsitektur microservice dengan dashboard web dan layanan internal dapat secara wajar menggabungkan HTTPS (dashboard ↔ API publik, otentikasi satu arah cukup di sisi browser), mTLS (service ↔ service secara internal, otentikasi mutual diperlukan), dan WSS (notifikasi waktu nyata yang didorong ke dashboard) -- tiga protokol aplikatif yang berbeda, semuanya dibangun di atas fondasi TCP + TLS yang sama.
 
 ## Cara Memilih, dalam Praktik
 

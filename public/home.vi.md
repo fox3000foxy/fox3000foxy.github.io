@@ -48,7 +48,7 @@ Tôi đã viết một bài viết toàn tập về các sở thích của tôi 
 
 ~~Bạn có thể khám phá các dự án trên trang Dự án và trên tài khoản GitHub của tôi.~~
 
-NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos -- can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 ## Tôi làm việc cho
 

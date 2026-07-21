@@ -311,7 +311,7 @@ Ba đảm bảo riêng biệt, thường bị nhầm lẫn:
 
 TLS 1.3 (phiên bản hiện tại được khuyến nghị) đã giảm handshake xuống chỉ còn một vòng khứ hồi trong trường hợp thông thường, so với hai vòng của TLS 1.2, giúp giảm đáng kể độ trễ kết nối.
 
-## Cấp độ 2bis: mTLS — xác thực trở nên lẫn nhau
+## Cấp độ 2bis: mTLS -- xác thực trở nên lẫn nhau
 
 mTLS (mutual TLS) là TLS với một ràng buộc bổ sung: server cũng _yêu cầu_ một chứng chỉ từ client và xác minh nó. Cả hai bên đều chứng minh danh tính của mình thông qua một chứng chỉ được ký bởi một tổ chức chứng thực chung đáng tin cậy.
 
@@ -327,7 +327,7 @@ Client                                        Server
   │──── khóa phiên được dẫn xuất, kênh mã hóa ────▶│
 ```
 
-Mặt trái của mTLS là về mặt vận hành: cần một cơ quan cấp chứng chỉ (CA) nội bộ, một cơ chế phân phối chứng chỉ cho mỗi dịch vụ, và một chiến lược luân chuyển/thu hồi. Trong một môi trường một máy với ít dịch vụ, đôi khi nó phức tạp hơn là lợi ích — mTLS trở nên cần thiết từ thời điểm lưu lượng giữa các dịch vụ đi qua một mạng mà ta không kiểm soát hoàn toàn (nhiều máy chủ, cloud đa đối tác), hoặc ngay khi ta muốn một chính sách kiểu _zero trust_, nơi không có dịch vụ nào được mặc nhiên tin tưởng chỉ vì nó nằm "bên trong" mạng.
+Mặt trái của mTLS là về mặt vận hành: cần một cơ quan cấp chứng chỉ (CA) nội bộ, một cơ chế phân phối chứng chỉ cho mỗi dịch vụ, và một chiến lược luân chuyển/thu hồi. Trong một môi trường một máy với ít dịch vụ, đôi khi nó phức tạp hơn là lợi ích -- mTLS trở nên cần thiết từ thời điểm lưu lượng giữa các dịch vụ đi qua một mạng mà ta không kiểm soát hoàn toàn (nhiều máy chủ, cloud đa đối tác), hoặc ngay khi ta muốn một chính sách kiểu _zero trust_, nơi không có dịch vụ nào được mặc nhiên tin tưởng chỉ vì nó nằm "bên trong" mạng.
 
 # Cấp độ 3: các giao thức ứng dụng trên TCP+TLS
 
@@ -335,13 +335,13 @@ Khi đã có vận chuyển và mã hóa, còn phải xác định _cấu trúc 
 
 ## HTTP / HTTPS
 
-HTTP là một giao thức yêu cầu-phản hồi: client mở một kết nối (hoặc tái sử dụng một kết nối, với keep-alive), gửi một yêu cầu, chờ phản hồi, kết nối sau đó có thể đóng lại hoặc được tái sử dụng. HTTPS, đơn giản là HTTP trên TLS — chữ S không thay đổi gì về ngữ nghĩa của giao thức, chỉ thay đổi việc vận chuyển được mã hóa.
+HTTP là một giao thức yêu cầu-phản hồi: client mở một kết nối (hoặc tái sử dụng một kết nối, với keep-alive), gửi một yêu cầu, chờ phản hồi, kết nối sau đó có thể đóng lại hoặc được tái sử dụng. HTTPS, đơn giản là HTTP trên TLS -- chữ S không thay đổi gì về ngữ nghĩa của giao thức, chỉ thay đổi việc vận chuyển được mã hóa.
 
-Mô hình yêu cầu-phản hồi có một giới hạn cấu trúc: server không bao giờ có thể nói trước. Nó chỉ có thể trả lời những gì client yêu cầu. Đối với việc polling thường xuyên (kiểm tra "có gì mới không?" mỗi giây), nó hoạt động nhưng lãng phí tài nguyên — mỗi yêu cầu tạo ra chi phí giao thức, và phần lớn thời gian, chẳng có gì mới để thông báo.
+Mô hình yêu cầu-phản hồi có một giới hạn cấu trúc: server không bao giờ có thể nói trước. Nó chỉ có thể trả lời những gì client yêu cầu. Đối với việc polling thường xuyên (kiểm tra "có gì mới không?" mỗi giây), nó hoạt động nhưng lãng phí tài nguyên -- mỗi yêu cầu tạo ra chi phí giao thức, và phần lớn thời gian, chẳng có gì mới để thông báo.
 
 ## WebSocket (WS / WSS)
 
-WebSocket giải quyết chính xác giới hạn này. Kết nối bắt đầu như một yêu cầu HTTP thông thường (với header `Upgrade: websocket`), nhưng một khi bắt tay được chấp nhận, kết nối TCP bên dưới không còn là một kênh yêu cầu-phản hồi HTTP nữa — nó trở thành một kênh hai chiều full-duplex nơi client và server có thể gửi thông điệp bất cứ lúc nào, mà không cần phải phát lại một chu trình yêu cầu-phản hồi cho mỗi lần trao đổi.
+WebSocket giải quyết chính xác giới hạn này. Kết nối bắt đầu như một yêu cầu HTTP thông thường (với header `Upgrade: websocket`), nhưng một khi bắt tay được chấp nhận, kết nối TCP bên dưới không còn là một kênh yêu cầu-phản hồi HTTP nữa -- nó trở thành một kênh hai chiều full-duplex nơi client và server có thể gửi thông điệp bất cứ lúc nào, mà không cần phải phát lại một chu trình yêu cầu-phản hồi cho mỗi lần trao đổi.
 
 ```
 GET /chat HTTP/1.1
@@ -357,7 +357,7 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS đơn giản là WebSocket trên TLS, giống hệt như HTTPS là HTTP trên TLS. Đây là giao thức được lựa chọn cho mọi thứ cần push server thời gian thực — chat, thông báo, luồng giao dịch, sự kiện trò chơi — mà không muốn tự quản lý một giao thức nhị phân trên TCP trần.
+WSS đơn giản là WebSocket trên TLS, giống hệt như HTTPS là HTTP trên TLS. Đây là giao thức được lựa chọn cho mọi thứ cần push server thời gian thực -- chat, thông báo, luồng giao dịch, sự kiện trò chơi -- mà không muốn tự quản lý một giao thức nhị phân trên TCP trần.
 
 ## gRPC
 
@@ -371,7 +371,7 @@ QUIC thay đổi cuộc chơi bằng cách quay lại dùng UDP thay vì TCP ở
 
 Tầng Giao thức Vai trò Vận chuyển TCP, UDP Đưa các byte đi, có tin cậy hoặc không Vận chuyển (thế hệ mới) QUIC UDP + độ tin cậy theo luồng + TLS tích hợp Bảo mật TLS, mTLS Mã hóa, toàn vẹn, xác thực (một chiều hoặc lẫn nhau) Ứng dụng HTTP/HTTPS, WS/WSS, gRPC Cấu trúc các trao đổi (yêu cầu-phản hồi, hai chiều, RPC có kiểu)
 
-Một ví dụ cụ thể để cố định ý tưởng: một kiến trúc microservices với dashboard web và các dịch vụ nội bộ có thể kết hợp HTTPS (dashboard ↔ API công cộng, xác thực một chiều là đủ về phía trình duyệt), mTLS (dịch vụ ↔ dịch vụ nội bộ, cần xác thực lẫn nhau), và WSS (thông báo thời gian thực đẩy đến dashboard) — ba giao thức ứng dụng khác nhau, tất cả đều được xây dựng trên cùng một nền tảng TCP + TLS.
+Một ví dụ cụ thể để cố định ý tưởng: một kiến trúc microservices với dashboard web và các dịch vụ nội bộ có thể kết hợp HTTPS (dashboard ↔ API công cộng, xác thực một chiều là đủ về phía trình duyệt), mTLS (dịch vụ ↔ dịch vụ nội bộ, cần xác thực lẫn nhau), và WSS (thông báo thời gian thực đẩy đến dashboard) -- ba giao thức ứng dụng khác nhau, tất cả đều được xây dựng trên cùng một nền tảng TCP + TLS.
 
 ## Cách chọn, trong thực tế
 

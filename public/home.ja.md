@@ -46,7 +46,7 @@ JavaScript の原理はかなり理解してる。だって8歳の頃から Java
 
 ~~プロジェクトは[プロジェクトページ](https://fox3000foxy.github.io/projects)と[GitHub プロフィール](https://github.com/fox3000foxy)で見られるよ。~~
 
-NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos — can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
+NB 2: Honestly I'm starting to have a lot of public and private repos. On the weekend of 11/07 I did a huge cleanup and quite a few of my repos were made public and archived. I have 194 repos -- can you believe it? That's a lot. I have 132 public repos and therefore 62 private repos. I'll probably write a blog post to show you my projects. But I already wrote about the ones I enjoyed the most and found the most interesting.
 
 ## 仕事の関係
 

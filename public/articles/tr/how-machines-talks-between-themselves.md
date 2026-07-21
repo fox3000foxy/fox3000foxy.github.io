@@ -305,7 +305,7 @@ Genellikle karıştırılan üç ayrı garanti:
 
 TLS 1.3 (önerilen güncel sürüm), el sıkışmayı normal durumda tek bir gidiş-dönüşe indirgemiştir (TLS 1.2'de iki iken), bu da bağlantı gecikmesini önemli ölçüde azaltır.
 
-## Seviye 2b: mTLS — kimlik doğrulama karşılıklı hale gelir
+## Seviye 2b: mTLS -- kimlik doğrulama karşılıklı hale gelir
 
 mTLS (karşılıklı TLS), ek bir kısıtlama ile TLS'dir: sunucu ayrıca istemciden de bir sertifika _talep eder_ ve bunu doğrular. Her iki taraf da ortak bir güvenilir otorite tarafından imzalanmış bir sertifika aracılığıyla kimliklerini kanıtlar.
 
@@ -321,7 +321,7 @@ Bu, dağıtık bir mimaride hizmetten hizmete iletişim için doğal mekanizmad�
   │──── oturum anahtarları türetilir, şifreli kanal▶│
 ```
 
-mTLS'nin karşılığı operasyoneldir: dahili bir sertifika otoritesi (CA), her hizmete sertifika dağıtmak için bir mekanizma ve bir döndürme/iptal stratejisi gerekir. Az sayıda hizmete sahip tek makinelik bir ortamda, bu bazen faydadan çok karmaşıklık getirir — mTLS, hizmetler arası trafik tam olarak kontrol edilmeyen bir ağdan (birden çok ana bilgisayar, çok kiracılı bulut) geçtiğinde veya hiçbir hizmetin yalnızca ağın "içinde" olduğu için örtük olarak güvenilir olmadığı _zero trust_ tipi bir politika istendiğinde gerekli hale gelir.
+mTLS'nin karşılığı operasyoneldir: dahili bir sertifika otoritesi (CA), her hizmete sertifika dağıtmak için bir mekanizma ve bir döndürme/iptal stratejisi gerekir. Az sayıda hizmete sahip tek makinelik bir ortamda, bu bazen faydadan çok karmaşıklık getirir -- mTLS, hizmetler arası trafik tam olarak kontrol edilmeyen bir ağdan (birden çok ana bilgisayar, çok kiracılı bulut) geçtiğinde veya hiçbir hizmetin yalnızca ağın "içinde" olduğu için örtük olarak güvenilir olmadığı _zero trust_ tipi bir politika istendiğinde gerekli hale gelir.
 
 # Seviye 3: TCP+TLS üzerinde uygulama katmanı protokolleri
 
@@ -329,13 +329,13 @@ Taşıma ve şifreleme yerine oturduktan sonra, geriye _alışverişlerin nasıl
 
 ## HTTP / HTTPS
 
-HTTP, istek-yanıt protokolüdür: istemci bir bağlantı açar (veya keep-alive ile mevcut birini yeniden kullanır), bir istek gönderir, bir yanıt bekler, bağlantı daha sonra kapanabilir veya yeniden kullanılabilir. HTTPS, HTTP'nin TLS üzerinde olmasıdır — S, protokolün anlambilimini değiştirmez, yalnızca taşımanın şifrelenmiş olmasını sağlar.
+HTTP, istek-yanıt protokolüdür: istemci bir bağlantı açar (veya keep-alive ile mevcut birini yeniden kullanır), bir istek gönderir, bir yanıt bekler, bağlantı daha sonra kapanabilir veya yeniden kullanılabilir. HTTPS, HTTP'nin TLS üzerinde olmasıdır -- S, protokolün anlambilimini değiştirmez, yalnızca taşımanın şifrelenmiş olmasını sağlar.
 
-İstek-yanıt modelinin yapısal bir sınırlaması vardır: sunucu asla ilk konuşamaz. Yalnızca istemcinin talep ettiği şeylere yanıt verebilir. Sık yoklama (polling) için (her saniye "yeni bir şey var mı?" diye kontrol etmek), çalışır ancak kaynak israfına neden olur — her istek, çoğu zaman bildirilecek yeni bir şey olmamasına rağmen, protokol yükünü yeniden oluşturur.
+İstek-yanıt modelinin yapısal bir sınırlaması vardır: sunucu asla ilk konuşamaz. Yalnızca istemcinin talep ettiği şeylere yanıt verebilir. Sık yoklama (polling) için (her saniye "yeni bir şey var mı?" diye kontrol etmek), çalışır ancak kaynak israfına neden olur -- her istek, çoğu zaman bildirilecek yeni bir şey olmamasına rağmen, protokol yükünü yeniden oluşturur.
 
 ## WebSocket (WS / WSS)
 
-WebSocket tam olarak bu sınırlamayı yanıtlar. Bağlantı klasik bir HTTP isteği olarak başlar (`Upgrade: websocket` başlığı ile), ancak el sıkışma kabul edildikten sonra, alttaki TCP bağlantısı artık bir HTTP istek-yanıt kanalı değildir — istemci ve sunucunun her an mesaj gönderebildiği, her alışverişte istek-yanıt döngüsünü yeniden başlatmaya gerek olmayan çift yönlü tam çift yönlü (full-duplex) bir kanal haline gelir.
+WebSocket tam olarak bu sınırlamayı yanıtlar. Bağlantı klasik bir HTTP isteği olarak başlar (`Upgrade: websocket` başlığı ile), ancak el sıkışma kabul edildikten sonra, alttaki TCP bağlantısı artık bir HTTP istek-yanıt kanalı değildir -- istemci ve sunucunun her an mesaj gönderebildiği, her alışverişte istek-yanıt döngüsünü yeniden başlatmaya gerek olmayan çift yönlü tam çift yönlü (full-duplex) bir kanal haline gelir.
 
 ```
 GET /chat HTTP/1.1
@@ -351,7 +351,7 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS, HTTPS'nin HTTP üzerinde TLS olması gibi, WebSocket'in TLS üzerinde olmasıdır. Gerçek zamanlı sunucu itme (push) gerektiren her şey için tercih edilen protokoldür — sohbet, bildirimler, ticaret akışları, oyun etkinlikleri — çıplak TCP üzerinde kendi ikili protokolünü yönetmek istemediğinizde.
+WSS, HTTPS'nin HTTP üzerinde TLS olması gibi, WebSocket'in TLS üzerinde olmasıdır. Gerçek zamanlı sunucu itme (push) gerektiren her şey için tercih edilen protokoldür -- sohbet, bildirimler, ticaret akışları, oyun etkinlikleri -- çıplak TCP üzerinde kendi ikili protokolünü yönetmek istemediğinizde.
 
 ## gRPC
 
@@ -359,13 +359,13 @@ Mikroservis dünyası dışında daha az bilinir ancak hizmetten hizmete iletiş
 
 ## QUIC / HTTP3
 
-QUIC, taşıma seviyesinde TCP yerine UDP'den başlayarak işleri değiştirir, aynı zamanda TCP'nin yerel olarak sunduğu güvenilirlik garantilerini üzerine yeniden uygular — ancak genel olarak değil, akış bazında, bu da taşıma seviyesinde head-of-line blocking'i ortadan kaldırır (bir akışta kaybolan paket, aynı bağlantının diğer akışlarını engellemez). TLS 1.3, üzerine eklenmek yerine doğrudan QUIC'in içine entegre edilmiştir, bu da el sıkışma gecikmesini daha da azaltır. HTTP/3, QUIC üzerinde HTTP'dir.
+QUIC, taşıma seviyesinde TCP yerine UDP'den başlayarak işleri değiştirir, aynı zamanda TCP'nin yerel olarak sunduğu güvenilirlik garantilerini üzerine yeniden uygular -- ancak genel olarak değil, akış bazında, bu da taşıma seviyesinde head-of-line blocking'i ortadan kaldırır (bir akışta kaybolan paket, aynı bağlantının diğer akışlarını engellemez). TLS 1.3, üzerine eklenmek yerine doğrudan QUIC'in içine entegre edilmiştir, bu da el sıkışma gecikmesini daha da azaltır. HTTP/3, QUIC üzerinde HTTP'dir.
 
 # Genel bakış: her protokolün yeri
 
 Katman Protokoller Rol Taşıma TCP, UDP Bayt taşımak, güvenilir veya değil Taşıma (yeni nesil) QUIC UDP + akış bazında güvenilirlik + gömülü TLS Güvenlik TLS, mTLS Şifreleme, bütünlük, kimlik doğrulama (tek veya karşılıklı) Uygulama HTTP/HTTPS, WS/WSS, gRPC Alışverişleri yapılandırma (istek-yanıt, çift yönlü, tür belirtilmiş RPC)
 
-Somut bir örnek: bir web panosu ve iç hizmetleri olan bir mikroservis mimarisi, makul bir şekilde HTTPS (pano ↔ genel API, tarayıcı tarafında tek yönlü kimlik doğrulama yeterli), mTLS (içte hizmet ↔ hizmet, karşılıklı kimlik doğrulama gerekli) ve WSS (panoya gerçek zamanlı bildirimler) birleştirebilir — tümü aynı TCP + TLS temeli üzerine inşa edilmiş üç farklı uygulama katmanı protokolü.
+Somut bir örnek: bir web panosu ve iç hizmetleri olan bir mikroservis mimarisi, makul bir şekilde HTTPS (pano ↔ genel API, tarayıcı tarafında tek yönlü kimlik doğrulama yeterli), mTLS (içte hizmet ↔ hizmet, karşılıklı kimlik doğrulama gerekli) ve WSS (panoya gerçek zamanlı bildirimler) birleştirebilir -- tümü aynı TCP + TLS temeli üzerine inşa edilmiş üç farklı uygulama katmanı protokolü.
 
 ## Pratikte nasıl seçim yapılır
 

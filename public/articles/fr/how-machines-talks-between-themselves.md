@@ -311,7 +311,7 @@ Trois garanties distinctes, souvent confondues :
 
 TLS 1.3 (la version actuelle recommandée) a réduit le handshake à un seul aller-retour dans le cas courant, contre deux pour TLS 1.2, ce qui réduit sensiblement la latence de connexion.
 
-## Niveau 2bis : mTLS — l'authentification devient mutuelle
+## Niveau 2bis : mTLS -- l'authentification devient mutuelle
 
 mTLS (mutual TLS) est TLS avec une contrainte supplémentaire : le serveur exige _aussi_ un certificat du client, et le vérifie. Les deux parties prouvent leur identité via un certificat signé par une autorité de confiance commune.
 
@@ -327,7 +327,7 @@ Client                                          Serveur
   │──── clés de session dérivées, canal chiffré ──▶│
 ```
 
-La contrepartie de mTLS est opérationnelle : il faut une autorité de certification (CA) interne, un mécanisme de distribution des certificats à chaque service, et une stratégie de rotation/révocation. Dans un environnement mono-machine avec peu de services, c'est parfois plus de complexité que de bénéfice — mTLS devient nécessaire à partir du moment où le trafic inter-services traverse un réseau qu'on ne contrôle pas entièrement (plusieurs hôtes, cloud multi-tenant), ou dès qu'on veut une politique de type _zero trust_, où aucun service n'est implicitement digne de confiance simplement parce qu'il est "à l'intérieur" du réseau.
+La contrepartie de mTLS est opérationnelle : il faut une autorité de certification (CA) interne, un mécanisme de distribution des certificats à chaque service, et une stratégie de rotation/révocation. Dans un environnement mono-machine avec peu de services, c'est parfois plus de complexité que de bénéfice -- mTLS devient nécessaire à partir du moment où le trafic inter-services traverse un réseau qu'on ne contrôle pas entièrement (plusieurs hôtes, cloud multi-tenant), ou dès qu'on veut une politique de type _zero trust_, où aucun service n'est implicitement digne de confiance simplement parce qu'il est "à l'intérieur" du réseau.
 
 # Niveau 3 : les protocoles applicatifs au-dessus de TCP+TLS
 
@@ -335,13 +335,13 @@ Une fois le transport et le chiffrement en place, reste à définir _comment str
 
 ## HTTP / HTTPS
 
-HTTP est un protocole requête-réponse : le client ouvre une connexion (ou en réutilise une, avec le keep-alive), envoie une requête, attend une réponse, la connexion peut ensuite se refermer ou être réutilisée. HTTPS, c'est simplement HTTP sur TLS — le S ne change rien à la sémantique du protocole, uniquement au fait que le transport est chiffré.
+HTTP est un protocole requête-réponse : le client ouvre une connexion (ou en réutilise une, avec le keep-alive), envoie une requête, attend une réponse, la connexion peut ensuite se refermer ou être réutilisée. HTTPS, c'est simplement HTTP sur TLS -- le S ne change rien à la sémantique du protocole, uniquement au fait que le transport est chiffré.
 
-Le modèle requête-réponse a une limite structurelle : le serveur ne peut jamais parler en premier. Il ne peut que répondre à ce que le client demande. Pour du polling fréquent (vérifier "y a-t-il du nouveau ?" toutes les secondes), ça marche mais gaspille des ressources — chaque requête recrée du overhead protocolaire pour, la plupart du temps, ne rien avoir de nouveau à annoncer.
+Le modèle requête-réponse a une limite structurelle : le serveur ne peut jamais parler en premier. Il ne peut que répondre à ce que le client demande. Pour du polling fréquent (vérifier "y a-t-il du nouveau ?" toutes les secondes), ça marche mais gaspille des ressources -- chaque requête recrée du overhead protocolaire pour, la plupart du temps, ne rien avoir de nouveau à annoncer.
 
 ## WebSocket (WS / WSS)
 
-WebSocket répond exactement à cette limite. La connexion démarre comme une requête HTTP classique (avec un header `Upgrade: websocket`), mais une fois la poignée de main acceptée, la connexion TCP sous-jacente n'est plus un canal requête-réponse HTTP — elle devient un canal bidirectionnel full-duplex où client et serveur peuvent envoyer des messages à tout moment, sans avoir à réémettre un cycle requête-réponse à chaque échange.
+WebSocket répond exactement à cette limite. La connexion démarre comme une requête HTTP classique (avec un header `Upgrade: websocket`), mais une fois la poignée de main acceptée, la connexion TCP sous-jacente n'est plus un canal requête-réponse HTTP -- elle devient un canal bidirectionnel full-duplex où client et serveur peuvent envoyer des messages à tout moment, sans avoir à réémettre un cycle requête-réponse à chaque échange.
 
 ```
 GET /chat HTTP/1.1
@@ -357,7 +357,7 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS est simplement WebSocket sur TLS, exactement comme HTTPS est HTTP sur TLS. C'est le protocole de choix pour tout ce qui nécessite du push serveur en temps réel — chat, notifications, flux de trading, événements de jeu — sans vouloir gérer soi-même un protocole binaire par-dessus TCP nu.
+WSS est simplement WebSocket sur TLS, exactement comme HTTPS est HTTP sur TLS. C'est le protocole de choix pour tout ce qui nécessite du push serveur en temps réel -- chat, notifications, flux de trading, événements de jeu -- sans vouloir gérer soi-même un protocole binaire par-dessus TCP nu.
 
 ## gRPC
 
@@ -371,7 +371,7 @@ QUIC change la donne en repartant d'UDP plutôt que de TCP au niveau transport, 
 
 Couche Protocoles Rôle Transport TCP, UDP Faire voyager des octets, fiable ou non Transport (nouvelle génération) QUIC UDP + fiabilité par flux + TLS intégré Sécurité TLS, mTLS Chiffrement, intégrité, authentification (uni ou mutuelle) Application HTTP/HTTPS, WS/WSS, gRPC Structurer les échanges (requête-réponse, bidirectionnel, RPC typé)
 
-Un exemple concret pour fixer les idées : une architecture microservices avec un dashboard web et des services internes pourrait raisonnablement combiner HTTPS (dashboard ↔ API publique, authentification uni-directionnelle suffisante côté navigateur), mTLS (service ↔ service en interne, authentification mutuelle nécessaire), et WSS (notifications temps réel poussées vers le dashboard) — trois protocoles applicatifs différents, tous construits sur le même socle TCP + TLS.
+Un exemple concret pour fixer les idées : une architecture microservices avec un dashboard web et des services internes pourrait raisonnablement combiner HTTPS (dashboard ↔ API publique, authentification uni-directionnelle suffisante côté navigateur), mTLS (service ↔ service en interne, authentification mutuelle nécessaire), et WSS (notifications temps réel poussées vers le dashboard) -- trois protocoles applicatifs différents, tous construits sur le même socle TCP + TLS.
 
 ## Comment choisir, en pratique
 

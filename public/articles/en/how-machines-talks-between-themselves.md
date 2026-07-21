@@ -311,7 +311,7 @@ Three distinct guarantees, often confused:
 
 TLS 1.3 (the current recommended version) reduced the handshake to a single round-trip in the common case, compared to two for TLS 1.2, which significantly reduces connection latency.
 
-## Level 2bis: mTLS — authentication becomes mutual
+## Level 2bis: mTLS -- authentication becomes mutual
 
 mTLS (mutual TLS) is TLS with an additional constraint: the server _also_ requires a certificate from the client, and verifies it. Both parties prove their identity via a certificate signed by a common trusted authority.
 
@@ -327,7 +327,7 @@ Client                                          Server
   │──── session keys derived, encrypted channel ──▶│
 ```
 
-The counterpart of mTLS is operational: you need an internal certificate authority (CA), a mechanism for distributing certificates to each service, and a rotation/revocation strategy. In a single-machine environment with few services, this is sometimes more complexity than benefit — mTLS becomes necessary when inter-service traffic crosses a network you do not fully control (multiple hosts, multi-tenant cloud), or as soon as you want a zero-trust policy, where no service is implicitly trustworthy simply because it is "inside" the network.
+The counterpart of mTLS is operational: you need an internal certificate authority (CA), a mechanism for distributing certificates to each service, and a rotation/revocation strategy. In a single-machine environment with few services, this is sometimes more complexity than benefit -- mTLS becomes necessary when inter-service traffic crosses a network you do not fully control (multiple hosts, multi-tenant cloud), or as soon as you want a zero-trust policy, where no service is implicitly trustworthy simply because it is "inside" the network.
 
 # Level 3: application protocols on top of TCP+TLS
 
@@ -335,13 +335,13 @@ Once transport and encryption are in place, the remaining question is _how to st
 
 ## HTTP / HTTPS
 
-HTTP is a request-response protocol: the client opens a connection (or reuses one, with keep-alive), sends a request, waits for a response, then the connection can be closed or reused. HTTPS is simply HTTP over TLS — the S does not change the semantics of the protocol, only the fact that the transport is encrypted.
+HTTP is a request-response protocol: the client opens a connection (or reuses one, with keep-alive), sends a request, waits for a response, then the connection can be closed or reused. HTTPS is simply HTTP over TLS -- the S does not change the semantics of the protocol, only the fact that the transport is encrypted.
 
-The request-response model has a structural limitation: the server can never speak first. It can only respond to what the client asks. For frequent polling (checking "is there anything new?" every second), it works but wastes resources — each request recreates protocol overhead for, most of the time, nothing new to announce.
+The request-response model has a structural limitation: the server can never speak first. It can only respond to what the client asks. For frequent polling (checking "is there anything new?" every second), it works but wastes resources -- each request recreates protocol overhead for, most of the time, nothing new to announce.
 
 ## WebSocket (WS / WSS)
 
-WebSocket addresses precisely this limitation. The connection starts as a regular HTTP request (with an `Upgrade: websocket` header), but once the handshake is accepted, the underlying TCP connection is no longer an HTTP request-response channel — it becomes a bidirectional full-duplex channel where client and server can send messages at any time, without having to re-issue a request-response cycle for each exchange.
+WebSocket addresses precisely this limitation. The connection starts as a regular HTTP request (with an `Upgrade: websocket` header), but once the handshake is accepted, the underlying TCP connection is no longer an HTTP request-response channel -- it becomes a bidirectional full-duplex channel where client and server can send messages at any time, without having to re-issue a request-response cycle for each exchange.
 
 ```
 GET /chat HTTP/1.1
@@ -357,21 +357,21 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS is simply WebSocket over TLS, exactly as HTTPS is HTTP over TLS. It is the protocol of choice for anything that requires real-time server push — chat, notifications, trading feeds, game events — without wanting to manage a binary protocol over raw TCP yourself.
+WSS is simply WebSocket over TLS, exactly as HTTPS is HTTP over TLS. It is the protocol of choice for anything that requires real-time server push -- chat, notifications, trading feeds, game events -- without wanting to manage a binary protocol over raw TCP yourself.
 
 ## gRPC
 
-Less known outside the microservices world but central in service-to-service communication: gRPC builds on HTTP/2 (thus TCP + optional TLS), serializes messages in Protocol Buffers (binary, typed, compact — unlike the text JSON of most REST APIs), and natively supports bidirectional streaming thanks to HTTP/2 multiplexing (multiple logical streams over a single TCP connection, without the head-of-line blocking that multiple sequential HTTP/1.1 requests would have).
+Less known outside the microservices world but central in service-to-service communication: gRPC builds on HTTP/2 (thus TCP + optional TLS), serializes messages in Protocol Buffers (binary, typed, compact -- unlike the text JSON of most REST APIs), and natively supports bidirectional streaming thanks to HTTP/2 multiplexing (multiple logical streams over a single TCP connection, without the head-of-line blocking that multiple sequential HTTP/1.1 requests would have).
 
 ## QUIC / HTTP3
 
-QUIC changes the game by starting from UDP rather than TCP at the transport level, while reimplementing on top the reliability guarantees that TCP natively offered — but per-stream rather than globally, which eliminates head-of-line blocking at the transport level (a lost packet on one stream no longer blocks other streams on the same connection). TLS 1.3 is integrated directly into QUIC rather than added on top, further reducing handshake latency. HTTP/3 is HTTP over QUIC.
+QUIC changes the game by starting from UDP rather than TCP at the transport level, while reimplementing on top the reliability guarantees that TCP natively offered -- but per-stream rather than globally, which eliminates head-of-line blocking at the transport level (a lost packet on one stream no longer blocks other streams on the same connection). TLS 1.3 is integrated directly into QUIC rather than added on top, further reducing handshake latency. HTTP/3 is HTTP over QUIC.
 
 # Overview: where each protocol sits
 
 Layer Protocols Role Transport TCP, UDP Move bytes around, reliable or not Transport (new generation) QUIC UDP + per-stream reliability + built-in TLS Security TLS, mTLS Encryption, integrity, authentication (one-way or mutual) Application HTTP/HTTPS, WS/WSS, gRPC Structure exchanges (request-response, bidirectional, typed RPC)
 
-A concrete example to set the ideas: a microservices architecture with a web dashboard and internal services could reasonably combine HTTPS (dashboard ↔ public API, one-way authentication sufficient on the browser side), mTLS (service ↔ service internally, mutual authentication required), and WSS (real-time notifications pushed to the dashboard) — three different application protocols, all built on the same TCP + TLS foundation.
+A concrete example to set the ideas: a microservices architecture with a web dashboard and internal services could reasonably combine HTTPS (dashboard ↔ public API, one-way authentication sufficient on the browser side), mTLS (service ↔ service internally, mutual authentication required), and WSS (real-time notifications pushed to the dashboard) -- three different application protocols, all built on the same TCP + TLS foundation.
 
 ## How to choose, in practice
 

@@ -311,7 +311,7 @@ Três garantias distintas, frequentemente confundidas:
 
 TLS 1.3 (a versão atual recomendada) reduziu o handshake a uma única ida e volta no caso comum, contra duas para TLS 1.2, o que reduz sensivelmente a latência de conexão.
 
-## Nível 2bis: mTLS — a autenticação torna-se mútua
+## Nível 2bis: mTLS -- a autenticação torna-se mútua
 
 mTLS (mutual TLS) é TLS com uma restrição adicional: o servidor exige _também_ um certificado do cliente, e o verifica. As duas partes provam sua identidade através de um certificado assinado por uma autoridade de confiança comum.
 
@@ -327,7 +327,7 @@ Cliente                                          Servidor
   │──── chaves de sessão derivadas, canal cifrado ▶│
 ```
 
-A contrapartida do mTLS é operacional: é necessária uma autoridade de certificação (CA) interna, um mecanismo de distribuição dos certificados para cada serviço, e uma estratégia de rotação/revogação. Em um ambiente de máquina única com poucos serviços, às vezes é mais complexidade do que benefício — o mTLS se torna necessário a partir do momento em que o tráfego entre serviços atravessa uma rede que não controlamos completamente (vários hosts, cloud multi-tenant), ou assim que se deseja uma política do tipo _zero trust_, onde nenhum serviço é implicitamente digno de confiança simplesmente por estar "dentro" da rede.
+A contrapartida do mTLS é operacional: é necessária uma autoridade de certificação (CA) interna, um mecanismo de distribuição dos certificados para cada serviço, e uma estratégia de rotação/revogação. Em um ambiente de máquina única com poucos serviços, às vezes é mais complexidade do que benefício -- o mTLS se torna necessário a partir do momento em que o tráfego entre serviços atravessa uma rede que não controlamos completamente (vários hosts, cloud multi-tenant), ou assim que se deseja uma política do tipo _zero trust_, onde nenhum serviço é implicitamente digno de confiança simplesmente por estar "dentro" da rede.
 
 # Nível 3: os protocolos de aplicação sobre TCP+TLS
 
@@ -335,13 +335,13 @@ Uma vez o transporte e a criptografia em vigor, resta definir _como estruturar a
 
 ## HTTP / HTTPS
 
-HTTP é um protocolo requisição-resposta: o cliente abre uma conexão (ou reutiliza uma, com o keep-alive), envia uma requisição, aguarda uma resposta, a conexão pode então se fechar ou ser reutilizada. HTTPS é simplesmente HTTP sobre TLS — o S não muda nada na semântica do protocolo, apenas no fato de que o transporte é criptografado.
+HTTP é um protocolo requisição-resposta: o cliente abre uma conexão (ou reutiliza uma, com o keep-alive), envia uma requisição, aguarda uma resposta, a conexão pode então se fechar ou ser reutilizada. HTTPS é simplesmente HTTP sobre TLS -- o S não muda nada na semântica do protocolo, apenas no fato de que o transporte é criptografado.
 
-O modelo requisição-resposta tem um limite estrutural: o servidor nunca pode falar primeiro. Ele só pode responder ao que o cliente pergunta. Para polling frequente (verificar "há novidades?" a cada segundo), funciona mas desperdiça recursos — cada requisição recria uma sobrecarga protocolar para, na maioria das vezes, não ter nada de novo a anunciar.
+O modelo requisição-resposta tem um limite estrutural: o servidor nunca pode falar primeiro. Ele só pode responder ao que o cliente pergunta. Para polling frequente (verificar "há novidades?" a cada segundo), funciona mas desperdiça recursos -- cada requisição recria uma sobrecarga protocolar para, na maioria das vezes, não ter nada de novo a anunciar.
 
 ## WebSocket (WS / WSS)
 
-WebSocket responde exatamente a esse limite. A conexão começa como uma requisição HTTP clássica (com um cabeçalho `Upgrade: websocket`), mas uma vez que o handshake é aceito, a conexão TCP subjacente não é mais um canal requisição-resposta HTTP — ela se torna um canal bidirecional full-duplex onde cliente e servidor podem enviar mensagens a qualquer momento, sem ter que reemitir um ciclo requisição-resposta a cada troca.
+WebSocket responde exatamente a esse limite. A conexão começa como uma requisição HTTP clássica (com um cabeçalho `Upgrade: websocket`), mas uma vez que o handshake é aceito, a conexão TCP subjacente não é mais um canal requisição-resposta HTTP -- ela se torna um canal bidirecional full-duplex onde cliente e servidor podem enviar mensagens a qualquer momento, sem ter que reemitir um ciclo requisição-resposta a cada troca.
 
 ```
 GET /chat HTTP/1.1
@@ -357,21 +357,21 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS é simplesmente WebSocket sobre TLS, exatamente como HTTPS é HTTP sobre TLS. É o protocolo de escolha para tudo que necessita de push do servidor em tempo real — chat, notificações, fluxo de trading, eventos de jogo — sem querer gerenciar você mesmo um protocolo binário sobre TCP puro.
+WSS é simplesmente WebSocket sobre TLS, exatamente como HTTPS é HTTP sobre TLS. É o protocolo de escolha para tudo que necessita de push do servidor em tempo real -- chat, notificações, fluxo de trading, eventos de jogo -- sem querer gerenciar você mesmo um protocolo binário sobre TCP puro.
 
 ## gRPC
 
-Menos conhecido fora do mundo dos microsserviços mas central na comunicação serviço-a-serviço: o gRPC se apoia em HTTP/2 (portanto TCP + TLS opcional), serializa as mensagens em Protocol Buffers (binário, tipado, compacto — ao contrário do JSON texto da maioria das APIs REST), e permite nativamente o streaming bidirecional graças ao multiplexação do HTTP/2 (vários fluxos lógicos em uma única conexão TCP, sem o head-of-line blocking que várias requisições HTTP/1.1 sequenciais teriam).
+Menos conhecido fora do mundo dos microsserviços mas central na comunicação serviço-a-serviço: o gRPC se apoia em HTTP/2 (portanto TCP + TLS opcional), serializa as mensagens em Protocol Buffers (binário, tipado, compacto -- ao contrário do JSON texto da maioria das APIs REST), e permite nativamente o streaming bidirecional graças ao multiplexação do HTTP/2 (vários fluxos lógicos em uma única conexão TCP, sem o head-of-line blocking que várias requisições HTTP/1.1 sequenciais teriam).
 
 ## QUIC / HTTP3
 
-QUIC muda o jogo ao partir do UDP em vez do TCP no nível do transporte, enquanto reimplementa por cima as garantias de confiabilidade que o TCP oferecia nativamente — mas fluxo por fluxo em vez de globalmente, o que elimina o head-of-line blocking no nível do transporte (um pacote perdido em um fluxo não bloqueia mais os outros fluxos da mesma conexão). TLS 1.3 é integrado diretamente no QUIC em vez de adicionado por cima, o que reduz ainda mais a latência do handshake. HTTP/3 é HTTP sobre QUIC.
+QUIC muda o jogo ao partir do UDP em vez do TCP no nível do transporte, enquanto reimplementa por cima as garantias de confiabilidade que o TCP oferecia nativamente -- mas fluxo por fluxo em vez de globalmente, o que elimina o head-of-line blocking no nível do transporte (um pacote perdido em um fluxo não bloqueia mais os outros fluxos da mesma conexão). TLS 1.3 é integrado diretamente no QUIC em vez de adicionado por cima, o que reduz ainda mais a latência do handshake. HTTP/3 é HTTP sobre QUIC.
 
 # Visão geral: onde se situa cada protocolo
 
 Camada Protocolos Papel Transporte TCP, UDP Fazer os bytes viajarem, confiável ou não Transporte (nova geração) QUIC UDP + confiabilidade por fluxo + TLS integrado Segurança TLS, mTLS Criptografia, integridade, autenticação (uni ou mútua) Aplicação HTTP/HTTPS, WS/WSS, gRPC Estruturar as trocas (requisição-resposta, bidirecional, RPC tipado)
 
-Um exemplo concreto para fixar as ideias: uma arquitetura de microsserviços com um dashboard web e serviços internos poderia razoavelmente combinar HTTPS (dashboard ↔ API pública, autenticação unidirecional suficiente no lado do navegador), mTLS (serviço ↔ serviço internamente, autenticação mútua necessária), e WSS (notificações em tempo real empurradas para o dashboard) — três protocolos de aplicação diferentes, todos construídos sobre a mesma base TCP + TLS.
+Um exemplo concreto para fixar as ideias: uma arquitetura de microsserviços com um dashboard web e serviços internos poderia razoavelmente combinar HTTPS (dashboard ↔ API pública, autenticação unidirecional suficiente no lado do navegador), mTLS (serviço ↔ serviço internamente, autenticação mútua necessária), e WSS (notificações em tempo real empurradas para o dashboard) -- três protocolos de aplicação diferentes, todos construídos sobre a mesma base TCP + TLS.
 
 ## Como escolher, na prática
 

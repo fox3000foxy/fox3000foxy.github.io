@@ -120,7 +120,7 @@ MIN_LENGTH = {
     "fullwidth_latin": 2,
 }
 
-# Languages where text is NOT space-delimited — fusion detection doesn't
+# Languages where text is NOT space-delimited -- fusion detection doesn't
 # apply (would produce false positives for compound/agglutinative writing).
 SPACELESS_SCRIPTS = {"ja", "zh", "th", "ko"}
 
@@ -315,7 +315,7 @@ def main():
         if anomalies:
             results[path] = anomalies
         elif args.verbose:
-            print(f"  {path} — clean")
+            print(f"  {path} -- clean")
     else:
         for lang_dir in sorted(glob.glob(f"{ARTICLES_DIR}/*/")):
             lang = lang_dir.rstrip("/").split("/")[-1]
@@ -328,7 +328,7 @@ def main():
                 if anomalies:
                     results[f] = anomalies
                 elif args.verbose:
-                    print(f"  {f} — clean")
+                    print(f"  {f} -- clean")
 
     if not results:
         print("No language contamination found across all articles.")
