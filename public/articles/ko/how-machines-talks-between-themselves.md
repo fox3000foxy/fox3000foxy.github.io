@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "ko"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "4pXNMpxYauoQz629rHRWpc3Y8dZaVf7zUGVPQPMT/fhWTBn25pzy2TRD8WzIaYnAYXJYdiZh2DPlMRbybHHtQw=="
+author_sig: "OY9i98NRgEy6kHIyCOVYMH8F+QRHvXcJP7wytEWgKj6hup7zwOPi8RppYQxv74B8WUccnqbs0ACSw/fcGnGEkQ=="
 ---
 # 문제: 약어는 너무 많은데, 계층 구조는 부족하다
 

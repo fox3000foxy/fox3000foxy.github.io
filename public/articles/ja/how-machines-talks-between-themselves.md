@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "ja"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "LQol1RSr/IZ37M6uUS/Q3dcQBtd3RY58w6fcsHMVO3lxxyGrLcLwk/B9P/xFoglgaaS7SiMo7i+8b0LkF8vp2g=="
+author_sig: "soFTExi8PF0utCThe5iuH9RLj02ZkrPvIMFhCGdT7xnMo+aw+p4h3GaJqJkJAEQDRiAOqgs1m/um9JcquyNgkw=="
 ---
 # 問題：多すぎる略語、足りない階層構造
 

@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "th"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "tkLri5hbVuJG13E6twPAGxZpOPb921Np8DW9pF3UUyqIXTeOXW7PUOwCjemEo2BB2bSKE8Ob3E+fMCOzJJFZDg=="
+author_sig: "1kSBNjFXmW32jCNY7UCHgJDHpKQVrUucyluaDRPkD7ODLeGS+Q1usT53dXdVcjFIC/w/ktbSEW1e+z0yC4VKvw=="
 ---
 # ปัญหา: คำย่อมากเกินไป ลำดับชั้นไม่เพียงพอ
 

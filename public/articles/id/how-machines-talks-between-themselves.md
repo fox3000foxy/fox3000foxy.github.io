@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "jaringan", "ar
 authors: ["docteur-turboss"]
 lang: "id"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "GtxWEuj2amWDFOt/ekCnpmr8s8L/kOGeECbbT6kHy5fi8LQXNc+QeAALSqlLJxa5AsVQl17P8s8qIQ28cz+9/w=="
+author_sig: "MLMyt5nM357eVwh+IqEkevrn38inNsITKpDcs7pODPhDzQFhoimx0C8IH5yv2b5GYlZpWMq53L5ZD40jOSGH3g=="
 ---
 # Masalahnya: Terlalu Banyak Akronim, Kurang Hierarki
 

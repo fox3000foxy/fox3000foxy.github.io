@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "en"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "da31kMsR9dMMDpOJnD9dwJ32qNjGMqN1AJZ8yCHYbP90e1ojYvJjj/0dpVuwxQRI+Is3pyhBuBlNlsAp2Tk6tA=="
+author_sig: "55v2vV4dp7Fsu8WRdT8Fu03rEn34ahFAH7D8/k6Qj1I8G3JrDZqeNzG2Mpk9rdf5hG5o1dCxcnlNgru+Gcr13A=="
 ---
 # The problem: too many acronyms, not enough hierarchy
 

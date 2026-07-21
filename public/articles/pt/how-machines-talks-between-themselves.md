@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "rede", "arquit
 authors: ["docteur-turboss"]
 lang: "pt"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "RVM6X3NSxM493lmZc46lgA4q+W6bzPb1kYygQPOZ/T4b8CKML2d77+Rk7OEwbL4Gfkw+MpsnY7tRJhP48N1pZA=="
+author_sig: "MRlNw6v0emISsPZtEQLlVtBbHamVVjN3PCR56CZNpdUEKTtqHfP7WbZNYV3xQChFKKOaEEbPa+fu0s+GMiZW1g=="
 ---
 # O problema: muitas siglas, pouca hierarquia
 

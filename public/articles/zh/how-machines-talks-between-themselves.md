@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "zh"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "nr5gsE2ukLAGWJNjq1Wb1fFgo7BgD72l4GyhsC6tkzXtFUsuFS/WVHHururOqpJv4RqTBImS3UvUdH3SGqbdgw=="
+author_sig: "eXh/FpCET54pbv9BjotJdo5GS+OcuMsYMe/c6xT/X7zcJibcdyCaDIhoGj586/IqDjbdFhsa2B4qeUwPDjr/5w=="
 ---
 # 问题：太多缩写，不够的层次感
 

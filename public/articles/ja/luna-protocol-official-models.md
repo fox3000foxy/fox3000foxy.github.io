@@ -13,7 +13,7 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "E+I2zmiVKYZ522Mm3zohK346pe0IehYArJEcGIro8ySF21kVzs0u7avLB2YtucHkwUsGBxnDZl3ldB33rb70GA=="
+author_sig: "UQiG57tSPPXZfnqibY+apvBqD7OGn7jUyNsiiGBJ3tEeWi4I8voxNVZdP+r4iJiXWm6hfLbldvE97jYud+0SUg=="
 ---
 
 # Luna Protocol：5万件のDiscordサンプルで1.5Bモデルをファインチューニングし、なぜFew-Shotプライミングが秘密兵器になったのか

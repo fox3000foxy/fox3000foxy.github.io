@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "mạng", "ki�
 authors: ["docteur-turboss"]
 lang: "vi"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "bd+DosSnZJl/ggRhETcd17oIoW0HG46P51eGJrXcNReS1SjUcj+vFu/Ttb6fIpdrJ0TfjBakC6OpNkq2saGR7g=="
+author_sig: "6GBd/4VTCSvO2GsTnx5zJO2OI4q2Hd5r0TW6BXcjPgiZYx53NsCwNe7uGjapzOGbdOsWe6TsgxSRKQZwX+QndA=="
 ---
 # Vấn đề: quá nhiều từ viết tắt, không đủ thứ bậc
 

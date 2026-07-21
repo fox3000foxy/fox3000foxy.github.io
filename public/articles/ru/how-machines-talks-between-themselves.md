@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "ru"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "AMWm3zne2lBFFAvO9Ymt4tVXZSU2plaFkLknL4fnCdpE4Vn77f/keMtZ/uBUf+UtB8c28zLbENyBD56YcGyu+A=="
+author_sig: "MENHK+Jkz9q2UYzPEzkxQayn7zsyE2Zvnlj3Zv9V3JYI+hrfQ3RIwaFERopgWgN0rLsdJSSUp/JFRWmTdXM6/g=="
 ---
 # Проблема: слишком много аббревиатур, недостаточно иерархии
 

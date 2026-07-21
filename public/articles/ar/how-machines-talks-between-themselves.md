@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "ar"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Jsk9WoN42YSjDB2LYmi0wb6VUJShM019ZiQBnM0DDhylAQPWMkvM+8cKij3wQ76omaQp0Gf0abBqjEmiwdWLbg=="
+author_sig: "F/zRgb27fb84ZP2tBqxEqPeouKMWtVEGqXuAkE0pFnZ94Rsu9oMY+dFZu9/N1TnFN6mQ4mL1cLMM9pL681eNsA=="
 ---
 # المشكلة: كثرة الاختصارات وغياب التسلسل الهرمي
 

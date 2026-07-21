@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "ağ", "dağıt
 authors: ["docteur-turboss"]
 lang: "tr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "n2wNzPeUNQDkfsxBaY6OSmKbRUDl4EIiEMLeigkmNSnbDhvs0F0xg37igPCejYhFrgmO1hyeGSJRP5OolPzq6w=="
+author_sig: "7WphJBvVIXbPIkKBI5UxAxI/W+LbbraSU/CuabzA5REY/LrMplPu2OmZk8xUKFF7k3SI3XtnmD/NEm6qHqus5g=="
 ---
 # Sorun: Çok fazla kısaltma, yeterince hiyerarşi yok
 

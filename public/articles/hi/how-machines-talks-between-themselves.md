@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "dis
 authors: ["docteur-turboss"]
 lang: "hi"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "aJuBfwcVCWZqqSGmKvZocTgIK99rwrPxrb7Bfh/UshVWCnzTGEHaC612EElLOvvrqpEb2QF9lj3LyVKEY4h3hg=="
+author_sig: "1+vB8t+6hNZoGtvH1PHLIDwZCeYqB9YVXFFewbJ8ma9MIsl/6fpqPYC4gnNGCxIY3QF9+J5YhcH1wT4qyABhEw=="
 ---
 # समस्या: बहुत सारे संक्षिप्ताक्षर, पर्याप्त पदानुक्रम नहीं
 
