@@ -77,6 +77,7 @@ const tr: TranslationMap = {
 	"search.hint":
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "Bu sayfa henüz çevrilmemiş.",
 };
 
 export default tr;

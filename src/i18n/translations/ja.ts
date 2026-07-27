@@ -77,6 +77,7 @@ const ja: TranslationMap = {
 	"search.hint":
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "このページはまだ翻訳されていません。",
 };
 
 export default ja;

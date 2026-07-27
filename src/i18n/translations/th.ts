@@ -82,6 +82,7 @@ const th: TranslationMap = {
 	"search.hint":
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "หน้านี้ยังไม่ได้แปล",
 };
 
 export default th;

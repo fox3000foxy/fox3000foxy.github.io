@@ -82,6 +82,7 @@ const ar: TranslationMap = {
 	"search.hint":
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "لم تتم ترجمة هذه الصفحة بعد.",
 };
 
 export default ar;

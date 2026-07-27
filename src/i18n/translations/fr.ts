@@ -79,6 +79,7 @@ const fr: TranslationMap = {
 	"search.hint":
 		"Recherche dans tous les articles par titre, description, tags et contenu.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "Cette page n'a pas encore été traduite.",
 };
 
 export default fr;

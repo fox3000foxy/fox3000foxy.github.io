@@ -77,6 +77,7 @@ const ko: TranslationMap = {
 	"search.hint":
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "이 페이지는 아직 번역되지 않았습니다.",
 };
 
 export default ko;

@@ -77,6 +77,7 @@ const zh: TranslationMap = {
 	"search.hint":
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "此页面尚未被翻译。",
 };
 
 export default zh;

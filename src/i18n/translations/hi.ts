@@ -82,6 +82,7 @@ const hi: TranslationMap = {
 	"search.hint":
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
+	"article.notTranslated": "इस पृष्ठ का अभी तक अनुवाद नहीं हुआ है।",
 };
 
 export default hi;
