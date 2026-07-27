@@ -1,3 +1,13 @@
+/* RTL support (Arabic, etc.) */
+html[dir="rtl"] pre,
+html[dir="rtl"] code,
+html[dir="rtl"] kbd,
+html[dir="rtl"] samp {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: embed;
+}
+
 .reading-progress {
   position: fixed;
   top: 0;
@@ -34,7 +44,7 @@ main {
 }
 
 article {
-  text-align: left;
+  text-align: start;
   max-width: 960px;
   margin: 0 auto;
 }
@@ -124,8 +134,8 @@ article {
 }
 
 .article-nav-link.next {
-  text-align: right;
-  margin-left: auto;
+  text-align: end;
+  margin-inline-start: auto;
 }
 
 .article-nav-label {
@@ -641,7 +651,7 @@ a.tag-badge:hover {
 .archive {
   max-width: 600px;
   margin: 0 auto;
-  text-align: left;
+  text-align: start;
 }
 
 .archive-group {
@@ -985,7 +995,7 @@ a {
 }
 
 .tags-index {
-  text-align: left;
+  text-align: start;
   max-width: 960px;
   margin: 0 auto;
 }
@@ -1035,7 +1045,7 @@ a {
 }
 
 .about-page {
-  text-align: left;
+  text-align: start;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.8;
@@ -1047,7 +1057,7 @@ a {
 }
 
 .about-page ul {
-  padding-left: 1.5rem;
+  padding-inline-start: 1.5rem;
 }
 
 .about-page li {

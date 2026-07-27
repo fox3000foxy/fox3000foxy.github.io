@@ -88,7 +88,7 @@ const hreflangLinks = ALL_LANGS.map((l) =>
     <script data-goatcounter="https://fox3000foxy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <script set:html={`(function(){var t=localStorage.getItem('theme');if(t==='light'||(!t&&window.matchMedia('(prefers-color-scheme:light)').matches))document.documentElement.classList.add('light');var l=localStorage.getItem('fox-blog-lang');if(!l){var p=navigator.languages||[navigator.language],c=${JSON.stringify(["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"])};for(var i=0;i<p.length;i++){var x=p[i].split('-')[0];if(c.indexOf(x)!==-1){l=x;break}}}if(l&&l!=='en')document.documentElement.dataset.lang=l})()`} />
+    <script set:html={`(function(){var t=localStorage.getItem('theme');if(t==='light'||(!t&&window.matchMedia('(prefers-color-scheme:light)').matches))document.documentElement.classList.add('light');var l=localStorage.getItem('fox-blog-lang');if(!l){var p=navigator.languages||[navigator.language],c=${JSON.stringify(["en","fr","zh","ja","ko","tr","it","de","ru","es","pt","id","hi","ar","vi","th"])};for(var i=0;i<p.length;i++){var x=p[i].split('-')[0];if(c.indexOf(x)!==-1){l=x;break}}}if(l&&l!=='en')document.documentElement.dataset.lang=l;var rtl=${JSON.stringify(Array.from(RTLLangs))};document.documentElement.dir=(l&&rtl.indexOf(l)!==-1)?'rtl':'ltr'})()`} />
   </head>
   <body>
     <input type="checkbox" id="theme-toggle" class="theme-checkbox" aria-label="Toggle theme" />
