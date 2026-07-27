@@ -40,8 +40,7 @@ function stripFrontmatter(text: string): string {
 export function readAllArticleData(slug: string) {
 	const raw: Record<Lang, string> = {} as Record<Lang, string>;
 	const content: Record<Lang, string> = {} as Record<Lang, string>;
-	let enContent = "";
-	let enRaw = "";
+	const hasTranslation: Record<Lang, boolean> = {} as Record<Lang, boolean>;
 
 	for (const lang of ALL_LANGS) {
 		const filePath = path.resolve(`public/articles/${lang}/${slug}.md`);
@@ -49,18 +48,19 @@ export function readAllArticleData(slug: string) {
 			const text = fs.readFileSync(filePath, "utf-8");
 			raw[lang] = text;
 			content[lang] = stripFrontmatter(text);
-			if (lang === "en") {
-				enContent = content[lang];
-				enRaw = text;
-			}
+			hasTranslation[lang] = true;
+		} else {
+			raw[lang] = "";
+			content[lang] = "";
+			hasTranslation[lang] = false;
 		}
 	}
 
-	for (const lang of ALL_LANGS) {
-		if (!content[lang]) {
-			content[lang] = enContent;
-			raw[lang] = enRaw;
-		}
+	const hasAny = ALL_LANGS.some((l) => {
+		return hasTranslation[l];
+	});
+	if (!hasAny) {
+		return null;
 	}
 
 	const allIndexes = readAllArticleIndexes();
@@ -72,9 +72,9 @@ export function readAllArticleData(slug: string) {
 			(e as { slug?: string }).slug === slug
 	) as { verified?: boolean; image?: string } | undefined;
 	const verified = enEntry?.verified ?? false;
-	const firstImage = enEntry?.image || extractFirstImage(enContent);
+	const firstImage = enEntry?.image || extractFirstImage(content.en || "");
 
-	return { raw, content, allIndexes, verified, firstImage };
+	return { raw, content, allIndexes, verified, firstImage, hasTranslation };
 }
 
 function extractFirstImage(markdown: string): string {
