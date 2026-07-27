@@ -5,7 +5,7 @@ html[dir="rtl"] kbd,
 html[dir="rtl"] samp {
   direction: ltr;
   text-align: left;
-  unicode-bidi: embed;
+  unicode-bidi: isolate;
 }
 
 .reading-progress {
