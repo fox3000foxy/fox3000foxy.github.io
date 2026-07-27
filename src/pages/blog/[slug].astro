@@ -15,11 +15,18 @@ import { parseHeadings } from "../../utils/headings";
 import { articleJsonLd, breadcrumbJsonLd } from "../../lib/schema";
 
 export async function getStaticPaths() {
-  const indexPath = path.resolve("public/articles/en/index.json");
-  if (!fs.existsSync(indexPath)) return [];
-  const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
-  return index.map((entry: { slug: string }) => ({
-    params: { slug: entry.slug },
+  const allSlugs = new Set<string>();
+  for (const lang of ALL_LANGS) {
+    const indexPath = path.resolve(`public/articles/${lang}/index.json`);
+    if (fs.existsSync(indexPath)) {
+      const index = JSON.parse(fs.readFileSync(indexPath, "utf-8")) as { slug?: string }[];
+      for (const entry of index) {
+        if (entry.slug) allSlugs.add(entry.slug);
+      }
+    }
+  }
+  return Array.from(allSlugs).map((slug) => ({
+    params: { slug },
   }));
 }
 
@@ -128,10 +135,21 @@ const suggested = allArticles
   {data ? (
     <>
       {ALL_LANGS.map((l) => {
+        const langKey = l as Lang;
+        if (!data.hasTranslation[langKey]) {
+          const tl = createT(langKey);
+          return (
+            <div class="lang-content" data-lang={l}>
+              <div class="not-translated">
+                <p>{tl("article.notTranslated")}</p>
+              </div>
+            </div>
+          );
+        }
         const meta = allMeta[l] || {};
-        const body = l === "en" ? bodyEn : (data.content[l as Lang] ? renderMarkdown(processArticleContent(data.content[l as Lang])) : "");
+        const body = l === "en" ? bodyEn : renderMarkdown(processArticleContent(data.content[langKey]));
         const rt = readingTime(body);
-        const headings = l === "en" ? parseHeadings(rawBodyEn) : parseHeadings(data.content[l as Lang] ? processArticleContent(data.content[l as Lang]) : "");
+        const headings = l === "en" ? parseHeadings(rawBodyEn) : parseHeadings(data.content[langKey] ? processArticleContent(data.content[langKey]) : "");
         return (
           <div class="lang-content" data-lang={l}>
             <article>
@@ -437,4 +455,6 @@ const suggested = allArticles
   .reading-mode .article-nav, .reading-mode .article-footer, .reading-mode .article-description { max-width: 700px; margin-left: auto; margin-right: auto; }
   .reading-mode .toc { display: none; }
   .toc-active > .toc-link { color: var(--accent); border-left-color: var(--accent); font-weight: 700; }
+  .not-translated { display: flex; align-items: center; justify-content: center; min-height: 30vh; text-align: center; }
+  .not-translated p { font-size: 1.1rem; color: var(--text-muted); padding: 2rem; border: 1px dashed var(--border); border-radius: 8px; max-width: 500px; }
 </style>
