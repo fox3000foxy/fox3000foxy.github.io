@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: ""
+author_sig: "hpWwKkqKA8pblkqwpNtQgEpWC1QXs7X7IX9H14HD3mj6YVO0H/7QeJiCTQ0/qxhZKj3Ko9BM/eoLupWu204w0g=="
 ---
 
 # Luna Protocol：共享大脑、情感分类，以及有趣/无聊的路由机制

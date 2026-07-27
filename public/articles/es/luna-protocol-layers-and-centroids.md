@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: ""
+author_sig: "QNTMiRbNjIsWw5nsHsM+Uqm8Ozfvh0pI4sH8iejVC2M15CAYHcNfU9pq+uwAWTJQJ2Y08/0+0AmBPiSxaRTFHw=="
 ---
 
 # Luna Protocol: cerebros compartidos, clasificación emocional y enrutamiento interesante/fútil

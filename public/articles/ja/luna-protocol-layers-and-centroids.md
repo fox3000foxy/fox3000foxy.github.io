@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: ""
+author_sig: "DPLsgQR13fdBCNNzT8d+8KTxGNUx8F81bNZ9VI42xgU48mP66OIpvc65ie/pnErJXZ5wPh+Epfa8lzBkPGt2cQ=="
 ---
 
 # Luna Protocol：脳の共有、感情分類、そして「面白い/どうでもいい」ルーティング

@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: ""
+author_sig: "iJ7Bs6om85RnwZIb7VAaaVe5fDPP/+SFHAt/bP6Qq3T959BMJLxRjB8hWxb6RXGWIqXytimjsVegTJEUsbJm4Q=="
 ---
 
 # Luna Protocol: cervelli condivisi, classificazione emotiva e routing interessante/futile

@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: ""
+author_sig: "1JDkDv1mcpscvUadvmbpkB/B5MtRocdSQUzwbOlEfcSAyavtOb3IB1Tsx05+Wet8jKSUHo4dBkVpBB/rGLmRiQ=="
 ---
 
 # Luna Protocol: geteilte Gehirne, Emotionsklassifikation und interessant/belanglos-Routing
