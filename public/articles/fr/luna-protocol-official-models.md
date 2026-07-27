@@ -1,5 +1,5 @@
 ---
-title: "Luna Protocol : pourquoi j'ai fine-tuné un modèle de 1,5 milliard de paramètres sur 50k échantillons Discord, et pourquoi le few-shot priming est devenu l'arme secrète"
+title: "Luna Protocol : pourquoi j'ai fine-tuné un modèle de 1,5 milliard de paramètres sur 50k échantillons Discord, et pourquoi le few-shot priming a tout changé"
 description: "Un modèle plus petit entraîné sur moins de données peut surpasser un modèle plus gros -- à condition de savoir bien l'amorcer. Voici pourquoi Luna Protocol est passé d'un Hermes 3B à un fine-tune Qwen 1,5B, et pourquoi le few-shot priming est devenu le vrai facteur de progrès."
 date: 2026-07-17
 authors:
@@ -16,7 +16,7 @@ author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTN
 author_sig: "kF7aLK4N8wL6lYoPkymVDx3PNLqiVRT5q61bVVsyMgHQrq444Gjf6JVIYkqDB4QCah2RZTBOZPy6yJVV1lubFA=="
 ---
 
-# Luna Protocol : pourquoi j'ai fine-tuné un modèle de 1,5 milliard de paramètres sur 50k échantillons Discord, et pourquoi le few-shot priming est devenu l'arme secrète
+# Luna Protocol : pourquoi j'ai fine-tuné un modèle de 1,5 milliard de paramètres sur 50k échantillons Discord, et pourquoi le few-shot priming a tout changé
 
 Dans le [premier article](/articles/en/luna-protocol-discord-bot), j'ai construit un bot Discord qui simule un être humain -- sommeil, fautes de frappe, hésitations, oublis, messages spontanés. Le système comportemental tenait la route. Le LLM derrière tout ça était un modèle Hermes de 3 milliards de paramètres, quantifié en Q8_0, consommant 3 Go de VRAM.
 
