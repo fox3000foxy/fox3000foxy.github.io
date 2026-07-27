@@ -1,5 +1,5 @@
 ---
-title: "Luna Protocol: Why I fine-tuned a 1.5B model on 50k Discord samples and made few-shot priming the secret weapon"
+title: "Luna Protocol: Why I fine-tuned a 1.5B model on 50k Discord samples and why few-shot priming changed everything"
 description: "A smaller model trained on less data can outperform a bigger one -- if you know how to prime it. Here is why Luna Protocol switched from a 3B Hermes to a 1.5B Qwen fine-tune, and why few-shot priming became the real game-changer."
 date: 2026-07-17
 authors:
@@ -16,7 +16,7 @@ author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTN
 author_sig: "BQpvAhQqd9VGBRx1q1YKVRc0hTzqFxob4Qymk6QXcbRPhzgTy/b1+ZbW0ZrqEmqLd0qfC3PQFqwVb3tWJDvtJw=="
 ---
 
-# Luna Protocol: Why I fine-tuned a 1.5B model on 50k Discord samples and made few-shot priming the secret weapon
+# Luna Protocol: Why I fine-tuned a 1.5B model on 50k Discord samples and why few-shot priming changed everything
 
 In the [first article](/articles/en/luna-protocol-discord-bot), I built a Discord bot that simulates a human being -- sleep, typos, hesitations, forgetfulness, spontaneous messages. The behavioral system was solid. The LLM behind it was a 3B Hermes model, quantized to Q8_0, eating 3GB of VRAM.
 
