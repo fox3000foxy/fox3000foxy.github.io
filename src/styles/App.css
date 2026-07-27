@@ -1,10 +1,14 @@
 /* RTL support (Arabic, etc.) */
 html[dir="rtl"] pre,
-html[dir="rtl"] code,
-html[dir="rtl"] kbd,
-html[dir="rtl"] samp {
+html[dir="rtl"] pre code {
   direction: ltr;
   text-align: left;
+}
+
+html[dir="rtl"] kbd,
+html[dir="rtl"] samp,
+html[dir="rtl"] :not(pre) > code {
+  direction: ltr;
   unicode-bidi: isolate;
 }
 
