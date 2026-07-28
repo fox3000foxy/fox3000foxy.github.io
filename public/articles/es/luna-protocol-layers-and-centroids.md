@@ -142,8 +142,8 @@ Un **centroide** es un concepto simple: es el promedio de un conjunto de vectore
 
 Hay **dos centroides de clasificación**:
 
-- `futile_centroid`: el promedio de los embeddings de ~500 mensajes triviales ("lol", "ok", "hello", "nm just chillin u")
-- `interesante_centroid`: el promedio de los embeddings de ~550 mensajes sustanciales (preguntas técnicas, confidencias, filosofía)
+- `futile_centroid`: el promedio de los embeddings de ~683 mensajes triviales ("lol", "ok", "hello", "nm just chillin u")
+- `interesante_centroid`: el promedio de los embeddings de ~678 mensajes sustanciales (preguntas técnicas, confidencias, filosofía)
 
 Cuando llega un mensaje:
 
@@ -315,7 +315,7 @@ En la práctica, así es como se ven los centroides de clasificación en el espa
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Clasificación por centroides - vista 3D interactiva"></iframe>
 
-Dos ejemplos se muestran en rojo: "lol" (clasificado como fútil) e "i feel sad today" (clasificado como interesante). "lol" cae en la nube azul de los fútiles, mientras que "i feel sad today" se sitúa del lado de los puntos amarillos. La separación es visible incluso tras una reducción a 3 dimensiones (solo el 15,6% de la varianza total explicada). En 384 dimensiones, la frontera es mucho más nítida.
+Dos ejemplos se muestran en rojo: "lol" (clasificado como fútil) e "i feel sad today" (clasificado como interesante). "lol" cae en la nube azul de los fútiles, mientras que "i feel sad today" se sitúa del lado de los puntos amarillos. La separación es visible incluso tras una reducción a 3 dimensiones (solo el 14,7% de la varianza total explicada). En 384 dimensiones, la frontera es mucho más nítida.
 
 El centroide del mensaje de entrada se mueve por este espacio en función de su contenido. La clasificación FÚTIL/INTERESANTE consiste simplemente en medir qué centroide está más cerca por similitud coseno. Así se puede representar cada mensaje como un punto en un espacio multidimensional, donde cada dimensión corresponde a una propiedad semántica.
 

@@ -142,8 +142,8 @@ Bir **centroid**, basit bir kavramdır: bir dizi embedding vektörünün ortalam
 
 **İki sınıflandırma centroid'i** vardır:
 
-- `futile_centroid`: ~500 önemsiz mesajın ortalama embedding'i ("lol", "ok", "hello", "nm just chillin u")
-- `interesting_centroid`: ~550 içerikli mesajın ortalama embedding'i (teknik sorular, itiraflar, felsefe)
+- `futile_centroid`: ~683 önemsiz mesajın ortalama embedding'i ("lol", "ok", "hello", "nm just chillin u")
+- `interesting_centroid`: ~678 içerikli mesajın ortalama embedding'i (teknik sorular, itiraflar, felsefe)
 
 Bir mesaj geldiğinde:
 

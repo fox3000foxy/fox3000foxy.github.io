@@ -142,22 +142,22 @@ Un **centroid** est un concept simple : c'est la moyenne d'un ensemble de vecteu
 
 Il y a **deux centroids de classification** :
 
-- `futile_centroid` : la moyenne des embeddings de ~500 messages triviaux ("lol", "ok", "hello", "nm just chillin u")
-- `interessant_centroid` : la moyenne des embeddings de ~550 messages substantiels (questions techniques, confidences, philosophie)
+- `futile_centroid` : ~683 messages triviaux ("lol", "ok", "hello") via k-means (k=10, seed=42)
+- `interessant_centroid` : ~678 messages substantiels (techniques, personnels, philosophiques) via k-means (k=10, seed=42)
 
 Quand un message arrive :
 
 ```python
-def classify(text, embedder, futile_centroid, interessant_centroid):
-    emb = embedder.query_embed(text)          # vecteur 384-D du message
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interessant_centroid)
+def classify(text, embedder, futile_centroids, interessant_centroids):
+    emb = embedder.query_embed(text)                     # vecteur 384-D
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max sur 10
+    sim_i = max(cos(emb, c) for c in interessant_centroids) # max sur 10
     diff = sim_i - sim_f
     label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
-La similarité cosinus entre le message et chaque centroid détermine la catégorie. La différence absolue donne la confiance. C'est simple, rapide (pas de forward pass de LLM), et étonnamment efficace.
+Le score par classe est la **similarité cosinus maximale** parmi ses 10 centroids. Cela capture les sous-types dans chaque catégorie -- une salutation et un au revoir tombent tous deux près d'un des 10 centroids futiles même s'ils sont éloignés dans l'espace d'embedding. Pas d'entraînement, pas de GPU, juste du k-means au démarrage et des produits scalaires à l'exécution.
 
 #### Pourquoi deux modèles ?
 
@@ -311,11 +311,11 @@ Le vrai pouvoir des centroids, c'est qu'ils transforment un problème de classif
 
 ### Visualisation 3D des centroids
 
-En pratique, voici à quoi ressemblent les centroids de classification dans l'espace d'embedding. Chaque point est un message d'exemple, projeté en 3D par PCA (les 384 dimensions originales sont réduites à 3 pour la visualisation). Les points bleus sont les messages futiles, les points jaunes les messages intéressants. Les deux gros diamants sont les centroids calculés -- la moyenne de chaque groupe. Passez la souris sur un point pour voir le texte original de l'exemple.
+En pratique, voici à quoi ressemblent les centroids de classification dans l'espace d'embedding. Chaque point est un message d'exemple, projeté en 3D par PCA (les 384 dimensions originales sont réduites à 3 pour la visualisation). Les points bleus sont les messages futiles, les points jaunes les messages intéressants. Les **20 marqueurs en diamant** sont les centroids k-means (10 par classe, seed=42). Passez la souris sur un point pour voir le texte original de l'exemple.
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Classification par centroïdes - vue 3D interactive"></iframe>
 
-Deux exemples sont affichés en rouge : "lol" (classé futile) et "i feel sad today" (classé intéressant). "lol" tombe dans le nuage bleu des futiles, tandis que "i feel sad today" se situe du côté des points jaunes. La séparation est visible même après une réduction à 3 dimensions (seulement 15,6% de la variance totale expliquée). En 384 dimensions, la frontière est bien plus nette.
+Deux exemples de test sont affichés en rouge : "lol" (classé futile) et "i feel sad today" (classé intéressant). Même après réduction de 384 à 3 dimensions (14,7% de variance expliquée), les deux clusters sont clairement séparés. L'annotation en haut montre les comptes exacts et la zone ambiguë.
 
 Le centroid du message d'entrée se promène dans cet espace en fonction de son contenu. La classification FUTILE/INTERESSANT consiste simplement à mesurer quel centroid est le plus proche par similarité cosinus. On peut ainsi représenter chaque message comme un point dans un espace à multiples dimensions, chaque dimension correspondant à une propriété sémantique.
 

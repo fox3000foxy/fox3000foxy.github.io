@@ -315,7 +315,7 @@ Trong thực tế, đây là hình ảnh của các centroid phân loại trong 
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Phân loại centroid - chế độ xem 3D tương tác"></iframe>
 
-Hai ví dụ được hiển thị màu đỏ: "lol" (phân loại futile) và "i feel sad today" (phân loại interesting). "lol" rơi vào đám mây xanh của các tin nhắn vô ích, trong khi "i feel sad today" nằm về phía các điểm màu vàng. Sự phân tách vẫn có thể nhìn thấy ngay cả sau khi giảm xuống 3 chiều (chỉ giải thích được 15,6% tổng phương sai). Trong không gian 384 chiều, ranh giới sắc nét hơn nhiều.
+Hai ví dụ được hiển thị màu đỏ: "lol" (phân loại futile) và "i feel sad today" (phân loại interesting). "lol" rơi vào đám mây xanh của các tin nhắn vô ích, trong khi "i feel sad today" nằm về phía các điểm màu vàng. Sự phân tách vẫn có thể nhìn thấy ngay cả sau khi giảm xuống 3 chiều (chỉ giải thích được 14,7% tổng phương sai). Trong không gian 384 chiều, ranh giới sắc nét hơn nhiều.
 
 Centroid của tin nhắn đầu vào di chuyển trong không gian này tùy theo nội dung của nó. Việc phân loại FUTILE/INTERESTING đơn giản chỉ là đo xem centroid nào gần hơn bằng độ tương đồng cosine. Điều này cho phép chúng ta biểu diễn mỗi tin nhắn như một điểm trong không gian đa chiều, với mỗi chiều tương ứng với một thuộc tính ngữ nghĩa.
 

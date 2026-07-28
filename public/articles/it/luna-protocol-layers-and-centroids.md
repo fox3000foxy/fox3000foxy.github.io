@@ -142,8 +142,8 @@ Un **centroide** è un concetto semplice: è la media di un insieme di vettori d
 
 Ci sono **due centroidi di classificazione**:
 
-- `futile_centroid`: la media degli embedding di ~500 messaggi banali ("lol", "ok", "hello", "nm just chillin u")
-- `interessante_centroid`: la media degli embedding di ~550 messaggi sostanziali (domande tecniche, confidenze, filosofia)
+- `futile_centroid`: la media degli embedding di ~683 messaggi banali ("lol", "ok", "hello", "nm just chillin u")
+- `interessante_centroid`: la media degli embedding di ~678 messaggi sostanziali (domande tecniche, confidenze, filosofia)
 
 Quando arriva un messaggio:
 
@@ -315,7 +315,7 @@ In pratica, ecco come appaiono i centroidi di classificazione nello spazio di em
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Classificazione per centroidi - vista 3D interattiva"></iframe>
 
-Due esempi sono mostrati in rosso: "lol" (classificato futile) e "i feel sad today" (classificato interessante). "lol" ricade nella nuvola blu dei futili, mentre "i feel sad today" si trova dal lato dei punti gialli. La separazione è visibile anche dopo una riduzione a 3 dimensioni (solo il 15,6% della varianza totale spiegata). In 384 dimensioni, il confine è molto più netto.
+Due esempi sono mostrati in rosso: "lol" (classificato futile) e "i feel sad today" (classificato interessante). "lol" ricade nella nuvola blu dei futili, mentre "i feel sad today" si trova dal lato dei punti gialli. La separazione è visibile anche dopo una riduzione a 3 dimensioni (solo il 14,7% della varianza totale spiegata). In 384 dimensioni, il confine è molto più netto.
 
 Il centroide del messaggio in ingresso si muove in questo spazio in base al suo contenuto. La classificazione FUTILE/INTERESSANTE consiste semplicemente nel misurare quale centroide è più vicino per similarità coseno. Si può così rappresentare ogni messaggio come un punto in uno spazio multidimensionale, dove ogni dimensione corrisponde a una proprietà semantica.
 

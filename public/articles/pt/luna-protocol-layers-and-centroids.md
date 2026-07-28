@@ -142,8 +142,8 @@ Um **centroide** é um conceito simples: é a média de um conjunto de vetores d
 
 Existem **dois centroides de classificação**:
 
-- `futile_centroid`: a média dos embeddings de ~500 mensagens triviais ("lol", "ok", "hello", "nm just chillin u")
-- `interessante_centroid`: a média dos embeddings de ~550 mensagens substanciais (perguntas técnicas, confidências, filosofia)
+- `futile_centroid`: a média dos embeddings de ~683 mensagens triviais ("lol", "ok", "hello", "nm just chillin u")
+- `interessante_centroid`: a média dos embeddings de ~678 mensagens substanciais (perguntas técnicas, confidências, filosofia)
 
 Quando uma mensagem chega:
 
@@ -315,7 +315,7 @@ Na prática, é assim que os centroides de classificação se parecem no espaço
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Classificação por centroides - visualização 3D interativa"></iframe>
 
-Dois exemplos são exibidos em vermelho: "lol" (classificado como fútil) e "i feel sad today" (classificado como interessante). "lol" cai na nuvem azul dos fúteis, enquanto "i feel sad today" fica do lado dos pontos amarelos. A separação é visível mesmo após uma redução a 3 dimensões (apenas 15,6% da variância total explicada). Em 384 dimensões, a fronteira é bem mais nítida.
+Dois exemplos são exibidos em vermelho: "lol" (classificado como fútil) e "i feel sad today" (classificado como interessante). "lol" cai na nuvem azul dos fúteis, enquanto "i feel sad today" fica do lado dos pontos amarelos. A separação é visível mesmo após uma redução a 3 dimensões (apenas 14,7% da variância total explicada). Em 384 dimensões, a fronteira é bem mais nítida.
 
 O centroide da mensagem de entrada se desloca nesse espaço conforme seu conteúdo. A classificação FÚTIL/INTERESSANTE consiste simplesmente em medir qual centroide está mais próximo por similaridade de cosseno. Assim, é possível representar cada mensagem como um ponto em um espaço multidimensional, com cada dimensão correspondendo a uma propriedade semântica.
 

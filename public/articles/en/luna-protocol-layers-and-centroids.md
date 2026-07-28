@@ -142,22 +142,22 @@ A **centroid** is a simple concept: it's the average of a set of embedding vecto
 
 There are **two classification centroids**:
 
-- `futile_centroid`: the average embedding of ~500 trivial messages ("lol", "ok", "hello", "nm just chillin u")
-- `interesting_centroid`: the average embedding of ~550 substantial messages (technical questions, confessions, philosophy)
+- `futile_centroid`: ~683 trivial messages ("lol", "ok", "hello", "nm just chillin u") via k-means (k=10, seed=42)
+- `interesting_centroid`: ~678 substantial messages (technical, personal, philosophical) via k-means (k=10, seed=42)
 
 When a message comes in:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # 384-D vector of the message
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)            # 384-D vector of the message
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids) # max over 10
     diff = sim_i - sim_f
     label = "INTERESTING" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
-The cosine similarity between the message and each centroid determines the category. The absolute difference gives the confidence. It's simple, fast (no LLM forward pass), and surprisingly effective.
+The score per class is the **maximum cosine similarity** across its 10 centroids. This captures sub-types within each category -- a greeting and a farewell both land near one of the 10 futile centroids even though they're far from each other in embedding space. No training, no GPU, just k-means at startup and dot products at runtime.
 
 #### Why two models?
 
@@ -311,11 +311,11 @@ The real power of centroids is that they turn a classification problem into a **
 
 ### 3D centroid visualization
 
-In practice, here's what the classification centroids look like in embedding space. Each point is an example message, projected in 3D via PCA (the original 384 dimensions are reduced to 3 for visualization). Blue points are futile messages, yellow points are interesting messages. The two large diamonds are the computed centroids -- the average of each group. Hover over a point to see the example's original text.
+In practice, here's what the classification centroids look like in embedding space. Each point is an example message, projected in 3D via PCA (the original 384 dimensions are reduced to 3 for visualization). Blue points are futile messages, yellow points are interesting messages. The **20 diamond markers** are the k-means centroids (10 per class, seed=42). Hover over a point to see the example's original text.
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Centroid classification - interactive 3D view"></iframe>
 
-Two examples are shown in red: "lol" (classified futile) and "i feel sad today" (classified interesting). "lol" falls into the blue cloud of futile messages, while "i feel sad today" sits on the side of the yellow points. The separation is visible even after reducing to 3 dimensions (only 15.6% of total variance explained). In 384 dimensions, the boundary is much sharper.
+Two test examples are shown in red: "lol" (classified futile) and "i feel sad today" (classified interesting). Even after reducing from 384 to 3 dimensions (14.7% explained variance), the two clusters are clearly separated. The annotation at the top shows exact counts and the ambiguous zone.
 
 The centroid of the input message wanders through this space depending on its content. FUTILE/INTERESTING classification simply consists of measuring which centroid is closer by cosine similarity. This lets us represent each message as a point in a multi-dimensional space, with each dimension corresponding to a semantic property.
 

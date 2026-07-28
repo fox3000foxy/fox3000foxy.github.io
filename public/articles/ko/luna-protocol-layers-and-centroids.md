@@ -315,7 +315,7 @@ Discord에서 누군가 "i'm really sad today"라고 보냈을 때 실제로 일
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="센트로이드 분류 - 인터랙티브 3D 뷰"></iframe>
 
-두 개의 예시가 빨간색으로 표시되어 있다: "lol"(futile로 분류)과 "i feel sad today"(interesting으로 분류)이다. "lol"은 사소한 메시지의 파란 구름 속에 떨어지는 반면, "i feel sad today"는 노란 점들이 있는 쪽에 위치한다. 3차원으로 축소한 후에도(전체 분산의 15.6%만 설명함) 분리가 눈에 보인다. 384차원에서는 경계가 훨씬 더 선명하다.
+두 개의 예시가 빨간색으로 표시되어 있다: "lol"(futile로 분류)과 "i feel sad today"(interesting으로 분류)이다. "lol"은 사소한 메시지의 파란 구름 속에 떨어지는 반면, "i feel sad today"는 노란 점들이 있는 쪽에 위치한다. 3차원으로 축소한 후에도(전체 분산의 14.7%만 설명함) 분리가 눈에 보인다. 384차원에서는 경계가 훨씬 더 선명하다.
 
 입력 메시지의 센트로이드는 내용에 따라 이 공간을 이동한다. FUTILE/INTERESTING 분류는 단순히 코사인 유사도로 어느 센트로이드가 더 가까운지 측정하는 것이다. 이를 통해 각 메시지를 다차원 공간의 한 점으로 표현할 수 있으며, 각 차원은 하나의 의미론적 속성에 해당한다.
 

@@ -142,8 +142,8 @@ Ein **Centroid** ist ein einfaches Konzept: es ist der Durchschnitt einer Menge 
 
 Es gibt **zwei Klassifikations-Centroids**:
 
-- `futile_centroid`: der Durchschnitt der Embeddings von ~500 trivialen Nachrichten ("lol", "ok", "hello", "nm just chillin u")
-- `interessant_centroid`: der Durchschnitt der Embeddings von ~550 inhaltsreichen Nachrichten (technische Fragen, Vertraulichkeiten, Philosophie)
+- `futile_centroid`: der Durchschnitt der Embeddings von ~683 trivialen Nachrichten ("lol", "ok", "hello", "nm just chillin u")
+- `interessant_centroid`: der Durchschnitt der Embeddings von ~678 inhaltsreichen Nachrichten (technische Fragen, Vertraulichkeiten, Philosophie)
 
 Wenn eine Nachricht eintrifft:
 
@@ -315,7 +315,7 @@ In der Praxis sehen die Klassifikations-Centroids im Embedding-Raum so aus. Jede
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Centroid-Klassifikation - interaktive 3D-Ansicht"></iframe>
 
-Zwei Beispiele werden in Rot angezeigt: "lol" (als belanglos klassifiziert) und "i feel sad today" (als interessant klassifiziert). "lol" fällt in die blaue Wolke der belanglosen Nachrichten, während "i feel sad today" auf der Seite der gelben Punkte liegt. Die Trennung ist selbst nach einer Reduktion auf 3 Dimensionen sichtbar (nur 15,6% der Gesamtvarianz erklärt). In 384 Dimensionen ist die Grenze weit deutlicher.
+Zwei Beispiele werden in Rot angezeigt: "lol" (als belanglos klassifiziert) und "i feel sad today" (als interessant klassifiziert). "lol" fällt in die blaue Wolke der belanglosen Nachrichten, während "i feel sad today" auf der Seite der gelben Punkte liegt. Die Trennung ist selbst nach einer Reduktion auf 3 Dimensionen sichtbar (nur 14,7% der Gesamtvarianz erklärt). In 384 Dimensionen ist die Grenze weit deutlicher.
 
 Der Centroid der Eingangsnachricht bewegt sich je nach ihrem Inhalt durch diesen Raum. Die BELANGLOS/INTERESSANT-Klassifikation besteht einfach darin, zu messen, welcher Centroid per Kosinus-Ähnlichkeit näher liegt. So kann man jede Nachricht als Punkt in einem mehrdimensionalen Raum darstellen, wobei jede Dimension einer semantischen Eigenschaft entspricht.
 

@@ -142,8 +142,8 @@ Sapphire adalah layanan yang paling menarik secara teknis. Ia adalah **middlewar
 
 Ada **dua centroid klasifikasi**:
 
-- `futile_centroid`: embedding rata-rata dari ~500 pesan sepele ("lol", "ok", "hello", "nm just chillin u")
-- `interesting_centroid`: embedding rata-rata dari ~550 pesan substansial (pertanyaan teknis, pengakuan, filosofi)
+- `futile_centroid`: embedding rata-rata dari ~683 pesan sepele ("lol", "ok", "hello", "nm just chillin u")
+- `interesting_centroid`: embedding rata-rata dari ~678 pesan substansial (pertanyaan teknis, pengakuan, filosofi)
 
 Ketika sebuah pesan masuk:
 
@@ -315,7 +315,7 @@ Dalam praktiknya, berikut adalah tampilan centroid klasifikasi dalam ruang embed
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Klasifikasi centroid - tampilan 3D interaktif"></iframe>
 
-Dua contoh ditampilkan dengan warna merah: "lol" (diklasifikasikan futile) dan "i feel sad today" (diklasifikasikan interesting). "lol" jatuh ke dalam awan biru pesan sia-sia, sementara "i feel sad today" berada di sisi titik-titik kuning. Pemisahan terlihat bahkan setelah direduksi menjadi 3 dimensi (hanya 15,6% dari total varian yang dijelaskan). Dalam 384 dimensi, batasnya jauh lebih tajam.
+Dua contoh ditampilkan dengan warna merah: "lol" (diklasifikasikan futile) dan "i feel sad today" (diklasifikasikan interesting). "lol" jatuh ke dalam awan biru pesan sia-sia, sementara "i feel sad today" berada di sisi titik-titik kuning. Pemisahan terlihat bahkan setelah direduksi menjadi 3 dimensi (hanya 14,7% dari total varian yang dijelaskan). Dalam 384 dimensi, batasnya jauh lebih tajam.
 
 Centroid dari pesan input bergerak melalui ruang ini tergantung pada isinya. Klasifikasi FUTILE/INTERESTING sederhananya hanya mengukur centroid mana yang lebih dekat dengan kemiripan kosinus. Ini memungkinkan kita merepresentasikan setiap pesan sebagai titik dalam ruang multi-dimensi, dengan setiap dimensi sesuai dengan properti semantik.
 
