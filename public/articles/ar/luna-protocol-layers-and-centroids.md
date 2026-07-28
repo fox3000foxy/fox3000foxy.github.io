@@ -142,18 +142,18 @@ emerald/src/behavior/
 
 توجد **مركزان للتصنيف**:
 
-- `futile_centroid`: متوسط تضمين ~683 رسالة تافهة ("lol"، "ok"، "hello"، "nm just chillin u")
+- `futile_centroid`: متوسط تضمين ~683 رسالة تافهة via k-means (k=10, seed=42) ("lol"، "ok"، "hello"، "nm just chillin u")
 - `interesting_centroid`: متوسط تضمين ~678 رسالة جوهرية (أسئلة تقنية، اعترافات، فلسفة)
 
 عندما تصل رسالة:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # 384-D vector of the message
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 

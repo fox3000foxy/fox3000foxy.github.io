@@ -142,18 +142,18 @@ Un **centroide** es un concepto simple: es el promedio de un conjunto de vectore
 
 Hay **dos centroides de clasificación**:
 
-- `futile_centroid`: el promedio de los embeddings de ~683 mensajes triviales ("lol", "ok", "hello", "nm just chillin u")
+- `futile_centroid`: el promedio de los embeddings de ~683 mensajes triviales via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
 - `interesante_centroid`: el promedio de los embeddings de ~678 mensajes sustanciales (preguntas técnicas, confidencias, filosofía)
 
 Cuando llega un mensaje:
 
 ```python
-def classify(text, embedder, futile_centroid, interesante_centroid):
-    emb = embedder.query_embed(text)          # vector 384-D del mensaje
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesante_centroid)
+def classify(text, embedder, futile_centroids, interesante_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesante_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESANTE" if diff > 0 else "FUTIL"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
@@ -311,7 +311,7 @@ El verdadero poder de los centroides es que convierten un problema de clasificac
 
 ### Visualización 3D de los centroides
 
-En la práctica, así es como se ven los centroides de clasificación en el espacio de embeddings. Cada punto es un mensaje de ejemplo, proyectado en 3D mediante PCA (las 384 dimensiones originales se reducen a 3 para la visualización). Los puntos azules son mensajes fútiles, los puntos amarillos son mensajes interesantes. Los dos grandes diamantes son los centroides calculados -- el promedio de cada grupo. Pase el ratón sobre un punto para ver el texto original del ejemplo.
+En la práctica, así es como se ven los centroides de clasificación en el espacio de embeddings. Cada punto es un mensaje de ejemplo, proyectado en 3D mediante PCA (las 384 dimensiones originales se reducen a 3 para la visualización). Los puntos azules son mensajes fútiles, los puntos amarillos son mensajes interesantes. Los **20 marcadores de diamante** son los centroides k-means (10 por clase) son los centroides calculados -- el promedio de cada grupo. Pase el ratón sobre un punto para ver el texto original del ejemplo.
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Clasificación por centroides - vista 3D interactiva"></iframe>
 

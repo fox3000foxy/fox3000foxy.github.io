@@ -142,18 +142,18 @@ Sapphire เป็นบริการที่น่าสนใจที่�
 
 มี **centroid สำหรับการจำแนกสองตัว**:
 
-- `futile_centroid`: embedding เฉลี่ยของข้อความไม่สำคัญประมาณ 500 ข้อความ ("lol", "ok", "hello", "nm just chillin u")
-- `interesting_centroid`: embedding เฉลี่ยของข้อความที่มีเนื้อหาสาระประมาณ 550 ข้อความ (คำถามทางเทคนิค การสารภาพ ปรัชญา)
+- `futile_centroid`: embedding เฉลี่ยของข้อความไม่สำคัญประมาณ 683 ข้อความ ("lol", "ok", "hello") via k-means (k=10, seed=42)
+- `interesting_centroid`: embedding เฉลี่ยของข้อความที่มีเนื้อหาสาระประมาณ 678 ข้อความ (เทคนิค, ส่วนตัว, ปรัชญา) via k-means (k=10, seed=42)
 
 เมื่อมีข้อความเข้ามา:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # เวกเตอร์ 384 มิติของข้อความ
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 

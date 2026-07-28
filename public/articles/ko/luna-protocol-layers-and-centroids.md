@@ -142,18 +142,18 @@ Sapphire는 기술적으로 가장 흥미로운 서비스다. Python과 FastAPI�
 
 **두 개의 분류 센트로이드**가 있다:
 
-- `futile_centroid`: 약 500개의 사소한 메시지("lol", "ok", "hello", "nm just chillin u")의 평균 임베딩
-- `interesting_centroid`: 약 550개의 실질적인 메시지(기술적 질문, 고백, 철학적 대화)의 평균 임베딩
+- `futile_centroid`: 약 683개의 사소한 메시지("lol", "ok", "hello") via k-means (k=10, seed=42)
+- `interesting_centroid`: 약 678개의 실질적인 메시지(기술, 개인, 철학) via k-means (k=10, seed=42)
 
 메시지가 들어오면:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # 메시지의 384차원 벡터
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
@@ -311,7 +311,7 @@ Discord에서 누군가 "i'm really sad today"라고 보냈을 때 실제로 일
 
 ### 3D 센트로이드 시각화
 
-실제로 임베딩 공간에서 분류 센트로이드가 어떻게 보이는지는 다음과 같다. 각 점은 PCA를 통해 3D로 투영된 예시 메시지다(원래 384차원이 시각화를 위해 3차원으로 축소되었다). 파란 점은 사소한(futile) 메시지, 노란 점은 흥미로운(interesting) 메시지다. 두 개의 큰 다이아몬드는 계산된 센트로이드 -- 각 그룹의 평균 -- 다. 점 위에 마우스를 올리면 예시의 원문을 볼 수 있다.
+실제로 임베딩 공간에서 분류 센트로이드가 어떻게 보이는지는 다음과 같다. 각 점은 PCA를 통해 3D로 투영된 예시 메시지다(원래 384차원이 시각화를 위해 3차원으로 축소되었다). 파란 점은 사소한(futile) 메시지, 노란 점은 흥미로운(interesting) 메시지다. **20개의 다이아몬드 마커**는 k-means 중심점입니다 (클래스당 10개)는 계산된 센트로이드 -- 각 그룹의 평균 -- 다. 점 위에 마우스를 올리면 예시의 원문을 볼 수 있다.
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="센트로이드 분류 - 인터랙티브 3D 뷰"></iframe>
 

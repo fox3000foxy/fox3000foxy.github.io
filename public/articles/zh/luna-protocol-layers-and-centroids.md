@@ -142,18 +142,18 @@ Sapphire 是技术上最有趣的服务。它是一个用 Python 和 FastAPI 编
 
 有**两个分类质心**：
 
-- `futile_centroid`：约 500 条琐碎消息（"lol"、"ok"、"hello"、"nm just chillin u"）的嵌入平均值
-- `interesting_centroid`：约 550 条有实质内容的消息（技术问题、心事倾诉、哲学讨论）的嵌入平均值
+- `futile_centroid`：约 683 条琐碎消息（"lol"、"ok"、"hello"） via k-means (k=10, seed=42)
+- `interesting_centroid`：约 678 条有实质内容的消息（技术、个人、哲学） via k-means (k=10, seed=42)
 
 当一条消息到来时：
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # 消息的 384 维向量
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 

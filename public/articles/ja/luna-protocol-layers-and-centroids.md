@@ -142,18 +142,18 @@ Sapphireは技術的に最も興味深いサービスだ。Python + FastAPIで�
 
 **2つの分類セントロイド**がある。
 
-- `futile_centroid`：約500件のありふれたメッセージ（"lol"、"ok"、"hello"、"nm just chillin u"）の埋め込み平均
-- `interesting_centroid`：約550件の中身のあるメッセージ（技術的な質問、打ち明け話、哲学）の埋め込み平均
+- `futile_centroid`：約683件のありふれたメッセージ（"lol"、"ok"、"hello"） via k-means (k=10, seed=42)
+- `interesting_centroid`：約678件の中身のあるメッセージ（技術、個人、哲学） via k-means (k=10, seed=42)
 
 メッセージが届くと：
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # メッセージの384次元ベクトル
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 

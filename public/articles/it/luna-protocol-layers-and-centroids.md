@@ -142,18 +142,18 @@ Un **centroide** è un concetto semplice: è la media di un insieme di vettori d
 
 Ci sono **due centroidi di classificazione**:
 
-- `futile_centroid`: la media degli embedding di ~683 messaggi banali ("lol", "ok", "hello", "nm just chillin u")
+- `futile_centroid`: la media degli embedding di ~683 messaggi banali via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
 - `interessante_centroid`: la media degli embedding di ~678 messaggi sostanziali (domande tecniche, confidenze, filosofia)
 
 Quando arriva un messaggio:
 
 ```python
-def classify(text, embedder, futile_centroid, interessante_centroid):
-    emb = embedder.query_embed(text)          # vettore 384-D del messaggio
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interessante_centroid)
+def classify(text, embedder, futile_centroids, interessante_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interessante_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESSANTE" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
@@ -311,7 +311,7 @@ Il vero potere dei centroidi è che trasformano un problema di classificazione i
 
 ### Visualizzazione 3D dei centroidi
 
-In pratica, ecco come appaiono i centroidi di classificazione nello spazio di embedding. Ogni punto è un messaggio di esempio, proiettato in 3D tramite PCA (le 384 dimensioni originali vengono ridotte a 3 per la visualizzazione). I punti blu sono messaggi futili, i punti gialli sono messaggi interessanti. I due grandi diamanti sono i centroidi calcolati -- la media di ciascun gruppo. Passa il mouse su un punto per vedere il testo originale dell'esempio.
+In pratica, ecco come appaiono i centroidi di classificazione nello spazio di embedding. Ogni punto è un messaggio di esempio, proiettato in 3D tramite PCA (le 384 dimensioni originali vengono ridotte a 3 per la visualizzazione). I punti blu sono messaggi futili, i punti gialli sono messaggi interessanti. I **20 marcatori a diamante** sono i centroidi k-means (10 per classe) sono i centroidi calcolati -- la media di ciascun gruppo. Passa il mouse su un punto per vedere il testo originale dell'esempio.
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Classificazione per centroidi - vista 3D interattiva"></iframe>
 

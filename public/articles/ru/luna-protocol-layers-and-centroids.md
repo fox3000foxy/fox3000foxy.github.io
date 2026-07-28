@@ -142,18 +142,18 @@ Sapphire -- технически самый интересный сервис. �
 
 Есть **два классификационных центроида**:
 
-- `futile_centroid`: среднее эмбеддингов ~683 тривиальных сообщений ("lol", "ok", "hello", "nm just chillin u")
+- `futile_centroid`: среднее эмбеддингов ~683 тривиальных сообщений via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
 - `interesting_centroid`: среднее эмбеддингов ~678 содержательных сообщений (технические вопросы, откровения, философия)
 
 Когда приходит сообщение:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # 384-мерный вектор сообщения
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 

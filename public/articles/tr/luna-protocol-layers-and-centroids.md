@@ -142,18 +142,18 @@ Bir **centroid**, basit bir kavramdır: bir dizi embedding vektörünün ortalam
 
 **İki sınıflandırma centroid'i** vardır:
 
-- `futile_centroid`: ~683 önemsiz mesajın ortalama embedding'i ("lol", "ok", "hello", "nm just chillin u")
+- `futile_centroid`: ~683 önemsiz mesajın ortalama embedding'i via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
 - `interesting_centroid`: ~678 içerikli mesajın ortalama embedding'i (teknik sorular, itiraflar, felsefe)
 
 Bir mesaj geldiğinde:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # 384-D vector of the message
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
@@ -311,7 +311,7 @@ Centroid'lerin gerçek gücü, bir sınıflandırma problemini bir **uzamsal mes
 
 ### 3B centroid görselleştirmesi
 
-Pratikte, sınıflandırma centroid'lerinin embedding uzayında nasıl göründüğü şöyle: her nokta, PCA aracılığıyla 3B'ye yansıtılmış bir örnek mesajdır (orijinal 384 boyut görselleştirme için 3'e indirgenmiştir). Mavi noktalar anlamsız mesajlardır, sarı noktalar ilginç mesajlardır. İki büyük elmas, hesaplanan centroid'lerdir -- her grubun ortalaması. Örneğin orijinal metnini görmek için bir noktanın üzerine gelin.
+Pratikte, sınıflandırma centroid'lerinin embedding uzayında nasıl göründüğü şöyle: her nokta, PCA aracılığıyla 3B'ye yansıtılmış bir örnek mesajdır (orijinal 384 boyut görselleştirme için 3'e indirgenmiştir). Mavi noktalar anlamsız mesajlardır, sarı noktalar ilginç mesajlardır. **20 elmas işaretleyici** k-means merkez noktalarıdır (sınıf başına 10), hesaplanan centroid'lerdir -- her grubun ortalaması. Örneğin orijinal metnini görmek için bir noktanın üzerine gelin.
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Centroid classification - interactive 3D view"></iframe>
 

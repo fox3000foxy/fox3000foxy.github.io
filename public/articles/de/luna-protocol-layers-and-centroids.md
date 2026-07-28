@@ -142,18 +142,18 @@ Ein **Centroid** ist ein einfaches Konzept: es ist der Durchschnitt einer Menge 
 
 Es gibt **zwei Klassifikations-Centroids**:
 
-- `futile_centroid`: der Durchschnitt der Embeddings von ~683 trivialen Nachrichten ("lol", "ok", "hello", "nm just chillin u")
-- `interessant_centroid`: der Durchschnitt der Embeddings von ~678 inhaltsreichen Nachrichten (technische Fragen, Vertraulichkeiten, Philosophie)
+- `futile_centroid`: der Durchschnitt der Embeddings von ~683 trivialen Nachrichten via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
+- `interessant_centroid`: der Durchschnitt der Embeddings von ~678 inhaltsreichen Nachrichten via k-means (k=10, seed=42) (technische Fragen, Vertraulichkeiten, Philosophie)
 
 Wenn eine Nachricht eintrifft:
 
 ```python
-def classify(text, embedder, futile_centroid, interessant_centroid):
-    emb = embedder.query_embed(text)          # 384-D-Vektor der Nachricht
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interessant_centroid)
+def classify(text, embedder, futile_centroids, interessant_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interessant_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESSANT" if diff > 0 else "BELANGLOS"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 

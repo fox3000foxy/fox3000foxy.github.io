@@ -142,18 +142,18 @@ Sapphire là dịch vụ thú vị nhất về mặt kỹ thuật. Nó là một
 
 Có **hai centroid phân loại**:
 
-- `futile_centroid`: embedding trung bình của khoảng 500 tin nhắn tầm thường ("lol", "ok", "hello", "nm just chillin u")
-- `interesting_centroid`: embedding trung bình của khoảng 550 tin nhắn thực chất (câu hỏi kỹ thuật, tâm sự, triết học)
+- `futile_centroid`: embedding trung bình của khoảng 683 tin nhắn tầm thường ("lol", "ok", "hello") via k-means (k=10, seed=42)
+- `interesting_centroid`: embedding trung bình của khoảng 678 tin nhắn thực chất (kỹ thuật, cá nhân, triết học) via k-means (k=10, seed=42)
 
 Khi một tin nhắn đến:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # Vector 384 chiều của tin nhắn
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 

@@ -142,18 +142,18 @@ Sapphire तकनीकी रूप से सबसे दिलचस्प 
 
 **दो वर्गीकरण सेंट्रॉइड** हैं:
 
-- `futile_centroid`: लगभग 500 तुच्छ संदेशों ("lol", "ok", "hello", "nm just chillin u") का औसत एम्बेडिंग
-- `interesting_centroid`: लगभग 550 सारगर्भित संदेशों (तकनीकी प्रश्न, स्वीकारोक्ति, दर्शन) का औसत एम्बेडिंग
+- `futile_centroid`: लगभग 683 तुच्छ संदेशों ("lol", "ok", "hello") via k-means (k=10, seed=42)
+- `interesting_centroid`: लगभग 678 सारगर्भित संदेशों (तकनीकी, व्यक्तिगत, दर्शन) via k-means (k=10, seed=42)
 
 जब कोई संदेश आता है:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # संदेश का 384-D वेक्टर
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
@@ -311,7 +311,7 @@ Luna मॉडल का फाइन-ट्यून भी दूसरे ल
 
 ### 3D सेंट्रॉइड विज़ुअलाइज़ेशन
 
-व्यवहार में, एम्बेडिंग स्पेस में वर्गीकरण सेंट्रॉइड ऐसे दिखते हैं। प्रत्येक बिंदु PCA के माध्यम से 3D में प्रक्षेपित एक उदाहरण संदेश है (मूल 384 आयामों को विज़ुअलाइज़ेशन के लिए 3 में घटाया गया है)। नीले बिंदु निरर्थक (futile) संदेश हैं, पीले बिंदु दिलचस्प (interesting) संदेश हैं। दो बड़े हीरे गणना किए गए सेंट्रॉइड हैं -- प्रत्येक समूह का औसत। उदाहरण का मूल टेक्स्ट देखने के लिए किसी बिंदु पर होवर करें।
+व्यवहार में, एम्बेडिंग स्पेस में वर्गीकरण सेंट्रॉइड ऐसे दिखते हैं। प्रत्येक बिंदु PCA के माध्यम से 3D में प्रक्षेपित एक उदाहरण संदेश है (मूल 384 आयामों को विज़ुअलाइज़ेशन के लिए 3 में घटाया गया है)। नीले बिंदु निरर्थक (futile) संदेश हैं, पीले बिंदु दिलचस्प (interesting) संदेश हैं। **20 हीरे के निशान (डायमंड मार्कर)** k-means सेंट्रॉइड (केंद्रक) हैं -- प्रति वर्ग 10 -- प्रत्येक समूह का औसत। उदाहरण का मूल टेक्स्ट देखने के लिए किसी बिंदु पर होवर करें।
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="सेंट्रॉइड वर्गीकरण - इंटरैक्टिव 3D दृश्य"></iframe>
 

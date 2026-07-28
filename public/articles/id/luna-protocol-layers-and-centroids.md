@@ -142,18 +142,18 @@ Sapphire adalah layanan yang paling menarik secara teknis. Ia adalah **middlewar
 
 Ada **dua centroid klasifikasi**:
 
-- `futile_centroid`: embedding rata-rata dari ~683 pesan sepele ("lol", "ok", "hello", "nm just chillin u")
+- `futile_centroid`: embedding rata-rata dari ~683 pesan sepele via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
 - `interesting_centroid`: embedding rata-rata dari ~678 pesan substansial (pertanyaan teknis, pengakuan, filosofi)
 
 Ketika sebuah pesan masuk:
 
 ```python
-def classify(text, embedder, futile_centroid, interesting_centroid):
-    emb = embedder.query_embed(text)          # Vektor 384-D dari pesan
-    sim_f = cosine_similarity(emb, futile_centroid)
-    sim_i = cosine_similarity(emb, interesting_centroid)
+def classify(text, embedder, futile_centroids, interesting_centroids):
+    emb = embedder.query_embed(text)                        # 384-D vector
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
+    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
     diff = sim_i - sim_f
-    label = "INTERESTING" if diff > 0 else "FUTILE"
+    label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
