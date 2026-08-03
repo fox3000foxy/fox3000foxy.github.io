@@ -45,17 +45,8 @@ jobs:
           VITE_BUILD_ID: ${{ github.sha }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Copy honeypot files to dist
-        run: |
-          cp www/.env.production dist/.env.production
-          cp www/.env.backup dist/.env.backup
-          cp www/.htaccess dist/.htaccess
-          cp www/.my.cnf dist/.my.cnf
-          cp -r www/.ssh dist/.ssh
-          cp www/wp-config.php.bak dist/wp-config.php.bak
-          cp www/phpinfo.php dist/phpinfo.php
-          cp -r www/backups dist/backups
-          cp -r www/etc dist/etc
+      - name: Copy honeypot www to dist
+        run: cp -r www/* dist/
 
       - name: Create CNAME
         run: bun run create-cname
