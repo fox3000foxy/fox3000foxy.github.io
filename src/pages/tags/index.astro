@@ -12,9 +12,11 @@ const normalized = (data as { slug?: string }[]).map((item) =>
   typeof item === "string" ? { slug: item } : item
 ) as ArticleMeta[];
 
+const HIDDEN_TAGS = new Set(["honeypot"]);
 const tagCounts = new Map<string, number>();
 for (const a of normalized) {
   for (const tag of a.tags ?? []) {
+    if (HIDDEN_TAGS.has(tag)) continue;
     tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
   }
 }

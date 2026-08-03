@@ -20,7 +20,8 @@ function normalize(data: unknown[]): ArticleMeta[] {
 
 const enArticles = normalize(allIndexes.en ?? []);
 
-const allTags = [...new Set(enArticles.flatMap((a) => a.tags ?? []))].sort();
+const HIDDEN_TAGS = new Set(["honeypot"]);
+const allTags = [...new Set(enArticles.flatMap((a) => a.tags ?? []).filter((t) => !HIDDEN_TAGS.has(t)))].sort();
 
 const articlesJson = JSON.stringify({
   en: enArticles,

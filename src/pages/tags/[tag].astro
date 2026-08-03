@@ -15,9 +15,11 @@ export async function getStaticPaths() {
   if (!fs.existsSync(indexPath)) return [];
   const index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
   const tags = new Set<string>();
+  const HIDDEN_TAGS = new Set(["honeypot"]);
   for (const entry of index) {
     if (entry.tags) {
       for (const tag of entry.tags) {
+        if (HIDDEN_TAGS.has(tag)) continue;
         tags.add(tag);
       }
     }
