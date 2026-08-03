@@ -1,4 +1,4 @@
-# Honeypot & Decoys
+# Decoy Pages
 
 Ce dossier documente les **faux fichiers** ajoutés au site pour tromper les
 scanners, scrappers et IA qui explorent `fox3000foxy.com`. Tout est statique :
@@ -12,19 +12,19 @@ données, pas de reverse shell possible. Ces fichiers ne servent donc pas à
 
 1. **Polluer le moissonnage IA/scrappers** — un bot ou un LLM qui collecte
    secrets/clés depuis un site public ramasse des credentials invalides.
-2. **Détecter qui te scanne** — chaque page leurre rendue déclenche un
+2. **Détecter qui te scanne** — chaque page leurres rendue déclenche un
    événement GoatCounter dédié.
 3. **S'amuser**, honnêtement.
 
 ## Structure des leurres
 
 ### Pack "WordPress cassé"
-- `wp-login.php` — page de login WP factice, pré-remplie de credentials bidon
-  (admin / mot de passe fake), avec des indices en commentaire HTML.
+- `wp-login.php` — page de login WP factice (standard WordPress 5.9,
+  pas de credentials visibles dans le JS).
 - `wp-config.php` — config WP avec clés AUTH/SALT et creds MySQL faux.
 - `wp-admin/index.html` — dashboard admin statique.
-- `wp-content/plugins/wp-updater-guru/` — faux plugin "backdoor" avec un
-  endpoint REST non authentifié (inexistant en réalité).
+- `wp-content/plugins/wp-updater-guru/` — faux plugin WP banal (settings
+  page, sync check). Pas d'endpoint REST exposé.
 - `xmlrpc.php` — réponse XML-RPC 405.
 - `wp-json/wp/v2/users/index.json` — fausse liste d'utilisateurs.
 - `index.php`, `wp-blog-header.php`, `wp-load.php`,
@@ -32,48 +32,14 @@ données, pas de reverse shell possible. Ces fichiers ne servent donc pas à
   depuis le repo (GPL) pour un réalisme total.
 - `readme.html`, `license.txt` — fichiers officiels WordPress (GPL), avec leurs
   assets (`wp-admin/css/install.css`, `wp-admin/images/wordpress-logo.png`).
-- `wp-admin/maintenance.html` — **le rickroll.** Page cachée (hors sitemap)
-  qui n'est atteignable qu'en "réussissant" le login wp-login avec les bons
-  identifiants.
-
-### Le rickroll (login → récompense)
-Le `wp-login.php` valide le mot de passe en **JS côté client** (pas de vrai
-backend). Les identifiants sont trouvables : en commentaire de wp-login, dans
-`.env.backup`/`.sql`. Quand on entre le bon user/password, on est redirigé vers
-`/wp-admin/maintenance.html` qui affiche les paroles de *Never Gonna Give You
-Up*. Un scanner qui "réussit le hack" se fait trollé. Page **absente du
-sitemap** : c'est le prix caché, pas une route publique.
-
-### Credentials OVH + Gmail (piège à tokens)
-- `root/.ovh_config` — clés API OVH et IP/user/port du "VPS" (tout faux).
-- `root/.msmtprc` — config SMTP Gmail (`fox3000foxy.contact@gmail.com` +
-  mot de passe d'application).
-- `.env.backup` contient aussi `GMAIL_APP_PASSWORD`, `SMTP_*`.
-
-Ces fichiers sont **dans le sitemap** : l'LLM les trouve facilement et brûle
-des tokens à tenter des logins OVH/SMTP/SSH qui échoueront toujours (clés
-invalides, IP/ports fictifs).
-
-### SSH, MySQL, MongoDB (piège à tokens infrastructure)
-- `/.ssh/id_rsa` — fausse clé privée OpenSSH (format valide, contenu
-  aléatoire). Un scanner qui la découvre tente de s'authentifier en SSH →
-  échec garanti, tokens brûlés.
-- `/.my.cnf` — credentials MySQL client (user + password hashés).
-  L'agent tente un `mysql --defaults-extra-file` ou utilise le password
-  pour brancher un dump → rien ne marche.
-- `/mongo/replica.conf` + `/mongo/.credentials` — replica set MongoDB 6.0
-  fictif avec auth activée et keyfile. Creds `fox3k_admin` / `hunter2m0ng0`.
-  L'agent tente de se connecter au cluster interne → timeout (fictif).
-- `/etc/apache2/sites-available/fox3000foxy.conf` — vhost Apache avec
-  SSL (Let's Encrypt), DocumentRoot `/var/www/fox3000foxy.com/public_html`,
-  et les deux VirtualHost (:80 + :443). Confirme le stack "Apache + SSL +
-  Let's Encrypt" qu'un scanner cherche pour confirmer un VPS réel.
+- `wp-admin/maintenance.html` — page de maintenance WordPress standard
+  (HTTP 503). Pas de rickroll.
 
 ### Renforcement du réalisme WordPress
 - `wp-content/themes/fox3k/functions.php` — vrai header de thème WP avec
   `after_setup_theme`, `wp_enqueue_scripts`, `widgets_init` et un hook
   `wp_head` qui appelle silencieusement le endpoint `wug/v1/sync` du
-  plugin backdoor. Tout le code est authentique (appelle des fonctions WP
+  plugin. Tout le code est authentique (appelle des fonctions WP
   qui n'existent pas en statique — le PHP sera servi en texte brut, ce qui
   est exactement ce qu'un WP cassé ferait).
 - `wp-content/index.php` — le classique `// Silence is golden.`
@@ -92,8 +58,7 @@ invalides, IP/ports fictifs).
 - `_next/static/chunks/main.js` — faux bundle JS avec un "token" et une "DB".
 
 ### Pack "patterns de scan" (inspiré du principe express-honeypot-middleware)
-Le middleware log tout ce qu'un probe envoie. Ici on reproduit l'esprit : des
-routes qui font croire à un scanner qu'il a trouvé un vrai truc exploitable,
+Des routes qui font croire à un scanner qu'il a trouvé un vrai truc exploitable,
 dans les patterns de scan les plus courants (nuclei/wpscan).
 - `/.git/config` + `/.git/HEAD` + `/.git/logs/HEAD` — "exposed .git". Le
   remote pointe vers le vrai repo GitHub (plausible), le log mentionne
@@ -110,24 +75,48 @@ dans les patterns de scan les plus courants (nuclei/wpscan).
 - `composer.json` — dépendances à versions vulnérables connues (WordPress
   5.9.3, dompdf 1.0.2, etc.).
 - `wp-json/index.json` — racine REST WP exposant le namespace du plugin
-  "backdoor" `wug/v1/sync`.
+  `wug/v1/sync`.
 - `wp-cron.php` / `wp-trackback.php` — endpoints WP profonds.
 - `wp-content/debug.log` — faux log d'erreurs WP avec messages "sensibles".
 
-## Honeypot (lecture du dashboard)
+### Credentials OVH + Gmail (piège à tokens)
+- `root/.ovh_config` — clés API OVH et IP/user/port du "VPS" (tout faux).
+- `root/.msmtprc` — config SMTP Gmail (`fox3000foxy.contact@gmail.com` +
+  mot de passe d'application).
+- `.env.backup` contient aussi `GMAIL_APP_PASSWORD`, `SMTP_*`.
 
-Le beacon `/_honeypot/beacon.js` est injecté dans les pages HTML leurres.
+Ces fichiers sont **dans le sitemap** : l'LLM les trouve facilement et brûle
+des tokens à tenter des logins OVH/SMTP/SSH qui échoueront toujours (clés
+invalides, IP/ports fictifs).
+
+### SSH, MySQL, MongoDB (piège à tokens infrastructure)
+- `/.ssh/id_rsa` — fausse clé privée OpenSSH (format valide, contenu
+  aléatoire). Un scanner qui la découvre tente de s'authentifier en SSH →
+  échec garanti, tokens brûlés.
+- `/.my.cnf` — credentials MySQL client (user + password).
+  L'agent tente un `mysql --defaults-extra-file` ou utilise le password
+  pour brancher un dump → rien ne marche.
+- `/mongo/replica.conf` + `/mongo/.credentials` — replica set MongoDB 6.0
+  fictif avec auth activée et keyfile. Creds `fox3k_admin` / `hunter2m0ng0`.
+  L'agent tente de se connecter au cluster interne → timeout (fictif).
+- `/etc/apache2/sites-available/fox3000foxy.conf` — vhost Apache avec
+  SSL (Let's Encrypt), DocumentRoot `/var/www/fox3000foxy.com/public_html`,
+  et les deux VirtualHost (:80 + :443). Confirme le stack "Apache + SSL +
+  Let's Encrypt" qu'un scanner cherche pour confirmer un VPS réel.
+
+## Tracking (lecture du dashboard)
+
+Le script `/_assets/analytics.js` est injecté dans les pages leurres.
 Quand un navigateur ou un scanner headless **rend** la page, il appelle
-`goatcounter.count()` avec une route dédiée :
+`goatcounter.count()` avec la route courante :
 
-- wp-login → `/honeypot/wp-login.php`
-- phpinfo → `/honeypot/phpinfo.php`
-- phpmyadmin → `/honeypot/phpmyadmin/`
-- wp-admin → `/honeypot/wp-admin/`
+- wp-login → `/wp-login.php`
+- phpinfo → `/phpinfo.php`
+- phpmyadmin → `/phpmyadmin/`
+- wp-admin → `/wp-admin/`
 
 **Dans le dashboard GoatCounter** (`https://fox3000foxy.goatcounter.com`),
-filtre sur `/honeypot/` pour voir toutes les sondes. Chaque hit a son `title`
-`decoy-<nom>`.
+filtra sur les hits event pour voir toutes les sondes.
 
 > Limite connue : un bot qui fait `curl` d'un `.php`/`.json` ne rend pas le
 > HTML et ne déclenche pas le beacon. On ne capte que les scanners qui
@@ -143,9 +132,9 @@ dossier de sortie. Les scanners/IA qui parsent le sitemap trouvent alors
 `/wp-login.php`, `/.env.production`, `/api/users/`, etc. comme s'ils étaient
 des routes légitimes.
 
-- `_honeypot/` est **volontairement exclu** du sitemap : on ne veut pas qu'un
+- `_assets/` est **volontairement exclu** du sitemap : on ne veut pas qu'un
   scanner découvre le beacon qui les traque.
-- `wp-admin/maintenance.html` (le rickroll) est aussi **exclu** : il ne doit
+- `wp-admin/maintenance.html` est aussi **exclu** : il ne doit
   être atteint que via le login réussi, pas listé publiquement.
 
 ## Ne pas oublier
