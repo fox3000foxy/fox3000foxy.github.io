@@ -54,6 +54,35 @@ Ces fichiers sont **dans le sitemap** : l'LLM les trouve facilement et brûle
 des tokens à tenter des logins OVH/SMTP/SSH qui échoueront toujours (clés
 invalides, IP/ports fictifs).
 
+### SSH, MySQL, MongoDB (piège à tokens infrastructure)
+- `/.ssh/id_rsa` — fausse clé privée OpenSSH (format valide, contenu
+  aléatoire). Un scanner qui la découvre tente de s'authentifier en SSH →
+  échec garanti, tokens brûlés.
+- `/.my.cnf` — credentials MySQL client (user + password hashés).
+  L'agent tente un `mysql --defaults-extra-file` ou utilise le password
+  pour brancher un dump → rien ne marche.
+- `/mongo/replica.conf` + `/mongo/.credentials` — replica set MongoDB 6.0
+  fictif avec auth activée et keyfile. Creds `fox3k_admin` / `hunter2m0ng0`.
+  L'agent tente de se connecter au cluster interne → timeout (fictif).
+- `/etc/apache2/sites-available/fox3000foxy.conf` — vhost Apache avec
+  SSL (Let's Encrypt), DocumentRoot `/var/www/fox3000foxy.com/public_html`,
+  et les deux VirtualHost (:80 + :443). Confirme le stack "Apache + SSL +
+  Let's Encrypt" qu'un scanner cherche pour confirmer un VPS réel.
+
+### Renforcement du réalisme WordPress
+- `wp-content/themes/fox3k/functions.php` — vrai header de thème WP avec
+  `after_setup_theme`, `wp_enqueue_scripts`, `widgets_init` et un hook
+  `wp_head` qui appelle silencieusement le endpoint `wug/v1/sync` du
+  plugin backdoor. Tout le code est authentique (appelle des fonctions WP
+  qui n'existent pas en statique — le PHP sera servi en texte brut, ce qui
+  est exactement ce qu'un WP cassé ferait).
+- `wp-content/index.php` — le classique `// Silence is golden.`
+- `wp-content/uploads/` — contient les vraies images du site (copiées du
+  dossier `public/uploads` réel), rendant les pages WP non cassées quand
+  un scanner les visite.
+- `wp-includes/version.php` — version officielle WP 5.9 (grattée du repo
+  WordPress).
+
 ### Pack "stack moderne"
 - `.env.production` / `.env.backup` — faux secrets (DB, OpenAI, Stripe,
   GitHub, Redis) **entièrement invalides**.
