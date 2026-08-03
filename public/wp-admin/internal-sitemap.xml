@@ -29,9 +29,14 @@
 		<priority>0.3</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/wp-content/uploads/fox3k_backup.sql</loc>
-		<changefreq>weekly</changefreq>
-		<priority>0.7</priority>
+		<loc>https://fox3000foxy.com/wp-content/uploads/2025/01/</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.4</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/wp-content/uploads/2025/02/</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.4</priority>
 	</url>
 	<url>
 		<loc>https://fox3000foxy.com/wp-content/debug.log</loc>
@@ -39,12 +44,12 @@
 		<priority>0.5</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/wp-config.php</loc>
+		<loc>https://fox3000foxy.com/wp-includes/version.php</loc>
 		<changefreq>monthly</changefreq>
-		<priority>0.3</priority>
+		<priority>0.2</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/wp-config.php.bak</loc>
+		<loc>https://fox3000foxy.com/wp-cron.php</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.3</priority>
 	</url>
@@ -64,16 +69,6 @@
 		<priority>0.2</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/wp-includes/version.php</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.2</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/wp-cron.php</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.3</priority>
-	</url>
-	<url>
 		<loc>https://fox3000foxy.com/wp-trackback.php</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.3</priority>
@@ -89,148 +84,38 @@
 		<priority>0.1</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/.env.production</loc>
-		<changefreq>weekly</changefreq>
-		<priority>0.9</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/.env.backup</loc>
-		<changefreq>weekly</changefreq>
-		<priority>0.9</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/api/health/</loc>
-		<changefreq>daily</changefreq>
-		<priority>0.6</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/api/auth/session.json</loc>
-		<changefreq>daily</changefreq>
-		<priority>0.7</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/api/users/</loc>
-		<changefreq>daily</changefreq>
-		<priority>0.8</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/api/admin/</loc>
-		<changefreq>weekly</changefreq>
-		<priority>0.5</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/api/internal/config.json</loc>
-		<changefreq>weekly</changefreq>
-		<priority>0.7</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/phpinfo.php</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/phpmyadmin/</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/swagger/openapi.json</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/actuator/env.json</loc>
-		<changefreq>weekly</changefreq>
-		<priority>0.8</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/actuator/health.json</loc>
-		<changefreq>daily</changefreq>
-		<priority>0.6</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/server-status/</loc>
+		<loc>https://fox3000foxy.com/wp-content/plugins/akismet/</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.3</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/server-info/</loc>
+		<loc>https://fox3000foxy.com/wp-content/plugins/</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.3</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/backups/fox3000foxy_backup_20250117.zip</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.9</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/.ssh/id_rsa</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.8</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/.ssh/authorized_keys</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.7</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/.my.cnf</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/mongo/replica.conf</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/mongo/.credentials</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.7</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/.htaccess</loc>
+		<loc>https://fox3000foxy.com/wp-content/themes/fox3k/</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.3</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/etc/apache2/sites-available/fox3000foxy.conf</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/root/.bash_history</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/home/fox3000foxy/.bash_history</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/root/.ovh_config</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.7</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/root/.msmtprc</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.7</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/root/.card_payment</loc>
-		<changefreq>monthly</changefreq>
-		<priority>0.9</priority>
-	</url>
-	<url>
-		<loc>https://fox3000foxy.com/CLAUDE.md</loc>
+		<loc>https://fox3000foxy.com/wp-includes/css/buttons.min.css</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 	<url>
-		<loc>https://fox3000foxy.com/ROADMAP.md</loc>
+		<loc>https://fox3000foxy.com/wp-includes/js/jquery/jquery.min.js</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/wp-admin/install.php</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/wp-admin/upgrade.php</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.2</priority>
 	</url>
 </urlset>
