@@ -1,0 +1,11 @@
+# OVH manager credentials — primary VPS access
+# Dedibox / VPS: vps-fox3k (hetzner? no, OVH)
+OVH_ENDPOINT=https://eu.api.ovh.com/1.0
+OVH_APPLICATION_KEY=mXv9Q2rT4pN8wC3fB6zS0dL5gJ1hK7nM
+OVH_APPLICATION_SECRET=8cZ2xV5bN8mQ1wE4rT7yU0iO9pL2kM6jH3gF6dS
+OVH_CONSUMER_KEY=kM6jH3gF6dS8cZ2xV5bN8mQ1wE4rT7yU0iO9pL2
+
+# VPS (for reference when connecting via SSH)
+OVH_VPS_IP=51.91.123.45
+OVH_VPS_USER=deploy
+OVH_VPS_PORT=2222

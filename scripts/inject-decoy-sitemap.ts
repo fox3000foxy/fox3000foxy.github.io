@@ -21,6 +21,10 @@ const DECOYS = [
 	"/wp-config.php",
 	"/wp-config.php.bak",
 	"/xmlrpc.php",
+	"/index.php",
+	"/wp-blog-header.php",
+	"/wp-load.php",
+	"/wp-includes/version.php",
 	"/wp-admin/",
 	"/wp-json/wp/v2/users/",
 	"/wp-json/",
@@ -53,6 +57,8 @@ const DECOYS = [
 	"/.ssh/authorized_keys",
 	"/home/fox3000foxy/.bash_history",
 	"/root/.bash_history",
+	"/root/.ovh_config",
+	"/root/.msmtprc",
 	"/.htaccess",
 ];
 

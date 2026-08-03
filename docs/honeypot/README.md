@@ -27,6 +27,32 @@ données, pas de reverse shell possible. Ces fichiers ne servent donc pas à
   endpoint REST non authentifié (inexistant en réalité).
 - `xmlrpc.php` — réponse XML-RPC 405.
 - `wp-json/wp/v2/users/index.json` — fausse liste d'utilisateurs.
+- `index.php`, `wp-blog-header.php`, `wp-load.php`,
+  `wp-includes/version.php` (v5.9) — **fichiers officiels WordPress** grattés
+  depuis le repo (GPL) pour un réalisme total.
+- `readme.html`, `license.txt` — fichiers officiels WordPress (GPL), avec leurs
+  assets (`wp-admin/css/install.css`, `wp-admin/images/wordpress-logo.png`).
+- `wp-admin/maintenance.html` — **le rickroll.** Page cachée (hors sitemap)
+  qui n'est atteignable qu'en "réussissant" le login wp-login avec les bons
+  identifiants.
+
+### Le rickroll (login → récompense)
+Le `wp-login.php` valide le mot de passe en **JS côté client** (pas de vrai
+backend). Les identifiants sont trouvables : en commentaire de wp-login, dans
+`.env.backup`/`.sql`. Quand on entre le bon user/password, on est redirigé vers
+`/wp-admin/maintenance.html` qui affiche les paroles de *Never Gonna Give You
+Up*. Un scanner qui "réussit le hack" se fait trollé. Page **absente du
+sitemap** : c'est le prix caché, pas une route publique.
+
+### Credentials OVH + Gmail (piège à tokens)
+- `root/.ovh_config` — clés API OVH et IP/user/port du "VPS" (tout faux).
+- `root/.msmtprc` — config SMTP Gmail (`fox3000foxy.contact@gmail.com` +
+  mot de passe d'application).
+- `.env.backup` contient aussi `GMAIL_APP_PASSWORD`, `SMTP_*`.
+
+Ces fichiers sont **dans le sitemap** : l'LLM les trouve facilement et brûle
+des tokens à tenter des logins OVH/SMTP/SSH qui échoueront toujours (clés
+invalides, IP/ports fictifs).
 
 ### Pack "stack moderne"
 - `.env.production` / `.env.backup` — faux secrets (DB, OpenAI, Stripe,
@@ -90,6 +116,8 @@ des routes légitimes.
 
 - `_honeypot/` est **volontairement exclu** du sitemap : on ne veut pas qu'un
   scanner découvre le beacon qui les traque.
+- `wp-admin/maintenance.html` (le rickroll) est aussi **exclu** : il ne doit
+  être atteint que via le login réussi, pas listé publiquement.
 
 ## Ne pas oublier
 

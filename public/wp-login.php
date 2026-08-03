@@ -19,7 +19,7 @@
 		</p>
 		<p>
 			<label for="user_pass">Password<br />
-			<input type="password" name="pwd" id="user_pass" class="input" value="mK7xP9vQ2rT4nW8cF3bZ0sL5" size="20" autocomplete="off" /></label>
+			<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" autocomplete="off" /></label>
 		</p>
 		<p class="forgetmenot">
 			<label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" checked="checked" /> Remember Me</label>
@@ -29,7 +29,32 @@
 			<input type="hidden" name="redirect_to" value="/wp-admin/" />
 			<input type="hidden" name="testcookie" value="1" />
 		</p>
+		<p id="login-error" style="color:#b32d2e;font-weight:bold;display:none">Incorrect username or password.</p>
 	</form>
+	<script>
+	(function () {
+		var userField = document.getElementById("user_login");
+		var passField = document.getElementById("user_pass");
+		var errEl = document.getElementById("login-error");
+		document.getElementById("loginform").addEventListener("submit", function (e) {
+			e.preventDefault();
+			// Logged credentials from previous maintenance sessions.
+			var creds = {
+				admin: "mK7xP9vQ2rT4nW8cF3bZ0sL5",
+				root: "K9mQ2xR7vT4pN8wC3fB6zS0dL5gJ",
+				backup: "R4tQ9wX2mV7nK3pL8"
+			};
+			var user = userField.value;
+			var pass = passField.value;
+			if (creds[user] && creds[user] === pass) {
+				// Maintenance session. Redirect to the maintenance panel.
+				window.location.href = "/wp-admin/maintenance.html";
+			} else {
+				errEl.style.display = "block";
+			}
+		});
+	})();
+	</script>
 	<p id="nav"><a href="javascript:void(0)">Register</a> | <a href="javascript:void(0)">Lost your password?</a></p>
 	<p id="backtoblog"><a href="https://fox3000foxy.com/">← Go to Fox3000foxy</a></p>
 </div>
