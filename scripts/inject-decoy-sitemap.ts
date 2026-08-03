@@ -15,22 +15,9 @@ const SITE = "https://fox3000foxy.com";
 // could find into the sitemap. That's the whole point: it looks like an
 // accident from a beginner who just dumped the build output.
 // We keep the analytics beacon folder (_assets) out of the sitemap.
+// WordPress-specific paths (wp-*, readme.html, license.txt) are excluded:
+// they only appear in the internal-sitemap.xml inside wp-admin/.
 const DECOYS = [
-	"/wp-config.php",
-	"/wp-config.php.bak",
-	"/xmlrpc.php",
-	"/index.php",
-	"/wp-blog-header.php",
-	"/wp-load.php",
-	"/wp-includes/version.php",
-	"/wp-admin/",
-	"/wp-json/",
-	"/wp-content/plugins/wp-updater-guru/",
-	"/wp-content/themes/fox3k/style.css",
-	"/wp-cron.php",
-	"/wp-trackback.php",
-	"/readme.html",
-	"/license.txt",
 	"/.env.production",
 	"/.env.backup",
 	"/api/health/",
@@ -42,8 +29,6 @@ const DECOYS = [
 	"/actuator/health.json",
 	"/server-status/",
 	"/server-info/",
-	"/wp-content/themes/fox3k/functions.php",
-	"/wp-content/index.php",
 	"/.htaccess",
 ];
 
