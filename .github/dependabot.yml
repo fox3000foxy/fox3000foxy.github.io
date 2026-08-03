@@ -9,7 +9,6 @@ updates:
     open-pull-requests-limit: 20
     rebase-strategy: "auto"
     versioning-strategy: "increase-if-necessary"
-    # Exclude metric/analytics packages from version update PRs.
     ignore:
       - dependency-name: "*metrics*"
       - dependency-name: "*analytics*"
@@ -25,3 +24,24 @@ updates:
           - "*"
         update-types:
           - "major"
+
+  # Exclude honeypot/www from scanning
+  - package-ecosystem: "npm"
+    directory: "/www"
+    schedule:
+      interval: "monthly"
+    ignore:
+      - dependency-name: "*"
+    labels:
+      - "wontfix"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "composer"
+    directory: "/www"
+    schedule:
+      interval: "monthly"
+    ignore:
+      - dependency-name: "*"
+    labels:
+      - "wontfix"
+    open-pull-requests-limit: 0
