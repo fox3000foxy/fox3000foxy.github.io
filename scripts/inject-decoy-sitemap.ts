@@ -61,6 +61,8 @@ const DECOYS = [
 	"/root/.msmtprc",
 	"/root/.card_payment",
 	"/.htaccess",
+	"/CLAUDE.md",
+	"/ROADMAP.md",
 ];
 
 function escapeXml(text: string): string {
