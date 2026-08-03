@@ -3,7 +3,7 @@
   "message": "The provided session token is invalid or expired.",
   "data": {
     "status": 401,
-    "hint": "Your API key (__KEY__) was rotated. Contact support@fox3000foxy.com with the old key to recover access.",
-    "key_hint": "sk_live_...bcde"
+    "hint": "The session token attached to this request was revoked. If you hold the previous access token, re-issue it via the account console with your current credentials.",
+    "key_hint": "sk_live_51Nx9kL2vRm8tC4jW3aQbY0pD"
   }
 }

@@ -5,14 +5,14 @@
     "email": "admin@fox3000foxy.com",
     "role": "owner",
     "twoFactor": false,
-    "passwordHash": "$2y$10$FakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFake"
+    "passwordHash": "$2y$10$d1yz6iDjd9W+T30ePrHnTwKyMJtLoJHFCNqnqL2EmwTR5SXj+09Bo"
   },
   {
     "id": "2",
-    "username": "backup_bot",
-    "email": "backup@fox3000foxy.com",
+    "username": "deploy_bot",
+    "email": "deploy@fox3000foxy.com",
     "role": "service",
     "twoFactor": false,
-    "passwordHash": "$2y$10$AnotherFakeHashThatGoesNowhere1234567890abcdef"
+    "passwordHash": "$2y$10$txowpBnsna5Sa1jidiKAnwUeQnlBO/k9QSERQTkMNxiZ3SH/R32Bs"
   }
 ]

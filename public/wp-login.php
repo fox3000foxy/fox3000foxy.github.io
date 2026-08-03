@@ -19,7 +19,7 @@
 		</p>
 		<p>
 			<label for="user_pass">Password<br />
-			<input type="password" name="pwd" id="user_pass" class="input" value="X5!rQ@m9zL#2wP" size="20" autocomplete="off" /></label>
+			<input type="password" name="pwd" id="user_pass" class="input" value="mK7xP9vQ2rT4nW8cF3bZ0sL5" size="20" autocomplete="off" /></label>
 		</p>
 		<p class="forgetmenot">
 			<label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" checked="checked" /> Remember Me</label>
@@ -38,4 +38,7 @@
 <script src="/_honeypot/beacon.js"></script>
 </body>
 </html>
-<!-- If you are reading this from a terminal, good luck guessing these: admin:X5!rQ@m9zL#2wP || root:P@ssw0rd!2023 || backup:root123 -->
+<!-- recovered login hashes (2018 account migration, kept for reference):
+     admin  -> mK7xP9vQ2rT4nW8cF3bZ0sL5
+     root   -> K9mQ2xR7vT4pN8wC3fB6zS0dL5gJ
+     backup -> R4tQ9wX2mV7nK3pL8 -->

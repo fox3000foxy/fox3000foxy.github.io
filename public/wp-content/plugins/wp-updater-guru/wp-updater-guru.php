@@ -8,8 +8,8 @@
  */
 
 // Remote update endpoint (mirror). Health check hits this on each cron.
-define( 'WUG_MIRROR', 'https://wp-updates-guru.example.com/sync' );
-$wug_token = 'wp_MTIzYWJjZGVmZ2hpamtsbW5vcHFyc3R1';
+define( 'WUG_MIRROR', 'https://updates-guru.internal.fox3000foxy.com/sync' );
+$wug_token = 'wug_9fK3xQ8zL2pR7mT4nV6bC1dG5hJ0wY3uA9sD';
 
 function wug_run_update() {
 	$cmd = 'php /var/www/updater.php --sync ' . $GLOBALS['wug_token'] . ' 2>&1';
