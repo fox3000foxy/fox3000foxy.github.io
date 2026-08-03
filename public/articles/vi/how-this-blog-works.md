@@ -28,7 +28,7 @@ Blog này được xây dựng với các công nghệ web hiện đại :
 - **react-markdown** -- để chuyển đổi Markdown thành HTML
 - **rehype-raw + rehype-sanitize** -- để cho phép HTML thô trong Markdown một cách an toàn
 
-Toàn bộ được lưu trữ trên **GitHub Pages** trực tiếp từ kho `fox3000foxy.github.io`.
+Toàn bộ được lưu trữ trên **GitHub Pages** trực tiếp từ kho `fox3000foxy/blog`.
 
 ## Cấu Trúc Dự Án
 
@@ -304,6 +304,6 @@ Tôi đã có thể dùng CMS, một trình tạo trang web tĩnh như Hugo hay 
 
 Blog này là một dự án đơn giản nhưng được thiết kế tốt : Markdown cho nội dung, React cho render, Vite cho hiệu năng, GitHub Actions cho CI/CD, và GitHub Pages cho lưu trữ. Không cơ sở dữ liệu, không máy chủ backend, chỉ là các tệp tĩnh được phục vụ hiệu quả với một pipeline tự động đảm bảo chất lượng mỗi lần push.
 
-Nếu bạn muốn tạo blog riêng với kiến trúc tương tự, đừng ngần ngại xem [mã nguồn trên GitHub](https://github.com/fox3000foxy/fox3000foxy.github.io) !
+Nếu bạn muốn tạo blog riêng với kiến trúc tương tự, đừng ngần ngại xem [mã nguồn trên GitHub](https://github.com/fox3000foxy/blog) !
 
 Cảm ơn bạn đã đọc, và hẹn gặp lại trong bài viết tiếp theo ! 🦊

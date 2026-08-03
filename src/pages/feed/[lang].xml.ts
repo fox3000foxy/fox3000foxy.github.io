@@ -107,7 +107,7 @@ ${tagXml}    </item>`;
     <lastBuildDate>${now}</lastBuildDate>
     <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
     <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
-    <generator>Astro v7</generator>
+    <generator>WordPress 5.9.3</generator>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <image>
       <url>${siteUrl}/og/home.png</url>

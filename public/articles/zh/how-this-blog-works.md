@@ -28,7 +28,7 @@ author_sig: "Npao7ZA4M+mh3BW8vW3eqIAzTRE43Y8x6O7Y7UaAnFlsXxcptXIYm+PTPkAkueImJw8
 - **react-markdown** -- 将 Markdown 转换为 HTML
 - **rehype-raw + rehype-sanitize** -- 在 Markdown 中安全使用原始 HTML
 
-一切托管在 **GitHub Pages** 上，直接从 `fox3000foxy.github.io` 仓库部署。
+一切托管在 **GitHub Pages** 上，直接从 `fox3000foxy/blog` 仓库部署。
 
 ## 项目结构
 
@@ -304,6 +304,6 @@ Vite 生成经过压缩和优化的文件，并自动进行代码分割。最终
 
 这个博客虽然简单，但经过精心设计：Markdown 负责内容，React 负责渲染，Vite 负责性能，GitHub Actions 负责 CI/CD，GitHub Pages 负责托管。没有数据库，没有后端服务器，只有高效提供的静态文件，以及每次推送时保证质量的自动化流水线。
 
-如果你想创建类似架构的博客，欢迎查看 [GitHub 上的源代码](https://github.com/fox3000foxy/fox3000foxy.github.io)！
+如果你想创建类似架构的博客，欢迎查看 [GitHub 上的源代码](https://github.com/fox3000foxy/blog)！
 
 感谢阅读，下篇文章见！🦊

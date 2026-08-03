@@ -37,7 +37,7 @@ export async function fetchRepos(): Promise<Repo[]> {
 	}
 	const all: Repo[] = (await res.json()) as Repo[];
 	cachedRepos = all
-		.filter((r) => !r.fork)
+		.filter((r) => !r.fork && r.name !== "fox3000foxy.github.io")
 		.map((r) => ({
 			...r,
 			owner:

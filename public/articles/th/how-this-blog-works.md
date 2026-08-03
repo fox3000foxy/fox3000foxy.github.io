@@ -29,7 +29,7 @@ author_sig: "c4vOoezKD8JX8PHumoaaTPfSEu89y6dykvfq0VTSjSqD/pgzgDGTqyg7bj3lS8eAVGD
 - **react-markdown** -- สำหรับแปลง Markdown เป็น HTML
 - **rehype-raw + rehype-sanitize** -- สำหรับอนุญาต HTML ดิบใน Markdown อย่างปลอดภัย
 
-ทั้งหมดโฮสต์บน **GitHub Pages** โดยตรงจาก repository `fox3000foxy.github.io`
+ทั้งหมดโฮสต์บน **GitHub Pages** โดยตรงจาก repository `fox3000foxy/blog`
 
 ## โครงสร้างโปรเจกต์
 
@@ -305,6 +305,6 @@ Vite สร้างไฟล์ที่ minified และปรับแต�
 
 บล็อกนี้เป็นโปรเจกต์ที่เรียบง่ายแต่ออกแบบมาอย่างดี: Markdown สำหรับเนื้อหา, React สำหรับการเรนเดอร์, Vite เพื่อประสิทธิภาพ, GitHub Actions สำหรับ CI/CD, และ GitHub Pages สำหรับโฮสต์ ไม่มีฐานข้อมูล, ไม่มีเซิร์ฟเวอร์ backend, แค่ไฟล์ static ที่ให้บริการอย่างมีประสิทธิภาพด้วย pipeline อัตโนมัติที่รับประกันคุณภาพทุกครั้งที่มีการ push
 
-ถ้าคุณต้องการสร้างบล็อกของคุณเองด้วยสถาปัตยกรรมที่คล้ายกัน อย่าลังเลที่จะดู[ซอร์สโค้ดบน GitHub](https://github.com/fox3000foxy/fox3000foxy.github.io) !
+ถ้าคุณต้องการสร้างบล็อกของคุณเองด้วยสถาปัตยกรรมที่คล้ายกัน อย่าลังเลที่จะดู[ซอร์สโค้ดบน GitHub](https://github.com/fox3000foxy/blog) !
 
 ขอบคุณที่อ่าน แล้วพบกันในบทความหน้าครับ ! 🦊
