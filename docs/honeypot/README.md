@@ -129,13 +129,36 @@ ajoute les URLs leurres à la fin de `sitemap-0.xml` après le build. L'idée :
 ces fichiers vivent dans `public/` mais ne sont pas de vraies pages Astro, donc
 ils "fuient" naturellement dans le sitemap — comme un accident de glob sur le
 dossier de sortie. Les scanners/IA qui parsent le sitemap trouvent alors
-`/wp-login.php`, `/.env.production`, `/api/users/`, etc. comme s'ils étaient
-des routes légitimes.
+des routes légitimes comme `/wp-admin/`, `/.env.production`, `/api/users/`, etc.
+
+Certains leurres **ne sont pas dans le sitemap** pour ne pas donner l'impression
+qu'ils ont été placés délibérément. Un attaquant qui les découvre doit croire
+qu'il a trouvé une vraie faille, pas un piège. Ces fichiers ne sont listés
+nulle part — il faut les trouver par probing direct (nuclei, wpscan, etc.).
+
+**Exclus du sitemap** (retrouvés par le premier audit agent) :
+- `phpinfo.php`, `/.ssh/id_rsa`, `/.ssh/authorized_keys`
+- `/backups/fox3000foxy_backup_20250117.zip`
+- `/actuator/env.json`, `/wp-json/wp/v2/users/`
+- `/wp-login.php`, `/.my.cnf`, `/mongo/replica.conf`, `/mongo/.credentials`
+- `/home/fox3000foxy/.bash_history`, `/root/.bash_history`
+- `/root/.ovh_config`, `/root/.msmtprc`, `/root/.card_payment`
+- `/etc/apache2/sites-available/fox3000foxy.conf`
+- `/wp-content/uploads/fox3k_backup.sql`, `/wp-content/debug.log`
+- `/_next/static/chunks/main.js`, `/composer.json`, `/package.json`
+- `/swagger/openapi.json`, `/CLAUDE.md`, `/ROADMAP.md`
+
+**Toujours dans le sitemap** (reconnaissables commeWP mais pas flaggées comme
+"honeypot" par les agents) :
+- `wp-admin/`, `wp-json/`, `wp-config.php`, `wp-config.php.bak`
+- `.env.production`, `.env.backup`
+- `api/health/`, `api/auth/session.json`, `api/users/`, `api/admin/`, `api/internal/config.json`
+- `phpmyadmin/`, `actuator/health.json`, `server-status/`, `server-info/`
+- `wp-content/plugins/wp-updater-guru/`, `wp-content/themes/fox3k/style.css`
+- etc.
 
 - `_assets/` est **volontairement exclu** du sitemap : on ne veut pas qu'un
   scanner découvre le beacon qui les traque.
-- `wp-admin/maintenance.html` est aussi **exclu** : il ne doit
-  être atteint que via le login réussi, pas listé publiquement.
 
 ## Ne pas oublier
 

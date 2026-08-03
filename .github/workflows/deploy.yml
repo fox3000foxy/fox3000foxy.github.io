@@ -40,7 +40,7 @@ jobs:
         run: python3 scripts/check-lang-contamination.py --fail-on-error
 
       - name: Build
-        run: bun run build
+        run: bun run build:ci
         env:
           VITE_BUILD_ID: ${{ github.sha }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

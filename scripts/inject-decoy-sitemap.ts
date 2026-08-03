@@ -14,10 +14,8 @@ const SITE = "https://fox3000foxy.com";
 // The "site generator" (a very naive glob over dist/) swept every file it
 // could find into the sitemap. That's the whole point: it looks like an
 // accident from a beginner who just dumped the build output.
-// The one thing we deliberately keep OUT is the analytics beacon folder
-// (_assets) — we don't want scanners discovering the tracker.
+// We keep the analytics beacon folder (_assets) out of the sitemap.
 const DECOYS = [
-	"/wp-login.php",
 	"/wp-config.php",
 	"/wp-config.php.bak",
 	"/xmlrpc.php",
@@ -26,18 +24,13 @@ const DECOYS = [
 	"/wp-load.php",
 	"/wp-includes/version.php",
 	"/wp-admin/",
-	"/wp-json/wp/v2/users/",
 	"/wp-json/",
 	"/wp-content/plugins/wp-updater-guru/",
 	"/wp-content/themes/fox3k/style.css",
-	"/wp-content/uploads/fox3k_backup.sql",
-	"/wp-content/debug.log",
 	"/wp-cron.php",
 	"/wp-trackback.php",
 	"/readme.html",
 	"/license.txt",
-	"/package.json",
-	"/composer.json",
 	"/.env.production",
 	"/.env.backup",
 	"/api/health/",
@@ -45,31 +38,13 @@ const DECOYS = [
 	"/api/users/",
 	"/api/admin/",
 	"/api/internal/config.json",
-	"/_next/static/chunks/main.js",
-	"/phpinfo.php",
 	"/phpmyadmin/",
-	"/swagger/openapi.json",
-	"/actuator/env.json",
 	"/actuator/health.json",
 	"/server-status/",
 	"/server-info/",
-	"/backups/fox3000foxy_backup_20250117.zip",
-	"/.ssh/authorized_keys",
-	"/.ssh/id_rsa",
-	"/.my.cnf",
-	"/mongo/replica.conf",
-	"/mongo/.credentials",
-	"/etc/apache2/sites-available/fox3000foxy.conf",
-	"/home/fox3000foxy/.bash_history",
-	"/root/.bash_history",
-	"/root/.ovh_config",
-	"/root/.msmtprc",
-	"/root/.card_payment",
 	"/wp-content/themes/fox3k/functions.php",
 	"/wp-content/index.php",
 	"/.htaccess",
-	"/CLAUDE.md",
-	"/ROADMAP.md",
 ];
 
 function escapeXml(text: string): string {
