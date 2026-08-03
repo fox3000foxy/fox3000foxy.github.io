@@ -46,7 +46,7 @@ Parfois j'écris des paquets npm, comme [fetch-tor-proxy](https://www.npmjs.com/
 
 NB 2 : En vrai je commence à avoir beaucoup de dépôts publics et privés. Le weekend du 11/07 j'ai fait un énorme tri et pas mal de mes repos ont été passés en public et archivés. J'ai 194 repos je sais pas si vous vous rendez compte, mais c'est beaucoup. J'ai 132 repos publics et donc 62 repos privés. Je vais probablement en faire un article de blog pour vous montrer mes projets. Mais j'en ai déjà fait sur ceux qui m'ont amusé le plus et que j'ai trouvé les plus intéressants.
 
-Tu peux découvrir mes projets sur la [page Projets](https://fox3000foxy.github.io/projects) et sur mon [profil GitHub](https://github.com/fox3000foxy)
+Tu peux découvrir mes projets sur la [page Projets](/projects) et sur mon [profil GitHub](https://github.com/fox3000foxy)
 
 ## Je travaille pour
 
