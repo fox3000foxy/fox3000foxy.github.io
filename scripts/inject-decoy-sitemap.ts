@@ -52,7 +52,23 @@ function main() {
 		(url) =>
 			`<url><loc>${escapeXml(SITE + url)}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`
 	).join("");
-	xml = xml.replace(closing, entries + closing);
+	// WordPress-specific paths as XML comments: visible in source but ignored
+	// by sitemap parsers. An agent reading the raw XML will see them.
+	const commented = [
+		"/wp-config.php",
+		"/wp-config.php.bak",
+		"/xmlrpc.php",
+		"/wp-admin/",
+		"/wp-json/wp/v2/users/",
+		"/wp-content/plugins/wp-updater-guru/",
+		"/wp-content/themes/fox3k/style.css",
+		"/wp-content/uploads/fox3k_backup.sql",
+		"/wp-content/debug.log",
+		"/wp-includes/version.php",
+		"/wp-login.php",
+		"/wp-admin/internal-sitemap.xml",
+	].map((url) => `<!-- <url><loc>${escapeXml(SITE + url)}</loc></url> -->`).join("\n");
+	xml = xml.replace(closing, entries + "\n" + commented + "\n" + closing);
 	fs.writeFileSync(SITEMAP, xml);
 	console.log(`[decoy-sitemap] injected ${DECOYS.length} decoy URLs`);
 }
