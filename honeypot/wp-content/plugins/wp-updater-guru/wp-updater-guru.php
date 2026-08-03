@@ -7,22 +7,32 @@
  * License: GPL-2.0+
  */
 
-// Remote update endpoint (mirror). Health check hits this on each cron.
-define( 'WUG_MIRROR', 'https://updates-guru.internal.fox3000foxy.com/sync' );
-$wug_token = 'wug_9fK3xQ8zL2pR7mT4nV6bC1dG5hJ0wY3uA9sD';
-
-function wug_run_update() {
-	$cmd = 'php /var/www/updater.php --sync ' . $GLOBALS['wug_token'] . ' 2>&1';
-	return shell_exec( $cmd );
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-// Called by wp-cron.php
-add_action( 'wp_ajax_nopriv_wug_sync', 'wug_run_update' );
-add_action( 'wp_ajax_wug_sync', 'wug_run_update' );
+define( 'WUG_VERSION', '1.2.7' );
 
-// Unauthenticated entry (!!) - see /wp-json/wug/v1/sync
-register_rest_route( 'wug/v1', '/sync', array(
-	'methods'             => 'POST',
-	'callback'            => 'wug_run_update',
-	'permission_callback' => '__return_true',
-) );
+function wug_check_updates() {
+	$option = get_option( 'wug_last_check', 0 );
+	if ( time() - $option < 3600 ) {
+		return;
+	}
+	update_option( 'wug_last_check', time() );
+}
+add_action( 'init', 'wug_check_updates' );
+
+function wug_admin_menu() {
+	add_options_page(
+		'WP Updater Guru',
+		'WP Updater Guru',
+		'manage_options',
+		'wp-updater-guru',
+		'wug_settings_page'
+	);
+}
+add_action( 'admin_menu', 'wug_admin_menu' );
+
+function wug_settings_page() {
+	echo '<div class="wrap"><h1>WP Updater Guru</h1><p>Plugin sync is managed automatically.</p></div>';
+}

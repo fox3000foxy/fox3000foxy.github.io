@@ -40,8 +40,7 @@
 <tr><th>DB_HOST</th><td>localhost</td></tr>
 <tr><th>DOCUMENT_ROOT</th><td>/var/www/fox3000foxy.com/public_html</td></tr>
 </table>
-<script>window.__DECOY_NAME="phpinfo";</script>
 <script async src="//gc.zgo.at/count.js" data-goatcounter="https://fox3000foxy.goatcounter.com/count"></script>
-<script src="/_honeypot/beacon.js"></script>
+<script src="/_assets/analytics.js"></script>
 </body>
 </html>
