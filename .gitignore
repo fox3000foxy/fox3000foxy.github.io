@@ -28,13 +28,13 @@ public/.git/
 
 # Generated at build time
 public/articles/*/index.json
-public/.ssh/
-public/.my.cnf
-public/etc/
-public/mongo/
-public/wp-content/uploads/
-public/wp-content/themes/
-public/wp-content/index.php
+# public/.ssh/
+# public/.my.cnf
+# public/etc/
+# public/mongo/
+# public/wp-content/uploads/
+# public/wp-content/themes/
+# public/wp-content/index.php
 
 # Internal
 ROADMAP.md
