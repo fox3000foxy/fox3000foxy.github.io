@@ -1,0 +1,12 @@
+{
+  "internal": true,
+  "baseUrl": "http://10.0.0.7:8080",
+  "serviceAccount": "svc-fox3k@internal",
+  "healthSecret": "int-9dKf2mPqR",
+  "endpoints": {
+    "metrics": "/internal/metrics",
+    "prometheus": ":9090",
+    "registry": "registry.internal:5000"
+  },
+  "note": "Internal services. Do not expose publicly."
+}

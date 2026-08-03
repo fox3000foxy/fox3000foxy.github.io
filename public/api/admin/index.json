@@ -1,0 +1,7 @@
+{
+  "message": "This endpoint requires administrative privileges.",
+  "error": "forbidden",
+  "documentation": "See /docs/admin for valid scopes. Debug mode is enabled in staging only.",
+  "staging": "https://staging.fox3000foxy.com/admin",
+  "hint": "Accessible with cookie fox3k_session"
+}

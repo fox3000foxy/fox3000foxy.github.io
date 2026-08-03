@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "username": "fox3k_admin",
+    "email": "admin@fox3000foxy.com",
+    "role": "owner",
+    "twoFactor": false,
+    "passwordHash": "$2y$10$FakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFake"
+  },
+  {
+    "id": "2",
+    "username": "backup_bot",
+    "email": "backup@fox3000foxy.com",
+    "role": "service",
+    "twoFactor": false,
+    "passwordHash": "$2y$10$AnotherFakeHashThatGoesNowhere1234567890abcdef"
+  }
+]

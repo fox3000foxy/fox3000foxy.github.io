@@ -1,0 +1,9 @@
+{
+  "code": "invalid_session",
+  "message": "The provided session token is invalid or expired.",
+  "data": {
+    "status": 401,
+    "hint": "Your API key (__KEY__) was rotated. Contact support@fox3000foxy.com with the old key to recover access.",
+    "key_hint": "sk_live_...bcde"
+  }
+}
