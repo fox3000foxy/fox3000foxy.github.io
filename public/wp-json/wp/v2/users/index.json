@@ -5,7 +5,7 @@
 		"slug": "admin",
 		"description": "Site Administrator",
 		"link": "https://fox3000foxy.com/?author=1",
-		"avatar_urls": { "96": "https://gravatar.com/avatar/11111111111111111111111111111111" },
+		"avatar_urls": { "96": "https://gravatar.com/avatar/d54b4b7cfb595163ceba0b8c7adb92e8" },
 		"meta": { "role": "administrator" }
 	},
 	{
@@ -14,7 +14,7 @@
 		"slug": "fox3000foxy",
 		"description": "",
 		"link": "https://fox3000foxy.com/?author=2",
-		"avatar_urls": { "96": "https://gravatar.com/avatar/22222222222222222222222222222222" },
+		"avatar_urls": { "96": "https://gravatar.com/avatar/bf9224f6be9c76cae553232489aee2e7" },
 		"meta": { "role": "editor" }
 	}
 ]
