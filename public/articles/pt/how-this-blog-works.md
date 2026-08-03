@@ -29,7 +29,6 @@ Este blog é construído com tecnologias web modernas:
 - **react-markdown** -- para transformar Markdown em HTML
 - **rehype-raw + rehype-sanitize** -- para permitir HTML bruto no Markdown com segurança
 
-Tudo está hospedado no **GitHub Pages** diretamente do repositório `fox3000foxy/blog`.
 
 ## Estrutura do Projeto
 
@@ -305,6 +304,5 @@ Eu poderia ter usado um CMS, um gerador de site estático como Hugo ou Jekyll, o
 
 Este blog é um projeto simples, mas bem pensado: Markdown para o conteúdo, React para a renderização, Vite para performance, GitHub Actions para CI/CD, e GitHub Pages para hospedagem. Sem banco de dados, sem servidor backend, apenas arquivos estáticos servidos eficientemente com um pipeline automatizado que garante a qualidade a cada push.
 
-Se você quiser criar seu próprio blog com uma arquitetura similar, não hesite em dar uma olhada no [código fonte no GitHub](https://github.com/fox3000foxy/blog)!
 
 Obrigado por ler, e até o próximo artigo! 🦊

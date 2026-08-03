@@ -29,7 +29,6 @@ author_sig: "W703KA8QuA9CI9wHdV0vyRtLexIf/qYY77qeRtwuopJ8J9NhosrrjqiLBOiZ+CsLoir
 - **react-markdown** -- لتحويل Markdown إلى HTML
 - **rehype-raw + rehype-sanitize** -- للسماح بـ HTML الخام داخل Markdown بأمان
 
-كل هذا مستضاف على **GitHub Pages** مباشرة من المستودع `fox3000foxy/blog`.
 
 ## هيكل المشروع
 
@@ -305,6 +304,5 @@ Vite ينتج ملفات مصغرة ومحسنة مع تقسيم تلقائي ل
 
 هذه المدونة مشروع بسيط ولكنه مدروس جيداً: Markdown للمحتوى، React للعرض، Vite للأداء، GitHub Actions لـ CI/CD، و GitHub Pages للاستضافة. لا قاعدة بيانات، لا خادم طرف خلفي، مجرد ملفات ثابتة تُخدم بكفاءة مع خط أنابيب آلي يضمن الجودة عند كل push.
 
-إذا كنت تريد إنشاء مدونتك الخاصة ببنية مشابهة، فلا تتردد في إلقاء نظرة على [الكود المصدري على GitHub](https://github.com/fox3000foxy/blog)!
 
 شكراً للقراءة، وإلى اللقاء في المقال القادم! 🦊

@@ -28,7 +28,6 @@ author_sig: "DIaxBZzW9Bb6joqCaDxss0S7FY0QtiOeP+UPEBzqOKrQdkFVEfrxb2rrdrguro4IB+1
 - **react-markdown** -- Markdown을 HTML로 변환
 - **rehype-raw + rehype-sanitize** -- 보안을 유지하면서 Markdown에서 원시 HTML 허용
 
-모든 건 **GitHub Pages**에서 `fox3000foxy/blog` 저장소에서 직접 호스팅되고 있어.
 
 ## 프로젝트 구조
 
@@ -303,6 +302,5 @@ CMS, Hugo나 Jekyll 같은 정적 사이트 생성기, 또는 Next.js를 사용�
 
 이 블로그는 단순하지만 잘 생각된 프로젝트야: 콘텐츠는 Markdown, 렌더링은 React, 성능은 Vite, CI/CD는 GitHub Actions, 호스팅은 GitHub Pages. 데이터베이스도, 백엔드 서버도 없이, 자동화된 파이프라인이 모든 푸시에서 품질을 보장하면서 효율적으로 제공되는 정적 파일일 뿐이야.
 
-비슷한 아키텍처로 자신만의 블로그를 만들고 싶다면, [GitHub의 소스 코드](https://github.com/fox3000foxy/blog)를 확인해 봐!
 
 읽어줘서 고마워, 다음 글에서 보자! 🦊

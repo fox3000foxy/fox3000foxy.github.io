@@ -28,7 +28,6 @@ author_sig: "TMBJPDUAu4nee8EXyFktYmGmj+xgUbmp7hbjUAQ53T3ANmSh4dJIJsEYguf3QnEY+vW
 - **react-markdown** -- MarkdownをHTMLに変換
 - **rehype-raw + rehype-sanitize** -- Markdown内で生のHTMLを安全に許可
 
-すべては**GitHub Pages**でホストされていて、`fox3000foxy/blog`リポジトリから直接配信されている。
 
 ## プロジェクト構成
 
@@ -304,6 +303,5 @@ CMSやHugo、Jekyllのような静的サイトジェネレーター、Next.jsを
 
 このブログはシンプルだがよく考え抜かれたプロジェクトだ：コンテンツにMarkdown、レンダリングにReact、パフォーマンスにVite、CI/CDにGitHub Actions、ホスティングにGitHub Pages。データベースもバックエンドサーバーもなく、自動化パイプラインがあらゆるプッシュで品質を確保しながら、効率的に提供される静的ファイルだけだ。
 
-同じようなアーキテクチャで自分のブログを作りたければ、[GitHubのソースコード](https://github.com/fox3000foxy/blog)をチェックしてみてね！
 
 読んでくれてありがとう、次の記事で会おう！🦊

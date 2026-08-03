@@ -29,7 +29,6 @@ Bu blog, modern web teknolojileriyle inşa edildi:
 - **react-markdown** -- Markdown'ı HTML'ye dönüştürmek için
 - **rehype-raw + rehype-sanitize** -- Markdown'da ham HTML'e izin verirken güvenli kalmak için
 
-Her şey **GitHub Pages** üzerinde doğrudan `fox3000foxy/blog` reposundan barındırılıyor.
 
 ## Proje Yapısı
 
@@ -304,6 +303,5 @@ Bir CMS, Hugo veya Jekyll gibi bir statik site oluşturucu, hatta Next.js kullan
 
 Bu blog basit ama iyi düşünülmüş bir proje: içerik için Markdown, işleme için React, performans için Vite, CI/CD için GitHub Actions ve barındırma için GitHub Pages. Veritabanı yok, arka uç sunucusu yok, sadece her push'ta kaliteyi sağlayan otomatik bir pipeline ile verimli bir şekilde sunulan statik dosyalar.
 
-Eğer benzer bir mimariyle kendi blogunu oluşturmak istersen, [GitHub'daki kaynak koda](https://github.com/fox3000foxy/blog) göz atmaktan çekinme!
 
 Okuduğun için teşekkürler, bir sonraki makalede görüşmek üzere! 🦊
