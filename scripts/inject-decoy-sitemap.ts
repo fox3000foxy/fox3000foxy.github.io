@@ -14,8 +14,8 @@ const SITE = "https://fox3000foxy.com";
 // The "site generator" (a very naive glob over dist/) swept every file it
 // could find into the sitemap. That's the whole point: it looks like an
 // accident from a beginner who just dumped the build output.
-// The one thing we deliberately keep OUT is the honeypot beacon folder
-// (_honeypot) — we don't want scanners discovering the tracker.
+// The one thing we deliberately keep OUT is the analytics beacon folder
+// (_assets) — we don't want scanners discovering the tracker.
 const DECOYS = [
 	"/wp-login.php",
 	"/wp-config.php",
