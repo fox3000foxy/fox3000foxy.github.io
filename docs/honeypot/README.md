@@ -36,6 +36,29 @@ données, pas de reverse shell possible. Ces fichiers ne servent donc pas à
   `/api/users`, `/api/admin`, `/api/internal/config`).
 - `_next/static/chunks/main.js` — faux bundle JS avec un "token" et une "DB".
 
+### Pack "patterns de scan" (inspiré du principe express-honeypot-middleware)
+Le middleware log tout ce qu'un probe envoie. Ici on reproduit l'esprit : des
+routes qui font croire à un scanner qu'il a trouvé un vrai truc exploitable,
+dans les patterns de scan les plus courants (nuclei/wpscan).
+- `/.git/config` + `/.git/HEAD` + `/.git/logs/HEAD` — "exposed .git". Le
+  remote pointe vers le vrai repo GitHub (plausible), le log mentionne
+  wp-config et env.backup. **Pas** dans le sitemap (aucun vrai site ne
+  l'expose) — trouvable par les scanners qui le probe directement.
+- `phpinfo.php` — fausse page de config PHP (display_errors On,
+  allow_url_include On, disable_functions vide = drapeaux rouges).
+- `phpmyadmin/index.html` — login phpMyAdmin avec erreur #1045 et mot de
+  passe pré-rempli.
+- `swagger/openapi.json` — spec OpenAPI décrivant de fausses routes internes
+  faibles (`/admin/config`, `/debug/dump`, `/users/reset-password`).
+- `actuator/env.json` + `actuator/health.json` — Spring Actuator fictif avec
+  datasource, JWT secret et service account (attractif pour scanners Java).
+- `composer.json` — dépendances à versions vulnérables connues (WordPress
+  5.9.3, dompdf 1.0.2, etc.).
+- `wp-json/index.json` — racine REST WP exposant le namespace du plugin
+  "backdoor" `wug/v1/sync`.
+- `wp-cron.php` / `wp-trackback.php` — endpoints WP profonds.
+- `wp-content/debug.log` — faux log d'erreurs WP avec messages "sensibles".
+
 ## Honeypot (lecture du dashboard)
 
 Le beacon `/_honeypot/beacon.js` est injecté dans les pages HTML leurres.
@@ -43,6 +66,8 @@ Quand un navigateur ou un scanner headless **rend** la page, il appelle
 `goatcounter.count()` avec une route dédiée :
 
 - wp-login → `/honeypot/wp-login.php`
+- phpinfo → `/honeypot/phpinfo.php`
+- phpmyadmin → `/honeypot/phpmyadmin/`
 - wp-admin → `/honeypot/wp-admin/`
 
 **Dans le dashboard GoatCounter** (`https://fox3000foxy.goatcounter.com`),

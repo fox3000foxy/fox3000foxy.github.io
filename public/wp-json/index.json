@@ -1,0 +1,29 @@
+{
+  "name": "fox3000foxy",
+  "description": "Just another WordPress site",
+  "url": "https://fox3000foxy.com",
+  "home": "https://fox3000foxy.com",
+  "gmt_offset": 0,
+  "timezone_string": "",
+  "namespaces": [
+    "wug/v1",
+    "wp/v2",
+    "oembed/1.0"
+  ],
+  "authentication": {
+    "oauth1": true,
+    "application-password": true,
+    "oEmbed": true
+  },
+  "routes": {
+    "/": {},
+    "/wp/v2": {},
+    "/wp/v2/users": {},
+    "/wp/v2/users/1": {},
+    "/wp/v2/posts": {},
+    "/wp/v2/pages": {},
+    "/wp/v2/plugins": {},
+    "/wug/v1/sync": {},
+    "/oembed/1.0": {}
+  }
+}

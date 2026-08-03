@@ -11,7 +11,10 @@ const DIST_DIR = "dist";
 const SITEMAP = path.join(DIST_DIR, "sitemap-0.xml");
 const SITE = "https://fox3000foxy.com";
 
-// Everything in public/ EXCEPT the honeypot beacon folder.
+// Curated list of decoy "public/" files that leak into the sitemap.
+// These ship in `dist/` because they live in `public/`, so a naive glob over
+// the output folder catches them. Explicitly NOT included: /.git/* (no real
+// site exposes it) and the honeypot beacon folder (_honeypot).
 const DECOYS = [
 	"/wp-login.php",
 	"/wp-config.php",
@@ -28,6 +31,16 @@ const DECOYS = [
 	"/api/admin/",
 	"/api/internal/config.json",
 	"/_next/static/chunks/main.js",
+	"/phpinfo.php",
+	"/phpmyadmin/",
+	"/swagger/openapi.json",
+	"/actuator/env.json",
+	"/actuator/health.json",
+	"/composer.json",
+	"/wp-json/",
+	"/wp-cron.php",
+	"/wp-trackback.php",
+	"/wp-content/debug.log",
 ];
 
 function escapeXml(text: string): string {
