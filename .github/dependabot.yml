@@ -25,15 +25,13 @@ updates:
         update-types:
           - "major"
 
-  # Exclude honeypot/www from scanning
+  # www: honeypot - pas de scan
   - package-ecosystem: "npm"
     directory: "/www"
     schedule:
       interval: "monthly"
     ignore:
       - dependency-name: "*"
-    labels:
-      - "wontfix"
     open-pull-requests-limit: 0
 
   - package-ecosystem: "composer"
@@ -42,6 +40,6 @@ updates:
       interval: "monthly"
     ignore:
       - dependency-name: "*"
-    labels:
-      - "wontfix"
     open-pull-requests-limit: 0
+
+
