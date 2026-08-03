@@ -53,6 +53,19 @@ filtre sur `/honeypot/` pour voir toutes les sondes. Chaque hit a son `title`
 > HTML et ne déclenche pas le beacon. On ne capte que les scanners qui
 > "rendent" (headless Chrome, crawlers AI, etc.).
 
+## Sitemap (les leurres "fuient" dans le sitemap)
+
+Le script `scripts/inject-decoy-sitemap.ts` (raccordé à la commande `build`)
+ajoute les URLs leurres à la fin de `sitemap-0.xml` après le build. L'idée :
+ces fichiers vivent dans `public/` mais ne sont pas de vraies pages Astro, donc
+ils "fuient" naturellement dans le sitemap — comme un accident de glob sur le
+dossier de sortie. Les scanners/IA qui parsent le sitemap trouvent alors
+`/wp-login.php`, `/.env.production`, `/api/users/`, etc. comme s'ils étaient
+des routes légitimes.
+
+- `_honeypot/` est **volontairement exclu** du sitemap : on ne veut pas qu'un
+  scanner découvre le beacon qui les traque.
+
 ## Ne pas oublier
 
 - Ne mets jamais de **vrais** secrets dans ces fichiers. Tout est fake à dessein.
