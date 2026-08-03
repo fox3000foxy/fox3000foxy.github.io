@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Generated at build time (merge-honeypot.ts splices this in, never committed)
+public/.git/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

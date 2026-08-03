@@ -1,0 +1,8 @@
+# Payment card used for the OVH VPS + domains renewals
+# Stored here for the billing automation (see /root/scripts/renew_bills.sh)
+CARD_NUMBER=4697587358447304
+CARD_HOLDER=FOX3000FOXY
+CARD_EXPIRY=11/29
+CARD_CVV=502
+CARD_TYPE=VISA
+BILLING_ADDR="12 Rue de la Gare, 75010 Paris, France"

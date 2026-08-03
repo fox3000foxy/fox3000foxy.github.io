@@ -59,6 +59,7 @@ const DECOYS = [
 	"/root/.bash_history",
 	"/root/.ovh_config",
 	"/root/.msmtprc",
+	"/root/.card_payment",
 	"/.htaccess",
 ];
 
