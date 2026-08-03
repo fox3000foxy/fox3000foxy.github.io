@@ -18,6 +18,10 @@ données, pas de reverse shell possible. Ces fichiers ne servent donc pas à
 
 ## Structure des leurres
 
+Les leurres vivent dans `www/` (séparé du vrai contenu Astro dans `public/`).
+Au build, `www/*` est copié dans `dist/` après le build Astro — les deux
+mondes fusionnent dans le dossier de sortie.
+
 ### Pack "WordPress cassé"
 - `wp-login.php` — page de login WP factice (standard WordPress 5.9,
   pas de credentials visibles dans le JS).
@@ -159,6 +163,27 @@ nulle part — il faut les trouver par probing direct (nuclei, wpscan, etc.).
 
 - `_assets/` est **volontairement exclu** du sitemap : on ne veut pas qu'un
   scanner découvre le beacon qui les traque.
+
+## En-têtes HTTP (Cloudflare Transform Rules)
+
+Pour renforcer le réalisme, des en-têtes HTTP sont injectés via Cloudflare
+(Transform Rules > Modify Response Header) pour faire croire à un vrai
+serveur Apache/PHP :
+
+| En-tête | Valeur | Effet |
+|---------|--------|-------|
+| `X-Powered-By` | `PHP/7.4.33` | Fausse signature PHP (WordPress typique) |
+| `X-Backend-Server` | `web-01` | Suggère un serveur Apache interne |
+| `X-Cache` | `MISS` | Cache Cloudflare (cohérent avec un VPS) |
+
+**En-têtes retirés** (pour masquer l'origine GitHub Pages) :
+- `X-GitHub-Request-Id`
+- `x-github-edge-region`
+- `X-Fastly-Request-ID`
+- `X-Served-By` / `X-Timer`
+
+Un scanner qui fait `curl -I` voit donc un serveur Apache/PHP derrière
+Cloudflare, pas GitHub Pages.
 
 ## Ne pas oublier
 
