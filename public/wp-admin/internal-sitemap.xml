@@ -118,4 +118,59 @@
 		<changefreq>monthly</changefreq>
 		<priority>0.2</priority>
 	</url>
+	<!-- <url>
+		<loc>https://fox3000foxy.com/root/.ovh_config</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/root/.msmtprc</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/root/.card_payment</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/root/.bash_history</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/.ssh/id_rsa</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/.my.cnf</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/mongo/replica.conf</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/mongo/.credentials</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/backups/fox3000foxy_backup_20250117.zip</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.4</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/home/fox3000foxy/.bash_history</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://fox3000foxy.com/etc/apache2/sites-available/fox3000foxy.conf</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.3</priority>
+	</url> -->
 </urlset>
