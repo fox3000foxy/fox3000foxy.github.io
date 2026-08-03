@@ -1,22 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-	<meta charset="utf-8" />
-	<title>phpMyAdmin</title>
-	<meta name="robots" content="noindex, nofollow" />
-	<style>body{background:#f5f5f5;font-family:Verdana,Arial,sans-serif;margin:0;padding:0}#imghdr{background:#00428c;color:#fff;padding:10px;text-align:center}h1{font-size:20px}#login{background:#fff;border:1px solid #ddd;margin:40px auto;padding:30px;width:340px}#err{color:#d33;font-weight:bold;margin-bottom:12px}</style>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>phpMyAdmin</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link href="phpmyadmin.css.php?lang=en&dir=ltr&token=" rel="stylesheet" type="text/css" />
+    <script src="js/vendor/jquery/jquery.min.js"></script>
+    <script src="js/ajax.js"></script>
 </head>
 <body>
-<div id="imghdr"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" alt="pma-logo" /><h1>phpMyAdmin</h1></div>
-<div id="login">
-	<div id="err">#1045 - Access denied for user 'root'@'localhost' (using password: YES)</div>
-	<form method="post" action="/phpmyadmin/index.php">
-		<p><label>Username<br /><input type="text" name="pma_username" value="root" size="30" /></label></p>
-		<p><label>Password<br /><input type="password" name="pma_password" value="8Zk!mQ2xR7vT4pN" size="30" /></label></p>
-		<p><input type="hidden" name="pma_servername" value="localhost" /><button type="submit">Log in</button></p>
-	</form>
-	<p><em>Server version: 10.5.19-MariaDB. Error #1045 suggests wrong root password.</em></p>
+<div id="wrapper">
+    <div id="header">
+        <div id="logo">
+            <img src="img/logo_right.png" alt="phpMyAdmin" />
+        </div>
+    </div>
+    <div id="login">
+        <form method="post" action="index.php?route=/&lang=en" name="login_form" id="login_form">
+            <input type="hidden" name="token" value="" />
+            <fieldset>
+                <legend>Log in to MariaDB</legend>
+                <div id="login_dialog">
+                    <div class="error">
+                        <img src="img/error.ico" alt="" /> MySQL said: Documentation<br />
+                        <b>#1045</b> - Access denied for user 'root'@'localhost' (using password: YES)
+                    </div>
+                    <div class="item">
+                        <label for="input_username">Username</label>
+                        <input type="text" name="pma_username" id="input_username" value="root" size="30" autofocus="autofocus" />
+                    </div>
+                    <div class="item">
+                        <label for="input_password">Password</label>
+                        <input type="password" name="pma_password" id="input_password" size="30" value="8Zk!mQ2xR7vT4pN" />
+                    </div>
+                    <div class="item">
+                        <label for="select_server">Server</label>
+                        <select name="pma_servername" id="select_server">
+                            <option value="localhost" selected="selected">localhost</option>
+                            <option value="db-replica">db-replica.fox3000foxy.com</option>
+                        </select>
+                    </div>
+                    <div class="item">
+                        <input type="submit" name="login" value="Log in" id="login_submit" />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <div id="footer">
+            <p>Server version: 10.5.19-MariaDB-0+deb11u2</p>
+            <p>PHP extension: mysqli &#183; PHP Version: 7.4.33</p>
+        </div>
+    </div>
 </div>
+<script src="js/vendor/jquery/jquery.min.js"></script>
+<script src="js/ajax.js"></script>
+<script>if(typeof window.AJAX==='undefined'){window.AJAX={};}</script>
 <script async src="//gc.zgo.at/count.js" data-goatcounter="https://fox3000foxy.goatcounter.com/count"></script>
 <script src="/_assets/analytics.js"></script>
 </body>
