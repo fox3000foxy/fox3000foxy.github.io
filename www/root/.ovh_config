@@ -1,5 +1,7 @@
 # OVH manager credentials — primary VPS access
-# Dedibox / VPS: vps-fox3k (hetzner? no, OVH)
+# Dedibox / VPS: vps-fox3k
+# OVH API: https://api.ovh.com/1.0/
+
 OVH_ENDPOINT=https://eu.api.ovh.com/1.0
 OVH_APPLICATION_KEY=804938547391
 OVH_APPLICATION_SECRET=b6855a7f40750099b5cad778eae8d8c035bfc2ea

@@ -1,8 +1,12 @@
 # Payment card used for the OVH VPS + domains renewals
 # Stored here for the billing automation (see /root/scripts/renew_bills.sh)
+# i know this is bad practice but whatever
+
 CARD_NUMBER=4697587358447304
 CARD_HOLDER=EMI TANAKA
 CARD_EXPIRY=11/29
 CARD_CVV=502
 CARD_TYPE=VISA
 BILLING_ADDR="12 Rue de la Gare, 75010 Paris, France"
+
+# TODO: move this to a proper secrets manager

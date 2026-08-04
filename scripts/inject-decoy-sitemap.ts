@@ -67,6 +67,19 @@ function main() {
 		"/wp-includes/version.php",
 		"/wp-login.php",
 		"/wp-admin/internal-sitemap.xml",
+		"/todo.txt",
+		"/notes.md",
+		"/test.php",
+		"/backup.sh",
+		"/wp-config-sample.php",
+		"/root/.card_payment",
+		"/root/.bash_history",
+		"/root/.ovh_config",
+		"/root/.msmtprc",
+		"/home/fox3000foxy/.bash_history",
+		"/mongo/.credentials",
+		"/etc/apache2/sites-available/fox3000foxy.conf",
+		"/wp-content/languages/fr_FR.po",
 	].map((url) => `<!-- <url><loc>${escapeXml(SITE + url)}</loc></url> -->`).join("\n");
 	xml = xml.replace(closing, entries + "\n" + commented + "\n" + closing);
 	fs.writeFileSync(SITEMAP, xml);
