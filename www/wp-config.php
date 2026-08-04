@@ -12,12 +12,12 @@ define( 'DB_CHARSET', 'utf8mb4' );
 define( 'DB_COLLATE', '' );
 
 // i copied these from the wordpress salt generator
-define( 'AUTH_KEY',         'rT8uY2wQ6eK4mN9vC3bZ7xP1fL5sD8gH' );
-define( 'SECURE_AUTH_KEY',  'hG6jK3lM9nB4vC7xZ2wQ5eR8tY1uI0oP' );
-define( 'LOGGED_IN_KEY',    'sD7fG2hJ5kL8qW3eR6tY9uI0oP4aZ1x' );
-define( 'NONCE_KEY',        'vB5cN8mQ1wE4rT7yU0iP9oL2kM6jH3' );
-define( 'AUTH_SALT',        'cX2zV5bN8mQ1wE4rT7yU0iO' );
-define( 'SECURE_AUTH_SALT', 'jH6gF3dS8aQ1zX5cV7bN2mK9lP0' );
+define( 'AUTH_KEY',         'Xp#9kLm2$vNq8wR5tY3eU1iO6aZ4sD0fG' );
+define( 'SECURE_AUTH_KEY',  'bHj7&nB4xC9vM2zW6eQ3rT8yU1oP5aI0' );
+define( 'LOGGED_IN_KEY',    'sDf2gH5jK8lQ1wE4rT7yU9iO3pA6zX0c' );
+define( 'NONCE_KEY',        'vBn8mQ2wE4rT7yU0iP9oL6kM1jH3sD5' );
+define( 'AUTH_SALT',        'cXz5bN8mQ1wE4rT7yU0iO6' );
+define( 'SECURE_AUTH_SALT', 'jHg3dS8aQ1zX5cV7bN2mK0lP9' );
 
 $table_prefix = 'wp_';
 
