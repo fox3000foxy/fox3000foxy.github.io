@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "JN2XQfwXqK1EBZtt10IStjE2MrmMgsu55Uo65K/4SEazzHDF4yeQNNMD/J/ORejX1MCcRjp181H1sWNU19xHMA=="
+author_sig: "Sb91AG3+BrQtz4hv3mWA2roJYupKJnkgMKnP9UcRjKKCiVpwzbUUgF+k2FssuXUT+Bjho1mYo5Rdxi0L56mmpw=="
 ---
 
 # लूना प्रोटोकॉल: साझा दिमाग, भावना वर्गीकरण, और दिलचस्प/निरर्थक रूटिंग

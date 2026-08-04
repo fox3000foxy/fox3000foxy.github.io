@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "0ujXY0ngq9MGciKm24Vg73ftleMmWGlb5gobTTrfrIM6PcJ69jp8IF9+w3VTBPi4yTUs4QbIn1/UHKUZ0zGluA=="
+author_sig: "H56zWztiuCKzmuxKo89R1GuxGfCw+8x/vd4Qp+gsf0pqapGvMNFzMmYVmf54yk+ekjbOQgKd6fNba/aGd01pmQ=="
 ---
 
 # Luna Protocol: bộ não dùng chung, phân loại cảm xúc, và định tuyến thú vị/vô ích

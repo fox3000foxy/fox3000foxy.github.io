@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "GRTDPJzbE7htdwYH9ePhCjfjRMLIJJW1nS6wVjiazA3PB9mxhlsY3jN9exgw6eWgzkgAUqg6pMrhHJCXB51O6A=="
+author_sig: "CNTEx+rURnQR7x+cwZ/XIqp0l/+tV5uY/e0+N7OO4dAxWbETqoUk6YBjB7qihzSxTVi6ce7xzh7JVEpUdcVkUQ=="
 ---
 
 # Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı
@@ -972,13 +972,13 @@ Mod 1: SSH/SFTP sunucusu
   → Kullanım alanı: honeypot'lar, uzak test ortamları, eğitim laboratuvarları
 
 Mod 2: Web shell (tarayıcı)
-  builds/fortune-nyx-v1.7.6-web.min.js (ESM paketi)
+  builds/fortune-nyx-v1.7.8-web.min.js (ESM paketi)
   → Tarayıcıda çalışır, VFS IndexedDB'de kalıcıdır
   → Kullanım alanı: etkileşimli eğitimler, gömülü terminaller, demolar
   → Bonus: tam simüle edilmiş bir XFCE masaüstü için startxfce4 çalıştır
 
 Mod 3: Bağımsız CLI
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (tek dosya, kurulum yok)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (tek dosya, kurulum yok)
   → curl ile çalıştır, VFS'yi .vfs/ dizininde kalıcı yap
   → Kullanım alanı: hızlı demolar, yerel deneyler
 ```

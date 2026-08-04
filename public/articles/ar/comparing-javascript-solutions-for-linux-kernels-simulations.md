@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Jhi5yCQacgZaI+In1HFhiYpY/3lHGAu4dYvpcMDFex0je600aKIvwUP82tpny+d9jBxX2vwVdqD6yt1Nq6XaNQ=="
+author_sig: "pRJY3oj4e8MYMzM/nlny+Ij9wvHYuhmO9mPGshBEnpvO0c59FWm3YG1s5FoGKVjKMHUqYFSYq4LFW+nb4gyf6Q=="
 ---
 
 # كل صندوق رمل JavaScript، ومحاكٍ، ومقلد، ومصيدة تفاعل Linux -- مقارنة
@@ -971,13 +971,13 @@ Mode 1 : خادم SSH/SFTP
   → حالات الاستخدام: مصائد التفاعل، بيئات اختبار عن بعد، مختبرات تدريب
 
 Mode 2 : شل ويب (متصفح)
-  builds/fortune-nyx-v1.7.6-web.min.js (حزمة ESM)
+  builds/fortune-nyx-v1.7.8-web.min.js (حزمة ESM)
   → يعمل في المتصفح، VFS مستمر في IndexedDB
   → حالات الاستخدام: دروس تفاعلية، طرفيات مدمجة، عروض توضيحية
   → مكافأة: يشغل startxfce4 لسطح مكتب XFCE كامل محاكى
 
 Mode 3 : CLI مستقل
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (ملف واحد، لا تثبيت)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (ملف واحد، لا تثبيت)
   → curl وتشغيل، VFS مستمر في مجلد .vfs/
   → حالات الاستخدام: عروض سريعة، تجارب محلية
 ```

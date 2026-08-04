@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "fXttdMee4pk8idNyjOgioizDf9nHsaN1vMOpCb7KDzPtuq9c8LdDeBKnnqOQM3ibxJqdsAukmoundrkaV5oe0g=="
+author_sig: "soH18raNs9Y9/BTfI7aJQqtULUap2oXSJt0Hzq6haEez37aDsoEb10JA3gaIn0nIHCRSCzmZATsq/9gvUl/rrw=="
 ---
 
 # Setiap JavaScript sandbox, emulator, simulator, dan honeypot Linux -- dibandingkan
@@ -972,13 +972,13 @@ Mode 1: Server SSH/SFTP
   → Kasus penggunaan: honeypot, lingkungan pengujian jarak jauh, lab pelatihan
 
 Mode 2: Shell web (browser)
-  builds/fortune-nyx-v1.7.6-web.min.js (bundel ESM)
+  builds/fortune-nyx-v1.7.8-web.min.js (bundel ESM)
   → Berjalan di browser, VFS dipersist di IndexedDB
   → Kasus penggunaan: tutorial interaktif, terminal tertanam, demo
   → Bonus: menjalankan startxfce4 untuk desktop XFCE lengkap yang disimulasikan
 
 Mode 3: CLI mandiri
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (satu file, tanpa instalasi)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (satu file, tanpa instalasi)
   → curl dan jalankan, VFS dipersist di direktori .vfs/
   → Kasus penggunaan: demo cepat, eksperimen lokal
 ```

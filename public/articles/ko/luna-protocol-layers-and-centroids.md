@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "dXvMynndgUrXuRYUl8g4TQL2rQiJJ04OSEERg/MqdFWoa4kOmEK0BVYONCsfnuW1vQd4tzdVJKCftXe4A+W/GQ=="
+author_sig: "2W3Me4I++RklJDg0O71TR769iAMIER/bW8blcmOyWkxIseUl3ZfDHCbgcIIIl7gDFbQA4QBUkMY68cU6mIeUdA=="
 ---
 
 # Luna Protocol: 공유 브레인, 감정 분류, 그리고 흥미로운/사소한 라우팅

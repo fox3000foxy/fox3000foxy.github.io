@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "EKq6vgMZP9ZW66mM+REoaM1E3WjMqhAOG5ythVOlCOMaMesRRssxPcbXnf7MsF+C2Yp8hziYrpDNT7/lsqfowA=="
+author_sig: "ySoFIkrETvEBSJsht65xJexrnxhMxujr7KzfnieSZy1ha2+FxhUbWr/yc/lu+TIDI8+ZcrWFXR4n1qgqRpHu/A=="
 ---
 
 # Luna Protocol: общие «мозги», классификация эмоций и маршрутизация интересно/бесполезно

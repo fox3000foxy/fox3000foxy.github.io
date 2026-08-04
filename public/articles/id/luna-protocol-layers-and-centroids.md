@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "0aCR5sSXF6Mj1KQ3hKb+SPV57vJ23oIVvx6hxaGnuUGfn8Zf7SDh3MARMiL/StloSdvDp29GSBu+2DYIPDK32Q=="
+author_sig: "c7uZE6rKXoPifAMCWHpuBRCWIZPE5TO8/vOMmFisSLc7m7QC9v72EiR7g+4Qn629USnGrAW49wbwa6arWyoMiw=="
 ---
 
 # Luna Protocol: otak bersama, klasifikasi emosi, dan routing menarik/sia-sia

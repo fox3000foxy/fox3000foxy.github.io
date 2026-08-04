@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "bnFAf1weg+lCWNh5KM26G7oOeRvfMUWILKm8L6yBWuaexWIAab+KMOnIa+G+PBQYnZUhKJhphO8Rz/NGqwY7dA=="
+author_sig: "QpKoZACyL0AlC3ZRlbnA31F8xkrTHt6myDTm1vSRbsw6stE/0gCxjyq2tgRqAQdWYoS4kIQHieawfKhHwzTYQw=="
 ---
 
 # Luna Protocol : mutualisation des cerveaux, classification émotionnelle, et routage intéressant/futile

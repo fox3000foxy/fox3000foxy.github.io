@@ -10,7 +10,7 @@ tags:
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "cNkqSL0C2EK9QqKtzjhtas4hL7525z9KbzJKuG7g0okUlj0xTJ+iUV/jevrsWGVjeiNYHtAp3NCMPrE0xDIypg=="
+author_sig: "dVAIWCeXGyIyjoYB5RsiFtm3qfBgvSaXAY3pJer/U3DMyVqZgw3q9VG7Jw4EAsGYeZaFf7WC2Qlq7yoGwqh5Jw=="
 ---
 
 # यह ब्लॉग कैसे काम करता है?

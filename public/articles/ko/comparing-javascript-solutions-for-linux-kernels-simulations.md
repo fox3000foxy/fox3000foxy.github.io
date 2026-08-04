@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "7GXkpEzS9hY8hufP9+myzIE4ae0fn3uXTupjWUJp5/3ULtIpM8zDWalwHjvTkohV5H0QJzAcI7+HxyQiq8mlzQ=="
+author_sig: "19fNlRNoxWcK/5lxx0Ivk2POp9AY9JIXjZw3TfSNrVhVkC9v2HSV9DG74ejGbhcFhiR/P/UfJ3jrqdZgnIZAPA=="
 ---
 
 # 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교
@@ -971,13 +971,13 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
   → 사용 사례: 허니팟, 원격 테스트 환경, 교육 연구실
 
 모드 2: 웹 셸 (브라우저)
-  builds/fortune-nyx-v1.7.6-web.min.js (ESM 번들)
+  builds/fortune-nyx-v1.7.8-web.min.js (ESM 번들)
   → 브라우저에서 실행, VFS가 IndexedDB에 영속화
   → 사용 사례: 대화형 튜토리얼, 내장 터미널, 데모
   → 보너스: startxfce4 실행으로 완전한 시뮬레이션된 XFCE 데스크톱
 
 모드 3: 독립형 CLI
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (단일 파일, 설치 불필요)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (단일 파일, 설치 불필요)
   → curl로 실행, .vfs/ 디렉토리에 VFS 영속화
   → 사용 사례: 빠른 데모, 로컬 실험
 ```

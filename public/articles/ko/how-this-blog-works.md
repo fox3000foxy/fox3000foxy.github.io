@@ -10,7 +10,7 @@ tags:
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "DIaxBZzW9Bb6joqCaDxss0S7FY0QtiOeP+UPEBzqOKrQdkFVEfrxb2rrdrguro4IB+1BTW1mB6adVb7HczV3YQ=="
+author_sig: "teWYsveqgXou/w4ibBmFtWQ9ZhYBtZBzeikqJQbLs08iejeEd2P4QsS06OJ33x+5nWA9m9MfMWgUpiLkywFehg=="
 ---
 
 # 이 블로그는 어떻게 동작하나요?

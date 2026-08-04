@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "pfD5Y31V2/esQqxHlV3UZHzi5jq2EWWKfYTVwpOBjkTq5ruQUKJCVy0fbig/0A5FbfBE37+o74hq622hQENbSQ=="
+author_sig: "QzIfvc4VseO2QBN4ylNnAA3FlHlKQ3oJTjVXWH1Fb1XfTcd9F82lVn1Mm0ILdwsAXf0y6SxXJTJ96HPpGCcnuA=="
 ---
 
 # Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh
@@ -972,13 +972,13 @@ Chế độ 1: Máy chủ SSH/SFTP
   → Trường hợp sử dụng: honeypot, môi trường kiểm thử từ xa, phòng thí nghiệm đào tạo
 
 Chế độ 2: Shell web (trình duyệt)
-  builds/fortune-nyx-v1.7.6-web.min.js (bundle ESM)
+  builds/fortune-nyx-v1.7.8-web.min.js (bundle ESM)
   → Chạy trong trình duyệt, VFS được lưu trữ trong IndexedDB
   → Trường hợp sử dụng: hướng dẫn tương tác, terminal nhúng, demo
   → Phần thưởng: chạy startxfce4 cho một màn hình XFCE hoàn chỉnh được mô phỏng
 
 Chế độ 3: CLI độc lập
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (một file duy nhất, không cần cài đặt)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (một file duy nhất, không cần cài đặt)
   → curl và chạy, lưu trữ VFS trong thư mục .vfs/
   → Trường hợp sử dụng: demo nhanh, thử nghiệm cục bộ
 ```

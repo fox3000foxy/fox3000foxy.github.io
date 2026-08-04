@@ -10,7 +10,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "/9FfXKCZfU62GthBf/Wz8tB8li5FEyDiLaZ25kdZz1rj8wDKuZfomrnMxGCbyc3WtrLGDVRpnA8Z2CbjJxcppA=="
+author_sig: "Izdp4YQQiVQrquBFU3uuSQ+3VzCTXCKDMXobJg5F+N5w9pS/6JFowDXPruupTG0MjPBQGW5wKqJ5Sdjai1A8Rg=="
 ---
 
 # ทุก sandbox JavaScript, เอมิวเลเตอร์, ซีมิวเลเตอร์ และ honeypot Linux -- เปรียบเทียบ
@@ -972,13 +972,13 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
   → กรณีการใช้งาน: honeypots, สภาพแวดล้อมการทดสอบระยะไกล, ห้องปฏิบัติการฝึกอบรม
 
 โหมด 2: Shell เว็บ (เบราว์เซอร์)
-  builds/fortune-nyx-v1.7.6-web.min.js (ESM bundle)
+  builds/fortune-nyx-v1.7.8-web.min.js (ESM bundle)
   → รันในเบราว์เซอร์, VFS คงอยู่ใน IndexedDB
   → กรณีการใช้งาน: บทช่วยสอนโต้ตอบ, เทอร์มินัลฝังตัว, เดโม่
   → โบนัส: รัน startxfce4 สำหรับเดสก์ท็อป XFCE ที่จำลองเต็มรูปแบบ
 
 โหมด 3: CLI แบบสแตนด์อโลน
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (ไฟล์เดียว, ไม่ต้องติดตั้ง)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (ไฟล์เดียว, ไม่ต้องติดตั้ง)
   → curl และรัน, คงอยู่ VFS ในไดเรกทอรี .vfs/
   → กรณีการใช้งาน: เดโม่รวดเร็ว, การทดลองในเครื่อง
 ```

@@ -10,7 +10,7 @@ tags:
   - meta
   - blog
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "YkwV8Kp5QsSsOesIe3KscYAi5uX8qidF2ngXeiJVVomKqVif5m0lZlMVjsWI9l0M1eQowejoERhu5l2lItnu+Q=="
+author_sig: "SAdL3cxLIJOUivX0xFHs6hLZpU/kwVPBy+hH9IwEOmDKJI9nJgBJItVeZ7/l8zIjgGOsebzo8hjkp3GG54WqNg=="
 ---
 
 # Blog Này Hoạt Động Như Thế Nào ?

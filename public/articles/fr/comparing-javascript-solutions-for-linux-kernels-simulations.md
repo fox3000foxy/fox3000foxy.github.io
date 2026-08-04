@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "pK0Q2Pm+2LLt49yYKb/WqQalZrirBq42V/ByLj0L2IMPklDWq1sJGlOrqxITNtGaAEIA8p26SUbrU1zN7fKowQ=="
+author_sig: "5EXE+DIkte6AEfEHrIeY1piEP1cJz0BmP75D5mREGqJMD9+8bzjXtMD33rEWQPfqDISD8Dz873wb3KO3NIgoAA=="
 ---
 
 # Chaque sandbox JavaScript, émulateur, simulateur et honeypot Linux -- comparé
@@ -972,13 +972,13 @@ Mode 1 : Serveur SSH/SFTP
   → Cas d'usage : honeypots, environnements de test distants, laboratoires de formation
 
 Mode 2 : Shell web (navigateur)
-  builds/fortune-nyx-v1.7.6-web.min.js (bundle ESM)
+  builds/fortune-nyx-v1.7.8-web.min.js (bundle ESM)
   → Tourne dans le navigateur, VFS persisté dans IndexedDB
   → Cas d'usage : tutoriels interactifs, terminaux embarqués, démos
   → Bonus : exécute startxfce4 pour un bureau XFCE complet simulé
 
 Mode 3 : CLI autonome
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (un seul fichier, pas d'installation)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (un seul fichier, pas d'installation)
   → curl et exécute, persisté le VFS dans le répertoire .vfs/
   → Cas d'usage : démos rapides, expérimentation locale
 ```

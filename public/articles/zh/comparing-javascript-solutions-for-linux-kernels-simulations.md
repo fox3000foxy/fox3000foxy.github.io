@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "sZ3M4NHLDCSrNqcZ632RckJ5uLZWtH959ohNkg1XhuePI41E8CTlegBMS3aZI9T2oXrA4Yr/4QdMPNt8v6MzTQ=="
+author_sig: "ocxVpULhoq8pirX/NmZgZP3XAmx3RFXdOiPQTvMGw4vzyAgfied6WEy+v6iS47eueONVhtRojJIPfD+MflhOuA=="
 ---
 
 # 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比
@@ -971,13 +971,13 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
   → 用例：蜜罐、远程测试环境、培训实验室
 
 模式 2：Web Shell（浏览器）
-  builds/fortune-nyx-v1.7.6-web.min.js（ESM 包）
+  builds/fortune-nyx-v1.7.8-web.min.js（ESM 包）
   → 在浏览器中运行，VFS 持久化到 IndexedDB
   → 用例：交互式教程、嵌入式终端、演示
   → 额外功能：运行 startxfce4 获得完整的模拟 XFCE 桌面
 
 模式 3：独立 CLI
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs（单文件，无需安装）
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs（单文件，无需安装）
   → curl 后直接运行，VFS 持久化到 .vfs/ 目录
   → 用例：快速演示、本地实验
 ```

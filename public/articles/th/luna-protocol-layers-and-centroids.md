@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "K/IEYQ8wpTnnmUy2iaSR7nS2WF55PbjwbNAhNFlGDRD0X94dYtlta00zPLFsuH98rprUhW9XiOvR4bjcfPkhcw=="
+author_sig: "A6wXijQ9hefS6xWJ/DTuAH4scQqUCc3NZJOaUF69IGLWMRdynBh+hm3RNzo7huuKC2MZg77XEEEwKbhBDcLPsA=="
 ---
 
 # Luna Protocol: สมองที่ใช้ร่วมกัน การจำแนกอารมณ์ และการจัดเส้นทางข้อความน่าสนใจ/ไร้สาระ

@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "iu6oPhTIV6bEdK84pwIcqQtvVR7yM/nlYnyob7fIykOl6xL3RCcBfbMkY74slNHSLZjBKr3VTBAFz7Ox+UbuDQ=="
+author_sig: "//8qUFpdMxmiaP6hB1zrOk40xDhYh3ZN5ZbG1RjxXl2uGOz3NvisOQ6Lpc1yJnib/3DuYqDEWPXpb95fGiykaQ=="
 ---
 
 # Luna Protocol: paylaşılan beyinler, duygu sınıflandırması ve ilginç/anlamsız yönlendirme

@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "nzvCdPjERMwXSw4r4hw6uGUB+fuK21XM8mn9GOzcc/ZP8+7Hyzpx7/3fIqQMGVCoNhS39c1IdWa+ozZhFQvUCg=="
+author_sig: "Zgz98aLnV0PhjVqN8sENYwkMqHoBeJm09yDiDn9Jxm0tB33unAmyvVImYMpT+xwPETsCPVT3YD/YJ8sNeOGhQA=="
 ---
 
 # हर जावास्क्रिप्ट सैंडबॉक्स, एमुलेटर, सिमुलेटर और लिनक्स हनीपॉट -- तुलना
@@ -971,13 +971,13 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
   → उपयोग के मामले: हनीपॉट, दूरस्थ परीक्षण वातावरण, प्रशिक्षण प्रयोगशालाएँ
 
 मोड 2: वेब शेल (ब्राउज़र)
-  builds/fortune-nyx-v1.7.6-web.min.js (ESM बंडल)
+  builds/fortune-nyx-v1.7.8-web.min.js (ESM बंडल)
   → ब्राउज़र में चलता है, VFS IndexedDB में स्थायी
   → उपयोग के मामले: इंटरैक्टिव ट्यूटोरियल, एम्बेडेड टर्मिनल, डेमो
   → बोनस: पूर्ण सिम्युलेटेड XFCE डेस्कटॉप के लिए startxfce4 चलाता है
 
 मोड 3: स्टैंडअलोन CLI
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (एकल फ़ाइल, कोई स्थापना नहीं)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (एकल फ़ाइल, कोई स्थापना नहीं)
   → curl और निष्पादित करें, VFS को .vfs/ निर्देशिका में स्थायी करें
   → उपयोग के मामले: त्वरित डेमो, स्थानीय प्रयोग
 ```

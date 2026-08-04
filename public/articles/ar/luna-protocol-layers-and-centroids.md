@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "crGjJ+8WgtIwxtJloc6ibfBWwH3g83uCoGc5y1ICr3jx3egkzmCTjQ+0Mr4YpBF+3EsAL4svyXcjcAwX0Irogw=="
+author_sig: "zyp369jIgPgdS4h8Ew5ZzhWjpdQhWaOLTX4Kq/wBhG7bBvEM+uIlg0mYlcTy/Ub14O9cDvxXtaqyqP16UNV22w=="
 ---
 
 # بروتوكول لونا: أدمغة مشتركة، تصنيف المشاعر، وتوجيه مثير/تافه

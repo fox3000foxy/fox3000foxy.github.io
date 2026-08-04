@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "TJ5LBAK2XsDgeZLQ+mXzwmxsLYpxw6l29aDwqft+vA8aKanFpQwLPo4xqGPa3s50syNEf0bVKj9AzNXvAY/dCQ=="
+author_sig: "IJdEVUd362QmGKQhcPruJdOVRsmbvQWYE+ykZQwuHvrTH6jccJsOZ19lEXGRCFELR0DGf752rQY8DGd4tVwQyA=="
 ---
 
 # あらゆるJavaScriptサンドボックス、エミュレーター、シミュレーター、ハニーポット----比較
@@ -971,13 +971,13 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
   → ユースケース：ハニーポット、リモートテスト環境、訓練ラボ
 
 モード2: Webシェル（ブラウザ）
-  builds/fortune-nyx-v1.7.6-web.min.js（ESMバンドル）
+  builds/fortune-nyx-v1.7.8-web.min.js（ESMバンドル）
   → ブラウザで動作、VFSはIndexedDBに永続化
   → ユースケース：対話型チュートリアル、埋め込みターミナル、デモ
   → おまけ：startxfce4で完全なシミュレートXFCEデスクトップを実行可能
 
 モード3: スタンドアロンCLI
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs（単一ファイル、インストール不要）
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs（単一ファイル、インストール不要）
   → curlして実行、VFSは.vfs/ディレクトリに永続化
   → ユースケース：クイックデモ、ローカル実験
 ```

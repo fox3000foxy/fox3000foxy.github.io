@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "b3Ewcb0jFwiME+v0Zg1M6h3+bHJ5mhgVMCzOSUzB6ceJBW7EkK2fsS4dd0KHgZyguoMzFd3us8028o8dtYtdKw=="
+author_sig: "fqzQbYqJXAwUJ+gaVGc5EwkhrsGymaQfZyJgxWKhKzUAkE2KGXFcZlXBzzbrIg1r4N9YQ4O6Met8Gi6Ts7KPzg=="
 ---
 
 # Every JavaScript sandbox, emulator, simulator and honeypot -- compared
@@ -971,13 +971,13 @@ Mode 1: SSH/SFTP server
   → Use case: honeypots, remote testing environments, training labs
 
 Mode 2: Web shell (browser)
-  builds/fortune-nyx-v1.7.6-web.min.js (ESM bundle)
+  builds/fortune-nyx-v1.7.8-web.min.js (ESM bundle)
   → Runs in browser, VFS persisted in IndexedDB
   → Use case: interactive tutorials, embedded terminals, demos
   → Bonus: run startxfce4 for a full simulated XFCE desktop
 
 Mode 3: Standalone CLI
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (single file, no install)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (single file, no install)
   → curl and run, persists VFS in .vfs/ directory
   → Use case: quick demos, local experimentation
 ```

@@ -9,7 +9,7 @@ tags:
   - linux
   - analysis
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "9UKSVuEspjJoV5XAvtAnU4E2NFbaMl9TrptntzRUQW10qkQQJnyXB7cjiKsRKEANx/yonATn93TGDh3AawSxZQ=="
+author_sig: "2heJnSF8opZba6ywFsKmGgrwCwCeclq7wOpnOzk6ZrE8tTvVCpXczeQmrUjBzpkOiRdzHnqYbNSZnV/9l5cfbg=="
 ---
 
 # Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение
@@ -971,13 +971,13 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
   → Сценарии: honeypot'ы, удалённые среды тестирования, обучающие лаборатории
 
 Режим 2: Веб-оболочка (браузер)
-  builds/fortune-nyx-v1.7.6-web.min.js (ESM бандл)
+  builds/fortune-nyx-v1.7.8-web.min.js (ESM бандл)
   → Работает в браузере, VFS сохраняется в IndexedDB
   → Сценарии: интерактивные туториалы, встроенные терминалы, демо
   → Бонус: запусти startxfce4 для полного симулированного XFCE рабочего стола
 
 Режим 3: Автономный CLI
-  builds/fortune-nyx-v1.7.6-directbash-k6.1.0.mjs (один файл, без установки)
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (один файл, без установки)
   → curl и запуск, сохраняет VFS в директории .vfs/
   → Сценарии: быстрые демо, локальные эксперименты
 ```
