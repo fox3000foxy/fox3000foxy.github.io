@@ -52,6 +52,10 @@ function main() {
 	const outPath = path.join(outDir, "aiml.json");
 
 	if (!fs.existsSync(aimlDir)) {
+		if (fs.existsSync(outPath)) {
+			console.log(`AIML source dir not found (${aimlDir}), using existing ${outPath}`);
+			return;
+		}
 		console.error(`AIML directory not found: ${aimlDir}`);
 		process.exit(1);
 	}
