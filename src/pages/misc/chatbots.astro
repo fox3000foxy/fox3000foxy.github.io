@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChatApp from "../../islands/ChatApp.tsx";
+import "../../styles/Chatbots.css";
+---
+
+<BaseLayout title="Chatbots" description="Historic chatbots running in your browser — ELIZA, PARRY, A.L.I.C.E., Jabberwacky, Cleverbot">
+	<article>
+		<h1>Chatbots</h1>
+		<p>
+			Five landmark conversational agents from the history of AI, faithfully ported to TypeScript from
+			<a href="https://github.com/fox3000foxy/chatbots" target="_blank" rel="noopener">fox3000foxy/chatbots</a>.
+			Everything runs client-side — no server needed.
+		</p>
+
+		<ChatApp client:load />
+	</article>
+</BaseLayout>

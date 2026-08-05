@@ -28,6 +28,8 @@ public/.git/
 
 # Generated at build time
 public/articles/*/index.json
+src/lib/chatbots/alice-data.ts
+public/chatbots/alice/aiml.json
 # public/.ssh/
 # public/.my.cnf
 # public/etc/

@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Misc" description="Miscellaneous interactive tools and experiments">
+	<article>
+		<h1>Misc</h1>
+		<p>Interactive tools, chatbots, and experiments — all running client-side in your browser.</p>
+
+		<div class="misc-grid">
+			<a href="/misc/chatbots" class="misc-card">
+				<h2>Chatbots</h2>
+				<p>Historic conversational agents ported to TypeScript — ELIZA, PARRY, A.L.I.C.E., Jabberwacky, and Cleverbot. Talk with them directly in your browser.</p>
+				<span class="misc-link">Try it →</span>
+			</a>
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.misc-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 1.5rem;
+		margin-top: 2rem;
+	}
+	.misc-card {
+		display: block;
+		padding: 1.5rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 0.2s, box-shadow 0.2s;
+	}
+	.misc-card:hover {
+		border-color: var(--accent);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+	}
+	.misc-card h2 {
+		margin: 0 0 0.5rem;
+		font-size: 1.25rem;
+		color: var(--accent);
+	}
+	.misc-card p {
+		margin: 0 0 1rem;
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+		line-height: 1.5;
+	}
+	.misc-link {
+		font-size: 0.85rem;
+		color: var(--accent);
+		font-weight: 500;
+	}
+</style>

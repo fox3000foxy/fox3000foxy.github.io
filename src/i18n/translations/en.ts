@@ -60,6 +60,7 @@ const en: TranslationMap = {
 	"nav.search": "Search",
 	"nav.write": "Write",
 	"nav.more": "More",
+	"nav.misc": "Misc",
 	"contact.title": "Contact",
 	"contact.email": "Email",
 	"contact.github": "GitHub",
