@@ -17,7 +17,6 @@
 <tr><th>Short Open Tag</th><td>On</td></tr>
 <tr><th>display_errors</th><td>On</td></tr>
 <tr><th>allow_url_include</th><td>On</td></tr>
-<tr><th>register_globals</th><td>Off</td></tr>
 <tr><th>file_uploads</th><td>On (upload_max_filesize: 64M)</td></tr>
 <tr><th>open_basedir</th><td>no value</td></tr>
 <tr><th>disable_functions</th><td>no value</td></tr>

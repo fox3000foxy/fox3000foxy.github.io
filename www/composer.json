@@ -8,9 +8,7 @@
         "phpseclib/phpseclib": "2.0.12",
         "guzzlehttp/guzzle": "6.5.5",
         "symfony/yaml": "4.4.0",
-        "monolog/monolog": "1.25.0",
-        "moodle/moodle": "3.9.0",
-        "drupal/core": "8.9.0"
+        "monolog/monolog": "1.25.0"
     },
     "require-dev": {
         "phpunit/phpunit": "7.5.20"
