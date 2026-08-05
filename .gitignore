@@ -46,3 +46,6 @@ ROADMAP.md
 .astro/dev.json
 .astro/settings.json
 .astro/
+
+!www/**/*
+
