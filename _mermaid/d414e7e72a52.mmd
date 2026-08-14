@@ -1,0 +1,28 @@
+flowchart TD
+    A["User Input"] --> B["elizaUppercase()"]
+    B --> C["splitUserInput()"]
+    C --> D["Build Keyword Stack"]
+    D --> E{"Stack non-empty?"}
+    E -->|"Yes"| F["Pop highest-priority keyword"]
+    E -->|"No"| G["Memory recall available?"]
+    G -->|"Yes"| H["Recall past user statement"]
+    G -->|"No"| I["Fallback to NONE rule"]
+    I --> J["Return response"]
+    H --> J
+
+    F --> K["Match decomposition patterns"]
+    K --> L{"Match found?"}
+    L -->|"No"| M{"Link keyword defined?"}
+    M -->|"Yes"| N["Push linked keyword to stack"]
+    N --> E
+    M -->|"No"| O["Return NOMATCH message"]
+    O --> J
+
+    L -->|"Yes"| P["Select next reassembly rule (round-robin)"]
+    P --> Q{"Reassembly type?"}
+    Q -->|"NEWKEY"| R["Skip to next keyword on stack"]
+    R --> E
+    Q -->|"=KEYWORD (PRE)"| S["Transform words, push link keyword"]
+    S --> N
+    Q -->|"Standard"| T["Expand captured references<br>into final response"]
+    T --> J

@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant H as Host (modded)
+    participant F as Friend (vanilla)
+    
+    H->>H: Entry(serverPlayer)
+    H->>H: player.getGameProfile()
+    Note over H: Mixin returns modified<br/>profile with jeb_'s textures<br/>(signed by Mojang)
+    H->>F: ClientboundPlayerInfoUpdatePacket
+    Note right of F: profile.properties = jeb_'s<br/>textures (valid signature)
+    F->>F: unpackTextures()
+    F->>F: SignatureState.SIGNED ✓
+    F->>F: secure = true → CAPE!

@@ -1,0 +1,14 @@
+flowchart TD
+    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332줄 시드 + 기록"]
+    B --> C["withReplies()<br>쌍 추출<br>(줄 → 응답)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>그 줄 앞의 컨텍스트)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["상위 K 후보 정렬"]
+    I --> J{"pickReply()<br>룰렛 선택"}
+    J -->|"선택"| K["Reply = reply.text<br>승리 쌍에서"]
+    J -->|"없음"| L["Fallback: 'I have no idea<br>what to say to that yet.'"]
+    K --> M["Append to transcript<br>save() → JSON"]
+    L --> M

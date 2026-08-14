@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fox&apos;s Blog (Italiano)</title>
+    <link>https://fox3000foxy.com</link>
+    <description>Fox3000foxy&apos;s blog about web development, automation, and open-source -- Italiano</description>
+    <language>it</language>
+    <lastBuildDate>Fri, 14 Aug 2026 09:49:53 GMT</lastBuildDate>
+    <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
+    <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
+    <generator>WordPress 5.9.3</generator>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <image>
+      <url>https://fox3000foxy.com/og/home.png</url>
+      <title>Fox&apos;s Blog (Italiano)</title>
+      <link>https://fox3000foxy.com</link>
+    </image>
+    <atom:link href="https://fox3000foxy.com/feed.it.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://fox3000foxy.com/feed.xml" rel="alternate" type="application/rss+xml" hreflang="x-default" />
+    <atom:link href="https://fox3000foxy.com/feed.en.xml" rel="alternate" type="application/rss+xml" hreflang="en" />
+    <atom:link href="https://fox3000foxy.com/feed.fr.xml" rel="alternate" type="application/rss+xml" hreflang="fr" />
+    <atom:link href="https://fox3000foxy.com/feed.zh.xml" rel="alternate" type="application/rss+xml" hreflang="zh" />
+    <atom:link href="https://fox3000foxy.com/feed.ja.xml" rel="alternate" type="application/rss+xml" hreflang="ja" />
+    <atom:link href="https://fox3000foxy.com/feed.ko.xml" rel="alternate" type="application/rss+xml" hreflang="ko" />
+    <atom:link href="https://fox3000foxy.com/feed.tr.xml" rel="alternate" type="application/rss+xml" hreflang="tr" />
+    <atom:link href="https://fox3000foxy.com/feed.de.xml" rel="alternate" type="application/rss+xml" hreflang="de" />
+    <atom:link href="https://fox3000foxy.com/feed.ru.xml" rel="alternate" type="application/rss+xml" hreflang="ru" />
+    <atom:link href="https://fox3000foxy.com/feed.es.xml" rel="alternate" type="application/rss+xml" hreflang="es" />
+    <atom:link href="https://fox3000foxy.com/feed.pt.xml" rel="alternate" type="application/rss+xml" hreflang="pt" />
+    <atom:link href="https://fox3000foxy.com/feed.id.xml" rel="alternate" type="application/rss+xml" hreflang="id" />
+    <atom:link href="https://fox3000foxy.com/feed.hi.xml" rel="alternate" type="application/rss+xml" hreflang="hi" />
+    <atom:link href="https://fox3000foxy.com/feed.ar.xml" rel="alternate" type="application/rss+xml" hreflang="ar" />
+    <atom:link href="https://fox3000foxy.com/feed.vi.xml" rel="alternate" type="application/rss+xml" hreflang="vi" />
+    <atom:link href="https://fox3000foxy.com/feed.th.xml" rel="alternate" type="application/rss+xml" hreflang="th" />
+    <item>
+      <title>Luna Protocol: cervelli condivisi, classificazione emotiva e routing interessante/futile</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</guid>
+      <description>Luna Protocol è passato da un monolite a un&apos;architettura a quattro livelli: adattatori, brain, classificatore emotivo e inferenza. In programma: centroidi di embedding, routing interessante/futile e regolazione dei parametri del LLM in base a valenza e arousal.</description>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>matrix</category>
+      <category>llm</category>
+      <category>architecture</category>
+      <category>embeddings</category>
+      <category>centroids</category>
+      <category>emotion-ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Da ELIZA agli LLM: 60 anni di IA conversazionale, ricostruita in TypeScript</title>
+      <link>https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</guid>
+      <description>ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- cinque architetture radicalmente diverse per lo stesso problema, portate in TypeScript con i loro dati originali. Dal 1966 agli LLM moderni, ecco come l&apos;IA conversazionale ha imparato a parlare, e cosa un repo di chatbot ci insegna su 60 anni di ricerca.</description>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <category>chatbot</category>
+      <category>ia</category>
+      <category>typescript</category>
+      <category>eliza</category>
+      <category>parry</category>
+      <category>alice</category>
+      <category>aiml</category>
+      <category>jabberwacky</category>
+      <category>cleverbot</category>
+      <category>llm</category>
+      <category>nlp</category>
+      <category>histoire</category>
+      <category>luna-protocol</category>    </item>
+    <item>
+      <title>Luna Protocol: perché ho fatto il fine-tuning di un modello da 1.5B su 50k campioni Discord e perché il few-shot priming è diventato l&apos;arma segreta</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-official-models</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-official-models</guid>
+      <description>Un modello più piccolo addestrato su meno dati può superare uno più grande -- se sai come fare priming. Ecco perché Luna Protocol è passato da un Hermes 3B a un fine-tune Qwen 1.5B, e perché il few-shot priming è diventato il vero punto di svolta.</description>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>llm</category>
+      <category>fine-tuning</category>
+      <category>few-shot-learning</category>
+      <category>qwen</category>
+      <category>unsloth</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Come le macchine comunicano tra loro: una panoramica da TCP a mTLS</title>
+      <link>https://fox3000foxy.com/blog/how-machines-talks-between-themselves</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-machines-talks-between-themselves</guid>
+      <description>Perché TCP, UDP, TLS, mTLS, HTTP e WebSocket non sono alternative concorrenti ma livelli sovrapposti; una panoramica gerarchica della comunicazione macchina a macchina, dal trasporto grezzo all&apos;autenticazione reciproca.</description>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <category>tcp</category>
+      <category>udp</category>
+      <category>tls</category>
+      <category>mtls</category>
+      <category>websocket</category>
+      <category>http</category>
+      <category>grpc</category>
+      <category>rete</category>
+      <category>architettura-distribuita</category>
+      <category>protocolli</category>    </item>
+    <item>
+      <title>5 modi ingegnosi di usare GitHub Actions (e cosa insegnano sui segreti)</title>
+      <link>https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</guid>
+      <description>Un runner CI trasformato in VPS gratuito, un bot che apre le proprie pull request, un publish npm senza alcun segreto. Un tour dei miei repo per catalogare pattern GitHub Actions che vanno oltre il classico &quot;lint + test + deploy&quot;.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>github-actions</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>valorant-short-maker: la pipeline che genera i miei short di Valorant da sola</title>
+      <link>https://fox3000foxy.com/blog/valorant-short-maker</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/valorant-short-maker</guid>
+      <description>Groq/Llama per la sceneggiatura, Piper per le voci, FFmpeg per tutto il resto. Come un cron job produce e pubblica un video al giorno su @valorant_agents, dalla A alla Z.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/valorant-short-maker/vsm-01-intro.png" type="image/png" length="0" />
+      <category>typescript</category>
+      <category>ffmpeg</category>
+      <category>automation</category>
+      <category>ai</category>    </item>
+    <item>
+      <title>Come ottenere qualsiasi mantello su Minecraft Bedrock</title>
+      <link>https://fox3000foxy.com/blog/bedrock-any-cape</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bedrock-any-cape</guid>
+      <description>Un launcher di terze parti, una vecchia versione del gioco e un selettore di mantelli che non ha mai imparato a dire di no. Tutorial completo piu la probabile spiegazione del perche funziona.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bedrock-cape/bedrock-cape-01-install-bedrock.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>bedrock</category>
+      <category>tutorial</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Ho evoluto una rete neurale tramite selezione naturale invece della discesa del gradiente</title>
+      <link>https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</guid>
+      <description>Come ho sostituito il classico addestramento con discesa del gradiente con un algoritmo genetico NSGA-II per evolvere agenti di trading DQN: quattro versioni, dall&apos;overfitting all&apos;evoluzione lamarckiana dei pesi.</description>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>nsga-ii</category>
+      <category>dqn</category>
+      <category>trading</category>
+      <category>typescript</category>    </item>
+    <item>
+      <title>I Bot di TF2 Non Sono Casuali: Ho Reverse-Engineered Ogni Impostazione di Difficoltà</title>
+      <link>https://fox3000foxy.com/blog/tf2-bot-ai-explained</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/tf2-bot-ai-explained</guid>
+      <description>Visione, tracciamento della mira, angoli delle pugnalate alle spalle della Spia, logica dei colpi in testa del Cecchino, ogni bug conosciuto -- Valve non ha mai documentato nulla. Quindi abbiamo frugato nel codice e l&apos;abbiamo trasformato in un foglio tecnico completo.</description>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/tf2-bot-ai-soldier-aim.png" type="image/png" length="0" />
+      <category>tf2</category>
+      <category>game-ai</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Cape Mod: come rubare il mantello di Jeb_ con un&apos;iniezione di firma RSA</title>
+      <link>https://fox3000foxy.com/blog/cape-mod-minecraft</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/cape-mod-minecraft</guid>
+      <description>Un mod Fabric che sfrutta una falla logica nel sistema di fiducia di Minecraft: una firma RSA valida di Mojang ma riutilizzata su un account sbagliato. Spiegazione del codice, implicazioni di sicurezza e lezioni crittografiche.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/xbox-profile.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>fabric</category>
+      <category>java</category>
+      <category>security</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Laupok ha creato un&apos;IA che gioca da sola a Super Mario World -- come funziona</title>
+      <link>https://fox3000foxy.com/blog/laupok-mario-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/laupok-mario-ai</guid>
+      <description>Un approfondimento sul progetto di Laupok: un&apos;IA basata su NEAT che impara a giocare a Super Mario World in modo autonomo. Algoritmi genetici, reti neurali, neuroevoluzione di topologie crescenti e 4200 righe di Lua.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/laupok-mario-ai/neat-title.jpg" type="image/png" length="0" />
+      <category>ai</category>
+      <category>lua</category>
+      <category>emulation</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Luna Protocol: ho creato un bot Discord autonomo che simula un essere umano</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-discord-bot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-discord-bot</guid>
+      <description>Luna Protocol è un bot Discord completamente autonomo dotato di un LLM locale, capace di conversazione naturale con sonno, errori di battitura, esitazioni, dimenticanze, stanchezza tematica e messaggi spontanei.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/luna-protocol/01-architecture-overview.svg" type="image/png" length="0" />
+      <category>discord</category>
+      <category>llm</category>
+      <category>typescript</category>
+      <category>event-driven-architecture</category>
+      <category>ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>L&apos;IA impara il PvP di Minecraft -- Apprendimento per Imitazione, Reinforcement Learning e le 30 variabili che contano</title>
+      <link>https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</guid>
+      <description>1.000 duelli registrati, rete neurale addestrata sui pixel, 90% di precisione nei tasti : e il bot correva dritto contro un muro. Poi sono arrivati RL, curriculum learning e 60 ore di addestramento.</description>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/ai-pvp-thumbnail.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>ai</category>
+      <category>python</category>    </item>
+    <item>
+      <title>Super Mario Bros.: il formato dei livelli, i puntatori e i 256 glitch worlds</title>
+      <link>https://fox3000foxy.com/blog/smb1-glitch-levels</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/smb1-glitch-levels</guid>
+      <description>Come 128 livelli × 4 tipi di zona stanno in 40KB di ROM, perché esiste il Minus World, e come una partita di Tennis NES può caricare dei glitch worlds.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/smb1-glitch-levels/title-card.jpg" type="image/png" length="0" />
+      <category>retro</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Ho passato un fine settimana a leggere il codice di konosuba-rpg ed ecco cosa ho trovato</title>
+      <link>https://fox3000foxy.com/blog/konosuba-rpg</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/konosuba-rpg</guid>
+      <description>Un RPG a turni Discord dove ogni azione genera un&apos;immagine WebP al volo: URL come stato di gioco, RNG deterministico, pipeline WASM, cache a 5 livelli, bot serverless.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/konosuba-rpg/game_init.webp" type="image/png" length="0" />
+      <category>discord</category>
+      <category>rpg</category>
+      <category>typescript</category>
+      <category>hono</category>
+      <category>cloudflare</category>
+      <category>supabase</category>
+      <category>wasm</category>
+      <category>gaming</category>
+      <category>serverless</category>    </item>
+    <item>
+      <title>Bareiron -- il server Minecraft che gira su un microcontrollore da 1$</title>
+      <link>https://fox3000foxy.com/blog/bareiron</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bareiron</guid>
+      <description>6800 righe di C, zero malloc, Perlin noise sostituito da interpolazione bilineare, biomi in tile map, e tutto su un chip da 1$.</description>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bareiron/esp32-board.jpg" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>reverse-engineering</category>
+      <category>embedded</category>
+      <category>c</category>
+      <category>esp32</category>    </item>
+    <item>
+      <title>Bot Discord 100% serverless: Hono + Cloudflare Workers</title>
+      <link>https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</guid>
+      <description>Come ho sostituito un bot Discord che mi costava 50€/mese con zero euro -- interaction endpoints, Hono, Workers, rendering di immagini in tempo reale e un gioco completo senza WebSocket.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>cloudflare</category>
+      <category>serverless</category>
+      <category>typescript</category>
+      <category>bots</category>    </item>
+    <item>
+      <title>La mia IA del cazzo per Nausicaa</title>
+      <link>https://fox3000foxy.com/blog/nausicaa-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/nausicaa-ai</guid>
+      <description>Un&apos;IA basata su coefficienti euristici, iperparametri che cambiano casualmente ogni 5 turni e un Oracolo che scappa -- tuffo nel cervello di un gioco da tavolo strategico mitologico.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>gaming</category>
+      <category>ai</category>
+      <category>javascript</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Logica di pathfinding di Minecraft e le sue applicazioni</title>
+      <link>https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</guid>
+      <description>Come l&apos;algoritmo A*, le penalità dei blocchi e i POI permettono di controllare, prevedere e sfruttare il movimento dei mob -- dalla redstone senza fili alle fattorie ottimizzate.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>minecraft</category>
+      <category>pathfinding</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>UTAU: come un software in Visual Basic 6 ha democratizzato la voce sintetica</title>
+      <link>https://fox3000foxy.com/blog/utau</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/utau</guid>
+      <description>Come UTAU, un software gratuito in VB6 del 2008, ha permesso a chiunque di creare voci sintetiche cantate con sintesi concatenativa -- e perché è ancora importante oggi.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>utau</category>
+      <category>vocaloid</category>
+      <category>music</category>
+      <category>synthesis</category>
+      <category>vb6</category>    </item>
+    <item>
+      <title>Far funzionare una libreria Node.js nel browser senza Wasm -- i polyfill di typescript-virtual-container</title>
+      <link>https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</guid>
+      <description>Come Fortune ha reimplementato a mano node:fs, node:crypto e una dozzina di altri moduli Node in 640 righe di JavaScript per far funzionare il container nel browser senza Wasm.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>nodejs</category>
+      <category>polyfills</category>
+      <category>browser</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Ho usato git come database per far girare un bot gratis su GitHub Actions</title>
+      <link>https://fox3000foxy.com/blog/email-autoreply</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/email-autoreply</guid>
+      <description>Come ho codificato un auto-risponditore email con IA che gira su GitHub Actions per 0€/mese -- usando tag git come database e snapshot pre-compilati in un tag runtime.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>automation</category>
+      <category>javascript</category>
+      <category>serverless</category>
+      <category>ai</category>
+      <category>git</category>    </item>
+    <item>
+      <title>Repo to VPS: trasforma GitHub Actions in un VPS gratuito con storage persistente</title>
+      <link>https://fox3000foxy.com/blog/repo-to-vps</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/repo-to-vps</guid>
+      <description>Come trasformare un runner GitHub Actions in un VPS sempre attivo usando git come storage persistente -- tmate, inotify e commit --amend.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>github</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>Confronto tra Soluzioni JavaScript per la Simulazione di Kernel Linux</title>
+      <link>https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</guid>
+      <description>Un&apos;analisi approfondita delle ricreazioni di ambienti Linux in JavaScript/TypeScript.</description>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <category>javascript</category>
+      <category>linux</category>
+      <category>analysis</category>    </item>
+    <item>
+      <title>Costruire character-factory: avatar con la genetica</title>
+      <link>https://fox3000foxy.com/blog/character-factory</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/character-factory</guid>
+      <description>Un modulo TypeScript basato su DiceBear: generazione coerente paese/etnia, un piccolo motore genetico per proiettare figli, e i dettagli ingegneristici che lo hanno reso utilizzabile in un gioco di carte.</description>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>npm</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Botting di una Microsoft Rewards Farm</title>
+      <link>https://fox3000foxy.com/blog/botting-a-farm</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/botting-a-farm</guid>
+      <description>Come ho programmato un bot per farmare punti Microsoft Rewards su larga scala -- e perché il rilevamento anti-bot di Microsoft ci ha raggiunto.</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_135010_image.png" type="image/png" length="0" />
+      <category>automation</category>
+      <category>javascript</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Lavorando a un Nuovo Progetto</title>
+      <link>https://fox3000foxy.com/blog/working-on-a-new-project</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/working-on-a-new-project</guid>
+      <description>Uno sguardo al processo di avvio e sviluppo di un nuovo sito web.</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_092734_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>webdev</category>    </item>
+    <item>
+      <title>Il Mio Profilo GitHub</title>
+      <link>https://fox3000foxy.com/blog/about-my-github-profile</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/about-my-github-profile</guid>
+      <description>Una breve introduzione al mio profilo GitHub.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260308_123527_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>github</category>    </item>
+    <item>
+      <title>Le Mie Passioni</title>
+      <link>https://fox3000foxy.com/blog/my-passions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/my-passions</guid>
+      <description>Programmazione, disegno, automazione, scoperta di vecchie tecnologie e altro -- uno sguardo a ciò che mi guida.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>personal</category>    </item>
+    <item>
+      <title>Script di firma commit SSH spiegato</title>
+      <link>https://fox3000foxy.com/blog/ssh-signing-script</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ssh-signing-script</guid>
+      <description>Una panoramica dell&apos;helper per la firma dei commit SSH e perché volevo commit eleganti.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>git</category>
+      <category>security</category>
+      <category>shell</category>    </item>
+    <item>
+      <title>Come Funziona Questo Blog?</title>
+      <link>https://fox3000foxy.com/blog/how-this-blog-works</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-this-blog-works</guid>
+      <description>Un&apos;analisi approfondita degli interni di questo blog: React, Vite, Markdown, la pipeline CI/CD e il flusso di scrittura degli articoli.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/how-this-blog-works/project-structure.png" type="image/png" length="0" />
+      <category>react</category>
+      <category>meta</category>
+      <category>blog</category>    </item>
+    <item>
+      <title>Ho costruito un honeypot Express ultra-realistico</title>
+      <link>https://fox3000foxy.com/blog/express-honeypot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/express-honeypot</guid>
+      <description>328 endpoint fittizi con risposte generate al volo, spoofing di intestazioni, registrazione del traffico bot -- un&apos;analisi approfondita di un middleware honeypot Express progettato per ingannare gli scanner.</description>
+      <pubDate>Fri, 14 Aug 2026 09:49:53 GMT</pubDate>
+      <category>express</category>
+      <category>nodejs</category>
+      <category>security</category>
+      <category>honeypot</category>    </item>
+  </channel>
+</rss>

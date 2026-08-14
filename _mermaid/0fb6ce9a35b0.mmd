@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>normalisiert Satzzeichen"]
+    B --> C["splitUserInput()<br>zerlegt in Wörter"]
+    C --> D["Build keyword stack<br>prioritätssortiert"]
+    D --> E{"Stack nicht leer?"}
+    E -->|"Ja"| F["Pop höchstpriores Keyword"]
+    E -->|"Nein"| G{"Memory recall?"}
+    G -->|"Ja"| H["Recall frühere Benutzeraussage"]
+    G -->|"Nein"| I["Fallback: zNONE-Regel"]
+    I --> J["Antwort zurückgeben"]
+    H --> J
+    F --> K["Dekompositionsmuster matchen"]
+    K --> L{"Match gefunden?"}
+    L -->|"Nein"| M{"Verknüpftes Keyword?"}
+    M -->|"Ja"| N["Verknüpftes Keyword auf Stack"]
+    N --> E
+    M -->|"Nein"| O["NOMATCH zurückgeben"]
+    O --> J
+    L -->|"Ja"| P["Nächsten Wiederzusammenbau wählen (Round-Robin)"]
+    P --> Q{"Wiederzusammenbau-Typ?"}
+    Q -->|"PRE"| R["Wörter transformieren (I→YOU)<br>Verknüpfungs-Keyword pushen"]
+    R --> N
+    Q -->|"NEWKEY"| S["Zum nächsten Keyword springen"]
+    S --> E
+    Q -->|"Standard"| T["(1), (2), (0) expandieren<br>in finale Antwort"]
+    T --> J

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fox&apos;s Blog (한국어)</title>
+    <link>https://fox3000foxy.com</link>
+    <description>Fox3000foxy&apos;s blog about web development, automation, and open-source -- 한국어</description>
+    <language>ko</language>
+    <lastBuildDate>Fri, 14 Aug 2026 09:49:53 GMT</lastBuildDate>
+    <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
+    <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
+    <generator>WordPress 5.9.3</generator>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <image>
+      <url>https://fox3000foxy.com/og/home.png</url>
+      <title>Fox&apos;s Blog (한국어)</title>
+      <link>https://fox3000foxy.com</link>
+    </image>
+    <atom:link href="https://fox3000foxy.com/feed.ko.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://fox3000foxy.com/feed.xml" rel="alternate" type="application/rss+xml" hreflang="x-default" />
+    <atom:link href="https://fox3000foxy.com/feed.en.xml" rel="alternate" type="application/rss+xml" hreflang="en" />
+    <atom:link href="https://fox3000foxy.com/feed.fr.xml" rel="alternate" type="application/rss+xml" hreflang="fr" />
+    <atom:link href="https://fox3000foxy.com/feed.zh.xml" rel="alternate" type="application/rss+xml" hreflang="zh" />
+    <atom:link href="https://fox3000foxy.com/feed.ja.xml" rel="alternate" type="application/rss+xml" hreflang="ja" />
+    <atom:link href="https://fox3000foxy.com/feed.tr.xml" rel="alternate" type="application/rss+xml" hreflang="tr" />
+    <atom:link href="https://fox3000foxy.com/feed.it.xml" rel="alternate" type="application/rss+xml" hreflang="it" />
+    <atom:link href="https://fox3000foxy.com/feed.de.xml" rel="alternate" type="application/rss+xml" hreflang="de" />
+    <atom:link href="https://fox3000foxy.com/feed.ru.xml" rel="alternate" type="application/rss+xml" hreflang="ru" />
+    <atom:link href="https://fox3000foxy.com/feed.es.xml" rel="alternate" type="application/rss+xml" hreflang="es" />
+    <atom:link href="https://fox3000foxy.com/feed.pt.xml" rel="alternate" type="application/rss+xml" hreflang="pt" />
+    <atom:link href="https://fox3000foxy.com/feed.id.xml" rel="alternate" type="application/rss+xml" hreflang="id" />
+    <atom:link href="https://fox3000foxy.com/feed.hi.xml" rel="alternate" type="application/rss+xml" hreflang="hi" />
+    <atom:link href="https://fox3000foxy.com/feed.ar.xml" rel="alternate" type="application/rss+xml" hreflang="ar" />
+    <atom:link href="https://fox3000foxy.com/feed.vi.xml" rel="alternate" type="application/rss+xml" hreflang="vi" />
+    <atom:link href="https://fox3000foxy.com/feed.th.xml" rel="alternate" type="application/rss+xml" hreflang="th" />
+    <item>
+      <title>Luna Protocol: 공유 브레인, 감정 분류, 그리고 흥미로운/사소한 라우팅</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</guid>
+      <description>Luna Protocol은 모놀리스에서 4계층 아키텍처로 진화했다: 어댑터, 브레인, 감정 분류기, 추론. 임베딩 센트로이드, 흥미로운/사소한 메시지 라우팅, valence와 arousal에 따른 LLM 파라미터 튜닝을 소개한다.</description>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>matrix</category>
+      <category>llm</category>
+      <category>architecture</category>
+      <category>embeddings</category>
+      <category>centroids</category>
+      <category>emotion-ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>ELIZA에서 LLM까지: 60년의 대화형 AI를 TypeScript로 재구성하다</title>
+      <link>https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</guid>
+      <description>ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- 동일한 문제에 대한 다섯 가지 근본적으로 다른 아키텍처를 원본 데이터와 함께 TypeScript로 포팅했습니다. 1966년부터 현대의 LLM까지, 대화형 AI가 말하는 법을 배운 과정과 하나의 챗봇 리포지토리가 60년의 연구에 대해 알려주는 것들.</description>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <category>chatbot</category>
+      <category>ia</category>
+      <category>typescript</category>
+      <category>eliza</category>
+      <category>parry</category>
+      <category>alice</category>
+      <category>aiml</category>
+      <category>jabberwacky</category>
+      <category>cleverbot</category>
+      <category>llm</category>
+      <category>nlp</category>
+      <category>histoire</category>
+      <category>luna-protocol</category>    </item>
+    <item>
+      <title>Luna Protocol: 5만 개의 Discord 샘플로 1.5B 모델을 파인튜닝하고 Few-Shot 프라이밍을 비밀 무기로 만든 이유</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-official-models</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-official-models</guid>
+      <description>더 적은 데이터로 학습된 작은 모델이 더 큰 모델을 능가할 수 있습니다----프라이밍 방법을 알면 말이죠. Luna Protocol이 3B Hermes에서 1.5B Qwen 파인튜닝으로 전환한 이유와 Few-Shot 프라이밍이 진정한 게임 체인저가 된 이유를 소개합니다.</description>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>llm</category>
+      <category>fine-tuning</category>
+      <category>few-shot-learning</category>
+      <category>qwen</category>
+      <category>unsloth</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>기계들이 서로 대화하는 방법: TCP에서 mTLS까지 개요</title>
+      <link>https://fox3000foxy.com/blog/how-machines-talks-between-themselves</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-machines-talks-between-themselves</guid>
+      <description>TCP, UDP, TLS, mTLS, HTTP, WebSocket이 경쟁 관계가 아니라 계층적으로 쌓여 있는 이유; 원시 전송부터 상호 인증까지 기계 간 통신의 계층별 개요.</description>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <category>tcp</category>
+      <category>udp</category>
+      <category>tls</category>
+      <category>mtls</category>
+      <category>websocket</category>
+      <category>http</category>
+      <category>grpc</category>
+      <category>network</category>
+      <category>distributed-architecture</category>
+      <category>protocols</category>    </item>
+    <item>
+      <title>GitHub Actions를 기발하게 활용하는 5가지 방법 (그리고 시크릿에 대해 배우는 것)</title>
+      <link>https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</guid>
+      <description>CI 러너를 무료 VPS로 변신, 스스로 PR을 여는 봇, 시크릿 없는 npm 배포. 단순한 lint+test+deploy를 넘어선 GitHub Actions 패턴 카탈로그.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>github-actions</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>valorant-short-maker: 발로란트 쇼츠를 혼자서 만들어내는 파이프라인</title>
+      <link>https://fox3000foxy.com/blog/valorant-short-maker</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/valorant-short-maker</guid>
+      <description>Groq/Llama로 스크립트, Piper로 목소리, FFmpeg로 나머지 전부. 크론 잡이 @valorant_agents에 하루 한 편의 영상을 처음부터 끝까지 만들어 올리는 방법.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/valorant-short-maker/vsm-01-intro.png" type="image/png" length="0" />
+      <category>typescript</category>
+      <category>ffmpeg</category>
+      <category>automation</category>
+      <category>ai</category>    </item>
+    <item>
+      <title>Minecraft Bedrock에서 어떤 망토든 얻는 방법</title>
+      <link>https://fox3000foxy.com/blog/bedrock-any-cape</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bedrock-any-cape</guid>
+      <description>서드파티 런처, 오래된 게임 버전, 그리고 &apos;아니오&apos;를 배운 적 없는 망토 선택기. 전체 튜토리얼과 작동 원리에 대한 추정 해설.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bedrock-cape/bedrock-cape-01-install-bedrock.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>bedrock</category>
+      <category>tutorial</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>경사 하강법 대신 자연 선택을 통해 신경망을 진화시켰습니다</title>
+      <link>https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</guid>
+      <description>NSGA-II 유전 알고리즘으로 기존 경사 하강법 훈련을 대체하여 DQN 트레이딩 에이전트를 진화시킨 방법: 과적합에서 라마르크적 가중치 진화까지 네 가지 버전</description>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>nsga-ii</category>
+      <category>dqn</category>
+      <category>trading</category>
+      <category>typescript</category>    </item>
+    <item>
+      <title>TF2 봇은 무작위가 아닙니다: 모든 난이도 설정을 리버스 엔지니어링했습니다</title>
+      <link>https://fox3000foxy.com/blog/tf2-bot-ai-explained</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/tf2-bot-ai-explained</guid>
+      <description>시야, 조준 추적, 스파이 백스탭 각도, 스나이퍼 헤드샷 로직, 모든 알려진 버그 -- Valve는 이 중 어느 것도 문서화하지 않았습니다. 그래서 우리는 코드를 파헤쳐 전체 사양 시트로 만들었습니다.</description>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/tf2-bot-ai-soldier-aim.png" type="image/png" length="0" />
+      <category>tf2</category>
+      <category>game-ai</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법</title>
+      <link>https://fox3000foxy.com/blog/cape-mod-minecraft</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/cape-mod-minecraft</guid>
+      <description>Fabric 모드로, Mojang의 유효한 RSA 서명을 다른 계정에 재사용하는 Minecraft 신뢰 시스템의 논리적 허점을 파헤친다. 코드 설명, 보안 영향, 암호학적 교훈.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/xbox-profile.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>fabric</category>
+      <category>java</category>
+      <category>security</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리</title>
+      <link>https://fox3000foxy.com/blog/laupok-mario-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/laupok-mario-ai</guid>
+      <description>Laupok 프로젝트 심층 분석: 슈퍼 마리오 월드를 자율적으로 플레이하는 NEAT 기반 AI. 유전 알고리즘, 신경망, 증강 토폴로지의 신경 진화, 그리고 4200줄의 Lua.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/laupok-mario-ai/neat-title.jpg" type="image/png" length="0" />
+      <category>ai</category>
+      <category>lua</category>
+      <category>emulation</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-discord-bot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-discord-bot</guid>
+      <description>Luna Protocol은 로컬 LLM을 탑재한 완전 자율 Discord 봇으로, 수면, 오타, 망설임, 건망증, 주제 피로, 자발적 메시지 등이 포함된 자연스러운 대화가 가능합니다.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/luna-protocol/01-architecture-overview.svg" type="image/png" length="0" />
+      <category>discord</category>
+      <category>llm</category>
+      <category>typescript</category>
+      <category>event-driven-architecture</category>
+      <category>ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>AI가 Minecraft PvP를 배우다 -- 모방 학습, 강화 학습, 그리고 중요했던 30개의 변수</title>
+      <link>https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</guid>
+      <description>1,000회의 결투 녹화, 픽셀 기반 신경망 훈련, 90% 키스트로크 정확도 -- 그리고 봇은 벽을 향해 돌진했다. 그 후 RL, 커리큘럼 학습, 60시간의 훈련이 시작되었다.</description>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/ai-pvp-thumbnail.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>ai</category>
+      <category>python</category>    </item>
+    <item>
+      <title>Super Mario Bros.: 레벨 포맷, 포인터, 그리고 256개의 글리치 월드</title>
+      <link>https://fox3000foxy.com/blog/smb1-glitch-levels</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/smb1-glitch-levels</guid>
+      <description>128개 레벨 × 4가지 영역 타입이 40KB ROM에 어떻게 들어가는지, Minus World가 왜 존재하는지, 그리고 NES 테니스 경기가 글리치 월드를 로드할 수 있는 이유.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/smb1-glitch-levels/title-card.jpg" type="image/png" length="0" />
+      <category>retro</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>주말 동안 konosuba-rpg 코드를 읽고 알게 된 것들</title>
+      <link>https://fox3000foxy.com/blog/konosuba-rpg</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/konosuba-rpg</guid>
+      <description>턴제 Discord RPG로, 각 액션마다 WebP 이미지를 실시간 생성합니다: URL을 게임 상태로 사용, 결정론적 RNG, WASM 파이프라인, 5단계 캐시, 서버리스 봇.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/konosuba-rpg/game_init.webp" type="image/png" length="0" />
+      <category>discord</category>
+      <category>rpg</category>
+      <category>typescript</category>
+      <category>hono</category>
+      <category>cloudflare</category>
+      <category>supabase</category>
+      <category>wasm</category>
+      <category>gaming</category>
+      <category>serverless</category>    </item>
+    <item>
+      <title>초현실적인 Express 허니팟을 구축했습니다</title>
+      <link>https://fox3000foxy.com/blog/express-honeypot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/express-honeypot</guid>
+      <description>328개의 가짜 엔드포인트, 즉석에서 생성되는 응답, 헤더 스푸핑, 봇 트래픽 기록 -- 스캐너를 속이기 위해 설계된 Express 허니팟 미들웨어 코드 분석.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <category>express</category>
+      <category>nodejs</category>
+      <category>security</category>
+      <category>honeypot</category>    </item>
+    <item>
+      <title>Bareiron -- 1$ 마이크로컨트롤러에서 돌아가는 마인크래프트 서버</title>
+      <link>https://fox3000foxy.com/blog/bareiron</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bareiron</guid>
+      <description>C 언어 6800줄, malloc 제로, Perlin noise 대신 bilinear interpolation, 타일 맵 바이옴, 그리고 이 모든 게 1$ 칩 위에서.</description>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bareiron/esp32-board.jpg" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>reverse-engineering</category>
+      <category>embedded</category>
+      <category>c</category>
+      <category>esp32</category>    </item>
+    <item>
+      <title>100% 서버리스 Discord 봇: Hono + Cloudflare Workers</title>
+      <link>https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</guid>
+      <description>월 50€나 들던 Discord 봇을 0원으로 교체한 방법 -- 인터랙션 엔드포인트, Hono, Workers, 실시간 이미지 렌더링, WebSocket 없는 완전한 게임.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>cloudflare</category>
+      <category>serverless</category>
+      <category>typescript</category>
+      <category>bots</category>    </item>
+    <item>
+      <title>내가 Nausicaa용으로 만든 좆같은 AI</title>
+      <link>https://fox3000foxy.com/blog/nausicaa-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/nausicaa-ai</guid>
+      <description>휴리스틱 계수 기반 AI, 5턴마다 랜덤으로 바뀌는 하이퍼파라미터, 도망치는 오라클 -- 신화 전략 보드 게임의 두뇌 속으로.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>gaming</category>
+      <category>ai</category>
+      <category>javascript</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Minecraft 경로찾기 로직과 응용</title>
+      <link>https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</guid>
+      <description>A* 알고리즘, 블록 패널티, POI 메커니즘으로 몹의 움직임을 제어, 예측, 활용하는 방법 -- 무선 레드스톤부터 최적화된 농장까지.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>minecraft</category>
+      <category>pathfinding</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>UTAU: Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가</title>
+      <link>https://fox3000foxy.com/blog/utau</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/utau</guid>
+      <description>2008년 VB6으로 만들어진 무료 프로그램 UTAU가 어떻게 ⁉이나 합성 노래 목소리를 만들 수 있게 했는지 -- 그리고 오늘날에도 여전히 중요한 이유.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>utau</category>
+      <category>vocaloid</category>
+      <category>music</category>
+      <category>synthesis</category>
+      <category>vb6</category>    </item>
+    <item>
+      <title>Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들</title>
+      <link>https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</guid>
+      <description>Fortune이 node:fs, node:crypto, 그리고 수십 개의 Node 모듈을 640줄의 JavaScript로 손수 재구현해서 Wasm 없이 컨테이너를 브라우저에서 돌리는 방법</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>nodejs</category>
+      <category>polyfills</category>
+      <category>browser</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>git을 데이터베이스로 써서 GitHub Actions에서 공짜로 봇 돌린 썰</title>
+      <link>https://fox3000foxy.com/blog/email-autoreply</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/email-autoreply</guid>
+      <description>GitHub Actions에서 월 0€로 돌아가는 AI 이메일 자동응답 봇을 어떻게 만들었는지 -- git 태그를 데이터베이스로 사용하고 런타임 태그에 미리 컴파일된 스냅샷을 저장하는 방법.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>automation</category>
+      <category>javascript</category>
+      <category>serverless</category>
+      <category>ai</category>
+      <category>git</category>    </item>
+    <item>
+      <title>Repo to VPS: GitHub Actions를 무료 영구 VPS로 바꾸는 방법</title>
+      <link>https://fox3000foxy.com/blog/repo-to-vps</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/repo-to-vps</guid>
+      <description>GitHub Actions 러너를 git을 영구 저장소로 사용하여 항상 커져 있는 VPS로 바꾸는 방법 -- tmate, inotify, commit --amend.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>github</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>JavaScript Linux 커널 시뮬레이션 솔루션 비교</title>
+      <link>https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</guid>
+      <description>JavaScript/TypeScript로 Linux 환경을 재현하는 방법에 대한 심층 분석</description>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <category>javascript</category>
+      <category>linux</category>
+      <category>analysis</category>    </item>
+    <item>
+      <title>character-factory 만들기: 유전학을 가진 아바타</title>
+      <link>https://fox3000foxy.com/blog/character-factory</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/character-factory</guid>
+      <description>DiceBear 기반 TypeScript 모듈: 국가/민족별 일관된 생성, 자식 투영을 위한 작은 유전학 엔진, 카드 게임에서 사용할 수 있게 만든 엔지니어링 세부사항</description>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>npm</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Microsoft Rewards 팜 봇 만들기</title>
+      <link>https://fox3000foxy.com/blog/botting-a-farm</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/botting-a-farm</guid>
+      <description>대규모로 Microsoft Rewards 포인트를 농사짓는 봇을 코딩한 방법 -- 그리고 Microsoft의 안티봇 탐지가 따라잡은 이유</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_135010_image.png" type="image/png" length="0" />
+      <category>automation</category>
+      <category>javascript</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>새 프로젝트 작업 중</title>
+      <link>https://fox3000foxy.com/blog/working-on-a-new-project</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/working-on-a-new-project</guid>
+      <description>새 웹사이트를 시작하고 개발하는 과정 살펴보기</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_092734_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>webdev</category>    </item>
+    <item>
+      <title>내 GitHub 프로필 소개</title>
+      <link>https://fox3000foxy.com/blog/about-my-github-profile</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/about-my-github-profile</guid>
+      <description>내 GitHub 프로필에 대한 간단한 소개</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260308_123527_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>github</category>    </item>
+    <item>
+      <title>내 열정들</title>
+      <link>https://fox3000foxy.com/blog/my-passions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/my-passions</guid>
+      <description>코딩, 그림, 자동화, 올드 테크 발견 등 -- 나를 움직이는 것들</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>personal</category>    </item>
+    <item>
+      <title>SSH 커밋 서명 스크립트 설명</title>
+      <link>https://fox3000foxy.com/blog/ssh-signing-script</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ssh-signing-script</guid>
+      <description>SSH 커밋 서명 헬퍼의 분석과 내가 스타일리시한 커밋을 원했던 이유</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>git</category>
+      <category>security</category>
+      <category>shell</category>    </item>
+    <item>
+      <title>이 블로그는 어떻게 동작하나요?</title>
+      <link>https://fox3000foxy.com/blog/how-this-blog-works</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-this-blog-works</guid>
+      <description>이 블로그의 내부 동작에 대한 심층 분석: React, Vite, Markdown, CI/CD 파이프라인, 글 작성 워크플로우</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/how-this-blog-works/project-structure.png" type="image/png" length="0" />
+      <category>react</category>
+      <category>meta</category>
+      <category>blog</category>    </item>
+  </channel>
+</rss>

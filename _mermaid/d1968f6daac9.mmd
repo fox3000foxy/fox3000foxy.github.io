@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>구두점 정규화"]
+    B --> C["splitUserInput()<br>단어로 분할"]
+    C --> D["Build keyword stack<br>우선순위로 정렬"]
+    D --> E{"스택이 비어있지 않음?"}
+    E -->|"예"| F["Pop highest-priority keyword"]
+    E -->|"아니오"| G{"기억 회상?"}
+    G -->|"예"| H["Recall past user statement"]
+    G -->|"아니오"| I["Fallback: zNONE rule"]
+    I --> J["Return response"]
+    H --> J
+    F --> K["Match decomposition patterns"]
+    K --> L{"매치 발견?"}
+    L -->|"아니오"| M{"연결된 키워드?"}
+    M -->|"예"| N["Push linked keyword to stack"]
+    N --> E
+    M -->|"아니오"| O["Return NOMATCH"]
+    O --> J
+    L -->|"예"| P["Select next reassembly (round-robin)"]
+    P --> Q{"재조립 유형?"}
+    Q -->|"PRE"| R["Transform words (I→YOU)<br>push link keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Skip to next keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expand (1), (2), (0)<br>최종 응답으로"]
+    T --> J

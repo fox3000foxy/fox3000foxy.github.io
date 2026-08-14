@@ -1,0 +1,667 @@
+[
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 18,
+    "body": "\n# Luna Protocol: otak bersama, klasifikasi emosi, dan routing menarik/sia-sia\n\nDalam [dua](/articles/id/luna-protocol-discord-bot) [artikel](/articles/id/luna-protocol-official-models) sebelumnya, saya memperkenalkan Luna Protocol sebagai satu bot Discord tunggal dengan sistem perilaku yang kompleks dan model yang telah di-fine-tune. Namun arsitekturnya telah berkembang jauh sejak saat itu. Yang dulunya sebuah monolit -- satu proses Node.js tunggal yang menangani bot Discord, perilaku, dan pema",
+    "verified": true,
+    "title": "Luna Protocol: otak bersama, klasifikasi emosi, dan routing menarik/sia-sia",
+    "description": "Luna Protocol berkembang dari monolit menjadi arsitektur empat lapis: adapter, brain, pengklasifikasi emosi, dan inference. Yang dibahas: centroid embedding, routing menarik/sia-sia, dan penyesuaian parameter LLM berdasarkan valence dan arousal.",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "c7uZE6rKXoPifAMCWHpuBRCWIZPE5TO8/vOMmFisSLc7m7QC9v72EiR7g+4Qn629USnGrAW49wbwa6arWyoMiw=="
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 21,
+    "body": "\n# Dari ELIZA ke LLM : 60 Tahun AI Percakapan, Dibangun Ulang dalam TypeScript\n\nPada tahun 1966, Joseph Weizenbaum menulis 420 baris MAD-SLIP di atas IBM 7094 untuk menciptakan chatbot pertama dalam sejarah. Program itu bernama **ELIZA**, dan ia mensimulasikan psikoterapis Rogerian dengan pola dasar dan permutasi kalimat. Enam dekade kemudian, AI percakapan telah menjadi topik arus utama -- ChatGPT, Claude, Gemini ada di setiap perbincangan.\n\nNamun di antara dua ekstrem ini, ada **PARRY** (chatb",
+    "verified": true,
+    "title": "Dari ELIZA ke LLM : 60 Tahun AI Percakapan, Dibangun Ulang dalam TypeScript",
+    "description": "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- lima arsitektur yang secara fundamental berbeda untuk masalah yang sama, diporting ke TypeScript dengan data asli mereka. Dari 1966 hingga LLM modern, beginilah cara AI percakapan belajar berbicara, dan apa yang diajarkan sebuah repo chatbot kepada kita tentang 60 tahun riset.",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ai",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "history",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "lang": "id",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "o9e6IQZOn0IVBOWNRn+uuDv8hfk1g+6JcubWSk3JWi9BVtslaDoc/RsiBiTAkOLKtoFq4V28O87TovgTdp0cwg=="
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 12,
+    "body": "\n# Luna Protocol: Mengapa saya melakukan fine-tune model 1,5B pada 50k sampel Discord dan menjadikan few-shot priming sebagai senjata rahasia\n\nPada [artikel pertama](/articles/en/luna-protocol-discord-bot), saya membuat bot Discord yang mensimulasikan manusia -- tidur, typo, keraguan, kelupaan, pesan spontan. Sistem perilakunya solid. LLM di belakangnya adalah model Hermes 3B, terkuantisasi ke Q8_0, memakan 3GB VRAM.\n\nItu berhasil. Tapi itu berlebihan.\n\nBot Discord tidak membutuhkan model 3B par",
+    "verified": true,
+    "title": "Luna Protocol: Mengapa saya melakukan fine-tune model 1,5B pada 50k sampel Discord dan menjadikan few-shot priming sebagai senjata rahasia",
+    "description": "Model yang lebih kecil yang dilatih dengan data lebih sedikit bisa mengungguli model yang lebih besar -- jika Anda tahu cara mempersiapkannya. Inilah mengapa Luna Protocol beralih dari Hermes 3B ke fine-tune Qwen 1,5B, dan mengapa few-shot priming menjadi pengubah permainan yang sesungguhnya.",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Kz82V9/0bkmeJLWfOuMizLkKFkdkHwRPSs2UHGNb48trjbuYLI4XGTZc8qkSb9dUH6ZxHAgsKw1L6uVTYZkIMg=="
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 14,
+    "body": "# Masalahnya: Terlalu Banyak Akronim, Kurang Hierarki\n\nTCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; sebagian besar sumber yang membahasnya menyajikannya sebagai daftar datar opsi yang dapat dipertukarkan, \"pilih sesuai kasus penggunaan\". Pada kenyataannya mereka tidak berada pada bidang yang sama: beberapa adalah protokol transportasi, yang lain adalah lapisan keamanan yang membungkus transportasi, dan lainnya lagi adalah protokol aplikatif yang dibangun di atas dua lapisan pertama.",
+    "verified": true,
+    "title": "Bagaimana Mesin Saling Berbicara: Sebuah Tinjauan dari TCP hingga mTLS",
+    "description": "Mengapa TCP, UDP, TLS, mTLS, HTTP, dan WebSocket bukanlah alternatif yang bersaing melainkan lapisan yang bertumpuk; sebuah tinjauan hierarkis komunikasi mesin-ke-mesin, dari transportasi mentah hingga otentikasi mutual.",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "jaringan",
+      "arsitektur-terdistribusi",
+      "protokol"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "id",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "MLMyt5nM357eVwh+IqEkevrn38inNsITKpDcs7pODPhDzQFhoimx0C8IH5yv2b5GYlZpWMq53L5ZD40jOSGH3g=="
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 8,
+    "body": "\n# 5 cara cerdik menggunakan GitHub Actions\n\nDi atas kertas, GitHub Actions untuk CI/CD klasik: kamu push, dia lint, test, deploy. Saya sudah menulis tentang kasus khusus -- menggunakan git tag sebagai database untuk bot email (lihat artikel khusus). Tapi menggali repo-repo saya sendiri, ada cukup banyak pola berbeda sehingga layak dibuat artikel tersendiri, kurang fokus pada satu proyek, lebih seperti katalog teknik.\n\nLima hal, dari yang paling klasik sampai paling nyeleneh.\n\nRekap cepat, detai",
+    "verified": true,
+    "title": "5 cara cerdik menggunakan GitHub Actions (dan apa yang diajarkan tentang secrets)",
+    "description": "CI runner disulap jadi VPS gratis, bot yang membuka PR-nya sendiri, publish npm tanpa secret sama sekali. Tur ke repo-repo saya untuk membuat katalog pola GitHub Actions yang melampaui \"lint + test + deploy\".",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "0PkYOnL2HLR8CkJ/QwYams3pd36MtMmzeS7mvuVQxXs/MsLyi8FK8rZ9Qb7JtQaTiBXcDK6tsaRxSUW9dUPpZw=="
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 8,
+    "body": "\n# valorant-short-maker: pipeline yang menghasilkan Shorts Valorant saya sendirian\n\nSelama beberapa bulan, sebuah channel YouTube berjalan tanpa saya sentuh: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). Agen-agen Valorant yang saling mengejek di antara ronde, di-dubbing, dengan subtitle karaoke, dipublikasikan sebagai Shorts. Semuanya dihasilkan oleh [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker), sebuah pipeline TypeScript/Bun yang ber",
+    "verified": true,
+    "title": "valorant-short-maker: pipeline yang menghasilkan Shorts Valorant saya sendirian",
+    "description": "Groq/Llama untuk skrip, Piper untuk suara, FFmpeg untuk sisanya. Bagaimana cron job memproduksi dan mempublikasikan satu video per hari di @valorant_agents, dari A sampai Z.",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "1f2EIUEsYrNNXCosNTawiXykHHKO7QHUrx1fr2k8MbsuVxaIqqE5RtvW0klfSau0ONI+M1sxYcwwZk/qUofwuA=="
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 8,
+    "body": "\n# Cara Mendapatkan Jubah Apapun di Minecraft Bedrock\n\nDi Java, ada banyak cara berbelit untuk mendapatkan jubah yang seharusnya tidak Anda miliki (lihat artikel `cape-mod`). Di Bedrock, gamenya berbeda, autentikasinya berbeda, tapi tetap ada caranya -- tidak perlu mod, tidak perlu menyentuh paket jaringan apapun. Cukup launcher pihak ketiga dan versi game yang cukup tua sehingga belum memiliki validasi yang diharapkan.\n\nIni caranya, lalu kita lihat apa yang mungkin terjadi di balik layar.\n\n- Ak",
+    "verified": true,
+    "title": "Cara Mendapatkan Jubah Apapun di Minecraft Bedrock",
+    "description": "Launcher pihak ketiga, versi lama game, dan pemilih jubah yang tidak pernah belajar bilang tidak. Tutorial lengkap plus penjelasan kemungkinan kenapa ini bekerja.",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "pm4tkRmUfT9MkuvjqPEFNMfBHeBMp3/hYWurqq3M8CDKqcN6w2YNZn0C+Ij3YDA8lliZYb2OehBQmiBd6nPXyw=="
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 8,
+    "body": "\n\nMelatih agen DQN untuk trading algoritmik dengan gradient descent klasik memiliki masalah yang sederhana untuk dinyatakan dan sulit untuk dipecahkan: gradient descent mengoptimalkan _satu_ jaringan menuju _satu_ minimum lokal, pada _satu_ jendela pasar. Tidak ada yang menjamin minimum ini dapat digeneralisasi ke rezim pasar yang berbeda, dan tidak ada dalam loop pelatihan yang mendorong keberagaman; dua kali eksekusi dari seed yang berbeda sering kali konvergen ke strategi yang hampir identik,",
+    "verified": true,
+    "title": "Saya mengevolusi jaringan saraf melalui seleksi alam alih-alih gradient descent",
+    "description": "Bagaimana saya mengganti pelatihan gradient descent klasik dengan algoritma genetik NSGA-II untuk mengevolusi agen trading DQN: empat versi, dari overfitting hingga evolusi bobot Lamarckian.",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "id",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "OgEpRpfSnGcA1CSnpDLnj61TbMDrQVgjIhilNkgHhiGV3xt7iQ2V5V/X6EIVr1JiEvPl0hR6SskbTxu9EoN/eg=="
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 28,
+    "body": "\n\n![Bot Soldier TF2 membidik peluncur roket](assets/tf2-bot-ai-soldier-aim.png)\n\nSetiap pemain TF2 pernah mengatakannya setidaknya sekali: \"bot ini curang.\" Atau sebaliknya: \"kenapa bot Easy ini cuma berdiri di sana makan roket.\" Tidak ada yang benar-benar tahu apa arti \"Easy,\" \"Normal,\" \"Hard,\" dan \"Expert\" di balik layar -- Valve mengirimkan empat label kesulitan dan tepat nol dokumentasi.\n\nJadi sekelompok kami (saya, awimii, Mush The Possum, dengan sebagian besar pekerjaan dasar oleh sigsegv,",
+    "verified": true,
+    "title": "Bot TF2 Tidak Acak: Saya Merekayasa Balik Setiap Pengaturan Kesulitan",
+    "description": "Visi, pelacakan bidikan, sudut backstab Spy, logika headshot Sniper, setiap bug yang diketahui -- Valve tidak pernah mendokumentasikannya. Jadi kami menggali kode dan mengubahnya menjadi lembar spesifikasi lengkap.",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "game-ai",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "hgLVCLYqTt35QeyKnL9FVYh7kstu1Shh283Z3Q6wm8LpWkzMEx3Aj56F9RjqnSxu5HGatrOq+3/M71ApeKlCEw=="
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 9,
+    "body": "\n# Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA\n\n![alt text](assets/xbox-profile.png)\nBagaimana jika cukup dengan tanda tangan RSA yang valid -- tetapi untuk **akun yang salah** -- untuk membuat teman-temanmu percaya bahwa kamu memakai cape resmi Mojang? Selamat datang di `cape-mod`, sebuah eksploitasi Fabric yang menunjukkan bagaimana Minecraft mempercayai tanda tangan tanpa memverifikasi bahwa profil yang dimilikinya benar-benar milikmu.\n\nDi Java Edition, ada pertanyaan ya",
+    "verified": true,
+    "title": "Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA",
+    "description": "Mod Fabric yang mengeksploitasi celah logika dalam sistem kepercayaan Minecraft: tanda tangan RSA Mojang yang valid tetapi diputar ulang pada akun yang salah. Penjelasan kode, implikasi keamanan, dan pelajaran kriptografi.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "3BTqAmVIp4ukXdgZJZyo6IG9x/JYvk8BNRxNX/XLecVVWP8WwmCfsTiLMUWfpcfNTxtG3N9bT5Hn98c2xBy8bg=="
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 17,
+    "body": "\n# Laupok membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya\n\nLaupok membangun kecerdasan buatan yang bermain **Super Mario World** sepenuhnya secara otonom. Tidak ada input yang sudah diatur sebelumnya, tidak ada frame yang direkam. AI itu belajar sendiri, melalui mutasi acak dan seleksi alam, untuk menyelesaikan level-level dalam permainan. Proyek ini berjalan di **BizHawk**, sebuah emulator multi-platform, melalui skrip Lua sekitar **4200 baris**.\n\nYang membuat pro",
+    "verified": true,
+    "title": "Laupok membangun AI yang bermain Super Mario World sendiri -- bagaimana cara kerjanya",
+    "description": "Penjelasan mendalam tentang proyek Laupok: AI berbasis NEAT yang belajar bermain Super Mario World secara otonom. Algoritma genetika, jaringan saraf tiruan, neuroevolution of augmenting topologies, dan 4200 baris Lua.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "OYD99ZuT3CEoz1tWLgxrrZ+9RZVqmLC/qUiNAX71Yv3vj96ZZKYr1OXA1U5C+PNnnyULpl6pMRvPBE7lIPAvbg=="
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 15,
+    "body": "\n# Luna Protocol: Saya Membuat Bot Discord Otonom yang Mensimulasikan Manusia\n\nBagaimana jika sebuah bot Discord bisa **tidur**, melakukan **salah ketik**, **ragu-ragu**, **lupa** membalas, dan terkadang mengirim Anda pesan atas inisiatif sendiri? Inilah yang dilakukan **Luna Protocol**: sebuah bot Discord sepenuhnya otonom yang menjalankan LLM lokal (llama.cpp) dan berbicara seperti manusia yang tidak sempurna.\n\nTanpa prompt kaku, tanpa jawaban robotik. Luna memiliki **sistem pemicu prioritas**",
+    "verified": true,
+    "title": "Luna Protocol: Saya Membuat Bot Discord Otonom yang Mensimulasikan Manusia",
+    "description": "Luna Protocol adalah bot Discord sepenuhnya otonom dengan LLM lokal, mampu melakukan percakapan alami dengan tidur, salah ketik, keraguan, kelupaan, kelelahan tematik, dan pesan spontan.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Slfyi4Ci0gMGgW8mVVEe7QDUr5R+ii4LZs1GfjsCzbGYr9Fa9TAUHKSORxKJnr0+AZOH21v3mu/kba78sMDl2Q=="
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 23,
+    "body": "\n\n![AI Belajar Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.png)\n\nAda sebuah video berjudul [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) oleh Kadambi | AI Engineering, dan ini adalah salah satu catatan paling jujur tentang pelatihan AI bermain game yang pernah saya lihat.\n\nPremisnya: buat bot yang memainkan Minecraft PvP (sword kit, baju diamond fully enchanted) dengan melihat layar dan mengeluarkan perintah mouse dan keyb",
+    "verified": true,
+    "title": "AI Belajar Minecraft PvP -- Imitation Learning, Reinforcement Learning, dan 30 Variabel yang Penting",
+    "description": "1.000 duel direkam, jaringan saraf dilatih pada piksel, akurasi penekanan tombol 90% : dan bot berjalan lurus ke tembok. Kemudian datang RL, curriculum learning, dan 60 jam pelatihan.",
+    "date": "2026-07-09",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "ejVbXUqhoOH2wuxwrAqA9hROZNbrRJxdTqv5qB69Y9/52HCegUWY8BiG9+siE41YHat9YOLqH7i1lIT1lsY7ng=="
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 27,
+    "body": "\n\nSuper Mario Bros. adalah 40 kilobyte ROM. Delapan dunia, 32 level, musuh, musik, power-up, semuanya muat di dalamnya.\n\nTapi jika kamu membuka emulator dan mengutak-atik byte yang tepat, kamu bisa memuat level 36-1. Atau 255-1. Atau mendarat di dunia di mana segalanya terbuat dari sprite Bowser dan pipa yang tidak membawa ke mana pun.\n\nGlitch world ini ada karena alasan sederhana: sistem penyimpanan level SMB1 adalah keajaiban optimasi 8-bit, dan ketika kita memaksa game membaca di tempat yang",
+    "verified": true,
+    "title": "Super Mario Bros.: format level, penunjuk, dan 256 glitch world",
+    "description": "Bagaimana 128 level × 4 tipe zona muat dalam 40KB ROM, mengapa Minus World ada, dan bagaimana pertandingan Tennis NES bisa memuat glitch world.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "PCkc/O3AxdKqRrprAs8n9YYTSU5ySjTJlKwJy5I18RVYs9heD8orKaRTCA9nzGK6sqiAXNf9csd9m1bYOC/dsA=="
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 11,
+    "body": "\n# Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan\n\nSaya sudah memelihara proyek ini sejak lama, tetapi membaca ulang kode sendiri dengan pikiran tenang selalu memberi pelajaran berharga. konosuba-rpg adalah RPG giliran Discord di mana setiap tindakan menghasilkan gambar WebP secara instan. Bukan embed teks. Gambar asli yang dikomposisi, dengan sprite, bar HP, pesan pertarungan -- semuanya.\n\nStack-nya: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. H",
+    "verified": true,
+    "title": "Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan",
+    "description": "RPG giliran Discord di mana setiap tindakan menghasilkan gambar WebP secara instan: URL sebagai status permainan, RNG deterministik, pipeline WASM, cache 5 level, bot serverless.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "KB38tuSZmqkMB9Akbbk2X8RrsgGKL93v5uy7PbyE7DYng6Afq/Pr/4DFYNzVQrnBDGtNzWUDkAP7dca/OkntZg=="
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 3,
+    "body": "\n\nBot dan pemindai otomatis terus-menerus memindai aplikasi web untuk mencari kerentanan. Mereka mencari file `.env`, panel admin, cadangan basis data, kredensial SSH -- apa pun yang dapat dieksploitasi.\n\nAlih-alih hanya mengembalikan 404, saya ingin membuat sesuatu yang lebih menarik: sebuah **honeypot Express** yang merespons dengan konten kredibel, membuat penyerang percaya bahwa mereka telah menemukan target yang rentan.\n\n## Fungsinya\n\nMiddleware ini mengekspos **328 endpoint** yang dibagi m",
+    "verified": true,
+    "title": "Saya membangun honeypot Express yang sangat realistis",
+    "description": "328 endpoint palsu dengan respons yang dihasilkan saat itu juga, spoofing header, pencatatan lalu lintas bot -- menyelami kode middleware honeypot Express yang dirancang untuk menipu pemindai.",
+    "date": "2026-06-10",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "HrPSRRiP2JJFcEMo1xs4pkDokni2IUpyiGjFSIomaDjpvSO5JDYZd4vXGZpUfzkFw+GOFSzCeifTNy+8B0XgXA=="
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 19,
+    "body": "\n\nPernah kepikiran apakah kita bisa menjalankan server Minecraft di mikrokontroler $1?\n\nAku iya. Dan jawabannya adalah iya. Secara harfiah.\n\nAda proyek bernama [Bareiron](https://github.com/p2r3/bareiron/), buatan p2r3, dan ini mungkin salah satu proyek paling menarik yang pernah kulihat di dunia Minecraft dalam beberapa tahun terakhir. Kita bicara soal binary yang muat dalam **300 kilobyte**, **6800 baris C**, nol dependensi eksternal, tanpa malloc, tanpa threading, dan berjalan di **ESP32 seha",
+    "verified": true,
+    "title": "Bareiron -- server Minecraft yang berjalan di mikrokontroler $1",
+    "description": "6800 baris C, nol malloc, Perlin noise diganti dengan bilinear interpolation, biome di tile map, dan semuanya di chip $1.",
+    "date": "2026-05-30",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "3Dw5gutaEIwghapeLOnhqgHhLySzJ1rWQC1EjiEZOA+WzKiZgqsIV4iF8MlcIYB5cgPIR21P7VluIeJXUTMzAg=="
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 11,
+    "body": "\n\nSaya menghabiskan beberapa bulan memelihara bot Discord biasa di mesin saya sendiri.\n\nKoneksi WebSocket selalu terbuka. Bot reconnect sendiri jam 3 pagi. Bot crash karena saya lihat dompet salah. Tagihan membengkak.\n\nSuatu hari saya menemukan: **kenapa harus maintain koneksi** ? Discord bisa POST langsung hal-hal yang kamu minati. Kamu jawab, selesai.\n\nSejak 2021, Discord menyediakan **interaction endpoints**.\n\nIni cuma HTTP. Tanpa WebSocket. Tanpa state persisten. Kamu terima request, kirim J",
+    "verified": true,
+    "title": "Discord bot 100% serverless : Hono + Cloudflare Workers",
+    "description": "Bagaimana saya mengganti bot Discord yang menghabiskan 50€/bulan menjadi nol euro -- interaction endpoints, Hono, Workers, render gambar real-time, dan game lengkap tanpa WebSocket.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "bOAVIzzlc2BIl3bXInpInE+ax0/aTwCbV5X4w+to+Ww5ZNY8sYCVLhm636QONK20UAp8sC2LQsi0kHi4fXe8cQ=="
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 6,
+    "body": "\n\nAda proyek yang dimulai dengan \"bagaimana kalau aku bikin game catur dengan mitologi?\" dan berakhir dengan sesuatu yang punya AI yang memutuskan hyper-parameternya sendiri setiap 5 giliran.\n\nNausicaa seperti itu. Game papan bergiliran di mana kamu membangun deck makhluk mitologis, mengelola mana, dan menempatkan unit di papan 10x8. Dan ada AI yang mengalami krisis kepribadian.\n\nAku menghabiskan cukup banyak waktu untuk AI ini, dan hasilnya cukup kacau xD\n\n## Game yang Sebenarnya\n\nSebelum bicar",
+    "verified": true,
+    "title": "AI Konyolku untuk Nausicaa",
+    "description": "AI dengan koefisien heuristik, hyper-parameter yang berubah setiap 5 giliran, dan Oracle yang kabur -- menyelami otak game papan strategis.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "IgJMXbKGIIeID7QtcWGeGtuqP0jh1GqyQql3tkRF8mpaTWdo3zc4geWJv0gwyqW+L09IbvO5amcdz8nF8WRWzw=="
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 13,
+    "body": "\n\nAku menghabiskan berjam-jam melihat domba menabrak tembok.\n\nDan jujur? Investasi terbaik dalam hidupku xD\n\nKarena semakin kamu lihat mob-mob ini, semakin kamu sadar bahwa mereka tidaklah acak. Setiap gerakan dikodekan, bisa diprediksi, dan yang terpenting -- bisa dieksploitasi sepenuhnya. Aku akhirnya menyelami kode sumber Minecraft untuk benar-benar memahami cara kerja pathfinding, dan yang kutemukan adalah kamu bisa benar-benar mengontrol pikiran mob. Maksudku, memaksa mereka pergi ke mana K",
+    "verified": true,
+    "title": "Logika Pathfinding Minecraft dan Aplikasinya",
+    "description": "Bagaimana algoritma A*, malus blok, dan POI memungkinkan kita mengontrol, memprediksi, dan mengeksploitasi pergerakan mob -- dari redstone nirkabel hingga farm yang dioptimalkan.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "6P6k8x5EyxAd7NPj4S/ld6WPSUfG7zEPDHGqbBLEjdFNiBDj5Zr+vK9u4mcDGRTbTfyfE/I3+aAH/ya5L90Byg=="
+  },
+  {
+    "slug": "utau",
+    "readingTime": 9,
+    "body": "\n\nAku sudah sempat menyinggungnya di halaman utamaku: aku suka UTAU. Inilah alasannya.\n\nPada tahun 2008, jika kamu ingin membuat suara sintetis bernyanyi, cuma ada satu opsi: VOCALOID. Perangkat lunak dari Yamaha. Mahal, proprietary, dengan suara resmi yang tidak bisa kamu buat sendiri.\n\nLalu ada seorang pria Jepang, Ameya/Ayame, yang merilis sesuatu buatannya sendiri. Sebuah perangkat lunak yang dikode dalam **Visual Basic 6**. Gratis. Yang memungkinkanmu membuat suaramu sendiri dengan... file",
+    "verified": true,
+    "title": "UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis",
+    "description": "Bagaimana UTAU, perangkat lunak gratis berbasis VB6 dari tahun 2008, memungkinkan siapa saja membuat suara nyanyian melalui sintesis konkatenatif -- dan mengapa hal itu masih berarti hingga hari ini.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "vPNC7o4mllrYRj5d+h6VEirIhwMKeIeMpN0GlIV1Tr6nId9HMgsd9+Y6+F8YZyabBEg/82/npbICO8C+s9eXeQ=="
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 11,
+    "body": "\n# Menjalankan Pustaka Node.js di Browser Tanpa Wasm -- polyfill typescript-virtual-container\n\nSaya baru saja menghabiskan cukup banyak waktu mempelajari kode sumber [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), proyek [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Dan bagian yang paling mengejutkan saya bukanlah VFS, bukan jaringan virtual, bukan 170 perintah Unix yang diimplementasikan ulang dalam TypeScript. Melainkan direktori `poly",
+    "verified": true,
+    "title": "Menjalankan Pustaka Node.js di Browser Tanpa Wasm -- polyfill typescript-virtual-container",
+    "description": "Bagaimana Fortune mengimplementasikan ulang node:fs, node:crypto, dan belasan modul Node secara manual dalam 640 baris JavaScript agar kontainer berjalan di browser tanpa Wasm.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "89opn2Fo7KFAAOU2cb+VdmCG3ty85v5TtE8qeAnPD4PGiFtW0du3mzNCNUuJTRdjmm7cE9kBOscBlohqZvii4g=="
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 7,
+    "body": "\n# Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions\n\nSaya punya reply email otomatis yang jalan 24/7.\n\nDia baca email saya, paham isinya, dan jawab sendiri pakai AI. Dia ingat percakapan sebelumnya. Dia abaikan newsletter dan `noreply@`. Dia forward ke manusia kalau terlalu panas.\n\nBiaya bulanan: **0€**.\n\nTanpa server. Tanpa VPS. Tanpa database. Cuma GitHub Actions dan hack gila: **pake git sebagai database**.\n\nKamu kebayang? Belum? OK, berpeganganlah, ini konyol se",
+    "verified": true,
+    "title": "Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions",
+    "description": "Cara saya membuat auto-reply email AI yang berjalan di GitHub Actions untuk 0€/bulan -- menggunakan git tags sebagai database dan pre-compile dalam tag runtime.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "xI2hZZ/BmYIntun3lV5SfFflVjvjY9FNA8ecJENbdF99OKkh5khYOYoL8GOLpvT5xAk1TUAyXChaOz4J6Dvd9g=="
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 16,
+    "body": "\n\nGitHub Actions kasih kamu mesin Linux gratis.\n\nIya, beneran server Ubuntu. 2 core, 7 GB RAM, 14 GB disk. Gratis. Selama 6 jam per run.\n\nSatu-satunya \"masalah\" : di akhir run, semuanya dihapus. Mesinnya disposable. Kamu install berbagai hal, ngoding, konfigurasi... dan poof, di akhir semuanya hilang. Seperti tidak pernah terjadi.\n\nKecuali.\n\nKecuali kamu pakai **git sebagai hard disk**.\n\nDan tiba-tiba, kamu punya VPS gratis dengan disk persisten yang bertahan dari run ke run. Kamu reconnect, sem",
+    "verified": true,
+    "title": "Repo to VPS : mengubah GitHub Actions menjadi VPS gratis dengan penyimpanan persisten",
+    "description": "Cara mengubah runner GitHub Actions menjadi VPS permanen dengan git sebagai penyimpanan persisten -- tmate, inotify dan commit --amend.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "nvOjjW8MR7u9pgcNr9q0FDAJSYjbjIKH+Q3kY1F2jP+1+MEecWiWiH1cAtZJy7ldNx7hl7ewlF3YitoMilPliQ=="
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 38,
+    "body": "\n# Setiap JavaScript sandbox, emulator, simulator, dan honeypot Linux -- dibandingkan\n\nBaik, jadi sudah cukup lama saya terlalu jauh masuk ke lubang kelinci ini lol. Semua dimulai karena saya membantu di [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- sebuah proyek Fortune (saya akan bahas nanti) -- dan saya terus ditanya \"tunggu, apa bedanya dengan `v86`?\" atau \"kenapa tidak pakai `vm2`?\" -- dan saya sadar bahwa saya tidak bisa memberikan jawaba",
+    "verified": true,
+    "title": "Perbandingan Solusi JavaScript untuk Simulasi Kernel Linux",
+    "description": "Analisis mendalam tentang rekonstruksi lingkungan Linux dalam JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "soH18raNs9Y9/BTfI7aJQqtULUap2oXSJt0Hzq6haEez37aDsoEb10JA3gaIn0nIHCRSCzmZATsq/9gvUl/rrw=="
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 6,
+    "body": "\n# Membangun character-factory: avatar dengan sistem genetika\n\nSaya butuh ribuan avatar kredibel dan berbeda untuk [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- sebuah proyek permainan kartu privat di mana setiap kartu berisi \"DNA\" karakter yang diubah mesin render menjadi potret. Membeli paket jadi, itu ketahuan. Membuat avatar DiceBear dengan seed per karakter, hasilnya kacau: kartu berlatar Jepang bisa mendapat wanita pirang Skandinavia, dan dua \"saudara\" tampak seperti orang asing.",
+    "verified": true,
+    "title": "Membangun character-factory: avatar dengan genetika",
+    "description": "Modul TypeScript di atas DiceBear: generasi konsisten per negara/etnis, mesin genetika kecil untuk memproyeksikan anak, dan detail rekayasa yang membuatnya dapat digunakan dalam permainan kartu.",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "VP6soV5DRhaQK3RYWVWjO5yZZfr32J/6r+VDh/UqX3UaboUN0WaFH0M4X+U+pUn/oD9Khrc7dR5Zs1lGB/Ugmg=="
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 7,
+    "body": "\n> **Catatan (2026) :** Proyek ini tidak lagi dipertahankan. Microsoft telah secara signifikan memperkuat deteksi anti-bot mereka -- apa yang dulu berhasil sekarang sudah tidak berfungsi lagi. Kode dan pendekatan yang dijelaskan di bawah ini disimpan untuk tujuan arsip dan demonstrasi saja.\n\nSaya menemukan Microsoft Rewards beberapa tahun yang lalu. Itu terjadi selama masa karantina, tapi itu tidak mengubah fakta bahwa saya diharuskan menggunakan parental control Microsoft Family Safety dan oleh",
+    "verified": true,
+    "title": "Membot sebuah Farm Microsoft Rewards",
+    "description": "Bagaimana saya membuat bot untuk memanen poin Microsoft Rewards secara besar-besaran -- dan mengapa Microsoft sejak itu telah memperkuat pertahanannya.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "5k9RUSPaAZDc92Mn/bS0ltgm8oNLEMBSj0+xd9yKRsmr6DTNaH8XNi8FSuRP06wkyyO+/SWx6kF/KCLV0ryvgg=="
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 4,
+    "body": "\n# Proyek\n\nProyek yang sedang saya kerjakan bernama LLJT :\n\n![](assets/20260313_092734_image.png)\n\nIni adalah situs web yang juga merupakan PWA, jadi juga aplikasi mobile. Ia menggunakan MaterialUI untuk memberikan kesan seperti aplikasi telepon sungguhan.\nSaya baru-baru ini harus menangani impor Mui, dan saya berhasil mengurangi dari 11707 modul menjadi hanya 595 pada akhirnya, dengan mengimpor setiap ikon secara manual baris per baris, daripada menggunakan impor terdestruktur: saya belajar bah",
+    "verified": true,
+    "title": "Bekerja pada Proyek Baru",
+    "description": "Gambaran umum tentang proses memulai dan mengembangkan situs web baru.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "ZQwEZcrLgCSGdbx0/FFDbCq+Ftn7Lo4qd3lP2UJW58kO9i0+NP2fABSRIGs27pdyQhgZd5w0Rblph8GIXNcwIQ=="
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 2,
+    "body": "\n# Profil GitHub Saya\n\nSelamat datang di profil GitHub saya -- diatur seperti perpustakaan yang rapi.\nDi bagian pertama ada header dengan tautan, cukup standar menurut saya:\n![](assets/20260308_123527_image.png)\n\nJadi seperti yang Anda lihat, ada tautan-tautan, kerenlah saya rasa, saya tidak terlalu tahu harus berkata apa lagi.\n\n## Tentang Saya\n\nAda juga bagian \"Tentang Saya\":\n\n![](assets/20260308_123913_image.png)\n\nDi bagian ini Anda bisa melihat apa yang sedang saya lakukan secara langsung! Ji",
+    "verified": true,
+    "title": "Tentang Profil GitHub Saya",
+    "description": "Perkenalan singkat tentang profil GitHub saya.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Mqg4bZXcJZrDS5kzSSTEODC61gWRIToAuv6/b3U2YMTTf5aUxm83/HmvqjVDNyozAXNWIcSe1u/rpS6v3xCOXg=="
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 4,
+    "body": "\n# Hobi Saya\n\nSaya sudah lama ingin menulis blog ini tetapi terus menahan diri :/\n\nMungkin karena saya ingin berbagi kehidupan saya tetapi tidak ingin berbagi informasi pribadi? Saya kira itu alasannya.\n\nHobi saya beragam: saya suka ngoding, seperti yang mungkin Anda sadari dari blog ini. Ada sesuatu yang sangat memuaskan dalam membangun sesuatu dari nol, memecahkan masalah, dan melihat kreasi Anda hidup. Baik itu alat baris perintah kecil atau aplikasi web lengkap, prosesnya tidak pernah membos",
+    "verified": true,
+    "title": "Hobi Saya",
+    "description": "Mengode, menggambar, mengotomatisasi, menemukan teknologi lama, dan masih banyak lagi -- sekilas tentang apa yang memotivasi saya.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "personal"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "GWSbYIoOGga6eB5XGPS018l0/QhwsEaaxKOODLyd1HWUy+ejShnsWtnIvP1ISyy7bZDdBLXmxA01E7KkRbPYVQ=="
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 5,
+    "body": "\n# Skrip Penandatanganan SSH untuk Komit -- Penjelasan\n\nArtikel ini menguraikan skrip `setup-ssh-signing.sh` yang saya publikasikan di [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). Kita akan lihat apa yang dilakukan setiap bagian, bagaimana cara membuat penandatanganan SSH lokal untuk sebuah repositori menjadi sangat mudah, dan, ya, mengapa saya repot-repot menulisnya (spoiler: saya hanya ingin komit saya terlihat **keren**).\n\nSaya selalu suka mengutak-atik alur k",
+    "verified": true,
+    "title": "Skrip Penandatanganan SSH Dijelaskan",
+    "description": "Menguraikan helper penandatanganan komit SSH dan mengapa saya ingin komit yang bergaya.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "aW6CHhtJzAhup7mI9oE5IV7nrThUSzmivp3ddihVRwikgGS/2scC5nBqhJONWiTLVbcfGvENEVpGnPmUqxq9cA=="
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 8,
+    "body": "\n# Bagaimana Cara Kerja Blog Ini?\n\nKamu pernah bertanya-tanya bagaimana blog ini bekerja di balik layar? Di artikel ini, aku akan menjelaskan seluruh arsitektur aplikasi, dari stack teknis hingga proses penulisan artikel. Dan ya, aku bahkan akan menunjukkan cara aku menulis artikel dari VS Code!\n\nBlog ini dibangun dengan teknologi web modern:\n\n- **React 19** -- untuk antarmuka pengguna\n- **TypeScript** -- untuk kode yang tertipe dan lebih andal\n- **Vite** -- sebagai alat build yang sangat cepat",
+    "verified": true,
+    "title": "Bagaimana Cara Kerja Blog Ini?",
+    "description": "Di balik layar blog: React, Vite, Markdown, pipeline CI/CD dan alur penulisan.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "LInRqnjdisUAqDWuEt2cuBoTx5Nw9NeIV2dasZ+CNEsc/6zZWzQfkwRsUpJKiuWAwQ1f40g0qzPfhNpHqFsgJw=="
+  }
+]

@@ -1,0 +1,663 @@
+[
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 17,
+    "body": "\n# بروتوكول لونا: أدمغة مشتركة، تصنيف المشاعر، وتوجيه مثير/تافه\n\nفي المقالين [السابقين](/articles/en/luna-protocol-discord-bot) [الاثنين](/articles/en/luna-protocol-official-models)، قدّمت بروتوكول لونا كبوت ديسكورد واحد بنظام سلوكي معقّد ونموذج مضبوط بدقة. لكن البنية تطورت كثيرًا منذ ذلك الحين. ما كان في السابق كتلة برمجية واحدة -- عملية Node.js وحيدة تتولى بوت ديسكورد والسلوك واستدعاءات النموذج اللغوي -- تحول إلى **أربع طبقات مستقلة**، لكل منها مسؤوليتها الخاصة، ولغتها الخاصة، ودورة حياتها الخ",
+    "verified": true,
+    "title": "بروتوكول لونا: أدمغة مشتركة، تصنيف المشاعر، وتوجيه مثير/تافه",
+    "description": "انتقل بروتوكول لونا من كتلة برمجية واحدة إلى بنية من أربع طبقات: المحولات، الدماغ، مصنف المشاعر، والاستدلال. على القائمة: مراكز التضمين (centroids)، توجيه مثير/تافه، وضبط معاملات النموذج اللغوي حسب التكافؤ والإثارة.",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "zyp369jIgPgdS4h8Ew5ZzhWjpdQhWaOLTX4Kq/wBhG7bBvEM+uIlg0mYlcTy/Ub14O9cDvxXtaqyqP16UNV22w=="
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 19,
+    "body": "\n# من ELIZA إلى LLM: 60 عاماً من الذكاء الاصطناعي التحادثي، معاد بناؤه في TypeScript\n\nفي عام 1966، كتب جوزيف فايزنباوم 420 سطراً من MAD-SLIP على IBM 7094 لإنشاء أول شات بوت في التاريخ. البرنامج كان اسمه **ELIZA**، وكان يحاكي معالجة نفسية رودجرية باستخدام أنماط أساسية وإعادة ترتيب للجمل. بعد ستة عقود، أصبح الذكاء الاصطناعي التحادثي موضوعاً رئيسياً -- ChatGPT، Claude، Gemini في كل محادثة.\n\nلكن بين هذين الطرفين، كان هناك **PARRY** (الشات بوت المصاب بجنون الارتياب، 1972)، **ALICE** (ملك AIML بـ 99,0",
+    "verified": true,
+    "title": "من ELIZA إلى LLM: 60 عاماً من الذكاء الاصطناعي التحادثي، معاد بناؤه في TypeScript",
+    "description": "ELIZA، PARRY، ALICE، Jabberwacky، Cleverbot -- خمس بنى مختلفة جذرياً لنفس المشكلة، منقولة إلى TypeScript مع بياناتها الأصلية. من 1966 إلى LLM الحديثة، إليكم كيف تعلّم الذكاء الاصطناعي التحادثي الكلام، وماذا يعلمنا مستودع من الشات بوت عن 60 عاماً من البحث.",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ia",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "histoire",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "lang": "ar",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "XRu08rDJpgvg97aaG0R5Ae1w1DJlWeagzjFB6gdL28gEdcVKtzdVqZlyLdm60fmj6k4CTlnqymDaelX2DNamwg=="
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 12,
+    "body": "\n# بروتوكول لونا: لماذا قمت بضبط نموذج 1.5B على 50k عينة من ديسكورد وجعلت التمهيد القليل من الأمثلة السلاح السري\n\nفي [المقال الأول](/articles/en/luna-protocol-discord-bot)، قمت ببناء بوت ديسكورد يحاكي إنسانًا حقيقيًا -- النوم، الأخطاء الإملائية، التردد، النسيان، الرسائل العفوية. النظام السلوكي كان متينًا. لكن النموذج اللغوي الكبير خلفه كان نموذج Hermes بحجم 3 مليار معامل، مكمّم إلى Q8_0، يستهلك 3 جيجابايت من VRAM.\n\nكان يعمل. لكنه كان مبالغًا فيه.\n\nبوت ديسكورد لا يحتاج نموذجًا بـ 3 مليار معامل لي",
+    "verified": true,
+    "title": "بروتوكول لونا: لماذا قمت بضبط نموذج 1.5B على 50k عينة من ديسكورد وجعلت التمهيد القليل من الأمثلة السلاح السري",
+    "description": "نموذج أصغر مدرب على بيانات أقل يمكنه التفوق على نموذج أكبر -- إذا كنت تعرف كيف تمهّده. إليكم لماذا تحول بروتوكول لونا من Hermes 3B إلى ضبط Qwen 1.5B، ولماذا أصبح التمهيد القليل من الأمثلة هو العامل الحقيقي للتغيير.",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "XMjQ1gJ+C5Y/wZ8n3Q0sN1m5ZZxvo+zBkbP1MURTNtzy32/0t0v7dop16alehWlOGID0+UHt0MfXrTPnmi1Gcg=="
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 14,
+    "body": "# المشكلة: كثرة الاختصارات وغياب التسلسل الهرمي\n\nTCP، UDP، TLS، mTLS، WebSocket، HTTP، HTTPS، gRPC، QUIC؛ معظم المصادر التي تتحدث عنها تقدّمها كقائمة مسطّحة من خيارات قابلة للتبديل، \"تُختار حسب حالة الاستخدام\". في الواقع، ليست كلها على نفس المستوى: بعضها بروتوكولات نقل، وأخرى طبقات أمان تُلفّ حول النقل، وبعضها الآخر بروتوكولات تطبيقية تستند إلى الأولين. فهم التسلسل الهرمي يعني فهم لماذا لا \"نختار\" أبدًا بين TCP وTLS: نختار TCP، _ثم_ نقرر ما إذا كنا سنضع TLS فوقه.\n\nهذه المقالة تعيد بناء هذا التسل",
+    "verified": true,
+    "title": "كيف تتحدث الآلات فيما بينها: جولة من TCP إلى mTLS",
+    "description": "لماذا TCP و UDP و TLS و mTLS و HTTP و WebSocket ليست بدائل متنافسة بل طبقات متراكبة؛ جولة هرمية في التواصل بين الآلات، من النقل الخام إلى المصادقة المتبادلة.",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "network",
+      "distributed-architecture",
+      "protocols"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "ar",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "F/zRgb27fb84ZP2tBqxEqPeouKMWtVEGqXuAkE0pFnZ94Rsu9oMY+dFZu9/N1TnFN6mQ4mL1cLMM9pL681eNsA=="
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 7,
+    "body": "\n# 5 طرق بارعة لاستخدام GitHub Actions\n\nعلى الورق، GitHub Actions مصمم لـ CI/CD الكلاسيكي: تدفع، يفحص، يختبر، ينشر. لقد كتبت بالفعل عن حالة خاصة -- استخدام git tags كقاعدة بيانات لبوت بريد إلكتروني (انظر المقال المخصص). لكن بالتنقيب في مستودعاتي، هناك أنماط مختلفة كافية لتستحق مقالاً مستقلاً، أقل تركيزاً على مشروع واحد، وأكثر كفهرس للتقنيات.\n\nخمسة أشياء، من الأكثر كلاسيكية إلى الأكثر التواءً.\n\nملخص سريع، التفاصيل الكاملة في مقال `email-autoreply`. GitHub Actions بلا حالة حسب التصميم -- كل تشغيل",
+    "verified": true,
+    "title": "5 طرق بارعة لاستخدام GitHub Actions (وما تعلمه عن الأسرار)",
+    "description": "محول CI يتحول إلى VPS مجاني، بوت يفتح طلبات السحب الخاصة به، نشر npm بدون أي سر. جولة في مستودعاتي لفهرسة أنماط GitHub Actions التي تتجاوز مجرد \"lint + test + deploy\".",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "wbfvcWxZ4ohdsW8bmcFUpPRTNN9NW1EsqoQzeIuZSTitr85Iju6cZ9iNoTvwVTkmdWxqGZgIxhB9nvM4ZmrcCQ=="
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 7,
+    "body": "\n# valorant-short-maker: البنية التي تولد Shorts Valorant الخاصة بي تلقائياً\n\nمنذ بضعة أشهر، هناك قناة يوتيوب تعمل دون أن ألمسها: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). عملاء Valorant يتناقشون بين الجولات، مدبلجين، مع ترجمة كاريوكي، منشورين كـ Shorts. كل شيء يولده [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker)، بنية TypeScript/Bun تعمل بـ cron وتنشر دون أن يضطر أحد للنقر على أي شيء.\n\nإليكم كيف يعمل، خطوة بخطوة.\n\nثلاث إطارات مأخوذة",
+    "verified": true,
+    "title": "valorant-short-maker: البنية التي تولد Shorts Valorant الخاصة بي تلقائياً",
+    "description": "Groq/Llama للكتابة، Piper للأصوات، FFmpeg لكل شيء آخر. كيف ينتج cron job وينشر فيديو يومياً على @valorant_agents، من الألف إلى الياء.",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Gf+e4fv4yE/N6IQ9K2huGG9nG1M6khG5gST45GZegMmUWV7t31wQeW7BLmDNk/6qFfNf+NwoWCcwHK1BP0yf9Q=="
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 8,
+    "body": "\n# كيفية الحصول على أي عباءة في Minecraft Bedrock\n\nفي Java، توجد طرق ملتوية عديدة لتحصل على عباءة لا يفترض بك امتلاكها (راجع مقال `cape-mod`). في Bedrock، اللعبة مختلفة، المصادقة مختلفة، لكن توجد طريقة مع ذلك -- لا تحتاج إلى مودات، ولا تحتاج للتلاعب بأي حزمة شبكة. فقط مشغل خارجي ونسخة قديمة بما يكفي من اللعبة لتفتقر إلى التحقق المتوقع.\n\nإليك كيفية القيام بذلك، ثم سنلقي نظرة على ما يحدث تحت الغطاء على الأرجح.\n\n- حساب Microsoft يملك Minecraft Bedrock مسبقًا (حسابك يفي بالغرض)\n- مشغل Minecraft الرس",
+    "verified": true,
+    "title": "كيفية الحصول على أي عباءة في Minecraft Bedrock",
+    "description": "مشغل خارجي، نسخة قديمة من اللعبة، ومحدد عبايات لم يتعلم أبدًا أن يقول لا. دليل كامل مع التفسير المحتمل لسبب نجاحها.",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "4sGIH0pEoySBKwssJpadOVdn/6yRGt876dysf3sDm2fgBgsHZ8rSlHMZH2jTzw1QGsku++LFNEB/q9OLVWmhXA=="
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 7,
+    "body": "\n\nتدريب وكيل DQN للتداول الخوارزمي باستخدام الانحدار المتدرج التقليدي له مشكلة بسيطة في الصياغة وأخرى صعبة في الحل: الانحدار المتدرج يحسِّن شبكة _واحدة_ نحو حد أدنى محلي _واحد_، على نافذة سوق _واحدة_. لا شيء يضمن أن هذا الحد الأدنى يعمم على نظام سوق مختلف، ولا يوجد في حلقة التدريب ما يدفع نحو التنوع؛ تشغيلتان تبدأان من بذور مختلفة غالباً ما تتقاربان إلى استراتيجيات متطابقة تقريباً، مع نفس النقاط العمياء.\n\nالإجابة التي استكشفتها: استبدال (أو بالأحرى تراكب) الانحدار المتدرج بخوارزمية جينية. بدلاً",
+    "verified": true,
+    "title": "طورت شبكة عصبية عبر الانتقاء الطبيعي بدلاً من الانحدار المتدرج",
+    "description": "كيف استبدلت تدريب الانحدار المتدرج التقليدي بخوارزمية جينية NSGA-II لتطوير وكلاء تداول DQN: أربعة إصدارات، من الإفراط في التخصيص إلى تطور لامارك للأوزان.",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "ar",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "DS5wzFsubECmncBGRypMPricSVituoF1OPgrojV7LvkiJWD9RfAvXeAxsQKj+OZITvyNU9Ya9tN6SbUeJrFiug=="
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 27,
+    "body": "\n\n![جندي بوت TF2 يصوب قاذفة صواريخ](assets/tf2-bot-ai-soldier-aim.png)\n\nكل لاعب TF2 قالها مرة على الأقل: \"هذا البوت يغش.\" أو العكس: \"لماذا هذا البوت السهل واقف يأكل الصواريخ.\" لا أحد يعرف حقًا ماذا تعني \"سهل\" و\"عادي\" و\"صعب\" و\"خبير\" تحت الغطاء -- Valve شحنت أربعة تصنيفات صعوبة ولا وثيقة واحدة.\n\nلذا مجموعة منا (أنا، awimii، Mush The Possum، مع جزء كبير من العمل الأساسي الذي قام به sigsegv، الذي بحث فعليًا في كود اللعبة المفكك) جمعنا وثيقة بحث كاملة عن سلوك TFBot. كل آلية، كل خطأ معروف، كل احتمال م",
+    "verified": true,
+    "title": "بوتات TF2 ليست عشوائية: لقد هندستُ عكسياً كل إعدادات الصعوبة",
+    "description": "الرؤية، تتبع التصويب، زوايا الطعن الخلفي للجاسوس، منطق القنص في الرأس، كل خطأ معروف -- لم يوثق Valve أيًا من هذا قط. لذا بحثنا في الكود وحوّلناه إلى ورقة مواصفات كاملة.",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "game-ai",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "fZvVqeT+D4WUevioSizLnpbRareoVnzj9bm4lF+lk1RdHiv9+jKMeWOsC3yzJHemcoDHgyLrfyctps0DlFnkVQ=="
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 8,
+    "body": "\n# مود الكيب: كيف تسرق كيب Jeb_ بحقن توقيع RSA\n\n![alt text](assets/xbox-profile.png)\nماذا لو أخبرتك أن توقيع RSA صحيحًا واحدًا -- لكن **للحساب الخطأ** -- يكفي لجعل أصدقائك يعتقدون أنك ترتدي الكيب الرسمي من Mojang؟ مرحبًا بك في `cape-mod`، exploit من نوع Fabric يوضح كيف تثق ماينكرافت بالتوقيع دون التحقق من أن الملف الشخصي الذي ينتمي إليه هو ملفك بالفعل.\n\nفي Java Edition، هناك سؤال لا نطرحه كثيرًا: **من المسؤول عن عرض skin وكيب اللاعب -- العميل أم الخادم؟**\n\nالإجابة دقيقة:\n\n| المكون | من يرسله؟ |",
+    "verified": true,
+    "title": "مود الكيب: كيف تسرق كيب Jeb_ بحقن توقيع RSA",
+    "description": "مود Fabric يستغل ثغرة منطقية في نظام الثقة في ماينكرافت: توقيع RSA صحيح من Mojang لكنه معاد استخدامه على حساب خاطئ. شرح الكود، تداعيات أمنية ودروس تشفيرية.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "RAfs0x57fwy1VsRNzuB/ppZ0XfUeJuz7/Mzr03BZNGKj+Od4smigzHlUZ/fGvaZvIsWcUpu3eO4i90JKPnS3ZQ=="
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 16,
+    "body": "\n# Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل\n\nأنشأ لاوبوك ذكاءً اصطناعياً يلعب **سوبر ماريو وورلد** بشكل كامل ومستقل. لا مدخلات مبرمجة مسبقاً، ولا إطارات مسجلة. الذكاء الاصطناعي يتعلم بمفرده، من خلال الطفرات العشوائية والانتقاء الطبيعي، لإتمام مراحل اللعبة. يعمل المشروع على **BizHawk**، محاكي متعدد المنصات، عبر سكربت لوكا يتكون من حوالي **4200 سطر**.\n\nما يجعل هذا المشروع مثيراً للإعجاب هو أنه يعتمد على مفاهيم بيولوجية مطبقة على الحوسبة: **نظرية التطور** لداروين، **الشبك",
+    "verified": true,
+    "title": "Laupok بنى ذكاءً اصطناعياً يلعب سوبر ماريو وورلد بمفرده -- كيف يعمل",
+    "description": "استعمق في مشروع لاوبوك: ذكاء اصطناعي مبني على خوارزمية NEAT يتعلم لعب سوبر ماريو وورلد بشكل مستقل. الخوارزميات الجينية، والشبكات العصبية، والتطور العصبي لل;topologies المتميزة، و4200 سطر من لوكا.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "dl4kXCmj1rjxrOamdX2qas9J/sRtFy7kRcl2E7MMVEVWbwUhVxaTKYvSfWA0sGT9+6CYjw0VsRhZPsu2LWerdw=="
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 14,
+    "body": "\n# Luna Protocol: أنشأت بوت Discord مستقل يحاكي إنسانًا\n\nماذا لو كان بوت Discord يستطيع **النوم**، وارتكاب **الأخطاء الإملائية**، و**التردد**، و**النسيان** في الرد، وأحيانًا إرسال رسالة من تلقاء نفسه؟ هذا بالضبط ما يفعله **Luna Protocol**: بوت Discord مستقل بالكامل يشغل LLM محلي (llama.cpp) ويتحدث كإنسان غير كامل.\n\nلا نصوص برمجية جامدة، ولا ردود آلية. Luna لديها **نظام تشغيل ذو أولوية**، و**تأخيرات متغيرة**، و**جداول نوم**، و**رسائل عفوية**، وحتى **خط أنابيب TTS** لإرسال رسائل صوتية. كل ذلك مهيأ",
+    "verified": true,
+    "title": "Luna Protocol: أنشأت بوت Discord مستقل يحاكي إنسانًا",
+    "description": "Luna Protocol هو بوت Discord مستقل بالكامل مزود بـ LLM محلي، قادر على محادثة طبيعية مع النوم، الأخطاء الإملائية، التردد، النسيان، التعب الموضوعي، والرسائل العفوية.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "gfNHnZeI2ki9zIgIan0SziKlhG1tRAlxaAAjT9HjHJ3SXPCixnWGynf7waWzMD/QEqRQ/RuTiRjLBtfSHM2Myw=="
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 21,
+    "body": "\n\n![صورة مصغرة: الذكاء الاصطناعي يتعلم PvP في ماينكرافت](assets/ai-pvp-thumbnail.png)\n\nهناك فيديو بعنوان [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) من Kadambi | AI Engineering، وهي واحدة من أكثر الروايات صدقًا عن تدريب ذكاء اصطناعي يلعب لعبة فيديو رأيتها على الإطلاق.\n\nالفكرة: بناء بوت يلعب PvP في ماينكرافت (طقم سيف، درع ألماس كامل مسحور) من خلال مشاهدة الشاشة وإخراج أوامر الفأرة ولوحة المفاتيح. لا قراءة لذاكرة اللعبة، لا ماك",
+    "verified": true,
+    "title": "الذكاء الاصطناعي يتعلم PvP في ماينكرافت -- التعلم بالمحاكاة، التعلم المعزز، و30 متغيرًا كانت مهمة",
+    "description": "1000 مبارزة مسجلة، شبكة عصبية مدربة على البكسلات، دقة ضغطات مفاتيح 90%... والبوت اصطدم بالجدار. ثم جاء التعزيز، والتعلم المنهجي، و60 ساعة من التدريب.",
+    "date": "2026-07-09",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "T6ugSSUoGzoY37LvxuTdoPPQOdNI7ATBya6ZuA07otTqpNUcA51o0rVtr6zTp0GOzKt+arsAXurbREsiyW8WJA=="
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 26,
+    "body": "\n\nSuper Mario Bros. هو 40 كيلوبايت من ROM. ثمانية عوالم، 32 مستوى، أعداء، موسيقى، قوى خارقة، كل ذلك يتسع في ذلك.\n\nلكن إذا فتحت محاكيًا وعبثت بالبايتات الصحيحة، يمكنك تحميل المستوى 36-1. أو 255-1. أو الهبوط في عالم تكون فيه كل شيء مصنوع من سبرايتات Bowser وأنابيب تؤدي إلى لا مكان.\n\nهذه العوالم الخاطئة (Glitch Worlds) موجودة لسبب بسيط: نظام تخزين مستويات SMB1 هو عبارة عن تحفة من التحسين على 8 بت، وعندما تجبر اللعبة على القراءة من المكان الخطأ، فهي تنتج نتائج مثيرة.\n\nقام Retro Game Mechanics Explai",
+    "verified": true,
+    "title": "Super Mario Bros.: تنسيق المستوى، المؤشرات، و256 عالم خلل",
+    "description": "كيف يتسع 128 مستوى × 4 أنواع منطقة في 40 كيلوبايت من ROM، ولماذا ي Exists Minus World، وكيف يمكن لمباراة تنس NES أن تحمّل عوالم الخلل.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "f0J6z1MH85jH4sMX3lIhxapX4/J5uXTzPWiQyTvvVPXPtf0nLFOYNEz9VKdG+P46Pzw1Cb+pTbCIBXx95ohLTA=="
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 11,
+    "body": "\n# قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته\n\nأنا المسؤول عن هذا المشروع منذ فترة، لكن إعادة قراءة الكود الخاص بك بروية هي دائماً تجربة تعليمية. konosuba-rpg هي لعبة تقمّص أدوار (RPG) بنظام الأدوار على Discord حيث كل حركة تولّد صورة WebP فوراً. ليس نص embed. بل صورة حقيقية مركبة، مع sprites وأشرطة الحياة ورسائل القتال -- كل شيء.\n\nالمكدس: TypeScript، Hono، Vercel، Cloudflare Workers، Supabase. استضافة مجانية بالكامل. وبوت Discord يعمل بدون خادم دائم. هذا المقال يشرح كيف يعمل كل",
+    "verified": true,
+    "title": "قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته",
+    "description": "لعبة تقمّص أدوار (RPG) بنظام الأدوار على Discord حيث كل حركة تولّد صورة WebP فوراً: URL كحالة اللعبة، RNG حتمي، خط أنابيب WASM، 5 مستويات تخزين مؤقت، بوت بدون خادم.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "YjALyy1ohrqC/kQCm37zfVP/gfw6kmXFLsw4CF9e9Nr1EyKsYJadTnCOqc8jl4knn1dKIFdZg/KcePQx0jPnCw=="
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 16,
+    "body": "\n\nهل تساءلت يوماً إن كان بإمكانك تشغيل خادم Minecraft على متحكم دقيق بـ 1 دولار؟\n\nأنا فعلت. والجواب هو نعم. حرفياً.\n\nهناك مشروع اسمه [Bareiron](https://github.com/p2r3/bareiron/)، من توقيع p2r3، وهو على الأرجح واحد من أكثر المشاريع إثارة للدهشة التي رأيتها في عالم Minecraft في السنوات الأخيرة. نحن نتحدث عن ملف ثنائي بحجم **300 كيلوبايت**، **6800 سطر من C**، بدون أي تبعيات خارجية، بدون malloc، بدون threading، وكل هذا يعمل على **ESP32 بـ 1 دولار**.\n\n![ESP32-C3، المتحكم الدقيق الذي يشغل الخادم](/im",
+    "verified": true,
+    "title": "Bareiron -- خادم Minecraft الذي يعمل على متحكم دقيق بـ 1$",
+    "description": "6800 سطر من C، بدون malloc، استبدال Perlin noise بـ bilinear interpolation، biomes في tile map، وكل هذا على شريحة بـ 1$.",
+    "date": "2026-05-30",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "K+aeschkME/2mMeOJ8Fw66BH/rU+bqpdRxN26o6UmY5sOV2Iz+rmnzAobee8ig3oZKX53XAbQ4LQZTKOTAAgMg=="
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 11,
+    "body": "\n\nقضيت بضعة أشهر في صيانة بوتات Discord تقليدية على جهازي الخاص.\n\nاتصال WebSocket مفتوح دائمًا. البوت يعيد الاتصال تلقائيًا في الساعة 3 صباحًا. البوت يتعطل لأنني نظرت إلى الخروف بشكل خاطئ. الفاتورة ترتفع.\n\nفي يوم اكتشفت: **لماذا نحافظ على اتصال**؟ Discord يمكنه أن يرسل لك POST فقط الأشياء التي تهمك. ترد، ينتهي الأمر.\n\nمنذ 2021، Discord يقدم **نقاط التفاعل (interaction endpoints)**.\n\nإنها مجرد HTTP. لا WebSocket. لا حالة دائمة. تستقبل طلبًا، ترسل JSON، ينتهي. الطلب التالي يأتي بمفرده.\n\nوالأفضل: C",
+    "verified": true,
+    "title": "بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers",
+    "description": "كيف استبدلت بوت Discord كان يكلفني 50€/شهر بصفر يورو -- نقاط التفاعل، Hono، Workers، عرض الصور في الوقت الفعلي، ولعبة كاملة بدون WebSocket.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "P5uSQM0/8SLDZaqEqgJEq1/IZ2vWCMyXrhbJt2mA5aypzRv+o5PfleFPWoHUdQi4YgDJovIl38m1aeTKn4452A=="
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 6,
+    "body": "\n\nهناك مشاريع تبدأ بـ \"ماذا لو صنعت لعبة شطرنج بالأساطير؟\" وتنتهي بشيء يملك ذكاءً اصطناعياً يقرر معاملاته الفائقة بنفسه كل 5 أدوار.\n\nNausicaa هي هذا. لعبة رقعة تعتمد على الأدوار حيث تبني مجموعة كائناتك الأسطورية، وتدير مانا (mana) خاصتك، وتنشر الوحدات على رقعة 10×8. ولديها ذكاء اصطناعي يعاني من نوبات انفصام في الشخصية.\n\nقضيت وقتاً لا بأس به على هذا الذكاء الاصطناعي، والنتيجة لا تُطاق ×د\n\n## اللعبة في الحقيقة\n\nقبل التحدث عن الدماغ، يجب فهم الجسد:\n\n- رقعة 10×8، منطقة نشر من صفين لكل لاعب\n- المانا",
+    "verified": true,
+    "title": "ذكائي الاصطناعي التافه من أجل Nausicaa",
+    "description": "ذكاء اصطناعي بمعاملات استدلالية، معلمات فائقة تتغير كل 5 أدوار، وأوراكل (Oracle) يهرب -- غوص في دماغ لعبة استراتيجية على رقعة.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "nGt0WVLnA1aMM1Sg0z0Bayi6Szl0ZaKj7U8AnRF1wE/BREvzcMbd0IAHoLgUb0yiFS0sCF7Ji67PoZt0Ym6ANA=="
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 12,
+    "body": "\n\nقضيت ساعات وأنا أشاهد الخرفان ترتطم بالجدران.\n\nوبصراحة؟ أفضل استثمار في حياتي xD\n\nلأنه كلما زادت مشاهدتك لهذه الموبات، أدركت أنها ليست عشوائية أبداً. كل حركة مبرمجة، متوقعة، والأهم -- قابلة للكسر تماماً. في النهاية غصت في الكود المصدري لماينكرافت لأفهم بالضبط كيف يعمل تحديد المسار، وما اكتشفته هو أنك تستطيع حرفياً التحكم بعقول الموبات. يعني، إجبارها على الذهاب حيث تريد أنت، وليس حيث يقرر العشوائي.\n\nهذا الدليل هو كل ما تعلمته أثناء البحث. الذكاء الاصطناعي، خوارزمية A*، العقوبات المخفية، الاستغل",
+    "verified": true,
+    "title": "منطق تحديد المسار في ماينكرافت وتطبيقاته",
+    "description": "كيف تتيح خوارزمية A* وعقوبات الكتل ونقاط الاهتمام (POI) التحكم في حركة الموبات والتنبؤ بها واستغلالها -- من ريدستون لاسلكية إلى مزارع محسّنة.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "vFQrc3fPXgYp4d6FiL7DH2OTdlPVtZ+mfl5CauO22ufS7xDbSj2pj0y5Hj/hDsdXqYvvuUonJ18+hZzawiMdzg=="
+  },
+  {
+    "slug": "utau",
+    "readingTime": 9,
+    "body": "\n\nلقد أشرت إليه في صفحتي الرئيسية: أنا أحب UTAU. إليكم السبب.\n\nفي عام 2008، إذا أردت جعل صوت اصطناعي يغني، كان لديك خيار واحد : VOCALOID. برنامج Yamaha. مكلف، مغلق، بأصوات رسمية لم يكن بإمكانك إنشاؤها بنفسك.\n\nثم جاء رجل ياباني، Ameya/Ayame، وأصدر شيئًا في زاويته الخاصة. برنامج كُتب بلغة **Visual Basic 6**. مجاني. يتيح لك إنشاء صوتك الخاص باستخدام... ملفات WAV تسجلها بنفسك.\n\nهذا الشيء اسمه **UTAU** (歌う، \"يغني\" باليابانية). وبالنسبة لعصره، كان سحرًا.\n\nلطالما وجدت هذا البرنامج رائعًا. ليس لأنه كان",
+    "verified": true,
+    "title": "UTAU : كيف أضفى برنامج بلغة Visual Basic 6 الطابع الديمقراطي على الصوت الاصطناعي",
+    "description": "كيف سمح UTAU، وهو برنامج مجاني بلغة VB6 من عام 2008، لأي شخص بإنشاء أصوات غنائية عبر التركيب التجميعي -- ولماذا لا يزال مهمًا حتى اليوم.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "9lug0/vJdqNTRwQLg3BLoJ0eu4UsgVETZUMLpGo9fYlv46oHptr4o2AwUaY5vrGQt7czM70+W2x9bBFDkfdWCA=="
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 10,
+    "body": "\n# تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills لـ typescript-virtual-container\n\nقضيت مؤخرًا وقتًا طويلاً في دراسة الكود المصدري لـ [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)، مشروع [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). والجزء الذي أدهشني أكثر ليس VFS، ولا الشبكة الافتراضية، ولا أوامر Unix الـ 170 المعاد تنفيذها في TypeScript. بل مجلد `polyfills/`.\n\nلأن الوحدة تعمل في المتصفح، بدون Wasm، ولتحقيق ذلك أعادت Fortune تنف",
+    "verified": true,
+    "title": "تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills typescript-virtual-container",
+    "description": "كيف أعادت Fortune تنفيذ node:fs و node:crypto وعشرات وحدات Node النمطية في 640 سطرًا من JavaScript لجعل الحاوية تعمل في المتصفح بدون Wasm.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Qc+B1Ledwvtic0hD5hjTh8alpXBFQzY3MFaYXfmXsRy8fV40SlBYRQuPqzckczEb475brjI75y4yNoK0I8VBMg=="
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 7,
+    "body": "\n# استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions\n\nعندي ردّاد بريد إلكتروني آلي يعمل 24/7.\n\nيقرأ إيميلاتي، يفهم موضوعها، ويرد تلقائيًا بالذكاء الاصطناعي. يتذكر المحادثات السابقة. يتجاهل النشرات الإخبارية و `noreply@`. يُحيل إلى إنسان عندما يكون الموضوع ساخنًا جدًا.\n\nالتكلفة الشهرية: **0€**.\n\nلا سيرفر. لا VPS. لا قاعدة بيانات. فقط GitHub Actions واختراق مجنون: **استخدام git كقاعدة بيانات**.\n\nأتتوقع الفكرة؟ لا؟ حسنًا، تمسّك، إنها سخيفة وعبقرية في نفس الوقت.\n\n---\n\nGitHub Actions مجان",
+    "verified": true,
+    "title": "استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions",
+    "description": "كيف برمجت ردّادًا آليًا للبريد الإلكتروني بالذكاء الاصطناعي يعمل على GitHub Actions بـ 0€/شهر -- باستخدام وسم git كقاعدة بيانات و التجميع المسبق في وسم تشغيل.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "wim91PH+Gklw+rfKo2qWwwj/dqw2r9YhdIjA8XZ7b3eXZzO11UM6DL2NvzN+CnqgKz0QAx0/c+sWMYMr0knzUQ=="
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 10,
+    "body": "\n\nGitHub Actions يعطيك أجهزة Linux مجانية.\n\nأعني، خوادم Ubuntu حقيقية. 2 نواة، 7 جيجا رام، 14 جيجا قرص. مجاني. لمدة 6 ساعات لكل تشغيلة.\n\n\"المشكلة\" الوحيدة: في نهاية التشغيلة، يُمسح كل شيء. الجهاز قابل للرمي. تثبّت أشياء، تكتب كوداً، تهيئ... وفجأة، في النهاية يختفي كل شيء. وكأنك لم تفعل شيئاً.\n\nإلا إذا.\n\nإلا إذا استخدمت **git كقرص صلب**.\n\nوهنا، فجأة، تحصل على VPS مجاني بقرص دائم ينجو من التشغيلات. تتصل مرة أخرى، كل شيء لا يزال موجوداً. تستأنف من حيث توقفت.\n\nهذا مكسور تماماً. دعني أشرح لك xD\n\n---",
+    "verified": true,
+    "title": "Repo to VPS : تحويل GitHub Actions إلى VPS مجاني مع تخزين دائم",
+    "description": "كيفية تحويل مشغل GitHub Actions إلى VPS دائم باستخدام git كتخزين دائم -- tmate و inotify و commit --amend.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "RzVufeQ7zky70nNDOX5+JgL/RmTHeioY3nto3ziLUx3oq4K61P6gPE+Qd5DeB7GKJ6snJdNR08oQkB5CX8maVQ=="
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 36,
+    "body": "\n# كل صندوق رمل JavaScript، ومحاكٍ، ومقلد، ومصيدة تفاعل Linux -- مقارنة\n\nحسنًا، لقد مضى وقت طويل وأنا غارق في جحر الأرانب هذا lol. بدأ كل شيء لأنني كنت أساعد في [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- مشروع Fortune (سأعود إليه بعد قليل) -- وكان الناس يسألونني دائمًا \"لحظة، ما الفرق بين هذا و `v86`؟\" أو \"لماذا لا تستخدم `vm2`؟\" -- وأدركت أنني لا أستطيع إعطاء إجابة واضحة دون رسم خريطة للنظام البيئي بأكمله أولاً. لذا ها نحن ذا، على ما أعتقد",
+    "verified": true,
+    "title": "مقارنة حلول JavaScript لمحاكاة أنوية Linux",
+    "description": "تحليل متعمق لإعادة بناء بيئات Linux في JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "pRJY3oj4e8MYMzM/nlny+Ij9wvHYuhmO9mPGshBEnpvO0c59FWm3YG1s5FoGKVjKMHUqYFSYq4LFW+nb4gyf6Q=="
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 5,
+    "body": "\n# بناء character-factory: صور رمزية بنظام وراثي\n\nكنت بحاجة لآلاف الصور الرمزية المعقولة والمتميزة من أجل [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- مشروع لعبة ورق خاص حيث كل بطاقة تحتوي على \"حمض نووي\" للشخصية يحوله محرك التصيير إلى صورة شخصية. شراء حزمة جاهزة كان سيكون مكشوفًا. توليد صور DiceBear عشوائيًا لكل شخصية كان ينتج فوضى: بطاقة بطابع ياباني قد تظهر بشخصية شقراء إسكندنافية، وشخصيتان \"أخ وأخت\" كانتا تبدوان كغرباء.\n\nلذا كتبت [character-factory](https://github.com/fox3000foxy/c",
+    "verified": true,
+    "title": "بناء character-factory: صور رمزية بعلم الوراثة",
+    "description": "وحدة TypeScript فوق DiceBear: توليد متسق حسب البلد/العرق، محرك وراثي صغير لإسقاط الأطفال، وتفاصيل هندسية جعلته قابلًا للاستخدام في لعبة ورق.",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "rWqNWOHuh5TEojXkosdYplkpfT8BIXmEDv9IRzjJTUgPhEgj1yvJ99i60Liegbhc2QxZxX1BRe3mJ8ywBALdvA=="
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 6,
+    "body": "\n> **ملاحظة (2026):** هذا المشروع لم يعد قيد الصيانة. مايكروسوفت عززت بشكل كبير اكتشافها لمكافحة البوتات -- ما كان يعمل في ذلك الوقت لم يعد يعمل اليوم. الكود والمنهجية الموصوفة أدناه مُحتفظ بها لأغراض الأرشفة والتوضيح فقط.\n\nاكتشفت Microsoft Rewards منذ بضع سنوات. كان ذلك خلال فترة الحجر الصحي، لكن ذلك لا يغير حقيقة أنني كنت مضطرًا لاستخدام الرقابة الأبوية Microsoft Family Safety وبالتالي المرور عبر Edge. وهناك اكتشفت Rewards.\n\nفي ذلك الوقت كان عمري 14 سنة فقط ولم يكن هناك شيء في الكتالوج يثير اه",
+    "verified": true,
+    "title": "بوتنة مزرعة Microsoft Rewards",
+    "description": "كيف برمجت بوتًا لجني نقاط Microsoft Rewards على نطاق واسع -- ولماذا عززت مايكروسوفت دفاعاتها منذ ذلك الحين.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Dw+n/tDUUsJIiOvIMd7WB5dQViMEmbdD4akR9ItF1Y/duTVLwjqKVC8OnJf9kGp57800/yTh2qdtG8eCX3hl/A=="
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 3,
+    "body": "\n# المشروع\n\nالمشروع الذي أعمل عليه يُدعى LLJT:\n\n![](assets/20260313_092734_image.png)\n\nإنه موقع ويب وهو أيضاً PWA، أي تطبيق جوال أيضاً. يستخدم MaterialUI لإعطاء انطباع بأنه تطبيق هاتف حقيقي.\nاضطررت مؤخراً للتعامل مع استيرادات Mui، وانتقلت من 11707 وحدة إلى 595 فقط في النهاية، عن طريق استيراد كل أيقونة يدوياً سطراً بسطر، بدلاً من استخدام الاستيراد المُفكك: تعلمت أنه عندما تقوم باستيراد مُفكك، فإنك في الواقع تحمّل مكتبة الأيقونات بأكملها، بينما عند استيرادها بشكل فردي، فإنك تستورد فقط تلك التي تحت",
+    "verified": true,
+    "title": "العمل على مشروع جديد",
+    "description": "نظرة عامة على عملية بدء وتطوير موقع ويب جديد.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "9rEArZ4Y4vnD1HHJmSPTKIomKcOH0utbp8qph0kOaVF1c3iwyAqFiTgYQcFZaZD5cj0vDO013J6fgCd83ehIrg=="
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 2,
+    "body": "\n# ملفي الشخصي على GitHub\n\nمرحباً بكم في ملفي الشخصي على GitHub -- منظم كمكتبة مرتبة.\nفي القسم الأول هناك رأس مع روابط، أعتقد أنه معتاد نوعاً ما:\n![](assets/20260308_123527_image.png)\n\nإذن كما ترون، هناك روابط، هذا رائع على ما أظن، لا أعرف ماذا أقول أكثر من ذلك.\n\n## عنّي\n\nهناك أيضاً قسم \"عنّي\":\n\n![](assets/20260308_123913_image.png)\n\nفي هذا القسم يمكنكم رؤية ما أفعله مباشراً! إذا رأيتموني أستمع إلى موسيقى، فهذا ما يحدث.\nسأضع المؤشر هنا أيضاً:\n\n### الحالة المباشرة\n[![Discord Presence](https://lan",
+    "verified": true,
+    "title": "عن ملفي الشخصي على GitHub",
+    "description": "نبذة مختصرة عن ملفي الشخصي على GitHub.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "jSc+q3xaAbt9beLvFYh+nlVC98wg7zVqxSdsIdfhMUu44W46QpOSU6g/PV1BhCM3I13ulLVRGhSYj5fMr0gBDQ=="
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 3,
+    "body": "\n# شغفي\n\nكنت أرغب في كتابة هذه المدونة منذ فترة طويلة لكنني كنت أمنع نفسي باستمرار :/\n\nربما لأنني أحب مشاركة حياتي لكن ليس معلوماتي الشخصية؟ أعتقد أن هذا هو السبب.\n\nشغفي متنوع: أحب البرمجة، كما لاحظتم على الأرجح في باقي هذه المدونة. هناك شيء مُرضٍ للغاية في بناء الأشياء من الصفر، وحل المشكلات، ورؤية إبداعك يتحول إلى واقع. سواء كانت أداة سطر أوامر صغيرة أو تطبيق ويب كامل، هذه العملية لا تمل أبدًا.\n\nلدي حب خاص للـ **مصادر المفتوحة** -- المشاركة جميلة، وأقدر حقًا فكرة أن شخصًا آخر قد يجد شفرتي مفيد",
+    "verified": true,
+    "title": "شغفي",
+    "description": "البرمجة، الرسم، الأتمتة، اكتشاف التقنيات القديمة، وأكثر -- لمحة عن ما يحفزني.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "personal"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "CoXwdMjdiS9Tt2fAFm0y4KrjbtZxa665RzWM3wPm6fxd2P0phKsBsh9B9KPW7LhNu2BX+X1HYfemJY8x9WbD4w=="
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 4,
+    "body": "\n# سكريبت توقيع SSH للـ commits -- شرح\n\nهذا المقال يحلل السكريبت `setup-ssh-signing.sh` الذي نشرته على [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). سنرى ما يفعله كل جزء، كيف يجعل التوقيع SSH المحلي لمستودع أمرًا سلسًا تمامًا، ونعم، لماذا تكبدت عناء كتابته (تنبيه: كنت أريد فقط أن تكون لـ commits الخاصة بي **شكلاً** رائعًا).\n\nلطالما أحببت تعديل سير عمل Git الخاص بي، وبعد رؤية أشخاص بشعارات «Verified» صغيرة بجانب commitsهم، قلت في نفسي: لماذا لا أنا؟ التوقيع GPG الم",
+    "verified": true,
+    "title": "شرح سكريبت التوقيع SSH",
+    "description": "تحليل مساعد توقيع commits SSH ولماذا أردت commits أنيقة.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "cM7oEJVzLQFg9MjDpFkqEJ7JwC9vvn9RnY+MX2N+DnBL8U2vxjJurtDiZphSzlkE5ohWtiJHCgpLMnK59ZMhPg=="
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 7,
+    "body": "\n# كيف يعمل هذه المدونة؟\n\nهل تساءلت يوماً كيف تعمل هذه المدونة تحت الغطاء؟ في هذا المقال، سأشرح لك بالتفصيل بنية التطبيق بالكامل، بدءاً من التقنيات المستخدمة وصولاً إلى عملية كتابة مقال. ونعم، سأريك أيضاً كيف أكتب مقالاتي من VS Code!\n\nهذه المدونة مبنية باستخدام تقنيات ويب حديثة:\n\n- **React 19** -- لواجهة المستخدم\n- **TypeScript** -- لكود منسق وأكثر موثوقية\n- **Vite** -- كأداة بناء فائقة السرعة\n- **React Router v7** -- للتنقل بين الصفحات\n- **react-markdown** -- لتحويل Markdown إلى HTML\n- **rehype",
+    "verified": true,
+    "title": "كيف يعمل هذه المدونة؟",
+    "description": "وراء كواليس المدونة: React، Vite، Markdown، خط أنابيب CI/CD وسير عمل الكتابة.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "5/TCLp1x4V8Q1yXCIKuJzNEpei39GRAZDUL6bPCbKQwPi0SpIsnhSyRV79552QdlFtIxjfKsP9+DMXfgkONh3w=="
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 4,
+    "body": "\n\nهل سبق لك أن نظرت إلى سجلات خادم Express ورأيت طلبات غريبة إلى `/wp-admin`، `/.env`، `/etc/shadow`؟ هذه هي البوتات والماسحات الضوئية والفضوليون الذين يختبرون تطبيقك بحثاً عن نقاط الضعف.\n\nلذلك قررت بناء **برمجية وسيطة (middleware) من نوع honeypot لـ Express** -- شرك يستجيب لهذه الطلبات بردود فائقة الواقعية، كما لو كانت كل نقطة نهاية خدمة حقيقية مكشوفة.\n\n## لماذا honeypot بدلاً من 404 فقط\n\nعندما يصادف بوت تطبيقك:\n\n- **مع 404**: يعرف أن المسار غير موجود، فينتقل إلى التالي.\n- **مع رد مزيف**: يظن أ",
+    "verified": true,
+    "title": "بنيت شرك Express فائق الواقعية",
+    "description": "328 نقطة نهاية وهمية مع ردود تُنشأ فورياً، تزوير الرؤوس، تسجيل حركة البوتات -- غوص عميق في برمجية وسيطة لـ Express مصممة لخداع الماسحات الضوئية.",
+    "aiGenerated": true,
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "nMBUT9me142vclOjOF3CEMJqkURufK2BQDnD8TcQtfu6RAiVB7Ojd8Diazb1lsyhirLDeKKO6H5oK1SGxxzNqA=="
+  }
+]

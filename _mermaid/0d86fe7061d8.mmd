@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>规范化标点"]
+    B --> C["splitUserInput()<br>分词"]
+    C --> D["Build keyword stack<br>按优先级排序"]
+    D --> E{"栈非空?"}
+    E -->|"是"| F["Pop highest-priority keyword"]
+    E -->|"否"| G{"记忆回忆?"}
+    G -->|"是"| H["Recall past user statement"]
+    G -->|"否"| I["Fallback: zNONE rule"]
+    I --> J["Return response"]
+    H --> J
+    F --> K["Match decomposition patterns"]
+    K --> L{"匹配到了?"}
+    L -->|"否"| M{"关联关键字?"}
+    M -->|"是"| N["Push linked keyword to stack"]
+    N --> E
+    M -->|"否"| O["Return NOMATCH"]
+    O --> J
+    L -->|"是"| P["Select next reassembly (round-robin)"]
+    P --> Q{"重组类型?"}
+    Q -->|"PRE"| R["Transform words (I→YOU)<br>push link keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Skip to next keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expand (1), (2), (0)<br>展开为最终回复"]
+    T --> J

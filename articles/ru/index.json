@@ -1,0 +1,663 @@
+[
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 17,
+    "body": "\n# Luna Protocol: общие «мозги», классификация эмоций и маршрутизация интересно/бесполезно\n\nВ [двух](/articles/ru/luna-protocol-discord-bot) [предыдущих](/articles/ru/luna-protocol-official-models) статьях я представил Luna Protocol как единого Discord-бота со сложной поведенческой системой и дообученной (fine-tuned) моделью. Но архитектура с тех пор сильно изменилась. То, что было монолитом -- единым процессом Node.js, который обрабатывал и Discord-бота, и поведение, и вызовы LLM -- превратилос",
+    "verified": true,
+    "title": "Luna Protocol: общие «мозги», классификация эмоций и маршрутизация интересно/бесполезно",
+    "description": "Luna Protocol превратился из монолита в четырёхуровневую архитектуру: адаптеры, brain, классификатор эмоций и инференс. В программе: центроиды эмбеддингов, маршрутизация интересно/бесполезно и настройка параметров LLM по валентности и возбуждению.",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "ySoFIkrETvEBSJsht65xJexrnxhMxujr7KzfnieSZy1ha2+FxhUbWr/yc/lu+TIDI8+ZcrWFXR4n1qgqRpHu/A=="
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 19,
+    "body": "\n# От ELIZA до LLM: 60 лет разговорного ИИ, пересобранного на TypeScript\n\nВ 1966 году Джозеф Вейценбаум написал 420 строк на MAD-SLIP для IBM 7094, чтобы создать первый чат-бот в истории. Программа называлась **ELIZA**, и она симулировала психотерапевта-роджерианца с помощью базовых шаблонов и перестановок фраз. Шесть десятилетий спустя разговорный ИИ стал мейнстримом — ChatGPT, Claude, Gemini у всех на слуху.\n\nНо между этими двумя крайностями были **PARRY** (параноидальный чат-бот, 1972), **ALI",
+    "verified": true,
+    "title": "От ELIZA до LLM: 60 лет разговорного ИИ, пересобранного на TypeScript",
+    "description": "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- пять радикально разных архитектур одной задачи, перенесённых на TypeScript с оригинальными данными. С 1966 до современных LLM — вот как разговорный ИИ учился говорить, и что репозиторий чат-ботов рассказывает нам о 60 годах исследований.",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ia",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "histoire",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "lang": "ru",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "JbS+DdNmvnoupA8AdAcQ7G+Q5FxEWlnML0JZ7YYe5o6iNXP3VeJwbptZ59z/kncySGDxnKjUaDbFUN2E+P/uMQ=="
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 12,
+    "body": "\n# Luna Protocol: почему я дообучил модель 1.5B на 50k Discord-образцов и почему few-shot priming стал секретным оружием\n\nВ [первой статье](/articles/en/luna-protocol-discord-bot) я создал Discord-бота, который симулирует человека -- сон, опечатки, колебания, забывчивость, спонтанные сообщения. Поведенческая система была надёжной. LLM за ней была модель Hermes 3B, квантифицированная в Q8_0, потребляющая 3 ГБ VRAM.\n\nЭто работало. Но было избыточно.\n\nDiscord-боту не нужна модель с 3B параметров, ч",
+    "verified": true,
+    "title": "Luna Protocol: почему я дообучил модель 1.5B на 50k Discord-образцов и почему few-shot priming стал секретным оружием",
+    "description": "Меньшая модель, обученная на меньшем объёме данных, может превзойти большую -- если знать, как правильно её настроить. Вот почему Luna Protocol перешёл с Hermes 3B на дообученный Qwen 1.5B и почему few-shot priming стал настоящим прорывом.",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "WhCMZab9tV4HlRVi29PeP1lYjnFdBJxO2lWcvI44pVrtrT8lmgps2otusPYgWt6jjfs7Bn2CBhEN5YQr5mMvUw=="
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 14,
+    "body": "# Проблема: слишком много аббревиатур, недостаточно иерархии\n\nTCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; большинство ресурсов, рассказывающих о них, преподносят их как плоский список взаимозаменяемых вариантов, «выбирай по ситуации». В реальности они находятся на разных уровнях: одни -- транспортные протоколы, другие -- слои безопасности, оборачивающиеся вокруг транспорта, третьи -- прикладные протоколы, опирающиеся на первые два. Понять иерархию -- значит понять, почему никогда не",
+    "verified": true,
+    "title": "Как машины общаются: обзор от TCP до mTLS",
+    "description": "Почему TCP, UDP, TLS, mTLS, HTTP и WebSocket -- это не конкурирующие альтернативы, а вложенные слои; иерархический обзор межмашинной коммуникации от сырой транспортировки до взаимной аутентификации.",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "network",
+      "distributed-architecture",
+      "protocols"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "ru",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "MENHK+Jkz9q2UYzPEzkxQayn7zsyE2Zvnlj3Zv9V3JYI+hrfQ3RIwaFERopgWgN0rLsdJSSUp/JFRWmTdXM6/g=="
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 7,
+    "body": "\n# 5 изобретательных способов использовать GitHub Actions\n\nНа бумаге GitHub Actions нужен для классического CI/CD: ты пушишь, он линтит, тестирует, деплоит. Я уже писал об одном частном случае -- использование git-тегов как базы данных для email-бота (см. отдельную статью). Но копаясь в собственных репозиториях, я набрал достаточно разных паттернов, чтобы это заслуживало отдельной статьи -- меньше фокуса на одном проекте, больше каталог техник.\n\nПять штук, от самой классической до самой извращён",
+    "verified": true,
+    "title": "5 изобретательных способов использовать GitHub Actions (и чему они учат о секретах)",
+    "description": "CI-раннер, превращённый в бесплатный VPS, бот, открывающий себе pull request'ы, npm-публикация без единого секрета. Обход моих репозиториев -- каталог паттернов GitHub Actions, выходящих за рамки \"lint + test + deploy\".",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "kWFAUAtxXJPdshYX8DG5n5vojpP17/uE9RYxST4Wl+U1q090y8GoSOx8j61fz8CKLcla93MxbK+XKRVMO6J0Rw=="
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 7,
+    "body": "\n# valorant-short-maker: пайплайн, который сам генерирует мои Shorts по Valorant\n\nУже несколько месяцев один YouTube-канал крутится без моего участия: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). Агенты Valorant подкалывают друг друга между раундами, озвучены, с караоке-субтитрами, публикуются как Shorts. Всё генерирует [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker), пайплайн на TypeScript/Bun, который работает по cron и публикует видео",
+    "verified": true,
+    "title": "valorant-short-maker: пайплайн, который сам генерирует мои Shorts по Valorant",
+    "description": "Groq/Llama для сценария, Piper для озвучки, FFmpeg для всего остального. Как cron-задача производит и публикует по видео в день на @valorant_agents, от и до.",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "pGVX6D59v3WssmG0lTpoO2kRohFhm50iuDiVvuElUGoeaxhEiE8rTUIywK0UvCm3iWwcCGY3adCaMGKBSj/mZQ=="
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 8,
+    "body": "\n# Как получить любой плащ в Minecraft Bedrock\n\nНа Java есть куча хитрых способов заполучить плащ, которого у тебя быть не должно (смотри статью про `cape-mod`). На Bedrock игра другая, авторизация другая, но способ всё равно есть -- ни модов, ни манипуляций с сетевыми пакетами. Только сторонний лаунчер и достаточно старая версия игры, где ещё нет нужной валидации.\n\nВот как это делается, а потом разберём, что, вероятно, происходит под капотом.\n\n- Аккаунт Microsoft, на котором уже есть Minecraft",
+    "verified": true,
+    "title": "Как получить любой плащ в Minecraft Bedrock",
+    "description": "Сторонний лаунчер, старая версия игры и селектор плащей, который так и не научился говорить нет. Полный туториал и вероятное объяснение того, почему это работает.",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "J0kRUkCdFN0VfxqD9G1m/DeYeYP99mcLsBpDDW3NJhlaVqrEMZ/OdOy7NM9rhaYGTqQm6VpIljFFjatahZTLxw=="
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 7,
+    "body": "\n\nОбучение DQN-агента для алгоритмической торговли с помощью классического градиентного спуска имеет простую в формулировке и сложную в решении проблему: градиентный спуск оптимизирует _одну_ сеть к _одному_ локальному минимуму на _одном_ рыночном окне. Ничто не гарантирует, что этот минимум обобщится на другой рыночный режим, и ничто в цикле обучения не способствует разнообразию; два запуска с разных начальных значений часто сходятся к почти идентичным стратегиям с одними и теми же слепыми зона",
+    "verified": true,
+    "title": "Я эволюционировал нейронную сеть через естественный отбор вместо градиентного спуска",
+    "description": "Как я заменил классическое обучение градиентным спуском на генетический алгоритм NSGA-II для эволюции DQN-агентов торговли: четыре версии, от переобучения до ламарковской эволюции весов.",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "ru",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "UgbdKpuT4dG/joe8e1pJE0PRlWhGpLalTAJaSmVaAJj/Lp+//MLjDqg2MBc/6nM2rEYL8/AR5NXT5wu9b9rMEQ=="
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 27,
+    "body": "\n\n![Солдат-бот TF2, целящийся из ракетомёта](assets/tf2-bot-ai-soldier-aim.png)\n\nКаждый игрок в TF2 хотя бы раз говорил: «этот бот читает» или наоборот: «почему этот лёгкий бот просто стоит и ест ракеты». Никто толком не знает, что «Лёгкий», «Средний», «Сложный» и «Эксперт» на самом деле *значат* под капотом -- Valve выпустила четыре ярлыка сложности и ровно ноль страниц документации.\n\nПоэтому мы (я, awimii, Mush The Possum, а также sigsegv, проделавший огромную работу по изучению дизассемблиров",
+    "verified": true,
+    "title": "Боты TF2 не случайны: я разобрал каждую настройку сложности",
+    "description": "Зрение, отслеживание цели, углы ударов в спину у шпиона, логика хедшотов снайпера и все известные баги -- Valve никогда ничего не документировала. Поэтому мы прошерстили код и превратили его в полную спецификацию.",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "game-ai",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "GxCPVo28JxDiQHIN3sRRJV1vV0MKXF/gMtCzqqgr0jrrugThT36B4HXzELAqfnfPD7gxyGkzApddgblEu/Skyw=="
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 8,
+    "body": "\n# Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA\n\n![alt text](assets/xbox-profile.png)\nЧто если я скажу тебе, что достаточно одной действительной подписи RSA -- но для **неправильной учётной записи** -- чтобы убедить друзей, что ты носишь официальный плащ Mojang? Добро пожаловать в `cape-mod`, эксплойт для Fabric, показывающий, как Minecraft доверяет подписи, не проверяя, принадлежит ли профиль, для которого она создана, действительно тебе.\n\nВ Java Edition есть вопрос, который р",
+    "verified": true,
+    "title": "Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA",
+    "description": "Мод Fabric, эксплуатирующий логическую уязвимость в системе доверия Minecraft: действительная подпись RSA от Mojang, но воспроизведённая на чужой учётной записи. Объяснение кода, последствия для безопасности и криптографические уроки.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "QD7wPD7RtMf1tH/RYNTu9e8D4b1B/3sMy9TCjFehay+scdJWzolqoB2GjR1lPVRQ1GHgyfYzNXpA/F5IOVjD+w=="
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 16,
+    "body": "\n# Laupok создал ИИ, который играет в Super Mario World сам -- как это работает\n\nLaupok создал искусственный интеллект, который играет в **Super Mario World** полностью автономно. Без заранее запрограммированных входных данных, без записанных кадров. ИИ учится сам, через случайные мутации и естественный отбор, проходить уровни игры. Проект работает на **BizHawk** -- мультиплатформенном эмуляторе -- с помощью Lua-скрипта объёмом около **4200 строк**.\n\nЧто делает этот проект таким увлекательным --",
+    "verified": true,
+    "title": "Laupok создал ИИ, который играет в Super Mario World сам -- как это работает",
+    "description": "Подробный разбор проекта Laupok: ИИ на основе алгоритма NEAT, который учится играть в Super Mario World автономно. Генетические алгоритмы, нейронные сети, нейроэволюция расширяющих топологий и 4200 строк на Lua.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "/L4M5TQoqAFlqXREYc8wByims7k8vBHZvrTikaMnhuLBpK8YCRMl9balB1E7bqMGCWws/rAAMSwO4ne37VW4gA=="
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 14,
+    "body": "\n# Luna Protocol: я создал автономного Discord-бота, который симулирует человека\n\nЧто, если бы Discord-бот мог **спать**, делать **опечатки**, **колебаться**, **забывать** ответить, а иногда и сам писать вам сообщения? Именно это и делает **Luna Protocol**: полностью автономный Discord-бот, который запускает локальный LLM (llama.cpp) и общается как несовершенный человек.\n\nНикаких жёстких промптов, никаких роботизированных ответов. У Luna есть **система приоритетного срабатывания**, **переменные",
+    "verified": true,
+    "title": "Luna Protocol: я создал автономного Discord-бота, который симулирует человека",
+    "description": "Luna Protocol -- это полностью автономный Discord-бот с локальным LLM, способный к естественному общению со сном, опечатками, колебаниями, забывчивостью, тематической усталостью и спонтанными сообщениями.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "c8vE0Hvv06SBkDnFDAbAFrZR1YhU28iyDuUTw+P8SMzHviuPgyVzw5O60dl3I0ES5mC0R0gS6vYEiri1mLfaEg=="
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 21,
+    "body": "\n\n![Превью: ИИ учится PvP в Minecraft](assets/ai-pvp-thumbnail.png)\n\nЕсть видео под названием [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) от Kadambi | AI Engineering, и это один из самых честных рассказов о тренировке игрового ИИ, которые я видел.\n\nСуть: создать бота, который играет в Minecraft PvP (набор с мечом, полностью зачарованная алмазная броня), наблюдая за экраном и отправляя команды мыши и клавиатуры. Никакого чтени",
+    "verified": true,
+    "title": "ИИ учится PvP в Minecraft -- имитационное обучение, обучение с подкреплением и 30 важных переменных",
+    "description": "1000 записанных дуэлей, нейросеть, обученная на пикселях, 90% точность нажатий клавиш... и бот упёрся в стену. Затем пришли RL, куррикулум-обучение и 60 часов тренировок.",
+    "date": "2026-07-09",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "WE8XnqhsY4CYDh45kUz6KhOBI8QjpXDJ18tLTEKIM8UXZ+0P3f5DvyJf4gHRbhEuprm41jo2SOsjp2c04sflWg=="
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 26,
+    "body": "\n\nSuper Mario Bros. -- это 40 килобайт ROM. Восемь миров, 32 уровня, враги, музыка, пауэр-апы -- всё это влезает сюда.\n\nНо если открыть эмулятор и поковыряться в нужных байтах, можно загрузить уровень 36-1. Или 255-1. Или попасть в мир, где всё сделано из спрайтов Боузера и труб, которые ведут в никуда.\n\nЭти глитч-миры существуют по простой причине: система хранения уровней SMB1 -- это шедевр 8-битной оптимизации, и когда заставляешь игру читать не оттуда, получаешь результаты, от которых захват",
+    "verified": true,
+    "title": "Super Mario Bros.: формат уровней, указатели и 256 глитч-миров",
+    "description": "Как 128 уровней × 4 типа зон влезают в 40КБ ROM, почему существует Minus World, и как матч в теннис на NES может загружать глитч-миры.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "gNrepE7DgWGM5HJoG6/n3Vr1qx4kuIfs8qrIUNY9tI6kfrBXktzQunMNeVVOLfiVVCpEDcsWDbQKohx9MxqiGw=="
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 10,
+    "body": "\n# Я провёл выходные за чтением кода konosuba-rpg и вот что я нашёл\n\nЯ поддерживаю этот проект уже некоторое время, но перечитывать свой собственный код спокойно -- это всегда поучительно. konosuba-rpg -- это пошаговая RPG для Discord, где каждое действие генерирует изображение WebP на лету. Не текстовый embed. Настоящее скомпонованное изображение со спрайтами, полосками здоровья, сообщениями о боях -- всё в одном.\n\nСтек: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Полностью бесплатн",
+    "verified": true,
+    "title": "Я провёл выходные за чтением кода konosuba-rpg и вот что я нашёл",
+    "description": "Пошаговая RPG для Discord, где каждое действие генерирует изображение WebP на лету: URL как состояние игры, детерминированный ГСЧ, конвейер WASM, кеш 5 уровней, бот без сервера.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "skbnYKm9mph/4w2Kv/N6xu3ZIV78UktvqQwsjtU3faIv7nEec00Zg2Td3HPuuVCg7KrvAmNMBAydXZJTZMXvIA=="
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 18,
+    "body": "\n\nТы когда-нибудь задумывался, можно ли запустить сервер Minecraft на микроконтроллере за 1 бакс?\n\nЯ -- да. И ответ -- да. Буквально.\n\nЕсть проект под названием [Bareiron](https://github.com/p2r3/bareiron/), автор p2r3, и это, вероятно, один из самых крутых проектов в мире Minecraft за последние годы. Речь о бинарнике, который весит **300 килобайт**, **6800 строк на C**, ноль внешних зависимостей, без malloc, без threading, и всё это работает на **ESP32 за 1 доллар**.\n\n![ESP32-C3, микроконтролле",
+    "verified": true,
+    "title": "Bareiron -- сервер Minecraft, работающий на микроконтроллере за 1$",
+    "description": "6800 строк на C, ни одного malloc, Perlin noise заменён билинейной интерполяцией, биомы в tile map, и всё это на чипе за 1$.",
+    "date": "2026-05-30",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "maHyrLpbIkVKbWlF1iG1nR8i1vPysgt5ovTxd9JrjHWMgO/egoCHaGAINCZwxp30/hxtMdMTnZIrM2X9kZKAUQ=="
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 11,
+    "body": "\n\nЯ несколько месяцев держал обычных Discord ботов на своей машине.\n\nWebSocket соединение всегда открыто. Бот сам переподключается в 3 ночи. Бот падает, потому что я косо посмотрел на овец. Счёт растёт.\n\nОднажды я понял: **зачем держать соединение**? Discord может POSTить тебе только то, что интересно. Ты отвечаешь -- готово.\n\nС 2021 года Discord поддерживает **interaction endpoints**.\n\nЭто просто HTTP. Никакого WebSocket. Никакого состояния. Ты получаешь запрос, шлёшь JSON, всё. Следующий запро",
+    "verified": true,
+    "title": "100% serverless бот Discord: Hono + Cloudflare Workers",
+    "description": "Как я заменил Discord-бота, который обходился мне в 50€/месяц, на ноль евро -- interaction endpoints, Hono, Workers, рендеринг изображений в реальном времени и полноценная игра без WebSocket.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "pR/AwC5cO3CTnzc5Vb7bdzm3gNaFmE20LG3JomPirxajScTq9GZAqK38vzXZrJJvu+iTBXrCt+XcqFqVQyZuBQ=="
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 6,
+    "body": "\n\nБывают проекты, которые начинаются с \"а что если сделать шахматы с мифологией?\", а заканчиваются какой-то ИИ, которая меняет свои гиперпараметры каждые 5 ходов.\n\nNausicaa -- это оно. Пошаговая настолка, где ты собираешь колоду мифических существ, управляешь маной, выставляешь юнитов на поле 10x8. А ещё там ИИ с раздвоением личности.\n\nЯ потратил дофига времени на эту ИИ, и результат просто неуправляемый xD\n\n## Что за игра\n\nПрежде чем говорить про мозги, надо понять тело:\n\n- Поле 10x8, зона разм",
+    "verified": true,
+    "title": "Мой тупой ИИ для Nausicaa",
+    "description": "Эвристический ИИ на коэффициентах, гиперпараметры которых меняются каждые 5 ходов, и Оракул который убегает -- погружение в мозг мифологической стратегической настолки.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "H/cIExSJw0NOJ6Pe+9BGLL2319AtwZSdvyRqXom+kSIvfqZpVnk/xAj3NFlAJXN43hmvrijrTY0wE7PW8zCV6Q=="
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 11,
+    "body": "\n\nЯ потратил часы, наблюдая за тем, как овцы врезаются в стены.\n\nЛучшая инвестиция в моей жизни xD\n\nЧем больше ты смотришь на этих мобов, тем больше понимаешь -- в их движении нет ничего случайного. Каждый шаг запрограммирован, предсказуем и, самое главное -- взламываем. Я залез в исходники Minecraft чтобы понять, как работает pathfinding, и обнаружил, что можно буквально контролировать разум мобов. Серьёзно, заставлять их идти туда, куда ТЫ хочешь, а не куда рандом решит.\n\nЭтот гайд -- всё, что",
+    "verified": true,
+    "title": "Логика поиска пути в Minecraft и её применение",
+    "description": "Как алгоритм A*, штрафы блоков и механика POI позволяют контролировать, предсказывать и эксплуатировать движение мобов -- от беспроводного редстоуна до оптимизированных ферм.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "evfvDBKnPmAfqYbjYbjBtrI+2R/8n8Wxv8OWH2xq5uxl9RFPpog3ri7c03RNppB5aMee26+yI4Hf7gSDRP3J6g=="
+  },
+  {
+    "slug": "utau",
+    "readingTime": 9,
+    "body": "\n\nЯ уже упоминал об этом на своей главной странице : я люблю UTAU. Вот почему.\n\nВ 2008 году, если ты хотел заставить синтетический голос петь, у тебя был один вариант : VOCALOID. Программа от Yamaha. Дорогая, проприетарная, с официальными голосами, которые ты не мог создать сам.\n\nА потом появился один японский чувак, Ameya/Ayame, который выпустил свою штуковину. Программа, написанная на **Visual Basic 6**. Бесплатная. Которая позволяла тебе создать свой собственный голос с помощью... WAV-файлов,",
+    "verified": true,
+    "title": "UTAU: как программа на Visual Basic 6 демократизировала синтетический голос",
+    "description": "Как UTAU, бесплатная программа на VB6 2008 года, позволила любому создавать синтетические певческие голоса с помощью конкатенативного синтеза -- и почему это всё ещё важно сегодня.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "RrYw+VbcvfUdehaxbRSeeEvmP9SmZHGGPtikWN7jiBnWQgnKyEYAo3zQ/u8hW7OMUfeDblQt4hZRY2P/IpXq7w=="
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 10,
+    "body": "\n# Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container\n\nЯ недавно потратил немало времени, изучая исходный код [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), проект [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). И часть, которая удивила меня больше всего -- это не VFS, не виртуальная сеть, не 170 команд Unix, переписанных на TypeScript. Это папка `polyfills/`.\n\nПотому что модуль работае",
+    "verified": true,
+    "title": "Как заставить Node.js библиотеку работать в браузере без Wasm -- полифиллы typescript-virtual-container",
+    "description": "Как Fortune вручную переписала node:fs, node:crypto и дюжину других Node-модулей в 640 строках JavaScript, чтобы контейнер работал в браузере без Wasm.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "WWdDIdmvKgCKdfxGSVaQvHj5hvishEyR7wx1O0jDKuX5AiB23St0kSMicvnZPFfk2j6iknPDXXQXeymn9ISkWw=="
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 7,
+    "body": "\n# Я использую git как базу данных, чтобы крутить бота на GitHub Actions бесплатно\n\nУ меня есть автоответчик на email, который работает 24/7.\n\nОн читает мои письма, понимает о чём речь, и отвечает сам с помощью ИИ. Он помнит предыдущие разговоры. Игнорит рассылки и `noreply@`. Пересылает человеку, если тема слишком серьёзная.\n\nМесячная стоимость: **0€**.\n\nНикакого сервера. Никакого VPS. Никакой базы данных. Просто GitHub Actions и безумный хак: **использовать git как базу данных**.\n\nЧуешь, к чем",
+    "verified": true,
+    "title": "Я использовал git как базу данных, чтобы запустить бота бесплатно на GitHub Actions",
+    "description": "Как я написал автоответчик на ИИ, который работает на GitHub Actions за 0€/месяц -- используя git-теги как базу данных и предварительно скомпилированные снимки в теге runtime.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "xbUvolucgdyO7FthJ/TS13L4EaCvH+lahVGOL9HUtG3we+zt0u+/msdjtcY7I1veoJjMB+bdZbSa3/todmpVrQ=="
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 15,
+    "body": "\n\nGitHub Actions даёт тебе бесплатные Linux-машины.\n\nТипа, настоящие серверы Ubuntu. 2 ядра, 7 ГБ RAM, 14 ГБ диска. Бесплатно. На 6 часов за один run.\n\nЕдинственная \"проблема\": после завершения run всё стирается. Машина одноразовая. Ты ставишь софт, кодишь, настраиваешь... и бац, в конце всё исчезает. Как будто ты ничего и не делал.\n\nКроме одного \"но\".\n\nКроме случая, когда ты используешь **git как жёсткий диск**.\n\nИ вот тут внезапно у тебя появляется бесплатный VPS с постоянным диском, который п",
+    "verified": true,
+    "title": "Repo to VPS: превращаем GitHub Actions в бесплатный VPS с постоянным хранилищем",
+    "description": "Как превратить runner GitHub Actions в постоянно работающий VPS, используя git в качестве постоянного хранилища -- tmate, inotify и commit --amend.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "TjuRpqJqNaItZlxXKUsLQ85yuk/ypl2L/qo0FkMPCQBGZ45/2TTNVFpiptuQE0ACAmxq6UeSxSHvZLd1G9L10g=="
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 37,
+    "body": "\n# Все JavaScript-песочницы, эмуляторы, симуляторы и honeypot'ы -- сравнение\n\nКороче, я залез в эту кроличью нору ОЧЕНЬ глубоко и надолго. Всё началось с того, что я помогал с [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- проектом Fortune (о ней чуть позже) -- и меня постоянно спрашивали «а чем это отличается от `v86`?» или «почему бы не использовать `vm2`?» -- и я понял, что не могу дать внятного ответа, не составив сначала карту всей экосисте",
+    "verified": true,
+    "title": "Сравнение JavaScript-решений для симуляции ядра Linux",
+    "description": "Глубокий анализ воссоздания Linux-окружений на JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "2heJnSF8opZba6ywFsKmGgrwCwCeclq7wOpnOzk6ZrE8tTvVCpXczeQmrUjBzpkOiRdzHnqYbNSZnV/9l5cfbg=="
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 6,
+    "body": "\n# Создание character-factory: аватары с генетикой\n\nМне понадобились тысячи правдоподобных, различимых аватаров для [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- приватного проекта карточной игры, где у каждой карты есть «ДНК» персонажа, которую рендерер превращает в портрет. Покупка готового набора выглядела бы шаблонно. Генерация отдельных аватаров DiceBear по сиду была случайной не в том смысле: карта в японском стиле могла выдать скандинавскую блондинку, а два «родственника» выгляд",
+    "verified": true,
+    "title": "Создание character-factory: аватары с генетикой",
+    "description": "TypeScript-модуль на основе DiceBear: согласованная генерация на основе страны/этничности, небольшой движок генетики для проекции детей и инженерные детали, сделавшие его пригодным для карточной игры.",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Z8owqLkwoLqyvQIi995KI9fkMHC9sTq3E47NUYzEWoIfSyfEi6RuRdK8FkiO/uH6sEJ4TJ2I2OtNMIbpIVDWWQ=="
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 6,
+    "body": "\n> **Примечание (2026):** Этот проект больше не поддерживается. Microsoft значительно усилила свою антибот-защиту -- то, что работало тогда, сегодня уже не работает. Код и подход, описанные ниже, сохранены только в архивных/образовательных целях.\n\n### Введение\n\nНесколько лет назад я открыл для себя Microsoft Rewards. Тогда был карантин, но это не отменяет того факта, что меня заставили использовать Microsoft Family Safety и, соответственно, Edge. Именно тогда я и узнал о Rewards.\n\nВ то время мне",
+    "verified": true,
+    "title": "Боттинг фермы Microsoft Rewards",
+    "description": "Как я написал бота для массового фарма очков Microsoft Rewards -- и почему их антибот-защита с тех пор ужесточилась.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "8nZyjNbyy4RWVNCw/gJTEbDOoVIp1Fn1eWnHGtqVty+uKxgUsAhmYNTdZALa1PD2niJiH3h8kqbQEvRlrRR1Wg=="
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 4,
+    "body": "\n# Проект\n\nПроект, над которым я работаю, называется LLJT:\n\n![](assets/20260313_092734_image.png)\n\nЭто сайт, который также является PWA, то есть и мобильным приложением. Он использует MaterialUI, чтобы ощущаться как настоящее телефонное приложение.\nНедавно мне пришлось заняться импортами Mui, и я сократил количество модулей с 11 707 до всего 595, импортируя каждую иконку отдельно по строке, а не через деструктуризацию: я понял, что при деструктуризации ты на самом деле загружаешь всю библиотеку",
+    "verified": true,
+    "title": "Работа над новым проектом",
+    "description": "Взгляд на процесс запуска и разработки нового сайта.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "r0TnrFk+sHUIyYSuS69wjg0N3IyjqyRQtyiEjRdMYgXDQLddP9XimKIfEEqnuhban5nP5Evgh0pG0tUgLCPpIw=="
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 2,
+    "body": "\n# Мой GitHub Профиль\n\nДобро пожаловать в мой GitHub-профиль -- организованный как хорошо подобранная библиотека.\nВ первой секции находится шапка со ссылками, довольно стандартно:\n![](assets/20260308_123527_image.png)\n\nКак видишь, тут есть ссылки. Круто, наверное. Не знаю, что ещё сказать.\n## Обо мне\n\nЕщё есть секция «Обо мне»:\n\n![](assets/20260308_123913_image.png)\n\nВ этой секции ты можешь видеть, чем я занимаюсь в реальном времени! Если ты видишь, что я слушаю музыку -- так и есть.\nЯ помещу ин",
+    "verified": true,
+    "title": "О моём GitHub-профиле",
+    "description": "Краткое введение в мой GitHub-профиль.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "tOQaMzkcfi4hlwueVC0vCH58PkrZt4rO++vXje+ZLrSqbF/ycHnO+g4zNLsIRoB3FC9I1T7yre85VSE1V2xQog=="
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 3,
+    "body": "\n# Мои увлечения\n\nЯ хотел написать этот блог уже давно, но всё откладывал :/\n\nНаверное, потому что мне хочется делиться своей жизнью, но не личной информацией? Как-то так.\n\nМои увлечения разнообразны: я обожаю программировать, как ты, наверное, уже заметил по остальным статьям. В создании вещей с нуля, решении задач и наблюдении за тем, как твоё творение оживает, есть что-то глубоко удовлетворяющее. Будь то маленькая CLI-утилита или полноценное веб-приложение -- этот процесс никогда не надоедает",
+    "verified": true,
+    "title": "Мои увлечения",
+    "description": "Программирование, рисование, автоматизация, изучение старого железа и многое другое -- взгляд на то, что мной движет.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "personal"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "bsV8a3sgGIbMrB2GFbHgbDtG/Vdf6avJcffQOPxw8F8aCJZG07cxp4X4wp781dL+4oVszIyn+GekU78+BUFHsA=="
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 5,
+    "body": "\n# Скрипт подписи коммитов SSH -- объяснение\n\nВ этом посте мы разберём скрипт `setup-ssh-signing.sh`, который я опубликовал в [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). Посмотрим, что делает каждая часть, как он упрощает локальную подпись коммитов через SSH в рамках репозитория и, да, почему я вообще решил его написать (спойлер: я просто хотел, чтобы мои коммиты выглядели **стильно**).\n\nМне всегда нравилось настраивать свой Git-воркфлоу, и после того, как я уви",
+    "verified": true,
+    "title": "Скрипт подписи коммитов SSH -- объяснение",
+    "description": "Разбор помощника для подписи коммитов через SSH и почему я хотел стильные коммиты.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "arF3C2bicTjNRFKiN+Qxw5kc86wm2I1wzEC87FyLJ23YdJG8BtsObyN6sxTI2vfRLjmsV03UjmBvRkDYuWunqA=="
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 8,
+    "body": "\n# Как работает этот блог?\n\nКогда-нибудь задумывался, как этот блог устроен под капотом? В этой статье я проведу тебя по всей архитектуре приложения -- от технологического стека до процесса написания статьи. И да, я даже покажу, как я пишу статьи прямо из VS Code!\n\nЭтот блог построен на современных веб-технологиях:\n\n- **React 19** -- для пользовательского интерфейса\n- **TypeScript** -- для типизированного и более надёжного кода\n- **Vite** -- как сверхбыстрый инструмент сборки\n- **React Router v7",
+    "verified": true,
+    "title": "Как работает этот блог?",
+    "description": "Глубокое погружение во внутреннее устройство блога: React, Vite, Markdown, CI/CD пайплайн и процесс написания статей.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "DoIMvO1XB4J8FsWMn5YxYyOYP4p0tU0iAOPE+ki76THZqimSv88dy7qhp5I1MPn8pRHYhw4NsmRm7WlJqgIhFQ=="
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 4,
+    "body": "\n\nВы когда-нибудь смотрели логи своего Express-сервера и видели странные запросы к `/wp-admin`, `/.env`, `/etc/shadow`? Это боты, сканеры и любопытные, проверяющие ваше приложение на уязвимости.\n\nПоэтому я решил создать **middleware-honeypot для Express** -- приманку, которая отвечает на такие запросы ультра-реалистичными ответами, как будто каждая конечная точка -- настоящий открытый сервис.\n\n## Зачем honeypot, а не просто 404\n\nКогда бот натыкается на ваше приложение:\n\n- **С 404**: он понимает,",
+    "verified": true,
+    "title": "Я создал ultra-реалистичный Express honeypot",
+    "description": "328 поддельных endpoint'ов с генерируемыми на лету ответами, подмена заголовков, запись трафика ботов -- погружение в код middleware-ловушки для Express, созданной для обмана сканеров.",
+    "aiGenerated": true,
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "SEGXmkZlqPDnujol1tQUeoIz5+8xVaF4++R6e7iYWJ9uzXIqRx3WMcAugEP7+6xuR1TLNQKSc0NL+O1QWFxLWw=="
+  }
+]

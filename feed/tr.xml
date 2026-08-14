@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fox&apos;s Blog (Türkçe)</title>
+    <link>https://fox3000foxy.com</link>
+    <description>Fox3000foxy&apos;s blog about web development, automation, and open-source -- Türkçe</description>
+    <language>tr</language>
+    <lastBuildDate>Fri, 14 Aug 2026 09:49:53 GMT</lastBuildDate>
+    <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
+    <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
+    <generator>WordPress 5.9.3</generator>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <image>
+      <url>https://fox3000foxy.com/og/home.png</url>
+      <title>Fox&apos;s Blog (Türkçe)</title>
+      <link>https://fox3000foxy.com</link>
+    </image>
+    <atom:link href="https://fox3000foxy.com/feed.tr.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://fox3000foxy.com/feed.xml" rel="alternate" type="application/rss+xml" hreflang="x-default" />
+    <atom:link href="https://fox3000foxy.com/feed.en.xml" rel="alternate" type="application/rss+xml" hreflang="en" />
+    <atom:link href="https://fox3000foxy.com/feed.fr.xml" rel="alternate" type="application/rss+xml" hreflang="fr" />
+    <atom:link href="https://fox3000foxy.com/feed.zh.xml" rel="alternate" type="application/rss+xml" hreflang="zh" />
+    <atom:link href="https://fox3000foxy.com/feed.ja.xml" rel="alternate" type="application/rss+xml" hreflang="ja" />
+    <atom:link href="https://fox3000foxy.com/feed.ko.xml" rel="alternate" type="application/rss+xml" hreflang="ko" />
+    <atom:link href="https://fox3000foxy.com/feed.it.xml" rel="alternate" type="application/rss+xml" hreflang="it" />
+    <atom:link href="https://fox3000foxy.com/feed.de.xml" rel="alternate" type="application/rss+xml" hreflang="de" />
+    <atom:link href="https://fox3000foxy.com/feed.ru.xml" rel="alternate" type="application/rss+xml" hreflang="ru" />
+    <atom:link href="https://fox3000foxy.com/feed.es.xml" rel="alternate" type="application/rss+xml" hreflang="es" />
+    <atom:link href="https://fox3000foxy.com/feed.pt.xml" rel="alternate" type="application/rss+xml" hreflang="pt" />
+    <atom:link href="https://fox3000foxy.com/feed.id.xml" rel="alternate" type="application/rss+xml" hreflang="id" />
+    <atom:link href="https://fox3000foxy.com/feed.hi.xml" rel="alternate" type="application/rss+xml" hreflang="hi" />
+    <atom:link href="https://fox3000foxy.com/feed.ar.xml" rel="alternate" type="application/rss+xml" hreflang="ar" />
+    <atom:link href="https://fox3000foxy.com/feed.vi.xml" rel="alternate" type="application/rss+xml" hreflang="vi" />
+    <atom:link href="https://fox3000foxy.com/feed.th.xml" rel="alternate" type="application/rss+xml" hreflang="th" />
+    <item>
+      <title>Luna Protocol: paylaşılan beyinler, duygu sınıflandırması ve ilginç/anlamsız yönlendirme</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</guid>
+      <description>Luna Protocol tek parça bir yapıdan dört katmanlı bir mimariye dönüştü: adaptörler, beyin, duygu sınıflandırıcı ve çıkarım. Menüde: embedding centroid&apos;leri, ilginç/anlamsız yönlendirme ve valans ile uyarılmaya göre LLM parametre ayarı var.</description>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>matrix</category>
+      <category>llm</category>
+      <category>architecture</category>
+      <category>embeddings</category>
+      <category>centroids</category>
+      <category>emotion-ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>ELIZA&apos;dan LLM&apos;lere : 60 Yıllık Konuşmalı Yapay Zeka, TypeScript&apos;te Yeniden İnşa Edildi</title>
+      <link>https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</guid>
+      <description>ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- aynı sorunun beş kökten farklı mimarisi, orijinal verileriyle TypeScript&apos;e taşındı. 1966&apos;dan modern LLM&apos;lere, konuşmalı yapay zekanın konuşmayı nasıl öğrendiği ve bir sohbet botu reposunun bize 60 yıllık araştırma hakkında ne öğrettiği.</description>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <category>chatbot</category>
+      <category>ai</category>
+      <category>typescript</category>
+      <category>eliza</category>
+      <category>parry</category>
+      <category>alice</category>
+      <category>aiml</category>
+      <category>jabberwacky</category>
+      <category>cleverbot</category>
+      <category>llm</category>
+      <category>nlp</category>
+      <category>history</category>
+      <category>luna-protocol</category>    </item>
+    <item>
+      <title>Luna Protocol: 50k Discord örneğiyle 1.5B modelini neden fine-tune ettim ve few-shot priming neden gizli silah oldu</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-official-models</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-official-models</guid>
+      <description>Daha az veriyle eğitilmiş daha küçük bir model, nasıl prime edileceğini biliyorsanız daha büyük bir modeli geçebilir. İşte Luna Protocol&apos;ün neden 3B Hermes&apos;ten 1.5B Qwen fine-tune&apos;una geçtiği ve few-shot priming&apos;in neden asıl oyun değiştirici olduğu.</description>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>llm</category>
+      <category>fine-tuning</category>
+      <category>few-shot-learning</category>
+      <category>qwen</category>
+      <category>unsloth</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Makineler Birbirleriyle Nasıl Konuşur: TCP&apos;den mTLS&apos;ye Bir Bakış</title>
+      <link>https://fox3000foxy.com/blog/how-machines-talks-between-themselves</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-machines-talks-between-themselves</guid>
+      <description>TCP, UDP, TLS, mTLS, HTTP ve WebSocket neden rakip alternatifler değil de üst üste bindirilmiş katmanlardır; ham taşımadan karşılıklı kimlik doğrulamaya kadar makineden makineye iletişimin hiyerarşik bir turu.</description>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <category>tcp</category>
+      <category>udp</category>
+      <category>tls</category>
+      <category>mtls</category>
+      <category>websocket</category>
+      <category>http</category>
+      <category>grpc</category>
+      <category>ağ</category>
+      <category>dağıtık-mimari</category>
+      <category>protokoller</category>    </item>
+    <item>
+      <title>GitHub Actions&apos;ı dahice kullanmanın 5 yolu (ve secret&apos;lar hakkında öğrettikleri)</title>
+      <link>https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</guid>
+      <description>CI runner&apos;ı bedava VPS&apos;e dönüştürmek, kendi PR&apos;larını açan bot, sıfır secret&apos;la npm publish. &quot;lint + test + deploy&quot;un ötesine geçen GitHub Actions desenlerini kataloglamak için repolarımda bir tur.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>github-actions</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>valorant-short-maker: Valorant short&apos;larımı kendi kendine üreten pipeline</title>
+      <link>https://fox3000foxy.com/blog/valorant-short-maker</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/valorant-short-maker</guid>
+      <description>Groq/Llama senaryo için, Piper sesler için, FFmpeg geri kalan her şey için. Bir cron işi @valorant_agents&apos;te A&apos;dan Z&apos;ye günde bir video nasıl üretip yayınlıyor.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/valorant-short-maker/vsm-01-intro.png" type="image/png" length="0" />
+      <category>typescript</category>
+      <category>ffmpeg</category>
+      <category>automation</category>
+      <category>ai</category>    </item>
+    <item>
+      <title>Minecraft Bedrock&apos;ta herhangi bir pelerini nasil alirsiniz</title>
+      <link>https://fox3000foxy.com/blog/bedrock-any-cape</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bedrock-any-cape</guid>
+      <description>Ucuncu parti bir baslatici, oyunun eski bir surumu ve hayir demeyi asla ogrenmemis bir pelerin secici. Tam rehber arti neden calistiginin olasi aciklamasi.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bedrock-cape/bedrock-cape-01-install-bedrock.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>bedrock</category>
+      <category>tutorial</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Gradyan inişi yerine doğal seçilimle bir sinir ağı evrimleştirdim</title>
+      <link>https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</guid>
+      <description>Klasik gradyan inişi eğitimini bir NSGA-II genetik algoritmasıyla değiştirerek DQN alım-satım ajanlarını nasıl evrimleştirdiğim: aşırı uyumdan Lamarckçı ağırlık evrimine dört sürüm</description>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>nsga-ii</category>
+      <category>dqn</category>
+      <category>trading</category>
+      <category>typescript</category>    </item>
+    <item>
+      <title>TF2 Botları Rastgele Değil: Her Zorluk Ayarını Tersine Mühendislikle Çözdüm</title>
+      <link>https://fox3000foxy.com/blog/tf2-bot-ai-explained</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/tf2-bot-ai-explained</guid>
+      <description>Görüş, nişan alma takibi, casus bıçaklama açıları, nişancı kafa vuruşu mantığı, bilinen her hata -- Valve bunların hiçbirini belgelemedi. Biz de kodu inceledik ve tam bir teknik şartname haline getirdik.</description>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/tf2-bot-ai-soldier-aim.png" type="image/png" length="0" />
+      <category>tf2</category>
+      <category>game-ai</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Cape Mod : RSA imza enjeksiyonuyla Jeb_&apos;nin capesini çalmak</title>
+      <link>https://fox3000foxy.com/blog/cape-mod-minecraft</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/cape-mod-minecraft</guid>
+      <description>Minecraft&apos;ın güven sistemindeki mantıksal bir açığı sömüren bir Fabric modu: Mojang&apos;dan geçerli bir RSA imzası ama yanlış hesaba replay edilmiş. Kod açıklaması, güvenlik etkileri ve kriptografik dersler.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/xbox-profile.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>fabric</category>
+      <category>java</category>
+      <category>security</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Laupok, Super Mario World&apos;ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor</title>
+      <link>https://fox3000foxy.com/blog/laupok-mario-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/laupok-mario-ai</guid>
+      <description>Laupok&apos;un projesinin detaylı bir analizi: Super Mario World&apos;ü bağımsız olarak oynamayı öğrenen bir NEAT tabanlı yapay zeka. Genetik algoritmalar, sinir ağları, artırılmış topolojilerin nöroevrimi ve 4200 satırlık Lua kodu.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/laupok-mario-ai/neat-title.jpg" type="image/png" length="0" />
+      <category>ai</category>
+      <category>lua</category>
+      <category>emulation</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-discord-bot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-discord-bot</guid>
+      <description>Luna Protocol, yerel bir LLM ile çalışan, tamamen otonom bir Discord botudur. Uyuma, yazım hatası yapma, tereddüt etme, unutma, konu yorgunluğu çekme ve kendiliğinden mesaj gönderme gibi doğal konuşma yeteneklerine sahiptir.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/luna-protocol/01-architecture-overview.svg" type="image/png" length="0" />
+      <category>discord</category>
+      <category>llm</category>
+      <category>typescript</category>
+      <category>event-driven-architecture</category>
+      <category>ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Yapay Zeka Minecraft PvP Öğreniyor -- Taklit Öğrenimi, Pekiştirmeli Öğrenme ve Önemli Olan 30 Değişken</title>
+      <link>https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</guid>
+      <description>1.000 düello kaydedildi, pikseller üzerinde eğitilen sinir ağı, %90 tuş doğruluğu : ve bot bir duvara doğru koştu. Sonra RL, müfredat öğrenimi ve 60 saatlik eğitim geldi.</description>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/ai-pvp-thumbnail.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>ai</category>
+      <category>python</category>    </item>
+    <item>
+      <title>Super Mario Bros.: Level formatı, göstergeçler ve 256 glitch world</title>
+      <link>https://fox3000foxy.com/blog/smb1-glitch-levels</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/smb1-glitch-levels</guid>
+      <description>128 level × 4 alan türü 40KB ROM&apos;a nasıl sığıyor, Minus World neden var ve bir NES Tennis maçı nasıl glitch world&apos;leri yükleyebiliyor.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/smb1-glitch-levels/title-card.jpg" type="image/png" length="0" />
+      <category>retro</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Bir hafta sonumu konosuba-rpg&apos;nin kodunu okuyarak geçirdim ve işte bulduklarım</title>
+      <link>https://fox3000foxy.com/blog/konosuba-rpg</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/konosuba-rpg</guid>
+      <description>Her eylemin anında WebP görüntüsü oluşturduğu sıra tabanlı bir Discord RPG&apos;si: URL oyun durumu olarak, deterministik RNG, WASM hattı, 5 seviyeli önbellek, sunucusuz bot.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/konosuba-rpg/game_init.webp" type="image/png" length="0" />
+      <category>discord</category>
+      <category>rpg</category>
+      <category>typescript</category>
+      <category>hono</category>
+      <category>cloudflare</category>
+      <category>supabase</category>
+      <category>wasm</category>
+      <category>gaming</category>
+      <category>serverless</category>    </item>
+    <item>
+      <title>Gerçeküstü bir Express honeypot&apos;u inşa ettim</title>
+      <link>https://fox3000foxy.com/blog/express-honeypot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/express-honeypot</guid>
+      <description>Anında oluşturulan yanıtlar, başlık sahteciliği, bot trafiği kaydı ile 328 sahte uç nokta -- tarayıcıları kandırmak için tasarlanmış bir Express honeypot middleware&apos;inin koduna derinlemesine bir dalış.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <category>express</category>
+      <category>nodejs</category>
+      <category>security</category>
+      <category>honeypot</category>    </item>
+    <item>
+      <title>Bareiron -- 1$&apos;lık bir mikrodenetleyicide çalışan Minecraft sunucusu</title>
+      <link>https://fox3000foxy.com/blog/bareiron</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bareiron</guid>
+      <description>6800 satır C, sıfır malloc, bilinear interpolasyonla değiştirilmiş Perlin gürültüsü, tile map&apos;te biyomlar ve bunların hepsi 1$&apos;lık bir çipte.</description>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bareiron/esp32-board.jpg" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>reverse-engineering</category>
+      <category>embedded</category>
+      <category>c</category>
+      <category>esp32</category>    </item>
+    <item>
+      <title>%100 sunucusuz Discord botu: Hono + Cloudflare Workers</title>
+      <link>https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</guid>
+      <description>Bana ayda 50€&apos;ya mal olan bir Discord botunu sıfır euro ile nasıl değiştirdim -- etkileşim uç noktaları, Hono, Workers, gerçek zamanlı görüntü oluşturma ve WebSocket olmadan eksiksiz bir oyun.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>cloudflare</category>
+      <category>serverless</category>
+      <category>typescript</category>
+      <category>bots</category>    </item>
+    <item>
+      <title>Nausicaa için salaş yapay zekâm</title>
+      <link>https://fox3000foxy.com/blog/nausicaa-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/nausicaa-ai</guid>
+      <description>Sezgisel katsayı tabanlı bir yapay zeka, her 5 turda rastgele değişen hiperparametreler ve kaçan bir Kahin -- mitolojik bir strateji tahta oyununun beynine dalış.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>gaming</category>
+      <category>ai</category>
+      <category>javascript</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Minecraft Pathfinding Mantığı ve Uygulamaları</title>
+      <link>https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</guid>
+      <description>A* algoritması, blok cezaları ve POI mekanikleri ile mob hareketlerini nasıl kontrol edebileceğin, tahmin edebileceğin ve sömürebileceğin -- kablosuz redstone&apos;dan optimize edilmiş çiftliklere.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>minecraft</category>
+      <category>pathfinding</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>UTAU: Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi</title>
+      <link>https://fox3000foxy.com/blog/utau</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/utau</guid>
+      <description>2008&apos;de VB6 ile yazılmış ücretsiz bir yazılım olan UTAU, birleştirmeli sentez kullanarak herkesin sentetik şarkı sesi oluşturmasını nasıl sağladı -- ve bugün hala neden önemli.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>utau</category>
+      <category>vocaloid</category>
+      <category>music</category>
+      <category>synthesis</category>
+      <category>vb6</category>    </item>
+    <item>
+      <title>Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill&apos;leri</title>
+      <link>https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</guid>
+      <description>Fortune&apos;un, konteynerin Wasm olmadan tarayıcıda çalışması için node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript&apos;te elle nasıl yeniden uyguladığı.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>nodejs</category>
+      <category>polyfills</category>
+      <category>browser</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>GitHub Actions&apos;ta ücretsiz bot çalıştırmak için git&apos;i veritabanı olarak kullandım</title>
+      <link>https://fox3000foxy.com/blog/email-autoreply</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/email-autoreply</guid>
+      <description>GitHub Actions&apos;ta ayda 0€&apos;ya çalışan bir yapay zeka e-posta otomatik cevaplayıcısını nasıl kodladım -- git tag&apos;lerini veritabanı olarak ve önceden derlenmiş runtime anlık görüntülerini kullanarak.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>automation</category>
+      <category>javascript</category>
+      <category>serverless</category>
+      <category>ai</category>
+      <category>git</category>    </item>
+    <item>
+      <title>Repo to VPS: GitHub Actions&apos;ı ücretsiz kalıcı VPS&apos;ye dönüştürün</title>
+      <link>https://fox3000foxy.com/blog/repo-to-vps</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/repo-to-vps</guid>
+      <description>Bir GitHub Actions runner&apos;ı git&apos;i kalıcı depolama olarak kullanarak sürekli açık bir VPS&apos;ye dönüştürme -- tmate, inotify ve commit --amend.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>github</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>JavaScript Çözümlerini Linux Çekirdek Simülasyonları İçin Karşılaştırma</title>
+      <link>https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</guid>
+      <description>JavaScript/TypeScript ile Linux ortamı yeniden oluşturmalarının derinlemesine analizi.</description>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <category>javascript</category>
+      <category>linux</category>
+      <category>analysis</category>    </item>
+    <item>
+      <title>character-factory&apos;yi İnşa Etmek: Genetikle Avatar Oluşturma</title>
+      <link>https://fox3000foxy.com/blog/character-factory</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/character-factory</guid>
+      <description>DiceBear üzerine bir TypeScript modülü: tutarlı ülke/etnisite tabanlı oluşturma, çocukları yansıtmak için küçük bir genetik motoru ve bir kart oyununda kullanışlı hale getiren mühendislik detayları.</description>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>npm</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Bir Microsoft Rewards Çiftliğini Botlamak</title>
+      <link>https://fox3000foxy.com/blog/botting-a-farm</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/botting-a-farm</guid>
+      <description>Ölçekli olarak Microsoft Rewards puanı toplamak için nasıl bir bot kodladığım -- ve Microsoft&apos;un anti-bot tespitinin neden artık işe yaramadığı.</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_135010_image.png" type="image/png" length="0" />
+      <category>automation</category>
+      <category>javascript</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Yeni Bir Proje Üzerinde Çalışmak</title>
+      <link>https://fox3000foxy.com/blog/working-on-a-new-project</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/working-on-a-new-project</guid>
+      <description>Yeni bir web sitesi geliştirme ve başlatma sürecine bir bakış.</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_092734_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>webdev</category>    </item>
+    <item>
+      <title>GitHub Profilim Hakkında</title>
+      <link>https://fox3000foxy.com/blog/about-my-github-profile</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/about-my-github-profile</guid>
+      <description>GitHub profilime kısa bir giriş.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260308_123527_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>github</category>    </item>
+    <item>
+      <title>Tutkularım</title>
+      <link>https://fox3000foxy.com/blog/my-passions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/my-passions</guid>
+      <description>Kod yazmak, çizim yapmak, her şeyi otomatikleştirmek, eski teknolojileri keşfetmek ve daha fazlası -- beni neyin yönlendirdiğine bir bakış.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>personal</category>    </item>
+    <item>
+      <title>SSH commit imzalama scripti açıklaması</title>
+      <link>https://fox3000foxy.com/blog/ssh-signing-script</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ssh-signing-script</guid>
+      <description>SSH commit imzalama yardımcısının adım adım açıklaması ve neden şık commit&apos;ler istediğim.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>git</category>
+      <category>security</category>
+      <category>shell</category>    </item>
+    <item>
+      <title>Bu Blog Nasıl Çalışıyor?</title>
+      <link>https://fox3000foxy.com/blog/how-this-blog-works</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-this-blog-works</guid>
+      <description>Bu blogun iç işleyişine derin bir dalış: React, Vite, Markdown, CI/CD pipeline&apos;ı ve makale yazma iş akışı.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/how-this-blog-works/project-structure.png" type="image/png" length="0" />
+      <category>react</category>
+      <category>meta</category>
+      <category>blog</category>    </item>
+  </channel>
+</rss>

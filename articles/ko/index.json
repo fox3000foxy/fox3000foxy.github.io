@@ -1,0 +1,667 @@
+[
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 15,
+    "body": "\n# Luna Protocol: 공유 브레인, 감정 분류, 그리고 흥미로운/사소한 라우팅\n\n[이전](/articles/ko/luna-protocol-discord-bot) [두](/articles/ko/luna-protocol-official-models) 기사에서 나는 Luna Protocol을 복잡한 행동 시스템과 파인튜닝된 모델을 갖춘 단일 Discord 봇으로 소개했다. 하지만 그 이후로 아키텍처는 크게 진화했다. 예전에는 모놀리스 -- Discord 봇, 행동, LLM 호출을 모두 처리하는 하나의 Node.js 프로세스 -- 였던 것이 이제는 **네 개의 독립된 계층**으로 나뉘었다. 각 계층은 저마다의 책임, 언어, 라이프사이클을 갖는다.\n\n이 분리는 예상치 못한 이점을 가져왔다: 여러 플랫폼 간의 \"브레인\" 공유, LLM의 파라미터를 동적으로 조정하는 감정 분류 시스템, 그리고 대화의 체감 중요도에 따라 두 모델 사이에서 메시지를 스마트하게 라우팅하는 기능이다.\n\n이 진",
+    "verified": true,
+    "title": "Luna Protocol: 공유 브레인, 감정 분류, 그리고 흥미로운/사소한 라우팅",
+    "description": "Luna Protocol은 모놀리스에서 4계층 아키텍처로 진화했다: 어댑터, 브레인, 감정 분류기, 추론. 임베딩 센트로이드, 흥미로운/사소한 메시지 라우팅, valence와 arousal에 따른 LLM 파라미터 튜닝을 소개한다.",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "2W3Me4I++RklJDg0O71TR769iAMIER/bW8blcmOyWkxIseUl3ZfDHCbgcIIIl7gDFbQA4QBUkMY68cU6mIeUdA=="
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 17,
+    "body": "\n# ELIZA에서 LLM까지: 60년의 대화형 AI를 TypeScript로 재구성하다\n\n1966년, 조셉 와이젠바움이 IBM 7094에서 MAD-SLIP으로 420줄의 코드를 작성해 역사상 최초의 챗봇을 만들었습니다. 프로그램 이름은 **ELIZA**였고, 기본 패턴과 문장 변환을 사용해 로저스식 심리치료사를 시뮬레이션했습니다. 60년 후, 대화형 AI는 대중의 화두가 되었습니다 -- ChatGPT, Claude, Gemini가 모든 대화에 등장하고 있습니다.\n\n하지만 이 두 극단 사이에는 **PARRY**(편집증적 챗봇, 1972년), **ALICE**(99,000개 카테고리의 AIML 왕, 1995년), **Jabberwacky**(규칙 없이 학습한 최초의 봇, 1997년), 그리고 **Cleverbot**(그 산업적 후계자, 2008년)이 있었습니다. 다섯 프로그램, 다섯 아키텍처, 하나의 문제: 기계가 말하게 하기.\n\n이 리포지토리에는 이 다섯 봇이 TypeScript로 포",
+    "verified": true,
+    "title": "ELIZA에서 LLM까지: 60년의 대화형 AI를 TypeScript로 재구성하다",
+    "description": "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- 동일한 문제에 대한 다섯 가지 근본적으로 다른 아키텍처를 원본 데이터와 함께 TypeScript로 포팅했습니다. 1966년부터 현대의 LLM까지, 대화형 AI가 말하는 법을 배운 과정과 하나의 챗봇 리포지토리가 60년의 연구에 대해 알려주는 것들.",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ia",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "histoire",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "lang": "ko",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "+VwJSV+oAdy5AY53kjIDe6APXjVZwtccuw9pcqn1j8CA3xMTaDod+cPRXWOmDdCHPt4I23mODVyiZmgmE0I3sw=="
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 10,
+    "body": "\n# Luna Protocol: 5만 개의 Discord 샘플로 1.5B 모델을 파인튜닝하고 Few-Shot 프라이밍을 비밀 무기로 만든 이유\n\n[첫 번째 글](/articles/ko/luna-protocol-discord-bot)에서 저는 인간을 시뮬레이션하는 Discord 봇을 만들었습니다----수면, 오타, 망설임, 건망증, 자발적인 메시지까지. 행동 시스템은 탄탄했습니다. 그 뒤에 있는 LLM은 3B 파라미터의 Hermes 모델로, Q8_0으로 양자화되어 3GB의 VRAM을 소모했습니다.\n\n작동했습니다. 하지만 과했죠.\n\nDiscord 봇이 \"nm just chillin, u\"라고 말하는 데 3B 파라미터 모델은 필요하지 않습니다. 필요한 것은 **스타일 일관성**----특정 대화 톤을 메시지마다 유지하고, 기업용 어시스턴트 모드로 빠지지 않는 능력입니다. 그리고 적은 데이터로 학습된 작은 모델이 몇 가지 예시로 프라이밍되면, 큰 모델이 시스템 프롬프트로 무식하게 밀어붙이는",
+    "verified": true,
+    "title": "Luna Protocol: 5만 개의 Discord 샘플로 1.5B 모델을 파인튜닝하고 Few-Shot 프라이밍을 비밀 무기로 만든 이유",
+    "description": "더 적은 데이터로 학습된 작은 모델이 더 큰 모델을 능가할 수 있습니다----프라이밍 방법을 알면 말이죠. Luna Protocol이 3B Hermes에서 1.5B Qwen 파인튜닝으로 전환한 이유와 Few-Shot 프라이밍이 진정한 게임 체인저가 된 이유를 소개합니다.",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "BWr7bgJJQVZLPMsT2gups9G9myE/dUUhdTgD2PVU4+bO8DAiLk0BQQFRTq99xAhZujak0QLyZ0PYt3LXnQMKjg=="
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 12,
+    "body": "# 문제: 약어는 너무 많은데, 계층 구조는 부족하다\n\nTCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; 이들을 다루는 대부분의 자료는 \"사용 사례에 따라 선택하라\"며 평평한 목록으로 제시한다. 실제로 이들은 같은 차원 위에 있지 않다: 어떤 것은 전송 프로토콜이고, 다른 것은 전송 주위를 감싸는 보안 계층이며, 또 다른 것은 앞선 둘 위에서 동작하는 애플리케이션 프로토콜이다. 계층 구조를 이해하는 것은 TCP와 TLS 사이에서 \"선택\"하지 않는 이유를 이해하는 것이다: TCP를 선택하고, _그 다음에_ TLS를 그 위에 얹을지 결정한다.\n\n이 글은 원시 전송부터 상호 인증까지 각 계층이 보장하는 것, 보장하지 않는 것, 그리고 언제 그것으로 충분한지를 계층별로 재구성한다.\n\n# 1계층: 전송 (TCP 대 UDP)\n\n모든 것은 여기서 시작된다. TCP와 UDP는 OSI 모델의 **전송 계층 (Layer 4)** 의 두 주요 프로토콜",
+    "verified": true,
+    "title": "기계들이 서로 대화하는 방법: TCP에서 mTLS까지 개요",
+    "description": "TCP, UDP, TLS, mTLS, HTTP, WebSocket이 경쟁 관계가 아니라 계층적으로 쌓여 있는 이유; 원시 전송부터 상호 인증까지 기계 간 통신의 계층별 개요.",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "network",
+      "distributed-architecture",
+      "protocols"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "ko",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "OY9i98NRgEy6kHIyCOVYMH8F+QRHvXcJP7wytEWgKj6hup7zwOPi8RppYQxv74B8WUccnqbs0ACSw/fcGnGEkQ=="
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 6,
+    "body": "\n# GitHub Actions를 기발하게 활용하는 5가지 방법\n\nGitHub Actions는 원래 고전적인 CI/CD를 위한 거다: 푸시하면 린트하고, 테스트하고, 배포한다. 특수 케이스에 대해 이미 글을 썼다 -- git 태그를 이메일 봇 데이터베이스로 쓰는 방법(전용 글 참고). 하지만 내 레포를 뒤져보니 하나의 프로젝트에 집중하기보다 카탈로그처럼 정리할 만한 패턴들이 꽤 많았다.\n\n다섯 가지. 가장 평범한 것부터 가장 기발한 것까지.\n\n간단히 요약하자면, 자세한 건 `email-autoreply` 글에 있다. GitHub Actions는 설계상 stateless다 -- 매번 빈 머신에서 시작한다. 우회 방법: 값(ID, 타임스탬프 등 작은 상태)을 전용 git 태그에 저장하는 거다. 브랜치가 아니라.\n\n```bash\n# 상태 읽기\ngit show refs/tags/lastid:data/lastId > data/lastId\n\n# 상태 쓰기 (고아 브랜치, 단일 커밋, 태그 fo",
+    "verified": true,
+    "title": "GitHub Actions를 기발하게 활용하는 5가지 방법 (그리고 시크릿에 대해 배우는 것)",
+    "description": "CI 러너를 무료 VPS로 변신, 스스로 PR을 여는 봇, 시크릿 없는 npm 배포. 단순한 lint+test+deploy를 넘어선 GitHub Actions 패턴 카탈로그.",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "UTpQEveLgiM/wqgSe4K0RwIGZ+dMLTrN5a6zv8Nh8RmrCL14apTlAsjUBc8EhrF2T/nydrkom7uZhUxCP82aUA=="
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 6,
+    "body": "\n# valorant-short-maker: 발로란트 쇼츠를 혼자서 만들어내는 파이프라인\n\n몇 달째, 내가 손대지 않아도 혼자 돌아가는 유튜브 채널이 있다: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). 발로란트 에이전트들이 라운드 사이에 서로 디스하고, 더빙되고, 노래방 자막이 달려 쇼츠로 올라간다. 전부 [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker)가 만들어낸다. TypeScript/Bun 파이프라인이 크론으로 돌면서 아무도 클릭할 필요 없이 게시까지 다 해준다.\n\n어떻게 돌아가는지 단계별로 설명할게.\n\n\"Duelist Debate\" (Phoenix, Yoru, Jett) 영상에서 추출한 세 프레임:\n\n![쇼츠 인트로, 에이전트 원형과 장면 제목](/images/valorant-short-maker/vs",
+    "verified": true,
+    "title": "valorant-short-maker: 발로란트 쇼츠를 혼자서 만들어내는 파이프라인",
+    "description": "Groq/Llama로 스크립트, Piper로 목소리, FFmpeg로 나머지 전부. 크론 잡이 @valorant_agents에 하루 한 편의 영상을 처음부터 끝까지 만들어 올리는 방법.",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "PR4LJSxPoPtNxiRSVTJuU5/+4UtDaf8+h3BJsmpcsK+Sm2y2q2nlUpdVdEmb7QVEPRcJXYxoyAlyrdWydTJf1w=="
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 7,
+    "body": "\n# Minecraft Bedrock에서 어떤 망토든 얻는 방법\n\n자바 에디션에는 가질 수 없는 망토를 얻는 꼬인 방법이 많다(`cape-mod` 글 참고). 베드락은 게임도 다르고 인증도 다르지만, 그래도 방법이 있다 -- 모드도 필요 없고 네트워크 패킷 조작도 필요 없다. 그냥 서드파티 런처 하나와, 검증이 덜 들어간 오래된 버전의 게임만 있으면 된다.\n\n하는 방법을 알려주고, 그다음에 내부에서 무슨 일이 일어나는지 살펴보자.\n\n- Minecraft Bedrock을 이미 소유한 Microsoft 계정 (네 걸로 충분)\n- 공식 Minecraft 런처 설치됨\n- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), Bedrock의 모든 과거 버전을 설치하고 실행할 수 있는 오픈소스 서드파티 런처\n- .NET 8.0 Desktop Runtime\n- Windows에 개발자 모드 활성화\n\n## 1단계 -- 공식 런",
+    "verified": true,
+    "title": "Minecraft Bedrock에서 어떤 망토든 얻는 방법",
+    "description": "서드파티 런처, 오래된 게임 버전, 그리고 '아니오'를 배운 적 없는 망토 선택기. 전체 튜토리얼과 작동 원리에 대한 추정 해설.",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Pz652yRpqcArVzY+HKyU7lZw/qfkEZOST9MiMs64IU5ZsJxRrKjKrtGwJItznAM4yl4qD63zE1f8OI0iC3AnBw=="
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 6,
+    "body": "\n\n알고리즘 트레이딩을 위한 DQN 에이전트를 기존 경사 하강법으로 훈련하는 것은 간단한 문제 진술과 풀기 어려운 과제를 가지고 있습니다. 경사 하강법은 _하나의_ 시장 윈도우에서 _하나의_ 네트워크를 _하나의_ 지역 최솟값으로 최적화합니다. 이 최솟값이 다른 시장 체제에 일반화된다는 보장은 없으며, 훈련 루프에는 다양성을 촉진하는 메커니즘도 없습니다. 서로 다른 시드에서 시작하는 두 번의 실행은 종종 거의 동일한 전략과 동일한 사각지대에 수렴합니다.\n\n제가 탐구한 답변은 경사 하강법을 유전 알고리즘으로 대체(또는 오버레이)하는 것입니다. 하나의 에이전트를 훈련하는 대신 에이전트 개체군을 진화시킵니다. 각 게놈은 아키텍처와 하이퍼파라미터를 인코딩하고, 자연 선택이 정렬을 수행하며, 경사 하강법은 각 개체의 수명 내에서 미세 조정을 계속합니다.\n\n이 러너는 단 한 번의 집중 세션에서 네 가지 버전을 거쳤습니다. 각 버전은 이전 버전의 구조적 결함을 수정했습니다.\n\n## v1: 순진한",
+    "verified": true,
+    "title": "경사 하강법 대신 자연 선택을 통해 신경망을 진화시켰습니다",
+    "description": "NSGA-II 유전 알고리즘으로 기존 경사 하강법 훈련을 대체하여 DQN 트레이딩 에이전트를 진화시킨 방법: 과적합에서 라마르크적 가중치 진화까지 네 가지 버전",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "ko",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "qCQgtZP6sMsrjIygC0lFfXvXb+C+WeZw61M4wv/QCEsxE17hTlQbhRRDPifUj3k7cnTWLmuPdrIid77lOfKNOw=="
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 24,
+    "body": "\n\n![TF2 솔져 봇이 로켓 런처를 조준하는 모습](assets/tf2-bot-ai-soldier-aim.png)\n\n모든 TF2 플레이어는 적어도 한 번쯤 말해봤다: \"이 봇 치트 치네.\" 또는 그 반대: \"왜 이 Easy 봇은 가만히 서서 로켓만 맞고 있는 거야.\" 아무도 \"Easy\", \"Normal\", \"Hard\", \"Expert\"가 실제로 내부적으로 *무슨 의미*인지 진짜로 알지 못한다 -- Valve는 난이도 레이블 네 개와 문서 정확히 제로를 제공했다.\n\n그래서 우리 몇 명(나, awimii, Mush The Possum, 그리고 실제로 디컴파일된 게임 코드를 파헤친 sigsegv의 엄청난 기초 작업)이 TFBot 행동에 대한 전체 연구 문서를 만들었다. 모든 메커니즘, 모든 알려진 버그, 모든 하드코딩된 확률. 이 글은 전체 정리본이며, 축약판이 아니다. Bonk를 집어라, 긴 글이다.\n\n---\n\n## 제1장: 기본\n\n### 봇 vs. Puppet 봇\n\nTF2에는 사람들",
+    "verified": true,
+    "title": "TF2 봇은 무작위가 아닙니다: 모든 난이도 설정을 리버스 엔지니어링했습니다",
+    "description": "시야, 조준 추적, 스파이 백스탭 각도, 스나이퍼 헤드샷 로직, 모든 알려진 버그 -- Valve는 이 중 어느 것도 문서화하지 않았습니다. 그래서 우리는 코드를 파헤쳐 전체 사양 시트로 만들었습니다.",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "game-ai",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "ki1OqfaW5Wr78/ozkCB7CEUsiD7ypE7n/3/Qu9gnO/U13QMa4pnKREsyGTGe+fR2XKAhhum6WOoYnYXow+UDTA=="
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 7,
+    "body": "\n# Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법\n\n![alt text](assets/xbox-profile.png)\n유효한 RSA 서명 하나면 -- 비록 **잘못된 계정**의 것이라도 -- 친구들에게 내가 공식 Mojang 망토를 착용하고 있는 것처럼 속일 수 있다면? `cape-mod`에 오신 것을 환영합니다. 이 Fabric 익스플로잇은 Minecraft가 서명 자체는 신뢰하면서 정작 그 서명이 속한 프로필이 실제로 자신의 것인지는 확인하지 않는 방식을 보여줍니다.\n\nJava Edition에서 우리가 자주 묻지 않는 질문이 하나 있습니다: **플레이어의 스킨과 망토를 렌더링할 책임은 누구에게 있는가 -- 클라이언트인가 서버인가?**\n\n정답은 미묘합니다:\n\n| 구성요소 | 누가 보내는가? | 누가 다운로드하는가? |\n|---|---|---|\n| **스킨 텍스처** | 서버가 서명된 URL을 전송 | 클라이언트가 `textures.minecraft.net`",
+    "verified": true,
+    "title": "Cape Mod: RSA 서명 주입으로 Jeb_의 망토를 훔치는 방법",
+    "description": "Fabric 모드로, Mojang의 유효한 RSA 서명을 다른 계정에 재사용하는 Minecraft 신뢰 시스템의 논리적 허점을 파헤친다. 코드 설명, 보안 영향, 암호학적 교훈.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "m6opZFJZK+5kntha02cYVlxwFJ+EOpDoVZ+bGFdcZwDfl4wN/k4G4s+HdQJOrBBsdX9OZ28E2Pg0hzQ7tu0S4Q=="
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 14,
+    "body": "\n# Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리\n\nLaupok는 **슈퍼 마리오 월드**를 완전히 자율적으로 플레이하는 인공 지능을 만들었다. 사전 정의된 입력도, 녹화된 프레임도 없다. AI는 혼자서, 무작위 돌연변이와 자연 선택을 통해 게임 레벨을 클리어하는 방법을 배운다. 프로젝트는 **BizHawk**라는 멀티 플랫폼 에뮬레이터에서 약 **4200줄**의 Lua 스크립트로 작동한다.\n\n이 프로젝트를 매력적으로 만드는 것은 생물학적 개념을 컴퓨터 과학에 적용한 것이다. 다윈의 **진화론**, **인공 신경망**, 그리고 가장 중요한 **NEAT**(NeuroEvolution of Augmenting Topologies)라는 특정 알고리즘이다. AI는 처음에 게임에 대해 아무것도 모른다. 무작위로 시도하고, 수천 번 실패하며, 점차 움직임, 점프, 생존 방법을 배운다.\n\n이 글에서는 모든 것을 개념별로, 코드 라인별로 분석해 보겠다.\n\n![La",
+    "verified": true,
+    "title": "Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리",
+    "description": "Laupok 프로젝트 심층 분석: 슈퍼 마리오 월드를 자율적으로 플레이하는 NEAT 기반 AI. 유전 알고리즘, 신경망, 증강 토폴로지의 신경 진화, 그리고 4200줄의 Lua.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "NCl2JMOxEY0gCjbDqjs8t0gPIgoJLFktJzfqcL+vjpvJ0uRGOCHh+4AWxYDQiSuJntLdtrp7Xtniwb+8hzLDEg=="
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 13,
+    "body": "\n# Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다\n\nDiscord 봇이 **잠을** 자고, **오타**를 내고, **망설이고**, 답변을 **까먹고**, 때로는 스스로 메시지를 보낼 수 있다면? 이것이 바로 **Luna Protocol**이 하는 일입니다: 로컬 LLM(llama.cpp)을 구동하며 불완전한 인간처럼 대화하는 완전 자율 Discord 봇입니다.\n\n딱딱한 프롬프트도, 로봇 같은 응답도 없습니다. Luna는 **우선순위 트리거 시스템**, **가변 지연 시간**, **수면 스케줄**, **자발적 메시지**, 그리고 음성 메시지를 보내는 **TTS 파이프라인**까지 갖추고 있습니다. 모든 것은 간단한 `config.yml` 파일로 핫 리로드 가능하게 설정됩니다.\n\n이 글에서는 제네릭 이벤트 버스부터 TTS 파이프라인, 트리거 시스템, 인간적 구성 요소, 파인튜닝 데이터셋까지 전체 아키텍처를 분석합니다.\n\n![전체 아키텍처",
+    "verified": true,
+    "title": "Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다",
+    "description": "Luna Protocol은 로컬 LLM을 탑재한 완전 자율 Discord 봇으로, 수면, 오타, 망설임, 건망증, 주제 피로, 자발적 메시지 등이 포함된 자연스러운 대화가 가능합니다.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "uDgwlg9NVzeBmVTuSMTxeC55EVkhHAfU735VBb7vx98fFzTkgZ72zbww3tnLlxJVBZL21XRklg4Z8GC4P1V2aA=="
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 19,
+    "body": "\n\n![AI Learns Minecraft PvP 썸네일](assets/ai-pvp-thumbnail.png)\n\nKadambi | AI Engineering의 [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U)라는 동영상은 게임 플레이 AI 훈련에 관한 가장 솔직한 기록 중 하나다.\n\n전제: 화면을 보면서 마우스와 키보드 명령을 출력하여 Minecraft PvP(검 키트, 완전 인챈트 다이아몬드 갑옷)를 플레이하는 봇을 만든다. 게임 메모리 읽기, 매크로, 모드 없음: 픽셀을 입력으로, 액션을 출력으로.\n\n이 동영상이 흥미로운 이유는 최종 결과가 아니라 그 과정이다. 모방 학습의 실패, 특징 공학으로의 전환, 파괴적 망각의 사이클, GPU 없는 노트북에서 60시간 이상의 훈련.\n\n## 1단계: 모방 학습 (실패)\n\n![모방 학습 중",
+    "verified": true,
+    "title": "AI가 Minecraft PvP를 배우다 -- 모방 학습, 강화 학습, 그리고 중요했던 30개의 변수",
+    "description": "1,000회의 결투 녹화, 픽셀 기반 신경망 훈련, 90% 키스트로크 정확도 -- 그리고 봇은 벽을 향해 돌진했다. 그 후 RL, 커리큘럼 학습, 60시간의 훈련이 시작되었다.",
+    "date": "2026-07-09",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "s0ffawx9vtfuWLSskoRr8+zQ6rp5lzh5G5YFozjfOHc9VAPLGVFXnVX4eDDlBqLUWPiXI0bxULqThivWsRd3Mw=="
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 23,
+    "body": "\n\nSuper Mario Bros.는 40KB ROM로 이루어져 있습니다. 8개 월드, 32개 레벨, 적, 음악, 파워업이 모두 거기 들어 있습니다.\n\n하지만 에뮬레이터를 열고 올바른 바이트를 조작하면 레벨 36-1을 로드할 수 있습니다. 또는 255-1도 가능합니다. 또는 모든 것이 Bowser 스프라이트와 아무 데도 연결되지 않는 파이프로 이루어진 월드에 착륙할 수도 있습니다.\n\n이 글리치 월드들이 존재하는 이유는 간단합니다: SMB1의 레벨 저장 시스템은 8비트 최적화의 걸작이고, 게임이 읽으면 안 되는 곳에서 읽도록 강제하면 매혹적인 결과가 나옵니다.\n\nRetro Game Mechanics Explained가 이 주제에 대해 4편의 영상을 만들었습니다 -- 가장 많이 팔린 그 시대의 게임의 6502 코드를 하나의 깊이 있는 탐험으로 정리하겠습니다.\n\n![GLITCH OBJECTS -- SMB1의 숨겨진 메커니즘에 대한 RGMechEx 시리즈 타이틀](/images/smb1-g",
+    "verified": true,
+    "title": "Super Mario Bros.: 레벨 포맷, 포인터, 그리고 256개의 글리치 월드",
+    "description": "128개 레벨 × 4가지 영역 타입이 40KB ROM에 어떻게 들어가는지, Minus World가 왜 존재하는지, 그리고 NES 테니스 경기가 글리치 월드를 로드할 수 있는 이유.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Z//yTv3ZmaYWxn1xaTHHs4UsEnXMuEWtRCZ3u4AgFYzC5fxuikj28EO7r/cgz6ACHMZdZbD33r9+6ltZ0RNC4A=="
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 9,
+    "body": "\n# 주말 동안 konosuba-rpg 코드를 읽고 알게 된 것들\n\n한동안 이 프로젝트를 유지해왔지만, 자신의 코드를 차분히 다시 읽는 것은 항상 유익합니다. konosuba-rpg는 턴제 Discord RPG로, 각 액션이 실시간으로 WebP 이미지를 생성합니다. 텍스트 embed가 아닙니다. 스프라이트, HP바, 전투 메시지 등 모든 것이 포함된 실제 합성 이미지입니다.\n\n스택: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. 완전 무료 호스팅입니다. Discord 봇은 영구 서버 없이 작동합니다. 이 글은 이 모든 것이 어떻게 함께 작동하는지 설명합니다.\n\n![게임 초기 상태](/images/konosuba-rpg/game_init.webp)\n\n---\n\n가장 먼저 눈에 띄는 점: 게임플레이를 위한 서버 측 상태가 전혀 없습니다. 전투의 전체 상태가 URL에 담겨 있습니다.\n\n```\n/konosuba-rpg/fr/abc123/A",
+    "verified": true,
+    "title": "주말 동안 konosuba-rpg 코드를 읽고 알게 된 것들",
+    "description": "턴제 Discord RPG로, 각 액션마다 WebP 이미지를 실시간 생성합니다: URL을 게임 상태로 사용, 결정론적 RNG, WASM 파이프라인, 5단계 캐시, 서버리스 봇.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "P9hmfE1iVddfRWUae5afZNFcv9x5eh+CvplUkX0IFg1Gx3HapJUjwnG0q+FZSXaEiIxGeA/pcVv6mxrhMjHYhg=="
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 3,
+    "body": "\n\n봇과 자동 스캐너는 취약점을 찾기 위해 웹 애플리케이션을 끊임없이 스캔합니다. `.env` 파일, 관리자 패널, 데이터베이스 백업, SSH 자격 증명 -- 악용할 수 있는 모든 것을 찾습니다.\n\n단순히 404를 반환하는 대신, 더 흥미로운 것을 만들고 싶었습니다: 공격자가 취약한 대상을 찾았다고 믿게 만드는 **신뢰할 수 있는 콘텐츠로 응답하는 Express 허니팟**입니다.\n\n## 기능\n\n이 미들웨어는 2가지 변형(기본 및 전체)으로 나뉜 **328개의 엔드포인트**를 노출합니다. 각 요청은 실제 서버를 모방하여 신선한 타임스탬프와 요청 ID가 포함된 즉석에서 생성된 고유한 응답을 받습니다.\n\n## 시작하기\n\n```bash\nnpm install express-middleware-honeypot\n```\n\n자동 등록을 사용한 기본 사용법:\n\n```js\nconst express = require(\"express\");\nconst { createHoneypot } = require(\"e",
+    "verified": true,
+    "title": "초현실적인 Express 허니팟을 구축했습니다",
+    "description": "328개의 가짜 엔드포인트, 즉석에서 생성되는 응답, 헤더 스푸핑, 봇 트래픽 기록 -- 스캐너를 속이기 위해 설계된 Express 허니팟 미들웨어 코드 분석.",
+    "date": "2026-06-10",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "dLYhIbBPIMJnkTmZf1mtasJBz7sdey9ikLlJ00cnQkqZ7We3uYShce6K8YbaRPr4roiXEKJEMwC/Ils47NnIag=="
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 17,
+    "body": "\n\n혹시 1$ 마이크로컨트롤러에서 마인크래프트 서버를 돌릴 수 있을지 궁금해한 적 있어?\n\n나는 궁금했어. 그리고 답은 \"된다\"야. 진짜로.\n\np2r3가 만든 [Bareiron](https://github.com/p2r3/bareiron/)이라는 프로젝트가 있는데, 아마 최근 몇 년간 마인크래프트 세계에서 내가 본 것 중 가장 매혹적인 프로젝트 중 하나일 거야. **300킬로바이트** 바이너리, **C 언어 6800줄**, 외부 의존성 제로, malloc 없음, 스레딩 없음, 그리고 **1달러 ESP32** 위에서 동작해.\n\n![ESP32-C3, 서버를 구동하는 마이크로컨트롤러](/images/bareiron/esp32-board.jpg)\n\n무한 지형 생성. 바이옴. 동굴. 제작. 채광. 몹. 배고픔. 상자. 서바이벌 서버에서 기대하는 모든 것.\n\n**0.5와트** 전력 소모에 **160MHz** 클럭인 칩 위에서 말이야.\n\n비교를 해보자면: 바닐라 마인크래프트 서버는 수 기가바이트",
+    "verified": true,
+    "title": "Bareiron -- 1$ 마이크로컨트롤러에서 돌아가는 마인크래프트 서버",
+    "description": "C 언어 6800줄, malloc 제로, Perlin noise 대신 bilinear interpolation, 타일 맵 바이옴, 그리고 이 모든 게 1$ 칩 위에서.",
+    "date": "2026-05-30",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "EpNGKumazHwGMK7egIMndYTzNy6+6qEsGjz8W2CngMxTCrairNK/h+ZnyLVLIYjsKv6RElwCvV2IIv4U6Naslg=="
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 9,
+    "body": "\n\n내 개인 서버에서 일반 Discord 봇 돌리다가 몇 달을 버텼어.\n\nWebSocket 계속 연결된 상태. 새벽 3시마다 봇이 알아서 재접속. 양을 이상하게 쳐다봤다고 봇이 팡 터짐. 요금은 계속 올라가고.\n\n어느 날 깨달았어: **왜 연결을 유지해야 하는데**? Discord가 니가 관심 있는 것만 POST로 보내주면 되잖아. 니가 응답하면 끝.\n\n2021년부터 Discord는 **interaction endpoints**를 제공하고 있어.\n\n그냥 HTTP야. WebSocket 없음. 상태 저장 없음. 요청 받고, JSON 보내고, 끝. 다음 요청은 알아서 옴.\n\n그리고 최고: Cloudflare Workers는 **무료**임, 하루 10만 요청까지. 90% 봇은 한 달에 0€임.\n\n이 글은 **Hono** (초경량 웹 프레임워크)랑 **Cloudflare Workers**로 WebSocket 없이 Discord 봇 만드는 법을 알려줄 거야. 실제 프로젝트 두 개를 보여줄게:",
+    "verified": true,
+    "title": "100% 서버리스 Discord 봇: Hono + Cloudflare Workers",
+    "description": "월 50€나 들던 Discord 봇을 0원으로 교체한 방법 -- 인터랙션 엔드포인트, Hono, Workers, 실시간 이미지 렌더링, WebSocket 없는 완전한 게임.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "CpxCLLhRllFHzk1TIn/C3mTlxvxxTHTn2cxYZb4LqX0FiQTR17ND+3pUnXvDmiXBLxVhX5zfn2RxHsabxt4rRg=="
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 5,
+    "body": "\n\n\"에에... 신화 테마로 체스 게임 한 번 만들어볼까?\" 에서 시작한 프로젝트가 5턴마다 자기 파라미터를 바꾸는 AI를 달고 끝났다 xD\n\nNausicaa는 그런 게임. 턴제 보드게임 + 신화 생물 덱 빌딩 + 마나 관리, 10x8 보드 위에서 유닛을 배치하는 방식이야.\n\n그리고 AI가 정체성 위기를 겪음 ㅋㅋ\n\nAI 만드는데 꽤 공 들였는데, 결과물은 꽤 답이 없다 xD\n\n## 게임은 뭐하는 거냐면\n\n뇌 얘기하기 전에 몸통부터 설명해야지:\n\n- 10x8 보드, 각 플레이어당 2줄 배치 구역\n- 마나는 1에서 시작, 턴마다 +1, 최대 6. 소환/공격/스킬에 사용\n- 목표: 상대 Oracle을 개발살내기\n\n12종 유닛, 각자 코스트와 이동 패턴이 다름:\n\n| Unit | 코스트 | 이동 | HP |\n| --- | --- | --- | --- |\n| Oracle | 0 | 킹 (8방향) | 1 |\n| Gobelin | 1 | 앞으로 3칸 | 1 |\n| Harpie | 1 | 킹 (",
+    "verified": true,
+    "title": "내가 Nausicaa용으로 만든 좆같은 AI",
+    "description": "휴리스틱 계수 기반 AI, 5턴마다 랜덤으로 바뀌는 하이퍼파라미터, 도망치는 오라클 -- 신화 전략 보드 게임의 두뇌 속으로.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "iu1CgTi6brgdH3CREB4LXL70zddN60UIWbZGWAXQev3GRv/Xlw/+b4V4UZ9MbUE4n6uKVt7GvHIYaWw/yXjCtQ=="
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 10,
+    "body": "\n\n양들이 벽에 머리 박는 거 몇 시간째 보고 있었음.\n\n내 인생 최고의 투자 xD\n\n몹들이 움직이는 거 계속 보다 보면 알게 됨 -- 이새끼들 랜덤이 아님. 한 땀 한 땀 코드로 짜여 있고, 예측 가능하고, 결정적으로 **부술 수 있음**. 결국 마인크래프트 소스코드를 까보게 됐는데, 알고 보니 몹들을 정신지배 할 수 있었음. 말 그대로 네가 원하는 곳으로 가게 조종 가능. 랜덤이 아니라.\n\n이 가이드는 내가 뒤지면서 찾은 모든 내용임. AI 시스템, A* 알고리즘, 숨은 악의값(?), 서바이벌에서 써먹을 수 있는 익스플로잇까지. 곡괭이 챙겨라.\n\n---\n\n## 몹 AI 작동 원리 (스포: 좀 멍청함)\n\n### 목표\n\n모든 몹은 *목표* 리스트를 가지고 있음. 할 수 있는 일, 그리고 얼마나 하고 싶은지. 숫자가 낮을수록 우선순위 높음. 지옥에서 온 투두리스트 같음.\n\n```java\nprotected void registerGoals() {\n   this.goalSelector.a",
+    "verified": true,
+    "title": "Minecraft 경로찾기 로직과 응용",
+    "description": "A* 알고리즘, 블록 패널티, POI 메커니즘으로 몹의 움직임을 제어, 예측, 활용하는 방법 -- 무선 레드스톤부터 최적화된 농장까지.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "TpIPTc6URMYBubE+NTorsqSNCVJ1X6wcyfEK10e0HL2wmafO6kXwMADaUjmEsHpYd+1RNBs3pbdBUmhSEguWeA=="
+  },
+  {
+    "slug": "utau",
+    "readingTime": 8,
+    "body": "\n\n내 메인 페이지에서 한마디 했었는데: 나는 UTAU를 좋아해. 이유를 설명해줄게.\n\n2008년에 합성 목소리로 노래를 시키고 싶었다면 선택지는 하나였어: VOCALOID. 야마하의 소프트웨어. 비싸고, 폐쇄적이고, 직접 만들 수 없는 공식 음성들만 있었지.\n\n그런데 일본인 아메야/아야메라는 사람이 자기 혼자서 뭔가를 만들어냈어. **Visual Basic 6**으로 코딩된 프로그램. 공짜. 직접 녹음한 WAV 파일로... 자신만의 목소리를 만들 수 있게 해주는 프로그램.\n\n이 프로그램 이름은 **UTAU**(일본어로 '노래하다'). 그리고 그 시대 기준으로는, 마법이나 다름없었어.\n\n난 항상 이 프로그램이 매력적이라고 생각했어. 기술적으로 깔끔해서가 아니라(스포일러: 사실 아니야, 이걸 만들었다니 진짜 대단한 놈이야... 개판 그 자체야, 이 닭새끼야 ㅠㅠ), 다른 누구도 하지 않은 일을 했기 때문이야: 음성 합성을 일반 대중에게 넘겨줬어. 너, 나, 마이크 하나만 있는 사람이라",
+    "verified": true,
+    "title": "UTAU: Visual Basic 6으로 만든 프로그램이 어떻게 합성음을 대중화했는가",
+    "description": "2008년 VB6으로 만들어진 무료 프로그램 UTAU가 어떻게 ⁉이나 합성 노래 목소리를 만들 수 있게 했는지 -- 그리고 오늘날에도 여전히 중요한 이유.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "XNJBIj+gdEopRRMZP3VUJvZcwavh3PIvlXo8P0FvuQPAJ9z36hJGUkDCOueieiN9bxU9t9FxaEOaySOw7PUJnA=="
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 9,
+    "body": "\n# Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들\n\n최근에 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 소스 코드를 열심히 뜯어봤어. [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr)의 프로젝트인데. 가장 놀라웠던 부분은 VFS도, 가상 네트워크도, TypeScript로 재구현한 170개의 Unix 명령어도 아니야. `polyfills/` 디렉토리였어.\n\n왜냐고? 이 모듈은 브라우저에서 돌아가거든, Wasm 없이. 그리고 그걸 위해 Fortune은 라이브러리가 필요한 `node:*` 레이어 전체를 손수 재구현했어. 약 640줄의 수제 JavaScript로 `node:fs`, `node:crypto`, `node:os`,",
+    "verified": true,
+    "title": "Wasm 없이 Node.js 라이브러리를 브라우저에서 돌리기 -- typescript-virtual-container의 polyfill들",
+    "description": "Fortune이 node:fs, node:crypto, 그리고 수십 개의 Node 모듈을 640줄의 JavaScript로 손수 재구현해서 Wasm 없이 컨테이너를 브라우저에서 돌리는 방법",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "CmMiVfbG+ZqQ/VMAl8df4jYISYlu4PY1BXSorl1azDkX9yzrfDqEK1kv6gUUWOvuLE2YQtNWkx/Um1NWluwkpg=="
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 6,
+    "body": "\n# GitHub Actions에서 깃을 데이터베이스로 써서 봇을 공짜로 돌린 썰\n\n24/7 돌아가는 자동 이메일 답장기를 만들었어.\n\n내 메일 읽고, 내용 이해하고, AI가 알아서 답장해줘. 이전 대화 내용도 기억해. 뉴스레터랑 `noreply@`는 씹고, 너무 중요한 건 사람한테 포워딩해.\n\n월 비용: **0€**.\n\n서버 없음. VPS 없음. 데이터베이스 없음. 그냥 GitHub Actions랑 미친 해킹 하나: **깃을 데이터베이스로 쓰기**.\n\n감 잡았어? 아니지? 좋아, 잡아타, 병신 같으면서도 동시에 쩌는 거야 xD\n\n---\n\nGitHub Actions는 공짜야. 5분마다 cron 돌려서 코드 실행시켜도 공짜.\n\n근데 문제가 있어: **stateless**야.\n\n매 실행마다 깨끗한 머신에서 시작해. 두 실행 사이에 아무것도 저장 안 돼. 이전 실행? 까먹음. 지워짐. 아예 없었던 것처럼.\n\n이메일 답장기한테 이건 엄청난 문제야. 예를 들어:\n\n> \"내가 이미 처리한 마지",
+    "verified": true,
+    "title": "git을 데이터베이스로 써서 GitHub Actions에서 공짜로 봇 돌린 썰",
+    "description": "GitHub Actions에서 월 0€로 돌아가는 AI 이메일 자동응답 봇을 어떻게 만들었는지 -- git 태그를 데이터베이스로 사용하고 런타임 태그에 미리 컴파일된 스냅샷을 저장하는 방법.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "rb1BztwLAKS14NEK/r5fJtp21g8Rl45Vi8gxhAQIbiUpVHDeoQeAkhue2kb/NsoVeJd+pRT9licl9PVHKGNGqw=="
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 13,
+    "body": "\n\nGitHub Actions가 공짜 Linux 머신을 줘.\n\n그니까, 진짜 Ubuntu 서버임. 2코어, 7GB RAM, 14GB 디스크. 공짜. 실행당 6시간.\n\n유일한 \"문제\"는: 실행이 끝나면 모든 게 지워진다는 거야. 머신은 일회용이야. 뭐 설치하고, 코딩하고, 설정하고, 그리고 푸, 끝나면 다 사라져. 아무것도 한 게 없는 것처럼.\n\n근데 말이지.\n\n근데 **git을 하드디스크처럼 쓰면** 말이지.\n\n그러면 갑자기, 실행이 끝나도 살아있는 영구 디스크를 가진 공짜 VPS가 생기는 거야. 다시 접속해도 모든 게 그대로 있어. 중단했던 곳부터 다시 시작하면 돼.\n\n완전 개쩔어. 설명해줄게 xD\n\n---\n\n## 배경: GitHub Actions 러너\n\nGitHub Actions 워크플로우를 실행하면, GitHub가 VM을 하나 줘.\n\n원래는 코드 빌드하고, 테스트 돌리고, 배포하라고 있는 거야. 워크플로우가 돌고, 일 끝나면 머신은 파괴됨.\n\n근데 아무도 못하게 하는 건 없어.",
+    "verified": true,
+    "title": "Repo to VPS: GitHub Actions를 무료 영구 VPS로 바꾸는 방법",
+    "description": "GitHub Actions 러너를 git을 영구 저장소로 사용하여 항상 커져 있는 VPS로 바꾸는 방법 -- tmate, inotify, commit --amend.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "e2371q8tLOauUzBEJmPi1Jutfqk/xiMGIqw7wvqXEagc4CKwCTwtAKDWpKHy92vU/I9npDZ34FRihPJRdM0Pxw=="
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 31,
+    "body": "\n# 모든 JavaScript 샌드박스, 에뮬레이터, 시뮬레이터, 허니팟 비교\n\n그래서 나는 한동안 이 토끼굴에 완전히 빠져 있었어. [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- Fortune의 프로젝트 (그녀에 대해선 나중에 더 얘기할게) -- 를 도와주다 보니, 계속 \"잠만, 이거 `v86`이랑 뭐가 다른데?\" 또는 \"그냥 `vm2` 쓰면 안 돼?\"라는 질문을 받게 됐어. 그리고 나는 생태계 전체를 먼저 매핑하지 않고는 깔끔한 답변을 할 수 없겠다는 걸 깨달았지. 그래서 여기까지 왔어 lol.\n\n알고 보니 네 가지 뚜렷한 계열이 있어 -- JS 샌드박스, Linux 에뮬레이터, Linux 시뮬레이터, 허니팟 -- 그리고 이들은 거의 겹치지 않는데, 항상 같은 맥락에서 언급되더라. 플러그인 시스템을 만드는 사람은 `isolated-vm`을 찾고, CLI",
+    "verified": true,
+    "title": "JavaScript Linux 커널 시뮬레이션 솔루션 비교",
+    "description": "JavaScript/TypeScript로 Linux 환경을 재현하는 방법에 대한 심층 분석",
+    "date": "2026-05-28",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "19fNlRNoxWcK/5lxx0Ivk2POp9AY9JIXjZw3TfSNrVhVkC9v2HSV9DG74ejGbhcFhiR/P/UfJ3jrqdZgnIZAPA=="
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 5,
+    "body": "\n# character-factory 만들기: 유전학을 가진 아바타\n\n[Kurekuta](https://github.com/fox3000foxy/kurekuta/)를 위해 수천 개의 그럴듯하고 구별되는 아바타가 필요했어 -- 모든 카드가 캐릭터 \"DNA\"를 가지고 있고 렌더러가 그걸 초상화로 바꿔주는 개인 카드 게임 프로젝트야. 스톡 팩을 사면 평범해 보였을 거야. 시드별로 일회성 DiceBear 아바타를 생성하는 건 잘못된 방식으로 랜덤하다고 느껴졌어: 일본풍 카드가 스칸디나비아 금발이 나올 수 있고, 두 \"형제자매\"가 전혀 낯선 사람처럼 보였거든.\n\n그래서 [character-factory](https://github.com/fox3000foxy/character-factory)를 만들었어 -- DiceBear의 Lorelei 컬렉션 위에 TypeScript 모듈로, DiceBear만으로는 안 되는 세 가지를 추가했어: **일관된 인구통계**, **작은 유전학 엔진**, 그리고",
+    "verified": true,
+    "title": "character-factory 만들기: 유전학을 가진 아바타",
+    "description": "DiceBear 기반 TypeScript 모듈: 국가/민족별 일관된 생성, 자식 투영을 위한 작은 유전학 엔진, 카드 게임에서 사용할 수 있게 만든 엔지니어링 세부사항",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "7UwVFK9ElNXWmVnsyZxIsURlNy6L3H82I8r6d2gK077TJL+CiWxwJJOg9iUkiwDYz7P4sma90UELs/JXzo1pSg=="
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 6,
+    "body": "\n> **참고 (2026년):** 이 프로젝트는 더 이상 유지보수되지 않습니다. Microsoft가 안티봇 탐지를 크게 강화해서 -- 예전에 통했던 방법이 지금은 더 이상 작동하지 않습니다. 아래 설명된 코드와 접근 방식은 기록/교육 목적으로만 보관됩니다.\n\n### 소개\n\n몇 년 전에 Microsoft Rewards를 발견했어. 그때는 락다운 기간이었는데, 그렇다고 해서 Microsoft Family Safety 자녀 보호 기능을 강제로 사용해야 했고 결과적으로 Edge를 써야 했던 건 변함없어. 그때 Rewards를 발견했지.\n\n그 당시 나는 겨우 14살이었고 카탈로그에 있는 어떤 것도 관심이 없었어. 이제는 내가 습득한 기술로 봇으로 포인트를 농사지은 다음, 코드를 나눠주거나 내가 정말 원한다면 더 싸게 재판매할 수도 있겠다고 생각했어 (나 자신을 알지만, 아마 안 할 거야). 어쨌든, 계정을 대규모로 농사짓는 봇을 어떻게 코딩했는지 알려줄게.\n\n---\n\n간단히 말하면: 검색,",
+    "verified": true,
+    "title": "Microsoft Rewards 팜 봇 만들기",
+    "description": "대규모로 Microsoft Rewards 포인트를 농사짓는 봇을 코딩한 방법 -- 그리고 Microsoft의 안티봇 탐지가 따라잡은 이유",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "dpdZM/836e3fetE8PasiM4VunpWac0fyKmT8THlvwtNaqI3iumoL6B1APvlTwvn68H8E6qfgFqJ2B/elW2RJbA=="
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 3,
+    "body": "\n# 프로젝트\n\n내가 작업 중인 프로젝트는 LLJT라고 해:\n\n![](assets/20260313_092734_image.png)\n\n이건 웹사이트이면서 PWA라서 모바일 앱이기도 해. MaterialUI를 사용해서 진짜 폰 앱처럼 보이게 만들었어.\n최근에 Mui imports를 관리해야 했는데, destructured import를 쓰는 대신 아이콘마다 한 줄씩 수동으로 import해서 11707개 모듈에서 595개로 줄였어: destructured import를 쓰면 전체 아이콘 라이브러리를 로드하는 반면, 개별적으로 import하면 필요한 것만 로드한다는 걸 배웠거든...\n\nNibi는 이 웹사이트에 연결된 봇이야.![](assets/20260313_093102_image.png)등급은 Google Forms 기반이야:\n![](assets/20260313_093255_image.png)\n객관식 테스트로 학생들을 평가하고, 주요 시험에 통과하면 Discord 역할과 이모지, 채널도",
+    "verified": true,
+    "title": "새 프로젝트 작업 중",
+    "description": "새 웹사이트를 시작하고 개발하는 과정 살펴보기",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Gm01rVmfqa30+W0OwPkP9+X7KKbjPKNNVJCCV8UUlkFpKXlOALjMe6+xcShNohFuPTkNa+HSwjLOlfWM7HYdQw=="
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 2,
+    "body": "\n# 내 GitHub 프로필\n\n내 GitHub 프로필에 온 걸 환영해--잘 정리된 도서관처럼 구성되어 있어.\n첫 번째 섹션에는 링크가 있는 헤더가 있어, 꽤 평범하다고 생각해:\n![](assets/20260308_123527_image.png)\n\n보다시피 링크들이 있어, 음, 괜찮은 것 같아. 뭐 더 말할 게 있나 싶네.\n## About Me\n\n\"About me\" 섹션도 있어:\n![](assets/20260308_123913_image.png)\n\n이 섹션에선 내가 지금 뭐 하고 있는지 실시간으로 볼 수 있어! 음악 듣고 있는 게 보이면, 그게 지금 상태야.\n여기에도 인디케이터를 달아둘게:\n\n### 실시간 상태\n[![Discord Presence](https://lanyard.cnrad.dev/api/724847846897221642?showDisplayName=true)](https://discord.com/users/724847846897221642)\n\n## 기술 스택\n\n이게 내",
+    "verified": true,
+    "title": "내 GitHub 프로필 소개",
+    "description": "내 GitHub 프로필에 대한 간단한 소개",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "6EUvaltmrnYdmls7HaxC5yFdnddd4Rq4AS683U/pdWphQXu9j5Pyk92PQ8RN6KVa3ZVp+SwlSGHIdU/Yo7SWYA=="
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 3,
+    "body": "\n# 내 열정들\n\n이 블로그를 오래전부터 쓰고 싶었지만 계속 망설였어 :/\n\n아마 내 삶을 공유하고 싶지만 개인 정보는 공유하기 싫어서 그런 것 같아. 아마 그게 이유인 듯.\n\n내 열정은 다양해: 나는 코딩을 사랑해. 이 블로그의 다른 글들을 보면 눈치챘을 거야. 무언가를 처음부터 만들고, 문제를 해결하고, 내 창작물이 살아 움직이는 걸 보는 데 깊은 만족감이 있어. 작은 CLI 도구든 풀 웹 앱이든, 그 과정은 절대 질리지 않아.\n\n**오픈 소스**를 특히 사랑해--공유는 곧 돌봄이고, 다른 사람이 내 코드를 유용하게 써줄 거란 생각이 정말 좋아. 내 프로젝트 대부분은 [내 GitHub](https://github.com/fox3000foxy)에 있고, [프로젝트 페이지](/projects)에서도 볼 수 있어.\n\n## 그림 그리기\n\n하지만 코딩만이 내 유일한 열정은 아니야--나는 그림 그리는 것도 좋아해! 내 그림들 중 일부야:\n\n<table style=\"width:100%;bor",
+    "verified": true,
+    "title": "내 열정들",
+    "description": "코딩, 그림, 자동화, 올드 테크 발견 등 -- 나를 움직이는 것들",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "personal"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "0ueJoIazGIfkQPBWwrrZvf8RERsNlXeehc/vgoMIlqEvO9zCG7Xu0uEiYzj3P8yCJJuApXJepy7ZRb2I+6BpFw=="
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 4,
+    "body": "\n# SSH 커밋 서명 스크립트 설명\n\n이 글은 내가 [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a)에 올린 `setup-ssh-signing.sh` 스크립트를 자세히 살펴본다. 각 부분이 무엇을 하는지, 어떻게 저장소-로컬 SSH 커밋 서명을 간편하게 만드는지, 그리고 솔직히 말해서 내가 왜 이걸 만들었는지까지 살펴볼 거야 (스포일러: 그냥 내 커밋을 **스타일리시하게** 만들고 싶었어).\n\n나는 항상 내 Git 워크플로우를 조정하는 걸 좋아했어. 다른 사람들의 커밋 옆에 있는 작은 \"Verified\" 배지를 보고 나는 생각했지: 왜 나는 안 돼? 기본 제공 GPG 서명은 좀 무겁고 전역 설정이라서, 결국 작은 헬퍼를 만들게 됐어:\n\n- 서명 전용 SSH 키 생성\n- 현재 저장소만 설정\n- 선택적으로 과거 커밋에 서명하도록 히스토리 재작성\n- 키를 다른 기기로 옮길 수 있게 내보내기/가져오기",
+    "verified": true,
+    "title": "SSH 커밋 서명 스크립트 설명",
+    "description": "SSH 커밋 서명 헬퍼의 분석과 내가 스타일리시한 커밋을 원했던 이유",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "jTn/DfRVn9viMn8wcvyxFz5Uk9CeYqx7X+FMVVjN/qhCqXivZojsPju86wcOeYfKzaGQ1W/tgICr/x606NCqYg=="
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 6,
+    "body": "\n# 이 블로그는 어떻게 동작하나요?\n\n이 블로그가 내부적으로 어떻게 돌아가는지 궁금했어? 이 글에서는 앱의 전체 아키텍처를 기술 스택부터 글을 쓰는 과정까지 모두 설명할게. 그리고 맞아, VS Code에서 어떻게 글을 쓰는지도 보여줄 거야!\n\n이 블로그는 최신 웹 기술로 만들어졌어:\n\n- **React 19** -- 사용자 인터페이스용\n- **TypeScript** -- 타입이 있는 더 안정적인 코드\n- **Vite** -- 초고속 빌드 도구\n- **React Router v7** -- 페이지 간 네비게이션\n- **react-markdown** -- Markdown을 HTML로 변환\n- **rehype-raw + rehype-sanitize** -- 보안을 유지하면서 Markdown에서 원시 HTML 허용\n\n## 프로젝트 구조\n\n프로젝트 트리는 이렇게 생겼어:\n\n![](assets/how-this-blog-works/project-structure.png)\n\n```\n├── .git",
+    "verified": true,
+    "title": "이 블로그는 어떻게 동작하나요?",
+    "description": "이 블로그의 내부 동작에 대한 심층 분석: React, Vite, Markdown, CI/CD 파이프라인, 글 작성 워크플로우",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "teWYsveqgXou/w4ibBmFtWQ9ZhYBtZBzeikqJQbLs08iejeEd2P4QsS06OJ33x+5nWA9m9MfMWgUpiLkywFehg=="
+  }
+]

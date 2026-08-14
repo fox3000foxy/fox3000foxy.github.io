@@ -1,0 +1,653 @@
+[
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 10,
+    "body": "\n# Luna Protocol: สมองที่ใช้ร่วมกัน การจำแนกอารมณ์ และการจัดเส้นทางข้อความน่าสนใจ/ไร้สาระ\n\nใน[สอง](/articles/th/luna-protocol-discord-bot)[บทความ](/articles/th/luna-protocol-official-models)ก่อนหน้านี้ ฉันได้นำเสนอ Luna Protocol ในฐานะบอท Discord เดี่ยวที่มีระบบพฤติกรรมซับซ้อนและโมเดลที่ผ่านการ fine-tune แต่สถาปัตยกรรมได้พัฒนาไปมากตั้งแต่นั้นมา สิ่งที่เคยเป็นโมโนลิธ -- โปรเซส Node.js เดียวที่จัดการทั้งบอท Discord พฤติกรรม และการเรียก LLM -- ได้กลายเป็น **สี่ชั้นอิสระ** แต่ละชั้นมีความรับผิดชอบ ภ",
+    "verified": true,
+    "title": "Luna Protocol: สมองที่ใช้ร่วมกัน การจำแนกอารมณ์ และการจัดเส้นทางข้อความน่าสนใจ/ไร้สาระ",
+    "description": "Luna Protocol พัฒนาจากโมโนลิธมาเป็นสถาปัตยกรรมสี่ชั้น: adapter, brain, ตัวจำแนกอารมณ์ และ inference ในบทความนี้: centroid ของ embedding, การจัดเส้นทางข้อความน่าสนใจ/ไร้สาระ และการปรับพารามิเตอร์ LLM ตาม valence และ arousal",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "A6wXijQ9hefS6xWJ/DTuAH4scQqUCc3NZJOaUF69IGLWMRdynBh+hm3RNzo7huuKC2MZg77XEEEwKbhBDcLPsA=="
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 11,
+    "body": "\n# จาก ELIZA สู่ LLM : 60 ปีของ AI เชิงสนทนา สร้างใหม่ใน TypeScript\n\nปี 1966 Joseph Weizenbaum เขียนโค้ด MAD-SLIP 420 บรรทัดบน IBM 7094 เพื่อสร้างแชทบอทตัวแรกในประวัติศาสตร์ โปรแกรมชื่อ **ELIZA** มันจำลองนักจิตบำบัดแนวโรเจอเรียนด้วยแพทเทิร์นพื้นฐานและการสลับประโยค หกทศวรรษต่อมา AI เชิงสนทนากลายเป็นหัวข้อหลัก -- ChatGPT, Claude, Gemini อยู่ในการสนทนาทุกครั้ง\n\nแต่ระหว่างสองขั้วนี้ มี **PARRY** (แชทบอทโรคหวาดระแวง, 1972), **ALICE** (ราชาแห่ง AIML 99,000 หมวดหมู่, 1995), **Jabberwacky** (ตัวแรกที่เร",
+    "verified": true,
+    "title": "จาก ELIZA สู่ LLM : 60 ปีของ AI เชิงสนทนา สร้างใหม่ใน TypeScript",
+    "description": "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- ห้าสถาปัตยกรรมที่แตกต่างกันโดยสิ้นเชิงสำหรับปัญหาเดียวกัน พอร์ตมาเป็น TypeScript พร้อมข้อมูลต้นฉบับ ตั้งแต่ปี 1966 ถึง LLM สมัยใหม่ ว่าแล้วว่า AI เชิงสนทนาเรียนรู้ที่จะพูดได้อย่างไร และสิ่งที่ repo แชทบอทสอนเราเกี่ยวกับ 60 ปีแห่งการวิจัย",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ai",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "history",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "lang": "th",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "jHo4/AFZ+f41wAp5EgBx/RtVUeECVRZzHC9Nl1TAicj9rii8zFWMfeccfC+2ZO7+dy1e9qhoz6S8ghpfBqkQQA=="
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 7,
+    "body": "\n# Luna Protocol: ทำไมฉันถึง fine-tune โมเดล 1.5B บนตัวอย่าง Discord 50k ชิ้น และทำให้ few-shot priming กลายเป็นอาวุธลับ\n\nใน [บทความแรก](/articles/en/luna-protocol-discord-bot) ฉันได้สร้างบอท Discord ที่จำลองพฤติกรรมมนุษย์ -- การนอน, การพิมพ์ผิด, การลังเล, การขี้ลืม, ข้อความที่เกิดขึ้นเอง ระบบพฤติกรรมนั้นแข็งแกร่ง LLM ที่อยู่เบื้องหลังคือโมเดล Hermes 3B ซึ่งถูก quantize เป็น Q8_0 กิน VRAM 3GB\n\nมันใช้งานได้ แต่มันเกินความจำเป็น\n\nบอท Discord ไม่ต้องการโมเดล 3B พารามิเตอร์เพื่อพูด \"nm just chillin,",
+    "verified": true,
+    "title": "Luna Protocol: ทำไมฉันถึง fine-tune โมเดล 1.5B บนตัวอย่าง Discord 50k ชิ้น และทำให้ few-shot priming กลายเป็นอาวุธลับ",
+    "description": "โมเดลที่เล็กกว่าซึ่งเทรนบนข้อมูลน้อยกว่าสามารถทำงานได้ดีกว่าโมเดลที่ใหญ่กว่า -- ถ้าคุณรู้วิธี prime มัน นี่คือสาเหตุที่ Luna Protocol เปลี่ยนจาก Hermes 3B มาเป็น fine-tune Qwen 1.5B และทำไม few-shot priming ถึงกลายเป็นตัวเปลี่ยนเกมที่แท้จริง",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "/yVDD8x0i0i4ffk0+0N9B9SdYAwMqeM1GUtq+3XzFYfp6x9bYNu8rZu1ydOQO8awr2mdg9HraytC/nMEObwaHQ=="
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 6,
+    "body": "# ปัญหา: คำย่อมากเกินไป ลำดับชั้นไม่เพียงพอ\n\nTCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; แหล่งข้อมูลส่วนใหญ่ที่พูดถึงโปรโตคอลเหล่านี้มักนำเสนอเป็นรายการราบของตัวเลือกที่ใช้แทนกันได้ \"ให้เลือกตามกรณีการใช้งาน\" แต่ในความเป็นจริงแล้วพวกมันไม่ได้อยู่ในระนาบเดียวกัน บางตัวเป็นโปรโตคอลการขนส่ง บางตัวเป็นชั้นความปลอดภัยที่ห่อหุ้มอยู่รอบการขนส่ง และบางตัวเป็นโปรโตคอลระดับแอปพลิเคชันที่ทำงานบนสองประเภทแรก การเข้าใจลำดับชั้นคือการเข้าใจว่าทำไมเราไม่เคย \"เลือก\" ระหว่าง TCP กับ TLS: เราเลือก TC",
+    "verified": true,
+    "title": "เครื่องจักรสื่อสารกันอย่างไร: ภาพรวมจาก TCP ถึง mTLS",
+    "description": "ทำไม TCP, UDP, TLS, mTLS, HTTP และ WebSocket ไม่ใช่ทางเลือกที่แข่งขันกัน แต่เป็นชั้นที่ซ้อนทับกัน ภาพรวมเชิงลำดับชั้นของการสื่อสารระหว่างเครื่อง จากการขนส่งดิบไปจนถึงการพิสูจน์ตัวตนร่วมกัน",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "network",
+      "distributed-architecture",
+      "protocols"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "th",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "1kSBNjFXmW32jCNY7UCHgJDHpKQVrUucyluaDRPkD7ODLeGS+Q1usT53dXdVcjFIC/w/ktbSEW1e+z0yC4VKvw=="
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 4,
+    "body": "\n# 5 วิธีใช้ GitHub Actions อย่างแยบยล\n\nบนกระดาษ GitHub Actions มีไว้สำหรับ CI/CD แบบคลาสสิก: คุณ push มันก็ lint, test, deploy ผมเคยเขียนถึงกรณีพิเศษแล้ว -- การใช้ git tag เป็นฐานข้อมูลให้บอทอีเมล (ดูบทความเฉพาะ) แต่พอขุดดู repo ตัวเอง มี pattern แตกต่างกันมากพอที่จะคุ้มกับบทความเดี่ยว ที่ไม่โฟกัสแค่โปรเจกต์เดียว แต่เป็นแคตตาล็อกเทคนิคมากกว่า\n\nห้าอย่าง จากคลาสสิกที่สุดไปยันบิดเบี้ยวที่สุด\n\nสรุปสั้น ๆ รายละเอียดเต็มอยู่ในบทความ `email-autoreply` GitHub Actions ถูกออกแบบมาแบบ stateless -- ทุกครั้",
+    "verified": true,
+    "title": "5 วิธีใช้ GitHub Actions อย่างแยบยล (และสิ่งที่สอนเกี่ยวกับ secrets)",
+    "description": "CI runner กลายเป็น VPS ฟรี บอทที่เปิด PR ให้ตัวเอง การ publish npm แบบไม่มี secret เลยสักตัว ทัวร์ repo ต่างๆ เพื่อจัดแคตตาล็อก pattern GitHub Actions ที่มากกว่าแค่ \"lint + test + deploy\"",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "l1OAnUtwL79MfHYk3pU2S3CgsaKTMHhIrDscRUCYqSOqHfk+O8ITIdEqMGxBeVPWf/jO2aAD/nYxUKGST+fU3A=="
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 4,
+    "body": "\n# valorant-short-maker: ไปป์ไลน์ที่สร้าง Shorts Valorant ให้ผมแบบอัตโนมัติ\n\nไม่กี่เดือนมานี้ มีช่อง YouTube ช่องหนึ่งที่ทำงานโดยผมไม่ต้องแตะอะไรเลย: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop) เอเจนต์ Valorant เถียงกันระหว่างยก พากย์เสียง มีซับคาราโอเกะ ลงเป็น Shorts ทุกอย่างสร้างโดย [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker) ไปป์ไลน์ TypeScript/Bun ที่ทำงานผ่าน cron และเผยแพร่โดยไม่มีใครต้องกดอะไรทั้งนั้น\n\nนี่คือวิธีการทำงาน ทีละข",
+    "verified": true,
+    "title": "valorant-short-maker: ไปป์ไลน์ที่สร้าง Shorts Valorant ให้ผมแบบอัตโนมัติ",
+    "description": "Groq/Llama สำหรับสคริปต์ Piper สำหรับเสียง FFmpeg สำหรับทุกอย่างที่เหลือ cron job ผลิitและเผยแพร่วิดีโอวันละคลิปบน @valorant_agents ได้ยังไงตั้งแต่ต้นจนจบ",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "175Qd50Shd2pAW/t06ValdXQBHM9tNkXbRukvWIm1gspKC2UTguac4p4gGafeLfS3Rci6DUcMnl3X1wZMQpY9g=="
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 3,
+    "body": "\n# วิธีรับผ้าคลุมใดๆ ใน Minecraft Bedrock\n\nใน Java มีวิธีวกวนมากมายที่จะได้ผ้าคลุมที่คุณไม่ควรมี (ดูบทความ `cape-mod`) ใน Bedrock เกมต่างออกไป การยืนยันตัวตนต่างออกไป แต่ก็ยังมีวิธี -- ไม่ต้องใช้ม็อด ไม่ต้องแตะแพ็กเก็ตเครือข่ายใดๆ แค่ลันเชอร์บุคคลที่สามกับเวอร์ชันเก่าพอของเกมที่ยังไม่มีการตรวจสอบอย่างที่คิด\n\nนี่คือวิธีการทำ แล้วเราค่อยดูว่ามีอะไรเกิดขึ้นใต้ฝากระโปรง\n\n- บัญชี Microsoft ที่มี Minecraft Bedrock อยู่แล้ว (บัญชีของคุณใช้ได้เลย)\n- ติดตั้งลันเชอร์ Minecraft ทางการแล้ว\n- [BedrockLaunche",
+    "verified": true,
+    "title": "วิธีรับผ้าคลุมใดๆ ใน Minecraft Bedrock",
+    "description": "ลันเชอร์บุคคลที่สาม, เวอร์ชันเก่าของเกม, และตัวเลือกผ้าคลุมที่ไม่เคยเรียนรู้ที่จะปฏิเสธ คู่มือแบบเต็มพร้อมคำอธิบายที่อาจเป็นไปได้ว่าทำไมมันถึงทำงาน",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "ytpTHFDfHqiv9EJf5cAj/b0rT2fkozFgvTQX7zePVCzpHUXb1Gpg+6l6NieQfPPg5opKs4RUkcvkwFWOFESIiA=="
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 2,
+    "body": "\n\nการฝึกเอเยนต์ DQN สำหรับการเทรดดิ้งเชิงอัลกอริทึมด้วยเกรเดียนต์ดีเซนต์ดั้งเดิมมีปัญหาที่พูดง่ายแต่แก้ยาก: เกรเดียนต์ดีเซนต์ปรับให้เหมาะสมกับโครงข่าย _หนึ่ง_ สู่จุดต่ำสุดเฉพาะที่ _หนึ่ง_ บนหน้าต่างตลาด _หนึ่ง_ ไม่มีอะไรรับประกันว่าจุดต่ำสุดนี้จะสามารถสรุป generalize ไปยังสภาวะตลาดอื่นได้ และไม่มีอะไรในลูปการฝึกที่ผลักดันให้เกิดความหลากหลาย การรันสองครั้งจาก seed ต่างกันมักจะลู่เข้าสู่กลยุทธ์ที่เกือบเหมือนกัน โดยมีจุดบอดเดียวกัน\n\nคำตอบที่ฉันสำรวจ: แทนที่ (หรือวางซ้อน) เกรเดียนต์ดีเซนต์ด้วยอัลกอร",
+    "verified": true,
+    "title": "ฉันวิวัฒนาการโครงข่ายประสาทเทียมผ่านการคัดเลือกโดยธรรมชาติแทนที่จะใช้เกรเดียนต์ดีเซนต์",
+    "description": "วิธีที่ฉันแทนที่การฝึกแบบเกรเดียนต์ดีเซนต์ดั้งเดิมด้วยอัลกอริทึมพันธุกรรม NSGA-II เพื่อวิวัฒนาการเอเยนต์เทรดดิ้ง DQN: สี่เวอร์ชัน จากการโอเวอร์ฟิตติ้งสู่การวิวัฒนาการแบบลามาร์กของน้ำหนัก",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "th",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "WkZhTkfR6DSa+Ab5mnbWeWfBWKKukkAB1cvlh08r/8QuOvKX+79U1DBjdUMtr0jgPAHAGBCKZB/TD8u5Svw1Cw=="
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 15,
+    "body": "\n\n![TF2 Soldier bot กำลังเล็ง rocket launcher](assets/tf2-bot-ai-soldier-aim.png)\n\nผู้เล่น TF2 ทุกคนเคยพูดอย่างน้อยครั้งหนึ่ง: \"บอทนี่โกงชัดๆ\" หรือตรงกันข้าม: \"ทำไมบอท Easy นี้ยืนเฉยแล้วกินจรวด\" ไม่มีใครรู้จริงๆ ว่า \"Easy,\" \"Normal,\" \"Hard,\" และ \"Expert\" แท้จริงแล้วหมายถึงอะไร -- Valve ส่งป้ายชื่อความยากสี่ระดับมาโดยไม่มีเอกสารใดๆ เลย\n\nพวกเราหลายคน (ผม, awimii, Mush The Possum, โดยมีงานพื้นฐานจำนวนมหาศาลจาก sigsegv ที่ลงไปขุดคุ้ยโค้ดเกมที่ถูกดีคอมไพล์) จึงรวบรวมเอกสารวิจัยฉบับเต็มเกี่ยวกับพฤติกร",
+    "verified": true,
+    "title": "TF2 บอทไม่สุ่ม: ผมถอดรหัสทุกรายละเอียดของความยากทุกระดับแล้ว",
+    "description": "การมองเห็น, การเล็งเป้า, มุมแทงหลังของ Spy, ตรรกะการยิงหัวของ Sniper, ทุกบั๊กที่รู้จัก -- Valve ไม่เคยบันทึกสิ่งเหล่านี้เลย เราจึงขุดคุ้ยโค้ดและเปลี่ยนมันเป็นเอกสารข้อมูลครบถ้วน",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "game-ai",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "76ZijUDOPSc/708+fMv8YBcy6k+G26GefwaPr5RLLbwvRyZPTbhIVHYZmQTmNZ8+gl0wIQWYPqDJ3D9jZtGDGQ=="
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 4,
+    "body": "\n# Cape Mod : วิธีขโมยเคปของ Jeb_ ด้วยการฉีดลายเซ็น RSA\n\n![alt text](assets/xbox-profile.png)\nจะเกิดอะไรขึ้นถ้าบอกว่า แค่มีลายเซ็น RSA ที่ถูกต้อง -- แต่สำหรับ**บัญชีผิด** -- ก็ทำให้เพื่อนคุณเชื่อว่าคุณสวมเคปทางการของ Mojang ได้แล้ว ยินดีต้อนรับสู่ `cape-mod` เอ็กซ์พลอยต์ Fabric ที่แสดงให้เห็นว่า Minecraft เชื่อถือลายเซ็นโดยไม่ตรวจสอบว่าโปรไฟล์ที่เป็นเจ้าของลายเซ็นนั้นเป็นของคุณจริงหรือไม่\n\nใน Java Edition มีคำถามที่เราไม่ค่อยได้ถามกัน : **ใครเป็นผู้รับผิดชอบในการแสดงสกินและเคปของผู้เล่น -- ไคลเอ",
+    "verified": true,
+    "title": "Cape Mod : วิธีขโมยเคปของ Jeb_ ด้วยการฉีดลายเซ็น RSA",
+    "description": "ม็อด Fabric ที่ใช้ประโยชน์จากช่องโหว่เชิงตรรกะในระบบความเชื่อถือของ Minecraft : ลายเซ็น RSA ที่ถูกต้องของ Mojang แต่ถูกนำมาใช้ซ้ำกับบัญชีผิด คำอธิบายโค้ด, ผลกระทบด้านความปลอดภัย และบทเรียนด้านการเข้ารหัส",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "L7yCnhxSOz+Iy7/NH6WaF8BqPynW0GMWQAOMIQa8Nh6pSdbexIeGQISlZ6kftsFzWW0OgMirqVDP1CbG9NZwkA=="
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 8,
+    "body": "\n# Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร\n\nLaupok สร้างปัญญาประดิษฐ์ที่เล่น **Super Mario World** ได้อย่างสมบูรณ์แบบอิสระ ไม่มีการบันทึกอินพุตล่วงหน้า ไม่มีเฟรมที่บันทึกไว้ AI เรียนรู้ด้วยตัวเอง ผ่านการกลายพันธุ์แบบสุ่มและการคัดเลือกโดยธรรมชาติ เพื่อผ่านด่านต่างๆ ของเกม โปรเจกต์นี้รันบน **BizHawk** ซึ่งเป็นอิมิวเลเตอร์หลายแพลตฟอร์ม ผ่านสคริปต์ Lua ประมาณ **4200 บรรทัด**\n\nสิ่งที่ทำให้โปรเจกต์นี้น่าทึ่งคือมันพึ่งพาแนวคิดทางชีววิทยาที่นำมาประยุกต์ใช้กับการคำนวณ: **ทฤษฎี",
+    "verified": true,
+    "title": "Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร",
+    "description": "บทความเชิงลึกเกี่ยวกับโปรเจกต์ของ Laupok: AI ที่ใช้ NEAT เรียนรู้การเล่น Super Mario World ได้อย่างอิสระ อัลกอริทึมพันธุกรรม โครงข่ายประสาทเทียม การวิวัฒน์โครงข่ายประสาทแบบเพิ่มขยาย และ Lua 4200 บรรทัด",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "HqWRea+rduVioNjA+c59qrHbjQ/oIRTNWRkkhUbLzbL1H8PctBEEdliqMv0Y3aEl/kJcfObUEr9yZcfHQB7BhA=="
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 9,
+    "body": "\n# Luna Protocol: ฉันสร้างบอท Discord อัตโนมัติที่จำลองความเป็นมนุษย์\n\nจะเป็นอย่างไรถ้าบอท Discord สามารถ **นอน** พิมพ์**ผิด** **ลังเล** **ลืม**ตอบ และบางครั้งส่งข้อความหาคุณเองได้? นี่คือสิ่งที่ **Luna Protocol** ทำ: บอท Discord อัตโนมัติเต็มรูปแบบที่รัน LLM ในเครื่อง (llama.cpp) และสนทนาเหมือนมนุษย์ผู้ไม่สมบูรณ์แบบ\n\nไม่มีพรอมป์ที่ตายตัว ไม่มีการตอบแบบหุ่นยนต์ Luna มี **ระบบการตัดสินใจแบบมีลำดับความสำคัญ**, **ระยะเวลาที่แปรผัน**, **ตารางการนอน**, **ข้อความที่ส่งเองตามธรรมชาติ**, และแม้กระทั่ง *",
+    "verified": true,
+    "title": "Luna Protocol: ฉันสร้างบอท Discord อัตโนมัติที่จำลองความเป็นมนุษย์",
+    "description": "Luna Protocol คือบอท Discord อัตโนมัติเต็มรูปแบบที่ขับเคลื่อนด้วย LLM ในเครื่อง สามารถสนทนาอย่างเป็นธรรมชาติ พร้อมการนอน พิมพ์ผิด การลังเล การลืม ความเหนื่อยล้าตามหัวข้อ และข้อความที่ส่งเองตามธรรมชาติ",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "6hzjY7KfGmNdOU65tgVbWDe4M2hdQ4wErPEQ5VXS2ZSyLlp/51/CwDRB7bWhwXDDZB62rsbNNDOhHoy3/FvxzQ=="
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 12,
+    "body": "\n\n![AI เรียนรู้ Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.png)\n\nมีวิดีโอชื่อ [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) โดย Kadambi | AI Engineering และนี่เป็นหนึ่งในบันทึกที่ซื่อสัตย์ที่สุดเกี่ยวกับการฝึก AI ให้เล่นเกมที่ผมเคยเห็น\n\nแนวคิด: สร้างบอทที่เล่น Minecraft PvP (ชุดดาบ, ชุดเกราะเพชร enchanted เต็ม) โดยการดูหน้าจอและส่งคำสั่งเมาส์และคีย์บอร์ด ไม่ต้องอ่านหน่วยความจำเกม ไม่มีมาโคร ไม่มีม็อด : แค่พิกเซลเข้าไป การ",
+    "verified": true,
+    "title": "AI เรียนรู้ Minecraft PvP -- Imitation Learning, Reinforcement Learning และ 30 ตัวแปรที่สำคัญ",
+    "description": "บันทึก 1,000 ดวล, ฝึกโครงข่ายประสาทเทียมบนพิกเซล, ความแม่นยำในการกดแป้นพิมพ์ 90% : และบอทเดินตรงไปชนกำแพง จากนั้นมา RL, curriculum learning และ 60 ชั่วโมงของการฝึก",
+    "date": "2026-07-09",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "kwZHOj2wRg4zgJoLG4bTF/16gkh7JHwA2sNFa+uuuzpscUL3DaIU7PZBTrhJPQg0zsVTHRJlENI3KFaIDuVQMg=="
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 17,
+    "body": "\n\nSuper Mario Bros. คือ ROM ขนาด 40 กิโลไบต์ แปดโลก, 32 เลเวล, ศัตรู, เพลง, power-ups ทุกอย่างบรรจุอยู่ในนั้น\n\nแต่ถ้าคุณเปิดเครื่องเลียนแบบแล้วแก้ไข byte ที่ถูกต้อง คุณสามารถโหลดเลเวล 36-1 ได้ หรือ 255-1 หรือลงจอดในโลกที่ทุกอย่างทำจาก sprite ของ Bowser และท่อที่นำไปสู่ที่ไหนไม่ได้\n\nglitch worlds เหล่านี้มีอยู่ด้วยเหตุผลง่ายๆ: ระบบการจัดเก็บเลเวลของ SMB1 คือผลงานชิ้นเอกของการเพิ่มประสิทธิภาพ 8 บิต และเมื่อเราบังคับให้เกมอ่านในที่ที่ไม่ควรจะอ่าน มันจะให้ผลลัพธ์ที่น่าทึ่ง\n\nRetro Game Mechanics Expl",
+    "verified": true,
+    "title": "Super Mario Bros.: รูปแบบของเลเวล, พอยน์เตอร์ และ 256 glitch worlds",
+    "description": "วิธีที่ 128 เลเวล × 4 ประเภทพื้นที่บรรจุอยู่ใน ROM 40KB ทำไม Minus World ถึงมีอยู่ และวิธีที่การแข่งขันเทนนิส NES สามารถโหลด glitch worlds",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "iwSNFYNGpIzqpQOFUndA1GxJ4jnDNY10ylb9pF6+R8qXw0CNuUvyRSLu35haPi150igirMpS3sEpShil0sVgTw=="
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 6,
+    "body": "\n# ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ\n\nฉันดูแลโปรเจกต์นี้มาระยะหนึ่งแล้ว แต่การอ่านโค้ดของตัวเองอีกครั้งอย่างใจเย็นก็ให้บทเรียนเสมอ konosuba-rpg คือ RPG ผลัดกันเล่นบน Discord ที่ทุกการกระทำสร้างภาพ WebP ทันที ไม่ใช่ embed ข้อความ แต่เป็นภาพจริงที่ประกอบด้วยสไปรต์, แถบพลังชีวิต, ข้อความต่อสู้ -- ทุกอย่าง\n\nstack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase โฮสต์ฟรีทั้งหมด และบอท Discord ทำงานโดยไม่ต้องมีเซิร์ฟเวอร์ถาวร โพสต์นี้อธิบายว่าทุกอย่างทำงานร่วมกันอย",
+    "verified": true,
+    "title": "ฉันใช้เวลาสุดสัปดาห์อ่านโค้ด konosuba-rpg และนี่คือสิ่งที่ฉันพบ",
+    "description": "RPG ผลัดกันเล่นบน Discord ที่ทุกการกระทำสร้างภาพ WebP ทันที: URL เป็นสถานะเกม, RNG แน่นอน, pipeline WASM, แคช 5 ระดับ, บอทแบบ serverless",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "eILzFixm7VnPMF66/KSPSxttPXTX5a8uMOKcU8QS9pfxe3Gs/waxHMO04KxvsiA4SZdxErKyft4xqEG+K/Ebpg=="
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 2,
+    "body": "\n\nบอทและสแกนเนอร์อัตโนมัติสแกนเว็บแอปพลิเคชันอย่างต่อเนื่องเพื่อหาช่องโหว่ พวกมันมองหาไฟล์ `.env` แผงผู้ดูแลระบบ การสำรองฐานข้อมูล ข้อมูลประจำตัว SSH -- อะไรก็ตามที่สามารถนำไปใช้ประโยชน์ได้\n\nแทนที่จะส่งคืน 404 ธรรมดา ฉันต้องการสร้างสิ่งที่สนุกกว่า: **honeypot Express** ที่ตอบสนองด้วยเนื้อหาที่น่าเชื่อถือ ทำให้ผู้โจมตีเชื่อว่าพวกเขาพบเป้าหมายที่มีช่องโหว่\n\n## ความสามารถ\n\nมิดเดิลแวร์นี้เปิดเผย **328 ปลายทาง** แบ่งเป็นสองรูปแบบ (ค่าเริ่มต้นและสมบูรณ์) แต่ละคำขอจะได้รับการตอบสนองที่ไม่ซ้ำกันซึ่งสร้า",
+    "verified": true,
+    "title": "ฉันสร้าง honeypot Express ที่สมจริงอย่างยิ่ง",
+    "description": "328 ปลายทางปลอมพร้อมการตอบสนองที่สร้างขึ้นทันที การปลอมแปลงส่วนหัว การบันทึกทราฟฟิกบอท -- เจาะลึกโค้ดของมิดเดิลแวร์ honeypot Express ที่ออกแบบมาเพื่อหลอกลวงสแกนเนอร์",
+    "date": "2026-06-10",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "fLKA/19dz76pSZgYpIahacb1hry8I7RYCFsbv6LfzfjOCbsc4qHeD4bgdNTJ+vZYRrAPL4mu8/6uI3zJVZWJgQ=="
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 10,
+    "body": "\n\nคุณเคยสงสัยไหมว่าเราสามารถรันเซิร์ฟเวอร์ Minecraft บนไมโครคอนโทรลเลอร์ราคา 1 ดอลลาร์ได้หรือไม่?\n\nผมเคย. และคำตอบคือใช่. ตามตัวอักษรเลย.\n\nมีโปรเจกต์ชื่อ [Bareiron](https://github.com/p2r3/bareiron/) โดย p2r3 และนี่น่าจะเป็นหนึ่งในโปรเจกต์ที่น่าทึ่งที่สุดที่ผมเคยเห็นในโลก Minecraft ช่วงไม่กี่ปีที่ผ่านมา เรากำลังพูดถึงไบนารีที่ขนาดแค่ **300 กิโลไบต์**, **โค้ด C 6800 บรรทัด**, ไม่มี dependency ภายนอก, ไม่มี malloc, ไม่มี threading, และมันรันบน **ESP32 ราคา 1 ดอลลาร์**\n\n![ESP32-C3 ไมโครคอนโทรลเลอร์",
+    "verified": true,
+    "title": "Bareiron -- เซิร์ฟเวอร์ Minecraft ที่รันบนไมโครคอนโทรลเลอร์ราคา 1$",
+    "description": "โค้ด C 6800 บรรทัด, zero malloc, Perlin noise ถูกแทนที่ด้วย bilinear interpolation, ไบโอมแบบ tile map, และทั้งหมดนี้บนชิปราคา 1$",
+    "date": "2026-05-30",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "TECraOGX+Qw/D+qV9nKqYxLiMUNgX4aPPRn6Yjhp5IO9znJF+4USc/lO/gtN/4oSB80FS6oMlxl9eANhLuwhow=="
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 8,
+    "body": "\n\nผมใช้เวลาหลายเดือนในการดูแล Discord bot ทั่วไปบนเครื่องของตัวเอง\n\nการเชื่อมต่อ WebSocket เปิดตลอดเวลา บอท reconnect เองตอนตีสาม บอท crash เพราะผมมองแกะผิดทาง ค่าใช้จ่ายพุ่ง\n\nวันหนึ่งผมค้นพบ: **ทำไมต้องรักษาการเชื่อมต่อ** ? Discord สามารถ POST เฉพาะสิ่งที่คุณสนใจได้ คุณตอบกลับ ก็จบ\n\nตั้งแต่ปี 2021 Discord มี **interaction endpoints**\n\nมันคือ HTTP ล้วน ๆ ไม่มี WebSocket ไม่มีสถานะคงที่ คุณได้รับ request ส่ง JSON กลับไป ก็จบ request ถัดไปมาก็เอง\n\nและที่เจ๋งที่สุด: Cloudflare Workers **ฟรี** สูงถึ",
+    "verified": true,
+    "title": "Discord bot 100% serverless : Hono + Cloudflare Workers",
+    "description": "วิธีที่ผมเปลี่ยน Discord bot ที่เสียค่าใช้จ่าย 50€/เดือน ให้เหลือศูนย์ยูโร -- interaction endpoints, Hono, Workers, การเรนเดอร์ภาพแบบเรียลไทม์, และเกมเต็มรูปแบบโดยไม่ต้องใช้ WebSocket",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "0Ot14ekcJzHOZbyHIe7vWrYR2NhHzwQPnFppATqyvbXHCkKmmrIClJSWDYli7FDrpK4cZtoSNvZCH1T8yXOTFw=="
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 4,
+    "body": "\n\nมีโปรเจกต์ที่เริ่มจาก \"เฮ้ ถ้าฉันทำเกมหมากรุกกับเทพปกรณัมล่ะ\" แล้วจบลงด้วย AI ที่ตัดสินใจไฮเปอร์พารามิเตอร์ของตัวเองทุก 5 เทิร์น\n\nNausicaa ก็เป็นแบบนั้น เกมกระดานผลัดกันเดินที่คุณสร้างเด็คสัตว์ในตำนาน จัดการมานา วางยูนิตบนกระดาน 10x8 และมี AI ที่มีหลายบุคลิกภาพ\n\nฉันใช้เวลากับ AI นี้พอสมควร และผลลัพธ์ก็ค่อนข้างจะจัดการยาก xD\n\n## เกมจริง ๆ\n\nก่อนจะพูดถึงสมอง ต้องเข้าใจร่างกายก่อน:\n\n- กระดาน 10x8 พื้นที่วางกำลัง 2 แถวต่อผู้เล่น\n- มานาเริ่มที่ 1 +1 ต่อเทิร์น สูงสุด 6 ใช้จ่ายเพื่ออัญเชิญ โจมตี ใช้คว",
+    "verified": true,
+    "title": "AI ขี้โกงของฉันสำหรับ Nausicaa",
+    "description": "AI ที่ใช้ค่าสัมประสิทธิ์ฮิวริสติก ไฮเปอร์พารามิเตอร์ที่เปลี่ยนทุก 5 เทิร์น และ Oracle ที่หนี -- ดำดิ่งสู่สมองของเกมกระดานเชิงกลยุทธ์",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "fHI3LupEzR9IU+vs6FOoIMVa+1fPFd8BsEt70qWPEFriEraGgXJs9Godl0oP+31TJCFLFvPK4UAEYy7Tms4eSQ=="
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 6,
+    "body": "\n\nผมใช้เวลาหลายชั่วโมงดูแกะเดินชนกำแพง\n\nและพูดตรงๆเหรอ? การลงทุนที่ดีที่สุดในชีวิตเลย xD\n\nเพราะยิ่งคุณดูม็อบพวกนี้มากเท่าไหร่ คุณก็ยิ่งรู้ว่าพวกมันไม่ได้สุ่มเลย ทุกการเคลื่อนไหวถูกเขียนโค้ดไว้ คาดเดาได้ และที่สำคัญ -- แก้ทางได้หมด ผมเลยดำดิ่งเข้าไปในซอร์สโค้ดของ Minecraft เพื่อทำความเข้าใจว่าการหาเส้นทางทำงานยังไง และสิ่งที่ค้นพบคือคุณสามารถควบคุมจิตใจม็อบได้จริงๆ แบบ บังคับให้มันไปที่ที่คุณอยากให้ไป ไม่ใช่ที่ที่ความสุ่มเลือก\n\nไกด์นี้คือทุกสิ่งที่ผมเรียนรู้จากการขุดคุ้ย ระบบ AI, อัลกอริทึม A*, ค",
+    "verified": true,
+    "title": "ตรรกะการหาเส้นทางของ Minecraft และการประยุกต์ใช้",
+    "description": "อัลกอริทึม A*, ค่าปรับของบล็อก และ POI ช่วยให้คุณควบคุม, ทำนาย และใช้ประโยชน์ การเคลื่อนที่ของม็อบได้ -- จากเรดสโตนไร้สายไปจนถึงฟาร์มที่ปรับแต่งแล้ว",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "imU107NHuv8eCSnLT4scYjGmkzLpGPiXOBCVE1PKKULqHngpSXWrhxCmYiWVu0oefF5cS1bpio28tL7CLyBMxg=="
+  },
+  {
+    "slug": "utau",
+    "readingTime": 4,
+    "body": "\n\nผมเคยพูดถึงมันไปแล้วบนหน้าเว็บหลัก: ผมชอบ UTAU นี่คือเหตุผล\n\nปี 2008 ถ้าคุณอยากให้เสียงสังเคราะห์ร้องเพลง คุณมีทางเลือกเดียว: VOCALOID ซอฟต์แวร์ของ Yamaha แพง เป็นลิขสิทธิ์ มีแต่เสียงทางการที่คุณสร้างเองไม่ได้\n\nแล้วก็มีคนญี่ปุ่นคนหนึ่ง ชื่อ Ameya/Ayame ที่ปล่อยอะไรบางอย่างออกมาจากมุมห้องของเขา ซอฟต์แวร์ที่เขียนด้วย **Visual Basic 6** ฟรี ให้คุณสร้างเสียงของคุณเองด้วย... ไฟล์ WAV ที่คุณอัดเอง\n\nสิ่งนั้นชื่อ **UTAU** (歌う, \"ร้องเพลง\" ในภาษาญี่ปุ่น) และสำหรับยุคนั้น มันคือเวทมนตร์\n\nผมรู้สึกว่าซอฟต์",
+    "verified": true,
+    "title": "UTAU: ซอฟต์แวร์ Visual Basic 6 ที่ทำให้เสียงสังเคราะห์เป็นของทุกคน",
+    "description": "UTAU ซอฟต์แวร์ฟรีที่เขียนด้วย VB6 ในปี 2008 ทำให้ทุกคนสามารถสร้างเสียงร้องเพลงด้วยการสังเคราะห์แบบต่อเนื่อง -- และทำไมมันถึงยังสำคัญจนถึงทุกวันนี้",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "cDIX8dTSSGmJ7d493u7tHJYYe/sJuNKI82rc1qIaXN8qypkFu+w0+XucVMAJ9nwDVf8FNxjBjkgdQvHKn3vyLg=="
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 6,
+    "body": "\n# ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm -- polyfills ของ typescript-virtual-container\n\nผมเพิ่งใช้เวลาพอสมควรในการไล่อ่านซอร์สโค้ดของ [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) โปรเจกต์ของ [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr) และส่วนที่ทำให้ผมประหลาดใจที่สุด ไม่ใช่ VFS ไม่ใช่เครือข่ายเสมือน ไม่ใช่ 170 คำสั่ง Unix ที่ถูกเขียนใหม่ใน TypeScript แต่มันคือโฟลเดอร์ `polyfills/`\n\nเพราะว่าโมดูลนี้ทำงานในเบราว์เซอร์ โดย",
+    "verified": true,
+    "title": "ไลบรารี Node.js ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm -- polyfills ของ typescript-virtual-container",
+    "description": "Fortune ได้สร้าง node:fs, node:crypto และโมดูล Node อีกกว่าสิบโมดูล ขึ้นมาใหม่ด้วย JavaScript 640 บรรทัดเพื่อให้คอนเทนเนอร์ทำงานในเบราว์เซอร์โดยไม่ต้องใช้ Wasm",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "FxEciBgqy1MHFUOEKyDhvGsrl/DCdBfVr9aI73Ow1nkxdp5chrRUTjeiTSAS+lfJX5qOAV46zLZC0cIcF0RvQA=="
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 4,
+    "body": "\n# ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions\n\nผมมีระบบตอบอีเมลอัตโนมัติที่ทำงาน 24/7\n\nมันอ่านอีเมลของผม ทำความเข้าใจว่าพูดถึงเรื่องอะไร และตอบกลับเองด้วย AI มันจำบทสนทนาก่อนหน้านี้ได้ มันข้าม newsletters และ `noreply@` มันส่งต่อไปยังมนุษย์เมื่อเรื่องร้อนเกินไป\n\nค่าใช้จ่ายต่อเดือน: **0€**.\n\nไม่มีเซิร์ฟเวอร์ ไม่มี VPS ไม่มีฐานข้อมูล แค่ GitHub Actions และ hack สุดบ้า: **ใช้ git เป็นฐานข้อมูล**\n\nเห็นภาพกันหรือยัง? ไม่? เอาล่ะ เกาะให้แน่นนะ นี่มันทั้งบ้าและเจ๋งในเวลาเดียวกัน\n\n---\n\nGitHu",
+    "verified": true,
+    "title": "ผมใช้ git เป็นฐานข้อมูลเพื่อรันบอทฟรีบน GitHub Actions",
+    "description": "วิธีที่ผมเขียน AI auto-reply email ที่รันบน GitHub Actions ด้วยค่าใช้จ่าย 0€/เดือน -- โดยใช้ git tags เป็นฐานข้อมูลและ pre-compile ใน runtime tag",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "m1UqguqOY4WWH2b8N1eB/2PCqDU1GmvKro79j9PXw830NRN7GRPlzv9SivaYtGD88PMQJJiFaO3xCk8tFcyMZA=="
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 10,
+    "body": "\n\nGitHub Actions ให้เครื่อง Linux ฟรีคุณ\n\nใช่แล้ว เซิร์ฟเวอร์ Ubuntu จริง ๆ 2 คอร์, RAM 7 GB, ดิสก์ 14 GB ฟรี นาน 6 ชั่วโมงต่อ run\n\n\"ปัญหา\" เดียวคือ ตอนจบ run ทุกอย่างถูกลบ เครื่องถูกทิ้ง คุณติดตั้งของ เขียนโค้ด ตั้งค่า... แล้วปุ๊บ ตอนจบทุกอย่างหายไป เหมือนคุณไม่ได้ทำอะไรเลย\n\nยกเว้นแต่\n\nยกเว้นแต่คุณใช้ **git เป็นฮาร์ดดิสก์**\n\nและแล้ว ทันใดนั้น คุณก็มี VPS ฟรีพร้อมดิสก์ถาวรที่อยู่รอดข้าม run คุณ reconnect ทุกอย่างยังอยู่ คุณกลับมาต่อจากที่ค้างไว้\n\nมันบ้าแตกเลย ให้ฉันอธิบายหน่อย xD\n\n---\n\n## บริบท",
+    "verified": true,
+    "title": "Repo to VPS : เปลี่ยน GitHub Actions เป็น VPS ฟรีพร้อมพื้นที่เก็บข้อมูลถาวร",
+    "description": "วิธีเปลี่ยน GitHub Actions runner ให้เป็น VPS ถาวรโดยใช้ git เป็นพื้นที่เก็บข้อมูลถาวร -- tmate, inotify และ commit --amend",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "zTh1lAS4k8ZOLqE2SCBYai2ScIkDryJg/QiV5lZ6FPAL3L6ZTBpaOY9tz4aDPjMa5on3X0m5JfO0FVBBsAzFRA=="
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 21,
+    "body": "\n# ทุก sandbox JavaScript, เอมิวเลเตอร์, ซีมิวเลเตอร์ และ honeypot Linux -- เปรียบเทียบ\n\nเอาล่ะ ก็ต้องบอกว่าผมดำดิ่งลงไปในหลุมกระต่ายนี้ลึกเกินไปแล้ว lol ทุกอย่างเริ่มต้นเพราะผมช่วยงานใน [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- โปรเจกต์ของ Fortune (ผมจะกลับมาพูดถึงเร็วๆ นี้) -- และมีคนถามผมตลอดเวลา \"เดี๋ยวนะ มันต่างจาก `v86` ยังไง?\" หรือ \"ทำไมไม่ใช้ `vm2` ล่ะ?\" -- และผมก็รู้ตัวว่าผมไม่สามารถตอบได้ชัดเจนถ้าไม่ได้ทำแผนที่ระบบนิเวศทั้งหมดก่อน",
+    "verified": true,
+    "title": "เปรียบเทียบโซลูชัน JavaScript สำหรับการจำลองเคอร์เนล Linux",
+    "description": "การวิเคราะห์เชิงลึกของการจำลองสภาพแวดล้อม Linux ใน JavaScript/TypeScript",
+    "date": "2026-05-28",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "Izdp4YQQiVQrquBFU3uuSQ+3VzCTXCKDMXobJg5F+N5w9pS/6JFowDXPruupTG0MjPBQGW5wKqJ5Sdjai1A8Rg=="
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 4,
+    "body": "\n> **หมายเหตุ (2026):** โปรเจกต์นี้ไม่ได้ดูแลอีกต่อไปแล้ว Microsoft ได้เสริมการตรวจจับแอนตี้บอทอย่างมาก -- สิ่งที่เคยใช้ได้ในตอนนั้นไม่สามารถใช้ได้อีกแล้วในวันนี้ โค้ดและแนวทางที่อธิบายไว้ด้านล่างนี้เก็บไว้เพื่อวัตถุประสงค์ในการเก็บถาวรและสาธิตเท่านั้น\n\nผมค้นพบ Microsoft Rewards เมื่อไม่กี่ปีที่แล้ว ตอนนั้นเป็นช่วงล็อกดาวน์ แต่มันก็ไม่ได้เปลี่ยนความจริงที่ว่าผมจำเป็นต้องใช้ระบบควบคุมโดยผู้ปกครอง Microsoft Family Safety และจึงต้องใช้ Edge นั่นคือตอนที่ผมค้นพบ Rewards\n\nตอนนั้นผมอายุแค่ 14 ปี และไม",
+    "verified": true,
+    "title": "บอทฟาร์ม Microsoft Rewards",
+    "description": "วิธีที่ผมเขียนบอทเพื่อฟาร์มคะแนน Microsoft Rewards แบบขนาดใหญ่ -- และเหตุใด Microsoft จึงเสริมการป้องกันตั้งแต่ตอนนั้น",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "SGDKyUOp/09dFWMDqoVO/fCfykO8Bh5PNF+xC2zNGi0dT7yVTOrVcvdXrS0cnMuv6QkTQGbNjP3umCRrSPs25A=="
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 2,
+    "body": "\n# โปรเจกต์\n\nโปรเจกต์ที่ฉันกำลังทำอยู่ชื่อ LLJT:\n\n![](assets/20260313_092734_image.png)\n\nมันเป็นเว็บไซต์ที่ยังเป็น PWA ด้วย ดังนั้นจึงเป็นแอปมือถือด้วยเหมือนกัน มันใช้ MaterialUI เพื่อให้รู้สึกเหมือนเป็นแอปโทรศัพท์จริง ๆ\nเมื่อเร็ว ๆ นี้ฉันต้องจัดการกับ imports ของ Mui และผมลดจาก 11707 modules เหลือเพียง 595 ในตอนท้าย โดยการ import แต่ละไอคอนด้วยตนเองทีละบรรทัด แทนที่จะใช้ destructured import: ฉันได้เรียนรู้ว่าเมื่อเราใช้ destructured import เรากำลังโหลดทั้งไลบรารีไอคอน ในขณะที่ถ้า import ทีละตัว",
+    "verified": true,
+    "title": "ทำงานในโปรเจกต์ใหม่",
+    "description": "ภาพรวมของกระบวนการเริ่มต้นและพัฒนาเว็บไซต์ใหม่",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "ZtrzGydDyBjlrCps0AyvI/lfHDOVLoo1BNJjVw03eAGDFOstOWjson2X3+RxjYrtkaMIv8VzfYI/4MiNVKe8ng=="
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 1,
+    "body": "\n# โปรไฟล์ GitHub ของฉัน\n\nยินดีต้อนรับสู่โปรไฟล์ GitHub ของฉัน -- จัดระเบียบเหมือนห้องสมุดที่เป็นระเบียบเรียบร้อย\nในส่วนแรกจะมีหัวเรื่องพร้อมลิงก์ ค่อนข้างมาตรฐานก็ว่าได้ :\n![](assets/20260308_123527_image.png)\n\nอย่างที่เห็น ก็มีลิงก์ เท่มากนะฉันว่า ก็ไม่รู้จะพูดอะไรเพิ่มเติม\n\n## เกี่ยวกับฉัน\n\nนอกจากนี้ยังมีส่วน \"เกี่ยวกับฉัน\" ด้วย :\n\n![](assets/20260308_123913_image.png)\n\nในส่วนนี้คุณสามารถดูสิ่งที่ฉันกำลังทำแบบสด ๆ ! ถ้าคุณเห็นฉันกำลังฟังเพลง นั่นแหละคือสิ่งที่ฉันทำ\nฉันจะใส่ indicator ไว้ตรงนี",
+    "verified": true,
+    "title": "เกี่ยวกับโปรไฟล์ GitHub ของฉัน",
+    "description": "การแนะนำโปรไฟล์ GitHub ของฉันโดยสังเขป",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "5e/9NHGgZb9mjSuVHt1d6jjjnLAe/AeRz06llSxvNkUeIEj9dK4C/HuEabkfyibUZoRk7Ko4WaCH24etihPK1g=="
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 2,
+    "body": "\n# ความหลงใหลของฉัน\n\nฉันอยากเขียนบล็อกนี้มานานแล้ว แต่ก็หยุดตัวเองไว้เรื่อยเลย :/\n\nบางทีอาจเป็นเพราะฉันอยากแบ่งปันชีวิตแต่ไม่อยากแชร์ข้อมูลส่วนตัว? ฉันเดาว่านั่นคือสาเหตุ\n\nความหลงใหลของฉันมีหลากหลาย: ฉันชอบเขียนโค้ด อย่างที่คุณคงสังเกตเห็นจากส่วนอื่นของบล็อกนี้ มันมีความรู้สึกพึงพอใจอย่างลึกซึ้มในการสร้างสิ่งต่างๆจากศูนย์ การแก้ปัญหา และการได้เห็นผลงานของตัวเองมีชีวิตขึ้นมา ไม่ว่าจะเป็นเครื่องมือบรรทัดคำสั่งเล็กๆ หรือเว็บแอปพลิเคชันเต็มรูปแบบ กระบวนการนี้ไม่เคยล้าสมัย\n\nฉันมีความรักเป็นพิเศษกับ *",
+    "verified": true,
+    "title": "ความหลงใหลของฉัน",
+    "description": "การเขียนโค้ด การวาดรูป การทำให้เป็นอัตโนมัติ การค้นพบเทคโนโลยีเก่าๆ และอีกมากมาย -- ภาพรวมของสิ่งที่ขับเคลื่อนฉัน",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "personal"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "GSJ1lgSmJEb0CVsnOZt6Q7TdCGgwKaLzbwQKFLRCU7FsvQd/45o5mCKSKonKfEgkt0dGA6h6wnuO6eEXpC4iZw=="
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 2,
+    "body": "\n# สคริปต์เซ็นชื่อ SSH สำหรับคอมมิต -- คำอธิบาย\n\nบทความนี้เจาะลึกสคริปต์ `setup-ssh-signing.sh` ที่ผมเผยแพร่บน [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) เราจะมาดูกันว่าแต่ละส่วนทำอะไร, ทำให้การเซ็นชื่อ SSH เฉพาะพื้นที่ในรีโพสิทอรี่เป็นเรื่องง่ายดาย และ, ใช่แล้ว, ทำไมผมถึงเสียเวลามาเขียนมัน (สปอยเลอร์: ฉันแค่อยากให้คอมมิตของฉันดู **เท่**)\n\nฉันชอบปรับแต่ง Git workflow ของฉันมาตลอด และหลังจากเห็นคนอื่นมีป้าย \"Verified\" เล็ก ๆ ข้างคอมมิตของพวกเขา ฉันก็เลยคิดว่า: ทำ",
+    "verified": true,
+    "title": "อธิบายสคริปต์เซ็นชื่อ SSH",
+    "description": "เจาะลึก helper สำหรับเซ็นชื่อคอมมิต SSH และว่าทำไมฉันถึงอยากได้คอมมิตที่ดูเท่",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "EZEm6n41HDJy27KvEOpZmGvYnMp84ytC+ig4iEUaRMZ4QzmqTqnVLNOqqKcM0Nj9ljJ0q2owvkdrREVkl2rNhg=="
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 5,
+    "body": "\n# บล็อกนี้ทำงานอย่างไร ?\n\nคุณเคยสงสัยไหมว่าบล็อกนี้ทำงานภายใต้ฝาครอบอย่างไร ? ในบทความนี้ ผมจะอธิบายรายละเอียดทั้งหมดเกี่ยวกับสถาปัตยกรรมของแอปพลิเคชัน ตั้งแต่เทคนิคสแตกไปจนถึงกระบวนการเขียนบทความ ใช่แล้ว ผมจะโชว์ให้คุณเห็นด้วยว่าผมเขียนบทความของผมจาก VS Code อย่างไร !\n\nบล็อกนี้สร้างขึ้นด้วยเทคโนโลยีเว็บสมัยใหม่:\n\n- **React 19** -- สำหรับอินเทอร์เฟซผู้ใช้\n- **TypeScript** -- สำหรับโค้ดที่กำหนดชนิดและเชื่อถือได้มากขึ้น\n- **Vite** -- เป็นเครื่องมือ build ที่เร็วเป็นพิเศษ\n- **React Router v7** --",
+    "verified": true,
+    "title": "บล็อกนี้ทำงานอย่างไร ?",
+    "description": "เบื้องหลังของบล็อก: React, Vite, Markdown, CI/CD Pipeline และขั้นตอนการเขียนบทความ",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "TP2Dzf0APrqnXVx29pt8uwWZabFMP3W08KtXwTmN0GMFiqlU5RYZLi7NH64nIzuDIXTn7eZK5inN3pzb2oyVMQ=="
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 2,
+    "body": "\n# สร้าง character-factory : อวาตาร์ที่มีระบบพันธุกรรม\n\nผมต้องการอวาตาร์ที่ดูสมจริงและแตกต่างกันเป็นพัน ๆ ตัวสำหรับ [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- โปรเจกต์เกมการ์ดส่วนตัวที่การ์ดแต่ละใบมี \"DNA\" ของตัวละครที่เอนจินเรนเดอร์เปลี่ยนเป็นภาพพอร์ตเรต การซื้อแพ็คสำเร็จรูปก็ดูออก การสร้างอวาตาร์ DiceBear ด้วย seed ต่อตัวละครก็ให้ผลลัพธ์ที่ไม่แน่นอน : การ์ดแนวญี่ปุ่นอาจได้ตัวละครสาวผมบลอนด์สแกนดิเนเวีย และ \"พี่น้อง\" สองคนกลับดูไม่ใช่คนรู้จักกันเลย\n\nผมเลยเขียน [character-factory](h",
+    "verified": true
+  }
+]

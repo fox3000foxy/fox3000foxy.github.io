@@ -1,0 +1,667 @@
+[
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 25,
+    "body": "\n# Luna Protocol: bộ não dùng chung, phân loại cảm xúc, và định tuyến thú vị/vô ích\n\nTrong [hai](/articles/vi/luna-protocol-discord-bot) [bài viết](/articles/vi/luna-protocol-official-models) trước, tôi đã giới thiệu Luna Protocol như một bot Discord đơn lẻ với hệ thống hành vi phức tạp và một mô hình đã được fine-tune. Nhưng kiến trúc đã tiến hóa rất nhiều kể từ đó. Thứ từng là một khối nguyên khối -- một tiến trình Node.js duy nhất xử lý bot Discord, hành vi, và các lệnh gọi LLM -- giờ đã trở",
+    "verified": true,
+    "title": "Luna Protocol: bộ não dùng chung, phân loại cảm xúc, và định tuyến thú vị/vô ích",
+    "description": "Luna Protocol đã chuyển từ một khối nguyên khối sang kiến trúc bốn lớp: adapter, brain, bộ phân loại cảm xúc, và inference. Trong bài viết: centroid embedding, định tuyến thú vị/vô ích, và tinh chỉnh tham số LLM theo valence và arousal.",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "H56zWztiuCKzmuxKo89R1GuxGfCw+8x/vd4Qp+gsf0pqapGvMNFzMmYVmf54yk+ekjbOQgKd6fNba/aGd01pmQ=="
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 29,
+    "body": "\n# Từ ELIZA đến LLM : 60 năm AI hội thoại, được tái dựng bằng TypeScript\n\nNăm 1966, Joseph Weizenbaum viết 420 dòng MAD-SLIP trên một chiếc IBM 7094 để tạo ra chatbot đầu tiên trong lịch sử. Chương trình có tên **ELIZA**, và nó mô phỏng một nhà trị liệu tâm lý Rogerian với các mẫu cơ bản và hoán vị câu. Sáu thập kỷ sau, AI hội thoại đã trở thành chủ đề chính thống -- ChatGPT, Claude, Gemini có mặt trong mọi cuộc trò chuyện.\n\nNhưng giữa hai thái cực này, có **PARRY** (chatbot hoang tưởng, 1972),",
+    "verified": true,
+    "title": "Từ ELIZA đến LLM : 60 năm AI hội thoại, được tái dựng bằng TypeScript",
+    "description": "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- năm kiến trúc hoàn toàn khác nhau cho cùng một bài toán, được chuyển sang TypeScript với dữ liệu gốc. Từ 1966 đến LLM hiện đại, đây là cách AI hội thoại học nói, và những gì một repo chatbot dạy chúng ta về 60 năm nghiên cứu.",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ai",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "history",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "lang": "vi",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "4qbYv7FnpqYTgE04jwBW9lVf/IsM9dpx9CdDQI/58rasIaLQf1I+47M2yM9qAyseAKUtS8fsjdBqjShxyTPaZA=="
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 17,
+    "body": "\n# Luna Protocol: Tại sao tôi fine-tune mô hình 1.5B trên 50k mẫu Discord và biến few-shot priming thành vũ khí bí mật\n\nTrong [bài viết đầu tiên](/articles/en/luna-protocol-discord-bot), tôi đã xây dựng một bot Discord mô phỏng hành vi con người -- ngủ, gõ sai, ngập ngừng, hay quên, tin nhắn tự phát. Hệ thống hành vi rất vững chắc. LLM đằng sau nó là mô hình Hermes 3B, được lượng tử hóa ở mức Q8_0, ngốn 3GB VRAM.\n\nNó hoạt động. Nhưng nó là quá mức cần thiết.\n\nMột bot Discord không cần mô hình 3B",
+    "verified": true,
+    "title": "Luna Protocol: Tại sao tôi fine-tune mô hình 1.5B trên 50k mẫu Discord và biến few-shot priming thành vũ khí bí mật",
+    "description": "Một mô hình nhỏ hơn được huấn luyện trên ít dữ liệu hơn có thể vượt trội hơn mô hình lớn hơn -- nếu bạn biết cách priming nó. Đây là lý do Luna Protocol chuyển từ Hermes 3B sang fine-tune Qwen 1.5B, và tại sao few-shot priming trở thành yếu tố thay đổi cuộc chơi thực sự.",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "L4hq7zeBc1oOcgwuNjDvlIPL1Yyv/44UQOKduID3CjsBvAQPEyWW5hskT6iK7f1K0+uOccFDL37N8HvpZoQDdw=="
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 21,
+    "body": "# Vấn đề: quá nhiều từ viết tắt, không đủ thứ bậc\n\nTCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; hầu hết các tài liệu nói về chúng đều trình bày như một danh sách phẳng các lựa chọn có thể thay thế, \"tùy trường hợp sử dụng mà chọn\". Thực tế, chúng không cùng một cấp độ: một số là giao thức vận chuyển, số khác là tầng bảo mật bọc quanh vận chuyển, lại có những giao thức ứng dụng dựa trên hai tầng đầu. Hiểu được thứ bậc là hiểu tại sao ta không bao giờ \"chọn\" giữa TCP và TLS: ta chọn TC",
+    "verified": true,
+    "title": "Cách các máy tính nói chuyện với nhau: tổng quan từ TCP đến mTLS",
+    "description": "Tại sao TCP, UDP, TLS, mTLS, HTTP và WebSocket không phải là những lựa chọn thay thế cạnh tranh mà là các tầng xếp chồng; một tổng quan phân cấp về giao tiếp máy tính, từ vận chuyển thô đến xác thực lẫn nhau.",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "mạng",
+      "kiến-trúc-phân-tán",
+      "giao-thức"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "vi",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "6GBd/4VTCSvO2GsTnx5zJO2OI4q2Hd5r0TW6BXcjPgiZYx53NsCwNe7uGjapzOGbdOsWe6TsgxSRKQZwX+QndA=="
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 10,
+    "body": "\n# 5 cách sáng tạo để dùng GitHub Actions\n\nTrên lý thuyết, GitHub Actions dành cho CI/CD cổ điển: bạn push, nó lint, test, deploy. Tôi đã viết về một trường hợp đặc biệt -- dùng git tag làm cơ sở dữ liệu cho bot email (xem bài riêng). Nhưng lục lại các repo của mình, có đủ pattern khác nhau để xứng đáng một bài riêng, ít tập trung vào một dự án, giống catalog kỹ thuật hơn.\n\nNăm thứ, từ cổ điển nhất đến dị nhất.\n\nTóm tắt nhanh, chi tiết đầy đủ trong bài về `email-autoreply`. GitHub Actions được t",
+    "verified": true,
+    "title": "5 cách sáng tạo để dùng GitHub Actions (và những gì chúng dạy về secrets)",
+    "description": "CI runner biến thành VPS miễn phí, bot tự mở pull request cho chính nó, publish npm không cần secret. Một chuyến tham quan các repo để liệt kê các pattern GitHub Actions vượt ra ngoài \"lint + test + deploy\".",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "dnROML8v/N39pvVdbQA6FuN7ai7nL6J3QHNrswu535rMsgrglv2+00nhtlZgDaNh7odc6Mt20hjvq76lbBB4Ng=="
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 10,
+    "body": "\n# valorant-short-maker: pipeline tự sinh short Valorant của tôi\n\nVài tháng nay, một kênh YouTube chạy mà tôi không phải động tay vào: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). Các đặc vụ Valorant cãi nhau giữa các vòng đấu, được lồng tiếng, phụ đề karaoke, đăng dưới dạng Shorts. Mọi thứ đều do [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker) tạo ra, một pipeline TypeScript/Bun chạy cron và tự đăng tải mà không ai phải bấm gì cả.\n\nĐây",
+    "verified": true,
+    "title": "valorant-short-maker: pipeline tự sinh short Valorant của tôi",
+    "description": "Groq/Llama viết kịch bản, Piper lồng tiếng, FFmpeg xử lý phần còn lại. Cách một cron job sản xuất và đăng tải một video mỗi ngày lên @valorant_agents, từ A đến Z.",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "b04bAlab9wUCooPZqLbdH0XHyvQ/CQ4jUbichenlwxk7e1vZYPmxBH81ExwTjOP9ar9A1gu7KUE6jIzUql2B3A=="
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 12,
+    "body": "\n# Cách lấy bất kỳ áo choàng nào trên Minecraft Bedrock\n\nTrên Java, có rất nhiều cách quanh co để sở hữu một áo choàng mà bạn không nên có (xem bài viết `cape-mod`). Trên Bedrock, game thì khác, xác thực thì khác, nhưng vẫn có một cách -- không cần mod, không cần động chạm vào bất kỳ gói mạng nào. Chỉ cần một launcher bên thứ ba và một phiên bản game đủ cũ để không có xác thực như mong đợi.\n\nĐây là cách làm, và sau đó chúng ta sẽ xem điều gì có lẽ đang xảy ra bên trong.\n\n- Một tài khoản Microsof",
+    "verified": true,
+    "title": "Cách lấy bất kỳ áo choàng nào trên Minecraft Bedrock",
+    "description": "Một launcher bên thứ ba, một phiên bản cũ của game, và một bộ chọn áo choàng chưa bao giờ học cách nói không. Hướng dẫn đầy đủ kèm theo giải thích khả năng về lý do tại sao nó hoạt động.",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "jwBd40w2FTMJixc5VNkXraa5XnfDgAsFJKYfLX9avDA+5zHal9hCZeUXhUg3heFvkdQYSUgXCmUOfElw40ohow=="
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 11,
+    "body": "\n\nHuấn luyện một tác nhân DQN cho giao dịch thuật toán bằng gradient descent cổ điển có một vấn đề đơn giản để phát biểu và một vấn đề khó để giải quyết: gradient descent tối ưu hóa _một_ mạng về _một_ cực tiểu địa phương, trên _một_ cửa sổ thị trường. Không gì đảm bảo cực tiểu này tổng quát hóa được sang một chế độ thị trường khác, và không có gì trong vòng lặp huấn luyện thúc đẩy sự đa dạng; hai lần chạy từ các seed khác nhau thường hội tụ về các chiến lược gần như giống hệt nhau, với cùng nhữ",
+    "verified": true,
+    "title": "Tôi đã tiến hóa mạng nơ-ron qua chọn lọc tự nhiên thay vì gradient descent",
+    "description": "Cách tôi thay thế huấn luyện gradient descent cổ điển bằng thuật toán di truyền NSGA-II để tiến hóa các tác nhân giao dịch DQN: bốn phiên bản, từ overfitting đến tiến hóa Lamarckian trọng số.",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "lang": "vi",
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "4Z9alSy9CRoGHM1sMqOPTAuF3XJxXjWjnDnR8EoaXKcLwCcNfK/MTBpWqmllT7rksJ42net9hvkdLtOyYIa6bQ=="
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 36,
+    "body": "\n\n![Bot Soldier TF2 đang ngắm súng rocket](assets/tf2-bot-ai-soldier-aim.png)\n\nMọi người chơi TF2 đều đã từng nói ít nhất một lần: \"con bot này gian lận.\" Hoặc ngược lại: \"sao con bot Dễ này cứ đứng đó hứng rocket vậy.\" Không ai thực sự biết \"Dễ,\" \"Thường,\" \"Khó,\" và \"Chuyên gia\" thực sự có nghĩa là gì bên dưới lớp vỏ -- Valve đưa ra bốn nhãn độ khó và không một tài liệu nào.\n\nVì vậy một nhóm chúng tôi (tôi, awimii, Mush The Possum, với phần lớn nền tảng do sigsegv thực hiện, người đã thực sự đà",
+    "verified": true,
+    "title": "Bot TF2 Không Phải Ngẫu Nhiên: Tôi Đã Dịch Ngược Từng Thiết Lập Độ Khó",
+    "description": "Tầm nhìn, theo dõi mục tiêu, góc đâm sau lưng của Spy, logic headshot của Sniper, mọi lỗi đã biết -- Valve chưa bao giờ ghi chép điều nào. Vì vậy chúng tôi đã lục tung mã nguồn và biến nó thành một bảng thông số đầy đủ.",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "game-ai",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "KiCI5nEr51nWgRnOvy+4pqNIDzlxTjhHVCnWWca+oC0iIrB3wLnNbSzM87xWOs00yzIiiZzdKPNBR3quA87GGg=="
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 11,
+    "body": "\n# Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA\n\n![alt text](assets/xbox-profile.png)\nNếu tôi nói với bạn rằng chỉ cần một chữ ký RSA hợp lệ -- nhưng dành cho **tài khoản sai** -- để khiến bạn bè tin rằng bạn đang đeo cape chính thức của Mojang? Chào mừng đến với `cape-mod`, một exploit Fabric cho thấy cách Minecraft tin tưởng một chữ ký mà không kiểm tra xem hồ sơ sở hữu nó có thực sự là của bạn hay không.\n\nTrong Java Edition, có một câu hỏi hiếm khi được đặt ra: **ai chịu tr",
+    "verified": true,
+    "title": "Cape Mod: cách đánh cắp cape của Jeb_ bằng cách chèn chữ ký RSA",
+    "description": "Một mod Fabric khai thác lỗ hổng logic trong hệ thống tin cậy của Minecraft: chữ ký RSA hợp lệ từ Mojang nhưng được phát lại trên tài khoản sai. Giải thích code, tác động bảo mật và bài học về mật mã.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "yV3y/BAthM28tvOQ9uG3eTuS7OXyy9fsbdvxvzN1w49JvPRK9QiuUab1CxEsZqeXW51rVRJSh4JE92xqP3AWAg=="
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 24,
+    "body": "\n# Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động\n\nLaupok đã tạo ra một trí tuệ nhân tạo tự chơi **Super Mario World** hoàn toàn tự chủ. Không có đầu vào được lập trình sẵn, không có khung hình được ghi lại. AI tự học, thông qua đột biến ngẫu nhiên và chọn lọc tự nhiên, để vượt qua các màn chơi. Dự án chạy trên **BizHawk**, một trình giả lập đa nền tảng, thông qua một script Lua khoảng **4200 dòng**.\n\nĐiều khiến dự án này trở nên hấp dẫn là nó dựa trên các khái niệm sinh học",
+    "verified": true,
+    "title": "Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động",
+    "description": "Phân tích chi tiết dự án của Laupok: một AI dựa trên NEAT học chơi Super Mario World một cách tự chủ. Thuật toán di truyền, mạng nơ-ron, tiến hóa nơ-ron mở rộngtopologies, và 4200 dòng Lua.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "C698uQMJa/RY42k3Pk9YiCY+PBaR6aICYAKZBbOw/ZPSq75UXi942hC9ImYmO9zqFsXxZVKn/h7u5pZYATYnIg=="
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 20,
+    "body": "\n# Luna Protocol: tôi đã tạo một bot Discord tự động mô phỏng con người\n\nSẽ thế nào nếu một bot Discord có thể **ngủ**, **gõ sai chính tả**, **ngập ngừng**, **quên** trả lời, và đôi khi tự ý gửi cho bạn một tin nhắn? Đó chính xác là những gì **Luna Protocol** làm: một bot Discord hoàn toàn tự động chạy LLM cục bộ (llama.cpp) và trò chuyện như một con người không hoàn hảo.\n\nKhông có prompt cứng nhắc, không có câu trả lời robot. Luna có **hệ thống kích hoạt ưu tiên**, **độ trễ thay đổi**, **lịch n",
+    "verified": true,
+    "title": "Luna Protocol: tôi đã tạo một bot Discord tự động mô phỏng con người",
+    "description": "Luna Protocol là một bot Discord hoàn toàn tự động với LLM cục bộ, có khả năng trò chuyện tự nhiên với giấc ngủ, lỗi gõ, ngập ngừng, quên, mệt mỏi chủ đề và tin nhắn tự phát.",
+    "date": "2026-07-11",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "yOEc09ECS2WVrwNYsLtPnSjcVZutFsLVOawTD18GUzW9ExP12AUARFJ0f4Wz68QbrfENfHFtdtWh44BOUCg1Uw=="
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 32,
+    "body": "\n\n![AI Học Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.png)\n\nCó một video có tên [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) bởi Kadambi | AI Engineering, và đây là một trong những bản tường thuật trung thực nhất về việc huấn luyện AI chơi game mà tôi từng thấy.\n\nTiền đề: xây dựng một bot chơi Minecraft PvP (bộ kiếm, giáp kim cương full enchant) bằng cách xem màn hình và xuất lệnh chuột và bàn phím. Không đọc bộ nhớ game",
+    "verified": true,
+    "title": "AI Học Minecraft PvP -- Imitation Learning, Reinforcement Learning và 30 biến quan trọng",
+    "description": "1.000 trận đấu được ghi lại, mạng nơ-ron được huấn luyện trên pixel, độ chính xác gõ phím 90% : và bot chạy thẳng vào tường. Rồi đến RL, curriculum learning và 60 giờ huấn luyện.",
+    "date": "2026-07-09",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "hhjGJvZerqY/wi5+2hOOeIU/+NYy5T9hyZ5Yade3FvcUx3X8/wFcQpHcezQS6Yf6XATOw5KAgTnTg4eSL89GxA=="
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 33,
+    "body": "\n\nSuper Mario Bros., đó là 40 kilobyte ROM. Tám thế giới, 32 level, kẻ thù, nhạc, power-ups, tất cả đều chứa trong đó.\n\nNhưng nếu bạn mở giả lập và thay đổi đúng byte, bạn có thể tải level 36-1. Hoặc 255-1. Hoặc rơi vào một thế giới nơi mọi thứ đều được tạo từ sprite của Bowser và ống nước dẫn đến hư không.\n\nNhững glitch world này tồn tại vì lý do đơn giản: hệ thống lưu trữ level của SMB1 là một kỳ quan tối ưu hóa 8-bit, và khi bạn buộc game đọc ở nơi không nên đọc, kết quả sẽ rất hấp dẫn.\n\nRetr",
+    "verified": true,
+    "title": "Super Mario Bros.: Định dạng level, con trỏ và 256 glitch world",
+    "description": "Cách 128 level × 4 loại khu vực vừa trong 40KB ROM, tại sao Minus World tồn tại, và cách một trận Tennis NES có thể tải glitch world.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "9puGU5PBnYIT/8jgmdrUvhO349GlOlBH3RnSL0/l+KkOSqDaQG5kgTB+tqwU55vNf3Ppu9BiWqF9jWOdFIr7xw=="
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 15,
+    "body": "\n# Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy\n\nTôi duy trì dự án này một thời gian rồi, nhưng đọc lại code của chính mình một cách bình tĩnh luôn mang lại bài học bổ ích. konosuba-rpg là một RPG theo lượt trên Discord nơi mỗi hành động tạo ra một hình ảnh WebP ngay lập tức. Không phải embed văn bản. Một hình ảnh thực sự được ghép, với sprite, thanh máu, tin nhắn chiến đấu -- tất cả.\n\nStack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Hostin",
+    "verified": true,
+    "title": "Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy",
+    "description": "Một RPG theo lượt trên Discord nơi mỗi hành động tạo ra một hình ảnh WebP ngay lập tức: URL như trạng thái trò chơi, RNG xác định, pipeline WASM, bộ nhớ đệm 5 tầng, bot serverless.",
+    "date": "2026-06-10",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "yNdAlkgdCRCTXNo7LWy4185kHTjwU5pnR5/4eYk6U5i6Qdw5bjh6B6gTMJ9cuGmmvwMJ+vyEaBkaaDzwg1yplg=="
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 4,
+    "body": "\n\nBot và các trình quét tự động liên tục quét các ứng dụng web để tìm lỗ hổng. Chúng tìm kiếm các tệp `.env`, bảng quản trị, bản sao lưu cơ sở dữ liệu, thông tin đăng nhập SSH -- bất cứ thứ gì có thể bị khai thác.\n\nThay vì chỉ trả về 404, tôi muốn tạo ra thứ gì đó thú vị hơn: một **honeypot Express** phản hồi bằng nội dung đáng tin cậy, khiến những kẻ tấn công tin rằng chúng đã tìm thấy một mục tiêu dễ bị tổn thương.\n\n## Tính năng\n\nMiddleware này phơi bày **328 điểm cuối** được chia thành hai bi",
+    "verified": true,
+    "title": "Tôi đã xây dựng một honeypot Express siêu thực",
+    "description": "328 điểm cuối giả với phản hồi được tạo ngay lập tức, giả mạo tiêu đề, ghi lại lưu lượng bot -- đi sâu vào mã của một middleware honeypot Express được thiết kế để đánh lừa các trình quét.",
+    "date": "2026-06-10",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "KVyk10fa41EGXCWPGCNa8CZWWplISTunII2ZbwA8bicV3mdkhzg2obaiUm+dI0yuklaUWwXQBvO8iaDYvAMXWQ=="
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 24,
+    "body": "\n\nBạn đã bao giờ tự hỏi liệu có thể chạy một máy chủ Minecraft trên một vi điều khiển giá 1$ không?\n\nTôi đã từng. Và câu trả lời là có. Theo nghĩa đen.\n\nCó một dự án tên là [Bareiron](https://github.com/p2r3/bareiron/), của p2r3, và đó có lẽ là một trong những dự án hấp dẫn nhất tôi từng thấy trong thế giới Minecraft những năm gần đây. Chúng ta đang nói về một binary chỉ nặng **300 kilobyte**, **6800 dòng C**, không phụ thuộc bên ngoài, không malloc, không threading, và chạy trên một **ESP32 giá",
+    "verified": true,
+    "title": "Bareiron -- máy chủ Minecraft chạy trên vi điều khiển giá 1$",
+    "description": "6800 dòng C, zero malloc, Perlin noise được thay thế bằng bilinear interpolation, biome dạng tile map, và tất cả trên một con chip 1$.",
+    "date": "2026-05-30",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "KZ1L3FQCHZW+dLPbwUV5v+t6rnh3QWPthUJjK9h3YLtFsjsQelftHgzf0l66GZjzfRceUElE0htXjTUseAiEWg=="
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 14,
+    "body": "\n\nTôi đã dành vài tháng để duy trì các bot Discord truyền thống trên máy cá nhân.\n\nKết nối WebSocket luôn mở. Bot tự kết nối lại lúc 3 giờ sáng. Bot crash vì tôi nhìn cừu không đúng cách. Hóa đơn tăng dần.\n\nMột ngày tôi phát hiện: **tại sao phải duy trì một kết nối**? Discord có thể POST chỉ những thứ bạn quan tâm. Bạn trả lời, xong.\n\nTừ 2021, Discord đã cung cấp **interaction endpoints**.\n\nChỉ là HTTP. Không WebSocket. Không trạng thái liên tục. Bạn nhận một request, bạn gửi JSON, xong. Request",
+    "verified": true,
+    "title": "Discord bot 100% serverless : Hono + Cloudflare Workers",
+    "description": "Cách tôi thay thế một bot Discord tốn 50€/tháng bằng zero euro -- interaction endpoints, Hono, Workers, render ảnh thời gian thực, và một game hoàn chỉnh không cần WebSocket.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "t0fsPD4KnRA0blrWforBCf20qSBdA/G77sYh8BkoTB+sB+BiW1M9upeaTSs7UxDJLKleBpZtyejPfDM7x18HZA=="
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 8,
+    "body": "\n\nCó những dự án bắt đầu bằng \"ơ hay mình làm game cờ với thần thoại nhỉ?\" và kết thúc bằng một thứ có AI tự quyết định siêu tham số của chính nó mỗi 5 lượt.\n\nNausicaa là thế đấy. Một game chiến thuật theo lượt nơi bạn xây dựng bộ bài sinh vật thần thoại, quản lý mana, triển khai quân lên bàn cờ 10x8. Và có một AI bị rối loạn đa nhân cách.\n\nTôi đã dành kha khá thời gian cho cái AI này, và kết quả thì khá là mất kiểm soát xD\n\n## Game thực sự ra sao\n\nTrước khi nói về bộ não, cần hiểu cơ thể đã:\n\n-",
+    "verified": true,
+    "title": "AI Nhảm Nhí Của Tôi Cho Nausicaa",
+    "description": "Một AI với hệ số heuristic, các siêu tham số thay đổi mỗi 5 lượt, và một Oracle chạy trốn -- đào sâu vào bộ não của một game chiến thuật bàn cờ.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "IlN6IN7R/NrAKhbN3B2IF4MDWTpDf/k4USInTCLKJQ8D3JVVJgkpdipVkOEvDy37W4+6NRIhakoiCoJE9bpbVQ=="
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 16,
+    "body": "\n\nTôi đã dành hàng giờ để nhìn mấy con cừu đâm đầu vào tường.\n\nThành thật mà nói? Đầu tư xứng đáng nhất đời tôi xD\n\nBởi vì càng nhìn mấy con mob này, bạn càng nhận ra chúng chẳng có gì ngẫu nhiên. Mọi chuyển động đều được mã hóa, có thể dự đoán, và quan trọng nhất -- hoàn toàn có thể phá vỡ. Cuối cùng tôi đã đào sâu vào mã nguồn Minecraft để hiểu chính xác pathfinding hoạt động thế nào, và thứ tôi khám phá ra là bạn có thể điều khiển tâm trí mob theo đúng nghĩa đen. Kiểu, ép chúng đi chỗ BẠN muố",
+    "verified": true,
+    "title": "Logic pathfinding Minecraft và các ứng dụng",
+    "description": "Cách thuật toán A*, điểm phạt khối và POI cho phép điều khiển, dự đoán và khai thác di chuyển của mob -- từ redstone không dây đến các trang trại tối ưu.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "UrWBLEtFQ2GaFA4B/myEywx877FUNqxgwdFOIYphEsDjFFz0IltN/j1307+VvR5r27o+63CAaREBfcxpvm5tIg=="
+  },
+  {
+    "slug": "utau",
+    "readingTime": 13,
+    "body": "\n\nTôi đã đề cập trên trang chính của mình : tôi yêu UTAU. Đây là lý do.\n\nNăm 2008, nếu bạn muốn tạo giọng hát tổng hợp, bạn chỉ có một lựa chọn : VOCALOID. Phần mềm của Yamaha. Đắt tiền, độc quyền, với những giọng hát chính thức mà bạn không thể tự tạo.\n\nRồi một người Nhật tên Ameya/Ayame đã phát hành một thứ gì đó tự làm. Một phần mềm được viết bằng **Visual Basic 6**. Miễn phí. Cho phép bạn tạo giọng hát của riêng mình với... những file WAV bạn tự thu âm.\n\nThứ đó có tên **UTAU** (歌う, \"hát\" tro",
+    "verified": true,
+    "title": "UTAU : cách một phần mềm Visual Basic 6 đã dân chủ hóa giọng hát tổng hợp",
+    "description": "UTAU, một phần mềm miễn phí viết bằng VB6 ra mắt năm 2008, đã cho phép bất kỳ ai tạo giọng hát bằng tổng hợp ngưng kết -- và tại sao điều đó vẫn còn quan trọng đến ngày nay.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "CBhgItVJwUkDao1r9j6fuUe2sl5cmXaXWedtukZktVgZkkQVT5e3gj+84mRHHZOVnq8/W2+rkgCQlzeVyCeecg=="
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 14,
+    "body": "\n# Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container\n\nGần đây tôi đã dành kha khá thời gian để nghiền ngẫm mã nguồn của [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), dự án của [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Và phần khiến tôi bất ngờ nhất không phải VFS, không phải mạng ảo, không phải 170 lệnh Unix được tái hiện bằng TypeScript. Mà là thư mục `polyfills/`.\n\nBởi vì modu",
+    "verified": true,
+    "title": "Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container",
+    "description": "Cách Fortune tự tay tái hiện node:fs, node:crypto và hàng tá module Node trong 640 dòng JavaScript để container chạy trong trình duyệt không cần Wasm.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "d7RET5DiH+dVps3BE382Iy7bxZjJtSlUMWFqprkIrEjOi3RstxoXJlcjV0x00KqZomNbbwaboQNbtuuq8Gqupw=="
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 9,
+    "body": "\n# Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions\n\nTôi có một trình trả lời email tự động chạy 24/7.\n\nNó đọc email của tôi, hiểu nội dung, và tự động trả lời bằng AI. Nó ghi nhớ các cuộc hội thoại trước đó. Nó bỏ qua newsletter và `noreply@`. Nó chuyển tiếp cho người thật khi vấn đề quá nóng.\n\nChi phí hàng tháng: **0€**.\n\nKhông server. Không VPS. Không cơ sở dữ liệu. Chỉ GitHub Actions và một hack điên rồ: **dùng git làm cơ sở dữ liệu**.\n\nBạn thấy ý tưởng chưa? Chưa?",
+    "verified": true,
+    "title": "Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions",
+    "description": "Cách tôi code một auto-répondeur email AI chạy trên GitHub Actions với giá 0€/tháng -- dùng git tags làm cơ sở dữ liệu và pre-compile trong tag runtime.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "NeiEQ4D9AE3pVEwgktaBr1QjWXVkYB1oGTh8mdj5wtxnJYwm6uXj0WrTsI825IYKT69+EDz1mF6GJft6zf5jWw=="
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 20,
+    "body": "\n\nGitHub Actions cho bạn máy Linux miễn phí.\n\nĐại loại, máy chủ Ubuntu thật sự. 2 nhân, 7 GB RAM, 14 GB ổ cứng. Miễn phí. Trong 6h mỗi lần chạy.\n\n\"Vấn đề\" duy nhất: khi kết thúc lượt chạy, mọi thứ đều bị xóa. Máy ảo dùng một lần. Bạn cài đặt, code, cấu hình... và rồi vèo, cuối cùng mọi thứ biến mất. Như chưa từng làm gì.\n\nTrừ khi.\n\nTrừ khi bạn dùng **git làm ổ cứng**.\n\nVà thế là, bỗng nhiên bạn có một VPS miễn phí với ổ cứng bền vững sống sót qua các lượt chạy. Bạn kết nối lại, mọi thứ vẫn còn n",
+    "verified": true,
+    "title": "Repo to VPS: biến GitHub Actions thành VPS miễn phí với bộ nhớ liên tục",
+    "description": "Cách biến một runner GitHub Actions thành VPS vĩnh viễn với git làm bộ nhớ liên tục -- tmate, inotify và commit --amend.",
+    "date": "2026-05-29",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "nffmwUAL81lodsw1kJT/Q291G/ZJpAo8bHkVyKeBqWXrA+67MZ/zHyrA//B6ZnhiHobUtCmP0c+tuGEo8QZbSQ=="
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 52,
+    "body": "\n# Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh\n\nĐược rồi, tôi đã đi quá sâu vào cái hố thỏ này từ lâu rồi lol. Mọi chuyện bắt đầu vì tôi đang giúp trên [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- một dự án của Fortune (tôi sẽ nói về nó ngay) -- và mọi người cứ hỏi tôi \"khoan đã, nó khác gì với `v86`?\" hay \"sao không dùng `vm2`?\" -- và tôi nhận ra mình không thể trả lời rõ ràng nếu chưa lập bản đồ to",
+    "verified": true,
+    "title": "So sánh các giải pháp JavaScript cho mô phỏng nhân Linux",
+    "description": "Một phân tích chuyên sâu về các bản tái hiện môi trường Linux bằng JavaScript/TypeScript.",
+    "date": "2026-05-28",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "QzIfvc4VseO2QBN4ylNnAA3FlHlKQ3oJTjVXWH1Fb1XfTcd9F82lVn1Mm0ILdwsAXf0y6SxXJTJ96HPpGCcnuA=="
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 7,
+    "body": "\n# Xây dựng character-factory: avatar với hệ thống di truyền\n\nTôi cần hàng ngàn avatar đáng tin và riêng biệt cho [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- một dự án game bài cá nhân nơi mỗi lá bài chứa một \"ADN\" nhân vật mà engine render biến thành chân dung. Mua một gói có sẵn thì sẽ bị phát hiện ngay. Tạo avatar DiceBear theo seed từng nhân vật thì ra toàn thứ vớ vẩn: một lá bài theo chủ đề Nhật Bản có thể ra một cô gái tóc vàng Bắc Âu, và hai \"anh chị em\" trông chẳng giống nhau",
+    "verified": true,
+    "title": "Xây dựng character-factory: avatar với hệ thống di truyền",
+    "description": "Một module TypeScript xây trên DiceBear: tạo nhất quán theo quốc gia/sắc tộc, một engine di truyền nhỏ để mô phỏng con cái, và các chi tiết kỹ thuật giúp nó dùng được trong một game bài.",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "689+ywoqzhGsfcAuikFlPvblosOY5PObA9R6mhQpfjJTkNLsdii5VoDQPI/PjdHQ3UXgVJ9Pa0vGxuqHLKfcbQ=="
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 8,
+    "body": "\n> **Ghi chú (2026):** Dự án này không còn được bảo trì nữa. Microsoft đã tăng cường đáng kể khả năng phát hiện chống bot -- những gì từng hoạt động trước đây giờ không còn hiệu quả. Mã và cách tiếp cận được mô tả dưới đây được giữ lại chỉ với mục đích lưu trữ và minh họa.\n\nTôi phát hiện ra Microsoft Rewards vài năm trước. Đó là trong thời gian phong tỏa, nhưng điều đó không thay đổi sự thật là tôi bị buộc phải sử dụng tính năng kiểm soát của phụ huynh Microsoft Family Safety và do đó phải dùng",
+    "verified": true,
+    "title": "Bot một trang trại Microsoft Rewards",
+    "description": "Cách tôi đã viết bot để farm điểm Microsoft Rewards trên quy mô lớn -- và tại sao Microsoft từ đó đã tăng cường phòng thủ.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "PEqDyQrewe2yGgDmF7e/xm+ITOSUHHUxAYeHnXvB6z+rC3r26UrII82nK4Zz6hGJ/1v0HY0REyPbhRO7vW0geg=="
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 5,
+    "body": "\n# Dự án\n\nDự án tôi đang làm tên là LLJT:\n\n![](assets/20260313_092734_image.png)\n\nĐây là một trang web đồng thời cũng là một PWA, tức cũng là một ứng dụng di động. Nó sử dụng MaterialUI để tạo cảm giác như một ứng dụng điện thoại thực thụ.\nGần đây tôi đã phải xử lý vấn đề import Mui, và tôi đã giảm từ 11707 modules xuống chỉ còn 595, bằng cách import từng icon thủ công từng dòng một, thay vì dùng import destructured: tôi đã học được rằng khi bạn dùng import destructured, bạn thực ra đang tải toà",
+    "verified": true,
+    "title": "Làm việc trên một Dự án Mới",
+    "description": "Tổng quan về quy trình khởi động và phát triển một trang web mới.",
+    "date": "2026-03-13",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "zFqSKgH+zusv9igBwVNoZIsctf2KeucJect3pxcFte8yDi4jbqVEaFGgBN7Xv/vJu7C7vQQzUOoUAd/5A7PdJQ=="
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 3,
+    "body": "\n# Hồ Sơ GitHub Của Tôi\n\nChào mừng đến với hồ sơ GitHub của tôi -- được sắp xếp như một thư viện gọn gàng.\nTrong phần đầu tiên có một tiêu đề với các liên kết, khá là tiêu chuẩn tôi nghĩ vậy:\n![](assets/20260308_123527_image.png)\n\nNhư bạn có thể thấy, có các liên kết, tôi cho là cũng ổn, không biết nói gì thêm.\n\n## Về Tôi\n\nCũng có một phần \"Về tôi\":\n\n![](assets/20260308_123913_image.png)\n\nTrong phần này bạn có thể thấy những gì tôi đang làm trực tiếp! Nếu bạn thấy tôi đang nghe nhạc, thì đó là n",
+    "verified": true,
+    "title": "Về Hồ Sơ GitHub Của Tôi",
+    "description": "Một bài giới thiệu ngắn về hồ sơ GitHub của tôi.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "7A7nILMkWc4GkM97GODGt/JGH0XeueXabLJfWpnz6IeNCDeGNUkXGI1AdST1Uok5pb+HSD7CgML33wviq+4N8A=="
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 5,
+    "body": "\n# Đam Mê Của Tôi\n\nTôi đã muốn viết blog này từ lâu nhưng cứ ngần ngại mãi :/\n\nCó lẽ vì tôi muốn chia sẻ cuộc sống của mình nhưng không muốn chia sẻ thông tin cá nhân? Tôi đoán là vậy.\n\nNiềm đam mê của tôi rất đa dạng: tôi thích lập trình, như bạn có thể đã thấy trên phần còn lại của blog này. Có điều gì đó thật sự thỏa mãn khi xây dựng mọi thứ từ con số không, giải quyết vấn đề, và thấy sáng tạo của mình trở nên sống động. Dù là một công cụ dòng lệnh nhỏ hay một ứng dụng web hoàn chỉnh, quá trì",
+    "verified": true,
+    "title": "Đam Mê Của Tôi",
+    "description": "Lập trình, vẽ vời, tự động hóa, khám phá công nghệ cũ, và hơn thế nữa -- một cái nhìn về những điều thúc đẩy tôi.",
+    "date": "2026-03-08",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "personal"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "ncmCbKUEuKm6pnxiQedHo+OZOeMDSm6S/QtlvSS7gh4WON2tEwX2km9yBJbspHyd7S9r4Ku9X9NsGVywe4oGJQ=="
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 6,
+    "body": "\n# Script ký commit SSH -- giải thích chi tiết\n\nBài viết này phân tích script `setup-ssh-signing.sh` mà tôi đã đăng trên [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). Chúng ta sẽ xem từng phần làm gì, cách nó giúp việc ký SSH trong một kho lưu trữ cục bộ trở nên hoàn toàn dễ dàng, và, đúng vậy, tại sao tôi lại mất công viết nó (spoiler: tôi chỉ muốn commit của mình trông **ngầu** thôi).\n\nTôi luôn thích mày mò workflow Git của mình, và sau khi thấy người khác có hu",
+    "verified": true,
+    "title": "Script ký commit SSH được giải thích",
+    "description": "Phân tích helper ký commit SSH và tại sao tôi muốn commit có phong cách.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "/HF+1HzbMuzuhHm5et2UQG9SY9lMLHXQ2rSzfuyluW8uMSa3q/+fqhfGX1YWiDu5hvC7R/werKysdEdV0hhR8w=="
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 11,
+    "body": "\n# Blog Này Hoạt Động Như Thế Nào ?\n\nBạn đã bao giờ tự hỏi blog này hoạt động ra sao dưới mui xe chưa ? Trong bài viết này, tôi sẽ trình bày chi tiết toàn bộ kiến trúc của ứng dụng, từ stack kỹ thuật cho đến quy trình viết một bài. Và vâng, tôi thậm chí sẽ chỉ cho bạn cách tôi viết bài ngay từ VS Code !\n\nBlog này được xây dựng với các công nghệ web hiện đại :\n\n- **React 19** -- cho giao diện người dùng\n- **TypeScript** -- cho mã nguồn có kiểu và đáng tin cậy hơn\n- **Vite** -- công cụ build siêu",
+    "verified": true,
+    "title": "Blog này hoạt động như thế nào ?",
+    "description": "Hậu trường của blog: React, Vite, Markdown, pipeline CI/CD và quy trình viết bài.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q==",
+    "author_sig": "SAdL3cxLIJOUivX0xFHs6hLZpU/kwVPBy+hH9IwEOmDKJI9nJgBJItVeZ7/l8zIjgGOsebzo8hjkp3GG54WqNg=="
+  }
+]
