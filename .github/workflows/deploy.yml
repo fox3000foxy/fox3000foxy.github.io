@@ -45,8 +45,8 @@ jobs:
           VITE_BUILD_ID: ${{ github.sha }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Copy honeypot www to dist
-        run: cp -r www/* dist/
+      - name: Unzip honeypot www to dist
+        run: unzip www.zip -d dist/
 
       - name: Create CNAME
         run: bun run create-cname

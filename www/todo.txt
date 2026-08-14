@@ -1,8 +1,0 @@
-- fix the ssl cert again (letsencrypt keeps breaking)
-- move the sql dump out of public_html (or just delete it lol)
-- figure out why wp-cron keeps failing
-- maybe switch to nginx? apache is slow
-- the backups script is broken, idk how to fix it
-- update php to 8.x eventually
-- remove phpinfo.php before someone sees it
-- the .env files should NOT be in the webroot but i cant figure out the paths
