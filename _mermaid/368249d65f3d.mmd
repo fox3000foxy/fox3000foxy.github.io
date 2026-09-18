@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>normaliza la puntuación"]
+    B --> C["splitUserInput()<br>divide en palabras"]
+    C --> D["Build keyword stack<br>ordenado por prioridad"]
+    D --> E{"¿Pila no vacía?"}
+    E -->|"Sí"| F["Pop keyword de mayor prioridad"]
+    E -->|"No"| G{"¿Memory recall?"}
+    G -->|"Sí"| H["Recall declaración anterior del usuario"]
+    G -->|"No"| I["Fallback: regla zNONE"]
+    I --> J["Devolver respuesta"]
+    H --> J
+    F --> K["Match patrones de descomposición"]
+    K --> L{"¿Match encontrado?"}
+    L -->|"No"| M{"¿Keyword enlazado?"}
+    M -->|"Sí"| N["Push keyword enlazado a la pila"]
+    N --> E
+    M -->|"No"| O["Devolver NOMATCH"]
+    O --> J
+    L -->|"Sí"| P["Seleccionar siguiente reensamblaje (round-robin)"]
+    P --> Q{"¿Tipo de reensamblaje?"}
+    Q -->|"PRE"| R["Transformar palabras (I→YOU)<br>push link keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Saltar al siguiente keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expandir (1), (2), (0)<br>en respuesta final"]
+    T --> J

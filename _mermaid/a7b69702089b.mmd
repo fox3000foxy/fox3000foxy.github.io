@@ -1,0 +1,10 @@
+flowchart TD
+    A["User input"] --> B["Similarity scan<br>compare against EVERY<br>past human line"]
+    B --> C["Score = 0.65 × relevance<br>+ 0.25 × context fit<br>+ 0.10 × recency"]
+    C --> D["Keep top K candidates"]
+    D --> E["Weighted random pick<br>(higher score = more likely)"]
+    E --> F{"Candidate found?"}
+    F -->|"Yes"| G["Reply with whatever was<br>said next in that<br>historical conversation"]
+    F -->|"No"| H["Fallback: generic response"]
+    G --> I["Append to transcript<br>save to JSON"]
+    H --> I

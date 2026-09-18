@@ -1,0 +1,11 @@
+flowchart LR
+    A[Nó inicial] --> B{Vizinhos a\navaliar?}
+    B -->|Sim| C[Calcular f = g + 1.5×h\npara cada vizinho]
+    C --> D[Selecionar o vizinho\ncom o menor f]
+    D --> E{Destino\nalcançado?}
+    E -->|Não| B
+    E -->|Sim| F[Caminho encontrado!]
+    B -->|Não| G[Nenhum caminho\npossível]
+    
+    style F color:#4caf50
+    style G color:#f44336

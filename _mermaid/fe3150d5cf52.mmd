@@ -1,0 +1,14 @@
+flowchart TD
+    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332行种子 + 历史"]
+    B --> C["withReplies()<br>提取配对<br>(行 → 回复)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>该行之前的上下文)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["前K个候选已排序"]
+    I --> J{"pickReply()<br>轮盘选择"}
+    J -->|"选中"| K["Reply = reply.text<br>来自赢家配对"]
+    J -->|"无"| L["Fallback: 'I have no idea<br>what to say to that yet.'"]
+    K --> M["追加到转录<br>save() → JSON"]
+    L --> M

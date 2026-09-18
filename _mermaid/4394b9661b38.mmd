@@ -1,0 +1,5 @@
+flowchart TD
+    A["Partitur<br/>(not + lirik)"] --> B[Phonemizer]
+    B -->|"memotong menjadi unit<br/>untuk dikonkatenasi"| C[Resampler]
+    C -->|"memuat WAV,<br/>mengubah durasi + pitch,<br/>menerapkan flag"| D[Wavtool]
+    D -->|"menempel kembali potongan"| E["Audio akhir"]

@@ -1,0 +1,14 @@
+flowchart TD
+    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332 líneas seed + historial"]
+    B --> C["withReplies()<br>extrae pares<br>(línea → reply)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>contexto antes de esta línea)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["Top K candidatos ordenados"]
+    I --> J{"pickReply()<br>roulette-wheel<br>selection"}
+    J -->|"Elegido"| K["Reply = reply.text<br>del par ganador"]
+    J -->|"Ninguno"| L["Fallback: 'I have no idea<br>what to say to that yet.'"]
+    K --> M["Append al transcript<br>save() → JSON"]
+    L --> M

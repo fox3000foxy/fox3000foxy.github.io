@@ -1,0 +1,65 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fox3000foxy Internal API",
+    "description": "Internal administration API. Accessible only from trusted networks. Authentication is enforced via API key in the X-API-Key header.",
+    "version": "2.4.1"
+  },
+  "servers": [
+    { "url": "https://fox3000foxy.com/api", "description": "Production" },
+    { "url": "http://10.0.0.7:8080/api", "description": "Internal" }
+  ],
+  "security": [
+    { "apiKey": [] }
+  ],
+  "paths": {
+    "/admin/config": {
+      "get": {
+        "summary": "Get full runtime config",
+        "security": [{ "apiKey": [] }, {}],
+        "responses": {
+          "200": { "description": "Config dump" },
+          "401": { "description": "Missing or invalid key" }
+        }
+      }
+    },
+    "/debug/dump": {
+      "get": {
+        "summary": "Debug: dump env & stacktrace",
+        "security": [{}],
+        "responses": { "200": { "description": "Debug dump" } }
+      }
+    },
+    "/users/reset-password": {
+      "post": {
+        "summary": "Reset a user's password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "new_password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/healthz": {
+      "get": { "responses": { "200": { "description": "ok" } } }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

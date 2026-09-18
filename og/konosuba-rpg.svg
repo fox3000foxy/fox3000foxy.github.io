@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d1117"/>
+  <rect x="0" y="0" width="1200" height="4" fill="#64b5f6"/>
+  <text x="600" y="180" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" font-weight="600" fill="#64b5f6" letter-spacing="4">FOX3000FOXY.COM</text>
+  <rect x="540" y="195" width="120" height="1" fill="#30363d"/>
+<text x="600" y="270" text-anchor="middle" font-family="system-ui,sans-serif" font-size="38" font-weight="700" fill="#ffffff">I spent a weekend reading</text>
+<text x="600" y="325" text-anchor="middle" font-family="system-ui,sans-serif" font-size="38" font-weight="700" fill="#ffffff">konosuba-rpg&apos;s code and here&apos;s what</text>
+<text x="600" y="380" text-anchor="middle" font-family="system-ui,sans-serif" font-size="38" font-weight="700" fill="#ffffff">I found</text>
+<text x="600" y="460" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" fill="#8b949e">A turn-based Discord RPG where every action generates a WebP image on the fly:</text>
+<text x="600" y="488" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" fill="#8b949e">...</text>
+<rect x="332" y="532" width="96" height="28" rx="14" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="380" y="551" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64b5f6">discord</text>
+<rect x="442" y="532" width="96" height="28" rx="14" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="490" y="551" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64b5f6">rpg</text>
+<rect x="552" y="532" width="96" height="28" rx="14" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="600" y="551" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64b5f6">typescript</text>
+<rect x="662" y="532" width="96" height="28" rx="14" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="710" y="551" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64b5f6">hono</text>
+<rect x="772" y="532" width="96" height="28" rx="14" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="820" y="551" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64b5f6">cloudflare</text>
+  <text x="600" y="600" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#8b949e">fox3000foxy · Blog</text>
+</svg>

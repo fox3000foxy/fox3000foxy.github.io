@@ -1,0 +1,11 @@
+flowchart LR
+    A[Nodo inicio] --> B{¿Vecinos a\nevaluar?}
+    B -->|Sí| C[Calcular f = g + 1.5×h\npara cada vecino]
+    C --> D[Seleccionar el vecino\ncon el menor f]
+    D --> E{¿Destino\nalcanzado?}
+    E -->|No| B
+    E -->|Sí| F[¡Camino encontrado!]
+    B -->|No| G[Ningún camino\nposible]
+    
+    style F color:#4caf50
+    style G color:#f44336
