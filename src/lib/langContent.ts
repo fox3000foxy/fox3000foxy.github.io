@@ -85,7 +85,15 @@ export function readAllArticleData(slug: string) {
 	const verified = verifiedByLang.en ?? false;
 	const firstImage = enEntry?.image || extractFirstImage(content.en || "");
 
-	return { raw, content, allIndexes, verified, verifiedByLang, firstImage, hasTranslation };
+	return {
+		raw,
+		content,
+		allIndexes,
+		verified,
+		verifiedByLang,
+		firstImage,
+		hasTranslation,
+	};
 }
 
 function extractFirstImage(markdown: string): string {
