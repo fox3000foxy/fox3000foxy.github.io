@@ -175,7 +175,7 @@ const suggested = allArticles
                         <div class="author-info-top">
                           <span class="author-name-top">
                             {author.name}
-                            {data.verified && <span class="verified-badge">Verified</span>}
+                            {((data as unknown as { verifiedByLang?: Record<string, boolean> }).verifiedByLang?.[l] ?? data.verified) && <span class="verified-badge">Verified</span>}
                           </span>
                           <span class="author-link-top">@{author.id}</span>
                         </div>

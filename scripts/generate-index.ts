@@ -75,13 +75,15 @@ function parseFrontMatter(text: string): {
 	content: string;
 } {
 	const meta: Partial<ArticleMeta> = {};
-	let content = text;
+	// Normalize CRLF to LF so signatures are stable regardless of checkout EOL
+	const normalized = text.replace(/\r\n/g, "\n");
+	let content = normalized;
 
-	if (text.startsWith("---\n")) {
-		const end = text.indexOf("\n---\n", 4);
+	if (normalized.startsWith("---\n")) {
+		const end = normalized.indexOf("\n---\n", 4);
 		if (end !== -1) {
-			const raw = text.slice(4, end);
-			content = text.slice(end + 5);
+			const raw = normalized.slice(4, end);
+			content = normalized.slice(end + 5);
 			try {
 				const parsed = parse(raw);
 				if (parsed && typeof parsed === "object") {
@@ -160,10 +162,20 @@ function main() {
 			const { meta, content } = parseFrontMatter(text);
 			const readingTime = estimateReadingTime(content);
 			const existingMeta = existingBySlug.get(slug) || {};
-			const enMeta = enBySlug.get(slug);
-			const verified = enMeta?.verified ?? false;
+			// Verify this language's own content, not English's — LF-normalized via parseFrontMatter
+			const verified =
+				meta.author_sig && meta.author_pubkey
+					? verifyArticle(
+							slug,
+							(meta.authors?.[0] || ""),
+							(meta.date || ""),
+							content,
+							meta.author_sig,
+							meta.author_pubkey
+						)
+					: false;
 			const body = content.replace(/^## .+/m, "").replace(/\n{3,}/g, "\n\n").substring(0, 500).trimEnd();
-			articles.push({ slug, readingTime, body, verified, ...existingMeta, ...meta });
+			articles.push({ slug, readingTime, body, ...existingMeta, ...meta, verified });
 		}
 
 		// Fall back to English articles for any slugs missing in this language

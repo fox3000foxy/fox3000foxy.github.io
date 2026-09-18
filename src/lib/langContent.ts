@@ -28,13 +28,14 @@ export function readAllHomeContent(): Record<Lang, string> {
 }
 
 function stripFrontmatter(text: string): string {
-	if (text.startsWith("---\n")) {
-		const end = text.indexOf("\n---\n", 4);
+	const normalized = text.replace(/\r\n/g, "\n");
+	if (normalized.startsWith("---\n")) {
+		const end = normalized.indexOf("\n---\n", 4);
 		if (end !== -1) {
-			return text.slice(end + 5);
+			return normalized.slice(end + 5);
 		}
 	}
-	return text;
+	return normalized;
 }
 
 export function readAllArticleData(slug: string) {
@@ -65,16 +66,26 @@ export function readAllArticleData(slug: string) {
 
 	const allIndexes = readAllArticleIndexes();
 
+	const verifiedByLang: Record<Lang, boolean> = {} as Record<Lang, boolean>;
+	for (const lang of ALL_LANGS) {
+		const entry = (allIndexes[lang] ?? []).find(
+			(e: unknown) =>
+				typeof e === "object" &&
+				e !== null &&
+				(e as { slug?: string }).slug === slug
+		) as { verified?: boolean } | undefined;
+		verifiedByLang[lang] = entry?.verified ?? false;
+	}
 	const enEntry = (allIndexes.en ?? []).find(
 		(e: unknown) =>
 			typeof e === "object" &&
 			e !== null &&
 			(e as { slug?: string }).slug === slug
 	) as { verified?: boolean; image?: string } | undefined;
-	const verified = enEntry?.verified ?? false;
+	const verified = verifiedByLang.en ?? false;
 	const firstImage = enEntry?.image || extractFirstImage(content.en || "");
 
-	return { raw, content, allIndexes, verified, firstImage, hasTranslation };
+	return { raw, content, allIndexes, verified, verifiedByLang, firstImage, hasTranslation };
 }
 
 function extractFirstImage(markdown: string): string {

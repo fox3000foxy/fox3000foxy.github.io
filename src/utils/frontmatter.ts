@@ -5,13 +5,14 @@ export function parseFrontMatter(text: string): {
 	content: string;
 } {
 	const meta: Partial<ArticleMeta> = {};
-	let content = text;
+	const normalized = text.replace(/\r\n/g, "\n");
+	let content = normalized;
 
-	if (text.startsWith("---\n")) {
-		const end = text.indexOf("\n---\n", 4);
+	if (normalized.startsWith("---\n")) {
+		const end = normalized.indexOf("\n---\n", 4);
 		if (end !== -1) {
-			const raw = text.slice(4, end);
-			content = text.slice(end + 5);
+			const raw = normalized.slice(4, end);
+			content = normalized.slice(end + 5);
 			const lines = raw.split("\n");
 			let listKey: string | null = null;
 			for (const line of lines) {

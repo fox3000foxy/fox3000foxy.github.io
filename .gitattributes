@@ -1,0 +1,6 @@
+* text=auto eol=lf
+public/articles/**/*.md text eol=lf
+scripts/*.mjs text eol=lf
+scripts/*.ts text eol=lf
+src/**/*.ts text eol=lf
+src/**/*.astro text eol=lf
