@@ -5,8 +5,8 @@ date: 2026-09-15
 tags: ["ai", "llm-agents", "code-review", "context-window", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "fr"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQcreZmmVx1U8zFHwsD+JTDIUKtMP5RYijaEkOIqZVfXIKA/i3h0lslw+ZgUBlLXKW3OVA2tGM8svcJWTXDxS8A=="
-author_sig: "YG6jWL6u7Vt0uCNlXvrERlwNrdUN7ry9WVMA9h3si2Et0EjRH9eSYPlY7GvrdXLBsNp6OcAP9/2eMH+GmbyTDA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "NEyiwgEWmKe2ZCV7kSqn3mdZ71MokspL4G4D+v5jagd63jKYBqGEL8dvEEyE7Ts7kplRo6AtgIraeSC9n/lyGg=="
 ---
 ## Le symptôme avant le diagnostic
 

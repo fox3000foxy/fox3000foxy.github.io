@@ -5,6 +5,8 @@ date: 2026-09-18
 tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
 lang: "fr"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
+author_sig: "TyvpM1OVST2keJEJCSFAzwiTx5ip9IOWVNZ6a7RxSy52B8e3UBCFQARHLwSbx2EZnoXHZpHCsOJ69dWjpxdN1A=="
 ---
 
 # Chlone : six jours pour cloner ma façon de parler sur Discord

@@ -61,10 +61,12 @@ function verifySignature(slug, author, date, content, sigBase64, pubkeyBase64) {
 }
 
 function parseFrontmatter(text) {
-  if (!text.startsWith("---\n")) return null;
-  const end = text.indexOf("\n---\n", 4);
+  const normalized = text.replace(/\r\n/g, "\n");
+  if (!normalized.startsWith("---\n")) return null;
+  const end = normalized.indexOf("\n---\n", 4);
   if (end === -1) return null;
-  return { frontmatter: text.slice(4, end), content: text.slice(end + 5) };
+  // Return normalized slices so downstream hashing is LF-consistent
+  return { frontmatter: normalized.slice(4, end), content: normalized.slice(end + 5), normalized };
 }
 
 function extractFields(frontmatter) {
@@ -100,9 +102,11 @@ let skip = 0;
 let fail = 0;
 
 for (const file of files) {
-  const text = readFileSync(file, "utf-8");
+  const rawText = readFileSync(file, "utf-8");
+  const text = rawText.replace(/\r\n/g, "\n");
+  const hadCRLF = rawText !== text;
 
-  const parsed = parseFrontmatter(text);
+  const parsed = parseFrontmatter(rawText);
   if (!parsed) {
     fail++;
     console.error(`FAIL: ${file} - no/bad frontmatter`);
@@ -116,12 +120,26 @@ for (const file of files) {
 
   // Check if existing signature is valid
   if (pubkey && sig) {
-    console.log(`Checking existing signature for ${file}...`);
+    //console.log(`Checking existing signature for ${file}...`);
     const isValid = verifySignature(slug, author, date, content, sig, pubkey);
-    console.log(`Signature valid: ${isValid}`);
+    //console.log(`Signature valid: ${isValid}`);
     if (isValid) {
+      if (hadCRLF) {
+        // Normalize line endings to LF without invalidating signature (content already normalized)
+        const normalizedFrontmatter = frontmatter; // already LF from parse
+        const newFrontmatterCRLF = normalizedFrontmatter;
+        // Reconstruct with LF and existing signature (already valid on normalized content)
+        const cleanFrontmatter = newFrontmatterCRLF
+          .split("\n")
+          .filter((l) => !l.startsWith("author_pubkey:") && !l.startsWith("author_sig:"))
+          .join("\n");
+        const newText = `---\n${cleanFrontmatter}\nauthor_pubkey: "${pubkey}"\nauthor_sig: "${sig}"\n---\n${content}`;
+        writeFileSync(file, newText);
+        console.log(`– ${file} (signature valid, normalized line endings)`);
+      } else {
+        console.log(`– ${file} (signature valid)`);
+      }
       skip++;
-      console.log(`– ${file} (signature valid)`);
       continue;
     }
   }
