@@ -1,0 +1,17 @@
+flowchart TD
+    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332 righe seed + storico"]
+    B --> C["withReplies()<br>estrae coppie<br>(riga → risposta)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>contesto prima di questa riga)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["Top K candidati ordinati"]
+    I --> J{"pickReply()<br>roulette-wheel<br>selection"}
+    J -->|"Scelto"| K["Risposta = reply.text<br>della coppia vincente"]
+    J -->|"Nessuno"| L["Fallback: 'I have no idea<br>what to say to that yet.'"]
+    K --> M["Append al transcript<br>save() → JSON"]
+    L --> M
+"
+
+Ecco il cuore dello scoring -- la nostra euristica ispirata alle descrizioni pubbliche di Cleverbot:

@@ -1,0 +1,17 @@
+# French translation - incomplete
+# TODO: finish this someday
+
+msgid "Home"
+msgstr "Accueil"
+
+msgid "About"
+msgstr "À propos"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "Contact"
+msgstr "Contact"
+
+# most strings are not translated yet
+# this file can be deleted probably

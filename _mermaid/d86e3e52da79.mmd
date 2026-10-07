@@ -1,0 +1,11 @@
+flowchart LR
+    A[Nodo partenza] --> B{Vicini da\nvalutare?}
+    B -->|Sì| C[Calcola f = g + 1,5×h\nper ogni vicino]
+    C --> D[Seleziona il vicino\ncon f più piccolo]
+    D --> E{Destinazione\nraggiunta?}
+    E -->|No| B
+    E -->|Sì| F[Percorso trovato!]
+    B -->|No| G[Nessun percorso\npossibile]
+    
+    style F color:#4caf50
+    style G color:#f44336

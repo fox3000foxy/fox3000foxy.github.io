@@ -1,0 +1,10 @@
+{
+  "status": "ok",
+  "uptime": 86400,
+  "version": "2.4.1",
+  "commit": "9f8e7d6",
+  "environment": "production",
+  "serverTime": "2026-08-03T12:00:00Z",
+  "debug": false,
+  "message": "Service is healthy. Health checks are disabled in production."
+}

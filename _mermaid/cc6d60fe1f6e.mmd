@@ -1,0 +1,5 @@
+flowchart TD
+    A["Bản nhạc<br/>(nốt + lời)"] --> B[Phonemizer]
+    B -->|"cắt thành các đơn vị<br/>để ghép nối"| C[Resampler]
+    C -->|"tải WAV,<br/>thay đổi duration + pitch,<br/>áp dụng flags"| D[Wavtool]
+    D -->|"ghép các mảnh lại"| E["Âm thanh cuối cùng"]

@@ -1,0 +1,11 @@
+flowchart LR
+    A[Start node] --> B{Neighbors to\nevaluate?}
+    B -->|Yes| C[Calculate f = g + 1.5×h\nfor each neighbor]
+    C --> D[Select neighbor\nwith smallest f]
+    D --> E{Reached\ndestination?}
+    E -->|No| B
+    E -->|Yes| F[Path found!]
+    B -->|No| G[No path\npossible]
+    
+    style F color:#4caf50
+    style G color:#f44336

@@ -1,0 +1,16 @@
+flowchart TD
+    A[Início do turno da CPU] --> B{Oráculo vivo?}
+    B -->|Não| C[Colocar novo Oráculo]
+    B -->|Sim| D[Calcular coeficientes\nde ataque para cada\npar de unidades]
+    D --> E[Escolher o melhor par\natacante → alvo]
+    E --> F{Ataque possível\nda posição atual?}
+    F -->|Sim| G[Atacar o alvo]
+    F -->|Não| H{Menos de 4\nunidades?}
+    H -->|Sim| I[Invocar da mão\na mais barata disponível]
+    H -->|Não| J[Mover-se em direção ao alvo\ncasa mais próxima]
+    J --> K{Mana > 2?}
+    K -->|Sim| L[Dash: movimento duplo\nem direção ao alvo]
+    K -->|Não| M[Fim do turno]
+    G --> M
+    I --> M
+    L --> M

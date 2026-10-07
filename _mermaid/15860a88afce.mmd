@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>normalizes punctuation"]
+    B --> C["splitUserInput()<br>splits into words"]
+    C --> D["Build keyword stack<br>ordered by priority"]
+    D --> E{"Stack non-empty?"}
+    E -->|"Yes"| F["Pop highest-priority keyword"]
+    E -->|"No"| G{"Memory recall?"}
+    G -->|"Yes"| H["Recall past user statement"]
+    G -->|"No"| I["Fallback: zNONE rule"]
+    I --> J["Return response"]
+    H --> J
+    F --> K["Match decomposition patterns"]
+    K --> L{"Match found?"}
+    L -->|"No"| M{"Linked keyword?"}
+    M -->|"Yes"| N["Push linked keyword to stack"]
+    N --> E
+    M -->|"No"| O["Return NOMATCH"]
+    O --> J
+    L -->|"Yes"| P["Select next reassembly (round-robin)"]
+    P --> Q{"Reassembly type?"}
+    Q -->|"PRE"| R["Transform words (I→YOU)<br>push link keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Skip to next keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expand (1), (2), (0)<br>into final response"]
+    T --> J

@@ -1,0 +1,14 @@
+flowchart TD
+    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332行シード + 履歴"]
+    B --> C["withReplies()<br>ペアを抽出<br>(行 → 応答)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>その行の前のコンテキスト)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["Top K 候補をソート"]
+    I --> J{"pickReply()<br>ルーレット選択"}
+    J -->|"選択"| K["Reply = reply.text<br>勝利ペアから"]
+    J -->|"なし"| L["Fallback: 'I have no idea<br>what to say to that yet.'"]
+    K --> M["Append to transcript<br>save() → JSON"]
+    L --> M
