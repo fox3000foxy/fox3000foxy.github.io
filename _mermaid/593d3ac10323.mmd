@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>нормализует пунктуацию"]
+    B --> C["splitUserInput()<br>разбивает на слова"]
+    C --> D["Build keyword stack<br>отсортирован по приоритету"]
+    D --> E{"Стек не пуст?"}
+    E -->|"Да"| F["Pop highest-priority keyword"]
+    E -->|"Нет"| G{"Вспомнить?"}
+    G -->|"Да"| H["Recall past user statement"]
+    G -->|"Нет"| I["Fallback: zNONE rule"]
+    I --> J["Return response"]
+    H --> J
+    F --> K["Match decomposition patterns"]
+    K --> L{"Совпадение найдено?"}
+    L -->|"Нет"| M{"Связанное ключевое слово?"}
+    M -->|"Да"| N["Push linked keyword to stack"]
+    N --> E
+    M -->|"Нет"| O["Return NOMATCH"]
+    O --> J
+    L -->|"Да"| P["Select next reassembly (round-robin)"]
+    P --> Q{"Тип сборки?"}
+    Q -->|"PRE"| R["Transform words (I→YOU)<br>push link keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Skip to next keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expand (1), (2), (0)<br>в финальный ответ"]
+    T --> J

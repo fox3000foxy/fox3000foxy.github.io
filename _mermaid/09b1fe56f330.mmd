@@ -1,0 +1,11 @@
+flowchart LR
+    A[Node awal] --> B{Tetangga untuk\ndievaluasi?}
+    B -->|Ya| C[Hitung f = g + 1.5×h\nuntuk setiap tetangga]
+    C --> D[Pilih tetangga\ndengan f terkecil]
+    D --> E{Tujuan\ntercapai?}
+    E -->|Tidak| B
+    E -->|Ya| F[Jalur ditemukan!]
+    B -->|Tidak| G[Tidak ada jalur\nyang mungkin]
+    
+    style F color:#4caf50
+    style G color:#f44336

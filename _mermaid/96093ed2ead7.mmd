@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>يطبع علامات الترقيم"]
+    B --> C["splitUserInput()<br>يقطع إلى كلمات"]
+    C --> D["Build keyword stack<br>مرتب حسب الأولوية"]
+    D --> E{"الرصة غير فارغة؟"}
+    E -->|"نعم"| F["Pop highest-priority keyword"]
+    E -->|"لا"| G{"استدعاء ذاكرة؟"}
+    G -->|"نعم"| H["Recall past user statement"]
+    G -->|"لا"| I["Fallback: zNONE rule"]
+    I --> J["Return response"]
+    H --> J
+    F --> K["Match decomposition patterns"]
+    K --> L{"وجد تطابق؟"}
+    L -->|"لا"| M{"كلمة مفتاحية مرتبطة؟"}
+    M -->|"نعم"| N["Push linked keyword to stack"]
+    N --> E
+    M -->|"لا"| O["Return NOMATCH"]
+    O --> J
+    L -->|"نعم"| P["Select next reassembly (round-robin)"]
+    P --> Q{"نوع إعادة التركيب؟"}
+    Q -->|"PRE"| R["Transform words (I→YOU)<br>push link keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Skip to next keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expand (1), (2), (0)<br>إلى رد نهائي"]
+    T --> J

@@ -1,0 +1,14 @@
+flowchart TD
+    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332 سطر بذرة + تاريخ"]
+    B --> C["withReplies()<br>يستخرج الأزواج<br>(سطر → رد)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>السياق قبل هذا السطر)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["أفضل K مرشح مرتبة"]
+    I --> J{"pickReply()<br>اختيار عجلة الروليت"}
+    J -->|"اختيار"| K["Reply = reply.text<br>من الزوج الفائز"]
+    J -->|"لا يوجد"| L["Fallback: 'I have no idea<br>what to say to that yet.'"]
+    K --> M["إلحاق بالنص<br>save() → JSON"]
+    L --> M
