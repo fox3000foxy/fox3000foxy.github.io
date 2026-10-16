@@ -81,6 +81,8 @@ const fr: TranslationMap = {
 		"Recherche dans tous les articles par titre, description, tags et contenu.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
 	"article.notTranslated": "Cette page n'a pas encore été traduite.",
+	"nav.legal": "Mentions légales",
+	"nav.privacy": "Confidentialité",
 };
 
 export default fr;

@@ -86,6 +86,8 @@ const en: TranslationMap = {
 		"Search across all articles by title, description, tags, and content.",
 	"newsletter.apiUrl": "https://api.example.com/subscribe",
 	"article.notTranslated": "This page has not been translated yet.",
+	"nav.legal": "Legal",
+	"nav.privacy": "Privacy",
 };
 
 export default en;

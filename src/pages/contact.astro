@@ -25,6 +25,9 @@ import "../styles/Contact.css";
       <div class="cf-turnstile" data-sitekey={CONFIG.turnstileSiteKey ?? ""} data-theme="dark" data-size="normal"></div>
 
       <button type="submit" id="contact-submit">Send</button>
+      <p class="contact-privacy" style="font-size:0.85rem;opacity:0.8">
+        By sending this form you agree to the <a href="/privacy">privacy policy</a>.
+      </p>
       <p id="contact-success" class="contact-success" style="display:none">Message sent! I'll get back to you soon.</p>
       <p id="contact-error" class="contact-error" style="display:none">Something went wrong. Try again later.</p>
     </form>
