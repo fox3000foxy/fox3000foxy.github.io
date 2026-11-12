@@ -6,8 +6,8 @@ authors:
   - fox3000foxy
 tags:
   - personal
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "0ueJoIazGIfkQPBWwrrZvf8RERsNlXeehc/vgoMIlqEvO9zCG7Xu0uEiYzj3P8yCJJuApXJepy7ZRb2I+6BpFw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "+PgoKpwqnX5sKy+Wy8IeoegrE665MLOEwT9Nn90UrfBDGWjz4kx4cQEQR2ckoe/MtxZKqvl1QqSOCHejh3QhQg=="
 ---
 
 # 내 열정들

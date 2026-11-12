@@ -8,8 +8,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "IJdEVUd362QmGKQhcPruJdOVRsmbvQWYE+ykZQwuHvrTH6jccJsOZ19lEXGRCFELR0DGf752rQY8DGd4tVwQyA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "UaZcOC5TnMF2j5Bbb9Ky8OkDYbjwWSPrvHA1+1qUw/m0G3t+SD/rXKd2ZT1/FbxKg84MYNBeuRyLhvw5hGVMww=="
 ---
 
 # あらゆるJavaScriptサンドボックス、エミュレーター、シミュレーター、ハニーポット----比較

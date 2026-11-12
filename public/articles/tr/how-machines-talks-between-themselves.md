@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "ağ", "dağıtık-mimari", "protokoller"]
 authors: ["docteur-turboss"]
 lang: "tr"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "7WphJBvVIXbPIkKBI5UxAxI/W+LbbraSU/CuabzA5REY/LrMplPu2OmZk8xUKFF7k3SI3XtnmD/NEm6qHqus5g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "tBeKeREMEJ2hjrDsOrAfCqYfGLmCo/+6AAcRxfxGpjYd7KI4zSC7u24dKAnCaJv6ceCerlQhIw42dvcKoKUnsQ=="
 ---
 # Sorun: Çok fazla kısaltma, yeterince hiyerarşi yok
 

@@ -9,8 +9,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "soH18raNs9Y9/BTfI7aJQqtULUap2oXSJt0Hzq6haEez37aDsoEb10JA3gaIn0nIHCRSCzmZATsq/9gvUl/rrw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "yT2q8Qg5oHi03SsdVBI5zkrmRx9Bs2VWz+o1Nk9I6yA5a8R5R/JumBkEzvYJ4i0qW1zpyLWhmkt/Nj0jrhrrtA=="
 ---
 
 # Setiap JavaScript sandbox, emulator, simulator, dan honeypot Linux -- dibandingkan

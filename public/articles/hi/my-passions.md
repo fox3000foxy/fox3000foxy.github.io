@@ -7,8 +7,8 @@ authors:
   - fox3000foxy
 tags:
   - personal
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "YqTK2v9uPvXrIOhX7GsSE1KnrUn66CJ2b58wEn32HD8L2vDwbRIKqoHYemJZjHi8HDmWvGBO8o8gArqwqMT+sw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "brLujz2vj4w1Se72iox6IF4ow906gi2U1COig4+XfajgFr2qke4l9OGyTz2u+M/WfVK6yPsbJWrPtOFW+j/PKA=="
 ---
 
 # मेरे जुनून

@@ -12,8 +12,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "wim91PH+Gklw+rfKo2qWwwj/dqw2r9YhdIjA8XZ7b3eXZzO11UM6DL2NvzN+CnqgKz0QAx0/c+sWMYMr0knzUQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "27EdKLNEIq7yQeQPqBpmomM2nyx75B2IJ42lnFolxt12968RQi0A/Ft5M/1B8FQb5KEknvDAYuWBXuMEP0buYQ=="
 ---
 
 # استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions

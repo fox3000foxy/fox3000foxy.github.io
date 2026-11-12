@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "UQiG57tSPPXZfnqibY+apvBqD7OGn7jUyNsiiGBJ3tEeWi4I8voxNVZdP+r4iJiXWm6hfLbldvE97jYud+0SUg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "wzn46i7z+TlIrK/zrNX6iR2jJzuCRbF+KKvn7ZIxqrF41FgpWXnjrUKOSd+/h1Xwm+OoT0hsHbATpryu7AuP4w=="
 ---
 
 # Luna Protocol：5万件のDiscordサンプルで1.5Bモデルをファインチューニングし、なぜFew-Shotプライミングが秘密兵器になったのか

@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "9EOsfVaVR8P4iONGephG/TIG1CKC8NNix32ud5Vq6wDcJLR9dmMOh6PfYJYWmDnuaFl5TL5Dsx/a6Uw/BSLdtg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "DsnlWCs2VBuASbcnTthR8p7CGyEdkkInwYDdbuSLTJsV4wcLvmrLyWjNGzmR0Y8WUuxNaGZEH3KeoGB31X8G+Q=="
 ---
 
 # Luna Protocol：为什么我用5万条Discord样本微调了一个1.5B模型，让少样本提示成为秘密武器

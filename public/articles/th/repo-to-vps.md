@@ -8,8 +8,8 @@ tags:
   - github
   - devops
   - automation
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "zTh1lAS4k8ZOLqE2SCBYai2ScIkDryJg/QiV5lZ6FPAL3L6ZTBpaOY9tz4aDPjMa5on3X0m5JfO0FVBBsAzFRA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "hFUUw1VFOmS/5i0Wyv2w94UPkc58J3vL1Dp6MdjZOb+o0a/T5JHnUpA7J9sKGIKHpXMVwmvySI2yDfeAH8wVgA=="
 ---
 
 ## GitHub แจก VPS ฟรีให้คุณ 6 ชั่วโมง ฉันหาวิธีทำให้มันถาวรได้แล้ว

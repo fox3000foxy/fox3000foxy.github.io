@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "bj+sUz7MneTc4VodxSMTGibYWRdiE6y3sBdaDs9Io6JH0mWI9Z5HrCpq26Hd+S4YOGL9gNmQZAQ6s6YDchaJMw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "Gy0m9/0uwjABiw8bKo/K6LW1yz3LtMSBeFNBVPR9KlbzI4VJBxfkp/AmZLEYoCYoIXMfw4nAMeZ1O1hu6rFcEw=="
 ---
 
 # Luna Protocol: geteilte Gehirne, Emotionsklassifikation und interessant/belanglos-Routing

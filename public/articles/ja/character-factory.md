@@ -9,8 +9,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "uUWi/6kLHiQaui4E3bgoCk+RCALOVqHa33B4cKMPIXQiTXEvPe7EPCHvpkMVe2uRmrt7+Z8qhLQcKudHPdP0Tw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "qnpuhoaHd8q/hmmeU56X8YofB6Iku1Gcvq/RUjRGRleOF5tMuJUh7DsBgvwdcm2Km2Ay8J2c0i2yS4w7uri5Xw=="
 ---
 
 # character-factoryの構築：遺伝子を持つアバター

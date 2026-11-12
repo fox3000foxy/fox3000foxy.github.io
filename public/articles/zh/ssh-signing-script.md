@@ -9,8 +9,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "GpVzLsqlTAE1uDMYGwnYK8hQqDz5nRkeZW76WgrqZKHV250OJ3IBrMhpCHFEGiYK+ZHXoa3CRktF6PCCWvR4fw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "Lw9ck9E4xcVh4npQo6lfjCfw5f7nryu9wa+qoiKzFu/Y+y7kaQrmmKF1fhkRiz1RfLdCUc/8/6aGLclj+XlEqQ=="
 ---
 
 # SSH 提交签名脚本详解

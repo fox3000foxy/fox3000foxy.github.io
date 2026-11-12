@@ -5,8 +5,8 @@ date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "ja"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "w0ilB4PS78nABGYuWOeIm/AGLVZ+n+419OGnoQDQSiPCWEszV5fCeKh8KTC0rBuCoPnItXPxxpxtQaaF9r6NVQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "1lOVS2ebfxsMRK4jtcA4Dq+MUtdAYUbFMk37zgeiDjJPv0QFyZ2TIa1kAzKxspWiyyC0j0Uy9lJy3Wc3J/gLrg=="
 ---
 
 ## 勾配降下法だけの問題

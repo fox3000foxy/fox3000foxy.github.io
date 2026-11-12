@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: ja
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "qV/GVeFuZLnSxQrywddSu+ze//+zdj02Yz64sfwcHpfh9x5RXQaDFekUSZiLS735YI2v7Dyw2kK2yo5JXeS/Pg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "KjtO2kdXewsnxsYdr0JXupvjJIS+iMbe+tmS2qEjd2yuUCALGHbJm5/BlN8zx2X7DLn80QCLVtAS0fQjD91yAw=="
 ---
 
 # ELIZAからLLMへ：60年の会話AIをTypeScriptで再構築

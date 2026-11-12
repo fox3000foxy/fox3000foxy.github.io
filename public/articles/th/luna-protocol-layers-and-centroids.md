@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "A6wXijQ9hefS6xWJ/DTuAH4scQqUCc3NZJOaUF69IGLWMRdynBh+hm3RNzo7huuKC2MZg77XEEEwKbhBDcLPsA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "fEFNQeRB8+UG5ek1rk8Pe7kSee+j3501TOHmCgvUd5Cm7ZdYemcjRsgK/lBAW6uShhKyninoPEysKx1B1lunzA=="
 ---
 
 # Luna Protocol: สมองที่ใช้ร่วมกัน การจำแนกอารมณ์ และการจัดเส้นทางข้อความน่าสนใจ/ไร้สาระ

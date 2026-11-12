@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "/TEaZ6qx8GR4tHx29WbW/iiIHmIRPSdWbb1N/EakvgPdRk7yMSWZYzY+ToQxMyilOTxzE9UffA5EDVsCFldQKA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "KC7F7rvBKWkRTIGFgx8mjRor5IskOIUwUcEGG30QDwdwOBA6jv0PaoqPFHWqQAwDBEQpEYl1muAbHNrtF02Xjw=="
 ---
 
 # Luna Protocol: 50k Discord örneğiyle 1.5B modelini neden fine-tune ettim ve few-shot priming neden gizli silah oldu

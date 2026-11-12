@@ -9,8 +9,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Izdp4YQQiVQrquBFU3uuSQ+3VzCTXCKDMXobJg5F+N5w9pS/6JFowDXPruupTG0MjPBQGW5wKqJ5Sdjai1A8Rg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "C6Rfm3oJf+LIXwfsez2t49iKVBQYhU3BkZPp2Ed1EGXmlo95FhQalchiEmOzy27najQ8RHRtwA2Jxu9vrx5ygQ=="
 ---
 
 # ทุก sandbox JavaScript, เอมิวเลเตอร์, ซีมิวเลเตอร์ และ honeypot Linux -- เปรียบเทียบ

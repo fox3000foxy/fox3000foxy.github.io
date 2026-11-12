@@ -11,8 +11,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "rWqNWOHuh5TEojXkosdYplkpfT8BIXmEDv9IRzjJTUgPhEgj1yvJ99i60Liegbhc2QxZxX1BRe3mJ8ywBALdvA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "1xj/W9Kd5fJNglup3p2gZ42j1WWr0wz7yXAlG5qCfQf/eRYCUYkjEoChsTYolmlQKX1KxR7ChosCa17ZBvrPPg=="
 ---
 
 # بناء character-factory: صور رمزية بنظام وراثي

@@ -11,8 +11,8 @@ tags:
   - event-driven-architecture
   - ai
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "gfNHnZeI2ki9zIgIan0SziKlhG1tRAlxaAAjT9HjHJ3SXPCixnWGynf7waWzMD/QEqRQ/RuTiRjLBtfSHM2Myw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "nvIGnYNmXv/t83FqmyuSLrxTZtdWqqMpJkXxFfqqhyT4sUc7swn5f5ulB1geOrysLLF70+hxrVm8rjyfXJlXXw=="
 ---
 
 # Luna Protocol: أنشأت بوت Discord مستقل يحاكي إنسانًا

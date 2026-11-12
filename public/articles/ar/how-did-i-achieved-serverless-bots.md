@@ -11,8 +11,8 @@ tags:
   - serverless
   - typescript
   - bots
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "P5uSQM0/8SLDZaqEqgJEq1/IZ2vWCMyXrhbJt2mA5aypzRv+o5PfleFPWoHUdQi4YgDJovIl38m1aeTKn4452A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "kwN7Sn1H7ikK9VgdWv7gZ9V5kdD3hmw13UtUVDfYa5YGZYQlNOhIVD9N60Shl6AF4kjdyCCo/Cs6B66+GRXkVw=="
 ---
 
 ## بوت Discord بدون سيرفر 100% : Hono + Cloudflare Workers = 💸 صفر

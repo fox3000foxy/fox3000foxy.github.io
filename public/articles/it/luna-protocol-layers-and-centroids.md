@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "pjQWm7+NrnNwWN1P43KR+4ljyg3iRraWgiaoVQ8UhuxmiqaL65QkOSuaha8piMc0LDSHeIiboSkVG4Di3dwXSA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "zWH4BdfG4d53yEXp86SNehczB+aFMulyncCxP+3zO7ACP67+9mc/EhXuVdgJHMgHfQjiW3Qa4V4f6/NMuIxCiw=="
 ---
 
 # Luna Protocol: cervelli condivisi, classificazione emotiva e routing interessante/futile

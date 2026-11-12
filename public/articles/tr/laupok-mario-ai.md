@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "RYVpPyXXd5hiR3TOjwckniqNAoDWEV+mNtEIyM9KEd1HB6DDT39o1UiRR/7yCsisX7CaOR/f/reSM1Q138vJqQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "Z4opY1VCjWmfROJ8nmAFtQl28J1lsDX6mQY3ctNkC4BUIU1WBZcKI04dc3KLStU/mUY2WM9T2174GRfupEp3Ng=="
 ---
 
 # Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor

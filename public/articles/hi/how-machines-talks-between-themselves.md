@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "distributed-architecture", "protocols"]
 authors: ["docteur-turboss"]
 lang: "hi"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "1+vB8t+6hNZoGtvH1PHLIDwZCeYqB9YVXFFewbJ8ma9MIsl/6fpqPYC4gnNGCxIY3QF9+J5YhcH1wT4qyABhEw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "M50Hg/ESaPnJ5oDVL9wiXRPpe5UoZFJXAoM+sOLxtcx98gHe2fRfVst5olNuMqiexqusxAnM75RWegDJqAZLFA=="
 ---
 # समस्या: बहुत सारे संक्षिप्ताक्षर, पर्याप्त पदानुक्रम नहीं
 

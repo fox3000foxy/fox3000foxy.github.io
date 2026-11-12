@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: ko
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "+VwJSV+oAdy5AY53kjIDe6APXjVZwtccuw9pcqn1j8CA3xMTaDod+cPRXWOmDdCHPt4I23mODVyiZmgmE0I3sw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "6uB1BPvMkpHtNr3auXEB0qEqM6RYvTGu3LS8UYQKMAg7+/nZeWGljUTFOc1KJrRI0scyuWwA0a7xDr+JYl9ESw=="
 ---
 
 # ELIZA에서 LLM까지: 60년의 대화형 AI를 TypeScript로 재구성하다

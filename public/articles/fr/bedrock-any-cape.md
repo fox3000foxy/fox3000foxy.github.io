@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "8CY0UnK3wkdbYb9a7zc4zZ8JTZ7xj/3J5OdvZdN3170h8sa7Sr19ScdtZaPBPVPjiiJajMna+lZrlHcLQqmV2A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "5MPRjZ/h12n6yklmncPNNxctobPh/4tWuvZ0KtcJN4OFJGFU8dLlaCugAF3Lje3P3cgBbv8JTbFHkZtr9YQ1nQ=="
 ---
 
 # Comment obtenir n'importe quelle cape sur Minecraft Bedrock

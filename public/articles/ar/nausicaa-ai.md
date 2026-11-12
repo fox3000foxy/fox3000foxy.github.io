@@ -10,8 +10,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "nGt0WVLnA1aMM1Sg0z0Bayi6Szl0ZaKj7U8AnRF1wE/BREvzcMbd0IAHoLgUb0yiFS0sCF7Ji67PoZt0Ym6ANA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "olDQ5zumZqPjU8ov5wkXrK52v375O41rTsmjMSw7ufe6oquGmW2dKBKpUkx2wK6Qs2yvZe2eZ737E6Q5H1Jdnw=="
 ---
 
 ## ذكائي الاصطناعي التافه من أجل Nausicaa

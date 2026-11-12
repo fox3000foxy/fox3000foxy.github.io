@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "cDIX8dTSSGmJ7d493u7tHJYYe/sJuNKI82rc1qIaXN8qypkFu+w0+XucVMAJ9nwDVf8FNxjBjkgdQvHKn3vyLg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "H/DD65PDs0oI/pgspqUxEHoT8C+RIuIr8Q5jX4n8FbbmD3YQLlJiQrwhMbqf4AE+ups3FnbIAewPy/+d1mqQbQ=="
 ---
 
 ## UTAU: ซอฟต์แวร์ Visual Basic 6 ที่ทำให้เสียงสังเคราะห์เป็นของทุกคน

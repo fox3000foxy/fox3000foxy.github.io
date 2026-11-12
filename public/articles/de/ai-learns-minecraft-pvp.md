@@ -8,8 +8,8 @@ tags:
   - minecraft
   - ai
   - python
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "zsn+862KzLuDj1tDBYwINvsjJJ/gTVa0DNvQj6OOJ/0HyrnYOpEywK5yuUZChiuC4kuKW3Mc/sOYWOiGQZggeg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "rsCbXQGoc+OQjW6XCsWm9Sg2+REPpp/qMjZ/J5dloJaz0nrzeOOZmH60lD6GmHqyIzWwplKP/FLcTa8RpmJ/YA=="
 ---
 
 ## Einführung

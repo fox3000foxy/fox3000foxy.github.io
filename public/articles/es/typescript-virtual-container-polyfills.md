@@ -14,8 +14,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "sDfSrZd8wabGnD+5MIzn9XObVwgesia1R7zqNO/4hD0eQdI/VIrzZUA/be1BS24KkNlJJZtNSMX/UPt+LuBXgQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "asuUarRPh6Xn0Ut5vsgayoSX0htYnTJdwmLQ1PzsDRH02yBFEEMzCqlX4Wu9C2W/MaHXCaHesQSI5Ztie8/RIw=="
 ---
 
 # Hacer funcionar una biblioteca Node.js en el navegador sin Wasm -- los polyfills de typescript-virtual-container

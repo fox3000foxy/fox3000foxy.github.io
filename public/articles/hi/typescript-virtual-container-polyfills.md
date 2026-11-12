@@ -14,8 +14,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "RXbU6PN3oYZo0EkTlzL15HD9IESWGxfq+b3tccK65S6yvLpxSc7ufz1MTeO28BZ+IN4scNsSmQ4apdebAKohgg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "Gi/+0jLsiGNXGbs33g9WtaECFTMAWoQ0U9pW6/KD9Gay4u1U475VyIF+M9gzeU1wk23IlPeRVa7HFZd48ZvrVg=="
 ---
 
 # बिना Wasm के ब्राउज़र में Node.js लाइब्रेरी चलाना -- typescript-virtual-container के polyfills

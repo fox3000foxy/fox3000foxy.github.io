@@ -19,8 +19,8 @@ tags:
   - luna-protocol
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "rVsLNxtwacLAN/Meq/GU//xEGyp3e9199uVppwxHSCGcUIaRlJ39iNKW1E03Ys3BEd7vJKUKAJMcfeTF0fM8cg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "KV+HUIA5wS/Cm3+PwLxxpY9qF9dq1KCRPTsvHleXZU55lX0QnTOMH3buWz/WFJysTLktofoqf0EWmjdL6ovyDg=="
 ---
 
 # Von ELIZA zu LLMs: 60 Jahre conversationale KI, neu aufgebaut in TypeScript

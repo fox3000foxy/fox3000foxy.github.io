@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "olBt6K9oYuzoplUo5yZPHmjr/EDpOob06aOmjjJHk6QGuVWL6ImQLWZNS2FXXjougbFKt8zIhk5it0VPm8SGHQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "+DYeHcUIifXUr8KswtN88a4y6xYE+zD78CMt1yNC74bm0yD624soWVpCTTflGKv6rrjC7AB2MbhaxZChQDGWpg=="
 ---
 
 # Laupok ने एक AI बनाया जो सुपर मारियो वर्ल्ड खुद खेलता है -- यह कैसे काम करता है

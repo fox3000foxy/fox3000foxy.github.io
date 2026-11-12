@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "d0mnvwunyKy5bQtTqa6TXJI1g+YRGr/fmM9VbiS526PqL3Go6EFgrbrpV4Lti1FpEQFs2KGXQ0GrgthK0MJx2A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "AplJPsj7BnwlFUa2vrSz0Yh+ml9ZKk6L/98LgMjIheccw9fTS6kqbZlkocE69701R1frgAkIm9RraPKCCSpmrg=="
 ---
 
 # Minecraft Bedrock'ta herhangi bir pelerini nasil alirsiniz

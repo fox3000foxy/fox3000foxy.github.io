@@ -11,8 +11,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "H/cIExSJw0NOJ6Pe+9BGLL2319AtwZSdvyRqXom+kSIvfqZpVnk/xAj3NFlAJXN43hmvrijrTY0wE7PW8zCV6Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "LVcKYf963mHdDktMR/zOAi68qcBOFbfXLOgc1aG3l1WidEfONTdoR28RT8HPfcqQS6Ec0Yaz/Zexy9eEyNV/kg=="
 ---
 
 ## Моя долбанутая ИИ для Nausicaa

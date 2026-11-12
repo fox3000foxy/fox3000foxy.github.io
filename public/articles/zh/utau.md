@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "UKZqFnSldsOxAfK1JnZW9P4/33XVDlIJKiOzibvvhxYeuxYUKhVHhcbjSmLemwm/SM7JjZdHQ8w56C/aY6DnPw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "F1YU3MBNl8jXiue7gucSVYC07M//jy30goj+X8ZXceRp+Lz+MJqIWM2Dq4R9pD05FoXLhjSFWcUa9NnC0hvQ9g=="
 ---
 
 ## UTAU：一个VB6软件如何让人人都能玩合成音声

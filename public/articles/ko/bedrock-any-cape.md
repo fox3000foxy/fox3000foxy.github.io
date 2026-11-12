@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Pz652yRpqcArVzY+HKyU7lZw/qfkEZOST9MiMs64IU5ZsJxRrKjKrtGwJItznAM4yl4qD63zE1f8OI0iC3AnBw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "zD5DpWfpQHnxpFKEfX2qNQtvwJwYO2R6B8yYE2Y5mdwZz6qHuwUdkMKL4ikLFi6KWPuZfADfAaMed0YN2STa3Q=="
 ---
 
 # Minecraft Bedrock에서 어떤 망토든 얻는 방법

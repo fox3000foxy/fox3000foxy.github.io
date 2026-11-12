@@ -9,8 +9,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "OKrywYav9VRltDUsU+Axj/4bUWMLoZlPk0Bf+BWVMZE2DnczR6hditTIjYtxehOavWcFlK+zi3GwvlrSk5nz/A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "CuHBXEFPDHJAS/CBBMQJjLqAaqrC5x5vAFVTmavOtWdGy5G+yON1TRb0fI6Kls1jzTzpCoJ4TcpI7yfGaX2K1w=="
 ---
 
 # SSHコミット署名スクリプトの解説

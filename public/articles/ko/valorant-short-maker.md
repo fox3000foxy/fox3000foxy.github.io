@@ -9,8 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "PR4LJSxPoPtNxiRSVTJuU5/+4UtDaf8+h3BJsmpcsK+Sm2y2q2nlUpdVdEmb7QVEPRcJXYxoyAlyrdWydTJf1w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "ZH8s4kq2E0MED2OnVNbTgV/hr5YbZ2E3/W6BqWh3/uuwBgNXdqYrVtkXOlF345kVSz0x6cDw70ELaWedYKY88g=="
 ---
 
 # valorant-short-maker: 발로란트 쇼츠를 혼자서 만들어내는 파이프라인

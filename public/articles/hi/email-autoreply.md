@@ -11,8 +11,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "H6pfyvUcq+0Y+cN9HndZgDl9wzgMpJCiks8f3JozqJXqZuC+lqONZ53YCGceipdiRcDDDBQmtkdJNnnEtoOHPw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "jz9SAmLXEZC7hJBCKuoprzjXMT1Y9z+zRORQq3rs7d/SPpCkiOuweBOz7/Azn8J6fDHCzFmBpTNUd2nTlbXQvQ=="
 ---
 
 # मैंने git को डेटाबेस की तरह इस्तेमाल करके GitHub Actions पर मुफ्त बॉट बनाया

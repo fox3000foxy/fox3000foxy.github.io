@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "z+aBgud8UduYXSgv8XqJ26lxf8t6UnmyDP8IXYBGDHu6fgfPSUOvaJ2ViWKCh81e386KN1+DKxgKoaPb9tpuQw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "FTp981L/8Is0OSdSWpyx+CcIOpQhz3yRtF3SUzq3XCP1eESUTe0DK48rLprcOiqsemjTCqxucEitfoPxVov5lw=="
 ---
 
 # Luna Protocol: perché ho fatto il fine-tuning di un modello da 1.5B su 50k campioni Discord e perché il few-shot priming è diventato l'arma segreta

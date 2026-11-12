@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "zyp369jIgPgdS4h8Ew5ZzhWjpdQhWaOLTX4Kq/wBhG7bBvEM+uIlg0mYlcTy/Ub14O9cDvxXtaqyqP16UNV22w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "AL/zTi6XqQlxx6P23VRW8G9Em7f1opeh49wZG90pyd5uqlBkEM8PHaef4VeUp37OX+NRT2DtFcyBnE3Vtp+/8Q=="
 ---
 
 # بروتوكول لونا: أدمغة مشتركة، تصنيف المشاعر، وتوجيه مثير/تافه

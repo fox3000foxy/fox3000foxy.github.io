@@ -11,8 +11,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "rMENjh/kLBnjD7ulsX37A0K2x3YuPvFcoQ4OIjWwyvbN0UhP+ziHPY6d+IBy4kwTdkNQl+N+N9N2DbVkFJ75vg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "ny0274IJVcfRbRq6onNAqaH6fnjZASNrZUu7l0PiUT3vWLzS1WjlHpq/t80TwduKSZIDj8/Vbi3QQXCkaCLMXw=="
 ---
 
 # Luna Protocol : j'ai créé un bot Discord autonome qui simule un être humain

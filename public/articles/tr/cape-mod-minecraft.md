@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "d/8vLuBaDgSUHkqA8rlk6umh5oRoTD8GhB45zbmutrQLfRjfWPxML+ADbiONZKBScWEpSpzfKEaa8Wqec2mDMw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "uR2Re8Io2Bt+ByW/dGrjXPPl3+ADs/uevQMKoN8a/Ix4fe4ZNkCN+BUtTdlNdvD4RnvZF9zbMUL7ArUIJjyJDQ=="
 ---
 
 # Cape Mod : RSA imza enjeksiyonuyla Jeb_'nin capesini çalmak

@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: ar
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "XRu08rDJpgvg97aaG0R5Ae1w1DJlWeagzjFB6gdL28gEdcVKtzdVqZlyLdm60fmj6k4CTlnqymDaelX2DNamwg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "LLQdG8Zh8bHO4U+doTr/Ocw/eRAv4b4GiViP+DiMN2etDqZO0YzJ85XBrvUX9MelB/sIGk0Ctyqdpre0otZkrg=="
 ---
 
 # من ELIZA إلى LLM: 60 عاماً من الذكاء الاصطناعي التحادثي، معاد بناؤه في TypeScript

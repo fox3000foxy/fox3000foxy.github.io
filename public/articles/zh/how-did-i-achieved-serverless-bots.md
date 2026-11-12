@@ -10,8 +10,8 @@ tags:
   - serverless
   - typescript
   - bots
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "wS+eO0lUw2OHdaxkxJ0WcrLAuDlFTVgqz7QaJoAn92fKGLLCoa9R8yYvV0WcyzNEdCAhRihwEEbIKvDbBaxMOg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "qyT8Iue8qTIBqH6ia1vKqZ6wdPgOXw7Btyaxp0AjRJmCcOd39X1RHZt5+6zdq+kBh97nFhcCv6g1ZDBuxpTB3A=="
 ---
 
 ## Discord bot 100% 无服务器 : Hono + Cloudflare Workers = 💸 零成本

@@ -11,8 +11,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "QYmkk9MpLIliPpKfrj+ICZjc+Vuyf+dpFmfv8yMNXfvvog14OdCLwIP+5+FgJIWD2HGZ8FJ906Zja/u4FSoLgA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "T0h7vgk62q3JOzhXJZb/ijcP0+bmvjENNt9fmBoOk/Sj4TlL1M8JEZhIqZPGffC9V4PCDQO+yAh1Lc7pCsCFbg=="
 ---
 
 # GitHub Actionsでgitをデータベース代わりに使って無料botを動かした話

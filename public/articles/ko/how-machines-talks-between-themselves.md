@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "distributed-architecture", "protocols"]
 authors: ["docteur-turboss"]
 lang: "ko"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "OY9i98NRgEy6kHIyCOVYMH8F+QRHvXcJP7wytEWgKj6hup7zwOPi8RppYQxv74B8WUccnqbs0ACSw/fcGnGEkQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "d/4X8G/q8/6r9ky5wCN1UL7ULXjWVvcKsVcqzX0WPWejuxcXR5sSb4I96v8ytFnkIeGbGcK88SlR/ewCNPES8Q=="
 ---
 # 문제: 약어는 너무 많은데, 계층 구조는 부족하다
 

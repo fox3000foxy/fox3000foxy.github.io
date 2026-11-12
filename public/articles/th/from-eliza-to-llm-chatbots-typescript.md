@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: th
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "jHo4/AFZ+f41wAp5EgBx/RtVUeECVRZzHC9Nl1TAicj9rii8zFWMfeccfC+2ZO7+dy1e9qhoz6S8ghpfBqkQQA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "x5Af/iXt5miGIiFIgjY9jWexg6qrnMbs2oI9lIbGq2JL/tBUbJeuU2XsTzV4NRB/0XkAozbJgNGs+sEHCDntmQ=="
 ---
 
 # จาก ELIZA สู่ LLM : 60 ปีของ AI เชิงสนทนา สร้างใหม่ใน TypeScript

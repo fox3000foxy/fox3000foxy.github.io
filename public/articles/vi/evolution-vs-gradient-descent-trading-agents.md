@@ -5,8 +5,8 @@ date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "vi"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "4Z9alSy9CRoGHM1sMqOPTAuF3XJxXjWjnDnR8EoaXKcLwCcNfK/MTBpWqmllT7rksJ42net9hvkdLtOyYIa6bQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "vByKMIC7q6G18fEes3huWtyQOs2jv0h7oDYPxJBg5T80r+9Zr1S2I4uDgQU46iUzyTtlkU87yzewkp2MgeMR5A=="
 ---
 
 ## Vấn đề với chỉ gradient descent

@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: vi
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "4qbYv7FnpqYTgE04jwBW9lVf/IsM9dpx9CdDQI/58rasIaLQf1I+47M2yM9qAyseAKUtS8fsjdBqjShxyTPaZA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "VvYGuEqMooP+sBFbIsQOPxma/irmM/c12BPgG+kViyeHPTWI4qCit4F2nc55xPMGk3+R2DuVIXNzSuV9U1x9iA=="
 ---
 
 # Từ ELIZA đến LLM : 60 năm AI hội thoại, được tái dựng bằng TypeScript

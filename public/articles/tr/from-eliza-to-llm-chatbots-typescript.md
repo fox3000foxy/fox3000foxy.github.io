@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: tr
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "4z0ckzQ2Jlj2D8qnQvPybaKItWAK84yXBryNm1CtcLI/Rb291nsh3Iov3eojypKtsvXUVEOMwHRFZPUyLTv7yw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "BvO556JfgPepRMYGIxMm8K/xdkzIeVBvmuxAvWQggkrKlz67jVypKa4PKG6pNq9jVG8CTyNrfI4znttpLneLnQ=="
 ---
 
 # ELIZA'dan LLM'lere : 60 Yıllık Konuşmalı Yapay Zeka, TypeScript'te Yeniden İnşa Edildi

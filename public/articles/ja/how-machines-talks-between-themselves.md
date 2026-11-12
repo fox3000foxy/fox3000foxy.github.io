@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "distributed-architecture", "protocols"]
 authors: ["docteur-turboss"]
 lang: "ja"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "soFTExi8PF0utCThe5iuH9RLj02ZkrPvIMFhCGdT7xnMo+aw+p4h3GaJqJkJAEQDRiAOqgs1m/um9JcquyNgkw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "DpS2hDQS+wjiAkpbCjwr+IFwHmi8mPnJa8oztgx3Mfj/y+/r1k5BFrAItK68MImm85djwtUmvg2EaHNdNLrriQ=="
 ---
 # 問題：多すぎる略語、足りない階層構造
 

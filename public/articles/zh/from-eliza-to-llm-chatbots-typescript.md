@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: zh
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "dO95j85vSqPaE823CbbQX9T+wOj7IsWR6UYLnlCU5sSXNCsu02N2Qevq27cfM7kSaeOJwlVFmypx21Kjk/DLUw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "n3NwpLMI/EB1JDipNaXFZMJKGbACjsZ+Apu5CmGwfTHy1dKZqee2hTlsC6wyAoBb87WdWaoFwAQRQR9Vj6UIuQ=="
 ---
 
 # 从ELIZA到LLM：60年对话式AI，用TypeScript重写

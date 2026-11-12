@@ -5,8 +5,8 @@ date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "it"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "EeAHcCQnFBM0F4jnmttJxDwv5/5ujkbbd0Upnj+uhJ5YPDwyxQ2+/W1G/HFjjMZlZOVZ2TLBwxiGPQfeiU7mNg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "lodcsn5grDhdAcmMSoT/XaMWf41Im+/cx4ek7bOXWE0qYeGukvJCr5YilwmhgrOqaG0a5Z08ZxaUCubrr1rOGA=="
 ---
 
 ## Il problema della sola discesa del gradiente

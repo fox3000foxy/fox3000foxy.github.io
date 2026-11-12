@@ -9,8 +9,8 @@ tags:
   - javascript
   - linux
   - analysis
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "QzIfvc4VseO2QBN4ylNnAA3FlHlKQ3oJTjVXWH1Fb1XfTcd9F82lVn1Mm0ILdwsAXf0y6SxXJTJ96HPpGCcnuA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "r/qrMgY3Xg0G5rhuiURzZT5al+6nV+80liK3eq6kJuzhPkD0hxjGK+f/+bROGXAGJV2fenTD+PKFOoOPjxMAuw=="
 ---
 
 # Mọi sandbox JavaScript, trình giả lập, trình mô phỏng và honeypot Linux -- được so sánh

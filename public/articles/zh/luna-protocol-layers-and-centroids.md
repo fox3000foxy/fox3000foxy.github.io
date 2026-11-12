@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "1RYnMXu2CTEnXpvuekSpfjaaQRO57r37jWoYNCe5YHRqf8s9sQBVBTA1Pyet6WgpzukWkAxBQLXdP6qWk2xaew=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "Mm5Mhyv2wEcL2gXPXAjzfMbOx6/DIKARRHUTuPbqpUJ2prwhw/niKp5CzZQ/KruhaVn5d+NaZhDPWs0U1JPjjQ=="
 ---
 
 # Luna Protocol：共享大脑、情感分类，以及有趣/无聊的路由机制

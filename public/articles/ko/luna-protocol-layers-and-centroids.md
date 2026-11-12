@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "2W3Me4I++RklJDg0O71TR769iAMIER/bW8blcmOyWkxIseUl3ZfDHCbgcIIIl7gDFbQA4QBUkMY68cU6mIeUdA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "T2cJ2Sl0TtF6GmZXlegwUGMgyErVN3iJpNkVcfj2enMujNHNvjA/gr2VxN/dpt7wJ9MG75A8lmueBFNLvC2K4g=="
 ---
 
 # Luna Protocol: 공유 브레인, 감정 분류, 그리고 흥미로운/사소한 라우팅

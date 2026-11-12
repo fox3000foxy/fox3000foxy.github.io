@@ -10,8 +10,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "IgJMXbKGIIeID7QtcWGeGtuqP0jh1GqyQql3tkRF8mpaTWdo3zc4geWJv0gwyqW+L09IbvO5amcdz8nF8WRWzw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "+qlBT+Ihof8WK2XQDgzubLNJrEyTBe/EW188lWldSgT8xRfWvaP1tyq+NQow3m1/qAAfdYZj02BptGwyORyXiw=="
 ---
 
 ## AI Konyolku untuk Nausicaa

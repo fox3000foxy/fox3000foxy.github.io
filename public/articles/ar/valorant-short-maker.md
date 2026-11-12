@@ -9,8 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Gf+e4fv4yE/N6IQ9K2huGG9nG1M6khG5gST45GZegMmUWV7t31wQeW7BLmDNk/6qFfNf+NwoWCcwHK1BP0yf9Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "NFA+O2Hd2/5tUafmpVcHWKcorCqIVBIDJ/kLm3y13QagozzGPhoEjo/CA0k4r5eTLaSIbAkxtMic1rSPZtylug=="
 ---
 
 # valorant-short-maker: البنية التي تولد Shorts Valorant الخاصة بي تلقائياً

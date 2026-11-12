@@ -13,8 +13,8 @@ tags:
   - git
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "5H/2bkaACBOeX1YVkALfObRaqWe1xbrOy+Oa3/imvifq3v9cy8ehnPKxSqfd611SJ7bGrF+wQQmDnVbHfdtFMQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "wkNAoislzRL2+C4BStVPPHGAcJXvZkk1fvqh+CyKlXgASMbh5gvyQeAbaJjRutRM89erRWqJbaI48IgV6ZKwXw=="
 ---
 
 # J'ai utilisé git comme base de données pour faire tourner un bot gratos sur GitHub Actions

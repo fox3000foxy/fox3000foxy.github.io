@@ -10,8 +10,8 @@ tags:
   - music
   - synthesis
   - vb6
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "z9QZ7IyImNacr0naWNzyD/Q9/AcUN1ZYcCyHAX3KXV8itNbK1kN5/kOkLoRCg5jGzR9JcYBQIW3YsT2aIEevuw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "rYTZnjmqOk81/razg3IRgWhP8eGfPHluU0AQWWtS9KUxDUC9jxeBgiLeHI0JFzXywTop09lguKjmf/TLhLGqmw=="
 ---
 
 ## UTAU : como um software em Visual Basic 6 democratizou a voz sintética

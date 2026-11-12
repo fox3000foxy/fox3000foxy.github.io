@@ -11,8 +11,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "RrzYQEWyBTRHmY0UuyaOCV0QCDB9DKRRS+/IGeZBvjMW8dwvt62+eRkBMt9qvzVaj6rCAXy0nmNKGeLMdhE80A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "1HLsaj0La9AW3m32jbcFkPqQ0d3S+gfxBeVNzIVc+oRZD/M7qU/wa4udv5pUWNPRRZrug4X+X2fA1b/6IayJDA=="
 ---
 
 ## Meine bekloppte KI für Nausicaa

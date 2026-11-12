@@ -19,8 +19,8 @@ tags:
   - luna-protocol
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "oC+jbU26X6s3FTPpjgFcBh2SVivoG7A0Vp6twRi8cTM4u1H0pF4D5cq3yddqZOL/VY6WH7Y7VpRDlN+m3vU3Kw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "uieq2PpLyzCHddcW1KhPnrXtuEb9cSEQhB4Wp65UHy3Bw570w9b7+uYBSu9/L0jqYDo4YhssOhXMWBBRdSNdXg=="
 ---
 
 # From ELIZA to LLMs: 60 Years of Conversational AI, Rebuilt in TypeScript

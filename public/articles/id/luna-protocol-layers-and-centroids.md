@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "c7uZE6rKXoPifAMCWHpuBRCWIZPE5TO8/vOMmFisSLc7m7QC9v72EiR7g+4Qn629USnGrAW49wbwa6arWyoMiw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "BKx36f7qH/mLCzt/Jvb2Eoo9tZu0+tBRZylC7A3wHlbrhZJQiY0Z8y297fb7FVWS+c/ouImC1khk8PBq49zYSQ=="
 ---
 
 # Luna Protocol: otak bersama, klasifikasi emosi, dan routing menarik/sia-sia

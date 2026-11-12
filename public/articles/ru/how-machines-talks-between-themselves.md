@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "distributed-architecture", "protocols"]
 authors: ["docteur-turboss"]
 lang: "ru"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "MENHK+Jkz9q2UYzPEzkxQayn7zsyE2Zvnlj3Zv9V3JYI+hrfQ3RIwaFERopgWgN0rLsdJSSUp/JFRWmTdXM6/g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "I6qenA3aEJq0/A6Vp5Hf5ZrpxT4WeEaUkWTZ3C5AQm62BIwaxKHsOJoVGZuQ3HA/T7gkNxQ68E+kIT5jDYpnOQ=="
 ---
 # Проблема: слишком много аббревиатур, недостаточно иерархии
 

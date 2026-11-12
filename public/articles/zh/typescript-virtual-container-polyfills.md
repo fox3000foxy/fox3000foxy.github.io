@@ -12,8 +12,8 @@ tags:
   - polyfills
   - browser
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Brw9WZEh9wUbdHgD6eZ16ZT4QLEiQyVub1F4opJR06eolhc5JzkDREGqFqN8Zt64fDH1+zBnfEVCKDmACvic2Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "FFeX7qGArcFX2Pv2Uzh0XDK8fUmIFCpd2W0NDDLI0ELgUJBTticUljNDzlIumn5qIJ44ZPOIIIsYTkkPiJvUJQ=="
 ---
 
 # 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill

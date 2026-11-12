@@ -7,8 +7,8 @@ tags:
   - nodejs
   - security
   - honeypot
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "nMBUT9me142vclOjOF3CEMJqkURufK2BQDnD8TcQtfu6RAiVB7Ojd8Diazb1lsyhirLDeKKO6H5oK1SGxxzNqA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "jmFdD2UtLNv6GTsPqiWzfF0ClYigurgKc11tbN6x+AWr3C2+Y060n7Rn8ms4RnAgpBHbU6wAsfyoN1N5fK4DKg=="
 ---
 
 ## الفكرة

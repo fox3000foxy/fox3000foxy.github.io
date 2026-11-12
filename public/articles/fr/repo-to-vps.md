@@ -8,8 +8,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "bFN23PUwv6TmIw+sOYNPIOztzg3MHzEvHgTpBxolY4ZYQIpQIVlHs3hf8D3ARk1QKdfCAiR0faDkLq4YGB+IaQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "z89OUsIG4QS0J30NVUrA35pHRUcsnVONcu0i/GTLp03GK/sYXKDZ0qjljgsdY5rjZR7dA1AkqHE43Jstd3qwiA=="
 ---
 
 ## GitHub te file un VPS gratuit pendant 6h. J'ai trouvé comment le rendre permanent.

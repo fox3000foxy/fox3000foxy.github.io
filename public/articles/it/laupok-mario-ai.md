@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "GLQ5UMuNZm7qANhTP1egVUzqV27Rxx8VnK6ELXT3UuZRd5xAdEJ9v30rgwlUPjH73igrqcdu/JxMz1Z9ORN4Rw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "fjRvp/nNxGmD67tpX4q18tKree0N9QzsR4OZsv13Wo9WqDvvqQXNCNj4sUiLFOkzS+tTpzoQzI9ueI7bYEYl9Q=="
 ---
 
 # Laupok ha creato un'IA che gioca da sola a Super Mario World -- come funziona

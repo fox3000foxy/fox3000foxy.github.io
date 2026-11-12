@@ -9,8 +9,8 @@ tags:
   - git
   - security
   - shell
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "cM7oEJVzLQFg9MjDpFkqEJ7JwC9vvn9RnY+MX2N+DnBL8U2vxjJurtDiZphSzlkE5ohWtiJHCgpLMnK59ZMhPg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "wV7O9kcbgrkLRq3nFd+x4xX/c09F2TKfH55KgkylbTrkzSiztSspX9Lj6UYmrde7AI33iDkGzgq6Wc3OUE4e4g=="
 ---
 
 # سكريبت توقيع SSH للـ commits -- شرح

@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "NCl2JMOxEY0gCjbDqjs8t0gPIgoJLFktJzfqcL+vjpvJ0uRGOCHh+4AWxYDQiSuJntLdtrp7Xtniwb+8hzLDEg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "2f05a197LR/6zhaIPcXJ1LsRnMf+ahIwcaCe8oD4Pan8LF0r2wuFgAvlLf1PfMN5izo66jvlMnNFS2a0bVkLhA=="
 ---
 
 # Laupok이 만든 슈퍼 마리오 월드를 혼자서 플레이하는 AI -- 작동 원리

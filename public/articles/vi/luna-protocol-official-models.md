@@ -12,8 +12,8 @@ tags:
   - qwen
   - unsloth
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "L4hq7zeBc1oOcgwuNjDvlIPL1Yyv/44UQOKduID3CjsBvAQPEyWW5hskT6iK7f1K0+uOccFDL37N8HvpZoQDdw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "p9C5GFwWarPmc/iFs119IMm/5ucbIsiuV22bjiPFN3msEKq1IgUOw0vaGN/LrWD/77EMk9IaEPdF3xMjzwGvSQ=="
 ---
 
 # Luna Protocol: Tại sao tôi fine-tune mô hình 1.5B trên 50k mẫu Discord và biến few-shot priming thành vũ khí bí mật

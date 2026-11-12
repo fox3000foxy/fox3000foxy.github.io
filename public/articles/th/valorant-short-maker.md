@@ -9,8 +9,8 @@ tags:
   - ai
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "175Qd50Shd2pAW/t06ValdXQBHM9tNkXbRukvWIm1gspKC2UTguac4p4gGafeLfS3Rci6DUcMnl3X1wZMQpY9g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "RcHGHOQWfQY+Psxsn2dr4COBq/LVwuIJwfK/vZaTv01ON0188Ss4Om0iY8UN2WFCd8LSpmV/prBDF9Y4/13gnQ=="
 ---
 
 # valorant-short-maker: ไปป์ไลน์ที่สร้าง Shorts Valorant ให้ผมแบบอัตโนมัติ

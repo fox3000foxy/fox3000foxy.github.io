@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "mạng", "kiến-trúc-phân-tán", "giao-thức"]
 authors: ["docteur-turboss"]
 lang: "vi"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "6GBd/4VTCSvO2GsTnx5zJO2OI4q2Hd5r0TW6BXcjPgiZYx53NsCwNe7uGjapzOGbdOsWe6TsgxSRKQZwX+QndA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "Y0wIb1xIRueUXS4jSgH5DLEHUZSVcFGocbmpqBL1TKk9CDWBhTybv7hkEJF+m5IQKlr/v81edRUabLmeWbyDxA=="
 ---
 # Vấn đề: quá nhiều từ viết tắt, không đủ thứ bậc
 

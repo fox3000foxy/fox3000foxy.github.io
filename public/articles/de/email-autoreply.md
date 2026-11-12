@@ -13,8 +13,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "+0CI+BPcISgHZ1bhqKIz20JpEcP3xABv60xdYa0UP43RuF0Gdvl+8XxIfQeZ9utECpKhlEDOFVcCiaoYT1PSKQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "DpOz5gNVYaHRgQE0plo/KuwAgs5NqMquDGRvySv0oglVN2p+yYLRn9n5uHOGOLTBEbRTiLZCUNWAFao0x7eaeA=="
 ---
 
 # Ich hab git als Datenbank benutzt, um einen kostenlosen Bot auf GitHub Actions laufen zu lassen

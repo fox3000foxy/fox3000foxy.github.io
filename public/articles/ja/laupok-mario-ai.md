@@ -9,8 +9,8 @@ tags:
   - lua
   - emulation
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "W1hJeASZiEk+ppB8sqIhBVXW/h6Jr3upj+BdA/yAXlKnMlIhNHgMFGO06w+O387rmF3Of26nAyWsI5cPggpIFQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "0hS1Z2miRShTD12qio2nNlm7jQy+8ODvdg1Bty0KB7q/Wy3hRwXuzOgolLrGBnFzx9HaUcIkHA2JU52lkj5OkA=="
 ---
 
 # Laupokが作ったスーパーマリオワールドを一人でプレイするAI――その仕組み

@@ -10,8 +10,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "r8ff7rcdcqLGGWmolqvyHyjNbmDSvhDEnkCBUcmUwzZw/g0NFAhy1EQblmOVjNSDrroHAg0hIk3xwFeWQdyTDg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "a+fkx8h7TI/xa0jAaTpeMsaZYPz53PNRYDjrrqxnaR4DIxp69M67aj10vbvFyQMmd8g7eZ4yG4KCV8nJnCFNSw=="
 ---
 
 # Cape Mod : comment voler la cape de Jeb_ avec une injection de signature RSA

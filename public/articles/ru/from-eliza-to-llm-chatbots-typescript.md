@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: ru
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "JbS+DdNmvnoupA8AdAcQ7G+Q5FxEWlnML0JZ7YYe5o6iNXP3VeJwbptZ59z/kncySGDxnKjUaDbFUN2E+P/uMQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "9eNYthHTbwCOOLaZ+lH0au0EaQkQdnaEsaqKbm6dBW7oLPZh2Ny0JWjFaXcrckDIBVuIPtuW+QC9+WaaxJl4MQ=="
 ---
 
 # От ELIZA до LLM: 60 лет разговорного ИИ, пересобранного на TypeScript

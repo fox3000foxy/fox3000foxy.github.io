@@ -9,8 +9,8 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "yWASN/Bp7NgYlvtxQE606KHZxH9nQK+gemxH70FAll7Epaaqq5Iarg5tb6feSVHcLfsIvxjMqGX1H+92zBjI/g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "vYGtmFwfhf4H6KWNWbfKUCHribX/rEgR7N+GAUjeSlnN5T7hM4a6Z5goOegGv3hvsxhorXqeD9nwlPDlclf3VQ=="
 ---
 
 # Minecraft Bedrock में कोई भी केप कैसे प्राप्त करें

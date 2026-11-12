@@ -11,8 +11,8 @@ tags:
   - embedded
   - c
   - esp32
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "xRSfo1aAN7a2G4IOaM06mhA2QanK5FCuzPNzClQuIDHsG5SBr9njD/tlXConu2xF1OTkzNrT/miSPKLp0onFcg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "IVcAhliQpEzDtr/TCl+TCav903CCy0m20Sf35rn//4fv5Rhqs4jI2e/cIESws4DnAHlFfNBDGRE5XRZOQ2Zckw=="
 ---
 
 ## Introduzione

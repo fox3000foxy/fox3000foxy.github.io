@@ -8,8 +8,8 @@ tags:
   - tf2
   - jeu-ia
   - ingenierie-inversee
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "C2RWgcBsOoCnf56gWVr71xvkqE06mZ3t+mqf+YdPuT0pxt6zGdCjn4XKmpA8wQkBgeiE8qnewO2hmB/PdF0Xpw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "xwL0FjtAUYKdbaq+0XV9tj9AZAag/h0F/qJ9DUhkXuCyiSGdwFMtv/tdomZO4NNvbZx63BjMW6iiGIw2tZHECg=="
 ---
 
 ## Introduction

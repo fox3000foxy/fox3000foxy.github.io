@@ -9,8 +9,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "SAdL3cxLIJOUivX0xFHs6hLZpU/kwVPBy+hH9IwEOmDKJI9nJgBJItVeZ7/l8zIjgGOsebzo8hjkp3GG54WqNg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "kz1fgYH0mDhWhf0a1PZqHC/tC9IYuvOEzk7J/hB6co3WahjSIneR7KxaqRh773nQtBbtZ3xtWlbJoiCcEOEEng=="
 ---
 
 # Blog Này Hoạt Động Như Thế Nào ?

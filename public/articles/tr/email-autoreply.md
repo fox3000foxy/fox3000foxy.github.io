@@ -13,8 +13,8 @@ tags:
   - serverless
   - ai
   - git
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Iix68MNIy6ta/Yh8bMKeDyM098b6gabISsXXv8/TwZIYPXonhh5AK08ClYf29H3h3efO5fy1WXJaH+i9lYvQQg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "tp4xiZwo0evd29ovliKO1sHZ5dmu8v88VIxXSy8zzZG7zIoQVuP3C0UOk9PnSslttR1cvRLncXLskePR7pE5yw=="
 ---
 
 # Git'i veritabanı olarak kullandım ve GitHub Actions'da bedavaya bir bot çalıştırdım

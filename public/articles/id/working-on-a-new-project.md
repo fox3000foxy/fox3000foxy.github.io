@@ -7,8 +7,8 @@ authors:
 tags:
   - meta
   - webdev
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "ZQwEZcrLgCSGdbx0/FFDbCq+Ftn7Lo4qd3lP2UJW58kO9i0+NP2fABSRIGs27pdyQhgZd5w0Rblph8GIXNcwIQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "hy66mQS/BayeTWW7r5N3Jzt1p/95wH/+kD9PVfdi9ym56Kl8+VCMs4ENJMsnnh480FeI7Z5jYIdzvFPpdFbbQw=="
 ---
 
 # Proyek

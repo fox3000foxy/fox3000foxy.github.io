@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "H56zWztiuCKzmuxKo89R1GuxGfCw+8x/vd4Qp+gsf0pqapGvMNFzMmYVmf54yk+ekjbOQgKd6fNba/aGd01pmQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "3+HzzelsVEDUiBbJjya3swHRlli8Ak89kLQuf6jYS03/3h6Jr1uoAzLf69YHVW85VzRSF6K1UzV1PwAI6FM82A=="
 ---
 
 # Luna Protocol: bộ não dùng chung, phân loại cảm xúc, và định tuyến thú vị/vô ích

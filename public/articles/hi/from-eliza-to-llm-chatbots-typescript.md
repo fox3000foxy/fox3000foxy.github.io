@@ -19,8 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: hi
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "fZfxfTG0mmSJ4Lek9mUiC4q1b9DsUcvdtMOayMtCSMmwDwTOl3GK/NynXTcfQdkUwHKplQnNnAe77fGzNS5XsA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "UxVb6TTP1vlJSuI/hdFAYlWfpuR3Mjcst09xa1DQkUMMnUsxmYDHQV3utUqVvqjVpxTu0voXvr59KUqxzdbheQ=="
 ---
 
 # ELIZA से LLM तक : 60 साल का संवादी AI, TypeScript में पुनर्निर्मित

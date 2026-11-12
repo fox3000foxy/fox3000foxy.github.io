@@ -7,8 +7,8 @@ authors:
 tags:
   - meta
   - github
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Mqg4bZXcJZrDS5kzSSTEODC61gWRIToAuv6/b3U2YMTTf5aUxm83/HmvqjVDNyozAXNWIcSe1u/rpS6v3xCOXg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "ntUHlIYXJlJRFcUIiDtIeIsrr1/cCRBdxn949BHQIyUdvZXxZn95ydC98HdirjOzFKXstnz5jgfnJwA+4Iei+Q=="
 ---
 
 # Profil GitHub Saya

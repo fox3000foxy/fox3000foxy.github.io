@@ -10,8 +10,8 @@ tags:
   - ai
   - javascript
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "fHI3LupEzR9IU+vs6FOoIMVa+1fPFd8BsEt70qWPEFriEraGgXJs9Godl0oP+31TJCFLFvPK4UAEYy7Tms4eSQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "fX9IQZpUptelIOlwvbBJ0AyjOFJ7aBWB08hHhbWLmvJ+5IH+7Qv9MkqC1eMi8G1kJqO5A8TACj+Kp+I1il5QBA=="
 ---
 
 ## AI ขี้โกงของฉันสำหรับ Nausicaa

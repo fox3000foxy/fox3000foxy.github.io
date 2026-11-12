@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "distributed-architecture", "protocols"]
 authors: ["docteur-turboss"]
 lang: "ar"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "F/zRgb27fb84ZP2tBqxEqPeouKMWtVEGqXuAkE0pFnZ94Rsu9oMY+dFZu9/N1TnFN6mQ4mL1cLMM9pL681eNsA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "QypHEb4LRK6DjmuIRp4V2KPzZ/GGnnh6e6sBwQIrLZQ8B8xXg2bgY72ZPOLVe/eTtJ87+woMj0jVNH93B5sn1g=="
 ---
 # المشكلة: كثرة الاختصارات وغياب التسلسل الهرمي
 

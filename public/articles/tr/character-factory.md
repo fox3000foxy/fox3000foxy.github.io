@@ -11,8 +11,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "ohAe/S/Fo8SqUMVpitutNYwQeAOo/UqrWeuzKgExK2j7xCV7KMov2huPG312vSIEynrFT67V4RpkPQXUaNvbmw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "M4MZQaseYi/KE/bCDXr1Gg5yg5BKGHZKOGuIDzO+go/KJ4Zi7wnyaZ7aVE1KWVKyTMNM8BENjMx1T2qivNKOnA=="
 ---
 
 # character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma

@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "Sb91AG3+BrQtz4hv3mWA2roJYupKJnkgMKnP9UcRjKKCiVpwzbUUgF+k2FssuXUT+Bjho1mYo5Rdxi0L56mmpw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "DgvRxRODW6pT4/SZL+9QVuedjDgk6EVPnRR3hjNciTg6jgNmGUVa+amcuRnAs2pQxt9zigPL4tKiJQ33KGDcAg=="
 ---
 
 # लूना प्रोटोकॉल: साझा दिमाग, भावना वर्गीकरण, और दिलचस्प/निरर्थक रूटिंग

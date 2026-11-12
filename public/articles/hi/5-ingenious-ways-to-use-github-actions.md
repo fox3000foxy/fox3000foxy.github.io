@@ -8,8 +8,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "19tUPAJroHAXvVDHoa46qJ70OLCpnVMr46CJquaPMLmqEHDrKvjKon3CfkhwYM4Bya8DhU45o1OY1TJDcynkPA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "BIxIbo5kXJznT3XgphbITMXSRaaX5hAM2K6Du04yUHtkIloAAf9piwSG7Ltk35YTQnOCj78luw7s3jwywBJvSw=="
 ---
 
 # GitHub Actions का रचनात्मक उपयोग करने के 5 तरीके

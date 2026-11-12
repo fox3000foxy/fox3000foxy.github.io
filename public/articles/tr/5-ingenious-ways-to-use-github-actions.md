@@ -8,8 +8,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "x3YlD0vxecKiHPGrxQCwSABUCc528ZmyeX6HS51YOrco/jLi3yEVR+p1EQWR3AShgYVJPSwm95XDGpcqG/3FYQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "AKkqvxIFEtHAxE9/qlOwGnEYPUBg+IPMtF2btOd9t0wj4qJ+e23rkmUECUdAyE3yoESNV3A8T/dvn5tVBaiWSA=="
 ---
 
 # GitHub Actions'ı dahice kullanmanın 5 yolu

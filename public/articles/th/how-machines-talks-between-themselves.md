@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "distributed-architecture", "protocols"]
 authors: ["docteur-turboss"]
 lang: "th"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "1kSBNjFXmW32jCNY7UCHgJDHpKQVrUucyluaDRPkD7ODLeGS+Q1usT53dXdVcjFIC/w/ktbSEW1e+z0yC4VKvw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "nE4WiyqQxtSOgD4OpxgtQUsHK2Y9ggP6fGg4mJ9H4YAYlk0784dNqvjfaIqEQ0DIKOOtHPtC1nY8l4DBaMZp6w=="
 ---
 # ปัญหา: คำย่อมากเกินไป ลำดับชั้นไม่เพียงพอ
 

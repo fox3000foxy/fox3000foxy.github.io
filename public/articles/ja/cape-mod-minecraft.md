@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "oDdeKCr49QgjWseyNMVx20B5cg1onPEYzap4JwJ7pEW56FSkIeQWoDgF/wbKFnGeFOWLyia6Ehjq4Ia23Ymr3A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "rV4Qlolcc81OOGYjjgNCXwU+HBFiUmP0JQR/JF1QAxz5i5d9DE+HRvkuHeDi6maTap7BZ3SFkE9aYgHQH35S7Q=="
 ---
 
 # Cape Mod：RSA署名注入でJeb_のケープを奪う方法

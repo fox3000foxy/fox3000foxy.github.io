@@ -9,8 +9,8 @@ tags:
   - react
   - meta
   - blog
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "teWYsveqgXou/w4ibBmFtWQ9ZhYBtZBzeikqJQbLs08iejeEd2P4QsS06OJ33x+5nWA9m9MfMWgUpiLkywFehg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "zRDMzjeiA5Ib5HWP8KORuPwH+oVBLJYc/agJcvWnClAprJC75k2DP5WjQip8K8FmmHzi1NTOANPX94VZ3lzQNA=="
 ---
 
 # 이 블로그는 어떻게 동작하나요?

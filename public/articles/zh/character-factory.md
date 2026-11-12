@@ -9,8 +9,8 @@ tags:
   - typescript
   - npm
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "blThL6KqnBpCKWpy+xiQtqURbfvxoR3skVazlI0dn262y9ccBQWYNrEw6nLSQUcSw2ZgrjS+6Lhvunf0ReKe1Q=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "p3FIBWHNlRoSMrNcmdYYbwAvRtds9h+uB77qkUXAzU5ZjbvDZqBKf3u9ZliQ0MV2OqeCqloJvU00KGwi85sWow=="
 ---
 
 # 构建 character-factory：带遗传基因的头像生成器

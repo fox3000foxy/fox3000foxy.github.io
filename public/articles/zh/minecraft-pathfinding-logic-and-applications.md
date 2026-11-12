@@ -8,8 +8,8 @@ tags:
   - minecraft
   - pathfinding
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "phBaOSRr8EdzSBBJBPKRhpL2G9N9DhzlQdjhxEYvvMsly3O/2KJVPdt1hFFK8aPZET+NM9FKHtyKQGr9rNcmLw=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "Qx8GXXJHcFZ/4XLtPp44dTqWfQtviYelPLgWzjjEj1ORvKu2PqCEri6gHDq97/aPlk/Zl7w76aZnJUaO/e315A=="
 ---
 
 ## 引言

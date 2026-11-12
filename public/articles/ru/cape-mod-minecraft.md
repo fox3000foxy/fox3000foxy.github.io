@@ -10,8 +10,8 @@ tags:
   - java
   - security
   - reverse-engineering
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "QD7wPD7RtMf1tH/RYNTu9e8D4b1B/3sMy9TCjFehay+scdJWzolqoB2GjR1lPVRQ1GHgyfYzNXpA/F5IOVjD+w=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "IfYSFLzj4m+oiaT0jq5YrWfeCu2zPRlKEMbyOpwoA1Nc+jsIsuKBRaqphqoQp/NVkukpB4YwR443I0TkWBvvCg=="
 ---
 
 # Cape Mod: как украсть плащ Jeb_ с помощью инъекции подписи RSA

@@ -5,8 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "rede", "arquitetura-distribuída", "protocolos"]
 authors: ["docteur-turboss"]
 lang: "pt"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "MRlNw6v0emISsPZtEQLlVtBbHamVVjN3PCR56CZNpdUEKTtqHfP7WbZNYV3xQChFKKOaEEbPa+fu0s+GMiZW1g=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "hoiG9IlYieu6HB+a2uZcxefto0VmpE07JMayzvCALBodmVJbCRriqsQotsJTDrACpFNRA2v5nEQ+2KSyhT1gBg=="
 ---
 # O problema: muitas siglas, pouca hierarquia
 

@@ -11,8 +11,8 @@ tags:
   - event-driven-architecture
   - ai
   - open-source
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "uDgwlg9NVzeBmVTuSMTxeC55EVkhHAfU735VBb7vx98fFzTkgZ72zbww3tnLlxJVBZL21XRklg4Z8GC4P1V2aA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "EDIZe2AglNA3LUFGgfw7g2gBqbzIYgZAlE8B8piarUqCDh9ZUPRLZMSWcz2qMg6tSxvfC8ZEVxIqX5i59ica3w=="
 ---
 
 # Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다

@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "UNpUU5xLj/V7zbub1GOncEZMceSIvajQUZ6NSfjmc95g4tSpSA0K4zItQ54yLRJgnxfHIeG3ptxyd8EOl8qS8A=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "7GHIrY9rF0JUz12wBMYdw5BvKMkBW0ZO3T9ItFe8y0FjOmls7Qth1I3OFFBj9SN2RKI68o3lpSr4tr3G1yOrtQ=="
 ---
 
 # Luna Protocol: cerebros compartidos, clasificación emocional y enrutamiento interesante/fútil

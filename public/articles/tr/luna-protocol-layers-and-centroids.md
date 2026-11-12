@@ -13,8 +13,8 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "//8qUFpdMxmiaP6hB1zrOk40xDhYh3ZN5ZbG1RjxXl2uGOz3NvisOQ6Lpc1yJnib/3DuYqDEWPXpb95fGiykaQ=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "FOJXgI8OnIL8fLJY22sYKqxaWjk2G8u0BSx525BU0ZKLEVt5pYM7TH9T1PV6DI6xiKYOIN3GPPl2QQP7Mcttrw=="
 ---
 
 # Luna Protocol: paylaşılan beyinler, duygu sınıflandırması ve ilginç/anlamsız yönlendirme

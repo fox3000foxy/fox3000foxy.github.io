@@ -11,8 +11,8 @@ tags:
   - embedded
   - c
   - esp32
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "KZ1L3FQCHZW+dLPbwUV5v+t6rnh3QWPthUJjK9h3YLtFsjsQelftHgzf0l66GZjzfRceUElE0htXjTUseAiEWg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "rNMq8tDJ8FvPe7FlCqx4/ai2g/1+//IhlIezXJPqN6ql+qwl63kPYXT39fraIx3Gy3apfGidODQBJRCnc3wuyQ=="
 ---
 
 ## Giới thiệu

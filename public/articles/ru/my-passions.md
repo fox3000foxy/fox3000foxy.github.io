@@ -7,8 +7,8 @@ authors:
   - fox3000foxy
 tags:
   - personal
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "bsV8a3sgGIbMrB2GFbHgbDtG/Vdf6avJcffQOPxw8F8aCJZG07cxp4X4wp781dL+4oVszIyn+GekU78+BUFHsA=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "d8Lj0HtI+q7lZyEJkL2u2HdbKAwv/iu9RzueO/0L40PtT4INL9kcW8rHH0OFh985cTwK2SzIFbF1vrKoDyQqgQ=="
 ---
 
 # Мои увлечения

@@ -8,8 +8,8 @@ tags:
   - minecraft
   - ai
   - python
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+nMe+wl5gkHk05/0EQ000PcDswTNZmZKqNtITRNVV+GGoarYNBDZxIYk2KbjUkdkmuqUhuAXmuXCG3GT7+1U6Q=="
-author_sig: "kwZHOj2wRg4zgJoLG4bTF/16gkh7JHwA2sNFa+uuuzpscUL3DaIU7PZBTrhJPQg0zsVTHRJlENI3KFaIDuVQMg=="
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "cmCK4Jj4/uQgFeGRh7rSAWuQBm05BlxOTNZGu3Q2vgyZdrpWTi6j05xGkuS+aB+t5RgtZBpFS7J1pVELDJ9evw=="
 ---
 
 ## บทนำ
