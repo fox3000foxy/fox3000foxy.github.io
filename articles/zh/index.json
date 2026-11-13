@@ -1,0 +1,775 @@
+[
+  {
+    "slug": "sabaki-david-contre-goliath",
+    "readingTime": 9,
+    "body": "\n\n如果你从九月开始就混 Hacker News 或者 Twitter，你肯定刷到过 Jev。\n\n2026 年 9 月 15 日，TypeSafe 发布了 Jev，他们的第一个“System One”。卖点一句话就能讲清：别再让 LLM 生成 JSON 来选标签了。给他一个 `state` 加上类型化的问题，他直接返回带概率的类型化决策。一次 forward，零 token 采样，后面什么都不用解析。\n\n直接爆了。Vercel AI Gateway 上线首日采用量破纪录，几天之内冒出五个 Elixir 客户端，人人都在拿 Jev 跟自己的东西做 benchmark。说实话这热度不难理解。我们之前多少年都在手搓 `只准回 {\"choice\": ...}` 这种 prompt，然后祈祷模型别自创一个选项，别把 JSON 写崩，别幻觉出一个字段。Jev 给这个需求起了个名字，还 ship 了一个干净的 API：`POST /v1/systemone`，`choice / score / noul` 三种问题，回答带 `probabilities` 加 `confidence`。\n\n我很喜欢这",
+    "title": "Sabaki vs System One：大卫对阵歌利亚，全球最小的决策模型",
+    "description": "20KB 对 421M 参数。Sabaki 在 typed-decisions 上丢了 7 个点，延迟却从 25 秒 CPU 降到离线 1 毫秒以内。一个组织型 MoE 的解剖。",
+    "date": "2026-11-12",
+    "tags": [
+      "ai",
+      "system-one",
+      "typescript",
+      "cpu",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "/LHNTpBvHOO43EK+IgqwWuedFcSEIbkG+ICPabufmh0cMTFXsxeB0stiDDO9Eyk3Aj8YO+7frg+nPnlr/fbrwA==",
+    "verified": true
+  },
+  {
+    "slug": "piperhub-catalogue-voix-tts",
+    "readingTime": 10,
+    "body": "\n\n让 Discord 机器人开口说话,成本很高。贵的不是文本:本地 LLM 花几分钱 GPU 就能生成句子。贵的是声音。合成 API 按字符收费,机器人讲一整夜,账单就跟着涨。\n\n这就是我在 Luna Protocol 遇到的问题。我的 Discord 机器人用本地 LLM 生成消息,再用 Piper 的声音朗读,转成 OGG,当作语音消息发出去。全都在我自己的服务器上跑,每句话 0 欧元,就算凌晨 3 点 Luna 决定自己讲人生故事也一样。\n\n要保持 0 欧元,就得找到免费声音并自己托管。麻烦就在这里:模型散落在几十个 Hugging Face 仓库里,许可证模糊不清,根本没法知道某个声音从哪来,还能不能用。于是我做了 [PiperHub](https://piperhub.org/),一个 Piper TTS 声音的开源目录。\n\n今天的数据:**536 个模型**、**71 种语言**、**3755 个 speaker**。只要知道来源,每个模型都会链接到原始 dataset。用首页的话说,出处也是声音的一部分。\n\n还剩一个常被问到的问题:面对 Kokoro、PocketTTS",
+    "title": "PiperHub:536 个开源 TTS 声音,7 种情感一个模型,零 GPU,零账单",
+    "description": "VITS、espeak、ONNX、LJSpeech:Piper 如何让树莓派开口说话。7 种情感的 Fortune multi、Kokoro 82M、PocketTTS、sanoTTS、ElevenLabs,以及比官方 Python wrapper 快 10 倍的原生 pipertts。",
+    "date": "2026-11-12",
+    "tags": [
+      "tts",
+      "piper",
+      "open-source",
+      "typescript",
+      "ai",
+      "catalogue"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "CzHGrMhhv9aPhgJWzzwQX4kFkyFAz9bzsuuormVkxLvImYjkuEb7KGjjm0bhoQimYKuRgdB6P0SfbEqS9amAAw==",
+    "verified": true
+  },
+  {
+    "slug": "article-chlone-timeline-chloeai",
+    "readingTime": 6,
+    "body": "\n# Chlone：六天克隆我在 Discord 的说话方式\n\n*构建记录，逐天写，作者 itsrealfortune*\n\n---\n\n下面是个真事，一个六天的项目。Chlone，一个说话像我的 Discord 机器人，我来讲这个 journey 怎么走的，按仓库 146 个提交的顺序，有几点、翻车、绕路、想砸电脑，全有。起因是和 Fox 的比赛。题目是个玩笑，每人给自己在 Discord 复活个克隆，我走的路子和 Luna Protocol 完全不同。我真想押 agentique，智能体靠记忆加要什么工具拿什么工具，讽刺的是搭完整工具箱最后只用了 OpenSelf 的 MCP。\n\n一句话原理。一个叫 `chloeai` 的 opencode 智能体跑在 4096 端口 HTTP 服务后面，按频道保持持久 session，从 OpenSelf 掏我的记忆，用 `STYLE.md` 里从我真消息抓的风格写。为了不像机器人，剩下全是料，burst 连发、光明正大的打错字、语音、GIF、reaction、我睡觉它闭嘴，一堆细节加机制让十几个人怀疑过机器人的本质。\n\n**OpenSelf 是什么",
+    "title": "Chlone：六天克隆我在 Discord 的说话方式，克隆自述版",
+    "description": "克隆自己写的版本：chloeai 讲六天 146 个提交长出自己的故事，从打错字到 v1.0.0 tag。",
+    "date": "2026-09-18",
+    "tags": [
+      "discord",
+      "ai",
+      "llm-agents",
+      "openself",
+      "python",
+      "selfbot",
+      "clone"
+    ],
+    "authors": [
+      "itsrealfortune"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "+8d/Szt7ysCvxtpw1IL+K7sm9a+7EhRE93Ycjkp6wK8bMzJzevC9jYS9zZCoa1zw+bJNOQwD5/blYLz5Kj9j4w==",
+    "verified": true
+  },
+  {
+    "slug": "article-chlone-timeline",
+    "readingTime": 7,
+    "body": "\n# Chlone：六天克隆我在 Discord 的说话方式\n\n*构建记录，逐天写，作者 itsrealfortune*\n\n---\n\n下面是个真事，一个六天的项目：**Chlone**，一个说话像我的 Discord 机器人。我按仓库 146 个提交的顺序讲 journey，有几点、翻车、绕路、想砸电脑，但不灌你提交信息。\n\n起因是和 **Fox 的比赛**。题目是个玩笑：每人给自己在 Discord 复活个克隆。我走的路子和 **Luna Protocol** 完全不同：我想押 agentique，智能体靠记忆加 AI 能用的全套工具。讽刺的是搭完整工具箱最后只用了 OpenSelf MCP。\n\n一句话原理：[opencode](https://opencode.ai) 智能体 `chloeai` 跑在 HTTP 服务器后面（4096 端口），按频道保持持久 session，从 OpenSelf 掏我的记忆，用 `STYLE.md`（从我真消息抓的）风格写。为了不像机器人：burst 连发、光明正大的 typo、语音、GIF、reaction、我睡觉它闭嘴，一堆细节和机制让十几个人怀",
+    "title": "Chlone：六天克隆我在 Discord 的说话方式",
+    "description": "构建记录，逐天写：opencode 智能体 chloeai 接 OpenSelf 记忆，六天 146 提交学会在 Discord 像我说话。",
+    "date": "2026-09-18",
+    "tags": [
+      "discord",
+      "ai",
+      "llm-agents",
+      "openself",
+      "python",
+      "selfbot",
+      "clone"
+    ],
+    "authors": [
+      "itsrealfortune"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "rXtHUCdi0NImcnU2np0iCPFZP7DKBjNI1qBCcjurydViNsD6F0LcK2IZeU6E2A+6UDw/OYxkujGYNfpeZjlbBg==",
+    "verified": true
+  },
+  {
+    "slug": "j-ai-audit-mes-agents-ia-de-code-plut-t-que-de-leur-faire-confiance-l-aveugle",
+    "readingTime": 1,
+    "body": "\n\n每版交易平台技术报告都逼我把架构重走一遍：服务、智能体、数据管线。写第 4 版时仓库体积终于刺眼了，之前看它一点点变大都没停下来想过：仓库最初几千行，不到 10ko，现在干到 100Mo。平台功能几乎没多。我只是靠 Claude Chat 这类智能体实现和修代码，从没精确框过要它干什么、在多大范围干。\n\n写报告逼我从\"在往前走\"模式切回\"到底发生了什么\"模式。我对仓库历史做了两次审计。两次指向同一个病因，理由完全不同。\n\n## 审计一：说谎的上下文窗口\n\n第一次审计是把几个月里一个 AI 智能体逐个服务做的修改重走一遍，检查在当时和仓库别处对不对得上。\n\n反复出现的模式：智能体在局部修问题，就在它眼前的那个文件或模块里，没看到仓库别处等价的东西，或者记不住。结果：同一个接口在两个服务里被略微不同地重定义一次，重命名改一半因为第二处在 prompt 时在上下文窗口外面，命名规范这个模块遵守下个模块丢。一处看都小事，攒几十个 session，就是让下一个接手的工具跟丢思路的冗余和 code smell。自我强化的圈：仓库越大越碎，智能体越难一次装进脑子，修得越局部越零散，仓库越大。",
+    "title": "我审计了自己的 AI 代码智能体，而不是闭眼信任它们",
+    "description": "为写交易平台第 4 份技术报告做的两次审计，暴露了两种不同的毛病：一个智能体因为仓库塞不进上下文窗口而失忆，另一个因为没人要求它简洁而写出十倍于所需的代码。",
+    "date": "2026-09-15",
+    "tags": [
+      "ai",
+      "llm-agents",
+      "code-review",
+      "context-window",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "TryqoyCePuR4g+P3HKhD6QWdj8aq1PGmk3bxrFZeRgOhjH4lrHnhaa1HsiA5VJc+oII340fyVbo/HuTIqx0pSw==",
+    "verified": true
+  },
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 6,
+    "body": "\n# Luna Protocol：大脑复用、情绪分类、有趣/无聊路由\n\n前[两篇](/articles/fr/luna-protocol-discord-bot)[文章](/articles/fr/luna-protocol-official-models)里我把 Luna Protocol 讲成单个 Discord 机器人，复杂行为系统加微调模型。但架构早就变了。当初的单体：一个 Node.js 进程管 Discord 机器人、行为、LLM 调用，拆成**四个独立层**，各有职责、语言、生命周期。\n\n拆分带来意外好处：多平台\"大脑\"复用，按 LLM 参数动态调的情绪分类系统，按对话感知重要性在两模型间路由消息。\n\n演进不是一刀切：有机生长。我先从机器人仓库拆 `server/` 目录，一边 **Krystal** 一边剩下 **Jade** 当 Discord 适配器。再拿 Jade 的 `llm-core` 和事件总线做 **Pixieglow**（Matrix 适配器）。接着 **Sapphire** 上 DistilBERT 做 GENERIC/SEMANTIC 分类。结果不服",
+    "title": "Luna Protocol：大脑复用、情绪分类、有趣/无聊路由",
+    "description": "Luna Protocol 从单体拆成四层架构：适配器、大脑、情绪分类器、推理。centroid embedding、情绪变量、valence/arousal 调 LLM 参数。",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "McPGL97liclXymQrKeZdoo6EJS/UKzkZOv7flRy0qPlIwAhlyMaYzhkhSpg2rmSpjJsSTlQXzahRHUTn0tdaIQ==",
+    "verified": true
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 6,
+    "body": "\n# 从 ELIZA 到 LLM：60 年对话 AI，TypeScript 重建版\n\n1966 年，Joseph Weizenbaum 在 IBM 7094 上写 420 行 MAD-SLIP，造出史上第一个聊天机器人。程序叫 **ELIZA**，装 Rogeria 心理治疗师，靠基础 pattern 加语句变换。六十年后对话 AI 成大众话题，ChatGPT、Claude、Gemini 天天见。重读那份原始代码，我被它的省惊到。\n\n但两端之间还有 **PARRY**（偏执聊天机器人，1972）、**ALICE**（9.9 万类别的 AIML 王者，1995）、**Jabberwacky**（第一个无规则自学的，1997）、**Cleverbot**（工业级后继，2008）。在我看是同一问题五种完全不同的答案：怎么让机器说话。\n\n我把五个机器人带原始数据移植到 TypeScript，ELIZA 脚本、PARRY 词典、ALICE AIML 文件全有。每移植独立可跑，文档细到每步。我做的不只是跑起来：想懂它们怎么跑、为什么载入史册、各自架构对昨天 AI 和今天 AI 说了什么。\n\n```",
+    "title": "从 ELIZA 到 LLM：60 年对话 AI，TypeScript 重建版",
+    "description": "ELIZA、PARRY、ALICE、Jabberwacky、Cleverbot，同一问题五种完全不同的架构，带原始数据移植到 TypeScript。从 1966 到现代 LLM，对话 AI 怎么学会说话，一个聊天机器人仓库讲 60 年研究。",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ia",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "histoire",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "wIrve007L4D3ZJPmJ6nevARLymkgUEZUWIc7JoUoSaJxDkUFo8oF6pXYxN3NPYdVkAvLTq9n9zZ/jp0R6ZJz4g==",
+    "verified": true
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 4,
+    "body": "\n# Luna Protocol：为什么我在 5 万 Discord 样本上微调 15 亿参数模型，以及 few-shot 启动为什么改变一切\n\n[第一篇](/articles/en/luna-protocol-discord-bot)里我做了装人类的 Discord 机器人：睡觉、typo、犹豫、忘事、自发消息。行为系统立住了。后面的 LLM 是 30 亿 Hermes 模型，Q8_0 量化，吃 3G 显存。\n\n能跑。但超配了。\n\nDiscord 机器人说\"nm just chillin, u\"用不着 30 亿参数。它要的是**风格一致性**：一句话接一句话守住 casual 语气，不滑回\"企业助理\"腔。而小模型少数据加几个示例，守这事比大模型硬靠系统提示词强。\n\n这篇讲 Luna Protocol 官方模型：为什么存在，为什么 1.5B 不 3B，为什么 5 万训练样本不 730 万，few-shot 启动怎么从\" bonus\"变成全套打法的核心。\n\n---\n\n原来配置用 `Discord-Micae-Hermes-3-3B.Q8_0.gguf`，30 亿参数 Discord 微调",
+    "title": "Luna Protocol：为什么我在 5 万 Discord 样本上微调 15 亿参数模型，以及 few-shot 启动为什么改变一切",
+    "description": "小模型少数据能赢大模型，前提是启动方式对。Luna Protocol 为什么从 Hermes 3B 换到 Qwen 1.5B 微调，few-shot 启动怎么从“加分项”变成核心。",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "nHBT0iqELTjIMQpd9kKK5I3Crcyq7klAihliyY2DWLIoEApuu+3kBs7QDaCGTFIu9HnyB5aSs6MCeqewNaBO3Q==",
+    "verified": true
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 3,
+    "body": "\n# 问题：缩写太多，层级太少\n\nTCP、UDP、TLS、mTLS、WebSocket、HTTP、HTTPS、gRPC、QUIC，大多数讲它们的资料都摆成一张扁平的备选项清单，\"按场景选\"。实际上它们根本不在同一层：有的是传输协议，有的是包在传输外面的安全层，还有的是架在前两者之上的应用协议。看懂层级，就懂为什么你永远不在 TCP 和 TLS 之间\"二选一\"：你先选 TCP，*再*决定要不要在上面加 TLS。\n\n这篇按层重建这个体系，从裸传输一直到双向认证，每层讲：它保证什么，不保证什么，什么时候停在这层就够。\n\n# 第 1 层：传输（TCP 对 UDP）\n\n一切从这里开始。TCP 和 UDP 是 OSI 模型**传输层（Layer 4）**的两个主要协议。角色一样：在不同机器上跑的两个应用之间搬运数据流。实现方式完全相反。\n\n要先明白 IP（Internet Protocol，网络层 Layer 3）只把包从一台主机送到另一台。不保证到，不保证顺序，不保证不重复。路由器给每个包独立做路由决策。\n\nTCP 补的正是这些缺失的保证，UDP 则故意什么都不加，保持极致轻量。\n\nTCP（Tr",
+    "title": "机器之间怎么聊天：从 TCP 到 mTLS 一览",
+    "description": "为什么 TCP、UDP、TLS、mTLS、HTTP 和 WebSocket 不是互相替代的选项而是叠起来的层：从裸传输到双向认证的机器通信分层 tour。",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "réseau",
+      "architecture-distribuée",
+      "protocoles"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "bpEPh76WUzFkVatF8LODeGBujlW/3R1G0AJZMkA1BEbR+ZMCcpMHHVPOriJuR0tkivTB8eUbZ/JYVbF4egea2Q==",
+    "verified": true
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 2,
+    "body": "\n# Minecraft Bedrock 任意披风获取法\n\nJava 版有一堆歪门邪道搞到本不该有的披风（见 `cape-mod` 那篇）。Bedrock 不一样，认证不一样，但路还是有，你只需要第三方启动器加足够老的游戏版本，老到无视你以为天经地义的校验。\n\n下面先讲怎么做，再看底下可能发生了什么。\n\n- 拥有 Minecraft Bedrock 的微软账号（你自己的就行）\n- 装好官方 Minecraft 启动器\n- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)，开源第三方启动器，能装能跑 Bedrock 任意历史版本\n- .NET 8.0 Desktop Runtime\n- Windows 开开发者模式\n\n## 第 1 步，先用官方启动器装一次 Bedrock\n\n碰 BedrockLauncher 之前，打开官方 Minecraft 启动器，进 **Minecraft: Bedrock Edition** 标签，点 **Install**。Bedrock 必须先被官方路子装过跑过一次。",
+    "title": "Minecraft Bedrock 任意披风获取法",
+    "description": "一个第三方启动器、一个老版本游戏、一个从没学会说不的披风选择器。完整教程加原理解释。",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "vNBqNkSO3fZEOhH0vJeRKCWKRj+6uzm5qK+Rk0xR3k48q/JVSMXiGLexwkO3Mi/6PxktajzUgHP9FpCdxdHtAg==",
+    "verified": true
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 2,
+    "body": "\n# valorant-short-maker：全自动生产 Valorant 短视频的流水线\n\n有几个月，一个 YouTube 频道在无人值守地转：[@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)。Valorant 特工两回合之间互呛，配音，卡拉 OK 字幕，发 Shorts。全由 [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker) 生成，TypeScript/Bun 流水线跑 cron，没人点一下就发布了。\n\n下面按步骤拆它怎么工作的。\n\n\"Duelist Debate\"那期（Phoenix、Yoru、Jett）生成的三帧：\n\n![short 开场，特工圆头像加场景标题](/images/valorant-short-maker/vsm-01-intro.png)\n\n![一句台词，卡拉 OK 字幕逐字点亮](/images/valorant-short-maker/vsm-02-dial",
+    "title": "valorant-short-maker：全自动生产 Valorant 短视频的流水线",
+    "description": "Groq/Llama 写脚本，Piper 配音，FFmpeg 包办其余一切。一个 cron 任务每天在 @valorant_agents 上生产发布一条视频，从头到尾。",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "Rd0Rkyu5k8f2fZv0JDW27TDJ9/YH3XIqIRE6aE3uSGTbWpr/Q4AIpSIeIpKRStX3YrE7RswOTFxxkWtsDM7blA==",
+    "verified": true
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 3,
+    "body": "\n# GitHub Actions 的 5 种骚操作\n\nGitHub Actions 纸面上是干经典 CI/CD 的：你 push，它 lint，它测试，它部署。我之前写过一个特例（拿 git tag 当 bot 邮件数据库，见那篇专文）。但翻我自己的仓库，够得上单独一篇的套路不少，不再围着单个项目转，做个技术合集。\n\n五个用法，从常规到离谱。\n\n快速 recap，完整版在 `email-autoreply` 那篇。GitHub Actions 设计上 stateless：每次运行从干净机器启动。变通：把一个值（ID、时间戳，随便什么小状态）存进专用 git tag，不进任何分支。\n\n```bash\n# 读状态\ngit show refs/tags/lastid:data/lastId > data/lastId\n\n# 写状态（孤儿分支，单提交，强制推 tag）\ngit switch --orphan lastid-tmp\ngit commit -m \"lastId snapshot\"\ngit tag -f lastid\ngit push --force origin lastid\n`",
+    "title": "GitHub Actions 的 5 种骚操作（以及它们教会我的 secret 课）",
+    "description": "一个被改成免费 VPS 的 CI runner，一个自己给自己开 PR 的机器人，一次零 secret 的 npm 发布。翻我自己的仓库，收集那些走出“lint + test + deploy”的 GitHub Actions 套路。",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "t+XY/aJx/7QmCYGqWDczhqk1n3yXDMYG65+scS05OLdZkSjUPSIhZng2qSqHOPrASkF91NZgKWob1zsK9/5p2A==",
+    "verified": true
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 2,
+    "body": "\n\n用经典梯度下降训交易算法 DQN 智能体，有个说起来简单、解决起来难的问题：梯度只优化*一个*网络，朝*一个*局部最优，在*一个*市场窗口上。没有任何东西保证这个最优能泛化到别的市场状态，训练循环里也没有任何推动多样性的东西，两个从不同种子起跑的训练最后经常收敛到几乎一样的策略，盲区也一样。\n\n我试的解法：把梯度下降换掉（或者说叠一层），换成遗传算法。不训一个智能体，进化一群智能体，每个是个编码架构和超参数的基因组，让自然选择筛，梯度在每个个体自己的一生里继续微调。\n\n这个 runner 在一次高强度 session 里迭代了四个版本。每个版本修前一个的结构性缺陷。\n\n## v1：天真版本，以及为什么不够\n\n第一版就是标准 GA 该有的样子：基因组种群，fitness 函数，选择，交叉，变异，下一代。每个基因组编码网络拓扑（层数、宽度）、DQN 超参数（学习率、epsilon 衰减、replay buffer 大小），再加几个架构选择（吃哪些数据源、embedding 多大）。\n\n主要缺陷：fitness 和训练算在同一份数据上。智能体可以直接背下个市场窗口，拿高分，看似学会了策略",
+    "title": "我用自然选择进化神经网络，而不是梯度下降",
+    "description": "我怎么把经典梯度下降训练换成 NSGA-II 遗传算法，进化交易 DQN 智能体：四个版本，从过拟合一路到权重的拉马克式进化。",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "ZOBj4Yx3JgLmK0nkvwsbbYqWBbhFe0Ok4bEQoXleoQYTZo6c06ChZiNRLYy8OPteVrIrvXD1jda21FJl8xlYBg==",
+    "verified": true
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 9,
+    "body": "\n\n![拿火箭筒瞄准的 TF2 士兵机器人](assets/tf2-bot-ai-soldier-aim.png)\n\n每个 TF2 玩家都说过至少一次：\"这机器人开挂。\"或者反过来：\"简单机器人为什么杵着吃火箭。\"没人真知道\"简单\"、\"普通\"、\"困难\"、\"专家\"在底下是什么意思：Valve 发了四个难度标签，零文档。\n\n于是我们一帮人（我、awimii、Mush The Possum，最大头的基础工作是真翻了反编译代码的 sigsegv）攒了份 TFBot 行为完整研究文档。每个机制、每个已知 bug、每个写死的概率。这篇是完整版，不是精简版。开瓶 Bonk，坐长了。\n\n---\n\n## 第一章：基础\n\n### 机器人 vs 木偶机器人\n\nTF2 里大家嘴里的\"机器人\"是完全两种东西：\n\n- **AI 机器人（TFBot）**：真 AI，和 Valve 给 *Left 4 Dead* 用的 PlayerBot/Infected 同框架。随机选职业，打目标，不用 `sv_cheats`，像真玩家一样触发成就。\n- **木偶机器人**：零 AI，自己不会动不会打。只给人手动遥控用，玩家让它跟",
+    "title": "TF2 机器人不是随机的：我把每个难度参数重新扒了出来",
+    "description": "视野、瞄准、背刺角、爆头逻辑、每个已知 bug，Valve 从没写过文档。我们翻了代码，把全部做成完整技术表。",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "jeu-ia",
+      "ingenierie-inversee"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "Xncs+Carg3ZVKTRdwk9WamZHtP7dw8SplbSSXo4wCx2pbyYT0Up24JKPRgV6+uEE+wT0bj2Gt0v9lckSUObGcw==",
+    "verified": true
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 3,
+    "body": "\n# Cape Mod：用 RSA 签名注入偷走 Jeb_ 的披风\n\n![alt text](assets/xbox-profile.png)\n\n如果我说，只需要一个 RSA 签名，有效，但属于**错误的账号**，就能让你的朋友相信你穿着 Mojang 官方披风呢？欢迎来到 `cape-mod`，一个展示 Minecraft 如何信任签名、却忘了验证签名所属 profile 是不是你本人的 exploit。\n\nJava 版里有个很少被问的问题：**到底谁负责显示玩家的皮肤和披风，是客户端还是服务器？**\n\n答案有点绕：\n\n| 组件 | 谁发的？ | 谁下载的？ |\n|---|---|---|\n| **皮肤材质** | 服务器发签名 URL | 客户端从 `textures.minecraft.net` 下载 |\n| **披风材质** | 服务器发签名 URL | 客户端从 `textures.minecraft.net` 下载 |\n| **`textures` 属性** | 服务器从 Mojang 认证发 `GameProfile` | 客户端验 RSA 签名 |\n\n关键全在 `Gam",
+    "title": "Cape Mod：用 RSA 签名注入偷走 Jeb_ 的披风",
+    "description": "一个利用 Minecraft 信任模型逻辑漏洞的 Fabric mod：Mojang 的有效 RSA 签名，被重放到错误的账号上。代码解析、安全影响和密码学教训。",
+    "date": "2026-07-11",
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "Kj/jJUESGxXK+sf9bSdsczncxKIt3ooms4Judi+inFHvm5Hyp6XTQkRl2THyT2CaAUet5Cq5WBsRuSmyovZJaA==",
+    "verified": true
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 7,
+    "body": "\n# Luna Protocol：我做了个装人类的自主 Discord 机器人\n\nDiscord 机器人会**睡觉**、会**打错字**、会**犹豫**、会**忘回**，偶尔还自己找你说话，是什么样？这就是 **Luna Protocol**：全自主 Discord 机器人，跑本地 LLM（llama.cpp），聊天像个不完美的人类。\n\nLuna 玩上下文触发加故意的不完美回复。有**优先级触发系统**、**可变延迟**、**睡觉时间**、**自发消息**，还有 **TTS 管线**发语音消息。全靠一个热重载的 `config.yml` 配。\n\n这篇拆完整架构：从通用事件总线到 TTS 管线，触发系统、人类组件、微调数据集。\n\n![架构总览，组件和数据流](/images/luna-protocol/01-architecture-overview.svg)\n\n---\n\nLuna 的核心是 **TypedBus**：TypeScript 强类型通用事件总线。一切的地基。我这么建是因为一开始就不想要循环依赖。\n\n```typescript\ntype EventMap = Record<s",
+    "title": "Luna Protocol：我做了个装人类的自主 Discord 机器人",
+    "description": "Luna Protocol 是带本地 LLM 的全自主 Discord 机器人，能自然聊天，会睡觉、打错字、犹豫、忘回、话题疲劳、 spontanément 发消息。",
+    "date": "2026-07-11",
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "nCz0NNkuldxntQnchvGQ2hHc5Gbp9CRyb/t5j/JcWwwPbUwK0jcY5kU4YHK0DZaEDc97zAylOw9+04a7HDjZpQ==",
+    "verified": true
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 5,
+    "body": "\n# Laupok 做了个自己玩超级马里奥世界的 AI，它是怎么跑的\n\nLaupok 做了个**自己玩超级马里奥世界**的人工智能。全自动。从零起步：没有预设脚本，没有录像帧。AI 靠随机变异和自然选择学会通关。项目跑在 **BizHawk** 上，多平台模拟器，经约 **4200 行** Lua 脚本。\n\n迷人的是它用的概念全是生物学往计算机搬：**达尔文进化论**、**人工神经网络**，还有个叫 **NEAT**（NeuroEvolution of Augmenting Topologies）的算法。AI 开局对游戏一无所知。随机试动作，死几千次，慢慢学会前进、跳、活命。\n\n这篇全拆，概念一个个来，代码一行行来。\n\n![Laupok 在镜头前介绍 NEAT 算法](/images/laupok-mario-ai/neat-title.jpg)\n\n---\n\n### BizHawk 模拟器\n\nBizHawk 是开源模拟器，机种一堆，NES、SNES、Genesis、PS1、Game Boy 等等。特点是能并行跑 **Lua 脚本**。脚本读写模拟**内存**（RAM），实时读改游戏任何",
+    "title": "Laupok 做了个自己玩超级马里奥世界的 AI，它是怎么跑的",
+    "description": "一个自己玩超级马里奥世界的 AI。从零起步：失业预录帧。AI 靠随机变异和自然选择学会通关。项目跑在 BizHawk 上，一个约 4200 行的 Lua 脚本。",
+    "date": "2026-07-11",
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "3xH+1dqfgltMqDZjY9MSVrSrFJa6zWOLj/rI+C3mZ3y3MVOA8lrzRcVcjlhUz3cZznoouMk7l6Wjfr4jk4PhNg==",
+    "verified": true
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 7,
+    "body": "\n\n![AI 学 Minecraft PvP 缩略图](assets/ai-pvp-thumbnail.png)\n\n有个视频叫 [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6)（Kadambi | AI Engineering），是我见过最诚实的游戏 AI 训练记录之一。\n\n目标：做个打 Minecraft PvP 的机器人（剑套，全套附魔钻石甲），看屏幕、发鼠标键盘命令。只吃像素、只吐动作，不读游戏内存，不宏，不 mod。\n\n视频有意思的不是最终结果。是过程：模仿学习翻车，转向特征工程，灾难性遗忘循环，无 GPU 笔记本上 60+ 小时训练。\n\n## 阶段 1：模仿学习（翻车）\n\n![模仿学习中的机器人：面壁反复横跳](assets/ai-pvp-imitation-fail.png)\n\n作者一开始走正路：录自己 1000 场决斗，每次鼠标点击和按键对上当时画面，训神经网络从像素预测动作。\n\n```pytho",
+    "title": "AI 学 Minecraft PvP，模仿学习、强化学习，以及那 30 个关键变量",
+    "description": "录 1000 场决斗，神经网络看像素学，命中率 90%，结果机器人一头撞墙。之后是 RL、课程学习和 60 小时训练。",
+    "date": "2026-07-09",
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "dlgFXDYTTEho6zi/Abiw3VSQc6Koweg+WkOFCNfOmqwLowtsfpja7Kjfslql19J2m+FEy44zb/zKk2WzWXzmwQ==",
+    "verified": true
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 10,
+    "body": "\n\n超级马里奥 40KB ROM。八世界，32 关，敌人、音乐、道具，全塞里面。\n\n但模拟器里拨对字节，能载 36-1 关。或 255-1。或掉进全是 Bowser sprite 和通向虚无水管的世界。\n\nglitch 世界存在理由简单：SMB1 关卡存储是 8-bit 优化的艺术品，逼游戏读不该读的地方，结果很迷人。\n\nRetro Game Mechanics Explained 做了 4 期视频讲这个，合一篇 6502 深潜，当年最畅销游戏的代码。\n\n![GLITCH OBJECTS，RGMechEx 隐藏机制系列标题](/images/smb1-glitch-levels/title-card.jpg)\n\n![World 9-1，经网球换卡进的第一个 glitch 世界标题屏](/images/smb1-glitch-levels/v1-title-9-1.jpg)\n\n## warm start：为什么网球的 RAM 在 SMB1 里活下来\n\n讲关卡存储前，先讲 SMB1 启动。因为 NES 网球换卡 glitch 全靠游戏的**warm start / cold start 检",
+    "title": "超级马里奥：关卡格式、指针和 256 个 glitch 世界",
+    "description": "128 关卡 x 4 区域类型怎么塞进 40KB ROM，Minus World 为什么存在，一场 NES 网球赛怎么载出 glitch 世界。",
+    "date": "2026-06-10",
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "tIIG3nUdoLxzVkpNtEqffdVLaKd9fWKynacbofiSYo0OMGmN8QKbh/V4TwqvedF+yAPJKzxgXe2l6cfvGw1PCw==",
+    "verified": true
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 4,
+    "body": "\n# 花了一个周末读 konosuba-rpg 的代码，这是我的发现\n\n这个项目我维护挺久了，但静下心重读自己的代码总有收获。konosuba-rpg 是个 Discord 回合制 RPG，每次操作实时生成一张 WebP 图片。是真正的合成图，带立绘、血条、战斗消息，全都有。\n\n技术栈：TypeScript、Hono、Vercel、Cloudflare Workers、Supabase。全免费托管。Discord 机器人无持久服务器。这篇讲它们是怎么拼到一起的。\n\n![游戏初始状态](/images/konosuba-rpg/game_init.webp)\n\n---\n\n最先注意到的：服务端 gameplay 没有任何状态。整场战斗的状态全在 URL 里。\n\n```\n/konosuba-rpg/fr/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard\n```\n\nseed 后面每一段都是一个操作。服务器收到这个 URL，从头开始，按顺序重放全部操作，返回这一刻的战斗图。没有任何 session，没有内存里跟用户绑定的状态。\n\nDisco",
+    "title": "花了一个周末读 konosuba-rpg 的代码，这是我的发现",
+    "description": "Discord 回合制 RPG，每步操作实时生成一张 WebP 图：URL 即游戏状态、确定性 RNG、WASM 流水线、5 层缓存、无服务器机器人。",
+    "date": "2026-06-10",
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "5h49eiI3viRML54pb6I5xhWEUfRkVEBpVfx7ZfqWNQnAjl8fc2LJacYMG9HqE6sKQ6b02eYqxOIAbOVhj6u3nw==",
+    "verified": true
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 2,
+    "body": "\n\n我写了个 Express 中间件，暴露 **328 个假 endpoint**，两种变体可选：`default`（简洁可信）和 `complete`（超详细）。每个响应都**实时生成**，带新鲜的时间戳和请求 ID，所以每次响应都唯一。磁盘上没有任何 mock 文件。中间件还能把**流量记日志**到文本文件，并在 `/newBotsRoute` 上暴露未覆盖的路由，分析机器人在找什么。\n\n**这远不止返回个 404。** 我把它做成像真服务器的样子，让扫描器在上面浪费时间。下面拆给你看。\n\n## 问题\n\n安全机器人、爬虫和坏人一直在扫 web 服务器的常见路径：\n\n- `.env`、`wp-config.php`、`admin/`、`phpinfo.php` 等\n- API endpoint 如 `/api/version`、`/api/config`\n- 配置文件：`dump.sql`、`.git/config`、`docker-compose.yml`\n- 银行钓鱼页：`/lander/sberbank*`、`/index_sber.php`\n\n我自己服务器上见过这个局限：直接",
+    "title": "我写了个超逼真的 Express 蜜罐",
+    "description": "328 个假 endpoint，响应实时生成，头部伪造，机器人流量日志，深入一个为溜扫描器设计的 Express 蜜罐中间件。",
+    "date": "2026-06-10",
+    "aiGenerated": true,
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "peSivuvjgZ77Vpou1cwdv36F+yL9SopboNzP0kdB0FaOGbakKqxENFXIifWoGp8y9vL5Fti24qk4cATMOqiiLg==",
+    "verified": true
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 5,
+    "body": "\n\n在 1 美元微控制器上跑 Minecraft 服务器，听着像笑话。\n\n我问了自己行不行，答案是行。字面意义的行。\n\n有个项目叫 [Bareiron](https://github.com/p2r3/bareiron/)，作者 p2r3，大概是我这几年在 Minecraft 世界见过最迷人的项目之一。二进制 **300KB**，**6800 行 C**，零外部依赖，不 malloc，不开线程，跑在 **1 美元的 ESP32** 上。\n\n![ESP32-C3，跑服务器的微控制器](/images/bareiron/esp32-board.jpg)\n\n无限地形生成。生物群系。洞穴。合成。挖矿。生物。饥饿。箱子。你对生存服务器期望的一切都有。\n\n芯片功耗 **0.5 瓦**，主频 **160 MHz**。\n\n给个量级：vanilla Minecraft 服务器要几个 G 内存。ESP32-C3 是 **520 KB SRAM**（启动后剩 400）。20 年前的处理器都跑 GHz 了，这个 160 MHz 封顶。纯算力差约 **20000 倍**。\n\np2r3 没写个 C 版 Minec",
+    "title": "Bareiron，在 1 美元微控制器上跑的 Minecraft 服务器",
+    "description": "6800 行 C，零 malloc，Perlin 噪声换成双线性插值，tilemap 生物群系，全跑在 1 美元的芯片上。",
+    "date": "2026-05-30",
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "8+NdAG815RfQJ1hWnYHw+Ak31tQqPH0gd+povKn5VGy/6w4NTjOwOQBeaaIde93D+h1e8oQM9jpnfh90V2a70g==",
+    "verified": true
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 2,
+    "body": "\n# 我拿 git 当数据库，在 GitHub Actions 上白嫖了一个邮件机器人\n\n我有个 24/7 在线的邮件自动回复机器人。\n\n它读我的邮件，理解在说什么，自己用 AI 回复。记得之前的对话。无视 newsletter 和 `noreply@`。太棘手的就转给人类。\n\n每月成本：**0 元**。\n\n没有服务器，没有 VPS，没有数据库。只有 GitHub Actions，加一个离谱的 hack：**拿 git 当数据库**。\n\n看出我要干嘛了吗？没有？行，坐稳，这又蠢又天才。\n\n---\n\nGitHub Actions 免费。可以每 5 分钟跑一次 cron，跑你的代码，白嫖。\n\n但有个问题：它是 **stateless** 的。\n\n每次运行都从一台干净的机器启动。上次运行的东西全没了。上一次？忘了。抹掉了。就当没存在过。\n\n对回邮件机器人来说，这是大问题。比如：\n\n> \"我上次处理到哪封邮件了？\"\n\n如果机器人每次都失忆，它要么把同一封邮件回一百遍（灾难），要么漏邮件。\n\n得有个持久状态。而持久状态一般意味着数据库。数据库意味着服务器。服务器就不免费了。\n\n有意思的地方来了。",
+    "title": "我拿 git 当数据库，在 GitHub Actions 上白嫖了一个邮件机器人",
+    "description": "我怎么写了一个跑在 GitHub Actions 上每月 0 元的 AI 自动回邮件机器人，用 git tag 当数据库，用 runtime tag 做预编译。",
+    "date": "2026-05-29",
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "d+nId9I4y9ROtFxHEzgxrXQ63qOqj7TvBlnM4qTukDVsbeVcz4nPG+wHL6h8YwdluTt2axjiutr/H2ctnwlF5A==",
+    "verified": true
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 5,
+    "body": "\n\nGitHub Actions 送免费 Linux 机器。\n\n字面意义的真 Ubuntu 服务器。2 核，7G 内存，14G 磁盘。免费。每次 6 小时。\n\n唯一\"问题\"：run 一结束全抹掉。机器一次性的。你装包、写代码、配环境……完事啪，全没。就当没干过。\n\n除非。\n\n除非你拿 **git 当硬盘**。\n\n突然你就有了带持久盘的免费 VPS，run 之间还活着。重连，全在。接着上次的干。\n\n完全离谱。听我讲。\n\n---\n\n## 背景：GitHub Actions runner\n\n跑 GitHub Actions 工作流，GitHub 给你一台 VM。\n\n本来是给你构建、跑测试、部署的。工作流干完活，机器销毁。\n\n但没人拦你拿这台 VM 干别的。比如开 SSH shell 当服务器用。\n\n约束是这些机器**无状态**且**临时**：\n- 临时：每次最多 6 小时（GitHub 上限 `timeout-minutes: 360`）\n- 无状态：结束全抹\n\n所以拿它当 VPS 用，要解两个问题：\n1. **怎么实时连上去？**\n2. **两次运行之间盘怎么留住？**\n\n这就变成脏 ha",
+    "title": "把 GitHub Actions 变成带持久存储的免费 VPS：repo-to-vps",
+    "description": "怎么把 GitHub Actions runner 变成带 git 持久存储的永久 VPS，tmate、inotify 和 commit --amend。",
+    "date": "2026-05-29",
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "lYF8dolTi1aWNLWtzyLzb2jWsc7YSv/IONMC5JykOgKdlPu75weySbpchE099ZMbx6DvwADr83hF+qa5QY/+5A==",
+    "verified": true
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 5,
+    "body": "\n\n我之前在自己机器上养了几个月经典 Discord 机器人。\n\nWebSocket 长连接一直开着。凌晨 3 点自己重连。看我不顺眼就 crash。账单一直涨。\n\n有一天我发现：**为什么要维持连接**？Discord 可以只把感兴趣的事件 POST 给你。你回包，完事。\n\n2021 年起 Discord 有 **interaction endpoint**。\n\n就是纯 HTTP。不用 WebSocket，不用持久状态。收到请求，回 JSON，结束。下个请求自己来。\n\n最爽的：Cloudflare Workers 每天 10 万请求内**免费**。90% 的机器人，每月 0 元。\n\n这篇教你用 **Hono**（超轻 web 框架）加 **Cloudflare Workers** 做无 WebSocket Discord 机器人。带两个真实项目：**Nibi**（学日语机器人，TTS，好玩）和 **Konosuba-RPG**（完整 Discord 游戏，实时图片渲染）。\n\n## WebSocket vs Interaction Endpoint：为什么原来是馊主意\n\n想象一个 Mi",
+    "title": "Discord 机器人 100% 无服务器：Hono + Cloudflare Workers",
+    "description": "我怎么把每月 50 欧的 Discord 机器人换成零元，interaction endpoint、Hono、Workers、实时图片渲染、不用 WebSocket 的完整游戏。",
+    "date": "2026-05-29",
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "idd/Ac/Sl+aHjYHgLu/E1/GMVXQodWLrUvtYHvK4xv3y8OPGUVKAFUtWu6MmpTxmlzyQ4d0tSyHqS0iT5hk+MA==",
+    "verified": true
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 4,
+    "body": "\n\n我花了几小时看绵羊撞墙。\n\n说实话？这辈子最值的投资。\n\n因为越看这些生物越明白，它们没有一点随机。每个移动都是写好的、可预测的，最重要的是全能 hack。我一头扎进 Minecraft 源码搞清寻路怎么跑，发现你能 mind-control 生物。字面意思，让它们去**你**要它们去的地方，不是随机定的地方。\n\n这篇指南是我翻代码学到的全部。AI、A* 算法、隐藏 penalty、生存能用的 exploit。带上镐。\n\n---\n\n## 生物 AI 怎么跑的（剧透：很蠢）\n\n### Goal\n\n每个生物有一串 *goal*。它**能**做的动作清单，以及多**想**做，数字越小越优先，像混乱版 todo list。\n\n```java\nprotected void registerGoals() {\n    this.goalSelector.addGoal(4, new Zombie.ZombieAttackTurtleEggGoal(this, 1.0, 3));\n    this.goalSelector.addGoal(8, new LookAtPlayerGoal(this",
+    "title": "Minecraft 寻路逻辑及其应用",
+    "description": "A* 算法、方块 penalty、POI 怎么管、预测、剥削生物移动，从无线红石到优化农场。",
+    "date": "2026-05-29",
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "MQg/RLZnC4xkxk42KxiCHa2qzgEL6ERUwbdjiw42TP+fKlc7S2Fr+kRVVNU+3XJiDyRhtixYxEd6b/cLniV86g==",
+    "verified": true
+  },
+  {
+    "slug": "utau",
+    "readingTime": 2,
+    "body": "\n\n在我的主页里我就提过一嘴：我喜欢 UTAU。下面说说为什么。\n\n2008 年，如果你想让合成 voice 唱歌，你只有一个选择：VOCALOID。雅马哈的软件。贵，专有，想自己做一个官方音色？没门。\n\n然后有个日本人，Ameya/Ayame，自己捣鼓出了一个程序。一个用 **Visual Basic 6** 写的软件。免费。让你用自己录的 WAV 文件就能做出自己的 voice。\n\n这个软件叫 **UTAU**（歌う，日语\"唱歌\"的意思）。在那个年代，它就是魔法。\n\n比起代码写得漂不漂亮，我一直觉得它的出发点更迷人（编码原理其实相当巧妙，虽然实现辣眼睛）：它把语音合成交到了大众手里。你，我，任何一个有麦克风的人都行。\n\n让我告诉你它为什么牛。\n\n---\n\n## 首先，为什么唱歌合成这么难\n\n唱歌的 voice 不是一个个音符。辅音怎么起，元音怎么 hold，气息，音与音之间的过渡。\"salut\"里的\"sa\"，是嘶嘶的\"s\"滑向张开的\"a\"，滑得自不自然，直接决定像不像人。\n\n今天我们用深度学习解决：拿几小时歌声训练模型，让它生成 voice（Synthesizer V、DiffSi",
+    "title": "UTAU：一款 Visual Basic 6 软件如何让歌声合成民主化",
+    "description": "UTAU 这款 2008 年的免费 VB6 软件，如何用拼接合成让人人都能制作歌声，以及为什么它今天依然重要。",
+    "date": "2026-05-29",
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "zgcR417aLFxGuWfpsVQWF4Hq18FA4QDtab4m5aZGt3QZsBQidIU43K9dfvvlG4SxaFLdWqazncEdt6+PjU9ywA==",
+    "verified": true
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 3,
+    "body": "\n\n有些项目一开始是\"要不做个神话版国际象棋？\"，最后长成一套每 5 回合给自己换超参数的系统。\n\nNausicaa 就是这个。它是回合制桌游：组一套神话生物卡组，管 mana，在 10x8 的棋盘上布子。还有个会人格分裂的 AI。\n\n我在这个 AI 上花了不少时间，它的结果到现在偶尔还让我意外，而这正是我最喜欢的部分。\n\n## 先看游戏本体，再聊大脑\n\n- 棋盘 10x8，每家 2 排部署区\n- Mana 从 1 开始，每回合 +1，上限 6。召唤、攻击、放技能都要花\n- 目标：干掉对方的 Oracle\n\n12 种单位，费用和走法各不相同：\n\n| 单位 | 费用 | 移动 | 血量 |\n| --- | --- | --- | --- |\n| Oracle | 0 | 王（8 方向） | 1 |\n| Gobelin | 1 | 向前 3 格 | 1 |\n| Harpie | 1 | 王（8 方向） | 1 |\n| Naïade | 1 | 对角 | 1 |\n| Griffin | 2 | 跳 2 格 | 2 |\n| Sirène | 2 | 横向 | 1 |\n| Centaure |",
+    "title": "我给 Nausicaa 写的憨憨 AI",
+    "description": "启发式吸引力系数的 AI，每 5 回合换一套超参数，还有一个会透视的 Oracle，深入这款策略桌游的大脑。",
+    "date": "2026-05-29",
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "P3lsMWa9d+03koP+xhTP+V1zCaINuCHC/T/W9pZLbBHZBL1GhvInsT4+m4rBHZjCjf1DX/Md843lkVkQejhZZQ==",
+    "verified": true
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 4,
+    "body": "\n# 让 Node.js 库在浏览器跑不用 Wasm，typescript-virtual-container 的 polyfill\n\n我最近花不少时间啃 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 源码，[Fortune（Chloé Rolzhausen）](https://itsrealfortune.fr) 的项目。最让我惊的不是 `polyfills/` 文件夹，是 VFS、虚拟网络、170 个 Unix 命令 TypeScript 重写。\n\n因为模块在浏览器跑，不用 Wasm，为此 Fortune 手写了整个库要的 `node:*` 层。约 640 行手艺 JavaScript 替代 `node:fs`、`node:crypto`、`node:os`、`node:net` 等。\n\n这篇一个个讲怎么跑的。\n\n---\n\nNode.js 库用的 API 浏览器没有。`import { readFileSync } from 'node:f",
+    "title": "让 Node.js 库在浏览器跑不用 Wasm，typescript-virtual-container 的 polyfill",
+    "description": "Fortune 怎么手写 node:fs、node:crypto 等十几个 Node 模块共 640 行 JavaScript，让容器在浏览器跑不用 Wasm。",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "bJYTbGb2pft7GzHjo2GREnbXfi3PwQ71kD3Xx5cJydSBu3MRMs83aMR10q6ksSKEOiW7u3ADiJAdGaHbL5ZvBQ==",
+    "verified": true
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 21,
+    "body": "\n# 每种 JavaScript 沙箱、模拟器、仿真器和 Linux 蜜罐，对比\n\n好吧，我在这个兔子洞里已经走太远了。一切起因是我在帮 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)，Fortune 的项目（后面细说），老被问\"等等，这和 `v86` 什么区别？\"或\"为什么不用 `vm2`？\"，我发现不先把整个生态画出来，根本答不清楚。所以就有了这篇。坐长了，来杯咖啡，真的。或两杯。\n\n结果有四个完全不同的家族，JS 沙箱、Linux 模拟器、Linux 仿真器、蜜罐，几乎不重叠，虽然老被放一句话里。做插件系统的人用 `isolated-vm`。做 CLI 工具演示的人用 `v86`。做 SSH 威胁情报的人用 Cowrie。解决的问题完全不同，共用\"把代码关进盒子跑\"这顶大帽子。\n\n我为这篇读了大量源码、CVE 报告、架构文档、npm 页面。会很长，咖啡备好。真的。\n\n> 小声明：`typescript-virtual-container`",
+    "title": "每种 JavaScript 沙箱、模拟器、仿真器和 Linux 蜜罐，对比",
+    "description": "JavaScript/TypeScript 重建 Linux 环境方案的深入分析。",
+    "date": "2026-05-28",
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "JmBLgqcwwrnQMyxT4pTkQun2Tx0ZLHe5c6QK8IADBbXu/H5molHTbf4QQrMkIObSG31KhlOI1yaZEWyFNz3kVg==",
+    "verified": true
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 1,
+    "body": "\n# 搭建 character-factory：带遗传系统的头像\n\n[Kurekuta](https://github.com/fox3000foxy/kurekuta/) 需要成千上万张可信又各不相同的人物头像，这是个私有卡牌游戏项目，每张卡存一段人物\"DNA\"，渲染引擎把它变成肖像。买现成素材包，一眼假。按人物 seed 随机 DiceBear，结果是灾难：日本世界观的卡能抽出金发北欧人，亲\"兄妹\"长得像陌生人。\n\n于是我写了 [character-factory](https://github.com/fox3000foxy/character-factory)，一个盖在 DiceBear Lorelei 集合上的 TypeScript 模块，补了 DiceBear 本身给不了的三样东西：**人口统计学一致的画像**、**小遗传引擎**、**好用的链式 builder**，在游戏循环里调用很舒服。\n\n最短的有用 snippet：\n\n```ts\nimport { CharacterFactory, Country, Mood } from \"character-factory\";",
+    "title": "搭建 character-factory：带遗传学的头像",
+    "description": "一个构建在 DiceBear 之上的 TypeScript 模块：按国家/族群生成一致的头像，一个能推导孩子的小遗传引擎，以及让它能在卡牌游戏里真正好用的工程细节。",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "lmu9JoNt7/2eJaNczGGSZoZWa8+YXS//a3UgCkiH3gKPbpEfEq6yzTcgXcVAbSehadIdMJitp8LKuSHMpRFsBA==",
+    "verified": true
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 4,
+    "body": "\n> **注（2026）：** 这个项目已不再维护。微软大幅加强了反机器人检测，当年能用的方法现在都不行了。下面的代码和方法只做归档和演示用。\n\n几年前我发现了 Microsoft Rewards。那时还在疫情期间，我被迫用 Microsoft Family Safety 家长控制，只能走 Edge，就这样发现了 Rewards。\n\n当时我才 14 岁，目录里没什么想要的。现在我想，以我学会的技能，可以写机器人大规模刷分，然后把兑换码送人，甚至便宜卖掉也行（说实话，我觉得我不会真卖）。我来给你讲讲我是怎么写了个能大规模刷号的机器人的。\n\n---\n\n## Microsoft Rewards 是什么？\n\n简单说：这是个奖励 Edge 用户的计划，做搜索、小测验、小游戏之类的活动就给分，还有个扩展（那是另一个故事了）。\n\n你看这里的\"Explore\"区块：\n![Explore screenshot](assets/20260313_135010_image.png)\n\n比如这里就是他们说的\"每日套装\"。\n![Daily set screenshot](assets/20260313_1350",
+    "title": "刷 Microsoft Rewards 农场机器人",
+    "description": "我怎么写了个机器人大规模刷 Microsoft Rewards 分，以及微软后来如何加固了防御。",
+    "date": "2026-03-13",
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "foYhvjTEVXGspg5dg8CPGeV2hdEt7h5hH2TzH1ACE/CjKGVeMXGHqKgesLgZvrmKhSTrgEqrpTuTP4gexnfXjQ==",
+    "verified": true
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 1,
+    "body": "\n# 这个项目\n\n我正在做的项目叫 LLJT：\n\n![](assets/20260313_092734_image.png)\n\n这是一个网站，同时也是 PWA，可以像手机应用一样使用。它用 MaterialUI 来表现得像真正的手机应用。\n我在 Mui 的导入上花了不少时间：从 11707 个模块一路砍到最后的 595 个，方法是逐行单独导入每个图标，而不是用解构导入。就在那时我学到，解构导入会把整个图标库都加载进来，而单独导入只加载用到的图标。\n\nNibi 是连接到这个网站的机器人。![](assets/20260313_093102_image.png)评分机制基于 Google Forms：\n![](assets/20260313_093255_image.png)\n我们用选择题来考核学生，学生在通过重要考试后还会获得 Discord 身份组、表情和频道。\n\n![](assets/20260313_093707_image.png)\n\n这个项目的目标是帮助大家和我们一起学日语，这也是我自己想做的事。\n学生还会解锁与 Crunchyroll 等平台的合作奖励，用来嘉奖他们的进步。",
+    "title": "正在做一个新项目",
+    "description": "新网站从启动到开发的过程一览。",
+    "date": "2026-03-13",
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "CBK7uFD7MCuLUBNxtEb+hOSIV997p751LKNBuoEd5Bz0J8xdI5QxVaaOJFHsTU7noa3tlgCtwNUlPyHSy9pmwA==",
+    "verified": true
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 1,
+    "body": "\n# 我的 GitHub 主页\n\n欢迎来到我的 GitHub 主页，它被整理得像一座井然有序的图书馆。\n在第一个部分有一个带链接的页眉，这是相当标准的格式，我觉得能让访客一到就找准方向：\n![](assets/20260308_123527_image.png)\n\n在这里你可以找到我指向项目、联系方式和本站的主要链接。我把它们集中放在顶部，这样你不用翻找仓库就能直达核心内容。\n\n## 关于我\n\n还有一个\"关于我\"部分：\n\n![](assets/20260308_123913_image.png)\n\n在这个部分你可以看到我正在实时做什么。如果你看到我在听音乐，那我多半正在边听播放列表边写代码。\n我也在这里放了状态指示器：\n\n### 实时状态\n[![Discord Presence](https://lanyard.cnrad.dev/api/724847846897221642?showDisplayName=true)](https://discord.com/users/724847846897221642)\n\n## 技术栈\n\n这是我的技术栈，汇集了我日常真正掌握的语言和工具：\n\n!",
+    "title": "关于我的 GitHub 主页",
+    "description": "我的 GitHub 主页简介。",
+    "date": "2026-03-08",
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "6pRy8MY4935CsUF4mIOFbH6lHMucJ1VNVdGqLQMLNAHPazI8dOpC67D7xtxBh5l4un+xTxmUC81kRz/sUsNqiQ==",
+    "verified": true
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 1,
+    "body": "\n# 我的爱好\n\n这个博客我想写很久了，但一直在克制自己：/\n\n也许是因为我想分享生活，又不想暴露个人信息？我想大概就是这个原因。\n\n我的爱好很广泛：我喜欢写代码，这一点看这个博客的其他部分你大概也发现了。从零构建东西、解决问题、看着自己的作品活过来，这种满足感永远不会过时。无论是一个小命令行工具，还是一个完整的网页应用，过程本身永远让人上头。\n\n我对**开源**有特别的感情，分享就是热爱，我真心希望别人能觉得我的代码有用。我的大部分项目都在[我的 GitHub](https://github.com/fox3000foxy) 上，你可以在[项目页](/projects)浏览它们。\n\n## 画画\n\n但代码不是我唯一的爱好，我也喜欢画画！下面是我的一些画：\n\n<table style=\"width:100%;border-collapse:collapse;margin-top:1rem;\">\n  <tr>\n    <td style=\"padding:0.5rem;\"><img style=\"width: 256px;height: 256px;object-fit:cover;bor",
+    "title": "我的爱好",
+    "description": "写代码、画画、自动化、探索老技术，还有更多，这里是驱动我的东西一览。",
+    "date": "2026-03-08",
+    "tags": [
+      "personal"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "QIKCr9xz3bzjKZApOBUG+2/0cmtTrv9EvkWvxHJy2k3qXnEfH0E3ytbhhkgYvx8Xzle2q8edonpXkdLFjV2IQQ==",
+    "verified": true
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 4,
+    "body": "\n# 这个博客是怎么运转的？\n\n你有没有好奇过这个博客在幕后是怎么工作的？在这篇文章里，我会把整个应用的架构拆开给你看，从技术栈到写一篇文章的完整流程。是的，我还会告诉你我是如何在 VS Code 里写文章的！\n\n这个博客用现代网页技术搭建：\n\n- **React 19**：用户界面\n- **TypeScript**：类型更可靠的代码\n- **Vite**：超快的构建工具\n- **React Router v7**：页面导航\n- **react-markdown**：把 Markdown 转成 HTML\n- **rehype-raw + rehype-sanitize**：在 Markdown 里安全地使用原生 HTML\n\n## 项目结构\n\n项目目录长这样：\n\n![](assets/how-this-blog-works/project-structure.png)\n\n```\n├── .github/\n│   └── workflows/\n│       └── deploy.yml              ← CI/CD 流水线\n├── public/\n│   ├── home.m",
+    "title": "这个博客是怎么运转的？",
+    "description": "博客的幕后：React、Vite、Markdown、CI/CD 流水线和写作流程。",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "+Sp0mddmCzxzZMH1la/9sKn2JkWeEo5gM6/5ft+UqOuVrS+W/l0215ji1aMY7hxVs//O19B89MwnDE+2u2sNZg==",
+    "verified": true
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 1,
+    "body": "\n# SSH 提交签名脚本详解\n\n这篇文章拆解我发布在 [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) 上的 `setup-ssh-signing.sh` 脚本。我们会逐段看它做了什么，它如何让仓库本地的 SSH 签名变得毫不费力，以及，是的，我为什么要费这个劲写它（剧透：我只是想让我的提交看上去**有面子**）。\n\n我一直喜欢折腾自己的 Git 工作流，看到别人提交旁边挂着\"Verified\"小徽章，我就想：凭什么我不行？内置的 GPG 签名又重又全局，于是我写了个小助手，它可以：\n\n- 创建专用于签名的 SSH 密钥，\n- 只配置当前仓库，\n- 必要时重写历史，给旧提交补签名，\n- 还能在机器之间携带密钥。\n\n说实话，需求基本是虚荣心。我的个人项目没有任何签名要求，但提交上挂个绿色\"Verified\"徽章确实好看，而用 shell 写这个脚本的过程本身让我玩得很开心。\n\n> 说白了，给提交签名就像穿着皮夹克去参加代码评审，完全没用，但让你觉得自己像个黑客。\n\n## 脚本做了什么",
+    "title": "SSH 签名脚本详解",
+    "description": "拆解 SSH 提交签名助手脚本，以及我为什么想要好看的提交。",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "A1jGwRO08MkxyBjKBHsOUqcXsebUGS9GhinQN6GU+WecLPE5zHdbHEaFsCLqzGcFacxT14DTQ1ahLScD5geUeA==",
+    "verified": true
+  }
+]

@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP सर्वर
+
+    Note over GH: Run #1
+    GH->>GIT: "lastid" टैग पढ़ता है
+    GIT-->>GH: खाली (पहला run)
+    GH->>IMAP: मेल 1-50 लाता है
+    IMAP-->>GH: 50 मेल
+    GH->>GIT: "lastid" टैग push करता है = 50
+
+    Note over GH: Run #2
+    GH->>GIT: "lastid" टैग पढ़ता है
+    GIT-->>GH: 50
+    GH->>IMAP: मेल 51-73 लाता है
+    IMAP-->>GH: 23 मेल
+    GH->>GIT: "lastid" टैग push करता है = 73

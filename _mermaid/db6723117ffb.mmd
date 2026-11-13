@@ -1,0 +1,5 @@
+flowchart TD
+    A["Score<br/>(notes + lyrics)"] --> B[Phonemizer]
+    B -->|"cuts into units<br/>to concatenate"| C[Resampler]
+    C -->|"loads the WAV,<br/>changes duration + pitch,<br/>applies flags"| D[Wavtool]
+    D -->|"glues the bits back"| E["Final audio"]

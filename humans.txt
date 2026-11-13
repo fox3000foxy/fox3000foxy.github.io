@@ -1,0 +1,14 @@
+/* TEAM */
+Author: Fox3000foxy
+Site: https://fox3000foxy.com
+GitHub: https://github.com/fox3000foxy
+
+/* THANKS */
+Thanks to p2r3 for Bareiron, the Minecraft community, and everyone reading this.
+
+/* TECHNOLOGY */
+Built with: TypeScript, React, Vite, Bun
+Hosted on: GitHub Pages
+Domain: Cloudflare
+Analytics: GoatCounter
+Inspiration: Minecraft, reverse engineering, and embedded systems

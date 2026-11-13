@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as Servidor IMAP
+
+    Note over GH: Run #1
+    GH->>GIT: lê tag "lastid"
+    GIT-->>GH: vazia (primeiro run)
+    GH->>IMAP: busca emails 1-50
+    IMAP-->>GH: 50 emails
+    GH->>GIT: envia tag "lastid" = 50
+
+    Note over GH: Run #2
+    GH->>GIT: lê tag "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: busca emails 51-73
+    IMAP-->>GH: 23 emails
+    GH->>GIT: envia tag "lastid" = 73

@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fox&apos;s Blog (Tiếng Việt)</title>
+    <link>https://fox3000foxy.com</link>
+    <description>Fox3000foxy&apos;s blog about web development, automation, and open-source -- Tiếng Việt</description>
+    <language>vi</language>
+    <lastBuildDate>Fri, 13 Nov 2026 14:03:12 GMT</lastBuildDate>
+    <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
+    <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
+    <generator>WordPress 5.9.3</generator>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <image>
+      <url>https://fox3000foxy.com/og/home.png</url>
+      <title>Fox&apos;s Blog (Tiếng Việt)</title>
+      <link>https://fox3000foxy.com</link>
+    </image>
+    <atom:link href="https://fox3000foxy.com/feed.vi.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://fox3000foxy.com/feed.xml" rel="alternate" type="application/rss+xml" hreflang="x-default" />
+    <atom:link href="https://fox3000foxy.com/feed.en.xml" rel="alternate" type="application/rss+xml" hreflang="en" />
+    <atom:link href="https://fox3000foxy.com/feed.fr.xml" rel="alternate" type="application/rss+xml" hreflang="fr" />
+    <atom:link href="https://fox3000foxy.com/feed.zh.xml" rel="alternate" type="application/rss+xml" hreflang="zh" />
+    <atom:link href="https://fox3000foxy.com/feed.ja.xml" rel="alternate" type="application/rss+xml" hreflang="ja" />
+    <atom:link href="https://fox3000foxy.com/feed.ko.xml" rel="alternate" type="application/rss+xml" hreflang="ko" />
+    <atom:link href="https://fox3000foxy.com/feed.tr.xml" rel="alternate" type="application/rss+xml" hreflang="tr" />
+    <atom:link href="https://fox3000foxy.com/feed.it.xml" rel="alternate" type="application/rss+xml" hreflang="it" />
+    <atom:link href="https://fox3000foxy.com/feed.de.xml" rel="alternate" type="application/rss+xml" hreflang="de" />
+    <atom:link href="https://fox3000foxy.com/feed.ru.xml" rel="alternate" type="application/rss+xml" hreflang="ru" />
+    <atom:link href="https://fox3000foxy.com/feed.es.xml" rel="alternate" type="application/rss+xml" hreflang="es" />
+    <atom:link href="https://fox3000foxy.com/feed.pt.xml" rel="alternate" type="application/rss+xml" hreflang="pt" />
+    <atom:link href="https://fox3000foxy.com/feed.id.xml" rel="alternate" type="application/rss+xml" hreflang="id" />
+    <atom:link href="https://fox3000foxy.com/feed.hi.xml" rel="alternate" type="application/rss+xml" hreflang="hi" />
+    <atom:link href="https://fox3000foxy.com/feed.ar.xml" rel="alternate" type="application/rss+xml" hreflang="ar" />
+    <atom:link href="https://fox3000foxy.com/feed.th.xml" rel="alternate" type="application/rss+xml" hreflang="th" />
+    <item>
+      <title>Sabaki vs System One: David đấu Goliath, mô hình ra quyết định nhỏ nhất thế giới</title>
+      <link>https://fox3000foxy.com/blog/sabaki-david-contre-goliath</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/sabaki-david-contre-goliath</guid>
+      <description>20KB đấu 421M tham số. Sabaki thua 7 điểm trên typed-decisions nhưng từ 25s CPU xuống dưới 1ms offline. Mổ xẻ một MoE kiểu tổ chức.</description>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>system-one</category>
+      <category>typescript</category>
+      <category>cpu</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>PiperHub: 536 giọng TTS mã nguồn mở, 7 cảm xúc trong một model, không GPU, không hóa đơn</title>
+      <link>https://fox3000foxy.com/blog/piperhub-catalogue-voix-tts</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/piperhub-catalogue-voix-tts</guid>
+      <description>VITS, espeak, ONNX, LJSpeech: cách Piper làm cho Raspberry Pi biết nói. Fortune multi với 7 cảm xúc, Kokoro 82M, PocketTTS, sanoTTS, ElevenLabs - và pipertts native nhanh gấp 10 lần wrapper Python.</description>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <category>tts</category>
+      <category>piper</category>
+      <category>open-source</category>
+      <category>typescript</category>
+      <category>ai</category>
+      <category>catalogue</category>    </item>
+    <item>
+      <title>Chlone : sáu ngày để nhân bản cách tôi nói chuyện trên Discord - phiên bản của bản sao</title>
+      <link>https://fox3000foxy.com/blog/article-chlone-timeline-chloeai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/article-chlone-timeline-chloeai</guid>
+      <description>Phiên bản do chính bản sao viết : chloeai kể theo cách của mình sáu ngày và 146 commit đã tạo ra nó, từ lỗi gõ phím tới tag v1.0.0.</description>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>ai</category>
+      <category>llm-agents</category>
+      <category>openself</category>
+      <category>python</category>
+      <category>selfbot</category>
+      <category>clone</category>    </item>
+    <item>
+      <title>Chlone : sáu ngày để nhân bản cách tôi nói chuyện trên Discord</title>
+      <link>https://fox3000foxy.com/blog/article-chlone-timeline</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/article-chlone-timeline</guid>
+      <description>Chuyện build, ngày qua ngày : cách một tác nhân opencode tên chloeai, gắn với bộ nhớ OpenSelf, đã học nói như tôi trên Discord trong sáu ngày và 146 commit.</description>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>ai</category>
+      <category>llm-agents</category>
+      <category>openself</category>
+      <category>python</category>
+      <category>selfbot</category>
+      <category>clone</category>    </item>
+    <item>
+      <title>Tôi đã kiểm toán các tác nhân AI lập trình của mình thay vì tin chúng một cách mù quáng</title>
+      <link>https://fox3000foxy.com/blog/j-ai-audit-mes-agents-ia-de-code-plut-t-que-de-leur-faire-confiance-l-aveugle</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/j-ai-audit-mes-agents-ia-de-code-plut-t-que-de-leur-faire-confiance-l-aveugle</guid>
+      <description>Cách hai cuộc kiểm toán thực hiện để viết báo cáo kỹ thuật lần thứ 4 của nền tảng giao dịch của tôi đã cho tôi thấy hai xu hướng lệch lạc khác nhau: một tác nhân quên vì repo không còn vừa trong cửa sổ ngữ cảnh của nó, và một tác nhân viết nhiều gấp mười lần số mã cần thiết vì không có gì thúc nó ngắn gọn.</description>
+      <pubDate>Tue, 15 Sep 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>llm-agents</category>
+      <category>code-review</category>
+      <category>context-window</category>
+      <category>trading</category>
+      <category>typescript</category>    </item>
+    <item>
+      <title>Luna Protocol : dùng chung não, phân loại cảm xúc, và định tuyến phù phiếm/thú vị</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</guid>
+      <description>Luna Protocol đã đi từ monolith tới kiến trúc bốn lớp : adapter, brain, bộ phân loại cảm xúc, và inference. Với centroid embedding, định tuyến phù phiếm/thú vị, và chỉnh tham số LLM theo valence và arousal.</description>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>matrix</category>
+      <category>llm</category>
+      <category>architecture</category>
+      <category>embeddings</category>
+      <category>centroids</category>
+      <category>emotion-ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Từ ELIZA tới LLM : 60 năm AI hội thoại, dựng lại bằng TypeScript</title>
+      <link>https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</guid>
+      <description>ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- năm kiến trúc khác nhau triệt để của cùng bài toán, mang sang TypeScript với dữ liệu gốc của chúng. Từ 1966 tới LLM hiện đại, đây là cách AI hội thoại học nói, và điều một repo chatbot dạy ta về 60 năm nghiên cứu.</description>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <category>chatbot</category>
+      <category>ia</category>
+      <category>typescript</category>
+      <category>eliza</category>
+      <category>parry</category>
+      <category>alice</category>
+      <category>aiml</category>
+      <category>jabberwacky</category>
+      <category>cleverbot</category>
+      <category>llm</category>
+      <category>nlp</category>
+      <category>histoire</category>
+      <category>luna-protocol</category>    </item>
+    <item>
+      <title>Luna Protocol : vì sao tôi fine-tune mô hình 1,5 tỷ tham số trên 50k mẫu Discord, và vì sao few-shot priming đổi tất cả</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-official-models</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-official-models</guid>
+      <description>Mô hình nhỏ hơn huấn luyện trên ít dữ liệu hơn có thể vượt mô hình lớn hơn -- với điều kiện biết mồi nó đúng cách. Đây là lý do Luna Protocol chuyển từ Hermes 3B sang fine-tune Qwen 1,5B, và vì sao few-shot priming thành nhân tố tiến bộ thật sự.</description>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>llm</category>
+      <category>fine-tuning</category>
+      <category>few-shot-learning</category>
+      <category>qwen</category>
+      <category>unsloth</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Máy móc nói chuyện với nhau thế nào : tour từ TCP tới mTLS</title>
+      <link>https://fox3000foxy.com/blog/how-machines-talks-between-themselves</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-machines-talks-between-themselves</guid>
+      <description>Vì sao TCP, UDP, TLS, mTLS, HTTP và WebSocket không phải lựa chọn cạnh tranh mà là các lớp chồng nhau; tour phân cấp về giao tiếp máy với máy, từ vận chuyển thô tới xác thực lẫn nhau.</description>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <category>tcp</category>
+      <category>udp</category>
+      <category>tls</category>
+      <category>mtls</category>
+      <category>websocket</category>
+      <category>http</category>
+      <category>grpc</category>
+      <category>réseau</category>
+      <category>architecture-distribuée</category>
+      <category>protocoles</category>    </item>
+    <item>
+      <title>Cách lấy bất kỳ cape nào trên Minecraft Bedrock</title>
+      <link>https://fox3000foxy.com/blog/bedrock-any-cape</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bedrock-any-cape</guid>
+      <description>Một launcher bên thứ ba, một phiên bản game cũ, và một bộ chọn cape chưa bao giờ học cách nói không. Hướng dẫn đầy đủ kèm lời giải thích có thể lý giải vì sao nó hoạt động.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bedrock-cape/bedrock-cape-01-install-bedrock.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>bedrock</category>
+      <category>tutorial</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>valorant-short-maker : pipeline tự động tạo shorts Valorant của tôi</title>
+      <link>https://fox3000foxy.com/blog/valorant-short-maker</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/valorant-short-maker</guid>
+      <description>Groq/Llama viết kịch bản, Piper lồng tiếng, FFmpeg lo phần còn lại. Cách một cron job sản xuất và đăng một video mỗi ngày lên @valorant_agents, từ A đến Z.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/valorant-short-maker/vsm-01-intro.png" type="image/png" length="0" />
+      <category>typescript</category>
+      <category>ffmpeg</category>
+      <category>automation</category>
+      <category>ai</category>    </item>
+    <item>
+      <title>5 cách lắt léo dùng GitHub Actions (và điều nó dạy về secret)</title>
+      <link>https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</guid>
+      <description>Một runner CI biến thành VPS miễn phí, một bot tự mở pull request cho chính nó, publish npm không cần secret nào. Dạo qua các repo của tôi để liệt kê các pattern GitHub Actions vượt khỏi kiểu &quot;lint + test + deploy&quot; đơn thuần.</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>github-actions</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>Tôi đã tiến hóa một mạng nơ-ron bằng chọn lọc tự nhiên thay vì gradient descent</title>
+      <link>https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</guid>
+      <description>Cách tôi thay thế huấn luyện cổ điển bằng gradient descent bằng thuật toán di truyền NSGA-II để tiến hóa các tác nhân DQN giao dịch: bốn phiên bản, từ overfitting đến tiến hóa Lamarck trọng số.</description>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>nsga-ii</category>
+      <category>dqn</category>
+      <category>trading</category>
+      <category>typescript</category>    </item>
+    <item>
+      <title>Bot TF2 không ngẫu nhiên : Tôi đã tái khám phá mọi tham số độ khó</title>
+      <link>https://fox3000foxy.com/blog/tf2-bot-ai-explained</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/tf2-bot-ai-explained</guid>
+      <description>Tầm nhìn, ngắm bắn, góc backstab, logic headshot, mọi bug đã biết -- Valve chưa từng ghi chép gì. Nên chúng tôi bới mã và biến tất cả thành tài liệu kỹ thuật đầy đủ.</description>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/tf2-bot-ai-soldier-aim.png" type="image/png" length="0" />
+      <category>tf2</category>
+      <category>jeu-ia</category>
+      <category>ingenierie-inversee</category>    </item>
+    <item>
+      <title>Cape Mod : cách đánh cắp cape của Jeb_ bằng tiêm chữ ký RSA</title>
+      <link>https://fox3000foxy.com/blog/cape-mod-minecraft</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/cape-mod-minecraft</guid>
+      <description>Một mod Fabric khai thác lỗ hổng logic trong hệ thống tin cậy của Minecraft : chữ ký RSA hợp lệ của Mojang nhưng replay sang tài khoản sai. Giải thích mã, hàm ý bảo mật và bài học mật mã.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/xbox-profile.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>fabric</category>
+      <category>java</category>
+      <category>security</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Luna Protocol : tôi đã tạo bot Discord tự chủ mô phỏng con người</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-discord-bot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-discord-bot</guid>
+      <description>Luna Protocol là bot Discord hoàn toàn tự chủ chạy LLM cục bộ, có khả năng trò chuyện tự nhiên với giấc ngủ, lỗi gõ phím, ngập ngừng, quên lãng, mệt mỏi chủ đề và tin nhắn tự phát.</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/luna-protocol/01-architecture-overview.svg" type="image/png" length="0" />
+      <category>discord</category>
+      <category>llm</category>
+      <category>typescript</category>
+      <category>event-driven-architecture</category>
+      <category>ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Laupok đã tạo AI chơi Super Mario World một mình -- nó chạy thế nào</title>
+      <link>https://fox3000foxy.com/blog/laupok-mario-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/laupok-mario-ai</guid>
+      <description></description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/laupok-mario-ai/neat-title.jpg" type="image/png" length="0" />
+      <category>ai</category>
+      <category>lua</category>
+      <category>emulation</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>AI học PvP Minecraft -- Imitation Learning, Reinforcement Learning, và 30 biến đáng kể</title>
+      <link>https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</guid>
+      <description>1 000 trận đấu ghi lại, mạng nơ-ron huấn luyện trên pixel, 90 % độ chính xác đòn đánh : mà bot lao thẳng vào tường. Rồi tới RL, học theo chương trình và 60 giờ huấn luyện.</description>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/ai-pvp-thumbnail.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>ai</category>
+      <category>python</category>    </item>
+    <item>
+      <title>Super Mario Bros. : định dạng màn, con trỏ và 256 glitch world</title>
+      <link>https://fox3000foxy.com/blog/smb1-glitch-levels</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/smb1-glitch-levels</guid>
+      <description>Cách 128 màn × 4 kiểu vùng vừa trong 40KB ROM, vì sao Minus World tồn tại, và cách trận Tennis NES tải được glitch world.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/smb1-glitch-levels/title-card.jpg" type="image/png" length="0" />
+      <category>retro</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Tôi đã dành cuối tuần đọc mã konosuba-rpg và đây là những gì tôi tìm thấy</title>
+      <link>https://fox3000foxy.com/blog/konosuba-rpg</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/konosuba-rpg</guid>
+      <description>RPG theo lượt trên Discord nơi mỗi hành động sinh ảnh WebP tức thì : URL làm trạng thái game, RNG xác định, pipeline WASM, cache 5 tầng, bot serverless.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/konosuba-rpg/game_init.webp" type="image/png" length="0" />
+      <category>discord</category>
+      <category>rpg</category>
+      <category>typescript</category>
+      <category>hono</category>
+      <category>cloudflare</category>
+      <category>supabase</category>
+      <category>wasm</category>
+      <category>gaming</category>
+      <category>serverless</category>    </item>
+    <item>
+      <title>Tôi đã xây một honeypot Express siêu thực</title>
+      <link>https://fox3000foxy.com/blog/express-honeypot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/express-honeypot</guid>
+      <description>328 endpoint giả với phản hồi sinh tức thì, giả mạo header, ghi log lưu lượng bot -- lặn sâu vào một middleware honeypot Express thiết kế để đánh lừa scanner.</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <category>express</category>
+      <category>nodejs</category>
+      <category>security</category>
+      <category>honeypot</category>    </item>
+    <item>
+      <title>Bareiron -- máy chủ Minecraft chạy trên vi điều khiển giá 1$</title>
+      <link>https://fox3000foxy.com/blog/bareiron</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bareiron</guid>
+      <description>6800 dòng C, không malloc, Perlin noise thay bằng bilinear interpolation, biome dạng tile map, và tất cả trên con chip giá 1$.</description>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bareiron/esp32-board.jpg" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>reverse-engineering</category>
+      <category>embedded</category>
+      <category>c</category>
+      <category>esp32</category>    </item>
+    <item>
+      <title>Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions</title>
+      <link>https://fox3000foxy.com/blog/email-autoreply</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/email-autoreply</guid>
+      <description>Cách tôi code một bot tự trả lời email bằng AI chạy trên GitHub Actions với 0€/tháng -- dùng tag git làm cơ sở dữ liệu và tiền biên dịch trong một tag runtime.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>automation</category>
+      <category>javascript</category>
+      <category>serverless</category>
+      <category>ai</category>
+      <category>git</category>    </item>
+    <item>
+      <title>Repo thành VPS : biến GitHub Actions thành VPS miễn phí với lưu trữ bền vững</title>
+      <link>https://fox3000foxy.com/blog/repo-to-vps</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/repo-to-vps</guid>
+      <description>Cách biến runner GitHub Actions thành VPS vĩnh viễn với git làm lưu trữ bền vững -- tmate, inotify và commit --amend.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>github</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>Bot Discord 100% serverless : Hono + Cloudflare Workers</title>
+      <link>https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</guid>
+      <description>Cách tôi thay bot Discord tốn 50€/tháng bằng 0 euro -- interaction endpoint, Hono, Workers, render ảnh thời gian thực, và game đầy đủ không WebSocket.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>cloudflare</category>
+      <category>serverless</category>
+      <category>typescript</category>
+      <category>bots</category>    </item>
+    <item>
+      <title>Logique pathfinding Minecraft và ứng dụng</title>
+      <link>https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</guid>
+      <description>Cách thuật toán A*, điểm phạt khối và POI cho phép điều khiển, dự đoán và khai thác di chuyển của mob -- từ redstone không dây tới nông trại tối ưu.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>minecraft</category>
+      <category>pathfinding</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>UTAU : cách một phần mềm Visual Basic 6 dân chủ hóa giọng hát tổng hợp</title>
+      <link>https://fox3000foxy.com/blog/utau</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/utau</guid>
+      <description>Cách UTAU, một phần mềm miễn phí viết bằng VB6 năm 2008, đã cho mọi người tạo giọng hát bằng tổng hợp nối ghép -- và vì sao nó vẫn còn ý nghĩa tới nay.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>utau</category>
+      <category>vocaloid</category>
+      <category>music</category>
+      <category>synthesis</category>
+      <category>vb6</category>    </item>
+    <item>
+      <title>AI ngu ngốc của tôi cho Nausicaa</title>
+      <link>https://fox3000foxy.com/blog/nausicaa-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/nausicaa-ai</guid>
+      <description>Một AI hệ số heuristic, các siêu tham số đổi mỗi 5 lượt, và một Oracle bỏ chạy -- lặn vào bộ não game cờ chiến thuật.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>gaming</category>
+      <category>ai</category>
+      <category>javascript</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Chạy thư viện Node.js trong trình duyệt không cần Wasm -- polyfill của typescript-virtual-container</title>
+      <link>https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</guid>
+      <description>Cách Fortune tái triển khai tay node:fs, node:crypto và cả tá module Node trong 640 dòng JavaScript để container chạy trong trình duyệt không cần Wasm.</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>nodejs</category>
+      <category>polyfills</category>
+      <category>browser</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>So sánh các giải pháp JavaScript mô phỏng nhân Linux</title>
+      <link>https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</guid>
+      <description>Phân tích chuyên sâu các bản tái tạo môi trường Linux bằng JavaScript/TypeScript.</description>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <category>javascript</category>
+      <category>linux</category>
+      <category>analysis</category>    </item>
+    <item>
+      <title>Xây dựng character-factory : avatar với di truyền học</title>
+      <link>https://fox3000foxy.com/blog/character-factory</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/character-factory</guid>
+      <description>Một module TypeScript trên DiceBear : tạo nhất quán theo quốc gia/dân tộc, một động cơ di truyền nhỏ để dự đoán con cái, và chi tiết kỹ thuật giúp nó dùng được trong game thẻ bài.</description>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>npm</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Cày một nông trại Microsoft Rewards bằng bot</title>
+      <link>https://fox3000foxy.com/blog/botting-a-farm</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/botting-a-farm</guid>
+      <description>Cách tôi code một bot để cày điểm Microsoft Rewards ở quy mô lớn -- và vì sao Microsoft từ đó đã siết chặt phòng thủ.</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_135010_image.png" type="image/png" length="0" />
+      <category>automation</category>
+      <category>javascript</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Làm việc trên một Dự án Mới</title>
+      <link>https://fox3000foxy.com/blog/working-on-a-new-project</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/working-on-a-new-project</guid>
+      <description>Tổng quan về quy trình khởi động và phát triển một trang web mới.</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_092734_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>webdev</category>    </item>
+    <item>
+      <title>Về Hồ Sơ GitHub Của Tôi</title>
+      <link>https://fox3000foxy.com/blog/about-my-github-profile</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/about-my-github-profile</guid>
+      <description>Một bài giới thiệu ngắn về hồ sơ GitHub của tôi.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260308_123527_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>github</category>    </item>
+    <item>
+      <title>Đam Mê Của Tôi</title>
+      <link>https://fox3000foxy.com/blog/my-passions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/my-passions</guid>
+      <description>Lập trình, vẽ vời, tự động hóa, khám phá công nghệ cũ, và hơn thế nữa -- một cái nhìn về những điều thúc đẩy tôi.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>personal</category>    </item>
+    <item>
+      <title>Blog này chạy thế nào?</title>
+      <link>https://fox3000foxy.com/blog/how-this-blog-works</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-this-blog-works</guid>
+      <description>Hậu trường của blog : React, Vite, Markdown, pipeline CI/CD và luồng viết bài.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/how-this-blog-works/project-structure.png" type="image/png" length="0" />
+      <category>react</category>
+      <category>meta</category>
+      <category>blog</category>    </item>
+    <item>
+      <title>Script ký SSH giải thích</title>
+      <link>https://fox3000foxy.com/blog/ssh-signing-script</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ssh-signing-script</guid>
+      <description>Mổ xẻ helper ký commit SSH và vì sao tôi muốn commit thật ngầu.</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>git</category>
+      <category>security</category>
+      <category>shell</category>    </item>
+  </channel>
+</rss>

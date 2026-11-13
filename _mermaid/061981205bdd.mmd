@@ -1,0 +1,16 @@
+flowchart TD
+    A[CPU turn start] --> B{Oracle alive?}
+    B -->|No| C[Place new Oracle]
+    B -->|Yes| D[Compute attack\ncoefficients for each\nunit pair]
+    D --> E[Pick best pair\nattacker → target]
+    E --> F{Attack possible\nfrom position?}
+    F -->|Yes| G[Attack the target]
+    F -->|No| H{Fewer than 4\nunits?}
+    H -->|Yes| I[Summon cheapest available\nfrom hand]
+    H -->|No| J[Move toward target\nclosest square]
+    J --> K{Mana > 2?}
+    K -->|Yes| L[Dash: double move\ntoward target]
+    K -->|No| M[End turn]
+    G --> M
+    I --> M
+    L --> M

@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>normalisiert Interpunktion"]
+    B --> C["splitUserInput()<br>zerlegt in Wörter"]
+    C --> D["Baut Keyword-Stack<br>sortiert nach Priorität"]
+    D --> E{"Stack nicht leer?"}
+    E -->|"Ja"| F["Popt höchstpriores Keyword"]
+    E -->|"Nein"| G{"Memory Recall?"}
+    G -->|"Ja"| H["Ruft vergangene Nutzeraussage ab"]
+    G -->|"Nein"| I["Fallback: zNONE-Regel"]
+    I --> J["Gibt Antwort zurück"]
+    H --> J
+    F --> K["Matcht Dekompositions-Patterns"]
+    K --> L{"Match gefunden?"}
+    L -->|"Nein"| M{"Verlinktes Keyword?"}
+    M -->|"Ja"| N["Pusht verlinktes Keyword auf Stack"]
+    N --> E
+    M -->|"Nein"| O["Gibt NOMATCH zurück"]
+    O --> J
+    L -->|"Ja"| P["Wählt nächstes Reassembly (Round-Robin)"]
+    P --> Q{"Reassembly-Typ?"}
+    Q -->|"PRE"| R["Transformiert Wörter (I→YOU)<br>pusht Link-Keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Springt zum nächsten Keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expandiert (1), (2), (0)<br>in finale Antwort"]
+    T --> J

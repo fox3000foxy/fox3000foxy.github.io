@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>विराम चिह्न सामान्य करता है"]
+    B --> C["splitUserInput()<br>शब्दों में काटता है"]
+    C --> D["Build keyword stack<br>प्राथमिकता क्रम में"]
+    D --> E{"Stack खाली नहीं?"}
+    E -->|"हाँ"| F["Pop highest-priority keyword"]
+    E -->|"नहीं"| G{"Memory recall?"}
+    G -->|"हाँ"| H["Recall past user statement"]
+    G -->|"नहीं"| I["Fallback: zNONE rule"]
+    I --> J["Return response"]
+    H --> J
+    F --> K["Match decomposition patterns"]
+    K --> L{"Match found?"}
+    L -->|"नहीं"| M{"Linked keyword?"}
+    M -->|"हाँ"| N["Push linked keyword to stack"]
+    N --> E
+    M -->|"नहीं"| O["Return NOMATCH"]
+    O --> J
+    L -->|"हाँ"| P["Select next reassembly (round-robin)"]
+    P --> Q{"Reassembly type?"}
+    Q -->|"PRE"| R["Transform words (I→YOU)<br>push link keyword"]
+    R --> N
+    Q -->|"NEWKEY"| S["Skip to next keyword"]
+    S --> E
+    Q -->|"Standard"| T["Expand (1), (2), (0)<br>into final response"]
+    T --> J

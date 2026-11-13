@@ -1,0 +1,16 @@
+flowchart TD
+    A[CPU sırası başlıyor] --> B{Kahin hayatta mı?}
+    B -->|Hayır| C[Yeni Kahin yerleştir]
+    B -->|Evet| D[Her birim çifti için\nsaldırı katsayılarını\nhesapla]
+    D --> E[En iyi çifti seç\nsaldıran → hedef]
+    E --> F{Pozisyondan\nsaldırı mümkün mü?}
+    F -->|Evet| G[Hedefe saldır]
+    F -->|Hayır| H{4'ten az\nbirim mi?}
+    H -->|Evet| I[Eldeki en ucuz\nmüsait birimi çağır]
+    H -->|Hayır| J[Hedefe doğru hareket et\nen yakın kare]
+    J --> K{Mana > 2?}
+    K -->|Evet| L[Dash: çift hareket\nhedefe doğru]
+    K -->|Hayır| M[Tur sonu]
+    G --> M
+    I --> M
+    L --> M

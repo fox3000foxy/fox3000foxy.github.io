@@ -1,0 +1,5 @@
+flowchart TD
+    A["楽譜<br/>(ノート + 歌詞)"] --> B[Phonemizer]
+    B -->|"連結する単位に<br/>分割"| C[Resampler]
+    C -->|"WAVを読み込み、<br/>長さとピッチを変更、<br/>フラグを適用"| D[Wavtool]
+    D -->|"断片を再結合"| E["最終オーディオ"]

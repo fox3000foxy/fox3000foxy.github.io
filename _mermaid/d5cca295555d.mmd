@@ -1,0 +1,27 @@
+flowchart TD
+    A["ClientboundPlayerInfoUpdatePacket<br/>Entry(ServerPlayer player)"] --> B["player.getGameProfile()<br/>← mixin intercepts here"]
+    B --> C["returns NEW GameProfile<br/>with jeb_'s textures"]
+    C --> D["Entry stores modified profile"]
+    D --> E["Packet serialized to network"]
+    E --> F["ADD_PLAYER writes<br/>profile.properties()"]
+    F --> G["our textures property<br/>is the ONLY one"]
+    G --> H["Friend's client receives packet"]
+    H --> I["PlayerInfo(profile, …)"]
+    I --> J["SkinManager.createLookup(profile, true)"]
+    J --> K["getPackedTextures(profile)"]
+    K --> L["returns our textures property"]
+    L --> M["unpackTextures(property)"]
+    M --> N["base64 decode JSON"]
+    N --> O["verify RSA signature<br/>→ SIGNED ✓"]
+    O --> P["return cape URL"]
+    P --> Q["download cape from<br/>textures.minecraft.net"]
+    Q --> R["create PlayerSkin(body, cape, …,<br/>secure=true)"]
+    R --> S["filter(secure) → passes<br/>→ return skin"]
+    S --> T["AvatarRenderer.extractRenderState()"]
+    T --> U["state.skin = player.getSkin()<br/>← has cape"]
+    U --> V["CapeLayer.submit()"]
+    V --> W["skin.cape() != null<br/>→ render cape!"]
+    
+    style B fill:#ff6,stroke:#333
+    style O fill:#6f6,stroke:#333
+    style S fill:#6f6,stroke:#333

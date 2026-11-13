@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP 서버
+
+    Note over GH: 실행 1
+    GH->>GIT: "lastid" 태그 읽기
+    GIT-->>GH: 비어 있음 (첫 실행)
+    GH->>IMAP: 메일 1-50 가져오기
+    IMAP-->>GH: 메일 50통
+    GH->>GIT: "lastid" 태그 푸시 = 50
+
+    Note over GH: 실행 2
+    GH->>GIT: "lastid" 태그 읽기
+    GIT-->>GH: 50
+    GH->>IMAP: 메일 51-73 가져오기
+    IMAP-->>GH: 메일 23통
+    GH->>GIT: "lastid" 태그 푸시 = 73

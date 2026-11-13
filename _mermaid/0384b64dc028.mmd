@@ -1,0 +1,5 @@
+flowchart TD
+    A["乐谱<br/>(音符 + 歌词)"] --> B[Phonemizer]
+    B -->|"切成要拼的<br/>单元"| C[Resampler]
+    C -->|"读 WAV,<br/>变时长变音高,<br/>应用 flags"| D[Wavtool]
+    D -->|"把碎片粘起来"| E["最终音频"]

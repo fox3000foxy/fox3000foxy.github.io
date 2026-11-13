@@ -1,0 +1,38 @@
+flowchart TD
+    A["User Input"] --> B["clean()<br>uppercase, normalise whitespace"]
+    B --> C["iterate sorted categories<br>(fewer wildcards first,<br>longest pattern tiebreak)"]
+    C --> D{"patternToRegex()<br>match input?"}
+    D -->|"No"| E["Next category"]
+    E --> D
+    D -->|"Yes"| F["Save wildcard match<br>to lastWildcard"]
+    F --> G["processTemplate()"]
+    G --> H{"Child tag type?"}
+
+    H -->|"text"| I["Append literal text"]
+    H -->|"star"| J["Insert lastWildcard"]
+    H -->|"sr"| K["processSrai(lastWildcard)"]
+    H -->|"srai"| L["processSrai(inner text)"]
+    H -->|"random"| M["Pick random li child"]
+    H -->|"set"| N["Store variable,<br>append value"]
+    H -->|"get"| O["Retrieve variable"]
+    H -->|"bot"| P["Lookup bot property"]
+    H -->|"condition"| Q["Match variable/value<br>to stored state"]
+    H -->|"think"| R["Side effects only<br>(set variables),<br>discard output"]
+
+    K --> S["findMatch(srai text)"]
+    L --> S
+    S --> T{"Depth < 10?"}
+    T -->|"Yes"| U["processTemplate()<br>recursively"]
+    T -->|"No"| V["Return empty string"]
+    U --> W["Append to result"]
+    M --> W
+    I --> W
+    J --> W
+    N --> W
+    O --> W
+    P --> W
+    Q --> W
+
+    W --> X{"More children?"}
+    X -->|"Yes"| H
+    X -->|"No"| Y["Return accumulated response"]

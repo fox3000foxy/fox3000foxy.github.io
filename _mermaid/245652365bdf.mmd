@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as Server IMAP
+    
+    Note over GH: Run #1
+    GH->>GIT: baca tag "lastid"
+    GIT-->>GH: kosong (pertama kali)
+    GH->>IMAP: fetch email 1-50
+    IMAP-->>GH: 50 email
+    GH->>GIT: push tag "lastid" = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: baca tag "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: fetch email 51-73
+    IMAP-->>GH: 23 email
+    GH->>GIT: push tag "lastid" = 73

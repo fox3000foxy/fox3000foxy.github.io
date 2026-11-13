@@ -1,0 +1,11 @@
+flowchart LR
+    A[Startknoten] --> B{Nachbarn\nzu evaluieren ?}
+    B -->|Oui| C[f = g + 1.5×h berechnen\nfür jeden Nachbarn]
+    C --> D[Nachbarn\nmit kleinstem f wählen]
+    D --> E{Ziel\nerreicht ?}
+    E -->|Non| B
+    E -->|Oui| F[Weg gefunden !]
+    B -->|Non| G[Kein Weg\nmöglich]
+    
+    style F color:#4caf50
+    style G color:#f44336

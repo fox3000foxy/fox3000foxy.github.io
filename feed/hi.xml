@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fox&apos;s Blog (हिन्दी)</title>
+    <link>https://fox3000foxy.com</link>
+    <description>Fox3000foxy&apos;s blog about web development, automation, and open-source -- हिन्दी</description>
+    <language>hi</language>
+    <lastBuildDate>Fri, 13 Nov 2026 14:03:12 GMT</lastBuildDate>
+    <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
+    <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
+    <generator>WordPress 5.9.3</generator>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <image>
+      <url>https://fox3000foxy.com/og/home.png</url>
+      <title>Fox&apos;s Blog (हिन्दी)</title>
+      <link>https://fox3000foxy.com</link>
+    </image>
+    <atom:link href="https://fox3000foxy.com/feed.hi.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://fox3000foxy.com/feed.xml" rel="alternate" type="application/rss+xml" hreflang="x-default" />
+    <atom:link href="https://fox3000foxy.com/feed.en.xml" rel="alternate" type="application/rss+xml" hreflang="en" />
+    <atom:link href="https://fox3000foxy.com/feed.fr.xml" rel="alternate" type="application/rss+xml" hreflang="fr" />
+    <atom:link href="https://fox3000foxy.com/feed.zh.xml" rel="alternate" type="application/rss+xml" hreflang="zh" />
+    <atom:link href="https://fox3000foxy.com/feed.ja.xml" rel="alternate" type="application/rss+xml" hreflang="ja" />
+    <atom:link href="https://fox3000foxy.com/feed.ko.xml" rel="alternate" type="application/rss+xml" hreflang="ko" />
+    <atom:link href="https://fox3000foxy.com/feed.tr.xml" rel="alternate" type="application/rss+xml" hreflang="tr" />
+    <atom:link href="https://fox3000foxy.com/feed.it.xml" rel="alternate" type="application/rss+xml" hreflang="it" />
+    <atom:link href="https://fox3000foxy.com/feed.de.xml" rel="alternate" type="application/rss+xml" hreflang="de" />
+    <atom:link href="https://fox3000foxy.com/feed.ru.xml" rel="alternate" type="application/rss+xml" hreflang="ru" />
+    <atom:link href="https://fox3000foxy.com/feed.es.xml" rel="alternate" type="application/rss+xml" hreflang="es" />
+    <atom:link href="https://fox3000foxy.com/feed.pt.xml" rel="alternate" type="application/rss+xml" hreflang="pt" />
+    <atom:link href="https://fox3000foxy.com/feed.id.xml" rel="alternate" type="application/rss+xml" hreflang="id" />
+    <atom:link href="https://fox3000foxy.com/feed.ar.xml" rel="alternate" type="application/rss+xml" hreflang="ar" />
+    <atom:link href="https://fox3000foxy.com/feed.vi.xml" rel="alternate" type="application/rss+xml" hreflang="vi" />
+    <atom:link href="https://fox3000foxy.com/feed.th.xml" rel="alternate" type="application/rss+xml" hreflang="th" />
+    <item>
+      <title>Sabaki vs System One : डेविड बनाम गोलियत, दुनिया का सबसे छोटा डिसीजन मॉडल</title>
+      <link>https://fox3000foxy.com/blog/sabaki-david-contre-goliath</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/sabaki-david-contre-goliath</guid>
+      <description>20KB बनाम 421M पैरामीटर। Sabaki typed-decisions पर 7 पॉइंट हारता है लेकिन 25s CPU से &lt;1ms offline पर आ जाता है। एक ऑर्गनाइजेशनल MoE की चीरफाड़।</description>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>system-one</category>
+      <category>typescript</category>
+      <category>cpu</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>PiperHub: 536 ओपन सोर्स TTS आवाजें, एक मॉडल में 7 भावनाएं, शून्य GPU, शून्य बिल</title>
+      <link>https://fox3000foxy.com/blog/piperhub-catalogue-voix-tts</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/piperhub-catalogue-voix-tts</guid>
+      <description>VITS, espeak, ONNX, LJSpeech: Piper Raspberry Pi को कैसे बुलवाता है। 7 भावनाओं वाला Fortune multi, Kokoro 82M, PocketTTS, sanoTTS, ElevenLabs, और आधिकारिक Python wrapper से 10x तेज नेटिव pipertts।</description>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <category>tts</category>
+      <category>piper</category>
+      <category>open-source</category>
+      <category>typescript</category>
+      <category>ai</category>
+      <category>catalogue</category>    </item>
+    <item>
+      <title>Chlone : Discord पर मेरी बोलचाल clone करने के छह दिन - clone का संस्करण</title>
+      <link>https://fox3000foxy.com/blog/article-chlone-timeline-chloeai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/article-chlone-timeline-chloeai</guid>
+      <description>clone द्वारा लिखा संस्करण : chloeai अपनी तरह छह दिन और 146 commit सुनाता है जिन्होंने उसे जीवन दिया, टाइपो से v1.0.0 tag तक।</description>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>ai</category>
+      <category>llm-agents</category>
+      <category>openself</category>
+      <category>python</category>
+      <category>selfbot</category>
+      <category>clone</category>    </item>
+    <item>
+      <title>Chlone : Discord पर मेरी बोलचाल clone करने के छह दिन</title>
+      <link>https://fox3000foxy.com/blog/article-chlone-timeline</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/article-chlone-timeline</guid>
+      <description>दिन दर दिन build वृत्तांत : opencode एजेंट chloeai, OpenSelf स्मृति से जुड़ा, छह दिन और 146 commit में Discord पर मेरी तरह बोलना कैसे सीखा।</description>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>ai</category>
+      <category>llm-agents</category>
+      <category>openself</category>
+      <category>python</category>
+      <category>selfbot</category>
+      <category>clone</category>    </item>
+    <item>
+      <title>मैंने अपने कोड AI एजेंटों पर अंधा भरोसा करने के बजाय उनका ऑडिट किया</title>
+      <link>https://fox3000foxy.com/blog/j-ai-audit-mes-agents-ia-de-code-plut-t-que-de-leur-faire-confiance-l-aveugle</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/j-ai-audit-mes-agents-ia-de-code-plut-t-que-de-leur-faire-confiance-l-aveugle</guid>
+      <description>ट्रेडिंग प्लेटफॉर्म की चौथी तकनीकी रिपोर्ट लिखने के लिए किए दो ऑडिट ने मुझे दो अलग विचलन कैसे दिखाए : एक एजेंट जो भूलता है क्योंकि repo उसकी संदर्भ विंडो में नहीं समाता, और एक एजेंट जो जरूरत से दस गुना ज्यादा कोड लिखता है क्योंकि उसे संक्षिप्तता की ओर कुछ नहीं धकेलता।</description>
+      <pubDate>Tue, 15 Sep 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>llm-agents</category>
+      <category>code-review</category>
+      <category>context-window</category>
+      <category>trading</category>
+      <category>typescript</category>    </item>
+    <item>
+      <title>Luna Protocol : दिमागों की साझेदारी, भावनात्मक वर्गीकरण, और दिलचस्प/तुच्छ routing</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-layers-and-centroids</guid>
+      <description>Luna Protocol monolithe से चार परत आर्किटेक्चर में गया : adaptateur, brain, भावनात्मक वर्गीकरणकर्ता, और inference। कार्यक्रम में : embedding centroid, दिलचस्प/तुच्छ routing, और valence और arousal से LLM पैरामीटर समायोजन।</description>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>matrix</category>
+      <category>llm</category>
+      <category>architecture</category>
+      <category>embeddings</category>
+      <category>centroids</category>
+      <category>emotion-ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>ELIZA से LLM तक : TypeScript में पुनर्निर्मित 60 साल की संवादात्मक AI</title>
+      <link>https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/from-eliza-to-llm-chatbots-typescript</guid>
+      <description>ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot, उसी समस्या की पाँच मौलिक अलग आर्किटेक्चर, मूल डेटा के साथ TypeScript में लाई गई। 1966 से आधुनिक LLM तक, संवादात्मक AI ने बोलना कैसे सीखा, और chatbot repo 60 साल के शोध के बारे में क्या सिखाता है।</description>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <category>chatbot</category>
+      <category>ia</category>
+      <category>typescript</category>
+      <category>eliza</category>
+      <category>parry</category>
+      <category>alice</category>
+      <category>aiml</category>
+      <category>jabberwacky</category>
+      <category>cleverbot</category>
+      <category>llm</category>
+      <category>nlp</category>
+      <category>histoire</category>
+      <category>luna-protocol</category>    </item>
+    <item>
+      <title>Luna Protocol : मैंने 50k Discord नमूनों पर 1,5 अरब पैरामीटर मॉडल fine-tune क्यों किया, और few-shot priming ने सब क्यों बदला</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-official-models</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-official-models</guid>
+      <description>कम डेटा पर प्रशिक्षित छोटा मॉडल बड़े मॉडल से बेहतर हो सकता है, बशर्ते उसे अच्छी तरह शुरू करना आता हो। Luna Protocol Hermes 3B से fine-tune Qwen 1,5B पर क्यों गया, और few-shot priming प्यारा बोनस से पूरे दृष्टिकोण का हृदय क्यों बना।</description>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>llm</category>
+      <category>fine-tuning</category>
+      <category>few-shot-learning</category>
+      <category>qwen</category>
+      <category>unsloth</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>मशीनें कैसे बात करती हैं : TCP से mTLS तक दौरा</title>
+      <link>https://fox3000foxy.com/blog/how-machines-talks-between-themselves</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-machines-talks-between-themselves</guid>
+      <description>TCP, UDP, TLS, mTLS, HTTP और WebSocket प्रतिस्पर्धी विकल्प क्यों नहीं बल्कि परत दर परत ढेर हैं; कच्चे परिवहन से पारस्परिक प्रमाणीकरण तक मशीन से मशीन संचार का पदानुक्रमित दौरा।</description>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <category>tcp</category>
+      <category>udp</category>
+      <category>tls</category>
+      <category>mtls</category>
+      <category>websocket</category>
+      <category>http</category>
+      <category>grpc</category>
+      <category>réseau</category>
+      <category>architecture-distribuée</category>
+      <category>protocoles</category>    </item>
+    <item>
+      <title>Minecraft Bedrock पर कोई भी केप कैसे पाएँ</title>
+      <link>https://fox3000foxy.com/blog/bedrock-any-cape</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bedrock-any-cape</guid>
+      <description>एक तृतीय पक्ष लॉन्चर, खेल का पुराना संस्करण, और केप चयनकर्ता जिसने कभी ना कहना नहीं सीखा। पूरा ट्यूटोरियल और यह क्यों काम करता है इसकी संभावित व्याख्या।</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bedrock-cape/bedrock-cape-01-install-bedrock.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>bedrock</category>
+      <category>tutorial</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>valorant-short-maker : वह पाइपलाइन जो मेरे Valorant शॉर्ट्स खुद बनाती है</title>
+      <link>https://fox3000foxy.com/blog/valorant-short-maker</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/valorant-short-maker</guid>
+      <description>स्क्रिप्ट के लिए Groq/Llama, आवाजों के लिए Piper, बाकी सब के लिए FFmpeg। एक cron job @valorant_agents पर A से Z तक रोज एक वीडियो कैसे बनाता और प्रकाशित करता है।</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/valorant-short-maker/vsm-01-intro.png" type="image/png" length="0" />
+      <category>typescript</category>
+      <category>ffmpeg</category>
+      <category>automation</category>
+      <category>ai</category>    </item>
+    <item>
+      <title>GitHub Actions का इस्तेमाल करने के 5 टेढ़े तरीके (और यह secrets के बारे में क्या सिखाता है)</title>
+      <link>https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/5-ingenious-ways-to-use-github-actions</guid>
+      <description>CI runner मुफ्त VPS में बदला, बॉट जो अपनी pull request खोलता है, बिना किसी secret के npm publish। मेरे repo का दौरा उन GitHub Actions पैटर्न सूचीबद्ध करने के लिए जो साधारण lint + test + deploy से बाहर हैं।</description>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>github-actions</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>मैंने ग्रेडिएंट डिसेंट के बजाय प्राकृतिक चयन से न्यूरल नेटवर्क विकसित किया</title>
+      <link>https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/evolution-vs-gradient-descent-trading-agents</guid>
+      <description>ट्रेडिंग के DQN एजेंट विकसित करने के लिए मैंने क्लासिक ग्रेडिएंट डिसेंट प्रशिक्षण को NSGA-II आनुवंशिक एल्गोरिदम से कैसे बदला : चार संस्करण, ओवरफिटिंग से वजनों के लामार्कवादी विकास तक।</description>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <category>ai</category>
+      <category>nsga-ii</category>
+      <category>dqn</category>
+      <category>trading</category>
+      <category>typescript</category>    </item>
+    <item>
+      <title>TF2 बॉट बेतरतीब नहीं हैं : मैंने कठिनाई का हर पैरामीटर फिर से खोजा</title>
+      <link>https://fox3000foxy.com/blog/tf2-bot-ai-explained</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/tf2-bot-ai-explained</guid>
+      <description>दृष्टि, निशाना, backstab कोण, headshot तर्क, हर ज्ञात bug, Valve ने कभी कुछ प्रलेखित नहीं किया। इसलिए हमने कोड खँगाला और सब कुछ पूर्ण तकनीकी शीट में बदला।</description>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/tf2-bot-ai-soldier-aim.png" type="image/png" length="0" />
+      <category>tf2</category>
+      <category>jeu-ia</category>
+      <category>ingenierie-inversee</category>    </item>
+    <item>
+      <title>Cape Mod : RSA हस्ताक्षर इंजेक्शन से Jeb_ की केप चुराना</title>
+      <link>https://fox3000foxy.com/blog/cape-mod-minecraft</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/cape-mod-minecraft</guid>
+      <description>एक Fabric mod जो Minecraft के विश्वास तंत्र में तार्किक खामी का शोषण करता है : Mojang का वैध RSA हस्ताक्षर लेकिन गलत खाते पर फिर से चलाया गया। कोड की व्याख्या, सुरक्षा निहितार्थ और क्रिप्टोग्राफिक सबक।</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/xbox-profile.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>fabric</category>
+      <category>java</category>
+      <category>security</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>Luna Protocol : मैंने स्वायत्त Discord बॉट बनाया जो मानव का अनुकरण करता है</title>
+      <link>https://fox3000foxy.com/blog/luna-protocol-discord-bot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/luna-protocol-discord-bot</guid>
+      <description>Luna Protocol स्थानीय LLM वाला पूरी तरह स्वायत्त Discord बॉट है, नींद, टाइपो, हिचकिचाहट, भूल, विषयगत थकान और स्वतः संदेशों के साथ स्वाभाविक बातचीत में सक्षम।</description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/luna-protocol/01-architecture-overview.svg" type="image/png" length="0" />
+      <category>discord</category>
+      <category>llm</category>
+      <category>typescript</category>
+      <category>event-driven-architecture</category>
+      <category>ai</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Laupok ने AI बनाई जो Super Mario World खुद खेलती है, यह कैसे काम करता है</title>
+      <link>https://fox3000foxy.com/blog/laupok-mario-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/laupok-mario-ai</guid>
+      <description></description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/laupok-mario-ai/neat-title.jpg" type="image/png" length="0" />
+      <category>ai</category>
+      <category>lua</category>
+      <category>emulation</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>AI Minecraft PvP सीखती है, Imitation Learning, Reinforcement Learning, और 30 चर जो मायने रखते थे</title>
+      <link>https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ai-learns-minecraft-pvp</guid>
+      <description>1 000 द्वंद्व दर्ज, pixel पर प्रशिक्षित neural network, प्रहार की 90 % सटीकता : और बॉट सीधे दीवार में घुसता था। फिर RL, पाठ्यचर्या सीखना और 60 घंटे प्रशिक्षण आए।</description>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/ai-pvp-thumbnail.png" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>ai</category>
+      <category>python</category>    </item>
+    <item>
+      <title>Super Mario Bros. : स्तर प्रारूप, pointer और 256 glitch world</title>
+      <link>https://fox3000foxy.com/blog/smb1-glitch-levels</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/smb1-glitch-levels</guid>
+      <description>128 स्तर × 4 क्षेत्र प्रकार 40KB ROM में कैसे समाते हैं, Minus World क्यों मौजूद है, और NES Tennis मैच glitch world कैसे लोड कर सकता है।</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/smb1-glitch-levels/title-card.jpg" type="image/png" length="0" />
+      <category>retro</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>मैंने konosuba-rpg का कोड पढ़ने में सप्ताहांत बिताया और यह मिला</title>
+      <link>https://fox3000foxy.com/blog/konosuba-rpg</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/konosuba-rpg</guid>
+      <description>Discord turn by turn RPG जहाँ हर क्रिया तुरंत WebP छवि बनाती है : खेल स्थिति के रूप में URL, नियतात्मक RNG, WASM पाइपलाइन, 5 स्तर cache, serverless बॉट।</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/konosuba-rpg/game_init.webp" type="image/png" length="0" />
+      <category>discord</category>
+      <category>rpg</category>
+      <category>typescript</category>
+      <category>hono</category>
+      <category>cloudflare</category>
+      <category>supabase</category>
+      <category>wasm</category>
+      <category>gaming</category>
+      <category>serverless</category>    </item>
+    <item>
+      <title>मैंने अति यथार्थवादी Express honeypot बनाया</title>
+      <link>https://fox3000foxy.com/blog/express-honeypot</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/express-honeypot</guid>
+      <description>तुरंत उत्पन्न उत्तरों वाले 328 नकली endpoint, हेडर spoofing, बॉट ट्रैफिक logging, स्कैनर को फँसाने के लिए डिजाइन किए Express honeypot middleware के हृदय में गोता।</description>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 GMT</pubDate>
+      <category>express</category>
+      <category>nodejs</category>
+      <category>security</category>
+      <category>honeypot</category>    </item>
+    <item>
+      <title>Bareiron, 1$ माइक्रोकंट्रोलर पर चलने वाला Minecraft serveur</title>
+      <link>https://fox3000foxy.com/blog/bareiron</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/bareiron</guid>
+      <description>C की 6800 पंक्तियाँ, शून्य malloc, Perlin noise bilinear interpolation से बदला, tile map में biome, और यह सब 1$ चिप पर।</description>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.com/images/bareiron/esp32-board.jpg" type="image/png" length="0" />
+      <category>minecraft</category>
+      <category>reverse-engineering</category>
+      <category>embedded</category>
+      <category>c</category>
+      <category>esp32</category>    </item>
+    <item>
+      <title>मैंने GitHub Actions पर मुफ्त बॉट चलाने के लिए git को डेटाबेस की तरह इस्तेमाल किया</title>
+      <link>https://fox3000foxy.com/blog/email-autoreply</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/email-autoreply</guid>
+      <description>मैंने email auto responder AI कैसे कोड किया जो GitHub Actions पर 0€/महीना चलता है, git टैग को डेटाबेस बनाकर और runtime टैग में पूर्व संकलन करके।</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>automation</category>
+      <category>javascript</category>
+      <category>serverless</category>
+      <category>ai</category>
+      <category>git</category>    </item>
+    <item>
+      <title>Repo to VPS : GitHub Actions को स्थायी भंडारण वाले मुफ्त VPS में बदलना</title>
+      <link>https://fox3000foxy.com/blog/repo-to-vps</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/repo-to-vps</guid>
+      <description>git को स्थायी भंडारण बनाकर GitHub Actions runner को स्थायी VPS में कैसे बदलें, tmate, inotify और commit --amend।</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>github</category>
+      <category>devops</category>
+      <category>automation</category>    </item>
+    <item>
+      <title>Discord बॉट 100% serverless : Hono + Cloudflare Workers</title>
+      <link>https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-did-i-achieved-serverless-bots</guid>
+      <description>मैंने 50€/महीना वाला Discord बॉट शून्य euro से कैसे बदला, interaction endpoint, Hono, Workers, वास्तविक समय छवि रेंडर, और बिना WebSocket पूरा गेम।</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>discord</category>
+      <category>cloudflare</category>
+      <category>serverless</category>
+      <category>typescript</category>
+      <category>bots</category>    </item>
+    <item>
+      <title>Minecraft pathfinding तर्क और उसके अनुप्रयोग</title>
+      <link>https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/minecraft-pathfinding-logic-and-applications</guid>
+      <description>A* एल्गोरिदम, ब्लॉक दंड और POI mob गति नियंत्रित, भविष्यवाणी और शोषण कैसे देते हैं, बिना तार redstone से अनुकूलित farm तक।</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>minecraft</category>
+      <category>pathfinding</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>UTAU : Visual Basic 6 के एक सॉफ्टवेयर ने सिंथेटिक आवाज को सबके लिए कैसे सुलभ बनाया</title>
+      <link>https://fox3000foxy.com/blog/utau</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/utau</guid>
+      <description>2008 का मुफ्त VB6 सॉफ्टवेयर UTAU ने कंकैटेनेटिव संश्लेषण से हर किसी को गाने वाली आवाजें बनाने कैसे दी, और यह आज भी क्यों मायने रखता है।</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>utau</category>
+      <category>vocaloid</category>
+      <category>music</category>
+      <category>synthesis</category>
+      <category>vb6</category>    </item>
+    <item>
+      <title>Nausicaa के लिए मेरा बेवकूफ AI</title>
+      <link>https://fox3000foxy.com/blog/nausicaa-ai</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/nausicaa-ai</guid>
+      <description>अनुमानी गुणांक वाला AI, हाइपर पैरामीटर जो हर 5 चाल में बदलते हैं, और Oracle जो भागता है, रणनीतिक बोर्ड गेम के दिमाग में गोता।</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>gaming</category>
+      <category>ai</category>
+      <category>javascript</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>ब्राउज़र में Wasm के बिना Node.js लाइब्रेरी चलाना, typescript-virtual-container के polyfill</title>
+      <link>https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/typescript-virtual-container-polyfills</guid>
+      <description>Fortune ने node:fs, node:crypto और एक दर्जन Node मॉड्यूल हाथ से 640 JavaScript पंक्तियों में फिर से लागू कैसे किए ताकि कंटेनर ब्राउज़र में बिना Wasm चले।</description>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>nodejs</category>
+      <category>polyfills</category>
+      <category>browser</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Linux कर्नल अनुकरण के लिए JavaScript समाधानों की तुलना</title>
+      <link>https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/comparing-javascript-solutions-for-linux-kernels-simulations</guid>
+      <description>JavaScript/TypeScript में Linux वातावरण पुनर्निर्माण का गहन विश्लेषण।</description>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <category>javascript</category>
+      <category>linux</category>
+      <category>analysis</category>    </item>
+    <item>
+      <title>character-factory बनाना : आनुवंशिकी वाले अवतार</title>
+      <link>https://fox3000foxy.com/blog/character-factory</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/character-factory</guid>
+      <description>DiceBear के ऊपर एक TypeScript मॉड्यूल : देश/नस्ल के अनुसार सुसंगत पीढ़ी, बच्चों की भविष्यवाणी के लिए छोटा आनुवंशिकी इंजन, और इंजीनियरिंग विवरण जिन्होंने इसे कार्ड गेम में उपयोगी बनाया।</description>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <category>typescript</category>
+      <category>npm</category>
+      <category>open-source</category>    </item>
+    <item>
+      <title>Microsoft Rewards फार्म को बॉट करना</title>
+      <link>https://fox3000foxy.com/blog/botting-a-farm</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/botting-a-farm</guid>
+      <description>मैंने बड़े पैमाने पर Microsoft Rewards अंक फार्म करने के लिए बॉट कैसे कोड किया, और तब से Microsoft ने अपनी सुरक्षा क्यों मजबूत की।</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_135010_image.png" type="image/png" length="0" />
+      <category>automation</category>
+      <category>javascript</category>
+      <category>reverse-engineering</category>    </item>
+    <item>
+      <title>एक नए प्रोजेक्ट पर काम</title>
+      <link>https://fox3000foxy.com/blog/working-on-a-new-project</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/working-on-a-new-project</guid>
+      <description>एक नई वेबसाइट शुरू करने और विकसित करने की प्रक्रिया की एक झलक।</description>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260313_092734_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>webdev</category>    </item>
+    <item>
+      <title>मेरे GitHub प्रोफ़ाइल के बारे में</title>
+      <link>https://fox3000foxy.com/blog/about-my-github-profile</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/about-my-github-profile</guid>
+      <description>मेरे GitHub प्रोफ़ाइल का एक संक्षिप्त परिचय।</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/20260308_123527_image.png" type="image/png" length="0" />
+      <category>meta</category>
+      <category>github</category>    </item>
+    <item>
+      <title>मेरा जुनून</title>
+      <link>https://fox3000foxy.com/blog/my-passions</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/my-passions</guid>
+      <description>कोडिंग, ड्राइंग, स्वचालन, पुरानी तकनीकों की खोज, और भी बहुत कुछ, मुझे क्या प्रेरित करता है इसकी एक झलक।</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>personal</category>    </item>
+    <item>
+      <title>यह ब्लॉग कैसे काम करता है ?</title>
+      <link>https://fox3000foxy.com/blog/how-this-blog-works</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/how-this-blog-works</guid>
+      <description>ब्लॉग के परदे के पीछे : React, Vite, Markdown, CI/CD पाइपलाइन और लेखन प्रवाह।</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://fox3000foxy.comassets/how-this-blog-works/project-structure.png" type="image/png" length="0" />
+      <category>react</category>
+      <category>meta</category>
+      <category>blog</category>    </item>
+    <item>
+      <title>SSH हस्ताक्षर स्क्रिप्ट समझाई गई</title>
+      <link>https://fox3000foxy.com/blog/ssh-signing-script</link>
+      <guid isPermaLink="true">https://fox3000foxy.com/blog/ssh-signing-script</guid>
+      <description>SSH कमिट हस्ताक्षर हेल्पर की चीड़फाड़ और मैं स्टाइलिश कमिट क्यों चाहता था।</description>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <category>git</category>
+      <category>security</category>
+      <category>shell</category>    </item>
+  </channel>
+</rss>

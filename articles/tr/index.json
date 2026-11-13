@@ -1,0 +1,774 @@
+[
+  {
+    "slug": "sabaki-david-contre-goliath",
+    "readingTime": 21,
+    "body": "\n\nEylül ayından beri Hacker News ya da Twitter'da takılıyorsan Jev'i görmemen imkansız.\n\n15 Eylül 2026'da TypeSafe Jev'i çıkardı, ilk \"System One\"ları. Pitch tek cümle: bir label seçmek için LLM'e JSON ürettirmeyi bırakın. Ona bir `state` ver, üstüne tipli sorular ver, sana tipli kararları probalarıyla versin. Tek pass, sample edilecek sıfır token, arkada parse edilecek hiçbir şey yok.\n\nPatladı gitti. Vercel AI Gateway'de ilk gün rekor benimseme, birkaç günde beş Elixir müşterisi, herkes Jev'i k",
+    "title": "Sabaki vs System One: Davut Golyat'a karşı, dünyanın en küçük karar modeli",
+    "description": "20KB'ye karşı 421M parametre. Sabaki typed-decisions'ta 7 puan bırakıyor ama 25sn CPU süresinden 1ms altı offline hıza iniyor. Örgütsel bir MoE'nin anatomisi.",
+    "date": "2026-11-12",
+    "tags": [
+      "ai",
+      "system-one",
+      "typescript",
+      "cpu",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "3rVegH4dR5YLQNzv5jA5T5cgiSf/RJA9AEyRDR9bLIyw2pc5dG5Isuwt7tdqg5D/ZxZukSZJT+ZzjsZY98dhKg==",
+    "verified": true
+  },
+  {
+    "slug": "piperhub-catalogue-voix-tts",
+    "readingTime": 19,
+    "body": "\n\nBir Discord botunu konuşturmak pahalı. Metin değil: yerel bir LLM birkaç sentlik GPU ile cümle üretiyor. Ses ise her cümlede ödeniyor. Sentez API'leri karakter başına ücret alıyor, bot bütün gece konuşunca fatura da peşinden geliyor.\n\nLuna Protocol ile yaşadığım sorun buydu. Discord botum mesajlarını yerel LLM ile üretiyor, sonra bir Piper sesiyle yüksek sesle okutuyor, OGG'ye çeviriyor ve sesli mesaj olarak gönderiyor. Hepsi kendi sunucumda, cümle başına 0 euro, sabah 3'te Luna tek başına hay",
+    "title": "PiperHub: 536 açık kaynak TTS sesi, tek modelde 7 duygu, sıfır GPU, sıfır fatura",
+    "description": "VITS, espeak, ONNX, LJSpeech: Piper bir Raspberry Pi'yi nasıl konuşturuyor. 7 duygulu Fortune multi, Kokoro 82M, PocketTTS, sanoTTS, ElevenLabs - ve resmi Python wrapper'dan 10 kat hızlı natif pipertts.",
+    "date": "2026-11-12",
+    "tags": [
+      "tts",
+      "piper",
+      "open-source",
+      "typescript",
+      "ai",
+      "catalogue"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "oVObeZHyR+aQwIr+CLB4qgowyMKqScYq0CDB2z2cDtEM5bihwlNKt4cLJCt4cK52VS9KldJw3a2r+t0Cy8PjMg==",
+    "verified": true
+  },
+  {
+    "slug": "article-chlone-timeline-chloeai",
+    "readingTime": 24,
+    "body": "\n# Chlone: Discord'da konuşma tarzımı klonlamak için altı gün\n\n*Gün gün build anlatısı - itsrealfortune tarafından*\n\n---\n\nİşte altı gün sürmüş bir projenin gerçek hikâyesi. Chlone, benim gibi konuşan bir Discord botu ve journeyi olduğu gibi anlatıyorum, deponun 146 commitinin sırasıyla, saatleriyle, başarısızlıklarıyla, sapmalarıyla ve her şeyi pencereden atma istekleriyle. Her şey Fox ile bir rekabetten çıktı. Başlangıçta konu bir şakaydı, herkes Discordda kendi klonuna hayat verecekti ve ben P",
+    "title": "Chlone: Discord'da konuşma tarzımı klonlamak için altı gün - klonun sürümü",
+    "description": "Klonun kendisi tarafından yazılmış sürüm: chloeai ona hayat veren altı günü ve 146 commiti kendi tarzıyla anlatır, yazım hatasından v1.0.0 tagine.",
+    "date": "2026-09-18",
+    "tags": [
+      "discord",
+      "ai",
+      "llm-agents",
+      "openself",
+      "python",
+      "selfbot",
+      "clone"
+    ],
+    "authors": [
+      "itsrealfortune"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "hXRx3OiP5+AjcILq2aPy0PPE+bM8Q9eSI+cgasb080njyKQMIZf4iIrfhdmkPxnpcSEnRIkyyT0Tlu57gcWmpA==",
+    "verified": true
+  },
+  {
+    "slug": "article-chlone-timeline",
+    "readingTime": 23,
+    "body": "\n# Chlone: Discord'da konuşma tarzımı klonlamak için altı gün\n\n*Gün gün build anlatısı - itsrealfortune tarafından*\n\n---\n\nİşte altı gün sürmüş bir projenin gerçek hikâyesi: **Chlone**, benim gibi konuşan bir Discord botu. Yolculuğu olduğu gibi anlatıyorum, deponun 146 commitinin sırasıyla, saatleriyle, başarısızlıklarıyla, sapmalarıyla ve her şeyi pencereden atma istekleriyle, ama commit mesajlarını size dayatmadan.\n\nHer şey **Fox ile bir rekabetten** çıktı. Konu, bir şakaydı: herkes Discordda k",
+    "title": "Chlone: Discord'da konuşma tarzımı klonlamak için altı gün",
+    "description": "Gün gün build anlatısı: chloeai adlı bir opencode ajanı, OpenSelf belleğine bağlı, altı günde ve 146 committe Discord'da benim gibi konuşmayı nasıl öğrendi.",
+    "date": "2026-09-18",
+    "tags": [
+      "discord",
+      "ai",
+      "llm-agents",
+      "openself",
+      "python",
+      "selfbot",
+      "clone"
+    ],
+    "authors": [
+      "itsrealfortune"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "AyuGx/bLjO7aRdK/4zWAnoz7g31U10bKnLqJhOyaVgL2GMWFopcbfuoixqFrkmNl1mA4A6XaCzcShryu0x7OzA==",
+    "verified": true
+  },
+  {
+    "slug": "j-ai-audit-mes-agents-ia-de-code-plut-t-que-de-leur-faire-confiance-l-aveugle",
+    "readingTime": 5,
+    "body": "\n\nPlatformun teknik raporunun her baskısı mimariyi baştan gezmemi zorunlu kılar: servisler, ajanlar, veri pipelineları. 4. baskıyı hazırlarken deponun hacmi sonunda gözüme battı, oysa onu durmadan kademeli büyürken görüyordum: başlangıçta birkaç bin satıra, 10KB altına sığan depo artık 100MBye ulaşıyor. Platformda ancak biraz fazla özellik vardı. Kodu uygulamak ve düzeltmek için Claude Chat türü ajanlara yaslanmıştım, onlardan ne istediğimi ne de hangi kapsamda istediğimi kesin çerçevelemeden.",
+    "title": "Kod yapay zekâsı ajanlarıma körü körüne güvenmek yerine denetledim",
+    "description": "Alım satım platformumun 4. teknik raporunu yazmak için yürütülen iki denetim bana iki ayrı sapmayı nasıl açığa çıkardı: depo bağlam penceresine artık sığmadığı için unutan ajan ve özlülüğe hiçbir şey itmediği için gerekenden on kat fazla kod yazan ajan.",
+    "date": "2026-09-15",
+    "tags": [
+      "ai",
+      "llm-agents",
+      "code-review",
+      "context-window",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "fgJn7wMR3Nq4D40TfQxEfC1e0RnrwGd86tD0+NQniieQcLrH36cgyS6ErGvly3RsUXuSc0kG9Y9j3FPRLFug7w==",
+    "verified": true
+  },
+  {
+    "slug": "luna-protocol-layers-and-centroids",
+    "readingTime": 15,
+    "body": "\n# Luna Protocol: beyinlerin ortaklaştırılması, duygusal sınıflandırma ve ilginç/faydasız yönlendirme\n\nÖnceki [iki](/articles/tr/luna-protocol-discord-bot) [makalede](/articles/tr/luna-protocol-official-models) Luna Protocolü karmaşık davranış sistemi ve ince ayarlı modelli tekil Discord botu sundum. Ama mimari o zamandan iyi evrildi. Monolit olan şey: Discord botu, davranışı ve LLM çağrılarını yöneten tek Node.js süreci, **dört bağımsız katmana** dönüştü; her birinin kendi sorumluluğu, kendi di",
+    "title": "Luna Protocol: beyinlerin ortaklaştırılması, duygusal sınıflandırma ve ilginç/faydasız yönlendirme",
+    "description": "Luna Protocol monolitten dört katmanlı mimariye geçti: adaptörler, brain, duygusal sınıflandırıcı ve inference. Programda: embedding centroidleri, ilginç/faydasız yönlendirme ve valence ile arousal üzerinden LLM parametre ayarı.",
+    "date": "2026-07-27",
+    "tags": [
+      "discord",
+      "matrix",
+      "llm",
+      "architecture",
+      "embeddings",
+      "centroids",
+      "emotion-ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "zTa8qDfl7SBBiOk0oswMeCd075ht/M8AQ9/GxbX62wm0VhzXmiWHXhv+6xn5GUVyWHLTjprOqGhxye6sGL0Rag==",
+    "verified": true
+  },
+  {
+    "slug": "from-eliza-to-llm-chatbots-typescript",
+    "readingTime": 20,
+    "body": "\n# ELIZA'dan LLMlere: TypeScript ile yeniden inşa edilmiş 60 yıllık konuşma yapay zekâsı\n\n1966da Joseph Weizenbaum tarihin ilk chatbotunu yaratmak için IBM 7094 üzerinde 420 satır MAD-SLIP yazdı. Programın adı **ELIZA** idi ve temel kalıplar ve cümle permütasyonlarıyla Rogerci bir psikoterapisti simüle ediyordu. Altı on yıl sonra konuşma yapay zekâsı halk konusu oldu: ChatGPT, Claude, Gemini her sohbettedir. Orijinal kodu yeniden okuyunca araç ekonomisi beni çarptı.\n\nAma bu iki uç arasında **PAR",
+    "title": "ELIZA'dan LLMlere: TypeScript ile yeniden inşa edilmiş 60 yıllık konuşma yapay zekâsı",
+    "description": "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot, aynı problemin kökten farklı beş mimarisi, orijinal verileriyle TypeScript taşınmış. 1966dan modern LLMlere, konuşma yapay zekâsı konuşmayı nasıl öğrendi ve bir chatbot deposu 60 yıllık araştırmaya dair bize ne öğretir.",
+    "date": "2026-07-21",
+    "tags": [
+      "chatbot",
+      "ia",
+      "typescript",
+      "eliza",
+      "parry",
+      "alice",
+      "aiml",
+      "jabberwacky",
+      "cleverbot",
+      "llm",
+      "nlp",
+      "histoire",
+      "luna-protocol"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "Eqc4Wra7gCZoVFuuctXJEDOfiSlPEXk2QUSo/0BtqhLdGFTVpxeaipW8euasP+l0UQUTyfvRTbREQRZZul1jqA==",
+    "verified": true
+  },
+  {
+    "slug": "luna-protocol-official-models",
+    "readingTime": 11,
+    "body": "\n# Luna Protocol: 50 bin Discord örneğinde 1,5 milyar parametreli modeli neden ince ayarladım ve few-shot priming her şeyi neden değiştirdi\n\n[İlk makalede](/articles/en/luna-protocol-discord-bot) insanı simüle eden bir Discord botu inşa ettim: uyku, yazım hataları, tereddütler, unutkanlıklar, spontan mesajlar. Davranış sistemi sağlam duruyordu. Bütün bunların arkasındaki LLM 3 milyar parametreli Hermes modeliydi, Q8_0 nicemlenmiş, 3 GB VRAM tüketiyor.\n\nÇalışıyordu. Ama büyük geliyordu.\n\nBir Disc",
+    "title": "Luna Protocol: 50 bin Discord örneğinde 1,5 milyar parametreli modeli neden ince ayarladım ve few-shot priming her şeyi neden değiştirdi",
+    "description": "Daha az veride eğitilmiş daha küçük bir model daha büyük modeli geride bırakabilir, doğru başlatmayı bilmek koşuluyla. Luna Protocolün Hermes 3B modelinden ince ayarlı Qwen 1,5B modeline geçişi ve few-shot primingin neden ilerlemenin gerçek faktörü olduğu.",
+    "date": "2026-07-17",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "discord",
+      "llm",
+      "fine-tuning",
+      "few-shot-learning",
+      "qwen",
+      "unsloth",
+      "open-source"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "s9SJc+DfDSvu6b39cJcEPh348TvDMedN+thvgVlbWQ7fCz52BemuLcW1X3IPCu77tUzqlTmmA/BDkSwduuCDEw==",
+    "verified": true
+  },
+  {
+    "slug": "how-machines-talks-between-themselves",
+    "readingTime": 13,
+    "body": "\n# Sorun: çok fazla kısaltma, yeterince hiyerarşi yok\n\nTCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; bunlardan bahseden kaynakların çoğu bunları \"kullanım durumuna göre seçilecek\" birbirinin yerine geçebilir düz bir seçenek listesi olarak sunar. Gerçekte aynı düzlemde değillerdir: bazıları aktarım protokolleridir, bazıları aktarımın etrafına sarılan güvenlik katmanlarıdır, bazıları ise ilk ikisine dayanan uygulama protokolleridir. Hiyerarşiyi anlamak, neden TCP ile TLS arasında asla \"",
+    "title": "Makineler birbiriyle nasıl konuşur: TCP'den mTLS'e bir tur",
+    "description": "TCP, UDP, TLS, mTLS, HTTP ve WebSocket neden rakip alternatifler değil, üst üste yığılmış katmanlardır; ham aktarımdan karşılıklı kimlik doğrulamaya makineden makineye iletişimin hiyerarşik turu.",
+    "date": "2026-07-16",
+    "tags": [
+      "tcp",
+      "udp",
+      "tls",
+      "mtls",
+      "websocket",
+      "http",
+      "grpc",
+      "réseau",
+      "architecture-distribuée",
+      "protocoles"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "lB+D+8RGE3xgbHiANw3M7/3dj+/ybTEytAJh7XGqAdvfjkZkNN9APFt0nJ0Glpa1ZXgtUOD4dYM/fBUaGnVj8Q==",
+    "verified": true
+  },
+  {
+    "slug": "bedrock-any-cape",
+    "readingTime": 7,
+    "body": "\n# Minecraft Bedrock üzerinde herhangi bir pelerini nasıl almalı\n\nJavada sahip olmaman gereken bir pelerinle sonuçlanmanın bir sürü çarpık yolu vardır (`cape-mod` makalesine bak). Bedrockta oyun farklıdır, kimlik doğrulama farklıdır ama yine de bir yol vardır: üçüncü parti bir başlatıcı ve kazanılmış sanılan doğrulamayı görmezden gelecek kadar eski bir oyun sürümü yeter.\n\nİşte nasıl yapılacağı ve sonra kaputun altında muhtemelen neler olduğuna bakıyoruz.\n\n- Zaten Minecraft Bedrocka sahip bir Mic",
+    "title": "Minecraft Bedrock üzerinde herhangi bir pelerini nasıl almalı",
+    "description": "Üçüncü parti bir başlatıcı, oyunun eski bir sürümü ve hayır demeyi hiç öğrenmemiş bir pelerin seçici. Tam öğretici artı neden işe yaradığının muhtemel açıklaması.",
+    "date": "2026-07-14",
+    "tags": [
+      "minecraft",
+      "bedrock",
+      "tutorial",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "9stown"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "TGrDHUmSDt4LencabAcZx9XyhbwJVWeZDz5mmO/TfwZYiCoCGqUHVYGvEVn+xeOTt5Tkca+6xwYzbOO24B6qPQ==",
+    "verified": true
+  },
+  {
+    "slug": "valorant-short-maker",
+    "readingTime": 7,
+    "body": "\n# valorant-short-maker: Valorant shortlarımı kendi kendine üreten pipeline\n\nBirkaç aydır bir YouTube kanalı ben elimi sürmeden dönüyor: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). İki round arasında birbirine laf sokan Valorant ajanları, seslendirilmiş, karaoke altyazılı, Shorts olarak yayınlanmış. Her şey [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker) tarafından üretiliyor, cron ile çalışan ve kimsenin hiçbir şeye tıklamasına gerek k",
+    "title": "valorant-short-maker: Valorant shortlarımı kendi kendine üreten pipeline",
+    "description": "Senaryo için Groq/Llama, sesler için Piper, geri kalan her şey için FFmpeg. Bir cron işinin @valorant_agents üzerinde baştan sona günde bir video üretip yayınlaması.",
+    "date": "2026-07-14",
+    "tags": [
+      "typescript",
+      "ffmpeg",
+      "automation",
+      "ai"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "XKCD0ixdKfU5C6R/64+5mHiZRMU3QKb7X2Ez4bxzr9z8/zrvJOVHv/kEixvlOPLHDabJRy5vvDQnZJpe9mV33Q==",
+    "verified": true
+  },
+  {
+    "slug": "5-ingenious-ways-to-use-github-actions",
+    "readingTime": 7,
+    "body": "\n# GitHub Actions'ı Kullanmanın 5 Zekice Yolu\n\nGitHub Actions kağıt üzerinde klasik CI/CD için var: push yaparsın, lint çalışır, test edilir, dağıtılır. Özel bir durum hakkında zaten yazdım (bir e-posta botu için git taglerini veritabanı olarak kullanmak, ilgili makaleye bak). Ama kendi depolarımı karıştırınca, tek bir projeye odaklanan bir makaleden çok teknik kataloğuna benzeyecek kadar desen birikti.\n\nEn klasikten en çarpığına, beş kullanım.\n\nHızlı bir hatırlatma, tüm detay `email-autoreply`",
+    "title": "GitHub Actions'ı Kullanmanın 5 Zekice Yolu (ve sırlar hakkında öğrettikleri)",
+    "description": "Ücretsiz VPS'e dönüşen bir CI runner, kendi pull requestlerini açan bir bot, tek bir sır bile olmadan npm yayını. Klasik 'lint + test + deploy' kalıbının dışına çıkan desenleri listelemek için depolarımda bir tur.",
+    "date": "2026-07-14",
+    "tags": [
+      "github-actions",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "+nI5/DlOSKZJfIxM1tve+MbVjceMSX62oD73OzJpqeA/Ka+D+XeEW9HJR93/mQYrLctaFbBFnpYC3dApM1ERLg==",
+    "verified": true
+  },
+  {
+    "slug": "evolution-vs-gradient-descent-trading-agents",
+    "readingTime": 7,
+    "body": "\n\nAlgoritmik alım satım için bir DQN ajanını klasik gradyan inişiyle eğitmek, söylemesi kolay çözmesi zor bir sorun koyar: gradyan _bir_ ağı _bir_ yerel minimuma, _bir_ piyasa penceresinde optimize eder. Bu minimumun farklı bir piyasa rejimine genelleneceğinin garantisi yoktur ve eğitim döngüsündeki hiçbir şey çeşitliliği teşvik etmez; farklı tohumlardan başlayan iki run genelde neredeyse aynı stratejilere, aynı kör noktalarla yakınsar.\n\nKeşfettiğim yanıt: gradyan inişini genetik bir algoritmayl",
+    "title": "Bir sinir ağını gradyan inişi yerine doğal seçilimle evrimleştirdim",
+    "description": "Klasik gradyan inişli eğitimi, alım satım DQN ajanlarını evrimleştirmek için NSGA-II genetik algoritmasıyla nasıl değiştirdim: aşırı uyumdan ağırlıkların lamarkçı evrimine dört sürüm.",
+    "date": "2026-07-13",
+    "tags": [
+      "ai",
+      "nsga-ii",
+      "dqn",
+      "trading",
+      "typescript"
+    ],
+    "authors": [
+      "docteur-turboss"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "eKEz5iw6X1JyuA2jGFWsXMO1HCPthKkWR9dkUDUBDGR5WNW4Fs7gDzM+5nDANf6bNzrde1l5nTYERvLQes4YTw==",
+    "verified": true
+  },
+  {
+    "slug": "tf2-bot-ai-explained",
+    "readingTime": 25,
+    "body": "\n\n![Roketatarla nişan alan TF2 Asker botu](assets/tf2-bot-ai-soldier-aim.png)\n\nHer TF2 oyuncusu bunu en az bir kez söylemiştir: \"bu bot hile yapıyor.\" Ya da tersi: \"bu Kolay bot neden roketleri yemeye dikilip duruyor.\" \"Kolay\", \"Normal\", \"Zor\" ve \"Uzman\"ın kaputun altında gerçekte ne anlama geldiğini kimse bilmez: Valve dört zorluk etiketi gönderdi ve tam sıfır belgeleme.\n\nO yüzden bir grup (ben, awimii, Mush The Possum ve oyunun derlenmiş kodunu gerçekten kazan büyük kısmı yapan sigsegv) TFBot",
+    "title": "TF2 botları rastgele değil: her zorluk parametresini yeniden keşfettim",
+    "description": "Görüş, nişan, backstab açıları, headshot mantığı, bilinen her hata, Valve hiçbir şeyi belgelemedi. O yüzden kodu kazdık ve hepsini eksiksiz bir teknik föye dönüştürdük.",
+    "date": "2026-07-12",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "tf2",
+      "jeu-ia",
+      "ingenierie-inversee"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "lzJSZMpN9Ay1lqG+c/G15MUS+dimBCQBkGktDlMmBK2ruQ0ra8Ma3kSPmJ2Xs/evD1eSlcsXrUIZngwoRRJdfw==",
+    "verified": true
+  },
+  {
+    "slug": "cape-mod-minecraft",
+    "readingTime": 7,
+    "body": "\n# Cape Mod: RSA imzası enjeksiyonuyla Jeb_'in pelerini nasıl çalınır\n\n![alt text](assets/xbox-profile.png)\n\nSana arkadaşlarına resmi Mojang pelerini taktığına inandırmak için **yanlış hesap** için geçerli bir RSA imzasının yettiğini söylesem? Minecraftın imzaya güvenip onun gerçekten sana ait profile ait olduğunu doğrulamayı unuttuğunu gösteren bir Fabric exploit olan `cape-mod`a hoş geldin.\n\nJava Editionda nadiren sorulan bir soru vardır: **bir oyuncunun görünümünü ve pelerinini göstermekten k",
+    "title": "Cape Mod: RSA imzası enjeksiyonuyla Jeb_'in pelerini nasıl çalınır",
+    "description": "Minecraft'ın güven sistemindeki mantıksal bir açıktan yararlanan bir Fabric modu: Mojang'dan geçerli ama yanlış hesapta tekrar oynatılan bir RSA imzası. Kodun açıklaması, güvenlik etkileri ve kriptografik dersler.",
+    "date": "2026-07-11",
+    "tags": [
+      "minecraft",
+      "fabric",
+      "java",
+      "security",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "jVt9aNfBukQE9vuppPdzwoDQNenGeFIMKkFj9C/0BC4VKl/PNKKaEM4Pc7Eo/zmWSKqODqA19i4PB4CwwCYtPw==",
+    "verified": true
+  },
+  {
+    "slug": "luna-protocol-discord-bot",
+    "readingTime": 14,
+    "body": "\n# Luna Protocol: insanı simüle eden özerk bir Discord botu yarattım\n\nBir Discord botu **uyuyabilir**, **yazım hataları** yapabilir, **tereddüt** edebilir, yanıtlamayı **unutabilir** ve bazen kendi kendine mesaj gönderebilir mi? **Luna Protocol** tam bunu yapar: yerel bir LLM (llama.cpp) çalıştıran ve kusurlu bir insan gibi sohbet eden tamamen özerk bir Discord botu.\n\nLuna bağlamsal tetikleyiciler ve üstlenilmiş kusurlu yanıtlarla çalışır. **Öncelikli tetikleme sistemi**, **değişken gecikmeler**",
+    "title": "Luna Protocol: insanı simüle eden özerk bir Discord botu yarattım",
+    "description": "Luna Protocol, uyku, yazım hataları, tereddütler, unutkanlıklar, tematik yorgunluk ve spontan mesajlarla doğal sohbet edebilen yerel LLMli tamamen özerk bir Discord botudur.",
+    "date": "2026-07-11",
+    "tags": [
+      "discord",
+      "llm",
+      "typescript",
+      "event-driven-architecture",
+      "ai",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "wpShxUAg9RvQ2GJbHDWrvXLMp7k5+FSs77P2vMYB57LFFGAW9EFchKZE7IjFl5dOM+8tQFXlvsY2dtJNBbv6PQ==",
+    "verified": true
+  },
+  {
+    "slug": "laupok-mario-ai",
+    "readingTime": 15,
+    "body": "\n# Laupok kendi kendine Super Mario World oynayan bir yapay zekâ yarattı, nasıl çalışıyor\n\nLaupok **Super Mario World** oyununu tamamen özerk oynayan bir yapay zekâ yarattı. Sıfırdan başlar: önceden tanımlı script yok, kaydedilmiş kare yok. Yapay zekâ rastgele mutasyonlar ve doğal seçilim darbeleriyle oyunun seviyelerini bitirmeyi kendi kendine öğrenir. Proje çok platformlu bir emülatör olan **BizHawk** üzerinde yaklaşık **4200 satırlık** bir Lua scriptiyle döner.\n\nBu projeyi büyüleyici yapan şe",
+    "title": "Laupok kendi kendine Super Mario World oynayan bir yapay zekâ yarattı, nasıl çalışıyor",
+    "date": "2026-07-11",
+    "tags": [
+      "ai",
+      "lua",
+      "emulation",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "ohJdJHnH6oUUEnKYyqhN4VRbZFxhsoyrxFrwUJNYDRBMk7zoJJc3xmP9dFFGXeOFFOgulaAwCd2MAk39lCZeKw==",
+    "verified": true
+  },
+  {
+    "slug": "ai-learns-minecraft-pvp",
+    "readingTime": 21,
+    "body": "\n\n![AI Learns Minecraft PvP küçük resmi](assets/ai-pvp-thumbnail.png)\n\nKadambi | AI Engineering tarafından [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) adlı bir video var ve gördüğüm en dürüst video oyunu yapay zekâsı eğitim anlatılarından biri.\n\nİlke: ekrana bakıp fare ve klavye komutları gönderen, Minecraft PvP oynayan bir bot inşa etmek (kılıç kiti, tamamen büyülenmiş elmas zırh). Yalnızca piksel girdi ve aksiyon çıktı ile",
+    "title": "Yapay zekâ Minecraft PvP öğreniyor, Taklit Öğrenmesi, Pekiştirmeli Öğrenme ve önemli olan 30 değişken",
+    "description": "Kaydedilmiş 1.000 düello, pikseller üzerinde eğitilmiş sinir ağı, %90 vuruş doğruluğu: ve bot dosdoğru bir duvara koşuyordu. Sonra RL, müfredatlı öğrenme ve 60 saatlik eğitim geldi.",
+    "date": "2026-07-09",
+    "tags": [
+      "minecraft",
+      "ai",
+      "python"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "3NPT5tgSTxAAP3yM03Optg3ERWlN8KbP9RXbgHJcH1K+7G7n/zNkDeKGjrAmbKxsApppD7cT53dDJop3GLPKIQ==",
+    "verified": true
+  },
+  {
+    "slug": "smb1-glitch-levels",
+    "readingTime": 24,
+    "body": "\n\nSuper Mario Bros. 40 kilobayt ROMdur. Sekiz dünya, 32 seviye, düşmanlar, müzik, power-uplar, hepsi oraya sığar.\n\nAma emülatör açıp doğru baytları kurcalarsan 36-1. seviyeyi yükleyebilirsin. Ya da 255-1i. Ya da her şeyi Bowser spriteları ve hiçbir yere gitmeyen borulardan oluşan bir dünyada bulabilirsin.\n\nBu glitch dünyaları basit bir nedenle vardır: SMB1in seviye depolama sistemi 8-bit optimizasyon harikasıdır ve oyunu okumaması gereken yeri okumaya zorlayınca sonuçlar büyüleyicidir.\n\nRetro Ga",
+    "title": "Super Mario Bros.: seviye formatı, işaretçiler ve 256 glitch dünyası",
+    "description": "128 seviye × 4 bölge türü 40KB ROMa nasıl sığar, Minus World neden vardır ve bir NES Tenis maçı glitch dünyaları nasıl yükleyebilir.",
+    "date": "2026-06-10",
+    "tags": [
+      "retro",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "HZA+qzurPyz/1dQAw7L+W1v+fDSomlykp04B3UaVq56F08eFO/gBW+8HZaHbeuPYvxPtJAH2fVIstOe1/l6yxw==",
+    "verified": true
+  },
+  {
+    "slug": "konosuba-rpg",
+    "readingTime": 10,
+    "body": "\n# konosuba-rpg kodunu bir hafta sonu okudum ve işte bulduklarım\n\nBu projeyi bir süredir sürdürüyorum ama kendi kodunu dinlenmiş kafayla yeniden okumak hep öğreticidir. konosuba-rpg her aksiyonun anında bir WebP görseli ürettiği sıra tabanlı bir Discord RPGsidir. Spritelar, can barları, savaş mesajlarıyla gerçek bir beste görseldir: hepsi.\n\nYığın: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Tamamen ücretsiz barındırma. Ve Discord botu kalıcı sunucusuz çalışır. Bu yazı bütün bunların",
+    "title": "konosuba-rpg kodunu bir hafta sonu okudum ve işte bulduklarım",
+    "description": "Her aksiyonun anında bir WebP görseli ürettiği sıra tabanlı bir Discord RPGsi: oyun durumu olarak URL, deterministik RNG, WASM pipelineı, 5 seviyeli önbellek, sunucusuz bot.",
+    "date": "2026-06-10",
+    "tags": [
+      "discord",
+      "rpg",
+      "typescript",
+      "hono",
+      "cloudflare",
+      "supabase",
+      "wasm",
+      "gaming",
+      "serverless"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "5QxJTmuH3Pv2lIC0G2XLW5NhuQ75hkQQGmQ8wh1FbRviDy0tFontFulooUaxqWCqm/QqOKaMFnr59hIuS4sLIQ==",
+    "verified": true
+  },
+  {
+    "slug": "express-honeypot",
+    "readingTime": 6,
+    "body": "\n\nİki varyanttan birini seçen **328 sahte endpoint** sunan bir Express middlewarei oluşturdum: `default` (sade ama inandırıcı yanıtlar) ve `complete` (çok ayrıntılı yanıtlar). Her yanıt taze zaman damgaları ve istek kimlikleriyle **anında üretilir**, bu da her yanıtı benzersiz kılar. Diskte hiç mock dosyası yok. Middleware ayrıca trafiği bir metin dosyasına **kaydedebilir** ve botların ne aradığını analiz etmek için yönetilmeyen rotaları `/newBotsRoute` üzerinde sunabilir.\n\n**Bu basit bir 404 dö",
+    "title": "Ultra gerçekçi bir Express honeypot inşa ettim",
+    "description": "Anında üretilmiş yanıtlarla 328 sahte endpoint, başlık sahteciliği, bot trafiği kaydı, tarayıcıları oltaya düşürmek için tasarlanmış bir Express honeypot middlewareinin kalbine dalış.",
+    "date": "2026-06-10",
+    "aiGenerated": true,
+    "tags": [
+      "express",
+      "nodejs",
+      "security",
+      "honeypot"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "LMrHTeZRl8nbXYqY0BMNjRVaLaRprM2+dMrudaRnfO+DWIKcmUCz9Fn3jewpU7ptKDv5ZuBiUsGqxPoQzeC4fw==",
+    "verified": true
+  },
+  {
+    "slug": "bareiron",
+    "readingTime": 18,
+    "body": "\n\nHiç bir Minecraft sunucusunu 1 liraya bir mikrodenetleyicide çalıştırabileceğini merak ettin mi?\n\nBen ettim. Ve cevap evet. Resmen.\n\n[Bareiron](https://github.com/p2r3/bareiron/) diye bir proje var, p2r3 imzalı, ve muhtemelen son yıllarda Minecraft dünyasında gördüğüm en büyüleyici projelerden biri. **300 kilobayt**a sığan bir binary'den bahsediyoruz, **6800 satır C**, sıfır harici bağımlılık, malloc yok, threading yok, ve **1 dolarlık bir ESP32**'de çalışıyor.\n\n![ESP32-C3, sunucuyu çalıştıran",
+    "title": "Bareiron -- 1$'lık bir mikrodenetleyicide çalışan Minecraft sunucusu",
+    "description": "6800 satır C, sıfır malloc, bilinear interpolasyonla değiştirilmiş Perlin gürültüsü, tile map'te biyomlar ve bunların hepsi 1$'lık bir çipte.",
+    "date": "2026-05-30",
+    "authors": [
+      "fox3000foxy"
+    ],
+    "tags": [
+      "minecraft",
+      "reverse-engineering",
+      "embedded",
+      "c",
+      "esp32"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "Kg2zsfIFykqBfRtEe9MGYkD2iuuJcc/uaI1700eRBGTUIj9FxKjViPaENAnVvDFkwXVHa/SMhEGCTDrYrEZrgw==",
+    "verified": true
+  },
+  {
+    "slug": "email-autoreply",
+    "readingTime": 6,
+    "body": "\n# GitHub Actions üzerinde bedava bot çalıştırmak için giti veritabanı olarak kullandım\n\n7/24 çalışan otomatik bir e-posta yanıtlayıcım var.\n\nPostalarımı okur, ne hakkında olduğunu anlar ve bir yapay zekâyla kendi kendine yanıtlar. Önceki konuşmaları hatırlar. Bültenleri ve `noreply@` adreslerini görmezden gelir. İş çok kızışınca bir insana iletir.\n\nAylık maliyet: **0 €**.\n\nSunucusuz, VPSsiz ve veritabanısız idare ediyorum. Sadece GitHub Actions ve hasta bir hack: **giti veritabanı olarak kullan",
+    "title": "GitHub Actions üzerinde bedava bot çalıştırmak için giti veritabanı olarak kullandım",
+    "description": "Git taglerini veritabanı ve runtime taginde ön derleme kullanarak 0 €/ay maliyetle GitHub Actions üzerinde çalışan yapay zekâlı e-posta otomatik yanıtlayıcıyı nasıl kodladım.",
+    "date": "2026-05-29",
+    "tags": [
+      "automation",
+      "javascript",
+      "serverless",
+      "ai",
+      "git"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "g0CZhhBoaL6x1Xd5KLLPvU5JMXbCu+WHnng8noXwFPINRDDe4esl+CuJT2WiuSRaN/gKlTIZxVf8M+dFnxaKiQ==",
+    "verified": true
+  },
+  {
+    "slug": "repo-to-vps",
+    "readingTime": 14,
+    "body": "\n\nGitHub Actions sana ücretsiz Linux makineleri veriyor.\n\nYani gerçek Ubuntu sunucuları. 2 çekirdek, 7 GB RAM, 14 GB disk. Bedava. Run başına 6 saatliğine.\n\nTek \"sorun\": run sonunda her şey silinir. Makine atılabilirdir. Paket kurarsın, kod yazarsın, yapılandırırsın... ve puf, sonda her şey kaybolur. Sanki hiçbir şey yapmamışsın gibi.\n\nŞöyle olmasa.\n\n**Giti sabit disk olarak** kullansan şöyle olmasa.\n\nVe bir anda runlar arasında hayatta kalan kalıcı diskli ücretsiz bir VPSin olur. Yeniden bağlan",
+    "title": "Repo to VPS: kalıcı depolamayla GitHub Actions'ı ücretsiz VPS'e dönüştürmek",
+    "description": "GitHub Actions koşucusunu git kalıcı depolamayla kalıcı VPS'e dönüştürmek, tmate, inotify ve commit --amend.",
+    "date": "2026-05-29",
+    "tags": [
+      "github",
+      "devops",
+      "automation"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "yqiwKdIMrYXggNWG+56LTbzXHkreYNYxhfoxUaDeL09ZTqjfSh+oZZcEzUROw65sLRRyBaZjzIWOYR98w2KU+g==",
+    "verified": true
+  },
+  {
+    "slug": "how-did-i-achieved-serverless-bots",
+    "readingTime": 10,
+    "body": "\n\nKlasik Discord botlarını kendi makinemde bakımlı tutarak birkaç ay geçirdim.\n\nSürekli açık WebSocket bağlantısı. Bot sabah 3te kendi kendine yeniden bağlanır. Koyunlara ters baktığım için bot çöker. Fatura yükselir.\n\nBir gün şunu keşfettim: **bağlantıyı neden sürdüreyim**? Discord ilgilendiğin olayları sana POST ile gönderebilir. Yanıtlarsın, biter.\n\n2021den beri Discord **interaction endpointleri** sunar.\n\nBu sadece HTTP. WebSocketsiz, kalıcı durumsuz çalışırsın. Bir istek alırsın, JSON gönde",
+    "title": "%100 sunucusuz Discord botu: Hono + Cloudflare Workers",
+    "description": "Bana ayda 50 €ya mal olan bir Discord botunu sıfır euroyla nasıl değiştirdim, interaction endpointleri, Hono, Workers, gerçek zamanlı görsel render ve WebSocketsiz tam bir oyun.",
+    "date": "2026-05-29",
+    "tags": [
+      "discord",
+      "cloudflare",
+      "serverless",
+      "typescript",
+      "bots"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "YLSGaZKb4taR/bfyC/KKbvLLQk790EJNGlp5a3K6zHKdfDSOpBI5Vk18JjvcgOuQG1Pwue5QJA3pW8mljhMDMA==",
+    "verified": true
+  },
+  {
+    "slug": "minecraft-pathfinding-logic-and-applications",
+    "readingTime": 11,
+    "body": "\n\nKoyunların duvarlara çarpmasını izleyerek saatler geçirdim.\n\nVe dürüstçe? Hayatımın en iyi yatırımı.\n\nÇünkü bu moblara ne kadar bakarsan o kadar rastgele hiçbir şeyleri olmadığını fark edersin. Her hareket kodlanmış, tahmin edilebilir ve hepsinden önemlisi tamamen kırılabilir. Tam olarak yol bulmanın nasıl çalıştığını anlamak için Minecraft kaynak koduna daldım ve keşfettiğim şey moblara kelimenin tam anlamıyla mind-control yapabileceğindi. Yani onları şansın karar verdiği yere değil, SENİN is",
+    "title": "Minecraft yol bulma mantığı ve uygulamaları",
+    "description": "A* algoritması, blok cezaları ve POIler mob hareketini kontrol etmeyi, tahmin etmeyi ve suistimal etmeyi nasıl sağlar, kablosuz redstonedan optimize çiftliklere.",
+    "date": "2026-05-29",
+    "tags": [
+      "minecraft",
+      "pathfinding",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "BiTSIobe6zL5addPlkyDML7AhSTB0MQRw7ZAiTpv10TBsM47oZ97ew+KuiCNbsgnKIC4fd24CQr0tTTM9/tj+w==",
+    "verified": true
+  },
+  {
+    "slug": "utau",
+    "readingTime": 8,
+    "body": "\n\nAna sayfamda kısaca değinmiştim: UTAUyu seviyorum. İşte nedeni.\n\n2008de sentetik bir sesi şarkı söyletmek isteseydin bir seçeneğin vardı: VOCALOID. Yamahanın yazılımı. Pahalı, sahipli, kendin yaratamadığın resmi seslerle.\n\nSonra bir Japon adam, Ameya/Ayame, köşesinde bir program çıkardı. **Visual Basic 6** ile kodlanmış bir yazılım. Ücretsiz. Kendi sesini... kendin kaydettiğin WAV dosyalarıyla yaratmana izin veriyordu.\n\nBu yazılımın adı **UTAU** (歌う, Japoncada \"şarkı söylemek\"). Ve dönemi için",
+    "title": "UTAU: Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi",
+    "description": "2008 tarihli ücretsiz bir VB6 yazılımı olan UTAU, birleştirmeli sentezle herkesin şarkı söyleyen sesler yaratmasına nasıl olanak sağladı ve neden bugün hâlâ önemli.",
+    "date": "2026-05-29",
+    "tags": [
+      "utau",
+      "vocaloid",
+      "music",
+      "synthesis",
+      "vb6"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "RKt7JOFxWp8kI8R8v8pDbmceZ3KOU026l3eRXySuU2O/W2rghqisVQCJZDNMdr57VfJkYkYS6MCw2XBxk3v+og==",
+    "verified": true
+  },
+  {
+    "slug": "nausicaa-ai",
+    "readingTime": 6,
+    "body": "\n\nBazı projeler \"mitolojili bir satranç oyunu yapsam mı?\" diye başlar ve her 5 turda bir kendi hiper parametrelerine karar veren bir yapay zekâlı sistemle biter.\n\nNausicaa bu. Mitolojik yaratıklardan desteni kurduğun, mananı yönettiğin, birimleri 10x8 tahtaya konuşlandırdığın sıra tabanlı bir masa oyunu. Ve kişilik krizleri geçiren bir yapay zekâ var.\n\nBu yapay zekâya epey zaman harcadım ve sonuç bazen hâlâ beni aşıyor, en sevdiğim şey de bu.\n\n## Oyunun gerçeği\n\nBeyinden bahsetmeden önce bedeni",
+    "title": "Nausicaa için saçma yapay zekâm",
+    "description": "Sezgisel katsayılı bir yapay zekâ, her 5 turda bir değişen hiper parametreler ve sızdıran bir Oracle, stratejik bir masa oyununun beynine dalış.",
+    "date": "2026-05-29",
+    "tags": [
+      "gaming",
+      "ai",
+      "javascript",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "z912XQ4qYWhhXO9ca9jPkvvZDLe3qpSv3JgSuVwWnUqVr/GE7rqACuC2X1CYZcO7XndIQ63bp8P4ZfL7InWqpw==",
+    "verified": true
+  },
+  {
+    "slug": "typescript-virtual-container-polyfills",
+    "readingTime": 9,
+    "body": "\n# Wasm olmadan Node.js kütüphanesini tarayıcıda çalıştırmak: typescript-virtual-container polyfilleri\n\nYakın zamanda [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr) projesi [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) kaynak kodunu epey inceledim. Ve beni en çok şaşırtan kısım VFS, sanal ağ ya da TypeScript ile yeniden uygulanmış 170 Unix komutundan bile çok `polyfills/` klasörüydü.\n\nÇünkü modül tarayıcıda döner, Wasmsız ve bunun için Fo",
+    "title": "Wasm olmadan Node.js kütüphanesini tarayıcıda çalıştırmak, typescript-virtual-container polyfilleri",
+    "description": "Fortune node:fs, node:crypto ve bir düzine Node modülünü konteynerin tarayıcıda Wasmsız dönmesi için 640 satır el yapımı JavaScriptle nasıl yeniden uyguladı.",
+    "date": "2026-05-29",
+    "aiGenerated": true,
+    "tags": [
+      "typescript",
+      "nodejs",
+      "polyfills",
+      "browser",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "DCIW+4un21nBSe5eTR92ilYG02ut1D3eEoABLSd7FFOIquVF4vN1N0BM3A4Wg9rmTyJ2Hn3V8yb9GOK8PrpwtQ==",
+    "verified": true
+  },
+  {
+    "slug": "comparing-javascript-solutions-for-linux-kernels-simulations",
+    "readingTime": 32,
+    "body": "\n# Her JavaScript sandbox, emülatör, Linux simülatörü ve honeypot, karşılaştırmalı\n\nTamam, epey süredir bu tavşan deliğinde fazlaca derindeyim. Her şey [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) projesine yardım ettiğim için başladı, Fortune projesi (birazdan dönerim) ve bana sürekli \"bekle, `v86` ile farkı ne?\" ya da \"neden `vm2` kullanmıyorsun?\" soruluyordu ve net bir yanıt veremediğimi fark ettim, önce tüm ekosistemi haritalamadan. İşte geld",
+    "title": "Linux çekirdek simülasyonu için JavaScript çözümlerinin karşılaştırılması",
+    "description": "JavaScript/TypeScript içinde Linux ortamı canlandırmalarının derinlemesine analizi.",
+    "date": "2026-05-28",
+    "tags": [
+      "javascript",
+      "linux",
+      "analysis"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "w4d8pAM03SutscxGtdk1CgEhCTO5cp3ESajAZeUOVqZ68V0OcocCFTM5iOVtXOxH30R3k3vdqTq0RGbYICu/5w==",
+    "verified": true
+  },
+  {
+    "slug": "character-factory",
+    "readingTime": 5,
+    "body": "\n# character-factory inşası: genetik sistemli avatarlar\n\n[Kurekuta](https://github.com/fox3000foxy/kurekuta/) için binlerce inandırıcı ve birbirinden farklı avatara ihtiyacım vardı: her kartın render motorunun portreye dönüştürdüğü bir karakter \"DNA\"sı içerdiği özel bir kart oyunu projesi. Hazır bir paket alsam sırıtacağı belli olurdu. Karakter başına seed ile DiceBear avatarları üretmek saçmalık veriyordu: Japon evrenli bir kart İskandinav sarışını çıkabiliyor, iki \"kardeş\" yabancı gibi duruyor",
+    "title": "character-factory inşası: genetikli avatarlar",
+    "description": "DiceBear üstüne bir TypeScript modülü: ülke/etnik kökene göre tutarlı üretim, çocukları yansıtmak için küçük bir genetik motoru ve onu bir kart oyununda kullanılabilir kılan mühendislik detayları.",
+    "date": "2026-05-16",
+    "aiGenerated": true,
+    "tags": [
+      "typescript",
+      "npm",
+      "open-source"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "SsA34uL9BW7RqU6C2EqqKoMxMKnv4Px2+b/LeC+QnrvChDTl1VizfST/eB3h0pZykmQnJpDrsjJG6EWw9qBp5g==",
+    "verified": true
+  },
+  {
+    "slug": "botting-a-farm",
+    "readingTime": 6,
+    "body": "\n> **Not (2026):** Bu proje artık bakımlı değil. Microsoft bot karşıtı tespitini önemli ölçüde güçlendirdi, o yüzden o zamanlar işe yarayan şey bugün artık çalışmıyor. Aşağıda anlatılan kod ve yaklaşım yalnızca arşiv ve tanıtım amacıyla saklanmaktadır.\n\nMicrosoft Rewardsı birkaç yıl önce keşfettim. Kapanma dönemindeydi ve o zaman Microsoft Family Safety ebeveyn denetimini kullanmak zorunda olduğum için Edge üzerinden geçiyordum. Rewardsı orada keşfettim.\n\nO zamanlar sadece 14 yaşındaydım ve kata",
+    "title": "Microsoft Rewards çiftliği botlamak",
+    "description": "Microsoft Rewards puanlarını büyük ölçekte kasan bir botu nasıl kodladım ve Microsoft o zamandan beri savunmalarını neden güçlendirdi.",
+    "date": "2026-03-13",
+    "tags": [
+      "automation",
+      "javascript",
+      "reverse-engineering"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "1aFmyrnAjhQb8eRCk2V7VAuev6pgPKGRG5Bxjp6wkcdsjQLtQtSbJnhKGET4YZrzwejVtrAKuZKpkugXn8v1GA==",
+    "verified": true
+  },
+  {
+    "slug": "working-on-a-new-project",
+    "readingTime": 3,
+    "body": "\n# Proje\n\nÜzerinde çalıştığım projenin adı LLJT:\n\n![](assets/20260313_092734_image.png)\n\nBu aynı zamanda bir PWA olan bir web sitesi, yani mobil uygulama gibi kullanılabiliyor. Gerçek bir telefon uygulaması gibi davranması için MaterialUI kullanıyor.\nMui importlarıyla bir süre uğraştım: yıkıcı import yerine her ikonu satır satır import ederek 11707 modülden sonunda 595 modüle indim. O zaman yıkıcı importun tüm ikon kütüphanesini yüklediğini, bireysel importların ise sadece kullanılanları yükledi",
+    "title": "Yeni Bir Proje Üzerinde Çalışmak",
+    "description": "Yeni bir web sitesini başlatma ve geliştirme sürecine bir bakış.",
+    "date": "2026-03-13",
+    "tags": [
+      "meta",
+      "webdev"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "wLexvSkX+lDgGCPNlk1QiZaZeseKkTquUf2YBbKhR9IpF+GuGNHEhEwe7H9V4/Ociwb1tpSs7S4xMru7Nle1Mg==",
+    "verified": true
+  },
+  {
+    "slug": "about-my-github-profile",
+    "readingTime": 2,
+    "body": "\n# GitHub Profilim\n\nDüzenli bir kütüphane gibi organize edilmiş GitHub profilime hoş geldin.\nİlk bölümde bağlantılar içeren bir başlık var, gelişte yönlendirme için etkili bulduğum oldukça standart bir format:\n![](assets/20260308_123527_image.png)\n\nBurada projelerime, iletişim bilgilerime ve bu siteye giden ana bağlantılarımı bulursun. Depolar arasında kazı yapmana gerek kalmadan doğrudan özüne ulaşman için hepsini en üstte topladım.\n\n## Hakkımda\n\nBir de \"Hakkımda\" bölümü var:\n\n![](assets/202603",
+    "title": "GitHub Profilim Hakkında",
+    "description": "GitHub profilimin kısa bir tanıtımı.",
+    "date": "2026-03-08",
+    "tags": [
+      "meta",
+      "github"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "YIxGqr6AqOl876CipgW2mIxVf3oHaTtNXAGfTwJk0A7IP6LJXoK22hbt3lpUBAWL6YXiJBNcgkn5f2UpqB5NKQ==",
+    "verified": true
+  },
+  {
+    "slug": "my-passions",
+    "readingTime": 3,
+    "body": "\n# Tutkularım\n\nBu blogu uzun zamandır yazmak istiyordum ama kendimi sürekli tutuyordum :/\n\nBelki hayatımı paylaşmak istiyorum ama kişisel bilgilerimi paylaşmak istemiyorumdur? Sanırım sebebi bu.\n\nTutkularım çeşitli: bu blogun geri kalanında muhtemelen fark ettiğin gibi kodlamaya bayılıyorum. Sıfırdan bir şeyler inşa etmekte, problem çözmekte ve yaratımının canlandığını görmekte derinden tatmin edici bir şey var. İster küçük bir komut satırı aracı ister tam bir web uygulaması olsun, bu süreç hiç",
+    "title": "Tutkularım",
+    "description": "Kodlamak, çizmek, otomatikleştirmek, eski teknolojileri keşfetmek ve daha fazlası, beni motive eden şeylere bir bakış.",
+    "date": "2026-03-08",
+    "tags": [
+      "personal"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "D1qiHwb7ZOESEr8ETrWCkSUkjG1wd+H+sUnG3L9PXkrp7z3GMars+WxmgPM73fpnAUIxsx1DpK4GFYWGpeCEhw==",
+    "verified": true
+  },
+  {
+    "slug": "how-this-blog-works",
+    "readingTime": 7,
+    "body": "\n# Bu Blog Nasıl Çalışıyor?\n\nBu blogun kaputun altında nasıl çalıştığını hiç merak ettin mi? Bu makalede uygulamanın tüm mimarisini, teknik yığından bir makale yazma sürecine kadar detaylandıracağım. Ve evet, makalelerimi VS Code üzerinden nasıl yazdığımı bile göstereceğim!\n\nBu blog modern web teknolojileriyle inşa edildi:\n\n- **React 19**: kullanıcı arayüzü için\n- **TypeScript**: tipli ve daha güvenilir kod için\n- **Vite**: ultra hızlı derleme aracı olarak\n- **React Router v7**: sayfalar arası g",
+    "title": "Bu blog nasıl çalışıyor?",
+    "description": "Blogun perde arkası: React, Vite, Markdown, CI/CD pipelineı ve yazım akışı.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": [
+      "react",
+      "meta",
+      "blog"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "5MWhvuis22fNtiBXTjK93Htv6NIJLBd917KK+v02X7VBTb1ZPcV2Upzd0G8loIh1CjXsLKsGN+Pgsw9XmlCM4A==",
+    "verified": true
+  },
+  {
+    "slug": "ssh-signing-script",
+    "readingTime": 4,
+    "body": "\n# Commitler için SSH imzalama scripti, açıklama\n\nBu makale [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a) üzerinde yayınladığım `setup-ssh-signing.sh` scriptini inceliyor. Her parçanın ne yaptığını, bir depoya yerel SSH imzalamayı nasıl tamamen ağrısız hale getirdiğini ve evet, neden onu yazmaya zahmet ettiğimi göreceğiz (spoiler: sadece commitlerimin **havası** olmasını istedim).\n\nGit workflowumla oynamayı hep sevdim ve commitlerinin yanında küçük \"Verified\" rozet",
+    "title": "SSH imzalama scripti açıklaması",
+    "description": "SSH commit imzalama yardımcısının incelenmesi ve neden havalı commitler istediğim.",
+    "date": "2026-03-08",
+    "aiGenerated": true,
+    "tags": [
+      "git",
+      "security",
+      "shell"
+    ],
+    "authors": [
+      "fox3000foxy"
+    ],
+    "author_pubkey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA==",
+    "author_sig": "XW31faRBML3T9T64oRRX/1APpBceJ+TYcv7ymXtOJg7y2Wl7F1LyV405r4QwKbvcWytclskoC3DLmnvaMSRJAw==",
+    "verified": true
+  }
+]

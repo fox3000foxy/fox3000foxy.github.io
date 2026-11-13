@@ -1,0 +1,14 @@
+flowchart TD
+    A["Ввод пользователя :<br>'hello'"] --> B["TranscriptStore<br>332 сид-строки + история"]
+    B --> C["withReplies()<br>извлекает пары<br>(строка → ответ)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>контекст до этой строки)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["Топ K отсортированных кандидатов"]
+    I --> J{"pickReply()<br>roulette-wheel<br>selection"}
+    J -->|"Pick"| K["Reply = reply.text<br>выигравшей пары"]
+    J -->|"Нет"| L["Фолбэк : 'I have no idea<br>what to say to that yet.'"]
+    K --> M["Дописать в транскрипт<br>save() → JSON"]
+    L --> M

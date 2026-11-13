@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAPサーバー
+    
+    Note over GH: Run #1
+    GH->>GIT: タグ「lastid」を読む
+    GIT-->>GH: 空（初回run）
+    GH->>IMAP: メール1-50を取得
+    IMAP-->>GH: 50通
+    GH->>GIT: タグ「lastid」= 50をpush
+    
+    Note over GH: Run #2
+    GH->>GIT: タグ「lastid」を読む
+    GIT-->>GH: 50
+    GH->>IMAP: メール51-73を取得
+    IMAP-->>GH: 23通
+    GH->>GIT: タグ「lastid」= 73をpush

@@ -1,0 +1,40 @@
+flowchart TD
+    A["User Input"] --> B["canonicalTokenize()"]
+    B --> C["modifyVariables()<br>Decay emotions toward baselines"]
+    C --> D["applyInferences()<br>TH2 / EMOTE / IF rules"]
+    D --> E["applyEmotionalJumps()<br>Flush ajump/fjump/hjump<br>into emotion state"]
+    E --> F{"Pattern match<br>spats.sel / cpats.sel?"}
+    F -->|"Yes"| G["Lookup pdat response"]
+    F -->|"No"| H{"SPECFN<br>GO/CONTINUE/ELAB?"}
+    H -->|"Yes"| I["Express 16 or 24"]
+    H -->|"No"| J{"FLAREREF<br>Trigger word found?"}
+    J -->|"Yes"| K["Weight >= current?<br>Record flare, expressFlare()"]
+    J -->|"No"| L{"DELREF<br>Sensitive noun/verb?"}
+    L -->|"Yes"| M["Set delFlag, jump FEAR<br>express 1020"]
+    L -->|"No"| N{"MISCQ<br>WHY/HOW?"}
+    N -->|"Yes"| O["Express 200"]
+    N -->|"No"| P{"MISCS<br>HELLO/HI?"}
+    P -->|"Yes"| Q["Express 10"]
+    P -->|"No"| R{"KEYWORD<br>I/YOU/DOCTOR/FEEL/..."}
+    R -->|"Yes"| S["Cycling keyword response<br>(anti-repetition)"]
+    R -->|"No"| T["MISC fallback<br>'I SEE, PLEASE GO ON.'"]
+    G --> U["finalizeResponse()"]
+    I --> U
+    K --> U
+    M --> U
+    O --> U
+    Q --> U
+    S --> U
+    T --> U
+    U --> V["Check response for flare words<br>Mod future flare availability"]
+    V --> W["Output"]
+
+    subgraph Emotions["Emotional State (per-turn)"]
+        E1["ANGER<br>baseline=0, decay -1.0"]
+        E2["FEAR<br>baseline=0, decay -0.2"]
+        E3["MISTRUST<br>baseline=0, decay -0.05"]
+        E4["HURT<br>baseline=0, decay -0.5"]
+    end
+
+    D -.->|"EMOTE rules modulate"| Emotions
+    Emotions -.->|"DELREF threshold check<br>mistrust > 10"| L

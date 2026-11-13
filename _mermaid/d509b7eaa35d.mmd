@@ -1,0 +1,26 @@
+flowchart TD
+    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>noktalamayı normalleştirir"]
+    B --> C["splitUserInput()<br>kelimelere böler"]
+    C --> D["Önceliğe göre sıralı<br>anahtar kelime yığını kur"]
+    D --> E{"Yığın boş değil mi?"}
+    E -->|"Evet"| F["En yüksek öncelikli anahtar kelimeyi al"]
+    E -->|"Hayır"| G{"Bellekte hatırlama mı?"}
+    G -->|"Evet"| H["Geçmiş kullanıcı ifadesini hatırlat"]
+    G -->|"Hayır"| I["Yedek: zNONE kuralı"]
+    I --> J["Yanıtı döndür"]
+    H --> J
+    F --> K["Ayrıştırma kalıplarını eşleştir"]
+    K --> L{"Eşleşme bulundu mu?"}
+    L -->|"Hayır"| M{"Bağlı anahtar kelime mi?"}
+    M -->|"Evet"| N["Bağlı anahtar kelimeyi yığına it"]
+    N --> E
+    M -->|"Hayır"| O["NOMATCH döndür"]
+    O --> J
+    L -->|"Evet"| P["Sonraki yeniden birleştirmeyi seç (dönüşümlü)"]
+    P --> Q{"Yeniden birleştirme türü?"}
+    Q -->|"PRE"| R["Kelimeleri dönüştür (I→YOU)<br>bağlantı anahtar kelimesini it"]
+    R --> N
+    Q -->|"NEWKEY"| S["Sonraki anahtar kelimeye atla"]
+    S --> E
+    Q -->|"Standart"| T["(1), (2), (0) genişlet<br>final yanıta"]
+    T --> J
