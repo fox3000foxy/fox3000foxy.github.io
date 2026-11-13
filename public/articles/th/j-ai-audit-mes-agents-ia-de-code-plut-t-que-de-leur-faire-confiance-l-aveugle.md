@@ -6,11 +6,11 @@ description: >-
   ตัวแทนหนึ่งที่ลืมเนื่องจาก repo ไม่ได้อยู่ภายในขอบเขตบริบทของเขา
   และตัวแทนอีกหนึ่งที่เขียนโค้ดสิบเท่าเกินจำเป็นเนื่องจากไม่มีสิ่งใดที่กระตุ้นให้เขาลดจำนวนโค้ด
 date: 2026-09-15
-tags: [["ai", "llm-agents", "code-review", "context-window", "trading", "typescript"]]
+tags: ["ai", "llm-agents", "code-review", "context-window", "trading", "typescript"]
 authors:
   - docteur-turboss
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "snmQXcAK61kyl6F0hwh2CvnYjmWyNF1J3OV0c6grji6sxg3Oapm57O+It3epkvAKTetN3/duRTgH03aUbEFDyQ=="
+author_sig: "sZenGyv6e8VBYyrd5twqr0cDiQN0MsLP+feyoOyaDm7cDhsD0GPAiFkKe7hcX5KUorO/zUE1lZUASoUie26x8g=="
 ---
 
 ## อาการก่อนการวินิจฉัย

@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "SWZikZDR717YiazM9OlV/21KSSEv4WSS0pLAXezbxq6/M2JYO6gNCz8m4jPV2WvkRdCRTzldv1DGZ16S6BsaQg=="
+author_sig: "VCheaPJQogqk8pVB9rhstFIBGnJqjAZCegNcq8uY9QfXhHWBhNRJUqr1AFbmXqkXPeIid37VPING5u4lpJd90Q=="
 ---
 
 # valorant-short-maker : กระบวนการสร้างสั้น ๆ ของฉันเอง
