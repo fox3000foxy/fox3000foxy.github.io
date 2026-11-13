@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "z89OUsIG4QS0J30NVUrA35pHRUcsnVONcu0i/GTLp03GK/sYXKDZ0qjljgsdY5rjZR7dA1AkqHE43Jstd3qwiA=="
+author_sig: "EgZurz/mm+ZofvEWi6ZndhasawXxAT/Jfnnj9VBGiqqKyATUVHSzIw5PbLd5PcRi62Rlw1xPqdIWrNoAx0X99g=="
 ---
 
 ## GitHub te file un VPS gratuit pendant 6h. J'ai trouvé comment le rendre permanent.
@@ -18,7 +18,7 @@ GitHub Actions te donne des machines Linux gratuites.
 
 Genre, des vrais serveurs Ubuntu. 2 cœurs, 7 Go de RAM, 14 Go de disque. Gratuit. Pendant 6h par run.
 
-Le seul "problème" : à la fin du run, tout est effacé. La machine est jetable. Tu installes des trucs, tu codes, tu configures... et pouf, à la fin tout disparaît. Comme si t'avais rien fait.
+Le seul "problème" : à la fin du run, tout est effacé. La machine est jetable. Tu installes des paquets, tu codes, tu configures... et pouf, à la fin tout disparaît. Comme si t'avais rien fait.
 
 Sauf si.
 
@@ -26,7 +26,7 @@ Sauf si tu utilises **git comme disque dur**.
 
 Et là, d'un coup, t'as un VPS gratuit avec un disque persistant qui survit aux runs. Tu te reconnectes, tout est encore là. Tu reprends où tu t'étais arrêté.
 
-C'est complètement pété. Laisse-moi t'expliquer xD
+C'est complètement pété. Laisse-moi t'expliquer.
 
 ---
 
@@ -38,7 +38,7 @@ C'est fait pour build ton code, lancer tes tests, deploy. Le workflow tourne, fa
 
 Mais rien ne t'empêche de faire autre chose avec cette VM. Genre, ouvrir un shell SSH dessus et l'utiliser comme un serveur.
 
-Le truc, c'est que ces machines sont **stateless** et **temporaires** :
+La contrainte, c'est que ces machines sont **stateless** et **temporaires** :
 - Temporaire : 6h max par run (`timeout-minutes: 360`, le plafond de GitHub)
 - Stateless : tout est effacé à la fin
 
@@ -79,7 +79,7 @@ Premier problème réglé. Mais c'est le deuxième qui est vraiment fou.
 
 ## Problème 2 : git comme disque dur
 
-Voilà le truc de malade.
+Voilà l'idée qui change tout.
 
 La machine est effacée à chaque run. Donc on stocke **le système de fichiers dans une branche git dédiée**, appelée `filesystem`.
 
@@ -98,9 +98,9 @@ git reset --hard "refs/remotes/origin/$filesystem_branch"
 
 La branche `filesystem` C'EST ton disque dur. Tes fichiers, tes installs, tes configs -- tout est dedans.
 
-Tu vois le truc ? La machine est jetable, mais le disque vit dans git. Tu relances le workflow, le disque est restauré, tu reprends pile où t'en étais.
+Tu vois l'idée ? La machine est jetable, mais le disque vit dans git. Tu relances le workflow, le disque est restauré, tu reprends pile où t'en étais.
 
-C'est comme un VPS qui hibernate. Sauf que l'hibernation c'est un repo git xD
+C'est comme un VPS qui hibernate. Sauf que l'hibernation c'est un repo git
 
 ### Premier lancement : créer le disque vide
 
@@ -120,7 +120,7 @@ ensure_filesystem_branch() {
 
 Le `git checkout --orphan` c'est la clé. Une branche orpheline c'est une branche **sans aucun historique** -- comme si tu repartais d'un repo vide.
 
-Pourquoi orpheline ? Parce que tu veux PAS que ton disque persistant traîne tout l'historique de ton code source. Le disque c'est un truc à part, qui a sa propre vie. Il commence vierge.
+Pourquoi orpheline ? Parce que tu veux PAS que ton disque persistant traîne tout l'historique de ton code source. Le disque reste isolé, avec sa propre vie. Il commence vierge.
 
 Et le `git ls-remote --exit-code` au début, c'est juste un check propre : "est-ce que la branche existe déjà sur le remote ?". Si oui, on touche à rien. Si non, on la crée. Idempotent, comme on aime.
 
@@ -134,7 +134,7 @@ git clean -fdx -e .apt-cache -e .cache -e host.conf -e tmate.sock
 
 `git clean -fdx` ça vire TOUT ce qui est pas tracké par git. Normalement c'est violent -- ça nettoie le workspace à fond.
 
-Mais les `-e` (exclude) protègent certains trucs :
+Mais les `-e` (exclude) protègent certains fichiers :
 - `.apt-cache` → le cache des paquets APT (on y reviendra, c'est malin)
 - `.cache` → cache générique
 - `host.conf` → l'adresse SSH de la session
@@ -182,7 +182,7 @@ Sans cet exclude, tu te retrouverais avec un autosave qui se déclenche en boucl
 
 Tu modifies un fichier ? inotify le détecte instantanément, ça commit, ça push. En moins d'une seconde, ton changement est dans la branche `filesystem`.
 
-Tu installes un truc, tu écris du code, tu touches une config -- tout est sauvegardé en temps réel, automatiquement, sans que tu fasses quoi que ce soit.
+Tu installes un paquet, tu écris du code, tu touches une config -- tout est sauvegardé en temps réel, automatiquement, sans que tu fasses quoi que ce soit.
 
 T'as littéralement un système de sauvegarde automatique du disque entier. Pété.
 
@@ -196,7 +196,7 @@ Le `sleep 1` dit : "attends une seconde après un save, le temps que la rafale s
 
 ### Et une sauvegarde périodique en plus
 
-Au cas où inotify raterait un truc, y'a aussi un save toutes les 5 secondes :
+Au cas où inotify raterait un événement, y'a aussi un save toutes les 5 secondes :
 
 ```bash
 periodic_save() {
@@ -252,7 +252,7 @@ Propre.
 
 ## Le sync_from_remote : gérer plusieurs sessions
 
-Tiens, un truc auquel tu penses pas au début : et si tu lances DEUX runs en même temps ? Ou si une session modifie la branche `filesystem` pendant qu'une autre tourne ?
+Tiens, un cas auquel tu penses pas au début : et si tu lances DEUX runs en même temps ? Ou si une session modifie la branche `filesystem` pendant qu'une autre tourne ?
 
 Le script gère ça avec un `sync_from_remote` avant chaque commit :
 
@@ -265,7 +265,7 @@ sync_from_remote() {
 
 Le `--ff-only` (fast-forward only) c'est important : ça veut dire "merge UNIQUEMENT si on peut avancer proprement, sans créer de commit de merge".
 
-Si les deux branches ont divergé (genre, deux sessions ont modifié des trucs différents), le fast-forward échoue silencieusement (`2>/dev/null || true`) et on garde l'état local. C'est pas un système de merge parfait, mais ça évite les corruptions dans le cas simple où une seule session tourne.
+Si les deux branches ont divergé (genre, deux sessions ont modifié des fichiers différents), le fast-forward échoue silencieusement (`2>/dev/null || true`) et on garde l'état local. C'est pas un système de merge parfait, mais ça évite les corruptions dans le cas simple où une seule session tourne.
 
 Honnêtement, faut pas lancer 3 sessions en parallèle sur le même repo. Mais le code essaie quand même de pas exploser si ça arrive. C'est de la défense.
 
@@ -366,7 +366,7 @@ done
 
 Tu `exit` ? La session redémarre toute seule. Tu te reconnectes avec le même lien.
 
-C'est débile, mais ça rend le truc utilisable.
+C'est débile, mais ça rend la session utilisable.
 
 ---
 
@@ -416,8 +416,8 @@ Un VPS gratuit avec disque persistant. Juste avec git et GitHub Actions.
 
 C'est un hack, pas un vrai VPS. Donc :
 
-- **6h max par run.** Faut relancer le workflow régulièrement. Pas de uptime infini.
-- **Pas pour de la prod.** Tu vas pas héberger ton site là-dessus. C'est pour explorer, dev, debug, tester un truc dans un Linux jetable mais récupérable.
+- **6h max par run.** Faut relancer le workflow régulièrement. Uptime limité à chaque run.
+- **Réservé au dev et à l'exploration.** Tu vas pas héberger ton site là-dessus. C'est pour explorer, dev, debug, tester un environnement Linux jetable mais récupérable.
 - **GitHub voit tout.** C'est leurs machines. Mets rien de sensible.
 - **Garde le repo privé.** Tu exposes un shell SSH. Un repo public = n'importe qui peut potentiellement s'y connecter. Mauvaise idée.
 - **C'est à la limite des conditions d'usage.** GitHub Actions c'est fait pour de la CI/CD, pas pour du VPS gratuit. Donc à utiliser avec parcimonie, pour du légitime, sans abuser.
@@ -431,7 +431,7 @@ Le disque persistant vit dans une branche git. Donc tout ce que tu sauvegardes p
 - a une limite de 100 Mo par fichier sur GitHub (hard limit, ça push pas au-delà)
 - recommande de rester sous ~5 Go par repo
 
-Donc si tu `npm install` un projet avec 500 Mo de `node_modules`, ou si tu build un truc qui crache des binaires lourds, le push vers `filesystem` va soit ramer à mort, soit carrément échouer.
+Donc si tu `npm install` un projet avec 500 Mo de `node_modules`, ou si tu build un projet qui génère des binaires lourds, le push vers `filesystem` va soit ramer à mort, soit carrément échouer.
 
 Le `git commit --amend` aide (un seul commit, pas d'historique qui gonfle), mais ça change rien au fait qu'un fichier de 200 Mo passera jamais.
 
@@ -462,9 +462,9 @@ Si tu veux que tes installs survivent, faut les mettre dans le workspace (genre,
 | **Persistance** | workspace seulement | système complet |
 | **Légitimité** | limite des CGU | 100% clean |
 
-Le truc marrant c'est que côté specs brutes (RAM, CPU), le runner GitHub est souvent MEILLEUR qu'un VPS à 5€. Mais l'uptime de 6h et la persistance limitée au workspace, c'est ce qui en fait un jouet de hacker, pas un vrai serveur.
+Le point intéressant c'est que côté specs brutes (RAM, CPU), le runner GitHub est souvent MEILLEUR qu'un VPS à 5€. Mais l'uptime de 6h et la persistance limitée au workspace, c'est ce qui en fait un jouet de hacker, pas un vrai serveur.
 
-Pour apprendre, tester, débugger un truc Linux vite fait dans un environnement récupérable ? Parfait. Pour héberger quoi que ce soit de sérieux ? Prends un vrai VPS.
+Pour apprendre, tester, débugger un système Linux vite fait dans un environnement récupérable ? Parfait. Pour héberger quoi que ce soit de sérieux ? Prends un vrai VPS.
 
 Mais pour un environnement Linux temporaire que tu peux restaurer à volonté ? C'est juste génial.
 
@@ -489,7 +489,7 @@ C'est pas fait pour ça. Mais ça marche. Et c'est gratuit.
 
 ---
 
-**Les 3 trucs à retenir :**
+**Les 3 points à retenir :**
 
 1. **Une branche git = un disque dur persistant** -- Stocke ton filesystem dans une branche dédiée, restore au démarrage, et t'as un état qui survit aux machines jetables.
 
@@ -497,4 +497,4 @@ C'est pas fait pour ça. Mais ça marche. Et c'est gratuit.
 
 3. **tmate transforme un runner en VPS** -- SSH live sur une machine GitHub Actions, avec restart automatique et reconnexion en une commande via l'API GitHub.
 
-Git comme disque dur, deuxième épisode. Je crois que je vais finir par tout stocker dans des branches git xD
+Git comme disque dur, deuxième épisode. Je crois que je vais finir par tout stocker dans des branches git

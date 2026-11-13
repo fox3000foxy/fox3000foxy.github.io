@@ -9,7 +9,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "pcTG4+aLHnC4wzOr082iI7j0AtVEGNozr9nwyrouaUDxgT4kInG2VNoJyLrOnwKbb/1QpJUOuCMo0NZ0GO7amA=="
+author_sig: "hGiPw+jEtH8d4vW1DOWFqa8ce6IP/u0sqxm0K3+s4oKo4a5roxYrM5W7dsa6QpNg9t3C/78fvspJipVYFzjoSQ=="
 ---
 
 ## Introduction
@@ -18,7 +18,7 @@ author_sig: "pcTG4+aLHnC4wzOr082iI7j0AtVEGNozr9nwyrouaUDxgT4kInG2VNoJyLrOnwKbb/1
 
 Il y a une vidéo intitulée [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) par Kadambi | AI Engineering, et c'est l'un des récits les plus honnêtes d'entraînement d'une IA de jeu vidéo que j'aie vus.
 
-Le principe : construire un bot qui joue au PvP Minecraft (kit épée, armure de diamant entièrement enchantée) en regardant l'écran et en envoyant des commandes souris et clavier. Pas d'accès à la mémoire du jeu, pas de macros, pas de mods : juste des pixels en entrée, des actions en sortie.
+Le principe : construire un bot qui joue au PvP Minecraft (kit épée, armure de diamant entièrement enchantée) en regardant l'écran et en envoyant des commandes souris et clavier. Il fonctionne uniquement avec des pixels en entrée et des actions en sortie, sans lire la mémoire du jeu, sans macros et sans mods.
 
 Ce qui rend la vidéo intéressante n'est pas le résultat final. C'est le parcours : l'échec de l'imitation learning, le pivot vers le feature engineering, les cycles d'oubli catastrophique, et les 60+ heures d'entraînement sur un laptop sans GPU.
 
@@ -88,8 +88,8 @@ Comme le bot ne peut pas récupérer les coordonnées depuis le code du jeu, il 
 L'OCR standard peine avec le texte transparent de Minecraft, donc les données critiques sont forcées en noir et blanc pour une lecture instantanée.
 
 **Temps (fenêtre de contexte)** :
-- Temps écoulé depuis que vous avez touché l'ennemi
-- Temps écoulé depuis qu'il vous a touché
+- Temps écoulé depuis que tu as touché l'ennemi
+- Temps écoulé depuis qu'il t'a touché
 - Tampon glissant des actions précédentes du bot
 
 Cela donne au réseau un contexte temporel : sans lui, le bot n'a aucune idée s'il est au milieu d'un combo ou s'il commence juste un combat.
@@ -126,7 +126,7 @@ Initialement, il avait trop peur d'essayer quoi que ce soit, craignant la pénal
 
 La vidéo se termine en demandant : ce bot triche-t-il ?
 
-L'argument contre : le bot ne traite que ce qu'un humain voit (les mêmes pixels), envoie les mêmes entrées clavier/souris qu'un humain (pas de manipulation de paquets comme l'anti-knockback), et ne lit pas la mémoire du jeu (pas de X-ray ni d'ESP).
+L'argument contre : le bot ne traite que ce qu'un humain voit (les mêmes pixels), envoie les mêmes entrées clavier/souris qu'un humain (sans manipulation de paquets comme l'anti-knockback), et ne lit pas la mémoire du jeu (sans X-ray ni ESP).
 
 L'argument pour : un bot peut traiter plus vite qu'un humain, et si l'adversaire pense qu'il joue contre un humain mais que ce n'est pas le cas, c'est de la tromperie.
 
@@ -228,7 +228,7 @@ Sur 40 graines entraînées pour 100M d'étapes environnementales, 24 des 40 ont
 
 Avant le bot PvP de la vidéo, avant VPT et DreamerV3, il y avait **ANNA** : un bot Minecraft construit avec une philosophie complètement différente. Au lieu d'apprendre à partir de pixels ou de récompenses, ANNA utilise une **machine d'états symbolique** avec un **analyseur NLP français** et un **arbre de dépendances de tâches** écrit à la main.
 
-Créé en 2022 (avant que « vibe coding » soit un terme), ANNA se connecte à un serveur Minecraft via Mineflayer et comprend des commandes en langage naturel en français. Dites *« obtiens un briquet », et ANNA analyse le verbe (obtien → obtenir), cherche la recette de l'objet, et le décompose récursivement en sous-tâches : miner du chêne → fabriquer des planches → fabriquer des bâtons → fabriquer une table de craft → fabriquer une pioche en bois → miner de la pierre → fabriquer une pioche en pierre → miner du minerai de fer → fondre des lingots de fer → fabriquer le briquet.
+Créé en 2022 (avant que « vibe coding » soit un terme), ANNA se connecte à un serveur Minecraft via Mineflayer et comprend des commandes en langage naturel en français. Dis *« obtiens un briquet », et ANNA analyse le verbe (obtien → obtenir), cherche la recette de l'objet, et le décompose récursivement en sous-tâches : miner du chêne → fabriquer des planches → fabriquer des bâtons → fabriquer une table de craft → fabriquer une pioche en bois → miner de la pierre → fabriquer une pioche en pierre → miner du minerai de fer → fondre des lingots de fer → fabriquer le briquet.
 
 ![ANNA's NLP parser architecture for French command recognition](assets/anna-nlp-diagram.png)
 
@@ -246,7 +246,7 @@ L'approche d'ANNA reflète une époque différente de l'IA : avant que l'apprent
 
 ![The Mace PvP training arena with the bot](assets/mace-bot-arena.png)
 
-Dans un coin complètement différent de l'IA Minecraft, le YouTubeur **Master Gumbo** a construit un bot d'entraînement PvP en utilisant **seulement des command blocks** : pas de mods, pas de plugins, pas de code externe. Juste des commandes Minecraft vanilla, de la redstone, et un carpet mod pour des entités clones de joueur. Le résultat est un adversaire IA pour la masse qui pratique les changements de brèche, les charges de vent et les mécanismes de bouclier avec le joueur.
+Dans un coin complètement différent de l'IA Minecraft, le YouTubeur **Master Gumbo** a construit un bot d'entraînement PvP en utilisant **seulement des command blocks**, uniquement avec des commandes Minecraft vanilla, de la redstone, et un carpet mod pour des entités clones de joueur. Le résultat est un adversaire IA pour la masse qui pratique les changements de brèche, les charges de vent et les mécanismes de bouclier avec le joueur.
 
 Le bot commence comme un zombie avec un équipement incassable et un totem dans sa seconde main (rempli à chaque tick via `/item replace`), le rendant effectivement immortel. Plus tard, Master Gumbo passe aux bots **Carpet Mod's player replica**, qui supportent des mécaniques humanoïdes (levage de bouclier, changement d'objet) que les zombies ne peuvent pas faire.
 
@@ -269,17 +269,17 @@ Après leur entraînement avec le bot puis en duel contre le joueur qui l'avait 
 
 ![The bot in a duel, practicing mace PvP techniques](assets/mace-final-duel.png)
 
-Là où le bot PvP (Kadambi) apprend à partir de pixels et ANNA raisonne à travers un arbre de tâches, le bot de Master Gumbo atteint l'intelligence par des **transitions d'états aléatoires** : une approche pur command block qui prouve que vous n'avez pas besoin de réseaux neuronaux pour construire un adversaire PvP convaincant.
+Là où le bot PvP (Kadambi) apprend à partir de pixels et ANNA raisonne à travers un arbre de tâches, le bot de Master Gumbo atteint l'intelligence par des **transitions d'états aléatoires** : une approche pur command block qui prouve que tu n'as pas besoin de réseaux neuronaux pour construire un adversaire PvP convaincant.
 
 ## Altoclef : Baritone + arbre de tâches à grande échelle
 
 Si ANNA est un bot symbolique qui *lit* pour savoir quoi faire, et que le Mace Bot randomise les décisions, **Altoclef** est un agent autonome complet qui *planifie* son chemin à travers le jeu entier. Construit par gaucho-matero comme un mod Fabric et propulsé par le pathfinding **Baritone**, Altoclef décompose n'importe quel objectif Minecraft en un arbre de tâches et l'exécute sans intervention humaine.
 
-L'interface est trompeusement simple : tapez `@gamer` dans le chat, et Altoclef commence la tâche « finir le jeu » depuis un monde survival. Il récolte du bois, craft des outils, mine du fer et du diamant, construit un portail du Nether, collecte des bâtons Blaze et des perles de l'Ender, trouve le stronghold, et tue l'Ender Dragon. Le tout en autonomie, via le client Minecraft natif, sur n'importe quel serveur vanilla.
+L'interface est trompeusement simple : tape `@gamer` dans le chat, et Altoclef commence la tâche « finir le jeu » depuis un monde survival. Il récolte du bois, craft des outils, mine du fer et du diamant, construit un portail du Nether, collecte des bâtons Blaze et des perles de l'Ender, trouve le stronghold, et tue l'Ender Dragon. Le tout en autonomie, via le client Minecraft natif, sur n'importe quel serveur vanilla.
 
 Sous le capot, ceci est réalisé grâce à un **système d'arbre de tâches récursif** où chaque objectif de haut niveau (par exemple, « craft une pioche en diamant ») est décomposé en tâches prérequises : miner du diamant → le fondre → craft des bâtons → les combiner. L'arbre parcourt le graphe complet des recettes Minecraft, gérant les chaînes de production, les drops de monstres, les tables de butin et l'accès aux conteneurs. Contrairement à l'arbre écrit à la main d'ANNA, les tâches d'Altoclef sont des **classes Java programmables** qui peuvent implémenter une logique arbitraire : stratégies de combat, troc avec les piglins, motifs d'exploration.
 
-L'idée architecturale clé est la séparation du **quoi** (l'arbre de tâches) du **comment** (le pathfinding Baritone). Baritone gère les déplacements de bas niveau : pathfinding, évitement d'obstacles, cassage de blocs, gestion d'inventaire -- tandis que le système de tâches orchestre le plan de haut niveau. Cette modularité signifie qu'aucun composant n'a besoin d'être une IA : ce sont tous deux des algorithmes déterministes, mais leur combinaison produit un comportement complexe et orienté vers un but qui rivalise avec les approches par apprentissage.
+L'idée architecturale clé est la séparation du **quoi** (l'arbre de tâches) du **comment** (le pathfinding Baritone). Baritone gère les déplacements de bas niveau : pathfinding, évitement d'obstacles, cassage de blocs, gestion d'inventaire, tandis que le système de tâches orchestre le plan de haut niveau. Cette modularité signifie qu'aucun composant n'a besoin d'être une IA : ce sont tous deux des algorithmes déterministes, mais leur combinaison produit un comportement complexe et orienté vers un but qui rivalise avec les approches par apprentissage.
 
 Altoclef représente la limite de **l'IA Minecraft symbolique pure** : il peut finir le jeu de zéro sans entraînement, sans GPU, et sans données humaines, mais il ne peut pas s'adapter à des tâches que ses programmeurs n'ont pas anticipées, et il ne peut pas apprendre de l'expérience. Il sait craft une pioche en diamant parce qu'une classe Java lui dit exactement comment, pas parce qu'il l'a découvert tout seul.
 

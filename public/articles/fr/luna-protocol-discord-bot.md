@@ -12,16 +12,16 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "ny0274IJVcfRbRq6onNAqaH6fnjZASNrZUu7l0PiUT3vWLzS1WjlHpq/t80TwduKSZIDj8/Vbi3QQXCkaCLMXw=="
+author_sig: "+HIl9PuUg0VSI9u2kDIf1pVS6FAGSCpp8XOLv0smDEUaI5umZ4Opzk8OnWCWZ3S8sNv4GkQa8m2PXxcUP5pENw=="
 ---
 
 # Luna Protocol : j'ai créé un bot Discord autonome qui simule un être humain
 
-Et si un bot Discord pouvait **dormir**, faire des **fautes de frappe**, **hésiter**, **oublier** de répondre, et parfois vous envoyer un message de son propre chef ? C'est exactement ce que fait **Luna Protocol** : un bot Discord entièrement autonome qui fait tourner un LLM local (llama.cpp) et converse comme un être humain imparfait.
+Et si un bot Discord pouvait **dormir**, faire des **fautes de frappe**, **hésiter**, **oublier** de répondre, et parfois t'envoyer un message de son propre chef ? C'est exactement ce que fait **Luna Protocol** : un bot Discord entièrement autonome qui fait tourner un LLM local (llama.cpp) et converse comme un être humain imparfait.
 
-Pas de prompts rigides, pas de réponses robotiques. Luna a un **système de déclenchement prioritaire**, des **délais variables**, des **horaires de sommeil**, des **messages spontanés**, et même une **pipeline TTS** pour envoyer des messages vocaux. Le tout configuré via un simple fichier `config.yml` hot-reloadable.
+Luna fonctionne avec des déclenchements contextuels et des réponses imparfaites assumées. Elle a un **système de déclenchement prioritaire**, des **délais variables**, des **horaires de sommeil**, des **messages spontanés**, et même une **pipeline TTS** pour envoyer des messages vocaux. Le tout configuré via un simple fichier `config.yml` hot-reloadable.
 
-Dans cet article, on décortique l'architecture complète : du bus d'événements générique au pipeline TTS, en passant par le système de déclenchement, les composants humains, et le dataset de fine-tuning.
+Dans cet article, je décortique l'architecture complète : du bus d'événements générique au pipeline TTS, en passant par le système de déclenchement, les composants humains, et le dataset de fine-tuning.
 
 ![Architecture Overview -- composants globaux et flux de données](/images/luna-protocol/01-architecture-overview.svg)
 
@@ -29,7 +29,7 @@ Dans cet article, on décortique l'architecture complète : du bus d'événement
 
 ## L'architecture : un bus d'événements typé
 
-Le cœur de Luna est un **TypedBus** -- un bus d'événements générique fortement typé en TypeScript. C'est la brique fondamentale sur laquelle tout repose.
+Le cœur de Luna est un **TypedBus** : un bus d'événements générique fortement typé en TypeScript. C'est la brique fondamentale sur laquelle tout repose. Je l'ai construit comme ça parce que je voulais éviter les dépendances circulaires dès le départ.
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
@@ -52,8 +52,8 @@ export class TypedBus<Events extends EventMap> {
 
 Deux buses principaux en découlent :
 
-- **`llmBus`** -- gère les tokens LLM, les erreurs, les crashes, le reset
-- **`stateBus`** -- gère les changements d'état avec persistence automatique
+- **`llmBus`** : gère les tokens LLM, les erreurs, les crashes, le reset
+- **`stateBus`** : gère les changements d'état avec persistence automatique
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -104,7 +104,7 @@ Le matching est **mot entier** (`\b`) : "ai" ne correspond pas à "mais", "vrai"
 
 ### Le mécanisme de follow-up
 
-Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate** -- pas de timer, pas de vérification de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
+Quand Luna répond à un message, elle s'enregistre comme `lastSpeaker`. Tout message suivant dans les 15 secondes déclenche une réponse **immédiate**, en court-circuitant timers et vérifications de keyword. Budget : 3 follow-ups par fenêtre de 60 secondes.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -192,7 +192,7 @@ Pendant les heures de sommeil, le statut Discord passe en `invisible`.
 
 ## Les fautes de frappe
 
-Luna peut faire des fautes de frappe -- et les corriger après 2-4 secondes. Le layout clavier est configurable (AZERTY ou QWERTY).
+Luna peut faire des fautes de frappe, corrigées après 2-4 secondes. Le layout clavier est configurable (AZERTY ou QWERTY). Je l'ai laissé configurable parce que tu repères immédiatement un bot qui écrit trop proprement.
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
@@ -219,7 +219,7 @@ Trois styles de correction :
 
 **Hésitations** : 15% de chance de commencer par un mot de remplissage (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Pas de message, pas de réaction -- comme si elle n'avait rien vu.
+**Oublis** : même après avoir matché un trigger, Luna peut "oublier" de répondre avec une probabilité de 3%. Elle reste alors totalement silencieuse, comme si elle n'avait rien vu. J'adore ce comportement parce que tu as déjà vu des humains zapper un message sans faire exprès.
 
 **Fatigue thématique** : si un mot revient trop souvent dans les 10 derniers messages (seuil : 3 occurrences), les délais sont multipliés et la chance d'ignore augmente de 15%.
 
@@ -227,15 +227,15 @@ Trois styles de correction :
 
 ## Le réalisme en pratique : quand ça devient flippant
 
-Sur le papier, tous ces systèmes (délais, fautes de frappe, hésitations, oublis) ça a l'air gadget. En vrai, mis bout à bout, le résultat est bluffant -- au point que des gens en conversation avec Luna ne se doutent de rien. Voici un échange réel où quelqu'un demande directement à Luna si c'est un bot, et où la conversation dérive ensuite sur un tout autre sujet, avec un naturel qui fait froid dans le dos.
+Sur le papier, tous ces systèmes (délais, fautes de frappe, hésitations, oublis) ont l'air gadget. En vrai, mis bout à bout, le résultat est bluffant : des gens en conversation avec Luna ne se doutent de rien. Voici un échange réel où quelqu'un demande directement à Luna si c'est un bot, et où la conversation dérive ensuite sur un tout autre sujet, avec un naturel qui fait froid dans le dos. Je ne m'attendais pas à ce que ce soit aussi crédible en conditions réelles.
 
 ![Conversation Discord avec Luna -- premier échange](/images/luna-protocol/realism/realism-01.png)
 
-Le ton, les hésitations, le rythme des réponses -- rien ne trahit un bot. Luna botte en touche sur la question de l'âge sans jamais casser le personnage.
+Le ton, les hésitations, le rythme des réponses : rien ne trahit un bot. Luna botte en touche sur la question de l'âge sans jamais casser le personnage.
 
 ![Conversation Discord avec Luna -- suite de l'échange](/images/luna-protocol/realism/realism-02.png)
 
-La conversation continue de façon totalement fluide, avec des réponses courtes et naturelles ("okay, okay", "yay", "yayy") -- exactement le genre de messages qu'un humain enverrait sur Discord.
+La conversation continue de façon totalement fluide, avec des réponses courtes et naturelles ("okay, okay", "yay", "yayy") : exactement le genre de messages qu'un humain enverrait sur Discord.
 
 ![Conversation Discord avec Luna -- dérive du sujet](/images/luna-protocol/realism/realism-03.png)
 
@@ -243,9 +243,9 @@ La conversation continue de façon totalement fluide, avec des réponses courtes
 
 ![Conversation Discord avec Luna -- fin de l'échange](/images/luna-protocol/realism/realism-05.png)
 
-Ce qui est terrifiant, ce n'est pas juste que Luna "répond" -- c'est qu'elle **tient une conversation**, avec des opinions apparentes, des relances, un fil de pensée cohérent d'un message à l'autre. Sans le système de déclenchement, les délais de concentration et les hésitations décrits plus haut, cette illusion s'effondrerait en quelques messages.
+Ce qui est terrifiant, ce n'est pas juste que Luna "répond" : c'est qu'elle **tient une conversation**, avec des opinions apparentes, des relances, un fil de pensée cohérent d'un message à l'autre. Sans le système de déclenchement, les délais de concentration et les hésitations décrits plus haut, cette illusion s'effondrerait en quelques messages.
 
-**Petit plot twist** : dans les screenshots ci-dessus, **les deux comptes qui discutent sont des instances de Luna**. `PixieGlow` et `Sujet d'SBlow` ne sont pas un humain qui teste un bot -- ce sont deux bots qui se parlent entre eux, chacun persuadé (au sens comportemental du terme) de discuter avec quelqu'un de "normal". Si en lisant l'échange plus haut vous avez supposé qu'un des deux interlocuteurs était humain, félicitations -- vous venez de tomber dans le piège exactement comme n'importe qui le ferait sur un vrai serveur Discord.
+**Petit plot twist** : dans les screenshots ci-dessus, **les deux comptes qui discutent sont des instances de Luna**. `PixieGlow` et `Sujet d'SBlow` ne sont pas un humain qui teste un bot : ce sont deux bots qui se parlent entre eux, chacun persuadé (au sens comportemental du terme) de discuter avec quelqu'un de "normal". Si en lisant l'échange plus haut tu as supposé qu'un des deux interlocuteurs était humain, félicitations : tu viens de tomber dans le piège exactement comme n'importe qui le ferait sur un vrai serveur Discord.
 
 C'est un peu la **dead internet theory** version pratique : cette théorie (à l'origine plutôt conspirationniste) postule qu'une part croissante du contenu et des interactions en ligne serait générée par des bots plutôt que par des humains, au point que le "vrai" internet humain serait devenu minoritaire. Longtemps considérée comme exagérée, elle devient de moins en moins absurde à mesure que des systèmes comme Luna Protocol montrent qu'il ne faut ni beaucoup de moyens ni un modèle énorme pour simuler une présence humaine crédible à grande échelle. Deux instances du même bot capables de tenir une conversation à rallonge sans jamais se trahir, ça donne un aperçu assez concret de ce à quoi pourrait ressembler un web peuplé majoritairement de bots qui se parlent entre eux.
 
@@ -259,11 +259,11 @@ Le bot envoie directement les requêtes à un `llama-server` local en HTTP. Le m
 
 ### Mode `online`
 
-Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq, Together...). Pas de LLM local nécessaire.
+Le bot appelle n'importe quelle API compatible OpenAI (OpenAI, OpenRouter, Groq, Together...). Tu as juste besoin d'une clé API, le LLM tourne côté fournisseur.
 
 ### Le streaming en temps réel
 
-Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis -- le bot envoie immédiatement le message accumulé. Pas de délai simulé : le rythme est celui du LLM.
+Le LLM stream sa réponse ligne par ligne (`\n`). Chaque ligne est découpée en mots, émis un par un sur `llmBus.emit("token", word)`. À chaque `\n`, un événement `flush` est émis : le bot envoie immédiatement le message accumulé. Le rythme suit directement celui du LLM.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -353,7 +353,7 @@ Chaque mutation d'état émet sur `stateBus` → sauvegarde automatique (debounc
 
 ## La configuration hot-reload
 
-Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** -- les changements sont pris en compte sans redémarrage.
+Un seul fichier `config.yml`. La plupart des valeurs sont **hot-reloadable** : les changements sont pris en compte sans redémarrage. Je voulais pouvoir ajuster les délais en live, sans couper les conversations en cours.
 
 | Catégorie | Hot-reload |
 |-----------|-----------|
@@ -445,7 +445,7 @@ Le cache de regex (`hasWordCache`) évite de recompiler les patterns à chaque m
 
 ## Les réactions
 
-Luna réagit aux messages avec des emojis. 30% de chance d'utiliser un emoji custom du serveur, 70% un emoji unicode. La réaction est déclenchée après le délai de concentration, pas immédiatement.
+Luna réagit aux messages avec des emojis. 30% de chance d'utiliser un emoji custom du serveur, 70% un emoji unicode. La réaction part après le délai de concentration, avec le même rythme décalé que les réponses. J'aime ce décalage parce que tu sens qu'elle a pris le temps de lire.
 
 Les commandes par réaction sur les messages de Luna :
 - ❌ → Stop
@@ -567,9 +567,9 @@ npm run build && npm start     # production
 
 ## Conclusion
 
-Luna Protocol n'est pas juste un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
+Luna Protocol va bien au-delà d'un bot Discord avec un LLM. C'est un **système comportemental complet** qui simule les imperfections humaines : les oublis, les fautes de frappe, le sommeil, les hésitations, la fatigue. Le tout architecturé autour d'un bus d'événements typé, avec 24 diagrammes Mermaid documentant chaque flux.
 
-Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet vous intéresse, plongez dans le code -- c'est plus accessible qu'il n'y paraît.
+Le code est open source, le dataset est public, et la configuration est hot-reloadable. Si le sujet t'intéresse, plonge dans le code : c'est plus accessible qu'il n'y paraît. Je m'en suis servi comme base pour tester beaucoup d'idées sur le comportement, et tu peux reprendre chaque module séparément.
 
 | Ressource | Lien |
 |-----------|------|

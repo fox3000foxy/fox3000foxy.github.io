@@ -17,12 +17,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "/wb3V1AUbByjaaAA9xdvfokPXiC3UJGiP3jc6mVwIz01eZZvhz729mcdqJt1MMm1/nZBjcQ/yx/VqeDQW2vY/w=="
+author_sig: "VXwVo01WCLfrRMwkRwSgP9ckSekb8f+BERvxRJ0S0+S8GpqTxWEPqsjSjkmWel++yGomhOATbW987dTURy0UPg=="
 ---
 
 # J'ai passé un week-end à lire le code de konosuba-rpg et voilà ce que j'ai trouvé
 
-Je maintiens ce projet depuis un moment, mais relire son propre code à tête reposée c'est toujours instructif. konosuba-rpg c'est un RPG tour par tour Discord où chaque action génère une image WebP à la volée. Pas un embed texte. Une vraie image composée, avec les sprites, les barres de vie, les messages de combat -- tout.
+Je maintiens ce projet depuis un moment, mais relire son propre code à tête reposée c'est toujours instructif. konosuba-rpg c'est un RPG tour par tour Discord où chaque action génère une image WebP à la volée. C'est une vraie image composée, avec les sprites, les barres de vie, les messages de combat -- tout.
 
 La stack : TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Hébergement entièrement gratuit. Et le bot Discord fonctionne sans serveur persistant. Ce post explique comment tout ça tient ensemble.
 
@@ -237,7 +237,7 @@ function freePhoton(_key: string, img: Photon.PhotonImage): void {
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` est un objet WASM avec une mémoire allouée côté linéaire WASM, hors du GC JavaScript. Sans appel explicite à `.free()`, cette mémoire ne se libère jamais. L'eviction du LRU trigger `.free()` automatiquement -- c'est du RAII porté en JavaScript.
+`Photon.PhotonImage` est un objet WASM avec une mémoire allouée côté linéaire WASM, hors du GC JavaScript. Cette mémoire reste allouée tant que `.free()` n'est pas appelé explicitement. L'eviction du LRU trigger `.free()` automatiquement -- c'est du RAII porté en JavaScript.
 
 ### Les clés de cache sont intentionnellement lossy
 
@@ -262,7 +262,7 @@ function hashString(value: string): string {
 }
 ```
 
-`Math.imul` force la multiplication en entier 32 bits, ce qui évite les conversions float64 et donne un hash polynomial stable. Pas de dépendance externe pour ça.
+`Math.imul` force la multiplication en entier 32 bits, ce qui évite les conversions float64 et donne un hash polynomial stable. Ça évite d'ajouter une dépendance externe pour ça.
 
 ### La conversion base64 sans stack overflow
 

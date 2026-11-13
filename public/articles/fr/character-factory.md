@@ -12,14 +12,14 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "aI2iBpxeEaq0hQh8ZTaqXb4pwJ5dp9+416zO8/2dMvOc1AN2d62M0bUc15Af06M3u9erQfJ+4HDyVCPcdULpNA=="
+author_sig: "5cXx07U6XcuPlEw0G+2RFAsX7oGHc1RJBKJ6VpfAaRO2j2RVoPvM4V2l4NUrWVrwjE+F7ZljF6q9A9XWZwxEoA=="
 ---
 
 # Construire character-factory : des avatars avec un système génétique
 
 J'avais besoin de milliers d'avatars crédibles et distincts pour [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- un projet de jeu de cartes privé où chaque carte contient un "ADN" de personnage que le moteur de rendu transforme en portrait. Acheter un pack tout fait, ça se serait vu. Générer des avatars DiceBear au seed par personnage, ça donnait du n'importe quoi : une carte à l'univers japonais pouvait tomber sur une blonde scandinave, et deux "frères et sœurs" ressemblaient à des inconnus.
 
-J'ai donc écrit [character-factory](https://github.com/fox3000foxy/character-factory) -- un module TypeScript par-dessus la collection Lorelei de DiceBear qui apporte trois trucs que DiceBear seul ne donne pas : **des profils démographiques cohérents**, **un petit moteur de génétique**, et **un builder fluide** agréable à utiliser depuis une boucle de jeu.
+J'ai donc écrit [character-factory](https://github.com/fox3000foxy/character-factory) -- un module TypeScript par-dessus la collection Lorelei de DiceBear qui apporte trois fonctionnalités que DiceBear seul ne donne pas : **des profils démographiques cohérents**, **un petit moteur de génétique**, et **un builder fluide** agréable à utiliser depuis une boucle de jeu.
 
 ## Ce que ça fait
 
@@ -112,7 +112,7 @@ Rien de tout ça n'est de la génétique digne d'une publication. C'est une couc
 
 ## Les parties ingénierie moins glamour qui ont compté
 
-Quelques trucs pas flashy mais qui ont mérité leur place dans le diff :
+Quelques détails peu visibles mais qui ont mérité leur place dans le diff :
 
 **Un `pick` plus sûr.** L'original renvoyait `undefined` casté en `T` sur un tableau vide. Avec `strict` + `noUncheckedIndexedAccess` en TypeScript, c'est un mensonge que le compilateur signe. La nouvelle version lance une `RangeError` -- attrapée immédiatement au site d'appel au lieu de produire des props `undefined` trois niveaux plus bas.
 
@@ -136,7 +136,7 @@ await Promise.all(Array.from({ length: concurrency }, () => worker()));
 
 Sur une exportation de 1000 personnages, ça a transformé une pause-café en un "c'est déjà fini ?"
 
-**Un message d'erreur `sharp` qui dit quelque chose.** `buildPng` importe `sharp` en paresseux parce que c'est une dépendance optionnelle que tu ne veux pas imposer aux utilisateurs SVG-only. L'ancien catch avalait la vraie erreur et disait toujours "sharp is required." Si l'échec réel était un conflit de version ou un problème de bindings natifs, tu passais dix minutes à réinstaller un truc déjà installé. La nouvelle version te dit toujours de l'installer, mais inclut l'erreur sous-jacente.
+**Un message d'erreur `sharp` qui dit quelque chose.** `buildPng` importe `sharp` en paresseux parce que c'est une dépendance optionnelle que tu ne veux pas imposer aux utilisateurs SVG-only. L'ancien catch avalait la vraie erreur et disait toujours "sharp is required." Si l'échec réel était un conflit de version ou un problème de bindings natifs, tu passais dix minutes à réinstaller un paquet déjà installé. La nouvelle version te dit toujours de l'installer, mais inclut l'erreur sous-jacente.
 
 ## La suite
 

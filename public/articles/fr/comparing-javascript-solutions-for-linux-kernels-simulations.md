@@ -10,12 +10,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "PgweO5PRGjkHJPoMfpfZglGZUIlRgpP/3+Ep+CbkrGZgyCI+70KGScBZtF5n2FgPYRjPPFdbXPE9P278svM5mA=="
+author_sig: "Bg0GhhzRyH623YOKEldxjT+Yc866XAA/WT6itrhXEYMabUl9+hBCiRF1NnEe8c0Saonj2vb/adRWbRFmhBqwkw=="
 ---
 
 # Chaque sandbox JavaScript, émulateur, simulateur et honeypot Linux -- comparé
 
-Bon, alors ça fait un moment que je suis bien trop loin dans ce terrier de lapin lol. Tout a commencé parce que j'aidais sur [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- un projet de Fortune (j'y reviens dans un instant) -- et on me demandait tout le temps "attends, c'est quoi la différence avec `v86` ?" ou "pourquoi ne pas utiliser `vm2` ?" -- et je me suis rendu compte que je pouvais pas donner une réponse claire sans cartographier tout l'écosystème d'abord. Donc voilà, on y est je suppose xD
+Bon, alors ça fait un moment que je suis bien trop loin dans ce terrier de lapin. Tout a commencé parce que j'aidais sur [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) -- un projet de Fortune (j'y reviens dans un instant) -- et on me demandait tout le temps "attends, c'est quoi la différence avec `v86` ?" ou "pourquoi ne pas utiliser `vm2` ?" -- et je me suis rendu compte que je pouvais pas donner une réponse claire sans cartographier tout l'écosystème d'abord. Donc voilà, on y est je suppose.
 
 Il s'avère qu'il y a quatre familles distinctes -- les bacs à sable JS, les émulateurs Linux, les simulateurs Linux, et les honeypots -- et elles ne se chevauchent quasiment jamais, même si on les mentionne constamment dans la même phrase. Quelqu'un qui construit un système de plugins utilise `isolated-vm`. Quelqu'un qui fait une démo d'outil CLI utilise `v86`. Quelqu'un qui fait du renseignement de menaces SSH utilise Cowrie. Ils résolvent des problèmes complètement différents sous le même vague parapluie de "faire tourner du code dans une boîte."
 
@@ -33,7 +33,7 @@ Avant de plonger, ça vaut le coup d'être précis sur l'utilité de chaque fami
 
 **Les émulateurs Linux** font tourner un vrai noyau Linux non modifié dans un émulateur CPU (x86, RISC-V, OR1K) implémenté en JavaScript ou WebAssembly. Tu démarres un vrai OS. Tu as de vrais appels système. Tu as la compatibilité binaire avec les programmes compilés pour x86. Le coût en ressources est énorme.
 
-**Les simulateurs Linux** imitent le *comportement* d'un système Linux sans faire tourner un vrai noyau. Ils implémentent un interpréteur de shell, un système de fichiers virtuel, et assez de sémantique Unix pour tromper les programmes et les humains. Pas de noyau. Pas de Wasm. Pas d'émulation CPU. Beaucoup moins de ressources.
+**Les simulateurs Linux** imitent le *comportement* d'un système Linux sans faire tourner un vrai noyau. Ils implémentent un interpréteur de shell, un système de fichiers virtuel, et assez de sémantique Unix pour tromper les programmes et les humains. Sans noyau, sans Wasm, sans émulation CPU. Beaucoup moins de ressources.
 
 **Les honeypots** sont conçus pour attirer les attaquants et enregistrer ce qu'ils font. Ce ne sont pas principalement des environnements d'exécution -- ce sont des outils d'observabilité. La fidélité au comportement réel de Linux importe seulement dans la mesure où elle empêche l'attaquant de détecter le piège.
 
@@ -72,7 +72,7 @@ La raison pour laquelle `vm` n'offre aucune sécurité : la chaîne de prototype
 vm.runInNewContext(`({}).__proto__.constructor("return process")()`);
 ```
 
-Je veux dire, la documentation de Node.js elle-même dit : "Le module vm n'est pas un mécanisme de sécurité. Ne l'utilisez pas pour exécuter du code non fiable." Cet avertissement est là depuis toujours. Les gens l'ignorent constamment. J'ai vu des applications en production utiliser `vm` comme bac à sable. S'il te plaît, ne fais pas ça xD
+Je veux dire, la documentation de Node.js elle-même dit : "Le module vm n'est pas un mécanisme de sécurité. Ne l'utilisez pas pour exécuter du code non fiable." Cet avertissement est là depuis toujours. Les gens l'ignorent constamment. J'ai vu des applications en production utiliser `vm` comme bac à sable. S'il te plaît, ne fais pas ça.
 
 **Verdict** : un mécanisme de portée, pas un bac à sable. Utilise-le quand tu as besoin d'isoler des variables (moteurs de templates, fonctionnalités de type `eval` où tu contrôles le code). Jamais pour des entrées non fiables.
 
@@ -83,7 +83,7 @@ Je veux dire, la documentation de Node.js elle-même dit : "Le module vm n'est p
 
 ### 1.2 `vm2` -- la tentative communautaire, et sa très longue mort
 
-`vm2` était la réponse de la communauté au problème d'évasion de `vm`. L'idée centrale : envelopper chaque objet qui franchit la frontière du bac à sable dans un `Proxy` qui intercepte les accès aux propriétés, bloque la remontée de prototypes, et filtre les références dangereuses. Idée intelligente en théorie ! Pas tellement en pratique, comme on va le voir.
+`vm2` était la réponse de la communauté au problème d'évasion de `vm`. L'idée centrale : envelopper chaque objet qui franchit la frontière du bac à sable dans un `Proxy` qui intercepte les accès aux propriétés, bloque la remontée de prototypes, et filtre les références dangereuses. Idée intelligente en théorie ! En pratique, le résultat s'est révélé bien moins convaincant, comme on va le voir.
 
 ```js
 const { VM } = require("vm2");
@@ -254,7 +254,7 @@ const result = realm.evaluate(`
 `);
 ```
 
-ShadowRealm est disponible dans les navigateurs (Chrome 90+, Firefox 105+) mais n'est pas encore dans Node.js stable en 2026. La proposition TC39 Compartments s'appuie dessus pour l'isolation au niveau des modules. Ce sont les réponses standardisées à long terme, mais elles ne sont pas encore prêtes pour la production côté serveur Node. C'est un de ces trucs où tu vois arriver de loin mais... c'est juste pas encore là. Du grand classique TC39 xD
+ShadowRealm est disponible dans les navigateurs (Chrome 90+, Firefox 105+) mais n'est pas encore dans Node.js stable en 2026. La proposition TC39 Compartments s'appuie dessus pour l'isolation au niveau des modules. Ce sont les réponses standardisées à long terme, mais elles ne sont pas encore prêtes pour la production côté serveur Node. C'est un de ces chantiers que tu vois arriver de loin mais... ce n'est juste pas encore là. Du grand classique TC39.
 
 ---
 
@@ -287,7 +287,7 @@ Le prix à payer est énorme, mais ce que tu obtiens est vraiment remarquable : 
 `v86` par Fabrice (copy sur GitHub) est l'émulateur x86 open-source le plus capable en JavaScript. Il a commencé comme un interpréteur JS pur vers 2013 et a évolué vers un système JIT où les blocs de base x86 sont traduits en WebAssembly à la volée, améliorant considérablement les performances.
 
 Ce qu'il émule :
-- **CPU** : x86-32 (IA-32), jeu d'instructions environ au niveau Pentium 1. Pas de 64-bit (x86-64) -- c'est une limite architecturale matérielle, pas une fonctionnalité manquante.
+- **CPU** : x86-32 (IA-32), jeu d'instructions environ au niveau Pentium 1. Le 64-bit (x86-64) reste exclu -- c'est une limite architecturale matérielle, pas une fonctionnalité manquante.
 - **FPU** : via `Float64Array` de JavaScript. Le x87 est en précision étendue 80-bit ; les doubles JS sont en 64-bit. Ça signifie que les résultats en virgule flottante peuvent différer légèrement d'un vrai CPU.
 - **Mémoire** : configurable, mappe vers un `SharedArrayBuffer` ou `ArrayBuffer` dans le tas JS.
 - **Matériel** : 8254 PIT (timer), 8259 PIC (contrôleur d'interruptions), contrôleur clavier 8042 (PS/2), CMOS RTC, VGA avec extensions SVGA et Bochs VBE, contrôleur IDE, contrôleur disquette (8272A), carte réseau NE2000.
@@ -318,11 +318,11 @@ emulator.serial0_send("ls /\n");
 
 **OS supportés** : Alpine Linux (excellent), Ubuntu 16.04/18.04 (i386 uniquement), Arch Linux 32, ReactOS, FreeDOS, Windows 9x/2000 (avec des réserves), MS-DOS.
 
-**Temps de démarrage** : 15-40 secondes pour Alpine Linux depuis une image propre. C'est inhérent à l'initialisation réelle du noyau -- tu ne peux pas la sauter. Oui, tes utilisateurs vont regarder un noyau Linux démarrer dans leur navigateur. C'est le deal xD
+**Temps de démarrage** : 15-40 secondes pour Alpine Linux depuis une image propre. C'est inhérent à l'initialisation réelle du noyau -- tu ne peux pas la sauter. Oui, tes utilisateurs vont regarder un noyau Linux démarrer dans leur navigateur. C'est le deal.
 
 **Mémoire minimum** : 100-256 Mo par instance. Le seul cache de code Wasm JIT peut atteindre des dizaines de Mo pour une instance Linux occupée.
 
-**Utilisation dans Node.js** : entièrement supporté. Pas besoin de DOM -- la sortie VGA peut être ignorée si tu ne t'intéresses qu'à la sortie série.
+**Utilisation dans Node.js** : entièrement supporté. Le DOM reste superflu -- la sortie VGA peut être ignorée si tu ne t'intéresses qu'à la sortie série.
 
 **Ce que tu ne peux pas faire** : exécuter des binaires 64-bit, utiliser des fonctionnalités modernes du noyau (eBPF, io_uring, etc.), ou faire tourner plus d'une poignée d'instances simultanément sans atteindre les limites mémoire.
 
@@ -355,7 +355,7 @@ TinyEMU a une démo JavaScript fournie via Emscripten. C'est la base de JSLinux 
 
 ### 2.3 jor1k -- émulateur OR1K
 
-jor1k est un émulateur OpenRISC 1000 (OR1K) écrit en JavaScript par Sebastian Macke. C'est intéressant historiquement parce que jor1k a introduit le support du système de fichiers VirtIO 9P, que Bellard a ensuite intégré dans TinyEMU et JSLinux. La pollinisation croisée entre ces projets est serrée -- ils s'empruntent tous des trucs les uns aux autres, ce qui est honnêtement l'une des choses les plus cool du travail d'émulation open-source.
+jor1k est un émulateur OpenRISC 1000 (OR1K) écrit en JavaScript par Sebastian Macke. C'est intéressant historiquement parce que jor1k a introduit le support du système de fichiers VirtIO 9P, que Bellard a ensuite intégré dans TinyEMU et JSLinux. La pollinisation croisée entre ces projets est serrée -- ils s'empruntent tous des idées les uns aux autres, ce qui est honnêtement l'une des choses les plus cool du travail d'émulation open-source.
 
 **Statut** : plus maintenu activement, pas de package npm. Archivé à ce stade. Utile à connaître surtout pour le contexte historique -- genre si quelqu'un mentionne jor1k dans une conversation, maintenant tu sais ce que c'est :)
 
@@ -392,9 +392,9 @@ await cx.run("/bin/bash");
 
 ### 2.5 WebContainers (StackBlitz) -- Node.js en Wasm, pas de l'émulation Linux
 
-Les WebContainers sont souvent mis dans le même sac que les émulateurs Linux mais sont architecturalement différents. Ils n'émulent pas x86. Ils ne démarrent pas Linux. Ils font tourner Node.js compilé en WebAssembly en utilisant WASI. Cette distinction compte beaucoup et j'ai passé bien trop de temps à être confus à ce sujet lol.
+Les WebContainers sont souvent mis dans le même sac que les émulateurs Linux mais sont architecturalement différents. Ils n'émulent pas x86. Ils ne démarrent pas Linux. Ils font tourner Node.js compilé en WebAssembly en utilisant WASI. Cette distinction compte beaucoup et j'ai passé bien trop de temps à être confus à ce sujet.
 
-Je pense que la confusion vient du marketing -- "faire tourner Node.js dans ton navigateur" ressemble à de l'émulation, mais c'est en fait Node.js lui-même compilé en Wasm, pas une émulation Linux qui fait tourner Node.js dans une VM. Un truc complètement différent.
+Je pense que la confusion vient du marketing -- "faire tourner Node.js dans ton navigateur" ressemble à de l'émulation, mais c'est en fait Node.js lui-même compilé en Wasm, pas une émulation Linux qui fait tourner Node.js dans une VM. Deux architectures complètement différentes.
 
 L'architecture :
 1. Node.js est compilé en Wasm (un runtime WASI personnalisé spécifiquement)
@@ -540,7 +540,7 @@ ws.on("message", data => {
 });
 ```
 
-C'est le schéma standard pour les IDE cloud et les terminaux web : xterm.js (navigateur) ↔ WebSocket ↔ node-pty ↔ vrai bash. Pas d'isolation. Le shell s'exécute avec toutes les permissions du processus Node.js (ou de l'utilisateur qui le lance).
+C'est le schéma standard pour les IDE cloud et les terminaux web : xterm.js (navigateur) ↔ WebSocket ↔ node-pty ↔ vrai bash. L'isolation reste inexistante. Le shell s'exécute avec toutes les permissions du processus Node.js (ou de l'utilisateur qui le lance).
 
 **Maintenu par** : Microsoft.  
 **npm** : [node-pty](https://www.npmjs.com/package/node-pty)  
@@ -734,7 +734,7 @@ Petite introduction puisque c'est la première fois que je la mentionne correcte
 
 ### Ce que c'est réellement
 
-`typescript-virtual-container` est un **simulateur d'environnement Linux** écrit en TypeScript pur. Pas de Wasm. Pas d'extensions natives. Pas de noyau. ~56 000 lignes de source réparties sur 247 fichiers TypeScript.
+`typescript-virtual-container` est un **simulateur d'environnement Linux** écrit en TypeScript pur. Sans Wasm, sans extensions natives, sans noyau. ~56 000 lignes de source réparties sur 247 fichiers TypeScript.
 
 La perspicacité clé : tu n'as pas besoin d'un émulateur CPU pour faire fonctionner `ls /etc | grep passwd`. Tu as besoin de :
 1. Un arbre de nœuds en mémoire qui répondent aux opérations de chemin
@@ -1019,7 +1019,7 @@ esbuild.build({
 });
 ```
 
-Pas de Wasm. Pas de bibliothèque de polyfills externe. Pas de trucs `webpack-node-externals`. Juste des modules aliasés et quelques globales injectées. Laisse-moi détailler chacun parce que certains sont vraiment impressionnants.
+Sans Wasm, sans bibliothèque de polyfills externe, sans recours à `webpack-node-externals`. Juste des modules aliasés et quelques globales injectées. Laisse-moi détailler chacun parce que certains sont vraiment impressionnants.
 
 **`node:fs` -- IndexedDB comme faux système de fichiers**
 
@@ -1042,7 +1042,7 @@ openDB().then(db => {
 });
 ```
 
-C'est la raison pour laquelle l'instantané VFS survit aux rechargements de page dans le navigateur -- le binaire `.vfsb` entier est écrit dans IndexedDB via ce polyfill, et relu au chargement suivant. Pas de Wasm. Pas de serveur. Juste IndexedDB, qui est dans tous les navigateurs depuis genre 2011.
+C'est la raison pour laquelle l'instantané VFS survit aux rechargements de page dans le navigateur -- le binaire `.vfsb` entier est écrit dans IndexedDB via ce polyfill, et relu au chargement suivant. Sans Wasm, sans serveur. Juste IndexedDB, qui est dans tous les navigateurs depuis 2011.
 
 **`node:crypto` -- SHA-256 en JS pur**
 
@@ -1067,7 +1067,7 @@ export function cpus(){
 
 **`node:net`, `ssh2`, `roxify` -- des stubs honnêtes**
 
-Le navigateur ne peut pas ouvrir de sockets TCP ou exécuter du vrai SSH, donc ce sont des stubs qui lancent une erreur `NotImplemented` avec un message clair si quelque chose essaye de les utiliser. Pas d'échec silencieux, pas de `undefined` retourné là où un objet est attendu. Juste un message fort et clair "ça ne marche pas dans le navigateur" -- ce qui est exactement ce que tu veux.
+Le navigateur ne peut pas ouvrir de sockets TCP ou exécuter du vrai SSH, donc ce sont des stubs qui lancent une erreur `NotImplemented` avec un message clair si quelque chose essaye de les utiliser. Les échecs restent explicites, sans `undefined` retourné là où un objet est attendu. Juste un message fort et clair "ça ne marche pas dans le navigateur" -- ce qui est exactement ce que tu veux.
 
 **`process.js` et `buffer.js` -- des globales injectées**
 
@@ -1075,7 +1075,7 @@ Ces deux-là sont injectés en haut de chaque fichier du bundle via l'option `in
 
 ---
 
-L'ensemble des polyfills fait environ 640 lignes de JS écrit à la main au total. Pas de packages npm. Pas de Wasm. Et le résultat est un bundle navigateur qui est juste la bibliothèque, tournant nativement, sans aucune de l'anxiété habituelle du "mais est-ce que ça marche vraiment dans le navigateur ?" que tu as avec les bibliothèques conçues pour Node en premier. Ça vaut le coup de jeter un œil au dossier `polyfills/` dans le dépôt si tu es curieux -- chaque fichier est bien contenu et lisible par lui-même, ce qui est un choix de style que j'apprécie beaucoup.
+L'ensemble des polyfills fait environ 640 lignes de JS écrit à la main au total. Sans packages npm, sans Wasm. Et le résultat est un bundle navigateur qui est juste la bibliothèque, tournant nativement, sans aucune de l'anxiété habituelle du "mais est-ce que ça marche vraiment dans le navigateur ?" que tu as avec les bibliothèques conçues pour Node en premier. Ça vaut le coup de jeter un œil au dossier `polyfills/` dans le dépôt si tu es curieux -- chaque fichier est bien contenu et lisible par lui-même, ce qui est un choix de style que j'apprécie beaucoup.
 
 | | `vm` | `isolated-vm` | `quickjs-emscripten` | `v86` | CheerpX | WebContainers | Cowrie | `typescript-virtual-container` |
 |---|---|---|---|---|---|---|---|---|
@@ -1127,7 +1127,7 @@ L'ensemble des polyfills fait environ 640 lignes de JS écrit à la main au tota
 → `typescript-virtual-container`. Les commandes s'exécutent réellement. Le VFS est une vraie structure de données que tu peux instantanément capturer et différencier. L'attaquant obtient un environnement interactif convaincant, et tu obtiens des données d'audit structurées sans quitter Node.
 
 **Tu as besoin d'automatisation shell / de tests en CI sans Docker.**  
-→ `typescript-virtual-container`. Démarre en moins d'une seconde, instantané avant un test, restauration après. Exécute des commandes shell avec une API typée. Pas de démon Docker, pas de noyau, pas de VM, pas d'attente.
+→ `typescript-virtual-container`. Démarre en moins d'une seconde, instantané avant un test, restauration après. Exécute des commandes shell avec une API typée. Sans démon Docker, sans noyau, sans VM, sans attente.
 
 **Tu as besoin d'environnements shell multi-locataires (SaaS, éducation, formation).**  
 → `typescript-virtual-container`. 5-20 Mo par instance vs. 150-256 Mo pour un émulateur. 100 utilisateurs simultanés : ~2 Go vs. ~25 Go. C'est une grosse différence en coûts d'hébergement !
@@ -1151,7 +1151,7 @@ Fortune a beaucoup réfléchi à ça en concevant le projet. Pour les cas d'usag
 
 Alors voilà. Cet écosystème est plus large et plus fragmenté qu'il n'y paraît de l'extérieur. `vm` est un séparateur de portée, pas un bac à sable. `vm2` continue d'accumuler des CVE (pour de vrai, regarde les avis de ce mois-ci). `isolated-vm` est la bonne réponse pour l'isolation JS mais JS uniquement. `quickjs-emscripten` est le bon choix quand tu as besoin de compatibilité navigateur ou que tu veux éviter les extensions natives. `v86` et CheerpX sont de vrais émulateurs quand tu as besoin de vraie compatibilité binaire. WebContainers est Node.js en Wasm, pas un environnement Linux généraliste. Cowrie est l'étalon-or des honeypots SSH, mais c'est du Python et pas natif Node.
 
-Et puis il y a `typescript-virtual-container` -- le projet de Fortune -- qui vit un peu dans sa propre catégorie. Pas un émulateur, pas un bac à sable JS, pas un honeypot passif. Quelque chose entre tous qui s'est avéré étonnamment utile pour beaucoup de choses qu'aucun des autres ne peut faire.
+Et puis il y a `typescript-virtual-container` -- le projet de Fortune -- qui vit un peu dans sa propre catégorie. Ni émulateur, ni bac à sable JS, ni honeypot passif. Quelque chose entre tous qui s'est avéré étonnamment utile pour beaucoup de choses qu'aucun des autres ne peut faire.
 
 `typescript-virtual-container` comble le fossé qu'aucun des autres ne touche : un environnement shell Linux complet et programmable avec du vrai SSH, SFTP, des permissions POSIX, la gestion des utilisateurs, du réseau virtuel, et une API TypeScript typée -- tournant dans environ 10 Mo, démarrant en moins d'une seconde, fonctionnant à la fois dans Node.js et le navigateur.
 

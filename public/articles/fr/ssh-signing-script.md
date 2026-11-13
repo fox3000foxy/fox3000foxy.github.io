@@ -11,36 +11,36 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "z7QRsv/Vdy2DvhXi2v/9A3AsKmUKZw64/kTbdNYVztTDG0j5XYnEOCyOcy27v4sQKpZRgZkart/Q2JWYMKZKYg=="
+author_sig: "bP0bZeOzIA+12pQ9Hkyvpkq5R5K2kILzk73xjg1ZWfzzosMWtepdeO7iiE3KzGYoWEstrhiS2ufOa5P6HEXACA=="
 ---
 
 # Script de signature SSH pour commits -- explication
 
-Cet article décortique le script `setup-ssh-signing.sh` que j'ai publié sur [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). On va voir ce que chaque partie fait, comment ça rend la signature SSH locale à un dépot complètement indolore, et, oui, pourquoi j'ai même pris la peine de l'écrire (spoiler : je voulais juste que mes commits aient de la **gueule**).
+Cet article décortique le script `setup-ssh-signing.sh` que j'ai publié sur [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). On va voir ce que chaque partie fait, comment ça rend la signature SSH locale à un dépôt complètement indolore, et, oui, pourquoi j'ai même pris la peine de l'écrire (spoiler : je voulais juste que mes commits aient de la **gueule**).
 
 ## Motivation
 
-J'ai toujours adoré bricoler mon workflow Git, et après avoir vu des gens avec des petits badges « Verified » à côté de leurs commits, je me suis dit : pourquoi pas moi ? La signature GPG intégrée est un lourde et globale, alors j'ai fini par écrire un petit helper qui :
+J'ai toujours adoré bricoler mon workflow Git, et après avoir vu des gens avec des petits badges « Verified » à côté de leurs commits, je me suis dit : pourquoi pas moi ? La signature GPG intégrée est lourde et globale, alors j'ai fini par écrire un petit helper qui :
 
 - crée une clé SSH dédiée à la signature,
 - configure uniquement le dépôt courant,
 - réécrit éventuellement l'historique pour signer les vieux commits,
 - et permet de transporter la clé entre machines.
 
-Franchement, le besoin était surtout de la vanity. Y'a pas d'exigence technique de signature dans mes projets perso, mais voir un badge vert « Verified » sur un commit, ça fait son petit effet, et écrire le script était un kiff en shell.
+Franchement, le besoin relevait surtout de la vanité. Mes projets perso n'imposent aucune exigence de signature, mais voir un badge vert « Verified » sur un commit fait son petit effet, et écrire ce script en shell m'a fait vraiment plaisir.
 
 > Bon, signer ses commits, c'est un peu comme mettre un blouson en cuir pour une review de code -- totalement inutile, mais ça te donne l'impression d'être un hacker.
 
 ## Ce que fait le script
 
-Le script est un seul fichier Bash avec `set -euo pipefail` en haut pour planter vite fait bien fait. Voilà un résumé de ce qu'il fait :
+Le script est un seul fichier Bash avec `set -euo pipefail` en haut pour interrompre l'exécution dès la première erreur. Voilà un résumé de ce qu'il fait :
 
 1. **Générer ou importer une clé de signature**  
    Les clés atterrissent dans `.git-signing/` dans le dossier où tu lances le script.
 2. **Configurer Git localement**  
    Il positionne `gpg.format=ssh`, `user.signingkey`, `commit.gpgsign=true`, `tag.gpgSign=true`, et un `allowedSignersFile` qui pointe vers la clé publique.
 3. **Gérer les clés entre machines**  
-   Grâce à `--export-keys` / `--import-keys`, tu peux balader ta clé privée d'un ordi à l'autre sans toucher à la config globale.
+   Grâce à `--export-keys` / `--import-keys`, tu peux transférer ta clé privée d'un ordi à l'autre sans toucher à la config globale.
 4. **Réécriture d'historique optionnelle** (`--resign-all`)  
    Réécrit tous les commits de toutes les branches/tags (ou seulement ceux pas dans `upstream` pour les forks) et les re-signe avec `-S`, sans toucher aux autres auteurs.
 5. **Flags utilitaires**  
@@ -72,7 +72,7 @@ if [[ -z "$NAME" || -z "$EMAIL" ]]; then
 fi
 ```
 
-La génération de clé se fait dans `$LAUNCH_DIR/.git-signing`. Si une clé existe déjà, le script la laisse tranquille ; `--import-keys` permet de remplir le dossier depuis un ZIP.
+La génération de clé se fait dans `$LAUNCH_DIR/.git-signing`. Si une clé existe déjà, le script la conserve telle quelle ; `--import-keys` permet de remplir le dossier depuis un ZIP.
 
 ```bash
 mkdir -p "$KEY_DIR"
@@ -89,7 +89,7 @@ else
 fi
 ```
 
-Après avoir vérifié que la clé privée est utilisable (`ssh-keygen -Y sign …`), le script écrit un petit fichier `allowed_signers` contenant la clé publique et positionne la config Git locale :
+Après avoir vérifié que la clé privée est utilisable (`ssh-keygen -Y sign …`), le script écrit un fichier `allowed_signers` contenant la clé publique et positionne la config Git locale :
 
 ```bash
 git -C "$REPO_DIR" config --local gpg.format ssh
@@ -101,7 +101,7 @@ git -C "$REPO_DIR" config --local tag.gpgSign true
 
 Si tu demandes la réécriture d'historique avec `--resign-all`, le script construit une commande `git filter-branch` qui re-signe les commits éligibles avec `-S`. Il respecte l'état du fork en sautant optionnellement les commits déjà présents dans `upstream`.
 
-Le résultat final affiche la clé publique et les instructions pour l'ajouter dans la section **Signing Key** de GitHub, avec une petite recette de test.
+Le résultat final affiche la clé publique et les instructions pour l'ajouter dans la section **Signing Key** de GitHub, avec une recette de test.
 
 ## Pourquoi signer ses commits ?
 
@@ -112,7 +112,7 @@ C'est le moment où j'avoue que je n'en avais pas besoin. Mes dépôts n'exigent
 - parce que ça m'a donné une excuse pour expérimenter avec `git filter-branch` et le shell,
 - et parce que c'est un énième « j'ai construit ça moi-même » pour le blog.
 
-Bref, c'était juste pour frimer, mais c'est ça qui est sympa quand on bricole ses outils.
+Bref, c'était juste pour frimer, mais c'est ça que j'aime quand je bricole mes outils.
 
 ## Exemples d'utilisation
 
@@ -136,11 +136,11 @@ chmod +x ./setup-ssh-signing.sh
 
 ## Dernières réflexions
 
-Ce script est un petit utilitaire, mais il contient quelques idées sympas :
+Ce script reste un utilitaire compact, mais il porte quelques principes que j'assume :
 
 - garder les clés cryptographiques locales et par dépôt,
 - ne jamais toucher à la config globale sauf si tu le demandes,
 - fournir un import/export simple et la réécriture d'historique,
-- et documenter tout le processus dans un article de blog, parce que pourquoi pas.
+- et documenter tout le processus dans un article de blog pour garder une trace réutilisable.
 
 Si l'envie te prend d'ajouter des signatures à tes propres commits, essaie-le ! Et si t'es juste là pour le style, pareil. 😎

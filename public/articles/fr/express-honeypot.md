@@ -11,14 +11,14 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Cd3O+RnbGTqqJpT/9Yddg6uejV8Gdh/6Swoyw5Cu9t74F/FflC6mzlLTAC3LN3+AqOZLrqWfGzveEnCXc080Cw=="
+author_sig: "QDY5ehG/0aBucUSHjFIaPuokaFZn0iyuD7cxIR4XI6sdAg3pbrcKtccEqu/0G++Figv3iJJ6BViVi4D6seBIyQ=="
 ---
 
 ## TL;DR
 
 J'ai créé un middleware Express qui expose **328 endpoints factices** au choix parmi deux variantes : `default` (réponses sobres mais crédibles) et `complete` (réponses très détaillées). Chaque réponse est **générée à la volée** avec des timestamps et des identifiants de requête frais, ce qui rend chaque réponse unique. Il n'y a aucun fichier mock sur le disque. Le middleware peut également **journaliser le trafic** dans un fichier texte et exposer les routes non gérées sur `/newBotsRoute` pour analyser ce que les bots cherchent.
 
-**Ce n'est pas juste un autre renvoi de 404.** C'est un pièce d'ingénierie conçue pour ressembler à un vrai serveur afin que les scanners gaspillent leur temps. Voyons comment ça marche.
+**C'est bien plus qu'un simple renvoi de 404.** J'ai conçu cette pièce d'ingénierie pour ressembler à un vrai serveur, pour que les scanners gaspillent leur temps dessus. Je te montre comment ça marche.
 
 ## Le problème
 
@@ -29,21 +29,21 @@ Les bots de sécurité, les scrapers et les acteurs malveillants scannent consta
 - fichiers de configuration : `dump.sql`, `.git/config`, `docker-compose.yml`
 - pages de phishing bancaire : `/lander/sberbank*`, `/index_sber.php`
 
-Une approche typique consiste à bloquer ces requêtes, à renvoyer un 404 ou un 403. Mais cela donne immédiatement au scanner une information précieuse : la route n'existe pas, donc il passe à la suivante. Un honeypot fait l'inverse : **il fait croire au scanner que tout existe**, le faisant perdre du temps à traiter de fausses réponses pendant que votre vrai serveur est protégé derrière des routes connues.
+J'ai vu cette limite sur mes propres serveurs : renvoyer un 404 ou un 403 indique tout de suite au scanner que la route n'existe pas, donc il passe à la suivante. J'ai choisi l'inverse avec ce honeypot : **faire croire au scanner que tout existe**, pour lui faire perdre du temps sur de fausses réponses pendant que ton vrai serveur reste protégé derrière tes routes connues.
 
 ## L'architecture
 
 ### 1. Un classifieur, pas une lookup table
 
-La pièce maîtresse est une fonction `classify()` dans `src/services/mockupGenerator.ts` qui prend un chemin d'endpoint et retourne un générateur de réponse. Cette fonction contient des règles hiérarchiques :
+La pièce maîtresse est une fonction `classify()` dans `src/services/mockupGenerator.ts` qui prend un chemin d'endpoint et retourne un générateur de réponse. Je l'ai construite comme une cascade de règles :
 
-1. **Correspondances exactes** -- les endpoints les plus courants ont des générateurs dédiés
-2. **Correspondances par motif** -- regex sur le chemin pour détecter des motifs comme `id_rsa`, `wp-admin`, `sitemap.xml`
-3. **Classification intelligente** -- chemins comme `/262LBNFp` (6+ caractères aléatoires) sont classifiés comme "battements de cœur C2"
-4. **Règles fourre-tout** -- les chemins d'API, les fichiers `.php`, `.html`, `.js`, `.json` et `.asmx` ont des générateurs génériques
-5. **Catchall final** -- `genCatchall()` produit une réponse JSON générique avec des métadonnées
+1. **Correspondances exactes** : les endpoints les plus courants ont des générateurs dédiés
+2. **Correspondances par motif** : regex sur le chemin pour détecter des motifs comme `id_rsa`, `wp-admin`, `sitemap.xml`
+3. **Classification intelligente** : chemins comme `/262LBNFp` (6+ caractères aléatoires) sont classifiés comme "battements de cœur C2"
+4. **Règles fourre-tout** : les chemins d'API, les fichiers `.php`, `.html`, `.js`, `.json` et `.asmx` ont des générateurs génériques
+5. **Catchall final** : `genCatchall()` produit une réponse JSON générique avec des métadonnées
 
-Cette approche signifie que les réponses sont **fraîches à chaque requête** -- pas de fichiers statiques, pas de mise en cache, chaque réponse semble provenir d'un vrai serveur avec son propre timestamp.
+J'aime cette approche parce que les réponses restent **fraîches à chaque requête** : aucun fichier statique, aucune mise en cache, chaque réponse porte son propre timestamp comme si elle venait d'un vrai serveur.
 
 ### 2. Le système de double variante
 
@@ -53,7 +53,7 @@ Chaque générateur supporte deux variantes :
 type Variant = "default" | "complete";
 ```
 
-- **`default`** -- réponses concises mais crédibles. Exemple pour `.env` :
+- **`default`** : réponses concises mais crédibles. Exemple pour `.env` :
   ```
   DB_HOST=localhost
   DB_USER=root
@@ -62,7 +62,7 @@ type Variant = "default" | "complete";
   APP_DEBUG=true
   ```
 
-- **`complete`** -- réponses très détaillées. Exemple pour `.env` :
+- **`complete`** : réponses très détaillées. Exemple pour `.env` :
   ```
   # Database
   DB_CONNECTION=mysql
@@ -85,11 +85,11 @@ type Variant = "default" | "complete";
   ...
   ```
 
-La variante `complete` inclut également des pages HTML complètes avec CSS stylisé -- pages d'administration, écrans de connexion WordPress, pages de phishing bancaire en russe, etc.
+La variante `complete` inclut également des pages HTML complètes avec CSS stylisé : pages d'administration, écrans de connexion WordPress, pages de phishing bancaire en russe, etc. Je la trouve redoutable quand tu veux vraiment occuper un scanner.
 
 ### 3. Génération à la volée
 
-Le générateur utilise `Date.now()` et `Date().toISOString()` pour produire des timestamps et des identifiants de requête uniques à chaque appel. Voici la fonction d'enrichissement :
+J'utilise `Date.now()` et `Date().toISOString()` pour produire des timestamps et des identifiants de requête uniques à chaque appel. Voici la fonction d'enrichissement :
 
 ```typescript
 function enrichResponse(response: Record<string, unknown>): Record<string, unknown> {
@@ -106,7 +106,7 @@ Pour les réponses JSON, le middleware tente de parser et d'enrichir avec ces ch
 
 ### 4. Le middleware de spooofing d'en-têtes
 
-Un middleware dédié définit des en-têtes HTTP réalistes en fonction de l'extension du fichier demandé :
+J'ai ajouté un middleware dédié qui définit des en-têtes HTTP réalistes en fonction de l'extension du fichier demandé :
 
 ```typescript
 res.setHeader("Server", "nginx/1.24.0");
@@ -125,11 +125,11 @@ else if (path.endsWith(".do") || path.endsWith(".action"))
   res.setHeader("X-Powered-By", "Servlet/3.0");
 ```
 
-Cela rend les réponses beaucoup plus crédibles -- un endpoint `.php` avec `X-Powered-By: PHP/8.1.12` et `Server: nginx/1.24.0` ressemble exactement à un vrai serveur WordPress.
+Cela rend les réponses beaucoup plus crédibles : un endpoint `.php` avec `X-Powered-By: PHP/8.1.12` et `Server: nginx/1.24.0` ressemble exactement à un vrai serveur WordPress. Je tiens à ce détail parce que c'est souvent l'en-tête qui trahit un faux serveur.
 
 ### 5. Le PHP Spoofer
 
-L'un des composants les plus intéressants est le `phpSpoofer`. Si une requête arrive pour un fichier `.php` et que l'hôte est localhost, le middleware **proxifie** la requête vers votre serveur PHP local, qui traite et renvoie une vraie page PHP. Si l'hôte n'est pas localhost, il renvoie un 404 (pour empêcher les attaques SSRF).
+Le `phpSpoofer` reste mon composant préféré. Si une requête arrive pour un fichier `.php` et que l'hôte est localhost, le middleware **proxifie** la requête vers ton serveur PHP local, qui traite et renvoie une vraie page PHP. Si l'hôte est distant, il renvoie un 404 pour bloquer toute tentative SSRF.
 
 ```typescript
 const phpSpoofer = async (req, res, next) => {
@@ -145,11 +145,11 @@ const phpSpoofer = async (req, res, next) => {
 };
 ```
 
-Cela permet aux développeurs qui exécutent WordPress en local d'avoir le honeypot qui sert de **vraies** pages WordPress aux bots -- le nec plus ultra du réalisme.
+Cela permet, quand tu fais tourner WordPress en local, d'avoir le honeypot qui sert de **vraies** pages WordPress aux bots : le maximum de réalisme selon mon expérience.
 
 ### 6. Journalisation et analyse du trafic
 
-Le `TrafficService` journalise chaque requête dans un fichier JSON-lines. Le `UnhandledRoutesService` analyse ensuite ces logs pour identifier les chemins que les bots ont demandés mais qui ne sont pas encore couverts par le honeypot.
+J'ai séparé deux responsabilités : le `TrafficService` journalise chaque requête dans un fichier JSON-lines. Le `UnhandledRoutesService` analyse ensuite ces logs pour identifier les chemins demandés par les bots qui restent à couvrir dans le honeypot.
 
 ```typescript
 app.get("/newBotsRoute", async (_req, res) => {
@@ -161,11 +161,11 @@ app.get("/newBotsRoute", async (_req, res) => {
 });
 ```
 
-Cette boucle de rétroaction signifie que plus vous laissez tourner le honeypot, plus vous apprenez sur ce que les bots recherchent -- et vous pouvez ajouter ces chemins à vos endpoints connus.
+J'adore cette boucle de rétroaction : plus tu laisses tourner le honeypot, plus tu apprends ce que les bots recherchent, et tu peux ajouter ces chemins à tes endpoints connus.
 
 ### 7. Endpoints connus et exclusion
 
-Le middleware accepte des listes de `knownPaths`, `knownPatterns`, `knownApiPaths` et `knownApiPatterns`. Toute route qui correspond à celle-ci passe à travers le middleware (vers votre vraie application). Cela garantit que vos vrais endpoints ne sont pas interceptés par le honeypot.
+Le middleware accepte des listes de `knownPaths`, `knownPatterns`, `knownApiPaths` et `knownApiPatterns`. Toute route qui correspond à celle-ci traverse le middleware vers ta vraie application. Je trouve ce filtre indispensable : tes vrais endpoints restent intacts, le honeypot ne les intercepte jamais.
 
 ```typescript
 const matches = (p) => p === endpoint || p.startsWith(endpoint + "/");
@@ -191,13 +191,13 @@ Voici comment ils sont classifiés (extrait du classifieur) :
 
 ## Codes et endpoints spéciaux
 
-Le classifieur contient des générateurs spécialisés pour des cas particuliers :
+J'ai ajouté des générateurs spécialisés pour des cas particuliers :
 
-- **`genLanding()`** -- pages de phishing bancaire en russe pour СберБанк, Тинькофф, Газпромбанк
-- **`genC2Heartbeat()`** -- réponse de battement de cœur C2 réaliste avec `agent_id`, `group`, `version`
-- **`genScannerPath()`** -- pièges pour scanners spécifiques (ports nmap NICE, Hazelcast, CGI)
-- **`genChineseApi()`** -- réponses d'API chinoises avec `msg: "成功"` (succès)
-- **`genMerchant()`** -- profils de commerçants avec `balance`, `fee_rate`, `tier`
+- **`genLanding()`** : pages de phishing bancaire en russe pour СберБанк, Тинькофф, Газпромбанк
+- **`genC2Heartbeat()`** : réponse de battement de cœur C2 réaliste avec `agent_id`, `group`, `version`
+- **`genScannerPath()`** : pièges pour scanners spécifiques (ports nmap NICE, Hazelcast, CGI)
+- **`genChineseApi()`** : réponses d'API chinoises avec `msg: "成功"` (succès)
+- **`genMerchant()`** : profils de commerçants avec `balance`, `fee_rate`, `tier`
 
 ## Comment l'utiliser
 
@@ -258,8 +258,8 @@ const instance = createHoneypot({ logTraffic: true });
 
 ## Conclusion
 
-Ce middleware honeypot Express va bien au-delà d'un simple leurre. Avec **328 endpoints**, une **génération à la volée**, un **spoofing d'en-têtes dynamique**, une **journalisation du trafic** et même un **proxy PHP** pour de vraies réponses WordPress, il est conçu pour être aussi réaliste que possible.
+Ce middleware honeypot Express va bien au-delà d'un simple leurre. Avec **328 endpoints**, une **génération à la volée**, un **spoofing d'en-têtes dynamique**, une **journalisation du trafic** et même un **proxy PHP** pour de vraies réponses WordPress, je l'ai conçu pour rester aussi réaliste que possible.
 
-Les scanners perdent du temps à crawler des pages d'administration factices, des fichiers `.env` crédibles et des pages de phishing bancaire pendant que votre vraie application reste protégée. Le système de double variante et la classification intelligente garantissent que chaque réponse est fraîche et adaptée au chemin demandé.
+Les scanners perdent du temps sur des pages d'administration factices, des fichiers `.env` crédibles et des pages de phishing bancaire pendant que ta vraie application reste protégée. J'apprécie particulièrement le système de double variante et la classification intelligente : chaque réponse reste fraîche et adaptée au chemin demandé.
 
 Le code source est disponible sur GitHub : [https://github.com/fox3000foxy/express-honeypot-middleware](https://github.com/fox3000foxy/express-honeypot-middleware)

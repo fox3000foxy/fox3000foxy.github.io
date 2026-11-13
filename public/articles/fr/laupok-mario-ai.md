@@ -10,14 +10,14 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "WlTIEjawcfiUsXmOxVXChYvdUYZYqTP/sTSPo3dAIJSJnUVUkWtlmj2zICfMiSL2UMa6MII+89e94NuedESbQA=="
+author_sig: "rXgkhQ7IWGOSwv1EnTHWtKOUcSlTCJ/R7sfzDXwNcd/1KplveE792XR7BlMw368x0/oDmH9EKQFYmlidWlawVw=="
 ---
 
 # Laupok a créé une IA qui joue à Super Mario World toute seule -- comment ça marche
 
-Laupok a créé une intelligence artificielle qui joue à **Super Mario World** de manière totalement autonome. Pas de script prédéfini, pas de frames à enregistrer. L'IA apprend seule, à coups de mutations aléatoires et de sélection naturelle, à finir les niveaux du jeu. Le projet tourne sur **BizHawk**, un émulateur multiplateforme, via un script Lua d'environ **4200 lignes**.
+Laupok a créé une intelligence artificielle qui joue à **Super Mario World** de manière totalement autonome. Elle part de zéro : aucun script prédéfini, aucune frame enregistrée. L'IA apprend seule, à coups de mutations aléatoires et de sélection naturelle, à finir les niveaux du jeu. Le projet tourne sur **BizHawk**, un émulateur multiplateforme, via un script Lua d'environ **4200 lignes**.
 
-Ce qui rend ce projet fascinant, c'est qu'il repose sur des concepts biologiques appliqués à l'informatique : la **théorie de l'évolution de Darwin**, les **réseaux de neurones artificiels**, et surtout un algorithme spécifique appelé **NEAT** (NeuroEvolution of Augmenting Topologies). L'IA ne connaît rien au jeu au départ. Elle teste des trucs au hasard, échoue des milliers de fois, et petit à petit, elle comprend comment avancer, sauter, et survivre.
+Ce qui rend ce projet fascinant, c'est qu'il repose sur des concepts biologiques appliqués à l'informatique : la **théorie de l'évolution de Darwin**, les **réseaux de neurones artificiels**, et surtout un algorithme spécifique appelé **NEAT** (NeuroEvolution of Augmenting Topologies). L'IA ne connaît rien au jeu au départ. Elle teste des actions au hasard, échoue des milliers de fois, et petit à petit, elle comprend comment avancer, sauter, et survivre.
 
 Dans cet article, on va décortiquer tout ça -- concept par concept, ligne de code par ligne de code.
 
@@ -224,7 +224,7 @@ CHANCE_MUTATION_NEURONE = 0.39
 
 Le `NB_INPUT` est de 99 parce que la vue de Mario fait 11×9 tiles. Chaque tile est un neurone d'entrée. Si la tile est vide, elle vaut 0. Si c'est un bloc, elle vaut 1. Si c'est un ennemi, elle vaut -1.
 
-Les 8 sorties correspondent aux boutons de la manette SNES : A, B, X, Y, Haut, Bas, Gauche, Droite. On exclut Start, Select, L et R pour pas "distract" Mario.
+Les 8 sorties correspondent aux boutons de la manette SNES : A, B, X, Y, Haut, Bas, Gauche, Droite. On exclut Start, Select, L et R pour limiter ses décisions à l'essentiel.
 
 ### Les structures de données
 
@@ -270,7 +270,7 @@ function newReseau()
 end
 ```
 
-Au départ, chaque réseau n'a que des inputs et des outputs. Pas de neurones cachés, pas de connexions. C'est l'algorithme qui va décider s'il en faut.
+Au départ, chaque réseau contient seulement des inputs et des outputs : aucun neurone caché, aucune connexion. C'est l'algorithme qui va décider s'il en faut.
 
 ### Les mutations en détail
 
@@ -497,7 +497,7 @@ end
 
 La fitness est simple : c'est la **distance parcourue vers la droite**. Si Mario avance de 10 pixels, la fitness augmente de 10. Si Mario recule, rien ne se passe (pas de pénalité). Si le niveau est terminé (adresse `0x0100` == 12), la fitness devient 1 000 000.
 
-C'est intentionnellement simple. Pas de bonus pour les ennemis tués, pas de pénalité pour la mort. Juste : avance vers la droite.
+C'est intentionnellement simple. Seule la progression vers la droite compte : tuer des ennemis ne rapporte rien, mourir ne coûte rien.
 
 ### Le reset intelligent
 
@@ -521,7 +521,7 @@ if fitnessAvant == laPopulation[idPopulation].fitness
 end
 ```
 
-La condition `memory.readbyte(0x0071) ~= 9` vérifie que Mario n'est pas en animation de mort. Pas la peine de resetter si Mario est déjà mort.
+La condition `memory.readbyte(0x0071) ~= 9` vérifie que Mario n'est pas en animation de mort. Le reset devient inutile quand Mario est déjà en animation de mort.
 
 ### La boucle principale
 
@@ -771,6 +771,6 @@ Le script inclut un formulaire avec des options :
 
 Ce que Laupok a fait, c'est prendre un algorithme académique (NEAT, 2002), le réécrire en Lua pour un émulateur (BizHawk), et l'appliquer à Super Mario World. Le résultat : une IA qui apprend de zéro à jouer au jeu, sans aucune connaissance préalable, uniquement par mutations aléatoires et sélection naturelle.
 
-C'est un exemple magnifique de la puissance des algorithmes génétiques. Pas besoin de deep learning, pas besoin de GPU, pas besoin de millions de données d'entraînement. Juste de la sélection naturelle, un peu de Lua, et beaucoup de patience.
+C'est un exemple magnifique de la puissance des algorithmes génétiques. La recette tient en trois ingrédients : la sélection naturelle, un peu de Lua, et beaucoup de patience. Aucun deep learning, aucun GPU, aucune donnée d'entraînement massive.
 
 Le code est commenté, partagé, et Laupok a fait deux vidéos explicatives -- une pour les grands concepts, une pour le code. Si le sujet t'intéresse, plonge dedans. C'est plus accessible qu'il n'y paraît.

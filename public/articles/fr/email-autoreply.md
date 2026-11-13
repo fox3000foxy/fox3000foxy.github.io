@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "wkNAoislzRL2+C4BStVPPHGAcJXvZkk1fvqh+CyKlXgASMbh5gvyQeAbaJjRutRM89erRWqJbaI48IgV6ZKwXw=="
+author_sig: "Tx11iP1Ftir3cJwOPIallRAe6OBGccc+ZYd4JMKCeNuO3lDsLo3syVQzZFnwNaUiQGy9vdjoHYfV7DiQhViY0w=="
 ---
 
 # J'ai utilisé git comme base de données pour faire tourner un bot gratos sur GitHub Actions
@@ -25,9 +25,9 @@ Il lit mes mails, comprend de quoi ça parle, et répond tout seul avec une IA. 
 
 Coût mensuel : **0€**.
 
-Pas de serveur. Pas de VPS. Pas de base de données. Juste GitHub Actions et un hack de malade : **utiliser git comme base de données**.
+Je me passe de serveur, de VPS et de base de données. Juste GitHub Actions et un hack de malade : **utiliser git comme base de données**.
 
-Tu vois le truc venir ? Non ? Bon, accroche-toi, c'est débile et génial à la fois.
+Tu vois où je veux en venir ? Non ? Bon, accroche-toi, c'est débile et génial à la fois.
 
 ---
 
@@ -115,7 +115,7 @@ On crée une branche **orpheline** (sans historique), on met juste le fichier `l
 
 Pourquoi orpheline ? Pour pas accumuler 10 000 commits de state dans l'historique du repo. Chaque update écrase le précédent. Le tag pointe toujours vers UN seul commit qui contient UNE seule valeur.
 
-C'est propre. C'est gratuit. C'est complètement pété xD
+C'est propre. C'est gratuit. C'est complètement tordu et ça marche.
 
 ---
 
@@ -160,7 +160,7 @@ Et le cron, lui, checkout directement ce tag :
   run: node dist/index.js --action
 ```
 
-Pas d'install. Pas de build. Le cron démarre instantanément et exécute juste `node dist/index.js`.
+Le cron démarre instantanément et exécute juste `node dist/index.js`, sans install ni build.
 
 Genre, tu as deux tags qui font deux boulots :
 - `runtime` = le code prêt à tourner (mis à jour quand tu push du code)
@@ -244,7 +244,7 @@ export function isAutomatedByHeaders(headers) {
 
 `List-Unsubscribe` dans les headers ? C'est une newsletter. `Precedence: bulk` ? Du mass-mailing. `X-Mailer: Mailchimp` ? Tu vois le genre. On ignore.
 
-C'est comme un videur de boîte de nuit : les robots passent pas xD
+C'est comme un videur de boîte de nuit : les robots ne passent pas.
 
 ### Les triggers magiques
 
@@ -311,13 +311,13 @@ const completion = await groq.chat.completions.create({
 });
 ```
 
-Donc le bot construit une mémoire compressée au fil du temps. Pas besoin de stocker tous les mails, juste un résumé qui grossit intelligemment.
+Donc le bot construit une mémoire compressée au fil du temps. Un résumé qui grossit intelligemment suffit, sans stocker tous les mails.
 
-Et ces fichiers JSON ? Ben... ils sont stockés dans git aussi, dans le runtime tag. Git partout xD
+Et ces fichiers JSON ? Ben... ils sont stockés dans git aussi, dans le runtime tag. Git partout.
 
 ---
 
-## Le truc malin avec la longueur du prompt
+## Le point malin avec la longueur du prompt
 
 Petit détail technique qui m'a fait sourire. 
 
@@ -379,12 +379,12 @@ Et ça recommence dans 5 minutes. Pour toujours. Gratos.
 
 ---
 
-**Les 3 trucs à retenir :**
+**Les 3 points à retenir :**
 
-1. **Git = base de données gratuite** -- Un tag orphelin peut stocker ton état persistant entre deux runs stateless. `git show refs/tags/X:fichier` pour lire, force-push pour écrire. Pas besoin de DB.
+1. **Git = base de données gratuite** -- Un tag orphelin peut stocker ton état persistant entre deux runs stateless. `git show refs/tags/X:fichier` pour lire, force-push pour écrire. Tu économises une DB complète.
 
 2. **Pré-compile dans un tag runtime** -- Au lieu de `npm install` à chaque run du cron, stocke le code compilé + node_modules dans un tag git. Le cron démarre instantanément.
 
 3. **Un bot IA doit savoir se taire** -- Les triggers `<no_reply>` et `<manual_reply_required>` laissent l'IA décider de pas répondre ou de passer la main. Plus le filtrage anti-robot. Sinon tu crées une boucle de mails infinie.
 
-Serverless cron avec état persistant, IA, mémoire, le tout à 0€/mois. C'est complètement pété et j'adore xD
+Serverless cron avec état persistant, IA, mémoire, le tout à 0€/mois. C'est complètement pété et j'adore ce montage.

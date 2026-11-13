@@ -14,16 +14,16 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "ZBM/IH6971gFA/WDxwO6Toilrw/gg4shPmY5Sht4hF8kuGbzFBg6bhjQhUygn+WuR8WDU9hn2BGpkpaqtEdD8A=="
+author_sig: "xrGRl2kMl0tGA2f9Izml3cvef4cM0o6uPCcRUQZUY7s8mW6spCpP/lCOCN3eiqA/qwiV5z3b/2dNAyO238e7pA=="
 ---
 
 # Luna Protocol : mutualisation des cerveaux, classification émotionnelle, et routage intéressant/futile
 
-Dans les [deux](/articles/fr/luna-protocol-discord-bot) [articles](/articles/fr/luna-protocol-official-models) précédents, j'ai présenté Luna Protocol comme un bot Discord unique avec un système comportemental complexe et un modèle fine-tuné. Mais l'architecture a depuis bien évolué. Ce qui était un monolithe -- un seul processus Node.js qui gérait à la fois le bot Discord, le comportement, et les appels LLM -- s'est transformé en **quatre couches indépendantes**, chacune avec sa propre responsabilité, son propre langage, et son propre cycle de vie.
+Dans les [deux](/articles/fr/luna-protocol-discord-bot) [articles](/articles/fr/luna-protocol-official-models) précédents, j'ai présenté Luna Protocol comme un bot Discord unique avec un système comportemental complexe et un modèle fine-tuné. Mais l'architecture a depuis bien évolué. Ce qui était un monolithe : un seul processus Node.js qui gérait à la fois le bot Discord, le comportement, et les appels LLM, il s'est transformé en **quatre couches indépendantes**, chacune avec sa propre responsabilité, son propre langage, et son propre cycle de vie.
 
 Cette séparation a apporté des bénéfices inattendus : la mutualisation des "cerveaux" entre plusieurs plateformes, un système de classification émotionnelle qui ajuste dynamiquement les paramètres du LLM, et un routage intelligent des messages entre deux modèles selon l'importance perçue de la conversation.
 
-L'évolution ne s'est pas faite d'un coup -- elle a suivi un chemin organique. J'ai d'abord séparé le dossier `server/` du repo du bot, créant ainsi **Krystal** d'un côté et laissant **Jade** comme adaptateur Discord. Puis j'ai créé **Pixieglow** (adaptateur Matrix) en reprenant le `llm-core` et le bus d'événements de Jade. Ensuite est venu **Sapphire** pour introduire une classification GENERIC/SEMANTIC avec DistilBERT -- mais les résultats n'étaient pas concluants, je suis donc passé par des centroids d'embeddings, plus malléables pour l'enrichissement d'exemples et plus précis ; la classification est devenue FUTILE/INTERESSANT. J'ai finalement ajouté des centroids de **valence** et **arousal** pour réguler la température et le repeat penalty du LLM. Pour finir, j'ai dégagé tout le code redondant entre Jade et Pixieglow en créant **Emerald**, le cerveau mutualisé, transformant Jade et Pixieglow en simples clients socket-driven.
+L'évolution ne s'est pas faite d'un coup : elle a suivi un chemin organique. J'ai d'abord séparé le dossier `server/` du repo du bot, créant ainsi **Krystal** d'un côté et laissant **Jade** comme adaptateur Discord. Puis j'ai créé **Pixieglow** (adaptateur Matrix) en reprenant le `llm-core` et le bus d'événements de Jade. Ensuite est venu **Sapphire** pour introduire une classification GENERIC/SEMANTIC avec DistilBERT. Les résultats n'étaient pas concluants, je suis donc passé par des centroids d'embeddings, plus malléables pour l'enrichissement d'exemples et plus précis ; la classification est devenue FUTILE/INTERESSANT. J'ai finalement ajouté des centroids de **valence** et **arousal** pour réguler la température et le repeat penalty du LLM. Pour finir, j'ai dégagé tout le code redondant entre Jade et Pixieglow en créant **Emerald**, le cerveau mutualisé, transformant Jade et Pixieglow en simples clients socket-driven.
 
 En parallèle, j'ai tenu à jour un site web qui retrace l'avancement du projet : [protocol-luna.github.io](https://protocol-luna.github.io/).
 
@@ -46,8 +46,8 @@ Tout était dans le même processus, communiquant via des bus d'événements typ
 
 - **Impossible d'ajouter un client Matrix** sans dupliquer tout le code de comportement
 - **Le LLM et le bot étaient dans le même repo** : le dossier `server/` existait déjà, mais impossible de faire évoluer l'un sans toucher à l'autre
-- **Pas de classification intelligente** : chaque message était traité de la même façon, qu'il s'agisse d'un "lol" ou d'une question existentielle
-- **Pas d'état émotionnel persistant** : le bot ne "ressentait" rien
+- **Traitement indifférencié** : chaque message était traité de la même façon, qu'il s'agisse d'un "lol" ou d'une question existentielle
+- **Amnésie émotionnelle** : le bot ne "ressentait" rien
 
 Le découpage en couches a résolu tous ces problèmes.
 
@@ -157,7 +157,7 @@ def classify(text, embedder, futile_centroids, interessant_centroids):
     return label, abs(diff), sim_f, sim_i
 ```
 
-Le score par classe est la **similarité cosinus maximale** parmi ses 10 centroids. Cela capture les sous-types dans chaque catégorie -- une salutation et un au revoir tombent tous deux près d'un des 10 centroids futiles même s'ils sont éloignés dans l'espace d'embedding. Pas d'entraînement, pas de GPU, juste du k-means au démarrage et des produits scalaires à l'exécution.
+Le score par classe est la **similarité cosinus maximale** parmi ses 10 centroids. Cela capture les sous-types dans chaque catégorie : une salutation et un au revoir tombent tous deux près d'un des 10 centroids futiles même s'ils sont éloignés dans l'espace d'embedding. Seulement du k-means au démarrage et des produits scalaires à l'exécution : sans entraînement, sans GPU.
 
 #### Pourquoi deux modèles ?
 
@@ -192,11 +192,11 @@ valence = sim(emb, positive) - sim(emb, negative)     # [-1, +1]
 arousal = sim(emb, high_arousal) - sim(emb, low_arousal)  # [-1, +1]
 ```
 
-**Valence** mesure si le message est positif ou négatif. **Arousal** mesure son intensité émotionnelle. Ensemble, ils forment le modèle circumplex de l'affect (Russell, 1980) -- le même modèle psychologique qui a inspiré le chatbot **PARRY** en 1972.
+**Valence** mesure si le message est positif ou négatif. **Arousal** mesure son intensité émotionnelle. Ensemble, ils forment le modèle circumplex de l'affect (Russell, 1980), le même modèle psychologique qui a inspiré le chatbot **PARRY** en 1972.
 
 #### Les variables de ressentiment : comment les émotions contrôlent le LLM
 
-C'est là que l'inspiration de PARRY devient tangible. PARRY (créé par Kenneth Colby en 1972) était un chatbot conçu pour simuler un patient paranoïaque. Il possédait des variables internes -- peur, colère, méfiance -- qui modifiaient ses réponses. Par exemple, un PARRY "effrayé" répondait de façon plus agressive.
+C'est là que l'inspiration de PARRY devient tangible. PARRY (créé par Kenneth Colby en 1972) était un chatbot conçu pour simuler un patient paranoïaque. Il possédait des variables internes (peur, colère, méfiance) qui modifiaient ses réponses. Par exemple, un PARRY "effrayé" répondait de façon plus agressive.
 
 Sapphire fait la même chose, mais avec des variables continues et une méthode plus élégante : les paramètres d'échantillonnage du LLM sont ajustés en temps réel selon l'état émotionnel de la conversation.
 
@@ -212,7 +212,7 @@ temperature = clamp(0.7 + arousal * 0.3, 0.4, 1.0)
 | 0.0 (neutre) | 0.70 | Créativité par défaut |
 | +1.0 (excité) | 1.00 | Maximum de randomité, réponses surprenantes |
 
-Quand quelqu'un est excité ou énervé (arousal élevé), la température monte. Le modèle produit des réponses plus variées, plus créatives, parfois plus chaotiques -- comme un humain qui "s'emballe". Quand la conversation est calme, la température baisse, les réponses sont plus posées.
+Quand quelqu'un est excité ou énervé (arousal élevé), la température monte. Le modèle produit des réponses plus variées, plus créatives, parfois plus chaotiques, comme un humain qui "s'emballe". Quand la conversation est calme, la température baisse, les réponses sont plus posées.
 
 ##### Le repeat penalty suit la valence
 
@@ -226,7 +226,7 @@ repeat_penalty = clamp(1.15 - valence * 0.1, 1.0, 1.3)
 | 0.0 (neutre) | 1.15 | Valeur par défaut |
 | +1.0 (positif) | 1.05 | Faible pénalité, permet les répétitions |
 
-Plus la conversation est négative, plus le modèle est poussé à éviter de se répéter -- comme quelqu'un qui cherche ses mots dans une dispute tendue. Plus la conversation est positive, plus le modèle peut se permettre des affirmations redondantes, comme une conversation détendue.
+Plus la conversation est négative, plus le modèle est poussé à éviter de se répéter, comme quelqu'un qui cherche ses mots dans une dispute tendue. Plus la conversation est positive, plus le modèle peut se permettre des affirmations redondantes, comme une conversation détendue.
 
 ##### L'état émotionnel cumulatif
 
@@ -251,7 +251,7 @@ class EmotionState:
 
 Le `decay` à 0.85 signifie que 85% de l'état précédent est conservé à chaque message, et 15% du nouveau signal est intégré. Cela donne une **mémoire émotionnelle** qui lisse les variations brutales : un seul message négatif ne rend pas le bot "triste", mais une série de messages négatifs fait progressivement dériver son humeur.
 
-En pratique : si quelqu'un commence une conversation de façon très excitée (`arousal=+0.8`), la température reste élevée pendant plusieurs échanges, même si les messages suivants sont plus calmes. L'émotion met du temps à redescendre -- comme un humain qui reste "chaud" après une dispute.
+En pratique : si quelqu'un commence une conversation de façon très excitée (`arousal=+0.8`), la température reste élevée pendant plusieurs échanges, même si les messages suivants sont plus calmes. L'émotion met du temps à redescendre, comme un humain qui reste "chaud" après une dispute.
 
 ---
 
@@ -293,7 +293,7 @@ Tout cela en moins de 3 secondes pour l'utilisateur.
 
 Le choix des centroids d'embeddings plutôt qu'un classifieur traditionnel (comme le DistilBERT que j'utilisais avant) mérite une explication.
 
-Un classifieur neuronal apprend une frontière de décision entre les classes -- typiquement une transformation non-linéaire qui projette les entrées vers des probabilités. Il est précis, mais :
+Un classifieur neuronal apprend une frontière de décision entre les classes, typiquement une transformation non-linéaire qui projette les entrées vers des probabilités. Il est précis, mais :
 
 - Il nécessite des données d'entraînement étiquetées
 - Il est sensible au changement de distribution (data drift)
@@ -302,9 +302,9 @@ Un classifieur neuronal apprend une frontière de décision entre les classes --
 
 Un centroid, en revanche, est un **vecteur moyen** d'embeddings d'exemples. La classification se fait par similarité cosinus à ce vecteur moyen. Avantages :
 
-- **Pas d'entraînement** : on calcule juste la moyenne d'embeddings d'exemples choisis à la main
+- **Aucun entraînement requis** : on calcule juste la moyenne d'embeddings d'exemples choisis à la main
 - **Facile à interpréter** : on peut regarder quels exemples sont les plus proches du centroid pour comprendre "ce que le centroid a appris"
-- **Ajout d'une classe** : on ajoute juste un nouveau centroid -- pas de ré-entraînement
+- **Ajout d'une classe** : on ajoute juste un nouveau centroid, sans ré-entraînement
 - **Robuste** : le centroid est une moyenne, donc les outliers ont peu d'impact
 
 Le vrai pouvoir des centroids, c'est qu'ils transforment un problème de classification en un problème de **mesure de distance spatiale**. On peut visualiser les catégories comme des régions dans un espace à 384 dimensions (ou en 2D/3D après réduction dimensionnelle PCA/t-SNE).
@@ -328,7 +328,7 @@ Les utilisateurs ne voient pas les couches, les centroids, ou les ajustements de
 - **Réponses plus rapides** pour les messages simples (le petit modèle est 2x plus rapide et gère 70% du trafic)
 - **Ton adaptatif** : si vous êtes énervé, le bot "sent" l'énervement et adapte son style
 - **Cohérence cross-plateforme** : un bot Matrix et un bot Discord partagent le même cerveau et le même état émotionnel
-- **Pas de "mode assistant"** : le fine-tune + few-shot + routage intelligent évite les réponses corporate
+- **Ton authentique préservé** : le fine-tune + few-shot + routage intelligent évite les réponses corporate
 
 Le passage à 200k échantillons d'entraînement pour le petit modèle a encore renforcé ces effets : le modèle capture mieux la diversité des conversations Discord sans perdre la malléabilité que permet le few-shot priming.
 
@@ -347,7 +347,7 @@ Voici les services qui tournent actuellement :
 | Krystal small | llama.cpp (PM2) | 3124 | Petit modèle (1.5B, futile) |
 | Krystal large | llama.cpp (PM2) | 3125 | Grand modèle (3B+, interessant) |
 
-Les dépendances entre services sont unidirectionnelles : l'adaptateur dépend d'Emerald, Emerald dépend de Sapphire, Sapphire dépend de Krystal. Pas de cycle. Chaque service peut être redémarré indépendamment.
+Les dépendances entre services sont unidirectionnelles : l'adaptateur dépend d'Emerald, Emerald dépend de Sapphire, Sapphire dépend de Krystal. Le graphe reste acyclique. Chaque service peut être redémarré indépendamment.
 
 ---
 

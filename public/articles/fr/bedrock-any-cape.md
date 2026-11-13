@@ -10,12 +10,12 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "5MPRjZ/h12n6yklmncPNNxctobPh/4tWuvZ0KtcJN4OFJGFU8dLlaCugAF3Lje3P3cgBbv8JTbFHkZtr9YQ1nQ=="
+author_sig: "6mQcWyLp5zErAtx5ikyNf5v8Mynl9i0qY+0jJ4ksoolmF4Vqs4JhRmH27zV/2tyqWdLwPeiFrcN6M0sO82PhbA=="
 ---
 
 # Comment obtenir n'importe quelle cape sur Minecraft Bedrock
 
-Sur Java, il existe plein de moyens tordus de se retrouver avec une cape qu'on ne devrait pas avoir (voir l'article sur `cape-mod`). Sur Bedrock, le jeu est différent, l'auth est différente, mais il existe quand même un moyen -- pas besoin de mod, pas besoin de toucher au moindre paquet réseau. Juste un launcher tiers et une version du jeu suffisamment vieille pour ne pas avoir la validation qu'on croit acquise.
+Sur Java, il existe plein de moyens tordus de se retrouver avec une cape qu'on ne devrait pas avoir (voir l'article sur `cape-mod`). Sur Bedrock, le jeu est différent, l'auth est différente, mais il existe quand même un moyen -- il te suffit d'un launcher tiers et d'une version du jeu suffisamment vieille pour ignorer la validation qu'on croit acquise.
 
 Voici comment faire, et ensuite on regarde ce qui se passe probablement sous le capot.
 
@@ -105,7 +105,7 @@ Le point clé, c'est que ce filtre a probablement été ajouté **après coup**,
 
 C'est la partie qui explique pourquoi ça survit à la réinstallation. Le choix de skin/cape sur Bedrock n'est pas juste un fichier local jetable -- il est probablement synchronisé sur le profil Xbox Live associé à ton compte Microsoft (le même système qui gère ton skin sur les autres plateformes Bedrock -- mobile, console, etc.). Quand tu sélectionnes une cape dans le vieux client, celui-ci envoie très probablement cette sélection au service de profil, exactement comme le ferait un client à jour avec une cape légitime -- parce que du point de vue du client, il n'y a aucune différence entre une cape « à toi » et une cape « choisie ». Le service de profil, lui, fait confiance au client sur ce point : il enregistre la sélection sans revalider si l'entitlement existe réellement derrière, du moins pas au moment de l'écriture.
 
-Résultat : quand tu relances le jeu officiel à jour, il va chercher ton skin/cape actuel sur le service de profil -- et le service renvoie fidèlement ce qui a été enregistré, cape non-légitime comprise. Le check d'entitlement, s'il existe, se fait probablement au moment de la **sélection** dans l'UI (d'où le filtre sur les clients récents), pas au moment de l'**affichage** de ce qui est déjà enregistré sur le profil.
+Résultat : quand tu relances le jeu officiel à jour, il va chercher ton skin/cape actuel sur le service de profil -- et le service renvoie fidèlement ce qui a été enregistré, cape non-légitime comprise. Le check d'entitlement, s'il existe, se fait probablement uniquement au moment de la **sélection** dans l'UI (d'où le filtre sur les clients récents), et laisse passer l'**affichage** de ce qui est déjà enregistré sur le profil.
 
 ### Le parallèle avec Java
 
@@ -120,7 +120,7 @@ Deux explications possibles, pas incompatibles entre elles :
 
 ## Conclusion
 
-Ce tuto tient en dix captures d'écran, mais il illustre un principe qu'on retrouve partout en sécurité logicielle : dès qu'un système historique (une vieille version de client, une API legacy, un service jamais mis à jour) peut encore écrire dans un état partagé, le contrôle d'accès du présent ne protège que ce qui passe par le présent. Tout ce qui peut encore parler à l'ancienne API contourne le filtre plus récent -- pas parce que le filtre est cassé, mais parce qu'il n'a jamais été appliqué à la version qui l'a précédé.
+Ce tuto tient en dix captures d'écran, mais il illustre un principe qu'on retrouve partout en sécurité logicielle : dès qu'un système historique (une vieille version de client, une API legacy, un service jamais mis à jour) peut encore écrire dans un état partagé, le contrôle d'accès du présent ne protège que ce qui passe par le présent. Tout ce qui peut encore parler à l'ancienne API contourne le filtre plus récent -- le filtre fonctionne sur les versions récentes, mais il n'a jamais été appliqué à la version qui l'a précédé.
 
 ---
 

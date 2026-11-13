@@ -12,14 +12,14 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "f9bUv8NeH+eNYuZNZ5z0PwVLpcZbuQwC4aieTqUVixPZJLLj4NvJ6e+nfI6ierG02+T1ghJyBjjYa2ixA69QLQ=="
+author_sig: "6zzfFrW4KT4SjD5k1QTbDzjfI/IRn13oe2Q8wpQTa6r0vMjVOL+6o7Mfbg5CX3ylOLpuprN9AOgBwg2s6kYidA=="
 ---
 
 ## Introduction
 
-Tu t'es déjà demandé si on pouvait faire tourner un serveur Minecraft sur un microcontrôleur à 1 balles ?
+Faire tourner un serveur Minecraft sur un microcontrôleur à 1 dollar, ça ressemble à une blague.
 
-Moi oui. Et la réponse c'est oui. Littéralement.
+Je me suis posé la question, et la réponse c'est oui. Littéralement.
 
 Y'a un projet qui s'appelle [Bareiron](https://github.com/p2r3/bareiron/), signé p2r3, et c'est probablement l'un des projets les plus fascinants que j'aie vus dans le monde Minecraft ces dernières années. On parle d'un binaire qui tient dans **300 kilooctets**, **6800 lignes de C**, zéro dépendance externe, pas de malloc, pas de threading, et ça tourne sur une **ESP32 à 1 dollar**.
 
@@ -100,7 +100,7 @@ uint32_t getChunkHash (short x, short z) {
 
 Il packe les 16 bits de X, 16 bits de Z, et 32 bits de seed, dans un buffer de 8 bytes, et il passe le tout dans `splitmix64`. Résultat : une valeur déterministe unique pour chaque position, basée sur la seed du monde.
 
-Tu captes la puissance du truc ? Le serveur n'a pas besoin de stocker le terrain. Il recalcule à la volée quand le joueur arrive dans une nouvelle zone, et ça donne exactement le même résultat à chaque fois.
+Tu captes la puissance du mécanisme ? Le serveur n'a pas besoin de stocker le terrain. Il recalcule à la volée quand le joueur arrive dans une nouvelle zone, et ça donne exactement le même résultat à chaque fois.
 
 Le `splitmix64` utilisé est un prng ultra-rapide conçu pour les hash 64 bits :
 
@@ -116,7 +116,7 @@ static uint32_t splitmix64 (uint64_t state) {
 }
 ```
 
-3 opérations : addition, xor/shift, multiplication, xor/shift, multiplication, xor/shift. Pas de lookup table, pas de boucle. Il prend le buffer de 8 bytes (X + Z + seed), le traite comme un entier 64 bits, et renvoie 32 bits de hash. C'est déterministe, rapide, et tient en 5 lignes.
+3 opérations : addition, xor/shift, multiplication, xor/shift, multiplication, xor/shift. Le tout tient en opérations directes, sans table ni boucle. Il prend le buffer de 8 bytes (X + Z + seed), le traite comme un entier 64 bits, et renvoie 32 bits de hash. C'est déterministe, rapide, et tient en 5 lignes.
 
 ### Pourquoi c'est pas du Perlin noise
 
@@ -168,7 +168,7 @@ uint8_t getTerrainBlock (int x, uint8_t y, int z) {
 }
 ```
 
-5 conditions. Une couche de grass/dirt/stone/deepslate/bedrock. Le bloc de surface dépend du biome via `biome_top[]` -- grass pour les plaines, sand pour le désert. Pas de boucle, pas de switch, une cascade de if qui tombe dans la bonne couche.
+5 conditions. Une couche de grass/dirt/stone/deepslate/bedrock. Le bloc de surface dépend du biome via `biome_top[]` -- grass pour les plaines, sand pour le désert. Une simple cascade de if tombe dans la bonne couche, ce qui remplace boucle et switch.
 
 ### Les grottes, mirror le plus paresseux
 
@@ -370,13 +370,11 @@ void generateChunk (uint8_t *chunk, short cx, short cz) {
 }
 ```
 
-C'est tout. 3 boucles imbriquées : pour chaque colonne, trouver la hauteur, remplir les blocs, passer à la suivante. La sortie est un `uint8_t[16384]` (8 × 8 × 256) qui représente le chunk complet. Pas de caching, pas de lazy loading, pas de compression -- le chunk est généré et envoyé direct au client.
+C'est tout. 3 boucles imbriquées : pour chaque colonne, trouver la hauteur, remplir les blocs, passer à la suivante. La sortie est un `uint8_t[16384]` (8 × 8 × 256) qui représente le chunk complet. Le chunk est généré puis envoyé direct au client, sans passer par du caching, du lazy loading ou de la compression.
 
 ## Le stockage : des arrays statiques partout
 
-L'architecture mémoire de Bareiron, c'est du C embarqué dans toute sa splendeur. Pas de malloc, pas de hash maps, pas de listes chaînées.
-
-Tout est dans des tableaux globaux de taille fixe.
+L'architecture mémoire de Bareiron, c'est du C embarqué dans toute sa splendeur : seuls des tableaux globaux de taille fixe, ni malloc, ni hash maps, ni listes chaînées.
 
 ### Les changements de blocs
 
@@ -409,6 +407,7 @@ uint8_t getBlockChange (short x, uint8_t y, short z) {
   }
   return 0xFF;
 }
+```
 
 Ajouter un changement est aussi direct que la recherche :
 
@@ -425,7 +424,7 @@ void addBlockChange (short x, short z, uint8_t y, uint8_t block) {
 }
 ```
 
-Un compteur, un index, une écriture. Pas de tri, pas de compaction, pas de gestion mémoire. Quand le tableau est plein, les nouveaux changements sont ignorés -- le terrain revient à son état généré.
+Un compteur, un index, une écriture. Le tableau se contente d'empiler : aucun tri, aucune compaction, aucune gestion mémoire. Quand le tableau est plein, les nouveaux changements sont ignorés -- le terrain revient à son état généré.
 
 Le commentaire de l'auteur sur la limite à 256 blocs : "je compte pas implémenter les escaliers en cuivre légèrement patinés cirés de si tôt."
 
@@ -443,7 +442,7 @@ typedef struct {
 } MobData;
 ```
 
-8 bytes. 16 emplacements max. Pas d'alignement, pas de padding. Le `data` byte est un bitfield maison : 5 bits de vie, 1 bit de tonte, 2 bits de timer de panique. Et quand un mob meurt, le champ Y devient un timer avant suppression. Réutilisation de mémoire au niveau du bit.
+8 bytes. 16 emplacements max. L'alignement et le padding passent à la trappe. Le `data` byte est un bitfield maison : 5 bits de vie, 1 bit de tonte, 2 bits de timer de panique. Et quand un mob meurt, le champ Y devient un timer avant suppression. Réutilisation de mémoire au niveau du bit.
 
 ### Les joueurs : packés serré
 
@@ -509,7 +508,7 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
 }
 ```
 
-Pas de jump table dynamique, pas de vtable, pas de map. Un switch compile en jump table statique. Parfait pour de l'embarqué.
+Un switch compile en jump table statique, ce qui remplace jump table dynamique, vtable et map. Parfait pour de l'embarqué.
 
 Le cas `0x1D-0x20` est le plus gros -- il gère les mises à jour de position, les dégâts de chute, les traversées de frontières de chunk, le spawn de mobs, la génération de chunks, ET la faim. Tout en un seul gros fall-through.
 
@@ -556,7 +555,7 @@ void handleServerTick (uint32_t delta) {
 }
 ```
 
-L'IA des mobs hostiles, c'est une comparaison de coordonnées. Littéralement `if (px < x) x--`. Pas de pathfinding, pas de A*, pas d'obstacle avoidance. Le zombie ajuste X et Z indépendamment vers le joueur -- il traverse les murs si y'en a.
+L'IA des mobs hostiles, c'est une comparaison de coordonnées. Littéralement `if (px < x) x--`. Le zombie ignore pathfinding, A* et obstacle avoidance : il ajuste X et Z indépendamment vers le joueur -- il traverse les murs si y'en a.
 
 Les dégâts de contact sont à 3 coeurs/sec. p2r3 l'a voulu élevé parce que l'absence de pathfinding rend les zombies faciles à kiter.
 
@@ -629,7 +628,7 @@ void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
 }
 ```
 
-Le premier check : si le flag `0x80` est levé, le buffer de craft est recyclé en pointeur de coffre. Pas de craft possible.
+Le premier check : si le flag `0x80` est levé, le buffer de craft est recyclé en pointeur de coffre. Le craft reste verrouillé.
 
 Ensuite, il compte les slots remplis, note le premier item, vérifie l'identité. Avec juste ça, tu mathes le fourneau en 4 checks :
 
@@ -714,6 +713,7 @@ if (player->saturation == 0) {
   player->saturation -= 1;
 }
 }
+```
 
 C'est littéralement ça. 5 lignes. Chaque packet de mouvement décrémente la saturation. Quand la saturation arrive à zéro, la faim baisse et on reset la saturation. Le sprint (flag `0x08`) double le drain.
 
@@ -790,7 +790,7 @@ Priorité aux changements, fallback sur le terrain. Zéro débat, zéro cache, z
 
 ### Le fourneau instantané
 
-Le plus drôle : le fourneau n'existe pas en tant qu'entité. Si tu poses du cobblestone dans la case "cuisson" et du coal dans "fuel", le résultat apparaît immédiatement. Pas de timer, pas de chunk ticking. C'est juste un slot d'inventaire qui se vide quand tu mets les bons items.
+Le plus drôle : le fourneau n'existe pas en tant qu'entité. Si tu poses du cobblestone dans la case "cuisson" et du coal dans "fuel", le résultat apparaît immédiatement, sans timer ni chunk ticking : c'est juste un slot d'inventaire qui se vide quand tu mets les bons items.
 
 ![Fourneau instantané -- pose les ingrédients, résultat immédiat](/images/bareiron/furnace.jpg)
 
@@ -828,12 +828,12 @@ Tout le code spécifique ESP32 est protégé par des `#ifdef ESP_PLATFORM`. Sur 
 
 Pour que tout ça tienne, y'a des features vanilla qui existent pas :
 
-- **Pas de compression réseau** -- zlib trop cher. Le serveur génère des chunks vite, mais les envoyer est le bottleneck.
-- **Pas de random ticks** -- les arbres poussent avec de la bone meal ou pas. Les mobs spawnent aux frontières de chunk.
-- **Pas d'entités item** -- les blocs minés vont direct dans l'inventaire. L'animation est purement visuelle.
+- **Zéro compression réseau** -- zlib trop cher. Le serveur génère des chunks vite, mais les envoyer est le bottleneck.
+- **Zéro random ticks** -- les arbres poussent avec de la bone meal ou pas. Les mobs spawnent aux frontières de chunk.
+- **Zéro entité item** -- les blocs minés vont direct dans l'inventaire. L'animation est purement visuelle.
 - **Aucune vérification d'inventaire** -- trust the client. 64 diamants ? OK. Un chunk miné en 1 sec ? OK. À utiliser entre gens de confiance.
-- **Pas de lumière serveur** -- les torches sont envoyées après tout le reste, le client calcule.
-- **Pas de fluides progressifs** -- état final instantané.
+- **Zéro lumière serveur** -- les torches sont envoyées après tout le reste, le client calcule.
+- **Zéro fluides progressifs** -- état final instantané.
 
 ## Le résultat final
 
@@ -858,10 +858,10 @@ Chaque ligne est un tradeoff :
 
 Chaque feature absente permet à une autre d'exister dans les limites du hardware.
 
-**Les 3 trucs à retenir :**
+**Les 3 points à retenir :**
 
 1. **Interpolation + RNG** -- 4 points seedés, terrain infini, zéro stockage, query sans regénérer le chunk, 200 ms de génération. C'est le move de génie qui rend tout le reste possible.
-2. **Chaque feature a un coût** -- Pas de compression, pas de random ticks, pas de validation. C'est pas des oublis, c'est ce qui permet de tenir dans 520 KB.
+2. **Chaque feature a un coût** -- L'absence de compression, de random ticks et de validation relève du choix assumé : c'est ce qui permet de tenir dans 520 KB.
 3. **Les hacks dégueus sont les plus intelligents** -- Coffres dans le tableau de blocs via memcpy, faim par packets de mouvement, fourneau instantané. La solution propre aurait été trop chère.
 
-Si le projet t'intéresse, tout est sur [GitHub en GPLv3](https://github.com/p2r3/bareiron/). C'est du C bien sale, et j'ai rarement pris autant de plaisir à lire un code source xD
+Si le projet t'intéresse, tout est sur [GitHub en GPLv3](https://github.com/p2r3/bareiron/). C'est du C bien sale, et j'ai rarement pris autant de plaisir à lire un code source.

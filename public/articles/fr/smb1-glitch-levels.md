@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "5CxhdckLbnPmdEHPAHlA7n68EcBJzjavUVx9MnE6lu0J6bjpfTwHCEj4rCeJ45Gr0Pv3aZxJ28ZeIQd/BIQyLg=="
+author_sig: "6V7u3DWZGQ3k6vgNT7Za5exoW+yZW3DAUf+He8G4UZ2xE0LNuJ3HNCsDqfr5XJdBejOLhzvDrBdbUC4e8aKlKg=="
 ---
 
 ## Introduction
@@ -243,7 +243,7 @@ LoadLevel:
   jsr DecompressTiles
 ```
 
-Pas de validation. Pas de check que le pointeur est valide. Le jeu lit l'adresse dans la table et décompresse ce qui se trouve à cette adresse, point final.
+Le jeu accorde une confiance totale aux pointeurs : il lit l'adresse dans la table et décompresse ce qui se trouve à cette adresse, point final.
 
 ![Level ID $06 (Water) -- 9-1, la version sous-marine de 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
 
@@ -395,7 +395,7 @@ Le plus célèbre des glitch worlds. Le Level ID $01 en AreaType 0 (eau) pointe 
 - **Tile pointer : $AE45** → la zone sous-marine de 2-2/7-2
 - **Sprite pointer : $A171** → les sprites de 2-2/7-2
 
-Le résultat : un niveau d'eau qui ressemble à 2-2, mais qui boucle à l'infini parce que le flagpole n'existe pas. Pas de fin de niveau, pas de sortie.
+Le résultat : un niveau d'eau qui ressemble à 2-2, mais qui boucle à l'infini parce que le flagpole n'existe pas. Le niveau tourne en boucle pour toujours.
 
 C'est le niveau 36-1 (ou 36-1 dans le monde $-1).
 
@@ -896,11 +896,11 @@ Les 256 glitch worlds existent parce que les **tables de pointeurs sont dimensio
 1. **Séparation tiles/sprites** : indépendance totale des deux couches, avec des ordres de stockage différents qui créent des Frankenstein levels uniques
 2. **Compression RLE + système d'objets** : les niveaux ne sont pas des bitmaps mais des listes d'objets placés, avec des floor patterns pour le sol
 3. **Queue 3 slots** : limite stricte du hardware (et du design de niveau)
-4. **Pas de validation** : le jeu fait confiance aux pointeurs et aux jump tables, ce qui produit soit des glitchs jouables, soit des crashs
+4. **Confiance totale aux pointeurs** : le jeu fait confiance aux pointeurs et aux jump tables, ce qui produit soit des glitchs jouables, soit des crashs
 5. **256 bytes max** : la limite du Y register 6502, qui fait que les données se répètent si on va trop loin
 6. **Warm start / cold start** : un système de "continuer" qui a ouvert la porte au cart swap Tennis → Mario
 
-Le plus beau : tout ça, c'est du code 6502 qui tient dans 40KB. Pas de couche d'abstraction, pas de validation d'accès mémoire, pas de gestionnaire d'exceptions. Si le pointeur est pourri, le jeu crashe. Et les crashs, on les appelle des glitch worlds.
+Le plus beau : tout ça, c'est du code 6502 qui tient dans 40KB. Le code dialogue directement avec le hardware et accorde une confiance totale à chaque accès mémoire. Si le pointeur est pourri, le jeu crashe. Et les crashs, on les appelle des glitch worlds.
 
 ## Les 3 trucs à retenir
 
@@ -912,4 +912,4 @@ Le plus beau : tout ça, c'est du code 6502 qui tient dans 40KB. Pas de couche d
 
 Les vidéos originales de [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) sont un putain de travail de fourmi -- le niveau de détail sur la désassemble 6502, les maps automatiques de tous les niveaux, les explications du cart swap et du warm start. Si t'as pas vu la série, mate-la, elle est courte et chaque minute est dense.
 
-Le code source des maps est dispo sur [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html), et le désassemble complet de SMB1 est open source sur plein de repos. Y'a 40 ans, des programmeurs japonais ont écrit ce système de niveau en 6502 avec zéro test unitaire et zéro bug tracker, et on continue d'apprendre des trucs en ouvrant leur code aujourd'hui.
+Le code source des maps est dispo sur [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html), et le désassemble complet de SMB1 est open source sur plein de repos. Y'a 40 ans, des programmeurs japonais ont écrit ce système de niveau en 6502 avec zéro test unitaire et zéro bug tracker, et on continue d'apprendre des techniques d'optimisation en ouvrant leur code aujourd'hui.

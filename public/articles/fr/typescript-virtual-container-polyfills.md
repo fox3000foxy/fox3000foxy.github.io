@@ -15,12 +15,12 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Bfit/wq3hztORnVKW30SKrt4SGGy335ZLjuXtLhUCpwRKxShH2vMh91CDnLHiWVYYH5V5Kw1EWqUmM9nqz9XSA=="
+author_sig: "zPij04L8v8oeXqZY8vwfz3KCmfHoKEEJBFiXpyfP8c8LTudsB7bfVqDdATqa3HPhcGgPP0Ff0/Rlt7y/qdWAIg=="
 ---
 
 # Faire tourner une bibliothèque Node.js dans le navigateur sans Wasm -- les polyfills de typescript-virtual-container
 
-J'ai récemment passé pas mal de temps à éplucher le code source de [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), le projet de [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Et la partie qui m'a le plus surpris, c'est pas le VFS, c'est pas le réseau virtuel, c'est pas les 170 commandes Unix réimplémentées en TypeScript. C'est le dossier `polyfills/`.
+J'ai récemment passé pas mal de temps à éplucher le code source de [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), le projet de [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Et la partie qui m'a le plus surpris, c'est le dossier `polyfills/`, encore plus que le VFS, le réseau virtuel ou les 170 commandes Unix réimplémentées en TypeScript.
 
 Parce que le module tourne dans le navigateur, sans Wasm, et que pour ça, Fortune a réimplémenté à la main toute la couche `node:*` dont la bibliothèque a besoin. Environ 640 lignes de JavaScript artisanal qui remplacent `node:fs`, `node:crypto`, `node:os`, `node:net`, et quelques autres.
 
@@ -151,7 +151,7 @@ export const process = {
 globalThis.process = process;
 ```
 
-Le mapping `nextTick` → `queueMicrotask` est le détail le plus important ici. `process.nextTick` dans Node.js schedule un callback à la fin de la phase courante de la boucle d'événements, avant les I/O. `queueMicrotask` dans le navigateur fait quelque chose de sémantiquement très proche -- il schedule une microtâche, qui s'exécute avant le prochain rendu ou événement. C'est pas identique, mais c'est suffisamment proche pour que tout le code qui utilise `nextTick` fonctionne correctement dans le browser.
+Le mapping `nextTick` → `queueMicrotask` est le détail le plus important ici. `process.nextTick` dans Node.js schedule un callback à la fin de la phase courante de la boucle d'événements, avant les I/O. `queueMicrotask` dans le navigateur offre une sémantique très proche : il schedule une microtâche, qui s'exécute avant le prochain rendu ou événement, et cette proximité suffit pour que tout le code qui utilise `nextTick` fonctionne correctement dans le browser.
 
 ---
 
@@ -272,7 +272,7 @@ const ok = timingSafeEqual(a, b);
 const key = scryptSync(password, salt, 32, { N: 16384 });
 ```
 
-Note : `scryptSync` est approximé via PBKDF2 avec un nombre d'itérations calé sur le paramètre `N`. C'est pas un vrai scrypt (qui utilise un schéma mémoire différent), mais pour les usages du projet c'est suffisant.
+Note : `scryptSync` est approximé via PBKDF2 avec un nombre d'itérations calé sur le paramètre `N`. Cette approximation remplace le schéma mémoire spécifique de scrypt et elle couvre les usages du projet.
 
 Les fonctions qui ne peuvent pas être émulées raisonnablement dans le browser (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`) lancent une erreur explicite si elles sont appelées. Comportement honnête.
 
@@ -334,13 +334,13 @@ export class Socket {
 
 Le point important : les méthodes de registre d'événements (`on`, `once`, `off`, `emit`) retournent `this` et ne lancent pas d'erreur. Ça permet au code qui fait `new net.Socket().on('connect', cb)` de fonctionner sans planter, même si la connexion ne se fait jamais. Seules les méthodes qui *tentent réellement de se connecter* lancent une erreur.
 
-`isIP`, `isIPv4`, `isIPv6` sont implémentés correctement (pas des stubs) car ils sont utilisés par le code réseau virtuel pour valider des adresses, sans jamais ouvrir de socket.
+`isIP`, `isIPv4`, `isIPv6` sont implémentés correctement (avec une vraie logique de validation) car ils sont utilisés par le code réseau virtuel pour valider des adresses, sans jamais ouvrir de socket.
 
 ---
 
 ## `node:path` -- POSIX path operations
 
-Réimplémentation complète des opérations de chemin POSIX, adaptée au contexte (pas de backslash Windows, chemins toujours absolus avec `/`).
+Réimplémentation complète des opérations de chemin POSIX, adaptée au contexte (chemins toujours absolus avec `/`, style Unix uniquement).
 
 ```js
 export const posix = {
@@ -503,7 +503,7 @@ export const parentPort = null;
 
 La prochaine fois que tu veux porter une bibliothèque Node.js dans le navigateur, voilà ce que l'approche de Fortune démontre :
 
-1. **Identifie ce qui est réellement utilisé.** Pas besoin d'implémenter `EventEmitter` en entier si le code n'utilise que `on`, `emit`, et `removeListener`.
+1. **Identifie ce qui est réellement utilisé.** Implémente seulement les méthodes appelées par le code : ici `on`, `emit` et `removeListener` suffisent pour `EventEmitter`.
 
 2. **Délègue aux APIs navigateur quand c'est possible.** `URL`, `URLSearchParams`, `MessageChannel`, `MessagePort`, `crypto.getRandomValues` -- le navigateur les a déjà, autant les utiliser.
 

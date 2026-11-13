@@ -6,7 +6,7 @@ tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
 lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "ZIWCsLaHl9fCqkkyI61a6nBMhYIiDb0WXZPRezje7zliS87+rtfP1AyFZOmbfO06CBGW3yfr7nJ8Z1x8ea/P0A=="
+author_sig: "Ie1h4ev/fkAIeTIRf0p7BsjLghW+64rzO3P18S76RuxHXmBSvGCuAYKgOZewCySSGTB/+6SZs1P8ICo0Q1zCxw=="
 ---
 
 # Chlone : six jours pour cloner ma façon de parler sur Discord
@@ -53,7 +53,7 @@ Je range l'héritage de Mimo, les rapports de test, les scénarios, les scripts 
 
 ### 08h48, 09h07 - le va-et-vient des intents
 
-Les `.pyc` partent au rebut et je fais un premier ménage sur la config, que je casse vingt minutes plus tard. Sans intents activés on reçoit pas le contenu des messages, donc retour en arrière, plus un script de lancement avec `run_watch_bot.sh`. Aller-retour en vingt minutes, c'est ça l'exploration, écrire un truc, casser et réécrire.
+Les `.pyc` partent au rebut et je fais un premier ménage sur la config, que je casse vingt minutes plus tard. Sans intents activés on reçoit pas le contenu des messages, donc retour en arrière, plus un script de lancement avec `run_watch_bot.sh`. Aller-retour en vingt minutes, c'est ça l'exploration, écrire un module, le casser et le réécrire.
 
 ### 09h13 → 09h58 - l'usinage du prompt
 
@@ -77,7 +77,7 @@ On ajoute les premiers `README.md` et une première doc à peu près lisible, pl
 
 ### 12h00 - les réflexes
 
-Une nouvelle section apparaît dans le STYLE, les réflexes. Un réflexe c'est un stimulus qui donne une réponse, sans réflexion, et la porte est ouverte à la connerie. Puis vient l'heure du déjeuner et LA question existentielle, est-ce que le bot répond Feur quand on lui dit quoi.
+Une nouvelle section apparaît dans le STYLE, les réflexes. Un réflexe c'est un stimulus qui donne une réponse, sans réflexion, et la porte est ouverte aux réponses imprévues. Puis vient l'heure du déjeuner et LA question existentielle, est-ce que le bot répond Feur quand on lui dit quoi.
 
 ### 13h03 - « quoi ? » -> « Feur »
 
@@ -103,7 +103,7 @@ Chaque pseudo reçu est préfixé d'un emoji par le système, un humain avec �
 
 ### 10h16 - les règles de ponctuation
 
-Je formalise dans le STYLE, pas de point final en conversation normale, point réservé aux situations sérieuses. C'est une règle absolue, parce qu'un clone qui met des points partout ça se sent direct. En vrai c'est un des trucs qui trahit le plus vite.
+Je formalise dans le STYLE, pas de point final en conversation normale, point réservé aux situations sérieuses. C'est une règle absolue, parce qu'un clone qui met des points partout ça se sent direct. En vrai c'est un des détails qui trahit le plus vite.
 
 ### 10h58 - les GIFs
 
@@ -135,7 +135,7 @@ Le rappel d'identité envoyé toutes les 5 messages devient trop présent, donc 
 
 ### 14h09 - le bot prend la parole tout seul
 
-Le bot arrête d'être un reflet, il peut parler sans être adressé quand le contexte déclenche quelque chose, et le fichier `behavior.py` naît avec 91 lignes. C'est là qu'on bascule de répondant à présence, parce qu'un vrai ami peut t'écrire en premier. Bah oui, sinon c'est juste un répondeur.
+Le bot arrête d'être un reflet, il peut parler sans être adressé quand le contexte déclenche quelque chose, et le fichier `behavior.py` naît avec 91 lignes. C'est là qu'on bascule de répondant à présence, parce qu'un vrai ami peut t'écrire en premier. Sans ça, le bot reste un simple répondeur.
 
 ### 14h20, 14h22 - fiabiliser la réponse
 
@@ -147,7 +147,7 @@ Le bot ne répond plus en 200ms comme un script, il laisse passer un délai d'in
 
 ### 23h45 - la popote du soir
 
-Il est presque minuit et je pousse une détection d'URL étendue aux domaines nus. Voilà le vrai flux de la journée, un truc brillant à 14h puis de la popote le soir parce que je suis encore dans la zone.
+Il est presque minuit et je pousse une détection d'URL étendue aux domaines nus. Voilà le vrai flux de la journée, une idée solide à 14h puis de la popote le soir parce que je suis encore dans la zone.
 
 **Fin du jour 2 : 61 commits cumulés. Le bot a une personnalité, des médias, des réflexes.**
 
@@ -171,7 +171,7 @@ Le bot se tait la nuit, dans une plage horaire calme configurable, désactivée 
 
 ### 08h46 - une réaction, pas un roman
 
-Pas assez fort pour mériter une phrase, alors une réaction. C'est de l'économie d'énergie sociale, et c'est très moi. Tkt, pas besoin de faire un pavé pour tout.
+Un message trop léger pour mériter une phrase reçoit une simple réaction. C'est de l'économie d'énergie sociale, et c'est très moi. Tkt, pas besoin de faire un pavé pour tout.
 
 ### 08h51 - PARRY, l'humeur
 
@@ -189,7 +189,7 @@ Le MLS débarque. Discord a récemment chiffré le flux audio de bout en bout, e
 
 Y'a eu des candidats par leaf-index avec backoff, le mapping des hooks SPEAKING, un essai en media type vidéo qui a raté, et le skip des ssrcs vidéo. J'ai abandonné la réponse vocale le temps de débugger, commentée mais pas supprimée, j'ai ajouté un mode de capture du handshake puis dumpé la structure des paquets qui échouent, comme un archéologue. Six layouts de nonce, des backoff, de l'introspection de groupe, j'ai mis le bot en debug total et j'ai ouvert chaque paquet pour voir ce qu'il y avait dedans.
 
-L'essentiel c'est pas que ça marche, c'est que j'ai rien jeté. La liste de commits est le carnet de laboratoire, chaque essai raté est archivé avec son hypothèse. C'est mon côté je garde tout, ça sert à un truc, qui a payé.
+L'essentiel c'est pas que ça marche, c'est que j'ai rien jeté. La liste de commits est le carnet de laboratoire, chaque essai raté est archivé avec son hypothèse. C'est mon côté je garde tout, ça finit toujours par servir, et cette fois ça a payé.
 
 ### 10h43 - le bot se découpe
 
@@ -223,11 +223,11 @@ Si quelqu'un lance la commande vocale, on traite pas le message comme un message
 
 ### 08h49 → 08h59 - l'âge adulte
 
-Documents légaux, licence propriétaire, code de conduite, guide de contribution et politique de sécurité, en anglais puis en français, avec un va-et-vient de corrections et un renommage de fichiers à la limite du pointilleux. J'ai passé des heures dessus et c'est le pan le moins amusant du repo, de loin. Mais faut le faire, tho.
+Documents légaux, licence propriétaire, code de conduite, guide de contribution et politique de sécurité, en anglais puis en français, avec un va-et-vient de corrections et un renommage de fichiers à la limite du pointilleux. J'ai passé des heures dessus et c'est le pan le moins amusant du repo, de loin. Mais il faut le faire, tho.
 
 ### 09h56 - le bot voit
 
-Les images jointes sont transcrites par OCR local et le texte est injecté dans le prompt. Pas d'API cloud, l'OCR tourne chez moi, j'envoie pas vos memes à un serveur tiers, même théoriquement.
+Les images jointes sont transcrites par OCR local et le texte est injecté dans le prompt. Aucune API cloud, l'OCR tourne chez moi, je n'envoie pas vos memes à un serveur tiers, pas même en théorie.
 
 ### 11h09 - le budget raisonnable
 
@@ -235,7 +235,7 @@ Révolution silencieuse dans le budget, quand le salon interdit les envois ou br
 
 ### 11h42 → 12h55 - la maison qui se refait
 
-Le grand balai, code mort supprimé, bugs d'envoi et d'auth corrigés, helpers factorisés. Les sessions trop vieilles sont expulsées, le cache des DMs expire et la détection de parole coûte moins cher. Des imports que j'avais cassés en déplaçant des trucs sont restaurés, et tout l'état runtime, sessions, auteurs vus, messages ignorés et humeur, survit aux redémarrages dans `data`.
+Le grand balai, code mort supprimé, bugs d'envoi et d'auth corrigés, helpers factorisés. Les sessions trop vieilles sont expulsées, le cache des DMs expire et la détection de parole coûte moins cher. Les imports que j'avais cassés en déplaçant des modules sont restaurés, et tout l'état runtime, sessions, auteurs vus, messages ignorés et humeur, survit aux redémarrages dans `data`.
 
 ### 14h41 - deux mondes, un bot
 
@@ -279,7 +279,7 @@ L'humeur PARRY n'est plus injectée à chaque message, une fois par état suffit
 
 ### 12h52 - v1.0.0
 
-Tag v1.0.0, signé en SSH. Changelog, runbook opérateur, kill-switch qui stoppe sans rien supprimer. Six jours, pile, entre le premier commit et la release. Bah oui, qui aurait cru ça le vendredi d'avant.
+Tag v1.0.0, signé en SSH. Changelog, runbook opérateur, kill-switch qui stoppe sans rien supprimer. Six jours, pile, entre le premier commit et la release. Personne n'aurait parié là-dessus le vendredi d'avant.
 
 ### 12h53 → 13h14 - la lessive
 
@@ -299,11 +299,11 @@ C'est le commit le plus drôle du repo et je le maintiens. Après six jours à d
 
 ## Les chiffres
 
-Les chiffres pour résumer, parce que j'aime bien quand c'est carré. On parle de 146 commits, 6 jours actifs du 11 au 18 septembre 2026, 65 fichiers trackés et autour de 4000 lignes de Python à la fin. Le score au test de style sur Mimo au début donne 9.1 sur 10, et la version finale c'est v1.0.0, tag signé SSH avec licence propriétaire. C'est assez simple en vrai, petit projet au début, gros truc à la fin.
+Les chiffres pour résumer, parce que j'aime bien quand c'est carré. On parle de 146 commits, 6 jours actifs du 11 au 18 septembre 2026, 65 fichiers trackés et autour de 4000 lignes de Python à la fin. Le score au test de style sur Mimo au début donne 9.1 sur 10, et la version finale c'est v1.0.0, tag signé SSH avec licence propriétaire. C'est assez simple en vrai, petit projet au début, grosse machine à la fin.
 
 ## Ce que je retiens de ces 6 jours
 
-D'abord l'ordre des priorités était n'importe quoi, et c'était la bonne méthode. J'ai d'abord fait un truc qui répond, puis un truc qui sonne juste, puis un truc qui est crédible, puis un truc qui est sûr, et enfin un truc distribuable. La personnalité avant la sécurité, le Feur avant la licence, on tiendrait pas ce rythme en suivant les règles des projets bien faits.
+D'abord l'ordre des priorités était n'importe quoi, et c'était la bonne méthode. J'ai d'abord fait un prototype qui répond, puis un bot qui sonne juste, puis un système crédible, puis un code sécurisé, et enfin un projet distribuable. La personnalité avant la sécurité, le Feur avant la licence, on tiendrait pas ce rythme en suivant les règles des projets bien faits.
 
 Ensuite le style c'est d'abord une liste de ne pas. Mon `STYLE.md` le plus utile décrit pas ce que je dis, il exclut ce que je fais pas, pas de point final, pas deux emojis, pas de `mdr` en majuscules, pas de phrases de robot en début de réponse. Les parasites de bot sont plus faciles à repérer que les traits de caractère à définir, et c'est pour ça que ça marche.
 
@@ -315,6 +315,6 @@ Et les derniers commits sont toujours drôles. Le 146e, celui qui ré-autorise `
 
 *Le projet n'est pas public : licence propriétaire, droits réservés. Mais l'historique, lui, je vous le raconte. Si vous croisez un jour un « ·Chloé » qui vous répond par un GIF de Patrick Jane après un temps d'inactivité parfaitement humain, vous savez maintenant ce qui se cache derrière.*
 
---- 
+---
 
 Vous avez tout lu ? Parce que c'est mon clone qui vous a écrit ça. Et il a fait un boulot impeccable, non ? La version originale est [ici](./article-chlone-timeline.md).

@@ -6,7 +6,7 @@ tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "réseau", "arc
 authors: ["docteur-turboss"]
 lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "LzDaODBWa3dp5QxKwketiHr0JTNPhlUOL54edjeAQJOdpxW2MGPvDZzoSxmo2zdishqypwiGav4Mjba/dX/9Bg=="
+author_sig: "akZc1dLEX3TJP4wd04moSa5q2ZxtSfsChuGNSW6YJ8/UDtVjysTNvcQ4h0PYfJr281Kkyu7ZZ/fADrEHYZhnIA=="
 ---
 # Le problème : trop de sigles, pas assez de hiérarchie
 
@@ -306,7 +306,7 @@ Trois garanties distinctes, souvent confondues :
     
 *   **Intégrité** : toute altération des données en transit est détectée.
     
-*   **Authentification** : mais dans le TLS classique, à sens unique : le client vérifie que le serveur est bien celui qu'il prétend être (via son certificat, signé par une autorité de confiance), mais le serveur ne vérifie rien sur l'identité du client. C'est exactement le modèle de HTTPS quand vous visitez un site : le navigateur authentifie le site, le site ne vous authentifie pas (l'authentification utilisateur passe par un mécanisme séparé, cookie de session, token).
+*   **Authentification** : mais dans le TLS classique, à sens unique : le client vérifie que le serveur est bien celui qu'il prétend être (via son certificat, signé par une autorité de confiance), mais le serveur ne vérifie rien sur l'identité du client. C'est exactement le modèle de HTTPS quand tu visites un site : le navigateur authentifie le site, le site ne t'authentifie pas (l'authentification utilisateur passe par un mécanisme séparé, cookie de session, token).
     
 
 TLS 1.3 (la version actuelle recommandée) a réduit le handshake à un seul aller-retour dans le cas courant, contre deux pour TLS 1.2, ce qui réduit sensiblement la latence de connexion.

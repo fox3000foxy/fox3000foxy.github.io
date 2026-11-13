@@ -11,16 +11,16 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "iWD9NhWuPEwHgI+EYpaY+tEEx7/Xwr89XITM3bY5jylM0DZoCNwos59ctPH95sBfEvdVf+W0jQIvUEUv4P2z+A=="
+author_sig: "a2EGbeHNkMN/8aeiDr5uEHo+4DPrw1w757vAfF4QWTH3iglNJu7giv8rRbtfVluyhvehSrAbDHpC64s7vr51mQ=="
 ---
 
 ## Introduction
 
 J'ai passé des heures à regarder des moutons se cogner dans des murs.
 
-Et honnetement ? Meilleur investissement de ma vie xD
+Et honnêtement ? Le meilleur investissement de ma vie.
 
-Parce que plus tu regardes ces mobs, plus tu réalises qu'ils n'ont rien d'aléatoire. Chaque mouvement est codé, prévisible, et surtout -- complètement cassable. J'ai fini par plonger dans le code source de Minecraft pour piger exactement comment le pathfinding marche, et ce que j'ai découvert c'est que tu peux littéralement mind-control les mobs. Genre, les forcer à aller où TU veux, pas là où le hasard décide.
+Parce que plus tu regardes ces mobs, plus tu réalises qu'ils n'ont rien d'aléatoire. Chaque mouvement est codé, prévisible, et surtout complètement cassable. J'ai fini par plonger dans le code source de Minecraft pour piger exactement comment le pathfinding marche, et ce que j'ai découvert c'est que tu peux littéralement mind-control les mobs. Genre, les forcer à aller où TU veux, pas là où le hasard décide.
 
 Ce guide c'est tout ce que j'ai appris en fouillant. L'IA, l'algorithme A*, les malus cachés, les exploits que tu peux balancer en survie. Prépare ta pioche.
 
@@ -30,7 +30,7 @@ Ce guide c'est tout ce que j'ai appris en fouillant. L'IA, l'algorithme A*, les 
 
 ### Les Goals
 
-Chaque mob a des *goals*. C'est une liste de trucs qu'il PEUT faire et à quel point il a ENVIE de les faire. Plus le nombre est petit, plus c'est prioritaire -- comme une todo list version chaos.
+Chaque mob a des *goals*. C'est une liste d'actions qu'il PEUT faire et à quel point il a ENVIE de les faire. Plus le nombre est petit, plus c'est prioritaire, comme une todo list version chaos.
 
 ```java
 protected void registerGoals() {
@@ -41,11 +41,11 @@ protected void registerGoals() {
 }
 ```
 
-T'as déjà vu un zombie ignorer un oeuf de tortue pour te courser dessus ? Voilà pourquoi : `ZombieAttackTurtleEggGoal` a priorité 4, alors que `ZombieAttackGoal` (le truc qui lui dit de te bouffer la tronche) est à priorité 2.
+T'as déjà vu un zombie ignorer un oeuf de tortue pour te courser dessus ? Voilà pourquoi : `ZombieAttackTurtleEggGoal` a priorité 4, alors que `ZombieAttackGoal` (le goal qui lui dit de te bouffer la tronche) est à priorité 2.
 
-Oui, un zombie préfère te manger plutôt que de casser un oeuf. C'est beau l'amour xD
+Oui, un zombie préfère te manger plutôt que de casser un oeuf. C'est beau l'amour.
 
-Le goal qui nous intéresse vraiment c'est `WaterAvoidingRandomStrollGoal`, priorité 7. Le "j'ai rien à foutre donc je marche au pif" goal. C'est là que commence le bordel.
+Le goal qui nous intéresse vraiment c'est `WaterAvoidingRandomStrollGoal`, priorité 7. Le "j'ai rien à foutre donc je marche au pif" goal. C'est là que tout devient intéressant.
 
 ### Le mouvement (ou "comment un random march a 1 chance sur 60 de se produire")
 
@@ -95,9 +95,9 @@ protected Vec3 getPosition() {
 }
 ```
 
-Regarde ces deux nombres à la fin : c'est le rayon XZ et le rayon Y. Dans l'eau, le mob cherche plus loin (15 au lieu de 10). Si il trouve pas de terre, il se rabat sur `super.getPosition()` qui accepte l'eau. **Résultat : les mobs VEULENT sortir de l'eau.** C'est pour ca que tes animaux nagent comme des malades vers le bord.
+Regarde ces deux nombres à la fin : c'est le rayon XZ et le rayon Y. Dans l'eau, le mob cherche plus loin (15 au lieu de 10). Si il trouve pas de terre, il se rabat sur `super.getPosition()` qui accepte l'eau. **Résultat : les mobs VEULENT sortir de l'eau.** C'est pour ça que tes animaux nagent comme des malades vers le bord.
 
-P'tit détail croustillant : y'a littéralement 0.1% de chance que le mob prenne `super.getPosition()` au lieu de `LandRandomPos`. Un pour mille. Mojang quoi xD
+P'tit détail croustillant : y'a littéralement 0.1% de chance que le mob prenne `super.getPosition()` au lieu de `LandRandomPos`. Un pour mille. C'est du Mojang typique.
 
 ### LandRandomPos : l'optimisation pourrie qui change tout
 
@@ -144,7 +144,7 @@ public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<Bl
 }
 ```
 
-La position avec le meilleur score GAGNE. Et si on connaît les critères de score, on peut faire gagner la position qu'on veut. C'est comme truquer une election.
+La position avec le meilleur score GAGNE. Et si on connaît les critères de score, on peut faire gagner la position qu'on veut. C'est comme truquer une élection.
 
 ---
 
@@ -176,9 +176,9 @@ public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
 }
 ```
 
-Genre les monstres c'est littéralement "si c'est éclairé, score négatif, je vais ailleurs". Ils font LA GUEULE a la lumière xD
+Genre les monstres c'est littéralement "si c'est éclairé, score négatif, je vais ailleurs". Ils font LA GUEULE à la lumière.
 
-Donc tu peux -- littéralement -- guider tes animaux avec de l'herbe et de la lumière, et tes monstres avec du noir. C'est débile et génial à la fois.
+Donc tu peux, littéralement, guider tes animaux avec de l'herbe et de la lumière, et tes monstres avec du noir. C'est débile et génial à la fois.
 
 ---
 
@@ -192,7 +192,7 @@ f(n) = g(n) + 1.5 × h(n)
 
 - **g(n)** = le chemin déjà parcouru (1 par bloc, ~1.41 en diagonale)
 - **h(n)** = la distance à vol d'oiseau
-- **1.5** = parce que Mojang aime les trucs un peu pétés
+- **1.5** = parce que Mojang aime les valeurs un peu pétées
 
 Normalement A* utilise `f(n) = g(n) + h(n)`. MOJANG A AJOUTÉ UN FACTEUR 1.5. Pourquoi ? Pour que l'algo aille plus vite vers la destination et coupe moins de branches de recherche. Résultat : le chemin trouvé est "bon" mais pas toujours le meilleur. C'est un A* un peu bourré.
 
@@ -210,7 +210,7 @@ flowchart LR
     style G color:#f44336
 ```
 
-Détail important : **un mob ne peut pathfinder que sur 16 blocs** (sa *follow range*). Si la destination est trop loin, il choisit le bloc le plus proche qu'il PEUT atteindre. Ça veut dire que tu peux créer un monolithe hors de portée, et le mob va pathfinder vers le bloc le plus proche qui le rapproche de ce monolithe -- making ses mouvements complètement prévisibles.
+Détail important : **un mob ne peut pathfinder que sur 16 blocs** (sa *follow range*). Si la destination est trop loin, il choisit le bloc le plus proche qu'il PEUT atteindre. Ça veut dire que tu peux créer un monolithe hors de portée, et le mob va pathfinder vers le bloc le plus proche qui le rapproche de ce monolithe, ce qui rend ses mouvements complètement prévisibles.
 
 ### Les deux exploits qui cassent le jeu
 
@@ -271,7 +271,7 @@ Imagine un villageois qui doit choisir entre plusieurs chemins.
 - **Chemin B** : 18 blocs avec 2 blocs d'eau (+8) et 1 bloc adjacent d'eau (+8)
 - **Chemin C** : 14 blocs tout droits... mais avec du feu -> IMPASSABLE pour un villageois
 - **Chemin D** : 16 blocs avec 1 bloc adjacent magma (+8) + 1 bloc adjacent miel (+8)
-- **Chemin E** : 25 blocs mais des cactus partout (+8 partout) -> 90.82 de coût total LOL
+- **Chemin E** : 25 blocs mais des cactus partout (+8 partout) -> 90.82 de coût total
 
 Calcul mental :
 
@@ -281,7 +281,7 @@ Calcul mental :
 
 Le gagnant c'est souvent le **Chemin B** : le détour est rentable parce que l'eau est CHÈRE.
 
-Un villageois c'est essentiellement un calculateur de coûts avec des jambes xD
+Un villageois c'est essentiellement un calculateur de coûts avec des jambes.
 
 ### Chaque mob a ses goûts
 
@@ -294,13 +294,13 @@ T'as littéralement des routes que certains mobs prennent et d'autres non. Tu pe
 
 ## Les villageois : le bazar ultime
 
-Ok, les villageois. C'est LE truc le moins compris de tout Minecraft. Mais une fois que t'as pogné le code, tu te rends compte que ce sont des machines prévisibles avec des horaires de bureau.
+Ok, les villageois. C'est LE système le moins compris de tout Minecraft. Mais une fois que t'as pogné le code, tu te rends compte que ce sont des machines prévisibles avec des horaires de bureau.
 
 ### Senseurs et mémoires
 
 9 senseurs, qui tournent toutes les 20 ticks (1 seconde). Chacun scrute un rayon autour du villageois et stocke le résultat en mémoire. Le villageois voit tout, se souvient de tout, et agit en fonction.
 
-Genre : "est-ce que y'a un ennemi ? un item par terre ? un joueur avec qui parler ?" -- il checke TOUT.
+Genre : "est-ce que y'a un ennemi ? un item par terre ? un joueur avec qui parler ?" Il checke TOUT.
 
 ### Les packages (ses phases de la journée)
 
@@ -332,7 +332,7 @@ Chaque POI a un nombre limité de slots :
 - **Lits** : 1 slot
 - **Cloches** : 32 slots
 
-Le truc DINGUE : **le slot est réservé au moment de l'acquisition, PAS à l'arrivée**. Un villageois peut verrouiller un composter depuis l'autre bout de la map, sans jamais l'atteindre.
+Le point DINGUE : **le slot est réservé au moment de l'acquisition, PAS à l'arrivée**. Un villageois peut verrouiller un composter depuis l'autre bout de la map, sans jamais l'atteindre.
 
 Tu captes la puissance ?
 
@@ -340,7 +340,7 @@ Tu captes la puissance ?
 
 1. Tu mets un villageois dans un minecart avec un chemin vers un composter
 2. Il acquiert le composter (slot pris, plus personne peut l'utiliser)
-3. Le villageois est trop loin pour cliquer dessus -- la bone meal reste
+3. Le villageois est trop loin pour cliquer dessus, la bone meal reste
 4. Tu BALADES ce villageois n'importe où dans le monde, il garde le slot
 5. Quand tu veux activer ton machin, tu T U E S le villageois
 6. Le slot se libère, un autre villageois acquiert le composter, retire la bone meal
@@ -348,7 +348,7 @@ Tu captes la puissance ?
 
 T'as littéralement créé un signal redstone sans fil, transmissible dans tout le monde, avec zéro chunk load nécessaire sur le chemin. Tu peux brancher ça sur une ender pearl stasis chamber, te faire téléporter depuis n'importe où en tuant un villageois.
 
-Mon utilisation préférée ? Un mini-jeu "bounty hunter" : tu mets plusieurs villageois avec des composters, le joueur doit tuer LE BON villageois pour activer la sortie. C'est complètement wtf comme mécanique xD
+Mon utilisation préférée ? Un mini-jeu "bounty hunter" : tu mets plusieurs villageois avec des composters, le joueur doit tuer LE BON villageois pour activer la sortie. C'est complètement wtf comme mécanique.
 
 ### Le Pathfinding Deadlock (ou "le villageois qui freeze pour toujours")
 
@@ -358,7 +358,7 @@ Y'a un bug TROP bon entre `Acquire POI` (qui voit un chemin) et la navigation r�
 - Navigation : "je peux pas marcher là"
 - Résultat : le villageois reste FIGÉ, pour toujours, à se battre avec lui-même.
 
-Littéralement des villageois frozen en place, utilisables comme décoration ou comme "props" dans des builds. Un tank à armure stand ? Oui. Un garde qui bouge pas ? Oui. Macabre ? Ptet. Mais efficace xD
+Littéralement des villageois frozen en place, utilisables comme décoration ou comme "props" dans des builds. Un tank à armure stand ? Oui. Un garde qui bouge pas ? Oui. Macabre ? Ptet. Mais efficace.
 
 ---
 
@@ -366,12 +366,10 @@ Littéralement des villageois frozen en place, utilisables comme décoration ou 
 
 Le pathfinding des mobs Minecraft c'est pas du hasard. C'est un système déterministe, basé sur des scores, prévisible ET pétable.
 
-**Les trois trucs à retenir :**
+**Les trois points à retenir :**
 
-1. **Des blocs sous les pieds = biais de hauteur** -- remplis ou vide le sous-sol pour guider les mobs
-2. **Les malus sont différents pour chaque mob** -- crée des routes que certains prennent et pas d'autres
-3. **Les POI slots sont réservés à distance** -- redstone sans fil gratuite, téléportation, tout ça
+1. **Des blocs sous les pieds = biais de hauteur** : remplis ou vide le sous-sol pour guider les mobs
+2. **Les malus sont différents pour chaque mob** : crée des routes que certains prennent et pas d'autres
+3. **Les POI slots sont réservés à distance** : redstone sans fil gratuite, téléportation, tout ça
 
 Le code source de Minecraft c'est une mine d'or de mécaniques sous-exploitées. J'ai passé des heures à lire du Java décompilé et franchement ? Chaque ligne est un Easter Egg fonctionnel. Sauf que ceux-là, tu t'en sers en survie pour faire de la redstone sans fil avec des villageois. Meilleur jeu confirmé.
-
-xD

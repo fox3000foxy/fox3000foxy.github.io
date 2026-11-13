@@ -10,16 +10,16 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "qYii04uIuUZ+RmjJZStFCslM8uZAYRj9trtxBymkrsD+XAlvgZpgux5cydwXyhBsLURZFF5o/e5jRvZnX8k4lQ=="
+author_sig: "2TRbmiD5inBK+aT2C+r/C+XFIp7i8R18JSWTGV+TSyBweMA3mutFrvF55+eWx8G/0euTuo0CAutOaF9KaU4HTg=="
 ---
 
-> **Note (2026) :** Ce projet n'est plus maintenu. Microsoft a considérablement renforcé sa détection anti-bot -- ce qui marchait à l'époque ne fonctionne plus aujourd'hui. Le code et l'approche décrits ci-dessous sont conservés à des fins d'archivage et de démonstration uniquement.
+> **Note (2026) :** Ce projet n'est plus maintenu. Microsoft a considérablement renforcé sa détection anti-bot, donc ce qui marchait à l'époque ne fonctionne plus aujourd'hui. Le code et l'approche décrits ci-dessous sont conservés à des fins d'archivage et de démonstration uniquement.
 
 ## Introduction
 
-J'ai découvert Microsoft Rewards il y a quelques années. C'était pendant le confinement, mais ça ne change rien au fait que j'étais obligé d'utiliser le contrôle parental Microsoft Family Safety et donc de passer par Edge. C'est là que j'ai découvert Rewards.
+J'ai découvert Microsoft Rewards il y a quelques années. C'était pendant le confinement, et à l'époque j'étais obligé d'utiliser le contrôle parental Microsoft Family Safety et donc de passer par Edge. C'est là que j'ai découvert Rewards.
 
-À l'époque j'avais seulement 14 ans et rien dans le catalogue ne m'intéressait. Maintenant je me dis qu'avec les compétences que j'ai acquises, je peux farmer des points avec des bots, puis donner les codes ou même les revendre moins cher si j'en ai vraiment envie (mais honnêtement, je pense pas le faire). Bref, je vais te raconter comment j'ai codé un bot qui farm des comptes à l'échelle.
+À l'époque j'avais seulement 14 ans et rien dans le catalogue ne m'intéressait. Maintenant je me dis qu'avec les compétences que j'ai acquises, je peux farmer des points avec des bots, puis donner les codes ou même les revendre moins cher si j'en ai vraiment envie (mais honnêtement, je pense pas le faire). Je vais te raconter comment j'ai codé un bot qui farm des comptes à l'échelle.
 
 ---
 
@@ -27,7 +27,7 @@ J'ai découvert Microsoft Rewards il y a quelques années. C'était pendant le c
 
 Pour faire court : c'est un programme qui récompense les utilisateurs d'Edge avec des points pour des activités comme les recherches, des petits quiz, des jeux, et une extension (mais ça c'est une autre histoire).
 
-Tu vois ici les trucs "Explore" :  
+Tu vois ici les blocs "Explore" :  
 ![Explore screenshot](assets/20260313_135010_image.png)
 
 Là par exemple c'est ce qu'ils appellent le "set du jour".  
@@ -36,13 +36,13 @@ Là par exemple c'est ce qu'ils appellent le "set du jour".
 Ils ont même fait un système de streak, c'est assez dingue.  
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-Y'a aussi un système de niveau et c'est juste complètement fun :  
+Y'a aussi un système de niveau et la progression rend la routine vraiment addictive :  
 ![Level screenshot](assets/20260313_135340_image.png)
 
 Donc t'as plein de façons de gagner des points, et la plupart sont quotidiennes.  
 L'idée ici ça va être de faire un bot qui fait les activités à ta place, pour farmer des points à l'échelle et compléter ta routine de farming.
 
-Comme tu peux le voir ci-dessous, la plupart des récompenses sont des cartes cadeaux, mais y'a aussi des trucs sympas comme des jeux ou des abonnements.  
+Comme tu peux le voir ci-dessous, la plupart des récompenses sont des cartes cadeaux, mais y'a aussi des options intéressantes comme des jeux ou des abonnements.  
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
 | Récompense | Catégorie | Coût en points |
@@ -82,7 +82,7 @@ Maintenant que tu comprends l'intérêt du programme, intéressons-nous au botti
 
 ## Premiers tests
 
-Avant de construire mon bot, je voulais être sûr que mon IP ne serait pas marquée pour avoir utilisé des centaines de comptes depuis la même adresse. Tu me connais, je vais utiliser Tor avec un proxy rotatif. Et je ne veux pas héberger mon bot sur un VPS -- je veux qu'il tourne dans une GitHub Action.
+Avant de construire mon bot, je voulais être sûr que mon IP ne serait pas marquée pour avoir utilisé des centaines de comptes depuis la même adresse. Tu me connais, je passe par Tor avec un proxy rotatif. Je veux l'exécuter dans une GitHub Action plutôt que sur un VPS.
 
 Donc j'ai écrit un workflow simple :
 
@@ -145,7 +145,7 @@ Les stats de temps étaient :
 Un deuxième run a donné ce résultat :  
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-Comme tu peux le voir, les IP sont différentes, donc on se fera pas flag pour utilisation abusive depuis la même IP. Bonne nouvelle -- on peut continuer à développer le bot de farming.
+Comme tu peux le voir, les IP sont différentes, donc on évite un marquage pour utilisation abusive depuis la même IP. Bonne nouvelle : on peut continuer à développer le bot de farming.
 
 ---
 
@@ -224,5 +224,5 @@ After navigation: title= Bienvenue dans Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-Ok, ça veut dire qu'on est pas encore connecté, donc maintenant on va construire la requête de login et voir si on peut se connecter à notre compte Microsoft Rewards pour faire les activités.
+Ce résultat confirme qu'on est encore déconnecté, donc maintenant je vais construire la requête de login et tester la connexion à mon compte Microsoft Rewards pour automatiser les activités.
 <!-- ## CET ARTICLE EST ENCORE EN COURS DE RÉDACTION, JE METTRAI À JOUR AVEC LES ÉTAPES DE CONNEXION ET DE BOTTING DES ACTIVITÉS BIENTÔT ! RESTE À L'ÉCOUTE. -->

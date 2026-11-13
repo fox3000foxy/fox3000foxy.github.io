@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "NIBqe/JEAPiMvAyuSFBKCJzjsPo8OVItKy9t0CEDrZAo4W63X8+aj1RrPMw5CsqzUcLPQwkbg74CJ5jJLRyCYQ=="
+author_sig: "kf0DYpSXXmDqnvMo9c04/y+t+ZcwBq+bzikmcFQV+zV3FqSL9GdtdnJK6568FGnc/pNa6ktSle9j+CAGZzwUjg=="
 ---
 
 ## UTAU : comment un logiciel en Visual Basic 6 a démocratisé la voix synthétique
@@ -20,11 +20,11 @@ J'en avais touché un mot sur ma page principale : j'aime UTAU. Voici pourquoi.
 
 En 2008, si tu voulais faire chanter une voix synthétique, t'avais une option : VOCALOID. Le logiciel de Yamaha. Cher, propriétaire, avec des voix officielles que tu pouvais pas créer toi-même.
 
-Et puis y'a un mec japonais, Ameya/Ayame, qui a sorti un truc dans son coin. Un logiciel codé en **Visual Basic 6**. Gratuit. Qui te laissait créer ta propre voix avec... des fichiers WAV que t'enregistrais toi-même.
+Et puis y'a un mec japonais, Ameya/Ayame, qui a sorti un programme dans son coin. Un logiciel codé en **Visual Basic 6**. Gratuit. Qui te laissait créer ta propre voix avec... des fichiers WAV que t'enregistrais toi-même.
 
-Ce truc s'appelle **UTAU** (歌う, "chanter" en japonais). Et pour son époque, c'était de la magie.
+Ce logiciel s'appelle **UTAU** (歌う, "chanter" en japonais). Et pour son époque, c'était de la magie.
 
-J'ai toujours trouvé ce logiciel fascinant. Pas parce qu'il était propre techniquement (spoiler : en fait si, fallait vraiment y penser à créer ce truc d'encu... c'est un beau bordel, je pleure sur ce poulet), mais parce qu'il a fait un truc que personne d'autre faisait : il a donné la synthèse vocale au grand public. Genre toi, moi, n'importe qui avec un micro.
+Je l'ai toujours trouvé fascinant pour son idée de départ plus que pour sa propreté technique (le principe d'encodage reste vraiment astucieux, même si l'implémentation pique les yeux) : il a ouvert la synthèse vocale au grand public. Toi, moi, n'importe qui avec un micro.
 
 Laisse-moi t'expliquer pourquoi c'était génial.
 
@@ -54,9 +54,9 @@ Ameya a regardé cette galère et a codé l'outil pour l'automatiser. À la base
 
 ## Pourquoi c'était révolutionnaire : TU crées la voix
 
-Voilà le truc qui change tout.
+Voilà ce qui change tout.
 
-VOCALOID, tu achetais une voix. Miku, Luka, etc. Créées par des pros, vendues par Yamaha. Pas moyen d'en faire une toi-même. UTAU, **n'importe qui enregistre sa voix et en fait un instrument chantant**.
+VOCALOID, tu achetais une voix. Miku, Luka, etc. Créées par des pros, vendues par Yamaha. La création restait réservée à Yamaha. Avec UTAU, **n'importe qui enregistre sa voix et en fait un instrument chantant**.
 
 Le mode CV (le plus simple) c'est : t'enregistres les ~100 syllabes de base du japonais ("a", "ka", "sa", "ta"...), tu configures les points de découpe, et voilà ta voicebank. Quelques heures de boulot.
 
@@ -129,16 +129,16 @@ Et il est **modulaire**. UTAU venait avec un resampler de base, mais la communau
 
 ---
 
-## Le bordel sous le capot (et pourquoi c'est attachant)
+## Le chantier sous le capot (et pourquoi c'est attachant)
 
-Faut être honnête sur l'état technique du bouzin :
+Je dois être honnête sur l'état technique du logiciel :
 
 - **Codé en Visual Basic 6.** Un langage déjà mort en 2008. Faut le runtime VB6 pour le faire tourner.
 - **Windows only à la base** (le portage Mac, UTAU-Synth, est venu en 2011).
 - **Encodage Shift-JIS obligatoire.** Si tes fichiers sont pas encodés en Shift-JIS japonais, UTAU comprend rien. Encore aujourd'hui faut souvent mettre son PC en locale japonaise ou utiliser AppLocale pour le lancer.
 - **Interface austère**, documentation quasi 100% en japonais à l'époque.
 
-Et pourtant. Pourtant ce truc a créé un mouvement mondial. Des dizaines de milliers de voicebanks. Des chansons écoutées des millions de fois.
+Et pourtant. Pourtant ce logiciel a créé un mouvement mondial. Des dizaines de milliers de voicebanks. Des chansons écoutées des millions de fois.
 
 Le meilleur exemple : **Kasane Teto**. Un personnage créé en 2008 et balancé comme un canular du 1er avril, en se faisant passer pour une VOCALOID. C'était une blague. Sauf que les gens ont adoré le personnage, une vraie voicebank UTAU a été créée derrière, et Teto est devenue une des chanteuses virtuelles les plus célèbres au monde. En 2023 elle a même eu droit à une voix Synthesizer V officielle. Un personnage né d'un poisson d'avril sur un logiciel gratuit.
 
@@ -150,13 +150,13 @@ UTAU c'est l'exemple parfait d'une techno "pauvre" qui gagne par l'ouverture.
 
 VOCALOID était techniquement supérieur, mieux financé, plus pro. Mais fermé. UTAU était bricolé, moche, en VB6 -- mais il laissait tout le monde participer. Créer des voix, créer des resamplers, créer des plugins, créer des méthodes d'enregistrement. La communauté a fait le reste.
 
-Et le concept survit complètement aujourd'hui. **OpenUtau**, un successeur open-source moderne, reprend l'idée et la dépoussière (multi-plateforme, UTF-8, support des resamplers modernes ET de l'IA). La synthèse concaténative tient encore debout à côté des modèles deep learning, parce qu'elle a un truc qu'ils ont pas : tu comprends exactement ce qui se passe, et tu contrôles chaque milliseconde.
+Et le concept survit complètement aujourd'hui. **OpenUtau**, un successeur open-source moderne, reprend l'idée et la dépoussière (multi-plateforme, UTF-8, support des resamplers modernes ET de l'IA). La synthèse concaténative tient encore debout à côté des modèles deep learning, parce qu'elle a un avantage qu'ils n'ont pas : tu comprends exactement ce qui se passe, et tu contrôles chaque milliseconde.
 
-C'est ça qui m'a toujours plu dans UTAU. Tu vois exactement ce qui se passe. C'est pas une IA qui te crache un truc magique que tu comprends pas : t'as tes WAV, tes points de découpe, et c'est toi qui décides de tout. Quand ça sonne mal, tu sais pourquoi et tu peux corriger. J'aime ce genre de contrôle.
+C'est ça qui m'a toujours plu dans UTAU. Tu vois exactement ce qui se passe. C'est pas une IA qui te crache un résultat magique que tu comprends pas : t'as tes WAV, tes points de découpe, et c'est toi qui décides de tout. Quand ça sonne mal, tu sais pourquoi et tu peux corriger. J'aime ce genre de contrôle.
 
 ---
 
-**Les 3 trucs à retenir :**
+**Les 3 points à retenir :**
 
 1. **Synthèse concaténative = puzzle de voix** -- UTAU colle des petits échantillons WAV ensemble pour former des mots. Le `oto.ini` définit où couper et coller chaque son. Tu contrôles tout, à la milliseconde, sans boîte noire.
 
@@ -164,4 +164,4 @@ C'est ça qui m'a toujours plu dans UTAU. Tu vois exactement ce qui se passe. C'
 
 3. **Une bonne idée survit à son code** -- VB6, Shift-JIS, Windows only... et pourtant le concept tourne encore via OpenUtau. Une techno géniale peut être codée avec les pieds.
 
-Honnêtement, rien que pour Kasane Teto née d'un poisson d'avril, ce logiciel mérite le respect xD
+Honnêtement, rien que pour Kasane Teto née d'un poisson d'avril, ce logiciel mérite le respect.

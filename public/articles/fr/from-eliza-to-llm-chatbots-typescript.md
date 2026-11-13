@@ -19,16 +19,16 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "1kX+2DycB1dNn9x9f5Afnq4xl7frr4vqO83ry7k/Hz5fw1hygCEkhUPGY0Jsr5CMO02oFMZt5dKF+FPNKAswwA=="
+author_sig: "l0d0NKZz5CSU9GBtlQ+j/OzvwUHndZhSMSnElce1b30AA02jCFSF36uYBgWUZhG1ivoHgYit8bwlyA2COqqyHQ=="
 ---
 
 # Des ELIZA aux LLM : 60 ans d'IA conversationnelle, reconstruite en TypeScript
 
-En 1966, Joseph Weizenbaum écrivait 420 lignes de MAD-SLIP sur un IBM 7094 pour créer le premier chatbot de l'histoire. Le programme s'appelait **ELIZA**, et il simulait une psychothérapeute rogérienne avec des motifs de base et des permutations de phrases. Six décennies plus tard, l'IA conversationnelle est devenue un sujet grand public -- ChatGPT, Claude, Gemini sont dans toutes les conversations.
+En 1966, Joseph Weizenbaum écrivait 420 lignes de MAD-SLIP sur un IBM 7094 pour créer le premier chatbot de l'histoire. Le programme s'appelait **ELIZA**, et il simulait une psychothérapeute rogérienne avec des motifs de base et des permutations de phrases. Six décennies plus tard, l'IA conversationnelle est devenue un sujet grand public -- ChatGPT, Claude, Gemini sont dans toutes les conversations. Quand j'ai relu ce code d'origine, j'ai été frappé par son économie de moyens.
 
-Mais entre ces deux extrêmes, il y a eu **PARRY** (le chatbot paranoïaque, 1972), **ALICE** (le roi de l'AIML à 99 000 catégories, 1995), **Jabberwacky** (le premier à apprendre sans règles, 1997), et **Cleverbot** (son successeur industriel, 2008). Cinq programmes, cinq architectures, un seul problème : faire parler une machine.
+Mais entre ces deux extrêmes, il y a eu **PARRY** (le chatbot paranoïaque, 1972), **ALICE** (le roi de l'AIML à 99 000 catégories, 1995), **Jabberwacky** (le premier à apprendre sans règles, 1997), et **Cleverbot** (son successeur industriel, 2008). Je les vois comme cinq réponses radicalement différentes au même problème : faire parler une machine.
 
-Ce repo contient ces cinq bots, portés en TypeScript avec leurs données d'origine -- scripts ELIZA, dictionnaires PARRY, fichiers AIML d'ALICE. Chaque port est autonome, prêt à l'emploi, et documenté dans les moindres détails. L'objectif n'est pas seulement de les faire tourner : c'est de comprendre comment ils marchaient, pourquoi ils ont marqué l'histoire, et ce que leurs architectures respectives nous apprennent sur l'IA d'hier... et d'aujourd'hui.
+J'ai porté ces cinq bots en TypeScript avec leurs données d'origine -- scripts ELIZA, dictionnaires PARRY, fichiers AIML d'ALICE. Chaque port est autonome, prêt à l'emploi, et documenté dans les moindres détails. Mon objectif avec ce travail dépasse la simple exécution : je veux comprendre comment ils fonctionnaient, pourquoi ils ont marqué l'histoire, et ce que leurs architectures respectives révèlent sur l'IA d'hier... et d'aujourd'hui.
 
 ```bash
 bun run eliza    # Parle à ELIZA (1966)
@@ -39,13 +39,13 @@ bun run cleverbot # Parle à Cleverbot
 bun run meeting  # ELIZA vs PARRY automatique
 ```
 
-On va décortiquer chaque bot, regarder leur code, puis faire le pont avec les LLM modernes à travers les articles sur **Luna Protocol**.
+Je vais décortiquer chaque bot avec toi, regarder leur code, puis faire le pont avec les LLM modernes à travers les articles sur **Luna Protocol**.
 
 ---
 
 ## ELIZA (1966) : l'art de faire croire qu'on comprend
 
-Commençons par la plus ancienne, et probablement la plus impressionnante dans sa simplicité. ELIZA n'a **aucune intelligence** au sens moderne du terme. Pas de réseau de neurones, pas de statistiques, pas d'apprentissage. Juste des motifs textuels et un peu de permutation.
+Je commence par la plus ancienne, et à mes yeux la plus impressionnante par sa simplicité. ELIZA n'a **aucune intelligence** au sens moderne du terme. Elle fonctionne uniquement avec des motifs textuels et un peu de permutation.
 
 ### Le principe
 
@@ -85,7 +85,7 @@ Tu dis: "My mother hates me"
   → matche probablement "YOU" → nouvelle réponse
 ```
 
-C'est pour ça qu'ELIZA a l'air de comprendre la différence entre "je" et "tu" -- ce n'est pas de la compréhension, c'est une transformation mécanique parfaitement conçue.
+C'est pour ça qu'ELIZA donne l'impression de comprendre la différence entre "je" et "tu" : je vois là une transformation mécanique parfaitement conçue qui simule la compréhension.
 
 Voici le flux complet, de la frappe utilisateur à la réponse :
 
@@ -120,11 +120,11 @@ flowchart TD
 
 ### Ce qui la rendait crédible
 
-Weizenbaum a fait un choix de génie : **la psychothérapie rogérienne**. Cette approche consiste à refléter les propos du patient sans interpréter. "Je suis triste" → "Vous dites que vous êtes triste". C'est exactement ce qu'ELIZA sait faire -- et comme c'est une technique thérapeutique reconnue, personne ne trouve ça bizarre.
+Je considère le choix de Weizenbaum comme un coup de génie : **la psychothérapie rogérienne**. Cette approche consiste à refléter les propos du patient sans interpréter. "Je suis triste" → "Vous dites que vous êtes triste". C'est exactement ce qu'ELIZA sait faire, et comme cette technique thérapeutique est reconnue, personne ne trouve sa réponse étrange. Quand tu testes le bot, tu ressens directement cet effet miroir.
 
 ### Dans le port TypeScript
 
-Le port charge les scripts `.ela` (format S-expression d'origine), les parse entièrement (y compris l'encodage Hollerith -- un format de chaîne des années 60), et exécute le même cycle : uppercasing → split → keyword stack → décomposition → réassemblage → PRE/transforms.
+Dans mon port, je charge les scripts `.ela` (format S-expression d'origine), je les parse entièrement (y compris l'encodage Hollerith, ce format de chaîne des années 60), et j'exécute le même cycle : uppercasing → split → keyword stack → décomposition → réassemblage → PRE/transforms. J'ai voulu rester fidèle au comportement d'origine jusque dans les détails.
 
 [➡ Voir le code source](https://github.com/fox3000foxy/chatbots/tree/main/eliza)
 
@@ -132,7 +132,7 @@ Le port charge les scripts `.ela` (format S-expression d'origine), les parse ent
 
 ## PARRY (1972) : le premier chatbot avec des émotions
 
-Six ans après ELIZA, Kenneth Colby (psychiatre à Stanford) a créé PARRY : un chatbot qui simule un patient atteint de **schizophrénie paranoïde**. Là où ELIZA était un miroir vide, PARRY a un véritable **modèle émotionnel interne**.
+Six ans après ELIZA, Kenneth Colby (psychiatre à Stanford) a créé PARRY : un chatbot qui simule un patient atteint de **schizophrénie paranoïde**. Là où ELIZA fonctionnait comme un miroir vide, PARRY embarque un véritable **modèle émotionnel interne**. C'est ce contraste qui m'a le plus marqué en les portant l'un après l'autre.
 
 ### Le modèle émotionnel
 
@@ -181,11 +181,11 @@ CHEAT → "PEOPLE ARE ALWAYS TRYING TO CHEAT ME."
 MAFIA → "THE MAFIA IS OUT TO GET ME."
 ```
 
-Chaque mot-clé déclenche une réponse pré-écrite (via le pattern matching), et si l'interlocuteur suit le sujet, PARRY dérive progressivement vers son délire central de persécution. Une fois qu'un flare est "déclenché", il devient inactif (`deadFlares`) -- PARRY passe au suivant, simulant un interlocuteur qui creuse le sujet.
+Chaque mot-clé déclenche une réponse pré-écrite (via le pattern matching), et si tu suis le sujet, PARRY dérive progressivement vers son délire central de persécution. Une fois qu'un flare est "déclenché", il devient inactif (`deadFlares`) et PARRY passe au suivant, comme un interlocuteur qui creuse son sujet. J'aime beaucoup cette mécanique parce qu'elle crée une progression narrative avec très peu de code.
 
 ### Pourquoi PARRY est historique
 
-En 1972, PARRY a passé une variante du test de Turing : des psychiatres ont reçu des transcriptions de conversations avec PARRY et avec de vrais patients paranoïaques, et **n'ont pas pu les distinguer de façon fiable**. C'est le premier programme à y parvenir, 40 ans avant les LLM.
+En 1972, PARRY a passé une variante du test de Turing : des psychiatres ont reçu des transcriptions de conversations avec PARRY et avec de vrais patients paranoïaques, et **n'ont pas pu les distinguer de façon fiable**. C'est le premier programme à y parvenir, 40 ans avant les LLM. Je trouve cet exploit remarquable quand tu compares les moyens de l'époque avec ceux d'aujourd'hui.
 
 [➡ Voir le code source](https://github.com/fox3000foxy/chatbots/tree/main/parry)
 
@@ -193,7 +193,7 @@ En 1972, PARRY a passé une variante du test de Turing : des psychiatres ont re�
 
 ## RFC 439 : quand ELIZA rencontre PARRY
 
-Le 18 septembre 1972, deux programmes se sont parlé pour la première fois de l'histoire -- littéralement : c'est la **première conversation inter-IA** jamais enregistrée. ELIZA (tournant sur BBN à Boston) et PARRY (tournant à Stanford) ont conversé via l'ARPANET, relayés par des opérateurs humains qui tapaient la sortie de l'un vers l'entrée de l'autre. La transcription a été publiée comme **RFC 439** ("PARRY Encounters the DOCTOR").
+Le 18 septembre 1972, deux programmes se sont parlé pour la première fois de l'histoire, littéralement : c'est la **première conversation inter-IA** jamais enregistrée. ELIZA (tournant sur BBN à Boston) et PARRY (tournant à Stanford) ont conversé via l'ARPANET, relayés par des opérateurs humains qui tapaient la sortie de l'un vers l'entrée de l'autre. La transcription a été publiée comme **RFC 439** ("PARRY Encounters the DOCTOR"). Quand j'ai découvert ce document, j'ai compris qu'il marquait un moment fondateur pour notre domaine.
 
 Voici un extrait de ce à quoi ça ressemblait :
 
@@ -206,23 +206,23 @@ ELIZA: SUPPOSE YOU TELL ME ABOUT YOUR PARENTS.
 PARRY: THEY ARE ALWAYS AFRAID OF SOMETHING.
 ```
 
-C'est étonnamment cohérent. ELIZA fait son travail de thérapeute : reformuler, questionner, explorer. PARRY fait son travail de patient paranoïaque : se plaindre, accuser, exprimer de la méfiance. Les deux programmes sont parfaitement dans leur rôle -- non parce qu'ils "comprennent" la situation, mais parce que leurs mécanismes respectifs (patterns ELIZA + modèle émotionnel PARRY) produisent des réponses qui s'emboîtent par hasard.
+La cohérence de cet échange m'a surpris à la première lecture. ELIZA fait son travail de thérapeute : reformuler, questionner, explorer. PARRY fait son travail de patient paranoïaque : se plaindre, accuser, exprimer de la méfiance. Les deux programmes restent parfaitement dans leur rôle grâce à la combinaison de leurs mécanismes respectifs (patterns ELIZA + modèle émotionnel PARRY) qui produit des réponses qui s'emboîtent par hasard. Quand tu lis la transcription en entier, tu vois à quel point cet alignement accidentel crée l'illusion d'un dialogue intentionnel.
 
-Le repo peut reproduire cette conversation avec :
+Tu peux reproduire cette conversation avec mon repo :
 
 ```bash
 bun run meeting
 ```
 
-La simulation lance 25 tours automatiques entre les deux bots, avec un sujet de départ aléatoire (chevaux, crime organisé, émotions...). Comme ELIZA et PARRY ont tous deux des éléments non-déterministes (round-robin ELIZA, randomisation PARRY), chaque exécution produit un échange différent.
+Ma simulation lance 25 tours automatiques entre les deux bots, avec un sujet de départ aléatoire (chevaux, crime organisé, émotions...). Comme ELIZA et PARRY embarquent tous deux des éléments non-déterministes (round-robin ELIZA, randomisation PARRY), chaque exécution produit un échange différent. J'adore relancer la commande plusieurs fois pour comparer les trajectoires.
 
-Ce qui est frappant avec ELIZA vs PARRY, c'est qu'on a deux programmes -- l'un sans état interne, l'autre avec un modèle émotionnel complet -- qui produisent ensemble une conversation qui **ressemble** à quelque chose de délibéré. Pour 1972, c'était sidérant.
+Ce qui me frappe avec ELIZA vs PARRY, c'est la rencontre entre deux programmes, l'un avec une architecture sans état interne, l'autre avec un modèle émotionnel complet, qui produisent ensemble une conversation qui **ressemble** à quelque chose de délibéré. Pour 1972, je trouve le résultat sidérant.
 
 ---
 
 ## ALICE (1995) : le pattern matching à grande échelle
 
-ALICE (Artificial Linguistic Internet Computer Entity) a été créée par Richard Wallace en 1995, et a gagné le **Loebner Prize** trois fois (2000, 2001, 2004). Là où ELIZA avait quelques centaines de règles et PARRY quelques milliers, ALICE en a **99 524** -- réparties dans 66 fichiers AIML.
+ALICE (Artificial Linguistic Internet Computer Entity) a été créée par Richard Wallace en 1995, et a gagné le **Loebner Prize** trois fois (2000, 2001, 2004). Là où ELIZA avait quelques centaines de règles et PARRY quelques milliers, ALICE en a **99 524**, réparties dans 66 fichiers AIML. Quand j'ai ouvert ce corpus pour la première fois, j'ai mesuré ce que "grande échelle" voulait dire à l'époque.
 
 ### AIML : le langage des catégories
 
@@ -254,7 +254,7 @@ Input: "WHAT'S UP?"
     → pattern "HELLO" → template "Hi there!"
 ```
 
-C'est le mécanisme qui donne à ALICE sa flexibilité : au lieu d'écrire une réponse pour chaque formulation possible, on écrit une réponse canonique et on redirige les variations vers elle. La limite de profondeur est de 10 -- au-delà, ALICE abandonne pour éviter les boucles infinies (soigneusement évitées dans la conception des catégories, mais un filet de sécurité reste essentiel).
+C'est le mécanisme qui donne à ALICE sa flexibilité : au lieu d'écrire une réponse pour chaque formulation possible, tu écris une réponse canonique et tu rediriges les variations vers elle. La limite de profondeur est de 10 : au-delà, ALICE abandonne pour éviter les boucles infinies (la conception des catégories les évite soigneusement, et ce filet de sécurité reste essentiel). Je trouve ce choix de conception élégant parce qu'il factorise des milliers de formulations avec très peu de règles.
 
 ### Comment ALICE matche les patterns
 
@@ -274,7 +274,7 @@ function findMatch(input: string, categories: Category[]): Match | null {
 
 ### Pourquoi ALICE a dominé les Loebner
 
-99 524 catégories, c'est un nombre qui change tout. ELIZA avait l'air intelligente parce que ses quelques règles étaient bien conçues pour un contexte spécifique (la thérapie). ALICE couvre tellement de sujets qu'elle donne l'impression d'avoir une vraie culture générale : sciences, politique, humour, sports, émotions, tout y est.
+99 524 catégories, c'est un nombre qui change tout. ELIZA donnait l'illusion de l'intelligence parce que ses quelques règles étaient bien conçues pour un contexte spécifique (la thérapie). ALICE couvre tellement de sujets qu'elle donne l'impression d'avoir une vraie culture générale : sciences, politique, humour, sports, émotions, tout y est. Je retiens de cette approche une leçon que j'applique encore : une couverture large et soignée compense l'absence de raisonnement profond.
 
 [➡ Voir le code source](https://github.com/fox3000foxy/chatbots/tree/main/alice)
 
@@ -282,11 +282,11 @@ function findMatch(input: string, categories: Category[]): Match | null {
 
 ## Jabberwacky (1997) & Cleverbot (2008) : la rupture épistémologique
 
-Tous les bots précédents partagent une hypothèse : **il faut écrire les réponses**. ELIZA a ses règles S-expressions, PARRY ses patterns sélécifs, ALICE ses catégories AIML. Rollo Carpenter a pris le contre-pied total : **et si on n'écrivait rien du tout ?**
+Tous les bots précédents partagent une hypothèse : **il faut écrire les réponses**. ELIZA a ses règles S-expressions, PARRY ses patterns sélécifs, ALICE ses catégories AIML. Rollo Carpenter a pris le contre-pied total avec une question radicale : **et si on laissait les conversations passées fournir les réponses ?** Je trouve ce renversement audacieux parce qu'il abandonne toute écriture manuelle de règles.
 
 ### L'idée
 
-Jabberwacky (lancé vers 1997, devenu Cleverbot en 2008) ne stocke **aucune règle**. Il stocke **tout l'historique des conversations** dans un transcript plat, et quand quelqu'un lui parle, il cherche dans cet historique le moment le plus similaire et reuse ce qui a été dit après :
+Jabberwacky (lancé vers 1997, devenu Cleverbot en 2008) repose entièrement sur **tout l'historique des conversations** stocké dans un transcript plat, et quand quelqu'un lui parle, il cherche dans cet historique le moment le plus similaire et réutilise ce qui a été dit après :
 
 ```
 Utilisateur: "hello"
@@ -298,11 +298,11 @@ Oui, dans la session #3, ligne 14, quelqu'un a dit "hello" et le bot a répondu 
 Répondre: "hi there!"
 ```
 
-Pas de motif. Pas de grammaire. Pas d'XML. Juste une archive géante de choses que des gens se sont dites, réutilisée au moment opportun. C'est la définition même de l'émergence.
+Tu trouveras ici uniquement une archive géante de choses que des gens se sont dites, réutilisée au moment opportun. J'y vois la définition même de l'émergence : un comportement conversationnel naît d'une accumulation de traces humaines.
 
 ### L'implémentation TypeScript
 
-Le port TypeScript reproduit cette architecture exacte :
+Mon port TypeScript reproduit cette architecture exacte :
 
 ```mermaid
 flowchart TD
@@ -321,7 +321,7 @@ flowchart TD
     L --> M
 ```
 
-Voici le cœur du scoring -- notre propre heuristique inspirée des descriptions publiques de Cleverbot :
+Voici le cœur du scoring, avec ma propre heuristique inspirée des descriptions publiques de Cleverbot :
 
 ```typescript
 const score = 0.65 * relevance + 0.25 * contextFit + 0.10 * recencyBonus;
@@ -331,7 +331,7 @@ const score = 0.65 * relevance + 0.25 * contextFit + 0.10 * recencyBonus;
 - **contextFit** (0.25) : similarité entre la conversation récente et ce qui précédait la ligne historique
 - **recencyBonus** (0.10) : les souvenirs récents comptent un peu plus (la personnalité du bot dérive avec le temps)
 
-Le pick est probabiliste (roulette-wheel selection) : le meilleur candidat gagne plus souvent, mais pas toujours -- ce qui donne de la variété.
+Le pick est probabiliste (roulette-wheel selection) : le meilleur candidat gagne plus souvent, avec une part de variabilité qui donne de la variété. J'apprécie ce choix parce qu'il rend les conversations moins prévisibles quand tu testes le bot plusieurs fois.
 
 ### Cleverbot : les deux innovations documentées
 
@@ -347,7 +347,7 @@ const line = store.append("human", text, null, sessionId, false); // pending
 // ...consolidate() est appelée au démarrage, pas pendant la session
 ```
 
-Le port TypeScript implémente ces deux comportements : les lignes ont un flag `consolidated`, et chaque session de REPL commence par une consolidation des lignes en attente.
+Mon port TypeScript implémente ces deux comportements : les lignes ont un flag `consolidated`, et chaque session de REPL commence par une consolidation des lignes en attente.
 
 [➡ Voir le code source](https://github.com/fox3000foxy/chatbots/tree/main/jabberwacky)
 
@@ -355,9 +355,9 @@ Le port TypeScript implémente ces deux comportements : les lignes ont un flag `
 
 ## Analyse du port TypeScript : concevoir une architecture commune
 
-Construire ces cinq bots dans le même langage, c'est se confronter à une question intéressante : **est-ce qu'on peut factoriser du code entre des architectures aussi différentes ?**
+Construire ces cinq bots dans le même langage m'a confronté à une question intéressante : **est-il possible de factoriser du code entre des architectures aussi différentes ?**
 
-La réponse est : très peu. Chaque bot a une boucle fondamentale différente :
+Ma réponse après les avoir tous portés : très peu. Chaque bot a une boucle fondamentale différente :
 
 | Bot | Boucle principale | Données | Apprentissage |
 |-----|------------------|---------|-------------|
@@ -371,21 +371,21 @@ Ce qu'ils partagent, c'est l'interface CLI et l'infrastructure TypeScript (biome
 
 ### Choix de conception communs
 
-**1. Fidélité aux données originales.** Pour ELIZA, PARRY et ALICE, on utilise les fichiers d'origine -- scripts ELIZA retrouvés dans les archives Weizenbaum en 2021, code original PARRY du PDP-10 (58 fichiers), AIML Free ALICE v1.6. Pas de traduction, pas de réécriture. Les bots se comportent comme les originaux parce qu'ils utilisent les mêmes données.
+**1. Fidélité aux données originales.** Pour ELIZA, PARRY et ALICE, j'utilise les fichiers d'origine, scripts ELIZA retrouvés dans les archives Weizenbaum en 2021, code original PARRY du PDP-10 (58 fichiers), AIML Free ALICE v1.6. Je les conserve dans leur forme d'origine. Les bots se comportent comme les originaux parce qu'ils utilisent les mêmes données.
 
-**2. Clean-room pour les parties propriétaires.** Jabberwacky et Cleverbot sont différents : leur code source n'a jamais été publié (Existor/Rollo Carpenter l'ont gardé propriétaire). Les ports sont donc des **clean-room reimplementations** -- construites uniquement à partir de descriptions publiques du comportement. Aucune ligne de code ni donnée propriétaire n'est copiée.
+**2. Clean-room pour les parties propriétaires.** Jabberwacky et Cleverbot posent un cas différent : leur code source n'a jamais été publié (Existor/Rollo Carpenter l'a gardé propriétaire). Mes ports sont donc des **clean-room reimplementations**, construites uniquement à partir de descriptions publiques du comportement. Je n'ai copié aucune ligne de code ni donnée propriétaire.
 
-**3. Dépendances minimales.** Le seul vrai prérequis, c'est TypeScript. ALICE utilise `dom-js` pour parser l'XML des fichiers AIML (66 fichiers, 99 524 catégories, le parsing XML fait maison serait une perte de temps). Tout le reste est vanilla TypeScript.
+**3. Dépendances minimales.** Le seul vrai prérequis, c'est TypeScript. ALICE utilise `dom-js` pour parser l'XML des fichiers AIML (66 fichiers, 99 524 catégories, le parsing XML fait maison serait une perte de temps). Tout le reste est en vanilla TypeScript. J'ai fait ce choix pour garder chaque bot lisible et facile à lancer quand tu clones le repo.
 
 ---
 
 ## Des chatbots symboliques aux LLM : le saut conceptuel
 
-Les cinq bots qu'on vient de voir partagent tous une caractéristique fondamentale : ils sont **symboliques**. Leurs "connaissances" sont stockées comme des symboles explicites -- motifs textuels, tables de règles, catégories XML, lignes de transcript. Il n'y a **aucune représentation numérique du langage** dans aucun de ces systèmes.
+Les cinq bots que je viens de te présenter partagent une caractéristique fondamentale : ils sont **symboliques**. Leurs "connaissances" reposent entièrement sur des symboles explicites : motifs textuels, tables de règles, catégories XML, lignes de transcript. Ils fonctionnent entièrement sans représentation numérique du langage.
 
-Ce qui signifie aussi qu'ils ont tous le même plafond de verre : ils ne peuvent répondre qu'à ce qui a été explicitement prévu ou enregistré. ELIZA est perdue si tu sors du cadre thérapeutique. PARRY ne peut pas parler de météo. ALICE n'apprend rien de ses conversations. Jabberwacky ne peut répondre que par des répliques déjà prononcées.
+Ils partagent donc le même plafond de verre : ils répondent uniquement à ce qui a été explicitement prévu ou enregistré. ELIZA est perdue si tu sors du cadre thérapeutique. PARRY parle uniquement de ses thèmes paranoïaques. ALICE n'apprend rien de ses conversations. Jabberwacky répond uniquement par des répliques déjà prononcées. Quand tu testes ces limites, tu comprends vite pourquoi cette génération a plafonné.
 
-Les LLM (Large Language Models) franchissent ce plafond en changeant radicalement de paradigme : au lieu de manipuler des symboles, ils convertissent le langage en **nombres** et apprennent des **relations statistiques** entre ces nombres. Ils ne stockent pas des réponses pré-écrites -- ils génèrent chaque token à la volée en calculant des probabilités. Voyons rapidement comment ça marche.
+Les LLM (Large Language Models) franchissent ce plafond en changeant radicalement de paradigme : au lieu de manipuler des symboles, ils convertissent le langage en **nombres** et apprennent des **relations statistiques** entre ces nombres. Ils génèrent chaque token à la volée en calculant des probabilités, à partir de connaissances encodées dans leurs poids plutôt que de réponses pré-écrites. Je trouve ce basculement fascinant parce qu'il inverse complètement la logique des bots précédents. Voyons rapidement comment ça marche.
 
 ### 1. Tokenization
 
@@ -406,7 +406,7 @@ Chaque token ID est converti en un **vecteur** -- un tableau de nombres flottant
 vecteur("roi")  − vecteur("homme") + vecteur("femme")  ≈  vecteur("reine")
 ```
 
-Cette propriété émerge de l'entraînement -- personne ne l'a programmée explicitement. C'est une conséquence de la façon dont les mots sont utilisés dans des contextes similaires.
+Cette propriété émerge de l'entraînement, sans programmation explicite de ma part ou de celle des chercheurs. J'y vois une conséquence directe de la façon dont les mots apparaissent dans des contextes similaires.
 
 ### 3. Attention
 
@@ -414,19 +414,19 @@ Le mécanisme d'**attention** (introduit par le papier "Attention is All You Nee
 
 ```
 "La banque a refusé mon prêt."
-     ↑
+      ↑
 Token "banque" regarde: "refusé", "prêt" → comprends qu'il s'agit d'une institution financière
 
 "Je vais me promener sur la banque."
-     ↑
+      ↑
 Token "banque" regarde: "promener", "sur" → comprends qu'il s'agit d'une rive
 ```
 
-L'attention permet au modèle de capturer le **contexte** -- chaque token est compris en fonction de ceux qui l'entourent, pas isolément.
+L'attention permet au modèle de capturer le **contexte** : chaque token est compris en fonction de ceux qui l'entourent, dans une lecture pleinement relationnelle. C'est cette sensibilité au contexte qui m'a le plus aidé à comprendre pourquoi les LLM dépassent les patterns fixes.
 
 ### 4. Prédiction du prochain token
 
-L'entraînement d'un LLM est d'une simplicité trompeuse : on lui montre un texte, on lui cache le dernier token, et on lui demande de le prédire. Puis on répète des milliards de fois.
+L'entraînement d'un LLM repose sur une simplicité trompeuse : tu lui montres un texte, tu caches le dernier token, et tu lui demandes de le prédire. Puis tu répètes l'opération des milliards de fois. J'aime cette idée parce qu'une règle d'apprentissage très simple produit des capacités très riches.
 
 ```
 Input:  "Je ne comprends"
@@ -436,7 +436,7 @@ Prédiction du modèle: "pas" (probabilité 0.87), "rien" (0.05), "jamais" (0.02
 
 L'objectif est de maximiser la probabilité du vrai token à chaque position. C'est ce qu'on appelle la **next-token prediction**. Pendant l'entraînement, le modèle ajuste ses milliards de paramètres pour minimiser l'erreur de prédiction sur des téraoctets de texte.
 
-Au moment de l'inférence (quand on lui parle), le modèle génère un token à la fois en boucle :
+Au moment de l'inférence (quand tu lui parles), le modèle génère un token à la fois en boucle :
 
 ```
 Token 1: "Je"    (input: "Parle-moi de toi.")
@@ -446,7 +446,7 @@ Token 4: "chatbot" (input: "Parle-moi de toi. Je suis un")
 ...
 ```
 
-Chaque token est échantillonné selon sa probabilité (température, top-k, top-p contrôlent le degré de "créativité"). Et c'est tout. Des milliards de paramètres qui font ça des milliers de fois.
+Chaque token est échantillonné selon sa probabilité (température, top-k, top-p contrôlent le degré de "créativité"). Et c'est tout. Des milliards de paramètres qui répètent cette opération des milliers de fois. Je trouve vertigineux qu'un mécanisme aussi répétitif produise des réponses aussi variées.
 
 ### Ce qui change fondamentalement
 
@@ -459,18 +459,16 @@ Chaque token est échantillonné selon sa probabilité (température, top-k, top
 | Robustesse | Nulle hors des motifs prévus | Généralise à des entrées jamais vues |
 | Interprétabilité | Parfaite (on peut lire les règles) | Limité (boîte noire) |
 
-Les chatbots classiques sont **transparents mais fragiles**. Un LLM est **robuste mais opaque**. Les deux approches existent encore aujourd'hui -- pas comme concurrents, mais comme outils pour des besoins différents.
+Les chatbots classiques sont **transparents mais fragiles**. Un LLM est **robuste mais opaque**. Je les vois aujourd'hui comme des outils complémentaires pour des besoins différents, et je choisis l'un ou l'autre selon le niveau de contrôle que tu veux garder sur les réponses.
 
-Si vous voulez approfondir le fonctionnement interne des LLM, cette vidéo est une excellente ressource :
-
-Si vous voulez approfondir le fonctionnement interne des LLM, cette vidéo est une excellente ressource :
+Si tu veux approfondir le fonctionnement interne des LLM, je te recommande cette vidéo comme excellente ressource :
 
 [How LLMs Work — YouTube](https://www.youtube.com/watch?v=YmLp8qe87A0)
 ---
 
 ## Luna Protocol : la synthèse moderne
 
-Les articles sur **Luna Protocol** (dont les liens sont ci-dessous) représentent la synthèse la plus aboutie de tout ce qu'on vient de voir : un bot Discord moderne qui combine un LLM local avec un système comportemental sophistiqué, le tout construit sur les leçons de 60 ans d'IA conversationnelle.
+Les articles sur **Luna Protocol** (dont les liens sont ci-dessous) représentent à mes yeux la synthèse la plus aboutie de tout ce que je viens de te montrer : un bot Discord moderne qui combine un LLM local avec un système comportemental sophistiqué, le tout construit sur les leçons de 60 ans d'IA conversationnelle. C'est le projet qui m'a permis de relier mes ports historiques à mes expérimentations actuelles.
 
 ### [Luna Protocol : j'ai créé un bot Discord autonome qui simule un être humain](/articles/fr/luna-protocol-discord-bot)
 
@@ -481,30 +479,30 @@ Cet article détaille l'architecture complète d'un bot Discord LLM-based :
 - **Pipeline TTS** : synthèse vocale via Piper + ffmpeg → messages vocaux Discord
 - **Streaming en temps réel** : le LLM émet les tokens un par un sur un bus d'événements typé
 
-Ce qui relie cet article aux chatbots historiques, c'est la même quête : **faire croire qu'on parle à une personne**. ELIZA le faisait avec des miroirs textuels. PARRY avec un modèle émotionnel. ALICE avec 99k catégories. Luna Protocol le fait avec un LLM fine-tuné + un système comportemental qui simule les imperfections humaines.
+Ce qui relie cet article aux chatbots historiques, c'est la même quête : **faire croire qu'on parle à une personne**. ELIZA utilisait des miroirs textuels. PARRY utilisait un modèle émotionnel. ALICE utilisait 99k catégories. Luna Protocol utilise un LLM fine-tuné + un système comportemental qui simule les imperfections humaines. Je retrouve dans cette filiation la même exigence : créer l'illusion d'une présence de l'autre côté de l'écran.
 
 ### [Luna Protocol : pourquoi j'ai fine-tuné un modèle de 1,5B](/articles/fr/luna-protocol-official-models)
 
-Le second article explore le fine-tuning et le few-shot priming. La découverte centrale : **un modèle plus petit (1,5B) entraîné sur moins de données (50k échantillons) surpasse un modèle plus gros (3B)** quand on l'amorce correctement avec des exemples few-shot.
+Le second article explore le fine-tuning et le few-shot priming. Ma découverte centrale : **un modèle plus petit (1,5B) entraîné sur moins de données (50k échantillons) surpasse un modèle plus gros (3B)** quand on l'amorce correctement avec des exemples few-shot. J'ai été vraiment surpris par ce résultat quand je l'ai mesuré.
 
 C'est une leçon qui résonne directement avec les chatbots historiques :
 - ELIZA montrait qu'avec quelques règles bien conçues, on peut simuler la compréhension
 - ALICE montrait qu'avec 99k catégories, on peut simuler la culture générale
 - Luna Protocol montre qu'avec un bon fine-tuning et 5 exemples few-shot, un petit LLM peut simuler un être humain
 
-La technique est différente, mais le principe est le même : **la qualité des données et la précision du système comptent plus que la taille brute**.
+La technique change, et le principe reste le même : **la qualité des données et la précision du système comptent plus que la taille brute**. C'est une conviction que je défends dans mes propres expériences.
 
 ---
 
 ## Conclusion : trois choses à retenir
 
-**1. L'IA conversationnelle n'a pas commencé avec ChatGPT.** ELIZA a 60 ans. PARRY a passé le test de Turing en 1972. ALICE a gagné le Loebner trois fois. Jabberwacky a posé les bases de l'apprentissage par transcript, que Cleverbot a industrialisé à grande échelle. Chaque approche a apporté une pièce du puzzle.
+**1. L'IA conversationnelle n'a pas commencé avec ChatGPT.** ELIZA a 60 ans. PARRY a passé le test de Turing en 1972. ALICE a gagné le Loebner trois fois. Jabberwacky a posé les bases de l'apprentissage par transcript, que Cleverbot a industrialisé à grande échelle. Chaque approche a apporté une pièce du puzzle. C'est ce que mes ports m'ont confirmé.
 
-**2. Plus de données ≠ plus intelligente.** Le transcript de Jabberwacky n'a pas de règles. Les 99k catégories d'ALICE n'apprennent pas. Le fine-tuning de Luna Protocol sur 50k échantillons surpasse le modèle 3B. La sagesse conventionnelle dit "plus c'est gros, mieux c'est" -- l'histoire des chatbots montre que l'architecture et la conception comptent autant que la taille.
+**2. Plus de données ≠ plus intelligente.** Le transcript de Jabberwacky n'a pas de règles. Les 99k catégories d'ALICE n'apprennent pas. Le fine-tuning de Luna Protocol sur 50k échantillons surpasse le modèle 3B. La sagesse conventionnelle dit "plus c'est gros, mieux c'est" -- l'histoire des chatbots montre que l'architecture et la conception comptent autant que la taille. Je défends cette idée dans chacun de mes choix techniques.
 
-**3. Le problème est le même depuis 60 ans.** Comment faire croire à un humain qu'il parle à un autre humain ? ELIZA répondait avec des miroirs textuels. PARRY avec de la colère simulée. ALICE avec des faits. Luna Protocol avec un LLM qui dort et fait des fautes de frappe. La solution change, le besoin reste.
+**3. Le problème est le même depuis 60 ans.** Comment faire croire à un humain qu'il parle à un autre humain ? ELIZA répondait avec des miroirs textuels. PARRY avec de la colère simulée. ALICE avec des faits. Luna Protocol avec un LLM qui dort et fait des fautes de frappe. La solution change, le besoin reste. C'est cette continuité qui me donne envie de continuer à explorer.
 
-Le repo est open source -- vous pouvez cloner, lancer chaque bot, et voir par vous-même comment 60 ans d'IA conversationnelle tiennent dans un seul dépôt TypeScript.
+Le repo est open source, tu peux le cloner, lancer chaque bot, et voir par toi-même comment 60 ans d'IA conversationnelle tiennent dans un seul dépôt TypeScript. J'espère que tu prendras autant de plaisir que moi à les faire parler.
 
 | Ressource | Lien |
 |-----------|------|

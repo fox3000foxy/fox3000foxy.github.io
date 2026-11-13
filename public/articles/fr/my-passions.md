@@ -8,7 +8,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "COx8gSdzf1mViTEaJoHi31YJF6bY4NEBk5rULJuCehaEFGcTaZaCX2sqZPv5ebtw+g559r1ELg+8Te4ihvsG3Q=="
+author_sig: "u8MKlzXYO3XF48/LdnIWNaibLQI2mq32Q2N3C9P2ad8//HnR++EP4RcGGEZOGZ25bodEWsYzYFn6lcysazuolA=="
 ---
 
 # Mes Passions
@@ -57,7 +57,7 @@ J'adore découvrir les vieilles technologies comme UTAU -- je trouve le concept 
 
 ## Les Vtubers
 
-J'adore aussi les Vtubers, et j'aimerais en devenir un un jour, mais malheureusement je suis un peu timide. Peut-être un jour !
+J'adore aussi les Vtubers, et j'aimerais en devenir un un jour, mais je suis un peu timide pour l'instant. Ce sera peut-être pour plus tard !
 
 ## La Musique
 
@@ -65,7 +65,7 @@ Mon passe-temps principal, c'est coder en écoutant de la musique. Rien de mieux
 
 ## Trouver des Solutions de Contournement
 
-J'adore aussi trouver des solutions de contournement pour éviter de payer pour des choses -- ou du moins penser hors des sentiers battus. Par exemple, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) était l'une de mes dernières créations où j'ai trouvé des solutions gratuites pour la gestion des commandes, la gestion de base de données, et les démons. Ce n'est pas une question d'être radin -- c'est le défi qui compte !
+J'adore aussi trouver des solutions de contournement pour éviter de payer pour des choses -- ou du moins penser hors des sentiers battus. Par exemple, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) était l'une de mes dernières créations où j'ai trouvé des solutions gratuites pour la gestion des commandes, la gestion de base de données, et les démons. C'est le défi qui compte, bien plus que les économies !
 
 ## Pourquoi Ce Blog
 

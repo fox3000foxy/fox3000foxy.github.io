@@ -6,7 +6,7 @@ tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
 lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "IQA+KWUFoct9rgkssoUVwHstm4GcAZcK6IjGFBOIx7b1NAkP87d77btPPTfPX8CiroT/lA3dkFDkWLy5FWPv6Q=="
+author_sig: "9eNr/8nMNijMP3hZ7gPCOPV5ODzEQV0Mqhud5LxsaJdYQTlYyPlcEatJYdmNc8Ap8gzGSqbT1qvQfk901nq8zQ=="
 ---
 
 # Chlone : six jours pour cloner ma façon de parler sur Discord
@@ -15,11 +15,11 @@ author_sig: "IQA+KWUFoct9rgkssoUVwHstm4GcAZcK6IjGFBOIx7b1NAkP87d77btPPTfPX8CiroT
 
 ---
 
-Voici l'histoire vraie d'un projet qui a duré six jours : **Chlone**, un bot Discord qui parle comme moi. Je raconte la journey comme elle s'est passée, dans l'ordre des 146 commits du repo, avec les heures, les échecs, les détours et les envies de tout jeter par la fenêtre - mais sans vous infliger les messages de commit.
+Voici l'histoire vraie d'un projet qui a duré six jours : **Chlone**, un bot Discord qui parle comme moi. Je raconte la journey comme elle s'est passée, dans l'ordre des 146 commits du repo, avec les heures, les échecs, les détours et les envies de tout jeter par la fenêtre, mais sans vous infliger les messages de commit.
 
-Tout est parti d'une **compétition avec Fox**. Le sujet, une boutade : chacun devait donner vie à son propre clone sur Discord. Et j'ai pris une approche radicalement différente du **Protocol Luna** : je voulais miser sur l'agentique - un agent qui se sert des souvenirs et de tous les outils dont l'IA pouvait avoir besoin. Ironie du sort : après avoir monté toute la boîte à outils, je n'ai eu besoin que du MCP OpenSelf.
+Tout est parti d'une **compétition avec Fox**. Le sujet, une boutade : chacun devait donner vie à son propre clone sur Discord. Et j'ai pris une approche radicalement différente du **Protocol Luna** : je voulais miser sur l'agentique, un agent qui se sert des souvenirs et de tous les outils dont l'IA pouvait avoir besoin. Ironie du sort : après avoir monté toute la boîte à outils, je n'ai eu besoin que du MCP OpenSelf.
 
-Le principe, une phrase : un agent [opencode](https://opencode.ai) du nom de `chloeai` tourne derrière un serveur HTTP (port 4096), garde des sessions persistantes par salon, pioche mes souvenirs dans OpenSelf, et écrit avec mon style - capturé dans `STYLE.md` à partir de mes vrais messages. Et pour ne pas sonner robot : burst de messages, fautes de frappe assumées, vocaux, GIFs, réactions, silence quand je dors, et pleins d'autres détails et mécanismes qui ont fait douter plus d'une dizaine de personnes quant à la nature du bot.
+Le principe, une phrase : un agent [opencode](https://opencode.ai) du nom de `chloeai` tourne derrière un serveur HTTP (port 4096), garde des sessions persistantes par salon, pioche mes souvenirs dans OpenSelf, et écrit avec mon style, capturé dans `STYLE.md` à partir de mes vrais messages. Et pour ne pas sonner robot : burst de messages, fautes de frappe assumées, vocaux, GIFs, réactions, silence quand je dors, et plein d'autres détails et mécanismes qui ont fait douter plus d'une dizaine de personnes quant à la nature du bot.
 
 **C'est quoi, OpenSelf ?**
 
@@ -28,24 +28,24 @@ OpenSelf, c'est la mémoire. Une CLI (`openself`, installée via `npm i -g opens
 Concrètement, OpenSelf c'est :
 
 - des **souvenirs typés** (`fact`, `preference`, `decision`, `relationship`, `event`, `note`), avec une sensibilité (public / personal / private / restricted), une note de confiance, une source, des tags ;
-- des **scopes** : chaque souvenir appartient à un contexte - le mien, ou `discord/dm/<id>` pour une personne précise ;
+- des **scopes** : chaque souvenir appartient à un contexte, le mien, ou `discord/dm/<id>` pour une personne précise ;
 - une **recherche hybride** (lexicale + vectorielle) exposée en MCP (`openself_openself_search_memory`, `openself_openself_get_context`) que l'agent `chloeai` interroge avant chaque réponse ;
 - une **détection de conflits** (mon sweep mensuel du jour 5) et une dédupe à l'écriture ;
 - un **vault chiffré** (clé dans Bitwarden) et un **dashboard local** (port 3210) pour inspecter le tout ;
 - et pour les plus flemmards que moi : `openself feed` pour nourrir ta personnalité depuis tes historiques WhatsApp/Telegram, `openself test`, `openself share` (« Talk to My Clone », une page web), `openself arena` (deux clones qui débattent) ou `openself ghost` (il répond quand tu es offline). Moi j'ai fait le mien à la main, mais l'infrastructure était là.
 
-En théorie, OpenSelf se suffit à lui tout seul pour avoir un clone, mais bon, vu tout ce que j'avais prévu de rajouter comme fonctionnalités, et vu que Discord n'est pas pris en charge, j'ai préféré n'utiliser que la partie souvenirs.
+En théorie, OpenSelf se suffit à lui tout seul pour avoir un clone, mais vu tout ce que j'avais prévu de rajouter comme fonctionnalités, et vu que Discord n'est pas pris en charge, j'ai préféré n'utiliser que la partie souvenirs.
 
 **Et d'où viennent les souvenirs et le style ?**
 
 En amont de tout ça, j'ai fait analyser mes vrais messages Discord. Le tooling a passé au crible mes DMs et mes salons pour en extraire deux choses :
 
-1. **Mon profil d'écriture** - la répartition majuscule/minuscule en début de phrase, le nombre d'emojis par message et leur position, la ponctuation (ou son absence : pas de point final en conversation normale), la longueur moyenne, le slang (`mdr`, `tkt`, `tho`), les expressions fétiches (« Bah », « En vrai ») et les réflexes du genre `quoi` -> `Feur`. Tout ça vit dans `STYLE.md`, que l'agent lit au démarrage de chaque session.
-2. **Le corpus de souvenirs** qui peuple OpenSelf : qui sont les gens avec qui je parle, de quoi on cause, ce qu'il faut retenir de notre historique, qui est qui. Le bot ne répond pas dans le vide : il répond *à propos de* des gens qu'il « connaît ». Il lit les souvenirs des gens qui apparaissent dans la conversation pour savoir de qui il s'agit. Ca permet de garder un contexte persistant sur les autres, de ne pas les oublier.
+1. **Mon profil d'écriture** - la répartition majuscule/minuscule en début de phrase, le nombre d'emojis par message et leur position, la ponctuation (ou son absence : phrases sans point final en conversation normale), la longueur moyenne, le slang (`mdr`, `tkt`, `tho`), les expressions fétiches (« Bah », « En vrai ») et les réflexes du genre `quoi` -> `Feur`. Tout ça vit dans `STYLE.md`, que l'agent lit au démarrage de chaque session.
+2. **Le corpus de souvenirs** qui peuple OpenSelf : qui sont les gens avec qui je parle, de quoi on cause, ce qu'il faut retenir de notre historique, qui est qui. Le bot ne répond pas dans le vide : il répond *à propos de* des gens qu'il « connaît ». Il lit les souvenirs des gens qui apparaissent dans la conversation pour savoir de qui il s'agit. Ça permet de garder un contexte persistant sur les autres, de ne pas les oublier.
 
-Le bot n'a rien inventé : il a été calibré chiffre par chiffre sur du vrai. C'est pour ça qu'il sonne juste - et que les vagues « je note ton style » qui se font au doigt mouillé ont l'air pathétiques à côté.
+Le bot n'a rien inventé : il a été calibré chiffre par chiffre sur du vrai. C'est pour ça qu'il sonne juste, et que les approximations « je note ton style » faites au doigt mouillé ont l'air pathétiques à côté.
 
-Dans Chlone, OpenSelf joue le rôle central ensuite : quand quelque chose d'important passe dans un salon (mot-clé « projet », « ami », « relation », ou une demande explicite « retiens que... »), le bot tape un souvenir dans le vault via `save_to_memory` - typé, scopé par personne, dédupé, vérifié contre les conflits. Et quand la conversation reprend, l'agent fouille ses souvenirs avant de répondre. C'est ça, la différence entre un miroir et un clone.
+Dans Chlone, OpenSelf joue le rôle central ensuite : quand quelque chose d'important passe dans un salon (mot-clé « projet », « ami », « relation », ou une demande explicite « retiens que... »), le bot tape un souvenir dans le vault via `save_to_memory`, typé, scopé par personne, dédupé, vérifié contre les conflits. Et quand la conversation reprend, l'agent fouille ses souvenirs avant de répondre. C'est ça, la différence entre un miroir et un clone.
 
 ---
 
@@ -55,7 +55,7 @@ Dans Chlone, OpenSelf joue le rôle central ensuite : quand quelque chose d'impo
 
 ### 08h24 - le premier commit
 
-Tout part de zéro, mais tout est déjà là, en vrac. Un `discord_watch_bot.py` de 372 lignes - un selfbot qui écoute un channel et répond via un serveur HTTP opencode. Un prompt d'identité `CHLOEAI_PROMPT.md`. Un `STYLE.md`. Des scénarios et rapports de test pour un clone qui, à l'époque, s'appelait encore **Mimo**. Une config PM2 pour faire tourner le MCP et le dashboard OpenSelf. Et une base sqlite qui sert de contexte.
+Tout part de zéro, mais tout est déjà là, en vrac. Un `discord_watch_bot.py` de 372 lignes, un selfbot qui écoute un channel et répond via un serveur HTTP opencode. Un prompt d'identité `CHLOEAI_PROMPT.md`. Un `STYLE.md`. Des scénarios et rapports de test pour un clone qui, à l'époque, s'appelait encore **Mimo**. Une config PM2 pour faire tourner le MCP et le dashboard OpenSelf. Et une base sqlite qui sert de contexte.
 
 C'est le chaos fondateur. Je n'ai pas prévu de projet : j'ai prévu une expérience. Est-ce qu'on peut faire un bot qui sonne *vraiment* humain sur Discord ?
 
@@ -65,13 +65,13 @@ Première leçon du vendredi matin : ne jamais commiter des bases sqlite `-wal` 
 
 ### 08h44 - on range l'héritage
 
-Je range l'héritage de Mimo : les rapports de test, les scénarios, les scripts d'intégration, la config PM2. Direction `archives/`. Je ne supprime rien - le projet est trop jeune pour que je jette quoi que ce soit. Ça deviendra une habitude.
+Je range l'héritage de Mimo : les rapports de test, les scénarios, les scripts d'intégration, la config PM2. Direction `archives/`. Je ne supprime rien, le projet est trop jeune pour que je jette quoi que ce soit. Ça deviendra une habitude.
 
 Le rapport de test mérite qu'on s'y arrête : Mimo avait été testé sur **15 scénarios** (chat décontracté, vanne absurde, soutien émotionnel, avis négatif, conflit avec un inconnu, proposition de collaboration...) pour un **9.1/10**. Les commentaires du testeur sont un poème : *« vanne absurde trop explicative »*, *« parfois 2 phrases alors que 1 suffirait »*, *« "Prends soin de toi aussi" un peu long »*. C'est la feuille de route du projet avant même que le projet n'existe : **court = mieux**.
 
 ### 08h48, 09h07 - le va-et-vient des intents
 
-Les `.pyc` au rebut, et un premier ménage sur la config... que je casse vingt minutes plus tard : sans intents activés, on ne reçoit pas le contenu des messages. Retour en arrière, plus un script de lancement (`run_watch_bot.sh`). Aller-retour en 20 minutes : c'est ça, l'exploration. Écrire un truc, casser, réécrire.
+Les `.pyc` au rebut, et un premier ménage sur la config... que je casse vingt minutes plus tard : sans intents activés, on ne reçoit pas le contenu des messages. Retour en arrière, plus un script de lancement (`run_watch_bot.sh`). Aller-retour en 20 minutes : c'est ça, l'exploration. Écrire une première version, casser, réécrire.
 
 ### 09h13 → 09h58 - l'usinage du prompt
 
@@ -113,7 +113,7 @@ Suivent, en rafale :
 
 ### 12h00 - les réflexes
 
-Une nouvelle section dans le STYLE : les réflexes. Un réflexe, c'est un stimulus -> une réponse, sans réflexion. La porte est ouverte à la connerie.
+Une nouvelle section dans le STYLE : les réflexes. Un réflexe, c'est un stimulus -> une réponse, sans réflexion. La porte est ouverte aux réponses absurdes.
 
 Puis vient l'heure du déjeuner, et LA question existentielle : est-ce que le bot répond `Feur` quand on lui dit `quoi` ?
 
@@ -124,14 +124,14 @@ Oui. Bien sûr que oui. C'est le commit le plus important du projet, culturellem
 On lubrifie ensuite :
 
 - les auteurs affichés par leur *global name* ;
-- la ponctuation tronquée avant de tester le réflexe (il faut couper le `quoi ?`, sinon pas de `Feur`) ;
-- le fameux `tqt` corrigé en `tkt` dans le STYLE - les gens qui ne connaissent pas le projet vont se demander pourquoi je commite ça. Moi je sais : un clone qui écrit `tqt`, c'est un clone mal calibré, et personne ne veut parler à un clone mal calibré ;
+- la ponctuation tronquée avant de tester le réflexe (il faut couper le `quoi ?`, sinon le `Feur` ne part pas) ;
+- le fameux `tqt` corrigé en `tkt` dans le STYLE, les gens qui ne connaissent pas le projet vont se demander pourquoi je commite ça. Moi je sais : un clone qui écrit `tqt`, c'est un clone mal calibré, et personne ne veut parler à un clone mal calibré ;
 - les mentions `@123456789` remplacées par de vrais noms dans le contexte ;
 - le bot se met à surveiller tous les salons par défaut.
 
 ### 16h37 - le silence
 
-Le `[void response]`. Le bot apprend le mot le plus important pour ne pas devenir un parasite social : **se taire**. Un message ambiant entre deux personnes qui ne le concernent pas = pas de réponse. La réserve est une fonctionnalité.
+Le `[void response]`. Le bot apprend le mot le plus important pour ne pas devenir un parasite social : **se taire**. Un message ambiant entre deux personnes qui ne le concernent pas appelle le silence. La réserve est une fonctionnalité.
 
 **Fin du jour 1 : 38 commits. Le bot écrit, faute, parle, se tait.**
 
@@ -145,15 +145,15 @@ On reprend, 10h du matin.
 
 ### 10h12 - qui parle à qui
 
-Chaque pseudo reçu est préfixé d'un emoji par le système : 🧑 un humain, 🤖 un bot (à traiter plus sèchement), 👑 **la créatrice - c'est-à-dire moi** sur mon compte principal. Cette convention va gouverner tout le reste du projet : le clone ne doit jamais traiter sa « modèle d'origine » comme une inconnue.
+Chaque pseudo reçu est préfixé d'un emoji par le système : 🧑 un humain, 🤖 un bot (à traiter plus sèchement), 👑 **la créatrice, c'est-à-dire moi** sur mon compte principal. Cette convention va gouverner tout le reste du projet : le clone ne doit jamais traiter sa « modèle d'origine » comme une inconnue.
 
 ### 10h16 - les règles de ponctuation
 
-Je formalise dans le STYLE : pas de point final en conversation normale, point réservé aux situations sérieuses. Règle absolue. Un clone qui met des points partout, ça se sent.
+Je formalise dans le STYLE : phrases sans point final en conversation normale, point réservé aux situations sérieuses. Règle absolue. Un clone qui met des points partout, ça se sent.
 
 ### 10h58 - les GIFs
 
-Ma librairie personnelle de GIFs, avec leurs règles d'usage : le Patrick Jane quand je prédit quelqu'un, la Miss Fortune quand je suis calme face à quelqu'un d'énervé, le gif du bescherelle qui tombe quand l'autre fait une faute. Un MCP statique les expose à l'agent. Le bot, à travers mes GIFs, devient un peu moi.
+Ma librairie personnelle de GIFs, avec leurs règles d'usage : le Patrick Jane quand je prédis quelqu'un, la Miss Fortune quand je suis calme face à quelqu'un d'énervé, le gif du bescherelle qui tombe quand l'autre fait une faute. Un MCP statique les expose à l'agent. Le bot, à travers mes GIFs, devient un peu moi.
 
 ### 11h07 → 11h35 - peaufinage
 
@@ -169,7 +169,7 @@ Le prompt sait maintenant proposer mes GIFs *et* mes émojis customs au bon mome
 
 ### 12h37 - l'hygiène d'identité
 
-- le bot n'a JAMAIS le droit de dire quel modèle il est - impossible de citer opencode, un provider, un nom de modèle ;
+- le bot n'a JAMAIS le droit de dire quel modèle il est, impossible de citer opencode, un provider, un nom de modèle ;
 - correction de « barista » dans l'identité (le bot est déjà meilleur que moi) ;
 - je passe une heure à harmoniser la ponctuation de mes propres prompts, ce qui est d'une ironie parfaite.
 
@@ -183,19 +183,19 @@ Le rappel d'identité, envoyé toutes les 5 messages, devient trop présent : pa
 
 ### 14h09 - le bot prend la parole tout seul
 
-Le bot arrête d'être un refle : il peut **parler sans être adressé**, quand le contexte déclenche quelque chose (le fichier `behavior.py` naît, 91 lignes). C'est là qu'on bascule de « répondant » à « présence » : un vrai ami peut t'écrire en premier.
+Le bot arrête d'être un réflexe : il peut **parler sans être adressé**, quand le contexte déclenche quelque chose (le fichier `behavior.py` naît, 91 lignes). C'est là qu'on bascule de « répondant » à « présence » : un vrai ami peut t'écrire en premier.
 
 ### 14h20, 14h22 - fiabiliser la réponse
 
-Gestion d'erreur quand l'envoi échoue, et réaction possible au lieu d'une réponse - parfois une réaction vaut mille mots.
+Gestion d'erreur quand l'envoi échoue, et réaction possible au lieu d'une réponse, parfois une réaction vaut mille mots.
 
 ### 18h16 - prendre son temps
 
-Le bot ne répond plus en 200ms comme un script. Il laisse passer un délai d'inactivité humain, il « prend son temps ». C'est ce qui rend le bot infoutu d'être pris pour un bot en démo : c'est le délai qui trahit toujours.
+Le bot ne répond plus en 200ms comme un script. Il laisse passer un délai d'inactivité humain, il « prend son temps ». C'est ce qui rend le bot indétectable en démo : c'est le délai qui trahit toujours les autres.
 
 ### 23h45 - la popote du soir
 
-Il est presque minuit et je pousse une détection d'URL étendue aux domaines nus. Voilà le vrai flux de la journée : un truc brillant à 14h, puis de la popote le soir parce que je suis encore dans la zone.
+Il est presque minuit et je pousse une détection d'URL étendue aux domaines nus. Voilà le vrai rythme de la journée : une avancée brillante à 14h, puis de la popote le soir parce que je suis encore dans la zone.
 
 **Fin du jour 2 : 61 commits cumulés. Le bot a une personnalité, des médias, des réflexes.**
 
@@ -221,13 +221,13 @@ Une liste dédiée aux petites choses qui font qu'on ne sent plus la machine. C'
 
 ### 08h44 → 08h46 - le pacte des machines humaines
 
-- le bot se tait la nuit, dans une plage horaire calme configurable (désactivée par défaut - tout le monde n'a pas mes horaires) ;
+- le bot se tait la nuit, dans une plage horaire calme configurable (désactivée par défaut, tout le monde n'a pas mes horaires) ;
 - une ligne par réponse peut perdre ses accents. Les gens fatigués écrivent comme ça. Le bot aussi, parfois ;
 - la petite ligne « Chloé joue à ... » change toute seule toutes les 30 min, pour que mon profil ait l'air vivant même sans message.
 
 ### 08h46 - une réaction, pas un roman
 
-Pas assez fort pour mériter une phrase ? Une réaction. Économie d'énergie sociale, et c'est très moi.
+Message trop faible pour mériter une phrase ? Une réaction suffit. Économie d'énergie sociale, et c'est très moi.
 
 ### 08h51 - PARRY, l'humeur
 
@@ -237,19 +237,19 @@ Pas assez fort pour mériter une phrase ? Une réaction. Économie d'énergie so
 
 - le bot peut rejoindre un salon **vocal**, parler via Piper, et partir tout seul quand il a fini ;
 - puis la deuxième grande idée : le bot **écoute** le salon (RTP capture, VAD détection de parole, Whisper transcription), et peut laisser les gens l'interrompre ;
-- entre les deux, le soundboard apparaît : un catalogue de sons avec leurs significations, l'agent **choisit** le son avant même de parler, et la règle finale est « soundboard d'abord, la voix en dernier recours » - le bot préfère envoyer un son que parler. Comme moi ;
+- entre les deux, le soundboard apparaît : un catalogue de sons avec leurs significations, l'agent **choisit** le son avant même de parler, et la règle finale est « soundboard d'abord, la voix en dernier recours », le bot préfère envoyer un son que parler. Comme moi ;
 - un réglage de probabilité vocale qui rend le tout viable ;
 - et l'arrivée de `davey`, cette lib dont j'apprends l'existence il y a dix minutes et que je vais maudire pendant une heure.
 
 ### 09h51 - le moment où Discord dit non. Non, non, mais non.
 
-Le **MLS**. Discord a récemment chiffré le flux audio de bout en bout, et ma capture ne reçoit que du bruit. Il faut déchiffrer, et le déchiffrage refuse de céder. S'ouvre la plus grande saga du repo - une trentaine de commits pour apprendre à écouter.
+Le **MLS**. Discord a récemment chiffré le flux audio de bout en bout, et ma capture ne reçoit que du bruit. Il faut déchiffrer, et le déchiffrage refuse de céder. S'ouvre la plus grande saga du repo, une trentaine de commits pour apprendre à écouter.
 
 On a tout essayé : des layouts de nonce de transport, la désactivation de l'E2E (le serveur nous la remet dans la figure, il l'impose), les candidats de clé récupérés depuis le groupe, des erreurs détaillées, le fallback transport, de l'introspection de l'intérieur des groupes, des candidats par leaf-index avec backoff, le mapping des hooks SPEAKING, un essai en media type vidéo (raté), et le skip des ssrcs vidéo...
 
 J'ai abandonné la réponse vocale le temps de débugger (commentée, pas supprimée), ajouté un mode de capture du handshake, puis dumpé la structure des paquets qui échouent, comme un archéologue. Six layouts de nonce. Des backoff. De l'introspection de groupe. J'ai mis le bot en debug total et j'ai ouvert chaque paquet pour voir ce qu'il y avait dedans.
 
-L'essentiel n'est pas que ça marche - c'est que **je n'ai rien jeté**. La liste de commits est le carnet de laboratoire : chaque essai raté est archivé avec son hypothèse. C'est mon côté « je garde tout, ça sert à un truc » qui a payé.
+L'essentiel n'est pas que ça marche, c'est que **je n'ai rien jeté**. La liste de commits est le carnet de laboratoire : chaque essai raté est archivé avec son hypothèse. C'est mon côté « je garde tout, ça servira pour un debug futur » qui a payé.
 
 ### 10h43 - le bot se découpe
 
@@ -262,10 +262,10 @@ Même en pleine guerre du MLS, je continue le ménage. 546 lignes disparaissent 
 ### 10h49 → 11h16 - le confort de dev
 
 - un seuil d'injection de l'humeur ajusté ;
-- quatre petits commits pour les exclusions d'éditeur (`data/`, `voices/`, les logs, les bases) - oui, j'en ai mis quatre, c'est le projet qui définit les priorités, pas les specs ;
+- quatre petits commits pour les exclusions d'éditeur (`data/`, `voices/`, les logs, les bases), oui, j'en ai mis quatre, c'est le projet qui définit les priorités, pas les specs ;
 - les bases de métadonnées sortent du suivi ;
 - le projet devient **réutilisable par d'autres** : templates génériques `PERSONA.example.md` et `STYLE.example.md` pour cloner *son* propre style ;
-- l'identité est renommée proprement (`CHLOEAI_PROMPT` devient `PERSONA`), et le README est dépersonnalisé - je retire « Chloé » de la doc publique, elle ne se raconte plus qu'en privé ;
+- l'identité est renommée proprement (`CHLOEAI_PROMPT` devient `PERSONA`), et le README est dépersonnalisé, je retire « Chloé » de la doc publique, elle ne se raconte plus qu'en privé ;
 - tout le tuning du bot bascule dans un `config.yaml` surchargé (gitignoré), avec un exemple commenté ligne par ligne ;
 - le script d'installation prépare désormais aussi les fichiers d'env et de config.
 
@@ -289,11 +289,11 @@ Si quelqu'un lance la commande vocale, on ne traite pas le message comme un mess
 
 ### 08h49 → 08h59 - l'âge adulte
 
-Documents légaux : licence **propriétaire**, code de conduite, guide de contribution, politique de sécurité - en anglais puis en français, avec un va-et-vient de corrections et un renommage de fichiers à la limite du pointilleux. J'ai passé des heures dessus, et c'est le pan le moins amusant du repo, de loin.
+Documents légaux : licence **propriétaire**, code de conduite, guide de contribution, politique de sécurité, en anglais puis en français, avec un va-et-vient de corrections et un renommage de fichiers à la limite du pointilleux. J'ai passé des heures dessus, et c'est le pan le moins amusant du repo, de loin.
 
 ### 09h56 - le bot voit
 
-Les images jointes sont transcrites par OCR local et le texte est injecté dans le prompt. Pas d'API cloud : l'OCR tourne chez moi. Je n'envoie pas vos memes à un serveur tiers, même théoriquement.
+Les images jointes sont transcrites par OCR local et le texte est injecté dans le prompt. L'OCR tourne en local chez moi. Je n'envoie pas vos memes à un serveur tiers, même théoriquement.
 
 ### 11h09 - le budget raisonnable
 
@@ -303,7 +303,7 @@ Révolution silencieuse dans le budget : quand le salon interdit les envois ou b
 
 - le grand balai : code mort supprimé, bugs d'envoi et d'auth corrigés, helpers factorisés ;
 - les sessions trop vieilles sont expulsées, le cache des DMs expire, la détection de parole coûte moins cher ;
-- des imports que j'avais cassés en déplaçant des trucs sont restaurés, et tout l'état runtime (sessions, auteurs vus, messages ignorés, humeur) survit aux redémarrages dans `data/`.
+- des imports que j'avais cassés en déplaçant des modules sont restaurés, et tout l'état runtime (sessions, auteurs vus, messages ignorés, humeur) survit aux redémarrages dans `data/`.
 
 ### 14h41 - deux mondes, un bot
 
@@ -347,7 +347,7 @@ J'écris le principe dans le code, en commentaire : *« dev via les sessions hum
 
 ### 11h02 → 11h15 - les finitions sécu
 
-Les mots-clés de sauvegarde mémoire sont resserrés et l'écriture est encore plus restrictive. On ajoute aussi au gitignore le fichier de backup du contexte - je commence à ne plus tout archiver, mais presque.
+Les mots-clés de sauvegarde mémoire sont resserrés et l'écriture est encore plus restrictive. On ajoute aussi au gitignore le fichier de backup du contexte, je commence à ne plus tout archiver, mais presque.
 
 ### 12h39 - l'humeur plus légère
 
@@ -375,7 +375,7 @@ Ponctuation des commentaires harmonisée, permissions mémoire et règles de sco
 
 Un seul commit, à 00h02.
 
-Le dernier commit du projet, et il est dérisoire. Le modèle « free tier » utilisé par l'agent identifie le client OpenCode à la **présence** de certains outils dans la requête (`bash`, `glob`, `grep`). Si on les retire - même pour des raisons de sécu légitimes - le fournisseur renvoie `403 FreeTierError: can only be used from within OpenCode`. Donc j'ai dû ré-autoriser, la veille d'avoir tout verrouillé, exactement ce que je venais de bloquer, pour que le bot continue à tourner gratuitement.
+Le dernier commit du projet, et il est dérisoire. Le modèle « free tier » utilisé par l'agent identifie le client OpenCode à la **présence** de certains outils dans la requête (`bash`, `glob`, `grep`). Si on les retire, même pour des raisons de sécu légitimes, le fournisseur renvoie `403 FreeTierError: can only be used from within OpenCode`. Donc j'ai dû ré-autoriser, la veille d'avoir tout verrouillé, exactement ce que je venais de bloquer, pour que le bot continue à tourner gratuitement.
 
 C'est le commit le plus drôle du repo et je le maintiens : après 6 jours à dompter Discord, Piper, MLS, OpenSelf et Docker, c'est **un modèle d'IA gratuit** qui dicte ma politique de sécurité.
 
@@ -397,18 +397,18 @@ C'est le commit le plus drôle du repo et je le maintiens : après 6 jours à do
 
 ## Ce que je retiens de ces 6 jours
 
-1. **L'ordre des priorités était n'importe quoi, et c'était la bonne méthode.** J'ai d'abord fait un truc qui *répond*, puis un truc qui *sonne juste*, puis un truc qui *est crédible*, puis un truc qui *est sûr*, et enfin un truc *distribuable*. La personnalité avant la sécurité, le `Feur` avant la licence. On ne tiendrait pas ce rythme en suivant les règles des projets « bien faits ».
-2. **Le style, c'est d'abord une liste de « ne pas ».** Mon `STYLE.md` le plus utile ne décrit pas ce que je dis, il exclut ce que je ne fais pas : pas de point final, pas deux émojis, pas de `mdr` en majuscules, pas de « Je vérifie juste un truc » en début de réponse. Les parasites de bot sont plus faciles à repérer que les traits de caractère à définir.
+1. **L'ordre des priorités était n'importe quoi, et c'était la bonne méthode.** J'ai d'abord construit un bot qui *répond*, puis un bot qui *sonne juste*, puis un bot qui *est crédible*, puis un bot qui *est sûr*, et enfin un bot *distribuable*. La personnalité avant la sécurité, le `Feur` avant la licence. On ne tiendrait pas ce rythme en suivant les règles des projets « bien faits ».
+2. **Le style, c'est d'abord une liste de « ne pas ».** Mon `STYLE.md` le plus utile ne décrit pas ce que je dis, il exclut ce que je ne fais pas : finir les phrases sans point, limiter les émojis à un seul, écrire `mdr` en minuscules, attaquer directement sans préambule du type « Je vérifie juste un détail » en début de réponse. Les parasites de bot sont plus faciles à repérer que les traits de caractère à définir.
 3. **Les échecs sont le projet.** Une trentaine de commits pour le MLS, un test jeté, six layouts de nonce testés. L'historique le plus fidèle de ce que j'ai vécu, ce sont les séries de tentatives ratées du mardi.
 4. **Un clone, c'est de la mémoire, pas du style.** Le style fait illusion dix messages. La mémoire (OpenSelf, scopes, dédupe, sweep de conflits) fait durer. C'est ce qui sépare un miroir d'une personne.
-5. **Les derniers commits sont toujours drôles.** Le 146e, celui qui ré-autorise `bash`, `glob` et `grep` parce qu'un free tier exige que ses propres outils soient présents - c'est mon préféré.
+5. **Les derniers commits sont toujours drôles.** Le 146e, celui qui ré-autorise `bash`, `glob` et `grep` parce qu'un free tier exige que ses propres outils soient présents, c'est mon préféré.
 
-Et le bilan, pour finir : **les résultats sont époustouflants, voir même bluffants.** Le clone tient une conversation sans qu'on devine la machine, se souvient des gens, des projets, des vannes passées, prend des initiatives et les marque d'une humeur - et il bat Fox au passage. C'est flippant, un peu, et c'est exactement ce qu'on cherchait.
+Et le bilan, pour finir : **les résultats sont époustouflants, voir même bluffants.** Le clone tient une conversation sans qu'on devine la machine, se souvient des gens, des projets, des vannes passées, prend des initiatives et les marque d'une humeur, et il bat Fox au passage. C'est flippant, un peu, et c'est exactement ce qu'on cherchait.
 
 ---
 
 *Le projet n'est pas public : licence propriétaire, droits réservés. Mais l'historique, lui, je vous le raconte. Si vous croisez un jour un « ·Chloé » qui vous répond par un GIF de Patrick Jane après un temps d'inactivité parfaitement humain... vous savez maintenant ce qui se cache derrière.*
 
---- 
+---
 
 Mon clone a écrit sa propre version de l'article, que vous pouvez lire [ici](./article-chlone-timeline-chloeai.md).

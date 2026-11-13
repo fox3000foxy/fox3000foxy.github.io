@@ -12,16 +12,16 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "g+vNMgTbApsYtcX+WGyNg6OF4ZnaBI2qa06F180bb4nNTizr0Y9S8CY7fQmzioygVIBnoxAX8YmWhYFIpR/j5A=="
+author_sig: "LKXj+YNZ74cls/VjqaMwC9zm+/S3e7dP5vnWyiLYFcNaA3XO9ooccEMUF8pZv7vskHyyNV7IN0xRRpb1nMPbvw=="
 ---
 
 ## Mon IA à la con pour Nausicaa
 
-Y'a des projets qui commencent par "tiens si je faisais un jeu d'échecs avec des mythologies ?" et qui finissent par un truc avec une IA qui décide de ses propres hyper-paramètres tous les 5 tours.
+Y'a des projets qui commencent par "tiens si je faisais un jeu d'échecs avec des mythologies ?" et qui finissent par un système avec une IA qui décide de ses propres hyper-paramètres tous les 5 tours.
 
 Nausicaa c'est ça. Un jeu de plateau au tour par tour où tu construis ton deck de créatures mythologiques, tu gères ton mana, tu déploies des unités sur un plateau 10x8. Et y'a une IA qui a des crises de personnalité.
 
-J'ai passé pas mal de temps sur cette IA, et le résultat est assez ingérable xD
+J'ai passé pas mal de temps sur cette IA, et le résultat m'échappe encore parfois, et c'est ce que je préfère.
 
 ## Le jeu en vrai
 
@@ -48,7 +48,7 @@ Avant de parler du cerveau, faut comprendre le corps :
 | Voyant | 4 | Aucun (genère du mana) | 1 |
 | Titan | 6 | Limité (attaque zone) | 3 |
 
-Chaque unité a son propre pattern d'attaque. La Sirène tape dans les 4 diagonales, l'Archer à distance sur 3 cases, le Titan détruit tout autour à l'invocation. Bref un jeu d'échecs avec du mytoches et du deckbuilding xD
+Chaque unité a son propre pattern d'attaque. La Sirène tape dans les 4 diagonales, l'Archer à distance sur 3 cases, le Titan détruit tout autour à l'invocation. Bref, un jeu d'échecs avec de la mythologie et du deckbuilding.
 
 ## Comment j'ai fait réfléchir le CPU
 
@@ -91,7 +91,7 @@ calculateAttackCoefficient(x1, y1, x2, y2) {
 
 ### Le coup des coefficients qui changent
 
-Là où c'est marrant c'est que les coefficients d'importance **changent aléatoirement tous les 5 tours**.
+Le point important, c'est que les coefficients d'importance **changent aléatoirement tous les 5 tours**.
 
 ```javascript
 if (this.turnCount % 5 === 0) {
@@ -123,7 +123,7 @@ const awayFromTarget = {
 
 Il calcule la direction opposée à la menace et se barre. Si y'a un mur, il cherche la case libre la plus proche dans cette direction.
 
-Tu passes 3 tours à t'approcher de l'Oracle, et paf il s'est cassé comme une fillette xD
+Tu passes 3 tours à t'approcher de l'Oracle, et paf il s'est déjà enfui à l'autre bout.
 
 ### La boucle de décision
 
@@ -191,7 +191,7 @@ Le système d'attractivité crée des dilemmes rigolos :
 
 - Le Voyant (70) génère du mana. Si tu le laisses vivre, l'adversaire a plus de ressources. Mais le Titan (95) est encore plus dangereux.
 - Le Métamorphe (90) peut échanger sa place avec n'importe quelle unité. Il peut voler ton Oracle.
-- L'Harpie (50) a une attaque explosive qui la tue aussi. Pas prioritaire... jusqu'à ce qu'elle soit à côté de 3 de tes unités.
+- L'Harpie (50) a une attaque explosive qui la tue aussi. Elle reste secondaire... jusqu'à ce qu'elle se retrouve à côté de 3 de tes unités.
 
 L'IA évalue le danger global selon les positions, pas juste les stats brutes.
 
@@ -215,7 +215,7 @@ Si j'avais plus de temps :
 - Le Métamorphe et le Centaure ont des capacités qu'elle sous-exploit
 - Apprentissage par renforcement : la faire jouer contre elle-même pour ajuster les coeffs
 
-Mais pour un jeu de navigateur ça fait le taf. Des potes arrivent à perdre contre, donc c'est bon xD
+Mais pour un jeu de navigateur ça tient la route. Des potes arrivent à perdre contre, donc c'est validé.
 
 ## Teste
 
@@ -225,10 +225,10 @@ Conseil : laisse l'IA jouer contre elle-même. Tu vas voir des phases agressives
 
 Le code est sur [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io) dans `js/cpu.js`.
 
-**3 trucs :**
+**3 points à retenir :**
 
 1. **Coefficients heuristiques** -- pas de minimax, chaque unité a une attractivité
 2. **Coeffs qui changent tous les 5 tours** -- l'IA alterne agressivité et contrôle, façon Pac-Man
 3. **L'Oracle fuit** -- il calcule la direction opposée à la menace et se casse
 
-Si t'as des idées pour rendre l'IA encore plus vicieuse, ouvre une issue. J'ai des plans pour une version qui apprend de ses défaites, mais ça sera pour un prochain article xD
+Si t'as des idées pour rendre l'IA encore plus vicieuse, ouvre une issue. J'ai des plans pour une version qui apprend de ses défaites, mais ça sera pour un prochain article.

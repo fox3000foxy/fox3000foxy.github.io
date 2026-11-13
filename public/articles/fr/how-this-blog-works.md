@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "YyVBU5BApzTvvPE/jMJjPeb97FfNJiBIjgwH0lGTD3qZkmCKftd7xh6VK0py5a6pt5qlRhvrLu/OZmeo3uJO3A=="
+author_sig: "Eq7pm9zpe326wWZNzfFGWE6HwpvPv8IKkFZOBDBD7C67EQNna/Nl/8AeKJh1yDwR13lb6dlk1yTsfjjMeXTypA=="
 ---
 
 # Comment Fonctionne Ce Blog ?
@@ -22,12 +22,12 @@ Tu t'es déjà demandé comment ce blog fonctionne sous le capot ? Dans cet arti
 
 Ce blog est construit avec des technologies web modernes :
 
-- **React 19** -- pour l'interface utilisateur
-- **TypeScript** -- pour un code typé et plus fiable
-- **Vite** -- comme outil de build ultra-rapide
-- **React Router v7** -- pour la navigation entre les pages
-- **react-markdown** -- pour transformer le Markdown en HTML
-- **rehype-raw + rehype-sanitize** -- pour autoriser du HTML brut dans le Markdown en toute sécurité
+- **React 19** : pour l'interface utilisateur
+- **TypeScript** : pour un code typé et plus fiable
+- **Vite** : comme outil de build ultra-rapide
+- **React Router v7** : pour la navigation entre les pages
+- **react-markdown** : pour transformer le Markdown en HTML
+- **rehype-raw + rehype-sanitize** : pour autoriser du HTML brut dans le Markdown en toute sécurité
 
 
 ## Structure du Projet
@@ -63,7 +63,7 @@ Voici à quoi ressemble l'arborescence du projet :
 └── vite.config.ts                  ← Configuration Vite
 ```
 
-L'idée centrale est simple : **le contenu est séparé du code**. Les pages sont écrites en Markdown dans le dossier `public/`, et le code React dans `src/` s'occupe de les afficher.
+L'idée centrale est simple : **le contenu est séparé du code**. Les pages sont écrites en Markdown dans le dossier `public/`, et le code React dans `src/` s'occupe de les afficher. Je tiens à cette séparation : elle rend le contenu facile à relire et le code facile à faire évoluer.
 
 ## Le Système de Routage
 
@@ -84,7 +84,7 @@ Chaque page a un rôle bien défini : elle récupère un fichier Markdown, le tr
 
 ## Comment Fonctionne un Article ?
 
-C'est la partie la plus intéressante ! Voici le cycle de vie d'un article :
+C'est la partie que je préfère ! Voici le cycle de vie d'un article :
 
 ### 1. Le Fichier `index.json`
 
@@ -101,10 +101,10 @@ Tous les articles sont référencés dans `public/articles/index.json`. Chaque e
 ]
 ```
 
-- **slug** -- l'identifiant unique, utilisé dans l'URL (`/blog/hello-world`)
-- **title** -- le titre affiché dans la liste
-- **description** -- un court résumé
-- **date** -- la date de publication
+- **slug** : l'identifiant unique, utilisé dans l'URL (`/blog/hello-world`)
+- **title** : le titre affiché dans la liste
+- **description** : un court résumé
+- **date** : la date de publication
 
 ### 2. Le Fichier Markdown
 
@@ -144,7 +144,7 @@ Le Footer est minimaliste : juste un copyright avec l'année courante calculée 
 
 ## Le Thème Sombre
 
-Le site est **toujours en mode sombre** -- pas de bascule jour/nuit. C'est un choix délibéré : `color-scheme: dark` est défini dans les styles globaux, avec un fond noir `#000` et du texte blanc `#fff`. Les liens sont bleus (`#64b5f6`) et deviennent verts au survol (`#81c784`).
+Le site reste en mode sombre en permanence. J'ai fait ce choix délibérément pour garder une lecture confortable le soir : `color-scheme: dark` est défini dans les styles globaux, avec un fond noir `#000` et du texte blanc `#fff`. Les liens sont bleus (`#64b5f6`) et deviennent verts au survol (`#81c784`).
 
 ## Comment J'Écris un Article
 
@@ -182,7 +182,7 @@ Je lance le serveur de développement Vite :
 pnpm dev
 ```
 
-Vite démarre en quelques millisecondes et je peux voir mon article en temps réel sur `localhost:5173` :
+Vite démarre en quelques millisecondes et je peux voir mon article en temps réel sur `localhost:5173`. Cette rapidité me permet de vérifier chaque modification presque instantanément :
 
 ![](assets/20260308_153703_image.png)
 
@@ -214,15 +214,15 @@ Le pipeline s'exécute à chaque **push** sur `main` et à chaque **pull request
 
 Le job de build tourne sur `ubuntu-latest` et suit ces étapes :
 
-1. **Checkout** -- Clone le dépôt avec tout l'historique (`fetch-depth: 0`)
-2. **Setup pnpm** -- Installe la dernière version de pnpm avec `pnpm/action-setup@v4`
-3. **Setup Node.js 20** -- Configure Node avec le cache pnpm activé pour des installations plus rapides
-4. **Install dependencies** -- Exécute `pnpm install --frozen-lockfile` pour garantir des builds reproductibles (pas de modification du lockfile autorisée)
-5. **Lint** -- Exécute `pnpm run lint` (ESLint) pour vérifier la qualité du code avant le build
-6. **Build** -- Exécute `pnpm run build`, qui vérifie d'abord les types TypeScript (`tsc -b`) puis bundle le tout avec Vite
-7. **Upload artifact** -- Téléverse le dossier `dist/` comme artefact de build pour le job de déploiement
+1. **Checkout** : Clone le dépôt avec tout l'historique (`fetch-depth: 0`)
+2. **Setup pnpm** : Installe la dernière version de pnpm avec `pnpm/action-setup@v4`
+3. **Setup Node.js 20** : Configure Node avec le cache pnpm activé pour des installations plus rapides
+4. **Install dependencies** : Exécute `pnpm install --frozen-lockfile` pour garantir des builds reproductibles (aucune modification du lockfile autorisée)
+5. **Lint** : Exécute `pnpm run lint` (ESLint) pour vérifier la qualité du code avant le build
+6. **Build** : Exécute `pnpm run build`, qui vérifie d'abord les types TypeScript (`tsc -b`) puis bundle le tout avec Vite
+7. **Upload artifact** : Téléverse le dossier `dist/` comme artefact de build pour le job de déploiement
 
-Si une étape échoue -- une erreur de lint, de type ou de build -- tout le pipeline s'arrête et rien n'est déployé. Ça protège le site en production du code cassé.
+Si une étape échoue (erreur de lint, de type ou de build), tout le pipeline s'arrête et rien n'est déployé. Cette garde me protège du code cassé en production et je m'y fie à chaque push.
 
 ### Job 2 : Deploy
 
@@ -238,10 +238,10 @@ if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
 Il procède ensuite :
 
-1. **Télécharge l'artefact de build** -- Récupère le dossier `dist/` produit par le job de build
-2. **Configure GitHub Pages** -- Met en place l'environnement Pages
-3. **Téléverse vers Pages** -- Prépare le dossier `dist/` pour GitHub Pages
-4. **Déploie** -- Publie le site avec `actions/deploy-pages@v4`
+1. **Télécharge l'artefact de build** : Récupère le dossier `dist/` produit par le job de build
+2. **Configure GitHub Pages** : Met en place l'environnement Pages
+3. **Téléverse vers Pages** : Prépare le dossier `dist/` pour GitHub Pages
+4. **Déploie** : Publie le site avec `actions/deploy-pages@v4`
 
 ### Le Tableau Complet
 
@@ -249,43 +249,43 @@ Voici ce qui se passe de l'écriture au déploiement :
 
 ```
 Écrire l'article dans VS Code
-         ↓
-   git add & commit
-         ↓
-      git push
-         ↓
-  GitHub Actions se déclenche
-         ↓
-  ┌─────────────────┐
-  │   BUILD JOB     │
-  │  1. Checkout    │
-  │  2. Setup pnpm  │
-  │  3. Setup Node  │
-  │  4. Install     │
-  │  5. Lint ✓      │
-  │  6. Build ✓     │
-  │  7. Upload dist │
-  └────────┬────────┘
-           ↓
-  ┌─────────────────┐
-  │  DEPLOY JOB     │
-  │  1. Download    │
-  │  2. Configure   │
-  │  3. Upload      │
-  │  4. Deploy 🚀   │
-  └─────────────────┘
-           ↓
-    En ligne sur GitHub Pages !
+          ↓
+    git add & commit
+          ↓
+       git push
+          ↓
+   GitHub Actions se déclenche
+          ↓
+   ┌─────────────────┐
+   │   BUILD JOB     │
+   │  1. Checkout    │
+   │  2. Setup pnpm  │
+   │  3. Setup Node  │
+   │  4. Install     │
+   │  5. Lint ✓      │
+   │  6. Build ✓     │
+   │  7. Upload dist │
+   └────────┬────────┘
+            ↓
+   ┌─────────────────┐
+   │  DEPLOY JOB     │
+   │  1. Download    │
+   │  2. Configure   │
+   │  3. Upload      │
+   │  4. Deploy 🚀   │
+   └─────────────────┘
+            ↓
+     En ligne sur GitHub Pages !
 ```
 
-Le processus entier prend environ une minute entre le push et la mise en ligne. Pas de déploiement manuel, pas de FTP, pas de SSH -- juste `git push` et c'est fait.
+Le processus entier prend environ une minute entre le push et la mise en ligne. Je publie avec un simple `git push`, le tout reste automatique sans passer par FTP ni SSH.
 
 ## Le Build de Production
 
 Sous le capot, la commande `pnpm build` exécute :
 
-1. `tsc -b` -- Vérifie les types TypeScript
-2. `vite build` -- Bundle et optimise tout le code
+1. `tsc -b` : Vérifie les types TypeScript
+2. `vite build` : Bundle et optimise tout le code
 
 Vite produit des fichiers minifiés et optimisés avec du code-splitting automatique. Le résultat est un site statique ultra-rapide.
 
@@ -293,16 +293,16 @@ Vite produit des fichiers minifiés et optimisés avec du code-splitting automat
 
 J'aurais pu utiliser un CMS, un générateur de site statique comme Hugo ou Jekyll, ou même Next.js. Mais voici pourquoi j'ai choisi cette approche :
 
-- **Simplicité** -- Écris en Markdown, push sur GitHub, c'est en ligne
-- **Contrôle total** -- Pas de dépendance à un CMS ou une base de données
-- **Performance** -- Vite + React = chargement rapide
-- **Flexibilité** -- Je peux mélanger Markdown et HTML comme je veux
-- **Apprentissage** -- C'est un super projet pour maîtriser React et TypeScript
-- **CI/CD** -- Vérifications de qualité et déploiement automatisés avec GitHub Actions
+- **Simplicité** : Écris en Markdown, push sur GitHub, c'est en ligne
+- **Contrôle total** : Aucune dépendance à un CMS ou une base de données
+- **Performance** : Vite + React = chargement rapide
+- **Flexibilité** : Je peux mélanger Markdown et HTML comme je veux
+- **Apprentissage** : C'est un super projet pour maîtriser React et TypeScript
+- **CI/CD** : Vérifications de qualité et déploiement automatisés avec GitHub Actions
 
 ## Conclusion
 
-Ce blog est un projet simple mais bien pensé : Markdown pour le contenu, React pour le rendu, Vite pour la performance, GitHub Actions pour le CI/CD, et GitHub Pages pour l'hébergement. Pas de base de données, pas de serveur backend, juste des fichiers statiques servis efficacement avec un pipeline automatisé qui garantit la qualité à chaque push.
+Ce blog est un projet simple mais bien pensé : Markdown pour le contenu, React pour le rendu, Vite pour la performance, GitHub Actions pour le CI/CD, et GitHub Pages pour l'hébergement. Il repose uniquement sur des fichiers statiques servis efficacement, avec un pipeline automatisé qui garantit la qualité à chaque push.
 
 
 Merci d'avoir lu, et à bientôt dans le prochain article ! 🦊
