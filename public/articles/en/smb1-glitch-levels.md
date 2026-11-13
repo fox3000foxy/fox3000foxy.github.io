@@ -1,59 +1,59 @@
 ---
-title: "Super Mario Bros.: the level format, pointers, and 256 glitch worlds"
-description: "How 128 levels x 4 area types fit in 40KB of ROM, why the Minus World exists, and how a NES Tennis cartridge swap can load glitch worlds."
+title: "Super Mario Bros.: Level Format, Pointers, and the 256 Glitch Worlds"
+description: How 128 levels × 4 zone types fit in 40KB of ROM, why the Minus World exists, and how a Tennis NES match can load glitch worlds.
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "3KYhwfnxhTt5AMysIifjANz7AEtowg5qvn3EptbC1mcZEqgGUbhO0Z/ud7c0xOxLFvmrkst2qionftHBpTVjbA=="
+author_sig: "6hLGe4XUoxHq/o2Q0EdIRcSB4LNnLti2hSeuctfEGp4fJGUI+p1IdYhLcmEPYktobTVj2iq63pVS6FLJVmp/sQ=="
 ---
 
 ## Introduction
 
-Super Mario Bros. is 40 kilobytes of ROM. Eight worlds, 32 levels, enemies, music, power-ups, all of it fits in there.
+Super Mario Bros. is 40 kilobytes of ROM. Eight worlds, 32 levels, enemies, music, power-ups, everything fits in there.
 
-But if you open an emulator and tweak the right bytes, you can load level 36-1. Or 255-1. Or land in a world made entirely of Bowser sprites and pipes that lead nowhere.
+But if you open an emulator and fiddle with the right bytes, you can load level 36-1. Or 255-1. Or land in a world where everything is made of Bowser sprites and pipes leading nowhere.
 
-These glitch worlds exist for a simple reason: SMB1's level storage system is a marvel of 8-bit optimization, and when you force the game to read where it shouldn't, you get fascinating results.
+Those glitch worlds exist for a simple reason: SMB1's level storage system is a marvel of 8-bit optimization, and when you force the game to read where it shouldn't, you get fascinating results.
 
-Retro Game Mechanics Explained did a 4-part video series on this -- we're going to compile it all into one deep dive into the 6502 code of the best-selling game of its era.
+Retro Game Mechanics Explained made a 4-video series on it -- let's compile it into a single dive into the 6502 code of the best-selling game of its era.
 
-![GLITCH OBJECTS -- the title card for RGMechEx's series on SMB1's hidden mechanics](/images/smb1-glitch-levels/title-card.jpg)
+![GLITCH OBJECTS -- the RGMechEx series title on SMB1's hidden mechanics](/images/smb1-glitch-levels/title-card.jpg)
 
-![World 9-1 -- the title screen of the first glitch world accessible via the Tennis cart swap](/images/smb1-glitch-levels/v1-title-9-1.jpg)
+![World 9-1 -- the first glitch world reachable via the Tennis cart swap](/images/smb1-glitch-levels/v1-title-9-1.jpg)
 
-## The warm start: why Tennis's RAM survives in SMB1
+## Warm start: why Tennis RAM survives into SMB1
 
-Before we talk about level storage, we need to understand how SMB1 boots. Because the NES Tennis cart swap glitch relies entirely on the game's **warm start / cold start detection system**.
+Before talking level storage, you need to understand how SMB1 boots. Because the NES Tennis cart-swap glitch rests entirely on the game's **warm start / cold start detection** system.
 
 ### The 41 preserved bytes
 
-When SMB1 detects a **cold start** (first power-on or power off/on), it wipes all the RAM. But when it detects a **warm start** (reset button, no power cycle), it preserves a **41-byte** memory region:
+When SMB1 detects a **cold start** (first power-on or power off/on), it wipes all RAM. But when it detects a **warm start** (reset button, no power cut), it preserves a **41-byte** memory zone:
 
 ```asm
-; Les 41 bytes préservés en RAM lors d'un warm start
-; Adresses $075F-$0787
+; The 41 RAM bytes preserved on warm start
+; Addresses $075F-$0787
 ;
-; $075F : byte de démarrage (world - 1)    [1 byte]
-; $0760 : flag de sélection de monde (B button) [1 byte]
-; $0761-$0762 : inutilisé                    [2 bytes]
-; $0763-$0768 : timer (6 digits, 3 affichés) [6 bytes]
-; $0769-$076E : coins Luigi                   [6 bytes]
-; $076F-$0774 : coins Mario                   [6 bytes]
-; $0775-$077A : score Luigi                   [6 bytes]
-; $077B-$0780 : score Mario                   [6 bytes]
-; $0781-$0786 : top score (6 digits, 1 caché) [6 bytes]
-; $0787 : le byte magique $A5                 [1 byte]
+; $075F : boot byte (world - 1)    [1 byte]
+; $0760 : world select flag (B button) [1 byte]
+; $0761-$0762 : unused                    [2 bytes]
+; $0763-$0768 : timer (6 digits, 3 shown) [6 bytes]
+; $0769-$076E : Luigi coins                   [6 bytes]
+; $076F-$0774 : Mario coins                   [6 bytes]
+; $0775-$077A : Luigi score                   [6 bytes]
+; $077B-$0780 : Mario score                   [6 bytes]
+; $0781-$0786 : top score (6 digits, 1 hidden) [6 bytes]
+; $0787 : the magic byte $A5                 [1 byte]
 ```
 
-These 41 bytes serve a single purpose: allowing the player to **continue on the same world after a game over**. If you die in 6-3, the game writes world 6 into the start byte, and at the title screen, if you hold A + Start, you restart in 6-1.
+Those 41 bytes serve a single feature: letting the player **continue at the same world after a game over**. If you die on 6-3, the game writes world 6 into the boot byte, and at the title screen, holding A + Start restarts you on 6-1.
 
-![The 41 bytes preserved in RAM during a warm start -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD, and the magic byte $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
+![The 41 RAM bytes preserved on warm start -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD, and the magic $A5 byte](/images/smb1-glitch-levels/v1-memory-state.jpg)
 
-### The double warm start check
+### The double warm-start check
 
 ![Cold start vs warm start -- the reset detection diagram](/images/smb1-glitch-levels/v1-warm-start.jpg)
 
@@ -61,13 +61,13 @@ When SMB1 boots, it doesn't check a single criterion but **two**:
 
 ```asm
 CheckWarmStart:
-  ; 1. Vérifier le byte magique $A5 à $0787
+  ; 1. Check the magic byte $A5 at $0787
   lda $0787
   cmp #$A5
-  bne ColdStart        ; pas $A5 → cold start
+  bne ColdStart        ; not $A5 → cold start
 
-  ; 2. Vérifier les 6 digits du top score ($0781-$0786)
-  ;    Chaque digit doit être entre 0 et 9
+  ; 2. Check the 6 top-score digits ($0781-$0786)
+  ;    Each digit must be between 0 and 9
   ldx #0
 CheckLoop:
   lda $0781,x
@@ -77,106 +77,106 @@ CheckLoop:
   cpx #6
   bne CheckLoop
 
-  ; Si les deux conditions passent → warm start
-  ; La RAM n'est pas effacée, le monde de départ est préservé
+  ; If both pass → warm start
+  ; RAM is not wiped, the start world is preserved
   jmp WarmStartBoot
 ```
 
-![The $A5 byte check and top score digits check -- the heart of the warm start](/images/smb1-glitch-levels/v1-a5-byte.jpg)
+![Checking the $A5 byte and top-score digits -- the warm start heart](/images/smb1-glitch-levels/v1-a5-byte.jpg)
 
-Why a double check? Because the $A5 byte could be present by chance (another game leaving that value behind, or the default idle state of the RAM chip). By verifying that the top score digits are valid (0-9), it ensures the data is coherent.
+Why a double check? Because the $A5 byte could be there by chance (another game leaving that value, or the RAM chip's default resting state). Checking the top-score digits are valid (0-9) ensures the data is coherent.
 
 ### Why Tennis is the only game that works
 
-When you insert SMB1 for the first time (cold start), the game:
-1. Wipes all the RAM → top score = 0, world byte = 0
+When you first insert SMB1 (cold start), the game:
+1. Wipes all RAM → top score = 0, world byte = 0
 2. Writes $A5 at address $0787
 
-Then you swap to Tennis without turning off the console. Tennis:
+Then you swap to Tennis without powering off. Tennis:
 - **Doesn't clean RAM on boot** (few NES games do)
-- **Doesn't write to the top score bytes** → they stay at 0 (valid)
-- **Doesn't touch the $A5 byte** → it stays intact
-- **Uses address $075F** for the player's step counter
+- **Doesn't write over the top-score bytes** → they stay at 0 (valid)
+- **Doesn't touch the $A5 byte** → it stays present
+- **Uses address $075F** for the player footstep counter
 
 ```asm
-; Le footstep increment dans Tennis :
-; À chaque pas du joueur sur le court, Tennis incrémente le byte à $075F.
-; Ce même byte est utilisé par SMB1 comme "world number - 1".
+; The footstep increment in Tennis:
+; On each player step on the court, Tennis increments the byte at $075F.
+; That same byte is used by SMB1 as "world number - 1".
 ;
-; 0 pas  → world 0 → SMB1 = world 1
-; 1-7 pas → world 1-7 → worlds normaux
-; 8+ pas → world 8+ → glitch worlds !
+; 0 steps  → world 0 → SMB1 = world 1
+; 1-7 steps → world 1-7 → normal worlds
+; 8+ steps → world 8+ → glitch worlds!
 ;
-; Le compteur ne s'incrémente que quand la musique s'arrête
-; (les footstep sounds ne jouent pas pendant la musique).
+; The counter only increments when music stops
+; (footstep sounds don't play during music).
 ```
 
 When you put SMB1 back in:
 1. The $A5 byte is still there (Tennis didn't touch it)
-2. The top score digits are still 0 (valid)
-3. The world byte is now 8+ (incremented by Tennis's footsteps)
+2. The top-score digits are still 0 (valid)
+3. The world byte is now 8+ (incremented by Tennis steps)
 4. SMB1 detects a warm start → preserves the corrupted world byte
-5. Hold A + Start → world 9-1, world A-1, world 36-1, etc.
+5. Holding A + Start → world 9-1, world A-1, world 36-1, etc.
 
-### Why you have to boot Mario before Tennis
+### Why you must boot Mario before Tennis
 
-One subtlety: you have to boot SMB1 first, then Tennis, then SMB1 again. If you started directly with Tennis, the $A5 byte would never be written (Tennis doesn't write $A5), so the warm start detection would fail and the RAM would be wiped.
+A subtlety: you must first boot SMB1, then Tennis, then SMB1 again. If you started directly with Tennis, the $A5 byte would never be written (Tennis doesn't write $A5), so warm-start detection would fail and RAM would be wiped.
 
-![Tennis's step counter: each footstep increments the world byte](/images/smb1-glitch-levels/v1-footstep.jpg)
+![Tennis footstep counter: each footstep increments the world byte](/images/smb1-glitch-levels/v1-footstep.jpg)
 
-![Access Glitch Worlds via NES Tennis -- the video explaining the cart swap](/images/smb1-glitch-levels/yt-tennis.jpg)
+![Access Glitch Worlds via NES Tennis -- the cart swap explainer video](/images/smb1-glitch-levels/yt-tennis.jpg)
 
 ## How SMB1 stores its levels in 40KB
 
-Nintendo R&D4 had to solve a deceptively simple problem: represent levels that scroll horizontally with tiles, enemies, items, all within an ultra-tight ROM budget.
+Nintendo R&D4 had a simple-looking problem to solve: representing horizontally scrolling levels with tiles, enemies, items, all in an ultra-tight ROM budget.
 
-The solution is a separation into two **completely independent** data layers:
+The solution is a split into two **completely independent** data layers:
 
 ### The tile layout (the level map)
 
-Each level is defined by a pointer to a compressed tile structure in ROM. The compression is rudimentary but brilliant: a control byte followed by 1-3 data bytes.
+Each level is defined by a pointer to a compressed ROM tile structure. The compression is crude but brilliant: a "control" byte followed by 1-3 data bytes.
 
-The tile format uses a **run-length** system:
+The tile format uses a **run** system (RLE-like):
 
 ```asm
-; Format tile SMB1 (simplifié)
-; Chaque "commande" est un byte contrôle :
+; SMB1 tile format (simplified)
+; Each "command" is a control byte:
 ;
-; $00-$7F : pose une tile, avance d'1 colonne
-; $80-$BF : pose une tile répétée N fois (N = byte - $80 + 1)
-; $C0-$FF : commande spéciale (fin de ligne, saut, changement de palette)
+; $00-$7F: place one tile, advance 1 column
+; $80-$BF: place a tile repeated N times (N = byte - $80 + 1)
+; $C0-$FF: special command (end of line, jump, palette change)
 
-Exemple : pour dessiner 3 briques consécutives :
-  $82 $01    ; répète la tile $01 (brick) 3 fois
+Example: to draw 3 consecutive bricks:
+  $82 $01    ; repeat tile $01 (brick) 3 times
 ```
 
-Each level contains 13 rows of 16 tile columns (13x16 = 208 visible tiles). But the compressed format allows for much smaller data -- for example, the sky and empty columns take up almost no space.
+Each level holds 13 rows of 16 tile columns (13×16 = 208 visible tiles). But the compressed format goes way lower -- e.g. sky and empty columns take almost no space.
 
-The 6502 rendering loop:
+The 6502 render loop:
 
 ```asm
-; Décompression tile - loop principale
-; Entrée : pointeur tile_data en $XX
-; Sortie : tilemap niveau dans la RAM PPU
+; Tile decompression - main loop
+; Input: tile_data pointer in $XX
+; Output: level tilemap in PPU RAM
 
 DecompressTile:
-  lda (tile_ptr),y      ; lire byte contrôle
+  lda (tile_ptr),y      ; read control byte
   iny
   cmp #$80
-  bcc SingleTile        ; $00-$7F : tile unique
+  bcc SingleTile        ; $00-$7F: single tile
   cmp #$C0
-  bcc RunLength         ; $80-$BF : run-length
-  jmp SpecialCommand    ; $C0-$FF : commande spéciale
+  bcc RunLength         ; $80-$BF: run-length
+  jmp SpecialCommand    ; $C0-$FF: special command
 
 SingleTile:
-  sta PPU_DATA          ; écrire la tile directement
+  sta PPU_DATA          ; write the tile directly
   jmp Next
 
 RunLength:
   sec
   sbc #$7E              ; N = control - $7E
   tax
-  lda (tile_ptr),y      ; lire la tile à répéter
+  lda (tile_ptr),y      ; read the tile to repeat
   iny
 : sta PPU_DATA
   dex
@@ -186,127 +186,127 @@ RunLength:
 
 ### The sprite layout (enemies and objects)
 
-In parallel, enemies and objects (question blocks, pipes, goombas, koopas) are stored in a completely separate structure. Each spawn is defined by 2 bytes:
+In parallel, enemies and objects (blocks ?, pipes, goombas, koopas) live in a completely separate structure. Each spawn is defined by 2 bytes:
 
 ```asm
-; Format sprite SMB1
-; Byte 0 : position X (en colonnes)
-; Byte 1 : type de sprite + bits de page Y
-; Y est dérivé de l'index dans la séquence
+; SMB1 sprite format
+; Byte 0: X position (in columns)
+; Byte 1: sprite type + Y page bits
+; Y is derived from the index in the sequence
 
-Une séquence de sprites :
-  $01 $4B    ; goomba à la colonne 1
-  $09 $4B    ; goomba à la colonne 9
-  $10 $61    ; bloc ? à la colonne 16 (contient pièce)
-  $15 $54    ; koopa verte à la colonne 21
-  $FF        ; fin de séquence
+A sprite sequence:
+  $01 $4B    ; goomba at column 1
+  $09 $4B    ; goomba at column 9
+  $10 $61    ; ? block at column 16 (holds coin)
+  $15 $54    ; green koopa at column 21
+  $FF        ; end of sequence
 ```
 
-Each level can reference up to 5 different sprite pages (well, 5 "screens" of 16 columns), but in practice most levels only use 2-3.
+Each level can reference up to 5 sprite pages (well, 5 "screens" of 16 columns), but in practice most levels use only 2-3.
 
 ### The pointer table
 
-The genius of the design is the pointer table. Each level is stored as a **pair** of ROM addresses:
+The design's genius is the pointer table. Each level is stored as a **pair** of ROM addresses:
 
 ```c
-// Structure interne (simplifiée) du World Map
+// Internal structure (simplified) of the World Map
 struct LevelPointer {
-    uint16_t tile_ptr;   // Adresse ROM des données tiles
-    uint16_t sprite_ptr; // Adresse ROM des données sprites
+    uint16_t tile_ptr;   // ROM address of tile data
+    uint16_t sprite_ptr; // ROM address of sprite data
 };
 
-// 4 tables séparées, une par AreaType :
+// 4 separate tables, one per AreaType:
 // 0 = Water, 1 = Overworld, 2 = Underground, 3 = Castle
 LevelPointer level_table[4][128];
 ```
 
-128 entries per table. 4 area types. **512 possible combinations**, but only a fraction is used by the official game. The rest is uninitialized RAM or data being interpreted as pointers.
+128 entries per table. 4 zone types. **512 possible combos**, but only a fraction is used by the official game. The rest is uninitialized RAM or data interpreted as pointers.
 
 When the game loads a level, it does this:
 
 ```asm
-; Chargement d'un niveau
+; Loading a level
 ; A = AreaType (0-3), X = LevelID (0-127)
 
 LoadLevel:
   sta AREA_TYPE
-  asl                  ; *2 pour offset dans table 16-bit
+  asl                  ; *2 for 16-bit table offset
   tax
   lda LevelTable_TilePtr, x
   sta TILE_PTR
   lda LevelTable_TilePtr+1, x
-  sta TILE_PTR+1       ; pointeur vers les tiles
+  sta TILE_PTR+1       ; pointer to tiles
   lda LevelTable_SpritePtr, x
   sta SPRITE_PTR
   lda LevelTable_SpritePtr+1, x
-  sta SPRITE_PTR+1     ; pointeur vers les sprites
+  sta SPRITE_PTR+1     ; pointer to sprites
   jsr DecompressTiles
 ```
 
-No validation. No check that the pointer is valid. The game reads the address from the table and decompresses whatever is at that address, end of story.
+The game places total trust in pointers: it reads the address in the table and decompresses whatever sits there, period.
 
 ![Level ID $06 (Water) -- 9-1, the underwater version of 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
 
 ![The Level ID table: 128 possible entries, 34 assigned](/images/smb1-glitch-levels/v2-level-id-table.jpg)
 
-![The different ordering of tile and sprite pointers -- the cause of Frankenstein levels](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
+![The different tile and sprite pointer orders -- the cause of Frankenstein levels](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
 
 ### The 34 unique levels and the 7-bit ID system
 
-![The NES RAM chip (MB8416A) -- it's the one that preserves data when you swap cartridges](/images/smb1-glitch-levels/v1-ram-chip.jpg)
+![The NES RAM chip (MB8416A) -- it's what preserves data when swapping cartridges](/images/smb1-glitch-levels/v1-ram-chip.jpg)
 
-SMB1 doesn't have 32 levels, but **34 unique levels**. Many levels are duplicates (5-3 = 1-3 but with Bullet Bills) marked with a "hard mode" flag. The truly unique levels:
+SMB1 doesn't have 32 levels, but **34 unique levels**. Many levels are duplicates (5-3 = 1-3 but with Bullet Bills) flagged "hard mode". The real unique levels:
 
-- **Water** (Type 0): 3 levels (2-2, 7-2, bonus area 5-2/6-2)
-- **Overworld** (Type 1): 22 levels (including the 2 cloud bonus rooms)
-- **Underground** (Type 2): 3 levels (including underground bonus rooms)
+- **Water** (Type 0): 3 levels (2-2, 7-2, bonus zone 5-2/6-2)
+- **Overworld** (Type 1): 22 levels (including the 2 bonus cloud rooms)
+- **Underground** (Type 2): 3 levels (including the underground bonus rooms)
 - **Castle** (Type 3): 6 levels
 - \+ 1 cutscene room (before underground/water levels)
 - \+ 1 warp zone from 4-2
 
-Each level has a **7-bit** ID. The 5 low bits = number within the subgroup, the 2 high bits = area type:
+Each level has a **7-bit** ID. The 5 low bits = number in the subgroup, the 2 high bits = zone type:
 
 ```asm
-; Encodage 7-bit du Level ID
-; Bits 6-5 : Type (00=Water, 01=Overworld, 10=Underground, 11=Castle)
-; Bits 4-0 : Numéro dans le sous-groupe
+; 7-bit Level ID encoding
+; Bits 6-5: Type (00=Water, 01=Overworld, 10=Underground, 11=Castle)
+; Bits 4-0: Number in subgroup
 ;
-; Water IDs      : $00-$02  (types 00, numéros 0-2)
-; Overworld IDs  : $20-$35  (types 01, numéros 0-21)
-; Underground IDs: $40-$42  (types 10, numéros 0-2)
-; Castle IDs     : $60-$65  (types 11, numéros 0-5)
+; Water IDs      : $00-$02  (types 00, numbers 0-2)
+; Overworld IDs  : $20-$35  (types 01, numbers 0-21)
+; Underground IDs: $40-$42  (types 10, numbers 0-2)
+; Castle IDs     : $60-$65  (types 11, numbers 0-5)
 ;
-; ID $25 = %0100101 → type 01 (Overworld), numéro 5 → 1-1
-; ID $23 = %0100011 → type 01 (Overworld), numéro 3 → 6-2
+; ID $25 = %0100101 → type 01 (Overworld), number 5 → 1-1
+; ID $23 = %0100011 → type 01 (Overworld), number 3 → 6-2
 ```
 
-**128 possible IDs** ($00-$7F), only 34 assigned to real levels. Unused IDs point to whatever happens to be there.
+**128 possible IDs** ($00-$7F), only 34 assigned to real levels. Unused IDs point to whatever.
 
-### The pointer tables: two lists, two orderings
+### Pointer tables: two lists, two orders
 
-The tile and sprite pointers aren't stored in the same order. The code uses two separate 16-bit lists (high byte / low byte in two distinct tables):
+Tile and sprite pointers aren't stored in the same order. The code uses two separate 16-bit lists (high byte / low byte in two distinct tables):
 
 ```
-Ordre des pointeurs sprites :
-  Index 0-5   : Castle (6 niveaux)
-  Index 6-27  : Overworld (22 niveaux)
-  Index 28-30 : Underground (3 niveaux)
-  Index 31-33 : Water (3 niveaux)
+Sprite pointer order:
+  Index 0-5   : Castle (6 levels)
+  Index 6-27  : Overworld (22 levels)
+  Index 28-30 : Underground (3 levels)
+  Index 31-33 : Water (3 levels)
 
-Ordre des pointeurs tiles :
-  Index 0-2   : Water (3 niveaux)
-  Index 3-24  : Overworld (22 niveaux)
-  Index 25-27 : Underground (3 niveaux)
-  Index 28-33 : Castle (6 niveaux)
+Tile pointer order:
+  Index 0-2   : Water (3 levels)
+  Index 3-24  : Overworld (22 levels)
+  Index 25-27 : Underground (3 levels)
+  Index 28-33 : Castle (6 levels)
 ```
 
-Why different orderings? No technical reason -- it's probably just how the data was organized during development. But it creates a fascinating consequence: when a level ID is invalid, the tile and sprite pointers load *different* levels, creating **Frankenstein levels**.
+Why different orders? No technical reason -- it's probably how data got organized during development. But it creates a fascinating consequence: when a level ID is invalid, tile and sprite pointers load *different* levels, creating **Frankenstein levels**.
 
-To navigate between these two lists, the game uses small **offset tables** (like a table of contents):
+To navigate between those two lists, the game uses small **offset tables** (like a table of contents):
 
 ```asm
-; Tables d'offset par type (Water, Overworld, Underground, Castle)
-; Chaque entrée = index de début dans la liste correspondante
+; Offset tables by type (Water, Overworld, Underground, Castle)
+; Each entry = start index in the matching list
 
 SpriteOffsetTable:
   .byte $1F, $06, $1C, $00    ; Water=31, Overworld=6, Underground=28, Castle=0
@@ -318,28 +318,28 @@ TileOffsetTable:
 To load level 6-2 (ID $23, Overworld number 3):
 
 ```asm
-; 1. Type = 01 (Overworld) → index dans table d'offset = 1
+; 1. Type = 01 (Overworld) → index in offset table = 1
 ; 2. Sprite offset = SpriteOffsetTable[1] = 6
-;    Index final = 6 + 3 (numéro de niveau) = 9 → 10ème pointeur sprites
+;    Final index = 6 + 3 (level number) = 9 → 10th sprite pointer
 ; 3. Tile offset = TileOffsetTable[1] = 3
-;    Index final = 3 + 3 = 6 → 7ème pointeur tiles
-; 4. Résultat : pointeur tiles $A619 + pointeur sprites $9ED0 = 6-2 ✓
+;    Final index = 3 + 3 = 6 → 7th tile pointer
+; 4. Result: tile pointer $A619 + sprite pointer $9ED0 = 6-2 ✓
 ```
 
 Now, what happens with an invalid ID like $43 (Underground number 3, which doesn't exist)?
 
 ```asm
-; ID $43, Type = 10 (Underground), numéro = 3
+; ID $43, Type = 10 (Underground), number = 3
 ; Sprite offset = SpriteOffsetTable[2] = $1C = 28
-;   Index = 28 + 3 = 31 → 32ème pointeur sprites = eau bonus 5-2 !
+;   Index = 28 + 3 = 31 → 32nd sprite pointer = 5-2 water bonus!
 ; Tile offset = TileOffsetTable[2] = $19 = 25
-;   Index = 25 + 3 = 28 → 29ème pointeur tiles = 1-4 (Castle) !
+;   Index = 25 + 3 = 28 → 29th tile pointer = 1-4 (Castle)!
 ;
-; Résultat : un niveau souterrain avec les tiles de 1-4
-; et les Bloopers de la zone eau de 5-2. Un vrai Frankenstein.
+; Result: an underground level with 1-4 tiles
+; and the 5-2 water zone Bloopers. A real Frankenstein.
 ```
 
-![Level ID $43 -- Frankenstein level: tiles 1-4 + water sprites from 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
+![Level ID $43 -- Frankenstein level: 1-4 tiles + 5-2 water sprites](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
 
 ![Exploring Glitch Level Pointers -- the offset tables explained](/images/smb1-glitch-levels/yt-pointers.jpg)
 
@@ -347,87 +347,87 @@ Now, what happens with an invalid ID like $43 (Underground number 3, which doesn
 
 ### The world index table: why world 9 overflows
 
-There's an 8-byte ROM table that gives the index of the first level in each world (1-8). And right after it, the table of 36 Level IDs for all levels in gameplay order.
+There's an 8-byte ROM table giving the first level's index of each world (1-8). And right after, the 36 Level IDs table of all levels in play order.
 
 ```asm
 ; WorldIndexTable (8 bytes)
   .byte 0, 5, 10, 15, 20, 25, 28, 33
-;   -> Monde 1 commence au niveau 0
-;   -> Monde 2 commence au niveau 5
-;   -> Monde 8 commence au niveau 33
+;   -> World 1 starts at level 0
+;   -> World 2 starts at level 5
+;   -> World 8 starts at level 33
 
 ; LevelIDTable (36 bytes)
-  .byte $25, $28, $29, $26, $24, ... ; les 36 Level IDs
+  .byte $25, $28, $29, $26, $24, ... ; the 36 Level IDs
 ```
 
-When trying to load world 9, the game reads the 9th byte of WorldIndexTable... which doesn't exist. It overflows by 1 byte into LevelIDTable, reads the value $25, then uses $25 as an index into LevelIDTable (37th entry) -- which overflows by 2 bytes into SpriteOffsetTable, and reads the value 6.
+When trying to load world 9, the game reads the 9th byte of WorldIndexTable... which doesn't exist. It overflows 1 byte into LevelIDTable, reads value $25, then uses $25 as index into LevelIDTable (37th entry) -- which overflows again 2 bytes into SpriteOffsetTable, and reads value 6.
 
 ```asm
-; World 9 :
-;   1. WorldIndexTable[8] (overflow) → lit $25 dans LevelIDTable
-;   2. LevelIDTable[37] (overflow) → lit le 2ème byte de SpriteOffsetTable = 6
-;   3. ID = 6 → Water level number 6 (qui n'existe pas)
-;   4. Tile pointer = pointeur water numéro 6 = tiles de 6-2
-;   5. Sprite pointer = index 31+6 = 37 > 33 → pointeur invalide
-;   6. Résultat : 6-2 sous l'eau avec des sprites glitchés
-;      → world 9-1 !
+; World 9:
+;   1. WorldIndexTable[8] (overflow) → reads $25 in LevelIDTable
+;   2. LevelIDTable[37] (overflow) → reads 2nd byte of SpriteOffsetTable = 6
+;   3. ID = 6 → Water level number 6 (doesn't exist)
+;   4. Tile pointer = water pointer number 6 = 6-2 tiles
+;   5. Sprite pointer = index 31+6 = 37 > 33 → invalid pointer
+;   6. Result: 6-2 underwater with glitched sprites
+;      → world 9-1!
 ```
 
-For world G (16), the overflow goes even further and lands on Level ID $01, which is the cutscene level that precedes 1-2:
+For world G (16), the overflow goes even further and lands on Level ID $01, which is the cutscene level preceding 1-2:
 
 ```asm
-; World G (16) :
-;   WorldIndexTable[15] → lit $01 dans LevelIDTable
-;   LevelIDTable[1] = $29 (cutscene 1-2)
-;   → world G-1 = la cutscene d'entrée de 1-2
+; World G (16):
+;   WorldIndexTable[15] → reads $01 in LevelIDTable
+;   LevelIDTable[1] = $29 (1-2 cutscene)
+;   → world G-1 = the 1-2 entry cutscene
 ```
 
-## Why the glitch worlds exist
+## Why glitch worlds exist
 
-The game has 32 "legitimate" levels (8 worlds x 4 levels). But the pointer table has 128 entries per area type. Entries beyond level 32 contain whatever is at those ROM addresses -- sometimes another level, sometimes sound data, sometimes RAM, sometimes anything at all.
+The game has 32 "legit" levels (8 worlds × 4 levels). But the pointer table has 128 entries per zone type. Entries beyond level 32 hold whatever sits in ROM at those addresses -- sometimes another level, sometimes sound data, sometimes RAM, sometimes whatever.
 
 ![Level ID $01 Water (Minus World) -- tile pointer $AE45, sprite pointer $A171](/images/smb1-glitch-levels/minus-world.png)
 
 ### Level ID $01 + AreaType 0 = Minus World
 
-The most famous of the glitch worlds. Level ID $01 in AreaType 0 (water) points to:
+The most famous glitch world. Level ID $01 in AreaType 0 (water) points to:
 
-- **Tile pointer: $AE45** → the underwater area from 2-2/7-2
-- **Sprite pointer: $A171** → the sprites from 2-2/7-2
+- **Tile pointer: $AE45** → the 2-2/7-2 underwater zone
+- **Sprite pointer: $A171** → the 2-2/7-2 sprites
 
-The result: a water level that looks like 2-2, but loops forever because the flagpole doesn't exist. No level end, no exit.
+Result: a water level looking like 2-2, but looping forever because the flagpole doesn't exist. The level loops forever.
 
-It's level 36-1 (or 36-1 in world $-1).
+It's level 36-1 (or 36-1 in the $-1 world).
 
-![SMB1's warm start check -- it's what allows the Minus World to exist](/images/smb1-glitch-levels/v4-minus-world.jpg)
-
-```asm
-; Pourquoi le flagpole manque dans le Minus World :
-; Les sprites de 2-2/7-2 ($A171) n'ont pas de flagpole
-; dans leur séquence. Le jeu cherche le sprite $FD (flagpole)
-; mais ne le trouve jamais → boucle infinie
-;
-; Le jeu continue de générer le niveau à l'infini
-; jusqu'à ce que le timer atteigne zéro.
-```
-
-### Pointers that point to RAM
-
-When the tile pointer or sprite pointer points to a RAM address ($00-$7F) instead of ROM, the game tries to interpret the constantly changing RAM values as tiles:
+![SMB1's warm start check -- it's what lets the Minus World exist](/images/smb1-glitch-levels/v4-minus-world.jpg)
 
 ```asm
-; Exemple : Level ID $03 en Water
-; Tile Pointer : $A46B (3-3 - valide)
-; Sprite Pointer : $009D (pointe vers la RAM page zéro !)
+; Why the flagpole is missing in the Minus World:
+; The 2-2/7-2 sprites ($A171) have no flagpole
+; in their sequence. The game looks for sprite $FD (flagpole)
+; but never finds it → infinite loop
 ;
-; La RAM page zéro contient les registres du jeu,
-; la position de Mario, l'état des compteurs...
-; Le jeu décompresse ça comme une séquence de sprites,
-; et le résultat c'est un niveau avec des ennemis
-; qui sont en fait des valeurs de registres.
+; The game keeps generating the level forever
+; until the timer hits zero.
 ```
 
-When the zero page changes (because Mario moves, the timer ticks, etc.), the level's "sprites" change too. That's why some glitch worlds have enemies that blink and constantly transform.
+### Pointers pointing to RAM
+
+When the tile or sprite pointer aims at a RAM address ($00-$7F) instead of ROM, the game tries interpreting the constantly changing RAM as tiles:
+
+```asm
+; Example: Level ID $03 in Water
+; Tile Pointer: $A46B (3-3 - valid)
+; Sprite Pointer: $009D (points to zero-page RAM!)
+;
+; Zero-page RAM holds the game's registers,
+; Mario's position, counter states...
+; The game decompresses that as a sprite sequence,
+; and the result is a level with enemies
+; that are actually register values.
+```
+
+When zero page changes (because Mario moves, the timer runs, ...), the level's "sprites" change too. That's why some glitch worlds have enemies blinking and constantly transforming.
 
 ![Level ID $03 Water -- sprite pointer $009D points to RAM, unplayable level](/images/smb1-glitch-levels/level-03-water.png)
 
@@ -438,7 +438,7 @@ Level ID $36 in Overworld:
 - **Tile pointer: $AC35** (1-2)
 - **Sprite pointer: $A0D8** (1-2)
 
-Result: nothing. The game loads the level but it's marked "no level" in RGMechEx's catalog. The tiles might be valid but the sprites point to a location that produces an empty or non-functional level.
+Result: nothing. The game loads the level but it's marked "no level" in RGMechEx's catalog. Tiles may be valid but sprites point somewhere producing an empty or non-functional level.
 
 ### Level ID $1D (Castle): the crash champion
 
@@ -447,469 +447,470 @@ Level ID $1D in Castle:
 - **Tile pointer: $A210** (4-4)
 - **Sprite pointer: $7EA0** (RAM!)
 
-Sprite pointer in RAM = undefined sprites. The game tries to display a Spiny ball or Bullet Bill blaster in the first row of tiles. It crashes immediately.
+RAM sprite pointer = undefined sprites. The game tries displaying a Spiny ball or Bullet Bill blaster in the first tile row. It crashes immediately.
 
 ```asm
-; Quand le sprite pointer pointe vers la RAM,
-; le jeu décompresse des bytes qui changent tout le temps
-; comme des instructions "spawn". Le résultat :
-; - Apparition d'objets inexistants (valeur undefined)
-; - Crash PPU quand le sprite NES essaie d'afficher un tile invalide
-; - Freeze complet de la console
+; When the sprite pointer aims at RAM,
+; the game decompresses ever-changing bytes
+; as "spawn" instructions. The result:
+; - Spawning nonexistent objects (undefined value)
+; - PPU crash when the NES sprite tries displaying an invalid tile
+; - Full console freeze
 ```
 
 ## The 256 cataloged glitch worlds
 
-RGMechEx wrote a script that generates maps of **every level**, for all 4 area types, and all 128 IDs each.
+RGMechEx wrote a script generating **every level's** maps, for all 4 zone types, and all 128 IDs each.
 
-The world counter is 8-bit (0-255). Worlds 1-8 are legitimate. That leaves **248 potential glitch worlds**. Each glitch world corresponds to the first level of that world, and its Level ID is calculated by the WorldIndexTable overflow mechanism.
+The world counter is 8-bit (0-255). Worlds 1-8 are legit. **248 glitch worlds** remain potential. Each glitch world matches that world's first level, and its Level ID computes via the WorldIndexTable overflow mechanism.
 
-![Glitch worlds table -- 248 corrupted worlds, 68 first levels accessible](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
+![Glitch worlds table -- 248 corrupted worlds, 68 reachable first levels](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
 
-Out of the 128 possible IDs, only **68 are "first levels" of a world** (accessible via the glitch world number). The other 60 are level 2+ or inaccessible.
+Of the 128 possible IDs, only **68 are a world's "first level"** (reachable via the glitch world number). The other 60 are 2nd+ levels or unreachable.
 
-| Type | Playable unique IDs | IDs that crash | Empty IDs |
-|------|---------------------|-------------------|-----------|
+| Type | Playable unique IDs | Crashing IDs | Empty IDs |
+|------|---------------------|-----------|-----------|
 | Water (0)    | ~20  | ~60  | ~48  |
 | Overworld (1)| ~30  | ~55  | ~43  |
 | Underground (2) | ~15 | ~65 | ~48  |
 | Castle (3)   | ~25  | ~58  | ~45  |
 
-Many IDs lead to the same level because the pointers land on the same ROM addresses. Level ID $28 (Overworld), for example -- tile pointer $A7CD (2-1) -- appears in **38 different glitch worlds**, because its sprite pointer $9F51 points to a region of ROM that's used as padding/sound data reused by many IDs.
+Many IDs lead to the same level because pointers land on the same ROM addresses. Level ID $28 (Overworld) for example -- tile pointer $A7CD (2-1) -- appears in **38 different glitch worlds**, because its $9F51 sprite pointer aims at a ROM zone reused as padding/sound data by many IDs.
 
-![Map of level ID $28 (Overworld) -- 2-1 tiles with normal sprites, 38 glitch worlds](/images/smb1-glitch-levels/level-28-overworld.png)
+![Level ID $28 (Overworld) map -- 2-1 tiles with normal sprites, 38 glitch worlds](/images/smb1-glitch-levels/level-28-overworld.png)
 
 ![Super Mario Bros. Glitch Levels Explained -- the 3rd video](/images/smb1-glitch-levels/yt-levels.jpg)
 
 ### The 6 truly unique glitch levels
 
-Out of the 19 accessible glitch level IDs, only **6 don't crash immediately** on load:
+Of the 19 reachable glitch level IDs, only **6 don't immediately crash** on load:
 
 | World | Level ID | Description |
 |-------|----------|-------------|
-| E-1 (224) | $50 | A single ? block over a chasm. Mario dies instantly. |
+| E-1 (224) | $50 | A single ? block above a pit. Mario dies instantly. |
 | W | $57 | Mario spawns stuck, unable to move. |
-| 42 (133) | $50 | Cloud tunnel that traps Mario if he goes far enough. |
-| 62 (131, 240) | $4D | Frozen castle: Mario spawns at the top, can't fall → stuck. |
+| 42 (133) | $50 | Cloud tunnel trapping Mario if he goes far enough. |
+| 62 (131, 240) | $4D | Frozen castle: Mario spawns on top, can't fall → stuck. |
 | 127 | $4B | Underground tunnel, but crashes if you go too far. |
-| 137 | $4B | Activates cutscene auto-scrolling. Mario meets a single brick block that blocks him forever. |
+| 137 | $4B | Enables cutscene autoscrolling. Mario meets a single brick block blocking him forever. |
 
-![Level ID $50 (cloud tunnel) -- glitch worlds 42-1 and E-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
+![Level ID $50 (cloud tunnel) -- glitch world 42-1 and E-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
 ![Level ID $4D (castle) -- world 62-1, Mario stuck at spawn](/images/smb1-glitch-levels/lvl-4D-castle.png)
 ![Level ID $4B (tunnel) -- world 127-1, crashes if you go too far](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
 
-Six glitch worlds out of 248 that produce something truly new. The rest are normal levels with the wrong area type, or black screens.
+Six glitch worlds out of 248 producing something genuinely new. The rest are normal levels with the wrong zone type, or black screens.
 
 ## The level format in detail
 
-Let's dive into the exact level data format, to understand why glitch levels hold up (or don't).
+Zooming into the exact level data format, to understand why glitch levels hold together (or not).
 
 ### The level header: 2 bytes, 6 properties
 
-Each level starts with a 2-byte header that controls 6 properties:
+Each level starts with a 2-byte header controlling 6 properties:
 
 ```asm
-; Byte 0 : timer + Y start + modifier
-;   Bits 7-6 : timer (00=inchangé, 01=200, 10=300, 11=400)
-;   Bits 5-3 : Y start Mario (111/110 = autowalk)
-;   Bits 2-0 : level type modifier
-;              000=default, 001=waves, 010=brick wall,
-;              011=water bottom, 100=night, 101=snow,
+; Byte 0: timer + Y start + modifier
+;   Bits 7-6: timer (00=unchanged, 01=200, 10=300, 11=400)
+;   Bits 5-3: Mario Y start (111/110 = autowalk)
+;   Bits 2-0: level type modifier
+;              000=default, 001=waves,
+;              010=brick wall, 011=water bottom,
+;              100=night, 101=snow,
 ;              110=snow night, 111=gray night
 
-; Byte 1 : platform + background + floor pattern
-;   Bits 7-6 : special platform (00=tree, 01=mushroom,
+; Byte 1: platform + background + floor pattern
+;   Bits 7-6: special platform (00=tree, 01=mushroom,
 ;                                 10=Bullet Bill, 11=cloud)
-;   Bits 5-4 : background (00=none, 01=clouds,
-;                           10=montains, 11=fences)
-;   Bits 3-0 : floor pattern initial (0-15)
+;   Bits 5-4: background (00=none, 01=clouds,
+;                           10=mountains, 11=fences)
+;   Bits 3-0: initial floor pattern (0-15)
 ```
 
-The modifier type controls visual variations: the waves at the top of water levels, the brick background of 8-3, the night palette of 4-3, the snow of 6-2, etc.
+The type modifier controls visual variations: waves atop water levels, the 8-3 brick background, the 4-3 night palette, 6-2 snow, etc.
 
 ### Tile objects: 2 bytes, Next Screen Flag, 3-slot queue
 
-After the header comes a list of **tile objects**, each object is 2 bytes. The byte $FD marks the end of the list.
+After the header comes a list of **tile objects**, each 2 bytes. Byte $FD marks the list end.
 
 ```asm
-; Format objet tile (16 bits) :
-; Byte 0 :
-;   Bits 7-4 : X position (colonne 0-15)
-;   Bits 3-0 : Y position
-;     Y=0-11  : position Y normale
-;     Y=12    : objets spéciaux (trous, ponts, rope, ? blocks)
-;     Y=13    : screen skip / objets spéciaux 2
-;     Y=14    : changement de modifier/scenery/floor
-;     Y=15    : objets spéciaux 3 (château, escaliers, gros tuyau)
+; Tile object format (16 bits):
+; Byte 0:
+;   Bits 7-4: X position (column 0-15)
+;   Bits 3-0: Y position
+;     Y=0-11  : normal Y position
+;     Y=12    : special objects (holes, bridges, rope, ? blocks)
+;     Y=13    : screen skip / special objects 2
+;     Y=14    : modifier/scenery/floor change
+;     Y=15    : special objects 3 (castle, stairs, big pipe)
 
-; Byte 1 :
+; Byte 1:
 ;   Bit  7   : NEXT SCREEN FLAG
-;   Bits 6-4 : type d'objet (0-7)
-;   Bits 3-0 : largeur/hauteur / sous-type
+;   Bits 6-4 : object type (0-7)
+;   Bits 3-0 : width/height / subtype
 ```
 
-When the "next screen" bit is set, the current working column is incremented by 1. This allows placing objects beyond the first 16 columns. Objects must be listed **in order** (left to right) because the game loads them sequentially:
+When the "next screen" bit is set, the current working column increments by 1. That places objects beyond the first 16 columns. Objects must be listed **in order** (left to right) because the game loads them sequentially:
 
 ```asm
-; La routine de chargement a DEUX phases par colonne :
-; Phase 1 : chercher les nouveaux objets qui commencent sur cette colonne
-;            et les ajouter à la file d'attente (queue)
-; Phase 2 : traiter chaque objet dans la queue en dessinant les tiles,
-;            et retirer ceux qui finissent sur cette colonne
+; The load routine has TWO phases per column:
+; Phase 1: find new objects starting on this column
+;            and add them to the queue
+; Phase 2: process each object in the queue by drawing tiles,
+;            and remove those ending on this column
 ```
 
-The queue holds exactly **3 slots**. Direct consequence: you can't have more than 3 objects starting on the same column. If the queue is full, the 4th object is ignored and never loaded.
+The queue is exactly **3 slots**. Direct consequence: you can't have more than 3 objects starting on the same column. If the queue is full, the 4th object is ignored and never loads.
 
-That's why well-designed levels avoid stacking too many objects. Example in 1-2: the column with the 1up block in the ceiling + the bricks next to it are split into two distinct objects to respect the 3-slot limit.
+That's why well-designed levels avoid stacking too many objects. Example in 1-2: the column with the 1up block in the ceiling + bricks next to it are split into two distinct objects to respect the 3 limit.
 
 ### Special Y positions: 12, 13, 14, 15
 
 When Y=12, the object has no Y position (it's hardcoded by type):
 
 ```asm
-; Y=12 : objets sans Y position
-;   Type 0 : trou (supprime le sol)
-;   Type 1 : rope de plateforme mobile
-;   Types 2-4 : ponts à Y fixe
-;   Type 5 : trou avec eau/lave
-;   Types 6-7 : rangées de ? blocks
+; Y=12: objects with no Y position
+;   Type 0: hole (removes ground)
+;   Type 1: moving platform rope
+;   Types 2-4: bridges at fixed Y
+;   Type 5: hole with water/lava
+;   Types 6-7: ? block rows
 ```
 
-When Y=13, two subgroups. If bit 6 of byte 1 is set:
+When Y=13, two subgroups. If byte 1's bit 6 is 1:
 
 ```asm
-; Y=13, bit6=1 : objets spéciaux
-;   0 = L-pipe (cutscene), 1 = flagpole, 2-3 = pont/axe/hamer (fin château)
-;   4 = stop screen, 5 = random enemies, 6 = loop level, 7+ = crash possible
+; Y=13, bit6=1: special objects
+;   0 = L-pipe (cutscene), 1 = flagpole, 2-3 = bridge/axe/hammer (castle end)
+;   4 = stop screen, 5 = random enemies, 6 = loop level, 7+ = possible crash
 ```
 
-If bit6=0, the 5 low bits encode a **screen skip** (jump directly to screen N, without going through the next screen flag one by one).
+If bit6=0, the 5 low bits encode a **screen skip** (jumping straight to screen N, without going one by one via next screen flag).
 
-When Y=14: same principle with bit6=1 to change the modifier type, bit6=0 to change the background + floor pattern.
+When Y=14: same principle with bit6=1 to change the type modifier, bit6=0 to change background + floor pattern.
 
 ### Floor patterns: 16 ground motifs
 
-The ground in levels isn't made of individual objects. SMB1 uses **floor patterns**, a background motif that applies to all columns until the next change:
+Level ground isn't made of individual objects. SMB1 uses **floor patterns**, a background motif applying to all columns until the next change:
 
 ```asm
-; Floor patterns (4 bits = 16 possibilités)
-;   0 = vide total
-;   1 = sol 2 tiles haut
-;   2 = sol 1 tile haut
-;   3 = sol + bottom
-;   4 = sol + bottom 2
-;   5 = sol 1/2 tile
-;   6 = 3/4 sol
-;   ... jusqu'à 15 = rempli total (sol + plafond)
+; Floor patterns (4 bits = 16 possibilities)
+;   0 = total void
+;   1 = 2-tile-high ground
+;   2 = 1-tile-high ground
+;   3 = ground + bottom
+;   4 = ground + bottom 2
+;   5 = 1/2 tile ground
+;   6 = 3/4 ground
+;   ... up to 15 = fully filled (ground + ceiling)
 ```
 
-That's why pits are objects: they override the floor pattern on a specific column without having to change the pattern for everything else.
+That's why holes are objects: they override the floor pattern on one specific column, without changing the pattern for everything else.
 
-### The 256-byte limit and the repeat
+### The 256-byte limit and repeat
 
-All tile data in a level fits within **256 bytes maximum**. The 6502 Y register is used as an index, and it's 8-bit. If the game reaches the end of the data without finding the $FD byte, **it loops back to the start** and repeats the 256 bytes forever:
+All tile data of a level fits in **256 bytes max**. The 6502's Y register serves as index, and it's 8-bit. If the game reaches the data end without meeting the $FD byte, **it loops back to the start** and repeats the 256 bytes forever:
 
 ```asm
-; Index Y = 8 bits → max 256 bytes de données tiles
-; Si Y overflow (255 → 0) sans rencontrer $FD → repeat
-; Même chose pour les sprites, mais les objets pipe (3 bytes)
-; décalent la parité de l'index à chaque chargement.
+; Y index = 8 bits → max 256 bytes of tile data
+; If Y overflows (255 → 0) without meeting $FD → repeat
+; Same for sprites, but pipe objects (3 bytes)
+; shift index parity on each load.
 ```
 
-Some glitch levels exploit this repeat to generate levels that last "indefinitely".
+Some glitch levels exploit that repeat to generate "endless" levels.
 
 ### The sprite system: 2 bytes + pipe transitions
 
-Sprites follow a similar format, but without a header and with a few key differences. The byte $FF marks the end of the list.
+Sprites follow a similar format, but with no header and a few key differences. Byte $FF marks the list end.
 
 ```asm
-; Format sprite (2 bytes) :
-; Byte 0 : position X (colonne)
-; Byte 1 :
-;   Bit 7 : NEXT SCREEN FLAG
-;   Bits 6-0 : type de sprite
-;       Certains types incluent : goomba, koopa, Blooper,
-;       Bullet Bill, Lakitu, Spiny, plateformes,
-;       commande warp zone, toad/princesse,
-;       commandes de spawn de groupes d'ennemis
+; Sprite format (2 bytes):
+; Byte 0: X position (column)
+; Byte 1:
+;   Bit 7: NEXT SCREEN FLAG
+;   Bits 6-0: sprite type
+;       Some types include: goomba, koopa, Blooper,
+;       Bullet Bill, Lakitu, Spiny, platforms,
+;       warp zone command, toad/princess,
+;       enemy group spawn commands
 ```
 
-The low bit of byte 1 is the **hard level flag**: when set to 1, the sprite only appears in levels >= 5-3. That's how "hard mode" levels are created.
+The low bit of byte 1 is the **hard level flag**: if set to 1, the sprite only appears in levels ≥ 5-3. That's how "hard mode" levels are created.
 
-Y position 15 = **screen skip** (same as tiles). Y position 14 = **pipe transition** (3 bytes):
+Y position 15 = **screen skip** (identical to tiles). Y position 14 = **pipe transition** (3 bytes):
 
 ```asm
-; Sprite Y=14 : pipe/vine transition (3 bytes !)
-;   Byte 0 : position X
-;   Byte 1 : bits 6-0 = Level ID 7-bit (destination)
-;   Byte 2 : bits 4-0 = screen de destination
-;            bits 7-5 = world où cette transition est valide
+; Sprite Y=14: pipe/vine transition (3 bytes!)
+;   Byte 0: X position
+;   Byte 1: bits 6-0 = destination 7-bit Level ID
+;   Byte 2: bits 4-0 = destination screen
+;            bits 7-5 = world where this transition is valid
 ;
-; Pourquoi un world ? Les bonus rooms sont réutilisées entre mondes.
-; Exemple : la salle bonus de 1-1 est aussi utilisée par 2-1 et 7-1.
-; Cette salle a 3 transitions, une par monde, pour que Mario
-; réapparaisse au bon endroit.
+; Why a world? Bonus rooms are reused across worlds.
+; Example: the 1-1 bonus room is also used by 2-1 and 7-1.
+; That room has 3 transitions, one per world, so Mario
+; reappears at the right place.
 ```
 
-Sprites **don't have a queue system**. The only limit is that no more than 4 sprites can be loaded simultaneously in the spawn area (just off-screen to the right). Beyond that, sprites are ignored.
+Sprites have **no queue system**. The only limit is no more than 4 loaded sprites at once in the spawn zone (just off-screen right). Beyond that, sprites are ignored.
 
-## How to access the glitch worlds
+## How to reach glitch worlds
 
 There are two main methods.
 
-### The classic method: the wall clip
+### The classic method: wall clip
 
-The wall clip (passing through walls) lets you get out of the normal level and walk to the hidden warp zone. By manipulating the world counter via RAM, you can load any Level ID.
+Wall clip (passing through walls) lets you leave the normal level and walk to the hidden war zone. By manipulating the world counter via RAM, you can load any Level ID.
 
 The technique:
 1. World 1-2: go into the hidden end pipe
-2. Perform the wall clip on the right wall
+2. Wall-clip through the right wall
 3. Walk through the void to the warp zone
-4. The game interprets the values as worlds
+4. The game interprets values as worlds
 
-But this method only gives access to a small portion of the glitch worlds.
+But that method only reaches a small share of glitch worlds.
 
 ### The extreme method: NES Tennis cart swap
 
-See the "warm start" section above for the full details. In short: Tennis's step counter writes to the same RAM byte as SMB1's start world, and the warm start detection preserves that value.
+See the "warm start" section above for full detail. In short: Tennis's footstep counter writes to the same RAM byte as SMB1's start world, and warm-start detection preserves that value.
 
-### The tinkerer's corner: code to explore everything
+### The tinkers' corner: code to explore everything
 
-If you want to explore all the glitches yourself in an emulator, you can patch the Level ID directly:
+If you want to explore all glitches yourself in an emulator, you can patch the Level ID directly:
 
 ```asm
-; Patch pour FCEUX / Mesen :
-; Adresse RAM $075F = Level ID actuel
-; Adresse RAM $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
+; Patch for FCEUX / Mesen:
+; RAM address $075F = current Level ID
+; RAM address $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
 
-; Exemple : charger le Level 57 (0x39) en Overworld
-; Dans l'émulateur, ouvrir le traceur mémoire et écrire :
+; Example: load Level 57 (0x39) in Overworld
+; In the emulator, open the memory tracer and write:
 ; $075F = 0x39
 ; $0760 = 0x01
-; Puis entrer dans un tuyau de warp ou mourir et recommencer
-; → Le jeu charge le niveau ID $39 en Overworld
+; Then enter a warp pipe or die and restart
+; → The game loads level ID $39 in Overworld
 ```
 
-RGMechEx published the complete list of 128 levels x 4 types with auto-generated maps on [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). Each entry shows the tile pointer, the sprite pointer, and a visual map of the level.
+RGMechEx published the full list of 128 levels × 4 types with auto-generated maps at [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). Each entry shows the tile pointer, sprite pointer, and a visual map of the level.
 
-## The most wtf levels
+## The weirdest levels
 
 ### Level ID $1F (Water): 15 glitch worlds in one
 
-Tile pointer $A302 (3-4) combined with sprite pointer $02A0 gives 15 different glitch worlds (D-1, J-1, Y-1, Z-1, 55-1, 73-1...). Explanation: the sprite pointer points to a region of ROM that contains data close enough to valid sprites to produce playable results, but combining the 3-4 castle tiles with overworld sprites creates an absurd rendering.
+Tile pointer $A302 (3-4) combined with sprite pointer $02A0 gives 15 different glitch worlds (D-1, J-1, Y-1, Z-1, 55-1, 73-1...). Explanation: the sprite pointer aims at a ROM zone holding data close enough to valid sprites to produce playable results, but combining 3-4 castle tiles with overworld sprites creates an absurd render.
 
 ### Level ID $28 (Overworld): 38 glitch worlds = record
 
-The absolute record. 38 glitch world entries point to the same level (2-1 tiles + $9F51 sprites). Why? Because the sprite pointer $9F51 falls into a ROM region used as padding/sound data reused by many IDs.
+The absolute record. 38 glitch world entries point at the same level (2-1 tiles + $9F51 sprites). Why? Because sprite pointer $9F51 lands in a ROM zone used as padding/sound data reused by many IDs.
 
 ### Level ID $49 (Underground): the FDS level
 
-Tile pointer $76AE + sprite pointer $1C9D. The tile pointer points to the ROM region reserved for the Famicom Disk System version. Result: a level with tiles that don't exist in the standard cartridge. It's the level that produces world 52-1 and 196-1.
+Tile pointer $76AE + sprite pointer $1C9D. The tile pointer aims at the ROM zone reserved for the Famicom Disk System version. Result: a level with tiles that don't exist in the standard cartridge. It's the level making levels 52-1 and 196-1 appear.
 
-### Level ID $00-$02: the real bonus levels
+### Level IDs $00-$02: the real bonus levels
 
-These IDs are used by legitimate sub-levels in the game:
+Those IDs are used by the game's legit sub-levels:
 
-- **$00**: underwater area of 5-2/6-2 (used by H-1, 39-1)
-- **$01**: the water of 2-2/7-2 (the Minus World, 36-1)
-- **$02**: sub-level of 8-4 (136-1, 151-1, 215-1)
+- **$00**: 5-2/6-2 underwater zone (used by H-1, 39-1)
+- **$01**: 2-2/7-2 water (the Minus World, 36-1)
+- **$02**: 8-4 sub-level (136-1, 151-1, 215-1)
 
-The difference between a "bonus" level accessible normally and a glitch world is that warp zones check the current world:
+The difference between a "bonus" level reachable normally and a glitch world is that warp zones check the current world:
 
 ```asm
-; Vérification warp zone (simplifié)
-; Le jeu vérifie que le monde cible est entre 1 et 8
+; Warp zone check (simplified)
+; The game checks the target world is between 1 and 8
 CheckWarp:
   lda TARGET_WORLD
   cmp #1
-  bcc InvalidWarp       ; < 1 → refusé
+  bcc InvalidWarp       ; < 1 → refused
   cmp #9
-  bcs InvalidWarp       ; > 8 → refusé
-  ; world valide entre 1 et 8 uniquement
+  bcs InvalidWarp       ; > 8 → refused
+  ; valid world only between 1 and 8
   jmp DoWarp
 ```
 
-Glitch worlds with numbers > 8 or 0 can't be reached through normal pipes. You need the wall clip or the cart swap.
+Glitch worlds numbered > 8 or 0 can't be reached through normal pipes. You need the wall clip or cart swap.
 
-## Why some levels crash: the jump tables
+## Why some levels crash: jump tables
 
 When the game loads a tile object, it uses its type as an index into a **jump table**:
 
 ```asm
-; Jump table des objets tiles standards (types 0-11)
+; Standard tile object jump table (types 0-11)
 JumpTable_TileObjects:
-  .word Obj_Special       ; type 0 : bloc ?, hidden, flagpole...
-  .word Obj_Platform      ; type 1 : plateforme spéciale
-  .word Obj_BrickRow      ; type 2 : rangée de briques
-  .word Obj_BlockRow      ; type 3 : rangée de blocks
-  .word Obj_CoinRow       ; type 4 : rangée de pièces
-  .word Obj_BrickCol      ; type 5 : colonne de briques
-  .word Obj_BlockCol      ; type 6 : colonne de blocks
-  .word Obj_Pipe          ; type 7 : tuyau
+  .word Obj_Special       ; type 0: ? block, hidden, flagpole...
+  .word Obj_Platform      ; type 1: special platform
+  .word Obj_BrickRow      ; type 2: brick row
+  .word Obj_BlockRow      ; type 3: block row
+  .word Obj_CoinRow       ; type 4: coin row
+  .word Obj_BrickCol      ; type 5: brick column
+  .word Obj_BlockCol      ; type 6: block column
+  .word Obj_Pipe          ; type 7: pipe
   .word Obj_8             ; type 8
   .word Obj_9             ; type 9
   .word Obj_10            ; type 10
   .word Obj_11            ; type 11
 ```
 
-![The jump tables: why an invalid object type crashes the game](/images/smb1-glitch-levels/v4-jump-table.jpg)
+![Jump tables: why an invalid object type crashes the game](/images/smb1-glitch-levels/v4-jump-table.jpg)
 
-If an object has an invalid type (>=12), the game jumps to a pointer that doesn't exist in this table. **4 possible outcomes**:
+If an object has an invalid type (≥12), the game jumps to a pointer that doesn't exist in that table. **4 possible outcomes**:
 
 1. **Valid pointer** → the object loads normally
-2. **Pointer to another jump table** (overlap) → a different object appears. Example: type 12 points to the Y=13 table, which produces an L-pipe.
-3. **Pointer to executable code** → execution of random code (probable crash)
-4. **Explicit placeholder (NOP)** → the object does nothing (some sprites are like this, producing enemies that hover in place without moving)
+2. **Pointer to another jump table** (overlap) → a different object appears. Example: type 12 points to the Y=13 table, giving an L-pipe.
+3. **Pointer to executable code** → random code execution (likely crash)
+4. **Explicit placeholder (NOP)** → the object does nothing (some sprites are like that, producing enemies hovering without moving)
 
-![Glitch level ID $58: the sprite pointer points to an invalid address, the game crashes](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
+![Glitch level ID $58: the sprite pointer aims at an invalid address, the game crashes](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
 
-![Glitch level ID $50: the cloud tunnel, a level generated by corrupted data](/images/smb1-glitch-levels/v4-glitch-50.jpg)
+![Glitch level ID $50: the cloud tunnel, a level generated from corrupted data](/images/smb1-glitch-levels/v4-glitch-50.jpg)
 
-Glitch level ID $58 (the crashing tunnel): its sprite pointer points to a memory region that **doesn't exist on a NES without mapper ROM**. The game tries to load the same Koopa 5 times per frame at position (0,0), which saturates the PPU and causes a freeze.
+Glitch level ID $58 (the crashing tunnel): its sprite pointer aims at a memory region that **doesn't exist on NES without a ROM mapper**. The game tries loading the same Koopa 5 times per frame at position (0,0), saturating the PPU and freezing.
 
 ```asm
-; Pourquoi ID $58 crashe :
-; Sprite pointer → adresse invalide (hors espace NES standard)
-; → Le jeu lit des bytes indéterminés comme des types de sprite
-; → Le Koopa $00 (type invalide sans handler) boucle en appel récursif
-; → Stack overflow 6502 → freeze
+; Why ID $58 crashes:
+; Sprite pointer → invalid address (outside standard NES space)
+; → The game reads undetermined bytes as sprite types
+; → The $00 Koopa (invalid type with no handler) loops in recursive calls
+; → 6502 stack overflow → freeze
 ```
 
 ### The pipe warp paradox
 
-Remember the check `target_world BETWEEN 1 AND 8`. Even if you find a pipe in a glitch world, the game checks that the destination world is between 1 and 8. Glitch worlds have numbers > 8 (36-1, 255-1...), so the warp fails.
+Remember the `target_world BETWEEN 1 AND 8` check. Even if you find a pipe in a glitch world, the game checks the destination world is between 1 and 8. Glitch worlds have numbers > 8 (36-1, 255-1...), so warping fails.
 
-That's also why the Minus World has no end: the flagpole isn't present in the sprites, and the pipes lead nowhere.
+That's also why the Minus World has no end: the flagpole isn't in the sprites, and pipes lead nowhere.
 
-### The 5-objects-in-one-column trick
+### The 5-objects-in-a-column trick
 
-There's an edge case that lets you bypass the 3-objects-per-column limit. When the queue gets stuck (slots full + next object missing the next screen flag), the game "preprocesses" the current column in a loop until it finds an object with the next screen flag. During each preprocessing pass:
+There's an edge case bypassing the 3-objects-per-column cap. When the queue jams (slots full + next object with no next screen flag), the game "pre-processes" the current column in a loop until it finds an object with next screen flag. During each preprocessing:
 
 ```asm
-; Pendant le prétraitement de colonne :
-; 1. Les objets dans la queue voient leur largeur restante
-;    décrémentée à chaque "fausse avancée" de colonne
-; 2. Si un objet atteint largeur=0, il quitte la queue
-; 3. Un slot libéré peut être rempli par un nouvel objet
-;    ajouté dans la même colonne
+; During column preprocessing:
+; 1. Objects in the queue see their remaining width
+;    decremented on each "fake" column advance
+; 2. If an object hits width=0, it leaves the queue
+; 3. A freed slot can be filled by a new object
+;    added in the same column
 
-; Résultat : jusqu'à 5 objets peuvent être traités sur la même colonne.
-; Technique : placer 2 objets qui traversent la screen boundary
-; (slots 1 et 2), 1 objet dummy en X < précédent (bloque la queue),
-; puis 3 objets à X=0 de l'écran suivant (dont un avec next screen flag).
+; Result: up to 5 objects can be processed on the same column.
+; Technique: place 2 objects crossing the screen boundary
+; (slots 1 and 2), 1 dummy object at X < previous (jams the queue),
+; then 3 objects at X=0 of the next screen (one with next screen flag).
 ```
 
-This is called a "queue skip" and it's used by some ROM hackers to create levels denser than the format normally allows.
+It's called a "queue skip" and romhackers use it to build denser levels than the format normally allows.
 
-## The differences between versions
+## Version differences
 
 ### Famicom Disk System
 
-The FDS version of SMB1 has a **different memory map**. All level pointers are shifted, but the data is the same. What changes: the glitch world indices are completely different:
+The FDS version of SMB1 has a **different memory map**. All level pointers shift, but data is the same. What changes: glitch world indices are completely different:
 
 ```
-FDS World 36 → Level ID $09 (eau version de 5-3)
-  → Le flagpole est présent ! On peut finir le niveau.
-  → Ensuite : $27 (7-3 normal) → $44 (4-4 underground)
-  → $44 est finissable → la hache fonctionne → fin du jeu !
-  
-Le Minus World FDS est donc un "bonus world" qui peut mener
-à la complétion du jeu, contrairement à la version NES.
+FDS World 36 → Level ID $09 (water version of 5-3)
+  → The flagpole IS there! You can finish the level.
+  → Then: $27 (normal 7-3) → $44 (underground 4-4)
+  → $44 is finishable → the axe works → end of game!
+
+  So the FDS Minus World is a "bonus world" that can lead
+  to game completion, unlike the NES version.
 ```
 
-My favorite FDS level: **ID $5F**, an underground version of the second half of 3-3 in a low tunnel (too bad it's an autoscroller).
+My favorite FDS level: **ID $5F**, an underground version of 3-3's second half in a low tunnel (shame it's an autoscroller).
 
-### The Lost Levels (Super Mario Bros. 2 Japanese)
+### The Lost Levels (Japanese Super Mario Bros. 2)
 
-Lost Levels changes a lot of things:
+Lost Levels changes a lot:
 
-1. **Same tiles/sprites ordering**: no more Frankenstein levels (tiles and sprites load the same level even with an invalid ID)
+1. **Identical tile/sprite order**: no more Frankenstein levels (tiles and sprites load the same level even with an invalid ID)
 2. **A single 16-bit pointer table** instead of two separate high/low tables
-3. **4 disk files**: the ROM was split for FDS:
+3. **4 disk files**: the ROM got split for FDS:
    - File 1: worlds 1-4
    - File 2: worlds 5-8
    - File 3: world 9 + sound engine
    - File 4: worlds A-D (completely different pointer table)
-4. **Same Level ID = 4 possible levels** depending on which file is loaded
-5. **No more Tennis glitch**: the continue option (continue on the same world after game over) makes the warm start unnecessary, and the game **resets immediately** if world > 9
-6. **New objects**: poison mushroom, invisible block, invisible fire flower, upside-down pipes, wind -- but inserted in the middle of existing lists → **backward incompatibility** with SMB1
-7. **Piranha Plants always red** after world 4, **springboards green** only in worlds 2/B/3/C/7
+4. **Same Level ID = 4 possible levels** depending on the loaded file
+5. **No more Tennis glitch**: the continue option (continue at the same world after game over) makes warm start useless, and the game **resets immediately** if world > 9
+6. **New objects**: poison mushroom, invisible block, invisible fire flower, upside down pipes, wind -- but inserted mid-list → **backward incompatibility** with SMB1
+7. **Red Piranha Plants** always after world 4, **green springboards** only in worlds 2/B/3/C/7
 
 ### Super Mario All-Stars (SNES)
 
-Direct port with the same 6502 routines (the SNES runs NES code in a compatible mode):
+Direct port with the same 6502 routines (the SNES runs NES code in compat mode):
 
-- **Warp zone fixed**: no more Minus World (entering the left pipe before the text leads to the correct world)
+- **Fixed warp zone**: no more Minus World (entering the left pipe before the text leads to the right world)
 - **Crashing**: most glitch levels crash (except ID $6A and 9-1)
-- **Castle objects added**: more unique renderings
-- **But**: the **4-2 wrong warp** still works (not patched!)
+- **Added castle objects**: made more unique
+- **But**: the **4-2 wrong warp** still works (never patched!)
 
 ### The 4-2 wrong warp: an object placement bug
 
-In 4-2, there are two pipe transition objects: the vine (warp zone) and the pipe (coin cash room). The first transition object (the vine) is placed **well before** the vine appears on screen. The second (the pipe) is placed **too late in the level**.
+In 4-2, there are two pipe transition objects: the vine (warp zone) and the pipe (coin cash room). The first transition object (the vine's) sits **way before** the vine appears on screen. The second (the pipe's) sits **too late in the level**.
 
 ```asm
-; Timing des transitions dans 4-2 :
-; Objet transition 1 (vigne → warp zone) : placé 3 écrans avant la vigne
-; Objet transition 2 (tuyau → coin cash) : placé 1 écran après le tuyau
+; Transition timing in 4-2:
+; Transition object 1 (vine → warp zone): placed 3 screens before the vine
+; Transition object 2 (pipe → coin cash): placed 1 screen after the pipe
 ;
-; Normalement le premier objet est désactivé avant que Mario
-; n'atteigne le tuyau. Mais si Mario va vite (ou utilise
-; le raccourci du bloc B+right), la transition de la vigne
-; est toujours active quand il touche le tuyau !
-; → Le jeu charge la warp zone au lieu du coin cash.
+; Normally the first object deactivates before Mario
+; reaches the pipe. But if Mario is fast (or uses
+; the B+right block shortcut), the vine transition
+; is still active when he touches the pipe!
+; → The game loads the warp zone instead of the coin cash.
 ;
-; Si l'objet avait été placé juste après la vigne mais avant
-; le tuyau, le bug n'existerait pas.
+; If the object had been placed just after the vine but before
+; the pipe, the bug wouldn't exist.
 ```
 
-### The loop levels
+### Loop levels
 
-How do the loops work (8-4, 7-4)? The level has **checkpoints** with hardcoded screen numbers and Y positions:
+How do loop levels (8-4, 7-4) work? The level has **checkpoints** with screen numbers and hardcoded Y positions:
 
 ```asm
-; Checkpoint : {screen_number, vertical_position}
-; Si Mario passe ce checkpoint à la bonne hauteur → niveau continue
-; Sinon → warp back de 4 écrans (64 blocks)
+; Checkpoint: {screen_number, vertical_position}
+; If Mario passes that checkpoint at the right height → level continues
+; Otherwise → warp back 4 screens (64 blocks)
 ;
-; Pour faire une boucle infinie : vertical_position = $F0
-; (en dessous du bas de l'écran) → impossible de valider.
+; For an infinite loop: vertical_position = $F0
+; (below the screen bottom) → impossible to validate.
 ;
-; Les checkpoints sont simples (un seul flag) sauf pour world 7
-; qui utilise des triplets (3 flags, il faut en échouer au moins 1)
+; Checkpoints are simple (one flag) except for world 7
+; using triplets (3 flags, must fail at least 1)
 ;
-; Le warp back est rude : offset de tile data réglé à une valeur
-; hardcodée, offset de sprite data remis à 0. Les ennemis présents
-; sont déchargés instantanément → les firebars disparaissent.
+; The warp back is harsh: tile data offset set to a
+; hardcoded value, sprite data offset reset to 0. Present enemies
+; instantly unload → firebars disappear.
 ```
 
 ## Changing the format, not the code
 
-One of the most fascinating lessons from this architecture is that SMB1's developers managed to create a highly expressive level system without ever touching the 6502 rendering code. All variation between levels comes from **data** (pointers, objects, sprites, floor patterns), not code.
+One of the most fascinating lessons of that architecture is that SMB1's devs managed to create a very expressive level system without ever touching the 6502 render code. All variation between levels comes from **data** (pointers, objects, sprites, floor patterns), never code.
 
-The 256 glitch worlds exist because the **pointer tables are sized for 128 entries x 4 types**, and the game never validates the values it reads. When a pointer lands in RAM, the game interprets Mario's registers as tiles. When a pointer lands in sound data, the game plays music in the form of level design. And when the jump tables overflow, the game executes anything until it crashes.
+The 256 glitch worlds exist because the **pointer tables are sized for 128 entries × 4 types**, and the game never validates the values it reads. When a pointer lands in RAM, the game interprets Mario's registers as tiles. When a pointer lands in sound data, the game plays music as level design. And when jump tables overflow, the game runs whatever until it crashes.
 
 ![More Super Mario Bros. Mechanics Explained -- the 4th video](/images/smb1-glitch-levels/yt-mechanics.jpg)
 
-## What we can learn from all this
+## What we can learn from all of that
 
-1. **Tile/sprite separation**: complete independence of the two layers, with different storage orderings creating unique Frankenstein levels
-2. **RLE compression + object system**: levels aren't bitmaps but lists of placed objects, with floor patterns for the ground
-3. **3-slot queue**: strict hardware (and level design) limitation
-4. **No validation**: the game trusts pointers and jump tables, producing either playable glitches or crashes
-5. **256 bytes max**: the limit of the 6502 Y register, causing data to repeat if you go too far
-6. **Warm start / cold start**: a "continue" system that opened the door to the Tennis → Mario cart swap
+1. **Tile/sprite separation**: total independence of both layers, with different storage orders creating unique Frankenstein levels
+2. **RLE compression + object system**: levels aren't bitmaps but placed object lists, with floor patterns for ground
+3. **3-slot queue**: strict hardware (and level design) cap
+4. **Total trust in pointers**: the game trusts pointers and jump tables, producing either playable glitches or crashes
+5. **256 bytes max**: the 6502 Y register limit, making data repeat if you go too far
+6. **Warm start / cold start**: a "continue" system that opened the door to Tennis → Mario cart swap
 
-The best part: all of this is 6502 code that fits in 40KB. No abstraction layer, no memory access validation, no exception handler. If the pointer is garbage, the game crashes. And the crashes, we call them glitch worlds.
+Most beautiful of all: it's 6502 code fitting in 40KB. The code talks directly to hardware and places total trust in every memory access. If the pointer is rotten, the game crashes. And crashes, we call glitch worlds.
 
-## The 3 key takeaways
+## The 3 things to remember
 
-1. **Glitch worlds are pointers gone wrong** -- The game has 128 IDs x 4 area types, but only 34 unique levels. When the world number is corrupted (by Tennis or wall clip), the game loads a pointer designed for a different level, and the 512 possible combinations produce unpredictable results.
+1. **Glitch worlds are pointers landing wrong** -- The game has 128 IDs × 4 zone types, but only 34 unique levels. When the world number is corrupted (by Tennis or wall clip), the game loads a pointer designed for another level, and the 512 possible combos produce unpredictable results.
 
-2. **The Minus World is a warp bug combined with corruption** -- The left pipe in 1-2, if activated before the text appears, loads world 36 (0x24). This world points to Level ID $01 (water from 2-2), a level with no flagpole. And since there's no pipe transition for world 36, the level loops forever. The lack of validation creates the icon.
+2. **The Minus World is a warp bug combined with corruption** -- The left pipe in 1-2, if activated before the text appears, loads world 36 (0x24). That world points to Level ID $01 (2-2 water), a level with no flagpole. And since there's no pipe transition for world 36, the level loops forever. The missing check creates the icon.
 
-3. **Tennis → Mario, 15 years before OoT → Paper Mario** -- NES RAM survives a cartridge swap thanks to capacitors and SMB1's warm start / cold start system. Tennis's step counter (which increments a RAM byte while playing the footstep sound) lands exactly on the world number address. The top score digits have to stay at 0, the $A5 byte has to be intact, and the game has to detect a warm start -- a perfect confluence of circumstances that only worked with Tennis.
+3. **Tennis → Mario, 15 years before OoT → Paper Mario** -- The NES RAM survives a cartridge swap thanks to capacitors and SMB1's warm start / cold start system. Tennis's footstep counter (incrementing a RAM byte while playing footstep sounds) lands exactly on the world number address. The top-score digits must stay at 0, the $A5 byte intact, and the game must detect a warm start -- a perfect coincidence that only worked with Tennis.
 
-The original videos by [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) are an absolute labor of love -- the level of detail on the 6502 disassembly, the auto-generated maps of every level, the cart swap and warm start explanations. If you haven't watched the series, check it out, it's short and every minute is dense.
+[Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained)'s original videos are a hell of a meticulous job -- the detail level on 6502 disassembly, automatic maps of every level, cart swap and warm start explanations. If you haven't seen the series, watch it, it's short and every minute is dense.
 
-The map source code is available on [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html), and the complete SMB1 disassembly is open source across many repos. 40 years ago, Japanese programmers wrote this level system in 6502 with zero unit tests and zero bug trackers, and we're still learning stuff by opening their code today.
+The maps' source code is at [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html), and SMB1's full disassembly is open source on many repos. 40 years ago, Japanese programmers wrote that level system in 6502 with zero unit tests and zero bug trackers, and we keep learning optimization techniques by opening their code today.

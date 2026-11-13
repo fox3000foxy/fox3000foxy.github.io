@@ -1,137 +1,137 @@
 ---
-title: 我用 git 当数据库在 GitHub Actions 上免费跑了一个机器人
-description: 如何编写一个在 GitHub Actions 上以 0€/月运行的 AI 邮件自动回复器 -- 使用 git 标签作为数据库和预编译的运行时快照。
+title: 我拿 git 当数据库，在 GitHub Actions 上白嫖了一个邮件机器人
+description: 我怎么写了一个跑在 GitHub Actions 上每月 0 元的 AI 自动回邮件机器人，用 git tag 当数据库，用 runtime tag 做预编译。
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "qnqyC+okGJtUBNb3YbGxs2j+ymGvpmZdYNycZN0mpYQyFPJhoiuRp69yhBv/+iCkqjjWm4/qk0bwcHitHuCc8A=="
+author_sig: "d+nId9I4y9ROtFxHEzgxrXQ63qOqj7TvBlnM4qTukDVsbeVcz4nPG+wHL6h8YwdluTt2axjiutr/H2ctnwlF5A=="
 ---
 
-# 我用 git 当数据库，在 GitHub Actions 上白嫖跑了个 bot
+# 我拿 git 当数据库，在 GitHub Actions 上白嫖了一个邮件机器人
 
-我有个 24/7 自动运行的邮件回复机器人。
+我有个 24/7 在线的邮件自动回复机器人。
 
-它能读我的邮件，理解内容，然后用 AI 自动回复。它记得之前的对话。它会忽略 newsletter 和 `noreply@`，遇到太敏感的内容就转发给真人。
+它读我的邮件，理解在说什么，自己用 AI 回复。记得之前的对话。无视 newsletter 和 `noreply@`。太棘手的就转给人类。
 
-每月成本：**0€**。
+每月成本：**0 元**。
 
-没有服务器。没有 VPS。没有数据库。只有 GitHub Actions 和一个疯狂的 hack：**用 git 当数据库**。
+没有服务器，没有 VPS，没有数据库。只有 GitHub Actions，加一个离谱的 hack：**拿 git 当数据库**。
 
-你猜到套路了吗？没有？行吧，坐稳了，这玩意儿又蠢又天才 xD
+看出我要干嘛了吗？没有？行，坐稳，这又蠢又天才。
 
 ---
 
 ## 问题：GitHub Actions 是无状态的
 
-GitHub Actions 是免费的。你可以每 5 分钟跑一个 cron，跑你的代码，免费。
+GitHub Actions 免费。可以每 5 分钟跑一次 cron，跑你的代码，白嫖。
 
-但有个问题：它是 **无状态的**。
+但有个问题：它是 **stateless** 的。
 
-每次运行都在一台全新的机器上启动。两次执行之间什么都不会保留。上一次的运行？忘了。清掉了。就像从未存在过一样。
+每次运行都从一台干净的机器启动。上次运行的东西全没了。上一次？忘了。抹掉了。就当没存在过。
 
-对于邮件回复机器人来说，这是个巨大的问题。比如：
+对回邮件机器人来说，这是大问题。比如：
 
-> "我已经处理过的最后一封邮件是什么？"
+> "我上次处理到哪封邮件了？"
 
-如果 bot 每次运行都忘了这个，它要么会反复回复同一批邮件（灾难），要么会漏掉一些邮件。
+如果机器人每次都失忆，它要么把同一封邮件回一百遍（灾难），要么漏邮件。
 
-你需要持久状态。通常，持久状态 = 数据库。但数据库需要服务器，而服务器就不免费了。
+得有个持久状态。而持久状态一般意味着数据库。数据库意味着服务器。服务器就不免费了。
 
-这就是事情变得有趣的地方。
+有意思的地方来了。
 
 ---
 
-## 解决方案：用 git tag 当数据库
+## 解法：git tag 当数据库
 
-你的 GitHub 仓库本身就是持久存储。免费。有版本控制。永远在那里。
+你的 GitHub 仓库本身就是持久存储。免费。带版本。一直在。
 
-那为什么不把状态存在这里面呢？
+那为什么不拿它存状态？
 
-思路：每次运行时，bot 从 **git tag** 读取已处理的上一个邮件 UID。处理新邮件。然后把 tag 更新为新 UID 再 push 回去。
+思路：每次运行，机器人从一个 **git tag** 读上次处理到的邮件 UID。处理新邮件。然后把 tag 推上去，带上新的 UID。
 
 ```mermaid
 sequenceDiagram
     participant GH as GitHub Actions
     participant GIT as Git Tags
-    participant IMAP as IMAP服务器
-    
+    participant IMAP as IMAP 服务器
+
     Note over GH: Run #1
-    GH->>GIT: 读取标签 "lastid"
-    GIT-->>GH: 空（首次运行）
-    GH->>IMAP: fetch mails 1-50
-    IMAP-->>GH: 50 mails
-    GH->>GIT: push tag "lastid" = 50
-    
+    GH->>GIT: 读 tag "lastid"
+    GIT-->>GH: 空（第一次运行）
+    GH->>IMAP: 取邮件 1-50
+    IMAP-->>GH: 50 封邮件
+    GH->>GIT: 推 tag "lastid" = 50
+
     Note over GH: Run #2
-    GH->>GIT: 读取标签 "lastid"
+    GH->>GIT: 读 tag "lastid"
     GIT-->>GH: 50
-    GH->>IMAP: fetch mails 51-73
-    IMAP-->>GH: 23 mails
-    GH->>GIT: push tag "lastid" = 73
+    GH->>IMAP: 取邮件 51-73
+    IMAP-->>GH: 23 封邮件
+    GH->>GIT: 推 tag "lastid" = 73
 ```
 
-git tag 就是数据库。只有一个值，但这就是我们需要的全部。
+git tag 就是数据库。一个值，但够用了。
 
-### 读取状态
+### 读状态
 
-任务开始时，从 tag 获取值：
+job 一开始从 tag 取值：
 
 ```bash
 git fetch origin --tags lastid || true
 git show refs/tags/lastid:data/lastId > data/lastId || true
 ```
 
-`git show refs/tags/lastid:data/lastId` 意思是："给我 tag `lastid` 中文件 `data/lastId` 的内容"。
+`git show refs/tags/lastid:data/lastId` 的意思是："把 tag `lastid` 里 `data/lastId` 文件的内容给我"。
 
-Boom。拿到值了，不需要数据库。
+Boom。拿到值了，不要数据库。
 
-### 写入状态
+### 写状态
 
-结束时，用新值重新创建 tag：
+结尾用新值重建 tag：
 
 ```bash
-git switch --orphan lastid-tmp   # 没有历史的新分支
-git rm -rf .                      # 清空
+git switch --orphan lastid-tmp   # 无历史的孤儿分支
+git rm -rf .                      # 全清空
 mkdir -p data
 printf "%s\n" "${LAST_ID_CONTENT}" > data/lastId
 
 git add data/lastId
 git commit -m "lastId snapshot"
-git tag -f lastid                 # 强制将 tag 指向这个 commit
-git push --force ...origin lastid # push tag
+git tag -f lastid                 # 强制打 tag 到这个提交
+git push --force ...origin lastid # 推 tag
 ```
 
-我们创建一个 **孤儿** 分支（没有历史），只放 `lastId` 文件，commit，tag，force push。
+建一个**孤儿**分支（没有历史），只放 `lastId` 文件，提交，打 tag，强制推。
 
-为什么用孤儿分支？为了不在仓库历史里堆积一万个状态 commit。每次更新都会覆盖上一次的。tag 始终只指向 **一个** commit，里面只有 **一个** 值。
+为什么孤儿？为了不在仓库历史里攒一万个状态提交。每次更新覆盖上一次。tag 永远指向**一个**提交，里面**一个**值。
 
-干净。免费。完全离谱 xD
+干净。免费。完全离谱，但能跑。
 
 ---
 
-## 第二个 hack：运行时快照
+## 第二个 hack：runtime 快照
 
-GitHub Actions 还有另一个问题：`npm install`。
+GitHub Actions 还有个问题：`npm install`。
 
-如果每次运行（每 5 分钟）都执行 `npm install` + `npm run build`，你每次要浪费 60-90 秒。在频繁的 cron 上，这就是好几分钟的计算资源被浪费了。
+如果每次运行（每 5 分钟）都 `npm install` + `npm run build`，每次白白烧 60-90 秒。cron 跑这么勤，全是浪费的算力。
 
-解决方案：预编译代码 **一次**，也存到 git tag 里。
+解法：代码**一次**预编译好，也存在 git tag 里。
 
-build workflow（当你 push 到 `master` 时触发）做这些：
+push 到 `master` 时跑的构建工作流做这个：
 
 ```bash
 # 编译代码
 bun install
 bun run build
 
-# 把 dist/ + node_modules/ 存到 tag "runtime"
+# 把 dist/ + node_modules/ 存进 "runtime" tag
 git checkout --orphan temp-runtime
 git rm -rf .
 cp -r "$TMPDIR"/* .
@@ -141,75 +141,75 @@ git tag -f runtime
 git push --force ...origin runtime
 ```
 
-`runtime` tag 包含编译后的代码和 `node_modules`。开箱即用。
+`runtime` tag 里是编译好的代码**加** `node_modules`。开箱即用。
 
-而 cron 则直接 checkout 这个 tag：
+cron 直接 checkout 这个 tag：
 
 ```yaml
 - name: Checkout runtime snapshot
   uses: actions/checkout@v4
   with:
-    ref: refs/tags/runtime    # 预构建代码，不是源码
+    ref: refs/tags/runtime    # 预编译好的代码，不是源码
     fetch-depth: 1
 
-# 没有 npm install，没有 build！
+# 不用 npm install，不用 build！
 - name: Process emails
   run: node dist/index.js --action
 ```
 
-没有安装。没有构建。cron 瞬间启动，直接执行 `node dist/index.js`。
+cron 瞬间启动，直接跑 `node dist/index.js`，不用 install 不用 build。
 
-两个 tag，各司其职：
-- `runtime` = 可运行的代码（当你 push 代码时更新）
-- `lastid` = 持久状态（每次运行时更新）
+你看，两个 tag 两个活：
+- `runtime` = 能直接跑的代码（push 代码时更新）
+- `lastid` = 持久状态（每次运行更新）
 
-脏得优雅。
+优雅得像个脏招。
 
 ---
 
-## Bot 本身：AI 自动回复器
+## 机器人本体：AI 自动回信
 
-好了，git hack 很酷，但 bot 到底干什么的？
+行，git hack 很酷，但机器人到底干嘛的？
 
-它通过 IMAP 读取你的邮件，用 AI（Groq + Llama 3.3 70B）理解内容，然后自动回复。
+它用 IMAP 读我的邮件，用 AI（Groq + Llama 3.3 70B）理解，自己回。
 
-使用依赖注入（InversifyJS）的干净服务架构：
+架构是干净的服务加依赖注入（InversifyJS）：
 
 ```
 App
-├── ImapService      → 读取邮件 (IMAP)
-├── SmtpService      → 发送回复 (SMTP)
+├── ImapService      → 读邮件（IMAP）
+├── SmtpService      → 发回复（SMTP）
 ├── ParserService    → 解析邮件内容
 ├── ReplyService     → 生成 AI 回复
 ├── SummaryService   → 对话记忆
-├── AccountsService  → 管理多个邮箱
+├── AccountsService  → 管多个邮箱账号
 └── ConfigService    → 配置 / 环境变量
 ```
 
 ### 两种运行模式
 
-Bot 可以两种方式运行：
+机器人有两种跑法：
 
-**Listener 模式（实时）**：持续的 IMAP 连接，带指数退避重连。适用于 VPS。
+**listener 模式**（实时）：IMAP 长连接加指数重连。给 VPS 用的。
 
 ```typescript
 this.imapService.on("exists", async (data) => {
-  console.log(`[MAIL] 新邮件！总数: ${data.count}`);
-  // 立即处理新邮件
+  console.log(`[MAIL] 新邮件！总数：${data.count}`);
+  // 立刻处理新邮件
 });
 ```
 
-**Action 模式（批处理）**：从 `lastId` 开始处理新邮件，然后关闭。适用于 GitHub Actions cron。
+**action 模式**（批处理）：从 `lastId` 开始处理新邮件，然后退出。给 GitHub Actions cron 用的。
 
 ```bash
 node dist/index.js --action
 ```
 
-`--action` 模式就是使用 git hack 的那个。它读取 `lastId`，处理新增内容，写入新 `lastId`，结束。
+`--action` 模式就是用 git hack 的那个。读 `lastId`，处理新增，写回新 `lastId`，结束。
 
-### 不要回复机器人
+### 别回机器人
 
-如果你的 bot 回复 **所有** 邮件，它会回复 newsletter、通知、`noreply@`。灾难。更糟的是：如果两个 bot 互相回复，那就是无限的邮件循环。噩梦。
+如果机器人**所有**邮件都回，它会回 newsletter、通知、`noreply@`。灾难。更惨：如果两个机器人互回，你就得到无限邮件循环。噩梦。
 
 所以要激进地过滤：
 
@@ -226,34 +226,34 @@ export function isAutomatedSender(address) {
 }
 ```
 
-还有通过邮件 header 检测：
+还有邮件头检测：
 
 ```typescript
 export function isAutomatedByHeaders(headers) {
   return (
     ["bulk", "list", "junk"].includes(headers.precedence) ||
     headers["auto-submitted"] !== "no" ||
-    headers["list-unsubscribe"] !== "" ||   // newsletter 会有这个
+    headers["list-unsubscribe"] !== "" ||   // newsletter 都有这个
     /mailchimp|sendgrid|mailgun|brevo/i.test(headers["x-mailer"])
   );
 }
 ```
 
-Header 里有 `List-Unsubscribe`？那是 newsletter。`Precedence: bulk`？群发邮件。`X-Mailer: Mailchimp`？你懂的。直接忽略。
+头里有 `List-Unsubscribe`？newsletter。`Precedence: bulk`？群发。`X-Mailer: Mailchimp`？懂的都懂。无视。
 
-就像夜店的保安：机器人不准进 xD
+就像夜店保安：机器人不让进。
 
-### 神奇的触发器
+### 魔法触发器
 
-AI 可以决定完全不要回复，或者把问题转给真人。怎么实现？通过回复中的特殊触发器。
+AI 可以决定完全不回，或者把活转给人类。怎么做？靠回复里的特殊触发器。
 
-系统提示告诉它：
+系统提示词这么告诉它：
 
-> 如果是自动邮件/newsletter → 回复 `<no_reply>`
-> 如果太重要/太敏感（法律、财务等）→ 回复 `<manual_reply_required>`
-> 否则 → 写真实回复
+> 如果是自动邮件/newsletter → 回 `<no_reply>`
+> 如果太重要太敏感（法律、财务……）→ 回 `<manual_reply_required>`
+> 否则 → 写个正常回复
 
-然后代码解析这个：
+代码这么读：
 
 ```typescript
 const aiReply = completion.choices[0].message.content.trim();
@@ -261,31 +261,31 @@ const manualTrigger = aiReply.includes(MANUAL_REPLY_TRIGGER);
 const noReply = aiReply.includes(NO_REPLY_TRIGGER);
 
 if (noReply) {
-  console.log("[MAIL] AI 决定忽略。跳过。");
+  console.log("[MAIL] AI 决定无视。跳过。");
   return;
 }
 
 if (manualTrigger) {
-  console.log("[MAIL] 太烫手了，转发给真人。");
+  console.log("[MAIL] 太棘手，转给人类。");
   await this.smtpService.sendManualForward(...);
   return;
 }
 
-// 否则发送 AI 回复
+// 否则发 AI 回复
 await this.smtpService.sendReply(...);
 ```
 
-AI 有权说"不，这个我不碰，叫真人来"。这才是智慧。
+AI 有权说"这我不碰，叫个人类来"。这叫智慧。
 
 ---
 
 ## 对话记忆
 
-一个细节改变一切：bot **记得** 对话。
+改变游戏规则的细节：机器人**记得**对话。
 
-当它回复某人时，它保存一份交流摘要。下次这个人再来信，摘要会被重新注入到提示中。
+它回复某人时会存一份交流摘要。下次这个人来信，摘要重新注入提示词。
 
-存储方式：每个联系人一个 JSON 文件。
+存成每联系人一个 JSON 文件：
 
 ```
 data/customers/
@@ -294,94 +294,94 @@ data/customers/
 │   └── bob%40client.fr.json
 ```
 
-摘要本身也是 AI 生成的，它把旧摘要和新消息合并：
+摘要本身也是 AI 生成的，把旧摘要和新消息合并：
 
 ```typescript
 const completion = await groq.chat.completions.create({
   model: "llama-3.3-70b-versatile",
   messages: [
-    { role: "system", content: "你是一个记忆助手。在不丢失信息的前提下合并旧摘要和新消息。" },
-    { role: "user", content: `现有摘要:\n${existing}\n\n新消息:\n${incomingContent}` }
+    { role: "system", content: "你是记忆助手。把旧摘要和新消息合并，不要丢信息。" },
+    { role: "user", content: `已有摘要:\n${existing}\n\n新消息:\n${incomingContent}` }
   ],
-  temperature: 0.0,  // 确定性，不要创造性
+  temperature: 0.0,  // 确定性，不要 creativity
   max_tokens: 800,
 });
 ```
 
-所以 bot 会随着时间的推移构建压缩记忆。不需要存储所有邮件，只需要一个智能增长的摘要。
+机器人随时间攒出压缩记忆。一份越长越聪明的摘要就够了，不用存全部邮件。
 
-而这些 JSON 文件呢？嗯...也是存在 git 里的，在 runtime tag 里。无处不在的 git xD
+这些 JSON 文件呢？嗯……也存在 git 里，runtime tag 里。git 无处不在。
 
 ---
 
-## 提示长度的巧妙处理
+## 提示词长度的小心机
 
-有个让我笑了的小技术细节。
+一个让我笑出来的技术细节。
 
-模型有 token 限制。如果你的邮件 + 摘要 + 角色提示超出限制，API 会报错。
+模型有 token 上限。邮件加摘要加 persona 提示词一超，API 直接报错。
 
-代码通过 **级联截断** + 重试来处理：
+代码用**级联截断**加重试处理：
 
 ```typescript
 try {
-  // 第一次尝试，正常限制
+  // 先用正常长度试一次
   completion = await groq.chat.completions.create({...});
 } catch (error) {
   if (!this.isLengthError(error)) throw error;
 
-  // 是长度错误：用更紧的限制重试
+  // 是长度报错：收紧限制再试
   ({ systemContent, userContent } = this.buildPromptPayload({
     ...,
     limits: {
-      systemPromptChars: 2200,  // 代替 3000
-      summaryChars: 1800,       // 代替 4000
-      personaChars: 900,        // 代替 1500
-      userContentChars: 2200,   // 代替 8000
+      systemPromptChars: 2200,  // 原来 3000
+      summaryChars: 1800,       // 原来 4000
+      personaChars: 900,        // 原来 1500
+      userContentChars: 2200,   // 原来 8000
     },
   }));
   completion = await groq.chat.completions.create({...});  // 重试
 }
 ```
 
-如果还不行，就切得更短再试一次。简单，有效，不会崩溃。
+一次不行就砍短再试。简单，有效，不崩。
 
 ---
 
-## 好了，具体怎么运行的？
+## 好，具体怎么跑的？
 
 一次 cron 运行的完整流程：
 
 ```
-1. GitHub Actions 触发（每 5 分钟的 cron）
+1. GitHub Actions 触发（每 5 分钟 cron）
 2. Checkout "runtime" tag（预编译代码）
-3. git show refs/tags/lastid → 获取已处理的最后 UID
+3. git show refs/tags/lastid → 取上次处理到的 UID
 4. node dist/index.js --action
-   ├── 连接 IMAP
-   ├── 从 lastId+1 开始获取邮件
-   ├── 每封邮件：
-   │   ├── 解析内容
-   │   ├── 过滤机器人（自动的就跳过）
-   │   ├── 匹配收件人账户
-   │   ├── 获取对话记忆
-   │   ├── 生成 AI 回复 (Groq)
-   │   ├── <no_reply>？跳过
-   │   ├── <manual_reply_required>？转发给真人
-   │   ├── 否则：发送回复 (SMTP)
-   │   └── 更新对话记忆
-   └── 写入新的 lastId
-5. git push --force tag "lastid" 带新值
+│   ├── IMAP 连接
+│   ├── 从 lastId+1 开始取新邮件
+│   ├── 每封邮件：
+│   │   ├── 解析内容
+│   │   ├── 机器人过滤（自动的跳过）
+│   │   ├── 匹配收件账号
+│   │   ├── 取对话记忆
+│   │   ├── 生成 AI 回复（Groq）
+│   │   ├── <no_reply>？跳过
+│   │   ├── <manual_reply_required>？转人类
+│   │   ├── 否则：发回复（SMTP）
+│   │   └── 更新对话记忆
+│   └── 写回新 lastId
+5. git push --force tag "lastid"，带新值
 ```
 
-然后 5 分钟后重来。永远如此。免费。
+5 分钟后重来一遍。永远。免费。
 
 ---
 
-**3 个要点：**
+**三句话总结：**
 
-1. **Git = 免费数据库** -- 一个孤儿 tag 可以在两次无状态运行之间存储你的持久状态。`git show refs/tags/X:fichier` 来读取，force-push 来写入。不需要数据库。
+1. **git = 免费数据库**，一个孤儿 tag 存两次无状态运行之间的持久状态。`git show refs/tags/X:文件` 读，强制推写。省掉整个数据库。
 
-2. **预编译到 runtime tag** -- 不用每次 cron 运行都执行 `npm install`，把编译后的代码 + node_modules 存到 git tag。cron 瞬间启动。
+2. **runtime tag 预编译**，cron 每次不用 `npm install`，把编译好的代码加 node_modules 存进 git tag。cron 瞬间启动。
 
-3. **AI bot 要知道什么时候闭嘴** -- `<no_reply>` 和 `<manual_reply_required>` 触发器让 AI 决定不回复或转给真人。再加上反机器人过滤。否则你会造出无限的邮件循环。
+3. **AI 机器人要懂得闭嘴**，`<no_reply>` 和 `<manual_reply_required>` 触发器让 AI 决定不回或转交。加机器人过滤。不然就是无限邮件循环。
 
-Serverless cron 带持久状态、AI、记忆，全月 0€。完全离谱，但我爱了 xD
+带持久状态、记忆、AI 的 serverless cron，每月 0 元。烂得漂亮，我太喜欢这个设计了。

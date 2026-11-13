@@ -1,14 +1,14 @@
 ---
 title: Yeni Bir Proje Üzerinde Çalışmak
-description: Yeni bir web sitesi geliştirme ve başlatma sürecine bir bakış.
+description: Yeni bir web sitesini başlatma ve geliştirme sürecine bir bakış.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - meta
   - webdev
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "6QUuU11jWQBBbuA1ygBveOwdOEJdzdgFleoAVTGM1jm3w8RRklW0Pm1SWuNKMX/WIVaFEszs1ZLUnTXKwjxDJg=="
+author_sig: "wLexvSkX+lDgGCPNlk1QiZaZeseKkTquUf2YBbKhR9IpF+GuGNHEhEwe7H9V4/Ociwb1tpSs7S4xMru7Nle1Mg=="
 ---
 
 # Proje
@@ -17,23 +17,23 @@ author_sig: "6QUuU11jWQBBbuA1ygBveOwdOEJdzdgFleoAVTGM1jm3w8RRklW0Pm1SWuNKMX/WIVa
 
 ![](assets/20260313_092734_image.png)
 
-Bu bir web sitesi ve aynı zamanda bir PWA, yani bir mobil uygulama da. Gerçek bir telefon uygulaması gibi hissettirmek için MaterialUI kullanıyor.
-Yakın zamanda Mui import'larını yönetmem gerekti ve her ikonu satır satır ayrı ayrı import ederek, destructered import kullanmak yerine 11707 modülden sadece 595'e düştüm: şunu öğrendim ki destructered yaptığında aslında tüm ikon kütüphanesini yüklüyorsun, tek tek import ettiğinde ise sadece ihtiyacın olanları import ediyorsun.
+Bu aynı zamanda bir PWA olan bir web sitesi, yani mobil uygulama gibi kullanılabiliyor. Gerçek bir telefon uygulaması gibi davranması için MaterialUI kullanıyor.
+Mui importlarıyla bir süre uğraştım: yıkıcı import yerine her ikonu satır satır import ederek 11707 modülden sonunda 595 modüle indim. O zaman yıkıcı importun tüm ikon kütüphanesini yüklediğini, bireysel importların ise sadece kullanılanları yüklediğini öğrendim.
 
-Nibi, bu web sitesine bağlı olan bot. ![](assets/20260313_093102_image.png) Mezuniyet Google Forms üzerinden yapılıyor:
+Nibi bu web sitesine bağlı bot.![](assets/20260313_093102_image.png)Notlandırma Google Forms üzerinden yapılıyor:
 ![](assets/20260313_093255_image.png)
-Öğrencilerimizi değerlendirmek için çoktan seçmeli testler kullanıyoruz ve ayrıca büyük bir sınavı geçerlerse öğrencilerimize Discord rolleri, emojiler ve kanallar da veriyoruz.
+Öğrencilerimizi testlerle değerlendiriyoruz ve önemli bir sınavı geçtiklerinde onlara Discord rolleri, emojiler ve kanallar da veriyoruz.
 
 ![](assets/20260313_093707_image.png)
 
-Bu projenin amacı, insanların bizimle birlikte Japonca öğrenmesini sağlamak çünkü ben de kendim yapmak istediğim bir şey.
-Öğrenciler ayrıca yeteneklerini ödüllendirmek için Crunchyroll ve diğer platformlarla ortaklıkların kilidini açacak.
+Bu projenin amacı insanların bizimle birlikte Japonca öğrenmesine yardım etmek, çünkü bu benim de kendim yapmak istediğim bir şey.
+Öğrenciler ilerlemelerini ödüllendirmek için Crunchyroll ve diğer platformlarla ortaklıkların da kilidini açacak.
 
-Nibi ve web sitesi sırasıyla Cloudflare Workers Hono Server Interaction URL ve GitHub Pages ile React Deployement üzerinde barındırılıyor.
-Web sitesinin kodu açık kaynak değil, ancak Nibi açık kaynak ve onu [bu GitHub reposunda](https://github.com/let-s-Learn-Japanese-Together/nibi) bulabilirsin. Web sitesi açık kaynak değil çünkü bazı özel bilgiler içeriyor, ama nasıl inşa ettiğimi merak ediyorsan bana Discord'dan falan sorabilirsin, süreci seninle paylaşmaktan mutluluk duyarım! Aslında GitHub Enterprise'a para ödememek için yaptığım bir GitHub Action kullanıyor ve ayrıca ilgini çekerse paylaşabileceğim bir sürü başka havalı araç ve teknik de kullanıyor!
+Nibi ve site sırasıyla Cloudflare Workers (Hono Server ile Interaction URL) ve React ile GitHub Pages tarafından barındırılıyor.
+Sitenin kodu açık kaynak değil ama Nibi açık kaynak ve onu [bu GitHub deposunda](https://github.com/let-s-Learn-Japanese-Together/nibi) bulabilirsin. Site özel bilgiler içerdiği için gizli kalıyor ama onu nasıl inşa ettiğimi bilmek istersen bana Discord üzerinden sor, süreci sana memnuniyetle anlatırım! GitHub Enterprise için ödeme yapmamak için oluşturduğum bir GitHub Action ve ilgini çekerse anlatabileceğim başka araçlar ve teknikler kullanıyor!
 
-Bir süredir projelerimi barındırmamak ve barındırma ücreti ödememek için işin kestirmesini bulmayı gerçekten seviyorum, bu yüzden Nibi'yi bir Interaction Endpoint Botu yaptım, böylece Cloudflare Workers'da ücretsiz barındırılabiliyor ve ayrıca web sitesini GitHub Pages'de ücretsiz dağıtmak için bir GitHub Action yaptım, böylece barındırma için para ödemek zorunda kalmıyorum. Bence işin kestirmesini bulmak, kod yazmanın en eğlenceli kısımlarından biri ve gerçekten zevk aldığım bir şey! Gerçekten kalıpların dışında düşünmek ve sorunlara yaratıcı çözümler bulmak zorundasın, işte bunu seviyorum. Sadece kod yazmakla ilgili değil, para harcamadan işleri yürütmenin yollarını bulmakla ilgili ve bu gerçekten keyif aldığım bir meydan okuma!
+Birkaç gündür projelerimi barındırma için ödeme yapmadan barındırmak için geçici çözümler bulmaktan çok keyif alıyorum. Bu yüzden Nibi'yi Interaction Endpoint botu yaptım, Cloudflare Workers üzerinde ücretsiz barındırmak için, ve siteyi GitHub Pages üzerinde ücretsiz dağıtmak için bir GitHub Action oluşturdum. Bu geçici çözümleri aramak benim için kodun en heyecan verici kısımlarından biri olmaya devam ediyor: farklı düşünmek ve yaratıcı çözümler inşa etmek gerekiyor ve beni motive eden tam olarak bu bütçesiz meydan okuma!
 
-GitHub Actions'ı özel olarak yapılmadığı bir şekilde kullanmak ve Cloudflare Workers'ı bir botu 'barındırmak' için kullanmak aynı zamanda yeni şeyler öğrenmenin ve Bulut Barındırma gibi yeni teknolojiler keşfetmenin bir yolu, ki bu da gerçekten keyif aldığım bir şey. Artık barındırma için para ödemek istemiyorum.
+GitHub Actions'ı tasarlanan kullanımının dışında kullanmak ve bir botu "barındırmak" için Cloudflare Workers kullanmak, aynı zamanda yeni şeyler öğrenmenin ve bulut barındırma gibi yeni teknolojiler keşfetmenin bir yolu. Artık barındırma için ödeme yapmak istemiyorum.
 
-Hâlâ üzerinde çalışıyorum ama ilerlemeyi takip etmek ve nasıl geliştiğini görmek istersen [Discord sunucusuna](https://discord.gg/frKZ9cJ4fD) katılabilirsin, hatta ilgini çekerse projeye katılabilirsin! Sunucu herkese açık ve bu Japonca öğrenme yolculuğunda bize katılmanı çok isteriz! Davet bağlantısını web sitesinde bulabilirsin ya da istersen bana sorabilirsin!
+Hâlâ üzerinde çalışıyorum ama ilerlemeyi takip etmek ve nasıl geliştiğini görmek için [Discord sunucusuna](https://discord.gg/frKZ9cJ4fD) katılabilirsin, hatta ilgini çekerse projeye katılabilirsin bile! Sunucu herkese açık ve birlikte Japonca öğrenmek için daha fazla insan görmek isteriz! Davet bağlantısını sitede bulursun ya da doğrudan bana sorabilirsin!

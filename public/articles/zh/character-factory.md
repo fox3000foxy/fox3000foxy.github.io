@@ -1,49 +1,49 @@
 ---
-title: 构建 character-factory：带遗传基因的头像生成器
-description: 基于 DiceBear 的 TypeScript 模块：按国家和地区合理生成一致性头像、用于预测后代的小型遗传引擎，以及使其在卡牌游戏中可用的工程细节。
+title: 搭建 character-factory：带遗传学的头像
+description: 一个构建在 DiceBear 之上的 TypeScript 模块：按国家/族群生成一致的头像，一个能推导孩子的小遗传引擎，以及让它能在卡牌游戏里真正好用的工程细节。
 date: 2026-05-16
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "p3FIBWHNlRoSMrNcmdYYbwAvRtds9h+uB77qkUXAzU5ZjbvDZqBKf3u9ZliQ0MV2OqeCqloJvU00KGwi85sWow=="
+author_sig: "lmu9JoNt7/2eJaNczGGSZoZWa8+YXS//a3UgCkiH3gKPbpEfEq6yzTcgXcVAbSehadIdMJitp8LKuSHMpRFsBA=="
 ---
 
-# 构建 character-factory：带遗传基因的头像生成器
+# 搭建 character-factory：带遗传系统的头像
 
-我需要为 [Kurekuta](https://github.com/fox3000foxy/kurekuta/) 生成成千上万个可信、各不相同的头像----这是一个私有的卡牌游戏项目，每张卡牌都包含一个角色"DNA"，渲染器将其转化为肖像。购买现成套图看起来千篇一律。按种子生成一次性 DiceBear 头像又感觉随机得不对劲：一张日式卡牌可能生成一个斯堪的纳维亚金发碧眼角色，而两个"兄弟姐妹"看起来像陌生人。
+[Kurekuta](https://github.com/fox3000foxy/kurekuta/) 需要成千上万张可信又各不相同的人物头像，这是个私有卡牌游戏项目，每张卡存一段人物"DNA"，渲染引擎把它变成肖像。买现成素材包，一眼假。按人物 seed 随机 DiceBear，结果是灾难：日本世界观的卡能抽出金发北欧人，亲"兄妹"长得像陌生人。
 
-所以我写了 [character-factory](https://github.com/fox3000foxy/character-factory)----一个基于 DiceBear 的 Lorelei 系列的 TypeScript 模块，在 DiceBear 本身的基础上增加了三样东西：**合理的人口统计分布**、**一个小型遗传引擎**和**一个流畅的构建器**，在游戏循环中非常易用。
+于是我写了 [character-factory](https://github.com/fox3000foxy/character-factory)，一个盖在 DiceBear Lorelei 集合上的 TypeScript 模块，补了 DiceBear 本身给不了的三样东西：**人口统计学一致的画像**、**小遗传引擎**、**好用的链式 builder**，在游戏循环里调用很舒服。
 
-## 它能做什么
+## 它能干嘛
 
-最小的可用代码片段：
+最短的有用 snippet：
 
 ```ts
 import { CharacterFactory, Country, Mood } from "character-factory";
 
 const svg = new CharacterFactory()
-  .setCountry(Country.Japan)   // 加权民族 → 协调的肤色/发色/发型/胡须
+  .setCountry(Country.Japan)   // 按族群加权 → 肤色/发色/发型/胡子自洽
   .setMood(Mood.Happy)
   .buildSvg();
 ```
 
-这一行链式调用根据日本的人口统计分布加权选择民族，抽取搭配的肤色和发色，从正确的性别子池中挑选发型，然后将眼睛/眉毛/嘴巴锁定为"开心"的组合。结果可以渲染为 SVG，如果安装了 `sharp` 库，也可以输出任意尺寸的 PNG。
+这一串做了：按日本人口加权抽族群，抽配套的肤色和发色，按性别分组选发型，锁眼/眉/嘴到"开心"态。结果出 SVG，装了 `sharp` 还能出任意尺寸 PNG。
 
-一个角色就是一个 `CharacterConfig` 对象----面部、头发、配饰、展示方式。构建器在内部修改它，你可以将其导出为 JSON、base64 或文件，也可以用同样的方式重新加载。对 Kurekuta 来说这一点至关重要：卡牌存储的是配置而非渲染好的图像，因此图片总是可重现的，卡牌的文件大小也保持极小。
+人物就是一个 `CharacterConfig` 对象，脸、头发、饰品、表情。builder 在内部改它，你可以导出 JSON、base64、文件，再原样读回。对 Kurekuta 很关键：卡只存配置，不存渲染图。美术永远可复现，卡面积极小。
 
-## 合理的人口统计分布，而非随机像素
+## 人口统计学一致，而不是纯随机像素
 
-DiceBear 的选项是均匀随机选择器。传递 `["#ffdbb4", "#2c1b18"]` 作为肤色，两者被选中的概率是相等的----这对 Logo 来说没问题，但对于"给我一个来自巴西的角色"来说毫无用处。
+DiceBear 的选项是均匀选择器。传 `["#ffdbb4", "#2c1b18"]` 当肤色，两个颜色等概率出，做 logo 行，做"给我来个巴西人"不行。
 
-`character-factory` 提供了一个 国家 → 民族 → 特征 的管道：
+`character-factory` 内置国家 → 族群 → 特征的流水线：
 
 ```ts
-// 模块内部的实际情况：
+// 模块里是这样的：
 ethnicitiesByCountry[Country.Brazil] = [
   { ethnicity: Ethnicity.WestEuropean,  weight: 35 },
   { ethnicity: Ethnicity.BlackAfrican,  weight: 25 },
@@ -58,17 +58,17 @@ ETHNICITY_PROFILES[Ethnicity.EastAsian] = {
     { color: SkinColor.Medium, weight: 20 },
     // ...
   ],
-  hairColors: [/* 主要是黑色/深棕色，没有金色 */],
+  hairColors: [/* 基本黑和深棕，没金发 */],
   hairCuts:   { male: [...], female: [...] },
   beardProbability: 0.15,
 };
 ```
 
-每一层都是加权随机抽取。这些权重不是社会学论文----它们是启发式的，确保"来自日本"不会产生红头发，"来自瑞典"不会产生乌黑头发。整个管道一次调用就搞定：`setCountry(country)` 或 `randomizeFromCountry(country, gender?)`。
+每一层都是加权抽。权重不是社会学论文，是启发式："来自日本"不出红发，"来自瑞典"不出深黑。整条流水线收敛成一个调用：`setCountry(country)` 或 `randomizeFromCountry(country, gender?)`。
 
-## 一个小型遗传引擎
+## 小遗传引擎
 
-我最喜欢的功能：`projectChild`。两个工厂可以产生一个后代，其特征通过粗略的生物显性继承：
+我玩得最开心的函数：`projectChild`。两个 factory 能生孩子，孩子的特征按近似显隐性遗传：
 
 ```ts
 const parentA = new CharacterFactory().setCountry(Country.Sweden);
@@ -76,7 +76,7 @@ const parentB = new CharacterFactory().setCountry(Country.Japan);
 const kid     = parentA.projectChild(parentB.getConfig());
 ```
 
-在底层这是一个刻意简化的小模型。每个父母被视为携带一个 2-等位基因的基因型，每个基因从另一方抽取一个，组合成显性或隐性：
+底层是故意做小的模型。每个亲本带 2 等位基因的基因型，两边各抽一个，按显隐性合并：
 
 ```ts
 function combine(a: Allele, b: Allele): "dominant" | "recessive" {
@@ -84,7 +84,7 @@ function combine(a: Allele, b: Allele): "dominant" | "recessive" {
 }
 ```
 
-具有真实显性轴的特征（皮肤、眼睛、头发）根据一个明确的有序列表来解析----深色显性于浅色，棕/黑色眼睛显性于蓝色，乌黑头发显性于金色：
+有明确显隐轴的特征（肤、眼、发）走显式排序表，深色压浅色，棕黑眼压蓝眼，深黑发压金发：
 
 ```ts
 const HAIR_DOMINANCE_ORDER = [
@@ -102,21 +102,21 @@ const HAIR_DOMINANCE_ORDER = [
 ] as const;
 ```
 
-`resolveByRank` 找到每个父母的索引，在"显性"等位基因组合时取较高值，在"隐性"时取较低值。幻彩色（粉红、淡紫）不在列表中----它们回退到 50/50 的抛硬币结果，这是正确的行为：它们不是生物特征，所以显性没有意义。
+`resolveByRank` 看双亲的 index，"显性"组合取高的，"隐性"取低的。幻想色（粉、紫）不在表里，50/50 抛硬币，这处理是对的：它们不生物，显隐无意义。
 
-雀斑模拟 MC1R 基因：如果父母双方都有，概率 75%；只有一方携带，概率 25%；双方都没有，概率 0%。胡须与 SRY 基因关联：如果后代为女性则去除，否则从有胡须的一方继承。发型完全不是生物特征----它是文化选择，所以后代从自己的性别池中选择，尽可能保留发质。
+雀斑按 MC1R 建模：双亲都有 75%，一方有 25%，都没有 0%。胡子跟 SRY 走：孩子是女孩直接去掉，否则继承有胡子那方。发型不生物，是文化选择，孩子从自己性别池里抽，尽量保留质感。
 
-这些都不是发表级遗传学。它是一个感觉层：孩子看起来像是父母双方合理的混合体，而不是两个陌生人简单平均在一起。
+这都不是能发论文的遗传学。是手感层：孩子像双亲 plausibly 的混合，不像两个陌生人的平均。
 
-## 那些不起眼但很重要的工程细节
+## 不起眼但重要的工程活
 
-有些事情虽然不炫酷，但在代码中占有一席之地：
+几个藏在 diff 里但值得说的细节：
 
-**更安全的 `pick`。** 原来的版本在空数组上返回 `undefined` 并强制转换为 `T` 类型。在开启了 `strict` + `noUncheckedIndexedAccess` 的 TypeScript 中，这是编译器批准的一个谎言。新版本抛出 `RangeError`----在调用点立即捕获，而不是在三级之后产生 `undefined` 属性。
+**更安全的 `pick`。** 原版空数组返回 `undefined` 强转 `T`，开了 `strict` + `noUncheckedIndexedAccess` 的 TypeScript 里，这是编译器签字的谎言。新版抛 `RangeError`，在调用处立刻炸，而不是三层之后冒出 `undefined` 的 props。
 
-**不损坏数组的 `deepMerge`。** 原来的递归在源值是对象时就会触发，即使目标槽是 `null` 或数组。`merge({tags: ["a"]}, {tags: ["b"]})` 会产生 `{tags: {0: "b"}}`。新版本只在双方都是普通对象时递归。
+**不腐蚀数组的 `deepMerge`。** 老递归只要源值是对象就 recurse，哪怕目标是 `null` 或数组。`merge({tags: ["a"]}, {tags: ["b"]})` 得到 `{tags: {0: "b"}}`。新版只在两边都是 plain object 时才 recurse。
 
-**并行批处理渲染。** `batchFactory` 原来使用串行循环渲染 PNG----导出 1000 张卡牌耗时数分钟。现在它是一个工作池，可配置并发数（默认为 4），通过写入预大小数组来保持结果顺序：
+**并行批量渲染。** `batchFactory` 原来是串行渲 PNG，导出 1000 张卡要等到天荒地老。现在是 worker 池，可配并发（默认 4），写预分配数组保序：
 
 ```ts
 const worker = async () => {
@@ -132,12 +132,12 @@ const worker = async () => {
 await Promise.all(Array.from({ length: concurrency }, () => worker()));
 ```
 
-在导出 1000 个角色时，这使原本够喝杯咖啡的时间变成了"已经搞定了？"的瞬间。
+1000 个人物导出，从"去泡咖啡"变成"啊？渲完了？"
 
-**有意义的 `sharp` 错误信息。** `buildPng` 使用惰性导入 `sharp`，因为它是类似 peer 的依赖项，你不想强加给仅需 SVG 的用户。原来的 catch 吞掉了真正的错误，总是显示"需要 sharp"。如果真正的失败是版本不匹配或原生绑定问题，你会花十分钟安装一个已经装好的东西。新版本仍然提示你安装它，但会包含底层错误信息。
+**会说话的 `sharp` 报错。** `buildPng` 懒加载 `sharp`，因为是不想强加给纯 SVG 用户的可选依赖。老 catch 吞掉真错误，永远说"sharp is required."。真问题是版本冲突或 native binding 坏掉时，你白重装十分钟。新版照样提示安装，但把底层错误一起带上。
 
-## 下一步计划
+## 下一步
 
-该模块目前是 1.1.1 版本，在 [character-factory 仓库](https://github.com/fox3000foxy/character-factory)中。遗传引擎显然是继续迭代的方向----目前还没有测试套件，所以像"一个巴西东亚混血角色永远不会拥有乌黑眼睛配铂金色头发"这样的连贯不变量只能靠权重来保证。添加 `bun test` 或 `vitest`，编写一个对每个国家运行一万次 `randomizeFromCountry` 调用的一致性测试，是下一步的计划。
+模块在 [character-factory 仓库](https://github.com/fox3000foxy/character-factory) 的 1.1.1。遗传引擎是最值得继续迭代的地方，现在还没测试套件，一致性约束（"东亚血统的巴西人物不会黑眼睛配铂金发"）只靠权重保证。下一步是加上 `bun test` 或 `vitest`，写个一致性测试，每个国家跑一万次 `randomizeFromCountry`。
 
-Kurekuta 本身目前还是私有的，但你最终看到的每张卡牌都是一个 `CharacterConfig` 数据块，离实际展现就差一次 `buildPng()` 调用。
+Kurekuta 本体暂时私有，但以后你看到的每张卡，都只是一个 `CharacterConfig` blob 加一次 `buildPng()`。

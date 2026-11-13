@@ -1,47 +1,48 @@
 ---
-title: Automatizando uma Farm do Microsoft Rewards
-description: Como eu codei um bot para farmar pontos do Microsoft Rewards em grande
-  escala -- e por que a Microsoft reforçou suas defesas desde então.
+title: Automatizando uma fazenda Microsoft Rewards
+description: Como codei um bot para farmar pontos Microsoft Rewards em
+  grande escala, e por que a Microsoft reforçou suas defesas desde então.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "unCytKU7ACWcSs7J+xE4+VRF6E3GliP2qrrlpDzXAjqoNCeCsfUYyTzQDk9imVyVCw9Nyml8JIfucWChGwurdw=="
+author_sig: "IRpyI+xJ9iT/jJVkkm0hBThsWJ22PnCfIZYPL9k/GxDEhsoEYpAcS1rLj5kWUyN7OXM6bHp598mzgs/qs7F9IA=="
 ---
 
-> **Nota (2026):** Este projeto não é mais mantido. A Microsoft reforçou consideravelmente sua detecção anti-bot -- o que funcionava na época não funciona mais hoje. O código e a abordagem descritos abaixo são mantidos apenas para fins de arquivo e demonstração.
+> **Nota (2026) :** Este projeto não é mais mantido. A Microsoft reforçou bastante sua detecção anti-bot, então o que funcionava na época não funciona mais hoje. O código e a abordagem descritos abaixo são mantidos para fins de arquivamento e demonstração apenas.
 
 ## Introdução
 
-Descobri o Microsoft Rewards alguns anos atrás. Foi durante o lockdown, mas isso não muda o fato de que eu era obrigado a usar o controle parental Microsoft Family Safety e, portanto, a usar o Edge. Foi aí que descobri o Rewards.
+Descobri o Microsoft Rewards há alguns anos. Foi durante o confinamento, e na época eu era obrigado a usar o controle parental Microsoft Family Safety e portanto passar pelo Edge. Foi aí que descobri o Rewards.
 
-Na época eu tinha apenas 14 anos e nada no catálogo me interessava. Agora eu penso que com as habilidades que adquiri, posso farmar pontos com bots, depois dar os códigos ou até mesmo revendê-los mais barato se eu realmente quiser (mas honestamente, acho que não vou fazer isso). Enfim, vou te contar como codei um bot que farma contas em escala.
+Na época eu tinha só 14 anos e nada no catálogo me interessava. Agora penso que com as habilidades que adquiri, posso farmar pontos com bots, e depois doar os códigos ou até revendê-los mais barato se eu realmente quiser (mas sinceramente, acho que não vou fazer). Vou te contar como codei um bot que farma contas em escala.
 
 ---
 
-## O que é o Microsoft Rewards?
+## O que é o Microsoft Rewards ?
 
-Resumindo: é um programa que recompensa usuários do Edge com pontos por atividades como pesquisas, quizzes, jogos e uma extensão (mas isso é outra história).
+Resumindo : é um programa que recompensa usuários do Edge com pontos por atividades como pesquisas, quizinhos, jogos, e uma extensão (mas isso é outra história).
 
-Você vê aqui as coisas "Explore":  
+Você vê aqui os blocos "Explore" :
 ![Explore screenshot](assets/20260313_135010_image.png)
 
-Aqui por exemplo é o que eles chamam de "conjunto do dia".  
+Aqui por exemplo é o que chamam de "set do dia".
 ![Daily set screenshot](assets/20260313_135038_image.png)
 
-Eles ainda fizeram um sistema de streak, é bem louco.  
+Eles até fizeram um sistema de streak, é bem louco.
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-Tem também um sistema de nível e é simplesmente muito divertido:  
+Também há um sistema de nível e a progressão deixa a rotina realmente viciante :
 ![Level screenshot](assets/20260313_135340_image.png)
 
-Então você tem várias maneiras de ganhar pontos, e a maioria é diária. A ideia aqui é fazer um bot que realiza as atividades no seu lugar, para farmar pontos em escala e completar sua rotina de farming.
+Então você tem várias formas de ganhar pontos, e a maioria é diária.
+A ideia aqui vai ser fazer um bot que faz as atividades no seu lugar, para farmar pontos em escala e completar sua rotina de farming.
 
-Como você pode ver abaixo, a maioria das recompensas são cartões-presente, mas também tem coisas legais como jogos ou assinaturas.  
+Como você pode ver abaixo, a maioria das recompensas são cartões-presente, mas também há opções interessantes como jogos ou assinaturas.
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
 | Recompensa | Categoria | Custo em pontos |
@@ -54,7 +55,7 @@ Como você pode ver abaixo, a maioria das recompensas são cartões-presente, ma
 | **Minecraft Minecoins** | Jogo / conteúdo digital | 2 500 |
 | **Cartão-presente League of Legends** | Jogo / conteúdo digital | 2 000 |
 | **Código Overwatch moedas (digital)** | Jogo / conteúdo digital | 2 000 |
-| **Sea of Thieves – Pacote de Moedas Antigas** | Jogo / conteúdo digital | 1 700 |
+| **Sea of Thieves – Pack Moedas antigas** | Jogo / conteúdo digital | 1 700 |
 | **Zalando – Cartão-presente** | Loja / serviço | 7 205 |
 | **Carrefour – Cartão-presente** | Loja / serviço | 14 410 |
 | **Cultura – Cartão-presente** | Loja / serviço | 14 410 |
@@ -63,29 +64,30 @@ Como você pode ver abaixo, a maioria das recompensas são cartões-presente, ma
 | **Mango – Cartão-presente** | Loja / serviço | 36 025 |
 | **Wonderbox – Cartão-presente** | Loja / serviço | 14 410 |
 | **Yves Rocher – Cartão-presente** | Loja / serviço | 14 410 |
-| **Amazon.fr – Cheque-presente** | Loja / serviço | 7 205 |
+| **Amazon.fr – Vale-presente** | Loja / serviço | 7 205 |
 | **Foot Locker – Cartão-presente** | Loja / serviço | 14 410 |
 | **IKEA FR – Cartão-presente** | Loja / serviço | 36 025 |
 | **IKEA FR – Cartão-presente (outro design)** | Loja / serviço | 7 200 |
 | **Marionnaud – Cartão-presente** | Loja / serviço | 14 410 |
 | **Asos – Cartão-presente** | Loja / serviço | 14 410 |
 | **Adidas FR – Cartão-presente** | Loja / serviço | 14 410 |
-| **Deliveroo França – Cartão-presente** | Loja / serviço | 21 615 |
-| **H&M França – Cartão-presente** | Loja / serviço | 14 410 |
+| **Deliveroo France – Cartão-presente** | Loja / serviço | 21 615 |
+| **H&M France – Cartão-presente** | Loja / serviço | 14 410 |
 | **Global Hotel Card (Expedia Group)** | Loja / serviço | 7 205 |
-| **Uber Eats França – Cartão-presente** | Loja / serviço | 36 025 |
+| **Uber Eats France – Cartão-presente** | Loja / serviço | 36 025 |
 
-Agora que você entende o valor do programa, vamos nos concentrar no botting.
+Agora que você entende o interesse do programa, vamos ao botting.
 
 ---
 
 ## Primeiros testes
 
-Antes de construir meu bot, eu queria ter certeza de que meu IP não seria marcado por ter usado centenas de contas do mesmo endereço. Você me conhece, vou usar Tor com um proxy rotativo. E não quero hospedar meu bot em um VPS -- quero que ele rode em uma GitHub Action.
+Antes de construir meu bot, eu queria ter certeza de que meu IP não seria marcado por usar centenas de contas do mesmo endereço. Você me conhece, passo pelo Tor com um proxy rotativo. Quero rodar em uma GitHub Action em vez de em um VPS.
 
-Então escrevi um workflow simples:
+Então escrevi um workflow simples :
 
 ```yaml
+# Workflow de teste : instala o Tor e faz um curl através dele
 name: Tor Proxy Curl
 
 on:
@@ -133,28 +135,29 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-Esse workflow apenas instala o Tor, o inicia e faz uma requisição curl através dele.
+Esse workflow só instala o Tor, inicia, e faz uma requisição curl através dele.
 
-A primeira execução deu este resultado:  
+O primeiro run deu este resultado :
 ![Tor curl first run](assets/20260313_140705_image.png)
 
-As estatísticas de tempo foram:  
+As estatísticas de tempo foram :
 !Timings
 
-Uma segunda execução deu este resultado:  
+Um segundo run deu este resultado :
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-Como você pode ver, os IPs são diferentes, então não seremos sinalizados por uso abusivo do mesmo IP. Boa notícia -- podemos continuar desenvolvendo o bot de farming.
+Como você pode ver, os IPs são diferentes, então evitamos uma marcação por uso abusivo do mesmo IP. Boa notícia : podemos continuar desenvolvendo o bot de farming.
 
 ---
 
 ## Primeiro teste com Selenium
 
-Para automatizar a interface, vou usar **Selenium**: uma ferramenta que controla um navegador real (Chrome/Edge/Firefox) no lugar de um usuário. No contexto de uma GitHub Action, isso significa instalar um navegador + seu driver, depois executar um script que se conecta ao Microsoft Rewards e clica onde for necessário.
+Para automatizar a interface, vou usar o **Selenium** : uma ferramenta que controla um navegador de verdade (Chrome/Edge/Firefox) no lugar de um usuário. No contexto de uma GitHub Action, isso significa instalar um navegador + seu driver, e depois lançar um script que se conecta ao Microsoft Rewards e clica onde precisa.
 
 ### Exemplo de script JavaScript (Node.js + selenium-webdriver)
 
 ```js
+// Opções do Chrome + anti-detecção de automação via DevTools
 import { Builder, By, Capabilities, until, WebDriver } from 'selenium-webdriver';
 
 const chromeOptions = {
@@ -214,14 +217,14 @@ async function applyStealth(driver: WebDriver) {
 })();
 ```
 
-Resultado do script:
+Resultado do script :
 
 ```
 DevTools listening on ws://127.0.0.1:50274/devtools/browser/37b9ea79-0e5d-4673-9e91-7ffeaf0d37f8
 After navigation: url= https://rewards.bing.com/welcome?idru=%2F
-After navigation: title= Bem-vindo ao Microsoft Rewards!
-Page loaded, sign in button found: Entrar
+After navigation: title= Bienvenue dans Microsoft Rewards!
+Page loaded, sign in button found: Se connecter
 ```
 
-Ok, isso significa que ainda não estamos logados, então agora vamos construir a requisição de login e ver se conseguimos nos conectar à nossa conta do Microsoft Rewards para realizar as atividades.
-<!-- ## ESTE ARTIGO AINDA ESTÁ SENDO ESCRITO, EM BREVE ATUALIZAREI COM AS ETAPAS DE CONEXÃO E BOTTING DAS ATIVIDADES! FIQUE ATENTO. -->
+Esse resultado confirma que ainda estamos desconectados, então agora vou construir a requisição de login e testar a conexão à minha conta Microsoft Rewards para automatizar as atividades.
+<!-- ## ESTE ARTIGO AINDA ESTÁ EM REDAÇÃO, VOU ATUALIZAR COM AS ETAPAS DE CONEXÃO E BOTTING DAS ATIVIDADES EM BREVE ! FIQUE LIGADO. -->

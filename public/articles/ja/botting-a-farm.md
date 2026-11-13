@@ -1,89 +1,89 @@
 ---
-title: Microsoft Rewardsファームのボット化
-description: Microsoft Rewardsのポイントを大規模に稼ぐボットをコードした方法----そしてMicrosoftのアンチボット検出が追いついた理由。
+title: Microsoft Rewardsのファームをボット化する
+description: Microsoft Rewardsのポイントを大規模にファームするボットをどうコーディングしたか。そしてMicrosoftがその後防御をどう固めたか。
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "l3Wn3JtwXfwcGWi08rnh55uMXQnARGt8OU0Jpi7oK82WKVeTYldODX9pH34n/qggmPk87QQbmAmHCipNBYiJxw=="
+author_sig: "WijdIf1gJg5r2TiKfW79j4gz63N/XlqRMT7UdzYPEClfEnsgcXJahEZq0qCAsu5T2jfwSa0Gyu0lOXh/Q497ng=="
 ---
 
-> **Note (2026):** このプロジェクトはもはやメンテナンスされていません。Microsoftはアンチボット検出を大幅に強化しており、当時有効だった手法は現在では機能しません。以下で説明するコードとアプローチは、アーカイブおよび教育目的のみで残されています。
+> **注意（2026年）：** このプロジェクトはもう保守してない。Microsoftはボット対策の検出を大幅に強化したので、当時動いたものは今はもう動かない。以下のコードと手法はアーカイブとデモ目的でのみ残してある。
 
-### はじめに
+## はじめに
 
-数年前、Microsoft Rewardsを発見した。当時はロックダウン中だったけど、それはともかく、Microsoftファミリーセーフティのペアレンタルコントロールを強制されていて、Edgeを使わざるを得なかったんだ。そこでRewardsを知った。
+Microsoft Rewardsを知ったのは数年前だ。ロックダウン期間中で、当時はMicrosoft Family Safetyのペアレンタルコントロールを使う義務があってEdge経由だった。そこでRewardsに出会った。
 
-当時俺は14歳で、カタログのどの商品にも興味がなかった。今では身につけたスキルを使って、ボットでポイントを稼いで、コードを配ったり、本当にしたければ安く転売したりできると思う（自分のことだから、たぶんやらないけど）。とにかく、アカウントを大規模にファームするボットをどうやって作ったか話すよ。
+当時は14歳だけでカタログに欲しいものは何もなかった。今思うと、身に付けたスキルでポイントをファームするボットを作って、コードを配ったり、気が向けば安く売ったりもできる（でも正直やる気はない）。複数アカウントを規模化してファームするボットをどうコーディングしたか話すよ。
 
 ---
 
 ## Microsoft Rewardsって何？
 
-簡単に言うと：Edgeユーザーに検索や小クイズ、ゲーム、拡張機能（それはまた別の話）などのアクティビティに対してポイントを与えるプログラムだ。
+手短に言うと、Edgeユーザーが検索とか小クイズとかゲームとか拡張機能（でもそれは別の話）みたいな活動でポイントをもらえるプログラムだ。
 
-ここに「Explore」系のものが見える：
+ここに見える「Explore」ブロックがそれだ。
 ![Explore screenshot](assets/20260313_135010_image.png)
 
-例えば、これが「本日のセット」ってやつだ。
+たとえばここにあるのが「今日のセット」って呼ばれるものだ。
 ![Daily set screenshot](assets/20260313_135038_image.png)
 
-連続ログインのシステムまであって、結構すごい。
+streakの仕組みまで作ってて、なかなかすごい。
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-レベルシステムもあって、とにかく楽しい：
+レベル制度もあって、進捗がルーティンをほんと中毒性のあるものにしてる。
 ![Level screenshot](assets/20260313_135340_image.png)
 
-こんな風にポイントを稼ぐ方法がたくさんあって、ほとんどは毎日のものだ。
-ここでのアイデアは、アクティビティを代わりにやってくれるボットを作って、ポイントを大規模に稼いで、ファームのルーティンを完了させることだ。
+ポイント稼ぎ方はたくさんあって、ほとんどが毎日できる。
+ここでの狙いは、代わりに活動をこなすボットを作って、大規模にポイントをファームしてファーミングルーティンを完成させることだ。
 
-下に見えるように、ほとんどの報酬はギフトカードだけど、ゲームやサービスサブスクリプションみたいな面白いものもある。
+下で見える通り、報酬のほとんどはギフトカードだけど、ゲームやサブスクみたいな面白い選択肢もある。
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
-| 報酬 | カテゴリ | 必要ポイント数 |
+| 報酬 | カテゴリ | ポイント |
 | --- | --- | --- |
-| **Rakuten TV – 1 HD movie** | Digital content | 1 785 |
-| **Roblox (digital card)** | Game / digital content | 6 750 |
-| **Microsoft gift card** | Store / service | 5 660 |
-| **Xbox gift card** | Store / service | 5 660 |
-| **Microsoft Solitaire Collection gift card** | Game / digital content | 1 500 |
-| **Minecraft Minecoins** | Game / digital content | 2 500 |
-| **League of Legends gift card** | Game / digital content | 2 000 |
-| **Overwatch coin code (digital)** | Game / digital content | 2 000 |
-| **Sea of Thieves – Old Coins pack** | Game / digital content | 1 700 |
-| **Zalando – Gift card** | Store / service | 7 205 |
-| **Carrefour – Gift card** | Store / service | 14 410 |
-| **Cultura – Gift card** | Store / service | 14 410 |
-| **Fnac‑Darty – Gift card** | Store / service | 14 410 |
-| **La Redoute – Gift card** | Store / service | 14 410 |
-| **Mango – Gift card** | Store / service | 36 025 |
-| **Wonderbox – Gift card** | Store / service | 14 410 |
-| **Yves Rocher – Gift card** | Store / service | 14 410 |
-| **Amazon.fr – Gift voucher** | Store / service | 7 205 |
-| **Foot Locker – Gift card** | Store / service | 14 410 |
-| **IKEA FR – Gift card** | Store / service | 36 025 |
-| **IKEA FR – Gift card (other design)** | Store / service | 7 200 |
-| **Marionnaud – Gift card** | Store / service | 14 410 |
-| **Asos – Gift card** | Store / service | 14 410 |
-| **Adidas FR – Gift card** | Store / service | 14 410 |
-| **Deliveroo France – Gift card** | Store / service | 21 615 |
-| **H&M France – Gift card** | Store / service | 14 410 |
-| **Global Hotel Card (Expedia Group)** | Store / service | 7 205 |
-| **Uber Eats France – Gift card** | Store / service | 36 025 |
+| **Rakuten TV – HD映画1本** | デジタルコンテンツ | 1 785 |
+| **Roblox（デジタルカード）** | ゲーム / デジタルコンテンツ | 6 750 |
+| **Microsoftギフトカード** | ストア / サービス | 5 660 |
+| **Xboxギフトカード** | ストア / サービス | 5 660 |
+| **Microsoft Solitaire Collectionギフトカード** | ゲーム / デジタルコンテンツ | 1 500 |
+| **Minecraft Minecoins** | ゲーム / デジタルコンテンツ | 2 500 |
+| **League of Legendsギフトカード** | ゲーム / デジタルコンテンツ | 2 000 |
+| **Overwatchコインコード（デジタル）** | ゲーム / デジタルコンテンツ | 2 000 |
+| **Sea of Thieves – Ancient Coinsパック** | ゲーム / デジタルコンテンツ | 1 700 |
+| **Zalando – ギフトカード** | ストア / サービス | 7 205 |
+| **Carrefour – ギフトカード** | ストア / サービス | 14 410 |
+| **Cultura – ギフトカード** | ストア / サービス | 14 410 |
+| **Fnac‑Darty – ギフトカード** | ストア / サービス | 14 410 |
+| **La Redoute – ギフトカード** | ストア / サービス | 14 410 |
+| **Mango – ギフトカード** | ストア / サービス | 36 025 |
+| **Wonderbox – ギフトカード** | ストア / サービス | 14 410 |
+| **Yves Rocher – ギフトカード** | ストア / サービス | 14 410 |
+| **Amazon.fr – ギフト券** | ストア / サービス | 7 205 |
+| **Foot Locker – ギフトカード** | ストア / サービス | 14 410 |
+| **IKEA FR – ギフトカード** | ストア / サービス | 36 025 |
+| **IKEA FR – ギフトカード（別デザイン）** | ストア / サービス | 7 200 |
+| **Marionnaud – ギフトカード** | ストア / サービス | 14 410 |
+| **Asos – ギフトカード** | ストア / サービス | 14 410 |
+| **Adidas FR – ギフトカード** | ストア / サービス | 14 410 |
+| **Deliveroo France – ギフトカード** | ストア / サービス | 21 615 |
+| **H&M France – ギフトカード** | ストア / サービス | 14 410 |
+| **Global Hotel Card (Expedia Group)** | ストア / サービス | 7 205 |
+| **Uber Eats France – ギフトカード** | ストア / サービス | 36 025 |
 
-このプログラムのポイントがわかったところで、ボット化について見ていこう。
+プログラムの旨みが分かったところで、ボット化の話に入ろう。
 
 ---
 
 ## 最初のテスト
 
-ボットを作る前に、同じアドレスから何百ものアカウントを使ってもIPがフラグされないことを確認したかったんだ。俺のことだから、Torと回転式プロキシを使う。それにVPSでボットをホストしたくない----GitHub Actionで実行したいんだ。
+ボットを作る前に、同じアドレスから何百ものアカウントを使ったせいでIPに印を付けられないか確かめたかった。私らしくTor経由でローテートするプロキシを使う。VPSじゃなくGitHub Actionで実行したい。
 
-というわけで、シンプルなワークフローを書いた：
+だからシンプルなワークフローを書いた。
 
 ```yaml
 name: Tor Proxy Curl
@@ -133,26 +133,26 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-このワークフローはTorをインストールして起動し、curlリクエストをTor経由で行うだけだ。
+このワークフローはTorを入れて起動して、経由でcurlリクエストを投げるだけだ。
 
-最初の実行結果：
+最初のrunはこうなった。
 ![Tor curl first run](assets/20260313_140705_image.png)
 
-タイムスタッツ：
+時間 stats はこうだった。
 !Timings
 
-2回目の実行結果：
+2回目のrunはこうなった。
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-見ての通りIPが違うから、同一IPからの濫用でフラグされることはない。朗報だ----ファーミングボットの開発を続けられる。
+見ての通りIPが違う。だから同じIPからの乱用で印を付けられる心配はない。いい知らせだ。ファーミングボットの開発を続けられる。
 
 ---
 
-## Seleniumを使った最初のテスト
+## Seleniumでの初テスト
 
-UIを自動化するために**Selenium**を使う：ユーザーの代わりに実際のブラウザ（Chrome/Edge/Firefox）を制御するツールだ。GitHub Actionの文脈では、ブラウザとそのドライバーをインストールし、Microsoft Rewardsにログインしてクリックするスクリプトを実行する。
+画面を自動化するため**Selenium**を使う。ユーザーの代わりに本物のブラウザ（ChromeやEdgeやFirefox）を操作するツールだ。GitHub Actionの文脈では、ブラウザとドライバーを入れて、Microsoft Rewardsにログインしてしかるべき場所をクリックするスクリプトを走らせるってことだ。
 
-### JavaScriptのサンプルスクリプト（Node.js + selenium-webdriver）
+### JavaScriptスクリプト例（Node.js + selenium-webdriver）
 
 ```js
 import { Builder, By, Capabilities, until, WebDriver } from 'selenium-webdriver';
@@ -169,14 +169,14 @@ const chromeOptions = {
 };
 
 async function applyStealth(driver: WebDriver) {
-  // ページJS実行前にスクリプトを注入し、自動化のフィンガープリンティングを軽減する。
+  // ページのJSが動く前に注入して自動化の指紋を減らす。
   await (driver as any).sendDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
     source: `
       Object.defineProperty(navigator, 'webdriver', {
         get: () => undefined
       });
 
-      // 一部のサイトはchromeランタイムとプラグインをチェックする
+      // chromeランタイムやプラグインを見るサイトもある
       window.chrome = { runtime: {} };
       Object.defineProperty(navigator, 'plugins', {
         get: () => [1, 2, 3, 4, 5],
@@ -223,5 +223,5 @@ After navigation: title= Bienvenue dans Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-よし、まだログインしてないってことだ。次はログインリクエストを作って、Microsoft Rewardsアカウントにサインインしてアクティビティを実行できるか試してみよう。
-<!-- ## この記事はまだ作成中です。ログイン手順とアクティビティのボット化手順は後日更新します！お楽しみに。 -->
+この結果でまだログアウト状態なのが確認できた。だから次はログインリクエストを作って、Microsoft Rewardsアカウントへの接続をテストして、活動のボット化へ進む。
+<!-- ## この記事はまだ執筆中です。ログインと活動ボット化の手順は近日追記します！お楽しみに。 -->

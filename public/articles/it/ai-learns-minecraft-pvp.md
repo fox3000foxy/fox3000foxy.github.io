@@ -1,176 +1,176 @@
 ---
-title: L'IA impara il PvP di Minecraft -- Apprendimento per Imitazione, Reinforcement Learning e le 30 variabili che contano
-description: "1.000 duelli registrati, rete neurale addestrata sui pixel, 90% di precisione nei tasti : e il bot correva dritto contro un muro. Poi sono arrivati RL, curriculum learning e 60 ore di addestramento."
+title: "L'IA impara il PvP di Minecraft: Imitation Learning, Reinforcement Learning, e le 30 variabili che contavano"
+description: "1 000 duelli registrati, rete neurale allenata sui pixel, 90% di precisione dei colpi: e il bot andava dritto contro un muro. Poi sono arrivati RL, apprendimento curriculare e 60 ore di allenamento."
 date: 2026-07-09
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "cTj4xyIVdZNjI8aYKYtCZBRQmelrwUxOfRhSy2RSiNyxn48h4BB1xKSUM+SwG67j8LtDByG8rMuASAz/LASLHw=="
+author_sig: "qlD3JOQwBbuKNvrncer/vQ+6hEUL8AOlSH6PQ3ft6MGsF3zgoeAfJ217Q/ZrohWd5NZK4DXn6tDRnNVK9RDbUQ=="
 ---
 
 ## Introduzione
 
 ![AI Learns Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.png)
 
-C'è un video intitolato [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) di Kadambi | AI Engineering, ed è uno dei resoconti più onesti sull'addestramento di un'IA per giocare ai videogiochi che abbia mai visto.
+C'è un video intitolato [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) di Kadambi | AI Engineering, ed è uno dei racconti più onesti di allenamento di un'IA da videogioco che abbia visto.
 
-La premessa: costruire un bot che giochi a PvP in Minecraft (kit spada, armatura di diamante incantata) osservando lo schermo e producendo comandi di mouse e tastiera. Niente lettura della memoria di gioco, niente macro, niente mod : solo pixel in ingresso, azioni in uscita.
+Il principio: costruire un bot che gioca al PvP di Minecraft (kit spada, armatura di diamante completamente incantata) guardando lo schermo e inviando comandi di mouse e tastiera. Funziona solo con pixel in ingresso e azioni in uscita, senza leggere la memoria del gioco, senza macro e senza mod.
 
-Ciò che rende interessante il video non è il risultato finale. È il percorso: il fallimento dell'apprendimento per imitazione, la svolta del feature engineering, i cicli di catastrophic forgetting e le 60+ ore di addestramento su un laptop senza GPU.
+Ciò che rende interessante il video non è il risultato finale. È il percorso: il fallimento dell'imitation learning, il passaggio al feature engineering, i cicli di oblio catastrofico, e le oltre 60 ore di allenamento su un laptop senza GPU.
 
-## Fase 1 : Apprendimento per Imitazione (il fallimento)
+## Fase 1: Imitation Learning (il fallimento)
 
-![Il bot durante l'apprendimento per imitazione: di fronte a un muro, che salta su e giù](assets/ai-pvp-imitation-fail.png)
+![The bot during imitation learning: facing a wall, jumping up and down](assets/ai-pvp-imitation-fail.png)
 
-Il creatore ha iniziato con un approccio sensato: registrare 1.000 duelli del proprio gameplay, mappare ogni clic del mouse e pressione di tasto al fotogramma corrispondente, e addestrare una rete neurale a predire le azioni dai pixel.
+Il creatore ha iniziato con un approccio sensato: registrare 1 000 duelli del proprio gameplay, associare ogni clic del mouse e pressione di tasto all'immagine corrispondente, e allenare una rete neurale a prevedere le azioni dai pixel.
 
 ```python
-# Pseudocodice per la pipeline di apprendimento per imitazione
-dataset = record_duels(1000)          # centinaia di migliaia di fotogrammi
+# Pseudocodice per la pipeline di imitation learning
+dataset = record_duels(1000)          # centinaia di migliaia di frame
 for frame, action in dataset:
     pixels = capture_screen(frame)
-    network.train(pixels → action)    # predice tastiera/mouse dall'immagine
+    network.train(pixels → action)    # prevede tastiera/mouse dall'immagine
 ```
 
-La rete ha imparato a predire i tasti con una **precisione del 90%**. Promettente.
+La rete ha imparato a prevedere i colpi con il **90% di precisione**. Promettente.
 
-Poi l'hanno testata in una partita reale. Il bot è andato dritto al bordo della mappa, si è messo davanti a un muro e ha iniziato a saltare su e giù.
+Poi l'hanno testato in un vero match. Il bot si è diretto dritto verso il bordo della mappa, ha guardato un muro, e ha saltato su e giù.
 
 Perché?
 
-**La trappola della pigrizia.** In un combattimento PvP, il tasto W viene premuto quasi sempre. La rete ha capito di poter ottenere alta precisione semplicemente tenendo premuto W e non facendo altro. Ha ottimizzato per l'azione più comune a scapito di tutte le altre.
+**La trappola della pigrizia.** In un combattimento PvP, il tasto W è premuto quasi sempre. La rete ha capito che poteva raggiungere un'alta precisione tenendo semplicemente premuto W e non facendo altro. Ha ottimizzato l'azione più frequente a scapito di tutte le altre.
 
-**Latenza umana.** Le azioni nel dataset sono ritardate di ~200ms dal tempo di reazione umano. Fotogramma per fotogramma, causa ed effetto sono quasi impossibili da apprendere per un modello dai pixel grezzi quando l'azione e la sua conseguenza visibile sono separate da più fotogrammi.
+**La latenza umana.** Le azioni nel dataset sono ritardate di circa 200 ms di tempo di reazione umano. Frame per frame, causa ed effetto sono quasi impossibili da imparare per un modello dai pixel grezzi quando l'azione e la sua conseguenza visibile sono separate da varie immagini.
 
-**Dimostrazioni incoerenti.** Il gameplay del creatore stesso variava: a volte strafava con la tastiera, a volte mirava con il mouse in situazioni identiche. Questo input contrastante ha confuso la rete.
+**Dimostrazioni incoerenti.** Il gameplay stesso del creatore variava: a volte faceva strafe con la tastiera, a volte mirava col mouse in situazioni identiche. Questi input contraddittori hanno confuso la rete.
 
-## Fase 2 : Reinforcement Learning con Curriculum
+## Fase 2: Reinforcement Learning con curriculum
 
-![Il bot che impara a tracciare orizzontalmente durante l'addestramento RL](assets/ai-pvp-rl-horizontal.png)
+![The bot learning to track horizontally during RL training](assets/ai-pvp-rl-horizontal.png)
 
-Abbandonando l'apprendimento per imitazione, il creatore è passato all'RL. Ma inserire un agente nuovo in un duello PvP completo è inutile: ci sono troppe cose che accadono contemporaneamente perché l'esplorazione casuale possa trovare qualcosa.
+Abbandonato l'imitation learning, il creatore è passato al RL. Ma buttare un agente fresco in un duello PvP completo è inutile: succedono troppe cose insieme perché un'esplorazione casuale trovi qualcosa.
 
-La soluzione: il **curriculum learning**. Isolare ogni meccanica e lasciare che il bot padroneggi le basi prima di entrare in un vero combattimento.
+La soluzione: **apprendimento curriculare**. Isolare ogni meccanica e lasciare che il bot padroneggi le basi prima di entrare in un vero combattimento.
 
-### Passo 1 : Mira orizzontale (7 ore)
+### Passo 1: Mira orizzontale (7 ore)
 
-La funzione di ricompensa più semplice: ricompensa positiva per aver colpito, penalità negativa per aver subito danni.
+La funzione di ricompensa più semplice: ricompensa positiva per colpire un bersaglio, penalità negativa per subire danni.
 
-Inizialmente, il bot si muove a malapena (rete neurale inizializzata con valori neutri). Oscilla da un lato all'altro: è il bot che testa azioni diverse per vedere quali danno ricompense.
+All'inizio, il bot si muove appena (rete neurale inizializzata con valori neutri). Trema lateralmente: è il bot che prova azioni diverse per vedere quali danno ricompense.
 
-Dopo un'ora, impara a centrarsi orizzontalmente, ma dolorosamente lentamente. Dopo 7 ore, riesce a seguire il nemico a sinistra e a destra, sebbene in modo asimmetrico (meglio a muoversi da destra a sinistra che da sinistra a destra, un comportamento che è persistito per tutto l'addestramento).
+Dopo un'ora, impara a centrarsi orizzontalmente, ma faticosamente lento. Dopo 7 ore, può seguire il nemico a sinistra e a destra, anche se in modo asimmetrico (migliore a spostarsi da destra a sinistra che da sinistra a destra, un comportamento persistito per tutto l'allenamento).
 
-### Passo 2 : Feature Engineering
+### Passo 2: Feature Engineering
 
-La cattura dello schermo grezza era oltre 2 milioni di pixel. Anche ridimensionata a 360p, sono 200.000 input: un numero eccessivo per un apprendimento efficiente.
+Lo screenshot grezzo superava i 2 milioni di pixel. Anche ridotto a 360p, sono 200 000 input: troppi per un apprendimento efficace.
 
-Il creatore ha analizzato migliaia di duelli e identificato **30 variabili che contano davvero**, suddivise in tre gruppi:
+Il creatore ha analizzato migliaia di duelli e identificato **30 variabili che contano davvero**, divise in tre gruppi:
 
-**Visione (tracciamento nemico)** :
-- Distanza del nemico dal mirino
-- Dimensione del bounding box del nemico
+**Visione (tracciamento nemico)**:
+- Distanza del nemico dal mirino (crosshair)
+- Dimensione della bounding box del nemico
 - Altezza del nemico
-- Stato del mirino (sul bersaglio/fuori bersaglio)
+- Stato del mirino (su bersaglio / fuori bersaglio)
 - Velocità relativa
 
-Invece di elaborare l'intera immagine, il bot filtra i pixel esclusivamente in base al colore dell'armatura del nemico, rendendo il rilevamento quasi istantaneo. Blocchi di sfondo di colore simile possono interferire: ma in Minecraft puoi semplicemente cambiare le texture.
+Invece di elaborare tutta l'immagine, il bot filtra i pixel solo per il colore dell'armatura nemica, rendendo il rilevamento quasi istantaneo. Blocchi di sfondo di colore simile possono disturbare questo filtro: ma in Minecraft puoi semplicemente cambiare le texture.
 
-**OCR (lettura HUD)** :
-Poiché il bot non può estrarre le coordinate dal codice del gioco, scansisce lo schermo in tempo reale per estrarre:
-- Inclinazione della telecamera (pitch)
+**OCR (lettura HUD)**:
+Dato che il bot non può recuperare le coordinate dal codice del gioco, scansiona lo schermo in tempo reale per estrarre:
+- Pitch della camera
 - Momentum
 - Livello Y
 
-L'OCR standard fa fatica con il testo trasparente di Minecraft, quindi i dati critici vengono forzati in bianco e nero per una lettura istantanea.
+L'OCR standard fatica con il testo trasparente di Minecraft, quindi i dati critici sono forzati in bianco e nero per una lettura istantanea.
 
-**Tempo (finestra di contesto)** :
-- Tempo dall'ultimo colpo al nemico
-- Tempo dall'ultimo colpo subito
+**Tempo (finestra di contesto)**:
+- Tempo passato da quando hai toccato il nemico
+- Tempo passato da quando lui ha toccato te
 - Buffer scorrevole delle azioni precedenti del bot
 
-Questo fornisce alla rete un contesto temporale: senza di esso, il bot non ha idea se sia nel mezzo di una combo o stia appena iniziando un combattimento.
+Questo dà alla rete un contesto temporale: senza, il bot non ha idea se è nel mezzo di una combo o se sta appena iniziando un combattimento.
 
-### Passo 3 : Mira verticale (altre 7 ore)
+### Passo 3: Mira verticale (altre 7 ore)
 
-![Il bot che impara a mirare su e giù durante l'addestramento RL](assets/ai-pvp-rl-vertical.png)
+![The bot learning to aim up and down during RL training](assets/ai-pvp-rl-vertical.png)
 
-Aggiungere il movimento verticale del mouse è stato "un disastro totale" all'inizio. Le prestazioni iniziali erano compromesse.
+Aggiungere il movimento verticale del mouse è stato "un disastro totale" all'inizio. La performance iniziale era distrutta.
 
-Dopo un'altra ora nella sandbox, il bot ha capito come guardare su e giù. Ma nel processo, ha completamente dimenticato come tracciare orizzontalmente.
+Dopo un'altra ora nel recinto, il bot ha capito come guardare in alto e in basso. Ma nel processo, ha completamente dimenticato come seguire orizzontalmente.
 
-Questo è il **catastrophic forgetting**: un classico problema del machine learning in cui l'ottimizzazione per nuovi dati sovrascrive le rappresentazioni apprese in precedenza. Ottimizzando per la mira verticale, la rete neurale ha accidentalmente sovrascritto il suo progresso orizzontale, lasciando al creatore un bot che riusciva a tenere il mirino in livello ma non a seguire un bersaglio.
+È l'**oblio catastrofico**: un classico problema di machine learning dove ottimizzare per nuovi dati schiaccia le rappresentazioni apprese prima. Ottimizzando la mira verticale, la rete neurale ha accidentalmente cancellato i suoi progressi orizzontali, lasciando il creatore con un bot che poteva tenere il mirino a livello ma non poteva seguire un bersaglio.
 
-Ci sono volute **6 ore aggiuntive** per recuperare il tracciamento orizzontale mantenendo il controllo verticale. Il bot ha poi mantenuto un buon posizionamento del mirino grazie al gruppo OCR che estraeva l'inclinazione della telecamera.
+Ci sono volute **altre 6 ore** per ritrovare il tracciamento orizzontale mantenendo il controllo verticale. Il bot ha poi mantenuto un buon piazzamento del mirino grazie al gruppo OCR che estraeva il pitch della camera.
 
-### Passo 4 : Controllo tastiera
+### Passo 4: Controllo tastiera
 
-![Il bot che alterna costantemente il tasto W, imparando a impegnarsi nel movimento](assets/ai-pvp-keyboard.png)
+![The bot toggling the W key constantly, learning to commit to movement](assets/ai-pvp-keyboard.png)
 
-Dare al bot il permesso di usare la tastiera ha reso le caratteristiche temporali ancora più critiche. All'inizio, il tasto W veniva attivato e disattivato continuamente: commutazione rapida perché la rete non aveva imparato a impegnarsi.
+Dare al bot il permesso di usare la tastiera ha reso le caratteristiche temporali ancora più critiche. All'inizio, il tasto W era continuamente acceso e spento: un cambio rapido perché la rete non aveva imparato a impegnarsi.
 
-Questo comportamento è stato penalizzato, quindi il bot ha imparato a smussarlo. Ha iniziato a eseguire più sprint hit (il suono sordo vs il sibilo di un colpo da fermo). Alcune combo sembravano insoddisfacenti perché il bot sfruttava il suo vantaggio di portata rispetto al nemico.
+Questo comportamento è stato penalizzato, quindi il bot ha imparato a renderlo fluido. Ha iniziato ad atterrare più colpi in sprint (il tonfo contro il fruscio di un colpo da fermo). Alcune combo sembravano insoddisfacenti perché il bot sfruttava il suo vantaggio di portata sul nemico.
 
-Per rendere le cose più eque, il creatore ha aumentato la portata del nemico. Molte delle strategie apprese dal bot hanno smesso di funzionare. Ma con più tempo, si è adattato.
+Per rendere le cose eque, il creatore ha aumentato la portata del nemico. Molte strategie apprese dal bot hanno smesso di funzionare. Ma col tempo, si è adattato.
 
-### Passo 5 : Insegnare al bot quando cliccare
+### Passo 5: Insegnare al bot quando cliccare
 
-Per la fase finale, il creatore ha riportato l'apprendimento per imitazione: ma solo per insegnare i tempi del clic, non l'intera politica di controllo. Il bot cercava di imitare i pattern di clic dai duelli registrati.
+Per la fase finale, il creatore ha riportato l'imitation learning: ma solo per insegnare il timing dei clic, non la politica di controllo completa. Il bot ha provato a imitare i pattern di clic dei duelli registrati.
 
-Inizialmente era troppo spaventato per provare qualunque cosa, temendo la penalità per i clic sbagliati. Ma alla fine ha trovato il coraggio di colpire e fare centro. Ovviamente, ha dimenticato come mirare di nuovo nel processo: il creatore ha dovuto lasciarlo da solo per **50 ore in più** per tornare a uno stato soddisfacente.
+All'inizio, aveva troppa paura di provare qualsiasi cosa, temendo la penalità per i clic sbagliati. Ma alla fine ha trovato il coraggio di colpire e atterrare colpi. Certo, ha dimenticato di nuovo come mirare nel processo: il creatore ha dovuto lasciarlo da solo per **altre 50 ore** per tornare a uno stato soddisfacente.
 
 ## Il dibattito sul cheating
 
-Il video si conclude chiedendo: questo bot sta barando?
+Il video finisce chiedendo: questo bot bara?
 
-L'argomentazione contro: il bot elabora solo ciò che vede un umano (stessi pixel), invia gli stessi input di tastiera e mouse di un umano (nessuna manipolazione di pacchetti come l'anti-knockback) e non legge la memoria di gioco (nessun X-ray o ESP).
+L'argomento contro: il bot elabora solo ciò che un umano vede (gli stessi pixel), invia gli stessi input tastiera/mouse di un umano (senza manipolazione di pacchetti come l'anti-knockback), e non legge la memoria del gioco (niente X-ray né ESP).
 
-L'argomentazione a favore: un bot può elaborare più velocemente di un umano, e se l'avversario pensa di giocare contro un umano ma non è così, questo è inganno.
+L'argomento a favore: un bot può elaborare più in fretta di un umano, e se l'avversario pensa di giocare contro un umano ma non è così, è inganno.
 
-Il parere del creatore: dipende dall'intento. Se entrambe le parti sanno che è un bot, è una partita leale. Il bot prosegue colpendo il nemico nel vuoto con una serie di 100 colpi.
+Il parere del creatore: dipende dall'intenzione. Se entrambe le parti sanno che è un bot, il match è equo. Il bot incatena il nemico nel vuoto con una serie di 100 colpi.
 
 ## Il risultato
 
-![Il bot che esegue una combo da 100 colpi](assets/ai-pvp-final-combo.png)
+![The bot executing a 100-hit combo](assets/ai-pvp-final-combo.png)
 
-Un bot PvP di Minecraft addestrato su un **laptop senza GPU**, costruito su una pipeline di addestramento personalizzata con:
+Un bot PvP Minecraft allenato su un **laptop senza GPU**, costruito su una pipeline di allenamento personalizzata con:
 
-- **Cattura dello schermo** per input pixel (2M+ pixel → 30 feature ingegnerizzate)
-- **Curriculum learning** (orizzontale → verticale → tastiera → clic)
-- **RL per il controllo motorio** + **apprendimento per imitazione per i tempi di clic**
+- **Screenshot** per l'input pixel (2M+ pixel ridotti a 30 feature progettate)
+- **Apprendimento curriculare** (orizzontale, poi verticale, poi tastiera, poi clic)
+- **RL per il controllo motorio** + **imitation learning per il timing dei clic**
 - **Feature engineering** sui pixel grezzi (3 gruppi: visione, OCR, tempo)
-- **60+ ore di addestramento** in più fasi
+- **Oltre 60 ore di allenamento** su più fasi
 
-Il tempo totale di addestramento è nell'ordine delle decine di ore, ma la maggior parte è passiva. Il bot traballa verso la comprensione, dimentica ciò che ha imparato, re-impara, e alla fine mette insieme una combo da 100 colpi.
+Il tempo totale di allenamento è di decine di ore, ma quasi tutte passive. Il bot trema fino alla comprensione, dimentica ciò che ha imparato, re-impara, e finisce per incatenare una serie di 100 colpi.
 
 Il video è su [youtube.com/watch?v=j5nxDKAjg6U](https://www.youtube.com/watch?v=j5nxDKAjg6U).
 
 ---
 
-*Questo articolo copre solo il contenuto del video. Per un contesto più ampio sull'IA di Minecraft: VPT, DreamerV3 e il panorama dell'apprendimento per imitazione vs RL: le sezioni sotto collegano questo progetto al campo più ampio.*
+*Questo articolo copre solo il contenuto del video. Per un contesto più ampio sull'IA di Minecraft: VPT, DreamerV3, e il panorama di imitation learning contro RL: le sezioni qui sotto collegano questo progetto al campo più vasto.*
 
-## VPT : Behavior Cloning su larga scala
+## VPT: Behavior cloning su larga scala
 
-![Diagramma del progetto VPT di OpenAI: il modello di dinamica inversa predice le azioni da coppie di fotogrammi](assets/vpt-overview.svg)
+![OpenAI's VPT project diagram : the Inverse Dynamics Model predicts actions from pairs of frames](assets/vpt-overview.svg)
 
-L'approccio di "behavior cloning" del video (Fase 1) è la stessa tecnica usata da OpenAI nel progetto **Video PreTraining (VPT)**, ma agli estremi opposti dello spettro di risorse. VPT ha dimostrato che l'apprendimento per imitazione funziona per Minecraft quando hai 70.000 ore di video, 720 GPU e un modello di dinamica inversa per pseudo-etichettare dati non etichettati. Il creatore qui ha dimostrato che fallisce con un laptop e 1.000 duelli: ma per la stessa ragione fondamentale: l'apprendimento per imitazione è limitato dalla qualità delle sue dimostrazioni.
+L'approccio "behavior cloning" del video (Fase 1) è la stessa tecnica che OpenAI ha usato nel suo progetto **Video PreTraining (VPT)**, ma agli estremi opposti dello spettro di risorse. VPT ha provato che l'imitation learning funziona per Minecraft quando hai 70 000 ore di video, 720 GPU, e un inverse dynamics model per pseudo-etichettare dati non etichettati. Il creatore qui ha provato che fallisce con un laptop e 1 000 duelli: ma per la stessa ragione fondamentale: l'imitation learning è limitato dalla qualità delle sue dimostrazioni.
 
-![L'agente VPT di OpenAI che abbatte un albero in Minecraft](assets/vpt-minecraft.jpg)
+![OpenAI's VPT agent mining a tree in Minecraft](assets/vpt-minecraft.jpg)
 
-La pipeline VPT risolve il problema dei dati addestrando un **modello di dinamica inversa (IDM)** che osserva il fotogramma t-1 e il fotogramma t+1 per predire l'azione al fotogramma t. Poiché l'IDM è non-causale (vede fotogrammi futuri), il compito è più facile del behavior cloning e richiede molti meno dati etichettati. Hanno pagato collaboratori circa ~$2.000 per 2.000 ore di dati etichettati, poi hanno usato l'IDM per pseudo-etichettare 70.000 ore di video Minecraft da YouTube.
+La pipeline VPT risolve il problema dei dati allenando un **Inverse Dynamics Model (IDM)** che guarda l'immagine t-1 e l'immagine t+1 per prevedere l'azione all'immagine t. Poiché l'IDM è non causale (vede le immagini future), il compito è più facile del behavior cloning e richiede molti meno dati etichettati. Hanno pagato dei contractor circa 2 000 $ per 2 000 ore di dati etichettati, poi hanno usato l'IDM per pseudo-etichettare 70 000 ore di video YouTube di Minecraft.
 
-![Tasso di crafting/raccolta in funzione del volume di dati di pre-addestramento (scala log): tavoli da lavoro, utensili di legno, utensili di pietra](assets/vpt-stone-pickaxe-sequence.svg)
+![Taux de crafting/collecte en fonction du volume de données de pré-entraînement (échelle log) : tables de craft, outils en bois, outils en pierre](assets/vpt-stone-pickaxe-sequence.svg)
 
-L'effetto di scala è netto: su un asse log da 1 ora a 100.000 ore di dati di pre-addestramento, il tasso al quale il modello costruisce un tavolo da lavoro, utensili di legno e poi utensili di pietra sale a gradini. Il modello addestrato solo sulle 2.000 ore etichettate dai collaboratori si ferma ai tavoli da lavoro; è aggiungendo le 70.000 ore pseudo-etichettate dall'IDM (linea tratteggiata sul grafico) che gli utensili di pietra emergono in zero-shot, senza una singola fase di RL.
+L'effetto scala è netto: su un asse log da 1 ora a 100 000 ore di dati di pre-allenamento, il tasso con cui il modello fabbrica un tavolo di craft, attrezzi di legno, poi attrezzi di pietra sale a gradini. Il modello allenato solo sulle 2 000 ore etichettate dai contractor si ferma ai tavoli di craft; è aggiungendo le 70 000 ore pseudo-etichettate dall'IDM (linea tratteggiata sul grafico) che gli attrezzi di pietra emergono in zero-shot, senza un solo passo di RL.
 
-Il modello foundation risultante da 0,5B parametri ha raggiunto capacità zero-shot che erano impossibili con il solo RL: tagliare alberi, creare tavoli da lavoro, pillar jumping: e messo a punto con RL, è diventato la prima IA a creare strumenti di diamante.
+Il modello fondazionale di 0,5B parametri risultante ha raggiunto capacità zero-shot impossibili col solo RL: tagliare alberi, fabbricare tavoli, salto in colonna: e affinato con RL, è diventato la prima IA a fabbricare attrezzi di diamante.
 
-![Ricompensa in funzione del numero di episodi di addestramento RL: partire da un modello inizializzato casualmente vs partire dal modello VPT pre-addestrato](assets/vpt-diamond-pickaxe-sequence.svg)
+![Récompense en fonction du nombre d'épisodes d'entraînement RL : partir d'un modèle initialisé aléatoirement vs partir du modèle VPT pré-entraîné](assets/vpt-diamond-pickaxe-sequence.svg)
 
-Questo grafico mostra perché il pre-addestramento cambia tutto per l'RL successivo. L'RL partito da una rete inizializzata casualmente (arancione) rimane piatto vicino a 0 per quasi un milione di episodi: il compito "ottenere un diamante" ha una ricompensa troppo sparsa perché un agente ingenuo ci incappi per esplorazione casuale. L'RL fine-tunato dal modello VPT pre-addestrato (verde) parte già con il comportamento di base (minare, fabbricare, esplorare) e sale regolarmente fino a una ricompensa di circa 25, che corrisponde al percorso completo verso un piccone di diamante.
+Questo grafico mostra perché il pre-allenamento cambia tutto per il RL a valle. Il RL partito da una rete inizializzata a caso (arancione) resta piatto vicino a 0 per quasi un milione di episodi: il compito "ottenere un diamante" ha una ricompensa troppo sparsa perché un agente ingenuo ci inciampi per esplorazione casuale. Il RL affinato dal modello VPT pre-allenato (verde) parte già col comportamento di base (minare, fabbricare, esplorare) e sale regolarmente fino a una ricompensa di circa 25, che corrisponde al percorso completo verso un piccone di diamante.
 
 <div style="max-width: 100%; margin: 1.5em 0;">
   <div style="position: relative; padding-bottom: 56.25%; height: 0;">
@@ -198,124 +198,117 @@ Questo grafico mostra perché il pre-addestramento cambia tutto per l'RL success
 
 *Demo video ufficiali del progetto VPT di OpenAI, che mostrano l'agente in azione.*
 
-## OpenAI Five : Il problema del reward shaping
+## OpenAI Five: Il problema del reward shaping
 
-![OpenAI Five che gioca a Dota 2 contro professionisti umani](assets/openai-five-dota2.jpg)
+![OpenAI Five playing Dota 2 against human professionals](assets/openai-five-dota2.jpg)
 
-OpenAI Five (2019) ha sconfitto i campioni del mondo di Dota 2 usando puro self-play RL: nessun apprendimento per imitazione. 256 GPU, 128.000 core CPU, 180 anni di gameplay al giorno, 10 mesi di addestramento.
+OpenAI Five (2019) ha battuto i campioni del mondo di Dota 2 usando RL puro in auto-apprendimento: niente imitation learning. 256 GPU, 128 000 core CPU, 180 anni di gioco al giorno, 10 mesi di allenamento.
 
-Ma la funzione di ricompensa era artigianale, creata da esperti di Dota: **28 delle 20.000 feature disponibili**, ciascuna con pesi regolati a mano. Patrimonio netto, uccisioni, morti, salute delle torri, assegnazioni di corsia: tutti selezionati e pesati da umani. Senza questo shaping, l'agente imparava a malapena (esperimento: ricompensa solo vittoria/sconfitta → plateau a livello semi-professionistico).
+Ma la funzione di ricompensa è stata progettata a mano da esperti di Dota: **28 feature sulle 20 000 disponibili**, ognuna con pesi regolati manualmente. Valore netto, uccisioni, morti, salute delle torri, assegnazioni di corsia: tutto è stato selezionato e pesato da umani. Senza questa modellazione, l'agente imparava a malapena (esperimento: ricompensa solo vittoria/sconfitta, poi plateau a livello semi-pro).
 
-Il bot del video affronta lo stesso problema: la sua funzione di ricompensa codifica la comprensione del creatore di ciò che conta nel PvP (colpire è bene, subire danni è male, mantenere il mirino è bene). Questo è inevitabile: l'RL ha bisogno di un segnale di ricompensa, e modellare quel segnale codifica il bias umano.
+Il bot del video affronta lo stesso problema: la sua funzione di ricompensa codifica la comprensione del creatore di ciò che conta in PvP (colpire è bene, essere colpito è male, tenere il mirino è bene). È inevitabile: il RL ha bisogno di un segnale di ricompensa, e modellare quel segnale codifica un bias umano.
 
-## DreamerV3 : Modelli del mondo e ricompense sparse
+## DreamerV3: World model e ricompense sparse
 
-![Punteggi benchmark di DreamerV3 su oltre 150 compiti diversi con una singola configurazione](assets/dreamerv3-benchmarks.png)
+![DreamerV3 benchmark scores across over 150 diverse tasks with a single configuration](assets/dreamerv3-benchmarks.png)
 
-DreamerV3 di DeepMind (2023) adotta un terzo approccio. Invece di behavior cloning o RL con shaping, impara un **modello del mondo**: una rete neurale che predice stati futuri e ricompense dalle azioni passate: e pianifica sognando futuri possibili. È stato il primo algoritmo a raccogliere diamanti in Minecraft da zero senza dati umani o curricula, pubblicato su Nature nel 2025.
+Il DreamerV3 di DeepMind (2023) adotta un terzo approccio. Invece di behavior cloning o RL con incentivi, impara un **world model**: una rete neurale che prevede stati futuri e ricompense dalle azioni passate: e pianifica sognando futuri possibili. È il primo algoritmo a raccogliere diamanti in Minecraft da zero senza dati umani né curricula, pubblicato su Nature nel 2025.
 
-![DreamerV3 apprende un modello del mondo per immaginare traiettorie future](assets/dreamerv3-header.png)
+![DreamerV3 learns a world model to imagine future trajectories](assets/dreamerv3-header.png)
 
-L'ambiente del diamante definisce una ricompensa sparsa su 12 traguardi (tronco → assi → bastone → tavolo da lavoro → piccone di legno → ciottolo → piccone di pietra → minerale di ferro → fornace → lingotto di ferro → piccone di ferro → diamante), ciascuno che dà +1 una sola volta. Più una piccola ricompensa per la salute (±0,01 per hp). Totale ottenibile: 11,1 in un episodio di 36.000 passi.
+L'ambiente diamante definisce una ricompensa sparsa su 12 tappe (tronco, poi assi, poi bastone, poi tavolo di craft, poi piccone di legno, poi pietra, poi piccone di pietra, poi minerale di ferro, poi forno, poi lingotto di ferro, poi piccone di ferro, poi diamante), ognuna dà +1 una sola volta. Più una piccola ricompensa di salute (±0,01 per pv). Totale raggiungibile: 11,1 in un episodio di 36 000 passi.
 
-Il modello del mondo di DreamerV3 gli permette di immaginare traiettorie e valutarle internamente: l'attore impara da rollout sognati piuttosto che da esperienza reale, testando migliaia di futuri possibili per ogni passo reale. Questo rende le ricompense sparse fattibili dove ucciderebbero un agente RL standard.
+Il world model di DreamerV3 gli permette di immaginare traiettorie e valutarle internamente: l'attore impara da rollout sognati invece che dall'esperienza reale, testando migliaia di futuri possibili per ogni passo reale. Questo rende possibili le ricompense sparse là dove distruggerebbero un agente RL standard.
 
-Su 40 seed addestrati per 100M passi ambientali, 24 su 40 hanno raccolto almeno un diamante. Il primo diamante è apparso dopo 29M passi (~9 giorni su una GPU).
+Su 40 seed allenati per 100M di passi ambientali, 24 dei 40 hanno raccolto almeno un diamante. Il primo diamante è apparso dopo 29M di passi (circa 9 giorni su una GPU).
 
-## ANNA : IA simbolica incontra Minecraft
+## ANNA: L'IA simbolica incontra Minecraft
 
-![La decomposizione ad albero dei compiti di ANNA per un acciarino](assets/anna-task-tree.png)
+![ANNA's task tree decomposition for a flint-and-steel](assets/anna-task-tree.png)
 
 Prima del bot PvP del video, prima di VPT e DreamerV3, c'era **ANNA**: un bot Minecraft costruito con una filosofia completamente diversa. Invece di imparare da pixel o ricompense, ANNA usa una **macchina a stati simbolica** con un **parser NLP francese** e un **albero di dipendenze dei compiti** scritto a mano.
 
-Creato nel 2022 (prima che "vibe coding" fosse un termine), ANNA si connette a un server Minecraft tramite Mineflayer e comprende comandi in linguaggio naturale in francese. Dì *"obtiens un briquet"* (prendi un acciarino), e il parser di ANNA identifica il verbo (*obtien* → ottieni), cerca la ricetta dell'oggetto e la scompone ricorsivamente in sotto-compiti: estrai tronchi di quercia → crea assi → crea bastoni → crea un tavolo da lavoro → crea un piccone di legno → estrai pietra → crea un piccone di pietra → estrai minerale di ferro → fondi lingotti di ferro → crea l'acciarino.
+Creato nel 2022 (prima che "vibe coding" fosse un termine), ANNA si connette a un server Minecraft via Mineflayer e capisce comandi in linguaggio naturale in francese. Dì *"ottieni un acciarino"*, e ANNA analizza il verbo (ottieni, poi ottenere), cerca la ricetta dell'oggetto, e lo scompone ricorsivamente in sotto-compiti: minare quercia, poi fabbricare assi, poi fabbricare bastoni, poi fabbricare un tavolo di craft, poi fabbricare un piccone di legno, poi minare pietra, poi fabbricare un piccone di pietra, poi minare minerale di ferro, poi fondere lingotti di ferro, poi fabbricare l'acciarino.
 
-![Architettura del parser NLP di ANNA per il riconoscimento di comandi in francese](assets/anna-nlp-diagram.png)
+![ANNA's NLP parser architecture for French command recognition](assets/anna-nlp-diagram.png)
 
-Il layer NLP (`utils/id_parser.js`) divide i comandi su *"et"* (e) per gestire ordini paralleli, mappa verbi francesi a tipi di compito (*craft*, *mine*, *tue*, *suis moi*) e traduce i nomi degli oggetti francesi in ID Minecraft attraverso un dizionario di 5.000 voci. I comandi non riconosciuti cadono in un sistema di conversazione basato su GPT che presenta ANNA come un compagno senziente di Minecraft.
+Lo strato NLP (`utils/id_parser.js`) separa i comandi su "e" per gestire ordini paralleli, associa i verbi francesi ai tipi di compiti, e traduce i nomi di oggetti francesi in identificatori Minecraft via un dizionario di 5 000 voci. I comandi non riconosciuti passano a un sistema di conversazione basato su GPT che presenta ANNA come un compagno Minecraft senziente.
 
-L'**albero dei compiti** (`mc-tasks-tree/`) è il cuore: un algoritmo ricorsivo che percorre il grafo degli oggetti di Minecraft (ricette di crafting, rese minerarie, drop dei mob, ricette della fornace) per produrre un piano passo-passo. Per un elmo di diamante, genera una scomposizione in 40+ passi che attraversa i livelli legno, pietra, ferro e diamante.
+L'**albero dei compiti** (`mc-tasks-tree/`) è il cuore: un algoritmo ricorsivo che percorre il grafo di oggetti Minecraft (ricette di craft, rese minerarie, drop di mostri, ricette di forno) per produrre un piano passo passo. Per un elmo di diamante, genera una scomposizione in oltre 40 passi che copre i livelli legno, pietra, ferro e diamante.
 
-![Albero dei compiti per l'elmo di diamante di ANNA: una scomposizione in 40+ passi](assets/anna-diamond-helmet.png)
+![ANNA's diamond helmet task tree : a 40+ step breakdown](assets/anna-diamond-helmet.png)
 
-Mentre il bot PvP del video impara dall'esperienza, ANNA funziona dalla conoscenza. Non ha bisogno di 1.000 duelli o 60 ore di addestramento: ha bisogno dell'albero, del parser e del server. Ma non può nemmeno generalizzare oltre ciò che il suo albero codifica. Nessuna quantità di ingegneria di macchine a stati gli insegnerebbe a fare PvP.
+Là dove il bot PvP del video impara dall'esperienza, ANNA funziona dalla conoscenza. Non ha bisogno di 1 000 duelli o 60 ore di allenamento: ha bisogno dell'albero, del parser e del server/distributore. Ma non può nemmeno generalizzare oltre ciò che il suo albero codifica. Nessuna quantità di ingegneria di macchine a stati gli insegnerebbe a fare PvP.
 
-L'approccio di ANNA rispecchia un'epoca diversa dell'IA: prima che l'apprendimento end-to-end dominasse, quando la promessa era che il ragionamento simbolico combinato con un'attenta ingegneria potesse produrre comportamento intelligente. Oggi, progetti come ANNA e il bot PvP rappresentano due poli dell'IA di Minecraft: uno ragiona sul mondo, l'altro lo percepisce.
+L'approccio di ANNA riflette un'epoca diversa dell'IA: prima che l'apprendimento end-to-end dominasse, quando la promessa era che il ragionamento simbolico unito a ingegneria attenta potesse produrre comportamento intelligente. Oggi, progetti come ANNA e il bot PvP rappresentano due poli dell'IA di Minecraft: uno ragiona sul mondo, l'altro lo percepisce.
 
-## Il Mace Bot di Master Gumbo : IA con soli command block
+## Master Gumbo's Mace Bot: IA con soli command block
 
-![L'arena di addestramento Mace PvP con il bot](assets/mace-bot-arena.png)
+![The Mace PvP training arena with the bot](assets/mace-bot-arena.png)
 
-In un angolo completamente diverso dell'IA di Minecraft, lo YouTuber **Master Gumbo** ha costruito un bot di addestramento PvP usando **solo command block**: niente mod, niente plugin, niente codice esterno. Solo comandi vanilla di Minecraft, redstone e un carpet mod per entità replica del giocatore. Il risultato è un avversario IA per mace PvP che pratica breach swapping, wind charging e meccaniche di scudo con il giocatore.
+In un angolo completamente diverso dell'IA di Minecraft, lo YouTuber **Master Gumbo** ha costruito un bot di allenamento PvP usando **solo command block**, solo con comandi Minecraft vanilla, redstone, e un carpet mod per entità cloni di giocatore. Il risultato è un avversario IA per la massa che pratica cambi di breccia, cariche di vento e meccanismi di scudo col giocatore.
 
-Il bot inizia come uno zombie con equipaggiamento infrangibile e un totem nella mano secondaria (riempito ogni tick tramite `/item replace`), rendendolo effettivamente immortale. Successivamente, Master Gumbo passa ai bot **Carpet Mod's player replica**, che supportano meccaniche umane (alzare lo scudo, cambiare oggetto) che gli zombie non possono fare.
+Il bot inizia come uno zombie con equipaggiamento infrangibile e un totem nella seconda mano (riempito a ogni tick via `/item replace`), rendendolo di fatto immortale. Poi, Master Gumbo passa ai bot **player replica del Carpet Mod**, che supportano meccaniche umanoidi (alzata di scudo, cambio oggetto) che gli zombie non possono fare.
 
-![Il centro impostazioni: pulsanti per configurare il comportamento del bot](assets/mace-settings-center.png)
+![The settings center : buttons to configure bot behavior](assets/mace-settings-center.png)
 
-L'innovazione principale è una **macchina a stati guidata dalla casualità**. Un armor stand viene teletrasportato sopra un cerchio di blocchi di cemento colorati usando il comando `/spreadplayers`, che disperde le entità casualmente. Dove atterra l'armor stand determina la prossima azione del bot:
+L'innovazione centrale è una **macchina a stati guidata dal caso**. Un armor stand viene teletrasportato sopra un cerchio di blocchi di cemento colorato via il comando `/spreadplayers`, che disperde le entità a caso. Il colore del blocco di cemento su cui l'armor stand atterra determina la prossima azione del bot:
 
 - **Cemento rosso** → strafe all'indietro
-- **Cemento blu** → wind charge verso l'alto (attacco)
+- **Cemento blu** → si alza verso l'alto (attacco) con la carica di vento
 - **Cemento verde** → alza lo scudo
 - **Cemento bianco** → pausa (aggiunge ritardo tra le azioni)
 
-![Il sistema decisionale dell'IA: un armor stand su cemento colorato](assets/mace-ai-system.png)
+![The AI decision system : an armor stand on colored concrete](assets/mace-ai-system.png)
 
-La posizione dell'armor stand viene letta da command block che rilevano il blocco sottostante e attivano il meccanismo corrispondente. Un blocco di redstone viene posizionato o rimosso per abilitare/disabilitare ogni comportamento. Poiché `/spreadplayers` viene eseguito in ripetizione, il bot prende continuamente nuove decisioni, creando un comportamento imprevedibile ma strutturato.
+La posizione dell'armor stand è letta da command block che rilevano il blocco sotto e attivano il meccanismo corrispondente. Un blocco di redstone viene piazzato o rimosso per attivare/disattivare ogni comportamento. Poiché `/spreadplayers` gira in ripetizione, il bot prende continuamente nuove decisioni, creando un comportamento imprevedibile ma strutturato.
 
-Master Gumbo chiama questo "una forma molto semplice e basilare di IA": non impara dalle interazioni come le reti neurali, ma la casualità combinata con la macchina a stati produce un comportamento PvP realistico che è più difficile da prevedere di un bot scriptato. Il centro impostazioni include un'interfaccia a libro per attivare/disattivare l'IA, regolare la difficoltà e configurare i pattern di movimento.
+Master Gumbo la chiama "una forma molto semplice e basilare di IA": non impara dalle interazioni come le reti neurali, ma caso + macchina a stati produce un comportamento PvP realistico più difficile da prevedere di un bot scriptato. Il centro impostazioni include un'interfaccia libro per attivare/disattivare l'IA, regolare la difficoltà e configurare i pattern di movimento.
 
-Dopo essersi addestrato con il bot e aver poi duellato contro il giocatore che lo aveva definito scarso (nell'intro del video), Master Gumbo vince. La mappa è condivisa via Discord, con Carpet Mod richiesto.
+Dopo il suo allenamento col bot e poi in duello contro il giocatore che l'aveva trattato da scarso (nell'intro del suo video), Master Gumbo vince. La mappa è condivisa via Discord, Carpet Mod richiesto.
 
-![Il bot in un duello, mentre pratica tecniche di mace PvP](assets/mace-final-duel.png)
+![The bot in a duel, practicing mace PvP techniques](assets/mace-final-duel.png)
 
-Mentre il bot PvP (Kadambi) impara dai pixel e ANNA ragiona con un albero dei compiti, il bot di Master Gumbo raggiunge l'intelligenza attraverso **transizioni di stato randomizzate**: un approccio puro con command block che dimostra che non servono reti neurali per costruire un avversario PvP convincente.
+Là dove il bot PvP (Kadambi) impara dai pixel e ANNA ragiona attraverso un albero di compiti, il bot di Master Gumbo raggiunge l'intelligenza con **transizioni di stato casuali**: un approccio puro command block che prova che non servono reti neurali per costruire un avversario PvP convincente.
 
-## Altoclef : Un mineratore IA con pianificazione basata su goal
+## Altoclef: Baritone + albero di compiti su larga scala
 
-Mentre tutti i progetti precedenti si concentrano sul combattimento o sulla sopravvivenza di base, **Altoclef** di **Ga13c** risolve un problema diverso: estrarre qualsiasi risorsa in Minecraft dato un obiettivo testuale. Non è un bot PvP e non usa pixel: è un agente IA strutturato che opera attraverso **Fabric API** direttamente nel client di Minecraft, controllando il giocatore attraverso il codice Java piuttosto che attraverso il riconoscimento dello schermo.
+Se ANNA è un bot simbolico che *legge* per sapere cosa fare, e il Mace Bot randomizza le decisioni, **Altoclef** è un agente autonomo completo che *pianifica* il suo percorso attraverso l'intero gioco. Costruito da gaucho-matero come mod Fabric e spinto dal pathfinding **Baritone**, Altoclef scompone qualsiasi obiettivo Minecraft in un albero di compiti e lo esegue senza intervento umano.
 
-L'architettura di Altoclef è un **task tree** con un sistema di pianificazione inverso. Date una risorsa obiettivo (ad esempio *"netherite ingot"*), l'agente percorre all'indietro il grafo delle ricette e delle azioni di Minecraft: ha bisogno di un lingotto di netherite → servono frammenti di netherite grezzi e oro → serve un piccone di diamante per la netherite → servono diamanti → serve un piccone di ferro per i diamanti. Il sistema si ferma solo quando raggiunge risorse ottenibili direttamente (legno, pietra, terra) e a quel punto esegue i compiti con **Baritone**, un pathfinding algorithm open-source che naviga nel mondo e interagisce con i blocchi.
+L'interfaccia è ingannevolmente semplice: scrivi `@gamer` in chat, e Altoclef inizia il compito "finire il gioco" da un mondo survival. Raccoglie legno, crafta attrezzi, mina ferro e diamante, costruisce un portale del Nether, raccoglie bastoni Blaze e perle dell'Ender, trova la stronghold, e uccide l'Ender Dragon. Tutto in autonomia, via il client Minecraft nativo, su qualsiasi server vanilla.
 
-L'agente gestisce:
+Sotto il cofano, questo è realizzato grazie a un **sistema di albero di compiti ricorsivo** dove ogni obiettivo di alto livello (per esempio, "crafta un piccone di diamante") è scomposto in compiti prerequisiti: minare diamante, poi fonderlo, poi craftare bastoni, poi combinarli. L'albero percorre il grafo completo delle ricette Minecraft, gestendo catene di produzione, drop di mostri, tabelle di loot e accesso ai contenitori. A differenza dell'albero scritto a mano di ANNA, i compiti di Altoclef sono **classi Java programmabili** che possono implementare logica arbitraria: strategie di combattimento, baratto coi piglin, pattern di esplorazione.
 
-- **Inferenza automatica delle ricette**: a partire da un obiettivo testuale, Altoclef costruisce l'intera catena di crafting senza alcuna codifica manuale.
-- **Task progress tracking**: utilizza lo stato del mondo e dell'inventario letti direttamente dalle classi Java di Minecraft per sapere se un sotto-compito è completo o fallito.
-- **Pianificazione adattiva**: se un componente della ricetta non è disponibile, l'albero dei compiti si espande automaticamente per estrarlo o craftarlo.
-- **Esecuzione parallela**: compiti indipendenti (ad esempio raccogliere legno e pietra contemporaneamente) possono essere eseguiti insieme per risparmiare tempo.
+L'idea architetturale chiave è la separazione del **cosa** (l'albero di compiti) dal **come** (il pathfinding Baritone). Baritone gestisce gli spostamenti di basso livello: pathfinding, evitamento ostacoli, rottura blocchi, gestione inventario, mentre il sistema di compiti orchestra il piano di alto livello. Questa modularità significa che nessun componente deve essere un'IA: sono entrambi algoritmi deterministici, ma la loro combinazione produce un comportamento complesso e orientato a uno scopo che rivaleggia con gli approcci per apprendimento.
 
-A differenza di ANNA, che opera tramite Mineflayer su un server esterno e usa NLP francese per l'interpretazione dei comandi, Altoclef gira come mod Fabric nel client di Minecraft vero e proprio. Non cattura schermate, non elabora pixel, non addestra reti neurali: legge direttamente lo stato del gioco dalle classi Java e invoca Baritone per la navigazione. È il più vicino a un "vero giocatore automatico" tra tutti i progetti qui discussi.
+Altoclef rappresenta il limite dell'**IA Minecraft simbolica pura**: può finire il gioco da zero senza allenamento, senza GPU, e senza dati umani, ma non può adattarsi a compiti che i suoi programmatori non hanno previsto, e non può imparare dall'esperienza. Sa craftare un piccone di diamante perché una classe Java gli dice esattamente come, non perché l'ha scoperto da solo.
 
-Tuttavia, Altoclef ha dei limiti. Non impara dall'esperienza (non usa RL), non riconosce oggetti visivamente e non è progettato per il PvP. La sua forza è la pianificazione sistematica della progressione. Per survival automation e speedrunning di progressione tecnologica è eccellente, ma non ti aiuterà in un duello.
+## Cosa li collega
 
-Altoclef rappresenta il polo **simbolico-procedurale** dello spettro dell'IA di Minecraft: conoscenza codificata come albero dei compiti, esecuzione affidata a un pathfinding terzo, percezione tramite API di gioco anziché visione artificiale.
+| Approccio | Metodo principale | Dati | Calcolo | Risultato | |
+|--------------------------|---------------------|---------|--------|-----------|-|
+| Bot PvP del video | RL + imitation learning | 1 000 duelli | 1 laptop, 60h | Combo da 100 colpi | |
+| OpenAI Five | RL in auto-apprendimento | 180 anni di gioco/giorno | 256 GPU, 10mesi | Campione del mondo Dota 2 | |
+| VPT | IL semi-supervisionato | 70K h YouTube + IDM | 720 GPU, 9 giorni | Attrezzi di diamante | |
+| DreamerV3 | RL world model | Tragitti sognati | 1 GPU, 9 giorni | Diamante da zero | |
+| **ANNA** | **NLP simbolico + albero di compiti** | **Ricette scritte** | **1 laptop, istantaneo** | **Qualsiasi oggetto craftabile** | |
+| **Altoclef** | **Baritone + task tree FS** | **Classi Java di compiti** | **Mod Fabric, no GPU** | **Finisce l'intero gioco** | |
+| **Mace Bot** | **Macchina a stati Command block** | **Decisioni casuali** | **MC vanilla, senza GPU** | **Allenamento PvP mazza** | |
 
-## Cosa li unisce
-
-| Approccio | Metodo principale | Dati | Calcolo | Risultato |
-|----------|------------|------|---------|--------|
-| Bot PvP del video | RL + apprendimento per imitazione | 1.000 duelli | 1 laptop, 60h | Combo da 100 colpi |
-| OpenAI Five | Self-play RL | 180 anni di gameplay/giorno | 256 GPU, 10 mesi | Campione mondiale Dota 2 |
-| VPT | IL semi-supervisionato | 70K ore YouTube + IDM | 720 GPU, 9 giorni | Strumenti di diamante |
-| DreamerV3 | World model RL | Traiettorie sognate | 1 GPU, 9 giorni | Diamante da zero |
-| **ANNA** | **NLP simbolico + albero compiti** | **Ricette scritte a mano** | **1 laptop, istantaneo** | **Qualsiasi oggetto creabile** |
-| **Altoclef** | **Task tree con Baritone + Fabric** | **Goal testuale → catena ricette** | **Client Minecraft, nessuna GPU** | **Estrazione automatica di risorse** |
-| **Mace Bot** | **Macchina a stati con command block** | **Decisioni randomizzate** | **MC vanilla, nessuna GPU** | **Addestramento Mace PvP** |
-
-Il bot del video è il più vincolato dalle risorse ma il più onesto riguardo al processo. Prima fallisce, poi itera. Dimentica ciò che ha imparato, poi re-impara. Finisce con una combo da 100 colpi: ma anche con una domanda su se ciò che ha costruito sia barare.
+Il bot del video è il più vincolato in risorse ma il più onesto sul processo. Fallisce prima, poi itera. Dimentica ciò che ha imparato, poi lo impara di nuovo. Finisce con una combo da 100 colpi: ma anche con una domanda su ciò che ha costruito che bara.
 
 ---
 
-**Video** : [AI Learns Minecraft PvP](https://www.youtube.com/watch?v=j5nxDKAjg6U) di Kadambi | AI Engineering
+**Video**: [AI Learns Minecraft PvP](https://www.youtube.com/watch?v=j5nxDKAjg6U) di Kadambi | AI Engineering
 
-**VPT** : [Paper](https://cdn.openai.com/vpt/Paper.pdf) · [Blog](https://openai.com/index/vpt/) · [GitHub](https://github.com/openai/Video-Pre-Training)
+**VPT**: [Articolo](https://cdn.openai.com/vpt/Paper.pdf) · [Blog](https://openai.com/index/vpt/) · [GitHub](https://github.com/openai/Video-Pre-Training)
 
-**OpenAI Five** : [Paper](https://arxiv.org/abs/1912.06680) · [Blog](https://openai.com/index/dota-2/)
+**OpenAI Five**: [Articolo](https://arxiv.org/abs/1912.06680) · [Blog](https://openai.com/index/dota-2/)
 
-**DreamerV3** : [Paper](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
+**DreamerV3**: [Articolo](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
-**ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, French NLP, task tree)
+**ANNA**: [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, NLP francese, albero di compiti)
 
-**Altoclef** : [GitHub](https://github.com/ga13c/Altoclef) · (Fabric mod, Baritone, task tree, goal-oriented mining)
+**Altoclef**: [GitHub](https://github.com/gaucho-matrero/altoclef) · [Fork attivo](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, task tree, finisce il gioco)
 
-**Mace Bot** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) di Master Gumbo · (Command blocks, Carpet Mod, state machine)
+**Mace Bot**: [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) di Master Gumbo · (Command block, Carpet Mod, macchina a stati)

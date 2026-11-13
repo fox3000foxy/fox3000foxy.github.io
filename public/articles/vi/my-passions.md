@@ -1,14 +1,14 @@
 ---
 title: Đam Mê Của Tôi
-description: Lập trình, vẽ vời, tự động hóa, khám phá công nghệ cũ, và hơn
-  thế nữa -- một cái nhìn về những điều thúc đẩy tôi.
+description: Lập trình, vẽ vời, tự động hóa, khám phá công nghệ cũ, và
+  hơn thế nữa -- một cái nhìn về những điều thúc đẩy tôi.
 date: 2026-03-08
-authors:
-  - fox3000foxy
 tags:
   - personal
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Y7g0FNZg7XBeW8fsZC9dKCyYyplwpXmcTj+PGORoKn7BKUKwSkA5Na9+8LWTe5dvsQiotNcCSJjPRCi+Y2Z1BQ=="
+author_sig: "bODEnAkAOFsx6/2g8MzBhP3vziQMCc7hOkCkL0C8jwnnDazHEl6DzjreQZAUzKFwlw9GiwyQkvELEIRYrrpK9g=="
 ---
 
 # Đam Mê Của Tôi
@@ -19,13 +19,13 @@ Có lẽ vì tôi muốn chia sẻ cuộc sống của mình nhưng không muố
 
 ## Code
 
-Niềm đam mê của tôi rất đa dạng: tôi thích lập trình, như bạn có thể đã thấy trên phần còn lại của blog này. Có điều gì đó thật sự thỏa mãn khi xây dựng mọi thứ từ con số không, giải quyết vấn đề, và thấy sáng tạo của mình trở nên sống động. Dù là một công cụ dòng lệnh nhỏ hay một ứng dụng web hoàn chỉnh, quá trình đó không bao giờ cũ.
+Niềm đam mê của tôi rất đa dạng : tôi thích lập trình, như bạn có thể đã thấy trên phần còn lại của blog này. Có điều gì đó thật sự thỏa mãn khi xây dựng mọi thứ từ con số không, giải quyết vấn đề, và thấy sáng tạo của mình trở nên sống động. Dù là một công cụ dòng lệnh nhỏ hay một ứng dụng web hoàn chỉnh, quá trình đó không bao giờ cũ.
 
 Tôi có một tình yêu đặc biệt dành cho **open source** -- chia sẻ là quan tâm, và tôi thực sự trân trọng ý nghĩ rằng ai đó khác có thể thấy mã nguồn của tôi hữu ích. Hầu hết các dự án của tôi sống trên [GitHub của tôi](https://github.com/fox3000foxy), và bạn có thể xem qua chúng trên [trang Dự án](/projects).
 
 ## Vẽ
 
-Nhưng code không phải là niềm đam mê duy nhất của tôi -- tôi cũng thích vẽ nữa! Đây là một số bức vẽ của tôi:
+Nhưng code không phải là niềm đam mê duy nhất của tôi -- tôi cũng thích vẽ nữa! Đây là một số bức vẽ của tôi :
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
@@ -63,12 +63,12 @@ Tôi cũng rất thích Vtuber, và ước một ngày nào đó có thể trở
 
 Sở thích chính của tôi là lập trình trong khi nghe nhạc. Không gì tuyệt hơn việc bước vào trạng thái flow với một playlist hay. Tôi cũng thích đi bộ bây giờ, không hiểu sao 😕.
 
-## Tìm Giải Pháp Thay Thế
+## Tìm Giải Pháp Lách
 
-Tôi cũng thích tìm các giải pháp thay thế để tránh phải trả tiền cho mọi thứ -- hoặc ít nhất là suy nghĩ vượt khuôn khổ. Ví dụ, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) là một trong những sáng tạo gần đây của tôi, nơi tôi đã tìm ra các giải pháp miễn phí cho quản lý đơn hàng, quản lý cơ sở dữ liệu, và daemon. Không phải vì keo kiệt -- chính thử thách mới là điều quan trọng!
+Tôi cũng thích tìm các giải pháp lách để tránh phải trả tiền cho mọi thứ -- hoặc ít nhất là suy nghĩ vượt khuôn khổ. Ví dụ, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) là một trong những sáng tạo gần đây của tôi, nơi tôi đã tìm ra các giải pháp miễn phí cho quản lý lệnh, quản lý cơ sở dữ liệu, và daemon. Chính thử thách mới là điều quan trọng, hơn nhiều so với số tiền tiết kiệm được!
 
 ## Tại Sao Blog Này
 
-Tôi muốn blog này là một nơi tôi có thể chia sẻ tiến trình, suy nghĩ, và bất cứ điều gì tôi muốn chia sẻ. Như vậy bạn sẽ biết tôi nghĩ như thế nào. Và viết về những đam mê của tôi dường như là cách hoàn hảo để bắt đầu.
+Tôi muốn blog này là một nơi tôi có thể chia sẻ tiến trình, suy nghĩ, và bất cứ điều gì tôi muốn chia sẻ. Như vậy bạn sẽ biết tôi nghĩ thế nào. Và viết về những đam mê của tôi dường như là cách hoàn hảo để bắt đầu.
 
 Cảm ơn bạn đã đọc!

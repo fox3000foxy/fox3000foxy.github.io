@@ -1,6 +1,6 @@
 ---
-title: "Minecraft Bedrock'ta herhangi bir pelerini nasil alirsiniz"
-description: "Ucuncu parti bir baslatici, oyunun eski bir surumu ve hayir demeyi asla ogrenmemis bir pelerin secici. Tam rehber arti neden calistiginin olasi aciklamasi."
+title: Minecraft Bedrock üzerinde herhangi bir pelerini nasıl almalı
+description: "Üçüncü parti bir başlatıcı, oyunun eski bir sürümü ve hayır demeyi hiç öğrenmemiş bir pelerin seçici. Tam öğretici artı neden işe yaradığının muhtemel açıklaması."
 date: 2026-07-14
 tags:
   - minecraft
@@ -10,127 +10,127 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "AplJPsj7BnwlFUa2vrSz0Yh+ml9ZKk6L/98LgMjIheccw9fTS6kqbZlkocE69701R1frgAkIm9RraPKCCSpmrg=="
+author_sig: "TGrDHUmSDt4LencabAcZx9XyhbwJVWeZDz5mmO/TfwZYiCoCGqUHVYGvEVn+xeOTt5Tkca+6xwYzbOO24B6qPQ=="
 ---
 
-# Minecraft Bedrock'ta herhangi bir pelerini nasil alirsiniz
+# Minecraft Bedrock üzerinde herhangi bir pelerini nasıl almalı
 
-Java'da olmamaniz gereken bir pelerine sahip olmanin bir suru dolambaçli yolu var (`cape-mod` yazisina bakin). Bedrock'ta oyun farkli, kimlik dogrulama farkli, ama yine de bir yolu var -- mod gerekmiyor, ag paketiyle oynamak gerekmiyor. Sadece ucuncu parti bir baslatici ve beklenen dogrulamaya sahip olmayacak kadar eski bir oyun surumu.
+Javada sahip olmaman gereken bir pelerinle sonuçlanmanın bir sürü çarpık yolu vardır (`cape-mod` makalesine bak). Bedrockta oyun farklıdır, kimlik doğrulama farklıdır ama yine de bir yol vardır: üçüncü parti bir başlatıcı ve kazanılmış sanılan doğrulamayı görmezden gelecek kadar eski bir oyun sürümü yeter.
 
-Iste nasil yapilacagi, ardindan da kaputun altinda muhtemelen neler olduguna bakalim.
+İşte nasıl yapılacağı ve sonra kaputun altında muhtemelen neler olduğuna bakıyoruz.
 
-## Ihtiyaciniz olanlar
+## Neye ihtiyacın var
 
-- Halihazirda Minecraft Bedrock'a sahip bir Microsoft hesabi (sizinki is gorur)
-- Resmi Minecraft baslaticisi kurulu
-- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), Bedrock'un herhangi bir tarihi surumunu kurup calistirmaniza olanak saglayan acik kaynakli bir ucuncu parti baslatici
+- Zaten Minecraft Bedrocka sahip bir Microsoft hesabı (seninki gayet iyi iş görür)
+- Kurulu resmi Minecraft başlatıcısı
+- Herhangi bir tarihsel Bedrock sürümünü kurup çalıştırmaya izin veren açık kaynak üçüncü parti bir başlatıcı olan [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
 - .NET 8.0 Desktop Runtime
-- Windows'ta gelistirici modu etkin
+- Windows üzerinde etkinleştirilmiş geliştirici modu
 
-## Adim 1 -- Bedrock'i resmi baslaticiyla en az bir kez kurun
+## Adım 1: Bedrockı resmi başlatıcıyla en az bir kez kur
 
-Baska bir sey yapmadan once, resmi Minecraft baslaticisini acin, **Minecraft: Bedrock Edition** sekmesine gidin ve **Yukle**'ye tiklayin. BedrockLauncher'a dokunmadan once Bedrock'in en az bir kez resmi kanaldan kurulmus ve calistirilmis olmasi gerek.
+Başka bir şey yapmadan önce resmi Minecraft başlatıcısını aç, **Minecraft: Bedrock Edition** sekmesine git ve **Install** düğmesine tıkla. BedrockLaunchera dokunmadan önce Bedrockın resmi yoldan en az bir kez kurulmuş ve çalıştırılmış olması gerekir.
 
-![Resmi baslaticidan Bedrock Edition'i kurma](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
+![Resmi başlatıcıdan Bedrock Edition kurulumu](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
 
-## Adim 2 -- BedrockLauncher'i indirin
+## Adım 2: BedrockLauncherı indir
 
-Projenin GitHub surumler sayfasina gidin. **Assets** altinda listelenen en son surumun zip dosyasini alin.
+Projenin GitHub releases sayfasına git. **Assets** içinde listelenen son sürümün zipini al.
 
-![BedrockLauncher GitHub surumler sayfasi](/images/bedrock-cape/bedrock-cape-02-github-release.png)
+![BedrockLauncherın GitHub releases sayfası](/images/bedrock-cape/bedrock-cape-02-github-release.png)
 
-## Adim 3 -- Arsivi cikarin
+## Adım 3: Arşivi çıkar
 
-Zip indirildikten sonra, `Indirilenler` klasorune (veya sonra bulabileceginiz herhangi bir yere) cikarin.
+Zip indirildikten sonra `Downloads` klasörüne çıkar (ya da klasörü sonra bulacağın sürece herhangi bir yere).
 
-![BedrockLauncher arsivini cikarma](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
+![BedrockLauncher arşivinin çıkarılması](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
 
-## Adim 4 -- Calistirilabilir dosyayi calistirin
+## Adım 4: Çalıştırılabilir dosyayı çalıştır
 
-Cikartilan klasore gidin ve `BedrockLauncher.exe`'yi calistirin.
+Çıkarılan klasöre git ve `BedrockLauncher.exe` dosyasını çalıştır.
 
-![BedrockLauncher.exe'yi calistirma](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
+![BedrockLauncher.exe dosyasının çalıştırılması](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
 
-## Adim 5 -- .NET Desktop Runtime'i yukleyin ve gelistirici modunu etkinlestirin
+## Adım 5: .NET Desktop Runtime kur ve geliştirici modunu etkinleştir
 
-Ilk calistirmada Windows buyuk ihtimalle **.NET 8.0 Desktop Runtime** isteyecek -- kurun. Ayrica `Ayarlar > Sistem > Gelistiriciler icin` uzerinden **gelistirici modunu** etkinlestirmeniz gerek, cunku BedrockLauncher oyunu loose paket olarak kurar (ham dosyalar, imzali gercek bir Store paketi degil) ve Windows bu mod olmadan bu tarz bir kurulumu reddeder.
+İlk çalıştırmada Windows büyük olasılıkla **.NET 8.0 Desktop Runtime** isteyecek: kur. Ayrıca `Paramètres > Système > Pour les développeurs` içinde **geliştirici modunu** etkinleştirmek gerekir çünkü BedrockLauncher oyunu gevşek bir paket olarak kurar (ham dosyalar, Storedan imzalı gerçek bir paket değil) ve Windows bu tür kuruluma bu mod olmadan izin vermez.
 
-![.NET Runtime kurulumu ve gelistirici modunu etkinlestirme](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
+![.NET çalışma ortamı kurulumu ve geliştirici modu etkinleştirme](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
 
-## Adim 6 -- Yeni bir kurulum olusturun
+## Adım 6: Yeni bir kurulum oluştur
 
-BedrockLauncher'i tekrar baslatin, Microsoft hesabinizla giris yapin, **Installations** sekmesine gidin ve **New installation**'a tiklayin.
+BedrockLauncherı yeniden çalıştır, Microsoft hesabınla bağlan, **Installations** sekmesine git ve **New installation** düğmesine tıkla.
 
-![BedrockLauncher'da yeni kurulum olusturma](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
+![BedrockLauncher içinde yeni kurulum oluşturma](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
 
-## Adim 7 -- Eski bir surum secin
+## Adım 7: Eski bir sürüm seç
 
-Kuruluma bir isim verin, sonra surum listesinden **eski** bir surum secin -- tipik olarak `1.16.x` veya daha eski. **Create**'e tiklayin.
+Kuruluma bir ad ver, sonra sürüm listesinden **eski** bir sürüm seç: tipik olarak `1.16.x` ya da daha eski bir sürüm. **Create** düğmesine tıkla.
 
-![Eski bir surum secme, burada 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
+![Eski sürüm seçimi, burada 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
 
-## Adim 8 -- Kurulumu baslatin
+## Adım 8: Kurulumu başlat
 
-**Play**'e tiklayin. Dosya cikarma islemi bilgisayara bagli olarak on dakikaya kadar surebilir -- baslatici donmus gorunecek ("Yanit Vermiyor"), bu normal, calismaya birakin.
+**Play** düğmesine tıkla. Dosyaların çıkarılması makineye göre on dakikaya kadar sürebilir: başlatıcı donmuş görünecek ("Not Responding"), bu normal, çalışmaya bırak.
 
-![Cikarma islemi devam ediyor, baslatici yanit vermiyor gorunuyor](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
+![Çıkarma sürüyor, başlatıcı yanıt vermiyor gibi görünüyor](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
 
-## Adim 9 -- Pelerini secin
+## Adım 9: Pelerini seç
 
-Oyun baslatildiktan sonra, hesabinizla giris yapin, yeni bir karakter olusturun ve skin editorunde **Pelerinler** sekmesine gidin. Orada, hic sahip olmadiklariniz da dahil olmak uzere oyunda var olan tum pelerinlerin tam listesini bulacaksiniz (promosyon etkinlikleri, gecmis festivaller, Mob Vote pelerinleri vb.). Istediginizi secin.
+Oyun açıldığında hesabınla bağlan, yeni bir karakter oluştur ve görünüm editörüne, **Capes** sekmesine git. Orada oyunda var olan tüm pelerinlerin tam listesini bulacaksın, hiç sahip olmadıkların dahil (tanıtım etkinlikleri pelerinleri, geçmiş festivaller, Mob Vote vs.). İstediğini seç.
 
-**Bu asamada skinin geri kalan gorunumune dokunmayin**, sadece pelerini birakin.
+**Bu aşamada görünümün geri kalanına dokunma**, sadece pelerini bırak.
 
-![Karakter editorunde pelerin secimi](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
+![Karakter editöründe pelerin seçimi](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
 
-## Adim 10 -- Resmi surumu yeniden yukleyin
+## Adım 10: Resmi sürümü yeniden kur
 
-Resmi baslaticiya geri donun, **Kurulum** sekmesi, ana Bedrock kurulumunda **Kaldir**'a tiklayin, sonra yeniden yukleyin (veya **Guncellemeleri Denetle**'ye tiklayin). Minecraft Bedrock'i bu sefer resmi baslaticidan baslatin.
+Resmi başlatıcıya dön, **Installation** sekmesi ve ana Bedrock kurulumunda **Uninstall** düğmesine tıkla, sonra yeniden kur (ya da **Check for Updates** yap). Bu sefer resmi başlatıcıdan Minecraft Bedrockı yeniden çalıştır.
 
-![Resmi baslaticidan kaldirma ve yeniden yukleme](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
+![Resmi başlatıcıdan kaldırma ve yeniden kurma](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
 
-Iste bu kadar -- pelerininiz orada, resmi surumde, gercek profilinizde.
+Ve işte bu: pelerin orada, resmi sürümde, gerçek profilinde.
 
 ## Muhtemelen neler oluyor
 
-Bedrock'un kapali kaynak kodunu kurcalamadim (derlenebilir olan Java'nin aksine), bu yuzden asagidaki **olasi** bir aciklama, kesin bir bilgi degil. Ancak gozlemlenen davranis asagidaki hipoteze oldukca iyi uyuyor.
+Kapalı kaynak Bedrock kodunun içine ellerimi sokmadım (decompilesi yapılabilen Javanın tersine), o yüzden sonrası **muhtemel** bir açıklama, mutlak bir kesinlik değil. Ama gözlemlenen davranış şu hipoteze epey uyuyor.
 
-### Pelerin secici hicbir zaman bir erisim kontrolu degildi
+### Pelerin seçici hiç erişim kontrolü olmadı
 
-Bedrock'ta pelerin secim ekrani buyuk ihtimalle **oyunda var olan tum pelerinlerin tam listesini** gosteriyor, sadece hesabinizin sahip olduklarini degil. Yeni istemcilerde bir uygulama filtresi (istemci tarafinda veya Xbox/Microsoft yetkilendirme servisine bir ag cagrisi yoluyla) sahip olmadiginiz pelerinleri gri yapar veya gizler.
+Bedrockta pelerin seçim ekranı büyük olasılıkla **oyunda var olan tüm pelerinlerin tam listesini** gösterir, yalnızca hesabının sahip olduklarını değil. Güncel istemcilerde uygulamalı bir filtre (istemci tarafı ya da Xbox/Microsoft yetkilendirme servisine ağ çağrısı üzerinden) sahip olmadığın pelerinleri grileştirir ya da gizler.
 
-Kilit nokta, bu filtrenin muhtemelen **sonradan**, yeterince yeni bir surumde eklenmis olmasi. 1.16.x gibi bir surum bu filtreden once gelir veya farkli (ya da var olmayan) bir dogrulama mekanizmasi kullanir: listedeki her sey secilebilir hale gelir, yetki olsun ya da olmasin.
+Kilit nokta şu ki bu filtre muhtemelen **sonradan** eklendi, yeterince güncel bir oyun sürümünde. 1.16.x gibi bir sürüm bu filtreden öncedir ya da farklı bir doğrulama mekanizması kullanır (hatta yok): listedeki her şey yetki olsun olmasın seçilebilir olur.
 
-### Pelerin tam olarak nerede saklaniyor?
+### Pelerin tam olarak nerede saklanıyor?
 
-Bu kisim yeniden yuklemeden sonra neden hayatta kaldigini acikliyor. Bedrock'ta skin/pelerin secimi sadece kullan-at bir yerel dosya degil -- Microsoft hesabiniza bagli Xbox Live profiline buyuk ihtimalle senkronize ediliyor (diger Bedrock platformlarindaki -- mobil, konsol vs. -- skininizi yoneten ayni sistem). Eski istemcide bir pelerin sectiginizde, guncel bir istemcinin mesru bir pelerinle yapacagi gibi bu secimi profil servisine gonderiyor olabilir -- cunku istemcinin bakis acisindan "size ait" bir pelerin ile "secilmis" bir pelerin arasinda hicbir fark yok. Profil servisi ise bu noktada istemciye guveniyor: yazma aninda, arkasinda gercekten yetkinin olup olmadigini yeniden dogrulamadan secimi kaydediyor.
+Yeniden kurulmadan sağ çıkmayı açıklayan kısım bu. Bedrockta görünüm/pelerin seçimi atılabilir yerel bir dosyadan ibaret değildir: büyük olasılıkla Microsoft hesabına bağlı Xbox Live profilinde senkronize edilir (diğer Bedrock platformlarında: mobil, konsol vs. görünümünü yöneten sistemin aynısı). Eski istemcide bir pelerin seçtiğinde bunu büyük olasılıkla profil servisine aynen meşru pelerinli güncel bir istemcinin yapacağı gibi gönderir, çünkü istemcinin gözünde "senin" bir pelerinle "seçilmiş" bir pelerin arasında fark yoktur. Profil servisi de bu noktada istemciye güvenir: yetkilendirmenin gerçekten arkada var olup olmadığını yeniden doğrulamadan seçimi kaydeder, en azından yazma anında değil.
 
-Sonuc: guncel resmi oyunu yeniden baslattiginizda, mevcut skin/pelerininizi profil servisinden aliyor -- ve servis, kurallara uymayan pelerin de dahil olmak uzere kaydedileni sadik bir sekilde geri donduruyor. Yetki kontrolu, eger varsa, buyuk ihtimalle yeni UI'da **secim** aninda gerceklesiyor (bu yuzden yeni istemcilerde filtre var), zaten profilde kayitli olanin **goruntulenmesi** aninda degil.
+Sonuç: güncel resmi oyunu yeniden çalıştırdığında mevcut görünümünü/pelerinini profil servisinden çeker ve servis kaydedileni sadakatle döndürür, meşru olmayan pelerin dahil. Yetki kontrolü varsa muhtemelen yalnızca UI içinde **seçim** anında yapılır (güncel istemcilerdeki filtre bu yüzden) ve hesapta zaten kayıtlı olanın **görüntülenmesini** serbest geçirir.
 
 ### Java ile paralellik
 
-Java'daki `cape-mod` ile ayni mantik hatasi ailesinden: bir servis, her adimda kokenini yeniden kontrol etmeden verilere guveniyor. Java'da bu, yanlis profilde tekrarlanan gecerli bir RSA imzasi. Bedrock'ta ise buyuk ihtimalle dogru filtreye hic sahip olmamis eski bir istemci tarafindan kabul edilen ve daha sonra yeniden dogrulama olmaksizin hesabin kalici durumuna yayilan bir pelerin secimi. Her iki durumda da sorun giris noktasi (Java modu, eski Bedrock istemcisi) degil -- yetkiyi asagi akista yeniden dogrulamasi gereken katmanin bunu yapmamasi veya sadece bir kez, yanlis yerde yapmasi.
+Javadaki `cape-mod` ile aynı mantıksal açık ailesi: bir servis her adımda kaynağını yeniden doğrulamadan bir veriye güvenir. Javada geçerli ama yanlış profilde tekrar oynatılan bir RSA imzasıdır. Bedrockta büyük olasılıkla doğru filtreye hiç sahip olmamış eski bir istemci tarafından kabul edilen bir pelerin seçimi, sonra hesabın kalıcı durumuna yeniden doğrulama olmadan yayılır. İki durumda da sorun giriş noktası değildir (Java modu, eski Bedrock istemcisi): yetkilendirmeyi aşağıda yeniden doğrulaması gereken katmanın bunu yapmaması, ya da yanlış yerde bir kez yapmasıdır.
 
-## Neden hala calisiyor
+## Neden hâlâ işe yarıyor
 
-Birbirini dislamayan iki olasi aciklama:
+Birbiriyle uyumsuz olmayan iki olası açıklama:
 
-1. **Mojang muhtemelen bunu oncelikli olarak gormuyor.** Ucuncu parti bir baslatici, cok adimli bir islem gerektiriyor ve sonuc tamamen kozmetik -- oynanis avantaji yok, baskasinin verisi tehlikeye atilmiyor.
-2. **Bunu duzgunce duzeltmek, yetkilerin her profil okumasinda yeniden dogrulanmasini gerektirir**, sadece secim aninda degil -- bu da her skin goruntulemede ek bir ag cagrisi demek, sadece estetikle ilgili bir sorun icin.
+1. **Mojang bunu muhtemelen öncelikli görmüyor.** Üçüncü parti bir başlatıcı, çok adımlı bir manipülasyon gerekir ve sonuç tamamen kozmetiktir: oyun avantajı yok, başkasının verisi ele geçirilmiş değil.
+2. **Bunu düzgün yamalamak yetkilendirmeleri profilin her okunuşunda yeniden doğrulamayı gerektirirdi**, yalnızca seçimde değil: bu da yalnızca estetikle ilgili bir sorun için her görünüm gösteriminde ek bir ağ çağrısı demektir.
 
-## Sonuc
+## Sonuç
 
-Bu rehber on ekran goruntusune sigiyor ama yazilim guvenliginin her yerinde gorulen bir prensibi gosteriyor: eski bir sistem (eski bir istemci surumu, eski bir API, hic guncellenmemis bir servis) hala paylasilan bir duruma yazabildigi surece, gunumuzdeki erisim kontrolu sadece su andan geceni korur. Hala eski API ile konusabilen her sey daha yeni filtreyi atlar -- filtre bozuk oldugu icin degil, ondan onceki surume hic uygulanmadigi icin.
+Bu öğretici on ekran görüntüsüne sığar ama yazılım güvenliğinde her yerde bulunan bir ilkeyi gösterir: tarihsel bir sistem (eski bir istemci sürümü, legacy bir API, hiç güncellenmemiş bir servis) paylaşılan bir duruma hâlâ yazabildiği anda, bugünün erişim kontrolü yalnızca bugünden geçeni korur. Eski API ile hâlâ konuşabilen her şey daha yeni filtreyi atlatır: filtre güncel sürümlerde çalışır ama onu önceleyen sürüme hiç uygulanmamıştır.
 
 ---
 
 **Kaynaklar**
 
-- **BedrockLauncher** : [github.com/bedrockLauncher/BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
-- **Ilgili makale** : Cape Mod, RSA imza enjeksiyonu ile Java esdegeri
+- **BedrockLauncher**: [github.com/bedrockLauncher/BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
+- **İlgili makale**: Cape Mod, RSA imzası enjeksiyonuyla Java eşdeğeri
 
-**3 onemli nokta**
+**3 kilit nokta**
 
-1. Eski bir Bedrock surumundeki pelerin secici, yetki filtresi olmadan tum oyun pelerinlerinin tam listesini gosteriyor olabilir.
-2. Secim daha sonra herhangi bir mesru pelerin gibi Xbox Live profilinize senkronize olur -- profil servisi istemciye guvenir.
-3. Yetki kontrolu, eger varsa, yeni UI'daki secim sirasinda gerceklesir -- hesapta zaten kayitli olanin okunmasi sirasinda degil.
+1. Eski bir Bedrock sürümünün pelerin seçicisi büyük olasılıkla oyunun tüm pelerin listesini yetki filtresi olmadan gösterir.
+2. Seçim sonra herhangi bir meşru pelerin gibi Xbox Live profilinde senkronize edilir: profil servisi istemciye güvenir.
+3. Varsa yetki kontrolü güncel UI içinde seçimde yapılır: hesapta zaten kayıtlı olanın okunmasında değil.

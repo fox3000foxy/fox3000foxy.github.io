@@ -1,50 +1,50 @@
 ---
 title: Chạy thư viện Node.js trong trình duyệt không cần Wasm --
-  các polyfill của typescript-virtual-container
-description: Cách Fortune tự tay tái hiện node:fs, node:crypto và hàng tá
-  module Node trong 640 dòng JavaScript để container chạy trong trình duyệt
-  không cần Wasm.
+  polyfill của typescript-virtual-container
+description: Cách Fortune tái triển khai tay node:fs, node:crypto và
+  cả tá module Node trong 640 dòng JavaScript để container
+  chạy trong trình duyệt không cần Wasm.
 date: 2026-05-29
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - nodejs
   - polyfills
   - browser
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "eayzROwPlyRH44uMseyD/6b2Xq/TXA73v/cH6A02AdFc6PGz/8MYoKqAy08W2V6EmBe+I7WHCO20IOZcOtSe5A=="
+author_sig: "XI5WHndp32TONbuCjAUNXqNKGrvmPx5HDPxoasF2zpUdhuZq0m991o0Tn7gb7sNN789BiI45zcXFRl+arVo8Wg=="
 ---
 
-# Chạy thư viện Node.js trong trình duyệt không cần Wasm -- các polyfill của typescript-virtual-container
+# Chạy thư viện Node.js trong trình duyệt không cần Wasm -- polyfill của typescript-virtual-container
 
-Gần đây tôi đã dành kha khá thời gian để nghiền ngẫm mã nguồn của [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), dự án của [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Và phần khiến tôi bất ngờ nhất không phải VFS, không phải mạng ảo, không phải 170 lệnh Unix được tái hiện bằng TypeScript. Mà là thư mục `polyfills/`.
+Gần đây tôi đã dành khá nhiều thời gian mổ xẻ mã nguồn [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), dự án của [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Và phần khiến tôi bất ngờ nhất là thư mục `polyfills/`, hơn cả VFS, mạng ảo hay 170 lệnh Unix tái triển khai bằng TypeScript.
 
-Bởi vì module chạy trong trình duyệt, không cần Wasm, và để làm được điều đó, Fortune đã tự tay tái hiện toàn bộ tầng `node:*` mà thư viện cần. Khoảng 640 dòng JavaScript thủ công thay thế `node:fs`, `node:crypto`, `node:os`, `node:net`, và một số module khác.
+Vì module chạy trong trình duyệt, không cần Wasm, và vì vậy, Fortune đã tái triển khai tay toàn bộ lớp `node:*` mà thư viện cần. Khoảng 640 dòng JavaScript thủ công thay thế `node:fs`, `node:crypto`, `node:os`, `node:net`, và vài cái khác.
 
-Bài viết này giải thích cách nó hoạt động, từng polyfill một.
+Bài này giải thích nó chạy thế nào, polyfill theo polyfill.
 
 ---
 
-## Vấn đề cơ bản
+## Bài toán nền
 
-Một thư viện Node.js sử dụng các API không tồn tại trong trình duyệt. Khi bạn viết `import { readFileSync } from 'node:fs'`, đó là một lệnh gọi hệ thống phía Node -- một truy cập đĩa thực qua libuv. Trong trình duyệt, `node:fs` hoàn toàn không tồn tại.
+Thư viện Node.js dùng các API không tồn tại trong trình duyệt. Khi bạn viết `import { readFileSync } from 'node:fs'`, đó là gọi hệ thống phía Node -- truy cập đĩa thật qua libuv. Trong trình duyệt, `node:fs` hoàn toàn không tồn tại.
 
-Các giải pháp thông thường là:
+Các giải pháp thường thấy là :
 
-- **Một runtime Wasm** (kiểu Emscripten, WASIp1/WASIp2) -- bạn biên dịch Node.js thành Wasm và chạy nó. Kết quả: bundle 10-50 MB, thời gian tải đáng kể, độ phức tạp triển khai lớn.
-- **Các polyfill chung chung** (kiểu `browserify`, `webpack node: polyfills`) -- các thư viện npm cung cấp xấp xỉ của mỗi module Node. Thường quá nặng, không phù hợp với trường hợp cụ thể.
-- **Tự viết polyfill bằng tay** -- tốn nhiều công hơn, nhưng kết quả tối ưu.
+- **Runtime Wasm** (kiểu Emscripten, WASIp1/WASIp2) -- bạn biên dịch Node.js sang Wasm và thực thi nó. Kết quả : bundle 10-50 MB, thời gian tải đáng kể, độ phức tạp triển khai lớn.
+- **Polyfill chung** (kiểu `browserify`, `webpack node: polyfills`) -- các thư viện npm cung cấp xấp xỉ mỗi module Node. Thường quá nặng, không hợp ca cụ thể.
+- **Viết lại polyfill bằng tay** -- nhiều việc hơn, nhưng kết quả tối ưu.
 
-Fortune đã chọn phương án thứ ba. Và kết quả là một bundle trình duyệt chỉ gồm thư viện, khởi động tức thì, và không phụ thuộc vào bất kỳ hạ tầng bên ngoài nào.
+Fortune chọn lựa chọn thứ ba. Và kết quả là bundle trình duyệt đúng là thư viện, khởi động tức thì, và không phụ thuộc hạ tầng ngoài nào.
 
 ---
 
 ## Cơ chế build
 
-Tất cả dựa trên esbuild và tùy chọn `alias` của nó. Mỗi import `node:*` được chuyển hướng đến một file cục bộ:
+Mọi thứ dựa trên esbuild và tùy chọn `alias` của nó. Mỗi import `node:*` được chuyển hướng tới tệp cục bộ :
 
 ```js
 // demo/build.js
@@ -74,15 +74,15 @@ esbuild.build({
 });
 ```
 
-Tùy chọn `inject` đáng được chú ý: nó cho phép tiêm `process.js` và `buffer.js` vào đầu mỗi file trong bundle, giúp `process` và `Buffer` có sẵn toàn cục mà không cần import tường minh. Giống hệt cách Node.js expose chúng nguyên bản.
+Tùy chọn `inject` đáng chú ý : nó cho phép bơm `process.js` và `buffer.js` lên đầu mỗi tệp bundle, khiến `process` và `Buffer` có sẵn toàn cục mà không cần import rõ nào. Đúng như Node.js phơi bày chúng gốc.
 
 ---
 
 ## `buffer.js` -- `Buffer` trên `Uint8Array`
 
-Đây là một trong hai global được inject. `Buffer` được sử dụng rộng rãi trong code -- mọi thao tác SSH, mọi snapshot VFS, mọi đọc/ghi nhị phân đều đi qua nó.
+Đây là một trong hai global được bơm. `Buffer` được dùng dày đặc trong mã -- mỗi thao tác SSH, mỗi snapshot VFS, mỗi đọc/ghi nhị phân đều qua đó.
 
-Giải pháp: một lớp `BrowserBuffer` mở rộng `Uint8Array` và triển khai toàn bộ API `Buffer` của Node.js.
+Giải pháp : lớp `BrowserBuffer` mở rộng `Uint8Array` và triển khai toàn bộ API `Buffer` của Node.js.
 
 ```js
 class BrowserBuffer extends Uint8Array {
@@ -110,16 +110,16 @@ class BrowserBuffer extends Uint8Array {
 globalThis.Buffer = BrowserBuffer;
 ```
 
-Tổng cộng những gì được triển khai:
+Những gì triển khai tổng cộng :
 - `Buffer.from`, `Buffer.alloc`, `Buffer.allocUnsafe`, `Buffer.isBuffer`, `Buffer.concat`, `Buffer.byteLength`
-- Tất cả các phương thức ghi: `writeUInt8/16/32BE/LE`, `writeInt8/16/32BE/LE`, `writeBigUInt64BE/LE`, `writeFloat/DoubleLE/BE`
-- Tất cả các phương thức đọc tương ứng
-- `toString` hỗ trợ hex, base64, utf8
+- Mọi phương thức ghi : `writeUInt8/16/32BE/LE`, `writeInt8/16/32BE/LE`, `writeBigUInt64BE/LE`, `writeFloat/DoubleLE/BE`
+- Mọi phương thức đọc tương ứng
+- `toString` với hỗ trợ hex, base64, utf8
 - `copy`, `equals`, `slice`, `subarray`
 
-Nó chiếm 116 dòng. So với những gì nó thay thế, nó nhỏ gọn một cách đáng kinh ngạc.
+Việc đó chiếm 116 dòng. Với những gì nó thay thế, gọn đáng kể.
 
-Mẹo chính là sử dụng `DataView` cho các truy cập đa byte, xử lý endianness chính xác mà không cần thao tác bit thủ công cho từng kiểu:
+Mẹo chính là dùng `DataView` cho truy cập đa byte, xử lý đúng endianness mà không phải thao tác bit tay cho mỗi kiểu :
 
 ```js
 writeUInt32BE(val, offset = 0) {
@@ -132,7 +132,7 @@ writeUInt32BE(val, offset = 0) {
 
 ## `process.js` -- global `process` tối thiểu
 
-Global được inject còn lại. Nhỏ nhưng cần thiết -- code thường kiểm tra `process.env.NODE_ENV`, `process.platform`, `process.nextTick`, v.v.
+Global bơm còn lại. Tí hon mà cần thiết -- mã thường kiểm tra `process.env.NODE_ENV`, `process.platform`, `process.nextTick`, v.v.
 
 ```js
 globalThis.startedat = Date.now();
@@ -151,33 +151,33 @@ export const process = {
 globalThis.process = process;
 ```
 
-Ánh xạ `nextTick` → `queueMicrotask` là chi tiết quan trọng nhất ở đây. `process.nextTick` trong Node.js lên lịch một callback ở cuối phase hiện tại của event loop, trước I/O. `queueMicrotask` trong trình duyệt làm điều gì đó rất gần về mặt ngữ nghĩa -- nó lên lịch một microtask, chạy trước lần render hoặc sự kiện tiếp theo. Không hoàn toàn giống hệt, nhưng đủ gần để mọi code sử dụng `nextTick` hoạt động chính xác trong trình duyệt.
+Ánh xạ `nextTick` → `queueMicrotask` là chi tiết quan trọng nhất ở đây. `process.nextTick` trong Node.js lên lịch callback cuối pha hiện tại của vòng lặp sự kiện, trước I/O. `queueMicrotask` trong trình duyệt cho ngữ nghĩa rất gần : nó lên lịch microtask, chạy trước lần render hay sự kiện tiếp theo, và gần gũi này đủ để mọi mã dùng `nextTick` chạy đúng trong browser.
 
 ---
 
-## `node:fs` -- IndexedDB như hệ thống file đồng bộ
+## `node:fs` -- IndexedDB làm hệ thống tệp đồng bộ
 
-Đây là polyfill tinh vi nhất, và xa nhất là thú vị nhất về mặt kỹ thuật.
+Đây là polyfill tinh vi nhất, và vượt xa thú vị nhất về kỹ thuật.
 
-Vấn đề khá tế nhị: `node:fs` expose một API đồng bộ (`readFileSync`, `writeFileSync`, v.v.), nhưng các API lưu trữ của trình duyệt đều bất đồng bộ (IndexedDB, Cache API, v.v.). Bạn không thể `await` ở giữa một hàm đồng bộ.
+Bài toán tế nhị : `node:fs` phơi bày API đồng bộ (`readFileSync`, `writeFileSync`, v.v.), nhưng các API lưu trữ browser đều bất đồng bộ (IndexedDB, Cache API, v.v.). Ta không thể `await` giữa hàm đồng bộ.
 
-Giải pháp của Fortune: hai tầng cache.
+Giải pháp của Fortune : cache hai tầng.
 
-**Tầng 1 -- Map trong bộ nhớ (đồng bộ)**  
-Mọi thao tác đọc đều từ một `Map<string, Uint8Array>` trong bộ nhớ. Tức thì, đồng bộ, không vấn đề về API.
+**Tầng 1 -- Map trong bộ nhớ (đồng bộ)**
+Mọi lần đọc đều từ `Map<string, Uint8Array>` trong bộ nhớ. Tức thì, đồng bộ, không vấn đề API.
 
-**Tầng 2 -- IndexedDB (bất đồng bộ, chạy nền)**  
-Khi khởi động, toàn bộ nội dung từ IndexedDB được tải vào Map. Các thao tác ghi được thực hiện ngay lập tức vào Map *và* khởi chạy một ghi bất đồng bộ vào IndexedDB mà không chặn.
+**Tầng 2 -- IndexedDB (bất đồng bộ, trong nền)**
+Lúc khởi động, toàn bộ nội dung IndexedDB được tải vào Map. Ghi đi ngay vào Map *và* kích hoạt ghi bất đồng bộ sang IndexedDB mà không chặn.
 
 ```js
 const DB_NAME = 'vfs-fs-shim';
 const STORE = 'files';
 let db = null;
 
-// Sync cache (path → Uint8Array | null)
+// Cache đồng bộ (đường dẫn → Uint8Array | null)
 const memCache = new Map();
 
-// Preload khi khởi động
+// Tải trước lúc khởi động
 openDB().then(db => {
   const tx = db.transaction(STORE, 'readonly');
   const req = tx.objectStore(STORE).openCursor();
@@ -189,7 +189,7 @@ openDB().then(db => {
   };
 });
 
-// Ghi bất đồng bộ vào IndexedDB (không chặn)
+// Ghi async sang IndexedDB (không chặn)
 function idbSet(path, value) {
   openDB().then(db => {
     const tx = db.transaction(STORE, 'readwrite');
@@ -199,11 +199,11 @@ function idbSet(path, value) {
 }
 ```
 
-API được expose đầy đủ: `readFileSync`, `writeFileSync`, `appendFileSync`, `existsSync`, `unlinkSync`, `rmSync` (với tùy chọn `recursive`), `mkdirSync` (với tùy chọn `recursive`), `readdirSync`, `statSync`, `renameSync`.
+API phơi bày đầy đủ : `readFileSync`, `writeFileSync`, `appendFileSync`, `existsSync`, `unlinkSync`, `rmSync` (với tùy chọn `recursive`), `mkdirSync` (với tùy chọn `recursive`), `readdirSync`, `statSync`, `renameSync`.
 
-Thậm chí còn có một tầng quản lý file descriptors (`openSync`, `writeSync`, `closeSync`) để journal WAL của VFS hoạt động ở chế độ trình duyệt -- journal mở một fd, ghi vào đó, đóng nó, và dữ liệu sẽ nằm trong IndexedDB.
+Thậm chí có lớp quản lý file descriptor (`openSync`, `writeSync`, `closeSync`) để nhật ký WAL của VFS chạy ở chế độ browser -- nhật ký mở fd, ghi vào, đóng, và dữ liệu tới IndexedDB.
 
-Thuộc tính `ready` được export để cho phép code biết khi nào quá trình preload ban đầu hoàn tất:
+Thuộc tính `ready` được xuất để mã biết khi nào tải trước ban đầu xong :
 
 ```js
 export const ready = openDB().then(db => new Promise(resolve => {
@@ -219,23 +219,23 @@ export const ready = openDB().then(db => new Promise(resolve => {
 globalThis.__fsReady__ = ready;
 ```
 
-Nhờ đó mà các snapshot VFS sống sót qua các lần tải lại trang trong trình duyệt. Khi bạn tải lại bản demo, VFS được phục hồi chính xác trạng thái bạn đã để lại, từ IndexedDB, không cần bất kỳ máy chủ nào.
+Nhờ đó snapshot VFS sống sót qua tải lại trang trong trình duyệt. Khi bạn tải lại demo, VFS được khôi phục đúng trạng thái bạn để lại, từ IndexedDB, không máy chủ nào dính dáng.
 
 ---
 
-## `node:crypto` -- SHA-256, HMAC, PBKDF2 trong JS thuần
+## `node:crypto` -- SHA-256, HMAC, PBKDF2 bằng JS thuần
 
-Thay vì import một thư viện crypto được biên dịch thành Wasm, Fortune đã triển khai trực tiếp các primitive cần thiết.
+Thay vì nhập thư viện crypto biên dịch sang Wasm, Fortune đã triển khai trực tiếp các nguyên thủy cần thiết.
 
-**SHA-256** được triển khai từ đầu với các hằng số FIPS 180-4:
+**SHA-256** được triển khai from scratch với hằng số FIPS 180-4 :
 
 ```js
 const K = new Uint32Array([
-  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* ... 60 hằng số khác */ 
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* ... 60 hằng số nữa */
 ]);
 
 function sha256(data) {
-  // padding FIPS 180-4
+  // đệm FIPS 180-4
   const msg = data instanceof Uint8Array ? data : new TextEncoder().encode(data);
   // ...
   // 64 vòng nén
@@ -251,43 +251,43 @@ function sha256(data) {
 }
 ```
 
-Trên nền SHA-256, **HMAC-SHA256** và **PBKDF2-HMAC-SHA256** được xây dựng. Hai primitive này được sử dụng để dẫn xuất khóa trong trao đổi SSH và xác thực nội bộ.
+Trên SHA-256, **HMAC-SHA256** và **PBKDF2-HMAC-SHA256** được dựng lên. Hai nguyên thủy này dùng cho dẫn xuất khóa trong trao đổi SSH và xác thực nội bộ.
 
-API được export tương tự như của Node.js:
+API xuất ra giống Node.js :
 
 ```js
-// Hash thông thường
+// Băm cổ điển
 const hash = createHash('sha256').update('data').digest('hex');
 
-// Bytes ngẫu nhiên (qua Web Crypto API chuẩn)
+// Byte ngẫu nhiên (qua API Web Crypto chuẩn)
 const bytes = randomBytes(32);
 
 // UUID
 const id = randomUUID();
 
-// So sánh timing-safe
+// So sánh an toàn thời gian
 const ok = timingSafeEqual(a, b);
 
 // scrypt (xấp xỉ qua PBKDF2)
 const key = scryptSync(password, salt, 32, { N: 16384 });
 ```
 
-Lưu ý: `scryptSync` được xấp xỉ qua PBKDF2 với số vòng lặp khớp với tham số `N`. Đây không phải scrypt thực sự (vốn sử dụng lược đồ bộ nhớ khác), nhưng với các mục đích sử dụng của dự án thì nó đủ dùng.
+Lưu ý : `scryptSync` được xấp xỉ qua PBKDF2 với số vòng lặp căn theo tham số `N`. Xấp xỉ này thay lược đồ bộ nhớ riêng của scrypt và nó phủ các cách dùng của dự án.
 
-Các hàm không thể được mô phỏng hợp lý trong trình duyệt (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`) sẽ ném ra lỗi tường minh nếu bị gọi. Hành vi trung thực.
+Các hàm không thể mô phỏng hợp lý trong browser (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`) ném lỗi rõ nếu bị gọi. Hành vi trung thực.
 
 ---
 
-## `node:os` -- đọc thông số thực của trình duyệt
+## `node:os` -- đọc spec thật của trình duyệt
 
-Thay vì trả về các giá trị cố định, polyfill này đọc các API của trình duyệt để trả về thông tin tương ứng với máy thực của người dùng.
+Thay vì trả giá trị cố định, polyfill này đọc các API của trình duyệt để trả về thông tin khớp máy thật của người dùng.
 
 ```js
 export function totalmem() {
   try {
     return navigator?.deviceMemory
       ? navigator.deviceMemory * 1024 * 1024 * 1024
-      : 2 * 1024 * 1024 * 1024; // 2 GB mặc định
+      : 2 * 1024 * 1024 * 1024; // mặc định 2 GB
   } catch(e) { return 2 * 1024 * 1024 * 1024; }
 }
 
@@ -309,22 +309,22 @@ export function arch() {
 }
 ```
 
-Kết quả cụ thể: khi bạn chạy `neofetch` trong bản demo trình duyệt, số nhân và RAM hiển thị tương ứng với máy của bạn. Đó là một chi tiết nhỏ, nhưng nó đóng góp rất lớn vào tính chân thực của terminal.
+Kết quả cụ thể : khi bạn chạy `neofetch` trong demo trình duyệt, số lõi và RAM hiện ra khớp máy của bạn. Đó là chi tiết, nhưng đóng góp lớn vào vẻ thật của terminal.
 
-Các export khác: `freemem` (40% tổng bộ nhớ, xấp xỉ hợp lý), `platform` → `'browser'`, `type` → `'Linux'`, `release` → `'web'`, `uptime` qua `performance.now()`, `endianness` → `'LE'` (little-endian, đúng trên mọi CPU x86/ARM phổ thông), `loadavg` → `[0, 0, 0]`.
+Các xuất khác : `freemem` (40% tổng bộ nhớ, xấp xỉ hợp lý), `platform` → `'browser'`, `type` → `'Linux'`, `release` → `'web'`, `uptime` qua `performance.now()`, `endianness` → `'LE'` (little-endian, đúng trên mọi bộ xử lý x86/ARM phổ thông), `loadavg` → `[0, 0, 0]`.
 
 ---
 
-## `node:net` -- các stub TCP sạch sẽ
+## `node:net` -- stub TCP sạch
 
-Trình duyệt không có quyền truy cập vào socket TCP thô (WebSocket không được tính -- đó là một giao thức ứng dụng khác). `node:net` do đó là một stub, nhưng là một stub *được viết tốt*.
+Trình duyệt không truy cập socket TCP thô (WebSocket không tính -- đó là giao thức ứng dụng khác). Nên `node:net` là stub, nhưng stub *viết tốt*.
 
 ```js
 export class Socket {
   connect() { notImpl('Socket.connect')(); }
-  on() { return this; }    // có thể chuỗi
-  once() { return this; }  // có thể chuỗi
-  pipe() { return this; }  // có thể chuỗi
+  on() { return this; }    // nối được
+  once() { return this; }  // nối được
+  pipe() { return this; }  // nối được
   setEncoding() { return this; }
   remoteAddress = '127.0.0.1';
   remotePort = 0;
@@ -332,15 +332,15 @@ export class Socket {
 }
 ```
 
-Điểm quan trọng: các phương thức đăng ký sự kiện (`on`, `once`, `off`, `emit`) trả về `this` và không ném lỗi. Điều này cho phép code viết `new net.Socket().on('connect', cb)` hoạt động không crash, ngay cả khi kết nối không bao giờ được thực hiện. Chỉ các phương thức *thực sự cố gắng kết nối* mới ném lỗi.
+Điểm quan trọng : các phương thức đăng ký sự kiện (`on`, `once`, `off`, `emit`) trả về `this` và không ném lỗi. Việc này cho phép mã kiểu `new net.Socket().on('connect', cb)` chạy không sập, dù kết nối không bao giờ thành. Chỉ các phương thức *thực sự cố kết nối* mới ném lỗi.
 
-`isIP`, `isIPv4`, `isIPv6` được triển khai chính xác (không phải stub) vì chúng được code mạng ảo sử dụng để xác thực địa chỉ, mà không bao giờ mở socket.
+`isIP`, `isIPv4`, `isIPv6` được triển khai đúng (với logic kiểm tra thật) vì chúng được mã mạng ảo dùng để kiểm tra địa chỉ, mà không bao giờ mở socket.
 
 ---
 
 ## `node:path` -- thao tác đường dẫn POSIX
 
-Tái hiện đầy đủ các thao tác đường dẫn POSIX, điều chỉnh cho phù hợp với ngữ cảnh (không có backslash Windows, đường dẫn luôn tuyệt đối với `/`).
+Tái triển khai đầy đủ thao tác đường dẫn POSIX, thích ứng ngữ cảnh (đường dẫn luôn tuyệt đối với `/`, chỉ kiểu Unix).
 
 ```js
 export const posix = {
@@ -369,13 +369,13 @@ export const posix = {
 };
 ```
 
-Đơn giản, gọn nhẹ, chính xác cho các mục đích sử dụng của dự án.
+Đơn giản, gọn, đúng cho các cách dùng của dự án.
 
 ---
 
-## `node:url` -- ủy quyền cho API trình duyệt
+## `node:url` -- ủy thác cho API trình duyệt
 
-Cái này thanh lịch bởi sự đơn giản của nó. API `URL` và `URLSearchParams` đã tồn tại sẵn trong trình duyệt -- chỉ cần tái xuất chúng.
+Cái này thanh lịch ở đơn giản. API `URL` và `URLSearchParams` đã tồn tại gốc trong trình duyệt -- chỉ cần xuất lại chúng.
 
 ```js
 const _URL = globalThis.URL;
@@ -383,7 +383,7 @@ const _URLSearchParams = globalThis.URLSearchParams;
 export { _URL as URL, _URLSearchParams as URLSearchParams };
 ```
 
-Chỉ `fileURLToPath` và `pathToFileURL` cần triển khai, vì chúng là riêng của Node:
+Chỉ `fileURLToPath` và `pathToFileURL` cần triển khai, vì chúng riêng của Node :
 
 ```js
 export function fileURLToPath(url) {
@@ -393,11 +393,11 @@ export function fileURLToPath(url) {
 }
 ```
 
-Đây là cách tiếp cận lý tưởng khi nền tảng đích (trình duyệt) đã cung cấp sẵn bản địa tương đương.
+Đó là cách lý tưởng khi nền tảng đích (trình duyệt) đã cung cấp bản tương đương gốc.
 
 ---
 
-## `node:zlib` -- định danh
+## `node:zlib` -- đồng nhất
 
 ```js
 export function gzipSync(buf) { return buf; }
@@ -405,9 +405,9 @@ export function gunzipSync(buf) { return buf; }
 export default { gzipSync, gunzipSync };
 ```
 
-Hai dòng. Thư viện sử dụng `fflate` cho nén thực tế (hoạt động native trên trình duyệt). `node:zlib` chỉ được import trong các nhánh code không chạy trong ngữ cảnh trình duyệt -- do đó một passthrough là đủ.
+Hai dòng. Thư viện dùng `fflate` cho nén thật (chạy gốc trong browser). `node:zlib` chỉ được import trong các đường mã không chạy trong ngữ cảnh browser -- nên passthrough là đủ.
 
-Đôi khi triển khai tốt nhất chỉ là hai dòng.
+Đôi khi triển khai đúng là hai dòng.
 
 ---
 
@@ -430,11 +430,11 @@ export class EventEmitter {
 }
 ```
 
-Triển khai đầy đủ `EventEmitter` của Node.js dài ~600 dòng với quản lý `maxListeners`, `once`, `prependListener`, v.v. Ở đây chỉ 12 dòng cho 4 phương thức thực sự được sử dụng. Tree-shaking tinh thần trước cả tree-shaking của công cụ build.
+Triển khai đầy đủ `EventEmitter` của Node.js khoảng 600 dòng với quản lý `maxListeners`, `once`, `prependListener`, v.v. Ở đây 12 dòng cho 4 phương thức thực sự dùng. Tree-shaking trong đầu trước cả tree-shaking của công cụ build.
 
 ---
 
-## `ssh2` và `roxify` -- stub tường minh
+## `ssh2` và `roxify` -- stub rõ ràng
 
 ```js
 // polyfills/ssh2/index.js
@@ -452,15 +452,15 @@ export class Client {
 }
 ```
 
-Máy chủ SSH không chạy trong trình duyệt (điều đó chẳng có nghĩa lý gì -- ai sẽ kết nối?). Nhưng code *nói về SSH phía client* -- các lớp xây dựng gói SSH, trình phân tích giao thức -- vẫn tồn tại trong thư viện. Các stub này cho phép toàn bộ code đó được bundle mà không lỗi, đồng thời đảm bảo một lỗi rõ ràng được ném ra nếu ai đó cố gọi một phương thức yêu cầu socket thực sự.
+Máy chủ SSH không chạy trong trình duyệt (việc đó vô nghĩa -- ai sẽ kết nối?). Nhưng mã *nói về SSH phía client* -- các lớp dựng gói SSH, trình phân tích giao thức -- tồn tại trong thư viện. Các stub này cho phép mọi mã đó được bundle không lỗi, đồng thời đảm bảo lỗi rõ được ném nếu ai đó cố gọi phương thức đòi socket thật.
 
-`roxify` là một định dạng nén độc quyền được sử dụng cho các snapshot VFS ở chế độ Node. Trong trình duyệt, `fflate` được sử dụng thay thế -- polyfill chỉ đơn giản ném lỗi nếu `roxify` được gọi trực tiếp.
+`roxify` là định dạng nén độc quyền dùng cho snapshot VFS ở chế độ Node. Trong trình duyệt, `fflate` được dùng thay -- polyfill chỉ ném lỗi nếu `roxify` bị gọi trực tiếp.
 
 ---
 
-## `node:worker_threads` -- tái xuất Web Workers
+## `node:worker_threads` -- xuất lại Web Workers
 
-Đây là cái tinh tế nhất. `node:worker_threads` trong Node.js và Web Workers của trình duyệt là hai API khác nhau, nhưng chúng gần gũi về mặt khái niệm. Polyfill thực hiện ánh xạ:
+Đây là cái tinh tế nhất. `node:worker_threads` trong Node.js và Web Workers của trình duyệt là hai API khác nhau, nhưng chúng gần nhau về khái niệm. Polyfill làm ánh xạ :
 
 ```js
 const _MessageChannel = globalThis.MessageChannel;
@@ -473,46 +473,46 @@ export const workerData = null;
 export const parentPort = null;
 ```
 
-`MessageChannel` và `MessagePort` được tái xuất trực tiếp từ trình duyệt (cùng API). `Worker` bản thân nó cần một wrapper vì constructor khác nhau (Node nhận đường dẫn module, trình duyệt nhận URL). `isMainThread` luôn là `true` phía trình duyệt trong ngữ cảnh này.
+`MessageChannel` và `MessagePort` được xuất lại trực tiếp từ browser (cùng API). Bản thân `Worker` cần wrapper vì constructor khác (Node chờ đường dẫn module, browser chờ URL). `isMainThread` luôn `true` phía trình duyệt trong ngữ cảnh này.
 
 ---
 
-## Tổng quan: 640 dòng này đại diện cho điều gì
+## Tổng quan : 640 dòng này đại diện gì
 
-| Polyfill | Số dòng | Chiến lược |
+| Polyfill | Dòng | Chiến lược |
 |---|---|---|
 | `buffer.js` | 116 | `Uint8Array` + `DataView`, toàn bộ API `Buffer` |
-| `node:crypto` | 166 | SHA-256/HMAC/PBKDF2 từ đầu + Web Crypto cho random |
-| `node:fs` | 210 | `Map` trong bộ nhớ + IndexedDB bất đồng bộ |
-| `node:net` | 70 | Stubs có thể chuỗi + xác thực IP thực |
-| `ssh2` | 74 | Stub tường minh |
-| `process.js` | 14 | `process` tối thiểu khả dụng |
+| `node:crypto` | 166 | SHA-256/HMAC/PBKDF2 from scratch + Web Crypto cho random |
+| `node:fs` | 210 | `Map` trong bộ nhớ + IndexedDB async |
+| `node:net` | 70 | Stub nối được + kiểm tra IP thật |
+| `ssh2` | 74 | Stub rõ ràng |
+| `process.js` | 14 | `process` khả thi tối thiểu |
 | `node:path` | ~30 | Thao tác đường dẫn POSIX |
-| `node:url` | ~25 | Ủy quyền cho API trình duyệt |
+| `node:url` | ~25 | Ủy thác cho API browser |
 | `node:events` | ~12 | EventEmitter 4 phương thức |
 | `node:os` | ~25 | `navigator.deviceMemory` / `hardwareConcurrency` |
 | `node:zlib` | 4 | Passthrough |
-| `node:worker_threads` | ~30 | Tái xuất Web Workers |
-| `roxify.js` | 8 | Stubs |
+| `node:worker_threads` | ~30 | Xuất lại Web Workers |
+| `roxify.js` | 8 | Stub |
 
-640 dòng. Không phụ thuộc npm. Không Wasm. Và nó tạo ra một bundle trình duyệt khởi động trong chưa đầy một giây và chạy mà không cần bất kỳ hạ tầng máy chủ nào.
-
----
-
-## Điều có thể rút ra
-
-Lần tới khi bạn muốn port một thư viện Node.js vào trình duyệt, đây là những gì cách tiếp cận của Fortune chứng minh:
-
-1. **Xác định những gì thực sự được sử dụng.** Không cần triển khai toàn bộ `EventEmitter` nếu code chỉ dùng `on`, `emit`, và `removeListener`.
-
-2. **Ủy quyền cho API trình duyệt khi có thể.** `URL`, `URLSearchParams`, `MessageChannel`, `MessagePort`, `crypto.getRandomValues` -- trình duyệt đã có sẵn, hãy tận dụng chúng.
-
-3. **Cache đồng bộ phía trước API bất đồng bộ.** Giải pháp `Map` + IndexedDB cho `node:fs` là pattern có thể tái sử dụng nhất trong toàn bộ thư mục.
-
-4. **Stub trung thực tốt hơn triển khai không đầy đủ thầm lặng.** Một `throw new Error('not implemented in browser')` tường minh hữu ích hơn vô cùng so với `return undefined` để lỗi tự biểu hiện 10 lần gọi sau đó.
-
-5. **esbuild `alias` + `inject` bị đánh giá thấp.** Đó là công cụ hoàn hảo cho kiểu port này -- zero cấu hình webpack, zero plugin, chỉ một danh sách các thay thế.
+640 dòng. Không phụ thuộc npm nào. Không Wasm nào. Và cho ra bundle trình duyệt khởi động dưới một giây và chạy không hạ tầng phía máy chủ nào.
 
 ---
 
-Mã nguồn nằm trong repo: [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). Mỗi file chỉ gói gọn trong một trang, có thể đọc trực tiếp trên GitHub. Rất khuyến khích nếu bạn đang làm việc trên một dự án tương tự.
+## Rút ra được gì
+
+Lần tới khi bạn muốn mang thư viện Node.js vào trình duyệt, đây là điều cách của Fortune chứng minh :
+
+1. **Xác định điều thực sự dùng.** Chỉ triển khai các phương thức mã gọi : ở đây `on`, `emit` và `removeListener` là đủ cho `EventEmitter`.
+
+2. **Ủy thác cho API trình duyệt khi có thể.** `URL`, `URLSearchParams`, `MessageChannel`, `MessagePort`, `crypto.getRandomValues` -- trình duyệt đã có, cứ dùng.
+
+3. **Cache đồng bộ trước API async.** Giải pháp `Map` + IndexedDB cho `node:fs` là mẫu tái dùng nhất cả thư mục.
+
+4. **Stub trung thực tốt hơn triển khai thiếu lặng lẽ.** `throw new Error('not implemented in browser')` rõ ràng vô hạn hữu ích hơn `return undefined` để bug lộ mười lần gọi sau.
+
+5. **esbuild `alias` + `inject` bị đánh giá thấp.** Đó là công cụ hoàn hảo cho kiểu port này -- không cấu hình webpack, không plugin, chỉ danh sách thay thế.
+
+---
+
+Mã trong repo : [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). Mỗi tệp gói trong một trang, đọc được trực tiếp trên GitHub. Rất khuyên nếu bạn làm dự án tương tự.

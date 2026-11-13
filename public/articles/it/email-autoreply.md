@@ -1,106 +1,104 @@
 ---
-title: Ho usato git come database per far girare un bot gratis su GitHub Actions
-description: Come ho codificato un auto-risponditore email con IA che gira su
-  GitHub Actions per 0€/mese -- usando tag git come database e snapshot
-  pre-compilati in un tag runtime.
+title: "Ho usato git come database per far girare un bot gratis su GitHub Actions"
+description: "Come ho programmato un risponditore email IA che gira su GitHub Actions per 0€/mese: usando tag git come database e pre-compilato in un tag runtime."
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "trCY+3elSPKO4lB3T0Ht9MSxj+JXaDJD0kBTRhuc38ZFsETMt0iNlOoAHY/BSWeUZAyTE5axLUJmNmGSwelGQQ=="
+author_sig: "HY+qLPJaVseTdjlmNbxCCyLZdicqffkNNsQBwFecKv5FrDwXvGIF+BbXRQH0yb7hbmzEKXK0AN1+VoJtbZbvUA=="
 ---
 
 # Ho usato git come database per far girare un bot gratis su GitHub Actions
 
-Ho un risponditore automatico email che gira 24/7.
+Ho un risponditore email automatico che gira 24/7.
 
 Legge le mie mail, capisce di cosa parlano, e risponde da solo con un'IA. Si ricorda delle conversazioni precedenti. Ignora le newsletter e i `noreply@`. Inoltra a un umano quando è troppo caldo.
 
 Costo mensile: **0€**.
 
-Niente server. Niente VPS. Niente database. Solo GitHub Actions e un hack pazzesco: **usare git come database**.
+Faccio a meno di server, VPS e database. Solo GitHub Actions e un hack matto: **usare git come database**.
 
-Vedi dove voglio arrivare? No? Beh, tieniti forte, è stupido e geniale allo stesso tempo.
+Vedi dove voglio arrivare? No? Bene, tieniti forte, è scemo e geniale insieme.
 
 ---
 
 ## Il problema: GitHub Actions è stateless
 
-GitHub Actions è gratuito. Puoi lanciare un cron ogni 5 minuti, far girare il tuo codice, gratis.
+GitHub Actions è gratis. Puoi lanciare un cron ogni 5 minuti, far girare il tuo codice, gratis.
 
 Ma c'è un problema: è **stateless**.
 
-Ogni run parte in una macchina vergine. Niente viene salvato tra un'esecuzione e l'altra. Il run precedente? Dimenticato. Cancellato. Come se non fosse mai esistito.
+Ogni run parte in una macchina vergine. Niente è salvato tra due esecuzioni. Il run prima? Dimenticato. Cancellato. Come se non fosse mai esistito.
 
 Per un risponditore email, è un problema enorme. Tipo:
 
-> "Qual è l'ultima mail che ho già processato?"
+> "Qual è l'ultima mail che ho già trattato?"
 
-Se il bot se lo dimentica a ogni run, o risponde sempre agli stessi messaggi in loop (catastrofe), oppure si perde delle mail.
+Se il bot dimentica questo a ogni run, o ri-risponde alle stesse mail in ciclo (catastrofe), o perde delle mail.
 
-Serve uno stato persistente. E normalmente, stato persistente = database. Ma un database è un server, e un server non è più gratuito.
+Serve uno stato persistente. E normalmente, stato persistente = database. Ma un database è un server, e un server non è più gratis.
 
-È qui che diventa interessante.
+È lì che diventa interessante.
 
 ---
 
-## La soluzione: git tags come database
+## La soluzione: tag git come database
 
-Il tuo repo GitHub è già storage persistente. Gratuito. Versionato. Sempre lì.
+Il tuo repo GitHub, è già storage persistente. Gratis. Versionato. Sempre lì.
 
-Allora perché non usarci per salvare lo stato?
+Allora perché non salvarci lo stato?
 
-L'idea: a ogni run, il bot legge l'ultimo UID email processato da un **git tag**. Processa le nuove mail. Poi re-pusha il tag col nuovo UID.
+L'idea: a ogni run, il bot legge l'ultimo UID email trattato da un **tag git**. Tratta le nuove mail. Poi ri-spinge il tag col nuovo UID.
 
 ```mermaid
 sequenceDiagram
     participant GH as GitHub Actions
     participant GIT as Git Tags
     participant IMAP as Server IMAP
-    
+
     Note over GH: Run #1
     GH->>GIT: legge tag "lastid"
     GIT-->>GH: vuoto (primo run)
-    GH->>IMAP: fetch mails 1-50
-    IMAP-->>GH: 50 mails
+    GH->>IMAP: fetch mail 1-50
+    IMAP-->>GH: 50 mail
     GH->>GIT: push tag "lastid" = 50
-    
+
     Note over GH: Run #2
     GH->>GIT: legge tag "lastid"
     GIT-->>GH: 50
-    GH->>IMAP: fetch mails 51-73
-    IMAP-->>GH: 23 mails
+    GH->>IMAP: fetch mail 51-73
+    IMAP-->>GH: 23 mail
     GH->>GIT: push tag "lastid" = 73
 ```
 
-Il tag git È il database. Un singolo valore, ma è tutto quello che serve.
+Il tag git È il database. Un solo valore, ma è tutto ciò di cui abbiamo bisogno.
 
 ### Leggere lo stato
 
-All'inizio del job, recuperi il valore dal tag:
+All'inizio del job, recuperiamo il valore dal tag:
 
 ```bash
 git fetch origin --tags lastid || true
 git show refs/tags/lastid:data/lastId > data/lastId || true
 ```
 
-`git show refs/tags/lastid:data/lastId` significa: "dammi il contenuto del file `data/lastId` così com'era nel tag `lastid`".
+`git show refs/tags/lastid:data/lastId` vuol dire: "dammi il contenuto del file `data/lastId` com'era nel tag `lastid`".
 
 Boom. Hai il tuo valore, senza database.
 
 ### Scrivere lo stato
 
-Alla fine, ricrei il tag col nuovo valore:
+Alla fine, ricreiamo il tag col nuovo valore:
 
 ```bash
 git switch --orphan lastid-tmp   # branch vergine senza storico
-git rm -rf .                      # si svuota tutto
+git rm -rf .                      # svuotiamo tutto
 mkdir -p data
 printf "%s\n" "${LAST_ID_CONTENT}" > data/lastId
 
@@ -110,23 +108,23 @@ git tag -f lastid                 # forza il tag su questo commit
 git push --force ...origin lastid # push del tag
 ```
 
-Si crea un branch **orfano** (senza storico), si mette solo il file `lastId`, si committa, si targa, si force pusha.
+Creiamo un branch **orfano** (senza storico), mettiamo solo il file `lastId`, committiamo, tagghiamo, force push.
 
-Perché orfano? Per non accumulare 10 000 commit di stato nello storico del repo. Ogni update sovrascrive il precedente. Il tag punta sempre a UN singolo commit che contiene UN singolo valore.
+Perché orfano? Per non accumulare 10 000 commit di stato nello storico del repo. Ogni update schiaccia il precedente. Il tag punta sempre a UN solo commit che contiene UN solo valore.
 
-È pulito. È gratuito. È completamente rotto xD
+È pulito. È gratis. È completamente storto e funziona.
 
 ---
 
-## Il secondo hack: lo snapshot del runtime
+## Il secondo hack: il runtime snapshot
 
 C'è un altro problema con GitHub Actions: il `npm install`.
 
 Se a ogni run (ogni 5 minuti) fai `npm install` + `npm run build`, sprechi 60-90 secondi ogni volta. Su un cron frequente, sono minuti di compute sprecati per niente.
 
-Soluzione: pre-compilare il codice UNA volta, e conservarlo in un tag git.
+Soluzione: pre-compilare il codice UNA volta, e salvarlo in un tag git anche lui.
 
-Il workflow di build (che gira quando pushi su `master`) fa questo:
+Il workflow di build (che gira quando spingi su `master`) fa questo:
 
 ```bash
 # compila il codice
@@ -143,9 +141,9 @@ git tag -f runtime
 git push --force ...origin runtime
 ```
 
-Il tag `runtime` contiene il codice compilato E i `node_modules`. Tutto pronto per girare.
+Il tag `runtime` contiene il codice compilato E i `node_modules`. Tutto pronto a girare.
 
-E il cron, invece, fa checkout direttamente di questo tag:
+E il cron, lui, fa checkout diretto di questo tag:
 
 ```yaml
 - name: Checkout runtime snapshot
@@ -159,33 +157,33 @@ E il cron, invece, fa checkout direttamente di questo tag:
   run: node dist/index.js --action
 ```
 
-Niente install. Niente build. Il cron parte istantaneamente ed esegue solo `node dist/index.js`.
+Il cron parte istantaneo ed esegue solo `node dist/index.js`, senza install né build.
 
-Praticamente hai due tag che fanno due lavori:
-- `runtime` = il codice pronto per girare (aggiornato quando pushi codice)
+Tipo, hai due tag che fanno due lavori:
+- `runtime` = il codice pronto a girare (aggiornato quando spingi codice)
 - `lastid` = lo stato persistente (aggiornato a ogni run)
 
-È elegante da far schifo.
+È elegante come uno sporco.
 
 ---
 
-## Il bot stesso: auto-risponditore IA
+## Il bot in sé: risponditore IA
 
-Ok, l'hack git è figo, ma il bot cosa fa esattamente?
+Bene, l'hack git è figo, ma il bot fa cosa esattamente?
 
 Legge le tue mail via IMAP, le capisce con un'IA (Groq + Llama 3.3 70B), e risponde automaticamente.
 
-Architettura in servizi puliti con dependency injection (InversifyJS):
+Architettura in servizi puliti con injection di dipendenze (InversifyJS):
 
 ```
 App
 ├── ImapService      → legge le mail (IMAP)
 ├── SmtpService      → invia le risposte (SMTP)
-├── ParserService    → analizza il contenuto delle mail
+├── ParserService    → parsa il contenuto delle mail
 ├── ReplyService     → genera la risposta IA
 ├── SummaryService   → memoria di conversazione
 ├── AccountsService  → gestisce più account email
-└── ConfigService    → config / env vars
+└── ConfigService    → config / env var
 ```
 
 ### Due modalità di funzionamento
@@ -195,27 +193,29 @@ Il bot può girare in due modi:
 **Modalità listener** (tempo reale): connessione IMAP permanente con reconnect esponenziale. Per un VPS.
 
 ```typescript
+// nuovo messaggio via listener IMAP
 this.imapService.on("exists", async (data) => {
-  console.log(`[MAIL] Nuova mail! Totale: ${data.count}`);
-  // processa la nuova mail immediatamente
+  console.log(`[MAIL] Nuovo messaggio! Totale: ${data.count}`);
+  // tratta il nuovo messaggio subito
 });
 ```
 
-**Modalità action** (batch): processa le nuove mail dal `lastId`, poi si chiude. Per il cron di GitHub Actions.
+**Modalità action** (batch): tratta le nuove mail dal `lastId`, poi si chiude. Per il cron GitHub Actions.
 
 ```bash
 node dist/index.js --action
 ```
 
-La modalità `--action` è quella che usa l'hack git. Legge `lastId`, processa ciò che è nuovo, scrive il nuovo `lastId`, fine.
+La modalità `--action` è quella che usa l'hack git. Legge `lastId`, tratta ciò che è nuovo, scrive il nuovo `lastId`, fine.
 
-### NON rispondere ai bot
+### NON rispondere ai robot
 
-Se il tuo bot risponde a TUTTE le mail, risponderà a newsletter, notifiche, `noreply@`. Catastrofe. Peggio: se due bot si rispondono a vicenda, hai un loop infinito di mail. L'incubo.
+Se il tuo bot risponde a TUTTE le mail, risponderà alle newsletter, alle notifiche, ai `noreply@`. Catastrofe. Peggio: se due bot si rispondono l'un l'altro, hai un ciclo infinito di mail. L'incubo.
 
 Quindi filtraggio aggressivo:
 
 ```typescript
+// pattern di mittenti automatici da ignorare
 export function isAutomatedSender(address) {
   const automatedPatterns = [
     "noreply", "no-reply", "donotreply",
@@ -228,9 +228,10 @@ export function isAutomatedSender(address) {
 }
 ```
 
-E anche rilevazione tramite gli header email:
+E anche rilevamento via header email:
 
 ```typescript
+// newsletter e mass-mailing via header
 export function isAutomatedByHeaders(headers) {
   return (
     ["bulk", "list", "junk"].includes(headers.precedence) ||
@@ -241,9 +242,9 @@ export function isAutomatedByHeaders(headers) {
 }
 ```
 
-`List-Unsubscribe` negli header? È una newsletter. `Precedence: bulk`? Mass-mailing. `X-Mailer: Mailchimp`? Hai capito il tipo. Ignoriamo.
+`List-Unsubscribe` negli header? È una newsletter. `Precedence: bulk`? Del mass-mailing. `X-Mailer: Mailchimp`? Hai capito il genere. Ignoriamo.
 
-È come un buttafuori di discoteca: i robot non passano xD
+È come un buttafuori di discoteca: i robot non passano.
 
 ### I trigger magici
 
@@ -251,13 +252,14 @@ L'IA può decidere di non rispondere affatto, o di passare la mano a un umano. C
 
 Il prompt di sistema le dice:
 
-> Se è una mail automatica/newsletter → rispondi `<no_reply>`
-> Se è troppo importante/sensibile (legale, finanziario...) → rispondi `<manual_reply_required>`
-> Altrimenti → scrivi una risposta vera
+> Se è una mail automatica/newsletter: rispondi `<no_reply>`
+> Se è troppo importante/sensibile (legale, finanziario...): rispondi `<manual_reply_required>`
+> Altrimenti: scrivi una vera risposta
 
-E il codice legge così:
+E il codice legge questo:
 
 ```typescript
+// l'IA può rifiutare o passare a un umano
 const aiReply = completion.choices[0].message.content.trim();
 const manualTrigger = aiReply.includes(MANUAL_REPLY_TRIGGER);
 const noReply = aiReply.includes(NO_REPLY_TRIGGER);
@@ -273,11 +275,11 @@ if (manualTrigger) {
   return;
 }
 
-// altrimenti si invia la risposta IA
+// altrimenti inviamo la risposta IA
 await this.smtpService.sendReply(...);
 ```
 
-Tipo l'IA ha il diritto di dire "no, qui non ci metto le mani, chiama un umano vero". È saggia.
+Tipo l'IA ha il diritto di dire "no qui non tocco, chiama un vero umano". È saggezza.
 
 ---
 
@@ -285,7 +287,7 @@ Tipo l'IA ha il diritto di dire "no, qui non ci metto le mani, chiama un umano v
 
 Un dettaglio che cambia tutto: il bot **si ricorda** delle conversazioni.
 
-Quando risponde a qualcuno, salva un riassunto dello scambio. La prossima volta che quella persona scrive, il riassunto viene reiniettato nel prompt.
+Quando risponde a qualcuno, salva un riassunto dello scambio. La prossima volta che questa persona scrive, il riassunto è reiniettato nel prompt.
 
 Storage: un file JSON per contatto.
 
@@ -296,13 +298,14 @@ data/customers/
 │   └── bob%40client.fr.json
 ```
 
-E il riassunto è esso stesso generato dall'IA, che fa il merge del vecchio riassunto col nuovo messaggio:
+E il riassunto è generato dall'IA stessa, che fonde il vecchio riassunto col nuovo messaggio:
 
 ```typescript
+// fonde il vecchio riassunto col nuovo messaggio
 const completion = await groq.chat.completions.create({
   model: "llama-3.3-70b-versatile",
   messages: [
-    { role: "system", content: "Sei un assistente di memoria. Fai il merge del vecchio riassunto col nuovo messaggio senza perdere informazioni." },
+    { role: "system", content: "Sei un assistente di memoria. Fondi il vecchio riassunto col nuovo messaggio senza perdere info." },
     { role: "user", content: `Riassunto esistente:\n${existing}\n\nNuovo messaggio:\n${incomingContent}` }
   ],
   temperature: 0.0,  // deterministico, niente creatività
@@ -310,19 +313,19 @@ const completion = await groq.chat.completions.create({
 });
 ```
 
-Quindi il bot costruisce una memoria compressa nel tempo. Non c'è bisogno di conservare tutte le mail, solo un riassunto che cresce intelligentemente.
+Quindi il bot costruisce una memoria compressa nel tempo. Un riassunto che cresce in modo intelligente basta, senza salvare tutte le mail.
 
-E questi file JSON? Beh... sono salvati in git anche loro, nel tag runtime. Git dappertutto xD
+E questi file JSON? Beh... sono salvati in git anche loro, nel tag runtime. Git ovunque.
 
 ---
 
-## La cosa furba con la lunghezza del prompt
+## Il punto furbo con la lunghezza del prompt
 
 Piccolo dettaglio tecnico che mi ha fatto sorridere.
 
-I modelli hanno un limite di token. Se la tua mail + il riassunto + il persona prompt sforano, l'API restituisce un errore.
+I modelli hanno un limite di token. Se la tua mail + il riassunto + il prompt persona superano, l'API restituisce un errore.
 
-Il codice gestisce tutto con un **troncamento a cascata** + retry:
+Il codice gestisce questo con una **troncatura a cascata** + retry:
 
 ```typescript
 try {
@@ -331,7 +334,7 @@ try {
 } catch (error) {
   if (!this.isLengthError(error)) throw error;
 
-  // era un errore di lunghezza: si riprova con limiti più stretti
+  // era un errore di lunghezza: riproviamo con limiti più stretti
   ({ systemContent, userContent } = this.buildPromptPayload({
     ...,
     limits: {
@@ -345,30 +348,30 @@ try {
 }
 ```
 
-Se non passa, tagli più corto e riprovi. Semplice, efficace, niente crash.
+Se non passa, tagliamo più corto e riproviamo. Semplice, efficace, niente crash.
 
 ---
 
-## Ok, e concretamente, come gira?
+## Bene, e in concreto, come gira?
 
-Il flow completo di un run del cron:
+Il flusso completo di un run di cron:
 
 ```
 1. GitHub Actions si attiva (cron ogni 5 min)
 2. Checkout del tag "runtime" (codice pre-build)
-3. git show refs/tags/lastid → recupera l'ultimo UID processato
+3. git show refs/tags/lastid → recupera l'ultimo UID trattato
 4. node dist/index.js --action
    ├── connessione IMAP
    ├── fetch delle mail da lastId+1
-   ├── per ogni mail :
-   │   ├── analizza il contenuto
-   │   ├── filtra i bot (skip se automated)
+   ├── per ogni mail:
+   │   ├── parsa il contenuto
+   │   ├── filtra i robot (skip se automatico)
    │   ├── matcha l'account destinatario
    │   ├── recupera la memoria di conversazione
    │   ├── genera la risposta IA (Groq)
-   │   ├── <no_reply> ? skip
-   │   ├── <manual_reply_required> ? inoltro umano
-   │   ├── altrimenti : invia la risposta (SMTP)
+   │   ├── <no_reply>? skip
+   │   ├── <manual_reply_required>? inoltro umano
+   │   ├── altrimenti: invia la risposta (SMTP)
    │   └── aggiorna la memoria di conversazione
    └── scrive il nuovo lastId
 5. git push --force tag "lastid" col nuovo valore
@@ -378,12 +381,12 @@ E ricomincia tra 5 minuti. Per sempre. Gratis.
 
 ---
 
-**Le 3 cose da ricordare:**
+**I 3 punti da ricordare:**
 
-1. **Git = database gratuito** -- Un tag orfano può salvare il tuo stato persistente tra due run stateless. `git show refs/tags/X:file` per leggere, force-push per scrivere. Niente DB.
+1. **Git = database gratis**: un tag orfano può salvare il tuo stato persistente tra due run stateless. `git show refs/tags/X:file` per leggere, force-push per scrivere. Risparmi un DB completo.
 
-2. **Pre-compila in un tag runtime** -- Invece di `npm install` a ogni run del cron, salva il codice compilato + node_modules in un tag git. Il cron parte istantaneamente.
+2. **Pre-compila in un tag runtime**: invece di `npm install` a ogni run del cron, salva il codice compilato + node_modules in un tag git. Il cron parte istantaneo.
 
-3. **Un bot IA deve saper stare zitto** -- I trigger `<no_reply>` e `<manual_reply_required>` lasciano che l'IA decida di non rispondere o di passare la mano. Più il filtraggio anti-bot. Altrimenti crei un loop infinito di mail.
+3. **Un bot IA deve saper tacere**: i trigger `<no_reply>` e `<manual_reply_required>` lasciano l'IA decidere di non rispondere o di passare la mano. Più il filtraggio anti-robot. Altrimenti crei un ciclo di mail infinito.
 
-Serverless cron con stato persistente, IA, memoria, tutto a 0€/mese. È completamente rotto e lo adoro xD
+Cron serverless con stato persistente, IA, memoria, il tutto a 0€/mese. È completamente rotto e adoro questo montaggio.

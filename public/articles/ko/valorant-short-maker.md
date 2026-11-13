@@ -1,6 +1,6 @@
 ---
-title: "valorant-short-maker: 발로란트 쇼츠를 혼자서 만들어내는 파이프라인"
-description: "Groq/Llama로 스크립트, Piper로 목소리, FFmpeg로 나머지 전부. 크론 잡이 @valorant_agents에 하루 한 편의 영상을 처음부터 끝까지 만들어 올리는 방법."
+title: "valorant-short-maker: 제 Valorant 쇼츠를 혼자 만들어내는 파이프라인"
+description: "대본은 Groq와 Llama, 목소리는 Piper, 나머지는 전부 FFmpeg. 크론 작업이 @valorant_agents에 하루 한 편씩 영상을 만들고 게시하는 방법을 A부터 Z까지."
 date: 2026-07-14
 tags:
   - typescript
@@ -10,34 +10,34 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "ZH8s4kq2E0MED2OnVNbTgV/hr5YbZ2E3/W6BqWh3/uuwBgNXdqYrVtkXOlF345kVSz0x6cDw70ELaWedYKY88g=="
+author_sig: "5762lqoZSUNVHmDprCv91sxGCKpiL7Qt9H6SS/NlbGXFlscyFEhPEniJBA/HmboFb9eGPQr2zZ7vtLLlHHrXYQ=="
 ---
 
-# valorant-short-maker: 발로란트 쇼츠를 혼자서 만들어내는 파이프라인
+# valorant-short-maker: 제 Valorant 쇼츠를 혼자 만들어내는 파이프라인
 
-몇 달째, 내가 손대지 않아도 혼자 돌아가는 유튜브 채널이 있다: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). 발로란트 에이전트들이 라운드 사이에 서로 디스하고, 더빙되고, 노래방 자막이 달려 쇼츠로 올라간다. 전부 [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker)가 만들어낸다. TypeScript/Bun 파이프라인이 크론으로 돌면서 아무도 클릭할 필요 없이 게시까지 다 해준다.
+몇 달째 손대지 않아도 돌아가는 YouTube 채널이 있어요. [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). 라운드 사이에 서로 놀리는 Valorant 요원들, 더빙되고 가라오케 자막이 입혀져 쇼츠로 올라가요. 전부 TypeScript와 Bun으로 짠 파이프라인 [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker)가 크론으로 돌면서, 누구도 클릭하지 않아도 게시해요.
 
-어떻게 돌아가는지 단계별로 설명할게.
+어떻게 동작하는지 단계별로 보여 드릴게요.
 
 ## 결과물
 
-"Duelist Debate" (Phoenix, Yoru, Jett) 영상에서 추출한 세 프레임:
+"Duelist Debate"(Phoenix, Yoru, Jett) 영상을 위해 만든 세 프레임이에요.
 
-![쇼츠 인트로, 에이전트 원형과 장면 제목](/images/valorant-short-maker/vsm-01-intro.png)
+![쇼츠 인트로, 장면 제목이 있는 요원 원](/images/valorant-short-maker/vsm-01-intro.png)
 
-![대사 진행 중, 노래방 자막이 반짝임](/images/valorant-short-maker/vsm-02-dialogue.png)
+![대사 진행 중, 켜지는 가라오케 자막](/images/valorant-short-maker/vsm-02-dialogue.png)
 
-![다른 대사, 말하는 에이전트에 따라 자막 색상 변경](/images/valorant-short-maker/vsm-03-dialogue.png)
+![또 다른 대사, 요원에 따라 자막 색이 바뀌어요](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-이 쇼츠 실물: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). 채널 영상들은 1.2~1.5k 뷰 정도 나온다. 대단한 숫자는 아니지만, 처음부터 완전 자동으로 돌아가는 채널이라는 게 포인트. 진짜 중요한 숫자는 0이다 -- 크론 한 번 돌려놓은 이후로 투자한 시간 0분.
+라이브 결과는 이 쇼츠예요. [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). 채널의 쇼츠는 1,2천에서 1,5천 조회수쯤 나와요. 대단한 건 아니지만, 처음부터 혼자 돌아가는 채널이니 진짜 중요한 숫자는 0이에요. 크론을 걸고 나서 들인 시간 0분이요.
 
-## 파이프라인 순서대로
+## 순서대로 보는 파이프라인
 
-### 1. 스크립트 쓰기 -- Groq + Llama 3.3
+### 1. 대본 쓰기: Groq + Llama 3.3
 
-매 실행마다 26명의 에이전트 중 3~4명을 랜덤으로 뽑고, Llama 3.3 70B (Groq 경유)에 시스템 프롬프트를 보낸다. 프롬프트에는 각 에이전트의 성격 요약과 장면 속 다른 에이전트들과의 관계가 담겨 있다 (이 페르소나들은 `src/lore/`에 에이전트별 파일로 존재한다). 프롬프트는 엄격한 규칙을 강제한다: 대사 한 줄은 짧고 강렬하게, 캐릭터 간 공평한 순번, 유머 우선, 그리고 무엇보다도 -- 쉼.
+매 실행마다 26명 중 3~4명의 요원을 무작위로 뽑고, Llama 3.3 70B(Groq 경유)에 시스템 프롬프트를 보내요. 선택된 각 요원마다 성격과 장면에 함께 있는 다른 요원들과의 관계를 간결하게 요약한 내용이 들어가요 (이 페르소나는 `src/lore/`에 요원별 파일로 살아요). 프롬프트는 정확한 규칙을 강제해요. 대사마다 짧고 강렬한 한 문장, 캐릭터 사이 공평한 순환, 유머 우선, 그리고 무엇보다 쉼표.
 
-실제 예시로 "Duelist Debate" -- Phoenix, Yoru, Jett가 누가 듀얼리스트 할지 싸우는 장면, 2026년 7월 6일 생성:
+2026년 7월 6일에 만든 "Duelist Debate"의 실제 예시예요. Phoenix, Yoru, Jett가 누가 듀얼리스트를 할지 다퉈요.
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -70,55 +70,55 @@ yoru: I'll make sure to burn you, Phoenix, not with fire, but with my rifts.
 jett: I'll take you both down, no problem.
 ```
 
-쉼이야말로 자연스러운 리듬을 만드는 디테일이다. 대사 중간에 들어간 `[0.3]`은 화면의 에이전트 원형을 끊지 않으면서 오디오에 0.3초의 묵음을 만들고, 별도 줄의 `pause: 1.0`은 두 화자 사이에 진짜 묵음을 만들고 원형을 숨긴다. 이게 없으면 TTS가 숨 한 번 안 쉬고 대사를 쏟아내서 로봇처럼 들린다.
+쉼표는 리듬을 자연스럽게 만드는 세부 사항이에요. 대사 중간에 넣은 `[0.3]`은 화면의 요원 원을 자르지 않고 오디오 파일에 0.3초 무음을 만들고, 통째로 한 줄인 `pause: 1.0`은 화자 사이에 원을 숨긴 진짜 무음을 만들어요. 이게 없으면 숨 쉬지 않고 대사를 잇는 TTS는 로봇처럼 들려요.
 
-### 2. 목소리 입히기 -- Piper, 에이전트별 모델
+### 2. 목소리 입히기: Piper, 요원별 모델 하나씩
 
-각 에이전트마다 전용으로 훈련된 Piper 모델 (`.onnx`)이 `voices/<agent>/`에 저장되어 있다. 생성된 텍스트가 해당 모델을 통과하면 WAV가 나온다. 내가 커스텀 보이스 트레이닝에 쓰는 것과 같은 기술이다 (Piper/Kaggle 파이프라인 글 참고) -- 여기서는 바로 프로덕션에서, 그때그때, 매번 영상 생성 시 적용된다.
+각 요원은 전문적으로 훈련된 자신만의 Piper 모델(`.onnx`)을 가지고 있고 `voices/<agent>/`에 저장돼 있어요. 만들어진 텍스트가 해당 모델을 거쳐 WAV가 나와요. 일반적으로 커스텀 음성 훈련에 쓰는 것과 같은 기술이에요 (Piper와 Kaggle 파이프라인 글 참고). 여기서는 매 영상 만들 때마다 즉석에서 바로 프로덕션에 적용해요.
 
-### 3. 노래방 자막 -- ASS 생성, 아이콘에서 색상 추출
+### 3. 가라오케 자막: 만들어낸 ASS, 아이콘에서 뽑은 색
 
-자막은 그냥 `.srt`가 아니다. `.ass` (Advanced SubStation Alpha) 파일이 단어 단위로 생성되며 노래방 효과가 들어간다: 발음되는 단어마다 색상이 점등되고, 나머지 텍스트는 중립 색상으로 유지된다. 강조 색상은 고정이 아니라 -- 말하는 에이전트의 아이콘에서 동적으로 추출된다 (Python 스크립트가 PIL로 아이콘 PNG를 읽고, 투명하지 않은 픽셀을 샘플링해서 주요 색상을 반환한다). 결과: Killjoy 자막은 보라색으로, Jett은 청록색으로 빛난다. 어디에도 하드코딩된 색상은 없다.
+자막은 단순한 `.srt`가 아니에요. 단어별로 만들어진 `.ass`(Advanced SubStation Alpha) 파일이고 가라오케 효과가 있어요. 발음되는 대로 각 단어가 강조 색으로 켜지고, 나머지 텍스트는 중립 색으로 남아요. 강조 색은 고정되어 있지 않아요. 말하는 요원의 아이콘에서 동적으로 뽑아요 (Python 스크립트가 아이콘 PNG에 PIL을 돌려서 투명하지 않은 픽셀을 샘플링하고 지배적인 색들을 돌려줘요). 결과: Killjoy 자막은 보라색으로 켜지고, Jett 자막은 청록색으로 켜져요. 어디에도 색이 하드코딩되어 있지 않아요.
 
-### 4. 오디오 반응형 원형 -- 프레임당 FFmpeg 수식
+### 4. 오디오 반응 원: 프레임마다 FFmpeg 표현식 하나
 
-파이프라인에서 가장 골치 아픈 부분이고, 아마 가장 자랑스러운 부분이기도 하다. 말하는 에이전트의 둥근 아이콘이 가만히 있지 않는다: 자기 목소리 리듬에 맞춰 살짝 확대/축소된다.
+파이프라인에서 가장 꼬인 부분이고, 아마 가장 자랑스러운 부분이에요. 말하는 요원의 둥근 아이콘이 가만히 있지 않아요. 자기 목소리 리듬에 맞춰 살짝 줌인 줌아웃해요.
 
-계산은 대사의 RAW WAV를 읽고, RMS 엔벨로프(root mean square, 신호 에너지 측정치)를 60fps로 프레임별 계산, 최대값으로 정규화, 그리고 끊김 방지를 위해 3프레임 윈도우로 스무딩한다. 각 엔벨로프 값은 `MAX_ZOOM_VARIATION` (0.2, 즉 기본 크기의 ±20%)로 제한된 스케일 팩터로 변환된다.
+계산은 대사의 날것 WAV를 읽고, 60fps로 프레임마다 RMS(root mean square, 신호 에너지 측정) 엔벨로프를 구하고, 최댓값으로 정규화한 뒤, 끊김을 피하려고 3프레임 창으로 스무딩해요. 각 엔벨로프 값을 `MAX_ZOOM_VARIATION`(0.2, 기본 크기 기준 앞뒤 20퍼센트)으로 묶인 스케일 계수로 바꿔요.
 
-이 계산 결과는 픽셀을 직접 건드리는 코드가 아니라 -- 거대한 FFmpeg 조건식으로 번역되어 (`lt(n,K)*val + between(n,K,K')*val + ...`, 프레임 그룹당 한 분기) 비디오 필터의 `scale` 파라미터를 직접 제어한다. FFmpeg가 렌더링의 매 프레임마다 이 수식을 평가한다. 60fps로 몇 초짜리 대사면 금방 하나의 수식 안에 수백 개 분기가 생긴다 -- 그래서 프레임을 그룹화해 깊이를 제한하는 `STEP` 파라미터가 필요하다.
+이 계산 결과는 픽셀을 만지는 코드로 적용되지 않아요. 거대한 FFmpeg 조건 표현식(`lt(n,K)*val + between(n,K,K')*val + ...`, 프레임 묶음별 분기 하나)으로 번역돼서 비디오 필터의 `scale` 매개변수를 직접 조종해요. FFmpeg가 렌더링의 매 프레임마다 이 표현식을 평가해요. 60fps에서 몇 초짜리 대사면 하나의 표현식에 금방 수백 개 분기가 생겨요. 그래서 깊이를 제한하려고 프레임을 묶는 `STEP` 매개변수가 있어요.
 
-### 5. 세그먼트별 렌더링, 인트로에 fisheye
+### 5. 구간별 렌더링, 인트로는 피시아이
 
-각 대사가 개별 렌더링된다: 비디오 배경 (`bg-video/`의 게임플레이 클립 중 랜덤으로, 알맞은 길이로 잘라서), 오디오 반응형 줌이 적용된 에이전트 원형을 위에 올리고, FFmpeg의 `ass` 필터로 자막을 입히고, TTS 오디오를 배경 게임플레이 사운드와 믹스한다.
+각 대사는 따로 렌더링돼요. 배경 영상(`bg-video/`의 게임플레이 클립 중 무작위 발췌를 적절한 길이로 자름), 위에 오디오 반응 원, FFmpeg `ass` 필터로 입힌 자막, 배경 게임플레이 소리와 믹스된 TTS 오디오.
 
-맨 첫 번째 세그먼트는 특별 처리를 받는다: 처음 20% 프레임에 걸쳐 점점 사라지는 fisheye 왜곡 (프레임별 `lenscorrection` 필터 + 모션 블러를 흉내 내기 위해 인접 프레임을 블렌딩하는 `tmix=frames=3`), "whoosh" 효과음과 동기화. 이게 카메라가 장면 안으로 "진입"하는 듯한 인트로 전환이다.
+맨 처음 구간은 특별 처리를 받아요. 처음 20퍼센트 프레임에 걸쳐 서서히 풀리는 피시아이 왜곡(프레임마다 평가되는 `lenscorrection` 필터에 모션 블러 흉내용으로 인접 프레임을 섞는 `tmix=frames=3` 추가)이 "whoosh" 소리와 동기화돼요. 카메라가 장면 속으로 "들어가는" 느낌을 주는 인트로 전환이에요.
 
-### 6. 연결 및 최종 믹싱
+### 6. 이어붙이기와 최종 믹싱
 
-모든 세그먼트가 끝에서 끝으로 연결되고, 배경 음악 (Sneaky Snitch, Kevin MacLeod, Creative Commons 라이선스)이 **오디오 더킹**과 함께 믹스된다 -- 사이드체인 컴프레션이 에이전트가 말하는 동안 음악 볼륨을 자동으로 낮추고, 묵음일 때 다시 올린다. 모든 게 처음부터 끝까지 60fps로 돌아가며, 단계 간 프레임레이트 변환은 없다.
+모든 구간을 끝에서 끝으로 이어붙이고, 배경 음악(Sneaky Snitch, Kevin MacLeod, Creative Commons 라이선스)을 **오디오 더킹**으로 위에 믹스해요. 요원이 말하는 동안 음악 볼륨을 자동으로 낮췄다가 무음 구간에 다시 올리는 사이드체인 압축이에요. 전체가 처음부터 끝까지 60fps로 돌고, 단계 사이에 프레임레이트 변환은 없어요.
 
 ### 7. 자동 게시
 
-표준 크론으로 실행되는 `run-cron.sh` 스크립트가 Python 환경을 활성화하고, `.env`를 로드하고, `bun src/workflow.ts --upload`를 실행한다. `--upload` 플래그는 메타데이터 생성(제목, 설명, 태그)도 트리거하고 `uploaders/upload.py`를 호출해 YouTube와 Instagram에 각각 별도 스크립트(`uploaders/youtube/upload.py`와 `uploaders/instagram/`)로 영상을 게시한다. LLM 프롬프트부터 영상이 온라인에 올라가기까지 전 과정이 인간 개입 없이 돌아간다.
+고전 크론이 실행하는 `run-cron.sh` 스크립트가 Python 환경을 켜고 `.env`를 불러온 뒤 `bun src/workflow.ts --upload`를 실행해요. `--upload` 플래그는 메타데이터(제목, 설명, 태그) 만들기에 더해 `uploaders/upload.py`를 호출해요. 두 개의 분리 스크립트(`uploaders/youtube/upload.py`와 `uploaders/instagram/`)로 YouTube와 Instagram에 영상을 올려요. LLM 프롬프트부터 온라인 영상까지 전체 체인이 사람 개입 없이 돌아가요.
 
-## 왜 Python 올인 대신 TypeScript/Bun인가
+## 왜 완전 Python이 아니라 TypeScript와 Bun인지
 
-이념적인 선택이 아니다 -- Bun이 `Bun.spawn`으로 FFmpeg를 서브프로세스로 빠르고 직접 제어할 수 있고, 파이프라인 데이터 구조(`Phrase`, `SegmentInfo`)에 강력한 타입을 제공하며, 몇 시간마다 크론으로 도는 스크립트치고 시작 속도가 Node보다 훨씬 빠르기 때문이다. 프로젝트에 Python이 두 군데만 있는 건, Python이 진짜 최적의 도구인 곳이기 때문이다: PIL로 색상 추출, 그리고 업로드 API (`google-api-python-client`로 YouTube, Instagram Graph API 스택으로 IG).
+선택이 이념적이지는 않아요. Bun이 서브프로세스로 FFmpeg를 조종하는 `Bun.spawn`에 직접 빠르고 닿기 좋고, 파이프라인 자료구조(`Phrase`, `SegmentInfo`)에 강한 타이핑을 주고, 몇 시간마다 크론으로 도는 스크립트에 Node보다 시작이 훨씬 빠른 런타임이라서예요. 프로젝트에서 Python 조각 둘은 Python이 실제로 가장 잘 갖춰진 곳에만 있어요. 색 뽑기용 PIL과 업로드 API(YouTube용 `google-api-python-client`, IG용 Instagram Graph API 스택)요.
 
-## 이게 보여주는 것
+## 보여주는 것
 
-이 프로젝트는 오늘날 완전 무료 혹은 오픈소스 블록만으로 뭘 만들 수 있는지 보여주는 좋은 예다: Groq API로 빠르고 공짜 LLM, 전용 GPU 없이 도는 로컬 TTS 엔진, 모든 비디오 렌더링에 FFmpeg -- 그리고 이걸 잇는 건 고작 몇백 줄 TypeScript. 개별 블록은 새로울 게 없다. 파이프라인을 만드는 건 조합이다: 진짜 캐릭터 관계가 담긴 일관된 스크립트 생성, 자연스러운 쉼이 있는 표현력 있는 오디오로 변환, 그 오디오의 에너지에 프레임 단위로 시각적 렌더링을 동기화, 그리고 게시까지 모든 체인 자동화.
+이 프로젝트는 오늘날 완전히 무료이거나 오픈 소스인 벽돌들로 무엇을 만들 수 있는지 보여주는 좋은 예예요. Groq API로 빠르고 무료인 LLM, 전용 GPU 없이 도는 로컬 TTS 엔진, 모든 비디오 렌더링용 FFmpeg. 그리고 이어주는 것은 TypeScript 몇백 줄뿐이에요. 벽돌 하나하나는 새것이 아니에요. 파이프라인을 만드는 것은 배치예요. 캐릭터 사이 진짜 관계가 담긴 일관된 대본을 만들고, 자연스러운 쉼표가 있는 표현력 있는 오디오로 바꾸고, 그 오디오의 에너지에 프레임마다 시각 렌더링을 동기화하고, 게시까지 전체 체인을 자동화하는 것.
 
 ---
 
-**리소스**
+**자료**
 
-- **Repo**: [github.com/fox3000foxy/valorant-short-maker](https://github.com/fox3000foxy/valorant-short-maker)
+- **저장소**: [github.com/fox3000foxy/valorant-short-maker](https://github.com/fox3000foxy/valorant-short-maker)
 - **채널**: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)
 
 **핵심 3가지**
 
-1. 스크립트는 LLM (Groq/Llama 3.3)이 에이전트별 페르소나와 관계를 바탕으로 생성한다. 미리 써둔 농담 리스트가 아니다.
-2. 에이전트 원형 줌은 WAV의 RMS 엔벨로프에서 프레임별로 계산된 FFmpeg 수식으로 제어된다 -- 일반적인 키프레임 애니메이션이 아니다.
-3. 프롬프트부터 YouTube/Instagram 게시까지 전 체인이 단일 크론 잡 하나로 인간 개입 없이 돌아간다.
+1. 대본은 미리 쓴 농담 목록이 아니라 요원별 페르소나와 관계가 담긴 LLM(Groq와 Llama 3.3)이 만들어요.
+2. 요원 원의 줌은 고전 키프레임 애니메이션이 아니라 WAV의 RMS 엔벨로프에서 프레임마다 계산된 FFmpeg 표현식이 조종해요.
+3. 프롬프트부터 YouTube와 Instagram 게시물까지 전체 체인이 사람 개입 없이 크론 작업 하나로 돌아가요.

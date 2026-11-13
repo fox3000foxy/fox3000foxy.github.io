@@ -1,182 +1,182 @@
 ---
-title: "Super Mario Bros.：レベルフォーマット、ポインタ、そして256のグリッチワールド"
-description: "128レベル × 4タイプのエリアがどうやって40KBのROMに収まるのか、Minus Worldがなぜ存在するのか、そしてNESテニスのカートリッジ交換でグリッチワールドをロードできる仕組み。"
+title: "スーパーマリオ：面形式とポインタと256のグリッチワールド"
+description: "128面×4 zone種別が40KB ROMにどう収まるか、Minus Worldがなぜあるか、NES Tennisの試合がグリッチワールドをどう読み込むか。"
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "cn4lxOd1PIOEQEDJUqy4784aAUYta2BMkGFWajC21Pq07T9WcB0ozzkc2Gow4+LOKXzGuoyrQMzN3hZc4+Rvgw=="
+author_sig: "Gav6TxTS4+RWLiZ8K8I+kOpCbOBu9Fbu3lKRR4ZKo4wzIOnhoBt8SJ+QEqsXC9zUCBZr3HuSzkE1/OouqdwLsA=="
 ---
 
 ## はじめに
 
-Super Mario Bros.はROM 40キロバイト。8つのワールド、32のレベル、敵、音楽、パワーアップ、全部これに収まっている。
+スーパーマリオは40キロバイトのROMだ。8ワールド、32面、敵、音楽、パワーアップ、全部そこに収まる。
 
-でもエミュレーターを開いて適当なバイトをいじれば、レベル36-1をロードできる。255-1もだ。Bowserのスプライトとどこにも繋がらないパイプだけで構成されたワールドに着地することもできる。
+でもエミュレータを開けて正しいバイトをいじれば、36-1面を読み込める。255-1もだ。クッパのスプライトとどこにも通じない土管だらけの世界に着地もできる。
 
-これらのグリッチワールドが存在するのは単純な理由によるものだ。SMB1のレベル保存システムは8ビットの最適化の傑作であり、ゲームに本来読むべきでない場所を読ませると、興味深い結果が生まれる。
+このグリッチワールドがあるのは単純な理由だ。SMB1の面保存システムは8ビット最適化の驚異で、ゲームが読んじゃいけないところを読まされると魅惑的な結果になる。
 
-Retro Game Mechanics Explainedがこれについて4本の動画シリーズを制作した -- 当時最も売れたゲームの6502コードを1本の深掘りにまとめよう。
+Retro Game Mechanics Explainedが4動画シリーズを作った。全部まとめて、史上いちばん売れたゲームの6502コードへの単一潜入にする。
 
-![GLITCH OBJECTS -- SMB1の隠しメカニズムに関するRGMechExシリーズのタイトルカード](/images/smb1-glitch-levels/title-card.jpg)
+![GLITCH OBJECTS、SMB1隠し仕掛けシリーズのRGMechExタイトル](/images/smb1-glitch-levels/title-card.jpg)
 
-![World 9-1 -- カートリッジ交換テニスでアクセスできる最初のグリッチワールドのタイトル画面](/images/smb1-glitch-levels/v1-title-9-1.jpg)
+![World 9-1、Tennisカート交換で到達できる最初のグリッチワールドのタイトル画面](/images/smb1-glitch-levels/v1-title-9-1.jpg)
 
-## ワームスタート：なぜテニスのRAMがSMB1で生き残るのか
+## ウォームスタート：TennisのRAMがSMB1で生き延びる理由
 
-レベルの保存について話す前に、SMB1がどのように起動するかを理解する必要がある。NESテニスのカートリッジ交換グリッチは、ゲームの**ワームスタート／コールドスタート検出システム**に完全に依存しているからだ。
+面保存を話す前に、SMB1の起動を理解しなきゃいけない。NES Tennisカート交換グリッチはゲームの**ウォームスタートやコールドスタート検出システム**に完全依存してるからだ。
 
-### 保持される41バイト
+### 保存される41バイト
 
-SMB1が**コールドスタート**（初回の電源投入または電源オフ→オン）を検出すると、すべてのRAMを消去する。しかし**ワームスタート**（リセットボタン、電源切断なし）を検出すると、**41バイト**のメモリ領域を保持する：
+SMB1が**コールドスタート**（初回通電か電源オフやオン）を検出すると、全RAMを消す。**ウォームスタート**（リセットボタン、電源切らず）を検出すると、**41バイト**のメモリ zone を保存する。
 
 ```asm
-; Les 41 bytes préservés en RAM lors d'un warm start
-; Adresses $075F-$0787
+; ウォームスタートでRAM保存される41バイト
+; アドレス $075F-$0787
 ;
-; $075F : byte de démarrage (world - 1)    [1 byte]
-; $0760 : flag de sélection de monde (B button) [1 byte]
-; $0761-$0762 : inutilisé                    [2 bytes]
-; $0763-$0768 : timer (6 digits, 3 affichés) [6 bytes]
-; $0769-$076E : coins Luigi                   [6 bytes]
-; $076F-$0774 : coins Mario                   [6 bytes]
-; $0775-$077A : score Luigi                   [6 bytes]
-; $077B-$0780 : score Mario                   [6 bytes]
-; $0781-$0786 : top score (6 digits, 1 caché) [6 bytes]
-; $0787 : le byte magique $A5                 [1 byte]
+; $075F : 起動バイト（world - 1）    [1バイト]
+; $0760 : ワールド選択フラグ（Bボタン） [1バイト]
+; $0761-$0762 : 未使用                    [2バイト]
+; $0763-$0768 : タイマー（6桁、3表示） [6バイト]
+; $0769-$076E : ルイージコイン                   [6バイト]
+; $076F-$0774 : マリオコイン                   [6バイト]
+; $0775-$077A : ルイージスコア                   [6バイト]
+; $077B-$0780 : マリオスコア                   [6バイト]
+; $0781-$0786 : トップスコア（6桁、1隠し） [6バイト]
+; $0787 : 魔法バイト $A5                 [1バイト]
 ```
 
-この41バイトは単一の機能のために使われる：ゲームオーバー後に**同じワールドを続ける**こと。6-3で死ぬと、ゲームはワールド6を起動バイトに書き込み、タイトル画面でA + Startを長押しすると6-1から再開できる。
+この41バイトは1機能のためだけにある。ゲームオーバー後に**同じワールドから続ける**ためだ。6-3で死んだらゲームはワールド6を起動バイトに書く。タイトル画面でAとStart押しながらなら6-1から再開する。
 
-![ワームスタート時にRAMに保持される41バイト -- TOP SCORE、MARIO SCORE、TIMER、WORLD SELECT、CONTINUE WORLD、そしてマジックバイト$A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
+![ウォームスタートでRAM保存される41バイト。TOP SCORE、MARIO SCORE、TIMER、WORLD SELECT、CONTINUE WORLD、魔法バイト$A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
 
-### ワームスタートの二重チェック
+### ウォームスタートの二重確認
 
-![コールドスタート vs ワームスタート -- リセット検出のフローチャート](/images/smb1-glitch-levels/v1-warm-start.jpg)
+![コールドスタート対ウォームスタート、リセット検出図](/images/smb1-glitch-levels/v1-warm-start.jpg)
 
-SMB1は起動時に1つの条件だけでなく**2つ**を確認する：
+SMB1起動時は1基準じゃなく**2つ**確認する。
 
 ```asm
 CheckWarmStart:
-  ; 1. Vérifier le byte magique $A5 à $0787
+  ; 1. $0787の魔法バイト$A5を確認
   lda $0787
   cmp #$A5
-  bne ColdStart        ; pas $A5 → cold start
+  bne ColdStart        ; $A5じゃない → コールドスタート
 
-  ; 2. Vérifier les 6 digits du top score ($0781-$0786)
-  ;    Chaque digit doit être entre 0 et 9
+  ; 2. トップスコア6桁（$0781-$0786）を確認
+  ;    各桁は0から9でなきゃいけない
   ldx #0
 CheckLoop:
   lda $0781,x
   cmp #$0A
-  bcs ColdStart        ; digit >= 10 → cold start
+  bcs ColdStart        ; 桁10以上 → コールドスタート
   inx
   cpx #6
   bne CheckLoop
 
-  ; Si les deux conditions passent → warm start
-  ; La RAM n'est pas effacée, le monde de départ est préservé
+  ; 両条件通過 → ウォームスタート
+  ; RAMは消さない、開始ワールドは保存する
   jmp WarmStartBoot
 ```
 
-![バイト$A5とトップスコアの桁のチェック -- ワームスタートの中核](/images/smb1-glitch-levels/v1-a5-byte.jpg)
+![$A5バイトとトップスコア桁の確認、ウォームスタートの心臓](/images/smb1-glitch-levels/v1-a5-byte.jpg)
 
-なぜ二重チェックなのか？ バイト$A5が偶然存在する可能性があるからだ（別のゲームがこの値を残した、あるいはRAMチップのデフォルトの待機状態など）。トップスコアの桁が有効（0-9）であることを確認することで、データが整合していることを保証している。
+なぜ二重確認なのか。$A5バイトは偶然ありうるからだ（他ゲームがこの値を残すとか、RAMチップ休止状態のデフォルト）。トップスコア桁が有効（0-9）か確認して、データ一貫性を確かめる。
 
-### なぜテニスだけが機能するのか
+### なぜTennisだけ動くのか
 
-SMB1を初めて挿入すると（コールドスタート）、ゲームは：
-1. すべてのRAMを消去 → トップスコア = 0、ワールドバイト = 0
-2. アドレス$0787に$A5を書き込む
+初めてSMB1を入れると（コールドスタート）、ゲームはこうする。
+1. 全RAMを消す → トップスコア0、ワールドバイト0
+2. アドレス$0787に$A5を書く
 
-その後、コンソールを消さずにテニスに切り替える。テニスは：
-- **起動時にRAMをクリーンアップしない**（NESのほとんどのゲームは这样做らない）
-- **トップスコアのバイトに書き込まない** → 0のまま（有効）
-- **バイト$A5に触れない** → そのまま残る
-- **アドレス$075F**をプレイヤーの歩数カウンターに使う
+次に電源切らずTennisに交換する。Tennisはこうだ。
+- **起動時にRAMを掃除しない**（NESゲームで掃除するものは少ない）
+- **トップスコアバイトに書かない** → 0のまま（有効）
+- **$A5バイトに触らない** → 残る
+- **アドレス$075Fを**プレイヤー歩数カウンタに使う
 
 ```asm
-; Le footstep increment dans Tennis :
-; À chaque pas du joueur sur le court, Tennis incrémente le byte à $075F.
-; Ce même byte est utilisé par SMB1 comme "world number - 1".
+; Tennisの歩数増分：
+; コート上の各歩でTennisは$075Fバイトを増やす。
+; この同じバイトはSMB1で「world number - 1」として使う。
 ;
-; 0 pas  → world 0 → SMB1 = world 1
-; 1-7 pas → world 1-7 → worlds normaux
-; 8+ pas → world 8+ → glitch worlds !
+; 0歩  → world 0 → SMB1ではworld 1
+; 1-7歩 → world 1-7 → 通常ワールド
+; 8歩以上 → world 8以上 → グリッチワールド！
 ;
-; Le compteur ne s'incrémente que quand la musique s'arrête
-; (les footstep sounds ne jouent pas pendant la musique).
+; カウンタは音楽停止時だけ増える
+; （足音は音楽中鳴らない）。
 ```
 
-SMB1を戻すと：
-1. バイト$A5はまだthere（テニスが触っていない）
-2. トップスコアの桁はまだ0（有効）
-3. ワールドバイトは現在8以上（テニスの歩数でインクリメントされた）
-4. SMB1がワームスタートを検出 → 破損したワールドバイトを保持
-5. A + Startを長押し → world 9-1、world A-1、world 36-1など
+SMB1に戻すとこうなる。
+1. $A5バイトはまだある（Tennisは触ってない）
+2. トップスコア桁はまだ0だ（有効）
+3. ワールドバイトは8以上になってる（Tennis歩数で増加）
+4. SMB1はウォームスタート検出 → 破損ワールドバイトを保存する
+5. AとStart押しながら → world 9-1、world A-1、world 36-1など
 
-### なぜ先にMarioを起動してからテニスに切り替える必要があるのか
+### なぜTennis前にマリオ起動が要るのか
 
-細かい点がある：まずSMB1を起動し、次にテニス、そして再度SMB1を起動する必要がある。最初からテニスを始めた場合、バイト$A5は書き込まれない（テニスは$A5を書き込まない）。そのためワームスタート検出に失敗し、RAMが消去されてしまう。
+微妙な点：まずSMB1を起動して、次にTennis、再びSMB1だ。Tennisから直接始めたら、$A5バイトは書かれない（Tennisは$A5を書かない）。ウォームスタート検出は失敗してRAMは消去される。
 
-![テニスの歩数カウンター：各footstepがワールドバイトをインクリメントする](/images/smb1-glitch-levels/v1-footstep.jpg)
+![Tennisの歩数カウンタ：各足音がワールドバイトを増やす](/images/smb1-glitch-levels/v1-footstep.jpg)
 
-![NESテニスでグリッチワールドにアクセスする -- カートリッジ交換を説明する動画](/images/smb1-glitch-levels/yt-tennis.jpg)
+![Access Glitch Worlds via NES Tennis、カート交換を解説する動画](/images/smb1-glitch-levels/yt-tennis.jpg)
 
-## SMB1が40KBにレベルを保存する方法
+## SMB1が40KBに面を保存する方法
 
-Nintendo R&D4は一見単純な問題を解決する必要があった：水平スクロールするタイル、敵、アイテムを備えたレベルを、ROMの超strictな予算内で表現することだ。
+任天堂R&D4は一見単純な問題を解かなきゃいけなかった。タイルで水平スクロールする面を、敵もアイテムも全部、超厳しいROM予算で表すことだ。
 
-解決策は、**完全に独立した**2つのデータレイヤーに分離することだった：
+解は、**完全独立**の2データ層への分離だ。
 
-### タイルレイヤー（レベルの地図）
+### タイル配置（面の地図）
 
-各レベルはROM内の圧縮されたタイル構造へのポインタで定義される。圧縮は原始的だが天才的だ：「コントロール」バイトの後に1-3バイトのデータが続く。
+各面はROM内圧縮タイル構造へのポインタで定義される。圧縮は素朴だが天才的だ。制御バイトの後ろに1-3データバイトが続く。
 
-タイルフォーマットは**ラン**（RLE風）システムを使用する：
+タイル形式は**run**制（RLE風）を使う。
 
 ```asm
-; Format tile SMB1 (simplifié)
-; Chaque "commande" est un byte contrôle :
+; SMB1タイル形式（簡略）
+; 各「命令」は制御バイト：
 ;
-; $00-$7F : pose une tile, avance d'1 colonne
-; $80-$BF : pose une tile répétée N fois (N = byte - $80 + 1)
-; $C0-$FF : commande spéciale (fin de ligne, saut, changement de palette)
+; $00-$7F : タイル1つ置いて1列進む
+; $80-$BF : タイルを指定回繰り返す（N = バイト - $80 + 1）
+; $C0-$FF : 特殊命令（行末、跳躍、パレット変更）
 
-Exemple : pour dessiner 3 briques consécutives :
-  $82 $01    ; répète la tile $01 (brick) 3 fois
+例：レンガ3つ連続を描く：
+  $82 $01    ; タイル$01（brick）を3回繰り返す
 ```
 
-各レベルは16列 × 13行のタイル（13×16 = 208タイルの可視領域）を含む。しかし圧縮フォーマットにより、もっと小さくすることができる -- 例えば空や空の列はほとんどスペースを取らない。
+各面は16列13行のタイルを持つ（13×16 = 208可視タイル）。でも圧縮形式でずっと小さくできる。たとえば空と空列は場所をほとんど取らない。
 
-6502のレンダリングループ：
+6502レンダー loop：
 
 ```asm
-; Décompression tile - loop principale
-; Entrée : pointeur tile_data en $XX
-; Sortie : tilemap niveau dans la RAM PPU
+; タイル伸長 - 主 loop
+; 入力：$XXのtile_dataポインタ
+; 出力：PPU RAM内の面タイルマップ
 
 DecompressTile:
-  lda (tile_ptr),y      ; lire byte contrôle
+  lda (tile_ptr),y      ; 制御バイト読む
   iny
   cmp #$80
-  bcc SingleTile        ; $00-$7F : tile unique
+  bcc SingleTile        ; $00-$7F : 単一タイル
   cmp #$C0
-  bcc RunLength         ; $80-$BF : run-length
-  jmp SpecialCommand    ; $C0-$FF : commande spéciale
+  bcc RunLength         ; $80-$BF : ランレングス
+  jmp SpecialCommand    ; $C0-$FF : 特殊命令
 
 SingleTile:
-  sta PPU_DATA          ; écrire la tile directement
+  sta PPU_DATA          ; タイル直接書き込み
   jmp Next
 
 RunLength:
   sec
   sbc #$7E              ; N = control - $7E
   tax
-  lda (tile_ptr),y      ; lire la tile à répéter
+  lda (tile_ptr),y      ; 繰り返すタイル読む
   iny
 : sta PPU_DATA
   dex
@@ -184,732 +184,728 @@ RunLength:
   jmp Next
 ```
 
-### スプライトレイヤー（敵とオブジェクト）
+### スプライト配置（敵と物）
 
-並行して、敵とオブジェクト（?ブロック、パイプ、クリボー、ノコノコ）は完全に別の構造に保存される。各スポーンは2バイトで定義される：
+並行して、敵と物（？ブロック、土管、クリボー、ノコノコ）は完全別の構造に保存される。各出現は2バイトで定義される。
 
 ```asm
-; Format sprite SMB1
-; Byte 0 : position X (en colonnes)
-; Byte 1 : type de sprite + bits de page Y
-; Y est dérivé de l'index dans la séquence
+; SMB1スプライト形式
+; バイト0：X位置（列単位）
+; バイト1：スプライト種別とYページbit
+; Yは並び内indexから導く
 
-Une séquence de sprites :
-  $01 $4B    ; goomba à la colonne 1
-  $09 $4B    ; goomba à la colonne 9
-  $10 $61    ; bloc ? à la colonne 16 (contient pièce)
-  $15 $54    ; koopa verte à la colonne 21
-  $FF        ; fin de séquence
+スプライト並び：
+  $01 $4B    ; 1列目にクリボー
+  $09 $4B    ; 9列目にクリボー
+  $10 $61    ; 16列目に？ブロック（コイン入り）
+  $15 $54    ; 21列目に緑ノコノコ
+  $FF        ; 並び終わり
 ```
 
-各レベルは最大5ページの異なるスプライトを参照できる（つまり16列の5「スクリーン」）。しかし実際にはほとんどのレベルは2-3しか使わない。
+各面は最大5スプライトページを参照できる（正確には16列の5「screen」）。実際は大半の面が2、3しか使わない。
 
 ### ポインタテーブル
 
-設計の天才はポインタテーブルにある。各レベルはROMアドレスの**ペア**として保存される：
+設計の天才はポインタテーブルだ。各面はROMアドレス**ペア**として保存される。
 
 ```c
-// Structure interne (simplifiée) du World Map
+// World Map内部構造（簡略）
 struct LevelPointer {
-    uint16_t tile_ptr;   // Adresse ROM des données tiles
-    uint16_t sprite_ptr; // Adresse ROM des données sprites
+    uint16_t tile_ptr;   // タイルデータROMアドレス
+    uint16_t sprite_ptr; // スプライトデータROMアドレス
 };
 
-// 4 tables séparées, une par AreaType :
-// 0 = Water, 1 = Overworld, 2 = Underground, 3 = Castle
+// AreaTypeごとに4テーブル分離：
+// 0 = Water、1 = Overworld、2 = Underground、3 = Castle
 LevelPointer level_table[4][128];
 ```
 
-テーブルごとに128エントリ。4つのエリアタイプ。**512の組み合わせが可能**だが、公式ゲームが使用するのはその一部のみ。残りは未初期化のRAMや、ポインタとして解釈されるデータだ。
+テーブルごとに128エントリだ。4 zone種別だ。**512組み合わせ可能**だが、公式ゲームが使うのは一部だけだ。残りは未初期化RAMかポインタとして解釈されるデータだ。
 
-ゲームがレベルをロードする際、以下のように行われる：
+ゲームが面を読み込むとこうする。
 
 ```asm
-; Chargement d'un niveau
-; A = AreaType (0-3), X = LevelID (0-127)
+; 面読み込み
+; A = AreaType (0-3)、X = LevelID (0-127)
 
 LoadLevel:
   sta AREA_TYPE
-  asl                  ; *2 pour offset dans table 16-bit
+  asl                  ; 16ビットテーブル用に*2
   tax
   lda LevelTable_TilePtr, x
   sta TILE_PTR
   lda LevelTable_TilePtr+1, x
-  sta TILE_PTR+1       ; pointeur vers les tiles
+  sta TILE_PTR+1       ; タイルへのポインタ
   lda LevelTable_SpritePtr, x
   sta SPRITE_PTR
   lda LevelTable_SpritePtr+1, x
-  sta SPRITE_PTR+1     ; pointeur vers les sprites
+  sta SPRITE_PTR+1     ; スプライトへのポインタ
   jsr DecompressTiles
 ```
 
-バリデーションなし。ポインタが有効かどうかのチェックなし。ゲームはテーブル内のアドレスを読み、そのアドレスにあるものを解凍する。それだけだ。
+ゲームはポインタを完全信用する。テーブル内アドレスを読んで、そのアドレスにあるものを伸長する。以上だ。
 
-![Level ID $06（Water）-- 9-1、6-2の水中バージョン](/images/smb1-glitch-levels/lvl-06-9-1.png)
+![Level ID $06 (Water)、9-1、6-2の水中版](/images/smb1-glitch-levels/lvl-06-9-1.png)
 
-![Level IDテーブル：128の可能なエントリ、34が割り当てられている](/images/smb1-glitch-levels/v2-level-id-table.jpg)
+![Level IDテーブル：128エントリ可能、34割り当て](/images/smb1-glitch-levels/v2-level-id-table.jpg)
 
-![タイルポインタとスプライトポインタの異なる順序 -- Frankensteinレベルの原因](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
+![タイルとスプライトポインタの違う順序、Frankenstein面の原因](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
 
-### 34のユニークレベルと7ビットIDシステム
+### 34固有面と7ビットID制
 
-![NESのRAMチップ（MB8416A）-- カートリッジ交換時にデータを保持するのはこのチップ](/images/smb1-glitch-levels/v1-ram-chip.jpg)
+![NESのRAMチップ（MB8416A）。カート交換時にデータを保つのはこいつだ](/images/smb1-glitch-levels/v1-ram-chip.jpg)
 
-SMB1には32レベルではなく、**34のユニークレベル**がある。多くのレベルは重複（5-3 = 1-3だがBullet Billあり）で、"ハードモード"フラグでマークされている。本物のユニークレベルは：
+SMB1は32面じゃなく**34固有面**だ。多くの面は重複だ（5-3は1-3だがBullet Bill付き）。「hard mode」フラグ印付きだ。本当の固有面：
 
-- **水**（タイプ0）：3レベル（2-2、7-2、ボーナスエリア5-2/6-2）
-- **オーバーワールド**（タイプ1）：22レベル（2つの雲ボーナスルームを含む）
-- **アンダーグラウンド**（タイプ2）：3レベル（地下ボーナスルームを含む）
-- **キャッスル**（タイプ3）：6レベル
-- \+ 1カットシーンルーム（地下/水中のレベルの前）
-- \+ 14-2のワープゾーン
+- **水**（Type 0）：3面（2-2、7-2、5-2や6-2 bonus zone）
+- **地上**（Type 1）：22面（2つの雲 bonus 部屋込み）
+- **地下**（Type 2）：3面（地下 bonus 部屋込み）
+- **城**（Type 3）：6面
+- 1カットシーン部屋（地下や水面前）
+- 4-2の1ワープ zone
 
-各レベルは**7ビット**のIDを持つ。下位5ビット = サブグループ内の番号、上位2ビット = エリアタイプ：
-
-```asm
-; Encodage 7-bit du Level ID
-; Bits 6-5 : Type (00=Water, 01=Overworld, 10=Underground, 11=Castle)
-; Bits 4-0 : Numéro dans le sous-groupe
-;
-; Water IDs      : $00-$02  (types 00, numéros 0-2)
-; Overworld IDs  : $20-$35  (types 01, numéros 0-21)
-; Underground IDs: $40-$42  (types 10, numéros 0-2)
-; Castle IDs     : $60-$65  (types 11, numéros 0-5)
-;
-; ID $25 = %0100101 → type 01 (Overworld), numéro 5 → 1-1
-; ID $23 = %0100011 → type 01 (Overworld), numéro 3 → 6-2
-```
-
-**128の可能なID**（$00-$7F）、34のみが実在のレベルに割り当てられている。未使用のIDはどこを指してもおかしくない。
-
-### ポインタテーブル：2つのリスト、2つの順序
-
-タイルポインタとスプライトポインタは同じ順序で保存されていない。コードは2つの16ビットリストを別々に使用する（high byte / low byteを2つの別テーブルに格納）：
-
-```
-Ordre des pointeurs sprites :
-  Index 0-5   : Castle (6 niveaux)
-  Index 6-27  : Overworld (22 niveaux)
-  Index 28-30 : Underground (3 niveaux)
-  Index 31-33 : Water (3 niveaux)
-
-Ordre des pointeurs tiles :
-  Index 0-2   : Water (3 niveaux)
-  Index 3-24  : Overworld (22 niveaux)
-  Index 25-27 : Underground (3 niveaux)
-  Index 28-33 : Castle (6 niveaux)
-```
-
-なぜ異なる順序なのか？ 技術的な理由はない -- 開発中にデータがこのように整理されたのだろう。しかし興味深い結果を生む：レベルIDが無効な場合、タイルポインタとスプライトポインタが*異なる*レベルをロードし、**Frankensteinレベル**が生まれる。
-
-この2つのリスト間をナビゲートするために、ゲームは小さな**オフセットテーブル**（目次のようなもの）を使う：
+各面は**7ビット**IDを持つ。下位5bitはサブグループ内番号、上位2bitは zone 種別だ。
 
 ```asm
-; Tables d'offset par type (Water, Overworld, Underground, Castle)
-; Chaque entrée = index de début dans la liste correspondante
+; Level IDの7ビット符号化
+; ビット6-5：種別（00=Water、01=Overworld、10=Underground、11=Castle）
+; ビット4-0：サブグループ内番号
+;
+; Water ID      : $00-$02  （種別00、番号0-2）
+; Overworld ID  : $20-$35  （種別01、番号0-21）
+; Underground ID: $40-$42  （種別10、番号0-2）
+; Castle ID     : $60-$65  （種別11、番号0-5）
+;
+; ID $25 = %0100101 → 種別01（Overworld）、番号5 → 1-1
+; ID $23 = %0100011 → 種別01（Overworld）、番号3 → 6-2
+```
+
+**128 ID可能**（$00-$7F）で、本物面に割り当ては34だけだ。未使用IDはどこでも指す。
+
+### ポインタテーブル：2リスト、2順序
+
+タイルとスプライトのポインタは同じ順序で保存されてない。コードは2つの分離16ビットリストを使う（2つの別テーブルにhigh byteとlow byte）。
+
+```
+スプライトポインタ順序：
+  Index 0-5   : Castle（6面）
+  Index 6-27  : Overworld（22面）
+  Index 28-30 : Underground（3面）
+  Index 31-33 : Water（3面）
+
+タイルポインタ順序：
+  Index 0-2   : Water（3面）
+  Index 3-24  : Overworld（22面）
+  Index 25-27 : Underground（3面）
+  Index 28-33 : Castle（6面）
+```
+
+なぜ順序が違うのか。技術理由はない。開発中にデータがこう組まれたってだけだろう。でも魅惑的な帰結を生む。無効面IDのとき、タイルとスプライトのポインタは*違う*面を読み込んで、**Frankenstein面**を作る。
+
+2リスト間を動くため、ゲームは小さな**オフセットテーブル**を使う（目次みたいなもの）。
+
+```asm
+; 種別ごとのオフセットテーブル（Water、Overworld、Underground、Castle）
+; 各エントリ = 対応リスト内の開始index
 
 SpriteOffsetTable:
-  .byte $1F, $06, $1C, $00    ; Water=31, Overworld=6, Underground=28, Castle=0
+  .byte $1F, $06, $1C, $00    ; Water=31、Overworld=6、Underground=28、Castle=0
 
 TileOffsetTable:
-  .byte $00, $03, $19, $1C    ; Water=0, Overworld=3, Underground=25, Castle=28
+  .byte $00, $03, $19, $1C    ; Water=0、Overworld=3、Underground=25、Castle=28
 ```
 
-6-2（ID $23、オーバーワールド番号3）をロードする場合：
+6-2（ID $23、Overworld番号3）読み込みはこうだ。
 
 ```asm
-; 1. Type = 01 (Overworld) → index dans table d'offset = 1
-; 2. Sprite offset = SpriteOffsetTable[1] = 6
-;    Index final = 6 + 3 (numéro de niveau) = 9 → 10ème pointeur sprites
-; 3. Tile offset = TileOffsetTable[1] = 3
-;    Index final = 3 + 3 = 6 → 7ème pointeur tiles
-; 4. Résultat : pointeur tiles $A619 + pointeur sprites $9ED0 = 6-2 ✓
+; 1. 種別 = 01（Overworld）→ オフセットテーブル内index = 1
+; 2. スプライト offset = SpriteOffsetTable[1] = 6
+;    最終Index = 6 + 3（面番号） = 9 → 10番目スプライトポインタ
+; 3. タイル offset = TileOffsetTable[1] = 3
+;    最終Index = 3 + 3 = 6 → 7番目タイルポインタ
+; 4. 結果：タイルポインタ$A619 + スプライトポインタ$9ED0 = 6-2 ✓
 ```
 
-では、$43のような無効なID（アンダーグラウンド番号3、存在しない）はどうなるか？
+じゃあ$43みたいな無効ID（存在しないUnderground番号3）では何が起きる？
 
 ```asm
-; ID $43, Type = 10 (Underground), numéro = 3
-; Sprite offset = SpriteOffsetTable[2] = $1C = 28
-;   Index = 28 + 3 = 31 → 32ème pointeur sprites = eau bonus 5-2 !
-; Tile offset = TileOffsetTable[2] = $19 = 25
-;   Index = 25 + 3 = 28 → 29ème pointeur tiles = 1-4 (Castle) !
+; ID $43、種別 = 10（Underground）、番号 = 3
+; スプライト offset = SpriteOffsetTable[2] = $1C = 28
+;   Index = 28 + 3 = 31 → 32番目スプライトポインタ = 水 bonus 5-2！
+; タイル offset = TileOffsetTable[2] = $19 = 25
+;   Index = 25 + 3 = 28 → 29番目タイルポインタ = 1-4（Castle）！
 ;
-; Résultat : un niveau souterrain avec les tiles de 1-4
-; et les Bloopers de la zone eau de 5-2. Un vrai Frankenstein.
+; 結果：5-2水 zone のBloopers付き1-4タイルの地下レベル
+; 本物のFrankensteinだ。
 ```
 
-![Level ID $43 -- Frankensteinレベル：タイル1-4 + スプライト水中5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
+![Level ID $43、Frankenstein面：1-4タイルと水5-2スプライト](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
 
-![グリッチレベルポインタの探索 -- オフセットテーブルの説明](/images/smb1-glitch-levels/yt-pointers.jpg)
+![Exploring Glitch Level Pointers、オフセットテーブル解説](/images/smb1-glitch-levels/yt-pointers.jpg)
 
-![ワールドインデックステーブル -- World 9のオーバーフローでグリッチレベルが生成される](/images/smb1-glitch-levels/v2-world-index-table.jpg)
+![world index table、world 9 overflow がグリッチ面を作るとき](/images/smb1-glitch-levels/v2-world-index-table.jpg)
 
-### ワールドインデックステーブル：なぜWorld 9がオーバーフローするのか
+### world index table：なぜworld 9が overflow するのか
 
-各ワールド（1-8）の最初のレベルのインデックスを与える8バイトのROMテーブルがある。その直後、ゲーム順ですべての36Level IDのテーブルがある。
+各ワールド（1-8）の初面indexを与える8バイトROMテーブルがある。その直後に、遊ぶ順の全36面のLevel ID 36個のテーブルがある。
 
 ```asm
 ; WorldIndexTable (8 bytes)
   .byte 0, 5, 10, 15, 20, 25, 28, 33
-;   -> Monde 1 commence au niveau 0
-;   -> Monde 2 commence au niveau 5
-;   -> Monde 8 commence au niveau 33
+;   -> ワールド1は面0から
+;   -> ワールド2は面5から
+;   -> ワールド8は面33から
 
 ; LevelIDTable (36 bytes)
-  .byte $25, $28, $29, $26, $24, ... ; les 36 Level IDs
+  .byte $25, $28, $29, $26, $24, ... ; 36 Level ID
 ```
 
-World 9をロードしようとすると、ゲームはWorldIndexTableの9バイト目を読む...がそれは存在しない。LevelIDTableに1バイトオーバーフローし、値$25を読み、その$25をLevelIDTableのインデックスとして使用する（37番目のエントリ）-- これによりSpriteOffsetTableに2バイトオーバーフローし、値6を読む。
+world 9を読み込もうとすると、ゲームはWorldIndexTableの9バイト目を読む。存在しない。LevelIDTableに1バイト overflow して値$25を読む。次に$25をLevelIDTable内のindexとして使う（37番目エントリ）。今度はSpriteOffsetTableに2バイト overflow して値6を読む。
 
 ```asm
 ; World 9 :
-;   1. WorldIndexTable[8] (overflow) → lit $25 dans LevelIDTable
-;   2. LevelIDTable[37] (overflow) → lit le 2ème byte de SpriteOffsetTable = 6
-;   3. ID = 6 → Water level number 6 (qui n'existe pas)
-;   4. Tile pointer = pointeur water numéro 6 = tiles de 6-2
-;   5. Sprite pointer = index 31+6 = 37 > 33 → pointeur invalide
-;   6. Résultat : 6-2 sous l'eau avec des sprites glitchés
-;      → world 9-1 !
+;   1. WorldIndexTable[8] (overflow) → LevelIDTable内の$25を読む
+;   2. LevelIDTable[37] (overflow) → SpriteOffsetTableの2バイト目 = 6を読む
+;   3. ID = 6 → 存在しないWater面番号6
+;   4. タイルポインタ = waterポインタ番号6 = 6-2タイル
+;   5. スプライトポインタ = index 31+6 = 37 > 33 → 無効ポインタ
+;   6. 結果：グリッチスプライト付き水中6-2
+;      → world 9-1！
 ```
 
-World G（16）では、オーバーフローはさらに遠く、Level ID $01に到達する。これは1-2の前のカットシーンレベルだ：
+world G（16）では overflow がさらに進んでLevel ID $01に落ちる。1-2前のカットシーン面だ。
 
 ```asm
 ; World G (16) :
-;   WorldIndexTable[15] → lit $01 dans LevelIDTable
-;   LevelIDTable[1] = $29 (cutscene 1-2)
-;   → world G-1 = la cutscene d'entrée de 1-2
+;   WorldIndexTable[15] → LevelIDTable内の$01を読む
+;   LevelIDTable[1] = $29 (1-2カットシーン)
+;   → world G-1 = 1-2入口カットシーン
 ```
 
-## グリッチワールドが存在する理由
+## なぜグリッチワールドがあるのか
 
-ゲームには32の「正規」レベル（8ワールド × 4レベル）がある。しかしポインタテーブルはエリアタイプごとに128エントリある。32以降のエントリには、そのROMアドレスにあるデータが入っている -- 時には別のレベル、有时はサウンドデータ、有时はRAM、有时はただのゴミ。
+ゲームは32「正規」面を持つ（8ワールド×4面）。でもポインタテーブルは zone 種別ごとに128エントリだ。面32超のエントリは、そのアドレスにあるROM内容だ。ときどき別面、ときどき音データ、ときどきRAM、ときどき何でもだ。
 
-![Level ID $01 Water（Minus World）-- タイルポインタ$AE45、スプライトポインタ$A171](/images/smb1-glitch-levels/minus-world.png)
+![Level ID $01 Water（Minus World）。タイルポインタ$AE45、スプライトポインタ$A171](/images/smb1-glitch-levels/minus-world.png)
 
-### Level ID $01 + AreaType 0 = Minus World
+### Level ID $01とAreaType 0はMinus World
 
-最も有名なグリッチワールド。Level ID $01のAreaType 0（水）は以下を指す：
+いちばん有名なグリッチワールドだ。AreaType 0（水）のLevel ID $01はこう指す。
 
-- **タイルポインタ：$AE45** → 2-2/7-2の水中エリア
-- **スプライトポインタ：$A171** → 2-2/7-2のスプライト
+- **タイルポインタ：$AE45** → 2-2や7-2の水中 zone
+- **スプライトポインタ：$A171** → 2-2や7-2のスプライト
 
-結果：2-2に似た水中レベルだが、flagpoleが存在しないので無限にループする。レベルの終わりなし、出口なし。
+結果：2-2っぽい水面だが、flagpoleがないから無限 loop する。永遠に loop する面だ。
 
-これはレベル36-1（またはワールド$-1の36-1）だ。
+これが36-1面だ（$-1ワールドの36-1とも）。
 
-![SMB1のワームスタートチェック -- Minus Worldが存在できるのはこのチェックのおかげ](/images/smb1-glitch-levels/v4-minus-world.jpg)
+![SMB1のウォームスタート確認。Minus Worldを存在させるのはこいつだ](/images/smb1-glitch-levels/v4-minus-world.jpg)
 
 ```asm
-; Pourquoi le flagpole manque dans le Minus World :
-; Les sprites de 2-2/7-2 ($A171) n'ont pas de flagpole
-; dans leur séquence. Le jeu cherche le sprite $FD (flagpole)
-; mais ne le trouve jamais → boucle infinie
+; Minus Worldにflagpoleがない理由：
+; 2-2/7-2スプライト（$A171）に並び内flagpoleがない
+; ゲームはスプライト$FD（flagpole）を探す
+; でも見つからない → 無限ループ
 ;
-; Le jeu continue de générer le niveau à l'infini
-; jusqu'à ce que le timer atteigne zéro.
+; ゲームはタイマーゼロまで無限に面生成を続ける
 ```
 
 ### RAMを指すポインタ
 
-タイルポインタやスプライトポインタがROMではなくRAMのアドレス（$00-$7F）を指すと、ゲームはRAMのconstantな変化をタイルとして解釈しようとする：
+タイルポインタやスプライトポインタがROMじゃなくRAM（$00-$7F）アドレスを指すと、ゲームは常に変わるRAMをタイルとして解釈しようとする。
 
 ```asm
-; Exemple : Level ID $03 en Water
-; Tile Pointer : $A46B (3-3 - valide)
-; Sprite Pointer : $009D (pointe vers la RAM page zéro !)
+; 例：WaterのLevel ID $03
+; タイルポインタ：$A46B (3-3 - 有効)
+; スプライトポインタ：$009D（ゼロページRAMを指す！）
 ;
-; La RAM page zéro contient les registres du jeu,
-; la position de Mario, l'état des compteurs...
-; Le jeu décompresse ça comme une séquence de sprites,
-; et le résultat c'est un niveau avec des ennemis
-; qui sont en fait des valeurs de registres.
+; ゼロページRAMはゲームレジスタ、
+; マリオ位置、カウンタ状態を含む。
+; ゲームはこれをスプライト並びとして伸長する。
+; 結果はレジスタ値である敵の面だ。
 ```
 
-ゼロページが変化すると（Marioが動いたり、タイマーが回ったり）、レベルの「スプライト」も変わる。だから一部のグリッチワールドでは敵が点滅し、constantに変化するのだ。
+ゼロページが変わる（マリオ動く、タイマー回るなど）と、面の「スプライト」も変わる。だから一部グリッチワールドは点滅して常に変形する敵がいる。
 
-![Level ID $03 Water -- スプライトポインタ$009DがRAMを指す、プレイ不可能なレベル](/images/smb1-glitch-levels/level-03-water.png)
+![Level ID $03 Water。スプライトポインタ$009DはRAMを指す。遊べない面](/images/smb1-glitch-levels/level-03-water.png)
 
-### Level ID $36：空のレベル（Overworld）
+### Level ID $36：空面（Overworld）
 
-Level ID $36のOverworld：
+OverworldのLevel ID $36：
 
-- **タイルポインタ：$AC35**（1-2）
-- **スプライトポインタ：$A0D8**（1-2）
+- **タイルポインタ：$AC35** (1-2)
+- **スプライトポインタ：$A0D8** (1-2)
 
-結果：何もなし。ゲームはレベルをロードするが、RGMechExのカタログでは「レベルなし」とマークされている。タイルは有効かもしれないが、スプライトが空のレベルまたは機能しないレベルを生成する場所を指している。
+結果：無だ。ゲームは面を読み込むが、RGMechExカタログでは「面なし」印だ。タイル有効でもスプライトが空か動かない面を出すところを指すのかも。
 
-### Level ID $1D（Castle）：クラッシュの王者
+### Level ID $1D (Castle)：クラッシュ王
 
-Level ID $1DのCastle：
+CastleのLevel ID $1D：
 
-- **タイルポインタ：$A210**（4-4）
-- **スプライトポインタ：$7EA0**（RAM！）
+- **タイルポインタ：$A210** (4-4)
+- **スプライトポインタ：$7EA0** (RAM！)
 
-スプライトポインタがRAM = 未定義スプライト。ゲームはタイルの最初の行にSpiny ballやBullet Bill blasterを表示しようとする。即座にクラッシュ。
+RAM内スプライトポインタは未定義スプライトだ。ゲームはタイル1行目にSpiny ballかBullet Bill blasterを表示しようとする。即クラッシュだ。
 
 ```asm
-; Quand le sprite pointer pointe vers la RAM,
-; le jeu décompresse des bytes qui changent tout le temps
-; comme des instructions "spawn". Le résultat :
-; - Apparition d'objets inexistants (valeur undefined)
-; - Crash PPU quand le sprite NES essaie d'afficher un tile invalide
-; - Freeze complet de la console
+; スプライトポインタがRAMを指すと、
+; ゲームは常に変わるバイトを
+; 「出現」命令として伸長する。結果：
+; - 存在しない物の出現（未定義値）
+; - NESスプライトが無効タイル表示しようとしてPPUクラッシュ
+; - 本体完全フリーズ
 ```
 
-## カタログ化された256のグリッチワールド
+## カタログ化された256グリッチワールド
 
-RGMechExは**すべてのレベル**のマップを生成するスクリプトを作成した。4つのエリアタイプすべて、それぞれ128IDだ。
+RGMechExは**全部の面**のマップを生成するスクリプトを書いた。4 zone種別、ID 128個ずつだ。
 
-ワールドカウンターは8ビット（0-255）。ワールド1-8は正規。残り**248のグリッチワールド**が潜在的に存在する。各グリッチワールドはそのワールドの最初のレベルに対応し、Level IDはWorldIndexTableのオーバーフローメカニズムで計算される。
+ワールドカウンタは8ビット（0-255）だ。ワールド1-8は正規だ。残り**248グリッチワールド**候補だ。各グリッチワールドはそのワールドの初面に対応して、Level IDはWorldIndexTable overflow 機構で計算される。
 
-![グリッチワールドテーブル -- 248の破損ワールド、68の最初のアクセス可能なレベル](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
+![グリッチワールドテーブル。248破損ワールド、到達可能初面68](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
 
-128の可能なIDのうち、**68のみがワールドの「最初のレベル」**（グリッチワールド番号でアクセス可能）。残り60はレベル2以上またはアクセス不可能。
+128 ID可能のうち、**68だけがワールドの「初面」**だ（グリッチワールド番号経由で到達可能）。残り60は2面以降か到達不能だ。
 
-| タイプ | プレイ可能なユニークID | クラッシュするID | 空のID |
+| 種別 | 遊べる固有ID | クラッシュID | 空ID |
 |------|---------------------|-------------------|-----------|
-| Water（0）    | ~20  | ~60  | ~48  |
-| Overworld（1）| ~30  | ~55  | ~43  |
-| Underground（2） | ~15 | ~65 | ~48  |
-| Castle（3）   | ~25  | ~58  | ~45  |
+| Water (0)    | 約20  | 約60  | 約48  |
+| Overworld (1)| 約30  | 約55  | 約43  |
+| Underground (2) | 約15 | 約65 | 約48  |
+| Castle (3)   | 約25  | 約58  | 約45  |
 
-多くのIDが同じポインタが同じROMアドレスを指すため、同じレベルに至る。例えばLevel ID $28（Overworld）-- タイルポインタ$A7CD（2-1）-- は**38の異なるグリッチワールド**に出現する。スプライトポインタ$9F51がROMのサウンドデータ/パディング領域を指し、多くのIDが再利用しているからだ。
+同じROMアドレスにポインタが落ちるから、多くのIDが同じ面になる。OverworldのLevel ID $28（タイルポインタ$A7CD (2-1））はたとえば**38違うグリッチワールド**に現れる。スプライトポインタ$9F51が多くのIDが再利用するパディングや音データ zone を指すからだ。
 
-![Level ID $28（Overworld）のマップ -- 2-1のタイルと通常のスプライト、38のグリッチワールド](/images/smb1-glitch-levels/level-28-overworld.png)
+![Level ID $28 (Overworld)のマップ。通常スプライト付き2-1タイル、38グリッチワールド](/images/smb1-glitch-levels/level-28-overworld.png)
 
-![Super Mario Bros.グリッチレベル解説 -- 3本目の動画](/images/smb1-glitch-levels/yt-levels.jpg)
+![Super Mario Bros. Glitch Levels Explained、3つ目の動画](/images/smb1-glitch-levels/yt-levels.jpg)
 
-### 本当にユニークな6つのグリッチレベル
+### 本当に固有の6グリッチ面
 
-アクセス可能な19のグリッチレベルIDのうち、ロード時に即座にクラッシュしないのは**6のみ**：
+到達可能な19グリッチ面IDのうち、読み込みで**即クラッシュしないのは6つだけ**だ。
 
 | ワールド | Level ID | 説明 |
 |-------|----------|-------------|
-| E-1（224） | $50 | 穴の上に?ブロックが1つ。Marioは即死。 |
-| W | $57 | Marioがスポーンして動けない。 |
-| 42（133） | $50 | 雲のトンネル。十分進むとMarioが閉じ込められる。 |
-| 62（131、240） | $4D | 凍った城：Marioが上にスポーンし、落ちられない → ロック。 |
-| 127 | $4B | 地下トンネル。だが進みすぎるとクラッシュ。 |
-| 137 | $4B | カットシーンの自動スクロールを有効化。Marioが唯一のbrick blockに永久にブロックされる。 |
+| E-1 (224) | $50 | 奈落の上に？ブロック1つ。マリオは即死ぬ。 |
+| W | $57 | マリオは詰まって出現、動けない。 |
+| 42 (133) | $50 | 雲トンネル。遠く行けばマリオが閉じ込められる。 |
+| 62 (131, 240) | $4D | 凍った城：マリオは上に出現、落ちられない → 詰み。 |
+| 127 | $4B | 地下トンネルだが、遠く行けばクラッシュする。 |
+| 137 | $4B | カットシーン自動スクロールが起動。マリオは唯一のレンガブロックに出会って永遠に詰む。 |
 
-![Level ID $50（雲トンネル）-- グリッチワールド42-1とE-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
-![Level ID $4D（城）-- ワールド62-1、スポーンでロックされたMario](/images/smb1-glitch-levels/lvl-4D-castle.png)
-![Level ID $4B（トンネル）-- ワールド127-1、進みすぎるとクラッシュ](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
+![Level ID $50（雲トンネル）。グリッチワールド42-1とE-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
+![Level ID $4D（城）。world 62-1、出現で詰まるマリオ](/images/smb1-glitch-levels/lvl-4D-castle.png)
+![Level ID $4B（トンネル）。world 127-1、遠く行けばクラッシュ](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
 
-248のグリッチワールドのうち、本当に新しいものを生み出すのは6のみ。残りは間違ったエリアタイプの通常レベルか、黒い画面だ。
+248グリッチワールドのうち本当に新しいものを出すのは6つだ。残りは違う zone 種別の通常面か、黒画面だ。
 
-## レベルフォーマットの詳細
+## 面形式の詳細
 
-グリッチレベルが成立する（しない）理由を理解するため、レベルデータの正確なフォーマットに飛び込む。
+面データの正確な形式に進んで、グリッチ面が立つ（立たない）理由を理解しよう。
 
-### レベルヘッダー：2バイト、6プロパティ
+### 面ヘッダー：2バイト、6特性
 
-各レベルは2バイトのヘッダーで始まり、6プロパティを制御する：
+各面は6特性を操る2バイトヘッダーから始まる。
 
 ```asm
-; Byte 0 : timer + Y start + modifier
-;   Bits 7-6 : timer (00=inchangé, 01=200, 10=300, 11=400)
-;   Bits 5-3 : Y start Mario (111/110 = autowalk)
-;   Bits 2-0 : level type modifier
-;              000=default, 001=waves, 010=brick wall,
-;              011=water bottom, 100=night, 101=snow,
-;              110=snow night, 111=gray night
+; バイト0：タイマーとY開始とmodifier
+;   ビット7-6：タイマー（00=不変、01=200、10=300、11=400）
+;   ビット5-3：マリオY開始（111/110は自動歩行）
+;   ビット2-0：面種別modifier
+;              000=デフォルト、001=波、010=レンガ壁、
+;              011=水底、100=夜、101=雪、
+;              110=雪夜、111=灰夜
 
-; Byte 1 : platform + background + floor pattern
-;   Bits 7-6 : special platform (00=tree, 01=mushroom,
-;                                 10=Bullet Bill, 11=cloud)
-;   Bits 5-4 : background (00=none, 01=clouds,
-;                           10=montains, 11=fences)
-;   Bits 3-0 : floor pattern initial (0-15)
+; バイト1：platformと背景と床模様
+;   ビット7-6：特殊platform（00=木、01=キノコ、
+;                                 10=Bullet Bill、11=雲）
+;   ビット5-4：背景（00=なし、01=雲、
+;                           10=山、11=柵）
+;   ビット3-0：初期床模様（0-15）
 ```
 
-タイプモディファイアは視覚的なバリエーションを制御する：水中レベルの波、8-3のbrick背景、4-3のナイトパレット、6-2の雪など。
+種別modifierは視覚変化を操る。水面上部の波、8-3のレンガ背景、4-3の夜パレット、6-2の雪などだ。
 
-### タイルオブジェクト：2バイト、Next Screen Flag、3スロットのキュー
+### タイル物：2バイト、Next Screen Flag、3枠待ち行列
 
-ヘッダーの後には**タイルオブジェクト**のリストが続く。各オブジェクトは2バイト。バイト$FDがリストの終わりを示す。
+ヘッダーの後に**タイル物**一覧が来る。各物は2バイトだ。バイト$FDが一覧終わり印だ。
 
 ```asm
-; Format objet tile (16 bits) :
-; Byte 0 :
-;   Bits 7-4 : X position (colonne 0-15)
-;   Bits 3-0 : Y position
-;     Y=0-11  : position Y normale
-;     Y=12    : objets spéciaux (trous, ponts, rope, ? blocks)
-;     Y=13    : screen skip / objets spéciaux 2
-;     Y=14    : changement de modifier/scenery/floor
-;     Y=15    : objets spéciaux 3 (château, escaliers, gros tuyau)
+; タイル物形式（16ビット）：
+; バイト0：
+;   ビット7-4：X位置（0-15列）
+;   ビット3-0：Y位置
+;     Y=0-11  : 通常Y位置
+;     Y=12    : 特殊物（穴、橋、ロープ、?ブロック）
+;     Y=13    : screen skip / 特殊物2
+;     Y=14    : modifier/scenery/floor変更
+;     Y=15    : 特殊物3（城、階段、大土管）
 
-; Byte 1 :
-;   Bit  7   : NEXT SCREEN FLAG
-;   Bits 6-4 : type d'objet (0-7)
-;   Bits 3-0 : largeur/hauteur / sous-type
+; バイト1：
+;   ビット7   : NEXT SCREEN FLAG
+;   ビット6-4 : 物種別（0-7）
+;   ビット3-0 : 幅/高さ / 亜種
 ```
 
-「next screen」ビットが立つと、作業中の列が1インクリメントされる。これにより16列目以降にオブジェクトを配置できる。オブジェクトは**順番に**（左から右へ）リストする必要がある。ゲームが順番にロードするからだ：
+「next screen」bitが立てば、作業中列は1増える。最初16列超に物を置ける。物は**順に**（左から右へ）並べなきゃいけない。ゲームは順に読むからだ。
 
 ```asm
-; La routine de chargement a DEUX phases par colonne :
-; Phase 1 : chercher les nouveaux objets qui commencent sur cette colonne
-;            et les ajouter à la file d'attente (queue)
-; Phase 2 : traiter chaque objet dans la queue en dessinant les tiles,
-;            et retirer ceux qui finissent sur cette colonne
+; 読み込みルーチンは列ごとに2段階：
+; 段階1：この列から始まる新物を探して
+;            待ち行列（queue）に足す
+; 段階2：待ち行列内各物をタイル描画で処理して、
+;            この列で終わるものを外す
 ```
 
-キューは正確に**3スロット**。直接的な結果：同じ列で始まるオブジェクトは3つ以上持てない。キューが満杯の場合、4番目のオブジェクトは無視され、ロードされない。
+待ち行列は正確に**3枠**だ。直接の帰結：同じ列から始まる物は3つまでだ。待ち行列いっぱいなら4つ目は無視されて読み込まれない。
 
-だから設計の良いレベルはオブジェクトの詰め込みを避ける。1-2の例：天井の1upブロックがある列 + 横のbrickは、3の制限を守ために2つの別オブジェクトに分割されている。
+だから良い面は物を積みすぎない。1-2の例：天井内1upブロックと隣レンガの列は、3上限を守るため2つの別物に分けられる。
 
-### 特殊なY位置：12、13、14、15
+### 特殊Y位置：12、13、14、15
 
-Y=12の場合、オブジェクトにはY位置がない（タイプでハードコードされている）：
+Y=12のとき、物にY位置はない（種別でハードコード）。
 
 ```asm
-; Y=12 : objets sans Y position
-;   Type 0 : trou (supprime le sol)
-;   Type 1 : rope de plateforme mobile
-;   Types 2-4 : ponts à Y fixe
-;   Type 5 : trou avec eau/lave
-;   Types 6-7 : rangées de ? blocks
+; Y=12 : Y位置なし物
+;   種別0 : 穴（床消す）
+;   種別1 : 動くplatformのロープ
+;   種別2-4 : Y固定の橋
+;   種別5 : 水や溶岩付き穴
+;   種別6-7 : ?ブロック列
 ```
 
-Y=13の場合、2つのサブグループがある。バイト1のビット6が1の場合：
+Y=13のとき、2亜群だ。バイト1のbit6が1ならこうだ。
 
 ```asm
-; Y=13, bit6=1 : objets spéciaux
-;   0 = L-pipe (cutscene), 1 = flagpole, 2-3 = pont/axe/hamer (fin château)
-;   4 = stop screen, 5 = random enemies, 6 = loop level, 7+ = crash possible
+; Y=13、bit6=1 : 特殊物
+;   0 = L土管（カットシーン）、1 = flagpole、2-3 = 橋や斧やハンマー（城終わり）
+;   4 = 画面停止、5 = ランダム敵、6 = loop面、7以上 = クラッシュ可能
 ```
 
-ビット6=0の場合、下位5ビットが**スクリーンスキップ**（next screen flagを1つずつ使わずに、スクリーンNに直接ジャンプ）をエンコードする。
+bit6=0なら、下位5bitは**screen skip**を符号化する（next screen flagを1つずつ通さず直接N画面へ跳ぶ）。
 
-Y=14の場合：同じ原理でビット6=1はタイプモディファイアの変更、ビット6=0は背景 + フロアパターンの変更。
+Y=14のとき：bit6=1で種別変更、bit6=0で背景と床模様変更と同じ仕組みだ。
 
-### フロアパターン：16種類の床パターン
+### 床模様：16床模様
 
-レベルの床は個別のオブジェクトで構成されていない。SMB1は**フロアパターン**を使用する。次の変更まで全列に適用される背景パターンだ：
+面の床は個別物で作らない。SMB1は**床模様**を使う。次変更まで全列に適用される背景模様だ。
 
 ```asm
-; Floor patterns (4 bits = 16 possibilités)
-;   0 = vide total
-;   1 = sol 2 tiles haut
-;   2 = sol 1 tile haut
-;   3 = sol + bottom
-;   4 = sol + bottom 2
-;   5 = sol 1/2 tile
-;   6 = 3/4 sol
-;   ... jusqu'à 15 = rempli total (sol + plafond)
+; 床模様（4ビット = 16可能）
+;   0 = 完全空
+;   1 = 2タイル高さ床
+;   2 = 1タイル高さ床
+;   3 = 床とbottom
+;   4 = 床とbottom 2
+;   5 = 床1/2タイル
+;   6 = 3/4床
+;   ... 15 = 完全充填（床と天井）まで
 ```
 
-だから穴はオブジェクトだ：特定の列でフロアパターンをオーバーライドし、残りのパターンを変更せずに済む。
+だから穴は物だ。残り全部変えず特定列で床模様を上書きする。
 
-### 256バイトの制限とリピート
+### 256バイト上限と繰り返し
 
-すべてのタイルデータは**最大256バイト**に収まる。6502のYレジスタがインデックスとして使われ、8ビットだ。$FDバイトを見つけずにデータの末尾に達した場合、**最初に戻って**256バイトを無限に繰り返す：
+面のタイルデータ全部は**最大256バイト**に収まる。6502のYレジスタをindexに使ってて、8ビットだ。$FDバイトなしにデータ終わりに着いたら、ゲームは頭へ** loop **して256バイトを無限繰り返す。
 
 ```asm
-; Index Y = 8 bits → max 256 bytes de données tiles
-; Si Y overflow (255 → 0) sans rencontrer $FD → repeat
-; Même chose pour les sprites, mais les objets pipe (3 bytes)
-; décalent la parité de l'index à chaque chargement.
+; Index Y = 8ビット → タイルデータ最大256バイト
+; Y overflow（255 → 0）で$FDなし → 繰り返し
+; スプライトも同じだが、土管物（3バイト）が
+; 読み込みごとにindex偶奇をずらす。
 ```
 
-一部のグリッチレベルはこのリピートを利用して、「無限」に続くレベルを生成する。
+一部グリッチ面はこの繰り返しを使って「無限」に続く面を作る。
 
-### スプライトシステム：2バイト + パイプトランジション
+### スプライト制：2バイトと土管遷移
 
-スプライトは同様のフォーマットに従うが、ヘッダーがなく、いくつかの重要な違いがある。バイト$FFがリストの終わりを示す。
+スプライトは似た形式に従う。ヘッダーなしでいくつか違う点付きだ。バイト$FFが一覧終わり印だ。
 
 ```asm
-; Format sprite (2 bytes) :
-; Byte 0 : position X (colonne)
-; Byte 1 :
-;   Bit 7 : NEXT SCREEN FLAG
-;   Bits 6-0 : type de sprite
-;       Certains types incluent : goomba, koopa, Blooper,
-;       Bullet Bill, Lakitu, Spiny, plateformes,
-;       commande warp zone, toad/princesse,
-;       commandes de spawn de groupes d'ennemis
+; スプライト形式（2バイト）：
+; バイト0：X位置（列）
+; バイト1：
+;   ビット7：NEXT SCREEN FLAG
+;   ビット6-0：スプライト種別
+;       一部種別はこう：クリボー、ノコノコ、Blooper、
+;       Bullet Bill、ジュゲム、トゲゾー、platform、
+;       ワープ zone 命令、キノピオや姫、
+;       敵群出現命令
 ```
 
-バイト1の最下位ビットは**ハードレベルフラグ**：1に設定されると、スプライトは5-3以上のレベルにのみ出現する。これで「ハードモード」レベルが作られる。
+バイト1の下位bitは**hard level flag**だ。1ならスプライトは5-3以降の面にしか現れない。「hard mode」面はこう作られる。
 
-Y位置15 = **スクリーンスキップ**（タイルと同じ）。Y位置14 = **パイプトランジション**（3バイト）：
+Y位置15は**screen skip**（タイルと同じ）だ。Y位置14は**土管遷移**（3バイト）だ。
 
 ```asm
-; Sprite Y=14 : pipe/vine transition (3 bytes !)
-;   Byte 0 : position X
-;   Byte 1 : bits 6-0 = Level ID 7-bit (destination)
-;   Byte 2 : bits 4-0 = screen de destination
-;            bits 7-5 = world où cette transition est valide
+; スプライトY=14 : 土管やツル遷移（3バイト！）
+;   バイト0 : X位置
+;   バイト1 : ビット6-0 = 7ビットLevel ID（目的地）
+;   バイト2 : ビット4-0 = 目的地screen
+;            ビット7-5 = この遷移が有効なworld
 ;
-; Pourquoi un world ? Les bonus rooms sont réutilisées entre mondes.
-; Exemple : la salle bonus de 1-1 est aussi utilisée par 2-1 et 7-1.
-; Cette salle a 3 transitions, une par monde, pour que Mario
-; réapparaisse au bon endroit.
+; なぜworldか。 bonus 部屋はワールド間で再利用されるからだ。
+; 例：1-1 bonus 部屋は2-1と7-1でも使う。
+; この部屋はワールドごとに3遷移あって、マリオが
+; 正しい場所に戻るようにする。
 ```
 
-スプライトには**キューシステムがない**。唯一の制限は、スポーンゾーン（画面右のすぐ外）に同時にロードできるスプライトが4つ以下であること。それ以上はスプライトが無視される。
+スプライトに**待ち行列制はない**。唯一の上限は、出現 zone（画面右すぐ外）に同時読み込みできるスプライトは4つまでだ。超えたらスプライトは無視される。
 
-## グリッチワールドへのアクセス方法
+## グリッチワールドへの行き方
 
-主に2つの方法がある。
+主な方法は2つだ。
 
-### クラシックな方法：壁抜け
+### 古典法：壁抜け
 
-壁抜け（壁を通り抜ける）により、通常のレベルから脱出し、隠されたワープゾーンまで歩くことができる。RAM経由でワールドカウンターを操作することで、任意のLevel IDをロードできる。
+壁抜け（壁通り抜け）で通常面を出て、隠し warzone まで歩く。RAM経由でワールドカウンタを操作して、任意Level IDを読み込める。
 
-テクニック：
-1. World 1-2：隠された終点パイプに入る
-2. 右の壁で壁抜けを行う
-3. ワープゾーンまで虚空を歩く
+手順：
+1. World 1-2：隠し終わり土管に入る
+2. 右壁に壁抜けする
+3. 虚空をワープ zone まで歩く
 4. ゲームが値をワールドとして解釈する
 
-しかし、この方法はグリッチワールドの一部にしかアクセスできない。
+でもこの方法ではグリッチワールドの一部にしか行けない。
 
-### 極端な方法：NESテニスカートリッジ交換
+### 極限法：NES Tennisカート交換
 
-詳細は上の「ワームスタート」セクションを参照。要するに：テニスの歩数カウンターがSMB1のワールドバイトと同じRAMバイトに書き込み、ワームスタート検出がこの値を保持する。
+上で「ウォームスタート」節に完全詳細あり。要約：Tennisの歩数カウンタはSMB1の開始ワールドと同じRAMバイトに書く。ウォームスタート検出がこの値を保存する。
 
-### ハッカー向け：すべてを探索するコード
+### いじり屋の隅：全部探るコード
 
-エミュレーターですべてのグリッチを自分で探索したい場合、Level IDに直接パッチを当てることができる：
+エミュレータで全部自分で探りたければ、Level IDを直接いじれる。
 
 ```asm
-; Patch pour FCEUX / Mesen :
-; Adresse RAM $075F = Level ID actuel
-; Adresse RAM $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
+; FCEUX / Mesen用パッチ：
+; RAMアドレス$075F = 現Level ID
+; RAMアドレス$0760 = Area Type (0=Water、1=Overworld、2=Underground、3=Castle)
 
-; Exemple : charger le Level 57 (0x39) en Overworld
-; Dans l'émulateur, ouvrir le traceur mémoire et écrire :
+; 例：Overworldで面57 (0x39)を読み込む
+; エミュレータでメモリトレーサを開いて書く：
 ; $075F = 0x39
 ; $0760 = 0x01
-; Puis entrer dans un tuyau de warp ou mourir et recommencer
-; → Le jeu charge le niveau ID $39 en Overworld
+; 次にワープ土管に入るか死んで再開する
+; → OverworldでID $39面を読み込む
 ```
 
-RGMechExは128レベル × 4タイプの完全なリストと自動生成されたマップを[rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html)に公開している。各エントリにはタイルポインタ、スプライトポインタ、レベルの視覚マップが表示される。
+RGMechExは128面×4種別の完全一覧を[rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html)で公開した。自動生成マップ付きだ。各エントリはタイルポインタ、スプライトポインタ、面の視覚マップを示す。
 
-## 最もクレイジーなレベル
+## いちばん変な面
 
-### Level ID $1F（Water）：1つで15のグリッチワールド
+### Level ID $1F (Water)：1つで15グリッチワールド
 
-タイルポインタ$A302（3-4）にスプライトポインタ$02A0を組み合わせると、15の異なるグリッチワールド（D-1、J-1、Y-1、Z-1、55-1、73-1...）が生成される。説明：スプライトポインタがROMのサウンドデータ/パディング領域を指し、有効なスプライトに近いデータを含むためプレイ可能な結果を生む。しかし3-4のキャッスルタイルとオーバーワールドスプライトの組み合わせは、意味のないレンダリングを生む。
+タイルポインタ$A302 (3-4)とスプライトポインタ$02A0の組み合わせで15違うグリッチワールドが出る（D-1、J-1、Y-1、Z-1、55-1、73-1など）。説明：スプライトポインタは有効スプライトに十分近いROM zone を指して遊べる結果を出す。でも城3-4タイルと地上スプライトの組み合わせで不条理な描画になる。
 
-### Level ID $28（Overworld）：38のグリッチワールド = 記録
+### Level ID $28 (Overworld)：38グリッチワールドで記録
 
-絶対記録。38のグリッチワールドエントリが同じレベル（2-1タイル + $9F51スプライト）を指す。なぜ？ スプライトポインタ$9F51がROMのサウンドデータ/パディング領域を指し、多くのIDが再利用しているからだ。
+絶対記録だ。38グリッチワールドエントリが同じ面を指す（2-1タイルと$9F51スプライト）。なぜか。スプライトポインタ$9F51が多くのIDが再利用するパディングや音データ zone に落ちるからだ。
 
-### Level ID $49（Underground）：FDSレベル
+### Level ID $49 (Underground)：FDS面
 
-タイルポインタ$76AE + スプライトポインタ$1C9D。タイルポインタがFamicom Disk System用に予約されたROM領域を指す。結果：標準カートリッジには存在しないタイルを持つレベル。これがレベル52-1と196-1を生み出す。
+タイルポインタ$76AEとスプライトポインタ$1C9D。タイルポインタはファミコンディスクシステム版用に予約されたROM zone を指す。結果：標準カートリッジにないタイルの面だ。52-1と196-1面を出す面だ。
 
-### Level ID $00-$02：本物のボーナスレベル
+### Level ID $00-$02：本物 bonus 面
 
-これらのIDはゲームの正規サブレベルに使用される：
+このIDはゲーム正規サブ面が使う。
 
-- **$00**：5-2/6-2の水中エリア（H-1、39-1で使用）
-- **$01**：2-2/7-2の水（Minus World、36-1）
-- **$02**：8-4のサブレベル（136-1、151-1、215-1）
+- **$00**：5-2や6-2の水中 zone（H-1、39-1が使う）
+- **$01**：2-2や7-2の水（Minus World、36-1）
+- **$02**：8-4のサブ面（136-1、151-1、215-1）
 
-通常アクセス可能な「ボーナス」レベルとグリッチワールドの違いは、ワープゾーンが現在のワールドをチェックすることだ：
+通常到達 bonus 面とグリッチワールドの違いは、ワープ zone が現ワールドを確認することだ。
 
 ```asm
-; Vérification warp zone (simplifié)
-; Le jeu vérifie que le monde cible est entre 1 et 8
+; ワープ zone 確認（簡略）
+; ゲームが対象ワールド1から8か確認する
 CheckWarp:
   lda TARGET_WORLD
   cmp #1
-  bcc InvalidWarp       ; < 1 → refusé
+  bcc InvalidWarp       ; 1未満 → 拒否
   cmp #9
-  bcs InvalidWarp       ; > 8 → refusé
-  ; world valide entre 1 et 8 uniquement
+  bcs InvalidWarp       ; 8超 → 拒否
+  ; 1から8の有効worldのみ
   jmp DoWarp
 ```
 
-番号が8超または0のグリッチワールドは通常のパイプでは到達できない。壁抜けまたはカートリッジ交換が必要だ。
+8超や0のグリッチワールドには通常土管で到達できない。壁抜けかカート交換が要る。
 
-## なぜ一部のレベルがクラッシュするのか：ジャンプテーブル
+## なぜ一部面がクラッシュするか：ジャンプテーブル
 
-ゲームがタイルオブジェクトをロードする際、タイプを**ジャンプテーブル**のインデックスとして使う：
+ゲームがタイル物を読み込むと、種別を**ジャンプテーブル**のindexとして使う。
 
 ```asm
-; Jump table des objets tiles standards (types 0-11)
+; 標準タイル物のジャンプテーブル（種別0-11）
 JumpTable_TileObjects:
-  .word Obj_Special       ; type 0 : bloc ?, hidden, flagpole...
-  .word Obj_Platform      ; type 1 : plateforme spéciale
-  .word Obj_BrickRow      ; type 2 : rangée de briques
-  .word Obj_BlockRow      ; type 3 : rangée de blocks
-  .word Obj_CoinRow       ; type 4 : rangée de pièces
-  .word Obj_BrickCol      ; type 5 : colonne de briques
-  .word Obj_BlockCol      ; type 6 : colonne de blocks
-  .word Obj_Pipe          ; type 7 : tuyau
-  .word Obj_8             ; type 8
-  .word Obj_9             ; type 9
-  .word Obj_10            ; type 10
-  .word Obj_11            ; type 11
+  .word Obj_Special       ; 種別0：?ブロック、隠し、flagpoleなど
+  .word Obj_Platform      ; 種別1：特殊platform
+  .word Obj_BrickRow      ; 種別2：レンガ列
+  .word Obj_BlockRow      ; 種別3：ブロック列
+  .word Obj_CoinRow       ; 種別4：コイン列
+  .word Obj_BrickCol      ; 種別5：レンガ柱
+  .word Obj_BlockCol      ; 種別6：ブロック柱
+  .word Obj_Pipe          ; 種別7：土管
+  .word Obj_8             ; 種別8
+  .word Obj_9             ; 種別9
+  .word Obj_10            ; 種別10
+  .word Obj_11            ; 種別11
 ```
 
-![ジャンプテーブル：なぜ無効なオブジェクトタイプでゲームがクラッシュするのか](/images/smb1-glitch-levels/v4-jump-table.jpg)
+![ジャンプテーブル：なぜ無効物種別がゲームをクラッシュさせるか](/images/smb1-glitch-levels/v4-jump-table.jpg)
 
-オブジェクトが無効なタイプ（≥12）を持つ場合、ゲームはこのテーブルに存在しないポインタにジャンプする。**4つの結果が可能**：
+物種別が無効（12以上）だと、ゲームはこのテーブルにないポインタへ跳ぶ。**4結果可能**だ。
 
-1. **有効なポインタ** → オブジェクトが通常通りロードされる
-2. **別のジャンプテーブルへのポインタ**（オーバーラップ） → 異なるオブジェクトが出現。例：タイプ12がY=13テーブルを指し、L-pipeになる
-3. **実行可能コードへのポインタ** → ランダムコードの実行（クラッシュの可能性大）
-4. **明示的なプレースホルダー（NOP）** → オブジェクトが何もしない（一部のスプライトはこのように、動かない空中浮遊の敵を生成する）
+1. **有効ポインタ** → 物は普通に読み込まれる
+2. **別ジャンプテーブルへのポインタ**（重なり）→ 違う物が現れる。例：種別12はY=13テーブルを指してL土管になる。
+3. **実行可能物へのポインタ** → ランダムコード実行（クラッシュ濃厚）
+4. **明示 placeholder（NOP）** → 物は何もしない（一部スプライトはこうで、動かず飛ぶ敵を出す）
 
-![グリッチレベルID $58：スプライトポインタが無効なアドレスを指し、ゲームがクラッシュ](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
+![グリッチ面ID $58：スプライトポインタが無効アドレスを指してゲームがクラッシュ](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
 
-![グリッチレベルID $50：雲トンネル、破損データから生成されたレベル](/images/smb1-glitch-levels/v4-glitch-50.jpg)
+![グリッチ面ID $50：雲トンネル、破損データ生成の面](/images/smb1-glitch-levels/v4-glitch-50.jpg)
 
-グリッチレベルID $58（クラッシュするトンネル）：スプライトポインタが**ROMマッパーなしのNESには存在しない**メモリ領域を指す。ゲームは（0,0）位置に同じKoopaを1フレームに5回ロードしようとして、PPUを飽和させ、フリーズを引き起こす。
+グリッチ面ID $58（クラッシュするトンネル）：スプライトポインタはmapper ROMなしNESに**存在しない**メモリ領域を指す。ゲームは同じKoopaを1フレーム5回位置(0,0)に読み込もうとして、PPU飽和でフリーズを起こす。
 
 ```asm
-; Pourquoi ID $58 crashe :
-; Sprite pointer → adresse invalide (hors espace NES standard)
-; → Le jeu lit des bytes indéterminés comme des types de sprite
-; → Le Koopa $00 (type invalide sans handler) boucle en appel récursif
-; → Stack overflow 6502 → freeze
+; なぜID $58がクラッシュするか：
+; スプライトポインタ → 無効アドレス（標準NES空間外）
+; → ゲームは不定バイトをスプライト種別として読む
+; → 無効Koopa $00（handlerなし）が再帰呼び出し loop
+; → 6502スタック溢れ → フリーズ
 ```
 
-### パイプワープのパラドックス
+### 土管ワープの逆説
 
-`target_world BETWEEN 1 AND 8`のチェックを覚えているか？ グリッチワールドでパイプを見つけたとしても、ゲームは目的地のワールドが1-8の間であることを確認する。グリッチワールドは番号が8超（36-1、255-1...）なので、ワープは失敗する。
+`target_world BETWEEN 1 AND 8`確認を思い出して。グリッチワールドで土管を見つけても、ゲームは目的地ワールドが1から8か確認する。グリッチワールドは8超の番号（36-1、255-1など）だからワープは失敗する。
 
-Minus Worldに終わりがないのもそのためだ：flagpoleがスプライトに存在せず、パイプはどこにも繋がらない。
+Minus Worldに終わりがないのもそのためだ。スプライトにflagpoleがなくて、土管はどこにも通じない。
 
-### 1列に5つのオブジェクトのトリック
+### 1列5物の技
 
-3オブジェクト/列の制限を上書きするエッジケースが存在する。キューがブロックされた場合（スロット満杯 + 次のオブジェクトにnext screen flagなし）、ゲームはnext screen flagを持つオブジェクトが見つかるまで現在の列をループで「プレプロセス」する。各プレプロセスで：
+1列あたり3物上限を超える edge case がある。待ち行列が詰まる（枠いっぱいと次物にnext screen flagなし）と、ゲームはnext screen flag付き物を見つけるまで現列を loop 「前処理」する。各前処理中にこうだ。
 
 ```asm
-; Pendant le prétraitement de colonne :
-; 1. Les objets dans la queue voient leur largeur restante
-;    décrémentée à chaque "fausse avancée" de colonne
-; 2. Si un objet atteint largeur=0, il quitte la queue
-; 3. Un slot libéré peut être rempli par un nouvel objet
-;    ajouté dans la même colonne
+; 列前処理中：
+; 1. 待ち行列内物は残り幅が
+;    「偽前進」ごとに減る
+; 2. 物が幅0に達したら待ち行列を出る
+; 3. 空いた枠は新物で埋められる
+;    同じ列に追加される
 
-; Résultat : jusqu'à 5 objets peuvent être traités sur la même colonne.
-; Technique : placer 2 objets qui traversent la screen boundary
-; (slots 1 et 2), 1 objet dummy en X < précédent (bloque la queue),
-; puis 3 objets à X=0 de l'écran suivant (dont un avec next screen flag).
+; 結果：同じ列で最大5物が処理されうる。
+; 技術：screen境界をまたぐ物2つを置く
+; （枠1と2）、前物よりX小さい dummy 物1つ（待ち行列詰まらせる）、
+; 次画面X=0に物3つ（1つはnext screen flag付き）。
 ```
 
-これは「キュースキップ」と呼ばれ、一部のROMハッカーがフォーマットが通常許すより密度の高いレベルを作成するために使用している。
+これを「queue skip」って呼んで、通常形式が許すより密な面を作る一部romhackerが使う。
 
-## バージョン間の違い
+## 版間の違い
 
-### Famicom Disk System
+### ファミコンディスクシステム
 
-SMB1のFDSバージョンは**メモリマップが異なる**。すべてのレベルポインタがシフトされているが、データは同じ。違い：グリッチワールドのインデックスが完全に異なる：
+SMB1のFDS版は**メモリマップが違う**。全ての面ポインタがずれるけどデータは同じだ。変わるのはグリッチワールドのindexが完全違うことだ。
 
 ```
-FDS World 36 → Level ID $09 (eau version de 5-3)
-  → Le flagpole est présent ! On peut finir le niveau.
-  → Ensuite : $27 (7-3 normal) → $44 (4-4 underground)
-  → $44 est finissable → la hache fonctionne → fin du jeu !
-  
-Le Minus World FDS est donc un "bonus world" qui peut mener
-à la complétion du jeu, contrairement à la version NES.
+FDS World 36 → Level ID $09 (5-3の水版)
+  → flagpoleある！面を終えられる。
+  → 次：$27（通常7-3）→ $44（地下4-4）
+  → $44は終えられる → 斧動く → ゲーム終了！
+
+FDSのMinus Worldはだからゲーム完了に通じうる
+「bonus world」で、NES版と違う。
 ```
 
-お気に入りのFDSレベル：**ID $5F**、3-3の後半の地下バージョン（ autoscrollingなのが残念だが）。
+私のお気に入りFDS面：**ID $5F**。低いトンネルの3-3後半の地下版だ（自動スクロールなのが残念）。
 
-### The Lost Levels（Super Mario Bros. 日本版）
+### The Lost Levels（日本版スーパーマリオ2）
 
-Lost Levelsは多くのことを変える：
+Lost Levelsは多くを変える。
 
-1. **タイル/スプライトの同じ順序**：Frankensteinレベルなし（無効なIDでもタイルとスプライトが同じレベルをロードする）
-2. **1つの16ビットポインタテーブル**（high/lowの2テーブルではなく）
-3. **4つのディスクファイル**：ROMがFDS用に分割された：
-   - ファイル1：ワールド1-4
-   - ファイル2：ワールド5-8
-   - ファイル3：ワールド9 + サウンドエンジン
-   - ファイル4：ワールドA-D（完全に異なるポインタテーブル）
-4. **同じLevel ID = 4つの可能なレベル**（ロードされたファイルによる）
-5. **テニスグリッチなし**：コンティニューオプション（ゲームオーバー後に同じワールドを続ける）がワームスタートを不要にし、ワールド > 9の場合**即座にリセット**する
-6. **新しいオブジェクト**：毒キノコ、不可視ブロック、不可視ファイアフラワーブロック、逆さまパイプ、風 -- だが既存リストの途中に挿入 → SMB1との**後方互換性なし**
-7. **ピラニアプラントがワールド4以降常に赤**、**スプリングボードがワールド2/B/3/C/7で緑のみ**
+1. **タイルやスプライト同順**：Frankenstein面なし（無効IDでもタイルとスプライトは同じ面を読み込む）
+2. **2つの分離high/lowテーブルじゃなく単一16ビットポインタテーブル1つ**
+3. **4ディスクファイル**：FDS用にROM分割した。
+   - ファイル1：worlds 1-4
+   - ファイル2：worlds 5-8
+   - ファイル3：world 9と音エンジン
+   - ファイル4：worlds A-D（完全違うポインタテーブル）
+4. **同じLevel IDは4面可能**だ。読み込んだファイルによる
+5. **Tennisグリッチなし**：continue選択肢（ゲームオーバー後同じワールドから続ける）がウォームスタートを無用にする。ゲームはworld 9超で**即リセット**する
+6. **新物**：毒キノコ、透明ブロック、透明ファイアフラワー、逆さ土管、風。でも既存一覧の真ん中に挿入 → SMB1との**後方非互換**
+7. world 4以降**Piranha Plantはつねに赤**、**緑バネ**はworlds 2やBや3やCや7だけ
 
-### Super Mario All-Stars（SNES）
+### スーパーマリオコレクション（SNES）
 
-同じ6502ルーチンによる直接移植（SNESは互換モードでNESコードを実行）：
+同じ6502ルーチンの直接移植だ（SNESは互換モードでNESコード実行）。
 
-- **ワープゾーン修正**：Minus Worldなし（テキストの前に左のパイプに入ると正しいワールドに到着）
-- **フリーズ**：ほとんどのグリッチレベルがクラッシュ（ID $6Aと9-1を除く）
-- **キャッスルオブジェクト追加**：よりユニークに
-- **しかし**：**4-2 wrong warp**はまだ機能する（パッチされていない！）
+- **ワープ zone 修正**：Minus Worldなし（テキスト前に左土管に入れば正しいワールド）
+- **クラッシュ**：大半グリッチ面がクラッシュする（ID $6Aと9-1除く）
+- **城物追加**：より固有描画
+- **でも**：**4-2 wrong warpはまだ動く**（直してない！）
 
-### 4-2 wrong warp：オブジェクト配置のバグ
+### 4-2 wrong warp：物配置バグ
 
-4-2には2つのパイプトランジションオブジェクトがある：蔦（ワープゾーン）とパイプ（コインキャッシュルーム）。最初のトランジションオブジェクト（蔦のもの）は、蔦が画面に出現する**はるか前に**配置されている。2番目（パイプ）はレベル内で**遅すぎる**位置に配置されている。
+4-2には土管遷移物が2つある。ツル（warp zone）と土管（coin cash部屋）だ。最初の遷移物（ツルの方）はツルが画面に出る**ずっと前**に置かれる。2つ目（土管の方）は面内**遅すぎる**ところに置かれる。
 
 ```asm
-; Timing des transitions dans 4-2 :
-; Objet transition 1 (vigne → warp zone) : placé 3 écrans avant la vigne
-; Objet transition 2 (tuyau → coin cash) : placé 1 écran après le tuyau
+; 4-2の遷移タイミング：
+; 遷移物1（ツル → warp zone）：ツルの3画面前に配置
+; 遷移物2（土管 → coin cash）：土管の1画面後に配置
 ;
-; Normalement le premier objet est désactivé avant que Mario
-; n'atteigne le tuyau. Mais si Mario va vite (ou utilise
-; le raccourci du bloc B+right), la transition de la vigne
-; est toujours active quand il touche le tuyau !
-; → Le jeu charge la warp zone au lieu du coin cash.
+; 普通は最初の物がマリオ土管到着前に無効化される。
+; でもマリオが速い（かB+右ブロック近道を使う）と、ツルの
+; 遷移は土管触ってもまだ有効だ！
+; → ゲームはcoin cashじゃなくwarp zoneを読み込む。
 ;
-; Si l'objet avait été placé juste après la vigne mais avant
-; le tuyau, le bug n'existerait pas.
+; 物がツル直後で土管前に置かれてたら、バグは存在しない。
 ```
 
-### ループレベル
+### loop 面
 
-ループ（8-4、7-4）はどう機能するか？ レベルにはハードコードされたスクリーン番号とY位置を持つ**チェックポイント**がある：
+loop（8-4、7-4）はどう動くのか。面は**チェックポイント**を持つ。画面番号とハードコードY位置付きだ。
 
 ```asm
-; Checkpoint : {screen_number, vertical_position}
-; Si Mario passe ce checkpoint à la bonne hauteur → niveau continue
-; Sinon → warp back de 4 écrans (64 blocks)
+; チェックポイント：{screen_number, vertical_position}
+; マリオが正しい高さでこのチェックポイントを通る → 面続く
+; そうじゃない → 4画面戻しワープ（64ブロック）
 ;
-; Pour faire une boucle infinie : vertical_position = $F0
-; (en dessous du bas de l'écran) → impossible de valider.
+; 無限ループ作り：vertical_position = $F0
+; （画面下の下）→ 検証不能だ。
 ;
-; Les checkpoints sont simples (un seul flag) sauf pour world 7
-; qui utilise des triplets (3 flags, il faut en échouer au moins 1)
+; チェックポイントは単純（フラグ1つ）。world 7除く
+; world 7は三つ組（3フラグ、1つ以上失敗が必要）
 ;
-; Le warp back est rude : offset de tile data réglé à une valeur
-; hardcodée, offset de sprite data remis à 0. Les ennemis présents
-; sont déchargés instantanément → les firebars disparaissent.
+; 戻しワープは荒い：タイルデータ offset はハードコード値、
+; スプライトデータ offset は0に戻る。いる敵は
+; 即読み込み解除 → firebar消える。
 ```
 
-## フォーマットを変え、コードは変えない
+## 形式を変える、コードじゃない
 
-このアーキテクチャの最も興味深い教訓の1つは、SMB1の開発者が6502レンダリングコードに触れることなく、非常に表現力豊かなレベルシステムを構築したことだ。レベル間のすべてのバリエーションは**データ**（ポインタ、オブジェクト、スプライト、フロアパターン）から来ており、コードではない。
+このアーキテクチャのいちばん魅惑的な教訓の1つは、SMB1開発者が6502レンダーコードに触れずとても表現豊かな面制を作れたことだ。面間変動は全部**データ**から来る（ポインタ、物、スプライト、床模様）。コードからじゃない。
 
-256のグリッチワールドが存在するのは、**ポインタテーブルが128エントリ × 4タイプに Sized**されており、ゲームが読み取る値を決してバリデーションしないからだ。ポインタがRAMに落ちると、ゲームはMarioのレジスタをタイルとして解釈する。ポインタがサウンドデータに落ちると、ゲームは音楽をレベルデザインとして再生する。そしてジャンプテーブルがオーバーフローすると、ゲームはクラッシュまで何でも実行する。
+256グリッチワールドがあるのは、**ポインタテーブルが128エントリ×4種別に寸法取り**されてて、ゲームが読む値を検証しないからだ。ポインタがRAMに落ちると、ゲームはマリオレジスタをタイルとして解釈する。ポインタが音データに落ちると、ゲームは音楽を面設計として遊ぶ。ジャンプテーブルが overflow すると、ゲームはクラッシュまで何でも実行する。
 
-![More Super Mario Bros. Mechanics Explained -- 4本目の動画](/images/smb1-glitch-levels/yt-mechanics.jpg)
+![More Super Mario Bros. Mechanics Explained、4つ目の動画](/images/smb1-glitch-levels/yt-mechanics.jpg)
 
-## ここから学べること
+## 全部から学べること
 
-1. **タイル/スプライトの分離**：2レイヤーの完全な独立、異なる保存順序がユニークなFrankensteinレベルを生む
-2. **RLE圧縮 + オブジェクトシステム**：レベルはビットマップではなく配置されたオブジェクトのリスト、床にはフロアパターン
-3. **3スロットキュー**：ハードウェア（とレベルデザイン）の厳格な制限
-4. **バリデーションなし**：ゲームはポインタとジャンプテーブルを信頼し、プレイ可能なグリッチまたはクラッシュを生む
-5. **最大256バイト**：6502のYレジスタの制限により、進みすぎるとデータが繰り返される
-6. **ワームスタート／コールドスタート**：「続ける」システムがテニスカートリッジ交換 → Marioへの扉を開いた
+1. **タイルやスプライト分離**：2層の完全独立。違う保存順序が固有Frankenstein面を作る
+2. **RLE圧縮と物制**：面はビットマップじゃなく配置物一覧だ。床は床模様でね
+3. **3枠待ち行列**：ハード（と面設計）の厳密上限だ
+4. **ポインタ完全信用**：ゲームはポインタとジャンプテーブルを信用する。遊べるグリッチかクラッシュかを出す
+5. **最大256バイト**：6502 Yレジスタ上限。遠く行きすぎるとデータ繰り返す
+6. **ウォームスタートやコールドスタート**： Tennis → Mario への道を開いた「続ける」システムだ
 
-最も美しいのは、これらすべてが40KBに収まる6502コードだ。抽象レイヤーなし、メモリアクセスバリデーションなし、例外ハンドラなし。ポインタが壊れていたら、ゲームはクラッシュする。そしてクラッシュは、グリッチワールドと呼ばれる。
+いちばん美しいのは、全部40KBに収まる6502コードってことだ。コードはハードと直接話して、全メモリアクセスを完全信用する。ポインタが腐ってたらゲームはクラッシュする。クラッシュをグリッチワールドって呼ぶんだ。
 
-## 覚えるべき3つのこと
+## 覚えるべき3つ
 
-1. **グリッチワールドは場違いに落ちたポインタだ** -- ゲームには128ID × 4エリアタイプがあるが、ユニークレベルは34のみ。ワールド番号が（テニスや壁抜けによって）破損すると、別のレベル用に設計されたポインタがロードされ、512の組み合わせが予測不可能な結果を生む。
+1. **グリッチワールドは落ちの悪いポインタだ**。ゲームは zone 種別4つにID 128個だが、固有面は34だけだ。ワールド番号が破損すると（Tennisか壁抜けで）、ゲームは別面用のポインタを読み込む。512可能組み合わせが予測不能結果を出す。
 
-2. **Minus Worldはワープバグと破損の組み合わせだ** -- 1-2の左パイプがテキスト表示前にアクティブ化されると、ワールド36（0x24）がロードされる。このワールドはLevel ID $01（2-2の水）を指し、flagpoleのないレベルだ。そしてワールド36にはパイプトランジションがないため、レベルは無限にループする。検証の欠如がこのアイコンを生んだ。
+2. **Minus Worldはワープバグと破損の組み合わせだ**。1-2の左土管は、テキスト前に起動すればworld 36 (0x24)を読み込む。このworldはLevel ID $01（2-2の水）を指す。flagpoleなし面だ。world 36用土管遷移がないから、面は無限 loop する。確認欠落が icon を作る。
 
-3. **テニス → Mario、OoT → Paper Marioの15年前** -- NESのRAMはコンデンサとSMB1のワームスタート／コールドスタートシステムのおかげでカートリッジ交換を生き残る。テニスの歩数カウンター（歩く音を再生しながらRAMバイトをインクリメントする）がワールド番号のアドレスにちょうど落ちる。トップスコアの桁が0のまま、バイト$A5が無傷、ゲームがワームスタートを検出する必要がある -- テニスでしか機能しなかった完璧な偶発的な組み合わせだ。
+3. **Tennis → MarioはOoT → Paper Marioの15年前だ**。NESのRAMはコンデンサとSMB1のウォームスタートやコールドスタート制のおかげでカート交換を生き延びる。Tennisの歩数カウンタ（歩音鳴らしてRAMバイト増やす）はワールド番号アドレスにぴったり落ちる。トップスコア桁が0のままで、$A5バイト無事で、ゲームがウォームスタート検出することが要る。Tennisでしか動かなかった完全な偶然の一致だ。
 
-[Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained)の元動画はとんでもない労力の産物だ -- 6502の逆アセンブル、すべてのレベルの自動マップ、カートリッジ交換とワームスタートの説明。シリーズを見ていなかったら見ろ。短いし、毎分が密集している。
+[Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained)の元動画は蟻の仕事だ。6502逆アセンブルへの詳細水準、全自動マップ、カート交換とウォームスタートの解説。シリーズ見てないなら見て。短いし各分が濃い。
 
-マップのソースコードは[rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html)で利用可能で、SMB1の完全な逆アセンブルは多数のリポジトリでオープンソースになっている。40年前、日本のプログラマーたちがユニットテストゼロ、バグトラッカーゼロの6502でこのレベルシステムを書き、今日でも彼らのコードを開くと新しいことを学べる。
+面ソースコードは[rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html)で出てる。完全SMB1逆アセンブルは多くのリポジトリでオープンソースだ。40年前、日本人プログラマーは単体テストゼロとバグ追跡ゼロでこの面制を6502で書いた。今日もコード開けて最適化技術を学び続けてる。

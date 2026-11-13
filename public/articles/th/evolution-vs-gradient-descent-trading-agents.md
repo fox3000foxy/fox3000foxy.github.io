@@ -4,9 +4,8 @@ description: "วิธีที่ฉันแทนที่การฝึก
 date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
-lang: "th"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "JVTVyWiDLVNEUb2QM5OnJlluc+9nE4LNP23BQzvueUDT56tSLOcO2rzYlNgw5Xv/Phun1ipzG0tWir/a2O1clA=="
+author_sig: "0aj8d/bxfDl5R74erj9EHKuREzvodB+WgVmrRTUdIbR2du8NelRBS4802iU2ljfqqhiyo/Z1Vht/DhXtfCIkTw=="
 ---
 
 ## ปัญหาของเกรเดียนต์ดีเซนต์เพียงอย่างเดียว

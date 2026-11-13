@@ -1,363 +1,375 @@
 ---
-title: Minecraft Pathfinding-Logik und ihre Anwendungen
-description: Wie A*, Block-Malus und POI-Mechaniken es dir ermöglichen,
-  Mob-Bewegungen zu kontrollieren, vorherzusagen und auszunutzen -- von
-  drahtlosem Redstone bis zu optimierten Farmen.
+title: Minecraft-Pathfinding-Logik und ihre Anwendungen
+description: Wie A*-Algorithmus, Block-Mali und POI es erlauben,
+  Mob-Bewegung zu kontrollieren, vorherzusagen und auszunutzen, von drahtloser Redstone
+  bis zu optimierten Farmen.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "5GBDg7Aeuu1R1DRayCllmgg/BgT0NLDZJLkex3/pC0ap95LXBoAlE7MwrgQS6C2c3OIiheig0Du+eSHJx+f6NA=="
+author_sig: "aetU6RkoZUpR9X2nHttvCWrJjAdQp3qFWLbnXTfMa2LbEzFneBr8o1cUSY94kgFpkA65QnRs5jFiifsI4ArTUA=="
 ---
 
 ## Einleitung
 
-Ich hab Stunden damit verbracht, Schafen beim Rennen gegen Wände zuzuschauen.
+Ich habe Stunden damit verbracht, Schafen zuzuschauen, wie sie gegen Mauern rennen.
 
-Beste Investition meines Lebens xD
+Und ehrlich? Die beste Investition meines Lebens.
 
-Je mehr du dir diese Mobs anschaust, desto mehr merkst du: Nichts an ihrer Bewegung ist zufällig. Jeder Schritt ist programmiert, vorhersagbar, und vor allem -- ausnutzbar. Ich hab den Minecraft-Sourcecode durchgewühlt um genau zu verstehen, wie Pathfinding funktioniert, und was ich gefunden hab ist, dass du Mobs buchstäblich mit Gedanken kontrollieren kannst. So à la zwing sie dahin zu gehen, wo DU willst, nicht wo der Zufall entscheidet.
+Denn je mehr du diese Mobs anschaust, desto mehr realisierst du, dass nichts zufällig ist. Jede Bewegung ist codiert, vorhersehbar und vor allem komplett kaputtbar. Ich bin am Ende in den Minecraft-Quellcode eingetaucht, um exakt zu kapieren, wie Pathfinding funktioniert, und was ich entdeckt habe, ist, dass du die Mobs buchstäblich mind-controlen kannst. So in der Art, sie zwingen, dahin zu gehen, wo DU willst, nicht wohin der Zufall entscheidet.
 
-Dieser Guide ist alles, was ich beim Graben gefunden hab. Das KI-System, der A*-Algorithmus, die versteckten Malice-Werte, die Exploits die du im Überlebensmodus ziehen kannst. Hol deine Spitzhacke.
+Dieser Guide ist alles, was ich beim Wühlen gelernt habe. Die KI, der A*-Algorithmus, die versteckten Mali, die Exploits, die du in Survival zünden kannst. Mach deine Spitzhacke bereit.
 
 ---
 
-## Wie Mob-KI funktioniert (Spoiler: sie ist irgendwie dumm)
+## Wie die Mob-KI funktioniert (Spoiler: sie ist dämlich)
 
-### Goals
+### Die Goals
 
-Jeder Mob hat eine Liste von *Goals*. Dinge, die er TUN KANN, und wie sehr er sie TUN WILL. Niedrigere Zahl = höhere Priorität. Wie eine TODO-Liste aus der Hölle.
+Jeder Mob hat *Goals*. Das ist eine Liste von Aktionen, die er machen KANN, und wie sehr er LUST darauf hat. Je kleiner die Zahl, desto prioritärer, wie eine Todo-Liste in Chaos-Version.
 
 ```java
 protected void registerGoals() {
-    this.goalSelector.addGoal(4, new Zombie.ZombieAttackTurtleEggGoal(this, 1.0, 3));
-    this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-    this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-    this.addBehaviourGoals();
+   this.goalSelector.addGoal(4, new Zombie.ZombieAttackTurtleEggGoal(this, 1.0, 3));
+   this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+   this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+   this.addBehaviourGoals();
 }
 ```
 
-Schon mal gesehen, wie ein Zombie ein Schildkröten-Ei ignoriert um dich zu jagen? Daher: `ZombieAttackTurtleEggGoal` hat Priorität 4, während `ZombieAttackGoal` (das "fress-dein-Gesicht"-Goal) Priorität 2 hat. Zombies bevorzugen Snacks mit Puls.
+Hast du schon mal einen Zombie gesehen, der ein Schildkrötenei ignoriert, um dich zu jagen? Darum: `ZombieAttackTurtleEggGoal` hat Priorität 4, während `ZombieAttackGoal` (das Goal, das ihm sagt, dir die Fresse zu fressen) auf Priorität 2 liegt.
 
-Das Goal, das uns eigentlich interessiert, ist `WaterAvoidingRandomStrollGoal`, Priorität 7. Das "ich hab nix Besseres zu tun, also lauf ich rum"-Goal. Hier fängt der Spaß an.
+Ja, ein Zombie frisst dich lieber, als ein Ei zu zerbrechen. Schön ist die Liebe.
 
-### Bewegung (oder "wie ein Random Walk eine 1-zu-60-Chance pro Tick hat")
+Das Goal, das uns wirklich interessiert, ist `WaterAvoidingRandomStrollGoal`, Priorität 7. Das "ich habe nichts zu tun, also laufe ich planlos"-Goal. Dort wird alles interessant.
 
-Jeden Tick (alle 0,05 Sekunden) ruft das Spiel `canUse()` auf, um zu checken ob der Mob überhaupt Bock hat, sich zu bewegen. 1 zu 60 Chance pro Tick. Unfassbar ineffizientes Design -- und ich liebe es.
+### Die Bewegung (oder "wie ein Random March 1 zu 60 Chance hat")
+
+Jeden Tick (alle 0.05 Sekunden) ruft das Spiel `canUse()` auf, um zu sehen, ob der Mob sich zu bewegen geruht. 1 zu 60 Chance bei jedem Tick. Komplett dämliches Design, und ich liebe es.
 
 ```java
 public boolean canUse() {
-    if (this.mob.hasControllingPassenger()) {
-        return false;
-    } else {
-        if (!this.forceTrigger) {
-            if (this.checkNoActionTime && this.mob.getNoActionTime() >= 100) {
-                return false;
-            }
-            if (this.mob.getRandom().nextInt(reducedTickDelay(this.interval)) != 0) {
-                return false;
-            }
-        }
-        Vec3 $$0 = this.getPosition();
-        if ($$0 == null) {
+   if (this.mob.hasControllingPassenger()) {
+      return false;
+   } else {
+      if (!this.forceTrigger) {
+         if (this.checkNoActionTime && this.mob.getNoActionTime() >= 100) {
             return false;
-        } else {
-            this.wantedX = $$0.x;
-            this.wantedY = $$0.y;
-            this.wantedZ = $$0.z;
-            this.forceTrigger = false;
-            return true;
-        }
-    }
+         }
+         if (this.mob.getRandom().nextInt(reducedTickDelay(this.interval)) != 0) {
+            return false;
+         }
+      }
+      Vec3 $$0 = this.getPosition();
+      if ($$0 == null) {
+         return false;
+      } else {
+         this.wantedX = $$0.x;
+         this.wantedY = $$0.y;
+         this.wantedZ = $$0.z;
+         this.forceTrigger = false;
+         return true;
+      }
+   }
 }
 ```
 
-Also zusammengefasst: wenn du auf dem Mob reitest -> nein, wenn der Mob 5 Sekunden nix getan hat -> nein, wenn RNG nein sagt -> nein. Das Spiel will REALLY nicht, dass Mobs sich bewegen.
+Also zusammengefasst: Wenn du auf dem Mob reitest -> nein, wenn der Mob seit 5 Sekunden nichts getan hat -> nein, wenn der Zufall nein sagt -> nein. Das Spiel will WIRKLICH nicht, dass der Mob sich bewegt.
 
-Aber wenn er sich doch bewegt, übernimmt `getPosition()`:
+Aber wenn er sich bewegt, übernimmt `getPosition()`:
 
 ```java
 protected Vec3 getPosition() {
-    if (this.mob.isInWater()) {
-        Vec3 $$0 = LandRandomPos.getPos(this.mob, 15, 7);
-        return $$0 == null ? super.getPosition() : $$0;
-    } else {
-        return this.mob.getRandom().nextFloat() >= this.probability
-            ? LandRandomPos.getPos(this.mob, 10, 7)
-            : super.getPosition();
-    }
+   if (this.mob.isInWater()) {
+      Vec3 $$0 = LandRandomPos.getPos(this.mob, 15, 7);
+      return $$0 == null ? super.getPosition() : $$0;
+   } else {
+      return this.mob.getRandom().nextFloat() >= this.probability
+         ? LandRandomPos.getPos(this.mob, 10, 7)
+         : super.getPosition();
+   }
 }
 ```
 
-Die zwei Zahlen am Ende? XZ-Radius und Y-Radius. Im Wasser sucht der Mob weiter (15 vs 10). Wenn er kein Land findet, fallbackt er auf `super.getPosition()` -- das Wasser akzeptiert. **Ergebnis: Mobs WOLLEN aus dem Wasser raus.** Deshalb schwimmen deine Tiere wie Verrückte Richtung Ufer.
+Schau dir diese zwei Zahlen am Ende an: Das ist der XZ-Radius und der Y-Radius. Im Wasser sucht der Mob weiter (15 statt 10). Wenn er kein Land findet, fällt er auf `super.getPosition()` zurück, das Wasser akzeptiert. **Ergebnis: Mobs WOLLEN aus dem Wasser raus.** Deshalb schwimmen deine Tiere wie Irre zum Ufer.
 
-Lustiges Detail: es gibt buchstäblich eine 0,1%-Chance, dass der Mob `super.getPosition()` statt `LandRandomPos` nimmt. Eins zu tausend. Mojang halt xD
+Kleines knackiges Detail: Es gibt buchstäblich 0.1% Chance, dass der Mob `super.getPosition()` statt `LandRandomPos` nimmt. Eins zu tausend. Typisch Mojang.
 
-### LandRandomPos: die Optimierung, die alles zerstört
+### LandRandomPos: die kaputte Optimierung, die alles ändert
 
-Das ist MEIN Lieblingsschritt. Das schönste technische Chaos, das Pathfinding ausnutzbar macht.
+Das ist MEIN Lieblingsschritt. Die schönste technische Dummheit, die Pathfinding ausnutzbar macht.
 
 ```java
 public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<BlockPos> $$3) {
-    boolean $$4 = GoalUtils.mobRestricted($$0, $$1);
-    return RandomPos.generateRandomPos(() -> {
-        BlockPos $$4xx = RandomPos.generateRandomDirection($$0.getRandom(), $$1, $$2);
-        BlockPos $$5 = generateRandomPosTowardDirection($$0, $$1, $$4, $$4xx);
-        return $$5 == null ? null : movePosUpOutOfSolid($$0, $$5);
-    }, $$3);
+   boolean $$4 = GoalUtils.mobRestricted($$0, $$1);
+   return RandomPos.generateRandomPos(() -> {
+      BlockPos $$4xx = RandomPos.generateRandomDirection($$0.getRandom(), $$1, $$2);
+      BlockPos $$5 = generateRandomPosTowardDirection($$0, $$1, $$4, $$4xx);
+      return $$5 == null ? null : movePosUpOutOfSolid($$0, $$5);
+   }, $$3);
 }
 ```
 
-`movePosUpOutOfSolid`. Der Name sagt alles. Wenn die gewählte Position in einem soliden Block ist, schiebt das Spiel sie nach oben, bis sie in der Luft ist.
+`movePosUpOutOfSolid`. Der Name sagt alles. Wenn die gewählte Position in einem soliden Block liegt, schiebt das Spiel sie nach oben, bis sie in der Luft ist.
 
-Das ist eine Optimierung: anstatt Zeit damit zu verschwenden, unterirdische Positionen zu überspringen, werden sie einfach an die Oberfläche geschoben. Klug? Ja. Aber es erzeugt einen MASSIVEN Bias: **Mobs bevorzugen Höhenlagen**.
+Das ist eine Optimierung: Statt Zeit zu verlieren, Positionen unter der Erde zu ignorieren, hebt das Spiel sie an die Oberfläche. Clever? Ja. Aber es erzeugt einen wahnsinnigen Bias: **Mobs bevorzugen Höhen**.
 
-Denk mal drüber nach. Viele Blöcke unter der Erde, das Spiel generiert 10 zufällige Positionen. Die in Blöcken werden nach oben geschoben. Dichte Gebiete (unter einem Hügel) erzeugen mehr gültige Positionen als hohle Gebiete. Ergebnis: der Mob läuft statistisch gesehen öfter zum Hügel.
+Stell dir vor. Du hast viele Blöcke unter der Oberfläche, das Spiel generiert 10 Zufallspositionen. Die in Blöcken werden nach oben geschoben. Dichte Zonen (unter einem Hügel) produzieren mehr gültige Positionen als hohle Zonen. Ergebnis: Der Mob geht statistisch öfter zum Hügel.
 
-Vertrau mir, wir werden das gleich komplett ausnutzen.
+Vertrau mir, das brechen wir in 2 Minuten.
 
-### Die Auswahl: bester Block gewinnt
+### Die Auswahl: der Wettbewerb um den besten Block
 
-10 Positionen, ein Gewinner, ein Score-Contest:
+10 Positionen, ein einziger Gewinner, ein Score-Wettbewerb:
 
 ```java
 public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<BlockPos> $$1) {
-    double $$2 = Double.NEGATIVE_INFINITY;
-    BlockPos $$3 = null;
-    for(int $$4 = 0; $$4 < 10; ++$$4) {
-        BlockPos $$5 = (BlockPos)$$0.get();
-        if ($$5 != null) {
-            double $$6 = $$1.applyAsDouble($$5);
-            if ($$6 > $$2) {
-                $$2 = $$6;
-                $$3 = $$5;
-            }
-        }
-    }
-    return $$3 != null ? Vec3.atBottomCenterOf($$3) : null;
+   double $$2 = Double.NEGATIVE_INFINITY;
+   BlockPos $$3 = null;
+   for(int $$4 = 0; $$4 < 10; ++$$4) {
+      BlockPos $$5 = (BlockPos)$$0.get();
+      if ($$5 != null) {
+         double $$6 = $$1.applyAsDouble($$5);
+         if ($$6 > $$2) {
+            $$2 = $$6;
+            $$3 = $$5;
+         }
+      }
+   }
+   return $$3 != null ? Vec3.atBottomCenterOf($$3) : null;
 }
 ```
 
-Die Position mit dem höchsten Score GEWINNT. Und wenn du die Bewertungskriterien kennst, kannst du DEINE Position gewinnen lassen. Das ist wie eine Wahl manipulieren.
+Die Position mit dem besten Score GEWINNT. Und wenn man die Score-Kriterien kennt, kann man die gewünschte Position gewinnen lassen. Wie eine Wahl fälschen.
 
 ---
 
-## Mob-Präferenzen (oder "warum deine Kuh über die Straße ging")
+## Die Mob-Vorlieben (oder "warum deine Kuh die Straße überquert")
 
-Jeder Mob hat andere Vorlieben. Und das ändert alles.
+Jeder Mob hat andere Geschmäcker. Und das ändert alles.
 
-| Mob | Liebt |
+| Mob | Mag das |
 | --- | --- |
-| **Tiere** (Kühe, Schafe, Schweine) | Grasblöcke, Licht |
-| **Monster** (Zombies, Skelette) | Dunkelheit (Hipster) |
-| **Schildkröten** | Wasser > Sand > Licht |
-| **Hoglin** | `crimson_nylium`; hasst `warped_fungus` |
-| **Lohen** | Lava und NICHTS ANDERES |
-| **Silberfischchen** | Infizierbare Blöcke |
-| **Wächter** | Wasser + Licht (Snobs) |
-| **Mooshrooms** | Myzel + Licht |
-| **Bienen** | Luft. Ja, die bevorzugen LUFT. |
+| **Tiere** (Kühe, Schafe, Schweine) | Gras und Licht (Hipster) |
+| **Monster** (Zombies, Skelette) | Dunkel (Edgelords) |
+| **Schildkröten** | Wasser, sonst Sand, sonst Licht |
+| **Hoglins** | `crimson_nylium`; hassen `warped_fungus` |
+| **Strider** | Nur Lava. NICHTS anderes. |
+| **Silverfish** | Befallbare Blöcke (logisch) |
+| **Guardians** | Wasser + Licht (die Snobs) |
+| **Mooshrooms** | Myzel + Licht (Pilze) |
+| **Bienen** | Luft. Ja, sie bevorzugen LUFT. |
 
 ```java
-// Animal: runtergucken, wenn Gras -> max Score
+// Tier : schaut nach unten, wenn Gras, Max-Score
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
-    return $$1.getBlockState($$0.below()).is(Blocks.GRASS_BLOCK) ? 10.0F : $$1.getPathfindingCostFromLightLevels($$0);
+   return $$1.getBlockState($$0.below()).is(Blocks.GRASS_BLOCK) ? 10.0F : $$1.getPathfindingCostFromLightLevels($$0);
 }
 
-// Monster: buchstäblich das Gegenteil
+// Monster : genau umgekehrt
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
-    return -$$1.getPathfindingCostFromLightLevels($$0);
+   return -$$1.getPathfindingCostFromLightLevels($$0);
 }
 ```
 
-Monster sind praktisch "wenn's hell ist, negativ-Score, ich bin raus." Die kriegen einen KRAMPF bei Licht xD
+So Monster sind buchstäblich "wenn beleuchtet, negativer Score, ich gehe woanders hin". Sie machen bei Licht DAS GESICHT.
 
-Du kannst also -- buchstäblich -- Tiere mit Gras und Licht lenken, und Monster mit Dunkelheit. Es ist dumm und genial zugleich.
+Du kannst also buchstäblich deine Tiere mit Gras und Licht führen und deine Monster mit Dunkel. Dämlich und genial zugleich.
 
 ---
 
-## A* in Minecraft (die geheime Formel)
+## Der A*-Algorithmus in Minecraft (die Geheimformel)
 
-Minecraft benutzt A* (A-Star) fürs Pathfinding. Aber Mojang hat ihren eigenen Dreh eingebaut:
+Minecraft nutzt den A*-Algorithmus (A-star) für Pathfinding. Aber Mojang hat seine Note draufgesetzt:
 
 ```
-f(n) = g(n) + 1,5 × h(n)
+f(n) = g(n) + 1.5 × h(n)
 ```
 
-- **g(n)** = bereits zurückgelegte Distanz (1 pro Block, ~1,41 diagonal)
-- **h(n)** = Luftlinien-Distanz zum Ziel
-- **1,5** = weil Mojang gern Dinge leicht kaputt macht
+- **g(n)** = der schon gelaufene Weg (1 pro Block, ~1.41 diagonal)
+- **h(n)** = die Luftliniendistanz
+- **1.5** = weil Mojang etwas kaputte Werte mag
 
-Normales A* benutzt `f(n) = g(n) + h(n)`. MOJANG HAT EINEN 1,5-MULTIPLIKATOR EINGEBAUT. Warum? Damit der Algorithmus schneller aufs Ziel zusteuert und weniger Such-Äste beschneidet. Ergebnis: der Pfad ist "gut genug" aber nicht immer optimal. Es ist ein betrunkenes A*.
+Normalerweise nutzt A* `f(n) = g(n) + h(n)`. MOJANG HAT EINEN 1.5-FAKTOR HINZUGEFÜGT. Warum? Damit der Algo schneller zum Ziel geht und weniger Suchzweige schneidet. Ergebnis: Der gefundene Weg ist "gut", aber nicht immer der beste. Ein leicht besoffenes A*.
 
 ```mermaid
 flowchart LR
-    A[Startknoten] --> B{Nachbarn zu\nbewerten?}
-    B -->|Ja| C[Berechne f = g + 1,5×h\nfür jeden Nachbarn]
-    C --> D[Nachbarn mit\nkleinstem f wählen]
-    D --> E{Ziel\nerreicht?}
-    E -->|Nein| B
-    E -->|Ja| F[Pfad gefunden!]
-    B -->|Nein| G[Kein Pfad\nmöglich]
+    A[Startknoten] --> B{Nachbarn\nzu evaluieren ?}
+    B -->|Oui| C[f = g + 1.5×h berechnen\nfür jeden Nachbarn]
+    C --> D[Nachbarn\nmit kleinstem f wählen]
+    D --> E{Ziel\nerreicht ?}
+    E -->|Non| B
+    E -->|Oui| F[Weg gefunden !]
+    B -->|Non| G[Kein Weg\nmöglich]
     
     style F color:#4caf50
     style G color:#f44336
 ```
 
-Wichtige Einschränkung: **ein Mob kann nur 16 Blöcke weit pathen** (seine *Follow Range*). Wenn das Ziel zu weit weg ist, nimmt es den nächstgelegenen erreichbaren Block. Das heißt, du kannst einen Monolithen außerhalb der Reichweite bauen und der Mob patht zum nächstgelegenen Block, der ihn näher bringt -- was seine Bewegung komplett vorhersagbar macht.
+Wichtiges Detail: **Ein Mob kann nur über 16 Blöcke pathfinden** (seine *Follow Range*). Wenn das Ziel zu weit ist, wählt er den nächsten Block, den er erreichen KANN. Das heißt, du kannst einen Monolithen außerhalb der Reichweite erschaffen, und der Mob pathfindet zum nächsten Block, der ihn dem Monolithen näher bringt, was seine Bewegungen komplett vorhersehbar macht.
 
-### Die zwei Exploits die das Spiel zerstören
+### Die zwei Exploits, die das Spiel brechen
 
-#### 1. Block-Updates erzwingen Neuberechnung
+#### 1. Block-Updates = erzwungene Neuberechnung
 
 ```java
 public boolean shouldRecomputePath(BlockPos $$0) {
-    if (this.hasDelayedRecomputation) return false;
-    if (this.path != null && !this.path.isDone() && this.path.getNodeCount() != 0) {
-        Node $$1 = this.path.getEndNode();
-        Vec3 $$2 = new Vec3(
-            ((double)$$1.x + this.mob.getX()) / 2.0,
-            ((double)$$1.y + this.mob.getY()) / 2.0,
-            ((double)$$1.z + this.mob.getZ()) / 2.0
-        );
-        return $$0.closerToCenterThan($$2, (double)(this.path.getNodeCount() - this.path.getNextNodeIndex()));
-    }
-    return false;
+   if (this.hasDelayedRecomputation) return false;
+   if (this.path != null && !this.path.isDone() && this.path.getNodeCount() != 0) {
+      Node $$1 = this.path.getEndNode();
+      Vec3 $$2 = new Vec3(
+         ((double)$$1.x + this.mob.getX()) / 2.0,
+         ((double)$$1.y + this.mob.getY()) / 2.0,
+         ((double)$$1.z + this.mob.getZ()) / 2.0
+      );
+      return $$0.closerToCenterThan($$2, (double)(this.path.getNodeCount() - this.path.getNextNodeIndex()));
+   }
+   return false;
 }
 ```
 
-Jedes Block-Update in der Nähe des Mob-Pfads erzwingt eine A*-Neuberechnung mit 1-Sekunden-Cooldown. Bau einen 1-Sekunden-Taktgeber neben einen Mob und er rechnet STÄNDIG neu. Das ist wie ein GPS das sich jede Sekunde zurücksetzt.
+Jedes Block-Update nahe dem Mobweg erzwingt eine A*-Neuberechnung mit 1-Sekunde-Cooldown. Du stellst eine 1-Sekunde-Uhr neben einen Mob, und er berechnet seinen Weg STÄNDIG neu. Das Äquivalent eines GPS, das sich jede Sekunde resettet.
 
-Und wenn du das mit 50 Mobs machst? Lag-City. RIP TPS.
+Und wenn du das mit 50 Mobs gleichzeitig machst? Lag City. RIP TPS.
 
-#### 2. Pathfinding Malice (Block-Kosten-Strafen)
+#### 2. Die Block-Mali (Pathfinding Malice)
 
-Manche Blöcke machen Mobs Angst. Buchstäblich. Jeder Block hat zugehörige Kosten, definiert durch ein Enum:
+Manche Blöcke machen Mobs Angst. Buchstäblich. Jeder Block hat assoziierte Kosten, definiert von einer Enumeration:
 
-| Block / Bedingung | Malice |
+| Block / Bedingung | Malus |
 | --- | --- |
-| **Honigblock** | +8 zum Durchlaufen |
+| **Honigblock** | +8 zu durchqueren |
 | **Pulverschnee** | Unpassierbar |
 | **Geschlossene Türen** | Unpassierbar |
-| **Feuer** | +16 durch, +8 angrenzend |
-| **Tiere & Dorfbewohner** | Feuer = -1 (HARTES NEIN) |
-| **Kaktus / Süßbeeren** | Unpassierbar; angrenzend = +8 |
-| **Wasser** | +8 durch oder angrenzend |
-| **Magma** | +8 angrenzend |
+| **Feuer** | +16 zu durchqueren, +8 zu umgehen |
+| **Tiere und Dorfbewohner** | Feuer = -1 (NOPE) |
+| **Kaktus / Süßbeere** | Unpassierbar; angrenzend = +8 |
+| **Wasser** | +8 zu durchqueren oder umgehen |
+| **Magma** | +8 zu umgehen (aua) |
 
-Tiere gehen noch weiter:
+Tiere sind noch extremer:
 
 ```java
 protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
-    super($$0, $$1);
-    this.setPathfindingMalus(PathType.DANGER_FIRE, 16.0F);
-    this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
+   super($$0, $$1);
+   this.setPathfindingMalus(PathType.DANGER_FIRE, 16.0F);
+   this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
 }
 ```
 
-DAMAGE_FIRE bei -1.0F ist buchstäblich "verboten." Ein Tier würde lieber in die Leere springen als durch Feuer zu laufen.
+DAMAGE_FIRE auf -1.0F ist buchstäblich "verboten". Ein Tier wirft sich lieber in die Leere, als durch Feuer zu gehen. Puh.
 
-### Übung: der große Pfad-Wettbewerb
+### Übung: der große Wegewettbewerb
 
-Ein Dorfbewohner wählt zwischen mehreren Pfaden:
+Stell dir einen Dorfbewohner vor, der zwischen mehreren Wegen wählen muss.
 
-- **Pfad A**: 15 Blöcke aber 6 an Wasser angrenzend (+8 jeder)
-- **Pfad B**: 18 Blöcke mit 2 Wasserblöcken (+8) + 1 wasserangrenzend (+8)
-- **Pfad C**: 14 Blöcke geradeaus... aber Feuer -> UNPASSIERBAR für Dorfbewohner
-- **Pfad D**: 16 Blöcke mit 1 magma-angrenzend (+8) + 1 honig-angrenzend (+8)
-- **Pfad E**: 25 Blöcke mit Kakteen überall (+8 überall) -> 90,82 Gesamt LOL
+- **Weg A**: 15 Blöcke aber 6 Blöcke längs Wasser (+8 jedes)
+- **Weg B**: 18 Blöcke mit 2 Wasserblöcken (+8) und 1 angrenzendem Wasserblock (+8)
+- **Weg C**: 14 Blöcke geradeaus... aber mit Feuer -> UNPASSIERBAR für einen Dorfbewohner
+- **Weg D**: 16 Blöcke mit 1 angrenzendem Magmablock (+8) + 1 angrenzendem Honigblock (+8)
+- **Weg E**: 25 Blöcke aber überall Kakteen (+8 überall) -> 90.82 Gesamtkosten
 
-Der Gewinner ist normalerweise **Pfad B**: der Umweg lohnt sich weil Wasser TEUER ist.
+Kopfrechnen:
 
-Ein Dorfbewohner ist quasi ein Taschenrechner mit Beinen xD
+- Weg A: 15 Blöcke + 6×8 für Wasser = 15 + 48 = **63** ... aber da kommt noch 1.5×Distanz dazu. Machen wir die echten Rechnungen.
+- Weg B: länger aber weniger Mali. Totalkosten = kumulierte Distanz + Mali.
+- Weg D: Magma und Honig stacken ihre Mali.
 
-### Jeder Mob wählt andere Pfade
+Der Gewinner ist oft **Weg B**: Der Umweg rentiert sich, weil Wasser TEUER ist.
 
-Ein Dorfbewohner: "Feuer? NOPE TSCHÜSS"
+Ein Dorfbewohner ist im Wesentlichen ein Kostenrechner mit Beinen.
+
+### Jeder Mob hat seine Geschmäcker
+
+Ein Dorfbewohner: "Feuer? NEIN DANKE TSCHÜSS"
 Ein Zombie: "Feuer? OK Boomer *läuft brennend durch*"
 
-Du kannst buchstäblich Highways bauen, die Dorfbewohner nehmen und Zombies nicht -- oder umgekehrt.
+Du hast buchstäblich Routen, die manche Mobs nehmen und andere nicht. Du kannst Dorfbewohner-Autobahnen bauen, wo Zombies verbrennen.
 
 ---
 
-## Dorfbewohner: das ultimative Chaos
+## Die Dorfbewohner: das ultimative Chaos
 
-Dorfbewohner sind das am meisten missverstandene Ding in Minecraft. Aber wenn du den Code einmal gelesen hast, merkst du: sie sind nur vorhersagbare Maschinen mit Bürozeiten.
+Ok, Dorfbewohner. Das am wenigsten verstandene System in ganz Minecraft. Aber sobald du den Code geknackt hast, realisierst du, dass es vorhersehbare Maschinen mit Bürozeiten sind.
 
-### Sensoren und Erinnerungen
+### Sensoren und Gedächtnisse
 
-9 Sensoren laufen alle 20 Ticks (1 Sekunde). Jeder scannt einen Radius um den Dorfbewohner und speichert das Ergebnis im Gedächtnis. Der Dorfbewohner sieht alles, erinnert sich an alles, und handelt entsprechend.
+9 Sensoren, die alle 20 Ticks laufen (1 Sekunde). Jeder scannt einen Radius um den Dorfbewohner und speichert das Ergebnis im Gedächtnis. Der Dorfbewohner sieht alles, erinnert sich an alles und handelt danach.
 
-### Aktivitätspakete
+So in der Art: "Gibt es einen Feind? Ein Item am Boden? Einen Spieler zum Reden ?" Er checkt ALLES.
 
-Das Gehirn eines Dorfbewohners ist in Aktivitätspakete unterteilt, die je nach Uhrzeit aktiv werden:
+### Die Packages (seine Tagesphasen)
 
-| Paket | Zeit | Der Dorfbewohner... |
+Das Gehirn eines Dorfbewohners sind Aktivitätspackages, die je nach Uhrzeit aktiv werden:
+
+| Package | Uhrzeit | Der Dorfbewohner... |
 | --- | --- | --- |
-| **Core** | 24/7 | Macht Türen auf, schwimmt (80% der Zeit), SAMMELT POIs |
-| **Work** | 8-15 Uhr | "Muss arbeiten" -- läuft zur Arbeitsstation |
-| **Meet** | 15-17 Uhr | "Happy Hour!" -- geht zur Glocke, sozialisiert |
-| **Rest** | 18-6 Uhr | "Schlafenszeit" -- geht ins Bett |
-| **Idle** | 6-8 Uhr, 17-18 Uhr | "Gelangweilt" -- läuft rum, vermehrt sich, springt auf Betten |
-| **Panic** | Verletzt / Feind | "RENN" -- FLIEHT |
+| **Core** | 24/7 | Öffnet Türen, schwimmt (80% der Zeit), und ERWIRBT POI |
+| **Work** | 8-15h | "Ich gehe arbeiten", läuft zu seiner Station |
+| **Meet** | 15-17h | "Apero !" , geht zur Glocke, plaudert |
+| **Rest** | 18-6h | "Muss schlafen", geht ins Bett |
+| **Idle** | 6-8h, 17-18h | "Ich gammel", spaziert, macht Babys, springt auf Betten |
+| **Panic** | Verletzung/Hostil | "HILFE", FLUCHT |
 
-**Panic** ist das einzige Paket, das ALLE anderen unterbrechen kann. Selbst wenn der Dorfbewohner schläft oder arbeitet -- wenn ein Zombie da ist, PANIK-MODUS.
+Das **Panic**-Package ist das einzige, das ALLE anderen unterbrechen kann. Selbst wenn der Dorfbewohner schläft oder arbeitet, wenn ein Zombie da ist, GENERELLE PANIK.
 
-### POI akquirieren: der Mechanismus der drahtloses Redstone ermöglicht
+### Acquire POI: das Ding, das drahtlose Redstone ermöglicht
 
 ```java
 Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithType(
-    $$0, $$11, $$8x.blockPosition(), 48, PoiManager.Occupancy.HAS_SPACE
+   $$0, $$11, $$8x.blockPosition(), 48, PoiManager.Occupancy.HAS_SPACE
 )
 ```
 
-`Acquire POI` scannt einen 48-Block-Radius nach allen gültigen Points of Interest. Es behält die 5 nächsten, checkt ob ein Pfad existiert, und akquiriert den nächstgelegenen erreichbaren. Jeder POI hat begrenzte Slots:
+`Acquire POI` scannt in 48 Block Radius alle POI (Points of Interest). Es behält die 5 nächsten, prüft, ob ein Weg existiert, und erwirbt den ersten erreichbaren.
+
+Jeder POI hat eine begrenzte Slotzahl:
 - **Arbeitsstationen**: 1 Slot
 - **Betten**: 1 Slot
 - **Glocken**: 32 Slots
 
-Das VERRÜCKTE: **der Slot wird beim AKQUIRIEREN reserviert, nicht bei Ankunft**. Ein Dorfbewohner kann einen Komposter von der anderen Seite der Karte blocken, ohne ihn jemals zu erreichen.
+Der WAHNSINNSPUNKT: **Der Slot wird zum Erwerbszeitpunkt reserviert, NICHT bei Ankunft**. Ein Dorfbewohner kann einen Komposter vom anderen Kartenende verriegeln, ohne ihn je zu erreichen.
 
-Du siehst, worauf das hinausläuft?
+Du kapierst die Power?
 
-### Drahtloses Redstone. Ja, DRAHTLOS.
+### Drahtlose Redstone. Ja, DRAHTLOS.
 
-1. Setz einen Dorfbewohner in eine Lore mit Pfad zu einem Komposter
-2. Er akquiriert den Komposter (Slot belegt, niemand sonst kann ihn nutzen)
-3. Der Dorfbewohner ist zu weit weg um zu klicken -- Knochenmehl bleibt
-4. BEWEGE diesen Dorfbewohner IRGENDWOHIN in der Welt, er behält den Slot
-5. Wenn du dein Ding aktivieren willst, TÖTE den Dorfbewohner
-6. Slot wird frei, ein anderer Dorfbewohner akquiriert den Komposter, entfernt Knochenmehl
-7. BLOCK-UPDATE -> jeder Redstone-Kreis wird aktiviert
+1. Du steckst einen Dorfbewohner in ein Minecart mit einem Weg zu einem Komposter
+2. Er erwirbt den Komposter (Slot belegt, niemand kann ihn mehr nutzen)
+3. Der Dorfbewohner ist zu weit, um drauf zu klicken, das Bone Meal bleibt
+4. Du FÄHRST diesen Dorfbewohner irgendwo in der Welt rum, er behält den Slot
+5. Wenn du dein Ding aktivieren willst, T Ö T E S T du den Dorfbewohner
+6. Der Slot wird frei, ein anderer Dorfbewohner erwirbt den Komposter, nimmt das Bone Meal raus
+7. BLOCK UPDATE -> beliebiger Redstoneschaltkreis aktiviert
 
-Du hast drahtloses Redstone erschaffen, übertragbar über die gesamte Welt, ohne dass ein Chunk auf dem Weg geladen werden muss. Koppel das mit einer Enderperlen-Stasis-Kammer und teleportiere dich von überall her, indem du einen Dorfbewohner tötest.
+Du hast buchstäblich ein drahtloses Redstonesignal erschaffen, übertragbar in der ganzen Welt, mit null Chunk Load nötig auf dem Weg. Du kannst das an eine Ender-Pearl-Stasis-Kammer hängen, dich von überall teleportieren lassen, indem du einen Dorfbewohner killst.
 
-Meine Lieblingsanwendung? Ein Kopfgeldjäger-Minispiel: mehrere Dorfbewohner mit Kompostern, der Spieler muss DEN RICHTIGEN Dorfbewohner töten um den Ausgang zu aktivieren. Komplett wtf Mechanik xD
+Meine Lieblingsnutzung? Ein "Bounty Hunter"-Minispiel: Du stellst mehrere Dorfbewohner mit Kompostern auf, der Spieler muss DEN RICHTIGEN Dorfbewohner killen, um den Ausgang zu aktivieren. Komplett wtf als Mechanik.
 
-### Der Pathfinding-Deadlock (oder "der Dorfbewohner der für immer einfriert")
+### Der Pathfinding-Deadlock (oder "der Dorfbewohner, der für immer freezt")
 
-Es gibt einen Bug zwischen `Acquire POI` (das einen Pfad sieht) und der eigentlichen Navigation (die sich weigert, ihn zu folgen). Passiert wenn der Block über einer Arbeitsstation nicht begehbar ist. Ergebnis:
+Es gibt einen ZU guten Bug zwischen `Acquire POI` (das einen Weg sieht) und der echten Navigation (die sich weigert, ihn zu nehmen). Passiert, wenn der Block über der Arbeitsstation nicht begehbar ist. Ergebnis:
 
-- Core-Paket: "Ich will den POI akquirieren"
-- Navigation: "Ich kann da nicht hingehen"
-- Ergebnis: der Dorfbewohner bleibt EINGEFROREN, für immer, im Kampf mit sich selbst.
+- Core-Package: "Ich will den POI erwerben"
+- Navigation: "Ich kann da nicht laufen"
+- Ergebnis: Der Dorfbewohner bleibt EINGEFROREN, für immer, im Kampf mit sich selbst.
 
-Buchstäblich eingefrorene Dorfbewohner, nutzbar als Dekoration oder Requisiten. Ein Rüstungsständer-Panzer? Ja. Eine Wache die sich nicht bewegt? Ja. Makaber? Vielleicht. Effektiv? Absolut xD
+Buchstäblich in Place gefrorene Dorfbewohner, nutzbar als Deko oder als "Props" in Builds. Ein Rüstungsständer-Tank? Ja. Eine Wache, die sich nicht bewegt? Ja. Makaber? Vllt. Aber effektiv.
 
 ---
 
 ## Fazit
 
-Mob-Pathfinding in Minecraft ist nicht zufällig. Es ist ein deterministisches, Score-basiertes System, vorhersagbar UND ausnutzbar.
+Mob-Pathfinding in Minecraft ist kein Zufall. Es ist ein deterministisches, score-basiertes, vorhersehbares UND kaputtbares System.
 
-**Drei Dinge zum Merken:**
+**Die drei Punkte zum Mitnehmen :**
 
-1. **Solide Blöcke drunter = Höhen-Bias** -- füll oder leere den Untergrund um Mobs zu lenken
-2. **Malice ist unterschiedlich pro Mob** -- erstelle Routen, die manche nehmen und andere nicht
-3. **POI-Slots werden auf Distanz reserviert** -- kostenloses drahtloses Redstone, Teleportation, alles dabei
+1. **Blöcke unter den Füßen = Höhenbias**: Fülle den Untergrund oder leere ihn, um Mobs zu führen
+2. **Die Mali sind je Mob verschieden**: Erstelle Routen, die manche nehmen und andere nicht
+3. **POI-Slots werden aus der Ferne reserviert**: Gratis drahtlose Redstone, Teleportation, das alles
 
-Minecrafts Sourcecode ist eine Goldgrube an unterausgenutzten Mechaniken. Ich hab Stunden damit verbracht, dekompiliertes Java zu lesen und ehrlich? Jede Zeile ist ein funktionales Easter Egg. Nur dass diese im Überlebensmodus für drahtloses Redstone mit Dorfbewohnern funktionieren. Bestes Game bestätigt xD
+Der Minecraft-Quellcode ist eine Goldmine untergenutzter Mechaniken. Ich habe Stunden damit verbracht, dekompiliertes Java zu lesen, und ehrlich? Jede Zeile ist ein funktionierendes Easter Egg. Nur dass du die in Survival nutzt, um drahtlose Redstone mit Dorfbewohnern zu machen. Bestes Spiel bestätigt.

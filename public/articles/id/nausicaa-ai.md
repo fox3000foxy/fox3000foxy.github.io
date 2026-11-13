@@ -1,57 +1,58 @@
 ---
-title: AI Konyolku untuk Nausicaa
-description: AI dengan koefisien heuristik, hyper-parameter yang berubah setiap 5
-  giliran, dan Oracle yang kabur -- menyelami otak game papan strategis.
+title: AI Jelekku untuk Nausicaa
+description: AI berkoefisien heuristik, hyper-parameter yang
+  berubah setiap 5 giliran, dan Oracle yang kabur -- menyelami otak
+  sebuah permainan papan strategis.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - gaming
   - ai
   - javascript
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "+qlBT+Ihof8WK2XQDgzubLNJrEyTBe/EW188lWldSgT8xRfWvaP1tyq+NQow3m1/qAAfdYZj02BptGwyORyXiw=="
+author_sig: "088SwROjLlU1dKow2pNKMDcL1hNKE9H/Hwd1EAYT4mqYY6Lee4cBCYqUE3S61S/RZD8gdvB9bpL8o3NJ5yXMbw=="
 ---
 
-## AI Konyolku untuk Nausicaa
+## AI jelekku untuk Nausicaa
 
-Ada proyek yang dimulai dengan "bagaimana kalau aku bikin game catur dengan mitologi?" dan berakhir dengan sesuatu yang punya AI yang memutuskan hyper-parameternya sendiri setiap 5 giliran.
+Ada proyek yang dimulai dengan "eh gimana kalau saya bikin catur dengan mitologi?" dan berakhir dengan sistem yang AI-nya memutuskan hyper-parameternya sendiri setiap 5 giliran.
 
-Nausicaa seperti itu. Game papan bergiliran di mana kamu membangun deck makhluk mitologis, mengelola mana, dan menempatkan unit di papan 10x8. Dan ada AI yang mengalami krisis kepribadian.
+Nausicaa itu begitu. Permainan papan bergiliran di mana kamu membangun dek makhluk mitologismu, mengatur manamu, menempatkan unit di papan 10x8. Dan ada AI yang mengalami krisis kepribadian.
 
-Aku menghabiskan cukup banyak waktu untuk AI ini, dan hasilnya cukup kacau xD
+Saya menghabiskan cukup banyak waktu untuk AI ini, dan hasilnya kadang masih lolos dari saya, dan itulah yang paling saya suka.
 
-## Game yang Sebenarnya
+## Permainannya secara nyata
 
-Sebelum bicara soal otak, kita perlu memahami tubuhnya:
+Sebelum bicara soal otak, harus paham badannya dulu :
 
 - Papan 10x8, zona penempatan 2 baris per pemain
-- Mana mulai dari 1, +1 per giliran, maks 6. Kamu habiskan untuk memanggil, menyerang, menggunakan kemampuan
-- Tujuan: bunuh Oracle lawan
+- Mana mulai dari 1, +1 per giliran, maks 6. Kamu belanjakan untuk memanggil, menyerang, memakai kemampuan
+- Tujuan : membunuh Oracle lawan
 
-12 unit, dengan biaya dan pola gerakan berbeda:
+12 unit, dengan biaya dan pola gerakan berbeda :
 
 | Unit | Biaya | Gerakan | HP |
 | --- | --- | --- | --- |
 | Oracle | 0 | Raja (8 arah) | 1 |
-| Goblin | 1 | Maju 3 petak | 1 |
-| Harpy | 1 | Raja (8 arah) | 1 |
-| Naiad | 1 | Diagonal | 1 |
+| Gobelin | 1 | Maju 3 petak | 1 |
+| Harpie | 1 | Raja (8 arah) | 1 |
+| Naïade | 1 | Diagonal | 1 |
 | Griffin | 2 | Lompat 2 petak | 2 |
-| Sirene | 2 | Samping | 1 |
-| Centaur | 2 | Kuda (bentuk L) | 2 |
-| Pemanah | 3 | Samping | 1 |
-| Phoenix | 3 | Diagonal (petak gelap) | 1 |
-| Shapeshifter | 4 | Tukar tempat | 1 |
-| Peramal | 4 | Tidak ada (menghasilkan mana) | 1 |
+| Sirène | 2 | Lateral | 1 |
+| Centaure | 2 | Kuda (L) | 2 |
+| Archer | 3 | Lateral | 1 |
+| Phénix | 3 | Diagonal (petak gelap) | 1 |
+| Métamorphe | 4 | Tukar tempat | 1 |
+| Voyant | 4 | Tidak ada (menghasilkan mana) | 1 |
 | Titan | 6 | Terbatas (serangan area) | 3 |
 
-Setiap unit memiliki pola serangannya sendiri. Sirene menyerang ke 4 diagonal, Pemanah jarak jauh sejauh 3 petak, Titan menghancurkan segala sesuatu di sekitarnya saat dipanggil. Singkatnya game catur dengan mitologi dan deckbuilding xD
+Setiap unit punya pola serangannya sendiri. Sirène memukul ke 4 diagonal, Archer jarak jauh 3 petak, Titan menghancurkan semua di sekitar saat dipanggil. Singkatnya, permainan catur dengan mitologi dan deckbuilding.
 
-## Bagaimana Aku Membuat CPU Berpikir
+## Cara saya membuat CPU berpikir
 
-Ide dasarnya sangat sederhana: **setiap unit musuh memiliki koefisien daya tarik**. Semakin berbahaya, semakin AI ingin mengurusinga.
+Ide dasarnya sangat sederhana : **setiap unit musuh punya koefisien daya tarik**. Makin berbahaya dia, makin ingin AI mengurusnya.
 
 ```javascript
 const UNITS_ATTRACTIVENESS = {
@@ -70,15 +71,15 @@ const UNITS_ATTRACTIVENESS = {
 };
 ```
 
-Oracle 100 -- logis, itu win condition. Titan 95 karena dia OS apa pun di sampingnya saat dipanggil. Goblin 20, itu prajurit biasa, kita tidak peduli.
+Oracle 100 -- logis, itu win condition. Titan 95 karena ia menghabisi semua di sebelahnya saat dipanggil. Gobelin 20, itu prajurit biasa, tidak peduli.
 
-Lalu untuk setiap pasangan unit (satu sekutu, satu musuh), aku hitung:
+Lalu untuk setiap pasangan unit (satu sekutu, satu musuh), saya hitung :
 
 ```
 interet = attractivite × coeff_attract / (distance × coeff_dist)
 ```
 
-Intinya: semakin berbahaya dan dekat, semakin AI ingin menghajarmu.
+Intinya : makin berbahaya dan dekat kamu, makin ingin AI menghajarmu.
 
 ```javascript
 calculateAttackCoefficient(x1, y1, x2, y2) {
@@ -88,9 +89,9 @@ calculateAttackCoefficient(x1, y1, x2, y2) {
 }
 ```
 
-### Trik Koefisien yang Berubah
+### Trik koefisien yang berubah
 
-Yang lucu adalah koefisien kepentingan **berubah secara acak setiap 5 giliran**.
+Poin pentingnya adalah koefisien kepentingan **berubah acak setiap 5 giliran**.
 
 ```javascript
 if (this.turnCount % 5 === 0) {
@@ -103,15 +104,15 @@ if (this.turnCount % 5 === 0) {
 }
 ```
 
-Sekali waktu AI akan sangat agresif (daya tarik 95, jarak 5), dia menerobos segalanya untuk membunuh Oracle-mu. Giliran berikutnya dia memprioritaskan jarak dan reposisi.
+Sekali AI jadi hiper agresif (attract 95, distance 5), ia menerobos segalanya untuk membunuh Oracle-mu. Berikutnya ia memprioritaskan jarak dan memposisikan ulang.
 
-Ini terinspirasi dari hantu Pac-Man -- Blinky mengejar, Pinky menyergap. Di sini AI berubah "kepribadian" setiap fase.
+Ini dicuri dari hantu Pac-Man -- Blinky mengejar, Pinky menyergap. Di sini AI berganti "kepribadian" tiap fase.
 
-**Hasil: tidak mungkin memprediksi AI dalam satu permainan penuh.** CPU tidak pernah melakukan pertandingan yang sama dua kali.
+**Hasilnya : mustahil memprediksi AI selama satu permainan penuh.** CPU tidak pernah memainkan dua match yang sama.
 
-### Oracle Itu Pengecut
+### Oracle itu pengecut
 
-Oracle lawan kabur. Secara harfiah.
+Oracle musuh kabur. Secara harfiah.
 
 ```javascript
 const awayFromTarget = {
@@ -120,22 +121,22 @@ const awayFromTarget = {
 };
 ```
 
-Dia menghitung arah berlawanan dari ancaman dan kabur. Kalau ada dinding, dia cari petak kosong terdekat di arah itu.
+Ia menghitung arah berlawanan dari ancaman dan kabur. Kalau ada tembok, ia mencari petak bebas terdekat ke arah itu.
 
-Kamu habiskan 3 giliran mendekati Oracle, dan bam dia kabur seperti pengecut xD
+Kamu menghabiskan 3 giliran mendekati Oracle, dan tiba-tiba ia sudah kabur ke ujung lain.
 
-### Loop Pengambilan Keputusan
+### Loop keputusan
 
-Begini cara AI memutuskan:
+Begini cara AI memutuskan :
 
-1. Jika Oracle sudah mati, tempatkan Oracle baru
+1. Kalau saya tidak punya Oracle lagi (mati), tempatkan yang baru
 2. Hitung koefisien untuk setiap pasangan unit sekutu → unit musuh
 3. Pilih pasangan terbaik
-4. Jika unit bisa menyerang target dari posisinya → serang
-5. Jika unit kurang dari 4 → panggil yang paling murah dari tangan
-6. Jika tidak, bergerak menuju target (petak gerakan terdekat ke musuh)
-7. Jika mana cukup (> 2), dash (gerakan ganda) untuk mendekat lebih lanjut
-8. Jika unit adalah Oracle → kabur
+4. Kalau unit bisa menyerang target dari posisinya → serang
+5. Kalau saya punya kurang dari 4 unit → panggil yang termurah yang tersedia dari tangan
+6. Kalau tidak, bergerak ke target (petak gerakan terdekat ke musuh)
+7. Kalau mana cukup (> 2), dash (gerakan ganda) untuk makin mendekat
+8. Kalau unitnya Oracle → kabur
 
 ```mermaid
 flowchart TD
@@ -147,7 +148,7 @@ flowchart TD
     F -->|Oui| G[Attaquer la cible]
     F -->|Non| H{Moins de 4\nunités ?}
     H -->|Oui| I[Invoquer depuis la main\nla moins chère dispo]
-    H -->|Non| J[Se déplacer vers la cible\ncase la plus proche]
+    H -->|Non| J[Bergerak ke target\npetak terdekat]
     J --> K{Mana > 2 ?}
     K -->|Oui| L[Dash : double mouvement\nvers la cible]
     K -->|Non| M[Fin du tour]
@@ -158,7 +159,7 @@ flowchart TD
 
 ```javascript
 async makeAction(dash=false) {
-    // tout ça en séquence
+    // semua itu berurutan
     // le CPU dash si il a assez de mana
     if(botPlayer.mana > 2) {
         this.makeAction(true);
@@ -166,9 +167,9 @@ async makeAction(dash=false) {
 }
 ```
 
-### Kenapa Jarak Euclidean
+### Kenapa jarak euclidean
 
-Aku menggunakan jarak Euclidean:
+Saya memakai jarak euclidean :
 
 ```javascript
 calculateEuclideanDistance(x1, y1, x2, y2) {
@@ -178,56 +179,56 @@ calculateEuclideanDistance(x1, y1, x2, y2) {
 }
 ```
 
-Kenapa bukan Manhattan? Karena unit memiliki pola gerakan yang bervariasi (L seperti kuda, diagonal, dll). Jarak garis lurus adalah perkiraan bahaya yang lebih baik.
+Kenapa bukan Manhattan? Karena unit-unitnya punya pola gerakan beragam (L seperti kuda, diagonal, dll). Jarak garis lurus adalah perkiraan bahaya yang lebih baik.
 
-## Kenapa Bukan Minimax
+## Kenapa bukan minimax
 
-Aku bisa saja membuat minimax klasik. Tapi dengan 12 jenis unit, pola gerakan berbeda, kemampuan khusus... pohon permainan meledak begitu cepat sehingga tidak bisa dimainkan. Pendekatan heuristik membuat pilihan cerdas tanpa menjelajahi 10 juta state.
+Saya bisa saja mengoding minimax klasik. Tapi dengan 12 tipe unit, pola gerakan berbeda, kemampuan khusus... pohon permainannya meledak begitu cepat sampai tidak bisa dimainkan. Pendekatan heuristik membuat pilihan cerdas tanpa menjelajahi 10 juta keadaan.
 
-## Yang Keren
+## Yang keren
 
-Sistem daya tarik menciptakan dilema lucu:
+Sistem daya tarik menciptakan dilema yang lucu :
 
-- Peramal (70) menghasilkan mana. Kalau kamu biarkan hidup, lawan punya lebih banyak sumber daya. Tapi Titan (95) masih lebih berbahaya.
-- Shapeshifter (90) bisa bertukar tempat dengan unit mana pun. Dia bisa mencuri Oracle-mu.
-- Harpy (50) memiliki serangan eksplosif yang juga membunuhnya. Tidak prioritas... sampai dia berada di samping 3 unit-mu.
+- Voyant (70) menghasilkan mana. Kalau kamu biarkan hidup, lawan punya lebih banyak sumber daya. Tapi Titan (95) masih lebih berbahaya.
+- Métamorphe (90) bisa bertukar tempat dengan unit mana pun. Ia bisa mencuri Oracle-mu.
+- Harpie (50) punya serangan meledak yang juga membunuhnya. Ia tetap sekunder... sampai ia berakhir di samping 3 unitmu.
 
-AI mengevaluasi bahaya global berdasarkan posisi, bukan hanya stat mentah.
+AI menilai bahaya global menurut posisi, bukan sekadar stat mentah.
 
-Ada juga fungsi `activateSimulation()` untuk menguji skenario tanpa memulai permainan baru:
+Ada juga fungsi `activateSimulation()` untuk menguji skenario tanpa mengulang permainan :
 
 ```javascript
 activateSimulation() {
     // Place des unités spécifiques sur le plateau
-    // Utile pour debugger l'IA
+    // Berguna untuk men-debug AI
     this.game.board = simulation.board;
     this.game.players = simulation.players;
 }
 ```
 
-## Yang Kurang
+## Yang kurang
 
-Kalau aku punya lebih banyak waktu:
+Kalau saya punya lebih banyak waktu :
 
-- AI bereaksi terhadap keadaan saat ini, tidak memprediksi apa yang akan dilakukan pemain
-- Dia tidak merencanakan tangan untuk beberapa giliran
-- Shapeshifter dan Centaur memiliki kemampuan yang kurang dimanfaatkan
-- Reinforcement learning: membuatnya bermain melawan dirinya sendiri untuk menyesuaikan koefisien
+- AI bereaksi pada keadaan saat ini, ia tidak memprediksi apa yang akan dilakukan pemain
+- Ia tidak merencanakan tangannya selama beberapa giliran
+- Métamorphe dan Centaure punya kemampuan yang kurang dieksploitasi
+- Pembelajaran penguatan : membuatnya bermain melawan dirinya sendiri untuk menyesuaikan koefisien
 
-Tapi untuk game browser, ini sudah cukup. Teman-teman bisa kalah melawannya, jadi ini ok xD
+Tapi untuk permainan peramban ini sudah cukup oke. Teman-teman bisa kalah melawannya, jadi sudah tervalidasi.
 
 ## Coba
 
-Tersedia di [nausicaa-game.github.io](https://nausicaa-game.github.io/). Kamu klik "MAIN", CPU mode ON, dan lihat AI bekerja.
+Tersedia di [nausicaa-game.github.io](https://nausicaa-game.github.io/). Kamu klik "JOUER", mode CPU ON, dan kamu lihat AI beraksi.
 
-Saran: biarkan AI bermain melawan dirinya sendiri. Kamu akan melihat fase agresif, lalu tiba-tiba dia mundur semua.
+Saran : biarkan AI bermain melawan dirinya sendiri. Kamu akan melihat fase agresif, lalu tiba-tiba ia mundur semua.
 
-Kode ada di [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io) di `js/cpu.js`.
+Kodenya ada di [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io) di `js/cpu.js`.
 
-**3 hal:**
+**3 poin yang perlu diingat :**
 
-1. **Koefisien heuristik** -- tanpa minimax, setiap unit memiliki daya tarik
-2. **Koefisien berubah setiap 5 giliran** -- AI bergantian antara agresif dan kontrol, ala Pac-Man
-3. **Oracle kabur** -- dia menghitung arah berlawanan dari ancaman dan kabur
+1. **Koefisien heuristik** -- tanpa minimax, setiap unit punya daya tarik
+2. **Koefisien yang berubah setiap 5 giliran** -- AI bergantian antara agresivitas dan kontrol, ala Pac-Man
+3. **Oracle kabur** -- ia menghitung arah berlawanan dari ancaman dan kabur
 
-Kalau kamu punya ide untuk membuat AI lebih jahat lagi, buka issue. Aku punya rencana untuk versi yang belajar dari kekalahannya, tapi itu untuk artikel berikutnya xD
+Kalau kamu punya ide untuk membuat AI makin licik, buka issue. Saya punya rencana untuk versi yang belajar dari kekalahannya, tapi itu untuk artikel berikutnya.

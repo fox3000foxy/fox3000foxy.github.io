@@ -4,9 +4,8 @@ description: "Por que TCP, UDP, TLS, mTLS, HTTP e WebSocket não são alternativ
 date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "rede", "arquitetura-distribuída", "protocolos"]
 authors: ["docteur-turboss"]
-lang: "pt"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "hoiG9IlYieu6HB+a2uZcxefto0VmpE07JMayzvCALBodmVJbCRriqsQotsJTDrACpFNRA2v5nEQ+2KSyhT1gBg=="
+author_sig: "XF8HFlBqpwciCO4+wU+a8pkzAyw1D3xNLnehcTfT0EaP2cM/xwqHFbK+dH6zkXZp18ZJW9M6D99gjuBWifBL4Q=="
 ---
 # O problema: muitas siglas, pouca hierarquia
 

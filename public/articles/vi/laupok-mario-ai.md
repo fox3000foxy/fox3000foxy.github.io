@@ -1,50 +1,50 @@
 ---
-title: "Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động"
-description: "Phân tích chi tiết dự án của Laupok: một AI dựa trên NEAT học chơi Super Mario World một cách tự chủ. Thuật toán di truyền, mạng nơ-ron, tiến hóa nơ-ron mở rộngtopologies, và 4200 dòng Lua."
+title: "Laupok đã tạo AI chơi Super Mario World một mình -- nó chạy thế nào"
+
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - ai
   - lua
   - emulation
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Z3opxymtjgiLwTIo8VtvbrShORFRMZY6k1U6uPH5GqR0OqWdwKwRZvM057fX0WriV7vMTZAcZzVOahR6C6bmtA=="
+author_sig: "nPArIJEOvTpg8Vny35DiiATREIB5NXbyL7T2x2rw7H7Slb9Q4A6lHjkhIF/gzqbuPKyUqrIVLMmb9ENmmF/EXQ=="
 ---
 
-# Laupok đã tạo một AI tự chơi Super Mario World -- cách nó hoạt động
+# Laupok đã tạo AI chơi Super Mario World một mình -- nó chạy thế nào
 
-Laupok đã tạo ra một trí tuệ nhân tạo tự chơi **Super Mario World** hoàn toàn tự chủ. Không có đầu vào được lập trình sẵn, không có khung hình được ghi lại. AI tự học, thông qua đột biến ngẫu nhiên và chọn lọc tự nhiên, để vượt qua các màn chơi. Dự án chạy trên **BizHawk**, một trình giả lập đa nền tảng, thông qua một script Lua khoảng **4200 dòng**.
+Laupok đã tạo một trí tuệ nhân tạo chơi **Super Mario World** hoàn toàn tự chủ. Nó khởi đầu từ con số không : không script định sẵn, không frame ghi sẵn. AI tự học, bằng đột biến ngẫu nhiên và chọn lọc tự nhiên, để qua màn game. Dự án chạy trên **BizHawk**, trình giả lập đa nền tảng, qua script Lua khoảng **4200 dòng**.
 
-Điều khiến dự án này trở nên hấp dẫn là nó dựa trên các khái niệm sinh học được áp dụng vào tin học: **thuyết tiến hóa** của Darwin, **mạng nơ-ron nhân tạo**, và quan trọng nhất là một thuật toán cụ thể gọi là **NEAT** (NeuroEvolution of Augmenting Topologies - Tiến hóa nơ-ron mở rộngtopologies). Ban đầu, AI không biết gì về trò chơi. Nó thử những thứ ngẫu nhiên, thất bại hàng nghìn lần, và dần dần tìm ra cách di chuyển, nhảy, và sinh tồn.
+Điều khiến dự án này cuốn hút là nó dựa trên khái niệm sinh học áp vào tin học : **thuyết tiến hóa của Darwin**, **mạng nơ-ron nhân tạo**, và nhất là một thuật toán cụ thể tên **NEAT** (NeuroEvolution of Augmenting Topologies). AI ban đầu không biết gì về game. Nó thử hành động ngẫu nhiên, thất bại hàng nghìn lần, và dần dần hiểu cách tiến lên, nhảy, và sống sót.
 
-Trong bài viết này, chúng ta sẽ phân tích tất cả -- từng khái niệm, từng dòng code.
+Trong bài này, ta sẽ mổ xẻ tất cả -- khái niệm theo khái niệm, dòng mã theo dòng mã.
 
-![Laupok giới thiệu thuật toán NEAT trên camera](/images/laupok-mario-ai/neat-title.jpg)
+![Laupok giới thiệu thuật toán NEAT trước camera](/images/laupok-mario-ai/neat-title.jpg)
 
 ---
 
-## Môi trường: BizHawk, Lua, và Super Mario World
+## Setup : BizHawk, Lua, và Super Mario World
 
 ### Trình giả lập BizHawk
 
-BizHawk là một trình giả lập mã nguồn mở hỗ trợ rất nhiều loại máy chơi game -- NES, SNES, Genesis, PS1, Game Boy, và nhiều hơn nữa. Tính năng quan trọng của nó là có thể chạy **script Lua** cùng với trò chơi. Các script này có quyền truy cập vào **RAM** (bộ nhớ truy cập ngẫu nhiên) của trình giả lập, nghĩa là chúng có thể đọc -- và sửa -- bất kỳ dữ liệu trò nào trong thời gian thực.
+BizHawk là trình giả lập open source hỗ trợ cả đống console -- NES, SNES, Genesis, PS1, Game Boy, và nhiều nữa. Đặc biệt ở chỗ nó cho chạy **script Lua** song song với game. Các script này truy cập **bộ nhớ RAM** của giả lập, nghĩa là chúng có thể đọc -- và sửa -- bất kỳ dữ liệu nào của game thời gian thực.
 
-Cụ thể, điều này có nghĩa là bạn có thể:
-- Đọc vị trí của Mario trong màn chơi
-- Biết sprite nào (kẻ thù, vật phẩm) đang ở trên màn hình
-- Biết trạng thái của mỗi ô (khối) xung quanh Mario
-- Điều khiển bộ điều khiển -- nhấn bất kỳ nút nào
+Cụ thể, nghĩa là ta có thể :
+- Đọc vị trí Mario trong màn
+- Biết sprite (kẻ thù, vật phẩm) nào trên màn hình
+- Biết trạng thái mỗi tile (khối) quanh Mario
+- Điều khiển tay cầm -- bấm bất kỳ nút nào
 
-Đây chính xác là những gì bạn cần để tạo một AI chơi game.
+Đó chính xác là những gì cần để AI chơi.
 
 ### Địa chỉ bộ nhớ của Super Mario World
 
-Trong RAM của Super Mario World, mỗi dữ liệu được lưu trữ tại một địa chỉ cụ thể. Nó giống như một khu phố: mỗi địa chỉ tương ứng với một "ngôi nhà" chứa một thông tin. Ví dụ:
+Trong RAM Super Mario World, mỗi dữ liệu nằm ở địa chỉ cụ thể. Giống khu phố : mỗi địa chỉ là một "ngôi nhà" chứa một thông tin. Ví dụ :
 
 | Địa chỉ | Dữ liệu |
-|---------|------|
+|---------|--------|
 | `0x94`-`0x95` | Vị trí X của Mario (16-bit, little-endian) |
 | `0x96`-`0x97` | Vị trí Y của Mario |
 | `0x14C8`+`i` | Trạng thái sprite `i` (>7 = sống) |
@@ -52,169 +52,169 @@ Trong RAM của Super Mario World, mỗi dữ liệu được lưu trữ tại m
 | `0x14E0`+`i` | Vị trí X cao của sprite `i` |
 | `0xD8`+`i` | Vị trí Y thấp của sprite `i` |
 | `0x14D4`+`i` | Vị trí Y cao của sprite `i` |
-| `0x170B`+`i` | Loại sprite mở rộng `i` |
-| `0x0100` | Trạng thái trò chơi (12 = màn chơi hoàn thành) |
-| `0x13D4` | Đang tạm dừng |
-| `0x0071` | Hoạt ảnh chết của Mario (9 = chết) |
-| `0x1C800`+... | Bảng ô màn chơi |
+| `0x170B`+`i` | Kiểu extended sprite `i` |
+| `0x0100` | Trạng thái game (12 = qua màn) |
+| `0x13D4` | Tạm dừng đang bật |
+| `0x0071` | Animation chết của Mario (9 = chết) |
+| `0x1C800`+... | Bảng tile của màn |
 
-Vị trí sprite sử dụng hai byte: byte "thấp" và byte "cao", vì vị trí có thể vượt quá 255 pixel. Công thức luôn là `thấp + cao × 256`.
+Vị trí sprite dùng hai byte : một byte "thấp" và một byte "cao", vì vị trí có thể vượt 255 pixel. Công thức luôn là `thấp + cao × 256`.
 
-Đối với ô thì phức tạp hơn: địa chỉ cơ sở là `0x1C800`, và bạn tính toán độ dịch dựa trên tọa độ `x` và `y` của ô trong thế giới, với bước 16 pixel mỗi ô.
+Với tile, phức tạp hơn : địa chỉ cơ sở là `0x1C800`, và ta tính offset theo tọa độ `x` và `y` của tile trong thế giới, với bước 16 pixel mỗi tile.
 
-![Super Mario World với lớp phủ debug hiển thị địa chỉ bộ nhớ sprite và vị trí Mario](/images/laupok-mario-ai/memory-debug.jpg)
+![Super Mario World với overlay gỡ lỗi hiện địa chỉ bộ nhớ sprite và vị trí Mario](/images/laupok-mario-ai/memory-debug.jpg)
 
 ---
 
-## Cơ bản: thuật toán di truyền và mạng nơ-ron
+## Nền tảng : thuật toán di truyền và mạng nơ-ron
 
-Trước khi đi sâu vào code, bạn cần hiểu hai khái niệm cơ bản. Không có chúng, mọi thứ khác đều vô nghĩa.
+Trước khi lặn vào mã, cần hiểu hai khái niệm nền. Không có chúng, phần còn lại vô nghĩa.
 
 ### Thuật toán di truyền
 
-Thuật toán di truyền là một mô phỏng của **thuyết tiến hóa**. Ý tưởng cốt lõi: bạn tạo ra một **quần thể** gồm các cá thể, mỗi cá thể có các đặc tính hơi khác nhau ("gen"). Bạn để chúng "sống" trong một môi trường. Những cá thể hoạt động tốt nhất sẽ tồn tại và sinh sản. Những cá thể hoạt động kém sẽ bị loại bỏ.
+Thuật toán di truyền là mô phỏng **thuyết tiến hóa**. Ý tưởng cốt lõi : ta tạo **quần thể** cá thể, mỗi cá thể có đặc điểm hơi khác nhau (các "gen"). Ta cho chúng "sống" trong môi trường. Kẻ xoay xở tốt nhất sống sót và sinh sản. Kẻ kém biến mất.
 
-Laupok minh họa điều này với một phép so sánh **Kirby**:
-- Một quần thể Kirby xuất hiện trên một bãi đất có gai và cà chua
-- Gai làm giảm điểm máu, cà chua khôi phục lại
-- Mỗi Kirby có gen: kích thước, tốc độ, máu, hành vi (chạy trốn, tìm cà chua, chạy mù quáng)
+Laupok minh họa bằng phép tương tự **Kirby** :
+- Quần thể Kirby xuất hiện trên địa hình có gai và cà chua
+- Gai trừ điểm sinh mệnh, cà chua hồi lại
+- Mỗi Kirby có gen : kích thước, tốc độ, điểm sinh mệnh, hành vi (chạy trốn, tìm cà chua, lao bừa)
 
-![Xoắn kép DNA với các nhãn "em bé", "kích thước", "tốc độ", "màu sắc" -- các gen tạo nên một cá thể](/images/laupok-mario-ai/dna-genes.jpg)
+![Chuỗi xoắn ADN với nhãn "đứa bé", "kích thước", "tốc độ", "màu sắc" -- các gen tạo nên cá thể](/images/laupok-mario-ai/dna-genes.jpg)
 
-- Sau 15 giây, bạn kiểm tra ai tồn tại lâu nhất
-- Kirby tốt nhất giao phối với các Kirby khác: con cái kế thừa một nửa gen tốt nhất và một nửa gen "tệ nhất"
-- Con cái trải qua các **đột biến** ngẫu nhiên (to hơn một chút, nhanh hơn một chút...)
-- Kirby cũ được thay thế bằng Kirby mới
-- Bạn bắt đầu lại
+- Sau 15 giây, ta xem ai sống lâu nhất
+- Kirby giỏi nhất sinh sản với các Kirby khác : con thừa hưởng nửa gen từ đứa giỏi nhất và nửa từ đứa "tệ nhất"
+- Các con chịu **đột biến** ngẫu nhiên (to hơn chút, nhanh hơn chút...)
+- Kirby cũ bị thay bằng Kirby mới
+- Chạy lại
 
-Sau 180 thế hệ (~15 giờ), Kirby tiến hóa từ khả năng sống sót 15 giây lên **15 phút**. Chúng trở nên nhỏ gọn (hitbox nhỏ hơn), nhanh chóng, và liên tục chạy trốn nguy hiểm.
+Sau 180 thế hệ (~15 giờ), Kirby đi từ 15 giây sống sót lên **15 phút**. Chúng thành nhỏ (vùng va chạm giảm), nhanh, và luôn chạy trốn nguy hiểm.
 
-![Mô phỏng Kirby thế hệ 0: các vòng tròn màu sắc phân tán ngẫu nhiên trên nền đen, tất cả có kích thước tương tự](/images/laupok-mario-ai/kirby-gen0.jpg)
+![Mô phỏng Kirby thế hệ 0 : các vòng tròn màu rải ngẫu nhiên trên nền đen, kích thước tương đương](/images/laupok-mario-ai/kirby-gen0.jpg)
 
-![Mô phỏng Kirby thế hệ 1866: Kirby nhỏ hơn, nhanh hơn, và liên tục chạy trốn nguy hiểm](/images/laupok-mario-ai/kirby-gen1866.jpg)
+![Mô phỏng Kirby thế hệ 1866 : Kirby nhỏ hơn, nhanh hơn, và lánh nguy hiểm có hệ thống](/images/laupok-mario-ai/kirby-gen1866.jpg)
 
-![Thống kê mô phỏng Kirby: fitness, máu, hành vi của mỗi cá thể được xếp hạng theo hiệu suất](/images/laupok-mario-ai/kirby-stats.jpg)
+![Thống kê mô phỏng Kirby : fitness, điểm sinh mệnh, hành vi mỗi cá thể xếp theo hiệu năng](/images/laupok-mario-ai/kirby-stats.jpg)
 
-Điểm mấu chốt: **bạn không định nghĩa giải pháp**. Thuật toán **tự tìm ra nó**. Và đó chính xác là điều khiến nó mạnh mẽ đối với các bài toán mà bạn không biết tổ hợp tham số tối ưu sẽ như thế nào.
+Điểm then chốt : **ta không định nghĩa lời giải**. Thuật toán **tự tìm ra**. Và đó chính xác là thứ khiến nó mạnh với bài toán nơi ta không biết tổ hợp tham số nào tối ưu.
 
 ### Mạng nơ-ron nhân tạo
 
-Mạng nơ-ron là một mô hình toán học đơn giản hóa của não người. Nó bao gồm:
-- **Nơ-ron đầu vào**: những gì mạng "thấy"
-- **Nơ-ron đầu ra**: những gì mạng "quyết định"
-- **Kết nối (trọng số)**: mỗi kết nối có một **trọng số** khuếch đại hoặc giảm tín hiệu
+Mạng nơ-ron là mô hình toán rút gọn của não người. Nó gồm :
+- **Nơ-ron đầu vào** (input) : những gì mạng "thấy"
+- **Nơ-ron đầu ra** (output) : những gì mạng "quyết"
+- **Kết nối** (trọng số) : mỗi kết nối có **trọng số** khuếch đại hay làm suy tín hiệu
 
-Nguyên tắc đơn giản: mỗi nơ-ron đầu vào gửi giá trị của nó. Nó được nhân với trọng số kết nối, rồi cộng dồn với các tín hiệu khác. Nếu kết quả vượt quá một ngưỡng nhất định (**hàm kích hoạt**), nơ-ron đầu ra sẽ kích hoạt.
+Nguyên tắc đơn giản : mỗi nơ-ron đầu vào gửi giá trị của nó. Nó được nhân với trọng số kết nối, rồi cộng với các tín hiệu khác. Nếu kết quả vượt ngưỡng nào đó (**hàm kích hoạt**), nơ-ron đầu ra kích hoạt.
 
-Trong phép so sánh của Laupok với Mario và con trỏ chuột:
-- Nơ-ron đầu vào = khoảng cách giữa Mario và con trỏ
+Trong phép tương tự của Laupok với Mario và đầu chuột :
+- Nơ-ron đầu vào = khoảng cách giữa Mario và đầu chuột
 - Trọng số kết nối = độ nhạy của Mario
-- Nơ-ron đầu ra = Mario có la hay không
+- Nơ-ron đầu ra = Mario hét hay không
 
-Con trỏ càng gần, giá trị đầu vào càng cao. Nếu trọng số mạnh, tín hiệu đầu ra mạnh, và Mario sẽ la. Bằng cách thay đổi trọng số, bạn thay đổi độ nhạy của Mario.
+Đầu chuột càng gần, giá trị đầu vào càng cao. Nếu trọng số mạnh, tín hiệu gửi ra mạnh, và Mario sẽ hét. Sửa trọng số, ta sửa độ nhạy của Mario.
 
-![Demo "Mario sợ hãi": Mario đối mặt với Boo với thanh nối xơ hiển thị trọng số kết nối giữa đầu vào và đầu ra](/images/laupok-mario-ai/mario-fear-demo.jpg)
+![Demo "Mario sợ hãi" : Mario đối mặt Boo với thanh synapse hiện trọng số kết nối giữa đầu vào và đầu ra](/images/laupok-mario-ai/mario-fear-demo.jpg)
 
-Trong mạng nơ-ron thực tế của AI, đó là cùng một logic, nhưng ở quy mô lớn hơn nhiều:
-- **99 nơ-ron đầu vào** (11×9 ô trong tầm nhìn của Mario)
+Trong mạng nơ-ron thật của AI, đó là cùng logic, nhưng ở quy mô lớn :
+- **99 nơ-ron đầu vào** (11×9 tile của tầm nhìn Mario)
 - **8 nơ-ron đầu ra** (A, B, X, Y, Lên, Xuống, Trái, Phải)
-- **Nơ-ron ẩn** ở giữa
-- Hàng trăm kết nối với các trọng số khác nhau
+- Nơ-ron **ẩn** (hidden) ở giữa
+- Hàng trăm kết nối với trọng số đa dạng
 
 ---
 
-## NEAT: thuật toán thay đổi mọi thứ
+## NEAT : thuật toán thay đổi mọi thứ
 
-### Vấn đề với thuật toán di truyền cơ bản
+### Vấn đề của thuật toán di truyền cổ điển
 
-Nếu bạn kết hợp một cách đơn giản thuật toán di truyền với mạng nơ-ron, bạn sẽ gặp vấn đề: bạn tạo ra 100 mạng nơ-ron hoàn toàn khác nhau, và bạn không thể so sánh chúng. Mỗi mạng có nơ-ron, kết nối, và trọng số riêng. Làm sao bạn biết hai mạng là "tương tự" hay "khác biệt"?
+Nếu kết hợp thuật toán di truyền với mạng nơ-ron một cách ngây thơ, ta gặp vấn đề : ta tạo 100 mạng nơ-ron hoàn toàn khác nhau, mà không biết so sánh chúng. Mỗi cái có nơ-ron riêng, kết nối riêng, trọng số riêng. Làm sao biết hai mạng "gần" hay "xa"?
 
-Đây là nơi **NEAT** xuất hiện -- NeuroEvolution of Augmenting Topologies (Tiến hóa nơ-ron mở rộngtopologies). Được phát minh bởi **Kenneth Stanley** và **Risto Miikkulainen** vào năm 2002, nó giải quyết chính xác vấn đề này.
+Đó là lúc **NEAT** -- NeuroEvolution of Augmenting Topologies -- xuất hiện. Do **Kenneth Stanley** và **Risto Miikkulainen** phát minh năm 2002, đó là thuật toán giải đúng bài toán này.
 
 ### Các loài
 
-Cơ chế then chốt đầu tiên của NEAT là **các loài**. Khi một mạng nơ-ron trở nên quá khác biệt so với mạng khác, nó được phân loại vào một loài khác. Độ tương tự được tính toán thông qua ba tham số:
+Cơ chế mấu chốt đầu tiên của NEAT là các **loài**. Khi một mạng nơ-ron trở nên quá khác mạng khác, nó được xếp vào loài khác. Độ tương đồng tính qua ba tham số :
 
-1. **Vượt trội** (`EXCES_COEF = 0.50`): số lượng kết nối không có điểm chung giữa hai mạng (các đổi mới khác nhau)
-2. **Rời rạc**: tương tự, nhưng đối với các kết nối ở giữa
-3. **Chênh lệch trọng số** (`POIDSDIFF_COEF = 0.92`): chênh lệch trọng số trung bình giữa các kết nối chia sẻ cùng một đổi mới
+1. **Excess** (`EXCES_COEF = 0.50`) : số kết nối không liên quan gì giữa hai mạng (đổi mới khác nhau)
+2. **Disjoint** : tương tự, nhưng cho kết nối nằm ở giữa
+3. **Chênh lệch trọng số** (`POIDSDIFF_COEF = 0.92`) : chênh lệch trọng số trung bình giữa các kết nối chung đổi mới
 
-Công thức tính điểm:
+Công thức điểm :
 
 ```
 score = (EXCES_COEF × disjoint) / max(nbConnexions1 + nbConnexions2, 1)
       + POIDSDIFF_COEF × diffPoids
 ```
 
-Nếu điểm này thấp hơn `DIFF_LIMITE` (1.0), hai mạng thuộc cùng một loài. Nếu không, một loài mới sẽ được tạo.
+Nếu điểm này dưới `DIFF_LIMITE` (1.0), hai mạng cùng loài. Ngược lại, tạo loài mới.
 
 ### Các đổi mới
 
-Đây là điểm thiên tài của NEAT. Mỗi khi một kết nối được tạo, nó nhận một số **đổi mới** duy nhất, toàn cục. Số này đi theo mạng nơ-ron ngay cả khi nó sinh sản.
+Đó là thiên tài của NEAT. Mỗi khi kết nối được tạo, nó nhận số **đổi mới** duy nhất và toàn cục. Số này theo mạng nơ-ron ngay cả khi nó sinh sản.
 
-Cụ thể, khi một cá thể con được tạo thông qua lai, nó kế thừa các đổi mới của cha mẹ. Nếu hai mạng chia sẻ cùng một đổi mới, điều đó có nghĩa là chúng có một kết nối từ cùng một tổ tiên. Đây là điều cho phép so sánh các mạng có kích thước khác nhau.
+Cụ thể, khi đứa bé sinh từ lai ghép, nó thừa hưởng đổi mới của bố mẹ. Nếu hai mạng chung đổi mới, nghĩa là chúng có kết nối tới từ cùng tổ tiên. Đó là thứ cho phép so sánh mạng kích thước khác nhau.
 
-### Lai
+### Lai ghép
 
-Khi hai mạng nơ-ron sinh sản, **lai** hoạt động như sau:
+Khi hai mạng nơ-ron sinh sản, **lai ghép** chạy như sau :
 
-![Laupok giải thích khái niệm lai với văn bản "CROSSOVER" được chồng lên](/images/laupok-mario-ai/crossover-label.jpg)
+![Laupok giải thích khái niệm lai ghép với chữ "CROSSOVER" phủ trên](/images/laupok-mario-ai/crossover-label.jpg)
 
-1. Mạng có hiệu suất tốt hơn trở thành "cha mẹ trội"
-2. Cá thể con kế thừa tất cả các kết nối từ cha mẹ trội
-3. Đối với mỗi kết nối chia sẻ cùng một đổi mới, cha mẹ khác có thể thay thế nó (50% khả năng)
-4. Chỉ các kết nối đang hoạt động từ cha mẹ không trội mới có thể thay thế
+1. Mạng hiệu năng nhất thành "bố mẹ trội"
+2. Đứa bé thừa hưởng mọi kết nối của bên trội
+3. Với mỗi kết nối chung đổi mới, bố mẹ kia có thể thay thế (50% cơ hội)
+4. Chỉ kết nối đang hoạt động của bố mẹ không trội mới được thay
 
-Điều này đảm bảo cá thể con luôn ít nhất tốt bằng cha mẹ tốt nhất.
+Việc này đảm bảo đứa bé luôn ít nhất giỏi bằng bố mẹ giỏi nhất.
 
 ### Đột biến
 
-Sau khi lai, cá thể con trải qua các đột biến với xác suất có thể cấu hình:
+Sau lai ghép, đứa bé chịu đột biến với xác suất cấu hình được :
 
-![Laupok giải thích đột biến với văn bản "(small modif = mutation)" được chồng lên](/images/laupok-mario-ai/mutation-label.jpg)
+![Laupok giải thích đột biến với chữ "(sửa nhỏ = đột biến)" phủ trên](/images/laupok-mario-ai/mutation-label.jpg)
 
 | Đột biến | Xác suất | Hiệu ứng |
-|----------|----------|-----------|
-| Đặt lại trọng số kết nối | 25% | Trọng số được ngẫu nhiên hóa hoàn toàn |
+|----------|------------|-------|
+| Reset trọng số kết nối | 25% | Trọng số ngẫu nhiên hoàn toàn |
 | Đột biến trọng số | 95% | Trọng số thay đổi ±0.80 |
-| Thêm kết nối | 85% | Kết nối mới giữa hai nơ-ron chưa được liên kết |
-| Thêm nơ-ron | 39% | Một nơ-ron ẩn được chèn vào giữa hai nơ-ron đã liên kết |
+| Thêm kết nối | 85% | Kết nối mới giữa hai nơ-ron chưa nối |
+| Thêm nơ-ron | 39% | Nơ-ron ẩn chèn giữa hai nơ-ron đã nối |
 
-Tỷ lệ thêm nơ-ron rất quan trọng: đó là điều cho phép mạng **phát triển**. Ban đầu, chỉ có đầu vào và đầu ra. Dần dần, các nơ-ron ẩn xuất hiện, khiến mạng ngày càng phức tạp hơn.
+Tỷ lệ thêm nơ-ron quan trọng : đó là thứ cho phép mạng **lớn lên**. Ban đầu, chỉ có đầu vào và đầu ra. Dần dần, nơ-ron ẩn xuất hiện, khiến mạng ngày càng phức tạp.
 
 ---
 
-## Code: phân tích toàn bộ
+## Mã nguồn : walkthrough đầy đủ
 
-### Hằng số
+### Các hằng số
 
-Script bắt đầu với một khối hằng số định nghĩa tất cả các cài đặt:
+Script bắt đầu bằng khối hằng số định nghĩa mọi tham số :
 
 ```lua
--- Mario's view around him
+-- Tầm nhìn của Mario quanh nó
 TAILLE_TILE = 16
-TAILLE_VUE_W = TAILLE_TILE * 11  -- 176 pixels wide
-TAILLE_VUE_H = TAILLE_TILE * 9   -- 144 pixels tall
-NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 tiles
-NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 tiles
+TAILLE_VUE_W = TAILLE_TILE * 11  -- 176 pixel chiều rộng
+TAILLE_VUE_H = TAILLE_TILE * 9   -- 144 pixel chiều cao
+NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 tile
+NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 tile
 
--- Neural network
-NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 inputs (visible tiles)
-NB_OUTPUT = 8  -- A, B, X, Y, Up, Down, Left, Right
-NB_INDIVIDU_POPULATION = 100  -- individuals per population
-NB_NEURONE_MAX = 100000  -- max hidden neurons
+-- Mạng nơ-ron
+NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 input (tile nhìn thấy)
+NB_OUTPUT = 8  -- A, B, X, Y, Lên, Xuống, Trái, Phải
+NB_INDIVIDU_POPULATION = 100  -- cá thể cho mỗi quần thể
+NB_NEURONE_MAX = 100000  -- giới hạn nơ-ron ẩn
 
 -- Fitness
-FITNESS_LEVEL_FINI = 1000000  -- value when level is finished
-NB_FRAME_RESET_BASE = 33  -- frames without progress before reset
-NB_FRAME_RESET_PROGRES = 300  -- frames if progress detected
+FITNESS_LEVEL_FINI = 1000000  -- giá trị khi qua màn
+NB_FRAME_RESET_BASE = 33  -- frame không tiến triển trước reset
+NB_FRAME_RESET_PROGRES = 300  -- frame nếu phát hiện tiến triển
 
--- Species
+-- Loài
 EXCES_COEF = 0.50
 POIDSDIFF_COEF = 0.92
 DIFF_LIMITE = 1.00
 
--- Mutations
+-- Đột biến
 CHANCE_MUTATION_RESET_CONNEXION = 0.25
 POIDS_CONNEXION_MUTATION_AJOUT = 0.80
 CHANCE_MUTATION_POIDS = 0.95
@@ -222,47 +222,47 @@ CHANCE_MUTATION_CONNEXION = 0.85
 CHANCE_MUTATION_NEURONE = 0.39
 ```
 
-`NB_INPUT` là 99 vì tầm nhìn của Mario là 11×9 ô. Mỗi ô là một nơ-ron đầu vào. Ô trống = 0. Khối = 1. Kẻ thù = -1.
+`NB_INPUT` là 99 vì tầm nhìn Mario là 11×9 tile. Mỗi tile là một nơ-ron đầu vào. Nếu tile trống, nó bằng 0. Nếu là khối, nó bằng 1. Nếu là kẻ thù, nó bằng -1.
 
-8 đầu ra tương ứng với các nút điều khiển SNES: A, B, X, Y, Lên, Xuống, Trái, Phải. Start, Select, L và R bị loại trừ để chúng không "làm mất tập trung" của Mario.
+8 đầu ra khớp các nút tay cầm SNES : A, B, X, Y, Lên, Xuống, Trái, Phải. Ta loại Start, Select, L và R để giới hạn quyết định của nó ở mức cần thiết.
 
 ### Cấu trúc dữ liệu
 
-Script định nghĩa ba cấu trúc chính:
+Script định nghĩa ba cấu trúc chính :
 
 ```lua
 function newNeurone()
     local neurone = {}
-    neurone.valeur = 0    -- current neuron value
-    neurone.id = 0        -- unique identifier
-    neurone.type = ""     -- "input", "output", or "hidden"
+    neurone.valeur = 0    -- giá trị hiện tại của nơ-ron
+    neurone.id = 0        -- định danh duy nhất
+    neurone.type = ""     -- "input", "output", hay "hidden"
     return neurone
 end
 
 function newConnexion()
     local connexion = {}
-    connexion.entree = 0     -- source neuron ID
-    connexion.sortie = 0     -- destination neuron ID
-    connexion.actif = true   -- can be disabled if a hidden neuron is inserted
-    connexion.poids = 0      -- connection weight
-    connexion.innovation = 0 -- unique innovation number
-    connexion.allume = false -- for display: true if signal passes
+    connexion.entree = 0     -- ID nơ-ron nguồn
+    connexion.sortie = 0     -- ID nơ-ron đích
+    connexion.actif = true   -- có thể tắt nếu nơ-ron ẩn được chèn
+    connexion.poids = 0      -- trọng số kết nối
+    connexion.innovation = 0 -- số đổi mới duy nhất
+    connexion.allume = false -- để hiển thị : true nếu tín hiệu đi qua
     return connexion
 end
 
 function newReseau()
     local reseau = {
-        nbNeurone = 0,        -- number of hidden neurons
-        fitness = 1,          -- performance (distance traveled)
-        idEspeceParent = 0,   -- which species it belongs to
-        lesNeurones = {},     -- neuron array
-        lesConnexions = {}    -- connection array
+        nbNeurone = 0,        -- số nơ-ron ẩn
+        fitness = 1,          -- hiệu năng (khoảng cách đi được)
+        idEspeceParent = 0,   -- thuộc loài nào
+        lesNeurones = {},     -- bảng nơ-ron
+        lesConnexions = {}    -- bảng kết nối
     }
-    -- Initialize with inputs
+    -- Khởi tạo với input
     for j = 1, NB_INPUT, 1 do
         ajouterNeurone(reseau, j, "input", 1)
     end
-    -- Then outputs
+    -- Rồi tới output
     for j = NB_INPUT + 1, NB_INPUT + NB_OUTPUT, 1 do
         ajouterNeurone(reseau, j, "output", 0)
     end
@@ -270,7 +270,7 @@ function newReseau()
 end
 ```
 
-Ban đầu, mỗi mạng chỉ có đầu vào và đầu ra. Không có nơ-ron ẩn, không có kết nối. Thuật toán quyết định xem có cần chúng hay không.
+Ban đầu, mỗi mạng chỉ chứa input và output : không nơ-ron ẩn, không kết nối. Thuật toán sẽ quyết có cần chúng hay không.
 
 ### Đột biến chi tiết
 
@@ -281,10 +281,10 @@ function mutationPoidsConnexions(unReseau)
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             if math.random() < CHANCE_MUTATION_RESET_CONNEXION then
-                -- 25%: total weight reset
+                -- 25% : reset toàn bộ trọng số
                 unReseau.lesConnexions[i].poids = genererPoids()
             else
-                -- 75%: variation of ±0.80
+                -- 75% : thay đổi ±0.80
                 if math.random() >= 0.5 then
                     unReseau.lesConnexions[i].poids =
                         unReseau.lesConnexions[i].poids - POIDS_CONNEXION_MUTATION_AJOUT
@@ -298,14 +298,14 @@ function mutationPoidsConnexions(unReseau)
 end
 ```
 
-Trọng số ban đầu luôn là 1 hoặc -1 (`genererPoids()`). Biên độ ±0.80 có thể đẩy nó giữa các giá trị âm và dương, thay đổi hành vi của mạng một cách triệt để.
+Trọng số ban đầu luôn là 1 hay -1 (`genererPoids()`). Thay đổi ±0.80 có thể khiến nó dao động giữa giá trị âm và dương, thay đổi triệt để hành vi mạng.
 
 #### Thêm kết nối
 
 ```lua
 function mutationAjouterConnexion(unReseau)
     local liste = {}
-    -- Shuffle the neuron list
+    -- Ngẫu nhiên hóa danh sách nơ-ron
     for i, v in ipairs(unReseau.lesNeurones) do
         local pos = math.random(1, #liste+1)
         table.insert(liste, pos, v)
@@ -317,11 +317,11 @@ function mutationAjouterConnexion(unReseau)
             if i ~= j then
                 local n1 = liste[i]
                 local n2 = liste[j]
-                -- Valid connection: input→output, hidden→hidden, hidden→output
+                -- Kết nối hợp lệ : input→output, hidden→hidden, hidden→output
                 if (n1.type == "input" and n2.type == "output") or
                    (n1.type == "hidden" and n2.type == "hidden") or
                    (n1.type == "hidden" and n2.type == "output") then
-                    -- Check no connection already exists
+                    -- Kiểm tra chưa có kết nối
                     local dejaConnexion = false
                     for k = 1, #unReseau.lesConnexions, 1 do
                         if unReseau.lesConnexions[k].entree == n1.id
@@ -343,18 +343,18 @@ function mutationAjouterConnexion(unReseau)
 end
 ```
 
-Bạn không thể kết nối đầu ra với đầu vào (điều đó sẽ tạo ra vòng lặp), và bạn không thể kết nối hai nơ-ron đã được liên kết. Việc xáo trộn đảm bảo các khả năng khác nhau được khám phá mỗi lần.
+Ta không thể nối output tới input (sẽ tạo chu trình), và không thể nối hai nơ-ron đã nối. Ngẫu nhiên hóa đảm bảo ta khám phá các khả năng khác nhau mỗi lần.
 
 #### Thêm nơ-ron
 
-Đây là đột biến thú vị nhất:
+Đây là đột biến thú vị nhất :
 
 ```lua
 function mutationAjouterNeurone(unReseau)
     if #unReseau.lesConnexions == 0 then return nil end
     if unReseau.nbNeurone == NB_NEURONE_MAX then return nil end
 
-    -- Shuffle connections
+    -- Ngẫu nhiên hóa kết nối
     local listeRandom = {}
     for i = 1, #unReseau.lesConnexions, 1 do
         local pos = math.random(1, #listeRandom+1)
@@ -363,20 +363,20 @@ function mutationAjouterNeurone(unReseau)
 
     for i = 1, #listeRandom, 1 do
         if unReseau.lesConnexions[listeRandom[i]].actif then
-            -- Disable the existing connection
+            -- Tắt kết nối hiện có
             unReseau.lesConnexions[listeRandom[i]].actif = false
             unReseau.nbNeurone = unReseau.nbNeurone + 1
             local indice = unReseau.nbNeurone + NB_INPUT + NB_OUTPUT
 
-            -- Create the hidden neuron
+            -- Tạo nơ-ron ẩn
             ajouterNeurone(unReseau, indice, "hidden", 1)
 
-            -- Connect input to hidden neuron
+            -- Nối đầu vào tới nơ-ron ẩn
             ajouterConnexion(unReseau,
                 unReseau.lesConnexions[listeRandom[i]].entree,
                 indice, genererPoids())
 
-            -- Connect hidden neuron to output
+            -- Nối nơ-ron ẩn tới đầu ra
             ajouterConnexion(unReseau,
                 indice,
                 unReseau.lesConnexions[listeRandom[i]].sortie,
@@ -387,17 +387,17 @@ function mutationAjouterNeurone(unReseau)
 end
 ```
 
-Cơ chế: bạn lấy một kết nối hiện có, **vô hiệu hóa nó**, và chèn một nơ-ron ẩn vào giữa. Kết nối gốc được thay thế bằng hai kết nối mới: đầu vào→ẩn và ẩn→đầu ra. Nó giống như cắt một dây điện để chèn vào một công tắc.
+Cơ chế : lấy kết nối hiện có, **tắt** nó, và chèn nơ-ron ẩn vào giữa. Kết nối gốc được thay bằng hai kết nối mới : vào→ẩn và ẩn→ra. Như thể ta "cắt" dây để chèn công tắc.
 
-Đây chính là điều khiến NEAT "mở rộngtopologies": mạng **phát triển** theo thời gian. Nó bắt đầu đơn giản và trở nên phức tạp chỉ khi cần thiết.
+Đó là thứ khiến NEAT thành "augmenting topologies" : mạng **lớn dần** theo thời gian. Nó khởi đầu đơn giản và chỉ phức tạp khi cần.
 
-### Hàm feedForward
+### feedForward
 
-Đây là hàm truyền tín hiệu qua mạng:
+Đây là hàm lan truyền tín hiệu qua mạng :
 
 ```lua
 function feedForward(unReseau)
-    -- Reset output neurons
+    -- Reset nơ-ron đầu ra
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             unReseau.lesNeurones[unReseau.lesConnexions[i].sortie].valeur = 0
@@ -405,7 +405,7 @@ function feedForward(unReseau)
         end
     end
 
-    -- Propagation
+    -- Lan truyền
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             local avantTraitement = unReseau.lesNeurones[unReseau.lesConnexions[i].sortie].valeur
@@ -424,23 +424,23 @@ function feedForward(unReseau)
 end
 ```
 
-Mỗi kết nối đang hoạt động gửi `giá trị đầu vào × trọng số` đến nơ-ron đầu ra. Giá trị được **cộng dồn** (cộng lại). Cờ `allume` chỉ dùng cho hiển thị mạng trực quan.
+Mỗi kết nối đang hoạt động gửi `giá_trị_vào × trọng_số` tới nơ-ron đầu ra. Giá trị được **cộng dồn**. Cờ `allume` chỉ để hiển thị trực quan mạng.
 
-### Đọc bộ nhớ trò chơi
+### Đọc bộ nhớ game
 
-Hàm `getLesInputs()` chuyển đổi thế giới Super Mario World thành dữ liệu mà mạng có thể hiểu được:
+Hàm `getLesInputs()` là thứ dịch thế giới Super Mario World thành dữ liệu mạng hiểu được :
 
 ```lua
 function getLesInputs()
     local lesInputs = {}
-    -- Initialize to 0 (gray = nothing)
+    -- Khởi tạo về 0 (xám = không có gì)
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             lesInputs[getIndiceLesInputs(i, j)] = 0
         end
     end
 
-    -- Sprites (enemies) = -1 (black)
+    -- Sprite (kẻ thù) = -1 (đen)
     local lesSprites = getLesSprites()
     for i = 1, #lesSprites, 1 do
         local input = convertirPositionPourInput(getLesSprites()[i])
@@ -449,7 +449,7 @@ function getLesInputs()
         end
     end
 
-    -- Tiles (blocks) = tile value (white if > 0)
+    -- Tile (khối) = giá trị tile (trắng nếu > 0)
     local lesTiles = getLesTiles()
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
@@ -464,30 +464,30 @@ function getLesInputs()
 end
 ```
 
-Lưới đầu vào là một tầm nhìn tập trung vào Mario: rộng 11 ô, cao 9 ô. Giá trị của mỗi ô:
-- **0** (xám): không có gì
-- **1** (trắng): khối rắn
-- **-1** (đen): kẻ thù
+Lưới input là khung nhìn căn giữa Mario : 11 tile chiều rộng, 9 chiều cao. Mỗi tile bằng :
+- **0** (xám) : không có gì
+- **1** (trắng) : khối đặc
+- **-1** (đen) : kẻ thù
 
-Kẻ thù được đọc từ hai danh sách trong RAM: sprite bình thường (`0x14C8`-`0x14F8`) và sprite mở rộng (`0x170B`-`0x173B`). Đối với mỗi sprite đang sống (trạng thái > 7), vị trí ô của nó so với Mario được tính toán và -1 được đặt vào ô tương ứng.
+Kẻ thù được đọc từ hai danh sách trong RAM : sprite thường (`0x14C8`-`0x14F8`) và extended sprite (`0x170B`-`0x173B`). Với mỗi sprite sống (trạng thái > 7), ta tính vị trí theo tile tương đối với Mario và đặt -1 vào ô tương ứng.
 
-### Fitness: cách AI biết nó đang tiến bộ
+### Fitness : AI biết mình tiến triển thế nào
 
 ```lua
 function majReseau(unReseau, marioBase)
     local mario = getPositionMario()
 
     if not niveauFini and memory.readbyte(0x0100) == 12 then
-        -- Level finished!
+        -- Qua màn!
         unReseau.fitness = FITNESS_LEVEL_FINI
         niveauFini = true
     elseif marioBase.x < mario.x then
-        -- Mario moved right
+        -- Mario tiến sang phải
         unReseau.fitness = unReseau.fitness + (mario.x - marioBase.x)
         marioBase.x = mario.x
     end
 
-    -- Update inputs
+    -- Cập nhật input
     local lesInputs = getLesInputs()
     for i = 1, NB_INPUT, 1 do
         unReseau.lesNeurones[i].valeur = lesInputs[i]
@@ -495,13 +495,13 @@ function majReseau(unReseau, marioBase)
 end
 ```
 
-Fitness rất đơn giản: đó là **quãng đường di chuyển về phía bên phải**. Nếu Mario di chuyển 10 pixel, fitness tăng thêm 10. Nếu Mario di chuyển sang trái, không có gì xảy ra (không bị phạt). Nếu màn chơi hoàn thành (địa chỉ `0x0100` == 12), fitness trở thành 1.000.000.
+Fitness đơn giản : là **khoảng cách đi sang phải**. Nếu Mario tiến 10 pixel, fitness tăng 10. Nếu Mario lùi, không gì xảy ra (không phạt). Nếu qua màn (địa chỉ `0x0100` == 12), fitness thành 1 000 000.
 
-Nó cố ý đơn giản. Không có điểm thưởng khi giết kẻ thù, không có hình phạt khi chết. Chỉ đơn giản: di chuyển sang phải.
+Cố ý đơn giản. Chỉ tiến sang phải được tính : giết kẻ thù không cho gì, chết không mất gì.
 
-### Đặt lại thông minh
+### Reset thông minh
 
-Nếu Mario không di chuyển trong 33 khung hình, màn chơi được đặt lại và chúng ta chuyển sang cá thể tiếp theo. Nhưng nếu Mario đã tiến bộ (fitness hiện tại khác với lúc đầu), chúng ta đợi 300 khung hình -- cho mạng cơ hội "hiểu" những gì nó đã làm đúng.
+Nếu Mario không động đậy 33 frame, ta reset màn và chuyển cá thể tiếp theo. Nhưng nếu Mario đã tiến triển (fitness hiện khác lúc bắt đầu), ta chờ 300 frame -- điều này cho mạng cơ hội "hiểu" điều nó làm tốt.
 
 ```lua
 if fitnessAvant == laPopulation[idPopulation].fitness
@@ -521,24 +521,24 @@ if fitnessAvant == laPopulation[idPopulation].fitness
 end
 ```
 
-Điều kiện `memory.readbyte(0x0071) ~= 9` kiểm tra xem Mario có đang trong hoạt ảnh chết hay không. Không có ý nghĩa gì khi đặt lại khi Mario đã chết.
+Điều kiện `memory.readbyte(0x0071) ~= 9` kiểm tra Mario không trong animation chết. Reset thành vô ích khi Mario đã trong animation chết.
 
 ### Vòng lặp chính
 
-Vòng lặp chạy ở 30 fps (tốc độ bình thường của Super Mario World):
+Vòng lặp chạy ở 30 fps (tốc độ bình thường của Super Mario World) :
 
 ```lua
 while true do
     local fitnessAvant = laPopulation[idPopulation].fitness
 
-    -- Display (network, info)
+    -- Hiển thị (mạng, thông tin)
     if forms.ischecked(estAccelere) then
-        emu.limitframerate(false)  -- speed up
+        emu.limitframerate(false)  -- tăng tốc
     else
         emu.limitframerate(true)   -- 30 fps
     end
 
-    -- The 3 vital functions
+    -- 3 hàm sống còn
     majReseau(laPopulation[idPopulation], marioBase)
     feedForward(laPopulation[idPopulation])
     appliquerLesBoutons(laPopulation[idPopulation])
@@ -546,16 +546,16 @@ while true do
     emu.frameadvance()
     nbFrame = nbFrame + 1
 
-    -- Reset if no progress
+    -- Reset nếu không tiến triển
     -- ...
-    -- New generation if all individuals tested
+    -- Thế hệ mới nếu mọi cá thể đã thử
     -- ...
 end
 ```
 
-Ba hàm quan trọng là `majReseau`, `feedForward`, và `appliquerLesBoutons`. Vô hiệu hóa bất kỳ hàm nào trong số này, Mario sẽ ngừng di chuyển.
+Ba hàm sống còn là `majReseau`, `feedForward`, và `appliquerLesBoutons`. Nếu tắt một trong ba, Mario không động đậy nữa.
 
-### Lai
+### Lai ghép
 
 ```lua
 function crossover(unReseau1, unReseau2)
@@ -585,16 +585,16 @@ function crossover(unReseau1, unReseau2)
 end
 ```
 
-Cá thể con kế thừa từ cha mẹ tốt hơn. Đối với mỗi kết nối chia sẻ cùng một đổi mới, cha mẹ khác có 50% khả năng thay thế nó -- nhưng **chỉ khi kết nối đang hoạt động**. Đây là một sửa đổi quan trọng: nếu không, các nơ-ron ẩn vô dụng có thể được tạo ra.
+Đứa bé thừa hưởng từ bố mẹ giỏi hơn. Với mỗi kết nối chung đổi mới, bố mẹ kia có 50% cơ hội thay thế -- nhưng **chỉ nếu kết nối đang hoạt động**. Đây là sửa quan trọng : không có nó, nơ-ron ẩn vô ích có thể được tạo.
 
-### Chọn loài
+### Chọn lọc theo loài
 
 ```lua
 function nouvelleGeneration(laPopulation, lesEspeces)
     local laNouvellePopulation = newPopulation()
     local nbIndividuACreer = NB_INDIVIDU_POPULATION
 
-    -- Calculate average fitness per species
+    -- Tính fitness trung bình cho mỗi loài
     for i = 1, #lesEspeces, 1 do
         lesEspeces[i].fitnessMoyenne = 0
         for j = 1, #lesEspeces[i].lesReseaux, 1 do
@@ -605,7 +605,7 @@ function nouvelleGeneration(laPopulation, lesEspeces)
             lesEspeces[i].fitnessMoyenne / #lesEspeces[i].lesReseaux
     end
 
-    -- Each species creates a number of children proportional to its average fitness
+    -- Mỗi loài tạo số con tỷ lệ với fitness trung bình
     for i = 1, #lesEspeces, 1 do
         local nbEnfant = math.ceil(
             #lesEspeces[i].lesReseaux *
@@ -622,13 +622,13 @@ function nouvelleGeneration(laPopulation, lesEspeces)
 end
 ```
 
-Ý tưởng: một loài có fitness trung bình 10.000 sẽ tạo ra nhiều con cái hơn nhiều so với một loài có fitness trung bình 1. Đây là **chọn lọc tự nhiên** đang hoạt động.
+Ý tưởng : loài có fitness trung bình 10 000 được tạo nhiều con hơn hẳn loài có fitness trung bình 1. Đó là **chọn lọc tự nhiên** trong hành động.
 
-`choisirParent` sử dụng chọn lọc bằng roulette: fitness của cá thể càng cao, khả năng nó được chọn làm cha mẹ càng lớn.
+`choisirParent` dùng chọn lọc roulette : cá thể càng fit càng có cơ hội được chọn làm bố mẹ.
 
 ### Lưu và tải
 
-Quần thể được lưu vào các tệp `.pop`:
+Quần thể được lưu trong tệp `.pop` :
 
 ```lua
 function sauvegarderUnReseau(unReseau, fichier)
@@ -651,30 +651,30 @@ function sauvegarderUnReseau(unReseau, fichier)
 end
 ```
 
-Việc lưu cũng bao gồm cá thể tốt nhất từ tất cả các quần thể trước đó. Nếu cá thể tốt nhất của quần thể cũ tốt hơn quần thể mới, chúng ta quay lại sử dụng quần thể cũ làm cơ sở. Đây là một hình thức **elitism**: cá thể tốt nhất không bao giờ bị mất.
+Lưu gồm cả cá thể giỏi nhất của mọi quần thể trước. Nếu cá thể giỏi nhất quần thể cũ giỏi hơn cá thể giỏi nhất quần thể mới, ta lấy lại cái cũ làm nền. Đó là dạng **ưu tú** : không bao giờ mất cái giỏi nhất.
 
-### Hiển thị trực quan mạng
+### Vẽ mạng
 
-Laupok đã thêm một trình hiển thị trực quan mạng nơ-ron được chồng lên trò chơi:
+Laupok thêm trình trực quan hóa mạng nơ-ron phủ lên game :
 
 ```lua
 function dessinerUnReseau(unReseau)
-    -- Inputs: 11×9 grid around Mario
+    -- Input : lưới 11×9 quanh Mario
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             local xT = ENCRAGE_X_INPUT + (i - 1) * TAILLE_INPUT
             local yT = ENCRAGE_Y_INPUT + (j - 1) * TAILLE_INPUT
             local couleurFond = "gray"
             if unReseau.lesNeurones[getIndiceLesInputs(i, j)].valeur < 0 then
-                couleurFond = "black"   -- enemy
+                couleurFond = "black"   -- kẻ thù
             elseif unReseau.lesNeurones[getIndiceLesInputs(i, j)].valeur > 0 then
-                couleurFond = "white"   -- block
+                couleurFond = "white"   -- khối
             end
             gui.drawRectangle(xT, yT, TAILLE_INPUT, TAILLE_INPUT, "black", couleurFond)
         end
     end
 
-    -- Outputs: 8 buttons
+    -- Output : 8 nút
     for i = 1, NB_OUTPUT, 1 do
         local xT = ENCRAGE_X_OUTPUT
         local yT = ENCRAGE_Y_OUTPUT + ESPACE_Y_OUTPUT * (i - 1)
@@ -685,7 +685,7 @@ function dessinerUnReseau(unReseau)
         end
     end
 
-    -- Connections
+    -- Kết nối
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             local alpha = 25
@@ -702,66 +702,66 @@ function dessinerUnReseau(unReseau)
 end
 ```
 
-Nó cực kỳ hữu ích để hiểu những gì mạng đang làm. Các kết nối đang hoạt động có màu trắng, các kết nối không hoạt động có độ trong suốt một phần. Đầu vào là một lưới các ô trắng/đen/xám. Đầu ra hiển thị những nút nào đang được nhấn.
+Cực hữu ích để hiểu mạng đang làm gì. Kết nối đang hoạt động màu trắng, không hoạt động bán trong suốt. Input là lưới ô trắng/đen/xám. Output hiện nút nào đang nhấn.
 
 ---
 
 ## Kết quả
 
-### Những gì AI đã học được
+### AI đã học được gì
 
-Sau nhiều giờ (và nhiều ngày) thực thi, AI đã tự khám phá ra:
+Qua hàng giờ (và hàng ngày) chạy, AI tự phát hiện :
 
-1. **Di chuyển sang phải**: hành vi cơ bản nhất, nhưng yêu cầu giữ nút Phải
-2. **Nhảy qua kẻ thù**: bằng cách kết nối đầu vào "phát hiện kẻ thù" với nút A hoặc B
-3. **Tránh chướng ngại vật**: một số mạng đã học cách tạm thời rút lui để tiến xa hơn
-4. **Hoàn thành màn chơi**: cá thể tốt nhất có thể vượt qua màn chơi đầu tiên của Super Mario World
+1. **Tiến sang phải** : hành vi cơ bản nhất, nhưng đòi giữ nút Phải
+2. **Nhảy qua kẻ thù** : bằng cách nối input "phát hiện kẻ thù" tới nút A hay B
+3. **Tránh chướng ngại** : vài mạng học lùi tạm để tiến tốt hơn
+4. **Qua màn** : cá thể giỏi nhất đã qua được màn đầu tiên của Super Mario World
 
-![Mario được điều khiển bởi AI đối mặt với Boo trong một màn Super Mario World -- mạng nơ-ron quyết định hành động trong thời gian thực](/images/laupok-mario-ai/mario-ai-playing.jpg)
+![Mario do AI điều khiển đối mặt Boo trong màn Super Mario World -- mạng nơ-ron quyết hành động thời gian thực](/images/laupok-mario-ai/mario-ai-playing.jpg)
 
-### Hạn chế
+### Giới hạn
 
-Dự án có những hạn chế của nó:
+Dự án có giới hạn :
 
-- **Một màn chơi**: AI được huấn luyện trên một màn chơi cụ thể. Nó không tự động khái quát hóa sang các màn chơi khác
-- **Thời gian huấn luyện**: cần hàng chục giờ để đạt được kết quả thỏa mãn
-- **Không hiểu biết**: AI không "hiểu" những gì nó đang làm. Nó tối ưu hóa một hàm fitness (quãng đường di chuyển) thông qua các đột biến ngẫu nhiên
-- **T-bagging**: Laupok nhận thấy Mario có xu hướng nhảy tại chỗ khi nhìn thấy kẻ thù, đơn giản vì điều đó làm tăng fitness (nó tiến bộ một chút trong khi nhảy)
+- **Một màn duy nhất** : AI huấn luyện trên một màn cụ thể. Nó không khái quát tự động sang màn khác
+- **Thời gian huấn luyện** : cần hàng chục giờ để đạt kết quả ưng ý
+- **Không hiểu** : AI không "hiểu" điều nó làm. Nó tối ưu hàm fitness (khoảng cách đi được) qua đột biến ngẫu nhiên
+- **T-bagging** : Laupok ghi nhận Mario có xu hướng nhảy tại chỗ khi thấy kẻ thù, đơn giản vì việc đó tăng fitness (nó tiến chút khi nhảy)
 
 ---
 
-## Cách tái hiện thí nghiệm
+## Cách tái tạo thí nghiệm
 
-Laupok đã chia sẻ tất cả. Đây là các bước:
+Laupok đã chia sẻ mọi thứ. Các bước :
 
-1. **Tải BizHawk** từ [tasvideos.org](https://tasvideos.org/BizHawk) (phần Download)
-2. **Lấy ROM USA của Super Mario World** (bản sao riêng từ cartridge của bạn)
+1. **Tải BizHawk** trên [tasvideos.org](https://tasvideos.org/BizHawk) (mục Download)
+2. **Lấy ROM USA Super Mario World** (bản sao riêng từ băng của chính bạn)
 3. **Tải script Lua** từ [Pastebin](https://pastebin.com/Jcvdqhqm) -- đổi tên thành `mario.lua`
 4. **Đặt script cùng thư mục với ROM**
-5. **Khởi chạy BizHawk**, mở ROM
-6. **Trong cửa sổ Lua console**: `dofile("mario.lua")` hoặc qua menu Script > Open Script
-7. **Lưu trạng thái** tại đầu màn chơi (menu Savestate > Save State) và đặt tên `debut.state`
-8. **Khởi chạy lại script** -- nó hoạt động
+5. **Chạy BizHawk**, mở ROM
+6. **Trong console Lua** : `dofile("mario.lua")` hay qua menu Script > Open Script
+7. **Lưu state** ở đầu màn (menu Savestate > Save State) và đặt tên `debut.state`
+8. **Chạy lại script** -- chạy được
 
-Script bao gồm một biểu mẫu với các tùy chọn:
-- **Accelerate**: tắt giới hạn 30 fps để chạy nhanh hơn
-- **Show network**: hiển thị mạng nơ-ron chồng lên trò chơi
-- **Show info**: hiển thị banner với thế hệ, fitness, và số lượng loài
-- **Pause**: tạm dừng thực thi
-- **Save/Load**: lưu quần thể hiện tại vào tệp `.pop`
+Script gồm form với tùy chọn :
+- **Tăng tốc** : tắt giới hạn 30 fps để đi nhanh hơn
+- **Hiện mạng** : hiện mạng nơ-ron phủ lên
+- **Hiện thông tin** : hiện dải băng với thế hệ, fitness, số loài
+- **Tạm dừng** : dừng thực thi
+- **Lưu/Tải** : bền vững quần thể hiện tại vào tệp `.pop`
 
 ---
 
-## Nguồn và tham khảo
+## Nguồn và tham chiếu
 
-| Tài nguyên | Liên kết |
-|----------|------|
-| Video chính của Laupok | [Tôi đã tạo AI tự chơi Mario](https://www.youtube.com/watch?v=F63GNXGHVwM) |
-| Video giới thiệu code + hướng dẫn | [Cách thiết lập AI + giới thiệu source code](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
-| Source code đầy đủ | [Pastebin Jcvdqhqm](https://pastebin.com/Jcvdqhqm) |
-| Bài báo NEAT gốc | Stanley & Miikkulainen, "Evolving Neural Networks through Augmenting Topologies", 2002 |
-| Hướng dẫn N8Programs | [Giới thiệu triển khai NEAT](https://n8programs.github.io/) (JavaScript, nhưng các khái niệm giống hệt) |
-| 16blings (nguồn cảm hứng của Laupok) | [AI chơi Super Mario World](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
+| Tài nguyên | Link |
+|-----------|------|
+| Video chính của Laupok | [j'ai créé une IA qui joue à mario toute seule](https://www.youtube.com/watch?v=F63GNXGHVwM) |
+| Video review mã + setup | [comment setup l'ia + code source review](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
+| Mã nguồn đầy đủ | [Pastebin Jcvdqhqm](https://pastebin.com/Jcvdqhqm) |
+| Bài gốc NEAT | Stanley và Miikkulainen, "Evolving Neural Networks through Augmenting Topologies", 2002 |
+| Hướng dẫn của N8Programs | [NEAT implementation walkthrough](https://n8programs.github.io/) (JavaScript, nhưng khái niệm giống hệt) |
+| 16blings (cảm hứng của Laupok) | [AI plays Super Mario World](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
 | BizHawk | [tasvideos.org/BizHawk](https://tasvideos.org/BizHawk) |
 | Bộ nhớ Super Mario World | [SMW Central - RAM Map](https://www.smwcentral.net/?p=section&a=details&id=21702) |
 
@@ -769,8 +769,8 @@ Script bao gồm một biểu mẫu với các tùy chọn:
 
 ## Kết luận
 
-Những gì Laupok đã làm là lấy một thuật toán học thuật (NEAT, 2002), viết lại bằng Lua cho một trình giả lập (BizHawk), và áp dụng nó vào Super Mario World. Kết quả: một AI tự học chơi trò chơi từ đầu, không có kiến thức trước, chỉ thông qua các đột biến ngẫu nhiên và chọn lọc tự nhiên.
+Điều Laupok làm là lấy thuật toán học thuật (NEAT, 2002), viết lại bằng Lua cho trình giả lập (BizHawk), và áp vào Super Mario World. Kết quả : AI học từ con số không để chơi game, không kiến thức trước nào, chỉ bằng đột biến ngẫu nhiên và chọn lọc tự nhiên.
 
-Đó là một ví dụ tuyệt đẹp về sức mạnh của thuật toán di truyền. Không có học sâu, không có GPU, không có hàng triệu dữ liệu huấn luyện. Chỉ có chọn lọc tự nhiên, một chút Lua, và rất nhiều kiên nhẫn.
+Đó là ví dụ tuyệt đẹp về sức mạnh thuật toán di truyền. Công thức gói trong ba thành phần : chọn lọc tự nhiên, chút Lua, và nhiều kiên nhẫn. Không deep learning, không GPU, không dữ liệu huấn luyện khổng lồ.
 
-Code được bình luận, chia sẻ, và Laupok đã làm hai video giải thích -- một cho các khái niệm lớn, một cho code. Nếu chủ đề này interest bạn, hãy đi sâu vào. Nó dễ tiếp cận hơn vẻ ngoài của nó.
+Mã được comment, chia sẻ, và Laupok làm hai video giải thích -- một cho khái niệm lớn, một cho mã. Nếu chủ đề khiến bạn hứng thú, hãy lặn vào. Nó dễ tiếp cận hơn vẻ ngoài.

@@ -1,104 +1,110 @@
 ---
-title: "Repo to VPS: GitHub Actions in einen kostenlosen VPS mit persistentem Speicher verwandeln"
-description: Wie man einen GitHub Actions Runner mit git als persistentem Speicher in einen Dauer-VPS verwandelt -- tmate, inotify und commit --amend.
+title: "Repo to VPS: GitHub Actions in gratis VPS verwandeln mit persistentem Speicher"
+description: Wie man einen GitHub-Actions-Runner mit Git als persistentem Speicher in einen permanenten VPS verwandelt, tmate, inotify und commit --amend.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - github
   - devops
   - automation
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "GJENjI17qrlB/YwEYn3k5fZPBDvTU7FhN6NWMak7veBZSwAeQtVmh/35j3lThH7R+8qhS+XtJ5whPMGGAditWw=="
+author_sig: "wqzHESOExUuQh+cBsNeZ0AO9pwYhDbhFh0n6xjz0OGwfyBKlRdklQNBeCm4flbO7S25CLKIBU2K5fHBgcvl0Kw=="
 ---
 
-## GitHub gibt dir 'nen kostenlosen VPS für 6h. Ich hab rausgefunden, wie du ihn permanent machst.
+## GitHub gibt dir 6h lang einen gratis VPS. Ich habe gefunden, wie man ihn permanent macht.
 
-GitHub Actions gibt dir kostenlose Linux-Maschinen.
+GitHub Actions gibt dir gratis Linux-Maschinen.
 
-So richtig. Echte Ubuntu-Server. 2 Kerne, 7 GB RAM, 14 GB Platte. Kostenlos. Für 6h pro Run.
+So richtige Ubuntu-Server. 2 Kerne, 7 GB RAM, 14 GB Platte. Gratis. Für 6h pro Run.
 
-Das einzige "Problem": Am Ende des Runs wird alles gelöscht. Die Maschine ist wegwerfbar. Du installierst Zeug, codest, konfigurierst... und zack, am Ende ist alles weg. Als ob du nichts gemacht hättest.
+Das einzige "Problem": Am Ende des Runs wird alles gelöscht. Die Maschine ist wegwerfbar. Du installierst Pakete, du codest, du konfigurierst... und puff, am Ende verschwindet alles. Als hättest du nichts gemacht.
 
 Außer wenn.
 
-Außer wenn du **Git als Festplatte** benutzt.
+Außer wenn du **Git als Festplatte** nutzt.
 
-Und auf einmal hast du 'nen kostenlosen VPS mit 'ner persistenten Platte, die Runs überlebt. Du verbindest dich neu, alles ist noch da. Du machst weiter, wo du aufgehört hast.
+Und da hast du plötzlich einen gratis VPS mit einer persistenten Platte, die Runs überlebt. Du verbindest dich neu, alles ist noch da. Du machst weiter, wo du aufgehört hast.
 
-Das ist komplett kaputt. Lass mich erklären xD
-
----
-
-## Der Kontext: GitHub Actions Runner
-
-Wenn du 'nen GitHub Actions Workflow startest, gibt dir GitHub 'ne VM.
-
-Die ist dazu da, deinen Code zu builden, Tests zu starten, zu deployen. Der Workflow läuft, macht seinen Job, und die Maschine wird zerstört.
-
-Aber nichts hält dich davon ab, was anderes mit dieser VM zu machen. 'Ne SSH-Shell öffnen und als Server benutzen.
-
-Der Punkt ist, diese Maschinen sind **zustandslos** und **temporär**:
-- Temporär: max 6h pro Run (`timeout-minutes: 360`, das GitHub-Limit)
-- Zustandslos: alles wird am Ende gelöscht
-
-Also um daraus 'nen brauchbaren VPS zu machen, musst du zwei Probleme lösen:
-1. **Wie verbinde ich mich in Echtzeit damit?**
-2. **Wie behalte ich die Platte zwischen zwei Runs?**
-
-Und hier wird's zu 'nem Hack.
+Das ist komplett kaputt. Lass es mich dir erklären.
 
 ---
 
-## Problem 1: Live-SSH mit tmate
+## Der Kontext: die GitHub-Actions-Runner
 
-**tmate** ist ein Fork von tmux, der 'ne teilbare SSH-Session erstellt.
+Wenn du einen GitHub-Actions-Workflow startest, gibt dir GitHub eine VM.
 
-Du startest es auf 'ner Maschine, es generiert zwei Links:
-- 'ne SSH-URL (`ssh xxx@nyc1.tmate.io`)
-- 'ne Web-URL (Terminal im Browser)
+Das ist gemacht, um deinen Code zu bauen, deine Tests laufen zu lassen, zu deployen. Der Workflow läuft, macht seinen Job, und die Maschine wird zerstört.
 
-Du verbindest dich mit einem dieser Links, und boom, du bist in 'ner Shell auf der Maschine. In Echtzeit.
+Aber nichts hindert dich, etwas anderes mit dieser VM zu machen. Zum Beispiel eine SSH-Shell darauf zu öffnen und sie als Server zu nutzen.
+
+Die Bedingung ist, dass diese Maschinen **stateless** und **temporär** sind:
+- Temporär: Max 6h pro Run (`timeout-minutes: 360`, GitHubs Deckel)
+- Stateless: Alles wird am Ende gelöscht
+
+Um daraus also einen nutzbaren VPS zu machen, muss man zwei Probleme lösen:
+1. **Wie verbindet man sich live darauf ?**
+2. **Wie behält man die Platte zwischen zwei Runs ?**
+
+Da wird es ein dreckiger Hack.
+
+---
+
+## Problem 1: das Live-SSH mit tmate
+
+**tmate** ist ein tmux-Fork, der eine teilbare SSH-Session erstellt.
+
+Du startest es auf einer Maschine, es generiert zwei Links:
+- Eine SSH-URL (`ssh xxx@nyc1.tmate.io`)
+- Eine Web-URL (Terminal im Browser)
+
+Du verbindest dich mit einem dieser Links, und boom, du bist in einer Shell auf der Maschine. Live.
 
 Der Workflow startet also tmate:
 
 ```bash
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
+
+# holt die Verbindungslinks
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
 
-Und diese Links werden von 'nem Python-Script direkt in die README des Repos geschrieben. Du öffnest dein Repo, siehst den Verbindungslink, klickst drauf. Schon bist du in deinem VPS.
+Und diese Links werden von einem Python-Skript direkt ins README des Repos geschrieben. Du öffnest dein Repo, siehst den Verbindungslink, klickst. Schon bist du in deinem VPS.
 
-Erstes Problem gelöst. Aber das zweite ist echt verrückt.
+Erstes Problem gelöst. Aber das zweite ist wirklich verrückt.
 
 ---
 
 ## Problem 2: Git als Festplatte
 
-Hier kommt das kranke Ding.
+Hier die Idee, die alles ändert.
 
-Die Maschine wird bei jedem Run gelöscht. Also speichern wir **das Dateisystem in 'nem dedizierten Git-Branch**, genannt `filesystem`.
+Die Maschine wird bei jedem Run gelöscht. Also speichern wir **das Dateisystem in einem dedizierten Git-Branch** namens `filesystem`.
 
-Beim Start stellt das Script den Zustand aus diesem Branch wieder her:
+Beim Start stellt das Skript den Zustand aus diesem Branch wieder her:
 
 ```bash
 filesystem_branch="filesystem"
+
+# holt den filesystem-Branch vom Remote
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
+
+# stellt den Workspace aus diesem Branch wieder her
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
 
-Der Branch `filesystem` IST deine Festplatte. Deine Dateien, deine Installationen, deine Konfigs -- alles ist drin.
+Der `filesystem`-Branch IST deine Festplatte. Deine Dateien, deine Installs, deine Configs, alles steckt drin.
 
-Checkst du das? Die Maschine ist wegwerfbar, aber die Platte lebt in Git. Du startest den Workflow neu, die Platte wird wiederhergestellt, du machst genau da weiter, wo du warst.
+Du siehst die Idee? Die Maschine ist wegwerfbar, aber die Platte lebt in Git. Du startest den Workflow neu, die Platte wird restauriert, du machst genau weiter, wo du warst.
 
-Es ist wie ein VPS, der in den Ruhezustand geht. Nur dass der Ruhezustand ein Git-Repo ist xD
+Es ist wie ein VPS, der hiberniert. Nur dass die Hibernation ein Git-Repo ist.
 
-### Erster Start: Leere Platte erstellen
+### Erster Start: die leere Platte erstellen
 
-Beim allerersten Run existiert der Branch `filesystem` noch nicht. Muss erstellt werden. Und das ist nicht trivial:
+Beim allerersten Run existiert der `filesystem`-Branch noch nicht. Man muss ihn erstellen. Und das ist nicht trivial:
 
 ```bash
 ensure_filesystem_branch() {
@@ -112,41 +118,41 @@ ensure_filesystem_branch() {
 }
 ```
 
-Das `git checkout --orphan` ist der Schlüssel. Ein Orphan-Branch ist ein Branch **ganz ohne History** -- als ob du mit 'nem leeren Repo von vorne anfängst.
+Das `git checkout --orphan` ist der Schlüssel. Ein verwaister Branch ist ein Branch **ohne jegliche Historie**, als startest du von einem leeren Repo neu.
 
-Warum orphan? Weil du NICHT willst, dass deine persistente Platte die ganze History deines Quellcodes mitschleppt. Die Platte ist 'ne eigene Sache, die ihr eigenes Leben führt. Sie startet leer.
+Warum verwaist? Weil du NICHT willst, dass deine persistente Platte die ganze Historie deines Sourcecodes mitschleppt. Die Platte bleibt isoliert, mit eigenem Leben. Sie startet jungfräulich.
 
-Und das `git ls-remote --exit-code` am Anfang ist einfach 'ner sauberer Check: "gibt es den Branch schon auf dem Remote?". Wenn ja, nichts tun. Wenn nein, wird er erstellt. Idempotent, wie wir es mögen.
+Und das `git ls-remote --exit-code` am Anfang ist nur ein sauberer Check: "existiert der Branch schon auf dem Remote ?". Wenn ja, fassen wir nichts an. Wenn nein, erstellen wir ihn. Idempotent, wie wir es mögen.
 
 ### Das selektive Git Clean: Caches schützen
 
-Diese Zeile verdient 'nen genaueren Blick:
+Diese Zeile verdient, dass man stehen bleibt:
 
 ```bash
 git clean -fdx -e .apt-cache -e .cache -e host.conf -e tmate.sock
 ```
 
-`git clean -fdx` löscht ALLES, was nicht von Git getrackt wird. Normalerweise ist das heftig -- es putzt das Workspace komplett durch.
+`git clean -fdx` wirft ALLES weg, was nicht von Git getrackt wird. Normalerweise ist das brutal, es räumt den Workspace gründlich auf.
 
-Aber die `-e` (exclude) schützen bestimmte Dinge:
-- `.apt-cache` → der Cache der APT-Pakete (dazu kommen wir gleich, das ist clever)
+Aber die `-e` (Exclude) schützen manche Dateien:
+- `.apt-cache` → der APT-Paketcache (dazu kommen wir, das ist clever)
 - `.cache` → generischer Cache
 - `host.conf` → die SSH-Adresse der Session
-- `tmate.sock` → der Socket der aktuellen tmate-Session
+- `tmate.sock` → der Socket der laufenden tmate-Session
 
-Wenn du diese Dateien putzen würdest, würdest du die aktive Session killen oder deinen Cache verlieren. Also werden sie beim Reset verschont.
+Wenn du diese Dateien aufräumen würdest, brichst du die aktive Session oder verlierst deinen Cache. Also sparen wir sie beim Reset aus.
 
-'n blödes Detail auf den ersten Blick, aber ohne das geht alles kaputt.
+Ein auf den ersten Blick dummes Detail, aber ohne das bricht alles.
 
 ---
 
-## Der Autosave: Inotify überwacht alles
+## Der Autosave: inotify, das alles überwacht
 
-Okay, aber wie landen die Dateien im Branch `filesystem`?
+Gut, aber wie kommen die Dateien in den `filesystem`-Branch?
 
-Antwort: 'n Watcher, der ALLE Dateiänderungen überwacht und automatisch committed/pusht.
+Antwort: Ein Watcher, der ALLE Dateiänderungen überwacht und automatisch committet/pusht.
 
-Das magische Tool ist **inotifywait** (aus dem Paket `inotify-tools`). Es überwacht das Dateisystem auf Kernel-Ebene und feuert los, sobald sich 'ne Datei ändert.
+Das magische Tool ist **inotifywait** (aus dem Paket `inotify-tools`). Es überwacht das Dateisystem auf Kernelebene und triggert, sobald sich eine Datei ändert.
 
 ```bash
 autosave() {
@@ -154,48 +160,48 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1
+    sleep 1   # Debounce wenn viele Änderungen auf einmal
   done
 }
 
 autosave &
 ```
 
-Lass uns die inotify-Flags aufdröseln, weil jedes zählt:
+Zerlegen wir die inotify-Flags, denn jedes zählt:
 - `-r` → rekursiv, überwacht alle Unterordner
-- `-e modify,create,delete,move` → reagiert auf diese 4 Ereignistypen (Änderung, Erstellung, Löschung, Verschiebung)
-- `--exclude '...'` → 'ne Regex, um bestimmte Dateien zu ignorieren
+- `-e modify,create,delete,move` → reagiert auf diese 4 Eventtypen
+- `--exclude '...'` → eine Regex, um manche Dateien zu ignorieren
 
 Das `--exclude` ist entscheidend. Schau, was es ignoriert:
-- `.git` → logisch, sonst würde jeder Commit 'nen Autosave auslösen, der 'nen Commit auslöst... Endlosschleife. Katastrophe.
-- `.apt-cache` und `.cache` → die Caches, die sich ständig ändern und die man nicht in Git spammen will
-- `host.conf` und `tmate.sock` → die Session-Dateien, die sich dauernd ändern
-- `.gitignore`, `.txt.swp` → temporäre Dateien (die `.swp` sind vim-Editierdateien)
+- `.git` → natürlich, sonst würde jeder Commit einen Autosave triggern, der einen Commit triggert... Endlosschleife. Katastrophe.
+- `.apt-cache` und `.cache` → die Caches, die sich ständig ändern und die wir nicht in Git spammen wollen
+- `host.conf` und `tmate.sock` → die Sessiondateien, die sich unaufhörlich bewegen
+- `.gitignore`, `.txt.swp` → temporäre Dateien (die `.swp` sind vims Editierdateien)
 
-Ohne diesen Exclude würdest du 'nen Autosave bekommen, der sich bei seinen eigenen Änderungen immer wieder selbst triggert. Das `.git` in der Liste ist DIE Zeile, die verhindert, dass du dich selbst ins Knie schießt.
+Ohne dieses Exclude hättest du einen Autosave, der sich in Schleife auf seine eigenen Änderungen triggert. Das `.git` in der Liste ist DIE Zeile, die dich davor bewahrt, dir ins eigene Bein zu schießen.
 
-Du änderst 'ne Datei? Inotify erkennt es sofort, es wird committed, gepusht. In unter 'ner Sekunde ist deine Änderung im Branch `filesystem`.
+Du änderst eine Datei? inotify erkennt es augenblicklich, es committet, es pusht. In weniger als einer Sekunde ist deine Änderung im `filesystem`-Branch.
 
-Du installierst was, schreibst Code, änderst 'ne Config -- alles wird in Echtzeit gespeichert, automatisch, ohne dass du irgendwas tun musst.
+Du installierst ein Paket, du schreibst Code, du fasst eine Config an, alles wird live gespeichert, automatisch, ohne dass du irgendwas tust.
 
-Du hast buchstäblich 'n automatisches Backup-System für die ganze Platte. Kaputt.
+Du hast buchstäblich ein automatisches Sicherungssystem der ganzen Platte. Kaputt.
 
-### Das Debounce: Git nicht zuspammen
+### Der Debounce: Git nicht spammen
 
 Das `sleep 1` nach jedem Save ist ein **Debounce**.
 
-Wenn du 'ne Datei in 'nem Editor speicherst, erzeugt das oft mehrere Dateisystem-Ereignisse auf einmal (temporäre Datei erstellen, umbenennen, alte löschen...). Ohne Debounce würden 3-4 Commits für 'nen einzigen Save rausgehen.
+Wenn du eine Datei in einem Editor speicherst, generiert das oft mehrere Filesystem-Events in Salve (Erstellung einer Tempdatei, Rename, Löschen der alten...). Ohne Debounce würdest du 3-4 Commits für ein einziges Speichern triggern.
 
-Das `sleep 1` sagt: "warte 'ne Sekunde nach 'nem Save, bis die Welle sich beruhigt hat, bevor du wieder lauschst". Es fasst nahe Änderungen in 'nem einzigen Commit zusammen. Clever.
+Das `sleep 1` sagt: "Warte eine Sekunde nach einem Save, bis die Salve sich beruhigt, bevor du wieder lauschst". Das gruppiert nahe Änderungen in einen einzigen Commit. Clever.
 
-### Und noch 'n periodischer Backup
+### Und ein periodisches Backup obendrauf
 
-Falls inotify mal was verpassen sollte, gibt's auch noch 'nen Save alle 5 Sekunden:
+Falls inotify ein Event verpassen sollte, gibt es auch alle 5 Sekunden einen Save:
 
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote
+    sync_from_remote   # holt eventuelle Remote-Änderungen
     sleep 5
     commit_and_push
   done
@@ -204,27 +210,27 @@ periodic_save() {
 periodic_save &
 ```
 
-Gürtel UND Hosenträger. Wir wollen den Plattenzustand auf keinen Fall verlieren.
+Gürtel UND Hosenträger. Wir wollen vor allem den Plattenzustand nicht verlieren.
 
 ---
 
-## Das clevere Detail: Nur ein Commit
+## Das clevere Detail: ein einziger Commit
 
-Wenn du bei jeder Dateiänderung commitest, sammelst du... tausende Commits. In 'ner Stunde Session explodiert deine Git-History. Das Repo wird riesig. Widerlich.
+Wenn du bei jeder Dateiänderung committest, häufst du Tausende Commits an. In einer Stunde Session explodiert deine Historie. Das Repo wird riesig. Das ist hässlich.
 
-Die Lösung ist elegant: **wir amendieren den existierenden Commit**, statt 'nen neuen zu erstellen.
+Die Lösung ist elegant: **Wir amenden den existierenden Commit**, statt einen neuen zu erstellen.
 
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return
+    flock -n 200 || return   # Lock damit nicht zwei Saves zugleich laufen
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/
+    git reset -- .github/workflows/ .github/scripts/   # Scripts nicht anfassen
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit
+        git commit --amend --no-edit    # AMEND : überschreibt den vorherigen Commit
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -234,21 +240,21 @@ commit_and_push() {
 }
 ```
 
-`git commit --amend` bedeutet: "ersetz den letzten Commit durch diesen".
+`git commit --amend` heißt: "Ersetze den letzten Commit durch diesen".
 
-Dadurch hat der Branch `filesystem` IMMER nur 'nen einzigen Commit. Egal wie oft du speicherst. Es ist einfach 'n Snapshot des aktuellen Zustands, der immer und immer wieder force-gepusht wird.
+Dadurch hat der `filesystem`-Branch IMMER einen einzigen Commit. Egal wie oft du sicherst. Es ist nur ein Snapshot des aktuellen Zustands, immer wieder force-gepusht.
 
-Das `flock` ist 'ne Sperre: weil es zwei Save-Schleifen gibt (inotify + periodisch), muss verhindert werden, dass sie gleichzeitig Git starten und sich gegenseitig in die Quere kommen. Nur ein Git-Prozess zur Zeit.
+Das `flock` ist ein Lock: Da es zwei Save-Schleifen gibt (inotify + periodisch), muss man vermeiden, dass sie Git gleichzeitig starten und sich in die Quere kommen. Ein einziger Git-Prozess auf einmal.
 
 Sauber.
 
 ---
 
-## Das sync_from_remote: Mehrere Sessions verwalten
+## Das sync_from_remote: mehrere Sessions handhaben
 
-Hier 'n Ding, an das du am Anfang nicht denkst: was, wenn du ZWEI Runs gleichzeitig startest? Oder wenn 'ne Session den Branch `filesystem` ändert, während 'ne andere läuft?
+Tja, ein Fall, an den du anfangs nicht denkst: Was, wenn du ZWEI Runs gleichzeitig startest? Oder wenn eine Session den `filesystem`-Branch ändert, während eine andere läuft?
 
-Das Script handhabt das mit 'nem `sync_from_remote` vor jedem Commit:
+Das Skript handhabt das mit einem `sync_from_remote` vor jedem Commit:
 
 ```bash
 sync_from_remote() {
@@ -257,17 +263,17 @@ sync_from_remote() {
 }
 ```
 
-Das `--ff-only` (Fast-Forward Only) ist wichtig: es bedeutet "merge NUR, wenn wir sauber vorrücken können, ohne 'nen Merge-Commit zu erstellen".
+Das `--ff-only` (nur Fast-Forward) ist wichtig: Es heißt "merge NUR, wenn man sauber vorrücken kann, ohne einen Merge-Commit zu erstellen".
 
-Wenn die beiden Branches auseinandergegangen sind (z.B. zwei Sessions haben verschiedene Dinge geändert), schlägt der Fast-Forward still fehl (`2>/dev/null || true`) und der lokale Zustand bleibt erhalten. Es ist kein perfektes Merge-System, aber es verhindert Korruption im einfachen Fall, wo nur eine Session läuft.
+Wenn beide Branches divergiert sind (z. B. zwei Sessions haben verschiedene Dateien geändert), schlägt der Fast-Forward still fehl (`2>/dev/null || true`) und wir behalten den lokalen Zustand. Kein perfektes Mergesystem, vermeidet aber Korruptionen im simplen Fall, wo nur eine Session läuft.
 
-Ehrlich gesagt, du solltest nicht 3 Sessions parallel im selben Repo laufen lassen. Aber der Code versucht trotzdem, nicht zu explodieren, falls es passiert. Das ist Verteidigung.
+Ehrlich gesagt sollte man nicht 3 Sessions parallel auf demselben Repo starten. Aber der Code versucht trotzdem, nicht zu explodieren, wenn es passiert. Defensive.
 
 ---
 
-## Der APT-Cache: Schnell installieren
+## Der APT-Cache: schnell installieren
 
-Es gibt 'n Detail im Workflow, das unscheinbar wirkt, aber gut durchdacht ist:
+Es gibt ein Detail im Workflow, das unscheinbar zahlt, aber gut durchdacht ist:
 
 ```yaml
 - name: Cache & install APT packages (tmate + watcher)
@@ -276,19 +282,19 @@ Es gibt 'n Detail im Workflow, das unscheinbar wirkt, aber gut durchdacht ist:
     packages: tmate inotify-tools
 ```
 
-tmate und inotify-tools werden über 'ne Action installiert, die **APT-Pakete cached**.
+tmate und inotify-tools werden via eine Action installiert, die **APT-Pakete cached**.
 
-Beim ersten Run werden sie runtergeladen und installiert. Bei späteren Runs werden sie aus dem GitHub-Actions-Cache wiederhergestellt -- schneller, kein erneuter Download nötig.
+Beim ersten Run lädt und installiert das. Bei folgenden Runs wird es aus dem GitHub-Actions-Cache restauriert, schneller, kein Re-Download nötig.
 
-Und erinnerst du dich an das `git clean -fdx -e .apt-cache` von vorhin? Das hängt damit zusammen. Der Ordner `.apt-cache` wird vor dem Putzen geschützt, damit die Pakete, die du während deiner Session installierst, zumindest minimal überleben können.
+Und erinnerst du dich an das `git clean -fdx -e .apt-cache` von vorhin? Das hängt zusammen. Der `.apt-cache`-Ordner ist gerade deshalb vor dem Aufräumen geschützt, damit die Pakete, die du während deiner Session installierst, minimal persistieren können.
 
-Alles hält sich.
+Alles hängt zusammen. Ich habe an den kompletten Lebenszyklus gedacht.
 
 ---
 
-## Die Scripts, die in /tmp versteckt werden
+## Die in /tmp versteckten Skripte
 
-Noch 'n fieses, aber cleveres Detail. Ganz am Anfang des Scripts:
+Noch ein fieses, aber cleveres Detail. Ganz am Anfang des Skripts:
 
 ```bash
 RUNNER_SCRIPTS_DIR="/tmp/runner-scripts"
@@ -297,25 +303,25 @@ mkdir -p "$RUNNER_SCRIPTS_DIR"
 cp -r .github/scripts "$RUNNER_SCRIPTS_DIR/"
 ```
 
-Die Scripts (`update_readme.py`, etc.) werden nach `/tmp` kopiert, BEVOR der Branch `filesystem` angefasst wird.
+Die Skripte (`update_readme.py` usw.) werden VOR dem Anfassen des `filesystem`-Branches nach `/tmp` kopiert.
 
-Warum? Weil wenn du `git reset --hard` auf den Branch `filesystem` machst (der am Anfang leer ist oder deine Platte enthält), verschwinden die `.github/scripts`-Dateien des Quell-Repos aus dem Workspace.
+Warum? Weil wenn du den `git reset --hard` auf den `filesystem`-Branch machst (der anfangs leer ist oder deine Platte enthält), die `.github/scripts`-Dateien des Sourcerepos aus dem Workspace verschwinden.
 
-Aber das Script braucht sie, um das README zu updaten. Also versteckt es sie in `/tmp`:
+Aber das Skript braucht sie noch während der Session (um das README bei jedem tmate-Neustart zu updaten). Also versteckt es sie in `/tmp`, außerhalb von Gits Reichweite:
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Wenn du nicht dran denkst, fliegt's dir um die Ohren. Ich hab dran gedacht.
+Wenn du daran nicht denkst, rätselst du 30 Minuten, warum dein Skript verschwunden ist. Ich habe daran gedacht.
 
 ---
 
 ## Die maßgeschneiderte Shell
 
-Kleiner Komfort am Ende: Die Session gibt dir 'ne konfigurierte Shell, kein nacktes Bash.
+Kleiner Komfort: Die Session gibt dir eine konfigurierte Shell, kein nacktes Bash.
 
-Das `prestart.sh` kopiert 'ne custom `.bashrc`:
+Das `prestart.sh` kopiert eine Custom-`.bashrc`:
 
 ```bash
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
@@ -324,7 +330,7 @@ fi
 sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
-Und diese `.bashrc` enthält 'nen farbigen Prompt, Aliase (`ll`, `lla`, `rm -i`), und vor allem 'nen cleveren Override von `exit`:
+Und diese `.bashrc` enthält einen farbigen Prompt, Aliase (`ll`, `lla`, `rm -i`) und vor allem einen `exit`-Override:
 
 ```bash
 exit() {
@@ -332,20 +338,21 @@ exit() {
     builtin exit "$@"
 }
 
+# Ctrl+D macht dasselbe wie exit
 bind -x '"\C-d": "exit"'
 ```
 
-Wenn du `exit` (oder Ctrl+D) eingibst, killt es sauber die tmate-Prozesse, bevor es schließt. Das verhindert, dass verwaiste tmate-Sessions auf der Maschine rumhängen.
+Wenn du `exit` tippst (oder Strg+D), killt das sauber die tmate-Prozesse vor dem Schließen. Das vermeidet, tmate-Zombie-Sessions zurückzulassen.
 
-Es gibt auch 'ne Funktion `tmate-detach`, falls du dich trennen willst, OHNE die Session zu killen (um dich später neu zu verbinden). Komfortdetail, aber es zeigt das Level an Sorgfalt.
+Es gibt auch eine `tmate-detach`-Funktion, wenn du dich trennen willst OHNE die Session zu killen (um dich später neu zu verbinden). Komfortdetail, zeigt aber das Sorgfaltsniveau.
 
 ---
 
-## Der selbst-neustartende tmate
+## Das tmate, das sich selbst neu startet
 
-Kleiner Komfort: Wenn du `exit` in deiner Shell eingibst, stirbt normalerweise die tmate-Session und du bist endgültig weg.
+Kleiner Komfort: Wenn du `exit` in deiner Shell tippst, stirbt normalerweise die tmate-Session und du bist endgültig getrennt.
 
-Aber hier ist tmate in 'ner `while true`-Schleife:
+Nur dass tmate hier in einer `while true`-Schleife steckt:
 
 ```bash
 while true; do
@@ -353,149 +360,141 @@ while true; do
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
-
   echo "tmate session ended; restarting..."
 done
 ```
 
-Du `exit`? Die Session startet von selbst neu. Du kannst dich mit demselben Link neu verbinden. Stabile Wiederverbindung, sogar nach 'ner Trennung.
+Du machst `exit`? Die Session startet von allein neu. Du verbindest dich mit demselben Link neu.
 
-Ist bescheuert, aber macht's nutzbar.
+Dämlich, aber macht die Session nutzbar.
 
 ---
 
-## Die Ein-Kommando-Wiederverbindung
+## Die Reconnection mit einem Command
 
-Wie verbindest du dich nach 'ner Trennung neu, ohne jedes Mal in den Run-Logs rumzukruschen?
+Wie verbindest du dich nach einer Trennung neu, ohne jedes Mal in den Runlogs zu wühlen?
 
-Die tmate-SSH-Adresse wird in 'ne Datei `host.conf` geschrieben, die selbst im Branch `filesystem` committed wird:
+Die tmate-SSH-Adresse steht in einer `host.conf`-Datei, committet im `filesystem`-Branch:
 
 ```bash
 printf '%s' "${tmate_ssh#ssh }" > host.conf
 ```
 
-Und weil diese Datei in Git ist, kannst du sie über die GitHub-API mit 'nem einzigen Kommando abrufen:
+Und da diese Datei in Git liegt, kannst du sie mit einem einzigen Command via GitHub-API holen:
 
 ```bash
 ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
   "/repos/USER/REPO/contents/host.conf?ref=filesystem" | tr -d '\r\n')"
 ```
 
-Du gibst das ein, es holt die aktuelle SSH-Adresse aus dem Repo und verbindet dich direkt. Selbst wenn die Adresse zwischen zwei Sessions gewechselt hat.
-
-Erledigt.
+Du startest das, es holt die aktuelle SSH-Adresse aus dem Repo und verbindet dich. Selbst wenn sich die Adresse zwischen zwei Sessions geändert hat.
 
 ---
 
 ## Der komplette Flow
 
-Fassen wir zusammen:
+Rekapitulieren wir:
 
-```
-1. Du startest den Workflow (Push oder manueller Button)
-2. GitHub gibt dir 'ne Ubuntu-VM
-3. Das Script stellt die Platte aus dem Branch "filesystem" wieder her
-4. Inotify beginnt, alle Änderungen zu überwachen
-5. Periodic_save committed alle 5s als Backup
-6. Tmate startet → generiert SSH-/Web-Links
-7. Die Links werden ins README + host.conf geschrieben
-8. Du verbindest dich mit SSH oder dem Web-Terminal
-9. Du machst, was du willst (codieren, installieren, debuggen...)
-   └── jede Dateiänderung = sofortiger Autosave nach Git
+1. Du triggerst den Workflow (Push oder manueller Button)
+2. GitHub gibt dir eine Ubuntu-VM
+3. Das Skript stellt die Platte aus dem "filesystem"-Branch wieder her
+4. inotify fängt an, alle Änderungen zu überwachen
+5. periodic_save committet alle 5s als Backup
+6. tmate startet → generiert die SSH/Web-Links
+7. Die Links werden in README + host.conf geschrieben
+8. Du verbindest dich mit ssh oder Webterminal
+9. Du machst, was du willst, jede Dateiänderung = Autosave
 10. 6h später killt GitHub die VM
-11. Aber deine Platte ist intakt im Branch "filesystem"
+11. Deine Platte ist intakt im "filesystem"-Branch
 12. Du startest den Workflow neu → zurück zu Schritt 3, alles ist noch da
-```
 
-Ein VPS. Kostenlos. Mit persistenter Platte. Einfach mit Git und GitHub Actions.
-
----
-
-## OK, seien wir ehrlich: Die Limits
-
-Es ist 'n Hack, kein echter VPS. Also:
-
-- **Max 6h pro Run.** Du musst den Workflow regelmäßig neu starten. Kein unendlicher Uptime.
-- **Nichts für Produktion.** Du wirst deine Site nicht darauf hosten. Es ist zum Explorieren, Entwickeln, Debuggen, Testen von Zeug in 'nem wegwerfbaren aber wiederherstellbaren Linux.
-- **GitHub sieht alles.** Es sind ihre Maschinen. Pack nichts Sensibles rein.
-- **Halt das Repo privat.** Du exponierst 'ne SSH-Shell. 'N öffentliches Repo = potenziell jeder kann sich verbinden. Schlechte Idee.
-- **Es ist am Rand der Nutzungsbedingungen.** GitHub Actions ist für CI/CD gedacht, nicht für kostenlose VPS. Also mit Maß verwenden, für legitime Zwecke, ohne zu missbrauchen.
-
-### Die wahre Achillesferse: Git hasst große Dateien
-
-Es gibt 'ne technischere Grenze, und das ist die wichtigste, die du verstehen musst.
-
-**Git ist für Text gemacht, nicht für 'n Dateisystem.**
-
-Die persistente Platte lebt in 'nem Git-Branch. Also geht alles, was du speicherst, durch Git. Und Git:
-- kann mit großen Binärdateien schlecht umgehen (ein 2 GB Docker-Image in Git? vergiss es)
-- hat 'n Limit von 100 MB pro Datei auf GitHub (harte Grenze, drüber pusht es nicht)
-- empfiehlt, unter ~5 GB pro Repo zu bleiben
-
-Also wenn du `npm install` in 'nem Projekt mit 500 MB `node_modules` machst, oder wenn du was baust, das schwere Binaries ausspuckt, wird der Push zum `filesystem`-Branch entweder extrem lahm oder scheitert komplett.
-
-Das `git commit --amend` hilft (nur ein Commit, keine aufblasende History), aber es ändert nichts daran, dass 'ne 200 MB Datei nie durchkommt.
-
-Kurz: **Es funktioniert super für Code, Configs, kleine Dateien. Es funktioniert nicht, um große Daten oder binäre Artefakte zu speichern.** Das musst du im Kopf behalten, wenn du in deiner Session arbeitest.
-
-### Es ist kein kompletter System-Snapshot
-
-Noch 'ne wichtige Nuance: Der Branch `filesystem` sichert das **Workspace** (den Ordner des Repos), nicht das ganze System.
-
-Wenn du `apt install htop` machst, landet das Binary in `/usr/bin/htop`, das AUSSERHALB des Workspace liegt. Es wird NICHT gesichert. Beim nächsten Run musst du es neu installieren.
-
-Deshalb gibt es den APT-Cache und das `prestart.sh`: um die System-Umgebung bei jedem Start neu vorzubereiten, weil nur das Workspace überlebt.
-
-Wenn du willst, dass deine Installationen überleben, musst du sie ins Workspace packen (z.B. in 'nem lokalen Ordner installieren statt systemweit). Das ist 'ne Denkweise, die du dir aneignen musst.
+Ein gratis VPS mit persistenter Platte. Nur mit Git und GitHub Actions.
 
 ---
 
-## Kostenloser VPS vs echter VPS: Der Vergleich
+## Gut, ehrlich sein: die Grenzen
+
+Es ist ein Hack, kein echter VPS. Also:
+
+- **Max 6h pro Run.** Man muss den Workflow regelmäßig neu starten. Uptime pro Run begrenzt.
+- **Reserviert für Dev und Exploration.** Du wirst deine Seite nicht darauf hosten. Es ist zum Explorieren, Entwickeln, Debuggen, schnell eine wegwerfbare, aber wiederherstellbare Linux-Umgebung testen.
+- **GitHub sieht alles.** Es sind ihre Maschinen. Nichts Sensibles drauflegen.
+- **Repo privat halten.** Du exponierst eine SSH-Shell. Ein öffentliches Repo = potenziell kann sich jeder verbinden. Schlechte Idee.
+- **An der Grenze der Nutzungsbedingungen.** GitHub Actions ist für CI/CD gemacht, nicht für gratis VPS. Also sparsam nutzen, für Legitimes, ohne Missbrauch.
+
+### Die echte Achillesferse: Git hasst große Dateien
+
+Git ist für Text gemacht, nicht für ein Dateisystem.
+
+Die persistente Platte lebt in einem Git-Branch. Also geht alles, was du sicherst, durch Git. Und Git:
+- Handhabt große Binärdateien schlecht (ein 2-GB-Docker-Image in Git? Vergiss es)
+- Hat ein 100-MB-Limit pro Datei auf GitHub (hartes Limit, pusht nicht darüber)
+- Empfiehlt, unter ~5 GB pro Repo zu bleiben
+
+Wenn du also `npm install` für ein Projekt mit 500 MB `node_modules` machst oder ein Projekt baust, das schwere Binaries generiert, wird der Push nach `filesystem` entweder zu Tode ruckeln oder glatt scheitern.
+
+Das `git commit --amend` hilft (ein einziger Commit, keine aufblähende Historie), ändert aber nichts daran, dass eine 200-MB-Datei nie durchgeht.
+
+Grob gesagt: **Es funktioniert super für Code, Configs, kleine Dateien. Es funktioniert nicht zum Speichern großer Daten oder Binärartefakte.** Das muss man im Kopf behalten bei dem, was du in deiner Session machst.
+
+### Kein komplettes Systemsnapshot
+
+Andere wichtige Nuance: Der `filesystem`-Branch sichert den **Workspace** (den Repo-Ordner), nicht das ganze System.
+
+Wenn du `apt install htop` machst, geht das Binary nach `/usr/bin/htop`, was AUßERHALB des Workspaces liegt. Also wird es NICHT gesichert. Beim nächsten Run musst du es neu installieren.
+
+Deshalb haben wir den APT-Cache und das `prestart.sh`: Um die Systemumgebung bei jedem Start neu vorzubereiten, da nur der Workspace persistiert.
+
+Wenn du willst, dass deine Installs überleben, musst du sie in den Workspace legen (z. B. in einen lokalen Ordner statt systemweit installieren). Eine einzuübende Gymnastik.
+
+---
+
+## Gratis-VPS vs. echter VPS: das Match
 
 | | repo-to-vps | Echter VPS (5€/Monat) |
 |---|---|---|
 | **Preis** | 0€ | ~5-10€/Monat |
 | **Uptime** | 6h, neu starten | 24/7 |
-| **Platte** | Git-Branch, kleine Dateien | echte SSD, mehrere GB |
-| **RAM** | ~7 GB (großzügig!) | 1-2 GB oft |
-| **CPU** | 2-4 ordentliche Kerne | 1-2 vCPU |
-| **Setup** | Template klonen | manuelle Config |
-| **Persistenz** | nur Workspace | komplettes System |
-| **Legitimität** | Grenze der AGB | 100% sauber |
+| **Platte** | Git-Branch, kleine Dateien | Echte SSD, mehrere GB |
+| **RAM** | ~7 GB (großzügig !) | Oft 1-2 GB |
+| **CPU** | 2-4 korrekte Kerne | 1-2 vCPU |
+| **Setup** | Template klonen | Manuelle Config |
+| **Persistenz** | Nur Workspace | Komplettes System |
+| **Legitimität** | AGB-Grenze | 100 % clean |
 
-Das Lustige ist, dass der GitHub-Runner bei den Rohdaten (RAM, CPU) oft BESSER ist als 'n 5€-VPS. Aber der 6h-Uptime und die auf das Workspace beschränkte Persistenz machen es zu 'nem Hackerspielzeug, nicht zu 'nem echten Server.
+Der interessante Punkt ist, dass rohe Specs-Seite (RAM, CPU) der GitHub-Runner oft BESSER ist als ein 5€-VPS. Aber die 6h-Uptime und die auf den Workspace begrenzte Persistenz machen daraus ein Hacker-Spielzeug, kein echter Server.
 
-Zum Lernen, Testen, schnellen Linux-Debuggen in 'ner wiederherstellbaren Umgebung? Perfekt. Um irgendwas Ernsthaftes zu hosten? Hol dir 'nen echten VPS.
+Zum Lernen, Testen, schnell ein Linux-System in einer wiederherstellbaren Umgebung debuggen? Perfekt. Um irgendwas Ernstes zu hosten? Nimm einen echten VPS.
 
-Aber für 'ne temporäre Linux-Umgebung, die du nach Belieben wiederherstellen kannst? Einfach genial.
-
----
-
-## Das Muster dahinter
-
-Wenn du einen Schritt zurücktrittst, basieren repo-to-vps und der E-Mail-Bot (mein anderer Artikel) auf derselben Idee:
-
-> **Git ist nicht nur ein Versionsverwalter. Es ist ein persistentes, kostenloses, versioniertes Speichersystem, das über 'ne API zugänglich ist.**
-
-Sobald du 'n zustandsloses System hast (GitHub Actions, 'n Worker, 'ne Serverless-Funktion) und 'nen Zustand zwischen zwei Ausführungen behalten willst, kann Git als "Platte" dienen.
-
-- Der E-Mail-Bot speichert 'ne `lastId` in 'nem Git-Tag.
-- repo-to-vps speichert 'n ganzes Dateisystem in 'nem Git-Branch.
-
-Gleiches Muster, zwei Größenordnungen. Ein Wert auf der einen Seite, 'ne Platte auf der anderen.
-
-Und das `git commit --amend` + Force-Push ist die gemeinsame Technik: **du behältst 'nen einzigen Commit, der den aktuellen Zustand repräsentiert, der bei jedem Update überschrieben wird.**
-
-War nicht dafür gedacht. Aber es funktioniert. Und ist kostenlos.
+Aber für eine temporäre Linux-Umgebung, die du nach Belieben restaurieren kannst? Das ist einfach genial.
 
 ---
 
-**Die 3 Dinge, die du dir merken solltest:**
+## Das Pattern hinter allem
 
-1. **Ein Git-Branch = 'ne persistente Festplatte** -- Speichere dein Dateisystem in 'nem dedizierten Branch, stelle es beim Start wieder her, und du hast 'nen Zustand, der wegwerfbare Maschinen überlebt.
+Wenn du zurücktrittst, beruhen repo-to-vps und der Mailbot (mein anderer Artikel) auf derselben Idee:
 
-2. **Inotify + Git = Autosave in Echtzeit** -- `inotifywait` überwacht Änderungen auf Kernel-Ebene und pusht sofort zu Git. Mit `git commit --amend`, um 'nen einzigen sauberen Commit zu behalten.
+> **Git ist nicht nur ein Versionsmanager. Es ist ein persistentes, gratis, versioniertes, via API erreichbares Speichersystem.**
 
-3. **Tmate verwandelt 'nen Runner in 'nen VPS** -- Live-SSH auf 'ner GitHub-Actions-Maschine, mit automatischem Neustart und Ein-Kommando-Wiederverbindung über die GitHub-API.
+Sobald du ein stateless System hast (GitHub Actions, ein Worker, eine Serverless-Funktion) und Zustand zwischen zwei Ausführungen behalten willst, kann Git als "Platte" dienen.
 
-Git als Festplatte, zweite Folge. Ich glaube, ich werde am Ende alles in Git-Branches speichern xD
+- Der Mailbot speichert eine `lastId` in einem Git-Tag.
+- repo-to-vps speichert ein ganzes Dateisystem in einem Git-Branch.
+
+Gleiches Pattern, zwei Maßstäbe. Ein Wert auf der einen, eine Platte auf der anderen Seite.
+
+Und `git commit --amend` + Force-Push ist die gemeinsame Technik: **Du behältst einen einzigen Commit, der den aktuellen Zustand darstellt, bei jedem Update überschrieben.**
+
+Dafür ist es nicht gemacht. Aber es funktioniert. Und es ist gratis.
+
+---
+
+**Die 3 Punkte zum Mitnehmen :**
+
+1. **Ein Git-Branch = eine persistente Festplatte**, speichere dein Dateisystem in einem dedizierten Branch, stelle beim Start wieder her, und du hast einen Zustand, der wegwerfbare Maschinen überlebt.
+
+2. **inotify + Git = Live-Autosave**, `inotifywait` überwacht Änderungen auf Kernelebene und pusht augenblicklich nach Git. Mit `git commit --amend`, um einen einzigen sauberen Commit zu behalten.
+
+3. **tmate verwandelt einen Runner in einen VPS**, Live-SSH auf eine GitHub-Actions-Maschine, mit automatischem Neustart und Ein-Command-Reconnection via GitHub-API.
+
+Git als Festplatte, zweite Episode. Ich glaube, ich werde am Ende alles in Git-Branches speichern.

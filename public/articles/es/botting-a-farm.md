@@ -1,88 +1,88 @@
 ---
-title: Automatizando una Granja de Microsoft Rewards
-description: Cómo programé un bot para cultivar puntos de Microsoft Rewards a
-  escala -- y por qué la detección antibots de Microsoft ya se ha puesto al día.
+title: Botear una granja de Microsoft Rewards
+description: Cómo programé un bot para farmear puntos de Microsoft Rewards a
+  gran escala, y por qué Microsoft reforzó desde entonces sus defensas.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "yXkF9F7qe02Y+ma8fUx7i39wCA/B75+wvfazfet730PW1xHcEOZZ0wMx0+EfAGpGRof0WGVdYm1H5kxjZblK3Q=="
+author_sig: "bVeuMiF0bzMnKEocylNuLm9OC7tF8ur9Vgc7od7Sae9X9oZ4gudnVg8Elq7S36gjUcC4yFjR8NkwL4zxGpj/lA=="
 ---
 
-> **Nota (2026):** Este proyecto ya no tiene mantenimiento. Microsoft ha endurecido significativamente su detección de bots -- lo que funcionaba antes ya no funciona hoy. El código y el enfoque descritos a continuación se conservan solo con fines educativos/de archivo.
+> **Nota (2026):** Este proyecto ya no se mantiene. Microsoft reforzó considerablemente su detección antibots, así que lo que funcionaba en la época ya no funciona hoy. El código y el enfoque descritos abajo se conservan solo con fines de archivo y demostración.
 
-### Introducción
+## Introducción
 
-Hace algunos años descubrí Microsoft Rewards. En ese entonces era durante el confinamiento, pero eso no cambia el hecho de que me obligaron a usar los controles parentales de Microsoft Family Safety y por lo tanto tuve que usar Edge. Fue ahí cuando descubrí Rewards.
+Descubrí Microsoft Rewards hace unos años. Fue durante el confinamiento, y en la época estaba obligado a usar el control parental Microsoft Family Safety y por tanto pasar por Edge. Ahí descubrí Rewards.
 
-En ese momento solo tenía 14 años y nada del catálogo me interesaba. Ahora pienso que con las habilidades que he adquirido, puedo generar puntos con bots y luego regalar los códigos o incluso revenderlos más baratos si realmente quiero (conociéndome, probablemente no lo haré). De todas formas, te contaré cómo programé un bot que cultiva cuentas a escala.
+En la época solo tenía 14 años y nada del catálogo me interesaba. Ahora me digo que con las habilidades que adquirí, puedo farmear puntos con bots, y luego regalar los códigos o incluso revenderlos más baratos si de verdad me apetece (pero honestamente, creo que no lo haré). Te voy a contar cómo programé un bot que farmea cuentas a escala.
 
 ---
 
-## ¿Qué es Microsoft Rewards?
+## Qué es Microsoft Rewards
 
-En pocas palabras: es un programa que recompensa a los usuarios de Edge con puntos por actividades como búsquedas, pequeños cuestionarios, juegos y una extensión (esa es otra historia).
+Para abreviar: es un programa que recompensa a los usuarios de Edge con puntos por actividades como búsquedas, pequeños quizzes, juegos, y una extensión (pero eso es otra historia).
 
-Aquí puedes ver cosas de «Explorar»:  
-![Captura de Explore](assets/20260313_135010_image.png)
+Aquí ves los bloques "Explore":
+![Explore screenshot](assets/20260313_135010_image.png)
 
-Aquí, por ejemplo, lo que llaman el «set del día».  
-![Captura del set diario](assets/20260313_135038_image.png)
+Ahí por ejemplo está lo que llaman el "set del día".
+![Daily set screenshot](assets/20260313_135038_image.png)
 
-Incluso crearon un sistema de rachas, es bastante loco.  
-![Captura de rachas](assets/20260313_135210_image.png)
+Hasta hicieron un sistema de racha, es bastante loco.
+![Streak screenshot](assets/20260313_135210_image.png)
 
-También hay un sistema de niveles y es simplemente divertido:  
-![Captura de niveles](assets/20260313_135340_image.png)
+También hay un sistema de nivel y la progresión hace la rutina de verdad adictiva:
+![Level screenshot](assets/20260313_135340_image.png)
 
-Así que tienes montones de formas de ganar puntos, y la mayoría son diarias.  
-La idea aquí va a ser hacer un bot que haga las actividades por ti, para que puedas generar puntos a escala y completar tu rutina de cultivo.
+Así que tienes un montón de formas de ganar puntos, y la mayoría son diarias.
+La idea aquí va a ser hacer un bot que haga las actividades en tu lugar, para farmear puntos a escala y completar tu rutina de farmeo.
 
-Como puedes ver abajo, la mayoría de las recompensas son tarjetas de regalo, pero también hay cosas divertidas como juegos o suscripciones a servicios.  
-![Captura de recompensas](assets/20260313_135646_image.png)
+Como puedes ver abajo, la mayoría de las recompensas son tarjetas regalo, pero también hay opciones interesantes como juegos o suscripciones.
+![Rewards screenshot](assets/20260313_135646_image.png)
 
-| Recompensa | Categoría | Costo en puntos |
+| Recompensa | Categoría | Coste en puntos |
 | --- | --- | --- |
-| **Rakuten TV – 1 película HD** | Contenido digital | 1 785 |
+| **Rakuten TV: 1 peli HD** | Contenido digital | 1 785 |
 | **Roblox (tarjeta digital)** | Juego / contenido digital | 6 750 |
 | **Tarjeta regalo Microsoft** | Tienda / servicio | 5 660 |
 | **Tarjeta regalo Xbox** | Tienda / servicio | 5 660 |
 | **Tarjeta regalo Microsoft Solitaire Collection** | Juego / contenido digital | 1 500 |
 | **Minecraft Minecoins** | Juego / contenido digital | 2 500 |
 | **Tarjeta regalo League of Legends** | Juego / contenido digital | 2 000 |
-| **Código de monedas Overwatch (digital)** | Juego / contenido digital | 2 000 |
-| **Sea of Thieves – Paquete de Monedas Antiguas** | Juego / contenido digital | 1 700 |
-| **Zalando – Tarjeta regalo** | Tienda / servicio | 7 205 |
-| **Carrefour – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Cultura – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Fnac‑Darty – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **La Redoute – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Mango – Tarjeta regalo** | Tienda / servicio | 36 025 |
-| **Wonderbox – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Yves Rocher – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Amazon.fr – Vales regalo** | Tienda / servicio | 7 205 |
-| **Foot Locker – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **IKEA FR – Tarjeta regalo** | Tienda / servicio | 36 025 |
-| **IKEA FR – Tarjeta regalo (otro diseño)** | Tienda / servicio | 7 200 |
-| **Marionnaud – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Asos – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Adidas FR – Tarjeta regalo** | Tienda / servicio | 14 410 |
-| **Deliveroo France – Tarjeta regalo** | Tienda / servicio | 21 615 |
-| **H&M France – Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Código Overwatch monedas (digital)** | Juego / contenido digital | 2 000 |
+| **Sea of Thieves: Pack Monedas antiguas** | Juego / contenido digital | 1 700 |
+| **Zalando: Tarjeta regalo** | Tienda / servicio | 7 205 |
+| **Carrefour: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Cultura: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Fnac‑Darty: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **La Redoute: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Mango: Tarjeta regalo** | Tienda / servicio | 36 025 |
+| **Wonderbox: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Yves Rocher: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Amazon.fr: Cheque regalo** | Tienda / servicio | 7 205 |
+| **Foot Locker: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **IKEA FR: Tarjeta regalo** | Tienda / servicio | 36 025 |
+| **IKEA FR: Tarjeta regalo (otro diseño)** | Tienda / servicio | 7 200 |
+| **Marionnaud: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Asos: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Adidas FR: Tarjeta regalo** | Tienda / servicio | 14 410 |
+| **Deliveroo France: Tarjeta regalo** | Tienda / servicio | 21 615 |
+| **H&M France: Tarjeta regalo** | Tienda / servicio | 14 410 |
 | **Global Hotel Card (Expedia Group)** | Tienda / servicio | 7 205 |
-| **Uber Eats France – Tarjeta regalo** | Tienda / servicio | 36 025 |
+| **Uber Eats France: Tarjeta regalo** | Tienda / servicio | 36 025 |
 
-Ahora que entiendes el propósito de este programa, pasemos al botting.
+Ahora que entiendes el interés del programa, pasemos al botting.
 
 ---
 
 ## Primeras pruebas
 
-Antes de construir mi bot, quería asegurarme de que no me marcarían la IP por usar cientos de cuentas desde la misma dirección. Me conoces, voy a usar Tor con un proxy rotatorio. Y no quiero alojar mi bot en un VPS -- quiero que se ejecute en una GitHub Action.
+Antes de construir mi bot, quería estar seguro de que mi IP no quedaría marcada por usar cientos de cuentas desde la misma dirección. Ya me conoces, paso por Tor con un proxy rotativo. Quiero ejecutarlo en una GitHub Action en vez de en un VPS.
 
 Así que escribí un workflow simple:
 
@@ -134,26 +134,26 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-Este workflow simplemente instala Tor, lo inicia y hace una solicitud curl a través de él.
+Este workflow solo instala Tor, lo arranca, y hace una petición curl a través de él.
 
-La primera ejecución dio este resultado:  
-![Primera ejecución Tor curl](assets/20260313_140705_image.png)
+El primer run dio este resultado:
+![Tor curl first run](assets/20260313_140705_image.png)
 
-Las estadísticas de tiempo fueron:  
+Las estadísticas de tiempo fueron:
 !Timings
 
-Una segunda ejecución dio este resultado:  
-![Segunda ejecución Tor curl](assets/20260313_140928_image.png)
+Un segundo run dio este resultado:
+![Tor curl second run](assets/20260313_140928_image.png)
 
-Como puedes ver, las IPs son diferentes, así que no nos marcarán por uso abusivo desde la misma IP. Esas son buenas noticias -- podemos seguir desarrollando el bot de cultivo.
+Como puedes ver, las IP son distintas, así que evitamos un marcado por uso abusivo desde la misma IP. Buena noticia: podemos seguir desarrollando el bot de farmeo.
 
 ---
 
 ## Primera prueba con Selenium
 
-Para automatizar la interfaz, voy a usar **Selenium**: una herramienta que controla un navegador real (Chrome/Edge/Firefox) en lugar de un usuario. En el contexto de una GitHub Action, esto significa instalar un navegador + su driver, y luego ejecutar un script que inicia sesión en Microsoft Rewards y hace clic donde sea necesario.
+Para automatizar la interfaz, voy a usar **Selenium**: una herramienta que controla un navegador real (Chrome/Edge/Firefox) en lugar de un usuario. En el contexto de una GitHub Action, eso significa instalar un navegador + su driver, y luego lanzar un script que inicia sesión en Microsoft Rewards y hace clic donde toca.
 
-### Script de ejemplo en JavaScript (Node.js + selenium-webdriver)
+### Ejemplo de script JavaScript (Node.js + selenium-webdriver)
 
 ```js
 import { Builder, By, Capabilities, until, WebDriver } from 'selenium-webdriver';
@@ -170,14 +170,14 @@ const chromeOptions = {
 };
 
 async function applyStealth(driver: WebDriver) {
-  // Inject script before any page JS runs to reduce automation fingerprinting.
+  // Inyecta el script antes de que corra cualquier JS de la página para reducir la huella de automatización.
   await (driver as any).sendDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
     source: `
       Object.defineProperty(navigator, 'webdriver', {
         get: () => undefined
       });
 
-      // Some sites check for chrome runtime and plugins
+      // Algunos sitios comprueban el runtime de chrome y los plugins
       window.chrome = { runtime: {} };
       Object.defineProperty(navigator, 'plugins', {
         get: () => [1, 2, 3, 4, 5],
@@ -224,5 +224,5 @@ After navigation: title= Bienvenue dans Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-Vale, eso significa que todavía no hemos iniciado sesión, así que ahora construiremos la solicitud de inicio de sesión y veremos si podemos acceder a nuestra cuenta de Microsoft Rewards para hacer las actividades.
-<!-- ## ESTE ARTÍCULO SIGUE SIENDO UN TRABAJO EN PROCESO, ¡LO ACTUALIZARÉ CON LOS PASOS DE INICIO DE SESIÓN Y LOS PASOS DE BOTTING DE ACTIVIDADES PRONTO! ESTAD ATENTOS. -->
+Este resultado confirma que seguimos desconectados, así que ahora voy a construir la petición de login y probar la conexión a mi cuenta de Microsoft Rewards para automatizar las actividades.
+<!-- ## ESTE ARTÍCULO AÚN ESTÁ EN REDACCIÓN, ¡ACTUALIZARÉ CON LOS PASOS DE CONEXIÓN Y BOTTEO DE ACTIVIDADES PRONTO! SIGUE ATENTO. -->

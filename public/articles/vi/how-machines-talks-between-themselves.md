@@ -1,208 +1,207 @@
 ---
-title: "Cách các máy tính nói chuyện với nhau: tổng quan từ TCP đến mTLS"
-description: "Tại sao TCP, UDP, TLS, mTLS, HTTP và WebSocket không phải là những lựa chọn thay thế cạnh tranh mà là các tầng xếp chồng; một tổng quan phân cấp về giao tiếp máy tính, từ vận chuyển thô đến xác thực lẫn nhau."
+title: "Máy móc nói chuyện với nhau thế nào : tour từ TCP tới mTLS"
+description: "Vì sao TCP, UDP, TLS, mTLS, HTTP và WebSocket không phải lựa chọn cạnh tranh mà là các lớp chồng nhau; tour phân cấp về giao tiếp máy với máy, từ vận chuyển thô tới xác thực lẫn nhau."
 date: 2026-07-16
-tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "mạng", "kiến-trúc-phân-tán", "giao-thức"]
+tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "réseau", "architecture-distribuée", "protocoles"]
 authors: ["docteur-turboss"]
-lang: "vi"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Y0wIb1xIRueUXS4jSgH5DLEHUZSVcFGocbmpqBL1TKk9CDWBhTybv7hkEJF+m5IQKlr/v81edRUabLmeWbyDxA=="
+author_sig: "SZhn1h7EZ9/8qdz9y9k5jW8iu99f4goHgpSzPafhXPTzDFDJq3QzptIixpjfQtO/EOEqwFqR8YRwC1PS/YC1Gw=="
 ---
-# Vấn đề: quá nhiều từ viết tắt, không đủ thứ bậc
+# Vấn đề : quá nhiều chữ viết tắt, quá ít phân cấp
 
-TCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; hầu hết các tài liệu nói về chúng đều trình bày như một danh sách phẳng các lựa chọn có thể thay thế, "tùy trường hợp sử dụng mà chọn". Thực tế, chúng không cùng một cấp độ: một số là giao thức vận chuyển, số khác là tầng bảo mật bọc quanh vận chuyển, lại có những giao thức ứng dụng dựa trên hai tầng đầu. Hiểu được thứ bậc là hiểu tại sao ta không bao giờ "chọn" giữa TCP và TLS: ta chọn TCP, _rồi_ quyết định có đặt TLS lên trên hay không.
+TCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; hầu hết tài liệu nói về chúng trình bày chúng như danh sách phẳng các lựa chọn thay thế nhau, "chọn tùy ca dùng". Thực tế chúng không cùng mặt phẳng : vài cái là giao thức vận chuyển, vài cái là lớp bảo mật quấn quanh vận chuyển, vài cái nữa là giao thức ứng dụng dựa trên hai thứ đầu. Hiểu phân cấp là hiểu vì sao ta không bao giờ "chọn" giữa TCP và TLS: ta chọn TCP, _rồi_ quyết có đặt TLS lên trên hay không.
 
-Bài viết này xây dựng lại thứ bậc đó từng tầng một, từ vận chuyển thô đến xác thực lẫn nhau, với mỗi cấp độ: nó đảm bảo điều gì, nó không đảm bảo điều gì, và khi nào thì dùng nó là đủ.
+Bài này dựng lại phân cấp đó lớp theo lớp, từ vận chuyển thô tới xác thực lẫn nhau, với mỗi tầng : nó đảm bảo gì, nó không đảm bảo gì, và khi nào cứ dùng nó là đủ.
 
-# Cấp độ 1: vận chuyển (TCP so với UDP)
+# Tầng 1 : vận chuyển (TCP đấu UDP)
 
-Mọi thứ bắt đầu từ đây. TCP và UDP là hai giao thức chính của tầng **Vận chuyển (Layer 4)** trong mô hình OSI. Vai trò của chúng giống hệt nhau: vận chuyển một luồng dữ liệu giữa hai ứng dụng chạy trên các máy khác nhau. Tuy nhiên, cách thức thực hiện của chúng hoàn toàn khác biệt.
+Mọi thứ bắt đầu ở đây. TCP và UDP là hai giao thức chính của tầng **Vận chuyển (Layer 4)** trong mô hình OSI. Vai trò của chúng giống hệt : chở luồng dữ liệu giữa hai ứng dụng chạy trên các máy khác nhau. Thế nhưng cách chúng làm khác nhau triệt để.
 
-Điều quan trọng cần hiểu là IP (Internet Protocol), nằm ở tầng mạng (Layer 3), chỉ làm nhiệm vụ chuyển tiếp các gói tin từ một máy chủ này sang máy chủ khác. Nó không đảm bảo việc gói tin đến nơi, không đảm bảo thứ tự, thậm chí không đảm bảo tính duy nhất. Các bộ định tuyến chỉ đơn giản đưa ra các quyết định định tuyến độc lập cho mỗi gói tin.
+Điều quan trọng cần hiểu là IP (Internet Protocol), nằm ở tầng mạng (Layer 3), chỉ định tuyến các gói từ máy này sang máy khác. Nó không đảm bảo chúng tới nơi, cũng không đảm bảo thứ tự, thậm chí không đảm bảo duy nhất. Các router chỉ ra quyết định định tuyến độc lập cho mỗi gói.
 
-Chính sự thiếu vắng các đảm bảo này là điều TCP đến để bù đắp, trong khi UDP cố tình không thêm gì cả để giữ cho nó cực kỳ nhẹ.
+Chính sự thiếu đảm bảo này là thứ TCP tới bù đắp, trong khi UDP cố ý không thêm gì để giữ cực nhẹ.
 
-## TCP: độ tin cậy lên hàng đầu
+## TCP : tin cậy trước hết
 
-TCP (Transmission Control Protocol) là một giao thức **hướng kết nối** (_connection-oriented_). Trước khi trao đổi bất kỳ byte dữ liệu nào, hai máy phải thiết lập một kết nối logic.
+TCP (Transmission Control Protocol) là giao thức **hướng kết nối** (_connection-oriented_). Trước khi trao đổi một byte dữ liệu, hai máy phải thiết lập kết nối logic.
 
-Kết nối này được tạo ra nhờ **Bắt tay ba bước (Three-Way Handshake)** nổi tiếng:
+Kết nối này tạo ra nhờ **Three-Way Handshake** nổi tiếng :
 
 ```
 
-Client                           Server
+Client                           Serveur
 SYN ---------------------------->
         <--------------------- SYN + ACK
-ACK ----------------------------> 
-Kết nối được thiết lập
+ACK ---------------------------->
+Connexion établie
 ```
 
-Mỗi bước có một mục tiêu cụ thể:
+Mỗi bước có mục tiêu chính xác :
 
-*   SYN: client thông báo muốn mở một kết nối và cung cấp số thứ tự đầu tiên (Initial Sequence Number - ISN).
-    
-*   SYN-ACK: server chấp nhận kết nối, xác nhận đã nhận SYN và cung cấp số thứ tự của riêng mình.
-    
-*   ACK: client xác nhận đã nhận thông tin từ server.
-    
+*   SYN : client thông báo muốn mở kết nối và đưa số thứ tự đầu tiên (Initial Sequence Number - ISN).
 
-Kể từ thời điểm này, cả hai máy đều biết trạng thái của kết nối và có thể bắt đầu trao đổi dữ liệu.
+*   SYN-ACK : máy chủ chấp nhận kết nối, xác nhận đã nhận SYN và đưa số thứ tự của chính nó.
 
-### **Các số thứ tự**
+*   ACK : client xác nhận đã nhận thông tin của máy chủ.
 
-TCP không xem dữ liệu như một chuỗi các gói tin, mà như một **luồng byte liên tục** (_byte stream_).
 
-Mỗi byte được gửi đều có một số thứ tự.
+Từ lúc đó, hai máy biết trạng thái kết nối và có thể bắt đầu trao đổi dữ liệu.
 
-Ví dụ:
+### **Số thứ tự**
+
+TCP không nhìn dữ liệu như chuỗi gói nối tiếp, mà như **luồng byte liên tục** (_byte stream_).
+
+Mỗi byte gửi đi có một số thứ tự.
+
+Ví dụ :
 
 ```
-Tin nhắn:
+Message :
 
 Bonjour
 
-B = byte 0
-o = byte 1
-n = byte 2
+B = octet 0
+o = octet 1
+n = octet 2
 ...
 ```
 
-Nếu một segment chứa các byte 1000 đến 1499 bị mất trong quá trình vận chuyển, bên nhận có thể phát hiện chính xác phần nào bị thiếu.
+Nếu đoạn chứa các byte 1000 tới 1499 mất lúc vận chuyển, bên nhận có thể phát hiện chính xác thiếu gì.
 
 Bên gửi chỉ truyền lại phần đó.
 
-Mức độ chi tiết này là một trong những lý do tạo nên sự mạnh mẽ của TCP.
+Độ hạt này là một trong những lý do TCP vững.
 
-### **Các xác nhận (ACK)**
+### **Xác nhận đã nhận (ACK)**
 
-Sau khi nhận được dữ liệu, bên nhận gửi một **ACK (Acknowledgment)**.
+Sau khi nhận dữ liệu, bên nhận gửi **ACK (Acknowledgment)**.
 
-Trái với suy nghĩ thông thường, một ACK không có nghĩa là:
+Trái với điều ta thường tưởng, ACK không có nghĩa :
 
-> "Tôi đã nhận được gói tin này"
+> "Tôi đã nhận gói này"
 
-Nó có nghĩa là:
+Nó có nghĩa :
 
-> "Tôi đã nhận được tất cả các byte cho đến số X."
+> "Tôi đã nhận mọi byte tới số X."
 
-Ví dụ:
+Ví dụ :
 
 ```
-Client gửi:
+Client envoie :
 
 0 → 999
 
-Server trả lời:
+Serveur répond :
 
 ACK = 1000
 ```
 
-Điều này có nghĩa là:
+Nghĩa là :
 
-> "Mọi thứ trước byte 1000 đã đến nơi an toàn."
+> "Mọi thứ trước byte 1000 đã tới nơi ổn."
 
-Cơ chế này cho phép xác nhận nhiều segment cùng một lúc (_cumulative acknowledgments_), giảm số lượng gói tin điều khiển.
+Cơ chế này cho phép xác nhận nhiều đoạn cùng lúc (_cumulative acknowledgments_), giảm số gói điều khiển.
 
-### **Các lần truyền lại**
+### **Truyền lại**
 
-Nếu một ACK không bao giờ đến, TCP cho rằng segment đã bị mất.
+Nếu ACK không bao giờ tới, TCP cho rằng đoạn mất.
 
-Nó tự động truyền lại.
+Nó tự truyền lại.
 
-Thời gian chờ truyền lại (**Retransmission Timeout – RTO**) không cố định.
+Trễ truyền lại (**Retransmission Timeout – RTO**) không cố định.
 
-TCP liên tục đo thời gian khứ hồi (**RTT**) nhờ các ACK đã nhận và tính toán động RTO để tránh các lần truyền lại không cần thiết.
+TCP liên tục đo thời gian khứ hồi (**RTT**) nhờ các ACK nhận được và tính động RTO để tránh truyền lại vô ích.
 
-Các triển khai hiện đại cũng sử dụng các cơ chế như **Fast Retransmit**: khi bên gửi nhận được nhiều ACK trùng lặp (thường là ba), nó suy ra rằng một segment ở giữa đã bị mất và gửi lại ngay lập tức, không cần chờ hết thời gian.
+Các triển khai hiện đại còn dùng cơ chế như **Fast Retransmit** : khi bên gửi nhận nhiều ACK trùng (thường ba), nó suy ra đoạn trung gian mất và gửi lại ngay, không chờ hết timer.
 
-### **Sắp xếp lại các gói tin**
+### **Sắp xếp lại gói**
 
-Internet hoàn toàn không đảm bảo rằng hai gói tin sẽ đi cùng một đường.
+Internet hoàn toàn không đảm bảo hai gói đi cùng đường.
 
-Ví dụ:
+Ví dụ :
 
 ```
-Gói tin 1
+Paquet 1
 Paris
- ↓
-London
- ↓
+  ↓
+Londres
+  ↓
 New York
 
-Gói tin 2
+Paquet 2
 Paris
- ↓
-Frankfurt
- ↓
+  ↓
+Francfort
+  ↓
 Chicago
- ↓
+  ↓
 New York
 ```
 
-Gói tin thứ hai có thể đến trước gói tin thứ nhất.
+Gói thứ hai có thể tới trước gói đầu.
 
-TCP tạm thời lưu trữ các segment nhận được **không đúng thứ tự** trong một bộ đệm (_reassembly buffer_), sau đó sắp xếp lại trước khi chuyển cho ứng dụng.
+TCP khi đó tạm lưu các đoạn nhận **lộn xộn** trong bộ đệm (_reassembly buffer_), rồi ráp lại trước khi giao cho ứng dụng.
 
-Đối với ứng dụng, mọi thứ dường như đến một cách hoàn hảo theo đúng thứ tự.
+Với ứng dụng, mọi thứ dường như tới hoàn hảo đúng thứ tự.
 
 ### Kiểm soát luồng
 
-Một kết nối không chỉ phụ thuộc vào mạng.
+Kết nối không chỉ phụ thuộc mạng.
 
-Bên nhận cũng có dung lượng bộ nhớ hạn chế.
+Bên nhận cũng có dung lượng bộ nhớ giới hạn.
 
-Nếu nó nhận nhanh hơn khả năng xử lý dữ liệu, các bộ đệm của nó sẽ bị tràn.
+Nếu nó nhận nhanh hơn khả năng xử lý dữ liệu, bộ đệm của nó cuối cùng bão hòa.
 
-TCP giải quyết vấn đề này nhờ một **cửa sổ trượt (Sliding Window)**.
+TCP giải bài toán này bằng **cửa sổ trượt (Sliding Window)**.
 
-Bên nhận chỉ ra trong mỗi ACK:
+Bên nhận chỉ trong mỗi ACK :
 
 ```
-Window = 32768 bytes
+Window = 32768 octets
 ```
 
-Điều này có nghĩa là:
+Nghĩa là :
 
-> "Bạn có thể gửi cho tôi thêm tới 32 KB."
+> "Bạn có thể gửi tôi thêm tới 32 Ko."
 
-Nếu cửa sổ này giảm xuống 0:
+Nếu cửa sổ này rớt về không :
 
 ```
 Window = 0
 ```
 
-Bên gửi tạm thời dừng truyền cho đến khi bên nhận thông báo có cửa sổ mới.
+Bên gửi tạm dừng truyền tới khi bên nhận thông báo cửa sổ mới có sẵn.
 
-Cơ chế này tạo nên **kiểm soát luồng (Flow Control)** và ngăn không cho một máy chủ nhanh làm ngập một máy chủ chậm hơn.
+Cơ chế này tạo thành **kiểm soát luồng (Flow Control)** và ngăn máy nhanh làm ngập máy chậm hơn.
 
 ### Kiểm soát tắc nghẽn
 
-Ngay cả khi bên nhận có khả năng hấp thụ dữ liệu, bản thân mạng cũng có thể bị bão hòa.
+Ngay cả khi bên nhận đủ khả năng hấp thụ dữ liệu, bản thân mạng có thể bão hòa.
 
-Các bộ định tuyến có hàng đợi (_queues_) hạn chế.
+Các router có hàng đợi (_queues_) giới hạn.
 
-Khi chúng tràn, các gói tin bị loại bỏ.
+Khi chúng tràn, các gói bị loại.
 
-TCP coi các mất mát là dấu hiệu của tắc nghẽn và tự động điều chỉnh tốc độ nhờ một **cửa sổ tắc nghẽn (Congestion Window – cwnd)**.
+TCP diễn giải mất mát như dấu hiệu tắc nghẽn và tự thích ứng tốc độ bằng **cửa sổ tắc nghẽn (Congestion Window – cwnd)**.
 
-Các thuật toán hiện đại (như **Reno**, **CUBIC** hoặc **BBR**, tùy theo hệ điều hành) điều chỉnh cửa sổ này để tìm sự cân bằng giữa tốc độ tối đa và sự ổn định của mạng.
+Các thuật toán hiện đại (như **Reno**, **CUBIC** hay **BBR**, tùy hệ điều hành) chỉnh cửa sổ này để tìm cân bằng giữa tốc độ tối đa và ổn định mạng.
 
-Các phiên bản đầu của TCP chủ yếu sử dụng hai cơ chế:
+Các phiên bản TCP đầu chủ yếu dùng hai cơ chế :
 
-*   **Slow Start**: tăng tốc độ theo cấp số nhân cho đến khi phát hiện tắc nghẽn.
-    
-*   **Congestion Avoidance**: sau đó tăng trưởng thận trọng hơn, thường là tuyến tính.
-    
+*   **Slow Start** : tăng tốc độ theo hàm mũ tới khi phát hiện tắc nghẽn.
 
-Sự thích ứng liên tục này là một trong những lý do TCP vẫn hoạt động tốt mặc dù chất lượng mạng có biến động.
+*   **Congestion Avoidance** : sau đó tăng thận trọng hơn, thường tuyến tính.
+
+
+Thích ứng thường trực này là một trong những lý do TCP vẫn hiệu quả dù chất lượng mạng biến động.
 
 ### Đóng kết nối
 
-Không giống như UDP, một kết nối TCP cũng có một quy trình đóng riêng.
+Không như UDP, kết nối TCP còn có đóng sạch.
 
-Mỗi đầu mút đóng luồng của mình một cách độc lập nhờ cờ **FIN**.
+Mỗi đầu đóng độc lập luồng của mình bằng cờ **FIN**.
 
-Một lần đóng hoàn chỉnh thường cần bốn lần trao đổi:
+Đóng đầy đủ thường cần bốn lần trao đổi :
 
 ```
 FIN
@@ -211,137 +210,137 @@ FIN
 ACK
 ```
 
-Thủ tục này đảm bảo rằng tất cả dữ liệu đang trên đường đều được giao trước khi kết nối bị hủy.
+Thủ tục này đảm bảo mọi dữ liệu đang đi đã được giao trước khi hủy kết nối.
 
-## UDP: sự đơn giản tối đa
+## UDP : đơn giản tối đa
 
-UDP (User Datagram Protocol) áp dụng triết lý ngược lại.
+UDP (User Datagram Protocol) theo triết lý ngược.
 
-Nó **không kết nối (connectionless)**.
+Nó **phi kết nối (connectionless)**.
 
-Không có:
+Nó không có :
 
-*   handshake nào;
-    
-*   số thứ tự nào;
-    
-*   xác nhận nào;
-    
-*   truyền lại nào;
-    
-*   kiểm soát luồng nào;
-    
+*   handshake nào ;
+
+*   số thứ tự nào ;
+
+*   xác nhận đã nhận nào ;
+
+*   truyền lại nào ;
+
+*   kiểm soát luồng nào ;
+
 *   kiểm soát tắc nghẽn nào.
-    
 
-Mỗi thông điệp chỉ đơn giản được đóng gói vào một **datagram** độc lập, gửi lên mạng, rồi bên gửi bỏ đi.
+
+Mỗi thông điệp đơn giản được bọc trong **datagram** độc lập, truyền cho mạng, rồi bị bên gửi quên.
 
 ```
-Application → UDP Datagram → IP → Internet
+Application → Datagramme UDP → IP → Internet
 ```
 
-Giao thức không lưu giữ bất kỳ trạng thái nào giữa hai lần gửi.
+Giao thức không giữ trạng thái nào giữa hai lần gửi.
 
-Mỗi datagram hoàn toàn độc lập với các datagram trước đó.
+Mỗi datagram hoàn toàn độc lập với các cái trước.
 
-### Tính toàn vẹn dữ liệu
+### Toàn vẹn dữ liệu
 
-Mặc dù UDP không đảm bảo việc giao hàng hay thứ tự, nó vẫn bảo vệ tính toàn vẹn của dữ liệu nhờ một **checksum**.
+Dù UDP không đảm bảo giao hay thứ tự, nó vẫn bảo vệ toàn vẹn dữ liệu bằng **checksum**.
 
-Khi nhận, checksum được tính toán lại.
+Lúc nhận, checksum được tính lại.
 
-*   Nếu các giá trị khớp nhau, datagram được chấp nhận.
-    
-*   Nếu không, nó bị từ chối ngay lập tức.
-    
+*   Nếu các giá trị khớp, datagram được chấp nhận.
 
-UDP do đó phát hiện dữ liệu bị hỏng, nhưng không bao giờ cố gắng khôi phục chúng.
+*   Ngược lại, nó bị loại ngay.
 
-### Tại sao UDP lại nhanh như vậy?
 
-Tiêu đề UDP chỉ chứa **8 byte**, so với tối thiểu **20 byte** cho TCP (chưa kể các tùy chọn như timestamps, SACK hay Window Scaling).
+UDP vì vậy phát hiện dữ liệu hỏng, nhưng không bao giờ cố phục hồi chúng.
 
-Không có kết nối nào được duy trì, hệ điều hành không phải theo dõi trạng thái của mỗi lần trao đổi, điều này cũng làm giảm mức tiêu thụ bộ nhớ và chi phí xử lý.
+### Vì sao UDP nhanh vậy?
 
-Ứng dụng nhận được dữ liệu gần như ngay khi chúng đến, không cần chờ các lần truyền lại có thể xảy ra.
+Header UDP chỉ chứa **8 byte**, so với tối thiểu **20 byte** cho TCP (chưa kể tùy chọn như timestamp, SACK hay Window Scaling).
 
-## Khi nào mất dữ liệu lại tốt hơn
+Vì không duy trì kết nối nào, hệ điều hành không phải theo dõi trạng thái mỗi lần trao đổi, giảm tiêu thụ bộ nhớ và chi phí xử lý.
 
-Ý tưởng cơ bản rất đơn giản:
+Ứng dụng nhận dữ liệu gần như ngay khi tới, không chờ truyền lại khả dĩ.
 
-> Một thông tin cũ có thể có giá trị thấp hơn một thông tin bị mất.
+## Khi mất dữ liệu lại tốt hơn
 
-Hãy xem xét một cuộc trò chuyện VoIP.
+Ý nền đơn giản :
 
-Mỗi gói tin chứa khoảng **20 ms** giọng nói.
+> Thông tin cũ có thể ít giá trị hơn thông tin mất.
 
-Nếu một gói tin bị mất, việc truyền lại nó thường mất nhiều thời gian hơn 20 ms đó.
+Lấy cuộc gọi VoIP.
 
-Khi nó cuối cùng đến nơi, cuộc trò chuyện đã tiếp diễn.
+Mỗi gói chở khoảng **20 ms** giọng.
 
-Hầu hết các ứng dụng thích che giấu sự mất mát (nội suy, im lặng, sửa lỗi) hơn là chờ truyền lại.
+Nếu một gói mất, truyền lại nó thường tốn thời gian hơn 20 ms đó.
 
-Lập luận tương tự cũng áp dụng cho:
+Khi nó cuối cùng tới, cuộc trò chuyện đã tiến tiếp.
 
-*   các trò chơi đa người thời gian thực;
-    
-*   phát trực tiếp video;
-    
-*   các luồng dữ liệu từ xa;
-    
-*   các cảm biến IoT;
-    
+Hầu hết ứng dụng khi đó thích che mất mát (nội suy, im lặng, sửa lỗi) hơn chờ truyền lại.
+
+Lập luận tương tự áp dụng cho :
+
+*   game nhiều người thời gian thực ;
+
+*   streaming video ;
+
+*   luồng đo xa ;
+
+*   cảm biến IoT ;
+
 *   dữ liệu vị trí GPS.
-    
 
-Một giá trị gần đây hầu như luôn hữu ích hơn một giá trị cũ hoàn toàn đáng tin cậy.
 
-# Cấp độ 2: mã hóa, TLS
+Giá trị mới gần như luôn hữu ích hơn giá trị cũ tin cậy hoàn hảo.
 
-TLS (Transport Layer Security, kế thừa của SSL) không thay thế TCP, nó được thêm vào bên trên. Cụ thể, TLS thiết lập một kết nối TCP bình thường, sau đó thương lượng một phiên mã hóa bên trong: trao đổi chứng chỉ, thỏa thuận về thuật toán mã hóa, dẫn xuất khóa phiên. Mọi thứ truyền đi sau đó đều được mã hóa và xác thực.
+# Tầng 2 : mã hóa, TLS
 
-Ba đảm bảo riêng biệt, thường bị nhầm lẫn:
+TLS (Transport Layer Security, hậu duệ SSL) không thay TCP, nó thêm lên trên. Cụ thể, TLS thiết lập kết nối TCP bình thường, rồi thương lượng phiên mã hóa bên trong : trao đổi chứng chỉ, thống nhất thuật toán mã hóa, dẫn xuất khóa phiên. Mọi thứ đi qua sau đó được mã hóa và xác thực.
 
-*   **Bảo mật (Confidentiality)**: không ai ngoài hai bên có thể đọc được nội dung.
-    
-*   **Toàn vẹn (Integrity)**: mọi sự thay đổi dữ liệu trong quá trình truyền đều bị phát hiện.
-    
-*   **Xác thực (Authentication)**: nhưng trong TLS cổ điển, chỉ một chiều: client xác minh rằng server đúng là người nó tuyên bố (thông qua chứng chỉ, được ký bởi một tổ chức đáng tin cậy), nhưng server không xác minh gì về danh tính của client. Đây chính xác là mô hình của HTTPS khi bạn truy cập một trang web: trình duyệt xác thực trang web, trang web không xác thực bạn (việc xác thực người dùng thông qua một cơ chế riêng, cookie phiên, token).
-    
+Ba đảm bảo riêng, thường bị lẫn :
 
-TLS 1.3 (phiên bản hiện tại được khuyến nghị) đã giảm handshake xuống chỉ còn một vòng khứ hồi trong trường hợp thông thường, so với hai vòng của TLS 1.2, giúp giảm đáng kể độ trễ kết nối.
+*   **Bảo mật** : không ai ngoài hai bên đọc được nội dung.
 
-## Cấp độ 2bis: mTLS -- xác thực trở nên lẫn nhau
+*   **Toàn vẹn** : mọi sửa đổi dữ liệu lúc đi bị phát hiện.
 
-mTLS (mutual TLS) là TLS với một ràng buộc bổ sung: server cũng _yêu cầu_ một chứng chỉ từ client và xác minh nó. Cả hai bên đều chứng minh danh tính của mình thông qua một chứng chỉ được ký bởi một tổ chức chứng thực chung đáng tin cậy.
+*   **Xác thực** : nhưng trong TLS cổ điển, một chiều : client kiểm tra máy chủ đúng là thứ nó xưng (qua chứng chỉ của nó, do cơ quan tin cậy ký), nhưng máy chủ không kiểm tra gì về danh tính client. Đó đúng là mô hình HTTPS khi bạn thăm trang : trình duyệt xác thực trang, trang không xác thực bạn (xác thực người dùng đi qua cơ chế riêng, cookie phiên, token).
 
-Đây là cơ chế tự nhiên cho giao tiếp service-à-service trong một kiến trúc phân tán: nơi HTTPS cổ điển đủ để trình duyệt nói chuyện với một server công cộng, mTLS trả lời một câu hỏi khác; _làm thế nào một dịch vụ nội bộ biết rằng nó đang nói chuyện với một dịch vụ nội bộ được ủy quyền khác, chứ không phải với một kẻ tấn công đã xâm nhập vào mạng?_
+
+TLS 1.3 (phiên bản hiện khuyên dùng) đã rút handshake còn một lần khứ hồi trong ca thường, so với hai lần ở TLS 1.2, giảm đáng kể trễ kết nối.
+
+## Tầng 2bis : mTLS -- xác thực thành lẫn nhau
+
+mTLS (mutual TLS) là TLS với ràng buộc thêm : máy chủ _cũng_ đòi chứng chỉ từ client, và kiểm tra nó. Cả hai bên chứng minh danh tính qua chứng chỉ do cơ quan tin cậy chung ký.
+
+Đó là cơ chế tự nhiên cho giao tiếp service-tới-service trong kiến trúc phân tán : nơi HTTPS cổ điển đủ để trình duyệt nói với máy chủ công cộng, mTLS trả lời câu hỏi khác; _làm sao một service nội bộ biết nó đang nói với một service nội bộ được phép khác, chứ không phải kẻ tấn công vừa đáp xuống mạng?_
 
 ```
-Client                                        Server
+Client                                          Serveur
   │──── ClientHello ─────────────────────────────▶│
-  │◀─── ServerHello + chứng chỉ server ────────────│
-  │──── xác minh chứng chỉ server ─────────────────│
-  │──── gửi CHỨNG CHỈ CỦA CHÍNH NÓ ───────────────▶│
-  │◀─── xác minh chứng chỉ client ──────────────────│
-  │──── khóa phiên được dẫn xuất, kênh mã hóa ────▶│
+  │◀─── ServerHello + certificat serveur ──────────│
+  │──── vérifie le certificat serveur ─────────────│
+  │──── envoie SON PROPRE certificat client ──────▶│
+  │◀─── vérifie le certificat client ───────────────│
+  │──── clés de session dérivées, canal chiffré ──▶│
 ```
 
-Mặt trái của mTLS là về mặt vận hành: cần một cơ quan cấp chứng chỉ (CA) nội bộ, một cơ chế phân phối chứng chỉ cho mỗi dịch vụ, và một chiến lược luân chuyển/thu hồi. Trong một môi trường một máy với ít dịch vụ, đôi khi nó phức tạp hơn là lợi ích -- mTLS trở nên cần thiết từ thời điểm lưu lượng giữa các dịch vụ đi qua một mạng mà ta không kiểm soát hoàn toàn (nhiều máy chủ, cloud đa đối tác), hoặc ngay khi ta muốn một chính sách kiểu _zero trust_, nơi không có dịch vụ nào được mặc nhiên tin tưởng chỉ vì nó nằm "bên trong" mạng.
+Cái giá của mTLS mang tính vận hành : cần cơ quan chứng nhận (CA) nội bộ, cơ chế phân phối chứng chỉ cho mỗi service, và chiến lược xoay vòng/thu hồi. Trong môi trường đơn máy với ít service, đôi khi phức tạp hơn lợi ích -- mTLS thành cần thiết từ lúc lưu lượng liên service đi qua mạng ta không kiểm soát hoàn toàn (nhiều máy, cloud multi-tenant), hay hễ ta muốn chính sách kiểu _zero trust_, nơi không service nào ngầm đáng tin chỉ vì nó "ở trong" mạng.
 
-# Cấp độ 3: các giao thức ứng dụng trên TCP+TLS
+# Tầng 3 : giao thức ứng dụng trên TCP+TLS
 
-Khi đã có vận chuyển và mã hóa, còn phải xác định _cấu trúc các trao đổi như thế nào_. Đây là vai trò của các giao thức ứng dụng.
+Khi vận chuyển và mã hóa đã đặt, còn phải định nghĩa _cách cấu trúc trao đổi_. Đó là vai trò của giao thức ứng dụng.
 
 ## HTTP / HTTPS
 
-HTTP là một giao thức yêu cầu-phản hồi: client mở một kết nối (hoặc tái sử dụng một kết nối, với keep-alive), gửi một yêu cầu, chờ phản hồi, kết nối sau đó có thể đóng lại hoặc được tái sử dụng. HTTPS, đơn giản là HTTP trên TLS -- chữ S không thay đổi gì về ngữ nghĩa của giao thức, chỉ thay đổi việc vận chuyển được mã hóa.
+HTTP là giao thức yêu cầu-phản hồi : client mở kết nối (hay tái dùng, với keep-alive), gửi yêu cầu, chờ phản hồi, kết nối sau đó có thể đóng hay tái dùng. HTTPS, đơn giản là HTTP trên TLS -- chữ S không đổi gì ngữ nghĩa giao thức, chỉ đổi việc vận chuyển được mã hóa.
 
-Mô hình yêu cầu-phản hồi có một giới hạn cấu trúc: server không bao giờ có thể nói trước. Nó chỉ có thể trả lời những gì client yêu cầu. Đối với việc polling thường xuyên (kiểm tra "có gì mới không?" mỗi giây), nó hoạt động nhưng lãng phí tài nguyên -- mỗi yêu cầu tạo ra chi phí giao thức, và phần lớn thời gian, chẳng có gì mới để thông báo.
+Mô hình yêu cầu-phản hồi có giới hạn cấu trúc : máy chủ không bao giờ được nói trước. Nó chỉ trả lời điều client hỏi. Với polling dày (kiểm tra "có gì mới?" mỗi giây), việc đó chạy nhưng phí tài nguyên -- mỗi yêu cầu tạo lại chi phí giao thức trong khi phần lớn thời gian chẳng có gì mới để thông báo.
 
 ## WebSocket (WS / WSS)
 
-WebSocket giải quyết chính xác giới hạn này. Kết nối bắt đầu như một yêu cầu HTTP thông thường (với header `Upgrade: websocket`), nhưng một khi bắt tay được chấp nhận, kết nối TCP bên dưới không còn là một kênh yêu cầu-phản hồi HTTP nữa -- nó trở thành một kênh hai chiều full-duplex nơi client và server có thể gửi thông điệp bất cứ lúc nào, mà không cần phải phát lại một chu trình yêu cầu-phản hồi cho mỗi lần trao đổi.
+WebSocket trả lời đúng giới hạn này. Kết nối khởi đầu như yêu cầu HTTP cổ điển (với header `Upgrade: websocket`), nhưng một khi bắt tay được chấp nhận, kết nối TCP bên dưới không còn là kênh yêu cầu-phản hồi HTTP -- nó thành kênh hai chiều full-duplex nơi client và máy chủ có thể gửi thông điệp bất cứ lúc nào, không phải phát lại chu kỳ yêu cầu-phản hồi mỗi lần trao đổi.
 
 ```
 GET /chat HTTP/1.1
@@ -357,31 +356,31 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS đơn giản là WebSocket trên TLS, giống hệt như HTTPS là HTTP trên TLS. Đây là giao thức được lựa chọn cho mọi thứ cần push server thời gian thực -- chat, thông báo, luồng giao dịch, sự kiện trò chơi -- mà không muốn tự quản lý một giao thức nhị phân trên TCP trần.
+WSS đơn giản là WebSocket trên TLS, đúng như HTTPS là HTTP trên TLS. Đó là giao thức chọn cho mọi thứ đòi push máy chủ thời gian thực -- chat, thông báo, luồng trading, sự kiện game -- mà không muốn tự quản giao thức nhị phân trên TCP trần.
 
 ## gRPC
 
-Ít được biết đến ngoài thế giới microservices nhưng là trung tâm trong giao tiếp service-à-service: gRPC dựa trên HTTP/2 (do đó TCP + TLS tùy chọn), tuần tự hóa các thông điệp bằng Protocol Buffers (nhị phân, có kiểu, nhỏ gọn - trái ngược với JSON dạng văn bản của hầu hết các API REST), và hỗ trợ streaming hai chiều một cách tự nhiên nhờ ghép kênh của HTTP/2 (nhiều luồng logic trên một kết nối TCP duy nhất, không có head-of-line blocking như nhiều yêu cầu HTTP/1.1 tuần tự).
+Ít biết ngoài thế giới microservices nhưng trung tâm trong giao tiếp service-tới-service : gRPC dựa trên HTTP/2 (nên TCP + TLS tùy chọn), tuần tự hóa thông điệp bằng Protocol Buffers (nhị phân, có kiểu, gọn - ngược với JSON văn bản của hầu hết API REST), và cho phép gốc streaming hai chiều nhờ ghép kênh của HTTP/2 (nhiều luồng logic trên một kết nối TCP, không head-of-line blocking như nhiều yêu cầu HTTP/1.1 nối tiếp).
 
 ## QUIC / HTTP3
 
-QUIC thay đổi cuộc chơi bằng cách quay lại dùng UDP thay vì TCP ở tầng vận chuyển, đồng thời tái triển khai các đảm bảo độ tin cậy mà TCP vốn có - nhưng theo từng luồng thay vì toàn cục, điều này loại bỏ head-of-line blocking ở tầng vận chuyển (một gói tin bị mất trên một luồng không còn chặn các luồng khác của cùng kết nối). TLS 1.3 được tích hợp trực tiếp vào QUIC thay vì được thêm lên trên, giúp giảm thêm độ trễ handshake. HTTP/3 là HTTP trên QUIC.
+QUIC đổi cuộc chơi bằng cách khởi đầu từ UDP thay vì TCP ở tầng vận chuyển, đồng thời tái triển khai lên trên các đảm bảo tin cậy mà TCP vốn cho gốc - nhưng theo từng luồng thay vì toàn cục, loại bỏ head-of-line blocking ở tầng vận chuyển (gói mất trên một luồng không còn chặn các luồng khác của cùng kết nối). TLS 1.3 tích hợp thẳng vào QUIC thay vì thêm lên trên, giảm tiếp trễ bắt tay. HTTP/3 là HTTP trên QUIC.
 
-# Tổng quan: mỗi giao thức nằm ở đâu
+# Tổng quan : mỗi giao thức nằm đâu
 
-Tầng Giao thức Vai trò Vận chuyển TCP, UDP Đưa các byte đi, có tin cậy hoặc không Vận chuyển (thế hệ mới) QUIC UDP + độ tin cậy theo luồng + TLS tích hợp Bảo mật TLS, mTLS Mã hóa, toàn vẹn, xác thực (một chiều hoặc lẫn nhau) Ứng dụng HTTP/HTTPS, WS/WSS, gRPC Cấu trúc các trao đổi (yêu cầu-phản hồi, hai chiều, RPC có kiểu)
+Tầng Giao thức Vai trò Vận chuyển TCP, UDP Cho byte đi, tin cậy hay không Vận chuyển (thế hệ mới) QUIC UDP + tin cậy theo luồng + TLS tích hợp Bảo mật TLS, mTLS Mã hóa, toàn vẹn, xác thực (đơn hay lẫn nhau) Ứng dụng HTTP/HTTPS, WS/WSS, gRPC Cấu trúc trao đổi (yêu cầu-phản hồi, hai chiều, RPC có kiểu)
 
-Một ví dụ cụ thể để cố định ý tưởng: một kiến trúc microservices với dashboard web và các dịch vụ nội bộ có thể kết hợp HTTPS (dashboard ↔ API công cộng, xác thực một chiều là đủ về phía trình duyệt), mTLS (dịch vụ ↔ dịch vụ nội bộ, cần xác thực lẫn nhau), và WSS (thông báo thời gian thực đẩy đến dashboard) -- ba giao thức ứng dụng khác nhau, tất cả đều được xây dựng trên cùng một nền tảng TCP + TLS.
+Ví dụ cụ thể để cố định ý : kiến trúc microservices với dashboard web và service nội bộ có thể hợp lý kết hợp HTTPS (dashboard ↔ API công cộng, xác thực một chiều đủ phía trình duyệt), mTLS (service ↔ service nội bộ, xác thực lẫn nhau cần thiết), và WSS (thông báo thời gian thực đẩy về dashboard) -- ba giao thức ứng dụng khác nhau, đều dựng trên cùng nền TCP + TLS.
 
-## Cách chọn, trong thực tế
+## Cách chọn, trong thực hành
 
-Ba câu hỏi thường đủ để phân định:
+Ba câu hỏi thường đủ để chốt :
 
-1.  **Tôi có cần độ tin cậy và thứ tự, hay tính tươi mới của dữ liệu quan trọng hơn việc giao hàng đảm bảo?** → TCP nếu có, UDP nếu không (hoặc QUIC để có cả hai thông qua một sự đánh đổi khác).
-    
-2.  **Server có cần có khả năng chủ động gửi tin nhắn, hay client luôn là bên yêu cầu trước?** → WebSocket/gRPC streaming nếu server cần push, HTTP cổ điển nếu không.
-    
-3.  **Cả hai bên có cần chứng minh danh tính lẫn nhau, hay chỉ một bên cần được xác minh?** → mTLS cho service-à-service trong môi trường zero-trust, TLS đơn giản cho client công cộng cổ điển.
-    
+1.  **Tôi có cần tin cậy và thứ tự, hay độ tươi của dữ liệu quan trọng hơn giao đảm bảo?** → TCP nếu có, UDP nếu không (hay QUIC để có cả hai qua thỏa hiệp khác).
 
-Độ phức tạp vận hành tăng lên theo mỗi tầng được thêm vào: TCP trần không có hạ tầng nào để quản lý, TLS cần chứng chỉ, mTLS cần một CA và chiến lược luân chuyển, gRPC cần một định nghĩa lược đồ Protobuf dùng chung. Phản xạ đúng đắn là chỉ tăng độ phức tạp khi tầng bên dưới cho thấy một giới hạn cụ thể, chứ không phải do phòng trước.
+2.  **Máy chủ có phải chủ động gửi thông điệp, hay client luôn hỏi trước?** → WebSocket/gRPC streaming nếu máy chủ phải đẩy, HTTP cổ điển nếu không.
+
+3.  **Cả hai bên có phải chứng minh danh tính lẫn nhau, hay chỉ một bên cần kiểm tra?** → mTLS cho service-tới-service trong môi trường zero-trust, TLS đơn cho client công cộng cổ điển.
+
+
+Độ phức tạp vận hành tăng mỗi lớp thêm, TCP trần không có hạ tầng nào cần quản, TLS đòi chứng chỉ, mTLS đòi CA và chiến lược xoay vòng, gRPC đòi định nghĩa schema Protobuf chia sẻ. Phản xạ đúng là chỉ leo phức tạp khi tầng dưới cho thấy giới hạn cụ thể, không phải phòng trước.

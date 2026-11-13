@@ -1,220 +1,220 @@
 ---
-title: "Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解"
-description: "深入解析 Laupok 的项目：一个基于 NEAT 算法的 AI，能够自主学习并通关《超级马里奥世界》。遗传算法、神经网络、增强拓扑的神经进化，以及约 4200 行 Lua 代码。"
+title: Laupok 做了个自己玩超级马里奥世界的 AI，它是怎么跑的
+description: 一个自己玩超级马里奥世界的 AI。从零起步：失业预录帧。AI 靠随机变异和自然选择学会通关。项目跑在 BizHawk 上，一个约 4200 行的 Lua 脚本。
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - ai
   - lua
   - emulation
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "lwkWPgqfglwJdomG6sO5X0gfS/jZeeo9q9lzY1k6AG66ts1fRtghhortVV7W7u4OgSNMm1dy2Krk2a9tcgMtSA=="
+author_sig: "3xH+1dqfgltMqDZjY9MSVrSrFJa6zWOLj/rI+C3mZ3y3MVOA8lrzRcVcjlhUz3cZznoouMk7l6Wjfr4jk4PhNg=="
 ---
 
-# Laupok做了一个能自动玩《超级马里奥世界》的AI----它的原理详解
+# Laupok 做了个自己玩超级马里奥世界的 AI，它是怎么跑的
 
-Laupok 制作了一个能够完全自主游玩**《超级马里奥世界》**的人工智能。没有任何预先编写的脚本，没有录制的帧数据。AI 通过自身的随机突变和自然选择，学会了如何通关游戏的各个关卡。这个项目运行在 **BizHawk**（一个多平台模拟器）上，通过一个约 **4200 行**的 Lua 脚本实现。
+Laupok 做了个**自己玩超级马里奥世界**的人工智能。全自动。从零起步：没有预设脚本，没有录像帧。AI 靠随机变异和自然选择学会通关。项目跑在 **BizHawk** 上，多平台模拟器，经约 **4200 行** Lua 脚本。
 
-这个项目令人着迷之处在于，它将生物学概念应用于计算：达尔文的**进化论**、**人工神经网络**，以及最重要的----一个叫做 **NEAT**（增强拓扑的神经进化）的特定算法。AI 在一开始对游戏一无所知。它会尝试随机操作，失败数千次，然后逐渐搞清楚如何移动、跳跃和生存。
+迷人的是它用的概念全是生物学往计算机搬：**达尔文进化论**、**人工神经网络**，还有个叫 **NEAT**（NeuroEvolution of Augmenting Topologies）的算法。AI 开局对游戏一无所知。随机试动作，死几千次，慢慢学会前进、跳、活命。
 
-在本文中，我们将逐一拆解----从概念到代码，逐行分析。
+这篇全拆，概念一个个来，代码一行行来。
 
 ![Laupok 在镜头前介绍 NEAT 算法](/images/laupok-mario-ai/neat-title.jpg)
 
 ---
 
-## 环境搭建：BizHawk、Lua 与《超级马里奥世界》
+## 环境：BizHawk、Lua、超级马里奥世界
 
 ### BizHawk 模拟器
 
-BizHawk 是一款开源模拟器，支持大量主机----NES、SNES、世嘉 Genesis、PS1、Game Boy 等。它的核心特性是可以在游戏运行的同时执行 **Lua 脚本**。这些脚本可以访问模拟器的**内存（RAM）**，也就是说它们可以实时读取----甚至修改----任何游戏数据。
+BizHawk 是开源模拟器，机种一堆，NES、SNES、Genesis、PS1、Game Boy 等等。特点是能并行跑 **Lua 脚本**。脚本读写模拟**内存**（RAM），实时读改游戏任何数据。
 
-具体来说，这意味着你可以：
-- 读取马里奥在关卡中的位置
-- 知道屏幕上有哪些精灵（敌人、道具）
-- 知道马里奥周围每个图块（砖块）的状态
-- 控制手柄----按下任意按钮
+具体说能：
+- 读马里奥在关卡的位置
+- 知道屏幕上哪些 sprite（敌人、道具）
+- 知道马里奥周围每块 tile 状态
+- 按手柄，任意键
 
-这正是让 AI 玩游戏所需要的一切。
+做 AI 正好全要。
 
-### 《超级马里奥世界》的内存地址
+### 超级马里奥世界内存地址
 
-在《超级马里奥世界》的 RAM 中，每一条数据都存储在一个特定的地址上。这就像一个社区：每个地址对应一栋"房子"，里面存放着一条信息。例如：
+SMW 的 RAM 里每个数据固定地址。像街区：每地址是装信息的"房子"。比如：
 
 | 地址 | 数据 |
-|---------|------|
-| `0x94`-`0x95` | 马里奥的 X 坐标（16 位，小端序） |
-| `0x96`-`0x97` | 马里奥的 Y 坐标 |
-| `0x14C8`+`i` | 精灵 `i` 的状态（>7 = 存活） |
-| `0xE4`+`i` | 精灵 `i` 的低字节 X 坐标 |
-| `0x14E0`+`i` | 精灵 `i` 的高字节 X 坐标 |
-| `0xD8`+`i` | 精灵 `i` 的低字节 Y 坐标 |
-| `0x14D4`+`i` | 精灵 `i` 的高字节 Y 坐标 |
-| `0x170B`+`i` | 扩展精灵 `i` 的类型 |
-| `0x0100` | 游戏状态（12 = 关卡完成） |
-| `0x13D4` | 暂停激活 |
-| `0x0071` | 马里奥的死亡动画（9 = 死亡） |
-| `0x1C800`+... | 关卡图块表 |
+|--------|--------|
+| `0x94`-`0x95` | 马里奥 X 位置（16 位，小端） |
+| `0x96`-`0x97` | 马里奥 Y 位置 |
+| `0x14C8`+`i` | sprite `i` 状态（>7 活着） |
+| `0xE4`+`i` | sprite `i` X 低字节 |
+| `0x14E0`+`i` | sprite `i` X 高字节 |
+| `0xD8`+`i` | sprite `i` Y 低字节 |
+| `0x14D4`+`i` | sprite `i` Y 高字节 |
+| `0x170B`+`i` | extended sprite `i` 类型 |
+| `0x0100` | 游戏状态（12 = 过关） |
+| `0x13D4` | 暂停 |
+| `0x0071` | 马里奥死亡动画（9 = 死了） |
+| `0x1C800`+... | 关卡 tile 表 |
 
-精灵的位置使用两个字节：一个"低"字节和一个"高"字节，因为位置可以超过 255 像素。计算公式始终是 `低 + 高 × 256`。
+sprite 位置两字节：低字节加高字节，位置超 255 像素就这么办。公式永远低 + 高 × 256。
 
-对于图块则更为复杂：基地址是 `0x1C800`，你需要根据图块在世界中的 `x` 和 `y` 坐标来计算偏移量，步长为每图块 16 像素。
+tile 复杂：基址 `0x1C800`，按 tile 在世界 `x` `y` 坐标算偏移，tile 16 像素步进。
 
-![《超级马里奥世界》带有调试覆层，显示精灵内存地址和马里奥的位置](/images/laupok-mario-ai/memory-debug.jpg)
+![带调试 overlay 的超级马里奥世界，显示 sprite 内存地址和马里奥位置](/images/laupok-mario-ai/memory-debug.jpg)
 
 ---
 
-## 基础知识：遗传算法与神经网络
+## 前置：遗传算法和神经网络
 
-在深入代码之前，你需要理解两个基本概念。没有它们，其他一切都无法理解。
+先讲两个基本概念。不懂后面全白看。
 
 ### 遗传算法
 
-遗传算法是对**进化论**的模拟。核心思想是：你创建一个**种群**，由多个个体组成，每个个体具有略微不同的特征（"基因"）。你让它们在一个环境中"生活"。表现最好的个体存活下来并繁殖。表现差的则被淘汰。
+遗传算法就是**进化论**模拟。核心：建**种群**，个体**基因**各不相同。放环境里活。活得好的生，活不好的死。
 
-Laupok 用**卡比**类比来说明：
-- 一群卡比出现在有尖刺和番茄的地形上
-- 尖刺会扣除生命值，番茄会恢复生命值
-- 每个卡比都有基因：体型、速度、生命值、行为（逃跑、寻找番茄、盲目奔跑）
+Laupok 用**卡比**打比方：
+- 卡比种群出生在带刺和番茄的场上
+- 刺扣血，番茄回血
+- 每只卡比有基因：大小、速度、血量、行为（跑、找番茄、乱冲）
 
-![DNA 双螺旋结构，标注了"宝宝"、"体型"、"速度"、"颜色"----构成个体的基因](/images/laupok-mario-ai/dna-genes.jpg)
+![DNA 双螺旋，标“宝宝”、大小、速度、颜色，组成个体的基因](/images/laupok-mario-ai/dna-genes.jpg)
 
-- 15 秒后，检查谁存活的时间最长
-- 最好的卡比与其他个体交配：后代继承一半最佳基因和一半"最差"基因
-- 后代会发生随机**突变**（大一点、快一点……）
-- 旧的卡比被新的取代
-- 重新开始
+- 15 秒后看谁活最久
+- 最好的卡比和其他的生：宝宝一半基因来自最好的，一半来自"最烂"
+- 宝宝**随机变异**（大一点、快一点……）
+- 老卡比换掉新的
+- 重来
 
-经过 180 代（约 15 小时），卡比的存活时间从 15 秒提升到了 **15 分钟**。它们变得体型更小（碰撞体积更小）、速度更快，并且会持续逃避危险。
+180 代（约 15 小时）后，卡比从活 15 秒到活 **15 分钟**。变小了（受击面积小）、快了、永远躲危险。
 
-![卡比模拟第 0 代：彩色圆点随机散布在黑色背景上，大小相似](/images/laupok-mario-ai/kirby-gen0.jpg)
+![卡比模拟第 0 代：黑底彩色圆随机散，大小差不多](/images/laupok-mario-ai/kirby-gen0.jpg)
 
-![卡比模拟第 1866 代：卡比变得更小、更快，并系统性地逃离危险](/images/laupok-mario-ai/kirby-gen1866.jpg)
+![卡比模拟第 1866 代：卡比更小更快，系统躲危险](/images/laupok-mario-ai/kirby-gen1866.jpg)
 
-![卡比模拟统计数据：适应度、生命值、每个个体按表现排名的行为](/images/laupok-mario-ai/kirby-stats.jpg)
+![卡比模拟统计：fitness、血量、每只行为按成绩排](/images/laupok-mario-ai/kirby-stats.jpg)
 
-关键在于：**你不需要定义解决方案**。算法会**自己找到**。这正是它在你不知道最优参数组合是什么的问题上如此强大的原因。
+关键：**不定义解**。算法自己**找**出来。这就是它在不知道最优参数组合长什么样的问题上强的原因。
 
 ### 人工神经网络
 
-神经网络是人脑的简化数学模型。它由以下部分组成：
-- **输入神经元**：网络"看到"的内容
-- **输出神经元**：网络"决定"的内容
-- **连接（权重）**：每条连接有一个**权重**，用于放大或抑制信号
+神经网络是简化版人脑数学模型。组成：
+- **输入神经元**：网络"看"到的
+- **输出神经元**：网络"决定"的
+- **连接**（权重）：每条连接有个**权重**放大或衰减信号
 
-原理很简单：每个输入神经元发送它的值。这个值乘以连接权重，然后与其他信号相加。如果结果超过某个阈值（**激活函数**），输出神经元就会激活。
+原理简单：每个输入发值。乘连接权重，加别的信号。如果结果过阈（**激活函数**），输出神经元激活。
 
-在 Laupok 关于马里奥和鼠标光标的类比中：
-- 输入神经元 = 马里奥与光标之间的距离
-- 连接权重 = 马里奥的敏感度
-- 输出神经元 = 马里奥是否尖叫
+Laupok 拿马里奥和鼠标指针打比方：
+- 输入神经元 = 马里奥和指针距离
+- 连接权重 = 马里奥敏感度
+- 输出神经元 = 马里奥叫不叫
 
-光标越近，输入值越高。如果权重很强，输出信号就强，马里奥就会尖叫。改变权重就改变了马里奥的敏感度。
+指针越近输入值越大。权重强输出信号强，马里奥叫。改权重改马里奥敏感度。
 
-!["马里奥害怕了"演示：马里奥面对一个幽灵，突触条显示输入和输出之间的连接权重](/images/laupok-mario-ai/mario-fear-demo.jpg)
+!["马里奥害怕"演示：马里奥面對 Boo，突触条显示输入输出连接权重](/images/laupok-mario-ai/mario-fear-demo.jpg)
 
-在实际 AI 的神经网络中，逻辑是一样的，但规模大得多：
-- **99 个输入神经元**（11×9 个图块，马里奥的视野）
-- **8 个输出神经元**（A、B、X、Y、上、下、左、右）
-- 中间的**隐藏神经元**
-- 数百条具有不同权重的连接
+真 AI 神经网络同理，规模大：
+- **99 输入神经元**（马里奥视野 11x9 tile）
+- **8 输出神经元**（A、B、X、Y、上、下、左、右）
+- 中间**隐藏神经元**
+- 几百条权重各异的连接
 
 ---
 
-## NEAT：改变一切的算法
+## NEAT：改命的算法
 
-### 基础遗传算法的问题
+### 朴素遗传加神经网络的问题
 
-如果你简单地将遗传算法与神经网络结合，会面临一个问题：你创建了 100 个完全不同的神经网络，但你无法比较它们。每个网络都有自己的神经元、连接和权重。你怎么知道两个网络是"相似"还是"不同"？
+遗传算法加神经网络直接拼，有麻烦：造 100 个完全不同的神经网络，没法比。神经元、连接、权重各不同。两网络"近"还是"远"？
 
-这就是 **NEAT** 的用武之地----增强拓扑的神经进化。由 **Kenneth Stanley** 和 **Risto Miikkulainen** 在 2002 年提出，它恰恰解决了这个问题。
+**NEAT** 上场，NeuroEvolution of Augmenting Topologies。**Kenneth Stanley** 和 **Risto Miikkulainen** 2002 年发明，专解这个问题。
 
 ### 物种
 
-NEAT 的第一个关键机制是**物种**。当一个神经网络与另一个差异太大时，它会被归类到不同的物种中。相似度通过三个参数计算：
+NEAT 第一关键机制**物种**。神经网络和另一个差太多，分不同物种。相似度三参数：
 
-1. **多余基因**（`EXCES_COEF = 0.50`）：两个网络之间没有共同点的连接数量（不同的创新）
-2. **不相交基因**：同上，但针对中间部分的连接
-3. **权重差异**（`POIDSDIFF_COEF = 0.92`）：共享相同创新的连接之间的平均权重差异
+1. **Excess**（`EXCES_COEF = 0.50`）：两网络风马牛不相及的连接数（不同 innovation）
+2. **Disjoint**：同上，但是中间位置的连接
+3. **权重差**（`POIDSDIFF_COEF = 0.92`）：共享 innovation 连接的平均权重差
 
-评分公式：
+分数公式：
 
 ```
-score = (EXCES_COEF × disjoint) / max(nbConnexions1 + nbConnexions2, 1)
-      + POIDSDIFF_COEF × diffPoids
+分数 = (EXCES_COEF × disjoint) / max(连接数1 + 连接数2, 1)
+       + POIDSDIFF_COEF × 权重差
 ```
 
-如果这个分数低于 `DIFF_LIMITE`（1.0），两个网络就属于同一物种。否则，创建一个新物种。
+分数小于 `DIFF_LIMITE`（1.0），两网络同物种。否则开新物种。
 
-### 创新编号
+### innovation
 
-这是 NEAT 的精妙之处。每次创建一条连接时，它会获得一个唯一的全局**创新**编号。即使在网络繁殖后，这个编号也会跟随神经网络。
+NEAT 的天才。每条连接出生拿全局唯一 **innovation** 号。号码跟网络走，繁殖也带着。
 
-具体来说，当通过交叉产生一个后代时，它会继承父母的创新编号。如果两个网络共享相同的创新编号，说明它们拥有来自同一祖先的连接。这使得比较不同规模的网络成为可能。
+实际宝宝交叉继承亲本 innovation。两网络共享 innovation，说明这条连接同祖。大小不同的网络也能比了。
 
 ### 交叉
 
-当两个神经网络繁殖时，**交叉**的工作方式如下：
+两神经网络繁殖，**交叉**这么跑：
 
-![Laupok 解释交叉概念，叠加文字"CROSSOVER"](/images/laupok-mario-ai/crossover-label.jpg)
+![Laupok 讲 crossover，叠字"CROSSOVER"](/images/laupok-mario-ai/crossover-label.jpg)
 
-1. 表现更好的网络成为"优势亲本"
-2. 后代继承优势亲本的所有连接
-3. 对于每条共享相同创新的连接，另一个亲本有 50% 的概率替换它
-4. 只有来自非优势亲本的活跃连接才能替换
+1. 成绩好的当"显性亲本"
+2. 宝宝全盘继承显性的连接
+3. 每条共享 innovation 的连接，非显性亲本 50% 概率替换
+4. 只有非显性亲本*活跃*连接能替换
 
-这保证了后代至少不比最好的亲本差。
+保证宝宝至少不比最好的亲本差。
 
-### 突变
+### 变异
 
-交叉之后，后代会经历具有可配置概率的突变：
+交叉后宝宝按可配概率变异：
 
-![Laupok 解释突变，叠加文字"(small modif = mutation)"](/images/laupok-mario-ai/mutation-label.jpg)
+![Laupok 讲变异，叠字"(petite modif = mutation)"](/images/laupok-mario-ai/mutation-label.jpg)
 
-| 突变类型 | 概率 | 效果 |
-|----------|------|------|
-| 重置连接权重 | 25% | 权重完全随机化 |
-| 权重突变 | 95% | 权重变化 ±0.80 |
-| 添加连接 | 85% | 在两个未连接的神经元之间创建新连接 |
-| 添加神经元 | 39% | 在两个已连接的神经元之间插入一个隐藏神经元 |
+| 变异 | 概率 | 效果 |
+|----------|------------|--------|
+| 连接权重重置 | 25% | 权重全随机 |
+| 权重变异 | 95% | 权重 ±0.80 浮动 |
+| 加连接 | 85% | 没连的两神经元连上 |
+| 加神经元 | 39% | 两连着的神经元中间插隐藏神经元 |
 
-添加神经元的概率很重要：正是它使网络能够**成长**。一开始只有输入和输出。逐渐地，隐藏神经元出现，使网络变得越来越复杂。
+加神经元概率重要：网络**长大**。开局只有输入输出。隐藏神经元慢慢冒出来，网络越来越复杂。
 
 ---
 
-## 代码：完整解析
+## 代码：完整走读
 
 ### 常量
 
-脚本以一组定义所有设置的常量开始：
+脚本开头一串常量定全部参数：
 
 ```lua
--- Mario's view around him
+-- 马里奥周围视野
 TAILLE_TILE = 16
-TAILLE_VUE_W = TAILLE_TILE * 11  -- 176 pixels wide
-TAILLE_VUE_H = TAILLE_TILE * 9   -- 144 pixels tall
-NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 tiles
-NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 tiles
+TAILLE_VUE_W = TAILLE_TILE * 11  -- 宽 176 像素
+TAILLE_VUE_H = TAILLE_TILE * 9   -- 高 144 像素
+NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 tile
+NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 tile
 
--- Neural network
-NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 inputs (visible tiles)
-NB_OUTPUT = 8  -- A, B, X, Y, Up, Down, Left, Right
-NB_INDIVIDU_POPULATION = 100  -- individuals per population
-NB_NEURONE_MAX = 100000  -- max hidden neurons
+-- 神经网络
+NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 输入（看得到的 tile）
+NB_OUTPUT = 8  -- A、B、X、Y、上、下、左、右
+NB_INDIVIDU_POPULATION = 100  -- 每代个体
+NB_NEURONE_MAX = 100000  -- 隐藏神经元上限
 
 -- Fitness
-FITNESS_LEVEL_FINI = 1000000  -- value when level is finished
-NB_FRAME_RESET_BASE = 33  -- frames without progress before reset
-NB_FRAME_RESET_PROGRES = 300  -- frames if progress detected
+FITNESS_LEVEL_FINI = 1000000  -- 过关分值
+NB_FRAME_RESET_BASE = 33  -- 没进展多少帧重置
+NB_FRAME_RESET_PROGRES = 300  -- 有进展给多少帧
 
--- Species
+-- 物种
 EXCES_COEF = 0.50
 POIDSDIFF_COEF = 0.92
 DIFF_LIMITE = 1.00
 
--- Mutations
+-- 变异
 CHANCE_MUTATION_RESET_CONNEXION = 0.25
 POIDS_CONNEXION_MUTATION_AJOUT = 0.80
 CHANCE_MUTATION_POIDS = 0.95
@@ -222,47 +222,47 @@ CHANCE_MUTATION_CONNEXION = 0.85
 CHANCE_MUTATION_NEURONE = 0.39
 ```
 
-`NB_INPUT` 为 99，因为马里奥的视野是 11×9 个图块。每个图块就是一个输入神经元。空图块 = 0。砖块 = 1。敌人 = -1。
+`NB_INPUT` 99 因为马里奥视野 11x9 tile。每 tile 一输入。tile 空 0。块 1。敌人 -1。
 
-8 个输出对应 SNES 手柄按钮：A、B、X、Y、上、下、左、右。排除了 Start、Select、L 和 R，以免"分散"马里奥的注意力。
+8 输出对应 SNES 手柄键：A、B、X、Y、上、下、左、右。Start、Select、L、R 不用，决策越少越好。
 
 ### 数据结构
 
-脚本定义了三个主要结构：
+脚本定三个主结构：
 
 ```lua
 function newNeurone()
     local neurone = {}
-    neurone.valeur = 0    -- current neuron value
-    neurone.id = 0        -- unique identifier
-    neurone.type = ""     -- "input", "output", or "hidden"
+    neurone.valeur = 0    -- 神经元当前值
+    neurone.id = 0        -- 唯一标识
+    neurone.type = ""     -- "input"、"output" 或 "hidden"
     return neurone
 end
 
 function newConnexion()
     local connexion = {}
-    connexion.entree = 0     -- source neuron ID
-    connexion.sortie = 0     -- destination neuron ID
-    connexion.actif = true   -- can be disabled if a hidden neuron is inserted
-    connexion.poids = 0      -- connection weight
-    connexion.innovation = 0 -- unique innovation number
-    connexion.allume = false -- for display: true if signal passes
+    connexion.entree = 0     -- 源神经元 ID
+    connexion.sortie = 0     -- 目标神经元 ID
+    connexion.actif = true   -- 插隐藏神经元可关掉
+    connexion.poids = 0      -- 连接权重
+    connexion.innovation = 0 -- 唯一 innovation 号
+    connexion.allume = false -- 显示用：有信号过就亮
     return connexion
 end
 
 function newReseau()
     local reseau = {
-        nbNeurone = 0,        -- number of hidden neurons
-        fitness = 1,          -- performance (distance traveled)
-        idEspeceParent = 0,   -- which species it belongs to
-        lesNeurones = {},     -- neuron array
-        lesConnexions = {}    -- connection array
+        nbNeurone = 0,        -- 隐藏神经元数
+        fitness = 1,          -- 成绩（走多远）
+        idEspeceParent = 0,   -- 属于哪个物种
+        lesNeurones = {},     -- 神经元表
+        lesConnexions = {}    -- 连接表
     }
-    -- Initialize with inputs
+    -- 先初始化输入
     for j = 1, NB_INPUT, 1 do
         ajouterNeurone(reseau, j, "input", 1)
     end
-    -- Then outputs
+    -- 再输出
     for j = NB_INPUT + 1, NB_INPUT + NB_OUTPUT, 1 do
         ajouterNeurone(reseau, j, "output", 0)
     end
@@ -270,21 +270,21 @@ function newReseau()
 end
 ```
 
-一开始，每个网络只有输入和输出。没有隐藏神经元，没有连接。算法会自行判断是否需要。
+开局每个网络只有输入输出：无隐藏神经元，无连接。要不要长算法定。
 
-### 突变详解
+### 变异细看
 
-#### 权重突变
+#### 权重变异
 
 ```lua
 function mutationPoidsConnexions(unReseau)
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             if math.random() < CHANCE_MUTATION_RESET_CONNEXION then
-                -- 25%: total weight reset
+                -- 25%：权重全重置
                 unReseau.lesConnexions[i].poids = genererPoids()
             else
-                -- 75%: variation of ±0.80
+                -- 75%：±0.80 浮动
                 if math.random() >= 0.5 then
                     unReseau.lesConnexions[i].poids =
                         unReseau.lesConnexions[i].poids - POIDS_CONNEXION_MUTATION_AJOUT
@@ -298,14 +298,14 @@ function mutationPoidsConnexions(unReseau)
 end
 ```
 
-初始权重始终是 1 或 -1（`genererPoids()`）。±0.80 的变化可以使权重在正负值之间大幅摆动，从而从根本上改变网络的行为。
+初始权重永远 1 或 -1（`genererPoids()`）。±0.80 浮动能在正负间荡，网络行为大变。
 
-#### 添加连接
+#### 加连接
 
 ```lua
 function mutationAjouterConnexion(unReseau)
     local liste = {}
-    -- Shuffle the neuron list
+    -- 神经元表打乱
     for i, v in ipairs(unReseau.lesNeurones) do
         local pos = math.random(1, #liste+1)
         table.insert(liste, pos, v)
@@ -317,11 +317,11 @@ function mutationAjouterConnexion(unReseau)
             if i ~= j then
                 local n1 = liste[i]
                 local n2 = liste[j]
-                -- Valid connection: input→output, hidden→hidden, hidden→output
+                -- 合法连接：输入→输出、隐藏→隐藏、隐藏→输出
                 if (n1.type == "input" and n2.type == "output") or
                    (n1.type == "hidden" and n2.type == "hidden") or
                    (n1.type == "hidden" and n2.type == "output") then
-                    -- Check no connection already exists
+                    -- 查是不是已经连了
                     local dejaConnexion = false
                     for k = 1, #unReseau.lesConnexions, 1 do
                         if unReseau.lesConnexions[k].entree == n1.id
@@ -343,18 +343,18 @@ function mutationAjouterConnexion(unReseau)
 end
 ```
 
-不能将输出连接到输入（那样会形成循环），也不能连接两个已经相连的神经元。打乱顺序保证了每次都会探索不同的可能性。
+输出连输入不行（成环），连过的 pair 不重连。打乱保证每次探索不同可能。
 
-#### 添加神经元
+#### 加神经元
 
-这是最有趣的突变：
+最有意思的变异：
 
 ```lua
 function mutationAjouterNeurone(unReseau)
     if #unReseau.lesConnexions == 0 then return nil end
     if unReseau.nbNeurone == NB_NEURONE_MAX then return nil end
 
-    -- Shuffle connections
+    -- 连接打乱
     local listeRandom = {}
     for i = 1, #unReseau.lesConnexions, 1 do
         local pos = math.random(1, #listeRandom+1)
@@ -363,20 +363,20 @@ function mutationAjouterNeurone(unReseau)
 
     for i = 1, #listeRandom, 1 do
         if unReseau.lesConnexions[listeRandom[i]].actif then
-            -- Disable the existing connection
+            -- 关掉已有连接
             unReseau.lesConnexions[listeRandom[i]].actif = false
             unReseau.nbNeurone = unReseau.nbNeurone + 1
             local indice = unReseau.nbNeurone + NB_INPUT + NB_OUTPUT
 
-            -- Create the hidden neuron
+            -- 建隐藏神经元
             ajouterNeurone(unReseau, indice, "hidden", 1)
 
-            -- Connect input to hidden neuron
+            -- 输入连隐藏
             ajouterConnexion(unReseau,
                 unReseau.lesConnexions[listeRandom[i]].entree,
                 indice, genererPoids())
 
-            -- Connect hidden neuron to output
+            -- 隐藏连输出
             ajouterConnexion(unReseau,
                 indice,
                 unReseau.lesConnexions[listeRandom[i]].sortie,
@@ -387,17 +387,17 @@ function mutationAjouterNeurone(unReseau)
 end
 ```
 
-机制是：你取一条现有的连接，**禁用它**，然后在中间插入一个隐藏神经元。原始连接被两条新连接取代：输入→隐藏 和 隐藏→输出。这就像剪断一根电线，在中间接入一个开关。
+机制：挑条已有连接**关掉**，中间插隐藏神经元。原来一条变两条：输入→隐藏和隐藏→输出。像把电线剪断中间串开关。
 
-这正是 NEAT "增强拓扑"的含义：网络会随时间**成长**。它从简单开始，只有在必要时才会变得复杂。
+这就是 NEAT "augmenting topologies"：网络随时间**长大**。简单开局，只在必要时变复杂。
 
-### 前向传播（feedForward）
+### feedForward
 
-这是将信号通过网络传播的函数：
+信号前向传播函数：
 
 ```lua
 function feedForward(unReseau)
-    -- Reset output neurons
+    -- 输出神经元清零
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             unReseau.lesNeurones[unReseau.lesConnexions[i].sortie].valeur = 0
@@ -405,7 +405,7 @@ function feedForward(unReseau)
         end
     end
 
-    -- Propagation
+    -- 传播
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             local avantTraitement = unReseau.lesNeurones[unReseau.lesConnexions[i].sortie].valeur
@@ -424,23 +424,23 @@ function feedForward(unReseau)
 end
 ```
 
-每条活跃的连接将 `输入值 × 权重` 发送到输出神经元。值是**累加**的（相加）。`allume` 标志仅用于可视化网络显示。
+每条活跃连接送 `输入值 × 权重` 到输出神经元。值**累加**。`allume` 旗只管网络可视化：有信号过就亮。
 
-### 读取游戏内存
+### 读游戏内存
 
-`getLesInputs()` 函数将《超级马里奥世界》的世界转换为网络可以理解的数据：
+`getLesInputs()` 把超级马里奥世界翻译成网络懂的数据：
 
 ```lua
 function getLesInputs()
     local lesInputs = {}
-    -- Initialize to 0 (gray = nothing)
+    -- 初始化 0（灰 = 空）
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             lesInputs[getIndiceLesInputs(i, j)] = 0
         end
     end
 
-    -- Sprites (enemies) = -1 (black)
+    -- sprite（敌人）= -1（黑）
     local lesSprites = getLesSprites()
     for i = 1, #lesSprites, 1 do
         local input = convertirPositionPourInput(getLesSprites()[i])
@@ -449,7 +449,7 @@ function getLesInputs()
         end
     end
 
-    -- Tiles (blocks) = tile value (white if > 0)
+    -- tile（块）= tile 值（> 0 白）
     local lesTiles = getLesTiles()
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
@@ -464,30 +464,30 @@ function getLesInputs()
 end
 ```
 
-输入网格是一个以马里奥为中心的视野：11 个图块宽，9 个图块高。每个图块的值为：
-- **0**（灰色）：空无一物
-- **1**（白色）：实心砖块
-- **-1**（黑色）：敌人
+输入格是以马里奥为中心的视野：宽 11 tile，高 9 tile。每格值：
+- **0**（灰）：空
+- **1**（白）：实心块
+- **-1**（黑）：敌人
 
-敌人从 RAM 中的两个列表读取：普通精灵（`0x14C8`-`0x14F8`）和扩展精灵（`0x170B`-`0x173B`）。对于每个存活的精灵（状态 > 7），会计算其相对于马里奥的图块位置，并在对应的单元格中放置 -1。
+敌人从 RAM 两表读：普通 sprite（`0x14C8`-`0x14F8`）和 extended sprite（`0x170B`-`0x173B`）。每活 sprite（状态 > 7）算相对马里奥的 tile 位置，对应格写 -1。
 
-### 适应度：AI 如何知道自己在进步
+### fitness：AI 怎么知道有没有进步
 
 ```lua
 function majReseau(unReseau, marioBase)
     local mario = getPositionMario()
 
     if not niveauFini and memory.readbyte(0x0100) == 12 then
-        -- Level finished!
+        -- 过关！
         unReseau.fitness = FITNESS_LEVEL_FINI
         niveauFini = true
     elseif marioBase.x < mario.x then
-        -- Mario moved right
+        -- 马里奥向右走
         unReseau.fitness = unReseau.fitness + (mario.x - marioBase.x)
         marioBase.x = mario.x
     end
 
-    -- Update inputs
+    -- 更新输入
     local lesInputs = getLesInputs()
     for i = 1, NB_INPUT, 1 do
         unReseau.lesNeurones[i].valeur = lesInputs[i]
@@ -495,13 +495,13 @@ function majReseau(unReseau, marioBase)
 end
 ```
 
-适应度很简单：就是**向右移动的距离**。如果马里奥移动了 10 像素，适应度就增加 10。如果马里奥向左移动，什么都不会发生（没有惩罚）。如果关卡完成（地址 `0x0100` == 12），适应度变为 1,000,000。
+fitness 简单粗暴：**向右走多远**。马里奥右移 10 像素 fitness 加 10。后退不扣分。过关（地址 `0x0100` == 12）fitness 直接 100 万。
 
-这是故意设计得这么简单的。击杀敌人没有奖励，死亡没有惩罚。就是：向右移动。
+故意简单。只有向右算数：杀怪不加分，死不扣分。
 
 ### 智能重置
 
-如果马里奥在 33 帧内没有移动，关卡会重置，并进入下一个个体。但如果马里奥取得了进展（当前适应度与初始值不同），则等待 300 帧----给网络一个机会来"理解"它做对了什么。
+马里奥 33 帧不动，重置关卡换下个个体。马里奥有进展（fitness 和开局不一样），等 300 帧，给网络"想明白"的机会。
 
 ```lua
 if fitnessAvant == laPopulation[idPopulation].fitness
@@ -521,24 +521,24 @@ if fitnessAvant == laPopulation[idPopulation].fitness
 end
 ```
 
-条件 `memory.readbyte(0x0071) ~= 9` 检查马里奥是否不在死亡动画中。如果马里奥已经死了，重置就没有意义。
+`memory.readbyte(0x0071) ~= 9` 查马里奥不在死亡动画。死了重置没意义。
 
 ### 主循环
 
-主循环以 30 fps 运行（《超级马里奥世界》的正常速度）：
+循环跑 30 fps（超级马里奥世界正常速度）：
 
 ```lua
 while true do
     local fitnessAvant = laPopulation[idPopulation].fitness
 
-    -- Display (network, info)
+    -- 显示（网络、信息）
     if forms.ischecked(estAccelere) then
-        emu.limitframerate(false)  -- speed up
+        emu.limitframerate(false)  -- 加速
     else
         emu.limitframerate(true)   -- 30 fps
     end
 
-    -- The 3 vital functions
+    -- 3 个 vital 函数
     majReseau(laPopulation[idPopulation], marioBase)
     feedForward(laPopulation[idPopulation])
     appliquerLesBoutons(laPopulation[idPopulation])
@@ -546,14 +546,14 @@ while true do
     emu.frameadvance()
     nbFrame = nbFrame + 1
 
-    -- Reset if no progress
+    -- 没进展重置
     -- ...
-    -- New generation if all individuals tested
+    -- 全测完新一代
     -- ...
 end
 ```
 
-三个核心函数是 `majReseau`、`feedForward` 和 `appliquerLesBoutons`。禁用任何一个，马里奥就会停止移动。
+`majReseau`、`feedForward`、`appliquerLesBoutons` 三个缺一，马里奥不动。
 
 ### 交叉
 
@@ -585,16 +585,16 @@ function crossover(unReseau1, unReseau2)
 end
 ```
 
-后代从更好的亲本继承。对于每条共享相同创新的连接，另一个亲本有 50% 的概率替换它----但**仅在该连接处于活跃状态时**。这是一个重要的修复：没有它，可能会创建无用的隐藏神经元。
+宝宝继承好亲本。每条共享 innovation 的连接，差亲本 50% 概率替换，**只限活跃连接**。重要修：不然没用的隐藏神经元乱生。
 
-### 物种选择
+### 按物种选
 
 ```lua
 function nouvelleGeneration(laPopulation, lesEspeces)
     local laNouvellePopulation = newPopulation()
     local nbIndividuACreer = NB_INDIVIDU_POPULATION
 
-    -- Calculate average fitness per species
+    -- 算每物种平均 fitness
     for i = 1, #lesEspeces, 1 do
         lesEspeces[i].fitnessMoyenne = 0
         for j = 1, #lesEspeces[i].lesReseaux, 1 do
@@ -605,7 +605,7 @@ function nouvelleGeneration(laPopulation, lesEspeces)
             lesEspeces[i].fitnessMoyenne / #lesEspeces[i].lesReseaux
     end
 
-    -- Each species creates a number of children proportional to its average fitness
+    -- 每物种按平均 fitness 比例生孩子
     for i = 1, #lesEspeces, 1 do
         local nbEnfant = math.ceil(
             #lesEspeces[i].lesReseaux *
@@ -622,13 +622,13 @@ function nouvelleGeneration(laPopulation, lesEspeces)
 end
 ```
 
-思路是：平均适应度为 10,000 的物种产生的后代数量远多于平均适应度为 1 的物种。这就是**自然选择**的实际运作。
+思路：平均 fitness 10000 的物种比平均 1 的多生得多孩子。这就是**自然选择**。
 
-`choisirParent` 使用轮盘赌选择：一个个体的适应度越高，被选为亲本的概率就越大。
+`choisirParent` 轮盘赌：fitness 越高当爹概率越大。
 
-### 保存与加载
+### 保存和加载
 
-种群保存为 `.pop` 文件：
+种群存 `.pop` 文件：
 
 ```lua
 function sauvegarderUnReseau(unReseau, fichier)
@@ -651,30 +651,30 @@ function sauvegarderUnReseau(unReseau, fichier)
 end
 ```
 
-保存还包括了所有先前种群中的最佳个体。如果旧种群的最佳个体比新种群的好，我们会恢复到旧种群作为基准。这是一种**精英策略**：最佳个体永远不会丢失。
+存全部种群加之前所有代最好的。如果老最好的比新一代最好的强，拿老的当底子。一种**精英主义**：最好的永不丢。
 
-### 网络可视化
+### 画网络
 
-Laupok 添加了一个叠加在游戏上的神经网络可视化器：
+Laupok 给网络加了游戏内 overlay 可视化：
 
 ```lua
 function dessinerUnReseau(unReseau)
-    -- Inputs: 11×9 grid around Mario
+    -- 输入：马里奥周围 11x9 格
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             local xT = ENCRAGE_X_INPUT + (i - 1) * TAILLE_INPUT
             local yT = ENCRAGE_Y_INPUT + (j - 1) * TAILLE_INPUT
             local couleurFond = "gray"
             if unReseau.lesNeurones[getIndiceLesInputs(i, j)].valeur < 0 then
-                couleurFond = "black"   -- enemy
+                couleurFond = "black"   -- 敌人
             elseif unReseau.lesNeurones[getIndiceLesInputs(i, j)].valeur > 0 then
-                couleurFond = "white"   -- block
+                couleurFond = "white"   -- 块
             end
             gui.drawRectangle(xT, yT, TAILLE_INPUT, TAILLE_INPUT, "black", couleurFond)
         end
     end
 
-    -- Outputs: 8 buttons
+    -- 输出：8 个键
     for i = 1, NB_OUTPUT, 1 do
         local xT = ENCRAGE_X_OUTPUT
         local yT = ENCRAGE_Y_OUTPUT + ESPACE_Y_OUTPUT * (i - 1)
@@ -685,7 +685,7 @@ function dessinerUnReseau(unReseau)
         end
     end
 
-    -- Connections
+    -- 连接
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             local alpha = 25
@@ -702,75 +702,75 @@ function dessinerUnReseau(unReseau)
 end
 ```
 
-它对于理解网络在做什么非常有用。活跃的连接显示为白色，非活跃的显示为半透明。输入是白色/黑色/灰色单元格的网格。输出显示哪些按钮被按下。
+看网络在干嘛超有用。活跃连接白色，不活跃半透明。输入是白黑灰格子。输出看哪个键按着。
 
 ---
 
-## 结果
+## 成果
 
 ### AI 学会了什么
 
-经过数小时（甚至数天）的运行，AI 自主发现：
+跑几小时（几天）下来，AI 自己悟出：
 
-1. **向右移动**：最基本的行为，但需要持续按住右键
-2. **跳过敌人**：通过将"检测到敌人"的输入连接到 A 或 B 按钮
-3. **避开障碍物**：一些网络学会了暂时后退以便走得更远
-4. **通关**：最佳个体能够完成《超级马里奥世界》的第一个关卡
+1. **向右走**：最基础，但右键得一直按着
+2. **跳过敌人**：敌人输入连 A 或 B 键
+3. **绕障碍**：有些网络学会暂时后退再前进
+4. **过关**：最好的个体打通超级马里奥世界第一关
 
-![由 AI 控制的马里奥在《超级马里奥世界》关卡中面对幽灵----神经网络实时决定动作](/images/laupok-mario-ai/mario-ai-playing.jpg)
+![AI 操作的马里奥在超级马里奥世界里面对 Boo，神经网络实时决策](/images/laupok-mario-ai/mario-ai-playing.jpg)
 
-### 局限性
+### 局限
 
-这个项目有其局限：
+项目有墙：
 
-- **单关卡训练**：AI 针对一个特定关卡训练。它不能自动泛化到其他关卡
-- **训练时间**：需要数十小时才能获得满意的结果
-- **不理解**：AI 并不"理解"自己在做什么。它通过随机突变来优化适应度函数（移动距离）
-- **原地跳跃**：Laupok 指出马里奥在看到敌人时倾向于原地跳跃，仅仅因为这会增加适应度（跳跃时会稍微前进一点）
+- **只会一关**：单关训的，不自动泛化到别的关
+- **训练时间**：像样结果要几十小时
+- **不懂**：AI 不"理解"自己干嘛。按 fitness 函数（走多远）随机变异优化
+- **蹭地**：Laupok 说马里奥见敌人爱原地跳，因为跳也往前蹭涨 fitness
 
 ---
 
-## 如何复现实验
+## 复现实验
 
-Laupok 公开了所有内容。以下是步骤：
+Laupok 全开源了。步骤：
 
-1. 从 [tasvideos.org](https://tasvideos.org/BizHawk) 下载 **BizHawk**（下载页面）
-2. 获取《超级马里奥世界》的 **美版 ROM**（从自己的卡带中备份）
-3. 从 [Pastebin](https://pastebin.com/Jcvdqhqm) 下载 **Lua 脚本**----重命名为 `mario.lua`
-4. 将脚本放在与 ROM **相同的文件夹**中
-5. **启动 BizHawk**，打开 ROM
-6. 在 **Lua 控制台**中：`dofile("mario.lua")` 或通过 Script > Open Script 菜单
-7. 在关卡开始处**保存存档状态**（Savestate > Save State 菜单），命名为 `debut.state`
-8. **重新启动脚本**----即可运行
+1. **下 BizHawk** [tasvideos.org](https://tasvideos.org/BizHawk)（Download 区）
+2. **搞 USA 版超级马里奥世界 ROM**（自己卡带备份）
+3. **下 Lua 脚本** [Pastebin](https://pastebin.com/Jcvdqhqm)，改名 `mario.lua`
+4. **脚本和 ROM 放同一文件夹**
+5. **开 BizHawk**，打开 ROM
+6. **Lua 控制台**：`dofile("mario.lua")` 或菜单 Script > Open Script
+7. **存档**开头（菜单 Savestate > Save State）起名 `debut.state`
+8. **重跑脚本**，成了
 
-脚本包含一个带选项的表单：
-- **加速**：禁用 30 fps 限制以加快速度
-- **显示网络**：在游戏上叠加显示神经网络
-- **显示信息**：显示包含代数、适应度和物种数量的信息栏
+脚本带表单选项：
+- **加速**：关 30 fps 上限跑更快
+- **显示网络**：overlay 显示神经网络
+- **显示信息**：横幅显示代数、fitness、物种数
 - **暂停**：暂停执行
-- **保存/加载**：将当前种群持久化为 `.pop` 文件
+- **保存/加载**：当前种群存 `.pop` 文件
 
 ---
 
-## 资源与参考
+## 来源和参考
 
 | 资源 | 链接 |
-|------|------|
-| Laupok 的主视频 | [I built an AI that plays Mario by itself](https://www.youtube.com/watch?v=F63GNXGHVwM) |
-| 代码讲解 + 设置视频 | [How to set up the AI + source code review](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
-| 完整源代码 | [Pastebin Jcvdqhqm](https://pastebin.com/Jcvdqhqm) |
-| 原始 NEAT 论文 | Stanley & Miikkulainen, "Evolving Neural Networks through Augmenting Topologies", 2002 |
-| N8Programs 教程 | [NEAT implementation walkthrough](https://n8programs.github.io/)（JavaScript，但概念相同） |
-| 16blings（Laupok 的灵感来源） | [AI plays Super Mario World](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
+|-----------|------|
+| Laupok 主视频 | [j'ai créé une IA qui joue à mario toute seule](https://www.youtube.com/watch?v=F63GNXGHVwM) |
+| 代码 review 加环境视频 | [comment setup l'ia + code source review](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
+| 完整源码 | [Pastebin Jcvdqhqm](https://pastebin.com/Jcvdqhqm) |
+| NEAT 原论文 | Stanley & Miikkulainen, "Evolving Neural Networks through Augmenting Topologies", 2002 |
+| N8Programs 教程 | [NEAT implementation walkthrough](https://n8programs.github.io/)（JavaScript，但概念一样） |
+| 16blings（Laupok 灵感） | [AI plays Super Mario World](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
 | BizHawk | [tasvideos.org/BizHawk](https://tasvideos.org/BizHawk) |
-| 《超级马里奥世界》内存 | [SMW Central - RAM Map](https://www.smwcentral.net/?p=section&a=details&id=21702) |
+| 超级马里奥世界内存 | [SMW Central - RAM Map](https://www.smwcentral.net/?p=section&a=details&id=21702) |
 
 ---
 
 ## 结语
 
-Laupok 所做的是将一个学术算法（NEAT，2002 年）用 Lua 为模拟器（BizHawk）重写，并将其应用于《超级马里奥世界》。结果是：一个从零开始学习玩游戏的 AI，没有任何先验知识，仅通过随机突变和自然选择实现。
+Laupok 做的事：拿学术算法（NEAT，2002），Lua 重写给模拟器（BizHawk），用到超级马里奥世界。结果：AI 从零学会玩游戏，零先验知识，纯随机变异加自然选择。
 
-这是遗传算法威力的一个美丽例证。没有深度学习，没有 GPU，没有数百万的训练数据。只有自然选择、一些 Lua 代码，以及大量的耐心。
+遗传算法威力的漂亮例子。配方三样：自然选择，一点 Lua，大把耐心。不用深度学习，不用 GPU，不用海量训练数据。
 
-代码有注释、已公开，Laupok 还制作了两个讲解视频----一个讲核心概念，一个讲代码实现。如果这个话题吸引你，那就深入研究吧。它比看起来更容易上手。
+代码有注释，开源，Laupok 做了两个讲解视频，一个讲大概念，一个讲代码。感兴趣直接跳， 比看着好懂。

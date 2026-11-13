@@ -1,6 +1,6 @@
 ---
-title: "valorant-short-maker: o pipeline que gera os meus shorts de Valorant sozinho"
-description: "Groq/Llama para o guião, Piper para as vozes, FFmpeg para o resto. Como um cron job produz e publica um vídeo por dia no @valorant_agents, de A a Z."
+title: "valorant-short-maker : o pipeline que gera meus shorts de Valorant sozinho"
+description: "Groq/Llama para o roteiro, Piper para as vozes, FFmpeg para todo o resto. Como um cron job produz e publica um vídeo por dia no @valorant_agents, de A a Z."
 date: 2026-07-14
 tags:
   - typescript
@@ -10,34 +10,34 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "hCorHWj1IetkPQYa9pCYzUFP8OSpfgt/Mc87UPjA37vY81bNL3pd91UQj50Jx9uosCC/DYtngF44JnQTIDSsqg=="
+author_sig: "F6yb3BUl3vsirv8OYtggqu2O+2DMkdtdrf8LMsPnkdsgx/DvaYneoNyV9JfQeHwepsAF8X+Om9ojZZY5V+pHJw=="
 ---
 
-# valorant-short-maker: o pipeline que gera os meus shorts de Valorant sozinho
+# valorant-short-maker : o pipeline que gera meus shorts de Valorant sozinho
 
-Há uns meses, um canal do YouTube funciona sem que eu lhe toque: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). Agentes do Valorant a picarem-se entre rondas, com dobragem, legendas karaoke, publicados como Shorts. Tudo é gerado pelo [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker), um pipeline TypeScript/Bun que corre em cron e publica sem que ninguém tenha de clicar em nada.
+Há alguns meses, um canal do YouTube roda sem eu tocar nele : [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop). Agentes de Valorant se provocando entre dois rounds, dublados, legendados em karaokê, publicados como Shorts. Tudo é gerado pelo [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker), um pipeline TypeScript/Bun que roda em cron e publica sem ninguém precisar clicar em nada.
 
-Aqui está como funciona, passo a passo.
+Veja como funciona, passo a passo.
 
 ## O resultado
 
-Três frames tirados do vídeo gerado para "Duelist Debate" (Phoenix, Yoru e Jett):
+Três frames extraídos do vídeo gerado para "Duelist Debate" (Phoenix, Yoru e Jett) :
 
-![Intro de um short, círculo do agente com o título da cena](/images/valorant-short-maker/vsm-01-intro.png)
+![Intro de um short, círculo de agente com o título da cena](/images/valorant-short-maker/vsm-01-intro.png)
 
-![Uma fala em andamento, legenda karaoke a iluminar-se](/images/valorant-short-maker/vsm-02-dialogue.png)
+![Uma fala em andamento, legenda karaokê que se ilumina](/images/valorant-short-maker/vsm-02-dialogue.png)
 
-![Outra fala, a cor da legenda muda conforme o agente que fala](/images/valorant-short-maker/vsm-03-dialogue.png)
+![Outra fala, a cor da legenda muda conforme o agente](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-O resultado ao vivo neste Short: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). No canal, os Shorts andam pelas 1,2 a 1,5k visualizações. Nada de extraordinário, mas é um canal que anda sozinho desde o início, por isso o número que realmente importa é zero -- zero minutos gastos nele desde que o cron foi lançado.
+O resultado ao vivo neste Short : [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU). No canal, os Shorts giram em torno de 1,2 a 1,5k visualizações. Nada enorme, mas é um canal que roda sozinho desde o início, então o número que realmente conta é zero, zero minuto gasto nele depois que o cron foi lançado.
 
-## O pipeline, por ordem
+## O pipeline, em ordem
 
-### 1. Escrever o guião -- Groq + Llama 3.3
+### 1. Escrever o roteiro -- Groq + Llama 3.3
 
-Cada execução escolhe 3 a 4 agentes aleatoriamente entre os 26 disponíveis, e envia ao Llama 3.3 70B (via Groq) um prompt de sistema que contém, para cada agente escolhido, um resumo compacto da sua personalidade e das suas relações com os outros agentes presentes na cena (estas personas vivem em `src/lore/`, um ficheiro por agente). O prompt impõe regras rigorosas: uma frase curta e impactante por fala, rotação justa entre personagens, humor em primeiro lugar, e sobretudo pausas.
+Cada run sorteia 3 a 4 agentes aleatórios entre os 26 disponíveis, e envia ao Llama 3.3 70B (via Groq) um prompt de sistema que contém, para cada agente escolhido, um resumo compacto da personalidade dele e das relações dele com os outros agentes presentes na cena (essas personas vivem em `src/lore/`, um arquivo por agente). O prompt impõe regras precisas : uma frase curta e impactante por fala, rotação justa entre os personagens, humor em prioridade, e principalmente pausas.
 
-Exemplo concreto com "Duelist Debate" -- Phoenix, Yoru e Jett discutem sobre quem vai de duelista, gerado a 6 de julho de 2026:
+Exemplo concreto com "Duelist Debate", Phoenix, Yoru e Jett discutindo quem vai jogar de duelist, gerado em 6 de julho de 2026 :
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -70,55 +70,55 @@ yoru: I'll make sure to burn you, Phoenix, not with fire, but with my rifts.
 jett: I'll take you both down, no problem.
 ```
 
-As pausas são o detalhe que torna o ritmo natural: um `[0.3]` metido no meio de uma fala cria um silêncio de 0,3s no áudio sem cortar o círculo do agente no ecrã, enquanto uma linha `pause: 1.0` completa cria um verdadeiro silêncio entre dois interlocutores, círculo escondido. Sem isto, um TTS a debitar falas sem respirar soa robótico.
+As pausas são o detalhe que deixa o ritmo natural : `[0.3]` inserido no meio de uma fala cria um silêncio de 0.3s no arquivo de áudio sem cortar o círculo do agente na tela, enquanto uma linha `pause: 1.0` inteira cria um silêncio real entre dois locutores, círculo escondido. Sem isso, um TTS que encadeia falas sem respirar soa robótico.
 
-### 2. Dar voz -- Piper, um modelo por agente
+### 2. Dar uma voz -- Piper, um modelo por agente
 
-Cada agente tem o seu próprio modelo Piper (`.onnx`) treinado especificamente, guardado em `voices/<agent>/`. O texto gerado passa pelo modelo correspondente, que cospe um WAV. É a mesma tecnologia que uso para o treino de vozes custom em geral (ver o artigo sobre o pipeline Piper/Kaggle) -- aqui aplicada diretamente em produção, on-the-fly, em cada geração de vídeo.
+Cada agente tem seu próprio modelo Piper (`.onnx`) treinado especificamente, guardado em `voices/<agent>/`. O texto gerado passa pelo modelo correspondente, o que produz um WAV. É a mesma tecnologia que uso para o treinamento de vozes custom em geral (ver o artigo sobre o pipeline Piper/Kaggle), aqui aplicada direto em prod, em tempo real, a cada geração de vídeo.
 
-### 3. Legendas karaoke -- ASS gerado, cor extraída do ícone
+### 3. Legendas karaokê -- ASS gerado, cor extraída do ícone
 
-As legendas não são um simples `.srt`. É um ficheiro `.ass` (Advanced SubStation Alpha) gerado palavra a palavra, com efeito karaoke: cada palavra acende-se numa cor à medida que é pronunciada, enquanto o resto do texto fica numa cor neutra. A cor de destaque não é fixa -- é extraída dinamicamente do ícone do agente que fala (um script Python corre o PIL sobre o PNG do ícone, amostra os pixels não transparentes e devolve as cores dominantes). Resultado: a legenda da Killjoy acende-se a roxo, a da Jett a azul-petróleo, sem que nenhuma cor tenha sido hardcoded em lado nenhum.
+A legendagem não é um simples `.srt`. É um arquivo `.ass` (Advanced SubStation Alpha) gerado palavra por palavra, com efeito karaokê : cada palavra se ilumina em uma cor à medida que é pronunciada, enquanto o resto do texto fica em uma cor neutra. A cor de destaque não é fixa, ela é extraída dinamicamente do ícone do agente que fala (um script Python roda PIL sobre o PNG do ícone, amostra os pixels não transparentes, e devolve as cores dominantes). Resultado : a legenda da Killjoy se ilumina em roxo, a da Jett em azul esverdeado, sem nenhuma cor ter sido fixada no código em lugar algum.
 
-### 4. O círculo audio-reativo -- uma expressão FFmpeg por frame
+### 4. O círculo audiorreativo -- uma expressão FFmpeg por frame
 
-Esta é a parte mais retorcida do pipeline, e provavelmente aquela de que mais me orgulho. O ícone redondo do agente que fala não fica quieto: faz um ligeiro zoom ao ritmo da sua própria voz.
+É a parte mais estranha do pipeline, e provavelmente a de que mais me orgulho. O ícone redondo do agente que fala não fica estático : ele dá zoom in e out suave no ritmo da própria voz dele.
 
-O cálculo lê o WAV bruto da fala, calcula o envelope RMS (root mean square, uma medida da energia do sinal) frame a frame a 60 fps, normaliza pelo máximo e suaviza numa janela de 3 frames para evitar solavancos. Cada valor do envelope é depois convertido num fator de escala limitado por `MAX_ZOOM_VARIATION` (0,2, ou seja ±20% em torno do tamanho base).
+O cálculo é feito lendo o WAV bruto da fala, calculando o envelope RMS (root mean square, uma medida da energia do sinal) frame por frame a 60 fps, normalizando pelo máximo, e depois suavizando em uma janela de 3 frames para evitar solavancos. Cada valor de envelope é então convertido em um fator de escala limitado por `MAX_ZOOM_VARIATION` (0.2, ou seja ±20% em torno do tamanho base).
 
-O resultado deste cálculo não é aplicado por código que manipula pixels -- é traduzido numa enorme expressão condicional FFmpeg (`lt(n,K)*val + between(n,K,K')*val + ...`, um ramo por grupo de frames) que controla diretamente o parâmetro `scale` do filtro de vídeo. O FFmpeg avalia esta expressão a cada frame do render. Para uma fala de alguns segundos a 60 fps, são rapidamente centenas de ramos numa única expressão -- daí o parâmetro `STEP` que agrupa os frames para limitar a profundidade.
+O resultado desse cálculo não é aplicado via código que manipula pixels, é traduzido em uma imensa expressão condicional FFmpeg (`lt(n,K)*val + between(n,K,K')*val + ...`, uma ramificação por grupo de frames) que controla diretamente o parâmetro `scale` do filtro de vídeo. O FFmpeg avalia essa expressão a cada frame da renderização. Para uma fala de alguns segundos a 60 fps, isso dá rápido centenas de ramificações em uma única expressão, daí o parâmetro `STEP` que agrupa os frames para limitar a profundidade.
 
 ### 5. Render por segmento, depois fisheye na intro
 
-Cada fala é renderizada individualmente: fundo de vídeo (um clip de gameplay aleatório de `bg-video/`, cortado à duração certa), o círculo do agente por cima com o zoom audio-reativo, legendas incrustadas via o filtro `ass` do FFmpeg, áudio TTS misturado com o som do gameplay de fundo.
+Cada fala é renderizada individualmente : vídeo de fundo (trecho aleatório de um dos clipes de gameplay em `bg-video/`, cortado na duração certa), círculo do agente por cima com o zoom audiorreativo, legendas embutidas via filtro `ass` do FFmpeg, áudio TTS mixado com o som do gameplay de fundo.
 
-O primeiríssimo segmento recebe um tratamento especial: uma distorção fisheye que se dissipa gradualmente nos primeiros 20% dos frames (filtro `lenscorrection` avaliado frame a frame, mais um `tmix=frames=3` que mistura frames adjacentes para simular motion blur), sincronizado com um som de "whoosh". É a transição de intro que dá a sensação de que a câmara "entra" na cena.
+O primeiríssimo segmento recebe um tratamento especial : uma distorção fisheye que se dissipa progressivamente nos primeiros 20% dos frames (filtro `lenscorrection` avaliado frame por frame, mais um `tmix=frames=3` que mistura frames adjacentes para simular motion blur), sincronizada com um som de "whoosh". É a transição de intro que dá a impressão de que a câmera "entra" na cena.
 
-### 6. Concatenação e mistura final
+### 6. Concatenação e mixagem final
 
-Todos os segmentos são concatenados de ponta a ponta, a música de fundo (Sneaky Snitch, Kevin MacLeod, licença Creative Commons) é misturada por cima com **audio ducking** -- uma compressão sidechain que baixa automaticamente o volume da música enquanto um agente fala, e volta a subir durante os silêncios. Tudo corre a 60 fps do início ao fim, sem conversão de framerate entre etapas.
+Todos os segmentos são concatenados um após o outro, a música de fundo (Sneaky Snitch, Kevin MacLeod, licença Creative Commons) é mixada por cima com **ducking de áudio**, uma compressão sidechain que baixa automaticamente o volume da música enquanto um agente fala, e que sobe de novo nos silêncios. Tudo roda em 60 fps do início ao fim, sem nenhuma conversão de framerate entre as etapas.
 
 ### 7. Publicação automática
 
-O script `run-cron.sh`, lançado por um cron normal, ativa o ambiente Python, carrega o `.env` e executa `bun src/workflow.ts --upload`. A flag `--upload` dispara também a geração de metadados (título, descrição, tags) e chama `uploaders/upload.py`, que publica o vídeo no YouTube e Instagram através de dois scripts separados (`uploaders/youtube/upload.py` e `uploaders/instagram/`). Toda a cadeia, do prompt LLM ao vídeo online, corre sem intervenção humana.
+O script `run-cron.sh`, lançado por um cron clássico, ativa o ambiente Python, carrega o `.env`, e lança `bun src/workflow.ts --upload`. A flag `--upload` dispara ainda a geração de metadados (título, descrição, tags) e chama `uploaders/upload.py`, que publica o vídeo no YouTube e no Instagram via dois scripts separados (`uploaders/youtube/upload.py` e `uploaders/instagram/`). Toda a cadeia, do prompt do LLM ao vídeo online, roda sem intervenção humana.
 
-## Porquê TypeScript/Bun em vez de tudo Python
+## Por que TypeScript/Bun em vez de algo todo em Python
 
-A escolha não é ideológica -- é que o Bun dá acesso direto e rápido ao `Bun.spawn` para pilotar o FFmpeg como subprocesso, tipagem forte nas estruturas de dados do pipeline (`Phrase`, `SegmentInfo`), e um runtime bem mais rápido a arrancar que o Node para um script que corre em cron de X em X horas. Os únicos dois bocadinhos de Python no projeto estão onde Python é realmente a melhor ferramenta: PIL para extração de cores, e as APIs de upload (`google-api-python-client` para YouTube, o stack Instagram Graph API para IG).
+A escolha não é ideológica, é que o Bun dá acesso direto e rápido ao `Bun.spawn` para controlar o FFmpeg em subprocesso, uma tipagem forte sobre as estruturas de dados do pipeline (`Phrase`, `SegmentInfo`), e um runtime bem mais rápido na inicialização do que o Node para um script que roda em cron a cada X horas. Os dois únicos trechos de Python no projeto estão onde Python é realmente a melhor ferramenta : PIL para extração de cores, e as APIs de upload (`google-api-python-client` para o YouTube, a stack da Instagram Graph API para o IG).
 
-## O que isto ilustra
+## O que isso ilustra
 
-Este projeto é um bom exemplo do que se pode construir hoje com blocos totalmente gratuitos ou open source: um LLM rápido e grátis via a API Groq, um motor TTS local que corre sem GPU dedicada, FFmpeg para toda a renderização de vídeo -- e a cola são apenas umas centenas de linhas de TypeScript. Nenhum destes blocos é novo individualmente. O que faz o pipeline é a organização: gerar um guião coerente com relações reais entre personagens, transformá-lo em áudio expressivo com pausas naturais, sincronizar uma renderização visual com a energia desse áudio frame a frame, e automatizar toda a cadeia até à publicação.
+Este projeto é um bom exemplo do que dá para construir hoje com peças inteiramente gratuitas ou open source : um LLM rápido e gratuito via API Groq, um motor TTS local que roda sem GPU dedicada, FFmpeg para toda a renderização de vídeo, e a cola, que são só algumas centenas de linhas de TypeScript. Nenhuma dessas peças é nova individualmente. O que faz o pipeline é o arranjo : gerar um roteiro coerente com relações reais entre personagens, transformá-lo em áudio expressivo com pausas naturais, sincronizar uma renderização visual sobre a energia desse áudio frame por frame, e automatizar toda a cadeia até a publicação.
 
 ---
 
 **Recursos**
 
-- **Repo**: [github.com/fox3000foxy/valorant-short-maker](https://github.com/fox3000foxy/valorant-short-maker)
-- **Canal**: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)
+- **Repo** : [github.com/fox3000foxy/valorant-short-maker](https://github.com/fox3000foxy/valorant-short-maker)
+- **Canal** : [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)
 
-**3 pontos-chave**
+**3 pontos principais**
 
-1. O guião é gerado por um LLM (Groq/Llama 3.3) com personas e relações por agente, não uma simples lista de piadas pré-escritas.
-2. O zoom do círculo do agente é controlado por uma expressão FFmpeg calculada frame a frame a partir do envelope RMS do WAV -- nada de animação por keyframes clássica.
-3. Toda a cadeia, do prompt ao post no YouTube/Instagram, corre através de um único cron job sem qualquer intervenção humana.
+1. O roteiro é gerado por um LLM (Groq/Llama 3.3) com personas e relações por agente, não uma simples lista de piadas pré-escritas.
+2. O zoom do círculo do agente é controlado por uma expressão FFmpeg calculada frame por frame a partir do envelope RMS do WAV, sem animação clássica por keyframes.
+3. Toda a cadeia, do prompt ao post no YouTube/Instagram, roda via um único cron job sem intervenção humana.

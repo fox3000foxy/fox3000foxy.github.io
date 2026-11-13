@@ -1,90 +1,90 @@
 ---
-title: Боттинг фермы Microsoft Rewards
-description: Как я написал бота для массового фарма очков Microsoft Rewards -- и
-  почему их антибот-защита с тех пор ужесточилась.
+title: Ботить ферму Microsoft Rewards
+description: Как я закодил бота для фарма очков Microsoft Rewards в
+  большом масштабе -- и почему Microsoft с тех пор усилил защиту.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "OC0T7Z0l9zV4gK25O+pQiZNhA4Uc4pGzEeB9xLSLRUUAdWTvDvh27ug/GoNE28+LHzeJqlSVFo+vCsuWEQkDdw=="
+author_sig: "W6gDDlu2MrEJ/PNHT5r0SOH0OFF9cbDmvAIvZEwvzLENVsJvgKfMVZfhi2aQqOyjKhjIhaFfqly1HLYw8WNGvQ=="
 ---
 
-> **Примечание (2026):** Этот проект больше не поддерживается. Microsoft значительно усилила свою антибот-защиту -- то, что работало тогда, сегодня уже не работает. Код и подход, описанные ниже, сохранены только в архивных/образовательных целях.
+> **Заметка (2026) :** Этот проект больше не поддерживается. Microsoft значительно усилил антибот-детект, так что то, что работало тогда, сегодня больше не работает. Код и подход, описанные ниже, сохранены только в целях архива и демонстрации.
 
-### Введение
+## Введение
 
-Несколько лет назад я открыл для себя Microsoft Rewards. Тогда был карантин, но это не отменяет того факта, что меня заставили использовать Microsoft Family Safety и, соответственно, Edge. Именно тогда я и узнал о Rewards.
+Я открыл Microsoft Rewards несколько лет назад. Это было во время ковида, и тогда я был обязан использовать родительский контроль Microsoft Family Safety и, значит, сидеть через Edge. Так я и открыл Rewards.
 
-В то время мне было всего 14, и ничего в каталоге меня не интересовало. Теперь я понимаю, что с приобретёнными навыками могу фармить очки с помощью ботов, а затем раздавать коды или даже перепродавать их дешевле, если очень захочу (зная себя, я, вероятно, не буду). В любом случае, я расскажу, как я написал бота для массового фарма аккаунтов.
+Тогда мне было всего 14, и ничего в каталоге меня не интересовало. Теперь думаю, что с навыками, которые приобрёл, могу фармить очки ботами, а потом раздавать коды или даже перепродавать дешевле, если реально захочу (но честно, думаю, не буду). Расскажу, как я закодил бота, который фармит аккаунты в масштабе.
 
 ---
 
-## Что такое Microsoft Rewards?
+## Что такое Microsoft Rewards ?
 
-Коротко: это программа, которая награждает пользователей Edge очками за такие действия, как поисковые запросы, небольшие викторины, игры и расширение (это уже совсем другая история).
+Коротко : это программа, награждающая пользователей Edge очками за активности вроде поисков, маленьких квизов, игр и расширения (но это уже другая история).
 
-Здесь можно увидеть раздел «Explore»:  
+Ты видишь здесь блоки "Explore" :
 ![Explore screenshot](assets/20260313_135010_image.png)
 
-А вот, например, то, что они называют «набором дня».  
+Вот, например, то, что они называют "набором дня".
 ![Daily set screenshot](assets/20260313_135038_image.png)
 
-Они даже создали систему серий, довольно безумно.  
+Они даже сделали систему стриков, это довольно дико.
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-Также есть система уровней, и это просто весело:  
+Есть ещё система уровней, и прогресс делает рутину реально залипательной :
 ![Level screenshot](assets/20260313_135340_image.png)
 
-В общем, есть куча способов зарабатывать очки, и большинство из них ежедневные.  
-Идея в том, чтобы сделать бота, который будет выполнять все действия за тебя, чтобы ты мог фармить очки в масштабе и выполнять свою ежедневную рутину.
+Так что есть куча способов зарабатывать очки, и большинство ежедневные.
+Идея здесь будет в том, чтобы сделать бота, который делает активности за тебя, чтобы фармить очки в масштабе и закрывать свою фарм-рутину.
 
-Как видно ниже, большинство наград -- это подарочные карты, но есть и забавные вещи вроде игр или подписок на сервисы.  
+Как видишь ниже, большинство наград это подарочные карты, но есть и интересные опции вроде игр или подписок.
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
-| Награда | Категория | Стоимость в очках |
+| Récompense | Catégorie | Coût en points |
 | --- | --- | --- |
-| **Rakuten TV – 1 HD фильм** | Цифровой контент | 1 785 |
-| **Roblox (цифровая карта)** | Игры / цифровой контент | 6 750 |
-| **Подарочная карта Microsoft** | Магазин / сервис | 5 660 |
-| **Подарочная карта Xbox** | Магазин / сервис | 5 660 |
-| **Подарочная карта Microsoft Solitaire Collection** | Игры / цифровой контент | 1 500 |
-| **Minecraft Minecoins** | Игры / цифровой контент | 2 500 |
-| **Подарочная карта League of Legends** | Игры / цифровой контент | 2 000 |
-| **Код Overwatch coin (цифровой)** | Игры / цифровой контент | 2 000 |
-| **Sea of Thieves – набор Old Coins** | Игры / цифровой контент | 1 700 |
-| **Zalando – Подарочная карта** | Магазин / сервис | 7 205 |
-| **Carrefour – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Cultura – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Fnac‑Darty – Подарочная карта** | Магазин / сервис | 14 410 |
-| **La Redoute – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Mango – Подарочная карта** | Магазин / сервис | 36 025 |
-| **Wonderbox – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Yves Rocher – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Amazon.fr – Подарочный ваучер** | Магазин / сервис | 7 205 |
-| **Foot Locker – Подарочная карта** | Магазин / сервис | 14 410 |
-| **IKEA FR – Подарочная карта** | Магазин / сервис | 36 025 |
-| **IKEA FR – Подарочная карта (другой дизайн)** | Магазин / сервис | 7 200 |
-| **Marionnaud – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Asos – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Adidas FR – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Deliveroo France – Подарочная карта** | Магазин / сервис | 21 615 |
-| **H&M France – Подарочная карта** | Магазин / сервис | 14 410 |
-| **Global Hotel Card (Expedia Group)** | Магазин / сервис | 7 205 |
-| **Uber Eats France – Подарочная карта** | Магазин / сервис | 36 025 |
+| **Rakuten TV – 1 film HD** | Contenu numérique | 1 785 |
+| **Roblox (carte digitale)** | Jeu / contenu numérique | 6 750 |
+| **Carte cadeau Microsoft** | Boutique / service | 5 660 |
+| **Carte cadeau Xbox** | Boutique / service | 5 660 |
+| **Carte cadeau Microsoft Solitaire Collection** | Jeu / contenu numérique | 1 500 |
+| **Minecraft Minecoins** | Jeu / contenu numérique | 2 500 |
+| **Carte cadeau League of Legends** | Jeu / contenu numérique | 2 000 |
+| **Code Overwatch pièces (digital)** | Jeu / contenu numérique | 2 000 |
+| **Sea of Thieves – Pack Pièces anciennes** | Jeu / contenu numérique | 1 700 |
+| **Zalando – Carte cadeau** | Boutique / service | 7 205 |
+| **Carrefour – Carte cadeau** | Boutique / service | 14 410 |
+| **Cultura – Carte cadeau** | Boutique / service | 14 410 |
+| **Fnac‑Darty – Carte cadeau** | Boutique / service | 14 410 |
+| **La Redoute – Carte cadeau** | Boutique / service | 14 410 |
+| **Mango – Carte cadeau** | Boutique / service | 36 025 |
+| **Wonderbox – Carte cadeau** | Boutique / service | 14 410 |
+| **Yves Rocher – Carte cadeau** | Boutique / service | 14 410 |
+| **Amazon.fr – Chèque cadeau** | Boutique / service | 7 205 |
+| **Foot Locker – Carte cadeau** | Boutique / service | 14 410 |
+| **IKEA FR – Carte cadeau** | Boutique / service | 36 025 |
+| **IKEA FR – Carte cadeau (autre design)** | Boutique / service | 7 200 |
+| **Marionnaud – Carte cadeau** | Boutique / service | 14 410 |
+| **Asos – Carte cadeau** | Boutique / service | 14 410 |
+| **Adidas FR – Carte cadeau** | Boutique / service | 14 410 |
+| **Deliveroo France – Carte cadeau** | Boutique / service | 21 615 |
+| **H&M France – Carte cadeau** | Boutique / service | 14 410 |
+| **Global Hotel Card (Expedia Group)** | Boutique / service | 7 205 |
+| **Uber Eats France – Carte cadeau** | Boutique / service | 36 025 |
 
-Теперь, когда ты понимаешь суть этой программы, давай поговорим о боттинге.
+Теперь, когда понимаешь интерес программы, займёмся ботингом.
 
 ---
 
 ## Первые тесты
 
-Прежде чем создавать своего бота, я хотел убедиться, что мой IP не будет забанен за использование сотен аккаунтов с одного адреса. Ты меня знаешь -- я буду использовать Tor с ротирующимся прокси. И я не хочу хостить бота на VPS -- я хочу, чтобы он работал в GitHub Action.
+Прежде чем строить бота, я хотел убедиться, что мой IP не будет помечен за использование сотен аккаунтов с одного адреса. Ты меня знаешь, я иду через Tor с ротирующимся прокси. Хочу запускать это в GitHub Action, а не на VPS.
 
-Поэтому я написал простой воркфлоу:
+Так что я написал простой воркфлоу :
 
 ```yaml
 name: Tor Proxy Curl
@@ -134,26 +134,26 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-Этот воркфлоу просто устанавливает Tor, запускает его и делает curl-запрос через него.
+Этот воркфлоу просто ставит Tor, запускает его и делает запрос curl через него.
 
-Первый запуск дал такой результат:  
+Первый запуск дал такой результат :
 ![Tor curl first run](assets/20260313_140705_image.png)
 
-Статистика времени была такой:  
+Статистика по времени была :
 !Timings
 
-Второй запуск дал такой результат:  
+Второй запуск дал такой результат :
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-Как видишь, IP-адреса разные, так что нас не забанят за чрезмерное использование с одного IP. Это хорошая новость -- можно продолжать разработку бота для фарма.
+Как видишь, IP разные, так что избегаем пометки за злоупотребление с одного IP. Хорошая новость : можно продолжать разрабатывать фарм-бота.
 
 ---
 
 ## Первый тест с Selenium
 
-Для автоматизации UI я буду использовать **Selenium**: инструмент, который управляет реальным браузером (Chrome/Edge/Firefox) вместо пользователя. В контексте GitHub Action это означает установку браузера + его драйвера, а затем запуск скрипта, который входит в Microsoft Rewards и кликает там, где нужно.
+Чтобы автоматизировать интерфейс, я буду использовать **Selenium** : инструмент, управляющий настоящим браузером (Chrome/Edge/Firefox) вместо пользователя. В контексте GitHub Action это значит поставить браузер + его драйвер, затем запустить скрипт, который логинится в Microsoft Rewards и кликает куда надо.
 
-### Пример JavaScript-скрипта (Node.js + selenium-webdriver)
+### Пример скрипта JavaScript (Node.js + selenium-webdriver)
 
 ```js
 import { Builder, By, Capabilities, until, WebDriver } from 'selenium-webdriver';
@@ -170,14 +170,14 @@ const chromeOptions = {
 };
 
 async function applyStealth(driver: WebDriver) {
-  // Inject script before any page JS runs to reduce automation fingerprinting.
+  // Внедряем скрипт до запуска любого JS страницы, чтобы снизить отпечаток автоматизации.
   await (driver as any).sendDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
     source: `
       Object.defineProperty(navigator, 'webdriver', {
         get: () => undefined
       });
 
-      // Some sites check for chrome runtime and plugins
+      // Некоторые сайты проверяют chrome runtime и плагины
       window.chrome = { runtime: {} };
       Object.defineProperty(navigator, 'plugins', {
         get: () => [1, 2, 3, 4, 5],
@@ -215,7 +215,7 @@ async function applyStealth(driver: WebDriver) {
 })();
 ```
 
-Результат работы скрипта:
+Результат скрипта :
 
 ```
 DevTools listening on ws://127.0.0.1:50274/devtools/browser/37b9ea79-0e5d-4673-9e91-7ffeaf0d37f8
@@ -224,5 +224,5 @@ After navigation: title= Bienvenue dans Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-Окей, это значит, что мы ещё не вошли. Теперь мы создадим запрос на вход и посмотрим, сможем ли мы войти в наш аккаунт Microsoft Rewards, чтобы выполнять действия.
-<!-- ## ЭТА СТАТЬЯ ЕЩЁ В ПРОЦЕССЕ НАПИСАНИЯ, Я ОБНОВЛЮ ЕЁ ШАГАМИ ПО ВХОДУ И АВТОМАТИЗАЦИИ ДЕЙСТВИЙ В БЛИЖАЙШЕЕ ВРЕМЯ! СЛЕДИ ЗА ОБНОВЛЕНИЯМИ. -->
+Результат подтверждает, что мы всё ещё разлогинены, так что теперь я построю запрос логина и протестирую подключение к своему аккаунту Microsoft Rewards, чтобы автоматизировать активности.
+<!-- ## CET ARTICLE EST ENCORE EN COURS DE RÉDACTION, JE METTRAI À JOUR AVEC LES ÉTAPES DE CONNEXION ET DE BOTTING DES ACTIVITÉS BIENTÔT ! RESTE À L'ÉCOUTE. -->

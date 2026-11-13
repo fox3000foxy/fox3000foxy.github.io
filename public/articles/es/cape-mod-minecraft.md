@@ -1,43 +1,44 @@
 ---
 title: "Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA"
-description: "Un mod Fabric que explota una falla lógica en el sistema de confianza de Minecraft: una firma RSA válida de Mojang pero reutilizada en la cuenta equivocada. Explicación del código, implicaciones de seguridad y lecciones criptográficas."
+description: "Un mod Fabric que explota un fallo lógico en el sistema de confianza de Minecraft: una firma RSA válida de Mojang pero repetida en una cuenta equivocada. Explicación del código, implicaciones de seguridad y lecciones criptográficas."
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
   - security
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "wmhP8/T+ChbV/zXC3RilZ/5yP0b6nOluH80gjthHrn3MQAaP4j7fMk0dHlKpxU7CeX93wLmWdXm51+G0DpaOpA=="
+author_sig: "I+EqPy2BmG0FD4ZWkcA7SPOo5i2665xyfMKTT6VkjGYph6YXjL8vEcUtWszYBD02upmXGwyjk4tjD9yghwq+mQ=="
 ---
 
 # Cape Mod: cómo robar la capa de Jeb_ con una inyección de firma RSA
 
 ![alt text](assets/xbox-profile.png)
-¿Y si te dijera que solo basta una firma RSA válida -- pero para la **cuenta equivocada** -- para hacer creer a tus amigos que llevas la capa oficial de Mojang? Bienvenido a `cape-mod`, un exploit Fabric que muestra cómo Minecraft confía en una firma sin verificar que el perfil al que pertenece sea efectivamente el tuyo.
 
-## El contexto: cómo Minecraft maneja las skins y las capas
+¿Y si te dijera que bastaba una firma RSA válida, pero para la **cuenta equivocada**, para hacer creer a tus amigos que llevas la capa oficial de Mojang? Bienvenido a `cape-mod`, un exploit Fabric que muestra cómo Minecraft confía en una firma mientras omite comprobar que el perfil al que pertenece es efectivamente el tuyo.
 
-En Java Edition, hay una pregunta que no nos hacemos a menudo: **¿quién es responsable de mostrar la skin y la capa de un jugador -- el cliente o el servidor?**
+## El contexto: cómo gestiona Minecraft skins y capas
 
-La respuesta es matizada:
+En Java Edition hay una pregunta rara vez planteada: **¿quién es responsable de mostrar el skin y la capa de un jugador: el cliente o el servidor?**
+
+La respuesta tiene matices:
 
 | Componente | ¿Quién lo envía? | ¿Quién lo descarga? |
 |---|---|---|
 | **Textura de skin** | El servidor envía la URL firmada | El cliente descarga desde `textures.minecraft.net` |
 | **Textura de capa** | El servidor envía la URL firmada | El cliente descarga desde `textures.minecraft.net` |
-| **Propiedad `textures`** | El servidor envía el `GameProfile` desde el auth de Mojang | El cliente verifica la firma RSA |
+| **Propiedad `textures`** | El servidor envía el `GameProfile` desde la auth de Mojang | El cliente verifica la firma RSA |
 
-El punto clave: todo está contenido en una propiedad llamada `textures` del `GameProfile`. Esta propiedad contiene:
+El punto clave: todo está contenido en una propiedad llamada `textures` del `GameProfile`. Esa propiedad contiene:
 - Un payload JSON en base64 con las URLs de las texturas
 - Una **firma RSA** hecha con la clave privada de Mojang
 
 ## El muro de la firma RSA
 
-Cada propiedad `textures` se ve así cuando la decodificamos:
+Cada propiedad `textures` se ve así cuando la decodificas:
 
 ```json
 {
@@ -56,7 +57,7 @@ Cada propiedad `textures` se ve así cuando la decodificamos:
 }
 ```
 
-El cliente verifica la firma RSA contra la **clave pública embebida en el jar** (`yggdrasil_session_pubkey.der`):
+El cliente verifica la firma RSA contra la **clave pública incluida en el jar** (`yggdrasil_session_pubkey.der`):
 
 ```java
 // Property.java (authlib)
@@ -68,26 +69,26 @@ public boolean isSignatureValid(PublicKey publicKey) {
 }
 ```
 
-Para los jugadores remotos (no locales), el cliente solo acepta las skins **marcadas como `secure`** -- es decir, con una firma válida:
+Para los jugadores remotos (fuera del juego local), el cliente solo acepta los skins **marcados como `secure`**: es decir con una firma válida:
 
 ```java
 // SkinManager.createLookup() -- simplificado
 PlayerSkin skin = optional
-    .filter(ps -> !isRemote || ps.secure())  // ← los jugadores remotos deben estar asegurados
+    .filter(ps -> !isRemote || ps.secure())  // ← los jugadores remotos tienen que ser seguros
     .orElse(defaultSkin);
 ```
 
-Este check previene el spoofing en teoría. Pero aquí es donde las cosas se ponen interesantes.
+Ese check bloquea el spoofing en teoría. Pero la validación se detiene ahí, y es justo ahí donde empieza el ataque.
 
-## La falla: reutilización de firma (signature replay)
+## El fallo: signature replay
 
-El cliente verifica que la firma RSA **es válida**. Pero **nunca** verifica que el `profileId` contenido en el JSON corresponda al UUID real del jugador.
+El cliente verifica que la firma RSA **sea válida**. Omite sistemáticamente comprobar que el `profileId` contenido en el JSON corresponda al UUID real del jugador.
 
-En otras palabras: una propiedad `textures` tomada de una **cuenta Mojang existente** (por ejemplo la de un empleado de Mojang) puede reutilizarse en cualquier otro jugador. La firma sigue siendo válida -- fue genuinamente hecha por Mojang -- solo que viene de otra cuenta.
+Dicho de otro modo: una propiedad `textures` tomada de una **cuenta Mojang existente** (por ejemplo la de un empleado de Mojang) puede repetirse en cualquier otro jugador. La firma sigue siendo válida: la produjo realmente Mojang, solo que viene de otra cuenta.
 
 ### Cómo extraer una firma real
 
-Jeb_ (UUID `853c80ef-3c37-49fd-aa49-938b674adae6`) tiene la capa de Mojang Studios. Desde el servidor de sesión de Mojang:
+Jeb_ (UUID `853c80ef-3c37-49fd-aa49-938b674adae6`) tiene la capa Mojang Studios. Desde el servidor de sesiones de Mojang:
 
 ```bash
 curl -s "https://sessionserver.mojang.com/session/minecraft/profile/853c80ef-3c37-49fd-aa49-938b674adae6?unsigned=false"
@@ -109,22 +110,22 @@ Respuesta:
 }
 ```
 
-La `signature` de este campo `value` fue producida por Mojang. Es RSA-2048 SHA-1. Es **absolutamente** válida, incluso si la reutilizas en otro UUID -- porque la firma de Jeb_ sigue siendo una firma de Jeb_, y el cliente nunca verifica que se **supone** que sea la tuya.
+La `signature` de ese campo `value` la produjo Mojang. Es RSA-2048 SHA-1. Es **absolutamente** válida, aunque la repitas en otro UUID: porque la firma de Jeb_ sigue siendo una firma de Jeb_, y el cliente omite controlar a quién estaba destinada.
 
 ## El código: cómo funciona el mod
 
-El mod `cape-mod` es diminuto -- 65 líneas de Java. Aquí está el corazón:
+El mod `cape-mod` es minúsculo: 65 líneas de Java. Aquí el corazón:
 
 ```java
 @Mixin(Player.class)
 public class ServerPlayerMixin {
     private static final String TEXTURES_VALUE =
         "ewogICJ0aW1lc3RhbXAiIDogMTc4MzY2NjMxNjI2OSwKICAicHJvZmlsZUlkIiA6ICJkOTBi...";
-    
+
     private static final String TEXTURES_SIGNATURE =
         "oxoAfZRLVNSfXYFMNbDKZ9XxrTHmz/k2yxzOxksXY3f6aDhY3gCyFCCtDreEWI7fpG9...";
 
-    @Inject(method = "getGameProfile()Lcom/mojang/authlib/GameProfile;", 
+    @Inject(method = "getGameProfile()Lcom/mojang/authlib/GameProfile;",
             at = @At("RETURN"), cancellable = true)
     private void injectCape(CallbackInfoReturnable<GameProfile> cir) {
         Player self = (Player) (Object) this;
@@ -144,69 +145,69 @@ public class ServerPlayerMixin {
             }
         }
         b.put("textures", new Property("textures", TEXTURES_VALUE, TEXTURES_SIGNATURE));
-        cir.setReturnValue(new GameProfile(original.id(), original.name(), 
+        cir.setReturnValue(new GameProfile(original.id(), original.name(),
                                            new PropertyMap(b.build())));
     }
 }
 ```
 
 **Pasos**:
-1. **Mixin** sobre `Player.getGameProfile()` -- el punto donde se devuelve el perfil del jugador
-2. Verifica que es un servidor local (Integrated Server)
-3. Verifica que es el host (mundo LAN)
+1. **Mixin** sobre `Player.getGameProfile()`: el punto donde se devuelve el perfil del jugador
+2. Comprueba que es un servidor local (Integrated Server)
+3. Comprueba que es el host (mundo LAN)
 4. **Reemplaza** la propiedad `textures` por la de Jeb_ (hardcodeada)
 5. Devuelve un nuevo `GameProfile` con las texturas inyectadas
 
-El `GameProfile` está **forjado**: es un perfil construido artificialmente, que no corresponde al jugador real. Las propiedades `textures` están **reutilizadas** de Jeb_ -- la firma RSA es auténtica pero aplicada al perfil equivocado. El paquete de red, en cambio, es legítimo: el servidor envía normalmente el `ClientboundPlayerInfoUpdatePacket` con este perfil modificado. Es el perfil el que está forjado, no el paquete.
+El `GameProfile` queda por tanto **forjado**: es un perfil construido artificialmente, que no corresponde al verdadero jugador. Las propiedades `textures` están **repetidas** desde Jeb_: la firma RSA es auténtica pero aplicada al perfil equivocado. El paquete de red, en cambio, es legítimo: el servidor envía normalmente el `ClientboundPlayerInfoUpdatePacket` con ese perfil modificado. Es el perfil el que está forjado; el paquete sigue siendo legítimo.
 
-Cuando los amigos del host se conectan por LAN, reciben el `ClientboundPlayerInfoUpdatePacket` con el perfil modificado. El cliente:
+Cuando los amigos del host se unen vía LAN, reciben el `ClientboundPlayerInfoUpdatePacket` con el perfil modificado. El cliente:
 1. Decodifica el payload base64
-2. Verifica la firma RSA → ✅ válida (es genuinamente la de Jeb_)
-3. Marca la skin como `secure=true` (porque la firma es válida)
+2. Verifica la firma RSA → ✅ válida (es realmente la de Jeb_)
+3. Marca el skin como `secure=true` (porque la firma es válida)
 4. Pasa el filtro `!isRemote || ps.secure()` → ✅ pasa
 5. **Descarga y muestra la capa de Jeb_**
 
-## Resultado en el juego: la capa sobre tu skin
+## Resultado en juego: la capa sobre tu skin
 
-Esto es lo que se ve in-game. Primero, vista frontal con la capa de Jeb_ mostrada en el host:
+Así se ve in-game. Primero, vista de frente con la capa de Jeb_ mostrada en el host:
 
-![Cape Mod -- Capa de Jeb_ mostrada en el host](/images/cape-mod/cape-01-jeb-cape.png)
+![Cape Mod: capa de Jeb_ mostrada en el host](/images/cape-mod/cape-01-jeb-cape.png)
 
-Se ve claramente el patrón rojo/blanco de la capa oficial de Mojang Studios. Sin diferencia con un verdadero Jeb_ que tuviera su propia capa -- el cliente descarga exactamente la misma textura desde `textures.minecraft.net`.
+Se ve claramente el motivo rojo/blanco de la capa oficial Mojang Studios. El render queda idéntico al de un verdadero Jeb_ llevando su propia capa: el cliente descarga exactamente la misma textura desde `textures.minecraft.net`.
 
-Y en vista inmersiva, dentro de una partida real:
+Y en vista inmersiva, en una partida real:
 
-![Cape Mod -- Vista en juego con capa visible](/images/cape-mod/cape-02-lava-cape.png)
+![Cape Mod: vista en juego con capa visible](/images/cape-mod/cape-02-lava-cape.png)
 
-La capa flota detrás del jugador, ondea con el movimiento. Perfectamente indistinguible de una skin auténtica con capa oficial.
+La capa flota tras el jugador, ondula con el movimiento. Perfectamente indistinguible de un skin auténtico con capa oficial.
 
 Otro ángulo, en un mundo con lava y terreno:
 
-![Cape Mod -- Capa en un entorno natural](/images/cape-mod/cape-03-local-game.png)
+![Cape Mod: capa en un entorno natural](/images/cape-mod/cape-03-local-game.png)
 
 Y una última vista cercana del gameplay real, donde se ve la capa en acción:
 
-![Cape Mod -- Capa en gameplay clásico de Minecraft](/images/cape-mod/cape-04-real-gameplay.png)
+![Cape Mod: capa en gameplay clásico de Minecraft](/images/cape-mod/cape-04-real-gameplay.png)
 
-Para alguien que se uniera a un LAN sin saber que el host tiene un mod, no hay absolutamente ninguna forma de distinguir esto de una capa real de Mojang. Eso es precisamente el punto: **la firma es válida**, el cliente no tiene ninguna razón para dudar.
+Para alguien que se uniera a una LAN ignorando que el host usa un mod, la capa sigue siendo visualmente idéntica a una verdadera capa Mojang. Ese es justo el punto: **la firma es válida**, así que el cliente la trata como legítima.
 
-## Por qué es una falla (y por qué no lo es)
+## Por qué es un fallo (y por qué no lo es)
 
-Es irónico: el exploit funciona **precisamente porque la firma es válida**. No hay un bypass criptográfico aquí -- es peor, es una **falla lógica** en el modelo de confianza.
+Es irónico: el exploit funciona **justamente porque la firma es válida**. No se trata de un bypass criptográfico: es peor, un **fallo lógico** en el modelo de confianza.
 
 | Check | Resultado |
 |---|---|
 | **Validez de la firma RSA** | ✅ Válida (firmada por Mojang para Jeb_) |
-| **¿El `profileId` en el payload corresponde al UUID del host?** | ❌ No (UUID de Jeb_ ≠ UUID del host) |
+| **¿El `profileId` del payload corresponde al UUID del host?** | ❌ No (UUID de Jeb_ ≠ UUID del host) |
 | **¿El cliente verifica la correspondencia?** | ❌ **No. Solo se verifica la firma RSA.** |
 
-Minecraft confía **en la firma**, no en la identidad de quien la porta. Mientras la firma venga de Mojang, el cliente la acepta. Es como mostrar un pasaporte falso firmado por el gobierno -- el sello es legítimo, aunque el pasaporte no te pertenezca.
+Minecraft confía **en la firma** en vez de en la identidad de quien la lleva. Mientras la firma venga de Mojang, el cliente la acepta. Es como mostrar un pasaporte falso firmado por el gobierno: el sello es legítimo, aunque el pasaporte no sea tuyo.
 
 ## Las implicaciones de seguridad
 
-### Alcance limitado al LAN
+### Alcance limitado a LAN
 
-El mod solo funciona en un servidor integrado (LAN). El atacante debe:
+El mod solo funciona en un servidor integrado (LAN). El atacante tiene que:
 - Tener un mod Fabric instalado
 - Ser el host de un mundo LAN
 - Sus amigos se conectan sin mod (vanilla)
@@ -214,42 +215,42 @@ El mod solo funciona en un servidor integrado (LAN). El atacante debe:
 ### Pero las posibilidades se amplían
 
 En teoría, con la misma técnica, se podría:
-- **Reinyectar otros datos firmados**: cabezas, encantamientos ilegales, componentes de chat maliciosos
-- **Combinar con un túnel LAN** (NGROK, playit.gg, Radmin VPN) para afectar jugadores por internet
-- **Extender a otras propiedades** del perfil que dependen de firmas
+- **Reinyectar otros datos firmados**: heads, encantamientos ilegales, componentes de chat maliciosos
+- **Combinar con un túnel LAN** (NGROK, playit.gg, Radmin VPN) para afectar a jugadores en internet
+- **Extender a otras propiedades** del perfil que dependan de firmas
 
 ### Por qué Mojang probablemente no lo parcheará
 
-No hay una "vulnerabilidad" en el sentido estricto -- la firma es válida. Parchear esto requeriría que Mojang modificara el modelo de autenticación completo, lo cual es complejo. Por ahora, es un caso extremo: se supone que los jugadores LAN confían entre sí.
+No se trata de una "vulnerabilidad" en sentido estricto: la firma es válida. Parchearlo exigiría a Mojang modificar el modelo de autenticación completo, lo cual es complejo. Por ahora, es un caso límite: se supone que los jugadores LAN confían entre sí.
 
 ## La trampa filosófica
 
-Cape Mod es una excelente **prueba de concepto** de una verdad más amplia: **nunca debes confiar en una firma sin verificar quién la firmó y sobre qué asunto**.
+Cape Mod es un excelente **proof of concept** de una verdad más amplia: **siempre tienes que verificar quién firmó un dato y para qué sujeto antes de confiar en él**.
 
-Es una lección de criptografía básica. RSA firma un **mensaje**, no una **identidad**. Si te doy una firma RSA válida de Mojang, sabes que Mojang firmó *algo*. No sabes para quién, y no puedes asumirlo solo mirando el mensaje.
+Es una lección de criptografía básica. RSA firma un **mensaje**; la **identidad** del destinatario queda fuera de la firma. Si te doy una firma RSA válida de Mojang, solo sabes que Mojang firmó *algo*, sin indicación fiable sobre el destinatario a partir del solo mensaje.
 
-Es exactamente lo que pasó con los certificados SSL/TLS en los años 2000 cuando las CA aceptaban cualquier cosa -- la firma era válida, pero se aplicaba al dominio equivocado.
+Es exactamente lo que pasó con los certificados SSL/TLS en los años 2000 cuando las CA firmaban certificados sin verificar correctamente el dominio: la firma era válida, pero se aplicaba al dominio equivocado.
 
 ## Conclusión
 
-Cape Mod no es un hack en el sentido clásico -- es una explotación elegante de una falta de validación lógica en Minecraft. Muestra que:
+Cape Mod no es un hack en sentido clásico: es una explotación elegante de una falta de validación lógica en Minecraft. Muestra que:
 
-1. **Una firma válida no garantiza la identidad de quien la porta**
-2. **En LAN, la confianza es más débil** de lo que creemos
-3. **Las propiedades `textures` de Minecraft son esencialmente contenido inyectado** -- hay que verificar que correspondan al jugador que las porta
+1. **Una firma válida no garantiza la identidad de quien la lleva**
+2. **En LAN, la confianza es más débil** de lo que se cree
+3. **Las propiedades `textures` de Minecraft son esencialmente contenido inyectado**: hay que verificar que correspondan al jugador que las lleva
 
-Si te unes a un mundo LAN en un servidor "desconocido" (o más bien, cuyo host tiene un mod sospechoso), ya tienes un problema de seguridad mucho antes de la capa. Pero es sintomático: Minecraft asume que todos en un LAN confían entre sí. Es cierto... hasta que deja de serlo.
+Si te unes a un mundo LAN en un servidor "desconocido" (o más bien, cuyo host tiene un mod sospechoso), ya tienes un problema de seguridad mucho antes que la capa. Pero es revelador: Minecraft supone que todo el mundo en una LAN confía entre sí. Es verdad... hasta el primer host que abusa de esa confianza.
 
 ---
 
 **Recursos**
 
 - **GitHub**: [fox3000foxy/cape-mod](https://github.com/fox3000foxy/cape-mod)
-- **Auth de Minecraft**: [Protocolo Yggdrasil](https://wiki.vg/Authentication) (wiki.vg)
-- **Criptografía RSA**: [RFC 3447](https://tools.ietf.org/html/rfc3447) (PKCS #1)
+- **Minecraft auth**: [Yggdrasil protocol](https://wiki.vg/Authentication) (wiki.vg)
+- **RSA criptografía**: [RFC 3447](https://tools.ietf.org/html/rfc3447) (PKCS #1)
 
 **3 puntos clave**
 
-1. Las firmas RSA validan un mensaje, no una identidad -- un detalle que le ha costado caro a muchos sistemas.
-2. Minecraft no verifica que el perfil del jugador corresponda a la firma que recibe -- una falla lógica, no criptográfica.
-3. En LAN o en túnel, todo está abierto de par en par para un mod que controla el servidor integrado.
+1. Las firmas RSA validan un mensaje más que una identidad: un detalle que costó caro a muchos sistemas.
+2. Minecraft omite comprobar que el perfil del jugador corresponde a la firma que recibe: un fallo lógico en la validación, con una criptografía intacta.
+3. En LAN o en túnel, todo es barra libre para un mod que controle el servidor integrado.

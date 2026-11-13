@@ -1,31 +1,31 @@
 ---
-title: Hobi Saya
-description: Mengode, menggambar, mengotomatisasi, menemukan teknologi lama, dan
+title: Hobiku
+description: Ngoding, menggambar, mengotomatisasi, menemukan teknologi lama, dan
   masih banyak lagi -- sekilas tentang apa yang memotivasi saya.
 date: 2026-03-08
-authors:
-  - fox3000foxy
 tags:
   - personal
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "UvIi5K8SMxajXyvq8qt9JOygk+Q3vcR2HuTVMkYMvefJBIu+lhPubWSQr2oNENPaF8G4ywPhodRD7gl28ORUxA=="
+author_sig: "nLL7ntLsxJX4h4wBpwT3MIkVYILPXIepXnE3Q38odLSt5u7N+dj6wyyw2A5KiEmkhSVj7IfKSi8IPKt35hangA=="
 ---
 
-# Hobi Saya
+# Hobiku
 
 Saya sudah lama ingin menulis blog ini tetapi terus menahan diri :/
 
-Mungkin karena saya ingin berbagi kehidupan saya tetapi tidak ingin berbagi informasi pribadi? Saya kira itu alasannya.
+Mungkin karena saya ingin berbagi hidup saya tetapi tidak ingin membagikan info pribadi? Saya kira itu alasannya.
 
 ## Ngoding
 
-Hobi saya beragam: saya suka ngoding, seperti yang mungkin Anda sadari dari blog ini. Ada sesuatu yang sangat memuaskan dalam membangun sesuatu dari nol, memecahkan masalah, dan melihat kreasi Anda hidup. Baik itu alat baris perintah kecil atau aplikasi web lengkap, prosesnya tidak pernah membosankan.
+Hobiku beragam: saya suka ngoding, seperti yang mungkin kamu sadari dari sisa blog ini. Ada sesuatu yang sangat memuaskan dalam membangun sesuatu dari nol, memecahkan masalah, dan melihat kreasimu hidup. Baik itu alat baris perintah kecil atau aplikasi web lengkap, prosesnya tidak pernah membosankan.
 
-Saya sangat menyukai **open source** -- berbagi itu indah, dan saya sangat menghargai gagasan bahwa orang lain dapat menemukan kode saya berguna. Sebagian besar proyek saya ada di [GitHub saya](https://github.com/fox3000foxy), dan Anda dapat melihatnya di [halaman Proyek](/projects).
+Saya punya cinta khusus untuk **open source** -- berbagi itu indah, dan saya sungguh menghargai gagasan bahwa orang lain bisa menganggap kodemu berguna. Sebagian besar proyek saya ada di [GitHub saya](https://github.com/fox3000foxy), dan kamu bisa melihat-lihat di [halaman Proyek](/projects).
 
 ## Menggambar
 
-Tapi ngoding bukan satu-satunya hobi saya -- saya juga suka menggambar! Berikut beberapa gambar saya:
+Tapi ngoding bukan satu-satunya hobiku -- saya juga suka menggambar! Berikut beberapa gambarku:
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
@@ -47,28 +47,28 @@ Tapi ngoding bukan satu-satunya hobi saya -- saya juga suka menggambar! Berikut 
 
 ## Mengotomatisasi Semua yang Bergerak
 
-Saya juga memiliki hasrat untuk otomatisasi. Bermain dengan GitHub Actions dan workflow adalah salah satu perasaan terbaik yang pernah saya alami. Setiap kali saya bisa mengganti proses manual dengan skrip atau pipeline, saya lakukan -- tanpa berpikir dua kali.
+Saya juga punya hasrat untuk otomatisasi. Bermain dengan GitHub Actions dan workflow adalah salah satu perasaan terbaik yang pernah saya rasakan. Setiap kali saya bisa mengganti proses manual dengan skrip atau pipeline, saya lakukan -- tanpa berpikir dua kali.
 
-Saya juga baru-baru ini mulai menandatangani commit saya dengan kunci SSH, dan saya membuat skrip untuk itu yang dapat Anda temukan di [gist ini](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
+Saya juga baru-baru ini mulai menandatangani commit saya dengan kunci SSH, dan saya membuat skrip untuk itu yang bisa kamu temukan di [gist ini](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a).
 
 ## Menemukan Teknologi Lama
 
-Saya suka menemukan teknologi lama seperti UTAU -- menurut saya konsepnya cukup menarik. Ada sesuatu yang spesial dalam memahami bagaimana orang membangun sesuatu sebelum era modern AI dan komputasi awan.
+Saya suka menemukan teknologi lama seperti UTAU -- menurut saya konsepnya cukup menarik. Ada sesuatu yang spesial dalam memahami bagaimana orang membangun sesuatu sebelum era modern AI dan cloud computing.
 
-## Vtuber
+## Para Vtuber
 
-Saya juga suka Vtuber, dan saya ingin menjadi Vtuber suatu hari nanti, tapi sayangnya saya agak pemalu. Mungkin suatu hari nanti!
+Saya juga suka para Vtuber, dan saya ingin menjadi salah satunya suatu hari, tapi saya masih agak pemalu untuk sekarang. Mungkin nanti!
 
 ## Musik
 
-Hobi utama saya adalah ngoding sambil mendengarkan musik. Tidak ada yang lebih baik daripada mencapai kondisi flow dengan playlist yang tepat. Saya juga suka berjalan-jalan sekarang, entah kenapa 😕.
+Hobi utamaku adalah ngoding sambil mendengarkan musik. Tidak ada yang lebih nikmat daripada masuk ke kondisi flow dengan playlist yang pas. Saya juga suka jalan kaki sekarang, entah kenapa 😕.
 
-## Menemukan Solusi Alternatif
+## Mencari Akal-akalan
 
-Saya juga suka menemukan solusi alternatif untuk menghindari membayar sesuatu -- atau setidaknya berpikir di luar kebiasaan. Misalnya, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) adalah salah satu kreasi terbaru saya di mana saya menemukan solusi gratis untuk manajemen perintah, manajemen basis data, dan daemon. Ini bukan masalah pelit -- tantangannya yang penting!
+Saya juga suka mencari akal-akalan supaya tidak perlu membayar untuk sesuatu -- atau setidaknya berpikir di luar kebiasaan. Misalnya, [Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi) adalah salah satu kreasi terakhir saya di mana saya menemukan solusi gratis untuk manajemen perintah, manajemen basis data, dan daemon. Tantangannya yang penting, jauh lebih penting daripada penghematannya!
 
-## Mengapa Blog Ini
+## Kenapa Blog Ini
 
-Saya ingin blog ini menjadi tempat di mana saya dapat berbagi kemajuan, pikiran, dan apa pun yang ingin saya bagikan. Dengan begitu Anda akan tahu bagaimana cara berpikir saya. Dan menulis tentang hobi saya terasa seperti cara yang sempurna untuk memulai.
+Saya ingin blog ini menjadi tempat saya bisa membagikan perkembanganku, pikiranku, dan semua yang ingin saya bagikan. Supaya kamu tahu bagaimana saya berpikir. Dan menulis tentang hobiku terasa seperti cara sempurna untuk memulai.
 
-Terima kasih telah membaca!
+Terima kasih sudah membaca!

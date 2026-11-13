@@ -4,9 +4,8 @@ description: "ทำไม TCP, UDP, TLS, mTLS, HTTP และ WebSocket ไม�
 date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "network", "distributed-architecture", "protocols"]
 authors: ["docteur-turboss"]
-lang: "th"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "nE4WiyqQxtSOgD4OpxgtQUsHK2Y9ggP6fGg4mJ9H4YAYlk0784dNqvjfaIqEQ0DIKOOtHPtC1nY8l4DBaMZp6w=="
+author_sig: "Bdoa+CfcJjlJGGaoD/8OF/yc79Ogoqymdc2+vOLW2HPa77ueVTxCRnfhvFq25EXcKbaTV1k4G3oaYicUrFKGEg=="
 ---
 # ปัญหา: คำย่อมากเกินไป ลำดับชั้นไม่เพียงพอ
 

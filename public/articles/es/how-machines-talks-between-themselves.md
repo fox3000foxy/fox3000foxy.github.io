@@ -1,105 +1,106 @@
 ---
-title: "Cómo se comunican las máquinas: un panorama de TCP a mTLS"
-description: "Por qué TCP, UDP, TLS, mTLS, HTTP y WebSocket no son alternativas competidoras sino capas apiladas; un recorrido jerárquico de la comunicación máquina a máquina, desde el transporte bruto hasta la autenticación mutua."
+title: "Cómo hablan las máquinas: un recorrido de TCP a mTLS"
+description: "Por qué TCP, UDP, TLS, mTLS, HTTP y WebSocket no son alternativas competidoras sino capas apiladas; un recorrido jerárquico de la comunicación máquina a máquina, del transporte en bruto a la autenticación mutua."
 date: 2026-07-16
-tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "red", "arquitectura-distribuida", "protocolos"]
+tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "réseau", "architecture-distribuée", "protocoles"]
 authors: ["docteur-turboss"]
-lang: "es"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "1pT8KojUPoe3gjjn9izCgOAHWAr4yQxQiLpFv+mvbvqaoQiOal9jfsrEuh839BHxkPdMYvgmfg/X1XQTkTg3bA=="
+author_sig: "oV2lmP2Ho2PScMkHdE6KXtlNyiFBBKSFzrrGskCbi8uCLPHQn3Hh+7pBP6bloIsUAxN+z2AdPSsYs+aGUX9WIw=="
 ---
-# El problema: demasiados acrónimos, poca jerarquía
+# El problema: demasiadas siglas, poca jerarquía
 
-TCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; la mayoría de los recursos que hablan de ellos los presentan como una lista plana de opciones intercambiables, "para elegir según el caso de uso". En realidad no están al mismo nivel: algunos son protocolos de transporte, otros son capas de seguridad que se envuelven alrededor del transporte, y otros son protocolos de aplicación que se apoyan en los dos primeros. Entender la jerarquía es entender por qué nunca se "elige" entre TCP y TLS: se elige TCP, _luego_ se decide si se pone TLS encima.
+TCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; la mayoría de los recursos que hablan de ellos los presentan como una lista plana de opciones intercambiables, "a elegir según el caso de uso". En realidad no están en el mismo plano: algunos son protocolos de transporte, otros capas de seguridad que se enrollan alrededor del transporte, otros aún protocolos aplicativos que se apoyan en los dos primeros. Entender la jerarquía es entender por qué nunca "eliges" entre TCP y TLS: eliges TCP, _y luego_ decides si pones TLS encima.
 
-Este artículo reconstruye esta jerarquía capa por capa, desde el transporte bruto hasta la autenticación mutua, con para cada nivel: qué garantiza, qué no garantiza, y cuándo conformarse con ello.
+Este artículo reconstruye esa jerarquía capa por capa, del transporte en bruto hasta la autenticación mutua, con para cada nivel: lo que garantiza, lo que no garantiza, y cuándo conformarse con él.
 
-# Nivel 1: el transporte (TCP vs UDP)
+# Nivel 1: el transporte (TCP contra UDP)
 
-Todo comienza aquí. TCP y UDP son los dos protocolos principales de la capa **Transporte (Capa 4)** del modelo OSI. Su función es idéntica: transportar un flujo de datos entre dos aplicaciones ejecutadas en máquinas diferentes. Sin embargo, su manera de lograrlo es radicalmente diferente.
+Todo empieza aquí. TCP y UDP son los dos principales protocolos de la capa **Transporte (Layer 4)** del modelo OSI. Su rol es idéntico: transportar un flujo de datos entre dos aplicaciones ejecutadas en máquinas distintas. Sin embargo, su forma de lograrlo es radicalmente distinta.
 
-Es importante entender que IP (Internet Protocol), situado en la capa de red (Capa 3), solo se encarga de enrutar paquetes de un host a otro. No garantiza ni su llegada, ni su orden, ni siquiera su unicidad. Los routers simplemente toman decisiones de enrutamiento independientes para cada paquete.
+Es importante entender que IP (Internet Protocol), situado en la capa red (Layer 3), solo encamina paquetes de un anfitrión a otro. No garantiza ni su llegada, ni su orden, ni siquiera su unicidad. Los routers simplemente toman decisiones de ruteo independientes para cada paquete.
 
-Es precisamente esta ausencia de garantías lo que TCP viene a compensar, mientras que UDP elige deliberadamente no añadir nada para mantenerse extremadamente ligero.
+Es justo esa ausencia de garantías la que TCP viene a compensar, mientras UDP elige deliberadamente no añadir nada para seguir siendo extremadamente ligero.
 
 ## TCP: la fiabilidad ante todo
 
-TCP (Transmission Control Protocol) es un protocolo **orientado a conexión** (_connection-oriented_). Antes de intercambiar el más mínimo octeto de datos, las dos máquinas deben establecer una conexión lógica.
+TCP (Transmission Control Protocol) es un protocolo **orientado a conexión** (_connection-oriented_). Antes de intercambiar el menor byte de datos, ambas máquinas tienen que establecer una conexión lógica.
 
-Esta conexión se crea mediante el famoso **Three-Way Handshake**:
+Esa conexión se crea gracias al famoso **Three-Way Handshake**:
 
 ```
-Client                           Servidor
+
+Client                           Serveur
 SYN ---------------------------->
         <--------------------- SYN + ACK
 ACK ---------------------------->
-Conexión establecida
+Connexion établie
 ```
 
-Cada paso tiene un objetivo preciso:
+Cada etapa tiene un objetivo preciso:
 
-*   SYN: el cliente anuncia que desea abrir una conexión y proporciona un primer número de secuencia (Initial Sequence Number - ISN).
+*   SYN: el cliente anuncia que desea abrir una conexión y aporta un primer número de secuencia (Initial Sequence Number - ISN).
 
-*   SYN-ACK: el servidor acepta la conexión, acusa recibo del SYN y proporciona a su vez su propio número de secuencia.
+*   SYN-ACK: el servidor acepta la conexión, acusa recibo del SYN y aporta a su vez su propio número de secuencia.
 
 *   ACK: el cliente confirma la recepción de la información del servidor.
 
-A partir de este momento, las dos máquinas conocen el estado de la conexión y pueden comenzar a intercambiar datos.
+
+A partir de ese momento, ambas máquinas conocen el estado de la conexión y pueden empezar a intercambiar datos.
 
 ### **Los números de secuencia**
 
-TCP no ve los datos como una sucesión de paquetes, sino como un **flujo continuo de octetos** (_byte stream_).
+TCP no ve los datos como una sucesión de paquetes, sino como un **flujo continuo de bytes** (_byte stream_).
 
-Cada octeto enviado posee un número de secuencia.
+Cada byte enviado tiene un número de secuencia.
 
 Ejemplo:
 
 ```
-Mensaje:
+Message :
 
-Hola
+Bonjour
 
-H = octeto 0
-o = octeto 1
-l = octeto 2
+B = octet 0
+o = octet 1
+n = octet 2
 ...
 ```
 
-Si un segmento que contiene los octetos 1000 a 1499 se pierde durante el transporte, el receptor puede detectar exactamente lo que falta.
+Si un segmento con los bytes 1000 a 1499 se pierde durante el transporte, el receptor puede detectar exactamente qué falta.
 
-El emisor retransmite únicamente esa porción.
+El emisor retransmite solo esa porción.
 
-Esta granularidad es una de las razones de la robustez de TCP.
+Esa granularidad es una de las razones de la robustez de TCP.
 
 ### **Los acuses de recibo (ACK)**
 
-Tras la recepción de los datos, el destinatario envía un **ACK (Acknowledgment)**.
+Tras recibir los datos, el destinatario envía un **ACK (Acknowledgment)**.
 
-Contrariamente a lo que a menudo se imagina, un ACK no significa:
+Al contrario de lo que suele imaginarse, un ACK no significa:
 
-> "He recibido este paquete"
+> "Recibí ese paquete"
 
-Significa más bien:
+Más bien significa:
 
-> "He recibido todos los octetos hasta el número X."
+> "Recibí todos los bytes hasta el número X."
 
 Por ejemplo:
 
 ```
-Cliente envía:
+Client envoie :
 
 0 → 999
 
-Servidor responde:
+Serveur répond :
 
 ACK = 1000
 ```
 
-Esto significa:
+Eso significa:
 
-> "Todo lo que precede al octeto 1000 ha llegado bien."
+> "Todo lo anterior al byte 1000 llegó bien."
 
-Este mecanismo permite acusar recibo de varios segmentos a la vez (_cumulative acknowledgments_), reduciendo así el número de paquetes de control.
+Ese mecanismo permite acusar recibo de varios segmentos a la vez (_cumulative acknowledgments_), reduciendo así el número de paquetes de control.
 
 ### **Las retransmisiones**
 
@@ -107,34 +108,34 @@ Si un ACK nunca llega, TCP supone que el segmento se perdió.
 
 Lo retransmite automáticamente.
 
-El tiempo de retransmisión (**Retransmission Timeout – RTO**) no es fijo.
+El retardo de retransmisión (**Retransmission Timeout – RTO**) no es fijo.
 
-TCP mide permanentemente el tiempo de ida y vuelta (**RTT**) gracias a los ACK recibidos y calcula dinámicamente el RTO para evitar retransmisiones innecesarias.
+TCP mide permanentemente el tiempo de ida y vuelta (**RTT**) gracias a los ACK recibidos y calcula dinámicamente el RTO para evitar retransmisiones inútiles.
 
-Las implementaciones modernas también utilizan mecanismos como **Fast Retransmit**: cuando un emisor recibe varios ACK duplicados (generalmente tres), deduce que un segmento intermedio se ha perdido y lo reenvía inmediatamente, sin esperar la expiración del temporizador.
+Las implementaciones modernas también usan mecanismos como **Fast Retransmit**: cuando un emisor recibe varios ACK duplicados (generalmente tres), deduce que un segmento intermedio se perdió y lo reenvía de inmediato, sin esperar a que expire el temporizador.
 
-### **Reordenación de paquetes**
+### **Reordenación de los paquetes**
 
-Internet no garantiza absolutamente que dos paquetes sigan el mismo camino.
+Internet no garantiza en absoluto que dos paquetes sigan el mismo camino.
 
 Ejemplo:
 
 ```
-Paquete 1
-París
- ↓
+Paquet 1
+Paris
+  ↓
 Londres
- ↓
-Nueva York
+  ↓
+New York
 
-Paquete 2
-París
- ↓
-Fráncfort
- ↓
+Paquet 2
+Paris
+  ↓
+Francfort
+  ↓
 Chicago
- ↓
-Nueva York
+  ↓
+New York
 ```
 
 El segundo paquete puede llegar antes que el primero.
@@ -145,25 +146,25 @@ Para la aplicación, todo parece llegar perfectamente en orden.
 
 ### Control de flujo
 
-Una conexión no depende únicamente de la red.
+Una conexión no depende solo de la red.
 
-El receptor también posee una capacidad de memoria limitada.
+El receptor también tiene una capacidad de memoria limitada.
 
 Si recibe más rápido de lo que puede procesar los datos, sus búferes terminan saturándose.
 
-TCP resuelve este problema mediante una **ventana deslizante (Sliding Window)**.
+TCP resuelve ese problema gracias a una **ventana deslizante (Sliding Window)**.
 
 El receptor indica en cada ACK:
 
 ```
-Window = 32768 octetos
+Window = 32768 octets
 ```
 
-Esto significa:
+Eso significa:
 
 > "Puedes enviarme hasta 32 KB adicionales."
 
-Si esta ventana cae a cero:
+Si esa ventana cae a cero:
 
 ```
 Window = 0
@@ -171,35 +172,36 @@ Window = 0
 
 El emisor suspende temporalmente las transmisiones hasta que el receptor anuncie una nueva ventana disponible.
 
-Este mecanismo constituye el **control de flujo (Flow Control)** y evita que un host rápido inunde a un host más lento.
+Ese mecanismo constituye el **control de flujo (Flow Control)** e impide que un anfitrión rápido inunde un anfitrión más lento.
 
 ### Control de congestión
 
-Incluso si el receptor es capaz de absorber los datos, la red misma puede saturarse.
+Aunque el receptor sea capaz de absorber los datos, la propia red puede saturarse.
 
 Los routers disponen de colas (_queues_) limitadas.
 
-Cuando se desbordan, los paquetes se eliminan.
+Cuando se desbordan, los paquetes se descartan.
 
-TCP interpreta las pérdidas como una señal de congestión y adapta automáticamente su caudal mediante una **ventana de congestión (Congestion Window – cwnd)**.
+TCP interpreta las pérdidas como un signo de congestión y adapta automáticamente su caudal gracias a una **ventana de congestión (Congestion Window – cwnd)**.
 
-Los algoritmos modernos (como **Reno**, **CUBIC** o **BBR**, según los sistemas operativos) ajustan esta ventana para encontrar un equilibrio entre caudal máximo y estabilidad de la red.
+Los algoritmos modernos (como **Reno**, **CUBIC** o **BBR**, según los sistemas operativos) ajustan esa ventana para encontrar un equilibrio entre caudal máximo y estabilidad de la red.
 
-Las primeras versiones de TCP utilizaban principalmente dos mecanismos:
+Las primeras versiones de TCP usaban principalmente dos mecanismos:
 
 *   **Slow Start**: aumento exponencial del caudal hasta detectar una congestión.
 
-*   **Congestion Avoidance**: crecimiento posterior más prudente, generalmente lineal.
+*   **Congestion Avoidance**: crecimiento luego más prudente, generalmente lineal.
 
-Esta adaptación permanente es una de las razones por las que TCP sigue siendo eficiente a pesar de las variaciones en la calidad de la red.
+
+Esa adaptación permanente es una de las razones por las que TCP sigue rindiendo pese a las variaciones de calidad de la red.
 
 ### Cierre de conexión
 
-A diferencia de UDP, una conexión TCP también posee un cierre propio.
+Al contrario que UDP, una conexión TCP también tiene un cierre limpio.
 
-Cada extremo cierra independientemente su flujo mediante la bandera **FIN**.
+Cada extremo cierra independientemente su flujo gracias a la bandera **FIN**.
 
-Un cierre completo requiere generalmente cuatro intercambios:
+Un cierre completo necesita generalmente cuatro intercambios:
 
 ```
 FIN
@@ -208,9 +210,9 @@ FIN
 ACK
 ```
 
-Este procedimiento garantiza que todos los datos en tránsito se hayan entregado antes de la destrucción de la conexión.
+Ese procedimiento garantiza que todos los datos en tránsito se entregaron bien antes de destruir la conexión.
 
-## UDP: la máxima simplicidad
+## UDP: la simplicidad máxima
 
 UDP (User Datagram Protocol) adopta la filosofía inversa.
 
@@ -230,10 +232,11 @@ No existe:
 
 *   ningún control de congestión.
 
-Cada mensaje se encapsula simplemente en un **datagrama** independiente, se transmite a la red, y luego el emisor lo olvida.
+
+Cada mensaje simplemente se encapsula en un **datagrama** independiente, se transmite a la red, y el emisor lo olvida.
 
 ```
-Aplicación → Datagrama UDP → IP → Internet
+Application → Datagramme UDP → IP → Internet
 ```
 
 El protocolo no conserva ningún estado entre dos envíos.
@@ -242,39 +245,40 @@ Cada datagrama es totalmente independiente de los anteriores.
 
 ### La integridad de los datos
 
-Aunque UDP no garantiza ni la entrega ni el orden, protege de todos modos la integridad de los datos mediante un **checksum**.
+Aunque UDP no garantiza ni la entrega ni el orden, aun así protege la integridad de los datos gracias a un **checksum**.
 
 Al recibir, el checksum se recalcula.
 
 *   Si los valores coinciden, el datagrama se acepta.
 
-*   De lo contrario, se rechaza inmediatamente.
+*   Si no, se rechaza de inmediato.
 
-UDP detecta entonces los datos corruptos, pero nunca intenta recuperarlos.
+
+UDP detecta por tanto los datos corruptos, pero nunca intenta recuperarlos.
 
 ### ¿Por qué UDP es tan rápido?
 
-La cabecera UDP contiene solo **8 octetos**, frente a un mínimo de **20 octetos** para TCP (sin contar las opciones como timestamps, SACK o Window Scaling).
+La cabecera UDP solo contiene **8 bytes**, contra un mínimo de **20 bytes** para TCP (sin contar las opciones como timestamps, SACK o Window Scaling).
 
-Al no mantenerse ninguna conexión, el sistema operativo no tiene que seguir el estado de cada intercambio, lo que también reduce el consumo de memoria y el coste de procesamiento.
+Como no se mantiene ninguna conexión, el sistema operativo no tiene que seguir el estado de cada intercambio, lo que también reduce el consumo de memoria y el coste de procesamiento.
 
-La aplicación recibe los datos casi inmediatamente después de su llegada, sin esperar posibles retransmisiones.
+La aplicación recibe los datos casi en cuanto llegan, sin esperar eventuales retransmisiones.
 
-## Cuándo es preferible perder un dato
+## Cuándo perder un dato es preferible
 
 La idea fundamental es simple:
 
-> Una información antigua puede tener menos valor que una información perdida.
+> Una información vieja puede tener menos valor que una información perdida.
 
 Tomemos una conversación VoIP.
 
-Cada paquete transporta aproximadamente **20 ms** de voz.
+Cada paquete transporta unos **20 ms** de voz.
 
-Si un paquete se pierde, retransmitirlo a menudo llevaría más tiempo que esos 20 ms.
+Si un paquete se pierde, retransmitirlo a menudo tardaría más que esos 20 ms.
 
-Cuando finalmente llegara, la conversación ya habría avanzado.
+Cuando por fin llegara, la conversación ya habría avanzado.
 
-La mayoría de las aplicaciones prefieren entonces ocultar la pérdida (interpolación, silencio, corrección de errores) en lugar de esperar la retransmisión.
+La mayoría de las aplicaciones prefieren entonces enmascarar la pérdida (interpolación, silencio, corrección de error) en vez de esperar la retransmisión.
 
 El mismo razonamiento se aplica:
 
@@ -288,53 +292,55 @@ El mismo razonamiento se aplica:
 
 *   a los datos de posición GPS.
 
-Un valor reciente es casi siempre más útil que un valor antiguo perfectamente fiable.
+
+Un valor reciente casi siempre es más útil que un valor viejo perfectamente fiable.
 
 # Nivel 2: el cifrado, TLS
 
-TLS (Transport Layer Security, sucesor de SSL) no reemplaza a TCP, se añade por encima. Concretamente, TLS establece una conexión TCP normal, luego negocia una sesión cifrada en su interior: intercambio de certificados, acuerdo sobre un algoritmo de cifrado, derivación de claves de sesión. Todo lo que transita después está cifrado y autenticado.
+TLS (Transport Layer Security, sucesor de SSL) no reemplaza TCP, se añade encima. En concreto, TLS establece una conexión TCP normal, y luego negocia una sesión cifrada dentro: intercambio de certificados, acuerdo sobre un algoritmo de cifrado, derivación de claves de sesión. Todo lo que transita después va cifrado y autenticado.
 
 Tres garantías distintas, a menudo confundidas:
 
-*   **Confidencialidad**: nadie más que las dos partes puede leer el contenido.
+*   **Confidencialidad**: nadie más que ambas partes puede leer el contenido.
 
-*   **Integridad**: cualquier alteración de los datos en tránsito es detectada.
+*   **Integridad**: cualquier alteración de los datos en tránsito se detecta.
 
-*   **Autenticación**: pero en el TLS clásico, unidireccional: el cliente verifica que el servidor es realmente quien dice ser (mediante su certificado, firmado por una autoridad de confianza), pero el servidor no verifica nada sobre la identidad del cliente. Es exactamente el modelo de HTTPS cuando visitas un sitio: el navegador autentica al sitio, el sitio no te autentica a ti (la autenticación de usuario pasa por un mecanismo separado: cookie de sesión, token).
+*   **Autenticación**: pero en el TLS clásico, en un solo sentido: el cliente verifica que el servidor es bien quien dice ser (vía su certificado, firmado por una autoridad de confianza), pero el servidor no verifica nada sobre la identidad del cliente. Es exactamente el modelo de HTTPS cuando visitas un sitio: el navegador autentica el sitio, el sitio no te autentica (la autenticación de usuario pasa por un mecanismo separado, cookie de sesión, token).
 
-TLS 1.3 (la versión actual recomendada) ha reducido el handshake a una sola ida y vuelta en el caso común, frente a dos para TLS 1.2, lo que reduce sensiblemente la latencia de conexión.
 
-## Nivel 2bis: mTLS -- la autenticación se vuelve mutua
+TLS 1.3 (la versión actual recomendada) redujo el handshake a una sola ida y vuelta en el caso común, contra dos para TLS 1.2, lo que reduce sensiblemente la latencia de conexión.
 
-mTLS (mutual TLS) es TLS con una restricción adicional: el servidor exige _también_ un certificado del cliente, y lo verifica. Ambas partes prueban su identidad mediante un certificado firmado por una autoridad de confianza común.
+## Nivel 2bis: mTLS: la autenticación se vuelve mutua
 
-Es el mecanismo natural para la comunicación servicio-a-servicio en una arquitectura distribuida: donde el HTTPS clásico basta para que un navegador hable con un servidor público, mTLS responde a una pregunta diferente: _¿cómo sabe un servicio interno que está hablando realmente con otro servicio interno autorizado, y no con un atacante que ha llegado a la red?_
+mTLS (mutual TLS) es TLS con una restricción adicional: el servidor exige _también_ un certificado del cliente, y lo verifica. Ambas partes prueban su identidad vía un certificado firmado por una autoridad de confianza común.
+
+Es el mecanismo natural para la comunicación servicio a servicio en una arquitectura distribuida: donde HTTPS clásico basta para que un navegador hable con un servidor público, mTLS responde a una pregunta distinta; _¿cómo sabe un servicio interno que habla bien con otro servicio interno autorizado, y no con un atacante que habría aterrizado en la red?_
 
 ```
-Cliente                                          Servidor
+Client                                          Serveur
   │──── ClientHello ─────────────────────────────▶│
-  │◀─── ServerHello + certificado servidor ────────│
-  │──── verifica el certificado servidor ──────────│
-  │──── envía SU PROPIO certificado cliente ──────▶│
-  │◀─── verifica el certificado cliente ────────────│
-  │──── claves de sesión derivadas, canal cifrado ─▶│
+  │◀─── ServerHello + certificat serveur ──────────│
+  │──── vérifie le certificat serveur ─────────────│
+  │──── envoie SON PROPRE certificat client ──────▶│
+  │◀─── vérifie le certificat client ───────────────│
+  │──── clés de session dérivées, canal chiffré ──▶│
 ```
 
-La contrapartida de mTLS es operativa: se necesita una autoridad de certificación (CA) interna, un mecanismo de distribución de certificados a cada servicio, y una estrategia de rotación/revocación. En un entorno monomáquina con pocos servicios, a veces es más complejidad que beneficio -- mTLS se vuelve necesario a partir del momento en que el tráfico entre servicios atraviesa una red que no se controla completamente (varios hosts, cloud multi-tenant), o tan pronto como se quiere una política de tipo _zero trust_, donde ningún servicio es implícitamente digno de confianza simplemente por estar "dentro" de la red.
+La contrapartida de mTLS es operativa: hace falta una autoridad de certificación (CA) interna, un mecanismo de distribución de los certificados a cada servicio, y una estrategia de rotación/revocación. En un entorno monomáquina con pocos servicios, a veces es más complejidad que beneficio: mTLS se vuelve necesario a partir del momento en que el tráfico entre servicios atraviesa una red que no controlamos del todo (varios anfitriones, cloud multitenant), o en cuanto se quiere una política tipo _zero trust_, donde ningún servicio es implícitamente digno de confianza simplemente porque está "dentro" de la red.
 
-# Nivel 3: los protocolos de aplicación sobre TCP+TLS
+# Nivel 3: los protocolos aplicativos sobre TCP+TLS
 
-Una vez establecidos el transporte y el cifrado, falta definir _cómo estructurar los intercambios_. Ese es el papel de los protocolos de aplicación.
+Una vez el transporte y el cifrado en su sitio, queda definir _cómo estructurar los intercambios_. Ese es el rol de los protocolos aplicativos.
 
 ## HTTP / HTTPS
 
-HTTP es un protocolo de petición-respuesta: el cliente abre una conexión (o reutiliza una, con el keep-alive), envía una petición, espera una respuesta, la conexión puede luego cerrarse o reutilizarse. HTTPS es simplemente HTTP sobre TLS -- la S no cambia nada en la semántica del protocolo, solo el hecho de que el transporte está cifrado.
+HTTP es un protocolo petición-respuesta: el cliente abre una conexión (o reutiliza una, con el keep-alive), envía una petición, espera una respuesta, la conexión puede luego cerrarse o reutilizarse. HTTPS es simplemente HTTP sobre TLS: la S no cambia nada de la semántica del protocolo, solo el hecho de que el transporte va cifrado.
 
-El modelo petición-respuesta tiene un límite estructural: el servidor nunca puede hablar primero. Solo puede responder a lo que el cliente solicita. Para sondeos frecuentes (verificar "¿hay algo nuevo?" cada segundo), funciona pero desperdicia recursos -- cada petición recrea overhead protocolario para, la mayoría de las veces, no tener nada nuevo que anunciar.
+El modelo petición-respuesta tiene un límite estructural: el servidor nunca puede hablar primero. Solo puede responder a lo que el cliente pide. Para polling frecuente (comprobar "¿hay algo nuevo?" cada segundo), funciona pero desperdicia recursos: cada petición recrea overhead protocolar para, la mayoría de las veces, no tener nada nuevo que anunciar.
 
 ## WebSocket (WS / WSS)
 
-WebSocket responde exactamente a ese límite. La conexión comienza como una petición HTTP clásica (con una cabecera `Upgrade: websocket`), pero una vez que el apretón de manos es aceptado, la conexión TCP subyacente ya no es un canal de petición-respuesta HTTP -- se convierte en un canal bidireccional full-duplex donde cliente y servidor pueden enviar mensajes en cualquier momento, sin tener que reemitir un ciclo de petición-respuesta en cada intercambio.
+WebSocket responde exactamente a ese límite. La conexión arranca como una petición HTTP clásica (con una cabecera `Upgrade: websocket`), pero una vez aceptado el apretón de manos, la conexión TCP subyacente ya no es un canal petición-respuesta HTTP: se vuelve un canal bidireccional full-duplex donde cliente y servidor pueden enviar mensajes en cualquier momento, sin tener que reemitir un ciclo petición-respuesta en cada intercambio.
 
 ```
 GET /chat HTTP/1.1
@@ -350,34 +356,31 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS es simplemente WebSocket sobre TLS, exactamente como HTTPS es HTTP sobre TLS. Es el protocolo ideal para todo lo que requiere push del servidor en tiempo real -- chat, notificaciones, flujos de trading, eventos de juego -- sin tener que gestionar uno mismo un protocolo binario sobre TCP desnudo.
+WSS es simplemente WebSocket sobre TLS, exactamente como HTTPS es HTTP sobre TLS. Es el protocolo de elección para todo lo que necesita push de servidor en tiempo real: chat, notificaciones, flujos de trading, eventos de juego, sin querer gestionar uno mismo un protocolo binario sobre TCP desnudo.
 
 ## gRPC
 
-Menos conocido fuera del mundo de microservicios pero central en la comunicación servicio-a-servicio: gRPC se apoya en HTTP/2 (por lo tanto TCP + TLS opcional), serializa los mensajes en Protocol Buffers (binario, tipado, compacto -- a diferencia del JSON textual de la mayoría de las API REST), y permite nativamente el streaming bidireccional gracias al multiplexado de HTTP/2 (múltiples flujos lógicos sobre una sola conexión TCP, sin el head-of-line blocking que tendrían varias peticiones HTTP/1.1 secuenciales).
+Menos conocido fuera del mundo microservicios pero central en comunicación servicio a servicio: gRPC se apoya en HTTP/2 (o sea TCP + TLS opcional), serializa los mensajes en Protocol Buffers (binario, tipado, compacto, al contrario que el JSON texto de la mayoría de las API REST), y permite nativamente el streaming bidireccional gracias al multiplexado de HTTP/2 (varios flujos lógicos sobre una sola conexión TCP, sin el head-of-line blocking que tendrían varias peticiones HTTP/1.1 secuenciales).
 
 ## QUIC / HTTP3
 
-QUIC cambia las reglas del juego al partir de UDP en lugar de TCP a nivel de transporte, mientras reimplementa por encima las garantías de fiabilidad que TCP ofrecía nativamente -- pero flujo por flujo en lugar de globalmente, lo que elimina el head-of-line blocking a nivel de transporte (un paquete perdido en un flujo ya no bloquea los demás flujos de la misma conexión). TLS 1.3 está integrado directamente en QUIC en lugar de añadirse por encima, lo que reduce aún más la latencia del handshake. HTTP/3 es HTTP sobre QUIC.
+QUIC cambia las reglas repartiendo de UDP en vez de TCP a nivel transporte, reimplementando encima las garantías de fiabilidad que TCP ofrecía nativamente, pero flujo por flujo en vez de globalmente, lo que elimina el head-of-line blocking a nivel transporte (un paquete perdido en un flujo ya no bloquea los demás flujos de la misma conexión). TLS 1.3 va integrado directamente en QUIC en vez de añadido encima, lo que reduce aún más la latencia de handshake. HTTP/3 es HTTP sobre QUIC.
 
-# Vista general: dónde se sitúa cada protocolo
+# Vista de conjunto: dónde se sitúa cada protocolo
 
-Capa         Protocolos               Rol
-Transporte   TCP, UDP                Hacer viajar octetos, fiable o no
-Transporte (nueva generación) QUIC   UDP + fiabilidad por flujo + TLS integrado
-Seguridad    TLS, mTLS               Cifrado, integridad, autenticación (uni o mutua)
-Aplicación   HTTP/HTTPS, WS/WSS, gRPC  Estructurar los intercambios (petición-respuesta, bidireccional, RPC tipado)
+Capa Protocolos Rol Transporte TCP, UDP Hacer viajar bytes, fiable o no Transporte (nueva generación) QUIC UDP + fiabilidad por flujo + TLS integrado Seguridad TLS, mTLS Cifrado, integridad, autenticación (uni o mutua) Aplicación HTTP/HTTPS, WS/WSS, gRPC Estructurar los intercambios (petición-respuesta, bidireccional, RPC tipado)
 
-Un ejemplo concreto para fijar ideas: una arquitectura de microservicios con un dashboard web y servicios internos podría combinar razonablemente HTTPS (dashboard ↔ API pública, autenticación unidireccional suficiente del lado del navegador), mTLS (servicio ↔ servicio internamente, autenticación mutua necesaria), y WSS (notificaciones en tiempo real push hacia el dashboard) -- tres protocolos de aplicación diferentes, todos construidos sobre la misma base TCP + TLS.
+Un ejemplo concreto para fijar las ideas: una arquitectura microservicios con un dashboard web y servicios internos podría razonablemente combinar HTTPS (dashboard ↔ API pública, autenticación unidireccional suficiente en el navegador), mTLS (servicio ↔ servicio en interno, autenticación mutua necesaria), y WSS (notificaciones en tiempo real empujadas hacia el dashboard): tres protocolos aplicativos distintos, todos construidos sobre el mismo zócalo TCP + TLS.
 
 ## Cómo elegir, en la práctica
 
-Tres preguntas bastan generalmente para decidir:
+Tres preguntas suelen bastar para decidir:
 
-1.  **¿Necesito fiabilidad y orden, o la frescura del dato prima sobre su entrega garantizada?** → TCP si sí, UDP si no (o QUIC para tener ambas mediante un compromiso diferente).
+1.  **¿Necesito fiabilidad y orden, o la frescura del dato prima sobre su entrega garantizada?** → TCP si sí, UDP si no (o QUIC para tener ambas cosas a la vez vía un compromiso distinto).
 
-2.  **¿Debe el servidor poder iniciar mensajes, o el cliente hace siempre la primera solicitud?** → WebSocket/gRPC streaming si el servidor debe enviar, HTTP clásico en caso contrario.
+2.  **¿El servidor debe poder iniciar mensajes, o el cliente siempre hace la primera petición?** → WebSocket/gRPC streaming si el servidor debe empujar, HTTP clásico si no.
 
-3.  **¿Deben ambas partes probarse mutuamente su identidad, o solo una de ellas necesita ser verificada?** → mTLS para servicio-a-servicio en entorno zero-trust, TLS simple para cliente público clásico.
+3.  **¿Ambas partes deben probarse mutuamente su identidad, o solo una de las dos necesita verificarse?** → mTLS para servicio a servicio en entorno zero-trust, TLS simple para cliente público clásico.
 
-La complejidad operativa aumenta con cada capa añadida: TCP desnudo no tiene ninguna infraestructura que gestionar, TLS exige certificados, mTLS exige una CA y una estrategia de rotación, gRPC exige una definición de esquema Protobuf compartida. El buen reflejo es aumentar la complejidad solo cuando la capa inferior muestra un límite concreto, no por anticipación.
+
+La complejidad operativa aumenta con cada capa añadida, TCP desnudo no tiene ninguna infraestructura que gestionar, TLS pide certificados, mTLS pide una CA y una estrategia de rotación, gRPC pide una definición de esquema Protobuf compartida. El buen reflejo es no subir en complejidad más que cuando la capa de abajo muestra un límite concreto, no por anticipación.

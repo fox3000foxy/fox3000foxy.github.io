@@ -2,109 +2,109 @@
 title: "Repo to VPS : mengubah GitHub Actions menjadi VPS gratis dengan penyimpanan persisten"
 description: Cara mengubah runner GitHub Actions menjadi VPS permanen dengan git sebagai penyimpanan persisten -- tmate, inotify dan commit --amend.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - github
   - devops
   - automation
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Ydn66camo8h9OVlyuaNBJf8wPUhDxTHjRvqV1FP9i7aby5YcSvy+YDpfNDBfHivzUtl3+QJl+ruGiQrQyUxPng=="
+author_sig: "LQEGkDJBQ/RP8jg3qMzjrLP85f4/yJMV8UFUnBmLrUMTUpC18Y86hw3eMIpYrqTl/zCEZWbGNITWWM/gtFfJrw=="
 ---
 
-## GitHub kasih kamu VPS gratis selama 6 jam. Aku nemu cara bikinnya permanen.
+## GitHub memberimu VPS gratis selama 6 jam. Saya menemukan cara membuatnya permanen.
 
-GitHub Actions kasih kamu mesin Linux gratis.
+GitHub Actions memberimu mesin Linux gratis.
 
-Iya, beneran server Ubuntu. 2 core, 7 GB RAM, 14 GB disk. Gratis. Selama 6 jam per run.
+Maksudnya, server Ubuntu sungguhan. 2 core, 7 GB RAM, 14 GB disk. Gratis. Selama 6 jam per run.
 
-Satu-satunya "masalah" : di akhir run, semuanya dihapus. Mesinnya disposable. Kamu install berbagai hal, ngoding, konfigurasi... dan poof, di akhir semuanya hilang. Seperti tidak pernah terjadi.
+Satu-satunya "masalah" : di akhir run, semuanya dihapus. Mesinnya sekali pakai. Kamu menginstal paket, ngoding, mengonfigurasi... dan tiba-tiba, di akhir semuanya hilang. Seolah kamu tidak melakukan apa-apa.
 
 Kecuali.
 
-Kecuali kamu pakai **git sebagai hard disk**.
+Kecuali kamu memakai **git sebagai hard disk**.
 
-Dan tiba-tiba, kamu punya VPS gratis dengan disk persisten yang bertahan dari run ke run. Kamu reconnect, semuanya masih ada. Kamu lanjutin dari tempat kamu berhenti.
+Dan tiba-tiba, kamu punya VPS gratis dengan disk persisten yang bertahan antar run. Kamu menyambung ulang, semuanya masih ada. Kamu lanjut tepat di mana kamu berhenti.
 
-Ini benar-benar gila. Biar aku jelasin xD
+Ini benar-benar rusak. Biar saya jelaskan.
 
 ---
 
-## Konteks : runner GitHub Actions
+## Konteksnya : runner GitHub Actions
 
-Saat kamu menjalankan workflow GitHub Actions, GitHub kasih kamu VM.
+Ketika kamu menjalankan workflow GitHub Actions, GitHub memberimu VM.
 
-Ini dibuat untuk build kode, jalankan test, deploy. Workflow berjalan, melakukan tugasnya, dan mesinnya dihancurkan.
+Ini dibuat untuk build kodemu, menjalankan tesmu, deploy. Workflow berjalan, mengerjakan tugasnya, dan mesin dihancurkan.
 
-Tapi tidak ada yang melarang kamu melakukan hal lain dengan VM ini. Misalnya, buka shell SSH di atasnya dan pakai sebagai server.
+Tapi tidak ada yang melarangmu melakukan hal lain dengan VM ini. Misalnya, membuka shell SSH di atasnya dan memakainya sebagai server.
 
-Masalahnya, mesin-mesin ini **stateless** dan **sementara** :
-- Sementara : maksimal 6 jam per run (`timeout-minutes: 360`, batas dari GitHub)
-- Stateless : semua dihapus di akhir
+Batasannya adalah mesin-mesin ini **stateless** dan **sementara** :
+- Sementara : 6 jam maks per run (`timeout-minutes: 360`, plafon GitHub)
+- Stateless : semuanya dihapus di akhir
 
-Jadi untuk menjadikannya VPS yang bisa dipakai, harus selesaikan dua masalah :
-1. **Bagaimana cara terhubung secara real-time ?**
-2. **Bagaimana cara menyimpan disk antar run ?**
+Jadi untuk menjadikannya VPS yang bisa dipakai, harus menyelesaikan dua masalah :
+1. **Bagaimana terhubung ke sana waktu nyata?**
+2. **Bagaimana menjaga disk antara dua run?**
 
-Nah ini jadi hack yang kotor.
+Di sinilah jadi hack kotor.
 
 ---
 
 ## Masalah 1 : SSH live dengan tmate
 
-**tmate** adalah fork dari tmux yang membuat session SSH yang bisa dibagikan.
+**tmate** adalah fork tmux yang membuat sesi SSH yang bisa dibagikan.
 
-Kamu jalankan di sebuah mesin, dia menghasilkan dua link :
+Kamu menjalankannya di mesin, ia membangkitkan dua tautan :
 - URL SSH (`ssh xxx@nyc1.tmate.io`)
-- URL web (terminal di browser)
+- URL web (terminal di peramban)
 
-Kamu connect dengan salah satu link ini, dan boom, kamu masuk ke shell di mesin itu. Secara real-time.
+Kamu terhubung dengan salah satu tautan ini, dan boom, kamu ada di shell di mesin. Waktu nyata.
 
-Workflow-nya menjalankan tmate :
+Workflow jadi menjalankan tmate :
 
 ```bash
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
 
-# ambil link koneksi
+# mengambil tautan koneksi
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
 
-Dan link-link ini ditulis langsung ke README repo oleh script Python. Kamu buka repo, kamu lihat link koneksi, kamu klik. Selamat datang di VPS kamu.
+Dan tautan ini ditulis langsung di README repo oleh skrip Python. Kamu membuka repomu, melihat tautan koneksi, mengklik. Kamu pun ada di VPS-mu.
 
-Masalah pertama beres. Tapi yang kedua yang benar-benar gila.
+Masalah pertama selesai. Tapi yang kedua benar-benar gila.
 
 ---
 
 ## Masalah 2 : git sebagai hard disk
 
-Ini dia hal gila.
+Inilah ide yang mengubah segalanya.
 
-Mesinnya dihapus setiap run. Jadi kita simpan **sistem file di branch git khusus**, bernama `filesystem`.
+Mesin dihapus di setiap run. Jadi kita menyimpan **sistem berkas di branch git khusus**, bernama `filesystem`.
 
-Saat startup, script me-restore state dari branch ini :
+Saat startup, skrip memulihkan keadaan dari branch ini :
 
 ```bash
 filesystem_branch="filesystem"
 
-# ambil branch filesystem dari remote
+# mengambil branch filesystem dari remote
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
 
-# restore workspace dari branch ini
+# memulihkan workspace dari branch ini
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
 
-Branch `filesystem` ADALAH hard disk kamu. File kamu, installasi kamu, konfigurasi kamu -- semuanya ada di dalamnya.
+Branch `filesystem` ADALAH hard disk-mu. Berkasmu, instalasimu, configmu -- semuanya ada di dalamnya.
 
-Kamu lihat kan? Mesinnya disposable, tapi disk-nya hidup di git. Kamu jalankan ulang workflow, disk-nya di-restore, kamu lanjut tepat dari tempat kamu berhenti.
+Kamu paham idenya? Mesinnya sekali pakai, tapi disknya hidup di git. Kamu menjalankan ulang workflow, disk dipulihkan, kamu lanjut tepat di mana kamu berhenti.
 
-Ini seperti VPS yang hibernate. Cuma hibernasi-nya berupa repo git xD
+Ini seperti VPS yang hibernasi. Kecuali hibernasinya repo git
 
-### Pertama kali jalan : buat disk kosong
+### Peluncuran pertama : membuat disk kosong
 
-Pertama kali run, branch `filesystem` belum ada. Harus dibuat. Dan ini tidak sepele :
+Di run pertama, branch `filesystem` belum ada. Harus dibuat. Dan ini tidak sepele :
 
 ```bash
 ensure_filesystem_branch() {
@@ -118,41 +118,41 @@ ensure_filesystem_branch() {
 }
 ```
 
-`git checkout --orphan` adalah kuncinya. Branch orphan adalah branch **tanpa history sama sekali** -- seperti kamu mulai dari repo kosong.
+`git checkout --orphan` itulah kuncinya. Branch yatim adalah branch **tanpa riwayat apa pun** -- seolah kamu mulai dari repo kosong.
 
-Kenapa orphan? Karena kamu TIDAK ingin disk persisten kamu membawa seluruh history kode sumber. Disk adalah entitas terpisah, punya hidup sendiri. Dia mulai kosong.
+Kenapa yatim? Karena kamu TIDAK ingin disk persistenmu menyeret seluruh riwayat kode sumbermu. Disk tetap terisolasi, dengan hidupnya sendiri. Ia mulai perawan.
 
-Dan `git ls-remote --exit-code` di awal, itu cuma pengecekan bersih : "apakah branch sudah ada di remote?". Kalau iya, tidak dilakukan apa-apa. Kalau tidak, dibuat. Idempoten, seperti yang kita suka.
+Dan `git ls-remote --exit-code` di awal, itu cuma cek bersih : "apakah branch sudah ada di remote?". Kalau ya, kita tidak menyentuh apa-apa. Kalau tidak, kita membuatnya. Idempoten, seperti yang kita suka.
 
 ### Git clean selektif : melindungi cache
 
-Baris ini layak untuk kita bahas :
+Baris ini layak berhenti sebentar :
 
 ```bash
 git clean -fdx -e .apt-cache -e .cache -e host.conf -e tmate.sock
 ```
 
-`git clean -fdx` itu MEMBUANG SEMUA yang tidak di-track oleh git. Biasanya ini keras -- membersihkan workspace habis-habisan.
+`git clean -fdx` menghapus SEMUA yang tidak di track git. Normalnya ini keras -- membersihkan workspace habis-habisan.
 
-Tapi `-e` (exclude) melindungi beberapa hal :
-- `.apt-cache` → cache paket APT (akan dibahas lagi, ini pintar)
+Tapi `-e` (exclude) melindungi berkas tertentu :
+- `.apt-cache` → cache paket APT (nanti kita bahas, ini cerdik)
 - `.cache` → cache generik
-- `host.conf` → alamat SSH session
-- `tmate.sock` → socket session tmate yang sedang berjalan
+- `host.conf` → alamat SSH sesi
+- `tmate.sock` → socket sesi tmate yang berjalan
 
-Kalau kamu bersihkan file-file itu, kamu akan merusak session aktif atau kehilangan cache. Jadi mereka disisihkan saat reset.
+Kalau kamu membersihkan berkas-berkas itu, kamu merusak sesi aktif atau kehilangan cache-mu. Jadi kita mengampuninya selama reset.
 
-Detail kecil yang kelihatannya sepele, tapi tanpanya semuanya berantakan.
+Detail tampak bodoh pada pandangan pertama, tapi tanpanya semuanya meledak.
 
 ---
 
-## Autosave : inotify yang memantau semuanya
+## Autosave : inotify yang mengawasi segalanya
 
-Nah, tapi bagaimana file-file itu masuk ke branch `filesystem`?
+Oke, tapi bagaimana berkas-berkas sampai di branch `filesystem`?
 
-Jawaban : sebuah watcher yang memantau SEMUA perubahan file dan commit/push secara otomatis.
+Jawaban : watcher yang mengawasi SEMUA perubahan berkas dan commit/push otomatis.
 
-Alat ajaibnya adalah **inotifywait** (dari paket `inotify-tools`). Dia memantau filesystem di level kernel dan terpicu saat file berubah.
+Alat ajaibnya adalah **inotifywait** (dari paket `inotify-tools`). Ia mengawasi filesystem di tingkat kernel dan memicu begitu berkas berubah.
 
 ```bash
 autosave() {
@@ -167,41 +167,41 @@ autosave() {
 autosave &
 ```
 
-Mari kita bedah flag inotify, karena masing-masing penting :
-- `-r` → rekursif, memantau semua sub-direktori
-- `-e modify,create,delete,move` → bereaksi terhadap 4 tipe event ini
-- `--exclude '...'` → regex untuk mengabaikan file tertentu
+Mari bedah flag inotify, karena masing-masing penting :
+- `-r` → rekursif, mengawasi semua subfolder
+- `-e modify,create,delete,move` → bereaksi pada 4 tipe event ini
+- `--exclude '...'` → regex untuk mengabaikan berkas tertentu
 
-`--exclude` sangat krusial. Lihat apa yang diabaikan :
-- `.git` → jelas, kalau tidak setiap commit akan memicu autosave yang memicu commit lagi... infinite loop. Bencana.
-- `.apt-cache` dan `.cache` → cache, yang sering berubah dan tidak ingin kita spam di git
-- `host.conf` dan `tmate.sock` → file session, yang terus berubah
-- `.gitignore`, `.txt.swp` → file sementara (`.swp` adalah file editing vim)
+`--exclude` ini krusial. Lihat apa yang ia abaikan :
+- `.git` → jelas, kalau tidak setiap commit memicu autosave yang memicu commit... loop tak berujung. Bencana.
+- `.apt-cache` dan `.cache` → cache, yang berubah terus dan tidak ingin kita spam ke git
+- `host.conf` dan `tmate.sock` → berkas sesi, yang bergerak tanpa henti
+- `.gitignore`, `.txt.swp` → berkas sementara (`.swp` itu berkas edit vim)
 
-Tanpa exclude ini, autosave akan terpicu terus-menerus oleh perubahannya sendiri. `.git` dalam daftar, itu BARIS yang mencegah kamu menembak kaki sendiri.
+Tanpa exclude ini, kamu berakhir dengan autosave yang terpicu berulang pada perubahannya sendiri. `.git` di daftar, itulah baris yang mencegahmu menembak kakimu sendiri.
 
-Kamu modifikasi file? inotify mendeteksinya seketika, commit, push. Kurang dari satu detik, perubahanmu sudah ada di branch `filesystem`.
+Kamu mengubah berkas? inotify mendeteksinya seketika, commit, push. Dalam kurang dari sedetik, perubahanmu ada di branch `filesystem`.
 
-Kamu install sesuatu, nulis kode, menyentuh konfigurasi -- semua tersimpan real-time, otomatis, tanpa kamu melakukan apapun.
+Kamu menginstal paket, menulis kode, menyentuh config -- semuanya disimpan waktu nyata, otomatis, tanpa kamu melakukan apa pun.
 
-Kamu benar-benar punya sistem backup otomatis seluruh disk. Gila.
+Kamu secara harfiah punya sistem simpan otomatis seluruh disk. Rusak.
 
 ### Debounce : jangan spam git
 
 `sleep 1` setelah setiap save adalah **debounce**.
 
-Saat kamu menyimpan file di editor, seringkali menghasilkan beberapa event filesystem beruntun (pembuatan file temp, rename, penghapusan file lama...). Tanpa debounce, kamu akan memicu 3-4 commit untuk satu kali save.
+Ketika kamu menyimpan berkas di editor, sering itu membangkitkan beberapa event filesystem beruntun (pembuatan berkas temp, rename, penghapusan yang lama...). Tanpa debounce, kamu memicu 3-4 commit untuk satu penyimpanan.
 
-`sleep 1` bilang : "tunggu satu detik setelah save, biar rangkaian eventnya reda, sebelum mendengarkan lagi". Ini mengelompokkan perubahan yang berdekatan menjadi satu commit. Pintar.
+`sleep 1` bilang : "tunggu sedetik setelah save, sampai beruntunnya tenang, sebelum mendengar lagi". Itu mengelompokkan perubahan yang berdekatan jadi satu commit. Cerdik.
 
-### Dan periodic save tambahan
+### Dan simpanan berkala sebagai tambahan
 
-Untuk jaga-jaga kalau inotify kelewatan sesuatu, ada juga save setiap 5 detik :
+Seandainya inotify melewatkan event, ada juga save setiap 5 detik :
 
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote   # ambil perubahan remote yang mungkin ada
+    sync_from_remote   # mengambil perubahan jarak jauh yang mungkin ada
     sleep 5
     commit_and_push
   done
@@ -210,27 +210,27 @@ periodic_save() {
 periodic_save &
 ```
 
-Sabuk DAN tali pengaman. Kita benar-benar tidak mau kehilangan state disk.
+Sabuk DAN suspender. Kita tidak mau kehilangan keadaan disk.
 
 ---
 
-## Detail pintar : satu commit aja
+## Detail cerdik : satu commit saja
 
-Kalau kamu commit setiap perubahan file, kamu akan mengumpulkan ribuan commit. Dalam satu jam session, history git kamu meledak. Repo jadi besar. Ini menjijikkan.
+Kalau kamu commit di setiap perubahan berkas, kamu akan menumpuk ribuan commit. Dalam satu jam sesi, riwayat gitmu meledak. Repo menjadi raksasa. Itu menjijikkan.
 
-Solusinya elegan : **kita amend commit yang ada** daripada membuat yang baru.
+Solusinya elegan : **kita mengamend commit yang ada** alih-alih membuat yang baru.
 
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return   # lock biar dua save tidak berjalan bersamaan
+    flock -n 200 || return   # lock supaya dua save tidak jalan bersamaan
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/   # jangan sentuh scripts
+    git reset -- .github/workflows/ .github/scripts/   # jangan sentuh skrip
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit    # AMEND : timpa commit sebelumnya
+        git commit --amend --no-edit    # AMEND : menimpa commit sebelumnya
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -242,19 +242,19 @@ commit_and_push() {
 
 `git commit --amend` artinya : "ganti commit terakhir dengan yang ini".
 
-Jadi branch `filesystem` SELALU hanya punya satu commit. Tidak peduli berapa kali kamu save. Hanya snapshot dari state terkini, di-force-push berulang kali.
+Jadi branch `filesystem` SELALU punya satu commit. Tidak peduli berapa kali kamu menyimpan. Itu hanya snapshot keadaan saat ini, di force-push berulang-ulang.
 
-`flock` adalah kunci : karena ada dua loop save (inotify + periodic), harus dicegah agar mereka tidak menjalankan git bersamaan dan saling menginjak. Hanya satu proses git dalam satu waktu.
+`flock` itu kunci : karena ada dua loop save (inotify + berkala), harus mencegah mereka menjalankan git bersamaan dan saling menginjak. Satu proses git dalam satu waktu.
 
 Bersih.
 
 ---
 
-## Sync_from_remote : menangani beberapa session
+## Sync_from_remote : menangani banyak sesi
 
-Nah, sesuatu yang tidak terpikirkan di awal : gimana kalau kamu menjalankan DUA run bersamaan? Atau kalau satu session memodifikasi branch `filesystem` sementara yang lain berjalan?
+Nah, kasus yang tidak terpikir di awal : bagaimana kalau kamu menjalankan DUA run bersamaan? Atau kalau satu sesi mengubah branch `filesystem` sementara yang lain berjalan?
 
-Script menangani ini dengan `sync_from_remote` sebelum setiap commit :
+Skrip menanganinya dengan `sync_from_remote` sebelum setiap commit :
 
 ```bash
 sync_from_remote() {
@@ -263,17 +263,17 @@ sync_from_remote() {
 }
 ```
 
-`--ff-only` (fast-forward only) itu penting : artinya "merge HANYA kalau bisa maju dengan bersih, tanpa membuat commit merge".
+`--ff-only` (fast-forward only) ini penting : artinya "merge HANYA kalau bisa maju bersih, tanpa membuat commit merge".
 
-Kalau kedua branch divergen (misalnya, dua session memodifikasi hal berbeda), fast-forward gagal secara diam-diam (`2>/dev/null || true`) dan state lokal dipertahankan. Ini bukan sistem merge yang sempurna, tapi menghindari korupsi dalam kasus sederhana di mana hanya satu session yang berjalan.
+Kalau kedua branch telah berdivergensi (misalnya, dua sesi mengubah berkas berbeda), fast-forward gagal diam-diam (`2>/dev/null || true`) dan kita menjaga keadaan lokal. Ini bukan sistem merge sempurna, tapi mencegah korupsi dalam kasus sederhana di mana satu sesi saja berjalan.
 
-Sejujurnya, jangan jalankan 3 session paralel di repo yang sama. Tapi kode ini tetap berusaha untuk tidak meledak kalau itu terjadi. Ini pertahanan.
+Sejujurnya, jangan menjalankan 3 sesi paralel di repo yang sama. Tapi kode tetap berusaha tidak meledak kalau itu terjadi. Ini pertahanan.
 
 ---
 
-## Cache APT : install cepat
+## Cache APT : menginstal cepat
 
-Ada detail di workflow yang kelihatan sepele tapi dipikirkan dengan baik :
+Ada detail di workflow yang tampak sepele tapi dipikirkan matang :
 
 ```yaml
 - name: Cache & install APT packages (tmate + watcher)
@@ -282,19 +282,19 @@ Ada detail di workflow yang kelihatan sepele tapi dipikirkan dengan baik :
     packages: tmate inotify-tools
 ```
 
-tmate dan inotify-tools diinstall melalui action yang **me-cache paket APT**.
+tmate dan inotify-tools dipasang lewat action yang **meng cache paket APT**.
 
-Di run pertama, download dan install. Di run berikutnya, di-restore dari cache GitHub Actions -- lebih cepat, tidak perlu download ulang.
+Di run pertama, ia mengunduh dan memasang. Di run berikutnya, dipulihkan dari cache GitHub Actions -- lebih cepat, tidak perlu mengunduh ulang.
 
-Dan ingat `git clean -fdx -e .apt-cache` dari tadi? Itu terkait. Folder `.apt-cache` dilindungi dari pembersihan justru agar paket yang kamu install selama session bisa bertahan minimal.
+Dan kamu ingat `git clean -fdx -e .apt-cache` tadi? Itu terkait. Folder `.apt-cache` dilindungi dari pembersihan justru supaya paket yang kamu pasang selama sesimu bisa bertahan minimal.
 
-Semuanya terkait. Aku sudah memikirkan siklus hidup lengkap.
+Semuanya nyambung. Saya memikirkan siklus hidup lengkap.
 
 ---
 
-## Script yang disembunyikan di /tmp
+## Skrip yang disembunyikan di /tmp
 
-Satu lagi detail licik tapi pintar. Di awal script :
+Satu detail licik tapi cerdik lagi. Di awal skrip :
 
 ```bash
 RUNNER_SCRIPTS_DIR="/tmp/runner-scripts"
@@ -303,25 +303,25 @@ mkdir -p "$RUNNER_SCRIPTS_DIR"
 cp -r .github/scripts "$RUNNER_SCRIPTS_DIR/"
 ```
 
-Script (`update_readme.py`, dll.) dicopy ke `/tmp` SEBELUM menyentuh branch `filesystem`.
+Skrip (`update_readme.py`, dll.) disalin ke `/tmp` SEBELUM menyentuh branch `filesystem`.
 
-Kenapa? Karena saat kamu melakukan `git reset --hard` ke branch `filesystem` (yang kosong di awal, atau berisi disk kamu), file `.github/scripts` dari repo sumber akan hilang dari workspace.
+Kenapa? Karena ketika kamu melakukan `git reset --hard` ke branch `filesystem` (yang kosong di awal, atau yang berisi diskmu), berkas `.github/scripts` dari repo sumber hilang dari workspace.
 
-Tapi script masih diperlukan selama session (untuk update README setiap kali tmate restart). Jadi dia disembunyikan di `/tmp`, di luar jangkauan git :
+Tapi skrip masih membutuhkannya selama sesi (untuk memperbarui README di setiap peluncuran ulang tmate). Jadi ia menyembunyikannya di `/tmp`, di luar jangkauan git :
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Kalau tidak dipikirkan, kamu akan pusing 30 menit mencari tahu kenapa script kamu hilang. Aku sudah pikirkan itu.
+Kalau tidak kepikiran, kamu menghabiskan 30 menit memahami kenapa skripmu hilang. Saya memikirkannya.
 
 ---
 
-## Shell custom
+## Shell sesuai pesanan
 
-Sedikit kenyamanan : session memberi kamu shell yang sudah dikonfigurasi, bukan bash kosong.
+Kenyamanan kecil : sesi memberimu shell yang dikonfigurasi, bukan bash telanjang.
 
-`prestart.sh` menyalin `.bashrc` custom :
+`prestart.sh` menyalin `.bashrc` kustom :
 
 ```bash
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
@@ -330,7 +330,7 @@ fi
 sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
-Dan `.bashrc` ini berisi prompt berwarna, alias (`ll`, `lla`, `rm -i`), dan yang terpenting override `exit` :
+Dan `.bashrc` ini berisi prompt berwarna, alias (`ll`, `lla`, `rm -i`), dan terutama override `exit` :
 
 ```bash
 exit() {
@@ -338,21 +338,21 @@ exit() {
     builtin exit "$@"
 }
 
-# Ctrl+D sama seperti exit
+# Ctrl+D melakukan hal yang sama seperti exit
 bind -x '"\C-d": "exit"'
 ```
 
-Saat kamu ketik `exit` (atau Ctrl+D), ini mematikan proses tmate dengan bersih sebelum menutup. Ini mencegah session tmate zombie.
+Ketika kamu mengetik `exit` (atau Ctrl+D), ia membunuh bersih proses tmate sebelum menutup. Ini mencegah sesi tmate zombie tertinggal.
 
-Ada juga fungsi `tmate-detach` kalau kamu ingin disconnect TANPA mematikan session (untuk reconnect nanti). Detail kenyamanan, tapi menunjukkan tingkat perhatian.
+Ada juga fungsi `tmate-detach` kalau kamu ingin terputus TANPA membunuh sesi (untuk menyambung ulang nanti). Detail kenyamanan, tapi menunjukkan tingkat perhatian.
 
 ---
 
-## Tmate yang restart sendiri
+## Tmate yang menyala ulang sendiri
 
-Sedikit kenyamanan : kalau kamu ketik `exit` di shell, biasanya session tmate mati dan kamu disconnect untuk selamanya.
+Kenyamanan kecil : kalau kamu mengetik `exit` di shell, normalnya sesi tmate mati dan kamu terputus untuk selamanya.
 
-Tapi di sini, tmate ada di dalam loop `while true` :
+Kecuali di sini, tmate ada dalam loop `while true` :
 
 ```bash
 while true; do
@@ -364,137 +364,137 @@ while true; do
 done
 ```
 
-Kamu `exit` ? Session restart otomatis. Kamu reconnect dengan link yang sama.
+Kamu `exit`? Sesi menyala ulang sendiri. Kamu menyambung ulang dengan tautan yang sama.
 
-Ini konyol, tapi membuatnya bisa dipakai.
+Ini bodoh, tapi membuat sesi bisa dipakai.
 
 ---
 
-## Reconnect dalam satu perintah
+## Penyambungan ulang dalam satu perintah
 
-Bagaimana cara reconnect setelah disconnect, tanpa harus mencari-cari di log run setiap kali?
+Bagaimana kamu menyambung ulang setelah terputus, tanpa mengobrak-abrik log run setiap kali?
 
-Alamat SSH tmate ditulis di file `host.conf`, di-commit ke branch `filesystem` :
+Alamat SSH tmate ditulis dalam berkas `host.conf`, yang di commit ke branch `filesystem` :
 
 ```bash
 printf '%s' "${tmate_ssh#ssh }" > host.conf
 ```
 
-Dan karena file ini ada di git, kamu bisa ambil melalui API GitHub dengan satu perintah :
+Dan karena berkas ini ada di git, kamu bisa mengambilnya lewat API GitHub dengan satu perintah :
 
 ```bash
 ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
   "/repos/USER/REPO/contents/host.conf?ref=filesystem" | tr -d '\r\n')"
 ```
 
-Kamu jalankan ini, dia akan mengambil alamat SSH terkini dari repo, dan connect. Bahkan jika alamatnya berubah antar session.
+Kamu menjalankan itu, ia mencari alamat SSH saat ini di repo, dan menghubungkanmu. Bahkan kalau alamat berubah antara dua sesi.
 
 ---
 
-## Flow lengkap
+## Alur lengkap
 
 Mari rekap :
 
-1. Kamu trigger workflow (push atau tombol manual)
-2. GitHub kasih kamu VM Ubuntu
-3. Script me-restore disk dari branch "filesystem"
-4. inotify mulai memantau semua perubahan
-5. periodic_save commit setiap 5 detik sebagai backup
-6. tmate mulai → menghasilkan link SSH/web
-7. Link ditulis ke README + host.conf
-8. Kamu connect dengan ssh atau terminal web
-9. Kamu lakukan apapun yang kamu mau -- setiap perubahan file = autosave
-10. 6 jam kemudian, GitHub mematikan VM
-11. Disk kamu utuh di branch "filesystem"
-12. Kamu jalankan ulang workflow → kembali ke langkah 3, semuanya masih ada
+1. Kamu memicu workflow (push atau tombol manual)
+2. GitHub memberimu VM Ubuntu
+3. Skrip memulihkan disk dari branch "filesystem"
+4. inotify mulai mengawasi semua perubahan
+5. periodic_save commit setiap 5 detik sebagai cadangan
+6. tmate menyala → membangkitkan tautan SSH/web
+7. Tautan ditulis di README + host.conf
+8. Kamu terhubung dengan ssh atau terminal web
+9. Kamu melakukan apa pun yang kamu mau -- setiap perubahan berkas = autosave
+10. 6 jam kemudian, GitHub membunuh VM
+11. Diskmu utuh di branch "filesystem"
+12. Kamu menjalankan ulang workflow → kembali ke langkah 3, semuanya masih ada
 
 VPS gratis dengan disk persisten. Hanya dengan git dan GitHub Actions.
 
 ---
 
-## Baiklah, harus jujur : keterbatasannya
+## Oke, harus jujur : batasannya
 
-Ini hack, bukan VPS beneran. Jadi :
+Ini hack, bukan VPS sungguhan. Jadi :
 
-- **Maksimal 6 jam per run.** Harus jalankan ulang workflow secara teratur. Tidak ada uptime tanpa batas.
-- **Bukan untuk production.** Kamu tidak akan host situs di sini. Ini untuk eksplorasi, dev, debug, testing sesuatu di Linux disposable tapi bisa dipulihkan.
-- **GitHub melihat semuanya.** Ini mesin mereka. Jangan simpan data sensitif.
-- **Jaga repo tetap private.** Kamu mengekspos shell SSH. Repo public = siapapun berpotensi connect. Ide buruk.
-- **Ini di batas ketentuan penggunaan.** GitHub Actions dibuat untuk CI/CD, bukan untuk VPS gratis. Jadi gunakan secukupnya, untuk hal yang sah, tanpa menyalahgunakan.
+- **6 jam maks per run.** Harus menjalankan ulang workflow rutin. Uptime terbatas di setiap run.
+- **Disediakan untuk dev dan eksplorasi.** Kamu tidak akan menghosting situsmu di atasnya. Ini untuk menjelajah, dev, debug, menguji lingkungan Linux sekali pakai tapi bisa dipulihkan.
+- **GitHub melihat segalanya.** Ini mesin mereka. Jangan taruh yang sensitif.
+- **Jaga repo tetap privat.** Kamu mengekspos shell SSH. Repo publik = siapa pun berpotensi terhubung. Ide buruk.
+- **Ini di batas syarat penggunaan.** GitHub Actions dibuat untuk CI/CD, bukan untuk VPS gratis. Jadi pakai secukupnya, untuk yang sah, tanpa menyalahgunakan.
 
-### Achilles heel yang sesungguhnya : git benci file besar
+### Tumit Achilles yang nyata : git benci berkas besar
 
 Git dibuat untuk teks, bukan untuk filesystem.
 
-Disk persisten hidup di branch git. Jadi semua yang kamu simpan melewati git. Dan git :
-- tidak cocok untuk file biner besar (image Docker 2 GB di git? lupakan)
-- punya batas 100 MB per file di GitHub (hard limit, tidak bisa push lebih)
+Disk persisten hidup di branch git. Jadi semua yang kamu simpan lewat git. Dan git :
+- menangani buruk berkas biner besar (image Docker 2 GB di git? lupakan)
+- punya batas 100 MB per berkas di GitHub (batas keras, tidak bisa push lebih)
 - merekomendasikan tetap di bawah ~5 GB per repo
 
-Jadi kalau kamu `npm install` project dengan 500 MB `node_modules`, atau build sesuatu yang menghasilkan biner berat, push ke `filesystem` akan sangat lambat atau bahkan gagal total.
+Jadi kalau kamu `npm install` proyek dengan 500 MB `node_modules`, atau kalau kamu build proyek yang membangkitkan biner berat, push ke `filesystem` akan entah ngadat parah, atau gagal total.
 
-`git commit --amend` membantu (satu commit, tidak ada history yang membengkak), tapi tidak mengubah fakta bahwa file 200 MB tidak akan pernah berhasil.
+`git commit --amend` membantu (satu commit saja, tanpa riwayat yang menggembung), tapi tidak mengubah fakta bahwa berkas 200 MB tidak akan pernah lewat.
 
-Intinya : **ini bekerja sangat baik untuk kode, konfigurasi, file kecil. Tidak bekerja untuk menyimpan data besar atau artefak biner.** Harus diingat saat melakukan sesuatu di session.
+Intinya : **ini bekerja super untuk kode, config, berkas kecil. Tidak bekerja untuk menyimpan data besar atau artefak biner.** Harus diingat tentang apa yang kamu lakukan di sesimu.
 
 ### Ini bukan snapshot sistem lengkap
 
-Nuansa penting lainnya : branch `filesystem` menyimpan **workspace** (folder repo), bukan seluruh sistem.
+Nuansa penting lain : branch `filesystem` menyimpan **workspace** (folder repo), bukan seluruh sistem.
 
-Kalau kamu `apt install htop`, biner-nya masuk ke `/usr/bin/htop`, yang DI LUAR workspace. Jadi tidak akan DISIMPAN. Di run berikutnya, harus install ulang.
+Kalau kamu melakukan `apt install htop`, binernya masuk ke `/usr/bin/htop`, yang DI LUAR workspace. Jadi ia TIDAK akan disimpan. Di run berikutnya, harus menginstal ulang.
 
-Itulah kenapa ada cache APT dan `prestart.sh` : untuk menyiapkan ulang environment sistem setiap startup, karena hanya workspace yang bertahan.
+Makanya kita punya cache APT dan `prestart.sh` : untuk menyiapkan ulang lingkungan sistem di setiap startup, karena hanya workspace yang bertahan.
 
-Kalau kamu ingin installasi kamu bertahan, harus taruh di workspace (misalnya, install di folder lokal daripada di sistem). Ini gaya olahraga yang harus dibiasakan.
+Kalau kamu ingin instalasimu bertahan, harus menaruhnya di workspace (misalnya, menginstal di folder lokal alih-alih sistem). Ini senam yang perlu diintegrasikan.
 
 ---
 
-## VPS gratis vs VPS beneran : perbandingan
+## VPS gratis vs VPS sungguhan : pertandingan
 
-| | repo-to-vps | VPS Beneran (5€/bulan) |
+| | repo-to-vps | VPS sungguhan (5€/bulan) |
 |---|---|---|
 | **Harga** | 0€ | ~5-10€/bulan |
-| **Uptime** | 6 jam, harus restart | 24/7 |
-| **Disk** | branch git, file kecil | SSD beneran, beberapa GB |
-| **RAM** | ~7 GB (besar!) | 1-2 GB biasanya |
+| **Uptime** | 6 jam, harus dijalankan ulang | 24/7 |
+| **Disk** | branch git, berkas kecil | SSD sungguhan, beberapa GB |
+| **RAM** | ~7 GB (murah hati!) | 1-2 GB seringnya |
 | **CPU** | 2-4 core lumayan | 1-2 vCPU |
-| **Setup** | clone template | konfigurasi manual |
+| **Setup** | clone template | config manual |
 | **Persistensi** | workspace saja | sistem lengkap |
-| **Legitimasi** | batas Syarat Ketentuan | 100% bersih |
+| **Legitimasi** | batas CGU | 100% bersih |
 
-Lucunya, dari segi spek mentah (RAM, CPU), runner GitHub seringkali LEBIH BAIK daripada VPS 5€. Tapi uptime 6 jam dan persistensi terbatas di workspace, inilah yang menjadikannya mainan hacker, bukan server beneran.
+Poin menariknya adalah dari sisi spek mentah (RAM, CPU), runner GitHub sering LEBIH BAIK daripada VPS 5€. Tapi uptime 6 jam dan persistensi terbatas pada workspace, itulah yang menjadikannya mainan hacker, bukan server sungguhan.
 
-Untuk belajar, testing, debugging Linux cepat dalam environment yang bisa dipulihkan? Sempurna. Untuk host sesuatu yang serius? Ambil VPS beneran.
+Untuk belajar, menguji, men-debug sistem Linux cepat di lingkungan yang bisa dipulihkan? Sempurna. Untuk menghosting sesuatu yang serius? Ambil VPS sungguhan.
 
-Tapi untuk environment Linux sementara yang bisa kamu restore kapan saja? Ini luar biasa.
-
----
-
-## Pattern di balik semua ini
-
-Kalau kamu lihat dari jauh, repo-to-vps dan bot email (artikelku yang lain) didasari ide yang sama :
-
-> **Git bukan hanya version control. Ini adalah sistem penyimpanan persisten, gratis, versioned, bisa diakses via API.**
-
-Begitu kamu punya sistem stateless (GitHub Actions, Worker, fungsi serverless) dan kamu ingin menjaga state antar eksekusi, git bisa berfungsi sebagai "disk".
-
-- Bot email menyimpan `lastId` di git tag.
-- repo-to-vps menyimpan seluruh filesystem di branch git.
-
-Pattern sama, dua skala. Satu nilai di satu sisi, satu disk di sisi lain.
-
-Dan `git commit --amend` + force-push adalah teknik umumnya : **kamu menyimpan satu commit yang merepresentasikan state terkini, ditimpa setiap update.**
-
-Ini tidak dirancang untuk itu. Tapi berhasil. Dan gratis.
+Tapi untuk lingkungan Linux sementara yang bisa kamu pulihkan sesukamu? Ini gila bagusnya.
 
 ---
 
-**3 hal yang perlu diingat :**
+## Pola di balik semuanya
 
-1. **Branch git = hard disk persisten** -- Simpan filesystem di branch khusus, restore saat startup, dan kamu punya state yang bertahan dari mesin disposable.
+Kalau kamu mundur selangkah, repo-to-vps dan bot email (artikel saya yang lain) bersandar pada ide yang sama :
 
-2. **inotify + git = autosave real-time** -- `inotifywait` memantau perubahan di level kernel dan push ke git secara instan. Dengan `git commit --amend` untuk menjaga satu commit yang bersih.
+> **Git bukan sekadar pengelola versi. Ini sistem penyimpanan persisten, gratis, berversi, bisa diakses lewat API.**
 
-3. **tmate mengubah runner menjadi VPS** -- SSH live di mesin GitHub Actions, dengan auto-restart dan reconnect satu perintah via API GitHub.
+Begitu kamu punya sistem stateless (GitHub Actions, Worker, fungsi serverless) dan ingin menjaga keadaan antara dua eksekusi, git bisa berfungsi sebagai "disk".
 
-Git sebagai hard disk, episode kedua. Kayaknya aku akan berakhir menyimpan semuanya di branch git xD
+- Bot email menyimpan `lastId` di tag git.
+- repo-to-vps menyimpan filesystem utuh di branch git.
+
+Pola yang sama, dua skala. Satu nilai di satu sisi, satu disk di sisi lain.
+
+Dan `git commit --amend` + force-push adalah teknik umumnya : **kamu menjaga satu commit yang mewakili keadaan saat ini, ditimpa di setiap pembaruan.**
+
+Ini tidak dibuat untuk itu. Tapi berhasil. Dan gratis.
+
+---
+
+**3 poin yang perlu diingat :**
+
+1. **Satu branch git = satu hard disk persisten** -- Simpan filesystem-mu di branch khusus, pulihkan saat startup, dan kamu punya keadaan yang bertahan dari mesin sekali pakai.
+
+2. **inotify + git = autosave waktu nyata** -- `inotifywait` mengawasi perubahan di tingkat kernel dan push ke git seketika. Dengan `git commit --amend` untuk menjaga satu commit bersih.
+
+3. **tmate mengubah runner menjadi VPS** -- SSH live di mesin GitHub Actions, dengan restart otomatis dan penyambungan ulang dalam satu perintah lewat API GitHub.
+
+Git sebagai hard disk, episode kedua. Saya rasa saya akan berakhir menyimpan segalanya di branch git

@@ -9,7 +9,7 @@ tags:
   - ai
   - python
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "cmCK4Jj4/uQgFeGRh7rSAWuQBm05BlxOTNZGu3Q2vgyZdrpWTi6j05xGkuS+aB+t5RgtZBpFS7J1pVELDJ9evw=="
+author_sig: "kamu2jXpUrIWQLy1ReTtLByautY9mJmd8L2AJWiv22A4efuItcTQ6m5vEhRl/TbnUItC1RypGWcpPYJxiTRYbg=="
 ---
 
 ## บทนำ

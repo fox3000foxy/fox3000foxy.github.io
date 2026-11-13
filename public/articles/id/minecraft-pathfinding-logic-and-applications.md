@@ -1,36 +1,36 @@
 ---
-title: Logika Pathfinding Minecraft dan Aplikasinya
-description: Bagaimana algoritma A*, malus blok, dan POI memungkinkan kita
-  mengontrol, memprediksi, dan mengeksploitasi pergerakan mob -- dari redstone
-  nirkabel hingga farm yang dioptimalkan.
+title: Logika pathfinding Minecraft dan penerapannya
+description: Bagaimana algoritma A*, malus blok dan POI memungkinkan
+  mengendalikan, memprediksi dan mengeksploitasi pergerakan mob -- dari redstone
+  tanpa kabel hingga peternakan yang dioptimalkan.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "ek6Aw39k5GxIWt4Esbv2CL89yKFkqMSq3/qbheG5TH2aOGsZRInR9XCRjKPv0igchVDlXhVsa43Ub6TwL+BZDQ=="
+author_sig: "3T0DHyIEOJrQpto3mh2wA6Q4FAMyYX28YJSISWLyc3qZVoQaJl2wg8Fmrf9JUafCvKepAFeG02WP8myLWJiJkw=="
 ---
 
 ## Pendahuluan
 
-Aku menghabiskan berjam-jam melihat domba menabrak tembok.
+Saya menghabiskan berjam-jam menonton domba menabrak tembok.
 
-Dan jujur? Investasi terbaik dalam hidupku xD
+Dan sejujurnya? Investasi terbaik dalam hidup saya.
 
-Karena semakin kamu lihat mob-mob ini, semakin kamu sadar bahwa mereka tidaklah acak. Setiap gerakan dikodekan, bisa diprediksi, dan yang terpenting -- bisa dieksploitasi sepenuhnya. Aku akhirnya menyelami kode sumber Minecraft untuk benar-benar memahami cara kerja pathfinding, dan yang kutemukan adalah kamu bisa benar-benar mengontrol pikiran mob. Maksudku, memaksa mereka pergi ke mana KAMU mau, bukan ke tempat yang diputuskan secara acak.
+Karena makin kamu menonton mob ini, makin kamu sadar mereka sama sekali tidak acak. Setiap gerakan dikode, bisa diprediksi, dan terutama sepenuhnya bisa dirusak. Saya akhirnya menyelam ke kode sumber Minecraft untuk paham tepat cara kerja pathfinding, dan yang saya temukan adalah kamu secara harfiah bisa mind-control mob. Maksudnya, memaksa mereka pergi ke tempat KAMU mau, bukan ke tempat yang diputuskan acak.
 
-Panduan ini adalah semua yang kupelajari saat menyelidikinya. AI, algoritma A*, malus tersembunyi, eksploitasi yang bisa kamu pakai di survival. Siapkan beliungmu.
+Panduan ini adalah semua yang saya pelajari dengan mengobrak-abrik. AI, algoritma A*, malus tersembunyi, exploit yang bisa kamu keluarkan di survival. Siapkan pickaxe-mu.
 
 ---
 
-## Cara kerja AI mob (spoiler: kacau)
+## Cara kerja AI mob (bocoran : ini bodoh)
 
-### Goals
+### Goal
 
-Setiap mob memiliki *goals*. Ini adalah daftar hal yang BISA dia lakukan dan seberapa besar dia INGIN melakukannya. Semakin kecil angkanya, semakin prioritas -- seperti daftar tugas versi chaos.
+Setiap mob punya *goal*. Ini daftar aksi yang BISA ia lakukan dan seberapa INGIN ia melakukannya. Makin kecil angkanya, makin prioritas, seperti daftar tugas versi chaos.
 
 ```java
 protected void registerGoals() {
@@ -41,15 +41,15 @@ protected void registerGoals() {
 }
 ```
 
-Pernah lihat zombie mengabaikan telur penyu untuk mengejarmu? Itu alasannya: `ZombieAttackTurtleEggGoal` punya prioritas 4, sedangkan `ZombieAttackGoal` (hal yang menyuruhnya memakan mukamu) ada di prioritas 2.
+Pernah lihat zombie mengabaikan telur penyu untuk mengejarmu? Inilah kenapanya : `ZombieAttackTurtleEggGoal` prioritasnya 4, sedangkan `ZombieAttackGoal` (goal yang menyuruhnya memakan mukamu) prioritasnya 2.
 
-Ya, zombie lebih memilih memakanmu daripada memecahkan telur. Indahnya cinta xD
+Ya, zombie lebih suka memakanmu daripada menghancurkan telur. Indahnya cinta.
 
-Goal yang benar-benar menarik perhatian kita adalah `WaterAvoidingRandomStrollGoal`, prioritas 7. Goal "nggak ada kerjaan jadi jalan-jalan random". Di sinilah kekacauan dimulai.
+Goal yang benar-benar menarik buat kita adalah `WaterAvoidingRandomStrollGoal`, prioritas 7. Goal "saya tidak ada kerjaan jadi jalan ngawur". Di sinilah segalanya menjadi menarik.
 
-### Pergerakan (atau "bagaimana random walk punya 1 dari 60 kesempatan untuk terjadi")
+### Gerakan (atau "cara random march punya 1 peluang dari 60 untuk terjadi")
 
-Setiap tick (setiap 0.05 detik), game memanggil `canUse()` untuk melihat apakah mob mau bergerak. 1 dari 60 kesempatan setiap tick. Benar-benar kacau desainnya, dan aku suka itu.
+Setiap tick (setiap 0.05 detik), permainan memanggil `canUse()` untuk melihat apakah mob berkenan bergerak. 1 peluang dari 60 di setiap tick. Desain yang benar-benar bodoh, dan saya suka itu.
 
 ```java
 public boolean canUse() {
@@ -78,9 +78,9 @@ public boolean canUse() {
 }
 ```
 
-Jadi singkatnya: kalau kamu naik di atas mob -> tidak, kalau mob tidak melakukan apa-apa selama 5 detik -> tidak, kalau random bilang tidak -> tidak. Game ini BENAR-BENAR tidak ingin mob bergerak.
+Jadi ringkasnya : kalau kamu menunggangi mob -> tidak, kalau mob tidak melakukan apa pun selama 5 detik -> tidak, kalau random bilang tidak -> tidak. Permainan BENAR-BENAR tidak ingin mob bergerak.
 
-Tapi saat dia bergerak, `getPosition()` mengambil alih:
+Tapi ketika ia bergerak, `getPosition()` mengambil alih :
 
 ```java
 protected Vec3 getPosition() {
@@ -95,13 +95,13 @@ protected Vec3 getPosition() {
 }
 ```
 
-Lihat dua angka di akhir: itu radius XZ dan radius Y. Di air, mob mencari lebih jauh (15 bukan 10). Kalau tidak menemukan daratan, dia fallback ke `super.getPosition()` yang menerima air. **Hasilnya: mob INGIN keluar dari air.** Itulah kenapa hewan-hewanmu berenang seperti gila ke tepi.
+Lihat dua angka di akhir : itu radius XZ dan radius Y. Di air, mob mencari lebih jauh (15 alih-alih 10). Kalau ia tidak menemukan daratan, ia jatuh kembali ke `super.getPosition()` yang menerima air. **Hasilnya : mob INGIN keluar dari air.** Makanya hewanmu berenang seperti orang gila ke tepi.
 
-Detail kecil yang menarik: ada 0.1% kemungkinan mob mengambil `super.getPosition()` daripada `LandRandomPos`. Satu banding seribu. Mojanglah xD
+Detail kecil yang renyah : secara harfiah ada peluang 0.1% mob mengambil `super.getPosition()` alih-alih `LandRandomPos`. Satu per seribu. Khas Mojang.
 
-### LandRandomPos: optimasi jelek yang mengubah segalanya
+### LandRandomPos : optimasi busuk yang mengubah segalanya
 
-Ini adalah tahap FAVORITKU. Kebodohan teknis paling indah yang membuat pathfinding bisa dieksploitasi.
+Ini tahap FAVORIT saya. Kebodohan teknis terindah yang membuat pathfinding bisa dieksploitasi.
 
 ```java
 public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<BlockPos> $$3) {
@@ -114,17 +114,17 @@ public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<
 }
 ```
 
-`movePosUpOutOfSolid`. Namanya sudah menjelaskan semuanya. Jika posisi yang dipilih ada di dalam blok solid, game mendorongnya ke atas sampai berada di udara.
+`movePosUpOutOfSolid`. Namanya mengatakan semuanya. Kalau posisi yang dipilih ada di blok padat, permainan mendorongnya ke atas sampai berada di udara.
 
-Ini adalah optimasi: daripada membuang waktu mengabaikan posisi di bawah tanah, game mendorongnya ke permukaan. Pintar? Ya. Tapi ini menciptakan bias yang gila: **mob lebih suka tempat tinggi**.
+Ini optimasi : alih-alih membuang waktu mengabaikan posisi di bawah tanah, permainan menaikkannya ke permukaan. Cerdik? Ya. Tapi itu menciptakan bias gila : **mob lebih suka ketinggian**.
 
-Bayangkan. Kamu punya banyak blok di bawah permukaan, game menghasilkan 10 posisi acak. Yang ada di dalam blok didorong ke atas. Area padat (di bawah bukit) menghasilkan lebih banyak posisi valid daripada area kosong. Hasilnya: mob secara statistik lebih sering pergi ke bukit.
+Bayangkan. Kamu punya banyak blok di bawah permukaan, permainan membangkitkan 10 posisi acak. Yang ada di blok didorong ke atas. Zona padat (di bawah bukit) menghasilkan lebih banyak posisi valid daripada zona berongga. Hasilnya : mob secara statistik lebih sering pergi ke bukit.
 
-Percayalah, kita akan mengeksploitasi ini dalam 2 menit.
+Percaya saya, kita akan merusaknya dalam 2 menit.
 
-### Seleksi: kontes blok terbaik
+### Seleksi : kontes blok terbaik
 
-10 posisi, satu pemenang, kontes skor:
+10 posisi, satu pemenang, kontes skor :
 
 ```java
 public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<BlockPos> $$1) {
@@ -144,7 +144,7 @@ public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<Bl
 }
 ```
 
-Posisi dengan skor tertinggi MENANG. Dan kalau kita tahu kriteria skornya, kita bisa membuat posisi yang kita inginkan menang. Ini seperti mengatur kecurangan pemilu.
+Posisi dengan skor terbaik MENANG. Dan kalau kita tahu kriteria skor, kita bisa membuat posisi yang kita mau menang. Ini seperti mencurangi pemilu.
 
 ---
 
@@ -154,67 +154,67 @@ Setiap mob punya selera berbeda. Dan itu mengubah segalanya.
 
 | Mob | Suka ini |
 | --- | --- |
-| **Hewan** (sapi, domba, babi) | Rumput dan cahaya (hipsters) |
-| **Monster** (zombie, skeleton) | Gelap (edgelords) |
+| **Hewan** (sapi, domba, babi) | Rumput dan cahaya (hipster) |
+| **Monster** (zombie, skeleton) | Gelap (edgelord) |
 | **Penyu** | Air, kalau tidak pasir, kalau tidak cahaya |
-| **Hoglin** | `crimson_nylium`; benci `warped_fungus` |
-| **Strider** | Hanya lava. Bukan yang LAIN. |
+| **Hoglin** | `crimson_nylium` ; benci `warped_fungus` |
+| **Strider** | Hanya lava. TIDAK yang lain. |
 | **Silverfish** | Blok yang bisa diinfestasi (logis) |
-| **Guardian** | Air + cahaya (para snob) |
-| **Mooshroom** | Mycelium + cahaya (jamur) |
+| **Guardian** | Air + cahaya (si snob) |
+| **Mooshroom** | Miselium + cahaya (jamur) |
 | **Lebah** | Udara. Ya, mereka lebih suka UDARA. |
 
 ```java
-// Hewan: lihat ke bawah, kalau rumput, skor maks
+// Hewan : melihat ke bawah, kalau rumput, skor maks
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return $$1.getBlockState($$0.below()).is(Blocks.GRASS_BLOCK) ? 10.0F : $$1.getPathfindingCostFromLightLevels($$0);
 }
 
-// Monster: kebalikannya
+// Monster : kebalikannya persis
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return -$$1.getPathfindingCostFromLightLevels($$0);
 }
 ```
 
-Monster tuh literally "kalau terang, skor negatif, aku pergi ke lain tempat". Mereka CEMBERUT sama cahaya xD
+Maksudnya monster itu secara harfiah "kalau terang, skor negatif, saya pergi ke tempat lain". Mereka MELOTOTI cahaya.
 
-Jadi kamu bisa -- literally -- memandu hewanmu dengan rumput dan cahaya, dan monstermu dengan kegelapan. Ini konyol sekaligus brilian.
+Jadi kamu bisa, secara harfiah, menuntun hewanmu dengan rumput dan cahaya, dan monstermu dengan gelap. Ini bodoh sekaligus jenius.
 
 ---
 
-## Algoritma A* di Minecraft (rumus rahasia)
+## Algoritma A* di Minecraft (formula rahasia)
 
-Minecraft menggunakan algoritma A* (A-star) untuk pathfinding. Tapi Mojang menambahkan sentuhannya:
+Minecraft memakai algoritma A* (A-star) untuk pathfinding. Tapi Mojang membubuhkan capnya :
 
 ```
 f(n) = g(n) + 1.5 × h(n)
 ```
 
-- **g(n)** = jarak yang sudah ditempuh (1 per blok, ~1.41 secara diagonal)
+- **g(n)** = jalan yang sudah ditempuh (1 per blok, ~1.41 secara diagonal)
 - **h(n)** = jarak garis lurus
-- **1.5** = karena Mojang suka hal-hal yang sedikit rusak
+- **1.5** = karena Mojang suka nilai yang agak rusak
 
-Normalnya A* menggunakan `f(n) = g(n) + h(n)`. MOJANG MENAMBAHKAN FAKTOR 1.5. Kenapa? Agar algo lebih cepat menuju tujuan dan memangkas lebih sedikit cabang pencarian. Hasilnya: jalur yang ditemukan "cukup bagus" tapi tidak selalu yang terbaik. Ini A* yang sedikit mabuk.
+Normalnya A* memakai `f(n) = g(n) + h(n)`. MOJANG MENAMBAHKAN FAKTOR 1.5. Kenapa? Supaya algo lebih cepat menuju tujuan dan memangkas lebih sedikit cabang pencarian. Hasilnya : jalan yang ditemukan "bagus" tapi tidak selalu terbaik. Ini A* yang agak mabuk.
 
 ```mermaid
 flowchart LR
-    A[Node awal] --> B{Tetangga untuk\ndievaluasi?}
-    B -->|Ya| C[Hitung f = g + 1.5×h\nuntuk setiap tetangga]
-    C --> D[Pilih tetangga\ndengan f terkecil]
-    D --> E{Tujuan\ntercapai?}
-    E -->|Tidak| B
-    E -->|Ya| F[Jalur ditemukan!]
-    B -->|Tidak| G[Tidak ada jalur\nyang mungkin]
-    
+    A[Nœud départ] --> B{Voisins à\névaluer ?}
+    B -->|Oui| C[Calculer f = g + 1.5×h\npour chaque voisin]
+    C --> D[Memilih tetangga\ndengan f terkecil]
+    D --> E{Destination\natteinte ?}
+    E -->|Non| B
+    E -->|Oui| F[Chemin trouvé !]
+    B -->|Non| G[Aucun chemin\npossible]
+
     style F color:#4caf50
     style G color:#f44336
 ```
 
-Detail penting: **mob hanya bisa pathfinding dalam 16 blok** (*follow range*-nya). Jika tujuan terlalu jauh, dia memilih blok terdekat yang bisa DIA capai. Artinya kamu bisa membuat monolit di luar jangkauan, dan mob akan pathfinding menuju blok terdekat yang mendekatkannya ke monolit itu -- membuat pergerakannya sepenuhnya bisa diprediksi.
+Detail penting : **mob hanya bisa pathfinding sejauh 16 blok** (*follow range*-nya). Kalau tujuannya terlalu jauh, ia memilih blok terdekat yang BISA ia capai. Artinya kamu bisa membuat monolit di luar jangkauan, dan mob akan pathfinding ke blok terdekat yang mendekatkannya ke monolit itu, yang membuat gerakannya sepenuhnya bisa diprediksi.
 
-### Dua eksploitasi yang merusak game
+### Dua exploit yang merusak permainan
 
-#### 1. Block updates = recalculation paksa
+#### 1. Pembaruan blok = komputasi ulang paksa
 
 ```java
 public boolean shouldRecomputePath(BlockPos $$0) {
@@ -232,26 +232,26 @@ public boolean shouldRecomputePath(BlockPos $$0) {
 }
 ```
 
-Setiap update blok di dekat jalur mob memaksa recalculation A* dengan cooldown 1 detik. Kamu pasang clock 1 detik di samping mob, dan dia menghitung ulang jalurnya TERUS-MENERUS. Ini setara dengan memasang GPS yang di-reset setiap detik.
+Setiap pembaruan blok di dekat jalan mob memaksa komputasi ulang A* dengan cooldown 1 detik. Kamu menaruh jam 1 detik di samping mob, dan ia menghitung ulang jalannya TERUS-MENERUS. Ini setara menaruh GPS yang ke reset setiap detik.
 
-Dan kalau kamu lakukan ini dengan 50 mob sekaligus? Lag city. RIP TPS.
+Dan kalau kamu melakukan itu dengan 50 mob bersamaan? Kota lag. RIP TPS.
 
 #### 2. Malus blok (Pathfinding Malice)
 
-Blok tertentu menakut-nakuti mob. Secara harfiah. Setiap blok memiliki biaya terkait, yang didefinisikan oleh enum:
+Beberapa blok menakuti mob. Secara harfiah. Setiap blok punya biaya terkait, didefinisikan oleh enumerasi :
 
 | Blok / Kondisi | Malus |
 | --- | --- |
-| **Blok madu** | +8 untuk melewati |
-| **Bubuk salju** | Tidak bisa dilalui |
-| **Pintu tertutup** | Tidak bisa dilalui |
-| **Api** | +16 untuk melewati, +8 untuk menyusuri |
-| **Hewan & Villageois** | Api = -1 (NGGAK) |
-| **Kaktus / Sweet berry** | Tidak bisa dilalui; berdekatan = +8 |
-| **Air** | +8 untuk melewati atau menyusuri |
-| **Magma** | +8 untuk menyusuri (aduh) |
+| **Blok madu** | +8 untuk dilewati |
+| **Salju bubuk** | Tidak bisa dilewati |
+| **Pintu tertutup** | Tidak bisa dilewati |
+| **Api** | +16 untuk dilewati, +8 untuk disusuri |
+| **Hewan dan Villager** | Api = -1 (TIDAK) |
+| **Kaktus / buah berry manis** | Tidak bisa dilewati ; bersebelahan = +8 |
+| **Air** | +8 untuk dilewati atau disusuri |
+| **Magma** | +8 untuk disusuri (aduh) |
 
-Hewan bahkan lebih ekstrem:
+Hewan bahkan lebih ekstrem :
 
 ```java
 protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
@@ -261,63 +261,63 @@ protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
 }
 ```
 
-DAMAGE_FIRE di -1.0F, itu literally "terlarang". Seekor hewan lebih memilih menjatuhkan diri ke jurang daripada melewati api. Fiuh.
+DAMAGE_FIRE -1.0F itu secara harfiah "dilarang". Hewan lebih suka menjatuhkan diri ke kehampaan daripada melewati api. Fiuh.
 
-### Latihan: kontes jalur besar
+### Latihan : kontes besar jalan
 
-Bayangkan seorang villageois yang harus memilih antara beberapa jalur.
+Bayangkan villager yang harus memilih antara beberapa jalan.
 
-- **Jalur A**: 15 blok tapi 6 blok menyusuri air (+8 setiap)
-- **Jalur B**: 18 blok dengan 2 blok air (+8) dan 1 blok berdekatan air (+8)
-- **Jalur C**: 14 blok lurus... tapi ada api -> TIDAK BISA DILALUI untuk villageois
-- **Jalur D**: 16 blok dengan 1 blok berdekatan magma (+8) + 1 blok berdekatan madu (+8)
-- **Jalur E**: 25 blok tapi kaktus di mana-mana (+8 di mana-mana) -> 90.82 total biaya LOL
+- **Jalan A** : 15 blok tapi 6 blok menyusuri air (+8 tiap)
+- **Jalan B** : 18 blok dengan 2 blok air (+8) dan 1 blok bersebelahan air (+8)
+- **Jalan C** : 14 blok lurus... tapi dengan api -> TIDAK BISA DILEWATI bagi villager
+- **Jalan D** : 16 blok dengan 1 blok bersebelahan magma (+8) + 1 blok bersebelahan madu (+8)
+- **Jalan E** : 25 blok tapi kaktus di mana-mana (+8 di mana-mana) -> biaya total 90.82
 
-Hitungan mental:
+Hitungan mental :
 
-- Jalur A : 15 blok + 6×8 untuk air = 15 + 48 = **63** ... tapi ada 1.5×jarak yang harus ditambahkan. Mari kita hitung yang bener.
-- Jalur B: lebih panjang tapi lebih sedikit malus. Total biaya = jarak kumulatif + malus.
-- Jalur D: magma dan madu menumpuk malusnya.
+- Jalan A : 15 blok + 6×8 untuk air = 15 + 48 = **63** ... tapi ada 1.5×jarak yang ditambahkan. Mari lakukan perhitungan sungguhan.
+- Jalan B : lebih panjang tapi lebih sedikit malus. Biaya total = jarak kumulatif + malus.
+- Jalan D : magma dan madu menumpuk malusnya.
 
-Pemenangnya biasanya **Jalur B**: memutar lebih menguntungkan karena air MAHAL.
+Pemenangnya sering **Jalan B** : memutarnya menguntungkan karena air itu MAHAL.
 
-Seorang villageois pada dasarnya adalah kalkulator biaya dengan kaki xD
+Villager pada dasarnya kalkulator biaya berkaki.
 
 ### Setiap mob punya seleranya
 
-Seorang villageois: "api? NGGAK MAU DONG BYE"
-Zombie: "api? OK boomer *lewat sambil terbakar*"
+Villager : "api? TIDAK MAKASIH DADAH"
+Zombie : "api? OK boomer *melewati sambil terbakar*"
 
-Kamu literally punya rute yang diambil beberapa mob dan yang lain tidak. Kamu bisa membuat jalan tol villageois di mana zombie hangus terbakar.
+Kamu secara harfiah punya jalan yang diambil mob tertentu dan tidak oleh lainnya. Kamu bisa membuat jalan tol villager di mana zombie terbakar.
 
 ---
 
-## Villageois: kekacauan tertinggi
+## Para villager : kekacauan pamungkas
 
-Oke, villageois. Ini adalah hal yang PALING tidak dipahami di seluruh Minecraft. Tapi begitu kamu paham kodenya, kamu sadar bahwa mereka adalah mesin yang bisa diprediksi dengan jam kerja kantoran.
+Oke, para villager. Ini sistem yang PALING tidak dipahami di seluruh Minecraft. Tapi begitu kamu mengantongi kodenya, kamu sadar mereka adalah mesin yang bisa diprediksi dengan jam kantor.
 
 ### Sensor dan memori
 
-9 sensor, berjalan setiap 20 tick (1 detik). Masing-masing mengamati radius di sekitar villageois dan menyimpan hasilnya di memori. Villageois melihat segalanya, mengingat segalanya, dan bertindak berdasarkan itu.
+9 sensor, yang berjalan setiap 20 tick (1 detik). Masing-masing memindai radius di sekitar villager dan menyimpan hasilnya dalam memori. Villager melihat semuanya, mengingat semuanya, dan bertindak menurut itu.
 
-Kayak: "apakah ada musuh? item di tanah? pemain untuk diajak bicara?" -- dia ngecek SEMUANYA.
+Maksudnya : "apakah ada musuh? item di tanah? pemain yang bisa diajak bicara?" Ia memeriksa SEMUANYA.
 
-### Package (fase hariannya)
+### Paket (fase harinya)
 
-Otak villageois adalah package aktivitas yang aktif tergantung waktu:
+Otak villager adalah paket aktivitas yang aktif menurut jam :
 
-| Package | Jadwal | Villageois... |
+| Paket | Jadwal | Villager... |
 | --- | --- | --- |
 | **Core** | 24 jam | Membuka pintu, berenang (80% waktu), dan MEMPEROLEH POI |
-| **Work** | 8-15 | "Aku mau kerja" -- berjalan ke tempat kerjanya |
-| **Meet** | 15-17 | "Ngopi!" -- pergi ke bell, ngobrol |
-| **Rest** | 18-6 | "Harus tidur" -- pergi ke tempat tidur |
-| **Idle** | 6-8, 17-18 | "Santai" -- jalan-jalan, bikin bayi, lompat di tempat tidur |
-| **Panic** | Terluka/hostile | "TOLONG" -- KABUR |
+| **Work** | 8.00-15.00 | "Saya mau kerja" -- berjalan ke posnya |
+| **Meet** | 15.00-17.00 | "Apéro !" -- pergi ke lonceng, mengobrol |
+| **Rest** | 18.00-6.00 | "Harus tidur" -- pergi ke tempat tidur |
+| **Idle** | 6.00-8.00, 17.00-18.00 | "Saya bengong" -- berkeliaran, membuat bayi, melompat di tempat tidur |
+| **Panic** | Luka/musuh | "TOLONG" -- KABUR |
 
-Package **Panic** adalah satu-satunya yang bisa menginterupsi SEMUA yang lain. Bahkan jika villageois sedang tidur atau kerja, kalau ada zombie, PANIK TOTAL.
+Paket **Panic** satu-satunya yang bisa menginterupsi SEMUA lainnya. Bahkan kalau villager sedang tidur atau kerja, kalau ada zombie, PANIK UMUM.
 
-### Acquire POI: hal yang memungkinkan redstone nirkabel
+### Acquire POI : hal yang memungkinkan redstone tanpa kabel
 
 ```java
 Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithType(
@@ -325,53 +325,51 @@ Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithT
 )
 ```
 
-`Acquire POI` memindai dalam radius 48 blok semua POI (points of interest). Dia menyimpan 5 yang terdekat, memeriksa apakah jalur ada, dan memperoleh yang pertama bisa dijangkau.
+`Acquire POI` memindai dalam radius 48 blok semua POI (point of interest). Ia menyimpan 5 terdekat, memeriksa bahwa jalan ada, dan memperoleh yang pertama bisa diakses.
 
-Setiap POI memiliki jumlah slot terbatas:
-- **Workstation**: 1 slot
-- **Tempat tidur**: 1 slot
-- **Bell**: 32 slot
+Setiap POI punya jumlah slot terbatas :
+- **Pos kerja** : 1 slot
+- **Tempat tidur** : 1 slot
+- **Lonceng** : 32 slot
 
-Hal yang GILA: **slot dipesan saat akuisisi, BUKAN saat tiba**. Seorang villageois bisa mengunci composter dari ujung map yang lain, tanpa pernah mencapainya.
+Poin GILA : **slot dicadangkan pada momen akuisisi, BUKAN saat tiba**. Villager bisa mengunci composter dari seberang peta, tanpa pernah mencapainya.
 
-Kamu paham potensinya?
+Kamu menangkap kekuatannya?
 
-### Redstone nirkabel. Ya, NIRKABEL.
+### Redstone tanpa kabel. Ya, TANPA KABEL.
 
-1. Kamu taruh villageois di minecart dengan jalur menuju composter
-2. Dia memperoleh composter (slot terambil, tidak ada yang bisa menggunakannya)
-3. Villageois terlalu jauh untuk mengkliknya -- bone meal tetap ada
-4. Kamu BAWA villageois ini ke mana saja di dunia, dia tetap memegang slot
-5. Saat kamu ingin mengaktifkan barangmu, kamu B U N U H villageois itu
-6. Slot terbebas, villageois lain memperoleh composter, mengambil bone meal
-7. BLOCK UPDATE -> sirkuit redstone mana pun aktif
+1. Kamu menaruh villager di minecart dengan jalan ke composter
+2. Ia memperoleh composter (slot diambil, tidak ada yang bisa memakainya)
+3. Villager terlalu jauh untuk mengkliknya, bone meal tetap di sana
+4. Kamu MEMBAWA villager ini ke mana saja di dunia, ia menyimpan slotnya
+5. Ketika kamu ingin mengaktifkan barangmu, kamu B U N U H villager
+6. Slot bebas, villager lain memperoleh composter, mengambil bone meal
+7. PEMBARUAN BLOK -> rangkaian redstone apa pun aktif
 
-Kamu literally menciptakan sinyal redstone nirkabel, yang bisa ditransmisikan di seluruh dunia, tanpa perlu chunk load sama sekali di sepanjang jalur. Kamu bisa menghubungkannya ke ender pearl stasis chamber, membuatmu teleport dari mana saja dengan membunuh villageois.
+Kamu secara harfiah menciptakan sinyal redstone tanpa kabel, bisa ditransmisikan ke seluruh dunia, dengan nol chunk load yang diperlukan di jalan. Kamu bisa mencoloknya ke ender pearl stasis chamber, membuatmu diteleportasi dari mana saja dengan membunuh villager.
 
-Penggunaan favoritku? Mini-game "bounty hunter": kamu taruh beberapa villageois dengan composter, pemain harus membunuh villageois yang TEPAT untuk mengaktifkan pintu keluar. Benar-benar wtf sebagai mekanik xD
+Pemakaian favorit saya? Mini-game "pemburu hadiah" : kamu menaruh beberapa villager dengan composter, pemain harus membunuh villager YANG BENAR untuk mengaktifkan keluaran. Ini mekanisme yang benar-benar gila.
 
-### Pathfinding Deadlock (atau "villageois yang freeze selamanya")
+### Deadlock Pathfinding (atau "villager yang freeze selamanya")
 
-Ada bug yang TERLALU bagus antara `Acquire POI` (yang melihat jalur) dan navigasi nyata (yang menolak melewatinya). Ini terjadi ketika blok di atas workstation tidak bisa diinjak. Hasilnya:
+Ada bug yang BAGUS BANGET antara `Acquire POI` (yang melihat jalan) dan navigasi nyata (yang menolak memakainya). Ini terjadi ketika blok di atas pos kerja tidak bisa diinjak. Hasilnya :
 
-- Core package: "aku ingin memperoleh POI"
-- Navigation: "aku tidak bisa berjalan di sana"
-- Hasil: villageois tetap BEKU, selamanya, bergumul dengan dirinya sendiri.
+- Paket core : "saya ingin memperoleh POI"
+- Navigasi : "saya tidak bisa berjalan ke sana"
+- Hasilnya : villager tetap BEKU, selamanya, bertarung dengan dirinya sendiri.
 
-Villageois yang literally beku di tempat, bisa digunakan sebagai dekorasi atau "props" di build. Tank baju besi berdiri? Ya. Penjaga yang tidak bergerak? Ya. Mengerikan? Mungkin. Tapi efektif xD
+Secara harfiah villager yang beku di tempat, bisa dipakai sebagai dekorasi atau sebagai "properti" dalam build. Tank armor stand? Ya. Penjaga yang tidak bergerak? Ya. Mengerikan? Mungkin. Tapi efektif.
 
 ---
 
 ## Kesimpulan
 
-Pathfinding mob Minecraft bukanlah kebetulan. Ini adalah sistem deterministik, berbasis skor, bisa diprediksi DAN bisa dieksploitasi.
+Pathfinding mob Minecraft bukan acak. Ini sistem deterministik, berdasarkan skor, bisa diprediksi DAN bisa dirusak.
 
-**Tiga hal yang perlu diingat:**
+**Tiga poin yang perlu diingat :**
 
-1. **Blok di bawah kaki = bias ketinggian** -- isi atau kosongkan bawah tanah untuk memandu mob
-2. **Malus berbeda untuk setiap mob** -- buat rute yang diambil beberapa mob dan tidak oleh yang lain
-3. **Slot POI dipesan dari jarak jauh** -- redstone nirkabel gratis, teleportasi, semuanya
+1. **Blok di bawah kaki = bias ketinggian** : isi atau kosongkan bawah tanah untuk menuntun mob
+2. **Malus berbeda untuk tiap mob** : buat jalan yang diambil sebagian dan tidak oleh lainnya
+3. **Slot POI dicadangkan dari jauh** : redstone tanpa kabel gratis, teleportasi, semua itu
 
-Kode sumber Minecraft adalah tambang emas mekanik yang kurang dimanfaatkan. Aku menghabiskan berjam-jam membaca Java yang didekompilasi dan jujur? Setiap baris adalah Easter Egg fungsional. Hanya saja yang ini, kamu pakai di survival untuk bikin redstone nirkabel dengan villageois. Game terbaik confirmed.
-
-xD
+Kode sumber Minecraft adalah tambang emas mekanisme yang kurang dieksploitasi. Saya menghabiskan berjam-jam membaca Java yang didekompilasi dan sejujurnya? Setiap baris adalah Easter Egg fungsional. Hanya saja yang ini, kamu pakai di survival untuk membuat redstone tanpa kabel dengan villager. Permainan terbaik terkonfirmasi.

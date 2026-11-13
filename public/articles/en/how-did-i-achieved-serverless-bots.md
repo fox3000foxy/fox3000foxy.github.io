@@ -1,82 +1,82 @@
 ---
-title: "Discord bot 100% serverless: Hono + Cloudflare Workers"
-description: How I replaced a Discord bot that cost me 50€/month with zero euros
-  -- interaction endpoints, Hono, Workers, real-time image rendering, and a full
-  game without WebSocket.
+title: "Discord Bot 100% Serverless: Hono + Cloudflare Workers"
+description: How I replaced a Discord bot that cost me €50/month with
+  zero euros -- interaction endpoints, Hono, Workers, real-time image
+  rendering, and a full game with no WebSocket.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "kR4nguduxOYfvVYdr4wTxjIzuzem/P6zT48X7ZSEHcUAtBvwfHGNjBbnYR0DasOCK1i1kcT4ZKaYIrsp05Zx8g=="
+author_sig: "8SJ5LCFdqBE4EWoMHv6aMZuEj+lfzVoIVylVimYGV9zdAk+SQSv2E7Oan/AGmEtWI4O/tG418DnZH/fYlcUwOQ=="
 ---
 
-## 100% serverless Discord bot: Hono + Cloudflare Workers = 💸 zero
+## Discord bot 100% serverless: Hono + Cloudflare Workers = 💸 zero
 
-I spent a few months running classic Discord bots on my own machine.
+I spent a few months maintaining classic Discord bots on my own machine.
 
-Always-open WebSocket connection. Bot auto-reconnects at 3 AM. Bot crashes because I looked at the sheep wrong. The bill goes up.
+WebSocket connection always open. The bot reconnects by itself at 3am. The bot crashes because I look at sheep the wrong way. The bill piles up.
 
-Then one day I realized: **why keep a connection alive**? Discord can just POST the stuff you care about. You reply, done.
+One day I discovered: **why keep a connection open**? Discord can just POST you the events you care about. You reply, done.
 
-Since 2021, Discord has had **interaction endpoints**.
+Since 2021, Discord offers **interaction endpoints**.
 
-It's just HTTP. No WebSocket. No persistent state. You get a request, you send JSON, that's it. The next request comes on its own.
+It's just HTTP. You work with no WebSocket, no persistent state. You get a request, you send JSON, it's over. The next request arrives on its own.
 
 And the best part: Cloudflare Workers is **free** up to 100k requests/day. For 90% of bots, that's 0€/month.
 
-This article shows you how to build a Discord bot without WebSocket using **Hono** (ultra-light web framework) and **Cloudflare Workers**. I'll show you two real projects: **Nibi** (bot for learning Japanese, TTS, cool) and **Konosuba-RPG** (a _full_ Discord game with real-time image rendering xD).
+This article shows you how to make a Discord bot with no WebSocket using **Hono** (an ultra-light web framework) and **Cloudflare Workers**. I'll show you two real projects: **Nibi** (bot for learning Japanese, TTS, cool) and **Konosuba-RPG** (a _complete_ Discord game with real-time image rendering).
 
-## WebSocket vs. Interaction Endpoints: why it was a bad idea
+## WebSocket vs. Interaction Endpoints: Why It Was a Bad Idea
 
-Imagine a Minecraft world where you gotta keep the connection open even when you're not playing.
+Imagine a Minecraft game where you have to keep the connection open even when you're not playing.
 
-And the server auto-reconnects every time it crashes. You gotta handle timeouts, exponential backoff reconnections, all that shitty boilerplate everyone hates. Just to receive interactions.
+And the server auto-reconnects every time it crashes. You have to handle timeouts, exponential reconnections, all the crap boilerplate we hate. Just to receive interactions.
 
 Interaction endpoints are the opposite. Discord POSTs to your URL. You reply. Done.
 
 If your server crashes? Discord retries 2-3 times and moves on. Zero drama.
 
-**Cost before**: 50€/month on Heroku just to keep a Node process alive.
+**Cost before**: €50/month on Heroku just to keep a Node process alive.
 
 **Cost after**: 0€/month on Cloudflare up to 100k requests/day.
 
-## The architecture: what's it actually about?
+## The Architecture: What Is It Exactly?
 
 Discord POSTs a request to your endpoint.
 
 ```plaintext
-Discord: "Hey! User clicked /ping!"
+Discord: "Hey! The user clicked /ping!"
       ↓
    Your URL (Cloudflare Worker)
       ↓
-   You verify it's really Discord (signature check)
+You check it's really Discord (signature check)
       ↓
-   You parse the interaction type
+You parse the interaction type
       ↓
-   You run the handler
+You run the handler
       ↓
-   You return JSON
+You return JSON
       ↓
-Discord: "Cool, I'll show that to the user"
+Discord: "Cool, I'll display that to the user"
 ```
 
-It's pure HTTP. No magic. No heavy library.
+It's pure HTTP, with a minimal readable stack.
 
-## Hono + Cloudflare Workers: the cheap combo
+## Hono + Cloudflare Workers: The Thrifty Combo
 
-**Hono** is a web framework that weighs 12KB. It runs everywhere: Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... same code everywhere.
+**Hono** is a web framework weighing 12KB. It runs everywhere: Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... the same code everywhere.
 
-Cloudflare Workers is compute at the edge. Your requests hit the nearest server. Response time: \<100ms. Cost: free up to 100k requests/day.
+Cloudflare Workers is edge compute. Your requests land on the closest server. Response time: \<100ms. Cost: free up to 100k requests/day.
 
 The Hono + Cloudflare combo is the perfect match for a Discord bot.
 
-Here's the minimal code for a complete bot:
+Here's the minimal code for a full bot:
 
 ```typescript
 import { Hono } from 'hono';
@@ -85,12 +85,12 @@ import { verifyKey } from 'discord-interactions';
 const app = new Hono();
 
 app.post('/interactions', async (c) => {
-  // 1. Get the headers
+  // 1. Grab the headers
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
   const body = await c.req.text();
 
-  // 2. Verify it's really Discord (not spam)
+  // 2. Check it's really Discord (not spam)
   const isValid = verifyKey(
     body,
     signature,
@@ -102,7 +102,7 @@ app.post('/interactions', async (c) => {
   // 3. Parse what it sent
   const interaction = JSON.parse(body);
 
-  // 4. Reply based on type
+  // 4. Reply by type
   if (interaction.type === 1) {
     // Discord test (PING)
     return c.json({ type: 1 });
@@ -125,9 +125,9 @@ app.post('/interactions', async (c) => {
 export default app;
 ```
 
-Like, 30 lines and it's a working bot.
+30 lines is enough for a working bot.
 
-No `bot.login()`. No event emitter. No callback hell. Just HTTP.
+You forget `bot.login()`, event emitters, and callback hell. You keep only HTTP.
 
 To deploy on Cloudflare:
 
@@ -136,13 +136,13 @@ npm install -D wrangler
 npx wrangler deploy
 ```
 
-Boom. You get a URL like `https://my-bot.workers.dev/interactions`.
+Boom. You have a URL like `https://my-bot.workers.dev/interactions`.
 
-You drop that in the Discord Developer Portal under "INTERACTIONS ENDPOINT URL", and Discord starts sending your interactions there.
+You put that in the Discord Developer Portal under "INTERACTIONS ENDPOINT URL", and Discord starts sending your interactions there.
 
-## Verifying the signature: no fake requests
+## Verifying the Signature: No Fake Requests
 
-Discord signs every request with a public key. If you get a request with a bad signature? That's spam. Ignore and move on.
+Discord signs every request with a public key. If you get a request with a bad signature? It's spam. Ignore and move on.
 
 The `discord-interactions` package does the job:
 
@@ -151,23 +151,23 @@ import { verifyKey } from 'discord-interactions';
 
 const isValid = verifyKey(
   rawBody,           // exact raw text (not parsed JSON!)
-  signature,         // header x-signature-ed25519
-  timestamp,         // header x-signature-timestamp
+  signature,         // x-signature-ed25519 header
+  timestamp,         // x-signature-timestamp header
   publicKey          // from Discord Dev Portal
 );
 ```
 
-**Important trap**: the signature depends on the _exact_ body. If you parse JSON and re-stringify, or if you log the body, you break the signature.
+**Important trap**: the signature depends on the _exact_ body. If you parse JSON and re-stringify, or log the body, you break the signature.
 
-Verify first. Parse after. That order matters.
+Verify first. Parse after. That's the order that matters.
 
-## Case 1: Nibi (Japanese learning bot)
+## Case 1: Nibi (Japanese Learning Bot)
 
 Nibi is a Discord bot for learning Japanese. Simple commands:
 
 *   `/dictionary kanji` → shows definitions
 *   `/pronounce テキスト` → generates TTS (text-to-speech)
-*   `/hello` → welcome message
+*   `/hello` → greeting message
 
 Each command is a TypeScript file:
 
@@ -191,19 +191,19 @@ interface Command {
   execute(
     interaction: Interaction,
     env: Bindings
-  ): Promise<InteractionResponse>;
+  ): Promise<interactionresponse>;
 }
 ```
 
-### The /pronounce command: making the bot talk
+### The /pronounce Command: Making the Bot Talk
 
-This one's wild. You send text (romaji, hiragana, kanji, whatever), the bot converts it to hiragana, generates TTS via VOICEVOX or Google TTS, and sends an audio message on Discord.
+This one is nicely weird. You send text (romaji, hiragana, kanji, whatever), the bot converts it to hiragana, generates TTS via VOICEVOX or Google TTS, and sends an audio message on Discord.
 
 ```typescript
 const pronounce: Command = {
   data: {
     name: 'pronounce',
-    description: 'Generates TTS for Japanese text',
+    description: 'Generate TTS for Japanese text',
     options: [
       {
         type: 3,  // STRING
@@ -256,11 +256,11 @@ const pronounce: Command = {
 };
 ```
 
-It's crazy: you call an external API, upload a file to Discord, send a message with the file. All without WebSocket, just HTTP.
+Crazy: you call an external API, upload a file to Discord, send a message with the file. All with no WebSocket, just HTTP.
 
-### Persistence with Supabase
+### Persistence With Supabase
 
-Nibi uses Supabase as a key-value store. To check if a user is registered:
+Nibi uses Supabase as a key-value store. To check whether a user is registered:
 
 ```typescript
 const DatabaseUtils = new DatabaseUtils({
@@ -278,17 +278,17 @@ if (!user) {
 }
 ```
 
-It's very basic (no real SQL queries, just JSON), but it works. For small bots it's perfect.
+Very basic (no real SQL queries, just JSON), but it works. For small bots it's perfect.
 
-## Case 2: Konosuba-RPG (Discord game with image rendering)
+## Case 2: Konosuba-RPG (Discord Game With Image Rendering)
 
-Okay this one's insane.
+Okay this one is wild.
 
-Konosuba-RPG is a **full game** on Discord. You fight mobs, gain XP, equip accessories, level up. Each battle generates an **image** in real-time. No pre-rendered spritesheets. The image is composed dynamically from the player's stats, the mob, and the combat state.
+Konosuba-RPG is a **full game** on Discord. You fight mobs, earn XP, equip accessories, level up. Every battle generates an **image** in real time. No pre-rendered spritesheets. The image is composed dynamically from player stats, the mob, and fight state.
 
-And the image gets generated in \<500ms on Cloudflare Workers. Literally.
+And the image renders in \<500ms on Cloudflare Workers. Literally.
 
-### The rendering architecture
+### The Render Architecture
 
 ```plaintext
 Discord (you click "Attack")
@@ -297,18 +297,18 @@ Cloudflare Worker receives the interaction
     ↓
 Game state update (XP, HP, etc.)
     ↓
-Generates JSX with Satori
+Generate JSX with Satori
     ↓
-Converts SVG → PNG with Resvg (Wasm)
+Convert SVG → PNG with Resvg (Wasm)
     ↓
-Uploads the image to Discord
+Upload the image to Discord
     ↓
-Sends the message with the image
+Send the message with the image
 ```
 
-All of that in under a second. It's nuts.
+All in under a second. Wild.
 
-### Image rendering on Workers
+### Image Rendering on Workers
 
 Konosuba uses **Satori** (JSX → SVG) and **Resvg** (SVG → PNG):
 
@@ -321,7 +321,7 @@ async function renderBattle(gameState: GameState) {
 
   // 1. Create JSX for the UI
   const jsx = (
-    <div style={{ display: 'flex', gap: '20px' }}>
+    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}="">
       <div>
         <h1>{gameState.player.name}</h1>
         <p>HP: {gameState.player.hp}/{gameState.player.maxHp}</p>
@@ -347,11 +347,11 @@ async function renderBattle(gameState: GameState) {
 }
 ```
 
-You write normal JSX. That becomes SVG. SVG becomes PNG. \<100ms on a Cloudflare Worker.
+You write normal JSX. It becomes SVG. SVG becomes PNG. \<100ms on a Cloudflare Worker.
 
-You get how powerful this is? It's just... beautiful xD
+You get the power? Just beautiful.
 
-### Game state and progression
+### Game State and Progression
 
 Player data lives in Supabase:
 
@@ -372,9 +372,9 @@ const { data: updated } = await db
   .eq('id', player.id);
 ```
 
-Every action (attack, defend, heal) updates the stats in the database. Then you regenerate the image with the new stats.
+Every action (attack, defend, heal) updates stats in the DB. Then you regenerate the image with the new stats.
 
-### Interactions: gameplay buttons
+### Interactions: Gameplay Buttons
 
 The game uses **button interactions** for combat actions:
 
@@ -390,7 +390,7 @@ The game uses **button interactions** for combat actions:
     },
     {
       type: 2,
-      style: 2,  // Secondary (grey)
+      style: 2,  // Secondary (gray)
       label: 'Defend',
       custom_id: 'battle_defend'
     }
@@ -414,27 +414,27 @@ if (interaction.type === 3) {
 }
 ```
 
-And boom, you calculate damage, update the database, regenerate the image, send it.
+And boom, you compute damage, update the DB, regenerate the image, send it.
 
-It's a complete turn-based game with zero persistent connection. Just stateless HTTP. Completely busted xD
+A full turn-based game with zero persistent connection. Just stateless HTTP. Completely broken.
 
-## Supabase: the database built for Workers
+## Supabase: The DB Made for Workers
 
-Traditional databases (PostgreSQL, MySQL, MongoDB) are designed around persistent TCP connections. You open a socket, keep it alive, send queries. Problem: **Cloudflare Workers don't support persistent TCP connections**. Every request is an ephemeral process. The moment you respond to the client, the Worker disappears.
+Classic databases (PostgreSQL, MySQL, MongoDB) are designed for persistent TCP connections. You open a socket, keep the connection open, send queries. Problem: **Cloudflare Workers doesn't support persistent TCP connections**. Every request is an ephemeral process. As soon as you answer the client, the Worker disappears.
 
 You can't do this:
 
 ```typescript
-// This WON'T work on Workers
+// This does NOT work on Workers
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();  // persistent TCP connection = dead
 ```
 
-Even native PostgreSQL drivers like `pg` or `postgres.js` rely on TCP connections. On Workers, they crash.
+And even native PostgreSQL drivers like `pg` or `postgres.js` use TCP connections. On Workers, they crash.
 
-**Supabase solves all of this.**
+**Supabase solves all of that.**
 
-Supabase is a REST API on top of PostgreSQL. You make normal HTTP requests. Every call is independent, no persistent connection, no state to manage. It's perfectly suited for the serverless model.
+Supabase is a REST API on top of PostgreSQL. You make plain HTTP requests. Each call is independent, no persistent connection, no state to manage. It's perfectly suited to the serverless model.
 
 ```typescript
 // This works PERFECTLY on Workers
@@ -447,32 +447,32 @@ const { data, error } = await supabase
 
 The Supabase client (`@supabase/supabase-js`) uses `fetch` under the hood. And `fetch` is native on Workers. Zero config, zero driver, zero persistent connection.
 
-| Database | Workers compatible? | Why |
+| Database | Workers-compatible? | Why |
 | --- | --- | --- |
 | **Supabase** | ✅ Yes | Stateless REST API, pure HTTP |
-| **PlanetScale (MySQL)** | ⚠️ Partial | HTTPS-only connection, no long transactions |
+| **PlanetScale (MySQL)** | ⚠️ Partial | HTTPS connection only, no long transactions |
 | **Neon** | ⚠️ Partial | Serverless branches but TCP driver needed |
 | **Turso (libSQL)** | ⚠️ Partial | HTTP possible but limited |
 | **Prisma/Prisma Postgres** | ❌ No | Requires persistent TCP |
 | **MongoDB Atlas** | ❌ No | TCP driver, no native REST API |
-| **Redis (Upstash)** | ✅ Yes | REST API over HTTP |
+| **Redis (Upstash)** | ✅ Yes | HTTP REST API |
 
-The real advantage of Supabase isn't just the DB -- it's the whole ecosystem being designed edge-first:
+Supabase's real advantage isn't just the DB -- it's the whole ecosystem designed edge-first:
 
-- **Auth**: REST API for sessions, works without state
-- **Storage**: File upload/download via HTTP
-- **Realtime**: Optional WebSocket, but you can also poll via REST
-- **Row Level Security**: security rules live in the DB, not your backend
+- **Auth**: REST API to manage sessions, works statelessly
+- **Storage**: File upload/download over HTTP
+- **Realtime**: Optional WebSocket, but you can also just poll via REST
+- **Row Level Security**: security rules live in the DB, not in your backend
 
-For a serverless Discord bot, Supabase is the simplest and most reliable choice. No driver to configure, no connection to maintain, no timeouts. Just HTTP requests.
+For a serverless Discord bot, Supabase is the simplest, most reliable choice. You configure no driver, maintain no connection, manage no timeout. You just send HTTP requests.
 
-If you want a real example, look at Nibi above: its persistence code is literally `readJson()` and `writeJson()` on Supabase. No migrations, no complex schemas, no crazy config. It works out of the box. And if your bot gets big, you can migrate to real SQL queries without changing providers.
+If you want a real example, look at Nibi above: the persistence code is literally `readJson()` and `writeJson()` on Supabase. You start with no migrations, no complex schema, no heavy config. It works out of the box. And if your bot gets big, you migrate to real SQL queries without switching providers.
 
-## Polyfills: when Node wants to run on Workers
+## Polyfills: When Node Wants to Run on Workers
 
 Some packages expect Node APIs. Kuromoji (kanji parser) uses `XMLHttpRequest`. Workers have `fetch`, not `XMLHttpRequest`.
 
-Simple solution: add a polyfill at the top of index.ts:
+Simple fix: add a polyfill at the top of index.ts:
 
 ```typescript
 // Polyfill XMLHttpRequest for kuromoji
@@ -497,11 +497,11 @@ import { setupPolyfills } from './utils/polyfills';
 setupPolyfills();
 ```
 
-It's basic hacking, but it works.
+Basic hack, but it works.
 
-## Towards an npm package: hono-discord-interactions
+## Toward an npm Package: hono-discord-interactions
 
-Doing it by hand, making a bot involves a lot of boilerplate:
+By hand, making a bot is a lot of boilerplate:
 
 *   Verify the Discord signature
 *   Route interaction types
@@ -538,9 +538,9 @@ app.post('/interactions', handler);
 export default app;
 ```
 
-Boom. 20 lines instead of 200. It'd cut Nibi in half easily.
+Boom. 20 lines instead of 200. That would cut Nibi in half easily.
 
-Idea for later xD
+Idea for later.
 
 ## Deploy
 
@@ -565,9 +565,9 @@ wrangler deploy --env production
 
 Resulting URL: `https://my-bot.workers.dev/interactions`
 
-Cost: **free** up to 100k requests/day. Beyond that: $0.50/million.
+Cost: **free** up to 100k requests/day. Beyond: $0.50/million.
 
-Spoiler: you'll never hit 100k requests unless you have 10,000 active users.
+Spoiler: you'll never burn the 100k requests unless you have 10,000 active users.
 
 ### Vercel
 
@@ -581,26 +581,26 @@ Same, free.
 
 ### Both at once
 
-Hono runs everywhere. You can deploy the same code on BOTH Cloudflare and Vercel. Useful for redundancy or testing before choosing.
+Hono runs everywhere. You can deploy the same code on Cloudflare AND Vercel. Useful for redundancy or testing before picking one.
 
-## Quick checklist
+## Quick Checklist
 
-1.  Create an Application on Discord Developer Portal
-2.  Copy PUBLIC\_KEY, BOT\_TOKEN, APP\_ID
+1.  Create an Application on the Discord Developer Portal
+2.  Copy PUBLIC_KEY, BOT_TOKEN, APP_ID
 3.  Create the project:
-4.  Write index.ts (signature verify + routing)
-5.  Register slash commands (once):
+4.  Write index.ts (signature check + routing)
+5.  Register the slash commands (once):
 6.  Deploy:
-7.  Set the URL in Discord (Developer Portal → Application → Interactions Endpoint URL)
-8.  Discord tests the connection (you must respond to PING)
+7.  Put the URL in Discord (Developer Portal → Application → Interactions Endpoint URL)
+8.  Discord tests the connection (you must answer the PING)
 9.  Invite the bot to a server
-10.  You're done
+10.  Done
 
-## Pros vs Limitations
+## Advantages vs Limitations
 
-**Pros**
+**Advantages**
 
-*   Cheap (free up to 100k req/day)
+*   Minimal cost (free up to 100k req/day)
 *   Scalable (no connection management)
 *   Simple (no WebSocket boilerplate)
 *   Fast (Cloudflare = edge servers)
@@ -608,26 +608,26 @@ Hono runs everywhere. You can deploy the same code on BOTH Cloudflare and Vercel
 
 **Limitations**
 
-*   No real-time server events (member join, role added, message deleted, etc.) -- you only get interactions (slash commands, buttons, modals)
-*   3-second timeout to respond -- otherwise Discord shows "Application did not respond"
-*   If you need real events -- you'll need a separate webhook HTTP endpoint or an auxiliary WebSocket connection
+*   You only receive interactions (slash commands, buttons, modals), no real-time server events (member joined, role added, message deleted, etc.)
+*   3-second timeout to reply -- otherwise Discord shows "Application did not respond"
+*   If you need real events -- you need a separate HTTP webhook or an auxiliary WebSocket connection
 
-For 90% of bots (everything slash-command based)? You're good.
+For 90% of bots (all slash-command based)? Good.
 
-## To wrap up
+## To Conclude
 
-I spent a lot of time optimizing KonosubaRPG and Nibi to save either as many requests as possible, or to reduce hot CPU time, or to reduce cold boot. Result is I have some serious perf across the board.  
-You should know I started cloudifying (I don't even know if that's a word) most of my projects because I had a monumental laziness to keep hosting them on my own VM. Seriously, I think it's GitHub Actions that saved my ass. Workers too, but when I realized I could make daemons with GitHub Actions and schedules, that really saved me for real.
+I spent quite a while optimizing KonosubaRPG and Nibi to save either as many requests as possible, or to cut hot CPU time, or to cut cold boot. Result: I've got solid perf on pretty much everything.
+Fact is I started cloudifying (no idea if that's even a word) most of my projects because I had monumental laziness about keeping hosting them on my own VM. Really, I think GitHub Actions saved my skin. Workers too, but actually when I saw I could run daemons with GitHub Actions and schedules, that really saved me for real.
 
-I'll probably write an article about a project called [email-autoreply](https://github.com/fox3000foxy/email-autoreply/), so subscribe to the RSS feed to see it drop soon :)).
+I'll probably write an article on a project called [email-autoreply](https://github.com/fox3000foxy/email-autoreply/), so subscribe to the RSS feed to see it drop soon :)).
 
-**The 3 things to remember:**
+**3 key points:**
 
-1.  **Interaction endpoints = HTTP serverless** -- No WebSocket, no persistent connection. Discord POSTs, you reply. Free on Cloudflare.
-2.  **Hono is the perfect tool** -- Lightweight framework (12KB), multi-runtime, zero dependencies. Same code on Cloudflare, Vercel, Node, everywhere.
-3.  **Rendering images on Workers = insane** -- Satori + Resvg (Wasm) lets you compose dynamic UIs in JSX and convert them to PNG in \<100ms. A full game can run on this.
+1.  **Interaction endpoints = serverless HTTP** -- no WebSocket, no persistent connection. Discord POSTs, you reply. Free on Cloudflare.
+2.  **Hono is the perfect tool** -- Lightweight framework (12KB), multi-runtime, zero dependencies. Identical code on Cloudflare, Vercel, Node, everywhere.
+3.  **Image render on Workers = wild** -- Satori + Resvg (Wasm) let you compose dynamic UIs in JSX and convert them to PNG in \<100ms. A full game can run on that.
 
-It's sick xD
+Wild.
 
 ```plaintext
 wrangler deploy

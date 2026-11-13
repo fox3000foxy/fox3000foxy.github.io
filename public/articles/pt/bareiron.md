@@ -12,7 +12,7 @@ tags:
   - c
   - esp32
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "HP2Zk1OXdnJWvdCN2VrBnYMRagiJbfFVn+XyuIs8qj+tAu8WZaoutvzr2iqym6pHz3cMTzEUYWnJenhLuMHOXA=="
+author_sig: "curDOhAn+yVaspnlKjtVdv+KmGYQT0pu61JvAXkjoITtQjWXDZ7WgjJSV2Sy0Q3Wd4fpEhS5blVYIa/f0qp5TQ=="
 ---
 
 ## Introdução
@@ -409,6 +409,7 @@ uint8_t getBlockChange (short x, uint8_t y, short z) {
   }
   return 0xFF;
 }
+```
 
 Adicionar uma alteração é tão direto quanto a busca:
 

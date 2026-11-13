@@ -1,36 +1,36 @@
 ---
-title: Minecraft Pathfinding Mantığı ve Uygulamaları
-description: A* algoritması, blok cezaları ve POI mekanikleri ile mob
-  hareketlerini nasıl kontrol edebileceğin, tahmin edebileceğin ve
-  sömürebileceğin -- kablosuz redstone'dan optimize edilmiş çiftliklere.
+title: Minecraft yol bulma mantığı ve uygulamaları
+description: A* algoritması, blok cezaları ve POIler mob hareketini kontrol etmeyi,
+  tahmin etmeyi ve suistimal etmeyi nasıl sağlar, kablosuz redstonedan optimize
+  çiftliklere.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "5S3qYdujgdXx7hgBQZ4KGZ3NDd49wT6T/juT3MCtXIF2jl/yRopNXMRZvLwAUmURpOjunsGByUbqsGO7nAbsTA=="
+author_sig: "BiTSIobe6zL5addPlkyDML7AhSTB0MQRw7ZAiTpv10TBsM47oZ97ew+KuiCNbsgnKIC4fd24CQr0tTTM9/tj+w=="
 ---
 
 ## Giriş
 
-Koyunların duvarlara toslayışını izleyerek saatler harcadım.
+Koyunların duvarlara çarpmasını izleyerek saatler geçirdim.
 
-Hayatımın en iyi yatırımı xD
+Ve dürüstçe? Hayatımın en iyi yatırımı.
 
-Bu mobları ne kadar izlersen, hareketlerinde rastgele hiçbir şey olmadığını o kadar fark ediyorsun. Her adım kodlanmış, tahmin edilebilir ve en önemlisi -- kırılabilir. Sonunda Minecraft'ın kaynak kodunu didik didik ederek pathfinding'in tam olarak nasıl çalıştığını anladım ve bulduğum şey şu: mobları resmen zihin kontrolü yapabilirsin. Yani, onları RASGELENİN değil, SENİN istediğin yere gitmeye zorlayabilirsin.
+Çünkü bu moblara ne kadar bakarsan o kadar rastgele hiçbir şeyleri olmadığını fark edersin. Her hareket kodlanmış, tahmin edilebilir ve hepsinden önemlisi tamamen kırılabilir. Tam olarak yol bulmanın nasıl çalıştığını anlamak için Minecraft kaynak koduna daldım ve keşfettiğim şey moblara kelimenin tam anlamıyla mind-control yapabileceğindi. Yani onları şansın karar verdiği yere değil, SENİN istediğin yere gitmeye zorlamak.
 
-Bu rehber, kazarken bulduğum her şey. AI sistemi, A* algoritması, gizli malice değerleri, survival'da kullanabileceğin exploit'ler. Kazmanı kap.
+Bu rehber kazarak öğrendiğim her şeydir. Yapay zekâ, A* algoritması, gizli cezalar, hayatta kalmada sallayabileceğin exploitler. Kazmanı hazırla.
 
 ---
 
-## Mob AI Nasıl Çalışır (spoiler: biraz gerizekalı)
+## Mob yapay zekâsı nasıl çalışır (spoiler: aptalca)
 
-### Hedefler (Goals)
+### Hedefler
 
-Her mob'un bir *goal* listesi vardır. YAPABİLECEĞİ şeyler ve ne kadar çok İSTEDİĞİ. Düşük sayı = yüksek öncelik. Cehennemden bir yapılacaklar listesi gibi.
+Her mobun *hedefleri* vardır. YapABİLECEĞİ eylemlerin ve onları yapmayı ne kadar İSTEDİĞİNİN bir listesidir. Sayı ne kadar küçükse o kadar önceliklidir, kaos sürümü bir yapılacaklar listesi gibi.
 
 ```java
 protected void registerGoals() {
@@ -41,13 +41,15 @@ protected void registerGoals() {
 }
 ```
 
-Hiç bir zombie'nin kaplumbağa yumurtasını görmezden gelip seni kovaladığını gördün mü? İşte nedeni: `ZombieAttackTurtleEggGoal`'ın önceliği 4, `ZombieAttackGoal` (yani "suratını ye" hedefi) ise öncelik 2. Zombiler nabzı olan atıştırmalıkları tercih ediyor.
+Bir zombinin üstüne koşmak için bir kaplumbağa yumurtasını görmezden geldiğini gördün mü? Nedeni işte bu: `ZombieAttackTurtleEggGoal` öncelik 4, oysa `ZombieAttackGoal` (ona suratını yemesini söyleyen hedef) öncelik 2dedir.
 
-Asıl umursadığımız hedef `WaterAvoidingRandomStrollGoal`, öncelik 7. "Yapacak daha iyi bir şeyim yok o yüzden boş boş dolanayım" hedefi. İşte eğlence burada başlıyor.
+Evet, bir zombi yumurta kırmak yerine seni yemeyi tercih eder. Aşk güzeldir.
 
-### Hareket (ya da "rastgele yürüyüşün tick başına 60'ta 1 şansı olması")
+Bizi gerçekten ilgilendiren hedef öncelik 7 olan `WaterAvoidingRandomStrollGoal`. "Yapacak bir şeyim yok o yüzden rastgele yürüyorum" hedefi. İşin ilginçleştiği yer burasıdır.
 
-Her tick'te (her 0.05 saniyede), oyun hareket edip edemeyeceğini kontrol etmek için `canUse()`'u çağırır. Tick başına 60'ta 1 şans. Dehşet verici derecede verimsiz bir tasarım ve buna bayılıyorum.
+### Hareket (ya da "rastgele yürüyüş nasıl 60ta 1 şansla olur")
+
+Her tickte (her 0,05 saniyede) oyun mobun hareket etmeye tenezzül edip etmediğini görmek için `canUse()` çağırır. Her tickte 60ta 1 şans. Aptalca bir tasarım ve buna bayılıyorum.
 
 ```java
 public boolean canUse() {
@@ -76,9 +78,9 @@ public boolean canUse() {
 }
 ```
 
-Özet geçmek gerekirse: mob'a biniyorsan -> hayır, mob 5 saniyedir hiçbir şey yapmadıysa -> hayır, RNG hayır derse -> hayır. Oyun GERÇEKTEN mobların hareket etmesini istemiyor.
+Özetlersek: mobun üstüne binmişsen hayır, mob 5 saniyedir bir şey yapmadıysa hayır, zar hayır derse hayır. Oyun mobun hareket etmesini GERÇEKTEN istemiyor.
 
-Ama hareket ettiğinde, `getPosition()` devreye giriyor:
+Ama hareket ettiğinde `getPosition()` devralır:
 
 ```java
 protected Vec3 getPosition() {
@@ -93,13 +95,13 @@ protected Vec3 getPosition() {
 }
 ```
 
-Sondaki iki sayı? XZ yarıçapı ve Y yarıçapı. Suda mob daha geniş arar (15 vs 10). Kara bulamazsa suyu kabul eden `super.getPosition()`'a düşer. **Sonuç: moblar sudan ÇIKMAK ister.** İşte bu yüzden hayvanların kıyıya doğru manyak gibi yüzer.
+Sondaki bu iki sayıya bak: XZ yarıçapı ve Y yarıçapıdır. Suda mob daha uzakta arar (10 yerine 15). Toprak bulamazsa suyu kabul eden `super.getPosition()`a düşer. **Sonuç: moblar sudan ÇIKMAK İSTER.** Hayvanlarının kenara deli gibi yüzmesinin sebebi budur.
 
-Eğlenceli detay: mob'un `LandRandomPos` yerine `super.getPosition()`'ı seçme ihtimali %0.1. Binde bir. Mojang yani xD
+Çıtır bir detay: mobun `LandRandomPos` yerine `super.getPosition()` alma şansı kelimenin tam anlamıyla %0,1dir. Binde bir. Tipik Mojang.
 
-### LandRandomPos: her şeyi kıran optimizasyon
+### LandRandomPos: her şeyi değiştiren çürük optimizasyon
 
-Bu BENİM en sevdiğim adım. Pathfinding'i exploit edilebilir yapan en güzel teknik karmaşa.
+Benim FAVORİ adımım. Yol bulmayı suistimal edilebilir yapan en güzel teknik saçmalık.
 
 ```java
 public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<BlockPos> $$3) {
@@ -112,17 +114,17 @@ public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<
 }
 ```
 
-`movePosUpOutOfSolid`. İsmi her şeyi anlatıyor. Seçilen pozisyon katı bir bloğun içindeyse, oyun onu havaya çıkana kadar yukarı iter.
+`movePosUpOutOfSolid`. Adı her şeyi söyler. Seçilen konum katı bir blok içindeyse oyun onu havada olana kadar yukarı iter.
 
-Bu bir optimizasyon: yer altı pozisyonlarını atlamakla zaman harcamak yerine, oyun onları direkt yüzeye fırlatır. Akıllıca mı? Evet. Ama DEV bir önyargı yaratıyor: **moblar yüksek zemini tercih ediyor**.
+Bu bir optimizasyondur: yer altındaki konumları görmezden gelerek zaman kaybetmek yerine oyun onları yüzeye çıkarır. Zeki mi? Evet. Ama çılgın bir önyargı yaratır: **moblar yükseklikleri tercih eder**.
 
-Düşünsene. Yer altında bir sürü blok var, oyun 10 rastgele pozisyon üretiyor. Blok içindekiler yukarı itiliyor. Yoğun alanlar (bir tepenin altı) içi boş alanlardan daha fazla geçerli pozisyon üretiyor. Sonuç: mob istatistiksel olarak tepeye doğru daha sık gidiyor.
+Hayal et. Yüzeyin altında bir sürü blok var, oyun 10 rastgele konum üretir. Blok içindekiler yukarı itilir. Yoğun bölgeler (bir tepenin altı) seyrek bölgelerden daha fazla geçerli konum üretir. Sonuç: mob istatistiksel olarak daha sık tepeye gider.
 
-Güven bana, bunu kırmak üzereyiz.
+Güven bana, bunu 2 dakikada kıracağız.
 
-### Seçim: en iyi blok kazanır
+### Seçim: en iyi blok yarışması
 
-10 pozisyon, bir kazanan, bir puan yarışması:
+10 konum, tek kazanan, bir skor yarışması:
 
 ```java
 public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<BlockPos> $$1) {
@@ -142,77 +144,77 @@ public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<Bl
 }
 ```
 
-En yüksek puanı alan pozisyon KAZANIR. Ve puanlama kriterlerini biliyorsan, SENİN pozisyonunu kazandırabilirsin. Seçim hilesi yapmak gibi.
+En iyi skorlu konum KAZANIR. Ve skor kriterlerini bilirsek istediğimiz konumun kazanmasını sağlayabiliriz. Bu seçimde hile yapmak gibidir.
 
 ---
 
-## Mob Tercihleri (ya da "ineğin neden karşıdan karşıya geçtiği")
+## Mobların tercihleri (ya da "ineğin neden yoldan geçiyor")
 
-Her mob'un farklı zevkleri var. Ve bu her şeyi değiştiriyor.
+Her mobun farklı zevkleri vardır. Ve bu her şeyi değiştirir.
 
-| Mob | Neyi sever |
+| Mob | Bunu sever |
 | --- | --- |
-| **Hayvanlar** (inek, koyun, domuz) | Çim blokları, ışık |
-| **Canavarlar** (zombi, iskelet) | Karanlık (hipsterlar) |
-| **Kaplumbağalar** | Su > kum > ışık |
-| **Hoglinler** | `crimson_nylium`; `warped_fungus`'tan nefret eder |
-| **Striderlar** | Lav ve BAŞKA HİÇBİR ŞEY |
-| **Gümüş balıkları** | Infestable bloklar |
-| **Guardian'lar** | Su + ışık (snoblar) |
-| **Mooshroom'lar** | Miselyum + ışık |
-| **Arılar** | Hava. Evet, HAVAYI tercih ediyorlar. |
+| **Hayvanlar** (inekler, koyunlar, domuzlar) | Çimen ve ışık (hipsterlar) |
+| **Canavarlar** (zombiler, iskeletler) | Karanlık (edgelordlar) |
+| **Kaplumbağalar** | Su, yoksa kum, yoksa ışık |
+| **Hoglinler** | `crimson_nylium`; `warped_fungus`tan nefret ederler |
+| **Striderlar** | Sadece lav. Başka HİÇBİR şey. |
+| **Silverfishler** | İstila edilebilir bloklar (mantıklı) |
+| **Gardiyanlar** | Su + ışık (züppeler) |
+| **Mooshroomlar** | Miselyum + ışık (mantarlar) |
+| **Arılar** | Hava. Evet, HAVAyı tercih ederler. |
 
 ```java
-// Hayvan: aşağı bak, çim varsa -> max puan
+// Hayvan: aşağı bakar, çimense maksimum skor
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return $$1.getBlockState($$0.below()).is(Blocks.GRASS_BLOCK) ? 10.0F : $$1.getPathfindingCostFromLightLevels($$0);
 }
 
-// Canavar: kelimenin tam anlamıyla tersi
+// Canavar: tam tersi
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return -$$1.getPathfindingCostFromLightLevels($$0);
 }
 ```
 
-Canavarlar temelde "ışıklıysa, negatif puan, ben kaçarım" gibi. Işık seviyesinde RESMEN sinir krizi geçiriyorlar xD
+Yani canavarlar kelimenin tam anlamıyla "aydınlıksa negatif skor, başka yere gidiyorum"dur. Işığa surat asarlar.
 
-Yani hayvanları çim ve ışıkla, canavarları da karanlıkla -- kelimenin tam anlamıyla -- yönlendirebilirsin. Aynı anda hem aptalca hem de zekice.
+Yani hayvanlarını kelimenin tam anlamıyla çimen ve ışıkla, canavarlarını karanlıkla yönlendirebilirsin. Hem aptalca hem harika.
 
 ---
 
-## Minecraft'ta A* (gizli formül)
+## Minecrafttaki A* algoritması (gizli formül)
 
-Minecraft pathfinding için A* (A-star) kullanıyor. Ama Mojang kendi dokunuşunu eklemiş:
+Minecraft yol bulma için A* (A-star) algoritmasını kullanır. Ama Mojang imzasını koymuş:
 
 ```
 f(n) = g(n) + 1.5 × h(n)
 ```
 
-- **g(n)** = şimdiye kadar gidilen mesafe (blok başına 1, çaprazda ~1.41)
-- **h(n)** = hedefe düz çizgi mesafesi
-- **1.5** = çünkü Mojang işleri biraz bozuk seviyor
+- **g(n)** = zaten gidilmiş yol (blok başına 1, çaprazda ~1,41)
+- **h(n)** = kuş uçuşu mesafe
+- **1.5** = çünkü Mojang biraz bozuk değerleri sever
 
-Normal A* `f(n) = g(n) + h(n)` kullanır. MOJANG 1.5 ÇARPANI EKLEMİŞ. Neden mi? Algoritma hedefe daha hızlı kilitlensin ve daha az dal araştırsın diye. Sonuç: yol "yeterince iyi" ama her zaman optimal değil. Sarhoş bir A* yani.
+Normalde A* `f(n) = g(n) + h(n)` kullanır. MOJANG 1.5 ÇARPANI EKLEMİŞ. Neden? Algonun hedefe daha hızlı gitmesi ve daha az arama dalı budaması için. Sonuç: bulunan yol "iyi"dir ama hep en iyi değildir. Hafif sarhoş bir A*.
 
 ```mermaid
 flowchart LR
-    A[Başlangıç düğümü] --> B{Komşular\ndeğerlendirilsin mi?}
-    B -->|Evet| C[Her komşu için\nf = g + 1,5×h hesapla]
-    C --> D[En küçük f'li\nkomşuyu seç]
-    D --> E{Hedefe\nulaşıldı mı?}
-    E -->|Hayır| B
-    E -->|Evet| F[Yol bulundu!]
-    B -->|Hayır| G[Yol\nmümkün değil]
+    A[Nœud départ] --> B{Voisins à\névaluer ?}
+    B -->|Oui| C[Calculer f = g + 1.5×h\npour chaque voisin]
+    C --> D[Sélectionner le voisin\navec le plus petit f]
+    D --> E{Destination\natteinte ?}
+    E -->|Non| B
+    E -->|Oui| F[Chemin trouvé !]
+    B -->|Non| G[Aucun chemin\npossible]
     
     style F color:#4caf50
     style G color:#f44336
 ```
 
-Ana sınırlama: **bir mob sadece 16 blok öteye pathfind yapabilir** (follow range'i). Hedef çok uzaktaysa, ulaşabileceği en yakın bloğu seçer. Bu, menzil dışında bir anıt inşa edebileceğin ve mob'un kendisine en yakın bloka doğru yol alacağı anlamına gelir -- hareketini tamamen tahmin edilebilir kılar.
+Önemli detay: **bir mob yalnızca 16 blok yol bulabilir** (*takip menzili*). Hedef çok uzaksa ULAŞABİLDİĞİ en yakın bloğu seçer. Bu, menzil dışında bir monolit yaratabileceğin ve mobun ona yaklaştıran en yakın bloğa yol bulacağı anlamına gelir, bu da hareketlerini tamamen tahmin edilebilir yapar.
 
 ### Oyunu kıran iki exploit
 
-#### 1. Blok güncellemeleri yeniden hesaplamayı zorlar
+#### 1. Blok güncellemeleri = zorla yeniden hesaplama
 
 ```java
 public boolean shouldRecomputePath(BlockPos $$0) {
@@ -230,26 +232,26 @@ public boolean shouldRecomputePath(BlockPos $$0) {
 }
 ```
 
-Mob'un yoluna yakın her blok güncellemesi, 1 saniye bekleme süresiyle bir A* yeniden hesaplamasını zorlar. Bir mob'un yanına 1 saniyelik bir saat koy, SÜREKLİ yeniden hesaplasın. Her saniye sıfırlanan bir GPS gibi.
+Mobun yolu yakınındaki her blok güncellemesi 1 saniyelik beklemeyle A* yeniden hesaplamasını zorlar. Bir mobun yanına 1 saniyelik bir saat koyarsın ve yolunu SÜREKLİ yeniden hesaplar. Bu her saniye sıfırlanan bir GPS koymak gibidir.
 
-Ve bunu 50 mob'la yaparsan? Lag şehri. TPS'in canı cehenneme.
+Ve bunu aynı anda 50 mobla yaparsan? Lag şehri. RIP TPS.
 
-#### 2. Pathfinding Malice (blok maliyet cezaları)
+#### 2. Blok cezaları (Yol Bulma Huysuzluğu)
 
-Bazı bloklar mobları korkutuyor. Cidden. Her bloğun bir enum tarafından tanımlanmış ilişkili bir maliyeti vardır:
+Bazı bloklar mobları korkutur. Kelimenin tam anlamıyla. Her bloğun ilişkili bir maliyeti vardır, bir numaralandırmayla tanımlanır:
 
-| Blok / Durum | Malice |
+| Blok / Durum | Ceza |
 | --- | --- |
-| **Bal bloğu** | İçinden geçmek +8 |
+| **Bal bloğu** | Geçmek +8 |
 | **Toz kar** | Geçilemez |
 | **Kapalı kapılar** | Geçilemez |
-| **Ateş** | İçinden +16, yanından +8 |
-| **Hayvanlar & Köylüler** | Ateş = -1 (KATI HAYIR) |
-| **Kaktüs / Tatlı meyve** | Geçilemez; yanı = +8 |
-| **Su** | İçinden veya yanından +8 |
-| **Magma** | Yanından +8 |
+| **Ateş** | Geçmek +16, yanından geçmek +8 |
+| **Hayvanlar ve Köylüler** | Ateş = -1 (HAYIR) |
+| **Kaktüs / Tatlı orman meyvesi** | Geçilemez; bitişik = +8 |
+| **Su** | Geçmek ya da yanından geçmek +8 |
+| **Magma** | Yanından geçmek +8 (ayy) |
 
-Hayvanlar daha da ileri gidiyor:
+Hayvanlar daha da uçtur:
 
 ```java
 protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
@@ -259,55 +261,63 @@ protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
 }
 ```
 
-DAMAGE_FIRE, -1.0F'de kelimenin tam anlamıyla "yasak". Bir hayvan ateşin içinden geçmektense boşluğa atlamayı tercih eder.
+DAMAGE_FIRE -1.0F değeri kelimenin tam anlamıyla "yasak"tır. Bir hayvan ateşten geçmektense boşluğa atlamayı tercih eder. Oh.
 
-### Egzersiz: büyük yol yarışı
+### Alıştırma: büyük yol yarışması
 
-Birden fazla yol arasında seçim yapan bir köylü:
+Birkaç yol arasında seçim yapması gereken bir köylü hayal et.
 
-- **Yol A**: 15 blok ama 6 blok su kenarı (her biri +8)
-- **Yol B**: 18 blok, 2 su bloğu (+8) + 1 su-kenarı (+8)
-- **Yol C**: 14 blok düz... ama ateş -> köylüler için GEÇİLEMEZ
-- **Yol D**: 16 blok, 1 magma-kenarı (+8) + 1 bal-kenarı (+8)
-- **Yol E**: 25 blok, her yerde kaktüs (her yerde +8) -> 90.82 toplam LOL
+- **Yol A**: 15 blok ama 6 blok sudan geçer (+8 her biri)
+- **Yol B**: 18 blok, 2 su bloğu (+8) ve 1 bitişik su bloğu (+8) ile
+- **Yol C**: 14 blok dümdüz... ama ateşli: bir köylü için GEÇİLEMEZ
+- **Yol D**: 1 bitişik magma bloğu (+8) + 1 bitişik bal bloğu (+8) ile 16 blok
+- **Yol E**: 25 blok ama her yerde kaktüs (+8 her yerde): toplam maliyet 90,82
 
-Kazanan genelde **Yol B**: detay yolu işe yarar çünkü su PAHALI.
+Zihinsel hesap:
 
-Bir köylü temelde bacakları olan bir maliyet hesaplayıcısıdır xD
+- Yol A: 15 blok + su için 6×8 = 15 + 48 = **63** ... ama eklenecek 1,5×mesafe var. Gerçek hesapları yapalım.
+- Yol B: daha uzun ama daha az ceza. Toplam maliyet = birikmiş mesafe + cezalar.
+- Yol D: magma ve bal cezalarını üst üste yığar.
 
-### Her mob farklı yollar seçer
+Kazanan genelde **Yol B** olur: sapma kârlıdır çünkü su PAHALIDIR.
 
-Bir köylü: "ateş mi? YOK HAYIR BEN KAÇTIM"
-Bir zombi: "ateş mi? tamam boomer *yanarak içinden geçer*"
+Bir köylü esasen bacaklı bir maliyet hesaplayıcıdır.
 
-Köylülerin gidip zombilerin gitmediği -- ya da tam tersi -- yollar inşa edebilirsin.
+### Her mobun zevkleri vardır
+
+Bir köylü: "ateş mi? HAYIR TEŞEKKÜRLER HOŞÇA KAL"
+Bir zombi: "ateş mi? TAMAM boomer *yanarak geçer*"
+
+Kelimenin tam anlamıyla bazı mobların aldığı, bazılarının almadığı yolların var. Zombilerin yandığı köylü otobanları yapabilirsin.
 
 ---
 
-## Köylüler: nihai karmaşa
+## Köylüler: nihai keşmekeş
 
-Köylüler Minecraft'taki en yanlış anlaşılan şey. Ama kodu okuduğunda, sadece mesai saatleri olan tahmin edilebilir makineler olduklarını anlıyorsun.
+Tamam, köylüler. Bu tüm Minecrafttaki EN az anlaşılan sistemdir. Ama kodu çözdüğünde büründüklerini fark edersin: mesai saatli tahmin edilebilir makinelerdir.
 
-### Sensörler ve hafıza
+### Sensörler ve bellekler
 
-Her 20 tick'te (1 saniye) çalışan 9 sensör. Her biri köylünün etrafındaki bir yarıçapı tarar ve sonucu hafızada saklar. Köylü her şeyi görür, her şeyi hatırlar ve ona göre hareket eder.
+9 sensör, her 20 tickte (1 saniye) döner. Her biri köylünün etrafında bir yarıçapı tarar ve sonucu bellekte saklar. Köylü her şeyi görür, her şeyi hatırlar ve ona göre davranır.
 
-### Aktivite paketleri
+Şöyle: "düşman var mı? Yerde eşya var mı? Konuşulacak bir oyuncu var mı?" HER ŞEYİ kontrol eder.
 
-Köylünün beyni, saate göre etkinleşen aktivite paketlerine bölünmüştür:
+### Paketler (günün fazları)
 
-| Paket | Zaman | Köylü... |
+Bir köylünün beyni saate göre etkinleşen aktivite paketleridir:
+
+| Paket | Saat | Köylü... |
 | --- | --- | --- |
-| **Core** | 7/24 | Kapıları açar, yüzer (%80 ihtimalle), POI EDİNİR |
-| **Work** | 08:00-15:00 | "Çalışmam gerek" -- iş istasyonuna yürür |
-| **Meet** | 15:00-17:00 | "Mutlu saat!" -- zile gider, sosyalleşir |
-| **Rest** | 18:00-06:00 | "Uyku vakti" -- yatağa gider |
-| **Idle** | 06:00-08:00, 17:00-18:00 | "Sıkıldım" -- gezinir, ürer, yataklara zıplar |
-| **Panic** | Hasar / düşman | "KAÇ" -- KAÇAR |
+| **Core** | 7/24 | Kapı açar, yüzer (zamanın %80i) ve POI EDİNİR |
+| **Work** | 8-15 | "Çalışmaya gidiyorum": istasyonuna yürür |
+| **Meet** | 15-17 | "Apero!": çana gider, sohbet eder |
+| **Rest** | 18-6 | "Uyumalı": yatağa gider |
+| **Idle** | 6-8, 17-18 | "Aylaklık ediyorum": gezinir, bebek yapar, yataklara zıplar |
+| **Panic** | Yaralanma/düşman | "İMDAT": KAÇIŞ |
 
-**Panic** diğer TÜM paketleri kesebilen tek pakettir. Köylü uyusa veya çalışıyor olsa bile, bir zombi varsa PANİK MODU.
+**Panic** paketi TÜM diğerlerini kesebilen tek pakettir. Köylü uyuyor ya da çalışıyor olsa bile, zombi varsa GENEL PANİK.
 
-### POI Edinme: kablosuz redstone'u mümkün kılan mekanik
+### Acquire POI: kablosuz redstoneu mümkün kılan şey
 
 ```java
 Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithType(
@@ -315,49 +325,51 @@ Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithT
 )
 ```
 
-`Acquire POI`, 48 blok yarıçapındaki tüm geçerli ilgi noktalarını tarar. En yakın 5 tanesini tutar, bir yol olup olmadığını kontrol eder ve ulaşılabilir en yakın olanı edinir. Her POI'nin sınırlı slotu vardır:
-- **İş istasyonları**: 1 slot
+`Acquire POI` 48 blok yarıçapta tüm POIleri (ilgi noktaları) tarar. En yakın 5i tutar, bir yol olduğunu doğrular ve erişilebilir ilki edinir.
+
+Her POInin sınırlı slot sayısı vardır:
+- **Çalışma istasyonları**: 1 slot
 - **Yataklar**: 1 slot
-- **Ziller**: 32 slot
+- **Çanlar**: 32 slot
 
-ÇILGIN OLAN ŞEY: **slot, VARILMA anında değil, EDİNME anında ayrılır**. Bir köylü, haritanın öbür ucundan bir komposteri kilitleyebilir -- oraya asla ulaşmasa bile.
+ÇILGIN nokta: **slot varışta DEĞİL, edinim anında rezerve edilir**. Bir köylü haritanın öbür ucundan bir kompostçuyu, ona hiç ulaşmadan kilitleyebilir.
 
-Nereye vardığını görüyor musun?
+Gücü görüyor musun?
 
 ### Kablosuz redstone. Evet, KABLOSUZ.
 
-1. Bir köylüyü bir kompostere giden yolu olan bir maden arabasına koy
-2. Komposteri edinir (slot dolu, kimse kullanamaz)
-3. Köylü tıklayamayacak kadar uzaktır -- gübre yerinde kalır
-4. Bu köylüyü DÜNYADA HERHANGİ BİR YERE taşı, slotu tutmaya devam eder
-5. Bir şeyi etkinleştirmek istediğinde, köylüyü ÖLDÜR
-6. Slot boşalır, başka bir köylü komposteri edinir, gübreyi alır
-7. BLOK GÜNCELLEMESİ -> herhangi bir redstone devresi etkinleşir
+1. Bir köylüyü kompostçuya giden yolla bir vagonete koyarsın
+2. Kompostçuyu edinir (slot alınır, kimse kullanamaz)
+3. Köylü tıklayamayacak kadar uzaktadır, kemik tozu kalır
+4. Bu köylüyü dünyada istediğin yere GEZDİRİRSİN, slotu tutar
+5. Düzeneğini etkinleştirmek istediğinde köylüyü ÖLDÜRÜRSÜN
+6. Slot serbest kalır, başka bir köylü kompostçuyu edinir, kemik tozunu alır
+7. BLOK GÜNCELLEMESİ: herhangi bir redstone devresi etkinleşir
 
-Tam dünya çapında iletilebilen, yol üzerinde sıfır chunk yüklemesi gerektiren kablosuz redstone yarattın. Bunu bir ender incisi stasis odasına bağla ve bir köylüyü öldürerek herhangi bir yerden ışınlan.
+Kelimenin tam anlamıyla yolda sıfır chunk yüklemeyle tüm dünyaya iletilebilir kablosuz bir redstone sinyali yarattın. Bunu bir ender pearl stasis chambera bağlayabilir, bir köylü öldürerek istediğin yerden ışınlanabilirsin.
 
-Benim favori kullanımım? Bir ödül avcısı minigame'i: her biri komposterli birden çok köylü, oyuncu çıkışı etkinleştirmek için DOĞRU köylüyü öldürmek zorunda. Tamamen wtf bir mekanik xD
+Favori kullanımım? "bounty hunter" mini oyunu: birkaç köylüyü kompostçularla koyarsın, oyuncu çıkışı etkinleştirmek için DOĞRU köylüyü öldürmelidir. Mekanik olarak tamamen saçma.
 
-### Pathfinding Deadlock (ya da "sonsuza kadar donan köylü")
+### Yol Bulma Kilidi (ya da "sonsuza dek donan köylü")
 
-`Acquire POI` (bir yol gören) ile gerçek navigasyon (onu takip etmeyi reddeden) arasında bir hata var. İş istasyonunun üstündeki blok yürünebilir değilse olur. Sonuç:
+`Acquire POI` (bir yol gören) ile gerçek navigasyon (onu almayı reddeden) arasında ÇOK iyi bir hata vardır. Bu çalışma istasyonunun üstündeki blok yürünebilir olmadığında olur. Sonuç:
 
-- Core paketi: "POI'yi edinmek istiyorum"
-- Navigasyon: "Oraya yürüyemem"
-- Sonuç: köylü DONAR, sonsuza kadar, kendi kendisiyle savaşır.
+- Core paketi: "POIyi edinmek istiyorum"
+- Navigasyon: "oraya yürüyemem"
+- Sonuç: köylü DONMUŞ kalır, sonsuza dek, kendisiyle kavga ederek.
 
-Cidden donmuş köylüler, dekorasyon veya aksesuar olarak kullanılabilir. Zırh standı tankı? Evet. Hareket etmeyen bir muhafız? Evet. Ürkütücü mü? Belki. Etkili mi? Kesinlikle xD
+Kelimenin tam anlamıyla yerinde donmuş köylüler, dekorasyon ya da buildlerde "aksesuar" olarak kullanılabilir. Bir zırh standı tankı mı? Evet. Kıpırdamayan bir muhafız mı? Evet. Ürkütücü mü? Belki. Ama etkili.
 
 ---
 
 ## Sonuç
 
-Minecraft'ta mob pathfinding'i rastgele değil. Belirleyici, puana dayalı bir sistem, tahmin edilebilir VE kırılabilir.
+Minecraft mob yol bulması şans değildir. Puana dayalı, deterministik, tahmin edilebilir VE kırılabilir bir sistemdir.
 
-**Unutulmaması gereken üç şey:**
+**Akılda tutulacak üç nokta:**
 
-1. **Altındaki katı bloklar = yükseklik önyargısı** -- mobları yönlendirmek için alt zemini doldur veya boşalt
-2. **Malice mob'a göre değişir** -- bazılarının gidip diğerlerinin gitmediği yollar oluştur
-3. **POI slotları uzaktan ayrılır** -- bedava kablosuz redstone, ışınlanma, hepsi
+1. **Ayakların altındaki bloklar = yükseklik önyargısı**: mobları yönlendirmek için yer altını doldur ya da boşalt
+2. **Cezalar her mob için farklıdır**: bazılarının aldığı bazılarının almadığı yollar yarat
+3. **POI slotları uzaktan rezerve edilir**: bedava kablosuz redstone, ışınlanma, hepsi
 
-Minecraft'ın kaynak kodu, az kullanılmış mekaniklerle dolu bir altın madeni. Decompile edilmiş Java okumak için saatler harcadım ve dürüst olmak gerekirse? Her satır işlevsel bir Paskalya yumurtası. Ama bunlar survival'da köylülerle kablosuz redstone için çalışıyor. En iyi oyun onaylandı xD
+Minecraft kaynak kodu az suistimal edilmiş mekaniklerin altın madenidir. Derlenmiş Java okuyarak saatler geçirdim ve dürüstçe? Her satır işlevsel bir Paskalya Yumurtasıdır. Tek fark bunlar hayatta kalmada köylülerle kablosuz redstone yapmak için kullanılır. En iyi oyun onaylandı.

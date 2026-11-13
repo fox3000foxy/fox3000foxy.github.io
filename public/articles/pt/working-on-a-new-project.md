@@ -1,39 +1,39 @@
 ---
 title: Trabalhando em um Novo Projeto
-description: Uma visão geral do processo de iniciar e desenvolver um novo site web.
+description: Uma visão geral do processo de iniciar e desenvolver um novo site.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - meta
   - webdev
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "bV/U/xMHVYEXdFR5UGD+sHmZ1BdA/3nY49hfq7rGYPxB1zpAz3ADYKBdSltHRDiyEQlj/cpo3h3iN5aEMfnASg=="
+author_sig: "u3ErE2VuBNvMs+Dl+uCZyDCROrmesyva1dxKhW7J1W/hqXcCVBZMAnHQ6FwtK7Dr84FBouzLYJUyz2PtolbV3Q=="
 ---
 
 # O Projeto
 
-O projeto em que estou trabalhando se chama LLJT:
+O projeto em que estou trabalhando se chama LLJT :
 
 ![](assets/20260313_092734_image.png)
 
-É um site que também é uma PWA, portanto também um aplicativo móvel. Ele usa MaterialUI para dar a impressão de ser um aplicativo de telefone real.
-Recentemente precisei gerenciar os imports do Mui, e passei de 11707 módulos para apenas 595 no final, importando manualmente cada ícone linha por linha, em vez de usar a importação desestruturada: aprendi que quando se faz uma importação desestruturada, na verdade carrega-se toda a biblioteca de ícones, enquanto importando-os individualmente, importa-se apenas aqueles de que precisa.
+É um site que também é um PWA, então pode ser usado como um aplicativo de celular. Ele usa MaterialUI para se comportar como um verdadeiro aplicativo de telefone.
+Passei um tempo nos imports do Mui : reduzi de 11707 módulos para 595 no final, importando cada ícone linha por linha em vez do import desestruturado. Aprendi na época que o import desestruturado carrega toda a biblioteca de ícones, enquanto os imports individuais carregam só os que são usados.
 
-Nibi é o bot que está conectado a este site.![](assets/20260313_093102_image.png)A classificação é baseada no Google Forms:
+Nibi é o bot conectado a este site.![](assets/20260313_093102_image.png)A avaliação é baseada no Google Forms :
 ![](assets/20260313_093255_image.png)
-Usamos questionários de múltipla escolha para avaliar nossos alunos, e também damos cargos no Discord, bem como emojis e canais, aos nossos alunos, se eles passarem em um exame importante.
+Usamos questionários de múltipla escolha para avaliar nossos estudantes, e também atribuímos cargos no Discord, além de emojis e canais, aos nossos estudantes quando passam em uma prova importante.
 
 ![](assets/20260313_093707_image.png)
 
-O objetivo deste projeto é ajudar as pessoas a aprender japonês junto conosco, pois é algo que eu também quero fazer.
-Os alunos também desbloquearão parcerias com a Crunchyroll e outras plataformas, para recompensá-los por suas habilidades.
+O objetivo deste projeto é ajudar as pessoas a aprender japonês juntas conosco, porque é algo que eu mesmo também quero fazer.
+Os estudantes também vão desbloquear parcerias com a Crunchyroll e outras plataformas, para recompensar o progresso deles.
 
-Nibi e o site são hospedados respectivamente pelo Cloudflare Workers (Interaction URL com Hono Server) e GitHub Pages com React.
-O código do site não é open source, mas o Nibi é, e você pode encontrá-lo neste [repositório do GitHub](https://github.com/let-s-Learn-Japanese-Together/nibi). O site não é open source pois contém informações privadas, mas se você quiser saber como o construí, pode me perguntar no Discord ou em outro lugar, e ficarei feliz em compartilhar o processo! Ele usa na verdade uma GitHub Action que criei para não precisar pagar pelo GitHub Enterprise, e também usa muitas outras ferramentas e técnicas legais que posso compartilhar se você tiver interesse!
+Nibi e o site são hospedados respectivamente por Cloudflare Workers (URL de interação com Hono Server) e GitHub Pages com React.
+O código do site não é open source, mas o Nibi é, e você pode encontrá-lo neste [repositório do GitHub](https://github.com/let-s-Learn-Japanese-Together/nibi). O site continua privado porque contém informações privadas, mas se você quiser saber como eu o construí, me pergunte no Discord e explicarei o processo com prazer ! Ele usa uma GitHub Action que criei para evitar pagar o GitHub Enterprise, além de várias outras ferramentas e técnicas que posso descrever se te interessar !
 
-Desde alguns dias, estou realmente adorando encontrar soluções alternativas para evitar hospedar meus projetos e ter que pagar por sua hospedagem. Foi por isso que fiz do Nibi um bot Interaction Endpoint, para que pudesse ser hospedado gratuitamente no Cloudflare Workers, e também criei uma GitHub Action para implantar o site gratuitamente no GitHub Pages, para não ter que pagar por sua hospedagem. Acho que encontrar soluções alternativas é uma das partes mais divertidas da programação, e é algo que aprecio enormemente! É preciso realmente pensar fora da caixa e encontrar soluções criativas para os problemas, e é isso que eu amo. Não se trata apenas de escrever código, trata-se de encontrar maneiras de fazer as coisas funcionarem sem gastar dinheiro, e é um desafio que realmente aprecio!
+Há alguns dias, tenho me divertido muito encontrando soluções alternativas para hospedar meus projetos sem pagar hospedagem. É por isso que fiz do Nibi um bot de endpoint de interação, para hospedá-lo de graça no Cloudflare Workers, e que criei uma GitHub Action para implantar o site de graça no GitHub Pages. Buscar essas soluções continua sendo para mim uma das partes mais estimulantes do código : é preciso pensar diferente e construir soluções criativas, e é exatamente esse desafio sem orçamento que me motiva !
 
-Usar GitHub Actions de uma maneira que não é especialmente prevista, e usar Cloudflare Workers para "hospedar" um bot, também é uma forma de aprender coisas novas e descobrir novas tecnologias, como hospedagem em nuvem, o que também aprecio. Eu realmente não quero mais pagar por hospedagem.
+Usar GitHub Actions fora do uso previsto, e usar Cloudflare Workers para "hospedar" um bot, também é uma forma de aprender coisas novas e descobrir novas tecnologias, como hospedagem em nuvem. Não quero mais pagar por hospedagem.
 
-Ainda estou trabalhando nisso, mas você pode entrar no [servidor do Discord](https://discord.gg/frKZ9cJ4fD) se quiser acompanhar o progresso e ver como está evoluindo, e talvez até mesmo se juntar ao projeto se tiver interesse! O servidor é aberto a todos, e gostaríamos de ter mais pessoas para nos acompanhar nesta jornada para aprender japonês juntos! Você encontrará o link de convite no site, ou pode me pedir se quiser!
+Ainda estou trabalhando nisso, mas você pode entrar no [servidor do Discord](https://discord.gg/frKZ9cJ4fD) se quiser acompanhar o progresso e ver como evolui, e talvez até entrar no projeto se te interessar ! O servidor é aberto a todos, e gostaríamos de ter mais gente para aprender japonês juntos ! Você vai encontrar o link de convite no site, ou pode me pedir diretamente !

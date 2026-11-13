@@ -1,43 +1,44 @@
 ---
 title: "Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA"
-description: "Mod Fabric yang mengeksploitasi celah logika dalam sistem kepercayaan Minecraft: tanda tangan RSA Mojang yang valid tetapi diputar ulang pada akun yang salah. Penjelasan kode, implikasi keamanan, dan pelajaran kriptografi."
+description: "Mod Fabric yang mengeksploitasi cacat logika dalam sistem kepercayaan Minecraft : tanda tangan RSA valid dari Mojang tapi di replay pada akun yang salah. Penjelasan kode, implikasi keamanan, dan pelajaran kriptografis."
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
   - security
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "iw5FuCsQ/d5UW49BXZDarVVBLlGPxWLv+khvxq0PHR04+t/leK5eMWjTvs0L5x7oTFsdb1rxgsUgdhSY74xGJg=="
+author_sig: "e08KFoVYS1MKAhOUmumbjutupLt1K/rKFdqmS+BW/3YwbiVAOdCKQz63PAkyp8QRV7mWMtY/qbT6HKDx6slS+Q=="
 ---
 
 # Cape Mod : cara mencuri cape Jeb_ dengan injeksi tanda tangan RSA
 
 ![alt text](assets/xbox-profile.png)
-Bagaimana jika cukup dengan tanda tangan RSA yang valid -- tetapi untuk **akun yang salah** -- untuk membuat teman-temanmu percaya bahwa kamu memakai cape resmi Mojang? Selamat datang di `cape-mod`, sebuah eksploitasi Fabric yang menunjukkan bagaimana Minecraft mempercayai tanda tangan tanpa memverifikasi bahwa profil yang dimilikinya benar-benar milikmu.
 
-## Konteks : bagaimana Minecraft mengelola skin dan cape
+Bagaimana kalau saya bilang bahwa satu tanda tangan RSA valid saja sudah cukup -- tapi untuk **akun yang salah** -- untuk membuat teman-temanmu percaya kamu memakai cape resmi Mojang? Selamat datang di `cape-mod`, exploit Fabric yang menunjukkan bagaimana Minecraft memercayai tanda tangan sambil lalai memverifikasi bahwa profil miliknya memang milikmu.
 
-Di Java Edition, ada pertanyaan yang jarang kita tanyakan : **siapa yang bertanggung jawab untuk menampilkan skin dan cape pemain -- klien atau server?**
+## Konteksnya : cara Minecraft mengelola skin dan cape
+
+Di Java Edition, ada pertanyaan yang jarang diajukan : **siapa yang bertanggung jawab menampilkan skin dan cape pemain -- klien atau server?**
 
 Jawabannya bernuansa :
 
 | Komponen | Siapa yang mengirim? | Siapa yang mengunduh? |
 |---|---|---|
-| **Tekstur Skin** | Server mengirim URL yang ditandatangani | Klien mengunduh dari `textures.minecraft.net` |
-| **Tekstur Cape** | Server mengirim URL yang ditandatangani | Klien mengunduh dari `textures.minecraft.net` |
+| **Tekstur skin** | Server mengirim URL bertanda tangan | Klien mengunduh dari `textures.minecraft.net` |
+| **Tekstur cape** | Server mengirim URL bertanda tangan | Klien mengunduh dari `textures.minecraft.net` |
 | **Properti `textures`** | Server mengirim `GameProfile` dari auth Mojang | Klien memverifikasi tanda tangan RSA |
 
-Poin kuncinya : semuanya terkandung dalam properti bernama `textures` dari `GameProfile`. Properti ini berisi :
-- Payload JSON dalam base64 dengan URL tekstur
+Poin kunci : semuanya terkandung dalam properti bernama `textures` dari `GameProfile`. Properti ini berisi :
+- Payload JSON dalam base64 berisi URL tekstur
 - **Tanda tangan RSA** yang dibuat dengan kunci privat Mojang
 
 ## Tembok tanda tangan RSA
 
-Setiap properti `textures` terlihat seperti ini jika didekode :
+Setiap properti `textures` tampak seperti ini setelah didekode :
 
 ```json
 {
@@ -56,7 +57,7 @@ Setiap properti `textures` terlihat seperti ini jika didekode :
 }
 ```
 
-Klien memverifikasi tanda tangan RSA terhadap **kunci publik yang tertanam di dalam jar** (`yggdrasil_session_pubkey.der`) :
+Klien memverifikasi tanda tangan RSA terhadap **kunci publik yang tertanam di jar** (`yggdrasil_session_pubkey.der`) :
 
 ```java
 // Property.java (authlib)
@@ -68,7 +69,7 @@ public boolean isSignatureValid(PublicKey publicKey) {
 }
 ```
 
-Untuk pemain jarak jauh (bukan lokal), klien hanya menerima skin yang **ditandai sebagai `secure`** -- yaitu dengan tanda tangan yang valid :
+Untuk pemain jarak jauh (di luar permainan lokal), klien hanya menerima skin yang **ditandai `secure`** -- yaitu dengan tanda tangan valid :
 
 ```java
 // SkinManager.createLookup() -- disederhanakan
@@ -77,23 +78,23 @@ PlayerSkin skin = optional
     .orElse(defaultSkin);
 ```
 
-Pemeriksaan ini mencegah spoofing secara teori. Tapi di sinilah segalanya menjadi menarik.
+Cek ini memblokir spoofing secara teori. Tapi validasi berhenti di situ, dan tepat di sanalah serangan dimulai.
 
-## Celahnya : replay tanda tangan
+## Cacatnya : replay tanda tangan
 
-Klien memverifikasi bahwa tanda tangan RSA **valid**. Tapi klien **tidak pernah** memeriksa apakah `profileId` yang terkandung dalam JSON cocok dengan UUID asli pemain.
+Klien memverifikasi bahwa tanda tangan RSA **valid**. Ia secara sistematis lalai memverifikasi bahwa `profileId` di dalam JSON cocok dengan UUID nyata pemain.
 
-Dengan kata lain : properti `textures` yang diambil dari **akun Mojang yang sudah ada** (misalnya milik seorang pegawai Mojang) dapat diputar ulang ke pemain lain mana pun. Tanda tangannya tetap valid -- tanda tangan itu benar-benar dibuat oleh Mojang -- hanya saja berasal dari akun lain.
+Dengan kata lain : properti `textures` yang diambil dari **akun Mojang yang sudah ada** (misalnya milik karyawan Mojang) bisa di replay pada pemain lain mana pun. Tanda tangannya tetap valid -- ia memang benar-benar diproduksi oleh Mojang -- hanya saja berasal dari akun lain.
 
-### Bagaimana cara mengekstrak tanda tangan asli?
+### Cara mengekstrak tanda tangan asli?
 
-Jeb_ (UUID `853c80ef-3c37-49fd-aa49-938b674adae6`) memiliki cape Mojang Studios. Dari server sesi Mojang :
+Jeb_ (UUID `853c80ef-3c37-49fd-aa49-938b674adae6`) punya cape Mojang Studios. Dari server sesi Mojang :
 
 ```bash
 curl -s "https://sessionserver.mojang.com/session/minecraft/profile/853c80ef-3c37-49fd-aa49-938b674adae6?unsigned=false"
 ```
 
-Respon :
+Respons :
 
 ```json
 {
@@ -109,22 +110,22 @@ Respon :
 }
 ```
 
-`signature` dari kolom `value` ini diproduksi oleh Mojang. Itu adalah RSA-2048 SHA-1. Tanda tangan itu **benar-benar** valid, bahkan jika kamu memutarnya pada UUID lain -- karena tanda tangan Jeb_ tetaplah tanda tangan Jeb_, dan klien tidak pernah memeriksa bahwa itu **seharusnya** milikmu.
+`signature` dari kolom `value` ini diproduksi oleh Mojang. Ini RSA-2048 SHA-1. Ia **mutlak** valid, bahkan kalau kamu replay pada UUID lain -- karena tanda tangan Jeb_ tetap tanda tangan Jeb_, dan klien lalai mengontrol untuk siapa ia ditujukan.
 
-## Kode : bagaimana mod ini bekerja
+## Kodenya : cara mod bekerja
 
-Mod `cape-mod` sangat kecil -- 65 baris Java. Berikut intinya :
+Mod `cape-mod` mungil -- 65 baris Java. Berikut intinya :
 
 ```java
 @Mixin(Player.class)
 public class ServerPlayerMixin {
     private static final String TEXTURES_VALUE =
         "ewogICJ0aW1lc3RhbXAiIDogMTc4MzY2NjMxNjI2OSwKICAicHJvZmlsZUlkIiA6ICJkOTBi...";
-    
+
     private static final String TEXTURES_SIGNATURE =
         "oxoAfZRLVNSfXYFMNbDKZ9XxrTHmz/k2yxzOxksXY3f6aDhY3gCyFCCtDreEWI7fpG9...";
 
-    @Inject(method = "getGameProfile()Lcom/mojang/authlib/GameProfile;", 
+    @Inject(method = "getGameProfile()Lcom/mojang/authlib/GameProfile;",
             at = @At("RETURN"), cancellable = true)
     private void injectCape(CallbackInfoReturnable<GameProfile> cir) {
         Player self = (Player) (Object) this;
@@ -136,7 +137,7 @@ public class ServerPlayerMixin {
         GameProfile original = cir.getReturnValue();
         if (host == null || !host.name().equals(original.name())) return;
 
-        // Ganti properti textures dengan milik Jeb_
+        // Mengganti properti textures dengan milik Jeb_
         ImmutableMultimap.Builder<String, Property> b = ImmutableMultimap.builder();
         for (Property p : original.properties().values()) {
             if (!p.name().equals("textures")) {
@@ -144,112 +145,112 @@ public class ServerPlayerMixin {
             }
         }
         b.put("textures", new Property("textures", TEXTURES_VALUE, TEXTURES_SIGNATURE));
-        cir.setReturnValue(new GameProfile(original.id(), original.name(), 
+        cir.setReturnValue(new GameProfile(original.id(), original.name(),
                                            new PropertyMap(b.build())));
     }
 }
 ```
 
-**Langkah-langkah** :
+**Langkahnya** :
 1. **Mixin** pada `Player.getGameProfile()` -- titik di mana profil pemain dikembalikan
-2. Memeriksa apakah ini server lokal (Integrated Server)
-3. Memeriksa apakah ini host (dunia LAN)
-4. **Mengganti** properti `textures` dengan milik Jeb_ (di-hardcode)
-5. Mengembalikan `GameProfile` baru dengan tekstur yang diinjeksi
+2. Memeriksa bahwa ini server lokal (Integrated Server)
+3. Memeriksa bahwa ini host (LAN world)
+4. **Mengganti** properti `textures` dengan milik Jeb_ (hardcoded)
+5. Mengembalikan `GameProfile` baru dengan tekstur yang disuntikkan
 
-`GameProfile` tersebut **direkayasa** : itu adalah profil yang dibangun secara artifisial, yang tidak sesuai dengan pemain asli. Properti `textures` **diputar ulang** dari Jeb_ -- tanda tangan RSA-nya asli tetapi diterapkan pada profil yang salah. Paket jaringan itu sendiri sah : server mengirim `ClientboundPlayerInfoUpdatePacket` secara normal dengan profil yang dimodifikasi ini. Profillah yang direkayasa, bukan paketnya.
+Jadi `GameProfile` itu **dipalsukan** : profil yang dibangun artifisial, yang tidak cocok dengan pemain sebenarnya. Properti `textures` **di replay** dari Jeb_ -- tanda tangan RSA otentik tapi diterapkan pada profil yang salah. Paket jaringannya sah : server mengirim normal `ClientboundPlayerInfoUpdatePacket` dengan profil yang diubah ini. Profilnyalah yang dipalsukan ; paketnya tetap sah.
 
-Ketika teman-teman host bergabung melalui LAN, mereka menerima `ClientboundPlayerInfoUpdatePacket` dengan profil yang dimodifikasi. Klien :
+Ketika teman-teman host bergabung lewat LAN, mereka menerima `ClientboundPlayerInfoUpdatePacket` dengan profil yang diubah. Klien :
 1. Mendekode payload base64
-2. Memverifikasi tanda tangan RSA → ✅ valid (itu benar-benar milik Jeb_)
-3. Menandai skin sebagai `secure=true` (karena tanda tangan valid)
-4. Melewati filter `!isRemote || ps.secure()` → ✅ lolos
+2. Memverifikasi tanda tangan RSA → ✅ valid (memang milik Jeb_)
+3. Menandai skin sebagai `secure=true` (karena tanda tangannya valid)
+4. Lolos filter `!isRemote || ps.secure()` → ✅ lolos
 5. **Mengunduh dan menampilkan cape Jeb_**
 
-## Hasil dalam game : cape di skinmu
+## Hasil dalam permainan : cape pada skinmu
 
-Berikut hasilnya di dalam game. Pertama, tampak depan dengan cape Jeb_ yang ditampilkan pada host :
+Begini tampilannya in-game. Pertama, tampak depan dengan cape Jeb_ ditampilkan pada host :
 
-![Cape Mod -- Cape Jeb_ ditampilkan pada host](/images/cape-mod/cape-01-jeb-cape.png)
+![Cape Mod -- cape Jeb_ ditampilkan pada host](/images/cape-mod/cape-01-jeb-cape.png)
 
-Terlihat jelas motif merah/putih dari cape resmi Mojang Studios. Tidak ada perbedaan dengan Jeb_ asli yang memiliki cape-nya sendiri -- klien mengunduh tekstur yang persis sama dari `textures.minecraft.net`.
+Motif merah/putih cape resmi Mojang Studios terlihat jelas. Rendernya tetap identik dengan Jeb_ asli yang memakai capenya sendiri -- klien mengunduh tepat tekstur yang sama dari `textures.minecraft.net`.
 
-Dan dalam tampilan imersif, di sesi permainan sungguhan :
+Dan dalam tampilan imersif, dalam permainan sungguhan :
 
-![Cape Mod -- tampilan dalam game dengan cape terlihat](/images/cape-mod/cape-02-lava-cape.png)
+![Cape Mod -- tampak dalam permainan dengan cape terlihat](/images/cape-mod/cape-02-lava-cape.png)
 
-Cape melambai di belakang pemain, bergerak mengikuti gerakan. Sempurna tidak bisa dibedakan dari skin asli dengan cape resmi.
+Cape berkibar di belakang pemain, bergelombang mengikuti gerakan. Sempurna tidak bisa dibedakan dari skin otentik dengan cape resmi.
 
 Sudut lain, di dunia dengan lava dan medan :
 
 ![Cape Mod -- cape di lingkungan alami](/images/cape-mod/cape-03-local-game.png)
 
-Dan satu tampilan jarak dekat dari gameplay nyata, di mana cape terlihat dalam aksi :
+Dan satu tampilan dekat terakhir dari gameplay nyata, di mana cape terlihat beraksi :
 
-![Cape Mod -- cape dalam gameplay klasik Minecraft](/images/cape-mod/cape-04-real-gameplay.png)
+![Cape Mod -- cape dalam gameplay Minecraft klasik](/images/cape-mod/cape-04-real-gameplay.png)
 
-Bagi seseorang yang bergabung ke LAN tanpa tahu bahwa host memiliki mod, sama sekali tidak ada cara untuk membedakan ini dari cape Mojang asli. Itulah tepatnya intinya : **tanda tangan itu valid**, klien tidak punya alasan untuk meragukannya.
+Bagi seseorang yang bergabung ke LAN tanpa tahu host memakai mod, cape tetap terlihat identik dengan cape Mojang asli. Tepat itulah poinnya : **tanda tangannya valid**, jadi klien memperlakukannya sebagai sah.
 
-## Mengapa ini celah (dan mengapa ini bukan)
+## Kenapa ini cacat (dan kenapa bukan)
 
-Ironisnya : eksploitasi ini berhasil **tepat karena tanda tangan itu valid**. Tidak ada bypass kriptografi di sini -- lebih buruk lagi, ini adalah **celah logika** dalam model kepercayaan.
+Ironisnya : exploit berfungsi **tepat karena tanda tangannya valid**. Ini soal lain daripada bypass kriptografis -- lebih buruk : **cacat logika** dalam model kepercayaan.
 
-| Pemeriksaan | Hasil |
+| Cek | Hasil |
 |---|---|
 | **Validitas tanda tangan RSA** | ✅ Valid (ditandatangani oleh Mojang untuk Jeb_) |
 | **Apakah `profileId` dalam payload cocok dengan UUID host?** | ❌ Tidak (UUID Jeb_ ≠ UUID host) |
-| **Apakah klien memeriksa kecocokan ini?** | ❌ **Tidak. Hanya tanda tangan RSA yang diperiksa.** |
+| **Apakah klien memverifikasi kecocokannya?** | ❌ **Tidak. Hanya tanda tangan RSA yang diverifikasi.** |
 
-Minecraft mempercayai **tanda tangan**, bukan identitas orang yang membawanya. Selama tanda tangan berasal dari Mojang, klien menerimanya. Ini seperti menunjukkan paspor palsu yang ditandatangani oleh pemerintah -- stempelnya sah, meskipun paspor itu bukan milikmu.
+Minecraft memercayai **tanda tangan** alih-alih identitas pembawanya. Selama tanda tangan berasal dari Mojang, klien menerimanya. Seperti menunjukkan paspor palsu yang dicap pemerintah -- capnya sah, meski paspor bukan milikmu.
 
 ## Implikasi keamanan
 
-### Jangkauan terbatas pada LAN
+### Cakupan terbatas pada LAN
 
-Mod ini hanya berfungsi pada server terintegrasi (LAN). Penyerang harus :
+Mod hanya berfungsi pada server terintegrasi (LAN). Penyerang harus :
 - Memasang mod Fabric
 - Menjadi host dunia LAN
 - Teman-temannya terhubung tanpa mod (vanilla)
 
 ### Tapi kemungkinannya meluas
 
-Secara teori, dengan teknik yang sama, seseorang bisa :
-- **Menyuntikkan data bertanda tangan lainnya** : kepala, enchantment ilegal, komponen chat berbahaya
-- **Menggabungkan dengan tunnel LAN** (NGROK, playit.gg, Radmin VPN) untuk memengaruhi pemain di internet
-- **Memperluas ke properti profil lain** yang bergantung pada tanda tangan
+Secara teori, dengan teknik yang sama, orang bisa :
+- **Menyuntik ulang data bertanda tangan lain** : heads, enchantment ilegal, komponen chat berbahaya
+- **Menggabung dengan tunnel LAN** (NGROK, playit.gg, Radmin VPN) untuk memengaruhi pemain di internet
+- **Memperluas ke properti lain** dari profil yang bergantung pada tanda tangan
 
-### Mengapa Mojang mungkin tidak akan memperbaikinya
+### Kenapa Mojang mungkin tidak akan menambal
 
-Tidak ada "kerentanan" dalam arti sebenarnya -- tanda tangan itu valid. Memperbaiki ini akan mengharuskan Mojang mengubah model autentikasi secara menyeluruh, yang rumit. Untuk saat ini, ini adalah edge case : pemain LAN dianggap saling percaya.
+Ini soal lain daripada "kerentanan" dalam arti sempit -- tanda tangannya valid. Menambalnya menuntut Mojang mengubah model autentikasi lengkap, yang rumit. Untuk sekarang, ini kasus batas : pemain LAN diasumsikan saling percaya.
 
-## Perangkap filosofis
+## Jebakan filosofis
 
-Cape Mod adalah **proof of concept** yang sangat baik dari kebenaran yang lebih luas : **kamu tidak boleh pernah mempercayai tanda tangan tanpa memverifikasi siapa yang menandatanganinya dan untuk subjek apa**.
+Cape Mod adalah **proof of concept** yang bagus untuk kebenaran yang lebih luas : **kamu harus selalu memverifikasi siapa menandatangani sebuah data dan untuk subjek apa sebelum memercayainya**.
 
-Ini adalah pelajaran dalam kriptografi dasar. RSA menandatangani sebuah **pesan**, bukan sebuah **identitas**. Jika aku memberimu tanda tangan RSA yang valid dari Mojang, kamu tahu bahwa Mojang telah menandatangani *sesuatu*. Kamu tidak tahu untuk siapa, dan kamu tidak bisa menganggapnya hanya dengan melihat pesannya.
+Ini pelajaran kriptografi dasar. RSA menandatangani sebuah **pesan** ; **identitas** penerima tetap di luar tanda tangan. Kalau saya memberimu tanda tangan RSA valid dari Mojang, kamu hanya tahu Mojang menandatangani *sesuatu*, tanpa indikasi andal tentang penerima hanya dari pesannya.
 
-Persis seperti apa yang terjadi dengan sertifikat SSL/TLS di tahun 2000-an ketika CA menerima apa saja -- tanda tangan itu valid, tetapi diterapkan pada domain yang salah.
+Tepat inilah yang terjadi dengan sertifikat SSL/TLS di tahun 2000-an ketika CA menandatangani sertifikat tanpa memverifikasi domain dengan benar -- tanda tangannya valid, tapi diterapkan pada domain yang salah.
 
 ## Kesimpulan
 
-Cape Mod bukanlah peretasan dalam arti klasik -- ini adalah eksploitasi elegan dari kurangnya validasi logika di Minecraft. Ini menunjukkan bahwa :
+Cape Mod soal lain daripada hack dalam arti klasik -- ini eksploitasi elegan atas kurangnya validasi logika di Minecraft. Ia menunjukkan bahwa :
 
-1. **Tanda tangan yang valid tidak menjamin identitas pembawanya**
-2. **Di LAN, kepercayaan lebih lemah** dari yang kita kira
-3. **Properti `textures` Minecraft pada dasarnya adalah konten yang diinjeksi** -- kita perlu memverifikasi bahwa properti itu sesuai dengan pemain yang membawanya
+1. **Tanda tangan valid tidak menjamin identitas pembawanya**
+2. **Di LAN, kepercayaan lebih lemah** daripada yang dikira
+3. **Properti `textures` Minecraft pada dasarnya konten yang disuntikkan** -- harus diverifikasi bahwa mereka cocok dengan pemain yang membawanya
 
-Jika kamu bergabung ke dunia LAN di server "yang tidak dikenal" (atau lebih tepatnya, yang host-nya memiliki mod mencurigakan), kamu sudah memiliki masalah keamanan jauh sebelum cape. Tapi ini gejala : Minecraft berasumsi bahwa semua orang di LAN saling percaya. Itu benar... sampai tidak lagi.
+Kalau kamu bergabung ke dunia LAN di server "tidak dikenal" (atau lebih tepatnya, yang hostnya punya mod mencurigakan), kamu sudah punya masalah keamanan jauh sebelum cape. Tapi ini revelator : Minecraft mengasumsikan semua orang di LAN saling percaya. Itu benar... sampai host pertama menyalahgunakan kepercayaan itu.
 
 ---
 
-**Sumber Daya**
+**Sumber daya**
 
 - **GitHub**: [fox3000foxy/cape-mod](https://github.com/fox3000foxy/cape-mod)
-- **Auth Minecraft**: [Protokol Yggdrasil](https://wiki.vg/Authentication) (wiki.vg)
-- **Kriptografi RSA**: [RFC 3447](https://tools.ietf.org/html/rfc3447) (PKCS #1)
+- **Minecraft auth**: [Yggdrasil protocol](https://wiki.vg/Authentication) (wiki.vg)
+- **RSA cryptographie**: [RFC 3447](https://tools.ietf.org/html/rfc3447) (PKCS #1)
 
-**3 Poin Penting**
+**3 poin kunci**
 
-1. Tanda tangan RSA memvalidasi sebuah pesan, bukan identitas -- detail yang telah merugikan banyak sistem.
-2. Minecraft tidak memeriksa apakah profil pemain sesuai dengan tanda tangan yang diterima -- celah logika, bukan kriptografi.
-3. Di LAN atau tunnel, semuanya terbuka lebar untuk mod yang mengontrol server terintegrasi.
+1. Tanda tangan RSA memvalidasi pesan alih-alih identitas -- detail yang merugikan banyak sistem.
+2. Minecraft lalai memverifikasi bahwa profil pemain cocok dengan tanda tangan yang diterimanya -- cacat logika dalam validasi, dengan kriptografi yang utuh.
+3. Di LAN atau tunnel, semuanya open bar untuk mod yang mengendalikan server terintegrasi.

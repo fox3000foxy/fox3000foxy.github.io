@@ -15,7 +15,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "zPij04L8v8oeXqZY8vwfz3KCmfHoKEEJBFiXpyfP8c8LTudsB7bfVqDdATqa3HPhcGgPP0Ff0/Rlt7y/qdWAIg=="
+author_sig: "de+9f0SPtL4A+hfTmF3Q0bSNXlFBid98II0Hm8N39J6xOfXZ92WNgDeebToXJyLbUtrfBlx2Lj2qpUPnCe2DYg=="
 ---
 
 # Faire tourner une bibliothèque Node.js dans le navigateur sans Wasm -- les polyfills de typescript-virtual-container

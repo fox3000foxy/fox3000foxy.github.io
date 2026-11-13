@@ -1,182 +1,182 @@
 ---
-title: "Super Mario Bros.: формат уровней, указатели и 256 глитч-миров"
-description: "Как 128 уровней × 4 типа зон влезают в 40КБ ROM, почему существует Minus World, и как матч в теннис на NES может загружать глитч-миры."
+title: "Super Mario Bros. : формат уровней, указатели и 256 глитч-миров"
+description: "Как 128 уровней × 4 типа зон умещаются в 40KB ROM, почему существует Minus World и как матч NES-тенниса может загружать глитч-миры."
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "bYJd8BA0pV6MjYW2sj1logz/g1vZHyYEk6jmpG2eDC8TmtMc9r6gUTSIuYu7uQutxTxXOHn3Oqsb2GlK+0LeKQ=="
+author_sig: "dCv5QXDZk0l0jHUuYg1Y68PGyVjEEILtQrOlb1CD0IoAQEzFPW8sE23ze8NTgqmq4ukONT/lre6PZWqSfFPgIw=="
 ---
 
 ## Введение
 
-Super Mario Bros. -- это 40 килобайт ROM. Восемь миров, 32 уровня, враги, музыка, пауэр-апы -- всё это влезает сюда.
+Super Mario Bros. это 40 килобайт ROM. Восемь миров, 32 уровня, враги, музыка, пауэрапы, всё умещается туда.
 
-Но если открыть эмулятор и поковыряться в нужных байтах, можно загрузить уровень 36-1. Или 255-1. Или попасть в мир, где всё сделано из спрайтов Боузера и труб, которые ведут в никуда.
+Но если открыть эмулятор и поковырять нужные байты, можно загрузить уровень 36-1. Или 255-1. Или приземлиться в мире, где всё сделано из спрайтов Боузера и труб, ведущих в никуда.
 
-Эти глитч-миры существуют по простой причине: система хранения уровней SMB1 -- это шедевр 8-битной оптимизации, и когда заставляешь игру читать не оттуда, получаешь результаты, от которых захватывает дух.
+Эти глитч-миры существуют по простой причине : система хранения уровней SMB1 это чудо 8-битной оптимизации, и когда заставляешь игру читать там, где не надо, получаются захватывающие результаты.
 
-Retro Game Mechanics Explained снял об этом серию из 4 видео -- мы соберём всё в одну погружённую статью по коду 6502 самой продаваемой игры своего времени.
+Retro Game Mechanics Explained сделал серию из 4 видео об этом -- скомпилируем их в одно погружение в код 6502 самой продаваемой игры своей эпохи.
 
-![GLITCH OBJECTS -- заголовок серии RGMechEx о скрытых механиках SMB1](/images/smb1-glitch-levels/title-card.jpg)
+![GLITCH OBJECTS -- название серии RGMechEx про скрытые механики SMB1](/images/smb1-glitch-levels/title-card.jpg)
 
-![World 9-1 -- экран загрузки первого глитч-мира, доступного через cart swap с теннисом](/images/smb1-glitch-levels/v1-title-9-1.jpg)
+![Мир 9-1 -- титульный экран первого глитч-мира, доступного через cart swap Tennis](/images/smb1-glitch-levels/v1-title-9-1.jpg)
 
-## Тёплый старт: почему RAM тенниса выживает в SMB1
+## Тёплый старт : почему RAM Tennis выживает в SMB1
 
-Прежде чем говорить о хранении уровней, надо понять, как стартует SMB1. Потому что глитч cart swap с NES Tennis целиком и полностью опирается на **систему определения тёплого/холодного старта** игры.
+Прежде чем говорить о хранении уровней, надо понять, как стартует SMB1. Потому что глитч cart swap NES Tennis целиком опирается на **систему детекта warm start / cold start** игры.
 
-### 41 байт, который сохраняется
+### 41 сохраняемый байт
 
-Когда SMB1 определяет **холодный старт** (первая включение или power off/on), он очищает всю RAM. Но когда определяет **тёплый старт** (сброс кнопкой, без отключения питания), он сохраняет область памяти в **41 байт**:
+Когда SMB1 детектит **cold start** (первое включение или выкл/вкл питания), он стирает всю RAM. Но когда детектит **warm start** (кнопка reset, без отключения питания), он сохраняет область памяти в **41 байт** :
 
 ```asm
-; Les 41 bytes préservés en RAM lors d'un warm start
-; Adresses $075F-$0787
+; 41 байтов, сохраняемых в RAM при warm start
+; Адреса $075F-$0787
 ;
-; $075F : byte de démarrage (world - 1)    [1 byte]
-; $0760 : flag de sélection de monde (B button) [1 byte]
-; $0761-$0762 : inutilisé                    [2 bytes]
-; $0763-$0768 : timer (6 digits, 3 affichés) [6 bytes]
-; $0769-$076E : coins Luigi                   [6 bytes]
-; $076F-$0774 : coins Mario                   [6 bytes]
-; $0775-$077A : score Luigi                   [6 bytes]
-; $077B-$0780 : score Mario                   [6 bytes]
-; $0781-$0786 : top score (6 digits, 1 caché) [6 bytes]
-; $0787 : le byte magique $A5                 [1 byte]
+; $075F : стартовый байт (world - 1)    [1 байт]
+; $0760 : флаг выбора мира (кнопка B) [1 байт]
+; $0761-$0762 : неиспользуемо                    [2 байта]
+; $0763-$0768 : таймер (6 цифр, 3 показываются) [6 байтов]
+; $0769-$076E : монеты Луиджи                   [6 байтов]
+; $076F-$0774 : монеты Марио                   [6 байтов]
+; $0775-$077A : счёт Луиджи                   [6 байтов]
+; $077B-$0780 : счёт Марио                   [6 байтов]
+; $0781-$0786 : топ-счёт (6 цифр, 1 скрыта) [6 байтов]
+; $0787 : магический байт $A5                 [1 байт]
 ```
 
-Эти 41 байт служат одной-единственной цели: дать игроку возможность **продолжить с того же мира после game over**. Если умереть на 6-3, игра записывает мир 6 в байт старта, и на титульном экране, если зажать A + Start, начнёшь с 6-1.
+Эти 41 байта служат одной функции : позволить игроку **продолжить с того же мира после game over**. Если умираешь в 6-3, игра пишет мир 6 в стартовый байт, и на титульном экране, если держать A + Start, перезапускаешься в 6-1.
 
-![Сохранённые 41 байт RAM при тёплом старте -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD и магический байт $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
+![41 байт, сохраняемых в RAM при warm start -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD и магический байт $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
 
-### Двойная проверка тёплого старта
+### Двойная проверка warm start
 
-![Холодный старт vs тёплый старт -- схема определения сброса](/images/smb1-glitch-levels/v1-warm-start.jpg)
+![Cold start против warm start -- диаграмма детекта reset](/images/smb1-glitch-levels/v1-warm-start.jpg)
 
-Когда SMB1 загружается, он проверяет не один критерий, а **два**:
+Когда SMB1 бутится, он проверяет не один критерий, а **два** :
 
 ```asm
 CheckWarmStart:
-  ; 1. Vérifier le byte magique $A5 à $0787
+  ; 1. Проверить магический байт $A5 по $0787
   lda $0787
   cmp #$A5
-  bne ColdStart        ; pas $A5 → cold start
+  bne ColdStart        ; нет $A5 → cold start
 
-  ; 2. Vérifier les 6 digits du top score ($0781-$0786)
-  ;    Chaque digit doit être entre 0 et 9
+  ; 2. Проверить 6 цифр топ-счёта ($0781-$0786)
+  ;    Каждая цифра должна быть между 0 и 9
   ldx #0
 CheckLoop:
   lda $0781,x
   cmp #$0A
-  bcs ColdStart        ; digit >= 10 → cold start
+  bcs ColdStart        ; цифра >= 10 → cold start
   inx
   cpx #6
   bne CheckLoop
 
-  ; Si les deux conditions passent → warm start
-  ; La RAM n'est pas effacée, le monde de départ est préservé
+  ; Если оба условия проходят → warm start
+  ; RAM не стирается, стартовый мир сохраняется
   jmp WarmStartBoot
 ```
 
-![Проверка байта $A5 и цифр top score -- сердце тёплого старта](/images/smb1-glitch-levels/v1-a5-byte.jpg)
+![Проверка байта $A5 и цифр топ-счёта -- сердце warm start](/images/smb1-glitch-levels/v1-a5-byte.jpg)
 
-Зачем двойная проверка? Потому что байт $A5 может оказаться на месте случайно (другая игра, оставившая это значение, или состояние покоя по умолчанию чипа RAM). Проверяя, что цифры top score допустимы (0-9), игра убеждается, что данные согласованы.
+Зачем двойная проверка? Потому что байт $A5 мог оказаться там случайно (другая игра, оставившая это значение, или состояние покоя чипа RAM по умолчанию). Проверяя, что цифры топ-счёта валидны (0-9), убеждаемся, что данные связны.
 
-### Почему только теннис работает
+### Почему работает только Tennis
 
-Когда впервые вставляешь SMB1 (холодный старт), игра:
-1. Очищает всю RAM → top score = 0, world byte = 0
-2. Записывает $A5 по адресу $0787
+Когда вставляешь SMB1 в первый раз (cold start), игра :
+1. Стирает всю RAM → топ-счёт = 0, world-байт = 0
+2. Пишет $A5 по адресу $0787
 
-Затем переключаешься на Tennis без выключения консоли. Tennis:
-- **Не чистит RAM при запуске** (мало какие игры NES это делают)
-- **Не пишет в байты top score** → они остаются 0 (валидные)
+Затем свапаешь на Tennis, не выключая консоль. Tennis :
+- **Не чистит RAM при старте** (мало какие игры NES это делают)
+- **Не пишет в байты топ-счёта** → они остаются 0 (валидны)
 - **Не трогает байт $A5** → он остаётся на месте
 - **Использует адрес $075F** для счётчика шагов игрока
 
 ```asm
-; Le footstep increment dans Tennis :
-; À chaque pas du joueur sur le court, Tennis incrémente le byte à $075F.
-; Ce même byte est utilisé par SMB1 comme "world number - 1".
+; Инкремент шагов в Tennis :
+; При каждом шаге игрока на корте Tennis инкрементирует байт по $075F.
+; Этот же байт используется SMB1 как "world number - 1".
 ;
-; 0 pas  → world 0 → SMB1 = world 1
-; 1-7 pas → world 1-7 → worlds normaux
-; 8+ pas → world 8+ → glitch worlds !
+; 0 шагов  → мир 0 → SMB1 = мир 1
+; 1-7 шагов → миры 1-7 → нормальные миры
+; 8+ шагов → мир 8+ → глитч-миры !
 ;
-; Le compteur ne s'incrémente que quand la musique s'arrête
-; (les footstep sounds ne jouent pas pendant la musique).
+; Счётчик инкрементируется, только когда останавливается музыка
+; (звуки шагов не играют во время музыки).
 ```
 
-Когда снова запускаешь SMB1:
-1. Байт $A5 всё ещё на месте (Tennis его не трогал)
-2. Цифры top score всё ещё 0 (валидные)
-3. World byte теперь 8+ (увеличен шагами тенниса)
-4. SMB1 определяет тёплый старт → сохраняет повреждённый world byte
-5. Зажимаем A + Start → world 9-1, world A-1, world 36-1 и т.д.
+Когда возвращаешь SMB1 :
+1. Байт $A5 всё ещё там (Tennis его не трогал)
+2. Цифры топ-счёта всё ещё 0 (валидны)
+3. World-байт теперь 8+ (наинкрементирован шагами Tennis)
+4. SMB1 детектит warm start → сохраняет повреждённый world-байт
+5. Держать A + Start → мир 9-1, мир A-1, мир 36-1 и т.д.
 
-### Почему надо загружать Mario перед теннисом
+### Почему надо бутить Mario до Tennis
 
-Тонкость: сначала нужно загрузить SMB1, потом Tennis, потом снова SMB1. Если начать сразу с тенниса, байт $A5 никогда не будет записан (Tennis не пишет $A5), и определение тёплого старта не сработает -- RAM будет очищена.
+Тонкость : надо сначала забутить SMB1, потом Tennis, потом снова SMB1. Если бы начал сразу с Tennis, байт $A5 никогда не был бы записан (Tennis не пишет $A5), так что детект warm start провалился бы и RAM стёрлась бы.
 
-![Счётчик шагов тенниса: каждый шаг увеличивает world byte](/images/smb1-glitch-levels/v1-footstep.jpg)
+![Счётчик шагов Tennis : каждый шаг инкрементирует world-байт](/images/smb1-glitch-levels/v1-footstep.jpg)
 
-![Доступ к глитч-мирам через NES Tennis -- видео, объясняющее cart swap](/images/smb1-glitch-levels/yt-tennis.jpg)
+![Access Glitch Worlds via NES Tennis -- видео, объясняющее cart swap](/images/smb1-glitch-levels/yt-tennis.jpg)
 
-## Как SMB1 хранит свои уровни в 40КБ
+## Как SMB1 хранит свои уровни в 40KB
 
-Nintendo R&D4 пришлось решить задачу, которая на первый взгляд кажется простой: представить уровни с горизонтальным скроллингом, тайлами, врагами, предметами -- и всё это уместить в ультра-жёсткий бюджет ROM.
+Nintendo R&D4 должна была решить на вид простую проблему : представить горизонтально скроллящиеся уровни с тайлами, врагами, предметами, всё в ультратесном бюджете ROM.
 
-Решение -- разделение на два **полностью независимых** слоя данных:
+Решение это разделение на два слоя данных **полностью независимых** :
 
 ### Tile layout (карта уровня)
 
-Каждый уровень определяется указателем на структуру тайлов, сжатую в ROM. Сжатие примитивное, но гениальное: байт "управления", за которым следуют 1-3 байта данных.
+Каждый уровень определяется указателем на структуру тайлов, сжатую в ROM. Сжатие рудиментарно, но гениально : "контрольный" байт, за которым 1-3 байта данных.
 
-Формат тайлов использует систему **run'ов** (как RLE):
+Формат тайлов использует систему **ранов** (RLE-like) :
 
 ```asm
-; Format tile SMB1 (simplifié)
-; Chaque "commande" est un byte contrôle :
+; Формат тайлов SMB1 (упрощённо)
+; Каждая "команда" это контрольный байт :
 ;
-; $00-$7F : pose une tile, avance d'1 colonne
-; $80-$BF : pose une tile répétée N fois (N = byte - $80 + 1)
-; $C0-$FF : commande spéciale (fin de ligne, saut, changement de palette)
+; $00-$7F : положить тайл, продвинуться на 1 колонку
+; $80-$BF : положить тайл, повторённый N раз (N = байт - $80 + 1)
+; $C0-$FF : спецкоманда (конец строки, прыжок, смена палитры)
 
-Exemple : pour dessiner 3 briques consécutives :
-  $82 $01    ; répète la tile $01 (brick) 3 fois
+Пример : чтобы нарисовать 3 кирпича подряд :
+  $82 $01    ; повторить тайл $01 (brick) 3 раза
 ```
 
-Каждый уровень содержит 13 строк по 16 колонок тайлов (13×16 = 208 видимых тайлов). Но сжатый формат позволяет снизить размер значительно ниже -- например, небо и пустые колонки почти не занимают места.
+Каждый уровень содержит 13 строк по 16 колонок тайлов (13×16 = 208 видимых тайлов). Но сжатый формат позволяет спускаться куда ниже -- например, небо и пустые колонки почти не занимают места.
 
-Цикл рендеринга на 6502:
+Цикл рендера на 6502 :
 
 ```asm
-; Décompression tile - loop principale
-; Entrée : pointeur tile_data en $XX
-; Sortie : tilemap niveau dans la RAM PPU
+; Декомпрессия тайлов - главный loop
+; Вход : указатель tile_data в $XX
+; Выход : тайлмап уровня в RAM PPU
 
 DecompressTile:
-  lda (tile_ptr),y      ; lire byte contrôle
+  lda (tile_ptr),y      ; читать контрольный байт
   iny
   cmp #$80
-  bcc SingleTile        ; $00-$7F : tile unique
+  bcc SingleTile        ; $00-$7F : одиночный тайл
   cmp #$C0
   bcc RunLength         ; $80-$BF : run-length
-  jmp SpecialCommand    ; $C0-$FF : commande spéciale
+  jmp SpecialCommand    ; $C0-$FF : спецкоманда
 
 SingleTile:
-  sta PPU_DATA          ; écrire la tile directement
+  sta PPU_DATA          ; писать тайл напрямую
   jmp Next
 
 RunLength:
   sec
   sbc #$7E              ; N = control - $7E
   tax
-  lda (tile_ptr),y      ; lire la tile à répéter
+  lda (tile_ptr),y      ; читать тайл для повтора
   iny
 : sta PPU_DATA
   dex
@@ -186,127 +186,127 @@ RunLength:
 
 ### Sprite layout (враги и объекты)
 
-Параллельно враги и объекты (блоки ?, трубы, гумбы, купы) хранятся в полностью отдельной структуре. Каждый спавн определяется 2 байтами:
+Параллельно враги и объекты (блоки ?, трубы, гумбы, купа) хранятся в совершенно отдельной структуре. Каждый спавн определяется 2 байтами :
 
 ```asm
-; Format sprite SMB1
-; Byte 0 : position X (en colonnes)
-; Byte 1 : type de sprite + bits de page Y
-; Y est dérivé de l'index dans la séquence
+; Формат спрайтов SMB1
+; Байт 0 : позиция X (в колонках)
+; Байт 1 : тип спрайта + биты страницы Y
+; Y выводится из индекса в последовательности
 
-Une séquence de sprites :
-  $01 $4B    ; goomba à la colonne 1
-  $09 $4B    ; goomba à la colonne 9
-  $10 $61    ; bloc ? à la colonne 16 (contient pièce)
-  $15 $54    ; koopa verte à la colonne 21
-  $FF        ; fin de séquence
+Последовательность спрайтов :
+  $01 $4B    ; гумба на колонке 1
+  $09 $4B    ; гумба на колонке 9
+  $10 $61    ; блок ? на колонке 16 (содержит монету)
+  $15 $54    ; зелёная купа на колонке 21
+  $FF        ; конец последовательности
 ```
 
-Каждый уровень может ссылаться до 5 страниц различных спрайтов (точнее, 5 "экранов" по 16 колонок), но на практике большинство уровней использует только 2-3.
+Каждый уровень может ссылаться до 5 страниц спрайтов (точнее, 5 "скринов" по 16 колонок), но на практике большинство уровней использует только 2-3.
 
 ### Таблица указателей
 
-Гениальность конструкции -- в таблице указателей. Каждый уровень хранится как **пара** адресов ROM:
+Гениальность дизайна это таблица указателей. Каждый уровень хранится как **пара** адресов ROM :
 
 ```c
-// Structure interne (simplifiée) du World Map
+// Внутренняя структура (упрощённо) World Map
 struct LevelPointer {
-    uint16_t tile_ptr;   // Adresse ROM des données tiles
-    uint16_t sprite_ptr; // Adresse ROM des données sprites
+    uint16_t tile_ptr;   // Адрес ROM данных тайлов
+    uint16_t sprite_ptr; // Адрес ROM данных спрайтов
 };
 
-// 4 tables séparées, une par AreaType :
+// 4 отдельные таблицы, по одной на AreaType :
 // 0 = Water, 1 = Overworld, 2 = Underground, 3 = Castle
 LevelPointer level_table[4][128];
 ```
 
-128 записей на таблицу. 4 типа зон. **512 возможных комбинаций**, но лишь дробь используется официальной игрой. Остальное -- неинициализированная RAM или данные, которые интерпретируются как указатели.
+128 входов на таблицу. 4 типа зон. **512 возможных комбинаций**, но лишь доля используется официальной игрой. Остальное это неинициализированная RAM или данные, интерпретируемые как указатели.
 
-Когда игра загружает уровень, она делает вот это:
+Когда игра грузит уровень, она делает это :
 
 ```asm
-; Chargement d'un niveau
+; Загрузка уровня
 ; A = AreaType (0-3), X = LevelID (0-127)
 
 LoadLevel:
   sta AREA_TYPE
-  asl                  ; *2 pour offset dans table 16-bit
+  asl                  ; *2 для офсета в 16-битной таблице
   tax
   lda LevelTable_TilePtr, x
   sta TILE_PTR
   lda LevelTable_TilePtr+1, x
-  sta TILE_PTR+1       ; pointeur vers les tiles
+  sta TILE_PTR+1       ; указатель на тайлы
   lda LevelTable_SpritePtr, x
   sta SPRITE_PTR
   lda LevelTable_SpritePtr+1, x
-  sta SPRITE_PTR+1     ; pointeur vers les sprites
+  sta SPRITE_PTR+1     ; указатель на спрайты
   jsr DecompressTiles
 ```
 
-Ни какой проверки. Ни проверки, что указатель валиден. Игра читает адрес из таблицы и распаковывает то, что лежит по этому адресу, точка.
+Игра оказывает указателям полное доверие : читает адрес в таблице и декомпрессирует то, что по этому адресу, точка.
 
 ![Level ID $06 (Water) -- 9-1, подводная версия 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
 
-![Таблица Level IDs: 128 возможных записей, 34 назначены](/images/smb1-glitch-levels/v2-level-id-table.jpg)
+![Таблица Level ID : 128 возможных входов, 34 назначено](/images/smb1-glitch-levels/v2-level-id-table.jpg)
 
-![Разный порядок указателей тайлов и спрайтов -- причина Frankenstein levels](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
+![Разный порядок указателей tiles и sprites -- причина Frankenstein levels](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
 
-### 34 уникальных уровня и 7-битная система ID
+### 34 уникальных уровня и система 7-битных ID
 
-![Чип RAM NES (MB8416A) -- он сохраняет данные при замене картриджей](/images/smb1-glitch-levels/v1-ram-chip.jpg)
+![Чип RAM NES (MB8416A) -- именно он сохраняет данные, когда свапаешь картриджи](/images/smb1-glitch-levels/v1-ram-chip.jpg)
 
-SMB1 имеет не 32, а **34 уникальных уровня**. Многие уровни -- дубликаты (5-3 = 1-3, но с Bullet Bills), помеченные флагом "hard mode". Настоящие уникальные уровни:
+В SMB1 не 32 уровня, а **34 уникальных уровня**. Многие уровни дубликаты (5-3 = 1-3, но с Bullet Bills), помеченные флагом "hard mode". Настоящие уникальные уровни :
 
-- **Вода** (Тип 0): 3 уровня (2-2, 7-2, бонусная зона 5-2/6-2)
-- **Overworld** (Тип 1): 22 уровня (включая 2 бонусных облачных комнаты)
-- **Underground** (Тип 2): 3 уровня (включая подземные бонусные комнаты)
-- **Castle** (Тип 3): 6 уровней
-- \+ 1 комната кат-сцены (перед подземными/водными уровнями)
-- \+ 1 warp-зона 4-2
+- **Вода** (Type 0) : 3 уровня (2-2, 7-2, бонусная зона 5-2/6-2)
+- **Overworld** (Type 1) : 22 уровня (включая 2 бонусные облачные комнаты)
+- **Underground** (Type 2) : 3 уровня (включая подземные бонусные комнаты)
+- **Castle** (Type 3) : 6 уровней
+- \+ 1 cutscene-комната (перед подземными/водными уровнями)
+- \+ 1 warp-зона из 4-2
 
-Каждый уровень имеет ID на **7 битах**. Младшие 5 бит = номер в подгруппе, старшие 2 бита = тип зоны:
-
-```asm
-; Encodage 7-bit du Level ID
-; Bits 6-5 : Type (00=Water, 01=Overworld, 10=Underground, 11=Castle)
-; Bits 4-0 : Numéro dans le sous-groupe
-;
-; Water IDs      : $00-$02  (types 00, numéros 0-2)
-; Overworld IDs  : $20-$35  (types 01, numéros 0-21)
-; Underground IDs: $40-$42  (types 10, numéros 0-2)
-; Castle IDs     : $60-$65  (types 11, numéros 0-5)
-;
-; ID $25 = %0100101 → type 01 (Overworld), numéro 5 → 1-1
-; ID $23 = %0100011 → type 01 (Overworld), numéro 3 → 6-2
-```
-
-**128 возможных ID** ($00-$7F), только 34 назначены реальным уровням. Неиспользуемые ID указывают на что угодно.
-
-### Таблицы указателей: два списка, два порядка
-
-Указатели тайлов и спрайтов хранятся в разном порядке. Код использует две отдельные 16-битные таблицы (старший байт / младший байт в разных таблицах):
-
-```
-Ordre des pointeurs sprites :
-  Index 0-5   : Castle (6 niveaux)
-  Index 6-27  : Overworld (22 niveaux)
-  Index 28-30 : Underground (3 niveaux)
-  Index 31-33 : Water (3 niveaux)
-
-Ordre des pointeurs tiles :
-  Index 0-2   : Water (3 niveaux)
-  Index 3-24  : Overworld (22 niveaux)
-  Index 25-27 : Underground (3 niveaux)
-  Index 28-33 : Castle (6 niveaux)
-```
-
-Почему разный порядок? Технических причин нет -- скорее всего, данные были организованы так в процессе разработки. Но это создаёт fascinating последствие: когда ID уровня невалиден, указатели тайлов и спрайтов загружают *разные* уровни, создавая **Frankenstein levels**.
-
-Чтобы перемещаться между этими двумя списками, игра использует небольшие **таблицы смещений** (как оглавление):
+У каждого уровня ID на **7 битах**. 5 младших битов = номер в подгруппе, 2 старших бита = тип зоны :
 
 ```asm
-; Tables d'offset par type (Water, Overworld, Underground, Castle)
-; Chaque entrée = index de début dans la liste correspondante
+; 7-битное кодирование Level ID
+; Биты 6-5 : Тип (00=Water, 01=Overworld, 10=Underground, 11=Castle)
+; Биты 4-0 : Номер в подгруппе
+;
+; Water IDs      : $00-$02  (типы 00, номера 0-2)
+; Overworld IDs  : $20-$35  (типы 01, номера 0-21)
+; Underground IDs: $40-$42  (типы 10, номера 0-2)
+; Castle IDs     : $60-$65  (типы 11, номера 0-5)
+;
+; ID $25 = %0100101 → тип 01 (Overworld), номер 5 → 1-1
+; ID $23 = %0100011 → тип 01 (Overworld), номер 3 → 6-2
+```
+
+**128 возможных ID** ($00-$7F), только 34 назначены настоящим уровням. Неиспользуемые ID указывают на что попало.
+
+### Таблицы указателей : два списка, два порядка
+
+Указатели tiles и sprites хранятся не в одном порядке. Код использует два отдельных 16-битных списка (старший байт / младший байт в двух разных таблицах) :
+
+```
+Порядок указателей sprites :
+  Индекс 0-5   : Castle (6 уровней)
+  Индекс 6-27  : Overworld (22 уровня)
+  Индекс 28-30 : Underground (3 уровня)
+  Индекс 31-33 : Water (3 уровня)
+
+Порядок указателей tiles :
+  Индекс 0-2   : Water (3 уровня)
+  Индекс 3-24  : Overworld (22 уровня)
+  Индекс 25-27 : Underground (3 уровня)
+  Индекс 28-33 : Castle (6 уровней)
+```
+
+Почему разные порядки? Никакой технической причины -- вероятно, данные так организовались при разработке. Но это создаёт захватывающее следствие : когда ID уровня невалиден, указатели tiles и sprites грузят *разные* уровни, создавая **Frankenstein levels**.
+
+Чтобы перемещаться между этими списками, игра использует маленькие **таблицы офсетов** (как оглавление) :
+
+```asm
+; Таблицы офсетов по типу (Water, Overworld, Underground, Castle)
+; Каждый вход = стартовый индекс в соответствующем списке
 
 SpriteOffsetTable:
   .byte $1F, $06, $1C, $00    ; Water=31, Overworld=6, Underground=28, Castle=0
@@ -315,601 +315,601 @@ TileOffsetTable:
   .byte $00, $03, $19, $1C    ; Water=0, Overworld=3, Underground=25, Castle=28
 ```
 
-Чтобы загрузить уровень 6-2 (ID $23, Overworld номер 3):
+Чтобы загрузить уровень 6-2 (ID $23, Overworld номер 3) :
 
 ```asm
-; 1. Type = 01 (Overworld) → index dans table d'offset = 1
+; 1. Тип = 01 (Overworld) → индекс в таблице офсетов = 1
 ; 2. Sprite offset = SpriteOffsetTable[1] = 6
-;    Index final = 6 + 3 (numéro de niveau) = 9 → 10ème pointeur sprites
+;    Финальный индекс = 6 + 3 (номер уровня) = 9 → 10-й указатель sprites
 ; 3. Tile offset = TileOffsetTable[1] = 3
-;    Index final = 3 + 3 = 6 → 7ème pointeur tiles
-; 4. Résultat : pointeur tiles $A619 + pointeur sprites $9ED0 = 6-2 ✓
+;    Финальный индекс = 3 + 3 = 6 → 7-й указатель tiles
+; 4. Результат : указатель tiles $A619 + указатель sprites $9ED0 = 6-2 ✓
 ```
 
-А что происходит с невалидным ID вроде $43 (Underground номер 3, которого не существует)?
+А что происходит с невалидным ID вроде $43 (Underground номер 3, не существующий)?
 
 ```asm
-; ID $43, Type = 10 (Underground), numéro = 3
+; ID $43, Тип = 10 (Underground), номер = 3
 ; Sprite offset = SpriteOffsetTable[2] = $1C = 28
-;   Index = 28 + 3 = 31 → 32ème pointeur sprites = eau bonus 5-2 !
+;   Индекс = 28 + 3 = 31 → 32-й указатель sprites = водный бонус 5-2 !
 ; Tile offset = TileOffsetTable[2] = $19 = 25
-;   Index = 25 + 3 = 28 → 29ème pointeur tiles = 1-4 (Castle) !
+;   Индекс = 25 + 3 = 28 → 29-й указатель tiles = 1-4 (Castle) !
 ;
-; Résultat : un niveau souterrain avec les tiles de 1-4
-; et les Bloopers de la zone eau de 5-2. Un vrai Frankenstein.
+; Результат : подземный уровень с тайлами 1-4
+; и блуперами из водной зоны 5-2. Настоящий Франкенштейн.
 ```
 
-![Level ID $43 -- Frankenstein level: тайлы 1-4 + спрайты воды 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
+![Level ID $43 -- Frankenstein level : тайлы 1-4 + спрайты воды 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
 
-![Exploring Glitch Level Pointers -- таблицы смещений объяснены](/images/smb1-glitch-levels/yt-pointers.jpg)
+![Exploring Glitch Level Pointers -- таблицы офсетов объяснены](/images/smb1-glitch-levels/yt-pointers.jpg)
 
-![World index table -- когда overflow world 9 создаёт glitch level](/images/smb1-glitch-levels/v2-world-index-table.jpg)
+![Таблица world index -- когда оверфлоу мира 9 создаёт глитч-левел](/images/smb1-glitch-levels/v2-world-index-table.jpg)
 
-### World index table: почему world 9 переполняется
+### World index table : почему мир 9 оверфлоуит
 
-Есть ROM-таблица из 8 байтов, которая даёт индекс первого уровня каждого мира (1-8). И сразу за ней таблица из 36 Level IDs всех уровней в порядке игры.
+Есть ROM-таблица на 8 байтов, дающая индекс первого уровня каждого мира (1-8). А сразу после таблица 36 Level ID всех уровней в порядке игры.
 
 ```asm
-; WorldIndexTable (8 bytes)
+; WorldIndexTable (8 байтов)
   .byte 0, 5, 10, 15, 20, 25, 28, 33
-;   -> Monde 1 commence au niveau 0
-;   -> Monde 2 commence au niveau 5
-;   -> Monde 8 commence au niveau 33
+;   -> Мир 1 начинается с уровня 0
+;   -> Мир 2 начинается с уровня 5
+;   -> Мир 8 начинается с уровня 33
 
-; LevelIDTable (36 bytes)
-  .byte $25, $28, $29, $26, $24, ... ; les 36 Level IDs
+; LevelIDTable (36 байтов)
+  .byte $25, $28, $29, $26, $24, ... ; 36 Level ID
 ```
 
-Когда пытаешься загрузить world 9, игра читает 9-й байт WorldIndexTable... которого не существует. Он переполняется на 1 байт в LevelIDTable, читает значение $25, затем использует $25 как индекс в LevelIDTable (37-я запись) -- что снова переполняется на 2 байта в SpriteOffsetTable, и читает значение 6.
+Когда пытаешься загрузить мир 9, игра читает 9-й байт WorldIndexTable... которого нет. Она оверфлоуит на 1 байт в LevelIDTable, читает значение $25, затем использует $25 как индекс в LevelIDTable (37-й вход) -- что снова оверфлоуит на 2 байта в SpriteOffsetTable и читает значение 6.
 
 ```asm
-; World 9 :
-;   1. WorldIndexTable[8] (overflow) → lit $25 dans LevelIDTable
-;   2. LevelIDTable[37] (overflow) → lit le 2ème byte de SpriteOffsetTable = 6
-;   3. ID = 6 → Water level number 6 (qui n'existe pas)
-;   4. Tile pointer = pointeur water numéro 6 = tiles de 6-2
-;   5. Sprite pointer = index 31+6 = 37 > 33 → pointeur invalide
-;   6. Résultat : 6-2 sous l'eau avec des sprites glitchés
-;      → world 9-1 !
+; Мир 9 :
+;   1. WorldIndexTable[8] (overflow) → читает $25 в LevelIDTable
+;   2. LevelIDTable[37] (overflow) → читает 2-й байт SpriteOffsetTable = 6
+;   3. ID = 6 → Water level number 6 (не существует)
+;   4. Tile pointer = указатель water номер 6 = тайлы 6-2
+;   5. Sprite pointer = индекс 31+6 = 37 > 33 → невалидный указатель
+;   6. Результат : 6-2 под водой с глюкнутыми спрайтами
+;      → мир 9-1 !
 ```
 
-Для world G (16) переполнение идёт ещё дальше и попадает на Level ID $01 -- это кат-сцена перед 1-2:
+Для мира G (16) оверфлоу идёт ещё дальше и падает на Level ID $01, уровень cutscene перед 1-2 :
 
 ```asm
-; World G (16) :
-;   WorldIndexTable[15] → lit $01 dans LevelIDTable
+; Мир G (16) :
+;   WorldIndexTable[15] → читает $01 в LevelIDTable
 ;   LevelIDTable[1] = $29 (cutscene 1-2)
-;   → world G-1 = la cutscene d'entrée de 1-2
+;   → мир G-1 = входная cutscene 1-2
 ```
 
 ## Почему существуют глитч-миры
 
-У игры 32 "легитимных" уровня (8 миров × 4 уровня). Но таблица указателей содержит 128 записей на тип зоны. Записи за пределами 32-го уровня содержат то, что лежит в ROM по этим адресам -- иногда другой уровень, иногда звуковые данные, иногда RAM, иногда что попало.
+В игре 32 "легитимных" уровня (8 миров × 4 уровня). Но таблица указателей на 128 входов на тип зоны. Входы за 32-м содержат то, что находится в ROM по этим адресам -- порой другой уровень, порой звуковые данные, порой RAM, порой что попало.
 
 ![Level ID $01 Water (Minus World) -- tile pointer $AE45, sprite pointer $A171](/images/smb1-glitch-levels/minus-world.png)
 
 ### Level ID $01 + AreaType 0 = Minus World
 
-Самый знаменитый из глитч-миров. Level ID $01 в AreaType 0 (вода) указывает на:
+Самый знаменитый из глитч-миров. Level ID $01 в AreaType 0 (вода) указывает на :
 
-- **Tile pointer: $AE45** → подводная зона 2-2/7-2
-- **Sprite pointer: $A171** → спрайты 2-2/7-2
+- **Tile pointer : $AE45** → подводная зона 2-2/7-2
+- **Sprite pointer : $A171** → спрайты 2-2/7-2
 
-Результат: водный уровень, похожий на 2-2, но зацикленный бесконечно, потому что flagpole не существует. Нет конца уровня, нет выхода.
+Итог : водный уровень, похожий на 2-2, но зацикливающийся бесконечно, потому что flagpole не существует. Уровень крутится в петле вечно.
 
 Это уровень 36-1 (или 36-1 в мире $-1).
 
-![Проверка тёплого старта SMB1 -- именно она позволяет Minus World существовать](/images/smb1-glitch-levels/v4-minus-world.jpg)
+![Проверка warm start в SMB1 -- именно она даёт существовать Minus World](/images/smb1-glitch-levels/v4-minus-world.jpg)
 
 ```asm
-; Pourquoi le flagpole manque dans le Minus World :
-; Les sprites de 2-2/7-2 ($A171) n'ont pas de flagpole
-; dans leur séquence. Le jeu cherche le sprite $FD (flagpole)
-; mais ne le trouve jamais → boucle infinie
+; Почему во Minus World нет flagpole :
+; У спрайтов 2-2/7-2 ($A171) нет flagpole
+; в последовательности. Игра ищет спрайт $FD (flagpole)
+; но никогда не находит → бесконечная петля
 ;
-; Le jeu continue de générer le niveau à l'infini
-; jusqu'à ce que le timer atteigne zéro.
+; Игра продолжает генерировать уровень бесконечно
+; пока таймер не дойдёт до нуля.
 ```
 
-### Указатели, указывающие на RAM
+### Указатели, указывающие в RAM
 
-Когда tile pointer или sprite pointer указывает на адрес в RAM ($00-$7F) вместо ROM, игра пытается интерпретировать постоянные изменения RAM как тайлы:
+Когда tile pointer или sprite pointer указывает на адрес в RAM ($00-$7F), а не в ROM, игра пытается интерпретировать постоянные изменения RAM как тайлы :
 
 ```asm
-; Exemple : Level ID $03 en Water
-; Tile Pointer : $A46B (3-3 - valide)
-; Sprite Pointer : $009D (pointe vers la RAM page zéro !)
+; Пример : Level ID $03 в Water
+; Tile Pointer : $A46B (3-3 - валиден)
+; Sprite Pointer : $009D (указывает в нулевую страницу RAM !)
 ;
-; La RAM page zéro contient les registres du jeu,
-; la position de Mario, l'état des compteurs...
-; Le jeu décompresse ça comme une séquence de sprites,
-; et le résultat c'est un niveau avec des ennemis
-; qui sont en fait des valeurs de registres.
+; Нулевая страница RAM содержит регистры игры,
+; позицию Марио, состояние счётчиков...
+; Игра декомпрессирует это как последовательность спрайтов,
+; и результат это уровень с врагами,
+; которые на деле значения регистров.
 ```
 
-Когда нулевая страница меняется (потому что Mario двигается, таймер тикает и т.д.), "спрайты" уровня тоже меняются. Поэтому у некоторых глитч-миров враги мигают и постоянно превращаются во что-то другое.
+Когда нулевая страница меняется (потому что Марио двигается, таймер тикает и т.д.), "спрайты" уровня тоже меняются. Поэтому у некоторых глитч-миров враги мигают и постоянно трансформируются.
 
-![Level ID $03 Water -- sprite pointer $009D указывает на RAM, уровень неиграбельный](/images/smb1-glitch-levels/level-03-water.png)
+![Level ID $03 Water -- sprite pointer $009D указывает в RAM, уровень неиграбелен](/images/smb1-glitch-levels/level-03-water.png)
 
-### Level ID $36: пустой уровень (Overworld)
+### Level ID $36 : пустой уровень (Overworld)
 
-Level ID $36 в Overworld:
+Level ID $36 в Overworld :
 
-- **Tile pointer: $AC35** (1-2)
-- **Sprite pointer: $A0D8** (1-2)
+- **Tile pointer : $AC35** (1-2)
+- **Sprite pointer : $A0D8** (1-2)
 
-Результат: ничего. Игра загружает уровень, но в каталоге RGMechEx он отмечен как "без уровня". Тайлы могут быть валидными, но спрайты указывают на место, которое создаёт пустой или нерабочий уровень.
+Итог : ничего. Игра грузит уровень, но он помечен "без уровня" в каталоге RGMechEx. Тайлы, может, валидны, но спрайты указывают туда, где получается пустой или нерабочий уровень.
 
-### Level ID $1D (Castle): чемпион крашей
+### Level ID $1D (Castle) : чемпион крашей
 
-Level ID $1D в Castle:
+Level ID $1D в Castle :
 
-- **Tile pointer: $A210** (4-4)
-- **Sprite pointer: $7EA0** (RAM!)
+- **Tile pointer : $A210** (4-4)
+- **Sprite pointer : $7EA0** (RAM !)
 
-Sprite pointer в RAM = неопределённые спрайты. Игра пытается отрисовать Spiny ball или Bullet Bill blaster в первой строке тайлов. Это вызывает немедленный краш.
+Sprite pointer в RAM = undefined sprites. Игра пытается показать Spiny ball или Bullet Bill blaster в первой строке тайлов. Крашится сразу.
 
 ```asm
-; Quand le sprite pointer pointe vers la RAM,
-; le jeu décompresse des bytes qui changent tout le temps
-; comme des instructions "spawn". Le résultat :
-; - Apparition d'objets inexistants (valeur undefined)
-; - Crash PPU quand le sprite NES essaie d'afficher un tile invalide
-; - Freeze complet de la console
+; Когда sprite pointer указывает в RAM,
+; игра декомпрессирует байты, меняющиеся всё время,
+; как инструкции "спавн". Результат :
+; - Появление несуществующих объектов (значение undefined)
+; - Краш PPU, когда спрайт NES пытается показать невалидный тайл
+; - Полный фриз консоли
 ```
 
-## 256 глитч-миров, каталогизированных
+## 256 каталогизированных глитч-миров
 
-RGMechEx написал скрипт, который генерирует карты **всех уровней** для 4 типов зон и 128 ID каждый.
+RGMechEx написал скрипт, генерирующий карты **всех уровней** для 4 типов зон и 128 ID каждого.
 
-Счётчик мира -- 8 бит (0-255). Миры 1-8 легитимные. Остаётся **248 потенциальных глитч-миров**. Каждый глитч-мир соответствует первому уровню этого мира, а его Level ID вычисляется механизмом переполнения WorldIndexTable.
+Счётчик мира на 8 битах (0-255). Миры 1-8 легитимны. Остаётся **248 потенциальных глитч-миров**. Каждый глитч-мир соответствует первому уровню этого мира, а его Level ID вычисляется механизмом оверфлоу WorldIndexTable.
 
-![Таблица глитч-миров -- 248 повреждённых миров, 68 первых доступных уровней](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
+![Таблица глитч-миров -- 248 повреждённых миров, 68 доступных первых уровней](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
 
-Из 128 возможных ID только **68 являются "первым уровнем" мира** (доступными через номер глитч-мира). Остальные 60 -- это уровни 2+ или недоступные.
+Из 128 возможных ID только **68 это "первые уровни" мира** (доступные через номер глитч-мира). Остальные 60 это уровни 2+ или недоступные.
 
-| Тип | Уникальные играбельные ID | ID, которые крашатся | Пустые ID |
+| Тип | Уникальных играбельных ID | Крашащихся ID | Пустых ID |
 |------|---------------------|-------------------|-----------|
 | Water (0)    | ~20  | ~60  | ~48  |
 | Overworld (1)| ~30  | ~55  | ~43  |
 | Underground (2) | ~15 | ~65 | ~48  |
 | Castle (3)   | ~25  | ~58  | ~45  |
 
-Многие ID ведут на один и тот же уровень из-за указателей, попадающих на одинаковые адреса ROM. Например, Level ID $28 (Overworld) -- tile pointer $A7CD (2-1) -- появляется в **38 разных глитч-мирах**, потому что его sprite pointer $9F51 указывает на область ROM, которая используется как padding/звуковые данные и переиспользуется множеством ID.
+Многие ID ведут на один уровень из-за указателей, падающих на те же адреса ROM. Level ID $28 (Overworld) например -- tile pointer $A7CD (2-1) -- появляется в **38 разных глитч-мирах**, потому что его sprite pointer $9F51 указывает в зону ROM, используемую как padding/звуковые данные, переиспользуемые кучей ID.
 
 ![Карта уровня ID $28 (Overworld) -- тайлы 2-1 с нормальными спрайтами, 38 глитч-миров](/images/smb1-glitch-levels/level-28-overworld.png)
 
-![Super Mario Bros. Glitch Levels Explained -- третье видео](/images/smb1-glitch-levels/yt-levels.jpg)
+![Super Mario Bros. Glitch Levels Explained -- 3-е видео](/images/smb1-glitch-levels/yt-levels.jpg)
 
-### 6 по-настоящему уникальных глитч-уровней
+### 6 реально уникальных глитч-уровней
 
-Из 19 доступных ID глитч-уровней только **6 не крашатся сразу** при загрузке:
+Среди 19 доступных ID глитч-уровней только **6 не крашатся сразу** при загрузке :
 
 | Мир | Level ID | Описание |
 |-------|----------|-------------|
-| E-1 (224) | $50 | Один-единственный ? блок над пропастью. Mario умирает мгновенно. |
-| W | $57 | Mario застревает при спавне, не может двигаться. |
-| 42 (133) | $50 | Облачный туннель, который ловит Mario, если он уйдёт достаточно далеко. |
-| 62 (131, 240) | $4D | Замёрзший замок: Mario спавнится наверху, не может упасть → застревает. |
-| 127 | $4B | Подземный туннель, но крашится, если уйти слишком далеко. |
-| 137 | $4B | Активирует автоматический скроллинг кат-сцен. Mario встречает единственный brick block, который блокирует его навсегда. |
+| E-1 (224) | $50 | Один ? блок над пропастью. Марио умирает мгновенно. |
+| W | $57 | Марио спавнится заблокированным, не может двигаться. |
+| 42 (133) | $50 | Облачный туннель, ловящий Марио, если зайти достаточно далеко. |
+| 62 (131, 240) | $4D | Замороженный замок : Марио спавнится наверху, не может упасть → заблокирован. |
+| 127 | $4B | Подземный туннель, но крашится, если зайти слишком далеко. |
+| 137 | $4B | Включает автопрокрутку катсцен. Марио встречает единственный brick block, блокирующий его навсегда. |
 
-![Level ID $50 (облачный туннель) -- глитч-мир 42-1 и E-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
-![Level ID $4D (замок) -- мир 62-1, Mario застрял при спавне](/images/smb1-glitch-levels/lvl-4D-castle.png)
-![Level ID $4B (туннель) -- мир 127-1, крашится при уходе слишком далеко](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
+![Level ID $50 (cloud tunnel) -- глитч-мир 42-1 и E-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
+![Level ID $4D (castle) -- мир 62-1, Марио заблокирован на спавне](/images/smb1-glitch-levels/lvl-4D-castle.png)
+![Level ID $4B (tunnel) -- мир 127-1, крашится, если зайти слишком далеко](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
 
-Шесть глитч-миров из 248, которые производят что-то действительно новое. Остальные -- это нормальные уровни с неправильным типом зоны или чёрные экраны.
+Шесть глитч-миров из 248, дающих что-то реально новое. Остальное это нормальные уровни с неправильным типом зоны или чёрные экраны.
 
 ## Формат уровней в деталях
 
-Копнём в точный формат данных уровня, чтобы понять, почему глитч-уровни держатся (или нет).
+Фокус на точном формате данных уровней, чтобы понять, почему глитч-уровни стоят (или нет).
 
-### Заголовок уровня: 2 байта, 6 свойств
+### Хедер уровня : 2 байта, 6 свойств
 
-Каждый уровень начинается с заголовка в 2 байта, который управляет 6 свойствами:
+Каждый уровень начинается с хедера в 2 байта, контролирующего 6 свойств :
 
 ```asm
-; Byte 0 : timer + Y start + modifier
-;   Bits 7-6 : timer (00=inchangé, 01=200, 10=300, 11=400)
-;   Bits 5-3 : Y start Mario (111/110 = autowalk)
-;   Bits 2-0 : level type modifier
+; Байт 0 : таймер + Y старта + модификатор
+;   Биты 7-6 : таймер (00=без изменений, 01=200, 10=300, 11=400)
+;   Биты 5-3 : Y старта Марио (111/110 = автопроход)
+;   Биты 2-0 : модификатор типа уровня
 ;              000=default, 001=waves, 010=brick wall,
 ;              011=water bottom, 100=night, 101=snow,
 ;              110=snow night, 111=gray night
 
-; Byte 1 : platform + background + floor pattern
-;   Bits 7-6 : special platform (00=tree, 01=mushroom,
+; Байт 1 : платформа + фон + паттерн пола
+;   Биты 7-6 : спецплатформа (00=tree, 01=mushroom,
 ;                                 10=Bullet Bill, 11=cloud)
-;   Bits 5-4 : background (00=none, 01=clouds,
+;   Биты 5-4 : фон (00=none, 01=clouds,
 ;                           10=montains, 11=fences)
-;   Bits 3-0 : floor pattern initial (0-15)
+;   Биты 3-0 : начальный паттерн пола (0-15)
 ```
 
-Модификатор типа управляет визуальными вариациями: волны вверху водных уровней, кирпичный фон 8-3, ночная палитра 4-3, снег 6-2 и т.д.
+Модификатор типа контролирует визуальные вариации : волны наверху водных уровней, кирпичный фон 8-3, ночная палитра 4-3, снег 6-2 и т.д.
 
-### Объекты тайлов: 2 байта, Next Screen Flag, очередь на 3 слота
+### Объекты тайлов : 2 байта, Next Screen Flag, очередь 3 слота
 
-После заголовка идёт список **объектов тайлов**, каждый по 2 байта. Байт $FD отмечает конец списка.
+После хедера идёт список **объектов тайлов**, каждый объект 2 байта. Байт $FD маркирует конец списка.
 
 ```asm
-; Format objet tile (16 bits) :
-; Byte 0 :
-;   Bits 7-4 : X position (colonne 0-15)
-;   Bits 3-0 : Y position
-;     Y=0-11  : position Y normale
-;     Y=12    : objets spéciaux (trous, ponts, rope, ? blocks)
-;     Y=13    : screen skip / objets spéciaux 2
-;     Y=14    : changement de modifier/scenery/floor
-;     Y=15    : objets spéciaux 3 (château, escaliers, gros tuyau)
+; Формат объекта тайла (16 бит) :
+; Байт 0 :
+;   Биты 7-4 : X позиция (колонка 0-15)
+;   Биты 3-0 : Y позиция
+;     Y=0-11  : нормальная Y позиция
+;     Y=12    : спецобъекты (дыры, мосты, верёвка, ? блоки)
+;     Y=13    : screen skip / спецобъекты 2
+;     Y=14    : смена модификатора/декораций/пола
+;     Y=15    : спецобъекты 3 (замок, лестницы, большая труба)
 
-; Byte 1 :
-;   Bit  7   : NEXT SCREEN FLAG
-;   Bits 6-4 : type d'objet (0-7)
-;   Bits 3-0 : largeur/hauteur / sous-type
+; Байт 1 :
+;   Бит  7   : ФЛАГ СЛЕДУЮЩЕГО ЭКРАНА
+;   Биты 6-4 : тип объекта (0-7)
+;   Биты 3-0 : ширина/высота / подтип
 ```
 
-Когда установлен бит "next screen", текущая рабочая колонка увеличивается на 1. Это позволяет размещать объекты за пределами первых 16 колонок. Объекты должны быть перечислены **в порядке** (слева направо), потому что игра загружает их последовательно:
+Когда бит "next screen" выставлен, текущая рабочая колонка инкрементируется на 1. Это позволяет ставить объекты за пределами первых 16 колонок. Объекты должны перечисляться **по порядку** (слева направо), потому что игра грузит их последовательно :
 
 ```asm
-; La routine de chargement a DEUX phases par colonne :
-; Phase 1 : chercher les nouveaux objets qui commencent sur cette colonne
-;            et les ajouter à la file d'attente (queue)
-; Phase 2 : traiter chaque objet dans la queue en dessinant les tiles,
-;            et retirer ceux qui finissent sur cette colonne
+; У загрузочной рутины ДВЕ фазы на колонку :
+; Фаза 1 : искать новые объекты, начинающиеся на этой колонке
+;            и добавлять в очередь (queue)
+; Фаза 2 : обработать каждый объект в очереди, отрисовывая тайлы,
+;            и убрать те, что заканчиваются на этой колонке
 ```
 
-О очередь вмещает ровно **3 слота**. Прямое следствие: нельзя иметь больше 3 объектов, начинающихся на одной колонке. Если очередь заполнена, 4-й объект игнорируется и никогда не загрузится.
+Очередь ровно на **3 слота**. Прямое следствие : нельзя иметь больше 3 объектов, начинающихся на одной колонке. Если очередь полна, 4-й объект игнорируется и никогда не загрузится.
 
-Именно поэтому хорошо спроектированные уровни избегают слишком плотной укладки объектов. Пример из 1-2: колонка с 1up блоком в потолке + кирпичи рядом разделены на два отдельных объекта, чтобы соблюсти лимит в 3.
+Поэтому хорошо спроектированные уровни избегают складывать слишком много объектов. Пример в 1-2 : колонка с 1up-блоком в потолке + кирпичи рядом разбиты на два отдельных объекта, чтобы уважить лимит 3.
 
-### Специальные Y-позиции: 12, 13, 14, 15
+### Спецпозиции Y : 12, 13, 14, 15
 
-Когда Y=12, объект не имеет Y-позиции (она зашита по типу):
+Когда Y=12, у объекта нет Y-позиции (она захардкожена по типу) :
 
 ```asm
-; Y=12 : objets sans Y position
-;   Type 0 : trou (supprime le sol)
-;   Type 1 : rope de plateforme mobile
-;   Types 2-4 : ponts à Y fixe
-;   Type 5 : trou avec eau/lave
-;   Types 6-7 : rangées de ? blocks
+; Y=12 : объекты без Y позиции
+;   Тип 0 : дыра (убирает пол)
+;   Тип 1 : верёвка движущейся платформы
+;   Типы 2-4 : мосты на фиксированном Y
+;   Тип 5 : дыра с водой/лавой
+;   Типы 6-7 : ряды ? блоков
 ```
 
-Когда Y=13, две подгруппы. Если бит 6 первого байта равен 1:
+Когда Y=13, две подгруппы. Если бит 6 байта 1 равен 1 :
 
 ```asm
-; Y=13, bit6=1 : objets spéciaux
-;   0 = L-pipe (cutscene), 1 = flagpole, 2-3 = pont/axe/hamer (fin château)
-;   4 = stop screen, 5 = random enemies, 6 = loop level, 7+ = crash possible
+; Y=13, бит6=1 : спецобъекты
+;   0 = L-pipe (cutscene), 1 = flagpole, 2-3 = мост/топор/молот (конец замка)
+;   4 = стоп экрана, 5 = случайные враги, 6 = петля уровня, 7+ = возможный краш
 ```
 
-Если bit6=0, младшие 5 бит кодируют **screen skip** (перейти напрямую к экрану N, не проходя по next screen flag по одному).
+Если бит6=0, 5 младших битов кодируют **screen skip** (прыгнуть прямо на экран N, не проходя next screen flag по одному).
 
-Когда Y=14: тот же принцип -- bit6=1 для смены модификатора типа, bit6=0 для смены фона + паттерна пола.
+Когда Y=14 : тот же принцип с бит6=1 для смены модификатора типа, бит6=0 для смены фона + паттерна пола.
 
-### Floor patterns: 16 паттернов пола
+### Floor patterns : 16 мотивов пола
 
-Пол уровней не состоит из отдельных объектов. SMB1 использует **floor patterns** -- паттерн фона, который применяется ко всем колонкам до следующего изменения:
+Пол уровней сделан не отдельными объектами. SMB1 использует **floor patterns**, фоновый мотив, применяющийся ко всем колонкам до следующей смены :
 
 ```asm
-; Floor patterns (4 bits = 16 possibilités)
-;   0 = vide total
-;   1 = sol 2 tiles haut
-;   2 = sol 1 tile haut
-;   3 = sol + bottom
-;   4 = sol + bottom 2
-;   5 = sol 1/2 tile
-;   6 = 3/4 sol
-;   ... jusqu'à 15 = rempli total (sol + plafond)
+; Floor patterns (4 бита = 16 возможностей)
+;   0 = полная пустота
+;   1 = пол 2 тайла высотой
+;   2 = пол 1 тайл высотой
+;   3 = пол + низ
+;   4 = пол + низ 2
+;   5 = пол 1/2 тайла
+;   6 = 3/4 пола
+;   ... до 15 = полное заполнение (пол + потолок)
 ```
 
-Именно поэтому дыры -- это объекты: они переопределяют floor pattern на конкретной колонке, не изменяя паттерн для всего остального.
+Поэтому дыры это объекты : они оверрайдят floor pattern на конкретной колонке, не меняя паттерн для всего остального.
 
-### Лимит 256 байт и повторение
+### Лимит 256 байтов и repeat
 
-Все tile-данные уровня помещаются в **максимум 256 байт**. Y-регистр 6502 используется как индекс, и он 8-битный. Если игра доходит до конца данных, не найдя байт $FD, **она возвращается в начало** и повторяет 256 байт бесконечно:
+Все tile-данные уровня умещаются максимум в **256 байтов**. Y-регистр 6502 используется как индекс, а он 8-битный. Если игра доходит до конца данных, не найдя байт $FD, **она зацикливается в начало** и повторяет 256 байтов бесконечно :
 
 ```asm
-; Index Y = 8 bits → max 256 bytes de données tiles
-; Si Y overflow (255 → 0) sans rencontrer $FD → repeat
-; Même chose pour les sprites, mais les objets pipe (3 bytes)
-; décalent la parité de l'index à chaque chargement.
+; Индекс Y = 8 бит → макс 256 байтов tile-данных
+; Если Y оверфлоуит (255 → 0), не встретив $FD → повтор
+; То же для спрайтов, но pipe-объекты (3 байта)
+; сдвигают чётность индекса при каждой загрузке.
 ```
 
-Некоторые глитч-уровни используют это повторение для генерации уровней, которые длятся "бесконечно".
+Некоторые глитч-уровни эксплуатируют этот повтор, чтобы генерировать уровни, длящиеся "бесконечно".
 
-### Система спрайтов: 2 байта + pipe-транзишены
+### Система спрайтов : 2 байта + pipe-переходы
 
-Спрайты следуют похожему формату, но без заголовка и с некоторыми ключевыми отличиями. Байт $FF отмечает конец списка.
+Спрайты следуют похожему формату, но без хедера и с ключевыми отличиями. Байт $FF маркирует конец списка.
 
 ```asm
-; Format sprite (2 bytes) :
-; Byte 0 : position X (colonne)
-; Byte 1 :
-;   Bit 7 : NEXT SCREEN FLAG
-;   Bits 6-0 : type de sprite
-;       Certains types incluent : goomba, koopa, Blooper,
-;       Bullet Bill, Lakitu, Spiny, plateformes,
-;       commande warp zone, toad/princesse,
-;       commandes de spawn de groupes d'ennemis
+; Формат спрайта (2 байта) :
+; Байт 0 : позиция X (колонка)
+; Байт 1 :
+;   Бит 7 : ФЛАГ СЛЕДУЮЩЕГО ЭКРАНА
+;   Биты 6-0 : тип спрайта
+;       Некоторые типы включают : goomba, koopa, Blooper,
+;       Bullet Bill, Lakitu, Spiny, платформы,
+;       команда warp zone, toad/принцесса,
+;       команды спавна групп врагов
 ```
 
-Младший бит первого байта -- **hard level flag**: если установлен в 1, спрайт появляется только на уровнях ≥ 5-3. Так создаются уровни "hard mode".
+Младший бит байта 1 это **флаг сложного уровня** : если выставлен, спрайт появляется только на уровнях ≥ 5-3. Так создаются уровни "hard mode".
 
-Y-позиция 15 = **screen skip** (аналогично тайлам). Y-позиция 14 = **pipe transition** (3 байта):
+Y-позиция 15 = **screen skip** (идентично тайлам). Y-позиция 14 = **pipe-переход** (3 байта) :
 
 ```asm
-; Sprite Y=14 : pipe/vine transition (3 bytes !)
-;   Byte 0 : position X
-;   Byte 1 : bits 6-0 = Level ID 7-bit (destination)
-;   Byte 2 : bits 4-0 = screen de destination
-;            bits 7-5 = world où cette transition est valide
+; Спрайт Y=14 : pipe/vine переход (3 байта !)
+;   Байт 0 : позиция X
+;   Байт 1 : биты 6-0 = Level ID 7-бит (назначение)
+;   Байт 2 : биты 4-0 = экран назначения
+;            биты 7-5 = мир, где этот переход валиден
 ;
-; Pourquoi un world ? Les bonus rooms sont réutilisées entre mondes.
-; Exemple : la salle bonus de 1-1 est aussi utilisée par 2-1 et 7-1.
-; Cette salle a 3 transitions, une par monde, pour que Mario
-; réapparaisse au bon endroit.
+; Почему мир? Бонусные комнаты переиспользуются между мирами.
+; Пример : бонусная комната 1-1 также используется 2-1 и 7-1.
+; У этой комнаты 3 перехода, по одному на мир, чтобы Марио
+; появлялся в правильном месте.
 ```
 
-У спрайтов **нет системы очереди**. Единственное ограничение -- в зоне спавна (просто за экраном справа) не может быть загружено одновременно больше 4 спрайтов. Больше -- спрайты игнорируются.
+У спрайтов **нет queue-системы**. Единственный лимит в том, что не может быть больше 4 спрайтов, загруженных одновременно в зоне спавна (чуть за экраном справа). Дальше спрайты игнорируются.
 
-## Как получить доступ к глитч-мирам
+## Как попасть в глитч-миры
 
-Есть два основных метода.
+Есть два главных метода.
 
-### Классический метод: wall clip
+### Классический метод : wall clip
 
-Wall clip (прохождение сквозь стены) позволяет выйти из нормального уровня и дойти до спрятанной warp-зоны. Манипулируя счётчиком мира через RAM, можно загрузить любой Level ID.
+Wall clip (проход сквозь стены) позволяет выйти из нормального уровня и дойти пешком до скрытой warzone. Манипулируя счётчиком мира через RAM, можно загрузить любой Level ID.
 
-Техника:
-1. World 1-2: зайти в спрятанную трубу в конце
+Техника :
+1. Мир 1-2 : идти в скрытую конечную трубу
 2. Сделать wall clip на правой стене
 3. Идти в пустоте до warp-зоны
-4. Интерпретирует значения как миры
+4. Игра интерпретирует значения как миры
 
-Но этот метод даёт доступ только к малой части глитч-миров.
+Но этот метод даёт доступ лишь к малой части глитч-миров.
 
-### Экстремальный метод: cart swap с NES Tennis
+### Экстремальный метод : NES Tennis cart swap
 
-Подробности см. в разделе "Тёплый старт" выше. Вкратце: счётчик шагов тennis пишет в тот же байт RAM, что и стартовый мир SMB1, а определение тёплого старта сохраняет это значение.
+См. секцию "Тёплый старт" выше для полных деталей. Вкратце : счётчик шагов Tennis пишет в тот же байт RAM, что стартовый мир SMB1, а детект warm start сохраняет это значение.
 
-### Блог для хакеров: код для полного исследования
+### Уголок ковырятелей : код, чтобы всё исследовать
 
-Если хочешь исследовать все глитчи сам в эмуляторе, можно пропатчить Level ID напрямую:
+Если хочешь сам исследовать все глитчи в эмуляторе, можно патчить Level ID напрямую :
 
 ```asm
-; Patch pour FCEUX / Mesen :
-; Adresse RAM $075F = Level ID actuel
-; Adresse RAM $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
+; Патч для FCEUX / Mesen :
+; Адрес RAM $075F = текущий Level ID
+; Адрес RAM $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
 
-; Exemple : charger le Level 57 (0x39) en Overworld
-; Dans l'émulateur, ouvrir le traceur mémoire et écrire :
+; Пример : загрузить Уровень 57 (0x39) в Overworld
+; В эмуляторе открыть трассировщик памяти и записать :
 ; $075F = 0x39
 ; $0760 = 0x01
-; Puis entrer dans un tuyau de warp ou mourir et recommencer
-; → Le jeu charge le niveau ID $39 en Overworld
+; Затем войти в warp-трубу или умереть и перезапуститься
+; → Игра грузит уровень ID $39 в Overworld
 ```
 
-RGMechEx опубликовал полный список из 128 уровней × 4 типа с автоматически сгенерированными картами на [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). Каждая запись показывает tile pointer, sprite pointer и визуальную карту уровня.
+RGMechEx опубликовал полный список 128 уровней × 4 типа со сгенерированными картами на [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). Каждый вход показывает tile pointer, sprite pointer и визуальную карту уровня.
 
-## Самые WTF-уровни
+## Самые wtf уровни
 
-### Level ID $1F (Water): 15 глитч-миров в одном
+### Level ID $1F (Water) : 15 глитч-миров в одном
 
-Tile pointer $A302 (3-4) в комбинации со sprite pointer $02A0 даёт 15 разных глитч-миров (D-1, J-1, Y-1, Z-1, 55-1, 73-1...). Объяснение: sprite pointer указывает на область ROM, содержащую данные, достаточно близкие к валидным спрайтам для создания играбельных результатов, но комбинация тайлов замка 3-4 со спрайтами overworld создаёт абсурдный рендер.
+Tile pointer $A302 (3-4) в комбинации со sprite pointer $02A0 даёт 15 разных глитч-миров (D-1, J-1, Y-1, Z-1, 55-1, 73-1...). Объяснение : sprite pointer указывает в зону ROM, содержащую данные достаточно близкие к валидным спрайтам, чтобы давать играбельные результаты, но комбинация тайлов замка 3-4 со спрайтами overworld создаёт абсурдный рендер.
 
-### Level ID $28 (Overworld): 38 глитч-миров = рекорд
+### Level ID $28 (Overworld) : 38 глитч-миров = рекорд
 
-Абсолютный рекорд. 38 записей глитч-миров указывают на один и тот же уровень (тайлы 2-1 + $9F51 спрайты). Почему? Потому что sprite pointer $9F51 попадает в область ROM, которая используется как padding/звуковые данные и переиспользуется множеством ID.
+Абсолютный рекорд. 38 входов глитч-миров указывают на один уровень (тайлы 2-1 + спрайты $9F51). Почему? Потому что sprite pointer $9F51 падает в зону ROM, используемую как padding/звуковые данные, переиспользуемые кучей ID.
 
-### Level ID $49 (Underground): уровень FDS
+### Level ID $49 (Underground) : уровень FDS
 
-Tile pointer $76AE + sprite pointer $1C9D. Tile pointer указывает на область ROM, зарезервированную для версии Famicom Disk System. Результат: уровень с тайлами, которых не существует в стандартном картридже. Именно этот уровень порождает уровни 52-1 и 196-1.
+Tile pointer $76AE + sprite pointer $1C9D. Tile pointer указывает в зону ROM, зарезервированную за версией Famicom Disk System. Итог : уровень с тайлами, не существующими в стандартном картридже. Это уровень, показывающий уровень 52-1 и 196-1.
 
-### Level ID $00-$02: настоящие бонусные уровни
+### Level ID $00-$02 : настоящие бонусные уровни
 
-Эти ID используются легитимными подуровнями игры:
+Эти ID используются легитимными подуровнями игры :
 
-- **$00**: подводная зона 5-2/6-2 (используется H-1, 39-1)
-- **$01**: вода 2-2/7-2 (Minus World, 36-1)
-- **$02**: подуровень 8-4 (136-1, 151-1, 215-1)
+- **$00** : подводная зона 5-2/6-2 (используется H-1, 39-1)
+- **$01** : вода 2-2/7-2 (Minus World, 36-1)
+- **$02** : подуровень 8-4 (136-1, 151-1, 215-1)
 
-Разница между "бонусным" уровнем, доступным нормально, и глитч-миром в том, что warp-зоны проверяют текущий мир:
+Разница между "бонусным" уровнем, доступным нормально, и глитч-миром в том, что warp-зоны проверяют текущий мир :
 
 ```asm
-; Vérification warp zone (simplifié)
-; Le jeu vérifie que le monde cible est entre 1 et 8
+; Проверка warp zone (упрощённо)
+; Игра проверяет, что целевой мир между 1 и 8
 CheckWarp:
   lda TARGET_WORLD
   cmp #1
-  bcc InvalidWarp       ; < 1 → refusé
+  bcc InvalidWarp       ; < 1 → отказ
   cmp #9
-  bcs InvalidWarp       ; > 8 → refusé
-  ; world valide entre 1 et 8 uniquement
+  bcs InvalidWarp       ; > 8 → отказ
+  ; мир валиден только между 1 и 8
   jmp DoWarp
 ```
 
-Глитч-миры с номерами > 8 или 0 недоступны через нормальные трубы. Нужен wall clip или cart swap.
+Глитч-миры с номерами > 8 или 0 не могут достигаться нормальными трубами. Нужен wall clip или cart swap.
 
-## Почему некоторые уровни крашатся: jump tables
+## Почему некоторые уровни крашатся : jump tables
 
-Когда игра загружает объект тайла, она использует его тип как индекс в **jump table**:
+Когда игра грузит объект тайла, она использует его тип как индекс в **jump table** :
 
 ```asm
-; Jump table des objets tiles standards (types 0-11)
+; Jump table стандартных объектов тайлов (типы 0-11)
 JumpTable_TileObjects:
-  .word Obj_Special       ; type 0 : bloc ?, hidden, flagpole...
-  .word Obj_Platform      ; type 1 : plateforme spéciale
-  .word Obj_BrickRow      ; type 2 : rangée de briques
-  .word Obj_BlockRow      ; type 3 : rangée de blocks
-  .word Obj_CoinRow       ; type 4 : rangée de pièces
-  .word Obj_BrickCol      ; type 5 : colonne de briques
-  .word Obj_BlockCol      ; type 6 : colonne de blocks
-  .word Obj_Pipe          ; type 7 : tuyau
-  .word Obj_8             ; type 8
-  .word Obj_9             ; type 9
-  .word Obj_10            ; type 10
-  .word Obj_11            ; type 11
+  .word Obj_Special       ; тип 0 : блок ?, hidden, flagpole...
+  .word Obj_Platform      ; тип 1 : спецплатформа
+  .word Obj_BrickRow      ; тип 2 : ряд кирпичей
+  .word Obj_BlockRow      ; тип 3 : ряд блоков
+  .word Obj_CoinRow       ; тип 4 : ряд монет
+  .word Obj_BrickCol      ; тип 5 : колонка кирпичей
+  .word Obj_BlockCol      ; тип 6 : колонка блоков
+  .word Obj_Pipe          ; тип 7 : труба
+  .word Obj_8             ; тип 8
+  .word Obj_9             ; тип 9
+  .word Obj_10            ; тип 10
+  .word Obj_11            ; тип 11
 ```
 
-![Jump tables: почему невалидный тип объекта крашит игру](/images/smb1-glitch-levels/v4-jump-table.jpg)
+![Jump tables : почему невалидный тип объекта крашит игру](/images/smb1-glitch-levels/v4-jump-table.jpg)
 
-Если объект имеет невалидный тип (≥12), игра прыгает на указатель, которого нет в этой таблице. **4 возможных исхода**:
+Если у объекта невалидный тип (≥12), игра прыгает на указатель, не существующий в этой таблице. **4 возможных исхода** :
 
-1. **Валидный указатель** → объект загружается нормально
-2. **Указатель на другую jump table** (перекрытие) → появляется другой объект. Пример: тип 12 указывает на таблицу Y=13, что даёт L-pipe.
-3. **Указатель на исполняемый код** → выполнение случайного кода (скорее всего краш)
-4. **Явный placeholder (NOP)** → объект ничего не делает (некоторые спрайты такие -- враги висят на месте без движения)
+1. **Валидный указатель** → объект грузится нормально
+2. **Указатель на другую jump table** (перекрытие) → появляется другой объект. Пример : тип 12 указывает на таблицу Y=13, что даёт L-pipe.
+3. **Указатель на исполняемое** → выполнение случайного кода (вероятный краш)
+4. **Явный плейсхолдер (NOP)** → объект ничего не делает (некоторые спрайты такие, давая врагов, висящих на месте без движения)
 
-![Глитч-уровень ID $58: sprite pointer указывает на невалидный адрес, игра крашится](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
+![Глитч-левел ID $58 : sprite pointer указывает на невалидный адрес, игра крашится](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
 
-![Глитч-уровень ID $50: облачный туннель, уровень, сгенерированный повреждёнными данными](/images/smb1-glitch-levels/v4-glitch-50.jpg)
+![Глитч-левел ID $50 : cloud tunnel, уровень, сгенерированный повреждёнными данными](/images/smb1-glitch-levels/v4-glitch-50.jpg)
 
-Глитч-уровень ID $58 (туннель, который крашится): его sprite pointer указывает на область памяти, **которой не существует на NES без mapper ROM**. Игра пытается загрузить одного и того же Koopa 5 раз за кадр в позиции (0,0), что перегружает PPU и вызывает фриз.
+Глитч-левел ID $58 (крашающийся туннель) : его sprite pointer указывает на область памяти, **не существующую на NES без ROM-мэппера**. Игра пытается грузить одного и того же Koopa 5 раз за кадр в позицию (0,0), что насыщает PPU и вызывает фриз.
 
 ```asm
-; Pourquoi ID $58 crashe :
-; Sprite pointer → adresse invalide (hors espace NES standard)
-; → Le jeu lit des bytes indéterminés comme des types de sprite
-; → Le Koopa $00 (type invalide sans handler) boucle en appel récursif
-; → Stack overflow 6502 → freeze
+; Почему крашится ID $58 :
+; Sprite pointer → невалидный адрес (вне стандартного пространства NES)
+; → Игра читает неопределённые байты как типы спрайтов
+; → Koopa $00 (невалидный тип без хендлера) петлит в рекурсивном вызове
+; → Переполнение стека 6502 → фриз
 ```
 
 ### Парадокс pipe warp
 
-Помнишь проверку `target_world BETWEEN 1 AND 8`? Даже если найдёшь трубу в глитч-мире, игра проверит, что мир назначения между 1 и 8. Глитч-миры имеют номера > 8 (36-1, 255-1...), поэтому warp не работает.
+Помнишь проверку `target_world BETWEEN 1 AND 8`. Даже если найдёшь трубу в глитч-мире, игра проверяет, что мир назначения между 1 и 8. У глитч-миров номера > 8 (36-1, 255-1...), так что warp проваливается.
 
-Именно поэтому Minus World не имеет конца: flagpole не присутствует в спрайтах, а трубы ведут в никуда.
+Поэтому у Minus World нет конца : flagpole отсутствует в спрайтах, а трубы ведут в никуда.
 
-### Трюк с 5 объектами в одной колонке
+### Трюк 5 объектов в колонке
 
-Существует edge case, который позволяет обойти лимит в 3 объекта на колонку. Когда очередь блокируется (слоты заполнены + следующий объект без next screen flag), игра "предобрабатывает" текущую колонку в цикле, пока не найдёт объект с next screen flag. При каждой предобработке:
+Есть edge case, позволяющий обойти лимит 3 объектов на колонку. Когда очередь блокируется (слоты полны + у следующего объекта нет флага next screen), игра "предобрабатывает" текущую колонку в цикле, пока не найдёт объект с флагом next screen. Во время каждой предобработки :
 
 ```asm
-; Pendant le prétraitement de colonne :
-; 1. Les objets dans la queue voient leur largeur restante
-;    décrémentée à chaque "fausse avancée" de colonne
-; 2. Si un objet atteint largeur=0, il quitte la queue
-; 3. Un slot libéré peut être rempli par un nouvel objet
-;    ajouté dans la même colonne
+; Во время предобработки колонки :
+; 1. Объекты в очереди видят свою оставшуюся ширину
+;    декрементируемой при каждой "ложной подвижке" колонки
+; 2. Если объект достигает ширины=0, он покидает очередь
+; 3. Освобождённый слот может заняться новым объектом,
+;    добавленным в той же колонке
 
-; Résultat : jusqu'à 5 objets peuvent être traités sur la même colonne.
-; Technique : placer 2 objets qui traversent la screen boundary
-; (slots 1 et 2), 1 objet dummy en X < précédent (bloque la queue),
-; puis 3 objets à X=0 de l'écran suivant (dont un avec next screen flag).
+; Результат : до 5 объектов могут обработаться на одной колонке.
+; Техника : поставить 2 объекта, пересекающих границу скрина
+; (слоты 1 и 2), 1 dummy-объект на X < предыдущего (блокирует очередь),
+; затем 3 объекта на X=0 следующего экрана (один с флагом next screen).
 ```
 
-Это называется "queue skip" и используется некоторыми ромхакерами для создания уровней плотнее, чем позволяет формат.
+Это называется "queue skip", и используется некоторыми ромхакерами, чтобы создавать уровни плотнее, чем формат нормально позволяет.
 
 ## Различия между версиями
 
 ### Famicom Disk System
 
-Версия FDS SMB1 имеет **другую memory map**. Все указатели уровней сдвинуты, но данные те же. Что меняется: индексы глитч-миров полностью другие:
+У версии FDS SMB1 **другая memory map**. Все указатели уровней сдвинуты, но данные те же. Что меняется : индексы глитч-миров совершенно другие :
 
 ```
-FDS World 36 → Level ID $09 (eau version de 5-3)
-  → Le flagpole est présent ! On peut finir le niveau.
-  → Ensuite : $27 (7-3 normal) → $44 (4-4 underground)
-  → $44 est finissable → la hache fonctionne → fin du jeu !
-  
-Le Minus World FDS est donc un "bonus world" qui peut mener
-à la complétion du jeu, contrairement à la version NES.
+Мир FDS 36 → Level ID $09 (водная версия 5-3)
+  → Flagpole присутствует ! Уровень можно закончить.
+  → Затем : $27 (нормальный 7-3) → $44 (4-4 underground)
+  → $44 финишируем → топор работает → конец игры !
+
+Minus World FDS, стало быть, "бонусный мир", способный вести
+к прохождению игры, в отличие от версии NES.
 ```
 
-Мой любимый FDS-уровень: **ID $5F**, подземная версия второй половины 3-3 в низком туннеле (жаль, что это автоскроллер).
+Мой любимый уровень FDS : **ID $5F**, подземная версия второй половины 3-3 в низком туннеле (жаль, что это autoscroller).
 
-### The Lost Levels (Super Mario Bros. 2 японская)
+### The Lost Levels (японский Super Mario Bros. 2)
 
-Lost Levels меняет многое:
+Lost Levels много меняет :
 
-1. **Одинаковый порядок tiles/sprites**: больше нет Frankenstein levels (тайлы и спрайты загружают один и тот же уровень даже с невалидным ID)
-2. **Одна 16-битная таблица указателей** вместо двух отдельных таблиц high/low
-3. **4 файл диска**: ROM была разделена для FDS:
-   - Файл 1: миры 1-4
-   - Файл 2: миры 5-8
-   - Файл 3: мир 9 + звуковой движок
-   - Файл 4: миры A-D (совершенно другая таблица указателей)
-4. **Один Level ID = 4 возможных уровня** в зависимости от загруженного файла
-5. **Больше нет глитча с теннисом**: опция continue (продолжение с того же мира после game over) делает тёплый старт ненужным, и игра **мгновенно сбрасывается**, если мир > 9
-6. **Новые объекты**: ядовитый гриб, невидимый блок, невидимый блок с огненным цветком, перевёрнутые трубы, ветер -- но вставлены в середину существующих списков → **обратная несовместимость** с SMB1
-7. **Piranha Plants всегда красные** после мира 4, **зелёные пружины** только в мирах 2/B/3/C/7
+1. **Одинаковый порядок tiles/sprites** : больше никаких Frankenstein levels (tiles и sprites грузят один уровень даже с невалидным ID)
+2. **Одна 16-битная таблица указателей** вместо двух раздельных таблиц high/low
+3. **4 файла диска** : ROM сплитована под FDS :
+   - Файл 1 : миры 1-4
+   - Файл 2 : миры 5-8
+   - Файл 3 : мир 9 + звуковой движок
+   - Файл 4 : миры A-D (совершенно другая таблица указателей)
+4. **Тот же Level ID = 4 возможных уровня** в зависимости от загруженного файла
+5. **Больше никакого глитча Tennis** : опция continue (продолжить с того же мира после game over) делает warm start бесполезным, а игра **ресетится сразу**, если мир > 9
+6. **Новые объекты** : ядовитый гриб, невидимый блок, невидимый блок fire flower, перевёрнутые трубы, ветер -- но вставлены в середину существующих списков → **обратная несовместимость** с SMB1
+7. **Piranha Plants всегда красные** после мира 4, **зелёные springboards** только в мирах 2/B/3/C/7
 
 ### Super Mario All-Stars (SNES)
 
-Прямой порт с теми же 6502-рутинами (SNES выполняет код NES в совместимом режиме):
+Прямой порт с теми же рутинами 6502 (SNES исполняет код NES в совместимом режиме) :
 
-- **Исправленная warp-зона**: больше нет Minus World (вход в левую трубу до текста ведёт в правильный мир)
-- **Падение**: большинство глитч-уровней крашатся (кроме ID $6A и 9-1)
-- **Добавлены объекты замка**: более уникальный рендер
-- **Но**: **4-2 wrong warp** по-прежнему работает (не исправлен!)
+- **Warp zone пофикшена** : больше никакого Minus World (вход в левую трубу до появления текста ведёт в правильный мир)
+- **Падучесть** : большинство глитч-уровней крашатся (кроме ID $6A и 9-1)
+- **Добавлены замковые объекты** : сделаны более уникальными
+- **Но** : **wrong warp 4-2** всё ещё работает (не запатчен !)
 
-### 4-2 wrong warp: баг размещения объекта
+### Wrong warp 4-2 : баг размещения объекта
 
-В 4-2 есть два объекта pipe-транзишена: лоза (warp-зона) и труба (комната с монетами). Первый объект транзишена (лозы) размещён **задолго до** того, как лоза появляется на экране. Второй (труба) размещён **слишком поздно в уровне**.
+В 4-2 есть два объекта pipe-перехода : лоза (warp zone) и труба (coin cash room). Первый объект перехода (лоза) размещён **задолго до** появления лозы на экране. Второй (труба) размещён **слишком поздно в уровне**.
 
 ```asm
-; Timing des transitions dans 4-2 :
-; Objet transition 1 (vigne → warp zone) : placé 3 écrans avant la vigne
-; Objet transition 2 (tuyau → coin cash) : placé 1 écran après le tuyau
+; Тайминг переходов в 4-2 :
+; Объект перехода 1 (лоза → warp zone) : размещён за 3 экрана до лозы
+; Объект перехода 2 (труба → coin cash) : размещён через 1 экран после трубы
 ;
-; Normalement le premier objet est désactivé avant que Mario
-; n'atteigne le tuyau. Mais si Mario va vite (ou utilise
-; le raccourci du bloc B+right), la transition de la vigne
-; est toujours active quand il touche le tuyau !
-; → Le jeu charge la warp zone au lieu du coin cash.
+; Нормально первый объект деактивируется до того, как Марио
+; достигает трубы. Но если Марио идёт быстро (или использует
+; шорткат блока B+right), переход лозы
+; всё ещё активен, когда он касается трубы !
+; → Игра грузит warp zone вместо coin cash.
 ;
-; Si l'objet avait été placé juste après la vigne mais avant
-; le tuyau, le bug n'existerait pas.
+; Если бы объект разместили сразу после лозы, но до
+; трубы, бага бы не существовало.
 ```
 
-### Зацикленные уровни
+### Петлевые уровни
 
-Как работают loop (8-4, 7-4)? У уровня есть **чекпоинты** с номерами экранов и зашитыми Y-позициями:
+Как работают петли (8-4, 7-4)? У уровня есть **чекпоинты** с номерами экранов и захардкоженными Y-позициями :
 
 ```asm
-; Checkpoint : {screen_number, vertical_position}
-; Si Mario passe ce checkpoint à la bonne hauteur → niveau continue
-; Sinon → warp back de 4 écrans (64 blocks)
+; Чекпоинт : {screen_number, vertical_position}
+; Если Марио проходит чекпоинт на правильной высоте → уровень продолжается
+; Иначе → warp back на 4 экрана (64 блока)
 ;
-; Pour faire une boucle infinie : vertical_position = $F0
-; (en dessous du bas de l'écran) → impossible de valider.
+; Чтобы сделать бесконечную петлю : vertical_position = $F0
+; (ниже низа экрана) → провалидировать невозможно.
 ;
-; Les checkpoints sont simples (un seul flag) sauf pour world 7
-; qui utilise des triplets (3 flags, il faut en échouer au moins 1)
+; Чекпоинты простые (один флаг), кроме мира 7,
+; где используются триплеты (3 флага, надо провалить хотя бы 1)
 ;
-; Le warp back est rude : offset de tile data réglé à une valeur
-; hardcodée, offset de sprite data remis à 0. Les ennemis présents
-; sont déchargés instantanément → les firebars disparaissent.
+; Warp back грубый : офсет tile-данных выставлен на захардкоженное
+; значение, офсет sprite-данных сброшен в 0. Присутствующие враги
+; выгружаются мгновенно → firebars исчезают.
 ```
 
 ## Менять формат, а не код
 
-Один из самых завораживающих уроков этой архитектуры -- разработчики SMB1 смогли создать очень выразительную систему уровней, никогда не трогая код рендеринга 6502. Всё разнообразие между уровнями идёт от **данных** (указатели, объекты, спрайты, floor patterns), а не от кода.
+Один из самых захватывающих уроков этой архитектуры в том, что разработчики SMB1 сумели создать очень выразительную систему уровней, ни разу не тронув код рендера 6502. Вся вариация между уровнями идёт из **данных** (указатели, объекты, спрайты, floor patterns), а не из кода.
 
-256 глитч-миров существуют потому, что **таблицы указателей рассчитаны на 128 записей × 4 типа**, и игра никогда не проверяет значения, которые читает. Когда указатель попадает в RAM, игра интерпретирует регистры Mario как тайлы. Когда указатель попадает в звуковые данные, игра играет музыку в виде level design. А когда jump tables переполняются, игра выполняет что угодно вплоть до краша.
+256 глитч-миров существуют потому, что **таблицы указателей размерены под 128 входов × 4 типа**, а игра никогда не валидирует читаемые значения. Когда указатель падает в RAM, игра интерпретирует регистры Марио как тайлы. Когда указатель падает в звуковые данные, игра играет музыку в виде левел-дизайна. А когда jump tables оверфлоуят, игра исполняет что попало до краша.
 
-![More Super Mario Bros. Mechanics Explained -- четвёртое видео](/images/smb1-glitch-levels/yt-mechanics.jpg)
+![More Super Mario Bros. Mechanics Explained -- 4-е видео](/images/smb1-glitch-levels/yt-mechanics.jpg)
 
-## Чему можно научиться из всего этого
+## Чему тут можно научиться
 
-1. **Разделение tiles/sprites**: полная независимость двух слоёв с разным порядком хранения, создающим уникальные Frankenstein levels
-2. **RLE-сжатие + система объектов**: уровни -- не битмапы, а списки размещённых объектов с floor patterns для пола
-3. **Очередь на 3 слота**: строгое ограничение hardware (и дизайна уровней)
-4. **Без проверки**: игра доверяет указателям и jump tables, что даёт либо играбельные глитчи, либо краши
-5. **256 байт максимум**: лимит Y-регистра 6502, из-за которого данные повторяются при выходе за границу
-6. **Warm start / cold start**: система "продолжения", открывшая дверь к cart swap Tennis → Mario
+1. **Разделение tiles/sprites** : полная независимость двух слоёв, с разными порядками хранения, создающими уникальные Frankenstein levels
+2. **RLE-сжатие + система объектов** : уровни не битмапы, а списки размещённых объектов, с floor patterns для пола
+3. **Очередь 3 слота** : строгий лимит железа (и дизайна уровней)
+4. **Полное доверие указателям** : игра доверяет указателям и jump tables, что даёт либо играбельные глитчи, либо краши
+5. **256 байтов макс** : лимит Y-регистра 6502, из-за которого данные повторяются, если зайти слишком далеко
+6. **Warm start / cold start** : система "продолжить", открывшая дверь cart swap Tennis → Mario
 
-Самое прекрасное: всё это -- код 6502, уместившийся в 40КБ. Без слоя абстракции, без проверки доступа к памяти, без обработчика исключений. Если указатель отстойный -- игра крашится. А краши мы называем глитч-мирами.
+Самое красивое : всё это код 6502, умещающийся в 40KB. Код говорит напрямую с железом и оказывает полное доверие каждому доступу к памяти. Если указатель гнилой, игра крашится. А краши мы называем глитч-мирами.
 
-## 3 главных вывода
+## 3 вещи запомнить
 
-1. **Глитч-миры -- это указатели, которые попадают не туда** -- У игры 128 ID × 4 типа зон, но только 34 уникальных уровня. Когда номер мира повреждён (теннисом или wall clip), игра загружает указатель, предназначенный для другого уровня, и 512 возможных комбинаций дают непредсказуемые результаты.
+1. **Глитч-миры это указатели, упавшие неудачно** -- У игры 128 ID × 4 типа зон, но только 34 уникальных уровня. Когда номер мира повреждён (через Tennis или wall clip), игра грузит указатель, задуманный для другого уровня, и 512 возможных комбинаций дают непредсказуемые результаты.
 
-2. **Minus World -- это баг warp'а в сочетании с повреждением данных** -- Левая труба в 1-2, если активирована до появления текста, загружает мир 36 (0x24). Этот мир указывает на Level ID $01 (вода 2-2), уровень без flagpole. И поскольку для мира 36 нет pipe-транзишена, уровень зацикливается. Отсутствие проверки создаёт икону.
+2. **Minus World это баг warp в сочетании с порчей** -- Левая труба в 1-2, если активировать до появления текста, грузит мир 36 (0x24). Этот мир указывает на Level ID $01 (вода 2-2), уровень без flagpole. А раз нет pipe-перехода для мира 36, уровень петлит бесконечно. Отсутствие проверки создаёт иконку.
 
-3. **Tennis → Mario, 15 лет до OoT → Paper Mario** -- RAM NES выживает при замене картриджа благодаря конденсаторам и системе warm start / cold start SMB1. Счётчик шагов тенниса (который увеличивает байт RAM, проигрывая звук шагов) попадает точно на адрес номера мира. Нужно, чтобы цифры top score оставались 0, байт $A5 был нетронут, и игра определила тёплый старт -- идеальное стечение обстоятельств, которое сработало только с теннисом.
+3. **Tennis → Mario, за 15 лет до OoT → Paper Mario** -- RAM NES переживает свап картриджа благодаря конденсаторам и системе warm start / cold start SMB1. Счётчик шагов Tennis (инкрементирующий байт RAM при проигрывании звука шагов) ровно падает на адрес номера мира. Нужно, чтобы цифры топ-счёта оставались 0, байт $A5 был цел, а игра детектила warm start -- идеальное стечение обстоятельств, сработавшее только с Tennis.
 
-Оригинальные видео [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) -- это потрясающий труд: уровень детализации по дизассембли 6502, автоматические карты всех уровней, объяснения cart swap и warm start. Если не смотрел серию -- посмотри, она короткая, и каждая минута насыщена.
+Оригинальные видео [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) это просто муравьиная работа -- уровень деталей по дизасму 6502, автоматическим картам всех уровней, объяснениям cart swap и warm start. Если не видел серию, глянь, она короткая, и каждая минута плотная.
 
-Исходный код карт доступен на [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html), а полный дизассембл SMB1 -- open source на множестве репозиториев. 40 лет назад японские программисты написали эту систему уровней на 6502 с нулевыми юнит-тестами и нулевым баг-трекером, и мы продолжаем узнавать новое, разглядывая их код сегодня.
+Исходник карт доступен на [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html), а полный дизасм SMB1 открыт на куче репозиториев. 40 лет назад японские программисты написали эту систему уровней на 6502 с нулём юнит-тестов и нулём баг-трекера, а мы продолжаем учить техники оптимизации, открывая их код сегодня.

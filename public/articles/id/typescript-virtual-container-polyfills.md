@@ -1,50 +1,50 @@
 ---
-title: Menjalankan Pustaka Node.js di Browser Tanpa Wasm --
+title: Menjalankan pustaka Node.js di peramban tanpa Wasm --
   polyfill typescript-virtual-container
-description: Bagaimana Fortune mengimplementasikan ulang node:fs, node:crypto, dan
-  belasan modul Node secara manual dalam 640 baris JavaScript agar kontainer
-  berjalan di browser tanpa Wasm.
+description: Bagaimana Fortune mengimplementasikan ulang manual node:fs, node:crypto dan
+  selusin modul Node dalam 640 baris JavaScript supaya kontainer
+  berjalan di peramban tanpa Wasm.
 date: 2026-05-29
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - nodejs
   - polyfills
   - browser
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "C0hyVrpX//6RqPjZdscKgc/JylWJVg44ouE6BDrI/ywnxvbBqg/sTjMLL3oYYdbjNtaN0Gr4oG6kTrQsve1Ssw=="
+author_sig: "lanQdNNlu+i2MQz0mckOPTVE67QI1FBIY887zRF7Ap5Ruc9EYHKZW5ePttL3pkQ1vFusZ4mrGW8qO1LPMmFG6Q=="
 ---
 
-# Menjalankan Pustaka Node.js di Browser Tanpa Wasm -- polyfill typescript-virtual-container
+# Menjalankan pustaka Node.js di peramban tanpa Wasm -- polyfill typescript-virtual-container
 
-Saya baru saja menghabiskan cukup banyak waktu mempelajari kode sumber [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), proyek [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Dan bagian yang paling mengejutkan saya bukanlah VFS, bukan jaringan virtual, bukan 170 perintah Unix yang diimplementasikan ulang dalam TypeScript. Melainkan direktori `polyfills/`.
+Saya baru-baru ini menghabiskan cukup banyak waktu menelusuri kode sumber [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container), proyek [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). Dan bagian yang paling mengejutkan saya adalah folder `polyfills/`, bahkan lebih dari VFS, jaringan virtual, atau 170 perintah Unix yang diimplementasikan ulang dalam TypeScript.
 
-Karena modul ini berjalan di browser, tanpa Wasm, dan untuk itu Fortune mengimplementasikan ulang secara manual seluruh lapisan `node:*` yang dibutuhkan pustaka ini. Sekitar 640 baris JavaScript buatan tangan yang menggantikan `node:fs`, `node:crypto`, `node:os`, `node:net`, dan beberapa lainnya.
+Karena modul berjalan di peramban, tanpa Wasm, dan untuk itu, Fortune mengimplementasikan ulang manual seluruh lapisan `node:*` yang dibutuhkan pustaka. Sekitar 640 baris JavaScript artisanal yang menggantikan `node:fs`, `node:crypto`, `node:os`, `node:net`, dan beberapa lainnya.
 
-Artikel ini menjelaskan cara kerjanya, polyfill demi polyfill.
+Artikel ini menjelaskan cara kerjanya, polyfill per polyfill.
 
 ---
 
 ## Masalah dasar
 
-Sebuah pustaka Node.js menggunakan API yang tidak ada di browser. Saat Anda menulis `import { readFileSync } from 'node:fs'`, itu adalah panggilan sistem di sisi Node -- akses disk nyata melalui libuv. Di browser, `node:fs` tidak ada sama sekali.
+Pustaka Node.js memakai API yang tidak ada di peramban. Ketika kamu menulis `import { readFileSync } from 'node:fs'`, itu panggilan sistem sisi Node -- akses disk sungguhan lewat libuv. Di peramban, `node:fs` sama sekali tidak ada.
 
-Solusi umumnya adalah:
+Solusi biasanya adalah :
 
-- **Runtime Wasm** (seperti Emscripten, WASIp1/WASIp2) -- Anda mengompilasi Node.js ke Wasm dan menjalankannya. Hasilnya: bundle 10-50 MB, waktu muat yang signifikan, kompleksitas deployment yang berarti.
-- **Polyfill generik** (seperti `browserify`, `webpack node: polyfills`) -- pustaka npm yang menyediakan perkiraan untuk setiap modul Node. Seringkali terlalu berat, kurang cocok untuk kasus spesifik.
-- **Menulis ulang polyfill secara manual** -- lebih banyak kerja, tetapi hasil optimal.
+- **Runtime Wasm** (tipe Emscripten, WASIp1/WASIp2) -- kamu mengompilasi Node.js ke Wasm dan menjalankannya. Hasilnya : bundle 10-50 MB, waktu pemuatan yang terasa, kompleksitas deployment yang signifikan.
+- **Polyfill generik** (tipe `browserify`, `webpack node: polyfills`) -- pustaka npm yang menyediakan perkiraan tiap modul Node. Sering terlalu berat, tidak cocok dengan kasus spesifik.
+- **Menulis ulang polyfill manual** -- lebih banyak kerja, tapi hasil optimal.
 
-Fortune memilih opsi ketiga. Dan hasilnya adalah bundle browser yang hanya berisi pustaka itu sendiri, langsung menyala, dan tidak bergantung pada infrastruktur eksternal apa pun.
+Fortune memilih opsi ketiga. Dan hasilnya adalah bundle peramban yang hanyalah pustakanya, yang menyala seketika, dan tidak bergantung pada infrastruktur luar apa pun.
 
 ---
 
-## Mekanisme build
+## Mekanika build
 
-Semuanya bergantung pada esbuild dan opsinya `alias`. Setiap `import node:*` diarahkan ke file lokal:
+Semuanya bersandar pada esbuild dan opsi `alias`-nya. Setiap import `node:*` dialihkan ke berkas lokal :
 
 ```js
 // demo/build.js
@@ -74,15 +74,15 @@ esbuild.build({
 });
 ```
 
-Opsi `inject` perlu diperhatikan: opsi ini menyuntikkan `process.js` dan `buffer.js` di awal setiap file bundle, sehingga `process` dan `Buffer` tersedia secara global tanpa import eksplisit. Persis seperti yang dilakukan Node.js secara native.
+Opsi `inject` layak dicatat : ia memungkinkan menyuntikkan `process.js` dan `buffer.js` di kepala setiap berkas bundle, yang membuat `process` dan `Buffer` tersedia global tanpa import eksplisit apa pun. Tepat seperti Node.js mengeksposnya secara native.
 
 ---
 
 ## `buffer.js` -- `Buffer` di atas `Uint8Array`
 
-Ini adalah salah satu dari dua global yang disuntikkan. `Buffer` digunakan secara masif dalam kode -- setiap operasi SSH, setiap snapshot VFS, setiap pembacaan/penulisan biner melaluinya.
+Ini salah satu dari dua global yang disuntikkan. `Buffer` dipakai masif di kode -- setiap operasi SSH, setiap snapshot VFS, setiap baca/tulis biner lewat sana.
 
-Solusinya: kelas `BrowserBuffer` yang memperluas `Uint8Array` dan mengimplementasikan seluruh API `Buffer` Node.js.
+Solusinya : kelas `BrowserBuffer` yang memperluas `Uint8Array` dan mengimplementasikan seluruh API `Buffer` Node.js.
 
 ```js
 class BrowserBuffer extends Uint8Array {
@@ -110,16 +110,16 @@ class BrowserBuffer extends Uint8Array {
 globalThis.Buffer = BrowserBuffer;
 ```
 
-Yang diimplementasikan secara total:
+Yang diimplementasikan total :
 - `Buffer.from`, `Buffer.alloc`, `Buffer.allocUnsafe`, `Buffer.isBuffer`, `Buffer.concat`, `Buffer.byteLength`
-- Semua metode penulisan: `writeUInt8/16/32BE/LE`, `writeInt8/16/32BE/LE`, `writeBigUInt64BE/LE`, `writeFloat/DoubleLE/BE`
-- Semua metode pembacaan yang sesuai
+- Semua metode penulisan : `writeUInt8/16/32BE/LE`, `writeInt8/16/32BE/LE`, `writeBigUInt64BE/LE`, `writeFloat/DoubleLE/BE`
+- Semua metode pembacaan yang bersesuaian
 - `toString` dengan dukungan hex, base64, utf8
 - `copy`, `equals`, `slice`, `subarray`
 
-Itu hanya 116 baris. Untuk apa yang digantikannya, ini luar biasa ringkas.
+Itu mewakili 116 baris. Untuk apa yang digantikannya, ini luar biasa ringkas.
 
-Trik utamanya adalah penggunaan `DataView` untuk akses multi-byte, yang menangani endianness dengan benar tanpa perlu memanipulasi bit secara manual untuk setiap tipe:
+Trik utamanya adalah pemakaian `DataView` untuk akses multi-oktet, yang menangani endianness dengan benar tanpa harus memanipulasi bit manual untuk tiap tipe :
 
 ```js
 writeUInt32BE(val, offset = 0) {
@@ -132,7 +132,7 @@ writeUInt32BE(val, offset = 0) {
 
 ## `process.js` -- global `process` minimal
 
-Global lain yang disuntikkan. Kecil namun diperlukan -- kode sering menguji `process.env.NODE_ENV`, `process.platform`, `process.nextTick`, dll.
+Global lain yang disuntikkan. Mungil tapi perlu -- kode sering menguji `process.env.NODE_ENV`, `process.platform`, `process.nextTick`, dll.
 
 ```js
 globalThis.startedat = Date.now();
@@ -151,23 +151,23 @@ export const process = {
 globalThis.process = process;
 ```
 
-Pemetaan `nextTick` → `queueMicrotask` adalah detail terpenting di sini. `process.nextTick` di Node.js menjadwalkan callback di akhir fase loop acara saat ini, sebelum I/O. `queueMicrotask` di browser melakukan sesuatu yang secara semantik sangat mirip -- ia menjadwalkan microtask, yang dijalankan sebelum rendering atau acara berikutnya. Ini tidak identik, tetapi cukup dekat sehingga semua kode yang menggunakan `nextTick` berfungsi dengan benar di browser.
+Pemetaan `nextTick` → `queueMicrotask` adalah detail terpenting di sini. `process.nextTick` di Node.js menjadwalkan callback di akhir fase berjalan dari event loop, sebelum I/O. `queueMicrotask` di peramban menawarkan semantik yang sangat dekat : ia menjadwalkan microtask, yang berjalan sebelum render atau event berikutnya, dan kedekatan ini cukup supaya semua kode yang memakai `nextTick` berfungsi benar di browser.
 
 ---
 
-## `node:fs` -- IndexedDB sebagai sistem file sinkron
+## `node:fs` -- IndexedDB sebagai sistem berkas sinkron
 
-Ini adalah polyfill paling canggih, dan sejauh ini yang paling menarik secara teknis.
+Ini polyfill paling canggih, dan sejauh ini paling menarik secara teknis.
 
-Masalahnya rumit: `node:fs` mengekspos API sinkron (`readFileSync`, `writeFileSync`, dll.), tetapi API penyimpanan browser semuanya asinkron (IndexedDB, Cache API, dll.). Anda tidak bisa melakukan `await` di tengah fungsi sinkron.
+Masalahnya pelik : `node:fs` mengekspos API sinkron (`readFileSync`, `writeFileSync`, dll.), tapi API penyimpanan browser semuanya asinkron (IndexedDB, Cache API, dll.). Kita tidak bisa melakukan `await` di tengah fungsi sinkron.
 
-Solusi Fortune: cache dua tingkat.
+Solusi Fortune : cache dua tingkat.
 
-**Tingkat 1 -- Map di memori (sinkron)**  
-Semua pembacaan dilakukan dari `Map<string, Uint8Array>` di memori. Instan, sinkron, tanpa masalah API.
+**Tingkat 1 -- Map di memori (sinkron)**
+Semua pembacaan dilakukan dari `Map<string, Uint8Array>` di memori. Seketika, sinkron, tanpa masalah API.
 
-**Tingkat 2 -- IndexedDB (asinkron, latar belakang)**  
-Saat startup, seluruh konten IndexedDB dimuat ke dalam Map. Penulisan dilakukan segera ke Map *dan* meluncurkan penulisan asinkron ke IndexedDB tanpa memblokir.
+**Tingkat 2 -- IndexedDB (asinkron, di latar belakang)**
+Saat startup, seluruh isi IndexedDB dimuat ke Map. Penulisan dilakukan segera ke Map *dan* memicu penulisan asinkron ke IndexedDB tanpa memblokir.
 
 ```js
 const DB_NAME = 'vfs-fs-shim';
@@ -189,7 +189,7 @@ openDB().then(db => {
   };
 });
 
-// Penulisan async ke IndexedDB (non-blocking)
+// Penulisan async ke IndexedDB (non-blokir)
 function idbSet(path, value) {
   openDB().then(db => {
     const tx = db.transaction(STORE, 'readwrite');
@@ -199,11 +199,11 @@ function idbSet(path, value) {
 }
 ```
 
-API yang diekspos lengkap: `readFileSync`, `writeFileSync`, `appendFileSync`, `existsSync`, `unlinkSync`, `rmSync` (dengan opsi `recursive`), `mkdirSync` (dengan opsi `recursive`), `readdirSync`, `statSync`, `renameSync`.
+API yang diekspos lengkap : `readFileSync`, `writeFileSync`, `appendFileSync`, `existsSync`, `unlinkSync`, `rmSync` (dengan opsi `recursive`), `mkdirSync` (dengan opsi `recursive`), `readdirSync`, `statSync`, `renameSync`.
 
-Bahkan ada lapisan manajemen file descriptor (`openSync`, `writeSync`, `closeSync`) agar jurnal WAL VFS berfungsi dalam mode browser -- jurnal membuka fd, menulis ke dalamnya, menutupnya, dan datanya tersimpan di IndexedDB.
+Bahkan ada lapisan manajemen file descriptor (`openSync`, `writeSync`, `closeSync`) supaya jurnal WAL VFS berfungsi dalam mode browser -- jurnal membuka fd, menulis di dalamnya, menutupnya, dan datanya berakhir di IndexedDB.
 
-Properti `ready` diekspor untuk memungkinkan kode mengetahui kapan preload awal selesai:
+Properti `ready` diekspor untuk memungkinkan kode tahu kapan preload awal selesai :
 
 ```js
 export const ready = openDB().then(db => new Promise(resolve => {
@@ -219,26 +219,26 @@ export const ready = openDB().then(db => new Promise(resolve => {
 globalThis.__fsReady__ = ready;
 ```
 
-Berkat inilah snapshot VFS bertahan dari muat ulang halaman di browser. Saat Anda memuat ulang demo, VFS akan dikembalikan persis seperti saat Anda tinggalkan, dari IndexedDB, tanpa melibatkan server apa pun.
+Berkat inilah snapshot VFS bertahan dari pemuatan ulang halaman di peramban. Ketika kamu memuat ulang demo, VFS dipulihkan tepat dalam keadaan kamu meninggalkannya, dari IndexedDB, tanpa server apa pun terlibat.
 
 ---
 
 ## `node:crypto` -- SHA-256, HMAC, PBKDF2 dalam JS murni
 
-Alih-alih mengimpor pustaka crypto yang dikompilasi ke Wasm, Fortune mengimplementasikan primitif yang diperlukan secara langsung.
+Alih-alih mengimpor pustaka crypto yang dikompilasi ke Wasm, Fortune mengimplementasikan primitif yang diperlukan langsung.
 
-**SHA-256** diimplementasikan dari awal dengan konstanta FIPS 180-4:
+**SHA-256** diimplementasikan dari nol dengan konstanta FIPS 180-4 :
 
 ```js
 const K = new Uint32Array([
-  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* ... 60 konstanta lainnya */ 
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* ... 60 konstanta lain */
 ]);
 
 function sha256(data) {
   // padding FIPS 180-4
   const msg = data instanceof Uint8Array ? data : new TextEncoder().encode(data);
   // ...
-  // 64 putaran kompresi
+  // 64 ronde kompresi
   for (let j = 0; j < 64; j++) {
     const S1  = (e>>>6|e<<26)^(e>>>11|e<<21)^(e>>>25|e<<7);
     const ch  = (e&f)^(~e&g);
@@ -251,15 +251,15 @@ function sha256(data) {
 }
 ```
 
-Di atas SHA-256, **HMAC-SHA256** dan **PBKDF2-HMAC-SHA256** dibangun. Kedua primitif ini digunakan untuk derivasi kunci dalam pertukaran SSH dan autentikasi internal.
+Di atas SHA-256, **HMAC-SHA256** dan **PBKDF2-HMAC-SHA256** dibangun. Kedua primitif ini dipakai untuk derivasi kunci dalam pertukaran SSH dan autentikasi internal.
 
-API yang diekspor mirip dengan Node.js:
+API yang diekspor menyerupai Node.js :
 
 ```js
 // Hash klasik
 const hash = createHash('sha256').update('data').digest('hex');
 
-// Byte acak (via Web Crypto API standar)
+// Byte acak (lewat API Web Crypto standar)
 const bytes = randomBytes(32);
 
 // UUID
@@ -268,26 +268,26 @@ const id = randomUUID();
 // Perbandingan timing-safe
 const ok = timingSafeEqual(a, b);
 
-// scrypt (didekati via PBKDF2)
+// scrypt (didekati lewat PBKDF2)
 const key = scryptSync(password, salt, 32, { N: 16384 });
 ```
 
-Catatan: `scryptSync` didekati via PBKDF2 dengan jumlah iterasi yang disetel ke parameter `N`. Ini bukan scrypt asli (yang menggunakan skema memori berbeda), tetapi untuk penggunaan proyek ini sudah cukup.
+Catatan : `scryptSync` didekati lewat PBKDF2 dengan jumlah iterasi yang disetel pada parameter `N`. Pendekatan ini menggantikan skema memori spesifik scrypt dan mencakup pemakaian proyek.
 
-Fungsi yang tidak dapat diemulasi secara wajar di browser (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`) akan melontarkan error eksplisit jika dipanggil. Perilaku yang jujur.
+Fungsi yang tidak bisa diemulasi wajar di browser (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`) melempar error eksplisit kalau dipanggil. Perilaku jujur.
 
 ---
 
-## `node:os` -- membaca spesifikasi nyata browser
+## `node:os` -- membaca spek nyata peramban
 
-Alih-alih mengembalikan nilai tetap, polyfill ini membaca API browser untuk mengembalikan informasi yang sesuai dengan mesin nyata pengguna.
+Alih-alih mengembalikan nilai tetap, polyfill ini membaca API peramban untuk mengembalikan informasi yang cocok dengan mesin nyata pengguna.
 
 ```js
 export function totalmem() {
   try {
     return navigator?.deviceMemory
       ? navigator.deviceMemory * 1024 * 1024 * 1024
-      : 2 * 1024 * 1024 * 1024; // 2 GB default
+      : 2 * 1024 * 1024 * 1024; // 2 GB secara bawaan
   } catch(e) { return 2 * 1024 * 1024 * 1024; }
 }
 
@@ -309,22 +309,22 @@ export function arch() {
 }
 ```
 
-Hasil nyata: saat Anda menjalankan `neofetch` di demo browser, jumlah core dan RAM yang ditampilkan sesuai dengan mesin Anda. Ini detail kecil, tetapi sangat berkontribusi pada kredibilitas terminal.
+Hasil konkret : ketika kamu menjalankan `neofetch` di demo peramban, jumlah core dan RAM yang ditampilkan cocok dengan mesinmu. Ini detail, tapi sangat berkontribusi pada kewajaran terminal.
 
-Ekspor lainnya: `freemem` (40% dari total memori, perkiraan wajar), `platform` → `'browser'`, `type` → `'Linux'`, `release` → `'web'`, `uptime` via `performance.now()`, `endianness` → `'LE'` (little-endian, benar untuk semua prosesor x86/ARM konsumen), `loadavg` → `[0, 0, 0]`.
+Ekspor lainnya : `freemem` (40% memori total, perkiraan wajar), `platform` → `'browser'`, `type` → `'Linux'`, `release` → `'web'`, `uptime` lewat `performance.now()`, `endianness` → `'LE'` (little-endian, benar di semua prosesor x86/ARM publik), `loadavg` → `[0, 0, 0]`.
 
 ---
 
 ## `node:net` -- stub TCP yang bersih
 
-Browser tidak memiliki akses ke socket TCP mentah (WebSocket tidak dihitung -- itu protokol aplikasi yang berbeda). `node:net` karenanya adalah stub, tetapi stub yang *ditulis dengan baik*.
+Peramban tidak punya akses ke socket TCP mentah (WebSocket tidak dihitung -- itu protokol aplikatif berbeda). Jadi `node:net` adalah stub, tapi stub yang *ditulis baik*.
 
 ```js
 export class Socket {
   connect() { notImpl('Socket.connect')(); }
-  on() { return this; }    // chainable
-  once() { return this; }  // chainable
-  pipe() { return this; }  // chainable
+  on() { return this; }    // bisa dirantai
+  once() { return this; }  // bisa dirantai
+  pipe() { return this; }  // bisa dirantai
   setEncoding() { return this; }
   remoteAddress = '127.0.0.1';
   remotePort = 0;
@@ -332,15 +332,15 @@ export class Socket {
 }
 ```
 
-Poin penting: metode pendaftaran acara (`on`, `once`, `off`, `emit`) mengembalikan `this` dan tidak melontarkan error. Ini memungkinkan kode yang melakukan `new net.Socket().on('connect', cb)` berfungsi tanpa crash, meskipun koneksi tidak pernah terjadi. Hanya metode yang *benar-benar mencoba terhubung* yang melontarkan error.
+Poin pentingnya : metode pendaftaran event (`on`, `once`, `off`, `emit`) mengembalikan `this` dan tidak melempar error. Itu memungkinkan kode yang melakukan `new net.Socket().on('connect', cb)` berfungsi tanpa crash, meski koneksi tidak pernah terjadi. Hanya metode yang *benar-benar mencoba terhubung* yang melempar error.
 
-`isIP`, `isIPv4`, `isIPv6` diimplementasikan dengan benar (bukan stub) karena digunakan oleh kode jaringan virtual untuk memvalidasi alamat, tanpa pernah membuka socket.
+`isIP`, `isIPv4`, `isIPv6` diimplementasikan benar (dengan logika validasi sungguhan) karena dipakai kode jaringan virtual untuk memvalidasi alamat, tanpa pernah membuka socket.
 
 ---
 
 ## `node:path` -- operasi path POSIX
 
-Implementasi ulang lengkap dari operasi path POSIX, disesuaikan dengan konteks (tanpa backslash Windows, path selalu absolut dengan `/`).
+Implementasi ulang lengkap operasi path POSIX, disesuaikan dengan konteks (path selalu absolut dengan `/`, gaya Unix saja).
 
 ```js
 export const posix = {
@@ -369,13 +369,13 @@ export const posix = {
 };
 ```
 
-Sederhana, ringkas, benar untuk penggunaan proyek.
+Sederhana, ringkas, benar untuk pemakaian proyek.
 
 ---
 
-## `node:url` -- delegasi ke API browser
+## `node:url` -- delegasi ke API peramban
 
-Yang ini elegan karena kesederhanaannya. API `URL` dan `URLSearchParams` sudah ada secara native di browser -- cukup diekspor ulang.
+Yang ini elegan karena kesederhanaannya. API `URL` dan `URLSearchParams` sudah ada native di peramban -- cukup mengekspor ulang.
 
 ```js
 const _URL = globalThis.URL;
@@ -383,7 +383,7 @@ const _URLSearchParams = globalThis.URLSearchParams;
 export { _URL as URL, _URLSearchParams as URLSearchParams };
 ```
 
-Hanya `fileURLToPath` dan `pathToFileURL` yang memerlukan implementasi, karena khusus untuk Node:
+Hanya `fileURLToPath` dan `pathToFileURL` yang membutuhkan implementasi, karena mereka khas Node :
 
 ```js
 export function fileURLToPath(url) {
@@ -393,7 +393,7 @@ export function fileURLToPath(url) {
 }
 ```
 
-Ini adalah pendekatan ideal ketika platform target (browser) sudah menyediakan padanan native.
+Ini pendekatan ideal ketika platform target (peramban) sudah menyediakan padanan nativenya.
 
 ---
 
@@ -405,9 +405,9 @@ export function gunzipSync(buf) { return buf; }
 export default { gzipSync, gunzipSync };
 ```
 
-Dua baris. Pustaka menggunakan `fflate` untuk kompresi sebenarnya (yang berfungsi secara native di browser). `node:zlib` hanya diimpor di jalur kode yang tidak dijalankan dalam konteks browser -- jadi passthrough sudah cukup.
+Dua baris. Pustaka memakai `fflate` untuk kompresi nyata (yang berfungsi native di browser). `node:zlib` hanya diimpor di path kode yang tidak berjalan dalam konteks browser -- jadi passthrough sudah cukup.
 
-Terkadang implementasi yang tepat hanya dua baris.
+Kadang implementasi yang benar itu dua baris.
 
 ---
 
@@ -430,7 +430,7 @@ export class EventEmitter {
 }
 ```
 
-Implementasi lengkap `EventEmitter` Node.js sekitar ~600 baris dengan penanganan `maxListeners`, `once`, `prependListener`, dll. Di sini hanya 12 baris untuk 4 metode yang benar-benar digunakan. Tree-shaking mental sebelum tree-shaking alat build.
+Implementasi lengkap `EventEmitter` Node.js sekitar 600 baris dengan penanganan `maxListeners`, `once`, `prependListener`, dll. Di sini 12 baris untuk 4 metode yang benar-benar dipakai. Tree-shaking mental bahkan sebelum tree-shaking alat build.
 
 ---
 
@@ -452,15 +452,15 @@ export class Client {
 }
 ```
 
-Server SSH tidak berjalan di browser (tidak masuk akal -- siapa yang akan terhubung?). Tetapi kode yang *berbicara tentang SSH di sisi klien* -- kelas yang membangun paket SSH, parser protokol -- ada di pustaka. Stub ini memungkinkan semua kode tersebut dibundle tanpa error, sambil memastikan error yang jelas dilontarkan jika seseorang mencoba memanggil metode yang membutuhkan socket sungguhan.
+Server SSH tidak berjalan di peramban (itu tidak masuk akal -- siapa yang terhubung?). Tapi kode yang *bicara soal SSH sisi klien* -- kelas yang membangun paket SSH, parser protokol -- ada di pustaka. Stub ini memungkinkan semua kode itu di bundle tanpa error, sekaligus menjamin error jelas dilempar kalau seseorang mencoba memanggil metode yang membutuhkan socket sungguhan.
 
-`roxify` adalah format kompresi kepemilikan yang digunakan untuk snapshot VFS dalam mode Node. Di browser, `fflate` digunakan sebagai gantinya -- polyfill hanya melontarkan error jika `roxify` dipanggil secara langsung.
+`roxify` adalah format kompresi proprietari yang dipakai untuk snapshot VFS dalam mode Node. Di peramban, `fflate`-lah yang dipakai sebagai gantinya -- polyfill cukup melempar error kalau `roxify` dipanggil langsung.
 
 ---
 
-## `node:worker_threads` -- reekspor Web Workers
+## `node:worker_threads` -- mengekspor ulang Web Worker
 
-Ini yang paling halus. `node:worker_threads` di Node.js dan Web Workers di browser adalah dua API yang berbeda, tetapi secara konseptual dekat. Polyfill melakukan pemetaan:
+Ini yang paling subtil. `node:worker_threads` di Node.js dan Web Worker peramban adalah dua API berbeda, tapi secara konsep dekat. Polyfill memetakan :
 
 ```js
 const _MessageChannel = globalThis.MessageChannel;
@@ -473,46 +473,46 @@ export const workerData = null;
 export const parentPort = null;
 ```
 
-`MessageChannel` dan `MessagePort` diekspor ulang langsung dari browser (API yang sama). `Worker` sendiri memerlukan wrapper karena konstruktornya berbeda (Node menerima path modul, browser menerima URL). `isMainThread` selalu `true` di sisi browser dalam konteks ini.
+`MessageChannel` dan `MessagePort` diekspor ulang langsung dari browser (API yang sama). `Worker` sendiri membutuhkan wrapper karena konstruktornya berbeda (Node mengharapkan path modul, browser mengharapkan URL). `isMainThread` selalu `true` di sisi peramban dalam konteks ini.
 
 ---
 
-## Gambaran umum: apa arti 640 baris ini
+## Gambaran umum : apa yang diwakili 640 baris ini
 
 | Polyfill | Baris | Strategi |
 |---|---|---|
 | `buffer.js` | 116 | `Uint8Array` + `DataView`, seluruh API `Buffer` |
-| `node:crypto` | 166 | SHA-256/HMAC/PBKDF2 from scratch + Web Crypto untuk random |
+| `node:crypto` | 166 | SHA-256/HMAC/PBKDF2 dari nol + Web Crypto untuk random |
 | `node:fs` | 210 | `Map` di memori + IndexedDB async |
-| `node:net` | 70 | Stub chainable + validasi IP nyata |
+| `node:net` | 70 | Stub bisa dirantai + validasi IP sungguhan |
 | `ssh2` | 74 | Stub eksplisit |
-| `process.js` | 14 | `process` minimal yang layak |
+| `process.js` | 14 | `process` minimal viable |
 | `node:path` | ~30 | Operasi path POSIX |
 | `node:url` | ~25 | Delegasi ke API browser |
 | `node:events` | ~12 | EventEmitter 4 metode |
 | `node:os` | ~25 | `navigator.deviceMemory` / `hardwareConcurrency` |
 | `node:zlib` | 4 | Passthrough |
-| `node:worker_threads` | ~30 | Reekspor Web Workers |
+| `node:worker_threads` | ~30 | Ekspor ulang Web Worker |
 | `roxify.js` | 8 | Stub |
 
-640 baris. Tanpa dependensi npm. Tanpa Wasm. Dan itu menghasilkan bundle browser yang menyala dalam waktu kurang dari satu detik dan berjalan tanpa infrastruktur sisi server sama sekali.
+640 baris. Tanpa dependensi npm. Tanpa Wasm. Dan itu memberikan bundle peramban yang menyala dalam kurang dari sedetik dan berjalan tanpa infrastruktur sisi server apa pun.
 
 ---
 
-## Yang bisa dipetik
+## Apa yang bisa dipetik
 
-Lain kali Anda ingin memindahkan pustaka Node.js ke browser, inilah yang ditunjukkan oleh pendekatan Fortune:
+Lain kali kamu ingin mem porting pustaka Node.js ke peramban, inilah yang ditunjukkan pendekatan Fortune :
 
-1. **Identifikasi apa yang benar-benar digunakan.** Tidak perlu mengimplementasikan `EventEmitter` secara keseluruhan jika kode hanya menggunakan `on`, `emit`, dan `removeListener`.
+1. **Identifikasi apa yang benar-benar dipakai.** Implementasikan hanya metode yang dipanggil kode : di sini `on`, `emit` dan `removeListener` cukup untuk `EventEmitter`.
 
-2. **Delegasikan ke API browser jika memungkinkan.** `URL`, `URLSearchParams`, `MessageChannel`, `MessagePort`, `crypto.getRandomValues` -- browser sudah memilikinya, manfaatkan saja.
+2. **Delegasikan ke API peramban kalau memungkinkan.** `URL`, `URLSearchParams`, `MessageChannel`, `MessagePort`, `crypto.getRandomValues` -- peramban sudah punya, pakai saja.
 
-3. **Cache sinkron di depan API async.** Solusi `Map` + IndexedDB untuk `node:fs` adalah pola yang paling dapat digunakan kembali dari seluruh direktori.
+3. **Cache sinkron di depan API async.** Solusi `Map` + IndexedDB untuk `node:fs` adalah pola paling bisa dipakai ulang dari seluruh folder.
 
-4. **Stub yang jujur lebih baik daripada implementasi tidak lengkap yang diam.** `throw new Error('not implemented in browser')` yang eksplisit jauh lebih berguna daripada `return undefined` yang membiarkan bug muncul 10 panggilan kemudian.
+4. **Stub jujur lebih baik daripada implementasi tak lengkap yang diam.** `throw new Error('not implemented in browser')` yang eksplisit jauh lebih berguna daripada `return undefined` yang membiarkan bug muncul 10 panggilan kemudian.
 
-5. **esbuild `alias` + `inject` diremehkan.** Ini adalah alat yang sempurna untuk jenis porting ini -- tanpa konfigurasi webpack, tanpa plugin, hanya daftar penggantian.
+5. **esbuild `alias` + `inject` diremehkan.** Ini alat sempurna untuk porting semacam itu -- nol konfigurasi webpack, nol plugin, hanya daftar penggantian.
 
 ---
 
-Kodenya ada di repo: [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). Setiap file muat dalam satu halaman, bisa dibaca langsung di GitHub. Sangat direkomendasikan jika Anda mengerjakan proyek serupa.
+Kode ada di repo : [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). Setiap berkas muat dalam satu halaman, bisa dibaca langsung di GitHub. Sangat direkomendasikan kalau kamu mengerjakan proyek serupa.

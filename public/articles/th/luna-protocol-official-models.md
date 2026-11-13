@@ -13,7 +13,7 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "YmH/EgtQYZZvOqIsQmGmb2uyroM7Zgu0tZz18U94w1NjHEVd4FhWEvMALd8V39MO/8qVXvwIXjd3ujy/MxJyuA=="
+author_sig: "kjt2eQEPiBZ96BFCWqdIveU4CpbCCDD7fsLjddBeH5W2+Mtoguqbt23M7z9D5hX1I3wRmU2GHdMcw3/3CL/isg=="
 ---
 
 # Luna Protocol: ทำไมฉันถึง fine-tune โมเดล 1.5B บนตัวอย่าง Discord 50k ชิ้น และทำให้ few-shot priming กลายเป็นอาวุธลับ

@@ -1,104 +1,110 @@
 ---
-title: "Repo to VPS: GitHub Actions'ı ücretsiz kalıcı VPS'ye dönüştürün"
-description: Bir GitHub Actions runner'ı git'i kalıcı depolama olarak kullanarak sürekli açık bir VPS'ye dönüştürme -- tmate, inotify ve commit --amend.
+title: "Repo to VPS: kalıcı depolamayla GitHub Actions'ı ücretsiz VPS'e dönüştürmek"
+description: GitHub Actions koşucusunu git kalıcı depolamayla kalıcı VPS'e dönüştürmek, tmate, inotify ve commit --amend.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - github
   - devops
   - automation
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "mj0LFRsHlLn99uK5GZOdU1oHb6qmCP7GAPEJR6NjUcL3uw4SgXFANC/EeuDLVWmIrpCtOrbmsp9/dBXGeLMM4g=="
+author_sig: "yqiwKdIMrYXggNWG+56LTbzXHkreYNYxhfoxUaDeL09ZTqjfSh+oZZcEzUROw65sLRRyBaZjzIWOYR98w2KU+g=="
 ---
 
-## GitHub sana 6 saatliğine ücretsiz VPS veriyor. Kalıcı hale getirmenin yolunu buldum.
+## GitHub sana 6 saatliğine ücretsiz bir VPS veriyor. Onu kalıcı yapmanın yolunu buldum.
 
 GitHub Actions sana ücretsiz Linux makineleri veriyor.
 
-Yani, gerçek Ubuntu sunucuları. 2 çekirdek, 7 GB RAM, 14 GB disk. Bedava. Run başına 6 saat.
+Yani gerçek Ubuntu sunucuları. 2 çekirdek, 7 GB RAM, 14 GB disk. Bedava. Run başına 6 saatliğine.
 
-Tek "sorun": run sonunda her şey siliniyor. Makine tek kullanımlık. Bir şeyler kurarsın, kod yazarsın, ayar çekersin... ve poof, her şey gider. Sanki hiçbir şey yapmamışsın gibi.
+Tek "sorun": run sonunda her şey silinir. Makine atılabilirdir. Paket kurarsın, kod yazarsın, yapılandırırsın... ve puf, sonda her şey kaybolur. Sanki hiçbir şey yapmamışsın gibi.
 
-Ta ki.
+Şöyle olmasa.
 
-Ta ki **git'i hard disk olarak** kullanana kadar.
+**Giti sabit disk olarak** kullansan şöyle olmasa.
 
-Ve işte o an, aniden, run'lar arasında hayatta kalan kalıcı bir diske sahip ücretsiz bir VPS'in olur. Yeniden bağlanırsın, her şey hâlâ oradadır. Kaldığın yerden devam edersin.
+Ve bir anda runlar arasında hayatta kalan kalıcı diskli ücretsiz bir VPSin olur. Yeniden bağlanırsın, her şey hâlâ oradadır. Kaldığın yerden devam edersin.
 
-Tamamen kırık bu. Anlatayım xD
+Bu tamamen kırık. Açıklayayım.
 
 ---
 
-## Arka plan: GitHub Actions runner'ları
+## Bağlam: GitHub Actions koşucuları
 
-Bir GitHub Actions workflow'u başlattığında, GitHub sana bir VM verir.
+Bir GitHub Actions workflowu çalıştırdığında GitHub sana bir VM verir.
 
-Kodunu build etmen, testlerini çalıştırman, deploy etmen için yapılmıştır. Workflow çalışır, işini yapar ve makine yok edilir.
+Kodunu derlemek, testlerini çalıştırmak, dağıtmak için yapılmış. Workflow döner, işini yapar ve makine yok edilir.
 
-Ama bu VM ile başka şeyler yapmanı engelleyen hiçbir şey yok. SSH shell açıp sunucu gibi kullanmak.
+Ama bu VM ile başka bir şey yapmana hiçbir şey engel değil. Mesela üzerinde bir SSH kabuğu açıp sunucu olarak kullanmak gibi.
 
-Olay şu ki, bu makineler **statesiz** ve **geçici**:
-- Geçici: run başına maksimum 6 saat (`timeout-minutes: 360`, GitHub'ın tavanı)
-- Statesiz: her şey sonunda silinir
+Kısıt şu ki bu makineler **stateless** ve **geçicidir**:
+- Geçici: run başına 6 saat maksimum (`timeout-minutes: 360`, GitHub tavanı)
+- Stateless: sonda her şey silinir
 
-Yani bunu kullanılabilir bir VPS yapmak için iki sorunu çözmek gerek:
-1. **Gerçek zamanlı olarak nasıl bağlanılır?**
-2. **İki run arasında disk nasıl korunur?**
+O yüzden kullanılabilir bir VPS yapmak için iki sorunu çözmek gerekir:
+1. **Üzerine gerçek zamanlı nasıl bağlanılır?**
+2. **Disk iki run arasında nasıl tutulur?**
 
-İşte burada işler hack'e dönüşüyor.
+Burası pis bir hacke dönüşüyor.
 
 ---
 
 ## Sorun 1: tmate ile canlı SSH
 
-**tmate**, paylaşılabilir bir SSH oturumu oluşturan bir tmux fork'u.
+**tmate**, paylaşılabilir bir SSH oturumu oluşturan bir tmux çatalıdır.
 
-Bir makinede çalıştırırsın, sana iki link üretir:
-- bir SSH URL'si (`ssh xxx@nyc1.tmate.io`)
-- bir web URL'si (tarayıcıda terminal)
+Bir makinede çalıştırırsın, sana iki bağlantı üretir:
+- bir SSH URLsi (`ssh xxx@nyc1.tmate.io`)
+- bir web URLsi (tarayıcıda terminal)
 
-Bu linklerden biriyle bağlanırsın ve boom, makinede bir shell'desin. Gerçek zamanlı.
+Bu bağlantılardan biriyle bağlanırsın ve bum, makinede bir kabuktesin. Gerçek zamanlı.
 
-Workflow tmate'i şöyle başlatır:
+Workflow o yüzden tmate çalıştırır:
 
 ```bash
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
+
+# bağlantıları al
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
 
-Ve bu linkler bir Python script'iyle direkt repo README'ine yazılır. Reponu açarsın, bağlantı linkini görürsün, tıklarsın. İşte VPS'indesin.
+Ve bu bağlantılar bir Python scriptiyle doğrudan deponun READMEsi içine yazılır. Deponu açarsın, bağlantıyı görürsün, tıklarsın. İşte VPSindesin.
 
-İlk sorun çözüldü. Ama asıl çılgınlık ikincisi.
+İlk sorun çözüldü. Ama gerçekten çılgın olan ikincisi.
 
 ---
 
-## Sorun 2: git hard disk olarak
+## Sorun 2: sabit disk olarak git
 
-İşte manyaklık burada.
+Her şeyi değiştiren fikir işte bu.
 
-Makine her run'da siliniyor. O yüzden **dosya sistemini `filesystem` adında özel bir git dalında** saklıyoruz.
+Makine her run silinir. O yüzden dosya sistemini `filesystem` adlı adanmış bir git dalında saklıyoruz.
 
-Başlangıçta, script durumu bu daldan geri yükler:
+Başlangıçta script durumu bu daldan geri yükler:
 
 ```bash
 filesystem_branch="filesystem"
+
+# filesystem dalını remotedan al
 git fetch origin "$filesystem_branch":refs/remotes/origin/$filesystem_branch
+
+# çalışma alanını bu daldan geri yükle
 git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
 
-`filesystem` dalı SENİN hard disk'in. Dosyaların, kurulumların, ayarların -- hepsi onun içinde.
+`filesystem` dalı senin sabit diskinDİR. Dosyaların, kurulumların, yapılandırmaların, hepsi içindedir.
 
-Görüyor musun olayı? Makine tek kullanımlık ama disk git'te yaşıyor. Workflow'u yeniden başlatırsın, disk geri yüklenir, kaldığın yerden aynen devam edersin.
+Fikri görüyor musun? Makine atılabilir ama disk gitte yaşar. Workflowu yeniden çalıştırırsın, disk geri yüklenir, tam kaldığın yerden devam edersin.
 
-Hibernate modu olan bir VPS gibi. Tek farkı hibernasyonun bir git repo'su olması xD
+Hibernate olan bir VPS gibi. Tek fark hibernasyonun bir git deposu olması.
 
-### İlk başlatma: boş diski oluşturmak
+### İlk çalıştırma: boş diski oluşturmak
 
-İlk run'da `filesystem` dalı henüz yoktur. Oluşturulması gerekir. Ve bu basit bir işlem değil:
+En ilk run `filesystem` dalı henüz yoktur. Oluşturmak gerekir. Ve bu önemsiz değildir:
 
 ```bash
 ensure_filesystem_branch() {
@@ -112,41 +118,41 @@ ensure_filesystem_branch() {
 }
 ```
 
-`git checkout --orphan` anahtar nokta. Yetim (orphan) dal, **hiçbir geçmişi olmayan** bir daldır -- sanki boş bir repodan başlıyormuşsun gibi.
+`git checkout --orphan` kilit noktadır. Öksüz bir dal **hiç tarihçesi olmayan** bir daldır: sanki boş bir depodan başlıyormuşsun gibi.
 
-Neden yetim? Çünkü kalıcı diskinin tüm kaynak kod geçmişini taşımasını İSTEMEZsin. Disk ayrı bir şey, kendi hayatı olan. Tertemiz başlar.
+Neden öksüz? Çünkü kalıcı diskinin kaynak kodunun tüm tarihçesini sürüklemesini istemezsin. Disk izole kalır, kendi hayatıyla. Tertemiz başlar.
 
-Ve baştaki `git ls-remote --exit-code` sadece temiz bir kontrol: "bu dal remote'da zaten var mı?". Varsa dokunma. Yoksa oluştur. Idempotent, sevdiğimiz gibi.
+Baştaki `git ls-remote --exit-code` sadece temiz bir kontroldür: "dal remoteda zaten var mı?". Varsa hiçbir şeye dokunmayız. Yoksa oluştururuz. Sevdiğimiz gibi idempotent.
 
 ### Seçici git clean: önbellekleri korumak
 
-Şu satırda durup bakmak lazım:
+Bu satır üzerinde durmayı hak ediyor:
 
 ```bash
 git clean -fdx -e .apt-cache -e .cache -e host.conf -e tmate.sock
 ```
 
-`git clean -fdx`, git tarafından takip edilmeyen HER ŞEYİ siler. Normalde vahşidir -- workspace'i kökünden temizler.
+`git clean -fdx` git tarafından izlenmeyen HER şeyi siler. Normalde serttir: çalışma alanını kökten temizler.
 
-Ama `-e` (exclude) bazı şeyleri korur:
-- `.apt-cache` → APT paket önbelleği (buna geri döneceğiz, akıllıca)
+Ama `-e` (hariç tut) bazı dosyaları korur:
+- `.apt-cache` → APT paket önbelleği (buna döneceğiz, kurnazca)
 - `.cache` → genel önbellek
 - `host.conf` → oturumun SSH adresi
-- `tmate.sock` → mevcut tmate oturumunun soketi
+- `tmate.sock` → devam eden tmate oturumunun soketi
 
-Bu dosyaları temizlersen, aktif oturumu bozar veya önbelleğini kaybedersin. O yüzden reset sırasında onları atlıyoruz.
+Şu dosyaları temizleseydin aktif oturumu bozar ya da önbelleğini kaybederdin. O yüzden sıfırlama sırasında es geçilirler.
 
-İlk bakışta aptal bir detay, ama bunlar olmadan her şey patlar.
+İlk bakışta aptalca bir detay ama o olmadan her şey patlar.
 
 ---
 
-## Otomatik kaydetme: her şeyi izleyen inotify
+## Otomatik kayıt: her şeyi izleyen inotify
 
-Peki dosyalar `filesystem` dalına nasıl gidiyor?
+Peki dosyalar `filesystem` dalına nasıl girer?
 
-Cevap: TÜM dosya değişikliklerini izleyen ve otomatik olarak commit/push yapan bir watcher.
+Yanıt: TÜM dosya değişikliklerini izleyip otomatik commit/push yapan bir izleyici.
 
-Sihirli araç **inotifywait** (`inotify-tools` paketinden). Kernel seviyesinde dosya sistemini izler ve bir dosya değiştiğinde tetiklenir.
+Sihirli araç **inotifywait** (`inotify-tools` paketinden). Dosya sistemini çekirdek seviyesinde izler ve bir dosya değişir değişmez tetiklenir.
 
 ```bash
 autosave() {
@@ -154,48 +160,48 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1
+    sleep 1   # bir anda çok değişiklik olursa debounce
   done
 }
 
 autosave &
 ```
 
-inotify flag'lerini inceleyelim, çünkü her biri önemli:
-- `-r` → recursive, tüm alt klasörleri izler
-- `-e modify,create,delete,move` → bu 4 olay türüne tepki verir (değişiklik, oluşturma, silme, taşıma)
-- `--exclude '...'` → bazı dosyaları yok saymak için bir regex
+inotify bayraklarını tek tek açalım çünkü her biri önemli:
+- `-r` → özyinelemeli, tüm alt klasörleri izler
+- `-e modify,create,delete,move` → bu 4 olay türüne tepki verir
+- `--exclude '...'` → bazı dosyaları yoksaymak için bir regex
 
-`--exclude` hayati önemde. Neleri yok saydığına bak:
+`--exclude` kritiktir. Neleri yoksaydığına bak:
 - `.git` → tabii ki, yoksa her commit bir autosave tetikler, o da bir commit tetikler... sonsuz döngü. Felaket.
-- `.apt-cache` ve `.cache` → sürekli değişen ve git'i spamlamak istemediğimiz önbellekler
-- `host.conf` ve `tmate.sock` → durmadan değişen oturum dosyaları
-- `.gitignore`, `.txt.swp` → geçici dosyalar (`.swp` vim düzenleme dosyaları)
+- `.apt-cache` ve `.cache` → her zaman değişen ve gite spamlemek istemediğimiz önbellekler
+- `host.conf` ve `tmate.sock` → durmadan oynayan oturum dosyaları
+- `.gitignore`, `.txt.swp` → geçici dosyalar (`.swp` vim düzenleme dosyalarıdır)
 
-Bu exclude olmadan, autosave kendi değişiklikleriyle döngüye girerdi. Listedeki `.git`, ayağına sıkmaktan seni koruyan SATIR.
+Bu hariç tutma olmadan kendi değişikliklerinde döngüde tetiklenen bir autosave ile kalırdın. Listedeki `.git`, ayağına sıkmanı engelleyen satırdır.
 
-Bir dosyayı değiştirirsin? inotify anında algılar, commit atar, push yapar. Bir saniyeden kısa sürede, değişikliğin `filesystem` dalında.
+Bir dosyayı mı değiştirdin? inotify anında tespit eder, commitler, pushlar. Bir saniyeden kısa sürede değişikliğin `filesystem` dalındadır.
 
-Bir şey kurarsın, kod yazarsın, ayar değiştirirsin -- her şey gerçek zamanlı, otomatik, sen hiçbir şey yapmadan kaydedilir.
+Bir paket mi kuruyorsun, kod mu yazıyorsun, yapılandırmaya mı dokunuyorsun: her şey gerçek zamanlı, otomatik, hiçbir şey yapmana gerek kalmadan kaydedilir.
 
-Gerçek anlamda tüm diskin otomatik yedekleme sistemine sahipsin. Kırık.
+Kelimenin tam anlamıyla tüm diskin otomatik yedekleme sistemine sahipsin. Kırık.
 
-### Debounce: git'i spamlamamak
+### Debounce: giti spamlememek
 
-Her kayıttan sonraki `sleep 1` bir **debounce**.
+Her kayıttan sonraki `sleep 1` bir **debounce**tur.
 
-Bir editörde dosya kaydettiğinde, genelde peş peşe birden fazla dosya sistemi olayı oluşur (geçici dosya oluşturma, rename, eskisini silme...). Debounce olmadan, tek bir kayıt için 3-4 commit tetiklenirdi.
+Bir editörde bir dosyayı kaydettiğinde genelde dosya sistemi olayları patlaması üretir (geçici dosya oluşturma, yeniden adlandırma, eskinin silinmesi...). Debounce olmadan tek bir kayıt için 3-4 commit tetiklerdin.
 
-`sleep 1` şunu der: "bir kayıttan sonra bir saniye bekle, patlama dinsin, sonra tekrar dinlemeye başla". Yakın zamandaki değişiklikleri tek bir commit'te toplar. Akıllıca.
+`sleep 1` şunu der: "bir kayıttan sonra bir saniye bekle, patlama yatışsın, yeniden dinlemeden önce". Yakın değişiklikleri tek committe gruplar. Kurnazca.
 
-### Bir de periyodik yedekleme
+### Üstüne periyodik bir kayıt daha
 
-Her ihtimale karşı, inotify bir şey kaçırırsa diye her 5 saniyede bir de kayıt var:
+inotify bir olayı kaçırır diye bir de 5 saniyede bir kayıt var:
 
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote
+    sync_from_remote   # olası uzak değişiklikleri alır
     sleep 5
     commit_and_push
   done
@@ -204,27 +210,27 @@ periodic_save() {
 periodic_save &
 ```
 
-Kuşak gibi askı gibi. Disk durumunu kaybetmek istemiyoruz hiç.
+Hem kemer HEM askı. Diskin durumunu kaybetmek hiç istemeyiz.
 
 ---
 
-## Akıllı detay: tek commit
+## Kurnaz detay: tek bir commit
 
-Her dosya değişikliğinde commit atarsan... binlerce commit birikir. Bir saatlik oturumda git geçmişin patlar. Repo kocaman olur. İğrenç.
+Her dosya değişikliğinde commitlersen binlerce commit biriktirirsin. Bir saatlik oturumda git tarihçen patlar. Depo devasa olur. İğrençtir.
 
-Çözüm zarif: **yeni commit oluşturmak yerine varolanı değiştiriyoruz (amend).**
+Çözüm zariftir: yeni bir tane oluşturmak yerine mevcut commiti **değiştiriyoruz**.
 
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return
+    flock -n 200 || return   # iki kaydın aynı anda dönmemesi için kilit
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/
+    git reset -- .github/workflows/ .github/scripts/   # scriptlere dokunma
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit
+        git commit --amend --no-edit    # AMEND: önceki commiti ezer
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -234,11 +240,11 @@ commit_and_push() {
 }
 ```
 
-`git commit --amend` şu anlama gelir: "son commit'i bununla değiştir."
+`git commit --amend` şu demektir: "son commiti bununla değiştir".
 
-Böylece `filesystem` dalında HER ZAMAN tek bir commit olur. Ne kadar kaydedersen kaydet. Sadece mevcut durumun bir anlık görüntüsü, defalarca force-push edilmiş.
+Böylece `filesystem` dalında HER ZAMAN tek bir commit olur. Kaç kez kaydedersen kaydet. Sadece mevcut durumun bir anlık görüntüsüdür, tekrar tekrar force-pushlanır.
 
-`flock` bir kilit: iki kaydetme döngüsü olduğu için (inotify + periyodik), ikisinin aynı anda git'i çalıştırıp birbirine girmesini engellemek gerek. Aynı anda tek bir git işlemi.
+`flock` bir kilittir: iki kayıt döngüsü olduğu için (inotify + periyodik) gitin aynı anda çalışıp birbirine basmasını engellemek gerekir. Aynı anda tek git süreci.
 
 Temiz.
 
@@ -246,9 +252,9 @@ Temiz.
 
 ## sync_from_remote: birden çok oturumu yönetmek
 
-İlk başta aklına gelmeyen bir şey: ya aynı anda İKİ run başlatırsan? Ya da bir oturum `filesystem` dalını değiştirirken başka bir oturum çalışıyorsa?
+İşte başta düşünmediğin bir durum: ya AYNI ANDA İKİ run çalıştırırsan? Ya da bir oturum diğeri dönerken `filesystem` dalını değiştirirse?
 
-Script bunu her commit'ten önce `sync_from_remote` ile halleder:
+Script bunu her committen önce `sync_from_remote` ile yönetir:
 
 ```bash
 sync_from_remote() {
@@ -257,17 +263,17 @@ sync_from_remote() {
 }
 ```
 
-`--ff-only` (sadece fast-forward) önemli: "SADECE düzgün bir şekilde ilerletebiliyorsak merge yap, merge commit'i oluşturmadan" anlamına gelir.
+`--ff-only` (yalnızca fast-forward) önemlidir: "YALNIZCA merge commiti oluşturmadan temiz ilerlenebiliyorsa birleştir" demektir.
 
-İki dal birbirinden ayrılmışsa (mesela iki oturum farklı şeyleri değiştirmişse), fast-forward sessizce başarısız olur (`2>/dev/null || true`) ve yerel durum korunur. Mükemmel bir merge sistemi değil, ama tek bir oturumun çalıştığı basit durumda bozulmaları önler.
+İki dal ıraksadıysa (mesela iki oturum farklı dosyaları değiştirdiyse) fast-forward sessizce başarısız olur (`2>/dev/null || true`) ve yerel durumu koruruz. Mükemmel bir birleştirme sistemi değil ama tek bir oturumun döndüğü basit durumda bozulmaları engeller.
 
-Açıkçası, aynı repo'da 3 paralel oturum başlatmamalısın. Ama kod yine de patlamamaya çalışıyor. Savunma amaçlı.
+Dürüstçe, aynı depoda paralel 3 oturum çalıştırmamak gerekir. Ama kod yine de o durumda patlamamaya çalışır. Savunmadır bu.
 
 ---
 
-## APT önbelleği: hızlı kurulum
+## APT önbelleği: hızlı kurmak
 
-Workflow'da göze çarpmayan ama iyi düşünülmüş bir detay var:
+Workflowda göze çarpmayan ama iyi düşünülmüş bir detay var:
 
 ```yaml
 - name: Cache & install APT packages (tmate + watcher)
@@ -276,19 +282,19 @@ Workflow'da göze çarpmayan ama iyi düşünülmüş bir detay var:
     packages: tmate inotify-tools
 ```
 
-tmate ve inotify-tools, **APT paketlerini önbelleğe alan** bir action ile kuruluyor.
+tmate ve inotify-tools APT paketlerini **önbelleğe alan** bir aksiyonla kurulur.
 
-İlk run'da indirir ve kurar. Sonraki run'larda GitHub Actions önbelleğinden geri yüklenir -- daha hızlı, yeniden indirmeye gerek kalmaz.
+İlk run indirir ve kurar. Sonraki runlarda GitHub Actions önbelleğinden geri yüklenir: daha hızlı, yeniden indirmeye gerek yok.
 
-Az önceki `git clean -fdx -e .apt-cache`'i hatırladın mı? İşte bağlantılı. `.apt-cache` klasörü, oturum sırasında kurduğun paketlerin bir şekilde kalıcı olabilmesi için temizlikten korunuyor.
+Ve az önceki `git clean -fdx -e .apt-cache`i hatırlıyor musun? Bağlantılı. `.apt-cache` klasörü temizlikten tam da oturum sırasında kurduğun paketlerin minimum kalıcılığı için korunur.
 
-Her şey birbirini tutuyor.
+Her şey birbirine oturur. Yaşam döngüsünün tamamını düşündüm.
 
 ---
 
-## /tmp'ye gizlenen script'ler
+## /tmp içinde saklanan scriptler
 
-Sinsi ama akıllıca bir detay daha. Script'in en başında:
+Yine kısır ama kurnaz bir detay. Scriptin en başında:
 
 ```bash
 RUNNER_SCRIPTS_DIR="/tmp/runner-scripts"
@@ -297,23 +303,23 @@ mkdir -p "$RUNNER_SCRIPTS_DIR"
 cp -r .github/scripts "$RUNNER_SCRIPTS_DIR/"
 ```
 
-Script'ler (`update_readme.py` vb.) `filesystem` dalına dokunmadan ÖNCE `/tmp`'ye kopyalanır.
+Scriptler (`update_readme.py` vs.) `filesystem` dalına dokunmadan ÖNCE `/tmp` içine kopyalanır.
 
-Neden? Çünkü `git reset --hard` ile `filesystem` dalına geçtiğinde (başlangıçta boş veya diskin neyse o), kaynak repodaki `.github/scripts` dosyaları workspace'ten kaybolur.
+Neden? Çünkü `filesystem` dalına `git reset --hard` yaptığında (başlangıçta boş ya da diskini içeren) kaynak deponun `.github/scripts` dosyaları çalışma alanından kaybolur.
 
-Ama README'i güncellemek için hâlâ gereklidir. O yüzden `/tmp`'ye saklar:
+Ama script oturum sırasında onlara hâlâ ihtiyaç duyar (tmate her yeniden başladığında READMEyi güncellemek için). O yüzden gitin erişemeyeceği `/tmp` içine saklar:
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Düşünmezsen script'in kaybolur. Ben düşündüm.
+Bunu düşünmezsen scriptinin neden kaybolduğunu anlamak için 30 dakika debelenirsin. Ben düşündüm.
 
 ---
 
-## Özel yapım shell
+## Ölçüye göre kabuk
 
-Son bir konfor: oturum sana çıplak bir bash değil, yapılandırılmış bir shell veriyor.
+Küçük konfor: oturum sana çıplak bir bash değil, yapılandırılmış bir kabuk verir.
 
 `prestart.sh` özel bir `.bashrc` kopyalar:
 
@@ -324,7 +330,7 @@ fi
 sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
-Ve bu `.bashrc` renkli bir prompt, alias'lar (`ll`, `lla`, `rm -i`) ve işte akıllı bir şey içerir: `exit` override'ı:
+Ve bu `.bashrc` renkli bir istem, takma adlar (`ll`, `lla`, `rm -i`) ve hepsinden önemlisi bir `exit` geçersiz kılma içerir:
 
 ```bash
 exit() {
@@ -332,20 +338,21 @@ exit() {
     builtin exit "$@"
 }
 
+# Ctrl+D exit ile aynı şeyi yapar
 bind -x '"\C-d": "exit"'
 ```
 
-`exit` (veya Ctrl+D) yazdığında, kapatmadan önce tmate process'lerini temizce öldürür. Böylece makinede zombi tmate oturumları kalmaz.
+`exit` (ya da Ctrl+D) yazdığında kapanmadan önce tmate süreçlerini temizce öldürür. Zombi tmate oturumları bırakmayı engeller.
 
-Bir de `tmate-detach` fonksiyonu var, oturumu öldürmeden bağlantıyı kesmek istersen diye (sonra tekrar bağlanmak için). Küçük bir konfor detayı, ama özen seviyesini gösteriyor.
+Daha sonra yeniden bağlanmak için oturumu öldürMEDEN ayrılmak istersen bir `tmate-detach` fonksiyonu da var. Konfor detayı ama özen seviyesini gösterir.
 
 ---
 
 ## Kendi kendine yeniden başlayan tmate
 
-Küçük bir konfor: shell'de `exit` yazdığında, normalde tmate oturumu ölür ve bir daha bağlanamazsın.
+Küçük konfor: kabuğuna `exit` yazarsan normalde tmate oturumu ölür ve temelli bağlantın kesilir.
 
-Ama burada tmate bir `while true` döngüsü içinde:
+Ama burada tmate bir `while true` döngüsündedir:
 
 ```bash
 while true; do
@@ -353,37 +360,34 @@ while true; do
   while tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' >/dev/null 2>&1; do
     sleep 2
   done
-
   echo "tmate session ended; restarting..."
 done
 ```
 
-`exit` yaparsın? Oturum kendi kendine yeniden başlar. Aynı linkle tekrar bağlanabilirsin. Düşüşten sonra bile istikrarlı bağlantı.
+`exit` mi yaptın? Oturum kendi kendine yeniden başlar. Aynı bağlantıyla yeniden bağlanırsın.
 
-Aptalca ama kullanışlı hale getiriyor.
+Aptalca ama oturumu kullanılabilir kılar.
 
 ---
 
 ## Tek komutla yeniden bağlanma
 
-Düşüşten sonra, her seferinde run log'larını karıştırmadan nasıl yeniden bağlanırsın?
+Her seferinde run loglarında kazı yapmadan bir kopuş sonrası nasıl yeniden bağlanırsın?
 
-tmate'in SSH adresi `host.conf` dosyasına yazılır ve `filesystem` dalında commit'lenir:
+tmate SSH adresi `filesystem` dalına commitlenen bir `host.conf` dosyasına yazılır:
 
 ```bash
 printf '%s' "${tmate_ssh#ssh }" > host.conf
 ```
 
-Ve bu dosya git'te olduğu için, GitHub API'si ile tek bir komutla alabilirsin:
+Ve bu dosya gitte olduğu için onu GitHub API üzerinden tek bir komutla alabilirsin:
 
 ```bash
 ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
   "/repos/USER/REPO/contents/host.conf?ref=filesystem" | tr -d '\r\n')"
 ```
 
-Bunu çalıştırırsın, repo'daki güncel SSH adresini alır ve direkt bağlanır. İki oturum arasında adres değişmiş olsa bile.
-
-Tamam.
+Bunu çalıştırırsın, depodaki güncel SSH adresini çeker ve bağlanır. Adres iki oturum arasında değişmiş olsa bile.
 
 ---
 
@@ -391,111 +395,106 @@ Tamam.
 
 Özetleyelim:
 
-```
-1. Workflow'u tetiklersin (push veya manuel buton)
+1. Workflowu tetiklersin (push ya da manuel düğme)
 2. GitHub sana bir Ubuntu VM verir
 3. Script diski "filesystem" dalından geri yükler
 4. inotify tüm değişiklikleri izlemeye başlar
-5. periodic_save her 5 saniyede bir yedek commit atar
-6. tmate başlar → SSH/web linklerini oluşturur
-7. Linkler README + host.conf'a yazılır
-8. ssh veya web terminali ile bağlanırsın
-9. Ne istersen yaparsın (kod yaz, kur, debug et...)
-   └── her dosya değişikliği = git'e anlık otomatik kayıt
-10. 6 saat sonra GitHub VM'i öldürür
-11. Ama diskin "filesystem" dalında sapasağlamdır
-12. Workflow'u yeniden başlatırsın → 3. adıma dön, her şey hâlâ orada
-```
+5. periodic_save yedek olarak her 5 saniyede commitler
+6. tmate başlar → SSH/web bağlantılarını üretir
+7. Bağlantılar README + host.conf içine yazılır
+8. ssh ya da web terminaliyle bağlanırsın
+9. İstediğini yaparsın: her dosya değişikliği = otomatik kayıt
+10. 6 saat sonra GitHub VM i öldürür
+11. Diskin "filesystem" dalında bozulmadan durur
+12. Workflowu yeniden çalıştırırsın → 3. adıma dön, her şey hâlâ orada
 
-Bir VPS. Ücretsiz. Kalıcı diskli. Sadece git ve GitHub Actions ile.
+Kalıcı diskli ücretsiz bir VPS. Sadece git ve GitHub Actions ile.
 
 ---
 
-## Tamam, dürüst olalım: sınırlamalar
+## Tamam, dürüst olalım: limitler
 
-Bu bir hack, gerçek VPS değil. Yani:
+Bu bir hack, gerçek bir VPS değil. O yüzden:
 
-- **Run başına maksimum 6 saat.** Workflow'u düzenli olarak yeniden başlatman gerekir. Sonsuz uptime yok.
-- **Prod için değil.** Siteni burada barındırmayacaksın. Keşfetmek, geliştirmek, debug yapmak, tek kullanımlık ama kurtarılabilir bir Linux'ta bir şey test etmek için.
+- **Run başına 6 saat maksimum.** Workflowu düzenli yeniden başlatmak gerekir. Her run sınırlı çalışma süresi.
+- **Dev ve keşfe ayrılmış.** Siteni bunun üstünde barındırmayacaksın. Keşfetmek, dev, debug, atılabilir ama kurtarılabilir bir Linux ortamını test etmek içindir.
 - **GitHub her şeyi görür.** Onların makineleri. Hassas bir şey koyma.
-- **Repoyu gizli tut.** Bir SSH shell'i açıyorsun. Herkese açık repo = potansiyel olarak herkes bağlanabilir. Kötü fikir.
-- **Kullanım koşullarının sınırında.** GitHub Actions CI/CD için yapılmıştır, ücretsiz VPS için değil. Ölçülü, meşru, suistimal etmeden kullan.
+- **Depoyu özel tut.** Bir SSH kabuğu sunuyorsun. Herkese açık bir depo = potansiyel olarak herkes bağlanabilir. Kötü fikir.
+- **Kullanım koşullarının sınırında.** GitHub Actions CI/CD için yapılmıştır, ücretsiz VPS için değil. O yüzden ölçülü, meşru şeyler için, abartmadan kullanmalı.
 
-### Gerçek zayıf nokta: git büyük dosyalardan nefret eder
+### Gerçek Aşil topuğu: git büyük dosyalardan nefret eder
 
-Daha teknik bir sınırlama var ve anlaşılması en önemlisi.
+Git metin içindir, dosya sistemi için değil.
 
-**Git metin için yapılmıştır, dosya sistemi için değil.**
+Kalıcı disk bir git dalında yaşar. O yüzden kaydettiğin her şey gitten geçer. Ve git:
+- büyük ikili dosyaları kötü yönetir (gitte 2 GB Docker imajı mı? unut)
+- GitHubda dosya başına 100 MB limiti vardır (sert limit, ötesini pushlamaz)
+- depo başına ~5 GB altında kalınması önerilir
 
-Kalıcı disk bir git dalında yaşar. Yani kaydettiğin her şey git'ten geçer. Ve git:
-- büyük binary dosyaları kötü yönetir (2 GB'lık bir Docker imajı git'te? unut gitsin)
-- GitHub'da dosya başına 100 MB sınırı vardır (hard limit, üstü push olmaz)
-- repo başına ~5 GB'ın altında kalmanı önerir
+O yüzden 500 MB `node_modules` olan bir proje `npm install` edersen ya da ağır ikililer üreten bir proje derlersen `filesystem`e push ya çok kasar ya da düpedüz başarısız olur.
 
-Yani 500 MB `node_modules`'lu bir projede `npm install` yaparsan veya ağır binary'ler çıkaran bir şey build edersen, `filesystem`'e push ya deli gibi yavaşlar ya da tamamen başarısız olur.
+`git commit --amend` yardımcı olur (tek bir commit, şişen tarihçe yok) ama 200 MB dosyanın asla geçmeyeceği gerçeğini değiştirmez.
 
-`git commit --amend` yardımcı olur (tek commit, şişen geçmiş yok), ama 200 MB'lık bir dosyanın asla geçmeyeceği gerçeğini değiştirmez.
+Kabaca: **kod, yapılandırma, küçük dosyalar için süper çalışır. Büyük verileri ya da ikili artefaktları saklamak için çalışmaz.** Oturumunda ne yaptığına dair bunu aklında tutmak gerekir.
 
-Kısacası: **kod, ayar dosyaları, küçük dosyalar için harika çalışır. Büyük verileri veya binary artifaktları depolamak için çalışmaz.** Oturumunda ne yaptığını buna göre ayarlamalısın.
+### Tam bir sistem anlık görüntüsü değil
 
-### Tam sistem anlık görüntüsü değil
+Bir önemli nüans daha: `filesystem` dalı **çalışma alanını** (depo klasörü) kaydeder, tüm sistemi değil.
 
-Bir diğer önemli nüans: `filesystem` dalı **workspace'i** (repo klasörünü) kaydeder, tüm sistemi değil.
+`apt install htop` yaparsan ikili `/usr/bin/htop` içine gider ki bu çalışma alanının DIŞINDADIR. O yüzden kaydedilMEZ. Sonraki run yeniden kurmak gerekir.
 
-`apt install htop` yaparsan, binary `/usr/bin/htop`'a gider, ki bu workspace DIŞINDADIR. Yani kaydedilmez. Sonraki run'da yeniden kurman gerekir.
+APT önbelleği ve `prestart.sh` bu yüzden var: yalnızca çalışma alanı kalıcı olduğu için sistem ortamını her başlatmada yeniden hazırlamak.
 
-İşte bu yüzden APT önbelleği ve `prestart.sh` var: her başlangıçta sistem ortamını yeniden hazırlamak için, çünkü sadece workspace kalıcı.
-
-Kurulumlarının hayatta kalmasını istiyorsan, onları workspace'in içine koymalısın (mesela sistem yerine yerel bir klasöre kurmak). Alışman gereken bir jimnastik.
+Kurulumlarının hayatta kalmasını istiyorsan onları çalışma alanına koymak gerekir (mesela sistem yerine yerel bir klasöre kurmak). Sindirilmesi gereken bir jimnastik.
 
 ---
 
-## Ücretsiz VPS vs gerçek VPS: karşılaştırma
+## Ücretsiz VPS ve gerçek VPS: maç
 
-| | repo-to-vps | Gerçek VPS (5€/ay) |
+| | repo-to-vps | Gerçek VPS (5 €/ay) |
 |---|---|---|
-| **Fiyat** | 0€ | ~5-10€/ay |
-| **Çalışma süresi** | 6 saat, yeniden başlatmak gerek | 7/24 |
+| **Fiyat** | 0 € | ~5-10 €/ay |
+| **Çalışma süresi** | 6 saat, yeniden başlatmalı | 7/24 |
 | **Disk** | git dalı, küçük dosyalar | gerçek SSD, birkaç GB |
 | **RAM** | ~7 GB (cömert!) | genelde 1-2 GB |
-| **CPU** | 2-4 iyi çekirdek | 1-2 vCPU |
-| **Kurulum** | template'i clone'la | manuel yapılandırma |
-| **Kalıcılık** | sadece workspace | tam sistem |
-| **Meşruiyet** | kullanım koşullarının sınırında | %100 clean |
+| **CPU** | düzgün 2-4 çekirdek | 1-2 vCPU |
+| **Kurulum** | bir şablonu klonla | manuel yapılandırma |
+| **Kalıcılık** | yalnızca çalışma alanı | tam sistem |
+| **Meşruiyet** | KG sınırında | %100 temiz |
 
-Komik olan şu ki ham özelliklerde (RAM, CPU) GitHub runner genelde 5€'luk bir VPS'ten DAHA İYİ. Ama 6 saatlik çalışma süresi ve workspace ile sınırlı kalıcılık, bunu gerçek bir sunucu değil, bir hacker oyuncağı yapıyor.
+İlginç nokta, ham özelliklerde (RAM, CPU) GitHub koşucusunun 5 €luk bir VPS ten genelde DAHA İYİ olmasıdır. Ama 6 saatlik çalışma süresi ve çalışma alanıyla sınırlı kalıcılık onu gerçek bir sunucu değil, hacker oyuncağı yapar.
 
-Öğrenmek, test etmek, kurtarılabilir bir ortamda hızlıca bir Linux şeyini debug etmek için? Mükemmel. Ciddi bir şey barındırmak için? Gerçek bir VPS al.
+Öğrenmek, test etmek, kurtarılabilir bir ortamda hızlıca bir Linux sisteminde hata ayıklamak için? Mükemmel. Ciddi bir şey barındırmak için? Gerçek bir VPS al.
 
-Ama dilediğin gibi geri yükleyebileceğin geçici bir Linux ortamı için? Harika.
-
----
-
-## Tüm bunların ardındaki desen
-
-Geriye çekilip bakarsan, repo-to-vps ve email bot'u (diğer yazım) aynı fikre dayanıyor:
-
-> **Git sadece bir versiyon yöneticisi değil. API'si ile erişilebilen, ücretsiz, versiyonlu, kalıcı bir depolama sistemidir.**
-
-Statesiz bir sistemin (GitHub Actions, bir Worker, serverless fonksiyon) olduğunda ve iki çalıştırma arasında bir durum tutmak istediğinde, git "disk" görevi görebilir.
-
-- Email bot'u bir `lastId`'yi bir git tag'inde saklar.
-- repo-to-vps bütün bir dosya sistemini bir git dalında saklar.
-
-Aynı desen, iki farklı ölçek. Bir tarafta bir değer, diğer tarafta bir disk.
-
-Ve `git commit --amend` + force-push ortak teknik: **her güncellemede üzerine yazılan, mevcut durumu temsil eden tek bir commit tutuyorsun.**
-
-Bunun için yapılmadı. Ama çalışıyor. Ve ücretsiz.
+Ama istenirse geri yüklenebilen geçici bir Linux ortamı için? Bu düpedüz harika.
 
 ---
 
-**Unutulmaması gereken 3 şey:**
+## Tüm bunların arkasındaki desen
 
-1. **Bir git dalı = kalıcı bir hard disk** -- Dosya sistemini özel bir dalda sakla, başlangıçta geri yükle, tek kullanımlık makinelerde hayatta kalan bir durumun olsun.
+Geri çekilip bakarsan repo-to-vps ve e-posta botu (diğer makalem) aynı fikre dayanır:
 
-2. **inotify + git = gerçek zamanlı otomatik kayıt** -- `inotifywait` kernel seviyesinde değişiklikleri izler ve anında git'e push eder. `git commit --amend` ile temiz bir tek commit korunur.
+> **Git sadece bir sürüm yöneticisi değildir. Ücretsiz, sürümlü, bir API üzerinden erişilebilir kalıcı bir depolama sistemidir.**
 
-3. **tmate runner'ı VPS'e dönüştürür** -- GitHub Actions makinesinde canlı SSH, otomatik yeniden başlatma ve GitHub API'si ile tek komutta yeniden bağlanma.
+Stateless bir sistemin (GitHub Actions, bir Worker, sunucusuz bir fonksiyon) olur olmaz iki çalıştırma arasında durum tutmak istersin, git "disk" görevi görebilir.
 
-Git hard disk olarak, ikinci bölüm. Sanırım sonunda her şeyi git dallarında saklayacağım xD
+- E-posta botu bir git taginde `lastId` saklar.
+- repo-to-vps bir git dalında koca bir dosya sistemi saklar.
+
+Aynı desen, iki ölçek. Bir tarafta bir değer, diğer tarafta bir disk.
+
+Ve `git commit --amend` + force-push ortak tekniktir: **mevcut durumu temsil eden, her güncellemede ezilen tek bir commit tutarsın.**
+
+Bunun için yapılmadı. Ama çalışıyor. Ve bedava.
+
+---
+
+**Akılda tutulacak 3 nokta:**
+
+1. **Bir git dalı = kalıcı bir sabit disk**: Dosya sistemini adanmış bir dalda sakla, başlangıçta geri yükle, atılabilir makinelere hayatta kalan bir duruma sahip ol.
+
+2. **inotify + git = gerçek zamanlı otomatik kayıt**: `inotifywait` değişiklikleri çekirdek seviyesinde izler ve gite anında pushlar. Temiz tek commit tutmak için `git commit --amend` ile.
+
+3. **tmate koşucuyu VPS e dönüştürür**: GitHub Actions makinesinde canlı SSH, otomatik yeniden başlatma ve GitHub API üzerinden tek komutla yeniden bağlanma.
+
+Sabit disk olarak git, ikinci bölüm. Sanırım her şeyi git dallarında saklayarak bitireceğim.

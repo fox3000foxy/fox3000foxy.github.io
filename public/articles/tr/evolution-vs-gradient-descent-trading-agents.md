@@ -1,39 +1,38 @@
 ---
-title: "Gradyan inişi yerine doğal seçilimle bir sinir ağı evrimleştirdim"
-description: "Klasik gradyan inişi eğitimini bir NSGA-II genetik algoritmasıyla değiştirerek DQN alım-satım ajanlarını nasıl evrimleştirdiğim: aşırı uyumdan Lamarckçı ağırlık evrimine dört sürüm"
+title: "Bir sinir ağını gradyan inişi yerine doğal seçilimle evrimleştirdim"
+description: "Klasik gradyan inişli eğitimi, alım satım DQN ajanlarını evrimleştirmek için NSGA-II genetik algoritmasıyla nasıl değiştirdim: aşırı uyumdan ağırlıkların lamarkçı evrimine dört sürüm."
 date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
-lang: "tr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "b0zELWZVg0s3oOXTfw32CO5m0/Vdcj2sw03tcKXCDIqi9WvWUqQvcRuVXFBZriKjTFJhV9GwWn+rZfnmWJ2nHA=="
+author_sig: "eKEz5iw6X1JyuA2jGFWsXMO1HCPthKkWR9dkUDUBDGR5WNW4Fs7gDzM+5nDANf6bNzrde1l5nTYERvLQes4YTw=="
 ---
 
-## Sadece gradyan inişinin sorunu
+## Yalnızca gradyan inişiyle ilgili sorun
 
-Algoritmik alım-satım için bir DQN ajanını klasik gradyan inişiyle eğitmenin ifade etmesi basit, çözmesi zor bir sorunu vardır: gradyan inişi _tek_ bir ağı _tek_ bir yerel minimuma, _tek_ bir piyasa penceresinde optimize eder. Bu minimumun farklı bir piyasa rejimine genellenebileceğini garanti eden hiçbir şey yoktur ve eğitim döngüsünde çeşitliliği iten hiçbir şey yoktur; farklı tohumlardan başlayan iki çalışma genellikle neredeyse aynı stratejilere ve aynı kör noktalara yakınsar.
+Algoritmik alım satım için bir DQN ajanını klasik gradyan inişiyle eğitmek, söylemesi kolay çözmesi zor bir sorun koyar: gradyan _bir_ ağı _bir_ yerel minimuma, _bir_ piyasa penceresinde optimize eder. Bu minimumun farklı bir piyasa rejimine genelleneceğinin garantisi yoktur ve eğitim döngüsündeki hiçbir şey çeşitliliği teşvik etmez; farklı tohumlardan başlayan iki run genelde neredeyse aynı stratejilere, aynı kör noktalarla yakınsar.
 
-Keşfettiğim yanıt: gradyan inişini bir genetik algoritmayla değiştirmek (veya üzerine yerleştirmek). Bir ajanı eğitmek yerine, bir ajan popülasyonunu evrimleştiriyorsunuz; her genom bir mimari ve hiperparametreler kodluyor; doğal seçilim sıralamayı yaparken, gradyan inişi her bireyi kendi yaşam süresi içinde ince ayarlamaya devam ediyor.
+Keşfettiğim yanıt: gradyan inişini genetik bir algoritmayla değiştirmek (daha doğrusu üst üste koymak). Tek bir ajan eğitmek yerine bir ajan popülasyonu evrimleştirilir; her biri mimari ve hiper parametreleri kodlayan bir genomdur; her birey kendi ömrü içinde gradyanla ince ayarlanmaya devam ederken ayıklamayı doğal seçilim yapar.
 
-Bu koşucu, tek bir yoğun oturumda dört sürümden geçti. Her sürüm, bir öncekindeki yapısal bir kusuru düzeltti.
+Bu koşucu tek bir yoğun çalışma oturumunda dört sürümden geçti. Her biri öncekinin yapısal bir kusurunu düzeltti.
 
-## v1: saf sürüm ve neden yeterli olmadığı
+## v1: naif sürüm ve neden yetmediği
 
-İlk sürüm, temel bir GA'dan bekleyeceğiniz şeyi yaptı: bir genom popülasyonu, bir uygunluk fonksiyonu, seçilim, çaprazlama, mutasyon, sonraki nesil. Her genom, ağ topolojisini (katman sayısı, genişlik), DQN hiperparametrelerini (öğrenme oranı, epsilon azalması, tekrar oynatma arabelleği boyutu) ve birkaç mimari seçeneği (hangi veri kaynaklarının kullanılacağı, yerleştirme boyutu) kodluyordu.
+İlk sürüm temel bir GAdan bekleneni yapıyordu: bir genom popülasyonu, bir fitness fonksiyonu, seçilim, çaprazlama, mutasyon, sonraki nesil. Her genom ağ topolojisini (katman sayısı, genişlik), DQN hiper parametrelerini (öğrenme hızı, epsilon azalması, tekrar tamponu boyutu) ve birkaç mimari seçimi (hangi veri kaynaklarını tüketmek, gömme boyutu) kodluyordu.
 
-Ana kusur: uygunluk, eğitim için kullanılan aynı veriler üzerinde hesaplanıyordu. Bir ajan, bir piyasa penceresini tam anlamıyla ezberleyebilir ve genellenebilir bir strateji öğrenmeden mükemmel bir puan alabilirdi. Klasik aşırı uyum, ancak genetik seçilimle güçlendirilmiş; GA bu açıktan en iyi şekilde yararlanan bireyleri aktif olarak seçer.
+Ana kusur: fitness eğitimle aynı veriler üzerinde hesaplanıyordu. Bir ajan bir piyasa penceresini kelimenin tam anlamıyla ezberleyip genellenebilir bir strateji öğrenmeden mükemmel bir skor alabiliyordu. Klasik aşırı uyum ama genetik seçilimle güçlendirilmiş; GA aktif olarak bu açığı en iyi suistimal eden bireyleri seçer.
 
-## v2: eğitim ve değerlendirmeyi ayırma
+## v2: eğitim ve değerlendirmeyi ayırmak
 
-Bariz düzeltme, aşamaları ayırmaktı: her genom bir piyasa penceresinde eğitilir, ardından eğitim sırasında hiç görülmemiş farklı bir pencerede değerlendirilir. Yalnızca değerlendirme performansı uygunluğa sayılır.
+Bariz düzeltme fazları ayırmaktı: her genom bir piyasa penceresinde eğitilir, sonra eğitimde hiç görülmemiş farklı bir pencerede değerlendirilir. Fitness için yalnızca değerlendirme performansı sayılır.
 
-Bu tek değişiklik, ortalama popülasyon uygunluğunun düşmesine neden oldu; bu, v1'de performans gibi görünen şeyin büyük bir kısmının saf ezber olduğunun bir işareti. Görmek acı verici, ancak tam olarak istediğiniz sinyal bu: daha düşük ama dürüst bir puan, şişirilmiş, yanıltıcı olandan daha iyidir.
+Yalnızca bu değişiklik popülasyonun ortalama fitnessını düşürdü; v1de performans gibi görünen şeyin iyi bir kısmının saf ezber olduğunun işareti. Görmesi acı verici ama tam istediğimiz sinyal bu: daha düşük ama dürüst bir skor, şişirilmiş ve yanıltıcı bir skordan iyidir.
 
-## v3: NSGA-II ve çok amaçlı uygunluğa geçiş
+## v3: NSGA-IIye ve çok amaçlı fitnessa geçiş
 
-Tek bir uygunluk puanını (örneğin getirileri) optimize etmek, ajanları mekanik olarak bu tek sayıyı maksimize etmek için aşırı riskler almaya iter. Çözüm, birden çok amacı keyfi bir ağırlıklı toplama indirgemeden eşzamanlı olarak optimize eden NSGA-II'ye (Baskın Olmayan Sıralama Genetik Algoritması II) geçmekti: getiriler, maksimum düşüş, Sharpe oranı, pencereler arası kararlılık.
+Tek bir fitness skorunu (örneğin getiriyi) optimize etmek mekanik olarak bu tek sayıyı maksimize etmek için aşırı risk alan ajanlara iter. Çözüm, keyfi ağırlıklı bir toplama indirgemeden birden çok hedefi aynı anda optimize eden NSGA-IIye (Non-dominated Sorting Genetic Algorithm II) geçmekti: getiri, maksimum drawdown, Sharpe oranı, pencereler arası kararlılık.
 
-NSGA-II bir Pareto cephesi oluşturur: bir amacın iyileştirilmesinin diğerini bozmasının mümkün olmadığı genom kümesi. Önceden seçilmiş bir ağırlıklandırma yoluyla tek bir getiri-risk ödünleşimini zorlamak yerine, tüm uzlaşma sınırını tutar ve nihai seçimi açık bırakırsınız.
+NSGA-II bir Pareto cephesi inşa eder: bir hedefte başka bir hedefi bozmadan iyileştirmenin mümkün olmadığı genomlar kümesi. Getiri ve risk arasında önceden seçilmiş bir ağırlıkla tek bir uzlaşma dayatmak yerine tüm uzlaşma sınırını tutar ve nihai seçimi açık bırakır.
 
 ```
 function nonDominatedSort(population: Genome[]): Genome[][] {
@@ -50,26 +49,26 @@ function nonDominatedSort(population: Genome[]): Genome[][] {
       fronts[0].push(p);
     }
   }
-  // ... sonraki cephelerin yinelemeli kaldırma ile oluşturulması
+  // ... sonraki cephelerin yinelemeli çıkarımla inşası
   return fronts;
 }
 ```
 
-v3'teki ikinci ekleme: **kalıcı bir Pareto arşivi**. Onsuz, 12. nesilde bulunan iyi bir genom, çaprazlama şansı onu yeniden üretmezse 15. nesilde kaybolabilir; onun yerini alan her şeyden daha iyi kalsa bile. Arşiv, mevcut popülasyondan bağımsız olarak, tüm nesiller boyunca şimdiye kadar karşılaşılan tüm baskın olmayan bireylerin kümesini tutar.
+v3ün ikinci eklemesi: kalıcı bir **Pareto arşivi**. O olmadan 12. nesilde bulunan iyi bir genom, çaprazlama şansı onu yeniden üretmezse 15. nesilde kaybolabilir; yerini alan her şeyden hâlâ daha iyi olsa bile. Arşiv, mevcut popülasyondan bağımsız olarak tüm nesiller boyunca karşılaşılan baskın olmayan bireylerin kümesini korur.
 
-## v4: Lamarckçı evrim ve çevresel çeşitlilik
+## v4: lamarkçı evrim ve çevresel çeşitlilik
 
-V3'ün yapısal bir kör noktası vardı: genom mimariyi tanımlıyordu, ancak eğitim sırasında öğrenilen ağırlıklar her yeni nesilde kayboluyordu. İki iyi ebeveynin çaprazlanmasından doğan bir çocuk, onların mimarisini miras aldı, ancak sıfırdan yeniden öğrenmek zorundaydı; ebeveynlerini performanslı yapan ağırlıkların hiçbir izi yoktu.
+v3ün yapısal bir kör noktası vardı: genom mimariyi tanımlıyordu ama eğitimde öğrenilen ağırlıklar her yeni nesilde kayboluyordu. İyi iki ebeveynin çaprazlamasından doğan bir yavru mimarilerini kalıtıyordu ama sıfırdan yeniden öğrenmek zorundaydı; ebeveynlerini performanslı kılan ağırlıklardan iz yoktu.
 
-V4, **Lamarckçı evrimi** getiriyor: eğitilmiş ağırlıklar, eğitimden sonra genoma geri beslenir ve (mutasyonla birlikte) yavrulara iletilir. Bu, kasıtlı bir biyolojik sapkınlıktır; Lamarck canlı organizmalar için yanılmıştı -- edinilmiş karakteristiklerin kalıtımı biyolojide mevcut değildir -- ancak dijital bir GA'nın akıllıca hile yapmasını hiçbir şey engelleyemez: burada, edinilmiş bilgiyi iletmek, yakınsamayı radikal bir şekilde hızlandırır, çünkü her nesil rastgele ağırlıklar yerine zaten bilgilendirilmiş bir başlangıçtan yeniden başlar.
+v4 **lamarkçı evrimi** getirir: eğitilmiş ağırlıklar eğitimden sonra genoma geri enjekte edilir ve yavruya (mutasyonla) aktarılır. Bu üstlenilmiş bir biyolojik sapkınlıktır; Lamarck canlı organizmalar için haksızdı, kazanılmış karakterlerin kalıtımı biyolojide yoktur; ama sayısal bir GAnın zekice hile yapmasına hiçbir şey engel değil: burada kazanılmışı aktarmak yakınsamayı kökten hızlandırır çünkü her nesil rastgele ağırlıklar yerine zaten bilgili bir başlatma noktasından başlar.
 
-Bu sürümdeki diğer üç yapısal değişiklik:
+Bu sürümde üç yapısal değişiklik daha:
 
-*   **Çevresel çeşitlilik**: her genom artık tek bir piyasa penceresinde değil, farklı rejimlerden (yükseliş, düşüş, bant) alınan birden çok pencerede değerlendirilir. Bir pencerede mükemmel olan ve diğerinde çöken bir ajan, artık Pareto cephesine hakim olamaz.
+*   **Çevresel çeşitlilik**: her genom artık tek bir piyasa penceresinde değil, farklı rejimlerden çekilmiş birkaç pencerede değerlendirilir (yükselen, düşen, yatay). Bir pencerede parlayıp diğerinde çöken bir ajan Pareto cephesine artık hükmedemez.
     
-*   **FLOPs karmaşıklık düzenlileştirmesi**: ağın hesaplama maliyeti (FLOPs cinsinden) NSGA-II'de tam bir amaç haline gelir. Bu, evrimin, haklı bir performans kazancı olmaksızın, yalnızca daha fazla ham kapasiteye sahip oldukları için devasa mimarilere yakınsamasını önler.
+*   **FLOPs karmaşıklığıyla düzenlileştirme**: ağın hesaplama maliyeti (FLOPs cinsinden) NSGA-II içinde başlı başına bir hedef olur. Bu, evrimin sırf ham kapasitesi daha fazla diye devasa mimarilere, performans kazancıyla haklı çıkarmadan yakınsamasını engeller.
     
-*   **Ayrıştırılmış `RLBackend` arayüzü**: GA artık DQN ayrıntılarını bilmez. Bir genomu manipüle eder ve soyut bir arayüz aracılığıyla `train()` / `evaluate()` işlevlerini çağırır; bu, teorik olarak, evrim motoruna dokunmadan başka bir RL algoritmasının değiştirilmesine olanak tanır.
+*   Ayrıştırılmış `RLBackend` **arayüzü**: GA artık DQN detaylarını bilmez. Bir genomu yönetir ve soyut bir arayüz üzerinden `train()` / `evaluate()` çağırır, bu da teoride evrimsel motora dokunmadan başka bir RL algoritması takmaya izin verir.
     
 
 ```
@@ -79,20 +78,20 @@ interface RLBackend {
 }
 ```
 
-Son teknik nokta: değerlendirme, **sınırlı async eşzamanlılığa** geçti; sıralı bir döngü yerine N paralel değerlendirmeden oluşan bir havuz ve mevcut GPU/CPU kaynaklarının doygunluğunu önlemek için açık bir sınır.
+Son teknik nokta: değerlendirme **sınırlı eşzamanlı eşzamanlılığa** geçti; sıralı bir döngü yerine paralel N değerlendirmeden bir havuz ve mevcut GPU/CPU kaynaklarını doyurmamak için açık bir limit.
 
-## v4'ün pratikte v3'te hangi sorunları düzelttiği
+## v4ün pratikte v3e göre düzelttiği şey
 
-V3 kusuru V4 düzeltmesi Her nesilde kaybedilen ağırlıklar Eğitilmiş ağırlıkların Lamarckçı yeniden enjekte edilmesi Tek bir piyasa penceresine aşırı uyum Birden çok pencerede, çeşitli rejimlerde değerlendirme Sınırsız büyüyen mimariler Açık Pareto hedefi olarak FLOPs GA'nın DQN ayrıntılarına bağlı olması Soyut `RLBackend` arayüzü Yavaş sıralı değerlendirme Sınırlı async eşzamanlılık
+v3 kusuru v4 düzeltmesi Her nesilde kaybolan ağırlıklar Eğitilmiş ağırlıkların lamarkçı geri enjeksiyonu Tek piyasa penceresine aşırı uyum Çeşitli rejimlerde çok pencereli değerlendirme Kısıtsız büyüyen mimariler Açık Pareto hedefi olarak FLOPs DQN detaylarına bağlı GA Soyut `RLBackend` arayüzü Yavaş sıralı değerlendirme Sınırlı eşzamanlı eşzamanlılık
 
-V4 ayrıca on somut API "temel" hatasını düzeltti; GA kodunun, gerçek uygulamayla tam olarak eşleşmeyen bir `TradingAgent` arayüzü varsaydığı durumlar. Bu tür hatalar, kodu gerçek ajan kaynağıyla karşılaştırana kadar görünmezdir: v4, yalnızca gerçek dosyaya karşı satır satır yeniden okuma yapıldıktan sonra doğrulandı.
+v4 ayrıca on somut "grounding" API hatasını düzeltti; GA kodunun `TradingAgent` için gerçek uygulamayla tam örtüşmeyen bir arayüz varsaydığı durumlar. Bu tür hata kod gerçek ajan kaynak koduyla yüzleşene kadar görünmezdir: v4 yalnızca gerçek dosya karşısında satır satır yeniden okuduktan sonra doğrulandı.
 
-## Neden birini seçmek yerine hem evrimi hem de gradyanı karıştırmalı
+## Evrim ve gradyanı birini seçmek yerine neden karıştırmalı
 
-Neden sadece saf RL veya NEAT gibi saf evrim kullanmadığınızı merak edebilirsiniz. Cevap tek bir cümle: gradyan, yerel ince ayar için mükemmeldir (sürekli ağırlıkları yakındaki bir optimuma ayarlamak), evrim ise küresel keşif için mükemmeldir (gradyanın ulaşamayacağı mimarileri ve hiperparametre kombinasyonlarını keşfetmek, çünkü ayrık arama uzayı türevlenebilir değildir). Birini diğeri olmadan kullanmak, iki keşif biçiminden birini kendinizden mahrum bırakmak anlamına gelir.
+Neden saf RL ya da NEAT tarzı saf evrim yapmıyoruz diye sorulabilir. Yanıt tek cümlede: gradyan yerel ince ayar için mükemmeldir (sürekli ağırlıkları yakın bir optimuma ayarlamak), evrim küresel keşif için mükemmeldir (hiçbir gradyanın ulaşamayacağı mimarileri ve hiper parametre kombinasyonlarını keşfetmek, çünkü ayrık arama uzayı türevlenebilir değildir). Birini diğer olmadan kullanmak iki keşif biçiminden birinden mahrum kalmaktır.
 
-Bedeli mühendislik karmaşıklığıdır; dört sürüm bir lüks değil, GA+RL döngüsünün kendini sabote etmeyi (aşırı uyum, iyi bireylerin kaybı, edinilmiş ağırlıkların kaybı) durdurması için gereken yineleme sayısıydı. Ancak sonuç, değerlendirilen her aday için gradyan inişinin yerel verimliliğini korurken, basit bir hiperparametre ızgara aramasından çok daha geniş bir tasarım alanını keşfeden bir sistemdir.
+Ödenecek bedel mühendislik karmaşıklığıdır; dört sürüm lüks değildi, GA + RL döngüsünün kendini sabote etmeyi bırakması için gereken yineleme sayısıydı (aşırı uyum, iyi bireylerin kaybı, kazanılmış ağırlıkların kaybı). Ama sonuç, basit bir hiper parametre grid searchten çok daha geniş bir tasarım uzayını keşfeden, değerlendirilen her aday için gradyanın yerel verimliliğini koruyan bir sistemdir.
 
 ## Sonraki adım
 
-Bu tek seviyeli evrimsel mimari (düz bir DQN genom popülasyonu), kapsanacak varlık sayısı arttığında sınırlarına ulaşır. Bu, üç seviyeli bir hiyerarşik mimariye (Varlık Analistleri → Sektör Yöneticileri → Portföy Tahsis Edici) geçişi motive etti ve her seviyede bağımsız olarak çalışan bir GA ile... ancak bu başka bir makalenin konusu.
+Bu tek seviyeli evrimsel mimari (düz bir DQN genom popülasyonu) kapsanacak varlık sayısı arttığında sınırlarına ulaşır. Üç seviyeli hiyerarşik bir mimariye geçişi motive eden şey bu (Varlık Analistleri → Sektör Yöneticileri → Portföy Tahsisçisi), her seviyede bağımsız çalışan bir GA ile... ama o başka bir yazının konusu.

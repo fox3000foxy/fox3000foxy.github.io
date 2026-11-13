@@ -1,6 +1,6 @@
 ---
-title: "5 formas engenhosas de usar o GitHub Actions (e o que ensinam sobre secrets)"
-description: "Um runner CI transformado em VPS gratuito, um bot que abre as suas próprias pull requests, um publish npm sem secret nenhum. Um passeio pelos meus repos para catalogar padrões de GitHub Actions que vão além do \"lint + test + deploy\"."
+title: "5 jeitos criativos de usar GitHub Actions (e o que isso ensina sobre secrets)"
+description: "Um runner de CI transformado em VPS gratuita, um bot que abre seus próprios pull requests, um publish no npm sem nenhum secret. Tour pelos meus repos para listar os padrões de GitHub Actions que saem do simples \"lint + test + deploy\"."
 date: 2026-07-14
 tags:
   - github-actions
@@ -9,35 +9,35 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "maZRfXUoUxdUJ2BNEEo/Xg78oalbipSmzvYVOwz/PxeN4bzxqOrSyA/nO2J9einSdi+kD3s37LvalaIxczf4xA=="
+author_sig: "pCI4RDAB6bIA55q9W7ffoY26CUIfFxxgLSEAEmEjqh5jQ+zSpYznuOP9U3nHGRTljPBVnEa8d3GD71tncr25Vw=="
 ---
 
-# 5 formas engenhosas de usar o GitHub Actions
+# 5 jeitos criativos de usar GitHub Actions
 
-No papel, o GitHub Actions serve para CI/CD clássico: fazes push, ele faz lint, testa, faz deploy. Já escrevi sobre um caso especial -- usar git tags como base de dados para um bot de email (ver o artigo dedicado). Mas a vasculhar os meus próprios repos, há padrões diferentes que cheguem para merecer um artigo à parte, menos focado num só projeto, mais catálogo de técnicas.
+GitHub Actions, no papel, é feito para CI/CD clássico : você dá push, ele faz lint, testa, implanta. Já escrevi sobre um caso específico (usar tags git como banco de dados para um bot de email, ver o artigo dedicado). Mas fuçando nos meus próprios repos, há padrões diferentes o bastante para valer um artigo à parte, menos centrado em um único projeto, mais catálogo de técnicas.
 
-Cinco coisas, da mais clássica à mais retorcida.
+Cinco usos, do mais clássico ao mais estranho.
 
-## 1. Uma git tag como estado persistente entre execuções
+## 1. Uma tag git como estado persistente entre dois runs
 
-Recapitulação rápida, os detalhes completos estão no artigo sobre `email-autoreply`. O GitHub Actions é stateless por design -- cada execução parte de uma máquina limpa. A solução: guardar um valor (um ID, um timestamp, qualquer estado pequeno) numa git tag dedicada, nunca num branch.
+Lembrete rápido, o detalhe completo está no artigo sobre `email-autoreply`. GitHub Actions é stateless por design : cada run parte de uma máquina limpa. A solução alternativa : guardar um valor (um ID, um timestamp, qualquer pequeno estado) em uma tag git dedicada, nunca em um branch.
 
 ```bash
-# ler estado
+# ler o estado
 git show refs/tags/lastid:data/lastId > data/lastId
 
-# escrever estado (branch órfão, um só commit, force-push da tag)
+# escrever o estado (branch órfão, um único commit, force-push da tag)
 git switch --orphan lastid-tmp
 git commit -m "lastId snapshot"
 git tag -f lastid
 git push --force origin lastid
 ```
 
-O ponto-chave: um branch órfão para nunca acumular histórico, e uma tag forçada em vez de um branch para não poluir a lista de branches do repo.
+O ponto principal : um branch órfão para nunca acumular histórico, e uma tag forçada em vez de um branch para não poluir a lista de branches do repo.
 
-## 2. Uma git tag como cache de build pré-compilado
+## 2. Uma tag git como cache de build pré-compilado
 
-Mesma família de ideias, uso diferente: em vez de guardar estado de aplicação, guarda-se um **artefacto de build**. O job `build` compila o código uma vez (no push para `master`) e depois faz push de `dist/` + `node_modules/` para uma tag `runtime`. O job `cron` faz checkout dessa tag diretamente em vez de correr `bun install && bun run build` a cada execução:
+Mesma família de ideia, outro uso : em vez de guardar um estado de aplicativo, guardamos um **artefato de build**. O job `build` compila o código uma vez (em push para `master`), e depois envia `dist/` + `node_modules/` para uma tag `runtime`. O job `cron`, por sua vez, faz checkout direto dessa tag em vez de rodar `bun install && bun run build` a cada execução :
 
 ```yaml
 - name: Checkout runtime snapshot
@@ -49,11 +49,11 @@ Mesma família de ideias, uso diferente: em vez de guardar estado de aplicação
 - run: node dist/index.js --action
 ```
 
-Isto muda a execução de ~20s para ~10s. Num cron que corre frequentemente, faz diferença. O `actions/cache` faz um trabalho semelhante (cache de dependências), mas uma git tag é mais direta quando queres congelar completamente um artefacto versionado e apontá-lo explicitamente -- não só acelerar um `npm install`.
+Isso muda o run de ~20s para ~10s. Em um cron que roda sempre, isso conta. O `actions/cache` faz um trabalho parecido (guardar dependências em cache), mas uma tag git é mais direta quando você quer mesmo congelar um artefato versionado e apontar explicitamente para ele, em vez de só acelerar um `npm install`.
 
 ## 3. Um único check obrigatório que agrega vários jobs
 
-Um pequeno padrão que não parece nada de especial mas que muda a vida na configuração de branches protegidos. No `konosuba-rpg`, a CI tem três jobs independentes (`typecheck`, `lint`, `tests`) a correr em paralelo -- e um quarto job, `test-battery`, que não faz nada além de depender dos três primeiros:
+Padrão pequeno que parece nada mas muda a vida na configuração de branch protegido. No `konosuba-rpg`, a CI tem três jobs independentes (`typecheck`, `lint`, `tests`) que rodam em paralelo, e um quarto job, `test-battery`, que não faz nada além de depender dos três primeiros :
 
 ```yaml
 test-battery:
@@ -66,13 +66,13 @@ test-battery:
     - run: echo "Typecheck, lint and tests succeeded."
 ```
 
-Sem este job fachada, configurar um branch protegido exigiria marcar três checks obrigatórios separados -- e atualizar essa lista cada vez que um job é adicionado ou renomeado. Com o `test-battery`, um único nome para marcar nas definições do repo, que permanece estável mesmo que os detalhes internos mudem.
+Sem esse job de fachada, configurar um branch protegido exigiria marcar três checks obrigatórios separados, e atualizar essa lista cada vez que um job é adicionado ou renomeado. Com `test-battery`, um só nome para marcar nas configurações do repo, que continua estável mesmo que o detalhe interno mude.
 
-## 4. Transformar um runner gratuito num VPS temporário
+## 4. Transformar um runner gratuito em VPS temporária
 
-Este é o mais retorcido de todos, e claramente o meu favorito: o `repo-to-vps` desvia completamente o uso previsto de um runner do GitHub Actions para o transformar numa máquina Linux acessível por SSH, gratuita, até 6 horas (a duração máxima de um job).
+Esse é o mais estranho de todos, e claramente meu favorito : o `repo-to-vps` desvia completamente o uso previsto de um runner GitHub Actions para fazer dele uma máquina Linux acessível via SSH, gratuita, por até 6 horas (o limite máximo de um job).
 
-O princípio: um job que não faz quase nada além de lançar o tmate:
+O princípio : um job que quase não faz nada além de lançar o [tmate](https://tmate.io/) (um fork do tmux que expõe uma sessão de terminal compartilhável via SSH ou navegador) :
 
 ```yaml
 name: debug-runner
@@ -95,44 +95,46 @@ jobs:
       - run: bash .github/scripts/start-tmate.sh
 ```
 
-O verdadeiro problema é que o sistema de ficheiros de um runner do GitHub Actions é **descartável** -- assim que o job termina, tudo desaparece. Uma sessão SSH que dura horas não serve de nada se tudo o que fazes se evapora na execução seguinte. A solução: um branch git que serve de snapshot ao vivo do sistema de ficheiros, sincronizado continuamente.
+O verdadeiro quebra-cabeça é que o filesystem de um runner GitHub Actions é **descartável** : assim que o job termina, tudo some. Uma sessão SSH de horas não serve para nada se tudo que você faz nela evapora no próximo run. A solução : um branch git que serve de snapshot ao vivo do filesystem, sincronizado continuamente.
 
-O script `start-tmate.sh` faz, por ordem:
+O script `start-tmate.sh` faz, em ordem :
 
-1. **Restaura** o sistema de ficheiros a partir de um branch dedicado `filesystem` no arranque do job (`git reset --hard` sobre ele).
-2. **Vigia** as alterações de ficheiros continuamente com `inotifywait`, e faz **commit + push imediatamente** assim que um ficheiro se mexe:
+1. **Restaura** o filesystem a partir de um branch dedicado `filesystem` no início do job (`git reset --hard` nele).
+2. **Observa** as mudanças de arquivos com `inotifywait` continuamente, e faz **commit + push na hora** assim que um arquivo muda :
 
 ```bash
+# Observa mudanças e salva na hora (com debounce de 1s)
 autosave() {
   while inotifywait -qq -r -e modify,create,delete,move \
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock)(/|$)' .; do
     commit_and_push
-    sleep 1
+    sleep 1   # debounce
   done
 }
 ```
 
-3. Cada gravação **emenda** o commit anterior em vez de criar um novo (`git commit --amend --no-edit`), por isso o branch `filesystem` fica sempre num único commit -- sem acumulação de milhares de snapshots.
-4. Um ciclo `while true` relança o tmate automaticamente se a sessão morrer, com `remain-on-exit on` para que o terminal continue acessível mesmo depois de um `exit`.
-5. O URL SSH gerado pelo tmate é escrito num ficheiro `host.conf`, commitado no branch `filesystem` -- recuperável via a API do GitHub (`gh api .../contents/host.conf`) sem nunca ter tido acesso em direto aos logs do job.
-6. Uma rotina `periodic_save` corre a cada 5 segundos em segundo plano, caso o `inotifywait` perca algum evento.
+3. Cada salvamento **altera** o commit anterior em vez de criar um novo (`git commit --amend --no-edit`), então o branch `filesystem` fica sempre com um único commit, o que evita acumular milhares de snapshots.
+4. Um loop `while true` relança o `tmate` automaticamente se a sessão morrer, com `remain-on-exit on` para o terminal continuar acessível mesmo após um `exit`.
+5. A URL SSH gerada pelo tmate é escrita em um arquivo `host.conf`, commitado no branch `filesystem`, então recuperável via API do GitHub (`gh api .../contents/host.conf`) sem nunca ter tido acesso aos logs do job ao vivo.
+6. Uma rotina `periodic_save` roda a cada 5 segundos em segundo plano, caso o `inotifywait` perca algum evento.
 
-Resultado: uma shell Linux completa, acessível de qualquer lado, com um sistema de ficheiros que persiste entre sessões -- apesar de a infraestrutura subjacente (um runner do GitHub Actions) não ter sido absolutamente nada concebida para isto. O único limite real é o timeout de 6 horas por job -- depois disso é preciso relançar o workflow.
+Resultado : um shell Linux completo, acessível de qualquer lugar, com um filesystem que persiste entre sessões, enquanto a infraestrutura por baixo (um runner GitHub Actions) não foi absolutamente feita para isso. O único limite real é o timeout de 6h por job : depois disso é preciso relançar o workflow.
 
-## 5. Um bot que abre as suas próprias pull requests
+## 5. Um bot que abre seus próprios pull requests
 
-No `konosuba-rpg`, um push para o branch `dev` dispara um job que verifica se já existe uma pull request aberta para `main` -- e cria uma automaticamente se não existir, via `actions/github-script` e a API REST do GitHub:
+No `konosuba-rpg`, um push no branch `dev` dispara um job que verifica se já existe um pull request aberto para `main`, e cria um automaticamente senão, via `actions/github-script` e a API REST do GitHub :
 
 ```js
+// Compara dev com main, verifica PR aberta, cria uma se preciso
 const { data: comparison } = await github.rest.repos.compareCommits({
   owner, repo, base: 'main', head: 'dev',
 });
-if (comparison.ahead_by === 0) return;
+if (comparison.ahead_by === 0) return; // nada a propor
 
 const { data: existing } = await github.rest.pulls.list({
   owner, repo, state: 'open', head: `${owner}:dev`, base: 'main',
 });
-if (existing.length > 0) return;
+if (existing.length > 0) return; // já há PR aberta
 
 await github.rest.pulls.create({
   owner, repo, head: 'dev', base: 'main',
@@ -140,9 +142,10 @@ await github.rest.pulls.create({
 });
 ```
 
-O detalhe que importa aqui é o token usado. Este workflow **não** usa o `GITHUB_TOKEN` automático -- exige um secret `AUTO_PR_TOKEN` separado e recusa-se a continuar se este faltar:
+O detalhe que conta aqui é o token usado. Esse workflow **não** usa o `GITHUB_TOKEN` automático : exige um secret `AUTO_PR_TOKEN` separado, e se recusa a continuar se ele estiver ausente :
 
 ```yaml
+# Valida que o token dedicado de PR existe antes de continuar
 - name: Validate pull request token
   env:
     AUTO_PR_TOKEN: ${{ secrets.AUTO_PR_TOKEN }}
@@ -153,13 +156,14 @@ O detalhe que importa aqui é o token usado. Este workflow **não** usa o `GITHU
     fi
 ```
 
-## 6. Publicar no npm sem secret nenhum
+## 6. Publicar no npm sem nenhum secret
 
-O mais discreto dos cinco, mas provavelmente o mais importante para o futuro: o workflow `publish.yml` do `typescript-virtual-container` não contém **nenhum secret npm**. Sem `NPM_TOKEN`, sem `NODE_AUTH_TOKEN`. Apenas isto:
+O mais discreto dos cinco, mas provavelmente o mais importante para o futuro : o workflow `publish.yml` do `typescript-virtual-container` não contém **nenhum secret npm**. Nenhum `NPM_TOKEN`, nenhum `NODE_AUTH_TOKEN`. Só isso :
 
 ```yaml
+# Publicação confiável via OIDC : sem token npm, identidade provada ao registro
 permissions:
-  id-token: write
+  id-token: write  # Required for OIDC
   contents: read
 jobs:
   publish:
@@ -170,43 +174,46 @@ jobs:
       - run: npm publish
 ```
 
-O `npm publish` funciona na mesma, porque o registry do npm agora suporta **trusted publishing** via OIDC: o workflow prova a sua identidade diretamente ao registry (repo exato + workflow exato, configurados do lado do npmjs.org), sem que nenhum token estático transite ou seja armazenado em lado nenhum. Zero secrets para escapar, zero tokens para rodar de seis em seis meses.
+`npm publish` funciona mesmo assim, porque o registro npm agora suporta **trusted publishing** via OIDC : o workflow prova sua identidade diretamente ao registro (repo + workflow exatos, configurados no lado npmjs.org), sem nenhum token estático transitar nem ser guardado em lugar algum. Zero secret para vazar, zero token para girar a cada seis meses.
 
 ---
 
-## Os secrets do GitHub, em profundidade
+## Os secrets do GitHub, a fundo
 
-Estes cinco padrões tocam todos, de uma forma ou de outra, na questão dos secrets. Alguns princípios que se repetem em todos os meus workflows:
+Esses cinco padrões tocam todos, de um jeito ou de outro, na questão dos secrets. Alguns princípios que voltam em todos os meus workflows :
 
-**Um secret não é necessariamente uma string simples.** No `email-autoreply`, o `ACCOUNTS_JSON` contém o JSON minificado inteiro da configuração multi-conta -- não apenas uma chave API, uma estrutura de dados completa, injetada tal e qual num ficheiro em runtime:
+**Um secret não é necessariamente uma string simples.** No `email-autoreply`, `ACCOUNTS_JSON` contém o JSON minificado inteiro da config multicontas : uma estrutura de dados completa em vez de uma simples chave de API, injetada como está em um arquivo no runtime :
 
 ```yaml
+# Injeta a config multicontas inteira a partir de um único secret
 env:
   ACCOUNTS_JSON: ${{ secrets.ACCOUNTS_JSON }}
 run: printf "%s" "$ACCOUNTS_JSON" > data/accounts.json
 ```
 
-Isto evita ter de fazer commit de um ficheiro de configuração, mesmo encriptado, e atualiza-se com um clique nas definições do repo sem tocar no código.
+Isso evita ter que commitar um arquivo de config, mesmo criptografado, e se atualiza em um clique nas settings do repo sem tocar no código.
 
-**O `GITHUB_TOKEN` tem limites precisos, e é de propósito.** O token automático que o GitHub injeta em cada execução é poderoso, mas selado em certos pontos: por padrão, não pode disparar outro workflow, e dependendo da configuração do repo pode ser bloqueado por regras de proteção de branch. É exatamente por isso que o `create-pull-request.yml` exige um PAT separado (`AUTO_PR_TOKEN`) -- um token de uma conta real (ou de uma GitHub App), com direitos explícitos `contents:write` + `pull-requests:write`, distinto do token efémero do job.
+**`GITHUB_TOKEN` tem limites precisos, e é de propósito.** O token automático que o GitHub injeta a cada run é poderoso, mas selado em certos pontos : por padrão, ele não pode disparar outro workflow, e conforme a configuração do repo pode ser bloqueado por regras de proteção de branch. É exatamente por isso que `create-pull-request.yml` exige um PAT (`AUTO_PR_TOKEN`) separado : um token que vem de uma conta de verdade (ou de uma GitHub App), com direitos explícitos `contents:write` + `pull-requests:write`, distinto do token efêmero do job.
 
-**As permissões são scopeadas job a job, não globalmente.** Cada workflow que listei aqui declara um bloco `permissions:` mínimo e comentado:
+**As permissões têm escopo job por job, não global.** Cada workflow que listei aqui declara um bloco `permissions:` mínimo e comentado :
 
 ```yaml
+# Escopo mínimo : só permite escrever checks, resto só leitura
 permissions:
   contents: read
   actions: read
   checks: write
+  # Only allow writing checks, everything else is read-only
 ```
 
-O `GITHUB_TOKEN` padrão tem historicamente direitos bastante amplos sobre um repo público; restringi-lo explicitamente ao que o job realmente precisa limita os danos se uma action de terceiros na cadeia se revelar comprometida.
+O `GITHUB_TOKEN` padrão historicamente tem direitos bem amplos em um repo público ; restringi-lo explicitamente ao que o job realmente precisa limita os danos se uma action de terceiros na cadeia (`uses: alguem/action@version`) se revelar comprometida.
 
-**O melhor secret é aquele que não existe.** O padrão OIDC do `typescript-virtual-container` é a versão mais conseguida desta ideia: em vez de gerir a rotação, expiração e risco de fuga de um `NPM_TOKEN`, o workflow prova criptograficamente a sua identidade (este repo exato, este workflow exato) diretamente ao serviço terceiro. Mesma lógica disponível para AWS, Docker Hub, PyPI -- cada vez mais registries e clouds suportam OIDC a partir do GitHub Actions.
+**O melhor secret é o que não existe.** O padrão OIDC do `typescript-virtual-container` é a versão mais acabada dessa ideia : em vez de gerenciar rotação, expiração e risco de vazamento de um `NPM_TOKEN`, o workflow prova criptograficamente sua identidade (este repo exato, este workflow exato) diretamente ao serviço terceiro. Mesma lógica disponível para AWS, Docker Hub, PyPI : cada vez mais registros e clouds suportam OIDC a partir de GitHub Actions.
 
 ---
 
-**3 pontos-chave**
+**3 pontos principais**
 
-1. Uma git tag (órfã, force-pushada) pode servir como base de dados minimalista ou cache de build pré-compilado -- dois usos distintos do mesmo mecanismo.
-2. Um runner gratuito do GitHub Actions pode tornar-se uma shell SSH persistente se aceitares sincronizar continuamente o seu sistema de ficheiros para um branch git, com auto-save via `inotifywait` e um único commit emendado.
-3. O `GITHUB_TOKEN` padrão é limitado de propósito -- criar PRs entre branches ou publicar sem secrets requer ou um PAT dedicado, ou a mudança para OIDC trusted publishing.
+1. Uma tag git (órfã, com force-push) pode servir de banco de dados minimalista ou de cache de build pré-compilado : dois usos distintos do mesmo mecanismo.
+2. Um runner gratuito de GitHub Actions pode virar um shell SSH persistente se aceitarmos sincronizar seu filesystem continuamente para um branch git, com autosave por `inotifywait` e um único commit alterado.
+3. O `GITHUB_TOKEN` padrão é propositalmente limitado : criar PRs entre branches ou publicar sem secret exige um PAT dedicado ou a passagem para OIDC trusted publishing.

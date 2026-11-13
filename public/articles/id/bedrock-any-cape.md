@@ -1,6 +1,6 @@
 ---
-title: "Cara Mendapatkan Jubah Apapun di Minecraft Bedrock"
-description: "Launcher pihak ketiga, versi lama game, dan pemilih jubah yang tidak pernah belajar bilang tidak. Tutorial lengkap plus penjelasan kemungkinan kenapa ini bekerja."
+title: "Cara mendapatkan cape apa pun di Minecraft Bedrock"
+description: "Peluncur pihak ketiga, versi lama permainan, dan pemilih cape yang tidak pernah belajar berkata tidak. Tutorial lengkap ditambah penjelasan yang mungkin tentang kenapa ini berhasil."
 date: 2026-07-14
 tags:
   - minecraft
@@ -10,127 +10,127 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "eSttkOu1i7WPLI5OtwO9mIJ9w30gJAtom39Sae0wUues3GGTBxx4qg8WuIgnb33PzIqQ5MBb+PRl0eiSUVmJIQ=="
+author_sig: "dfjiMK+iYZRWz1BDUI8IIHUU17XbdLVmSjUXXAwLoMMlLzmKaSCuEqyl7XbkL+Ainlhu/AIAnxacAU720L+Org=="
 ---
 
-# Cara Mendapatkan Jubah Apapun di Minecraft Bedrock
+# Cara mendapatkan cape apa pun di Minecraft Bedrock
 
-Di Java, ada banyak cara berbelit untuk mendapatkan jubah yang seharusnya tidak Anda miliki (lihat artikel `cape-mod`). Di Bedrock, gamenya berbeda, autentikasinya berbeda, tapi tetap ada caranya -- tidak perlu mod, tidak perlu menyentuh paket jaringan apapun. Cukup launcher pihak ketiga dan versi game yang cukup tua sehingga belum memiliki validasi yang diharapkan.
+Di Java, ada banyak cara aneh untuk berakhir dengan cape yang seharusnya tidak kamu miliki (lihat artikel tentang `cape-mod`). Di Bedrock, permainannya berbeda, auth-nya berbeda, tapi tetap ada caranya -- kamu cuma butuh peluncur pihak ketiga dan versi permainan yang cukup tua untuk mengabaikan validasi yang dianggap sudah pasti.
 
-Ini caranya, lalu kita lihat apa yang mungkin terjadi di balik layar.
+Begini caranya, lalu kita lihat apa yang mungkin terjadi di balik kapnya.
 
-## Yang Anda butuhkan
+## Yang kamu butuhkan
 
-- Akun Microsoft yang sudah memiliki Minecraft Bedrock (akun Anda sendiri cukup)
-- Launcher Minecraft resmi terinstal
-- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), launcher pihak ketiga open source yang memungkinkan Anda menginstal dan menjalankan versi historis Bedrock manapun
+- Akun Microsoft yang sudah memiliki Minecraft Bedrock (punyamu sudah cukup)
+- Peluncur Minecraft resmi yang terpasang
+- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), peluncur pihak ketiga open source yang memungkinkan menginstal dan menjalankan versi historis Bedrock mana pun
 - .NET 8.0 Desktop Runtime
-- Mode pengembang diaktifkan di Windows
+- Mode pengembang yang aktif di Windows
 
-## Langkah 1 -- Instal Bedrock setidaknya sekali dengan launcher resmi
+## Langkah 1 -- Instal Bedrock minimal sekali dengan peluncur resmi
 
-Sebelum melakukan apapun, buka launcher Minecraft resmi, buka tab **Minecraft: Bedrock Edition**, dan klik **Install**. Bedrock harus sudah terinstal dan dijalankan setidaknya sekali melalui jalur resmi sebelum menyentuh BedrockLauncher.
+Sebelum melakukan apa pun, buka peluncur Minecraft resmi, pergi ke tab **Minecraft: Bedrock Edition**, dan klik **Install**. Bedrock harus sudah dipasang dan dijalankan minimal sekali lewat jalur resmi sebelum menyentuh BedrockLauncher.
 
-![Instal Bedrock Edition dari launcher resmi](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
+![Menginstal Bedrock Edition dari peluncur resmi](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
 
 ## Langkah 2 -- Unduh BedrockLauncher
 
-Pergi ke halaman rilis GitHub proyek ini. Ambil zip versi terbaru yang tercantum di **Assets**.
+Pergi ke halaman rilis GitHub proyek. Ambil zip versi terbaru yang terdaftar di **Assets**.
 
 ![Halaman rilis GitHub BedrockLauncher](/images/bedrock-cape/bedrock-cape-02-github-release.png)
 
-## Langkah 3 -- Ekstrak arsip
+## Langkah 3 -- Ekstrak arsipnya
 
-Setelah zip terunduh, ekstrak ke folder `Downloads` Anda (atau di manapun, asal Anda bisa menemukan foldernya nanti).
+Setelah zip terunduh, ekstrak ke folder `Downloads`-mu (atau di mana saja, asal kamu menemukan foldernya setelahnya).
 
-![Ekstrak arsip BedrockLauncher](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
+![Ekstraksi arsip BedrockLauncher](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
 
-## Langkah 4 -- Jalankan file eksekusinya
+## Langkah 4 -- Jalankan executable-nya
 
 Masuk ke folder hasil ekstrak dan jalankan `BedrockLauncher.exe`.
 
-![Menjalankan BedrockLauncher.exe](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
+![Peluncuran BedrockLauncher.exe](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
 
 ## Langkah 5 -- Instal .NET Desktop Runtime dan aktifkan mode pengembang
 
-Saat pertama kali dijalankan, Windows kemungkinan besar akan meminta **.NET 8.0 Desktop Runtime** -- instal. Anda juga perlu mengaktifkan **mode pengembang** di `Pengaturan > Sistem > Untuk pengembang`, karena BedrockLauncher menginstal game sebagai paket lepas (file mentah, bukan paket Store asli yang ditandatangani), dan Windows menolak instalasi seperti ini tanpa mode itu.
+Pada peluncuran pertama, Windows kemungkinan besar akan memintamu memasang **.NET 8.0 Desktop Runtime** -- pasanglah. Kamu juga harus mengaktifkan **mode pengembang** di `Pengaturan > Sistem > Untuk pengembang`, karena BedrockLauncher memasang permainan sebagai paket loose (berkas mentah, bukan paket bertanda tangan Store sungguhan), dan Windows menolak instalasi semacam itu tanpa mode ini.
 
-![Instal .NET Runtime dan aktifkan mode pengembang](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
+![Instalasi runtime .NET dan aktivasi mode pengembang](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
 
 ## Langkah 6 -- Buat instalasi baru
 
-Luncurkan lagi BedrockLauncher, masuk dengan akun Microsoft Anda, buka tab **Installations**, lalu klik **New installation**.
+Jalankan ulang BedrockLauncher, masuk dengan akun Microsoft-mu, pergi ke tab **Installations**, lalu klik **New installation**.
 
-![Membuat instalasi baru di BedrockLauncher](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
+![Pembuatan instalasi baru di BedrockLauncher](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
 
 ## Langkah 7 -- Pilih versi lama
 
-Beri nama instalasi, lalu di daftar versi, pilih versi **lama** -- biasanya `1.16.x` atau lebih awal. Klik **Create**.
+Beri nama pada instalasinya, lalu di daftar versi, pilih versi **lama** -- biasanya versi `1.16.x` atau lebih tua. Klik **Create**.
 
-![Memilih versi lama, di sini 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
+![Pemilihan versi lama, di sini 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
 
-## Langkah 8 -- Luncurkan instalasi
+## Langkah 8 -- Jalankan instalasinya
 
-Klik **Play**. Ekstraksi file bisa memakan waktu hingga sepuluh menit tergantung mesin -- launcher akan tampak beku ("Not Responding"), ini normal, biarkan berjalan.
+Klik **Play**. Ekstraksi berkas bisa memakan waktu hingga sepuluh menit tergantung mesin -- peluncurnya akan tampak beku ("Not Responding"), itu normal, biarkan berjalan.
 
-![Ekstraksi sedang berlangsung, launcher tampak tidak merespons](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
+![Ekstraksi berjalan, peluncur tampak tidak merespons](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
 
-## Langkah 9 -- Pilih jubah
+## Langkah 9 -- Pilih capenya
 
-Setelah game diluncurkan, masuk dengan akun Anda, buat karakter baru dan buka editor skin, tab **Jubah**. Di sana Anda akan menemukan daftar lengkap semua jubah yang ada di dalam game -- termasuk yang tidak pernah Anda miliki (jubah event promo, festival lampau, Mob Vote, dll). Pilih yang Anda mau.
+Setelah permainan berjalan, masuk dengan akunmu, buat karakter baru dan pergi ke editor skin, tab **Capes**. Di sana, kamu akan menemukan daftar lengkap semua cape yang ada di Minecraft -- termasuk yang tidak pernah kamu miliki (cape event promo, festival lampau, Mob Vote, dll). Pilih yang kamu mau.
 
-**Jangan sentuh tampilan skin lainnya di tahap ini**, biarkan saja jubanya.
+**Jangan sentuh sisa tampilan skin pada tahap ini**, biarkan saja capenya.
 
-![Memilih jubah di editor karakter](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
+![Pemilihan cape di editor karakter](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
 
 ## Langkah 10 -- Instal ulang versi resmi
 
-Kembali ke launcher resmi, tab **Instalasi**, dan klik **Uninstall** pada instalasi Bedrock utama, lalu instal ulang (atau tekan **Check for Updates**). Luncurkan Minecraft Bedrock kali ini dari launcher resmi.
+Kembali ke peluncur resmi, tab **Installation**, dan klik **Uninstall** pada instalasi Bedrock utama, lalu instal ulang (atau lakukan **Check for Updates**). Jalankan ulang Minecraft Bedrock dari peluncur resmi kali ini.
 
-![Uninstal dan instal ulang dari launcher resmi](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
+![Uninstal dan instal ulang dari peluncur resmi](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
 
-Dan selesai -- jubah Anda sudah ada, di versi resmi, di profil asli Anda.
+Dan selesai -- capemu ada di sana, di versi resmi, di profil aslimu.
 
 ## Apa yang mungkin terjadi
 
-Saya belum mengoprek kode sumber tertutup Bedrock (tidak seperti Java yang bisa didekompilasi), jadi berikut ini adalah penjelasan **kemungkinan**, bukan kepastian mutlak. Tapi perilaku yang diamati cukup cocok dengan hipotesis berikut.
+Saya belum mengoprek kode sumber tertutup Bedrock (tidak seperti Java yang bisa didekompilasi), jadi yang berikut adalah penjelasan yang **mungkin**, bukan kepastian mutlak. Tapi perilaku yang teramati cukup cocok dengan hipotesis berikut.
 
-### Pemilih jubah tidak pernah menjadi kontrol akses
+### Pemilih cape tidak pernah menjadi kontrol akses
 
-Di Bedrock, layar pemilihan jubah kemungkinan besar menampilkan **daftar lengkap semua jubah yang ada di game**, bukan hanya yang dimiliki akun Anda. Di klien terbaru, filter aplikasi (sisi klien atau melalui panggilan jaringan ke layanan entititlement Xbox/Microsoft) membuat abu-abu atau menyembunyikan jubah yang tidak Anda miliki.
+Di Bedrock, layar pemilihan cape kemungkinan menampilkan **daftar lengkap cape yang ada di permainan**, bukan hanya yang dimiliki akunmu. Pada klien terbaru, filter aplikatif (sisi klien atau lewat panggilan jaringan ke layanan entitlements Xbox/Microsoft) mengabukan atau menyembunyikan cape yang tidak kamu miliki.
 
-Poin kuncinya adalah filter ini kemungkinan ditambahkan **belakangan**, di versi game yang cukup baru. Versi seperti 1.16.x mendahului filter ini, atau menggunakan mekanisme verifikasi yang berbeda (atau tidak ada sama sekali): semua yang ada di daftar menjadi bisa dipilih, dengan atau tanpa entititlement.
+Poin kuncinya adalah filter ini mungkin ditambahkan **belakangan**, pada versi permainan yang cukup baru. Versi seperti 1.16.x lebih tua dari filter ini, atau memakai mekanisme verifikasi berbeda (bahkan tidak ada) : semua yang ada di daftar menjadi bisa dipilih, entitlement atau tidak.
 
-### Di mana tepatnya jubah disimpan?
+### Cape disimpan di mana, tepatnya?
 
-Ini bagian yang menjelaskan mengapa pilihan bertahan setelah instal ulang. Pilihan skin/jubah di Bedrock bukan sekadar file lokal yang dibuang -- kemungkinan besar disinkronkan ke profil Xbox Live yang terhubung ke akun Microsoft Anda (sistem yang sama yang mengelola skin Anda di platform Bedrock lain -- seluler, konsol, dll). Saat Anda memilih jubah di klien lama, klien kemungkinan besar mengirim pilihan itu ke layanan profil, persis seperti cara klien terbaru melakukannya dengan jubah yang sah -- karena dari sudut pandang klien, tidak ada bedanya antara jubah "milik Anda" dan jubah "yang dipilih". Layanan profil, dari pihaknya, memercayai klien dalam hal ini: ia mencatat pilihan tanpa memvalidasi ulang apakah entititlementnya benar-benar ada di belakangnya, setidaknya tidak pada saat penulisan.
+Ini bagian yang menjelaskan kenapa ia bertahan setelah instal ulang. Pilihan skin/cape di Bedrock bukan sekadar berkas lokal yang bisa dibuang -- ia mungkin disinkronkan ke profil Xbox Live yang terkait dengan akun Microsoft-mu (sistem yang sama yang mengelola skinmu di platform Bedrock lain -- ponsel, konsol, dll.). Ketika kamu memilih cape di klien lama, ia kemungkinan mengirim pilihan itu ke layanan profil, persis seperti klien terbaru dengan cape sah -- karena dari sudut pandang klien, tidak ada bedanya antara cape "milikmu" dan cape "terpilih". Layanan profil, pada pihaknya, memercayai klien soal ini : ia mencatat pilihan tanpa memvalidasi ulang apakah entitlement benar-benar ada di baliknya, setidaknya tidak pada saat penulisan.
 
-Hasilnya: ketika Anda meluncurkan ulang game resmi terbaru, game mengambil skin/jubah Anda saat ini dari layanan profil -- dan layanan dengan setia mengembalikan apa yang disimpan, termasuk jubah yang tidak sah. Pemeriksaan entititlement, jika ada, kemungkinan terjadi pada saat **pemilihan** di UI (makanya ada filter di klien terbaru), bukan pada saat **penampilan** dari apa yang sudah tersimpan di profil.
+Hasilnya : ketika kamu menjalankan ulang permainan resmi yang terbaru, ia mencari skin/cape-mu saat ini di layanan profil -- dan layanan mengembalikan dengan setia apa yang tercatat, termasuk cape yang tidak sah. Cek entitlement, kalau ada, mungkin hanya dilakukan pada saat **pemilihan** di UI (makanya ada filter pada klien terbaru), dan membiarkan lewat **tampilan** dari apa yang sudah tercatat di profil.
 
 ### Paralel dengan Java
 
-Ini adalah keluarga cacat logika yang sama dengan `cape-mod` di Java: sebuah layanan memercayai data tanpa memeriksa ulang asal-usulnya di setiap langkah. Di Java, ini adalah tanda tangan RSA valid yang diputar ulang di profil yang salah. Di Bedrock, ini kemungkinan adalah pilihan jubah yang diterima oleh klien lama yang tidak pernah memiliki filter yang benar, lalu disebarkan tanpa validasi ulang ke status persisten akun. Dalam kedua kasus, masalahnya bukan pada titik masuk (mod Java, klien Bedrock lama) -- melainkan bahwa lapisan yang seharusnya memvalidasi ulang entititlement di hilir tidak melakukannya, atau hanya melakukannya sekali, di tempat yang salah.
+Ini keluarga cacat logika yang sama dengan `cape-mod` di Java : layanan memercayai sebuah data tanpa memeriksa ulang asalnya di setiap tahap. Di Java, itu tanda tangan RSA valid tapi di replay pada profil yang salah. Di Bedrock, kemungkinan itu pilihan cape yang diterima klien lama yang tidak pernah punya filter yang benar, lalu disebar tanpa verifikasi ulang ke keadaan persisten akun. Dalam kedua kasus, masalahnya bukan titik masuk (mod Java, klien Bedrock lama) -- melainkan lapisan yang seharusnya memvalidasi ulang entitlement di hilir tidak melakukannya, atau hanya melakukannya sekali, di tempat yang salah.
 
-## Kenapa masih berfungsi
+## Kenapa ini masih berhasil
 
-Dua penjelasan yang mungkin, tidak saling eksklusif:
+Dua penjelasan yang mungkin, tidak saling meniadakan :
 
-1. **Mojang kemungkinan tidak menganggap ini prioritas.** Butuh launcher pihak ketiga, proses multi-langkah, dan hasilnya murni kosmetik -- tidak ada keunggulan gameplay, tidak ada data orang lain yang dikompromikan.
-2. **Menambal ini dengan benar akan membutuhkan validasi ulang entititlement pada setiap pembacaan profil**, bukan hanya saat pemilihan -- yang berarti panggilan jaringan tambahan di setiap penampilan skin, untuk masalah yang hanya menyangkut estetika.
+1. **Mojang mungkin tidak menganggap ini prioritas.** Butuh peluncur pihak ketiga, manipulasi beberapa langkah, dan hasilnya murni kosmetik -- tidak ada keunggulan gameplay, tidak ada data orang lain yang dikompromikan.
+2. **Menambalnya dengan benar menuntut validasi ulang entitlements di setiap pembacaan profil**, bukan hanya saat pemilihan -- yang berarti panggilan jaringan tambahan di setiap tampilan skin, untuk masalah yang hanya soal estetika.
 
 ## Kesimpulan
 
-Tutorial ini muat dalam sepuluh tangkapan layar, tapi mengilustrasikan prinsip yang bisa ditemukan di mana-mana dalam keamanan perangkat lunak: begitu sistem lawas (versi klien lama, API lawas, layanan yang tidak pernah diperbarui) masih bisa menulis ke status bersama, kontrol akses masa kini hanya melindungi apa yang melewati masa kini. Apapun yang masih bisa berbicara dengan API lama melewati filter yang lebih baru -- bukan karena filternya rusak, tapi karena filter itu tidak pernah diterapkan ke versi sebelumnya.
+Tutorial ini muat dalam sepuluh tangkapan layar, tapi menggambarkan prinsip yang ditemukan di mana-mana dalam keamanan perangkat lunak : begitu sistem historis (versi klien lama, API legacy, layanan yang tidak pernah diperbarui) masih bisa menulis ke keadaan bersama, kontrol akses masa kini hanya melindungi apa yang lewat masa kini. Semua yang masih bisa bicara ke API lama memotong filter yang lebih baru -- filter berfungsi pada versi terbaru, tapi tidak pernah diterapkan pada versi yang mendahuluinya.
 
 ---
 
 **Sumber daya**
 
 - **BedrockLauncher** : [github.com/bedrockLauncher/BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
-- **Artikel terkait** : Cape Mod, ekuivalen Java dengan injeksi tanda tangan RSA
+- **Artikel terkait** : Cape Mod, padanan Java lewat injeksi tanda tangan RSA
 
-**3 poin utama**
+**3 poin kunci**
 
-1. Pemilih jubah di versi Bedrock lama kemungkinan menampilkan daftar lengkap semua jubah game, tanpa filter entititlement.
-2. Pilihan kemudian disinkronkan ke profil Xbox Live Anda seperti jubah sah manapun -- layanan profil memercayai klien.
-3. Pemeriksaan entititlement, jika ada, terjadi saat pemilihan di UI terbaru -- bukan saat membaca apa yang sudah tersimpan di akun.
+1. Pemilih cape versi lama Bedrock kemungkinan menampilkan daftar lengkap cape permainan, tanpa filter entitlement.
+2. Pilihan itu lalu disinkronkan ke profil Xbox Live-mu seperti cape sah mana pun -- layanan profil memercayai klien.
+3. Cek entitlement, kalau ada, dilakukan saat pemilihan di UI terbaru -- bukan saat pembacaan apa yang sudah tercatat di akun.

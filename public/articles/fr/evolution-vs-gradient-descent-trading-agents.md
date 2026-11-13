@@ -4,9 +4,8 @@ description: "Comment j'ai remplacé l'entraînement classique par descente de g
 date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
-lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "A1Lkyk8jvgkhWQCrehBJ5sKH87nW4L6ZAL0v6JGa48+Eny1VbzvnQJ8AObjmGIkq1MweqOBmqgZAakAXgq04GA=="
+author_sig: "tJ6HgvImEzKjZOV7UQUrXQKtom0BRFz99MbWDmpkSPyo18mStGIVJ5XaHoiK5VjEUSIb0mJDBKcGP/WSDVmz2w=="
 ---
 ## Le problème avec la descente de gradient seule
 

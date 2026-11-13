@@ -1,51 +1,51 @@
 ---
-title: "character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma"
-description: "DiceBear üzerine bir TypeScript modülü: tutarlı ülke/etnisite
-  tabanlı oluşturma, çocukları yansıtmak için küçük bir genetik motoru ve bir
-  kart oyununda kullanışlı hale getiren mühendislik detayları."
+title: "character-factory inşası: genetikli avatarlar"
+description: "DiceBear üstüne bir TypeScript modülü: ülke/etnik kökene göre tutarlı
+  üretim, çocukları yansıtmak için küçük bir genetik motoru ve onu bir kart
+  oyununda kullanılabilir kılan mühendislik detayları."
 date: 2026-05-16
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "M4MZQaseYi/KE/bCDXr1Gg5yg5BKGHZKOGuIDzO+go/KJ4Zi7wnyaZ7aVE1KWVKyTMNM8BENjMx1T2qivNKOnA=="
+author_sig: "SsA34uL9BW7RqU6C2EqqKoMxMKnv4Px2+b/LeC+QnrvChDTl1VizfST/eB3h0pZykmQnJpDrsjJG6EWw9qBp5g=="
 ---
 
-# character-factory'yi İnşa Etmek: Genetikle Avatar Oluşturma
+# character-factory inşası: genetik sistemli avatarlar
 
-[Kurekuta](https://github.com/fox3000foxy/kurekuta/) için binlerce inandırıcı, farklı avatara ihtiyacım vardı -- her kartın bir karakter "DNA"sı taşıdığı ve renderleyicinin bunu bir portreye dönüştürdüğü özel bir kart oyunu projesi. Hazır bir paket satın almak stok gibi görünürdü. Tohum başına tek seferlik DiceBear avatarları üretmek yanlış şekilde rastgele hissettiriyordu: Japon temalı bir kart İskandinav sarışınına düşebiliyordu ve iki "kardeş" birbirine yabancı gibi görünüyordu.
+[Kurekuta](https://github.com/fox3000foxy/kurekuta/) için binlerce inandırıcı ve birbirinden farklı avatara ihtiyacım vardı: her kartın render motorunun portreye dönüştürdüğü bir karakter "DNA"sı içerdiği özel bir kart oyunu projesi. Hazır bir paket alsam sırıtacağı belli olurdu. Karakter başına seed ile DiceBear avatarları üretmek saçmalık veriyordu: Japon evrenli bir kart İskandinav sarışını çıkabiliyor, iki "kardeş" yabancı gibi duruyordu.
 
-Bu yüzden [character-factory](https://github.com/fox3000foxy/character-factory)'i yazdım -- DiceBear'ın Lorelei koleksiyonunun üzerine, DiceBear'ın tek başına vermediği üç şeyi ekleyen bir TypeScript modülü: **tutarlı demografiler**, **küçük bir genetik motoru** ve **bir oyun döngüsünden kullanması keyifli akıcı bir builder**.
+O yüzden [character-factory](https://github.com/fox3000foxy/character-factory) yazdım: DiceBearın Lorelei koleksiyonu üstüne, DiceBearın tek başına vermediği üç özelliği getiren bir TypeScript modülü: **tutarlı demografik profiller**, **küçük bir genetik motoru** ve oyun döngüsünden kullanımı keyifli **akıcı bir builder**.
 
-## Ne işe yarıyor
+## Ne yapıyor
 
-Kullanışlı en küçük parça:
+En küçük faydalı snippet:
 
 ```ts
 import { CharacterFactory, Country, Mood } from "character-factory";
 
 const svg = new CharacterFactory()
-  .setCountry(Country.Japan)   // ağırlıklı etnisite → tutarlı ten/saç/sakal
+  .setCountry(Country.Japan)   // ağırlıklı etnik köken → tutarlı ten/saç/kesim/sakal
   .setMood(Mood.Happy)
   .buildSvg();
 ```
 
-Bu tek zincir, Japonya'nın demografik karışımına göre ağırlıklı bir etnisite seçer, birbiriyle uyumlu bir ten rengi ve saç rengi çeker, doğru cinsiyet alt havuzundan bir saç stili seçer ve ardından gözleri/kaşları/ağzı "mutlu" bir kombinasyona kilitler. Sonuç SVG olarak işlenir veya `sharp` kuruluysa herhangi bir boyutta PNG olarak.
+Bu basit zincir Japon demografisine göre ağırlıklı bir etnik köken seçer, birbirine uyan bir ten ve saç rengi çeker, doğru cinsiyet alt grubundan bir kesim seçer, sonra göz/kaş/ağzı "mutlu" modda kilitler. Sonuç SVG olarak çıkar ya da `sharp` kuruluysa herhangi bir boyutta PNG olarak.
 
-Bir karakter sadece bir `CharacterConfig` nesnesidir -- yüz, saç, aksesuarlar, sunum. Builder bunu dahili olarak değiştirir ve sen onu JSON, base64 veya dosya olarak çekip aynı şekilde tekrar yükleyebilirsin. Kurekuta için bu önemlidir: bir kart, işlenmiş görüntüyü değil, yapılandırmayı saklar, böylece sanat her zaman yeniden üretilebilir ve kartın dosya boyutu küçük kalır.
+Bir karakter sadece bir `CharacterConfig` nesnesidir: yüz, saç, aksesuarlar, sunum. Builder onu içten değiştirir ve JSON, base64 ya da dosya olarak dışa aktarıp birebir geri yükleyebilirsin. Kurekuta için bu kritik: bir kart render edilmiş görseli değil, configi saklar. Böylece çizim hep yeniden üretilebilir ve bir kartın boyutu minicik kalır.
 
-## Rastgele pikseller değil, tutarlı demografiler
+## Rastgele piksel değil, tutarlı demografik profiller
 
-DiceBear'ın seçenekleri tek tip seçicilerdir. Ten rengi için `["#ffdbb4", "#2c1b18"]` geçirirsen ikisinden birini eşit olasılıkla alırsın -- bir logo için iyi, "bana Brezilya'dan bir karakter ver" için işe yaramaz.
+DiceBear seçenekleri tekdüze seçicilerdir. Ten rengi için `["#ffdbb4", "#2c1b18"]` geç, ikisinden biri aynı olasılıkla gelir: logo için tamam, "bana Brezilyalı bir karakter ver" için işe yaramaz.
 
-`character-factory` bir ülke → etnisite → özellik pipeline'ı sunar:
+`character-factory` ülke → etnik köken → özellik pipelineı içerir:
 
 ```ts
-// Modülün içinde gerçekte olan:
+// Modülün içindekiler:
 ethnicitiesByCountry[Country.Brazil] = [
   { ethnicity: Ethnicity.WestEuropean,  weight: 35 },
   { ethnicity: Ethnicity.BlackAfrican,  weight: 25 },
@@ -66,11 +66,11 @@ ETHNICITY_PROFILES[Ethnicity.EastAsian] = {
 };
 ```
 
-Her katman ağırlıklı bir çekiliştir. Ağırlıklar bir sosyoloji makalesi değil -- "Japonya'dan" bir kızıl saçlı, "İsveç'ten" ise simsiyah saçlı üretmesini engelleyen bir buluşsal yöntem. Tüm pipeline tek bir çağrıya indirgenir: `setCountry(country)` veya `randomizeFromCountry(country, gender?)`.
+Her katman ağırlıklı bir çekiliştir. Ağırlıklar sosyoloji tezi değil: "Japonyalı"nın kızıl, "İsveçli"nin simsiyah üretmesini engelleyen bir sezgiseldir. Bütün pipeline tek bir çağrıya iner: `setCountry(country)` ya da `randomizeFromCountry(country, gender?)`.
 
 ## Küçük bir genetik motoru
 
-En eğlendiğim özellik: `projectChild`. İki fabrika, özellikleri yaklaşık biyolojik baskınlıkla miras alan bir çocuk üretebilir:
+En çok eğlendiğim fonksiyon: `projectChild`. İki factory, özellikleri yaklaşık biyolojik baskınlıkla kalıtılan bir çocuk üretebilir:
 
 ```ts
 const parentA = new CharacterFactory().setCountry(Country.Sweden);
@@ -78,7 +78,7 @@ const parentB = new CharacterFactory().setCountry(Country.Japan);
 const kid     = parentA.projectChild(parentB.getConfig());
 ```
 
-Perde arkasında kasıtlı olarak küçük bir model var. Her ebeveyn, her iki taraftan çekilen 2-allel bir genotip taşıyor gibi kabul edilir ve baskın veya çekinik olarak birleştirilir:
+Kaputun altında bilerek minicik bir model var. Her ebeveyn 2 alelli bir genotip taşır, her taraftan biri çekilir, baskın ya da çekinik olarak birleştirilir:
 
 ```ts
 function combine(a: Allele, b: Allele): "dominant" | "recessive" {
@@ -86,7 +86,7 @@ function combine(a: Allele, b: Allele): "dominant" | "recessive" {
 }
 ```
 
-Gerçek bir baskınlık ekseni olan özellikler (ten, göz, saç) açık bir sıralı listeye göre çözümlenir -- koyu ten açık ten üzerinde baskın, kahverengi/siyah gözler mavi göz üzerinde baskın, simsiyah saç sarışın üzerinde baskın:
+Gerçek bir baskınlık ekseni olan özellikler (ten, göz, saç) açık bir sıralı listeyle çözülür: koyu açığa baskındır, kahverengi/siyah gözler maviye baskındır, simsiyah sarışına baskındır:
 
 ```ts
 const HAIR_DOMINANCE_ORDER = [
@@ -104,28 +104,28 @@ const HAIR_DOMINANCE_ORDER = [
 ] as const;
 ```
 
-`resolveByRank` her ebeveynin indeksini bulur, "baskın" allel kombinasyonunda yüksek olanı, "çekinik"te ise düşük olanı seçer. Fantazi renkleri (pastel pembe, leylak) sıralamada yoktur -- yazı tura atar gibi %50/%50'ye düşerler, ki bu doğru davranıştır: biyolojik değillerdir, bu yüzden baskınlık bir anlam ifade edemez.
+`resolveByRank` her ebeveynin indeksini bulur, "baskın" alel kombinasyonunda en yükseği, "çekinik"te en düşüğü alır. Fantezi renkler (pastel pembe, lila) sıralamada yok: 50/50 yazı tura yaparlar ve bu doğru davranıştır: biyolojik değiller, o yüzden baskınlığın anlamı yok.
 
-Çiller MC1R'yi modeller: her iki ebeveynde varsa %75, sadece birinde taşınıyorsa %25, hiçbirinde yoksa %0. Sakal SRY bağlantılıdır: çocuk kadınsa kaldırılır, aksi halde sakalı olan ebeveynden miras alınır. Saç stili biyolojik değildir -- kültürel bir seçimdir, bu yüzden çocuk kendi cinsiyet havuzundan seçer, mümkünse doku korunur.
+Çiller MC1Rı modeller: iki ebeveynde de varsa %75, birinde varsa %25, hiç yoksa %0. Sakal SRYa bağlı: çocuk kızsa alınır, yoksa sakalı olan ebeveynden kalıtılır. Saç kesiminin biyolojik hiçbir yanı yok: kültürel bir seçimdir, o yüzden çocuk kendi cinsiyet havuzundan çeker, mümkünse dokuyu koruyarak.
 
-Bunların hiçbiri yayın kalitesinde genetik değil. Bu bir his katmanı: çocuklar, iki yabancının ortalaması alınmış gibi değil, ebeveynlerinin makul bir karışımı gibi görünür.
+Bunların hiçbiri yayına değer genetik değil. Bir his katmanı: çocuklar iki yabancının ortalaması değil, ebeveynlerinin makul bir karışımı gibi durur.
 
-## Önemli Olan Sıkıcı Mühendislik Kısımları
+## Az gösterişli ama önemli mühendislik kısımları
 
-Gösterişli olmayan ama diff'te yerini hak eden birkaç şey:
+Görünürlüğü az ama diffte yerini hak eden birkaç detay:
 
-**Daha güvenli bir `pick`.** Orijinali, boş bir dizide `undefined`'ı `T` olarak cast edip döndürüyordu. TypeScript'te `strict` + `noUncheckedIndexedAccess` ile bu, derleyicinin onayladığı bir yalan. Yeni sürüm bir `RangeError` fırlatıyor -- üç seviye aşağıda `undefined` prop'lar üretmek yerine çağrı noktasında hemen yakalanıyor.
+**Daha güvenli bir `pick`.** Orijinal boş dizide `T` olarak cast edilmiş `undefined` döndürüyordu. TypeScriptte `strict` + `noUncheckedIndexedAccess` ile bu derleyicinin imzaladığı bir yalan. Yeni sürüm `RangeError` fırlatır: üç katman aşağıda `undefined` proplar üretmek yerine çağrı yerinde hemen yakalanır.
 
-**Dizileri bozmayan bir `deepMerge`.** Eski özyineleme, kaynak değer bir nesne olduğunda, hedef alan `null` veya bir dizi olsa bile ateşleniyordu. `merge({tags: ["a"]}, {tags: ["b"]})`, `{tags: {0: "b"}}` üretiyordu. Yeni sürüm sadece her iki taraf da düz nesne olduğunda özyineleme yapıyor.
+**Dizileri bozmayan bir `deepMerge`.** Eski özyineleme, hedef `null` ya da dizi olsa bile kaynak değer nesne olduğu anda devreye giriyordu. `merge({tags: ["a"]}, {tags: ["b"]})` sonucu `{tags: {0: "b"}}` üretiyordu. Yeni sürüm yalnızca iki taraf da düz nesneyken özyinelenir.
 
-**Paralel toplu işleme.** `batchFactory` eskiden PNG'leri seri bir döngüde render ediyordu -- 1000 kartlık bir dışa aktarma dakikalarca sürüyordu. Artık yapılandırılabilir eşzamanlılığa (varsayılan 4) sahip bir worker havuzu ve sonuçları önceden boyutlandırılmış bir diziye yazarak sırayı koruyor:
+**Paralel toplu render.** `batchFactory` PNGleri seri döngüde renderlıyordu: 1000 kartlık dışa aktarma saatler sürüyordu. Şimdi yapılandırılabilir eşzamanlılıkla (varsayılan 4) bir worker havuzu ve önceden boyutlandırılmış bir diziye yazarak sonuç sırasını korur:
 
 ```ts
 const worker = async () => {
   while (true) {
     const i = nextIndex++;
     if (i >= count) return;
-    // render et ve kaydet
+    // renderla ve kaydet
     results[i] = { index: i + 1, filePath, config: clone.getConfig() };
     done++;
     onProgress?.(done, count);
@@ -134,12 +134,12 @@ const worker = async () => {
 await Promise.all(Array.from({ length: concurrency }, () => worker()));
 ```
 
-1000 karakterlik bir dışa aktarmada bu, kahve molasını "çoktan bitti mi?" anına dönüştürdü.
+1000 karakterlik bir dışa aktarmada bu kahve molasını "çoktan bitti mi?"ye dönüştürdü.
 
-**Bir şey söyleyen `sharp` hata mesajı.** `buildPng`, `sharp`'ı tembelce import eder çünkü bu, sadece SVG kullanan kullanıcılara zorlamak istemediğin akran bağımlılığı gibidir. Eski catch gerçek hatayı yutardı ve her zaman "sharp gerekli" derdi. Gerçek hata bir sürüm uyuşmazlığı veya yerel bağlama sorunuysa, zaten kurulu olan bir şeyi kurmak için on dakika harcardın. Yeni sürüm hala kurmanı söyler, ama altta yatan hatayı da içerir.
+**Bir şey söyleyen bir `sharp` hata mesajı.** `buildPng`, SVG-only kullanıcılara dayatmak istemediğin opsiyonel bir bağımlılık olduğu için `sharp`ı tembel içe aktarır. Eski catch gerçek hatayı yutuyor ve hep "sharp is required." diyordu. Gerçek hata bir sürüm çakışması ya da yerel binding sorunuysa, zaten kurulu bir paketi yeniden kurarak on dakika harcıyordun. Yeni sürüm kurmanı yine söyler ama alttaki hatayı da içerir.
 
-## Sırada ne var
+## Sıradaki
 
-Modül [character-factory reposunda](https://github.com/fox3000foxy/character-factory) 1.1.1 sürümünde. Genetik motoru, üzerinde yinelemeye devam etmek için bariz yer -- henüz bir test paketi yok, bu yüzden tutarlı değişmezler ("Brezilyalı bir Doğu Asya eğilimli karakterin hiçbir zaman simsiyah gözlerle platin saçı eşleştirmemesi") sadece ağırlıklar tarafından zorlanıyor. `bun test` veya `vitest` eklemek ve ülke başına on bin `randomizeFromCountry` çağrısı çalıştıran bir tutarlılık testi yazmak bir sonraki adım.
+Modül [character-factory deposunda](https://github.com/fox3000foxy/character-factory) 1.1.1 sürümünde. Genetik motor yinelemeye devam etmek için ideal yer: henüz test paketi yok, o yüzden tutarlılık değişmezleri ("Doğu Asya kökenli Brezilyalı bir karakterde platin saçla simsiyah göz asla olmaz") yalnızca ağırlıklarla sağlanıyor. `bun test` ya da `vitest` ekleyip ülke başına on bin `randomizeFromCountry` çalıştıran bir tutarlılık testi yazmak sonraki adım.
 
-Kurekuta'nın kendisi şimdilik özel, ama sonunda göreceğin her kart bir `CharacterConfig` blob'u ve bir `buildPng()` çağrısı uzaklığında.
+Kurekuta kendisi şimdilik özel ama içinde bir gün göreceğin her kart sadece bir `CharacterConfig` bloğu ve bir `buildPng()` uzağında.

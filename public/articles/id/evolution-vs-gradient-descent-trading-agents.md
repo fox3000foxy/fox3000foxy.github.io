@@ -1,39 +1,38 @@
 ---
-title: "Saya mengevolusi jaringan saraf melalui seleksi alam alih-alih gradient descent"
-description: "Bagaimana saya mengganti pelatihan gradient descent klasik dengan algoritma genetik NSGA-II untuk mengevolusi agen trading DQN: empat versi, dari overfitting hingga evolusi bobot Lamarckian."
+title: "Saya mengembangkan jaringan saraf lewat seleksi alam alih-alih penurunan gradien"
+description: "Bagaimana saya mengganti pelatihan klasik dengan penurunan gradien dengan algoritma genetika NSGA-II untuk mengembangkan agen DQN trading : empat versi, dari overfitting hingga evolusi lamarckian pada bobot."
 date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
-lang: "id"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "+IFA0a9LAnbo5pE3MrEpzWvwFNm3Ttg4iVddhrCo9qEaai8o7LPNheX352HrIdl6BAMUNBucLDeWvRdontdP0A=="
+author_sig: "4bLu3o1SBemHHb0H0ng5r6rny1NQ5bC/L6qgDBIIPzd10Kp/PDbDkWAZtXcT2RKX8FRDC5zfwiG4h/RB6B6iog=="
 ---
 
-## Masalah gradient descent saja
+## Masalah dengan penurunan gradien saja
 
-Melatih agen DQN untuk trading algoritmik dengan gradient descent klasik memiliki masalah yang sederhana untuk dinyatakan dan sulit untuk dipecahkan: gradient descent mengoptimalkan _satu_ jaringan menuju _satu_ minimum lokal, pada _satu_ jendela pasar. Tidak ada yang menjamin minimum ini dapat digeneralisasi ke rezim pasar yang berbeda, dan tidak ada dalam loop pelatihan yang mendorong keberagaman; dua kali eksekusi dari seed yang berbeda sering kali konvergen ke strategi yang hampir identik, dengan titik buta yang sama.
+Melatih agen DQN untuk trading algoritmik dengan penurunan gradien klasik menimbulkan masalah yang sederhana diucapkan dan sulit dipecahkan : gradien mengoptimalkan _satu_ jaringan menuju _satu_ minimum lokal, pada _satu_ jendela pasar. Tidak ada yang menjamin minimum itu menggeneralisasi ke rezim pasar yang berbeda, dan tidak ada dalam loop pelatihan yang mendorong keanekaragaman; dua run yang berangkat dari seed berbeda sering konvergen ke strategi yang hampir identik, dengan blind spot yang sama.
 
-Jawaban yang saya eksplorasi: mengganti (atau lebih tepatnya melapisi) gradient descent dengan algoritma genetik. Alih-alih melatih satu agen, Anda mengevolusi populasi agen; setiap genom mengkodekan arsitektur dan hiperparameter; dan seleksi alam melakukan pengurutan, sementara gradient descent terus menyempurnakan setiap individu dalam masa hidupnya sendiri.
+Jawaban yang saya jelajahi : mengganti (atau lebih tepatnya menumpuk) penurunan gradien dengan algoritma genetika. Alih-alih melatih satu agen, kita mengembangkan populasi agen; masing-masing genom mengodekan arsitektur dan hyperparameter; dan kita biarkan seleksi alam memilah, sementara gradien terus memoles tiap individu di dalam hidupnya sendiri.
 
-Percobaan ini melalui empat versi dalam satu sesi intensif. Setiap versi memperbaiki cacat struktural dari versi sebelumnya.
+Runner ini melewati empat versi dalam satu sesi kerja intensif. Masing-masing memperbaiki cacat struktural versi sebelumnya.
 
-## v1: versi naif, dan mengapa itu tidak cukup
+## v1 : versi naif, dan kenapa tidak cukup
 
-Versi pertama melakukan apa yang Anda harapkan dari GA dasar: populasi genom, fungsi fitness, seleksi, crossover, mutasi, generasi berikutnya. Setiap genom mengkodekan topologi jaringan (jumlah lapisan, lebar), hiperparameter DQN (learning rate, epsilon decay, ukuran buffer replay), dan beberapa pilihan arsitektural (sumber data mana yang digunakan, ukuran embedding apa).
+Versi pertama melakukan apa yang diharapkan dari GA dasar : populasi genom, fungsi fitness, seleksi, crossover, mutasi, generasi berikutnya. Setiap genom mengodekan topologi jaringan (jumlah lapisan, lebar), hyperparameter DQN (learning rate, epsilon decay, ukuran replay buffer), dan beberapa pilihan arsitektural (sumber data mana yang dikonsumsi, ukuran embedding).
 
-Cacat utamanya: fitness dihitung pada data yang sama yang digunakan untuk pelatihan. Seorang agen benar-benar bisa menghafal jendela pasar dan mendapatkan skor sangat baik tanpa mempelajari strategi yang dapat digeneralisasi. Overfitting klasik, tetapi diperkuat oleh seleksi genetik; GA secara aktif memilih individu yang paling mengeksploitasi celah ini.
+Cacat utama : fitness dihitung pada data yang sama dengan pelatihan. Agen bisa secara harfiah menghafal jendela pasar dan mendapat skor bagus tanpa mempelajari strategi yang bisa digeneralisasi. Overfitting klasik, tapi diamplifikasi oleh seleksi genetika; GA secara aktif menyeleksi individu yang paling mengeksploitasi celah ini.
 
-## v2: memisahkan pelatihan dan evaluasi
+## v2 : memisahkan pelatihan dan evaluasi
 
-Perbaikan yang jelas adalah memisahkan fase-fasenya: setiap genom berlatih pada satu jendela pasar, kemudian dievaluasi pada jendela yang berbeda, yang tidak pernah terlihat selama pelatihan. Hanya kinerja evaluasi yang diperhitungkan dalam fitness.
+Perbaikan yang jelas adalah memisahkan fase : setiap genom berlatih pada satu jendela pasar, lalu dievaluasi pada jendela berbeda, yang tidak pernah dilihat selama pelatihan. Hanya performa evaluasi yang dihitung untuk fitness.
 
-Perubahan ini saja menyebabkan rata-rata fitness populasi turun; sebuah tanda bahwa sebagian besar dari apa yang tampak seperti kinerja di v1 adalah hafalan murni. Menyakitkan untuk dilihat, tetapi itulah sinyal yang Anda inginkan: skor yang lebih rendah tetapi jujur lebih baik daripada skor yang meningkat dan menyesatkan.
+Perubahan ini saja membuat fitness rata-rata populasi anjlok; tanda bahwa sebagian besar dari apa yang tampak sebagai performa di v1 adalah hafalan murni. Menyakitkan dilihat, tapi tepat sinyal yang kita inginkan : skor lebih rendah tapi jujur lebih baik daripada skor menggembung dan menipu.
 
-## v3: beralih ke NSGA-II dan fitness multi-objektif
+## v3 : beralih ke NSGA-II dan fitness multi-objektif
 
-Mengoptimalkan satu skor fitness (misalnya, imbal hasil) secara mekanis mendorong agen untuk mengambil risiko ekstrem demi memaksimalkan satu angka tersebut. Solusinya adalah beralih ke NSGA-II (Non-dominated Sorting Genetic Algorithm II), yang secara simultan mengoptimalkan beberapa tujuan tanpa mereduksinya menjadi jumlah terbobot yang arbitrer: imbal hasil, drawdown maksimum, rasio Sharpe, stabilitas antar-jendela.
+Mengoptimalkan satu skor fitness (misalnya return) secara mekanis mendorong ke agen yang mengambil risiko ekstrem untuk memaksimalkan satu angka itu. Solusinya adalah beralih ke NSGA-II (Non-dominated Sorting Genetic Algorithm II), yang mengoptimalkan beberapa objektif sekaligus tanpa mereduksinya jadi jumlah berbobot yang sewenang-wenang : return, drawdown maksimal, rasio Sharpe, stabilitas antar-jendela.
 
-NSGA-II membangun front Pareto: kumpulan genom di mana tidak ada peningkatan pada satu tujuan yang mungkin tanpa menurunkan tujuan lain. Alih-alih memaksakan satu trade-off imbal hasil-risiko melalui pembobotan yang telah dipilih sebelumnya, Anda menyimpan seluruh perbatasan kompromi dan membiarkan pilihan akhir tetap terbuka.
+NSGA-II membangun front Pareto : himpunan genom di mana tidak ada perbaikan pada satu objektif yang mungkin tanpa memperburuk yang lain. Alih-alih memaksakan satu kompromi antara return dan risiko lewat pembobotan yang dipilih di awal, kita menyimpan seluruh perbatasan kompromi dan membiarkan pilihan akhir tetap terbuka.
 
 ```
 function nonDominatedSort(population: Genome[]): Genome[][] {
@@ -50,27 +49,27 @@ function nonDominatedSort(population: Genome[]): Genome[][] {
       fronts[0].push(p);
     }
   }
-  // ... konstruksi front berikutnya dengan penghapusan iteratif
+  // ... pembangunan front berikutnya lewat pelepasan iteratif
   return fronts;
 }
 ```
 
-Penambahan kedua di v3: **arsip Pareto persisten**. Tanpanya, genom bagus yang ditemukan di generasi 12 bisa menghilang di generasi 15 jika keberuntungan crossover tidak mereproduksinya; bahkan jika genom itu tetap lebih baik dari semua yang menggantikannya. Arsip ini menyimpan, di semua generasi, kumpulan semua individu yang tidak terdominasi yang pernah ditemui, terlepas dari populasi saat ini.
+Tambahan kedua di v3 : **arsip Pareto persisten**. Tanpanya, genom bagus yang ditemukan di generasi 12 bisa hilang di generasi 15 kalau kebetulan crossover tidak mereproduksinya; meski ia tetap lebih baik dari semua yang menggantikannya. Arsip menyimpan, lintas semua generasi, himpunan individu tak terdominasi yang pernah ditemui, terlepas dari populasi saat ini.
 
-## v4: evolusi Lamarckian dan keragaman lingkungan
+## v4 : evolusi lamarckian dan keanekaragaman lingkungan
 
-V3 memiliki titik buta struktural: genom menggambarkan arsitektur, tetapi bobot yang dipelajari selama pelatihan menghilang di setiap generasi baru. Seorang anak yang lahir dari crossover dua orang tua yang baik mewarisi arsitektur mereka, tetapi harus belajar dari awal lagi; tidak ada jejak bobot yang membuat orang tuanya berkinerja baik.
+V3 punya blind spot struktural : genom menggambarkan arsitektur, tapi bobot yang dipelajari selama pelatihan hilang di setiap generasi baru. Keturunan yang lahir dari crossover dua orang tua yang bagus mewarisi arsitektur mereka, tapi harus belajar ulang dari nol; tidak ada jejak bobot yang membuat orang tuanya performan.
 
-V4 memperkenalkan **evolusi Lamarckian**: bobot yang telah dilatih dimasukkan kembali ke dalam genom setelah pelatihan, dan ditransmisikan (dengan mutasi) kepada keturunannya. Ini adalah bid'ah biologis yang disengaja; Lamarck salah untuk organisme hidup -- pewarisan karakteristik yang diperoleh tidak ada dalam biologi -- tetapi tidak ada yang menghentikan GA digital untuk curang secara cerdas: di sini, mentransmisikan pengetahuan yang diperoleh secara radikal mempercepat konvergensi, karena setiap generasi memulai kembali dari inisialisasi yang sudah diinformasikan daripada bobot acak.
+V4 memperkenalkan **evolusi lamarckian** : bobot terlatih disuntikkan kembali ke genom setelah pelatihan, dan diwariskan (dengan mutasi) ke keturunan. Ini kesesatan biologis yang disadari; Lamarck salah untuk organisme hidup, hereditas sifat yang didapat tidak ada dalam biologi; tapi tidak ada yang melarang GA numerik curang dengan cerdas : di sini, mewariskan yang didapat mempercepat konvergensi secara radikal, karena setiap generasi berangkat dari titik inisialisasi yang sudah terinformasi alih-alih bobot acak.
 
-Tiga perubahan struktural lain dalam versi ini:
+Tiga perubahan struktural lain di versi ini :
 
-*   **Keragaman lingkungan**: setiap genom tidak lagi dievaluasi pada satu jendela pasar tunggal tetapi pada beberapa jendela, yang diambil dari rezim yang berbeda (bullish, bearish, ranging). Seorang agen yang unggul di satu jendela dan runtuh di jendela lain tidak lagi dapat mendominasi front Pareto.
-    
-*   **Regularisasi kompleksitas FLOPs**: biaya komputasi jaringan (dalam FLOPs) menjadi tujuan penuh dalam NSGA-II. Ini mencegah evolusi konvergen ke arsitektur masif hanya karena memiliki kapasitas mentah yang lebih besar, tanpa peningkatan kinerja yang dapat dibenarkan.
-    
-*   **Antarmuka `RLBackend` yang terdekopling**: GA tidak lagi mengetahui detail DQN. Ia memanipulasi genom dan memanggil `train()` / `evaluate()` melalui antarmuka abstrak, yang secara teoretis memungkinkan menukar algoritma RL lain tanpa menyentuh mesin evolusioner.
-    
+*   **Keanekaragaman lingkungan** : setiap genom tidak lagi dievaluasi pada satu jendela pasar tapi pada beberapa, yang diambil dari rezim berbeda (bullish, bearish, range). Agen yang unggul pada satu jendela dan runtuh pada jendela lain tidak bisa lagi mendominasi front Pareto.
+
+*   **Regularisasi lewat kompleksitas FLOPs** : biaya komputasi jaringan (dalam FLOPs) menjadi objektif tersendiri di NSGA-II. Ini mencegah evolusi konvergen ke arsitektur masif hanya karena kapasitas mentahnya lebih besar, tanpa dibenarkan oleh perolehan performa.
+
+*   **Antarmuka** `RLBackend` **yang terpisah** : GA tidak lagi mengenal detail DQN. Ia memanipulasi genom dan memanggil `train()` / `evaluate()` lewat antarmuka abstrak, yang secara teori memungkinkan mencolokkan algoritma RL lain tanpa menyentuh mesin evolusioner.
+
 
 ```
 interface RLBackend {
@@ -79,26 +78,20 @@ interface RLBackend {
 }
 ```
 
-Poin teknis terakhir: evaluasi beralih ke **konkurensi asinkron terbatas**; kumpulan N evaluasi paralel alih-alih loop sekuensial, dengan batas eksplisit untuk menghindari kejenuhan sumber daya GPU/CPU yang tersedia.
+Poin teknis terakhir : evaluasi beralih ke **konkurensi asinkron berbatas**; pool berisi N evaluasi paralel alih-alih loop sekuensial, dengan batas eksplisit supaya tidak menjenuhkan sumber daya GPU/CPU yang tersedia.
 
-## Apa yang v4 perbaiki versus v3 dalam praktik
+## Apa yang diperbaiki v4 dibanding v3 dalam praktik
 
-Cacat v3 | Perbaikan v4
---- | ---
-Bobot hilang setiap generasi | Injeksi ulang Lamarckian dari bobot terlatih
-Overfitting ke satu jendela pasar | Evaluasi pada beberapa jendela, rezim bervariasi
-Arsitektur tumbuh tanpa kendali | FLOPs sebagai tujuan Pareto eksplisit
-GA terikat ke detail DQN | Antarmuka abstrak `RLBackend`
-Evaluasi sekuensial lambat | Konkurensi asinkron terbatas
+Cacat v3 Perbaikan v4 Bobot hilang di setiap generasi Penyuntikan lamarckian pada bobot terlatih Overfitting pada satu jendela pasar Evaluasi pada banyak jendela, rezim bervariasi Arsitektur yang membesar tanpa batas FLOPs sebagai objektif Pareto eksplisit GA terkopling pada detail DQN Antarmuka `RLBackend` abstrak Evaluasi sekuensial yang lambat Konkurensi async berbatas
 
-V4 juga memperbaiki sepuluh bug "pembumian" API yang konkret; kasus di mana kode GA mengasumsikan antarmuka untuk `TradingAgent` yang tidak persis cocok dengan implementasi aslinya. Jenis bug ini tidak terlihat sampai Anda membandingkan kode dengan sumber agen yang sebenarnya: v4 hanya divalidasi setelah pembacaan ulang baris demi baris terhadap file asli.
+V4 juga memperbaiki sepuluh bug konkret "grounding" API; kasus di mana kode GA mengasumsikan antarmuka untuk `TradingAgent` yang tidak persis cocok dengan implementasi nyata. Bug semacam ini tak terlihat selama kode tidak dihadapkan pada kode sumber nyata agen : v4 baru tervalidasi setelah dibaca ulang baris per baris berhadapan dengan berkas aslinya.
 
-## Mengapa mencampur evolusi dan gradien daripada memilih salah satu
+## Kenapa mencampur evolusi dan gradien alih-alih memilih salah satu
 
-Anda mungkin bertanya-tanya mengapa tidak menggunakan RL murni saja, atau evolusi murni seperti NEAT. Jawabannya adalah satu kalimat: gradien sangat baik untuk penyetelan lokal (menyesuaikan bobot kontinu menuju titik optimal terdekat), evolusi sangat baik untuk eksplorasi global (menemukan arsitektur dan kombinasi hiperparameter yang tidak dapat dicapai gradien, karena ruang pencarian diskrit tidak dapat didiferensiasikan). Menggunakan salah satu tanpa yang lain berarti menghilangkan salah satu dari dua bentuk eksplorasi.
+Orang bisa bertanya kenapa tidak sekadar RL murni, atau evolusi murni ala NEAT. Jawabannya muat dalam satu kalimat : gradien unggul untuk memoles secara lokal (menyesuaikan bobot kontinu menuju optimum dekat), evolusi unggul untuk mengeksplorasi secara global (menemukan arsitektur dan kombinasi hyperparameter yang tidak bisa dicapai gradien mana pun, karena ruang pencarian diskret tidak terdiferensiasi). Memakai satu tanpa yang lain berarti kehilangan salah satu dari dua bentuk eksplorasi.
 
-Harganya adalah kompleksitas rekayasa; empat versi bukanlah kemewahan, itu adalah jumlah iterasi yang diperlukan agar loop GA + RL berhenti menyabotase dirinya sendiri (overfitting, kehilangan individu yang baik, kehilangan bobot yang diperoleh). Tetapi hasilnya adalah sistem yang mengeksplorasi ruang desain yang jauh lebih luas daripada pencarian kisi sederhana dari hiperparameter, sambil mempertahankan efisiensi lokal dari gradient descent untuk setiap kandidat yang dievaluasi.
+Harga yang dibayar adalah kompleksitas rekayasa; empat versi bukan kemewahan, itu jumlah iterasi yang diperlukan agar loop GA + RL berhenti menyabotase dirinya sendiri (overfitting, kehilangan individu bagus, kehilangan bobot yang didapat). Tapi hasilnya adalah sistem yang menjelajahi ruang desain jauh lebih luas daripada sekadar grid search hyperparameter, sambil menjaga efisiensi lokal gradien untuk setiap kandidat yang dievaluasi.
 
-## Langkah selanjutnya
+## Langkah berikutnya
 
-Arsitektur evolusioner satu tingkat ini (populasi datar genom DQN) mencapai batasnya ketika jumlah aset yang akan dicakup bertambah. Itulah yang mendorong perpindahan ke arsitektur hierarkis tiga tingkat (Analis Aset → Manajer Sektor → Alokator Portofolio), dengan GA beroperasi secara independen di setiap tingkat... tapi itu adalah topik untuk artikel lain.
+Arsitektur evolusioner satu tingkat ini (populasi datar genom DQN) mencapai batasnya ketika jumlah aset yang dicakup naik. Inilah yang memotivasi peralihan ke arsitektur hierarkis tiga tingkat (Asset Analysts → Sector Managers → Portfolio Allocator), dengan GA yang beroperasi independen di tiap tingkat... tapi itu topik artikel lain.

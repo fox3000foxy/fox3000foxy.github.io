@@ -1,80 +1,80 @@
 ---
-title: 100% 无服务 Discord 机器人：Hono + Cloudflare Workers
-description: 如何将我每月50欧元的Discord机器人替换为零成本 -- 交互端点、Hono、Workers、实时图像渲染以及无需WebSocket的完整游戏。
+title: Discord 机器人 100% 无服务器：Hono + Cloudflare Workers
+description: 我怎么把每月 50 欧的 Discord 机器人换成零元，interaction endpoint、Hono、Workers、实时图片渲染、不用 WebSocket 的完整游戏。
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "qyT8Iue8qTIBqH6ia1vKqZ6wdPgOXw7Btyaxp0AjRJmCcOd39X1RHZt5+6zdq+kBh97nFhcCv6g1ZDBuxpTB3A=="
+author_sig: "idd/Ac/Sl+aHjYHgLu/E1/GMVXQodWLrUvtYHvK4xv3y8OPGUVKAFUtWu6MmpTxmlzyQ4d0tSyHqS0iT5hk+MA=="
 ---
 
-## Discord bot 100% 无服务器 : Hono + Cloudflare Workers = 💸 零成本
+## Discord 机器人 100% 无服务器：Hono + Cloudflare Workers = 💸 零元
 
-我花了几个月在自己的机器上维护传统的 Discord bot。
+我之前在自己机器上养了几个月经典 Discord 机器人。
 
-WebSocket 连接永远开着。Bot 凌晨三点自动重连。Bot 崩了只是因为我看羊的眼神不对。账单一直涨。
+WebSocket 长连接一直开着。凌晨 3 点自己重连。看我不顺眼就 crash。账单一直涨。
 
-有一天我发现：**为什么要保持连接**？Discord 可以只 POST 你感兴趣的东西。你回复，完事。
+有一天我发现：**为什么要维持连接**？Discord 可以只把感兴趣的事件 POST 给你。你回包，完事。
 
-从 2021 年起，Discord 提供了 **interaction endpoints**。
+2021 年起 Discord 有 **interaction endpoint**。
 
-就是纯 HTTP。没有 WebSocket。没有持久状态。你收到请求，返回 JSON，结束。下一条请求自己会来。
+就是纯 HTTP。不用 WebSocket，不用持久状态。收到请求，回 JSON，结束。下个请求自己来。
 
-最棒的是：Cloudflare Workers **免费**直到每天 10 万次请求。对 90% 的 bot 来说，这就是 0€/月。
+最爽的：Cloudflare Workers 每天 10 万请求内**免费**。90% 的机器人，每月 0 元。
 
-这篇文章会教你如何用 **Hono**（超轻量 web 框架）和 **Cloudflare Workers** 做一个不需要 WebSocket 的 Discord bot。我会给你看两个真实项目：**Nibi**（学日语的 bot，带 TTS，很酷）和 **Konosuba-RPG**（一个 _完整的_ Discord 游戏，带实时图片渲染 xD）。
+这篇教你用 **Hono**（超轻 web 框架）加 **Cloudflare Workers** 做无 WebSocket Discord 机器人。带两个真实项目：**Nibi**（学日语机器人，TTS，好玩）和 **Konosuba-RPG**（完整 Discord 游戏，实时图片渲染）。
 
-## WebSocket vs. Interaction Endpoints : 为什么之前是个馊主意
+## WebSocket vs Interaction Endpoint：为什么原来是馊主意
 
-想象一下一个 Minecraft 服务器，你不玩的时候也得保持连接开着。
+想象一个 Minecraft 游戏，不玩的时候也要一直连着。
 
-而且服务器每次崩了都会自动重连。你得处理超时、指数退避重连，所有那些我们讨厌的垃圾样板代码。就为了接收交互。
+服务器一 crash 就自动重连。超时、指数退避、一堆你讨厌的 boilerplate 全要自己写。就为了收交互。
 
-Interaction endpoints 正好相反。Discord POST 到你的 URL。你回复。完事。
+interaction endpoint 反着来。Discord POST 到你 URL。你回包。完事。
 
-如果你的服务器崩了？Discord 重试 2-3 次然后继续。零 drama。
+服务器挂了？Discord 重试两三次就过了。零 drama。
 
-**之前成本**：每个月 50€ 在 Heroku 上，就为了让一个 Node 进程活着。
+**之前成本**：Heroku 上每月 50 欧，就为了让 Node 进程一直活着。
 
-**之后成本**：每个月 0€ 在 Cloudflare 上，直到 10 万次请求/天。
+**之后成本**：Cloudflare 上每月 0 元，每天 10 万请求内。
 
-## 架构 : 到底是什么？
+## 架构：到底是什么？
 
 Discord POST 一个请求到你的 endpoint。
 
 ```plaintext
-Discord: "嘿！用户点了 /ping！"
+Discord："喂！用户点了 /ping！"
       ↓
-   你的 URL (Cloudflare Worker)
+   你的 URL（Cloudflare Worker）
       ↓
-   你验证是不是真的 Discord (签名检查)
+ 你验明确实是 Discord（验签名）
       ↓
-   你解析 interaction 类型
+ 你解析交互类型
       ↓
-   你执行 handler
+ 你跑 handler
       ↓
-   你返回 JSON
+ 你回 JSON
       ↓
-Discord: "好的，我会把这个显示给用户"
+Discord："好，我显示给用户"
 ```
 
-就是纯 HTTP。没有魔法。没有重库。
+纯 HTTP，栈又小又清楚。
 
-## Hono + Cloudflare Workers : 省钱组合
+## Hono + Cloudflare Workers：省钱组合
 
-**Hono** 是一个 12KB 的 web 框架。哪里都能跑：Cloudflare Workers、Vercel、AWS Lambda、Deno、Bun... 同样的代码到处跑。
+**Hono** 是 12KB 的 web 框架。到处跑：Cloudflare Workers、Vercel、AWS Lambda、Deno、Bun……同一份代码。
 
-Cloudflare Workers 是在边缘计算。你的请求到达最近的服务器。响应时间：\<100ms。成本：免费直到每天 10 万次请求。
+Cloudflare Workers 是边缘计算。请求进离用户最近的服务器。延迟 \<100ms。每天 10 万请求内免费。
 
-Hono + Cloudflare 的组合对 Discord bot 来说简直是绝配。
+Hono 配 Cloudflare 打 Discord 机器人是绝配。
 
-这是一个完整 bot 的最小代码：
+下面是完整机器人的最小代码：
 
 ```typescript
 import { Hono } from 'hono';
@@ -83,12 +83,12 @@ import { verifyKey } from 'discord-interactions';
 const app = new Hono();
 
 app.post('/interactions', async (c) => {
-  // 1. 获取 headers
+  // 1. 取头
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
   const body = await c.req.text();
 
-  // 2. 验证真的是 Discord（不是垃圾请求）
+  // 2. 验明确实是 Discord（不是垃圾请求）
   const isValid = verifyKey(
     body,
     signature,
@@ -97,17 +97,17 @@ app.post('/interactions', async (c) => {
   );
   if (!isValid) return c.text('Invalid request', 401);
 
-  // 3. 解析它发来的内容
+  // 3. 解析它发了什么
   const interaction = JSON.parse(body);
 
-  // 4. 根据类型回复
+  // 4. 按类型回
   if (interaction.type === 1) {
-    // Discord 测试 (PING)
+    // Discord 测试（PING）
     return c.json({ type: 1 });
   }
 
   if (interaction.type === 2) {
-    // 这是一个斜杠命令
+    // slash 命令
     const name = interaction.data.name;
     if (name === 'ping') {
       return c.json({
@@ -123,9 +123,9 @@ app.post('/interactions', async (c) => {
 export default app;
 ```
 
-就 30 行，一个能用的 bot 就好了。
+30 行，一个能跑的机器人。
 
-没有 `bot.login()`。没有 event emitter。没有回调地狱。只有 HTTP。
+忘了 `bot.login()`、event emitter 和 callback hell。只留 HTTP。
 
 部署到 Cloudflare：
 
@@ -134,40 +134,40 @@ npm install -D wrangler
 npx wrangler deploy
 ```
 
-Boom。你得到一个 URL 比如 `https://mon-bot.workers.dev/interactions`。
+Boom。你得到 `https://mon-bot.workers.dev/interactions` 这样的 URL。
 
-把这个放到 Discord Developer Portal 的 "INTERACTIONS ENDPOINT URL" 里，Discord 就会开始把交互发到那里。
+填到 Discord Developer Portal 的"INTERACTIONS ENDPOINT URL"，Discord 就开始往那里发交互。
 
-## 验证签名 : 拒绝假请求
+## 验签名：假请求走开
 
-Discord 用公钥给每个请求签名。如果你收到一个签名不对的请求？那就是垃圾。忽略它，继续。
+Discord 每个请求都拿公钥签名。签名不对？垃圾请求。无视，继续。
 
-`discord-interactions` 这个包帮你搞定：
+`discord-interactions` 包干这个活：
 
 ```typescript
 import { verifyKey } from 'discord-interactions';
 
 const isValid = verifyKey(
-  rawBody,           // 精确的原始文本（不是解析后的 JSON！）
-  signature,         // header x-signature-ed25519
-  timestamp,         // header x-signature-timestamp
-  publicKey          // 从 Discord Dev Portal 获取
+  rawBody,           // 精确原文（别拿解析过的 JSON！）
+  signature,         // x-signature-ed25519 头
+  timestamp,         // x-signature-timestamp 头
+  publicKey          // Discord Dev Portal 拿的
 );
 ```
 
-**重要陷阱**：签名依赖于 _精确的_ body。如果你解析 JSON 再重新序列化，或者你 log 了 body，签名就坏了。
+**重要坑**：签名依赖**精确** body。你解析 JSON 再 stringify，或者 log 一下 body，签名就坏了。
 
-先验证。再解析。顺序很重要。
+先验，再解析。顺序不能反。
 
-## 案例 1 : Nibi（日语学习 bot）
+## 案例 1：Nibi（学日语机器人）
 
-Nibi 是一个学日语的 Discord bot。简单的命令：
+Nibi 是学日语的 Discord 机器人。命令很简单：
 
 *   `/dictionary kanji` → 显示释义
-*   `/pronounce テキスト` → 生成 TTS（文本转语音）
-*   `/hello` → 欢迎消息
+*   `/pronounce テキスト` → 生成 TTS（文字转语音）
+*   `/hello` → 打招呼
 
-每个命令是一个 TypeScript 文件：
+每个命令一个 TypeScript 文件：
 
 ```plaintext
 src/commands/
@@ -177,7 +177,7 @@ src/commands/
 └── ...
 ```
 
-每个命令实现这个接口：
+命令实现这个接口：
 
 ```typescript
 interface Command {
@@ -189,24 +189,24 @@ interface Command {
   execute(
     interaction: Interaction,
     env: Bindings
-  ): Promise<InteractionResponse>;
+  ): Promise<interactionresponse>;
 }
 ```
 
-### /pronounce 命令 : 让 bot 说话
+### /pronounce 命令：让机器人开口
 
-这个最骚。你发一段文本（罗马音、平假名、汉字，随便什么），bot 把它转成平假名，通过 VOICEVOX 或 Google TTS 生成语音，然后在 Discord 上发一条音频消息。
+这个最邪门。你扔文本进来（罗马音、假名、汉字，随便），机器人转成平假名，用 VOICEVOX 或 Google TTS 生成语音，在 Discord 发语音消息。
 
 ```typescript
 const pronounce: Command = {
   data: {
     name: 'pronounce',
-    description: '为日语文本生成 TTS',
+    description: '给日语文本生成 TTS',
     options: [
       {
         type: 3,  // STRING
         name: 'text',
-        description: '要发音的文本',
+        description: '要读的文本',
         required: true
       }
     ]
@@ -216,7 +216,7 @@ const pronounce: Command = {
     const text = interaction.data.options[0].value;
 
     try {
-      // 1. 用 Kuroshiro 把罗马音转成平假名
+      // 1. 罗马音 → 平假名，用 Kuroshiro
       const hiragana = await kuroshiro.convert(text, { to: 'hiragana' });
 
       // 2. 生成 TTS 音频
@@ -229,24 +229,24 @@ const pronounce: Command = {
         env.BOT_TOKEN
       );
 
-      // 4. 发送带音频的消息
+      // 4. 发带音频的消息
       await sendVoiceMessage(
         interaction.channel.id,
         uploadFilename,
-        audioBuffer.length / 16000,  // 时长（秒）
+        audioBuffer.length / 16000,  // 时长秒数
         env.BOT_TOKEN
       );
 
       return {
         type: 4,
-        data: { content: `"${text}" 的发音` }
+        data: { content: `“${text}”的发音` }
       };
     } catch (err) {
       return {
         type: 4,
         data: {
-          content: '错误：无法生成音频 xD',
-          flags: 64  // ephemeral（私密消息）
+          content: '出错了：音频生成失败 xD',
+          flags: 64  // ephemeral（仅自己可见）
         }
       };
     }
@@ -254,11 +254,11 @@ const pronounce: Command = {
 };
 ```
 
-离谱的是：你调用外部 API，上传文件到 Discord，用这个文件发送消息。全程没有 WebSocket，只有 HTTP。
+很疯吧：调外部 API，上传文件到 Discord，发带文件的消息。全程无 WebSocket，纯 HTTP。
 
-### 用 Supabase 做持久化
+### Supabase 做持久化
 
-Nibi 用 Supabase 做 key-value 存储。检查用户是否已注册：
+Nibi 用 Supabase 当 key-value 存。查用户注册没：
 
 ```typescript
 const DatabaseUtils = new DatabaseUtils({
@@ -270,56 +270,56 @@ const users = await DatabaseUtils.readJson('users');
 const user = users.find(u => u.id === interaction.member.user.id);
 
 if (!user) {
-  // 添加用户
+  // 加用户
   users.push({ id: interaction.member.user.id, verified: true });
   await DatabaseUtils.writeJson('users', users);
 }
 ```
 
-很基础（不是真正的 SQL 查询，只是 JSON），但能用。对小 bot 来说完美。
+很基础（没有真 SQL 查询，就是 JSON），但够用。小机器人完美。
 
-## 案例 2 : Konosuba-RPG（带图片渲染的 Discord 游戏）
+## 案例 2：Konosuba-RPG（带图片渲染的 Discord 游戏）
 
-好吧这个是真的离谱。
+这个更疯。
 
-Konosuba-RPG 是一个 Discord 上的**完整游戏**。你打怪、赚经验、装备饰品、升级。每场战斗都实时生成一张**图片**。没有预渲染的 spritesheet。图片是根据玩家属性、怪物和战斗状态动态合成的。
+Konosuba-RPG 是 Discord 上的**完整游戏**。打怪、涨 XP、装饰品、升级。每场战斗实时生成一张**图片**。不用预渲染 sprite。图片按玩家属性、怪、战斗状态动态合成。
 
-而且图片在 Cloudflare Workers 上 \<500ms 就能生成。真的。
+图在 Cloudflare Workers 上 \<500ms 生成。字面意思。
 
 ### 渲染架构
 
 ```plaintext
-Discord（你点了 "Attack"）
+Discord（你点"攻击"）
     ↓
-Cloudflare Worker 收到 interaction
+Cloudflare Worker 收到交互
     ↓
-更新游戏状态（经验值、血量等）
+更新游戏状态（XP、HP 等）
     ↓
 用 Satori 生成 JSX
     ↓
-用 Resvg (Wasm) 把 SVG 转成 PNG
+Resvg（Wasm）转 SVG → PNG
     ↓
 上传图片到 Discord
     ↓
-发送带图片的消息
+发带图的消息
 ```
 
-全部在一秒内完成。简直了。
+全程不到一秒。离谱。
 
-### 在 Workers 上渲染图片
+### Workers 侧图片渲染
 
-Konosuba 使用 **Satori**（JSX → SVG）和 **Resvg**（SVG → PNG）：
+Konosuba 用 **Satori**（JSX → SVG）加 **Resvg**（SVG → PNG）：
 
 ```typescript
-import Satori from 'satori';
+import { Satori } from 'satori';
 import initWasm from '@cf-wasm/resvg';
 
 async function renderBattle(gameState: GameState) {
   const resvg = await initWasm();
 
-  // 1. 创建 UI 的 JSX
+  // 1. 写 UI 的 JSX
   const jsx = (
-    <div style={{ display: 'flex', gap: '20px' }}>
+    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}="">
       <div>
         <h1>{gameState.player.name}</h1>
         <p>HP: {gameState.player.hp}/{gameState.player.maxHp}</p>
@@ -345,13 +345,13 @@ async function renderBattle(gameState: GameState) {
 }
 ```
 
-你写普通的 JSX。它变成 SVG。SVG 变成 PNG。在 Cloudflare Worker 上 \<100ms。
+正常写 JSX。变 SVG。SVG 变 PNG。Cloudflare Worker 上 \<100ms。
 
-你感受到这威力了吗？就是... 美 xD
+get 到威力了吗？美得很。
 
-### 游戏状态与进度
+### 游戏状态与成长
 
-玩家数据存在 Supabase 里：
+玩家数据在 Supabase：
 
 ```typescript
 const player = await db
@@ -370,11 +370,11 @@ const { data: updated } = await db
   .eq('id', player.id);
 ```
 
-每个动作（攻击、防御、治疗）都会更新数据库里的数据。然后用新数据重新生成图片。
+每次操作（攻击、防御、治疗）更新库里属性。再用新属性重渲图。
 
-### 交互 : 游戏按钮
+### 交互：玩法的按钮
 
-游戏用 **button interactions** 来做战斗操作：
+游戏用**按钮交互**做战斗操作：
 
 ```typescript
 {
@@ -382,13 +382,13 @@ const { data: updated } = await db
   components: [
     {
       type: 2,  // Button
-      style: 1,  // Primary（蓝色）
+      style: 1,  // Primary（蓝）
       label: 'Attack',
       custom_id: 'battle_attack'
     },
     {
       type: 2,
-      style: 2,  // Secondary（灰色）
+      style: 2,  // Secondary（灰）
       label: 'Defend',
       custom_id: 'battle_defend'
     }
@@ -396,11 +396,11 @@ const { data: updated } = await db
 }
 ```
 
-当你点 "Attack"，Discord POST 一个带有 `custom_id: 'battle_attack'` 的 interaction。handler 会路由它：
+点"Attack"，Discord POST 一个带 `custom_id: 'battle_attack'` 的交互。handler 路由：
 
 ```typescript
 if (interaction.type === 3) {
-  // Component interaction（按钮点击等）
+  // 组件交互（按钮点击等）
   const customId = interaction.data.custom_id;
 
   if (customId === 'battle_attack') {
@@ -412,30 +412,30 @@ if (interaction.type === 3) {
 }
 ```
 
-然后 boom，你计算伤害，更新数据库，重新生成图片，发送。
+Boom，算伤害，更新库，重渲图，发出去。
 
-这是一个完整的回合制游戏，没有任何持久连接。纯 HTTP 无状态。彻底离谱 xD
+回合制完整游戏，不维持任何连接。纯无状态 HTTP。烂得漂亮。
 
-## Supabase：为 Workers 而生的数据库
+## Supabase：为 Workers 生的库
 
-传统数据库（PostgreSQL、MySQL、MongoDB）都是为持久 TCP 连接设计的。你打开一个 socket，保持连接，发送查询。问题在于：**Cloudflare Workers 不支持持久 TCP 连接**。每个请求都是一个短暂的进程。一旦你响应客户端，Worker 就消失了。
+经典数据库（PostgreSQL、MySQL、MongoDB）为持久 TCP 连接设计。开 socket，连着，发查询。问题：**Cloudflare Workers 不支持持久 TCP 连接**。每次请求是个短命进程。回完客户端，Worker 就没了。
 
-你不能这样做：
+下面这样不行：
 
 ```typescript
-// 这在 Workers 上不 ⚠️ 工作
+// Workers 上这样不行
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();  // 持久 TCP 连接 = 死
 ```
 
-就连 `pg` 或 `postgres.js` 这样的原生 PostgreSQL 驱动也都使用 TCP 连接。在 Workers 上它们会崩溃。
+`pg`、`postgres.js` 这类原生 driver 也走 TCP。Workers 上全挂。
 
-**Supabase 解决了一切问题。**
+**Supabase 全解决。**
 
-Supabase 是在 PostgreSQL 之上的 REST API。你发起普通的 HTTP 请求。每次调用都是独立的，没有持久连接，没有需要管理的状态。它完美适配 serverless 模型。
+Supabase 是盖在 PostgreSQL 上的 REST API。发普通 HTTP 请求。每次调用独立，无持久连接，无状态要管。serverless 体质完美。
 
 ```typescript
-// 这在 Workers 上完美工作
+// Workers 上完美运行
 const { data, error } = await supabase
   .from('players')
   .select('*')
@@ -443,45 +443,45 @@ const { data, error } = await supabase
   .single();
 ```
 
-Supabase 客户端（`@supabase/supabase-js`）底层使用的是 `fetch`。而 `fetch` 在 Workers 上是原生支持的。零配置、零驱动、零持久连接。
+Supabase 客户端（`@supabase/supabase-js`）底层用 `fetch`。`fetch` 在 Workers 原生。零配置，零 driver，零持久连接。
 
-| 数据库 | Workers 兼容？ | 原因 |
+| 数据库 | 兼容 Workers？ | 为什么 |
 | --- | --- | --- |
-| **Supabase** | ✅ 是 | 无状态 REST API，纯 HTTP |
-| **PlanetScale (MySQL)** | ⚠️ 部分 | 仅 HTTPS 连接，不支持长事务 |
-| **Neon** | ⚠️ 部分 | Serverless 分支但需要 TCP 驱动 |
-| **Turso (libSQL)** | ⚠️ 部分 | HTTP 可行但有限制 |
-| **Prisma/Prisma Postgres** | ❌ 否 | 需要持久 TCP |
-| **MongoDB Atlas** | ❌ 否 | TCP 驱动，没有原生 REST API |
-| **Redis (Upstash)** | ✅ 是 | 基于 HTTP 的 REST API |
+| **Supabase** | ✅ 行 | 无状态 REST API，纯 HTTP |
+| **PlanetScale（MySQL）** | ⚠️ 半行 | 只能 HTTPS，没长事务 |
+| **Neon** | ⚠️ 半行 | serverless 分支，但 driver 要 TCP |
+| **Turso（libSQL）** | ⚠️ 半行 | HTTP 可行但受限 |
+| **Prisma/Prisma Postgres** | ❌ 不行 | 要持久 TCP |
+| **MongoDB Atlas** | ❌ 不行 | TCP driver，无原生 REST API |
+| **Redis（Upstash）** | ✅ 行 | REST API 走 HTTP |
 
-Supabase 的真正优势不仅仅是数据库----而是整个生态系统都是为边缘计算设计的：
+Supabase 真正强的还不只是库，是整套 edge-first 生态：
 
-- **Auth**：用于会话的 REST API，无状态运行
-- **Storage**：通过 HTTP 上传/下载文件
-- **Realtime**：可选的 WebSocket，但也可以通过 REST 轮询
-- **Row Level Security**：安全规则存在于数据库中，不在你的后端
+- **Auth**：REST API 管 session，无状态
+- **Storage**：文件上传下载走 HTTP
+- **Realtime**：WebSocket 可选，不想用就 REST 轮询
+- **Row Level Security**：安全规则写库里，不写后端
 
-对于 serverless Discord 机器人来说，Supabase 是最简单、最可靠的选择。无需配置驱动，无需维护连接，无需超时。只需要 HTTP 请求。
+serverless Discord 机器人，Supabase 是最简单最稳的选择。不配 driver，不养连接，不管超时。只发 HTTP 请求。
 
-如果你想看实际例子，看看上面的 Nibi：它的持久化代码就是 Supabase 上的 `readJson()` 和 `writeJson()`。无需迁移、无需复杂 schema、无需疯狂配置。开箱即用。而且如果你的机器人做大了，你可以在不更换提供商的情况下迁移到真正的 SQL 查询。
+看上面 Nibi 的例子就懂：持久化就是 `readJson()` 加 `writeJson()`。不用 migration，不用复杂 schema，不用重配置。直接跑。机器人做大了再迁真 SQL 查询，provider 都不用换。
 
-## Polyfills : 当 Node 想在 Workers 上跑的时候
+## Polyfill：Node 要在 Workers 上跑
 
-有些包依赖 Node 的 API。Kuromoji（日语解析器）用了 `XMLHttpRequest`。Workers 有 `fetch`，没有 `XMLHttpRequest`。
+有些包默认你在 Node。Kuromoji（假名解析）用 `XMLHttpRequest`。Workers 有 `fetch`，没 `XMLHttpRequest`。
 
-简单方案：在 index.ts 顶部加个 polyfill：
+简单解：在 index.ts 顶部加 polyfill：
 
 ```typescript
-// 为 kuromoji 做 XMLHttpRequest polyfill
+// 给 kuromoji 的 XMLHttpRequest Polyfill
 if (!globalThis.XMLHttpRequest) {
   globalThis.XMLHttpRequest = class {
-    // 最小 stub
+    // 最小 Stub
   } as any;
 }
 ```
 
-或者建一个专用模块：
+或写个专用模块：
 
 ```typescript
 // src/utils/polyfills.ts
@@ -495,18 +495,18 @@ import { setupPolyfills } from './utils/polyfills';
 setupPolyfills();
 ```
 
-就是基础 hack，但能用。
+基础 hack，但管用。
 
-## 做一个 npm 包 : hono-discord-interactions
+## 做个 npm 包：hono-discord-interactions
 
-手动做 bot 有很多样板代码：
+手写机器人 boilerplate 很多：
 
-*   验证 Discord 签名
-*   路由 interaction 类型
-*   处理命令、组件、弹窗
-*   返回合法的 JSON
+*   验 Discord 签名
+*   路由交互类型
+*   管命令、组件、modal
+*   回合法 JSON
 
-我们可以把这些抽象成一个 npm 包。比如：
+可以抽象成 npm 包。比如：
 
 ```typescript
 import { createDiscordHandler } from 'hono-discord-interactions';
@@ -536,9 +536,9 @@ app.post('/interactions', handler);
 export default app;
 ```
 
-砰。20 行代替 200 行。Nibi 的代码量能轻松减半。
+Boum。200 行变 20 行。Nibi 直接砍一半。
 
-以后再说 xD
+以后再说的想法。
 
 ## 部署
 
@@ -561,11 +561,11 @@ wrangler secret put SUPABASE_URL --env production
 wrangler deploy --env production
 ```
 
-结果 URL：`https://mon-bot.workers.dev/interactions`
+得到 URL：`https://mon-bot.workers.dev/interactions`
 
-成本：**免费**直到每天 10 万次请求。超出后：$0.50/百万次。
+成本：每天 10 万请求内**免费**。超出：100 万次 0.5 美元。
 
-剧透：除非你有 1 万个活跃用户，否则你永远花不到那 10 万次请求。
+剧透：用户不到一万活跃，你花不完 10 万请求。
 
 ### Vercel
 
@@ -575,57 +575,57 @@ npm run vercel:deploy
 
 URL：`https://mon-bot-xyz.vercel.app/api/interactions`
 
-同样免费。
+一样免费。
 
-### 两者同时跑
+### 两个一起
 
-Hono 哪里都能跑。你可以把同一份代码部署到 Cloudflare 和 Vercel。用来做冗余或者先测试再决定。
+Hono 到处跑。同一份代码同时部署 Cloudflare 和 Vercel。冗余或选型前对比都行。
 
-## 快速清单
+## 速查清单
 
-1.  在 Discord Developer Portal 创建一个 Application
-2.  复制 PUBLIC\_KEY、BOT\_TOKEN、APP\_ID
-3.  创建项目：
-4.  写 index.ts（签名验证 + 路由）
-5.  注册斜杠命令（一次即可）：
+1.  在 Discord Developer Portal 建应用
+2.  抄下 PUBLIC\_KEY、BOT\_TOKEN、APP\_ID
+3.  建项目：
+4.  写 index.ts（验签名加路由）
+5.  注册 slash 命令（一次）：
 6.  部署：
-7.  把 URL 放到 Discord（Developer Portal → Application → Interactions Endpoint URL）
-8.  Discord 测试连接（你必须回复 PING）
-9.  把 bot 邀请到服务器
+7.  把 URL 填进 Discord（Developer Portal → 应用 → Interactions Endpoint URL）
+8.  Discord 测试连接（你要回 PING）
+9.  拉机器人进服务器
 10. 搞定
 
-## 优势 vs 局限
+## 优点 vs 局限
 
-**优势**
+**优点**
 
-*   便宜（免费直到每天 10 万次请求）
-*   可伸缩（无需管理连接）
-*   简单（没有 WebSocket 样板代码）
-*   快速（Cloudflare = 边缘服务器）
-*   可移植（Hono 代码 = 多个平台）
+*   成本极小（每天 10 万请求内免费）
+*   可扩展（不用管连接）
+*   简单（无 WebSocket boilerplate）
+*   快（Cloudflare = 边缘服务器）
+*   可移植（Hono 代码到处跑）
 
 **局限**
 
-*   没有实时服务器事件（成员加入、角色添加、消息删除等）----你只收到交互（斜杠命令、按钮、弹窗）
-*   3 秒超时来回复----否则 Discord 显示 "Application did not respond"
-*   如果你需要真正的事件----需要单独的 HTTP webhook 或辅助 WebSocket 连接
+*   只能收交互（slash 命令、按钮、modal），收不到服务器实时事件（成员加入、身份组变更、消息删除等）
+*   3 秒超时回包，不然 Discord 显示"应用无响应"
+*   真要实时事件，得另加 HTTP webhook 或辅助 WebSocket 连接
 
-对 90% 的 bot（都基于斜杠命令）来说？够用了。
+90% 的机器人（全 slash 命令）？够了。
 
-## 总结
+## 结语
 
-我花了不少时间优化 KonosubaRPG 和 Nibi，要么为了节省尽可能多的请求，要么为了减少热 CPU 时间，要么为了减少冷启动。结果就是，几乎所有地方的性能都相当不错。
-要知道，我开始把大部分项目搬到云上（我都不知道这个词对不对）是因为我真的懒得继续在自己 VM 上托管它们了。真的，我觉得是 GitHub Actions 救了我的老命。Workers 也是，但当我发现可以用 GitHub Actions 加定时任务做守护进程时，真的救了我一命。
+我在 KonosubaRPG 和 Nibi 上抠了很久性能，要么省请求数，要么压热 CPU 时间，要么压冷启动。结果各项性能都很顶。
+说实话，我一开始把大部分项目云化（这词对吗）是因为懒得在自己 VPS 上养它们。真的，我觉得是 GitHub Actions 救了我的命。Workers 也是，但当我发现能用 GitHub Actions 加 schedule 跑 daemon，我是真松了口气。
 
-我可能会写一篇关于 [email-autoreply](https://github.com/fox3000foxy/email-autoreply/) 项目的文章，所以订阅 RSS 源等着看吧 :))。
+我应该会给 [email-autoreply](https://github.com/fox3000foxy/email-autoreply/) 写篇文章，订阅 RSS 等更新吧 :))。
 
-**要记住的 3 件事：**
+**三句话总结：**
 
-1.  **Interaction endpoints = HTTP 无服务器** -- 没有 WebSocket，没有持久连接。Discord POST，你回复。在 Cloudflare 上免费。
-2.  **Hono 是完美工具** -- 轻量框架（12KB），多运行时，零依赖。在 Cloudflare、Vercel、Node 上代码都一样。
-3.  **在 Workers 上渲染图片 = 离谱** -- Satori + Resvg (Wasm) 让你用 JSX 组合动态 UI，在 \<100ms 内转成 PNG。一个完整的游戏可以跑在这上面。
+1.  **Interaction endpoint = HTTP 无服务器**，无 WebSocket，无持久连接。Discord POST，你回。Cloudflare 免费。
+2.  **Hono 是完美工具**，12KB 轻框架，多运行时，零依赖。Cloudflare、Vercel、Node，到处同一份代码。
+3.  **Workers 上图片渲染很疯**，Satori + Resvg（Wasm）在 JSX 里拼动态 UI，转 PNG 不到 100ms。完整游戏跑得动。
 
-太牛了 xD
+疯得很。
 
 ```plaintext
 wrangler deploy

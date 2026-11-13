@@ -1,90 +1,90 @@
 ---
-title: بوتنة مزرعة Microsoft Rewards
-description: كيف برمجت بوتًا لجني نقاط Microsoft Rewards على نطاق واسع -- ولماذا عززت
-  مايكروسوفت دفاعاتها منذ ذلك الحين.
+title: توفير مزرعة Microsoft Rewards بالبوتات
+description: كيف برمجت بوتا لتوفير نقاط Microsoft Rewards على نطاق واسع،
+  ولماذا شددت Microsoft دفاعاتها منذ ذلك الحين.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "YJf5akMQ8EqSuH1nif+qunsG+Ry9GSUwNRfq/IM4UAg2cm9O1bWmRlfJr0N8kucExTVd/ODrzw5ZKEGK48ZGfQ=="
+author_sig: "0cp5Ar3i8XyuoKyxRlWH3eW3tjAUCFS9VqsVUVQmMpQGiEOD5g/zmTm2vxmjayXFVOS5IO6HVe8//BGvhKYXkA=="
 ---
 
-> **ملاحظة (2026):** هذا المشروع لم يعد قيد الصيانة. مايكروسوفت عززت بشكل كبير اكتشافها لمكافحة البوتات -- ما كان يعمل في ذلك الوقت لم يعد يعمل اليوم. الكود والمنهجية الموصوفة أدناه مُحتفظ بها لأغراض الأرشفة والتوضيح فقط.
+> **ملاحظة (2026) :** لم يعد هذا المشروع مصانا. شددت Microsoft كثيرا كشفها ضد البوتات، فما كان يعمل آنذاك لم يعد يعمل اليوم. الكود والمقاربة الموصوفان أدناه محفوظان لأغراض الأرشفة والعرض فقط.
 
 ## مقدمة
 
-اكتشفت Microsoft Rewards منذ بضع سنوات. كان ذلك خلال فترة الحجر الصحي، لكن ذلك لا يغير حقيقة أنني كنت مضطرًا لاستخدام الرقابة الأبوية Microsoft Family Safety وبالتالي المرور عبر Edge. وهناك اكتشفت Rewards.
+اكتشفت Microsoft Rewards قبل سنوات. كان ذلك أثناء الحجر، وكنت آنذاك مجبرا على استخدام الرقابة الأبوية Microsoft Family Safety وبالتالي المرور عبر Edge. وهناك اكتشفت Rewards.
 
-في ذلك الوقت كان عمري 14 سنة فقط ولم يكن هناك شيء في الكتالوج يثير اهتمامي. الآن أقول لنفسي أنه مع المهارات التي اكتسبتها، يمكنني جني النقاط باستخدام البوتات، ثم إعطاء الرموز أو حتى بيعها بسعر أقل إذا أردت حقًا (لكن بصراحة، لا أعتقد أنني سأفعل ذلك). المهم، سأخبرك كيف برمجت بوتًا يجني الحسابات على نطاق واسع.
+آنذاك كان عمري 14 فقط ولا شيء في الفهرس يهمني. الآن أقول لنفسي أنه بالمهارات التي اكتسبتها، أستطيع توفير نقاط ببوتات، ثم إعطاء الرموز أو حتى إعادة بيعها أرخص إذا أردت فعلا (لكن بصراحة، لا أظنني سأفعل). سأروي لك كيف برمجت بوتا يوفّر حسابات على نطاق واسع.
 
 ---
 
-## ما هو Microsoft Rewards؟
+## ما هو Microsoft Rewards ؟
 
-باختصار: هو برنامج يكافئ مستخدمي Edge بنقاط مقابل أنشطة مثل عمليات البحث، اختبارات صغيرة، ألعاب، وإضافة (لكن تلك قصة أخرى).
+باختصار : إنه برنامج يكافئ مستخدمي Edge بنقاط لأنشطة مثل البحوث والاختبارات الصغيرة والألعاب وإضافة (لكن تلك قصة أخرى).
 
-ترى هنا أشياء "Explore":
+ترى هنا كتل "Explore" :
 ![Explore screenshot](assets/20260313_135010_image.png)
 
-هذا مثلاً ما يسمونه "مجموعة اليوم".
+هنا مثلا ما يسمونه "set اليوم" :
 ![Daily set screenshot](assets/20260313_135038_image.png)
 
-حتى أنهم صنعوا نظامًا للتتابع، هذا مذهل جدًا.
+وصنعوا حتى نظام streak، وهذا جنوني بعض الشيء.
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-يوجد أيضًا نظام مستويات وهذا ممتع تمامًا:
+وهناك أيضا نظام مستوى والتقدم يجعل الروتين مُدمنا فعلا :
 ![Level screenshot](assets/20260313_135340_image.png)
 
-إذن لديك طرق عديدة لكسب النقاط، ومعظمها يومية.
-الفكرة هنا ستكون صنع بوت يقوم بالأنشطة نيابة عنك، لجني النقاط على نطاق واسع وإكمال روتين الجني الخاص بك.
+إذن لديك طرق كثيرة لكسب النقاط، ومعظمها يومي.
+الفكرة هنا ستكون صنع بوت يقوم بالأنشطة مكانك، لتوفير نقاط على نطاق واسع وإكمال روتين التوفير خاصتك.
 
-كما ترى أدناه، معظم المكافآت هي بطاقات هدايا، لكن هناك أيضًا أشياء رائعة مثل الألعاب أو الاشتراكات.
+كما ترى أدناه، معظم المكافآت بطاقات هدايا، لكن هناك أيضا خيارات مثيرة مثل ألعاب أو اشتراكات.
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
-| المكافأة | الفئة | التكلفة بالنقاط |
+| المكافأة | الفئة | Kost بالنقاط |
 | --- | --- | --- |
-| **Rakuten TV – فيلم HD** | محتوى رقمي | 1٬785 |
-| **Roblox (بطاقة رقمية)** | لعبة / محتوى رقمي | 6٬750 |
-| **بطاقة هدايا Microsoft** | متجر / خدمة | 5٬660 |
-| **بطاقة هدايا Xbox** | متجر / خدمة | 5٬660 |
-| **بطاقة هدايا Microsoft Solitaire Collection** | لعبة / محتوى رقمي | 1٬500 |
-| **Minecraft Minecoins** | لعبة / محتوى رقمي | 2٬500 |
-| **بطاقة هدايا League of Legends** | لعبة / محتوى رقمي | 2٬000 |
-| **رمز عملات Overwatch (رقمي)** | لعبة / محتوى رقمي | 2٬000 |
-| **Sea of Thieves – حزمة العملات القديمة** | لعبة / محتوى رقمي | 1٬700 |
-| **Zalando – بطاقة هدايا** | متجر / خدمة | 7٬205 |
-| **Carrefour – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Cultura – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Fnac‑Darty – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **La Redoute – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Mango – بطاقة هدايا** | متجر / خدمة | 36٬025 |
-| **Wonderbox – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Yves Rocher – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Amazon.fr – شيك هدية** | متجر / خدمة | 7٬205 |
-| **Foot Locker – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **IKEA FR – بطاقة هدايا** | متجر / خدمة | 36٬025 |
-| **IKEA FR – بطاقة هدايا (تصميم آخر)** | متجر / خدمة | 7٬200 |
-| **Marionnaud – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Asos – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Adidas FR – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Deliveroo France – بطاقة هدايا** | متجر / خدمة | 21٬615 |
-| **H&M France – بطاقة هدايا** | متجر / خدمة | 14٬410 |
-| **Global Hotel Card (Expedia Group)** | متجر / خدمة | 7٬205 |
-| **Uber Eats France – بطاقة هدايا** | متجر / خدمة | 36٬025 |
+| **Rakuten TV – 1 فيلم HD** | محتوى رقمي | 1 785 |
+| **Roblox (بطاقة رقمية)** | لعبة / محتوى رقمي | 6 750 |
+| **بطاقة هدايا Microsoft** | متجر / خدمة | 5 660 |
+| **بطاقة هدايا Xbox** | متجر / خدمة | 5 660 |
+| **بطاقة هدايا Microsoft Solitaire Collection** | لعبة / محتوى رقمي | 1 500 |
+| **Minecraft Minecoins** | لعبة / محتوى رقمي | 2 500 |
+| **بطاقة هدايا League of Legends** | لعبة / محتوى رقمي | 2 000 |
+| **رمز Overwatch عملات (رقمي)** | لعبة / محتوى رقمي | 2 000 |
+| **Sea of Thieves – حزمة العملات القديمة** | لعبة / محتوى رقمي | 1 700 |
+| **Zalando – بطاقة هدايا** | متجر / خدمة | 7 205 |
+| **Carrefour – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Cultura – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Fnac‑Darty – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **La Redoute – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Mango – بطاقة هدايا** | متجر / خدمة | 36 025 |
+| **Wonderbox – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Yves Rocher – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Amazon.fr – شيك هدايا** | متجر / خدمة | 7 205 |
+| **Foot Locker – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **IKEA FR – بطاقة هدايا** | متجر / خدمة | 36 025 |
+| **IKEA FR – بطاقة هدايا (تصميم آخر)** | متجر / خدمة | 7 200 |
+| **Marionnaud – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Asos – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Adidas FR – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Deliveroo France – بطاقة هدايا** | متجر / خدمة | 21 615 |
+| **H&M France – بطاقة هدايا** | متجر / خدمة | 14 410 |
+| **Global Hotel Card (Expedia Group)** | متجر / خدمة | 7 205 |
+| **Uber Eats France – بطاقة هدايا** | متجر / خدمة | 36 025 |
 
-الآن بعد أن فهمت قيمة البرنامج، دعنا ننتقل إلى البوتنة.
+الآن وقد فهمت فائدة البرنامج، لنهتم بالتوفير بالبوتات.
 
 ---
 
-## الاختبارات الأولى
+## اختبارات أولى
 
-قبل بناء البوت، أردت التأكد من أن عنوان IP الخاص بي لن يتم وضع علامة عليه لاستخدام مئات الحسابات من نفس العنوان. أنت تعرفني، سأستخدم Tor مع وكيل دوار. ولا أريد استضافة البوت على VPS -- أريده أن يعمل في GitHub Action.
+قبل بناء بوتي، أردت التأكد أن IP خاصتي لن يُوسَم لاستخدام مئات الحسابات من نفس العنوان. تعرفني، أمر عبر Tor مع وكيل دوّار. أريد تنفيذه في GitHub Action بدلا من VPS.
 
-لذا كتبت workflow بسيطًا:
+فكتبت workflow بسيطا :
 
 ```yaml
 name: Tor Proxy Curl
@@ -134,26 +134,26 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-هذا الـ workflow يقوم فقط بتثبيت Tor، تشغيله، وإجراء طلب curl عبره.
+هذا workflow يثبت فقط Tor، ويشغّله، وينفذ طلب curl عبره.
 
-التشغيل الأول أعطى هذه النتيجة:
+أعطى أول تشغيل هذه النتيجة :
 ![Tor curl first run](assets/20260313_140705_image.png)
 
-إحصائيات الوقت كانت:
+كانت إحصاءات الزمن :
 !Timings
 
-تشغيل ثانٍ أعطى هذه النتيجة:
+أعطى تشغيل ثانٍ هذه النتيجة :
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-كما ترى، عناوين IP مختلفة، لذا لن يتم الإبلاغ عنا لاستخدامنا المسيء من نفس IP. خبر جيد -- يمكننا مواصلة تطوير بوت الجني.
+كما ترى، IP مختلفة، إذن نتجنب وسم الاستخدام المسيء من نفس IP. خبر سار : نستطيع مواصلة تطوير بوت التوفير.
 
 ---
 
 ## أول اختبار مع Selenium
 
-لأتمتة الواجهة، سأستخدم **Selenium**: أداة تتحكم بمتصفح حقيقي (Chrome/Edge/Firefox) بدلاً من المستخدم. في سياق GitHub Action، هذا يعني تثبيت متصفح + مشغله، ثم تشغيل script يتصل بـ Microsoft Rewards وينقر حيث يجب.
+لأتمتة الواجهة، سأستخدم **Selenium** : أداة تتحكم بمتصفح حقيقي (Chrome/Edge/Firefox) مكان مستخدم. في سياق GitHub Action، يعني ذلك تثبيت متصفح + مشغّله، ثم إطلاق سكربت يتصل بـMicrosoft Rewards وينقر حيث يلزم.
 
-### مثال script بلغة JavaScript (Node.js + selenium-webdriver)
+### مثال سكربت JavaScript (Node.js + selenium-webdriver)
 
 ```js
 import { Builder, By, Capabilities, until, WebDriver } from 'selenium-webdriver';
@@ -170,14 +170,14 @@ const chromeOptions = {
 };
 
 async function applyStealth(driver: WebDriver) {
-  // Inject script before any page JS runs to reduce automation fingerprinting.
+  // حقن سكربت قبل عمل أي JS للصفحة لتقليل بصمة الأتمتة.
   await (driver as any).sendDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
     source: `
       Object.defineProperty(navigator, 'webdriver', {
         get: () => undefined
       });
 
-      // Some sites check for chrome runtime and plugins
+      // بعض المواقع تتحقق من chrome runtime والإضافات
       window.chrome = { runtime: {} };
       Object.defineProperty(navigator, 'plugins', {
         get: () => [1, 2, 3, 4, 5],
@@ -199,23 +199,23 @@ async function applyStealth(driver: WebDriver) {
     const targetUrl = 'https://rewards.bing.com/';
     await driver.get(targetUrl);
 
-    console.log('After navigation: url=', await driver.getCurrentUrl());
-    console.log('After navigation: title=', await driver.getTitle());
+    console.log('بعد التنقل : الرابط=', await driver.getCurrentUrl());
+    console.log('بعد التنقل : العنوان=', await driver.getTitle());
 
     const signInButton = await driver.wait(
       until.elementLocated(By.css('#rewards-header-sign-in')),
       20000,
-      'Timed out waiting for sign-in button (may indicate 400/blocked page)'
+      'انتهت المهلة بانتظار زر الدخول (قد يشير لصفحة 400/محظورة)'
     );
 
-    console.log('Page loaded, sign in button found:', await signInButton.getText());
+    console.log('حُمّلت الصفحة، وُجد زر الدخول:', await signInButton.getText());
   } finally {
     await driver.quit();
   }
 })();
 ```
 
-نتيجة الـ script:
+نتيجة السكربت :
 
 ```
 DevTools listening on ws://127.0.0.1:50274/devtools/browser/37b9ea79-0e5d-4673-9e91-7ffeaf0d37f8
@@ -224,5 +224,5 @@ After navigation: title= Bienvenue dans Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-حسنًا، هذا يعني أننا لم نسجل الدخول بعد، لذا سنقوم الآن ببناء طلب تسجيل الدخول ونرى ما إذا كان بإمكاننا تسجيل الدخول إلى حساب Microsoft Rewards الخاص بنا للقيام بالأنشطة.
-<!-- ## CET ARTICLE EST ENCORE EN COURS DE RÉDACTION, JE METTRAI À JOUR AVEC LES ÉTAPES DE CONNEXION ET DE BOTTING DES ACTIVITÉS BIENTÔT ! RESTE À L'ÉCOUTE. -->
+تؤكد هذه النتيجة أننا ما زلنا غير متصلين، إذن سأبني الآن طلب الدخول وأختبر الاتصال بحساب Microsoft Rewards خاصتي لأتمتة الأنشطة.
+<!-- ## هذا المقال ما زال قيد التحرير، سأحدّث مع خطوات الاتصال وتوفير الأنشطة قريبا ! ابقَ مستمعا. -->

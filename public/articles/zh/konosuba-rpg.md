@@ -1,9 +1,7 @@
 ---
-title: "我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切"
-description: "一个 Discord 回合制 RPG，每次操作都实时生成 WebP 图片：URL 即游戏状态、确定性 RNG、WASM 管线、5 级缓存、无服务器 bot。"
+title: 花了一个周末读 konosuba-rpg 的代码，这是我的发现
+description: Discord 回合制 RPG，每步操作实时生成一张 WebP 图：URL 即游戏状态、确定性 RNG、WASM 流水线、5 层缓存、无服务器机器人。
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - discord
   - rpg
@@ -14,15 +12,17 @@ tags:
   - wasm
   - gaming
   - serverless
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "uaDX2objeSVwDY5H8JUhlCN4AeeX/NxtB/BCpshwBt+J4WUf/9LNMlASrxQMYmRlRMtJJHef6vkcPb61dqyQPg=="
+author_sig: "5h49eiI3viRML54pb6I5xhWEUfRkVEBpVfx7ZfqWNQnAjl8fc2LJacYMG9HqE6sKQ6b02eYqxOIAbOVhj6u3nw=="
 ---
 
-# 我花了一个周末阅读 konosuba-rpg 的代码，这是我发现的一切
+# 花了一个周末读 konosuba-rpg 的代码，这是我的发现
 
-我维护这个项目已经有一段时间了，但静下心来重读自己的代码总是很有启发。konosuba-rpg 是一个 Discord 回合制 RPG，每次操作都实时生成一张 WebP 图片。不是文本 embed。而是一张真正的合成图像，包含精灵、血条、战斗信息----全部都有。
+这个项目我维护挺久了，但静下心重读自己的代码总有收获。konosuba-rpg 是个 Discord 回合制 RPG，每次操作实时生成一张 WebP 图片。是真正的合成图，带立绘、血条、战斗消息，全都有。
 
-技术栈：TypeScript、Hono、Vercel、Cloudflare Workers、Supabase。完全免费托管。而且这个 Discord bot 无需持久化服务器。这篇文章将解释这一切是如何组合在一起的。
+技术栈：TypeScript、Hono、Vercel、Cloudflare Workers、Supabase。全免费托管。Discord 机器人无持久服务器。这篇讲它们是怎么拼到一起的。
 
 ![游戏初始状态](/images/konosuba-rpg/game_init.webp)
 
@@ -30,20 +30,20 @@ author_sig: "uaDX2objeSVwDY5H8JUhlCN4AeeX/NxtB/BCpshwBt+J4WUf/9LNMlASrxQMYmRlRMt
 
 ## 基础设计：URL 即游戏状态
 
-最令人印象深刻的一点是：服务端完全没有保存游戏状态。一场战斗的完整状态全部包含在 URL 中。
+最先注意到的：服务端 gameplay 没有任何状态。整场战斗的状态全在 URL 里。
 
 ```
 /konosuba-rpg/fr/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
 ```
 
-seed 之后的每个片段都是一个已执行的操作。服务器收到这个 URL，从头开始，按顺序重放所有操作，然后返回该时刻的战斗图片。没有会话，没有与用户相关的内存状态。
+seed 后面每一段都是一个操作。服务器收到这个 URL，从头开始，按顺序重放全部操作，返回这一刻的战斗图。没有任何 session，没有内存里跟用户绑定的状态。
 
-Discord 通过交互式按钮工作----当玩家按下"攻击"时，Discord 将按钮的 `custom_id` 发送给服务器。这个 custom_id 包含添加了新操作后的压缩战斗 URL。服务器从头重新计算所有内容并返回更新后的图片。
+Discord 靠可交互按钮工作，玩家点"攻击"，Discord 把按钮的 `custom_id` 发给服务器。这个 custom_id 里是压缩后的战斗 URL 加上新操作。服务器从零重算，返回更新后的图。
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// 在函数外部预编译----不会在每次调用时重新创建
+// 函数外预编译，不用每次调用重建
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -51,7 +51,7 @@ export default function processUrl(url: string): [Random, string[], string, stri
   for (const part of urlParts) {
     if (VALID_MOVES_SET.has(part.toUpperCase())) moves.push(part.toUpperCase());
   }
-  // seed = 第6个片段，哈希到 8096 个值
+  // seed = 第 6 段，哈希到 8096 个值
   const seedStr = (urlParts[5] || "").toLowerCase();
   let seed = 0;
   for (let i = 0; i < seedStr.length; i++) {
@@ -61,15 +61,15 @@ export default function processUrl(url: string): [Random, string[], string, stri
 }
 ```
 
-在函数外部预编译 `Set` 是个小细节，但可以避免在每次调用时重建该结构，在模块可能被重新评估的边缘计算环境中尤其重要。
+函数外预编译的 `Set` 是个细节，但在模块可能被反复求值的 edge 环境里，避免每次调用重建结构。
 
-### RNG：改良版 RC4
+### RNG：魔改 RC4
 
-随机数生成器是一个将 RC4（流加密算法）改造为 PRNG 的实现。
+随机数发生器是 RC4 实现（流加密算法），拿来当 PRNG 用。
 
 ```typescript
 export class Random {
-  private S: number[]; // 256 条目表
+  private S: number[]; // 256 项的表
   private i: number;
   private j: number;
 
@@ -79,7 +79,7 @@ export class Random {
     let workingSeed = seed || Date.now();
     for (let i = 0; i < 256; i++) {
       j = (j + this.S[i] + (workingSeed & 0xff)) & 0xff;
-      // swap S[i] 和 S[j]
+      // 交换 S[i] 和 S[j]
       [this.S[i], this.S[j]] = [this.S[j], this.S[i]];
       workingSeed >>>= 8;
     }
@@ -91,24 +91,24 @@ export class Random {
 }
 ```
 
-为什么用 RC4？因为它是一个确定性 PRNG，具有良好的分布特性和合理的抗 seed 碰撞能力。相同的 seed = 相同的数字序列 = 每次战斗结果相同。这样可以通过保留 URL 来"重放"任何战斗，并确保两个不同的服务器（Vercel + Cloudflare）对相同的 URL 产生完全相同的结果。
+为什么 RC4？因为它是确定性 PRNG，分布不错，seed 碰撞抗性也还行。同 seed = 同样的数字序列 = 同样的战斗。这样任何战斗靠 URL 就能"重放"，还保证两台服务器（Vercel + Cloudflare）对同一 URL 算出完全一样的结果。
 
 ---
 
-## Discord 100 字符限制问题
+## Discord 100 字符 custom_id 上限问题
 
-Discord 对按钮的 `custom_id` 施加了 100 个字符的限制。经过几十次操作后，战斗 URL 很容易超过这个限制。
+Discord 给按钮的 `custom_id` 限 100 字符。战斗打几十步，URL 轻松超限。
 
-有两种机制解决这个问题。
+两招应对。
 
-### 1. RLE 操作压缩
+### 1. 操作的 RLE 压缩
 
-操作被编码为单个字符（`a`=attack, `d`=defend, `h`=hug...）并通过游程编码压缩：
+操作编码成单个字符（`a`=攻击、`d`=防御、`h`=拥抱……），再做 run-length 编码：
 
 ```typescript
 // movesUtils.ts
 export function compressMoves(moves: string): string {
-  // "aaaaaadddh" → "a6d3h"
+  // "aaaaaaadddh" → "a6d3h"
   let result = "";
   let count = 1;
   for (let i = 1; i <= actions.length; i++) {
@@ -123,11 +123,11 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-很简单，但当玩家连续攻击 10 次时，`aaaaaaaaaa`（10 字符）会变成 `a10`（3 字符）。UI 中的"攻击 x4"和"攻击 x10"按钮正是为此而设----加快战斗速度同时更好地压缩 payload。
+简单，但玩家连点 10 次攻击时，`aaaaaaaaaa`（10 字符）变 `a10`（3 字符）。UI 里"攻击 x4""攻击 x10"按钮就是干这个的，加速战斗的同时把 payload 压得很好。
 
-### 2. 当压缩不够用时的会话 Token
+### 2. 压不住就用 session token
 
-如果压缩后的 payload 仍然太长，则会将其存入数据库并分配一个短 token：
+压缩完还太长，就存库里，换个短 token：
 
 ```typescript
 // gameSessionService.ts
@@ -135,49 +135,49 @@ const TOKEN_PREFIX = "gs.";
 const TOKEN_SIZE = 10; // "gs.aBcDeFgHiJ"
 
 export async function encodeGameplayButtons(buttons: RawButton[]): Promise {
-  // 按 battle_key 分组 payload，批量插入 Supabase
-  // 将 custom_id 替换为 "gs.{token}:{userId}"
+  // 按 battle_key 分组，批量插入 Supabase
+  // 把 custom_id 换成 "gs.{token}:{userId}"
 }
 
 export async function decodeGameplayPayloadWithStatus(encodedPayload: string, userID: string) {
   if (!encodedPayload.startsWith(TOKEN_PREFIX)) {
-    return { payload: encodedPayload }; // 无需查找
+    return { payload: encodedPayload }; // 不需要查就别查
   }
   // 先查内存，再查 Supabase
   const cached = tokenToSession.get(token) || await loadTokenRowByToken(token);
-  // 验证所有权、TTL（7 天）和 turn_version（防止重放旧状态）
+  // 验归属、TTL（7 天）、turn_version（防止重放旧状态）
 }
 ```
 
-会话的 TTL 为 7 天，每 10 分钟自动清理一次。`turnVersion` 验证可防止玩家在进度前进后重放过期状态----这是对意外"回退"的巧妙保护。
+session 7 天 TTL，每 10 分钟自动清理。`turnVersion` 校验防止玩家点回过期状态，不小心"读档"回去的保护，很隐蔽。
 
-内存中的两个 Maps（`tokenToSession`、`latestTurnByBattle`）使用与图片缓存相同的 `globalThis as unknown as GameSessionGlobals` 模式，原因将在下文说明。
+两个内存 Map（`tokenToSession`、`latestTurnByBattle`）和图片缓存一样，用 `globalThis as unknown as GameSessionGlobals` 模式，原因后面讲缓存时再说。
 
 ---
 
-## 图片渲染管线
+## 图片渲染流水线
 
-![对史莱姆的战斗开始](/images/konosuba-rpg/shot_01_start.webp)
+![和史莱姆开战](/images/konosuba-rpg/shot_01_start.webp)
 
-`/konosuba-rpg/:lang/*` 路由返回的不是 JSON。它返回按需生成的 WebP 图片。
+`/konosuba-rpg/:lang/*` 路由返回的不是 JSON。是按需生成的 WebP 图。
 
-管线组织为 3 个合成层：
+流水线是 3 层合成：
 
 ```
-背景（棋盘 + 边框）
+Background（棋盘 + 边框）
     +
-角色层（玩家精灵 + 怪物，固定位置）
+Characters layer（玩家和怪的立绘，固定坐标）
     +
-UI 覆盖层（血条、消息、角色图标，通过 Satori → SVG → PNG）
+UI overlay（血条、消息、人物图标，经 Satori → SVG → PNG）
     ↓
 Photon.watermark() × 2
     ↓
 WebP 输出
 ```
 
-**背景**：两张固定图片（棋盘和边框），从文件系统加载并合成一次。
+**Background**：两张固定图（棋盘和边框），从文件系统加载，合成一次。
 
-**角色层**：精灵按计算出的坐标定位。死亡的玩家被排除在外（`activeSlots = slots.filter(s => playerHp[s.i] > 0)`）。敌方精灵通过自定义 `flipX` 水平镜像----逐像素循环而非外部依赖。
+**Characters layer**：立绘按算好的坐标放。死了的玩家剔除（`activeSlots = slots.filter(s => playerHp[s.i] > 0)`）。敌方立绘水平镜像，用手写的 `flipX`，逐像素循环，不引外部依赖。
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -196,24 +196,24 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 }
 ```
 
-**UI 覆盖层**：这是最重的部分。界面的 JSX（血条、文字、图标）以 React-like 方式通过 Satori 描述，渲染为 SVG，由 `@cf-wasm/resvg` 转换为 PNG，然后导入 Photon 进行最终合成。Satori + resvg 是两个专为 Cloudflare Workers 编译的 WASM 模块，使用了 `edge-light` 标志。
+**UI overlay**：最重的部分。界面 JSX（血条、文字、图标）用类 React 写，Satori 渲染成 SVG，`@cf-wasm/resvg` 转 PNG，再导进 Photon 做最终合成。Satori + resvg 都是专门给 Cloudflare Workers 编译的 WASM 模块，带 `edge-light` 标志。
 
 ![防御动作](/images/konosuba-rpg/shot_03_defend.webp)
 
-![战斗进行中](/images/konosuba-rpg/shot_02_combat.webp)
+![战斗中](/images/konosuba-rpg/shot_02_combat.webp)
 
 ![拥抱动作](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
-## 缓存系统----最精心设计的部分
+## 缓存系统，最下功夫的部分
 
-共有 5 个不同级别的缓存。每个缓存针对管线的不同粒度。
+5 层不同的缓存。每一层管流水线里不同粒度的东西。
 
 ```typescript
-// renderImage.ts -- 全部放在 globalThis 上
-G.__imageCache  ??= {} as Record; // 原始素材
-G.__base64Cache ??= {} as Record;       // 素材的 base64（供 Satori 使用）
+// renderImage.ts -- 全挂 globalThis
+G.__imageCache  ??= {} as Record; // 原始资源
+G.__base64Cache ??= {} as Record;       // 资源的 base64（给 Satori 用）
 G.__fontCache   ??= {} as Record; // 字体
 G.__photonCache    ??= new LRUCache(40, freePhoton);
 G.__layerCache     ??= new LRUCache(12, freePhoton);
@@ -221,23 +221,23 @@ G.__uiPhotonCache  ??= new LRUCache(30, freePhoton);
 G.__renderOutputCache ??= new LRUCache(120);
 ```
 
-`globalThis` 上的 `??=` 模式：边缘 worker 中的 JavaScript 模块在某些配置下可能在请求之间被重新评估。使用 `??=` 将缓存存储在 `globalThis` 上可确保它们在重新评估后仍然存在而不会重新创建。
+`??=` 加 `globalThis` 模式：在某些配置的 edge worker 里，JS 模块两次请求之间可能被重新求值。缓存挂 `globalThis` 上加 `??=`，保证重求值也不丢、不重建。
 
-### WASM 驱逐机制
+### WASM 驱逐
 
-Photon 图片缓存（`photonCache`、`layerCache`、`uiPhotonCache`）使用驱逐回调：
+Photon 图片缓存（`photonCache`、`layerCache`、`uiPhotonCache`）用驱逐回调：
 
 ```typescript
 function freePhoton(_key: string, img: Photon.PhotonImage): void {
-  try { img.free(); } catch { /* 已释放 */ }
+  try { img.free(); } catch { /* 已经释放了 */ }
 }
 
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` 是一个 WASM 对象，其内存在 WASM 线性端分配，不受 JavaScript GC 管理。如果不显式调用 `.free()`，这块内存永远不会被释放。LRU 驱逐会自动触发 `.free()`----这是 JavaScript 中的 RAII 模式。
+`Photon.PhotonImage` 是 WASM 对象，内存 alloc 在 WASM 线性内存里，JS GC 管不着。不显式 `.free()` 就永远不释放。LRU 驱逐时自动调 `.free()`，等于把 RAII 搬到了 JavaScript 里。
 
-### 缓存键故意有损
+### 缓存 key 故意做成有损的
 
 ```typescript
 function buildCharactersKey(playerImages: string[][], playerHp: number[], creatureImages: string[], creatureHp: number): string {
@@ -246,23 +246,23 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-角色层的缓存键不编码 HP 的精确值----只有 `1`（活着）或 `0`（死亡）。因为 40 HP 的玩家和 15 HP 的玩家精灵是完全相同的。只要没有人倒下，缓存命中可以承受任何伤害。
+角色层 key 不编码精确 HP，只记 `1`（活）或 `0`（死）。因为 40 血和 15 血的玩家立绘一模一样。只要没人倒下，挨多少打都不影响这层缓存命中。
 
-而 UI 缓存键则编码精确的 HP（血条每次受击都会变化）和消息的哈希值：
+UI 层 key 则相反，编码精确 HP（血条每刀都变）和消息哈希：
 
 ```typescript
 function hashString(value: string): string {
   let hash = 0;
   for (let i = 0; i < value.length; i++) {
-    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // 32 位有符号整数
+    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // 有符号 32 位整数
   }
   return hash.toString(16);
 }
 ```
 
-`Math.imul` 强制 32 位整数乘法，避免了 float64 转换并产生稳定的多项式哈希。不需要外部依赖。
+`Math.imul` 强制 32 位整数乘法，不走 float64 转换，哈希多项式稳定。省掉一个外部依赖。
 
-### 无栈溢出的 base64 转换
+### base64 转换防栈溢出
 
 ```typescript
 function getBase64Cached(key: string, buf: ArrayBuffer): string {
@@ -279,39 +279,39 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)` 在大图片上可能导致栈溢出，因为参数是通过调用栈传递的。按 32KB 分块可以避免这个问题。结果会被缓存----同一张图片的 base64 转换在每个 worker 实例中只执行一次。
+`String.fromCharCode(...大数组)` 参数走调用栈，大图直接栈溢出。按 32K 分块就没事。结果进缓存，同一张图每个 worker 实例只转一次。
 
 ---
 
-## STRIPPER.md----await 串行审计
+## STRIPPER.md：串行 await 审计
 
-仓库中有一个 `STRIPPER.md` 文件，记录了 `await` 并行化的审计情况。以下是一些记录的例子：
+仓库里有个 `STRIPPER.md`，记录了一次 await 并行化审计。举几个记下来的：
 
-- 玩家资料加载曾串行执行 3 次 Supabase 查询（进度、run 摘要、成就）。它们之间没有依赖关系，已改为 `Promise.all`。
-- 战斗结束奖励发放（饰品 + 消耗品）是串行的。同样已并行化。
-- 按钮的会话 token 创建是逐组进行的。独立的组现在并行创建。
+- 读玩家档案原来是 3 个 Supabase 请求串行（进度、run 历史、成就）。改成 `Promise.all`，三者无依赖。
+- 战斗结算发奖励（饰品加消耗品）原来串行。同样并行化。
+- 按钮 session token 创建原来按组串行。独立组并行创建。
 
 ```typescript
-// progressionService.ts -- 之前（串行）
+// progressionService.ts -- 改之前（串行）
 await grantAccessoryDropRewards(...);
 await grantConsumableDropRewards(...);
 
-// 之后
+// 改之后
 await Promise.all([
   grantAccessoryDropRewards(...),
   grantConsumableDropRewards(...),
 ]);
 ```
 
-没什么革命性的，但在 serverless 环境中，每毫秒响应时间都计费（或影响冷启动），这就很重要了。
+没什么革命性的，但在 serverless 里每毫秒响应时间都算钱（冷启动也算），值得抠。
 
 ---
 
-## 无持久服务器的 Discord bot
+## 无持久服务器的 Discord 机器人
 
 ![胜利](/images/konosuba-rpg/shot_05_win.webp)
 
-一个常被误解的点：Discord bot 不一定需要持久的 WebSocket 连接。Discord 提供了一个替代方案：**Interactions Endpoint URL**。你向 Discord 提供一个 HTTPS URL，Discord 会为每个交互（斜杠命令、按钮、自动补全）发送一个 POST 请求。
+常被误解的一点：Discord 机器人不一定需要 WebSocket 长连接。Discord 提供了替代方案：**Interactions Endpoint URL**。你给 Discord 一个 HTTPS 地址，Discord 每次交互（slash 命令、按钮、自动补全）POST 过来。
 
 ```typescript
 // interactions.ts
@@ -321,18 +321,18 @@ export async function handleInteractions(c: Context) {
   if (!isVerified) return c.text("Invalid signature", 401);
 
   const interaction: Interaction = JSON.parse(body);
-  if (interaction.type === 1) return c.json({ type: 1 }); // ping Discord
+  if (interaction.type === 1) return c.json({ type: 1 }); // Discord ping
   if (interaction.type === 2) return handleSlashCommand(...);
   if (interaction.type === 3) return handleButtonInteraction(...);
   if (interaction.type === 4) return handleAutocomplete(...);
 }
 ```
 
-Discord 发送 POST，处理程序在 Vercel 函数或 Cloudflare Worker 上运行 50-200ms，响应后即结束。无需维护持久连接，无需保持服务器运行。整个 Discord bot 托管在 Vercel 免费层上。
+Discord POST 过来，handler 在 Vercel 函数或 Cloudflare Worker 上跑 50-200ms，回包，结束。不用维持长连接，不用养服务器。整个 Discord 机器人跑在 Vercel 免费套餐上。
 
-Ed25519 验证（来自 `discord-interactions` 的 `verifyKey`）是必须的----Discord 在 headers 中发送一个签名，你必须验证它，否则 Discord 会拒绝该 endpoint。
+Ed25519 验签（`discord-interactions` 的 `verifyKey`）是强制的，Discord 发的每个请求都带签名头，必须验，不然 endpoint 通不过。
 
-### 特殊动画----唯一有意的 await
+### 特殊动画，唯一故意的 await
 
 ```typescript
 // handleSpecialButton.ts
@@ -343,21 +343,21 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-这个 3 秒的故意延迟在 STRIPPER.md 中被记录为有意为之。Megumin 的特殊攻击（Explosion）在 Discord 端有动画效果----消息首先更新为中间视觉效果，3 秒后修改为最终结果。这是唯一一个 Vercel 函数故意运行超过必要时间的场景。
+这 3 秒延迟是故意的，STRIPPER.md 里有记录。Megumin 的 Explosion 特攻在 Discord 侧有个动画，消息先更新成中间态，3 秒后再改成结果。这是唯一一个让 Vercel 函数故意多跑一会儿的地方。
 
 ![特殊攻击](/images/konosuba-rpg/shot_08_special.webp)
 
 ---
 
-## 双平台可部署性
+## 双平台部署
 
-同一代码库无需修改即可在 Vercel（Node.js）和 Cloudflare Workers（V8 isolates）上运行：
+同一套代码在 Vercel（Node.js）和 Cloudflare Workers（V8 isolates）上不改跑：
 
 ```typescript
 // worker.ts -- Cloudflare 入口
 export default {
   fetch(request: Request, env: WorkerBindings): Promise {
-    syncBindingsToProcessEnv(env); // 将 CF 密钥注入 process.env
+    syncBindingsToProcessEnv(env); // 把 CF secrets 同步进 process.env
     return app.fetch(request, env, ctx);
   }
 };
@@ -367,24 +367,24 @@ const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
 
-主要区别在于静态资源。在 Vercel 上，从文件系统读取（`/var/task/assets/`）。在 Cloudflare Workers 上，通过 `ASSETS` binding（CF 静态资源）访问，并回退到 HTTPS mirror（`fox3000foxy.com/konosuba-rpg/assets`）。`assetLoader.ts` 中的 `getAssetBytes` 处理两种路径，先尝试文件系统，再尝试 fetch。
+主要区别：静态资源。Vercel 上从文件系统读（`/var/task/assets/`）。Cloudflare Workers 上走 `ASSETS` 绑定（CF 静态资源），失败回退到镜像 `fox3000foxy.com/konosuba-rpg/assets`。`assetLoader.ts` 里的 `getAssetBytes` 两条路都走，先试文件系统，再 fetch。
 
-WASM（`@cf-wasm/photon/edge-light`、`@cf-wasm/resvg`）为每个运行时提供独立的构建。包名中的 `edge-light` 标志表示兼容 Cloudflare Workers 的构建，后者不允许在运行时使用 `new WebAssembly.Module()`----WASM 必须预编译。
+WASM（`@cf-wasm/photon/edge-light`、`@cf-wasm/resvg`）给每个运行时分别有构建。包名里的 `edge-light` 就是 Cloudflare Workers 专用构建，不允许运行时 `new WebAssembly.Module()`，WASM 必须预编译。
 
 ---
 
-## 成长系统：经验值、等级、好感度
+## 成长线：XP、等级、好感
 
-![一个 Boss，650 HP](/images/konosuba-rpg/shot_06_boss.webp)
+![Boss，650 血](/images/konosuba-rpg/shot_06_boss.webp)
 
-元成长系统基于 Supabase 免费层。数据模式包括 `players` 表（全局 XP、等级、金币）、`character_progress`（每个角色----Darkness、Aqua、Megumin----的 XP/等级/好感度）、`runs`（战斗历史）、`inventory_items`、`daily_quests_progress`、`achievements_unlocked`、`game_sessions`。
+meta 成长靠 Supabase 免费套餐。表有 `players`（全局 XP、等级、金币）、`character_progress`（Darkness、Aqua、Megumin 各自 XP/等级/好感）、`runs`（战斗历史）、`inventory_items`、`daily_quests_progress`、`achievements_unlocked`、`game_sessions`。
 
 成长模型很简单：
 
 ```typescript
 // characterService.ts
 export function computeLevelFromXp(xp: number): number {
-  return Math.floor(xp / 100) + 1; // 每级 100 XP
+  return Math.floor(xp / 100) + 1; // 100 XP 一级
 }
 
 export function getLevelFactor(level: number): number {
@@ -392,16 +392,16 @@ export function getLevelFactor(level: number): number {
 }
 
 export function getAffinityFactor(affinity: number): number {
-  const stars = Math.floor(affinity / 20); // 每 20 点一颗星，最多 5 颗星
-  return 1.2 ** stars; // 指数增长
+  const stars = Math.floor(affinity / 20); // 20 点一星，最高 5 星
+  return 1.2 ** stars; // 指数成长
 }
 ```
 
-这些系数在每次 `processGame` 开始时作用于角色属性。Kazuma 跟随玩家的全局等级，其他三个角色各自拥有独立的 XP/等级。好感度（通过拾取与角色相关的掉落物获得）独立乘算其属性。
+这些系数在每局 `processGame` 开头作用到人物属性。Kazuma 跟玩家全局等级，另外三人各有 XP/等级。好感（靠捡人物相关掉落涨）独立乘区。
 
 ![治疗](/images/konosuba-rpg/shot_07_heal.webp)
 
-掉落系统使用按难度加权的战利品表：
+掉落用按难度加权的 loot table：
 
 ```typescript
 const LOOT_TABLE_BY_DIFFICULTY: Record = {
@@ -414,7 +414,7 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
       { rarity: Rarity.Epic,   weight: 1  },
     ],
   },
-  // ...直到 Legendary
+  // ...一直到 Legendary
 };
 ```
 
@@ -422,9 +422,9 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
 
 ## 测试
 
-三套测试：单元测试、性能测试和内存泄漏测试。
+三套：单元、性能、泄漏。
 
-内存泄漏测试尤为直接：
+泄漏测试最直接：
 
 ```typescript
 // leaks.spec.ts
@@ -438,54 +438,54 @@ it('does not show strong heap growth across repeated runs', async () => {
 
   global.gc();
   const after = heapUsedMb();
-  expect(after - before).toBeLessThan(20); // 堆增长最多 20MB
+  expect(after - before).toBeLessThan(20); // 堆增长不超过 20MB
 });
 ```
 
-1200 次 `processGame` 迭代，强制 GC 前后各一次，堆增量 < 20MB。如果这个测试通过，`processGame` 就没有内存泄漏。渲染测试（`renderImage.spec.ts`）则验证执行时间是否在实用阈值以下。
+1200 次 `processGame`，前后强制 GC，堆差 < 20MB。过了说明 `processGame` 不漏。渲染测试（`renderImage.spec.ts`）则看执行时间在不在实用阈值内。
 
-还有一个 `bench.ts` 脚本用于分析完整管线：
+还有个 `bench.ts` 给整条流水线 profiling：
 
 ```
 RENDER_PERF=1 npx tsx bench.ts --runs=20 --warmup=3 --monster=Dragon
 ```
 
-当 `RENDER_PERF=1` 时，每个服务中的 `withPerf` 包装器会记录时间：
+`RENDER_PERF=1` 时各服务的 `withPerf` wrapper 打点：
 
 ```typescript
 export async function withPerf(scope: string, label: string, work: () => Promise): Promise {
   const perf = createPerfLogger(scope);
-  if (!perf.enabled) return work(); // 禁用时零开销
+  if (!perf.enabled) return work(); // 关掉时零开销
   perf.mark(`${label}:start`);
   try { return await work(); }
   finally { perf.done(`${label}:done`); }
 }
 ```
 
-如果 `DEV_MODE` 和 `RENDER_PERF` 不是 `1`，`createPerfLogger` 返回 no-op。生产环境零开销。
+`DEV_MODE` 和 `RENDER_PERF` 都不是 `1` 时 `createPerfLogger` 返回 no-op。生产零开销。
 
 ---
 
-## 运行成本
+## 跑起来多少钱
 
-- **Vercel 免费层**：100GB 带宽，每月 100 万次 serverless 调用。图片渲染算一次调用。
-- **Cloudflare Workers 免费层**：每天 10 万次请求，每次请求 10ms CPU 时间（渲染在 Workers 上可能超过此限制，因此以 Vercel 为主）。
-- **Supabase 免费层**：500MB 数据库，5GB 带宽。足以支持数千名玩家。
+- **Vercel 免费套餐**：100GB 流量，每月 100 万次 serverless 调用。渲一张图算一次调用。
+- **Cloudflare Workers 免费套餐**：每天 10 万请求，每请求 10ms CPU 时间（渲染吃 WASM CPU，Workers 上容易超，所以 Vercel 做主力）。
+- **Supabase 免费套餐**：500MB 库，5GB 流量。几千玩家够了。
 
-整个后端在达到显著规模之前以零成本运行。唯一的瓶颈是 Cloudflare Workers 的 CPU 限制----图片渲染因 WASM 而 CPU 密集，因此策略是 Vercel 为主，Workers 作为故障转移 CDN。
+用户量起来之前，整套后端跑在零成本。唯一的摩擦是 Cloudflare Workers 的 CPU 上限，图片渲染是 WASM 重活，所以策略是 Vercel 主力、Workers 做 failover CDN。
 
 ---
 
-## 值得记住的 3 件事
+## 最值得记住的三件事
 
-1. **URL 即游戏状态**不仅仅是一个巧妙的技巧----这是 Discord 施加的限制（按钮有 100 字符限制）所迫出来的架构，进而产生了无状态设计，包含 RLE 压缩和会话 token 作为回退。限制决定了设计。
+1. **URL 即游戏状态**不只是小聪明，是 Discord 强加的（按钮 100 字符上限）逼出来的无状态设计，RLE 压缩加 session token 兜底。约束决定了设计。
 
-2. **带显式驱逐的 WASM 缓存**：`PhotonImage` 在 JavaScript 堆之外分配内存，不调用 `.free()` 永远不会被 GC。将 `freePhoton` 绑定到 LRU 的驱逐上，就是 JavaScript 中的 RAII。这在代码中并不显眼，但没有它，worker 在生产中会内存泄漏。
+2. **WASM 缓存加显式释放**：`PhotonImage` 的内存 alloc 在 JS 堆外，不 `.free()` 永远不释放。LRU 驱逐上挂 `freePhoton` 就是 JavaScript 版 RAII。代码里不起眼，生产上没它 worker 必漏。
 
-3. **无需 WebSocket 的无服务器 Discord bot**：这不如 WebSocket 网关方法知名，但对于处理无状态操作（每个交互相互独立）的 bot，Interactions Endpoint 严格更优----无需重连、无需心跳、无需维护进程。Discord 在其基础设施端管理可用性。
+3. **无 WebSocket 的 serverless Discord 机器人**：比 Gateway WebSocket 方案冷门，但对无状态处理（每次交互独立）的机器人来说，Interactions Endpoint 全方位更优，不用重连，不用心跳，不用养进程。可用性 Discord 那边兜底。
 
 ---
 
 *仓库：[fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
 
-*源代码可用自定义许可证----禁止再分发，可自由使用。*
+*自定义 source-available 许可，不许再分发，随便用。*

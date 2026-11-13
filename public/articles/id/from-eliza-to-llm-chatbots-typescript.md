@@ -1,10 +1,10 @@
 ---
-title: "Dari ELIZA ke LLM : 60 Tahun AI Percakapan, Dibangun Ulang dalam TypeScript"
-description: "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- lima arsitektur yang secara fundamental berbeda untuk masalah yang sama, diporting ke TypeScript dengan data asli mereka. Dari 1966 hingga LLM modern, beginilah cara AI percakapan belajar berbicara, dan apa yang diajarkan sebuah repo chatbot kepada kita tentang 60 tahun riset."
+title: "Dari ELIZA ke LLM : 60 tahun AI percakapan, dibangun ulang dalam TypeScript"
+description: "ELIZA, PARRY, ALICE, Jabberwacky, Cleverbot -- lima arsitektur yang sangat berbeda untuk masalah yang sama, di porting ke TypeScript dengan data aslinya. Dari 1966 hingga LLM modern, beginilah cara AI percakapan belajar bicara, dan apa yang diajarkan repo chatbot tentang 60 tahun riset."
 date: 2026-07-21
 tags:
   - chatbot
-  - ai
+  - ia
   - typescript
   - eliza
   - parry
@@ -14,22 +14,21 @@ tags:
   - cleverbot
   - llm
   - nlp
-  - history
+  - histoire
   - luna-protocol
 authors:
   - fox3000foxy
-lang: id
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "tBMLtyhS4dlLjK1kluxk2gFc+Pl8i4vdFdVp0zp1JWz/7vgTN66T9woRryTzQHeLLZJQMZRWC3D229WKtPXgZA=="
+author_sig: "liXLoquJOdez+TmqLYgzp024Ja8+9bah/B3DyfCOuZiLpTVg4xHja/TLr0lbrl1KpqxZWpN0NoyPgK0RDbHIOA=="
 ---
 
-# Dari ELIZA ke LLM : 60 Tahun AI Percakapan, Dibangun Ulang dalam TypeScript
+# Dari ELIZA ke LLM : 60 tahun AI percakapan, dibangun ulang dalam TypeScript
 
-Pada tahun 1966, Joseph Weizenbaum menulis 420 baris MAD-SLIP di atas IBM 7094 untuk menciptakan chatbot pertama dalam sejarah. Program itu bernama **ELIZA**, dan ia mensimulasikan psikoterapis Rogerian dengan pola dasar dan permutasi kalimat. Enam dekade kemudian, AI percakapan telah menjadi topik arus utama -- ChatGPT, Claude, Gemini ada di setiap perbincangan.
+Pada 1966, Joseph Weizenbaum menulis 420 baris MAD-SLIP di IBM 7094 untuk menciptakan chatbot pertama dalam sejarah. Program itu bernama **ELIZA**, dan ia mensimulasikan psikoterapis rogerian dengan motif dasar dan permutasi kalimat. Enam dekade kemudian, AI percakapan menjadi topik publik -- ChatGPT, Claude, Gemini ada di semua percakapan. Ketika saya membaca ulang kode aslinya, saya terkejut oleh kehematan sarananya.
 
-Namun di antara dua ekstrem ini, ada **PARRY** (chatbot paranoid, 1972), **ALICE** (raja AIML dengan 99.000 kategori, 1995), **Jabberwacky** (yang pertama belajar tanpa aturan, 1997), dan **Cleverbot** (penerus industrinya, 2008). Lima program, lima arsitektur, satu masalah : membuat mesin berbicara.
+Tapi antara dua ekstrem itu, ada **PARRY** (chatbot paranoid, 1972), **ALICE** (raja AIML dengan 99 000 kategori, 1995), **Jabberwacky** (yang pertama belajar tanpa aturan, 1997), dan **Cleverbot** (penerus industrinya, 2008). Saya melihat mereka sebagai lima jawaban yang sangat berbeda untuk masalah yang sama : membuat mesin bicara.
 
-Repo ini berisi kelima bot tersebut, diporting ke TypeScript dengan data asli mereka -- skrip ELIZA, kamus PARRY, file AIML ALICE. Setiap port berdiri sendiri, siap pakai, dan didokumentasikan dengan detail. Tujuannya bukan sekadar menjalankannya : tetapi memahami cara kerjanya, mengapa mereka menandai sejarah, dan apa yang diajarkan arsitektur mereka tentang AI kemarin... dan hari ini.
+Saya mem porting kelima bot ini ke TypeScript dengan data aslinya -- skrip ELIZA, kamus PARRY, berkas AIML ALICE. Setiap port mandiri, siap pakai, dan didokumentasikan hingga detail terkecil. Tujuan saya dengan pekerjaan ini melampaui sekadar eksekusi : saya ingin memahami cara mereka bekerja, kenapa mereka menandai sejarah, dan apa yang diungkapkan arsitektur masing-masing tentang AI kemarin... dan hari ini.
 
 ```bash
 bun run eliza    # Bicara dengan ELIZA (1966)
@@ -40,17 +39,17 @@ bun run cleverbot # Bicara dengan Cleverbot
 bun run meeting  # ELIZA vs PARRY otomatis
 ```
 
-Kita akan membedah setiap bot, melihat kodenya, lalu menghubungkannya dengan LLM modern melalui artikel tentang **Luna Protocol**.
+Saya akan membedah setiap bot bersamamu, melihat kodenya, lalu menjembatani ke LLM modern lewat artikel tentang **Luna Protocol**.
 
 ---
 
-## ELIZA (1966) : Seni Membuat Orang Percaya Bahwa Kamu Mengerti
+## ELIZA (1966) : seni membuat orang percaya kita memahami
 
-Mari mulai dari yang tertua, dan mungkin yang paling mengesankan dalam kesederhanaannya. ELIZA tidak memiliki **kecerdasan** dalam arti modern. Tidak ada jaringan saraf, tidak ada statistik, tidak ada pembelajaran. Hanya pola teks dan sedikit permutasi.
+Saya mulai dari yang tertua, dan menurut saya paling mengesankan karena kesederhanaannya. ELIZA tidak punya **kecerdasan apa pun** dalam arti modern. Ia bekerja hanya dengan motif tekstual dan sedikit permutasi.
 
 ### Prinsipnya
 
-Skrip DOCTOR (versi psikoterapis) bekerja dengan sebuah tabel **kata kunci**, masing-masing terkait dengan **pola dekomposisi** dan **aturan perakitan kembali**. Berikut aturan tipikal :
+Skrip DOCTOR (versi psikoterapis) bekerja dengan tabel **keyword**, masing-masing terkait dengan **pola dekomposisi** dan **aturan reassembly**. Berikut aturan tipikal :
 
 ```lisp
 (HELLO
@@ -58,15 +57,15 @@ Skrip DOCTOR (versi psikoterapis) bekerja dengan sebuah tabel **kata kunci**, ma
         (HOW DO YOU DO.  PLEASE STATE YOUR PROBLEM)))
 ```
 
-`HELLO` adalah kata kuncinya. `0` adalah pola dekomposisi yang mengatakan "tangkap semua yang mengikuti" (seperti wildcard). `HOW DO YOU DO. PLEASE STATE YOUR PROBLEM.` adalah aturan perakitan kembali. Itu saja.
+`HELLO` adalah kata kunci. `0` adalah pola dekomposisi yang berarti "tangkap semua yang mengikuti" (seperti wildcard). `HOW DO YOU DO. PLEASE STATE YOUR PROBLEM.` adalah aturan reassembly. Itu saja.
 
-Saat kamu bilang "Hello, I'm sad today", ELIZA :
-1. Mengubah teks menjadi huruf kapital : `HELLO I'M SAD TODAY`
-2. Memindai setiap kata terhadap tabel kata kunci
-3. Menemukan `HELLO` → mendorongnya ke tumpukan kata kunci
-4. Mengambil kata kunci dengan prioritas tertinggi
-5. Mencoba setiap pola dekomposisi secara berurutan
-6. Jika cocok, memilih aturan perakitan berikutnya (round-robin)
+Ketika kamu bilang "Hello, I'm sad today", ELIZA :
+1. Mengubah teks menjadi huruf besar : `HELLO I'M SAD TODAY`
+2. Memindai setiap kata melawan tabel keyword-nya
+3. Menemukan `HELLO` → mendorongnya ke tumpukan keyword
+4. Mengambil keyword dengan prioritas tertinggi
+5. Mencoba setiap pola dekomposisi berurutan
+6. Kalau cocok, memilih aturan reassembly berikutnya (round-robin)
 7. Mengganti `(1)`, `(2)` dll. dengan bagian yang ditangkap
 
 Tapi bagian yang benar-benar cerdas adalah **aturan PRE**. Lihat ini :
@@ -77,16 +76,16 @@ Tapi bagian yang benar-benar cerdas adalah **aturan PRE**. Lihat ini :
         (PRE (1 0) (=YOU))))
 ```
 
-Saat ELIZA mencocokkan `MY`, ia mengubah sisa kalimat (ditangkap oleh `0`) melalui aturan PRE, dan menyuntikkan hasilnya kembali seolah-olah pengguna baru saja mengatakan kata kunci baru. Secara konkret :
+Ketika ELIZA mencocokkan `MY`, ia mengubah sisa kalimat (yang ditangkap oleh `0`) lewat aturan PRE, dan menyuntikkan ulang hasilnya seolah pengguna baru saja mengucapkan kata kunci baru. Konkretnya :
 
 ```
-Kamu bilang : "My mother hates me"
-  → PRE mengubah : "YOUR MOTHER HATES YOU"
-  → disuntikkan kembali seolah kamu baru mengatakannya
-  → kemungkinan cocok dengan "YOU" → respons baru
+Kamu bilang: "My mother hates me"
+  → PRE mengubah: "YOUR MOTHER HATES YOU"
+  → disuntikkan ulang seolah kamu baru mengucapkannya
+  → mungkin cocok dengan "YOU" → respons baru
 ```
 
-Inilah mengapa ELIZA terlihat memahami perbedaan antara "aku" dan "kamu" -- itu bukan pemahaman, melainkan transformasi mekanis yang dirancang dengan sempurna.
+Itulah kenapa ELIZA memberi kesan memahami beda "aku" dan "kamu" : saya melihat di sana transformasi mekanis yang dirancang sempurna yang mensimulasikan pemahaman.
 
 Berikut alur lengkapnya, dari ketikan pengguna hingga respons :
 
@@ -119,52 +118,52 @@ flowchart TD
     T --> J
 ```
 
-### Apa yang Membuatnya Masuk Akal
+### Apa yang membuatnya kredibel
 
-Weizenbaum membuat pilihan brilian : **psikoterapi Rogerian**. Pendekatan ini adalah merefleksikan ucapan pasien tanpa menafsirkan. "Saya sedih" → "Anda mengatakan Anda sedih." Itulah tepatnya yang ELIZA bisa lakukan -- dan karena ini adalah teknik terapi yang diakui, tidak ada yang menganggapnya aneh.
+Saya menganggap pilihan Weizenbaum sebagai pukulan jenius : **psikoterapi rogerian**. Pendekatan ini consiste merefleksikan ucapan pasien tanpa menafsirkan. "Saya sedih" → "Kamu bilang kamu sedih". Tepat itulah yang bisa dilakukan ELIZA, dan karena teknik terapeutik ini diakui, tidak ada yang menganggap responsnya aneh. Ketika kamu menguji bot, kamu langsung merasakan efek cermin ini.
 
-### Dalam Port TypeScript
+### Dalam port TypeScript
 
-Port memuat skrip `.ela` (format S-expression asli), menguraikannya sepenuhnya (termasuk encoding Hollerith -- format string dari tahun 60-an), dan menjalankan siklus yang sama : kapitalisasi → pemisahan → tumpukan kata kunci → dekomposisi → perakitan kembali → PRE/transformasi.
+Dalam port saya, saya memuat skrip `.ela` (format S-expression aslinya), mem parsingnya utuh (termasuk enkode Hollerith, format string tahun 60-an itu), dan menjalankan siklus yang sama : uppercasing → split → keyword stack → dekomposisi → reassembly → PRE/transform. Saya ingin tetap setia pada perilaku aslinya hingga detailnya.
 
 [➡ Lihat kode sumber](https://github.com/fox3000foxy/chatbots/tree/main/eliza)
 
 ---
 
-## PARRY (1972) : Chatbot Pertama dengan Emosi
+## PARRY (1972) : chatbot pertama beremosi
 
-Enam tahun setelah ELIZA, Kenneth Colby (psikiater di Stanford) menciptakan PARRY : chatbot yang mensimulasikan pasien dengan **skizofrenia paranoid**. Jika ELIZA adalah cermin kosong, PARRY memiliki **model emosional internal** yang sesungguhnya.
+Enam tahun setelah ELIZA, Kenneth Colby (psikiater di Stanford) menciptakan PARRY : chatbot yang mensimulasikan pasien penderita **skizofrenia paranoid**. Di mana ELIZA berfungsi seperti cermin kosong, PARRY membawa **model emosional internal** yang sungguhan. Kontras inilah yang paling menandai saya saat mem porting keduanya berurutan.
 
-### Model Emosional
+### Model emosional
 
-PARRY memiliki empat variabel kontinu yang berubah setiap putaran percakapan :
+PARRY punya empat variabel kontinu yang berkembang di setiap putaran percakapan :
 
-| Variabel | Garis Dasar | Peluruhan/Putaran | Deskripsi |
+| Variabel | Garis dasar | Peluruhan/putaran | Deskripsi |
 |----------|:---:|:---:|------|
-| `ANGER` | 0 | −1.0 | Permusuhan, iritasi |
-| `FEAR` | 0 | −0.2 | Paranoia (meluruh lambat setelah delusi dimulai) |
-| `MISTRUST` | 0 | −0.05 | Kecurigaan (sangat lambat turun) |
+| `ANGER` | 0 | −1.0 | Hostilitas, iritasi |
+| `FEAR` | 0 | −0.2 | Paranoia (meluruh lambat setelah awal deliri) |
+| `MISTRUST` | 0 | −0.05 | Ketidakpercayaan (sangat lambat turun) |
 | `HURT` | 0 | −0.5 | Luka emosional |
 
-Nilai-nilai ini meningkat melalui **lompatan emosional** (`ajump`, `fjump`, `hjump`) yang dipicu oleh aturan inferensi, dan meluruh secara alami kembali ke garis dasarnya setiap putaran.
+Nilai ini naik lewat **lompatan emosional** (`ajump`, `fjump`, `hjump`) yang dipicu aturan inferensi, dan meluruh alami menuju garis dasarnya di setiap putaran.
 
-### Jaringan Keyakinan
+### Jaringan keyakinan
 
-PARRY memiliki 200+ keyakinan yang disimpan dalam file `bel` :
+PARRY punya 200+ keyakinan yang disimpan dalam berkas `bel` :
 
 ```lisp
 (BELIEF (FEAR 5) ((PAT PARANOIA)) BELIEF GROUP)
 ```
 
-Setiap keyakinan memiliki kategori (HUM = pasien, HUM2 = orang lain, DOC = dokter, INT = interogasi, INN = niat) dan kekuatan (0-5). Aturan inferensi (`TH2`, `EMOTE`, `IF`) menghubungkan keyakinan satu sama lain :
+Setiap keyakinan punya kategori (HUM = pasien, HUM2 = orang lain, DOC = dokter, INT = interogasi, INN = niat) dan kekuatan (0-5). Aturan inferensi (`TH2`, `EMOTE`, `IF`) menyebarkan keyakinan di antara mereka :
 
-- **TH2** : jika keyakinan A melebihi ambang batas, ia menguat dan konsekuensinya meningkat
-- **EMOTE** : jika keyakinan melebihi ambang batas, ia memicu lompatan emosional (marah/takut/sakit)
-- **IF** : kondisional -- jika A benar, maka B menjadi benar pada tingkat tertentu
+- **TH2** : kalau keyakinan A melampaui ambang, ia menguat dan konsekuensinya meningkat
+- **EMOTE** : kalau keyakinan melampaui ambang, ia memicu lompatan emosional (anger/fear/hurt)
+- **IF** : kondisional -- kalau A benar, maka B menjadi benar pada tingkat tertentu
 
-### Hierarki Delusi (Sistem Flare)
+### Hierarki deliri (sistem flare)
 
-Bagian paling menarik dari PARRY adalah sistem "flare" -- rantai eskalasi yang secara progresif mengarah ke delusi pusat :
+Bagian paling menarik dari PARRY adalah sistem "flare"-nya -- rantai eskalasi yang berangsur menuju deliri pusat :
 
 ```
 HORSE → "I USED TO GO TO THE RACES SOMETIMES."
@@ -182,21 +181,21 @@ CHEAT → "PEOPLE ARE ALWAYS TRYING TO CHEAT ME."
 MAFIA → "THE MAFIA IS OUT TO GET ME."
 ```
 
-Setiap kata kunci memicu respons yang sudah ditulis sebelumnya (melalui pencocokan pola), dan jika lawan bicara mengikuti topik, PARRY secara bertahap hanyut menuju delusi pusat penganiayaannya. Begitu flare "terpicu", ia menjadi tidak aktif (`deadFlares`) -- PARRY beralih ke yang berikutnya, mensimulasikan lawan bicara yang menggali topik lebih dalam.
+Setiap kata kunci memicu respons yang sudah ditulis (lewat pencocokan pola), dan kalau kamu mengikuti topiknya, PARRY berangsur menuju deliri pusat persekusinya. Begitu flare "terpicu", ia menjadi tidak aktif (`deadFlares`) dan PARRY lanjut ke berikutnya, seperti lawan bicara yang menggali topiknya. Saya sangat suka mekanisme ini karena ia menciptakan progresi naratif dengan sangat sedikit kode.
 
-### Mengapa PARRY Bersejarah
+### Kenapa PARRY bersejarah
 
-Pada tahun 1972, PARRY lulus varian uji Turing : psikiater diberikan transkrip percakapan dengan PARRY dan dengan pasien paranoid sungguhan, dan **tidak dapat membedakannya secara andal**. Itu adalah program pertama yang berhasil melakukannya, 40 tahun sebelum LLM.
+Pada 1972, PARRY lolos varian tes Turing : psikiater menerima transkrip percakapan dengan PARRY dan dengan pasien paranoid sungguhan, dan **tidak bisa membedakannya secara andal**. Ini program pertama yang berhasil, 40 tahun sebelum LLM. Saya menganggap pencapaian ini luar biasa kalau kamu bandingkan sarana zaman itu dengan hari ini.
 
 [➡ Lihat kode sumber](https://github.com/fox3000foxy/chatbots/tree/main/parry)
 
 ---
 
-## RFC 439 : Saat ELIZA Bertemu PARRY
+## RFC 439 : ketika ELIZA bertemu PARRY
 
-Pada 18 September 1972, dua program berbicara satu sama lain untuk pertama kalinya dalam sejarah -- secara harfiah : ini adalah **percakapan antar-AI pertama** yang pernah tercatat. ELIZA (berjalan di BBN, Boston) dan PARRY (berjalan di Stanford) bercakap-cakap melalui ARPANET, disambungkan oleh operator manusia yang mengetik keluaran satu ke masukan yang lain. Transkripnya diterbitkan sebagai **RFC 439** ("PARRY Encounters the DOCTOR").
+Pada 18 September 1972, dua program saling bicara untuk pertama kalinya dalam sejarah, secara harfiah : ini **percakapan antar-AI pertama** yang pernah direkam. ELIZA (berjalan di BBN di Boston) dan PARRY (berjalan di Stanford) bercakap lewat ARPANET, disampaikan operator manusia yang mengetikkan keluaran satu ke masukan lainnya. Transkripnya diterbitkan sebagai **RFC 439** ("PARRY Encounters the DOCTOR"). Ketika saya menemukan dokumen ini, saya paham ia menandai momen pendiri bagi bidang kami.
 
-Berikut kutipan bagaimana tampilannya :
+Berikut kutipan dari tampilannya :
 
 ```
 ELIZA: HOW DO YOU DO. PLEASE STATE YOUR PROBLEM.
@@ -207,25 +206,25 @@ ELIZA: SUPPOSE YOU TELL ME ABOUT YOUR PARENTS.
 PARRY: THEY ARE ALWAYS AFRAID OF SOMETHING.
 ```
 
-Sangat koheren secara mengejutkan. ELIZA melakukan tugas terapisnya : merumuskan ulang, bertanya, mengeksplorasi. PARRY melakukan tugas pasien paranoidnya : mengeluh, menuduh, mengekspresikan kecurigaan. Kedua program sempurna dalam peran mereka -- bukan karena mereka "memahami" situasi, tetapi karena mekanisme masing-masing (pola ELIZA + model emosional PARRY) menghasilkan respons yang secara kebetulan saling cocok.
+Koherensi pertukaran ini mengejutkan saya pada bacaan pertama. ELIZA melakukan tugas terapisnya : memformulasikan ulang, bertanya, menjelajah. PARRY melakukan tugas pasien paranoidnya : mengeluh, menuduh, mengungkapkan ketidakpercayaan. Kedua program tetap sempurna dalam perannya berkat kombinasi mekanisme masing-masing (pola ELIZA + model emosional PARRY) yang menghasilkan respons yang saling mengunci secara kebetulan. Ketika kamu membaca transkrip utuhnya, kamu melihat sejauh mana keselarasan kebetulan ini menciptakan ilusi dialog yang disengaja.
 
-Repo dapat mereproduksi percakapan ini dengan :
+Kamu bisa mereproduksi percakapan ini dengan repo saya :
 
 ```bash
 bun run meeting
 ```
 
-Simulasi menjalankan 25 putaran otomatis antara kedua bot, dengan topik awal acak (kuda, kejahatan terorganisir, emosi...). Karena ELIZA dan PARRY sama-sama memiliki elemen non-deterministik (ELIZA round-robin, PARRY randomisasi), setiap eksekusi menghasilkan pertukaran yang berbeda.
+Simulasi saya menjalankan 25 putaran otomatis antara kedua bot, dengan topik awal acak (kuda, kejahatan terorganisasi, emosi...). Karena ELIZA dan PARRY sama-sama membawa elemen non-deterministik (round-robin ELIZA, randomisasi PARRY), setiap eksekusi menghasilkan pertukaran berbeda. Saya suka menjalankan ulang perintah berkali-kali untuk membandingkan lintasannya.
 
-Yang mencolok tentang ELIZA vs PARRY adalah kita memiliki dua program -- satu tanpa status internal, yang lain dengan model emosional lengkap -- yang bersama-sama menghasilkan percakapan yang **terlihat** disengaja. Untuk tahun 1972, itu mencengangkan.
+Yang men striking saya soal ELIZA vs PARRY adalah pertemuan dua program, satu dengan arsitektur tanpa keadaan internal, satunya dengan model emosional lengkap, yang bersama menghasilkan percakapan yang **menyerupai** sesuatu yang disengaja. Untuk 1972, saya menganggap hasilnya mencengangkan.
 
 ---
 
-## ALICE (1995) : Pencocokan Pola Skala Besar
+## ALICE (1995) : pencocokan pola skala besar
 
-ALICE (Artificial Linguistic Internet Computer Entity) diciptakan oleh Richard Wallace pada tahun 1995, dan memenangkan **Loebner Prize** tiga kali (2000, 2001, 2004). Jika ELIZA memiliki beberapa ratus aturan dan PARRY beberapa ribu, ALICE memiliki **99.524** -- tersebar di 66 file AIML.
+ALICE (Artificial Linguistic Internet Computer Entity) diciptakan Richard Wallace pada 1995, dan memenangkan **Hadiah Loebner** tiga kali (2000, 2001, 2004). Di mana ELIZA punya beberapa ratus aturan dan PARRY beberapa ribu, ALICE punya **99 524**, terbagi dalam 66 berkas AIML. Ketika saya membuka korpus ini pertama kali, saya mengukur apa arti "skala besar" pada zaman itu.
 
-### AIML : Bahasa Kategori
+### AIML : bahasa kategori
 
 AIML (Artificial Intelligence Markup Language) adalah format XML untuk mendefinisikan pasangan tanya-jawab :
 
@@ -247,19 +246,19 @@ Tapi kekuatan ALICE berasal dari wildcard dan **SRAI** (Symbolic Reduction) :
 </category>
 ```
 
-SRAI memungkinkan ALICE mengarahkan input ke kategori lain, menciptakan rantai reduksi :
+SRAI memungkinkan ALICE mengarahkan ulang masukan ke kategori lain, menciptakan rantai reduksi :
 
 ```
 Input: "WHAT'S UP?"
-  → pattern "WHAT IS UP" → srai "HELLO"
-    → pattern "HELLO" → template "Hi there!"
+  → pola "WHAT IS UP" → srai "HELLO"
+    → pola "HELLO" → template "Hi there!"
 ```
 
-Itulah mekanisme yang memberi ALICE fleksibilitasnya : alih-alih menulis respons untuk setiap kemungkinan formulasi, kita menulis satu respons kanonik dan mengarahkan variasi ke sana. Batas kedalaman adalah 10 -- di atas itu, ALICE menyerah untuk menghindari loop tak terbatas (dihindari dengan hati-hati dalam desain kategori, tapi jaring pengaman tetap penting).
+Inilah mekanisme yang memberi ALICE fleksibilitasnya : alih-alih menulis respons untuk setiap formulasi yang mungkin, kamu menulis respons kanonis dan mengarahkan variasinya ke sana. Batas kedalamannya 10 : selebihnya, ALICE menyerah untuk menghindari loop tak berujung (desain kategorinya menghindarinya dengan cermat, dan jaring pengaman ini tetap esensial). Saya menganggap pilihan desain ini elegan karena ia memfaktorkan ribuan formulasi dengan sangat sedikit aturan.
 
-### Bagaimana ALICE Mencocokkan Pola
+### Cara ALICE mencocokkan pola
 
-Pola diurutkan berdasarkan kekhususan : yang memiliki wildcard paling sedikit dicoba terlebih dahulu. Wildcard `*` dan `_` menangkap urutan kata apa pun. Engine mengompilasi setiap pola menjadi regex, lalu mengulangi kategori yang telah diurutkan hingga menemukan kecocokan.
+Pola diurutkan berdasar spesifisitas : yang wildcardnya paling sedikit dicoba dulu. Wildcard `*` dan `_` menangkap urutan kata apa pun. Mesin mengompilasi tiap pola menjadi regex, lalu mengiterasi kategori yang diurutkan hingga menemukan kecocokan.
 
 ```typescript
 // Implementasi TypeScript kami -- disederhanakan tapi setia
@@ -273,37 +272,37 @@ function findMatch(input: string, categories: Category[]): Match | null {
 }
 ```
 
-### Mengapa ALICE Mendominasi Loebner
+### Kenapa ALICE mendominasi Loebner
 
-99.524 kategori, itu angka yang mengubah segalanya. ELIZA terlihat pintar karena beberapa aturannya dirancang dengan baik untuk konteks spesifik (terapi). ALICE mencakup begitu banyak topik sehingga ia memberi kesan memiliki pengetahuan umum yang nyata : sains, politik, humor, olahraga, emosi, semuanya ada.
+99 524 kategori, angka yang mengubah segalanya. ELIZA memberi ilusi kecerdasan karena sedikit aturannya dirancang baik untuk konteks spesifik (terapi). ALICE mencakup begitu banyak topik sampai memberi kesan punya budaya umum sungguhan : sains, politik, humor, olahraga, emosi, semuanya ada. Saya mengambil dari pendekatan ini pelajaran yang masih saya terapkan : cakupan luas dan dirawat mengkompensasi ketiadaan penalaran mendalam.
 
 [➡ Lihat kode sumber](https://github.com/fox3000foxy/chatbots/tree/main/alice)
 
 ---
 
-## Jabberwacky (1997) & Cleverbot (2008) : Pemutusan Epistemologis
+## Jabberwacky (1997) dan Cleverbot (2008) : ruptura epistemologis
 
-Semua bot sebelumnya berbagi asumsi : **respons harus ditulis**. ELIZA punya aturan S-expression, PARRY punya pola selektif, ALICE punya kategori AIML. Rollo Carpenter mengambil pendekatan sebaliknya : **bagaimana jika kita tidak menulis apa pun?**
+Semua bot sebelumnya berbagi satu hipotesis : **respons harus ditulis**. ELIZA punya aturan S-expression-nya, PARRY pola selektifnya, ALICE kategori AIML-nya. Rollo Carpenter mengambil lawan total dengan pertanyaan radikal : **bagaimana kalau percakapan lampau saja yang menyediakan respons?** Saya menganggap pembalikan ini berani karena ia meninggalkan semua penulisan aturan manual.
 
 ### Idenya
 
-Jabberwacky (diluncurkan sekitar 1997, menjadi Cleverbot pada 2008) tidak menyimpan **aturan apa pun**. Ia menyimpan **seluruh riwayat percakapan** dalam transkrip datar, dan ketika seseorang berbicara dengannya, ia mencari di riwayat ini momen yang paling mirip dan menggunakan kembali apa yang dikatakan setelahnya :
+Jabberwacky (diluncurkan sekitar 1997, menjadi Cleverbot pada 2008) sepenuhnya bersandar pada **seluruh riwayat percakapan** yang disimpan dalam transkrip datar, dan ketika seseorang berbicara dengannya, ia mencari dalam riwayat ini momen paling mirip dan memakai ulang apa yang dikatakan setelahnya :
 
 ```
-Pengguna : "hello"
+Pengguna: "hello"
   ↓
-Cari : apakah ada yang pernah mengatakan "hello" sebelumnya?
+Mencari: apakah seseorang pernah berkata "hello" sebelumnya?
   ↓
 Ya, di sesi #3, baris 14, seseorang berkata "hello" dan bot menjawab "hi there!"
   ↓
-Jawab : "hi there!"
+Menjawab: "hi there!"
 ```
 
-Tanpa pola. Tanpa tata bahasa. Tanpa XML. Hanya arsip raksasa tentang hal-hal yang dikatakan orang satu sama lain, digunakan kembali pada saat yang tepat. Itulah definisi emergence.
+Kamu hanya menemukan di sini arsip raksasa hal yang dikatakan orang, dipakai ulang pada momen tepat. Saya melihat di sana definisi emergensi itu sendiri : perilaku percakapan lahir dari akumulasi jejak manusia.
 
 ### Implementasi TypeScript
 
-Port TypeScript mereproduksi arsitektur persis ini :
+Port TypeScript saya mereproduksi tepat arsitektur ini :
 
 ```mermaid
 flowchart TD
@@ -311,7 +310,7 @@ flowchart TD
     B --> C["withReplies()<br>extrait les paires<br>(ligne → reply)"]
     C --> D["findCandidates()"]
     D --> E["relevance = similarity(input, line.text)"]
-    E --> F["contextFit = similarity(recentContext,<br>context avant cette ligne)"]
+    E --> F["contextFit = similarity(recentContext,<br>konteks sebelum baris ini)"]
     F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
     G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
     H --> I["Top K candidats triés"]
@@ -322,122 +321,122 @@ flowchart TD
     L --> M
 ```
 
-Inilah jantung penilaian -- heuristik kami sendiri yang terinspirasi dari deskripsi publik Cleverbot :
+Berikut inti scoring, dengan heuristik saya sendiri yang terinspirasi deskripsi publik Cleverbot :
 
 ```typescript
 const score = 0.65 * relevance + 0.25 * contextFit + 0.10 * recencyBonus;
 ```
 
-- **relevance** (0.65) : kemiripan antara input pengguna dan baris historis
-- **contextFit** (0.25) : kemiripan antara percakapan terkini dan konteks sebelum baris historis
-- **recencyBonus** (0.10) : ingatan terbaru sedikit lebih berbobot (kepribadian bot berubah seiring waktu)
+- **relevance** (0.65) : kemiripan antara masukan pengguna dan baris historis
+- **contextFit** (0.25) : kemiripan antara percakapan terbaru dan apa yang mendahului baris historis
+- **recencyBonus** (0.10) : kenangan terbaru sedikit lebih dihitung (kepribadian bot melayang seiring waktu)
 
-Pemilihan bersifat probabilistik (roulette-wheel selection) : kandidat terbaik menang lebih sering, tapi tidak selalu -- yang memberikan variasi.
+Pick-nya probabilistik (roulette-wheel selection) : kandidat terbaik lebih sering menang, dengan bagian variabilitas yang memberi variasi. Saya menghargai pilihan ini karena membuat percakapan kurang bisa ditebak ketika kamu menguji bot berkali-kali.
 
-### Cleverbot : Dua Inovasi yang Terdokumentasi
+### Cleverbot : dua inovasi yang terdokumentasi
 
-Cleverbot menambahkan dua mekanisme ke konsep dasar Jabberwacky :
+Cleverbot menambahkan dua mekanisme pada konsep dasar Jabberwacky :
 
-1. **Pembelajaran multi-orang** : jutaan pengguna berkontribusi ke transkrip bersama yang sama. Respons yang diambil dari riwayat bisa berasal dari suara yang sama sekali berbeda dari percakapan yang sedang berlangsung -- yang menjelaskan mengapa Cleverbot tiba-tiba berubah kepribadian.
+1. **Pembelajaran multi-orang** : jutaan pengguna berkontribusi pada transkrip bersama yang sama. Respons yang diambil dari riwayat bisa berasal dari suara yang sama sekali berbeda dari percakapan berjalan -- yang menjelaskan kenapa Cleverbot tiba-tiba berganti kepribadian.
 
-2. **Pembelajaran tertunda** : apa yang kamu katakan ke Cleverbot selama satu sesi TIDAK tersedia untuk pencocokan selama sesi yang sama. Baris baru ditandai `pending` dan baru bisa dicocokkan setelah "konsolidasi" antar sesi -- yang menjelaskan mengapa kamu tidak bisa mengajari Cleverbot suatu fakta dan menggunakannya kembali dalam percakapan yang sama.
+2. **Pembelajaran tertunda** : apa yang kamu katakan ke Cleverbot selama sesi TIDAK tersedia untuk dicocokkan selama sesi yang sama itu. Baris baru ditandai `pending` dan baru bisa dicocokkan setelah "konsolidasi" antar sesi -- yang menjelaskan kenapa kamu tidak bisa mengajarkan fakta ke Cleverbot lalu memakainya ulang dalam percakapan yang sama.
 
 ```typescript
-// Cleverbot : baris terbaru tidak terlihat sampai konsolidasi
+// Cleverbot : baris terbaru tak terlihat hingga konsolidasi
 const line = store.append("human", text, null, sessionId, false); // pending
 // ...consolidate() dipanggil saat startup, bukan selama sesi
 ```
 
-Port TypeScript mengimplementasikan kedua perilaku ini : baris memiliki flag `consolidated`, dan setiap sesi REPL dimulai dengan konsolidasi baris yang tertunda.
+Port TypeScript saya mengimplementasikan kedua perilaku ini : baris punya flag `consolidated`, dan setiap sesi REPL dimulai dengan konsolidasi baris yang menunggu.
 
 [➡ Lihat kode sumber](https://github.com/fox3000foxy/chatbots/tree/main/jabberwacky)
 
 ---
 
-## Analisis Port TypeScript : Merancang Arsitektur Bersama
+## Analisis port TypeScript : merancang arsitektur bersama
 
-Membangun kelima bot dalam bahasa yang sama adalah menghadapi pertanyaan menarik : **dapatkah kita memfaktorkan ulang kode antar arsitektur yang berbeda seperti ini?**
+Membangun kelima bot ini dalam bahasa yang sama menghadapkan saya pada pertanyaan menarik : **mungkinkah memfaktorkan kode di antara arsitektur yang begitu berbeda?**
 
-Jawabannya : sangat sedikit. Setiap bot memiliki loop fundamental yang berbeda :
+Jawaban saya setelah mem porting semuanya : sangat sedikit. Setiap bot punya loop fundamental berbeda :
 
-| Bot | Loop Utama | Data | Pembelajaran |
+| Bot | Loop utama | Data | Pembelajaran |
 |-----|------------------|---------|-------------|
-| **ELIZA** | Tumpukan kata kunci → dekomposisi → perakitan kembali | Skrip `.ela` dalam S-expression | Tidak ada |
-| **PARRY** | Tokenisasi → pola selektif / flare / kata kunci / inferensi | 58 file PDP-10 (kamus, keyakinan, aturan) | Tidak ada |
-| **ALICE** | Pola terurut → regex → template AIML → SRAI rekursif | 66 file AIML XML | Tidak ada |
-| **Jabberwacky** | Kemiripan → konteks → kedekatan → pilihan berbobot | Transkrip JSON (bertambah seiring penggunaan) | Berkelanjutan |
+| **ELIZA** | Keyword stack → dekomposisi → reassembly | Skrip `.ela` dalam S-expression | Tidak ada |
+| **PARRY** | Tokenisasi → pola selektif / flare / keyword / inferensi | 58 berkas PDP-10 (kamus, keyakinan, aturan) | Tidak ada |
+| **ALICE** | Pola diurutkan → regex → template AIML → SRAI rekursif | 66 berkas AIML XML | Tidak ada |
+| **Jabberwacky** | Kemiripan → konteks → recency → pick berbobot | Transkrip JSON (tumbuh dengan pemakaian) | Kontinu |
 | **Cleverbot** | Sama seperti Jabberwacky + pending/consolidated + persona | Transkrip JSON + seed multi-persona | Tertunda (antar sesi) |
 
-Yang mereka bagi adalah antarmuka CLI dan infrastruktur TypeScript (biome untuk lint, tsx untuk eksekusi). Sisanya spesifik untuk setiap arsitektur.
+Yang mereka bagikan adalah antarmuka CLI dan infrastruktur TypeScript (biome untuk lint, tsx untuk eksekusi). Sisanya spesifik tiap arsitektur.
 
-### Pilihan Desain Bersama
+### Pilihan desain bersama
 
-**1. Kesetiaan pada data asli.** Untuk ELIZA, PARRY dan ALICE, kami menggunakan file asli -- skrip ELIZA yang ditemukan di arsip Weizenbaum tahun 2021, kode PARRY asli dari PDP-10 (58 file), AIML Free ALICE v1.6. Tidak ada terjemahan, tidak ada penulisan ulang. Bot berperilaku seperti aslinya karena mereka menggunakan data yang sama.
+**1. Kesetiaan pada data asli.** Untuk ELIZA, PARRY dan ALICE, saya memakai berkas aslinya, skrip ELIZA yang ditemukan kembali dalam arsip Weizenbaum pada 2021, kode asli PARRY dari PDP-10 (58 berkas), AIML Free ALICE v1.6. Saya menyimpannya dalam bentuk aslinya. Bot berperilaku seperti aslinya karena mereka memakai data yang sama.
 
-**2. Clean-room untuk bagian kepemilikan.** Jabberwacky dan Cleverbot berbeda : kode sumber mereka tidak pernah dipublikasikan (Existor/Rollo Carpenter menjaganya tetap proprietary). Oleh karena itu port adalah **clean-room reimplementation** -- dibangun hanya dari deskripsi publik tentang perilaku. Tidak ada baris kode atau data proprietary yang disalin.
+**2. Clean-room untuk bagian proprietari.** Jabberwacky dan Cleverbot menimbulkan kasus berbeda : kode sumber mereka tidak pernah diterbitkan (Existor/Rollo Carpenter menyimpannya proprietari). Jadi port saya adalah **reimplementasi clean-room**, dibangun hanya dari deskripsi publik perilaku. Saya tidak menyalin satu baris kode maupun data proprietari.
 
-**3. Ketergantungan minimal.** Satu-satunya prasyarat nyata adalah TypeScript. ALICE menggunakan `dom-js` untuk mengurai XML dari file AIML (66 file, 99.524 kategori, mengurai XML sendiri akan membuang-buang waktu). Sisanya adalah TypeScript vanilla.
+**3. Dependensi minimal.** Satu-satunya prasyarat nyata adalah TypeScript. ALICE memakai `dom-js` untuk mem parsing XML berkas AIML (66 berkas, 99 524 kategori, parsing XML buatan sendiri hanya buang waktu). Sisanya vanilla TypeScript. Saya membuat pilihan ini agar setiap bot tetap mudah dibaca dan mudah dijalankan ketika kamu mengkloning repo.
 
 ---
 
-## Dari Chatbot Simbolis ke LLM : Lompatan Konseptual
+## Dari chatbot simbolis ke LLM : lompatan konseptual
 
-Kelima bot yang baru kita lihat semuanya berbagi karakteristik fundamental : mereka **simbolis**. "Pengetahuan" mereka disimpan sebagai simbol eksplisit -- pola teks, tabel aturan, kategori XML, baris transkrip. Tidak ada **representasi numerik bahasa** di salah satu sistem ini.
+Kelima bot yang baru saya tunjukkan berbagi ciri fundamental : mereka **simbolis**. "Pengetahuan" mereka sepenuhnya bersandar pada simbol eksplisit : motif tekstual, tabel aturan, kategori XML, baris transkrip. Mereka berfungsi sepenuhnya tanpa representasi numerik bahasa.
 
-Yang berarti mereka semua memiliki batasan yang sama : mereka hanya bisa merespons apa yang telah direncanakan atau dicatat secara eksplisit. ELIZA tersesat jika kamu keluar dari kerangka terapi. PARRY tidak bisa bicara tentang cuaca. ALICE tidak belajar apa pun dari percakapannya. Jabberwacky hanya bisa merespons dengan replika yang sudah pernah diucapkan.
+Jadi mereka berbagi plafon kaca yang sama : mereka hanya menjawab apa yang eksplisit direncanakan atau direkam. ELIZA tersesat kalau kamu keluar dari bingkai terapeutik. PARRY hanya bicara soal tema paranoidnya. ALICE tidak belajar apa pun dari percakapannya. Jabberwacky hanya menjawab dengan replika yang sudah diucapkan. Ketika kamu menguji batas ini, kamu cepat paham kenapa generasi ini mentok.
 
-LLM (Large Language Models) melampaui batasan ini dengan mengubah paradigma secara radikal : alih-alih memanipulasi simbol, mereka mengubah bahasa menjadi **angka** dan mempelajari **hubungan statistik** antara angka-angka ini. Mereka tidak menyimpan respons yang sudah ditulis sebelumnya -- mereka menghasilkan setiap token saat itu juga dengan menghitung probabilitas. Mari kita lihat sekilas cara kerjanya.
+LLM (Large Language Models) melompati plafon ini dengan mengubah paradigma secara radikal : alih-alih memanipulasi simbol, mereka mengubah bahasa menjadi **angka** dan mempelajari **relasi statistik** antara angka ini. Mereka membangkitkan tiap token langsung dengan menghitung probabilitas, dari pengetahuan yang dienkode dalam bobotnya alih-alih respons yang sudah ditulis. Saya menganggap peralihan ini menarik karena ia membalik total logika bot sebelumnya. Mari lihat cepat cara kerjanya.
 
 ### 1. Tokenisasi
 
-Langkah pertama adalah memotong teks menjadi **token** -- unit yang lebih kecil dari kata tetapi lebih besar dari karakter :
+Langkah pertama adalah memotong teks menjadi **token** -- unit yang lebih kecil dari kata tapi lebih besar dari karakter :
 
 ```
 "Je ne comprends pas"
   → ["Je", " ne", " comprend", "s", " pas"]
 ```
 
-Setiap token memiliki ID numerik dalam kosakata (biasanya 32.000 hingga 128.000 token untuk model terbaru). Fragmentasi ini memungkinkan model menangani kata-kata yang belum pernah dilihat dengan memecahnya menjadi sub-kata yang dikenal.
+Setiap token punya ID numerik dalam kosakata (umumnya 32 000 hingga 128 000 token untuk model terbaru). Fragmentasi ini memungkinkan model menangani kata yang tidak pernah dilihatnya dengan menguraikannya menjadi sub-kata yang dikenal.
 
 ### 2. Embedding
 
-Setiap ID token diubah menjadi **vektor** -- sebuah array angka floating-point (biasanya 4096 dimensi untuk model ukuran sedang). Vektor ini adalah **embedding** yang mengkodekan makna token dalam ruang matematis di mana token yang mirip secara semantik memiliki vektor yang berdekatan :
+Setiap ID token diubah menjadi **vektor** -- tabel angka float (umumnya 4096 dimensi untuk model ukuran sedang). Vektor ini adalah **plongement** (embedding) yang mengenkode makna token dalam ruang matematis di mana token yang semantiknya dekat punya vektor yang dekat :
 
 ```
-vecteur("roi") − vecteur("homme") + vecteur("femme") ≈ vecteur("reine")
+vektor("roi")  − vektor("homme") + vektor("femme")  ≈  vektor("reine")
 ```
 
-Sifat ini muncul dari pelatihan -- tidak ada yang memprogramnya secara eksplisit. Ini adalah konsekuensi dari cara kata-kata digunakan dalam konteks yang serupa.
+Sifat ini muncul dari pelatihan, tanpa pemrograman eksplisit dari saya atau para peneliti. Saya melihat di sana akibat langsung dari cara kata muncul dalam konteks mirip.
 
-### 3. Attention
+### 3. Atensi
 
-Mekanisme **attention** (diperkenalkan oleh makalah "Attention is All You Need" tahun 2017) adalah yang membuat LLM menjadi mungkin. Untuk setiap token, attention menghitung token lain mana dalam kalimat yang penting untuk memahami token ini :
+Mekanisme **atensi** (diperkenalkan lewat makalah "Attention is All You Need" pada 2017) inilah yang membuat LLM mungkin. Untuk setiap token, atensi menghitung token lain mana dalam kalimat yang penting untuk memahami yang ini :
 
 ```
 "La banque a refusé mon prêt."
-     ↑
-Token "banque" melihat : "refusé", "prêt" → paham bahwa ini adalah institusi keuangan
+      ↑
+Token "banque" melihat: "refusé", "prêt" → paham ini lembaga keuangan
 
 "Je vais me promener sur la banque."
-     ↑
-Token "banque" melihat : "promener", "sur" → paham bahwa ini adalah tepi sungai
+      ↑
+Token "banque" melihat: "promener", "sur" → paham ini tepi sungai
 ```
 
-Attention memungkinkan model menangkap **konteks** -- setiap token dipahami berdasarkan apa yang ada di sekitarnya, tidak secara terisolasi.
+Atensi memungkinkan model menangkap **konteks** : setiap token dipahami menurut yang mengelilinginya, dalam bacaan yang sepenuhnya relasional. Kepekaan pada konteks inilah yang paling membantu saya memahami kenapa LLM melampaui pola tetap.
 
-### 4. Prediksi Token Berikutnya
+### 4. Prediksi token berikutnya
 
-Pelatihan LLM memiliki kesederhanaan yang menipu : kita tunjukkan sebuah teks, sembunyikan token terakhir, dan minta ia memprediksinya. Lalu ulangi miliaran kali.
+Pelatihan LLM bersandar pada kesederhanaan yang menipu : kamu menunjukkan teks padanya, kamu sembunyikan token terakhir, dan kamu memintanya memprediksinya. Lalu kamu ulangi operasinya miliaran kali. Saya suka ide ini karena aturan belajar yang sangat sederhana menghasilkan kemampuan yang sangat kaya.
 
 ```
-Input: "Je ne comprends"
-Sembunyi: "pas"
-Prediksi model : "pas" (probabilitas 0.87), "rien" (0.05), "jamais" (0.02)...
+Input:  "Je ne comprends"
+Disembunyikan:  "pas"
+Prediksi model: "pas" (probabilitas 0.87), "rien" (0.05), "jamais" (0.02)...
 ```
 
-Tujuannya adalah memaksimalkan probabilitas token yang benar di setiap posisi. Ini disebut **next-token prediction**. Selama pelatihan, model menyesuaikan miliaran parameternya untuk meminimalkan kesalahan prediksi pada terabyte teks.
+Tujuannya adalah memaksimalkan probabilitas token benar di setiap posisi. Inilah yang disebut **prediksi token berikutnya**. Selama pelatihan, model menyesuaikan miliaran parameternya untuk meminimalkan error prediksi pada terabita teks.
 
-Saat inferensi (ketika kita berbicara dengannya), model menghasilkan satu token pada satu waktu dalam satu loop :
+Pada momen inferensi (ketika kamu berbicara dengannya), model membangkitkan satu token demi satu dalam loop :
 
 ```
 Token 1: "Je"    (input: "Parle-moi de toi.")
@@ -447,73 +446,71 @@ Token 4: "chatbot" (input: "Parle-moi de toi. Je suis un")
 ...
 ```
 
-Setiap token diambil sampelnya berdasarkan probabilitasnya (temperature, top-k, top-p mengontrol tingkat "kreativitas"). Dan hanya itu. Miliaran parameter melakukan ini ribuan kali.
+Setiap token disampel menurut probabilitasnya (temperatur, top-k, top-p mengendalikan derajat "kreativitas"). Dan itu saja. Miliaran parameter yang mengulangi operasi ini ribuan kali. Saya menganggap pusing bahwa mekanisme yang begitu repetitif menghasilkan respons yang begitu bervariasi.
 
-### Apa yang Berubah Secara Fundamental
+### Apa yang berubah secara fundamental
 
-| Aspek | Bot Simbolis (ELIZA, PARRY, ALICE) | LLM Modern |
+| Aspek | Bot simbolis (ELIZA, PARRY, ALICE) | LLM modern |
 |--------|--------------------------------------|--------------|
 | Representasi | Kata dan aturan eksplisit | Vektor numerik (embedding) |
-| Generasi | Seleksi dari respons yang sudah ditulis | Prediksi probabilistik token per token |
-| Pengetahuan | Disimpan dalam file aturan | Dienkode dalam bobot jaringan |
-| Pembelajaran | Manual (menulis aturan) | Otomatis (pelatihan pada korpus) |
-| Ketahanan | Nol di luar pola yang direncanakan | Generalisasi ke input yang belum pernah dilihat |
-| Interpretabilitas | Sempurna (aturan dapat dibaca) | Terbatas (kotak hitam) |
+| Pembangkitan | Seleksi dalam respons yang sudah ditulis | Prediksi probabilistik token per token |
+| Pengetahuan | Disimpan dalam berkas aturan | Dienkode dalam bobot jaringan |
+| Pembelajaran | Manual (penulisan aturan) | Otomatis (pelatihan pada korpus) |
+| Ketangguhan | Nol di luar motif yang direncanakan | Menggeneralisasi ke masukan yang tak pernah dilihat |
+| Interpretabilitas | Sempurna (aturannya bisa dibaca) | Terbatas (kotak hitam) |
 
-Chatbot klasik **transparan tapi rapuh**. LLM **kuat tapi buram**. Kedua pendekatan masih ada hingga hari ini -- bukan sebagai pesaing, tetapi sebagai alat untuk kebutuhan yang berbeda.
+Chatbot klasik **transparan tapi rapuh**. LLM **tangguh tapi opak**. Saya melihat mereka hari ini sebagai alat komplementer untuk kebutuhan berbeda, dan saya memilih satu atau lainnya menurut tingkat kontrol yang ingin kamu jaga atas respons.
 
-Si vous voulez approfondir le fonctionnement interne des LLM, cette vidéo est une excellente ressource :
+Kalau kamu ingin mendalami cara kerja internal LLM, saya merekomendasikan video ini sebagai sumber bagus :
 
-Jika Anda ingin mendalami cara kerja internal LLM, video ini adalah sumber yang sangat baik:
-
-[How LLMs Work — YouTube](https://www.youtube.com/watch?v=YmLp8qe87A0)
+[How LLMs Work - YouTube](https://www.youtube.com/watch?v=YmLp8qe87A0)
 ---
 
-## Luna Protocol : Sintesis Modern
+## Luna Protocol : sintesis modern
 
-Artikel tentang **Luna Protocol** (tautan di bawah) mewakili sintesis paling matang dari semua yang baru saja kita lihat : sebuah bot Discord modern yang menggabungkan LLM lokal dengan sistem perilaku yang canggih, dibangun di atas pelajaran dari 60 tahun AI percakapan.
+Artikel tentang **Luna Protocol** (yang tautannya di bawah) mewakili menurut saya sintesis paling matang dari semua yang baru saya tunjukkan : bot Discord modern yang menggabung LLM lokal dengan sistem perilaku canggih, semuanya dibangun di atas pelajaran 60 tahun AI percakapan. Proyek inilah yang memungkinkan saya menghubungkan port historis saya ke eksperimen saya saat ini.
 
-### [Luna Protocol : Saya membuat bot Discord otonom yang mensimulasikan manusia](/articles/id/luna-protocol-discord-bot)
+### [Luna Protocol : saya menciptakan bot Discord otonom yang mensimulasikan manusia](/articles/fr/luna-protocol-discord-bot)
 
 Artikel ini merinci arsitektur lengkap bot Discord berbasis LLM :
-- **Sistem pemicu prioritas** (mention > DM > nama > kata kunci > follow-up > acak)
-- **Perilaku manusia** : konsentrasi bervariasi, salah ketik, keraguan (15%), kelupaan (3%), kelelahan tematik
-- **Jadwal tidur** : bot tidur, melambat, atau mengabaikan tergantung waktu
-- **Pipeline TTS** : sintesis suara melalui Piper + ffmpeg → pesan suara Discord
-- **Streaming real-time** : LLM memancarkan token satu per satu pada bus peristiwa bertipe
+- **Sistem pemicu** berprioritas (mention > DM > nama > kata kunci > follow-up > acak)
+- **Perilaku manusia** : konsentrasi variabel, salah ketik, keraguan (15%), lupa (3%), kelelahan tematis
+- **Jadwal tidur** : bot tidur, melambat, atau mengabaikan menurut jam
+- **Pipeline TTS** : sintesis vokal lewat Piper + ffmpeg → pesan vokal Discord
+- **Streaming waktu nyata** : LLM memancarkan token satu per satu di bus event bertipe
 
-Yang menghubungkan artikel ini dengan chatbot historis adalah pencarian yang sama : **membuat orang percaya mereka berbicara dengan manusia**. ELIZA melakukannya dengan cermin teks. PARRY dengan model emosional. ALICE dengan 99k kategori. Luna Protocol melakukannya dengan LLM yang di-fine-tune + sistem perilaku yang mensimulasikan ketidaksempurnaan manusia.
+Yang menghubungkan artikel ini ke chatbot historis adalah pencarian yang sama : **membuat orang percaya sedang bicara dengan seseorang**. ELIZA memakai cermin tekstual. PARRY memakai model emosional. ALICE memakai 99k kategori. Luna Protocol memakai LLM yang di fine-tune + sistem perilaku yang mensimulasikan ketidaksempurnaan manusia. Saya menemukan kembali dalam silsilah ini tuntutan yang sama : menciptakan ilusi kehadiran di seberang layar.
 
-### [Luna Protocol : mengapa saya melakukan fine-tune model 1,5B](/articles/id/luna-protocol-official-models)
+### [Luna Protocol : kenapa saya men fine-tune model 1,5B](/articles/fr/luna-protocol-official-models)
 
-Artikel kedua mengeksplorasi fine-tuning dan few-shot priming. Temuan utamanya : **model yang lebih kecil (1,5B) yang dilatih pada lebih sedikit data (50k sampel) mengungguli model yang lebih besar (3B)** ketika dipersiapkan dengan benar menggunakan contoh few-shot.
+Artikel kedua menjelajahi fine-tuning dan few-shot priming. Penemuan sentral saya : **model lebih kecil (1,5B) yang dilatih pada lebih sedikit data (50k sampel) melampaui model lebih besar (3B)** ketika di priming benar dengan contoh few-shot. Saya benar-benar terkejut oleh hasil ini ketika mengukurnya.
 
-Ini adalah pelajaran yang beresonansi langsung dengan chatbot historis :
-- ELIZA menunjukkan bahwa dengan beberapa aturan yang dirancang dengan baik, kita bisa mensimulasikan pemahaman
-- ALICE menunjukkan bahwa dengan 99k kategori, kita bisa mensimulasikan pengetahuan umum
-- Luna Protocol menunjukkan bahwa dengan fine-tuning yang baik dan 5 contoh few-shot, LLM kecil bisa mensimulasikan manusia
+Ini pelajaran yang bergema langsung dengan chatbot historis :
+- ELIZA menunjukkan bahwa dengan beberapa aturan yang dirancang baik, kita bisa mensimulasikan pemahaman
+- ALICE menunjukkan bahwa dengan 99k kategori, kita bisa mensimulasikan budaya umum
+- Luna Protocol menunjukkan bahwa dengan fine-tuning bagus dan 5 contoh few-shot, LLM kecil bisa mensimulasikan manusia
 
-Tekniknya berbeda, tapi prinsipnya sama : **kualitas data dan presisi sistem lebih penting daripada ukuran mentah**.
+Tekniknya berubah, dan prinsipnya tetap sama : **kualitas data dan ketepatan sistem lebih penting daripada ukuran mentah**. Ini keyakinan yang saya bela dalam eksperimen saya sendiri.
 
 ---
 
-## Kesimpulan : Tiga Hal yang Perlu Diingat
+## Kesimpulan : tiga hal yang perlu diingat
 
-**1. AI percakapan tidak dimulai dengan ChatGPT.** ELIZA berusia 60 tahun. PARRY lulus uji Turing pada tahun 1972. ALICE memenangkan Loebner tiga kali. Jabberwacky meletakkan dasar pembelajaran berbasis transkrip, yang diindustrialisasikan Cleverbot dalam skala besar. Setiap pendekatan membawa satu bagian dari teka-teki.
+**1. AI percakapan tidak dimulai dengan ChatGPT.** ELIZA berumur 60 tahun. PARRY lolos tes Turing pada 1972. ALICE memenangkan Loebner tiga kali. Jabberwacky meletakkan dasar pembelajaran lewat transkrip, yang diindustrialisasi Cleverbot dalam skala besar. Setiap pendekatan membawa satu keping puzzle. Itulah yang dikonfirmasi port saya.
 
-**2. Lebih banyak data ≠ lebih pintar.** Transkrip Jabberwacky tidak memiliki aturan. 99k kategori ALICE tidak belajar. Fine-tuning Luna Protocol pada 50k sampel mengungguli model 3B. Kebijaksanaan konvensional mengatakan "semakin besar semakin baik" -- sejarah chatbot menunjukkan bahwa arsitektur dan desain sama pentingnya dengan ukuran.
+**2. Lebih banyak data ≠ lebih cerdas.** Transkrip Jabberwacky tidak punya aturan. 99k kategori ALICE tidak belajar. Fine-tuning Luna Protocol pada 50k sampel melampaui model 3B. Kebijaksanaan konvensional bilang "makin besar makin baik" -- sejarah chatbot menunjukkan bahwa arsitektur dan desain sama pentingnya dengan ukuran. Saya membela ide ini dalam setiap pilihan teknis saya.
 
-**3. Masalahnya tetap sama selama 60 tahun.** Bagaimana membuat manusia percaya bahwa ia sedang berbicara dengan manusia lain? ELIZA menjawab dengan cermin teks. PARRY dengan kemarahan yang disimulasikan. ALICE dengan fakta. Luna Protocol dengan LLM yang tidur dan membuat salah ketik. Solusi berubah, kebutuhannya tetap sama.
+**3. Masalahnya sama sejak 60 tahun.** Bagaimana membuat manusia percaya ia bicara dengan manusia lain? ELIZA menjawab dengan cermin tekstual. PARRY dengan kemarahan simulasi. ALICE dengan fakta. Luna Protocol dengan LLM yang tidur dan salah ketik. Solusinya berubah, kebutuhannya tetap. Kontinuitas inilah yang membuat saya ingin terus menjelajah.
 
-Repo ini bersifat open source -- kamu bisa mengkloning, menjalankan setiap bot, dan melihat sendiri bagaimana 60 tahun AI percakapan muat dalam satu repo TypeScript.
+Repo-nya open source, kamu bisa mengkloningnya, menjalankan setiap bot, dan melihat sendiri bagaimana 60 tahun AI percakapan muat dalam satu depot TypeScript. Saya harap kamu bersenang-senang seperti saya membuatnya bicara.
 
-| Sumber Daya | Tautan |
+| Sumber daya | Tautan |
 |-----------|------|
-| GitHub Repo | [fox3000foxy/chatbots](https://github.com/fox3000foxy/chatbots) |
-| Luna Protocol -- arsitektur bot | [Baca artikel](/articles/id/luna-protocol-discord-bot) |
-| Luna Protocol -- fine-tuning few-shot | [Baca artikel](/articles/id/luna-protocol-official-models) |
+| Depot GitHub | [fox3000foxy/chatbots](https://github.com/fox3000foxy/chatbots) |
+| Luna Protocol -- arsitektur bot | [Baca artikel](/articles/fr/luna-protocol-discord-bot) |
+| Luna Protocol -- fine-tuning few-shot | [Baca artikel](/articles/fr/luna-protocol-official-models) |
 | Skrip ELIZA asli | [anthay/ELIZA](https://github.com/anthay/ELIZA) |
 | Kode sumber PARRY asli | [lexcore/PARRY](https://github.com/lexcore/PARRY) |
 | AIML Free ALICE v1.6 | [drwallace/aiml-en-us-foundation-alice](https://github.com/drwallace/aiml-en-us-foundation-alice) |
 | RFC 439 asli | [PARRY Encounters the DOCTOR](https://tools.ietf.org/html/rfc439) |
-| Penjelasan luar biasa tentang cara kerja LLM | [https://www.youtube.com/watch?v=YmLp8qe87A0](https://www.youtube.com/watch?v=YmLp8qe87A0) |
+| Penjelasan bagus cara kerja LLM | [https://www.youtube.com/watch?v=YmLp8qe87A0](https://www.youtube.com/watch?v=YmLp8qe87A0) |

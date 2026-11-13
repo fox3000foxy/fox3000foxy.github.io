@@ -1,6 +1,6 @@
 ---
-title: "GitHub Actionsを巧妙に使う5つの方法（そしてシークレットについて学ぶこと）"
-description: "CIランナーを無料VPSに変身、自分でPRを開くボット、シークレットなしのnpmパブリッシュ。「lint + test + deploy」を超えたGitHub Actionsパターンのカタログ。"
+title: "GitHub Actionsの裏ワザ的使い方5選（そしてシークレットについて学んだこと）"
+description: "CIランナーを無料VPS化、自分でPRを開くボット、シークレットなしのnpm公開。単なる「lint + test + deploy」を超えたGitHub Actionsパターンを自分のリポジトリから集めたカタログ。"
 date: 2026-07-14
 tags:
   - github-actions
@@ -9,35 +9,35 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "vzLP1YzPI5ejqQHlthQsAR8YoEsvTOdT6jKnNxA4WKzF/8oatQGi0Jd0o5fiI94pVx8zWgXV8VXbe/LGBfughA=="
+author_sig: "AqXgQwuokowtyJwu82x8LJFDG2uMABjQ79jdSkdnu6cQxuT/WCOX942koVRmPLwFg4IPsP7nJo4fv1cUp8LAxw=="
 ---
 
-# GitHub Actionsを巧妙に使う5つの方法
+# GitHub Actionsの裏ワザ的使い方5選
 
-GitHub Actionsは本来、古典的なCI/CDのためのものだ。プッシュすればリントし、テストし、デプロイする。特殊なケースについてはすでに書いた -- gitタグをメールボットのデータベースとして使う方法（専用記事参照）。でも自分のリポジトリを掘り返すと、一つのプロジェクトに絞らずカタログ的にまとめる価値があるくらいパターンが揃ってた。
+GitHub Actionsは本来、古典的なCI/CDのためのものだ。pushしたらlintして、テストして、デプロイする。私はすでに特殊なケースについて書いたことがある（メールボット用にgitタグをデータベースとして使う方法は専用の記事を参照）。でも自分のリポジトリを掘り返してみると、1つのプロジェクトに絞らないカタログ記事にするだけの価値があるくらい、いろんなパターンが出てきた。
 
-五つ。一番普通のから一番ひねくれたやつまで。
+5つの使い方を、王道なものから一番ひねくれたものまで紹介する。
 
-## 1. gitタグをラン間の永続状態として使う
+## 1. gitタグをrun間の永続的な状態として使う
 
-簡単に復習すると、詳細は`email-autoreply`の記事にある。GitHub Actionsは設計上ステートレスだ -- 毎回まっさらなマシンから始まる。回避策: 値（ID、タイムスタンプなど小さな状態）を専用のgitタグに保存する。ブランチじゃなくて。
+手短なおさらいだが、詳しくは`email-autoreply`の記事にある。GitHub Actionsは設計上ステートレスだ。各runはまっさらなマシンから始まる。回避策は、値（ID、タイムスタンプ、その他小さな状態）をブランチではなく専用のgitタグに保存することだ。
 
 ```bash
 # 状態を読む
 git show refs/tags/lastid:data/lastId > data/lastId
 
-# 状態を書く（孤立ブランチ、単一コミット、タグをforce-push）
+# 状態を書く（orphanブランチ、コミットは1つだけ、タグをforce-push）
 git switch --orphan lastid-tmp
 git commit -m "lastId snapshot"
 git tag -f lastid
 git push --force origin lastid
 ```
 
-キモ: 孤立ブランチで履歴を一切蓄積せず、ブランチではなく強制タグでリポジトリのブランチ一覧を汚さない。
+ポイントは、履歴を溜めないためのorphanブランチと、リポジトリのブランチ一覧を汚さないためのブランチではなく強制上書きするタグを使うことだ。
 
 ## 2. gitタグをプリコンパイル済みビルドキャッシュとして使う
 
-同じ発想の別用途: アプリの状態の代わりに**ビルドアーティファクト**を保存する。`build`ジョブがコードを一度コンパイルし（`master`へのプッシュ時）、`dist/` + `node_modules/`を`runtime`タグにプッシュする。`cron`ジョブは毎回`bun install && bun run build`を回す代わりにこのタグを直接チェックアウトする:
+同じ系統のアイデアで、使い方が違う。アプリの状態ではなく**ビルド成果物**を保存する。`build`ジョブがコードを1回だけコンパイルし（`master`へのpush時）、`dist/`と`node_modules/`を`runtime`タグにpushする。`cron`ジョブ側は毎回`bun install && bun run build`を回す代わりに、このタグを直接チェックアウトする。
 
 ```yaml
 - name: Checkout runtime snapshot
@@ -45,15 +45,15 @@ git push --force origin lastid
   with:
     ref: refs/tags/runtime
     fetch-depth: 1
-# installもbuildもなし -- コードは準備済み
+# installなし、buildなし。コードはもう準備できている
 - run: node dist/index.js --action
 ```
 
-これで実行時間が約20秒から約10秒に変わる。頻繁に回るcronでは意味がある。`actions/cache`も似た仕事をするが（依存関係のキャッシュ）、gitタグはバージョン付きアーティファクトを丸ごと凍結して明示的に指したい時により直接的だ -- 単に`npm install`を速くするだけじゃない。
+これでrunが約20秒から約10秒に短縮される。頻繁に回るcronでは効いてくる。`actions/cache`も似た仕事をする（依存関係をキャッシュする）が、`npm install`を速くするだけではなく、バージョン付き成果物をがっちり固定して明示的に指したい場合はgitタグの方が直接的だ。
 
-## 3. 複数ジョブを束ねる単一の必須チェック
+## 3. 複数ジョブを集約する必須チェックを1つだけ作る
 
-地味だけどブランチ保護設定を根本から変えるパターン。`konosuba-rpg`では、CIに3つの独立ジョブ（`typecheck`、`lint`、`tests`）が並列で走り -- 4つ目のジョブ`test-battery`は最初の3つに依存するだけで何もしない:
+地味に見えるが、保護ブランチの設定では人生が変わるパターンだ。`konosuba-rpg`ではCIに3つの独立したジョブ（`typecheck`、`lint`、`tests`）が並列で回っていて、4つ目のジョブ`test-battery`はこの3つに依存するだけで他には何もしない。
 
 ```yaml
 test-battery:
@@ -66,13 +66,13 @@ test-battery:
     - run: echo "Typecheck, lint and tests succeeded."
 ```
 
-このファサードジョブなしだと、保護ブランチの設定で3つの必須チェックを別々にチェックし、ジョブが追加されたり名前が変わったりするたびにそのリストを更新しなきゃいけない。`test-battery`があれば、リポジトリ設定で名前一つチェックするだけで、内部が変わっても安定してる。
+このダミージョブがないと、保護ブランチの設定では3つの必須チェックを別々にチェックし、ジョブが追加・改名されるたびに一覧を更新しなければならない。`test-battery`があれば、リポジトリ設定でチェックする名前は1つだけで、中身が変わっても安定したまま使える。
 
 ## 4. 無料ランナーを一時VPSに変える
 
-これが一番ひねくれていて、明らかに俺のお気に入り: `repo-to-vps`はGitHub Actionsランナーの本来の使い方を完全に乗っ取って、SSHでアクセス可能なLinuxマシンにする。無料。最大6時間（ジョブの最大時間）。
+これが一番ひねくれていて、明らかに私のお気に入りだ。`repo-to-vps`はGitHub Actionsランナーの想定用途を完全に踏み外して、無料で最大6時間（1ジョブの上限）使えるSSH接続可能なLinuxマシンに仕立てている。
 
-原理: tmateを起動する以外ほとんど何もしないジョブ:
+仕組みは、[tmate](https://tmate.io/)（SSHやブラウザで共有できるターミナルセッションを公開するtmuxのフォーク）を起動するだけのジョブだ。
 
 ```yaml
 name: debug-runner
@@ -95,44 +95,44 @@ jobs:
       - run: bash .github/scripts/start-tmate.sh
 ```
 
-本当の難題は、GitHub Actionsランナーのファイルシステムが**使い捨て**だってことだ -- ジョブが終わった瞬間に全部消える。何時間も続くSSHセッションも、やったことが次の実行で蒸発したら無意味だ。解決策: ファイルシステムのライブスナップショットとして機能するgitブランチ。継続的に同期。
+本当の難所は、GitHub Actionsランナーのファイルシステムが**使い捨て**なことだ。ジョブが終われば全部消える。何時間も続くSSHセッションも、そこでやったことが次のrunで蒸発するなら意味がない。解決策は、ファイルシステムのライブスナップショット用gitブランチを用意して、継続的に同期することだ。
 
-`start-tmate.sh`スクリプトは順に:
+`start-tmate.sh`スクリプトは順番にこう動く。
 
-1. ジョブ開始時に専用の`filesystem`ブランチからファイルシステムを**復元**する（`git reset --hard`）。
-2. `inotifywait`でファイル変更を継続的に**監視**し、ファイルが動くたびに**即コミット＋プッシュ**:
+1. ジョブ開始時に専用ブランチ`filesystem`からファイルシステムを**復元**する（その上に`git reset --hard`）。
+2. `inotifywait`でファイル変更を継続的に**監視**し、ファイルが動くたびに即**コミットしてpush**する。
 
 ```bash
 autosave() {
   while inotifywait -qq -r -e modify,create,delete,move \
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock)(/|$)' .; do
     commit_and_push
-    sleep 1
+    sleep 1   # debounce
   done
 }
 ```
 
-3. 保存のたびに新しいコミットではなく前のコミットを**修正**する（`git commit --amend --no-edit`）、だから`filesystem`ブランチは常に単一コミット -- 何千ものスナップショットが溜まらない。
-4. `while true`ループでセッションが死んだらtmateを自動再起動、`remain-on-exit on`で`exit`後もターミナルに接続可能。
-5. tmateが生成したSSH URLを`host.conf`ファイルに書き込み、`filesystem`ブランチにコミット -- ジョブのログにライブアクセスできなくてもGitHub API（`gh api .../contents/host.conf`）で取得可能。
-6. `periodic_save`ルーチンが5秒ごとにバックグラウンドで回り、`inotifywait`がイベントを見逃した場合に備える。
+3. 各保存は新規コミットではなく直前のコミットを**amend**する（`git commit --amend --no-edit`）ので、`filesystem`ブランチは常にコミット1つだけで、何千ものスナップショットが溜まらない。
+4. `while true`ループが、セッションが死んだら`tmate`を自動で再起動する。`remain-on-exit on`で`exit`後もターミナルに到達できるままにしておく。
+5. tmateが生成したSSH用URLは`host.conf`ファイルに書き出して`filesystem`ブランチにコミットするので、ジョブのログをリアルタイムで見ていなくてもGitHub API（`gh api .../contents/host.conf`）経由で回収できる。
+6. `inotifywait`がイベントを取りこぼした場合に備えて、`periodic_save`ルーチンがバックグラウンドで5秒ごとに回る。
 
-結果: どこからでもアクセス可能な完全なLinuxシェル。セッション間でファイルシステムが持続する -- 基盤インフラ（GitHub Actionsランナー）は絶対にそんな用途に設計されてないのに。唯一の本当の制限はジョブあたり6時間のタイムアウト -- それを過ぎたらワークフローを再起動する必要がある。
+結果として、完全なLinuxシェルにどこからでもアクセスでき、土台（GitHub Actionsランナー）はそんな用途をまったく想定していないのにファイルシステムはセッション間で永続化される。唯一の本当の制限は1ジョブ6時間のタイムアウトで、それを超えたらワークフローを再起動する必要がある。
 
-## 5. 自分でPRを開くボット
+## 5. 自分でプルリクエストを開くボット
 
-`konosuba-rpg`では、`dev`ブランチへのプッシュが`main`へのオープンなPRが既にあるかチェックするジョブをトリガーする -- なければ`actions/github-script`とGitHub REST APIで自動生成:
+`konosuba-rpg`では、`dev`ブランチへのpushでジョブが起動し、`main`へのオープンPRがすでにあるか確認して、なければ自動で作成する。`actions/github-script`とGitHub REST API経由だ。
 
 ```js
 const { data: comparison } = await github.rest.repos.compareCommits({
   owner, repo, base: 'main', head: 'dev',
 });
-if (comparison.ahead_by === 0) return;
+if (comparison.ahead_by === 0) return; // 提案するものなし
 
 const { data: existing } = await github.rest.pulls.list({
   owner, repo, state: 'open', head: `${owner}:dev`, base: 'main',
 });
-if (existing.length > 0) return;
+if (existing.length > 0) return; // すでにオープンなPRあり
 
 await github.rest.pulls.create({
   owner, repo, head: 'dev', base: 'main',
@@ -140,7 +140,7 @@ await github.rest.pulls.create({
 });
 ```
 
-ここで重要なのは使われるトークンだ。このワークフローは自動の`GITHUB_TOKEN`を**使わない** -- 別途`AUTO_PR_TOKEN`シークレットを要求し、なければ続行を拒否する:
+ここで大事なのは使うトークンだ。このワークフローは自動の`GITHUB_TOKEN`を**使わない**。別のシークレット`AUTO_PR_TOKEN`を必須とし、なければ続行を拒否する。
 
 ```yaml
 - name: Validate pull request token
@@ -153,13 +153,13 @@ await github.rest.pulls.create({
     fi
 ```
 
-## 6. シークレットなしでnpmにパブリッシュ
+## 6. シークレットなしでnpmに公開する
 
-五つの中で一番静かだけど、未来にとって一番重要かもしれない: `typescript-virtual-container`の`publish.yml`ワークフローには**npmシークレットが一切ない**。`NPM_TOKEN`も`NODE_AUTH_TOKEN`もなし。これだけ:
+5つの中では一番目立たないが、おそらく将来に向けて一番重要だ。`typescript-virtual-container`の`publish.yml`ワークフローには**npmシークレットが一切ない**。`NPM_TOKEN`も`NODE_AUTH_TOKEN`もない。あるのはこれだけだ。
 
 ```yaml
 permissions:
-  id-token: write
+  id-token: write  # Required for OIDC
   contents: read
 jobs:
   publish:
@@ -170,15 +170,15 @@ jobs:
       - run: npm publish
 ```
 
-`npm publish`が動作するのは、npmレジストリがOIDC経由の**trusted publishing**をサポートするようになったからだ: ワークフローがレジストリに直接自分の身元を証明し（npmjs.org側で設定された正確なリポジトリ＋正確なワークフロー）、静的なトークンがどこにも保存も転送もされない。漏洩するシークレットも、半年ごとにローテートするトークンもゼロ。
+それでも`npm publish`は動く。npmレジストリがOIDC経由の**trusted publishing**に対応しているからだ。ワークフローは自分の身元をレジストリに直接証明する（正確なリポジトリとワークフローはnpmjs.org側で設定）。静的なトークンはどこにも通過せず、どこにも保存されない。漏れるシークレットはゼロ、半年ごとに回すトークンもゼロだ。
 
 ---
 
-## GitHubシークレット、深掘り
+## GitHubシークレットを深掘りする
 
-この5つのパターンは全部、何らかの形でシークレットの問題に触れている。俺のワークフロー全体で繰り返し出てくる原則:
+この5つのパターンはどれも、何らかの形でシークレットの問題に触れている。私のワークフロー全体で繰り返し出てくる原則をいくつか挙げる。
 
-**シークレットは必ずしも単純な文字列じゃない。** `email-autoreply`では、`ACCOUNTS_JSON`がマルチアカウント設定のミニファイされたJSON全体を含んでいる -- APIキーだけじゃなく、完全なデータ構造をランタイムにそのままファイルに注入:
+**シークレットは単純な文字列とは限らない。** `email-autoreply`では、`ACCOUNTS_JSON`にマルチアカウント設定の縮小JSON全体が入っている。単なるAPIキーではなく完全なデータ構造で、実行時にそのままファイルに注入する。
 
 ```yaml
 env:
@@ -186,27 +186,28 @@ env:
 run: printf "%s" "$ACCOUNTS_JSON" > data/accounts.json
 ```
 
-設定ファイルをコミットする必要がなく（暗号化されていても）、リポジトリ設定でワンクリックでコードに触れずに更新できる。
+これで設定ファイルをコミットせずに済む（暗号化されていても）。コードに触らずリポジトリ設定からワンクリックで更新できる。
 
-**`GITHUB_TOKEN`には正確な制限があり、それは意図的なものだ。** GitHubが各実行に注入する自動トークンは強力だが、特定の点で封印されている: デフォルトでは別のワークフローをトリガーできず、リポジトリ設定によってはブランチ保護ルールにブロックされる。だからこそ`create-pull-request.yml`が別途PAT（`AUTO_PR_TOKEN`）を要求する -- 実アカウント（またはGitHub App）のトークン、明示的な`contents:write` + `pull-requests:write`権限付き、ジョブの一時トークンとは別。
+**`GITHUB_TOKEN`には明確な制限があり、それは意図的なものだ。** 各runにGitHubが注入する自動トークンは強力だが、いくつかの点では封印されている。デフォルトでは他のワークフローを起動できないし、リポジトリ設定によってはブランチ保護ルールにブロックされることもある。`create-pull-request.yml`が別のPAT（`AUTO_PR_TOKEN`）を必須とするのはまさにそのためだ。ジョブの一時トークンとは別に、本物のアカウント（またはGitHub App）由来のトークンで、明示的な権限`contents:write`と`pull-requests:write`を持つものが必要になる。
 
-**権限はグローバルではなくジョブごとにスコープされる。** ここに挙げた全ワークフローが最小限のコメント付き`permissions:`ブロックを宣言している:
+**権限は全体ではなくジョブごとに絞る。** ここに挙げた各ワークフローは最小限の`permissions:`ブロックを宣言してコメントを付けている。
 
 ```yaml
 permissions:
   contents: read
   actions: read
   checks: write
+  # Only allow writing checks, everything else is read-only
 ```
 
-デフォルトの`GITHUB_TOKEN`は歴史的に公開リポジトリに対してかなり広い権限を持つ。ジョブが実際に必要とするものだけに明示的に制限すれば、チェーン内のサードパーティアクションが侵害された場合の被害を抑えられる。
+デフォルトの`GITHUB_TOKEN`は歴史的にパブリックリポジトリでかなり広い権限を持っていた。ジョブが本当に必要とする範囲に明示的に絞っておけば、チェーン内のサードパーティ製アクション（`uses: 誰かの/action@version`）の1つが侵害されたときの被害を抑えられる。
 
-**最高のシークレットは存在しないシークレットだ。** `typescript-virtual-container`のOIDCパターンはこの考え方の最も完成された形だ: `NPM_TOKEN`のローテーション、期限切れ、漏洩リスクを管理する代わりに、ワークフローが暗号的に自分の身元（この正確なリポジトリ、この正確なワークフロー）をサードパーティサービスに直接証明する。AWS、Docker Hub、PyPIでも同じロジックが使える -- どんどん多くのレジストリとクラウドがGitHub ActionsからのOIDCをサポートしている。
+**最高のシークレットは存在しないシークレットだ。** `typescript-virtual-container`のOIDCパターンはこの考えの最良の形だ。`NPM_TOKEN`のローテーション、有効期限、漏洩リスクを管理する代わりに、ワークフローは自分の身元（この正確なリポジトリ、この正確なワークフロー）をサードパーティサービスに暗号学的に証明する。AWS、Docker Hub、PyPIでも同じ仕組みが使える。GitHub ActionsからのOIDCに対応するレジストリやクラウドはどんどん増えている。
 
 ---
 
-**3つのポイント**
+**要点3つ**
 
-1. gitタグ（孤立、force-push）はミニマリストなデータベースやプリコンパイル済みビルドキャッシュとして機能する -- 同じ仕組みの2つの異なる使い方。
-2. 無料のGitHub Actionsランナーは、`inotifywait`で自動保存し単一のamendコミットでファイルシステムをgitブランチに継続同期することを受け入れれば、永続的なSSHシェルになれる。
-3. デフォルトの`GITHUB_TOKEN`は意図的に制限されている -- ブランチ間PRの作成やシークレットなしのパブリッシュには専用PATかOIDC trusted publishingへの切り替えが必要。
+1. gitタグ（orphan、force-push）はミニマルなデータベースにもプリコンパイル済みビルドキャッシュにもなる。同じ仕組みの別々の使い方だ。
+2. 無料のGitHub Actionsランナーも、ファイルシステムをgitブランチへ継続同期すれば永続SSHシェルになる。`inotifywait`による自動保存とamend1コミットが鍵だ。
+3. デフォルトの`GITHUB_TOKEN`は意図的に制限されている。ブランチ間のPR作成やシークレットなし公開には、専用PATかOIDC trusted publishingへの移行が必要だ。

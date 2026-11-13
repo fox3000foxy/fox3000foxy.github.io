@@ -1,27 +1,27 @@
 ---
-title: "Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor"
-description: "Laupok'un projesinin detaylı bir analizi: Super Mario World'ü bağımsız olarak oynamayı öğrenen bir NEAT tabanlı yapay zeka. Genetik algoritmalar, sinir ağları, artırılmış topolojilerin nöroevrimi ve 4200 satırlık Lua kodu."
+title: "Laupok kendi kendine Super Mario World oynayan bir yapay zekâ yarattı, nasıl çalışıyor"
+
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - ai
   - lua
   - emulation
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Z4opY1VCjWmfROJ8nmAFtQl28J1lsDX6mQY3ctNkC4BUIU1WBZcKI04dc3KLStU/mUY2WM9T2174GRfupEp3Ng=="
+author_sig: "ohJdJHnH6oUUEnKYyqhN4VRbZFxhsoyrxFrwUJNYDRBMk7zoJJc3xmP9dFFGXeOFFOgulaAwCd2MAk39lCZeKw=="
 ---
 
-# Laupok, Super Mario World'ü kendi başına oynayan bir yapay zeka oluşturdu -- nasıl çalışıyor
+# Laupok kendi kendine Super Mario World oynayan bir yapay zekâ yarattı, nasıl çalışıyor
 
-Laupok, **Super Mario World**'ü tamamen bağımsız olarak oynayan bir yapay zeka oluşturdu. Önceden programlanmış girdiler, kaydedilmiş kareler yok. Yapay zeka, rastgele mutasyonlar ve doğal seleksiyon aracılığıyla oyunun bölümlerini bitirmeyi kendi başına öğreniyor. Proje, yaklaşık **4200 satırlık** bir Lua betiği aracılığıyla **BizHawk** çoklu platform emülatöründe çalışır.
+Laupok **Super Mario World** oyununu tamamen özerk oynayan bir yapay zekâ yarattı. Sıfırdan başlar: önceden tanımlı script yok, kaydedilmiş kare yok. Yapay zekâ rastgele mutasyonlar ve doğal seçilim darbeleriyle oyunun seviyelerini bitirmeyi kendi kendine öğrenir. Proje çok platformlu bir emülatör olan **BizHawk** üzerinde yaklaşık **4200 satırlık** bir Lua scriptiyle döner.
 
-Bu projeyi büyüleyici kılan şey, bilişime uygulanan biyolojik kavramlara dayanmasıdır: Darwin'ın **evrim teorisi**, **yapay sinir ağları** ve en önemlisi **NEAT** (Artırılmış Topolojilerin Nöroevrimi) adlı belirli bir algoritmadır. Yapay zeka başlangıçta oyun hakkında hiçbir şey bilmez. Rastgele şeyler dener, binlerce kez başarısız olur ve yavaşça nasıl hareket edeceğini, zıplayacağını ve hayatta kalacağını çözer.
+Bu projeyi büyüleyici yapan şey biyolojik kavramların bilişime uygulanmasına dayanmasıdır: **Darwinin evrim teorisi**, **yapay sinir ağları** ve hepsinden önemlisi **NEAT** (NeuroEvolution of Augmenting Topologies) adlı belirli bir algoritma. Yapay zekâ başlangıçta oyun hakkında hiçbir şey bilmez. Rastgele aksiyonları test eder, binlerce kez başarısız olur ve yavaş yavaş ilerlemeyi, zıplamayı ve hayatta kalmayı anlar.
 
-Bu makalede her şeyi kavram kavram, kod satırı kod satırı inceleyeceğiz.
+Bu makalede bütün bunları didikleyeceğiz: kavram kavram, kod satırı kod satırı.
 
-![Laupok kamera karşısında NEAT algoritmasını anlatıyor](/images/laupok-mario-ai/neat-title.jpg)
+![Laupok kameranın önünde NEAT algoritmasını tanıtıyor](/images/laupok-mario-ai/neat-title.jpg)
 
 ---
 
@@ -29,185 +29,185 @@ Bu makalede her şeyi kavram kavram, kod satırı kod satırı inceleyeceğiz.
 
 ### BizHawk emülatörü
 
-BizHawk, pek çok konsolu destekleyen açık kaynaklı bir emülatördür -- NES, SNES, Genesis, PS1, Game Boy ve daha fazlası. Ana özelliği, oyunla birlikte **Lua betikleri** çalıştırabilmesidir. Bu betikler emülasyonun **RAM'ine** (rastgele erişim belleği) erişebilir, yani herhangi bir oyun verisini gerçek zamanlı olarak okuyabilir --ve değiştirebilir.
+BizHawk bir sürü konsolu destekleyen açık kaynak bir emülatördür: NES, SNES, Genesis, PS1, Game Boy ve daha niceleri. Özelliği oyunla paralel **Lua scriptleri** çalıştırmaya izin vermesidir. Bu scriptler emülasyonun **RAM belleğine** erişir, yani oyunun herhangi bir verisini gerçek zamanlı okuyabilir ve değiştirebilir.
 
-Somut olarak, bu şunları yapabileceğiniz anlamına gelir:
-- Mario'nun bölgedeki konumunu okuma
-- Hangi sprite'ların (düşmanlar, eşyalar) ekranda olduğunu bilme
-- Mario'nun etrafındaki her karonun (blok) durumunu bilme
-- Kumandayı kontrol etme -- herhangi bir düğmeye basma
+Somut olarak bu şu demektir:
+- Seviyede Marionun konumu okunabilir
+- Ekranda hangi spriteların (düşmanlar, eşyalar) olduğu bilinebilir
+- Mario etrafındaki her karenin (blok) durumu bilinebilir
+- Gamepad kontrol edilebilir: herhangi bir düğmeye basılabilir
 
-Bu, bir yapay zekanın oynaması için tam olarak ihtiyacınız olan şeydir.
+Bir yapay zekâyı oynatmak için gereken tam olarak budur.
 
 ### Super Mario World bellek adresleri
 
-Super Mario World'ün RAM'inde, her veri parçası belirli bir adreste saklanır. Bir mahalle gibidir: her adres, içinde bir bilgi parçası barındıran bir "eve" karşılık gelir. Örneğin:
+Super Mario World RAMinde her veri belirli bir adreste saklanır. Biraz mahalle gibidir: her adres bir bilgi içeren bir "eve" karşılık gelir. Örneğin:
 
 | Adres | Veri |
-|-------|------|
-| `0x94`-`0x95` | Mario'nun X konumu (16 bit, little-endian) |
-| `0x96`-`0x97` | Mario'nun Y konumu |
-| `0x14C8`+`i` | Sprite `i` durumu (>7 = yaşıyor) |
-| `0xE4`+`i` | Sprite `i` düşük X konumu |
-| `0x14E0`+`i` | Sprite `i` yüksek X konumu |
-| `0xD8`+`i` | Sprite `i` düşük Y konumu |
-| `0x14D4`+`i` | Sprite `i` yüksek Y konumu |
-| `0x170B`+`i` | Genişletilmiş sprite `i` türü |
-| `0x0100` | Oyun durumu (12 = bölüm tamamlandı) |
+|---------|--------|
+| `0x94`-`0x95` | Marionun X konumu (16 bit, little-endian) |
+| `0x96`-`0x97` | Marionun Y konumu |
+| `0x14C8`+`i` | `i` spritının durumu (>7 = canlı) |
+| `0xE4`+`i` | `i` spritının düşük X konumu |
+| `0x14E0`+`i` | `i` spritının yüksek X konumu |
+| `0xD8`+`i` | `i` spritının düşük Y konumu |
+| `0x14D4`+`i` | `i` spritının yüksek Y konumu |
+| `0x170B`+`i` | `i` genişletilmiş spritının türü |
+| `0x0100` | Oyun durumu (12 = seviye bitti) |
 | `0x13D4` | Duraklatma aktif |
-| `0x0071` | Mario'nun ölüm animasyonu (9 = öldü) |
-| `0x1C800`+... | Bölüm karo tablosu |
+| `0x0071` | Marionun ölüm animasyonu (9 = ölü) |
+| `0x1C800`+... | Seviyenin kare tablosu |
 
-Sprite konumları iki byte kullanır: bir "düşük" byte ve bir "yüksek" byte, çünkü konum 255 pikseli aşabilir. Formül her zaman `düşük + yüksek × 256` şeklindedir.
+Spriteların konumu iki bayt kullanır: bir "düşük" bayt ve bir "yüksek" bayt, çünkü konum 255 pikseli aşabilir. Formül hep `düşük + yüksek × 256` şeklindedir.
 
-Karo için durum daha karmaşıktır: temel adres `0x1C800`'dür ve ofseti dünyanın `x` ve `y` koordinatlarına göre, karo başına 16 piksel adımıyla hesaplarsınız.
+Kareler için daha karmaşıktır: taban adres `0x1C800`dür ve ofset dünyada karenin `x` ve `y` koordinatlarına göre, kare başına 16 piksel adımla hesaplanır.
 
-![Sprite bellek adreslerini ve Mario'nun konumunu gösteren hata ayıklama katmanlı görünümüyle Super Mario World](/images/laupok-mario-ai/memory-debug.jpg)
+![Sprit bellek adreslerini ve Marionun konumunu gösteren hata ayıklama katmanlı Super Mario World](/images/laupok-mario-ai/memory-debug.jpg)
 
 ---
 
 ## Temeller: genetik algoritmalar ve sinir ağları
 
-Koda dalmadan önce iki temel kavramı anlamanız gerekir. Bunlar olmadan diğer hiçbir şey mantıklı gelmez.
+Koda dalmadan önce iki temel kavramı anlamak gerekir. Onlar olmadan gerisi anlamsızdır.
 
 ### Genetik algoritmalar
 
-Genetik algoritma, **evrim teorisinin** bir simülasyonudur. Temel fikir: her biri biraz farklı özelliklere ("genlere") sahip bireylerden oluşan bir **popülasyon** oluşturursunuz. Onları bir ortamda "yaşamaya" bırakırsınız. En iyi performansı gösterenler hayatta kalır ve ürer. Kötü performans gösterenler yok olur.
+Bir genetik algoritma **evrim teorisinin** bir simülasyonudur. Merkez fikir: her biri biraz farklı özellikli ("gen") **popülasyon** yaratılır. Bir ortamda "yaşatılır". En iyi idare edenler hayatta kalır ve ürer. Kötü idare edenler kaybolur.
 
-Laupok bunu bir **Kirby** benzetmesiyle açıklar:
-- Dikenli ve domatesli bir arazide Kirby'lerden oluşan bir popülasyon belirir
-- Dikenler can puanlarını düşürür, domatesler geri kazandırır
-- Her Kirby'nin genleri vardır: boyut, hız, can puanı, davranış (kaç, domates ara, körce koş)
+Laupok bunu bir **Kirby** benzetmesiyle gösterir:
+- Dikenler ve domateslerle bir arazide bir Kirby popülasyonu belirir
+- Dikenler can puanı götürür, domatesler geri verir
+- Her Kirbynin genleri vardır: boyut, hız, can puanı, davranış (kaçmak, domates aramak, her yere dalmak)
 
-![DNA çift sarmalı "the baby", "size", "speed", "color" etiketleriyle -- bir bireyi oluşturan genler](/images/laupok-mario-ai/dna-genes.jpg)
+!["bebek", "boyut", "hız", "renk" etiketli çift sarmal DNA: bir bireyi oluşturan genler](/images/laupok-mario-ai/dna-genes.jpg)
 
-- 15 saniye sonra kimin en uzun süre hayatta kaldığına bakarsınız
-- En iyi Kirby diğerleriyle çiftleşir: yavrular en iyi genlerin yarısını ve en kötü genlerin yarısını miras alır
-- Yavrular rastgele **mutasyonlara** uğrar (biraz daha büyük, biraz daha hızlı...)
-- Eski Kirby'ler yenileriyle değiştirilir
-- Yeniden başlatırsınız
+- 15 saniye sonra kimin en uzun hayatta kaldığına bakılır
+- En iyi Kirby diğerleriyle ürer: bebekler en iyinin genlerinin yarısını ve "en kötünün" yarısını kalıtır
+- Bebekler rastgele **mutasyonlara** uğrar (biraz daha büyük, biraz daha hızlı...)
+- Eski Kirbyler yenileriyle değiştirilir
+- Yeniden başlatılır
 
-180 nesil sonra (~15 saat), Kirby'ler 15 saniyelik hayatta kalma süresinden **15 dakikaya** ulaştı. Küçükleştiler (düşük vuruş kutusu), hızlandılar ve sürekli tehlikeden kaçıyorlar.
+180 nesil (~15 saat) sonra Kirbyler 15 saniyelik hayatta kalmadan **15 dakikaya** geçer. Küçüldüler (azalmış çarpışma bölgesi), hızlandılar ve tehlikeden sürekli kaçarlar.
 
-![Kirby simülasyonu nesil 0: renkli daireler siyah arka planda rastgele dağılmış, boyut olarak benzer](/images/laupok-mario-ai/kirby-gen0.jpg)
+![Simülasyon Kirby nesil 0: siyah fonda rastgele dağılmış renkli daireler, hepsi benzer boyutta](/images/laupok-mario-ai/kirby-gen0.jpg)
 
-![Kirby simülasyonu nesil 1866: Kirby'ler daha küçük, daha hızlı ve sistemli olarak tehlikeden kaçıyor](/images/laupok-mario-ai/kirby-gen1866.jpg)
+![Simülasyon Kirby nesil 1866: Kirbyler daha küçük, daha hızlı ve tehlikelerden sistematik kaçar](/images/laupok-mario-ai/kirby-gen1866.jpg)
 
-![Kirby simülasyonu istatistikleri: performansa göre sıralanmış her bireyin uygunluk değeri, can puanı, davranışı](/images/laupok-mario-ai/kirby-stats.jpg)
+![Kirby simülasyonu istatistikleri: performansa göre sınıflanmış her bireyin fitness, can puanı sayısı, davranışı](/images/laupok-mario-ai/kirby-stats.jpg)
 
-En önemli nokta: **çözümü siz tanımlamıyorsunuz**. Algoritma **kendi başına bulur**. Ve bu, optimum parametre kombinasyonunun ne olacağını bilmediğiniz problemler için onu güçlü kılan şeydir.
+Kritik nokta: **çözümü tanımlamayız**. Algoritma onu **kendi kendine bulur**. Ve onu hangi parametre kombinasyonunun optimal olacağını bilmediğimiz problemler için güçlü yapan tam olarak budur.
 
 ### Yapay sinir ağları
 
-Sinir ağları, insan beyninin basitleştirilmiş bir matematiksel modelidir. Şunlardan oluşur:
-- **Girdi nöronları**: ağın "gördüğü"
-- **Çıktı nöronları**: ağın "karar verdiği"
-- **Bağlantılar (ağırlıklar)**: her bağlantının sinyali güçlendiren veya zayıflatan bir **ağırlığı** vardır
+Bir sinir ağı insan beyninin basitleştirilmiş matematiksel bir modelidir. Şunlardan oluşur:
+- **Girdi nöronları** (inputs): ağın "gördüğü"
+- **Çıktı nöronları** (outputs): ağın "karar verdiği"
+- **Bağlantılar** (ağırlıklar): her bağlantının sinyali güçlendiren ya da zayıflatan bir **ağırlığı** vardır
 
-Prensip basittir: her girdi nöronu değerini gönderir. Bağlantı ağırlığıyla çarpılır, ardından diğer sinyallerle toplanır. Sonuç belirli bir eşiği ( **aktivasyon fonksiyonu** ) aşıyorsa, çıktı nöronu ateşlenir.
+İlke basittir: her girdi nöronu değerini gönderir. Bağlantının ağırlığıyla çarpılır, sonra diğer sinyallerle toplanır. Sonuç belli bir eşiği aşarsa (**aktivasyon fonksiyonu**) çıktı nöronu etkinleşir.
 
-Laupok'un Mario ve fare imleciyle olan benzetmesinde:
-- Girdi nöronu = Mario ile imleç arasındaki mesafe
-- Bağlantı ağırlığı = Mario'nun hassasiyeti
-- Çıktı nöronu = Mario bağırır veya bağarmaz
+Mario ve farenin ucuyla Laupok benzetmesinde:
+- Girdi nöronu = Mario ile uç arasındaki mesafe
+- Bağlantının ağırlığı = Marionun hassasiyeti
+- Çıktı nöronu = Mario bağırır ya da bağırmaz
 
-İleç ne kadar yakınsa, girdi değeri o kadar yüksek olur. Ağırlık güçlüyse, çıkış sinyali güçlüdür ve Mario bağırır. Ağırlığı değiştirerek Mario'nun hassasiyetini değiştirirsiniz.
+Uç ne kadar yakınsa girdi değeri o kadar yüksek olur. Ağırlık güçlüyse çıktıya gönderilen sinyal güçlüdür ve Mario bağırırdı. Ağırlığı değiştirerek Marionun hassasiyeti değiştirilir.
 
-![Mario korkuyor demosu: Mario bir Boo'ya bakıyor, girdi ile çıkış arasındaki bağlantı ağırlığını gösteren sinaptik çubukla](/images/laupok-mario-ai/mario-fear-demo.jpg)
+!["Mario korkuyor" demosu: sinaps çubuğuyla girdi ve çıktı arasındaki bağlantının ağırlığını gösteren bir Boo karşısında Mario](/images/laupok-mario-ai/mario-fear-demo.jpg)
 
-Gerçek yapay zekanın sinir ağında aynı mantık vardır, ancak çok daha geniş bir ölçekte:
-- **99 girdi nöronu** (Mario'nun görüşünün 11×9 karosu)
+Yapay zekânın gerçek sinir ağında aynı mantıktır ama devasa ölçekte:
+- **99 girdi nöronu** (Marionun görüşünün 11×9 karesi)
 - **8 çıktı nöronu** (A, B, X, Y, Yukarı, Aşağı, Sol, Sağ)
-- Aralarında **gizli nöronlar**
-- Değişken ağırlıklara sahip yüzlerce bağlantı
+- Arada **gizli nöronlar** (hidden)
+- Çeşitli ağırlıklı yüzlerce bağlantı
 
 ---
 
 ## NEAT: her şeyi değiştiren algoritma
 
-### Temel genetik algoritmaların sorunu
+### Klasik genetik algoritmaların sorunu
 
-Bir genetik algoritmayı bir sinir ağıyla bilinçsizce birleştirirseniz, bir sorununuz olur: 100 tamamen farklı sinir ağı oluşturursunuz ve bunları karşılaştıramazsınız. Her birinin kendi nöronları, bağlantıları ve ağırlıkları vardır. İki ağın "benzer" mi yoksa "farklı" mı olduğunu nasıl anlarsınız?
+Bir genetik algoritmayı naif şekilde bir sinir ağıyla birleştirirsek bir sorunumuz olur: tamamen farklı 100 sinir ağı yaratırız ve onları karşılaştırmayı bilmeyiz. Her birinin kendi nöronları, kendi bağlantıları, kendi ağırlıkları vardır. İki ağın "yakın" mı "uzak" mı olduğu nereden bilinir?
 
-İşte **NEAT** burada devreye girer -- Artırılmış Topolojilerin Nöroevrimi. **Kenneth Stanley** ve **Risto Miikkulainen** tarafından 2002'de icat edilen bu algoritma tam olarak bu sorunu çözer.
+**NEAT**: NeuroEvolution of Augmenting Topologies devreye girdiği yer burasıdır. 2002de **Kenneth Stanley** ve **Risto Miikkulainen** tarafından icat edilmiş, tam bu sorunu çözen bir algoritmadır.
 
 ### Türler
 
-NEAT'in birinci temel mekanizması **türler**dir. Bir sinir ağı diğerinden çok farklı olduğunda, farklı bir türe sınıflandırılır. Benzerlik üç parametre hesaplanarak belirlenir:
+NEATin ilk kilit mekanizması **türlerdir**. Bir sinir ağı diğerinden çok farklılaştığında farklı bir türe sınıflanır. Benzerlik üç parametreyle hesaplanır:
 
-1. **Fazlalık** (`EXCES_COEF = 0.50`): iki ağ arasında hiçbir ortak noktası olmayan bağlantı sayısı (farklı yenilikler)
-2. **Kesik**: aynı, ancak ortadaki bağlantılar için
-3. **Ağırlık farkı** (`POIDSDIFF_COEF = 0.92`): aynı yeniliği paylaşan bağlantılar arasındaki ortalama ağırlık farkı
+1. **Excess** (`EXCES_COEF = 0.50`): iki ağ arasında hiç ilişkisi olmayan bağlantıların sayısı (farklı inovasyonlar)
+2. **Disjoint**: aynısı ama ortada yer alan bağlantılar için
+3. **Ağırlık farkı** (`POIDSDIFF_COEF = 0.92`): aynı inovasyonu paylaşan bağlantılar arasındaki ortalama ağırlık farkı
 
-Puan formülü:
+Skor formülü:
 
 ```
-skor = (EXCES_COEF × kesik) / max(bağlantıSayısı1 + bağlantıSayısı2, 1)
-     + POIDSDIFF_COEF × ağırlıkFarkı
+score = (EXCES_COEF × disjoint) / max(nbConnexions1 + nbConnexions2, 1)
+      + POIDSDIFF_COEF × diffPoids
 ```
 
-Bu puan `DIFF_LIMITE`'ten (1.0) düşükse, iki ağ aynı türdedir. Aksi takdirde yeni bir tür oluşturulur.
+Bu skor `DIFF_LIMITE` (1.0) değerinden düşükse iki ağ aynı türdedir. Yoksa yeni bir tür oluşturulur.
 
-### Yenilikler
+### İnovasyonlar
 
-Bu NEAT'in dehasıdır. Her bağlantı oluşturulduğunda, benzersiz, küresel bir **yenilik** numarası alır. Bu numara, ağ ürediğinde bile sinir ağıyla birlikte devam eder.
+NEATin dehası budur. Bir bağlantı her oluşturulduğunda benzersiz ve global bir **inovasyon** numarası alır. Bu numara sinir ağını ürediğinde bile izler.
 
-Somut olarak, çaprazlama yoluyla bir bebek oluşturulduğunda, ebeveynlerinin yeniliklerini miras alır. İki ağ aynı yeniliği paylaşıyorsa, aynı atadan geldikleri anlamına gelir. Bu, farklı boyutlardaki ağları karşılaştırmayı mümkün kılar.
+Somut olarak çaprazlamayla bir bebek yaratıldığında ebeveynlerinin inovasyonlarını kalıtır. İki ağ aynı inovasyonu paylaşıyorsa aynı atadan gelen bir bağlantıları olduğu demektir. Farklı boyutlardaki ağları karşılaştırmaya izin veren budur.
 
 ### Çaprazlama
 
-İki sinir ağı ürediğinde, **çaprazlama** şöyle çalışır:
+İki sinir ağı ürediğinde **çaprazlama** şöyle çalışır:
 
-![Laupok "ÇAPRAZLAMA" metniyle çaprazlama kavramını açıklıyor](/images/laupok-mario-ai/crossover-label.jpg)
+![Laupok "CROSSOVER" metni bindirmeli çaprazlama kavramını açıklıyor](/images/laupok-mario-ai/crossover-label.jpg)
 
-1. Daha iyi performans gösteren ağ "baskın ebeveyn" olur
-2. Bebek, baskın ebeveynin tüm bağlantılarını miras alır
-3. Aynı yeniliği paylaşan her bağlantı için, diğer ebeveyn onu değiştirme şansına sahiptir (%50)
-4. Yalnızca baskın olmayan ebeveynin aktif bağlantıları değiştirebilir
+1. En performanslı ağ "baskın ebeveyn" olur
+2. Bebek baskının tüm bağlantılarını kalıtır
+3. Aynı inovasyonu paylaşan her bağlantı için diğer ebeveyn onun yerine geçebilir (%50 şans)
+4. Yalnızca baskın olmayanın aktif bağlantıları yer değiştirebilir
 
-Bu, bebeğin her zaman en azından en iyi ebeveyn kadar iyi olmasını garanti eder.
+Bu bebeğin hep en iyi ebeveyn kadar iyi olmasını garanti eder.
 
 ### Mutasyonlar
 
-Çaprazlamadan sonra, bebek yapılandırılabilir olasılıklarla mutasyonlara uğrar:
+Çaprazlamadan sonra bebek yapılandırılabilir olasılıklarla mutasyonlara uğrar:
 
-![Laupok "(küçük değişiklik = mutasyon)" metniyle mutasyonları açıklıyor](/images/laupok-mario-ai/mutation-label.jpg)
+![Laupok "(küçük değişiklik = mutasyon)" metni bindirmeli mutasyonları açıklıyor](/images/laupok-mario-ai/mutation-label.jpg)
 
 | Mutasyon | Olasılık | Etki |
-|----------|----------|------|
-| Bağlantı ağırlığını sıfırla | %25 | Ağırlık tamamen rastgele hale gelir |
-| Ağırlık mutasyonu | %95 | Ağırlık ±0.80 oranında değişir |
-| Bağlantı ekle | %85 | İki bağlı olmayan nöron arasında yeni bağlantı |
-| Nöron ekle | %39 | İki bağlı nöron arasına bir gizli nöron eklenir |
+|----------|------------|-------|
+| Bağlantı ağırlığı sıfırlama | %25 | Ağırlık tamamen rastgelelenir |
+| Ağırlık mutasyonu | %95 | Ağırlık ±0,80 değişir |
+| Bağlantı ekleme | %85 | Henüz bağlı olmayan iki nöron arasında yeni bağlantı |
+| Nöron ekleme | %39 | Bağlı iki nöron arasına gizli bir nöron yerleştirilir |
 
-Nöron ekleme oranı önemlidir: ağın **büyümesini** sağlayan şey budur. Başlangıçta yalnızca girdiler ve çıktılar vardır. Yavaş yavaş gizli nöronlar belirerek ağı gittikçe daha karmaşık hale getirir.
+Nöron ekleme hızı önemlidir: ağın **büyümesine** izin veren budur. Başlangıçta yalnızca girdiler ve çıktılar vardır. Yavaş yavaş gizli nöronlar belirir, ağı gittikçe karmaşıklaştırır.
 
 ---
 
-## Kod: tam kod incelemesi
+## Kod: eksiksiz izlenecek yol
 
 ### Sabitler
 
-Betik, tüm ayarları tanımlayan bir sabit bloğuyla başlar:
+Script her şeyi tanımlayan bir sabit bloğuyla başlar:
 
 ```lua
--- Mario'nun etrafındaki görünüm
+-- Marionun etrafındaki görüşü
 TAILLE_TILE = 16
-TAILLE_VUE_W = TAILLE_TILE * 11  -- 176 piksel genişliğinde
-TAILLE_VUE_H = TAILLE_TILE * 9   -- 144 piksel yüksekliğinde
-NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 karo
-NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 karo
+TAILLE_VUE_W = TAILLE_TILE * 11  -- genişlikte 176 piksel
+TAILLE_VUE_H = TAILLE_TILE * 9   -- yükseklikte 144 piksel
+NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 kare
+NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 kare
 
 -- Sinir ağı
-NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 girdi (görünür karolar)
+NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 girdi (görünür kareler)
 NB_OUTPUT = 8  -- A, B, X, Y, Yukarı, Aşağı, Sol, Sağ
-NB_INDIVIDU_POPULATION = 100  -- popülasyon başına birey sayısı
-NB_NEURONE_MAX = 100000  -- maksimum gizli nöron
+NB_INDIVIDU_POPULATION = 100  -- popülasyon başına birey
+NB_NEURONE_MAX = 100000  -- gizli nöron limiti
 
--- Uygunluk
-FITNESS_LEVEL_FINI = 1000000  -- bölüm tamamlandığında değer
-NB_FRAME_RESET_BASE = 33  -- ilerleme olmadan sıfırlama için kare sayısı
-NB_FRAME_RESET_PROGRES = 300  -- ilerleme tespit edilirse kare sayısı
+-- Fitness
+FITNESS_LEVEL_FINI = 1000000  -- seviye bitince değer
+NB_FRAME_RESET_BASE = 33  -- ilerlemesiz sıfırlamadan önce kareler
+NB_FRAME_RESET_PROGRES = 300  -- ilerleme tespit edilirse kareler
 
 -- Türler
 EXCES_COEF = 0.50
@@ -222,31 +222,31 @@ CHANCE_MUTATION_CONNEXION = 0.85
 CHANCE_MUTATION_NEURONE = 0.39
 ```
 
-`NB_INPUT` 99'dur çünkü Mario'nun görünümü 11×9 karodur. Her karo bir girdi nöronudur. Boş karo = 0. Blok = 1. Düşman = -1.
+`NB_INPUT` 99dur çünkü Marionun görüşü 11×9 karedir. Her kare bir girdi nöronudur. Kare boşsa 0 değerindedir. Blურვasa 1 değerindedir. Düşmansa -1 değerindedir.
 
-8 çıktı SNES kumandası düğmelerine karşılık gelir: A, B, X, Y, Yukarı, Aşağı, Sol, Sağ. Start, Select, L ve R Mario'yu "rahat bırakmayacakları" için hariç tutulmuştur.
+8 çıktı SNES gamepad düğmelerine karşılık gelir: A, B, X, Y, Yukarı, Aşağı, Sol, Sağ. Kararlarını özle sınırlamak için Start, Select, L ve R hariç tutulur.
 
 ### Veri yapıları
 
-Betik üç ana yapı tanımlar:
+Script üç ana yapı tanımlar:
 
 ```lua
 function newNeurone()
     local neurone = {}
-    neurone.valeur = 0    -- geçerli nöron değeri
+    neurone.valeur = 0    -- nöronun mevcut değeri
     neurone.id = 0        -- benzersiz tanımlayıcı
-    neurone.type = ""     -- "input", "output" veya "hidden"
+    neurone.type = ""     -- "input", "output" ya da "hidden"
     return neurone
 end
 
 function newConnexion()
     local connexion = {}
-    connexion.entree = 0     -- kaynak nöron ID'si
-    connexion.sortie = 0     -- hedef nöron ID'si
-    connexion.actif = true   -- bir gizli nöron eklendiğinde devre dışı bırakılabilir
-    connexion.poids = 0      -- bağlantı ağırlığı
-    connexion.innovation = 0 -- benzersiz yenilik numarası
-    connexion.allume = false -- görüntüleme için: sinyal geçiyorsa true
+    connexion.entree = 0     -- kaynak nöronun IDsi
+    connexion.sortie = 0     -- hedef nöronun IDsi
+    connexion.actif = true   -- gizli bir nöron yerleştirilirse devre dışı kalabilir
+    connexion.poids = 0      -- bağlantının ağırlığı
+    connexion.innovation = 0 -- benzersiz inovasyon numarası
+    connexion.allume = false -- görüntü için: sinyal geçerse true
     return connexion
 end
 
@@ -254,15 +254,15 @@ function newReseau()
     local reseau = {
         nbNeurone = 0,        -- gizli nöron sayısı
         fitness = 1,          -- performans (kat edilen mesafe)
-        idEspeceParent = 0,   -- hangi türe ait olduğu
+        idEspeceParent = 0,   -- hangi türe ait
         lesNeurones = {},     -- nöron dizisi
         lesConnexions = {}    -- bağlantı dizisi
     }
-    -- Girdiler ile başlatılır
+    -- Girdilerle başlatma
     for j = 1, NB_INPUT, 1 do
         ajouterNeurone(reseau, j, "input", 1)
     end
-    -- Ardından çıktılar
+    -- Sonra çıktılar
     for j = NB_INPUT + 1, NB_INPUT + NB_OUTPUT, 1 do
         ajouterNeurone(reseau, j, "output", 0)
     end
@@ -270,9 +270,9 @@ function newReseau()
 end
 ```
 
-Başlangıçta her ağda yalnızca girdiler ve çıktılar vardır. Gizli nöron yok, bağlantı yok. Algoritma gerekli olup olmadığına karar verir.
+Başlangıçta her ağ yalnızca girdiler ve çıktılar içerir: gizli nöron yok, bağlantı yok. Gerekip gerekmediğine algoritma karar verecektir.
 
-### Mutasyonlar detaylı
+### Mutasyonlar ayrıntılı
 
 #### Ağırlık mutasyonu
 
@@ -281,10 +281,10 @@ function mutationPoidsConnexions(unReseau)
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             if math.random() < CHANCE_MUTATION_RESET_CONNEXION then
-                -- %25: toplam ağırlık sıfırlama
+                -- 25% : ağırlığın toplam sıfırlanması
                 unReseau.lesConnexions[i].poids = genererPoids()
             else
-                -- %75: ±0.80 değişiklik
+                -- 75% : ±0.80 değişim
                 if math.random() >= 0.5 then
                     unReseau.lesConnexions[i].poids =
                         unReseau.lesConnexions[i].poids - POIDS_CONNEXION_MUTATION_AJOUT
@@ -298,14 +298,14 @@ function mutationPoidsConnexions(unReseau)
 end
 ```
 
-İlk ağırlık her zaman 1 veya -1'dir (`genererPoids()`). ±0.80 değişiklik, onu negatif ve pozitif değerler arasında sallandırarak ağın davranışını kökten değiştirebilir.
+Başlangıç ağırlığı hep 1 ya da -1dir (`genererPoids()`). ±0,80 değişim onu negatif ve pozitif değerler arasında salındırabilir, bu da ağın davranışını kökten değiştirir.
 
 #### Bağlantı ekleme
 
 ```lua
 function mutationAjouterConnexion(unReseau)
     local liste = {}
-    -- Nöron listesini karıştır
+    -- Nöron listesinin rastgelelenmesi
     for i, v in ipairs(unReseau.lesNeurones) do
         local pos = math.random(1, #liste+1)
         table.insert(liste, pos, v)
@@ -317,11 +317,11 @@ function mutationAjouterConnexion(unReseau)
             if i ~= j then
                 local n1 = liste[i]
                 local n2 = liste[j]
-                -- Geçerli bağlantı: girdi→çıktı, gizli→gizli, gizli→çıktı
+                -- Geçerli bağlantı: input→output, hidden→hidden, hidden→output
                 if (n1.type == "input" and n2.type == "output") or
                    (n1.type == "hidden" and n2.type == "hidden") or
                    (n1.type == "hidden" and n2.type == "output") then
-                    -- Zaten bağlantı olup olmadığını kontrol et
+                    -- Zaten bir bağlantı olmadığını doğrula
                     local dejaConnexion = false
                     for k = 1, #unReseau.lesConnexions, 1 do
                         if unReseau.lesConnexions[k].entree == n1.id
@@ -343,18 +343,18 @@ function mutationAjouterConnexion(unReseau)
 end
 ```
 
-Bir çıktıyı bir girdiye bağlayamazsınız (bu bir döngü oluşturur) ve zaten bağlı olan iki nöronu da bağlayamazsınız. Karıştırma, her seferinde farklı olasılıkların keşfedilmesini garanti eder.
+Bir output bir inputa bağlanamaz (döngü yaratırdı) ve zaten bağlı iki nöron bağlanamaz. Rastgeleleme her seferinde farklı olasılıkları keşfetmeyi garanti eder.
 
 #### Nöron ekleme
 
-Bu en ilginç mutasyondur:
+En ilginç mutasyon budur:
 
 ```lua
 function mutationAjouterNeurone(unReseau)
     if #unReseau.lesConnexions == 0 then return nil end
     if unReseau.nbNeurone == NB_NEURONE_MAX then return nil end
 
-    -- Bağlantıları karıştır
+    -- Bağlantıların rastgelelenmesi
     local listeRandom = {}
     for i = 1, #unReseau.lesConnexions, 1 do
         local pos = math.random(1, #listeRandom+1)
@@ -387,17 +387,17 @@ function mutationAjouterNeurone(unReseau)
 end
 ```
 
-Mekanizma: mevcut bir bağlantıyı alırsınız, **devre dışı bırakırsınız** ve arasına bir gizli nöron eklersiniz. Orijinal bağlantı iki yeni bağlantı ile değiştirilir: girdi→gizli ve gizli→çıktı. Bir kabloyu kesip içine bir şalter eklemek gibidir.
+Mekanizma: mevcut bir bağlantı alınır, **devre dışı bırakılır** ve ortaya gizli bir nöron yerleştirilir. Orijinal bağlantı iki yeni bağlantıyla değiştirilir: girdi→gizli ve gizli→çıktı. Bu araya bir anahtar sokmak için bir teli "kesmek" gibidir.
 
-Bu, NEAT'i "artırılmış topolojiler" yapan şeydir: ağ zaman içinde **büyür**. Basit başlar ve yalnızca gerektiğinde karmaşık hale gelir.
+NEATi "augmenting topologies" yapan budur: ağ zamanla **büyür**. Basit başlar ve yalnızca gerekirse karmaşıklaşır.
 
-### FeedForward
+### feedForward
 
-Sinyalleri ağ boyunca ileten fonksiyondur:
+Sinyalleri ağda yayan fonksiyondur:
 
 ```lua
 function feedForward(unReseau)
-    -- Çıktı nöronlarını sıfırla
+    -- Çıktı nöronlarının sıfırlanması
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             unReseau.lesNeurones[unReseau.lesConnexions[i].sortie].valeur = 0
@@ -424,23 +424,23 @@ function feedForward(unReseau)
 end
 ```
 
-Her aktif bağlantı, `girdi_değeri × ağırlık` değerini çıktı nöronuna gönderir. Değer **kümelenir** (toplanır). `allume` bayrağı yalnızca görsel ağ gösterimi içindir.
+Her aktif bağlantı `girdi_değeri × ağırlık` değerini çıktı nöronuna gönderir. Değer **birikimlidir** (toplanır). `allume` bayrağı sadece ağın görsel gösterimi içindir.
 
-### Oyunun belleğini okuma
+### Oyun belleğinin okunması
 
-`getLesInputs()` fonksiyonu, Super Mario World'ün dünyasını ağın anlayabileceği verilere dönüştürür:
+`getLesInputs()` fonksiyonu Super Mario World dünyasını ağın anlayabildiği verilere çevirendir:
 
 ```lua
 function getLesInputs()
     local lesInputs = {}
-    -- 0'a başlat (gri = hiçbir şey)
+    -- 0a başlatma (gri = hiçbir şey)
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             lesInputs[getIndiceLesInputs(i, j)] = 0
         end
     end
 
-    -- Sprite'lar (düşmanlar) = -1 (siyah)
+    -- Spritelar (düşmanlar) = -1 (siyah)
     local lesSprites = getLesSprites()
     for i = 1, #lesSprites, 1 do
         local input = convertirPositionPourInput(getLesSprites()[i])
@@ -449,7 +449,7 @@ function getLesInputs()
         end
     end
 
-    -- Karolar (bloklar) = karo değeri (0'dan büyükse beyaz)
+    -- Kareler (bloklar) = karenin değeri (> 0 ise beyaz)
     local lesTiles = getLesTiles()
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
@@ -464,30 +464,30 @@ function getLesInputs()
 end
 ```
 
-Girdi ızgarası Mario'ya merkezli bir görünümdür: 11 karo genişliğinde, 9 karo yüksekliğinde. Her karo değeri:
+Girdi ızgarası Mario merkezli bir görünümdür: genişlikte 11 kare, yükseklikte 9. Her kare değeri:
 - **0** (gri): hiçbir şey
 - **1** (beyaz): katı blok
 - **-1** (siyah): düşman
 
-Düşmanlar, RAM'deki iki listeden okunur: normal sprite'lar (`0x14C8`-`0x14F8`) ve genişletilmiş sprite'lar (`0x170B`-`0x173B`). Her yaşayan sprite için (durum > 7), Mario'ya göre karo konumu hesaplanır ve karşılık gelen hücreye -1 yerleştirilir.
+Düşmanlar RAMdeki iki listeden okunur: normal spritelar (`0x14C8`-`0x14F8`) ve genişletilmiş spritelar (`0x170B`-`0x173B`). Her canlı sprite için (durum > 7) Marioya göre kare cinsinden konumu hesaplanır ve ilgili kutuya -1 konur.
 
-### Uygunluk: yapay zeka ilerlediğini nasıl biliyor
+### Fitness: yapay zekâ ilerlediğini nereden bilir
 
 ```lua
 function majReseau(unReseau, marioBase)
     local mario = getPositionMario()
 
     if not niveauFini and memory.readbyte(0x0100) == 12 then
-        -- Bölüm tamamlandı!
+        -- Seviye bitti!
         unReseau.fitness = FITNESS_LEVEL_FINI
         niveauFini = true
     elseif marioBase.x < mario.x then
-        -- Mario sağa hareket etti
+        -- Mario sağa ilerliyor
         unReseau.fitness = unReseau.fitness + (mario.x - marioBase.x)
         marioBase.x = mario.x
     end
 
-    -- Girdileri güncelle
+    -- Girdilerin güncellenmesi
     local lesInputs = getLesInputs()
     for i = 1, NB_INPUT, 1 do
         unReseau.lesNeurones[i].valeur = lesInputs[i]
@@ -495,13 +495,13 @@ function majReseau(unReseau, marioBase)
 end
 ```
 
-Uygunluk basittir: **sağa kat edilen mesafe**dir. Mario 10 piksel hareket ederse, uygunluk 10 artar. Mario sola hareket ederse hiçbir şey olmaz (ceza yok). Bölüm tamamlanırsa (adres `0x0100` == 12), uygunluk 1.000.000 olur.
+Fitness basittir: **sağa kat edilen mesafedir**. Mario 10 piksel ilerlerse fitness 10 artar. Mario geri giderse hiçbir şey olmaz (ceza yok). Seviye biterse (adres `0x0100` == 12) fitness 1 000 000 olur.
 
-Bu kasıtlı olarak basittir. Düşman öldürme için bonus yok, ölüm için ceza yok. Sadece: sağa hareket et.
+Bu bilinçli basittir. Yalnızca sağa ilerleme sayılır: düşman öldürmek bir şey kazandırmaz, ölmek bir şeye mal olmaz.
 
 ### Akıllı sıfırlama
 
-Mario 33 kare boyunca hareket etmezse, bölüm sıfırlanır ve sonraki bireye geçilir. Ancak Mario ilerleme kaydettiyse (geçerli uygunluk başlangıçtan farklıysa), 300 kare bekleriz -- ağa neyi doğru yaptığını "anlama" şansı veririz.
+Mario 33 kare hareket etmezse seviyeyi sıfırlar ve sonraki bireye geçilir. Ama Mario ilerleme kaydettiyse (mevcut fitnessi baştakinden farklıysa) 300 kare beklenir: bu ağa iyi yaptığı şeyi "anlama" şansı verir.
 
 ```lua
 if fitnessAvant == laPopulation[idPopulation].fitness
@@ -521,17 +521,17 @@ if fitnessAvant == laPopulation[idPopulation].fitness
 end
 ```
 
-`memory.readbyte(0x0071) ~= 9` koşulu, Mario'nun ölüm animasyonunda olmadığını kontrol eder. Mario zaten ölüyse sıfırlamanın bir anlamı yoktur.
+`memory.readbyte(0x0071) ~= 9` koşulu Marionun ölüm animasyonunda olmadığını doğrular. Mario zaten ölüm animasyonundayken sıfırlama gereksiz olur.
 
 ### Ana döngü
 
-Döngü saniyede 30 karede (Super Mario World'ün normal hızı) çalışır:
+Döngü 30 fps döner (Super Mario World normal hızı):
 
 ```lua
 while true do
     local fitnessAvant = laPopulation[idPopulation].fitness
 
-    -- Görüntüleme (ağ, bilgi)
+    -- Görüntüleme (ağ, bilgiler)
     if forms.ischecked(estAccelere) then
         emu.limitframerate(false)  -- hızlandır
     else
@@ -553,7 +553,7 @@ while true do
 end
 ```
 
-Üç hayati fonksiyon `majReseau`, `feedForward` ve `appliquerLesBoutons`'tur. Bunlardan birini devre dışı bırakırsanız Mario hareket etmeyi durdurur.
+Üç hayati fonksiyon `majReseau`, `feedForward` ve `appliquerLesBoutons` dur. Birini bile devre dışı bırakırsak Mario artık hareket etmez.
 
 ### Çaprazlama
 
@@ -585,16 +585,16 @@ function crossover(unReseau1, unReseau2)
 end
 ```
 
-Bebek daha iyi ebeveynden miras alır. Aynı yeniliği paylaşan her bağlantı için, diğer ebeveynin değiştirme şansı %50'dir -- ancak **bağlantı aktifse**. Bu önemli bir düzeltmedir: olmadan, işe yaramaz gizli nöronlar oluşturulabilirdi.
+Bebek en iyi ebeveyni kalıtır. Aynı inovasyonu paylaşan her bağlantı için diğer ebeveynin onun yerine geçme şansı %50dir: ama **yalnızca bağlantı aktifse**. Bu önemli bir düzeltmedir: o olmadan gereksiz gizli nöronlar yaratılabilirdi.
 
-### Tür seçimi
+### Türlerle seçim
 
 ```lua
 function nouvelleGeneration(laPopulation, lesEspeces)
     local laNouvellePopulation = newPopulation()
     local nbIndividuACreer = NB_INDIVIDU_POPULATION
 
-    -- Tür başına ortalama uygunluğu hesapla
+    -- Tür başına ortalama fitness hesabı
     for i = 1, #lesEspeces, 1 do
         lesEspeces[i].fitnessMoyenne = 0
         for j = 1, #lesEspeces[i].lesReseaux, 1 do
@@ -605,7 +605,7 @@ function nouvelleGeneration(laPopulation, lesEspeces)
             lesEspeces[i].fitnessMoyenne / #lesEspeces[i].lesReseaux
     end
 
-    -- Her tür ortalama uygunluğuna oranlı çocuk sayısı üretir
+    -- Her tür ortalama fitnessiyle orantılı çocuk sayısı yaratır
     for i = 1, #lesEspeces, 1 do
         local nbEnfant = math.ceil(
             #lesEspeces[i].lesReseaux *
@@ -622,9 +622,9 @@ function nouvelleGeneration(laPopulation, lesEspeces)
 end
 ```
 
-Fikir: ortalama uygunluğu 10.000 olan bir tür, ortalama uygunluğu 1 olan bir türden çok daha fazla çocuk üretir. Bu, **doğal seleksiyon**un pratikteki halidir.
+Fikir: ortalama fitnessi 10 000 olan bir tür, ortalama fitnessi 1 olan bir türden çok daha fazla çocuk yaratma hakkına sahiptir. Harekete geçen **doğal seçilimdir**.
 
-`choisirParent`, rulet seçimini kullanır: bir bireyin uygunluğu ne kadar yüksekse, ebeveyn olarak seçilme olasılığı o kadar artar.
+`choisirParent` rulet seçimi kullanır: bir bireyin fitnessi ne kadar yüksekse ebeveyn seçilme şansı o kadar artar.
 
 ### Kaydetme ve yükleme
 
@@ -651,15 +651,15 @@ function sauvegarderUnReseau(unReseau, fichier)
 end
 ```
 
-Kayıt, tüm önceki popülasyonlardaki en iyi bireyi de içerir. Eski popülasyonun en iyisi yeniden daha iyiyse, temel olarak geri döneriz. Bu bir **elitizm** biçimidir: en iyi asla kaybolmaz.
+Kaydetme tüm önceki popülasyonların en iyi bireyini de içerir. Eski popülasyonun en iyisi yeninin en iyisinden iyiyse eski temel olarak alınır. Bu bir **elitizm** biçimidir: en iyi asla kaybedilmez.
 
-### Ağ görselleştirme
+### Ağın çizimi
 
-Laupok, oyun üzerine yerleştirilmiş bir sinir ağı görselleştiricisi ekledi:
+Laupok oyunun üstüne sinir ağının bir görselleştiricisini ekledi:
 
 ```lua
 function dessinerUnReseau(unReseau)
-    -- Girdiler: Mario'nun etrafında 11×9 ızgara
+    -- Girdiler: Mario etrafında 11×9 ızgara
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             local xT = ENCRAGE_X_INPUT + (i - 1) * TAILLE_INPUT
@@ -702,75 +702,75 @@ function dessinerUnReseau(unReseau)
 end
 ```
 
-Ne yaptığını anlamak için inanılmaz derecede faydalıdır. Aktif bağlantılar beyaz, etkin olmayanlar yarı saydamdır. Girdiler beyaz/siyah/gri hücrelerden oluşan bir ızgaradır. Çıktılar hangi düğmelere basıldığını gösterir.
+Ağın ne yaptığını anlamak için süper kullanışlıdır. Aktif bağlantılar beyazdır, inaktifler yarı saydamdır. Girdiler beyaz/siyah/gri kutu ızgarasıdır. Çıktılar hangi düğmelerin basılı olduğunu gösterir.
 
 ---
 
 ## Sonuçlar
 
-### Yapay zekanın öğrendikleri
+### Yapay zekânın öğrendikleri
 
-Saatlerce (ve günlerce) süren çalıştırmalar boyunca, yapay zeka kendi başına şunları keşfetti:
+Çalışmanın saatleri (ve günleri) boyunca yapay zekâ kendi kendine keşfetti:
 
-1. **Sağa hareket et**: en temel davranış, ancak Sağ düğmesine basılı tutmayı gerektirir
-2. **Düşmanların üstünden atla**: "düşman tespit edildi" girdisini A veya B düğmesine bağlayarak
-3. **Engellerden kaçın**: bazı ağlar daha ileriye gitmek için geçici olarak geri çekilmeyi öğrendi
-4. **Bölümleri tamamla**: en iyi birey Super Mario World'ün ilk bölümünü tamamlayabildi
+1. **Sağa ilerlemek**: en temel davranış ama Sağ düğmeyi basılı tutmayı gerektirir
+2. **Düşmanların üstünden zıplamak**: "düşman tespit edildi" girdisini A ya da B düğmesine bağlayarak
+3. **Engellerden kaçınmak**: bazı ağlar daha iyi ilerlemek için geçici geri gitmeyi öğrendi
+4. **Seviyeleri bitirmek**: en iyi birey Super Mario World ilk seviyesini bitirebildi
 
-![Yapay zeka tarafından kontrol edilen Mario bir Super Mario World bölümünde bir Boo'ya karşı -- sinir ağı gerçek zamanlı olarak kararlar veriyor](/images/laupok-mario-ai/mario-ai-playing.jpg)
+![Super Mario World bir seviyede bir Boo karşısında yapay zekâca kontrol edilen Mario: sinir ağı aksiyonları gerçek zamanlı kararlaştırır](/images/laupok-mario-ai/mario-ai-playing.jpg)
 
 ### Sınırlamalar
 
-Projenin sınırları var:
+Projenin limitleri var:
 
-- **Tek bölüm**: yapay zeka belirli bir bölümde eğitilir. Otomatik olarak diğer bölümlere genelleşmez
+- **Tek seviye**: yapay zekâ belirli tek bir seviyede eğitilir. Diğer seviyelere otomatik genellemez
 - **Eğitim süresi**: tatmin edici sonuçlara ulaşmak için onlarca saat gerekir
-- **Anlama yok**: yapay zeka ne yaptığını "anlamaz". Rastgele mutasyonlar aracılığıyla bir uygunluk fonksiyonunu (kat edilen mesafe) optimize eder
-- **T-bagging**: Laupok, Mario'nun bir düşman gördüğünde yerinde zıplama eğiliminde olduğunu not eder, bunun yalnızca uygunluk artırdığı için (zıplarken biraz ilerler)
+- **Anlama yok**: yapay zekâ ne yaptığını "anlamaz". Rastgele mutasyonlarla bir fitness fonksiyonunu (kat edilen mesafe) optimize eder
+- **T-bagging**: Laupok Marionun bir düşman görünce yerinde zıplama eğiliminde olduğunu not eder, sırf bu fitnessi artırdığı için (zıplayarak biraz ilerler)
 
 ---
 
-## Deneyi nasıl tekrarlayabilirsiniz
+## Deneyimi nasıl yeniden üretmeli
 
-Laupok her şeyi paylaştı. Adımlar şunlardır:
+Laupok her şeyi paylaştı. İşte adımlar:
 
-1. **BizHawk'ı indirin** [tasvideos.org](https://tasvideos.org/BizHawk) adresinden (İndirme bölümü)
-2. **Super Mario World'ün ABD ROM'unu edinin** (kendi kartınızdan kişisel kopya)
-3. **Lua betiğini indirin** [Pastebin](https://pastebin.com/Jcvdqhqm) adresinden -- `mario.lua` olarak yeniden adlandırın
-4. **Betigi ROM ile aynı klasöre yerleştirin**
-5. **BizHawk'ı başlatın**, ROM'u açın
-6. **Lua konsolunda**: `dofile("mario.lua")` veya Script > Open Script menüsü aracılığıyla
-7. **Bölümün başlangıcında bir durum kaydedin** (Savestate > Save State menüsü) ve `debut.state` olarak adlandırın
-8. **Betigi yeniden başlatın** -- çalışıyor
+1. **BizHawkı indir** [tasvideos.org](https://tasvideos.org/BizHawk) üzerinden (Download bölümü)
+2. **Super Mario World ABD ROMu edin** (kendi kartuşunun özel kopyası)
+3. **Lua scriptini indir** [Pastebin](https://pastebin.com/Jcvdqhqm) üzerinden: `mario.lua` olarak yeniden adlandır
+4. **Scripti ROM ile aynı klasöre yerleştir**
+5. **BizHawkı çalıştır**, ROMu aç
+6. **Lua konsolunda**: `dofile("mario.lua")` ya da Script > Open Script menüsüyle
+7. Seviye başında bir **durum kaydet** (Savestate > Save State menüsü) ve `debut.state` olarak adlandır
+8. **Scripti yeniden çalıştır**: çalışır
 
-Betik seçeneklerle bir form içerir:
-- **Hızlandır**: daha hızlı gitmek için 30 fps sınırını devre dışı bırakır
-- **Ağı göster**: sinir ağını oyun üzerine yerleştirilmiş olarak görüntüler
-- **Bilgiyi göster**: nesil, uygunluk ve tür sayısını gösteren bir banner görüntüler
+Script seçenekli bir form içerir:
+- **Hızlandır**: daha hızlı gitmek için 30 fps limitini devre dışı bırakır
+- **Ağı göster**: sinir ağını bindirmeli gösterir
+- **Bilgileri göster**: nesil, fitness, tür sayısıyla bir şerit gösterir
 - **Duraklat**: yürütmeyi duraklatır
-- **Kaydet/Yükle**: geçerli popülasyonu bir `.pop` dosyasına kalıcı hale getirir
+- **Kaydet/Yükle**: mevcut popülasyonu bir `.pop` dosyasında saklar
 
 ---
 
 ## Kaynaklar ve referanslar
 
 | Kaynak | Bağlantı |
-|--------|----------|
-| Laupok'un ana videosu | [Kendi başına Mario oynayan bir yapay zeka oluşturdum](https://www.youtube.com/watch?v=F63GNXGHVwM) |
-| Kod incelemesi + kurulum videosu | [Yapay zeka nasıl kurulur + kaynak kodu incelemesi](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
+|-----------|------|
+| Laupok ana videosu | [j'ai créé une IA qui joue à mario toute seule](https://www.youtube.com/watch?v=F63GNXGHVwM) |
+| Kod incelemesi + kurulum videosu | [comment setup l'ia + code source review](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
 | Tam kaynak kodu | [Pastebin Jcvdqhqm](https://pastebin.com/Jcvdqhqm) |
-| Orijinal NEAT makalesi | Stanley & Miikkulainen, "Evolving Neural Networks through Augmenting Topologies", 2002 |
-| N8Programs eğitimi | [NEAT uygulama incelemesi](https://n8programs.github.io/) (JavaScript, ancak kavramlar aynı) |
-| 16blings (Laupok'un ilham kaynağı) | [Yapay zeka Super Mario World oynuyor](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
+| NEAT orijinal makalesi | Stanley & Miikkulainen, "Evolving Neural Networks through Augmenting Topologies", 2002 |
+| N8Programs öğreticisi | [NEAT implementation walkthrough](https://n8programs.github.io/) (JavaScript ama kavramlar aynı) |
+| 16blings (Laupok ilhamı) | [AI plays Super Mario World](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
 | BizHawk | [tasvideos.org/BizHawk](https://tasvideos.org/BizHawk) |
-| Super Mario World belleği | [SMW Central - RAM Haritası](https://www.smwcentral.net/?p=section&a=details&id=21702) |
+| Super Mario World belleği | [SMW Central - RAM Map](https://www.smwcentral.net/?p=section&a=details&id=21702) |
 
 ---
 
 ## Sonuç
 
-Laupok'un yaptığı şey, akademik bir algoritmayı (NEAT, 2002) alıp Lua için bir emülatöre (BizHawk) yeniden yazması ve Super Mario World'e uygulamasıdır. Sonuç: hiçbir ön bilgi olmadan, yalnızca rastgele mutasyonlar ve doğal seleksiyon aracılığıyla oyunu sıfırdan oynamayı öğrenen bir yapay zeka.
+Laupokun yaptığı şey akademik bir algoritmayı (NEAT, 2002) alıp bir emülatör (BizHawk) için Luada yeniden yazmak ve Super Mario Worlde uygulamaktır. Sonuç: önceden bilgi olmadan, yalnızca rastgele mutasyonlar ve doğal seçilimle oyunu oynamayı sıfırdan öğrenen bir yapay zekâ.
 
-Genetik algoritmaların gücünün güzel bir örneği. Derin öğrenme yok, GPU yok, milyonlarca eğitim veri noktası yok. Sadece doğal seleksiyon, birkaç Lua kodu ve çok fazla sabır.
+Bu genetik algoritmaların gücünün muhteşem bir örneğidir. Tarif üç malzemeye sığar: doğal seçilim, biraz Lua ve çok sabır. Derin öğrenme yok, GPU yok, devasa eğitim verisi yok.
 
-Kod yorumlanmış, paylaşılmış ve Laupok iki açıklayıcı video yapmış -- biri büyük kavramlar için, diğeri kod için. Konu ilginizi çekiyorsa, dalın. Göründüğünden çok daha erişilebilir.
+Kod yorumlu, paylaşılmış ve Laupok iki açıklayıcı video yapmış: biri büyük kavramlar, biri kod için. Konu ilgini çekerse dal içine. Göründüğünden daha erişilebilir.

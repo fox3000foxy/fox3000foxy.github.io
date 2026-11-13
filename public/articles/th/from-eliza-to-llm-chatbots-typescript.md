@@ -20,7 +20,7 @@ authors:
   - fox3000foxy
 lang: th
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "x5Af/iXt5miGIiFIgjY9jWexg6qrnMbs2oI9lIbGq2JL/tBUbJeuU2XsTzV4NRB/0XkAozbJgNGs+sEHCDntmQ=="
+author_sig: "ky6LAXVgI+KrD4Xrb7/9RRSJvoi9su2O4Q5NgNpC0Ihynbqwvexphh0EW6K8+XLuaRz1e2vN5aLgFbdsXWWKOw=="
 ---
 
 # จาก ELIZA สู่ LLM : 60 ปีของ AI เชิงสนทนา สร้างใหม่ใน TypeScript

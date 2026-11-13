@@ -1,35 +1,36 @@
 ---
-title: Minecraft Pathfinding Logic and Applications
-description: How A*, block malice, and POI mechanics let you control, predict,
-  and exploit mob movement -- from wireless redstone to optimized farms.
+title: Minecraft Pathfinding Logic and Its Applications
+description: How the A* algorithm, block penalties, and POIs let you
+  control, predict, and exploit mob movement -- from wireless redstone to
+  optimized farms.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "FZbXRtnLgXKVqEt9wQTqktDMmdZyn92sau/6KSnZXMtXh5MuNtnwwh7owjENIqcyM/Goq461U9b+O6qfCfMX8Q=="
+author_sig: "kzi14yCvYKDGNtgc4LGSYG2fu3hjuc/0+BhVdxAQOJ/aFoBLL8CGOxozcJoTvnPForRNfec3YUvea3wnInaRCQ=="
 ---
 
 ## Introduction
 
-I've spent hours watching sheep bump into walls.
+I spent hours watching sheep bump into walls.
 
-Best investment of my life xD
+And honestly? Best investment of my life.
 
-The more you watch these mobs, the more you realize nothing about their movement is random. Every step is coded, predictable, and most importantly -- breakable. I ended up digging through Minecraft's source code to understand exactly how pathfinding works, and what I found is that you can literally mind-control mobs. Like, force them to go where YOU want, not where randomness decides.
+Because the more you watch those mobs, the more you realize nothing about them is random. Every move is coded, predictable, and totally breakable. I ended up diving into the Minecraft source code to get exactly how pathfinding works, and what I found is that you can literally mind-control mobs. Like, force them to go where YOU want, not where chance decides.
 
-This guide is everything I found while digging. The AI system, the A* algorithm, the hidden malice values, the exploits you can pull in survival. Grab your pickaxe.
+This guide is everything I learned digging around. The AI, the A* algorithm, the hidden penalties, the exploits you can pull in survival. Grab your pickaxe.
 
 ---
 
-## How Mob AI Works (spoiler: it's kinda dumb)
+## How Mob AI Works (Spoiler: It's Dumb)
 
 ### Goals
 
-Every mob has a list of *goals*. Things it CAN do, and how badly it WANTS to do them. Lower number = higher priority. Like a todo list from hell.
+Every mob has *goals*. It's a list of actions it CAN do and how much it WANTS to do them. The smaller the number, the higher the priority, like a chaos-version todo list.
 
 ```java
 protected void registerGoals() {
@@ -40,13 +41,15 @@ protected void registerGoals() {
 }
 ```
 
-Ever seen a zombie ignore a turtle egg to chase you instead? That's why: `ZombieAttackTurtleEggGoal` has priority 4, while `ZombieAttackGoal` (the "eat your face" goal) is priority 2. Zombies prefer snacks with a pulse.
+Ever seen a zombie ignore a turtle egg to chase you? Here's why: `ZombieAttackTurtleEggGoal` is priority 4, while `ZombieAttackGoal` (the goal telling it to eat your face) is priority 2.
 
-The goal we actually care about is `WaterAvoidingRandomStrollGoal`, priority 7. The "I got nothing better to do so I wander around" goal. This is where the fun begins.
+Yes, a zombie prefers eating you over breaking an egg. That's love.
 
-### Movement (or "how a random walk has a 1 in 60 chance per tick")
+The goal we really care about is `WaterAvoidingRandomStrollGoal`, priority 7. The "I've got nothing to do so I'll walk randomly" goal. That's where it all gets interesting.
 
-Every tick (every 0.05 seconds), the game calls `canUse()` to check if the mob can be bothered to move. 1 in 60 chance per tick. Horrifically inefficient design, and I love it.
+### Movement (or "How a Random Stroll Has a 1-in-60 Chance of Happening")
+
+Every tick (every 0.05 seconds), the game calls `canUse()` to see if the mob deigns to move. 1 chance in 60 every tick. Completely dumb design, and I love it.
 
 ```java
 public boolean canUse() {
@@ -75,9 +78,9 @@ public boolean canUse() {
 }
 ```
 
-So to sum up: if you're riding the mob -> no, if the mob hasn't done anything in 5 seconds -> no, if RNG says no -> no. The game REALLY doesn't want mobs to move.
+So to sum up: if you're riding the mob -> no, if the mob has done nothing for 5 seconds -> no, if the random says no -> no. The game really does NOT want the mob to move.
 
-But when it does move, `getPosition()` takes over:
+But when it moves, `getPosition()` takes over:
 
 ```java
 protected Vec3 getPosition() {
@@ -92,13 +95,13 @@ protected Vec3 getPosition() {
 }
 ```
 
-Those two numbers at the end? XZ radius and Y radius. In water, the mob searches wider (15 vs 10). If it can't find land, it falls back to `super.getPosition()` which accepts water. **Result: mobs WANT to get out of water.** That's why your animals swim like maniacs toward the shore.
+Look at those two numbers at the end: that's the XZ radius and Y radius. In water, the mob searches farther (15 instead of 10). If it finds no land, it falls back to `super.getPosition()` which accepts water. **Result: mobs WANT to get out of water.** That's why your animals swim toward the shore like mad.
 
-Fun detail: there's literally a 0.1% chance the mob picks `super.getPosition()` over `LandRandomPos`. One in a thousand. Mojang I guess xD
+Fun little detail: there's literally a 0.1% chance the mob takes `super.getPosition()` instead of `LandRandomPos`. One in a thousand. Classic Mojang.
 
-### LandRandomPos: the optimization that breaks everything
+### LandRandomPos: The Crappy Optimization That Changes Everything
 
-This is MY favorite step. The most beautiful technical mess that makes pathfinding exploitable.
+This is MY favorite step. The most beautiful technical nonsense that makes pathfinding exploitable.
 
 ```java
 public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<BlockPos> $$3) {
@@ -111,15 +114,15 @@ public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<
 }
 ```
 
-`movePosUpOutOfSolid`. The name says it all. If the chosen position is inside a solid block, the game pushes it upward until it's in the air.
+`movePosUpOutOfSolid`. The name says it all. If the picked position is inside a solid block, the game pushes it up until it's in the air.
 
-It's an optimization: instead of wasting time skipping underground positions, the game just shoves them to the surface. Smart? Yes. But it creates a MASSIVE bias: **mobs prefer high ground**.
+It's an optimization: instead of wasting time ignoring underground positions, the game lifts them to the surface. Clever? Yes. But it creates a crazy bias: **mobs prefer heights**.
 
-Think about it. Lots of blocks underground, the game generates 10 random positions. The ones inside blocks get pushed up. Dense areas (under a hill) produce more valid positions than hollow areas. Result: the mob statistically goes toward the hill more often.
+Imagine. Lots of blocks under the surface, the game generates 10 random positions. The ones inside blocks get pushed up. Dense zones (under a hill) produce more valid positions than hollow zones. Result: the mob statistically goes toward the hill more often.
 
-Trust me, we're about to break this wide open.
+Trust me, we'll break that in 2 minutes.
 
-### The selection: best block wins
+### Selection: The Best-Block Contest
 
 10 positions, one winner, a score contest:
 
@@ -141,64 +144,64 @@ public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<Bl
 }
 ```
 
-The position with the highest score WINS. And if you know the scoring criteria, you can make YOUR position win. It's like rigging an election.
+The position with the best score WINS. And if you know the scoring criteria, you can make the position you want win. It's like rigging an election.
 
 ---
 
-## Mob Preferences (or "why your cow crossed the road")
+## Mob Preferences (or "Why Your Cow Crosses the Road")
 
 Every mob has different tastes. And it changes everything.
 
-| Mob | Loves |
+| Mob | Loves it |
 | --- | --- |
-| **Animals** (cows, sheep, pigs) | Grass blocks, light |
-| **Monsters** (zombies, skeletons) | Darkness (hipsters) |
-| **Turtles** | Water > sand > light |
+| **Animals** (cows, sheep, pigs) | Grass and light (hipsters) |
+| **Monsters** (zombies, skeletons) | Darkness (edgelords) |
+| **Turtles** | Water, otherwise sand, otherwise light |
 | **Hoglins** | `crimson_nylium`; hate `warped_fungus` |
-| **Striders** | Lava and NOTHING ELSE |
-| **Silverfish** | Infestable blocks |
-| **Guardians** | Water + light (snobs) |
-| **Mooshrooms** | Mycelium + light |
+| **Striders** | Only lava. NOTHING else. |
+| **Silverfish** | Infestable blocks (makes sense) |
+| **Guardians** | Water + light (the snobs) |
+| **Mooshrooms** | Mycelium + light (mushrooms) |
 | **Bees** | Air. Yes, they prefer AIR. |
 
 ```java
-// Animal: look down, if grass -> max score
+// Animal: looks down, if it's grass, max score
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return $$1.getBlockState($$0.below()).is(Blocks.GRASS_BLOCK) ? 10.0F : $$1.getPathfindingCostFromLightLevels($$0);
 }
 
-// Monster: literally the opposite
+// Monster: exactly the opposite
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return -$$1.getPathfindingCostFromLightLevels($$0);
 }
 ```
 
-Monsters are basically "if it's lit, negative score, I'm out." They throw a FIT at light levels xD
+Like, monsters are literally "if it's lit, negative score, I'm going elsewhere". They HATE light.
 
-So you can -- literally -- guide animals with grass and light, and monsters with darkness. It's dumb and brilliant at the same time.
+So you can, literally, guide your animals with grass and light, and your monsters with darkness. Dumb and awesome at the same time.
 
 ---
 
-## A* in Minecraft (the secret formula)
+## The A* Algorithm in Minecraft (The Secret Formula)
 
-Minecraft uses A* (A-star) for pathfinding. But Mojang added their own twist:
+Minecraft uses the A* (A-star) algorithm for pathfinding. But Mojang put its own spin on it:
 
 ```
 f(n) = g(n) + 1.5 × h(n)
 ```
 
-- **g(n)** = distance already traveled (1 per block, ~1.41 diagonal)
-- **h(n)** = straight-line distance to target
-- **1.5** = because Mojang likes things slightly busted
+- **g(n)** = the path already walked (1 per block, ~1.41 diagonally)
+- **h(n)** = the bird-flight distance
+- **1.5** = because Mojang likes slightly broken values
 
-Normal A* uses `f(n) = g(n) + h(n)`. MOJANG ADDED A 1.5 MULTIPLIER. Why? So the algorithm homes in on the destination faster and prunes fewer search branches. Result: the path is "good enough" but not always optimal. It's a drunk A*.
+Normally A* uses `f(n) = g(n) + h(n)`. MOJANG ADDED A 1.5 FACTOR. Why? So the algo goes faster toward the destination and prunes fewer search branches. Result: the path found is "good" but not always the best. It's a slightly drunk A*.
 
 ```mermaid
 flowchart LR
     A[Start node] --> B{Neighbors to\nevaluate?}
-    B -->|Yes| C[Calculate f = g + 1.5×h\nfor each neighbor]
-    C --> D[Select neighbor\nwith smallest f]
-    D --> E{Reached\ndestination?}
+    B -->|Yes| C[Compute f = g + 1.5×h\nfor each neighbor]
+    C --> D[Pick the neighbor\nwith smallest f]
+    D --> E{Destination\nreached?}
     E -->|No| B
     E -->|Yes| F[Path found!]
     B -->|No| G[No path\npossible]
@@ -207,11 +210,11 @@ flowchart LR
     style G color:#f44336
 ```
 
-Key limitation: **a mob can only pathfind 16 blocks** (its *follow range*). If the destination is too far, it picks the closest reachable block. This means you can build a monolith out of range and the mob will path toward the closest block that gets it closer -- making its movement completely predictable.
+Important detail: **a mob can only pathfind over 16 blocks** (its follow range). If the destination is too far, it picks the closest block it CAN reach. That means you can create an out-of-range monolith, and the mob will pathfind toward the closest block that brings it closer to that monolith, making its moves fully predictable.
 
-### The two exploits that break the game
+### The Two Exploits That Break the Game
 
-#### 1. Block updates force recalculation
+#### 1. Block Updates = Forced Recalculation
 
 ```java
 public boolean shouldRecomputePath(BlockPos $$0) {
@@ -229,84 +232,92 @@ public boolean shouldRecomputePath(BlockPos $$0) {
 }
 ```
 
-Every block update near the mob's path forces an A* recomputation with a 1-second cooldown. Put a 1-second clock next to a mob and it recalculates CONSTANTLY. It's like a GPS that resets every second.
+Every block update near the mob's path forces an A* recalculation with a 1-second cooldown. You put a 1-second clock next to a mob, and it recalculates its path CONSTANTLY. It's like a GPS that resets every second.
 
-And if you do this with 50 mobs? Lag city. RIP TPS.
+And if you do that with 50 mobs at once? Lag city. RIP TPS.
 
-#### 2. Pathfinding Malice (block cost penalties)
+#### 2. Block Penalties (Pathfinding Malice)
 
-Some blocks scare mobs. Literally. Every block has an associated cost defined by an enum:
+Some blocks scare mobs. Literally. Every block has an associated cost, defined by an enum:
 
-| Block / Condition | Malice |
+| Block / Condition | Penalty |
 | --- | --- |
-| **Honey block** | +8 to walk through |
+| **Honey block** | +8 to cross |
 | **Powder snow** | Impassable |
 | **Closed doors** | Impassable |
-| **Fire** | +16 through, +8 adjacent |
-| **Animals & Villagers** | Fire = -1 (HARD NO) |
+| **Fire** | +16 to cross, +8 to walk alongside |
+| **Animals & Villagers** | Fire = -1 (NOPE) |
 | **Cactus / Sweet berry** | Impassable; adjacent = +8 |
-| **Water** | +8 through or adjacent |
-| **Magma** | +8 adjacent |
+| **Water** | +8 to cross or walk alongside |
+| **Magma** | +8 to walk alongside (ouch) |
 
-Animals go even further:
+Animals are even more extreme:
 
 ```java
-protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
+protected Animal(Entity<? extends Animal> $$0, Level $$1) {
    super($$0, $$1);
    this.setPathfindingMalus(PathType.DANGER_FIRE, 16.0F);
    this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
 }
 ```
 
-DAMAGE_FIRE at -1.0F is literally "forbidden." An animal would rather jump into the void than walk through fire.
+DAMAGE_FIRE at -1.0F is literally "forbidden". An animal would rather throw itself into the void than cross fire. Phew.
 
-### Exercise: the great path contest
+### Exercise: The Great Path Contest
 
-A villager choosing between multiple paths:
+Imagine a villager choosing between several paths.
 
-- **Path A**: 15 blocks but 6 border water (+8 each)
-- **Path B**: 18 blocks with 2 water blocks (+8) + 1 water-adjacent (+8)
-- **Path C**: 14 blocks straight... but fire -> IMPASSABLE for villagers
-- **Path D**: 16 blocks with 1 magma-adjacent (+8) + 1 honey-adjacent (+8)
-- **Path E**: 25 blocks with cacti everywhere (+8 everywhere) -> 90.82 total LOL
+- **Path A**: 15 blocks but 6 blocks alongside water (+8 each)
+- **Path B**: 18 blocks with 2 blocks of water (+8) and 1 adjacent water block (+8)
+- **Path C**: 14 blocks straight... but with fire -> IMPASSABLE for a villager
+- **Path D**: 16 blocks with 1 magma-adjacent block (+8) + 1 honey-adjacent block (+8)
+- **Path E**: 25 blocks but cacti everywhere (+8 everywhere) -> 90.82 total cost
 
-The winner is usually **Path B**: the detour pays off because water is EXPENSIVE.
+Mental math:
 
-A villager is basically a cost calculator with legs xD
+- Path A: 15 blocks + 6×8 for water = 15 + 48 = **63** ... but there's the 1.5×distance to add. Let's do the real math.
+- Path B: longer but fewer penalties. Total cost = cumulative distance + penalties.
+- Path D: magma and honey stack their penalties.
 
-### Every mob picks different paths
+The winner is often **Path B**: the detour pays off because water is EXPENSIVE.
 
-A villager: "fire? NOPE BYE"
-A zombie: "fire? OK boomer *walks through on fire*"
+A villager is essentially a cost calculator with legs.
 
-You can literally build highways that villagers take and zombies won't -- or vice versa.
+### Every Mob Has Its Tastes
+
+A villager: "fire? NO THANKS BYE"
+A zombie: "fire? OK boomer *walks through flaming*"
+
+You literally have roads some mobs take and others don't. You can build villager highways where zombies get burned.
 
 ---
 
-## Villagers: the ultimate mess
+## Villagers: The Ultimate Mess
 
-Villagers are the most misunderstood thing in Minecraft. But once you've read the code, you realize they're just predictable machines with office hours.
+OK, villagers. THE least understood system in all of Minecraft. But once you've read the code, you realize they're predictable machines with office hours.
 
-### Sensors and memories
+### Sensors and Memories
 
-9 sensors running every 20 ticks (1 second). Each scans a radius around the villager and stores the result in memory. The villager sees everything, remembers everything, and acts accordingly.
+9 sensors, running every 20 ticks (1 second). Each scans a radius around the villager and stores the result in memory. The villager sees everything, remembers everything, and acts accordingly.
 
-### Activity packages
+Like: "is there an enemy? an item on the ground? a player to talk to?" It checks EVERYTHING.
 
-A villager's brain is divided into activity packages that activate based on the time:
+### Packages (Its Phases of the Day)
 
-| Package | Time | The villager... |
+A villager's brain is activity packages that activate by time:
+
+| Package | Schedule | The villager... |
 | --- | --- | --- |
-| **Core** | 24/7 | Opens doors, swims (80% of the time), ACQUIRES POIs |
-| **Work** | 8am-3pm | "Gotta work" -- walks to workstation |
-| **Meet** | 3pm-5pm | "Happy hour!" -- goes to the bell, socializes |
-| **Rest** | 6pm-6am | "Bed time" -- goes to bed |
-| **Idle** | 6am-8am, 5pm-6pm | "Bored" -- wanders, breeds, jumps on beds |
-| **Panic** | Hurt / hostile | "RUN" -- FLEES |
+| **Core** | 24/7 | Opens doors, swims (80% of the time), and ACQUIRES POIs |
+| **Work** | 8am-3pm | "Going to work" -- walks to its workstation |
+| **Meet** | 3pm-5pm | "Drinks!" -- goes to the bell, chats |
+| **Rest** | 6pm-6am | "Gotta sleep" -- goes to bed |
+| **Idle** | 6-8am, 5-6pm | "Chilling" -- wanders, makes babies, jumps on beds |
+| **Panic** | Injury/hostile | "HELP" -- RUNS |
 
-**Panic** is the only package that can interrupt ALL others. Even if the villager is sleeping or working, if there's a zombie, PANIC MODE.
+The **Panic** package is the only one that can interrupt ALL others. Even if the villager is sleeping or working, if there's a zombie, TOTAL PANIC.
 
-### Acquire POI: the mechanic that enables wireless redstone
+### Acquire POI: The Trick Behind Wireless Redstone
 
 ```java
 Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithType(
@@ -314,49 +325,51 @@ Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithT
 )
 ```
 
-`Acquire POI` scans a 48-block radius for all valid points of interest. It keeps the 5 closest, checks if a path exists, and acquires the closest reachable one. Each POI has limited slots:
+`Acquire POI` scans in a 48-block radius for all points of interest. It keeps the 5 closest, checks a path exists, and acquires the first reachable one.
+
+Each POI has a limited number of slots:
 - **Workstations**: 1 slot
 - **Beds**: 1 slot
 - **Bells**: 32 slots
 
-The INSANE thing: **the slot is reserved at ACQUISITION time, not on arrival**. A villager can lock a composter from across the map without ever reaching it.
+The CRAZY bit: **the slot is reserved at acquisition time, NOT on arrival**. A villager can lock a composter from across the map, without ever reaching it.
 
-You see where this is going?
+You catch the power?
 
-### Wireless redstone. Yes, WIRELESS.
+### Wireless Redstone. Yes, WIRELESS.
 
-1. Put a villager in a minecart with a path to a composter
+1. You put a villager in a minecart with a path to a composter
 2. It acquires the composter (slot taken, nobody else can use it)
-3. The villager is too far to click it -- bonemeal stays
-4. MOVE this villager ANYWHERE in the world, it keeps the slot
-5. When you want to activate your thing, KILL the villager
-6. Slot releases, another villager acquires the composter, removes bonemeal
-7. BLOCK UPDATE -> any redstone circuit activated
+3. The villager is too far to click it, the bone meal stays
+4. You WALK that villager anywhere in the world, it keeps the slot
+5. When you want to trigger your contraption, you KILL the villager
+6. The slot frees up, another villager acquires the composter, removes the bone meal
+7. BLOCK UPDATE -> any redstone circuit activates
 
-You've created wireless redstone, transmittable across the entire world, with zero chunk loading needed on the path. Hook this to an ender pearl stasis chamber and teleport yourself from anywhere by killing a villager.
+You literally created a wireless redstone signal, transmittable anywhere in the world, with zero chunk loading needed along the way. You can wire that to an ender pearl stasis chamber, teleport yourself from anywhere by killing a villager.
 
-My favorite use? A bounty hunter minigame: multiple villagers with composters, the player has to kill THE RIGHT villager to activate the exit. Completely wtf mechanic xD
+My favorite use? A "bounty hunter" mini-game: you put several villagers with composters, the player must kill THE RIGHT villager to activate the exit. Completely wtf mechanics.
 
-### The Pathfinding Deadlock (or "the villager that freezes forever")
+### The Pathfinding Deadlock (or "The Villager That Freezes Forever")
 
-There's a bug between `Acquire POI` (which sees a path) and the actual navigation (which refuses to follow it). Happens when the block above a workstation isn't walkable. Result:
+There's a TOO GOOD bug between `Acquire POI` (which sees a path) and actual navigation (which refuses to take it). It happens when the block above the workstation isn't walkable. Result:
 
 - Core package: "I want to acquire the POI"
 - Navigation: "I can't walk there"
-- Result: the villager stays FROZEN, forever, fighting itself.
+- Result: the villager stays FROZEN, forever, fighting with itself.
 
-Literally frozen villagers, usable as decoration or props. An armor stand tank? Yes. A guard that doesn't move? Yes. Macabre? Maybe. Effective? Totally xD
+Literally villagers frozen in place, usable as decoration or as "props" in builds. An armor stand tank? Yes. A guard that doesn't move? Yes. Macabre? Maybe. But effective.
 
 ---
 
 ## Conclusion
 
-Mob pathfinding in Minecraft isn't random. It's a deterministic, score-based system, predictable AND breakable.
+Minecraft mob pathfinding isn't random. It's a deterministic, score-based system, predictable AND breakable.
 
-**Three things to remember:**
+**The three things to remember:**
 
-1. **Solid blocks underneath = height bias** -- fill or empty the subfloor to guide mobs
-2. **Malice is different per mob** -- create routes that some take and others don't
-3. **POI slots reserved at distance** -- free wireless redstone, teleportation, all of it
+1. **Blocks underfoot = height bias**: fill or empty the underground to guide mobs
+2. **Penalties differ per mob**: create roads some take and others don't
+3. **POI slots are reserved remotely**: free wireless redstone, teleportation, all that
 
-Minecraft's source code is a goldmine of under-exploited mechanics. I spent hours reading decompiled Java and honestly? Every line is a functional Easter Egg. Except these ones work in survival for wireless redstone with villagers. Best game confirmed xD
+Minecraft source code is a goldmine of underused mechanics. I spent hours reading decompiled Java and honestly? Every line is a functional Easter Egg. Except these ones, you use them in survival to do wireless redstone with villagers. Best game confirmed.

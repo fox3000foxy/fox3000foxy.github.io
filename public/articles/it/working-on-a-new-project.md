@@ -1,39 +1,40 @@
 ---
-title: Lavorando a un Nuovo Progetto
-description: Uno sguardo al processo di avvio e sviluppo di un nuovo sito web.
+title: "Lavoro su un nuovo progetto"
+description: "Uno sguardo al processo di avvio e sviluppo di un nuovo sito web."
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - meta
   - webdev
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Zd/OU0kZfYeRK/WrzU1+1dLT1TnxuYY1Z9rtBRZGnkBzAfN877ds6fJ/DxeeqzLF5myTxiGO7Q1/kbvvMDbhvg=="
+author_sig: "sz/1X5vK1HrPKKeb4zZliZxIcppDmZKTi8gtqgx3/yNg2CJVSfHe1tfM8ihmHSd8jXIdeTr2wZ1xGqu9Gt3Dng=="
 ---
 
-# Il Progetto
+# Il progetto
 
-Il progetto a cui sto lavorando si chiama LLJT:
+Il progetto su cui lavoro si chiama LLJT:
 
 ![](assets/20260313_092734_image.png)
 
-Questo è un sito web che è anche una PWA, quindi anche un'app mobile. Usa MaterialUI per sembrare una vera app per telefono.
-Di recente ho dovuto gestire le importazioni di Mui, e sono passato da 11707 moduli a solo 595 alla fine, importando manualmente ogni icona per riga, invece di usare l'import destrutturato: ho imparato che quando fai l'import destrutturato, carichi in realtà l'intera libreria di icone, mentre importandole singolarmente importi solo quelle che ti servono...
+È un sito web che è anche una PWA, quindi usabile come un'app mobile. Usa MaterialUI per comportarsi come una vera app telefono.
+Ho passato un po' sugli import Mui: sono passato da 11707 moduli a 595 alla fine, importando ogni icona riga per riga invece dell'import destrutturato. Ho imparato in quel momento che l'import destrutturato carica tutta la libreria di icone, mentre gli import individuali caricano solo quelle usate.
 
-Nibi è il bot collegato a questo sito.![](assets/20260313_093102_image.png)La valutazione si basa su Google Forms:
+Nibi è il bot collegato a questo sito web.![](assets/20260313_093102_image.png)La valutazione poggia su Google Forms:
 ![](assets/20260313_093255_image.png)
-Usiamo test a risposta multipla per valutare i nostri studenti, e assegniamo anche ruoli Discord, e quindi emoji e canali, ai nostri studenti, se superano un esame importante.
+Usiamo QCM per valutare i nostri studenti, e attribuiamo anche ruoli Discord, oltre a emoji e canali, ai nostri studenti quando superano un esame importante.
 
 ![](assets/20260313_093707_image.png)
 
-L'obiettivo di questo progetto è far sì che le persone imparino il giapponese insieme a noi, dato che è una cosa che voglio fare anch'io.
-Gli studenti sbloccheranno anche partnership con Crunchyroll e altre piattaforme, per premiarli per le loro capacità.
+Lo scopo di questo progetto è aiutare la gente a imparare il giapponese insieme a noi, perché è qualcosa che voglio fare anch'io.
 
-Nibi e il sito web sono ospitati rispettivamente da Cloudflare Workers Hono Server Interaction URL e GitHub Pages con React Deployement.
-Il codice del sito web non è open source, ma Nibi sì, e puoi trovarlo in [questo repository GitHub](https://github.com/let-s-Learn-Japanese-Together/nibi). Il sito web non è open source perché contiene alcune informazioni private, ma se vuoi sapere come l'ho costruito, puoi chiedermelo su Discord o altro, e sarò felice di condividere il processo! In realtà usa una GitHub Action che ho creato così non devo pagare per GitHub Enterprise, e usa anche molti altri strumenti e tecniche interessanti che posso condividere con te se sei interessato!
+Gli studenti sbloccheranno anche partnership con Crunchyroll e altre piattaforme, per ricompensare la loro progressione.
 
-Da qualche giorno amo davvero trovare soluzioni alternative per i miei progetti per evitare di ospitarli, e per evitare di pagare per ospitarli, ecco perché ho fatto di Nibi un bot Interaction Endpoint, così può essere ospitato gratuitamente su Cloudflare Workers, e ho anche creato una GitHub Action per pubblicare il sito web gratuitamente su GitHub Pages, così non devo pagare per ospitarlo. Trovo che trovare soluzioni alternative sia una delle parti più divertenti della programmazione, ed è qualcosa che mi piace davvero fare! Devi davvero pensare fuori dagli schemi e trovare soluzioni creative ai problemi, ed è questo che amo. Non si tratta solo di scrivere codice, ma di trovare modi per far funzionare le cose senza spendere soldi, ed è una sfida che mi piace davvero!
+Nibi e il sito sono ospitati rispettivamente da Cloudflare Workers (Interaction URL con Hono Server) e GitHub Pages con React.
+Il codice del sito non è open source, ma Nibi lo è, e potete trovarlo su [questo deposito GitHub](https://github.com/let-s-Learn-Japanese-Together/nibi). Il sito resta privato perché contiene info private, ma se volete sapere come l'ho costruito, chiedetemi su Discord e vi spiegherò il processo con piacere! Usa una GitHub Action che ho creato per evitare di pagare GitHub Enterprise, oltre a vari altri strumenti e tecniche che posso descrivervi se vi interessa!
 
-Usare GitHub Actions in un modo non proprio previsto, e usare Cloudflare Workers per "ospitare" un bot è anche un modo per imparare cose nuove e scoprire nuove tecnologie, come il Cloud Hosting, che è qualcosa che mi piace molto. Non voglio davvero più pagare per l'hosting.
+Da qualche giorno, mi diverto un sacco a trovare soluzioni di aggiramento per ospitare i miei progetti senza pagare hosting. Ecco perché ho fatto di Nibi un bot Interaction Endpoint, per ospitarlo gratis su Cloudflare Workers, e ho creato una GitHub Action per deployare il sito gratis su GitHub Pages. Cercare questi aggiramenti resta per me una delle parti più stimolanti del codice: bisogna ragionare altrimenti e costruire soluzioni creative, ed è esattamente questa sfida senza budget che mi motiva!
 
-Ci sto ancora lavorando ma puoi unirti al [server Discord](https://discord.gg/frKZ9cJ4fD) se vuoi seguire i progressi e vedere come si evolve, e magari anche unirti al progetto se sei interessato! Il server è aperto a tutti, e ci piacerebbe avere più persone che si uniscano a noi in questo viaggio per imparare il giapponese insieme! Puoi trovare il link d'invito sul sito web, o chiedermelo se vuoi!
+Usare GitHub Actions fuori dal suo uso previsto, e usare Cloudflare Workers per "ospitare" un bot, è anche un modo per imparare cose nuove e scoprire nuove tecnologie, come l'hosting cloud. Non voglio più pagare per l'hosting.
+
+Ci lavoro ancora ma potete unirvi al [server Discord](https://discord.gg/frKZ9cJ4fD) se volete seguire l'avanzamento e vedere come evolve, e magari unirvi al progetto se vi interessa! Il server è aperto a tutti, e ci piacerebbe avere più gente per imparare il giapponese insieme! Troverete il link di invito sul sito, o potete chiedermelo direttamente!

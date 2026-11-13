@@ -1,9 +1,7 @@
 ---
-title: "Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다"
-description: "Luna Protocol은 로컬 LLM을 탑재한 완전 자율 Discord 봇으로, 수면, 오타, 망설임, 건망증, 주제 피로, 자발적 메시지 등이 포함된 자연스러운 대화가 가능합니다."
+title: "Luna Protocol: 사람을 흉내 내는 자율 Discord 봇을 만들었어요"
+description: "Luna Protocol은 로컬 LLM이 들어간 완전 자율 Discord 봇이에요. 수면과 오타, 망설임과 깜빡함, 주제 피로와 자발 메시지로 자연스럽게 대화해요."
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - discord
   - llm
@@ -11,25 +9,27 @@ tags:
   - event-driven-architecture
   - ai
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "EDIZe2AglNA3LUFGgfw7g2gBqbzIYgZAlE8B8piarUqCDh9ZUPRLZMSWcz2qMg6tSxvfC8ZEVxIqX5i59ica3w=="
+author_sig: "AlF/cPAJQvnUvsxf+cRhsGqmXoo8Yl7QttsGrcMT3sw17Lehf8tzEKAg9vThVulmg9rXM+FzxTC09QiFBiJEsw=="
 ---
 
-# Luna Protocol: 완전 자율적으로 인간을 시뮬레이션하는 Discord 봇을 만들었습니다
+# Luna Protocol: 사람을 흉내 내는 자율 Discord 봇을 만들었어요
 
-Discord 봇이 **잠을** 자고, **오타**를 내고, **망설이고**, 답변을 **까먹고**, 때로는 스스로 메시지를 보낼 수 있다면? 이것이 바로 **Luna Protocol**이 하는 일입니다: 로컬 LLM(llama.cpp)을 구동하며 불완전한 인간처럼 대화하는 완전 자율 Discord 봇입니다.
+Discord 봇이 **잘 수** 있고, **오타**를 내고, **망설이고**, 답장을 **잊어버리고**, 가끔 먼저 메시지를 보낸다면 어떨까요? 바로 그 일을 하는 것이 **Luna Protocol**이에요. 로컬 LLM(llama.cpp)을 돌리는 완전 자율 Discord 봇으로, 불완전한 사람처럼 대화해요.
 
-딱딱한 프롬프트도, 로봇 같은 응답도 없습니다. Luna는 **우선순위 트리거 시스템**, **가변 지연 시간**, **수면 스케줄**, **자발적 메시지**, 그리고 음성 메시지를 보내는 **TTS 파이프라인**까지 갖추고 있습니다. 모든 것은 간단한 `config.yml` 파일로 핫 리로드 가능하게 설정됩니다.
+Luna는 맥락 트리거와 당당한 불완전 답장으로 동작해요. **우선순위 트리거 시스템**과 **가변 지연**, **수면 시간**, **자발 메시지**, 심지어 음성 메시지를 보내는 **TTS 파이프라인**까지 있어요. 전부 핫리로드 가능한 단순 `config.yml` 파일로 설정해요.
 
-이 글에서는 제네릭 이벤트 버스부터 TTS 파이프라인, 트리거 시스템, 인간적 구성 요소, 파인튜닝 데이터셋까지 전체 아키텍처를 분석합니다.
+이 글에서는 전체 아키텍처를 뜯어봐요. 범용 이벤트 버스에서 TTS 파이프라인까지, 트리거 시스템과 인간 컴포넌트, 미세 조정 데이터셋을 거쳐요.
 
-![전체 아키텍처 -- 글로벌 컴포넌트 및 데이터 흐름](/images/luna-protocol/01-architecture-overview.svg)
+![아키텍처 개요: 전체 컴포넌트와 자료 흐름](/images/luna-protocol/01-architecture-overview.svg)
 
 ---
 
-## 아키텍처: 타입드 이벤트 버스
+## 아키텍처: 타입화된 이벤트 버스
 
-Luna의 핵심은 **TypedBus**입니다 -- TypeScript로 작성된 강력한 타입의 제네릭 이벤트 버스입니다. 모든 것이 이 위에 구축된 기본 빌딩 블록입니다.
+Luna의 심장은 **TypedBus**예요. TypeScript로 강하게 타입화된 범용 이벤트 버스. 모든 것이 기대는 기본 벽돌이에요. 처음부터 순환 의존성을 피하려고 이렇게 만들었어요.
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
@@ -50,10 +50,10 @@ export class TypedBus<Events extends EventMap> {
 }
 ```
 
-여기서 파생된 두 개의 주요 버스:
+여기에서 주 버스 둘이 나와요.
 
-- **`llmBus`** -- LLM 토큰, 오류, 크래시, 리셋 처리
-- **`stateBus`** -- 자동 저장이 포함된 상태 변경 처리
+- **`llmBus`**: LLM 토큰과 오류, 충돌, 리셋을 다뤄요
+- **`stateBus`**: 자동 영속과 함께 상태 변경을 다뤄요
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -62,11 +62,11 @@ export class TypedBus<Events extends EventMap> {
 ├──────────────────┬──────────────────────────────────┤
 │   core/llm-bus   │       state/state-bus             │
 │  token / done /  │     state:changed                 │
-│  error / crash /  │     → persistence auto            │
+│  error / crash / │     → persistence auto            │
 │  flush / ready / │                                   │
 │  reset           │                                   │
 └────────┬─────────┴────────┬─────────────────────────┘
-         │                  │
+          │                  │
 ┌──────────────────┐  ┌────▼──────────────────────┐
 │ core/llm-core.ts │  │ bot.ts (Eris)             │
 │ mode direct      │  │ bot/pending.ts             │
@@ -79,32 +79,32 @@ export class TypedBus<Events extends EventMap> {
 └──────────────────┘  └────────────────────────────┘
 ```
 
-이 접근 방식의 장점: 각 모듈은 나머지와 **분리**되어 있습니다. LLM이 버스에 토큰을 방출하면, 봇이 이를 소비하고, 상태가 자동으로 업데이트됩니다. 순환 의존성이 없습니다.
+이 접근의 이점: 각 모듈이 나머지에서 **분리**돼 있어요. LLM은 버스에 토큰을 내보내고, 봇은 소비하고, 상태는 자동으로 고쳐져요. 순환 의존성 없어요.
 
 ---
 
-![메시지 처리 -- 메시지의 전체 처리 흐름](/images/luna-protocol/02-message-processing.svg)
+![메시지 처리: 메시지 하나의 완전한 처리 흐름](/images/luna-protocol/02-message-processing.svg)
 
-## 트리거 시스템: 누가 Luna가 응답할지 결정하나요?
+## 트리거 시스템: Luna가 언제 답할지 누가 정하나요?
 
-들어오는 모든 메시지는 `evaluateMessage()`에 의해 평가되어 트리거 이유가 포함된 `TriggerResult`를 반환합니다. 우선순위 순서가 중요합니다:
+들어오는 각 메시지는 `TriggerResult`를 돌려주는 `evaluateMessage()`로 평가받고, 트리거 이유가 들어 있어요. 우선순위 순서가 중요해요.
 
 | # | 이유 | 조건 | 무시 우회 | 일시정지 우회 |
 |---|--------|-----------|---------------|--------------|
 | 1 | `mention` | @bot | 예 (0%) | 예 |
-| 2 | `dm` | DM (`replyInDM = true`) | 예 (0%) | 아니오 |
-| 3 | `name` | "Luna"/"Pixie"/별칭 (단어 전체) | 아니오 (8%) | 아니오 |
-| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (단어 전체) | 아니오 (8%) | 아니오 |
-| 5 | `follow-up` | 봇이 마지막 발화자 + < 15초 + < 3 / 60초 | -- | -- |
-| 6 | `random` | 일치하지 않는 메시지에 1.5% 확률 | 아니오 (8%) | 아니오 |
+| 2 | `dm` | `replyInDM = true`인 DM | 예 (0%) | 아니요 |
+| 3 | `name` | "Luna"와 "Pixie", 별칭 (단어 전체) | 아니요 (8%) | 아니요 |
+| 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (단어 전체) | 아니요 (8%) | 아니요 |
+| 5 | `follow-up` | 봇이 마지막 화자 + 15초 미만 + 60초에 3회 미만 | -- | -- |
+| 6 | `random` | 맞지 않는 메시지에 1.5퍼센트 확률 | 아니요 (8%) | 아니요 |
 
-매칭은 **단어 전체** (`\b`)입니다: "ai"는 "mais", "vrai", "lait"와 일치하지 않습니다.
+매칭은 **단어 전체**(`\b`)예요. "ai"가 "mais", "vrai", "lait"에 맞지 않아요.
 
-![트리거 평가 -- 각 메시지의 입력 결정](/images/luna-protocol/03-trigger-evaluation.svg)
+![트리거 평가: 각 메시지의 진입 결정](/images/luna-protocol/03-trigger-evaluation.svg)
 
-### 후속 메시지 메커니즘
+### 후속 구조
 
-Luna가 메시지에 응답하면 `lastSpeaker`로 등록됩니다. 15초 이내의 다음 메시지는 **즉시** 응답을 트리거합니다 -- 타이머나 키워드 확인이 없습니다. 예산: 60초 창에 3개의 후속 메시지.
+Luna가 메시지에 답하면 `lastSpeaker`로 등록돼요. 이어지는 15초 안의 모든 메시지는 타이머와 키워드 검사를 지름길로 통과해서 바로 답장을 일으켜요. 예산: 60초 창에 후속 3회.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -117,13 +117,13 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 
 ### 쿨다운
 
-같은 채널에서 두 응답 사이 8초. 멘션과 후속 메시지는 우회합니다.
+같은 채널에서 두 답장 사이 8초. 멘션과 후속이 우회해요.
 
 ---
 
-## 인간적 행동: 가변 집중도
+## 인간 행동: 오락가락 집중
 
-여기서 Luna가 흥미로워집니다. 각 트리거 유형에는 고유한 **집중도 임계값**이 있습니다: 최소/최대 지연, 무시 확률, 반응 확률.
+여기에서 Luna가 흥미로워져요. 각 트리거 종류는 자신만의 **집중 임계값**을 가지고 있어요. 최소와 최대 지연, 무시 확률, 반응 확률.
 
 | 트리거 | 최소 지연 | 최대 지연 | 무시 | 반응 |
 |---------|----------|----------|--------|----------|
@@ -134,10 +134,11 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 | `follow-up` | 500ms | 2000ms | 0% | 3% |
 | `random` | 1500ms | 5000ms | 15% | 2% |
 
-지연 계산에는 다음도 고려됩니다:
-- **메시지 길이**: 메시지가 길수록 Luna가 "읽는" 데 시간이 더 걸림
-- **비활성 시간**: Luna가 10분 이상 활동하지 않은 경우 지연이 2배 (각성 시뮬레이션)
-- **수면**: `slow` 모드에서는 지연이 3~5배 증가
+지연 계산에는 다음도 들어가요.
+
+- **메시지 길이**: 메시지가 길수록 Luna가 "읽는" 데 오래 걸려요
+- **비활성**: Luna가 10분 동안 활동하지 않았으면 지연이 2배예요 ("잠깨기" 흉내)
+- **수면**: `slow` 모드에서는 지연이 3~5배예요
 
 ```typescript
 export function computeDelay(
@@ -155,16 +156,16 @@ export function computeDelay(
   if (sleepBehavior === "slow") {
     delay *= 3 + Math.random() * 2;
   }
-  delay *= 0.5 + Math.random() * 1.5; // jitter agressif
+  delay *= 0.5 + Math.random() * 1.5; // 공격적 지터
   return delay;
 }
 ```
 
 ---
 
-## 수면 스케줄
+## 수면 시간
 
-Luna는 잠을 잘 수 있습니다. `config.yml`로 설정 가능:
+Luna는 잘 수 있어요. `config.yml`로 설정해요.
 
 ```yaml
 timezone: "Europe/Paris"
@@ -182,72 +183,72 @@ time_schedules:
 
 | 모드 | 효과 |
 |------|-------|
-| `sleep` | 멘션과 DM만 통과 |
-| `slow` | 지연 ×3-5, 반응 거의 없음 |
-| `short` | 무시 확률 +30%, 반응 거의 없음 |
+| `sleep` | 멘션과 DM만 통과해요 |
+| `slow` | 지연 3~5배, 반응 거의 없어요 |
+| `short` | 무시 확률 +30퍼센트, 반응 거의 없어요 |
 
-수면 시간 동안 Discord 상태는 `invisible`로 전환됩니다.
+수면 시간에는 Discord 상태가 `invisible`로 바뀌어요.
 
 ---
 
 ## 오타
 
-Luna는 오타를 낼 수 있습니다 -- 그리고 2-4초 후에 수정합니다. 키보드 레이아웃은 설정 가능합니다 (AZERTY 또는 QWERTY).
+Luna는 오타를 낼 수 있고, 2~4초 뒤에 고쳐요. 키보드 레이아웃 설정 가능 (AZERTY 또는 QWERTY). 너무 깨끗하게 쓰는 봇은 바로 티가 나니 설정 가능하게 뒀어요.
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
   a: ["z", "q", "w"],
   z: ["a", "e", "s", "x"],
   e: ["z", "r", "d", "s"],
-  // ... toutes les touches adjacentes
+  // ... 모든 인접 키
 };
 ```
 
-AZERTY 예시: `bonjour -- bonjpur`, `salut -- slaut`, `comment -- cpmment`.
+AZERTY 예시: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`.
 
-세 가지 수정 스타일:
+고치기 방식 셋:
 
-| 스타일 | 동작 |
+| 방식 | 동작 |
 |-------|-------------|
-| `edit` | 메시지 수정 |
+| `edit` | 메시지를 수정해요 |
 | `message` | 새 메시지: `word*` |
-| `mixed` | 50/50 랜덤 (기본값) |
+| `mixed` | 50대 50 무작위 (기본값) |
 
 ---
 
-## 망설임과 건망증
+## 망설임과 깜빡함
 
-**망설임**: 15% 확률로 채움 단어(`uh...`, `um...`, `well...`, `hmm...`, `so...`)로 시작.
+**망설임**: 채우기 말(`uh...`, `um...`, `well...`, `hmm...`, `so...`)로 시작할 확률 15퍼센트.
 
-**건망증**: 트리거가 일치한 후에도 Luna는 3% 확률로 응답을 "까먹을" 수 있습니다. 메시지 없음, 반응 없음 -- 아무것도 보지 못한 것처럼.
+**깜빡함**: 트리거에 맞아도 Luna가 확률 3퍼센트로 답장을 "잊어버릴" 수 있어요. 그러면 아무것도 못 본 것처럼 완전히 조용히 있어요. 사람이 실수로 메시지를 넘기는 것을 본 적이 있으니 이 행동이 좋아요.
 
-**주제 피로**: 특정 단어가 최근 10개 메시지에서 너무 자주 나타나면 (임계값: 3회), 지연이 증가하고 무시 확률이 15% 증가합니다.
+**주제 피로**: 단어가 최근 10개 메시지에서 너무 자주 돌아오면 (임계값: 3회) 지연이 곱해지고 무시 확률이 15퍼센트 올라가요.
 
 ---
 
-## 실전에서의 리얼리즘: 소름 돋는 순간
+## 실전 리얼리즘: 소름 끼칠 때
 
-이론상으로는 이런 장치들(지연, 오타, 망설임, 망각)이 그냥 기믹처럼 들린다. 하지만 실제로 다 합쳐지면 결과는 놀랍다 -- Luna와 대화하는 사람들이 전혀 눈치채지 못할 정도로. 여기 누군가 Luna에게 봇이냐고 직접 물어보고, 이후 대화가 완전히 다른 주제로 소름 끼칠 만큼 자연스럽게 흘러가는 실제 대화가 있다.
+종이 위에서는 이 시스템들(지연, 오타, 망설임, 깜빡함)이 모두 장난처럼 보여요. 실제로는 이어붙이면 결과가 기가 막혀요. Luna와 대화하는 사람들은 아무것도 눈치채지 못해요. 누군가 Luna에게 직접 봇인지 묻고, 대화가 완전히 다른 주제로 흘러가는 실제 교환이 여기 있어요. 소름 끼치는 자연스러움이에요. 실제로 이렇게 믿을 만할 줄은 예상하지 못했어요.
 
-![Luna와의 디스코드 대화 -- 첫 번째 대화](/images/luna-protocol/realism/realism-01.png)
+![Luna와의 Discord 대화: 첫 교환](/images/luna-protocol/realism/realism-01.png)
 
-말투, 망설임, 답장 속도 -- 봇이라는 걸 드러내는 요소가 전혀 없다. Luna는 캐릭터를 절대 깨지 않으면서 나이 질문을 슬쩍 피한다.
+톤과 망설임, 답장 리듬. 봇이라는 티가 없어요. Luna는 캐릭터를 절대 깨지 않고 나이에 대한 질문을 피해 가요.
 
-대화는 완전히 자연스럽게 이어지며, 짧고 인간적인 답변("okay, okay", "yay", "yayy")들이 오간다 -- 사람이 디스코드에서 보낼 법한 딱 그런 메시지들이다.
+![Luna와의 Discord 대화: 교환 이어서](/images/luna-protocol/realism/realism-02.png)
 
-![Luna와의 디스코드 대화 -- 계속](/images/luna-protocol/realism/realism-02.png)
+대화가 완전히 유창하게 이어져요. 짧고 자연스러운 답장("okay, okay", "yay", "yayy"). Discord에서 사람이 보낼 법한 메시지 그대로예요.
 
-![Luna와의 디스코드 대화 -- 주제 전환](/images/luna-protocol/realism/realism-03.png)
+![Luna와의 Discord 대화: 주제 흘러가기](/images/luna-protocol/realism/realism-03.png)
 
-![Luna와의 디스코드 대화 -- 주제 전환이 계속됨](/images/luna-protocol/realism/realism-04.png)
+![Luna와의 Discord 대화: 흘러가기 이어서](/images/luna-protocol/realism/realism-04.png)
 
-![Luna와의 디스코드 대화 -- 대화의 끝](/images/luna-protocol/realism/realism-05.png)
+![Luna와의 Discord 대화: 교환 끝](/images/luna-protocol/realism/realism-05.png)
 
-소름 끼치는 건 Luna가 그냥 "답장한다"는 게 아니라 -- 겉보기에 진짜 같은 의견, 되묻기, 메시지마다 이어지는 일관된 사고 흐름을 가지고 **대화를 이어간다**는 점이다. 위에서 설명한 트리거 시스템, 집중 지연, 망설임이 없다면 이 환상은 몇 마디 안에 무너질 것이다.
+무서운 것은 Luna가 "답장한다"는 것이 아니에요. **대화를 이어간다**는 거예요. 겉보기 의견과 추임새, 메시지에서 메시지로 일관된 생각 줄기를 가지고요. 위에 설명한 트리거 시스템과 집중 지연, 망설임이 없으면 이 착각은 몇 개 메시지 만에 무너져요.
 
-**작은 반전**: 위 스크린샷에서 **대화 중인 두 계정 모두 Luna의 인스턴스다**. `PixieGlow`와 `Sujet d'SBlow`는 봇을 테스트하는 인간이 아니다 -- 서로 대화하는 두 개의 봇이며, 각자(행동적인 의미에서) "정상적인" 누군가와 대화하고 있다고 "확신"하고 있다. 위 대화를 읽으면서 둘 중 하나가 인간이라고 생각했다면 -- 축하한다, 실제 디스코드 서버에서 누구나 그렇듯 방금 함정에 빠진 것이다.
+**작은 반전**: 위 스크린샷에서 **대화하는 두 계정은 둘 다 Luna 인스턴스**예요. `PixieGlow`와 `Sujet d'SBlow`는 봇을 테스트하는 사람이 아니에요. 서로 말하는 두 봇이고, 각자(행동적 의미에서) "평범한" 누군가와 이야기한다고 믿어요. 위 교환을 읽으면서 둘 중 하나가 사람이라고 생각했다면 축하해요. 진짜 Discord 서버에서 누구나처럼 정확히 함정에 빠진 거예요.
 
-이건 사실상 **죽은 인터넷 이론**의 실전판이다. 이 이론(원래는 다소 음모론에 가까운 주장)은 온라인 콘텐츠와 상호작용의 점점 더 많은 부분이 인간이 아닌 봇에 의해 생성되어, "진짜" 인간 인터넷이 소수가 되어가고 있다고 주장한다. 오랫동안 과장된 이야기로 여겨졌지만, Luna Protocol 같은 시스템이 대규모로 신뢰할 만한 인간의 존재감을 시뮬레이션하는 데 그리 많은 연산 자원도, 거대한 모델도 필요하지 않다는 걸 보여주면서 점점 덜 터무니없는 이야기가 되고 있다. 같은 봇의 두 인스턴스가 한 번도 정체를 들키지 않고 긴 대화를 이어갈 수 있다는 사실은, 서로 대화하는 봇들로 대부분 채워진 웹이 어떤 모습일지에 대한 꽤 구체적인 단서를 준다.
+이것은 **데드 인터넷 이론**의 실전 버전이에요. 이 이론(원래는 음모론 쪽)은 온라인 콘텐츠와 상호작용의 점점 큰 몫이 사람이 아니라 봇이 만들 것이고, "진짜" 인간 인터넷이 소수가 될 지경이라고 해요. 오래 과장으로 여겨졌지만, Luna Protocol 같은 시스템이 믿을 만한 인간 존재감을 대규모로 흉내 내는 데 큰 수단도 거대 모델도 필요 없음을 보여주면서 점점 덜 터무니없어져요. 절대 들키지 않고 긴 대화를 이어갈 수 있는 같은 봇의 인스턴스 둘. 봇끼리 말하는 봇이 대다수인 웹이 어떤 모습일지 꽤 구체적으로 보여줘요.
 
 ---
 
@@ -255,15 +256,15 @@ AZERTY 예시: `bonjour -- bonjpur`, `salut -- slaut`, `comment -- cpmment`.
 
 ### `direct` 모드 (기본값)
 
-봇이 HTTP를 통해 로컬 `llama-server`로 직접 요청을 보냅니다. 모델은 공유되며, 프롬프트 캐시와 4개의 동시 슬롯이 있습니다. 두 개의 PM2 프로세스: LLM 서버와 봇 클라이언트.
+봇이 로컬 `llama-server`에 바로 HTTP로 요청을 보내요. 모델은 공유되고, 프롬프트 캐시와 동시 슬롯 4개. PM2 프로세스 둘: LLM 서버와 봇 클라이언트.
 
 ### `online` 모드
 
-봇이 OpenAI 호환 API(OpenAI, OpenRouter, Groq, Together 등)를 호출합니다. 로컬 LLM이 필요 없습니다.
+봇이 OpenAI 호환 API(OpenAI, OpenRouter, Groq, Together...)를 불러요. API 키 하나면 되고, LLM은 제공자 쪽에서 돌아요.
 
 ### 실시간 스트리밍
 
-LLM이 응답을 줄 단위(`\n`)로 스트리밍합니다. 각 줄은 단어로 분할되어 `llmBus.emit("token", word)`를 통해 하나씩 방출됩니다. `\n`마다 `flush` 이벤트가 방출됩니다 -- 봇이 누적된 메시지를 즉시 전송합니다. 시뮬레이션된 지연 없음: LLM의 리듬 그대로입니다.
+LLM이 답장을 줄 단위(`\n`)로 스트리밍해요. 각 줄은 단어로 나뉘고 `llmBus.emit("token", word)`로 하나씩 내보내져요. `\n`마다 `flush` 이벤트가 나가요. 봇이 쌓인 메시지를 바로 보내요. 리듬이 바로 LLM 리듬을 따라가요.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -285,13 +286,13 @@ function emitWordTokens(chunk: string): void {
 }
 ```
 
-대기열(`requestQueue`)은 요청을 하나씩 처리하며, 대기열이 100개를 초과하면 자동으로 정리됩니다.
+요청 큐(`requestQueue`)가 요청을 하나씩 처리하고, 큐가 100개를 넘으면 자동 정리해요.
 
 ---
 
-## 자발적 메시지
+## 자발 메시지
 
-5분마다 12% 확률로 Luna가 스스로 메시지를 게시합니다. 서버는 **선형 가중치** 시스템으로 선택됩니다: 가장 활동적인 서버가 마지막 서버보다 N배 더 높은 확률을 가집니다.
+5분마다 Luna가 먼저 메시지를 올릴 확률 12퍼센트. 서버는 **선형 가중** 시스템으로 골라요. 가장 활발한 서버가 꼴찌보다 N배 더 뽑혀요.
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -302,19 +303,19 @@ for (let i = 0; i < ranked.length; i++) {
 }
 ```
 
-최근 5개 메시지의 컨텍스트를 읽고 Luna가 "자연스럽게" 대화에 합류합니다.
+최근 5개 메시지 맥락을 읽고, Luna가 "자연스럽게" 대화에 끼어요.
 
 ---
 
 ## TTS 파이프라인: 음성 메시지
 
-8% 확률로 Luna가 텍스트 대신 음성 메시지를 보냅니다. 전체 파이프라인:
+확률 8퍼센트로 Luna가 텍스트 대신 음성 메시지를 보내요. 전체 파이프라인:
 
-1. **Piper TTS**가 텍스트를 WAV로 합성
-2. **ffmpeg**가 OGG로 변환
-3. Discord 미리보기를 위한 웨이브폼 계산
-4. Discord CDN API를 통해 파일 업로드
-5. 음성 메시지 전송
+1. **Piper TTS**가 텍스트를 WAV로 합성해요
+2. **ffmpeg**가 OGG로 바꿔요
+3. Discord 미리보기용 파형을 계산해요
+4. Discord CDN API로 파일을 올려요
+5. 음성 메시지를 보내요
 
 ```typescript
 export async function sendTextAsVoiceMessage(
@@ -331,41 +332,41 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS 파이프라인 -- 합성된 텍스트에서 Discord 음성 메시지까지](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS 파이프라인: 합성 텍스트에서 Discord 음성 메시지까지](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
-## 안티스팸 및 영속성
+## 안티스팸과 영속
 
 ### 안티스팸
 
-`channelId:userId`별 대기열. 채널당 사용자당 하나의 메시지만 대기 가능. 현재 응답이 끝나면 처리됩니다.
+`channelId:userId`별 대기열. 채널별 사용자별 대기 메시지 하나. 진행 중인 답장이 끝나면 바로 처리해요.
 
-### 세션 제한
+### 세션 한도
 
-8회 응답 후 Luna는 30초 동안 일시정지합니다. 3분간 비활성 상태이면 카운터가 재설정됩니다.
+교환 8회 뒤 Luna가 30초 쉬어요. 3분 비활성 뒤 카운터가 리셋돼요.
 
-### 자동 영속성
+### 자동 영속
 
-모든 상태 변경이 `stateBus`로 방출됩니다 -- 자동 저장 (debounce 500ms). 더 이상 수동 `saveAllState()` 호출이 필요 없습니다. 저장되는 상태: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, 후속 메시지 카운터.
+상태 변이마다 `stateBus`에 내보내면 자동 저장(디바운스 500ms). 손으로 `saveAllState()`를 부를 필요 없어요. 영속 상태에는 pendingMessages, paused, cooldowns, timestamps, lastSpeaker, 후속 카운터가 들어 있어요.
 
 ---
 
-## 핫 리로드 설정
+## 핫리로드 설정
 
-단일 `config.yml` 파일. 대부분의 값은 **핫 리로드 가능**합니다 -- 재시작 없이 변경 사항이 적용됩니다.
+`config.yml` 파일 하나. 대부분 값이 **핫리로드 가능**해요. 다시 시작 없이 바로 반영돼요. 진행 중인 대화를 끊지 않고 지연을 라이브로 조정하고 싶었어요.
 
-| 카테고리 | 핫 리로드 |
+| 범주 | 핫리로드 |
 |-----------|-----------|
 | 트리거, 키워드, 이름 | ✅ |
-| 집중도, 지연 시간 | ✅ |
+| 집중, 지연 | ✅ |
 | 오타, 버스트, 피로 | ✅ |
-| 수면 스케줄 | ✅ |
+| 수면 일정 | ✅ |
 | TTS, 음성 메시지 | ✅ |
-| Discord 토큰, LLM 모드 | ❌ (재시작 필요) |
+| Discord 토큰, LLM 모드 | ❌ (다시 시작 필요) |
 
 ```typescript
-// config.ts -- getter가 실시간 값을 반환
+// config.ts -- getter가 라이브 값을 돌려줘요
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -377,48 +378,48 @@ export const config = {
 
 ## 데이터셋: Discord-Dialogues
 
-모델은 [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues)로 파인튜닝되었습니다: **730만 개의 교환**, **1690만 개의 턴**, **1억 3990만 개의 단어**. 2025년 봄-여름 실제 Discord 대화로, 필터링됨 (PII, ToS, 봇, 명령어). Apache 2.0.
+모델은 [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues)에 미세 조정돼요. **교환 730만 건**, **턴 1,700만**, **단어 1억 4,000만**. 2025년 봄과 여름의 진짜 Discord 대화, 필터링됨(PII, ToS, 봇, 명령어). Apache 2.0.
 
 | 지표 | 값 |
 |----------|--------|
-| 샘플 | 7,303,464 |
-| 총 턴 수 | 16,881,010 |
-| 총 단어 수 | 139,922,950 |
-| 평균 토큰 수 | 32.8 |
+| 샘플 | 7 303 464 |
+| 총 턴 | 16 881 010 |
+| 총 단어 | 139 922 950 |
+| 평균 토큰 | 32.8 |
 | 토크나이저 | Hermes-3-Llama-3.1-8B |
 
-사용된 양자화 모델은 GGUF입니다 (예: `Discord-Hermes-3-8B.Q3_K_M.gguf`).
+쓰는 양자화 모델은 GGUF(예를 들어 `Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
 ![Discord-Dialogues 데이터셋 분포](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![완전한 라이프사이클 -- 메시지부터 응답까지의 전체 봇 동작, 타이머 및 경계 케이스 포함](/images/luna-protocol/22-complete-lifecycle.svg)
+![전체 생애주기: 타이머와 경계 경우를 포함한 봇의 메시지에서 답장까지 완전한 행동](/images/luna-protocol/22-complete-lifecycle.svg)
 
-## 아키텍처 다이어그램
+## 아키텍처 도식
 
-`state-machines/` 디렉토리에는 전체 소스 코드를 다루는 **24개의 Mermaid 다이어그램**이 있습니다. 각 다이어그램에는 인간이 읽을 수 있는 상세한 설명이 포함되어 있습니다.
+`state-machines/` 폴더에 소스 코드 전체를 아우르는 **머메이드 도식 24개**가 있어요. 각 도식에 사람 말로 자세한 설명이 있어요.
 
 가장 중요한 것들:
 
-| # | 다이어그램 | 유형 |
+| # | 도식 | 종류 |
 |---|-----------|------|
-| 01 | 아키텍처 개요 | `graph` |
-| 02 | 메시지 처리 (전체) | `stateDiagram` |
-| 03 | 트리거 평가 | `flowchart` |
-| 04 | LLM 코어 큐 (3개 백엔드) | `stateDiagram` |
-| 10 | TTS 파이프라인 | `flowchart` |
-| 13 | 상태 영속성 | `flowchart` |
-| 21 | 타이밍 간트 차트 | `gantt` |
-| 22 | 완전한 라이프사이클 | `stateDiagram` |
+| 01 | Architecture Overview | `graph` |
+| 02 | Message Processing (complet) | `stateDiagram` |
+| 03 | Trigger Evaluation | `flowchart` |
+| 04 | LLM Core Queue (3 backends) | `stateDiagram` |
+| 10 | TTS Pipeline | `flowchart` |
+| 13 | State Persistence | `flowchart` |
+| 21 | Timing Gantt | `gantt` |
+| 22 | Complete Lifecycle | `stateDiagram` |
 
-이 다이어그램은 들어오는 메시지에서 응답까지, 타이머와 경계 케이스를 포함한 전체 흐름을 이해하는 데 금광과 같습니다.
+이 도식들은 완전한 흐름을 이해하는 금광이에요. 들어오는 메시지에서 답장까지, 타이머와 경계 경우를 거쳐요.
 
 ---
 
-## 트리거 코드 상세
+## 자세한 트리거 코드
 
-트리거는 `state/trigger.ts`의 `evaluateMessage()`에 의해 평가됩니다. 전체 로직은 다음과 같습니다:
+트리거는 `state/trigger.ts`의 `evaluateMessage()`로 평가돼요. 전체 논리는 이렇습니다.
 
 ```typescript
 export function evaluateMessage(
@@ -435,54 +436,55 @@ export function evaluateMessage(
   if (isPaused()) return { shouldRespond: false, reason: null, botName: "" };
   if (isOnCooldown(channelId)) return { shouldRespond: false, reason: null, botName };
 
-  // ... 이름, 키워드, 후속 메시지, 랜덤 매칭
+  // ... 이름과 키워드, 후속, 무작위 매칭
 }
 ```
 
-정규식 캐시(`hasWordCache`)는 매 메시지마다 패턴을 다시 컴파일하지 않도록 합니다.
+정규식 캐시(`hasWordCache`)가 메시지마다 패턴을 다시 컴파일하지 않아요.
 
 ---
 
 ## 반응
 
-Luna는 이모지로 메시지에 반응합니다. 30% 확률로 서버 맞춤 이모지, 70% 확률로 유니코드 이모지를 사용합니다. 반응은 집중도 지연 후에 트리거되며, 즉시 실행되지 않습니다.
+Luna가 이모지로 메시지에 반응해요. 서버 커스텀 이모지 30퍼센트, 유니코드 이모지 70퍼센트 확률. 반응은 집중 지연 뒤에 나가고, 답장과 같은 어긋난 리듬이에요. 읽는 시간을 가진 느낌이 들어서 이 어긋남이 좋아요.
 
-Luna 메시지에 대한 반응 명령어:
-- ❌ -- 중지
-- ▶️ -- 시작
-- 🗑️ -- 지우기
+Luna 메시지 위 반응 명령:
+
+- ❌ → 중지
+- ▶️ → 시작
+- 🗑️ → 지우기
 
 ---
 
-## 응답 스타일
+## 답장 스타일
 
-응답 스타일은 채널에서 Luna의 최근 활동에 따라 가중치가 부여됩니다:
+Luna의 채널 내 최근 활동에 따라 답장 스타일에 가중치를 둬요.
 
-| 컨텍스트 | messageReference | mentionRepliedUser | 가중치 |
+| 맥락 | messageReference | mentionRepliedUser | 가중치 |
 |----------|-----------------|-------------------|-------|
-| 냉담 | true | false | 70% |
-| 냉담 | true | true | 20% |
-| 냉담 | false | false | 10% |
-| 활동적 | true | false | 50% |
-| 활동적 | true | true | 15% |
-| 활동적 | false | false | 30% |
-| 활동적 | false | true | 5% |
+| 차가움 | true | false | 70% |
+| 차가움 | true | true | 20% |
+| 차가움 | false | false | 10% |
+| 활발 | true | false | 50% |
+| 활발 | true | true | 15% |
+| 활발 | false | false | 30% |
+| 활발 | false | true | 5% |
 
-DM에서는 `messageReference`가 항상 `false`입니다.
+DM에서는 `messageReference`가 항상 `false`예요.
 
 ---
 
 ## 버스트 메시지
 
-15% 확률로 응답이 2-3개의 조각으로 나뉘어 인간적인 리듬으로 전송됩니다 (조각당 1.5-4초). 누군가가 여러 번에 나눠 입력하는 것을 시뮬레이션합니다.
+확률 15퍼센트로 답장이 2~3개 조각으로 나뉘어 사람 리듬(조각 사이 1.5~4초)으로 나가요. 여러 번에 나눠 치는 사람을 흉내 내요.
 
-![타이밍 간트 차트 -- 지연, 반응, LLM 스트리밍 및 수정의 실제 대기 시간](/images/luna-protocol/21-timing-gantt.svg)
+![타이밍 간트: 지연과 반응, LLM 스트리밍과 고치기의 실제 대기 시간](/images/luna-protocol/21-timing-gantt.svg)
 
 ---
 
 ## 동적 상태
 
-Luna의 Discord 상태는 15분마다 여러 설정된 프리셋 사이를 순환합니다. 지원되는 유형: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). 수면 중에는 상태가 `invisible`로 전환됩니다.
+Luna의 Discord 상태가 설정된 여러 프리셋을 돌고, 15분마다 바뀌어요. 지원하는 종류: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). 수면 중에는 상태가 `invisible`로 바뀌어요.
 
 ```yaml
 dynamic_status_presets:
@@ -494,11 +496,11 @@ dynamic_status_presets:
     type: 2       # Listening
 ```
 
-랜덤 지터(×0.5-1.0)로 예측 가능한 순환을 방지합니다. 10%의 시도는 반복을 피하기 위해 건너뜁니다.
+무작위 지터(0.5~1.0배)가 예측 가능한 순환을 막아요. 반복을 피하려고 시도 10퍼센트는 건너뛰어요.
 
-## 타이핑 표시기
+## 입력 중 표시기
 
-LLM을 호출하기 전에 Luna는 `startTyping()`을 호출합니다. `setInterval`이 생성 중 8초마다 표시기를 새로고침합니다. `finally` 블록에서 정리됩니다 (`clearInterval`).
+LLM을 부르기 전에 Luna가 `startTyping()`을 불러요. `setInterval`이 만드는 동안 8초마다 표시기를 새로고쳐요. `finally`에서 정리해요 (`clearInterval`).
 
 ```typescript
 const startTyping = () => {
@@ -512,13 +514,13 @@ const startTyping = () => {
 };
 ```
 
-## 크래시 후 복구
+## 충돌 뒤 복구
 
-LLM이 크래시되면 (`llama-server` 프로세스 중단), Luna가 `llmBus.emit("crash", code)`를 통해 이벤트를 감지하고 지수 백오프로 재시작을 시도합니다. 무한 재시작 루프를 방지합니다.
+LLM이 죽으면(`llama-server` 프로세스 사망) Luna가 `llmBus.emit("crash", code)` 이벤트로 감지하고 지수 백오프로 다시 시작을 시도해요. 무한 재시작 루프를 피해요.
 
 ## LLM 매개변수
 
-매개변수는 `src/config.ts`에 하드코딩되어 있습니다:
+매개변수는 `src/config.ts`에 하드코딩돼요.
 
 ```yaml
 temp: 0.75
@@ -534,11 +536,11 @@ ubatch: 256
 context: 4096
 ```
 
-ChatML 템플릿(`<|im_start|>/<|im_end|>`)이 사용됩니다. 스레드 수는 `os.cpus().length`를 통해 자동 감지됩니다.
+ChatML 템플릿(`<|im_start|>/<|im_end|>`)을 써요. 스레드 수는 `os.cpus().length`로 자동 감지해요.
 
 ---
 
-## 설정
+## 설치
 
 ```bash
 npm install
@@ -550,12 +552,12 @@ npm run build && npm start     # 프로덕션
 
 | 스크립트 | 설명 |
 |--------|-------------|
-| `build` | 독립 실행형 CLI 번들 |
+| `build` | 독립 CLI 번들 |
 | `start` | 봇 실행 |
 | `lint` / `format` / `check` | Biome |
 | `test` | 테스트 (Bun) |
-| `download-model` | HuggingFace에서 GGUF 다운로드 |
-| `diagrams` | Mermaid 다이어그램을 SVG/PNG로 내보내기 |
+| `download-model` | HuggingFace에서 GGUF |
+| `diagrams` | 머메이드 도식을 SVG와 PNG로 내보내기 |
 
 ### PM2 배포
 
@@ -567,11 +569,11 @@ npm run build && npm start     # 프로덕션
 
 ## 결론
 
-Luna Protocol은 단순한 LLM 기반 Discord 봇이 아닙니다. 이는 인간의 불완전함을 시뮬레이션하는 **완전한 행동 시스템**입니다: 건망증, 오타, 수면, 망설임, 피로. 모든 것이 타입드 이벤트 버스를 중심으로 아키텍처링되었으며, 24개의 Mermaid 다이어그램이 각 흐름을 문서화합니다.
+Luna Protocol은 LLM이 들어간 Discord 봇을 훨씬 넘어요. 인간의 불완전함을 흉내 내는 **완전한 행동 시스템**이에요. 깜빡함과 오타, 수면과 망설임, 피로. 타입화된 이벤트 버스 중심 아키텍처에, 각 흐름을 문서화한 머메이드 도식 24개.
 
-코드는 오픈 소스이며, 데이터셋은 공개되어 있고, 설정은 핫 리로드 가능합니다. 이 주제가 흥미로우시다면 코드를 살펴보세요 -- 생각보다 접근하기 쉽습니다.
+코드는 오픈 소스, 데이터셋은 공개, 설정은 핫리로드 가능. 주제에 관심 있으면 코드에 뛰어들어 보세요. 보기보다 쉬워요. 행동에 대한 많은 생각을 테스트하는 토대로 썼고, 각 모듈을 따로 가져갈 수 있어요.
 
-| 리소스 | 링크 |
+| 자료 | 링크 |
 |-----------|------|
 | GitHub 저장소 | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | 데이터셋 | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |

@@ -1,50 +1,50 @@
 ---
-title: Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak --
-  typescript-virtual-container polyfill'leri
-description: Fortune'un, konteynerin Wasm olmadan tarayıcıda çalışması için
-  node:fs, node:crypto ve bir düzine başka Node modülünü 640 satır JavaScript'te
-  elle nasıl yeniden uyguladığı.
+title: Wasm olmadan Node.js kütüphanesini tarayıcıda çalıştırmak,
+  typescript-virtual-container polyfilleri
+description: Fortune node:fs, node:crypto ve bir düzine Node modülünü konteynerin
+  tarayıcıda Wasmsız dönmesi için 640 satır el yapımı JavaScriptle nasıl yeniden
+  uyguladı.
 date: 2026-05-29
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - nodejs
   - polyfills
   - browser
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "qzs8kTDPLnJj5/7NGxGkp1rbw5AL2c7jFKpDb9Sp76e/R+kOlpLAeO9TOK6f4pBP1xyotAsXB0w22jyrfFX3/w=="
+author_sig: "DCIW+4un21nBSe5eTR92ilYG02ut1D3eEoABLSd7FFOIquVF4vN1N0BM3A4Wg9rmTyJ2Hn3V8yb9GOK8PrpwtQ=="
 ---
 
-# Bir Node.js kütüphanesini Wasm olmadan tarayıcıda çalıştırmak -- typescript-virtual-container polyfill'leri
+# Wasm olmadan Node.js kütüphanesini tarayıcıda çalıştırmak: typescript-virtual-container polyfilleri
 
-Geçenlerde [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr)'un projesi olan [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)'ın kaynak kodunu incelemeye epey zaman harcadım. Ve beni en çok şaşırtan kısım VFS değil, sanal ağ değil, TypeScript'te yeniden uygulanmış 170 Unix komutu değil. `polyfills/` klasörüydü.
+Yakın zamanda [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr) projesi [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) kaynak kodunu epey inceledim. Ve beni en çok şaşırtan kısım VFS, sanal ağ ya da TypeScript ile yeniden uygulanmış 170 Unix komutundan bile çok `polyfills/` klasörüydü.
 
-Çünkü modül tarayıcıda, Wasm olmadan çalışıyor ve bunun için Fortune, kütüphanenin ihtiyaç duyduğu tüm `node:*` katmanını elle yeniden uygulamış. Yaklaşık 640 satır el yapımı JavaScript ile `node:fs`, `node:crypto`, `node:os`, `node:net` ve diğerlerini değiştiriyor.
+Çünkü modül tarayıcıda döner, Wasmsız ve bunun için Fortune kütüphanenin ihtiyaç duyduğu tüm `node:*` katmanını elle yeniden uygulamış. `node:fs`, `node:crypto`, `node:os`, `node:net` ve birkaç diğerinin yerini alan yaklaşık 640 satır el yapımı JavaScript.
 
-Bu makale, polyfill polyfill nasıl çalıştığını açıklıyor.
-
----
-
-## Temel Problem
-
-Bir Node.js kütüphanesi, tarayıcıda var olmayan API'ler kullanır. `import { readFileSync } from 'node:fs'` yazdığında, bu Node tarafında bir sistem çağrısıdır -- libuv üzerinden gerçek bir disk erişimi. Tarayıcıda `node:fs` diye bir şey yoktur.
-
-Olağan çözümler şunlardır:
-
-- **Bir Wasm Runtime** (Emscripten, WASIp1/WASIp2 gibi) -- Node.js'i Wasm'a derler ve çalıştırırsın. Sonuç: 10-50 MB'lık bundle'lar, belirgin bir yüklenme süresi, önemli bir dağıtım karmaşıklığı.
-- **Genel Polyfill'ler** (`browserify`, `webpack node: polyfills` gibi) -- her Node modülünün yaklaşımlarını sağlayan npm kütüphaneleri. Genelde çok ağır, özel kullanım durumuna uygun değil.
-- **Polyfill'leri elle yazmak** -- daha çok iş, ama optimal sonuç.
-
-Fortune üçüncü seçeneği tercih etti. Ve sonuç, sadece kütüphanenin kendisi olan, anında başlayan ve hiçbir dış altyapıya bağımlı olmayan bir tarayıcı bundle'ı.
+Bu makale polyfill polyfill nasıl çalıştığını açıklar.
 
 ---
 
-## Build Mekaniği
+## Temel sorun
 
-Her şey esbuild ve onun `alias` seçeneğine dayanıyor. Her `node:*` import'u yerel bir dosyaya yönlendiriliyor:
+Bir Node.js kütüphanesi tarayıcıda var olmayan APIler kullanır. `import { readFileSync } from 'node:fs'` yazdığında bu Node tarafında bir sistem çağrısıdır: libuv üzerinden gerçek disk erişimi. Tarayıcıda `node:fs` hiç yoktur.
+
+Alışılmış çözümler:
+
+- **Wasm çalışma ortamı** (Emscripten türü, WASIp1/WASIp2): Node.jsi Wasme derleyip çalıştırırsın. Sonuç: 10-50 MB paketler, belirgin yükleme süresi, anlamlı dağıtım karmaşıklığı.
+- **Genel polyfiller** (`browserify`, `webpack node: polyfills` türü): her Node modülünün yaklaşımlarını sağlayan npm kütüphaneleri. Genelde fazla ağır, özel duruma kötü uyarlanmış.
+- **Polyfilleri elle yeniden yazmak**: daha fazla iş ama en iyi sonuç.
+
+Fortune üçüncü seçeneği seçti. Ve sonuç yalnızca kütüphane olan bir tarayıcı paketi, anında başlar ve hiçbir dış altyapıya bağlı değildir.
+
+---
+
+## Derleme mekaniği
+
+Her şey esbuild ve `alias` seçeneğine dayanır. Her `node:*` içe aktarma yerel bir dosyaya yönlendirilir:
 
 ```js
 // demo/build.js
@@ -74,15 +74,15 @@ esbuild.build({
 });
 ```
 
-`inject` seçeneği dikkate değer: `process.js` ve `buffer.js` dosyalarını bundle'daki her dosyanın başına enjekte etmeyi sağlar, böylece `process` ve `Buffer` hiçbir açık import gerektirmeden global olarak kullanılabilir olur. Tıpkı Node.js'in onları yerel olarak sunması gibi.
+`inject` seçeneği not edilmeyi hak eder: paketin her dosyasının başına `process.js` ve `buffer.js` enjekte etmeye izin verir, bu da `process` ve `Buffer`ı açık içe aktarma olmadan global kullanılabilir yapar. Tıpkı Node.jsin onları yerel sunması gibi.
 
 ---
 
-## `buffer.js` -- `Uint8Array` üzerinde `Buffer`
+## `buffer.js`: `Uint8Array` üstünde `Buffer`
 
-Bu, enjekte edilen iki globalden biri. `Buffer`, kodda yoğun olarak kullanılıyor -- her SSH işlemi, her VFS anlık görüntüsü, her ikili okuma/yazma işlemi onun üzerinden geçiyor.
+Enjekte edilen iki globalden biri. `Buffer` kodda yoğun kullanılır: her SSH işlemi, her VFS anlık görüntüsü, her ikili okuma/yazma oradan geçer.
 
-Çözüm: `Uint8Array`'i genişleten ve Node.js'in tüm `Buffer` API'sini uygulayan bir `BrowserBuffer` sınıfı.
+Çözüm: `Uint8Array` genişleten ve Node.js `Buffer` API tamamını uygulayan bir `BrowserBuffer` sınıfı.
 
 ```js
 class BrowserBuffer extends Uint8Array {
@@ -110,16 +110,16 @@ class BrowserBuffer extends Uint8Array {
 globalThis.Buffer = BrowserBuffer;
 ```
 
-Toplamda uygulananlar:
+Toplam uygulanan şey:
 - `Buffer.from`, `Buffer.alloc`, `Buffer.allocUnsafe`, `Buffer.isBuffer`, `Buffer.concat`, `Buffer.byteLength`
-- Tüm yazma metodları: `writeUInt8/16/32BE/LE`, `writeInt8/16/32BE/LE`, `writeBigUInt64BE/LE`, `writeFloat/DoubleLE/BE`
-- Tüm karşılık gelen okuma metodları
-- hex, base64, utf8 desteğiyle `toString`
+- Tüm yazma yöntemleri: `writeUInt8/16/32BE/LE`, `writeInt8/16/32BE/LE`, `writeBigUInt64BE/LE`, `writeFloat/DoubleLE/BE`
+- Karşılık gelen tüm okuma yöntemleri
+- hex, base64, utf8 destekli `toString`
 - `copy`, `equals`, `slice`, `subarray`
 
-Bu 116 satır ediyor. Değiştirdiği şeye bakarsak, oldukça kompakt.
+Bu 116 satır eder. Değiştirdiği şey için kayda değer kompakt.
 
-Ana numara, çok baytlı erişimler için `DataView` kullanımı; bu, her tür için bitleri elle manipüle etmek zorunda kalmadan endianness'i doğru şekilde yönetiyor:
+Ana numara çok baytlı erişimler için `DataView` kullanımıdır, bu her tür için biti elle manipüle etmeden endiannessı doğru yönetir:
 
 ```js
 writeUInt32BE(val, offset = 0) {
@@ -130,9 +130,9 @@ writeUInt32BE(val, offset = 0) {
 
 ---
 
-## `process.js` -- minimal `process` global'ı
+## `process.js`: minimal global `process`
 
-Diğer enjekte edilen global. Küçük ama gerekli -- kod sık sık `process.env.NODE_ENV`, `process.platform`, `process.nextTick` vb. kontrol ediyor.
+Enjekte edilen diğer global. Minicik ama gerekli: kod sık `process.env.NODE_ENV`, `process.platform`, `process.nextTick` vs. test eder.
 
 ```js
 globalThis.startedat = Date.now();
@@ -151,30 +151,30 @@ export const process = {
 globalThis.process = process;
 ```
 
-`nextTick` → `queueMicrotask` eşlemesi buradaki en önemli detay. Node.js'te `process.nextTick`, olay döngüsünün mevcut aşamasının sonunda, I/O'dan önce bir callback planlar. Tarayıcıda `queueMicrotask` anlamsal olarak çok benzer bir şey yapar -- bir sonraki render veya olaydan önce yürütülen bir mikro görev planlar. Aynı değil, ancak `nextTick` kullanan tüm kodun tarayıcıda doğru çalışması için yeterince yakın.
+Buradaki en önemli detay `nextTick` → `queueMicrotask` eşlemesidir. Node.js içinde `process.nextTick`, olay döngüsünün mevcut fazının sonunda, G/Çden önce bir geri çağrı zamanlar. Tarayıcıda `queueMicrotask` çok yakın bir semantik sunar: sonraki render ya da olaydan önce çalışan bir mikrogörev zamanlar ve bu yakınlık `nextTick` kullanan tüm kodun tarayıcıda doğru çalışmasına yeter.
 
 ---
 
-## `node:fs` -- Senkron dosya sistemi olarak IndexedDB
+## `node:fs`: senkron dosya sistemi olarak IndexedDB
 
-Bu, en karmaşık polyfill ve teknik olarak açık ara en ilginç olanı.
+Bu açık ara en sofistike polyfill ve teknik olarak en ilginç olanıdır.
 
-Problem zorlu: `node:fs` senkron bir API sunar (`readFileSync`, `writeFileSync` vb.), ancak tarayıcı depolama API'lerinin tümü asenkrondur (IndexedDB, Cache API vb.). Senkron bir fonksiyonun ortasında `await` yapamazsın.
+Sorun inceliklidir: `node:fs` senkron bir API sunar (`readFileSync`, `writeFileSync` vs.) ama tarayıcı depolama APIlerinin hepsi asenkrondur (IndexedDB, Cache API vs.). Senkron bir fonksiyonun ortasında `await` yapılamaz.
 
-Fortune'un çözümü: iki seviyeli bir önbellek.
+Fortuneun çözümü: çift katmanlı önbellek.
 
-**Seviye 1 -- Bellek içi Map (senkron)**  
-Tüm okumalar, bellekteki bir `Map<string, Uint8Array>` üzerinden yapılır. Anlık, senkron, API sorunu yok.
+**Katman 1: bellekte Map (senkron)**
+Tüm okumalar bellekteki `Map<string, Uint8Array>` üzerinden yapılır. Anlık, senkron, API sorunu yok.
 
-**Seviye 2 -- IndexedDB (asenkron, arka planda)**  
-Başlangıçta, IndexedDB'nin tüm içeriği Map'e yüklenir. Yazmalar hemen Map'e yapılır *ve* bloke etmeden IndexedDB'ye asenkron bir yazma başlatır.
+**Katman 2: IndexedDB (asenktron, arka planda)**
+Başlangıçta IndexedDBnin tüm içeriği Mape yüklenir. Yazmalar hemen Mape yapılır *ve* bloklamadan IndexedDBye asenkron yazma başlatır.
 
 ```js
 const DB_NAME = 'vfs-fs-shim';
 const STORE = 'files';
 let db = null;
 
-// Sync cache (path → Uint8Array | null)
+// Senkron önbellek (path → Uint8Array | null)
 const memCache = new Map();
 
 // Başlangıçta ön yükleme
@@ -189,7 +189,7 @@ openDB().then(db => {
   };
 });
 
-// IndexedDB'ye async yazma (bloke etmeyen)
+// IndexedDBye asenkron yazma (bloklamaz)
 function idbSet(path, value) {
   openDB().then(db => {
     const tx = db.transaction(STORE, 'readwrite');
@@ -199,11 +199,11 @@ function idbSet(path, value) {
 }
 ```
 
-Dışa aktarılan API eksiksiz: `readFileSync`, `writeFileSync`, `appendFileSync`, `existsSync`, `unlinkSync`, `rmSync` (`recursive` seçeneğiyle), `mkdirSync` (`recursive` seçeneğiyle), `readdirSync`, `statSync`, `renameSync`.
+Sunulan API eksiksizdir: `readFileSync`, `writeFileSync`, `appendFileSync`, `existsSync`, `unlinkSync`, `rmSync` (`recursive` seçeneğiyle), `mkdirSync` (`recursive` seçeneğiyle), `readdirSync`, `statSync`, `renameSync`.
 
-Hatta VFS'in WAL günlüğünün tarayıcı modunda çalışması için bir dosya tanımlayıcı yönetim katmanı bile var (`openSync`, `writeSync`, `closeSync`) -- günlük bir fd açar, içine yazar, kapatır ve veriler IndexedDB'ye gider.
+VFS WAL günlüğünün tarayıcı modunda çalışması için dosya tanımlayıcı yönetim katmanı bile vardır (`openSync`, `writeSync`, `closeSync`): günlük bir fd açar, içine yazar, kapatır ve veriler IndexedDBde bulunur.
 
-`ready` özelliği, kodun ilk ön yüklemenin ne zaman tamamlandığını bilmesini sağlamak için dışa aktarılır:
+Kodun başlangıç ön yüklemesinin bittiğini bilmesine izin vermek için `ready` özelliği dışa aktarılır:
 
 ```js
 export const ready = openDB().then(db => new Promise(resolve => {
@@ -219,15 +219,15 @@ export const ready = openDB().then(db => new Promise(resolve => {
 globalThis.__fsReady__ = ready;
 ```
 
-Bu sayede VFS anlık görüntüleri tarayıcıda sayfa yenilemelerine dayanır. Demoyu yeniden yüklediğinde, VFS IndexedDB'den, hiçbir sunucu olmadan, tam olarak bıraktığın durumda geri yüklenir.
+VFS anlık görüntülerinin tarayıcıda sayfa yeniden yüklemelerine dayanması bunun sayesindedir. Demoyu yeniden yükleyince VFS hiç sunucu karışmadan IndexedDBden, bıraktığın halde aynen geri yüklenir.
 
 ---
 
-## `node:crypto` -- Saf JS ile SHA-256, HMAC, PBKDF2
+## `node:crypto`: saf JSde SHA-256, HMAC, PBKDF2
 
-Wasm'da derlenmiş bir kripto kütüphanesi ithal etmek yerine, Fortune gerekli primitifleri doğrudan uygulamış.
+Wasme derlenmiş kripto kütüphanesi içe aktarmak yerine Fortune gerekli ilkelleri doğrudan uygulamış.
 
-**SHA-256**, FIPS 180-4 sabitleriyle sıfırdan uygulanmış:
+**SHA-256** FIPS 180-4 sabitleriyle sıfırdan uygulanır:
 
 ```js
 const K = new Uint32Array([
@@ -235,7 +235,7 @@ const K = new Uint32Array([
 ]);
 
 function sha256(data) {
-  // FIPS 180-4 padding
+  // FIPS 180-4 dolgusu
   const msg = data instanceof Uint8Array ? data : new TextEncoder().encode(data);
   // ...
   // 64 sıkıştırma turu
@@ -251,36 +251,36 @@ function sha256(data) {
 }
 ```
 
-SHA-256 üzerine **HMAC-SHA256** ve **PBKDF2-HMAC-SHA256** inşa edilmiş. Bu iki primitif, SSH el sıkışmalarında ve iç kimlik doğrulamada anahtar türetme için kullanılıyor.
+SHA-256 üstüne **HMAC-SHA256** ve **PBKDF2-HMAC-SHA256** inşa edilir. Bu iki ilkel SSH değişimlerinde anahtar türetme ve dahili kimlik doğrulama için kullanılır.
 
-Dışa aktarılan API Node.js'inkine benziyor:
+Dışa aktarılan API Node.jsinkine benzer:
 
 ```js
-// Klasik Hash
+// Klasik hash
 const hash = createHash('sha256').update('data').digest('hex');
 
-// Rastgele baytlar (standart Web Crypto API ile)
+// Rastgele baytlar (standart Web Crypto API üzerinden)
 const bytes = randomBytes(32);
 
 // UUID
 const id = randomUUID();
 
-// Timing-güvenli karşılaştırma
+// Zamanlamaya güvenli karşılaştırma
 const ok = timingSafeEqual(a, b);
 
-// scrypt (PBKDF2 ile yaklaşık)
+// scrypt (PBKDF2 üzerinden yaklaştırılmış)
 const key = scryptSync(password, salt, 32, { N: 16384 });
 ```
 
-Not: `scryptSync`, `N` parametresine göre ayarlanmış bir iterasyon sayısıyla PBKDF2 üzerinden yaklaşık olarak hesaplanır. Gerçek scrypt değildir (farklı bir bellek şeması kullanır), ancak projenin kullanımları için yeterlidir.
+Not: `scryptSync`, parametre `N` üzerine ayarlı yineleme sayısıyla PBKDF2 üzerinden yaklaştırılır. Bu yaklaşım scrypte özel bellek şemasının yerini alır ve projenin kullanımlarını kapsar.
 
-Tarayıcıda makul bir şekilde öykünemeyen fonksiyonlar (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`), çağrıldıklarında açık bir hata fırlatır. Dürüst davranış.
+Tarayıcıda makul öykünülemeyecek fonksiyonlar (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`) çağrılırsa açık hata fırlatır. Dürüst davranış.
 
 ---
 
-## `node:os` -- tarayıcının gerçek özelliklerini okumak
+## `node:os`: tarayıcının gerçek özelliklerini okumak
 
-Sabit değerler döndürmek yerine, bu polyfill tarayıcı API'lerini okuyarak kullanıcının gerçek makinesine karşılık gelen bilgileri döndürür.
+Sabit değerler döndürmek yerine bu polyfill gerçek makineye karşılık gelen bilgileri döndürmek için tarayıcı APIlerini okur.
 
 ```js
 export function totalmem() {
@@ -309,15 +309,15 @@ export function arch() {
 }
 ```
 
-Somut sonuç: Tarayıcı demosunda `neofetch` çalıştırdığında, görüntülenen çekirdek sayısı ve RAM, gerçek makinenle eşleşir. Bu bir detay, ancak terminalin inandırıcılığına büyük katkı sağlar.
+Somut sonuç: tarayıcı demoda `neofetch` çalıştırınca gösterilen çekirdek sayısı ve RAM makinene karşılık gelir. Detaydır ama terminalin gerçekliğine çok katkıda bulunur.
 
-Diğer dışa aktarımlar: `freemem` (toplam belleğin %40'ı, makul bir yaklaşım), `platform` → `'browser'`, `type` → `'Linux'`, `release` → `'web'`, `uptime` `performance.now()` ile, `endianness` → `'LE'` (tüm yaygın x86/ARM işlemcilerde geçerli olan little-endian), `loadavg` → `[0, 0, 0]`.
+Diğer dışa aktarmalar: `freemem` (toplam belleğin %40ı, makul yaklaşım), `platform` → `'browser'`, `type` → `'Linux'`, `release` → `'web'`, `performance.now()` üzerinden `uptime`, `endianness` → `'LE'` (tüm genel x86/ARM işlemcilerde doğru little-endian), `loadavg` → `[0, 0, 0]`.
 
 ---
 
-## `node:net` -- temiz TCP stub'ları
+## `node:net`: temiz TCP saplamaları
 
-Tarayıcının ham TCP soketlerine erişimi yoktur (WebSocket sayılmaz -- bu farklı bir uygulama katmanı protokolüdür). Bu nedenle `node:net` bir stub, ama *iyi yazılmış* bir stub.
+Tarayıcı ham TCP soketlerine erişemez (WebSocket sayılmaz: farklı bir uygulama protokolüdür). `node:net` o yüzden bir saplama ama *iyi yazılmış* bir saplama.
 
 ```js
 export class Socket {
@@ -332,15 +332,15 @@ export class Socket {
 }
 ```
 
-Önemli nokta: olay kayıt metodları (`on`, `once`, `off`, `emit`) `this` döndürür ve hata fırlatmaz. Bu, `new net.Socket().on('connect', cb)` yapan kodun, bağlantı hiç gerçekleşmese bile çökmeden çalışmasını sağlar. Sadece *gerçekten bağlantı kurmayı deneyen* metodlar hata fırlatır.
+Önemli nokta: olay kayıt yöntemleri (`on`, `once`, `off`, `emit`) `this` döndürür ve hata fırlatmaz. Bu `new net.Socket().on('connect', cb)` yapan kodun bağlantı hiç kurulmasa bile çökmeden çalışmasına izin verir. Yalnızca *gerçekten bağlanmaya çalışan* yöntemler hata fırlatır.
 
-`isIP`, `isIPv4`, `isIPv6` doğru şekilde uygulanmıştır (stub değil), çünkü sanal ağ kodu tarafından hiçbir zaman soket açmadan adresleri doğrulamak için kullanılırlar.
+`isIP`, `isIPv4`, `isIPv6` doğru uygulanır (gerçek doğrulama mantığıyla) çünkü soket açmadan adresleri doğrulamak için sanal ağ kodunca kullanılır.
 
 ---
 
-## `node:path` -- POSIX yol işlemleri
+## `node:path`: POSIX yol işlemleri
 
-POSIX yol işlemlerinin, bağlama uyarlanmış (Windows ters eğik çizgisi yok, yollar her zaman `/` ile mutlak) tamamen yeniden uygulanması.
+Tam POSIX yol işlemlerinin yeniden uygulaması, bağlama uyarlanmış (hep `/` ile mutlak yollar, yalnızca Unix tarzı).
 
 ```js
 export const posix = {
@@ -373,9 +373,9 @@ Basit, kompakt, projenin kullanımları için doğru.
 
 ---
 
-## `node:url` -- tarayıcı API'lerine delegasyon
+## `node:url`: tarayıcı APIlerine yetki
 
-Bu, basitliğiyle zarif. `URL` ve `URLSearchParams` API'si tarayıcıda zaten yerel olarak var -- sadece yeniden dışa aktarmak yeterli.
+Bu sadeliğiyle zariftir. `URL` ve `URLSearchParams` API tarayıcıda zaten yerel vardır: yeniden dışa aktarmak yeter.
 
 ```js
 const _URL = globalThis.URL;
@@ -383,7 +383,7 @@ const _URLSearchParams = globalThis.URLSearchParams;
 export { _URL as URL, _URLSearchParams as URLSearchParams };
 ```
 
-Sadece `fileURLToPath` ve `pathToFileURL` bir uygulama gerektirir, çünkü bunlar Node'a özgüdür:
+Yalnızca `fileURLToPath` ve `pathToFileURL` uygulama gerektirir çünkü Nodea özgüdür:
 
 ```js
 export function fileURLToPath(url) {
@@ -393,11 +393,11 @@ export function fileURLToPath(url) {
 }
 ```
 
-Hedef platform (tarayıcı) zaten yerel eşdeğerini sağladığında ideal yaklaşım budur.
+Hedef platform (tarayıcı) zaten yerel eşdeğeri sağlıyorsa ideal yaklaşımdır.
 
 ---
 
-## `node:zlib` -- kimlik
+## `node:zlib`: kimlik
 
 ```js
 export function gzipSync(buf) { return buf; }
@@ -405,13 +405,13 @@ export function gunzipSync(buf) { return buf; }
 export default { gzipSync, gunzipSync };
 ```
 
-İki satır. Kütüphane gerçek sıkıştırma için `fflate` kullanır (tarayıcıda yerel olarak çalışır). `node:zlib` yalnızca tarayıcı bağlamında yürütülmeyen kod yollarında içe aktarılır -- bu nedenle bir passthrough yeterlidir.
+İki satır. Kütüphane gerçek sıkıştırma için `fflate` kullanır (tarayıcıda yerel çalışır). `node:zlib` yalnızca tarayıcı bağlamında çalışmayan kod yollarında içe aktarılır: o yüzden geçiş yeterlidir.
 
 Bazen doğru uygulama iki satırdır.
 
 ---
 
-## `node:events` -- Minimal EventEmitter
+## `node:events`: minimal EventEmitter
 
 ```js
 export class EventEmitter {
@@ -430,11 +430,11 @@ export class EventEmitter {
 }
 ```
 
-Node.js'in tam `EventEmitter` uygulaması, `maxListeners`, `once`, `prependListener` vb. yönetimiyle ~600 satırdır. Burada gerçekten kullanılan 4 metot için 12 satır. Build aracının tree-shaking'inden önce zihinsel tree-shaking.
+Node.js `EventEmitter` tam uygulaması `maxListeners`, `once`, `prependListener` vs. yönetimiyle ~600 satır yapar. Burada gerçekten kullanılan 4 yöntem için 12 satırdır. Derleme aracının tree-shakinginden önce bile zihinsel tree-shaking.
 
 ---
 
-## `ssh2` ve `roxify` -- açık stub'lar
+## `ssh2` ve `roxify`: açık saplamalar
 
 ```js
 // polyfills/ssh2/index.js
@@ -452,15 +452,15 @@ export class Client {
 }
 ```
 
-SSH sunucusu tarayıcıda çalışmaz (bunun bir anlamı olmazdı -- kim bağlanacak ki?). Ancak *istemci tarafında SSH hakkında konuşan* kod -- SSH paketleri oluşturan sınıflar, protokol ayrıştırıcıları -- kütüphanede mevcuttur. Bu stub'lar, tüm bu kodun hatasız bir şekilde bundle edilmesine izin verirken, birisi gerçek bir soket gerektiren bir metodu çağırmaya kalkışırsa net bir hata fırlatılmasını garanti eder.
+SSH sunucusu tarayıcıda dönmez (anlamı olmazdı: kim bağlanırdı?). Ama SSH *istemci tarafında konuşan* kod: SSH paketleri kuran sınıflar, protokol ayrıştırıcılar, kütüphanede vardır. Bu saplamalar tüm bu kodun hatasız paketlenmesine izin verirken gerçek soket gerektiren yöntemi çağırmaya kalkan olursa açık hata garanti eder.
 
-`roxify`, Node modunda VFS anlık görüntüleri için kullanılan özel bir sıkıştırma biçimidir. Tarayıcıda bunun yerine `fflate` kullanılır -- polyfill, `roxify` doğrudan çağrılırsa sadece bir hata fırlatır.
+`roxify`, Node modunda VFS anlık görüntüleri için kullanılan sahipli bir sıkıştırma formatıdır. Tarayıcıda yerine `fflate` kullanılır: polyfill `roxify` doğrudan çağrılırsa hata fırlatmakla yetinir.
 
 ---
 
-## `node:worker_threads` -- Web Workers'ları yeniden dışa aktarma
+## `node:worker_threads`: Web Workerların yeniden dışa aktarımı
 
-Bu en ince olanı. Node.js'teki `node:worker_threads` ve tarayıcıdaki Web Workers iki farklı API'dir, ancak kavramsal olarak birbirlerine yakındır. Polyfill eşlemeyi yapar:
+En incesi budur. Node.js içinde `node:worker_threads` ile tarayıcının Web Workerları iki farklı APIdir ama kavramsal yakındırlar. Polyfill eşlemeyi yapar:
 
 ```js
 const _MessageChannel = globalThis.MessageChannel;
@@ -473,46 +473,46 @@ export const workerData = null;
 export const parentPort = null;
 ```
 
-`MessageChannel` ve `MessagePort` doğrudan tarayıcıdan yeniden dışa aktarılır (aynı API). `Worker`'ın kendisi bir wrapper gerektirir çünkü yapıcı farklıdır (Node bir modül yolu bekler, tarayıcı bir URL bekler). `isMainThread` bu bağlamda tarayıcı tarafında her zaman `true`'dur.
+`MessageChannel` ve `MessagePort` tarayıcıdan doğrudan yeniden dışa aktarılır (aynı API). `Worker`ın kendisi sarmalayıcı gerektirir çünkü kurucu farklıdır (Node modül yolu bekler, tarayıcı URL bekler). Bu bağlamda tarayıcı tarafında `isMainThread` hep `true`dur.
 
 ---
 
-## Genel Bakış: Bu 640 satır neyi temsil ediyor
+## Genel bakış: bu 640 satır neyi temsil eder
 
 | Polyfill | Satır | Strateji |
 |---|---|---|
-| `buffer.js` | 116 | `Uint8Array` + `DataView`, tüm `Buffer` API'si |
-| `node:crypto` | 166 | SHA-256/HMAC/PBKDF2 sıfırdan + Rastgeleler için Web Crypto |
-| `node:fs` | 210 | Bellekte `Map` + IndexedDB async |
-| `node:net` | 70 | Zincirlenebilir Stub'lar + gerçek IP doğrulamaları |
-| `ssh2` | 74 | Açık Stub'lar |
-| `process.js` | 14 | Minimal viable `process` |
+| `buffer.js` | 116 | `Uint8Array` + `DataView`, tüm `Buffer` API |
+| `node:crypto` | 166 | Sıfırdan SHA-256/HMAC/PBKDF2 + randomlar için Web Crypto |
+| `node:fs` | 210 | Bellekte `Map` + asenkron IndexedDB |
+| `node:net` | 70 | Zincirlenebilir saplamalar + gerçek IP doğrulamaları |
+| `ssh2` | 74 | Açık saplamalar |
+| `process.js` | 14 | Minimal yaşayabilir `process` |
 | `node:path` | ~30 | POSIX yol işlemleri |
-| `node:url` | ~25 | Tarayıcı API'lerine delegasyon |
-| `node:events` | ~12 | EventEmitter 4 metot |
+| `node:url` | ~25 | Tarayıcı APIlerine yetki |
+| `node:events` | ~12 | 4 yöntemli EventEmitter |
 | `node:os` | ~25 | `navigator.deviceMemory` / `hardwareConcurrency` |
-| `node:zlib` | 4 | Passthrough |
-| `node:worker_threads` | ~30 | Web Workers'ları yeniden dışa aktarma |
-| `roxify.js` | 8 | Stub'lar |
+| `node:zlib` | 4 | Geçiş |
+| `node:worker_threads` | ~30 | Web Worker yeniden dışa aktarımı |
+| `roxify.js` | 8 | Saplamalar |
 
-640 satır. Hiçbir npm bağımlılığı yok. Hiçbir Wasm yok. Ve bu, bir saniyeden kısa sürede başlayan ve hiçbir sunucu altyapısı gerektirmeyen bir tarayıcı bundle'ı üretiyor.
-
----
-
-## Bundan çıkarılacak dersler
-
-Bir dahaki sefere bir Node.js kütüphanesini tarayıcıya taşımak istediğinde, Fortune'un yaklaşımı şunları gösteriyor:
-
-1. **Gerçekten neyin kullanıldığını belirle.** Kod sadece `on`, `emit` ve `removeListener` kullanıyorsa tüm `EventEmitter`'ı uygulamaya gerek yok.
-
-2. **Mümkün olduğunda tarayıcı API'lerine devret.** `URL`, `URLSearchParams`, `MessageChannel`, `MessagePort`, `crypto.getRandomValues` -- tarayıcıda zaten var, kullan onları.
-
-3. **Async API'nin önünde senkron önbellek.** `node:fs` için `Map` + IndexedDB çözümü, tüm klasördeki en yeniden kullanılabilir desen.
-
-4. **Dürüst stub'lar, sessiz eksik uygulamalardan iyidir.** Açık bir `throw new Error('not implemented in browser')`, hatanın 10 çağrı sonra ortaya çıkmasına izin veren bir `return undefined`'dan sonsuz derecede daha kullanışlıdır.
-
-5. **esbuild `alias` + `inject` hafife alınıyor.** Bu tür bir taşıma için mükemmel araç -- sıfır webpack yapılandırması, sıfır eklenti, sadece bir değiştirme listesi.
+640 satır. Sıfır npm bağımlılığı. Sıfır Wasm. Ve bir saniyeden kısa başlayan, hiç sunucu altyapısı olmadan dönen bir tarayıcı paketi verir.
 
 ---
 
-Kod repo'da: [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). Her dosya tek bir sayfaya sığıyor, doğrudan GitHub'da okunabilir. Benzer bir proje üzerinde çalışıyorsan şiddetle tavsiye edilir.
+## Buradan ne çıkarılabilir
+
+Bir dahaki sefere Node.js kütüphanesini tarayıcıya taşımak isteyince Fortuneun yaklaşımının gösterdiği şey:
+
+1. **Gerçekten kullanılanı belirle.** Yalnızca kodun çağırdığı yöntemleri uygula: burada `EventEmitter` için `on`, `emit` ve `removeListener` yeter.
+
+2. **Mümkünse tarayıcı APIlerine yetki ver.** `URL`, `URLSearchParams`, `MessageChannel`, `MessagePort`, `crypto.getRandomValues`: tarayıcı zaten sahiptir, kullanmak gerekir.
+
+3. **Asenkron API önünde senkron önbellek.** `node:fs` için `Map` + IndexedDB çözümü tüm klasörün en yeniden kullanılabilir desenidir.
+
+4. **Dürüst saplamalar sessiz eksik uygulamalardan iyidir.** Açık `throw new Error('not implemented in browser')`, hatanın 10 çağrı sonra belirmesine bırakan `return undefined`den sonsuz faydalıdır.
+
+5. **esbuild `alias` + `inject` az değer görür.** Bu tür taşıma için mükemmel araçtır: sıfır webpack yapılandırması, sıfır eklenti, sadece değiştirme listesi.
+
+---
+
+Kod depodadır: [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). Her dosya tek sayfaya sığar, doğrudan GitHubda okunabilir. Benzer bir projede çalışıyorsan şiddetle önerilir.

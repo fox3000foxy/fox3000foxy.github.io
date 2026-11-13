@@ -1,52 +1,51 @@
 ---
-title: "Character-Factory bauen: Avatare mit Genetik"
-description: "Ein TypeScript-Modul auf Basis von DiceBear: kohärente
-  länder-/ethniebasierte Generierung, eine kleine Genetik-Engine zum Projizieren
-  von Kindern und die technischen Details, die es in einem Kartenspiel nutzbar
-  gemacht haben."
+title: "character-factory bauen: Avatare mit Genetik"
+description: "Ein TypeScript-Modul auf DiceBear: konsistente Generierung
+  nach Land/Ethnie, eine kleine Genetik-Engine zum Projizieren von Kindern, und
+  die Engineering-Details, die es in einem Kartenspiel nutzbar gemacht haben."
 date: 2026-05-16
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "oWXVoggS1JDtiBVj7lOsPs4Q1oLIxjlvZpissMMXXArONrd9FoW0frF7sqZm3mV0Uvf0V3oLktpjauBgL+gR3w=="
+author_sig: "p33ELq0YgXbSwTPNI2f3jT4sRwtGUruilxlo52vhD/nw2VdrUWlEoGamCfJR6qxOfYDDh79QdCbUkFkfnrIzyA=="
 ---
 
-# character-factory bauen: Avatare mit Genetik
+# character-factory bauen: Avatare mit Genetiksystem
 
-Ich brauchte tausende glaubwürdige, unverwechselbare Avatare für [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- ein privates Kartenspiel-Projekt, bei dem jede Karte eine Charakter-„DNA“ enthält, die der Renderer in ein Porträt verwandelt. Ein Stock-Pack zu kaufen, hätte nach Stock ausgesehen. Einmalige DiceBear-Avatare pro Seed zu generieren, fühlte sich auf die falsche Art zufällig an: Eine japanisch angehauchte Karte könnte auf eine skandinavische Blondine landen, und zwei „Geschwister“ sahen aus wie Fremde.
+Ich brauchte Tausende glaubwürdige und unterschiedliche Avatare für [Kurekuta](https://github.com/fox3000foxy/kurekuta/), ein privates Kartenspielprojekt, bei dem jede Karte eine Charakter-"DNA" enthält, die die Render-Engine in ein Porträt verwandelt. Ein fertiges Pack zu kaufen hätte man gesehen. DiceBear-Avatare pro Charakter zu seeden gab Unsinn: Eine Karte mit japanischem Universum konnte auf eine skandinavische Blondine fallen, und zwei "Geschwister" sahen aus wie Fremde.
 
-Also habe ich [character-factory](https://github.com/fox3000foxy/character-factory) geschrieben -- ein TypeScript-Modul auf Basis von DiceBears Lorelei-Sammlung, das drei Dinge hinzufügt, die DiceBear allein nicht bietet: **kohärente Demografien**, **eine kleine Genetik-Engine** und **einen flüssigen Builder**, der sich in einer Game-Schleife gut benutzen lässt.
+Also habe ich [character-factory](https://github.com/fox3000foxy/character-factory) geschrieben, ein TypeScript-Modul auf der Lorelei-Collection von DiceBear, das drei Funktionen mitbringt, die DiceBear allein nicht gibt: **konsistente demografische Profile**, **eine kleine Genetik-Engine** und **einen flüssigen Builder**, der sich angenehm aus einer Spielschleife nutzen lässt.
 
-## Was es macht
+## Was es tut
 
-Das kleinste nützliche Schnipsel:
+Das kleinste nützliche Snippet:
 
 ```ts
 import { CharacterFactory, Country, Mood } from "character-factory";
 
 const svg = new CharacterFactory()
-  .setCountry(Country.Japan)   // gewichtete Ethnie → kohärente Haut/Haar/Schnitt/Bart
+  .setCountry(Country.Japan)   // gewichtete Ethnizität → konsistente Haut/Haare/Schnitt/Bart
   .setMood(Mood.Happy)
   .buildSvg();
 ```
 
-Diese einzelne Kette wählt eine nach Japans demografischer Mischung gewichtete Ethnie aus, wählt einen zusammengehörigen Hautton und eine Haarfarbe, sucht eine Frisur aus dem richtigen Geschlechter-Pool und stellt dann Augen/Augenbrauen/Mund zu einer „fröhlichen“ Kombination zusammen. Das Ergebnis wird als SVG oder, mit installiertem `sharp`, als PNG in beliebiger Größe gerendert.
+Diese einfache Kette zieht eine nach der japanischen Demografie gewichtete Ethnie, zieht einen Teint und eine Haarfarbe, die zusammenpassen, wählt einen Schnitt aus der passenden Gender-Untergruppe und verriegelt dann Augen/Brauen/Mund in den "fröhlich"-Modus. Das Ergebnis kommt als SVG raus oder, mit installiertem `sharp`, als PNG in beliebiger Größe.
 
-Ein Charakter ist einfach ein `CharacterConfig`-Objekt -- Gesicht, Haare, Accessoires, Präsentation. Der Builder mutiert eines intern, und du kannst es als JSON, Base64 oder Datei extrahieren und auf demselben Weg wieder laden. Für Kurekuta ist das wichtig: Eine Karte speichert die Konfiguration, nicht das gerenderte Bild, sodass die Kunst immer reproduzierbar ist und die Dateigröße einer Karte winzig bleibt.
+Ein Charakter ist nur ein `CharacterConfig`-Objekt, Gesicht, Haare, Accessoires, Darstellung. Der Builder verändert es intern, und du kannst es als JSON, Base64 oder Datei exportieren und dann identisch wieder laden. Für Kurekuta ist das entscheidend: Eine Karte speichert die Config, nicht das gerenderte Bild. Dadurch ist die Kunst immer reproduzierbar und die Größe einer Karte bleibt winzig.
 
-## Kohärente Demografien, nicht nur zufällige Pixel
+## Konsistente demografische Profile statt zufälliger Pixel
 
-DiceBears Optionen sind einheitliche Picker. Übergib `["#ffdbb4", "#2c1b18"]` für die Hautfarbe und du bekommst eine von beiden mit gleicher Wahrscheinlichkeit -- gut für ein Logo, nutzlos für „gib mir einen Charakter aus Brasilien.“
+Die DiceBear-Optionen sind uniforme Selektoren. Gib `["#ffdbb4", "#2c1b18"]` für die Hautfarbe an und du bekommst das eine oder das andere mit derselben Wahrscheinlichkeit, OK für ein Logo, nutzlos für "gib mir einen Charakter aus Brasilien."
 
-`character-factory` liefert eine Land → Ethnie → Eigenschaften-Pipeline:
+`character-factory` bringt eine Land → Ethnie → Merkmale-Pipeline mit:
 
 ```ts
-// Was tatsächlich im Modul ist:
+// Was im Modul steckt :
 ethnicitiesByCountry[Country.Brazil] = [
   { ethnicity: Ethnicity.WestEuropean,  weight: 35 },
   { ethnicity: Ethnicity.BlackAfrican,  weight: 25 },
@@ -61,17 +60,17 @@ ETHNICITY_PROFILES[Ethnicity.EastAsian] = {
     { color: SkinColor.Medium, weight: 20 },
     // ...
   ],
-  hairColors: [/* hauptsächlich schwarz/dunkelbraun, kein blond */],
+  hairColors: [/* vor allem schwarz/dunkelbraun, kein blond */],
   hairCuts:   { male: [...], female: [...] },
   beardProbability: 0.15,
 };
 ```
 
-Jede Schicht ist eine gewichtete Ziehung. Die Gewichte sind keine soziologische Abhandlung -- sie sind eine Heuristik, die verhindert, dass „aus Japan“ eine Rothaarige produziert und „aus Schweden" pechschwarze Haare. Die gesamte Pipeline bricht auf einen einzigen Aufruf zusammen: `setCountry(country)` oder `randomizeFromCountry(country, gender?)`.
+Jede Schicht ist eine gewichtete Ziehung. Die Gewichte sind keine Sozio-These, es ist eine Heuristik, die verhindert, dass "aus Japan" einen Rothaarigen produziert und "aus Schweden" ein tiefes Schwarz. Die ganze Pipeline löst sich in einen einzigen Aufruf auf: `setCountry(country)` oder `randomizeFromCountry(country, gender?)`.
 
 ## Eine kleine Genetik-Engine
 
-Das Feature, mit dem ich am meisten Spaß hatte: `projectChild`. Zwei Factories können ein Kind produzieren, dessen Eigenschaften mit grober biologischer Dominanz vererbt werden:
+Die Funktion, mit der ich mich am meisten amüsiert habe: `projectChild`. Zwei Factories können ein Kind produzieren, dessen Merkmale mit ungefährer biologischer Dominanz vererbt werden:
 
 ```ts
 const parentA = new CharacterFactory().setCountry(Country.Sweden);
@@ -79,7 +78,7 @@ const parentB = new CharacterFactory().setCountry(Country.Japan);
 const kid     = parentA.projectChild(parentB.getConfig());
 ```
 
-Unter der Haube steckt ein bewusst winziges Modell. Jeder Elternteil trägt einen 2-Allel-Genotyp, einen von jeder Seite gezogen, kombiniert zu dominant oder rezessiv:
+Unter der Haube ist es ein absichtlich winziges Modell. Jeder Elternteil trägt einen Genotyp mit 2 Allelen, eines von jeder Seite gezogen, kombiniert zu dominant oder rezessiv:
 
 ```ts
 function combine(a: Allele, b: Allele): "dominant" | "recessive" {
@@ -87,7 +86,7 @@ function combine(a: Allele, b: Allele): "dominant" | "recessive" {
 }
 ```
 
-Eigenschaften mit einer echten Dominanzachse (Haut, Augen, Haare) werden gegen eine explizite geordnete Liste aufgelöst -- dunkler dominant über heller, braune/schwarze Augen dominant über blau, pechschwarze Haare dominant über blond:
+Merkmale, die eine echte Dominanzachse haben (Haut, Augen, Haare), werden über eine explizite geordnete Liste aufgelöst, dunkel dominiert hell, braune/schwarze Augen dominieren blau, tiefes Schwarz dominiert blond:
 
 ```ts
 const HAIR_DOMINANCE_ORDER = [
@@ -105,28 +104,28 @@ const HAIR_DOMINANCE_ORDER = [
 ] as const;
 ```
 
-`resolveByRank` findet den Index jedes Elternteils, wählt den höheren bei einer „dominanten“ Allelkombination und den niedrigeren bei „rezessiv.“ Fantasiefarben (Pastellpink, Lila) sind nicht in der Reihenfolge -- sie fallen auf einen 50/50-Münzwurf zurück, was das richtige Verhalten ist: Sie sind nicht biologisch, also kann Dominanz nichts bedeuten.
+`resolveByRank` findet den Index jedes Elternteils, nimmt den höheren bei einer "dominanten" Allelkombination und den niedrigeren bei "rezessiv". Fantasy-Farben (Pastellrosa, Flieder) stehen nicht in der Ordnung, sie machen 50/50-Kopf-oder-Zahl, was das richtige Verhalten ist: Sie sind nicht biologisch, also ergibt Dominanz keinen Sinn.
 
-Sommersprossen modellieren MC1R: 75%, wenn beide Elternteile sie haben, 25%, wenn nur einer sie trägt, 0%, wenn keiner. Bart ist SRY-gebunden: entfernt, wenn das Kind weiblich ist, ansonsten von dem Elternteil geerbt, der einen hatte. Die Frisur ist überhaupt nicht biologisch -- sie ist eine kulturelle Wahl, also wählt das Kind aus seinem eigenen Geschlechter-Pool und bewahrt, wenn möglich, die Textur.
+Sommersprossen modellieren MC1R: 75 %, wenn beide Eltern sie haben, 25 %, wenn nur einer sie trägt, 0 %, wenn keiner. Der Bart hängt an SRY: entfernt, wenn das Kind eine Frau ist, sonst vom Elternteil vererbt, der einen hatte. Der Haarschnitt hat nichts Biologisches, es ist eine kulturelle Wahl, also zieht das Kind aus seinem eigenen Gender-Pool und bewahrt dabei wenn möglich die Textur.
 
-Nichts davon ist publikationsreife Genetik. Es ist eine Gefühlsebene: Kinder sehen aus wie eine plausible Mischung ihrer Eltern, anstatt wie zwei Fremde, die gemittelt wurden.
+Nichts davon ist publikationswürdige Genetik. Es ist eine Gefühlsschicht: Die Kinder sehen aus wie eine plausible Mischung ihrer Eltern, nicht wie der Durchschnitt zweier Fremder.
 
-## Die langweiligen Engineering-Teile, die wichtig waren
+## Die weniger glamourösen Engineering-Teile, die gezählt haben
 
-Ein paar Dinge, die nicht spektakulär sind, aber ihren Platz im Diff verdient haben:
+Einige wenig sichtbare Details, die ihren Platz im Diff verdient haben:
 
-**Ein sichereres `pick`.** Das Original gab `undefined` zurück, gecastet als `T` bei einem leeren Array. Mit `strict` + `noUncheckedIndexedAccess` in TypeScript ist das eine Lüge, die der Compiler absegnet. Die neue Version wirft einen `RangeError` -- sofort an der Aufrufstelle abgefangen, anstatt `undefined`-Props drei Ebenen tiefer zu produzieren.
+**Ein sichereres `pick`.** Das Original gab `undefined` gecastet zu `T` bei leerem Array zurück. Mit `strict` + `noUncheckedIndexedAccess` in TypeScript ist das eine Lüge, die der Compiler unterschreibt. Die neue Version wirft einen `RangeError`, sofort an der Aufrufstelle gefangen, statt drei Ebenen tiefer `undefined`-Props zu produzieren.
 
-**Ein `deepMerge`, das Arrays nicht korrumpiert.** Die alte Rekursion feuert, wenn der Quellwert ein Objekt ist, selbst wenn der Zielslot `null` oder ein Array ist. `merge({tags: ["a"]}, {tags: ["b"]})` produzierte `{tags: {0: "b"}}`. Die neue Version rekursiert nur, wenn beide Seiten einfache Objekte sind.
+**Ein `deepMerge`, das Arrays nicht korrumpiert.** Die alte Rekursion aktivierte sich, sobald der Quellwert ein Objekt war, selbst wenn das Ziel `null` oder ein Array war. `merge({tags: ["a"]}, {tags: ["b"]})` produzierte `{tags: {0: "b"}}`. Die neue Version rekursiert nur, wenn beide Seiten einfache Objekte sind.
 
-**Paralleles Batch-Rendering.** `batchFactory` renderte früher PNGs in einer seriellen Schleife – ein 1000-Karten-Export lief Minuten. Jetzt ist es ein Worker-Pool mit konfigurierbarem Parallelitätsgrad (Standard 4), der die Ergebnisreihenfolge durch Schreiben in ein vorab dimensioniertes Array beibehält:
+**Paralleles Batch-Rendering.** `batchFactory` renderte die PNGs in serialisierter Schleife, ein Export von 1000 Karten dauerte ewig. Jetzt ist es ein Worker-Pool mit konfigurierbarer Konkurrenz (Standard 4), der die Ergebnisreihenfolge bewahrt, indem er in ein vordimensioniertes Array schreibt:
 
 ```ts
 const worker = async () => {
   while (true) {
     const i = nextIndex++;
     if (i >= count) return;
-    // render and save
+    // rendern und speichern
     results[i] = { index: i + 1, filePath, config: clone.getConfig() };
     done++;
     onProgress?.(done, count);
@@ -135,12 +134,12 @@ const worker = async () => {
 await Promise.all(Array.from({ length: concurrency }, () => worker()));
 ```
 
-Bei einem 1000-Charakter-Export verwandelte sich eine Kaffeepause in einen „Ist das schon fertig?“-Moment.
+Bei einem Export von 1000 Charakteren hat das eine Kaffeepause in ein "schon fertig ?" verwandelt.
 
-**Eine `sharp`-Fehlermeldung, die etwas aussagt.** `buildPng` importiert `sharp` lazy, weil es eine Peer-ähnliche Abhängigkeit ist, die man SVG-only-Benutzern nicht aufzwingen will. Der alte Catch verschluckte den eigentlichen Fehler und gab immer „sharp wird benötigt“ aus. Wenn der eigentliche Fehler ein Versionskonflikt oder ein natives Binding-Problem war, verbrachte man zehn Minuten damit, etwas zu installieren, das bereits installiert war. Die neue Version sagt dir immer noch, dass du es installieren sollst, enthält aber den zugrunde liegenden Fehler.
+**Eine `sharp`-Fehlermeldung, die etwas aussagt.** `buildPng` importiert `sharp` faul, weil es eine optionale Abhängigkeit ist, die du SVG-only-Nutzern nicht aufzwingen willst. Der alte Catch verschluckte den echten Fehler und sagte immer "sharp is required." Wenn der echte Fehler ein Versionskonflikt oder ein natives Binding-Problem war, hast du zehn Minuten damit verbracht, ein schon installiertes Paket neu zu installieren. Die neue Version sagt dir immer noch, es zu installieren, schließt aber den zugrunde liegenden Fehler ein.
 
-## Was als Nächstes kommt
+## Wie weiter
 
-Das Modul ist auf Version 1.1.1 im [character-factory-Repository](https://github.com/fox3000foxy/character-factory). Die Genetik-Engine ist der offensichtliche Ort, um weiterzuentwickeln -- es gibt noch keine Testsuite, also werden kohärente Invarianten („ein brasilianischer Ostasien-lastiger Charakter hat niemals pechschwarze Augen mit platinblonden Haaren“) nur durch die Gewichte erzwungen. `bun test` oder `vitest` hinzuzufügen und einen Kohärenztest zu schreiben, der zehntausend `randomizeFromCountry`-Aufrufe pro Land ausführt, ist der nächste Schritt.
+Das Modul steht auf 1.1.1 im [character-factory-Repository](https://github.com/fox3000foxy/character-factory). Die Genetik-Engine ist der ideale Ort, um weiter zu iterieren, es gibt noch keine Testsuite, also werden die Konsistenzinvarianten ("ein brasilianischer Charakter ostasiatischer Abstammung wird nie tiefschwarze Augen mit platinblonden Haaren haben") nur durch die Gewichte sichergestellt. `bun test` oder `vitest` hinzuzufügen und einen Konsistenztest zu schreiben, der zehntausend `randomizeFromCountry` pro Land laufen lässt, ist der nächste Schritt.
 
-Kurekuta selbst ist vorerst privat, aber jede Karte, die du irgendwann darin sehen wirst, ist ein `CharacterConfig`-Blob und einen `buildPng()`-Aufruf davon entfernt zu existieren.
+Kurekuta selbst ist vorerst privat, aber jede Karte, die du eines Tages darin siehst, ist nur ein `CharacterConfig`-Blob und ein `buildPng()` von der Existenz entfernt.

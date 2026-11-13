@@ -1,58 +1,58 @@
 ---
 title: SSH commit signing script explained
-description: A walkthrough of the SSH commit‑signing helper and why I wanted
+description: A walkthrough of the SSH commit-signing helper and why I wanted
   stylish commits.
 date: 2026-03-08
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - git
   - security
   - shell
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "tJatwvDMy678icCQ1TjUTQfKNioEsV21Vl7CrU//umqLRlUlFLGrUseGfxccuohxIH/BFl8JxMwCmXsXTk5NrQ=="
+author_sig: "oKniors9SV74DnmlW93ehy9PxWN225KJ0gTJmA8RHr6rZEiexMq/Cd+lQAO+aq4jvplIBFnE1wAbpKeluWCf+A=="
 ---
 
-# SSH commit signing script explained
+# SSH commit signing script -- explained
 
-This post dives into the `setup-ssh-signing.sh` script I published on [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). We'll look at what each part does, how it makes repository‑local SSH commit signing painless, and, yes, why I even bothered to write it in the first place (spoiler: I just wanted my commits to look **stylish**).
+This article breaks down the `setup-ssh-signing.sh` script I published on [Gist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a). We'll look at what each part does, how it makes repo-local SSH signing completely painless, and, yes, why I even bothered writing it (spoiler: I just wanted my commits to look **cool**).
 
 ## Motivation
 
-I’ve always loved tweaking my Git workflow, and after seeing other people with little “Verified” badges next to their commits I thought: why not me? The built‑in GPG signing is a bit heavy and global, so I ended up writing a tiny helper that:
+I've always loved tinkering with my Git workflow, and after seeing people with little "Verified" badges next to their commits, I thought: why not me? The built-in GPG signing is heavyweight and global, so I ended up writing a small helper that:
 
-- creates an SSH key just for signing,
-- configures the current repository only,
+- creates a dedicated signing key,
+- configures only the current repo,
 - optionally rewrites history to sign old commits,
-- and lets me ship the key between machines.
+- and lets you carry the key between machines.
 
-Really, the need was mostly vanity. There’s no technical requirement for signatures in my personal projects, but having a green “Verified” on a commit feels cool, and writing the script was a fun exercise in shell scripting.
+Honestly, the need was mostly vanity. My personal projects impose no signing requirements, but seeing a green "Verified" badge on a commit does have an effect, and writing that script in shell was genuinely fun.
 
-> I mean, signing your commits is like wearing a leather jacket to a code review -- totally unnecessary, but it makes you feel like a hacker.
+> Signing your commits is a bit like wearing a leather jacket to a code review -- totally useless, but it makes you feel like a hacker.
 
 ## What the script does
 
-The script is a single Bash file with `set -euo pipefail` at the top so it fails fast. Here’s a high‑level summary of its behaviour:
+The script is a single Bash file with `set -euo pipefail` at the top to abort on the first error. Here's a summary of what it does:
 
-1. **Generate or import a signing key**  
-   Keys live in `.git-signing/` under the directory where you run the script.
-2. **Configure Git locally**  
-   Sets `gpg.format=ssh`, `user.signingkey`, `commit.gpgsign=true`, `tag.gpgSign=true`, and an `allowedSignersFile` pointing to the public key.
-3. **Manage keys cross‑machine**  
-   Support for `--export-keys`/`--import-keys` lets you move the private key between computers without touching global state.
-4. **Optional history rewrite** (`--resign-all`)  
-   Rewrites every commit on every branch/tag (or just those not in `upstream` for forks) and re‑commits them with `-S`, leaving other authors untouched.
-5. **Utility flags**  
-   `--autostash`, `--autopush`, `--commit-date`, `--yes` for non‑interactive mode, etc.
-6. **Fork‑awareness and safety checks**  
-   Detects `upstream` remote, warns before rewriting history, checks for required tools (`git`, `ssh-keygen`, `zip/unzip`), ensures proper permissions, and even creates a secure runtime copy of the key if filesystem permissions are too loose.
+1. **Generate or import a signing key**
+   Keys land in `.git-signing/` in the directory where you run it.
+2. **Configure Git locally**
+   It sets `gpg.format=ssh`, `user.signingkey`, `commit.gpgsign=true`, `tag.gpgSign=true`, and an `allowedSignersFile` pointing at the public key.
+3. **Move keys between machines**
+   With `--export-keys` / `--import-keys`, you can transfer your private key from one machine to another without touching the global config.
+4. **Optional history rewrite** (`--resign-all`)
+   Rewrites all commits on all branches/tags and re-signs them with `-S`, without touching the other authors.
+5. **Utility flags**
+   `--autostash`, `--autopush`, `--commit-date`, `--yes` for non-interactive mode, etc.
+6. **Fork detection and safety checks**
+   It detects the `upstream` remote, warns before rewriting history, checks required tools (`git`, `ssh-keygen`, `zip/unzip`), makes sure permissions are right, and even creates a secure copy of the key if the filesystem permissions are too loose.
 
-The script is idempotent: running it twice won’t regenerate your key or overwrite existing configuration.
+The script is idempotent: running it twice doesn't regenerate your key or overwrite the existing config.
 
-## Step‑by‑step walkthrough
+## Step-by-step walkthrough
 
-Below are some of the key parts of the code with explanations.
+Here are a few key excerpts from the code with their explanations.
 
 ```bash
 #!/usr/bin/env bash
@@ -63,7 +63,7 @@ set -euo pipefail
 # - Git config is written locally to the current repository only.
 ```
 
-The header establishes safety and documents the goal. The next chunk parses CLI options (`--name`, `--email`, `--repo`, etc.) with a `while [[ $# -gt 0 ]]; do case … esac done` loop. Mandatory identity fields are enforced later:
+The header sets the safety ground rules and documents the goal. The next chunk parses CLI options (`--name`, `--email`, `--repo`, etc.) with a `while [[ $# -gt 0 ]]; do case … esac done` loop. The required identity fields are checked later:
 
 ```bash
 if [[ -z "$NAME" || -z "$EMAIL" ]]; then
@@ -72,7 +72,7 @@ if [[ -z "$NAME" || -z "$EMAIL" ]]; then
 fi
 ```
 
-Key generation happens under `$LAUNCH_DIR/.git-signing`. If a key already exists the script leaves it alone; `--import-keys` can populate the directory from a ZIP file.
+Key generation happens in `$LAUNCH_DIR/.git-signing`. If a key already exists, the script keeps it as is; `--import-keys` fills the directory from a ZIP.
 
 ```bash
 mkdir -p "$KEY_DIR"
@@ -89,7 +89,7 @@ else
 fi
 ```
 
-After ensuring the private key is usable (`ssh-keygen -Y sign …`), the script writes a tiny `allowed_signers` file containing the public key and sets the Git local config accordingly:
+After verifying the private key is usable (`ssh-keygen -Y sign …`), the script writes an `allowed_signers` file containing the public key and sets the local Git config:
 
 ```bash
 git -C "$REPO_DIR" config --local gpg.format ssh
@@ -99,33 +99,33 @@ git -C "$REPO_DIR" config --local commit.gpgsign true
 git -C "$REPO_DIR" config --local tag.gpgSign true
 ```
 
-If you request history rewriting with `--resign-all`, the script builds a `git filter-branch` command that re‑commits eligible commits with `-S`. It respects fork state by optionally skipping commits already present in `upstream`.
+If you ask for a history rewrite with `--resign-all`, the script builds a `git filter-branch` command that re-signs eligible commits with `-S`. It respects fork state by optionally skipping commits already present in `upstream`.
 
-The final output prints the public key and instructions for adding it to GitHub’s **Signing Key** section, along with a quick test recipe.
+The final output prints the public key and instructions for adding it in GitHub's **Signing Key** section, with a test recipe.
 
-## Why commit signing?
+## Why sign your commits?
 
-This is the part where I admit I didn’t need it. My repositories don’t require provenance for anything I publish, and I’m not using signed tags for releases. The “why” is:
+This is where I admit I didn't need it. My repos require no provenance for what I publish, and I don't use signed tags for releases. The "why" is:
 
 - because I could,
-- because it looks neat (have you seen the badge?),
-- because it gave me an excuse to experiment with `git filter-branch` and shell scripting,
-- and because it’s another piece of “I built this myself” content for the blog.
+- because it looks good (you saw the badge?),
+- because it gave me an excuse to experiment with `git filter-branch` and shell,
+- and because it's one more "I built this myself" for the blog.
 
-In short: it was just for show, but that’s half the fun of tinkering with tooling.
+In short, it was just for showing off, but that's what I love about tinkering with my tools.
 
 ## Usage examples
 
 ```bash
-# initial setup in current repo
+# initial setup in the current repo
 chmod +x ./setup-ssh-signing.sh
 ./setup-ssh-signing.sh --name "Your Name" \
                        --email "you@example.com"
 
-# export keys to use on another machine
+# export keys for another machine
 ./setup-ssh-signing.sh --export-keys ./my-signing-keys.zip
 
-# import keys on second machine
+# import keys on a second machine
 ./setup-ssh-signing.sh --import-keys ./my-signing-keys.zip --repo ./my-repo \
                        --name "Your Name" --email "you@example.com"
 
@@ -136,11 +136,11 @@ chmod +x ./setup-ssh-signing.sh
 
 ## Final thoughts
 
-This script is a small utility, but it encapsulates a few nice ideas:
+This script stays a compact utility, but it carries a few principles I stand by:
 
-- keep cryptographic keys local and per‑repo,
-- never touch global config unless you ask for it,
-- provide simple import/export and history rewriting,
-- and document the whole process in a blog post because why not.
+- keep cryptographic keys local and per-repo,
+- never touch the global config unless you ask,
+- provide simple import/export and history rewrite,
+- and document the whole process in a blog article to keep a reusable record.
 
-If you’re tempted to add signatures to your own commits, give it a spin! And if you’re just here for the style points, same. 😎
+If you feel like adding signatures to your own commits, give it a try! And if you're just here for the style, same. 😎

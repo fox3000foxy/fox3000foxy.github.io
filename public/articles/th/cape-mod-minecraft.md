@@ -11,7 +11,7 @@ tags:
   - security
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "sZMuzl6/EtcNvxZKxoW1GUHOkiGBLUmQ//9SJHLVOWgb2ngHD+8Y/0wjA7OSy6oF1ktU65WnsJcQjYxvw2bP4g=="
+author_sig: "gpdacvuzcxyLONAtfdfpFMEQVLN0lbsa7yH+iacE+Bs+Sa3pCEKxLk00ZlkM9aJi81+uzxB5u+GhoYtfGidkEg=="
 ---
 
 # Cape Mod : วิธีขโมยเคปของ Jeb_ ด้วยการฉีดลายเซ็น RSA

@@ -1,9 +1,8 @@
 ---
-title: "قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته"
-description: "لعبة تقمّص أدوار (RPG) بنظام الأدوار على Discord حيث كل حركة تولّد صورة WebP فوراً: URL كحالة اللعبة، RNG حتمي، خط أنابيب WASM، 5 مستويات تخزين مؤقت، بوت بدون خادم."
+title: "قضيت عطلة نهاية أسبوع أقرأ كود konosuba-rpg وإليكم ما وجدت"
+description: "RPG أدوار Discord حيث يولد كل فعل صورة WebP لحظيا : الرابط
+  كحالة لعب وRNG حتمي وخط WASM وكاش من 5 مستويات وبوت بلا خادم."
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - discord
   - rpg
@@ -14,36 +13,38 @@ tags:
   - wasm
   - gaming
   - serverless
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "N0Jbx5E1UyStjSB52a9XqsGNqGMsaHHH0Eu66JkP0ELgtnQRQqXeVrCNQVUFaJBWIcM+PiTxQrx1WviXP+AWGg=="
+author_sig: "STkimko4Vzewwh0HlIMFWicwXeo9h2IaF9Fq5Z/XtWT3A9olPjdhd6yVj58zzkKltRLEdDfn9g6SrrJjp5wnPw=="
 ---
 
-# قضيت عطلة نهاية الأسبوع أقرأ كود konosuba-rpg وهذا ما وجدته
+# قضيت عطلة نهاية أسبوع أقرأ كود konosuba-rpg وإليكم ما وجدت
 
-أنا المسؤول عن هذا المشروع منذ فترة، لكن إعادة قراءة الكود الخاص بك بروية هي دائماً تجربة تعليمية. konosuba-rpg هي لعبة تقمّص أدوار (RPG) بنظام الأدوار على Discord حيث كل حركة تولّد صورة WebP فوراً. ليس نص embed. بل صورة حقيقية مركبة، مع sprites وأشرطة الحياة ورسائل القتال -- كل شيء.
+أصون هذا المشروع منذ مدة، لكن إعادة قراءة كود المرء برأس مرتاح مفيدة دائما. konosuba-rpg هو RPG أدوار في Discord حيث يولد كل فعل صورة WebP لحظيا. إنها صورة مركبة فعلا، مع sprites وأشرطة حياة ورسائل قتال، كل شيء.
 
-المكدس: TypeScript، Hono، Vercel، Cloudflare Workers، Supabase. استضافة مجانية بالكامل. وبوت Discord يعمل بدون خادم دائم. هذا المقال يشرح كيف يعمل كل هذا معاً.
+الحزمة : TypeScript وHono وVercel وCloudflare Workers وSupabase. استضافة مجانية تماما. ويعمل بوت Discord دون خادم دائم. يشرح هذا المنشور كيف يتماسك كل ذلك.
 
-![État initial du jeu](/images/konosuba-rpg/game_init.webp)
+![الحالة الأولية للعبة](/images/konosuba-rpg/game_init.webp)
 
 ---
 
-## التصميم الأساسي: URL كحالة اللعبة
+## التصميم الأساسي : الرابط كحالة اللعبة
 
-أول ما يلفت الانتباه: لا توجد أية حالة على جانب الخادم لأسلوب اللعب. الحالة الكاملة لأي معركة موجودة في الـ URL.
+أول ما يدهش : لا توجد حالة جهة الخادم للعب. حالة القتال الكاملة تقف في الرابط.
 
 ```
 /konosuba-rpg/fr/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
 ```
 
-كل مقطع بعد الـ seed هو حركة تم تنفيذها. الخادم يستقبل هذا الـ URL، يعيد من البداية، يعيد تشغيل كل الحركات بالترتيب، ويعيد صورة المعركة في تلك اللحظة بالضبط. لا جلسة، ولا حالة في الذاكرة مرتبطة بأي مستخدم.
+كل مقطع بعد البذرة فعل ملعوب. يستلم الخادم هذا الرابط، وينطلق من البداية، ويعيد تشغيل كل الأفعال بالترتيب، ويعيد صورة القتال في تلك اللحظة بالضبط. لا جلسة، ولا حالة في RAM مرتبطة بمستخدم.
 
-Discord يعمل عبر أزرار تفاعلية -- عندما يضغط اللاعب على "هجوم"، Discord يرسل للخادم `custom_id` الخاص بالزر. هذا الـ custom_id يحوي الـ URL المضغوط للمعركة مع الحركة الجديدة المضافة. الخادم يعيد حساب كل شيء من الصفر ويعيد الصورة المحدثة.
+يعمل Discord بأزرار تفاعلية، فعندما يضغط اللاعب "هجوم"، يرسل Discord للخادم `custom_id` الخاص بالزر. يحوي custom_id الرابط المضغوط للقتال مع الفعل الجديد المضاف. يعيد الخادم حساب كل شيء من الصفر ويعيد الصورة المحدثة.
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// مُجمّع مسبقاً خارج الدالة -- لا يُعاد إنشاؤه في كل استدعاء
+// مُجمَّع مسبقا خارج الدالة، لا يُعاد إنشاؤه مع كل استدعاء
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -51,7 +52,7 @@ export default function processUrl(url: string): [Random, string[], string, stri
   for (const part of urlParts) {
     if (VALID_MOVES_SET.has(part.toUpperCase())) moves.push(part.toUpperCase());
   }
-  // seed = المقطع السادس، يُهاش على 8096 قيمة
+  // البذرة = المقطع السادس، مُجزَّأة على 8096 قيمة
   const seedStr = (urlParts[5] || "").toLowerCase();
   let seed = 0;
   for (let i = 0; i < seedStr.length; i++) {
@@ -61,15 +62,15 @@ export default function processUrl(url: string): [Random, string[], string, stri
 }
 ```
 
-`Set` المُجمّع خارج الدالة هو تفصيل صغير، لكنه يتجنب إعادة بناء الهيكل في كل استدعاء ضمن سياق edge حيث قد تُعاد تقييم modules.
+`Set` المُجمَّع مسبقا خارج الدالة تفصيل، لكنه يتجنب إعادة بناء البنية مع كل استدعاء في سياق edge حيث يمكن إعادة تقييم الوحدات.
 
-### RNG: RC4 معدّل
+### RNG : نسخة معدلة من RC4
 
-مولد الأرقام العشوائي (RNG) هو تطبيق RC4 (خوارزمية تشفير تدفقي) تم تحويلها إلى PRNG.
+المولد العشوائي تنفيذ RC4 (خوارزمية تشفير تدفق) مُحوَّل إلى PRNG.
 
 ```typescript
 export class Random {
-  private S: number[]; // جدول من 256 مدخلاً
+  private S: number[]; // جدول 256 مدخلا
   private i: number;
   private j: number;
 
@@ -79,7 +80,7 @@ export class Random {
     let workingSeed = seed || Date.now();
     for (let i = 0; i < 256; i++) {
       j = (j + this.S[i] + (workingSeed & 0xff)) & 0xff;
-      // swap S[i] و S[j]
+      // تبديل S[i] وS[j]
       [this.S[i], this.S[j]] = [this.S[j], this.S[i]];
       workingSeed >>>= 8;
     }
@@ -91,19 +92,19 @@ export class Random {
 }
 ```
 
-لماذا RC4؟ لأنه PRNG حتمي بتوزيع صحيح ومقاومة معقولة لتصادم الـ seed. نفس الـ seed = نفس تسلسل الأرقام = نفس المعركة في كل مرة. هذا يسمح بـ "إعادة تشغيل" أي معركة والاحتفاظ بـ URL الخاص بها، ويضمن أن خادمين مختلفين (Vercel + Cloudflare) ينتجان نفس النتيجة تماماً لنفس الـ URL.
+لماذا RC4 ؟ لأنه PRNG حتمي بتوزيع صحيح ومقاومة معقولة لتصادمات البذور. نفس البذرة = نفس تسلسل الأرقام = نفس القتال في كل مرة. وهذا يسمح "بإعادة تشغيل" أي قتال بالاحتفاظ برابطه، ويضمن أن خادمين مختلفين (Vercel + Cloudflare) ينتجان بالضبط نفس النتيجة لنفس الرابط.
 
 ---
 
 ## مشكلة حد 100 حرف في Discord
 
-Discord يفرض حد 100 حرف على `custom_id` للأزرار. بعد بضع عشرات من الحركات، أي URL معركة يتجاوز هذا الحد بسهولة.
+يفرض Discord حد 100 حرف على `custom_id` الخاصة بالأزرار. بعد بضع عشرات من الأفعال، يتجاوز رابط قتال هذا الحد بارتياح.
 
-آليتان تتعاملان مع هذا.
+تجيب آليتان عن ذلك.
 
-### 1. ضغط RLE للحركات
+### 1. ضغط RLE للأفعال
 
-الحركات تُرمّز بحرف واحد (`a`=هجوم, `d`=دفاع, `h`=عناق...) وتُضغط عبر تشفير طول التشغيل (RLE):
+تُرمَّز الأفعال بحرف واحد (`a`=هجوم و`d`=دفاع و`h`=عناق...) وتُضغَط بترميز طول التشغيل :
 
 ```typescript
 // movesUtils.ts
@@ -123,11 +124,11 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-بسيط، لكن عندما يكرر اللاعب هجوم x10 فإن `aaaaaaaaaa` (10 حروف) تتحول إلى `a10` (3 حروف). أزرار "هجوم x4" و"هجوم x10" في واجهة المستخدم موجودة لهذا بالتحديد -- تسريع المعركة مع ضغط الحمولة جيداً.
+بسيط، لكن عندما يغمر اللاعب الهجوم x10 ينتقل من `aaaaaaaaaa` (10 حروف) إلى `a10` (3 حروف). زرا "هجوم x4" و"هجوم x10" في الواجهة موجودان لهذا بالضبط، تسريع القتال مع ضغط الحمولة جيدا.
 
-### 2. رموز الجلسة (Session tokens) عندما لا يكفي الضغط
+### 2. رموز جلسة عندما لا يكفي الضغط
 
-إذا بقيت الحمولة المضغوطة طويلة جداً، تُخزّن في قاعدة البيانات مع رمز قصير:
+إذا بقيت الحمولة المضغوطة طويلة أكثر من اللازم، تُخزَّن في القاعدة مع رمز قصير :
 
 ```typescript
 // gameSessionService.ts
@@ -135,49 +136,49 @@ const TOKEN_PREFIX = "gs.";
 const TOKEN_SIZE = 10; // "gs.aBcDeFgHiJ"
 
 export async function encodeGameplayButtons(buttons: RawButton[]): Promise {
-  // تجميع الحمولات حسب battle_key، إدراج دفعة في Supabase
-  // استبدال custom_id بـ "gs.{token}:{userId}"
+  // يجمّع الحمولات حسب battle_key، ويدخل دفعيا في Supabase
+  // يستبدل custom_id بـ"gs.{token}:{userId}"
 }
 
 export async function decodeGameplayPayloadWithStatus(encodedPayload: string, userID: string) {
   if (!encodedPayload.startsWith(TOKEN_PREFIX)) {
-    return { payload: encodedPayload }; // لا بحث إذا لم يكن ضرورياً
+    return { payload: encodedPayload }; // لا بحث إذا لم يلزم
   }
-  // بحث في الذاكرة أولاً، ثم Supabase إذا لم يوجد
+  // البحث في الذاكرة أولا، ثم Supabase إذا غاب
   const cached = tokenToSession.get(token) || await loadTokenRowByToken(token);
-  // تحقق من الملكية، TTL (7 أيام)، و turn_version (يمنع إعادة تشغيل حالة قديمة)
+  // يتحقق من الملكية وTTL (7 أيام) وturn_version (يتجنب إعادة تشغيل حالة قديمة)
 }
 ```
 
-الجلسات لها TTL مدته 7 أيام وتنظيف تلقائي كل 10 دقائق. التحقق من `turnVersion` يمنع إعادة تشغيل حالة منتهية إذا كان اللاعب قد تقدّم في اللعبة -- حماية غير ظاهرة ضد "التراجع" العرضي.
+للجلسات TTL من 7 أيام وتقليم آلي كل 10 دقائق. يمنع فحص `turnVersion` إعادة تشغيل حالة متقادمة إذا تقدم اللاعب في المباراة، حماية خفية ضد "الرجوع" العرضي.
 
-كلا الخريطتين في الذاكرة (`tokenToSession`, `latestTurnByBattle`) تستخدمان نفس النمط `globalThis as unknown as GameSessionGlobals` مثل ذاكرات التخزين المؤقت للصور، لنفس الأسباب التي سنراها لاحقاً.
+تستخدم خريطتا الذاكرة (`tokenToSession` و`latestTurnByBattle`) نفس نمط `globalThis as unknown as GameSessionGlobals` مثل كاشات الصور، لنفس الأسباب التي سنراها أدناه.
 
 ---
 
-## خط أنابيب توليد الصور
+## خط عرض الصور
 
-![بداية معركة مع Slime](/images/konosuba-rpg/shot_01_start.webp)
+![بداية قتال ضد Slime](/images/konosuba-rpg/shot_01_start.webp)
 
-المسار `/konosuba-rpg/:lang/*` لا يعيد JSON. بل يعيد صورة WebP مولّدة عند الطلب.
+لا يعيد طريق `/konosuba-rpg/:lang/*` JSON. بل يعيد صورة WebP مولدة عند الطلب.
 
-خط الأنابيب منظم في 3 طبقات مركّبة:
+الخط منظم في 3 طبقات مركبة :
 
 ```
-خلفية (board + frame)
+Background (لوحة + إطار)
     +
-طبقة الشخصيات (sprites لاعبين + مخلوق، مواضع ثابتة)
+Characters layer (sprites لاعبين + وحش، مواضع ثابتة)
     +
-تراكب واجهة المستخدم (أشرطة HP، رسائل، أيقونات شخصيات عبر Satori → SVG → PNG)
+UI overlay (أشرطة HP ورسائل وأيقونات شخصيات عبر Satori ← SVG ← PNG)
     ↓
 Photon.watermark() × 2
     ↓
 مخرجات WebP
 ```
 
-**الخلفية**: صورتان ثابتتان (اللوحة والإطار)، تُحمّلان من نظام الملفات وتُركبان مرة واحدة.
+**الخلفية** : صورتان ثابتتان (اللوحة والإطار)، تُحمَّلان من نظام الملفات وتُركَّبان مرة.
 
-**طبقة الشخصيات**: sprites موضوعة حسب إحداثيات محسوبة. اللاعبون الموتى مستبعدون (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). sprites الأعداء معكوسة أفقياً باستخدام `flipX` مخصص -- حلقة بيكسل ببيكسل بدلاً من اعتماد خارجي.
+**طبقة الشخصيات** : توضع sprites حسب إحداثيات محسوبة. يُستبعَد اللاعبون الموتى (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). تُعكَس sprites العدو أفقيا مع `flipX` مخصص، حلقة بكسل ببكسل بدلا من تبعية خارجية.
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -196,48 +197,48 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 }
 ```
 
-**تراكب واجهة المستخدم**: هذا هو الجزء الثقيل. JSX الواجهة (أشرطة الحياة، نصوص، أيقونات) يُوصف بنمط React-like باستخدام Satori، يُحوّل إلى SVG، ثم يُحوّل إلى PNG بواسطة `@cf-wasm/resvg`، ثم يُستورد إلى Photon للتركيب النهائي. Satori + resvg هما وحدتان WASM مخصّصتان لـ Cloudflare Workers مع العلم `edge-light`.
+**تراكب الواجهة** : إنه الجزء الثقيل. واجهة JSX (أشرطة حياة ونصوص وأيقونات) موصوفة بنمط React مع Satori، وتُعرض SVG، وتُحوَّل PNG بواسطة `@cf-wasm/resvg`، ثم تُستورَد في Photon للتركيب النهائي. Satori وresvg وحدتا WASM مُجمَّعتان خصيصا لـCloudflare Workers مع علم `edge-light`.
 
-![حركة دفاع](/images/konosuba-rpg/shot_03_defend.webp)
+![فعل دفاع](/images/konosuba-rpg/shot_03_defend.webp)
 
-![معركة جارية](/images/konosuba-rpg/shot_02_combat.webp)
+![قتال جارٍ](/images/konosuba-rpg/shot_02_combat.webp)
 
-![حركة عناق](/images/konosuba-rpg/shot_04_hug.webp)
+![فعل عناق](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
-## نظام التخزين المؤقت -- الجزء الأكثر إتقاناً
+## نظام الكاش، الجزء الأكثر عملا
 
-هناك 5 مستويات تخزين مؤقت منفصلة. كل منها يستهدف تفصيلاً مختلفاً من خط الأنابيب.
+هناك 5 مستويات كاش متميزة. يستهدف كل واحد دقة مختلفة من الخط.
 
 ```typescript
-// renderImage.ts -- كلها على globalThis
-G.__imageCache  ??= {} as Record; // الأصول الخام
-G.__base64Cache ??= {} as Record;       // base64 للأصول (لـ Satori)
-G.__fontCache   ??= {} as Record; // الخطوط
+// renderImage.ts، كلها على globalThis
+G.__imageCache  ??= {} as Record; // أصول خام
+G.__base64Cache ??= {} as Record;       // base64 الأصول (لـSatori)
+G.__fontCache   ??= {} as Record; // خطوط
 G.__photonCache    ??= new LRUCache(40, freePhoton);
 G.__layerCache     ??= new LRUCache(12, freePhoton);
 G.__uiPhotonCache  ??= new LRUCache(30, freePhoton);
 G.__renderOutputCache ??= new LRUCache(120);
 ```
 
-نمط `??=` على `globalThis`: modules JavaScript في edge workers قد تُعاد تقييمها بين الطلبات في بعض الإعدادات. تخزين الـ caches على `globalThis` مع `??=` يضمن بقاءها بعد هذه التقييمات دون إعادة إنشائها.
+نمط `??=` على `globalThis` : يمكن إعادة تقييم وحدات JavaScript في workers الحافة بين الطلبات على بعض الإعدادات. تخزين الكاشات على `globalThis` مع `??=` يضمن نجاتها من إعادة التقييم دون إعادة إنشائها.
 
-### إخلاء WASM (Eviction)
+### إخلاء WASM
 
-caches صور Photon (`photonCache`, `layerCache`, `uiPhotonCache`) تستخدم رد اتصال (callback) للإخلاء:
+تستخدم كاشات صور Photon (`photonCache` و`layerCache` و`uiPhotonCache`) رد إخلاء :
 
 ```typescript
 function freePhoton(_key: string, img: Photon.PhotonImage): void {
-  try { img.free(); } catch { /* تم التحرير بالفعل */ }
+  try { img.free(); } catch { /* مُحرَّرة فعلا */ }
 }
 
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` هو كائن WASM بذاكرة مخصّصة على الجانب الخطي لـ WASM، خارج GC الخاص بـ JavaScript. بدون استدعاء صريح لـ `.free()`، هذه الذاكرة لا تُحرّر أبداً. إخلاء LRU يقوم بتشغيل `.free()` تلقائياً -- هذا هو RAII منقول إلى JavaScript.
+`Photon.PhotonImage` كائن WASM بذاكرة مخصصة جهة WASM الخطية، خارج GC الخاص بـJavaScript. تبقى هذه الذاكرة مخصصة ما لم يُستدعَ `.free()` صراحة. يحفّز إخلاء LRU دالة `.free()` تلقائيا، إنه RAII منقول إلى JavaScript.
 
-### مفاتيح التخزين المؤقت فقدانية عمداً
+### مفاتيح الكاش ضبابية عمدا
 
 ```typescript
 function buildCharactersKey(playerImages: string[][], playerHp: number[], creatureImages: string[], creatureHp: number): string {
@@ -246,23 +247,23 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-مفتاح طبقة الشخصيات لا يرمّز القيمة الدقيقة لـ HP -- فقط `1` (حي) أو `0` (ميت). لأن صورة اللاعب عند 40 HP واللاعب عند 15 HP متطابقة. لذا فإن hit في التخزين المؤقت ينجو من أي ضرر طالما لم يسقط أحد.
+لا يرمّز مفتاح طبقة الشخصيات قيمة HP الدقيقة، فقط `1` (حي) أو `0` (ميت). لأن sprite لاعب بـ40 HP ولاعب بـ15 HP متماثل. إذن تنجو إصابة كاش من أي ضرر ما لم يسقط أحد.
 
-مفتاح واجهة المستخدم بالمقابل يرمّز HP الدقيق (شريط الحياة يتغير مع كل ضربة) و hash للرسائل:
+بينما يرمّز مفتاح الواجهة HP الدقيقة (يتغير شريط الحياة مع كل ضربة) وhash للرسائل :
 
 ```typescript
 function hashString(value: string): string {
   let hash = 0;
   for (let i = 0; i < value.length; i++) {
-    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // عدد صحيح 32-bit مع إشارة
+    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // عدد صحيح 32-bit موقَّع
   }
   return hash.toString(16);
 }
 ```
 
-`Math.imul` يجبر الضرب على عدد صحيح 32 بت، مما يتجنب تحويلات float64 ويعطي معدل تعدد حدودي (polynomial hash) ثابت. لا اعتماد خارجي لهذا.
+يجبر `Math.imul` الضرب في عدد صحيح 32 بت، مما يتجنب تحويلات float64 ويعطي hash متعدد الحدود مستقر. وهذا يتجنب إضافة تبعية خارجية لذلك.
 
-### تحويل base64 دون تجاوز الكومة (stack overflow)
+### تحويل base64 دون فيض كومة
 
 ```typescript
 function getBase64Cached(key: string, buf: ArrayBuffer): string {
@@ -279,20 +280,20 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)` قد يسبب تجاوز الكومة (stack overflow) على الصور الكبيرة لأن الوسائط تُمرر على call stack. التقسيم إلى أجزاء 32 كيلوبايت يتجنب هذا. النتيجة تُخزّن مؤقتاً -- تحويل base64 لنفس الصورة يتم مرة واحدة فقط لكل نسخة worker.
+يمكن أن يسبب `String.fromCharCode(...largeArray)` فيض كومة على الصور الكبيرة لأن الوسائط تُمرَّر على كومة الاستدعاء. يتجنب التقطيع بـ32Ko ذلك. تُوضَع النتيجة في الكاش، فلا يُجرَى تحويل base64 لنفس الصورة إلا مرة لكل نسخة worker.
 
 ---
 
-## STRIPPER.md -- تدقيق await المتسلسلة
+## STRIPPER.md، تدقيق awaits المتسلسلة
 
-هناك ملف `STRIPPER.md` في المستودع يوثق تدقيقاً لموازاة `await`. بعض الأمثلة مما تم تسجيله:
+هناك ملف `STRIPPER.md` في المستودع يوثق تدقيق موازاة `await`. بعض أمثلة ما هو مدوَّن فيه :
 
-- تحميل ملف اللاعب الشخصي كان يقوم بـ 3 استعلامات Supabase متسلسلة (التقدّم، ملخص الجولة، الإنجازات). تم تحويلها إلى `Promise.all` -- لا تبعية بينها.
-- توزيع مكافآت نهاية المعركة (إكسسوارات + مواد استهلاكية) كان متسلسلاً. تمت موازاته أيضاً.
-- إنشاء رموز الجلسة للأزرار كان يتم مجموعة بمجموعة. المجموعات المستقلة تُنشأ الآن بالتوازي.
+- تحميل ملف اللاعب كان ينفذ 3 طلبات Supabase متسلسلة (تقدم وملخص جولة وإنجازات). نُقلت إلى `Promise.all`، لا تبعية بينها.
+- توزيع مكافآت نهاية القتال (إكسسوارات + مستهلكات) كان متسلسلا. وُوزي بنفس الطريقة.
+- إنشاء رموز جلسة للأزرار كان يتم مجموعة بمجموعة. تُنشأ الآن المجموعات المستقلة بالتوازي.
 
 ```typescript
-// progressionService.ts -- قبل (تسلسلي)
+// progressionService.ts، قبل (متسلسل)
 await grantAccessoryDropRewards(...);
 await grantConsumableDropRewards(...);
 
@@ -303,15 +304,15 @@ await Promise.all([
 ]);
 ```
 
-لا شيء ثورياً، لكن في سياق serverless حيث كل ملي ثانية من زمن الاستجابة تُفوتر (أو تساهم في cold start)، هذا مهم.
+لا شيء ثوري، لكن في سياق serverless حيث كل مللي ثانية من زمن الاستجابة مُفوترَة (أو تسهم في الإقلاع البارد)، يُحتسَب ذلك.
 
 ---
 
-## بوت Discord بدون خادم دائم
+## بوت Discord دون خادم دائم
 
 ![نصر](/images/konosuba-rpg/shot_05_win.webp)
 
-نقطة يساء فهمها غالباً: بوت Discord لا يحتاج بالضرورة اتصال WebSocket دائم. Discord يقدم بديلاً: **Interactions Endpoint URL**. تقدم رابط HTTPS لـ Discord، و Discord يرسل لك POST لكل تفاعل (slash command، زر، autocomplete).
+نقطة يُساء فهمها غالبا : لا يتطلب بوت Discord بالضرورة اتصال WebSocket دائما. يقترح Discord بديلا : **Interactions Endpoint URL**. تعطي رابط HTTPS لـDiscord، ويرسل لك Discord POST مع كل تفاعل (slash command وزر وإكمال تلقائي).
 
 ```typescript
 // interactions.ts
@@ -321,18 +322,18 @@ export async function handleInteractions(c: Context) {
   if (!isVerified) return c.text("Invalid signature", 401);
 
   const interaction: Interaction = JSON.parse(body);
-  if (interaction.type === 1) return c.json({ type: 1 }); // ping Discord
+  if (interaction.type === 1) return c.json({ type: 1 }); // ping الخاص بـDiscord
   if (interaction.type === 2) return handleSlashCommand(...);
   if (interaction.type === 3) return handleButtonInteraction(...);
   if (interaction.type === 4) return handleAutocomplete(...);
 }
 ```
 
-Discord يرسل POST، المعالج يعمل من 50 إلى 200 ملي ثانية على دالة Vercel أو Cloudflare Worker، يرد، وينتهي الأمر. لا اتصال دائم للحفاظ عليه، ولا خادم لإبقائه قيد التشغيل. بوت Discord بأكمله مستضاف على الخطة المجانية لـ Vercel.
+يرسل Discord POST، يعمل المعالج 50-200ms على دالة Vercel أو Cloudflare Worker، ويرد، وانتهى. لا اتصال دائم يُصان، ولا خادم يُبقَى مشتعلا. بوت Discord كله مستضاف على المستوى المجاني في Vercel.
 
-التحقق Ed25519 (`verifyKey` من `discord-interactions`) إلزامي -- Discord يرسل توقيعاً في الترويسات (headers) يجب عليك التحقق منه، وإلا سيرفض النقطة الطرفية (endpoint).
+التحقق Ed25519 (`verifyKey` من `discord-interactions`) إلزامي، فيرسل Discord توقيعا في الترويسات يجب التحقق منه، وإلا يرفض نقطة النهاية.
 
-### الحركة الخاصة -- الـ await المتعمد الوحيد
+### الحركة الخاصة، await الوحيد المقصود
 
 ```typescript
 // handleSpecialButton.ts
@@ -343,18 +344,18 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-هذا التأخير المتعمد لـ 3 ثوانٍ موثّق في STRIPPER.md كمتعمّد. الهجوم الخاص لـ Megumin (انفجار) له حركة على جانب Discord -- تُحدّث الرسالة أولاً بمظهر وسيط، ثم تُعدّل بعد 3 ثوانٍ بالنتيجة. هذه هي الحالة الوحيدة التي تعمل فيها دالة Vercel لفترة أطول من اللازم عمداً.
+هذا التأخير الطوعي لـ3 ثوانٍ موثق في STRIPPER.md كمقصود. لهجوم Megumin الخاص (Explosion) حركة جهة Discord، يُحدَّث أولا الرسالة ببصري وسيط، ثم تُعدَّل بعد 3 ثوانٍ بالنتيجة. إنها الحالة الوحيدة حيث تعمل دالة Vercel طوعا أطول من اللازم.
 
 ![هجوم خاص](/images/konosuba-rpg/shot_08_special.webp)
 
 ---
 
-## النشر على منصتين
+## قابلية النشر على منصتين
 
-نفس قاعدة الكود تعمل على Vercel (Node.js) وعلى Cloudflare Workers (V8 isolates) دون تعديل:
+يعمل نفس قاعدة الكود على Vercel (Node.js) وعلى Cloudflare Workers (V8 isolates) دون تعديل :
 
 ```typescript
-// worker.ts -- نقطة دخول Cloudflare
+// worker.ts، مدخل Cloudflare
 export default {
   fetch(request: Request, env: WorkerBindings): Promise {
     syncBindingsToProcessEnv(env); // يحقن أسرار CF في process.env
@@ -362,24 +363,24 @@ export default {
   }
 };
 
-// index.ts -- نقطة دخول Vercel/Node
+// index.ts، مدخل Vercel/Node
 const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
 
-الفرق الرئيسي: الأصول الثابتة (static assets). على Vercel، تُقرأ من نظام الملفات (`/var/task/assets/`). على Cloudflare Workers، تمر عبر binding `ASSETS` (أصول ثابتة CF) مع fallback إلى مرآة HTTPS (`fox3000foxy.com/konosuba-rpg/assets`). `getAssetBytes` في `assetLoader.ts` تدير كلا المسارين بمحاولة نظام الملفات أولاً، ثم fetch.
+الفرق الرئيسي : الأصول الثابتة. على Vercel، تُقرَأ من نظام الملفات (`/var/task/assets/`). على Cloudflare Workers، تمر عبر ربط `ASSETS` (أصول CF الثابتة) مع fallback نحو مرآة HTTPS (`fox3000foxy.com/konosuba-rpg/assets`). تدير دالة `getAssetBytes` في `assetLoader.ts` المسارين بتجربة نظام الملفات أولا، ثم fetch.
 
-وحدات WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) لها بنيات منفصلة لكل بيئة تشغيل. العلم `edge-light` في اسم الحزمة يشير إلى البنية المتوافقة مع Cloudflare Workers، والتي لا تسمح بـ `new WebAssembly.Module()` في وقت التشغيل -- يجب أن يكون WASM مُجمّعاً مسبقاً.
+لدى WASM (`@cf-wasm/photon/edge-light` و`@cf-wasm/resvg`) بناءات منفصلة لكل runtime. يشير علم `edge-light` في اسم الحزمة للبناء المتوافق مع Cloudflare Workers، الذي لا يسمح بـ`new WebAssembly.Module()` عند التشغيل، فيجب تجميع WASM مسبقا.
 
 ---
 
-## التقدّم: XP، المستويات، الانتماء
+## التقدم : XP ومستويات وألفة
 
 ![زعيم، 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
-التقدّم الكلي (meta-progression) يعتمد على الطبقة المجانية لـ Supabase. المخطط يشمل جدول `players` (XP كلي، مستوى، ذهب)، `character_progress` (XP/مستوى/انتماء لكل شخصية: Darkness، Aqua، Megumin)، `runs` (سجل المعارك)، `inventory_items`، `daily_quests_progress`، `achievements_unlocked`، `game_sessions`.
+يرتكز التقدم الوصفي على المستوى المجاني في Supabase. يتضمن المخطط جدول `players` (XP شامل ومستوى وذهب) و`character_progress` (XP/مستوى/ألفة لكل شخصية لـDarkness وAqua وMegumin) و`runs` (سجل القتالات) و`inventory_items` و`daily_quests_progress` و`achievements_unlocked` و`game_sessions`.
 
-نموذج التقدّم بسيط:
+نموذج التقدم بسيط :
 
 ```typescript
 // characterService.ts
@@ -388,20 +389,20 @@ export function computeLevelFromXp(xp: number): number {
 }
 
 export function getLevelFactor(level: number): number {
-  return 1 + 0.2 * (level - 1); // +20% إحصائيات لكل مستوى
+  return 1 + 0.2 * (level - 1); // +20% إحصاءات لكل مستوى
 }
 
 export function getAffinityFactor(affinity: number): number {
-  const stars = Math.floor(affinity / 20); // 20 نقطة لكل نجمة، 5 نجوم كحد أقصى
-  return 1.2 ** stars; // تقدّم أسي
+  const stars = Math.floor(affinity / 20); // 20 نقطة لكل نجمة، 5 نجوم حدا
+  return 1.2 ** stars; // تقدم أسّي
 }
 ```
 
-هذه العوامل تُطبّق على إحصائيات الشخصيات في بداية كل `processGame`. Kazuma يتبع المستوى العام للاعب، بينما الثلاثة الآخرون لكل منهم XP/مستوى خاص بهم. الانتماء (يُكتسب بجمع قطرات مرتبطة بشخصية) يضاعف إحصائياتها بشكل مستقل.
+تُطبَّق هذه العوامل على إحصاءات الشخصيات في بداية كل `processGame`. يتبع Kazuma المستوى الشامل للاعب، وللثلاثة الآخرين XP/مستوى خاص لكل واحد. تضرب الألفة (المكتسبة باسترجاع إسقاطات مرتبطة بشخصية) إحصاءاته مستقلة.
 
 ![شفاء](/images/konosuba-rpg/shot_07_heal.webp)
 
-نظام القطرات يستخدم جداول غنائم موزونة حسب الصعوبة:
+يستخدم نظام الإسقاطات جداول غنائم موزونة بالصعوبة :
 
 ```typescript
 const LOOT_TABLE_BY_DIFFICULTY: Record = {
@@ -422,9 +423,9 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
 
 ## الاختبارات
 
-ثلاث مجموعات: وحدة (unit)، أداء (perf)، وتسرب (leak).
+ثلاث سلاسل : وحدات وأداء وتسريبات.
 
-اختبار التسرب مباشر بشكل خاص:
+اختبار التسريب مباشر خصوصا :
 
 ```typescript
 // leaks.spec.ts
@@ -438,54 +439,54 @@ it('does not show strong heap growth across repeated runs', async () => {
 
   global.gc();
   const after = heapUsedMb();
-  expect(after - before).toBeLessThan(20); // حد 20MB أقصى لنمو الكومة
+  expect(after - before).toBeLessThan(20); // حد 20MB نمو كومة
 });
 ```
 
-1200 تكرار لـ `processGame`، GC قسري قبل وبعد، فرق heap < 20MB. إذا نجح هذا الاختبار، فإن `processGame` لا يسرب. اختبار التوليد (`renderImage.spec.ts`) بالتحقق من وقت التنفيذ تحت حد عملي.
+1200 تكرار لـ`processGame`، وGC مُجبَر قبل وبعد، وفرق كومة < 20MB. إذا نجح هذا الاختبار، فلا يسرّب `processGame`. بينما يتحقق اختبار العرض (`renderImage.spec.ts`) من زمن التنفيذ تحت عتبة عملية.
 
-يوجد أيضاً سكريبت `bench.ts` لتحليل خط الأنابيب بالكامل:
+وهناك أيضا سكربت `bench.ts` لتنميط الخط الكامل :
 
 ```
 RENDER_PERF=1 npx tsx bench.ts --runs=20 --warmup=3 --monster=Dragon
 ```
 
-مع `RENDER_PERF=1`، الغلاف `withPerf` في كل خدمة يسجل التوقيتات:
+مع `RENDER_PERF=1`، يسجل الغلاف `withPerf` في كل خدمة التوقيتات :
 
 ```typescript
 export async function withPerf(scope: string, label: string, work: () => Promise): Promise {
   const perf = createPerfLogger(scope);
-  if (!perf.enabled) return work(); // بدون أثر إذا معطّل
+  if (!perf.enabled) return work(); // صفر عبء إذا عُطّل
   perf.mark(`${label}:start`);
   try { return await work(); }
   finally { perf.done(`${label}:done`); }
 }
 ```
 
-`createPerfLogger` يُرجع no-ops إذا لم يكن `DEV_MODE` و `RENDER_PERF` على `1`. لا أثر إضافي في الإنتاج.
+يعيد `createPerfLogger` عمليات معدومة إذا لم تكن `DEV_MODE` و`RENDER_PERF` على `1`. لا عبء في الإنتاج.
 
 ---
 
-## تكلفة التشغيل
+## ما kost تشغيله
 
-- **Vercel free tier**: 100GB نطاق ترددي، مليون استدعاء serverless شهرياً. توليد الصورة يُحتسب كاستدعاء واحد.
-- **Cloudflare Workers free tier**: 100 ألف طلب/يوم، 10ms وقت وحدة معالجة مركزية لكل طلب (التوليد قد يتجاوز هذا على Workers، لذلك Vercel هو الأساسي).
-- **Supabase free tier**: 500MB قاعدة بيانات، 5GB نطاق ترددي. كافٍ لآلاف اللاعبين.
+- **المستوى المجاني في Vercel** : 100GB عرض نطاق و1M استدعاء serverless شهريا. يُحتسَب عرض الصورة كاستدعاء.
+- **المستوى المجاني في Cloudflare Workers** : 100K طلب/يوم و10ms زمن CPU لكل طلب (قد يتجاوز العرض ذلك على Workers، ومن هنا Vercel أوليا).
+- **المستوى المجاني في Supabase** : 500MB قاعدة و5GB عرض نطاق. كافٍ لآلاف اللاعبين.
 
-النهاية الخلفية بأكملها تعمل بتكلفة صفرية حتى حجم استخدام كبير. نقطة الاحتكاك الوحيدة هي حد وحدة المعالجة المركزية لـ Cloudflare Workers -- توليد الصور يستهلك وحدة معالجة مركزية بكثافة بسبب WASM، ومن هنا استراتيجية Vercel كأساسي و Workers كـ CDN للتعويض (failover).
-
----
-
-## 3 أشياء تستحق التذكر
-
-1. **الـ URL كحالة اللعبة** ليست مجرد خدعة جميلة -- إنها قيد فرضه Discord (الأزرار لها حد 100 حرف) الذي أجبر على بنية عديمة الحالة (stateless) مع ضغط RLE + رمز جلسة كحل بديل. القيد هو ما صمّم التصميم.
-
-2. **ذاكرة WASM المؤقتة مع إخلاء صريح**: كائنات `PhotonImage` تخصّص ذاكرة خارج كومة JavaScript ولن تُجمّع أبداً (GC) بدون `.free()`. ربط `freePhoton` بإخلاء LRU هو RAII في JavaScript. غير ظاهر في الكود، لكن بدونه كان الـ worker سيُسرب (leak) في الإنتاج.
-
-3. **بوت Discord serverless بدون WebSocket**: أقل شهرة من نهج WebSocket gateway، لكن بالنسبة لبوت يقوم بمعالجة عديمة الحالة (كل تفاعل مستقل)، فإن Interactions Endpoint هو الأفضل قطعياً -- لا إعادة اتصال، لا heartbeat، لا عملية يجب الحفاظ عليها. Discord يدير التوفر على بنيته التحتية.
+يعمل backend كله بkost صفر حتى حجم ملحوظ. نقطة الاحتكاك الوحيدة هي حد CPU في Cloudflare Workers، فعرض الصور مكثف CPU بسبب WASM، ومن هنا استراتيجية Vercel أوليا وWorkers كـCDN احتياطي.
 
 ---
 
-*المستودع: [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
+## الأشياء الثلاثة الجديرة بالتذكر
 
-*رخصة وصول-مصدر مخصصة -- لا إعادة توزيع، مجانية الاستخدام.*
+1. **الرابط كحالة لعب** ليس مجرد حيلة لطيفة، بل قيد فرضه Discord (للأزرار حد 100 حرف) الذي أجبر بنية عديمة الحالة مع ضغط RLE + رمز جلسة كاحتياطي. أملى القيد التصميم.
+
+2. **كاش WASM مع إخلاء صريح** : تخصّص `PhotonImage` خارج كومة JavaScript ولن تُجمَع قمامة أبدا دون `.free()`. ربط `freePhoton` بإخلاء LRU هو RAII في JavaScript. إنه خفي في الكود، لكن دونه كان worker سيسرّب في الإنتاج.
+
+3. **بوت Discord بلا خادم دون WebSocket** : إنه أقل شهرة من مقاربة بوابة WebSocket، لكن لبوت يقوم بمعالجة عديمة الحالة (كل تفاعل مستقل)، نقطة النهاية Interactions متفوقة تماما، لا إعادة اتصال ولا نبضات ولا عملية تُصان. يدير Discord التوافر جهة بنيته.
+
+---
+
+*المستودع : [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
+
+*رخصة custom متاحة المصدر، لا إعادة توزيع، والاستخدام مجاني.*

@@ -1,6 +1,6 @@
 ---
-title: "valorant-short-maker: Valorantのショート動画を自動生成するパイプライン"
-description: "Groq/Llamaでスクリプト、Piperで音声、FFmpegでそれ以外全部。cronジョブが@valorant_agentsに毎日1本の動画を企画から公開まで全自動で作り上げる仕組み。"
+title: "valorant-short-maker：Valorantショートを1人で作るパイプライン"
+description: "台本はGroqやLlama、声はPiper、残り全部FFmpeg。cronジョブが@valorant_agentsに1日1本動画を作って公開する。AからZまで。"
 date: 2026-07-14
 tags:
   - typescript
@@ -10,34 +10,34 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Z2+DvgzGRKomcMxwkRG24s2bvvaUOQRfUKAPW47N3BQfe+o2mclym7W8s/n5JMeR8xgJ+/H+JyvcIry1lGIY1w=="
+author_sig: "Zu4oPqj9Do/BxNzwmG/kBH/Kbr6r/rY2dfMrgl5I2MZDRFHcj/eoG+rT4q3c+ix2OPhn60wADM/nzWYk0tRQpw=="
 ---
 
-# valorant-short-maker: Valorantのショート動画を自動生成するパイプライン
+# valorant-short-maker：Valorantショートを1人で作るパイプライン
 
-ここ数ヶ月、俺が一切触らなくても勝手に回ってるYouTubeチャンネルがある: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)。Valorantのエージェントたちがラウンドの合間に言い合いをして、吹き替えされて、カラオケ字幕付きでショート動画として公開されてる。全部 [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker) が生成してる。TypeScript/Bunのパイプラインがcronで回って、誰もクリックしなくても公開まで済ませてくれる。
+数か月前からYouTubeチャンネルが触らずに回ってる。[@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)だ。ラウンド合間に言い合うValorantエージェント、吹き替え付き、カラオケ字幕付き、Shorts公開だ。全部[`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker)が作ってる。cronで回るTypeScriptやBunのパイプラインで、誰も何も押さずに公開する。
 
-どう動いてるか、ステップごとに解説する。
+仕組みを段階ごとに見せる。
 
-## 成果物
+## できるもの
 
-"Duelist Debate"（フェニックス、ヨル、ジェット）の動画から抜き出した3フレーム:
+"Duelist Debate"（Phoenix、Yoru、Jett）用に作った動画から抜いた3フレームだ。
 
-![ショートのイントロ、エージェントの丸アイコンとシーンタイトル](/images/valorant-short-maker/vsm-01-intro.png)
+![ショートのイントロ、場面タイトル付きエージェント円](/images/valorant-short-maker/vsm-01-intro.png)
 
-![セリフが進行中、カラオケ字幕が光る](/images/valorant-short-maker/vsm-02-dialogue.png)
+![台詞の途中、光るカラオケ字幕](/images/valorant-short-maker/vsm-02-dialogue.png)
 
-![別のセリフ、話しているエージェントによって字幕の色が変わる](/images/valorant-short-maker/vsm-03-dialogue.png)
+![別台詞、エージェントで変わる字幕色](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-このショートの実物: [Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU)。チャンネルのショートは大体1.2〜1.5kビューくらい。大した数字じゃないけど、最初から完全自動で回ってるチャンネルだから、本当に大事な数字はゼロだ -- cronを起動してから費やした時間ゼロ分。
+live の結果はこのShortだ。[Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU)。チャンネルではShortsが1.2から1.5k再生くらいだ。大したことないけど、最初から1人で回るチャンネルだ。本当に大事な数はゼロだ。一度cron回したら使う時間ゼロ分ってことだ。
 
-## パイプライン、順を追って
+## パイプライン、順番に
 
-### 1. スクリプトを書く -- Groq + Llama 3.3
+### 1. 台本を書く。GroqとLlama 3.3
 
-毎回の実行で、26人のエージェントからランダムに3〜4人を選び、Llama 3.3 70B（Groq経由）にシステムプロンプトを送る。プロンプトには、選ばれた各エージェントの性格の簡潔な要約と、シーンに登場する他のエージェントとの関係性が含まれている（このペルソナデータは `src/lore/` にエージェントごとのファイルとして管理されてる）。プロンプトは厳格なルールを課す: 1行は短くパンチの効いた文、キャラクター間の公平なローテーション、ユーモア優先、そして何より -- 間（ポーズ）。
+各runは26人から3、4エージェントをランダムに引く。Groq経由のLlama 3.3 70Bにシステムプロンプトを送る。選んだ各エージェントの短い人格要約と場面内他エージェントとの関係付きだ（このpersonaは`src/lore/`にいる。エージェントごとに1ファイル）。プロンプトは正確な規則を課す。台詞ごとに短く刺さる1文、人物間の公平な交代、ユーモア優先、何より pause だ。
 
-具体例として "Duelist Debate" -- フェニックス、ヨル、ジェットが誰がデュエリストをやるかで言い争うシーン、2026年7月6日生成:
+"Duelist Debate"の具体例。Phoenix、Yoru、Jettが誰がduelistやるか争う。2026年7月6日生成だ。
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -70,55 +70,55 @@ yoru: I'll make sure to burn you, Phoenix, not with fire, but with my rifts.
 jett: I'll take you both down, no problem.
 ```
 
-間こそが自然なリズムを作る細部だ。セリフの途中に入った `[0.3]` は画面上のエージェントの丸を切らずに音声に0.3秒の無音を作り、独立行の `pause: 1.0` は二人の話者の間に本当の沈黙を作って丸を隠す。これがないと、TTSが息継ぎなしでセリフを連打してロボットみたいになる。
+pause がリズムを自然にする詳細だ。台詞真ん中の`[0.3]`は画面のエージェント円を切らず音声ファイルに0.3秒無音を作る。対して単独行の`pause: 1.0`は2話者間に本物無音を作る。円隠しだ。これなしでは、呼吸せず台詞つなげるTTSはロボットっぽく聞こえる。
 
-### 2. 声を与える -- Piper、エージェントごとに1モデル
+### 2. 声を付ける。Piper、エージェントごとに1モデル
 
-各エージェントは専用に学習されたPiperモデル（`.onnx`）を持っていて、`voices/<agent>/` に保存されている。生成されたテキストが該当モデルを通り、WAVが出てくる。俺が普段カスタム音声のトレーニングに使ってるのと同じ技術だ（Piper/Kaggleパイプラインの記事参照） -- ここではそのまま本番で、その場で、動画生成のたびに適用される。
+各エージェントは独自Piperモデル（`.onnx`）を持つ。専用訓練したものだ。`voices/<agent>/`に保存する。作ったテキストは対応モデルを通ってWAVを出す。普段のカスタム声訓練に使うのと同じ技術だ（PiperやKaggleパイプライン記事参照）。ここでは本番に直接、その場で、各動画生成に当ててる。
 
-### 3. カラオケ字幕 -- ASS生成、アイコンから色抽出
+### 3. カラオケ字幕。作るASS、アイコンから取る色
 
-字幕は単なる `.srt` じゃない。単語単位で生成された `.ass`（Advanced SubStation Alpha）ファイルで、カラオケ効果が入ってる: 発話される単語ごとに色が点灯し、残りのテキストは中間色のままだ。強調色は固定じゃなくて -- 話しているエージェントのアイコンから動的に抽出される（PythonスクリプトがPILでアイコンのPNGを読み込み、非透明ピクセルをサンプリングして主要色を返す）。結果: Killjoyの字幕は紫色に、Jettのは青緑に光る。どこにも色がハードコードされてない。
+字幕は単純`.srt`じゃない。語ごとに作った`.ass`ファイル（Advanced SubStation Alpha）で、カラオケ効果付きだ。各語が言われるにつれて色で光って、残りテキストは中立色のまま残る。強調色は固定じゃない。話すエージェントのアイコンから動的抽出する（PythonスクリプトがPILでアイコンPNGを回して、透明外ピクセルを抽出して、支配色を返す）。結果：Killjoy字幕は紫に光って、Jettは青緑に光る。どこにも色はハードコードされてない。
 
-### 4. 音声反応サークル -- フレームごとに1つのFFmpeg式
+### 4. 音反応円。1フレーム1式のFFmpeg
 
-パイプラインで一番めんどくさくて、かつ一番誇らしい部分。話してるエージェントの丸いアイコンは静止してない: 自分の声のリズムに合わせて微妙にズームイン・アウトする。
+パイプラインでいちばんひねくれた部分で、たぶんいちばん誇らしい。話すエージェントの丸アイコンは静止しない。自分の声のリズムで少しズームインやアウトする。
 
-計算はセリフの生WAVを読み、RMSエンベロープ（root mean square、信号エネルギーの測定値）を60fpsでフレームごとに計算し、最大値で正規化し、3フレームウィンドウで平滑化してガタつきを防ぐ。各エンベロープ値は `MAX_ZOOM_VARIATION`（0.2、基本サイズの±20%）で制限されたスケール係数に変換される。
+計算は台詞の素WAVを読んで、60fpsで1フレームごとにRMS envelope（root mean square、信号 energy の尺度）を計算して、最大で正規化して、ぎくしゃく避けに3フレーム窓で滑らかにする。各 envelope 値を`MAX_ZOOM_VARIATION`（0.2、基準サイズ周りプラスマイナス20パーセント）で区切った倍率に変換する。
 
-この計算結果はピクセルを操作するコードで適用されるんじゃない -- 巨大なFFmpeg条件式に変換され（`lt(n,K)*val + between(n,K,K')*val + ...`、フレームグループごとに1分岐）、ビデオフィルターの `scale` パラメータを直接駆動する。FFmpegがレンダリングの全フレームでこの式を評価する。60fpsで数秒のセリフなら、1つの式の中にすぐに数百の分岐ができる -- だからフレームをグループ化して深さを制限する `STEP` パラメータがある。
+この計算結果はピクセルいじるコード経由で当てない。巨大なFFmpeg条件式（`lt(n,K)*val + between(n,K,K')*val + ...`、フレーム群ごとに1分岐）に翻訳して、動画フィルタの`scale`パラメータを直接操る。FFmpegはレンダー各フレームでこの式を評価する。60fpsで数秒の台詞なら1式にすぐ数百分岐だ。だから`STEP`パラメータでフレームをまとめて深さを抑える。
 
-### 5. セグメントごとのレンダリング、イントロにfisheye
+### 5. 区切りごとレンダー、イントロに fisheye
 
-各セリフは個別にレンダリングされる: 動画背景（`bg-video/`のゲームプレイクリップからランダムに、適切な長さにカット）、その上に音声反応ズーム付きのエージェントの丸、FFmpegの `ass` フィルターで字幕を焼き込み、TTS音声を背景ゲームサウンドとミックス。
+各台詞は個別レンダーする。背景動画（`bg-video/`内ゲームプレイ切り抜きからランダム抜粋、正しい長さに切り）、上に音反応ズーム付きエージェント円、FFmpeg `ass`フィルタ経由で焼く字幕、背景ゲームプレイ音と混ぜるTTS音声だ。
 
-一番最初のセグメントだけ特別処理: 最初の20%フレームで徐々に消えるfisheye歪み（フレームごとの `lenscorrection` フィルター + 隣接フレームをブレンドしてモーションブラーをシミュレートする `tmix=frames=3`）、「whoosh」効果音と同期。これがカメラがシーンに「入っていく」ようなイントロのトランジションだ。
+最初区切りは特別処理を受ける。頭20パーセントフレームで少しずつ解けるfisheye歪みだ（1フレームごとに評価する`lenscorrection`フィルタと、動きぼかし再現に隣フレーム混ぜる`tmix=frames=3`）。"whoosh"ノイズと同期する。カメラが場面に「入る」感じを出すイントロ遷移だ。
 
-### 6. 結合と最終ミックス
+### 6. 連結と最終混合
 
-全セグメントが端から端まで結合され、BGM（Sneaky Snitch, Kevin MacLeod, Creative Commonsライセンス）が **オーディオダッキング** でミックスされる -- サイドチェインコンプレッションがエージェントの発話中は自動的にBGM音量を下げ、無音中に戻す。全部が最初から最後まで60fpsで動き、ステップ間のフレームレート変換は一切ない。
+全区切りを端から端へつなげて、背景音楽（Sneaky Snitch、Kevin MacLeod、Creative Commonsライセンス）を**ダッキング付き**で上に混ぜる。エージェントが話す間音楽音量を自動下げて、無音で上げる sidechain 圧縮だ。全体60fpsで端から端まで、段階間でフレームレート変換なしだ。
 
 ### 7. 自動公開
 
-標準的なcronで起動される `run-cron.sh` スクリプトがPython環境を有効化し、`.env` を読み込み、`bun src/workflow.ts --upload` を実行する。`--upload` フラグはさらにメタデータ（タイトル、説明、タグ）の生成をトリガーし、`uploaders/upload.py` を呼び出し、YouTubeとInstagramに別々のスクリプト（`uploaders/youtube/upload.py` と `uploaders/instagram/`）で動画を公開する。LLMプロンプトから動画がオンラインになるまで、全チェーンが人間の介入なしで回る。
+`run-cron.sh`スクリプトは古典cronで起動して、Python環境を入れて、`.env`を読んで、`bun src/workflow.ts --upload`を走らせる。`--upload`フラグはメタデータ生成（タイトル、説明、タグ）を起こして`uploaders/upload.py`を呼ぶ。2つの別スクリプト経由でYouTubeとInstagramに動画公開する（`uploaders/youtube/upload.py`と`uploaders/instagram/`）。LLMプロンプトからオンライン動画まで全連鎖が人手なしで回る。
 
-## なぜ全部PythonじゃなくてTypeScript/Bunなのか
+## なぜ全部PythonじゃなくTypeScriptやBunか
 
-思想的な選択じゃない -- Bunなら `Bun.spawn` でFFmpegをサブプロセスとして直接かつ高速に制御でき、パイプラインのデータ構造（`Phrase`, `SegmentInfo`）に強い型付けができて、数時間おきにcronで回るスクリプトとしてはNodeより圧倒的に起動が速いからだ。プロジェクトにPythonが2箇所だけあるのは、Pythonが本当に最適な場所だからだ: PILで色抽出、そしてアップロードAPI（YouTube用の `google-api-python-client`、IG用のInstagram Graph APIスタック）。
+選択は思想じゃない。Bunが`Bun.spawn`でFFmpegを子プロセス操る直接高速アクセスをくれて、パイプライン構造（`Phrase`、`SegmentInfo`）に強い型付けをくれて、X時間ごとにcron回るスクリプト用にNodeより起動が断然速いランタイムだからだ。プロジェクト内Python2つはPythonが本当に最適道具なところにある。色抽出用PILと、アップロードAPI（YouTube用`google-api-python-client`、IG用Instagram Graph API一式）だ。
 
-## これが示すもの
+## 示すこと
 
-このプロジェクトは、今日完全に無料かオープンソースのブロックだけで何が作れるかの良い例だ: Groq API経由の高速無料LLM、専用GPUなしで動くローカルTTSエンジン、全動画レンダリングにFFmpeg -- そしてつなぎ役はたった数百行のTypeScript。個々のブロックはどれも新しくない。パイプラインを成立させているのは組み合わせだ: 本物のキャラクター関係性を持った一貫性のあるスクリプトを生成し、自然な間のある表現豊かな音声に変換し、その音声のエネルギーにフレーム単位でビジュアルレンダリングを同期させ、公開までの全チェーンを自動化する。
+このプロジェクトは今日無料かオープンソースの部品だけで何作れるかの良い例だ。Groq API経由の速く無料なLLM、専用GPUなしで回るローカルTTSエンジン、全部の動画レンダー用FFmpeg。つなぎはTypeScript数百行だけだ。部品はどれも個別には新しくない。パイプラインを作るのは配置だ。人物間の本物関係付き一貫台本を作って、自然 pause 付き表現豊かな音声に変えて、この音声 energy に1フレームごとに視覚レンダーを同期させて、公開まで全連鎖を自動化する。
 
 ---
 
 **リソース**
 
-- **リポジトリ**: [github.com/fox3000foxy/valorant-short-maker](https://github.com/fox3000foxy/valorant-short-maker)
-- **チャンネル**: [@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)
+- **リポジトリ**：[github.com/fox3000foxy/valorant-short-maker](https://github.com/fox3000foxy/valorant-short-maker)
+- **チャンネル**：[@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)
 
-**3つの重要ポイント**
+**要点3つ**
 
-1. スクリプトはLLM（Groq/Llama 3.3）がエージェントごとのペルソナと関係性に基づいて生成する。あらかじめ書かれたジョークのリストじゃない。
-2. エージェントの丸のズームは、WAVのRMSエンベロープからフレームごとに計算されたFFmpeg式で駆動される -- 従来のキーフレームアニメーションじゃない。
-3. プロンプトからYouTube/Instagram投稿まで全チェーンが、1つのcronジョブだけで人間の介入なしに回る。
+1. 台本はエージェントごとのpersonaと関係付きLLM（GroqやLlama 3.3）で作る。単なる書き置き冗談一覧じゃない。
+2. エージェント円ズームはWAVのRMS envelope から1フレームごとに計算したFFmpeg式で操る。古典 keyframes アニメじゃない。
+3. プロンプトからYouTubeやInstagram投稿まで全連鎖が単一cronジョブで人手なしに回る。

@@ -1,182 +1,182 @@
 ---
-title: "Super Mario Bros.: Định dạng level, con trỏ và 256 glitch world"
-description: "Cách 128 level × 4 loại khu vực vừa trong 40KB ROM, tại sao Minus World tồn tại, và cách một trận Tennis NES có thể tải glitch world."
+title: "Super Mario Bros. : định dạng màn, con trỏ và 256 glitch world"
+description: "Cách 128 màn × 4 kiểu vùng vừa trong 40KB ROM, vì sao Minus World tồn tại, và cách trận Tennis NES tải được glitch world."
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "H9DUVeE4KfQ4JWO3alWl6W0E57DlaD7BhFkoIqSAjbSdkNfM0jj/dS0hDukaDFfMeAXlFn+DjUe0Ju3tK0pNDw=="
+author_sig: "dTeR7kEAGgzjGPDjJoUeRj9tTh0HxWnB35OrXb6FECNrtCx4U6s0Qre7k4nFkclPLb9cnB49nL5iVqVh0My+ew=="
 ---
 
 ## Giới thiệu
 
-Super Mario Bros., đó là 40 kilobyte ROM. Tám thế giới, 32 level, kẻ thù, nhạc, power-ups, tất cả đều chứa trong đó.
+Super Mario Bros. là 40 kilobyte ROM. Tám thế giới, 32 màn, kẻ thù, nhạc, power-up, tất cả vừa trong đó.
 
-Nhưng nếu bạn mở giả lập và thay đổi đúng byte, bạn có thể tải level 36-1. Hoặc 255-1. Hoặc rơi vào một thế giới nơi mọi thứ đều được tạo từ sprite của Bowser và ống nước dẫn đến hư không.
+Nhưng nếu bạn mở trình giả lập và chọc đúng byte, bạn có thể tải màn 36-1. Hay 255-1. Hay đáp xuống thế giới mọi thứ làm bằng sprite Bowser và ống dẫn tới hư vô.
 
-Những glitch world này tồn tại vì lý do đơn giản: hệ thống lưu trữ level của SMB1 là một kỳ quan tối ưu hóa 8-bit, và khi bạn buộc game đọc ở nơi không nên đọc, kết quả sẽ rất hấp dẫn.
+Các glitch world này tồn tại vì lý do đơn giản : hệ thống lưu màn của SMB1 là kỳ quan tối ưu 8-bit, và khi ta ép game đọc nơi không nên, nó cho kết quả cuốn hút.
 
-Retro Game Mechanics Explained đã thực hiện một loạt 4 video về chủ đề này -- chúng ta sẽ tổng hợp chúng thành một lần đi sâu vào mã 6502 của game bán chạy nhất thời đại.
+Retro Game Mechanics Explained đã làm series 4 video về chuyện này -- ta sẽ gom chúng thành một lần lặn vào mã 6502 của game bán chạy nhất thời của nó.
 
-![GLITCH OBJECTS -- tiêu đề loạt phim RGMechEx về các cơ chế ẩn của SMB1](/images/smb1-glitch-levels/title-card.jpg)
+![GLITCH OBJECTS -- tiêu đề series RGMechEx về cơ chế ẩn của SMB1](/images/smb1-glitch-levels/title-card.jpg)
 
-![World 9-1 -- màn hình tiêu đề của glitch world đầu tiên có thể truy cập qua việc hoán đổi cartridge Tennis](/images/smb1-glitch-levels/v1-title-9-1.jpg)
+![World 9-1 -- màn hình tiêu đề của glitch world đầu tiên truy cập được qua cart swap Tennis](/images/smb1-glitch-levels/v1-title-9-1.jpg)
 
-## Warm start: Tại sao RAM của Tennis tồn tại trong SMB1
+## Warm start : vì sao RAM của Tennis sống sót trong SMB1
 
-Trước khi nói về lưu trữ level, cần hiểu cách SMB1 khởi động. Bởi vì lỗi cart swap NES Tennis dựa hoàn toàn vào **hệ thống phát hiện warm start / cold start** của game.
+Trước khi nói lưu màn, phải hiểu SMB1 khởi động thế nào. Vì glitch cart swap NES Tennis hoàn toàn dựa trên **hệ thống phát hiện warm start / cold start** của game.
 
-### 41 byte được bảo toàn
+### 41 byte được giữ
 
-Khi SMB1 phát hiện **cold start** (lần bật nguồn đầu tiên hoặc tắt/mở nguồn), nó xóa toàn bộ RAM. Nhưng khi phát hiện **warm start** (nhấn nút reset, không tắt nguồn), nó bảo toàn một vùng nhớ **41 byte**:
+Khi SMB1 phát hiện **cold start** (bật nguồn lần đầu hay tắt/bật nguồn), nó xóa sạch RAM. Nhưng khi nó phát hiện **warm start** (nút reset, không cắt nguồn), nó giữ vùng bộ nhớ **41 byte** :
 
 ```asm
-; Les 41 bytes préservés en RAM lors d'un warm start
-; Adresses $075F-$0787
+; 41 byte được giữ trong RAM lúc warm start
+; Địa chỉ $075F-$0787
 ;
-; $075F : byte de démarrage (world - 1)    [1 byte]
-; $0760 : flag de sélection de monde (B button) [1 byte]
-; $0761-$0762 : inutilisé                    [2 bytes]
-; $0763-$0768 : timer (6 digits, 3 affichés) [6 bytes]
-; $0769-$076E : coins Luigi                   [6 bytes]
-; $076F-$0774 : coins Mario                   [6 bytes]
-; $0775-$077A : score Luigi                   [6 bytes]
-; $077B-$0780 : score Mario                   [6 bytes]
-; $0781-$0786 : top score (6 digits, 1 caché) [6 bytes]
-; $0787 : le byte magique $A5                 [1 byte]
+; $075F : byte khởi động (world - 1)    [1 byte]
+; $0760 : cờ chọn thế giới (nút B) [1 byte]
+; $0761-$0762 : không dùng                    [2 byte]
+; $0763-$0768 : timer (6 chữ số, 3 hiện) [6 byte]
+; $0769-$076E : xu Luigi                   [6 byte]
+; $076F-$0774 : xu Mario                   [6 byte]
+; $0775-$077A : điểm Luigi                   [6 byte]
+; $077B-$0780 : điểm Mario                   [6 byte]
+; $0781-$0786 : điểm cao nhất (6 chữ số, 1 ẩn) [6 byte]
+; $0787 : byte kỳ diệu $A5                 [1 byte]
 ```
 
-41 byte này phục vụ một chức năng duy nhất: cho phép người chơi **tiếp tục ở cùng thế giới sau khi game over**. Nếu bạn chết ở 6-3, game ghi thế giới 6 vào byte bắt đầu, và ở màn hình tiêu đề, nếu giữ A + Start, bạn bắt đầu lại ở 6-1.
+41 byte này phục vụ một tính năng duy nhất : cho phép người chơi **tiếp tục ở cùng thế giới sau game over**. Nếu bạn chết ở 6-3, game ghi thế giới 6 vào byte khởi động, và ở màn hình tiêu đề, nếu bạn giữ A + Start, bạn bắt đầu lại ở 6-1.
 
-![41 byte được bảo toàn trong RAM khi warm start -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD, và byte ma thuật $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
+![41 byte được giữ trong RAM lúc warm start -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD, và byte kỳ diệu $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
 
 ### Kiểm tra kép warm start
 
-![Cold start so với warm start -- sơ đồ phát hiện reset](/images/smb1-glitch-levels/v1-warm-start.jpg)
+![Cold start đấu warm start -- sơ đồ phát hiện reset](/images/smb1-glitch-levels/v1-warm-start.jpg)
 
-Khi SMB1 khởi động, nó không kiểm tra một tiêu chí mà là **hai**:
+Khi SMB1 boot, nó không kiểm tra một tiêu chí mà **hai** :
 
 ```asm
 CheckWarmStart:
-  ; 1. Vérifier le byte magique $A5 à $0787
+  ; 1. Kiểm tra byte kỳ diệu $A5 ở $0787
   lda $0787
   cmp #$A5
-  bne ColdStart        ; pas $A5 → cold start
+  bne ColdStart        ; không phải $A5 → cold start
 
-  ; 2. Vérifier les 6 digits du top score ($0781-$0786)
-  ;    Chaque digit doit être entre 0 et 9
+  ; 2. Kiểm tra 6 chữ số của điểm cao nhất ($0781-$0786)
+  ;    Mỗi chữ số phải từ 0 tới 9
   ldx #0
 CheckLoop:
   lda $0781,x
   cmp #$0A
-  bcs ColdStart        ; digit >= 10 → cold start
+  bcs ColdStart        ; chữ số >= 10 → cold start
   inx
   cpx #6
   bne CheckLoop
 
-  ; Si les deux conditions passent → warm start
-  ; La RAM n'est pas effacée, le monde de départ est préservé
+  ; Nếu cả hai điều kiện qua → warm start
+  ; RAM không bị xóa, thế giới khởi đầu được giữ
   jmp WarmStartBoot
 ```
 
-![Kiểm tra byte $A5 và các chữ số top score -- cốt lõi của warm start](/images/smb1-glitch-levels/v1-a5-byte.jpg)
+![Kiểm tra byte $A5 và các chữ số điểm cao nhất -- lõi của warm start](/images/smb1-glitch-levels/v1-a5-byte.jpg)
 
-Tại sao kiểm tra kép? Bởi vì byte $A5 có thể xuất hiện ngẫu nhiên (một game khác để lại giá trị này, hoặc trạng thái mặc định của chip RAM). Bằng cách kiểm tra các chữ số top score hợp lệ (0-9), chúng ta đảm bảo dữ liệu nhất quán.
+Vì sao kiểm tra kép? Vì byte $A5 có thể tình cờ hiện diện (game khác để lại giá trị này, hay trạng thái nghỉ mặc định của chip RAM). Bằng cách kiểm tra các chữ số điểm cao nhất hợp lệ (0-9), ta đảm bảo dữ liệu nhất quán.
 
-### Tại sao Tennis là game duy nhất hoạt động
+### Vì sao chỉ Tennis mới chạy
 
-Khi cắm SMB1 lần đầu (cold start), game:
-1. Xóa toàn bộ RAM → top score = 0, world byte = 0
-2. Ghi $A5 tại địa chỉ $0787
+Khi ta lắp SMB1 lần đầu (cold start), game :
+1. Xóa sạch RAM → điểm cao nhất = 0, byte world = 0
+2. Ghi $A5 vào địa chỉ $0787
 
-Sau đó, hoán đổi sang Tennis mà không tắt máy. Tennis:
-- **Không xóa RAM khi khởi động** (ít game NES làm vậy)
-- **Không ghi vào các byte top score** → chúng vẫn là 0 (hợp lệ)
-- **Không chạm vào byte $A5** → nó vẫn còn
-- **Sử dụng địa chỉ $075F** cho bộ đếm bước chân của người chơi
+Rồi, ta swap sang Tennis mà không tắt máy. Tennis :
+- **Không dọn RAM lúc khởi động** (ít game NES nào làm)
+- **Không ghi lên các byte điểm cao nhất** → chúng vẫn 0 (hợp lệ)
+- **Không đụng byte $A5** → nó vẫn ở đó
+- **Dùng địa chỉ $075F** cho bộ đếm bước chân của người chơi
 
 ```asm
-; Le footstep increment dans Tennis :
-; À chaque pas du joueur sur le court, Tennis incrémente le byte à $075F.
-; Ce même byte est utilisé par SMB1 comme "world number - 1".
+; Tăng footstep trong Tennis :
+; Mỗi bước của người chơi trên sân, Tennis tăng byte ở $075F.
+; Byte này cũng được SMB1 dùng làm "world number - 1".
 ;
-; 0 pas  → world 0 → SMB1 = world 1
-; 1-7 pas → world 1-7 → worlds normaux
-; 8+ pas → world 8+ → glitch worlds !
+; 0 bước  → world 0 → SMB1 = world 1
+; 1-7 bước → world 1-7 → world thường
+; 8+ bước → world 8+ → glitch worlds !
 ;
-; Le compteur ne s'incrémente que quand la musique s'arrête
-; (les footstep sounds ne jouent pas pendant la musique).
+; Bộ đếm chỉ tăng khi nhạc dừng
+; (tiếng bước chân không phát khi nhạc chạy).
 ```
 
-Khi cắm lại SMB1:
-1. Byte $A5 vẫn còn (Tennis không chạm vào nó)
-2. Các chữ số top score vẫn là 0 (hợp lệ)
-3. World byte giờ có giá trị 8+ (được tăng bởi các bước chân Tennis)
-4. SMB1 phát hiện warm start → bảo toàn world byte bị hỏng
+Khi ta lắp lại SMB1 :
+1. Byte $A5 vẫn đó (Tennis không đụng tới)
+2. Các chữ số điểm cao nhất vẫn 0 (hợp lệ)
+3. Byte world giờ thành 8+ (tăng bởi bước chân Tennis)
+4. SMB1 phát hiện warm start → giữ byte world hỏng
 5. Giữ A + Start → world 9-1, world A-1, world 36-1, v.v.
 
-### Tại sao phải khởi động Mario trước Tennis
+### Vì sao phải boot Mario trước Tennis
 
-Một điểm tinh tế: phải khởi động SMB1 trước, rồi Tennis, rồi SMB1 lại. Nếu bắt đầu trực tiếp với Tennis, byte $A5 sẽ không bao giờ được ghi (Tennis không ghi $A5), nên việc phát hiện warm start sẽ thất bại và RAM sẽ bị xóa.
+Một tinh tế : phải boot SMB1 trước, rồi Tennis, rồi lại SMB1. Nếu bạn khởi đầu trực tiếp bằng Tennis, byte $A5 sẽ không bao giờ ghi (Tennis không ghi $A5), nên phát hiện warm start thất bại và RAM bị xóa.
 
-![Bộ đếm bước chân Tennis: mỗi footstep tăng world byte](/images/smb1-glitch-levels/v1-footstep.jpg)
+![Bộ đếm bước chân của Tennis : mỗi footstep tăng byte world](/images/smb1-glitch-levels/v1-footstep.jpg)
 
-![Truy cập Glitch Worlds qua NES Tennis -- video giải thích cart swap](/images/smb1-glitch-levels/yt-tennis.jpg)
+![Truy cập Glitch World qua NES Tennis -- video giải thích cart swap](/images/smb1-glitch-levels/yt-tennis.jpg)
 
-## Cách SMB1 lưu trữ các level trong 40KB
+## Cách SMB1 lưu màn trong 40KB
 
-Nintendo R&D4 phải giải quyết một vấn đề đơn giản trên bề mặt: biểu diễn các level cuộn ngang với tile, kẻ thù, item, tất cả trong ngân sách ROM cực kỳ chặt chẽ.
+Nintendo R&D4 phải giải bài toán trông đơn giản : biểu diễn màn cuộn ngang với tile, kẻ thù, vật phẩm, tất cả trong ngân sách ROM siêu chật.
 
-Giải pháp là sự tách biệt thành hai lớp dữ liệu **hoàn toàn độc lập**:
+Giải pháp là tách thành hai lớp dữ liệu **hoàn toàn độc lập** :
 
-### Tile layout (bản đồ level)
+### Bố cục tile (bản đồ màn)
 
-Mỗi level được định nghĩa bằng một con trỏ tới cấu trúc nén tile trong ROM. Nén đơn giản nhưng thông minh: byte "điều khiển" theo sau bởi 1-3 byte dữ liệu.
+Mỗi màn định nghĩa bằng con trỏ tới cấu trúc tile nén trong ROM. Nén thô sơ mà thiên tài : byte "điều khiển" theo sau 1-3 byte dữ liệu.
 
-Định dạng tile sử dụng hệ thống **runs** (giống RLE):
+Định dạng tile dùng hệ **run** (kiểu RLE) :
 
 ```asm
-; Format tile SMB1 (simplifié)
-; Chaque "commande" est un byte contrôle :
+; Định dạng tile SMB1 (rút gọn)
+; Mỗi "lệnh" là byte điều khiển :
 ;
-; $00-$7F : pose une tile, avance d'1 colonne
-; $80-$BF : pose une tile répétée N fois (N = byte - $80 + 1)
-; $C0-$FF : commande spéciale (fin de ligne, saut, changement de palette)
+; $00-$7F : đặt một tile, tiến 1 cột
+; $80-$BF : đặt tile lặp N lần (N = byte - $80 + 1)
+; $C0-$FF : lệnh đặc biệt (kết dòng, nhảy, đổi palette)
 
-Exemple : pour dessiner 3 briques consécutives :
-  $82 $01    ; répète la tile $01 (brick) 3 fois
+Ví dụ : để vẽ 3 viên gạch liên tiếp :
+  $82 $01    ; lặp tile $01 (gạch) 3 lần
 ```
 
-Mỗi level chứa 13 hàng × 16 cột tile (13×16 = 208 tile hiển thị). Nhưng định dạng nén cho phép giảm đáng kể -- ví dụ, bầu trời và cột trống gần như không chiếm dung lượng.
+Mỗi màn chứa 13 hàng 16 cột tile (13×16 = 208 tile thấy được). Nhưng định dạng nén cho phép xuống thấp hơn nhiều -- ví dụ, trời và cột trống gần như không tốn chỗ.
 
-Vòng lặp render bằng 6502:
+Vòng lặp render bằng 6502 :
 
 ```asm
-; Décompression tile - loop principale
-; Entrée : pointeur tile_data en $XX
-; Sortie : tilemap niveau dans la RAM PPU
+; Giải nén tile - vòng lặp chính
+; Đầu vào : con trỏ tile_data ở $XX
+; Đầu ra : bản đồ màn trong RAM PPU
 
 DecompressTile:
-  lda (tile_ptr),y      ; lire byte contrôle
+  lda (tile_ptr),y      ; đọc byte điều khiển
   iny
   cmp #$80
-  bcc SingleTile        ; $00-$7F : tile unique
+  bcc SingleTile        ; $00-$7F : tile đơn
   cmp #$C0
   bcc RunLength         ; $80-$BF : run-length
-  jmp SpecialCommand    ; $C0-$FF : commande spéciale
+  jmp SpecialCommand    ; $C0-$FF : lệnh đặc biệt
 
 SingleTile:
-  sta PPU_DATA          ; écrire la tile directement
+  sta PPU_DATA          ; ghi tile trực tiếp
   jmp Next
 
 RunLength:
   sec
   sbc #$7E              ; N = control - $7E
   tax
-  lda (tile_ptr),y      ; lire la tile à répéter
+  lda (tile_ptr),y      ; đọc tile cần lặp
   iny
 : sta PPU_DATA
   dex
@@ -184,129 +184,129 @@ RunLength:
   jmp Next
 ```
 
-### Sprite layout (kẻ thù và vật thể)
+### Bố cục sprite (kẻ thù và vật thể)
 
-Song song đó, kẻ thù và vật thể (khối ?, ống nước, goomba, koopa) được lưu trữ trong cấu trúc hoàn toàn riêng biệt. Mỗi spawn được định nghĩa bởi 2 byte:
+Song song, kẻ thù và vật thể (khối ?, ống, goomba, koopa) lưu trong cấu trúc hoàn toàn riêng. Mỗi spawn định nghĩa bằng 2 byte :
 
 ```asm
-; Format sprite SMB1
-; Byte 0 : position X (en colonnes)
-; Byte 1 : type de sprite + bits de page Y
-; Y est dérivé de l'index dans la séquence
+; Định dạng sprite SMB1
+; Byte 0 : vị trí X (theo cột)
+; Byte 1 : kiểu sprite + bit trang Y
+; Y suy từ index trong chuỗi
 
-Une séquence de sprites :
-  $01 $4B    ; goomba à la colonne 1
-  $09 $4B    ; goomba à la colonne 9
-  $10 $61    ; bloc ? à la colonne 16 (contient pièce)
-  $15 $54    ; koopa verte à la colonne 21
-  $FF        ; fin de séquence
+Một chuỗi sprite :
+  $01 $4B    ; goomba ở cột 1
+  $09 $4B    ; goomba ở cột 9
+  $10 $61    ; khối ? ở cột 16 (chứa xu)
+  $15 $54    ; koopa xanh ở cột 21
+  $FF        ; kết chuỗi
 ```
 
-Mỗi level có thể tham chiếu tối đa 5 trang sprite khác nhau (hay 5 "màn hình" 16 cột), nhưng trong thực tế hầu hết level chỉ dùng 2-3.
+Mỗi màn có thể tham chiếu tới 5 trang sprite khác nhau (đúng hơn, 5 "màn hình" 16 cột), nhưng thực tế hầu hết màn chỉ dùng 2-3.
 
 ### Bảng con trỏ
 
-Thiết kế thiên tài nằm ở bảng con trỏ. Mỗi level được lưu trữ dưới dạng **cặp** địa chỉ ROM:
+Thiên tài thiết kế là bảng con trỏ. Mỗi màn lưu dưới dạng **cặp** địa chỉ ROM :
 
 ```c
-// Structure interne (simplifiée) du World Map
+// Cấu trúc nội bộ (rút gọn) của World Map
 struct LevelPointer {
-    uint16_t tile_ptr;   // Adresse ROM des données tiles
-    uint16_t sprite_ptr; // Adresse ROM des données sprites
+    uint16_t tile_ptr;   // Địa chỉ ROM của dữ liệu tile
+    uint16_t sprite_ptr; // Địa chỉ ROM của dữ liệu sprite
 };
 
-// 4 tables séparées, une par AreaType :
+// 4 bảng riêng, một cho mỗi AreaType :
 // 0 = Water, 1 = Overworld, 2 = Underground, 3 = Castle
 LevelPointer level_table[4][128];
 ```
 
-128 mục mỗi bảng. 4 loại khu vực. **512 tổ hợp có thể**, nhưng chỉ một phần nhỏ được sử dụng bởi game chính thức. Phần còn lại là RAM chưa khởi tạo hoặc dữ liệu được giải thích sai thành con trỏ.
+128 mục cho mỗi bảng. 4 kiểu vùng. **512 tổ hợp khả dĩ**, nhưng chỉ một phần được game chính thức dùng. Phần còn lại là RAM chưa khởi tạo hay dữ liệu bị diễn giải thành con trỏ.
 
-Khi game tải level, nó làm như sau:
+Khi game tải màn, nó làm vầy :
 
 ```asm
-; Chargement d'un niveau
+; Tải một màn
 ; A = AreaType (0-3), X = LevelID (0-127)
 
 LoadLevel:
   sta AREA_TYPE
-  asl                  ; *2 pour offset dans table 16-bit
+  asl                  ; *2 cho offset trong bảng 16-bit
   tax
   lda LevelTable_TilePtr, x
   sta TILE_PTR
   lda LevelTable_TilePtr+1, x
-  sta TILE_PTR+1       ; pointeur vers les tiles
+  sta TILE_PTR+1       ; con trỏ tới tile
   lda LevelTable_SpritePtr, x
   sta SPRITE_PTR
   lda LevelTable_SpritePtr+1, x
-  sta SPRITE_PTR+1     ; pointeur vers les sprites
+  sta SPRITE_PTR+1     ; con trỏ tới sprite
   jsr DecompressTiles
 ```
 
-Không có kiểm tra. Không kiểm tra con trỏ có hợp lệ không. Game đọc địa chỉ trong bảng và nén dữ liệu tại địa chỉ đó, xong.
+Game đặt niềm tin tuyệt đối vào con trỏ : nó đọc địa chỉ trong bảng và giải nén thứ ở địa chỉ đó, hết.
 
-![Level ID $06 (Water) -- 9-1, phiên bản dưới nước của 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
+![Level ID $06 (Water) -- 9-1, bản dưới nước của 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
 
-![Bảng Level ID: 128 mục có thể, 34 được gán](/images/smb1-glitch-levels/v2-level-id-table.jpg)
+![Bảng Level ID : 128 mục khả dĩ, 34 gán](/images/smb1-glitch-levels/v2-level-id-table.jpg)
 
-![Thứ tự khác nhau của con trỏ tile và sprite -- nguyên nhân tạo ra Frankenstein level](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
+![Thứ tự khác nhau của con trỏ tile và sprite -- nguyên nhân màn Frankenstein](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
 
-### 34 level độc đáo và hệ thống ID 7-bit
+### 34 màn duy nhất và hệ ID 7-bit
 
-![Chip RAM của NES (MB8416A) -- chip này giữ dữ liệu khi hoán đổi cartridge](/images/smb1-glitch-levels/v1-ram-chip.jpg)
+![Chip RAM của NES (MB8416A) -- chính nó giữ dữ liệu khi ta swap băng](/images/smb1-glitch-levels/v1-ram-chip.jpg)
 
-SMB1 không có 32 level, mà là **34 level độc đáo**. Nhiều level là bản sao (5-3 = 1-3 nhưng có Bullet Bill) được đánh dấu bằng cờ "hard mode". Các level độc đáo thực sự:
+SMB1 không có 32 màn, mà **34 màn duy nhất**. Nhiều màn là trùng (5-3 = 1-3 nhưng có Bullet Bill) đánh dấu bằng cờ "hard mode". Các màn thật :
 
-- **Nước** (Loại 0): 3 level (2-2, 7-2, vùng bonus 5-2/6-2)
-- **Overworld** (Loại 1): 22 level (bao gồm 2 phòng mây bonus)
-- **Underground** (Loại 2): 3 level (bao gồm các phòng bonus ngầm)
-- **Castle** (Loại 3): 6 level
-- \+ 1 phòng cutscene (trước các level ngầm/dưới nước)
+- **Nước** (Kiểu 0) : 3 màn (2-2, 7-2, vùng thưởng 5-2/6-2)
+- **Overworld** (Kiểu 1) : 22 màn (kể cả 2 phòng mây thưởng)
+- **Underground** (Kiểu 2) : 3 màn (kể cả phòng thưởng ngầm)
+- **Castle** (Kiểu 3) : 6 màn
+- \+ 1 phòng cắt cảnh (trước màn ngầm/nước)
 - \+ 1 warp zone của 4-2
 
-Mỗi level có một ID trên **7 bit**. 5 bit thấp = số trong nhóm con, 2 bit cao = loại khu vực:
+Mỗi màn có ID trên **7 bit**. 5 bit thấp = số trong nhóm con, 2 bit cao = kiểu vùng :
 
 ```asm
-; Encodage 7-bit du Level ID
-; Bits 6-5 : Type (00=Water, 01=Overworld, 10=Underground, 11=Castle)
-; Bits 4-0 : Numéro dans le sous-groupe
+; Mã hóa Level ID 7-bit
+; Bit 6-5 : Kiểu (00=Water, 01=Overworld, 10=Underground, 11=Castle)
+; Bit 4-0 : Số trong nhóm con
 ;
-; Water IDs      : $00-$02  (types 00, numéros 0-2)
-; Overworld IDs  : $20-$35  (types 01, numéros 0-21)
-; Underground IDs: $40-$42  (types 10, numéros 0-2)
-; Castle IDs     : $60-$65  (types 11, numéros 0-5)
+; Water IDs      : $00-$02  (kiểu 00, số 0-2)
+; Overworld IDs  : $20-$35  (kiểu 01, số 0-21)
+; Underground IDs: $40-$42  (kiểu 10, số 0-2)
+; Castle IDs     : $60-$65  (kiểu 11, số 0-5)
 ;
-; ID $25 = %0100101 → type 01 (Overworld), numéro 5 → 1-1
-; ID $23 = %0100011 → type 01 (Overworld), numéro 3 → 6-2
+; ID $25 = %0100101 → kiểu 01 (Overworld), số 5 → 1-1
+; ID $23 = %0100011 → kiểu 01 (Overworld), số 3 → 6-2
 ```
 
-**128 ID có thể** ($00-$7F), chỉ 34 được gán cho level thật. Các ID chưa sử dụng trỏ đến bất kỳ thứ gì.
+**128 ID khả dĩ** ($00-$7F), chỉ 34 gán cho màn thật. Các ID không dùng trỏ tới bất cứ gì.
 
-### Bảng con trỏ: hai danh sách, hai thứ tự
+### Bảng con trỏ : hai danh sách, hai thứ tự
 
-Con trỏ tile và sprite không được lưu trữ cùng thứ tự. Code sử dụng hai danh sách 16-bit riêng biệt (byte cao / byte thấp trong hai bảng khác nhau):
+Các con trỏ tile và sprite không lưu cùng thứ tự. Mã dùng hai danh sách 16-bit riêng (byte cao / byte thấp trong hai bảng khác) :
 
 ```
-Ordre des pointeurs sprites :
-  Index 0-5   : Castle (6 niveaux)
-  Index 6-27  : Overworld (22 niveaux)
-  Index 28-30 : Underground (3 niveaux)
-  Index 31-33 : Water (3 niveaux)
+Thứ tự con trỏ sprite :
+  Index 0-5   : Castle (6 màn)
+  Index 6-27  : Overworld (22 màn)
+  Index 28-30 : Underground (3 màn)
+  Index 31-33 : Water (3 màn)
 
-Ordre des pointeurs tiles :
-  Index 0-2   : Water (3 niveaux)
-  Index 3-24  : Overworld (22 niveaux)
-  Index 25-27 : Underground (3 niveaux)
-  Index 28-33 : Castle (6 niveaux)
+Thứ tự con trỏ tile :
+  Index 0-2   : Water (3 màn)
+  Index 3-24  : Overworld (22 màn)
+  Index 25-27 : Underground (3 màn)
+  Index 28-33 : Castle (6 màn)
 ```
 
-Tại sao thứ tự khác nhau? Không có lý do kỹ thuật -- có thể dữ liệu được sắp xếp như vậy trong quá trình phát triển. Nhưng nó tạo ra hậu quả hấp dẫn: khi ID level không hợp lệ, con trỏ tile và sprite tải các level *khác nhau*, tạo ra **Frankenstein level**.
+Vì sao thứ tự khác nhau? Không lý do kỹ thuật nào -- có lẽ dữ liệu tổ chức vậy lúc phát triển. Nhưng việc này tạo hậu quả cuốn hút : khi ID màn không hợp lệ, con trỏ tile và sprite tải các màn *khác nhau*, tạo **màn Frankenstein**.
 
-Để di chuyển giữa hai danh sách này, game sử dụng các **bảng offset** nhỏ (như mục lục):
+Để đi giữa hai danh sách này, game dùng các **bảng offset** nhỏ (như mục lục) :
 
 ```asm
-; Tables d'offset par type (Water, Overworld, Underground, Castle)
-; Chaque entrée = index de début dans la liste correspondante
+; Bảng offset theo kiểu (Water, Overworld, Underground, Castle)
+; Mỗi mục = index bắt đầu trong danh sách tương ứng
 
 SpriteOffsetTable:
   .byte $1F, $06, $1C, $00    ; Water=31, Overworld=6, Underground=28, Castle=0
@@ -315,601 +315,599 @@ TileOffsetTable:
   .byte $00, $03, $19, $1C    ; Water=0, Overworld=3, Underground=25, Castle=28
 ```
 
-Để tải level 6-2 (ID $23, Overworld số 3):
+Để tải màn 6-2 (ID $23, Overworld số 3) :
 
 ```asm
-; 1. Type = 01 (Overworld) → index dans table d'offset = 1
+; 1. Kiểu = 01 (Overworld) → index trong bảng offset = 1
 ; 2. Sprite offset = SpriteOffsetTable[1] = 6
-;    Index final = 6 + 3 (numéro de niveau) = 9 → 10ème pointeur sprites
+;    Index cuối = 6 + 3 (số màn) = 9 → con trỏ sprite thứ 10
 ; 3. Tile offset = TileOffsetTable[1] = 3
-;    Index final = 3 + 3 = 6 → 7ème pointeur tiles
-; 4. Résultat : pointeur tiles $A619 + pointeur sprites $9ED0 = 6-2 ✓
+;    Index cuối = 3 + 3 = 6 → con trỏ tile thứ 7
+; 4. Kết quả : con trỏ tile $A619 + con trỏ sprite $9ED0 = 6-2 ✓
 ```
 
-Bây giờ, điều gì xảy ra với ID không hợp lệ như $43 (Underground số 3, không tồn tại)?
+Giờ, chuyện gì với ID không hợp lệ như $43 (Underground số 3, không tồn tại)?
 
 ```asm
-; ID $43, Type = 10 (Underground), numéro = 3
+; ID $43, Kiểu = 10 (Underground), số = 3
 ; Sprite offset = SpriteOffsetTable[2] = $1C = 28
-;   Index = 28 + 3 = 31 → 32ème pointeur sprites = eau bonus 5-2 !
+;   Index = 28 + 3 = 31 → con trỏ sprite thứ 32 = nước thưởng 5-2 !
 ; Tile offset = TileOffsetTable[2] = $19 = 25
-;   Index = 25 + 3 = 28 → 29ème pointeur tiles = 1-4 (Castle) !
+;   Index = 25 + 3 = 28 → con trỏ tile thứ 29 = 1-4 (Castle) !
 ;
-; Résultat : un niveau souterrain avec les tiles de 1-4
-; et les Bloopers de la zone eau de 5-2. Un vrai Frankenstein.
+; Kết quả : màn ngầm với tile của 1-4
+; và Blooper của vùng nước 5-2. Frankenstein thật.
 ```
 
-![Level ID $43 -- Frankenstein level: tile 1-4 + sprite nước 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
+![Level ID $43 -- màn Frankenstein : tile của 1-4 + sprite nước 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
 
-![Exploring Glitch Level Pointers -- bảng offset được giải thích](/images/smb1-glitch-levels/yt-pointers.jpg)
+![Khám phá Con trỏ Glitch Level -- bảng offset giải thích](/images/smb1-glitch-levels/yt-pointers.jpg)
 
-![World index table -- khi overflow của world 9 tạo glitch level](/images/smb1-glitch-levels/v2-world-index-table.jpg)
+![Bảng index thế giới -- khi tràn world 9 tạo glitch level](/images/smb1-glitch-levels/v2-world-index-table.jpg)
 
-### World index table: Tại sao world 9 bị overflow
+### Bảng index thế giới : vì sao world 9 tràn
 
-Có một bảng ROM 8 byte cho index của level đầu tiên mỗi thế giới (1-8). Và ngay sau đó là bảng 36 Level ID của tất cả level theo thứ tự chơi.
+Có bảng ROM 8 byte cho index của màn đầu mỗi thế giới (1-8). Và ngay sau, bảng 36 Level ID của mọi màn theo thứ tự game.
 
 ```asm
-; WorldIndexTable (8 bytes)
+; WorldIndexTable (8 byte)
   .byte 0, 5, 10, 15, 20, 25, 28, 33
-;   -> Monde 1 commence au niveau 0
-;   -> Monde 2 commence au niveau 5
-;   -> Monde 8 commence au niveau 33
+;   -> Thế giới 1 bắt đầu ở màn 0
+;   -> Thế giới 2 bắt đầu ở màn 5
+;   -> Thế giới 8 bắt đầu ở màn 33
 
-; LevelIDTable (36 bytes)
-  .byte $25, $28, $29, $26, $24, ... ; les 36 Level IDs
+; LevelIDTable (36 byte)
+  .byte $25, $28, $29, $26, $24, ... ; 36 Level ID
 ```
 
-Khi cố tải world 9, game đọc byte thứ 9 của WorldIndexTable... không tồn tại. Nó tràn 1 byte vào LevelIDTable, đọc giá trị $25, rồi dùng $25 làm index trong LevelIDTable (mục thứ 37) -- điều này tràn thêm 2 byte vào SpriteOffsetTable, và đọc giá trị 6.
+Khi ta cố tải world 9, game đọc byte thứ 9 của WorldIndexTable... không tồn tại. Nó tràn 1 byte vào LevelIDTable, đọc giá trị $25, rồi dùng $25 làm index trong LevelIDTable (mục thứ 37) -- tràn tiếp 2 byte vào SpriteOffsetTable, và đọc giá trị 6.
 
 ```asm
 ; World 9 :
-;   1. WorldIndexTable[8] (overflow) → lit $25 dans LevelIDTable
-;   2. LevelIDTable[37] (overflow) → lit le 2ème byte de SpriteOffsetTable = 6
-;   3. ID = 6 → Water level number 6 (qui n'existe pas)
-;   4. Tile pointer = pointeur water numéro 6 = tiles de 6-2
-;   5. Sprite pointer = index 31+6 = 37 > 33 → pointeur invalide
-;   6. Résultat : 6-2 sous l'eau avec des sprites glitchés
+;   1. WorldIndexTable[8] (tràn) → đọc $25 trong LevelIDTable
+;   2. LevelIDTable[37] (tràn) → đọc byte thứ 2 của SpriteOffsetTable = 6
+;   3. ID = 6 → Water level number 6 (không tồn tại)
+;   4. Tile pointer = con trỏ water số 6 = tile của 6-2
+;   5. Sprite pointer = index 31+6 = 37 > 33 → con trỏ không hợp lệ
+;   6. Kết quả : 6-2 dưới nước với sprite glitch
 ;      → world 9-1 !
 ```
 
-Với world G (16), overflow đi xa hơn nữa và rơi vào Level ID $01, là level cutscene đứng trước 1-2:
+Với world G (16), tràn còn xa hơn và rơi vào Level ID $01, tức màn cắt cảnh đứng trước 1-2 :
 
 ```asm
 ; World G (16) :
-;   WorldIndexTable[15] → lit $01 dans LevelIDTable
-;   LevelIDTable[1] = $29 (cutscene 1-2)
-;   → world G-1 = la cutscene d'entrée de 1-2
+;   WorldIndexTable[15] → đọc $01 trong LevelIDTable
+;   LevelIDTable[1] = $29 (cắt cảnh 1-2)
+;   → world G-1 = cắt cảnh vào 1-2
 ```
 
-## Tại sao glitch world tồn tại
+## Vì sao glitch world tồn tại
 
-Game có 32 level "hợp pháp" (8 thế giới × 4 level). Nhưng bảng con trỏ có 128 mục mỗi loại khu vực. Các mục vượt quá level 32 chứa dữ liệu ROM tại các địa chỉ đó -- đôi khi là level khác, đôi khi là dữ liệu âm thanh, đôi khi là RAM, đôi khi là bất kỳ thứ gì.
+Game có 32 màn "hợp lệ" (8 thế giới × 4 màn). Nhưng bảng con trỏ làm 128 mục cho mỗi kiểu vùng. Các mục vượt màn 32 chứa thứ ở trong ROM tại các địa chỉ đó -- đôi khi màn khác, đôi khi dữ liệu âm thanh, đôi khi RAM, đôi khi bất cứ gì.
 
 ![Level ID $01 Water (Minus World) -- tile pointer $AE45, sprite pointer $A171](/images/smb1-glitch-levels/minus-world.png)
 
 ### Level ID $01 + AreaType 0 = Minus World
 
-Nổi tiếng nhất trong các glitch world. Level ID $01 ở AreaType 0 (nước) trỏ đến:
+Nổi tiếng nhất trong các glitch world. Level ID $01 ở AreaType 0 (nước) trỏ tới :
 
-- **Tile pointer: $AE45** → vùng dưới nước của 2-2/7-2
-- **Sprite pointer: $A171** → sprite của 2-2/7-2
+- **Tile pointer : $AE45** → vùng dưới nước của 2-2/7-2
+- **Sprite pointer : $A171** → sprite của 2-2/7-2
 
-Kết quả: một level nước giống 2-2, nhưng lặp vô hạn vì cột cờ không tồn tại. Không có kết thúc level, không có lối ra.
+Kết quả : màn nước trông như 2-2, nhưng lặp vô hạn vì cột cờ không tồn tại. Màn quay vòng mãi mãi.
 
-Đó là level 36-1 (hay 36-1 trong thế giới $-1).
+Đó là màn 36-1 (hay 36-1 trong thế giới $-1).
 
-![Warm start check của SMB1 -- chính nó cho phép Minus World tồn tại](/images/smb1-glitch-levels/v4-minus-world.jpg)
+![Kiểm tra warm start của SMB1 -- chính nó cho phép Minus World tồn tại](/images/smb1-glitch-levels/v4-minus-world.jpg)
 
 ```asm
-; Pourquoi le flagpole manque dans le Minus World :
-; Les sprites de 2-2/7-2 ($A171) n'ont pas de flagpole
-; dans leur séquence. Le jeu cherche le sprite $FD (flagpole)
-; mais ne le trouve jamais → boucle infinie
+; Vì sao cột cờ thiếu trong Minus World :
+; Sprite của 2-2/7-2 ($A171) không có cột cờ
+; trong chuỗi. Game tìm sprite $FD (cột cờ)
+; nhưng không bao giờ thấy → vòng lặp vô hạn
 ;
-; Le jeu continue de générer le niveau à l'infini
-; jusqu'à ce que le timer atteigne zéro.
+; Game tiếp tục sinh màn vô hạn
+; tới khi timer về không.
 ```
 
-### Các con trỏ trỏ đến RAM
+### Các con trỏ trỏ vào RAM
 
-Khi tile pointer hoặc sprite pointer trỏ đến địa chỉ RAM ($00-$7F) thay vì ROM, game cố giải thích các thay đổi liên tục của RAM như tile:
+Khi tile pointer hay sprite pointer trỏ vào địa chỉ RAM ($00-$7F) thay vì ROM, game cố diễn giải các thay đổi liên tục của RAM thành tile :
 
 ```asm
-; Exemple : Level ID $03 en Water
-; Tile Pointer : $A46B (3-3 - valide)
-; Sprite Pointer : $009D (pointe vers la RAM page zéro !)
+; Ví dụ : Level ID $03 ở Water
+; Tile Pointer : $A46B (3-3 - hợp lệ)
+; Sprite Pointer : $009D (trỏ vào RAM trang 0 !)
 ;
-; La RAM page zéro contient les registres du jeu,
-; la position de Mario, l'état des compteurs...
-; Le jeu décompresse ça comme une séquence de sprites,
-; et le résultat c'est un niveau avec des ennemis
-; qui sont en fait des valeurs de registres.
+; RAM trang 0 chứa thanh ghi của game,
+; vị trí của Mario, trạng thái bộ đếm...
+; Game giải nén nó thành chuỗi sprite,
+; và kết quả là màn với kẻ thù
+; thực chất là giá trị thanh ghi.
 ```
 
-Khi trang zero thay đổi (vì Mario di chuyển, timer chạy, v.v.), "sprite" của level cũng thay đổi. Đó là lý do một số glitch world có kẻ thù nhấp nháy và biến đổi liên tục.
+Khi trang 0 đổi (vì Mario động, timer chạy, v.v.), "sprite" của màn cũng đổi. Đó là lý do vài glitch world có kẻ thù nhấp nháy và biến hình liên tục.
 
-![Level ID $03 Water -- sprite pointer $009D trỏ đến RAM, level không thể chơi](/images/smb1-glitch-levels/level-03-water.png)
+![Level ID $03 Water -- sprite pointer $009D trỏ vào RAM, màn không chơi được](/images/smb1-glitch-levels/level-03-water.png)
 
-### Level ID $36: Level trống (Overworld)
+### Level ID $36 : màn trống (Overworld)
 
-Level ID $36 ở Overworld:
+Level ID $36 ở Overworld :
 
-- **Tile pointer: $AC35** (1-2)
-- **Sprite pointer: $A0D8** (1-2)
+- **Tile pointer : $AC35** (1-2)
+- **Sprite pointer : $A0D8** (1-2)
 
-Kết quả: không gì cả. Game tải level nhưng nó được đánh dấu "không có level" trong danh mục của RGMechEx. Tile có thể hợp lệ nhưng sprite trỏ đến nơi tạo ra level trống hoặc không hoạt động.
+Kết quả : không gì. Game tải màn nhưng nó bị đánh dấu "không màn" trong danh mục của RGMechEx. Các tile có thể hợp lệ nhưng sprite trỏ tới nơi cho ra màn trống hay không chạy được.
 
-### Level ID $1D (Castle): Vua crash
+### Level ID $1D (Castle) : quán quân crash
 
-Level ID $1D ở Castle:
+Level ID $1D ở Castle :
 
-- **Tile pointer: $A210** (4-4)
-- **Sprite pointer: $7EA0** (RAM!)
+- **Tile pointer : $A210** (4-4)
+- **Sprite pointer : $7EA0** (RAM !)
 
-Sprite pointer ở RAM = sprite chưa xác định. Game cố hiển thị Spiny ball hoặc Bullet Bill blaster ở hàng tile đầu tiên. Nó crash ngay lập tức.
+Sprite pointer trong RAM = sprite không xác định. Game cố hiện Spiny ball hay Bullet Bill blaster trong dòng tile đầu. Crash ngay.
 
 ```asm
-; Quand le sprite pointer pointe vers la RAM,
-; le jeu décompresse des bytes qui changent tout le temps
-; comme des instructions "spawn". Le résultat :
-; - Apparition d'objets inexistants (valeur undefined)
-; - Crash PPU quand le sprite NES essaie d'afficher un tile invalide
-; - Freeze complet de la console
+; Khi sprite pointer trỏ vào RAM,
+; game giải nén các byte đổi liên tục
+; thành lệnh "spawn". Kết quả :
+; - Xuất hiện vật thể không tồn tại (giá trị không xác định)
+; - Crash PPU khi sprite NES cố hiện tile không hợp lệ
+; - Treo toàn bộ console
 ```
 
-## 256 glitch world được phân loại
+## 256 glitch world lập danh mục
 
-RGMechEx đã viết script tạo bản đồ của **tất cả level**, cho 4 loại khu vực, mỗi loại 128 ID.
+RGMechEx đã viết script sinh map của **mọi màn**, cho cả 4 kiểu vùng, và 128 ID mỗi cái.
 
-Bộ đếm thế giới 8 bit (0-255). Thế giới 1-8 hợp pháp. Còn lại **248 glitch world** tiềm năng. Mỗi glitch world tương ứng với level đầu tiên của thế giới đó, và Level ID của nó được tính bởi cơ chế overflow của WorldIndexTable.
+Bộ đếm thế giới trên 8 bit (0-255). Các thế giới 1-8 hợp lệ. Còn lại **248 glitch world** tiềm năng. Mỗi glitch world khớp màn đầu của thế giới đó, và Level ID của nó tính bằng cơ chế tràn của WorldIndexTable.
 
-![Bảng glitch world -- 248 thế giới bị hỏng, 68 level đầu tiên có thể truy cập](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
+![Bảng glitch world -- 248 thế giới hỏng, 68 màn đầu truy cập được](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
 
-Trong 128 ID có thể, chỉ **68 là "level đầu tiên" của một thế giới** (có thể truy cập qua số glitch world). 60 ID còn lại là level 2+ hoặc không thể truy cập.
+Trên 128 ID khả dĩ, chỉ **68 là "màn đầu"** của một thế giới (truy cập được qua số glitch world). 60 còn lại là màn 2+ hay không truy cập được.
 
-| Loại | ID hợp lệ có thể chơi | ID gây crash | ID trống |
-|------|---------------------|-------------------|-----------|
+| Kiểu | ID duy nhất chơi được | ID gây crash | ID trống |
+|------|---------------------|---------------|-----------|
 | Water (0)    | ~20  | ~60  | ~48  |
 | Overworld (1)| ~30  | ~55  | ~43  |
 | Underground (2) | ~15 | ~65 | ~48  |
 | Castle (3)   | ~25  | ~58  | ~45  |
 
-Nhiều ID dẫn đến cùng level vì con trỏ rơi vào cùng địa chỉ ROM. Ví dụ Level ID $28 (Overworld) -- tile pointer $A7CD (2-1) -- xuất hiện trong **38 glitch world khác nhau**, vì sprite pointer $9F51 trỏ đến vùng ROM được dùng làm padding/dữ liệu âm thanh tái sử dụng bởi nhiều ID.
+Nhiều ID dẫn tới cùng màn vì các con trỏ rơi lên cùng địa chỉ ROM. Level ID $28 (Overworld) ví dụ -- tile pointer $A7CD (2-1) -- xuất hiện trong **38 glitch world khác nhau**, vì sprite pointer $9F51 của nó trỏ vào vùng ROM dùng làm đệm/dữ liệu âm thanh tái dùng bởi nhiều ID.
 
-![Bản đồ level ID $28 (Overworld) -- tile 2-1 với sprite bình thường, 38 glitch world](/images/smb1-glitch-levels/level-28-overworld.png)
+![Bản đồ màn ID $28 (Overworld) -- tile 2-1 với sprite thường, 38 glitch world](/images/smb1-glitch-levels/level-28-overworld.png)
 
-![Super Mario Bros. Glitch Levels Explained -- video thứ 3](/images/smb1-glitch-levels/yt-levels.jpg)
+![Super Mario Bros. Glitch Levels giải thích -- video thứ 3](/images/smb1-glitch-levels/yt-levels.jpg)
 
 ### 6 glitch level thực sự độc đáo
 
-Trong 19 ID glitch level có thể truy cập, chỉ **6 không crash ngay khi tải**:
+Trong 19 ID glitch level truy cập được, chỉ **6 không crash ngay** lúc tải :
 
-| Thế giới | Level ID | Mô tả |
+| World | Level ID | Mô tả |
 |-------|----------|-------------|
-| E-1 (224) | $50 | Chỉ một ? block phía trên vực thẳm. Mario chết ngay lập tức. |
-| W | $57 | Mario spawn bị chặn, không thể di chuyển. |
-| 42 (133) | $50 | Đường hầm mây giam Mario nếu đi quá xa. |
-| 62 (131, 240) | $4D | Lâu đài đóng băng: Mario spawn ở trên, không thể rơi → bị chặn. |
+| E-1 (224) | $50 | Một khối ? duy nhất trên vực. Mario chết ngay. |
+| W | $57 | Mario spawn kẹt, không động được. |
+| 42 (133) | $50 | Đường hầm mây bẫy Mario nếu nó đi đủ xa. |
+| 62 (131, 240) | $4D | Lâu đài đông cứng : Mario spawn trên cao, không rơi được → kẹt. |
 | 127 | $4B | Đường hầm ngầm, nhưng crash nếu đi quá xa. |
-| 137 | $4B | Kích hoạt cuộn tự động của cutscene. Mario gặp một brick block duy nhất chặn mãi mãi. |
+| 137 | $4B | Kích hoạt tự cuộn của cắt cảnh. Mario gặp đúng một khối gạch chặn nó mãi mãi. |
 
 ![Level ID $50 (đường hầm mây) -- glitch world 42-1 và E-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
-![Level ID $4D (lâu đài) -- world 62-1, Mario bị chặn khi spawn](/images/smb1-glitch-levels/lvl-4D-castle.png)
+![Level ID $4D (lâu đài) -- world 62-1, Mario kẹt lúc spawn](/images/smb1-glitch-levels/lvl-4D-castle.png)
 ![Level ID $4B (đường hầm) -- world 127-1, crash nếu đi quá xa](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
 
-Sáu glitch world trong 248 tạo ra điều gì đó thực sự mới. Phần còn lại là level bình thường với sai loại khu vực, hoặc màn hình đen.
+Sáu glitch world trên 248 cho ra thứ thực sự mới. Phần còn lại là màn thường với sai kiểu vùng, hay màn hình đen.
 
-## Định dạng level chi tiết
+## Định dạng màn chi tiết
 
-Đi vào định dạng dữ liệu level chính xác, để hiểu tại sao glitch level đứng vững (hay không).
+Tới định dạng chính xác của dữ liệu màn, để hiểu vì sao glitch level đứng được (hay không).
 
-### Header level: 2 byte, 6 thuộc tính
+### Header màn : 2 byte, 6 thuộc tính
 
-Mỗi level bắt đầu bằng header 2 byte kiểm soát 6 thuộc tính:
+Mỗi màn bắt đầu bằng header 2 byte điều khiển 6 thuộc tính :
 
 ```asm
 ; Byte 0 : timer + Y start + modifier
-;   Bits 7-6 : timer (00=inchangé, 01=200, 10=300, 11=400)
-;   Bits 5-3 : Y start Mario (111/110 = autowalk)
-;   Bits 2-0 : level type modifier
-;              000=default, 001=waves, 010=brick wall,
-;              011=water bottom, 100=night, 101=snow,
-;              110=snow night, 111=gray night
+;   Bit 7-6 : timer (00=không đổi, 01=200, 10=300, 11=400)
+;   Bit 5-3 : Y start Mario (111/110 = tự đi)
+;   Bit 2-0 : bộ sửa kiểu màn
+;              000=mặc định, 001=sóng, 010=tường gạch,
+;              011=đáy nước, 100=đêm, 101=tuyết,
+;              110=đêm tuyết, 111=đêm xám
 
 ; Byte 1 : platform + background + floor pattern
-;   Bits 7-6 : special platform (00=tree, 01=mushroom,
-;                                 10=Bullet Bill, 11=cloud)
-;   Bits 5-4 : background (00=none, 01=clouds,
-;                           10=montains, 11=fences)
-;   Bits 3-0 : floor pattern initial (0-15)
+;   Bit 7-6 : platform đặc biệt (00=cây, 01=nấm,
+;                                 10=Bullet Bill, 11=mây)
+;   Bit 5-4 : background (00=không, 01=mây,
+;                           10=núi, 11=hàng rào)
+;   Bit 3-0 : floor pattern ban đầu (0-15)
 ```
 
-Thuộc tính modifier kiểm soát các biến thể hình ảnh: sóng trên cùng level nước, nền gạch của 8-3, bảng màu đêm của 4-3, tuyết của 6-2, v.v.
+Bộ sửa kiểu điều khiển biến thể hình ảnh : sóng trên đỉnh màn nước, nền gạch của 8-3, palette đêm của 4-3, tuyết của 6-2, v.v.
 
-### Vật thể tile: 2 byte, cờ Next Screen, hàng đợi 3 vị trí
+### Vật thể tile : 2 byte, Next Screen Flag, hàng đợi 3 slot
 
-Sau header đến danh sách **vật thể tile**, mỗi vật thể 2 byte. Byte $FD đánh dấu kết thúc danh sách.
+Sau header là danh sách **vật thể tile**, mỗi vật thể 2 byte. Byte $FD đánh dấu kết danh sách.
 
 ```asm
-; Format objet tile (16 bits) :
+; Định dạng vật thể tile (16 bit) :
 ; Byte 0 :
-;   Bits 7-4 : X position (colonne 0-15)
-;   Bits 3-0 : Y position
-;     Y=0-11  : position Y normale
-;     Y=12    : objets spéciaux (trous, ponts, rope, ? blocks)
-;     Y=13    : screen skip / objets spéciaux 2
-;     Y=14    : changement de modifier/scenery/floor
-;     Y=15    : objets spéciaux 3 (château, escaliers, gros tuyau)
+;   Bit 7-4 : vị trí X (cột 0-15)
+;   Bit 3-0 : vị trí Y
+;     Y=0-11  : vị trí Y thường
+;     Y=12    : vật thể đặc biệt (hố, cầu, dây, khối ?)
+;     Y=13    : bỏ qua màn hình / vật thể đặc biệt 2
+;     Y=14    : đổi modifier/scenery/floor
+;     Y=15    : vật thể đặc biệt 3 (lâu đài, cầu thang, ống lớn)
 
 ; Byte 1 :
 ;   Bit  7   : NEXT SCREEN FLAG
-;   Bits 6-4 : type d'objet (0-7)
-;   Bits 3-0 : largeur/hauteur / sous-type
+;   Bit 6-4 : kiểu vật thể (0-7)
+;   Bit 3-0 : chiều rộng/chiều cao / kiểu con
 ```
 
-Khi bit "next screen" được đặt, cột làm việc hiện tại tăng 1. Điều này cho phép đặt vật thể vượt quá 16 cột đầu tiên. Các vật thể phải được liệt kê **theo thứ tự** (trái sang phải) vì game tải chúng tuần tự:
+Khi bit "next screen" đặt, cột làm việc hiện tại tăng 1. Việc này cho phép đặt vật thể vượt 16 cột đầu. Các vật thể phải liệt kê **theo thứ tự** (trái sang phải) vì game tải chúng tuần tự :
 
 ```asm
-; La routine de chargement a DEUX phases par colonne :
-; Phase 1 : chercher les nouveaux objets qui commencent sur cette colonne
-;            et les ajouter à la file d'attente (queue)
-; Phase 2 : traiter chaque objet dans la queue en dessinant les tiles,
-;            et retirer ceux qui finissent sur cette colonne
+; Quy trình tải có HAI pha cho mỗi cột :
+; Pha 1 : tìm vật thể mới bắt đầu trên cột này
+;            và thêm chúng vào hàng đợi (queue)
+; Pha 2 : xử lý mỗi vật thể trong hàng đợi bằng cách vẽ tile,
+;            và gỡ thứ kết thúc trên cột này
 ```
 
-Hàng đợi có đúng **3 vị trí**. Hậu quả trực tiếp: không thể có hơn 3 vật thể bắt đầu trên cùng cột. Nếu hàng đợi đầy, vật thể thứ 4 bị bỏ qua và không bao giờ được tải.
+Hàng đợi đúng **3 slot**. Hệ quả trực tiếp : không thể có hơn 3 vật thể bắt đầu trên cùng cột. Nếu hàng đợi đầy, vật thể thứ 4 bị lờ và không bao giờ tải.
 
-Đó là lý do level được thiết kế tốt tránh xếp quá nhiều vật thể. Ví dụ trong 1-2: cột có block 1up trên trần + gạch bên cạnh được chia thành hai vật thể riêng biệt để tuân thủ giới hạn 3.
+Đó là lý do các màn thiết kế tốt tránh chồng quá nhiều vật thể. Ví dụ trong 1-2 : cột có khối 1up trong trần + gạch bên cạnh được tách thành hai vật thể riêng để tôn trọng giới hạn 3.
 
-### Vị trí Y đặc biệt: 12, 13, 14, 15
+### Vị trí Y đặc biệt : 12, 13, 14, 15
 
-Khi Y=12, vật thể không có vị trí Y (nó được hardcode theo loại):
+Khi Y=12, vật thể không có vị trí Y (nó ghi cứng theo kiểu) :
 
 ```asm
-; Y=12 : objets sans Y position
-;   Type 0 : trou (supprime le sol)
-;   Type 1 : rope de plateforme mobile
-;   Types 2-4 : ponts à Y fixe
-;   Type 5 : trou avec eau/lave
-;   Types 6-7 : rangées de ? blocks
+; Y=12 : vật thể không vị trí Y
+;   Kiểu 0 : hố (xóa mặt đất)
+;   Kiểu 1 : dây của platform di động
+;   Kiểu 2-4 : cầu ở Y cố định
+;   Kiểu 5 : hố với nước/dung nham
+;   Kiểu 6-7 : hàng khối ?
 ```
 
-Khi Y=13, hai nhóm con. Nếu bit 6 của byte 1 bằng 1:
+Khi Y=13, hai nhóm con. Nếu bit 6 của byte 1 ở 1 :
 
 ```asm
-; Y=13, bit6=1 : objets spéciaux
-;   0 = L-pipe (cutscene), 1 = flagpole, 2-3 = pont/axe/hamer (fin château)
-;   4 = stop screen, 5 = random enemies, 6 = loop level, 7+ = crash possible
+; Y=13, bit6=1 : vật thể đặc biệt
+;   0 = ống L (cắt cảnh), 1 = cột cờ, 2-3 = cầu/rìu/búa (kết lâu đài)
+;   4 = dừng màn hình, 5 = kẻ thù ngẫu nhiên, 6 = vòng lặp màn, 7+ = có thể crash
 ```
 
-Nếu bit6=0, 5 bit thấp mã hóa một **screen skip** (nhảy trực tiếp đến màn hình N, không qua cờ next screen từng cái một).
+Nếu bit6=0, 5 bit thấp mã hóa **bỏ qua màn hình** (nhảy thẳng tới màn N, không cần next screen flag từng cái một).
 
-Khi Y=14: nguyên lý tương tự với bit6=1 để thay đổi thuộc tính modifier, bit6=0 để thay đổi nền + floor pattern.
+Khi Y=14 : cùng nguyên tắc với bit6=1 để đổi bộ sửa kiểu, bit6=0 để đổi nền + floor pattern.
 
-### Floor pattern: 16 mẫu sàn
+### Floor pattern : 16 mẫu nền
 
-Sàn level không được tạo từ vật thể riêng lẻ. SMB1 sử dụng **floor pattern**, mẫu nền áp dụng cho tất cả cột cho đến khi thay đổi tiếp theo:
+Mặt đất của màn không làm bằng vật thể riêng lẻ. SMB1 dùng **floor pattern**, mẫu nền áp cho mọi cột tới lần đổi tiếp :
 
 ```asm
-; Floor patterns (4 bits = 16 possibilités)
-;   0 = vide total
-;   1 = sol 2 tiles haut
-;   2 = sol 1 tile haut
-;   3 = sol + bottom
-;   4 = sol + bottom 2
-;   5 = sol 1/2 tile
-;   6 = 3/4 sol
-;   ... jusqu'à 15 = rempli total (sol + plafond)
+; Floor pattern (4 bit = 16 khả năng)
+;   0 = trống hoàn toàn
+;   1 = mặt đất dày 2 tile
+;   2 = mặt đất dày 1 tile
+;   3 = mặt đất + đáy
+;   4 = mặt đất + đáy 2
+;   5 = mặt đất 1/2 tile
+;   6 = 3/4 mặt đất
+;   ... tới 15 = lấp đầy (mặt đất + trần)
 ```
 
-Đó là lý do lỗ là vật thể: chúng ghi đè floor pattern ở cột cụ thể, không cần thay đổi pattern cho phần còn lại.
+Đó là lý do hố là vật thể : chúng ghi đè floor pattern trên cột cụ thể, mà không phải đổi pattern cho phần còn lại.
 
-### Giới hạn 256 byte và repeat
+### Giới hạn 256 byte và lặp lại
 
-Tất cả dữ liệu tile của level chứa trong **tối đa 256 byte**. Register Y của 6502 được dùng làm index, và nó 8 bit. Nếu game đến cuối dữ liệu mà không tìm thấy byte $FD, **nó lặp lại từ đầu** và lặp 256 byte vô hạn:
+Mọi dữ liệu tile của một màn vừa trong tối đa **256 byte**. Thanh ghi Y của 6502 dùng làm index, và nó 8 bit. Nếu game tới cuối dữ liệu mà không gặp byte $FD, **nó quay lại đầu** và lặp 256 byte vô hạn :
 
 ```asm
-; Index Y = 8 bits → max 256 bytes de données tiles
-; Si Y overflow (255 → 0) sans rencontrer $FD → repeat
-; Même chose pour les sprites, mais les objets pipe (3 bytes)
-; décalent la parité de l'index à chaque chargement.
+; Index Y = 8 bit → tối đa 256 byte dữ liệu tile
+; Nếu Y tràn (255 → 0) mà không gặp $FD → lặp lại
+; Tương tự với sprite, nhưng vật thể ống (3 byte)
+; lệch tính chẵn lẻ của index mỗi lần tải.
 ```
 
-Một số level exploit exploit repeat này để tạo level kéo dài "vô thời hạn".
+Vài glitch level khai thác lặp này để sinh màn kéo dài "vô hạn".
 
-### Hệ thống sprite: 2 byte + chuyển tiếp pipe
+### Hệ sprite : 2 byte + chuyển ống
 
-Sprite theo định dạng tương tự, nhưng không có header và có vài khác biệt chính. Byte $FF đánh dấu kết thúc danh sách.
+Sprite theo định dạng tương tự, nhưng không header và vài khác biệt chính. Byte $FF kết danh sách.
 
 ```asm
-; Format sprite (2 bytes) :
-; Byte 0 : position X (colonne)
+; Định dạng sprite (2 byte) :
+; Byte 0 : vị trí X (cột)
 ; Byte 1 :
 ;   Bit 7 : NEXT SCREEN FLAG
-;   Bits 6-0 : type de sprite
-;       Certains types incluent : goomba, koopa, Blooper,
-;       Bullet Bill, Lakitu, Spiny, plateformes,
-;       commande warp zone, toad/princesse,
-;       commandes de spawn de groupes d'ennemis
+;   Bit 6-0 : kiểu sprite
+;       Vài kiểu gồm : goomba, koopa, Blooper,
+;       Bullet Bill, Lakitu, Spiny, platform,
+;       lệnh warp zone, toad/công chúa,
+;       lệnh spawn nhóm kẻ thù
 ```
 
-Bit thấp của byte 1 là **hard level flag**: nếu đặt bằng 1, sprite chỉ xuất hiện ở level ≥ 5-3. Các level "hard mode" được tạo theo cách này.
+Bit thấp của byte 1 là cờ **hard level** : nếu ở 1, sprite chỉ xuất hiện trong màn ≥ 5-3. Đó là cách tạo màn "hard mode".
 
-Vị trí Y 15 = **screen skip** (giống tile). Vị trí Y 14 = **chuyển tiếp pipe** (3 byte):
+Vị trí Y 15 = **bỏ qua màn hình** (giống tile). Vị trí Y 14 = **chuyển ống** (3 byte) :
 
 ```asm
-; Sprite Y=14 : pipe/vine transition (3 bytes !)
-;   Byte 0 : position X
-;   Byte 1 : bits 6-0 = Level ID 7-bit (destination)
-;   Byte 2 : bits 4-0 = screen de destination
-;            bits 7-5 = world où cette transition est valide
+; Sprite Y=14 : chuyển ống/dây (3 byte !)
+;   Byte 0 : vị trí X
+;   Byte 1 : bit 6-0 = Level ID 7-bit (đích)
+;   Byte 2 : bit 4-0 = màn đích
+;            bit 7-5 = world nơi chuyển này hợp lệ
 ;
-; Pourquoi un world ? Les bonus rooms sont réutilisées entre mondes.
-; Exemple : la salle bonus de 1-1 est aussi utilisée par 2-1 et 7-1.
-; Cette salle a 3 transitions, une par monde, pour que Mario
-; réapparaisse au bon endroit.
+; Vì sao world? Phòng thưởng tái dùng giữa các thế giới.
+; Ví dụ : phòng thưởng của 1-1 cũng dùng cho 2-1 và 7-1.
+; Phòng này có 3 chuyển, một cho mỗi thế giới, để Mario
+; xuất hiện lại đúng chỗ.
 ```
 
-Sprite **không có hệ thống hàng đợi**. Giới hạn duy nhất là không thể có hơn 4 sprite tải đồng thời ở vùng spawn (ngay ngoài màn hình bên phải). Nhiều hơn, sprite bị bỏ qua.
+Sprite **không có hệ queue**. Giới hạn duy nhất là không thể có hơn 4 sprite tải đồng thời trong vùng spawn (ngay ngoài màn hình bên phải). Vượt quá, sprite bị lờ.
 
 ## Cách truy cập glitch world
 
 Có hai phương pháp chính.
 
-### Phương pháp truyền thống: wall clip
+### Phương pháp cổ điển : wall clip
 
-Wall clip (đi xuyên tường) cho phép thoát level bình thường và đi đến warp zone ẩn. Bằng cách thao túng bộ đếm thế giới qua RAM, bạn có thể tải bất kỳ Level ID nào.
+Wall clip (đi xuyên tường) cho phép ra khỏi màn thường và đi bộ tới warzone ẩn. Bằng cách thao túng bộ đếm thế giới qua RAM, ta có thể tải bất kỳ Level ID nào.
 
-Kỹ thuật:
-1. World 1-2: đi vào ống ẩn cuối level
-2. Thực hiện wall clip ở tường bên phải
-3. Đi trong khoảng trống đến vùng warp
-4. Game giải thích giá trị như thế giới
+Kỹ thuật :
+1. World 1-2 : đi vào ống kết ẩn
+2. Làm wall clip trên tường phải
+3. Đi trong khoảng không tới vùng warp
+4. Game diễn giải các giá trị thành thế giới
 
-Nhưng phương pháp này chỉ truy cập được một phần nhỏ glitch world.
+Nhưng phương pháp này chỉ cho một phần nhỏ glitch world.
 
-### Phương pháp cực đoan: NES Tennis cart swap
+### Phương pháp cực đoan : cart swap NES Tennis
 
-Xem phần "Warm start" ở trên để biết chi tiết. Tóm lại: bộ đếm bước chân Tennis ghi vào cùng byte RAM với thế giới bắt đầu của SMB1, và việc phát hiện warm start bảo toàn giá trị đó.
+Xem mục "Warm start" ở trên để biết chi tiết đầy đủ. Tóm lại : bộ đếm bước chân của Tennis ghi lên cùng byte RAM với thế giới khởi đầu của SMB1, và phát hiện warm start giữ giá trị này.
 
-### Góc cho người hack: code để khám phá tất cả
+### Góc vọc thủ : mã để khám phá hết
 
-Nếu bạn muốn tự khám phá tất cả glitch trong giả lập, bạn có thể patch Level ID trực tiếp:
+Nếu bạn muốn khám phá mọi glitch tự mình trong trình giả lập, bạn có thể vá Level ID trực tiếp :
 
 ```asm
-; Patch pour FCEUX / Mesen :
-; Adresse RAM $075F = Level ID actuel
-; Adresse RAM $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
+; Vá cho FCEUX / Mesen :
+; Địa chỉ RAM $075F = Level ID hiện tại
+; Địa chỉ RAM $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
 
-; Exemple : charger le Level 57 (0x39) en Overworld
-; Dans l'émulateur, ouvrir le traceur mémoire et écrire :
+; Ví dụ : tải Level 57 (0x39) ở Overworld
+; Trong trình giả lập, mở trình theo dõi bộ nhớ và ghi :
 ; $075F = 0x39
 ; $0760 = 0x01
-; Puis entrer dans un tuyau de warp ou mourir et recommencer
-; → Le jeu charge le niveau ID $39 en Overworld
+; Rồi vào ống warp hay chết và bắt đầu lại
+; → Game tải màn ID $39 ở Overworld
 ```
 
-RGMechEx đã phát hành danh sách đầy đủ 128 level × 4 loại với bản đồ tự động tạo trên [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). Mỗi mục hiển thị tile pointer, sprite pointer, và bản đồ hình ảnh của level.
+RGMechEx đã xuất bản danh sách đầy đủ 128 màn × 4 kiểu với map sinh tự động trên [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). Mỗi mục hiện tile pointer, sprite pointer, và bản đồ trực quan của màn.
 
-## Các level khó hiểu nhất
+## Các màn dị nhất
 
-### Level ID $1F (Water): 15 glitch world trong một
+### Level ID $1F (Water) : 15 glitch world trong một
 
-Tile pointer $A302 (3-4) kết hợp với sprite pointer $02A0 tạo ra 15 glitch world khác nhau (D-1, J-1, Y-1, Z-1, 55-1, 73-1...). Giải thích: sprite pointer trỏ đến vùng ROM chứa dữ liệu gần đủ với sprite hợp lệ để tạo kết quả chơi được, nhưng sự kết hợp tile lâu đài 3-4 với sprite overworld tạo ra kết xuất vô lý.
+Tile pointer $A302 (3-4) kết hợp sprite pointer $02A0 cho ra 15 glitch world khác nhau (D-1, J-1, Y-1, Z-1, 55-1, 73-1...). Giải thích : sprite pointer trỏ vào vùng ROM chứa dữ liệu đủ gần sprite hợp lệ để cho kết quả chơi được, nhưng kết hợp tile lâu đài 3-4 với sprite overworld tạo render phi lý.
 
-### Level ID $28 (Overworld): 38 glitch world = kỷ lục
+### Level ID $28 (Overworld) : 38 glitch world = kỷ lục
 
-Kỷ lục tuyệt đối. 38 mục glitch world trỏ đến cùng level (tile 2-1 + sprite $9F51). Tại sao? Bởi vì sprite pointer $9F51 rơi vào vùng ROM được dùng làm padding/dữ liệu âm thanh tái sử dụng bởi nhiều ID.
+Kỷ lục tuyệt đối. 38 mục glitch world trỏ về cùng màn (tile 2-1 + sprite $9F51). Vì sao? Vì sprite pointer $9F51 rơi vào vùng ROM dùng làm đệm/dữ liệu âm thanh tái dùng bởi nhiều ID.
 
-### Level ID $49 (Underground): Level FDS
+### Level ID $49 (Underground) : màn FDS
 
-Tile pointer $76AE + sprite pointer $1C9D. Tile pointer trỏ đến vùng ROM dành riêng cho phiên bản Famicom Disk System. Kết quả: level với tile không tồn tại trong cartridge chuẩn. Đây là level tạo ra level 52-1 và 196-1.
+Tile pointer $76AE + sprite pointer $1C9D. Tile pointer trỏ vào vùng ROM dành cho bản Famicom Disk System. Kết quả : màn với tile không tồn tại trong băng chuẩn. Đó là màn tạo ra màn 52-1 và 196-1.
 
-### Level ID $00-$02: Level bonus thật sự
+### Level ID $00-$02 : các màn thưởng thật
 
-Các ID này được dùng bởi các level con hợp pháp của game:
+Các ID này được các màn con hợp lệ của game dùng :
 
-- **$00**: vùng dưới nước 5-2/6-2 (dùng bởi H-1, 39-1)
-- **$01**: nước 2-2/7-2 (Minus World, 36-1)
-- **$02**: level con 8-4 (136-1, 151-1, 215-1)
+- **$00** : vùng dưới nước của 5-2/6-2 (dùng bởi H-1, 39-1)
+- **$01** : nước của 2-2/7-2 (Minus World, 36-1)
+- **$02** : màn con của 8-4 (136-1, 151-1, 215-1)
 
-Sự khác biệt giữa level "bonus" có thể truy cập bình thường và glitch world là warp zone kiểm tra thế giới hiện tại:
+Khác biệt giữa màn "thưởng" truy cập bình thường và glitch world là warp zone kiểm tra thế giới hiện tại :
 
 ```asm
-; Vérification warp zone (simplifié)
-; Le jeu vérifie que le monde cible est entre 1 et 8
+; Kiểm tra warp zone (rút gọn)
+; Game kiểm tra thế giới đích từ 1 tới 8
 CheckWarp:
   lda TARGET_WORLD
   cmp #1
-  bcc InvalidWarp       ; < 1 → refusé
+  bcc InvalidWarp       ; < 1 → từ chối
   cmp #9
-  bcs InvalidWarp       ; > 8 → refusé
-  ; world valide entre 1 et 8 uniquement
+  bcs InvalidWarp       ; > 8 → từ chối
+  ; world hợp lệ chỉ từ 1 tới 8
   jmp DoWarp
 ```
 
-Các glitch world có số > 8 hoặc 0 không thể được tiếp cận qua ống nước bình thường. Cần wall clip hoặc cart swap.
+Các glitch world với số > 8 hay 0 không thể tới bằng ống thường. Phải wall clip hay cart swap.
 
-## Tại sao một số level crash: Jump table
+## Vì sao vài màn crash : jump table
 
-Khi game tải vật thể tile, nó dùng loại làm index trong một **jump table**:
+Khi game tải vật thể tile, nó dùng kiểu của nó làm index trong **jump table** :
 
 ```asm
-; Jump table des objets tiles standards (types 0-11)
+; Jump table của vật thể tile chuẩn (kiểu 0-11)
 JumpTable_TileObjects:
-  .word Obj_Special       ; type 0 : bloc ?, hidden, flagpole...
-  .word Obj_Platform      ; type 1 : plateforme spéciale
-  .word Obj_BrickRow      ; type 2 : rangée de briques
-  .word Obj_BlockRow      ; type 3 : rangée de blocks
-  .word Obj_CoinRow       ; type 4 : rangée de pièces
-  .word Obj_BrickCol      ; type 5 : colonne de briques
-  .word Obj_BlockCol      ; type 6 : colonne de blocks
-  .word Obj_Pipe          ; type 7 : tuyau
-  .word Obj_8             ; type 8
-  .word Obj_9             ; type 9
-  .word Obj_10            ; type 10
-  .word Obj_11            ; type 11
+  .word Obj_Special       ; kiểu 0 : khối ?, ẩn, cột cờ...
+  .word Obj_Platform      ; kiểu 1 : platform đặc biệt
+  .word Obj_BrickRow      ; kiểu 2 : hàng gạch
+  .word Obj_BlockRow      ; kiểu 3 : hàng block
+  .word Obj_CoinRow       ; kiểu 4 : hàng xu
+  .word Obj_BrickCol      ; kiểu 5 : cột gạch
+  .word Obj_BlockCol      ; kiểu 6 : cột block
+  .word Obj_Pipe          ; kiểu 7 : ống
+  .word Obj_8             ; kiểu 8
+  .word Obj_9             ; kiểu 9
+  .word Obj_10            ; kiểu 10
+  .word Obj_11            ; kiểu 11
 ```
 
-![Jump table: tại sao loại vật thể không hợp lệ khiến game crash](/images/smb1-glitch-levels/v4-jump-table.jpg)
+![Jump table : vì sao kiểu vật thể không hợp lệ làm game crash](/images/smb1-glitch-levels/v4-jump-table.jpg)
 
-Nếu vật thể có loại không hợp lệ (≥12), game nhảy đến con trỏ không tồn tại trong bảng này. **4 kết quả có thể**:
+Nếu vật thể có kiểu không hợp lệ (≥12), game nhảy tới con trỏ không tồn tại trong bảng này. **4 kết quả khả dĩ** :
 
 1. **Con trỏ hợp lệ** → vật thể tải bình thường
-2. **Con trỏ đến jump table khác** (chồng lấn) → vật thể khác xuất hiện. Ví dụ: loại 12 trỏ đến bảng Y=13, tạo ra L-pipe.
-3. **Con trỏ đến mã thực thi** → thực thi code ngẫu nhiên (crash có thể)
-4. **Placeholder rõ ràng (NOP)** → vật thể không làm gì (một số sprite như vậy, tạo ra kẻ thù bay tại chỗ không di chuyển)
+2. **Con trỏ tới jump table khác** (chồng lấn) → vật thể khác xuất hiện. Ví dụ : kiểu 12 trỏ tới bảng Y=13, cho ra ống L.
+3. **Con trỏ tới mã thực thi** → thực thi mã ngẫu nhiên (có thể crash)
+4. **Chỗ giữ rõ (NOP)** → vật thể không làm gì (vài sprite như vậy, tạo kẻ thù bay tại chỗ không động)
 
-![Glitch level ID $58: sprite pointer trỏ đến địa chỉ không hợp lệ, game crash](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
+![Glitch level ID $58 : sprite pointer trỏ tới địa chỉ không hợp lệ, game crash](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
 
-![Glitch level ID $50: đường hầm mây, level được tạo bởi dữ liệu bị hỏng](/images/smb1-glitch-levels/v4-glitch-50.jpg)
+![Glitch level ID $50 : đường hầm mây, màn sinh bởi dữ liệu hỏng](/images/smb1-glitch-levels/v4-glitch-50.jpg)
 
-Glitch level ID $58 (đường hầm gây crash): sprite pointer trỏ đến vùng nhớ **không tồn tại trên NES không có mapper ROM**. Game cố tải cùng Koopa 5 lần mỗi frame ở vị trí (0,0), làm bão hòa PPU và gây freeze.
+Glitch level ID $58 (đường hầm crash) : sprite pointer của nó trỏ tới vùng bộ nhớ **không tồn tại trên NES không mapper ROM**. Game cố tải cùng Koopa 5 lần mỗi frame ở vị trí (0,0), làm bão hòa PPU và gây treo.
 
 ```asm
-; Pourquoi ID $58 crashe :
-; Sprite pointer → adresse invalide (hors espace NES standard)
-; → Le jeu lit des bytes indéterminés comme des types de sprite
-; → Le Koopa $00 (type invalide sans handler) boucle en appel récursif
-; → Stack overflow 6502 → freeze
+; Vì sao ID $58 crash :
+; Sprite pointer → địa chỉ không hợp lệ (ngoài không gian NES chuẩn)
+; → Game đọc các byte không xác định thành kiểu sprite
+; → Koopa $00 (kiểu không hợp lệ không handler) lặp gọi đệ quy
+; → Tràn ngăn xếp 6502 → treo
 ```
 
 ### Nghịch lý pipe warp
 
-Nhớ kiểm tra `target_world BETWEEN 1 AND 8`. Ngay cả khi bạn tìm thấy ống trong glitch world, game kiểm tra thế giới đích nằm giữa 1 và 8. Glitch world có số > 8 (36-1, 255-1...), nên warp thất bại.
+Nhớ kiểm tra `target_world BETWEEN 1 AND 8`. Ngay cả khi bạn thấy ống trong glitch world, game kiểm tra thế giới đích từ 1 tới 8. Các glitch world có số > 8 (36-1, 255-1...), nên warp thất bại.
 
-Đó cũng là lý do Minus World không có kết thúc: cột cờ không có trong sprite, và ống không dẫn đến đâu cả.
+Đó cũng là lý do Minus World không có kết : cột cờ không hiện trong sprite, và các ống không dẫn đâu.
 
-### Trick 5 vật thể trong một cột
+### Mẹo 5 vật thể trong một cột
 
-Có một edge case cho phép vượt quá giới hạn 3 vật thể mỗi cột. Khi hàng đợi bị chặn (vị trí đầy + vật thể tiếp theo thiếu cờ next screen), game "xử lý trước" cột hiện tại trong vòng lặp cho đến khi tìm được vật thể có cờ next screen. Trong mỗi lần xử lý trước:
+Có trường hợp biên cho phép vượt giới hạn 3 vật thể cho mỗi cột. Khi hàng đợi kẹt (slot đầy + vật thể tiếp thiếu next screen flag), game "tiền xử lý" cột hiện tại vòng lặp tới khi thấy vật thể có next screen flag. Trong mỗi lần tiền xử lý :
 
 ```asm
-; Pendant le prétraitement de colonne :
-; 1. Les objets dans la queue voient leur largeur restante
-;    décrémentée à chaque "fausse avancée" de colonne
-; 2. Si un objet atteint largeur=0, il quitte la queue
-; 3. Un slot libéré peut être rempli par un nouvel objet
-;    ajouté dans la même colonne
+; Trong lúc tiền xử lý cột :
+; 1. Các vật thể trong hàng đợi thấy chiều rộng còn lại
+;    giảm mỗi "bước tiến giả" của cột
+; 2. Nếu vật thể chạm chiều rộng=0, nó rời hàng đợi
+; 3. Slot trống có thể lấp bằng vật thể mới
+;    thêm trong cùng cột
 
-; Résultat : jusqu'à 5 objets peuvent être traités sur la même colonne.
-; Technique : placer 2 objets qui traversent la screen boundary
-; (slots 1 et 2), 1 objet dummy en X < précédent (bloque la queue),
-; puis 3 objets à X=0 de l'écran suivant (dont un avec next screen flag).
+; Kết quả : tới 5 vật thể xử lý trên cùng cột.
+; Kỹ thuật : đặt 2 vật thể vượt biên màn hình
+; (slot 1 và 2), 1 vật thể mồi ở X < trước (chặn hàng đợi),
+; rồi 3 vật thể ở X=0 của màn tiếp (gồm một có next screen flag).
 ```
 
-Đây được gọi là "queue skip" và được một số romhacker sử dụng để tạo level dày hơn định dạng cho phép.
+Việc này gọi là "queue skip" và vài romhacker dùng nó để tạo màn đặc hơn định dạng thường cho phép.
 
-## Sự khác biệt giữa các phiên bản
+## Khác biệt giữa các phiên bản
 
 ### Famicom Disk System
 
-Phiên bản FDS của SMB1 có **bộ nhớ khác**. Tất cả con trỏ level bị dịch chuyển, nhưng dữ liệu giống nhau. Điều thay đổi: chỉ số glitch world hoàn toàn khác:
+Bản FDS của SMB1 có **bản đồ bộ nhớ khác**. Mọi con trỏ màn dịch chuyển, nhưng dữ liệu giống. Điều đổi : index của các glitch world hoàn toàn khác :
 
 ```
-FDS World 36 → Level ID $09 (eau version de 5-3)
-  → Le flagpole est présent ! On peut finir le niveau.
-  → Ensuite : $27 (7-3 normal) → $44 (4-4 underground)
-  → $44 est finissable → la hache fonctionne → fin du jeu !
-  
-Le Minus World FDS est donc un "bonus world" qui peut mener
-à la complétion du jeu, contrairement à la version NES.
+FDS World 36 → Level ID $09 (bản nước của 5-3)
+  → Cột cờ hiện diện ! Có thể qua màn.
+  → Sau đó : $27 (7-3 thường) → $44 (4-4 ngầm)
+  → $44 qua được → rìu hoạt động → kết game !
+
+Minus World FDS vì vậy là "world thưởng" có thể dẫn
+tới hoàn tất game, ngược với bản NES.
 ```
 
-Level FDS yêu thích của tôi: **ID $5F**, phiên bản ngầm của nửa sau 3-3 ở đường hầm thấp (tiếc là autoscroller).
+Màn FDS tôi thích nhất : **ID $5F**, bản ngầm của nửa sau 3-3 ở đường hầm thấp (tiếc là tự cuộn).
 
-### The Lost Levels (Super Mario Bros. 2 Nhật Bản)
+### The Lost Levels (Super Mario Bros. 2 Nhật)
 
-Lost Levels thay đổi nhiều thứ:
+Lost Levels đổi nhiều thứ :
 
-1. **Thứ tự tile/sprite giống nhau**: không còn Frankenstein level (tile và sprite tải cùng level ngay cả với ID không hợp lệ)
-2. **Một bảng con trỏ 16-bit** thay vì hai bảng riêng high/low
-3. **4 file disk**: ROM đã được chia cho FDS:
-   - File 1: thế giới 1-4
-   - File 2: thế giới 5-8
-   - File 3: thế giới 9 + sound engine
-   - File 4: thế giới A-D (bảng con trỏ hoàn toàn khác)
-4. **Cùng Level ID = 4 level có thể** tùy file được tải
-5. **Không còn glitch Tennis**: tùy chọn continue (tiếp tục cùng thế giới sau game over) khiến warm start vô dụng, và game **reset ngay lập tức** nếu world > 9
-6. **Vật thể mới**: nấm độc, block vô hình, block vô hình fire flower, ống đảo ngược, gió -- nhưng được chèn vào giữa danh sách hiện tại → **không tương thích ngược** với SMB1
-7. **Piranha Plants luôn đỏ** sau world 4, **springboard xanh** chỉ ở thế giới 2/B/3/C/7
+1. **Thứ tự tile/sprite giống hệt** : hết màn Frankenstein (tile và sprite tải cùng màn ngay cả với ID không hợp lệ)
+2. **Một bảng con trỏ 16-bit duy nhất** thay vì hai bảng riêng cao/thấp
+3. **4 tệp đĩa** : ROM chẻ cho FDS :
+   - Tệp 1 : world 1-4
+   - Tệp 2 : world 5-8
+   - Tệp 3 : world 9 + engine âm thanh
+   - Tệp 4 : world A-D (bảng con trỏ hoàn toàn khác)
+4. **Cùng Level ID = 4 màn khả dĩ** tùy tệp tải
+5. **Hết glitch Tennis** : tùy chọn tiếp tục (tiếp tục ở cùng thế giới sau game over) khiến warm start vô ích, và game **reset ngay** nếu world > 9
+6. **Vật thể mới** : nấm độc, block vô hình, block vô hình fire flower, ống lộn ngược, gió -- nhưng chèn giữa danh sách hiện có → **không tương thích ngược** với SMB1
+7. **Piranha Plant luôn đỏ** sau world 4, **lò xo xanh** chỉ ở world 2/B/3/C/7
 
 ### Super Mario All-Stars (SNES)
 
-Port trực tiếp với cùng routines 6502 (SNES thực thi mã NES ở chế độ tương thích):
+Port trực tiếp với cùng routine 6502 (SNES chạy mã NES ở chế độ tương thích) :
 
-- **Warp zone đã sửa**: không còn Minus World (vào ống bên trái trước văn bản dẫn đến đúng thế giới)
-- **Crash**: hầu hết glitch level crash (trừ ID $6A và 9-1)
-- **Vật thể lâu đài được thêm**: render độc đáo hơn
-- **Nhưng**: **4-2 wrong warp** vẫn hoạt động (chưa patch!)
+- **Warp zone sửa** : hết Minus World (vào ống trái trước khi chữ hiện dẫn tới đúng thế giới)
+- **Sập** : hầu hết glitch level crash (trừ ID $6A và 9-1)
+- **Vật thể lâu đài thêm** : render độc đáo hơn
+- **Nhưng** : **4-2 wrong warp** vẫn chạy (chưa vá !)
 
-### 4-2 wrong warp: Lỗi đặt vật thể
+### 4-2 wrong warp : bug đặt vật thể
 
-Trong 4-2, có hai vật thể chuyển tiếp pipe: dây leo (warp zone) và ống (phòng coin cash). Vật thể chuyển tiếp đầu tiên (dây leo) được đặt **trước rất lâu** khi dây leo xuất hiện trên màn hình. Vật thể thứ hai (ống) được đặt **quá muộn trong level**.
-
-```asm
-; Timing des transitions dans 4-2 :
-; Objet transition 1 (vigne → warp zone) : placé 3 écrans avant la vigne
-; Objet transition 2 (tuyau → coin cash) : placé 1 écran après le tuyau
-;
-; Normalement le premier objet est désactivé avant que Mario
-; n'atteigne le tuyau. Mais si Mario va vite (ou utilise
-; le raccourci du bloc B+right), la transition de la vigne
-; est toujours active quand il touche le tuyau !
-; → Le jeu charge la warp zone au lieu du coin cash.
-;
-; Si l'objet avait été placé juste après la vigne mais avant
-; le tuyau, le bug n'existerait pas.
-```
-
-### Level lặp
-
-Loop hoạt động như thế nào (8-4, 7-4)? Level có **checkpoint** với số màn hình và vị trí Y hardcode:
+Trong 4-2, có hai vật thể chuyển ống : dây leo (warp zone) và ống (phòng xu). Vật thể chuyển đầu (của dây leo) đặt **trước xa** khi dây leo xuất hiện trên màn hình. Cái thứ hai (ống) đặt **quá muộn trong màn**.
 
 ```asm
-; Checkpoint : {screen_number, vertical_position}
-; Si Mario passe ce checkpoint à la bonne hauteur → niveau continue
-; Sinon → warp back de 4 écrans (64 blocks)
+; Thời điểm chuyển trong 4-2 :
+; Vật thể chuyển 1 (dây leo → warp zone) : đặt 3 màn hình trước dây leo
+; Vật thể chuyển 2 (ống → phòng xu) : đặt 1 màn hình sau ống
 ;
-; Pour faire une boucle infinie : vertical_position = $F0
-; (en dessous du bas de l'écran) → impossible de valider.
+; Bình thường vật thể đầu bị tắt trước khi Mario
+; chạm ống. Nhưng nếu Mario nhanh (hay dùng
+; lối tắt của khối B+right), chuyển của dây leo
+; vẫn hoạt động khi nó chạm ống !
+; → Game tải warp zone thay vì phòng xu.
 ;
-; Les checkpoints sont simples (un seul flag) sauf pour world 7
-; qui utilise des triplets (3 flags, il faut en échouer au moins 1)
-;
-; Le warp back est rude : offset de tile data réglé à une valeur
-; hardcodée, offset de sprite data remis à 0. Les ennemis présents
-; sont déchargés instantanément → les firebars disparaissent.
+; Nếu vật thể đặt ngay sau dây leo nhưng trước
+; ống, bug đã không tồn tại.
 ```
 
-## Thay đổi định dạng, không thay đổi code
+### Các màn vòng lặp
 
-Một trong những bài học hấp dẫn nhất của kiến trúc này là các nhà phát triển SMB1 đã tạo được hệ thống level rất biểu cảm mà không bao giờ chạm vào code render 6502. Tất cả sự khác biệt giữa level đến từ **dữ liệu** (con trỏ, vật thể, sprite, floor pattern), không phải code.
+Vòng lặp chạy thế nào (8-4, 7-4)? Màn có **checkpoint** với số màn hình và vị trí Y ghi cứng :
 
-248 glitch world tồn tại vì **bảng con trỏ được thiết kế cho 128 mục × 4 loại**, và game không bao giờ kiểm tra giá trị nó đọc. Khi con trỏ rơi vào RAM, game giải thích các register của Mario như tile. Khi con trỏ rơi vào dữ liệu âm thanh, game phát nhạc dưới dạng level design. Và khi jump table bị overflow, game thực thi bất kỳ thứ gì cho đến khi crash.
+```asm
+; Checkpoint : {số_màn_hình, vị_trí_dọc}
+; Nếu Mario qua checkpoint này ở đúng chiều cao → màn tiếp tục
+; Ngược lại → warp lùi 4 màn hình (64 block)
+;
+; Để tạo vòng lặp vô hạn : vị_trí_dọc = $F0
+; (dưới đáy màn hình) → không thể đạt.
+;
+; Checkpoint đơn giản (một cờ) trừ world 7
+; dùng bộ ba (3 cờ, phải hỏng ít nhất 1)
+;
+; Warp lùi gắt : offset dữ liệu tile đặt thành giá trị
+; ghi cứng, offset dữ liệu sprite về 0. Kẻ thù hiện diện
+; bị dỡ ngay → firebar biến mất.
+```
+
+## Đổi định dạng, không đổi mã
+
+Một trong những bài học cuốn hút nhất của kiến trúc này là nhà phát triển SMB1 đã tạo hệ màn rất biểu cảm mà không bao giờ chạm mã render 6502. Mọi biến thiên giữa các màn tới từ **dữ liệu** (con trỏ, vật thể, sprite, floor pattern), không phải mã.
+
+256 glitch world tồn tại vì **bảng con trỏ định cỡ 128 mục × 4 kiểu**, và game không bao giờ kiểm tra giá trị nó đọc. Khi con trỏ rơi vào RAM, game diễn giải thanh ghi của Mario thành tile. Khi con trỏ rơi vào dữ liệu âm thanh, game chơi nhạc dưới dạng thiết kế màn. Và khi jump table tràn, game thực thi bất cứ gì tới khi crash.
 
 ![More Super Mario Bros. Mechanics Explained -- video thứ 4](/images/smb1-glitch-levels/yt-mechanics.jpg)
 
-## Những gì có thể học từ đây
+## Rút ra được gì từ tất cả
 
-1. **Tách biệt tile/sprite**: độc lập hoàn toàn giữa hai lớp, với thứ tự lưu trữ khác nhau tạo ra Frankenstein level độc đáo
-2. **Nén RLE + hệ thống vật thể**: level không phải bitmap mà là danh sách vật thể được đặt, với floor pattern cho sàn
-3. **Hàng đợi 3 vị trí**: giới hạn cứng của phần cứng (và thiết kế level)
-4. **Không kiểm tra**: game tin vào con trỏ và jump table, tạo ra glitch chơi được hoặc crash
-5. **Tối đa 256 byte**: giới hạn của register Y 6502, khiến dữ liệu lặp lại nếu đi quá xa
-6. **Warm start / cold start**: hệ thống "tiếp tục" mở đường cho cart swap Tennis → Mario
+1. **Tách tile/sprite** : độc lập hoàn toàn của hai lớp, với thứ tự lưu khác nhau tạo màn Frankenstein độc đáo
+2. **Nén RLE + hệ vật thể** : màn không phải bitmap mà là danh sách vật thể đặt, với floor pattern cho mặt đất
+3. **Hàng đợi 3 slot** : giới hạn chặt của phần cứng (và thiết kế màn)
+4. **Tin tuyệt đối vào con trỏ** : game tin con trỏ và jump table, tạo glitch chơi được hay crash
+5. **Tối đa 256 byte** : giới hạn của thanh ghi Y 6502, khiến dữ liệu lặp nếu đi quá xa
+6. **Warm start / cold start** : hệ "tiếp tục" mở ra cart swap Tennis → Mario
 
-Điều tuyệt vời nhất: tất cả là code 6502 chứa trong 40KB. Không tầng trừu tượng, không kiểm tra truy cập bộ nhớ, không trình quản lý ngoại lệ. Nếu con trỏ hỏng, game crash. Và crash, chúng ta gọi là glitch world.
+Đẹp nhất : tất cả là mã 6502 gói trong 40KB. Mã đối thoại trực tiếp với phần cứng và đặt niềm tin tuyệt đối vào mỗi lần truy cập bộ nhớ. Nếu con trỏ hỏng, game crash. Và các crash, ta gọi là glitch world.
 
-## 3 điều cần nhớ
+## 3 điều cần giữ
 
-1. **Glitch world là con trỏ rơi sai chỗ** -- Game có 128 ID × 4 loại khu vực, nhưng chỉ 34 level độc đáo. Khi world number bị hỏng (do Tennis hoặc wall clip), game tải con trỏ được thiết kế cho level khác, và 512 tổ hợp có thể tạo ra kết quả không thể đoán trước.
+1. **Glitch world là con trỏ rơi sai** -- Game có 128 ID × 4 kiểu vùng, nhưng chỉ 34 màn duy nhất. Khi số world hỏng (bởi Tennis hay wall clip), game tải con trỏ thiết kế cho màn khác, và 512 tổ hợp khả dĩ cho kết quả không đoán được.
 
-2. **Minus World là lỗi warp kết hợp với hỏng dữ liệu** -- ống bên trái trong 1-2, nếu kích hoạt trước khi văn bản xuất hiện, tải world 36 (0x24). World này trỏ đến Level ID $01 (nước 2-2), level không có cột cờ. Và vì không có chuyển tiếp pipe cho world 36, level lặp vô hạn. Sự thiếu kiểm tra tạo ra biểu tượng.
+2. **Minus World là bug warp cộng hỏng** -- Ống trái trong 1-2, nếu kích hoạt trước khi chữ hiện, tải world 36 (0x24). World này trỏ tới Level ID $01 (nước của 2-2), màn không cột cờ. Và vì không có chuyển ống nào cho world 36, màn lặp vô hạn. Thiếu kiểm tra tạo biểu tượng.
 
-3. **Tennis → Mario, 15 năm trước OoT → Paper Mario** -- RAM của NES tồn tại qua hoán đổi cartridge nhờ tụ điện và hệ thống warm start / cold start của SMB1. Bộ đếm bước chân Tennis (tăng byte RAM khi phát âm thanh bước chân) rơi đúng vào địa chỉ world number. Cần các chữ số top score giữ ở 0, byte $A5 nguyên vẹn, và game phát hiện warm start -- một sự trùng hợp hoàn hảo chỉ hoạt động với Tennis.
+3. **Tennis → Mario, 15 năm trước OoT → Paper Mario** -- RAM của NES sống sót qua swap băng nhờ tụ điện và hệ warm start / cold start của SMB1. Bộ đếm bước chân của Tennis (tăng byte RAM khi phát tiếng bước) rơi đúng địa chỉ của số world. Phải giữ các chữ số điểm cao nhất ở 0, byte $A5 nguyên vẹn, và game phát hiện warm start -- hội tụ hoàn hảo chỉ chạy được với Tennis.
 
-Video gốc của [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) là một công trình phi thường -- mức độ chi tiết về disassemble 6502, bản đồ tự động của tất cả level, giải thích cart swap và warm start. Nếu bạn chưa xem loạt phim này, hãy xem, nó ngắn và mỗi phút đều đậm đặc.
-
-Code nguồn bản đồ có trên [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html), và bản disassemble đầy đủ SMB1 là open source trên nhiều repo. 40 năm trước, các lập trình viên Nhật Bản đã viết hệ thống level này bằng 6502 với zero unit test và zero bug tracker, và chúng ta vẫn học được điều gì đó khi mở code của họ ngày nay.
+Các video gốc của [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) đúng là công trình kiến -- chi tiết về dịch ngược 6502, bản đồ tự động của mọi màn, giải thích cart swap và warm start. Nếu bạn chưa xem series, hãy xem, nó ngắn và mỗi phút đều đặc.

@@ -1,38 +1,37 @@
 ---
-title: Logica di pathfinding di Minecraft e le sue applicazioni
-description: Come l'algoritmo A*, le penalità dei blocchi e i POI permettono di
-  controllare, prevedere e sfruttare il movimento dei mob -- dalla redstone
-  senza fili alle fattorie ottimizzate.
+title: "Logica di pathfinding Minecraft e le sue applicazioni"
+description: "Come l'algoritmo A*, i malus di blocchi e i POI permettono di controllare, prevedere e sfruttare lo spostamento dei mob: dalla redstone senza fili alle farm ottimizzate."
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "oVkECPwYO2wYMpKplP7nWdBsQsVL6eX4kwtiTGYxMTT+ouvtXOJB29vYhSWFibcMCVF0vz4knngUE83KUTS7pg=="
+author_sig: "+lXjqAsNAJlGwy2ur7uqXjyHnImd8dedAtcSOUal8B/ybqoUhwEPH1B7fl01sxezYzvoZ6KboLEvJ5GrIxzH8g=="
 ---
 
 ## Introduzione
 
-Ho passato ore a guardare pecore sbattere contro i muri.
+Ho passato ore a guardare pecore sbattere contro muri.
 
-Miglior investimento della mia vita xD
+E onestamente? Il miglior investimento della mia vita.
 
-Più guardi questi mob, più realizzi che nei loro movimenti non c'è niente di casuale. Ogni passo è programmato, prevedibile e, cosa più importante, sfruttabile. Alla fine mi sono messo a spulciare il codice sorgente di Minecraft per capire esattamente come funziona il pathfinding, e ho scoperto che puoi letteralmente controllare i mob con la mente. Tipo, forzarli ad andare dove VUOI tu, non dove decide il caso.
+Perché più guardi questi mob, più realizzi che non hanno niente di casuale. Ogni movimento è codificato, prevedibile, e soprattutto completamente rompibile. Ho finito per tuffarmi nel codice sorgente di Minecraft per capire esattamente come il pathfinding funziona, e ciò che ho scoperto è che puoi letteralmente fare mind-control ai mob. Tipo, forzarli ad andare dove vuoi TU, non dove decide il caso.
 
-Questa guida è tutto quello che ho scoperto mentre scavavo. Il sistema AI, l'algoritmo A*, i valori nascosti di malus, gli exploit che puoi usare in survival. Prendi il tuo piccone.
+Questa guida è tutto ciò che ho imparato scavando. L'IA, l'algoritmo A*, i malus nascosti, gli exploit che puoi lanciare in survival. Prepara il piccone.
 
 ---
 
-## Come Funziona la Mob AI (spoiler: è un po' tonta)
+## Come funziona l'IA dei mob (spoiler: è scema)
 
-### Goals
+### I Goal
 
-Ogni mob ha una lista di *goal*. Cose che PUÒ fare, e quanto tanto le VUOLE fare. Numero più basso = priorità più alta. Tipo una lista di cose da fare infernale.
+Ogni mob ha *goal*. È una lista di azioni che PUÒ fare e quanto ha VOGLIA di farle. Più il numero è piccolo, più è prioritario, come una todo list versione caos.
 
 ```java
+// i goal sono prioritari: numero piccolo = più voglia
 protected void registerGoals() {
    this.goalSelector.addGoal(4, new Zombie.ZombieAttackTurtleEggGoal(this, 1.0, 3));
    this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -41,15 +40,18 @@ protected void registerGoals() {
 }
 ```
 
-Mai visto uno zombie ignorare un uovo di tartaruga per inseguire te invece? Ecco perché: `ZombieAttackTurtleEggGoal` ha priorità 4, mentre `ZombieAttackGoal` (il goal "mangiami la faccia") ha priorità 2. Gli zombie preferiscono spuntini col polso.
+Hai mai visto uno zombie ignorare un uovo di tartaruga per darti la caccia? Ecco perché: `ZombieAttackTurtleEggGoal` ha priorità 4, mentre `ZombieAttackGoal` (il goal che gli dice di mangiarti la faccia) è a priorità 2.
 
-Il goal che ci interessa davvero è `WaterAvoidingRandomStrollGoal`, priorità 7. Il goal "non ho niente di meglio da fare quindi giro a caso". È qui che inizia il divertimento.
+Sì, uno zombie preferisce mangiarti invece di rompere un uovo. È bello l'amore.
 
-### Movimento (ovvero "come un random walk ha 1 possibilità su 60 per tick")
+Il goal che ci interessa davvero è `WaterAvoidingRandomStrollGoal`, priorità 7. Il "non ho niente da fare quindi cammino a caso" goal. È lì che tutto diventa interessante.
 
-Ogni tick (ogni 0.05 secondi), il gioco chiama `canUse()` per controllare se il mob ha voglia di muoversi. 1 possibilità su 60 per tick. Design orribilmente inefficiente, e lo adoro.
+### Il movimento (o "come una marcia casuale ha 1 probabilità su 60 di prodursi")
+
+Ogni tick (ogni 0.05 secondi), il gioco chiama `canUse()` per vedere se il mob si degna di muoversi. 1 probabilità su 60 a ogni tick. Completamente scemo come design, e lo adoro.
 
 ```java
+// 1 probabilità su 60 per tick di volersi muovere
 public boolean canUse() {
    if (this.mob.hasControllingPassenger()) {
       return false;
@@ -76,11 +78,12 @@ public boolean canUse() {
 }
 ```
 
-Quindi, per riassumere: se stai cavalcando il mob -> no, se il mob non ha fatto niente per 5 secondi -> no, se l'RNG dice no -> no. Il gioco NON VUOLE davvero che i mob si muovano.
+Quindi per riassumere: se sei montato sul mob -> no, se il mob non ha fatto niente da 5 secondi -> no, se il random dice no -> no. Il gioco VUOLE davvero che il mob non si muova.
 
-Ma quando si muove, `getPosition()` prende il controllo:
+Ma quando si muove, `getPosition()` prende il seguito:
 
 ```java
+// cerca una posizione casuale, più lontano se in acqua
 protected Vec3 getPosition() {
    if (this.mob.isInWater()) {
       Vec3 $$0 = LandRandomPos.getPos(this.mob, 15, 7);
@@ -93,15 +96,16 @@ protected Vec3 getPosition() {
 }
 ```
 
-Quei due numeri alla fine? Raggio XZ e raggio Y. In acqua, il mob cerca più lontano (15 vs 10). Se non trova terra, ripiega su `super.getPosition()` che accetta l'acqua. **Risultato: i mob VOGLIONO uscire dall'acqua.** Ecco perché i tuoi animali nuotano come pazzi verso la riva.
+Guarda questi due numeri alla fine: è il raggio XZ e il raggio Y. In acqua, il mob cerca più lontano (15 invece di 10). Se non trova terra, ripiega su `super.getPosition()` che accetta l'acqua. **Risultato: i mob VOGLIONO uscire dall'acqua.** Ecco perché i tuoi animali nuotano come matti verso il bordo.
 
-Dettaglio divertente: c'è letteralmente lo 0.1% di possibilità che il mob scelga `super.getPosition()` invece di `LandRandomPos`. Uno su mille. Mojang immagino xD
+Piccolo dettaglio croccante: c'è letteralmente lo 0.1% di probabilità che il mob prenda `super.getPosition()` invece di `LandRandomPos`. Uno su mille. È Mojang tipico.
 
-### LandRandomPos: l'ottimizzazione che rompe tutto
+### LandRandomPos: l'ottimizzazione marcia che cambia tutto
 
-Questo è il MIO passo preferito. Il più bel casino tecnico che rende il pathfinding sfruttabile.
+È la MIA fase preferita. La più bella stronzata tecnica che rende il pathfinding sfruttabile.
 
 ```java
+// spinge verso l'alto le posizioni dentro blocchi solidi
 public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<BlockPos> $$3) {
    boolean $$4 = GoalUtils.mobRestricted($$0, $$1);
    return RandomPos.generateRandomPos(() -> {
@@ -112,19 +116,20 @@ public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<
 }
 ```
 
-`movePosUpOutOfSolid`. Il nome dice tutto. Se la posizione scelta è dentro un blocco solido, il gioco la spinge verso l'alto finché non è in aria.
+`movePosUpOutOfSolid`. Il nome dice tutto. Se la posizione scelta è in un blocco solido, il gioco la spinge verso l'alto finché è in aria.
 
-È un'ottimizzazione: invece di perdere tempo a saltare posizioni sottoterra, il gioco le spinge direttamente in superficie. Intelligente? Sì. Ma crea un ENORME bias: **i mob preferiscono le zone alte**.
+È un'ottimizzazione: invece di perdere tempo a ignorare le posizioni sottoterra, il gioco le risale in superficie. Furbo? Sì. Ma crea un bias pazzesco: **i mob preferiscono le altezze**.
 
-Pensaci. Tanti blocchi sottoterra, il gioco genera 10 posizioni casuali. Quelle dentro ai blocchi vengono spinte su. Le aree dense (sotto una collina) producono più posizioni valide delle aree vuote. Risultato: il mob va statisticamente più spesso verso la collina.
+Immagina. Hai un sacco di blocchi sotto la superficie, il gioco genera 10 posizioni casuali. Quelle nei blocchi sono spinte verso l'alto. Le zone dense (sotto una collina) producono più posizioni valide delle zone vuote. Risultato: il mob andrà statisticamente più spesso verso la collina.
 
-Fidati, stiamo per spaccare tutto quanto.
+Fidati, lo rompiamo in 2 minuti.
 
-### La selezione: vince il blocco migliore
+### La selezione: il concorso del blocco migliore
 
-10 posizioni, un vincitore, una gara a punti:
+10 posizioni, un solo vincitore, un concorso di punteggio:
 
 ```java
+// la posizione col miglior punteggio VINCE
 public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<BlockPos> $$1) {
    double $$2 = Double.NEGATIVE_INFINITY;
    BlockPos $$3 = null;
@@ -142,79 +147,80 @@ public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<Bl
 }
 ```
 
-La posizione col punteggio più alto VINCE. E se conosci i criteri di punteggio, puoi far vincere LA TUA posizione. È come truccare un'elezione.
+La posizione col miglior punteggio VINCE. E se conosciamo i criteri di punteggio, possiamo far vincere la posizione che vogliamo. È come truccare un'elezione.
 
 ---
 
-## Preferenze dei Mob (ovvero "perché la tua mucca ha attraversato la strada")
+## Le preferenze dei mob (o "perché la tua mucca attraversa la strada")
 
 Ogni mob ha gusti diversi. E cambia tutto.
 
-| Mob | Ama |
+| Mob | Ama questo |
 | --- | --- |
-| **Animali** (mucche, pecore, maiali) | Blocchi d'erba, luce |
-| **Mostri** (zombie, scheletri) | Buio (hipster) |
-| **Tartarughe** | Acqua > sabbia > luce |
+| **Animali** (mucche, pecore, maiali) | L'erba e la luce (hipster) |
+| **Mostri** (zombie, scheletri) | Il buio (edgelord) |
+| **Tartarughe** | L'acqua, altrimenti la sabbia, altrimenti la luce |
 | **Hoglin** | `crimson_nylium`; odiano `warped_fungus` |
-| **Strider** | Lava e NULL'ALTRO |
-| **Silverfish** | Blocchi infestabili |
-| **Guardian** | Acqua + luce (snob) |
-| **Mooshroom** | Micelio + luce |
-| **Api** | Aria. Sì, preferiscono l'ARIA. |
+| **Strider** | Solo la lava. NIENTE altro. |
+| **Silverfish** | I blocchi infestabili (logico) |
+| **Guardian** | Acqua + luce (gli snob) |
+| **Mooshroom** | Micelio + luce (funghi) |
+| **Api** | L'aria. Sì, preferiscono L'ARIA. |
 
 ```java
-// Animale: guarda giù, se erba -> punteggio massimo
+// Animale: guarda sotto, se è erba, punteggio max
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return $$1.getBlockState($$0.below()).is(Blocks.GRASS_BLOCK) ? 10.0F : $$1.getPathfindingCostFromLightLevels($$0);
 }
 
-// Mostro: letteralmente l'opposto
+// Mostro: esattamente l'inverso
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return -$$1.getPathfindingCostFromLightLevels($$0);
 }
 ```
 
-I mostri sono tipo "se c'è luce, punteggio negativo, me ne vado." Si INCAZZANO con i livelli di luce xD
+Tipo i mostri sono letteralmente "se è illuminato, punteggio negativo, vado altrove". Fanno LA FACCIA alla luce.
 
-Quindi puoi -- letteralmente -- guidare gli animali con erba e luce, e i mostri con l'oscurità. È stupido e geniale allo stesso tempo.
+Quindi puoi, letteralmente, guidare i tuoi animali con erba e luce, e i tuoi mostri col buio. È scemo e geniale insieme.
 
 ---
 
-## A* in Minecraft (la formula segreta)
+## L'algoritmo A* in Minecraft (la formula segreta)
 
-Minecraft usa A* (A-star) per il pathfinding. Ma Mojang ci ha messo il suo tocco:
+Minecraft usa l'algoritmo A* (A-star) per il pathfinding. Ma Mojang ci ha messo la sua:
 
 ```
 f(n) = g(n) + 1.5 × h(n)
 ```
 
-- **g(n)** = distanza già percorsa (1 per blocco, ~1.41 in diagonale)
-- **h(n)** = distanza in linea retta verso il target
-- **1.5** = perché a Mojang piacciono le cose leggermente rotte
+- **g(n)** = il percorso già fatto (1 per blocco, circa 1.41 in diagonale)
+- **h(n)** = la distanza in linea d'aria
+- **1.5** = perché a Mojang piacciono i valori un po' sballati
 
-L'A* normale usa `f(n) = g(n) + h(n)`. MOJANG HA AGGIUNTO UN MOLTIPLICATORE 1.5. Perché? Così l'algoritmo punta dritto alla destinazione più velocemente e pota meno rami di ricerca. Risultato: il percorso è "abbastanza buono" ma non sempre ottimale. È un A* ubriaco.
+Normalmente A* usa `f(n) = g(n) + h(n)`. MOJANG HA AGGIUNTO UN FATTORE 1.5. Perché? Perché l'algo vada più in fretta verso la destinazione e tagli meno rami di ricerca. Risultato: il percorso trovato è "buono" ma non sempre il migliore. È un A* un po' ubriaco.
 
 ```mermaid
 flowchart LR
-    A[Nodo partenza] --> B{Vicini da\nvalutare?}
-    B -->|Sì| C[Calcola f = g + 1,5×h\nper ogni vicino]
-    C --> D[Seleziona il vicino\ncon f più piccolo]
-    D --> E{Destinazione\nraggiunta?}
+    A[Nodo partenza] --> B{Vicini da\nvalutare ?}
+    B -->|Sì| C[Calcola f = g + 1.5×h\nper ogni vicino]
+    C --> D[Seleziona il vicino\ncol f più piccolo]
+    D --> E{Destinazione\nraggiunta ?}
     E -->|No| B
-    E -->|Sì| F[Percorso trovato!]
+    E -->|Sì| F[Percorso trovato !]
     B -->|No| G[Nessun percorso\npossibile]
-    
+
     style F color:#4caf50
     style G color:#f44336
 ```
 
-Limitazione chiave: **un mob può fare pathfinding solo per 16 blocchi** (il suo *follow range*). Se la destinazione è troppo lontana, sceglie il blocco raggiungibile più vicino. Questo significa che puoi costruire un monolito fuori portata e il mob farà pathfinding verso il blocco più vicino che lo avvicina -- rendendo il suo movimento completamente prevedibile.
+Dettaglio importante: **un mob può fare pathfinding solo su 16 blocchi** (la sua *follow range*). Se la destinazione è troppo lontana, sceglie il blocco più vicino che PUÒ raggiungere. Vuol dire che puoi creare un monolite fuori portata, e il mob farà pathfinding verso il blocco più vicino che lo avvicina a questo monolite, il che rende i suoi movimenti completamente prevedibili.
 
 ### I due exploit che rompono il gioco
 
-#### 1. Gli aggiornamenti dei blocchi forzano il ricalcolo
+#### 1. I block update = ricalcolo forzato
 
 ```java
+// un update vicino al percorso forza il ricalcolo A*
 public boolean shouldRecomputePath(BlockPos $$0) {
    if (this.hasDelayedRecomputation) return false;
    if (this.path != null && !this.path.isDone() && this.path.getNodeCount() != 0) {
@@ -230,28 +236,29 @@ public boolean shouldRecomputePath(BlockPos $$0) {
 }
 ```
 
-Ogni aggiornamento di blocco vicino al percorso del mob forza un ricalcolo A* con un cooldown di 1 secondo. Metti un clock da 1 secondo accanto a un mob e lui ricalcola COSTANTEMENTE. È come un GPS che si resetta ogni secondo.
+Ogni aggiornamento di blocco vicino al percorso del mob forza un ricalcolo di A* con un cooldown di 1 secondo. Metti un orologio a 1 secondo accanto a un mob, e ricalcola il suo percorso DI CONTINUO. È l'equivalente di mettere un GPS che si resetta ogni secondo.
 
-E se lo fai con 50 mob? Lag city. RIP TPS.
+E se fai questo con 50 mob insieme? Lag city. RIP TPS.
 
-#### 2. Malus di Pathfinding (penalità sui blocchi)
+#### 2. I malus di blocchi (Pathfinding Malice)
 
-Alcuni blocchi spaventano i mob. Letteralmente. Ogni blocco ha un costo associato definito da un enum:
+Certi blocchi fanno paura ai mob. Letteralmente. Ogni blocco ha un costo associato, definito da un'enumerazione:
 
 | Blocco / Condizione | Malus |
 | --- | --- |
-| **Blocco di miele** | +8 per attraversarlo |
-| **Neve polverosa** | Impraticabile |
-| **Porte chiuse** | Impraticabile |
-| **Fuoco** | +16 dentro, +8 adiacente |
-| **Animali & Villager** | Fuoco = -1 (NO ASSOLUTO) |
-| **Cactus / Bacche dolci** | Impraticabile; adiacente = +8 |
-| **Acqua** | +8 dentro o adiacente |
-| **Magma** | +8 adiacente |
+| **Blocco di miele** | +8 da attraversare |
+| **Neve farinosa** | Invalicabile |
+| **Porte chiuse** | Invalicabile |
+| **Fuoco** | +16 da attraversare, +8 da costeggiare |
+| **Animali e Villici** | Fuoco = -1 (NO) |
+| **Cactus / Bacche dolci** | Invalicabile; adiacente = +8 |
+| **Acqua** | +8 da attraversare o costeggiare |
+| **Magma** | +8 da costeggiare (ahi) |
 
-Gli animali vanno anche oltre:
+Gli animali sono ancora più estremi:
 
 ```java
+// gli animali vietano letteralmente il fuoco
 protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
    super($$0, $$1);
    this.setPathfindingMalus(PathType.DANGER_FIRE, 16.0F);
@@ -259,105 +266,116 @@ protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
 }
 ```
 
-DAMAGE_FIRE a -1.0F è letteralmente "vietato." Un animale preferirebbe saltare nel vuoto piuttosto che camminare nel fuoco.
+DAMAGE_FIRE a -1.0F, è letteralmente "vietato". Un animale preferisce buttarsi nel vuoto invece di attraversare fuoco. Uff.
 
-### Esercizio: la grande gara di percorsi
+### Esercizio: il gran concorso di percorsi
 
-Un villager che sceglie tra più percorsi:
+Immagina un villico che deve scegliere tra vari percorsi.
 
-- **Percorso A**: 15 blocchi ma 6 confinanti con acqua (+8 ciascuno)
-- **Percorso B**: 18 blocchi con 2 blocchi d'acqua (+8) + 1 adiacente all'acqua (+8)
-- **Percorso C**: 14 blocchi dritti... ma fuoco -> IMPRATICABILE per i villager
-- **Percorso D**: 16 blocchi con 1 adiacente a magma (+8) + 1 adiacente a miele (+8)
-- **Percorso E**: 25 blocchi con cactus dappertutto (+8 ovunque) -> 90.82 totale LOL
+- **Percorso A**: 15 blocchi ma 6 blocchi costeggiano acqua (+8 ognuno)
+- **Percorso B**: 18 blocchi con 2 blocchi di acqua (+8) e 1 blocco adiacente acqua (+8)
+- **Percorso C**: 14 blocchi dritti... ma con fuoco -> IMPASSABILE per un villico
+- **Percorso D**: 16 blocchi con 1 blocco adiacente magma (+8) + 1 blocco adiacente miele (+8)
+- **Percorso E**: 25 blocchi ma cactus ovunque (+8 ovunque) -> 90.82 di costo totale
 
-Il vincitore è di solito il **Percorso B**: la deviazione ripaga perché l'acqua è COSTOSA.
+Calcolo mentale:
 
-Un villager è praticamente una calcolatrice di costi con le gambe xD
+- Percorso A: 15 blocchi + 6×8 per l'acqua = 15 + 48 = **63** ... ma c'è l'1.5×distanza da aggiungere. Facciamo i veri calcoli.
+- Percorso B: più lungo ma meno malus. Il costo totale = distanza cumulata + malus.
+- Percorso D: magma e miele sommano i loro malus.
 
-### Ogni mob sceglie percorsi diversi
+Il vincitore è spesso il **Percorso B**: la deviazione è redditizia perché l'acqua è CARA.
 
-Un villager: "fuoco? NOPE CIAO"
-Uno zombie: "fuoco? OK boomer *ci cammina dentro in fiamme*"
+Un villico è essenzialmente un calcolatore di costi con le gambe.
 
-Puoi letteralmente costruire autostrade che i villager prendono e gli zombie no -- o viceversa.
+### Ogni mob ha i suoi gusti
+
+Un villico: "del fuoco? NO GRAZIE CIAO"
+Uno zombie: "del fuoco? OK boomer *attraversa in fiamme*"
+
+Hai letteralmente strade che certi mob prendono e altri no. Puoi fare autostrade per villici dove gli zombie si bruciano.
 
 ---
 
-## Villager: il caos finale
+## I villici: il casino ultimo
 
-I villager sono la cosa più fraintesa di Minecraft. Ma dopo aver letto il codice, realizzi che sono solo macchine prevedibili con orari d'ufficio.
+Ok, i villici. È IL sistema meno capito di tutto Minecraft. Ma una volta beccato il codice, ti rendi conto che sono macchine prevedibili con orari di ufficio.
 
 ### Sensori e memorie
 
-9 sensori che girano ogni 20 tick (1 secondo). Ognuno scansiona un raggio attorno al villager e salva il risultato in memoria. Il villager vede tutto, ricorda tutto, e agisce di conseguenza.
+9 sensori, che girano ogni 20 tick (1 secondo). Ognuno scruta un raggio intorno al villico e salva il risultato in memoria. Il villico vede tutto, ricorda tutto, e agisce di conseguenza.
 
-### Pacchetti di attività
+Tipo: "c'è un nemico? un item per terra? un giocatore con cui parlare?" Controlla TUTTO.
 
-Il cervello di un villager è diviso in pacchetti di attività che si attivano in base all'ora:
+### I package (le sue fasi della giornata)
 
-| Pacchetto | Orario | Il villager... |
+Il cervello di un villico sono package di attività che si attivano secondo l'ora:
+
+| Package | Orario | Il villico... |
 | --- | --- | --- |
-| **Core** | 24/7 | Apre porte, nuota (80% del tempo), ACQUISISCE POI |
-| **Lavoro** | 8:00-15:00 | "Devo lavorare" -- va alla postazione |
-| **Incontro** | 15:00-17:00 | "Happy hour!" -- va alla campana, socializza |
-| **Riposo** | 18:00-6:00 | "Ora di dormire" -- va a letto |
-| **Ozioso** | 6:00-8:00, 17:00-18:00 | "Mi annoio" -- vaga, si riproduce, salta sui letti |
-| **Panico** | Danno / ostile | "CORRI" -- SCAPPA |
+| **Core** | H24 | Apre porte, nuota (80% del tempo), e ACQUISISCE POI |
+| **Work** | 8h-15h | "Vado a lavorare": cammina verso il suo posto |
+| **Meet** | 15h-17h | "Aperitivo!": va alla campana, chiacchiera |
+| **Rest** | 18h-6h | "Devo dormire": va a letto |
+| **Idle** | 6h-8h, 17h-18h | "Cazzeggio": gira, fa bebè, salta sui letti |
+| **Panic** | Ferita/ostile | "AIUTO": FUGA |
 
-**Panico** è l'unico pacchetto che può interrompere TUTTI gli altri. Anche se il villager sta dormendo o lavorando, se c'è uno zombie, MODALITÀ PANICO.
+Il package **Panic** è l'unico che può interrompere TUTTI gli altri. Anche se il villico sta dormendo o lavorando, se c'è uno zombie, PANICO GENERALE.
 
-### Acquisisci POI: la meccanica che abilita la redstone wireless
+### Acquire POI: la cosa che permette la redstone senza fili
 
 ```java
+// scansiona i POI in un raggio di 48 blocchi
 Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithType(
    $$0, $$11, $$8x.blockPosition(), 48, PoiManager.Occupancy.HAS_SPACE
 )
 ```
 
-`Acquisisci POI` scansiona un raggio di 48 blocchi per tutti i punti d'interesse validi. Tiene i 5 più vicini, controlla se esiste un percorso, e acquisisce il più vicino raggiungibile. Ogni POI ha slot limitati:
-- **Postazioni di lavoro**: 1 slot
+`Acquire POI` scansiona in un raggio di 48 blocchi tutti i POI (punti di interesse). Tiene i 5 più vicini, verifica che esista un percorso, e acquisisce il primo accessibile.
+
+Ogni POI ha un numero limitato di slot:
+- **Posti di lavoro**: 1 slot
 - **Letti**: 1 slot
 - **Campane**: 32 slot
 
-La cosa FOLLE: **lo slot viene riservato al momento dell'ACQUISIZIONE, non all'arrivo**. Un villager può bloccarti un composter dall'altra parte della mappa senza mai raggiungerlo.
+Il punto PAZZESCO: **lo slot è riservato al momento dell'acquisizione, NON all'arrivo**. Un villico può bloccare un composter dall'altra parte della mappa, senza mai raggiungerlo.
 
-Vedi dove voglio arrivare?
+Cogli la potenza?
 
-### Redstone wireless. Sì, WIRELESS.
+### Redstone senza fili. Sì, SENZA FILI.
 
-1. Metti un villager in un minecart con un percorso verso un composter
-2. Lui acquisisce il composter (slot occupato, nessun altro può usarlo)
-3. Il villager è troppo lontano per cliccarlo -- la farina d'ossa resta
-4. MUOVI questo villager DOVUNQUE nel mondo, lui mantiene lo slot
-5. Quando vuoi attivare la tua cosa, UCCIDI il villager
-6. Lo slot si libera, un altro villager acquisisce il composter, rimuove la farina d'ossa
-7. AGGIORNAMENTO BLOCCO -> qualsiasi circuito redstone attivato
+1. Metti un villico in un minecart con un percorso verso un composter
+2. Acquisisce il composter (slot preso, nessuno può più usarlo)
+3. Il villico è troppo lontano per cliccarci sopra, la bone meal resta
+4. PORTI A SPASSO questo villico ovunque nel mondo, tiene lo slot
+5. Quando vuoi attivare il tuo aggeggio, UCCIDI il villico
+6. Lo slot si libera, un altro villico acquisisce il composter, ritira la bone meal
+7. BLOCK UPDATE -> qualsiasi circuito redstone attivato
 
-Hai creato redstone wireless, trasmissibile attraverso l'intero mondo, senza bisogno di caricare chunk sul percorso. Collegala a una camera di stasi con ender pearl e teletrasportati da qualsiasi posto uccidendo un villager.
+Hai letteralmente creato un segnale redstone senza fili, trasmissibile in tutto il mondo, con zero chunk load necessario sul percorso. Puoi collegarci una ender pearl stasis chamber, farti teletrasportare da ovunque uccidendo un villico.
 
-Il mio uso preferito? Un minigioco cacciatore di taglie: villager multipli con composter, il giocatore deve uccidere IL VILLAGER GIUSTO per attivare l'uscita. Meccanica completamente wtf xD
+Il mio uso preferito? Un mini-gioco "bounty hunter": metti più villici con composter, il giocatore deve uccidere IL villico GIUSTO per attivare l'uscita. È completamente wtf come meccanica.
 
-### Lo Stallo del Pathfinding (ovvero "il villager che si congela per sempre")
+### Il Pathfinding Deadlock (o "il villico che freeza per sempre")
 
-C'è un bug tra `Acquisisci POI` (che vede un percorso) e la navigazione reale (che si rifiuta di seguirlo). Succede quando il blocco sopra una postazione di lavoro non è camminabile. Risultato:
+C'è un bug TROPPO buono tra `Acquire POI` (che vede un percorso) e la navigazione reale (che rifiuta di prenderlo). Succede quando il blocco sopra il posto di lavoro non è calpestabile. Risultato:
 
-- Pacchetto Core: "Voglio acquisire il POI"
-- Navigazione: "Non ci posso camminare"
-- Risultato: il villager rimane CONGELATO, per sempre, in lotta con sé stesso.
+- Core package: "voglio acquisire il POI"
+- Navigazione: "non posso camminare lì"
+- Risultato: il villico resta CONGELATO, per sempre, a lottare con se stesso.
 
-Villager letteralmente congelati, usabili come decorazione o oggetti di scena. Un armor stand tank? Sì. Una guardia che non si muove? Sì. Macabro? Forse. Efficace? Totalmente xD
+Letteralmente villici frozen sul posto, usabili come decorazione o come "props" nelle build. Un tank per armature stand? Sì. Una guardia che non si muove? Sì. Macabro? Forse. Ma efficace.
 
 ---
 
 ## Conclusione
 
-Il pathfinding dei mob in Minecraft non è casuale. È un sistema deterministico basato su punteggi, prevedibile E sfruttabile.
+Il pathfinding dei mob di Minecraft non è caso. È un sistema deterministico, basato su punteggi, prevedibile E rompibile.
 
-**Tre cose da ricordare:**
+**I tre punti da trattenere:**
 
-1. **Blocchi solidi sotto = bias di altezza** -- riempi o svuota il sottosuolo per guidare i mob
-2. **Il malus è diverso per ogni mob** -- crea percorsi che alcuni prendono e altri no
-3. **Slot POI riservati a distanza** -- redstone wireless gratuita, teletrasporto, tutto quanto
+1. **Blocchi sotto i piedi = bias di altezza**: riempi o svuota il sottosuolo per guidare i mob
+2. **I malus sono diversi per ogni mob**: crea strade che alcuni prendono e altri no
+3. **Gli slot POI sono riservati a distanza**: redstone senza fili gratis, teletrasporto, tutto questo
 
-Il codice sorgente di Minecraft è una miniera d'oro di meccaniche poco sfruttate. Ho passato ore a leggere Java decompilato e onestamente? Ogni riga è un Easter Egg funzionale. Tranne che queste funzionano in survival per la redstone wireless con i villager. Miglior gioco confermato xD
+Il codice sorgente di Minecraft è una miniera d'oro di meccaniche sotto-sfruttate. Ho passato ore a leggere Java decompilato e francamente? Ogni riga è un Easter Egg funzionale. Solo che questi, li usi in survival per fare redstone senza fili coi villici. Gioco migliore confermato.

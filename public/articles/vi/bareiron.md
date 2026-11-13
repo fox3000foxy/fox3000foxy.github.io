@@ -1,54 +1,54 @@
 ---
 title: Bareiron -- máy chủ Minecraft chạy trên vi điều khiển giá 1$
-description: 6800 dòng C, zero malloc, Perlin noise được thay thế bằng bilinear
-  interpolation, biome dạng tile map, và tất cả trên một con chip 1$.
+description: 6800 dòng C, không malloc, Perlin noise thay bằng
+  bilinear interpolation, biome dạng tile map, và tất cả trên con chip giá 1$.
 date: 2026-05-30
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "rNMq8tDJ8FvPe7FlCqx4/ai2g/1+//IhlIezXJPqN6ql+qwl63kPYXT39fraIx3Gy3apfGidODQBJRCnc3wuyQ=="
+author_sig: "/joHsf4iZxomXYQLlCoXGb/OtsCwF38orlNRou/iZOv1xlgHzwWLtSfappvUxzOjp7Lp1ybCiAbsUGhAtc7RBw=="
 ---
 
 ## Giới thiệu
 
-Bạn đã bao giờ tự hỏi liệu có thể chạy một máy chủ Minecraft trên một vi điều khiển giá 1$ không?
+Chạy máy chủ Minecraft trên vi điều khiển giá 1 đô, nghe như trò đùa.
 
-Tôi đã từng. Và câu trả lời là có. Theo nghĩa đen.
+Tôi đã tự hỏi, và câu trả lời là có. Theo nghĩa đen.
 
-Có một dự án tên là [Bareiron](https://github.com/p2r3/bareiron/), của p2r3, và đó có lẽ là một trong những dự án hấp dẫn nhất tôi từng thấy trong thế giới Minecraft những năm gần đây. Chúng ta đang nói về một binary chỉ nặng **300 kilobyte**, **6800 dòng C**, không phụ thuộc bên ngoài, không malloc, không threading, và chạy trên một **ESP32 giá 1 đô la**.
+Có một dự án tên [Bareiron](https://github.com/p2r3/bareiron/), của p2r3, và đó có lẽ là một trong những dự án cuốn hút nhất tôi thấy trong thế giới Minecraft mấy năm gần đây. Ta nói về binary gói trong **300 kilobyte**, **6800 dòng C**, không phụ thuộc ngoài, không malloc, không threading, và nó chạy trên **ESP32 giá 1 đô**.
 
 ![ESP32-C3, vi điều khiển chạy máy chủ](/images/bareiron/esp32-board.jpg)
 
-Tạo địa hình vô tận. Biome. Hang động. Chế tạo. Đào mỏ. Sinh vật. Đói. Rương. Tất cả những gì bạn mong đợi từ một máy chủ survival.
+Sinh địa hình vô hạn. Các biome. Hang động. Chế tạo. Đào mỏ. Mob. Đói. Rương. Mọi thứ bạn mong ở máy chủ survival.
 
-Trên một con chip tiêu thụ **0.5 Watt** và có xung nhịp **160 MHz**.
+Trên con chip tiêu thụ **0.5 Watt** và xung **160 MHz**.
 
-Để dễ hình dung: một máy chủ Minecraft vanilla cần vài GB RAM. ESP32-C3 chỉ có **520 KB SRAM** (400 KB khả dụng sau khi boot). Bộ vi xử lý cách đây 20 năm đã chạy ở GHz -- con chip này chỉ đạt tối đa 160 MHz. Hệ số chênh lệch về sức mạnh thuần túy là khoảng **20 000**.
+Để cho thang đo : máy chủ Minecraft vanilla cần vài GB RAM. ESP32-C3 là **520 KB SRAM** (400 còn lại sau boot). Bộ xử lý 20 năm trước đã chạy ở gigahertz -- con này trần ở 160 MHz. Hệ số giữa hai bên về sức mạnh thuần khoảng **20 000**.
 
-p2r3 không chỉ viết một máy chủ Minecraft bằng C, anh ấy đã phát minh lại từng viên gạch của máy chủ để nó vừa vặn trong những giới hạn đó. Hãy cùng xem bằng cách mở mã nguồn.
+p2r3 không viết máy chủ Minecraft bằng C, anh ấy phát minh lại từng viên gạch của máy chủ để nó vừa các ràng buộc này. Ta sẽ xem thế nào, bằng cách mở mã nguồn.
 
-![Hình thu nhỏ video giới thiệu Bareiron của p2r3](/images/bareiron/title-card.jpg)
+![Ảnh thu nhỏ video giới thiệu Bareiron của p2r3](/images/bareiron/title-card.jpg)
 
-## Bộ não của dự án: tạo địa hình không cần bộ nhớ
+## Bộ não dự án : sinh địa hình không cần bộ nhớ
 
-Vấn đề lớn nhất khi bạn muốn làm một máy chủ MC nhúng là tạo địa hình.
+Vấn đề lớn nhất khi muốn làm máy chủ MC nhúng là sinh địa hình.
 
-Trong Minecraft vanilla, thế giới được tạo bằng **Perlin noise**: nhiều lớp chồng lên nhau (octave), 6 tham số biome (nhiệt độ, độ ẩm, tính lục địa, xói mòn, weirdness, độ sâu), và cả một hệ thống caching để không phải tính toán lại mọi thứ mỗi lần.
+Trong Minecraft vanilla, thế giới sinh bằng **Perlin noise** : nhiều lớp chồng (octave), 6 tham số biome (nhiệt độ, độ ẩm, lục địa, xói mòn, weirdness, độ sâu), và cả hệ cache để không phải tính lại mọi thứ mỗi lần.
 
-Kết quả thật tuyệt đẹp. Nhưng nó tốn kém về tính toán, và chiếm RAM để lưu trữ các chunk đã tạo.
+Kết quả tuyệt đẹp. Nhưng tốn tính toán, và tốn RAM để lưu các chunk đã sinh.
 
-Cách tiếp cận của Bareiron hoàn toàn khác biệt. Thay vì chồng noise, nó sử dụng **bilinear interpolation** trên 4 điểm được tạo bởi một **RNG tất định**.
+Cách của Bareiron khác triệt để. Thay vì chồng nhiễu, nó dùng **bilinear interpolation** trên 4 điểm sinh bởi **RNG xác định**.
 
-Bạn biết khi bạn phóng to một bức ảnh nhỏ bị pixel hóa và các cạnh trở nên mờ không? Đó chính xác là những gì đang xảy ra.
+Bạn biết khi phóng to ảnh pixel nhỏ và các cạnh mờ đi chứ? Đúng là nó.
 
 ```c
-// worldgen.c, dòng 117-171 (đã đơn giản hóa)
+// worldgen.c, dòng 117-171 (rút gọn)
 
 uint8_t interpolate (uint8_t a, uint8_t b, uint8_t c, uint8_t d, int x, int z) {
   uint16_t top    = a * (CHUNK_SIZE - x) + b * x;
@@ -68,44 +68,44 @@ uint8_t getHeightAt (int x, int z) {
 }
 ```
 
-Nội suy song tuyến tính tiêu chuẩn: 4 góc, trọng số theo vị trí, một `uint8_t` duy nhất đầu ra. CHUNK_SIZE là 8, vì vậy nó được thực hiện bằng phép nhân số nguyên, không dùng float.
+Nội suy song tuyến chuẩn : 4 góc, trọng số theo vị trí, một `uint8_t` đầu ra. CHUNK_SIZE là 8, nên việc này bằng phép nhân số nguyên, không float.
 
-p2r3 trình bày từng bước trong video: đầu tiên là 4 góc của chunk, mỗi góc có một độ cao được seed bởi RNG.
+p2r3 trình bày từng bước trong video : đầu tiên 4 góc của chunk, mỗi cái với chiều cao seed bởi RNG.
 
-![4 góc của chunk, mỗi góc được seed bởi RNG tất định](/images/bareiron/gen-four-corners.jpg)
+![4 góc của chunk, mỗi cái seed bởi RNG xác định](/images/bareiron/gen-four-corners.jpg)
 
-Sau đó, phép nội suy giữa 4 điểm này tạo ra một bề mặt liên tục.
+Rồi nội suy giữa 4 điểm này tạo bề mặt liên tục.
 
-![Áp dụng bilinear interpolation giữa 4 góc](/images/bareiron/gen-interpolate.jpg)
+![Áp bilinear interpolation giữa 4 góc](/images/bareiron/gen-interpolate.jpg)
 
-Và bằng cách lặp lại mẫu này trên tất cả các chunk liền kề, chúng ta có được địa hình trải dài vô tận.
+Và lặp mẫu trên mọi chunk kề, ta được địa hình trải vô hạn.
 
-![Kết quả cuối cùng: địa hình gồ ghề liên tục](/images/bareiron/gen-result.jpg)
+![Kết quả cuối : địa hình gồ ghề liên tục](/images/bareiron/gen-result.jpg)
 
-### RNG tất định
+### RNG xác định
 
-Chìa khóa làm nên tất cả điều này là seeding. Mỗi chunk có 4 góc, và mỗi góc cần một giá trị giả ngẫu nhiên duy nhất nhưng có thể tái tạo.
+Chìa khóa khiến tất cả khả thi là seeding. Mỗi chunk có 4 góc, và mỗi góc cần một giá trị giả ngẫu nhiên duy nhất mà tái tạo được.
 
 ```c
 // worldgen.c, dòng 13-22
 
 uint32_t getChunkHash (short x, short z) {
   uint8_t buf[8];
-  memcpy(buf, &x, 2);          // 16 bit tọa độ X
-  memcpy(buf + 2, &z, 2);      // 16 bit tọa độ Z
-  memcpy(buf + 4, &world_seed, 4);  // 32 bit seed toàn cục
+  memcpy(buf, &x, 2);          // 16 bits de coordonnée X
+  memcpy(buf + 2, &z, 2);      // 16 bits de coordonnée Z
+  memcpy(buf + 4, &world_seed, 4);  // 32 bits de seed globale
   return splitmix64(*((uint64_t *)buf));  // hash
 }
 ```
 
-Nó đóng gói 16 bit của X, 16 bit của Z, và 32 bit seed, vào một bộ đệm 8 byte, và đưa tất cả vào `splitmix64`. Kết quả: một giá trị tất định duy nhất cho mỗi vị trí, dựa trên seed của thế giới.
+Nó đóng gói 16 bit X, 16 bit Z, và 32 bit seed, vào buffer 8 byte, và chạy tất cả qua `splitmix64`. Kết quả : giá trị xác định duy nhất cho mỗi vị trí, dựa trên seed của thế giới.
 
-Bạn thấy sức mạnh của nó chứ? Máy chủ không cần lưu trữ địa hình. Nó tính toán lại khi cần khi người chơi đến khu vực mới, và cho kết quả hoàn toàn giống nhau mỗi lần.
+Bạn nắm sức mạnh của cơ chế chứ? Máy chủ không cần lưu địa hình. Nó tính lại tức thì khi người chơi tới vùng mới, và cho đúng cùng kết quả mỗi lần.
 
-`splitmix64` được sử dụng là một PRNG cực nhanh được thiết kế cho hash 64 bit:
+`splitmix64` dùng là prng siêu nhanh thiết kế cho hash 64 bit :
 
 ```c
-// worldgen.c (đã đơn giản hóa)
+// worldgen.c (rút gọn)
 
 static uint32_t splitmix64 (uint64_t state) {
   state += 0x9E3779B97F4A7C15ull;
@@ -116,45 +116,45 @@ static uint32_t splitmix64 (uint64_t state) {
 }
 ```
 
-3 thao tác: cộng, xor/dịch, nhân, xor/dịch, nhân, xor/dịch. Không có lookup table, không có vòng lặp. Nó lấy bộ đệm 8 byte (X + Z + seed), xử lý như một số nguyên 64 bit, và trả về 32 bit hash. Tất định, nhanh, và gọn trong 5 dòng.
+3 thao tác : cộng, xor/shift, nhân, xor/shift, nhân, xor/shift. Tất cả gói trong thao tác trực tiếp, không bảng không vòng lặp. Nó lấy buffer 8 byte (X + Z + seed), xử lý như số nguyên 64 bit, và trả 32 bit hash. Xác định, nhanh, và gói trong 5 dòng.
 
-### Tại sao đây không phải là Perlin noise
+### Vì sao không phải Perlin noise
 
-p2r3 tự nói trong video: "bạn càng thêm nhiều chữ số từ số ngẫu nhiên, địa hình càng trở nên đều đặn, giống như tung đồng xu nhiều lần càng tiến gần đến 50/50". Trong thực tế, đó là số bit của hash mà nó kết hợp:
+p2r3 tự nói trong video : "càng thêm chữ số của số ngẫu nhiên, địa hình càng đều, như càng tung đồng xu càng tiến về 50/50". Thực tế, đó là số bit của hash anh ấy kết hợp :
 
 ```c
 // worldgen.c, dòng 51-115
 
-// Với biome plains: 4 yếu tố kết hợp → địa hình đều đặn
+// Với biome plains : 4 hệ số kết hợp → địa hình đều
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
-// Với snowy plains: 2 yếu tố → gồ ghề hơn
+// Với snowy plains : 2 hệ số → gồ ghề hơn
 h = (hash % 5) + ((hash >> 4) % 5);
 ```
 
-Mỗi biome chọn bao nhiêu lần trích xuất bit để kết hợp. Càng nhiều, phân phối càng ổn định -- giống như tung nhiều đồng xu tiến gần đến 50/50. Càng ít, biến thể cục bộ càng mạnh.
+Mỗi biome chọn bao nhiêu trích bit nó kết hợp. Càng nhiều, phân bố càng ổn định -- như càng tung đồng xu càng tiến về 50/50. Càng ít, biến thiên cục bộ càng mạnh.
 
-![Địa hình gồ ghề -- ít yếu tố, biến thể lớn](/images/bareiron/terrain-irregular.jpg)
+![Địa hình gồ ghề -- ít hệ số, biến thiên mạnh](/images/bareiron/terrain-irregular.jpg)
 
-Chỉ với 2 yếu tố, snowy plains tạo ra địa hình đồi núi, gần như núi non. Các đỉnh và hố thường xuyên xuất hiện.
+Với chỉ 2 hệ số, snowy plains cho địa hình đồi, gần như núi. Đỉnh và hố thường xuyên.
 
-![Địa hình đều đặn -- nhiều yếu tố, bề mặt mịn](/images/bareiron/terrain-regular.jpg)
+![Địa hình đều -- nhiều hệ số, bề mặt mịn](/images/bareiron/terrain-regular.jpg)
 
-Với 4 yếu tố, plains vẫn bằng phẳng và dễ đoán. Phân phối ổn định.
+Với 4 hệ số, đồng bằng giữ phẳng và đoán được. Phân bố ổn định.
 
-Một chunk được tạo trong **200 ms** trên ESP32 -- so với thời gian không thể đo được trên cùng phần cứng với Perlin noise vì nó quá đắt.
+Chunk sinh trong **200 ms** trên ESP32 -- so với thời gian không đo nổi trên cùng phần cứng với Perlin noise vì nó đắt tới vậy.
 
-### Chi tiết đỉnh cao: truy vấn một khối mà không cần tạo toàn bộ chunk
+### Chi tiết đắt giá : hỏi khối mà không sinh cả chunk
 
-Bạn chơi, bạn đào một khối. Máy chủ cần biết item nào để đưa cho bạn. Theo cách ngây thơ, bạn sẽ cần tạo toàn bộ chunk để làm điều đó.
+Bạn chơi, bạn đào khối. Máy chủ phải biết cho bạn vật phẩm gì. Ngây thơ, phải sinh cả chunk vì việc đó.
 
-Với bilinear interpolation, bạn có thể truy vấn **bất kỳ điểm nào** trên mặt phẳng trực tiếp từ tọa độ. Các góc của chunk có được từ vị trí người chơi, phép nội suy cho bạn độ cao tại bất kỳ offset nào. Một vài phép toán, không cần tạo chunk.
+Với bilinear interpolation, bạn hỏi **bất kỳ điểm nào** của mặt phẳng trực tiếp từ tọa độ. Các góc của chunk lấy từ vị trí người chơi, nội suy cho chiều cao ở bất kỳ offset nào. Vài phép toán, không sinh chunk.
 
-p2r3: "điều tôi muốn là một hàm kỳ diệu có thể cho tôi biết khối nào nằm ở tọa độ nhất định, mà không cần truy cập bộ nhớ hay tính toán bản đồ noise đắt đỏ". Chính xác những gì anh ấy đã làm.
+p2r3 : "điều tôi muốn là hàm kỳ diệu có thể bảo tôi khối nào ở tọa độ cho trước, không cần chạm bộ nhớ hay tính bản đồ nhiễu đắt đỏ". Đúng điều anh ấy đã làm.
 
-Đây là cách độ cao trở thành các khối cụ thể:
+Đây là cách chiều cao thành các khối cụ thể :
 
 ```c
-// worldgen.c (đã đơn giản hóa)
+// worldgen.c (rút gọn)
 
 uint8_t getTerrainBlock (int x, uint8_t y, int z) {
   uint8_t surface = getHeightAt(x, z);
@@ -168,46 +168,46 @@ uint8_t getTerrainBlock (int x, uint8_t y, int z) {
 }
 ```
 
-5 điều kiện. Một lớp grass/dirt/stone/deepslate/bedrock. Khối bề mặt phụ thuộc vào biome qua `biome_top[]` -- grass cho plains, sand cho sa mạc. Không vòng lặp, không switch, một chuỗi if rơi vào đúng lớp.
+5 điều kiện. Một lớp grass/dirt/stone/deepslate/bedrock. Khối bề mặt phụ thuộc biome qua `biome_top[]` -- grass cho đồng bằng, sand cho sa mạc. Thác if đơn giản rơi vào đúng lớp, thay vòng lặp và switch.
 
-### Hang động, phép mirror lười biếng nhất
+### Hang động, tấm gương lười nhất
 
 ```c
 altitude_grotte = CAVE_BASE_DEPTH - (hauteur_surface - y);
 ```
 
-Nó mirror độ cao bề mặt xuống lòng đất. Trông giống các hốc deepslate lớn. Không tính toán, một dòng.
+Nó phản chiếu chiều cao bề mặt xuống dưới lòng đất. Trông như các hốc deepslate lớn. Không tính toán, một dòng.
 
-![Hang động được tạo bằng mirror địa hình bề mặt](/images/bareiron/cave-mirror.jpg)
+![Hang sinh bằng phản chiếu địa hình bề mặt](/images/bareiron/cave-mirror.jpg)
 
-![Sơ đồ mirror địa hình để tạo hang động](/images/bareiron/cave-diagram.jpg)
+![Sơ đồ phản chiếu địa hình để sinh hang](/images/bareiron/cave-diagram.jpg)
 
-### Quặng, phiên bản XOR
+### Quặng, bản XOR
 
 ```c
 candidat = (chunk_x ^ col_x ^ col_z) % 100;
 if (candidat < 5 && y < 16) -> diamond
 ```
 
-XOR tọa độ đảm bảo một ứng cử viên mỗi cột. Loại chỉ phụ thuộc vào độ cao. Kim cương được giấu dưới điểm thấp nhất của hang động để việc đào vẫn có ích.
+XOR tọa độ đảm bảo một ứng viên cho mỗi cột. Kiểu chỉ phụ thuộc độ cao. Kim cương giấu dưới điểm thấp nhất của hang để đào bới vẫn đáng.
 
 ### Biome dạng tile map
 
-Mỗi biome là một hòn đảo hình tròn trong một lưới, loại của nó được xác định bởi một mẫu tính toán từ seed. Có lưới, dễ đoán, và miễn phí.
+Mỗi biome là đảo tròn trong lưới, kiểu của nó xác định bằng mẫu tính từ seed. Lưới, đoán được, và miễn phí.
 
-![Bản đồ biome dạng tile map -- mỗi đảo là một biome khác nhau](/images/bareiron/biome-tilemap.jpg)
+![Bản đồ biome dạng tile map -- mỗi đảo là một biome khác](/images/bareiron/biome-tilemap.jpg)
 
-Mỗi biome có bộ tham số riêng được mã hóa trong các mảng:
+Mỗi biome có bộ tham số riêng mã hóa trong các bảng :
 
 ```c
-// worldgen.c (đã đơn giản hóa)
+// worldgen.c (rút gọn)
 
 static const uint8_t biome_base[] = {
-  [BIOME_PLAINS]  = 48,   // độ cao cơ sở: 48
-  [BIOME_DESERT]  = 52,   // cao hơn một chút
-  [BIOME_FOREST]  = 50,   // ở giữa
-  [BIOME_TAIGA]   = 46,   // thấp hơn một chút
-  [BIOME_SNOWY]   = 40,   // thấp nhất
+  [BIOME_PLAINS]  = 48,   // hauteur de base : 48
+  [BIOME_DESERT]  = 52,   // légèrement plus haut
+  [BIOME_FOREST]  = 50,   // entre les deux
+  [BIOME_TAIGA]   = 46,   // un peu plus bas
+  [BIOME_SNOWY]   = 40,   // le plus bas
 };
 
 static const uint8_t biome_top[] = {
@@ -219,45 +219,45 @@ static const uint8_t biome_top[] = {
 };
 
 static const uint8_t biome_factors[] = {
-  [BIOME_PLAINS]  = 4,   // 4 lần trích xuất → rất đều
-  [BIOME_DESERT]  = 3,   // 3 lần trích xuất → vừa phải
-  [BIOME_FOREST]  = 4,   // 4 lần trích xuất → đều, đồi núi
-  [BIOME_TAIGA]   = 3,   // 3 lần trích xuất → vừa phải
-  [BIOME_SNOWY]   = 2,   // 2 lần trích xuất → rất gồ ghề
+  [BIOME_PLAINS]  = 4,   // 4 extractions → très régulier
+  [BIOME_DESERT]  = 3,   // 3 extractions → modéré
+  [BIOME_FOREST]  = 4,   // 4 extractions → régulier, vallonné
+  [BIOME_TAIGA]   = 3,   // 3 extractions → modéré
+  [BIOME_SNOWY]   = 2,   // 2 extractions → très accidenté
 };
 ```
 
-**Plains**: độ cao 48, 4 yếu tố → địa hình rất bằng phẳng, cỏ.
+**Plains** : chiều cao 48, 4 hệ số → địa hình rất phẳng, cỏ.
 
 ```c
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
-// Kết quả: dao động tối đa ±4 khối
+// Kết quả : biến thiên tối đa ±4 khối
 ```
 
-**Desert**: độ cao 52, 3 yếu tố, khối bề mặt = cát. Không bao giờ dưới mực nước biển.
+**Desert** : chiều cao 52, 3 hệ số, khối bề mặt = cát. Không bao giờ dưới mực nước biển.
 
 ```c
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3);
-// Kết quả: dao động tối đa ±6 khối, kẹp ở SEA_LEVEL+1
+// Kết quả : biến thiên tối đa ±6 khối, kẹp ở SEA_LEVEL+1
 ```
 
-**Forest**: độ cao 50, 4 yếu tố như plains nhưng cơ sở cao hơn → đồi cây cối.
+**Forest** : chiều cao 50, 4 hệ số như plains nhưng nền cao hơn → đồi rừng.
 
-**Taiga**: độ cao 46, 3 yếu tố → biến thể vừa phải, địa hình lạnh.
+**Taiga** : chiều cao 46, 3 hệ số → biến thiên vừa, địa hình lạnh.
 
-**Snowy plains**: độ cao 40, chỉ 2 yếu tố → gồ ghề nhất.
+**Snowy plains** : chiều cao 40, chỉ 2 hệ số → gồ ghề nhất.
 
 ```c
 h = (hash % 5) + ((hash >> 4) % 5);
-// Kết quả: dao động tối đa ±14 khối
+// Kết quả : biến thiên tối đa ±14 khối
 ```
 
-Mỗi biome được mã hóa trong **3 mảng 5 phần tử**: độ cao cơ sở, khối bề mặt, số yếu tố. Khi `getHeightAtFromHash` nhận được biome, nó tra cứu các mảng này để điều chỉnh địa hình. 15 byte dữ liệu để thay thế toàn bộ hệ thống biome của Minecraft.
+Mỗi biome mã hóa trong **3 bảng 5 mục** : chiều cao nền, khối bề mặt, số hệ số. Khi `getHeightAtFromHash` nhận biome, nó tra các bảng này để chỉnh địa hình. 15 byte dữ liệu thay toàn bộ hệ thống biome của Minecraft.
 
-Bộ phát hiện biome sử dụng seed để xác định biome nào tương ứng với mỗi chunk:
+Bộ phát hiện biome dùng seed để xác định biome nào khớp mỗi chunk :
 
 ```c
-// worldgen.c (đã đơn giản hóa)
+// worldgen.c (rút gọn)
 
 static const uint8_t biome_pattern[] = {
   BIOME_PLAINS, BIOME_FOREST, BIOME_PLAINS, BIOME_DESERT,
@@ -273,24 +273,24 @@ uint8_t getChunkBiome (short cx, short cz) {
 }
 ```
 
-Một mẫu 16 phần tử, một chỉ mục được seed bởi tọa độ chunk. Tạo ra một lưới lặp lại nhưng trực quan nhất quán. 4 dòng code để thay thế toàn bộ hệ thống tham số biome của Minecraft vanilla.
+Mẫu 16 mục, index seed bởi tọa độ chunk. Cho ra lưới lặp nhưng trông nhất quán. 4 dòng mã thay toàn bộ hệ thống tham số biome của Minecraft vanilla.
 
-### getHeightAtFromHash: trình lắp ráp địa hình
+### getHeightAtFromHash : bộ ráp địa hình
 
-Hàm cốt lõi của quá trình tạo kết hợp 4 góc được seed bởi biome:
+Hàm ở lõi sinh kết hợp 4 góc seed theo biome :
 
 ```c
-// worldgen.c (đã đơn giản hóa)
+// worldgen.c (rút gọn)
 
 static uint8_t getHeightAtFromHash (int rx, int rz, short cx, short cz,
                                     uint32_t h, uint8_t biome) {
-  // 4 góc trích từ hash, seed khác nhau mỗi góc
+  // 4 coins extraits du hash, seed différente par coin
   uint8_t h1 = biome_base[biome] + (h & 0x0F);
   uint8_t h2 = biome_base[biome] + ((h >> 4) & 0x0F);
   uint8_t h3 = biome_base[biome] + ((h >> 8) & 0x0F);
   uint8_t h4 = biome_base[biome] + ((h >> 12) & 0x0F);
 
-  // Ràng buộc biome: sa mạc không bao giờ dưới nước
+  // Contrainte biome : désert jamais sous l'eau
   if (biome == BIOME_DESERT) {
     h1 = max(h1, SEA_LEVEL + 1);
     h2 = max(h2, SEA_LEVEL + 1);
@@ -298,32 +298,32 @@ static uint8_t getHeightAtFromHash (int rx, int rz, short cx, short cz,
     h4 = max(h4, SEA_LEVEL + 1);
   }
 
-  // Nội suy từ 4 góc
+  // Interpolation depuis les 4 coins
   return interpolate(h1, h2, h3, h4, rx, rz);
 }
 ```
 
-Mỗi biome có một `biome_base` dịch chuyển độ cao tham chiếu, và 4 góc được trích xuất từ hash với các độ dịch khác nhau. Sa mạc buộc giá trị tối thiểu trên mực nước biển -- một dòng ràng buộc tránh nước mà không cần tính toán biom bổ sung.
+Mỗi biome có `biome_base` dịch chiều cao tham chiếu, và 4 góc trích từ hash với độ lệch khác nhau. Sa mạc ép min trên mực nước biển -- một dòng ràng buộc tránh nước mà không cần tính toán biome thêm.
 
-### Cây và xương rồng: đặt theo xác suất
+### Cây và xương rồng : đặt theo xác suất
 
-Quá trình tạo bề mặt sử dụng cùng hash chunk để quyết định nơi đặt:
+Sinh bề mặt dùng cùng hash chunk để quyết trồng ở đâu :
 
 ```c
-// worldgen.c (đã đơn giản hóa)
+// worldgen.c (rút gọn)
 
 static void genFoliage (uint8_t *chunk_data, short cx, short cz,
                         uint32_t hash, uint8_t biome) {
   if (biome == BIOME_DESERT) {
-    // Xương rồng: một ứng cử viên mỗi chunk, hash quyết định vị trí
+    // Cactus : un candidat par chunk, hash détermine la position
     int tx = (hash >> 8) & 7;
     int tz = (hash >> 12) & 7;
     int ty = getHeightAt(cx * 8 + tx, cz * 8 + tz);
     if (chunk_data[ty * 64 + tz * 8 + tx] == B_sand)
       placeCactus(chunk_data, tx, ty + 1, tz);
   } else {
-    // Cây: hash quyết định có đặt không và đặt ở đâu
-    int tree_count = (hash & 3);  // 0-3 cây mỗi chunk
+    // Arbres : hash détermine si on en pose et où
+    int tree_count = (hash & 3);  // 0-3 arbres par chunk
     for (int i = 0; i < tree_count; i ++) {
       int tx = ((hash >> (4 + i * 4)) & 7);
       int tz = ((hash >> (6 + i * 4)) & 7);
@@ -334,30 +334,30 @@ static void genFoliage (uint8_t *chunk_data, short cx, short cz,
 }
 ```
 
-0-3 cây mỗi chunk cho biome xanh, tối đa 1 xương rồng cho sa mạc. Hash chunk là nguồn entropy duy nhất -- `& 7` cho vị trí trong chunk, `& 3` cho bộ đếm. Mọi thứ đều tất định, không gì được lưu trữ.
+0-3 cây cho mỗi chunk với biome xanh, tối đa 1 xương rồng cho sa mạc. Hash của chunk là nguồn entropy duy nhất -- `& 7` cho vị trí trong chunk, `& 3` cho bộ đếm. Mọi thứ xác định, không gì lưu trữ.
 
-### generateChunk: ghép mọi thứ lại
+### generateChunk : ráp tất cả
 
-Hàm kết hợp tất cả để tạo ra một chunk hoàn chỉnh gồm 8×8×256 khối:
+Hàm gom tất cả để cho ra chunk đầy đủ 8×8×256 khối :
 
 ```c
-// worldgen.c (đã đơn giản hóa)
+// worldgen.c (rút gọn)
 
 void generateChunk (uint8_t *chunk, short cx, short cz) {
   uint32_t hash = getChunkHash(cx, cz);
   uint8_t biome = getChunkBiome(cx, cz);
 
-  // Với mỗi cột trong chunk (8×8 = 64)
+  // Pour chaque colonne du chunk (8×8 = 64)
   for (int x = 0; x < 8; x ++) {
     for (int z = 0; z < 8; z ++) {
-      // Tọa độ thế giới tuyệt đối
+      // Coordonnées monde absolues
       int wx = cx * 8 + x;
       int wz = cz * 8 + z;
 
-      // Độ cao của cột
+      // Hauteur de la colonne
       uint8_t height = getHeightAt(wx, wz);
 
-      // Điền cột từ dưới lên
+      // Remplir la colonne de bas en haut
       for (int y = 0; y < height; y ++) {
         uint8_t block = getTerrainBlock(wx, y, wz);
         chunk[y * 64 + z * 8 + x] = block;
@@ -365,35 +365,33 @@ void generateChunk (uint8_t *chunk, short cx, short cz) {
     }
   }
 
-  // Thêm các phần tử bề mặt (cây, xương rồng)
+  // Ajouter les éléments de surface (arbres, cactus)
   genFoliage(chunk, cx, cz, hash, biome);
 }
 ```
 
-Đó là tất cả. 3 vòng lặp lồng nhau: với mỗi cột, tìm độ cao, điền khối, chuyển sang cột tiếp theo. Đầu ra là một `uint8_t[16384]` (8 × 8 × 256) đại diện cho chunk hoàn chỉnh. Không caching, không lazy loading, không nén -- chunk được tạo và gửi trực tiếp đến client.
+Hết. 3 vòng lặp lồng : với mỗi cột, tìm chiều cao, lấp khối, sang cột tiếp. Đầu ra là `uint8_t[16384]` (8 × 8 × 256) đại diện chunk đầy đủ. Chunk được sinh rồi gửi thẳng cho client, không qua cache, tải lười hay nén.
 
-## Bộ nhớ: toàn mảng tĩnh
+## Lưu trữ : mảng tĩnh khắp nơi
 
-Kiến trúc bộ nhớ của Bareiron là C nhúng trong tất cả vinh quang của nó. Không malloc, không hash map, không danh sách liên kết.
+Kiến trúc bộ nhớ của Bareiron đúng chất C nhúng huy hoàng : chỉ bảng toàn cục kích thước cố định, không malloc, không hash map, không danh sách liên kết.
 
-Mọi thứ đều là mảng toàn cục kích thước cố định.
-
-### Các thay đổi khối
+### Thay đổi khối
 
 ```c
 // globals.h, dòng 191-196
 
 typedef struct {
-  short x;      // 2 byte -- giới hạn 32 000 khối theo chiều ngang
-  short z;      // 2 byte
-  uint8_t y;    // 1 byte -- giới hạn 256 khối theo chiều dọc
-  uint8_t block; // 1 byte -- giới hạn 256 loại khối
+  short x;      // 2 bytes -- limite à 32 000 blocs horizontal
+  short z;      // 2 bytes
+  uint8_t y;    // 1 byte -- limite à 256 blocs vertical
+  uint8_t block; // 1 byte -- limite à 256 types de blocs
 } BlockChange;
 ```
 
-20 000 mục, tương đương khoảng **25 000 thay đổi** -- tương đương một chunk rưỡi bị đào hết. Trường `block` có giá trị `0xFF` đánh dấu mục trống. Việc tìm kiếm là quét tuyến tính:
+20 000 mục, tức khoảng **25 000 thay đổi** -- tương đương chunk rưỡi đào sạch. Trường `block` ở `0xFF` đánh dấu mục trống. Tìm kiếm là quét tuyến tính :
 
-![Bố cục bộ nhớ của mảng khối -- 6 byte mỗi mục](/images/bareiron/memory-layout.jpg)
+![Bố cục bộ nhớ của bảng khối -- 6 byte cho mỗi mục](/images/bareiron/memory-layout.jpg)
 
 ```c
 // procedures.c
@@ -409,8 +407,9 @@ uint8_t getBlockChange (short x, uint8_t y, short z) {
   }
   return 0xFF;
 }
+```
 
-Thêm một thay đổi cũng trực tiếp như tìm kiếm:
+Thêm thay đổi trực tiếp như tìm kiếm :
 
 ```c
 static uint8_t changes_count = 0;
@@ -425,41 +424,41 @@ void addBlockChange (short x, short z, uint8_t y, uint8_t block) {
 }
 ```
 
-Một bộ đếm, một chỉ mục, một lần ghi. Không sắp xếp, không nén, không quản lý bộ nhớ. Khi mảng đầy, các thay đổi mới bị bỏ qua -- địa hình trở về trạng thái được tạo ban đầu.
+Một bộ đếm, một index, một lần ghi. Bảng chỉ chồng chất : không sắp xếp, không nén, không quản lý bộ nhớ. Khi bảng đầy, các thay đổi mới bị lờ -- địa hình về trạng thái đã sinh.
 
-Bình luận của tác giả về giới hạn 256 khối: "tôi không tính đến việc implement cầu thang đồng hơi bị patina đánh bóng sớm đâu."
+Nhận xét của tác giả về giới hạn 256 khối : "je compte pas implémenter les escaliers en cuivre légèrement patinés cirés de si tôt."
 
-### Sinh vật: 8 byte mỗi con
+### Mob : 8 byte cho mỗi đầu ống
 
 ```c
-// globals.h, dòng 240-251 (pragma pack(push, 1) để loại bỏ padding)
+// globals.h, dòng 240-251 (pragma pack(push, 1) pour éliminer le padding)
 
 typedef struct {
-  uint8_t type;   // 25=gà, 28=bò, 95=lợn, 106=cừu, 145=zombie
+  uint8_t type;   // 25=chicken, 28=cow, 95=pig, 106=sheep, 145=zombie
   short x;
-  uint8_t y;      // nếu health=0, Y trở thành timer trước khi xóa
+  uint8_t y;      // si health=0, Y devient un timer avant suppression
   short z;
-  uint8_t data;   // bit 0-4: máu, bit 5: cừu bị cắt lông, bit 6-7: timer hoảng loạn
+  uint8_t data;   // bits 0-4: health, bit 5: sheep sheared, bits 6-7: panic timer
 } MobData;
 ```
 
-8 byte. Tối đa 16 vị trí. Không căn chỉnh, không padding. Byte `data` là một bitfield tự chế: 5 bit máu, 1 bit cắt lông, 2 bit timer hoảng loạn. Và khi một sinh vật chết, trường Y trở thành timer trước khi xóa. Tái sử dụng bộ nhớ ở cấp độ bit.
+8 byte. Tối đa 16 vị trí. Căn chỉnh và đệm vứt bỏ. Byte `data` là bitfield tự chế : 5 bit máu, 1 bit cạo lông, 2 bit timer hoảng. Và khi mob chết, trường Y thành timer trước xóa. Tái dùng bộ nhớ tới cấp bit.
 
-### Người chơi: đóng gói chặt
+### Người chơi : đóng chặt
 
-Dữ liệu người chơi cũng dùng `#pragma pack(push, 1)` -- tọa độ ở dạng `short` + `uint8_t`, kho đồ trong mảng cố định `uint16_t` + `uint8_t`, và một trường `flags` mã hóa cả cooldown tấn công, trạng thái spawn, sneak, sprint, eat, load, movement cooldown, và khóa craft. Tất cả trong các bit riêng lẻ.
+Dữ liệu người chơi cũng dùng `#pragma pack(push, 1)` -- tọa độ bằng `short` + `uint8_t`, túi đồ bằng bảng cố định `uint16_t` + `uint8_t`, và trường `flags` mã hóa cùng lúc cooldown tấn công, trạng thái spawn, sneak, sprint, eat, load, movement cooldown, và khóa craft. Tất cả trong các bit riêng lẻ.
 
-## Vòng lặp chính: while(true) và non-blocking
+## Vòng lặp chính : while(true) và không chặn
 
-Toàn bộ máy chủ chạy trên một vòng lặp, một thread, không thư viện event.
+Toàn bộ máy chủ chạy trên một vòng lặp, một luồng, không thư viện sự kiện.
 
 ```c
 // main.c, dòng 594-720
 
 while (true) {
-  task_yield();  // để watchdog trên ESP32 thở
+  task_yield();  // laisse respirer le watchdog sur ESP32
 
-  // Chấp nhận kết nối mới (non-blocking)
+  // Accepter une nouvelle connexion (non-bloquant)
   for (int i = 0; i < MAX_PLAYERS; i ++) {
     if (clients[i] != -1) continue;
     clients[i] = accept(server_fd, ...);
@@ -467,17 +466,17 @@ while (true) {
     break;
   }
 
-  // Tick máy chủ nếu đã hết thời gian
+  // Tick serveur si le temps est écoulé
   if (get_program_time() - last_tick_time > TIME_BETWEEN_TICKS) {
     handleServerTick(time_since_last_tick);
     last_tick_time = get_program_time();
   }
 
-  // Round-robin: một client, một packet mỗi lần lặp
+  // Round-robin : un client, un packet par itération
   client_index = (client_index + 1) % MAX_PLAYERS;
   if (clients[client_index] == -1) continue;
 
-  // Đọc header packet: length + ID
+  // Lire l'entête du packet : length + ID
   recv(client_fd, &recv_buffer, 2, MSG_PEEK);
   int length = readVarInt(client_fd);
   int packet_id = readVarInt(client_fd);
@@ -485,104 +484,104 @@ while (true) {
 }
 ```
 
-Chỉ một client được xử lý mỗi lần lặp, và chỉ một packet được đọc mỗi lần. `task_yield()` ở đầu vòng lặp cho phép tác vụ idle của FreeRTOS thở trên ESP32 -- nếu không có nó, watchdog timer sẽ reset chip.
+Một client duy nhất xử lý cho mỗi vòng lặp, và một gói duy nhất đọc mỗi lần. `task_yield()` ở đầu vòng lặp để task idle FreeRTOS thở trên ESP32 -- không có nó, timer watchdog reset chip của bạn.
 
-Việc phân phối packet là một switch khổng lồ **400 dòng**:
+Điều phối gói, đó là switch khổng lồ **400 dòng** :
 
 ```c
 // main.c, dòng 68-497
 
 void handlePacket (int client_fd, int length, int packet_id, int state) {
   switch (packet_id) {
-    case 0x00:  // Handshake / Status / Login tùy trạng thái
+    case 0x00:  // Handshake / Status / Login selon l'état
     case 0x01:  // Status ping
     case 0x02:  // Plugin message
     case 0x03:  // Login/configuration acknowledgment
     case 0x08:  // Chat
     case 0x0B:  // Client status (respawn)
-    case 0x11:  // Click container (quản lý rương)
+    case 0x11:  // Click container (gère les coffres)
     case 0x19:  // Interact entity
-    case 0x1D..0x20:  // Movement packets (case lớn nhất)
-    case 0x28:  // Player action (đào/đặt)
-    // ... hơn 40 case
+    case 0x1D..0x20:  // Movement packets (le plus gros cas)
+    case 0x28:  // Player action (dig/place)
+    // ... 40+ cas
   }
 }
 ```
 
-Không jump table động, không vtable, không map. Một switch được biên dịch thành jump table tĩnh. Hoàn hảo cho hệ thống nhúng.
+Switch biên dịch thành jump table tĩnh, thay jump table động, vtable và map. Hoàn hảo cho nhúng.
 
-Case `0x1D-0x20` là lớn nhất -- nó xử lý cập nhật vị trí, sát thương rơi, vượt biên giới chunk, spawn sinh vật, tạo chunk, VÀ cơn đói. Tất cả trong một fall-through lớn.
+Ca `0x1D-0x20` là lớn nhất -- nó xử lý cập nhật vị trí, sát thương rơi, vượt biên chunk, spawn mob, sinh chunk, VÀ đói. Tất cả trong một fall-through lớn.
 
-![Mã nguồn máy chủ Bareiron -- 6800 dòng C](/images/bareiron/code-shot.jpg)
+![Mã của máy chủ Bareiron -- 6800 dòng C](/images/bareiron/code-shot.jpg)
 
-## Server tick và AI của sinh vật
+## Tick máy chủ và AI của mob
 
-Hàm `handleServerTick` được gọi mỗi 50 ms (20 TPS). Nó quản lý thế giới trong khi vòng lặp chính xử lý người chơi:
+Hàm `handleServerTick` được gọi mỗi 50 ms (20 TPS). Nó quản thế giới trong khi vòng lặp chính lo người chơi :
 
 ```c
-// main.c (đã đơn giản hóa)
+// main.c (rút gọn)
 
 void handleServerTick (uint32_t delta) {
-  // Cập nhật mỗi sinh vật
+  // Mettre à jour chaque mob
   for (int i = 0; i < MOB_COUNT; i ++) {
-    if (mobs[i].type == 0 || mobs[i].data == 0) continue;  // chết hoặc rỗng
+    if (mobs[i].type == 0 || mobs[i].data == 0) continue;  // mort ou vide
 
     MobData *mob = &mobs[i];
     int px, pz;
     getNearestPlayer(mob->x, mob->z, &px, &pz);
 
     if (mob->type == MOB_ZOMBIE) {
-      // Thù địch: đi về phía người chơi gần nhất
+      // Hostile : marche vers le joueur le plus proche
       if (px < mob->x) mob->x --;
       else if (px > mob->x) mob->x ++;
       if (pz < mob->z) mob->z --;
       else if (pz > mob->z) mob->z ++;
-      // Sát thương tiếp xúc ở 2 khối
+      // Dégâts de contact à 2 blocs
       if (abs(px - mob->x) <= 2 && abs(pz - mob->z) <= 2)
         damagePlayer(getNearestPlayerId(mob->x, mob->z), 3);
     } else {
-      // Bị động: 8 hướng ngẫu nhiên
+      // Passif : 8 directions aléatoires
       uint8_t dir = getMobDir(mob);
       mob->x += dir_lookup[dir][0];
       mob->z += dir_lookup[dir][1];
-      // Đổi hướng mỗi ~40 tick
+      // Changement de direction toutes les ~40 ticks
       if (mob->data >> 6 < 1) setMobDir(mob, rand() & 7);
       mob->data = (mob->data & 0x3F) | ((mob->data - 0x40) & 0xC0);
     }
 
-    // Đánh thức các chunk xung quanh sinh vật
+    // Réveiller les chunks autour du mob
     setChunkGenerated(mob->x / 8, mob->z / 8);
   }
 }
 ```
 
-AI của sinh vật thù địch là một phép so sánh tọa độ. Nghĩa đen là `if (px < x) x--`. Không pathfinding, không A*, không tránh vật cản. Zombie điều chỉnh X và Z độc lập về phía người chơi -- nó xuyên tường nếu có.
+AI của mob thù địch là so sánh tọa độ. Theo nghĩa đen `if (px < x) x--`. Zombie lờ pathfinding, A* và tránh chướng ngại : nó chỉnh X và Z độc lập về phía người chơi -- nó xuyên tường nếu có.
 
-Sát thương tiếp xúc là 3 máu/giây. p2r3 cố tình đặt cao vì không có pathfinding khiến zombie dễ bị kiter.
+Sát thương tiếp xúc ở 3 tim/giây. p2r3 muốn nó cao vì thiếu pathfinding khiến zombie dễ thả diều.
 
-Công thức giáp là công thức trước combat update -- đơn giản nhất có thể:
+Công thức giáp là của trước combat update -- đơn giản nhất có thể :
 
 ```c
-// main.c (đã đơn giản hóa)
+// main.c (rút gọn)
 
 static uint8_t applyArmor (uint8_t damage, uint16_t armor_value) {
-  // Công thức tiền-1.9: giảm tuyến tính
-  // Mỗi điểm giáp = 4% giảm, tối đa 80%
+  // Formule pré-1.9 : réduction linéaire
+  // Chaque point d'armure = 4% de réduction, max 80%
   uint8_t reduction = (armor_value * 4);
   if (reduction > 80) reduction = 80;
   return damage * (100 - reduction) / 100;
 }
 ```
 
-Full diamond = giảm 80%. Một đòn zombie 3 máu thành 0.6 máu. p2r3 chọn công thức cũ này vì nó tính được trong 2 phép toán -- không ngưỡng, không đường cong, chỉ là phần trăm tuyến tính.
+Full diamond = 80% giảm. Cú zombie 3 tim thành 0.6 tim. p2r3 chọn công thức cũ này vì nó tính bằng 2 phép toán -- không ngưỡng, không đường cong, chỉ phần trăm tuyến tính.
 
-Sinh vật bị động: 8 hướng trong một lookup table, đổi hướng mỗi ~40 tick. Trường `data` mã hóa hướng hiện tại trong 2 bit cao nhất, và timer đổi hướng trong 6 bit còn lại.
+Mob thụ động : 8 hướng trong bảng tra, đổi hướng mỗi ~40 tick. Trường `data` mã hóa hướng hiện trong 2 bit cao, và timer đổi hướng trong 6 bit còn lại.
 
-![Sinh vật trong Bareiron -- zombie, lợn, cừu](/images/bareiron/mobs.jpg)
+![Mob trong Bareiron -- zombie, lợn, cừu](/images/bareiron/mobs.jpg)
 
-### Respawn sinh vật
+### Respawn mob
 
-Sinh vật không spawn bằng random tick. Chúng xuất hiện khi server tick gặp biên giới chunk mới:
+Mob không spawn bằng random tick. Chúng xuất hiện khi tick máy chủ gặp biên chunk mới :
 
 ```c
 if (player crossed chunk boundary) {
@@ -594,18 +593,18 @@ if (player crossed chunk boundary) {
 }
 ```
 
-Cùng RNG với địa hình, cùng seed chunk. Nếu một vị trí sinh vật trống, spawn là tất định.
+Cùng RNG như địa hình, cùng seed chunk. Nếu vị trí mob trống, spawn xác định.
 
-## Chế tạo: không ma trận, chỉ if/else
+## Chế tạo : không ma trận, if/else
 
 ```c
-// crafting.c, dòng 9-347 (đã đơn giản hóa)
+// crafting.c, dòng 9-347 (rút gọn)
 
 void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
-  // Nếu flag 0x80 được bật, bộ đệm craft đang được rương sử dụng
+  // Si le flag 0x80 est levé, le buffer de craft est utilisé par un coffre
   if (player->flags & 0x80) { *count = 0; *item = 0; return; }
 
-  // Đếm slot, tìm item đầu tiên, kiểm tra tính đồng nhất
+  // Compter les slots, trouver le premier item, vérifier l'identité
   uint8_t filled = 0, first = 10, identical = true;
   for (int i = 0; i < 9; i ++) {
     if (player->craft_items[i]) {
@@ -617,56 +616,56 @@ void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
   }
 
   switch (filled) {
-    case 1:  /* ván gỗ, thỏi... */
-    case 2:  /* gậy, kéo, đuốc */
-    case 3:  /* xẻng, kiếm, slab */
-    case 4:  /* bàn chế tạo, ủng */
-    case 5:  /* cuốc, rìu, mũ */
-    case 7:  /* quần, composteur */
-    case 8:  /* lò nung, rương, giáp ngực */
-    case 9:  /* khối đầy đủ (sắt, vàng, v.v.) */
+    case 1:  /* planches, lingots... */
+    case 2:  /* bâtons, cisailles, torches */
+    case 3:  /* pelles, épées, dalles */
+    case 4:  /* table de craft, boots */
+    case 5:  /* pioches, haches, casques */
+    case 7:  /* jambières, composteurs */
+    case 8:  /* fourneau, coffre, plastron */
+    case 9:  /* blocs complets (fer, or, etc.) */
   }
 }
 ```
 
-Kiểm tra đầu tiên: nếu flag `0x80` được bật, bộ đệm craft được tái sử dụng làm con trỏ rương. Không thể chế tạo.
+Kiểm tra đầu : nếu cờ `0x80` bật, buffer craft tái chế thành con trỏ rương. Chế tạo giữ khóa.
 
-Sau đó, nó đếm số slot đã điền, ghi nhận item đầu tiên, kiểm tra tính đồng nhất. Chỉ với điều đó, bạn match được lò nung trong 4 kiểm tra:
+Rồi, nó đếm slot đầy, ghi nhận vật phẩm đầu, kiểm tra giống nhau. Chỉ với đó, bạn khớp lò trong 4 lần kiểm tra :
 
 ```c
 if (count == 8 && first == cobblestone && all_identical && center_empty)
     return furnace;
 ```
 
-Đối với các hình dạng phức tạp, nó sử dụng chỉ mục của item đầu tiên và kiểm tra vị trí tương đối. Các công thức dùng chung một hàm matching -- vật liệu quyết định kết quả.
+Với hình phức tạp, nó dùng index của vật phẩm đầu và kiểm tra vị trí tương đối. Các công thức chung cùng hàm khớp -- vật liệu quyết kết quả.
 
 ![Giao diện chế tạo và rương trong Bareiron](/images/bareiron/crafting.jpg)
 
-## Rương: hack thực sự
+## Rương : mẹo bộ nhớ thật
 
-Hack bộ nhớ mà mọi người nói đến, trong code thực tế:
+Mẹo bộ nhớ ai cũng bàn, trong mã thật :
 
 ```c
 // procedures.c, dòng 1262-1293
 
 if (target == B_chest) {
-  // Tìm mục rương trong mảng khối
+  // Chercher l'entrée du coffre dans le tableau des blocs
   uint8_t *storage_ptr = NULL;
   for (int i = 0; i < block_changes_count; i ++) {
     if (block_changes[i].block != B_chest) continue;
     if (block_changes[i].x != x || block_changes[i].y != y || block_changes[i].z != z)
       continue;
-    storage_ptr = (uint8_t *)(&block_changes[i + 1]);  // trỏ sau khối rương
+    storage_ptr = (uint8_t *)(&block_changes[i + 1]);  // pointe après le bloc coffre
     break;
   }
   if (storage_ptr == NULL) return;
 
   // Terrible memory hack!!
-  // Sao chép CON TRỎ vào mảng item craft của người chơi
+  // On copie le POINTEUR dans le tableau d'items de craft du joueur
   memcpy(player->craft_items, &storage_ptr, sizeof(storage_ptr));
-  player->flags |= 0x80;  // khóa craft
+  player->flags |= 0x80;  // lock le craft
 
-  // Gửi giao diện rương đến client
+  // Envoyer l'interface coffre au client
   sc_openScreen(player->client_fd, 2, "Chest", 5);
   for (int i = 0; i < 27; i ++) {
     uint16_t item;
@@ -678,34 +677,34 @@ if (target == B_chest) {
 }
 ```
 
-Và bình luận trong code: `// Terrible memory hack!!1!`
+Và comment trong mã : `// Terrible memory hack!!1!`
 
-Chính xác là vậy. Nó lấy địa chỉ bộ nhớ của mục tiếp theo trong `block_changes[]`, sao chép nó vào `player->craft_items` (là `uint16_t[9]`, tức 18 byte -- đủ để lưu một con trỏ 32 bit), và bật flag để không ai cố chế tạo trong thời gian đó.
+Đúng là nó. Nó lấy địa chỉ bộ nhớ của mục tiếp theo trong `block_changes[]`, nó chép vào `player->craft_items` (là `uint16_t[9]`, nên 18 byte -- đủ chứa con trỏ 32 bit), và nó bật cờ để không ai cố chế tạo lúc đó.
 
-Mỗi lần click trong kho đồ rương:
+Mỗi lần bấm trong túi đồ của rương :
 
 ```c
 // packets.c, dòng 620-638
 
 uint8_t *storage_ptr;
 memcpy(&storage_ptr, player->craft_items, sizeof(storage_ptr));
-// storage_ptr giờ trỏ đến dữ liệu rương
+// storage_ptr pointe maintenant vers les données du coffre
 uint16_t *p_item = (uint16_t *)(storage_ptr + (slot - 41) * 3);
 uint8_t *p_count = storage_ptr + (slot - 41) * 3 + 2;
 ```
 
-Nó lấy lại con trỏ từ bộ đệm craft, và truy cập các slot với một offset. Dữ liệu rương được lưu với 3 byte mỗi slot (2 cho ID, 1 cho số lượng), dán liền nhau trong mảng khối.
+Nó lấy lại con trỏ từ buffer craft, và nó truy cập các slot bằng offset. Dữ liệu rương lưu với 3 byte cho mỗi slot (2 cho ID, 1 cho số lượng), dán cạnh nhau trong bảng khối.
 
-![Dữ liệu rương được lưu trong mảng khối -- một hack bộ nhớ](/images/bareiron/chest-hack.jpg)
+![Dữ liệu rương lưu trong bảng khối -- một mẹo bộ nhớ](/images/bareiron/chest-hack.jpg)
 
-## Cơn đói: 5 dòng thiên tài
+## Đói : 5 dòng thiên tài
 
 ```c
 // main.c, dòng 293-305
 
-// Người chơi gửi packet di chuyển ~20/giây khi họ
-// di chuyển, ít hơn nhiều khi đứng yên. Chúng ta tương quan
-// điều này với hoạt động để mô phỏng cơn đói miễn phí.
+// Les joueurs envoient des packets de mouvement à ~20/sec quand ils
+// bougent, beaucoup moins quand ils sont immobiles. On corrèle ça
+// avec l'activité pour simuler la faim gratuitement.
 if (player->saturation == 0) {
   if (player->hunger > 0) player->hunger--;
   player->saturation = 200;
@@ -713,35 +712,36 @@ if (player->saturation == 0) {
 } else if (player->flags & 0x08) {  // sprinting
   player->saturation -= 1;
 }
+}
 ```
 
-Chính xác là vậy. 5 dòng. Mỗi packet di chuyển giảm độ bão hòa. Khi độ bão hòa về 0, cơn đói giảm và ta reset độ bão hòa. Sprint (flag `0x08`) nhân đôi tốc độ tiêu hao.
+Đúng nghĩa đen vậy. 5 dòng. Mỗi gói di chuyển giảm bão hòa. Khi bão hòa về không, đói giảm và ta reset bão hòa. Chạy nước rút (cờ `0x08`) nhân đôi hao.
 
-Không timer, không bộ nhớ cấp phát, không tính toán chuyên dụng. Một bộ đếm giảm dần trên các packet đã tồn tại.
+Không timer, không bộ nhớ cấp, không tính toán chuyên. Bộ đếm giảm trên các gói đã tồn tại.
 
 ### Sát thương rơi
 
-Hệ thống sát thương đơn giản nhất của dự án:
+Hệ sát thương đơn giản nhất của dự án :
 
 ```c
-// Khi người chơi rời khỏi mặt đất, ta lưu Y của họ
-// Khi họ chạm đất lại, ta trừ
-sát_thương = y_cuối_cùng_trên_mặt_đất - y_hiện_tại;
+// Quand le joueur quitte le sol, on stocke son Y
+// Quand il retouche le sol, on soustrait
+degats = dernier_y_au_sol - y_actuel;
 ```
 
 Một phép trừ.
 
 ## Đào và đặt khối
 
-Khi bạn click vào một khối, packet `0x28` (Player Action) rơi vào switch. Handler phải xác định khối nào ở vị trí đó, loại bỏ nó, và đặt item vào kho đồ:
+Khi bạn bấm vào khối, gói `0x28` (Player Action) đáp vào switch. Handler phải xác định khối nào ở vị trí, gỡ nó, và đặt vật phẩm vào túi :
 
 ```c
-// main.c, case 0x28 (đã đơn giản hóa)
+// main.c, case 0x28 (rút gọn)
 
 void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z) {
   switch (action) {
     case START_DESTROY_BLOCK: {
-      // Xác định loại khối tại vị trí được click
+      // Déterminer le type de bloc à la position cliquée
       uint8_t block = getBlockAt(x, y, z);
 
       if (block == B_chest) {
@@ -749,19 +749,19 @@ void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z)
         break;
       }
 
-      // Thêm vào block_changes
+      // Ajouter aux block_changes
       addBlockChange(x, z, y, 0);  // 0 = air
 
-      // Đưa item cho người chơi (trust the client)
+      // Donner l'item au joueur (trust the client)
       addItemToPlayer(client_fd, block_to_item(block), 1);
 
-      // Gửi cập nhật đến client
+      // Envoyer la mise à jour au client
       sc_blockChange(client_fd, x, y, z, 0);
       sc_ackBlockChange(client_fd, x, y, z, 0);
       break;
     }
     case PLACE_BLOCK: {
-      // Đọc loại khối từ tay người chơi
+      // Lire le type de bloc depuis la main du joueur
       uint16_t item = getHeldItem(client_fd);
       uint8_t block = item_to_block(item);
       addBlockChange(x, z, y, block);
@@ -773,28 +773,28 @@ void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z)
 }
 ```
 
-`getBlockAt` kết hợp cả tạo địa hình VÀ thay đổi của người chơi:
+`getBlockAt` kết hợp sinh địa hình VÀ thay đổi của người chơi :
 
 ```c
 uint8_t getBlockAt (int x, uint8_t y, int z) {
-  // Đầu tiên kiểm tra thay đổi của người chơi
+  // D'abord vérifier les changements joueurs
   uint8_t change = getBlockChange(x, y, z);
   if (change != 0xFF) return change;
 
-  // Nếu không, đọc từ địa hình được tạo
+  // Sinon, lire depuis le terrain généré
   return getTerrainBlock(x, y, z);
 }
 ```
 
-Ưu tiên thay đổi, fallback về địa hình. Không tranh luận, không cache, không overhead. Bên dưới `getTerrainBlock` là `getHeightAt` + các lớp stone/dirt/grass/coal.
+Ưu tiên thay đổi, dự phòng địa hình. Không tranh cãi, không cache, không chi phí. `getTerrainBlock` bên dưới là `getHeightAt` + các lớp stone/dirt/grass/coal.
 
 ### Lò nung tức thì
 
-Điều buồn cười nhất: lò nung không tồn tại như một thực thể. Nếu bạn đặt cobblestone vào ô "nấu" và coal vào "nhiên liệu", kết quả xuất hiện ngay lập tức. Không timer, không chunk ticking. Nó chỉ là một slot kho đồ trống khi bạn đặt đúng item.
+Buồn cười nhất : lò nung không tồn tại như thực thể. Nếu bạn đặt cobblestone vào ô "nấu" và coal vào "fuel", kết quả hiện ngay, không timer hay chunk ticking : chỉ là slot túi đồ trống khi bạn đặt đúng vật phẩm.
 
-![Lò nung tức thì -- đặt nguyên liệu, kết quả ngay lập tức](/images/bareiron/furnace.jpg)
+![Lò nung tức thì -- đặt nguyên liệu, kết quả ngay](/images/bareiron/furnace.jpg)
 
-## Vòng lặp ESP32: máy chủ MC trong 4 KB stack
+## Vòng lặp ESP32 : máy chủ MC trong 4 KB stack
 
 ```c
 // main.c, dòng 732-779
@@ -807,7 +807,7 @@ void bareiron_main (void *pvParameters) {
 }
 
 static void wifi_event_handler (...) {
-  if (/* đã kết nối */) {
+  if (/* connecté */) {
     xTaskCreate(bareiron_main, "bareiron", 4096, NULL, 5, NULL);
   }
 }
@@ -815,53 +815,53 @@ static void wifi_event_handler (...) {
 void app_main () {
   esp_timer_early_init();
   wifi_init();
-  // Phần còn lại được xử lý bởi event handler
+  // Le reste est géré par le event handler
 }
 #endif
 ```
 
-Toàn bộ máy chủ chạy trong một tác vụ FreeRTOS với **4096 byte stack**. Đó là tất cả. Luồng main chính chỉ khởi tạo WiFi và đợi kết nối. Khi đã kết nối, nó spawn `bareiron_main` gọi hàm `main()` tiêu chuẩn.
+Toàn bộ máy chủ chạy trong task FreeRTOS với **4096 byte stack**. Hết. Luồng main chính chỉ khởi tạo WiFi và chờ kết nối. Khi nối xong, nó sinh `bareiron_main` gọi `main()` chuẩn.
 
-Tất cả code dành riêng cho ESP32 được bảo vệ bởi `#ifdef ESP_PLATFORM`. Trên PC, tất cả biên dịch thành code POSIX tiêu chuẩn.
+Mọi mã riêng ESP32 được bảo vệ bằng `#ifdef ESP_PLATFORM`. Trên PC, tất cả biên dịch thành mã POSIX chuẩn.
 
-## Những gì đã hy sinh
+## Điều đã hy sinh
 
-Để mọi thứ vừa vặn, có những tính năng vanilla không tồn tại:
+Để tất cả vừa, có các tính năng vanilla không tồn tại :
 
-- **Không nén mạng** -- zlib quá đắt. Máy chủ tạo chunk nhanh, nhưng gửi chúng là nút thắt cổ chai.
-- **Không random tick** -- cây mọc bằng bone meal hoặc không. Sinh vật spawn ở biên giới chunk.
-- **Không item entity** -- khối đào được đưa thẳng vào kho đồ. Hoạt ảnh chỉ mang tính thị giác.
-- **Không kiểm tra kho đồ** -- trust the client. 64 kim cương? OK. Một chunk đào trong 1 giây? OK. Dùng giữa những người tin tưởng lẫn nhau.
-- **Không ánh sáng máy chủ** -- đuốc được gửi sau mọi thứ, client tự tính.
-- **Không chất lỏng dần dần** -- trạng thái cuối cùng tức thì.
+- **Không nén mạng** -- zlib quá đắt. Máy chủ sinh chunk nhanh, nhưng gửi chúng là nút thắt.
+- **Không random tick** -- cây mọc bằng bone meal hay không. Mob spawn ở biên chunk.
+- **Không thực thể vật phẩm** -- khối đào đi thẳng vào túi. Animation thuần trực quan.
+- **Không kiểm tra túi đồ** -- trust the client. 64 kim cương? OK. Chunk đào trong 1 giây? OK. Dùng giữa người tin nhau.
+- **Không ánh sáng phía máy chủ** -- đuốc gửi sau mọi thứ còn lại, client tính.
+- **Không chất lỏng lũy tiến** -- trạng thái cuối tức thì.
 
-## Kết quả cuối cùng
+## Kết quả cuối
 
-Ryzen 5 3600: ~0.5 ms mỗi chunk.
-ESP32-C3 giá 1$: ~200 ms mỗi chunk. Có thể chơi được.
+Ryzen 5 3600 : ~0.5 ms cho mỗi chunk.
+ESP32-C3 giá 1$ : ~200 ms cho mỗi chunk. Chơi được.
 
-![Benchmark tạo chunk -- Ryzen vs ESP32](/images/bareiron/performance.jpg)
+![Benchmark sinh chunk -- Ryzen đấu ESP32](/images/bareiron/performance.jpg)
 
-3+ người chơi: bắt đầu giật. Có thể so sánh với 2b2t vào giờ cao điểm, theo lời tác giả.
+3+ người chơi : nó ì. Ngang 2b2t giờ cao điểm, theo lời tác giả.
 
-![Nhiều người chơi kết nối cùng một máy chủ Bareiron](/images/bareiron/multiplayer.jpg)
+![Nhiều người chơi nối vào cùng máy chủ Bareiron](/images/bareiron/multiplayer.jpg)
 
 ## Triết lý
 
-p2r3: "Tôi chỉ thích ý tưởng rằng con chip nhỏ bé giá 1$ này tiêu thụ 0.5 Watt có thể chạy một thứ tiên tiến như Minecraft. Science isn't about 'why', it's about 'why not'."
+p2r3 : "Tôi chỉ thích ý tưởng con chip tí hon giá 1 xu tiêu thụ 0.5 Watt này có thể chạy thứ tân tiến như Minecraft. Science isn't about 'why', it's about 'why not'."
 
-Mỗi dòng là một sự đánh đổi:
-- Perlin noise → nội suy: kém đẹp hơn, nhanh gấp 200 lần, tốn 0 bộ nhớ
-- Ma trận chế tạo → matching hardcode: code bẩn, tốn 0 byte
-- zlib → không: kết nối chậm = chết, nhưng chơi được
-- Xác thực → trust: zero bảo mật, zero tính toán
+Mỗi dòng là đánh đổi :
+- Perlin noise → nội suy : kém đẹp, nhanh gấp 200 lần, không bộ nhớ
+- Ma trận chế tạo → khớp ghi cứng : mã xấu, không byte
+- zlib → không gì : kết nối tệ = chết, nhưng chơi được
+- Kiểm tra → tin tưởng : không bảo mật, không tính toán
 
-Mỗi tính năng vắng mặt cho phép một tính năng khác tồn tại trong giới hạn phần cứng.
+Mỗi tính năng vắng mặt cho phép tính năng khác tồn tại trong giới hạn phần cứng.
 
-**3 điều cần nhớ:**
+**3 điểm cần nhớ :**
 
-1. **Nội suy + RNG** -- 4 điểm được seed, địa hình vô tận, không lưu trữ, truy vấn không cần tạo lại chunk, 200 ms tạo. Đó là nước cờ thiên tài khiến mọi thứ khác trở nên khả thi.
-2. **Mỗi tính năng đều có cái giá** -- Không nén, không random tick, không xác thực. Đó không phải là sơ suất, đó là điều cho phép mọi thứ vừa vặn trong 520 KB.
-3. **Những hack bẩn thỉu nhất là thông minh nhất** -- Rương trong mảng khối qua memcpy, cơn đói qua packet di chuyển, lò nung tức thì. Giải pháp sạch sẽ sẽ quá đắt.
+1. **Nội suy + RNG** -- 4 điểm seed, địa hình vô hạn, không lưu trữ, truy vấn không cần sinh lại chunk, 200 ms sinh. Đó là nước thiên tài khiến phần còn lại khả thi.
+2. **Mỗi tính năng có giá** -- Thiếu nén, random tick và kiểm tra là lựa chọn có chủ ý : đó là điều cho phép vừa trong 520 KB.
+3. **Mẹo bẩn thông minh nhất** -- Rương trong bảng khối qua memcpy, đói bằng gói di chuyển, lò nung tức thì. Giải pháp sạch sẽ quá đắt.
 
-Nếu dự án này làm bạn quan tâm, mọi thứ đều có trên [GitHub theo GPLv3](https://github.com/p2r3/bareiron/). Đó là C rất bẩn, và tôi hiếm khi đọc mã nguồn nào vui đến thế xD
+Nếu dự án khiến bạn hứng thú, mọi thứ trên [GitHub theo GPLv3](https://github.com/p2r3/bareiron/). Đó là C bẩn đẹp, và tôi hiếm khi vui vậy khi đọc mã nguồn.

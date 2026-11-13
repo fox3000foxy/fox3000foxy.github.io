@@ -1,38 +1,39 @@
 ---
-title: AI Nhảm Nhí Của Tôi Cho Nausicaa
-description: Một AI với hệ số heuristic, các siêu tham số thay đổi mỗi 5 lượt,
-  và một Oracle chạy trốn -- đào sâu vào bộ não của một game chiến thuật bàn cờ.
+title: AI ngu ngốc của tôi cho Nausicaa
+description: Một AI hệ số heuristic, các siêu tham số đổi
+  mỗi 5 lượt, và một Oracle bỏ chạy -- lặn vào bộ não
+  game cờ chiến thuật.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - gaming
   - ai
   - javascript
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "buxqaHHGybrHvdoRYqBe0LPz9clovuDmR4OnOTl2snH0iQ4pL1BMTvkBEEf3JNKsdpQMpn/iZ+7tkFwGpZ9Mcg=="
+author_sig: "2I10x1CZX2oSoahGigcRJtABpPbyom0Oa9aanccqpumCHKI4mfi4tMX4uBYVRXhchW40D3ny7JTEz8aK5o6ttQ=="
 ---
 
-## AI Nhảm Nhí Của Tôi Cho Nausicaa
+## AI ngu ngốc của tôi cho Nausicaa
 
-Có những dự án bắt đầu bằng "ơ hay mình làm game cờ với thần thoại nhỉ?" và kết thúc bằng một thứ có AI tự quyết định siêu tham số của chính nó mỗi 5 lượt.
+Có những dự án khởi đầu bằng "hay làm game cờ kiểu thần thoại nhỉ?" và kết thúc bằng hệ thống có AI tự quyết siêu tham số của chính nó mỗi 5 lượt.
 
-Nausicaa là thế đấy. Một game chiến thuật theo lượt nơi bạn xây dựng bộ bài sinh vật thần thoại, quản lý mana, triển khai quân lên bàn cờ 10x8. Và có một AI bị rối loạn đa nhân cách.
+Nausicaa là vậy. Game cờ theo lượt nơi bạn xây deck sinh vật thần thoại, quản lý mana, triển khai đơn vị trên bàn 10x8. Và có AI lên cơn đa nhân cách.
 
-Tôi đã dành kha khá thời gian cho cái AI này, và kết quả thì khá là mất kiểm soát xD
+Tôi đã dành khá nhiều thời gian cho AI này, và kết quả đôi khi vẫn vượt khỏi tôi, và đó là điều tôi thích nhất.
 
-## Game thực sự ra sao
+## Game thật
 
-Trước khi nói về bộ não, cần hiểu cơ thể đã:
+Trước khi nói về bộ não, phải hiểu cơ thể :
 
-- Bàn cờ 10x8, vùng triển khai 2 hàng mỗi người chơi
+- Bàn 10x8, vùng triển khai 2 hàng cho mỗi người chơi
 - Mana bắt đầu ở 1, +1 mỗi lượt, tối đa 6. Bạn tiêu để triệu hồi, tấn công, dùng kỹ năng
-- Mục tiêu: hạ Oracle của đối thủ
+- Mục tiêu : giết Oracle đối phương
 
-12 đơn vị, chi phí và pattern di chuyển khác nhau:
+12 đơn vị, chi phí và mẫu di chuyển khác nhau :
 
-| Unit | Cost | Movement | HP |
+| Đơn vị | Giá | Di chuyển | Máu |
 | --- | --- | --- | --- |
 | Oracle | 0 | Vua (8 hướng) | 1 |
 | Gobelin | 1 | Tiến 3 ô | 1 |
@@ -40,18 +41,18 @@ Trước khi nói về bộ não, cần hiểu cơ thể đã:
 | Naïade | 1 | Chéo | 1 |
 | Griffin | 2 | Nhảy 2 ô | 2 |
 | Sirène | 2 | Ngang | 1 |
-| Centaure | 2 | Mã (hình chữ L) | 2 |
+| Centaure | 2 | Mã (chữ L) | 2 |
 | Archer | 3 | Ngang | 1 |
 | Phénix | 3 | Chéo (ô tối) | 1 |
 | Métamorphe | 4 | Đổi chỗ | 1 |
 | Voyant | 4 | Không (sinh mana) | 1 |
 | Titan | 6 | Hạn chế (tấn công vùng) | 3 |
 
-Mỗi đơn vị có pattern tấn công riêng. Sirène đánh 4 đường chéo, Archer đánh xa 3 ô, Titan phá hủy mọi thứ xung quanh khi triệu hồi. Nói chung là cờ với thần thoại và xây bài xD
+Mỗi đơn vị có mẫu tấn công riêng. Sirène đánh 4 đường chéo, Archer đánh xa 3 ô, Titan phá mọi thứ xung quanh khi triệu hồi. Tóm lại, game cờ kiểu thần thoại kèm deckbuilding.
 
-## Cách tôi làm cho CPU suy nghĩ
+## Cách tôi khiến CPU suy nghĩ
 
-Ý tưởng cơ bản thì ngu một cách đơn giản: **mỗi đơn vị địch có một hệ số hấp dẫn**. Càng nguy hiểm, AI càng muốn xử lý nó.
+Ý tưởng nền ngớ ngẩn đơn giản : **mỗi đơn vị địch có hệ số hấp dẫn**. Nó càng nguy hiểm, AI càng muốn xử lý nó.
 
 ```javascript
 const UNITS_ATTRACTIVENESS = {
@@ -70,15 +71,15 @@ const UNITS_ATTRACTIVENESS = {
 };
 ```
 
-Oracle 100 -- hợp lý, đấy là điều kiện thắng. Titan 95 vì nó one-shot mọi thứ bên cạnh khi triệu hồi. Gobelin 20, chỉ là lính quèn, kệ mẹ nó.
+Oracle ở 100 -- hợp lý, đó là điều kiện thắng. Titan ở 95 vì nó oneshot mọi thứ bên cạnh khi triệu hồi. Gobelin ở 20, đó là lính bộ, kệ nó.
 
-Sau đó với mỗi cặp đơn vị (một đồng minh, một địch), tôi tính:
+Rồi với mỗi cặp đơn vị (một phe ta, một phe địch), tôi tính :
 
 ```
-interet = attractivite × coeff_attract / (distance × coeff_dist)
+hứng_thú = hấp_dẫn × hệ_số_hấp_dẫn / (khoảng_cách × hệ_số_khoảng_cách)
 ```
 
-Nói chung: mày càng nguy hiểm và càng gần, AI càng muốn đập mày.
+Đại khái : bạn càng nguy hiểm và gần, AI càng muốn đập bạn.
 
 ```javascript
 calculateAttackCoefficient(x1, y1, x2, y2) {
@@ -88,9 +89,9 @@ calculateAttackCoefficient(x1, y1, x2, y2) {
 }
 ```
 
-### Chiêu trò đổi hệ số
+### Chiêu hệ số thay đổi
 
-Cái hay là các hệ số quan trọng **thay đổi ngẫu nhiên mỗi 5 lượt**.
+Điểm quan trọng là các hệ số tầm quan trọng **đổi ngẫu nhiên mỗi 5 lượt**.
 
 ```javascript
 if (this.turnCount % 5 === 0) {
@@ -103,15 +104,15 @@ if (this.turnCount % 5 === 0) {
 }
 ```
 
-Lúc thì AI cực kỳ hung hãn (attract 95, distance 5), nó xông qua mọi thứ để hạ Oracle của mày. Lúc sau nó ưu tiên khoảng cách và tự reposition.
+Lúc AI cực hiếu chiến (hấp dẫn 95, khoảng cách 5), nó băng qua mọi thứ để giết Oracle của bạn. Lúc sau nó ưu tiên khoảng cách và tái bố trí.
 
-Cái này lấy cảm hứng từ bóng ma Pac-Man -- Blinky rượt đuổi, Pinky phục kích. Ở đây AI đổi "tính cách" mỗi pha.
+Việc này chôm từ ma Pac-Man -- Blinky săn, Pinky phục kích. Ở đây AI đổi "nhân cách" mỗi pha.
 
-**Kết quả: không thể đoán được AI trong cả ván đấu.** CPU không bao giờ chơi hai trận giống nhau.
+**Kết quả : không thể đoán AI suốt cả ván.** CPU không bao giờ chơi hai trận giống nhau.
 
-### Oracle là đồ nhát
+### Oracle là kẻ nhát
 
-Oracle địch chạy trốn. Theo nghĩa đen.
+Oracle địch bỏ chạy. Theo nghĩa đen.
 
 ```javascript
 const awayFromTarget = {
@@ -120,37 +121,37 @@ const awayFromTarget = {
 };
 ```
 
-Nó tính hướng ngược lại với mối đe dọa và chuồn. Nếu gặp tường, nó tìm ô trống gần nhất theo hướng đó.
+Nó tính hướng ngược mối đe dọa và chuồn. Nếu có tường, nó tìm ô trống gần nhất theo hướng đó.
 
-Mày mất 3 lượt tiếp cận Oracle, và thế là nó chạy mất dép xD
+Bạn mất 3 lượt áp sát Oracle, và paf nó đã chạy sang đầu bên kia.
 
 ### Vòng lặp quyết định
 
-Đây là cách AI quyết định:
+Đây là cách AI quyết định :
 
-1. Nếu mất Oracle (chết), đặt một Oracle mới
-2. Tính hệ số cho mỗi cặp đơn vị đồng minh → đơn vị địch
+1. Nếu tôi mất Oracle (chết), đặt cái mới
+2. Tính hệ số cho mỗi cặp đơn vị phe ta → đơn vị phe địch
 3. Chọn cặp tốt nhất
-4. Nếu đơn vị có thể tấn công mục tiêu từ vị trí hiện tại → tấn công
-5. Nếu có ít hơn 4 đơn vị → triệu hồi đơn vị rẻ nhất có sẵn từ tay bài
-6. Nếu không, di chuyển về phía mục tiêu (ô di chuyển gần địch nhất)
-7. Nếu đủ mana (> 2), dash (di chuyển đôi) để tiến gần hơn
-8. Nếu đơn vị là Oracle → chạy trốn
+4. Nếu đơn vị có thể tấn công mục tiêu từ vị trí của nó → tấn công
+5. Nếu tôi có dưới 4 đơn vị → triệu hồi đơn vị rẻ nhất có từ tay
+6. Ngược lại, di chuyển về mục tiêu (ô di chuyển gần địch nhất)
+7. Nếu đủ mana (> 2), dash (di chuyển đôi) để áp sát thêm
+8. Nếu đơn vị là Oracle → bỏ chạy
 
 ```mermaid
 flowchart TD
-    A[Début du tour CPU] --> B{Oracle en vie ?}
-    B -->|Non| C[Placer nouvel Oracle]
-    B -->|Oui| D[Calculer coefficients\nd'attaque pour chaque\npaire d'unités]
-    D --> E[Choisir la meilleure paire\nattaquant → cible]
-    E --> F{Attaque possible\ndepuis la position ?}
-    F -->|Oui| G[Attaquer la cible]
-    F -->|Non| H{Moins de 4\nunités ?}
-    H -->|Oui| I[Invoquer depuis la main\nla moins chère dispo]
-    H -->|Non| J[Se déplacer vers la cible\ncase la plus proche]
-    J --> K{Mana > 2 ?}
-    K -->|Oui| L[Dash : double mouvement\nvers la cible]
-    K -->|Non| M[Fin du tour]
+    A[Bắt đầu lượt CPU] --> B{Oracle còn sống?}
+    B -->|Không| C[Đặt Oracle mới]
+    B -->|Có| D[Tính hệ số\ntấn công cho mỗi\ncặp đơn vị]
+    D --> E[Chọn cặp tốt nhất\ntấn công → mục tiêu]
+    E --> F{Tấn công được\ntừ vị trí?}
+    F -->|Có| G[Tấn công mục tiêu]
+    F -->|Không| H{Ít hơn 4\nđơn vị?}
+    H -->|Có| I[Triệu hồi từ tay\nđơn vị rẻ nhất có]
+    H -->|Không| J[Di chuyển về mục tiêu\nô gần nhất]
+    J --> K{Mana > 2?}
+    K -->|Có| L[Dash : di chuyển đôi\nvề mục tiêu]
+    K -->|Không| M[Kết thúc lượt]
     G --> M
     I --> M
     L --> M
@@ -158,17 +159,17 @@ flowchart TD
 
 ```javascript
 async makeAction(dash=false) {
-    // tout ça en séquence
-    // le CPU dash si il a assez de mana
+    // tất cả nối tiếp
+    // CPU dash nếu đủ mana
     if(botPlayer.mana > 2) {
         this.makeAction(true);
     }
 }
 ```
 
-### Tại sao lại là khoảng cách Euclid
+### Vì sao khoảng cách Euclid
 
-Tôi dùng khoảng cách Euclid:
+Tôi dùng khoảng cách Euclid :
 
 ```javascript
 calculateEuclideanDistance(x1, y1, x2, y2) {
@@ -178,56 +179,56 @@ calculateEuclideanDistance(x1, y1, x2, y2) {
 }
 ```
 
-Sao không dùng Manhattan? Vì các đơn vị có pattern di chuyển đa dạng (chữ L như mã, chéo, v.v.). Khoảng cách đường chim bay là xấp xỉ nguy hiểm tốt hơn.
+Vì sao không phải Manhattan? Vì các đơn vị có mẫu di chuyển đa dạng (L như mã, chéo, v.v.). Khoảng cách chim bay là xấp xỉ nguy hiểm tốt hơn.
 
-## Sao không dùng minimax
+## Vì sao không minimax
 
-Tôi có thể code minimax cổ điển. Nhưng với 12 loại đơn vị, pattern di chuyển khác nhau, kỹ năng đặc biệt... cây trò chơi nổ tung nhanh đến mức không chơi được. Cách tiếp cận heuristic đưa ra lựa chọn thông minh mà không cần thám hiểm 10 triệu trạng thái.
+Tôi có thể code minimax cổ điển. Nhưng với 12 kiểu đơn vị, mẫu di chuyển khác nhau, kỹ năng đặc biệt... cây game nổ nhanh tới mức không chơi được. Cách heuristic đưa ra lựa chọn thông minh mà không duyệt 10 triệu trạng thái.
 
-## Cái hay
+## Điều hay
 
-Hệ thống hấp dẫn tạo ra những tình huống khó xử hài hước:
+Hệ thống hấp dẫn tạo ra các thế khó vui :
 
-- Voyant (70) sinh mana. Nếu để nó sống, đối thủ có thêm tài nguyên. Nhưng Titan (95) thì nguy hiểm hơn nhiều.
-- Métamorphe (90) có thể đổi chỗ với bất kỳ đơn vị nào. Nó có thể cướp Oracle của mày.
-- Harpie (50) có đòn tấn công nổ giết luôn chính nó. Không ưu tiên... cho đến khi nó đứng cạnh 3 đơn vị của mày.
+- Voyant (70) sinh mana. Nếu bạn để nó sống, đối thủ có thêm tài nguyên. Nhưng Titan (95) còn nguy hiểm hơn.
+- Métamorphe (90) có thể đổi chỗ với bất kỳ đơn vị nào. Nó có thể cướp Oracle của bạn.
+- Harpie (50) có đòn nổ tự sát. Nó vẫn thứ yếu... tới khi nó đứng cạnh 3 đơn vị của bạn.
 
-AI đánh giá nguy hiểm tổng thể dựa trên vị trí, không chỉ stats thô.
+AI đánh giá nguy hiểm tổng thể theo vị trí, không chỉ stat thô.
 
-Cũng có hàm `activateSimulation()` để test kịch bản mà không cần chơi lại cả ván:
+Ngoài ra có hàm `activateSimulation()` để test kịch bản mà không chơi lại ván :
 
 ```javascript
 activateSimulation() {
-    // Place des unités spécifiques sur le plateau
-    // Utile pour debugger l'IA
+    // Đặt các đơn vị cụ thể lên bàn
+    // Hữu ích để gỡ lỗi AI
     this.game.board = simulation.board;
     this.game.players = simulation.players;
 }
 ```
 
-## Còn thiếu
+## Điều thiếu
 
-Nếu có thêm thời gian:
+Nếu tôi có thêm thời gian :
 
-- AI chỉ phản ứng với trạng thái hiện tại, không dự đoán người chơi sẽ làm gì
-- Nó không lên kế hoạch cho tay bài nhiều lượt
-- Métamorphe và Centaure có kỹ năng mà AI khai thác chưa hết
-- Học tăng cường: cho nó tự đấu với chính mình để tinh chỉnh hệ số
+- AI phản ứng với trạng thái hiện tại, nó không đoán điều người chơi sẽ làm
+- Nó không lập kế hoạch tay bài nhiều lượt
+- Métamorphe và Centaure có kỹ năng nó khai thác chưa hết
+- Học tăng cường : cho nó tự đấu với chính nó để chỉnh hệ số
 
-Nhưng với game trên trình duyệt thì thế là đủ. Bạn bè tôi vẫn thua được, thế là ổn xD
+Nhưng với game trình duyệt thế là ổn. Bạn bè tôi thua được nó, nên coi như đạt.
 
-## Thử nghiệm
+## Thử
 
-Có sẵn tại [nausicaa-game.github.io](https://nausicaa-game.github.io/). Bấm "JOUER", bật CPU mode ON, và xem AI làm việc.
+Có trên [nausicaa-game.github.io](https://nausicaa-game.github.io/). Bạn bấm "JOUER", bật CPU mode ON, và xem AI làm.
 
-Lời khuyên: để AI tự đấu với nhau. Mày sẽ thấy những pha hung hãn, rồi phút sau nó lùi hết.
+Lời khuyên : để AI tự đấu với chính nó. Bạn sẽ thấy các pha hiếu chiến, rồi pfft nó rút hết.
 
-Code trên [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io) trong `js/cpu.js`.
+Mã trên [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io) trong `js/cpu.js`.
 
-**3 điều chính:**
+**3 điểm cần nhớ :**
 
 1. **Hệ số heuristic** -- không minimax, mỗi đơn vị có độ hấp dẫn
-2. **Hệ số thay đổi mỗi 5 lượt** -- AI chuyển giữa hung hãn và kiểm soát, kiểu Pac-Man
-3. **Oracle chạy trốn** -- nó tính hướng ngược lại với mối đe dọa và chuồn
+2. **Hệ số đổi mỗi 5 lượt** -- AI luân phiên hiếu chiến và kiểm soát, kiểu Pac-Man
+3. **Oracle bỏ chạy** -- nó tính hướng ngược mối đe dọa và chuồn
 
-Nếu có ý tưởng làm AI đểu hơn nữa, hãy mở issue. Tôi có kế hoạch cho một phiên bản tự học từ thất bại, nhưng để bài sau nhé xD
+Nếu bạn có ý tưởng khiến AI nham hiểm hơn, hãy mở issue. Tôi có kế hoạch cho phiên bản học từ thất bại, nhưng đó sẽ là bài sau.

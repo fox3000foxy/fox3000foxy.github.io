@@ -1,11 +1,7 @@
 ---
-title: "मैंने एक सप्ताहांत konosuba-rpg का कोड पढ़ा और यहाँ बताया कि मुझे क्या मिला"
-description: "एक Discord टर्न-बेस्ड RPG जहाँ हर क्रिया तुरंत एक WebP इमेज जनरेट करती है:
-  URL गेम स्टेट के रूप में, डिटरमिनिस्टिक RNG, WASM पाइपलाइन, 5-लेवल कैश,
-  सर्वरलेस बॉट।"
+title: "मैंने konosuba-rpg का कोड पढ़ने में सप्ताहांत बिताया और यह मिला"
+description: "Discord turn by turn RPG जहाँ हर क्रिया तुरंत WebP छवि बनाती है : खेल स्थिति के रूप में URL, नियतात्मक RNG, WASM पाइपलाइन, 5 स्तर cache, serverless बॉट।"
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - discord
   - rpg
@@ -16,36 +12,38 @@ tags:
   - wasm
   - gaming
   - serverless
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "/Ry8YJnRtXP65gOiFrBwcCMnM8ZFkNP2Zf2uzPwOK/bgaQ5UXiijVKIpqNWHfdzBcCvmQ08xWgvA99GUB7f6Ew=="
+author_sig: "2bIjKu41987DAexv8HE8IxNBhYP0n4fSM/Cqts995v2pz8fHRq3lNG7H8K1FcAH7VFUxS88K8Uk6FoBlnq2J8g=="
 ---
 
-# मैंने एक सप्ताहांत konosuba-rpg का कोड पढ़ा और यहाँ बताया कि मुझे क्या मिला
+# मैंने konosuba-rpg का कोड पढ़ने में सप्ताहांत बिताया और यह मिला
 
-मैं इस प्रोजेक्ट को कुछ समय से मेंटेन कर रहा हूँ, लेकिन अपने कोड को शांति से दोबारा पढ़ना हमेशा शिक्षाप्रद होता है। konosuba-rpg एक Discord टर्न-बेस्ड RPG है जहाँ हर क्रिया तुरंत एक WebP इमेज जनरेट करती है। कोई टेक्स्ट एम्बेड नहीं। एक वास्तविक इमेज जो स्प्राइट्स, हेल्थ बार, कॉम्बैट मैसेज -- सब कुछ से बनी होती है।
+मैं यह प्रोजेक्ट काफी समय से बनाए रखता हूँ, लेकिन शांत दिमाग से अपना कोड फिर से पढ़ना हमेशा शिक्षाप्रद होता है। konosuba-rpg एक Discord turn by turn RPG है जहाँ हर क्रिया तुरंत WebP छवि बनाती है। यह असली संयोजित छवि है, sprite, जीवन पट्टियों, युद्ध संदेशों के साथ, सब कुछ।
 
-स्टैक: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase। पूरी तरह से मुफ्त होस्टिंग। और Discord बॉट बिना किसी स्थायी सर्वर के चलता है। यह पोस्ट बताता है कि यह सब एक साथ कैसे काम करता है।
+स्टैक : TypeScript, Hono, Vercel, Cloudflare Workers, Supabase। पूरी तरह मुफ्त होस्टिंग। और Discord बॉट स्थायी सर्वर के बिना चलता है। यह पोस्ट समझाता है कि यह सब एक साथ कैसे टिका है।
 
-![État initial du jeu](/images/konosuba-rpg/game_init.webp)
+![खेल की प्रारंभिक स्थिति](/images/konosuba-rpg/game_init.webp)
 
 ---
 
-## बेसिक डिज़ाइन: URL गेम स्टेट के रूप में
+## बुनियादी डिजाइन : खेल स्थिति के रूप में URL
 
-पहली चीज़ जो ध्यान खींचती है: गेमप्ले के लिए सर्वर साइड पर कोई स्टेट नहीं है। एक पूरे मुकाबले की स्थिति URL में समाई होती है।
+पहली चीज जो चुभती है : gameplay के लिए serveur तरफ कोई स्थिति नहीं है। युद्ध की पूरी स्थिति URL में समाती है।
 
 ```
 /konosuba-rpg/fr/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
 ```
 
-सीड के बाद प्रत्येक सेगमेंट एक खेली गई चाल है। सर्वर यह URL प्राप्त करता है, शुरुआत से शुरू करता है, सभी चालों को क्रम से दोबारा खेलता है, और उस पल के मुकाबले की एक इमेज लौटाता है। कोई सेशन नहीं, किसी उपयोगकर्ता से जुड़ा कोई RAM स्टेट नहीं।
+seed के बाद हर खंड खेली क्रिया है। serveur यह URL पाता है, शुरुआत से फिर शुरू करता है, सभी क्रियाएँ क्रम से फिर से खेलता है, और ठीक उस क्षण के युद्ध की छवि लौटाता है। कोई सत्र नहीं, किसी उपयोगकर्ता से जुड़ी RAM में कोई स्थिति नहीं।
 
-Discord इंटरैक्टिव बटन के माध्यम से काम करता है -- जब खिलाड़ी "Attack" दबाता है, Discord सर्वर को बटन का `custom_id` भेजता है। यह custom_id नई चाल जोड़कर मुकाबले का संपीड़ित URL रखता है। सर्वर सब कुछ शून्य से पुनर्गणना करता है और अपडेटेड इमेज लौटाता है।
+Discord इंटरैक्टिव बटन से काम करता है, जब खिलाड़ी "Attaquer" दबाता है, तो Discord serveur को बटन का `custom_id` भेजता है। इस custom_id में जोड़ी नई क्रिया के साथ युद्ध का संपीड़ित URL होता है। serveur शून्य से सब फिर से गणना करता है और अद्यतन छवि लौटाता है।
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// फ़ंक्शन से बाहर प्रीकंपाइल -- हर कॉल पर पुनर्निर्मित नहीं
+// फंक्शन के बाहर पूर्व संकलित, हर कॉल पर फिर से नहीं बनाया जाता
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -53,7 +51,7 @@ export default function processUrl(url: string): [Random, string[], string, stri
   for (const part of urlParts) {
     if (VALID_MOVES_SET.has(part.toUpperCase())) moves.push(part.toUpperCase());
   }
-  // seed = 6वाँ सेगमेंट, 8096 मानों पर हैश किया गया
+  // seed = 6वाँ खंड, 8096 मानों पर hash किया गया
   const seedStr = (urlParts[5] || "").toLowerCase();
   let seed = 0;
   for (let i = 0; i < seedStr.length; i++) {
@@ -63,15 +61,15 @@ export default function processUrl(url: string): [Random, string[], string, stri
 }
 ```
 
-फ़ंक्शन के बाहर प्रीकंपाइल `Set` एक छोटी बात है, लेकिन यह एज कॉन्टेक्स्ट में हर इनवोकेशन पर संरचना को पुनर्निर्मित करने से बचाता है जहाँ मॉड्यूल का पुनर्मूल्यांकन हो सकता है।
+फंक्शन के बाहर पूर्व संकलित `Set` एक विवरण है, लेकिन यह edge संदर्भ में हर आह्वान पर संरचना फिर से बनाने से बचाता है जहाँ मॉड्यूल फिर से मूल्यांकित हो सकते हैं।
 
-### RNG: संशोधित RC4
+### RNG : संशोधित RC4
 
-रैंडम जनरेटर RC4 (स्ट्रीम सिफर एल्गोरिदम) का एक कार्यान्वयन है जिसे PRNG में बदल दिया गया है।
+बेतरतीब जनरेटर RC4 कार्यान्वयन (stream एन्क्रिप्शन एल्गोरिदम) है जिसे PRNG में मोड़ा गया है।
 
 ```typescript
 export class Random {
-  private S: number[]; // 256 एंट्री की टेबल
+  private S: number[]; // 256 प्रविष्टियों की तालिका
   private i: number;
   private j: number;
 
@@ -81,7 +79,7 @@ export class Random {
     let workingSeed = seed || Date.now();
     for (let i = 0; i < 256; i++) {
       j = (j + this.S[i] + (workingSeed & 0xff)) & 0xff;
-      // swap S[i] और S[j]
+      // S[i] और S[j] अदला बदली
       [this.S[i], this.S[j]] = [this.S[j], this.S[i]];
       workingSeed >>>= 8;
     }
@@ -93,19 +91,19 @@ export class Random {
 }
 ```
 
-RC4 क्यों? क्योंकि यह एक डिटरमिनिस्टिक PRNG है जिसमें उचित वितरण और उचित सीड कोलिजन प्रतिरोध है। एक ही सीड = संख्याओं का एक ही क्रम = हर बार एक ही मुकाबला। यह किसी भी मुकाबले को उसका URL रखते हुए "रीप्ले" करने की अनुमति देता है, और गारंटी देता है कि दो अलग-अलग सर्वर (Vercel + Cloudflare) एक ही URL के लिए बिल्कुल एक ही परिणाम उत्पन्न करते हैं।
+RC4 क्यों ? क्योंकि यह सही वितरण और उचित seed टक्कर प्रतिरोध वाला नियतात्मक PRNG है। वही seed = संख्याओं का वही क्रम = हर बार वही युद्ध। यह अपना URL रखकर किसी भी युद्ध को "फिर से खेलने" देता है, और गारंटी देता है कि दो अलग serveur (Vercel + Cloudflare) उसी URL के लिए बिल्कुल वही परिणाम बनाते हैं।
 
 ---
 
-## Discord की 100 कैरेक्टर सीमा की समस्या
+## Discord की 100 अक्षर सीमा की समस्या
 
-Discord बटन के `custom_id` पर 100 कैरेक्टर की सीमा लगाता है। कुछ दर्जन चालों के बाद, एक मुकाबले का URL आसानी से इस सीमा को पार कर जाता है।
+Discord बटन के `custom_id` पर 100 अक्षर सीमा थोपता है। कुछ दस क्रियाओं के बाद, युद्ध URL इस सीमा को आसानी से पार कर जाता है।
 
-दो तंत्र इसका समाधान करते हैं।
+दो तंत्र इसका उत्तर देते हैं।
 
-### 1. RLE संपीड़न
+### 1. क्रियाओं का RLE संपीड़न
 
-चालों को एक एकल कैरेक्टर (`a`=attack, `d`=defend, `h`=hug...) में एन्कोड किया जाता है और run-length encoding द्वारा संपीड़ित किया जाता है:
+क्रियाएँ एक अक्षर से एन्कोड की जाती हैं (`a`=attack, `d`=defend, `h`=hug...) और run-length encoding से संपीड़ित होती हैं :
 
 ```typescript
 // movesUtils.ts
@@ -125,11 +123,11 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-सरल, लेकिन जब खिलाड़ी Attack x10 स्पैम करता है तो `aaaaaaaaaa` (10 कैरेक्टर) `a10` (3 कैरेक्टर) में बदल जाता है। UI में "Attack x4" और "Attack x10" बटन इसी के लिए मौजूद हैं -- मुकाबले को तेज़ करना और पेलोड को अच्छी तरह संपीड़ित करना।
+सरल, लेकिन जब खिलाड़ी Attaque x10 spam करता है तो यह `aaaaaaaaaa` (10 अक्षर) से `a10` (3 अक्षर) जाता है। UI में "Attaquer x4" और "Attaquer x10" बटन ठीक इसके लिए मौजूद हैं, युद्ध तेज करने के साथ payload अच्छा संपीड़ित करना।
 
-### 2. सेशन टोकन जब संपीड़न पर्याप्त न हो
+### 2. जब संपीड़न काफी न हो तो सत्र token
 
-यदि संपीड़ित पेलोड अभी भी बहुत लंबा है, तो इसे एक छोटे टोकन के साथ डेटाबेस में संग्रहीत किया जाता है:
+अगर संपीड़ित payload अभी भी बहुत लंबा है, तो वह छोटे token के साथ आधार में संग्रहित होता है :
 
 ```typescript
 // gameSessionService.ts
@@ -137,49 +135,49 @@ const TOKEN_PREFIX = "gs.";
 const TOKEN_SIZE = 10; // "gs.aBcDeFgHiJ"
 
 export async function encodeGameplayButtons(buttons: RawButton[]): Promise {
-  // पेलोड को battle_key से समूहित करता है, Supabase में बैच डालता है
+  // battle_key से payload समूह करता है, Supabase में batch डालता है
   // custom_id को "gs.{token}:{userId}" से बदलता है
 }
 
 export async function decodeGameplayPayloadWithStatus(encodedPayload: string, userID: string) {
   if (!encodedPayload.startsWith(TOKEN_PREFIX)) {
-    return { payload: encodedPayload }; // ज़रूरत न होने पर कोई लुकअप नहीं
+    return { payload: encodedPayload }; // जरूरत न होने पर कोई lookup नहीं
   }
-  // पहले मेमोरी में लुकअप, फिर Supabase में यदि न हो
+  // पहले स्मृति में lookup, फिर अनुपस्थित होने पर Supabase
   const cached = tokenToSession.get(token) || await loadTokenRowByToken(token);
-  // स्वामित्व, TTL (7 दिन), और turn_version जाँचता है (पुरानी स्थिति को रीप्ले करने से बचाता है)
+  // स्वामित्व, TTL (7 दिन), और turn_version जाँचता है (पुरानी स्थिति फिर से खेलने से रोकता है)
 }
 ```
 
-सेशन का TTL 7 दिन है और हर 10 मिनट में स्वचालित प्रूनिंग होती है। `turnVersion` जाँच खिलाड़ी द्वारा आगे बढ़ने पर पुरानी स्थिति को रीप्ले करने से रोकती है -- आकस्मिक "पीछे जाने" के खिलाफ एक सूक्ष्म सुरक्षा।
+सत्रों का TTL 7 दिन है और हर 10 मिनट स्वचालित pruning। `turnVersion` जाँच पुरानी स्थिति फिर से खेलने से रोकती है अगर खिलाड़ी खेल में आगे बढ़ चुका है, आकस्मिक "पीछे जाने" के खिलाफ विवेकपूर्ण सुरक्षा।
 
-मेमोरी में दोनों Maps (`tokenToSession`, `latestTurnByBattle`) उसी `globalThis as unknown as GameSessionGlobals` पैटर्न का उपयोग करती हैं जैसे इमेज कैश करते हैं, उन्हीं कारणों से जो आगे बताए जाएँगे।
+स्मृति में दो Map (`tokenToSession`, `latestTurnByBattle`) छवि cache वाला `globalThis as unknown as GameSessionGlobals` पैटर्न इस्तेमाल करते हैं, उन्हीं कारणों से जो हम नीचे देखेंगे।
 
 ---
 
-## इमेज रेंडर पाइपलाइन
+## छवि रेंडर पाइपलाइन
 
-![डेब्यू डु कॉम्बैट कॉन्ट्रे उन स्लाइम](/images/konosuba-rpg/shot_01_start.webp)
+![Slime के खिलाफ युद्ध शुरुआत](/images/konosuba-rpg/shot_01_start.webp)
 
-रूट `/konosuba-rpg/:lang/*` JSON नहीं लौटाता। यह माँग पर जनरेट की गई WebP इमेज लौटाता है।
+`/konosuba-rpg/:lang/*` route JSON नहीं लौटाती। वह माँग पर उत्पन्न WebP छवि लौटाती है।
 
-पाइपलाइन 3 संरचनात्मक परतों में व्यवस्थित है:
+पाइपलाइन 3 संयोजित layer में व्यवस्थित है :
 
 ```
 Background (board + frame)
     +
-Characters layer (खिलाड़ी स्प्राइट्स + मॉब, निश्चित स्थान)
+Characters layer (खिलाड़ी sprite + mob, स्थिर स्थितियाँ)
     +
-UI overlay (HP बार, मैसेज, Satori → SVG → PNG के माध्यम से कैरेक्टर आइकन)
+UI overlay (HP पट्टियाँ, संदेश, Satori → SVG → PNG से व्यक्तिगत आइकन)
     ↓
 Photon.watermark() × 2
     ↓
 WebP output
 ```
 
-**Background**: दो स्थिर छवियाँ (बोर्ड और फ्रेम), फाइलसिस्टम से लोड की गईं और एक बार कंपोज़ की गईं।
+**Background** : दो स्थिर छवियाँ (पट्ट और फ्रेम), filesystem से लोड और एक बार संयोजित।
 
-**Characters layer**: स्प्राइट्स गणना किए गए निर्देशांकों पर स्थित होते हैं। मरे हुए खिलाड़ी बाहर रखे जाते हैं (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`)। दुश्मन स्प्राइट्स को कस्टम `flipX` से क्षैतिज रूप से मिरर किया जाता है -- बाहरी निर्भरता के बजाय पिक्सेल-दर-पिक्सेल लूप।
+**Characters layer** : sprite गणना निर्देशांक अनुसार स्थित हैं। मरे खिलाड़ी बाहर हैं (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`)। शत्रु sprite कस्टम `flipX` से क्षैतिज mirror किए गए हैं, बाहरी निर्भरता के बजाय pixel दर pixel लूप।
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -198,48 +196,48 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 }
 ```
 
-**UI overlay**: यह भारी हिस्सा है। इंटरफ़ेस का JSX (हेल्थ बार, टेक्स्ट, आइकन) React-like तरीके से Satori के साथ वर्णित किया जाता है, SVG में रेंडर किया जाता है, `@cf-wasm/resvg` द्वारा PNG में परिवर्तित किया जाता है, फिर अंतिम रचना के लिए Photon में आयात किया जाता है। Satori + resvg दो WASM मॉड्यूल हैं जिन्हें विशेष रूप से Cloudflare Workers के लिए `edge-light` फ्लैग के साथ संकलित किया गया है।
+**UI overlay** : यह भारी हिस्सा है। इंटरफेस JSX (जीवन पट्टियाँ, पाठ, आइकन) Satori से React जैसे वर्णित है, SVG में रेंडर, `@cf-wasm/resvg` से PNG में बदला, फिर अंतिम संयोजन के लिए Photon में आयात। Satori + resvg दो WASM मॉड्यूल हैं जो `edge-light` flag के साथ Cloudflare Workers के लिए विशेष संकलित हैं।
 
-![एक्शन डिफ़ेंस](/images/konosuba-rpg/shot_03_defend.webp)
+![Défense क्रिया](/images/konosuba-rpg/shot_03_defend.webp)
 
-![कॉम्बैट इन प्रोग्रेस](/images/konosuba-rpg/shot_02_combat.webp)
+![चलता युद्ध](/images/konosuba-rpg/shot_02_combat.webp)
 
-![एक्शन हग](/images/konosuba-rpg/shot_04_hug.webp)
+![Câlin क्रिया](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
-## कैश सिस्टम -- सबसे अधिक काम किया गया हिस्सा
+## cache तंत्र, सबसे मेहनत वाला हिस्सा
 
-5 अलग-अलग कैश स्तर हैं। प्रत्येक पाइपलाइन के एक अलग ग्रैन्युलैरिटी को लक्षित करता है।
+5 अलग cache स्तर हैं। हर एक पाइपलाइन की अलग दानेदारी लक्षित करता है।
 
 ```typescript
-// renderImage.ts -- सभी globalThis पर
-G.__imageCache  ??= {} as Record; // कच्चे एसेट्स
-G.__base64Cache ??= {} as Record;       // एसेट्स का base64 (Satori के लिए)
-G.__fontCache   ??= {} as Record; // फॉन्ट
+// renderImage.ts , सब globalThis पर
+G.__imageCache  ??= {} as Record; // कच्चे assets
+G.__base64Cache ??= {} as Record;       // assets का base64 (Satori के लिए)
+G.__fontCache   ??= {} as Record; // font
 G.__photonCache    ??= new LRUCache(40, freePhoton);
 G.__layerCache     ??= new LRUCache(12, freePhoton);
 G.__uiPhotonCache  ??= new LRUCache(30, freePhoton);
 G.__renderOutputCache ??= new LRUCache(120);
 ```
 
-`globalThis` पर `??=` पैटर्न: एज वर्कर्स में JavaScript मॉड्यूल कुछ कॉन्फ़िगरेशन पर अनुरोधों के बीच पुनर्मूल्यांकित हो सकते हैं। `??=` के साथ `globalThis` पर कैश संग्रहीत करना सुनिश्चित करता है कि वे पुनर्मूल्यांकन से बचे रहें बिना पुनर्निर्मित हुए।
+`globalThis` पर `??=` पैटर्न : edge worker में JavaScript मॉड्यूल कुछ कॉन्फ़िगरेशन पर अनुरोधों के बीच फिर से मूल्यांकित हो सकते हैं। `??=` के साथ `globalThis` पर cache संग्रहित करना गारंटी देता है कि वे इन पुनर्मूल्यांकन से बिना फिर से बनाए बचते हैं।
 
-### WASM एविक्शन
+### WASM निष्कासन
 
-Photon इमेज कैश (`photonCache`, `layerCache`, `uiPhotonCache`) एविक्शन कॉलबैक का उपयोग करते हैं:
+Photon छवि cache (`photonCache`, `layerCache`, `uiPhotonCache`) निष्कासन callback इस्तेमाल करते हैं :
 
 ```typescript
 function freePhoton(_key: string, img: Photon.PhotonImage): void {
-  try { img.free(); } catch { /* पहले ही मुक्त किया जा चुका */ }
+  try { img.free(); } catch { /* पहले ही मुक्त */ }
 }
 
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` एक WASM ऑब्जेक्ट है जिसमें WASM लीनियर मेमोरी के बाहर आवंटित मेमोरी होती है, जो JavaScript GC के दायरे से बाहर है। बिना `.free()` के स्पष्ट कॉल के, यह मेमोरी कभी मुक्त नहीं होती। LRU का एविक्शन स्वचालित रूप से `.free()` ट्रिगर करता है -- यह JavaScript में RAII है।
+`Photon.PhotonImage` WASM ऑब्जेक्ट है जिसकी स्मृति रैखिक WASM तरफ आवंटित है, JavaScript GC के बाहर। यह स्मृति आवंटित रहती है जब तक `.free()` स्पष्ट न बुलाया जाए। LRU निष्कासन `.free()` अपने आप trigger करता है, यह JavaScript में लाया RAII है।
 
-### कैश कीज़ जानबूझकर लॉसी हैं
+### cache कुंजियाँ जानबूझकर lossy हैं
 
 ```typescript
 function buildCharactersKey(playerImages: string[][], playerHp: number[], creatureImages: string[], creatureHp: number): string {
@@ -248,29 +246,29 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-कैरेक्टर्स लेयर की की HP का सटीक मान एन्कोड नहीं करती -- सिर्फ `1` (जीवित) या `0` (मृत)। क्योंकि 40 HP वाले खिलाड़ी और 15 HP वाले खिलाड़ी का स्प्राइट एक जैसा होता है। इसलिए एक कैश हिट किसी भी क्षति से बच जाता है जब तक कोई मर न जाए।
+characters layer कुंजी HP का सटीक मान एन्कोड नहीं करती, सिर्फ `1` (जीवित) या `0` (मरा)। क्योंकि 40 HP वाले खिलाड़ी और 15 HP वाले खिलाड़ी का sprite समान है। cache hit इसलिए किसी भी नुकसान से बचता है जब तक कोई गिरता नहीं।
 
-दूसरी ओर UI की सटीक HP एन्कोड करती है (हेल्थ बार हर हिट पर बदलता है) और मैसेज का हैश:
+UI कुंजी इसके विपरीत सटीक HP एन्कोड करती है (जीवन पट्टी हर चोट पर बदलती है) और संदेशों का hash :
 
 ```typescript
 function hashString(value: string): string {
   let hash = 0;
   for (let i = 0; i < value.length; i++) {
-    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // 32-बिट साइन्ड इंटीजर
+    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // हस्ताक्षरित 32-बिट पूर्णांक
   }
   return hash.toString(16);
 }
 ```
 
-`Math.imul` गुणा को 32-बिट इंटीजर में बलपूर्वक करता है, जो float64 रूपांतरण से बचाता है और एक स्थिर बहुपद हैश देता है। इसके लिए कोई बाहरी निर्भरता नहीं।
+`Math.imul` गुणा को 32 बिट पूर्णांक में बाध्य करता है, जो float64 रूपांतरण से बचाता है और स्थिर बहुपद hash देता है। यह इसके लिए बाहरी निर्भरता जोड़ने से बचाता है।
 
-### स्टैक ओवरफ़्लो के बिना base64 रूपांतरण
+### बिना stack overflow base64 रूपांतरण
 
 ```typescript
 function getBase64Cached(key: string, buf: ArrayBuffer): string {
   if (base64Cache[key]) return base64Cache[key];
   const bytes = new Uint8Array(buf);
-  const chunkSize = 0x8000; // 32768 बाइट्स
+  const chunkSize = 0x8000; // 32768 octet
   let binary = "";
   for (let i = 0; i < bytes.length; i += chunkSize) {
     binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunkSize, bytes.length)));
@@ -281,20 +279,20 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)` बड़ी इमेज पर स्टैक ओवरफ़्लो का कारण बन सकता है क्योंकि आर्ग्युमेंट कॉल स्टैक पर पास होते हैं। 32KB चंकिंग इससे बचाती है। परिणाम कैश किया जाता है -- एक ही इमेज का base64 रूपांतरण प्रति वर्कर इंस्टेंस केवल एक बार किया जाता है।
+`String.fromCharCode(...largeArray)` बड़ी छवियों पर stack overflow कर सकता है क्योंकि तर्क call stack पर भेजे जाते हैं। 32Ko chunking इससे बचाता है। परिणाम cache किया जाता है, एक ही छवि का base64 रूपांतरण worker उदाहरण में सिर्फ एक बार किया जाता है।
 
 ---
 
-## STRIPPER.md -- अनुक्रमिक awaits का ऑडिट
+## STRIPPER.md, क्रमिक await का ऑडिट
 
-रिपो में एक फ़ाइल `STRIPPER.md` है जो `await` के समानांतरीकरण ऑडिट का दस्तावेज़ीकरण करती है। कुछ उदाहरण जो इसमें दर्ज हैं:
+repo में `STRIPPER.md` फाइल है जो `await` समानांतरीकरण ऑडिट प्रलेखित करती है। इसमें दर्ज कुछ उदाहरण :
 
-- खिलाड़ी प्रोफ़ाइल लोड करना तीन Supabase क्वेरी (प्रोग्रेस, रन सारांश, उपलब्धियाँ) श्रृंखला में कर रहा था। उन्हें `Promise.all` में बदल दिया गया -- उनके बीच कोई निर्भरता नहीं।
-- मुकाबले के अंत में पुरस्कार वितरण (एक्सेसरीज़ + उपभोग्य वस्तुएँ) अनुक्रमिक था। उसी तरह समानांतर किया गया।
-- बटन के लिए सेशन टोकन का निर्माण समूह दर समूह हो रहा था। स्वतंत्र समूह अब समानांतर में बनाए जाते हैं।
+- खिलाड़ी प्रोफाइल लोड 3 Supabase अनुरोध क्रम में करता था (प्रगति, run सारांश, achievement)। उन्हें `Promise.all` में डाला गया, उनके बीच कोई निर्भरता नहीं।
+- युद्ध अंत पुरस्कार वितरण (सहायक वस्तुएँ + उपभोग्य) क्रमिक था। वैसे ही समानांतर किया गया।
+- बटन के लिए सत्र token निर्माण समूह दर समूह होता था। स्वतंत्र समूह अब समानांतर बनाए जाते हैं।
 
 ```typescript
-// progressionService.ts -- पहले (अनुक्रमिक)
+// progressionService.ts , पहले (क्रमिक)
 await grantAccessoryDropRewards(...);
 await grantConsumableDropRewards(...);
 
@@ -305,15 +303,15 @@ await Promise.all([
 ]);
 ```
 
-इसमें कोई क्रांतिकारी बात नहीं, लेकिन सर्वरलेस कॉन्टेक्स्ट में जहाँ प्रतिक्रिया समय की हर मिलीसेकंड बिल योग्य है (या कोल्ड स्टार्ट में योगदान करती है), यह मायने रखता है।
+कुछ क्रांतिकारी नहीं, लेकिन serverless संदर्भ में जहाँ उत्तर समय का हर मिलीसेकंड बिल किया जाता है (या cold start में योगदान देता है), यह मायने रखता है।
 
 ---
 
-## बिना स्थायी सर्वर के Discord बॉट
+## स्थायी सर्वर रहित Discord बॉट
 
-![विजय](/images/konosuba-rpg/shot_05_win.webp)
+![Victoire](/images/konosuba-rpg/shot_05_win.webp)
 
-एक अक्सर गलत समझी जाने वाली बात: Discord बॉट को जरूरी नहीं कि एक स्थायी WebSocket कनेक्शन की आवश्यकता हो। Discord एक विकल्प प्रदान करता है: **Interactions Endpoint URL**। आप Discord को एक HTTPS URL प्रदान करते हैं, और Discord प्रत्येक इंटरैक्शन (स्लैश कमांड, बटन, ऑटोकम्प्लीट) के लिए आपको एक POST भेजता है।
+अक्सर गलत समझा बिंदु : Discord बॉट को जरूरी नहीं स्थायी WebSocket कनेक्शन चाहिए। Discord विकल्प देता है : **Interactions Endpoint URL**। तुम Discord को HTTPS URL देते हो, और Discord हर interaction (slash command, बटन, autocomplete) के लिए POST भेजता है।
 
 ```typescript
 // interactions.ts
@@ -330,11 +328,11 @@ export async function handleInteractions(c: Context) {
 }
 ```
 
-Discord एक POST भेजता है, हैंडलर Vercel फ़ंक्शन या Cloudflare Worker पर 50-200ms चलता है, जवाब देता है, और समाप्त। कोई स्थायी कनेक्शन बनाए रखने की ज़रूरत नहीं, कोई सर्वर चालू रखने की ज़रूरत नहीं। पूरा Discord बॉट Vercel के फ्री टियर पर होस्ट किया गया है।
+Discord POST भेजता है, handler Vercel फंक्शन या Cloudflare Worker पर 50-200ms चलता है, जवाब देता है, और खत्म। बनाए रखने को कोई स्थायी कनेक्शन नहीं, जलाए रखने को कोई serveur नहीं। पूरा Discord बॉट Vercel free tier पर होस्ट है।
 
-Ed25519 सत्यापन (`discord-interactions` से `verifyKey`) अनिवार्य है -- Discord हेडर में एक सिग्नेचर भेजता है जिसे आपको सत्यापित करना होता है, अन्यथा वह एंडपॉइंट को अस्वीकार कर देता है।
+Ed25519 जाँच (`discord-interactions` से `verifyKey`) अनिवार्य है, Discord हेडर में हस्ताक्षर भेजता है जिसे तुम्हें मान्य करना होगा, वरना वह endpoint अस्वीकार करता है।
 
-### विशेष एनिमेशन -- एकमात्र जानबूझकर किया गया await
+### विशेष एनीमेशन, एकमात्र जानबूझकर await
 
 ```typescript
 // handleSpecialButton.ts
@@ -345,65 +343,65 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-यह जानबूझकर 3 सेकंड की देरी STRIPPER.md में जानबूझकर के रूप में दस्तावेज़ित है। Megumin का विशेष हमला (Explosion) Discord साइड पर एक एनिमेशन रखता है -- संदेश को पहले एक मध्यवर्ती दृश्य के साथ अपडेट किया जाता है, फिर 3 सेकंड बाद परिणाम के साथ संशोधित किया जाता है। यह एकमात्र मामला है जहाँ Vercel फ़ंक्शन जानबूझकर आवश्यकता से अधिक समय तक चलता है।
+3 सेकंड का यह स्वैच्छिक विलंब STRIPPER.md में जानबूझकर प्रलेखित है। Megumin का विशेष हमला (Explosion) Discord तरफ एनीमेशन रखता है, संदेश पहले मध्यवर्ती दृश्य से अद्यतन होता है, फिर 3 सेकंड बाद परिणाम से संशोधित होता है। यही एकमात्र मामला है जहाँ Vercel फंक्शन जानबूझकर जरूरत से ज्यादा चलता है।
 
 ![विशेष हमला](/images/konosuba-rpg/shot_08_special.webp)
 
 ---
 
-## दो प्लेटफ़ॉर्म पर डिप्लॉयेबिलिटी
+## दो प्लेटफॉर्म पर परिनियोजन योग्यता
 
-एक ही कोडबेस बिना संशोधन के Vercel (Node.js) और Cloudflare Workers (V8 आइसोलेट्स) पर चलता है:
+वही codebase बिना संशोधन Vercel (Node.js) और Cloudflare Workers (V8 isolates) पर चलता है :
 
 ```typescript
-// worker.ts -- Cloudflare एंट्रीपॉइंट
+// worker.ts , Cloudflare entrypoint
 export default {
   fetch(request: Request, env: WorkerBindings): Promise {
-    syncBindingsToProcessEnv(env); // CF सीक्रेट्स को process.env में इंजेक्ट करता है
+    syncBindingsToProcessEnv(env); // CF secret process.env में डालता है
     return app.fetch(request, env, ctx);
   }
 };
 
-// index.ts -- Vercel/Node एंट्रीपॉइंट
+// index.ts , Vercel/Node entrypoint
 const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
 
-मुख्य अंतर: स्टैटिक एसेट्स। Vercel पर, वे फाइलसिस्टम (`/var/task/assets/`) से पढ़े जाते हैं। Cloudflare Workers पर, वे `ASSETS` बाइंडिंग (CF स्टैटिक एसेट्स) से HTTTPS मिरर (`fox3000foxy.com/konosuba-rpg/assets`) पर फ़ॉलबैक के साथ जाते हैं। `assetLoader.ts` में `getAssetBytes` पहले फाइलसिस्टम, फिर fetch कोशिश करके दोनों पथों को संभालता है।
+मुख्य अंतर : स्थिर asset। Vercel पर, वे filesystem से पढ़े जाते हैं (`/var/task/assets/`)। Cloudflare Workers पर, वे `ASSETS` binding (CF स्थिर asset) से गुजरते हैं, HTTPS mirror (`fox3000foxy.com/konosuba-rpg/assets`) की ओर fallback के साथ। `assetLoader.ts` में `getAssetBytes` filesystem पहले, फिर fetch आजमाकर दोनों रास्ते संभालता है।
 
-WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) के प्रत्येक रनटाइम के लिए अलग-अलग बिल्ड हैं। पैकेज के नाम में `edge-light` फ्लैग Cloudflare Workers-संगत बिल्ड को दर्शाता है, जो रनटाइम पर `new WebAssembly.Module()` की अनुमति नहीं देता -- WASM को प्री-कंपाइल होना चाहिए।
+WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) के हर runtime के लिए अलग build हैं। पैकेज नाम में `edge-light` flag Cloudflare Workers संगत build दर्शाता है, जो runtime पर `new WebAssembly.Module()` अनुमति नहीं देता, WASM पूर्व संकलित होना चाहिए।
 
 ---
 
-## प्रोग्रेस: XP, लेवल, अफ़िनिटी
+## प्रगति : XP, स्तर, आत्मीयता
 
-![एक बॉस, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
+![Boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
-मेटा-प्रोग्रेस Supabase फ्री टियर पर आधारित है। स्कीमा में एक टेबल `players` (ग्लोबल XP, लेवल, गोल्ड), `character_progress` (Darkness, Aqua, Megumin के लिए प्रति कैरेक्टर XP/लेवल/अफ़िनिटी), `runs` (मुकाबलों का इतिहास), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions` शामिल हैं।
+meta-प्रगति Supabase free tier पर टिकी है। schema में `players` तालिका (वैश्विक XP, स्तर, gold), `character_progress` (Darkness, Aqua, Megumin के लिए प्रति पात्र XP/स्तर/आत्मीयता), `runs` (युद्ध इतिहास), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions` हैं।
 
-प्रोग्रेस मॉडल सरल है:
+प्रगति मॉडल सरल है :
 
 ```typescript
 // characterService.ts
 export function computeLevelFromXp(xp: number): number {
-  return Math.floor(xp / 100) + 1; // 100 XP प्रति लेवल
+  return Math.floor(xp / 100) + 1; // प्रति स्तर 100 XP
 }
 
 export function getLevelFactor(level: number): number {
-  return 1 + 0.2 * (level - 1); // +20% स्टैट्स प्रति लेवल
+  return 1 + 0.2 * (level - 1); // प्रति स्तर +20% stats
 }
 
 export function getAffinityFactor(affinity: number): number {
-  const stars = Math.floor(affinity / 20); // 20 पॉइंट प्रति स्टार, अधिकतम 5 स्टार
-  return 1.2 ** stars; // एक्सपोनेंशियल प्रोग्रेस
+  const stars = Math.floor(affinity / 20); // प्रति तारा 20 अंक, अधिकतम 5 तारे
+  return 1.2 ** stars; // घातांकीय प्रगति
 }
 ```
 
-ये फैक्टर प्रत्येक `processGame` की शुरुआत में कैरेक्टर स्टैट्स पर लागू होते हैं। Kazuma खिलाड़ी के ग्लोबल लेवल का अनुसरण करता है, बाकी तीनों का अपना XP/लेवल है। अफ़िनिटी (एक कैरेक्टर से संबंधित ड्रॉप प्राप्त करके अर्जित) स्वतंत्र रूप से उनके स्टैट्स को गुणा करती है।
+ये कारक हर `processGame` शुरुआत में पात्र stats पर लागू होते हैं। Kazuma खिलाड़ी के वैश्विक स्तर का पालन करता है, अन्य तीनों का अपना XP/स्तर है। आत्मीयता (किसी पात्र से जुड़े drop पाकर जीती) उसकी stats स्वतंत्र गुणा करती है।
 
-![हील](/images/konosuba-rpg/shot_07_heal.webp)
+![उपचार](/images/konosuba-rpg/shot_07_heal.webp)
 
-ड्रॉप सिस्टम कठिनाई-भारित लूट टेबल का उपयोग करता है:
+drop तंत्र कठिनाई से भारित loot table इस्तेमाल करता है :
 
 ```typescript
 const LOOT_TABLE_BY_DIFFICULTY: Record = {
@@ -424,9 +422,9 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
 
 ## परीक्षण
 
-तीन सूट: यूनिट, परफॉरमेंस, और लीक।
+तीन सुइट : इकाई, perf, और leak।
 
-लीक टेस्ट विशेष रूप से प्रत्यक्ष है:
+leak परीक्षण विशेष रूप से सीधा है :
 
 ```typescript
 // leaks.spec.ts
@@ -444,50 +442,50 @@ it('does not show strong heap growth across repeated runs', async () => {
 });
 ```
 
-`processGame` के 1200 पुनरावृत्तियाँ, पहले और बाद में फोर्स्ड GC, delta heap < 20MB। यदि यह परीक्षण पास होता है, `processGame` लीक नहीं करता। रेंडर टेस्ट (`renderImage.spec.ts`) इसके बजाय एक व्यावहारिक सीमा के तहत निष्पादन समय की जाँच करता है।
+`processGame` के 1200 दोहराव, पहले और बाद में बाध्य GC, heap delta < 20MB। अगर यह परीक्षण पास होता है, तो `processGame` लीक नहीं करता। render परीक्षण (`renderImage.spec.ts`) बल्कि व्यावहारिक सीमा के नीचे निष्पादन समय जाँचता है।
 
-पूर्ण पाइपलाइन को प्रोफाइल करने के लिए एक स्क्रिप्ट `bench.ts` भी है:
+पूरा पाइपलाइन profile करने के लिए `bench.ts` स्क्रिप्ट भी है :
 
 ```
 RENDER_PERF=1 npx tsx bench.ts --runs=20 --warmup=3 --monster=Dragon
 ```
 
-`RENDER_PERF=1` के साथ, प्रत्येक सेवा में `withPerf` रैपर टाइमिंग लॉग करता है:
+`RENDER_PERF=1` के साथ, हर service में `withPerf` wrapper timing log करता है :
 
 ```typescript
 export async function withPerf(scope: string, label: string, work: () => Promise): Promise {
   const perf = createPerfLogger(scope);
-  if (!perf.enabled) return work(); // निष्क्रिय होने पर शून्य ओवरहेड
+  if (!perf.enabled) return work(); // निष्क्रिय होने पर zero overhead
   perf.mark(`${label}:start`);
   try { return await work(); }
   finally { perf.done(`${label}:done`); }
 }
 ```
 
-`createPerfLogger` नो-ऑप्स लौटाता है यदि `DEV_MODE` और `RENDER_PERF` `1` पर नहीं हैं। प्रोडक्शन में कोई ओवरहेड नहीं।
+`createPerfLogger` no-op लौटाता है अगर `DEV_MODE` और `RENDER_PERF` `1` पर नहीं हैं। production में कोई overhead नहीं।
 
 ---
 
-## इसे चलाने में कितना खर्च आता है
+## इसे चलाने की लागत क्या है
 
-- **Vercel फ्री टियर**: 100GB बैंडविड्थ, प्रति माह 1M सर्वरलेस इनवोकेशन। इमेज रेंडर एक इनवोकेशन माना जाता है।
-- **Cloudflare Workers फ्री टियर**: 100K अनुरोध/दिन, प्रति अनुरोध 10ms CPU समय (रेंडर Workers पर इसे पार कर सकता है, इसलिए Vercel प्राथमिक है)।
-- **Supabase फ्री टियर**: 500MB डेटाबेस, 5GB बैंडविड्थ। हज़ारों खिलाड़ियों के लिए पर्याप्त।
+- **Vercel free tier** : 100GB bandwidth, प्रति माह 1M serverless invocation। छवि render invocation गिना जाता है।
+- **Cloudflare Workers free tier** : 100K अनुरोध/दिन, प्रति अनुरोध 10ms CPU time (WASM के कारण render Workers पर इससे पार कर सकता है, इसीलिए Vercel प्राथमिक)।
+- **Supabase free tier** : 500MB आधार, 5GB bandwidth। हजारों खिलाड़ियों के लिए काफी।
 
-पूरा बैकएंड एक महत्वपूर्ण वॉल्यूम तक शून्य लागत पर चलता है। एकमात्र घर्षण बिंदु Cloudflare Workers की CPU सीमा है -- WASM के कारण इमेज रेंडर CPU-इंटेंसिव है, इसलिए Vercel को प्राथमिक और Workers को फ़ेलओवर CDN के रूप में रखने की रणनीति है।
+पूरा backend महत्वपूर्ण आयतन तक शून्य लागत चलता है। एकमात्र घर्षण बिंदु Cloudflare Workers CPU सीमा है, छवि render WASM के कारण CPU गहन है, इसीलिए Vercel प्राथमिक और Workers failover CDN रणनीति है।
 
 ---
 
-## 3 चीज़ें जो याद रखने लायक हैं
+## 3 चीजें जो याद रखने योग्य हैं
 
-1. **URL गेम स्टेट के रूप में** केवल एक अच्छी ट्रिक नहीं है -- यह Discord द्वारा लगाई गई एक बाध्यता है (बटन की 100 कैरेक्टर सीमा) जिसने RLE संपीड़न + फ़ॉलबैक के रूप में सेशन टोकन के साथ एक स्टेटलेस आर्किटेक्चर को मजबूर किया। बाध्यता ने डिज़ाइन को निर्धारित किया।
+1. **खेल स्थिति के रूप में URL** सिर्फ अच्छी चाल नहीं है, यह Discord थोपी बाधा है (बटन 100 अक्षर सीमा) जिसने fallback के रूप में RLE संपीड़न + सत्र token वाली stateless आर्किटेक्चर बाध्य की। बाधा ने डिजाइन तय किया।
 
-2. **स्पष्ट एविक्शन के साथ WASM कैश**: `PhotonImage` JavaScript heap के बाहर आवंटित होते हैं और `.free()` के बिना कभी GC'd नहीं होंगे। LRU के एविक्शन पर `freePhoton` को जोड़ना JavaScript में RAII है। यह कोड में सूक्ष्म है, लेकिन इसके बिना वर्कर प्रोडक्शन में लीक करेगा।
+2. **स्पष्ट निष्कासन वाला WASM cache** : `PhotonImage` JavaScript heap के बाहर आवंटित करते हैं और `.free()` के बिना कभी GC नहीं होंगे। LRU निष्कासन पर `freePhoton` जोड़ना JavaScript में RAII है। कोड में विवेकपूर्ण है, लेकिन इसके बिना worker production में लीक करेगा।
 
-3. **WebSocket के बिना एक सर्वरलेस Discord बॉट**: यह WebSocket गेटवे दृष्टिकोण से कम ज्ञात है, लेकिन स्टेटलेस प्रोसेसिंग करने वाले बॉट के लिए (प्रत्येक इंटरैक्शन स्वतंत्र है), Interactions Endpoint सख्ती से बेहतर है -- कोई पुनःकनेक्शन नहीं, कोई हार्टबीट नहीं, कोई बनाए रखने वाली प्रक्रिया नहीं। Discord अपने इन्फ्रा की ओर से उपलब्धता का प्रबंधन करता है।
+3. **बिना WebSocket serverless Discord बॉट** : यह WebSocket gateway दृष्टिकोण से कम ज्ञात है, लेकिन बॉट के लिए जो stateless प्रोसेसिंग करता है (हर interaction स्वतंत्र है), Interactions Endpoint कड़ाई से बेहतर है, कोई पुनः जुड़ाव नहीं, कोई heartbeat नहीं, बनाए रखने को कोई प्रक्रिया नहीं। Discord उनकी infra तरफ उपलब्धता संभालता है।
 
 ---
 
 *Repo : [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
 
-*Licence source-available custom -- pas de redistribution, free to use.*
+*कस्टम source-available लाइसेंस, कोई पुनर्वितरण नहीं, free to use।*

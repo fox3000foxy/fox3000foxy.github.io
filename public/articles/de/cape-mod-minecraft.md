@@ -1,43 +1,44 @@
 ---
-title: "Cape Mod: Wie man Jeb_s Cape mit einer RSA-Signatur-Injektion stiehlt"
-description: "Ein Fabric-Mod, der eine logische Schwachstelle im Vertrauenssystem von Minecraft ausnutzt: eine gültige RSA-Signatur von Mojang, die jedoch auf das falsche Konto replayiert wird. Code-Erklärung, Sicherheitsimplikationen und kryptografische Lektionen."
+title: "Cape Mod: wie man Jeb_s Cape mit einer RSA-Signaturinjektion klaut"
+description: "Ein Fabric-Mod, der eine Logiklücke im Vertrauenssystem von Minecraft ausnutzt: eine gültige RSA-Signatur von Mojang, aber replayt auf ein falsches Konto. Erklärung des Codes, Sicherheitsimplikationen und kryptografische Lehren."
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - fabric
   - java
   - security
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Zn/S9zJz290w4zWNY6gSLaj6G+kTZqFxu+Z71e/LUpSw6Z5z+26m9yFs0A03LrbawJ+/i7FIewxBga5BRDYYPA=="
+author_sig: "RsNclPqGWpaa9+WLxX/v0JkTrwR3HGt4Wqu83Nmt973bVmSZIZX5NUGhH+PtheJ1tladEx0GeVn2cu87+xNlyg=="
 ---
 
-# Cape Mod: Wie man Jeb_s Cape mit einer RSA-Signatur-Injektion stiehlt
+# Cape Mod: wie man Jeb_s Cape mit einer RSA-Signaturinjektion klaut
 
 ![alt text](assets/xbox-profile.png)
-Was wäre, wenn ich dir sagte, dass eine gültige RSA-Signatur -- aber für den **falschen Account** -- völlig ausreicht, um deine Freunde glauben zu lassen, du trägst den offiziellen Mojang-Umhang? Willkommen bei `cape-mod`, einem Fabric-Exploit, der zeigt, wie Minecraft einer Signatur vertraut, ohne zu überprüfen, ob das Profil, zu dem sie gehört, tatsächlich deines ist.
 
-## Der Kontext: Wie Minecraft Skins und Capes verwaltet
+Was, wenn ich dir sagen würde, dass eine gültige RSA-Signatur reichte, aber für das **falsche Konto**, um deine Freunde glauben zu lassen, du trägst die offizielle Mojang-Cape? Willkommen bei `cape-mod`, einem Fabric-Exploit, der zeigt, wie Minecraft einer Signatur vertraut und dabei vergisst zu prüfen, ob das Profil, zu dem sie gehört, wirklich deines ist.
 
-In der Java Edition stellt sich eine Frage, die man sich nicht oft stellt: **Wer ist dafür verantwortlich, den Skin und den Cape eines Spielers anzuzeigen -- der Client oder der Server?**
+## Der Kontext: wie Minecraft Skins und Capes handhabt
+
+In der Java Edition gibt es eine selten gestellte Frage: **Wer ist verantwortlich, den Skin und die Cape eines Spielers anzuzeigen, der Client oder der Server ?**
 
 Die Antwort ist nuanciert:
 
-| Komponente | Wer sendet sie? | Wer lädt sie herunter? |
+| Komponente | Wer schickt sie? | Wer lädt sie herunter? |
 |---|---|---|
-| **Skin-Textur** | Der Server sendet die signierte URL | Der Client lädt von `textures.minecraft.net` |
-| **Cape-Textur** | Der Server sendet die signierte URL | Der Client lädt von `textures.minecraft.net` |
-| **Eigenschaft `textures`** | Der Server sendet das `GameProfile` von der Mojang-Auth | Der Client prüft die RSA-Signatur |
+| **Skin-Textur** | Der Server schickt die signierte URL | Der Client lädt von `textures.minecraft.net` herunter |
+| **Cape-Textur** | Der Server schickt die signierte URL | Der Client lädt von `textures.minecraft.net` herunter |
+| **`textures`-Eigenschaft** | Der Server schickt das `GameProfile` aus der Mojang-Auth | Der Client prüft die RSA-Signatur |
 
-Der entscheidende Punkt: Alles ist in einer Eigenschaft namens `textures` des `GameProfile` enthalten. Diese Eigenschaft enthält:
-- Ein Base64-JSON-Payload mit den URLs der Texturen
-- Eine **RSA-Signatur**, erstellt mit dem privaten Schlüssel von Mojang
+Der springende Punkt: Alles steckt in einer Eigenschaft namens `textures` des `GameProfile`. Diese Eigenschaft enthält:
+- Einen base64-codierten JSON-Payload mit den Textur-URLs
+- Eine **RSA-Signatur** mit Mojangs privatem Schlüssel gemacht
 
-## Die RSA-Signatur-Mauer
+## Die Mauer der RSA-Signatur
 
-Jede `textures`-Eigenschaft sieht nach dem Dekodieren so aus:
+Jede `textures`-Eigenschaft sieht so aus, wenn man sie dekodiert:
 
 ```json
 {
@@ -68,26 +69,26 @@ public boolean isSignatureValid(PublicKey publicKey) {
 }
 ```
 
-Für entfernte Spieler (nicht lokal) akzeptiert der Client nur Skins, die als `secure` markiert sind -- also mit einer gültigen Signatur:
+Für entfernte Spieler (außerhalb des lokalen Spiels) akzeptiert der Client nur Skins, die als **`secure`** markiert sind, also mit gültiger Signatur:
 
 ```java
-// SkinManager.createLookup() -- vereinfacht
+// SkinManager.createLookup() – vereinfacht
 PlayerSkin skin = optional
     .filter(ps -> !isRemote || ps.secure())  // ← entfernte Spieler müssen sicher sein
     .orElse(defaultSkin);
 ```
 
-Diese Prüfung verhindert theoretisch Spoofing. Aber hier wird es interessant.
+Dieser Check blockiert Spoofing in der Theorie. Aber die Validierung hört dort auf, und genau dort beginnt der Angriff.
 
-## Die Schwachstelle: Signatur-Replay
+## Die Lücke: Signature Replay
 
-Der Client prüft, ob die RSA-Signatur **gültig** ist. Aber er prüft **nie**, ob die im JSON enthaltene `profileId` mit der tatsächlichen UUID des Spielers übereinstimmt.
+Der Client prüft, dass die RSA-Signatur **gültig ist**. Er vergisst systematisch zu prüfen, dass die im JSON enthaltene `profileId` der echten UUID des Spielers entspricht.
 
-Mit anderen Worten: Eine `textures`-Eigenschaft, die von einem **bestehenden Mojang-Account** (z. B. dem eines Mojang-Mitarbeiters) stammt, kann auf jeden anderen Spieler replayiert werden. Die Signatur bleibt gültig -- sie wurde echt von Mojang erstellt -- sie stammt nur von einem anderen Account.
+Anders gesagt: Eine `textures`-Eigenschaft von einem **existierenden Mojang-Konto** (zum Beispiel dem eines Mojang-Mitarbeiters) kann auf jeden anderen Spieler replayt werden. Die Signatur bleibt gültig, sie wurde wirklich von Mojang produziert, sie kommt nur von einem anderen Konto.
 
 ### Wie extrahiert man eine echte Signatur?
 
-Jeb_ (UUID `853c80ef-3c37-49fd-aa49-938b674adae6`) hat den Mojang-Studios-Umhang. Vom Mojang-Session-Server:
+Jeb_ (UUID `853c80ef-3c37-49fd-aa49-938b674adae6`) hat die Mojang-Studios-Cape. Vom Mojang-Session-Server:
 
 ```bash
 curl -s "https://sessionserver.mojang.com/session/minecraft/profile/853c80ef-3c37-49fd-aa49-938b674adae6?unsigned=false"
@@ -109,11 +110,11 @@ Antwort:
 }
 ```
 
-Die `signature` dieses `value`-Feldes wurde von Mojang erstellt. Es ist RSA-2048 SHA-1. Sie ist **absolut** gültig, selbst wenn du sie auf eine andere UUID replays -- denn Jeb_s Signatur bleibt Jeb_s Signatur, und der Client prüft nie, ob sie **angeblich** deine sein soll.
+Die `signature` dieses `value`-Felds wurde von Mojang produziert. Es ist RSA-2048 SHA-1. Sie ist **absolut** gültig, selbst wenn du sie auf eine andere UUID replayst, weil Jeb_s Signatur Jeb_s Signatur bleibt, und der Client vergisst zu kontrollieren, für wen sie bestimmt war.
 
-## Der Code: Wie der Mod funktioniert
+## Der Code: wie der Mod funktioniert
 
-Der `cape-mod` ist winzig -- 65 Zeilen Java. Hier ist der Kern:
+Der `cape-mod`-Mod ist winzig, 65 Zeilen Java. Hier das Herz:
 
 ```java
 @Mixin(Player.class)
@@ -136,7 +137,7 @@ public class ServerPlayerMixin {
         GameProfile original = cir.getReturnValue();
         if (host == null || !host.name().equals(original.name())) return;
 
-        // Ersetzt die textures-Eigenschaft durch die von Jeb_
+        // Ersetzt die Eigenschaft Texturen durch die Eigenschaft Jeb_
         ImmutableMultimap.Builder<String, Property> b = ImmutableMultimap.builder();
         for (Property p : original.properties().values()) {
             if (!p.name().equals("textures")) {
@@ -151,105 +152,105 @@ public class ServerPlayerMixin {
 ```
 
 **Schritte**:
-1. **Mixin** auf `Player.getGameProfile()` -- der Punkt, an dem das Spielerprofil zurückgegeben wird
-2. Prüft, ob es sich um einen lokalen Server handelt (Integrated Server)
-3. Prüft, ob es der Host ist (LAN-Welt)
-4. **Ersetzt** die `textures`-Eigenschaft durch die von Jeb_ (hartkodiert)
+1. **Mixin** auf `Player.getGameProfile()`, den Punkt, an dem das Spielerprofil zurückgegeben wird
+2. Prüft, dass es ein lokaler Server ist (Integrated Server)
+3. Prüft, dass es der Host ist (LAN-Welt)
+4. **Ersetzt** die `textures`-Eigenschaft durch die von Jeb_ (hardcodiert)
 5. Gibt ein neues `GameProfile` mit den injizierten Texturen zurück
 
-Das `GameProfile` ist also **gekünstelt**: Es ist ein künstlich erstelltes Profil, das nicht dem echten Spieler entspricht. Die `textures`-Eigenschaften sind von Jeb_ **replayed** -- die RSA-Signatur ist authentisch, wird aber auf das falsche Profil angewendet. Das Netzwerkpaket selbst ist legitim: Der Server sendet normalerweise das `ClientboundPlayerInfoUpdatePacket` mit diesem modifizierten Profil. Es ist das Profil, das gekünstelt ist, nicht das Paket.
+Das `GameProfile` ist also **gefälscht**: Es ist ein künstlich gebautes Profil, das nicht zum echten Spieler passt. Die `textures`-Eigenschaften sind von Jeb_ **replayt**, die RSA-Signatur ist authentisch, aber auf das falsche Profil angewendet. Das Netzwerkpaket dagegen ist legitim: Der Server schickt normal das `ClientboundPlayerInfoUpdatePacket` mit diesem modifizierten Profil. Das Profil ist gefälscht; das Paket bleibt legitim.
 
-Wenn die Freunde des Hosts über LAN beitreten, erhalten sie das `ClientboundPlayerInfoUpdatePacket` mit dem modifizierten Profil. Der Client:
-1. Dekodiert das Base64-Payload
-2. Prüft die RSA-Signatur → ✅ gültig (es ist echt die von Jeb_)
-3. Markiert den Skin als `secure=true` (da die Signatur gültig ist)
-4. Passiert den Filter `!isRemote || ps.secure()` → ✅ bestanden
-5. **Lädt Jeb_s Cape herunter und zeigt ihn an**
+Wenn die Freunde des Hosts via LAN beitreten, erhalten sie das `ClientboundPlayerInfoUpdatePacket` mit dem modifizierten Profil. Der Client:
+1. Dekodiert den base64-Payload
+2. Prüft die RSA-Signatur → ✅ gültig (es ist wirklich die von Jeb_)
+3. Markiert den Skin als `secure=true` (weil die Signatur gültig ist)
+4. Passiert den Filter `!isRemote || ps.secure()` → ✅ passiert
+5. **Lädt Jeb_s Cape herunter und zeigt sie an**
 
-## Ergebnis im Spiel: Der Cape auf deinem Skin
+## Ergebnis im Spiel: die Cape auf deinem Skin
 
-So sieht es in-Game aus. Zuerst die Frontansicht mit Jeb_s Cape auf dem Host:
+So sieht es in-game aus. Zuerst Frontalansicht mit Jeb_s Cape auf dem Host angezeigt:
 
-![Cape Mod -- Jeb_s Cape angezeigt auf dem Host](/images/cape-mod/cape-01-jeb-cape.png)
+![Cape Mod -- Jeb_ Cape auf dem Host angezeigt](/images/cape-mod/cape-01-jeb-cape.png)
 
-Man erkennt deutlich das rot/weiße Muster des offiziellen Mojang-Studios-Umhangs. Kein Unterschied zu einem echten Jeb_, der seinen eigenen Umhang hätte -- der Client lädt exakt dieselbe Textur von `textures.minecraft.net`.
+Man sieht klar das rot/weiße Muster der offiziellen Mojang-Studios-Cape. Das Rendering bleibt identisch zu dem eines echten Jeb_, der seine eigene Cape trägt, der Client lädt exakt dieselbe Textur von `textures.minecraft.net` herunter.
 
-Und in immersiver Ansicht, in einer echten Spielsitzung:
+Und in immersiver Ansicht, in einer echten Partie:
 
-![Cape Mod -- In-Game-Ansicht mit sichtbarem Cape](/images/cape-mod/cape-02-lava-cape.png)
+![Cape Mod -- vue en jeu avec cape visible](/images/cape-mod/cape-02-lava-cape.png)
 
-Der Cape weht hinter dem Spieler her, bewegt sich mit der Bewegung. Perfekt nicht unterscheidbar von einem authentischen Skin mit offiziellem Cape.
+Die Cape flattert hinter dem Spieler, wellt sich mit der Bewegung. Perfekt ununterscheidbar von einem authentischen Skin mit offizieller Cape.
 
-Ein anderer Winkel, in einer Welt mit Lava und Gelände:
+Anderer Winkel, in einer Welt mit Lava und Terrain:
 
-![Cape Mod -- Cape in einer natürlichen Umgebung](/images/cape-mod/cape-03-local-game.png)
+![Cape Mod -- cape dans un environnement naturel](/images/cape-mod/cape-03-local-game.png)
 
-Und eine letzte Nahaufnahme des tatsächlichen Gameplays, die den Cape in Aktion zeigt:
+Und eine letzte Nahansicht des echten Gameplays, wo man die Cape in Aktion sieht:
 
-![Cape Mod -- Cape im klassischen Minecraft-Gameplay](/images/cape-mod/cape-04-real-gameplay.png)
+![Cape Mod -- cape en gameplay classique Minecraft](/images/cape-mod/cape-04-real-gameplay.png)
 
-Für jemanden, der einem LAN beitritt, ohne zu wissen, dass der Host einen Mod hat, gibt es absolut keine Möglichkeit, dies von einem echten Mojang-Cape zu unterscheiden. Das ist genau der Punkt: **Die Signatur ist gültig**, der Client hat keinen Grund zu zweifeln.
+Für jemanden, der einem LAN beitreten würde, ohne zu wissen, dass der Host einen Mod nutzt, bleibt die Cape visuell identisch zu einer echten Mojang-Cape. Genau das ist der Punkt: **Die Signatur ist gültig**, der Client behandelt sie also als legitim.
 
-## Warum das eine Schwachstelle ist (und warum nicht)
+## Warum das eine Lücke ist (und warum keine)
 
-Ironisch: Der Exploit funktioniert **gerade weil die Signatur gültig ist**. Es gibt hier keinen kryptografischen Bypass -- es ist schlimmer, es ist eine **logische Schwachstelle** im Vertrauensmodell.
+Es ist ironisch: Der Exploit funktioniert **genau weil die Signatur gültig ist**. Es geht um etwas anderes als einen kryptografischen Bypass, es ist schlimmer: Eine **Logiklücke** im Vertrauensmodell.
 
-| Prüfung | Ergebnis |
+| Check | Ergebnis |
 |---|---|
 | **Gültigkeit der RSA-Signatur** | ✅ Gültig (von Mojang für Jeb_ signiert) |
-| **Entspricht die `profileId` im Payload der UUID des Hosts?** | ❌ Nein (Jeb_s UUID ≠ UUID des Hosts) |
-| **Prüft der Client die Übereinstimmung?** | ❌ **Nein. Nur die RSA-Signatur wird geprüft.** |
+| **Entspricht die `profileId` im Payload der UUID des Hosts ?** | ❌ Nein (Jeb_s UUID ≠ Host-UUID) |
+| **Prüft der Client die Übereinstimmung ?** | ❌ **Nein. Nur die RSA-Signatur wird geprüft.** |
 
-Minecraft vertraut **der Signatur**, nicht der Identität des Trägers. Solange die Signatur von Mojang stammt, akzeptiert sie der Client. Es ist, als würde man einen gefälschten Reisepass zeigen, der von der Regierung signiert wurde -- das Siegel ist echt, auch wenn der Pass nicht dir gehört.
+Minecraft vertraut **der Signatur** statt der Identität dessen, der sie trägt. Solange die Signatur von Mojang kommt, akzeptiert der Client sie. Es ist wie einen gefälschten von der Regierung signierten Pass zu zeigen, das Siegel ist legitim, auch wenn der Pass dir nicht gehört.
 
 ## Die Sicherheitsimplikationen
 
-### Begrenzter Umfang auf LAN
+### Auf LAN begrenzte Reichweite
 
 Der Mod funktioniert nur auf einem integrierten Server (LAN). Der Angreifer muss:
 - Einen installierten Fabric-Mod haben
-- Der Host einer LAN-Welt sein
-- Seine Freunde verbinden sich ohne Mod (Vanilla)
+- Host einer LAN-Welt sein
+- Seine Freunde verbinden sich ohne Mod (vanilla)
 
 ### Aber die Möglichkeiten erweitern sich
 
-Theoretisch könnte man mit derselben Technik:
-- **Andere signierte Daten reinjizieren**: Köpfe, illegale Verzauberungen, bösartige Chat-Komponenten
-- **Mit einem LAN-Tunnel kombinieren** (NGROK, playit.gg, Radmin VPN), um Spieler über das Internet zu beeinflussen
-- **Auf andere Profil-Eigenschaften ausweiten**, die von Signaturen abhängen
+In der Theorie könnte man mit derselben Technik:
+- **Andere signierte Daten reinjizieren**: Heads, illegale Enchantments, bösartige Chat-Komponenten
+- **Mit einem LAN-Tunnel kombinieren** (NGROK, playit.gg, Radmin VPN), um Spieler im Internet zu betreffen
+- **Auf andere Eigenschaften** des Profils ausweiten, die von Signaturen abhängen
 
 ### Warum Mojang wahrscheinlich nicht patchen wird
 
-Es gibt keine "Verwundbarkeit" im engeren Sinne -- die Signatur ist gültig. Dies zu patchen würde von Mojang verlangen, das gesamte Authentifizierungsmodell zu ändern, was komplex ist. Derzeit ist dies ein Edge Case: LAN-Spieler sollen sich vertrauen.
+Es geht um etwas anderes als eine "Schwachstelle" im strengen Sinn, die Signatur ist gültig. Das zu patchen würde erfordern, dass Mojang das komplette Authentifizierungsmodell ändert, was komplex ist. Vorerst ist es ein Grenzfall: LAN-Spieler sollen einander vertrauen.
 
 ## Die philosophische Falle
 
-Cape Mod ist ein hervorragender **Proof of Concept** einer umfassenderen Wahrheit: **Du darfst niemals einer Signatur vertrauen, ohne zu prüfen, wer sie signiert hat und zu welchem Gegenstand**.
+Cape Mod ist ein exzellenter **Proof of Concept** einer breiteren Wahrheit: **Du musst immer prüfen, wer Daten signiert hat und für welches Subjekt, bevor du ihnen vertraust.**
 
-Es ist eine Lektion in grundlegender Kryptografie. RSA signiert eine **Nachricht**, keine **Identität**. Wenn ich dir eine gültige RSA-Signatur von Mojang gebe, weißt du, dass Mojang *etwas* signiert hat. Du weißt nicht für wen, und du kannst es nicht einfach durch Betrachten der Nachricht annehmen.
+Das ist eine Lektion in Basiskryptografie. RSA signiert eine **Nachricht**; die **Identität** des Empfängers bleibt außerhalb der Signatur. Wenn ich dir eine gültige RSA-Signatur von Mojang gebe, weißt du nur, dass Mojang *etwas* signiert hat, ohne verlässliche Angabe zum Empfänger aus der bloßen Nachricht.
 
-Genau das ist in den 2000er Jahren mit SSL/TLS-Zertifikaten passiert, als CAs alles akzeptierten -- die Signatur war gültig, aber sie bezog sich auf die falsche Domain.
+Genau das passierte mit SSL/TLS-Zertifikaten in den 2000ern, als CAs Zertifikate signierten, ohne die Domain korrekt zu prüfen, die Signatur war gültig, galt aber für die falsche Domain.
 
 ## Fazit
 
-Cape Mod ist kein Hack im klassischen Sinne -- es ist eine elegante Ausnutzung eines Mangels an logischer Validierung in Minecraft. Er zeigt, dass:
+Cape Mod ist etwas anderes als ein Hack im klassischen Sinn, es ist eine elegante Ausnutzung fehlender Logikvalidierung in Minecraft. Es zeigt, dass:
 
-1. **Eine gültige Signatur nicht die Identität ihres Trägers garantiert**
-2. **Im LAN ist das Vertrauen schwächer**, als man glaubt
-3. **Minecrafts `textures`-Eigenschaften sind im Wesentlichen injizierte Inhalte** -- man muss prüfen, ob sie mit dem sie tragenden Spieler übereinstimmen
+1. **Eine gültige Signatur garantiert nicht die Identität dessen, der sie trägt**
+2. **In LAN ist das Vertrauen schwächer**, als man glaubt
+3. **Minecrafts `textures`-Eigenschaften sind im Wesentlichen injizierter Inhalt**, man muss prüfen, dass sie zum Spieler passen, der sie trägt
 
-Wenn du einer LAN-Welt auf einem "unbekannten" Server beitrittst (oder besser gesagt, einem, dessen Host einen verdächtigen Mod hat), hast du bereits ein Sicherheitsproblem, lange bevor der Umhang ins Spiel kommt. Aber es ist symptomatisch: Minecraft geht davon aus, dass sich alle im LAN vertrauen. Das stimmt... bis es das nicht mehr tut.
+Wenn du einer LAN-Welt auf einem "unbekannten" Server beitrittst (oder eher, dessen Host einen verdächtigen Mod hat), hast du schon ein Sicherheitsproblem lange vor der Cape. Aber es ist aufschlussreich: Minecraft nimmt an, dass sich alle in einem LAN vertrauen. Das stimmt... bis zum ersten Host, der dieses Vertrauen missbraucht.
 
 ---
 
 **Ressourcen**
 
 - **GitHub**: [fox3000foxy/cape-mod](https://github.com/fox3000foxy/cape-mod)
-- **Minecraft Auth**: [Yggdrasil Protokoll](https://wiki.vg/Authentication) (wiki.vg)
-- **RSA-Kryptografie**: [RFC 3447](https://tools.ietf.org/html/rfc3447) (PKCS #1)
+- **Minecraft auth**: [Yggdrasil protocol](https://wiki.vg/Authentication) (wiki.vg)
+- **RSA Kryptografie**: [RFC 3447](https://tools.ietf.org/html/rfc3447) (PKCS #1)
 
 **3 Kernpunkte**
 
-1. RSA-Signaturen validieren eine Nachricht, nicht eine Identität -- ein Detail, das viele Systeme teuer zu stehen kam.
-2. Minecraft prüft nicht, ob das Spielerprofil mit der empfangenen Signatur übereinstimmt -- eine logische, keine kryptografische Schwachstelle.
-3. Im LAN oder per Tunnel ist alles offen für einen Mod, der den integrierten Server kontrolliert.
+1. RSA-Signaturen validieren eine Nachricht statt einer Identität, ein Detail, das viele Systeme teuer gekostet hat.
+2. Minecraft vergisst zu prüfen, dass das Spielerprofil der Signatur entspricht, die es empfängt, eine Logiklücke in der Validierung bei intakter Kryptografie.
+3. In LAN oder Tunnel ist alles Open Bar für einen Mod, der den integrierten Server kontrolliert.

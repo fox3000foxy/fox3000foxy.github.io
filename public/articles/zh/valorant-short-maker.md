@@ -1,6 +1,6 @@
 ---
-title: "valorant-short-maker：自动生成我 Valorant Shorts 的流水线"
-description: "Groq/Llama 写剧本，Piper 配音，FFmpeg 搞定其余一切。一个 cron job 如何每天从零到一在 @valorant_agents 上生产并发布一条视频。"
+title: valorant-short-maker：全自动生产 Valorant 短视频的流水线
+description: Groq/Llama 写脚本，Piper 配音，FFmpeg 包办其余一切。一个 cron 任务每天在 @valorant_agents 上生产发布一条视频，从头到尾。
 date: 2026-07-14
 tags:
   - typescript
@@ -10,34 +10,34 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "7pD2YD1CbWNdH/jTC83ZSWLAasg9BCu2u8twL2L25CK86NAy8pdH1Mg6rkBBToYWoqhAC87sjejpygYeKWokyg=="
+author_sig: "Rd0Rkyu5k8f2fZv0JDW27TDJ9/YH3XIqIRE6aE3uSGTbWpr/Q4AIpSIeIpKRStX3YrE7RswOTFxxkWtsDM7blA=="
 ---
 
-# valorant-short-maker：自动生成我 Valorant Shorts 的流水线
+# valorant-short-maker：全自动生产 Valorant 短视频的流水线
 
-几个月来，一个 YouTube 频道一直在我不插手的情况下自己运转：[@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)。Valorant 特工们在两局之间互怼，有配音，有卡拉OK字幕，以 Shorts 形式发布。一切都是 [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker) 生成的----一个 TypeScript/Bun 流水线，通过 cron 定时运行，无需任何人点击任何东西就能发布。
+有几个月，一个 YouTube 频道在无人值守地转：[@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)。Valorant 特工两回合之间互呛，配音，卡拉 OK 字幕，发 Shorts。全由 [`valorant-short-maker`](https://github.com/fox3000foxy/valorant-short-maker) 生成，TypeScript/Bun 流水线跑 cron，没人点一下就发布了。
 
-下面一步步拆解它是怎么运作的。
+下面按步骤拆它怎么工作的。
 
-## 效果展示
+## 长什么样
 
-从"Duelist Debate"（Phoenix、Yoru 和 Jett）生成的视频中截取的三帧：
+"Duelist Debate"那期（Phoenix、Yoru、Jett）生成的三帧：
 
-![Shorts 开场，特工圆形图标和场景标题](/images/valorant-short-maker/vsm-01-intro.png)
+![short 开场，特工圆头像加场景标题](/images/valorant-short-maker/vsm-01-intro.png)
 
-![一句台词进行中，卡拉OK字幕亮起](/images/valorant-short-maker/vsm-02-dialogue.png)
+![一句台词，卡拉 OK 字幕逐字点亮](/images/valorant-short-maker/vsm-02-dialogue.png)
 
-![另一句台词，字幕颜色随说话的特工变化](/images/valorant-short-maker/vsm-03-dialogue.png)
+![另一句台词，字幕颜色随特工变](/images/valorant-short-maker/vsm-03-dialogue.png)
 
-这个 Short 的成品：[Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU)。频道上每个 Short 大约 1.2 到 1.5k 播放量。不算大，但这是一个从一开始就完全自主运转的频道，真正重要的数字是零----cron job 启动后就再也没花过一分钟在上面。
+成片在这条 Short：[Duelist Debate -- youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU)。频道 Shorts 大概 1.2 到 1.5k 播放。不大，但这是从 cron 启动就没人管过的频道，所以真正重要的数字是零，启动后花零分钟。
 
 ## 流水线，按顺序
 
-### 1. 写剧本----Groq + Llama 3.3
+### 1. 写脚本，Groq + Llama 3.3
 
-每次运行会从 26 个可选特工中随机选 3 到 4 个，然后向 Llama 3.3 70B（通过 Groq）发送一个系统提示词，提示词中包含每位入选特工的个性简述以及他们与场景中其他特工的关系（这些人设存在于 `src/lore/` 目录下，每个特工一个文件）。提示词强制约束：每句台词短小有力，角色间公平轮换，幽默优先，最重要的是----停顿。
+每次运行从 26 个特工里随机抽 3 到 4 个，发给 Llama 3.3 70B（走 Groq），系统提示词里带每个出场特工的精简 persona 和相互关系（persona 在 `src/lore/`，一特工一文件）。提示词定死规则：每句短而狠、人物轮流讲、幽默优先，最重要的是停顿。
 
-以"Duelist Debate"为例----Phoenix、Yoru 和 Jett 争论谁该玩决斗者，生成于 2026 年 7 月 6 日：
+"Duelist Debate"实例，Phoenix、Yoru、Jett 争谁打决斗，2026 年 7 月 6 日生成：
 
 ```
 phoenix: I'm telling you, I've got the skills to play duelist this match.
@@ -70,45 +70,45 @@ yoru: I'll make sure to burn you, Phoenix, not with fire, but with my rifts.
 jett: I'll take you both down, no problem.
 ```
 
-停顿是让节奏自然的细节：台词中间插入的 `[0.3]` 会在音频中产生 0.3 秒的静音，而不会打断屏幕上特工的圆形图标；而独立的 `pause: 1.0` 行则会在两个说话者之间产生真正的静音，图标隐藏。没有这些，TTS 连珠炮似的朗读会听上去像机器人。
+停顿是节奏自然的关键细节：句中 `[0.3]` 在音频里造 0.3 秒静音，屏幕上特工圆圈不消失；单独一行 `pause: 1.0` 是两个说话人之间的真停顿，圆圈隐藏。没有这个，连珠炮的 TTS 听着就是机器人。
 
-### 2. 配音----Piper，每个特工一个模型
+### 2. 配音，Piper，一特工一模型
 
-每个特工都有自己专门训练的 Piper 模型（`.onnx`），存储在 `voices/<agent>/` 下。生成的文本通过对应模型，输出 WAV 音频。这就是我一般用来训练自定义语音的技术（见 Piper/Kaggle 流水线文章）----这里直接应用在生产环境，实时生成，每次生成视频都会用到。
+每个特工有自己训的 Piper 模型（`.onnx`），存在 `voices/<agent>/`。文本丢进对应模型，出 WAV。这就是我训自定义 voice 那套流水线（见 Piper/Kaggle 那篇），这里直接上生产，每次生成视频现跑。
 
-### 3. 卡拉OK字幕----动态生成 ASS，从图标提取颜色
+### 3. 卡拉 OK 字幕，生成的 ASS，颜色从图标取
 
-字幕不是简单的 `.srt`。它是一个逐词生成的 `.ass`（Advanced SubStation Alpha）文件，带有卡拉OK效果：每个词在朗读时以某种颜色高亮，其余文本保持中性色。高亮颜色不是固定的----它是从说话特工的图标中动态提取的（Python 脚本用 PIL 读取图标的 PNG，采样非透明像素，返回主色调）。结果：Killjoy 的字幕亮起紫色，Jett 的字幕亮起青蓝色，没有任何颜色被硬编码。
+字幕不是简单 `.srt`。是逐词生成的 `.ass`（Advanced SubStation Alpha）文件，卡拉 OK 特效：说到的词按颜色点亮，其余保持中性色。点亮色不是写死的，从说话特工的图标动态取（Python 脚本调 PIL 读 PNG 图标，采样非透明像素，返回主色）。结果：Killjoy 的字幕紫里点亮，Jett 的蓝绿点亮，没有一个颜色是手写死的。
 
-### 4. 音频响应式圆圈----每帧一个 FFmpeg 表达式
+### 4. 音频反应圆圈，一帧一个 FFmpeg 表达式
 
-这是流水线中最棘手的部分，可能也是我最引以为豪的部分。说话特工的圆形图标不是静止的：它会随着自己声音的节奏微微缩放。
+流水线最绕、我也最得意的部分。说话特工的圆形头像不是静止的：跟着自己 voice 的能量轻微缩放。
 
-计算过程是读取台词的原始 WAV，逐帧（60 fps）计算 RMS 包络（均方根，信号能量的度量），按最大值归一化，然后在 3 帧窗口上平滑以避免抖动。每个包络值随后被转换为一个缩放因子，受 `MAX_ZOOM_VARIATION` 约束（0.2，即基准大小的 ±20%）。
+计算是读这句的 WAV 原始数据，按 60 fps 逐帧算 RMS 包络（root mean square，信号能量度量），按最大归一，再 3 帧窗口平滑去抖。每个包络值转成 `MAX_ZOOM_VARIATION`（0.2，基准尺寸上下 20%）框住的缩放系数。
 
-计算结果不是通过操作像素的代码来应用的----它被翻译成一个巨大的 FFmpeg 条件表达式（`lt(n,K)*val + between(n,K,K')*val + ...`，每组帧一个分支），直接驱动视频滤镜的 `scale` 参数。FFmpeg 在渲染的每一帧上计算这个表达式。对于 60 fps 下几秒钟的台词，一个表达式里很快就有了数百个分支----因此有了 `STEP` 参数来将帧分组以限制深度。
+计算结果不经过像素代码，直接翻译成巨型条件 FFmpeg 表达式（`lt(n,K)*val + between(n,K,K')*val + ...`，一组帧一个分支），直接驱动视频滤镜的 `scale` 参数。FFmpeg 渲染时每帧求这个表达式。一句几秒的台词 60 fps，轻松几百个分支，所以有 `STEP` 参数按组压深度。
 
-### 5. 逐段渲染，开场加鱼眼效果
+### 5. 分段渲染，开场加鱼眼
 
-每句台词单独渲染：视频背景（从 `bg-video/` 中随机选一段游戏画面剪辑，裁剪到合适时长），上面叠加带有音频响应式缩放的特工圆圈，通过 FFmpeg 的 `ass` 滤镜烧录字幕，TTS 音频与背景游戏声音混合。
+每句单独渲染：背景视频（`bg-video/` 里随机抽段 gameplay，按时长切）、特工圆圈叠上加音频反应缩放、FFmpeg `ass` 滤镜烧字幕、TTS 音频和背景 gameplay 声混音。
 
-第一个片段有特殊处理：鱼眼畸变在前 20% 的帧中逐渐消退（每帧计算的 `lenscorrection` 滤镜，外加 `tmix=frames=3` 混合相邻帧来模拟运动模糊），与"嗖"声效果同步。这就是让镜头"进入"场景的开场过渡。
+第一段特殊处理：前 20% 帧渐消的鱼眼畸变（`lenscorrection` 滤镜逐帧求值，加 `tmix=frames=3` 混相邻帧模拟动态模糊），配"whoosh"音效同步。这是开场转场，让镜头有"扎进"场景的感觉。
 
-### 6. 拼接和最终混音
+### 6. 拼接与终混
 
-所有片段首尾拼接，背景音乐（Sneaky Snitch，Kevin MacLeod，Creative Commons 许可）通过**音频闪避**混入----侧链压缩在特工说话时自动降低音乐音量，在静音时回升。整个流程从头到尾都是 60 fps，步骤间没有帧率转换。
+全部段首尾拼起来，背景音乐（Sneaky Snitch，Kevin MacLeod，CC 许可）用**闪避**混进去，sidechain 压缩，特工一开口音乐自动压低，停顿回升。全程 60 fps，中间没有任何帧率转换。
 
 ### 7. 自动发布
 
-`run-cron.sh` 脚本由标准 cron 任务启动，激活 Python 环境，加载 `.env`，运行 `bun src/workflow.ts --upload`。`--upload` 标志还触发元数据生成（标题、描述、标签），并调用 `uploaders/upload.py`，通过两个独立的脚本（`uploaders/youtube/upload.py` 和 `uploaders/instagram/`）将视频发布到 YouTube 和 Instagram。整条链路，从 LLM 提示词到视频上线，完全无需人工干预。
+`run-cron.sh` 被经典 cron 拉起，激活 Python 环境，加载 `.env`，跑 `bun src/workflow.ts --upload`。`--upload`  flag 触发元数据生成（标题、描述、标签），再调 `uploaders/upload.py`，经两个独立脚本（`uploaders/youtube/upload.py` 管 YouTube、`uploaders/instagram/` 管 IG）把视频发出去。从 LLM 提示词到视频上线，全程无人。
 
-## 为什么用 TypeScript/Bun 而不是全 Python
+## 为什么 TypeScript/Bun，而不全 Python
 
-这个选择不是意识形态----而是因为 Bun 能通过 `Bun.spawn` 直接快速地驱动 FFmpeg 作为子进程，为流水线的数据结构（`Phrase`、`SegmentInfo`）提供强类型，并且启动速度比 Node 快得多，对于每隔几小时通过 cron 运行的脚本来说很重要。项目中仅有的两处 Python 代码恰恰是 Python 最擅长的地方：PIL 用于颜色提取，以及上传 API（YouTube 用 `google-api-python-client`，IG 用 Instagram Graph API 栈）。
+不是意识形态，是 Bun 给 `Bun.spawn` 起 FFmpeg 子进程又快又直接，流水线数据结构（`Phrase`、`SegmentInfo`）有强类型，cron 每 X 小时跑一次的话 Node 启动还更快。项目里仅有的两块 Python 在 Python 真有优势的地方：PIL 取颜色，上传 API（YouTube 的 `google-api-python-client`、IG 的 Graph API 栈）。
 
-## 这说明了什么
+## 它说明了什么
 
-这个项目是一个很好的例子，展示了如今只用完全免费或开源的组件能搭建出什么：通过 Groq API 接入快速免费的 LLM，无需专用 GPU 的本地 TTS 引擎，FFmpeg 搞定所有视频渲染----而粘合剂只是几百行 TypeScript。这些组件单独来看都不是新东西。让流水线成立的是编排：生成一个包含真实角色关系的一致剧本，将其转化为带有自然停顿的表现力音频，逐帧将视觉渲染同步到该音频的能量上，并自动化整条链路直到发布。
+这个项目很好地说明今天用全免费或开源砖头能搭出什么：Groq 上又快又免费的 LLM，本地跑不用独显的 TTS 引擎，FFmpeg 包办全部视频渲染，粘合只用了几百行 TypeScript。没有一块砖是新的。流水线全在编排：按人物关系生成连贯剧本，带自然停顿转成有表现力的音频，按音频能量逐帧同步渲染画面，整条链自动走到发布。
 
 ---
 
@@ -117,8 +117,8 @@ jett: I'll take you both down, no problem.
 - **仓库**：[github.com/fox3000foxy/valorant-short-maker](https://github.com/fox3000foxy/valorant-short-maker)
 - **频道**：[@valorant_agents](https://www.youtube.com/@valorant_agents?app=desktop)
 
-**3 个关键点**
+**三句话总结**
 
-1. 剧本由 LLM（Groq/Llama 3.3）基于每个特工的人设和关系生成，不是简单的预写笑话语录。
-2. 特工圆圈的缩放由从 WAV RMS 包络逐帧计算的 FFmpeg 表达式驱动----不是传统的关键帧动画。
-3. 整条链路，从提示词到 YouTube/Instagram 发布，通过一个 cron job 运行，零人工干预。
+1. 脚本由 LLM（Groq/Llama 3.3）按特工 persona 和关系生成，不是预写的笑话列表。
+2. 特工圆圈的缩放由 FFmpeg 表达式驱动，按 WAV 的 RMS 包络逐帧算出，不是经典关键帧动画。
+3. 整条链从提示词到 YouTube/Instagram 发帖，一个 cron 任务无人值守跑完。

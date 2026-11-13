@@ -1,48 +1,47 @@
 ---
-title: 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
-description: Fortune 如何用 640 行 JavaScript 手动重新实现了 node:fs、node:crypto 等一打 Node
-  模块，让容器在浏览器中无需 Wasm 即可运行。
+title: 让 Node.js 库在浏览器跑不用 Wasm，typescript-virtual-container 的 polyfill
+description: Fortune 怎么手写 node:fs、node:crypto 等十几个 Node 模块共 640 行 JavaScript，让容器在浏览器跑不用 Wasm。
 date: 2026-05-29
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - nodejs
   - polyfills
   - browser
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "FFeX7qGArcFX2Pv2Uzh0XDK8fUmIFCpd2W0NDDLI0ELgUJBTticUljNDzlIumn5qIJ44ZPOIIIsYTkkPiJvUJQ=="
+author_sig: "bJYTbGb2pft7GzHjo2GREnbXfi3PwQ71kD3Xx5cJydSBu3MRMs83aMR10q6ksSKEOiW7u3ADiJAdGaHbL5ZvBQ=="
 ---
 
-# 如何让 Node.js 库在浏览器中运行而无需 Wasm -- typescript-virtual-container 的 polyfill
+# 让 Node.js 库在浏览器跑不用 Wasm，typescript-virtual-container 的 polyfill
 
-我最近花了不少时间阅读 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 的源代码，这是 [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr) 的项目。最让我惊讶的部分不是 VFS，不是虚拟网络，也不是用 TypeScript 重写的 170 个 Unix 命令，而是 `polyfills/` 文件夹。
+我最近花不少时间啃 [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) 源码，[Fortune（Chloé Rolzhausen）](https://itsrealfortune.fr) 的项目。最让我惊的不是 `polyfills/` 文件夹，是 VFS、虚拟网络、170 个 Unix 命令 TypeScript 重写。
 
-因为这个模块在浏览器中运行，没有 Wasm，而且为此 Fortune 手动重写了库所需的整个 `node:*` 层。大约 640 行手工 JavaScript，替代了 `node:fs`、`node:crypto`、`node:os`、`node:net` 等模块。
+因为模块在浏览器跑，不用 Wasm，为此 Fortune 手写了整个库要的 `node:*` 层。约 640 行手艺 JavaScript 替代 `node:fs`、`node:crypto`、`node:os`、`node:net` 等。
 
-这篇文章将逐一解释每个 polyfill 的工作原理。
+这篇一个个讲怎么跑的。
 
 ---
 
-## 基本问题
+## 原始问题
 
-Node.js 库使用了浏览器中不存在的 API。当你写 `import { readFileSync } from 'node:fs'` 时，这是 Node 端的系统调用 ---- 通过 libuv 的真实磁盘访问。在浏览器中，`node:fs` 根本不存在。
+Node.js 库用的 API 浏览器没有。`import { readFileSync } from 'node:fs'` 在 Node 是经 libuv 的真磁盘访问。浏览器里 `node:fs` 压根不存在。
 
-常见的解决方案：
+常见解法：
 
-- **Wasm 运行时**（如 Emscripten、WASIp1/WASIp2）---- 你把 Node.js 编译成 Wasm 然后运行它。结果：10-50 MB 的 bundle，明显的加载时间，显著的部署复杂度。
-- **通用 polyfill**（如 `browserify`、`webpack node: polyfills`）---- 提供每个 Node 模块近似实现的 npm 库。通常过于臃肿，不适合特定场景。
-- **手写 polyfill** ---- 工作量更大，但结果最优。
+- **Wasm 运行时**（Emscripten、WASIp1/WASIp2 这类），Node.js 编进 Wasm 跑。结果：10-50M 包，加载慢，部署复杂。
+- **通用 polyfill**（`browserify`、`webpack node: polyfills` 这类 npm 库），每个 Node 模块给近似。经常太重，和具体场景不对付。
+- **手写 polyfill**，活多，但结果最优。
 
-Fortune 选择了第三个方案。结果就是：一个纯粹的浏览器端 bundle，即刻启动，不依赖任何外部基础设施。
+Fortune 选第三条。结果：浏览器包就是库本身，瞬间启动，不依赖任何外部 infra。
 
 ---
 
 ## 构建机制
 
-一切都基于 esbuild 及其 `alias` 选项。每个 `node:*` 导入都被重定向到本地文件：
+全靠 esbuild 的 `alias` 选项。每个 `node:*` 导入重定向到本地文件：
 
 ```js
 // demo/build.js
@@ -72,15 +71,15 @@ esbuild.build({
 });
 ```
 
-`inject` 选项值得注意：它允许将 `process.js` 和 `buffer.js` 注入到 bundle 中每个文件的开头，使 `process` 和 `Buffer` 全局可用，无需任何显式导入。这正是 Node.js 原生提供它们的方式。
+`inject` 值得单说：把 `process.js` 和 `buffer.js` 注进包里每个文件头，`process` 和 `Buffer` 全局可用，不用显式导入。和 Node.js 原生暴露一模一样。
 
 ---
 
-## `buffer.js` -- 基于 `Uint8Array` 的 `Buffer`
+## `buffer.js`，`Uint8Array` 上的 `Buffer`
 
-这是两个全局注入文件之一。`Buffer` 在代码中被大量使用 ---- 每次 SSH 操作、每个 VFS 快照、每次二进制读写都经过它。
+两个注入全局之一。`Buffer` 代码里到处用，每个 SSH 操作、VFS 快照、读写二进制全走它。
 
-解决方案：一个继承 `Uint8Array` 并实现 Node.js 全部 `Buffer` API 的 `BrowserBuffer` 类。
+解法：`BrowserBuffer` 类继承 `Uint8Array`，实现 Node.js `Buffer` 全 API。
 
 ```js
 class BrowserBuffer extends Uint8Array {
@@ -108,16 +107,16 @@ class BrowserBuffer extends Uint8Array {
 globalThis.Buffer = BrowserBuffer;
 ```
 
-总共实现了：
+总共实现：
 - `Buffer.from`、`Buffer.alloc`、`Buffer.allocUnsafe`、`Buffer.isBuffer`、`Buffer.concat`、`Buffer.byteLength`
-- 所有写入方法：`writeUInt8/16/32BE/LE`、`writeInt8/16/32BE/LE`、`writeBigUInt64BE/LE`、`writeFloat/DoubleLE/BE`
-- 所有相应的读取方法
-- 支持 hex、base64、utf8 的 `toString`
+- 全部写方法：`writeUInt8/16/32BE/LE`、`writeInt8/16/32BE/LE`、`writeBigUInt64BE/LE`、`writeFloat/DoubleLE/BE`
+- 对应全部读方法
+- `toString` 支持 hex、base64、utf8
 - `copy`、`equals`、`slice`、`subarray`
 
-这只有 116 行。考虑到它替代的内容，相当紧凑。
+共 116 行。替代的东西看，紧凑得离谱。
 
-主要的技巧是使用 `DataView` 进行多字节访问，它正确处理了字节序，无需为每种类型手动操作位：
+主要技巧是用 `DataView` 做多字节访问，endianness 交给它，不用每类型手玩 bit：
 
 ```js
 writeUInt32BE(val, offset = 0) {
@@ -128,9 +127,9 @@ writeUInt32BE(val, offset = 0) {
 
 ---
 
-## `process.js` -- 最小的全局 `process`
+## `process.js`，最小 `process` 全局
 
-另一个全局注入文件。很小但必不可少 ---- 代码经常检查 `process.env.NODE_ENV`、`process.platform`、`process.nextTick` 等。
+另一个注入全局。小但必要，代码到处查 `process.env.NODE_ENV`、`process.platform`、`process.nextTick` 等。
 
 ```js
 globalThis.startedat = Date.now();
@@ -149,33 +148,33 @@ export const process = {
 globalThis.process = process;
 ```
 
-`nextTick` → `queueMicrotask` 的映射是最重要的细节。Node.js 中的 `process.nextTick` 在当前事件循环阶段结束时、I/O 之前调度一个回调。浏览器中的 `queueMicrotask` 在语义上非常接近 ---- 它调度一个微任务，在下次渲染或事件之前执行。这不完全相同，但对于使用 `nextTick` 的所有代码来说，已经足够在浏览器中正常运行。
+`nextTick` → `queueMicrotask` 映射是最重要的一笔。Node.js `process.nextTick` 在事件循环当前阶段尾、I/O 前调回调。浏览器 `queueMicrotask` 语义很近：微任务，下次渲染或事件前跑，这点近似够全部用 `nextTick` 的代码在浏览器跑对。
 
 ---
 
-## `node:fs` -- 将 IndexedDB 用作同步文件系统
+## `node:fs`，IndexedDB 上的同步文件系统
 
-这是最复杂的 polyfill，也是技术上最有趣的一个。
+技术上最精巧的 polyfill，断层领先。
 
-问题很微妙：`node:fs` 提供的是同步 API（`readFileSync`、`writeFileSync` 等），但浏览器的存储 API 都是异步的（IndexedDB、Cache API 等）。你不能在同步函数中间执行 `await`。
+难题微妙：`node:fs` 暴露同步 API（`readFileSync`、`writeFileSync` 等），浏览器存储 API 全异步（IndexedDB、Cache API 等）。同步函数中间不能 `await`。
 
-Fortune 的解决方案：双层缓存。
+Fortune 解法：双层缓存。
 
-**第一层 -- 内存中的 Map（同步）**  
-所有读取都从内存中的 `Map<string, Uint8Array>` 进行。即时、同步、没有 API 问题。
+**第 1 层，内存 Map（同步）**
+全部读走 `Map<string, Uint8Array>` 内存。瞬时，同步，API 没问题。
 
-**第二层 -- IndexedDB（异步、后台）**  
-启动时，IndexedDB 的所有内容被加载到 Map 中。写入立即进入 Map *并*启动异步写入 IndexedDB，不会阻塞。
+**第 2 层，IndexedDB（异步，后台）**
+启动全量 IndexedDB 载进 Map。写先写 Map*再*后台异步写 IndexedDB 不阻塞。
 
 ```js
 const DB_NAME = 'vfs-fs-shim';
 const STORE = 'files';
 let db = null;
 
-// Sync cache (path → Uint8Array | null)
+// 同步缓存（路径 → Uint8Array | null）
 const memCache = new Map();
 
-// Preload at startup
+// 启动预载
 openDB().then(db => {
   const tx = db.transaction(STORE, 'readonly');
   const req = tx.objectStore(STORE).openCursor();
@@ -187,7 +186,7 @@ openDB().then(db => {
   };
 });
 
-// Async write to IndexedDB (non-blocking)
+// 后台异步写 IndexedDB（不阻塞）
 function idbSet(path, value) {
   openDB().then(db => {
     const tx = db.transaction(STORE, 'readwrite');
@@ -197,11 +196,11 @@ function idbSet(path, value) {
 }
 ```
 
-暴露的 API 很完整：`readFileSync`、`writeFileSync`、`appendFileSync`、`existsSync`、`unlinkSync`、`rmSync`（支持 `recursive` 选项）、`mkdirSync`（支持 `recursive` 选项）、`readdirSync`、`statSync`、`renameSync`。
+暴露 API 全：`readFileSync`、`writeFileSync`、`appendFileSync`、`existsSync`、`unlinkSync`、`rmSync`（带 `recursive`）、`mkdirSync`（带 `recursive`）、`readdirSync`、`statSync`、`renameSync`。
 
-甚至还有一个文件描述符管理层（`openSync`、`writeSync`、`closeSync`），让 VFS 的 WAL 日志在浏览器模式下工作 ---- 日志打开一个 fd，写入数据，关闭它，数据最终存入 IndexedDB。
+还有文件描述符层（`openSync`、`writeSync`、`closeSync`）给 VFS 的 WAL 日志在浏览器跑，日志开 fd 写关，数据进 IndexedDB。
 
-导出 `ready` 属性，让代码知道初始预加载何时完成：
+`ready` 导出给代码知道预载完没：
 
 ```js
 export const ready = openDB().then(db => new Promise(resolve => {
@@ -217,26 +216,26 @@ export const ready = openDB().then(db => new Promise(resolve => {
 globalThis.__fsReady__ = ready;
 ```
 
-正是凭借这一点，VFS 快照才能在浏览器中跨页面刷新而持久存在。当你刷新演示页面时，VFS 会从 IndexedDB 恢复到之前的状态，无需任何服务器参与。
+浏览器 VFS 快照刷新不丢全靠这个。demo 页重载，VFS 从 IndexedDB 原样恢复，零服务器。
 
 ---
 
-## `node:crypto` -- 纯 JS 实现的 SHA-256、HMAC、PBKDF2
+## `node:crypto`，纯 JS 的 SHA-256、HMAC、PBKDF2
 
-Fortune 没有导入编译成 Wasm 的加密库，而是直接实现了所需的原语。
+不引 Wasm 编译的密码库，Fortune 需要的原语直接写。
 
-**SHA-256** 使用 FIPS 180-4 常量从头实现：
+**SHA-256** 从零按 FIPS 180-4 常量实现：
 
 ```js
 const K = new Uint32Array([
-  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* ... 60 other constants */ 
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* 另外 60 个常量 */
 ]);
 
 function sha256(data) {
-  // padding FIPS 180-4
+  // FIPS 180-4 padding
   const msg = data instanceof Uint8Array ? data : new TextEncoder().encode(data);
   // ...
-  // 64 rounds of compression
+  // 64 轮压缩
   for (let j = 0; j < 64; j++) {
     const S1  = (e>>>6|e<<26)^(e>>>11|e<<21)^(e>>>25|e<<7);
     const ch  = (e&f)^(~e&g);
@@ -249,43 +248,43 @@ function sha256(data) {
 }
 ```
 
-在 SHA-256 之上构建了 **HMAC-SHA256** 和 **PBKDF2-HMAC-SHA256**。这两个原语用于 SSH 密钥交换和内部认证中的密钥派生。
+SHA-256 上建 **HMAC-SHA256** 和 **PBKDF2-HMAC-SHA256**。这两个做 SSH 密钥派生和内部认证。
 
-导出的 API 类似于 Node.js 的 API：
+导出 API 像 Node.js：
 
 ```js
-// Classic hash
+// 常规哈希
 const hash = createHash('sha256').update('data').digest('hex');
 
-// Random bytes (via standard Web Crypto API)
+// 随机字节（走标准 Web Crypto）
 const bytes = randomBytes(32);
 
 // UUID
 const id = randomUUID();
 
-// Timing-safe comparison
+// 常时比较
 const ok = timingSafeEqual(a, b);
 
-// scrypt (approximated via PBKDF2)
+// scrypt（PBKDF2 近似）
 const key = scryptSync(password, salt, 32, { N: 16384 });
 ```
 
-注意：`scryptSync` 是通过 PBKDF2 近似的，迭代次数与参数 `N` 对应。这不是真正的 scrypt（它使用不同的内存方案），但对项目的用途来说已经足够了。
+注：`scryptSync` 按 `N` 参数折迭代数走 PBKDF2 近似。替代 scrypt 特有的内存 hard 方案，覆盖项目用法。
 
-无法合理在浏览器中模拟的函数（`generateKeyPairSync`、`createCipheriv`、`createDecipheriv`、`createSign`）在被调用时会抛出明确的错误。诚实的行为。
+浏览器合理模拟不了的（`generateKeyPairSync`、`createCipheriv`、`createDecipheriv`、`createSign`）调了就抛明确错误。诚实。
 
 ---
 
-## `node:os` -- 读取浏览器的真实规格
+## `node:os`，读浏览器真规格
 
-这个 polyfill 不是返回固定值，而是读取浏览器的 API 来返回用户真实机器的信息。
+不返回写死值，这 polyfill 读浏览器 API 返回贴用户真机的信息。
 
 ```js
 export function totalmem() {
   try {
     return navigator?.deviceMemory
       ? navigator.deviceMemory * 1024 * 1024 * 1024
-      : 2 * 1024 * 1024 * 1024; // 2 GB default
+      : 2 * 1024 * 1024 * 1024; // 默认 2G
   } catch(e) { return 2 * 1024 * 1024 * 1024; }
 }
 
@@ -307,22 +306,22 @@ export function arch() {
 }
 ```
 
-实际效果：当你在浏览器演示中运行 `neofetch` 时，显示的核心数和内存数量与实际机器一致。这是一个小细节，但对终端的真实感贡献巨大。
+具体效果：浏览器 demo 跑 `neofetch`，核数内存显示的是你真机。细节，但终端像真的一大半功劳。
 
-其他导出项：`freemem`（总内存的 40%，合理的近似值）、`platform` → `'browser'`、`type` → `'Linux'`、`release` → `'web'`、通过 `performance.now()` 实现的 `uptime`、`endianness` → `'LE'`（小端序，对所有主流 x86/ARM 处理器都成立）、`loadavg` → `[0, 0, 0]`。
+别的导出：`freemem`（总内存 40%，合理近似）、`platform` → `'browser'`、`type` → `'Linux'`、`release` → `'web'`、`uptime` 走 `performance.now()`、`endianness` → `'LE'`（x86/ARM 民用全小端）、`loadavg` → `[0, 0, 0]`。
 
 ---
 
-## `node:net` -- 干净的存根
+## `node:net`，干净 TCP stub
 
-浏览器无法访问原始 TCP 套接字（WebSocket 不算 ---- 这是一个不同的应用层协议）。所以 `node:net` 是一个存根，但是一个*写得很好*的存根。
+浏览器开不了裸 TCP socket（WebSocket 不算，那是另一应用协议）。`node:net` 是 stub，但写得*体面*。
 
 ```js
 export class Socket {
   connect() { notImpl('Socket.connect')(); }
-  on() { return this; }    // chainable
-  once() { return this; }  // chainable
-  pipe() { return this; }  // chainable
+  on() { return this; }    // 可链
+  once() { return this; }  // 可链
+  pipe() { return this; }  // 可链
   setEncoding() { return this; }
   remoteAddress = '127.0.0.1';
   remotePort = 0;
@@ -330,15 +329,15 @@ export class Socket {
 }
 ```
 
-关键点：事件注册方法（`on`、`once`、`off`、`emit`）返回 `this` 且不抛出错误。这使得执行 `new net.Socket().on('connect', cb)` 的代码能正常运行而不会崩溃，即使连接从未建立。只有*实际尝试连接*的方法才抛出错误。
+重点：事件注册方法（`on`、`once`、`off`、`emit`）返回 `this` 不抛错。`new net.Socket().on('connect', cb)` 这类代码不断，哪怕连永远建不起。只有*真尝试连接*的方法抛错。
 
-`isIP`、`isIPv4`、`isIPv6` 被正确实现（不是存根），因为它们被虚拟网络代码用来验证地址，而无需打开套接字。
+`isIP`、`isIPv4`、`isIPv6` 真逻辑实现（确实的校验），因为虚拟网络代码拿它们验地址，从不开 socket。
 
 ---
 
-## `node:path` -- POSIX 路径操作
+## `node:path`，POSIX 路径运算
 
-完整的 POSIX 路径操作重实现，适应当前上下文（没有 Windows 反斜杠，路径总是以 `/` 开头的绝对路径）。
+POSIX 路径运算完整重写，按场景来（路径永远 `/` 开头，只 Unix 风格）。
 
 ```js
 export const posix = {
@@ -367,13 +366,13 @@ export const posix = {
 };
 ```
 
-简单、紧凑、对项目用途来说正确。
+简单，紧凑，项目用法全对。
 
 ---
 
-## `node:url` -- 委托给浏览器 API
+## `node:url`，转交浏览器原生 API
 
-这个因其简洁性而优雅。`URL` 和 `URLSearchParams` API 已经原生存在于浏览器中 ---- 只需重新导出它们即可。
+这个优雅在简单。浏览器原生有 `URL` 和 `URLSearchParams`，直接重导出。
 
 ```js
 const _URL = globalThis.URL;
@@ -381,7 +380,7 @@ const _URLSearchParams = globalThis.URLSearchParams;
 export { _URL as URL, _URLSearchParams as URLSearchParams };
 ```
 
-只有 `fileURLToPath` 和 `pathToFileURL` 需要实现，因为它们特定于 Node：
+只 `fileURLToPath` 和 `pathToFileURL` 要手写，因为 Node 专有：
 
 ```js
 export function fileURLToPath(url) {
@@ -391,11 +390,11 @@ export function fileURLToPath(url) {
 }
 ```
 
-当目标平台（浏览器）已经提供了原生等价物时，这是理想的做法。
+目标平台（浏览器）已有等价原生，这是理想做法。
 
 ---
 
-## `node:zlib` -- 透传
+## `node:zlib`，恒等
 
 ```js
 export function gzipSync(buf) { return buf; }
@@ -403,13 +402,13 @@ export function gunzipSync(buf) { return buf; }
 export default { gzipSync, gunzipSync };
 ```
 
-两行代码。库使用 `fflate` 进行实际的压缩（它在浏览器中原生工作）。`node:zlib` 只在不会在浏览器上下文中执行的代码路径中被导入 ---- 因此透传就足够了。
+两行。库真压缩走 `fflate`（浏览器原生跑）。`node:zlib` 只在浏览器跑不到的代码路径导入，直通够用。
 
-有时候正确的实现就是两行代码。
+有时对的实现就是两行。
 
 ---
 
-## `node:events` -- 最小的 EventEmitter
+## `node:events`，最小 EventEmitter
 
 ```js
 export class EventEmitter {
@@ -428,11 +427,11 @@ export class EventEmitter {
 }
 ```
 
-Node.js 中 `EventEmitter` 的完整实现约 600 行，包含 `maxListeners`、`once`、`prependListener` 等处理。这里只有 12 行代码处理实际使用的 4 个方法。在构建工具进行 tree-shaking 之前，先做了心智层面的 tree-shaking。
+Node.js 完整 `EventEmitter` 约 600 行管 `maxListeners`、`once`、`prependListener` 等。这里 12 行实现真正用到的 4 方法。构建工具 tree-shaking 之前先人肉 tree-shaking。
 
 ---
 
-## `ssh2` 和 `roxify` -- 显式存根
+## `ssh2` 和 `roxify`，明确 stub
 
 ```js
 // polyfills/ssh2/index.js
@@ -450,15 +449,15 @@ export class Client {
 }
 ```
 
-SSH 服务器不在浏览器中运行（这没有意义 ---- 谁会连接进来？）。但是*在客户端侧谈论 SSH* 的代码 ---- 构建 SSH 包的类、协议解析器 ---- 存在于库中。这些存根让所有这些代码能够被打包而不会出错，同时确保如果有人尝试调用需要真实套接字的方法，会抛出明确的错误。
+SSH 服务端不在浏览器跑（跑了给谁连？）。但*讲 SSH 客户端*的代码，包构造类、协议解析器，在库里，打包全进。这些 stub 让全部代码正常打包，调到真要 socket 的方法明确报错。
 
-`roxify` 是一种专有压缩格式，用于 Node 模式下的 VFS 快照。在浏览器中，使用 `fflate` 替代 ---- polyfill 只是在 `roxify` 被直接调用时抛出一个错误。
+`roxify` 是 Node 下 VFS 快照专有压缩格式。浏览器用 `fflate`，polyfill 直接调就报错。
 
 ---
 
-## `node:worker_threads` -- 重新导出 Web Workers
+## `node:worker_threads`，重导出 Web Worker
 
-这是最微妙的部分。Node.js 中的 `node:worker_threads` 和浏览器中的 Web Workers 是两个不同的 API，但它们在概念上是相似的。Polyfill 做了映射：
+最绕。Node.js `node:worker_threads` 和浏览器 Web Worker 是两 API，但概念近。polyfill 做映射：
 
 ```js
 const _MessageChannel = globalThis.MessageChannel;
@@ -471,46 +470,42 @@ export const workerData = null;
 export const parentPort = null;
 ```
 
-`MessageChannel` 和 `MessagePort` 直接从浏览器重新导出（相同的 API）。`Worker` 本身需要一个包装，因为构造函数不同（Node 接受一个模块路径，浏览器接受一个 URL）。`isMainThread` 在浏览器端始终为 `true`。
+`MessageChannel` 和 `MessagePort` 直接重导出浏览器版（同 API）。`Worker` 要包一层因为构造不同（Node 传模块路径，浏览器传 URL）。浏览器语境 `isMainThread` 永远 `true`。
 
 ---
 
-## 概览：这 640 行代表了什么
+## 总览：640 行是什么
 
 | Polyfill | 行数 | 策略 |
 |---|---|---|
-| `buffer.js` | 116 | `Uint8Array` + `DataView`，完整的 `Buffer` API |
-| `node:crypto` | 166 | 从头实现 SHA-256/HMAC/PBKDF2 + Web Crypto 生成随机数 |
-| `node:fs` | 210 | 内存 `Map` + 异步 IndexedDB |
-| `node:net` | 70 | 可链式调用的存根 + 真实的 IP 验证 |
-| `ssh2` | 74 | 显式存根 |
-| `process.js` | 14 | 最小可行的 `process` |
-| `node:path` | ~30 | POSIX 路径操作 |
-| `node:url` | ~25 | 委托给浏览器 API |
-| `node:events` | ~12 | 4 个方法的 EventEmitter |
-| `node:os` | ~25 | `navigator.deviceMemory` / `hardwareConcurrency` |
-| `node:zlib` | 4 | 透传 |
-| `node:worker_threads` | ~30 | 重新导出 Web Workers |
-| `roxify.js` | 8 | 存根 |
+| `buffer.js` | 116 | `Uint8Array` 加 `DataView`，`Buffer` 全 API |
+| `node:crypto` | 166 | 手写 SHA-256/HMAC/PBKDF2 加 Web Crypto 取随机 |
+| `node:fs` | 210 | 内存 `Map` 加后台 IndexedDB |
+| `node:net` | 70 | 可链 stub 加真 IP 校验 |
+| `ssh2` | 74 | 明确 stub |
+| `process.js` | 14 | 最小可用 `process` |
+| `node:path` | 约 30 | POSIX 路径运算 |
+| `node:url` | 约 25 | 转交浏览器 API |
+| `node:events` | 约 12 | 4 方法 EventEmitter |
+| `node:os` | 约 25 | `navigator.deviceMemory` / `hardwareConcurrency` |
+| `node:zlib` | 4 | 直通 |
+| `node:worker_threads` | 约 30 | 重导出 Web Worker |
+| `roxify.js` | 8 | Stub |
 
-640 行。没有 npm 依赖。没有 Wasm。结果是一个不到一秒就能启动、无需任何服务器端基础设施即可运行的浏览器 bundle。
-
----
-
-## 可以学到的经验
-
-下次你想把 Node.js 库移植到浏览器时，Fortune 的方法展示了以下几点：
-
-1. **找出实际使用的内容。** 如果代码只使用 `on`、`emit` 和 `removeListener`，就无需实现完整的 `EventEmitter`。
-
-2. **尽可能委托给浏览器 API。** `URL`、`URLSearchParams`、`MessageChannel`、`MessagePort`、`crypto.getRandomValues` ---- 浏览器已经有了，直接使用它们。
-
-3. **在异步 API 前加同步缓存。** `Map` + IndexedDB 用于 `node:fs` 的方案是整个文件夹中最可复用的模式。
-
-4. **诚实的存根胜过沉默的不完整实现。** 明确的 `throw new Error('not implemented in browser')` ---- 比让 bug 在 10 个调用后才显现的 `return undefined` 有用无数倍。
-
-5. **esbuild 的 `alias` + `inject` 被低估了。** 这是进行此类移植的完美工具 ---- 零 webpack 配置、零插件，只是一个替换列表。
+640 行。零 npm 依赖。零 Wasm。浏览器包不到一秒启动，零服务端 infra。
 
 ---
 
-代码在仓库中：[github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills)。每个文件只有一页，可以直接在 GitHub 上阅读。如果你在做类似的项目，强烈推荐。
+## 能学到什么
+
+下次把 Node.js 库搬浏览器，Fortune 做法证明：
+
+1. **只实现真用到的。** 这里 `on`、`emit`、`removeListener` 够 `EventEmitter`。
+2. **浏览器有的直接用。** `URL`、`URLSearchParams`、`MessageChannel`、`MessagePort`、`crypto.getRandomValues`，浏览器全有，拿来用。
+3. **同步缓存挡异步 API。** `Map` 加 IndexedDB 解 `node:fs`，整文件夹最可复用的模式。
+4. **诚实的 stub 胜过沉默的半实现。** 明确 `throw new Error('not implemented in browser')` 比默默 `return undefined` 强百倍，bug 不会十层调用后才爆。
+5. **esbuild `alias` 加 `inject` 被低估。** 这种移植完美工具，零 webpack 配置，零插件，一个替换表。
+
+---
+
+代码在仓库：[github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills)。每文件一页，GitHub 直接读。做类似项目强烈推荐看一遍。

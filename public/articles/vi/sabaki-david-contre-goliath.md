@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Kpe/dXOKtt4I3frcLLw8MrYvmjhojpdx6or/m6ZkqZZTkzYhYbsPLClLZ6Jb4IBrjIbwHnWUD869tPaqEH7R2w=="
+author_sig: "GCJs7elJsGwpJHmnof8k6DE+sIB2FI/fKGHTBjlYjcRxsxdWDBQXcyBtrXlqPed+A4iQIL7Oci3FUXUdgOHIkA=="
 ---
 
 ## Giới thiệu

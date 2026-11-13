@@ -1,89 +1,89 @@
 ---
-title: "Repo to VPS: biến GitHub Actions thành VPS miễn phí với bộ nhớ liên tục"
-description: Cách biến một runner GitHub Actions thành VPS vĩnh viễn với git làm bộ nhớ liên tục -- tmate, inotify và commit --amend.
+title: "Repo thành VPS : biến GitHub Actions thành VPS miễn phí với lưu trữ bền vững"
+description: Cách biến runner GitHub Actions thành VPS vĩnh viễn với git làm lưu trữ bền vững -- tmate, inotify và commit --amend.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - github
   - devops
   - automation
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "w/n6rPteAz2aNHREBQj6HuC7LCxjtt6ycrRUQ1+UwjHWRCF9IHmpaK3/Sx9c+aTxxMFr/F67ovDkPjRseAA8Ww=="
+author_sig: "yUqKmcTxwu9X20jqmHYsEcyIJp62L7drqQosfJ5mItY7eEqQ7mvsUFSNH8u6D5T/aod1GP8qAVtms6V89+c74A=="
 ---
 
-## GitHub cho bạn một VPS miễn phí trong 6h. Tôi đã tìm ra cách biến nó thành vĩnh viễn.
+## GitHub cho bạn VPS miễn phí 6 giờ. Tôi đã tìm ra cách khiến nó vĩnh viễn.
 
 GitHub Actions cho bạn máy Linux miễn phí.
 
-Đại loại, máy chủ Ubuntu thật sự. 2 nhân, 7 GB RAM, 14 GB ổ cứng. Miễn phí. Trong 6h mỗi lần chạy.
+Kiểu, máy chủ Ubuntu thật. 2 lõi, 7 Go RAM, 14 Go đĩa. Miễn phí. 6 giờ mỗi lần chạy.
 
-"Vấn đề" duy nhất: khi kết thúc lượt chạy, mọi thứ đều bị xóa. Máy ảo dùng một lần. Bạn cài đặt, code, cấu hình... và rồi vèo, cuối cùng mọi thứ biến mất. Như chưa từng làm gì.
+"Vấn đề" duy nhất : cuối lần chạy, mọi thứ bị xóa. Máy dùng một lần. Bạn cài gói, bạn code, bạn cấu hình... và pouf, cuối cùng mọi thứ biến mất. Như thể bạn chưa làm gì.
 
 Trừ khi.
 
 Trừ khi bạn dùng **git làm ổ cứng**.
 
-Và thế là, bỗng nhiên bạn có một VPS miễn phí với ổ cứng bền vững sống sót qua các lượt chạy. Bạn kết nối lại, mọi thứ vẫn còn nguyên. Bạn tiếp tục từ chỗ bạn dừng lại.
+Và lúc đó, đùng cái, bạn có VPS miễn phí với đĩa bền vững sống sót qua các lần chạy. Bạn kết nối lại, mọi thứ còn đó. Bạn tiếp tục nơi đã dừng.
 
-Hoàn toàn điên rồ. Để tôi giải thích xD
-
----
-
-## Bối cảnh: runner GitHub Actions
-
-Khi bạn chạy một workflow GitHub Actions, GitHub cấp cho bạn một VM.
-
-Nó được tạo ra để build code, chạy test, deploy. Workflow chạy, làm việc của nó, và máy ảo bị phá hủy.
-
-Nhưng không gì ngăn bạn làm việc khác với VM này. Ví dụ, mở một shell SSH trên đó và dùng nó như một máy chủ.
-
-Vấn đề là, những máy này **stateless** và **tạm thời**:
-- Tạm thời: tối đa 6h mỗi lần chạy (`timeout-minutes: 360`, giới hạn của GitHub)
-- Stateless: mọi thứ bị xóa khi kết thúc
-
-Vậy để biến nó thành VPS dùng được, cần giải quyết hai vấn đề:
-1. **Làm sao kết nối vào nó theo thời gian thực?**
-2. **Làm sao giữ ổ cứng giữa các lượt chạy?**
-
-Đây mới là hack bẩn thỉu.
+Hoàn toàn điên. Để tôi giải thích.
 
 ---
 
-## Vấn đề 1: SSH live với tmate
+## Bối cảnh : runner GitHub Actions
 
-**tmate** là một nhánh của tmux tạo ra một session SSH có thể chia sẻ.
+Khi bạn chạy workflow GitHub Actions, GitHub đưa bạn VM.
 
-Bạn chạy nó trên một máy, nó tạo ra hai liên kết:
-- một URL SSH (`ssh xxx@nyc1.tmate.io`)
-- một URL web (terminal trong trình duyệt)
+Nó sinh ra để build mã, chạy test, deploy. Workflow chạy, làm việc, và máy bị hủy.
 
-Bạn kết nối bằng một trong các liên kết đó, và boom, bạn ở trong một shell trên máy. Thời gian thực.
+Nhưng không gì cấm bạn làm chuyện khác với VM này. Kiểu, mở shell SSH lên đó và dùng nó như máy chủ.
 
-Workflow chạy tmate:
+Ràng buộc là các máy này **stateless** và **tạm thời** :
+- Tạm thời : tối đa 6 giờ mỗi lần chạy (`timeout-minutes: 360`, trần của GitHub)
+- Stateless : mọi thứ bị xóa cuối cùng
+
+Nên để biến nó thành VPS dùng được, phải giải hai bài toán :
+1. **Kết nối lên đó thời gian thực thế nào?**
+2. **Giữ đĩa giữa hai lần chạy thế nào?**
+
+Tới đây thành mẹo bẩn.
+
+---
+
+## Bài toán 1 : SSH trực tiếp bằng tmate
+
+**tmate** là fork của tmux tạo phiên SSH chia sẻ được.
+
+Bạn chạy nó trên máy, nó sinh hai link :
+- URL SSH (`ssh xxx@nyc1.tmate.io`)
+- URL web (terminal trong trình duyệt)
+
+Bạn kết nối bằng một trong các link này, và bùm, bạn ở trong shell trên máy. Thời gian thực.
+
+Workflow vì vậy chạy tmate :
 
 ```bash
 tmate -S /tmp/tmate.sock new-session -d "bash --rcfile $HOME/.bashrc -i"
 tmate -S /tmp/tmate.sock set-option -g remain-on-exit on
 
-# lấy các liên kết kết nối
+# lấy link kết nối
 tmate_ssh=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
 tmate_web=$(tmate -S /tmp/tmate.sock display -p '#{tmate_web}')
 ```
 
-Và những liên kết này được ghi trực tiếp vào README của repo bằng script Python. Bạn mở repo, thấy liên kết kết nối, bạn nhấp vào. Bạn đã ở trong VPS của mình.
+Và các link này được ghi thẳng vào README của repo bằng script Python. Bạn mở repo, thấy link kết nối, bấm. Bạn ở trong VPS của mình.
 
-Vấn đề đầu tiên đã giải quyết. Nhưng vấn đề thứ hai mới thực sự điên rồ.
+Xong bài toán đầu. Nhưng bài thứ hai mới thực sự điên.
 
 ---
 
-## Vấn đề 2: git làm ổ cứng
+## Bài toán 2 : git làm ổ cứng
 
-Đây là thứ bệnh hoạn.
+Đây là ý tưởng thay đổi tất cả.
 
-Máy bị xóa sau mỗi lượt chạy. Vậy chúng ta lưu trữ **hệ thống tệp tin trong một nhánh git riêng**, gọi là `filesystem`.
+Máy bị xóa mỗi lần chạy. Nên ta lưu **hệ thống tệp trong nhánh git chuyên dụng**, tên là `filesystem`.
 
-Khi khởi động, script khôi phục trạng thái từ nhánh này:
+Lúc khởi động, script khôi phục trạng thái từ nhánh này :
 
 ```bash
 filesystem_branch="filesystem"
@@ -96,15 +96,15 @@ git checkout -B filesystem-workspace "refs/remotes/origin/$filesystem_branch"
 git reset --hard "refs/remotes/origin/$filesystem_branch"
 ```
 
-Nhánh `filesystem` CHÍNH LÀ ổ cứng của bạn. Tệp của bạn, cài đặt của bạn, cấu hình của bạn -- tất cả đều ở trong đó.
+Nhánh `filesystem` CHÍNH LÀ ổ cứng của bạn. Tệp, cài đặt, cấu hình của bạn -- tất cả trong đó.
 
-Bạn thấy không? Máy dùng một lần, nhưng ổ cứng sống trong git. Bạn chạy lại workflow, ổ cứng được khôi phục, bạn tiếp tục chính xác chỗ bạn đã dừng.
+Bạn thấy ý tưởng chứ? Máy dùng một lần, nhưng đĩa sống trong git. Bạn chạy lại workflow, đĩa được khôi phục, bạn tiếp tục đúng nơi đã dừng.
 
-Cứ như VPS ngủ đông. Chỉ khác ngủ đông là một repo git xD
+Như VPS ngủ đông. Chỉ có điều ngủ đông là repo git.
 
-### Lần chạy đầu tiên: tạo ổ cứng trống
+### Lần chạy đầu : tạo đĩa trống
 
-Ở lần chạy đầu tiên, nhánh `filesystem` chưa tồn tại. Phải tạo nó. Và điều này không hề đơn giản:
+Ngay lần chạy đầu, nhánh `filesystem` chưa tồn tại. Phải tạo. Và việc này không tầm thường :
 
 ```bash
 ensure_filesystem_branch() {
@@ -118,41 +118,41 @@ ensure_filesystem_branch() {
 }
 ```
 
-`git checkout --orphan` là chìa khóa. Một nhánh orphan là một nhánh **không có bất kỳ lịch sử nào** -- như thể bạn bắt đầu lại từ một repo trống.
+`git checkout --orphan` là chìa khóa. Nhánh mồ côi là nhánh **không có lịch sử nào** -- như thể bạn khởi đầu từ repo trống.
 
-Tại sao orphan? Bởi vì bạn KHÔNG muốn ổ cứng của bạn kéo theo toàn bộ lịch sử code nguồn. Ổ cứng là một thứ riêng, có cuộc sống riêng. Nó bắt đầu trống.
+Vì sao mồ côi? Vì bạn KHÔNG muốn đĩa bền vững lôi theo toàn bộ lịch sử mã nguồn. Đĩa ở riêng, sống đời riêng. Nó khởi đầu trinh nguyên.
 
-Và `git ls-remote --exit-code` ở đầu, chỉ là một kiểm tra sạch sẽ: "nhánh này đã tồn tại trên remote chưa?". Nếu rồi, không động gì. Nếu chưa, tạo nó. Idempotent, như chúng ta thích.
+Và `git ls-remote --exit-code` ở đầu, chỉ là kiểm tra sạch : "nhánh đã tồn tại trên remote chưa?". Nếu có, không đụng gì. Nếu chưa, ta tạo. Idempotent, như ta thích.
 
-### Git clean chọn lọc: bảo vệ cache
+### git clean chọn lọc : bảo vệ cache
 
-Dòng này đáng để dừng lại:
+Dòng này đáng dừng lại :
 
 ```bash
 git clean -fdx -e .apt-cache -e .cache -e host.conf -e tmate.sock
 ```
 
-`git clean -fdx` xóa TẤT CẢ những gì không được git theo dõi. Bình thường nó khá mạnh -- dọn sạch workspace triệt để.
+`git clean -fdx` xóa MỌI thứ git không theo dõi. Bình thường việc này bạo lực -- nó dọn workspace sạch bong.
 
-Nhưng các `-e` (exclude) bảo vệ một số thứ:
-- `.apt-cache` → cache của gói APT (sẽ quay lại, rất thông minh)
+Nhưng các `-e` (loại trừ) bảo vệ vài tệp :
+- `.apt-cache` → cache gói APT (ta sẽ quay lại, nó láu)
 - `.cache` → cache chung
-- `host.conf` → địa chỉ SSH của session
-- `tmate.sock` → socket của session tmate hiện tại
+- `host.conf` → địa chỉ SSH của phiên
+- `tmate.sock` → socket của phiên tmate đang chạy
 
-Nếu bạn dọn những tệp đó, bạn sẽ làm hỏng session hiện tại hoặc mất cache. Vậy nên chúng được tha trong quá trình reset.
+Nếu bạn dọn các tệp đó, bạn phá phiên đang chạy hay mất cache. Nên ta tha chúng lúc reset.
 
-Một chi tiết nhỏ nhặt thoạt nhìn, nhưng không có nó mọi thứ đổ vỡ.
+Chi tiết trông ngu lúc đầu, nhưng thiếu nó mọi thứ vỡ.
 
 ---
 
-## Tự động lưu: inotify giám sát mọi thứ
+## Tự lưu : inotify canh mọi thứ
 
-Nhưng, làm thế nào các tệp được đưa vào nhánh `filesystem`?
+Được, nhưng tệp vào nhánh `filesystem` bằng cách nào?
 
-Câu trả lời: một watcher giám sát TẤT CẢ các thay đổi tệp và tự động commit/push.
+Trả lời : watcher canh MỌI thay đổi tệp và commit/đẩy tự động.
 
-Công cụ kỳ diệu là **inotifywait** (từ gói `inotify-tools`). Nó giám sát hệ thống tệp ở cấp kernel và kích hoạt ngay khi một tệp thay đổi.
+Công cụ kỳ diệu là **inotifywait** (từ gói `inotify-tools`). Nó canh filesystem ở tầng kernel và kích hoạt hễ tệp đổi.
 
 ```bash
 autosave() {
@@ -160,48 +160,48 @@ autosave() {
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock|\.gitignore|\.txt\.swp)(/|$)' .; do
     echo "[autosave] change detected"
     commit_and_push
-    sleep 1   # debounce nếu có nhiều thay đổi cùng lúc
+    sleep 1   # debounce nếu nhiều thay đổi dồn dập
   done
 }
 
 autosave &
 ```
 
-Phân tích các flag inotify, vì mỗi cái đều có lý do:
-- `-r` → đệ quy, giám sát tất cả thư mục con
-- `-e modify,create,delete,move` → phản ứng với 4 loại sự kiện này
-- `--exclude '...'` → regex để bỏ qua một số tệp
+Mổ các cờ inotify, vì cờ nào cũng đáng :
+- `-r` → đệ quy, canh mọi thư mục con
+- `-e modify,create,delete,move` → phản ứng với 4 kiểu sự kiện này
+- `--exclude '...'` → regex để bỏ qua vài tệp
 
-`--exclude` rất quan trọng. Xem nó bỏ qua gì:
-- `.git` → hiển nhiên, nếu không mỗi commit sẽ kích hoạt autosave rồi lại kích hoạt commit... vòng lặp vô hạn. Thảm họa.
-- `.apt-cache` và `.cache` → cache, thay đổi liên tục và không muốn spam vào git
-- `host.conf` và `tmate.sock` → tệp session, thay đổi không ngừng
-- `.gitignore`, `.txt.swp` → tệp tạm thời (`.swp` là tệp soạn thảo của vim)
+`--exclude` then chốt. Xem nó bỏ qua gì :
+- `.git` → hiển nhiên, nếu không mỗi commit kích hoạt autosave kích hoạt commit... vòng lặp vô hạn. Thảm họa.
+- `.apt-cache` và `.cache` → cache, đổi liên tục mà ta không muốn spam vào git
+- `host.conf` và `tmate.sock` → tệp phiên, động không ngừng
+- `.gitignore`, `.txt.swp` → tệp tạm (`.swp` là tệp chỉnh sửa của vim)
 
-Nếu không có exclude này, bạn sẽ gặp autosave kích hoạt vòng lặp trên chính các thay đổi của nó. `.git` trong danh sách, đó là DÒNG ngăn bạn tự bắn vào chân mình.
+Không có exclude này, bạn sẽ có autosave tự kích hoạt vòng lặp trên chính thay đổi của nó. `.git` trong danh sách, chính là dòng ngăn bạn tự bắn vào chân.
 
-Bạn sửa một tệp? inotify phát hiện ngay lập tức, nó commit, nó push. Trong chưa đầy một giây, thay đổi của bạn đã ở trong nhánh `filesystem`.
+Bạn sửa tệp? inotify phát hiện tức thì, nó commit, nó đẩy. Dưới một giây, thay đổi của bạn đã vào nhánh `filesystem`.
 
-Bạn cài một công cụ, bạn viết code, bạn sửa cấu hình -- mọi thứ được lưu trong thời gian thực, tự động, không cần bạn làm gì.
+Bạn cài gói, bạn viết mã, bạn đụng config -- mọi thứ được lưu thời gian thực, tự động, mà bạn không phải làm gì.
 
-Bạn thực sự có một hệ thống tự động sao lưu toàn bộ ổ cứng. Điên rồ.
+Bạn đúng nghĩa có hệ thống tự lưu toàn bộ đĩa. Điên.
 
-### Debounce: không spam git
+### Debounce : không spam git
 
-`sleep 1` sau mỗi lần lưu là một **debounce**.
+`sleep 1` sau mỗi lần lưu là **debounce**.
 
-Khi bạn lưu tệp trong trình soạn thảo, thường có nhiều sự kiện hệ thống tệp phát ra liên tiếp (tạo tệp tạm, rename, xóa tệp cũ...). Không có debounce, bạn sẽ kích hoạt 3-4 commit cho một lần lưu.
+Khi bạn lưu tệp trong trình chỉnh, thường nó sinh nhiều sự kiện filesystem dồn dập (tạo tệp tạm, đổi tên, xóa cái cũ...). Không debounce, bạn kích 3-4 commit cho một lần lưu.
 
-`sleep 1` nói: "chờ một giây sau khi lưu, để loạt sự kiện lắng xuống, trước khi lắng nghe lại". Nó gom các thay đổi gần nhau vào một commit duy nhất. Thông minh.
+`sleep 1` nói : "chờ một giây sau lần lưu, cho đợt dồn lắng xuống, rồi mới nghe lại". Việc này gom thay đổi gần nhau thành một commit. Láu.
 
-### Và thêm một bản lưu định kỳ
+### Và thêm lưu định kỳ
 
-Phòng trường hợp inotify bỏ sót thứ gì, cũng có một bản lưu mỗi 5 giây:
+Phòng khi inotify hụt sự kiện, còn lưu mỗi 5 giây :
 
 ```bash
 periodic_save() {
   while true; do
-    sync_from_remote   # lấy các thay đổi từ xa nếu có
+    sync_from_remote   # lấy thay đổi từ xa nếu có
     sleep 5
     commit_and_push
   done
@@ -210,27 +210,27 @@ periodic_save() {
 periodic_save &
 ```
 
-Vừa đai vừa dây treo. Không muốn mất trạng thái ổ cứng.
+Cả thắt lưng VÀ dây đeo. Ta nhất quyết không muốn mất trạng thái đĩa.
 
 ---
 
-## Chi tiết thông minh: chỉ một commit
+## Chi tiết láu : một commit duy nhất
 
-Nếu bạn commit mỗi khi tệp thay đổi, bạn sẽ tích lũy hàng ngàn commit. Trong một giờ session, lịch sử git của bạn nổ tung. Repo trở nên khổng lồ. Thật kinh khủng.
+Nếu bạn commit mỗi lần tệp đổi, bạn sẽ tích hàng nghìn commit. Trong một giờ phiên, lịch sử git nổ tung. Repo thành khổng lồ. Kinh tởm.
 
-Giải pháp rất thanh lịch: **chúng ta amend commit hiện tại** thay vì tạo commit mới.
+Giải pháp thanh lịch : **sửa commit hiện có** thay vì tạo commit mới.
 
 ```bash
 commit_and_push() {
   (
-    flock -n 200 || return   # lock để hai luồng lưu không chạy cùng lúc
+    flock -n 200 || return   # khóa để hai lần lưu không chạy cùng lúc
 
     git add -A
-    git reset -- .github/workflows/ .github/scripts/   # đừng động vào scripts
+    git reset -- .github/workflows/ .github/scripts/   # không đụng script
 
     if ! git diff --cached --quiet; then
       if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git commit --amend --no-edit    # AMEND: ghi đè commit trước đó
+        git commit --amend --no-edit    # AMEND : ghi đè commit trước
       else
         git commit -m "autosave $(date -u +%Y%m%dT%H%M%SZ)"
       fi
@@ -240,21 +240,21 @@ commit_and_push() {
 }
 ```
 
-`git commit --amend` nghĩa là: "thay thế commit cuối cùng bằng commit này".
+`git commit --amend` nghĩa là : "thay commit cuối bằng cái này".
 
-Vì vậy nhánh `filesystem` LUÔN LUÔN chỉ có một commit. Không quan trọng bạn lưu bao nhiêu lần. Nó chỉ là một snapshot của trạng thái hiện tại, force-push hết lần này đến lần khác.
+Nhờ vậy nhánh `filesystem` LUÔN chỉ một commit. Dù bạn lưu bao nhiêu lần. Nó chỉ là snapshot trạng thái hiện tại, force-push đi đẩy lại.
 
-`flock` là một khóa: vì có hai vòng lặp lưu (inotify + định kỳ), cần tránh chúng chạy git cùng lúc và giẫm lên nhau. Chỉ một tiến trình git tại một thời điểm.
+`flock` là khóa : vì có hai vòng lưu (inotify + định kỳ), phải tránh chúng chạy git cùng lúc và giẫm nhau. Một tiến trình git tại một thời điểm.
 
-Sạch sẽ.
+Gọn.
 
 ---
 
-## Sync_from_remote: xử lý nhiều session
+## sync_from_remote : xử lý nhiều phiên
 
-Ồ, một thứ bạn không nghĩ tới lúc đầu: nếu bạn chạy HAI lượt cùng lúc thì sao? Hoặc nếu một session sửa nhánh `filesystem` trong khi session khác đang chạy?
+Này, trường hợp bạn lúc đầu không nghĩ tới : nếu bạn chạy HAI lần cùng lúc thì sao? Hay một phiên sửa nhánh `filesystem` trong khi phiên khác chạy?
 
-Script xử lý việc này bằng `sync_from_remote` trước mỗi commit:
+Script xử lý việc đó bằng `sync_from_remote` trước mỗi commit :
 
 ```bash
 sync_from_remote() {
@@ -263,17 +263,17 @@ sync_from_remote() {
 }
 ```
 
-`--ff-only` (fast-forward only) rất quan trọng: nó có nghĩa là "merge CHỈ KHI chúng ta có thể tiến thẳng, không tạo commit merge".
+`--ff-only` (chỉ fast-forward) quan trọng : nghĩa là "merge CHỈ nếu tiến sạch được, không tạo commit merge".
 
-Nếu hai nhánh đã phân nhánh (kiểu, hai session sửa những thứ khác nhau), fast-forward thất bại im lặng (`2>/dev/null || true`) và giữ trạng thái local. Đây không phải hệ thống merge hoàn hảo, nhưng nó tránh hỏng hóc trong trường hợp đơn giản chỉ có một session chạy.
+Nếu hai nhánh đã rẽ (kiểu, hai phiên sửa các tệp khác nhau), fast-forward thất bại lặng lẽ (`2>/dev/null || true`) và ta giữ trạng thái cục bộ. Không phải hệ thống merge hoàn hảo, nhưng tránh hỏng trong trường hợp đơn giản chỉ một phiên chạy.
 
-Thành thật, không nên chạy 3 session song song trên cùng một repo. Nhưng code vẫn cố gắng không phát nổ nếu điều đó xảy ra. Đó là phòng vệ.
+Thật lòng, đừng chạy 3 phiên song song trên cùng repo. Nhưng mã vẫn cố không nổ nếu chuyện đó xảy ra. Đó là phòng thủ.
 
 ---
 
-## Cache APT: cài đặt nhanh
+## Cache APT : cài nhanh
 
-Có một chi tiết trong workflow trông không quan trọng nhưng được thiết kế tốt:
+Có chi tiết trong workflow trông không có gì mà nghĩ kỹ :
 
 ```yaml
 - name: Cache & install APT packages (tmate + watcher)
@@ -282,19 +282,19 @@ Có một chi tiết trong workflow trông không quan trọng nhưng được t
     packages: tmate inotify-tools
 ```
 
-tmate và inotify-tools được cài qua một action **cache các gói APT**.
+tmate và inotify-tools được cài qua action **cache gói APT**.
 
-Ở lần chạy đầu tiên, nó tải xuống và cài đặt. Ở các lần sau, nó được khôi phục từ cache GitHub Actions -- nhanh hơn, không cần tải lại.
+Lần chạy đầu, nó tải và cài. Các lần sau, nó khôi phục từ cache GitHub Actions -- nhanh hơn, không cần tải lại.
 
-Và bạn nhớ `git clean -fdx -e .apt-cache` lúc nãy không? Có liên quan đấy. Thư mục `.apt-cache` được bảo vệ khỏi dọn dẹp chính xác để các gói bạn cài trong session có thể tồn tại tối thiểu.
+Và bạn nhớ `git clean -fdx -e .apt-cache` lúc nãy chứ? Liên quan đấy. Thư mục `.apt-cache` được bảo vệ khỏi dọn dẹp đúng để các gói bạn cài trong phiên có thể bền tối thiểu.
 
-Mọi thứ kết nối với nhau. Tôi đã nghĩ về toàn bộ vòng đời.
+Mọi thứ khớp. Tôi đã nghĩ tới toàn bộ vòng đời.
 
 ---
 
-## Các script giấu trong /tmp
+## Script giấu trong /tmp
 
-Một chi tiết lắt léo nhưng thông minh nữa. Ngay đầu script:
+Thêm chi tiết hiểm mà láu. Ngay đầu script :
 
 ```bash
 RUNNER_SCRIPTS_DIR="/tmp/runner-scripts"
@@ -303,25 +303,25 @@ mkdir -p "$RUNNER_SCRIPTS_DIR"
 cp -r .github/scripts "$RUNNER_SCRIPTS_DIR/"
 ```
 
-Các script (`update_readme.py`, v.v.) được sao chép vào `/tmp` TRƯỚC KHI đụng vào nhánh `filesystem`.
+Các script (`update_readme.py`, v.v.) được chép vào `/tmp` TRƯỚC khi đụng tới nhánh `filesystem`.
 
-Tại sao? Bởi vì khi bạn làm `git reset --hard` về nhánh `filesystem` (lúc đầu trống, hoặc chứa ổ cứng của bạn), các tệp `.github/scripts` từ repo nguồn biến mất khỏi workspace.
+Vì sao? Vì khi bạn làm `git reset --hard` về nhánh `filesystem` (ban đầu trống, hay chứa đĩa của bạn), các tệp `.github/scripts` của repo nguồn biến mất khỏi workspace.
 
-Nhưng script vẫn cần chúng trong session (để cập nhật README mỗi khi tmate khởi động lại). Vậy nên nó giấu chúng trong `/tmp`, ngoài tầm với của git:
+Nhưng script vẫn cần chúng trong phiên (để cập nhật README mỗi lần tmate chạy lại). Nên nó giấu chúng trong `/tmp`, ngoài tầm git :
 
 ```bash
 python3 "$RUNNER_SCRIPTS_DIR/scripts/update_readme.py" --ssh "$tmate_ssh" ...
 ```
 
-Nếu bạn không nghĩ đến điều này, bạn sẽ vật lộn 30 phút để hiểu tại sao script của bạn biến mất. Tôi đã nghĩ đến nó.
+Nếu bạn không nghĩ tới, bạn vật vã 30 phút để hiểu vì sao script biến mất. Tôi đã nghĩ tới.
 
 ---
 
-## Shell tùy chỉnh
+## Shell đo ni đóng giày
 
-Một chút tiện nghi: session cấp cho bạn một shell đã cấu hình, không phải bash trần trụi.
+Tiện nghi nhỏ : phiên cho bạn shell đã cấu hình, không phải bash trần.
 
-`prestart.sh` sao chép một `.bashrc` tùy chỉnh:
+`prestart.sh` chép `.bashrc` custom :
 
 ```bash
 if ! grep -q "Custom prompt and aliases for remote sessions" "$HOME/.bashrc"; then
@@ -330,7 +330,7 @@ fi
 sudo cp "$HOME/.bashrc" /root/.bashrc
 ```
 
-Và `.bashrc` này chứa prompt màu sắc, alias (`ll`, `lla`, `rm -i`), và đặc biệt là ghi đè `exit`:
+Và `.bashrc` này chứa prompt màu, alias (`ll`, `lla`, `rm -i`), và nhất là ghi đè `exit` :
 
 ```bash
 exit() {
@@ -338,21 +338,21 @@ exit() {
     builtin exit "$@"
 }
 
-# Ctrl+D làm tương tự exit
+# Ctrl+D làm giống exit
 bind -x '"\C-d": "exit"'
 ```
 
-Khi bạn gõ `exit` (hoặc Ctrl+D), nó giết sạch các tiến trình tmate trước khi đóng. Tránh để lại các session tmate zombie.
+Khi bạn gõ `exit` (hay Ctrl+D), nó giết sạch tiến trình tmate trước khi đóng. Việc này tránh để lại phiên tmate zombie.
 
-Cũng có hàm `tmate-detach` nếu bạn muốn ngắt kết nối MÀ KHÔNG giết session (để kết nối lại sau). Chi tiết tiện nghi, nhưng cho thấy mức độ chăm chút.
+Ngoài ra có hàm `tmate-detach` nếu bạn muốn ngắt KẾT NỐI mà KHÔNG giết phiên (để kết nối lại sau). Chi tiết tiện nghi, nhưng cho thấy mức chăm chút.
 
 ---
 
-## Tmate tự khởi động lại
+## tmate tự chạy lại
 
-Tiện nghi nhỏ: nếu bạn gõ `exit` trong shell, bình thường session tmate chết và bạn mất kết nối vĩnh viễn.
+Tiện nghi nhỏ : nếu bạn gõ `exit` trong shell, bình thường phiên tmate chết và bạn mất kết nối vĩnh viễn.
 
-Nhưng ở đây, tmate nằm trong vòng lặp `while true`:
+Chỉ có điều ở đây, tmate nằm trong vòng `while true` :
 
 ```bash
 while true; do
@@ -364,137 +364,137 @@ while true; do
 done
 ```
 
-Bạn `exit`? Session tự động khởi động lại. Bạn kết nối lại với cùng liên kết.
+Bạn `exit`? Phiên tự khởi động lại. Bạn kết nối lại bằng cùng link.
 
-Thật điên rồ, nhưng nó làm cho công cụ trở nên dùng được.
+Ngớ ngẩn, nhưng khiến phiên dùng được.
 
 ---
 
 ## Kết nối lại bằng một lệnh
 
-Làm thế nào để kết nối lại sau khi mất kết nối, mà không phải lục tung log của run mỗi lần?
+Bạn kết nối lại sau khi mất kết nối thế nào, mà không phải lục log lần chạy mỗi lần?
 
-Địa chỉ SSH của tmate được ghi vào tệp `host.conf`, được commit trong nhánh `filesystem`:
+Địa chỉ SSH của tmate được ghi vào tệp `host.conf`, commit trong nhánh `filesystem` :
 
 ```bash
 printf '%s' "${tmate_ssh#ssh }" > host.conf
 ```
 
-Vì tệp này nằm trong git, bạn có thể lấy nó qua API GitHub bằng một lệnh duy nhất:
+Và vì tệp này trong git, bạn lấy được nó qua API GitHub bằng một lệnh duy nhất :
 
 ```bash
 ssh "$(gh api -H 'Accept: application/vnd.github.v3.raw' \
   "/repos/USER/REPO/contents/host.conf?ref=filesystem" | tr -d '\r\n')"
 ```
 
-Bạn chạy lệnh này, nó lấy địa chỉ SSH hiện tại từ repo và kết nối bạn. Kể cả nếu địa chỉ đã thay đổi giữa các session.
+Bạn chạy nó, nó đi lấy địa chỉ SSH hiện tại trong repo, và kết nối bạn. Ngay cả khi địa chỉ đã đổi giữa hai phiên.
 
 ---
 
-## Luồng hoàn chỉnh
+## Luồng đầy đủ
 
-Tóm lại:
+Tóm lại :
 
-1. Bạn kích hoạt workflow (push hoặc nút thủ công)
-2. GitHub cấp cho bạn một VM Ubuntu
-3. Script khôi phục ổ cứng từ nhánh "filesystem"
-4. inotify bắt đầu giám sát mọi thay đổi
-5. periodic_save commit mỗi 5s dự phòng
-6. tmate khởi động → tạo các liên kết SSH/web
-7. Các liên kết được ghi vào README + host.conf
-8. Bạn kết nối bằng ssh hoặc terminal web
-9. Bạn làm gì tùy thích -- mỗi thay đổi tệp = autosave
-10. 6h sau, GitHub giết VM
-11. Ổ cứng của bạn còn nguyên trong nhánh "filesystem"
-12. Bạn chạy lại workflow → quay lại bước 3, mọi thứ vẫn còn
+1. Bạn kích hoạt workflow (đẩy hay nút tay)
+2. GitHub đưa bạn VM Ubuntu
+3. Script khôi phục đĩa từ nhánh "filesystem"
+4. inotify bắt đầu canh mọi thay đổi
+5. periodic_save commit mỗi 5s để dự phòng
+6. tmate khởi động → sinh link SSH/web
+7. Link được ghi vào README + host.conf
+8. Bạn kết nối bằng ssh hay terminal web
+9. Bạn làm gì tùy -- mỗi thay đổi tệp = tự lưu
+10. 6 giờ sau, GitHub giết VM
+11. Đĩa của bạn nguyên vẹn trong nhánh "filesystem"
+12. Bạn chạy lại workflow → về bước 3, mọi thứ còn đó
 
-Một VPS miễn phí với ổ cứng bền vững. Chỉ với git và GitHub Actions.
-
----
-
-## Thành thật mà nói: những giới hạn
-
-Đây là hack, không phải VPS thật. Vậy nên:
-
-- **Tối đa 6h mỗi lần chạy.** Phải chạy lại workflow thường xuyên. Không có uptime vô hạn.
-- **Không dùng cho production.** Bạn sẽ không host trang web ở đây. Nó dành cho khám phá, dev, debug, thử nghiệm một thứ trong Linux dùng một lần nhưng có thể phục hồi.
-- **GitHub thấy mọi thứ.** Đó là máy của họ. Đừng đặt gì nhạy cảm.
-- **Giữ repo ở chế độ private.** Bạn đang phơi bày một shell SSH. Repo public = bất kỳ ai cũng có thể kết nối. Ý tưởng tồi.
-- **Nó ở ranh giới điều khoản sử dụng.** GitHub Actions được tạo cho CI/CD, không phải VPS miễn phí. Vậy hãy dùng có chừng mực, cho mục đích chính đáng, không lạm dụng.
-
-### Điểm yếu thực sự: git ghét tệp lớn
-
-Git được tạo cho văn bản, không phải cho hệ thống tệp.
-
-Ổ cứng sống trong một nhánh git. Vậy mọi thứ bạn lưu đều qua git. Và git:
-- xử lý kém các tệp nhị phân lớn (một image Docker 2 GB trong git? quên đi)
-- có giới hạn 100 MB mỗi tệp trên GitHub (hard limit, không push được qua)
-- khuyến nghị dưới ~5 GB mỗi repo
-
-Vậy nếu bạn `npm install` một dự án với 500 MB `node_modules`, hoặc build thứ gì đó ra tệp nhị phân nặng, push lên `filesystem` sẽ hoặc rất chậm, hoặc hoàn toàn thất bại.
-
-`git commit --amend` giúp ích (chỉ một commit, không lịch sử phình to), nhưng không thay đổi sự thật rằng một tệp 200 MB sẽ không bao giờ qua được.
-
-Tóm lại: **nó hoạt động tuyệt vời cho code, cấu hình, tệp nhỏ. Nó không hoạt động để lưu dữ liệu lớn hoặc artifact nhị phân.** Phải ghi nhớ điều này khi làm việc trong session của bạn.
-
-### Đây không phải snapshot hệ thống hoàn chỉnh
-
-Một sắc thái quan trọng khác: nhánh `filesystem` lưu **workspace** (thư mục của repo), không phải toàn bộ hệ thống.
-
-Nếu bạn `apt install htop`, tệp nhị phân sẽ vào `/usr/bin/htop`, nằm NGOÀI workspace. Vậy nó sẽ KHÔNG được lưu. Ở lần chạy sau, phải cài lại.
-
-Đó là lý do có cache APT và `prestart.sh`: để chuẩn bị lại môi trường hệ thống mỗi lần khởi động, vì chỉ workspace mới tồn tại.
-
-Nếu bạn muốn các cài đặt của mình sống sót, phải đặt chúng trong workspace (kiểu, cài trong thư mục local thay vì hệ thống). Đó là một bài tập cần làm quen.
+VPS miễn phí với đĩa bền vững. Chỉ bằng git và GitHub Actions.
 
 ---
 
-## VPS miễn phí vs VPS thật: so sánh
+## Được, phải trung thực : giới hạn
+
+Đây là mẹo, không phải VPS thật. Nên :
+
+- **Tối đa 6 giờ mỗi lần chạy.** Phải chạy lại workflow thường xuyên. Uptime giới hạn mỗi lần chạy.
+- **Dành cho dev và khám phá.** Bạn sẽ không host trang của mình trên đó. Nó để khám phá, dev, gỡ lỗi, test môi trường Linux dùng một lần mà khôi phục được.
+- **GitHub thấy hết.** Đó là máy của họ. Đừng đặt gì nhạy cảm.
+- **Giữ repo riêng tư.** Bạn phơi shell SSH. Repo công khai = bất kỳ ai cũng có thể kết nối vào. Ý tệ.
+- **Nó ở rìa điều khoản dùng.** GitHub Actions sinh ra cho CI/CD, không phải VPS miễn phí. Nên dùng tiết chế, cho việc hợp lệ, không lạm dụng.
+
+### Gót chân Achilles thật : git ghét tệp lớn
+
+Git sinh ra cho văn bản, không phải filesystem.
+
+Đĩa bền vững sống trong nhánh git. Nên mọi thứ bạn lưu đều qua git. Và git :
+- xử lý kém tệp nhị phân lớn (ảnh Docker 2 Go trong git? quên đi)
+- có giới hạn 100 Mo cho mỗi tệp trên GitHub (giới hạn cứng, không đẩy được vượt)
+- khuyến nghị ở dưới ~5 Go cho mỗi repo
+
+Nên nếu bạn `npm install` dự án với 500 Mo `node_modules`, hay build dự án sinh nhị phân nặng, lần đẩy lên `filesystem` sẽ hoặc ì ạch tới chết, hoặc thất bại thẳng.
+
+`git commit --amend` giúp (một commit duy nhất, không lịch sử phình), nhưng không đổi được việc tệp 200 Mo sẽ không bao giờ qua.
+
+Đại khái : **nó chạy siêu tốt cho mã, config, tệp nhỏ. Nó không chạy để lưu dữ liệu lớn hay artefact nhị phân.** Phải nhớ điều đó về những gì bạn làm trong phiên.
+
+### Không phải snapshot hệ thống đầy đủ
+
+Sắc thái quan trọng khác : nhánh `filesystem` lưu **workspace** (thư mục repo), không phải toàn bộ hệ thống.
+
+Nếu bạn làm `apt install htop`, nhị phân vào `/usr/bin/htop`, nằm NGOÀI workspace. Nên nó sẽ KHÔNG được lưu. Lần chạy sau, phải cài lại.
+
+Đó là lý do ta có cache APT và `prestart.sh` : để chuẩn bị lại môi trường hệ thống mỗi lần khởi động, vì chỉ workspace bền vững.
+
+Nếu bạn muốn cài đặt của mình sống sót, phải đặt chúng trong workspace (kiểu, cài vào thư mục cục bộ thay vì hệ thống). Đó là bài thể dục cần nhập tâm.
+
+---
+
+## VPS miễn phí so với VPS thật : trận đấu
 
 | | repo-to-vps | VPS thật (5€/tháng) |
 |---|---|---|
 | **Giá** | 0€ | ~5-10€/tháng |
-| **Uptime** | 6h, phải chạy lại | 24/7 |
-| **Ổ cứng** | nhánh git, tệp nhỏ | SSD thật, nhiều GB |
-| **RAM** | ~7 GB (hào phóng!) | 1-2 GB thường |
-| **CPU** | 2-4 nhân ổn | 1-2 vCPU |
-| **Thiết lập** | clone template | cấu hình thủ công |
-| **Tồn tại** | workspace chỉ | hệ thống hoàn chỉnh |
-| **Hợp pháp** | ranh giới ĐKSD | 100% sạch sẽ |
+| **Uptime** | 6 giờ, phải chạy lại | 24/7 |
+| **Đĩa** | nhánh git, tệp nhỏ | SSD thật, nhiều Go |
+| **RAM** | ~7 Go (hào phóng!) | Thường 1-2 Go |
+| **CPU** | 2-4 lõi ổn | 1-2 vCPU |
+| **Setup** | clone mẫu | cấu hình tay |
+| **Bền vững** | chỉ workspace | toàn bộ hệ thống |
+| **Hợp lệ** | rìa CGU | 100% sạch |
 
-Điều buồn cười là về specs thô (RAM, CPU), runner GitHub thường TỐT HƠN VPS 5€. Nhưng uptime 6h và tồn tại giới hạn trong workspace, đó là thứ biến nó thành đồ chơi hacker, không phải máy chủ thật.
+Điểm thú vị là về spec thô (RAM, CPU), runner GitHub thường TỐT HƠN VPS 5€. Nhưng uptime 6 giờ và bền vững giới hạn ở workspace, đó là thứ biến nó thành đồ chơi hacker, không phải máy chủ thật.
 
-Để học, thử nghiệm, debug Linux nhanh trong môi trường có thể phục hồi? Hoàn hảo. Để host bất cứ thứ gì nghiêm túc? Hãy mua VPS thật.
+Để học, test, gỡ lỗi hệ thống Linux nhanh trong môi trường khôi phục được? Hoàn hảo. Để host thứ gì nghiêm túc? Lấy VPS thật.
 
-Nhưng cho môi trường Linux tạm thời mà bạn có thể khôi phục tùy ý? Nó thật sự tuyệt vời.
-
----
-
-## Pattern đằng sau tất cả
-
-Nếu bạn lùi lại, repo-to-vps và bot email (bài viết khác của tôi) đều dựa trên cùng một ý tưởng:
-
-> **Git không chỉ là trình quản lý phiên bản. Nó là hệ thống lưu trữ bền vững, miễn phí, có phiên bản, có thể truy cập qua API.**
-
-Khi bạn có một hệ thống stateless (GitHub Actions, Worker, serverless function) và muốn giữ trạng thái giữa các lần thực thi, git có thể làm "ổ cứng".
-
-- Bot email lưu `lastId` trong một tag git.
-- repo-to-vps lưu toàn bộ hệ thống tệp trong một nhánh git.
-
-Cùng pattern, hai quy mô. Một bên là giá trị, một bên là ổ cứng.
-
-Và `git commit --amend` + force-push là kỹ thuật chung: **bạn giữ một commit duy nhất đại diện cho trạng thái hiện tại, bị ghi đè mỗi lần cập nhật.**
-
-Nó không được tạo ra cho việc này. Nhưng nó hoạt động. Và nó miễn phí.
+Nhưng với môi trường Linux tạm thời mà bạn có thể khôi phục tùy ý? Đúng là thiên tài.
 
 ---
 
-**3 điều cần nhớ:**
+## Mẫu đằng sau tất cả
 
-1. **Một nhánh git = ổ cứng bền vững** -- Lưu hệ thống tệp của bạn trong một nhánh riêng, khôi phục khi khởi động, và bạn có trạng thái sống sót qua các máy dùng một lần.
+Nếu bạn lùi lại, repo-to-vps và bot email (bài kia của tôi) dựa trên cùng ý tưởng :
 
-2. **inotify + git = autosave thời gian thực** -- `inotifywait` giám sát thay đổi ở cấp kernel và push lên git ngay lập tức. Với `git commit --amend` để giữ một commit duy nhất, sạch sẽ.
+> **Git không chỉ là quản lý phiên bản. Đó là hệ thống lưu trữ bền vững, miễn phí, có phiên bản, truy cập được qua API.**
 
-3. **tmate biến runner thành VPS** -- SSH live trên máy GitHub Actions, với tự động khởi động lại và kết nối lại bằng một lệnh qua API GitHub.
+Hễ bạn có hệ thống stateless (GitHub Actions, Worker, hàm serverless) mà muốn giữ trạng thái giữa hai lần thực thi, git có thể đóng vai "đĩa".
 
-Git làm ổ cứng, tập hai. Tôi nghĩ tôi sẽ kết thúc với việc lưu mọi thứ trong các nhánh git xD
+- Bot email lưu `lastId` trong tag git.
+- repo-to-vps lưu cả filesystem trong nhánh git.
+
+Cùng mẫu, hai quy mô. Một giá trị một bên, một đĩa một bên.
+
+Và `git commit --amend` + force-push là kỹ thuật chung : **bạn giữ một commit duy nhất đại diện trạng thái hiện tại, ghi đè mỗi lần cập nhật.**
+
+Nó không sinh ra cho việc đó. Nhưng nó chạy. Và miễn phí.
+
+---
+
+**3 điểm cần nhớ :**
+
+1. **Nhánh git = ổ cứng bền vững** -- Lưu filesystem vào nhánh chuyên dụng, khôi phục lúc khởi động, và bạn có trạng thái sống sót qua máy dùng một lần.
+
+2. **inotify + git = tự lưu thời gian thực** -- `inotifywait` canh thay đổi ở tầng kernel và đẩy lên git tức thì. Với `git commit --amend` để giữ một commit sạch duy nhất.
+
+3. **tmate biến runner thành VPS** -- SSH trực tiếp lên máy GitHub Actions, với khởi động lại tự động và kết nối lại bằng một lệnh qua API GitHub.
+
+Git làm ổ cứng, tập hai. Tôi nghĩ mình sẽ lưu mọi thứ vào nhánh git mất

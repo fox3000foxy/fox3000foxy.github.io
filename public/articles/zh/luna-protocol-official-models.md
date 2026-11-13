@@ -1,6 +1,6 @@
 ---
-title: "Luna Protocol：为什么我用5万条Discord样本微调了一个1.5B模型，让少样本提示成为秘密武器"
-description: "一个在更少数据上训练的小模型可以胜过更大的模型----只要你知道如何提示它。本文讲述了Luna Protocol为何从3B Hermes转向1.5B Qwen微调模型，以及为什么少样本提示成为了真正的游戏规则改变者。"
+title: Luna Protocol：为什么我在 5 万 Discord 样本上微调 15 亿参数模型，以及 few-shot 启动为什么改变一切
+description: 小模型少数据能赢大模型，前提是启动方式对。Luna Protocol 为什么从 Hermes 3B 换到 Qwen 1.5B 微调，few-shot 启动怎么从“加分项”变成核心。
 date: 2026-07-17
 authors:
   - fox3000foxy
@@ -13,106 +13,106 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "DsnlWCs2VBuASbcnTthR8p7CGyEdkkInwYDdbuSLTJsV4wcLvmrLyWjNGzmR0Y8WUuxNaGZEH3KeoGB31X8G+Q=="
+author_sig: "nHBT0iqELTjIMQpd9kKK5I3Crcyq7klAihliyY2DWLIoEApuu+3kBs7QDaCGTFIu9HnyB5aSs6MCeqewNaBO3Q=="
 ---
 
-# Luna Protocol：为什么我用5万条Discord样本微调了一个1.5B模型，让少样本提示成为秘密武器
+# Luna Protocol：为什么我在 5 万 Discord 样本上微调 15 亿参数模型，以及 few-shot 启动为什么改变一切
 
-在第一[篇文章](/articles/zh/luna-protocol-discord-bot)中，我构建了一个模拟真人的Discord机器人----包括睡眠、打字错误、犹豫、健忘和自发消息。行为系统很扎实。其背后的LLM是一个3B参数的Hermes模型，量化为Q8_0，占用3GB显存。
+[第一篇](/articles/en/luna-protocol-discord-bot)里我做了装人类的 Discord 机器人：睡觉、typo、犹豫、忘事、自发消息。行为系统立住了。后面的 LLM 是 30 亿 Hermes 模型，Q8_0 量化，吃 3G 显存。
 
-它能用。但杀鸡用了牛刀。
+能跑。但超配了。
 
-一个Discord机器人不需要3B参数的模型来说一句"nm just chillin, u"。它需要的是**风格一致性**----在每条消息中保持特定的对话语气，不偏离到企业助手模式。事实证明，一个在更少数据上训练的小模型，加上几个示例的提示，比一个靠系统提示蛮力输出的更大模型做得更好。
+Discord 机器人说"nm just chillin, u"用不着 30 亿参数。它要的是**风格一致性**：一句话接一句话守住 casual 语气，不滑回"企业助理"腔。而小模型少数据加几个示例，守这事比大模型硬靠系统提示词强。
 
-本文介绍Luna Protocol的官方模型：它们为什么存在，为什么是1.5B而不是3B，为什么用5万条训练样本而不是730万条，以及为什么少样本提示从锦上添花变成了整个方法的核心。
+这篇讲 Luna Protocol 官方模型：为什么存在，为什么 1.5B 不 3B，为什么 5 万训练样本不 730 万，few-shot 启动怎么从" bonus"变成全套打法的核心。
 
 ---
 
-## 3B模型的问题
+## 3B 模型的问题
 
-原始配置使用了`Discord-Micae-Hermes-3-3B.Q8_0.gguf`----一个在Discord数据上微调的3B参数模型。它能产生不错的回复，但是：
+原来配置用 `Discord-Micae-Hermes-3-3B.Q8_0.gguf`，30 亿参数 Discord 微调模型。回复质量好，但：
 
 | 指标 | Hermes-3-3B Q8_0 | 目标 |
 |--------|-------------------|--------|
-| 显存占用 | ~3 GB | < 1 GB |
-| Token生成速度 | ~30 tok/s | ~60+ tok/s |
-| 模型文件大小 | ~3.2 GB | < 1 GB |
-| 冷启动时间 | ~8s | ~3s |
+| 显存占用 | 约 3G | < 1G |
+| token 生成 | 约 30 tok/s | 约 60+ tok/s |
+| 模型文件 | 约 3.2G | < 1G |
+| 冷启动 | 约 8 秒 | 约 3 秒 |
 
-对于一个在普通服务器上全天候运行的机器人来说，3GB显存太多了。而且生成速度----虽然对偶尔的消息来说还行----在突发响应或多个频道活跃时显得迟缓。
+24/7 跑在小服务器的机器人，3G 显存很多。生成速度偶发消息还行，连发或多频道齐飞就肉。
 
-问题是：我们能否用一半的参数获得同样的Discord-Dialogues风格？
+问题：同样 Discord-Dialogues 味，能不能一半参数拿下？
 
 ---
 
-## 微调决策：为什么是5万条，而不是730万条
+## 微调决策：为什么 5 万，不 730 万
 
-[Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues)数据集包含**730万次对话**和**1700万个轮次**。这是一个庞大的真实Discord对话语料库。显而易见的做法是在整个数据集上训练。
+[Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) 数据集有 **730 万对话**、**1700 万轮**。巨型真 Discord 对话库。直觉做法是全量训。
 
-我反其道而行之。我只用了**5万个样本**----不到可用数据的1%。
+我反着来。训 **5 万样本**，不到数据的 1%。
 
-原因如下：**训练集的大小直接影响模型对其训练分布的过拟合程度**。
+为什么：**训练集大小直接决定模型对训练分布的过拟合程度**。
 
-在730万个示例上训练的模型学会了对话的非常具体的统计分布。它擅长复现这种分布，但也变得**僵化**----它在推理时适应新模式的能力较弱。
+730 万样本训出的模型学到很尖的对话统计分布。复现这个分布无敌，但也**僵**：推理时给新模式，腾挪空间小。
 
-在5万个示例上训练的模型学会了Discord对话的总体语气和语域（非正式、简短、缩写、小写），但保留了足够的灵活性，可以通过**上下文示例来引导**。少样本示例不需要对抗庞大的已学习分布----它们只是补充了一个较轻量的分布。
+5 万样本训出的模型学到 Discord 语气的大致样子（随意、短、缩写、小写），但留着被上下文示例**带**的余地。few-shot 示例不用和海量学死的分布打架：补轻分布刚刚好。
 
-这是核心洞察：**有限的训练数据使少样本提示更加高效**。
+核心直觉：**训练数据有限，few-shot 启动更有效**。
 
 ---
 
 ## 模型：技术细节
 
-Luna Protocol模型是对[Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)的**QLoRA微调**：
+Luna Protocol 模型是 [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) 的 **QLoRA** 微调：
 
 | 参数 | 值 |
 |-----------|-------|
-| 基础模型 | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
+| 基座 | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
 | 方法 | QLoRA（4-bit） |
-| LoRA秩 | `r=16`, `lora_alpha=16` |
-| 目标模块 | `q/k/v/o_proj`, `gate/up/down_proj` |
-| 可训练参数 | 18,464,768 / 1,562,179,072（1.18%） |
-| 训练数据 | ~50,000个示例（Discord-Dialogues子集） |
-| 筛选条件 | 每个样本8-512个token |
-| 训练轮次 | 2-3 |
+| LoRA 秩 | `r=16`，`lora_alpha=16` |
+| 目标模块 | `q/k/v/o_proj`、`gate/up/down_proj` |
+| 可训参数 | 18 464 768 / 1 562 179 072（1.18%） |
+| 训练数据 | 约 5 万样本（Discord-Dialogues 子集） |
+| 过滤 | 每样本 8-512 token |
+| Epoch | 2-3 |
 | 硬件 | Kaggle T4 |
 | 框架 | [Unsloth](https://github.com/unslothai/unsloth) |
 
-数据集是Discord-Dialogues的一个预处理分支，经过筛选只保留干净的`user`/`assistant`轮次----没有系统消息、没有元数据、没有机器人命令。这对后续很重要。
+数据集是预处理的 Discord-Dialogues fork，只留干净 `user`/`assistant` 轮：只要用户和助手轮，不要系统消息、元数据、机器人命令。这点后面关键。
 
-### 可用的量化版本
+### 量化版本
 
-| 文件 | 量化方式 | 大小 | 说明 |
+| 文件 | 量化 | 大小 | 备注 |
 |------|-------------|------|-------|
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 MB | 明显降质----不推荐 |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | 大小/质量平衡好（推荐） |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1.65 GB | 最佳风格保真度 |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676M | 掉点明显，不推荐 |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986M | 大小质量平衡（推荐） |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1.65G | 风格保真最好 |
 
-推荐的模型是**Q4_K_M**----不到1GB，速度快，能很好地保留对话风格。Q2_K在这种小模型上降质太严重。Q8_0质量最好但多占用68%的内存。
+推荐 **Q4_K_M**：不到 1G，快，聊天味保得好。Q2_K 这尺寸掉太多。Q8_0 质量最好但多 68% 内存。
 
 ---
 
-## 少样本提示的突破
+## few-shot 启动的突破
 
-这部分改变了一切。
+下面是改命的部分。
 
-HuggingFace模型卡片上有一条警告：
+HuggingFace 模型卡上有句警告：
 
-> 在没有提示的裸提示词下，该模型倾向于退回到Qwen的默认助手语气。短的少样本提示会产生巨大差异。
+> 光秃系统提示词不加启动，这模型爱滑回 Qwen 默认"助理"腔。短 few-shot 启动效果差很大。
 
-这不是一个bug----这是训练数据结构化的直接结果。
+直接原因是训练数据的结构。
 
-### 为什么单独使用系统提示没用
+### 为什么纯系统提示词不行
 
-Discord-Dialogues训练数据只包含`user`/`assistant`轮次。训练集中**没有系统角色的示例**。模型从未被训练过将系统提示作为风格指令来遵循。
+Discord-Dialogues 训练数据只有 `user`/`assistant` 轮。**训练集里没有任何 system role 示例**。模型从没学过把系统提示词当风格指令跟。
 
-当你给它一个系统提示，比如"你的名字是Luna，随便聊聊"，它听到了指令，但没有一个强大的已学习模式来将其转化为输出。它会退回到Qwen的默认模式：乐于助人、结构化、略显正式。
+给它"你叫 Luna，随意点"这类系统提示词，它听懂指令，但没有学实的映射转成输出。于是滑回 Qwen 默认：热心、结构化、偏正式。
 
-### 为什么少样本示例有效
+### 为什么 few-shot 示例行
 
-当你注入与模型训练所用的相同ChatML格式（使用`user`/`assistant`轮次结构）的对话示例时，模型会"咔嗒"一声理解。它识别出训练数据中的模式，并将输出对齐以匹配。
+把同训练 ChatML 格式的对话示例注进去，开关触发。模型认出训练里的模式，对齐输出。
 
-以下是少样本提示的实际样子：
+实际 few-shot 启动长这样：
 
 ```yaml
 few_shot_examples:
@@ -124,65 +124,65 @@ few_shot_examples:
     assistant: "im doing pretty good tbh, just vibing"
 ```
 
-这些示例被注入到系统提示之后、真实对话之前。模型将它们视为对话历史的一部分，而不是指令。这是一个关键区别----不是*告诉*它要随意，而是*展示*随意是什么样子。
+示例注在系统提示词后、真对话前。模型当它们是历史对话的一部分，真聊过，而不是指令。区别关键：给它*看*随意长什么样，不*命令*它随意。
 
 ### 前后对比
 
-没有少样本提示（裸系统提示）：
+无 few-shot 启动（光秃系统提示词）：
 
 ```
 User: yo whats good
 Bot: Hello! I am doing well, thank you for asking. How can I assist you today?
 ```
 
-有少样本提示（3个示例）：
+加 few-shot 启动（3 例）：
 
 ```
 User: yo whats good
 Bot: nm just chillin, u
 ```
 
-差异巨大。模型不仅仅是产生不同的词汇----它还采用了整个语域：小写、缩写、随意语气、简短回复。它匹配了示例的风格，而不是Qwen训练数据的风格。
+差天差地。整套 register 跟过去：小写、缩写、随意、短。它抄示例风格，不抄 Qwen 训练的风格。
 
 ---
 
-## 内存与速度：具体数字
+## 内存和速度：具体数字
 
-从Hermes-3-3B切换到Luna-Protocol-1.5B带来了可衡量的提升：
+Hermes-3-3B 换 Luna-Protocol-1.5B，实测收益：
 
 | 指标 | Hermes-3-3B Q8_0 | Luna-Protocol Q4_K_M | 提升 |
 |--------|-------------------|----------------------|-------------|
-| 显存占用 | ~3 GB | ~986 MB | **减少67%** |
-| 模型文件大小 | ~3.2 GB | ~986 MB | **缩小69%** |
-| Token生成速度 | ~30 tok/s | ~60+ tok/s | **快2倍** |
-| 冷启动 | ~8s | ~3s | **快62%** |
-| 上下文窗口 | 8192 | 8192 | 相同 |
+| 显存占用 | 约 3G | 约 986M | **少 67%** |
+| 模型文件 | 约 3.2G | 约 986M | **小 69%** |
+| token 生成 | 约 30 tok/s | 约 60+ tok/s | **快 2 倍** |
+| 冷启动 | 约 8 秒 | 约 3 秒 | **快 62%** |
+| 上下文窗 | 8192 | 8192 | 一样 |
 
-### 为什么速度提升是真实的
+### 速度收益是真的
 
-较小的模型不仅仅是"不那么慢"----它们在推理时本质上更快。使用1.5B参数而不是3B：
+小模型推理本质上快。15 亿对 30 亿：
 
-- **每个token的矩阵乘法更少**：注意力层、FFN层和输出投影都随参数数量线性扩展
-- **更好的缓存利用**：较小的模型能将更多权重放入L2/L3缓存
-- **更低的内存带宽压力**：每个token从显存读取的字节更少
+- 每 token **矩阵乘法少**：注意力层、FFN 层、输出投影全随参数线性走
+- **缓存更友好**：小模型更多权重塞进 L2/L3
+- **显存带宽压力小**：每 token 从显存放的字节少
 
-在普通的纯CPU配置（2核，无GPU）上，1.5B模型的token生成速度大约是3B模型的**2倍**。这就是"感觉像机器人"和"感觉像真人在打字"之间的区别。
+丐版配置纯 CPU（2 核无 GPU），1.5B 生成速度约 3B **2 倍**。"像机器人"和"像真人在敲字"的区别。
 
-### 提示缓存放大了优势
+### prompt 缓存放大优势
 
-Luna Protocol使用启用了提示缓存的`llama-server`（`--cache-reuse 256`）。这意味着：
+Luna Protocol 用 `llama-server` 开 prompt 缓存（`--cache-reuse 256`）。效果：
 
-1. 会话中的第一条消息支付完整的提示处理成本（系统提示 + 少样本示例 + 用户消息）
-2. 后续消息只处理*新的*token----缓存的前缀被重用
-3. 使用5个少样本示例（约50-150个token），第一次请求后开销可以忽略不计
+1. session 首条消息付全 prompt 处理（系统提示词加 few-shot 示例加用户消息）
+2. 后面消息只处理*新* token，缓存前缀复用
+3. 5 个 few-shot 示例（约 50-150 token）首条之后开销忽略
 
-在会话的第一条消息之后，少样本示例实际上就是"免费"的。模型以零边际成本获得风格指导。
+few-shot 示例实际首条消息之后"免费"。风格引导边际成本零。
 
 ---
 
-## 实现：代码如何工作
+## 实现：代码怎么跑
 
-Luna Protocol中的少样本系统简洁而精炼。三个文件处理所有逻辑：
+Luna Protocol 的 few-shot 系统干净极简。三个文件管全部。
 
 ### 1. 配置（`config.yml`）
 
@@ -201,11 +201,11 @@ few_shot_examples:
     assistant: "it was alright, nothing crazy happened lol"
 ```
 
-配置支持热重载。修改示例，保存，机器人立即采用新风格----无需重启。
+配置热重载。改示例，保存，机器人立刻换风格，不重启。
 
-### 2. 格式化与注入（`src/core/few-shot.ts`）
+### 2. 格式化和注入（`src/core/few-shot.ts`）
 
-`formatFewShotExamples()`函数将YAML示例转换为ChatML消息对象：
+`formatFewShotExamples()` 把 YAML 示例转 ChatML 消息：
 
 ```typescript
 export function formatFewShotExamples(
@@ -221,7 +221,7 @@ export function formatFewShotExamples(
 }
 ```
 
-`injectFewShotIntoConversation()`函数将它们放置在系统提示之后：
+`injectFewShotIntoConversation()` 插到系统提示词后面：
 
 ```typescript
 export function injectFewShotIntoConversation(
@@ -234,9 +234,9 @@ export function injectFewShotIntoConversation(
 }
 ```
 
-### 3. 集成（`src/core/llm-client.ts`）
+### 3. 接入（`src/core/llm-client.ts`）
 
-每次LLM调用前，如果启用则注入少样本示例：
+每次调 LLM 前开着就注入 few-shot 示例：
 
 ```typescript
 let finalMessages = messages;
@@ -246,60 +246,60 @@ if (FEW_SHOT_ENABLED && FEW_SHOT_EXAMPLES.length > 0) {
 }
 ```
 
-模型接收到：`[system_prompt] + [few_shot_examples] + [conversation_history]`
+模型收到：`[系统提示词] + [few-shot 示例] + [对话历史]`
 
 ---
 
-## 保持Discord-Dialogues风格
+## 守住 Discord-Dialogues 味
 
-原始Discord-Dialogues数据集具有非常独特的对话特征：
+Discord-Dialogues 原数据集对话签名很鲜明：
 
-- **短消息**：每轮平均32.8个token
-- **非正式语域**：缩写、小写、无标点
-- **快速来回**：多次简短交流而非长篇独白
-- **自然的不完美**：打字错误、"lol"、"fr"、"ngl"、"tbh"
+- **消息短**：平均每轮 32.8 token
+- **随意 register**：缩写、小写、不加标点
+- **快节奏**：多短轮，不长独白
+- **自然瑕疵**：typo、"lol"、"fr"、"ngl"、"tbh"
 
-Luna-Protocol模型通过两种机制保持这种风格：
+Luna Protocol 模型靠两机制守住风格：
 
-### 1. 微调改变基础分布
+### 1. 微调挪基准分布
 
-5万条训练样本教会了模型Discord对话的*统计特征*。它学会了回复通常是简短、小写且非正式的。这使得模型的默认输出脱离了Qwen的乐于助人的助手模式。
+5 万训练样本教模型 Discord 对话的**统计指纹**。它学到回复一般短、小写、随意。模型默认输出离 Qwen"热心助理"模式远了。
 
-### 2. 少样本提示锁定风格
+### 2. few-shot 启动锁死
 
-少样本示例强化了模型在微调期间学到的确切模式。它们起到了**风格锚点**的作用----即使模型在长时间对话中略微向正式语气偏移，上下文中的示例也会持续将其拉回。
+few-shot 示例强化训练学过的模式。起**风格锚**作用：长对话里模型往正式滑，上下文里的示例把它拽回来。
 
-两者的结合比任何一种机制单独使用都更强大：
-- 无少样本的微调：模型*大致*随意但不一致
-- 无微调的少样本：模型尝试跟随示例但不断退回到助手模式
-- 微调 + 少样本：模型**始终如一**地保持角色
-
----
-
-## 理念：更小的模型，更聪明的提示
-
-LLM部署的传统智慧是"越大越好"。更多参数、更多训练数据、更多显存。Luna Protocol采取了相反的方法：
-
-- **1.5B而不是3B**：一半的参数，一半的内存，两倍的速度
-- **5万样本而不是730万**：更少的训练数据，更多的上下文学习灵活性
-- **少样本提示而不是系统提示**：向模型展示你想要什么，而不只是告诉它
-
-这不仅仅是技术优化----这是一种设计理念。Discord机器人不需要成为通用助手。它需要一致、快速地说出"nm just chillin, u"，而不会吃掉你服务器的全部显存预算。
-
-结果：一个在5美元/月的VPS上运行的机器人，生成token的速度足以让人感觉像实时打字，并通过微调和少样本提示的结合保持一致的个性----两者的结合效果大于各自之和。
+组合比单用强：
+- 只微调不 few-shot：整体随意但不稳
+- 只 few-shot 不微调：跟着示例走但老滑回助理模式
+- 微调加 few-shot：**一直**在人物里
 
 ---
 
-## 设置
+## 哲学：小模型，加聪明的启动
 
-### 下载模型
+LLM 部署的传统智慧说"越大越好"。更多参数，更多训练数据，更多显存。Luna Protocol 反着走：
+
+- **1.5B 不 3B**：一半参数，一半内存，两倍速度
+- **5 万样本不 730 万**：训练数据少，上下文学习余地大
+- **few-shot 启动不系统提示词**：给模型看要什么，不只告诉它
+
+这是深思熟虑的设计选择，不只是技术优化。Discord 机器人要的是轻量聊天伙伴，不是通用助理。它要稳定快速说"nm just chillin, u"，不吃光服务器显存预算。
+
+结果：5 美元/月 VPS 跑的机器人，token 生成快到像实时敲字，微调加 few-shot 组合守住一致人格，1 加 1 大于 2。
+
+---
+
+## 部署
+
+### 下模型
 
 ```bash
 npm run download-model
-# 下载 Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf
+# 下 Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf
 ```
 
-或从[HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues)手动下载。
+或手动从 [HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) 拿。
 
 ### 配置
 
@@ -316,27 +316,20 @@ few_shot_examples:
     assistant: "im doing pretty good tbh, just vibing"
 ```
 
-### 运行
+### 跑
 
 ```bash
 npm run dev                    # 开发（热重载）
-npm run build && npm start     # 生产环境
-./start.sh                     # PM2（生产环境，带llama-server）
+npm run build && npm start     # 生产
+./start.sh                     # PM2（生产加 llama-server）
 ```
 
 ---
 
-## 结论
+## 结语
 
-Luna Protocol模型证明了对于风格特定的对话式AI来说，**少即是多**。一个在5万个精心挑选样本上训练的1.5B模型，加上几个示例的提示，在内存成本极小和生成速度翻倍的情况下，胜过在数百万示例上训练的3B模型。
+Luna Protocol 模型证明，风格向对话 AI **少即是多**。15 亿模型 5 万精挑样本训，加几个示例启动，赢 30 亿几百万样本训的，内存零头，生成快一倍。
 
-少样本提示对于小模型来说不仅仅是锦上添花。它是使它们适用于实时对话应用的关键机制。示例不仅仅是"帮助"----它们通过匹配模型训练时使用的确切格式，从根本上改变了模型的行为方式。
+few-shot 启动是小模型的核心机制。没有它小模型做不了实时对话。示例不只是"有帮助"：它们根本改变模型行为，按训练格式原样对齐。
 
-代码是开源的，模型在HuggingFace上，数据集也是公开的。如果你想构建一个感觉像真人的对话机器人，配方是：小模型、有限微调、强大的少样本提示。
-
-| 资源 | 链接 |
-|----------|------|
-| GitHub仓库 | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
-| 模型（HuggingFace） | [fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) |
-| 数据集 | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
-| 第一篇文章 | [Luna Protocol：我创建了一个自主Discord机器人](/articles/zh/luna-protocol-discord-bot) |
+代码开源，模型在 HuggingFace，数据集公开。想做装人类的聊天机器人，配方是：小模型、有限微调、扎实 few-shot 启动。

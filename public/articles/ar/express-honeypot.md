@@ -1,181 +1,265 @@
 ---
-title: "بنيت شرك Express فائق الواقعية"
-description: "328 نقطة نهاية وهمية مع ردود تُنشأ فورياً، تزوير الرؤوس، تسجيل حركة البوتات -- غوص عميق في برمجية وسيطة لـ Express مصممة لخداع الماسحات الضوئية."
+title: "بنيت honeypot Express واقعيا للغاية"
+description: "328 endpoint زائفا مع ردود مولدة لحظيا، وتزوير ترويسات، وتسجيل ترافيك البوتات، غوص في قلب middleware honeypot لـExpress مصمم لخداع الماسحات."
+date: 2026-06-10
 aiGenerated: true
 tags:
   - express
   - nodejs
   - security
   - honeypot
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "jmFdD2UtLNv6GTsPqiWzfF0ClYigurgKc11tbN6x+AWr3C2+Y060n7Rn8ms4RnAgpBHbU6wAsfyoN1N5fK4DKg=="
+author_sig: "/S+IEQuIFAq3bIN7a8JxYW9vib+5uRx1DzdMPUmkKs+G258kbY+yCIwElDDTzSwVF92t1uYD9lPrALD7ZpS9vA=="
 ---
 
-## الفكرة
+## TL;DR
 
-هل سبق لك أن نظرت إلى سجلات خادم Express ورأيت طلبات غريبة إلى `/wp-admin`، `/.env`، `/etc/shadow`؟ هذه هي البوتات والماسحات الضوئية والفضوليون الذين يختبرون تطبيقك بحثاً عن نقاط الضعف.
+أنشأت middleware لـExpress يعرض **328 endpoint زائفا** للاختيار بين متغيرين : `default` (ردود رصينة لكن موثوقة) و`complete` (ردود مفصلة جدا). كل رد **مولَّد لحظيا** مع طوابع زمنية ومعرفات طلب جديدة، مما يجعل كل رد فريدا. لا يوجد أي ملف mock على القرص. يستطيع الـmiddleware أيضا **تسجيل الترافيك** في ملف نصي وعرض الطرق غير المُدارَة على `/newBotsRoute` لتحليل ما تبحث عنه البوتات.
 
-لذلك قررت بناء **برمجية وسيطة (middleware) من نوع honeypot لـ Express** -- شرك يستجيب لهذه الطلبات بردود فائقة الواقعية، كما لو كانت كل نقطة نهاية خدمة حقيقية مكشوفة.
+**إنه أكثر بكثير من مجرد إعادة 404.** صممت هذه القطعة الهندسية لتشبه خادما حقيقيا، لكي تضيّع الماسحات وقتها عليها. أريك كيف تعمل.
 
-## لماذا honeypot بدلاً من 404 فقط
+## المشكلة
 
-عندما يصادف بوت تطبيقك:
+بوتات الأمان والكاشطات والفاعلون الخبثاء يمسحون باستمرار خوادم الويب بحثا عن طرق شائعة :
 
-- **مع 404**: يعرف أن المسار غير موجود، فينتقل إلى التالي.
-- **مع رد مزيف**: يظن أنه وجد شيئاً مثيراً للاهتمام ويواصل الاستكشاف، كاشفاً بذلك سلوكه وتقنياته.
+- `.env` و`wp-config.php` و`admin/` و`phpinfo.php`، إلخ.
+- نقاط API مثل `/api/version` و`/api/config`
+- ملفات إعداد : `dump.sql` و`.git/config` و`docker-compose.yml`
+- صفحات تصيد مصرفي : `/lander/sberbank*` و`/index_sber.php`
 
-الـ honeypot المصمم جيداً يسمح بـ:
-- تسجيل حركة البوتات للتحليل
-- إضاعة وقت الماسحات الضوئية
-- اكتشاف أنماط هجوم ناشئة
-- دراسة تقنيات البوتنتات
+رأيت هذا الحد على خوادمي الخاصة : إعادة 404 أو 403 تشير فورا للماسح أن الطريق غير موجود، فينتقل للتالي. اخترت العكس مع هذا الـhoneypot : **جعل الماسح يظن أن كل شيء موجود**، ليضيع وقته على ردود زائفة بينما يبقى خادمك الحقيقي محميا خلف طرقك المعروفة.
 
-## نقاط النهاية الـ 328
+## البنية
 
-تغطي البرمجية الوسيطة **328 نقطة نهاية** (بنمطين: `default` و `complete`). كل نقطة نهاية ترجع محتوى معقولاً يتم إنشاؤه فورياً.
+### 1. مصنف، لا جدول بحث
 
-إليك توزيعها:
+القطعة الأساسية هي دالة `classify()` في `src/services/mockupGenerator.ts` تأخذ مسار endpoint وتعيد مولد رد. بنيتها كسلسلة قواعد :
 
-| الفئة | أمثلة |
+1. **مطابقات دقيقة** : أكثر الـendpoints شيوعا لها مولدات مخصصة
+2. **مطابقات بالنمط** : regex على المسار لكشف أنماط مثل `id_rsa` و`wp-admin` و`sitemap.xml`
+3. **تصنيف ذكي** : مسارات مثل `/262LBNFp` (6+ حروف عشوائية) تُصنَّف "نبضات قلب C2"
+4. **قواعد شاملة** : مسارات API وملفات `.php` و`.html` و`.js` و`.json` و`.asmx` لها مولدات عامة
+5. **التقاط نهائي** : `genCatchall()` ينتج رد JSON عاما مع بيانات وصفية
+
+أحب هذه المقاربة لأن الردود تبقى **جديدة مع كل طلب** : لا ملف ثابت، ولا تخزين مؤقت، كل رد يحمل طابعه الزمني الخاص كأنه من خادم حقيقي.
+
+### 2. نظام المتغير المزدوج
+
+يدعم كل مولد متغيرين :
+
+```typescript
+type Variant = "default" | "complete";
+```
+
+- **`default`** : ردود موجزة لكن موثوقة. مثال لـ`.env` :
+  ```
+  DB_HOST=localhost
+  DB_USER=root
+  DB_PASS=s3cur3P@ss
+  APP_ENV=development
+  APP_DEBUG=true
+  ```
+
+- **`complete`** : ردود مفصلة جدا. مثال لـ`.env` :
+  ```
+  # Database
+  DB_CONNECTION=mysql
+  DB_HOST=db-master-01.internal.example.com
+  DB_PORT=3306
+  DB_DATABASE=production_app_v2
+  DB_USER=admin_service
+  DB_PASS=mM9k#2$xL!qR7pZ
+
+  # Redis
+  REDIS_HOST=redis-cluster-01.internal.example.com
+  REDIS_PORT=6379
+  REDIS_PASSWORD=R3d!s_S3cur3_K3y_2025
+
+  # App
+  APP_ENV=production
+  APP_DEBUG=false
+  APP_URL=https://admin.internal.example.com
+  APP_KEY=base64:qJ3fR8mL2pX5vB7nC4kA9wE1yH6sD0tG
+  ...
+  ```
+
+يتضمن المتغير `complete` أيضا صفحات HTML كاملة مع CSS منسق : صفحات إدارة وشاشات دخول WordPress وصفحات تصيد مصرفي بالروسية، إلخ. أجده مرعبا عندما تريد فعلا إشغال ماسح.
+
+### 3. توليد لحظي
+
+أستخدم `Date.now()` و`Date().toISOString()` لإنتاج طوابع زمنية ومعرفات طلب فريدة مع كل استدعاء. إليكم دالة الإثراء :
+
+```typescript
+function enrichResponse(response: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...response,
+    timestamp: getTimestamp(),
+    version: "1.0",
+    lastUpdated: getTimestamp(),
+  };
+}
+```
+
+لردود JSON، يحاول الـmiddleware التحليل والإثراء بهذه الحقول. الردود غير JSON تُعاد كما هي.
+
+### 4. middleware تزوير الترويسات
+
+أضفت middleware مخصصا يضبط ترويسات HTTP واقعية حسب امتداد الملف المطلوب :
+
+```typescript
+res.setHeader("Server", "nginx/1.24.0");
+res.setHeader("X-Frame-Options", "SAMEORIGIN");
+res.setHeader("X-XSS-Protection", "1; mode=block");
+res.setHeader("X-Content-Type-Options", "nosniff");
+res.setHeader("X-Robots-Tag", "noindex, nofollow");
+res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+// X-Powered-By واقعي حسب امتداد الملف
+if (path.endsWith(".php")) res.setHeader("X-Powered-By", "PHP/8.1.12");
+else if (path.endsWith(".jsp")) res.setHeader("X-Powered-By", "JSP/3.0");
+else if (path.endsWith(".aspx") || path.endsWith(".ashx") || path.endsWith(".asmx"))
+  res.setHeader("X-Powered-By", "ASP.NET");
+else if (path.endsWith(".do") || path.endsWith(".action"))
+  res.setHeader("X-Powered-By", "Servlet/3.0");
+```
+
+وهذا يجعل الردود أكثر موثوقية : endpoint بصيغة `.php` مع `X-Powered-By: PHP/8.1.12` و`Server: nginx/1.24.0` يشبه تماما خادم WordPress حقيقي. أتمسك بهذا التفصيل لأن الترويسة هي غالبا ما تخون خادما زائفا.
+
+### 5. مُزوِّر PHP
+
+يبقى `phpSpoofer` مكوني المفضل. إذا وصل طلب لملف `.php` وكان المضيف localhost، **يوكّل** الـmiddleware الطلب نحو خادم PHP المحلي الخاص بك، الذي يعالج ويعيد صفحة PHP حقيقية. وإذا كان المضيف بعيدا، يعيد 404 لحظر أي محاولة SSRF.
+
+```typescript
+const phpSpoofer = async (req, res, next) => {
+  if (!req.path?.match(/\.php$/)) return next();
+  const host = req.headers?.host;
+  if (host.startsWith("localhost") || host.startsWith("127.0.0.1") || host.startsWith("[::1]")) {
+    const baseUrl = req.originalUrl.replace(/\.php.*$/, "");
+    const response = await fetch(`http://${host}${baseUrl}`);
+    // يعيد رد PHP الحقيقي
+  } else {
+    res.status(404).send("404 Not Found");
+  }
+};
+```
+
+وهذا يسمح، عندما تشغّل WordPress محليا، أن يخدم الـhoneypot البوتات بصفحات WordPress **حقيقية** : أقصى واقعية حسب تجربتي.
+
+### 6. تسجيل الترافيك وتحليله
+
+فصلت مسؤوليتين : `TrafficService` يسجل كل طلب في ملف JSON-lines. ثم يحلل `UnhandledRoutesService` هذه السجلات لتحديد المسارات التي تطلبها البوتات والتي تبقى لتُغطَّى في الـhoneypot.
+
+```typescript
+app.get("/newBotsRoute", async (_req, res) => {
+  const routes = await unhandledRoutesService.getUnhandledRoutes(
+    additionalEndpoints, knownPathOptions
+  );
+  res.setHeader("Content-Type", "text/plain");
+  res.send(routes.join("\n"));
+});
+```
+
+أعشق حلقة التغذية الراجعة هذه : كلما تركت الـhoneypot يعمل، تعلمت أكثر عما تبحث عنه البوتات، وتستطيع إضافة هذه المسارات إلى endpoints المعروفة لديك.
+
+### 7. Endpoints معروفة واستثناء
+
+يقبل الـmiddleware قوائم `knownPaths` و`knownPatterns` و`knownApiPaths` و`knownApiPatterns`. كل طريق يطابقها يعبر الـmiddleware نحو تطبيقك الحقيقي. أجد هذا المرشح لا غنى عنه : تبقى endpoints الحقيقية سليمة، ولا يعترضها الـhoneypot أبدا.
+
+```typescript
+const matches = (p) => p === endpoint || p.startsWith(endpoint + "/");
+```
+
+## الـ328 endpoint بالتفصيل
+
+إليكم كيف تُصنَّف (مقتطف من المصنف) :
+
+| الفئة | أمثلة endpoints |
 |---|---|
-| تسريبات بيانات الدخول | `.env`، `secrets.json`، `aws/credentials` |
-| مفاتيح SSH | `.ssh/id_rsa`، `.ssh/id_ed25519` |
-| إعدادات قواعد البيانات | `config/database`، `wp-config.php`، `docker-compose.yml` |
-| لوحات الإدارة | `/admin`، `/wp-admin`، `/manage/account/login` |
-| ردود API | `/api/version`، `/api/config` |
-| تصيد بنكي | `/lander/sber*`، `/index_sber.php` |
-| نبضات C2 | مسارات عشوائية (`/262LBNFp`، `/Kd67Fq1x`) |
-| عملات رقمية/أسهم | `/stock/mzhishu`، `/kline/1m/1` |
-| ألعاب/مقامرة | `/proxy/games`، `/Ctrls/GetSysCoin` |
-| صفحات ثابتة | `/about`، `/contact`، `/products`، `/blog` |
+| تسريبات بيانات اعتماد | `.env` و`secrets.json` و`aws/credentials` و`etc/shadow` |
+| مفاتيح SSH | `.ssh/id_rsa` و`.ssh/id_ed25519` |
+| إعدادات قواعد بيانات | `config/database` و`wp-config.php` و`docker-compose.yml` |
+| لوحات إدارة | `/admin` و`/wp-admin` و`/manage/account/login` |
+| ردود API | `/api/version` و`/api/config` و`.do` و`.ashx` |
+| تصيد مصرفي | `/lander/sber*` و`/index_sber.php` |
+| نبضات قلب C2 | مسارات عشوائية من 6+ حروف (`/262LBNFp`) |
+| أفعال/بورصة | `/stock/mzhishu` و`/kline/1m/1` و`/m/allticker/1` |
+| ألعاب/كازينو | `/proxy/games` و`/Ctrls/GetSysCoin` و`/room/getRoomBangFans` |
+| ملفات إعداد | `config.json` و`config.yml` و`sitemap.xml` و`ads.txt` |
+| صفحات هبوط | `/about` و`/contact` و`/products` و`/blog` |
 
-## بنية البرمجية الوسيطة
+## رموز وendpoints خاصة
 
-جوهر المشروع هو مولد النماذج الذي ينتج كل رد على الطاير:
+أضفت مولدات متخصصة لحالات خاصة :
 
-```ts
-// المولد يعيّن طابعاً زمنياً و request_id فريدين
-function generateMockResponse(endpoint: string): MockResponse {
-    return {
-        timestamp: Date.now(),
-        requestId: crypto.randomUUID(),
-        data: generateContentFor(endpoint),
-    };
-}
-```
+- **`genLanding()`** : صفحات تصيد مصرفي بالروسية لـСберБанк وТинькофф وГазпромбанк
+- **`genC2Heartbeat()`** : رد نبضة قلب C2 واقعي مع `agent_id` و`group` و`version`
+- **`genScannerPath()`** : فخاخ لماسحات بعينها (منافذ nmap NICE وHazelcast وCGI)
+- **`genChineseApi()`** : ردود API صينية مع `msg: "成功"` (نجاح)
+- **`genMerchant()`** : ملفات تجار مع `balance` و`fee_rate` و`tier`
 
-### مستويان من الواقعية
+## كيفية الاستخدام
 
-النمط `default` يعيد ردوداً موجزة لكنها معقولة:
-
-```json
-{
-    "code": 0,
-    "message": "ok",
-    "data": { "user": "admin", "role": "superadmin" }
-}
-```
-
-النمط `complete` يضيف بيانات وصفية وأختام زمنية ورؤوس إصدار لأقصى واقعية:
-
-```json
-{
-    "code": 0,
-    "message": "ok",
-    "timestamp": 1718032412000,
-    "request_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "version": "1.2.3",
-    "data": { "user": "admin", "role": "superadmin" }
-}
-```
-
-## تزوير الرؤوس
-
-جانب حاسم للمصداقية -- رؤوس HTTP. تختارها البرمجية الوسيطة ديناميكياً حسب امتداد الملف المطلوب:
-
-| الامتداد | `X-Powered-By` |
-|---|---|
-| `.php` | `PHP/8.1.12` |
-| `.jsp` | `JSP/3.0` |
-| `.aspx`، `.ashx`، `.asmx` | `ASP.NET` |
-| `.do`، `.action` | `Servlet/3.0` |
-| أخرى | بدون رأس |
-
-## مزيف PHP
-
-مكوّن مثير للاهتمام هو `phpSpoofer`. بدلاً من إعادة رد ثابت، يمكنه **توكيل طلبات `.php` إلى خادم PHP محلي**:
-
-1. يعترض الطلبات التي تحتوي على `.php` في المسار
-2. يزيل اللاحقة `.php` ويوكل إلى `http://localhost:<port>/<base>`
-3. إذا استجاب الخادم المحلي، يتم إرجاع HTML إلى البوت
-4. إذا لم يكن المضيف localhost، يرجع 404 (حماية SSRF)
-
-هذا يسمح بتسليم **صفحات WordPress حقيقية** للبوتات في بيئة التطوير.
-
-## واجهة برمجية عامة
-
-توفر البرمجية الوسيطة واجهة قابلة للتجميع:
-
-```ts
-interface HoneypotInstance {
-    mocks: Record<string, Middleware>;
-    middleware: Middleware;
-    headersMiddleware: Middleware;
-    phpSpoofer: Middleware;
-    notFoundHandler: Middleware;
-    register(app: RouteApp): void;
-    getUnhandledRoutes(): Promise<string[]>;
-    getNotCoveredEndpoints(): string[];
-}
-```
-
-### استخدام بسيط
-
-```js
-const { createHoneypot } = require("express-middleware-honeypot");
-const instance = createHoneypot({ logTraffic: true });
-instance.register(app);
-```
-
-### استخدام متقدم -- نقاط نهاية فردية
-
-```js
-const instance = createHoneypot({});
-app.all('/admin', instance.mocks['/admin']);
-app.all('/.env', instance.mocks['/.env']);
-```
-
-### وضع catch-all
-
-```js
-app.use(instance.middleware);
-app.use(instance.phpSpoofer);
-```
-
-## تسجيل الحركة
-
-مع خيار `logTraffic: true`، يُسجل كل طلب وارد بصيغة JSON-lines في `traffic.txt`. المسارات غير المعروفة (غير المدرجة ضمن الـ 328 نقطة نهاية مدمجة) متاحة عبر `/newBotsRoute`، مما يسمح بتوسيع التغطية.
-
-## توليد النماذج للتصحيح
-
-لكتابة النماذج على القرص وفحصها:
+### التثبيت
 
 ```bash
-bun run scripts/generate-mockups.ts --dry-run
-bun run scripts/generate-mockups.ts --list-uncategorized
+npm install express-middleware-honeypot
 ```
 
-## النتائج
+### استخدام أساسي مع تسجيل تلقائي
 
-منذ تثبيت هذا honeypot على خادم staging:
+```javascript
+const { createHoneypot } = require("express-middleware-honeypot");
 
-- **أكثر من 5000 طلب مشبوه** تم تسجيلها في 48 ساعة
-- **بوتات جديدة** تُكتشف يومياً عبر المسارات غير المغطاة
-- **أنماط هجوم ناشئة** تم تحديدها (C2 جديدة، تقنيات مسح)
-- **صفر نتائج إيجابية خاطئة** -- المستخدمون الحقيقيون لا يزورون هذه المسار أبداً
+const app = express();
+const instance = createHoneypot({
+    knownPaths: ["/", "/login", "/support"],
+    knownPatterns: [/^\/blogs\/[^/]+$/],
+    knownApiPaths: ["/api/cart", "/api/cart/list"],
+    knownApiPatterns: [/^\/api\/cart\/[^/]+$/],
+    logTraffic: true,
+    is404Handler: true,
+    isCompleteResponses: false,
+});
 
-## الخاتمة
+instance.register(app);
+app.listen(3000);
+```
 
-هذا المشروع يظهر أنه يمكن تحويل نقطة ضعف تشغيلية (الطلبات غير المرغوب فيها) إلى أداة استخباراتية. البرمجية الوسيطة متاحة على npm والكود مفتوح المصدر.
+### مع app.use() (middleware شامل وحيد)
 
-الكود المصدري متاح هنا: [https://github.com/fox3000foxy/express-honeypot-middleware](https://github.com/fox3000foxy/express-honeypot-middleware)
+```javascript
+const { createHoneypot } = require("express-middleware-honeypot");
+const app = express();
+
+// طرقك الحقيقية أولا
+app.get("/", (req, res) => res.send("Home"));
+
+// ثم الـhoneypot الشامل
+const instance = createHoneypot({ /* options */ });
+app.use(instance.headersMiddleware);
+app.use(instance.middleware);
+```
+
+### ردود كاملة ضد افتراضية
+
+```javascript
+// ردود مفصلة مع صفحات HTML كاملة
+const instance = createHoneypot({ isCompleteResponses: true });
+```
+
+### تسجيل الترافيك
+
+```javascript
+const instance = createHoneypot({ logTraffic: true });
+// راجع ملف traffic.txt لترى ما تطلبه البوتات
+```
+
+## الخلاصة
+
+يتجاوز middleware الـhoneypot في Express هذا مجرد شرك بسيط. مع **328 endpoint** و**توليد لحظي** و**تزوير ترويسات ديناميكي** و**تسجيل ترافيك** وحتى **وكيل PHP** لردود WordPress حقيقية، صممته ليبقى واقعيا قدر الإمكان.
+
+تضيّع الماسحات وقتها على صفحات إدارة زائفة وملفات `.env` موثوقة وصفحات تصيد مصرفي بينما يبقى تطبيقك الحقيقي محميا. أقدّر خصوصا نظام المتغير المزدوج والتصنيف الذكي : كل رد يبقى جديدا وملائما للمسار المطلوب.
+
+الكود المصدري متاح على GitHub : [https://github.com/fox3000foxy/express-honeypot-middleware](https://github.com/fox3000foxy/express-honeypot-middleware)

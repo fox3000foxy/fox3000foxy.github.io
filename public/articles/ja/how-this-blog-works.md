@@ -1,16 +1,16 @@
 ---
 title: このブログの仕組み
-description: このブログの内部構造を深掘り：React、Vite、Markdown、CI/CDパイプライン、記事作成ワークフロー。
+description: "ブログの舞台裏：React、Vite、Markdown、CI/CDパイプライン、執筆フロー。"
 date: 2026-03-08
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - react
   - meta
   - blog
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "T2qgpfpnpGSPGKeqpMle8WGavLWW5CcoqvGuTjg3WZKJhwSrM4ZPmM3ShV4mCCLWYOwner8BZ5cyEIysYJleww=="
+author_sig: "27pyHgMKhGzpLy286FAVPZMnirLAO6XDvm5xUwd/BdtDp2jSG/KlupjmwKdhZb60OO3iIebPteJ5k7GKsfHVEg=="
 ---
 
 # このブログの仕組み
@@ -19,75 +19,75 @@ author_sig: "T2qgpfpnpGSPGKeqpMle8WGavLWW5CcoqvGuTjg3WZKJhwSrM4ZPmM3ShV4mCCLWYOw
 
 ## 技術スタック
 
-このブログはモダンなWeb技術で作られている：
+このブログはモダンなウェブ技術で作られてる。
 
-- **React 19** -- ユーザーインターフェース
-- **TypeScript** -- 型付きでより信頼性の高いコード
-- **Vite** -- 超高速ビルドツール
-- **React Router v7** -- ページ間のナビゲーション
-- **react-markdown** -- MarkdownをHTMLに変換
-- **rehype-raw + rehype-sanitize** -- Markdown内で生のHTMLを安全に許可
+- **React 19**：ユーザーインターフェース用
+- **TypeScript**：型付きで信頼できるコード用
+- **Vite**：超高速ビルドツール
+- **React Router v7**：ページ間ナビゲーション用
+- **react-markdown**：MarkdownをHTMLに変換
+- **rehype-raw + rehype-sanitize**：安全に素のHTMLをMarkdown内で許可
 
 
-## プロジェクト構成
+## プロジェクト構造
 
-プロジェクトツリーはこんな感じ：
+プロジェクトのツリーはこんな感じだ。
 
 ![](assets/how-this-blog-works/project-structure.png)
 
 ```
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml        ← CI/CDパイプライン
+│       └── deploy.yml              ← Pipeline CI/CD
 ├── public/
-│   ├── home.md               ← ホームページコンテンツ
-│   ├── portfolio.md           ← ポートフォリオコンテンツ
+│   ├── home.md                     ← Contenu de la page d'accueil
+│   ├── portfolio.md                ← Contenu du portfolio
 │   └── articles/
-│       ├── index.json         ← 全記事の一覧
-│       ├── hello-world.md     ← サンプル記事
-│       ├── how-this-blog-works.md  ← この記事！
-│       └── assets/            ← 記事の画像
+│       ├── index.json              ← Liste de tous les articles
+│       ├── hello-world.md          ← Un article
+│       ├── how-this-blog-works.md  ← Cet article !
+│       └── assets/                 ← Images des articles
 ├── src/
-│   ├── main.tsx               ← Reactのエントリーポイント
-│   ├── App.tsx                ← メインルーター
+│   ├── main.tsx                    ← Point d'entrée React
+│   ├── App.tsx                     ← Routeur principal
 │   ├── components/
-│   │   ├── Header.tsx         ← ナビゲーションバー
-│   │   └── Footer.tsx         ← フッター
+│   │   ├── Header.tsx              ← Barre de navigation
+│   │   └── Footer.tsx              ← Pied de page
 │   └── pages/
-│       ├── Home.tsx           ← ホームページ
-│       ├── BlogList.tsx       ← 記事一覧
-│       ├── Article.tsx        ← 記事リーダー
-│       ├── Portfolio.tsx      ← ポートフォリオページ
-│       └── NotFound.tsx       ← 404ページ
-└── vite.config.ts             ← Vite設定
+│       ├── Home.tsx                ← Page d'accueil
+│       ├── BlogList.tsx            ← Liste des articles
+│       ├── Article.tsx             ← Lecteur d'article
+│       ├── Portfolio.tsx           ← Page portfolio
+│       └── NotFound.tsx            ← Page 404
+└── vite.config.ts                  ← Configuration Vite
 ```
 
-コアとなる考え方はシンプルだ：**コンテンツはコードから分離されている**。ページは`public/`フォルダにMarkdownで書かれ、`src/`のReactコードがそれらをレンダリングする。
+中心的な考えは単純だ。**コンテンツはコードから分離されてる**。ページは`public/`内のMarkdownで書かれて、`src/`内のReactコードが表示を担う。この分離にこだわってる。コンテンツは読み返しやすく、コードは進化させやすいからね。
 
 ## ルーティングシステム
 
-`App.tsx`がReact Routerを使って全アプリケーションルートを定義している：
+`App.tsx`ファイルがReact Routerでアプリの全ルートを定義してる。
 
 ![](assets/20260308_153440_image.png)
 
 
 | ルート | ページ | 説明 |
-| --------------- | ----------- | --------------------------------------------- |
-| `/`           | Home      | ホームページ。`home.md`を読み込む                   |
-| `/blog`       | BlogList  | 全記事の一覧                        |
-| `/blog/:slug` | Article   | 個別記事。`articles/{slug}.md`を読み込む |
-| `/portfolio`  | Portfolio | ポートフォリオページ。`portfolio.md`を読み込む         |
-| `*`           | NotFound  | 不明なURL用の404ページ                   |
+| --------------- | ----------- | -------------------------------------------- |
+| `/`           | Home      | トップページ、`home.md`を読む |
+| `/blog`       | BlogList  | 全記事の一覧 |
+| `/blog/:slug` | Article   | 1つの記事、`articles/{slug}.md`を読む |
+| `/portfolio`  | Portfolio | ポートフォリオページ、`portfolio.md`を読む |
+| `*`           | NotFound  | 不明URL用404ページ |
 
-各ページは明確に定義された役割を持つ：Markdownファイルを取得し、`react-markdown`でHTMLに変換し、画面に表示する。
+各ページの役割は明確だ。Markdownファイルを取り、react-markdownでHTMLに変換して、画面に表示する。
 
-## 記事の仕組み
+## 記事はどう動くの
 
-これが一番面白い部分だ！記事のライフサイクルはこんな感じ：
+いちばん好きな部分だよ！記事のライフサイクルはこうだ。
 
 ### 1. `index.json`ファイル
 
-すべての記事は`public/articles/index.json`で参照される。各エントリには記事のメタデータが含まれる：
+全記事は`public/articles/index.json`に参照されてる。各エントリが記事のメタデータを持つ。
 
 ```json
 [
@@ -100,100 +100,100 @@ author_sig: "T2qgpfpnpGSPGKeqpMle8WGavLWW5CcoqvGuTjg3WZKJhwSrM4ZPmM3ShV4mCCLWYOw
 ]
 ```
 
-- **slug** -- 一意の識別子。URLで使われる（`/blog/hello-world`）
-- **title** -- 一覧に表示されるタイトル
-- **description** -- 短い要約
-- **date** -- 公開日
+- **slug**：一意ID、URLに使う（`/blog/hello-world`）
+- **title**：一覧に表示されるタイトル
+- **description**：短い要約
+- **date**：公開日
 
 ### 2. Markdownファイル
 
-記事のコンテンツは`public/articles/`にある単純な`.md`ファイル。ファイル名は`index.json`で定義された`slug`と一致する。
+記事内容は`public/articles/`内の単なる`.md`ファイルだ。ファイル名は`index.json`で定義した`slug`に対応する。
 
 ![](assets/20260308_153509_image.png)
 
-見出し、リスト、画像、テーブル、そして`rehype-raw`のおかげで生のHTMLさえも入れられる！
+何でも入れられる。タイトル、リスト、画像、テーブル、果ては`rehype-raw`のおかげで素のHTMLまで！
 
-### 3. React側のレンダリング
+### 3. React側のレンダー
 
-`/blog/hello-world`にアクセスすると、こんなことが起きる：
+`/blog/hello-world`を開くとこうなる。
 
-1. React RouterがURLから`slug`パラメータを取得
-2. `Article.tsx`コンポーネントが`/articles/hello-world.md`をフェッチ
-3. Markdownが`react-markdown`によってHTMLに変換される
-4. `assets/`へのリンクは自動的に`/articles/assets/`に書き換えられる
-5. 並行して、`index.json`からメタデータが読み込まれ、日付と説明が表示される
+1. React RouterがURLから`slug`パラメータを取る
+2. `Article.tsx`コンポーネントが`/articles/hello-world.md`を読む
+3. Markdownは`react-markdown`でHTMLに変換される
+4. `assets/`へのリンクは自動で`/articles/assets/`に書き換えられる
+5. 並行して日付と説明表示用メタデータが`index.json`から読まれる
 
-これだけのシンプルさだ！
+ほんと単純だよ！
 
-## ホームページとポートフォリオ
+## トップページとポートフォリオ
 
-ホームページとポートフォリオもまったく同じように動作する：Markdownファイル（`home.md`または`portfolio.md`）を読み込み、HTMLとしてレンダリングする。
+トップとポートフォリオのページはまったく同じ仕組みだ。Markdownファイル（`home.md`か`portfolio.md`）を読んでHTMLにレンダーする。
 
-特別なのは、すべてのHTML要素で`class`と`style`属性を許可するカスタムサニタイゼーションスキーマを使っていることだ。これにより、Markdown内でスタイル付きHTMLを直接書ける。例えば画像ギャラリーなどだ。
+特徴は、カスタム消毒スキーマを使って全HTML要素に`class`と`style`属性を許可してることだ。画像ギャラリーみたいにスタイル付きHTMLをMarkdownに直接書ける。
 
 ## ヘッダーとフッター
 
-ヘッダーは`position: fixed`でページの上部に固定されている。中身は：
+ヘッダーは`position: fixed`でページ上部に固定されてる。内容はこうだ。
 
-- 俺のGitHubアバター（`github.com/fox3000foxy.png`から直接読み込み）
-- ブログのタイトル
-- ナビゲーションリンク：Home、Blog、Portfolio
+- 私のGitHubアバター（`github.com/fox3000foxy.png`から直接読み込み）
+- ブログタイトル
+- ナビリンク：トップ、ブログ、ポートフォリオ
 
-フッターはミニマリスト：現在の年を動的に計算した著作権表示だけ。
+フッターは最小限だ。動的計算の当年入りコピーライトだけだ。
 
 ## ダークテーマ
 
-サイトは**常にダークモード**だ----ライト/ダーク切り替えはない。これは意図的な選択：グローバルスタイルで`color-scheme: dark`が設定されていて、背景は黒`#000`、テキストは白`#fff`。リンクは青（`#64b5f6`）で、ホバー時に緑（`#81c784`）に変わる。
+サイトは常にダークモードのままだ。夜も快適に読めるよう意識的にこう選んだ。グローバルスタイルで`color-scheme: dark`を定義して、背景黒`#000`に文字白`#fff`だ。リンクは青（`#64b5f6`）でホバーで緑（`#81c784`）になる。
 
 ## 記事の書き方
 
-実践的な部分だ！新しい記事を書くときのワークフロー：
+実践に入ろう！新規記事を書く私のワークフローはこうだ。
 
-### ステップ1：Markdownファイルを作成
+### ステップ1：Markdownファイルを作る
 
-VS Codeを開いて、`public/articles/`に新しい`.md`ファイルを作成する：
+VS Codeを開いて`public/articles/`に新しい`.md`ファイルを作る。
 
-### ステップ2：コンテンツを書く
+### ステップ2：内容を書く
 
-記事の内容をMarkdownで直接書く。VS Codeには優れたMarkdownプレビュー機能が組み込まれている：
+記事内容を直接Markdownで書く。VS Codeには優秀な内蔵Markdownプレビューがある。
 
 ![](assets/20260308_153613_image.png)
 
-画像は`public/articles/assets/`に配置し、標準的なMarkdown記法で参照する：
+画像は`public/articles/assets/`に置いて、標準Markdown記法で参照する。
 
 ```markdown
 ![description](assets/my-image.png)
 ```
 
-`Article.tsx`コンポーネントが自動的に`assets/`パスを`/articles/assets/`に書き換え、画像が正しく表示されるようにする。
+`Article.tsx`コンポーネントが画像表示用に`assets/`パスを自動で`/articles/assets/`に書き換える。
 
-### ステップ3：index.jsonに記事を登録
+### ステップ3：index.jsonに記事を登録する
 
-記事ができたら、`public/articles/index.json`に追加してブログ一覧に表示させる：
+記事が終わったら、ブログ一覧に出るよう`public/articles/index.json`に足す。
 
 ![](assets/20260308_153629_image.png)
 
-### ステップ4：ローカルでテスト
+### ステップ4：ローカルで試す
 
-Vite開発サーバーを起動：
+Vite開発サーバーを起動する。
 
 ```bash
 pnpm dev
 ```
 
-Viteはミリ秒で起動し、`localhost:5173`で記事がリアルタイムで見れる：
+Viteは数ミリ秒で起動して、`localhost:5173`で記事をリアルタイムに見られる。この速さで各変更をほぼ即確認できる。
 
 ![](assets/20260308_153703_image.png)
 
-### ステップ5：公開
+### ステップ5：公開する
 
-`git push`するだけ！CI/CDパイプラインが残りを自動で処理する。
+単なる`git push`で十分だ！CI/CDパイプラインが残り全部を自動でやる。
 
 ## CI/CDデプロイパイプライン
 
-**GitHub Actions**のフルパイプラインを設定していて、`main`にプッシュするたびにリンター、ビルド、デプロイを自動化している。
+**GitHub Actions**の完全パイプラインを入れてて、`main`への各pushでサイトのlintとbuildとデプロイを自動化してる。詳しく見よう。
 
-ワークフローは`.github/workflows/deploy.yml`にあり、**build**と**deploy**の2つのジョブに分かれている。
+ワークフローは`.github/workflows/deploy.yml`にあって、**build**と**deploy**の2ジョブに分かれてる。
 
 ### トリガー
 
@@ -207,101 +207,101 @@ on:
       - main
 ```
 
-パイプラインは`main`への**プッシュ**と、`main`をターゲットにする**プルリクエスト**のたびに実行される。つまり、PRはマージ前にチェック（lint + build）されるが、デプロイが実際にトリガーされるのは`main`へのプッシュのみだ。
+パイプラインは**push**で`main`へ、そして`main`宛て各**pull request**で動く。PRはマージ前に検証（lintとbuild）される。デプロイを起こすのは`main`へのpushだけだ。
 
 ### ジョブ1：Build
 
-ビルドジョブは`ubuntu-latest`で実行され、以下のステップを経る：
+buildジョブは`ubuntu-latest`で回って、こんな手順だ。
 
-1. **Checkout** -- 完全な履歴でリポジトリをクローン（`fetch-depth: 0`）
-2. **Setup pnpm** -- `pnpm/action-setup@v4`を使って最新版のpnpmをインストール
-3. **Setup Node.js 20** -- pnpmキャッシュを有効にしてNodeを設定、高速インストール
-4. **Install dependencies** -- `pnpm install --frozen-lockfile`で再現可能なビルドを確保（ロックファイルの変更不可）
-5. **Lint** -- `pnpm run lint`（ESLint）でコード品質をチェック
-6. **Build** -- `pnpm run build`を実行。まずTypeScriptの型をチェック（`tsc -b`）、それからViteでバンドル
-7. **Upload artifact** -- `dist/`フォルダをビルド成果物としてアップロード
+1. **Checkout**：全履歴付きでリポジトリをクローン（`fetch-depth: 0`）
+2. **Setup pnpm**：`pnpm/action-setup@v4`で最新pnpmを入れる
+3. **Setup Node.js 20**：pnpmキャッシュ有効でNodeを設定して高速インストール
+4. **Install dependencies**：再現build保証で`pnpm install --frozen-lockfile`を実行（lockfile変更不可）
+5. **Lint**：build前にコード品質確認で`pnpm run lint`（ESLint）を実行
+6. **Build**：`pnpm run build`を実行。TypeScript型確認（`tsc -b`）してからViteでまとめる
+7. **Upload artifact**：デプロイジョブ用に`dist/`フォルダをbuild成果物として上げる
 
-いずれかのステップが失敗すると----lintエラー、型エラー、ビルドエラー----パイプライン全体が停止し、何もデプロイされない。これで本番サイトが壊れたコードから守られる。
+1段階でも失敗（lint、型、buildのエラー）したらパイプライン全体が止まって何もデプロイされない。この guard で壊れたコードの本番混入を防いでて、各pushで頼ってる。
 
 ### ジョブ2：Deploy
 
-デプロイジョブは以下の場合のみ実行される：
+デプロイジョブは以下全部のときだけ動く。
 
-- ビルドジョブが成功した（`needs: build`）
-- イベントが**プッシュ**である（PRではない）
-- ブランチが**main**である
+- buildジョブが成功した（`needs: build`）
+- イベントが**push**だ（PRじゃない）
+- ブランチが**main**だ
 
 ```yaml
 if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 ```
 
-そして：
+次にこう進む。
 
-1. **ビルド成果物をダウンロード** -- ビルドジョブが生成した`dist/`フォルダを取得
-2. **GitHub Pagesを設定** -- Pages環境をセットアップ
-3. **Pagesにアップロード** -- `dist/`フォルダをGitHub Pages用にパッケージ
-4. **デプロイ** -- `actions/deploy-pages@v4`でサイトを公開
+1. **build成果物を落とす**：buildジョブが作った`dist/`フォルダを取る
+2. **GitHub Pagesを設定する**：Pages環境を整える
+3. **Pagesへ上げる**：GitHub Pages用に`dist/`フォルダを準備する
+4. **デプロイする**：`actions/deploy-pages@v4`でサイト公開する
 
-### 全体像
+### 全体図
 
-執筆からデプロイまでの流れ：
+執筆からデプロイまではこうなる。
 
 ```
 VS Codeで記事を書く
-        ↓
-   git add & commit
-        ↓
-      git push
-        ↓
-  GitHub Actionsが起動
-        ↓
-  ┌─────────────────┐
-  │   BUILD JOB     │
-  │  1. Checkout    │
-  │  2. Setup pnpm  │
-  │  3. Setup Node  │
-  │  4. Install     │
-  │  5. Lint ✓      │
-  │  6. Build ✓     │
-  │  7. Upload dist │
-  └────────┬────────┘
-           ↓
-  ┌─────────────────┐
-  │  DEPLOY JOB     │
-  │  1. Download    │
-  │  2. Configure   │
-  │  3. Upload      │
-  │  4. Deploy 🚀   │
-  └─────────────────┘
-           ↓
-    GitHub Pagesで公開！
+          ↓
+    git addとcommit
+          ↓
+       git push
+          ↓
+   GitHub Actionsが起動
+          ↓
+   ┌─────────────────┐
+   │   BUILD JOB     │
+   │  1. Checkout    │
+   │  2. Setup pnpm  │
+   │  3. Setup Node  │
+   │  4. Install     │
+   │  5. Lint ✓      │
+   │  6. Build ✓     │
+   │  7. Upload dist │
+   └────────┬────────┘
+            ↓
+   ┌─────────────────┐
+   │  DEPLOY JOB     │
+   │  1. Download    │
+   │  2. Configure   │
+   │  3. Upload      │
+   │  4. Deploy 🚀   │
+   └─────────────────┘
+            ↓
+     GitHub Pagesで公開！
 ```
 
-プッシュから公開まで約1分。手動デプロイ不要、FTP不要、SSH不要----`git push`だけで完了だ。
+pushから公開まで全体で約1分だ。単なる`git push`で公開する。FTPもSSHも通さず全部自動のままだ。
 
-## プロダクションビルド
+## 本番Build
 
-内部では、`pnpm build`コマンドが以下を実行する：
+内部では`pnpm build`コマンドがこう動く。
 
-1. `tsc -b` -- TypeScriptの型をチェック
-2. `vite build` -- 全コードをバンドルして最適化
+1. `tsc -b`：TypeScript型を確認する
+2. `vite build`：全コードをまとめて最適化する
 
-Viteは自動コード分割で最小化・最適化されたファイルを生成する。結果は爆速の静的サイトだ。
+Viteは自動コード分割付きの最小最適化ファイルを作る。結果は超高速な静的サイトだ。
 
-## なぜこのアーキテクチャ？
+## なぜこのアーキテクチャ
 
-CMSやHugo、Jekyllのような静的サイトジェネレーター、Next.jsを使うこともできた。でもなぜこのアプローチを選んだか：
+CMSやHugoやJekyllみたいな静的サイトジェネレータやNext.jsだって使えた。でもこの手法を選んだ理由はこうだ。
 
-- **シンプルさ** -- Markdownで書いてGitHubにプッシュするだけで公開
-- **完全な制御** -- CMSやデータベースに依存しない
-- **パフォーマンス** -- Vite + React = 高速読み込み
-- **柔軟性** -- MarkdownとHTMLを好きなように混ぜられる
-- **学習** -- ReactとTypeScriptを極めるのに最適なプロジェクト
-- **CI/CD** -- GitHub Actionsによる自動品質チェックとデプロイ
+- **単純さ**：Markdownで書いて、GitHubにpushしたら公開だ
+- **完全管理**：CMSやデータベースへの依存なし
+- **性能**：ViteとReactは読み込み高速だ
+- **柔軟さ**：MarkdownとHTMLを好きに混ぜられる
+- **学習**：ReactとTypeScript習得に最高のプロジェクトだ
+- **CI/CD**：GitHub Actionsで品質確認と自動デプロイだ
 
 ## 結論
 
-このブログはシンプルだがよく考え抜かれたプロジェクトだ：コンテンツにMarkdown、レンダリングにReact、パフォーマンスにVite、CI/CDにGitHub Actions、ホスティングにGitHub Pages。データベースもバックエンドサーバーもなく、自動化パイプラインがあらゆるプッシュで品質を確保しながら、効率的に提供される静的ファイルだけだ。
+このブログは単純だが考え抜かれたプロジェクトだ。内容にMarkdown、レンダーにReact、性能にVite、CI/CDにGitHub Actions、ホスティングにGitHub Pagesだ。効率よく出される静的ファイルだけに頼ってて、各pushで品質を保証する自動パイプライン付きだ。
 
 
-読んでくれてありがとう、次の記事で会おう！🦊
+読んでくれてありがとう、次の記事でね！🦊

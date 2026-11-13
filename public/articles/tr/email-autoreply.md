@@ -1,63 +1,62 @@
 ---
-title: GitHub Actions'ta ücretsiz bot çalıştırmak için git'i veritabanı olarak
-  kullandım
-description: GitHub Actions'ta ayda 0€'ya çalışan bir yapay zeka e-posta
-  otomatik cevaplayıcısını nasıl kodladım -- git tag'lerini veritabanı olarak ve
-  önceden derlenmiş runtime anlık görüntülerini kullanarak.
+title: GitHub Actions üzerinde bedava bot çalıştırmak için giti veritabanı olarak kullandım
+description: Git taglerini veritabanı ve runtime taginde ön derleme kullanarak 0
+  €/ay maliyetle GitHub Actions üzerinde çalışan yapay zekâlı e-posta
+  otomatik yanıtlayıcıyı nasıl kodladım.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "tp4xiZwo0evd29ovliKO1sHZ5dmu8v88VIxXSy8zzZG7zIoQVuP3C0UOk9PnSslttR1cvRLncXLskePR7pE5yw=="
+author_sig: "g0CZhhBoaL6x1Xd5KLLPvU5JMXbCu+WHnng8noXwFPINRDDe4esl+CuJT2WiuSRaN/gKlTIZxVf8M+dFnxaKiQ=="
 ---
 
-# Git'i veritabanı olarak kullandım ve GitHub Actions'da bedavaya bir bot çalıştırdım
+# GitHub Actions üzerinde bedava bot çalıştırmak için giti veritabanı olarak kullandım
 
-7/24 çalışan otomatik bir email yanıtlayıcım var.
+7/24 çalışan otomatik bir e-posta yanıtlayıcım var.
 
-Maillerimi okuyor, ne hakkında olduğunu anlıyor ve bir AI ile kendi başına cevap veriyor. Önceki konuşmaları hatırlıyor. Newsletter'ları ve `noreply@`ları görmezden geliyor. İşler kızışınca bir insana yönlendiriyor.
+Postalarımı okur, ne hakkında olduğunu anlar ve bir yapay zekâyla kendi kendine yanıtlar. Önceki konuşmaları hatırlar. Bültenleri ve `noreply@` adreslerini görmezden gelir. İş çok kızışınca bir insana iletir.
 
-Aylık maliyet: **0€**.
+Aylık maliyet: **0 €**.
 
-Sunucu yok. VPS yok. Veritabanı yok. Sadece GitHub Actions ve çılgın bir hack: **git'i veritabanı olarak kullanmak**.
+Sunucusuz, VPSsiz ve veritabanısız idare ediyorum. Sadece GitHub Actions ve hasta bir hack: **giti veritabanı olarak kullanmak**.
 
-Nereye geldiğimi görüyor musun? Hayır mı? Peki, hazır ol, bu hem aptalca hem de dâhiyane.
+Nereye varmak istediğimi görüyor musun? Hayır mı? Tamam, sıkı tutun, hem aptalca hem harika.
 
 ---
 
-## Sorun: GitHub Actions Stateless
+## Sorun: GitHub Actions stateless çalışır
 
-GitHub Actions bedava. Her 5 dakikada bir cron çalıştırabilirsin, kodunu çalıştırabilirsin, beleş.
+GitHub Actions bedava. Her 5 dakikada bir cron çalıştırıp kodunu döndürebilirsin, bedava.
 
 Ama bir sorun var: **stateless**.
 
-Her run bomboş bir makinede başlıyor. İki çalıştırma arasında hiçbir şey kaydedilmiyor. Önceki run mı? Unutuldu. Silindi. Hiç var olmamış gibi.
+Her run tertemiz bir makinede başlar. İki çalıştırma arasında hiçbir şey kaydedilmez. Önceki run mı? Unutuldu. Silindi. Hiç var olmamış gibi.
 
-Bir email yanıtlayıcı için bu dev bir sorun. Mesela:
+Bir e-posta yanıtlayıcı için bu devasa bir sorun. Şöyle bir şey:
 
-> "Son işlediğim email hangisiydi?"
+> "Zaten işlediğim son posta hangisiydi?"
 
-Bot her seferinde bunu unutursa, ya aynı maillere tekrar tekrar cevap verir (felaket), ya da mailleri kaçırır.
+Bot bunu her run unutursa ya aynı postalara döngüde tekrar yanıt verir (felaket) ya da postaları kaçırır.
 
-Kalıcı bir durum lazım. Ve normalde kalıcı durum = veritabanı. Ama veritabanı bir sunucu demek ve sunucu artık bedava değil.
+Kalıcı duruma ihtiyaç var. Ve normalde kalıcı durum = veritabanı. Ama veritabanı bir sunucudur ve sunucu artık bedava değildir.
 
-İşte burası işin ilginçleştiği yer.
+İşin ilginçleştiği yer burası.
 
 ---
 
-## Çözüm: Git Tag'lerini Veritabanı Olarak Kullanmak
+## Çözüm: veritabanı olarak git tagleri
 
-GitHub repo'n zaten kalıcı depolama. Bedava. Version'lanmış. Hep orada.
+GitHub depon zaten kalıcı depolamadır. Bedava. Sürümlü. Hep orada.
 
-O zaman neden durumu orada saklamıyorsun?
+O zaman durumu neden orada saklamayalım?
 
-Fikir: her run'da bot son işlenen email UID'sini bir **git tag**'inden okuyor. Yeni mailleri işliyor. Sonra tag'i yeni UID ile tekrar push'luyor.
+Fikir: her run bot işlenmiş son e-posta UIDini bir **git taginden** okur. Yeni postaları işler. Sonra tagi yeni UID ile tekrar pushlar.
 
 ```mermaid
 sequenceDiagram
@@ -66,75 +65,75 @@ sequenceDiagram
     participant IMAP as IMAP Sunucusu
     
     Note over GH: Run #1
-    GH->>GIT: okur tag'ı "lastid"
-    GIT-->>GH: boş (ilk çalıştırma)
-    GH->>IMAP: fetch mails 1-50
-    IMAP-->>GH: 50 mails
-    GH->>GIT: push tag "lastid" = 50
+    GH->>GIT: "lastid" tagini oku
+    GIT-->>GH: boş (ilk run)
+    GH->>IMAP: 1-50 postalarını çek
+    IMAP-->>GH: 50 posta
+    GH->>GIT: "lastid" tagini pushla = 50
     
     Note over GH: Run #2
-    GH->>GIT: okur tag'ı "lastid"
+    GH->>GIT: "lastid" tagini oku
     GIT-->>GH: 50
-    GH->>IMAP: fetch mails 51-73
-    IMAP-->>GH: 23 mails
-    GH->>GIT: push tag "lastid" = 73
+    GH->>IMAP: 51-73 postalarını çek
+    IMAP-->>GH: 23 posta
+    GH->>GIT: "lastid" tagini pushla = 73
 ```
 
-Git tag'i veritabanının TA KENDİSİ. Tek bir değer, ama ihtiyacın olan tek şey bu.
+Git tagi veritabanının TA kendisidir. Tek bir değer ama ihtiyacımız olan her şey bu.
 
-### State'i Okumak
+### Durumu okumak
 
-Job'un başında, değeri tag'den alıyoruz:
+İşin başında değer tagden alınır:
 
 ```bash
 git fetch origin --tags lastid || true
 git show refs/tags/lastid:data/lastId > data/lastId || true
 ```
 
-`git show refs/tags/lastid:data/lastId` şu anlama geliyor: "bana `data/lastId` dosyasının `lastid` tag'indeki halinin içeriğini ver".
+`git show refs/tags/lastid:data/lastId` şu demektir: "bana `lastid` tagindeki haliyle `data/lastId` dosyasının içeriğini ver".
 
-Boom. Değerin sende, veritabanı olmadan.
+Bum. Veritabanısız değerin elinde.
 
-### State'i Yazmak
+### Durumu yazmak
 
-Sonunda, tag'i yeni değerle yeniden oluşturuyoruz:
+Sonda tag yeni değerle yeniden oluşturulur:
 
 ```bash
-git switch --orphan lastid-tmp   # branche vierge sans historique
-git rm -rf .                      # on vide tout
+git switch --orphan lastid-tmp   # tarihsiz tertemiz dal
+git rm -rf .                      # her şeyi boşalt
 mkdir -p data
 printf "%s\n" "${LAST_ID_CONTENT}" > data/lastId
 
 git add data/lastId
 git commit -m "lastId snapshot"
-git tag -f lastid                 # force le tag sur ce commit
-git push --force ...origin lastid # push le tag
+git tag -f lastid                 # tagi bu commite zorla
+git push --force ...origin lastid # tagi pushla
 ```
 
-**Orphan** bir branch oluşturuyoruz (geçmişsiz), sadece `lastId` dosyasını koyuyoruz, commit, tag, force push.
+**Öksüz** bir dal oluşturuyoruz (tarihsiz), sadece `lastId` dosyasını koyuyoruz, commitliyoruz, tagliyoruz, force pushluyoruz.
 
-Neden orphan? Çünkü repo geçmişinde 10.000 tane state commit'i biriktirmek istemeyiz. Her update bir öncekinin üzerine yazar. Tag her zaman TEK bir değer içeren TEK bir commit'i gösterir.
+Neden öksüz? Deponun tarihçesinde 10.000 durum commiti biriktirmemek için. Her güncelleme öncekinin üzerine yazar. Tag her zaman TEK değer içeren TEK bir commiti gösterir.
 
-Tertemiz. Bedava. Tamamen kırık dökük xD
+Temiz. Bedava. Tamamen çarpık ve çalışıyor.
 
 ---
 
-## İkinci Hack: Runtime Snapshot'ı
+## İkinci hack: runtime anlık görüntüsü
 
-GitHub Actions'la ilgili başka bir sorun daha var: `npm install`.
+GitHub Actions ile başka bir sorun var: `npm install`.
 
-Her run'da (her 5 dakikada bir) `npm install` + `npm run build` yaparsan, her seferinde 60-90 saniye boşa harcarsın. Sık bir cron'da bu, boşa harcanmış dakikalarca compute demek.
+Her run (5 dakikada bir) `npm install` + `npm run build` yaparsan her seferinde 60-90 saniye harcarsın. Sık bir cronda bu hiç yoktan harcanmış işlem dakikalarıdır.
 
-Çözüm: kodu BİR kere önceden derle ve onu da bir git tag'inde sakla.
+Çözüm: kodu BİR kez önceden derleyip onu da bir git taginde saklamak.
 
-Build workflow'u (`master`'a push yaptığında çalışan) şunu yapıyor:
+Derleme workflowu (`master` üzerine pushlayınca çalışan) şunu yapar:
 
 ```bash
-# compile le code
+# kodu derle
 bun install
 bun run build
 
-# stocke dist/ + node_modules/ dans un tag "runtime"
+# dist/ + node_modules/ içeriğini "runtime" taginde sakla
 git checkout --orphan temp-runtime
 git rm -rf .
 cp -r "$TMPDIR"/* .
@@ -144,77 +143,77 @@ git tag -f runtime
 git push --force ...origin runtime
 ```
 
-`runtime` tag'i derlenmiş kodu VE `node_modules`'u içeriyor. Çalışmaya hazır.
+`runtime` tagi derlenmiş kodu VE `node_modules` içeriğini taşır. Çalışmaya tamamen hazır.
 
-Cron ise direkt bu tag'i checkout ediyor:
+Ve cron doğrudan bu tagi checkout eder:
 
 ```yaml
 - name: Checkout runtime snapshot
   uses: actions/checkout@v4
   with:
-    ref: refs/tags/runtime    # le code pré-build, pas le source
+    ref: refs/tags/runtime    # önceden derlenmiş kod, kaynak değil
     fetch-depth: 1
 
-# pas de npm install, pas de build !
+# npm install yok, derleme yok!
 - name: Process emails
   run: node dist/index.js --action
 ```
 
-Install yok. Build yok. Cron anında başlıyor ve sadece `node dist/index.js` çalıştırıyor.
+Cron anında başlar ve kurulum ya da derleme olmadan sadece `node dist/index.js` çalıştırır.
 
-Yani iki tag'in var, iki farklı iş yapıyorlar:
-- `runtime` = çalışmaya hazır kod (kod push'ladığında güncellenir)
-- `lastid` = kalıcı durum (her run'da güncellenir)
+Yani iki tag iki iş yapar:
+- `runtime` = çalışmaya hazır kod (kod pushlayınca güncellenir)
+- `lastid` = kalıcı durum (her run güncellenir)
 
-Bu nasıl bir eleganlık, hasta eder.
+Pisliğine zarif.
 
 ---
 
-## Bot'un Kendisi: AI Otomatik Yanıtlayıcı
+## Botun kendisi: yapay zekâlı otomatik yanıtlayıcı
 
-Tamam, git hack'i cool, ama bot tam olarak ne yapıyor?
+Tamam, git hacki havalı ama bot tam olarak ne yapıyor?
 
-IMAP üzerinden maillerini okuyor, bir AI ile anlıyor (Groq + Llama 3.3 70B) ve otomatik olarak cevaplıyor.
+Postalarını IMAP üzerinden okur, bir yapay zekâyla anlar (Groq + Llama 3.3 70B) ve otomatik yanıtlar.
 
-Dependency injection'lı temiz servis mimarisi (InversifyJS):
+Bağımlılık enjeksiyonlu temiz servislerle mimari (InversifyJS):
 
 ```
 App
-├── ImapService      → lit les mails (IMAP)
-├── SmtpService      → envoie les réponses (SMTP)
-├── ParserService    → parse le contenu des mails
-├── ReplyService     → génère la réponse IA
-├── SummaryService   → mémoire de conversation
-├── AccountsService  → gère plusieurs comptes email
-└── ConfigService    → config / env vars
+├── ImapService      → postaları okur (IMAP)
+├── SmtpService      → yanıtları gönderir (SMTP)
+├── ParserService    → posta içeriğini ayrıştırır
+├── ReplyService     → yapay zekâ yanıtı üretir
+├── SummaryService   → konuşma belleği
+├── AccountsService  → birden çok e-posta hesabını yönetir
+└── ConfigService    → yapılandırma / ortam değişkenleri
 ```
 
-### İki Çalışma Modu
+### İki çalışma modu
 
-Bot iki şekilde çalışabiliyor:
+Bot iki şekilde dönebilir:
 
-**Listener modu** (gerçek zamanlı): üstel yeniden bağlanma ile kalıcı IMAP bağlantısı. Bir VPS için.
+**Dinleyici modu** (gerçek zamanlı): üstel yeniden bağlanmalı kalıcı IMAP bağlantısı. VPS için.
 
 ```typescript
 this.imapService.on("exists", async (data) => {
-  console.log(`[MAIL] Nouveau mail ! Total: ${data.count}`);
-  // traite le nouveau mail immédiatement
+  console.log(`[MAIL] Yeni posta! Toplam: ${data.count}`);
+  // yeni postayı hemen işle
 });
 ```
 
-**Action modu** (batch): `lastId`'den itibaren yeni mailleri işler, sonra kapanır. GitHub Actions cron'u için.
+**Aksiyon modu** (toplu): `lastId` sonrasındaki yeni postaları işler, sonra kapanır. GitHub Actions cronu için.
 
 ```bash
 node dist/index.js --action
 ```
 
-`--action` modu git hack'ini kullanan mod. `lastId`'yi okur, yenileri işler, yeni `lastId`'yi yazar, biter.
+`--action` modu git hackini kullanan moddur. `lastId` okur, yeni olanı işler, yeni `lastId` yazar, biter.
 
-### Robotlara CEVAP VERME
+### Robotlara yanıt VERME
 
-Bot'un TÜM maillere cevap verirse, newsletter'lara, bildirimlere, `noreply`lara cevap verir. Felaket. Daha kötüsü: iki bot birbirine cevap verirse, sonsuz bir email döngüsüne girersin. Kâbus.
+Botun TÜM postalara yanıt verirse bültenlere, bildirimlere, `noreply@` adreslerine yanıt verir. Felaket. Daha kötüsü: iki bot birbirine yanıt verirse sonsuz bir posta döngün olur. Kâbus.
 
-Bu yüzden agresif filtreleme:
+O yüzden agresif filtreleme:
 
 ```typescript
 export function isAutomatedSender(address) {
@@ -229,34 +228,34 @@ export function isAutomatedSender(address) {
 }
 ```
 
-Ve ayrıca email header'ları ile tespit:
+Ve e-posta başlıkları üzerinden tespit de var:
 
 ```typescript
 export function isAutomatedByHeaders(headers) {
   return (
     ["bulk", "list", "junk"].includes(headers.precedence) ||
     headers["auto-submitted"] !== "no" ||
-    headers["list-unsubscribe"] !== "" ||   // newsletters ont ça
+    headers["list-unsubscribe"] !== "" ||   // bültenlerde bu vardır
     /mailchimp|sendgrid|mailgun|brevo/i.test(headers["x-mailer"])
   );
 }
 ```
 
-Header'larda `List-Unsubscribe` mı var? Bu bir newsletter. `Precedence: bulk` mı? Toplu mail. `X-Mailer: Mailchimp` mı? Anladın işte. Görmezden geliyoruz.
+Başlıklarda `List-Unsubscribe` mi var? O bir bültendir. `Precedence: bulk` mı? Toplu postadır. `X-Mailer: Mailchimp` mi? Anladın. Görmezden geliyoruz.
 
-Gece kulübü fedaisi gibi: robotlar geçemez xD
+Gece kulübü fedaisi gibi: robotlar geçemez.
 
-### Sihirli Trigger'lar
+### Sihirli tetikleyiciler
 
-AI hiç cevap vermemeye veya bir insana devretmeye karar verebilir. Nasıl mı? Cevabındaki özel trigger'larla.
+Yapay zekâ hiç yanıt vermemeye ya da işi bir insana bırakmaya karar verebilir. Nasıl? Yanıtındaki özel tetikleyicilerle.
 
-Sistem prompt'u ona şunu söylüyor:
+Sistem istemi ona şunu söyler:
 
-> Eğer otomatik bir mail/newsletter ise → `<no_reply>` cevabı ver
-> Çok önemli/hassas bir şeyse (hukuki, finansal...) → `<manual_reply_required>` cevabı ver
-> Yoksa → gerçek bir cevap yaz
+> Otomatik posta/bültense → `<no_reply>` yanıtla
+> Çok önemli/hassassa (hukuki, finansal...) → `<manual_reply_required>` yanıtla
+> Yoksa → gerçek bir yanıt yaz
 
-Ve kod bunu okuyor:
+Ve kod bunu okur:
 
 ```typescript
 const aiReply = completion.choices[0].message.content.trim();
@@ -264,31 +263,31 @@ const manualTrigger = aiReply.includes(MANUAL_REPLY_TRIGGER);
 const noReply = aiReply.includes(NO_REPLY_TRIGGER);
 
 if (noReply) {
-  console.log("[MAIL] L'IA a décidé d'ignorer. Skip.");
+  console.log("[MAIL] Yapay zekâ görmezden gelmeye karar verdi. Atla.");
   return;
 }
 
 if (manualTrigger) {
-  console.log("[MAIL] Trop chaud, je forward à un humain.");
+  console.log("[MAIL] Çok sıcak, bir insana iletiyorum.");
   await this.smtpService.sendManualForward(...);
   return;
 }
 
-// sinon on envoie la réponse IA
+// yoksa yapay zekâ yanıtını gönder
 await this.smtpService.sendReply(...);
 ```
 
-Yani AI'nin "hayır ben bu işe bulaşmam, gerçek bir insan çağır" deme hakkı var. İşte bu bilgelik.
+Yani yapay zekânın "yok buna dokunmuyorum, gerçek bir insan çağır" deme hakkı var. Bu bilgelik.
 
 ---
 
-## Konuşma Hafızası
+## Konuşma belleği
 
-Her şeyi değiştiren bir detay: bot konuşmaları **hatırlıyor**.
+Her şeyi değiştiren bir detay: bot konuşmaları **hatırlar**.
 
-Birine cevap verdiğinde, konuşmanın bir özetini kaydediyor. Bir dahaki sefere o kişi yazdığında, özet tekrar prompt'a enjekte ediliyor.
+Birine yanıt verdiğinde alışverişin bir özetini kaydeder. Bu kişi bir dahaki sefere yazdığında özet isteme geri enjekte edilir.
 
-Depolama: her kişi için bir JSON dosyası.
+Depolama: kişi başına bir JSON dosyası.
 
 ```
 data/customers/
@@ -297,7 +296,7 @@ data/customers/
 │   └── bob%40client.fr.json
 ```
 
-Ve özetin kendisi de AI tarafından oluşturuluyor, eski özeti yeni mesajla birleştiriyor:
+Ve özetin kendisi de eski özeti yeni mesajla birleştiren yapay zekâ tarafından üretilir:
 
 ```typescript
 const completion = await groq.chat.completions.create({
@@ -306,85 +305,85 @@ const completion = await groq.chat.completions.create({
     { role: "system", content: "Tu es un assistant de mémoire. Merge l'ancien résumé avec le nouveau message sans perdre d'info." },
     { role: "user", content: `Résumé existant:\n${existing}\n\nNouveau message:\n${incomingContent}` }
   ],
-  temperature: 0.0,  // déterministe, pas de créativité
+  temperature: 0.0,  // deterministik, yaratıcılık yok
   max_tokens: 800,
 });
 ```
 
-Yani bot zamanla sıkıştırılmış bir hafıza inşa ediyor. Tüm mailleri saklamaya gerek yok, sadece akıllıca büyüyen bir özet.
+Yani bot zamanla sıkıştırılmış bir bellek inşa eder. Tüm postaları saklamadan akıllıca büyüyen bir özet yeter.
 
-Peki bu JSON dosyaları? Şey... onlar da git'te saklanıyor, runtime tag'inin içinde. Her yerde git xD
+Ve bu JSON dosyaları mı? Onlar da gitte saklanır, runtime taginde. Her yerde git.
 
 ---
 
-## Prompt Uzunluğuyla İlgili Zekice Oyun
+## İstemin uzunluğundaki kurnaz nokta
 
 Beni gülümseten küçük bir teknik detay.
 
-Modellerin bir token limiti var. Eğer mail'in + özet + persona prompt'u aşarsa, API hata döndürüyor.
+Modellerin bir jeton limiti vardır. Postan + özet + persona istemi aşarsa API bir hata döndürür.
 
-Kod bunu **kademeli kırpma** + yeniden deneme ile yönetiyor:
+Kod bunu **basamaklı kırpma** + yeniden deneme ile yönetir:
 
 ```typescript
 try {
-  // premier essai avec les limites normales
+  // normal limitlerle ilk deneme
   completion = await groq.chat.completions.create({...});
 } catch (error) {
   if (!this.isLengthError(error)) throw error;
 
-  // c'était une erreur de longueur : on re-tente avec des limites plus serrées
+  // uzunluk hatasıydı: daha sıkı limitlerle yeniden dene
   ({ systemContent, userContent } = this.buildPromptPayload({
     ...,
     limits: {
-      systemPromptChars: 2200,  // au lieu de 3000
-      summaryChars: 1800,       // au lieu de 4000
-      personaChars: 900,        // au lieu de 1500
-      userContentChars: 2200,   // au lieu de 8000
+      systemPromptChars: 2200,  // 3000 yerine
+      summaryChars: 1800,       // 4000 yerine
+      personaChars: 900,        // 1500 yerine
+      userContentChars: 2200,   // 8000 yerine
     },
   }));
-  completion = await groq.chat.completions.create({...});  // retry
+  completion = await groq.chat.completions.create({...});  // yeniden deneme
 }
 ```
 
-Olmazsa, daha kısa kesip tekrar deniyoruz. Basit, etkili, crash yok.
+Geçmezse daha kısa kesip yeniden deniyoruz. Basit, etkili, çökme yok.
 
 ---
 
-## Peki, somut olarak nasıl çalışıyor?
+## Peki somut olarak nasıl dönüyor?
 
-Bir cron run'ının komple akışı:
+Bir cron runının tam akışı:
 
 ```
-1. GitHub Actions se déclenche (cron toutes les 5 min)
-2. Checkout du tag "runtime" (code pré-build)
-3. git show refs/tags/lastid → récupère le dernier UID traité
+1. GitHub Actions tetiklenir (5 dakikada bir cron)
+2. "runtime" taginin checkoutu (önceden derlenmiş kod)
+3. git show refs/tags/lastid → işlenmiş son UIDyi alır
 4. node dist/index.js --action
-   ├── connexion IMAP
-   ├── fetch des mails depuis lastId+1
-   ├── pour chaque mail :
-   │   ├── parse le contenu
-   │   ├── filtre les robots (skip si automated)
-   │   ├── match le compte destinataire
-   │   ├── récupère la mémoire de conversation
-   │   ├── génère la réponse IA (Groq)
-   │   ├── <no_reply> ? skip
-   │   ├── <manual_reply_required> ? forward humain
-   │   ├── sinon : envoie la réponse (SMTP)
-   │   └── update la mémoire de conversation
-   └── écrit le nouveau lastId
-5. git push --force tag "lastid" avec la nouvelle valeur
+    ├── IMAP bağlantısı
+    ├── lastId+1 sonrasındaki postaları çek
+    ├── her posta için:
+    │   ├── içeriği ayrıştır
+    │   ├── robotları filtrele (otomatikse atla)
+    │   ├── alıcı hesabı eşleştir
+    │   ├── konuşma belleğini al
+    │   ├── yapay zekâ yanıtını üret (Groq)
+    │   ├── <no_reply> mi? atla
+    │   ├── <manual_reply_required> mi? insana ilet
+    │   ├── yoksa: yanıtı gönder (SMTP)
+    │   └── konuşma belleğini güncelle
+    └── yeni lastId yazar
+5. yeni değerle "lastid" taginin git push --force ile pushu
 ```
 
-Ve 5 dakika sonra tekrar başlıyor. Sonsuza kadar. Beleş.
+Ve 5 dakika sonra yeniden başlar. Sonsuza dek. Bedava.
 
 ---
 
-**Unutulmaması gereken 3 şey:**
+**Akılda tutulacak 3 nokta:**
 
-1. **Git = bedava veritabanı** -- Orphan bir tag iki stateless run arasında kalıcı durumunu saklayabilir. Okumak için `git show refs/tags/X:dosya`, yazmak için force-push. DB'ye gerek yok.
+1. **Git = bedava veritabanı**: Öksüz bir tag, stateless iki run arasında kalıcı durumunu saklayabilir. Okumak için `git show refs/tags/X:dosya`, yazmak için force-push. Tam bir veritabanından tasarruf edersin.
 
-2. **Runtime tag'inde ön-derle** -- Her cron run'ında `npm install` yapmak yerine, derlenmiş kodu + node_modules'u bir git tag'inde sakla. Cron anında başlıyor.
+2. **Runtime taginde ön derleme**: Cronun her runında `npm install` yerine derlenmiş kodu + node_modules içeriğini bir git taginde sakla. Cron anında başlar.
 
-3. **Bir AI bot susmasını bilmeli** -- `<no_reply>` ve `<manual_reply_required>` trigger'ları AI'nin cevap vermemeye veya devretmeye karar vermesini sağlar. Bir de anti-robot filtreleme. Yoksa sonsuz bir email döngüsü yaratırsın.
+3. **Yapay zekâlı bir bot susmayı bilmeli**: `<no_reply>` ve `<manual_reply_required>` tetikleyicileri yapay zekânın yanıt vermemesine ya da işi bırakmasına izin verir. Anti-robot filtrelemeyle birlikte. Yoksa sonsuz bir posta döngüsü yaratırsın.
 
-Kalıcı durumlu, AI'lı, hafızalı serverless cron, hepsi ayda 0€. Tamamen kırık dökük ve buna bayılıyorum xD
+Kalıcı durumlu sunucusuz cron, yapay zekâ, bellek, hepsi 0 €/ay. Tamamen kırık ve bu düzeneğe bayılıyorum.

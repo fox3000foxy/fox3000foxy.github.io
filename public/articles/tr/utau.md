@@ -1,167 +1,167 @@
 ---
 title: "UTAU: Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi"
-description: 2008'de VB6 ile yazılmış ücretsiz bir yazılım olan UTAU, birleştirmeli sentez kullanarak herkesin sentetik şarkı sesi oluşturmasını nasıl sağladı -- ve bugün hala neden önemli.
+description: 2008 tarihli ücretsiz bir VB6 yazılımı olan UTAU, birleştirmeli sentezle herkesin şarkı söyleyen sesler yaratmasına nasıl olanak sağladı ve neden bugün hâlâ önemli.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - utau
   - vocaloid
   - music
   - synthesis
   - vb6
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "I5BX7RQSXCesVwnBFX8Scecm7BuFc/4kVsKQ0cMunZiN6kvlaYsQb5w0bx6+sdYnazNrD9ZBK8GjZeE42G8+bw=="
+author_sig: "RKt7JOFxWp8kI8R8v8pDbmceZ3KOU026l3eRXySuU2O/W2rghqisVQCJZDNMdr57VfJkYkYS6MCw2XBxk3v+og=="
 ---
 
-## UTAU : Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi
+## UTAU: Visual Basic 6 ile yazılmış bir yazılım sentetik sesi nasıl demokratikleştirdi
 
-Ana sayfamda biraz bahsetmiştim : UTAU'yu severim. İşte nedeni.
+Ana sayfamda kısaca değinmiştim: UTAUyu seviyorum. İşte nedeni.
 
-2008'de sentetik bir sesi şarkı söyletmek istiyosan tek seçeneğin vardı : VOCALOID. Yamaha'nın yazılımı. Pahalı, kapalı, kendi başına oluşturamayacağın resmi seslerle dolu.
+2008de sentetik bir sesi şarkı söyletmek isteseydin bir seçeneğin vardı: VOCALOID. Yamahanın yazılımı. Pahalı, sahipli, kendin yaratamadığın resmi seslerle.
 
-Sonra Japon bir eleman, Ameya/Ayame, kendi köşesinde bi' şey çıkardı. **Visual Basic 6** ile kodlanmış bir yazılım. Bedava. Kendi sesini yaratmanı sağlıyordu... kendi kaydettiğin WAV dosyalarıyla.
+Sonra bir Japon adam, Ameya/Ayame, köşesinde bir program çıkardı. **Visual Basic 6** ile kodlanmış bir yazılım. Ücretsiz. Kendi sesini... kendin kaydettiğin WAV dosyalarıyla yaratmana izin veriyordu.
 
-Bu şeyin adı **UTAU** (歌う, Japonca "şarkı söylemek"). Ve zamanına göre resmen büyüydü.
+Bu yazılımın adı **UTAU** (歌う, Japoncada "şarkı söylemek"). Ve dönemi için bu resmen sihirdi.
 
-Bu yazılımı hep büyüleyici bulmuşumdur. Teknik olarak temiz olduğu için değil (spoiler : aslında bu şeyi yaratmayı düşünmek bile ayrı bi' olay... tam bir karmaşa, bu tavuğa ağlıyorum), başka kimsenin yapmadığı bi' şey yaptığı için : ses sentezini herkese açtı. Yani sen, ben, mikrofonu olan herhangi biri.
+Onu teknik temizliğinden çok çıkış fikri için her zaman büyüleyici bulmuşumdur (kodlama prensibi gerçekten çok zekice kalıyor, uygulaması gözleri kanatsa da): vokal sentezi halka açtı. Sen, ben, mikrofonu olan herkes.
 
-Neden harika olduğunu anlatayım.
-
----
-
-## Öncelikle, şarkı söyleme sentezi neden zordur
-
-Şarkı söyleyen bir ses, notalardan ibaret değildir. İçinde ünsüzün saldırısı, ünlünün tutunması, nefes, ikisi arasındaki geçişler var. "Merhaba"daki "me" bir "m" sesinin "e" açıklığına kaymasıdır ve bu kayma sesi insani yapan ya da yapmayan şeydir.
-
-Bugün bunu deep learning ile çözüyoruz : saatlerce şarkı üzerinde bir model eğitiyorsun ve sesi üretiyor (Synthesizer V, DiffSinger). Ama bu 2020+ işi. 2008'de, yoktu.
-
-UTAU daha eski ve daha kurnaz bir yöntem kullanır : **birleştirmeli sentez** (concatenative synthesis).
+Neden harika olduğunu açıklayayım.
 
 ---
 
-## Birleştirmeli sentez : ses parçalarını kopyala-yapıştır
+## Önce, şarkı sentezi neden dertli bir iş
 
-Fikir çok basit : küçük ses parçaları kaydediyorsun ve bunları birleştirip kelimeler oluşturuyorsun. "merhaba" = "me" örneği + "rha" + "ba", art arda dizilmiş. Bir notasyonla yönetilen ses yapbozu.
+Şarkı söyleyen bir ses notalardan ibaret değildir. Saldıran ünsüz, tutulan ünlü, nefes, ikisi arasındaki geçişler var. "selam"daki "se" ıslık çalan bir "s"nin açık bir "e"ye kaymasıdır ve insansı duyulup duyulmadığını belirleyen bu kaymadır.
 
-Bu, YouTube Poop'lardaki karakterin sözlerini kesip biçip saçma şeyler söyletme mantığıyla aynı -- sadece burada iş düzenli ve otomatik.
+Bugün bunu derin öğrenmeyle çözüyoruz: modeli saatlerce şarkı üzerinde eğitiyorsun ve sesi üretiyor (Synthesizer V, DiffSinger). Ama bu 2020 sonrası. 2008de hiçbir şey yoktu.
 
-Ve UTAU tam da buradan geliyor. Öncesinde **"Jinriki Vocaloid"** (人力ボーカロイド, "Elle Vocaloid") vardı : insanlar elle ses parçalarını kesiyor, fonemleri çıkarıyor, perdeyi değiştiriyor ve bir ses düzenleyicide hepsini tekrar birleştirip VOCALOID sesini taklit ediyordu. Elle. Düşün işin zorluğunu.
-
-Ameya bu çileyi gördü ve otomatize edecek aracı kodladı. Aslında UTAU başta sadece buydu : elle Vocaloid için bir yardımcı.
+UTAU daha eski, daha yaşlı ve daha kurnaz bir yöntem kullanır: **birleştirmeli sentez**.
 
 ---
 
-## Neden devrimseldi : SESİ SEN yaratıyorsun
+## Birleştirmeli sentez: ses parçalarının kopyala yapıştırı
 
-İşte her şeyi değiştiren şey.
+Fikir çocuk oyuncağı kadar basit: küçük ses parçaları kaydedip kelimeler oluşturmak için birbirine yapıştırıyorsun. "selam" = "se" + "la" + "m" örneği, art arda dizilmiş. Bir partisyonun sürdüğü bir ses yapbozu.
 
-VOCALOID'de bir ses satın alıyordun. Miku, Luka, falan. Profesyonellerce yapılmış, Yamaha tarafından satılmış. Kendin yapman mümkün değildi. UTAU'da **herkes kendi sesini kaydedip onu şarkı söyleyen bir enstrümana dönüştürebilir**.
+YouTube Poop prensibi, bir karakterin kelimelerini ona her şeyi söyletmek için yeniden kesersin, tek fark burada bunun düzgün ve otomatik olması.
 
-CV modu (en basiti) şu : Japoncadaki ~100 temel heceyi kaydediyorsun ("a", "ka", "sa", "ta"...), kesme noktalarını ayarlıyorsun ve işte voicebank'ın. Birkaç saatlik iş.
+Ve UTAU tam olarak buradan geliyor. Ondan önce **"Jinriki Vocaloid"** (人力ボーカロイド, "manuel Vocaloid") vardı: insanlar vokal parçalarını elle kesiyor, fonemleri çıkarıyor, perdesini değiştiriyor ve VOCALOID sesini taklit etmek için hepsini bir ses editöründe yeniden birleştiriyordu. Elle. İşin büyüklüğünü hayal et.
 
-Sonuç : ekosistem patladı. Topluluk tarafından yaratılmış binlerce voicebank -- hayran sesleri, arkadaş sesleri, uydurma karakterler. Kocaman bir sanal şarkıcı evreni, bedava. Ve yazılım **Defoko** (Utane Uta) ile geliyordu, AquesTalk TTS motoruyla üretilen varsayılan bir ses, yani mikrofonsuz bile başlayabilirdin.
+Ameya bu eziyete baktı ve onu otomatikleştiren aracı kodladı. Başlangıçta UTAU sadece buydu: manuel Vocaloid için bir asistan.
 
 ---
 
-## oto.ini : sistemin kalbi
+## Neden devrimciydi: sesi SEN yaratıyorsun
 
-UTAU sesleri nerede keseceğini ve yapıştıracağını nasıl biliyor? Voicebank başına bir yapılandırma dosyasıyla : **`oto.ini`**. Her WAV için kesme noktalarını (milisaniye cinsinden) tanımlar :
+Her şeyi değiştiren bu.
 
-- **Offset** → baştaki sessizliği atmak için
-- **Preutterance** → ünsüzün ünlüye geçtiği nokta ("ka"daki "k"→"a" sınırı)
-- **Overlap** → önceki notanın buna ne kadar taştığı
-- **Fixed region** → uzun notalarda UZATILMAMASI gereken kısım (genelde ünsüz)
-- **Cutoff** → sonun nerede kesileceği
+VOCALOIDde bir ses satın alıyordun. Miku, Luka vs. Profesyonellerce yaratılmış, Yamaha tarafından satılan sesler. Yaratım Yamahada kalıyordu. UTAU ile **herkes sesini kaydedip şarkı söyleyen bir enstrümana dönüştürüyor**.
 
-**Preutterance** en akıllı parametre. Bir hecenin ünlüden önce her zaman bir parça ünsüzü vardır. Notanın zamanında çalması için, tam vuracak olan *ünlü* olmalı, ünsüz değil. Bu yüzden UTAU örneği geriye kaydırır : "ka"daki "a" tam zamanında düşer, "k" hemen öncesine taşar. Bir davulcunun vuruşunu öne çekmesi gibi -- sadece bu bir `.ini` dosyasında.
+En basit mod olan CV modu şu: Japoncanın ~100 temel hecesini kaydediyorsun ("a", "ka", "sa", "ta"...), kesme noktalarını yapılandırıyorsun ve işte ses bankan hazır. Birkaç saatlik iş.
 
-Görsel olarak, bir "ka" örneğinde `oto.ini` bölgeleri şöyle kesilir :
+Sonuç: ekosistem patladı. Topluluk tarafından yaratılmış binlerce ses bankası: hayran sesleri, arkadaş sesleri, icat edilmiş karakterler. Tam bir sanal şarkıcı evreni, ücretsiz. Ve yazılım **Defoko** (Utane Uta) ile geliyordu, AquesTalk TTS motoruyla üretilmiş varsayılan bir ses, yani mikrofonsuz bile başlayabiliyordun.
+
+---
+
+## oto.ini: sistemin kalbi
+
+UTAU sesleri nerede kesip yapıştıracağını nereden biliyor? Ses bankası başına bir yapılandırma dosyası üzerinden: **`oto.ini`**. Her WAV için kesme noktalarını (milisaniye cinsinden) tanımlar:
+
+- **Offset** → baştaki silinecek sessizlik
+- **Preutterance** → ünsüzün ünlüye geçtiği nokta ("sa" içindeki "s"den "a"ya sınır)
+- **Overlap** → önceki notanın bunun üzerine ne kadar taştığı
+- **Fixed region** → uzun bir notada esnetilmemesi GEREKEN kısım (tipik olarak ünsüz)
+- **Cutoff** → sonun kesildiği yer
+
+**Preutterance** en zeki parametre. Bir hecenin ünlüden önce her zaman bir ünsüz parçası vardır. Notanın zamana denk gelmesi için denk gelmesi gereken *ünlüdür*, ünsüz değil. Bu yüzden UTAU örneği geriye kaydırır: "sa"daki "a" tam zamana düşer, "s" hemen öncesine taşar. Sesin tam düşmesi için vuruşunu önceden tahmin eden bir davulcu gibi, tek fark bunun bir `.ini` içinde olması.
+
+Görsel olarak, bir "ka" örneğinde `oto.ini` bölgeleri şöyle bölünür:
 
 ```mermaid
 flowchart LR
-    A["🔇 sessizlik<br/>(offset)"] --> B["🅺 ünsüz<br/>(fixed region,<br/>uzatılmaz)"]
-    B --> C["🅰 ünlü<br/>(uzatılabilir bölge)"]
+    A["🔇 sessizlik<br/>(offset)"] --> B["🅺 ünsüz<br/>(fixed region,<br/>esnetilmez)"]
+    B --> C["🅰 ünlü<br/>(esnetilebilir bölge)"]
     C --> D["🔇 kesilmiş son<br/>(cutoff)"]
     style B fill:#3b4a6b
     style C fill:#5b3b6b
 ```
 
-Ünsüz ve ünlü arasındaki sınır, preutterance'dır. Ünlü, uzun notalar için uzatılan bölgedir ; ünsüz bozulmadan kalır, yoksa "k" iki saniye sürer ve berbat duyulur.
+Ünsüz ile ünlü arasındaki sınır preutterance. Ünlü, uzun notalar için esnetilen bölgedir; ünsüz bozulmadan kalır, yoksa "k"n iki saniye sürer ve berbat duyulur.
 
 ```ini
 # oto.ini (basitleştirilmiş)
-# dosya=alias,offset,consonant,cutoff,preutterance,overlap
+# dosya=takma-ad,offset,consonant,cutoff,preutterance,overlap
 _ka.wav=ka,120,80,-200,90,40
 ```
 
-Her ses için beş değer, tüm örneklerinde, ve UTAU herhangi bir kelimeyi düzgünce birleştirir.
+Tüm örneklerinde ses başına beş değer ve UTAU herhangi bir kelimeyi düzgünce birleştirir.
 
 ---
 
-## CV, VCV, CVVC : gerçekçilik yarışı
+## CV, VCV, CVVC: gerçekçilik yarışı
 
-Temel mod, **CV** (Consonne-Voyelle / Ünsüz-Ünlü), hece başına bir sestir. Basit ama biraz robotik : hece birleşim yerleri kaba.
+Temel mod **CV** (Ünsüz-Ünlü), hece başına bir sestir. Basit ama biraz robotik: heceler arası birleşimler hamdır.
 
-2010'da topluluk **VCV**'yi (Voyelle-Consonne-Voyelle / Ünlü-Ünsüz-Ünlü) icat etti. Sadece "ka" kaydetmek yerine "a ka" kaydediyorsun -- önceki ünlünün kuyruğuyla birlikte. Geçiş doğal olur çünkü kaydın *içinde*, sonradan hesaplanmaz.
+2010da topluluk **VCV**yi (Ünlü-Ünsüz-Ünlü) icat eder. "ka"yı tek başına kaydetmek yerine "a ka" kaydedersin, önceki ünlünün kuyruğuyla. Geçiş doğal olur çünkü *kaydın içindedir*, sonradan hesaplanmaz.
 
-Can alıcı detay : **VOCALOID, VCV'yi VOCALOID3'e kadar, yani 2011'e kadar alamadı.** Bir adamın tek başına kodladığı VB6 freeware, geçiş gerçekçiliğinde Yamaha'yı bir yıl tokatladı. Bir hayran topluluğu, çok uluslu şirketten hızlıydı.
+Can acıtan detay: **VOCALOID, 2011de VOCALOID3e kadar VCVye sahip olmadı.** Tek başına bir adamın kodladığı VB6 freeware, geçişlerin gerçekçiliğinde Yamahayı bir yıl geride bıraktı. Çokulusludan daha hızlı bir hayran topluluğu.
 
-Sonra **CVVC**, **ARPAsing** (İngilizce), **VCCV** geldi... her yöntem gerçekçiliği daha da ileri taşıdı, hepsi topluluk tarafından icat edildi ve belgelendi.
+Sonra **CVVC**, **ARPAsing** (İngilizce), **VCCV** geldi... her yöntem gerçekçiliği daha ileri taşıdı, hepsi topluluk tarafından icat edilip belgelendi.
 
 ---
 
-## Tam pipeline : bir kelime nasıl sese dönüşür
+## Tam pipeline: bir kelime sese nasıl dönüşür
 
-Bir nota koyup söz yazdığında, perde arkasında şunlar olur :
+Bir nota yerleştirip bir söz yazdığında, perde arkasında şunlar olur:
 
 ```mermaid
 flowchart TD
     A["Partisyon<br/>(notalar + sözler)"] --> B[Phonemizer]
-    B -->|"birleştirilecek<br/>birimlere ayır"| C[Resampler]
-    C -->|"WAV'ı yükle,<br/>süre + perdeyi değiştir,<br/>flag'leri uygula"| D[Wavtool]
-    D -->|"parçaları birleştir"| E["Final ses"]
+    B -->|"birleştirilecek<br/>birimlere bölme"| C[Resampler]
+    C -->|"WAVi yükler,<br/>süre + pitch değiştirir,<br/>flagleri uygular"| D[Wavtool]
+    D -->|"parçaları yeniden yapıştırır"| E["Final ses"]
 ```
 
-**Resampler** ana parçadır : kaydettiğin "ka" örneğini alır, istenen notaya uyacak şekilde yeniden uzatır/perdeler -- sadece uzatılabilir bölgeyi uzatır ve ünsüzü bozulmadan tutar (işte bu yüzden `oto.ini` var).
+**Resampler** başyapıttır: belli bir perdede kaydettiğin "ka" örneğini alıp istenen notaya uyması için yeniden esnetir/perdesini değiştirir, sadece esnetilebilir bölgeyi esnetip ünsüzü bozulmadan tutarak (oto.ini bu yüzden var).
 
-Ve **modülerdir**. UTAU varsayılan bir resampler ile geliyordu ama topluluk başkalarını da üretti (moresampler, TIPS...), her birinin kendi ses dokusu var. Sentez motorunu plugin gibi değiştiriyordun. 2008'de. Bir freeware'de.
+Ve **modülerdir**. UTAU temel bir resampler ile geliyordu ama topluluk başka resamplerlar çıkardı (moresampler, TIPS...), her birinin kendi ses dokusu var. Sentez motorunu bir eklenti gibi değiştiriyordun. 2008de. Bir freeware üzerinde.
 
 ---
 
-## Kaputun altındaki karmaşa (ve neden sevimli)
+## Kaputun altındaki şantiye (ve neden sevimli)
 
-Şu işin teknik durumu hakkında dürüst olalım :
+Yazılımın teknik durumu hakkında dürüst olmalıyım:
 
-- **Visual Basic 6 ile kodlanmış.** 2008'de zaten ölü bir dil. Çalıştırmak için VB6 runtime gerekli.
-- **Başta sadece Windows** (Mac portu UTAU-Synth 2011'de geldi).
-- **Shift-JIS kodlaması zorunlu.** Dosyaların Japonca Shift-JIS ile kodlanmamışsa UTAU bi' şey anlamaz. Hâlâ bugün bile bilgisayarını Japon locale'ine alman ya da AppLocale kullanman gerekebilir.
-- **Sade arayüz**, zamanında neredeyse %100 Japonca dökümantasyon.
+- **Visual Basic 6 ile kodlanmış.** 2008de bile ölmüş bir dil. Çalıştırmak için VB6 çalışma zaman ortamı gerekir.
+- Başlangıçta **sadece Windows** (Mac portu, UTAU-Synth, 2011de geldi).
+- **Zorunlu Shift-JIS kodlaması.** Dosyaların Japonca Shift-JIS ile kodlanmamışsa UTAU hiçbir şey anlamaz. Hâlâ bugün bile bilgisayarı Japonca yerele almak ya da başlatmak için AppLocale kullanmak gerekir.
+- **Sade arayüz**, o dönemde neredeyse %100 Japonca belgeleme.
 
-Ve yine de. Yine de bu şey küresel bir hareket yarattı. On binlerce voicebank. Milyonlarca kez dinlenmiş şarkılar.
+Ve yine de. Yine de bu yazılım küresel bir hareket yarattı. On binlerce ses bankası. Milyonlarca kez dinlenen şarkılar.
 
-En iyi örnek : **Kasane Teto**. 2008'de yaratılmış ve 1 Nisan şakası olarak piyasaya sürülmüş, VOCALOID'miş gibi davranan bir karakter. Bir şakaydı. Ama insanlar karakteri çok sevdi, arkasından gerçek bir UTAU voicebank'ı yapıldı ve Teto dünyanın en ünlü sanal şarkıcılarından biri oldu. 2023'te resmi bir Synthesizer V sesi bile aldı. Bedava bir yazılımdaki 1 Nisan şakasından doğan bir karakter.
+En iyi örnek: **Kasane Teto**. 2008de yaratılan ve 1 Nisan şakası olarak atılan, kendini VOCALOID gibi gösteren bir karakter. Şakaydı bu. Ama insanlar karakteri sevdi, arkasında gerçek bir UTAU ses bankası yaratıldı ve Teto dünyanın en ünlü sanal şarkıcılarından biri oldu. 2023te resmi bir Synthesizer V sesi bile aldı. Ücretsiz bir yazılım üzerindeki 1 Nisan balığından doğan bir karakter.
 
 ---
 
 ## Neden hâlâ önemli
 
-UTAU, açıklıkla kazanan "fakir" bir teknolojinin mükemmel örneği.
+UTAU, açıklıkla kazanan "yoksul" bir teknolojinin mükemmel örneği.
 
-VOCALOID teknik olarak üstündü, daha iyi finanse edilmişti, daha profesyöneldi. Ama kapalıydı. UTAU hödüktü, çirkindi, VB6'ydı -- ama herkesin katılmasına izin veriyordu. Ses yaratmak, resampler yaratmak, plugin yaratmak, kayıt yöntemleri yaratmak. Gerisini topluluk yaptı.
+VOCALOID teknik olarak üstündü, daha iyi finanse edilmişti, daha profesyoneldi. Ama kapalıydı. UTAU el yapımıydı, çirkindi, VB6 ile yazılmıştı, ama herkesin katılmasına izin veriyordu. Sesler yaratmak, resamplerlar yaratmak, eklentiler yaratmak, kayıt yöntemleri yaratmak. Geri kalanını topluluk yaptı.
 
-Ve konsept bugün tamamen yaşıyor. **OpenUtau**, modern bir açık kaynak halef, aynı fikri alıp tozunu alıyor (çapraz platform, UTF-8, modern resampler VE yapay zeka desteği). Birleştirmeli sentez, deep learning modellerinin yanında hâlâ ayakta, çünkü onlarda olmayan bir şeye sahip : tam olarak ne olduğunu anlıyorsun ve her milisaniyeyi kontrol ediyorsun.
+Ve konsept bugün tamamen hayatta. Modern açık kaynak bir halef olan **OpenUtau**, fikri alıp yeniliyor (çok platformlu, UTF-8, modern resamplerların VE yapay zekânın desteği). Birleştirmeli sentez derin öğrenme modellerinin yanında hâlâ ayakta, çünkü onların sahip olmadığı bir avantajı var: tam olarak ne olduğunu anlıyorsun ve her milisaniyeyi kontrol ediyorsun.
 
-UTAU'da beni hep çeken şey bu. Tam olarak ne olduğunu görüyorsun. Sana anlamadığın sihirli bir şey tüküren bir yapay zeka değil : WAV'ların var, kesme noktaların var ve her şeye sen karar veriyorsun. Kötü duyulduğunda nedenini biliyorsun ve düzeltebiliyorsun. Bu tür bir kontrolü severim.
+UTAUda hep sevdiğim şey bu. Tam olarak ne olduğunu görüyorsun. Anlamadığın sihirli bir sonucu sana tüküren bir yapay zekâ değil: WAVların, kesme noktaların var ve her şeye karar veren sensin. Kötü duyulduğunda nedenini biliyorsun ve düzeltebilirsin. Bu tür kontrolü seviyorum.
 
 ---
 
-**3 Hatırlanması Gereken Şey :**
+**Akılda tutulacak 3 nokta:**
 
-1. **Birleştirmeli sentez = ses yapbozu** -- UTAU küçük WAV örneklerini birleştirip kelimeler oluşturur. `oto.ini` her sesin nerede kesilip yapıştırılacağını tanımlar. Her şeyi milisaniyesine kadar kontrol edersin, kara kutu yok.
+1. **Birleştirmeli sentez = ses yapbozu**: UTAU kelimeler oluşturmak için küçük WAV örneklerini birbirine yapıştırır. `oto.ini` her sesi nerede kesip yapıştıracağını tanımlar. Kara kutu olmadan, milisaniyesine kadar her şeyi kontrol edersin.
 
-2. **Açıklık tekniği yener** -- VOCALOID daha iyiydi ama kapalıydı. UTAU hödüktü ama herkesin kendi sesini yaratmasına izin veriyordu. Topluluk ekosistemi patlattı ve hatta VCV'de Yamaha'yı geçti.
+2. **Açıklık tekniği yener**: VOCALOID daha iyiydi ama kapalıydı. UTAU el yapımıydı ama herkesin kendi seslerini yaratmasına izin veriyordu. Topluluk ekosistemi patlattı ve VCVde Yamahayı bile geride bıraktı.
 
-3. **İyi bir fikir kodundan daha uzun yaşar** -- VB6, Shift-JIS, sadece Windows... ve yine de konsept OpenUtau'da dönmeye devam ediyor. Harika bir teknoloji ayaklarla kodlanmış olabilir.
-
-Dürüst olmak gerekirse, sırf 1 Nisan şakasından doğan Kasane Teto için bile bu yazılım saygıyı hak ediyor xD
+3. **İyi bir fikir kodundan sağ çıkar**: VB6, Shift-JIS, sadece Windows... ama konsept OpenUtau üzerinden hâlâ dönüyor. Harika bir teknoloji özensiz kodlanabilir.
+ 
+Dürüstçe söyleyeyim, sadece 1 Nisan balığından doğan Kasane Teto için bile bu yazılım saygıyı hak ediyor.

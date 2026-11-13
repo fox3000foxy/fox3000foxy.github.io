@@ -4,9 +4,8 @@ description: "Comment deux audits menés pour rédiger le 4ème rapport techniqu
 date: 2026-09-15
 tags: ["ai", "llm-agents", "code-review", "context-window", "trading", "typescript"]
 authors: ["docteur-turboss"]
-lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "SOa2Oc9AEh4Eov/AD6KwZy2gi4gA2j6hQdrOsgUPRzbNbE3p+PPHzVjnZLaTOUvds1iQXGQUGDtj6ZbtT94iew=="
+author_sig: "NhphsCeJRp4Yu+DxkWow5stIyMO2II6RIgwvhznVizdk3SOfgnlLL3nP+1SFLrmVUTty1+c217LyJxO/9tIpTw=="
 ---
 ## Le symptôme avant le diagnostic
 

@@ -20,7 +20,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "wnKRkADOYUtte5Qnh82D/HMUe82JAXJvmbXLIMJDHcuXB4INdKUqHqcoTe94MUWWHgtt2GSS7bD8JDo2s48b3w=="
+author_sig: "pRh42ET0qy5exVckCdkOR2Y7uY6fPAkhNQKn+mri0vxjTfn/7+tQrGWnO+UtnT3YbmH3tv/fYCpsbYNxiw2Fig=="
 ---
 
 # De ELIZA aos LLM: 60 anos de IA conversacional, reconstruída em TypeScript

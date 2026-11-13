@@ -1,6 +1,6 @@
 ---
-title: "Luna Protocol：共享大脑、情感分类，以及有趣/无聊的路由机制"
-description: "Luna Protocol 从一个单体架构演变为四层架构：适配器、大脑、情感分类器和推理层。本文将介绍嵌入质心、有趣/无聊路由，以及根据效价和唤醒度调整 LLM 参数的方法。"
+title: Luna Protocol：大脑复用、情绪分类、有趣/无聊路由
+description: Luna Protocol 从单体拆成四层架构：适配器、大脑、情绪分类器、推理。centroid embedding、情绪变量、valence/arousal 调 LLM 参数。
 date: 2026-07-27
 tags:
   - discord
@@ -14,223 +14,223 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Mm5Mhyv2wEcL2gXPXAjzfMbOx6/DIKARRHUTuPbqpUJ2prwhw/niKp5CzZQ/KruhaVn5d+NaZhDPWs0U1JPjjQ=="
+author_sig: "McPGL97liclXymQrKeZdoo6EJS/UKzkZOv7flRy0qPlIwAhlyMaYzhkhSpg2rmSpjJsSTlQXzahRHUTn0tdaIQ=="
 ---
 
-# Luna Protocol：共享大脑、情感分类，以及有趣/无聊的路由机制
+# Luna Protocol：大脑复用、情绪分类、有趣/无聊路由
 
-在[前两篇](/articles/zh/luna-protocol-discord-bot)[文章](/articles/zh/luna-protocol-official-models)中，我把 Luna Protocol 介绍成一个拥有复杂行为系统和微调模型的单一 Discord 机器人。但此后架构发生了巨大的演变。曾经的单体架构——一个处理 Discord 机器人、行为逻辑和 LLM 调用的单一 Node.js 进程——如今已经变成了**四个独立的层**，每一层都有自己的职责、自己的语言和自己的生命周期。
+前[两篇](/articles/fr/luna-protocol-discord-bot)[文章](/articles/fr/luna-protocol-official-models)里我把 Luna Protocol 讲成单个 Discord 机器人，复杂行为系统加微调模型。但架构早就变了。当初的单体：一个 Node.js 进程管 Discord 机器人、行为、LLM 调用，拆成**四个独立层**，各有职责、语言、生命周期。
 
-这次拆分带来了意想不到的好处：跨多个平台共享"大脑"、一个能动态调整 LLM 参数的情感分类系统，以及根据对话感知重要性在两个模型之间智能路由消息的机制。
+拆分带来意外好处：多平台"大脑"复用，按 LLM 参数动态调的情绪分类系统，按对话感知重要性在两模型间路由消息。
 
-这次演进并非一蹴而就——而是遵循了一条有机的路径。我首先把 `server/` 文件夹从机器人仓库中拆分出来，创建了 **Krystal**，并保留 **Jade** 作为 Discord 适配器。接着我复用了 Jade 的 `llm-core` 和事件总线，创建了 **Pixieglow**（Matrix 适配器）。然后是 **Sapphire** 的加入，它引入了基于 DistilBERT 的 GENERIC/SEMANTIC 分类——但效果并不理想，于是我转向了嵌入质心，这种方法在丰富示例方面更灵活，也更精确；分类变成了无聊/有趣。最终我加入了**效价**和**唤醒度**质心，用来调节 LLM 的温度和重复惩罚。最后，我通过创建共享大脑 **Emerald**，消除了 Jade 和 Pixieglow 之间所有冗余代码，把它们变成了简单的、由 socket 驱动的客户端。
+演进不是一刀切：有机生长。我先从机器人仓库拆 `server/` 目录，一边 **Krystal** 一边剩下 **Jade** 当 Discord 适配器。再拿 Jade 的 `llm-core` 和事件总线做 **Pixieglow**（Matrix 适配器）。接着 **Sapphire** 上 DistilBERT 做 GENERIC/SEMANTIC 分类。结果不服，换 embedding centroid，更好加示例更准，分类变 FUTILE/INTERESSANT。再加 **valence** 和 **arousal** centroid 调 LLM 温度和 repeat penalty。最后把 Jade 和 Pixieglow 重复代码全抽了造 **Emerald**，共用大脑，Jade 和 Pixieglow 退成 socket 驱动的瘦客户端。
 
-与此同时，我一直维护着一个网站，用来追踪项目的进展：[protocol-luna.github.io](https://protocol-luna.github.io/)。
+中间我还搭网站记录进展：[protocol-luna.github.io](https://protocol-luna.github.io/)。
 
-本文将讲述我为什么以及如何拆分这些层，每个服务具体做什么，以及**质心**（嵌入向量的平均值）和**怨恨变量**（灵感来自 1970 年代的聊天机器人 PARRY）等概念，是如何把一个简单的 Discord 机器人变成一个出人意料地连贯一致的多平台系统的。
-
----
-
-## 单体架构的问题
-
-最初，Luna Protocol 只需要一个 Node.js 进程。代码负责处理：
-
-- Discord 连接（通过 Eris 库）
-- 触发条件的评估（提及、关键词、跟进消息……）
-- 人类行为的模拟（打字错误、犹豫、睡眠……）
-- 对本地 LLM 服务器（llama.cpp）的 HTTP 调用
-- 会话管理与反垃圾信息
-- TTS 流水线
-
-一切都运行在同一个进程中，通过类型化的事件总线（`TypedBus`）进行通信。它能用，但存在局限：
-
-- **无法添加 Matrix 客户端**，除非复制全部行为代码
-- **LLM 和机器人在同一个仓库中**：`server/` 文件夹虽已存在，但无法在不影响另一方的情况下独立演进其中一方
-- **没有智能分类**：无论是一句"lol"还是一个存在主义式的问题，每条消息都被同等对待
-- **没有持久的情感状态**：机器人什么都"感觉"不到
-
-分层拆分解决了所有这些问题。
+这篇讲为什么切这几层，每层服务到底干什么，**centroid**（embedding 平均向量）和**怨念变量**（70 年代 PARRY 聊天机器人来的灵感）怎么把简单 Discord 机器人变成跨平台还出奇一致的系统。
 
 ---
 
-## 四个层级
+## 单体的问题
 
-Luna Protocol 目前的架构被组织成一个四级漏斗：
+最初 Luna Protocol 是一个 Node.js 进程。管：
+
+- Discord 连接（Eris 库）
+- 触发判定（mention、关键词、follow-up……）
+- 人类行为模拟（typo、犹豫、睡觉……）
+- 本地 llama.cpp HTTP 调用
+- session 管理和反 spam
+- TTS 管线
+
+全一进程，类型化事件总线（`TypedBus`）串着。能跑，但有墙：
+
+- 加 Matrix 客户端要复制整套行为代码
+- LLM 和机器人同仓库：`server/` 目录早就在，但动一边必碰另一边
+- 无差别处理： "lol" 和存在主义问题走同一套
+- 情绪失忆：机器人"没感觉"
+
+切层全解了。
+
+---
+
+## 四层
+
+现在 Luna Protocol 架构是四级漏斗：
 
 ```
 Matrix / Discord
       |
       v
-  [适配器]        Pixieglow (Matrix) / Jade (Discord)
+  [适配器]      Pixieglow（Matrix）/ Jade（Discord）
       |
       v
-  [大脑]          Emerald (WebSocket, 端口 3126)
+  [大脑]            Emerald（WebSocket，3126 端口）
       |
       v
-  [分类器]        Sapphire (HTTP, 端口 3123)
+  [分类]          Sapphire（HTTP，3123 端口）
       |
       v
-  [推理层]        Krystal (llama.cpp, 端口 3124 / 3125)
+  [推理]          Krystal（llama.cpp，3124 / 3125 端口）
 ```
 
-每一层都可以独立重启、更新或替换。
+每层独立重启、升级、换掉。
 
 ---
 
-### 第一层：适配器（Pixieglow 和 Jade）
+### 第 1 层：适配器（Pixieglow 和 Jade）
 
-这是最简单的一层。它们唯一的工作就是把某个消息平台的事件，翻译成发往 Emerald 的标准化协议：
+最薄的两层。只做一件事：把聊天平台事件翻译成往 Emerald 发的标准协议：
 
-- **Jade** 是 Discord 适配器。它使用 Eris 库连接 Discord，并通过 WebSocket 把消息转发给 Emerald。它还负责 TTS 流水线（通过 Piper 进行语音合成、转换为 OGG、上传到 Discord）。
-- **Pixieglow** 是 Matrix 适配器。它直接使用 Matrix 的 Client-Server HTTP API（不依赖 SDK），采用长轮询同步。它没有 TTS 功能。
+- **Jade** 是 Discord 适配器。Eris 库连 Discord，经 WebSocket 把消息转发 Emerald。还管 TTS 管线（Piper 语音合成、转 OGG、传 Discord）。
+- **Pixieglow** 是 Matrix 适配器。直接调 Matrix Client-Server HTTP API（不用 SDK），长轮询 sync。没 TTS。
 
-两个适配器共享同一个在 `emerald-client.ts` 中定义的 WebSocket 协议：
+两适配器共享 `emerald-client.ts` 定的同一 WebSocket 协议：
 
 ```typescript
 type ClientId = "jade" | "pixieglow";
 
-// 事件（适配器 -> Emerald）
+// 事件（适配器 → Emerald）
 type InEvent = MessageEvent | ReadyEvent | BotMessageEvent | PresenceEvent;
 
-// 命令（Emerald -> 适配器）
+// 命令（Emerald → 适配器）
 type OutCommand = RespondCommand | TypingCommand | SetPresenceCommand
                 | SpontaneousCommand | ForgotCommand;
 ```
 
-两个拥有相同接口的适配器同时存在，证明了共享机制确实有效：**同一个"大脑"（Emerald）可以无差别地为 Discord 机器人和 Matrix 机器人服务**，且行为完全一致。这个协议是声明式的：Emerald 并不会告诉适配器*如何*发送一条消息，而是告诉它*应该发送什么*（带延迟的文本、可能的连发计划、一个反应等等）。每个适配器根据自身平台实现具体的执行逻辑。
+两适配器同接口证明复用成立：**同一个"大脑"（Emerald）同时伺候 Discord 机器人和 Matrix 机器人**，行为一致。协议是声明式的：Emerald 不教适配器*怎么*发消息，告诉它发*什么*（文本加延迟，可能带 burst 计划、reaction 等）。各适配器按平台具体执行。
 
-这正是这套架构的优势所在：要支持 Telegram、Signal 或其他任何平台，只需编写一个实现该 WebSocket 协议的适配器即可。
+这架构的力：加 Telegram、Signal 之类，写个实现 WebSocket 协议的适配器就行。
 
 ---
 
-### 第二层：大脑（Emerald）
+### 第 2 层：大脑（Emerald）
 
-Emerald 是中枢决策服务。它通过 WebSocket 在 3126 端口监听，负责：
+Emerald 是中央决策服务。3126 端口听 WebSocket，管：
 
-- **触发条件评估**：提及、私信、名字、关键词、跟进消息、随机
-- **行为模拟**：专注延迟、打字错误、犹豫、遗忘、连发消息、话题疲劳
-- **睡眠周期**：sleep / slow / short 三种模式
-- **会话管理**：冷却时间、会话限制、反垃圾信息
-- **向 Sapphire 的路由**：发送消息、接收流式返回的响应
+- 触发判定：mention、DM、名字、关键词、follow-up、随机
+- 行为模拟：注意力延迟、typo、犹豫、忘事、burst、话题疲劳
+- 睡眠周期：sleep / slow / short 模式
+- session 管理：冷却、session 上限、反 spam
+- 往 Sapphire 路由：发消息，收流式回复
 
-Emerald 是使共享成为可能的核心服务，也是从这次拆分中受益最多的一个。以前，每种行为（打字错误、连发消息、犹豫）都与 Discord 代码紧密纠缠在一起。现在它们都被放在 `behavior/` 目录下的专用模块中：
+Emerald 是促成复用的中央层，也是拆分受益最大的。以前每种行为（typo、burst、hesitation）和 Discord 代码绞在一起。现在 `behavior/` 下独立模块：
 
 ```
 emerald/src/behavior/
-  burst.ts         -- 连发消息的规划
-  mannerisms.ts    -- 延迟、犹豫、反应、遗忘
-  sleep.ts         -- 睡眠时间表的评估
-  typo.ts          -- 打字错误模拟 (AZERTY/QWERTY)
+  burst.ts         -- 连发消息计划
+  mannerisms.ts    -- 延迟、犹豫、reaction、忘事
+  sleep.ts         -- 睡眠时间判定
+  typo.ts          -- typo 模拟（AZERTY/QWERTY）
 ```
 
-大脑并不知道自己运行在哪个平台上。它接收一个带有 `clientId`（"jade" 或 "pixieglow"）的 `MessageEvent`，做出决定，并返回一条命令。剩下的事情由适配器负责。
+大脑不知道自己在哪个平台。它收带 `clientId`（"jade" 或 "pixieglow"）的 `MessageEvent`，做决定，回命令。执行适配器管。
 
 ---
 
-### 第三层：情感分类器（Sapphire）
+### 第 3 层：情绪分类器（Sapphire）
 
-Sapphire 是技术上最有趣的服务。它是一个用 Python 和 FastAPI 编写的 **LLM 中间件**，承担着四个关键角色：
+Sapphire 技术上最有意思。是 Python FastAPI 写的 **LLM 中间件**，四个关键角色：
 
-1. 通过嵌入质心实现的**无聊 / 有趣二元分类器**
-2. 通过质心实现的**情感评分器**（效价 / 唤醒度）
-3. 面向 Krystal 的**后端路由器**（小模型 vs 大模型）
-4. **少样本（few-shot）注入器**与会话管理器
+1. **二分类 FUTILE / INTERESSANT** 走 embedding centroid
+2. **情绪打分**（valence / arousal）走 centroid
+3. 往 Krystal **路由后端**（小模型对大模型）
+4. **few-shot 注入**和 session 管理
 
-#### 质心：分类的核心
+#### centroid：分类的心脏
 
-**质心**是一个简单的概念：它是一组嵌入向量的平均值。具体来说，我收集了数百条示例消息，把它们输入一个嵌入模型（`BAAI/bge-small-en-v1.5`，384 维），然后对得到的向量取平均值。
+**centroid** 概念简单：embedding 向量集合的平均。实际我攒几百条消息示例，过 embedding 模型（`BAAI/bge-small-en-v1.5`，384 维），平均向量。
 
-有**两个分类质心**：
+两颗**分类 centroid**：
 
-- `futile_centroid`：约 683 条琐碎消息（"lol"、"ok"、"hello"） via k-means (k=10, seed=42)
-- `interesting_centroid`：约 678 条有实质内容的消息（技术、个人、哲学） via k-means (k=10, seed=42)
+- `futile_centroid`：约 683 条琐碎消息（"lol"、"ok"、"hello"），k-means（k=10，seed=42）
+- `interessant_centroid`：约 678 条实质消息（技术、个人、哲学），k-means（k=10，seed=42）
 
-当一条消息到来时：
+消息进来：
 
 ```python
-def classify(text, embedder, futile_centroids, interesting_centroids):
-    emb = embedder.query_embed(text)                        # 384-D vector
-    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
-    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
+def classify(text, embedder, futile_centroids, interessant_centroids):
+    emb = embedder.query_embed(text)                     # 384 维向量
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # 10 个取最大
+    sim_i = max(cos(emb, c) for c in interessant_centroids) # 10 个取最大
     diff = sim_i - sim_f
     label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
-消息与每个质心之间的余弦相似度决定了它的类别。绝对差值则给出置信度。这种方法简单、快速（不需要 LLM 的前向传播），而且效果出奇地好。
+每类分数是 10 个 centroid 里**最大余弦相似度**。抓住每类子类：问候和道别都靠近某颗 futile centroid，哪怕 embedding 空间里离得远。启动 k-means 一次，运行全点积：不训练，不用 GPU。
 
-#### 为什么用两个模型？
+#### 为什么两模型？
 
-这次分类的结果决定了要调用哪个 LLM 后端：
+分类结果定调哪个 LLM 后端：
 
 | 标签 | Krystal 后端 | 模型 | 端口 |
-|------|--------------|------|------|
-| `FUTILE`（无聊） | `generic` | Luna-Protocol-1.5B（941 MB, Q4_K_M） | 3124 |
-| `INTERESTING`（有趣） | `semantic` | Hermes-3-3B 或 8B（视配置而定） | 3125 |
+|-------|----------------|--------|------|
+| `FUTILE` | `generic` | Luna-Protocol-1.5B（941M，Q4_K_M） | 3124 |
+| `INTERESSANT` | `semantic` | Hermes-3-3B 或 8B（看配置） | 3125 |
 
-这个直觉很简单：一句"lol"或"nm just chillin u"不值得调用一个 80 亿参数的模型。经过 20 万条 Discord 样本微调的小型 Luna 1.5B 模型，处理轻松的对话已经绰绰有余。而关于人生的问题、心事倾诉或技术辩论，则会被路由到能产生更丰富回复的大模型上。
+直觉简单："lol" 或 "nm just chillin u" 不值得调 80 亿参数模型。Discord 微调小 Luna 1.5B（20 万样本训）应付闲聊足够。人生问题、掏心窝、硬核技术 debate 路由大模型给更厚回复。
 
-这种经济型路由大大降低了 LLM 服务器的负载：大约 70% 的消息被分类为"无聊"，由小模型处理，从而把大模型解放出来，专门服务于那些真正值得的对话。
+经济路由大幅减 LLM 服务器负载：约 70% 消息判 FUTILE 走小模型，大模型留给真值得的对话。
 
-#### 情感维度：效价与唤醒度
+#### 情绪轴：valence 和 arousal
 
-但这还不是全部。Sapphire 在一个独立的维度上使用了**同样的质心机制**，来评估消息的情感：
+不止这些。Sapphire **同 centroid 机制**独立轴给消息打情绪分：
 
-有**四个情感质心**：
+四颗**情绪 centroid**：
 
-| 极点 | 示例 |
-|------|------|
-| `positive`（正面） | "hell yeah"、"love that"、"this is great" |
-| `negative`（负面） | "shut up"、"i hate this"、"this sucks" |
-| `high_arousal`（高唤醒） | "WHAT THE HELL"、"omg omg omg"、"AAAAA" |
-| `low_arousal`（低唤醒） | "just chilling"、"meh"、"i guess" |
+| 极 | 示例 |
+|------|----------|
+| `positive` | "hell yeah"、"love that"、"this is great" |
+| `negative` | "shut up"、"i hate this"、"this sucks" |
+| `high_arousal` | "WHAT THE HELL"、"omg omg omg"、"AAAAA" |
+| `low_arousal` | "just chilling"、"meh"、"i guess" |
 
-分数的计算方式是各维度上相似度的差值：
+分数是两轴相似度差：
 
 ```python
 valence = sim(emb, positive) - sim(emb, negative)     # [-1, +1]
 arousal = sim(emb, high_arousal) - sim(emb, low_arousal)  # [-1, +1]
 ```
 
-**效价（Valence）**衡量消息是正面还是负面。**唤醒度（Arousal）**衡量它的情感强度。两者结合起来构成了情感环状模型（Russell，1980）——正是这个心理学模型，启发了 1972 年的聊天机器人 **PARRY**。
+**valence** 量正负。**arousal** 量情绪强度。合起来是情感环状模型（Russell，1980），1972 年 **PARRY** 聊天机器人灵感来源的同一心理学模型。
 
-#### 怨恨变量：情感如何控制 LLM
+#### 怨念变量：情绪怎么调 LLM
 
-正是在这里，PARRY 的启发变得具体可感。PARRY（由 Kenneth Colby 于 1972 年创建）是一个用于模拟偏执型患者的聊天机器人。它拥有内部变量——恐惧、愤怒、猜疑——这些变量会改变它的回应方式。比如，一个"受到惊吓"的 PARRY 会做出更具攻击性的回应。
+PARRY 灵感落地的点。PARRY（Kenneth Colby 1972 年造）是装偏执病人的聊天机器人。它有内部变量（恐惧、愤怒、猜疑）改回复。比如"害怕"的 PARRY 回得更冲。
 
-Sapphire 做的是同样的事情，但采用了连续变量和更优雅的方法：LLM 的采样参数会根据对话的情感状态实时调整。
+Sapphire 同样的事，连续变量加更优雅的方法：LLM 采样参数按对话情绪状态实时调。
 
-##### 温度跟随唤醒度
+##### 温度跟 arousal 走
 
 ```python
 temperature = clamp(0.7 + arousal * 0.3, 0.4, 1.0)
 ```
 
-| 唤醒度 | 温度 | 效果 |
-|--------|------|------|
-| -1.0（平静） | 0.40 | 创造性低，回应可预测 |
-| 0.0（中性） | 0.70 | 默认创造性 |
-| +1.0（激动） | 1.00 | 最大随机性，回应令人意外 |
+| Arousal | 温度 | 效果 |
+|---------|-------------|-------|
+| -1.0（平静） | 0.40 | 低 creativity，可预测回复 |
+| 0.0（中性） | 0.70 | 默认 creativity |
+| +1.0（激动） | 1.00 | 最大随机，意外回复 |
 
-当有人感到兴奋或恼怒时（高唤醒度），温度会上升。模型会产生更加多样、更有创造性、有时更混乱的回应——就像一个"忘乎所以"的人。当对话平静时，温度下降，回应变得更加沉稳。
+人激动上头（arousal 高），温度升。模型输出更多变更 creative 甚至混乱，像人"上头"。对话平静温度降，回复稳。
 
-##### 重复惩罚跟随效价
+##### repeat penalty 跟 valence 走
 
 ```python
 repeat_penalty = clamp(1.15 - valence * 0.1, 1.0, 1.3)
 ```
 
-| 效价 | 重复惩罚 | 效果 |
-|------|----------|------|
-| -1.0（负面） | 1.25 | 惩罚力度大，避免重复 |
-| 0.0（中性） | 1.15 | 默认值 |
-| +1.0（正面） | 1.05 | 惩罚力度小，允许重复 |
+| Valence | Repeat Penalty | 效果 |
+|---------|---------------|-------|
+| -1.0（负） | 1.25 | 重罚，避重复 |
+| 0.0（中性） | 1.15 | 默认 |
+| +1.0（正） | 1.05 | 轻罚，允许重复 |
 
-对话越负面，模型就越被推动去避免重复自己——就像一个人在紧张的争吵中努力寻找措辞。对话越正面，模型就越能容忍冗余的表述，就像在一场轻松的闲聊中一样。
+对话越负，模型越被推着别复读，像紧张吵架找词的人。对话越正，越允许肯定式复读，像松弛闲聊。
 
-##### 累积的情感状态
+##### 累积情绪状态
 
-这些分数并不只针对当下这一条消息。`EmotionState` 会为每个会话维护一个效价和唤醒度的**指数移动平均值**：
+分数不只看当下消息。`EmotionState` 按 session 维护 valence 和 arousal **指数滑动平均**：
 
 ```python
 class EmotionState:
@@ -249,122 +249,122 @@ class EmotionState:
         return s
 ```
 
-`decay` 值为 0.85，意味着每条消息都会保留 85% 的先前状态，并融入 15% 的新信号。这形成了一种**情感记忆**，能够平滑掉剧烈波动：单独一条负面消息不会让机器人"悲伤"起来，但一连串的负面消息会逐渐让它的情绪发生偏移。
+`decay` 0.85 意思是每消息保留 85% 旧状态，融 15% 新信号。得到**情绪记忆**抹平剧烈抖动：一条负消息不让机器人"难过"，一连串负的慢慢带偏心情。
 
-在实践中：如果有人以非常兴奋的状态开始一段对话（`arousal=+0.8`），即使后续消息更加平静，温度也会在好几轮交流中保持在较高水平。情绪需要时间才能平复下来——就像一个人在争吵之后仍然"余怒未消"一样。
-
----
-
-### 第四层：推理（Krystal）
-
-Krystal 是最底层：它是围绕 `llama.cpp` 构建的一个封装层，对外暴露一个与 OpenAI 兼容的 API（`/v1/chat/completions`）。它以两个 PM2 实例的形式运行：
-
-- `krystal-small`：微调后的 Luna 1.5B 模型，运行在 3124 端口，CPU 亲和性为 0
-- `krystal-large`：Hermes 3B 模型，运行在 3125 端口，CPU 亲和性为 0、1
-
-两个实例都是预编译好的 `llama-server` 进程，通过 `taskset` 启动以实现 CPU 绑定。
-
-自第二篇文章以来，Luna 模型的微调也发生了演进：现在它使用**20 万条样本**进行训练（相比之前的 5 万条），仍然是基于 Qwen2.5-1.5B-Instruct 通过 QLoRA 进行微调。这 20 万条样本是 Discord-Dialogues 数据集的一个子集，经过筛选，只保留了最自然、最多样化的对话。目标是：在不损失使少样本引导（few-shot priming）如此有效的灵活性的前提下，拓宽模型的风格表达范围。
+实际：有人开场很激动（`arousal=+0.8`），后面消息平了温度还高几轮。情绪下来慢，像人吵完还"热"着。
 
 ---
 
-## 完整流程：一条消息的旅程
+### 第 4 层：推理（Krystal）
 
-下面是当有人在 Discord 上发送"我今天真的很难过"时具体发生的事情：
+Krystal 最底层：llama.cpp 套 OpenAI 兼容 API（`/v1/chat/completions`）壳。PM2 起两实例：
 
-1. **Jade** 通过 Discord Gateway API 接收到消息。它将消息转换为一个 `MessageEvent`，并通过 WebSocket 发送给 Emerald。
-2. **Emerald** 评估触发条件（是提及？名字？还是关键词？）。这是一次直接提及。它计算出一个专注延迟，检查冷却时间、会话状态、话题疲劳度。它决定回应，并通过 HTTP 把消息发送给 Sapphire。
-3. **Sapphire** 使用 `bge-small-en-v1.5` 对消息进行嵌入。
-   - 分类：该消息更接近 `interesting` 质心而非 `futile` 质心（差值 = +0.31）-> **有趣（INTERESTING）**
-   - 情感：负面效价（-0.42），中等唤醒度（0.35）
-   - 路由：方向为 `KRYSTAL_SEMANTIC_URL`（3125 端口，大模型）
-   - 采样参数：温度 = 0.80（唤醒度提高所致），repeat_penalty = 1.19（负面效价所致）
-   - 会话的情感状态被更新为这些数值
-4. **Krystal**（大模型实例）用经过情感调整的参数生成回应，并返回给 Sapphire。
-5. **Sapphire** 将这个回应连同元数据（标签、效价、唤醒度、调试统计信息）流式传输给 Emerald。
-6. **Emerald** 决定加入一句犹豫的话（"哦……"），规划一次连发（2 个片段），并选择一个反应。它向 Jade 发送一个 `RespondCommand`。
-7. **Jade** 执行操作：等待初始延迟，发送带有犹豫语气的第一个片段，等待 1.5 秒，再发送第二个片段。在整个生成过程中，它会一直显示"正在输入"的提示。
+- `krystal-small`：Luna 微调 1.5B 模型，3124 端口，CPU 亲和 0
+- `krystal-large`：Hermes 3B 模型，3125 端口，CPU 亲和 0、1
 
-这一切在用户看来，都发生在不到 3 秒的时间里。
+两实例是预编译 `llama-server` 进程，`taskset` 绑 CPU。
+
+Luna 微调相对第二篇也进化了：训练到 **20 万样本**（之前 5 万），还是 Qwen2.5-1.5B-Instruct QLoRA。20 万是从 Discord-Dialogues 子集滤的，留最自然最多样的对话。目标：拓宽小模型风格 register，不丢 few-shot 启动的弹性。
 
 ---
 
-## 质心：为什么它比神经网络分类器更好
+## 全图：一句话旅行
 
-选择嵌入质心而不是传统分类器（比如我之前使用的 DistilBERT）的原因，值得解释一下。
+"我今天真难过"发 Discord 上，具体发生什么：
 
-神经网络分类器学习的是各个类别之间的决策边界——通常是一种把输入映射为概率的非线性变换。它很精确，但存在以下问题：
+1. **Jade** 经 Discord Gateway API 收消息。转 `MessageEvent` 经 WebSocket 发 Emerald。
+2. **Emerald** 判触发（mention？名字？关键词？）。直接 mention。它算注意力延迟，查冷却、session、话题疲劳。定回复，经 HTTP 发 Sapphire。
+3. **Sapphire** 拿 `bge-small-en-v1.5` embed 消息。
+   - 分类：消息离 `interessant` centroid 比 `futile` 近（diff = +0.31）→ **INTERESSANT**
+   - 情绪：valence 负（-0.42），arousal 中（0.35）
+   - 路由：`KRYSTAL_SEMANTIC_URL`（3125 端口，大模型）
+   - 采样参数：温度 = 0.80（arousal 推高），repeat_penalty = 1.19（valence 负）
+   - session 情绪状态更新
+4. **Krystal**（大实例）按情绪调参生成回复，回 Sapphire。
+5. **Sapphire** 流式回 Emerald，带元数据（标签、valence、arousal、debug 统计）。
+6. **Emerald** 定加犹豫（"oh……"），排 burst（2 段），挑 reaction。发 `RespondCommand` 给 Jade。
+7. **Jade** 执行：等初始延迟，发第一段带犹豫，1.5 秒后发第二段。生成全程打字指示器开着。
 
-- 需要有标签的训练数据
-- 对分布变化（数据漂移）很敏感
-- 难以解释
-- 每添加一个新类别都需要重新训练
-
-而质心则是一组示例嵌入的**平均向量**。分类过程通过与这个平均向量的余弦相似度来完成。它的优点包括：
-
-- **无需训练**：只需计算手工挑选的示例嵌入的平均值即可
-- **易于解释**：可以查看哪些示例最接近质心，从而理解"这个质心学到了什么"
-- **添加类别很简单**：只需添加一个新的质心——无需重新训练
-- **鲁棒性强**：质心是一种平均值，因此离群点的影响很小
-
-质心真正的力量在于，它把一个分类问题转化成了一个**空间距离度量**问题。我们可以把各个类别想象成 384 维空间中的一个个区域（经过 PCA/t-SNE 降维后，也可以在 2D/3D 中可视化）。
-
-### 质心的 3D 可视化
-
-在实践中，嵌入空间中的分类质心大致是这个样子。每个点代表一条示例消息，通过 PCA 投影到 3D 空间中（原始的 384 维被降维到 3 维用于可视化）。蓝色的点是"无聊"消息，黄色的点是"有趣"消息。两个大的菱形是计算出的质心——即每组的平均值。把鼠标悬停在某个点上，即可看到该示例的原始文本。
-
-<iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="质心分类 - 交互式 3D 视图"></iframe>
-
-图中用红色标出了两个示例："lol"（被分类为无聊）和 "i feel sad today"（被分类为有趣）。"lol" 落在了"无聊"消息的蓝色云团中，而 "i feel sad today" 则位于黄色点的一侧。即使降维到 3 维之后，这种分离依然清晰可见（尽管只解释了总方差的 14.7%）。在完整的 384 维空间中，分类边界要清晰得多。
-
-输入消息的质心会根据其内容在这个空间中游走。无聊/有趣的分类，本质上就是通过余弦相似度来判断哪个质心更近。这样一来，每条消息都可以被表示成多维空间中的一个点，每个维度对应一种语义属性。
+用户侧全程不到 3 秒。
 
 ---
 
-## 这在实践中改变了什么
+## centroid：为什么比神经分类器好
 
-用户看不到这些层、质心，或是温度调整。但他们能感受到这些效果：
+Sapphire 以前 DistilBERT 分类器，值得解释为什么换 embedding centroid。
 
-- **更快的响应速度**：对于简单消息（小模型速度快 2 倍，处理 70% 的流量）
-- **自适应的语气**：如果你感到恼怒，机器人能"感受到"这种恼怒，并调整自己的表达风格
-- **跨平台一致性**：Matrix 机器人和 Discord 机器人共享同一个大脑和同一个情感状态
-- **没有"助手模式"**：微调 + 少样本引导 + 智能路由，避免了那种公司腔调的回应
+神经分类器学类间决策边界，一般非线性投影到概率。准，但：
 
-将小模型的训练样本增加到 20 万条，进一步强化了这些效果：模型能更好地捕捉 Discord 对话的多样性，同时又不失少样本引导所带来的灵活性。
+- 要标注训练数据
+- 数据漂移敏感（data drift）
+- 难解释
+- 加类要重训
+
+centroid 是示例 embedding **平均向量**。分类靠和平均向量的余弦相似度。好处：
+
+- **零训练**：手挑示例 embedding 平均一下
+- **好解释**：看离 centroid 最近的示例就知道"它学了什么"
+- **加类**：加颗 centroid，不重训
+- **稳健**：平均抹掉 outlier
+
+centroid 真威力是把分类变成**空间距离度量**。类别是 384 维空间区域（PCA/t-SNE 降 2D/3D 可视化）。
+
+### centroid 3D 可视化
+
+实际分类 centroid 在 embedding 空间长这样。每点一条示例消息，PCA 压 3D（384 维压 3 维看）。蓝点 futile 消息，黄点 interessant 消息。**20 颗钻石标记**是 k-means centroid（每类 10 颗，seed=42）。悬停看示例原文。
+
+<iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="按 centroid 分类，3D 交互视图"></iframe>
+
+两条红色测试示例："lol"（判 futile），"i feel sad today"（判 interessant）。384 压 3 维只剩 14.7% 解释方差，两簇还清楚分开。顶部注记总样本数和模糊区。
+
+输入消息的 centroid 在空间里按内容飘。FUTILE/INTERESSANT 分类就是量它离哪颗 centroid 余弦最近。每条消息能看成多维空间一点，每维对应某种语义属性。
 
 ---
 
-## 完整的基础设施
+## 实际改变什么
 
-以下是目前正在运行的各项服务：
+用户看不见层、centroid、温度调。但感觉得到：
+
+- 简单消息**回更快**（小模型快 2 倍，吃 70% 流量）
+- **语气自适应**：你急机器人"感"到急，风格跟变
+- **跨平台一致**：Matrix 机器人和 Discord 机器人共享大脑和情绪状态
+- **本味保住**：微调加 few-shot 加智能路由，不出企业腔
+
+小模型训到 20 万样本又强化了这些：Discord 对话多样性吃更好，few-shot 弹性还在。
+
+---
+
+## 完整 infra
+
+现在跑的服务：
 
 | 服务 | 技术 | 端口 | 角色 |
-|------|------|------|------|
-| Pixieglow | TypeScript (Bun) | -- | Matrix 适配器 |
-| Jade | TypeScript (esbuild) | -- | Discord 适配器 |
-| Emerald | TypeScript (Bun) | 3126 (WebSocket) | 大脑 / 决策 |
-| Sapphire | Python (FastAPI) | 3123 (HTTP) | 分类器 + 情感 |
-| Krystal small | llama.cpp (PM2) | 3124 | 小模型 (1.5B, 无聊) |
-| Krystal large | llama.cpp (PM2) | 3125 | 大模型 (3B+, 有趣) |
+|---------|------------|---------|------|
+| Pixieglow | TypeScript（Bun） | -- | Matrix 适配器 |
+| Jade | TypeScript（esbuild） | -- | Discord 适配器 |
+| Emerald | TypeScript（Bun） | 3126（WebSocket） | 大脑 / 决策 |
+| Sapphire | Python（FastAPI） | 3123（HTTP） | 分类加情绪 |
+| Krystal small | llama.cpp（PM2） | 3124 | 小模型（1.5B，futile） |
+| Krystal large | llama.cpp（PM2） | 3125 | 大模型（3B+，interessant） |
 
-服务之间的依赖关系是单向的：适配器依赖 Emerald，Emerald 依赖 Sapphire，Sapphire 依赖 Krystal。没有循环依赖。每个服务都可以独立重启。
+服务依赖单向：适配器依赖 Emerald，Emerald 依赖 Sapphire，Sapphire 依赖 Krystal。图无环。每服务独立重启。
 
 ---
 
 ## 结语
 
-把 Luna Protocol 拆分成四个层，不仅仅是一次架构上的练习。它是对一系列具体局限的回应：无法支持 Matrix、缺乏情感感知能力、缺少智能的消息优先级排序。
+Luna Protocol 拆四层不只是架构练习。是对具体墙的回应：Matix 支持不了，情绪感知没有，消息轻重不分。
 
-如今，这个系统变得更加健壮（LLM 崩溃不会导致整个机器人挂掉）、更加可扩展（一个 Telegram 或 WhatsApp 适配器只需遵循同样的 WebSocket 协议即可接入），也变得更加"有生命力"：机器人会根据对话感知到的情感状态，调整自己的行为、语气，甚至是 LLM 的参数。
+现在系统更稳（LLM crash 不杀机器人），更能长（Telegram、WhatsApp 适配器走同一 WebSocket 协议就行），更"活"：行为、语气、甚至 LLM 参数都随感知到的对话情绪变。
 
-嵌入质心是让这一切得以实现、同时又不带来过度复杂性的关键要素：没有训练好的神经网络，没有带标签的数据流水线，只有向量平均值和余弦相似度。这是一种简单、效果惊人、却又被严重低估的技术。
+embedding centroid 是让一切成立的关键，还简单得离谱：不训神经网络，不搞标注管线，平均向量加余弦相似度。简单，巨有效，严重被低估。
 
 | 资源 | 链接 |
-|------|------|
-| 项目网站 | [protocol-luna.github.io](https://protocol-luna.github.io/) |
+|----------|------|
+| 项目站 | [protocol-luna.github.io](https://protocol-luna.github.io/) |
 | Pixieglow | [protocol-luna/pixieglow](https://github.com/protocol-luna/pixieglow) |
 | Emerald | [protocol-luna/emerald](https://github.com/protocol-luna/emerald) |
 | Sapphire | [protocol-luna/sapphire](https://github.com/protocol-luna/sapphire) |
 | Krystal | [protocol-luna/krystal](https://github.com/protocol-luna/krystal) |
-| 文章一：Discord 机器人 | [Luna Protocol：我打造了一个自主的 Discord 机器人](/articles/zh/luna-protocol-discord-bot) |
-| 文章二：微调过程 | [Luna Protocol：为什么我要微调一个 1.5B 模型](/articles/zh/luna-protocol-official-models) |
+| 第 1 篇：Discord 机器人 | [Luna Protocol：我做了个装人类的 Discord 机器人](/articles/fr/luna-protocol-discord-bot) |
+| 第 2 篇：微调 | [Luna Protocol：为什么我在 5 万 Discord 样本上微调 15 亿参数模型](/articles/fr/luna-protocol-official-models) |

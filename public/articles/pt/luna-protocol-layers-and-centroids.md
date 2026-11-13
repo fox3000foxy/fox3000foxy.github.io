@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "hPFoPf6fzQwcYcnPLlkQAHdTZMGdlKY/JFdQGwHtOBQuZPDzTuCtiVb0pKa7m28xc/TBUjxpBAkcHLZG0kVo3Q=="
+author_sig: "KpFULHk1f1qdYEyAGZZGFbLRVwvRTvzCbAULO3W5xqDMjt9sju390TE51lP1BXpr1AXo0axTugk9dU5VF0J1Hw=="
 ---
 
 # Luna Protocol: cérebros compartilhados, classificação emocional e roteamento interessante/fútil
@@ -46,8 +46,8 @@ Tudo estava no mesmo processo, comunicando-se via barramentos de eventos tipados
 
 - **Impossível adicionar um cliente Matrix** sem duplicar todo o código de comportamento
 - **O LLM e o bot estavam no mesmo repositório**: a pasta `server/` já existia, mas era impossível evoluir um sem mexer no outro
-- **Sem classificação inteligente**: cada mensagem era tratada da mesma forma, seja um "lol" ou uma pergunta existencial
-- **Sem estado emocional persistente**: o bot não "sentia" nada
+- **Tratamento indiferenciado** : cada mensagem era tratada do mesmo jeito, fosse um "lol" ou uma pergunta existencial
+- **Amnésia emocional** : o bot não "sentia" nada
 
 A divisão em camadas resolveu todos esses problemas.
 
@@ -138,26 +138,26 @@ O Sapphire é o serviço tecnicamente mais interessante. É um **middleware de L
 
 #### Os centroides: o coração da classificação
 
-Um **centroide** é um conceito simples: é a média de um conjunto de vetores de embeddings. Na prática, reuni centenas de mensagens de exemplo, passei-as por um modelo de embedding (`BAAI/bge-small-en-v1.5`, 384 dimensões), e tirei a média dos vetores obtidos.
+Um **centroide** é um conceito simples : é a média de um conjunto de vetores de embeddings. Na prática, reuni centenas de mensagens de exemplo, passei por um modelo de embedding (`BAAI/bge-small-en-v1.5`, 384 dimensões), e tirei a média dos vetores obtidos.
 
 Existem **dois centroides de classificação**:
 
-- `futile_centroid`: a média dos embeddings de ~683 mensagens triviais via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
-- `interessante_centroid`: a média dos embeddings de ~678 mensagens substanciais (perguntas técnicas, confidências, filosofia)
+- `futile_centroid` : ~683 mensagens triviais ("lol", "ok", "hello") via k-means (k=10, seed=42)
+- `interessant_centroid` : ~678 mensagens substanciais (técnicas, pessoais, filosóficas) via k-means (k=10, seed=42)
 
 Quando uma mensagem chega:
 
 ```python
-def classify(text, embedder, futile_centroids, interessante_centroids):
-    emb = embedder.query_embed(text)                        # 384-D vector
-    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
-    sim_i = max(cos(emb, c) for c in interessante_centroids)     # max over 10
+def classify(text, embedder, futile_centroids, interessant_centroids):
+    emb = embedder.query_embed(text)                     # vetor 384-D
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # máx entre 10
+    sim_i = max(cos(emb, c) for c in interessant_centroids) # máx entre 10
     diff = sim_i - sim_f
     label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
-A similaridade de cosseno entre a mensagem e cada centroide determina a categoria. A diferença absoluta dá a confiança. É simples, rápido (sem forward pass do LLM), e surpreendentemente eficaz.
+O score por classe é a **similaridade de cosseno máxima** entre seus 10 centroides. Isso captura os subtipos em cada categoria : uma saudação e uma despedida caem ambos perto de um dos 10 centroides fúteis mesmo estando distantes no espaço de embeddings. Só k-means na inicialização e produtos escalares na execução : sem treinamento, sem GPU.
 
 #### Por que dois modelos?
 
@@ -165,8 +165,8 @@ O resultado dessa classificação decide qual backend de LLM é invocado:
 
 | Rótulo | Backend Krystal | Modelo | Porta |
 |--------|------------------|--------|-------|
-| `FUTIL` | `generic` | Luna-Protocol-1.5B (941 MB, Q4_K_M) | 3124 |
-| `INTERESSANTE` | `semantic` | Hermes-3-3B ou 8B (conforme configuração) | 3125 |
+| `FUTILE` | `generic` | Luna-Protocol-1.5B (941 Mo, Q4_K_M) | 3124 |
+| `INTERESSANT` | `semantic` | Hermes-3-3B ou 8B (conforme config) | 3125 |
 
 A intuição é simples: um "lol" ou um "nm just chillin u" não merece invocar um modelo de 8 bilhões de parâmetros. O modelo pequeno Luna 1.5B fine-tuned, treinado com 200.000 amostras do Discord, é mais que suficiente para trocas leves. Já uma pergunta sobre a vida, uma confidência, ou um debate técnico é roteado para o modelo grande, que pode produzir uma resposta mais rica.
 
@@ -180,10 +180,10 @@ Existem **quatro centroides emocionais**:
 
 | Polo | Exemplos |
 |------|----------|
-| `positivo` | "hell yeah", "love that", "this is great" |
-| `negativo` | "shut up", "i hate this", "this sucks" |
-| `ativação alta` | "WHAT THE HELL", "omg omg omg", "AAAAA" |
-| `ativação baixa` | "just chilling", "meh", "i guess" |
+| `positive` | "hell yeah", "love that", "this is great" |
+| `negative` | "shut up", "i hate this", "this sucks" |
+| `high_arousal` | "WHAT THE HELL", "omg omg omg", "AAAAA" |
+| `low_arousal` | "just chilling", "meh", "i guess" |
 
 O score é calculado como uma diferença de similaridades em cada eixo:
 
@@ -311,11 +311,11 @@ O verdadeiro poder dos centroides é que eles transformam um problema de classif
 
 ### Visualização 3D dos centroides
 
-Na prática, é assim que os centroides de classificação se parecem no espaço de embeddings. Cada ponto é uma mensagem de exemplo, projetada em 3D via PCA (as 384 dimensões originais são reduzidas a 3 para a visualização). Os pontos azuis são mensagens fúteis, os pontos amarelos são mensagens interessantes. Os **20 marcadores de diamante** são os centroides k-means (10 por classe) são os centroides calculados -- a média de cada grupo. Passe o mouse sobre um ponto para ver o texto original do exemplo.
+Na prática, eis como os centroides de classificação aparecem no espaço de embeddings. Cada ponto é uma mensagem de exemplo, projetada em 3D via PCA (as 384 dimensões originais são reduzidas a 3 para a visualização). Os pontos azuis são as mensagens fúteis, os pontos amarelos as mensagens interessantes. Os **20 marcadores em diamante** são os centroides k-means (10 por classe, seed=42). Passe o mouse sobre um ponto para ver o texto original do exemplo.
 
 <iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Classificação por centroides - visualização 3D interativa"></iframe>
 
-Dois exemplos são exibidos em vermelho: "lol" (classificado como fútil) e "i feel sad today" (classificado como interessante). "lol" cai na nuvem azul dos fúteis, enquanto "i feel sad today" fica do lado dos pontos amarelos. A separação é visível mesmo após uma redução a 3 dimensões (apenas 14,7% da variância total explicada). Em 384 dimensões, a fronteira é bem mais nítida.
+Dois exemplos de teste aparecem em vermelho : "lol" (classificado fútil) e "i feel sad today" (classificado interessante). Mesmo após redução de 384 para 3 dimensões (14,7% de variância explicada), os dois clusters estão claramente separados. A anotação no topo mostra as contagens exatas e a zona ambígua.
 
 O centroide da mensagem de entrada se desloca nesse espaço conforme seu conteúdo. A classificação FÚTIL/INTERESSANTE consiste simplesmente em medir qual centroide está mais próximo por similaridade de cosseno. Assim, é possível representar cada mensagem como um ponto em um espaço multidimensional, com cada dimensão correspondendo a uma propriedade semântica.
 

@@ -4,9 +4,8 @@ description: "Récit de build, jour par jour : comment un agent opencode nommé 
 date: 2026-09-18
 tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
-lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "9eNr/8nMNijMP3hZ7gPCOPV5ODzEQV0Mqhud5LxsaJdYQTlYyPlcEatJYdmNc8Ap8gzGSqbT1qvQfk901nq8zQ=="
+author_sig: "D8DSwhrwgQMvY5c8iJZvs/GhyXThCo2lSY18W3g1YZldTUiTpE4vGV67835JCFG2bz7iEDb7NK7hDkjsqMFXLA=="
 ---
 
 # Chlone : six jours pour cloner ma façon de parler sur Discord

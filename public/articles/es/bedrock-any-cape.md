@@ -1,6 +1,6 @@
 ---
-title: "Como conseguir cualquier capa en Minecraft Bedrock"
-description: "Un launcher de terceros, una version antigua del juego y un selector de capas que nunca aprendio a decir que no. Tutorial completo mas la explicacion probable de por que funciona."
+title: "Cómo conseguir cualquier capa en Minecraft Bedrock"
+description: "Un launcher de terceros, una versión vieja del juego, y un selector de capas que nunca aprendió a decir que no. Tutorial completo más la explicación probable de por qué funciona."
 date: 2026-07-14
 tags:
   - minecraft
@@ -10,127 +10,127 @@ tags:
 authors:
   - 9stown
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "S8xlVGz/d/0vlfzImk8J65J9vt7aFdMB6bmcD/LWnTc8tSzaQHk3X8yt76a0kqBmnB0ZNlYas/URVAjDe+ADDA=="
+author_sig: "el7IIaJitW8V68qQGlF3qmKiM1c9xxhIrxuIU+K0CtE4UB6gPD8pN5yDUpduj40EP9JFtixL0sw/Nm/Z7Kul3A=="
 ---
 
-# Como conseguir cualquier capa en Minecraft Bedrock
+# Cómo conseguir cualquier capa en Minecraft Bedrock
 
-En Java existen un monton de formas retorcidas de acabar con una capa que no deberias tener (mira el articulo de `cape-mod`). En Bedrock el juego es distinto, la autenticacion es distinta, pero aun asi hay un metodo -- sin mods, sin tocar ni un solo paquete de red. Solo un launcher de terceros y una version del juego lo bastante vieja como para no tener la validacion que creemos que tiene.
+En Java hay un montón de formas retorcidas de acabar con una capa que no deberías tener (ver el artículo sobre `cape-mod`). En Bedrock el juego es distinto, la autenticación es distinta, pero aun así hay una forma: solo necesitas un launcher de terceros y una versión del juego lo bastante vieja como para ignorar la validación que creías adquirida.
 
-Aqui te cuento como se hace, y luego vemos que esta pasando probablemente por dentro.
+Así se hace, y luego vemos qué pasa probablemente bajo el capó.
 
-## Lo que necesitas
+## Qué necesitas
 
-- Una cuenta Microsoft que ya tenga Minecraft Bedrock (la tuya vale)
+- Una cuenta Microsoft que ya tenga Minecraft Bedrock (la tuya sirve perfectamente)
 - El launcher oficial de Minecraft instalado
-- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), un launcher de terceros open source que te permite instalar y ejecutar cualquier version historica de Bedrock
+- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), un launcher de terceros open source que permite instalar y lanzar cualquier versión histórica de Bedrock
 - .NET 8.0 Desktop Runtime
-- Modo desarrollador activado en Windows
+- El modo desarrollador activado en Windows
 
-## Paso 1 -- Instalar Bedrock al menos una vez con el launcher oficial
+## Paso 1: instalar Bedrock al menos una vez con el launcher oficial
 
-Antes de hacer nada mas, abre el launcher oficial de Minecraft, ve a la pestana **Minecraft: Bedrock Edition** y haz clic en **Instalar**. Bedrock tiene que haberse instalado y ejecutado al menos una vez por la via oficial antes de tocar BedrockLauncher.
+Antes de hacer nada más, abre el launcher oficial de Minecraft, ve a la pestaña **Minecraft: Bedrock Edition**, y haz clic en **Install**. Bedrock tiene que haberse instalado y lanzado al menos una vez por la vía oficial antes de tocar BedrockLauncher.
 
 ![Instalar Bedrock Edition desde el launcher oficial](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
 
-## Paso 2 -- Descargar BedrockLauncher
+## Paso 2: descargar BedrockLauncher
 
-Ve a la pagina de releases de GitHub del proyecto. Descarga el zip de la ultima version que aparece en **Assets**.
+Ve a la página de releases de GitHub del proyecto. Coge el zip de la última versión listada en los **Assets**.
 
-![Pagina de releases de GitHub de BedrockLauncher](/images/bedrock-cape/bedrock-cape-02-github-release.png)
+![Página de releases de GitHub de BedrockLauncher](/images/bedrock-cape/bedrock-cape-02-github-release.png)
 
-## Paso 3 -- Extraer el archivo
+## Paso 3: extraer el archivo
 
-Una vez descargado el zip, extraelo en tu carpeta `Downloads` (o donde quieras, mientras luego sepas encontrarlo).
+Una vez descargado el zip, extráelo en tu carpeta `Downloads` (o donde sea, mientras encuentres la carpeta después).
 
-![Extrayendo el archivo de BedrockLauncher](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
+![Extracción del archivo BedrockLauncher](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
 
-## Paso 4 -- Ejecutar el ejecutable
+## Paso 4: lanzar el ejecutable
 
-Entra en la carpeta extraida y ejecuta `BedrockLauncher.exe`.
+Ve a la carpeta extraída y lanza `BedrockLauncher.exe`.
 
-![Ejecutando BedrockLauncher.exe](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
+![Lanzamiento de BedrockLauncher.exe](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
 
-## Paso 5 -- Instalar .NET Desktop Runtime y activar el modo desarrollador
+## Paso 5: instalar .NET Desktop Runtime y activar el modo desarrollador
 
-En el primer arranque, Windows probablemente te pedira el **.NET 8.0 Desktop Runtime** -- instalalo. Tambien necesitas activar el **modo desarrollador** en `Configuracion > Sistema > Para desarrolladores`, porque BedrockLauncher instala el juego como un paquete suelto (archivos crudos, no un paquete firmado de la Store), y Windows rechaza este tipo de instalacion sin ese modo.
+En el primer lanzamiento, Windows muy probablemente te pida el **.NET 8.0 Desktop Runtime**: instálalo. También hay que activar el **modo desarrollador** en `Configuración > Sistema > Para desarrolladores`, porque BedrockLauncher instala el juego como un paquete loose (archivos en bruto, no un paquete firmado de verdad de la Store), y Windows rechaza ese tipo de instalación sin ese modo.
 
-![Instalando .NET Runtime y activando el modo desarrollador](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
+![Instalación del runtime .NET y activación del modo desarrollador](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
 
-## Paso 6 -- Crear una nueva instalacion
+## Paso 6: crear una nueva instalación
 
-Vuelve a abrir BedrockLauncher, inicia sesion con tu cuenta Microsoft, ve a la pestana **Installations** y haz clic en **New installation**.
+Vuelve a lanzar BedrockLauncher, inicia sesión con tu cuenta Microsoft, ve a la pestaña **Installations**, y haz clic en **New installation**.
 
-![Creando una nueva instalacion en BedrockLauncher](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
+![Creación de una nueva instalación en BedrockLauncher](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
 
-## Paso 7 -- Elegir una version antigua
+## Paso 7: elegir una versión vieja
 
-Dale un nombre a la instalacion y en la lista de versiones elige una version **antigua** -- tipicamente `1.16.x` o anterior. Haz clic en **Create**.
+Dale un nombre a la instalación, y en la lista de versiones elige una versión **vieja**: típicamente una versión `1.16.x` o anterior. Haz clic en **Create**.
 
-![Seleccionando una version antigua, aqui 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
+![Selección de una versión antigua, aquí 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
 
-## Paso 8 -- Lanzar la instalacion
+## Paso 8: lanzar la instalación
 
-Haz clic en **Play**. La extraccion de archivos puede tardar hasta diez minutos dependiendo del ordenador -- el launcher parecera congelado ("No responde"), es normal, dejalo funcionar.
+Haz clic en **Play**. La extracción de archivos puede tardar hasta diez minutos según la máquina: el launcher parecerá congelado ("Not Responding"), es normal, déjalo correr.
 
-![Extraccion en curso, el launcher parece no responder](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
+![Extracción en curso, el launcher parece no responder](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
 
-## Paso 9 -- Elegir la capa
+## Paso 9: elegir la capa
 
-Cuando el juego arranque, inicia sesion con tu cuenta, crea un personaje nuevo y ve al editor de skin, pestana **Capas**. Ahi encontraras la lista completa de todas las capas que existen en el juego -- incluidas las que nunca has tenido (capas de eventos promocionales, festivales pasados, Mob Vote, etc.). Elige la que quieras.
+Una vez lanzado el juego, inicia sesión con tu cuenta, crea un personaje nuevo y ve al editor de skins, pestaña **Capes**. Ahí encontrarás la lista completa de todas las capas que existen en Minecraft, incluidas las que nunca tuviste (capas de eventos promo, de festivales pasados, de Mob Vote, etc). Elige la que quieras.
 
-**No toques el resto de la apariencia del skin en esta fase**, deja solo la capa.
+**No toques el resto de la apariencia del skin en este punto**, deja solo la capa.
 
-![Seleccionando una capa en el editor de personaje](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
+![Selección de una capa en el editor de personaje](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
 
-## Paso 10 -- Reinstalar la version oficial
+## Paso 10: reinstalar la versión oficial
 
-Vuelve al launcher oficial, pestana **Instalacion**, y haz clic en **Desinstalar** en la instalacion principal de Bedrock, luego reinstalala (o dale a **Buscar actualizaciones**). Lanza Minecraft Bedrock esta vez desde el launcher oficial.
+Vuelve al launcher oficial, pestaña **Installation**, y haz clic en **Uninstall** en la instalación principal de Bedrock, luego reinstálala (o haz **Check for Updates**). Vuelve a lanzar Minecraft Bedrock desde el launcher oficial esta vez.
 
-![Desinstalando y reinstalando desde el launcher oficial](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
+![Desinstalación y reinstalación desde el launcher oficial](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
 
-Y ya esta -- tu capa esta ahi, en la version oficial, en tu perfil real.
+Y listo: tu capa está ahí, en la versión oficial, en tu perfil de verdad.
 
-## Que esta pasando probablemente
+## Qué pasa probablemente
 
-No he metido las manos en el codigo cerrado de Bedrock (a diferencia de Java que es descompilable), asi que lo que sigue es una explicacion **probable**, no una certeza absoluta. Pero el comportamiento observado encaja bastante bien con la siguiente hipotesis.
+No metí las manos en el código fuente cerrado de Bedrock (al contrario que Java, que es descompilable), así que lo que sigue es una explicación **probable**, no una certeza absoluta. Pero el comportamiento observado encaja bastante bien con la hipótesis siguiente.
 
 ### El selector de capas nunca fue un control de acceso
 
-En Bedrock, la pantalla de seleccion de capas muestra probablemente **la lista completa de capas que existen en el juego**, no solo las que tu cuenta posee. En los clientes recientes, un filtro aplicativo (en el lado del cliente o via una llamada de red a un servicio de entitlements de Xbox/Microsoft) pone en gris u oculta las capas que no posees.
+En Bedrock, la pantalla de selección de capas muestra verosímilmente **la lista completa de las capas que existen en el juego**, no solo las que posee tu cuenta. En los clientes recientes, un filtro aplicativo (en el cliente o vía una llamada de red a un servicio de entitlements de Xbox/Microsoft) atenúa u oculta las capas que no posees.
 
-El punto clave es que este filtro probablemente se anadio **a posteriori**, en una version del juego lo suficientemente reciente. Una version como 1.16.x es anterior a este filtro, o usa un mecanismo de verificacion diferente (o inexistente): todo lo que esta en la lista se vuelve seleccionable, con entitlement o sin el.
+El punto clave es que ese filtro probablemente se añadió **a posteriori**, en una versión del juego lo bastante reciente. Una versión como la 1.16.x es anterior a ese filtro, o usa un mecanismo de verificación distinto (o inexistente): todo lo que está en la lista se vuelve seleccionable, haya entitlement o no.
 
-### Donde se almacena exactamente la capa?
+### Dónde se guarda la capa, exactamente
 
-Esta es la parte que explica por que sobrevive a la reinstalacion. La eleccion de skin/capa en Bedrock no es solo un archivo local desechable -- probablemente se sincroniza con el perfil de Xbox Live asociado a tu cuenta Microsoft (el mismo sistema que gestiona tu skin en otras plataformas Bedrock -- movil, consola, etc.). Cuando seleccionas una capa en el cliente antiguo, este envia muy probablemente esa seleccion al servicio de perfil, exactamente igual que lo haria un cliente actualizado con una capa legitima -- porque desde el punto de vista del cliente, no hay ninguna diferencia entre una capa "tuya" y una capa "elegida". El servicio de perfil, por su parte, confia en el cliente en este punto: registra la seleccion sin revalidar si el entitlement realmente existe detras, al menos no en el momento de la escritura.
+Esta es la parte que explica por qué sobrevive a la reinstalación. La elección de skin/capa en Bedrock no es solo un archivo local desechable: probablemente se sincroniza en el perfil de Xbox Live asociado a tu cuenta Microsoft (el mismo sistema que gestiona tu skin en las demás plataformas Bedrock: móvil, consola, etc.). Cuando seleccionas una capa en el cliente viejo, este muy probablemente envía esa selección al servicio de perfil, exactamente como lo haría un cliente actualizado con una capa legítima, porque desde el punto de vista del cliente no hay ninguna diferencia entre una capa "tuya" y una capa "elegida". El servicio de perfil, por su parte, confía en el cliente en ese punto: registra la selección sin revalidar si el entitlement existe de verdad detrás, al menos no en el momento de escribir.
 
-Resultado: cuando vuelves a lanzar el juego oficial actualizado, este busca tu skin/capa actual en el servicio de perfil -- y el servicio devuelve fielmente lo que se guardo, capa no legitima incluida. El chequeo de entitlement, si existe, probablemente ocurre en el momento de la **seleccion** en la UI (de ahi el filtro en los clientes recientes), no en el momento de la **visualizacion** de lo que ya esta guardado en el perfil.
+Resultado: cuando vuelves a lanzar el juego oficial actualizado, este va a buscar tu skin/capa actual en el servicio de perfil, y el servicio devuelve fielmente lo registrado, capa no legítima incluida. El check de entitlement, si existe, se hace probablemente solo en el momento de la **selección** en la UI (de ahí el filtro en los clientes recientes), y deja pasar la **visualización** de lo ya registrado en el perfil.
 
-### El paralelo con Java
+### El paralelismo con Java
 
-Es la misma familia de fallo logico que el `cape-mod` en Java: un servicio confia en unos datos sin volver a verificar su origen en cada paso. En Java, es una firma RSA valida replayeda sobre el perfil equivocado. En Bedrock, es probablemente una seleccion de capa aceptada por un cliente antiguo que nunca tuvo el filtro correcto, y luego propagada sin revalidacion al estado persistente de la cuenta. En ambos casos, el problema no es el punto de entrada (el mod de Java, el cliente antiguo de Bedrock) -- sino que la capa que deberia revalidar el entitlement aguas abajo no lo hace, o solo lo hace una vez, en el sitio equivocado.
+Es la misma familia de fallo lógico que la del `cape-mod` en Java: un servicio confía en un dato sin revalidar su origen en cada etapa. En Java, es una firma RSA válida pero repetida en el perfil equivocado. En Bedrock, es verosímilmente una selección de capa aceptada por un cliente viejo que nunca tuvo el filtro correcto, y luego propagada sin revalidación hacia el estado persistente de la cuenta. En ambos casos, el problema no es el punto de entrada (el mod Java, el cliente viejo de Bedrock): es que la capa que debería revalidar el entitlement más abajo no lo hace, o lo hace una sola vez, en el sitio equivocado.
 
-## Por que sigue funcionando
+## Por qué sigue funcionando
 
-Dos explicaciones posibles, no excluyentes entre si:
+Dos explicaciones posibles, no incompatibles entre sí:
 
-1. **Mojang probablemente no lo considera prioritario.** Hace falta un launcher de terceros, un proceso en varios pasos, y el resultado es puramente cosmetico -- sin ventaja de juego, sin datos de terceros comprometidos.
-2. **Parchear esto correctamente requeriria revalidar los entitlements en cada lectura del perfil**, no solo en la seleccion -- lo que supone una llamada de red adicional en cada visualizacion de skin, para un problema que solo afecta a la estetica.
+1. **Mojang probablemente no lo considera prioritario.** Hace falta un launcher de terceros, una manipulación en varios pasos, y el resultado es puramente cosmético: ninguna ventaja de gameplay, ningún dato ajeno comprometido.
+2. **Parchearlo bien exigiría revalidar los entitlements en cada lectura del perfil**, no solo en la selección: lo que significa una llamada de red adicional en cada visualización de skin, para un problema que solo afecta a la estética.
 
-## Conclusion
+## Conclusión
 
-Este tutorial cabe en diez capturas de pantalla, pero ilustra un principio que se encuentra por todas partes en la seguridad del software: en cuanto un sistema legacy (una version antigua de cliente, una API legacy, un servicio nunca actualizado) puede seguir escribiendo en un estado compartido, el control de acceso actual solo protege lo que pasa por el presente. Todo lo que aun pueda hablar con la API antigua sortea el filtro mas reciente -- no porque el filtro este roto, sino porque nunca se aplico a la version que lo precedio.
+Este tutorial cabe en diez capturas de pantalla, pero ilustra un principio que se repite en todas partes en seguridad de software: en cuanto un sistema histórico (una versión vieja de cliente, una API legacy, un servicio jamás actualizado) aún puede escribir en un estado compartido, el control de acceso del presente solo protege lo que pasa por el presente. Todo lo que aún pueda hablar con la API antigua sortea el filtro más reciente: el filtro funciona en las versiones recientes, pero nunca se aplicó a la versión que lo precedió.
 
 ---
 
 **Recursos**
 
-- **BedrockLauncher** : [github.com/bedrockLauncher/BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
-- **Articulo relacionado** : Cape Mod, el equivalente en Java por inyeccion de firma RSA
+- **BedrockLauncher**: [github.com/bedrockLauncher/BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
+- **Artículo relacionado**: Cape Mod, el equivalente en Java por inyección de firma RSA
 
 **3 puntos clave**
 
-1. El selector de capas de una version antigua de Bedrock muestra probablemente la lista completa de todas las capas del juego, sin filtro de entitlement.
-2. La seleccion se sincroniza luego con tu perfil de Xbox Live como cualquier capa legitima -- el servicio de perfil confia en el cliente.
-3. El chequeo de entitlement, si existe, ocurre en la seleccion en la UI reciente -- no en la lectura de lo que ya esta guardado en la cuenta.
+1. El selector de capas de una versión vieja de Bedrock muestra probablemente la lista completa de capas del juego, sin filtro de entitlement.
+2. La selección se sincroniza luego en tu perfil de Xbox Live como cualquier capa legítima: el servicio de perfil confía en el cliente.
+3. El check de entitlement, si existe, se hace en la selección en la UI reciente, no en la lectura de lo ya registrado en la cuenta.

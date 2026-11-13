@@ -1,182 +1,182 @@
 ---
-title: "Super Mario Bros.: تنسيق المستوى، المؤشرات، و256 عالم خلل"
-description: "كيف يتسع 128 مستوى × 4 أنواع منطقة في 40 كيلوبايت من ROM، ولماذا ي Exists Minus World، وكيف يمكن لمباراة تنس NES أن تحمّل عوالم الخلل."
+title: "Super Mario Bros. : صيغة المستوى والمؤشرات و256 glitch worlds"
+description: "كيف تتسع 128 مستوى × 4 أنواع منطقة في 40KB من ROM، ولماذا يوجد Minus World، وكيف يمكن لمباراة Tennis على NES تحميل glitch worlds."
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - retro
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "YWu1h8Cwo53FVbadI9gA2FRuvV74j2c1nCDAHQRhFjaTWMZb1f9erWq7a9SQfqxbxicHM7+yXlB/FdHZxln+YA=="
+author_sig: "ew53zxctWZAbAj/zMKRfK+T9cOgJz6ks255h9Jwu1Xc4Nq1m3NDKP7PJkT93PfFrXv4lIW3Z8LT1jpMlgE2XGQ=="
 ---
 
-## المقدمة
+## مقدمة
 
-Super Mario Bros. هو 40 كيلوبايت من ROM. ثمانية عوالم، 32 مستوى، أعداء، موسيقى، قوى خارقة، كل ذلك يتسع في ذلك.
+Super Mario Bros. هي 40 كيلوبايت من ROM. ثمانية عوالم و32 مستوى وأعداء وموسيقى وpower-ups، كل شيء يتسع هناك.
 
-لكن إذا فتحت محاكيًا وعبثت بالبايتات الصحيحة، يمكنك تحميل المستوى 36-1. أو 255-1. أو الهبوط في عالم تكون فيه كل شيء مصنوع من سبرايتات Bowser وأنابيب تؤدي إلى لا مكان.
+لكن إذا فتحت محاكيا وعبثت بالبايتات الصحيحة، تستطيع تحميل مستوى 36-1. أو 255-1. أو الهبوط في عالم كل شيء فيه مصنوع من sprites لـBowser وأنابيب لا تؤدي لأي مكان.
 
-هذه العوالم الخاطئة (Glitch Worlds) موجودة لسبب بسيط: نظام تخزين مستويات SMB1 هو عبارة عن تحفة من التحسين على 8 بت، وعندما تجبر اللعبة على القراءة من المكان الخطأ، فهي تنتج نتائج مثيرة.
+توجد glitch worlds هذه لسبب بسيط : نظام تخزين مستويات SMB1 هو أعجوبة تحسين 8-bit، وعندما نُجبِر اللعبة على القراءة حيث لا يجب، يعطي ذلك نتائج ساحرة.
 
-قام Retro Game Mechanics Explained بعمل سلسلة من 4 مقاطع فيديو حول هذا الموضوع -- وسنجمعها في غوص واحد في كود 6502 لأكثر لعبة مبيعاً في ذلك العصر.
+صنعت Retro Game Mechanics Explained سلسلة من 4 فيديوهات عن ذلك، سنجمعها في غوصة واحدة في كود 6502 للعبة الأكثر مبيعا في عصرها.
 
-![GLITCH OBJECTS -- عنوان سلسلة RGMechEx حول آليات SMB1 المخفية](/images/smb1-glitch-levels/title-card.jpg)
+![GLITCH OBJECTS -- le titre de la série RGMechEx sur les mécaniques cachées de SMB1](/images/smb1-glitch-levels/title-card.jpg)
 
-![World 9-1 -- شاشة العنوان لأول عالم خلل يمكن الوصول إليه عبر تبادل كارترidge Tennis](/images/smb1-glitch-levels/v1-title-9-1.jpg)
+![World 9-1 -- l'écran titre du premier glitch world accessible via le cart swap Tennis](/images/smb1-glitch-levels/v1-title-9-1.jpg)
 
-## البدء الدافئ: لماذا تبقى ذاكرة RAM من Tennis في SMB1
+## البدء الدافئ : لماذا تنجو RAM الخاصة بـTennis في SMB1
 
-قبل التحدث عن تخزين المستويات، يجب أن نفهم كيف يبدأ SMB1. لأن خلل تبادل الكارترidge في NES Tennis يعتمد بالكامل على **نظام اكتشاف البدء الدافئ / البدء البارد** في اللعبة.
+قبل الكلام عن تخزين المستويات، يجب فهم كيف تقلع SMB1. لأن glitch تبديل الخرطوشة في NES Tennis يرتكز كليا على **نظام كشف البدء الدافئ / البدء البارد** في اللعبة.
 
-### البايتات الحادية والأربعون المحفوظة
+### البايتات الـ41 المحفوظة
 
-عندما يكتشف SMB1 **بدءًا باردًا** (تشغيل لأول مرة أو إيقاف/تشغيل)، يمسح جميع ذاكرة RAM. لكن عندما يكتشف **بدءًا دافئًا** (إعادة تشغيل الزر، دون قطع الطاقة)، يحتفظ بمنطقة ذاكرة تحتوي على **41 بايت**:
+عندما تكشف SMB1 **بدءا باردا** (أول تشغيل أو إطفاء/تشغيل)، تمسح كل RAM. لكن عندما تكشف **بدءا دافئا** (زر reset، دون قطع طاقة)، تحفظ منطقة ذاكرة من **41 بايت** :
 
 ```asm
-; Les 41 bytes préservés en RAM lors d'un warm start
-; Adresses $075F-$0787
+; البايتات الـ41 المحفوظة في RAM أثناء بدء دافئ
+; العناوين $075F-$0787
 ;
-; $075F : byte de démarrage (world - 1)    [1 byte]
-; $0760 : flag de sélection de monde (B button) [1 byte]
-; $0761-$0762 : inutilisé                    [2 bytes]
-; $0763-$0768 : timer (6 digits, 3 affichés) [6 bytes]
-; $0769-$076E : coins Luigi                   [6 bytes]
-; $076F-$0774 : coins Mario                   [6 bytes]
-; $0775-$077A : score Luigi                   [6 bytes]
-; $077B-$0780 : score Mario                   [6 bytes]
-; $0781-$0786 : top score (6 digits, 1 caché) [6 bytes]
-; $0787 : le byte magique $A5                 [1 byte]
+; $075F : بايت البدء (world - 1)    [1 byte]
+; $0760 : علم اختيار العالم (زر B) [1 byte]
+; $0761-$0762 : غير مستخدم                    [2 bytes]
+; $0763-$0768 : مؤقت (6 أرقام، 3 معروضة) [6 bytes]
+; $0769-$076E : عملات Luigi                   [6 bytes]
+; $076F-$0774 : عملات Mario                   [6 bytes]
+; $0775-$077A : نتيجة Luigi                   [6 bytes]
+; $077B-$0780 : نتيجة Mario                   [6 bytes]
+; $0781-$0786 : أعلى نتيجة (6 أرقام، 1 مخفي) [6 bytes]
+; $0787 : البايت السحري $A5                 [1 byte]
 ```
 
-هذه البايتات الحادية والأربعون تخدم وظيفة واحدة فقط: السماح للاعب **بالاستمرار في نفس العالم بعد خسارة اللعبة**. إذا مت في 6-3، تكتب اللعبة العالم 6 في بايت البداية، وعند شاشة العنوان، إذا ضغطت A + Start، تبدأ من جديد في 6-1.
+تخدم هذه البايتات الـ41 وظيفة واحدة : السماح للاعب بـ**المواصلة في نفس العالم بعد game over**. إذا مت في 6-3، تكتب اللعبة العالم 6 في بايت البدء، وفي شاشة العنوان، إذا أبقيت A + Start، تعيد البدء في 6-1.
 
-![البايتات الحادية والأربعون المحفوظة في ذاكرة RAM أثناء البدء الدافئ -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD, والبايت السحري $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
+![Les 41 bytes préservés en RAM lors d'un warm start -- TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD, et le byte magique $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
 
 ### الفحص المزدوج للبدء الدافئ
 
-![البدء البارد مقابل البدء الدافئ -- مخطط اكتشاف إعادة التشغيل](/images/smb1-glitch-levels/v1-warm-start.jpg)
+![Cold start vs warm start -- le diagramme de détection du reset](/images/smb1-glitch-levels/v1-warm-start.jpg)
 
-عندما يعمل SMB1، لا يتحقق من معيار واحد فقط بل **معيارين**:
+عندما تقلع SMB1، لا تتحقق من معيار واحد بل **اثنين** :
 
 ```asm
 CheckWarmStart:
-  ; 1. Vérifier le byte magique $A5 à $0787
+  ; 1. فحص البايت السحري $A5 في $0787
   lda $0787
   cmp #$A5
-  bne ColdStart        ; pas $A5 → cold start
+  bne ColdStart        ; ليس $A5 ← بدء بارد
 
-  ; 2. Vérifier les 6 digits du top score ($0781-$0786)
-  ;    Chaque digit doit être entre 0 et 9
+  ; 2. فحص أرقام أعلى نتيجة الستة ($0781-$0786)
+  ;    كل رقم يجب أن يكون بين 0 و9
   ldx #0
 CheckLoop:
   lda $0781,x
   cmp #$0A
-  bcs ColdStart        ; digit >= 10 → cold start
+  bcs ColdStart        ; رقم >= 10 ← بدء بارد
   inx
   cpx #6
   bne CheckLoop
 
-  ; Si les deux conditions passent → warm start
-  ; La RAM n'est pas effacée, le monde de départ est préservé
+  ; إذا نجح الشرطان ← بدء دافئ
+  ; لا تُمسَح RAM، ويُحفَظ عالم البدء
   jmp WarmStartBoot
 ```
 
-![فحص البايت $A5 وأرقام أعلى نقاط -- جوهر البدء الدافئ](/images/smb1-glitch-levels/v1-a5-byte.jpg)
+![La vérification du byte $A5 et des digits du top score -- le coeur du warm start](/images/smb1-glitch-levels/v1-a5-byte.jpg)
 
-لماذا فحص مزدوج؟ لأن البايت $A5 قد يكون موجودًا بالصدفة (لعبة أخرى تترك هذه القيمة، أو حالة الراحة الافتراضية لشريحة RAM). بالتحقق من أن أرقام أعلى نقاط صالحة (0-9)، نضمن أن البيانات متسقة.
+لماذا فحص مزدوج ؟ لأن بايت $A5 قد يكون موجودا بالمصادفة (لعبة أخرى تترك هذه القيمة، أو حالة السكون الافتراضية لشريحة RAM). وبفحص أن أرقام أعلى نتيجة صالحة (0-9)، نتأكد أن البيانات متسقة.
 
-### لماذا Tennis هو اللعبة الوحيدة التي تعمل
+### لماذا Tennis هي اللعبة الوحيدة التي تنجح
 
-عندما تدخل SMB1 لأول مرة (بدء بارد)، تقوم اللعبة:
-1. بمسح جميع ذاكرة RAM ← أعلى نقاط = 0، بايت العالم = 0
-2. بكتابة $A5 على العنوان $0787
+عندما نُدخِل SMB1 أول مرة (بدء بارد)، تقوم اللعبة بـ :
+1. مسح كل RAM ← أعلى نتيجة = 0 وبايت العالم = 0
+2. كتابة $A5 في العنوان $0787
 
-بعد ذلك، تتحول إلى Tennis دون إيقاف جهاز التحكم. Tennis:
-- **لا ينظف ذاكرة RAM عند بدء التشغيل** (قليل من ألعاب NES يفعل ذلك)
-- **لا يكتب على بايتات أعلى نقاط** ← تبقى عند 0 (صالحة)
-- **لا يلمس البايت $A5** ← يبقى موجودًا
-- **يستخدم العنوان $075F** لعداد خطوات اللاعب
+ثم نبدّل نحو Tennis دون إطفاء المنصة. تقوم Tennis بـ :
+- **لا تنظف RAM عند الإقلاع** (قليل من ألعاب NES يفعل ذلك)
+- **لا تكتب على بايتات أعلى نتيجة** ← تبقى 0 (صالحة)
+- **لا تمس البايت $A5** ← يبقى موجودا
+- **تستخدم العنوان $075F** لعداد خطوات اللاعب
 
 ```asm
-; Le footstep increment dans Tennis :
-; À chaque pas du joueur sur le court, Tennis incrémente le byte à $075F.
-; Ce même byte est utilisé par SMB1 comme "world number - 1".
+; زيادة الخطوات في Tennis :
+; مع كل خطوة للاعب على الملعب، تزيد Tennis البايت في $075F.
+; هذا البايت نفسه تستخدمه SMB1 كـ"رقم العالم - 1".
 ;
-; 0 pas  → world 0 → SMB1 = world 1
-; 1-7 pas → world 1-7 → worlds normaux
-; 8+ pas → world 8+ → glitch worlds !
+; 0 خطوة  ← العالم 0 ← SMB1 = العالم 1
+; 1-7 خطوات ← العالم 1-7 ← عوالم عادية
+; 8+ خطوات ← العالم 8+ ← glitch worlds !
 ;
-; Le compteur ne s'incrémente que quand la musique s'arrête
-; (les footstep sounds ne jouent pas pendant la musique).
+; لا يزيد العداد إلا عندما تتوقف الموسيقى
+; (أصوات الخطوات لا تعمل أثناء الموسيقى).
 ```
 
-عندما تعيد SMB1:
-1. البايت $A5 لا يزال موجودًا (Tennis لم يلمسه)
-2. أرقام أعلى نقاط لا تزال 0 (صالحة)
-3. بايت العالم يساوي الآن 8+ (زاد بسبب خطوات Tennis)
-4. SMB1 يكتشف بدءًا دافئًا ← يحتفظ ببايت العالم المتلف
-5. ضغط A + Start ← World 9-1, World A-1, World 36-1، إلخ
+وعندما نعيد SMB1 :
+1. بايت $A5 ما زال هناك (لم تمسه Tennis)
+2. أرقام أعلى نتيجة ما زالت 0 (صالحة)
+3. بايت العالم صار الآن 8+ (زادته خطوات Tennis)
+4. تكشف SMB1 بدءا دافئا ← تحفظ بايت العالم الفاسد
+5. الإبقاء على A + Start ← العالم 9-1 والعالم A-1 والعالم 36-1، إلخ.
 
-### لماذا يجب تشغيل Mario قبل Tennis
+### لماذا يجب إقلاع Mario قبل Tennis
 
-تفاصيل دقيقة: يجب تشغيل SMB1 أولاً، ثم Tennis، ثم SMB1 مرة أخرى. إذا بدأت مباشرة بـ Tennis، لن يُكتب البايت $A5 أبدًا (Tennis لا يكتب $A5)، لذلك سيفشل اكتشاف البدء الدافئ وتمسح ذاكرة RAM.
+دقة : يجب أولا إقلاع SMB1، ثم Tennis، ثم SMB1 مجددا. وإذا بدأت مباشرة بـTennis، فلن يُكتَب بايت $A5 أبدا (لا تكتبه Tennis)، فيفشل كشف البدء الدافئ وتُمسَح RAM.
 
-![عداد خطوات Tennis: كل خطوة تزيد بايت العالم](/images/smb1-glitch-levels/v1-footstep.jpg)
+![Le compteur de pas de Tennis : chaque footstep incrémente le world byte](/images/smb1-glitch-levels/v1-footstep.jpg)
 
-![الوصول إلى عوالم الخلل عبر NES Tennis -- الفيديو الذي يشرح تبادل الكارترidge](/images/smb1-glitch-levels/yt-tennis.jpg)
+![Access Glitch Worlds via NES Tennis -- la vidéo qui explique le cart swap](/images/smb1-glitch-levels/yt-tennis.jpg)
 
-## كيفخزّن SMB1 مستوياتها في 40KB
+## كيف تخزن SMB1 مستوياتها في 40KB
 
-اجبرت R&D4 في نينتندو على حل مشكلة تبدو بسيطة: تمثيل مستويات تتحرك أفقيًا باستخدام بلاطات، أعداء، عناصر، وكل ذلك في ميزانية ROM ضيقة للغاية.
+وجب على Nintendo R&D4 حل مشكلة بسيطة ظاهريا : تمثيل مستويات تتحرك أفقيا مع tiles وأعداء وعناصر، الكل في ميزانية ROM ضيقة للغاية.
 
-الحل هو فصل البيانات إلى طبقتين **مستقلتين تمامًا**:
+والحل هو فصل إلى طبقتي بيانات **مستقلتين تماما** :
 
-### تخطيط البلاطات (خريطة المستوى)
+### مخطط tiles (خريطة المستوى)
 
-يُعرّف كل مستوى بمؤشر يشير إلى بنية بلاطات مضغوطة في ROM. الضغط بدائي لكنه عبقري: بايت "تحكم" متبوع بـ 1-3 بايتات بيانات.
+يُعرَّف كل مستوى بمؤشر نحو بنية tiles مضغوطة في ROM. الضغط بدائي لكن عبقري : بايت "تحكم" متبوع بـ1-3 بايتات بيانات.
 
-يستخدم تنسيق البلاطات نظام **تسلسلات** (يشبه RLE):
+يستخدم صيغة tile نظام **runs** (شبيه RLE) :
 
 ```asm
-; Format tile SMB1 (simplifié)
-; Chaque "commande" est un byte contrôle :
+; صيغة tile في SMB1 (مبسطة)
+; كل "أمر" هو بايت تحكم :
 ;
-; $00-$7F : pose une tile, avance d'1 colonne
-; $80-$BF : pose une tile répétée N fois (N = byte - $80 + 1)
-; $C0-$FF : commande spéciale (fin de ligne, saut, changement de palette)
-
-Exemple : pour dessiner 3 briques consécutives :
-  $82 $01    ; répète la tile $01 (brick) 3 fois
+; $00-$7F : وضع tile، وتقدم عمودا واحدا
+; $80-$BF : وضع tile مكررة N مرات (N = بايت - $80 + 1)
+; $C0-$FF : أمر خاص (نهاية سطر وقفز وتغيير لوحة)
+;
+; مثال : لرسم 3 طوبات متتالية :
+;   $82 $01    ; كرر tile رقم $01 (طوبة) 3 مرات
 ```
 
-يحتوي كل مستوى على 13 صفًا من 16 عمودًا من البلاطات (13×16 = 208 بلاطة مرئية). لكن التنسيق المضغوط يسمح بالانخفاض أكثر بكثير -- على سبيل المثال، السماء والأعمدة الفارغة لا تشغل تقريبًا أي مكان.
+يحوي كل مستوى 13 سطرا من 16 عمودا من tiles (13×16 = 208 tiles مرئية). لكن الصيغة المضغوطة تسمح بالنزول أدنى بكثير، فمثلا السماء والأعمدة الفارغة لا تأخذ حيزا تقريبا.
 
-حلقة العرض في 6502:
+حلقة العرض في 6502 :
 
 ```asm
-; Décompression tile - loop principale
-; Entrée : pointeur tile_data en $XX
-; Sortie : tilemap niveau dans la RAM PPU
-
+; فك ضغط tile، الحلقة الرئيسية
+; مدخل : مؤشر tile_data في $XX
+; مخرج : خريطة tiles المستوى في RAM الخاصة بـPPU
+;
 DecompressTile:
-  lda (tile_ptr),y      ; lire byte contrôle
+  lda (tile_ptr),y      ; قراءة بايت تحكم
   iny
   cmp #$80
-  bcc SingleTile        ; $00-$7F : tile unique
+  bcc SingleTile        ; $00-$7F : tile مفردة
   cmp #$C0
-  bcc RunLength         ; $80-$BF : run-length
-  jmp SpecialCommand    ; $C0-$FF : commande spéciale
-
+  bcc RunLength         ; $80-$BF : طول تشغيل
+  jmp SpecialCommand    ; $C0-$FF : أمر خاص
+;
 SingleTile:
-  sta PPU_DATA          ; écrire la tile directement
+  sta PPU_DATA          ; كتابة tile مباشرة
   jmp Next
-
+;
 RunLength:
   sec
-  sbc #$7E              ; N = control - $7E
+  sbc #$7E              ; N = تحكم - $7E
   tax
-  lda (tile_ptr),y      ; lire la tile à répéter
+  lda (tile_ptr),y      ; قراءة tile للتكرار
   iny
 : sta PPU_DATA
   dex
@@ -184,732 +184,732 @@ RunLength:
   jmp Next
 ```
 
-### تخطيط السبرايتات (الأعداء والأشياء)
+### مخطط sprites (الأعداء والعناصر)
 
-بشكل متزامن، الأعداء والأشياء (بلوكات ؟، أنابيب، goombas، koopas) مخزنة في بنية منفصلة تمامًا. كل ظهور يُعرّف بـ 2 بايت:
+بالتوازي، تُخزَّن الأعداء والعناصر (كتل ؟ وأنابيب وgoombas وkoopas) في بنية منفصلة تماما. كل ظهور يُعرَّف ببايتين :
 
 ```asm
-; Format sprite SMB1
-; Byte 0 : position X (en colonnes)
-; Byte 1 : type de sprite + bits de page Y
-; Y est dérivé de l'index dans la séquence
-
-Une séquence de sprites :
-  $01 $4B    ; goomba à la colonne 1
-  $09 $4B    ; goomba à la colonne 9
-  $10 $61    ; bloc ? à la colonne 16 (contient pièce)
-  $15 $54    ; koopa verte à la colonne 21
-  $FF        ; fin de séquence
+; صيغة sprite في SMB1
+; بايت 0 : موضع X (بالأعمدة)
+; بايت 1 : نوع sprite + بتات صفحة Y
+; يُشتَق Y من الفهرس في التسلسل
+;
+; تسلسل sprites :
+;   $01 $4B    ; goomba في العمود 1
+;   $09 $4B    ; goomba في العمود 9
+;   $10 $61    ; كتلة ؟ في العمود 16 (تحوي قطعة)
+;   $15 $54    ; koopa خضراء في العمود 21
+;   $FF        ; نهاية التسلسل
 ```
 
-يمكن لكل مستوى الإشارة إلى ما يصل إلى 5 صفحات سبرايتات مختلفة (أو بدقة، 5 "شاشات" من 16 عمودًا)، لكن في الممارسة العملية معظم المستويات لا تستخدم سوى 2-3.
+يستطيع كل مستوى الإشارة حتى 5 صفحات sprites مختلفة (في الواقع، 5 "شاشات" من 16 عمودا)، لكن عمليا لا تستخدم معظم المستويات إلا 2-3.
 
 ### جدول المؤشرات
 
-العبقرية في التصميم هي جدول المؤشرات. كل مستوى مخزون ك**زوج** من عناوين ROM:
+عبقرية التصميم هي جدول المؤشرات. يُخزَّن كل مستوى كـ**زوج** من عناوين ROM :
 
 ```c
-// Structure interne (simplifiée) du World Map
+// البنية الداخلية (مبسطة) لخريطة العالم
 struct LevelPointer {
-    uint16_t tile_ptr;   // Adresse ROM des données tiles
-    uint16_t sprite_ptr; // Adresse ROM des données sprites
+    uint16_t tile_ptr;   // عنوان ROM لبيانات tiles
+    uint16_t sprite_ptr; // عنوان ROM لبيانات sprites
 };
 
-// 4 tables séparées, une par AreaType :
-// 0 = Water, 1 = Overworld, 2 = Underground, 3 = Castle
+// 4 جداول منفصلة، واحد لكل AreaType :
+// 0 = ماء و1 = خارجي و2 = تحت أرضي و3 = قلعة
 LevelPointer level_table[4][128];
 ```
 
-128 إدخالًا لكل جدول. 4 أنواع منطقة. **512 تركيبة ممكنة**، لكن فقط جزء منها مستخدم من اللعبة الرسمية. الباقي هو RAM غير مهيأة أو بيانات يتم تفسيرها كمؤشرات.
+128 مدخلا لكل جدول. 4 أنواع منطقة. **512 تركيبة ممكنة**، لكن جزءا فقط يستخدمه اللعب الرسمي. الباقي RAM غير مُهيَّأة أو بيانات تُفسَّر كمؤشرات.
 
-عندما تحمّل اللعبة مستوى، تفعل ما يلي:
+عندما يحمّل اللعب مستوى، يفعل ذلك :
 
 ```asm
-; Chargement d'un niveau
-; A = AreaType (0-3), X = LevelID (0-127)
-
+; تحميل مستوى
+; A = النوع (0-3) وX = المعرف (0-127)
+;
 LoadLevel:
   sta AREA_TYPE
-  asl                  ; *2 pour offset dans table 16-bit
+  asl                  ; ×2 للإزاحة في جدول 16-bit
   tax
   lda LevelTable_TilePtr, x
   sta TILE_PTR
   lda LevelTable_TilePtr+1, x
-  sta TILE_PTR+1       ; pointeur vers les tiles
+  sta TILE_PTR+1       ; مؤشر نحو tiles
   lda LevelTable_SpritePtr, x
   sta SPRITE_PTR
   lda LevelTable_SpritePtr+1, x
-  sta SPRITE_PTR+1     ; pointeur vers les sprites
+  sta SPRITE_PTR+1     ; مؤشر نحو sprites
   jsr DecompressTiles
 ```
 
-لا تحقق. لا فحص ما إذا كان المؤشر صالحًا. تقرأ اللعبة العنوان في الجدول وتضغط ما يوجد على هذا العنوان، نقطة نهاية.
+يمنح اللعب ثقة كاملة للمؤشرات : يقرأ العنوان في الجدول ويفك ضغط ما يوجد في هذا العنوان، نقطة نهائية.
 
-![Level ID $06 (Water) -- 9-1، الإصدار تحت الماء من 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
+![Level ID $06 (Water) -- 9-1, la version sous-marine de 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
 
-![جدول Level IDs: 128 إدخالًا ممكنًا، 34 معينًا](/images/smb1-glitch-levels/v2-level-id-table.jpg)
+![La table des Level IDs : 128 entrées possibles, 34 assignées](/images/smb1-glitch-levels/v2-level-id-table.jpg)
 
-![الترتيب المختلف لمؤشرات البلاطات والسبرايتات -- سبب المستويات الكائن فرانكنشتاين](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
+![L'ordre différent des pointeurs tiles et sprites -- la cause des Frankenstein levels](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
 
-### الـ 34 مستوى فريدًا ونظام المعرّف 7 بت
+### المستويات الـ34 الفريدة ونظام المعرف 7-bit
 
-![شريحة RAM في NES (MB8416A) -- هي التي تحافظ البيانات عند تبادل الكارترidgeات](/images/smb1-glitch-levels/v1-ram-chip.jpg)
+![Le chip RAM de la NES (MB8416A) -- c'est lui qui conserve les données quand on swap les cartouches](/images/smb1-glitch-levels/v1-ram-chip.jpg)
 
-ليس لدى SMB1 32 مستوى، بل **34 مستوى فريدًا**. كثير من المستويات مكررة (5-3 = 1-3 لكن مع Bullet Bills) وulozhyz بعلم "الوضع الصعب". المستويات الفريدة الحقيقية:
+لا تملك SMB1 32 مستوى، بل **34 مستوى فريدا**. الكثير من المستويات مكررات (5-3 = 1-3 لكن مع Bullet Bills) موسومة بعلم "وضع صعب". المستويات الحقيقية الفريدة :
 
-- **الماء** (النوع 0): 3 مستويات (2-2، 7-2، منطقة مكافأة 5-2/6-2)
-- **العالم العلوي** (النوع 1): 22 مستوى (بما في ذلك غرفتي مكافأة السحاب)
-- **تحت الأرض** (النوع 2): 3 مستويات (بما في ذلك غرف المكافأة تحت الأرض)
-- **القلعة** (النوع 3): 6 مستويات
-- \+ 1 غرفة مشهد (قبل المستويات تحت الأرض/الماء)
-- \+ 1 منطقة تéléchargement من 4-2
+- **ماء** (نوع 0) : 3 مستويات (2-2 و7-2 ومنطقة مكافأة 5-2/6-2)
+- **خارجي** (نوع 1) : 22 مستوى (منها غرفتا سحب المكافأة)
+- **تحت أرضي** (نوع 2) : 3 مستويات (منها غرف المكافأة تحت الأرضية)
+- **قلعة** (نوع 3) : 6 مستويات
+- \+ غرفة مشهد واحدة (قبل المستويات تحت الأرضية/المائية)
+- \+ منطقة warp واحدة في 4-2
 
-لكل مستوى معرّف على **7 بت**. الـ 5 بت الأقل وزنًا = رقم في المجموعة الفرعية، والـ 2 بت الأعلى وزنًا = نوع المنطقة:
-
-```asm
-; Encodage 7-bit du Level ID
-; Bits 6-5 : Type (00=Water, 01=Overworld, 10=Underground, 11=Castle)
-; Bits 4-0 : Numéro dans le sous-groupe
-;
-; Water IDs      : $00-$02  (types 00, numéros 0-2)
-; Overworld IDs  : $20-$35  (types 01, numéros 0-21)
-; Underground IDs: $40-$42  (types 10, numéros 0-2)
-; Castle IDs     : $60-$65  (types 11, numéros 0-5)
-;
-; ID $25 = %0100101 → type 01 (Overworld), numéro 5 → 1-1
-; ID $23 = %0100011 → type 01 (Overworld), numéro 3 → 6-2
-```
-
-**128 معرّفًا ممكنًا** ($00-$7F)، فقط 34 معرّفًا معينًا لمستويات حقيقية. المعرّفات غير المستخدمة تشير إلى أي شيء.
-
-### جداول المؤشرات: قائمتان، ترتيبان
-
-مؤشرات البلاطات والسبرايتات ليست مخزنة بنفس الترتيب. يستخدم الكود قائمتين منفصلتين من 16 بت (بايت عالي/بايت منخفض في جدولين مختلفين):
-
-```
-Ordre des pointeurs sprites :
-  Index 0-5   : Castle (6 niveaux)
-  Index 6-27  : Overworld (22 niveaux)
-  Index 28-30 : Underground (3 niveaux)
-  Index 31-33 : Water (3 niveaux)
-
-Ordre des pointeurs tiles :
-  Index 0-2   : Water (3 niveaux)
-  Index 3-24  : Overworld (22 niveaux)
-  Index 25-27 : Underground (3 niveaux)
-  Index 28-33 : Castle (6 niveaux)
-```
-
-لماذا ترتيبان مختلفان؟ لا يوجد سبب فني -- من المحتمل أنه بهذه الطريقة تم تنظيم البيانات أثناء التطوير. لكن هذا يخلق نتيجة مثيرة: عندما يكون معرّف مستوى غير صالح، تحمل مؤشرات البلاطات والسبرايتات مستويات *مختلفة*، مما يخلق **مستويات فرانكنشتاين**.
-
-للتنقل بين هاتين القائمتين، تستخدم اللعبة **جداول إزاحة صغيرة** (مثل جدول محتويات):
+لكل مستوى معرف على **7 بت**. البتات الخمسة الضعيفة = الرقم في المجموعة الفرعية، والبتان القويان = نوع المنطقة :
 
 ```asm
-; Tables d'offset par type (Water, Overworld, Underground, Castle)
-; Chaque entrée = index de début dans la liste correspondante
+; ترميز 7-bit لمعرف المستوى
+; بتان 6-5 : النوع (00=ماء و01=خارجي و10=تحت أرضي و11=قلعة)
+; بتات 4-0 : الرقم في المجموعة الفرعية
+;
+; معرفات ماء      : $00-$02  (أنواع 00 وأرقام 0-2)
+; معرفات خارجية  : $20-$35  (أنواع 01 وأرقام 0-21)
+; معرفات تحت أرضية: $40-$42  (أنواع 10 وأرقام 0-2)
+; معرفات قلعة     : $60-$65  (أنواع 11 وأرقام 0-5)
+;
+; معرف $25 = %0100101 ← نوع 01 (خارجي) ورقم 5 ← 1-1
+; معرف $23 = %0100011 ← نوع 01 (خارجي) ورقم 3 ← 6-2
+```
 
+**128 معرفا ممكنا** ($00-$7F)، و34 فقط مُسنَدة لمستويات حقيقية. تشير المعرفات غير المستخدمة لأي شيء.
+
+### جداول المؤشرات : قائمتان وترتيبان
+
+لا تُخزَّن مؤشرات tiles وsprites بنفس الترتيب. يستخدم الكود قائمتين 16-bit منفصلتين (بايت عالٍ / بايت منخفض في جدولين متميزين) :
+
+```
+ترتيب مؤشرات sprites :
+  فهرس 0-5   : قلعة (6 مستويات)
+  فهرس 6-27  : خارجي (22 مستوى)
+  فهرس 28-30 : تحت أرضي (3 مستويات)
+  فهرس 31-33 : ماء (3 مستويات)
+;
+ترتيب مؤشرات tiles :
+  فهرس 0-2   : ماء (3 مستويات)
+  فهرس 3-24  : خارجي (22 مستوى)
+  فهرس 25-27 : تحت أرضي (3 مستويات)
+  فهرس 28-33 : قلعة (6 مستويات)
+```
+
+لماذا ترتيبان مختلفان ؟ لا سبب تقني، فهكذا نُظِّمت البيانات غالبا أثناء التطوير. لكن ذلك يخلق عاقبة ساحرة : عندما يكون معرف مستوى غير صالح، تحمّل مؤشرات tiles وsprites مستويين *مختلفين*، خالقة **مستويات Frankenstein**.
+
+للتنقل بين هاتين القائمتين، يستخدم اللعب جداول **إزاحة** صغيرة (كفهرس) :
+
+```asm
+; جداول الإزاحة حسب النوع (ماء وخارجي وتحت أرضي وقلعة)
+; كل مدخل = فهرس البداية في القائمة الموافقة
+;
 SpriteOffsetTable:
-  .byte $1F, $06, $1C, $00    ; Water=31, Overworld=6, Underground=28, Castle=0
-
+  .byte $1F, $06, $1C, $00    ; ماء=31 وخارجي=6 وتحت أرضي=28 وقلعة=0
+;
 TileOffsetTable:
-  .byte $00, $03, $19, $1C    ; Water=0, Overworld=3, Underground=25, Castle=28
+  .byte $00, $03, $19, $1C    ; ماء=0 وخارجي=3 وتحت أرضي=25 وقلعة=28
 ```
 
-لتحميل المستوى 6-2 (Mعرّف $23، العالم العلوي رقم 3):
+لتحميل مستوى 6-2 (معرف $23 وخارجي رقم 3) :
 
 ```asm
-; 1. Type = 01 (Overworld) → index dans table d'offset = 1
-; 2. Sprite offset = SpriteOffsetTable[1] = 6
-;    Index final = 6 + 3 (numéro de niveau) = 9 → 10ème pointeur sprites
-; 3. Tile offset = TileOffsetTable[1] = 3
-;    Index final = 3 + 3 = 6 → 7ème pointeur tiles
-; 4. Résultat : pointeur tiles $A619 + pointeur sprites $9ED0 = 6-2 ✓
+; 1. النوع = 01 (خارجي) ← الفهرس في جدول الإزاحة = 1
+; 2. إزاحة Sprite = SpriteOffsetTable[1] = 6
+;    الفهرس النهائي = 6 + 3 (رقم المستوى) = 9 ← مؤشر sprites العاشر
+; 3. إزاحة Tile = TileOffsetTable[1] = 3
+;    الفهرس النهائي = 3 + 3 = 6 ← مؤشر tiles السابع
+; 4. النتيجة : مؤشر tiles رقم $A619 + مؤشر sprites رقم $9ED0 = 6-2 ✓
 ```
 
-الآن، ماذا يحدث مع معرّف غير صالح مثل $43 (تحت الأرض رقم 3، الذي لاExists)؟
+الآن، ماذا يحدث مع معرف غير صالح مثل $43 (تحت أرضي رقم 3، غير موجود) ؟
 
 ```asm
-; ID $43, Type = 10 (Underground), numéro = 3
-; Sprite offset = SpriteOffsetTable[2] = $1C = 28
-;   Index = 28 + 3 = 31 → 32ème pointeur sprites = eau bonus 5-2 !
-; Tile offset = TileOffsetTable[2] = $19 = 25
-;   Index = 25 + 3 = 28 → 29ème pointeur tiles = 1-4 (Castle) !
+; معرف $43 والنوع = 10 (تحت أرضي) والرقم = 3
+; إزاحة Sprite = SpriteOffsetTable[2] = $1C = 28
+;   الفهرس = 28 + 3 = 31 ← مؤشر sprites الـ32 = ماء مكافأة 5-2 !
+; إزاحة Tile = TileOffsetTable[2] = $19 = 25
+;   الفهرس = 25 + 3 = 28 ← مؤشر tiles الـ29 = 1-4 (قلعة) !
 ;
-; Résultat : un niveau souterrain avec les tiles de 1-4
-; et les Bloopers de la zone eau de 5-2. Un vrai Frankenstein.
+; النتيجة : مستوى تحت أرضي مع tiles الخاصة بـ1-4
+; وBloopers منطقة ماء 5-2. Frankenstein حقيقي.
 ```
 
-![Level ID $43 -- مستوى فرانكنشتاين: بلاطات 1-4 + سبرايتات ماء 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
+![Level ID $43 -- Frankenstein level : tiles 1-4 + sprites eau 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
 
-![استكشاف مؤشرات مستوى الخلل -- جداول الإزاحة المفسرة](/images/smb1-glitch-levels/yt-pointers.jpg)
+![Exploring Glitch Level Pointers -- les tables d'offset expliquées](/images/smb1-glitch-levels/yt-pointers.jpg)
 
-![جدول فهرس العالم -- عندما يسبب تجاوز World 9 مستوى خلل](/images/smb1-glitch-levels/v2-world-index-table.jpg)
+![Le world index table -- quand l'overflow de world 9 crée un glitch level](/images/smb1-glitch-levels/v2-world-index-table.jpg)
 
-### جدول فهرس العالم: لماذا يتجاوز World 9
+### جدول فهرس العالم : لماذا يفيض العالم 9
 
-هناك جدول ROM من 8 بايتات يعطي فهرس أول مستوى لكل عالم (1-8). وبعده مباشرة، جدول الـ 36 معرّف مستوى لجميع المستويات بترتيب اللعب.
+هناك جدول ROM من 8 بايتات يعطي فهرس أول مستوى لكل عالم (1-8). وبعده مباشرة، جدول 36 معرف مستوى لكل المستويات بترتيب اللعب.
 
 ```asm
-; WorldIndexTable (8 bytes)
+; جدول WorldIndexTable (8 بايتات)
   .byte 0, 5, 10, 15, 20, 25, 28, 33
-;   -> Monde 1 commence au niveau 0
-;   -> Monde 2 commence au niveau 5
-;   -> Monde 8 commence au niveau 33
-
-; LevelIDTable (36 bytes)
-  .byte $25, $28, $29, $26, $24, ... ; les 36 Level IDs
-```
-
-عندما تحاول تحميل World 9، تقرأ اللعبة البايت التاسع من WorldIndexTable... الذي لاExists. يتجاوزه ببايت واحد إلى LevelIDTable، يقرأ القيمة $25، ثم يستخدم $25 كفهرس في LevelIDTable (الإدخال 37) -- مما يتخطى مرتين في SpriteOffsetTable ويقرأ القيمة 6.
-
-```asm
-; World 9 :
-;   1. WorldIndexTable[8] (overflow) → lit $25 dans LevelIDTable
-;   2. LevelIDTable[37] (overflow) → lit le 2ème byte de SpriteOffsetTable = 6
-;   3. ID = 6 → Water level number 6 (qui n'existe pas)
-;   4. Tile pointer = pointeur water numéro 6 = tiles de 6-2
-;   5. Sprite pointer = index 31+6 = 37 > 33 → pointeur invalide
-;   6. Résultat : 6-2 sous l'eau avec des sprites glitchés
-;      → world 9-1 !
-```
-
-لـ World G (16)، يتجاوز التخطي أبعد ويرسخ على Level ID $01، وهو مستوى المشهد الذي يسبق 1-2:
-
-```asm
-; World G (16) :
-;   WorldIndexTable[15] → lit $01 dans LevelIDTable
-;   LevelIDTable[1] = $29 (cutscene 1-2)
-;   → world G-1 = la cutscene d'entrée de 1-2
-```
-
-## لماذا توجد عوالم الخلل
-
-تiliki اللعبة 32 مستوى "شرعيًا" (8 عوالم × 4 مستويات). لكن جدول المؤشرات يحتوي على 128 إدخالًا لكل نوع منطقة. الإدخالات التي تتجاوز المستوى 32 تحتوي على ما يوجد في ROM على هذه العناوين -- أحيانًا مستوى آخر، وأحيانًا بيانات صوتية، وأحيانًا RAM، وأحيانًا أي شيء.
-
-![Level ID $01 Water (Minus World) -- مؤشر البلاطات $AE45، مؤشر السبرايتات $A171](/images/smb1-glitch-levels/minus-world.png)
-
-### Level ID $01 + AreaType 0 = Minus World
-
-أشهر عوالم الخلل. Level ID $01 في AreaType 0 (ماء) يشير إلى:
-
-- **مؤشر البلاطات: $AE45** ← المنطقة تحت الماء من 2-2/7-2
-- **مؤشر السبرايتات: $A171** ← سبرايتات 2-2/7-2
-
-النتيجة: مستوى ماء يشبه 2-2، لكنه يتكرر إلى الأبد لأن عمود العلم (flagpole) لا Exists. لا نهاية للمستوى، لا مخرج.
-
-هذا هو المستوى 36-1 (أو 36-1 في العالم $-1).
-
-![فحص البدء الدافئ في SMB1 -- هو الذي يسمح لـ Minus World بالوجود](/images/smb1-glitch-levels/v4-minus-world.jpg)
-
-```asm
-; Pourquoi le flagpole manque dans le Minus World :
-; Les sprites de 2-2/7-2 ($A171) n'ont pas de flagpole
-; dans leur séquence. Le jeu cherche le sprite $FD (flagpole)
-; mais ne le trouve jamais → boucle infinie
+;   ← العالم 1 يبدأ عند المستوى 0
+;   ← العالم 2 يبدأ عند المستوى 5
+;   ← العالم 8 يبدأ عند المستوى 33
 ;
-; Le jeu continue de générer le niveau à l'infini
-; jusqu'à ce que le timer atteigne zéro.
+; جدول LevelIDTable (36 بايتا)
+  .byte $25, $28, $29, $26, $24, ... ; معرفات المستويات الـ36
 ```
 
-### المؤشرات التي تشير إلى الذاكرة RAM
-
-عندما يشير مؤشر البلاطات أو مؤشر السبرايتات إلى عنوان في RAM ($00-$7F) بدلاً من ROM، تحاول اللعبة تفسير التغييرات المستمرة في RAM كبلاطات:
+وعند محاولة تحميل العالم 9، يقرأ اللعب البايت التاسع من WorldIndexTable... غير الموجود. فيفيض ببايت واحد في LevelIDTable، ويقرأ القيمة $25، ثم يستخدم $25 كفهرس في LevelIDTable (المدخل 37)، مما يفيض مجددا ببايتين في SpriteOffsetTable، ويقرأ القيمة 6.
 
 ```asm
-; Exemple : Level ID $03 en Water
-; Tile Pointer : $A46B (3-3 - valide)
-; Sprite Pointer : $009D (pointe vers la RAM page zéro !)
+; العالم 9 :
+;   1. WorldIndexTable[8] (فيض) ← يقرأ $25 في LevelIDTable
+;   2. LevelIDTable[37] (فيض) ← يقرأ البايت الثاني من SpriteOffsetTable = 6
+;   3. المعرف = 6 ← مستوى ماء رقم 6 (غير موجود)
+;   4. مؤشر Tile = مؤشر ماء رقم 6 = tiles الخاصة بـ6-2
+;   5. مؤشر Sprite = فهرس 31+6 = 37 > 33 ← مؤشر غير صالح
+;   6. النتيجة : 6-2 تحت الماء مع sprites مُفسَدة
+;      ← العالم 9-1 !
+```
+
+بالنسبة للعالم G (16)، يذهب الفيض أبعد ويقع على معرف المستوى $01، وهو مستوى المشهد الذي يسبق 1-2 :
+
+```asm
+; العالم G (16) :
+;   WorldIndexTable[15] ← يقرأ $01 في LevelIDTable
+;   LevelIDTable[1] = $29 (مشهد 1-2)
+;   ← العالم G-1 = مشهد دخول 1-2
+```
+
+## لماذا توجد glitch worlds
+
+يملك اللعب 32 مستوى "شرعيا" (8 عوالم × 4 مستويات). لكن جدول المؤشرات يبلغ 128 مدخلا لكل نوع منطقة. تحوي المداخل بعد المستوى 32 ما يوجد في ROM في هذه العناوين، أحيانا مستوى آخر، وأحيانا بيانات صوتية، وأحيانا RAM، وأحيانا أي شيء.
+
+![Level ID $01 Water (Minus World) -- tile pointer $AE45, sprite pointer $A171](/images/smb1-glitch-levels/minus-world.png)
+
+### معرف المستوى $01 + النوع 0 = Minus World
+
+أشهر glitch worlds. معرف المستوى $01 في النوع 0 (ماء) يشير نحو :
+
+- **مؤشر Tile : $AE45** ← المنطقة تحت المائية في 2-2/7-2
+- **مؤشر Sprite : $A171** ← sprites الخاصة بـ2-2/7-2
+
+النتيجة : مستوى ماء يشبه 2-2، لكنه يدور للأبد لأن flagpole غير موجود. يدور المستوى في حلقة للأبد.
+
+إنه مستوى 36-1 (أو 36-1 في العالم $-1).
+
+![Le warm start check de SMB1 -- c'est lui qui permet au Minus World d'exister](/images/smb1-glitch-levels/v4-minus-world.jpg)
+
+```asm
+; لماذا ينقص flagpole في Minus World :
+; لا تحوي sprites الخاصة بـ2-2/7-2 ($A171) flagpole
+; في تسلسلها. يبحث اللعب عن sprite رقم $FD (flagpole)
+; لكنه لا يجده أبدا ← حلقة لانهائية
 ;
-; La RAM page zéro contient les registres du jeu,
-; la position de Mario, l'état des compteurs...
-; Le jeu décompresse ça comme une séquence de sprites,
-; et le résultat c'est un niveau avec des ennemis
-; qui sont en fait des valeurs de registres.
+; يواصل اللعب توليد المستوى للأبد
+; حتى يبلغ المؤقت صفرا.
 ```
 
-عندما تتغير الصفحة الصفرية (لأن Mario يتحرك، أو المؤقت يدور، إلخ)، تتغير "سبرايتات" المستوى أيضًا. لهذا السبب بعض عوالم الخلل بها أعداء يتوهجون ويتحولون باستمرار.
+### المؤشرات التي تشير نحو RAM
 
-![Level ID $03 Water -- مؤشر السبرايتات $009D يشير إلى RAM، مستوى غير قابل للعب](/images/smb1-glitch-levels/level-03-water.png)
-
-### Level ID $36: المستوى الفارغ (العالم العلوي)
-
-Level ID $36 في العالم العلوي:
-
-- **مؤشر البلاطات: $AC35** (1-2)
-- **مؤشر السبرايتات: $A0D8** (1-2)
-
-النتيجة: لا شيء. تحمل اللعبة المستوى لكنه مulozhenn "بدون مستوى" في كتالوج RGMechEx. البلاطات قد تكون صالحة لكن السبرايتات تشير إلى مكان ينتج مستوى فارغًا أو غير قابل للتشغيل.
-
-### Level ID $1D (Castle): بطل الأعطال
-
-Level ID $1D في القلعة:
-
-- **مؤشر البلاطات: $A210** (4-4)
-- **مؤشر السبرايتات: $7EA0** (RAM !)
-
-مؤشر السبرايتات في RAM = سبرايتات غير معرفة. تحاول اللعبة عرض Spiny ball أو Bullet Bill blaster في صف البلاطات الأول. يتعطل فورًا.
+عندما يشير مؤشر tile أو مؤشر sprite نحو عنوان في RAM ($00-$7F) بدلا من ROM، يحاول اللعب تفسير تغيرات RAM المستمرة كـtiles :
 
 ```asm
-; Quand le sprite pointer pointe vers la RAM,
-; le jeu décompresse des bytes qui changent tout le temps
-; comme des instructions "spawn". Le résultat :
-; - Apparition d'objets inexistants (valeur undefined)
-; - Crash PPU quand le sprite NES essaie d'afficher un tile invalide
-; - Freeze complet de la console
+; مثال : معرف المستوى $03 في ماء
+; مؤشر Tile : $A46B (3-3، صالح)
+; مؤشر Sprite : $009D (يشير نحو RAM الصفحة صفر !)
+;
+; تحوي RAM الصفحة صفر سجلات اللعب،
+; وموضع Mario وحالة العدادات...
+; يفك اللعب ضغط ذلك كتسلسل sprites،
+; والنتيجة مستوى مع أعداء
+; هم في الواقع قيم سجلات.
 ```
 
-## الـ 256 عالم خلل الموثقة
+وعندما تتغير الصفحة صفر (لأن Mario يتحرك أو المؤقت يدور، إلخ)، تتغير "sprites" المستوى أيضا. لهذا تملك بعض glitch worlds أعداء تومض وتتحول باستمرار.
 
-كتب RGMechEx نصًا يولّد خرائط **جميع المستويات**، لأنواع المنطقة الأربعة، والـ 128 معرّفًا لكل منها.
+![Level ID $03 Water -- sprite pointer $009D pointe vers la RAM, niveau injouable](/images/smb1-glitch-levels/level-03-water.png)
 
-عداد العالم على 8 بت (0-255). العوالم 1-8 شرعية. تبقى **248 عالم خلل** محتملًا. كل عالم خلل يتوافق مع أول مستوى لذلك العالم، ويتم حساب معرّف مستوى عن طريق آلية تجاوز WorldIndexTable.
+### معرف المستوى $36 : المستوى الفارغ (خارجي)
 
-![جدول عوالم الخلل -- 248 عالمًا متلفًا، 68 مستوى أول يمكن الوصول إليها](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
+معرف المستوى $36 في خارجي :
 
-من بين الـ 128 معرّفًا ممكنًا، فقط **68 هي "مستوى أول" لعالم** (يمكن الوصول إليها عبر رقم عالم الخلل). الـ 60 الأخرى هي مستويات 2+ أو غير قابلة للوصول.
+- **مؤشر Tile : $AC35** (1-2)
+- **مؤشر Sprite : $A0D8** (1-2)
 
-| النوع | معرّفات قابلة للعب فريدة | معرّفات تسبب تعطل | معرّفات فارغة |
-|------|--------------------------|-------------------|-----------|
-| الماء (0)    | ~20  | ~60  | ~48  |
-| العالم العلوي (1)| ~30  | ~55  | ~43  |
-| تحت الأرض (2) | ~15 | ~65 | ~48  |
-| القلعة (3)   | ~25  | ~58  | ~45  |
+النتيجة : لا شيء. يحمّل اللعب المستوى لكنه موسوم "دون مستوى" في فهرس RGMechEx. قد تكون tiles صالحة لكن sprites تشير نحو مكان ينتج مستوى فارغا أو غير عامل.
 
-كثير من المعرّفات تؤدي إلى نفس المستوى بسبب المؤشرات التي تقع على نفس العناوين ROM. Level ID $28 (العالم العلوي) على سبيل المثال -- مؤشر البلاطات $A7CD (2-1) -- يظهر في **38 عالم خلل مختلفًا**، لأنه مؤشر السبرايتات $9F51 يشير إلى منطقة في ROM تستخدم كحشو/بيانات صوتية يعيد استخدامها كثير من المعرّفات.
+### معرف المستوى $1D (قلعة) : بطل الانهيارات
 
-![خريطة المستوى ID $28 (العالم العلوي) -- بلاطات 2-1 مع سبرايتات عادية، 38 عالم خلل](/images/smb1-glitch-levels/level-28-overworld.png)
+معرف المستوى $1D في قلعة :
 
-![شرح آليات Super Mario Bros. الخلل -- الفيديو الثالث](/images/smb1-glitch-levels/yt-levels.jpg)
+- **مؤشر Tile : $A210** (4-4)
+- **مؤشر Sprite : $7EA0** (RAM !)
 
-### الـ 6 مستويات خلل فريدة حقًا
+مؤشر Sprite في RAM = sprites غير معرفة. يحاول اللعب عرض كرة Spiny أو قاذف Bullet Bill في أول سطر tiles. ينهار فورا.
 
-من بين معرّفات الخلل الـ 19 القابلة للوصول، فقط **6 لا تتعرض للتعطل فورًا** عند التحميل:
+```asm
+; عندما يشير مؤشر sprite نحو RAM،
+; يفك اللعب ضغط بايتات تتغير طوال الوقت
+; كتعليمات "ظهور". النتيجة :
+; - ظهور عناصر غير موجودة (قيمة غير معرفة)
+; - انهيار PPU عندما يحاول sprite الخاص بـNES عرض tile غير صالح
+; - تجمد كامل للمنصة
+```
 
-| العالم | Level ID | الوصف |
+## glitch worlds الـ256 المفهرسة
+
+كتب RGMechEx سكربت يولد خرائط **كل المستويات**، للأنواع الأربعة للمنطقة، والمعرفات الـ128 لكل واحد.
+
+عداد العالم على 8 بت (0-255). العوالم 1-8 شرعية. يبقى **248 glitch worlds** محتملة. يطابق كل glitch world أول مستوى لهذا العالم، وتُحسَب معرف مستواه بآلية فيض WorldIndexTable.
+
+![Table des glitch worlds -- 248 mondes corrompus, 68 premiers niveaux accessibles](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
+
+من المعرفات الـ128 الممكنة، **68 فقط هي "مستوى أول" لعالم** (قابلة للوصول عبر رقم glitch world). الستون الأخرى مستويات 2+ أو غير قابلة للوصول.
+
+| النوع | معرفات فريدة قابلة للعب | معرفات منهارة | معرفات فارغة |
+|------|---------------------|-------------------|-----------|
+| ماء (0)    | ~20  | ~60  | ~48  |
+| خارجي (1)| ~30  | ~55  | ~43  |
+| تحت أرضي (2) | ~15 | ~65 | ~48  |
+| قلعة (3)   | ~25  | ~58  | ~45  |
+
+تؤدي الكثير من المعرفات لنفس المستوى لأن المؤشرات تقع على نفس عناوين ROM. معرف المستوى $28 (خارجي) مثلا، مؤشر tiles رقم $A7CD (2-1)، يظهر في **38 glitch worlds مختلفة**، لأن مؤشر sprite رقم $9F51 يشير نحو منطقة ROM مستخدمة كحشو/بيانات صوتية يُعاد استخدامها من الكثير من المعرفات.
+
+![Carte du niveau ID $28 (Overworld) -- 2-1 tiles avec des sprites normaux, 38 glitch worlds](/images/smb1-glitch-levels/level-28-overworld.png)
+
+![Super Mario Bros. Glitch Levels Explained -- la 3ème vidéo](/images/smb1-glitch-levels/yt-levels.jpg)
+
+### مستويات glitch الستة الفريدة فعلا
+
+من معرفات glitch level الـ19 القابلة للوصول، **6 فقط لا تنهار فورا** عند التحميل :
+
+| العالم | معرف المستوى | الوصف |
 |-------|----------|-------------|
-| E-1 (224) | $50 | بلوك ؟ واحد فوق هاوية. يموت Mario فورًا. |
-| W | $57 | Mario يظهر محتجزًا، غير قادر على الحركة. |
-| 42 (133) | $50 | نفق سحاب يحبس Mario إذا ذهب بعيدًا بما يكفي. |
-| 62 (131, 240) | $4D | قلعة جليدية: Mario يظهر في الأعلى، لا يمكنه السقوط ← محتجز. |
-| 127 | $4B | نفق تحت الأرض، لكنه يتعرض للتعطل إذا ذهب بعيدًا. |
-| 137 | $4B | ي.active التمرير التلقائي لمشاهد cutscenes. Mario يلتقي ببلوك brick واحد يحجبه إلى الأبد. |
+| E-1 (224) | $50 | كتلة ؟ واحدة فوق هاوية. يموت Mario فورا. |
+| W | $57 | يظهر Mario عالقا، عاجزا عن الحركة. |
+| 42 (133) | $50 | نفق سحب يحبس Mario إذا ذهب بعيدا بما يكفي. |
+| 62 (131 و240) | $4D | قلعة متجمدة : يظهر Mario في الأعلى، لا يستطيع السقوط ← عالق. |
+| 127 | $4B | نفق تحت أرضي، لكنه ينهار إذا ذهب بعيدا. |
+| 137 | $4B | يفعّل التمرير الآلي للمشاهد. يلاقي Mario كتلة طوب وحيدة تحجبه للأبد. |
 
-![Level ID $50 (نفق السحاب) -- عالم الخلل 42-1 و E-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
-![Level ID $4D (قلعة) -- World 62-1، Mario محتجز عند الظهور](/images/smb1-glitch-levels/lvl-4D-castle.png)
-![Level ID $4B (نفق) -- World 127-1، يتعرض للتعطل إذا ذهب بعيدًا](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
+![Level ID $50 (cloud tunnel) -- le glitch world 42-1 et E-1](/images/smb1-glitch-levels/lvl-50-cloud.png)
+![Level ID $4D (castle) -- world 62-1, Mario bloqué au spawn](/images/smb1-glitch-levels/lvl-4D-castle.png)
+![Level ID $4B (tunnel) -- world 127-1, crashe si on va trop loin](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
 
-ستة عوالم خلل من أصل 248 تنتج شيئًا جديدًا حقًا. الباقي هي مستويات عادية مع نوع المنطقة الخاطئ، أو شاشات سوداء.
+ستة glitch worlds من 248 تنتج شيئا جديدا فعلا. الباقي مستويات عادية بنوع منطقة خطأ، أو شاشات سوداء.
 
-## تنسيق المستويات بالتفصيل
+## صيغة المستويات بالتفصيل
 
-نبحث في التنسيق الدقيق لبيانات المستوى، لفهم لماذا تثبت مستويات الخلل (أو لا تثبت).
+نحو الصيغة الدقيقة لبيانات المستوى، لفهم لماذا تصمد glitch levels (أم لا).
 
-### رأس المستوى: 2 بايت، 6 خصائص
+### ترويسة المستوى : بايتان و6 خصائص
 
-يبدأ كل مستوى برأس من 2 بايت يتحكم في 6 خصائص:
-
-```asm
-; Byte 0 : timer + Y start + modifier
-;   Bits 7-6 : timer (00=inchangé, 01=200, 10=300, 11=400)
-;   Bits 5-3 : Y start Mario (111/110 = autowalk)
-;   Bits 2-0 : level type modifier
-;              000=default, 001=waves, 010=brick wall,
-;              011=water bottom, 100=night, 101=snow,
-;              110=snow night, 111=gray night
-
-; Byte 1 : platform + background + floor pattern
-;   Bits 7-6 : special platform (00=tree, 01=mushroom,
-;                                 10=Bullet Bill, 11=cloud)
-;   Bits 5-4 : background (00=none, 01=clouds,
-;                           10=montains, 11=fences)
-;   Bits 3-0 : floor pattern initial (0-15)
-```
-
-يتحكم نوع التعديل في الاختلافات البصرية: الأمواج في أعلى مستويات الماء، خلفية الطوب في 8-3، لوحة الليل في 4-3، الثلج في 6-2، إلخ.
-
-### أشياء البلاطات: 2 بايت، علامة الشاشة التالية، طابور 3 أماكن
-
-بعد الرأس تأتي قائمة **أشياء البلاطات**، كل شيء يساوي 2 بايت. البايت $FD يعلم نهاية القائمة.
+يبدأ كل مستوى بترويسة بايتين تتحكم في 6 خصائص :
 
 ```asm
-; Format objet tile (16 bits) :
-; Byte 0 :
-;   Bits 7-4 : X position (colonne 0-15)
-;   Bits 3-0 : Y position
-;     Y=0-11  : position Y normale
-;     Y=12    : objets spéciaux (trous, ponts, rope, ? blocks)
-;     Y=13    : screen skip / objets spéciaux 2
-;     Y=14    : changement de modifier/scenery/floor
-;     Y=15    : objets spéciaux 3 (château, escaliers, gros tuyau)
-
-; Byte 1 :
-;   Bit  7   : NEXT SCREEN FLAG
-;   Bits 6-4 : type d'objet (0-7)
-;   Bits 3-0 : largeur/hauteur / sous-type
+; بايت 0 : مؤقت + بداية Y + معدِّل
+;   بتان 7-6 : مؤقت (00=دون تغيير و01=200 و10=300 و11=400)
+;   بتات 5-3 : بداية Y الخاصة بـMario (111/110 = مشي آلي)
+;   بتات 2-0 : معدِّل نوع المستوى
+;              000=افتراضي و001=موجات و010=جدار طوب،
+;              011=قاع ماء و100=ليل و101=ثلج،
+;              110=ثلج ليل و111=ليل رمادي
+;
+; بايت 1 : منصة + خلفية + نمط أرضية
+;   بتان 7-6 : منصة خاصة (00=شجرة و01=فطر،
+;                                 10=Bullet Bill و11=سحابة)
+;   بتان 5-4 : خلفية (00=لا شيء و01=سحب،
+;                           10=جبال و11=أسوار)
+;   بتات 3-0 : نمط أرضية أولي (0-15)
 ```
 
-عندما يتم تعيين علامة "الشاشة التالية"، يتم زيادة عمود العمل الحالي بـ 1. هذا يسمح بوضع أشياء تتجاوز الأعمدة الـ 16 الأولى. يجب سرد الأشياء **بالترتيب** (من اليسار إلى اليمين) لأن اللعبة تحملها بشكل متسلسل:
+يتحكم معدِّل النوع في تغيرات بصرية : الموجات أعلى مستويات الماء، وخلفية الطوب في 8-3، ولوحة الليل في 4-3، وثلج 6-2، إلخ.
+
+### عناصر tiles : بايتان وعلم الشاشة التالية وطابور 3 خانات
+
+بعد الترويسة تأتي قائمة **عناصر tile**، كل عنصر بايتان. يسم البايت $FD نهاية القائمة.
 
 ```asm
-; La routine de chargement a DEUX phases par colonne :
-; Phase 1 : chercher les nouveaux objets qui commencent sur cette colonne
-;            et les ajouter à la file d'attente (queue)
-; Phase 2 : traiter chaque objet dans la queue en dessinant les tiles,
-;            et retirer ceux qui finissent sur cette colonne
+; صيغة عنصر tile (16 بت) :
+; بايت 0 :
+;   بتات 7-4 : موضع X (عمود 0-15)
+;   بتات 3-0 : موضع Y
+;     Y=0-11  : موضع Y عادي
+;     Y=12    : عناصر خاصة (ثقوب وجسور وحبال وكتل ؟)
+;     Y=13    : تخطي شاشة / عناصر خاصة 2
+;     Y=14    : تغيير معدِّل/مشهد/أرضية
+;     Y=15    : عناصر خاصة 3 (قلعة وسلالم وأنبوب كبير)
+;
+; بايت 1 :
+;   بت  7   : علم الشاشة التالية
+;   بتات 6-4 : نوع العنصر (0-7)
+;   بتات 3-0 : عرض/ارتفاع / نوع فرعي
 ```
 
-الطابور يحتوي بالضبط على **3 أماكن**. نتيجة مباشرة: لا يمكن أن يكون هناك أكثر من 3 أشياء تبدأ في نفس العمود. إذا كان الطابور ممتلئًا، يتم تجاهل الشيء الرابع ولن يُحمّل أبدًا.
-
-لهذا السبب تتجنب المستويات المصممة جيدًا تكدس الكثير من الأشياء. مثال في 1-2: العمود الذي يحتوي على بلوك 1up في السقف + الطوب بجانبه مقسمان إلى شيئين منفصلين للالتزام بحد 3.
-
-### Y مميز: 12، 13، 14، 15
-
-عندما Y=12، ليس للشيء موقع Y (إنه مبرمج حسب النوع):
+وعند ضبط بت "الشاشة التالية"، يُزاد عمود العمل الحالي 1. وهذا يسمح بوضع عناصر بعد الأعمدة الـ16 الأولى. يجب سرد العناصر **بالترتيب** (يسارا ليمينا) لأن اللعب يحمّلها تسلسليا :
 
 ```asm
-; Y=12 : objets sans Y position
-;   Type 0 : trou (supprime le sol)
-;   Type 1 : rope de plateforme mobile
-;   Types 2-4 : ponts à Y fixe
-;   Type 5 : trou avec eau/lave
-;   Types 6-7 : rangées de ? blocks
+; روتين التحميل له مرحلتان لكل عمود :
+; مرحلة 1 : البحث عن العناصر الجديدة التي تبدأ على هذا العمود
+;            وإضافتها لطابور الانتظار
+; مرحلة 2 : معالجة كل عنصر في الطابور برسم tiles،
+;            وإزالة ما ينتهي على هذا العمود
 ```
 
-عندما Y=13، مجموعتان فرعيتان. إذا كان Bit 6 من البايت 1 يساوي 1:
+يبلغ الطابور بالضبط **3 خانات**. عاقبة مباشرة : لا يمكن وجود أكثر من 3 عناصر تبدأ على نفس العمود. وإذا كان الطابور ممتلئا، يُتجاهَل العنصر الرابع ولن يُحمَّل أبدا.
+
+لهذا تتجنب المستويات المصممة جيدا تكديس عناصر كثيرة. مثال في 1-2 : العمود مع كتلة 1up في السقف + الطوب بجانبه مُقسَّم إلى عنصرين متميزين لاحترام حد 3.
+
+### موضع Y الخاص : 12 و13 و14 و15
+
+عندما Y=12، لا موضع Y للعنصر (مُرمَّز صلبا حسب النوع) :
 
 ```asm
-; Y=13, bit6=1 : objets spéciaux
-;   0 = L-pipe (cutscene), 1 = flagpole, 2-3 = pont/axe/hamer (fin château)
-;   4 = stop screen, 5 = random enemies, 6 = loop level, 7+ = crash possible
+; Y=12 : عناصر دون موضع Y
+;   نوع 0 : ثقب (يزيل الأرض)
+;   نوع 1 : حبل منصة متحركة
+;   أنواع 2-4 : جسور عند Y ثابت
+;   نوع 5 : ثقب مع ماء/حمم
+;   أنواع 6-7 : صفوف كتل ؟
 ```
 
-إذا bit6=0، الـ 5 بت الأقل وزنًا تشفّر **تخطي شاشة** (انتقل مباشرة إلى شاشة N، دون المرور بعلامة الشاشة التالية واحدة تلو الأخرى).
-
-عندما Y=14: نفس المبدأ مع bit6=1 لتغيير نوع التعديل، bit6=0 لتغيير الخلفية + نمط الأرضية.
-
-### أنماط الأرضية: 16 نمطًا أرضيًا
-
-أرضية المستويات ليست مصنوعة من أشياء فردية. يستخدم SMB1 **أنماط أرضية**، نمط خلفية ينطبق على جميع الأعمدة حتى التغيير التالي:
+عندما Y=13، مجموعتان فرعيتان. إذا كان بت 6 من بايت 1 عند 1 :
 
 ```asm
-; Floor patterns (4 bits = 16 possibilités)
-;   0 = vide total
-;   1 = sol 2 tiles haut
-;   2 = sol 1 tile haut
-;   3 = sol + bottom
-;   4 = sol + bottom 2
-;   5 = sol 1/2 tile
-;   6 = 3/4 sol
-;   ... jusqu'à 15 = rempli total (sol + plafond)
+; Y=13 وبت6=1 : عناصر خاصة
+;   0 = أنبوب L (مشهد) و1 = عمود علم و2-3 = جسر/فأس/مطرقة (نهاية قلعة)
+;   4 = إيقاف شاشة و5 = أعداء عشوائيون و6 = مستوى حلقي و7+ = انهيار محتمل
 ```
 
-لهذا السبب الثقوب هي أشياء: فهي تتجاوز نمط الأرضية على عمود محدد، دون الحاجة إلى تغيير النمط لبقية كل شيء.
+وإذا كان بت6=0، ترمّز البتات الخمسة الضعيفة **تخطي شاشة** (قفز مباشرة لشاشة N، دون المرور بعلم الشاشة التالية واحدا بواحد).
+
+وعندما Y=14 : نفس المبدأ مع بت6=1 لتغيير معدِّل النوع، وبت6=0 لتغيير الخلفية + نمط الأرضية.
+
+### أنماط الأرضية : 16 نمط أرض
+
+أرضية المستويات ليست عناصر فردية. تستخدم SMB1 **أنماط أرضية**، نمط خلفية يُطبَّق على كل الأعمدة حتى التغيير التالي :
+
+```asm
+; أنماط أرضية (4 بت = 16 احتمالا)
+;   0 = فارغ كامل
+;   1 = أرض بارتفاع بلاطتين
+;   2 = أرض بارتفاع بلاطة
+;   3 = أرض + قاع
+;   4 = أرض + قاع 2
+;   5 = أرض نصف بلاطة
+;   6 = 3/4 أرض
+;   ... حتى 15 = ممتلئ كامل (أرض + سقف)
+```
+
+لهذا الثقوب عناصر : إنها تتجاوز نمط الأرضية على عمود بعينه، دون تغيير النمط لبقية الباقي.
 
 ### حد 256 بايت والتكرار
 
-جميع بيانات البلاطات للمستوى تندرج في **256 بايت كحد أقصى**. السجل Y في 6502 يُستخدم كفهرس، وهو 8 بت. إذا وصلت اللعبة إلى نهاية البيانات دون العثور على البايت $FD، **تعود إلى البداية** وتكرر الـ 256 بايت إلى الأبد:
+تتسع كل بيانات tile لمستوى في **256 بايت حدا**. يُستخدَم سجل Y في 6502 كفهرس، وهو 8 بت. وإذا بلغ اللعب نهاية البيانات دون إيجاد بايت $FD، **يعيد الحلقة للبداية** ويكرر 256 بايت للأبد :
 
 ```asm
-; Index Y = 8 bits → max 256 bytes de données tiles
-; Si Y overflow (255 → 0) sans rencontrer $FD → repeat
-; Même chose pour les sprites, mais les objets pipe (3 bytes)
-; décalent la parité de l'index à chaque chargement.
+; فهرس Y = 8 بت ← حد 256 بايت لبيانات tiles
+; إذا فاض Y (255 ← 0) دون لقاء $FD ← تكرار
+; نفس الشيء لـsprites، لكن عناصر الأنبوب (3 بايتات)
+; تزيح تكافؤ الفهرس مع كل تحميل.
 ```
 
-بعض مستويات الخلل تستغل هذا التكرار لتوليد مستويات تدوم "إلى الأبد".
+تستغل بعض glitch levels هذا التكرار لتوليد مستويات تدوم "للأبد".
 
-### نظام السبرايتات: 2 بايت + انتقالات الأنابيب
+### نظام sprites : بايتان + انتقالات أنبوب
 
-تتبع السبرايتات تنسيقًا مشابهًا، لكن بدون رأس وبعض الاختلافات الجوهرية. البايت $FF يعلم نهاية القائمة.
+تتبع sprites صيغة مشابهة، لكن دون ترويسة ومع بعض الفروق الأساسية. يسم البايت $FF نهاية القائمة.
 
 ```asm
-; Format sprite (2 bytes) :
-; Byte 0 : position X (colonne)
-; Byte 1 :
-;   Bit 7 : NEXT SCREEN FLAG
-;   Bits 6-0 : type de sprite
-;       Certains types incluent : goomba, koopa, Blooper,
-;       Bullet Bill, Lakitu, Spiny, plateformes,
-;       commande warp zone, toad/princesse,
-;       commandes de spawn de groupes d'ennemis
+; صيغة sprite (بايتان) :
+; بايت 0 : موضع X (عمود)
+; بايت 1 :
+;   بت 7 : علم الشاشة التالية
+;   بتات 6-0 : نوع sprite
+;       بعض الأنواع تتضمن : goomba وkoopa وBlooper،
+;       Bullet Bill وLakitu وSpiny ومنصات،
+;       أمر منطقة warp وtoad/أميرة،
+;       أوامر ظهور مجموعات أعداء
 ```
 
-البت الأقل وزنًا في البايت 1 هو **علم المستوى الصعب**: إذا تم تعيينه بـ 1، لا يظهر السبرايت إلا في المستويات ≥ 5-3. هكذا يتم إنشاء مستويات "الوضع الصعب".
+البت الضعيف من بايت 1 هو **علم المستوى الصعب** : إذا ضُبط عند 1، لا يظهر sprite إلا في المستويات ≥ 5-3. وهكذا تُنشأ مستويات "الوضع الصعب".
 
-الموقع Y 15 = **تخطي شاشة** (مطابق للبلاطات). الموقع Y 14 = **انتقال أنبوب** (3 بايت):
+موضع Y رقم 15 = **تخطي شاشة** (مطابق لـtiles). موضع Y رقم 14 = **انتقال أنبوب** (3 بايتات) :
 
 ```asm
-; Sprite Y=14 : pipe/vine transition (3 bytes !)
-;   Byte 0 : position X
-;   Byte 1 : bits 6-0 = Level ID 7-bit (destination)
-;   Byte 2 : bits 4-0 = screen de destination
-;            bits 7-5 = world où cette transition est valide
+; Sprite عند Y=14 : انتقال أنبوب/كرمة (3 بايتات !)
+;   بايت 0 : موضع X
+;   بايت 1 : بتات 6-0 = معرف المستوى 7-bit (وجهة)
+;   بايت 2 : بتات 4-0 = شاشة الوجهة
+;            بتات 7-5 = العالم الذي يصح فيه هذا الانتقال
 ;
-; Pourquoi un world ? Les bonus rooms sont réutilisées entre mondes.
-; Exemple : la salle bonus de 1-1 est aussi utilisée par 2-1 et 7-1.
-; Cette salle a 3 transitions, une par monde, pour que Mario
-; réapparaisse au bon endroit.
+; لماذا عالم ؟ تُعاد استخدام غرف المكافأة بين العوالم.
+; مثال : غرفة مكافأة 1-1 تُستخدَم أيضا في 2-1 و7-1.
+; لهذه الغرفة 3 انتقالات، واحد لكل عالم، لكي يظهر Mario
+; في المكان الصحيح.
 ```
 
-السبرايتات **ليس لها نظام طابور**. الحد الوحيد هو عدم وجود أكثر من 4 سبرايتات محملة في نفس الوقت في منطقة الظهور (خارج الشاشة على اليمين فقط). فوق ذلك، يتم تجاهل السبرايتات.
+لا تملك sprites **نظام طابور**. الحد الوحيد أنه لا يمكن وجود أكثر من 4 sprites مُحمَّلة في آن واحد في منطقة الظهور (خارج الشاشة يمينا بقليل). وبعد ذلك، تُتجاهَل sprites.
 
-## كيفية الوصول إلى عوالم الخلل
+## كيف تصل لglitch worlds
 
-هناك طرقتان رئيستان.
+هناك طريقتان رئيسيتان.
 
-### الطريقة الكلاسيكية: تسلق الجدار (wall clip)
+### الطريقة التقليدية : اختراق الجدار
 
-يسمح تسلق الجدار بالخروج من المستوى العادي والمشي إلى منطقة التحويل المخفية. بالتعامل مع عداد العالم عبر RAM، يمكنك تحميل أي Level ID.
+يسمح اختراق الجدار (المرور عبر الجدران) بالخروج من المستوى العادي والمشي حتى منطقة warp المخفية. بالتلاعب بعداد العالم عبر RAM، يمكن تحميل أي معرف مستوى.
 
-التقنية:
-1. World 1-2: اذهب إلى الأنبوب الخفي النهائي
-2. افعل تسلق الجدار على الجدار الأيمن
-3. امشي في الفراغ حتى منطقة التحويل
-4. تفسر اللعبة القيم كعوالم
+التقنية :
+1. العالم 1-2 : الذهاب في أنبوب النهاية المخفي
+2. تنفيذ اختراق الجدار على الجدار الأيمن
+3. المشي في الفراغ حتى منطقة warp
+4. يفسّر اللعب القيم كعوالم
 
-لكن هذه الطريقة لا تمنح الوصول إلا إلى جزء صغير من عوالم الخلل.
+لكن هذه الطريقة لا تعطي الوصول إلا لجزء صغير من glitch worlds.
 
-### الطريقة المتطرفة: تبادل كارترidge NES Tennis
+### الطريقة القصوى : تبديل خرطوشة NES Tennis
 
-انظر قسم "البدء الدافئ" أعلاه للتفاصيل الكاملة. باختصار: عداد خطوات Tennis يكتب على نفس بايت RAM الذي يحتوي على عالم البداية في SMB1، واكتشاف البدء الدافئ يحافظ على هذه القيمة.
+انظر قسم "البدء الدافئ" أعلاه للتفصيل الكامل. باختصار : يكتب عداد خطوات Tennis على نفس بايت RAM كعالم بداية SMB1، وكشف البدء الدافئ يحفظ هذه القيمة.
 
-### زاوية المخترعين: الكود للاستكشاف الكامل
+### ركن العابثين : الكود لاستكشاف الكل
 
-إذا أردت استكشاف جميع الخلل بنفسك في محاكي، يمكنك تثبيت Level ID مباشرة:
+إذا أردت استكشاف glitch كلها بنفسك في محاكٍ، تستطيع ترقيع معرف المستوى مباشرة :
 
 ```asm
-; Patch pour FCEUX / Mesen :
-; Adresse RAM $075F = Level ID actuel
-; Adresse RAM $0760 = Area Type (0=Water, 1=Overworld, 2=Underground, 3=Castle)
-
-; Exemple : charger le Level 57 (0x39) en Overworld
-; Dans l'émulateur, ouvrir le traceur mémoire et écrire :
+; ترقيع لـFCEUX / Mesen :
+; عنوان RAM رقم $075F = معرف المستوى الحالي
+; عنوان RAM رقم $0760 = نوع المنطقة (0=ماء و1=خارجي و2=تحت أرضي و3=قلعة)
+;
+; مثال : تحميل المستوى 57 (0x39) في خارجي
+; في المحاكي، افتح متتبع الذاكرة واكتب :
 ; $075F = 0x39
 ; $0760 = 0x01
-; Puis entrer dans un tuyau de warp ou mourir et recommencer
-; → Le jeu charge le niveau ID $39 en Overworld
+; ثم ادخل أنبوب warp أو مُت وأعد البدء
+; ← يحمّل اللعب مستوى المعرف $39 في خارجي
 ```
 
-نشر RGMechEx القائمة الكاملة للـ 128 مستوى × 4 أنواع مع خرائط مولّدة تلقائيًا على [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). كل إدخال يعرض مؤشر البلاطات، مؤشر السبرايتات، وخريطة بصرية للمستوى.
+نشرت RGMechEx القائمة الكاملة للمستويات الـ128 × الأنواع الأربعة مع خرائط مولدة آليا على [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html). يعرض كل مدخل مؤشر tile ومؤشر sprite وخريطة بصرية للمستوى.
 
-## المستويات الأكثر غرابة
+## المستويات الأكثر جنونا
 
-### Level ID $1F (Water): 15 عالم خلل في واحد
+### معرف المستوى $1F (ماء) : 15 glitch worlds في واحد
 
-مؤشر البلاطات $A302 (3-4) المُجمّع مع مؤشر السبرايتات $02A0 ينتج 15 عالم خلل مختلفًا (D-1, J-1, Y-1, Z-1, 55-1, 73-1...). التفسير: مؤشر السبرايتات يشير إلى منطقة في ROM تحتوي على بيانات قريبة بما يكفي من السبرايتاتصالحة لإنتاج نتائج قابلة للعب، لكن مزيج بلاطات القلعة 3-4 مع سبرايتات العالم العلوي يخلق عرضًا عبثيًا.
+مؤشر tile رقم $A302 (3-4) مدمجا مع مؤشر sprite رقم $02A0 يعطي 15 glitch worlds مختلفة (D-1 وJ-1 وY-1 وZ-1 و55-1 و73-1...). التفسير : يشير مؤشر sprite نحو منطقة ROM تحوي بيانات قريبة بما يكفي من sprites صالحة لنتائج قابلة للعب، لكن تركيبة tiles قلعة 3-4 مع sprites خارجية تخلق عرضا عبثيا.
 
-### Level ID $28 (Overworld): 38 عالم خلل = ريكورد
+### معرف المستوى $28 (خارجي) : 38 glitch worlds = رقم قياسي
 
-الريكورد المطلق. 38 إدخال عالم خلل تشير إلى نفس المستوى (بلاطات 2-1 + سبرايتات $9F51). لماذا؟ لأن مؤشر السبرايتات $9F51 يقع في منطقة في ROM تستخدم كحشو/بيانات صوتية يعيد استخدامها كثير من المعرّفات.
+الرقم المطلق. تشير 38 مدخلا من glitch world نحو نفس المستوى (tiles الخاصة بـ2-1 + sprites رقم $9F51). لماذا ؟ لأن مؤشر sprite رقم $9F51 يقع في منطقة ROM مستخدمة كحشو/بيانات صوتية يُعاد استخدامها من الكثير من المعرفات.
 
-### Level ID $49 (Underground): مستوى FDS
+### معرف المستوى $49 (تحت أرضي) : مستوى FDS
 
-مؤشر البلاطات $76AE + مؤشر السبرايتات $1C9D. مؤشر البلاطات يشير إلى منطقة في ROM المحجوزة لإصدار Famicom Disk System. النتيجة: مستوى به بلاطات لاExists في الكارترidge القياسي. هذا هو المستوى الذي يجعل Levels 52-1 و 196-1 تظهر.
+مؤشر tile رقم $76AE + مؤشر sprite رقم $1C9D. يشير مؤشر tile نحو منطقة ROM محفوظة لنسخة Famicom Disk System. النتيجة : مستوى مع tiles غير موجودة في الخرطوشة القياسية. إنه المستوى الذي يُظهر المستوى 52-1 و196-1.
 
-### Level ID $00-$02: مستويات المكافأة الحقيقية
+### معرفات المستوى $00-$02 : مستويات المكافأة الحقيقية
 
-هذه المعرّفات تستخدمها مستويات فرعية شرعية من اللعبة:
+تستخدم هذه المعرفات مستويات فرعية شرعية من اللعب :
 
-- **$00**: المنطقة تحت الماء من 5-2/6-2 (يستخدمه H-1, 39-1)
-- **$01**: ماء 2-2/7-2 (Minus World, 36-1)
-- **$02**: مستوى فرعي من 8-4 (136-1, 151-1, 215-1)
+- **$00** : منطقة تحت مائية في 5-2/6-2 (يستخدمها H-1 و39-1)
+- **$01** : ماء 2-2/7-2 (Minus World و36-1)
+- **$02** : مستوى فرعي في 8-4 (136-1 و151-1 و215-1)
 
-الفرق بين مستوى "مكافأة" يمكن الوصول إليه بشكل طبيعي وعالم خلل هو أن مناطق التحويل تتحقق من العالم الحالي:
+الفرق بين مستوى "مكافأة" قابل للوصول عادة وglitch world أن مناطق warp تتحقق من العالم الحالي :
 
 ```asm
-; Vérification warp zone (simplifié)
-; Le jeu vérifie que le monde cible est entre 1 et 8
+; فحص منطقة warp (مبسط)
+; يتحقق اللعب أن العالم الهدف بين 1 و8
 CheckWarp:
   lda TARGET_WORLD
   cmp #1
-  bcc InvalidWarp       ; < 1 → refusé
+  bcc InvalidWarp       ; < 1 ← مرفوض
   cmp #9
-  bcs InvalidWarp       ; > 8 → refusé
-  ; world valide entre 1 et 8 uniquement
+  bcs InvalidWarp       ; > 8 ← مرفوض
+  ; عالم صالح بين 1 و8 فقط
   jmp DoWarp
 ```
 
-عوالم الخلل بأرقام > 8 أو 0 لا يمكن الوصول إليها عبر أنابيب عادية. تحتاج تسلق الجدار أو تبادل الكارترidge.
+لا يمكن بلوغ glitch worlds ذات أرقام > 8 أو 0 بأنابيب عادية. يلزم اختراق الجدار أو تبديل الخرطوشة.
 
-## لماذا تتعرض بعض المستويات للتعطل: جداول القفز
+## لماذا تنهار بعض المستويات : جداول القفز
 
-عندما تحمل اللعبة شيئًا بلاطات، تستخدم نوعه كفهرس في **جدول قفز**:
+عندما يحمّل اللعب عنصر tile، يستخدم نوعه كفهرس في **جدول قفز** :
 
 ```asm
-; Jump table des objets tiles standards (types 0-11)
+; جدول قفز عناصر tiles القياسية (أنواع 0-11)
 JumpTable_TileObjects:
-  .word Obj_Special       ; type 0 : bloc ?, hidden, flagpole...
-  .word Obj_Platform      ; type 1 : plateforme spéciale
-  .word Obj_BrickRow      ; type 2 : rangée de briques
-  .word Obj_BlockRow      ; type 3 : rangée de blocks
-  .word Obj_CoinRow       ; type 4 : rangée de pièces
-  .word Obj_BrickCol      ; type 5 : colonne de briques
-  .word Obj_BlockCol      ; type 6 : colonne de blocks
-  .word Obj_Pipe          ; type 7 : tuyau
-  .word Obj_8             ; type 8
-  .word Obj_9             ; type 9
-  .word Obj_10            ; type 10
-  .word Obj_11            ; type 11
+  .word Obj_Special       ; نوع 0 : كتلة ؟ ومخفي وعمود علم...
+  .word Obj_Platform      ; نوع 1 : منصة خاصة
+  .word Obj_BrickRow      ; نوع 2 : صف طوب
+  .word Obj_BlockRow      ; نوع 3 : صف كتل
+  .word Obj_CoinRow       ; نوع 4 : صف قطع
+  .word Obj_BrickCol      ; نوع 5 : عمود طوب
+  .word Obj_BlockCol      ; نوع 6 : عمود كتل
+  .word Obj_Pipe          ; نوع 7 : أنبوب
+  .word Obj_8             ; نوع 8
+  .word Obj_9             ; نوع 9
+  .word Obj_10            ; نوع 10
+  .word Obj_11            ; نوع 11
 ```
 
-![جداول القفز: لماذا يتسبب نوع شيء غير صالح في تعطل اللعبة](/images/smb1-glitch-levels/v4-jump-table.jpg)
+![Les jump tables : pourquoi un type d'objet invalide fait crasher le jeu](/images/smb1-glitch-levels/v4-jump-table.jpg)
 
-إذا كان للشيء نوع غير صالح (≥12)، تقفز اللعبة إلى مؤشر غير موجود في هذا الجدول. **4 نتائج ممكنة**:
+إذا كان لعنصر نوع غير صالح (≥12)، يقفز اللعب لمؤشر غير موجود في هذا الجدول. **4 نتائج ممكنة** :
 
-1. **مؤشر صالح** ← يُحمّل الشيء بشكل طبيعي
-2. **مؤشر إلى جدول قفز آخر** (تراكب) ← يظهر شيء مختلف. مثال: النوع 12 يشير إلى جدول Y=13، مما ينتج L-pipe.
-3. **مؤشر إلى كود قابل للتنفيذ** ← تنفيذ كود عشوائي (تعطل محتمل)
-4. **بديل صريح (NOP)** ← لا يفعل الشيء شيئًا (بعض السبرايتات هكذا، تنتج أعداء يطيران في مكانهم دون الحركة)
+1. **مؤشر صالح** ← يُحمَّل العنصر عاديا
+2. **مؤشر نحو جدول قفز آخر** (تداخل) ← يظهر عنصر مختلف. مثال : النوع 12 يشير نحو جدول Y=13، مما يعطي أنبوب L.
+3. **مؤشر نحو قابل للتنفيذ** ← تنفيذ كود عشوائي (انهيار محتمل)
+4. **عنصر نائب صريح (NOP)** ← لا يفعل العنصر شيئا (بعض sprites هكذا، منتجة أعداء تطير في مكانها دون حركة)
 
-![Level ID $58 الخلل: مؤشر السبرايتات يشير إلى عنوان غير صالح، تتعرض اللعبة للتعطل](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
+![Glitch level ID $58 : le sprite pointer pointe vers une adresse invalide, le jeu crashe](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
 
-![Level ID $50 الخلل: نفق السحاب، مستوى ولّد من بيانات متلفة](/images/smb1-glitch-levels/v4-glitch-50.jpg)
+![Glitch level ID $50 : le cloud tunnel, un niveau généré par des données corrompues](/images/smb1-glitch-levels/v4-glitch-50.jpg)
 
-Level ID $58 الخلل (النفق الذي يتعرض للتعطل): مؤشر السبرايتات يشير إلى منطقة ذاكرة **لاExists في NES بدون مخطط ROM**. تحاول اللعبة تحميل نفس Koopa 5 مرات في كل إطار عند الموقع (0، 0)، مما يشبع PPU ويسبب تجمد.
+مستوى glitch ذو معرف $58 (النفق المنهار) : يشير مؤشر sprite نحو منطقة ذاكرة **غير موجودة على NES دون mapper خاص بـROM**. يحاول اللعب تحميل نفس Koopa 5 مرات لكل إطار في الموضع (0,0)، مما يشبع PPU ويسبب تجمدا.
 
 ```asm
-; Pourquoi ID $58 crashe :
-; Sprite pointer → adresse invalide (hors espace NES standard)
-; → Le jeu lit des bytes indéterminés comme des types de sprite
-; → Le Koopa $00 (type invalide sans handler) boucle en appel récursif
-; → Stack overflow 6502 → freeze
+; لماذا ينهار المعرف $58 :
+; مؤشر Sprite ← عنوان غير صالح (خارج فضاء NES القياسي)
+; ← يقرأ اللعب بايتات غير محددة كأنواع sprite
+; ← Koopa رقم $00 (نوع غير صالح دون معالج) يدور في استدعاء تكراري
+; ← فيض كومة 6502 ← تجمد
 ```
 
-### مفارقة أنبوب التحويل
+### مفارقة warp الأنبوب
 
-تذكر فحص `target_world BETWEEN 1 AND 8`. حتى لو وجدت أنبوبًا في عالم خلل، تتحقق اللعبة من أن العالم المقصد بين 1 و 8. عوالم الخلل بها أرقام > 8 (36-1، 255-1...)، لذلك يفشل التحويل.
+تذكّر فحص `target_world BETWEEN 1 AND 8`. حتى لو وجدت أنبوبا في glitch world، يتحقق اللعب أن عالم الوجهة بين 1 و8. لدى glitch worlds أرقام > 8 (36-1 و255-1...)، فيفشل warp.
 
-لهذا السبب أيضًا لا Exists نهاية لـ Minus World: عمود العلم غير موجود في السبرايتات، والأنابيب لا تؤدي إلى أي مكان.
+ولهذا لا نهاية لـMinus World : flagpole غير حاضر في sprites، والأنابيب لا تؤدي لأي مكان.
 
-### حيلة الـ 5 أشياء في عمود
+### حيلة العناصر الخمسة في عمود
 
-هناك حالة حد تسمح بتجاوز حد 3 أشياء لكل عمود. عندما يتوقف الطابور (أماكن ممتلئة + الشيء التالي مع علامة الشاشة التالية مفقودة)، "تعالج مسبقًا" اللعبة العمود الحالي في حلقة حتى تجد شيئًا مع علامة الشاشة التالية. أثناء كل معالجة مسبقة:
+هناك حالة حدية تسمح بتجاوز حد 3 عناصر لكل عمود. عندما يعلق الطابور (خانات ممتلئة + عنصر تالٍ دون علم شاشة تالية)، "يُعالِج" اللعب مسبقا العمود الحالي في حلقة حتى إيجاد عنصر مع علم شاشة تالية. وأثناء كل معالجة مسبقة :
 
 ```asm
-; Pendant le prétraitement de colonne :
-; 1. Les objets dans la queue voient leur largeur restante
-;    décrémentée à chaque "fausse avancée" de colonne
-; 2. Si un objet atteint largeur=0, il quitte la queue
-; 3. Un slot libéré peut être rempli par un nouvel objet
-;    ajouté dans la même colonne
-
-; Résultat : jusqu'à 5 objets peuvent être traités sur la même colonne.
-; Technique : placer 2 objets qui traversent la screen boundary
-; (slots 1 et 2), 1 objet dummy en X < précédent (bloque la queue),
-; puis 3 objets à X=0 de l'écran suivant (dont un avec next screen flag).
+; أثناء المعالجة المسبقة لعمود :
+; 1. ترى العناصر في الطابور عرضها المتبقي
+;    منقوصا مع كل "تقدم زائف" لعمود
+; 2. وإذا بلغ عنصر عرضا=0، يغادر الطابور
+; 3. يمكن ملء خانة محررة بعنصر جديد
+;    مضاف في نفس العمود
+;
+; النتيجة : يمكن معالجة حتى 5 عناصر على نفس العمود.
+; التقنية : وضع عنصرين يعبران حد الشاشة
+; (خانتان 1 و2) وعنصر dummy عند X < السابق (يعلق الطابور)،
+; ثم 3 عناصر عند X=0 للشاشة التالية (منها واحد مع علم شاشة تالية).
 ```
 
-يُسمى هذا "تخطي الطابور" ويستخدمه بعض مخترعي الروم لإنشاء مستويات أكثر كثافة مما يسمح به التنسيق عادةً.
+وهذا ما يسمى "تخطي طابور" ويستخدمه بعض صانعي romhack لإنشاء مستويات أكثف مما تسمح به الصيغة عادة.
 
-## الفروقات بين الإصدارات
+## الفروق بين النسخ
 
 ### Famicom Disk System
 
-إصدار FDS من SMB1 له **خريطة ذاكرة مختلفة**. جميع مؤشرات المستويات مزاحة، لكن البيانات متسقة. ما يتغير: فهارس عوالم الخلل مختلفة تمامًا:
+تملك نسخة FDS من SMB1 **خريطة ذاكرة مختلفة**. كل مؤشرات المستوى مزاحة، لكن البيانات نفسها. ما يتغير : فهارس glitch worlds مختلفة تماما :
 
 ```
-FDS World 36 → Level ID $09 (eau version de 5-3)
-  → Le flagpole est présent ! On peut finir le niveau.
-  → Ensuite : $27 (7-3 normal) → $44 (4-4 underground)
-  → $44 est finissable → la hache fonctionne → fin du jeu !
-  
-Le Minus World FDS est donc un "bonus world" qui peut mener
-à la complétion du jeu, contrairement à la version NES.
+عالم FDS رقم 36 ← معرف المستوى $09 (نسخة ماء من 5-3)
+  ← flagpole موجود ! يمكن إنهاء المستوى.
+  ← ثم : $27 (7-3 عادي) ← $44 (4-4 تحت أرضي)
+  ← $44 قابل للإنهاء ← الفأس يعمل ← نهاية اللعب !
+;
+إذن Minus World في FDS هو "عالم مكافأة" يمكنه أن يقود
+لإكمال اللعب، خلافا لنسخة NES.
 ```
 
-مستوى FDS المفضل لدي: **ID $5F**، الإصدار تحت الأرض من النصف الثاني من 3-3 في نفق منخفض (مؤسف أنه autoscroller).
+مستوى FDS المفضل لدي : **معرف $5F**، نسخة تحت أرضية من النصف الثاني لـ3-3 في نفق منخفض (للأسف إنه تمرير آلي).
 
-### The Lost Levels (الإصدار الياباني من Super Mario Bros. 2)
+### The Lost Levels (Super Mario Bros. 2 اليابانية)
 
-يغير Lost Levels الكثير من الأمور:
+تغيّر Lost Levels أشياء كثيرة :
 
-1. **ترتيب مطابق للبلاطات/السبرايتات**: لا Exists مستويات فرانكنشتاين (البلاطات والسبرايتات تحمل نفس المستوى حتى مع معرّف غير صالح)
-2. **جدول مؤشرات واحد من 16 بت** بدلاً من جدولين منفصلين عالي/منخفض
-3. **4 ملفات قرص**: تم تقسيم ROM لـ FDS:
-   - الملف 1: العوالم 1-4
-   - الملف 2: العوالم 5-8
-   - الملف 3: World 9 + محرك الصوت
-   - الملف 4: العوالم A-D (جدول مؤشرات مختلف تمامًا)
-4. **نفس Level ID = 4 مستويات ممكنة** حسب الملف المحمل
-5. **لا Exists خلل Tennis**: خيار الاستمرار (الاستمرار في نفس العالم بعد الخسارة) يجعل البدء الدافئ غير ضروري، واللعبة **تعيد التشغيل فورًا** إذا World > 9
-6. **أشياء جديدة**: فطر السام، بلوك غير مرئي، بلوك زهرة النار غير المرئي، أنابيب مقلوبة، رياح -- لكنها مدرجة في منتصف القوائم الموجودة → **عدم توافق عكسي** مع SMB1
-7. **نباتات Piranha حمراء دائمًا** بعد World 4، **منصات قفز خضراء فقط** في العوالم 2/B/3/C/7
+1. **ترتيب tiles/sprites متماثل** : لا مستويات Frankenstein بعد (تحمّل tiles وsprites نفس المستوى حتى مع معرف غير صالح)
+2. **جدول مؤشرات 16-bit واحد** بدلا من جدولين منفصلين عالٍ/منخفض
+3. **4 ملفات قرص** : قُسِّمت ROM لـFDS :
+   - ملف 1 : عوالم 1-4
+   - ملف 2 : عوالم 5-8
+   - ملف 3 : عالم 9 + محرك صوت
+   - ملف 4 : عوالم A-D (جدول مؤشرات مختلف تماما)
+4. **نفس معرف المستوى = 4 مستويات ممكنة** حسب الملف المُحمَّل
+5. **لا glitch خاص بـTennis بعد** : خيار المواصلة (مواصلة في نفس العالم بعد game over) يجعل البدء الدافئ عديم الفائدة، واللعب **يُصفَّر فورا** إذا كان العالم > 9
+6. **عناصر جديدة** : فطر سام وكتلة غير مرئية وكتلة غير مرئية بزهرة نار وأنابيب مقلوبة ورياح، لكن مُدرَجة وسط القوائم الموجودة ← **عدم توافق خلفي** مع SMB1
+7. **نباتات Piranha حمراء دائما** بعد العالم 4، و**منصات قفز خضراء** فقط في عوالم 2/B/3/C/7
 
 ### Super Mario All-Stars (SNES)
 
-منقل مباشر مع نفس الروتينات 6502 (يشغل SNES كود NES في وضع متوافق):
+نقل مباشر مع نفس روتينات 6502 (ينفذ SNES كود NES في وضع متوافق) :
 
-- **منطقة التحويل مصححة**: لا Exists Minus World (دخول الأنبوب الأيسر قبل النص يؤدي إلى العالم الصحيح)
-- **تجمد**: معظم مستويات الخلل تتعرض للتعطل (باستثناء ID $6A و 9-1)
-- **أشياء القلعة المضافة**: أكثر فردية
-- **لكن**: **التحويل الخاطئ 4-2** لا يزال يعمل (لم يتم تثبيته!)
+- **منطقة warp مُصلَّحة** : لا Minus World بعد (الدخول في الأنبوب الأيسر قبل النص يقود للعالم الصحيح)
+- **انهيار** : تنهار معظم glitch levels (باستثناء معرف $6A و9-1)
+- **عناصر قلعة مضافة** : عروض أكثر فرادة
+- **لكن** : **4-2 wrong warp** ما زال يعمل (لم يُصحَّح !)
 
-### التحويل الخاطئ 4-2: خطأ في وضع الأشياء
+### 4-2 wrong warp : bug موضع عنصر
 
-في 4-2، هناك شيئان من انتقال الأنبوب: الكرمة (منطقة التحويل) والأنبوب (غرفة عملات). الشيء الأول من الانتقال (الكرمة) يوضع **قبل ظهور الكرمة على الشاشة**. الثاني (الأنبوب) يوضع **متأخرًا في المستوى**.
+في 4-2، هناك عنصرا انتقال أنبوب : الكرمة (منطقة warp) والأنبوب (غرفة نقود). وُضِع عنصر الانتقال الأول (الخاص بالكرمة) **قبل ظهور الكرمة على الشاشة بكثير**. ووُضِع الثاني (الخاص بالأنبوب) **متأخرا أكثر من اللازم في المستوى**.
 
 ```asm
-; Timing des transitions dans 4-2 :
-; Objet transition 1 (vigne → warp zone) : placé 3 écrans avant la vigne
-; Objet transition 2 (tuyau → coin cash) : placé 1 écran après le tuyau
+; توقيت الانتقالات في 4-2 :
+; عنصر انتقال 1 (كرمة ← منطقة warp) : موضوع 3 شاشات قبل الكرمة
+; عنصر انتقال 2 (أنبوب ← غرفة نقود) : موضوع شاشة بعد الأنبوب
 ;
-; Normalement le premier objet est désactivé avant que Mario
-; n'atteigne le tuyau. Mais si Mario va vite (ou utilise
-; le raccourci du bloc B+right), la transition de la vigne
-; est toujours active quand il touche le tuyau !
-; → Le jeu charge la warp zone au lieu du coin cash.
+; عادة يُعطَّل العنصر الأول قبل بلوغ Mario
+; الأنبوب. لكن إذا ذهب Mario سريعا (أو استخدم
+; اختصار الكتلة B+يمين)، يكون انتقال الكرمة
+; ما زال نشطا عندما يلمس الأنبوب !
+; ← يحمّل اللعب منطقة warp بدلا من غرفة النقود.
 ;
-; Si l'objet avait été placé juste après la vigne mais avant
-; le tuyau, le bug n'existerait pas.
+; وإذا وُضِع العنصر بعد الكرمة مباشرة وقبل
+; الأنبوب، لما وُجد bug.
 ```
 
 ### مستويات الحلقة
 
-كيف تعمل الحلقات (8-4، 7-4)؟ المستوى يحتوي على **نقاط تفتيش** مع أرقام شاشة ومواقع Y مبرمجة:
+كيف تعمل loop (8-4 و7-4) ؟ يملك المستوى **نقاط فحص** مع أرقام شاشة ومواضع Y مُرمَّزة صلبا :
 
 ```asm
-; Checkpoint : {screen_number, vertical_position}
-; Si Mario passe ce checkpoint à la bonne hauteur → niveau continue
-; Sinon → warp back de 4 écrans (64 blocks)
+; نقطة فحص : {رقم_شاشة وموضع_عمودي}
+; إذا اجتاز Mario نقطة الفحص هذه بالارتفاع الصحيح ← يستمر المستوى
+; وإلا ← warp خلفي 4 شاشات (64 كتلة)
 ;
-; Pour faire une boucle infinie : vertical_position = $F0
-; (en dessous du bas de l'écran) → impossible de valider.
+; لصنع حلقة لانهائية : موضع_عمودي = $F0
+; (تحت أسفل الشاشة) ← مستحيل التحقق.
 ;
-; Les checkpoints sont simples (un seul flag) sauf pour world 7
-; qui utilise des triplets (3 flags, il faut en échouer au moins 1)
+; نقاط الفحص بسيطة (علم واحد) باستثناء العالم 7
+; الذي يستخدم ثلاثيات (3 أعلام، يجب إفشال واحد على الأقل)
 ;
-; Le warp back est rude : offset de tile data réglé à une valeur
-; hardcodée, offset de sprite data remis à 0. Les ennemis présents
-; sont déchargés instantanément → les firebars disparaissent.
+; warp الخلفي قاسٍ : إزاحة بيانات tile مضبوطة على قيمة
+; مُرمَّزة صلبا، وإزاحة بيانات sprite تُصفَّر. الأعداء الحاضرون
+; يُفرَّغون فورا ← تختفي firebars.
 ```
 
-## تغيير التنسيق، لا الكود
+## تغيير الصيغة، لا الكود
 
-إحدى الدروس الأكثر إثارة في هذه البنية هي أن مطوري SMB1 نجحوا في إنشاء نظام مستوى معبر للغاية دون لمس كود العرض 6502 أبدًا. كل التباين بين المستويات يأتي من **البيانات** (المؤشرات، الأشياء، السبرايتات، أنماط الأرضية)، لا من الكود.
+من أكثر دروس هذه البنية سحرا أن مطوري SMB1 نجحوا في إنشاء نظام مستوى معبّر جدا دون لمس كود العرض 6502 أبدا. كل التباين بين المستويات يأتي من **البيانات** (مؤشرات وعناصر وsprites وأنماط أرضية)، لا من الكود.
 
-توجد عوالم الخلل الـ 256 لأن **جداول المؤشرات مصممة لـ 128 إدخالًا × 4 أنواع**، واللعبة لا تتحقق أبدًا من القيم التي تقرأها. عندما يقع مؤشر في RAM، تفسر اللعبة سجلات Mario كبلاطات. عندما يقع مؤشر في البيانات الصوتية، تلعب اللعبة موسيقى على شكل تصميم مستوى. وعندما تتخطى جداول القفز، تنفيذ اللعبة أي شيء حتى التعطل.
+توجد glitch worlds الـ256 لأن **جداول المؤشرات مُبعَّدة لـ128 مدخلا × 4 أنواع**، واللعب لا يتحقق أبدا من القيم التي يقرأها. عندما يقع مؤشر في RAM، يفسّر اللعب سجلات Mario كـtiles. وعندما يقع مؤشر في البيانات الصوتية، يعزف اللعب موسيقى على شكل تصميم مستوى. وعندما تفيض جداول القفز، ينفذ اللعب أي شيء حتى الانهيار.
 
-![شرح آليات Super Mario Bros. الإضافية -- الفيديو الرابع](/images/smb1-glitch-levels/yt-mechanics.jpg)
+![More Super Mario Bros. Mechanics Explained -- la 4ème vidéo](/images/smb1-glitch-levels/yt-mechanics.jpg)
 
-## ما يمكن أن نتعلمه من كل هذا
+## ما يمكن تعلمه من كل ذلك
 
-1. **فصل البلاطات/السبرايتات**: استقلالية تامة للطبقتين، مع ترتيبات تخزين مختلفة تخلق مستويات فرانكنشتاين فريدة
-2. **ضغط RLE + نظام الأشياء**: المستويات ليست صور نقطية بل قوائم أشياء مع أنماط أرضية للأرضية
-3. **طابور 3 أماكن**: حد صلب للعتاد (وتصميم المستوى)
-4. **لا تحقق**: اللعبة تثق بالمؤشرات وجداول القفز، مما ينتج إما خلل قابل للعب أو تعطل
-5. **256 بايت كحد أقصى**: حد سجل Y في 6502، مما يجعل البيانات تتكرر إذا ذهبت بعيدًا
-6. **بدء دافئ / بارد**: نظام "استمرار" فتح الباب لتبادل كارترidge Tennis ← Mario
+1. **فصل tiles/sprites** : استقلال كامل للطبقتين، مع ترتيبي تخزين مختلفين يخلقان مستويات Frankenstein فريدة
+2. **ضغط RLE + نظام عناصر** : المستويات ليست صور نقطية بل قوائم عناصر موضوعة، مع أنماط أرضية للأرض
+3. **طابور 3 خانات** : حد صارم للعتاد (ولتصميم المستوى)
+4. **ثقة كاملة بالمؤشرات** : يثق اللعب بالمؤشرات وجداول القفز، مما ينتج إما glitchs قابلة للعب أو انهيارات
+5. **256 بايت حدا** : حد سجل Y في 6502، الذي يجعل البيانات تتكرر إذا ذهبنا بعيدا
+6. **بدء دافئ / بدء بارد** : نظام "مواصلة" فتح الباب لتبديل الخرطوشة Tennis ← Mario
 
-الأجمل من ذلك كله: كل هذا هو كود 6502 يتسع في 40KB. لا طبقة تجريد، لا تحقق من الوصول للذاكرة، لا مدير استثناءات. إذا كان المؤشر تالفًا، تتعرض اللعبة للتعطل. والتعطلات، نسميها عوالم الخلل.
+الأجمل : كل ذلك كود 6502 يتسع في 40KB. يحاور الكود العتاد مباشرة ويمنح ثقة كاملة لكل وصول ذاكرة. وإذا كان المؤشر فاسدا، ينهار اللعب. ونسمي الانهيارات glitch worlds.
 
-## الـ 3 أشياء للتذكر
+## الأشياء الثلاثة للتذكر
 
-1. **عوالم الخلل هي مؤشرات تسقط في المكان الخطأ** -- تiliki اللعبة 128 معرّفًا × 4 أنواع منطقة، لكن فقط 34 مستوى فريدًا. عندما يتلف رقم العالم (بوسيلة Tennis أو تسلق الجدار)، تحمل اللعبة مؤشرًا مصممًا لمستوى آخر، والـ 512 تركيبة ممكنة تنتج نتائج غير متوقعة.
+1. **glitch worlds هي مؤشرات تقع سيئا**، يملك اللعب 128 معرفا × 4 أنواع منطقة، لكن 34 مستوى فريدا فقط. وعندما يكون رقم العالم فاسدا (بواسطة Tennis أو اختراق الجدار)، يحمّل اللعب مؤشرا مصمما لمستوى آخر، وتنتج التركيبات الـ512 الممكنة نتائج غير متوقعة.
 
-2. **Minus World هو خطأ تحويل مُجمّع مع تلف** -- الأنبوب الأيسر في 1-2، إذا تم تفعيله قبل ظهور النص، يحمّل World 36 (0x24). هذا العالم يشير إلى Level ID $01 (ماء 2-2)، مستوى بدون عمود العلم. وبما أن لا Exists انتقال أنبوب لـ World 36، يتكرر المستوى إلى الأبد. غياب التحقق يخلق الأيقونة.
+2. **Minus World هو bug في warp مدمج بفساد**، الأنبوب الأيسر في 1-2، إذا فُعِّل قبل ظهور النص، يحمّل العالم 36 (0x24). يشير هذا العالم نحو معرف المستوى $01 (ماء 2-2)، وهو مستوى دون flagpole. وبما أنه لا انتقال أنبوب للعالم 36، يدور المستوى للأبد. يخلق غياب الفحص الأيقونة.
 
-3. **Tennis ← Mario، 15 عامًا قبل OoT ← Paper Mario** -- ذاكرة RAM في NES تنجو من تبادل كارترidge بفضل المكثفات ونظام البدء الدافئ / البارد في SMB1. عداد خطوات Tennis (الذي يزيد بايت RAM أثناء تشغيل صوت الخطوات) يقع بالضبط على عنوان رقم العالم. يجب أن تبقى أرقام أعلى نقاط عند 0، وأن البايت $A5 سليمًا، وأن تكتشف اللعبة بدءًا دافئًا -- سلسلة ظروف مثالية لم تعمل إلا مع Tennis.
+3. **Tennis ← Mario، قبل 15 عاما من OoT ← Paper Mario**، تنجو RAM الخاصة بـNES من تبديل خرطوشة بفضل المكثفات ونظام البدء الدافئ / البدء البارد في SMB1. يقع عداد خطوات Tennis (الذي يزيد بايت RAM بعزف صوت الخطوات) بالضبط على عنوان رقم العالم. يجب أن تبقى أرقام أعلى نتيجة عند 0، وأن يبقى بايت $A5 سليما، وأن يكشف اللعب بدءا دافئا، مسابقة ظروف كاملة لم تنجح إلا مع Tennis.
 
-مقاطع فيديو [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) الأصلية هي عمل نشيط للغاية -- مستوى التفاصيل في تفكيك 6502، خرائط جميع المستويات المولّدة تلقائيًا، شروحات تبادل الكارترidge والبدء الدافئ. إذا لم تشاهد السلسلة، شاهدها، فهي قصيرة وكل دقيقة كثيفة.
+فيديوهات [Retro Game Mechanics Explained](https://www.youtube.com/c/RetroGameMechanicsExplained) الأصلية عمل نمل مذهل، مستوى التفصيل عن تفكيك 6502 وخرائط آلية لكل المستويات وشروح تبديل الخرطوشة والبدء الدافئ. إذا لم تشاهد السلسلة، شاهدها، إنها قصيرة وكل دقيقة كثيفة.
 
-كود الخرائط متاح على [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html)، والتفكيك الكامل لـ SMB1 مفتوح المصدر في كثير من المستودعات. منذ 40 عامًا، كتب مبرمجون يابانيون نظام المستوى هذا في 6502 بدون اختبار وحدة واحد أو متتبع أخطاء واحد، ونواصل التعلم من فتح كودهم اليوم.
+الكود المصدري للخرائط متاح على [rgmechex.com](https://rgmechex.com/tech/smb1levels/index.html)، والتفكيك الكامل لـSMB1 مفتوح المصدر على الكثير من المستودعات. قبل 40 عاما، كتب مبرمجون يابانيون نظام المستوى هذا في 6502 دون اختبار وحدة ودون متتبع bugs، وما زلنا نتعلم تقنيات تحسين بفتح كودهم اليوم.

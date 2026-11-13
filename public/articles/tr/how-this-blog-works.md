@@ -1,93 +1,94 @@
 ---
-title: Bu Blog Nasıl Çalışıyor?
-description: "Bu blogun iç işleyişine derin bir dalış: React, Vite, Markdown,
-  CI/CD pipeline'ı ve makale yazma iş akışı."
+title: Bu blog nasıl çalışıyor?
+description: "Blogun perde arkası: React, Vite, Markdown, CI/CD pipelineı ve
+  yazım akışı."
 date: 2026-03-08
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - react
   - meta
   - blog
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "LnKOxB3/4g2Xzgurcr8SVj116T7UfGlk5AZLm5rXQcCM72impZAJyDGMnczFWvkAbX5kumog4TiaLDJIZBCJJA=="
+author_sig: "5MWhvuis22fNtiBXTjK93Htv6NIJLBd917KK+v02X7VBTb1ZPcV2Upzd0G8loIh1CjXsLKsGN+Pgsw9XmlCM4A=="
 ---
 
 # Bu Blog Nasıl Çalışıyor?
 
-Hiç bu blogun perde arkasında nasıl çalıştığını merak ettin mi? Bu yazıda, uygulamanın tüm mimarisini, teknoloji yığınından makale yazma sürecine kadar adım adım anlatacağım. Ve evet, makalelerimi VS Code'dan nasıl yazdığımı bile göstereceğim!
+Bu blogun kaputun altında nasıl çalıştığını hiç merak ettin mi? Bu makalede uygulamanın tüm mimarisini, teknik yığından bir makale yazma sürecine kadar detaylandıracağım. Ve evet, makalelerimi VS Code üzerinden nasıl yazdığımı bile göstereceğim!
 
-## Teknoloji Yığını
+## Teknik Yığın
 
-Bu blog, modern web teknolojileriyle inşa edildi:
+Bu blog modern web teknolojileriyle inşa edildi:
 
-- **React 19** -- kullanıcı arayüzü için
-- **TypeScript** -- tipli ve daha güvenilir kod için
-- **Vite** -- ultra hızlı bir derleme aracı olarak
-- **React Router v7** -- sayfalar arası navigasyon için
-- **react-markdown** -- Markdown'ı HTML'ye dönüştürmek için
-- **rehype-raw + rehype-sanitize** -- Markdown'da ham HTML'e izin verirken güvenli kalmak için
+- **React 19**: kullanıcı arayüzü için
+- **TypeScript**: tipli ve daha güvenilir kod için
+- **Vite**: ultra hızlı derleme aracı olarak
+- **React Router v7**: sayfalar arası gezinme için
+- **react-markdown**: Markdownı HTMLye dönüştürmek için
+- **rehype-raw + rehype-sanitize**: Markdown içinde ham HTMLye güvenli şekilde izin vermek için
 
 
 ## Proje Yapısı
 
-Proje ağacı şöyle görünüyor:
+Proje ağacı şöyle görünür:
 
 ![](assets/how-this-blog-works/project-structure.png)
 
 ```
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml         ← CI/CD pipeline'ı
+│       └── deploy.yml              ← CI/CD Pipelineı
 ├── public/
-│   ├── home.md                ← Ana sayfa içeriği
-│   ├── portfolio.md           ← Portfolyo içeriği
+│   ├── home.md                     ← Ana sayfa içeriği
+│   ├── portfolio.md                ← Portföy içeriği
 │   └── articles/
-│       ├── index.json         ← Tüm makalelerin listesi
-│       ├── hello-world.md     ← Bir makale
+│       ├── index.json              ← Tüm makalelerin listesi
+│       ├── hello-world.md          ← Bir makale
 │       ├── how-this-blog-works.md  ← Bu makale!
-│       └── assets/            ← Makale görselleri
+│       └── assets/                 ← Makalelerin görselleri
 ├── src/
-│   ├── main.tsx               ← React giriş noktası
-│   ├── App.tsx                ← Ana yönlendirici
+│   ├── main.tsx                    ← React giriş noktası
+│   ├── App.tsx                     ← Ana yönlendirici
 │   ├── components/
-│   │   ├── Header.tsx         ← Navigasyon çubuğu
-│   │   └── Footer.tsx         ← Alt bilgi
+│   │   ├── Header.tsx              ← Gezinme çubuğu
+│   │   └── Footer.tsx              ← Alt bilgi
 │   └── pages/
-│       ├── Home.tsx           ← Ana sayfa
-│       ├── BlogList.tsx       ← Makale listesi
-│       ├── Article.tsx        ← Makale okuyucu
-│       ├── Portfolio.tsx      ← Portfolyo sayfası
-│       └── NotFound.tsx       ← 404 sayfası
-└── vite.config.ts             ← Vite yapılandırması
+│       ├── Home.tsx                ← Ana sayfa
+│       ├── BlogList.tsx            ← Makale listesi
+│       ├── Article.tsx             ← Makale okuyucu
+│       ├── Portfolio.tsx           ← Portföy sayfası
+│       └── NotFound.tsx            ← 404 sayfası
+└── vite.config.ts                  ← Vite yapılandırması
 ```
 
-Temel fikir basit: **içerik koddan ayrılmıştır**. Sayfalar `public/` klasöründe Markdown olarak yazılır ve `src/` içindeki React kodu onları görüntülemekle ilgilenir.
+Merkez fikir basittir: **içerik koddan ayrıdır**. Sayfalar `public/` klasöründe Markdown yazılır ve `src/` içindeki React kodu onları göstermekle ilgilenir. Bu ayrıma önem veriyorum: içeriği yeniden okumayı kolaylaştırır ve kodu geliştirmeyi kolaylaştırır.
 
 ## Yönlendirme Sistemi
 
-`App.tsx` dosyası, React Router kullanarak tüm uygulama rotalarını tanımlar:
+`App.tsx` dosyası React Router ile uygulamanın tüm rotalarını tanımlar:
 
 ![](assets/20260308_153440_image.png)
 
-| Rota          | Sayfa      | Açıklama                                      |
-| --------------- | ----------- | ------------------------------------------------ |
-| `/`           | Home      | Ana sayfa, `home.md` dosyasını yükler           |
-| `/blog`       | BlogList  | Tüm makalelerin listesi                         |
-| `/blog/:slug` | Article   | Tek bir makale, `articles/{slug}.md` dosyasını yükler |
-| `/portfolio`  | Portfolio | Portfolyo sayfası, `portfolio.md` dosyasını yükler |
-| `*`           | NotFound  | Bilinmeyen URL'ler için 404 sayfası             |
 
-Her sayfanın iyi tanımlanmış bir rolü vardır: bir Markdown dosyasını getirir, `react-markdown` ile HTML'ye dönüştürür ve ekranda gösterir.
+| Rota          | Sayfa     | Açıklama                                   |
+| --------------- | ----------- | -------------------------------------------- |
+| `/`           | Home      | Ana sayfa, `home.md` yükler                |
+| `/blog`       | BlogList  | Tüm makalelerin listesi                      |
+| `/blog/:slug` | Article   | Bir makale, `articles/{slug}.md` yükler    |
+| `/portfolio`  | Portfolio | Portföy sayfası, `portfolio.md` yükler     |
+| `*`           | NotFound  | Bilinmeyen URLler için 404 sayfası           |
+
+Her sayfanın net bir rolü vardır: bir Markdown dosyası alır, `react-markdown` ile HTMLye dönüştürür ve ekranda gösterir.
 
 ## Bir Makale Nasıl Çalışır?
 
-Bu en ilginç kısım! İşte bir makalenin yaşam döngüsü:
+En sevdiğim kısım bu! İşte bir makalenin yaşam döngüsü:
 
 ### 1. `index.json` Dosyası
 
-Tüm makaleler `public/articles/index.json` dosyasında referanslanır. Her girdi, makalenin metaverilerini içerir:
+Tüm makaleler `public/articles/index.json` içinde referanslanır. Her girdi makalenin meta verilerini içerir:
 
 ```json
 [
@@ -100,100 +101,100 @@ Tüm makaleler `public/articles/index.json` dosyasında referanslanır. Her gird
 ]
 ```
 
-- **slug** -- benzersiz tanımlayıcı, URL'de kullanılır (`/blog/hello-world`)
-- **title** -- listede görüntülenen başlık
-- **description** -- kısa bir özet
-- **date** -- yayınlanma tarihi
+- **slug**: URLde kullanılan benzersiz tanımlayıcı (`/blog/hello-world`)
+- **title**: listede gösterilen başlık
+- **description**: kısa bir özet
+- **date**: yayın tarihi
 
 ### 2. Markdown Dosyası
 
-Makale içeriği, `public/articles/` içinde basit bir `.md` dosyasıdır. Dosya adı, `index.json` içinde tanımlanan `slug` ile eşleşir.
+Makalenin içeriği `public/articles/` içinde basit bir `.md` dosyasıdır. Dosya adı `index.json` içinde tanımlı `slug` ile eşleşir.
 
 ![](assets/20260308_153509_image.png)
 
-İçine her şeyi koyabilirsin: başlıklar, listeler, görseller, tablolar ve hatta `rehype-raw` sayesinde ham HTML!
+İstediğini koyabilirsin: başlıklar, listeler, görseller, tablolar ve `rehype-raw` sayesinde ham HTML bile!
 
-### 3. React Tarafında İşleme
+### 3. React Tarafında Render
 
-`/blog/hello-world` sayfasını ziyaret ettiğinde şunlar olur:
+`/blog/hello-world` adresini ziyaret ettiğinde şunlar olur:
 
-1. React Router, URL'den `slug` parametresini alır
-2. `Article.tsx` bileşeni `/articles/hello-world.md` dosyasını getirir
-3. Markdown, `react-markdown` tarafından HTML'ye dönüştürülür
-4. `assets/` bağlantıları otomatik olarak `/articles/assets/` olarak yeniden yazılır
-5. Paralel olarak, metaveriler `index.json`'dan yüklenerek tarih ve açıklama görüntülenir
+1. React Router URLden `slug` parametresini alır
+2. `Article.tsx` bileşeni `/articles/hello-world.md` dosyasını yükler
+3. Markdown `react-markdown` tarafından HTMLye dönüştürülür
+4. `assets/` bağlantıları otomatik olarak `/articles/assets/` yoluna yeniden yazılır
+5. Paralel olarak meta veriler tarihi ve açıklamayı göstermek için `index.json` dosyasından yüklenir
 
 Bu kadar basit!
 
-## Ana Sayfa ve Portfolyo
+## Ana Sayfa ve Portföy
 
-Ana sayfa ve Portfolyo sayfaları tam olarak aynı şekilde çalışır: bir Markdown dosyası (`home.md` veya `portfolio.md`) yükler ve HTML olarak işler.
+Ana Sayfa ve Portföy sayfaları tamamen aynı şekilde çalışır: bir Markdown dosyası (`home.md` ya da `portfolio.md`) yükleyip HTML olarak render ederler.
 
-Özel olan şey, tüm HTML öğelerinde `class` ve `style` niteliklerine izin veren özel bir temizleme şeması kullanmalarıdır. Bu, Markdown içinde doğrudan stillendirilmiş HTML yazmama olanak tanır, örneğin görsel galerileri gibi.
+Özellikleri, tüm HTML öğelerinde `class` ve `style` özniteliklerine izin veren özel bir sanitizasyon şeması kullanmalarıdır. Bu, bana doğrudan Markdown içinde stilize HTML yazma izni verir, örneğin görsel galerileri gibi.
 
-## Başlık ve Alt Bilgi
+## Header ve Footer
 
-Başlık, sayfanın üstüne `position: fixed` ile sabitlenmiştir. Şunları içerir:
+Header `position: fixed` ile sayfanın üstüne sabitlenmiştir. Şunları içerir:
 
 - GitHub avatarım (doğrudan `github.com/fox3000foxy.png` adresinden yüklenir)
 - Blog başlığı
-- Gezinme bağlantıları: Ana Sayfa, Blog, Portfolyo
+- Gezinme bağlantıları: Ana Sayfa, Blog, Portföy
 
-Alt bilgi minimalisttir: sadece dinamik olarak hesaplanan güncel yılı içeren bir telif hakkı.
+Footer minimalisttir: dinamik hesaplanan güncel yılla sadece bir telif hakkı.
 
-## Karanlık Tema
+## Koyu Tema
 
-Site **her zaman karanlık moddadır** -- açık/karanlık geçişi yoktur. Bu bilinçli bir seçimdir: global stillerde siyah arka plan `#000` ve beyaz metin `#fff` ile `color-scheme: dark` ayarlanmıştır. Bağlantılar mavidir (`#64b5f6`) ve üzerine gelindiğinde yeşile döner (`#81c784`).
+Site kalıcı olarak koyu modda kalır. Akşam rahat okuma için bu seçimi bilinçli yaptım: global stillerde `color-scheme: dark` tanımlıdır, siyah arka plan `#000` ve beyaz metin `#fff` ile. Bağlantılar mavidir (`#64b5f6`) ve üzerine gelince yeşil olur (`#81c784`).
 
 ## Bir Makaleyi Nasıl Yazıyorum
 
-Şimdi pratik kısma geçelim! İşte yeni bir makale yazma iş akışım:
+Pratiğe geçelim! İşte yeni bir makale yazma workflowum:
 
-### Adım 1: Markdown Dosyasını Oluştur
+### Adım 1: Markdown Dosyasını Oluşturmak
 
-VS Code'u açarım ve `public/articles/` içinde yeni bir `.md` dosyası oluştururum:
+VS Code açar ve `public/articles/` içinde yeni bir `.md` dosyası oluştururum:
 
-### Adım 2: İçeriği Yaz
+### Adım 2: İçeriği Yazmak
 
-Makale içeriğini doğrudan Markdown olarak yazarım. VS Code mükemmel bir yerleşik Markdown önizlemesi sunar:
+Makalenin içeriğini doğrudan Markdown yazarım. VS Codeun mükemmel bir yerleşik Markdown önizlemesi vardır:
 
 ![](assets/20260308_153613_image.png)
 
-Görseller için, onları `public/articles/assets/` klasörüne koyarım ve standart Markdown sözdizimiyle referans veririm:
+Görseller için onları `public/articles/assets/` içine koyar ve standart Markdown sözdizimiyle referanslarım:
 
 ```markdown
-![açıklama](assets/my-image.png)
+![description](assets/my-image.png)
 ```
 
-`Article.tsx` bileşeni, `assets/` yolunu otomatik olarak `/articles/assets/` olarak yeniden yazar, böylece görseller doğru görüntülenir.
+`Article.tsx` bileşeni görsellerin doğru görüntülenmesi için `assets/` yolunu otomatik olarak `/articles/assets/` yoluna yeniden yazar.
 
-### Adım 3: Makaleyi index.json'a Kaydet
+### Adım 3: Makaleyi index.json içine Kaydetmek
 
-Makale bittiğinde, blog listesinde görünmesi için `public/articles/index.json` dosyasına eklerim:
+Makale bitince blog listesinde görünmesi için onu `public/articles/index.json` içine eklerim:
 
 ![](assets/20260308_153629_image.png)
 
-### Adım 4: Yerelde Test Et
+### Adım 4: Yerelde Test Etmek
 
-Vite geliştirme sunucusunu başlatırım:
+Vite geliştirme sunucusunu çalıştırırım:
 
 ```bash
 pnpm dev
 ```
 
-Vite milisaniyeler içinde başlar ve makalemi `localhost:5173` adresinde gerçek zamanlı olarak görebilirim:
+Vite milisaniyeler içinde başlar ve makalemi `localhost:5173` üzerinde gerçek zamanlı görebilirim. Bu hız her değişikliği neredeyse anında kontrol etmeme izin verir:
 
 ![](assets/20260308_153703_image.png)
 
-### Adım 5: Yayınla
+### Adım 5: Yayınlamak
 
-Sadece `git push` yapmak yeterli! CI/CD pipeline'ı gerisini otomatik olarak halleder.
+Basit bir `git push` yeter! CI/CD pipelineı gerisini otomatik halleder.
 
-## CI/CD Dağıtım Pipeline'ı
+## CI/CD Dağıtım Pipelineı
 
-`main` branch'ine her push yaptığımda lint, build ve deploy işlemlerini otomatikleştiren tam bir **GitHub Actions** pipeline'ı kurdum. Gelin adım adım inceleyelim.
+Her `main` pushunda sitenin lint, derleme ve dağıtımını otomatikleştiren eksiksiz bir **GitHub Actions** pipelineı kurdum. Ayrıntılı bakalım.
 
-Workflow, `.github/workflows/deploy.yml` dosyasında yaşar ve iki job'a ayrılmıştır: **build** ve **deploy**.
+Workflow `.github/workflows/deploy.yml` içindedir ve iki işe bölünmüştür: **build** ve **deploy**.
 
 ### Tetikleyiciler
 
@@ -207,101 +208,100 @@ on:
       - main
 ```
 
-Pipeline, `main` branch'ine her **push**ta ve `main`'i hedefleyen her **pull request**te çalışır. Bu sayede PR'lar birleştirilmeden önce kontrol edilir (lint + build), ancak sadece `main`'e yapılan push'lar gerçekten dağıtımı tetikler.
+Pipeline her **push** üzerinde `main` üzerine ve `main` hedefli her **pull request** üzerinde çalışır. PRler birleştirilmeden önce doğrulanır (lint + build) ama yalnızca `main` üzerindeki pushlar dağıtımı tetikler.
 
-### Job 1: Build
+### İş 1: Build
 
-Build job'ı `ubuntu-latest` üzerinde çalışır ve şu adımlardan geçer:
+Derleme işi `ubuntu-latest` üzerinde döner ve şu adımları izler:
 
-1. **Checkout** -- Repoyu tam geçmişiyle klonlar (`fetch-depth: 0`)
-2. **Setup pnpm** -- `pnpm/action-setup@v4` kullanarak en son pnpm sürümünü kurar
-3. **Setup Node.js 20** -- Node'u pnpm önbelleği etkinken yapılandırır (daha hızlı kurulum için)
-4. **Install dependencies** -- Tekrarlanabilir derlemeler için `pnpm install --frozen-lockfile` çalıştırır (lockfile değişikliklerine izin verilmez)
-5. **Lint** -- Derlemeden önce kod kalitesi sorunlarını yakalamak için `pnpm run lint` (ESLint) çalıştırır
-6. **Build** -- Önce TypeScript türlerini kontrol eden (`tsc -b`) ardından her şeyi Vite ile paketleyen `pnpm run build` çalıştırır
-7. **Upload artifact** -- `dist/` klasörünü deploy job'ı için bir build yapıtı olarak yükler
+1. **Checkout**: Depoyu tüm tarihçeyle klonlar (`fetch-depth: 0`)
+2. **Setup pnpm**: `pnpm/action-setup@v4` ile en güncel pnpm sürümünü kurar
+3. **Setup Node.js 20**: Daha hızlı kurulumlar için pnpm önbelleği etkin Node yapılandırır
+4. **Install dependencies**: Yeniden üretilebilir derlemeleri garantilemek için `pnpm install --frozen-lockfile` çalıştırır (lockfile değişikliğine izin yok)
+5. **Lint**: Derlemeden önce kod kalitesini kontrol etmek için `pnpm run lint` (ESLint) çalıştırır
+6. **Build**: Önce TypeScript türlerini kontrol eden (`tsc -b`) sonra her şeyi Vite ile paketleyen `pnpm run build` çalıştırır
+7. **Upload artifact**: Dağıtım işi için `dist/` klasörünü derleme artefaktı olarak yükler
 
-Herhangi bir adım başarısız olursa -- bir lint hatası, bir tür hatası, bir derleme hatası -- tüm pipeline durur ve hiçbir şey dağıtılmaz. Bu, canlı siteyi bozuk koddan korur.
+Bir adım başarısız olursa (lint, tür ya da derleme hatası) tüm pipeline durur ve hiçbir şey dağıtılmaz. Bu koruma beni üretimde kırık koddan korur ve her pushta ona güvenirim.
 
-### Job 2: Deploy
+### İş 2: Deploy
 
-Deploy job'ı sadece şu durumlarda çalışır:
+Dağıtım işi yalnızca şunlarsa çalışır:
 
-- Build job'ı başarılı olduysa (`needs: build`)
+- Derleme işi başarılıysa (`needs: build`)
 - Olay bir **push** ise (PR değil)
-- Branch **main** ise
+- Dal **main** ise
 
 ```yaml
 if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 ```
 
-Ardından:
+Sonra şöyle ilerler:
 
-1. **Build yapıtını indirir** -- Build job'ının ürettiği `dist/` klasörünü alır
-2. **GitHub Pages'i yapılandırır** -- Pages ortamını kurar
-3. **Pages'e yükler** -- `dist/` klasörünü GitHub Pages için paketler
-4. **Dağıtır** -- `actions/deploy-pages@v4` kullanarak siteyi yayınlar
+1. **Derleme artefaktını indir**: Derleme işinin ürettiği `dist/` klasörünü alır
+2. **GitHub Pagesi yapılandır**: Pages ortamını kurar
+3. **Pagese yükle**: `dist/` klasörünü GitHub Pages için hazırlar
+4. **Dağıt**: Siteyi `actions/deploy-pages@v4` ile yayınlar
 
-### Tam Resim
+### Tam Tablo
 
-İşte yazmadan dağıtıma kadar olan süreç:
+Yazımdan dağıtıma neler olduğu:
 
 ```
-VS Code'da makaleyi yaz
-        ↓
-   git add & commit
-        ↓
-      git push
-        ↓
-  GitHub Actions tetiklenir
-        ↓
-  ┌─────────────────┐
-  │   BUILD JOB'ı   │
-  │  1. Checkout    │
-  │  2. Setup pnpm  │
-  │  3. Setup Node  │
-  │  4. Install     │
-  │  5. Lint ✓      │
-  │  6. Build ✓     │
-  │  7. Upload dist │
-  └────────┬────────┘
-           ↓
-  ┌─────────────────┐
-  │  DEPLOY JOB'ı   │
-  │  1. Download    │
-  │  2. Configure   │
-  │  3. Upload      │
-  │  4. Deploy 🚀   │
-  └─────────────────┘
-           ↓
-    GitHub Pages'de canlı!
+Écrire l'article dans VS Code
+          ↓
+    git add & commit
+          ↓
+        git push
+          ↓
+    GitHub Actions se déclenche
+          ↓
+    ┌─────────────────┐
+    │   BUILD JOB     │
+    │  1. Checkout    │
+    │  2. Setup pnpm  │
+    │  3. Setup Node  │
+    │  4. Install     │
+    │  5. Lint ✓      │
+    │  6. Build ✓     │
+    │  7. Upload dist │
+    └────────┬────────┘
+             ↓
+    ┌─────────────────┐
+    │  DEPLOY JOB     │
+    │  1. Download    │
+    │  2. Configure   │
+    │  3. Upload      │
+    │  4. Deploy 🚀   │
+    └─────────────────┘
+             ↓
+      En ligne sur GitHub Pages !
 ```
 
-Tüm süreç, push'tan canlı yayına kadar yaklaşık bir dakika sürer. Manuel dağıtım yok, FTP yok, SSH yok -- sadece `git push` ve iş tamam.
+Tüm süreç push ile çevrimiçi olma arasında yaklaşık bir dakika sürer. Basit bir `git push` ile yayınlarım, her şey FTP ya da SSH olmadan otomatik kalır.
 
-## Production Derlemesi
+## Üretim Derlemesi
 
-Perde arkasında, `pnpm build` komutu şunları çalıştırır:
+Kaputun altında `pnpm build` komutu şunu çalıştırır:
 
-1. `tsc -b` -- TypeScript türlerini kontrol eder
-2. `vite build` -- Tüm kodu paketler ve optimize eder
+1. `tsc -b`: TypeScript türlerini kontrol eder
+2. `vite build`: Tüm kodu paketler ve optimize eder
 
-Vite, otomatik kod bölme ile küçültülmüş ve optimize edilmiş dosyalar üretir. Sonuç, uçuk hızlı bir statik sitedir.
+Vite otomatik kod bölmeli minifiye ve optimize dosyalar üretir. Sonuç ultra hızlı statik bir sitedir.
 
 ## Neden Bu Mimari?
 
-Bir CMS, Hugo veya Jekyll gibi bir statik site oluşturucu, hatta Next.js kullanabilirdim. Ama bu yaklaşımı seçmemin nedeni şu:
+Bir CMS, Hugo ya da Jekyll gibi bir statik site üretici, hatta Next.js kullanabilirdim. Ama bu yaklaşımı seçmemin nedenleri:
 
-- **Basitlik** -- Markdown yaz, GitHub'a pushla, canlıya çıksın
-- **Tam kontrol** -- Bir CMS veya veritabanına bağımlılık yok
-- **Performans** -- Vite + React = hızlı yükleme
-- **Esneklik** -- Markdown ve HTML'i dilediğim gibi karıştırabilirim
-- **Öğrenme** -- React ve TypeScript'i ustalaşmak için harika bir proje
-- **CI/CD** -- GitHub Actions ile otomatik kalite kontrolleri ve dağıtım
+- **Sadelik**: Markdown yaz, GitHuba pushla, çevrimiçi
+- **Tam kontrol**: CMS ya da veritabanı bağımlılığı yok
+- **Performans**: Vite + React = hızlı yükleme
+- **Esneklik**: Markdown ve HTMLyi istediğim gibi karıştırabilirim
+- **Öğrenme**: React ve TypeScriptte ustalaşmak için süper bir proje
+- **CI/CD**: GitHub Actions ile otomatik kalite kontrolleri ve dağıtım
 
 ## Sonuç
 
-Bu blog basit ama iyi düşünülmüş bir proje: içerik için Markdown, işleme için React, performans için Vite, CI/CD için GitHub Actions ve barındırma için GitHub Pages. Veritabanı yok, arka uç sunucusu yok, sadece her push'ta kaliteyi sağlayan otomatik bir pipeline ile verimli bir şekilde sunulan statik dosyalar.
+Bu blog basit ama iyi düşünülmüş bir projedir: içerik için Markdown, render için React, performans için Vite, CI/CD için GitHub Actions ve barındırma için GitHub Pages. Verimli sunulan statik dosyalara dayanır, her pushta kaliteyi garantileyen otomatik bir pipeline ile.
 
-
-Okuduğun için teşekkürler, bir sonraki makalede görüşmek üzere! 🦊
+Okuduğun için teşekkürler, sonraki makalede görüşmek üzere! 🦊

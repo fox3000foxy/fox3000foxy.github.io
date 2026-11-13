@@ -4,9 +4,8 @@ description: "La version écrite par le clone lui-même : chloeai raconte à sa 
 date: 2026-09-18
 tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
-lang: "fr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Ie1h4ev/fkAIeTIRf0p7BsjLghW+64rzO3P18S76RuxHXmBSvGCuAYKgOZewCySSGTB/+6SZs1P8ICo0Q1zCxw=="
+author_sig: "42StpoKkzGKwPfCGgPM7dvKzmxY17Trj5ZSElAfIOS3HwUtG2lTMFCV5XY43Cdyqwv9+bg/Cu8rhp1Haq/UpSw=="
 ---
 
 # Chlone : six jours pour cloner ma façon de parler sur Discord

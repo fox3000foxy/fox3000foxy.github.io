@@ -1,35 +1,36 @@
 ---
-title: Logic pathfinding Minecraft và các ứng dụng
-description: Cách thuật toán A*, điểm phạt khối và POI cho phép điều khiển, dự đoán và khai thác
-  di chuyển của mob -- từ redstone không dây đến các trang trại tối ưu.
+title: Logique pathfinding Minecraft và ứng dụng
+description: Cách thuật toán A*, điểm phạt khối và POI cho phép
+  điều khiển, dự đoán và khai thác di chuyển của mob -- từ redstone
+  không dây tới nông trại tối ưu.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - pathfinding
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Mah4SaKAgm15ZTWgjqjEClYNz/dle8ntKeXOdU4lySnIob2vN1bxAmaLDjR2wa0h1lx9jvCLDyFr/DESUXRyrg=="
+author_sig: "t7Bxr3v3FGEBc3OtKkV+qby8mIpPuRafs5jI9616fG1oO/atEjoPPkeSSpB5oE/DvfFikm0iX1gUznoSfIfN8Q=="
 ---
 
 ## Giới thiệu
 
-Tôi đã dành hàng giờ để nhìn mấy con cừu đâm đầu vào tường.
+Tôi từng dành hàng giờ nhìn cừu húc đầu vào tường.
 
-Thành thật mà nói? Đầu tư xứng đáng nhất đời tôi xD
+Và thật lòng? Khoản đầu tư tốt nhất đời tôi.
 
-Bởi vì càng nhìn mấy con mob này, bạn càng nhận ra chúng chẳng có gì ngẫu nhiên. Mọi chuyển động đều được mã hóa, có thể dự đoán, và quan trọng nhất -- hoàn toàn có thể phá vỡ. Cuối cùng tôi đã đào sâu vào mã nguồn Minecraft để hiểu chính xác pathfinding hoạt động thế nào, và thứ tôi khám phá ra là bạn có thể điều khiển tâm trí mob theo đúng nghĩa đen. Kiểu, ép chúng đi chỗ BẠN muốn, chứ không phải nơi ngẫu nhiên quyết định.
+Vì càng nhìn các mob này, bạn càng nhận ra chúng chẳng có gì ngẫu nhiên. Mỗi chuyển động đều được code, đoán được, và nhất là phá được hoàn toàn. Cuối cùng tôi lặn vào mã nguồn Minecraft để hiểu chính xác pathfinding chạy thế nào, và điều tôi phát hiện là bạn có thể mind-control mob theo nghĩa đen. Kiểu, ép chúng đi nơi BẠN muốn, không phải nơi ngẫu nhiên quyết định.
 
-Hướng dẫn này là tất cả những gì tôi học được khi mày mò. AI, thuật toán A*, điểm phạt ẩn, những exploit bạn có thể xài trong survival. Chuẩn bị cuốc của bạn đi.
+Hướng dẫn này là mọi thứ tôi học được khi bới móc. AI, thuật toán A*, các điểm phạt ẩn, các exploit bạn có thể tung ra trong survival. Chuẩn bị cuốc đi.
 
 ---
 
-## Cách AI của mob hoạt động (spoiler: nó khá ngu)
+## AI của mob chạy thế nào (tiết lộ : nó ngớ ngẩn)
 
 ### Các Goal
 
-Mỗi mob có các *goal*. Đó là danh sách những thứ nó CÓ THỂ làm và mức độ nó MUỐN làm. Số càng nhỏ thì càng ưu tiên -- như một todo list phiên bản hỗn loạn.
+Mỗi mob có các *goal*. Đó là danh sách hành động nó CÓ THỂ làm và mức độ nó MUỐN làm. Số càng nhỏ càng ưu tiên, như todo list phiên bản hỗn loạn.
 
 ```java
 protected void registerGoals() {
@@ -40,15 +41,15 @@ protected void registerGoals() {
 }
 ```
 
-Bạn đã bao giờ thấy zombie lơ một quả trứng rùa để rượt bạn chưa? Đây là lý do: `ZombieAttackTurtleEggGoal` có độ ưu tiên 4, trong khi `ZombieAttackGoal` (thứ bảo nó ăn mặt bạn) có độ ưu tiên 2.
+Bạn từng thấy zombie lờ trứng rùa để đuổi theo bạn chưa? Đó là lý do : `ZombieAttackTurtleEggGoal` ưu tiên 4, trong khi `ZombieAttackGoal` (goal bảo nó cắn mặt bạn) ở ưu tiên 2.
 
-Ừ, zombie thích ăn bạn hơn là đập trứng. Tình yêu đẹp đấy xD
+Đúng, zombie thích ăn bạn hơn đập trứng. Tình yêu thật đẹp.
 
-Goal mà chúng ta thực sự quan tâm là `WaterAvoidingRandomStrollGoal`, độ ưu tiên 7. Cái goal "chả có gì để làm nên đi bộ lung tung". Đó là nơi mọi chuyện bắt đầu.
+Goal thực sự khiến ta quan tâm là `WaterAvoidingRandomStrollGoal`, ưu tiên 7. Goal kiểu "chẳng có gì làm nên đi bừa". Chính ở đó mọi thứ thành thú vị.
 
-### Di chuyển (hay "cách một random walk có 1/60 cơ hội xảy ra")
+### Chuyển động (hay "random march có 1/60 cơ hội xảy ra thế nào")
 
-Mỗi tick (mỗi 0.05 giây), game gọi `canUse()` để xem mob có thèm động đậy không. 1 trên 60 cơ hội mỗi tick. Thiết kế ngu vãi, và tôi yêu nó.
+Mỗi tick (mỗi 0.05 giây), game gọi `canUse()` để xem mob có thèm di chuyển không. 1/60 cơ hội mỗi tick. Thiết kế hoàn toàn ngớ ngẩn, và tôi mê nó.
 
 ```java
 public boolean canUse() {
@@ -77,9 +78,9 @@ public boolean canUse() {
 }
 ```
 
-Tóm lại: nếu bạn đang cưỡi trên mob -> không, nếu mob chưa làm gì 5 giây -> không, nếu random bảo không -> không. Game thực sự KHÔNG muốn mob động đậy.
+Tóm lại : nếu bạn đang cưỡi mob -> không, nếu mob chẳng làm gì 5 giây rồi -> không, nếu random nói không -> không. Game THỰC SỰ không muốn mob di chuyển.
 
-Nhưng khi nó động đậy, `getPosition()` tiếp quản:
+Nhưng khi nó di chuyển, `getPosition()` tiếp quản :
 
 ```java
 protected Vec3 getPosition() {
@@ -94,13 +95,13 @@ protected Vec3 getPosition() {
 }
 ```
 
-Nhìn hai con số ở cuối: đó là bán kính XZ và bán kính Y. Trong nước, mob tìm xa hơn (15 thay vì 10). Nếu không tìm thấy đất, nó rơi xuống `super.getPosition()` – cái chấp nhận nước. **Kết quả: mob MUỐN ra khỏi nước.** Đó là lý do động vật của bạn bơi như điên về phía bờ.
+Nhìn hai số cuối : đó là bán kính XZ và bán kính Y. Trong nước, mob tìm xa hơn (15 thay vì 10). Nếu không thấy đất, nó quay về `super.getPosition()` chấp nhận nước. **Kết quả : mob MUỐN ra khỏi nước.** Đó là lý do thú của bạn bơi điên cuồng về bờ.
 
-Chi tiết ngon: có đúng 0.1% cơ hội mob lấy `super.getPosition()` thay vì `LandRandomPos`. Một phần nghìn. Mojang đó xD
+Chi tiết nhỏ giòn tan : có đúng 0.1% cơ hội mob lấy `super.getPosition()` thay vì `LandRandomPos`. Một phần nghìn. Đúng chất Mojang.
 
-### LandRandomPos: cái tối ưu dở hơi làm thay đổi mọi thứ
+### LandRandomPos : tối ưu lởm thay đổi tất cả
 
-Đây là bước TÔI yêu thích nhất. Thứ kỹ thuật ngu ngốc nhất khiến pathfinding có thể khai thác được.
+Đây là bước tôi thích NHẤT. Mẩu ngớ ngẩn kỹ thuật đẹp nhất khiến pathfinding khai thác được.
 
 ```java
 public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<BlockPos> $$3) {
@@ -113,17 +114,17 @@ public static Vec3 getPos(PathfinderMob $$0, int $$1, int $$2, ToDoubleFunction<
 }
 ```
 
-`movePosUpOutOfSolid`. Cái tên nói lên tất cả. Nếu vị trí được chọn nằm trong khối rắn, game đẩy nó lên trên cho đến khi ở trong không khí.
+`movePosUpOutOfSolid`. Tên nói hết. Nếu vị trí chọn nằm trong khối đặc, game đẩy nó lên tới khi ra ngoài không khí.
 
-Đây là một tối ưu hóa: thay vì mất thời gian bỏ qua các vị trí dưới lòng đất, game đưa chúng lên mặt đất. Thông minh? Ừ. Nhưng nó tạo ra một thiên vị điên rồ: **mob thích độ cao hơn**.
+Đó là tối ưu : thay vì phí thời gian bỏ qua vị trí dưới đất, game nâng chúng lên mặt đất. Khôn? Có. Nhưng nó tạo thiên lệch khủng : **mob thích chỗ cao**.
 
-Hãy tưởng tượng. Bạn có đầy khối dưới mặt đất, game tạo ra 10 vị trí ngẫu nhiên. Những vị trí trong khối bị đẩy lên trên. Vùng đặc (dưới đồi) tạo ra nhiều vị trí hợp lệ hơn vùng rỗng. Kết quả: mob về mặt thống kê sẽ đi về phía đồi nhiều hơn.
+Tưởng tượng. Bạn có đống khối dưới mặt đất, game sinh 10 vị trí ngẫu nhiên. Những cái trong khối bị đẩy lên trên. Vùng đặc (dưới đồi) cho nhiều vị trí hợp lệ hơn vùng rỗng. Kết quả : mob về mặt thống kê đi về đồi thường hơn.
 
-Tin tôi đi, chúng ta sẽ phá vỡ điều này trong 2 phút.
+Tin tôi đi, ta sẽ phá cái này trong 2 phút.
 
-### Chọn lọc: cuộc thi khối nào ngon nhất
+### Lựa chọn : cuộc thi khối giỏi nhất
 
-10 vị trí, một người thắng, một cuộc thi điểm số:
+10 vị trí, một người thắng, cuộc thi chấm điểm :
 
 ```java
 public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<BlockPos> $$1) {
@@ -143,77 +144,77 @@ public static Vec3 generateRandomPos(Supplier<BlockPos> $$0, ToDoubleFunction<Bl
 }
 ```
 
-Vị trí có điểm cao nhất THẮNG. Và nếu ta biết tiêu chí chấm điểm, ta có thể làm cho vị trí mình muốn thắng. Như gian lận bầu cử vậy.
+Vị trí điểm cao nhất THẮNG. Và nếu ta biết tiêu chí chấm, ta có thể cho vị trí mình muốn thắng. Như gian lận bầu cử.
 
 ---
 
-## Sở thích của mob (hay "tại sao bò của bạn băng qua đường")
+## Sở thích của mob (hay "vì sao bò của bạn băng qua đường")
 
-Mỗi mob có gu khác nhau. Và điều đó thay đổi mọi thứ.
+Mỗi mob có gu khác nhau. Và điều đó thay đổi tất cả.
 
-| Mob | Thích |
+| Mob | Khoái cái này |
 | --- | --- |
-| **Động vật** (bò, cừu, heo) | Cỏ và ánh sáng (hipster) |
-| **Quái vật** (zombie, skeleton) | Bóng tối (edgelord) |
-| **Rùa** | Nước, nếu không thì cát, nếu không thì ánh sáng |
-| **Hoglin** | `crimson_nylium`; ghét `warped_fungus` |
-| **Strider** | Chỉ lava. KHÔNG gì khác. |
-| **Silverfish** | Khối có thể infest (hợp lý) |
-| **Guardian** | Nước + ánh sáng (kẻ hợm) |
+| **Thú** (bò, cừu, lợn) | Cỏ và ánh sáng (hipster) |
+| **Quái** (zombie, skeleton) | Bóng tối (edgelord) |
+| **Rùa** | Nước, không thì cát, không thì ánh sáng |
+| **Hoglin** | `crimson_nylium` ; ghét `warped_fungus` |
+| **Strider** | Chỉ dung nham. KHÔNG gì khác. |
+| **Silverfish** | Khối nhiễm được (hợp lý) |
+| **Guardian** | Nước + ánh sáng (sang chảnh) |
 | **Mooshroom** | Mycelium + ánh sáng (nấm) |
-| **Ong** | Không khí. Ừ, chúng thích KHÔNG KHÍ. |
+| **Ong** | Không khí. Đúng, chúng thích KHÔNG KHÍ. |
 
 ```java
-// Animal: nhìn xuống, nếu là cỏ, điểm tối đa
+// Thú : nhìn xuống, nếu là cỏ, điểm tối đa
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return $$1.getBlockState($$0.below()).is(Blocks.GRASS_BLOCK) ? 10.0F : $$1.getPathfindingCostFromLightLevels($$0);
 }
 
-// Monster: chính xác thì ngược lại
+// Quái : đúng ngược lại
 public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
    return -$$1.getPathfindingCostFromLightLevels($$0);
 }
 ```
 
-Kiểu quái vật là "nếu chỗ sáng, điểm âm, tao đi chỗ khác". Chúng MẶT NẶC với ánh sáng xD
+Kiểu quái đúng nghĩa "nếu có sáng, điểm âm, tôi đi chỗ khác". Chúng LÊN MẶT với ánh sáng.
 
-Vậy bạn có thể -- theo nghĩa đen -- dẫn động vật bằng cỏ và ánh sáng, và quái vật bằng bóng tối. Vừa ngu vừa tuyệt.
+Nên bạn có thể, theo nghĩa đen, dẫn thú bằng cỏ và ánh sáng, và dẫn quái bằng bóng tối. Vừa ngớ ngẩn vừa thiên tài.
 
 ---
 
 ## Thuật toán A* trong Minecraft (công thức bí mật)
 
-Minecraft sử dụng thuật toán A* (A-star) cho pathfinding. Nhưng Mojang đã thêm dấu ấn riêng:
+Minecraft dùng thuật toán A* (A-star) cho pathfinding. Nhưng Mojang đã đặt dấu ấn :
 
 ```
 f(n) = g(n) + 1.5 × h(n)
 ```
 
-- **g(n)** = đường đã đi (1 mỗi khối, ~1.41 đường chéo)
-- **h(n)** = khoảng cách đường chim bay
-- **1.5** = vì Mojang thích mấy thứ hơi lỗi
+- **g(n)** = đường đã đi (1 mỗi khối, ~1.41 theo đường chéo)
+- **h(n)** = khoảng cách chim bay
+- **1.5** = vì Mojang thích giá trị hơi điên
 
-Bình thường A* dùng `f(n) = g(n) + h(n)`. MOJANG ĐÃ THÊM HỆ SỐ 1.5. Tại sao? Để thuật toán đi nhanh hơn đến đích và cắt bớt nhánh tìm kiếm. Kết quả: đường tìm được là "tốt" nhưng không phải lúc nào cũng tốt nhất. Đây là A* hơi say.
+Bình thường A* dùng `f(n) = g(n) + h(n)`. MOJANG THÊM HỆ SỐ 1.5. Vì sao? Để thuật toán lao nhanh hơn về đích và cắt bớt nhánh tìm kiếm. Kết quả : đường tìm được "ổn" nhưng không luôn tốt nhất. Đó là A* hơi say.
 
 ```mermaid
 flowchart LR
-    A[Nút bắt đầu] --> B{Có láng giềng\ncần đánh giá?}
+    A[Nút bắt đầu] --> B{Còn láng giềng\ncần đánh giá?}
     B -->|Có| C[Tính f = g + 1.5×h\ncho mỗi láng giềng]
     C --> D[Chọn láng giềng\ncó f nhỏ nhất]
     D --> E{Đã tới\nđích?}
     E -->|Không| B
-    E -->|Có| F[Đã tìm thấy đường!]
+    E -->|Có| F[Tìm thấy đường!]
     B -->|Không| G[Không có đường\nkhả thi]
-    
+
     style F color:#4caf50
     style G color:#f44336
 ```
 
-Chi tiết quan trọng: **một mob chỉ có thể pathfinding trong 16 khối** (tầm *follow range* của nó). Nếu đích quá xa, nó chọn khối gần nhất mà nó CÓ THỂ tới. Điều này có nghĩa bạn có thể tạo một monolithe ngoài tầm với, và mob sẽ pathfinding đến khối gần nhất đưa nó đến gần monolithe đó -- khiến chuyển động của nó hoàn toàn có thể dự đoán.
+Chi tiết quan trọng : **mob chỉ pathfinder được trên 16 khối** (*follow range* của nó). Nếu đích quá xa, nó chọn khối gần nhất mà nó CÓ THỂ tới. Nghĩa là bạn có thể tạo khối nguyên thạch ngoài tầm với, và mob sẽ pathfinder về khối gần nhất đưa nó lại gần khối đó, khiến chuyển động của nó hoàn toàn đoán được.
 
 ### Hai exploit phá game
 
-#### 1. Block updates = buộc tính toán lại
+#### 1. Block update = ép tính lại
 
 ```java
 public boolean shouldRecomputePath(BlockPos $$0) {
@@ -231,26 +232,26 @@ public boolean shouldRecomputePath(BlockPos $$0) {
 }
 ```
 
-Mỗi lần cập nhật khối gần đường đi của mob buộc tính toán lại A* với cooldown 1 giây. Bạn đặt một đồng hồ 1 giây cạnh mob, và nó tính toán lại LIÊN TỤC. Như kiểu GPS bị reset mỗi giây.
+Mỗi cập nhật khối gần đường của mob ép tính lại A* với cooldown 1 giây. Bạn đặt đồng hồ 1 giây cạnh mob, và nó tính lại đường LIÊN TỤC. Tương đương đặt GPS reset mỗi giây.
 
 Và nếu bạn làm vậy với 50 mob cùng lúc? Lag city. RIP TPS.
 
 #### 2. Điểm phạt khối (Pathfinding Malice)
 
-Một số khối làm mob sợ. Theo nghĩa đen. Mỗi khối có một chi phí kèm theo, được định nghĩa bằng enum:
+Vài khối khiến mob sợ. Theo nghĩa đen. Mỗi khối có chi phí kèm theo, định nghĩa bởi enum :
 
-| Khối / Điều kiện | Phạt |
+| Khối / Điều kiện | Điểm phạt |
 | --- | --- |
-| **Khối mật ong** | +8 khi đi qua |
-| **Bột tuyết** | Không thể đi qua |
-| **Cửa đóng** | Không thể đi qua |
-| **Lửa** | +16 khi đi qua, +8 khi đi cạnh |
-| **Động vật & Dân làng** | Lửa = -1 (NOPE) |
-| **Cactus / Sweet berry** | Không thể đi qua; kế bên = +8 |
-| **Nước** | +8 khi đi qua hoặc đi cạnh |
-| **Magma** | +8 khi đi cạnh (đau) |
+| **Khối mật ong** | +8 để đi qua |
+| **Tuyết bột** | Không thể vượt |
+| **Cửa đóng** | Không thể vượt |
+| **Lửa** | +16 để đi qua, +8 để đi men theo |
+| **Thú và Dân làng** | Lửa = -1 (KHÔNG) |
+| **Xương rồng / Berry ngọt** | Không thể vượt ; kề bên = +8 |
+| **Nước** | +8 để đi qua hay men theo |
+| **Magma** | +8 để men theo (ui da) |
 
-Động vật còn cực đoan hơn:
+Thú còn cực đoan hơn :
 
 ```java
 protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
@@ -260,63 +261,61 @@ protected Animal(EntityType<? extends Animal> $$0, Level $$1) {
 }
 ```
 
-DAMAGE_FIRE ở -1.0F, có nghĩa là "cấm" theo nghĩa đen. Một con vật thà nhảy xuống vực còn hơn đi qua lửa. Phù.
+DAMAGE_FIRE ở -1.0F, đúng nghĩa "cấm". Thú thà lao xuống vực còn hơn băng qua lửa. Phù.
 
-### Bài tập: cuộc thi đường đi lớn
+### Bài tập : cuộc thi đường lớn
 
-Hãy tưởng tượng một dân làng phải chọn giữa nhiều con đường.
+Tưởng tượng một dân làng phải chọn giữa nhiều đường.
 
-- **Đường A**: 15 khối nhưng 6 khối đi cạnh nước (+8 mỗi cái)
-- **Đường B**: 18 khối với 2 khối nước (+8) và 1 khối kế nước (+8)
-- **Đường C**: 14 khối thẳng tắp... nhưng có lửa -> KHÔNG THỂ ĐI đối với dân làng
-- **Đường D**: 16 khối với 1 khối kế magma (+8) + 1 khối kế mật ong (+8)
-- **Đường E**: 25 khối nhưng toàn cactus (+8 khắp nơi) -> 90.82 tổng chi phí LOL
+- **Đường A** : 15 khối nhưng 6 khối men theo nước (+8 mỗi cái)
+- **Đường B** : 18 khối với 2 khối nước (+8) và 1 khối kề nước (+8)
+- **Đường C** : 14 khối thẳng tắp... nhưng có lửa -> KHÔNG THỂ QUA với dân làng
+- **Đường D** : 16 khối với 1 khối kề magma (+8) + 1 khối kề mật ong (+8)
+- **Đường E** : 25 khối nhưng xương rồng khắp nơi (+8 khắp nơi) -> tổng chi phí 90.82
 
-Tính nhẩm:
+Nhẩm :
+- Đường A : 15 khối + 6×8 cho nước = 15 + 48 = **63** ... nhưng còn phải cộng 1.5×khoảng cách. Tính thật đi.
+- Đường B : dài hơn nhưng ít phạt hơn. Tổng cost = khoảng cách cộng dồn + điểm phạt.
+- Đường D : magma và mật ong cộng dồn điểm phạt.
 
-- Đường A: 15 khối + 6×8 cho nước = 15 + 48 = **63** ... nhưng còn thêm 1.5×khoảng cách. Tính thực tế nào.
-- Đường B: dài hơn nhưng ít phạt hơn. Tổng cost = khoảng cách tích lũy + phạt.
-- Đường D: magma và mật ong stack phạt.
-
-Người thắng thường là **Đường B**: đường vòng có lợi vì nước ĐẮT.
-
-Một dân làng thực chất là một máy tính chi phí có chân xD
+Thắng thường là **Đường B** : đi vòng đáng vì nước ĐẮT.
+Dân làng về cơ bản là máy tính chi phí có chân.
 
 ### Mỗi mob có gu riêng
 
-Một dân làng: "lửa ư? KHÔNG CẢM ƠN BAI"
-Một zombie: "lửa ư? OK boomer *đi xuyên qua rực lửa*"
+Dân làng : "lửa á? KHÔNG CẢM ƠN TẠM BIỆT"
+Zombie : "lửa á? OK boomer *đi xuyên qua trong lửa cháy*"
 
-Bạn có đúng nghĩa đen những con đường mà mob này đi nhưng mob kia không. Bạn có thể làm đường cao tốc cho dân làng mà zombie bị cháy.
+Bạn có đúng nghĩa những con đường mob này đi mà mob khác không. Bạn có thể làm xa lộ cho dân làng nơi zombie tự thiêu.
 
 ---
 
-## Dân làng: cái đống hỗn độn tối thượng
+## Dân làng : mớ hỗn độn tột cùng
 
-Ok, dân làng. Đây là thứ ÍT được hiểu nhất trong toàn bộ Minecraft. Nhưng một khi đã nắm được code, bạn nhận ra chúng là những cỗ máy có thể dự đoán với lịch làm việc văn phòng.
+OK, dân làng. Đó là hệ thống ít được hiểu nhất cả Minecraft. Nhưng khi đã nắm mã, bạn nhận ra chúng là cỗ máy đoán được với giờ hành chính.
 
-### Cảm biến và bộ nhớ
+### Cảm biến và trí nhớ
 
-9 cảm biến, chạy mỗi 20 tick (1 giây). Mỗi cái quét một bán kính quanh dân làng và lưu kết quả vào bộ nhớ. Dân làng thấy tất cả, nhớ tất cả, và hành động dựa trên đó.
+9 cảm biến, chạy mỗi 20 tick (1 giây). Mỗi cái quét bán kính quanh dân làng và lưu kết quả vào trí nhớ. Dân làng thấy hết, nhớ hết, và hành động theo.
 
-Kiểu: "có kẻ thù không? có item trên đất không? có người chơi để nói chuyện không?" -- nó check MỌI THỨ.
+Kiểu : "có kẻ thù không? có vật phẩm rơi không? có người chơi để nói chuyện không?" Nó kiểm tra TẤT CẢ.
 
-### Các package (giai đoạn trong ngày)
+### Các package (pha trong ngày của nó)
 
-Não dân làng là các gói hoạt động kích hoạt theo giờ:
+Não dân làng là các package hoạt động kích hoạt theo giờ :
 
 | Package | Giờ | Dân làng... |
 | --- | --- | --- |
-| **Core** | 24/7 | Mở cửa, bơi (80% thời gian), và THU NHẬN POI |
-| **Work** | 8h-15h | "Tôi đi làm" -- đi đến bàn làm việc |
-| **Meet** | 15h-17h | "Giờ gặp mặt!" -- đi đến chuông, tán gẫu |
-| **Rest** | 18h-6h | "Phải ngủ" -- đi lên giường |
-| **Idle** | 6h-8h, 17h-18h | "Tôi lười" -- đi dạo, đẻ con, nhảy lên giường |
-| **Panic** | Bị thương/thù địch | "CỨU" -- CHẠY TRỐN |
+| **Core** | 24/24 | Mở cửa, bơi (80% thời gian), và THU THẬP POI |
+| **Work** | 8h-15h | "Tôi đi làm" -- đi về trạm làm việc |
+| **Meet** | 15h-17h | "Nhậu thôi!" -- ra chuông, tám chuyện |
+| **Rest** | 18h-6h | "Phải ngủ" -- đi ngủ |
+| **Idle** | 6h-8h, 17h-18h | "Tôi lông bông" -- đi dạo, sinh em bé, nhảy lên giường |
+| **Panic** | Thương tích/thù địch | "CỨU VỚI" -- CHẠY |
 
-Package **Panic** là cái duy nhất có thể ngắt TẤT CẢ cái khác. Kể cả dân làng đang ngủ hay làm việc, nếu có zombie, HOẢNG LOẠN TOÀN DIỆN.
+Package **Panic** là duy nhất có thể ngắt TẤT CẢ các package khác. Dù dân làng đang ngủ hay đang làm, nếu có zombie, HOẢNG LOẠN TOÀN DIỆN.
 
-### Acquire POI: thứ cho phép redstone không dây
+### Acquire POI : thứ cho phép redstone không dây
 
 ```java
 Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithType(
@@ -324,53 +323,51 @@ Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithT
 )
 ```
 
-`Acquire POI` quét trong bán kính 48 khối tất cả POI (điểm ưa thích). Nó giữ 5 cái gần nhất, kiểm tra đường có tồn tại không, và thu nhận cái đầu tiên có thể tới được.
+`Acquire POI` quét trong bán kính 48 khối mọi POI (điểm quan tâm). Nó giữ 5 cái gần nhất, kiểm tra đường tồn tại, và thu thập cái đầu tiên tới được.
 
-Mỗi POI có số slot giới hạn:
-- **Bàn làm việc**: 1 slot
-- **Giường**: 1 slot
-- **Chuông**: 32 slot
+Mỗi POI có số slot giới hạn :
+- **Trạm làm việc** : 1 slot
+- **Giường** : 1 slot
+- **Chuông** : 32 slot
 
-Điều ĐIÊN RỒ: **slot được giữ tại thời điểm thu nhận, KHÔNG PHẢI lúc tới nơi**. Một dân làng có thể khóa một composter từ đầu bên kia bản đồ, mà không bao giờ tới được nó.
+Điểm ĐIÊN : **slot được giữ lúc thu thập, KHÔNG phải lúc tới nơi**. Dân làng có thể khóa composter từ đầu bên kia bản đồ, mà không bao giờ tới nơi.
 
-Bạn thấy sức mạnh chưa?
+Bạn nắm sức mạnh chưa?
 
 ### Redstone không dây. Đúng, KHÔNG DÂY.
 
-1. Bạn đặt dân làng vào minecart với đường dẫn tới composter
-2. Nó thu nhận composter (slot bị chiếm, không ai dùng được nữa)
-3. Dân làng ở quá xa không thể click -- bone meal vẫn còn
-4. Bạn DẮT dân làng này đi bất kỳ đâu trong thế giới, nó giữ slot
-5. Khi bạn muốn kích hoạt thứ của mình, bạn G I Ế T dân làng
-6. Slot được giải phóng, dân làng khác thu nhận composter, lấy bone meal
-7. BLOCK UPDATE -> bất kỳ mạch redstone nào cũng được kích hoạt
+1. Bạn nhốt dân làng trong minecart với đường tới composter
+2. Nó thu thập composter (slot chiếm, không ai dùng được nữa)
+3. Dân làng quá xa để bấm vào, bone meal còn nguyên
+4. Bạn DẮT dân làng này đi bất cứ đâu trên thế giới, nó giữ slot
+5. Khi muốn kích hoạt đồ của mình, bạn G I Ế T dân làng
+6. Slot giải phóng, dân làng khác thu thập composter, lấy bone meal
+7. BLOCK UPDATE -> bất kỳ mạch redstone nào kích hoạt
 
-Bạn vừa tạo ra tín hiệu redstone không dây, có thể truyền khắp thế giới, với zero chunk load cần thiết trên đường đi. Bạn có thể kết nối nó với ender pearl stasis chamber, tự dịch chuyển từ bất kỳ đâu bằng cách giết một dân làng.
+Bạn vừa tạo tín hiệu redstone không dây, truyền được khắp thế giới, không cần load chunk nào trên đường. Bạn có thể móc nó vào buồng stasis ender pearl, tự dịch chuyển từ bất cứ đâu bằng cách giết dân làng.
 
-Cách dùng yêu thích của tôi? Một mini-game "bounty hunter": bạn đặt nhiều dân làng với composter, người chơi phải giết ĐÚNG dân làng để kích hoạt lối ra. Cơ chế wtf hoàn toàn xD
+Cách dùng tôi thích nhất? Mini-game "thợ săn tiền thưởng" : bạn đặt nhiều dân làng với composter, người chơi phải giết ĐÚNG dân làng để kích hoạt lối ra. Cơ chế hoàn toàn wtf.
 
-### Pathfinding Deadlock (hay "dân làng đóng băng vĩnh viễn")
+### Pathfinding Deadlock (hay "dân làng đứng hình mãi mãi")
 
-Có một bug QUÁ ngon giữa `Acquire POI` (thấy đường) và navigation thực tế (từ chối đi đường đó). Xảy ra khi khối phía trên bàn làm việc không thể đi được. Kết quả:
+Có bug QUÁ hay giữa `Acquire POI` (thấy đường) và điều hướng thật (từ chối đi). Xảy ra khi khối trên trạm làm việc không đi được. Kết quả :
 
-- Core package: "tao muốn thu nhận POI"
-- Navigation: "tao không thể đi ở đó"
-- Kết quả: dân làng ĐỨNG YÊN, mãi mãi, tự đấu tranh với chính mình.
+- Package Core : "tôi muốn thu thập POI"
+- Điều hướng : "tôi không đi đó được"
+- Kết quả : dân làng ĐỨNG HÌNH, mãi mãi, tự giằng co với chính mình.
 
-Dân làng đóng băng tại chỗ, có thể dùng làm trang trí hoặc "đạo cụ" trong build. Một cái tủ đựng giáp? Ừ. Một lính canh không động đậy? Ừ. Rùng rợn? Có thể. Nhưng hiệu quả xD
+Đúng nghĩa dân làng đông cứng tại chỗ, dùng được làm trang trí hay "đạo cụ" trong build. Xe tăng giá giáp? Có. Lính gác không động? Có. Bệnh hoạn? Có thể. Nhưng hiệu quả.
 
 ---
 
 ## Kết luận
 
-Pathfinding của mob Minecraft không phải ngẫu nhiên. Đó là một hệ thống tất định, dựa trên điểm số, có thể dự đoán VÀ phá vỡ được.
+Pathfinding của mob Minecraft không phải ngẫu nhiên. Đó là hệ thống xác định, dựa trên điểm, đoán được VÀ phá được.
 
-**Ba điều cần nhớ:**
+**Ba điểm cần nhớ :**
 
-1. **Khối dưới chân = thiên vị độ cao** -- lấp đầy hoặc làm rỗng tầng hầm để dẫn mob
-2. **Điểm phạt khác nhau cho mỗi mob** -- tạo đường mà mob này đi nhưng mob kia không
-3. **Slot POI được giữ từ xa** -- redstone không dây miễn phí, dịch chuyển, đủ thứ
+1. **Khối dưới chân = thiên lệch độ cao** : lấp đầy hay dọn sạch lòng đất để dẫn mob
+2. **Điểm phạt khác nhau cho mỗi mob** : tạo đường mob này đi mà mob khác không
+3. **Slot POI giữ từ xa** : redstone không dây miễn phí, dịch chuyển, đủ thứ
 
-Mã nguồn Minecraft là một mỏ vàng các cơ chế bị khai thác ít. Tôi đã dành hàng giờ đọc Java đã dịch ngược và thành thật? Mỗi dòng code là một Easter Egg có chức năng. Chỉ khác là mấy cái này, bạn xài được trong survival để làm redstone không dây với dân làng. Game hay nhất confirmed.
-
-xD
+Mã nguồn Minecraft là mỏ vàng cơ chế ít khai thác. Tôi đã dành hàng giờ đọc Java dịch ngược và thật lòng? Mỗi dòng là Easter Egg chức năng. Chỉ có điều mấy cái này, bạn dùng trong survival để làm redstone không dây với dân làng. Game hay nhất xác nhận.

@@ -1,53 +1,53 @@
 ---
 title: Bareiron -- 1ドルのマイコンで動くMinecraftサーバー
-description: C言語6800行、mallocゼロ、パーリンノイズをバイリニア補間に置き換え、タイルマップ式バイオーム、すべて1ドルのチップで
+description: 6800行のC、mallocなし、Perlinノイズをbilinear補間に置き換え、タイルマップ式バイオーム。全部1ドルのチップの上で。
 date: 2026-05-30
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - reverse-engineering
   - embedded
   - c
   - esp32
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "8zhBhuwZ9dUCPP4uKXUgLLxLsUNR7caJZ5CBOeaI/4Mrza3jCNFJVYcrwpGcsOT5bq+dbWce6sSuG02TsgtIOA=="
+author_sig: "62TRyoombEUdqbmq5M8NHgMKrj3sxyAM7VVMfJDv4quEZ4dujfMK1KMVVbYxr+YPJfpHLD5CsrQZn0vQRgn66A=="
 ---
 
 ## はじめに
 
-1ドルのマイコンでMinecraftサーバーが動かせるかどうか、考えたことある？
+1ドルのマイコンでMinecraftサーバーを動かすなんて、冗談みたいに聞こえる。
 
-俺はある。そして答えはイエスだ。文字通り。
+私は自問した。答えはイエスだ。文字通りね。
 
-[Bareiron](https://github.com/p2r3/bareiron/)っていうプロジェクトがあって、p2r3作。ここ数年でMinecraft界で見た中で、おそらく最も魅力的なプロジェクトのひとつだ。**300キロバイト**のバイナリ、**C言語6800行**、外部依存ゼロ、mallocなし、スレッディングなし、それが**1ドルのESP32**で動く。
+[Bareiron](https://github.com/p2r3/bareiron/)っていうプロジェクトがあって、p2r3作で、ここ数年Minecraft界隈で見た中でたぶん一番魅惑的なプロジェクトの1つだ。**300キロバイト**に収まるバイナリ、**6800行のC**、外部依存ゼロ、mallocなし、スレッドなし。それが**1ドルのESP32**で動く。
 
-![ESP32-C3, le microcontrôleur qui fait tourner le serveur](/images/bareiron/esp32-board.jpg)
+![ESP32-C3、サーバーを動かすマイコン](/images/bareiron/esp32-board.jpg)
 
-無限地形生成。バイオーム。洞窟。クラフト。採掘。モブ。空腹。チェスト。サバイバルサーバーに期待するすべての機能。
+無限地形生成。バイオーム。洞窟。クラフト。採掘。モブ。空腹。チェスト。サバイバルサーバーに期待するもの全部ある。
 
-消費電力**0.5ワット**、クロック**160 MHz**のチップで。
+0.5ワット消費でクロック160MHzのチップの上でだ。
 
-イメージしてほしい：バニラのMinecraftサーバーは数ギガのRAMが必要だ。ESP32-C3は**520 KBのSRAM**（ブート後に使えるのは400）。20年前のプロセッサですでにギガヘルツで動いてた -- こいつは160 MHzが上限。純粋な演算性能の差は約**20,000**倍。
+規模感を言うと、バニラのMinecraftサーバーは数ギガのRAMが要る。ESP32-C3は**SRAM 520KB**（起動後に残るのは400）。20年前のプロセッサはすでにギガヘルツで回ってたのに、こいつは160MHzが上限だ。純粋な性能差はざっと**2万倍**だ。
 
-p2r3はCでMinecraftサーバーを書いたんじゃない。サーバーのすべての構成要素を、この制約に収まるように再発明したんだ。ソースコードを開いて、どうやってやったのか見てみよう。
+p2r3はMinecraftサーバーをCで書いたんじゃない。この制約に収めるためにサーバーの各部品を reinvent したんだ。ソースコードを開けてどうなってるか見ていこう。
 
-![Miniature de la vidéo de présentation de Bareiron par p2r3](/images/bareiron/title-card.jpg)
+![p2r3によるBareiron紹介動画のサムネイル](/images/bareiron/title-card.jpg)
 
-## プロジェクトの核心：メモリ無しの地形生成
+## プロジェクトの心臓部：メモリ不要の地形生成
 
-組み込みMCサーバーを作るときの最大の問題は地形生成だ。
+組み込みMCサーバーを作りたいとき、一番の問題は地形生成だ。
 
-バニラMinecraftでは、ワールドは**パーリンノイズ**で生成される：複数の重ね合わせレイヤー（オクターブ）、6つのバイオームパラメータ（温度、湿度、大陸性、侵食、変則性、深度）、そして毎回再計算しなくていいようにキャッシュシステム全体。
+バニラMinecraftでは世界は**Perlinノイズ**で生成される。重ねた複数層（オクターブ）、6つのバイオームパラメータ（気温、湿度、大陸性、浸食、weirdness、深度）、毎回全部再計算しないためのキャッシュ機構いっぱいだ。
 
-結果は美しい。でも計算コストが高いし、生成されたチャンクを保存するのにRAMを食う。
+結果は壮麗だ。でも計算は重いし、生成済みチャンク保存にRAMを食う。
 
-Bareironのアプローチは根本的に違う。ノイズを重ねる代わりに、**決定論的RNG**で生成した4点を使った**バイリニア補間**を使う。
+Bareironのアプローチは根本的に違う。ノイズを重ねる代わりに、**決定的RNG**が作る4点に対する**bilinear補間**を使う。
 
-小さいピクセル画像を拡大したときに境界がぼやけるあの感じ、分かる？まさにあれだ。
+小さなピクセル画像を拡大したとき縁がぼやけるだろ。まさにあれだ。
 
 ```c
-// worldgen.c, lignes 117-171 (simplifié)
+// worldgen.c、117-171行目（簡略化）
 
 uint8_t interpolate (uint8_t a, uint8_t b, uint8_t c, uint8_t d, int x, int z) {
   uint16_t top    = a * (CHUNK_SIZE - x) + b * x;
@@ -58,53 +58,53 @@ uint8_t interpolate (uint8_t a, uint8_t b, uint8_t c, uint8_t d, int x, int z) {
 uint8_t getHeightAt (int x, int z) {
   int _x = floor(x / CHUNK_SIZE);  // チャンク座標
   int _z = floor(z / CHUNK_SIZE);
-  int rx = x % CHUNK_SIZE;          // チャンク内のオフセット
+  int rx = x % CHUNK_SIZE;          // チャンク内オフセット
   int rz = z % CHUNK_SIZE;
   uint32_t hash = getChunkHash(_x, _z);
   uint8_t biome = getChunkBiome(_x, _z);
-  // hash + biomeでシードされた4隅の補間
+  // ハッシュとバイオームを種にした4隅間の補間
   return getHeightAtFromHash(rx, rz, _x, _z, hash, biome);
 }
 ```
 
-標準的なバイリニア補間：4つの隅、位置に応じた重み、出力は単一の`uint8_t`。CHUNK_SIZEは8なので、整数の掛け算で済み、floatは使わない。
+標準の双線形補間だ。4つの隅、位置による重み、出力は`uint8_t`1つ。CHUNK_SIZEは8だから整数乗算だけでできて、floatなしだ。
 
-p2r3が動画で段階的に見せてる：まずチャンクの4隅、それぞれRNGでシードされた高さを持つ。
+p2r3は動画で段階的に見せてる。まずチャンクの4隅で、それぞれRNGを種にして高さを作る。
 
-![Les 4 coins du chunk, chacun seedé par le RNG déterministe](/images/bareiron/gen-four-corners.jpg)
+![チャンクの4隅、それぞれ決定的RNGを種に](/images/bareiron/gen-four-corners.jpg)
 
-次に、この4点間の補間で連続したサーフェスができる。
+次にこの4点間に補間をかけて連続面を作る。
 
-![Application de la bilinear interpolation entre les 4 coins](/images/bareiron/gen-interpolate.jpg)
+![4隅間のbilinear補間の適用](/images/bareiron/gen-interpolate.jpg)
 
-そしてこのパターンを隣接する全チャンクに繰り返せば、無限に広がる地形が得られる。
+隣り合う全チャンクでパターンを繰り返せば、無限に広がる地形になる。
 
-![Résultat final : terrain irrégulier continu](/images/bareiron/gen-result.jpg)
+![最終結果：連続した起伏地形](/images/bareiron/gen-result.jpg)
 
-### 決定論的RNG
+### 決定的RNG
 
-これを可能にする鍵はシーディングだ。各チャンクには4つの隅があり、各隅にはユニークで再現可能な擬似乱数値が必要だ。
+これ全部を可能にする鍵はシード付けだ。各チャンクに4隅があって、各隅に一意で再現可能な疑似乱数値が要る。
 
 ```c
-// worldgen.c, lignes 13-22
+// worldgen.c、13-22行目
 
 uint32_t getChunkHash (short x, short z) {
   uint8_t buf[8];
-  memcpy(buf, &x, 2);          // X座標の16ビット
-  memcpy(buf + 2, &z, 2);      // Z座標の16ビット
-  memcpy(buf + 4, &world_seed, 4);  // グローバルシードの32ビット
+  memcpy(buf, &x, 2);          // X座標16ビット
+  memcpy(buf + 2, &z, 2);      // Z座標16ビット
+  memcpy(buf + 4, &world_seed, 4);  // グローバルシード32ビット
   return splitmix64(*((uint64_t *)buf));  // ハッシュ
 }
 ```
 
-Xの16ビット、Zの16ビット、シードの32ビットを8バイトのバッファに詰め込んで、全部を`splitmix64`に通す。結果：ワールドシードに基づく、各位置に対して一意で決定論的な値。
+Xの16ビット、Zの16ビット、シードの32ビットを8バイトのバッファに詰めて、全部`splitmix64`に通す。結果は各位置に一意な決定的値で、ワールドシードを元にしてる。
 
-この凄さが分かるか？サーバーは地形を保存する必要がない。プレイヤーが新しいエリアに来たときにその場で再計算するだけで、毎回まったく同じ結果になるんだ。
+この仕組みの強さ分かる？サーバーは地形を保存する必要がないんだ。プレイヤーが新しいゾーンに来たらその場で再計算する。毎回まったく同じ結果になる。
 
-使われている`splitmix64`は64ビットハッシュ用に設計された超高速PRNGだ：
+使ってる`splitmix64`は64ビットハッシュ用の超高速prngだ。
 
 ```c
-// worldgen.c (simplifié)
+// worldgen.c（簡略化）
 
 static uint32_t splitmix64 (uint64_t state) {
   state += 0x9E3779B97F4A7C15ull;
@@ -115,45 +115,45 @@ static uint32_t splitmix64 (uint64_t state) {
 }
 ```
 
-演算3つ：加算、xor/shift、乗算、xor/shift、乗算、xor/shift。ルックアップテーブルなし、ループなし。8バイトのバッファ（X + Z + シード）を64ビット整数として扱い、32ビットのハッシュを返す。決定論的で高速、たった5行。
+3つの演算だ。加算、xorとシフト、乗算、xorとシフト、乗算、xorとシフト。全部直接演算で、テーブルもループもなし。8バイトバッファ（XとZとシード）を64ビット整数として扱って、32ビットのハッシュを返す。決定的で、速くて、5行に収まる。
 
-### なぜパーリンノイズじゃないのか
+### なぜPerlinノイズじゃないのか
 
-p2r3自身が動画で言ってる：「乱数の桁を増やすほど、地形は規則的になる。コイン投げの回数が増えるほど50/50に近づくのと同じだ」。実際には、組み合わせるハッシュのビット数のことだ：
+p2r3自身が動画で言ってる。「乱数の桁を足すほど地形は規則的になる。コイン投げを増やすほど50/50に近づくようにね」。実際やってるのはハッシュの何ビットを組み合わせるかだ。
 
 ```c
-// worldgen.c, lignes 51-115
+// worldgen.c、51-115行目
 
-// 平原バイオームの場合：4つの要素を組み合わせ → 規則的な地形
+// plainsバイオーム：4因子の組み合わせから規則的な地形
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
-// 氷雪平原の場合：2要素 → より起伏が激しい
+// snowy plains：2因子から起伏が激しい
 h = (hash % 5) + ((hash >> 4) % 5);
 ```
 
-各バイオームが、いくつのビット抽出を組み合わせるかを選ぶ。多ければ多いほど分布が安定する -- コイン投げの回数が増えて50/50に近づくのと同じ。少なければ少ないほど、局所的な変動が大きくなる。
+各バイオームは抽出ビットを何個組み合わせるか選ぶ。多いほど分布は安定する。コイン投げを増やして50/50に近づくようにね。少ないほど局所変動が強くなる。
 
-![Terrain irrégulier -- peu de facteurs, variations fortes](/images/bareiron/terrain-irregular.jpg)
+![起伏の激しい地形、因子が少なく変動が強い](/images/bareiron/terrain-irregular.jpg)
 
-たった2要素で、氷雪平原は丘陵地帯、ほとんど山岳のような地形になる。ピークと窪みが頻繁に現れる。
+2因子だけだと、snowy plainsは丘陵っぽい、ほぼ山な地形になる。起伏の山と谷が頻繁だ。
 
-![Terrain régulier -- facteurs multiples, surface lisse](/images/bareiron/terrain-regular.jpg)
+![規則的な地形、複数因子で滑らかな面](/images/bareiron/terrain-regular.jpg)
 
-4要素では、平原は平坦で予測可能なまま。分布が安定する。
+4因子だと平原は平らで予測可能に保たれる。分布が安定する。
 
-チャンク1つの生成にかかる時間はESP32で**200 ms** -- 同じハードウェアでパーリンノイズだとコストが高すぎて計測すらできない。
+チャンク生成はESP32で**200ms**だ。同じハードでPerlinノイズだと重すぎて計測不能なくらいだ。
 
-### ヤバい詳細：チャンク全体を生成せずにブロックを参照
+### 唸る詳細：チャンク全体を生成せずにブロックを問い合わせる
 
-プレイしてて、ブロックを掘る。サーバーはどのアイテムをドロップするか知る必要がある。単純に考えれば、そのためにチャンク全体を生成する必要がある。
+プレイしててブロックを掘る。サーバーはどのアイテムを渡すか知らなきゃいけない。素朴にはチャンク全体を生成することになる。
 
-バイリニア補間を使えば、座標から直接**任意の点**を問い合わ合わせられる。チャンクの隅はプレイヤーの位置から取得でき、補間で任意のオフセットにおける高さが得られる。数回の算術演算だけで、チャンク生成は不要。
+bilinear補間なら、座標から平面上の**任意の点**を直接問い合わせられる。チャンクの隅はプレイヤー位置から出る。補間が任意オフセットの高さをくれる。一握りの算術演算で、チャンク生成なしだ。
 
-p2r3曰く：「俺が欲しかったのは、メモリにアクセスしたり高コストなノイズマップを計算したりせずに、指定された座標のブロックを教えてくれる魔法の関数だ」。まさにそれを実現した。
+p2r3いわく「欲しいのは、メモリに触れず高価なノイズマップも計算せずに、指定座標にどのブロックがあるか言える魔法の関数だ」。まさに作ったものがそれだ。
 
-高さが具体的なブロックになる仕組みはこうだ：
+高さが具体的なブロックになるのはこうだ。
 
 ```c
-// worldgen.c (simplifié)
+// worldgen.c（簡略化）
 
 uint8_t getTerrainBlock (int x, uint8_t y, int z) {
   uint8_t surface = getHeightAt(x, z);
@@ -167,19 +167,19 @@ uint8_t getTerrainBlock (int x, uint8_t y, int z) {
 }
 ```
 
-5つの条件。grass/dirt/stone/deepslate/bedrockのレイヤー。表面ブロックは`biome_top[]`でバイオームに依存 -- 平原はgrass、砂漠はsand。ループなし、switchなし、該当するレイヤーに落ちるifのカスケード。
+5つの条件だ。grassとdirtとstoneとdeepslateとbedrockの層だ。表面ブロックは`biome_top[]`経由でバイオーム依存になる。平原ならgrass、砂漠ならsandだ。単なるifカスケードで正しい層に落ちる。ループもswitchも置き換えてる。
 
-### 洞窟、最も怠惰なミラーリング
+### 洞窟、一番怠けたミラー
 
 ```c
 altitude_grotte = CAVE_BASE_DEPTH - (hauteur_surface - y);
 ```
 
-地表の高さを地下でミラーリングする。deepslateの大きな空洞みたいになる。計算量ゼロ、たった1行。
+地下で表面高さをミラーする。deepslateの大洞窟っぽく見える。計算ゼロ、1行だ。
 
-![Caves générées par mirror du terrain de surface](/images/bareiron/cave-mirror.jpg)
+![表面地形のミラーで作った洞窟](/images/bareiron/cave-mirror.jpg)
 
-![Schéma du mirror de terrain pour générer les grottes](/images/bareiron/cave-diagram.jpg)
+![洞窟生成のための地形ミラーの図](/images/bareiron/cave-diagram.jpg)
 
 ### 鉱石、XOR版
 
@@ -188,24 +188,24 @@ candidat = (chunk_x ^ col_x ^ col_z) % 100;
 if (candidat < 5 && y < 16) -> diamond
 ```
 
-座標のXORで列ごとに候補が一意に決まる。タイプは高度だけで決まる。ダイアモンドは洞窟の最深部の下に隠れてて、掘りごたえを残してる。
+座標のXORで列ごとに候補を1つ保証する。種類は高度だけで決まる。ダイヤは掘る意味が残るよう洞窟最低点の下に隠してある。
 
 ### タイルマップ式バイオーム
 
-各バイオームはグリッド内の円形の島で、タイプはシードから計算されたパターンで決まる。グリッド化されてて、予測可能で、タダ。
+各バイオームはグリッド上の円形島で、種類はシードから計算したパターンで決まる。グリッド化、予測可能、タダだ。
 
-![Carte des biomes en tile map -- chaque île est un biome différent](/images/bareiron/biome-tilemap.jpg)
+![タイルマップ式バイオーム地図、各島が違うバイオーム](/images/bareiron/biome-tilemap.jpg)
 
-各バイオームには独自のパラメータセットがあり、配列にエンコードされてる：
+各バイオームは独自パラメータをテーブルにエンコードして持つ。
 
 ```c
-// worldgen.c (simplifié)
+// worldgen.c（簡略化）
 
 static const uint8_t biome_base[] = {
-  [BIOME_PLAINS]  = 48,   // 基本高さ：48
-  [BIOME_DESERT]  = 52,   // やや高め
+  [BIOME_PLAINS]  = 48,   // 基準高さ：48
+  [BIOME_DESERT]  = 52,   // 少し高め
   [BIOME_FOREST]  = 50,   // 中間
-  [BIOME_TAIGA]   = 46,   // やや低め
+  [BIOME_TAIGA]   = 46,   // 少し低め
   [BIOME_SNOWY]   = 40,   // 最も低い
 };
 
@@ -218,45 +218,45 @@ static const uint8_t biome_top[] = {
 };
 
 static const uint8_t biome_factors[] = {
-  [BIOME_PLAINS]  = 4,   // 4抽出 → 非常に規則的
-  [BIOME_DESERT]  = 3,   // 3抽出 → 中程度
-  [BIOME_FOREST]  = 4,   // 4抽出 → 規則的、丘陵あり
-  [BIOME_TAIGA]   = 3,   // 3抽出 → 中程度
-  [BIOME_SNOWY]   = 2,   // 2抽出 → 非常に起伏大
+  [BIOME_PLAINS]  = 4,   // 4抽出からとても規則的
+  [BIOME_DESERT]  = 3,   // 3抽出から中程度
+  [BIOME_FOREST]  = 4,   // 4抽出から規則的で丘陵
+  [BIOME_TAIGA]   = 3,   // 3抽出から中程度
+  [BIOME_SNOWY]   = 2,   // 2抽出からとても起伏が激しい
 };
 ```
 
-**平原**：高さ48、4要素 → 非常に平坦な地形、草。
+**平原**：高さ48、4因子からとても平らな地形、草だ。
 
 ```c
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
-// 結果：最大±4ブロックの変動
+// 結果：最大プラスマイナス4ブロックの変動
 ```
 
-**砂漠**：高さ52、3要素、表面ブロック = 砂。海面より下にならない。
+**砂漠**：高さ52、3因子、表面ブロックは砂。海面下には絶対ならない。
 
 ```c
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3);
-// 結果：最大±6ブロックの変動、SEA_LEVEL+1でクランプ
+// 結果：最大プラスマイナス6ブロックの変動、SEA_LEVEL+1にクランプ
 ```
 
-**森林**：高さ50、4要素（平原と同じだがベースが高い）→ 樹木の生い茂った丘陵。
+**森**：高さ50、平原と同じ4因子だが基準が高いから木の生えた丘になる。
 
-**タイガ**：高さ46、3要素 → 中程度の変動、寒冷地形。
+**タイガ**：高さ46、3因子から中程度の変動、寒い地形だ。
 
-**氷雪平原**：高さ40、わずか2要素 → 最も起伏が激しい。
+**雪原**：高さ40、2因子だけだから一番起伏が激しい。
 
 ```c
 h = (hash % 5) + ((hash >> 4) % 5);
-// 結果：最大±14ブロックの変動
+// 結果：最大プラスマイナス14ブロックの変動
 ```
 
-各バイオームは**5エントリ×3配列**でエンコードされてる：基本高さ、表面ブロック、要素数。`getHeightAtFromHash`がバイオームを受け取ると、これらの配列を参照して地形を調整する。たった15バイトのデータでMinecraftのバイオームシステム全体を置き換えてる。
+各バイオームは**5エントリのテーブル3つ**にエンコードされてる。基準高さ、表面ブロック、因子数だ。`getHeightAtFromHash`がバイオームを受け取ってこのテーブルを引いて地形を調整する。15バイトのデータでバニラMinecraftのバイオーム機構全部を置き換えてる。
 
-バイオーム検出器はシードを使って各チャンクにどのバイオームが対応するかを決める：
+バイオーム検出器はシードを使って各チャンクに対応するバイオームを決める。
 
 ```c
-// worldgen.c (simplifié)
+// worldgen.c（簡略化）
 
 static const uint8_t biome_pattern[] = {
   BIOME_PLAINS, BIOME_FOREST, BIOME_PLAINS, BIOME_DESERT,
@@ -272,24 +272,24 @@ uint8_t getChunkBiome (short cx, short cz) {
 }
 ```
 
-16エントリのパターン、チャンク座標でシードされたインデックス。繰り返しのグリッドになるが視覚的に一貫性がある。たった4行のコードでバニラMinecraftのバイオームパラメータシステム全体を置き換えてる。
+16エントリのパターンと、チャンク座標を種にしたインデックスだ。繰り返すグリッドになるけど見た目は一貫してる。4行のコードでバニラのバイオームパラメータ機構全部を置き換えてる。
 
-### getHeightAtFromHash : 地形の組み立て屋
+### getHeightAtFromHash：地形の組み立て屋
 
-生成の中核となる関数は、バイオームでシードされた4つの隅を組み合わせる：
+生成の中心にある関数で、バイオームを種にした4隅を組み合わせる。
 
 ```c
-// worldgen.c (simplifié)
+// worldgen.c（簡略化）
 
 static uint8_t getHeightAtFromHash (int rx, int rz, short cx, short cz,
                                     uint32_t h, uint8_t biome) {
-  // ハッシュから抽出した4隅、隅ごとに異なるシード
+  // ハッシュから4隅を抽出、隅ごとに違うシフト
   uint8_t h1 = biome_base[biome] + (h & 0x0F);
   uint8_t h2 = biome_base[biome] + ((h >> 4) & 0x0F);
   uint8_t h3 = biome_base[biome] + ((h >> 8) & 0x0F);
   uint8_t h4 = biome_base[biome] + ((h >> 12) & 0x0F);
 
-  // バイオーム制約：砂漠は水面下にならない
+  // バイオーム制約：砂漠は水面下禁止
   if (biome == BIOME_DESERT) {
     h1 = max(h1, SEA_LEVEL + 1);
     h2 = max(h2, SEA_LEVEL + 1);
@@ -302,26 +302,26 @@ static uint8_t getHeightAtFromHash (int rx, int rz, short cx, short cz,
 }
 ```
 
-各バイオームには基準高さをシフトする`biome_base`があり、4つの隅は異なるシフト量でハッシュから抽出される。砂漠は海面以上の最小値を強制 -- 追加のバイオーム計算なしで水を回避する1行の制約。
+各バイオームは`biome_base`で基準高さをずらして、4隅はハッシュからずらし違いで抽出する。砂漠は海面以上を強制する。追加のバイオーム計算なしで水を避ける1行制約だ。
 
 ### 木とサボテン：確率的配置
 
-地表生成は同じチャンクハッシュを使ってどこに何を置くかを決める：
+表面生成は同じチャンクハッシュでどこに植えるか決める。
 
 ```c
-// worldgen.c (simplifié)
+// worldgen.c（簡略化）
 
 static void genFoliage (uint8_t *chunk_data, short cx, short cz,
                         uint32_t hash, uint8_t biome) {
   if (biome == BIOME_DESERT) {
-    // サボテン：チャンクあたり1候補、ハッシュが位置を決める
+    // サボテン：チャンクごとに1候補、ハッシュが位置を決める
     int tx = (hash >> 8) & 7;
     int tz = (hash >> 12) & 7;
     int ty = getHeightAt(cx * 8 + tx, cz * 8 + tz);
     if (chunk_data[ty * 64 + tz * 8 + tx] == B_sand)
       placeCactus(chunk_data, tx, ty + 1, tz);
   } else {
-    // 木：ハッシュが配置するかどうかと場所を決める
+    // 木：ハッシュが本数と位置を決める
     int tree_count = (hash & 3);  // チャンクあたり0-3本
     for (int i = 0; i < tree_count; i ++) {
       int tx = ((hash >> (4 + i * 4)) & 7);
@@ -333,30 +333,30 @@ static void genFoliage (uint8_t *chunk_data, short cx, short cz,
 }
 ```
 
-緑のバイオームではチャンクあたり0-3本の木、砂漠では最大1つのサボテン。チャンクハッシュが唯一のエントロピー源 -- チャンク内の位置は`& 7`、カウンターは`& 3`。すべて決定論的で、何も保存されない。
+緑バイオームはチャンクあたり木0から3本、砂漠はサボテン最大1本。チャンクハッシュが唯一のエントロピー源だ。チャンク内位置に`& 7`、本数に`& 3`。全部決定的で、何も保存しない。
 
-### generateChunk : 全部まとめる
+### generateChunk：全部組み立てる
 
-8×8×256ブロックの完全なチャンクを生成する関数：
+全部まとめて8かける8かける256ブロックの完全チャンクを作る関数だ。
 
 ```c
-// worldgen.c (simplifié)
+// worldgen.c（簡略化）
 
 void generateChunk (uint8_t *chunk, short cx, short cz) {
   uint32_t hash = getChunkHash(cx, cz);
   uint8_t biome = getChunkBiome(cx, cz);
 
-  // チャンクの各列に対して（8×8 = 64）
+  // チャンクの各列（8かける8で64）
   for (int x = 0; x < 8; x ++) {
     for (int z = 0; z < 8; z ++) {
-      // 絶対ワールド座標
+      // 世界の絶対座標
       int wx = cx * 8 + x;
       int wz = cz * 8 + z;
 
       // 列の高さ
       uint8_t height = getHeightAt(wx, wz);
 
-      // 下から上に列を埋める
+      // 下から上へ列を埋める
       for (int y = 0; y < height; y ++) {
         uint8_t block = getTerrainBlock(wx, y, wz);
         chunk[y * 64 + z * 8 + x] = block;
@@ -364,35 +364,33 @@ void generateChunk (uint8_t *chunk, short cx, short cz) {
     }
   }
 
-  // 地表要素の追加（木、サボテン）
+  // 表面要素（木、サボテン）を追加
   genFoliage(chunk, cx, cz, hash, biome);
 }
 ```
 
-これだけ。3重ループ：各列について、高さを求め、ブロックを埋め、次へ。出力は`uint8_t[16384]`（8×8×256）で完全なチャンクを表す。キャッシュなし、レイジーローディングなし、圧縮なし -- チャンクは生成されて直接クライアントに送られる。
+以上だ。3重ループで、各列の高さを見て、ブロックを埋めて、次へ進む。出力は完全チャンクを表す`uint8_t[16384]`（8かける8かける256）だ。チャンクは生成してクライアントに直接送る。キャッシュも遅延読み込みも圧縮もなしだ。
 
-## ストレージ：全部静的配列
+## ストレージ：どこまでも静的配列
 
-Bareironのメモリアーキテクチャは、組み込みCの真骨頂。mallocなし、ハッシュマップなし、リンクリストなし。
+Bareironのメモリアーキテクチャは組み込みCの真骨頂だ。固定サイズのグローバル配列だけで、mallocもハッシュマップもリンクリストもなしだ。
 
-全部が固定サイズのグローバル配列に入ってる。
-
-### ブロックの変更
+### ブロック変更
 
 ```c
-// globals.h, lignes 191-196
+// globals.h、191-196行目
 
 typedef struct {
-  short x;      // 2バイト -- 水平方向32000ブロックが上限
+  short x;      // 2バイト、水平32,000ブロックに制限
   short z;      // 2バイト
-  uint8_t y;    // 1バイト -- 垂直方向256ブロックが上限
-  uint8_t block; // 1バイト -- 256ブロックタイプが上限
+  uint8_t y;    // 1バイト、垂直256ブロックに制限
+  uint8_t block; // 1バイト、256種のブロックに制限
 } BlockChange;
 ```
 
-20,000エントリ、つまり約**25,000回の変更** -- チャンク1.5個分を完全に掘り返した量に相当。`block`フィールドが`0xFF`のときは空きエントリを示す。検索は線形スキャン：
+2万エントリで、約**25,000変更**だ。チャンク1個半を丸ごと掘り返す相当だ。`block`フィールドが`0xFF`なら空きエントリだ。検索は線形スキャンだ。
 
-![Layout mémoire du tableau de blocs -- 6 bytes par entrée](/images/bareiron/memory-layout.jpg)
+![ブロック配列のメモリレイアウト、1エントリ6バイト](/images/bareiron/memory-layout.jpg)
 
 ```c
 // procedures.c
@@ -408,8 +406,9 @@ uint8_t getBlockChange (short x, uint8_t y, short z) {
   }
   return 0xFF;
 }
+```
 
-変更の追加も検索と同じくらい直接的：
+追加も検索と同じくらい直接的だ。
 
 ```c
 static uint8_t changes_count = 0;
@@ -424,41 +423,41 @@ void addBlockChange (short x, short z, uint8_t y, uint8_t block) {
 }
 ```
 
-カウンタ、インデックス、書き込み。ソートなし、コンパクションなし、メモリ管理なし。配列がいっぱいになると新しい変更は無視される -- 地形は生成時の状態に戻る。
+カウンタとインデックスと書き込み1回だ。テーブルは積むだけだ。ソートも圧縮もメモリ管理もなし。テーブルがいっぱいになったら新しい変更は無視される。地形は生成状態に戻る。
 
-256ブロック上限に関する作者のコメント：「ちょっとくすんだ銅の階段とか、そういうのはまだ実装する気ないんだよね」。
+256ブロック制限についての作者コメントは「少し緑青を帯びた磨かれた銅の階段を実装する予定は当分ない」だ。
 
-### モブ：1匹8バイト
+### モブ：パイプ1本あたり8バイト
 
 ```c
-// globals.h, lignes 240-251 (pragma pack(push, 1) でパディングを削除)
+// globals.h、240-251行目（パディング排除のpragma pack(push, 1)）
 
 typedef struct {
-  uint8_t type;   // 25=ニワトリ, 28=ウシ, 95=ブタ, 106=ヒツジ, 145=ゾンビ
+  uint8_t type;   // 25=ニワトリ、28=ウシ、95=ブタ、106=ヒツジ、145=ゾンビ
   short x;
-  uint8_t y;      // health=0の場合、Yは削除前のタイマーになる
+  uint8_t y;      // health=0ならYは削除前タイマーになる
   short z;
-  uint8_t data;   // ビット0-4: HP, ビット5: ヒツジの刈り取り, ビット6-7: パニックタイマー
+  uint8_t data;   // ビット0-4:体力、ビット5:ヒツジの毛刈り、ビット6-7:パニックタイマー
 } MobData;
 ```
 
-8バイト。最大16スロット。アラインメントなし、パディングなし。`data`バイトは自作ビットフィールド：5ビットのHP、1ビットの刈り取り、2ビットのパニックタイマー。そしてモブが死ぬと、Yフィールドが削除前のタイマーになる。ビットレベルでメモリを再利用してる。
+8バイトだ。最大16体だ。アライメントもパディングも捨てる。`data`バイトは自家製ビットフィールドで、体力5ビット、毛刈り1ビット、パニックタイマー2ビットだ。モブが死んだらYフィールドは削除前タイマーに転用される。ビット単位のメモリ再利用だ。
 
-### プレイヤー：ギュウギュウ詰め
+### プレイヤー：きっちり詰める
 
-プレイヤーデータも`#pragma pack(push, 1)`を使用 -- 座標は`short` + `uint8_t`、インベントリは固定配列の`uint16_t` + `uint8_t`、そして`flags`フィールドには攻撃クールダウン、スポーン状態、スニーク、スプリント、食事、ロード、移動クールダウン、クラフトロックのすべてがエンコードされてる。全部個別のビットに詰め込まれてる。
+プレイヤーデータも`#pragma pack(push, 1)`だ。座標は`short`と`uint8_t`、インベントリは`uint16_t`と`uint8_t`の固定配列、`flags`フィールドは攻撃クールダウン、スポーン状態、スニーク、スプリント、食事、load、移動クールダウン、クラフトロックをエンコードする。全部個別ビットだ。
 
 ## メインループ：while(true)とノンブロッキング
 
-サーバー全体が1つのループ、1つのスレッド、イベントライブラリゼロで動く。
+サーバー全体はループ1つ、スレッド1つ、イベントライブラリゼロで回る。
 
 ```c
-// main.c, lignes 594-720
+// main.c、594-720行目
 
 while (true) {
-  task_yield();  // ESP32のウォッチドッグを落ち着かせる
+  task_yield();  // ESP32でウォッチドッグを休ませる
 
-  // 新しい接続を受け付ける（ノンブロッキング）
+  // 新規接続を受け付ける（ノンブロッキング）
   for (int i = 0; i < MAX_PLAYERS; i ++) {
     if (clients[i] != -1) continue;
     clients[i] = accept(server_fd, ...);
@@ -466,17 +465,17 @@ while (true) {
     break;
   }
 
-  // 時間が経過していたらサーバーティック
+  // 時間が来たらサーバーtick
   if (get_program_time() - last_tick_time > TIME_BETWEEN_TICKS) {
     handleServerTick(time_since_last_tick);
     last_tick_time = get_program_time();
   }
 
-  // ラウンドロビン：1クライアント、1イテレーションにつき1パケット
+  // ラウンドロビン：1イテレーションで1クライアント1パケット
   client_index = (client_index + 1) % MAX_PLAYERS;
   if (clients[client_index] == -1) continue;
 
-  // パケットヘッダを読む：length + ID
+  // パケットヘッダを読む：lengthとID
   recv(client_fd, &recv_buffer, 2, MSG_PEEK);
   int length = readVarInt(client_fd);
   int packet_id = readVarInt(client_fd);
@@ -484,104 +483,104 @@ while (true) {
 }
 ```
 
-ループ1イテレーションにつき1クライアントだけが処理され、1パケットだけが読まれる。ループ先頭の`task_yield()`でESP32上のFreeRTOSアイドルタスクが息継ぎできる -- これがないとウォッチドッグタイマーがチップをリセットする。
+ループ1周で処理するクライアントは1つだけで、読むパケットも1つだけだ。ループ頭の`task_yield()`でFreeRTOSのidleタスクを呼吸させる。これがないとウォッチドッグタイマーがチップをリセットする。
 
-パケットディスパッチは**400行**の巨大なswitch文：
+パケット振り分けは**400行**の巨大switchだ。
 
 ```c
-// main.c, lignes 68-497
+// main.c、68-497行目
 
 void handlePacket (int client_fd, int length, int packet_id, int state) {
   switch (packet_id) {
-    case 0x00:  // 状態に応じてHandshake / Status / Login
+    case 0x00:  // 状態に応じたHandshakeやStatusやLogin
     case 0x01:  // Status ping
     case 0x02:  // Plugin message
-    case 0x03:  // Login/configuration acknowledgment
+    case 0x03:  // Loginやconfiguration acknowledgment
     case 0x08:  // Chat
-    case 0x0B:  // Client status (respawn)
-    case 0x11:  // Click container (チェストを処理)
+    case 0x0B:  // Client status（リスポーン）
+    case 0x11:  // Click container（チェストを扱う）
     case 0x19:  // Interact entity
-    case 0x1D..0x20:  // Movement packets (最大のケース)
-    case 0x28:  // Player action (掘る/置く)
-    // ... 40以上のケース
+    case 0x1D..0x20:  // Movementパケット（一番大きいケース）
+    case 0x28:  // Player action（掘るや置く）
+    // ... 40超のケース
   }
 }
 ```
 
-動的ジャンプテーブルなし、vtableなし、マップなし。switchは静的ジャンプテーブルにコンパイルされる。組み込みに最適。
+switchは静的ジャンプテーブルにコンパイルされる。動的ジャンプテーブルやvtableやmapの代わりだ。組み込みには最適だ。
 
-`0x1D-0x20`のケースが最大 -- 位置更新、落下ダメージ、チャンク境界通過、モブスポーン、チャンク生成、そして空腹までもを処理する。全部1つの巨大なフォールスルーで。
+`0x1D-0x20`ケースが一番大きくて、位置更新、落下ダメージ、チャンク境界横断、モブスポーン、チャンク生成、それに空腹まで扱う。全部1つの大きなfall-throughだ。
 
-![Le code du serveur Bareiron -- 6800 lignes de C](/images/bareiron/code-shot.jpg)
+![Bareironサーバーのコード、6800行のC](/images/bareiron/code-shot.jpg)
 
-## サーバーティックとモブAI
+## サーバーtickとモブAI
 
-`handleServerTick`関数は50msごと（20 TPS）に呼び出される。メインループがプレイヤーを処理している間に、ワールドを管理する：
+`handleServerTick`関数は50msごと（20TPS）に呼ばれる。メインループがプレイヤーを扱う間、世界を動かす。
 
 ```c
-// main.c (simplifié)
+// main.c（簡略化）
 
 void handleServerTick (uint32_t delta) {
   // 各モブを更新
   for (int i = 0; i < MOB_COUNT; i ++) {
-    if (mobs[i].type == 0 || mobs[i].data == 0) continue;  // 死亡または空
+    if (mobs[i].type == 0 || mobs[i].data == 0) continue;  // 死亡か空き
 
     MobData *mob = &mobs[i];
     int px, pz;
     getNearestPlayer(mob->x, mob->z, &px, &pz);
 
     if (mob->type == MOB_ZOMBIE) {
-      // 敵対的：最も近いプレイヤーに向かって歩く
+      // 敵対：最寄りプレイヤーに向かって歩く
       if (px < mob->x) mob->x --;
       else if (px > mob->x) mob->x ++;
       if (pz < mob->z) mob->z --;
       else if (pz > mob->z) mob->z ++;
-      // 2ブロック以内で接触ダメージ
+      // 2ブロック接触ダメージ
       if (abs(px - mob->x) <= 2 && abs(pz - mob->z) <= 2)
         damagePlayer(getNearestPlayerId(mob->x, mob->z), 3);
     } else {
-      // 受動的：8方向ランダム
+      // 中立：8方向ランダム
       uint8_t dir = getMobDir(mob);
       mob->x += dir_lookup[dir][0];
       mob->z += dir_lookup[dir][1];
-      // 約40ティックごとに方向転換
+      // 約40tickごとに方向転換
       if (mob->data >> 6 < 1) setMobDir(mob, rand() & 7);
       mob->data = (mob->data & 0x3F) | ((mob->data - 0x40) & 0xC0);
     }
 
-    // モブ周辺のチャンクを起動
+    // モブ周辺チャンクを起こす
     setChunkGenerated(mob->x / 8, mob->z / 8);
   }
 }
 ```
 
-敵対モブのAIは座標比較。文字通り `if (px < x) x--`。パスファインディングなし、A*なし、障害物回避なし。ゾンビはプレイヤーに向かってXとZを独立に調整する -- 壁があれば壁の中も突き進む。
+敵対モブのAIは座標比較だ。文字通り`if (px < x) x--`だ。ゾンビはパスファインディングもA*も障害物回避も無視する。XとZを独立にプレイヤーへ調整する。壁があっても突っ込む。
 
-接触ダメージはハート3個/秒。p2r3は意図的に高く設定している。パスファインディングがない分、ゾンビは簡単にキットできるからだ。
+接触ダメージは3ハート毎秒だ。パスファインディングなしだとゾンビは簡単にkiteできるから、p2r3はわざと高めにした。
 
-防具の計算式はコンバットアップデート前のもの -- 可能な限りシンプル：
+防具式は戦闘アップデート前のもので、一番単純なやつだ。
 
 ```c
-// main.c (simplifié)
+// main.c（簡略化）
 
 static uint8_t applyArmor (uint8_t damage, uint16_t armor_value) {
-  // 1.9以前の計算式：線形減少
-  // 防具ポイント1につき4%軽減、最大80%
+  // 1.9前の式：線形軽減
+  // 防具1ごとに4%軽減、最大80%
   uint8_t reduction = (armor_value * 4);
   if (reduction > 80) reduction = 80;
   return damage * (100 - reduction) / 100;
 }
 ```
 
-フルダイアモンド = 80%軽減。ゾンビの3ハート攻撃が0.6ハートになる。p2r3がこの古い計算式を選んだのは、2回の演算で済むからだ -- しきい値なし、曲線なし、ただの線形パーセンテージ。
+フルダイヤは80%軽減だ。ゾンビの3ハート攻撃は0.6ハートになる。p2r3はこの古い式を選んだ。2演算で計算できるからだ。しきい値も曲線もなく、ただの線形パーセントだ。
 
-受動的モブ：ルックアップテーブルで8方向、約40ティックごとに進路変更。`data`フィールドは上位2ビットに現在の方向、残り6ビットに方向転換タイマーをエンコードしてる。
+中立モブは8方向のルックアップテーブルで、約40tickごとに進路変更する。`data`フィールドは進行方向を上位2ビットに、方向転換タイマーを残り6ビットにエンコードする。
 
-![Mobs dans Bareiron -- zombies, cochons, moutons](/images/bareiron/mobs.jpg)
+![Bareironのモブ、ゾンビとブタとヒツジ](/images/bareiron/mobs.jpg)
 
 ### モブのリスポーン
 
-モブはランダムティックでスポーンしない。サーバーティックが新しいチャンク境界に遭遇したときに出現する：
+モブはランダムtickで湧かない。サーバーtickが新しいチャンク境界に出会ったときに現れる。
 
 ```c
 if (player crossed chunk boundary) {
@@ -593,18 +592,18 @@ if (player crossed chunk boundary) {
 }
 ```
 
-地形と同じRNG、同じチャンクシード。モブスロットが空いていれば、スポーンは決定論的。
+地形と同じRNGで、同じチャンクシードだ。空きモブ枠があればスポーンは決定的だ。
 
-## クラフト：マトリックスなし、if/elseのみ
+## クラフト：行列なし、ifとelseだけ
 
 ```c
-// crafting.c, lignes 9-347 (simplifié)
+// crafting.c、9-347行目（簡略化）
 
 void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
-  // 0x80フラグが立っている場合、クラフトバッファはチェストに使用中
+  // 0x80フラグが立ってたらクラフトバッファはチェスト用
   if (player->flags & 0x80) { *count = 0; *item = 0; return; }
 
-  // スロットを数え、最初のアイテムを見つけ、同一性を確認
+  // スロット数え、最初のアイテム特定、同一性確認
   uint8_t filled = 0, first = 10, identical = true;
   for (int i = 0; i < 9; i ++) {
     if (player->craft_items[i]) {
@@ -616,7 +615,7 @@ void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
   }
 
   switch (filled) {
-    case 1:  /* 板材、インゴット... */
+    case 1:  /* 板材、インゴットなど */
     case 2:  /* 棒、ハサミ、松明 */
     case 3:  /* シャベル、剣、ハーフブロック */
     case 4:  /* 作業台、ブーツ */
@@ -628,44 +627,44 @@ void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
 }
 ```
 
-最初のチェック：`0x80`フラグが立っている場合、クラフトバッファはチェストポインタとして再利用されている。クラフト不可能。
+最初のチェック：`0x80`フラグが立ってたら、クラフトバッファはチェストポインタに転用中だ。クラフトは施錠される。
 
-次に、埋まったスロットを数え、最初のアイテムを記録し、同一性を確認する。これだけで、かまどは4つのチェックでマッチする：
+次に埋まったスロットを数えて、最初のアイテムをメモして、同一性を確認する。これだけでかまどは4チェックで当てられる。
 
 ```c
 if (count == 8 && first == cobblestone && all_identical && center_empty)
     return furnace;
 ```
 
-複雑な形状の場合、最初のアイテムのインデックスを使って相対位置をチェックする。すべてのレシピは同じマッチング関数を共有し、素材が結果を決定する。
+複雑な形は最初のアイテムのインデックスを使って相対位置をチェックする。レシピは同じマッチ関数を共有する。素材が結果を決める。
 
-![Interface de craft et coffre dans Bareiron](/images/bareiron/crafting.jpg)
+![Bareironのクラフトとチェスト画面](/images/bareiron/crafting.jpg)
 
-## チェスト：本当のハック
+## チェスト：本物のハック
 
-みんなが話題にしてるメモリハック、実際のコード：
+みんなが話すメモリハックを本物のコードで見よう。
 
 ```c
-// procedures.c, lignes 1262-1293
+// procedures.c、1262-1293行目
 
 if (target == B_chest) {
-  // ブロック配列からチェストエントリを探す
+  // ブロックテーブルでチェストエントリを探す
   uint8_t *storage_ptr = NULL;
   for (int i = 0; i < block_changes_count; i ++) {
     if (block_changes[i].block != B_chest) continue;
     if (block_changes[i].x != x || block_changes[i].y != y || block_changes[i].z != z)
       continue;
-    storage_ptr = (uint8_t *)(&block_changes[i + 1]);  // チェストブロックの次のエントリを指す
+    storage_ptr = (uint8_t *)(&block_changes[i + 1]);  // チェストブロックの次を指す
     break;
   }
   if (storage_ptr == NULL) return;
 
-  // 恐ろしいメモリハック!!
+  // ひどいメモリハック！！
   // ポインタをプレイヤーのクラフトアイテム配列にコピー
   memcpy(player->craft_items, &storage_ptr, sizeof(storage_ptr));
-  player->flags |= 0x80;  // クラフトをロック
+  player->flags |= 0x80;  // クラフトを施錠
 
-  // クライアントにチェストインターフェースを送信
+  // チェスト画面をクライアントに送る
   sc_openScreen(player->client_fd, 2, "Chest", 5);
   for (int i = 0; i < 27; i ++) {
     uint16_t item;
@@ -677,34 +676,34 @@ if (target == B_chest) {
 }
 ```
 
-そしてコード内のコメント：`// 恐ろしいメモリハック!!1!`
+コード内のコメントはこうだ。`// Terrible memory hack!!1!`
 
-まさにその通り。`block_changes[]`の次のエントリのメモリアドレスを取得し、それを`player->craft_items`（`uint16_t[9]`、つまり18バイト -- 32ビットポインタを保存するのに十分）にコピーし、その間誰もクラフトしようとしないようにフラグを立てる。
+まさにそれだ。`block_changes[]`の次エントリのメモリアドレスを取って、`player->craft_items`（`uint16_t[9]`で18バイト。32ビットポインタを格納できる）にコピーして、その間クラフトされないようフラグを立てる。
 
-チェストインベントリ内での各クリック：
+チェストインベントリのクリックごとにこうだ。
 
 ```c
-// packets.c, lignes 620-638
+// packets.c、620-638行目
 
 uint8_t *storage_ptr;
 memcpy(&storage_ptr, player->craft_items, sizeof(storage_ptr));
-// storage_ptrは今チェストデータを指している
+// storage_ptrはチェストデータを指す
 uint16_t *p_item = (uint16_t *)(storage_ptr + (slot - 41) * 3);
 uint8_t *p_count = storage_ptr + (slot - 41) * 3 + 2;
 ```
 
-クラフトバッファからポインタを復元し、オフセットでスロットにアクセスする。チェストデータは1スロットあたり3バイト（IDに2、数量に1）で、ブロック配列内に連続して格納されている。
+クラフトバッファからポインタを取り戻して、オフセットでスロットにアクセスする。チェストデータは1スロット3バイト（IDに2、個数に1）でブロックテーブル内にくっつけて格納される。
 
-![Données de coffre stockées dans le tableau de blocs -- un hack mémoire](/images/bareiron/chest-hack.jpg)
+![ブロックテーブルに格納されたチェストデータ、メモリハック](/images/bareiron/chest-hack.jpg)
 
-## 空腹：天才の5行
+## 空腹：5行の天才
 
 ```c
-// main.c, lignes 293-305
+// main.c、293-305行目
 
-// プレイヤーは移動中は毎秒約20個の移動パケットを送信し、
-// 停止中ははるかに少ない。これをアクティビティと相関させて
-// 無料で空腹をシミュレートする。
+// プレイヤーは動くと毎秒約20移動パケットを送る
+// 止まってるとずっと少ない。これと
+// 活動を結び付けてタダで空腹を再現する
 if (player->saturation == 0) {
   if (player->hunger > 0) player->hunger--;
   player->saturation = 200;
@@ -712,35 +711,36 @@ if (player->saturation == 0) {
 } else if (player->flags & 0x08) {  // スプリント中
   player->saturation -= 1;
 }
+}
 ```
 
-まさにこれだけ。5行。各移動パケットが満腹度を減らす。満腹度がゼロになると空腹度が減り、満腹度がリセットされる。スプリント（`0x08`フラグ）は消費を2倍にする。
+文字通りこれだけだ。5行だ。各移動パケットが満腹度を減らす。満腹度がゼロになったら空腹が減って満腹度リセットだ。スプリント（フラグ`0x08`）は消耗2倍だ。
 
-タイマーゼロ、割り当てメモリゼロ、専用計算ゼロ。すでに存在するパケットで減算されるカウンタ。
+タイマーゼロ、確保メモリゼロ、専用計算ゼロ。既存パケットを減らすカウンタだ。
 
 ### 落下ダメージ
 
-このプロジェクトで最もシンプルなダメージシステム：
+プロジェクト最単純のダメージ機構だ。
 
 ```c
-// プレイヤーが地面を離れた時点のYを保存
-// 再着地したときの差を計算
-ダメージ = 最後の接地Y - 現在Y
+// プレイヤーが地面を離れたらYを保存
+// 地面に戻ったら引き算
+degats = dernier_y_au_sol - y_actuel;
 ```
 
-引き算1つ。
+引き算1つだ。
 
-## ブロックの採掘と設置
+## 掘ると置く
 
-ブロックをクリックすると、パケット`0x28`（Player Action）がswitchに届く。ハンドラはその位置にあるブロックを特定し、削除し、アイテムをインベントリに入れる必要がある：
+ブロックをクリックすると`0x28`パケット（Player Action）がswitchに着弾する。ハンドラはその位置のブロック種を特定して、取り除いて、アイテムをインベントリに入れなきゃいけない。
 
 ```c
-// main.c, case 0x28 (simplifié)
+// main.c、case 0x28（簡略化）
 
 void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z) {
   switch (action) {
     case START_DESTROY_BLOCK: {
-      // クリックされた位置のブロックタイプを特定
+      // クリック位置のブロック種を特定
       uint8_t block = getBlockAt(x, y, z);
 
       if (block == B_chest) {
@@ -751,16 +751,16 @@ void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z)
       // block_changesに追加
       addBlockChange(x, z, y, 0);  // 0 = 空気
 
-      // プレイヤーにアイテムを付与（クライアントを信頼）
+      // アイテムをプレイヤーに渡す（クライアントを信頼）
       addItemToPlayer(client_fd, block_to_item(block), 1);
 
-      // クライアントに更新を送信
+      // クライアントに更新を送る
       sc_blockChange(client_fd, x, y, z, 0);
       sc_ackBlockChange(client_fd, x, y, z, 0);
       break;
     }
     case PLACE_BLOCK: {
-      // プレイヤーの手からブロックタイプを読む
+      // 手持ちからブロック種を読む
       uint16_t item = getHeldItem(client_fd);
       uint8_t block = item_to_block(item);
       addBlockChange(x, z, y, block);
@@ -772,31 +772,31 @@ void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z)
 }
 ```
 
-`getBlockAt`は地形生成とプレイヤーの変更を組み合わせる：
+`getBlockAt`は地形生成とプレイヤー変更を組み合わせる。
 
 ```c
 uint8_t getBlockAt (int x, uint8_t y, int z) {
-  // まずプレイヤーの変更を確認
+  // まずプレイヤー変更を確認
   uint8_t change = getBlockChange(x, y, z);
   if (change != 0xFF) return change;
 
-  // なければ生成された地形から読む
+  // なければ生成地形から読む
   return getTerrainBlock(x, y, z);
 }
 ```
 
-変更を優先、フォールバックは地形。議論の余地なし、キャッシュなし、オーバーヘッドなし。`getTerrainBlock`の内部は`getHeightAt` + stone/dirt/grass/coalのレイヤー。
+変更優先、なければ地形だ。議論ゼロ、キャッシュゼロ、オーバーヘッドゼロ。中の`getTerrainBlock`は`getHeightAt`とstoneやdirtやgrassやcoalの層だ。
 
-### 瞬間沸騰炉
+### 即時かまど
 
-一番面白いところ：かまどはエンティティとして存在しない。「調理」スロットに丸石を、「燃料」に石炭を入れると、結果が即座に表示される。タイマーなし、チャンクティッキングなし。適切なアイテムを入れると空になるただのインベントリスロットだ。
+一番笑えるのは、かまどがエンティティとして存在しないことだ。「焼く」枠に丸石を、「燃料」に石炭を置いたら、結果は即出る。タイマーもチャンクtickもなしだ。正しいアイテムを置いたら空くインベントリ枠でしかない。
 
-![Fourneau instantané -- pose les ingrédients, résultat immédiat](/images/bareiron/furnace.jpg)
+![即時かまど、材料を置けば結果は即時](/images/bareiron/furnace.jpg)
 
-## ESP32ループ：4KBのスタックで動くMCサーバー
+## ESP32ループ：4KBスタックのMCサーバー
 
 ```c
-// main.c, lignes 732-779
+// main.c、732-779行目
 
 #ifdef ESP_PLATFORM
 
@@ -806,7 +806,7 @@ void bareiron_main (void *pvParameters) {
 }
 
 static void wifi_event_handler (...) {
-  if (/* 接続完了 */) {
+  if (/* 接続済み */) {
     xTaskCreate(bareiron_main, "bareiron", 4096, NULL, 5, NULL);
   }
 }
@@ -814,53 +814,53 @@ static void wifi_event_handler (...) {
 void app_main () {
   esp_timer_early_init();
   wifi_init();
-  // 残りはイベントハンドラが処理
+  // 残りはイベントハンドラが管理
 }
 #endif
 ```
 
-サーバー全体が**4096バイトのスタック**を持つFreeRTOSタスクで動く。それだけ。メインのスレッドはWiFiを初期化して接続を待つだけ。接続されると、標準の`main()`を呼び出す`bareiron_main`を起動する。
+サーバー全体は**4096バイトのスタック**を持つFreeRTOSタスクで回る。以上だ。メインスレッドはWiFi初期化して接続待ちするだけだ。接続されたら標準`main()`を呼ぶ`bareiron_main`をspawnする。
 
-ESP32固有のコードはすべて`#ifdef ESP_PLATFORM`で保護されている。PC上では、すべて標準POSIXコードとしてコンパイルされる。
+ESP32固有コードは全部`#ifdef ESP_PLATFORM`で守られてる。PCでは全部標準POSIXコードとしてコンパイルされる。
 
-## 犠牲にされたもの
+## 犠牲になったもの
 
-これをすべて収めるために、存在しないバニラ機能がある：
+全部収めるために、バニラの機能で存在しないものがある。
 
-- **ネットワーク圧縮なし** -- zlibが高コストすぎる。サーバーはチャンクを高速生成するが、送信がボトルネックになる。
-- **ランダムティックなし** -- 木は骨粉を使うか使わないかで成長する。モブはチャンク境界でスポーンする。
-- **アイテムエンティティなし** -- 採掘したブロックは直接インベントリに入る。アニメーションは純粋に視覚的。
-- **インベントリ検証なし** -- クライアントを信頼。ダイアモンド64個？OK。1秒でチャンクを掘り尽くす？OK。信頼できる人同士で使う用。
-- **サーバー側ライティングなし** -- 松明は他のものより後に送信され、クライアントが計算する。
-- **進行性流体なし** -- 最終状態が即座に反映される。
+- **ネットワーク圧縮ゼロ**。zlibは高すぎる。サーバーはチャンクを速く作るけど、送る方がボトルネックだ。
+- **ランダムtickゼロ**。木は骨粉かそのまま育つ。モブはチャンク境界で湧く。
+- **アイテムエンティティゼロ**。掘ったブロックは直接インベントリ行きだ。アニメは純粋に見た目だけだ。
+- **インベントリ検証なし**。クライアントを信頼する。ダイヤ64個？OKだ。1秒でチャンク1個掘る？OKだ。信頼できる仲間で使う用だ。
+- **サーバー側光源ゼロ**。松明は全部の後に送られて、クライアントが計算する。
+- **漸進流体ゼロ**。即最終状態だ。
 
 ## 最終結果
 
-Ryzen 5 3600：チャンクあたり約0.5 ms。
-1ドルのESP32-C3：チャンクあたり約200 ms。プレイ可能。
+Ryzen 5 3600：チャンクあたり約0.5ms。
+1ドルのESP32-C3：チャンクあたり約200ms。遊べる。
 
-![Benchmark de génération de chunks -- Ryzen vs ESP32](/images/bareiron/performance.jpg)
+![チャンク生成ベンチマーク、Ryzen対ESP32](/images/bareiron/performance.jpg)
 
-3人以上のプレイヤー：重くなる。作者曰く、ピーク時の2b2t並み。
+3人以上プレイヤー：重くなる。作者いわくピーク時の2b2t並みだ。
 
-![Plusieurs joueurs connectés au même serveur Bareiron](/images/bareiron/multiplayer.jpg)
+![同じBareironサーバーに接続した複数プレイヤー](/images/bareiron/multiplayer.jpg)
 
 ## 哲学
 
-p2r3：「たった1ドルで0.5ワットしか消費しないこの小さなチップが、Minecraftほど先進的なものを動かせるというアイデアがただ好きなんだ。科学は『なぜ』じゃない、『なぜやらない』なんだよ」。
+p2r3いわく「0.5ワット消費の1ドル小チップがMinecraftみたいな高度なものを動かせるって発想が好きなんだ。科学は『なぜ』じゃなく『なぜやらないのか』だよ」。
 
-すべての行はトレードオフだ：
-- パーリンノイズ → 補間：見た目は劣るが、200倍高速、メモリゼロ
-- クラフトマトリックス → ハードコードされたマッチング：コードは汚いが、バイト数ゼロ
-- zlib → なし：回線が悪ければ死ぬが、プレイ可能
-- 検証 → 信頼：セキュリティゼロ、計算量ゼロ
+各行がトレードオフだ。
+- Perlinノイズから補間へ：見た目は劣る、200倍速い、メモリゼロ
+- クラフト行列からハードコード照合へ：汚いコード、ゼロバイト
+- zlibから無しへ：回線悪ければ死ぬ、でも遊べる
+- 検証から信頼へ：安全ゼロ、計算ゼロ
 
-欠けている機能のひとつひとつが、別の機能をハードウェアの制限内で存在させるためにある。
+欠けた各機能が、ハードの制限内で別の機能の存在を許してる。
 
-**覚えておくべき3つのポイント：**
+**覚えるべき3点：**
 
-1. **補間 + RNG** -- シードされた4点、無限の地形、保存量ゼロ、チャンク再生成不要のクエリ、200 msの生成。これがすべてを可能にした天才的な一手だ。
-2. **すべての機能にはコストが伴う** -- 圧縮なし、ランダムティックなし、検証なし。これは忘れたんじゃない。520 KBに収めるために必要なことだ。
-3. **汚いハックが一番賢い** -- memcpyによるブロック配列内のチェスト、移動パケットによる空腹、瞬間沸騰炉。きれいな解決策は高すぎた。
+1. **補間とRNG**。種付き4点、無限地形、保存ゼロ、チャンク再生成なしの問い合わせ、生成200ms。これが他全部を可能にした天才の一手だ。
+2. **各機能にコストがある**。圧縮もランダムtickも検証もないのは自覚的な選択だ。520KBに収めるのを許してる。
+3. **汚いハックが一番賢い**。memcpy経由でブロックテーブルに入れるチェスト、移動パケットで回す空腹、即時かまど。きれいな解法は高すぎたんだ。
 
-このプロジェクトに興味があれば、全部 [GitHubでGPLv3](https://github.com/p2r3/bareiron/) で公開されてる。めちゃくちゃ汚いC言語だ。そしてこんなに楽しくソースコードを読めたことは滅多にない xD
+興味が出たら、全部[GPLv3でGitHubにある](https://github.com/p2r3/bareiron/)。かなり汚いCだけど、ソース読んでこんなに楽しんだのは久しぶりだ。

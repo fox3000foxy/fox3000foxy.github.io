@@ -1,6 +1,6 @@
 ---
-title: "5 cara cerdik menggunakan GitHub Actions (dan apa yang diajarkan tentang secrets)"
-description: "CI runner disulap jadi VPS gratis, bot yang membuka PR-nya sendiri, publish npm tanpa secret sama sekali. Tur ke repo-repo saya untuk membuat katalog pola GitHub Actions yang melampaui \"lint + test + deploy\"."
+title: "5 cara cerdik memakai GitHub Actions (dan apa yang ia ajarkan soal secret)"
+description: "Runner CI yang diubah menjadi VPS gratis, bot yang membuka pull request-nya sendiri, publish npm tanpa secret sedikit pun. Tur repo saya untuk mendaftar pola GitHub Actions yang keluar dari sekadar lint + test + deploy."
 date: 2026-07-14
 tags:
   - github-actions
@@ -9,35 +9,35 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "vorowwp3S0OPLdbugKWm1DeohKLhshoyPr/aZW4TRfWoDl5VTP3TVpCTiUi41wooZWdBFzGcHK6tvuXpqp0aOA=="
+author_sig: "wU2vcN3MUXVury+cTrj4m13Bn9zgXfvdaGPT5/fNrBKmamRWYkWDpbRn0YDBAOcEZvIIiarEaOZWt6W5qLl2OQ=="
 ---
 
-# 5 cara cerdik menggunakan GitHub Actions
+# 5 cara cerdik memakai GitHub Actions
 
-Di atas kertas, GitHub Actions untuk CI/CD klasik: kamu push, dia lint, test, deploy. Saya sudah menulis tentang kasus khusus -- menggunakan git tag sebagai database untuk bot email (lihat artikel khusus). Tapi menggali repo-repo saya sendiri, ada cukup banyak pola berbeda sehingga layak dibuat artikel tersendiri, kurang fokus pada satu proyek, lebih seperti katalog teknik.
+GitHub Actions, di atas kertas, dibuat untuk CI/CD klasik : kamu push, ia lint, ia test, ia deploy. Saya sudah menulis soal kasus khusus (memakai tag git sebagai basis data untuk bot email, lihat artikel khusus). Tapi dengan menggali repo saya sendiri, ada cukup banyak pola berbeda sampai layak jadi artikel tersendiri, kurang terpusat pada satu proyek, lebih katalog teknik.
 
-Lima hal, dari yang paling klasik sampai paling nyeleneh.
+Lima kegunaan, dari paling klasik hingga paling bengkok.
 
-## 1. Git tag sebagai state persisten antar run
+## 1. Tag git sebagai keadaan persisten antar run
 
-Rekap cepat, detail lengkapnya di artikel `email-autoreply`. GitHub Actions didesain stateless -- setiap run mulai dari mesin kosong. Akal-akalannya: simpan sebuah nilai (ID, timestamp, state kecil apa pun) di git tag khusus, jangan pernah di branch.
+Pengingat cepat, detail lengkapnya ada di artikel `email-autoreply`. GitHub Actions stateless secara desain : setiap run berangkat dari mesin perawan. Akal-akalannya : menyimpan nilai (ID, timestamp, keadaan kecil apa pun) dalam tag git khusus, tidak pernah di branch.
 
 ```bash
-# baca state
+# membaca keadaan
 git show refs/tags/lastid:data/lastId > data/lastId
 
-# tulis state (orphan branch, commit tunggal, force-push tag)
+# menulis keadaan (branch yatim, satu commit, force-push tag)
 git switch --orphan lastid-tmp
 git commit -m "lastId snapshot"
 git tag -f lastid
 git push --force origin lastid
 ```
 
-Poin kuncinya: orphan branch agar tidak pernah menumpuk history, dan forced tag alih-alih branch agar tidak mengotori daftar branch repo.
+Poin kuncinya : branch yatim supaya tidak pernah menumpuk riwayat, dan tag yang dipaksa alih-alih branch supaya tidak mengotori daftar branch repo.
 
-## 2. Git tag sebagai cache build yang sudah dikompilasi
+## 2. Tag git sebagai cache build pra-kompilasi
 
-Satu keluarga ide, beda penggunaan: alih-alih menyimpan state aplikasi, simpan **artefak build**. Job `build` mengompilasi kode sekali (saat push ke `master`), lalu push `dist/` + `node_modules/` ke tag `runtime`. Job `cron` checkout langsung tag itu daripada menjalankan `bun install && bun run build` setiap eksekusi:
+Keluarga ide yang sama, kegunaan lain : alih-alih menyimpan keadaan aplikatif, kita menyimpan **artefak build**. Job `build` mengompilasi kode sekali (saat push ke `master`), lalu mendorong `dist/` + `node_modules/` ke tag `runtime`. Job `cron`, checkout langsung tag ini alih-alih menjalankan `bun install && bun run build` di setiap eksekusi :
 
 ```yaml
 - name: Checkout runtime snapshot
@@ -45,15 +45,15 @@ Satu keluarga ide, beda penggunaan: alih-alih menyimpan state aplikasi, simpan *
   with:
     ref: refs/tags/runtime
     fetch-depth: 1
-# tidak ada install, tidak ada build -- kode sudah siap
+# tanpa install, tanpa build -- kode sudah siap
 - run: node dist/index.js --action
 ```
 
-Ini mengubah waktu run dari ~20 detik ke ~10 detik. Pada cron yang sering jalan, ini berarti. `actions/cache` melakukan pekerjaan serupa (cache dependensi), tapi git tag lebih langsung ketika kamu ingin membekukan artefak berversi secara utuh dan menunjuknya secara eksplisit -- bukan cuma mempercepat `npm install`.
+Ini mengubah run dari ~20 detik menjadi ~10 detik. Pada cron yang sering berjalan, itu penting. `actions/cache` melakukan pekerjaan serupa (meng cache dependensi), tapi tag git lebih langsung ketika kamu ingin membekukan artefak berversi dan menunjuknya eksplisit, alih-alih sekadar mempercepat `npm install`.
 
-## 3. Satu required check yang menggabungkan banyak job
+## 3. Satu cek wajib yang mengagregasi banyak job
 
-Pola kecil yang kelihatannya sepele tapi mengubah hidup dalam konfigurasi branch protection. Di `konosuba-rpg`, CI punya tiga job independen (`typecheck`, `lint`, `tests`) yang berjalan paralel -- dan job keempat, `test-battery`, yang tidak melakukan apa pun selain bergantung pada tiga job pertama:
+Pola kecil yang tampak sepele tapi mengubah hidup dalam konfigurasi branch terproteksi. Di `konosuba-rpg`, CI punya tiga job independen (`typecheck`, `lint`, `tests`) yang berjalan paralel, dan job keempat, `test-battery`, yang tidak melakukan apa pun selain bergantung pada tiga yang pertama :
 
 ```yaml
 test-battery:
@@ -66,13 +66,13 @@ test-battery:
     - run: echo "Typecheck, lint and tests succeeded."
 ```
 
-Tanpa job fasad ini, mengonfigurasi branch yang dilindungi akan mengharuskan mencentang tiga check wajib terpisah -- dan memperbarui daftar itu setiap kali job ditambahkan atau diganti nama. Dengan `test-battery`, cukup satu nama untuk dicentang di pengaturan repo, yang tetap stabil meskipun detail internal berubah.
+Tanpa job fasad ini, mengonfigurasi branch terproteksi menuntut mencentang tiga cek wajib terpisah, dan memperbarui daftar itu setiap kali job ditambahkan atau diganti nama. Dengan `test-battery`, satu nama yang dicentang di pengaturan repo, yang tetap stabil meski detail internal berubah.
 
 ## 4. Mengubah runner gratis menjadi VPS sementara
 
-Ini yang paling nyeleneh, dan jelas favorit saya: `repo-to-vps` sepenuhnya membajak penggunaan yang dimaksud dari runner GitHub Actions untuk menjadikannya mesin Linux yang bisa diakses via SSH, gratis, hingga 6 jam (durasi maksimum job).
+Yang ini paling bengkok dari semuanya, dan jelas favorit saya : `repo-to-vps` mengalihkan sepenuhnya kegunaan yang dimaksud dari runner GitHub Actions untuk menjadikannya mesin Linux yang bisa diakses SSH, gratis, hingga 6 jam (batas maks satu job).
 
-Prinsipnya: sebuah job yang hampir tidak melakukan apa pun selain menjalankan tmate:
+Prinsipnya : job yang hampir tidak melakukan apa pun selain menjalankan [tmate](https://tmate.io/) (fork tmux yang mengekspos sesi terminal yang bisa dibagikan lewat SSH atau peramban) :
 
 ```yaml
 name: debug-runner
@@ -95,44 +95,44 @@ jobs:
       - run: bash .github/scripts/start-tmate.sh
 ```
 
-Masalah sebenarnya adalah filesystem runner GitHub Actions bersifat **sekali pakai** -- begitu job selesai, semuanya hilang. Sesi SSH yang berlangsung berjam-jam tidak berguna jika semua yang kamu lakukan menguap pada run berikutnya. Solusinya: branch git yang berfungsi sebagai snapshot langsung dari filesystem, disinkronkan terus-menerus.
+Teka-teki sesungguhnya adalah filesystem runner GitHub Actions itu **sekali pakai** : begitu job selesai, semuanya hilang. Sesi SSH yang bertahan berjam-jam tidak ada gunanya kalau semua yang kamu lakukan di sana menguap di run berikutnya. Solusinya : branch git yang berfungsi sebagai snapshot live filesystem, disinkronkan terus-menerus.
 
-Script `start-tmate.sh` melakukan, secara berurutan:
+Skrip `start-tmate.sh` melakukan, berurutan :
 
-1. **Memulihkan** filesystem dari branch `filesystem` khusus saat job dimulai (`git reset --hard` ke branch itu).
-2. **Mengawasi** perubahan file secara terus-menerus dengan `inotifywait`, dan **commit + push segera** begitu ada file yang berubah:
+1. **Memulihkan** filesystem dari branch khusus `filesystem` saat job dimulai (`git reset --hard` ke sana).
+2. **Mengawasi** perubahan berkas dengan `inotifywait` terus-menerus, dan **commit + push segera** begitu berkas bergerak :
 
 ```bash
 autosave() {
   while inotifywait -qq -r -e modify,create,delete,move \
     --exclude '(^|/)(\.git|\.apt-cache|\.cache|host\.conf|tmate\.sock)(/|$)' .; do
     commit_and_push
-    sleep 1
+    sleep 1   # debounce
   done
 }
 ```
 
-3. Setiap penyimpanan **mengamend** commit sebelumnya alih-alih membuat yang baru (`git commit --amend --no-edit`), jadi branch `filesystem` selalu berada di satu commit -- tidak ada penumpukan ribuan snapshot.
-4. Loop `while true` memulai ulang tmate secara otomatis jika sesi mati, dengan `remain-on-exit on` agar terminal tetap bisa dijangkau bahkan setelah `exit`.
-5. URL SSH yang dihasilkan tmate ditulis ke file `host.conf`, di-commit ke branch `filesystem` -- bisa diambil via GitHub API (`gh api .../contents/host.conf`) tanpa pernah punya akses langsung ke log job.
-6. Rutin `periodic_save` berjalan setiap 5 detik di latar belakang, kalau-kalau `inotifywait` melewatkan event.
+3. Setiap simpanan **meng amend** commit sebelumnya alih-alih membuat yang baru (`git commit --amend --no-edit`), jadi branch `filesystem` selalu tetap satu commit, yang mencegah akumulasi ribuan snapshot.
+4. Loop `while true` menyalakan ulang `tmate` otomatis kalau sesi mati, dengan `remain-on-exit on` supaya terminal tetap bisa dijangkau bahkan setelah `exit`.
+5. URL SSH yang dibangkitkan tmate ditulis dalam berkas `host.conf`, yang di commit ke branch `filesystem`, jadi bisa diambil lewat API GitHub (`gh api .../contents/host.conf`) tanpa pernah punya akses ke log job secara langsung.
+6. Rutin `periodic_save` berjalan setiap 5 detik di latar belakang, seandainya `inotifywait` melewatkan event.
 
-Hasilnya: shell Linux lengkap, bisa diakses dari mana saja, dengan filesystem yang bertahan antar sesi -- padahal infrastruktur di bawahnya (runner GitHub Actions) sama sekali tidak dirancang untuk ini. Satu-satunya batasan nyata adalah timeout 6 jam per job -- setelah itu harus memulai ulang workflow.
+Hasilnya : shell Linux lengkap, bisa diakses dari mana saja, dengan filesystem yang bertahan antar sesi, padahal infrastruktur di bawahnya (runner GitHub Actions) sama sekali tidak dirancang untuk itu. Satu-satunya batas nyata adalah timeout 6 jam per job : setelah itu workflow harus dijalankan ulang.
 
-## 5. Bot yang membuka PR-nya sendiri
+## 5. Bot yang membuka pull request-nya sendiri
 
-Di `konosuba-rpg`, push ke branch `dev` memicu job yang memeriksa apakah sudah ada PR terbuka ke `main` -- dan membuatnya secara otomatis jika belum, via `actions/github-script` dan GitHub REST API:
+Di `konosuba-rpg`, push ke branch `dev` memicu job yang memeriksa apakah sudah ada pull request terbuka ke `main`, dan otomatis membuatnya kalau belum, lewat `actions/github-script` dan API REST GitHub :
 
 ```js
 const { data: comparison } = await github.rest.repos.compareCommits({
   owner, repo, base: 'main', head: 'dev',
 });
-if (comparison.ahead_by === 0) return;
+if (comparison.ahead_by === 0) return; // tidak ada yang diusulkan
 
 const { data: existing } = await github.rest.pulls.list({
   owner, repo, state: 'open', head: `${owner}:dev`, base: 'main',
 });
-if (existing.length > 0) return;
+if (existing.length > 0) return; // sudah ada PR terbuka
 
 await github.rest.pulls.create({
   owner, repo, head: 'dev', base: 'main',
@@ -140,7 +140,7 @@ await github.rest.pulls.create({
 });
 ```
 
-Detail yang penting di sini adalah token yang digunakan. Workflow ini **tidak** menggunakan `GITHUB_TOKEN` otomatis -- ia memerlukan secret `AUTO_PR_TOKEN` terpisah, dan menolak melanjutkan jika tidak ada:
+Detail yang penting di sini adalah token yang dipakai. Workflow ini **tidak** memakai `GITHUB_TOKEN` otomatis : ia menuntut secret terpisah `AUTO_PR_TOKEN`, dan menolak lanjut kalau tidak ada :
 
 ```yaml
 - name: Validate pull request token
@@ -153,13 +153,13 @@ Detail yang penting di sini adalah token yang digunakan. Workflow ini **tidak** 
     fi
 ```
 
-## 6. Publish ke npm tanpa secret sama sekali
+## 6. Menerbitkan ke npm tanpa secret apa pun
 
-Yang paling tenang dari kelimanya, tapi mungkin paling penting untuk masa depan: workflow `publish.yml` dari `typescript-virtual-container` **tidak mengandung secret npm apa pun**. Tidak ada `NPM_TOKEN`, tidak ada `NODE_AUTH_TOKEN`. Hanya ini:
+Yang paling diam dari kelimanya, tapi mungkin paling penting untuk masa depan : workflow `publish.yml` dari `typescript-virtual-container` tidak berisi **secret npm apa pun**. Tanpa `NPM_TOKEN`, tanpa `NODE_AUTH_TOKEN`. Hanya ini :
 
 ```yaml
 permissions:
-  id-token: write
+  id-token: write  # Required for OIDC
   contents: read
 jobs:
   publish:
@@ -170,15 +170,15 @@ jobs:
       - run: npm publish
 ```
 
-`npm publish` tetap berfungsi, karena registry npm sekarang mendukung **trusted publishing** via OIDC: workflow membuktikan identitasnya langsung ke registry (repo persis + workflow persis, dikonfigurasi di sisi npmjs.org), tanpa ada token statis yang transit atau disimpan di mana pun. Nol secret yang bisa bocor, nol token yang harus dirotasi setiap enam bulan.
+`npm publish` tetap berhasil, karena registri npm kini mendukung **trusted publishing** lewat OIDC : workflow membuktikan identitasnya langsung ke registri (repo + workflow yang persis, dikonfigurasi di sisi npmjs.org), tanpa token statis apa pun transit maupun disimpan di mana pun. Nol secret yang bisa bocor, nol token yang diputar setiap enam bulan.
 
 ---
 
-## GitHub secrets, secara mendalam
+## Secret GitHub, secara mendalam
 
-Kelima pola ini semuanya menyentuh, dengan satu atau lain cara, persoalan secrets. Beberapa prinsip yang berulang di semua workflow saya:
+Kelima pola ini semuanya menyentuh soal secret, dengan satu atau lain cara. Beberapa prinsip yang kembali di semua workflow saya :
 
-**Sebuah secret tidak selalu berupa string sederhana.** Di `email-autoreply`, `ACCOUNTS_JSON` berisi seluruh JSON terminifikasi dari konfigurasi multi-akun -- bukan cuma API key, struktur data lengkap, diinjeksi begitu saja ke file saat runtime:
+**Secret belum tentu string sederhana.** Di `email-autoreply`, `ACCOUNTS_JSON` berisi JSON minifikasi utuh dari config multi-akun : struktur data lengkap alih-alih sekadar kunci API, disuntikkan apa adanya ke berkas saat runtime :
 
 ```yaml
 env:
@@ -186,27 +186,28 @@ env:
 run: printf "%s" "$ACCOUNTS_JSON" > data/accounts.json
 ```
 
-Ini menghindari harus commit file konfigurasi, bahkan yang terenkripsi, dan bisa diperbarui dengan satu klik di pengaturan repo tanpa menyentuh kode.
+Ini menghindari keharusan meng commit berkas config, bahkan yang terenkripsi, dan diperbarui dalam sekali klik di pengaturan repo tanpa menyentuh kode.
 
-**`GITHUB_TOKEN` punya batasan yang tepat, dan itu disengaja.** Token otomatis yang disuntikkan GitHub ke setiap run itu kuat, tapi disegel pada titik-titik tertentu: secara default ia tidak bisa memicu workflow lain, dan tergantung konfigurasi repo bisa diblokir oleh aturan branch protection. Itulah kenapa `create-pull-request.yml` memerlukan PAT terpisah (`AUTO_PR_TOKEN`) -- token dari akun sungguhan (atau GitHub App), dengan hak eksplisit `contents:write` + `pull-requests:write`, terpisah dari token sementara job.
+**`GITHUB_TOKEN` punya batas tepat, dan itu disengaja.** Token otomatis yang disuntikkan GitHub ke setiap run itu kuat, tapi tersegel pada poin tertentu : secara bawaan, ia tidak bisa memicu workflow lain, dan tergantung konfigurasi repo ia bisa diblokir oleh aturan proteksi branch. Tepat karena itulah `create-pull-request.yml` menuntut PAT terpisah (`AUTO_PR_TOKEN`) : token yang berasal dari akun sungguhan (atau GitHub App), dengan hak eksplisit `contents:write` + `pull-requests:write`, berbeda dari token fana job.
 
-**Izin di-scope per job, bukan global.** Setiap workflow yang saya daftarkan di sini mendeklarasikan blok `permissions:` minimal dan dikomentari:
+**Izin di scoping per job, bukan global.** Setiap workflow yang saya daftarkan di sini mendeklarasikan blok `permissions:` yang minimal dan dikomentari :
 
 ```yaml
 permissions:
   contents: read
   actions: read
   checks: write
+  # Only allow writing checks, everything else is read-only
 ```
 
-`GITHUB_TOKEN` bawaan secara historis punya hak yang cukup luas di repo publik; membatasinya secara eksplisit ke apa yang benar-benar dibutuhkan job membatasi kerusakan jika action pihak ketiga dalam rantai ternyata terkompromi.
+`GITHUB_TOKEN` bawaan secara historis punya hak cukup luas di repo publik ; membatasinya eksplisit pada apa yang benar-benar dibutuhkan job membatasi kerusakan kalau action pihak ketiga dalam rantai (`uses: seseorang/action@versi`) ternyata dikompromikan.
 
-**Secret terbaik adalah yang tidak ada.** Pola OIDC dari `typescript-virtual-container` adalah versi paling lengkap dari ide ini: alih-alih mengelola rotasi, kedaluwarsa, dan risiko kebocoran `NPM_TOKEN`, workflow membuktikan identitasnya secara kriptografis (repo persis ini, workflow persis ini) langsung ke layanan pihak ketiga. Logika yang sama tersedia untuk AWS, Docker Hub, PyPI -- semakin banyak registry dan cloud yang mendukung OIDC dari GitHub Actions.
+**Secret terbaik adalah yang tidak ada.** Pola OIDC dari `typescript-virtual-container` adalah versi paling matang dari ide ini : alih-alih mengelola rotasi, kedaluwarsa, dan risiko bocornya `NPM_TOKEN`, workflow membuktikan kriptografis identitasnya (repo tepat ini, workflow tepat ini) langsung ke layanan pihak ketiga. Logika yang sama tersedia untuk AWS, Docker Hub, PyPI : makin banyak registri dan cloud mendukung OIDC dari GitHub Actions.
 
 ---
 
 **3 poin kunci**
 
-1. Sebuah git tag (orphan, force-push) bisa berfungsi sebagai database minimalis atau cache build yang sudah dikompilasi -- dua penggunaan berbeda dari mekanisme yang sama.
-2. Runner GitHub Actions gratis bisa menjadi shell SSH persisten jika kamu menerima untuk terus menyinkronkan filesystem-nya ke branch git, dengan autosave via `inotifywait` dan satu commit yang diamend.
-3. `GITHUB_TOKEN` bawaan sengaja dibatasi -- membuat PR lintas branch atau publish tanpa secret memerlukan PAT khusus, atau beralih ke OIDC trusted publishing.
+1. Tag git (yatim, di force-push) bisa berfungsi sebagai basis data minimalis atau cache build pra-kompilasi : dua kegunaan berbeda dari mekanisme yang sama.
+2. Runner GitHub Actions gratis bisa menjadi shell SSH persisten kalau kita menerima menyinkronkan filesystemnya terus-menerus ke branch git, dengan autosave lewat `inotifywait` dan satu commit yang di amend.
+3. `GITHUB_TOKEN` bawaan sengaja dibatasi : membuat PR antar-branch atau menerbitkan tanpa secret menuntut PAT khusus atau beralih ke trusted publishing OIDC.

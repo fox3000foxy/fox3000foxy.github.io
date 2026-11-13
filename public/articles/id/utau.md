@@ -1,167 +1,167 @@
 ---
-title: "UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis"
-description: Bagaimana UTAU, perangkat lunak gratis berbasis VB6 dari tahun 2008, memungkinkan siapa saja membuat suara nyanyian melalui sintesis konkatenatif -- dan mengapa hal itu masih berarti hingga hari ini.
+title: "UTAU : bagaimana perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis"
+description: Bagaimana UTAU, perangkat lunak gratis VB6 dari 2008, memungkinkan semua orang membuat suara bernyanyi lewat sintesis konkatentif -- dan kenapa itu masih penting hari ini.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - utau
   - vocaloid
   - music
   - synthesis
   - vb6
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "guRz6H29YGBCtNMa5FzwD7Ru4hCmZk+hehgN/psEoLQCOxPl4qxpC9jSywlHpe6rd8HbZonXrXxLcdue90ZiBg=="
+author_sig: "6GZSSDMtYL9/SOA2dX9vvniY2fkPhB9pmI69ef6zt4jwkdvu8rhcv9x4D+M/nvo9LmEmd+/HpIV60DJrlCnQBA=="
 ---
 
-## UTAU : bagaimana sebuah perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis
+## UTAU : bagaimana perangkat lunak Visual Basic 6 mendemokratisasi suara sintetis
 
-Aku sudah sempat menyinggungnya di halaman utamaku: aku suka UTAU. Inilah alasannya.
+Saya sempat menyinggungnya di halaman utama saya : saya suka UTAU. Inilah kenapanya.
 
-Pada tahun 2008, jika kamu ingin membuat suara sintetis bernyanyi, cuma ada satu opsi: VOCALOID. Perangkat lunak dari Yamaha. Mahal, proprietary, dengan suara resmi yang tidak bisa kamu buat sendiri.
+Pada 2008, kalau kamu ingin membuat suara sintetis bernyanyi, kamu punya satu opsi : VOCALOID. Perangkat lunak Yamaha. Mahal, proprietari, dengan suara resmi yang tidak bisa kamu buat sendiri.
 
-Lalu ada seorang pria Jepang, Ameya/Ayame, yang merilis sesuatu buatannya sendiri. Sebuah perangkat lunak yang dikode dalam **Visual Basic 6**. Gratis. Yang memungkinkanmu membuat suaramu sendiri dengan... file WAV yang kamu rekam sendiri.
+Lalu ada orang Jepang, Ameya/Ayame, yang merilis program buatannya sendiri. Perangkat lunak yang dikode dalam **Visual Basic 6**. Gratis. Yang membiarkanmu membuat suaramu sendiri dengan... berkas WAV yang kamu rekam sendiri.
 
-Benda itu bernama **UTAU** (歌う, "bernyanyi" dalam bahasa Jepang). Dan untuk zamannya, itu adalah sihir.
+Perangkat lunak ini bernama **UTAU** (歌う, "bernyanyi" dalam bahasa Jepang). Dan untuk zamannya, itu sihir.
 
-Aku selalu merasa perangkat lunak ini mempesona. Bukan karena ia bersih secara teknis (spoiler: sebenarnya ya, butuh pemikiran sungguhan untuk membuat benda ini--pokoknya berantakan, aku menangisi ayam ini), tapi karena ia melakukan sesuatu yang tidak dilakukan orang lain: ia memberikan sintesis suara kepada masyarakat umum. Kayak kamu, aku, siapa pun yang punya mikrofon.
+Saya selalu menganggapnya menarik karena ide awalnya lebih daripada kerapian teknisnya (prinsip enkodenya tetap benar-benar cerdik, meski implementasinya bikin mata perih) : ia membuka sintesis vokal ke publik luas. Kamu, saya, siapa pun yang punya mikrofon.
 
-Biarkan aku jelaskan kenapa ini keren.
+Biar saya jelaskan kenapa itu jenius.
 
 ---
 
 ## Pertama, kenapa sintesis nyanyian itu sulit
 
-Suara bernyanyi itu bukan sekadar not. Ada konsonan yang menyerang, vokal yang bertahan, napas, transisi di antaranya. "Sa" dari "salam" itu adalah "s" yang mendesis lalu meluncur ke "a" yang terbuka, dan pergeseran itulah yang membuatnya terdengar manusiawi atau tidak.
+Suara bernyanyi bukan nada. Ada konsonan yang menyerang, vokal yang bertahan, napas, transisi antara keduanya. "Sa" dari "salut" adalah "s" berdesis yang meluncur ke "a" terbuka, dan justru luncuran inilah yang terdengar manusiawi atau tidak.
 
-Sekarang kita menyelesaikannya dengan deep learning: kamu melatih model pada jam-jam nyanyian dan ia menghasilkan suara (Synthesizer V, DiffSinger). Tapi itu 2020+. Di tahun 2008, nggak ada.
+Hari ini kita menyelesaikannya dengan deep learning : kamu melatih model pada berjam-jam nyanyian dan ia membangkitkan suara (Synthesizer V, DiffSinger). Tapi itu 2020+. Pada 2008, tidak ada apa-apa.
 
-UTAU menggunakan metode lama, lebih tua dan lebih cerdik: **sintesis konkatenatif**.
-
----
-
-## Sintesis konkatenatif: copy-paste potongan suara
-
-Idenya sederhana banget: kamu merekam potongan-potongan kecil suara lalu menempelkannya bersama untuk membentuk kata. "salam" = sampel "sa" + "lam", dirangkai. Sebuah puzzle suara yang dijalankan oleh partitur.
-
-Ini prinsip yang sama dengan YouTube Poop di mana orang memotong ulang kata-kata karakter untuk membuatnya mengatakan apa saja -- cuma di sini lebih rapi dan otomatis.
-
-Dan UTAU benar-benar berasal dari situ. Sebelumnya ada **"Jinriki Vocaloid"** (人力ボーカロイド, "Vocaloid manual"): orang-orang memotong secara manual trek vokal, mengekstrak fonem, mengubah pitch, dan merakit ulang semuanya di editor audio untuk meniru suara VOCALOID. Manual. Bayangkan repotnya.
-
-Ameya melihat kerepotan ini dan mengkode alat untuk mengotomatiskannya. Awalnya UTAU hanyalah itu: sebuah asisten untuk Vocaloid manual.
+UTAU memakai metode sebelumnya, lebih tua dan lebih cerdik : **sintesis konkatentif**.
 
 ---
 
-## Kenapa ini revolusioner: KAMU yang menciptakan suara
+## Sintesis konkatentif : salin-tempel potongan suara
 
-Ini dia hal yang mengubah segalanya.
+Idenya bodoh sederhananya : kamu merekam potongan suara kecil dan menempelkannya bersama untuk membentuk kata. "salut" = sampel "sa" + "lu" + "to", dirangkai. Puzzle suara yang digerakkan partitur.
 
-VOCALOID, kamu membeli suara. Miku, Luka, dll. Dibuat oleh profesional, dijual oleh Yamaha. Nggak ada cara untuk membuatnya sendiri. UTAU, **siapa pun bisa merekam suaranya dan menjadikannya instrumen bernyanyi**.
+Ini prinsip YouTube Poop di mana kata-kata karakter dipotong ulang agar ia mengatakan apa saja -- kecuali di sini rapi dan otomatis.
 
-Mode CV (paling sederhana) adalah: kamu merekam ~100 suku kata dasar bahasa Jepang ("a", "ka", "sa", "ta"...), mengatur titik potong, dan jadilah voicebank-mu. Beberapa jam kerja.
+Dan UTAU secara harfiah berasal dari sana. Sebelumnya ada **"Jinriki Vocaloid"** (人力ボーカロイド, "Vocaloid manual") : orang memotong manual trek vokal, mengekstrak fonem, me repitch, dan merakit ulang semuanya dalam editor audio untuk meniru suara VOCALOID. Manual. Kamu bayangkan kerjaannya.
 
-Hasilnya: ekosistemnya meledak. Ribuan voicebank diciptakan oleh komunitas -- suara fans, teman, karakter buatan. Seluruh alam semesta penyanyi virtual, gratis. Dan perangkat lunaknya sudah disertai **Defoko** (Utane Uta), suara default yang dihasilkan melalui mesin TTS AquesTalk, jadi kamu bisa mulai bahkan tanpa mikrofon.
+Ameya melihat kerepotan itu dan mengoding alat untuk mengotomasinya. Awalnya UTAU hanya itu : asisten untuk Vocaloid manual.
 
 ---
 
-## oto.ini: jantung sistem
+## Kenapa revolusioner : KAMU menciptakan suara
 
-Bagaimana UTAU tahu di mana memotong dan menempel suara? Melalui file konfigurasi per voicebank: **`oto.ini`**. Untuk setiap WAV, ia menentukan titik potong (dalam milidetik):
+Inilah yang mengubah segalanya.
 
-- **Offset** → hening yang harus dibuang di awal
-- **Preutterance** → titik di mana konsonan beralih ke vokal (batas "s"→"a" dalam "sa")
-- **Overlap** → seberapa banyak not sebelumnya tumpang tindih dengan yang ini
-- **Fixed region** → bagian yang TIDAK boleh diregangkan pada not panjang (biasanya konsonan)
-- **Cutoff** → di mana memotong bagian akhir
+VOCALOID, kamu membeli suara. Miku, Luka, dll. Dibuat oleh profesional, dijual Yamaha. Penciptaan tetap disediakan untuk Yamaha. Dengan UTAU, **siapa pun merekam suaranya dan menjadikannya instrumen bernyanyi**.
 
-**Preutterance** adalah parameter paling cerdas. Satu suku kata selalu memiliki sebagian konsonan sebelum vokal. Agar not jatuh tepat pada ketukan, *vokal* yang harus jatuh tepat, bukan konsonan. Jadi UTAU menggeser sampel ke belakang: "a" dari "sa" mendarat tepat di ketukan, "s" meluber sedikit sebelumnya. Seperti drummer yang mengantisipasi pukulannya agar suara jatuh tepat -- cuma di sini ada di dalam `.ini`.
+Mode CV (paling sederhana) begini : kamu merekam ~100 suku kata dasar bahasa Jepang ("a", "ka", "sa", "ta"...), kamu mengonfigurasi titik potong, dan jadilah voicebank-mu. Beberapa jam kerja.
 
-Secara visual, pada sampel "ka", area `oto.ini` terpotong seperti ini:
+Hasilnya : ekosistem meledak. Ribuan voicebank yang dibuat komunitas -- suara penggemar, teman, karakter ciptaan. Semesta utuh penyanyi virtual, gratis. Dan perangkat lunak datang dengan **Defoko** (Utane Uta), suara bawaan yang dibangkitkan lewat mesin TTS AquesTalk, jadi kamu bisa mulai bahkan tanpa mikrofon.
+
+---
+
+## Oto.ini : jantung sistem
+
+Bagaimana UTAU tahu di mana memotong dan menempel suara? Lewat berkas config per voicebank : **`oto.ini`**. Untuk setiap WAV, ia mendefinisikan titik potong (dalam milidetik) :
+
+- **Offset** → hening yang dibuang di awal
+- **Preutterance** → titik di mana konsonan beralih ke vokal (perbatasan "s"→"a" dalam "sa")
+- **Overlap** → seberapa jauh nada sebelumnya meluap ke yang ini
+- **Fixed region** → bagian yang TIDAK boleh diregangkan pada nada panjang (biasanya konsonan)
+- **Cutoff** → di mana memotong akhir
+
+**Preutterance** adalah param paling cerdik. Suku kata selalu punya potongan konsonan sebelum vokal. Supaya nadamu jatuh tepat waktu, *vokal*-lah yang harus jatuh tepat, bukan konsonan. Jadi UTAU menggeser sampel ke belakang : "a" dari "sa" mendarat tepat waktu, "s" meluap tepat sebelumnya. Seperti drummer yang mengantisipasi pukulannya supaya bunyi jatuh tepat -- kecuali di sini dalam `.ini`.
+
+Secara visual, pada sampel "ka", zona `oto.ini` terpotong begini :
 
 ```mermaid
 flowchart LR
-    A["🔇 hening<br/>(offset)"] --> B["🅺 konsonan<br/>(fixed region,<br/>tidak diregang)"]
-    B --> C["🅰 vokal<br/>(zona bisa diregang)"]
-    C --> D["🔇 ujung dipotong<br/>(cutoff)"]
+    A["🔇 hening<br/>(offset)"] --> B["🅺 konsonan<br/>(fixed region,<br/>tidak diregangkan)"]
+    B --> C["🅰 vokal<br/>(zona bisa diregangkan)"]
+    C --> D["🔇 akhir dipotong<br/>(cutoff)"]
     style B fill:#3b4a6b
     style C fill:#5b3b6b
 ```
 
-Batas antara konsonan dan vokal adalah preutterance. Vokal adalah zona yang diregangkan untuk not panjang; konsonan tetap utuh, jika tidak "k"-mu akan berdurasi dua detik dan terdengar mengerikan.
+Perbatasan antara konsonan dan vokal itulah preutterance. Vokal adalah zona yang diregangkan untuk nada panjang ; konsonan tetap utuh, kalau tidak "k"-mu berlangsung dua detik dan terdengar mengerikan.
 
 ```ini
 # oto.ini (disederhanakan)
-# file=alias,offset,consonant,cutoff,preutterance,overlap
+# berkas=alias,offset,consonant,cutoff,preutterance,overlap
 _ka.wav=ka,120,80,-200,90,40
 ```
 
-Lima nilai per suara, pada semua sampelmu, dan UTAU merakit kata apa pun dengan rapi.
+Lima nilai per suara, pada semua sampelmu, dan UTAU merakit kata apa pun dengan bersih.
 
 ---
 
-## CV, VCV, CVVC: perlombaan menuju realisme
+## CV, VCV, CVVC : perlombaan menuju realisme
 
-Mode dasar, **CV** (Konsonan-Vokal), adalah satu suara per suku kata. Sederhana tapi agak robotik: sambungan antarsuku kata kasar.
+Mode dasar, **CV** (Konsonan-Vokal), adalah satu suara per suku kata. Sederhana tapi agak robotik : sambungan antar suku kata kasar.
 
-Pada 2010 komunitas menemukan **VCV** (Vokal-Konsonan-Vokal). Alih-alih merekam "ka" saja, kamu merekam "a ka" -- dengan ekor vokal sebelumnya. Transisinya menjadi alami karena *ada* dalam rekaman, bukan dihitung setelahnya.
+Pada 2010 komunitas menciptakan **VCV** (Vokal-Konsonan-Vokal). Alih-alih merekam "ka" saja, kamu merekam "a ka" -- dengan ekor vokal sebelumnya. Transisinya menjadi alami karena ada *dalam* rekaman, bukan dihitung setelahnya.
 
-Detail yang menarik: **VOCALOID tidak memiliki VCV sebelum VOCALOID3, pada 2011.** Freeware dalam VB6 yang dikode oleh satu orang sendirian mendahului Yamaha satu tahun dalam hal realisme transisi. Komunitas fans lebih cepat daripada perusahaan multinasional.
+Detail yang menyakitkan : **VOCALOID tidak punya VCV sebelum VOCALOID3, pada 2011.** Freeware VB6 yang dikode satu orang saja mendahului Yamaha setahun dalam realisme transisi. Komunitas penggemar lebih cepat daripada multinasional.
 
-Setelah itu muncullah **CVVC**, **ARPAsing** (Inggris), **VCCV**... setiap metode mendorong realisme lebih jauh, semuanya ditemukan dan didokumentasikan oleh komunitas.
+Lalu datang **CVVC**, **ARPAsing** (Inggris), **VCCV**... tiap metode mendorong realisme lebih jauh, semuanya diciptakan dan didokumentasikan komunitas.
 
 ---
 
-## Pipeline lengkap: bagaimana kata menjadi suara
+## Pipeline lengkap : cara kata menjadi suara
 
-Saat kamu menempatkan not dan mengetik lirik, inilah yang terjadi di belakang layar:
+Ketika kamu menaruh nada dan mengetik lirik, inilah yang terjadi di balik layar :
 
 ```mermaid
 flowchart TD
-    A["Partitur<br/>(not + lirik)"] --> B[Phonemizer]
-    B -->|"memotong menjadi unit<br/>untuk dikonkatenasi"| C[Resampler]
+    A["Partitur<br/>(nada + lirik)"] --> B[Phonemizer]
+    B -->|"memotong menjadi unit<br/>yang dirangkai"| C[Resampler]
     C -->|"memuat WAV,<br/>mengubah durasi + pitch,<br/>menerapkan flag"| D[Wavtool]
-    D -->|"menempel kembali potongan"| E["Audio akhir"]
+    D -->|"menempel ulang potongan"| E["Audio akhir"]
 ```
 
-**Resampler** adalah komponen utamanya: ia mengambil sampel "ka"-mu yang direkam pada pitch tertentu dan meregangkan/mengubah pitch-nya agar sesuai dengan not yang diinginkan -- hanya meregangkan zona yang bisa diregang dan menjaga konsonan tetap utuh (dari situlah `oto.ini` berasal).
+**Resampler** adalah karya utamanya : ia mengambil sampel "ka"-mu yang direkam pada ketinggian tertentu dan me rentang/me repitch untuk mencocokkan nada yang diinginkan -- hanya merentangkan zona yang bisa direntangkan dan menjaga konsonan tetap utuh (makanya `oto.ini`).
 
-Dan ia bersifat **modular**. UTAU hadir dengan resampler bawaan, tetapi komunitas menciptakan yang lain (moresampler, TIPS...), masing-masing dengan karakter suaranya sendiri. Kamu bisa mengganti mesin sintesis seperti plugin. Di tahun 2008. Pada freeware.
-
----
-
-## Kekacauan di balik kap mesin (dan kenapa ini menggemaskan)
-
-Harus jujur soal kondisi teknis benda ini:
-
-- **Dikode dalam Visual Basic 6.** Bahasa yang sudah mati di tahun 2008. Perlu runtime VB6 untuk menjalankannya.
-- **Awalnya Windows only** (porting Mac, UTAU-Synth, baru hadir di 2011).
-- **Encoding Shift-JIS wajib.** Jika file-mu tidak di-encode dalam Shift-JIS Jepang, UTAU tidak mengerti apa pun. Bahkan sampai sekarang sering harus mengatur PC ke locale Jepang atau menggunakan AppLocale untuk menjalankannya.
-- **Antarmuka ala kadarnya**, dokumentasi hampir 100% bahasa Jepang pada masanya.
-
-Dan tetap saja. Tetap saja benda ini menciptakan gerakan global. Puluhan ribu voicebank. Lagu yang didengarkan jutaan kali.
-
-Contoh terbaik: **Kasane Teto**. Karakter yang diciptakan pada 2008 dan diluncurkan sebagai lelucon 1 April, berpura-pura menjadi VOCALOID. Itu cuma bercanda. Tapi orang-orang menyukai karakter tersebut, voicebank UTAU asli dibuat setelahnya, dan Teto menjadi salah satu penyanyi virtual paling terkenal di dunia. Pada 2023 ia bahkan mendapatkan suara Synthesizer V resmi. Karakter yang lahir dari lelucon April Mop pada perangkat lunak gratis.
+Dan ia **modular**. UTAU datang dengan resampler dasar, tapi komunitas menetaskan lainnya (moresampler, TIPS...), masing-masing dengan butir suaranya. Kamu berganti mesin sintesis seperti plugin. Pada 2008. Pada freeware.
 
 ---
 
-## Kenapa ini masih berarti
+## Pekerjaan di balik kap (dan kenapa itu menawan)
 
-UTAU adalah contoh sempurna dari teknologi "miskin" yang menang karena keterbukaan.
+Saya harus jujur soal keadaan teknis perangkat lunak :
 
-VOCALOID secara teknis lebih unggul, lebih didanai, lebih pro. Tapi tertutup. UTAU dibuat seadanya, jelek, dalam VB6 -- tapi ia membiarkan semua orang berpartisipasi. Membuat suara, membuat resampler, membuat plugin, membuat metode perekaman. Komunitas melakukan sisanya.
+- **Dikode dalam Visual Basic 6.** Bahasa yang sudah mati pada 2008. Butuh runtime VB6 untuk menjalankannya.
+- **Awalnya hanya Windows** (porting Mac, UTAU-Synth, datang 2011).
+- **Enkode Shift-JIS wajib.** Kalau berkasmu tidak dienkode dalam Shift-JIS Jepang, UTAU tidak paham apa-apa. Bahkan hari ini sering harus menaruh PC dalam locale Jepang atau memakai AppLocale untuk menjalankannya.
+- **Antarmuka sederhana**, dokumentasi nyaris 100% berbahasa Jepang waktu itu.
 
-Dan konsepnya masih bertahan sepenuhnya hingga hari ini. **OpenUtau**, penerus open-source modern, mengambil ide tersebut dan membersihkannya (multi-platform, UTF-8, dukungan resampler modern DAN AI). Sintesis konkatenatif masih bertahan di samping model deep learning, karena ia memiliki sesuatu yang tidak dimiliki model-model itu: kamu mengerti persis apa yang terjadi, dan kamu mengontrol setiap milidetik.
+Namun. Namun perangkat lunak ini menciptakan gerakan dunia. Puluhan ribu voicebank. Lagu yang didengar jutaan kali.
 
-Itulah yang selalu aku suka dari UTAU. Kamu melihat persis apa yang terjadi. Ini bukan AI yang memuntahkan sesuatu yang ajaib yang tidak kamu pahami: kamu punya WAV-mu, titik potongmu, dan kaulah yang memutuskan segalanya. Ketika suaranya jelek, kamu tahu kenapa dan kamu bisa memperbaikinya. Aku suka kendali semacam itu.
+Contoh terbaik : **Kasane Teto**. Karakter yang dibuat pada 2008 dan dilempar sebagai lelucon 1 April, dengan menyamar sebagai VOCALOID. Itu lelucon. Kecuali orang menyukai karakternya, voicebank UTAU sungguhan dibuat di belakangnya, dan Teto menjadi salah satu penyanyi virtual paling terkenal di dunia. Pada 2023 ia bahkan mendapat suara Synthesizer V resmi. Karakter yang lahir dari lelucon April Mop pada perangkat lunak gratis.
 
 ---
 
-**3 Hal yang perlu diingat:**
+## Kenapa masih penting
 
-1. **Sintesis konkatenatif = puzzle suara** -- UTAU menempelkan sampel WAV kecil bersama untuk membentuk kata. `oto.ini` menentukan di mana memotong dan menempel setiap suara. Kamu mengontrol semuanya, hingga milidetik, tanpa kotak hitam.
+UTAU adalah contoh sempurna teknologi "miskin" yang menang lewat keterbukaan.
 
-2. **Keterbukaan mengalahkan teknik** -- VOCALOID lebih baik tapi tertutup. UTAU dibuat seadanya tapi membiarkan semua orang membuat suaranya sendiri. Komunitas meledakkan ekosistem, dan bahkan mendahului Yamaha dalam VCV.
+VOCALOID secara teknis unggul, lebih didanai, lebih pro. Tapi tertutup. UTAU tambal sulam, jelek, dalam VB6 -- tapi membiarkan semua orang berpartisipasi. Membuat suara, membuat resampler, membuat plugin, membuat metode perekaman. Komunitas melakukan sisanya.
 
-3. **Ide bagus bertahan lebih lama dari kodenya** -- VB6, Shift-JIS, Windows only... dan tetap saja konsepnya masih berjalan melalui OpenUtau. Teknologi hebat bisa dikode dengan cara yang amburadul.
+Dan konsepnya bertahan sepenuhnya hari ini. **OpenUtau**, penerus open-source modern, mengambil ide itu dan membersihkannya (multi-platform, UTF-8, dukungan resampler modern DAN AI). Sintesis konkatentif tetap berdiri di samping model deep learning, karena punya keunggulan yang tidak mereka miliki : kamu paham tepat apa yang terjadi, dan kamu mengendalikan setiap milidetik.
 
-Sejujurnya, hanya untuk Kasane Teto yang lahir dari lelucon April Mop, perangkat lunak ini layak dihormati xD
+Itulah yang selalu saya suka dari UTAU. Kamu melihat tepat apa yang terjadi. Ini bukan AI yang memuntahkan hasil ajaib yang tidak kamu pahami : kamu punya WAV-mu, titik potongmu, dan kamulah yang memutuskan segalanya. Ketika terdengar buruk, kamu tahu kenapa dan bisa memperbaiki. Saya suka kontrol semacam itu.
+
+---
+
+**3 poin yang perlu diingat :**
+
+1. **Sintesis konkatentif = puzzle suara** -- UTAU menempelkan sampel WAV kecil bersama untuk membentuk kata. `oto.ini` mendefinisikan di mana memotong dan menempel setiap suara. Kamu mengendalikan segalanya, hingga milidetik, tanpa kotak hitam.
+
+2. **Keterbukaan mengalahkan teknik** -- VOCALOID lebih baik tapi tertutup. UTAU tambal sulam tapi membiarkan semua orang membuat suaranya. Komunitas meledakkan ekosistem, dan bahkan mendahului Yamaha dalam VCV.
+
+3. **Ide bagus bertahan dari kodenya** -- VB6, Shift-JIS, hanya Windows... namun konsepnya tetap berjalan lewat OpenUtau. Teknologi jenius bisa dikode dengan kaki.
+
+Sejujurnya, hanya demi Kasane Teto yang lahir dari lelucon April Mop, perangkat lunak ini layak dihormati.

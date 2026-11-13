@@ -1,49 +1,48 @@
 ---
-title: تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills
-  typescript-virtual-container
-description: كيف أعادت Fortune تنفيذ node:fs و node:crypto وعشرات وحدات Node
-  النمطية في 640 سطرًا من JavaScript لجعل الحاوية تعمل في المتصفح بدون Wasm.
+title: تشغيل مكتبة Node.js في المتصفح دون Wasm، polyfills الخاصة بـtypescript-virtual-container
+description: كيف أعادت Fortune تنفيذ node:fs وnode:crypto يدويا وعشر وحدات Node
+  في 640 سطر JavaScript لكي يعمل الحاوي في المتصفح دون Wasm.
 date: 2026-05-29
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - nodejs
   - polyfills
   - browser
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "kHCLGezcUnAacOIEV7M5sX0mh1XzoAnjl2wOGL80vnAT+JPukD0OXN+oA3/qEPD/krUyzrzPbvceoxs4eDuVEg=="
+author_sig: "8FA7kk1ZFl5Hpe62jk8b8MYQ5KLeEvhLde0KGGFaqrMfhUpexAcNtw3SZ2k6RWot8WXve8i1oYBPDlJ87hAEVg=="
 ---
 
-# تشغيل مكتبة Node.js في المتصفح بدون Wasm -- polyfills لـ typescript-virtual-container
+# تشغيل مكتبة Node.js في المتصفح دون Wasm، polyfills الخاصة بـtypescript-virtual-container
 
-قضيت مؤخرًا وقتًا طويلاً في دراسة الكود المصدري لـ [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)، مشروع [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). والجزء الذي أدهشني أكثر ليس VFS، ولا الشبكة الافتراضية، ولا أوامر Unix الـ 170 المعاد تنفيذها في TypeScript. بل مجلد `polyfills/`.
+قضيت مؤخرا وقتا طويلا أنقّب في الكود المصدري لـ[typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)، مشروع [Fortune (Chloé Rolzhausen)](https://itsrealfortune.fr). والجزء الذي فاجأني أكثر هو مجلد `polyfills/`، أكثر حتى من VFS أو الشبكة الافتراضية أو أوامر Unix الـ170 المُعاد تنفيذها في TypeScript.
 
-لأن الوحدة تعمل في المتصفح، بدون Wasm، ولتحقيق ذلك أعادت Fortune تنفيذ طبقة `node:*` التي تحتاجها المكتبة يدويًا بالكامل. حوالي 640 سطرًا من JavaScript الحرفي الذي يحل محل `node:fs` و `node:crypto` و `node:os` و `node:net` وغيرها.
+لأن الوحدة تعمل في المتصفح، دون Wasm، ولهذا أعادت Fortune تنفيذ يدويا كل طبقة `node:*` التي تحتاجها المكتبة. حوالي 640 سطر JavaScript حرفية تستبدل `node:fs` و`node:crypto` و`node:os` و`node:net` وبضعة أخرى.
 
-يشرح هذا المقال كيف يعمل ذلك، polyfill تلو الآخر.
+يشرح هذا المقال كيف يعمل ذلك، polyfill بـpolyfill.
 
 ---
 
 ## المشكلة الأساسية
 
-مكتبة Node.js تستخدم واجهات برمجة تطبيقات (APIs) غير موجودة في المتصفح. عندما تكتب `import { readFileSync } from 'node:fs'`، هذا استدعاء نظام من جانب Node -- وصول حقيقي للقرص عبر libuv. في المتصفح، `node:fs` غير موجودة إطلاقًا.
+تستخدم مكتبة Node.js واجهات غير موجودة في المتصفح. عندما تكتب `import { readFileSync } from 'node:fs'`، فهو استدعاء نظام جهة Node، وصول قرص حقيقي عبر libuv. في المتصفح، لا توجد `node:fs` إطلاقا.
 
-الحلول المعتادة هي:
+الحلول المعتادة هي :
 
-- **بيئة تشغيل Wasm** (مثل Emscripten، WASIp1/WASIp2) -- تقوم بترجمة Node.js إلى Wasm وتشغيله. النتيجة: حزم بحجم 10-50 MB، وقت تحميل ملحوظ، تعقيد نشر كبير.
-- **polyfills عامة** (مثل `browserify`، `webpack node: polyfills`) -- مكتبات npm توفر تقريبات لكل وحدة Node نمطية. غالبًا ما تكون ثقيلة جدًا، وغير مناسبة للحالة المحددة.
-- **إعادة كتابة polyfills يدويًا** -- عمل أكثر، لكن بنتيجة مثالية.
+- **Runtime في Wasm** (نوع Emscripten وWASIp1/WASIp2)، تجمّع Node.js في Wasm وتنفذه. النتيجة : حزم 10-50 MB وزمن تحميل ملحوظ وتعقيد نشر كبير.
+- **polyfills عامة** (نوع `browserify` و`webpack node: polyfills`)، مكتبات npm توفر تقريبات لكل وحدة Node. غالبا أثقل من اللازم وغير ملائمة للحالة الخاصة.
+- **إعادة كتابة polyfills يدويا**، عمل أكثر، لكن نتيجة مثلى.
 
-اختارت Fortune الخيار الثالث. والنتيجة هي حزمة متصفح هي مجرد المكتبة، تبدأ فورًا، ولا تعتمد على أي بنية تحتية خارجية.
+اختارت Fortune الخيار الثالث. والنتيجة حزمة متصفح هي فقط المكتبة، تقلع فورا، ولا تعتمد على أي بنية خارجية.
 
 ---
 
 ## آلية البناء
 
-كل شيء يعتمد على esbuild وخياره `alias`. كل استيراد `node:*` يُعاد توجيهه إلى ملف محلي:
+يرتكز كل شيء على esbuild وخيار `alias`. يُعاد توجيه كل استيراد `node:*` نحو ملف محلي :
 
 ```js
 // demo/build.js
@@ -73,15 +72,15 @@ esbuild.build({
 });
 ```
 
-خيار `inject` يستحق الذكر: يسمح بحقن `process.js` و `buffer.js` في رأس كل ملف من الحزمة، مما يجعل `process` و `Buffer` متاحين عمومًا دون أي استيراد صريح. تمامًا كما تعرضها Node.js بشكل أصلي.
+يستحق خيار `inject` الملاحظة : يسمح بحقن `process.js` و`buffer.js` في رأس كل ملف من الحزمة، مما يجعل `process` و`Buffer` متاحين شموليا دون أي استيراد صريح. تماما كما يعرضهما Node.js أصليا.
 
 ---
 
-## `buffer.js` -- `Buffer` على `Uint8Array`
+## `buffer.js`، `Buffer` فوق `Uint8Array`
 
-هذا أحد المتغيرين العموميين المحقونين. `Buffer` يُستخدم بشكل مكثف في الكود -- كل عملية SSH، كل لقطة VFS، كل قراءة/كتابة ثنائية تمر عبره.
+إنه أحد الشموليين المحقونين. يُستخدَم `Buffer` بكثافة في الكود، فكل عملية SSH وكل لقطة VFS وكل قراءة/كتابة ثنائية تمر من هناك.
 
-الحل: كلاس `BrowserBuffer` يمتد `Uint8Array` وينفذ كامل واجهة `Buffer` الخاصة بـ Node.js.
+الحل : فئة `BrowserBuffer` تمتد `Uint8Array` وتنفذ واجهة `Buffer` كاملة في Node.js.
 
 ```js
 class BrowserBuffer extends Uint8Array {
@@ -109,16 +108,16 @@ class BrowserBuffer extends Uint8Array {
 globalThis.Buffer = BrowserBuffer;
 ```
 
-ما تم تنفيذه إجمالاً:
-- `Buffer.from`, `Buffer.alloc`, `Buffer.allocUnsafe`, `Buffer.isBuffer`, `Buffer.concat`, `Buffer.byteLength`
-- جميع طرق الكتابة: `writeUInt8/16/32BE/LE`, `writeInt8/16/32BE/LE`, `writeBigUInt64BE/LE`, `writeFloat/DoubleLE/BE`
-- جميع طرق القراءة المقابلة
-- `toString` مع دعم hex و base64 و utf8
-- `copy`, `equals`, `slice`, `subarray`
+ما هو منفذ إجمالا :
+- `Buffer.from` و`Buffer.alloc` و`Buffer.allocUnsafe` و`Buffer.isBuffer` و`Buffer.concat` و`Buffer.byteLength`
+- كل طرق الكتابة : `writeUInt8/16/32BE/LE` و`writeInt8/16/32BE/LE` و`writeBigUInt64BE/LE` و`writeFloat/DoubleLE/BE`
+- كل طرق القراءة الموافقة
+- `toString` مع دعم hex وbase64 وutf8
+- `copy` و`equals` و`slice` و`subarray`
 
-هذا يمثل 116 سطرًا. مقابل ما يستبدله، إنه مدمج بشكل ملحوظ.
+يمثل ذلك 116 سطرا. لما يستبدله، إنه مدمج بشكل لافت.
 
-الحيلة الرئيسية هي استخدام `DataView` للوصول متعدد البايتات، مما يعالج ترتيب البايتات (endianness) بشكل صحيح دون الحاجة للتلاعب بالبتات يدويًا لكل نوع:
+الحيلة الرئيسية هي استخدام `DataView` للوصول متعدد البايتات، مما يدير endianness صحيحا دون التلاعب بالبتات يدويا لكل نوع :
 
 ```js
 writeUInt32BE(val, offset = 0) {
@@ -129,9 +128,9 @@ writeUInt32BE(val, offset = 0) {
 
 ---
 
-## `process.js` -- المتغير العمومي `process` الأدنى
+## `process.js`، الشمولي `process` الدنيا
 
-المتغير العمومي الآخر المحقون. صغير جدًا لكنه ضروري -- الكود يختبر غالبًا `process.env.NODE_ENV` و `process.platform` و `process.nextTick` إلخ.
+الشمولي الآخر المحقون. ضئيل لكن ضروري، فالكود يختبر غالبا `process.env.NODE_ENV` و`process.platform` و`process.nextTick`، إلخ.
 
 ```js
 globalThis.startedat = Date.now();
@@ -150,33 +149,33 @@ export const process = {
 globalThis.process = process;
 ```
 
-التعيين `nextTick` → `queueMicrotask` هو أهم تفصيل هنا. `process.nextTick` في Node.js يجدول استدعاءً في نهاية المرحلة الحالية من حلقة الأحداث، قبل الإدخال/الإخراج. `queueMicrotask` في المتصفح يفعل شيئًا مشابهًا جدًا من الناحية الدلالية -- يجدول مهمة صغرى (microtask)، تُنفذ قبل الرسم التالي أو الحدث التالي. ليس مطابقًا، لكنه قريب كفاية ليعمل كل الكود الذي يستخدم `nextTick` بشكل صحيح في المتصفح.
+رسم `nextTick` ← `queueMicrotask` هو التفصيل الأهم هنا. يجدول `process.nextTick` في Node.js رد اتصال في نهاية المرحلة الراهنة من حلقة الأحداث، قبل إدخال/إخراج. يقدم `queueMicrotask` في المتصفح دلالة قريبة جدا : يجدول مهمة دقيقة، تُنفَّذ قبل العرض أو الحدث التالي، وهذا القرب يكفي ليعمل صحيحا في المتصفح كل كود يستخدم `nextTick`.
 
 ---
 
-## `node:fs` -- IndexedDB كنظام ملفات متزامن
+## `node:fs`، IndexedDB كنظام ملفات متزامن
 
-هذا هو polyfill الأكثر تعقيدًا، والأكثر إثارة للاهتمام تقنيًا وبفارق كبير.
+إنه polyfill الأكثر تطورا، والأكثر إثارة تقنيا بلا منازع.
 
-المشكلة صعبة: `node:fs` يعرض واجهة برمجة تطبيقات متزامنة (`readFileSync`, `writeFileSync` إلخ)، لكن واجهات تخزين المتصفح كلها غير متزامنة (IndexedDB، Cache API إلخ). لا يمكنك عمل `await` في منتصف دالة متزامنة.
+المشكلة دقيقة : تعرض `node:fs` واجهة متزامنة (`readFileSync` و`writeFileSync`، إلخ)، لكن واجهات تخزين المتصفح كلها غير متزامنة (IndexedDB وCache API، إلخ). لا يمكن عمل `await` في وسط دالة متزامنة.
 
-حل Fortune: مستوى مزدوج من التخزين المؤقت.
+حل Fortune : مستوى مزدوج من الكاش.
 
-**المستوى 1 -- Map في الذاكرة (متزامن)**  
-كل القراءات تتم من `Map<string, Uint8Array>` في الذاكرة. فوري، متزامن، لا مشكلة في واجهة API.
+**مستوى 1، Map في الذاكرة (متزامن)**
+تتم كل القراءات من `Map<string, Uint8Array>` في الذاكرة. فوري ومتزامن، ولا مشكلة واجهة.
 
-**المستوى 2 -- IndexedDB (غير متزامن، في الخلفية)**  
-عند بدء التشغيل، يُحمّل كل محتوى IndexedDB في الـ Map. تتم الكتابة فورًا في الـ Map *وتطلق* كتابة غير متزامنة نحو IndexedDB دون حظر.
+**مستوى 2، IndexedDB (غير متزامن، في الخلفية)**
+عند الإقلاع، يُحمَّل كل محتوى IndexedDB في Map. تتم الكتابات فورا في Map *وتطلق* كتابة غير متزامنة نحو IndexedDB دون حظر.
 
 ```js
 const DB_NAME = 'vfs-fs-shim';
 const STORE = 'files';
 let db = null;
 
-// Sync cache (path → Uint8Array | null)
+// كاش متزامن (مسار ← Uint8Array | null)
 const memCache = new Map();
 
-// Preload عند بدء التشغيل
+// تحميل مسبق عند الإقلاع
 openDB().then(db => {
   const tx = db.transaction(STORE, 'readonly');
   const req = tx.objectStore(STORE).openCursor();
@@ -188,7 +187,7 @@ openDB().then(db => {
   };
 });
 
-// كتابة غير متزامنة نحو IndexedDB (غير محظورة)
+// كتابة غير متزامنة نحو IndexedDB (غير حاجبة)
 function idbSet(path, value) {
   openDB().then(db => {
     const tx = db.transaction(STORE, 'readwrite');
@@ -198,11 +197,11 @@ function idbSet(path, value) {
 }
 ```
 
-واجهة API المعروضة كاملة: `readFileSync`, `writeFileSync`, `appendFileSync`, `existsSync`, `unlinkSync`, `rmSync` (مع خيار `recursive`)، `mkdirSync` (مع خيار `recursive`)، `readdirSync`, `statSync`, `renameSync`.
+الواجهة المعروضة كاملة : `readFileSync` و`writeFileSync` و`appendFileSync` و`existsSync` و`unlinkSync` و`rmSync` (مع خيار `recursive`) و`mkdirSync` (مع خيار `recursive`) و`readdirSync` و`statSync` و`renameSync`.
 
-يوجد حتى طبقة لإدارة واصفات الملفات (file descriptors) (`openSync`, `writeSync`, `closeSync`) ليعمل سجل WAL الخاص بـ VFS في وضع المتصفح -- يفتح السجل fd، يكتب فيه، يغلقه، وتنتهي البيانات في IndexedDB.
+وهناك حتى طبقة إدارة واصفات ملفات (`openSync` و`writeSync` و`closeSync`) لكي يعمل سجل WAL الخاص بـVFS في وضع المتصفح، فيفتح السجل fd ويكتب فيه ويغلقه، وتنتهي البيانات في IndexedDB.
 
-الخاصية `ready` مُصدّرة للسماح للكود بمعرفة متى ينتهي التحميل المسبق الأولي:
+تُصدَّر الخاصية `ready` ليعرف الكود متى انتهى التحميل المسبق الأولي :
 
 ```js
 export const ready = openDB().then(db => new Promise(resolve => {
@@ -218,23 +217,23 @@ export const ready = openDB().then(db => new Promise(resolve => {
 globalThis.__fsReady__ = ready;
 ```
 
-بفضل هذا تستمر لقطات VFS في النجاة من إعادة تحميل الصفحة في المتصفح. عندما تعيد تحميل العرض التجريبي، يُستعاد VFS بالضبط في الحالة التي تركته فيها، من IndexedDB، دون أي خادم وسيط.
+وبفضل ذلك تنجو لقطات VFS من إعادة تحميل الصفحة في المتصفح. عندما تعيد تحميل العرض، يُستعاد VFS بالضبط في الحالة التي تركته فيها، من IndexedDB، دون أي خادم مشمول.
 
 ---
 
-## `node:crypto` -- SHA-256 و HMAC و PBKDF2 في JS خالص
+## `node:crypto`، SHA-256 وHMAC وPBKDF2 في JS خالص
 
-بدلاً من استيراد مكتبة تشفير مُجمّعة في Wasm، نفذت Fortune الأساسيات الضرورية مباشرة.
+بدلا من استيراد مكتبة تشفير مُجمَّعة في Wasm، نفذت Fortune البدائيات اللازمة مباشرة.
 
-**SHA-256** منفذ من الصفر باستخدام ثوابت FIPS 180-4:
+**SHA-256** منفذ من الصفر مع ثوابت FIPS 180-4 :
 
 ```js
 const K = new Uint32Array([
-  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* ... 60 ثابتًا أخرى */ 
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, /* ... 60 ثابتا آخر */
 ]);
 
 function sha256(data) {
-  // padding FIPS 180-4
+  // حشو FIPS 180-4
   const msg = data instanceof Uint8Array ? data : new TextEncoder().encode(data);
   // ...
   // 64 جولة ضغط
@@ -250,12 +249,12 @@ function sha256(data) {
 }
 ```
 
-فوق SHA-256، بُني **HMAC-SHA256** و **PBKDF2-HMAC-SHA256**. هاتان البدائيتان تُستخدمان لاشتقاق المفاتيح في تبادلات SSH والمصادقة الداخلية.
+وفوق SHA-256، يُبنَى **HMAC-SHA256** و**PBKDF2-HMAC-SHA256**. تُستخدَم هاتان البدائيتان لاشتقاق المفاتيح في تبادلات SSH والمصادقة الداخلية.
 
-واجهة API المُصدّرة تشبه واجهة Node.js:
+تبدو الواجهة المُصدَّرة كتلك الخاصة بـNode.js :
 
 ```js
-// Hash عادي
+// تجزئة تقليدية
 const hash = createHash('sha256').update('data').digest('hex');
 
 // بايتات عشوائية (عبر واجهة Web Crypto القياسية)
@@ -264,29 +263,29 @@ const bytes = randomBytes(32);
 // UUID
 const id = randomUUID();
 
-// مقارنة آمنة زمنيًا
+// مقارنة آمنة زمنيا
 const ok = timingSafeEqual(a, b);
 
-// scrypt (مقرب عبر PBKDF2)
+// scrypt (تقريب عبر PBKDF2)
 const key = scryptSync(password, salt, 32, { N: 16384 });
 ```
 
-ملاحظة: `scryptSync` مُقرّب عبر PBKDF2 مع عدد تكرارات مضبوط على المعامل `N`. ليس scrypt حقيقيًا (الذي يستخدم مخطط ذاكرة مختلفًا)، لكنه كافٍ لاستخدامات المشروع.
+ملاحظة : `scryptSync` مُقرَّب عبر PBKDF2 مع عدد تكرارات مضبوط على المعامل `N`. يغطي هذا التقريب مخطط الذاكرة الخاص بـscrypt ويغطي استخدامات المشروع.
 
-الدوال التي لا يمكن محاكاتها بشكل معقول في المتصفح (`generateKeyPairSync`, `createCipheriv`, `createDecipheriv`, `createSign`) تُلقي خطأً صريحًا إذا تم استدعاؤها. سلوك أمين.
+الدوال التي لا يمكن محاكاتها معقولا في المتصفح (`generateKeyPairSync` و`createCipheriv` و`createDecipheriv` و`createSign`) ترمي خطأ صريحا إذا استُدعيت. سلوك صادق.
 
 ---
 
-## `node:os` -- قراءة مواصفات المتصفح الحقيقية
+## `node:os`، قراءة مواصفات المتصفح الحقيقية
 
-بدلاً من إرجاع قيم ثابتة، يقرأ هذا polyfill واجهات المتصفح لإرجاع معلومات تطابق جهاز المستخدم الحقيقي.
+بدلا من إعادة قيم ثابتة، يقرأ polyfill واجهات المتصفح ليعيد معلومات تطابق آلة المستخدم الحقيقية.
 
 ```js
 export function totalmem() {
   try {
     return navigator?.deviceMemory
       ? navigator.deviceMemory * 1024 * 1024 * 1024
-      : 2 * 1024 * 1024 * 1024; // 2 GB افتراضيًا
+      : 2 * 1024 * 1024 * 1024; // 2 Go افتراضيا
   } catch(e) { return 2 * 1024 * 1024 * 1024; }
 }
 
@@ -308,22 +307,22 @@ export function arch() {
 }
 ```
 
-النتيجة الملموسة: عندما تشغل `neofetch` في العرض التجريبي للمتصفح، عدد الأنوية والذاكرة RAM المعروضة تطابق جهازك. إنها تفصيلة صغيرة، لكنها تساهم بشكل هائل في مصداقية الطرفية.
+نتيجة ملموسة : عندما تشغّل `neofetch` في عرض المتصفح، يطابق عدد الأنوية وRAM المعروضان آلتك. إنه تفصيل، لكنه يسهم كثيرا في مصداقية الطرفية.
 
-الصادرات الأخرى: `freemem` (40% من إجمالي الذاكرة، تقريب معقول)، `platform` ← `'browser'`، `type` ← `'Linux'`، `release` ← `'web'`، `uptime` عبر `performance.now()`، `endianness` ← `'LE'` (little-endian، صحيح على جميع معالجات x86/ARM الاستهلاكية)، `loadavg` ← `[0, 0, 0]`.
+الصادرات الأخرى : `freemem` (40% من الذاكرة الإجمالية، تقريب معقول) و`platform` ← `'browser'` و`type` ← `'Linux'` و`release` ← `'web'` و`uptime` عبر `performance.now()` و`endianness` ← `'LE'` (little-endian، صحيح على كل معالجات x86/ARM العامة) و`loadavg` ← `[0, 0, 0]`.
 
 ---
 
-## `node:net` -- stubs TCP نظيفة
+## `node:net`، بدائل TCP نظيفة
 
-المتصفح لا يملك وصولاً إلى مقابس TCP الخام (WebSocket لا يُحتسب -- إنه بروتوكول تطبيقي مختلف). لذلك `node:net` هو stub، لكن stub *مكتوب جيدًا*.
+لا وصول للمتصفح لمقابس TCP الخام (WebSocket لا يُحتسَب، فهو بروتوكول تطبيقي مختلف). إذن `node:net` بديل، لكن بديل *مكتوب جيدا*.
 
 ```js
 export class Socket {
   connect() { notImpl('Socket.connect')(); }
-  on() { return this; }    // قابل للتسلسل
-  once() { return this; }  // قابل للتسلسل
-  pipe() { return this; }  // قابل للتسلسل
+  on() { return this; }    // قابل للسلسلة
+  once() { return this; }  // قابل للسلسلة
+  pipe() { return this; }  // قابل للسلسلة
   setEncoding() { return this; }
   remoteAddress = '127.0.0.1';
   remotePort = 0;
@@ -331,15 +330,15 @@ export class Socket {
 }
 ```
 
-النقطة المهمة: طرق تسجيل الأحداث (`on`, `once`, `off`, `emit`) تُرجع `this` ولا تُلقي خطأً. هذا يسمح للكود الذي يفعل `new net.Socket().on('connect', cb)` بالعمل دون تعطل، حتى لو لم يتم الاتصال أبدًا. فقط الطرق التي *تحاول فعلاً الاتصال* تُلقي خطأً.
+النقطة المهمة : طرق سجل الأحداث (`on` و`once` و`off` و`emit`) تعيد `this` ولا ترمي خطأ. وهذا يسمح لكود يفعل `new net.Socket().on('connect', cb)` بالعمل دون انهيار، حتى لو لم يحدث الاتصال أبدا. وحده الطرق التي *تحاول الاتصال فعلا* ترمي خطأ.
 
-`isIP`, `isIPv4`, `isIPv6` منفذة بشكل صحيح (ليست stubs) لأنها تُستخدم بواسطة كود الشبكة الافتراضية للتحقق من صحة العناوين، دون فتح أي مقبس.
+`isIP` و`isIPv4` و`isIPv6` منفذة صحيحا (مع منطق تحقق حقيقي) لأنها تُستخدَم من كود الشبكة الافتراضية للتحقق من عناوين، دون فتح مقبس أبدا.
 
 ---
 
-## `node:path` -- عمليات مسار POSIX
+## `node:path`، عمليات مسارات POSIX
 
-إعادة تنفيذ كاملة لعمليات مسار POSIX، مكيفة مع السياق (لا backslash في Windows، المسارات دائمًا مطلقة مع `/`).
+إعادة تنفيذ كاملة لعمليات مسارات POSIX، مكيَّفة للسياق (مسارات مطلقة دائما مع `/` ونمط Unix فقط).
 
 ```js
 export const posix = {
@@ -368,13 +367,13 @@ export const posix = {
 };
 ```
 
-بسيط، مدمج، صحيح لاستخدامات المشروع.
+بسيط ومدمج وصحيح لاستخدامات المشروع.
 
 ---
 
-## `node:url` -- تفويض لواجهات المتصفح
+## `node:url`، تفويض لواجهات المتصفح
 
-هذه أنيقة ببساطتها. واجهة `URL` و `URLSearchParams` موجودة أصلاً في المتصفح -- يكفي إعادة تصديرها.
+هذه أنيقة ببساطتها. واجهة `URL` و`URLSearchParams` موجودة أصليا فعلا في المتصفح، فيكفي إعادة تصديرهما.
 
 ```js
 const _URL = globalThis.URL;
@@ -382,7 +381,7 @@ const _URLSearchParams = globalThis.URLSearchParams;
 export { _URL as URL, _URLSearchParams as URLSearchParams };
 ```
 
-فقط `fileURLToPath` و `pathToFileURL` تحتاجان تنفيذًا، لأنهما خاصتان بـ Node:
+وحده `fileURLToPath` و`pathToFileURL` تتطلبان تنفيذا، لأنهما خاصتان بـNode :
 
 ```js
 export function fileURLToPath(url) {
@@ -392,11 +391,11 @@ export function fileURLToPath(url) {
 }
 ```
 
-هذا هو النهج المثالي عندما توفر المنصة الهدف (المتصفح) بالفعل المكافئ الأصلي.
+إنها المقاربة المثلى عندما توفر المنصة المستهدفة (المتصفح) المكافئ الأصلي فعلا.
 
 ---
 
-## `node:zlib` -- هوية
+## `node:zlib`، هوية
 
 ```js
 export function gzipSync(buf) { return buf; }
@@ -404,13 +403,13 @@ export function gunzipSync(buf) { return buf; }
 export default { gzipSync, gunzipSync };
 ```
 
-سطران. المكتبة تستخدم `fflate` للضغط الفعلي (الذي يعمل في المتصفح أصلاً). `node:zlib` يُستورد فقط في مسارات كود لا تُنفذ في سياق المتصفح -- لذا فإن التمرير المباشر (passthrough) كافٍ.
+سطران. تستخدم المكتبة `fflate` للضغط الحقيقي (الذي يعمل في المتصفح أصليا). لا يُستورَد `node:zlib` إلا في مسارات كود لا تُنفَّذ في سياق المتصفح، فيكفي تمرير.
 
-أحيانًا أفضل تنفيذ هو سطران.
+أحيانا التنفيذ الصحيح سطران.
 
 ---
 
-## `node:events` -- EventEmitter أدنى
+## `node:events`، EventEmitter دنيا
 
 ```js
 export class EventEmitter {
@@ -429,11 +428,11 @@ export class EventEmitter {
 }
 ```
 
-التنفيذ الكامل لـ `EventEmitter` في Node.js يبلغ حوالي 600 سطر مع إدارة `maxListeners` و `once` و `prependListener` إلخ. هنا 12 سطرًا لأربع طرق مستخدمة فعلاً. tree-shaking ذهني قبل حتى tree-shaking أداة البناء.
+تنفيذ `EventEmitter` الكامل في Node.js حوالي 600 سطر مع إدارة `maxListeners` و`once` و`prependListener`، إلخ. وهنا 12 سطرا للطرق الأربع المستخدمة فعلا. تقليم ذهني قبل حتى تقليم أداة البناء.
 
 ---
 
-## `ssh2` و `roxify` -- stubs صريحة
+## `ssh2` و`roxify`، بدائل صريحة
 
 ```js
 // polyfills/ssh2/index.js
@@ -451,15 +450,15 @@ export class Client {
 }
 ```
 
-خادم SSH لا يعمل في المتصفح (لن يكون له معنى -- من سيتصل؟). لكن الكود الذي *يتحدث عن SSH من جانب العميل* -- الكلاسات التي تبني حزم SSH، محللات البروتوكول -- موجود في المكتبة. هذه الـ stubs تسمح بضم كل هذا الكود في الحزمة دون خطأ، مع ضمان رفع خطأ واضح إذا حاول أحد استدعاء طريقة تتطلب مقبسًا حقيقيًا.
+لا يعمل خادم SSH في المتصفح (لا معنى لذلك، فمن سيتصل ؟). لكن الكود الذي *يتكلم عن SSH جهة العميل*، الفئات التي تبني حزم SSH ومحللات البروتوكول، موجود في المكتبة. تسمح هذه البدائل بتحزيم كل هذا الكود دون خطأ، مع ضمان رمي خطأ واضح إذا حاول شخص استدعاء طريقة تتطلب مقبسا حقيقيا.
 
-`roxify` هو تنسيق ضغط مملوك يُستخدم للقطات VFS في وضع Node. في المتصفح، يُستخدم `fflate` بدلاً منه -- يكتفي polyfill برفع خطأ إذا تم استدعاء `roxify` مباشرة.
+`roxify` صيغة ضغط ملكية تُستخدَم للقطات VFS في وضع Node. في المتصفح، يُستخدَم `fflate` بدلا منه، فيكتفي polyfill برمي خطأ إذا استُدعي `roxify` مباشرة.
 
 ---
 
-## `node:worker_threads` -- إعادة تصدير Web Workers
+## `node:worker_threads`، إعادة تصدير Web Workers
 
-هذه الأكثر دقة. `node:worker_threads` في Node.js و Web Workers في المتصفح هما واجهتا API مختلفتان، لكنهما متقاربتان conceptually. polyfill يقوم بالتعيين:
+إنه الأكثر دقة. `node:worker_threads` في Node.js وWeb Workers في المتصفح واجهتان مختلفتان، لكنهما متقاربتان مفاهيميا. يقوم polyfill بالربط :
 
 ```js
 const _MessageChannel = globalThis.MessageChannel;
@@ -472,46 +471,46 @@ export const workerData = null;
 export const parentPort = null;
 ```
 
-`MessageChannel` و `MessagePort` مُعاد تصديرهما مباشرة من المتصفح (نفس API). `Worker` نفسه يحتاج غلافًا (wrapper) لأن المُنشئ مختلف (Node يتوقع مسار وحدة، المتصفح يتوقع URL). `isMainThread` دائمًا `true` في جانب المتصفح في هذا السياق.
+يُعاد تصدير `MessageChannel` و`MessagePort` مباشرة من المتصفح (نفس الواجهة). أما `Worker` نفسه فيتطلب غلافا لأن الباني مختلف (تنتظر Node مسار وحدة، وينتظر المتصفح رابطا). `isMainThread` دائما `true` جهة المتصفح في هذا السياق.
 
 ---
 
-## نظرة عامة: ماذا تمثل هذه الـ 640 سطرًا
+## نظرة شاملة : ما تمثله هذه 640 سطرا
 
-| Polyfill | أسطر | إستراتيجية |
+| Polyfill | أسطر | الاستراتيجية |
 |---|---|---|
-| `buffer.js` | 116 | `Uint8Array` + `DataView`، كل واجهة `Buffer` |
+| `buffer.js` | 116 | `Uint8Array` + `DataView`، واجهة `Buffer` كاملة |
 | `node:crypto` | 166 | SHA-256/HMAC/PBKDF2 من الصفر + Web Crypto للعشوائيات |
-| `node:fs` | 210 | `Map` في الذاكرة + IndexedDB غير متزامن |
-| `node:net` | 70 | Stubs قابلة للتسلسل + تحقق IP حقيقي |
-| `ssh2` | 74 | Stubs صريحة |
-| `process.js` | 14 | `process` أدنى قابل للحياة |
-| `node:path` | ~30 | عمليات مسار POSIX |
+| `node:fs` | 210 | `Map` في الذاكرة + IndexedDB غير متزامنة |
+| `node:net` | 70 | بدائل قابلة للسلسلة + تحققات IP حقيقية |
+| `ssh2` | 74 | بدائل صريحة |
+| `process.js` | 14 | `process` دنيا قابلة للحياة |
+| `node:path` | ~30 | عمليات مسارات POSIX |
 | `node:url` | ~25 | تفويض لواجهات المتصفح |
-| `node:events` | ~12 | EventEmitter بـ 4 طرق |
+| `node:events` | ~12 | EventEmitter بأربع طرق |
 | `node:os` | ~25 | `navigator.deviceMemory` / `hardwareConcurrency` |
-| `node:zlib` | 4 | تمرير مباشر (Passthrough) |
+| `node:zlib` | 4 | تمرير |
 | `node:worker_threads` | ~30 | إعادة تصدير Web Workers |
-| `roxify.js` | 8 | Stubs |
+| `roxify.js` | 8 | بدائل |
 
-640 سطرًا. لا اعتماديات npm. لا Wasm. وهذا يعطيك حزمة متصفح تبدأ في أقل من ثانية وتعمل دون أي بنية تحتية من جانب الخادم.
-
----
-
-## ما يمكننا استخلاصه
-
-في المرة القادمة التي تريد فيها نقل مكتبة Node.js إلى المتصفح، هذا ما يثبته نهج Fortune:
-
-1. **حدد ما هو مستخدم فعلاً.** لا حاجة لتنفيذ `EventEmitter` بالكامل إذا كان الكود يستخدم فقط `on` و `emit` و `removeListener`.
-
-2. **فوض لواجهات المتصفح عندما يمكن ذلك.** `URL` و `URLSearchParams` و `MessageChannel` و `MessagePort` و `crypto.getRandomValues` -- المتصفح يملكها بالفعل، فلنستخدمها.
-
-3. **التخزين المؤقت المتزامن أمام واجهة غير متزامنة.** حل `Map` + IndexedDB لـ `node:fs` هو النمط الأكثر قابلية لإعادة الاستخدام في المجلد بأكمله.
-
-4. **الـ stubs الصريحة أفضل من التنفيذات غير المكتملة الصامتة.** الأمر `throw new Error('not implemented in browser')` الصريح مفيد بشكل لا نهائي أكثر من `return undefined` الذي يترك الخلل يظهر بعد 10 استدعاءات.
-
-5. **esbuild `alias` + `inject` مُقَلَّم من قيمته.** إنها الأداة المثالية لهذا النوع من النقل -- لا إعداد webpack، لا إضافة، مجرد قائمة استبدالات.
+640 سطرا. لا تبعية npm. لا Wasm. وتعطي حزمة متصفح تقلع في أقل من ثانية وتعمل دون أي بنية جهة الخادم.
 
 ---
 
-الكود موجود في المستودع: [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). كل ملف يتسع في صفحة واحدة، قابل للقراءة مباشرة على GitHub. موصى به بشدة إذا كنت تعمل على مشروع مماثل.
+## ما يمكن استخلاصه
+
+في المرة التالية التي تريد نقل مكتبة Node.js للمتصفح، إليكم ما تثبته مقاربة Fortune :
+
+1. **حدد ما هو مستخدم فعلا.** نفّذ فقط الطرق التي يستدعيها الكود : هنا تكفي `on` و`emit` و`removeListener` لـ`EventEmitter`.
+
+2. **فوّض لواجهات المتصفح عندما يمكن.** `URL` و`URLSearchParams` و`MessageChannel` و`MessagePort` و`crypto.getRandomValues`، المتصفح لديها فعلا، فاستخدمها.
+
+3. **الكاش المتزامن أمام واجهة غير متزامنة.** حل `Map` + IndexedDB لـ`node:fs` هو النمط الأكثر قابلية لإعادة الاستخدام في المجلد كله.
+
+4. **البدائل الصادقة أفضل من التنفيذات الناقصة الصامتة.** رمي `throw new Error('not implemented in browser')` صريح أنفع بما لا يقاس من `return undefined` يترك bug يظهر بعد 10 استدعاءات.
+
+5. **esbuild مع `alias` + `inject` مُقلَّل من شأنه.** إنه الأداة المثالية لهذا النوع من النقل، صفر إعداد webpack وصفر إضافة، فقط قائمة استبدالات.
+
+---
+
+الكود في المستودع : [github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills](https://github.com/itsrealfortune/typescript-virtual-container/tree/main/polyfills). كل ملف يتسع في صفحة واحدة، وهو مقروء مباشرة على GitHub. موصى به بشدة إذا عملت على مشروع مشابه.

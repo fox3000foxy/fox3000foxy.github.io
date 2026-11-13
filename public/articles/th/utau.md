@@ -11,7 +11,7 @@ tags:
   - synthesis
   - vb6
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "H/DD65PDs0oI/pgspqUxEHoT8C+RIuIr8Q5jX4n8FbbmD3YQLlJiQrwhMbqf4AE+ups3FnbIAewPy/+d1mqQbQ=="
+author_sig: "FiziuIpUhHKnn02Nu+qT+8Gsfc3G8K9VTBSm64juudNfMOLUwnuDz4fyYHCPKGlnf6mLCUoZipiQK/IIxI6jVA=="
 ---
 
 ## UTAU: ซอฟต์แวร์ Visual Basic 6 ที่ทำให้เสียงสังเคราะห์เป็นของทุกคน

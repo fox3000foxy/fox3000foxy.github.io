@@ -1,89 +1,90 @@
 ---
-title: Bot một trang trại Microsoft Rewards
-description: Cách tôi đã viết bot để farm điểm Microsoft Rewards trên quy mô lớn -- và tại sao Microsoft từ đó đã tăng cường phòng thủ.
+title: Cày một nông trại Microsoft Rewards bằng bot
+description: Cách tôi code một bot để cày điểm Microsoft Rewards ở
+  quy mô lớn -- và vì sao Microsoft từ đó đã siết chặt phòng thủ.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "mQjWbbcC6IvamVXitVtt9LM4ah41SgZ82at7WTO0BkI4Od9N5B/iWhXG7i+1NyH5ZPax4Bftg6UyWrBcZdUg0g=="
+author_sig: "djafmdLLk00eg4YUKmYfl7XCoj0cfyah41Xou45efLrb3YoMngMPTKM6s9l/OcrZzNuq5/6moNbj697zWEa0+g=="
 ---
 
-> **Ghi chú (2026):** Dự án này không còn được bảo trì nữa. Microsoft đã tăng cường đáng kể khả năng phát hiện chống bot -- những gì từng hoạt động trước đây giờ không còn hiệu quả. Mã và cách tiếp cận được mô tả dưới đây được giữ lại chỉ với mục đích lưu trữ và minh họa.
+> **Ghi chú (2026) :** Dự án này không còn được duy trì. Microsoft đã tăng cường đáng kể khả năng phát hiện bot, nên những gì từng hoạt động thời đó nay không còn chạy nữa. Mã và cách tiếp cận mô tả bên dưới chỉ được giữ lại cho mục đích lưu trữ và minh họa.
 
 ## Giới thiệu
 
-Tôi phát hiện ra Microsoft Rewards vài năm trước. Đó là trong thời gian phong tỏa, nhưng điều đó không thay đổi sự thật là tôi bị buộc phải sử dụng tính năng kiểm soát của phụ huynh Microsoft Family Safety và do đó phải dùng Edge. Đó là lúc tôi biết đến Rewards.
+Tôi phát hiện Microsoft Rewards vài năm trước. Đó là thời gian phong tỏa, và hồi đó tôi buộc phải dùng kiểm soát phụ huynh Microsoft Family Safety nên phải đi qua Edge. Chính ở đó tôi phát hiện Rewards.
 
-Lúc đó tôi mới chỉ 14 tuổi và chẳng có gì trong danh mục khiến tôi hứng thú. Bây giờ tôi nghĩ, với những kỹ năng đã học được, tôi có thể farm điểm bằng bot, rồi tặng mã hoặc thậm chí bán lại với giá rẻ hơn nếu tôi thực sự muốn (nhưng thành thật mà nói, tôi nghĩ mình sẽ không làm vậy). Dù sao thì, tôi sẽ kể cho bạn nghe cách tôi đã viết một bot farm tài khoản trên quy mô lớn.
+Hồi đó tôi mới 14 tuổi và chẳng có gì trong danh mục khiến tôi hứng thú. Giờ tôi nghĩ với các kỹ năng đã tích lũy, tôi có thể cày điểm bằng bot, rồi cho đi các mã hoặc thậm chí bán lại rẻ hơn nếu tôi thực sự muốn (nhưng thật lòng, tôi nghĩ mình sẽ không làm). Tôi sẽ kể bạn nghe cách tôi code một con bot cày tài khoản ở quy mô lớn.
 
 ---
 
 ## Microsoft Rewards là gì?
 
-Nói ngắn gọn: đó là chương trình thưởng cho người dùng Edge bằng điểm cho các hoạt động như tìm kiếm, câu đố nhỏ, trò chơi và tiện ích mở rộng (nhưng đó là chuyện khác).
+Nói ngắn gọn : đó là chương trình thưởng người dùng Edge bằng điểm cho các hoạt động như tìm kiếm, quiz nhỏ, trò chơi, và một tiện ích mở rộng (nhưng đó là chuyện khác).
 
-Bạn thấy các mục "Explore" ở đây:  
+Bạn thấy ở đây các khối "Explore" :
 ![Explore screenshot](assets/20260313_135010_image.png)
 
-Ví dụ đây là cái họ gọi là "set trong ngày".  
+Ví dụ đây là cái họ gọi là "set trong ngày".
 ![Daily set screenshot](assets/20260313_135038_image.png)
 
-Họ còn có cả hệ thống streak, khá là điên rồ.  
+Họ thậm chí làm hệ thống streak, khá điên.
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-Cũng có hệ thống cấp độ và nó thực sự rất vui:  
+Ngoài ra còn có hệ thống cấp độ và tiến trình khiến thói quen thực sự gây nghiện :
 ![Level screenshot](assets/20260313_135340_image.png)
 
-Vậy là có rất nhiều cách để kiếm điểm, và hầu hết đều là hàng ngày.  
-Ý tưởng ở đây là tạo một bot làm các hoạt động thay bạn, để farm điểm trên quy mô lớn và hoàn thành thói quen farm của bạn.
+Vậy bạn có đủ cách kiếm điểm, và hầu hết là hằng ngày.
+Ý tưởng ở đây sẽ là làm một con bot thực hiện các hoạt động thay bạn, để cày điểm ở quy mô lớn và hoàn thành thói quen cày của bạn.
 
-Như bạn thấy bên dưới, hầu hết phần thưởng là thẻ quà tặng, nhưng cũng có những thứ thú vị như trò chơi hoặc gói đăng ký.  
+Như bạn thấy bên dưới, hầu hết phần thưởng là thẻ quà tặng, nhưng cũng có các lựa chọn thú vị như game hay gói đăng ký.
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
-| Phần thưởng | Danh mục | Chi phí (điểm) |
+| Phần thưởng | Danh mục | Giá điểm |
 | --- | --- | --- |
 | **Rakuten TV – 1 phim HD** | Nội dung số | 1 785 |
-| **Roblox (thẻ kỹ thuật số)** | Trò chơi / Nội dung số | 6 750 |
-| **Thẻ quà tặng Microsoft** | Cửa hàng / Dịch vụ | 5 660 |
-| **Thẻ quà tặng Xbox** | Cửa hàng / Dịch vụ | 5 660 |
-| **Thẻ quà tặng Microsoft Solitaire Collection** | Trò chơi / Nội dung số | 1 500 |
-| **Minecraft Minecoins** | Trò chơi / Nội dung số | 2 500 |
-| **Thẻ quà tặng League of Legends** | Trò chơi / Nội dung số | 2 000 |
-| **Mã Overwatch coins (kỹ thuật số)** | Trò chơi / Nội dung số | 2 000 |
-| **Sea of Thieves – Gói Cổ vật** | Trò chơi / Nội dung số | 1 700 |
-| **Zalando – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 7 205 |
-| **Carrefour – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Cultura – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Fnac‑Darty – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **La Redoute – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Mango – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 36 025 |
-| **Wonderbox – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Yves Rocher – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Amazon.fr – Séc quà tặng** | Cửa hàng / Dịch vụ | 7 205 |
-| **Foot Locker – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **IKEA FR – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 36 025 |
-| **IKEA FR – Thẻ quà tặng (kiểu khác)** | Cửa hàng / Dịch vụ | 7 200 |
-| **Marionnaud – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Asos – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Adidas FR – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Deliveroo France – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 21 615 |
-| **H&M France – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 14 410 |
-| **Global Hotel Card (Expedia Group)** | Cửa hàng / Dịch vụ | 7 205 |
-| **Uber Eats France – Thẻ quà tặng** | Cửa hàng / Dịch vụ | 36 025 |
+| **Roblox (thẻ số)** | Game / nội dung số | 6 750 |
+| **Thẻ quà tặng Microsoft** | Cửa hàng / dịch vụ | 5 660 |
+| **Thẻ quà tặng Xbox** | Cửa hàng / dịch vụ | 5 660 |
+| **Thẻ quà tặng Microsoft Solitaire Collection** | Game / nội dung số | 1 500 |
+| **Minecraft Minecoins** | Game / nội dung số | 2 500 |
+| **Thẻ quà tặng League of Legends** | Game / nội dung số | 2 000 |
+| **Mã Overwatch coins (số)** | Game / nội dung số | 2 000 |
+| **Sea of Thieves – Gói Ancient Coins** | Game / nội dung số | 1 700 |
+| **Zalando – Thẻ quà tặng** | Cửa hàng / dịch vụ | 7 205 |
+| **Carrefour – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Cultura – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Fnac‑Darty – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **La Redoute – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Mango – Thẻ quà tặng** | Cửa hàng / dịch vụ | 36 025 |
+| **Wonderbox – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Yves Rocher – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Amazon.fr – Phiếu quà tặng** | Cửa hàng / dịch vụ | 7 205 |
+| **Foot Locker – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **IKEA FR – Thẻ quà tặng** | Cửa hàng / dịch vụ | 36 025 |
+| **IKEA FR – Thẻ quà tặng (thiết kế khác)** | Cửa hàng / dịch vụ | 7 200 |
+| **Marionnaud – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Asos – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Adidas FR – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Deliveroo France – Thẻ quà tặng** | Cửa hàng / dịch vụ | 21 615 |
+| **H&M France – Thẻ quà tặng** | Cửa hàng / dịch vụ | 14 410 |
+| **Global Hotel Card (Expedia Group)** | Cửa hàng / dịch vụ | 7 205 |
+| **Uber Eats France – Thẻ quà tặng** | Cửa hàng / dịch vụ | 36 025 |
 
-Giờ bạn đã hiểu chương trình này hấp dẫn thế nào, hãy cùng tìm hiểu về botting.
+Giờ bạn đã hiểu lợi ích của chương trình, hãy quan tâm tới botting.
 
 ---
 
 ## Thử nghiệm đầu tiên
 
-Trước khi xây dựng bot, tôi muốn chắc chắn rằng IP của mình sẽ không bị đánh dấu vì đã sử dụng hàng trăm tài khoản từ cùng một địa chỉ. Bạn biết tôi mà, tôi sẽ dùng Tor với proxy xoay vòng. Và tôi không muốn host bot trên VPS -- tôi muốn nó chạy trong một GitHub Action.
+Trước khi xây bot, tôi muốn chắc IP của mình sẽ không bị đánh dấu vì dùng hàng trăm tài khoản từ cùng một địa chỉ. Bạn biết tôi mà, tôi đi qua Tor với proxy xoay. Tôi muốn chạy nó trong GitHub Action thay vì trên VPS.
 
-Vậy là tôi đã viết một workflow đơn giản:
+Vì vậy tôi viết một workflow đơn giản :
 
 ```yaml
 name: Tor Proxy Curl
@@ -133,24 +134,24 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-Workflow này chỉ cài Tor, khởi động nó và thực hiện một yêu cầu curl qua nó.
+Workflow này chỉ cài Tor, khởi động nó, và gửi một yêu cầu curl qua nó.
 
-Lần chạy đầu tiên cho kết quả này:  
+Lần chạy đầu cho kết quả này :
 ![Tor curl first run](assets/20260313_140705_image.png)
 
-Thống kê thời gian:  
+Thống kê thời gian là :
 !Timings
 
-Lần chạy thứ hai cho kết quả này:  
+Lần chạy thứ hai cho kết quả này :
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-Như bạn thấy, các IP đều khác nhau, nên chúng ta sẽ không bị gắn cờ vì lạm dụng từ cùng một IP. Tin tốt -- chúng ta có thể tiếp tục phát triển bot farm.
+Như bạn thấy, các IP khác nhau, nên ta tránh bị đánh dấu vì lạm dụng từ cùng một IP. Tin tốt : có thể tiếp tục phát triển bot cày.
 
 ---
 
-## Thử nghiệm đầu tiên với Selenium
+## Thử nghiệm đầu với Selenium
 
-Để tự động hóa giao diện, tôi sẽ sử dụng **Selenium**: một công cụ điều khiển trình duyệt thật (Chrome/Edge/Firefox) thay cho người dùng. Trong bối cảnh GitHub Action, điều này có nghĩa là cài đặt trình duyệt + driver của nó, sau đó chạy một script đăng nhập vào Microsoft Rewards và nhấp vào những chỗ cần thiết.
+Để tự động hóa giao diện, tôi sẽ dùng **Selenium** : một công cụ điều khiển trình duyệt thật (Chrome/Edge/Firefox) thay cho người dùng. Trong bối cảnh GitHub Action, nghĩa là cài trình duyệt + driver của nó, rồi chạy script đăng nhập Microsoft Rewards và bấm đúng chỗ cần.
 
 ### Ví dụ script JavaScript (Node.js + selenium-webdriver)
 
@@ -214,7 +215,7 @@ async function applyStealth(driver: WebDriver) {
 })();
 ```
 
-Kết quả script:
+Kết quả của script :
 
 ```
 DevTools listening on ws://127.0.0.1:50274/devtools/browser/37b9ea79-0e5d-4673-9e91-7ffeaf0d37f8
@@ -223,5 +224,5 @@ After navigation: title= Bienvenue dans Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-Ok, điều đó có nghĩa là chúng ta chưa đăng nhập, vậy bây giờ chúng ta sẽ xây dựng yêu cầu đăng nhập và xem liệu có thể đăng nhập vào tài khoản Microsoft Rewards để thực hiện các hoạt động hay không.
-<!-- ## BÀI VIẾT NÀY VẪN ĐANG ĐƯỢC VIẾT, TÔI SẼ CẬP NHẬT CÁC BƯỚC ĐĂNG NHẬP VÀ BOT CÁC HOẠT ĐỘNG SỚM! HÃY CHỜ ĐÓN. -->
+Kết quả này xác nhận ta vẫn đang đăng xuất, nên giờ tôi sẽ xây dựng yêu cầu login và thử kết nối tới tài khoản Microsoft Rewards của mình để tự động hóa các hoạt động.
+<!-- ## BÀI NÀY VẪN ĐANG VIẾT DỞ, TÔI SẼ CẬP NHẬT VỚI CÁC BƯỚC ĐĂNG NHẬP VÀ CÀY HOẠT ĐỘNG SỚM! HÃY ĐÓN XEM. -->

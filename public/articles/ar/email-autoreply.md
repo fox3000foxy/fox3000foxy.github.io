@@ -1,76 +1,75 @@
 ---
 title: استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions
-description: كيف برمجت ردّادًا آليًا للبريد الإلكتروني بالذكاء الاصطناعي يعمل على GitHub
-  Actions بـ 0€/شهر -- باستخدام وسم git كقاعدة بيانات و
-  التجميع المسبق في وسم تشغيل.
+description: كيف برمجت مجيبا آليا للبريد بالذكاء الاصطناعي يعمل على GitHub
+  Actions بـ0€/شهر، باستخدام وسوم git كقاعدة بيانات وتجميد مسبق في وسم runtime.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "27EdKLNEIq7yQeQPqBpmomM2nyx75B2IJ42lnFolxt12968RQi0A/Ft5M/1B8FQb5KEknvDAYuWBXuMEP0buYQ=="
+author_sig: "PW7OqMFjo/zTdN/GM1oAfgOB0T2ZMMZcyNF1j64GOHUXuqu1WREZYD6LhoYDm9LljIADWTKzw0SiT0ILz+fNHQ=="
 ---
 
 # استخدمت git كقاعدة بيانات لتشغيل بوت مجاني على GitHub Actions
 
-عندي ردّاد بريد إلكتروني آلي يعمل 24/7.
+لدي مجيب بريد آلي يعمل 24/7.
 
-يقرأ إيميلاتي، يفهم موضوعها، ويرد تلقائيًا بالذكاء الاصطناعي. يتذكر المحادثات السابقة. يتجاهل النشرات الإخبارية و `noreply@`. يُحيل إلى إنسان عندما يكون الموضوع ساخنًا جدًا.
+يقرأ رسائلي، ويفهم عما تتكلم، ويرد وحده بذكاء اصطناعي. يتذكر المحادثات السابقة. يتجاهل النشرات و`noreply@`. يحوّل لإنسان عندما يكون الأمر ساخنا أكثر من اللازم.
 
-التكلفة الشهرية: **0€**.
+الkost الشهري : **0€**.
 
-لا سيرفر. لا VPS. لا قاعدة بيانات. فقط GitHub Actions واختراق مجنون: **استخدام git كقاعدة بيانات**.
+أستغني عن خادم وVPS وقاعدة بيانات. فقط GitHub Actions وحيلة مجنونة : **استخدام git كقاعدة بيانات**.
 
-أتتوقع الفكرة؟ لا؟ حسنًا، تمسّك، إنها سخيفة وعبقرية في نفس الوقت.
-
----
-
-## المشكلة: GitHub Actions بلا حالة
-
-GitHub Actions مجاني. يمكنك تشغيل cron كل 5 دقائق، تشغيل كودك، مجانًا.
-
-لكن فيه مشكلة: إنه **بلا حالة**.
-
-كل تشغيلة تبدأ في آلة فارغة. لا شيء يُحفظ بين تشغيلتين. التشغيلة السابقة؟ منسية. ممسوحة. وكأنها لم تكن موجودة أبدًا.
-
-بالنسبة لردّاد البريد الإلكتروني، هذه مشكلة ضخمة. مثل:
-
-> "ما هو آخر إيميل قمت بمعالجته؟"
-
-إذا نسي البوت هذا في كل تشغيلة، فإما سيعيد الرد على نفس الإيميلات مرارًا (كارثة)، أو سيفوّت بعض الإيميلات.
-
-نحتاج إلى حالة دائمة. وعادةً، الحالة الدائمة = قاعدة بيانات. لكن قاعدة البيانات تعني سيرفر، والسيرفر لم يعد مجانيًا.
-
-وهنا يصبح الأمر مثيرًا للاهتمام.
+ترى إلى أين أريد الوصول ؟ لا ؟ حسنا، تمسك، فهو غبي وعبقري في آن واحد.
 
 ---
 
-## الحل: وسم git كقاعدة بيانات
+## المشكلة : GitHub Actions عديم الحالة
 
-مستودع GitHub الخاص بك هو بالفعل تخزين دائم. مجاني. مُرقّم. موجود دائمًا.
+GitHub Actions مجاني. تستطيع إطلاق cron كل 5 دقائق، وتشغيل كودك، مجانا.
 
-إذًا لماذا لا نخزّن الحالة فيه؟
+لكن هناك مشكلة : إنه **عديم الحالة**.
 
-الفكرة: في كل تشغيلة، يقرأ البوت آخر UID إيميل تمت معالجته من **وسم git**. يعالج الإيميلات الجديدة. ثم يعيد دفع الوسم بالـ UID الجديد.
+كل تشغيل ينطلق في آلة عذراء. لا شيء يُحفَظ بين تنفيذين. التشغيل السابق ؟ منسي. ممحو. كأنه لم يوجد أبدا.
+
+لمجيب بريد، هذه مشكلة ضخمة. مثلا :
+
+> "ما آخر بريد عالجته فعلا ؟"
+
+إذا نسي البوت ذلك مع كل تشغيل، سيعيد الرد على نفس الرسائل في حلقة (كارثة)، أو سيفوّت رسائل.
+
+يلزم حالة دائمة. وعادة، حالة دائمة = قاعدة بيانات. لكن قاعدة بيانات تعني خادما، والخادم لم يعد مجانيا.
+
+هنا يصبح الأمر مثيرا.
+
+---
+
+## الحل : وسوم git كقاعدة بيانات
+
+مستودع GitHub الخاص بك تخزين دائم فعلا. مجاني. مُصدَر. موجود دائما.
+
+فلماذا لا نخزن الحالة فيه ؟
+
+الفكرة : مع كل تشغيل، يقرأ البوت آخر UID بريد معالَج من **وسم git**. يعالج الرسائل الجديدة. ثم يعيد دفع الوسم مع UID الجديد.
 
 ```mermaid
 sequenceDiagram
     participant GH as GitHub Actions
     participant GIT as Git Tags
     participant IMAP as Serveur IMAP
-    
+
     Note over GH: Run #1
     GH->>GIT: lit tag "lastid"
     GIT-->>GH: vide (premier run)
     GH->>IMAP: fetch mails 1-50
     IMAP-->>GH: 50 mails
     GH->>GIT: push tag "lastid" = 50
-    
+
     Note over GH: Run #2
     GH->>GIT: lit tag "lastid"
     GIT-->>GH: 50
@@ -79,61 +78,61 @@ sequenceDiagram
     GH->>GIT: push tag "lastid" = 73
 ```
 
-وسم git هو قاعدة البيانات. قيمة واحدة، لكن هذا كل ما نحتاجه.
+وسم git هو قاعدة البيانات. قيمة واحدة، لكنها كل ما نحتاجه.
 
 ### قراءة الحالة
 
-في بداية المهمة، نجلب القيمة من الوسم:
+في بداية الوظيفة، نسترجع القيمة من الوسم :
 
 ```bash
 git fetch origin --tags lastid || true
 git show refs/tags/lastid:data/lastId > data/lastId || true
 ```
 
-`git show refs/tags/lastid:data/lastId` تعني: "أعطني محتوى الملف `data/lastId` كما كان في الوسم `lastid`".
+يعني `git show refs/tags/lastid:data/lastId` : "أعطني محتوى ملف `data/lastId` كما كان في وسم `lastid`".
 
-بوم. حصلت على القيمة، دون قاعدة بيانات.
+بوم. لديك قيمتك، دون قاعدة بيانات.
 
 ### كتابة الحالة
 
-في النهاية، نعيد إنشاء الوسم بالقيمة الجديدة:
+في النهاية، نعيد إنشاء الوسم مع القيمة الجديدة :
 
 ```bash
-git switch --orphan lastid-tmp   # فرع يتيم بلا تاريخ
-git rm -rf .                      # نفرّغ كل شيء
+git switch --orphan lastid-tmp   # فرع عذراء دون سجل
+git rm -rf .                      # نفرغ كل شيء
 mkdir -p data
 printf "%s\n" "${LAST_ID_CONTENT}" > data/lastId
 
 git add data/lastId
 git commit -m "lastId snapshot"
-git tag -f lastid                 # فرض الوسم على هذا الالتزام
-git push --force ...origin lastid # دفع الوسم
+git tag -f lastid                 # نجبر الوسم على هذا الـcommit
+git push --force ...origin lastid # ندفع الوسم
 ```
 
-ننشئ فرعًا **يتيمًا** (بلا تاريخ)، نضع فقط ملف `lastId`، نلتزم، نوسم، ندفع بقوة.
+ننشئ فرعا **يتيما** (دون سجل)، ونضع فقط ملف `lastId`، ونُدخل، ونسم، وندفع بالإجبار.
 
-لماذا يتيم؟ لكي لا نتراكم 10,000 التزام حالة في تاريخ المستودع. كل تحديث يمسح السابق. الوسم يشير دائمًا إلى التزام واحد فقط يحتوي على قيمة واحدة فقط.
+لماذا يتيما ؟ لعدم تراكم 10 000 commit حالة في سجل المستودع. كل تحديث يمحو سابقه. يشير الوسم دائما إلى commit واحد يحوي قيمة واحدة.
 
-هذا نظيف. هذا مجاني. هذا مكسور تمامًا xD
+إنه نظيف. مجاني. ملتَوٍ تماما ويعمل.
 
 ---
 
-## الاختراق الثاني: لقطة وقت التشغيل
+## الحيلة الثانية : لقطة runtime
 
-هناك مشكلة أخرى مع GitHub Actions: `npm install`.
+هناك مشكلة أخرى مع GitHub Actions : الـ`npm install`.
 
-إذا في كل تشغيلة (كل 5 دقائق) قمت بـ `npm install` + `npm run build`، فأنت تهدر 60-90 ثانية في كل مرة. على cron متكرر، هذا دقائق من الحوسبة المُهدرة مقابل لا شيء.
+إذا كنت مع كل تشغيل (كل 5 دقائق) تنفذ `npm install` + `npm run build`، تهدر 60-90 ثانية في كل مرة. في cron متكرر، هذه دقائق حساب مهدورة للا شيء.
 
-الحل: تجميع الكود مسبقًا مرة واحدة، وتخزينه في وسم git أيضًا.
+الحل : تجميع الكود مرة واحدة، وتخزينه في وسم git أيضا.
 
-سير عمل البناء (الذي يعمل عندما تدفع على `master`) يفعل هذا:
+يفعل workflow البناء (الذي يعمل عندما تدفع على `master`) هذا :
 
 ```bash
-# compile le code
+# تجميع الكود
 bun install
 bun run build
 
-# stocke dist/ + node_modules/ dans un tag "runtime"
+# تخزين dist/ + node_modules/ في وسم "runtime"
 git checkout --orphan temp-runtime
 git rm -rf .
 cp -r "$TMPDIR"/* .
@@ -143,77 +142,77 @@ git tag -f runtime
 git push --force ...origin runtime
 ```
 
-وسم `runtime` يحتوي على الكود المترجم و `node_modules`. كل شيء جاهز للتشغيل.
+يحوي وسم `runtime` الكود المُجمَّع و`node_modules`. جاهز للعمل.
 
-أما cron فهو يسحب هذا الوسم مباشرة:
+أما الـcron فيسحب هذا الوسم مباشرة :
 
 ```yaml
 - name: Checkout runtime snapshot
   uses: actions/checkout@v4
   with:
-    ref: refs/tags/runtime    # الكود المجمّع مسبقًا، لا المصدر
+    ref: refs/tags/runtime    # الكود المُجمَّع مسبقا، لا المصدر
     fetch-depth: 1
 
-# pas de npm install, pas de build !
+# لا npm install ولا build !
 - name: Process emails
   run: node dist/index.js --action
 ```
 
-لا تثبيت. لا بناء. cron يبدأ فورًا وينفذ فقط `node dist/index.js`.
+ينطلق الـcron فورا وينفذ فقط `node dist/index.js`، دون install ولا build.
 
-يعني، لديك وسمان يقومان بمهمتين:
-- `runtime` = الكود الجاهز للتشغيل (يُحدّث عندما تدفع كودًا)
-- `lastid` = الحالة الدائمة (تُحدّث في كل تشغيلة)
+يعني لديك وسمان يقومان بعملين :
+- `runtime` = الكود الجاهز للعمل (يُحدَّث عندما تدفع كودا)
+- `lastid` = الحالة الدائمة (تُحدَّث مع كل تشغيل)
 
-أنيق بشكل مقرف.
+إنه أنيق بشكل قذر.
 
 ---
 
-## البوت نفسه: ردّاد آلي بالذكاء الاصطناعي
+## البوت نفسه : مجيب آلي بالذكاء الاصطناعي
 
-حسنًا، اختراق git رائع، لكن ماذا يفعل البوت بالضبط؟
+حسنا، حيلة git رائعة، لكن ماذا يفعل البوت بالضبط ؟
 
-يقرأ إيميلاتك عبر IMAP، يفهمها بالذكاء الاصطناعي (Groq + Llama 3.3 70B)، ويرد تلقائيًا.
+يقرأ رسائلك عبر IMAP، ويفهمها بذكاء اصطناعي (Groq + Llama 3.3 70B)، ويرد تلقائيا.
 
-بنية معمارية بخدمات نظيفة وحقن تبعيات (InversifyJS):
+بنية بخدمات نظيفة مع حقن تبعيات (InversifyJS) :
 
 ```
 App
-├── ImapService      → lit les mails (IMAP)
-├── SmtpService      → envoie les réponses (SMTP)
-├── ParserService    → parse le contenu des mails
-├── ReplyService     → génère la réponse IA
-├── SummaryService   → mémoire de conversation
-├── AccountsService  → gère plusieurs comptes email
-└── ConfigService    → config / env vars
+├── ImapService      ← يقرأ الرسائل (IMAP)
+├── SmtpService      ← يرسل الردود (SMTP)
+├── ParserService    ← يحلل محتوى الرسائل
+├── ReplyService     ← يولد رد الذكاء الاصطناعي
+├── SummaryService   ← ذاكرة المحادثة
+├── AccountsService  ← يدير حسابات بريد متعددة
+└── ConfigService    ← إعداد / متغيرات بيئة
 ```
 
-### وضعيّ تشغيل
+### وضعا التشغيل
 
-يمكن للبوت العمل بطريقتين:
+يمكن للبوت العمل بطريقتين :
 
-**وضع المستمع (الوقت الفعلي)**: اتصال IMAP دائم مع إعادة اتصال أُسّي. لـ VPS.
+**وضع الاستماع** (وقت حقيقي) : اتصال IMAP دائم مع إعادة اتصال أسّية. لـVPS.
 
 ```typescript
 this.imapService.on("exists", async (data) => {
-  console.log(`[MAIL] Nouveau mail ! Total: ${data.count}`);
-  // traite le nouveau mail immédiatement
+  console.log(`[MAIL] بريد جديد ! الإجمالي: ${data.count}`);
+  // يعالج البريد الجديد فورا
 });
 ```
 
-**وضع الدفعة (batch)**: يعالج الإيميلات الجديدة من `lastId`، ثم يُغلق. لـ cron GitHub Actions.
+**وضع الفعل** (دفعي) : يعالج الرسائل الجديدة منذ `lastId`، ثم يُغلَق. لـcron في GitHub Actions.
 
 ```bash
 node dist/index.js --action
 ```
 
-وضع `--action` هو الذي يستخدم اختراق git. يقرأ `lastId`، يعالج الجديد، يكتب `lastId` الجديد، انتهى.
+وضع `--action` هو الذي يستخدم حيلة git. يقرأ `lastId`، ويعالج الجديد، ويكتب `lastId` الجديد، انتهى.
 
-### عدم الرد على البوتات
+### لا ترد على الآليين
 
-إذا رد بوتك على كل الإيميلات، فسيرد على النشرات الإخبارية والإشعارات و `noreply@`. كارثة. أسوأ: إذا رد بوتان على بعضهما البعض، يكون لديك حلقة لا نهائية من الإيميلات. الكابوس.
+إذا رد بوتك على كل الرسائل، سيرد على النشرات والإشعارات و`noreply@`. كارثة. والأسوأ : إذا رد بوتان على بعضهما، لديك حلقة بريد لانهائية. الكابوس.
 
-لذا فلترة عدوانية:
+إذن ترشيح عدواني :
 
 ```typescript
 export function isAutomatedSender(address) {
@@ -228,34 +227,34 @@ export function isAutomatedSender(address) {
 }
 ```
 
-وكذلك كشف عبر ترويسات الإيميل:
+وأيضا كشف عبر ترويسات البريد :
 
 ```typescript
 export function isAutomatedByHeaders(headers) {
   return (
     ["bulk", "list", "junk"].includes(headers.precedence) ||
     headers["auto-submitted"] !== "no" ||
-    headers["list-unsubscribe"] !== "" ||   // newsletters ont ça
+    headers["list-unsubscribe"] !== "" ||   // النشرات لديها هذا
     /mailchimp|sendgrid|mailgun|brevo/i.test(headers["x-mailer"])
   );
 }
 ```
 
-`List-Unsubscribe` في الترويسات؟ هذه نشرة إخبارية. `Precedence: bulk`؟ بريد جماعي. `X-Mailer: Mailchimp`؟ فهمت الفكرة. نتجاهل.
+هل يوجد `List-Unsubscribe` في الترويسات ؟ إنها نشرة. `Precedence: bulk` ؟ بريد جماعي. `X-Mailer: Mailchimp` ؟ ترى النوع. نتجاهل.
 
-إنه مثل حارس النادي الليلي: البوتات لا تدخل xD
+إنه كبوّاب ملهى ليلي : الآليون لا يمرون.
 
-### المشغّلات السحرية
+### المحفزات السحرية
 
-يمكن للذكاء الاصطناعي أن يقرر عدم الرد أصلًا، أو تحويل الأمر لإنسان. كيف؟ بمشغّلات خاصة في رده.
+يستطيع الذكاء الاصطناعي أن يقرر ألا يرد إطلاقا، أو أن يسلّم لإنسان. كيف ؟ بمحفزات خاصة في رده.
 
-موجه النظام يقول له:
+يقول له prompt النظام :
 
-> إذا كان إيميلًا تلقائيًا/نشرة إخبارية → رد بـ `<no_reply>`
-> إذا كان مهمًا/حساسًا جدًا (قانوني، مالي...) → رد بـ `<manual_reply_required>`
-> وإلا → اكتب ردًا حقيقيًا
+> إذا كان بريدا آليا/نشرة ← رد `<no_reply>`
+> إذا كان مهما/حساسا أكثر من اللازم (قانوني ومالي...) ← رد `<manual_reply_required>`
+> وإلا ← اكتب ردا حقيقيا
 
-والكود يقرأ ذلك:
+ويقرأ الكود ذلك :
 
 ```typescript
 const aiReply = completion.choices[0].message.content.trim();
@@ -263,31 +262,31 @@ const manualTrigger = aiReply.includes(MANUAL_REPLY_TRIGGER);
 const noReply = aiReply.includes(NO_REPLY_TRIGGER);
 
 if (noReply) {
-  console.log("[MAIL] L'IA a décidé d'ignorer. Skip.");
+  console.log("[MAIL] قرر الذكاء الاصطناعي التجاهل. تخطٍّ.");
   return;
 }
 
 if (manualTrigger) {
-  console.log("[MAIL] Trop chaud, je forward à un humain.");
+  console.log("[MAIL] ساخن أكثر من اللازم، أحوّل لإنسان.");
   await this.smtpService.sendManualForward(...);
   return;
 }
 
-// sinon on envoie la réponse IA
+// وإلا نرسل رد الذكاء الاصطناعي
 await this.smtpService.sendReply(...);
 ```
 
-يعني الذكاء الاصطناعي لديه الحق في قول "لا، أنا لا ألمس هذا، اتصل بإنسان حقيقي". هذه حكمة.
+يعني للذكاء الاصطناعي حق قول "لا، هنا لا ألمس، نادِ إنسانا حقيقيا". إنها حكمة.
 
 ---
 
 ## ذاكرة المحادثة
 
-تفصيل يغير كل شيء: البوت **يتذكر** المحادثات.
+تفصيل يغيّر كل شيء : البوت **يتذكر** المحادثات.
 
-عندما يرد على شخص ما، يحفظ ملخصًا للتبادل. في المرة القادمة التي يكتب فيها هذا الشخص، يُعاد حقن الملخص في الموجه.
+عندما يرد على شخص، يحفظ ملخصا للتبادل. في المرة التالية التي يكتب فيها هذا الشخص، يُحقَن الملخص في الـprompt.
 
-التخزين: ملف JSON لكل جهة اتصال.
+التخزين : ملف JSON لكل جهة.
 
 ```
 data/customers/
@@ -296,7 +295,7 @@ data/customers/
 │   └── bob%40client.fr.json
 ```
 
-والملخص نفسه يُولّد بواسطة الذكاء الاصطناعي، الذي يدمج الملخص القديم مع الرسالة الجديدة:
+والملخص نفسه يولده الذكاء الاصطناعي، الذي يدمج الملخص القديم مع الرسالة الجديدة :
 
 ```typescript
 const completion = await groq.chat.completions.create({
@@ -305,85 +304,85 @@ const completion = await groq.chat.completions.create({
     { role: "system", content: "Tu es un assistant de mémoire. Merge l'ancien résumé avec le nouveau message sans perdre d'info." },
     { role: "user", content: `Résumé existant:\n${existing}\n\nNouveau message:\n${incomingContent}` }
   ],
-  temperature: 0.0,  // déterministe, pas de créativité
+  temperature: 0.0,  // حتمي، دون إبداع
   max_tokens: 800,
 });
 ```
 
-إذًا البوت يبني ذاكرة مضغوطة مع مرور الوقت. لا حاجة لتخزين كل الإيميلات، فقط ملخص يكبر بذكاء.
+إذن يبني البوت ذاكرة مضغوطة مع الوقت. ملخص يكبر بذكاء يكفي، دون تخزين كل الرسائل.
 
-وهذه الملفات JSON؟ حسنًا... هي مخزنة في git أيضًا، في وسم runtime. Git في كل مكان xD
+وهذه الملفات JSON ؟ حسنا... إنها مخزنة في git أيضا، في وسم runtime. git في كل مكان.
 
 ---
 
-## الأمر الذكي بطول الموجه
+## النقطة الذكية في طول الـprompt
 
 تفصيل تقني صغير جعلني أبتسم.
 
-النماذج لها حد للرموز. إذا تجاوز إيميلك + الملخص + موجه الشخصية الحد، ترجع API خطأ.
+للنماذج حد رموز. إذا تجاوز بريدك + الملخص + prompt الشخصية، يعيد API خطأ.
 
-الكود يتعامل مع هذا بـ **اقتطاع متسلسل** + إعادة محاولة:
+يدير الكود ذلك بـ**اقتطاع متتالٍ** + إعادة محاولة :
 
 ```typescript
 try {
-  // premier essai avec les limites normales
+  // محاولة أولى بالحدود العادية
   completion = await groq.chat.completions.create({...});
 } catch (error) {
   if (!this.isLengthError(error)) throw error;
 
-  // c'était une erreur de longueur : on re-tente avec des limites plus serrées
+  // كان خطأ طول : نعيد المحاولة بحدود أضيق
   ({ systemContent, userContent } = this.buildPromptPayload({
     ...,
     limits: {
-      systemPromptChars: 2200,  // au lieu de 3000
-      summaryChars: 1800,       // au lieu de 4000
-      personaChars: 900,        // au lieu de 1500
-      userContentChars: 2200,   // au lieu de 8000
+      systemPromptChars: 2200,  // بدلا من 3000
+      summaryChars: 1800,       // بدلا من 4000
+      personaChars: 900,        // بدلا من 1500
+      userContentChars: 2200,   // بدلا من 8000
     },
   }));
-  completion = await groq.chat.completions.create({...});  // retry
+  completion = await groq.chat.completions.create({...});  // إعادة محاولة
 }
 ```
 
-إذا لم تنجح، نقطّع أقصر ونعيد المحاولة. بسيط، فعال، لا تعطل.
+إذا لم يمر، نقطع أقصر ونعيد المحاولة. بسيط وفعال، دون انهيار.
 
 ---
 
-## حسنًا، وكيف يعمل عمليًا؟
+## حسنا، وعمليا، كيف يعمل ؟
 
-التدفق الكامل لتشغيلة cron:
+التدفق الكامل لتشغيل cron :
 
 ```
-1. GitHub Actions تُفعّل (cron كل 5 دقائق)
-2. سحب وسم "runtime" (الكود المجمّع مسبقًا)
-3. git show refs/tags/lastid → جلب آخر UID تمت معالجته
+1. يُحفَّز GitHub Actions (cron كل 5 دقائق)
+2. سحب وسم "runtime" (كود مُجمَّع مسبقا)
+3. git show refs/tags/lastid ← يسترجع آخر UID معالَج
 4. node dist/index.js --action
    ├── اتصال IMAP
-   ├── جلب الإيميلات من lastId+1
-   ├── لكل إيميل :
-   │   ├── تحليل المحتوى
-   │   ├── فلترة البوتات (تخطي إذا تلقائي)
-   │   ├── مطابقة حساب المستلم
-   │   ├── جلب ذاكرة المحادثة
-   │   ├── توليد رد الذكاء الاصطناعي (Groq)
-   │   ├── <no_reply> ؟ تخطي
-   │   ├── <manual_reply_required> ؟ تحويل لإنسان
-   │   ├── وإلا : إرسال الرد (SMTP)
-   │   └── تحديث ذاكرة المحادثة
-   └── كتابة lastId الجديد
-5. git push --force tag "lastid" بالقيمة الجديدة
+   ├── جلب الرسائل منذ lastId+1
+   ├── لكل بريد :
+   │   ├── حلل المحتوى
+   │   ├── رشّح الآليين (تخطَّ إذا آلي)
+   │   ├── طابِق الحساب المتلقي
+   │   ├── استرجع ذاكرة المحادثة
+   │   ├── ولّد رد الذكاء الاصطناعي (Groq)
+   │   ├── <no_reply> ؟ تخطَّ
+   │   ├── <manual_reply_required> ؟ حوّل لإنسان
+   │   ├── وإلا : أرسل الرد (SMTP)
+   │   └── حدّث ذاكرة المحادثة
+   └── اكتب lastId الجديد
+5. git push --force للوسم "lastid" بالقيمة الجديدة
 ```
 
-ثم يعاد الكرّة بعد 5 دقائق. إلى الأبد. مجانًا.
+ويبدأ من جديد بعد 5 دقائق. للأبد. مجانا.
 
 ---
 
-**الـ 3 أشياء يجب تذكرها:**
+**النقاط الثلاث للتذكر :**
 
-1. **Git = قاعدة بيانات مجانية** -- وسم يتيم يمكنه تخزين حالتك الدائمة بين تشغيلتين بلا حالة. `git show refs/tags/X:fichier` للقراءة، force-push للكتابة. لا حاجة لـ DB.
+1. **git = قاعدة بيانات مجانية**، وسم يتيم يستطيع تخزين حالتك الدائمة بين تشغيلين عديمي الحالة. `git show refs/tags/X:fichier` للقراءة، والدفع بالإجبار للكتابة. توفر قاعدة بيانات كاملة.
 
-2. **التجميع المسبق في وسم runtime** -- بدل `npm install` في كل تشغيلة cron، خزّن الكود المُجمّع + node_modules في وسم git. cron يبدأ فوريًا.
+2. **جمّع مسبقا في وسم runtime**، بدلا من `npm install` مع كل تشغيل للـcron، خزّن الكود المُجمَّع + node_modules في وسم git. ينطلق الـcron فورا.
 
-3. **بوت الذكاء الاصطناعي يجب أن يعرف متى يصمت** -- المشغّلات `<no_reply>` و `<manual_reply_required>` تترك للذكاء الاصطناعي قرار عدم الرد أو تحويل الأمر. بالإضافة إلى فلترة البوتات. وإلا ستخلق حلقة إيميلات لا نهائية.
+3. **بوت الذكاء الاصطناعي يجب أن يعرف الصمت**، المحفزان `<no_reply>` و`<manual_reply_required>` يتركان للذكاء الاصطناعي قرار عدم الرد أو التسليم. مع الترشيح ضد الآليين. وإلا أنشأت حلقة بريد لانهائية.
 
-Serverless cron مع حالة دائمة، ذكاء اصطناعي، ذاكرة، كل ذلك بـ 0€/شهر. إنه مكسور تمامًا وأنا أحبه xD
+cron بلا خادم مع حالة دائمة وذكاء اصطناعي وذاكرة، الكل بـ0€/شهر. إنه معطوب تماما وأعشق هذا التركيب.

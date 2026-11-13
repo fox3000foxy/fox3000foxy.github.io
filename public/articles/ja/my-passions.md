@@ -1,73 +1,73 @@
 ---
-title: 俺の情熱
-description: コーディング、絵を描くこと、自動化、古い技術の発見など----僕を動かすものたち。
+title: 私の情熱
+description: "コード、絵、自動化、古い技術探索など。私を動かすものの概要。"
 date: 2026-03-08
-authors:
-  - fox3000foxy
 tags:
   - personal
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "9+amI9zdxC03kT6Ug1rYOq5ArYfKW+nw8QGlifoKoUIb8GX4JFr/pGmsNZva7LoBj3wES2rrAWGFb4haZp1jlg=="
+author_sig: "w/86ZGoguwxgjpEzAs1tt+iqZvfINm4n3tWTLWUxDsW0qj+NafQ1tawfyTunAzA8Pgr4WOYq430v4rE5YxU0Vg=="
 ---
 
-# 俺の情熱
+# 私の情熱
 
-このブログはずっと前から書きたいと思ってたんだけど、ずっと自分を抑えてきたんだ :/
+このブログは前から書きたかったけどずっと我慢してた :/
 
-たぶん、人生を共有したいけど個人情報は共有したくないってやつかな。そんな感じだと思う。
+たぶん人生は共有したいけど個人情報は出したくないからだと思う。たぶんそれだね。
 
-## コーディング
+## コード
 
-俺の情熱はいろいろある：コードを書くのが大好きだ。このブログの他の部分を見ればたぶん気づいてると思うけど。何かをゼロから作って、問題を解決して、自分の創造物が動くのを見る----そこには深い満足感がある。小さなCLIツールでも本格的なWebアプリでも、そのプロセスは決して色あせない。
+情熱はいろいろだ。コード書くのが大好きで、このブログの残りで気づいた通りだと思う。ゼロからものを作って、問題を解いて、作品が生きるのを見るのは深く満たされる。ちっぽけなCLIツールでも完全なウェブアプリでも、過程はちっとも古びない。
 
-**オープンソース**には特に愛情がある----共有することは思いやりってやつで、誰かが自分のコードを役立つと思ってくれるかもしれないって考えるのが本当に好きなんだ。ほとんどのプロジェクトは[俺のGitHub](https://github.com/fox3000foxy)にあるし、[Projectsページ](/projects)からも見れるよ。
+特に**オープンソース**が好きだ。共有は愛で、誰かが私のコードを役立ててくれる考えが心から好きだ。大半のプロジェクトは[私のGitHub](https://github.com/fox3000foxy)に生きてて、[プロジェクトページ](/projects)で見られる。
 
-## 描くこと
+## 絵
 
-でもコーディングだけが情熱じゃない----絵を描くのも好きなんだ！以下が俺の描いたイラスト：
+でもコードだけが情熱じゃない。絵を描くのも大好きだ！私の絵をいくつか紹介する。
 
 <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
   <tr>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430087066_362752016741701_1789090055850910350_n.png" alt="drawing1"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430211211_1506393849948620_2289852538544570689_n.png" alt="drawing2"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430306739_1096266581640599_4223690919449423402_n.png" alt="drawing3"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430087066_362752016741701_1789090055850910350_n.png" alt="dessin1"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430211211_1506393849948620_2289852538544570689_n.png" alt="dessin2"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430306739_1096266581640599_4223690919449423402_n.png" alt="dessin3"/></td>
   </tr>
   <tr>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430333617_1441291393440641_3513029838453039108_n.png" alt="drawing4"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430351528_460519246393040_8676436084581333629_n.png" alt="drawing5"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430829334_2216111272054528_1672689474813728089_n.png" alt="drawing6"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430333617_1441291393440641_3513029838453039108_n.png" alt="dessin4"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430351528_460519246393040_8676436084581333629_n.png" alt="dessin5"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430829334_2216111272054528_1672689474813728089_n.png" alt="dessin6"/></td>
   </tr>
   <tr>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430986791_2549915025169770_2055293833870974255_n.png" alt="drawing7"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/433170570_3705959496395744_465341575681966835_n.png" alt="drawing8"/></td>
-    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/433200108_444443761648586_2008342869375830981_n.png" alt="drawing9"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/430986791_2549915025169770_2055293833870974255_n.png" alt="dessin7"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/433170570_3705959496395744_465341575681966835_n.png" alt="dessin8"/></td>
+    <td style="padding:0.5rem;"><img style="width: 256px;height: 256px;object-fit:cover;border-radius:4px;" src="/uploads/433200108_444443761648586_2008342869375830981_n.png" alt="dessin9"/></td>
   </tr>
 </table>
 
-## なんでも自動化
+## 動くもの全部自動化する
 
-自動化にも情熱がある。GitHub Actionsやワークフローをいじるのは最高に気持ちいい。手動のプロセスをスクリプトやパイプラインで置き換えられるなら、ためらわずにやる--問答無用で。
+自動化にも情熱がある。GitHub Actionsやワークフローで遊ぶのは今まで知った最高の気持ちの1つだ。手動過程をスクリプトやパイプラインに置き換えられるときはいつもやる。疑問なしだ。
 
-最近はSSHキーでコミットに署名し始めたんだ。そのためのスクリプトも作ったから、[このgist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a)で見れるよ。
+最近コミットのSSH署名も始めて、そのスクリプトは[このgist](https://gist.github.com/fox3000foxy/95500d129cd4bf5c173c323d2492569a)にある。
 
-## 古い技術の発見
+## 古い技術の探索
 
-UTAUみたいな古い技術を発見するのも大好きで、そのコンセプトにかなり魅了されてる。AIやクラウドコンピューティング以前の時代に、人々がどうやってものを作っていたのかを理解するのは特別な何かがある。
+UTAUみたいな古い技術の探索大好きだ。概念がかなり魅惑的だと思う。AIやクラウドコンピューティングの現代より前に人々がものをどう作ってたか理解するのって特別なものがある。
 
 ## Vtuber
 
-Vtuberも大好きで、いつか自分もなりたいと思ってる。でもちょっと恥ずかしがり屋なんだよね。いつかね！
+Vtuberも大好きで、いつかなりたいけど今はちょっと恥ずかしい。たぶん後でね！
 
 ## 音楽
 
-趣味のメインは、音楽を聴きながらのコーディング。適切なプレイリストでフロー状態に入ることに勝るものはない。最近は散歩も結構好きになってきた。なぜかは分からないけど 😕。
+主な趣味は音楽聴きながらコードを書くことだ。正しいプレイリストでフローに入るのに勝るものはない。最近は歩くのも結構好きだ。なぜか分からないけど😕。
 
-## 抜け道探し
+## 回避策探し
 
-お金を払わずに済む抜け道を探すのも好きだ--少なくとも枠にとらわれない考え方をするってことだね。例えば[Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi)は最近の作品の一つで、コマンドハンドリングやデータベース管理、デーモンにお金をかけない方法を見つけたんだ。ケチってわけじゃなくて、チャレンジが楽しいんだよ！
+お金払わず済ませる回避策探しも大好きだ。というか型破りな考え方だね。たとえば[Nibi](https://github.com/Let-s-Learn-Japanese-Together/Nibi)は最後の作品の1つで、コマンド管理もデータベース管理もデーモンも無料解法を見つけた。大事なのは挑戦で、節約よりずっとね！
 
 ## なぜこのブログ
 
-このブログを、自分の進歩や考え、共有したいことをなんでも載せられる場所にしたかったんだ。そうすれば俺の考え方がわかるでしょ。そして情熱について書くのが、始めるのにぴったりだと思ったんだ。
+このブログには進捗も考えも共有したいもの全部も置ける場所にしたかった。そうすれば私がどう考えるか分かるでしょ。情熱について書くのが始めるのに最適に思えた。
 
 読んでくれてありがとう！

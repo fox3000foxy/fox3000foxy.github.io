@@ -1,6 +1,6 @@
 ---
-title: "Luna Protocol: Mengapa saya melakukan fine-tune model 1,5B pada 50k sampel Discord dan menjadikan few-shot priming sebagai senjata rahasia"
-description: "Model yang lebih kecil yang dilatih dengan data lebih sedikit bisa mengungguli model yang lebih besar -- jika Anda tahu cara mempersiapkannya. Inilah mengapa Luna Protocol beralih dari Hermes 3B ke fine-tune Qwen 1,5B, dan mengapa few-shot priming menjadi pengubah permainan yang sesungguhnya."
+title: "Luna Protocol : kenapa saya men fine-tune model 1,5 miliar parameter pada 50k sampel Discord, dan kenapa few-shot priming mengubah segalanya"
+description: "Model lebih kecil yang dilatih pada lebih sedikit data bisa melampaui model lebih besar -- asal tahu cara meng priming dengan baik. Inilah kenapa Luna Protocol beralih dari Hermes 3B ke fine-tune Qwen 1,5B, dan kenapa few-shot priming menjadi faktor kemajuan yang sesungguhnya."
 date: 2026-07-17
 authors:
   - fox3000foxy
@@ -13,82 +13,82 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "JH+7vF8cWDz0VQqSZU/Gnqw7xqEw6/vHhl2sHVThj7w688fdMMQhZImZGXP+yC7arlyrNra6i6vAkT0sYG+svw=="
+author_sig: "oDYZwbWFaCJ+utn5wX7ofAPrdK6wB4oPy0VER/azMQyO55wXBnz/TUBfGAPlLIafDyqfG2W9EOg/GWZ8gyb3uw=="
 ---
 
-# Luna Protocol: Mengapa saya melakukan fine-tune model 1,5B pada 50k sampel Discord dan menjadikan few-shot priming sebagai senjata rahasia
+# Luna Protocol : kenapa saya men fine-tune model 1,5 miliar parameter pada 50k sampel Discord, dan kenapa few-shot priming mengubah segalanya
 
-Pada [artikel pertama](/articles/en/luna-protocol-discord-bot), saya membuat bot Discord yang mensimulasikan manusia -- tidur, typo, keraguan, kelupaan, pesan spontan. Sistem perilakunya solid. LLM di belakangnya adalah model Hermes 3B, terkuantisasi ke Q8_0, memakan 3GB VRAM.
+Dalam [artikel pertama](/articles/en/luna-protocol-discord-bot), saya membangun bot Discord yang mensimulasikan manusia : tidur, salah ketik, keraguan, kelupaan, pesan spontan. Sistem perilakunya bertahan. LLM di balik semuanya adalah model Hermes 3 miliar parameter, terkuantisasi Q8_0, mengonsumsi 3 GB VRAM.
 
-Itu berhasil. Tapi itu berlebihan.
+Itu berfungsi. Tapi terlalu besar.
 
-Bot Discord tidak membutuhkan model 3B parameter untuk mengatakan "nm just chillin, u". Yang dibutuhkan adalah **konsistensi gaya** -- kemampuan untuk mempertahankan nada percakapan tertentu, pesan demi pesan, tanpa melenceng ke mode asisten korporat. Ternyata, model yang lebih kecil yang dilatih dengan data lebih sedikit, dipersiapkan dengan beberapa contoh, melakukannya lebih baik daripada model yang lebih besar yang memaksakan jalannya melalui prompt sistem.
+Bot Discord tidak butuh model 3 miliar parameter untuk bilang "nm just chillin, u". Yang dibutuhkannya adalah **koherensi stilistika** : kemampuan menjaga nada percakapan yang tepat, pesan demi pesan, tanpa melayang ke mode "asisten korporat". Dan ternyata model lebih kecil, yang dilatih pada lebih sedikit data dan di priming dengan beberapa contoh, mencapainya lebih baik daripada model lebih besar yang dipaksa lewat prompt sistem sederhana.
 
-Artikel ini membahas model resmi Luna Protocol: mengapa mereka ada, mengapa 1,5B bukan 3B, mengapa 50k sampel pelatihan bukan 7,3M, dan mengapa few-shot priming berubah dari sesuatu yang "nice-to-have" menjadi inti dari seluruh pendekatan.
+Artikel ini soal model resmi Luna Protocol : kenapa mereka ada, kenapa 1,5B alih-alih 3B, kenapa 50k sampel pelatihan alih-alih 7,3 juta, dan kenapa few-shot priming beralih dari status "bonus manis" menjadi jantung seluruh pendekatan.
 
 ---
 
 ## Masalah dengan model 3B
 
-Pengaturan awal menggunakan `Discord-Micae-Hermes-3-3B.Q8_0.gguf` -- model 3B parameter yang di-fine-tune pada data Discord. Model ini menghasilkan respons yang baik, tetapi:
+Konfigurasi aslinya memakai `Discord-Micae-Hermes-3-3B.Q8_0.gguf`, model 3 miliar parameter yang di fine-tune pada data Discord. Ia menghasilkan respons bagus, tapi :
 
 | Metrik | Hermes-3-3B Q8_0 | Target |
 |--------|-------------------|--------|
-| Penggunaan VRAM | ~3 GB | < 1 GB |
-| Generasi token | ~30 tok/s | ~60+ tok/s |
-| Ukuran file model | ~3,2 GB | < 1 GB |
-| Waktu cold start | ~8s | ~3s |
+| Pemakaian VRAM | ~3 GB | < 1 GB |
+| Pembangkitan token | ~30 tok/dtk | ~60+ tok/dtk |
+| Ukuran berkas model | ~3,2 GB | < 1 GB |
+| Waktu startup dingin | ~8 dtk | ~3 dtk |
 
-Untuk bot yang berjalan 24/7 di server sederhana, 3GB VRAM sangat besar. Dan kecepatan generasi -- meskipun cukup untuk pesan sesekali -- terasa lambat saat respons burst atau ketika beberapa kanal aktif.
+Untuk bot yang berjalan 24/7 di server sederhana, 3 GB VRAM itu banyak. Dan kecepatan pembangkitan, yang oke untuk pesan sesekali, terasa lambat saat respons beruntun atau dengan banyak kanal aktif.
 
-Pertanyaannya: bisakah kita mendapatkan gaya Discord-Dialogues yang sama dengan setengah parameter?
-
----
-
-## Keputusan fine-tuning: mengapa 50k, bukan 7,3M
-
-Dataset [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) berisi **7,3M pertukaran** dan **17M giliran**. Ini adalah korpus besar percakapan Discord nyata. Pendekatan yang jelas adalah melatih pada dataset lengkap.
-
-Saya melakukan sebaliknya. Saya melatih pada **50.000 sampel** -- kurang dari 1% dari data yang tersedia.
-
-Inilah alasannya: **ukuran set pelatihan secara langsung mempengaruhi seberapa banyak model overfit pada distribusi pelatihannya**.
-
-Model yang dilatih pada 7,3M contoh mempelajari distribusi statistik percakapan yang sangat spesifik. Model menjadi sangat baik dalam mereproduksi distribusi itu, tetapi juga menjadi **kaku** -- memiliki fleksibilitas lebih sedikit untuk beradaptasi dengan pola baru yang diberikan pada waktu inferensi.
-
-Model yang dilatih pada 50k contoh mempelajari nada dan register umum percakapan Discord (informal, pendek, singkatan, huruf kecil), tetapi tetap mempertahankan fleksibilitas yang cukup untuk **diarahkan oleh contoh dalam konteks**. Contoh few-shot tidak melawan distribusi besar yang telah dipelajari -- mereka melengkapi distribusi yang lebih ringan.
-
-Inilah wawasan intinya: **data pelatihan terbatas membuat few-shot priming lebih efisien**.
+Pertanyaannya adalah : bisakah kita mendapatkan gaya Discord-Dialogues yang sama dengan setengah parameter?
 
 ---
 
-## Model: detail teknis
+## Keputusan fine-tuning : kenapa 50k, bukan 7,3 juta
 
-Model Luna Protocol adalah **fine-tune QLoRA** dari [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct):
+Himpunan data [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) berisi **7,3 juta pertukaran** dan **17 juta putaran bicara**. Ini korpus masif percakapan Discord sungguhan. Pendekatan jelasnya adalah melatih pada seluruh himpunan data.
+
+Saya melakukan kebalikannya. Saya melatih pada **50 000 sampel**, kurang dari 1% data yang tersedia.
+
+Inilah kenapanya : **ukuran himpunan pelatihan langsung memengaruhi derajat overfitting model terhadap distribusi pelatihannya**.
+
+Model yang dilatih pada 7,3 juta contoh mempelajari distribusi statistik percakapan yang sangat spesifik. Ia menjadi hebat mereproduksi distribusi itu, tapi ia juga menjadi **kaku** : ia punya lebih sedikit ruang untuk beradaptasi pada pola baru yang diberikan saat inferensi.
+
+Model yang dilatih pada 50k contoh mempelajari nada dan register umum percakapan Discord (informal, pendek, singkatan, huruf kecil), tapi ia menyimpan cukup fleksibilitas untuk **dipandu oleh contoh dalam konteks**. Contoh few-shot tidak melawan distribusi masif yang sudah dipelajari : mereka melengkapi distribusi yang lebih ringan.
+
+Inilah intuisi sentral : **data pelatihan yang terbatas membuat few-shot priming lebih efektif**.
+
+---
+
+## Modelnya : detail teknis
+
+Model Luna Protocol adalah **fine-tune QLoRA** dari [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) :
 
 | Parameter | Nilai |
 |-----------|-------|
 | Model dasar | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
 | Metode | QLoRA (4-bit) |
-| Rank LoRA | `r=16`, `lora_alpha=16` |
-| Modul target | `q/k/v/o_proj`, `gate/up/down_proj` |
-| Parameter yang dapat dilatih | 18.464.768 / 1.562.179.072 (1,18%) |
-| Data pelatihan | ~50.000 contoh (subset Discord-Dialogues) |
+| Peringkat LoRA | `r=16`, `lora_alpha=16` |
+| Modul yang ditarget | `q/k/v/o_proj`, `gate/up/down_proj` |
+| Parameter yang bisa dilatih | 18 464 768 / 1 562 179 072 (1,18 %) |
+| Data pelatihan | ~50 000 contoh (subset Discord-Dialogues) |
 | Filter | 8-512 token per sampel |
 | Epoch | 2-3 |
 | Perangkat keras | Kaggle T4 |
 | Framework | [Unsloth](https://github.com/unslothai/unsloth) |
 
-Dataset adalah fork pra-pemrosesan dari Discord-Dialogues, difilter hanya untuk berisi giliran `user`/`assistant` yang bersih -- tanpa pesan sistem, tanpa metadata, tanpa perintah bot. Ini penting untuk nanti.
+Himpunan data adalah fork Discord-Dialogues yang diproses sebelumnya, difilter untuk hanya menyimpan putaran `user`/`assistant` yang bersih : hanya pertukaran pengguna dan asisten, tanpa pesan sistem maupun metadata maupun perintah bot. Ini penting untuk kelanjutannya.
 
 ### Kuantisasi yang tersedia
 
-| File | Kuantisasi | Ukuran | Catatan |
+| Berkas | Kuantisasi | Ukuran | Catatan |
 |------|-------------|------|-------|
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 MB | Terdegradasi signifikan -- tidak direkomendasikan |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | Keseimbangan ukuran/kualitas yang baik (direkomendasikan) |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1,65 GB | Fidelitas gaya terbaik |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 MB | Jelas terdegradasi -- tidak disarankan |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | Kompromi ukuran/kualitas yang bagus (disarankan) |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1,65 GB | Kesetiaan stilistika terbaik |
 
-Model yang direkomendasikan adalah **Q4_K_M** -- di bawah 1GB, cepat, dan mempertahankan gaya percakapan dengan baik. Q2_K terlalu terdegradasi pada model sekecil ini. Q8_0 adalah kualitas terbaik tetapi menggunakan memori 68% lebih banyak.
+Model yang disarankan adalah **Q4_K_M** : kurang dari 1 GB, cepat, dan menjaga baik gaya percakapan. Q2_K terlalu terdegradasi untuk model ukuran ini. Q8_0 menawarkan kualitas terbaik tapi mengonsumsi 68% memori lebih banyak.
 
 ---
 
@@ -96,23 +96,23 @@ Model yang direkomendasikan adalah **Q4_K_M** -- di bawah 1GB, cepat, dan memper
 
 Inilah bagian yang mengubah segalanya.
 
-Kartu model HuggingFace memiliki peringatan:
+Lembar model di HuggingFace memuat peringatan :
 
-> Dengan prompt kosong tanpa persiapan, model ini cenderung kembali ke nada asisten default Qwen. Persiapan few-shot pendek membuat perbedaan besar.
+> Dengan prompt telanjang dan tanpa priming, model ini cenderung jatuh kembali ke nada bawaan "asisten" Qwen. Priming few-shot yang singkat membuat perbedaan besar.
 
-Ini bukan bug -- ini adalah konsekuensi langsung dari bagaimana data pelatihan distrukturkan.
+Ini akibat langsung dari cara data pelatihan distrukturkan.
 
-### Mengapa prompt sistem saja tidak berfungsi
+### Kenapa prompt sistem saja tidak berhasil
 
-Data pelatihan Discord-Dialogues hanya berisi giliran `user`/`assistant`. Tidak ada **contoh peran sistem** dalam set pelatihan. Model tidak pernah dilatih untuk mengikuti prompt sistem sebagai arahan gaya.
+Data pelatihan Discord-Dialogues hanya berisi putaran `user`/`assistant`. Tidak ada **contoh peran sistem** dalam himpunan pelatihan. Model tidak pernah dilatih mengikuti prompt sistem sebagai arahan gaya.
 
-Ketika Anda memberikan prompt sistem seperti "Nama kamu Luna, bicaralah dengan santai", model mendengar instruksi tetapi tidak memiliki pola belajar yang kuat untuk menerjemahkannya ke output. Model kembali ke default Qwen: membantu, terstruktur, sedikit formal.
+Ketika kita memberinya prompt sistem seperti "Namamu Luna, bicara santai", ia mendengar instruksinya tapi tidak punya pola kuat yang dipelajari untuk menerjemahkannya menjadi keluaran. Ia lalu jatuh kembali pada perilaku bawaan Qwen : membantu, terstruktur, sedikit formal.
 
-### Mengapa contoh few-shot berfungsi
+### Kenapa contoh few-shot berhasil
 
-Ketika Anda menyuntikkan contoh percakapan dalam format ChatML yang sama dengan yang digunakan model saat dilatih (menggunakan struktur giliran `user`/`assistant`), sesuatu terhubung. Model mengenali pola dari data pelatihannya dan menyelaraskan outputnya untuk mencocokkan.
+Ketika kita menyuntikkan contoh percakapan dalam format ChatML yang sama dengan yang dipakai saat pelatihan (dengan struktur putaran `user`/`assistant`), sesuatu terpicu. Model mengenali pola dari pelatihannya dan menyelaraskan keluarannya sesuai itu.
 
-Inilah tampilan persiapan few-shot dalam praktik:
+Beginilah tampilan priming few-shot dalam praktik :
 
 ```yaml
 few_shot_examples:
@@ -124,65 +124,65 @@ few_shot_examples:
     assistant: "im doing pretty good tbh, just vibing"
 ```
 
-Contoh-contoh ini disuntikkan setelah prompt sistem dan sebelum percakapan nyata. Model melihatnya sebagai bagian dari riwayat percakapan, bukan sebagai instruksi. Ini adalah perbedaan kritis -- model tidak *diperintahkan* untuk menjadi santai, ia *diperlihatkan* bagaimana wujud santai itu.
+Contoh ini disuntikkan setelah prompt sistem dan sebelum percakapan sungguhan. Model memahaminya sebagai bagian dari riwayat percakapan, jadi sebagai pertukaran nyata alih-alih instruksi. Ini perbedaan esensial : kita *menunjukkannya* seperti apa nada santai alih-alih *memerintahkannya*.
 
-### Sebelum dan sesudah
+### Sebelum / sesudah
 
-Tanpa persiapan few-shot (hanya prompt sistem):
+Tanpa priming few-shot (prompt sistem telanjang) :
 
 ```
 User: yo whats good
 Bot: Hello! I am doing well, thank you for asking. How can I assist you today?
 ```
 
-Dengan persiapan few-shot (3 contoh):
+Dengan priming few-shot (3 contoh) :
 
 ```
 User: yo whats good
 Bot: nm just chillin, u
 ```
 
-Perbedaannya sangat mencolok. Model tidak hanya menghasilkan kata-kata yang berbeda -- ia mengadopsi seluruh register: huruf kecil, singkatan, nada santai, respons pendek. Model mencocokkan gaya contoh, bukan gaya data pelatihan Qwen.
+Perbedaannya mencolok. Model mengadopsi seluruh register : huruf kecil, singkatan, nada santai, respons pendek. Ia meniru gaya contoh alih-alih gaya data pelatihan Qwen.
 
 ---
 
-## Memori dan kecepatan: angka konkret
+## Memori dan kecepatan : angka konkret
 
-Peralihan dari Hermes-3-3B ke Luna-Protocol-1.5B memberikan peningkatan yang terukur:
+Peralihan dari Hermes-3-3B ke Luna-Protocol-1.5B membawa perolehan yang terukur :
 
 | Metrik | Hermes-3-3B Q8_0 | Luna-Protocol Q4_K_M | Peningkatan |
 |--------|-------------------|----------------------|-------------|
-| Penggunaan VRAM | ~3 GB | ~986 MB | **67% lebih sedikit** |
-| Ukuran file model | ~3,2 GB | ~986 MB | **69% lebih kecil** |
-| Generasi token | ~30 tok/s | ~60+ tok/s | **2x lebih cepat** |
-| Cold start | ~8s | ~3s | **62% lebih cepat** |
+| Pemakaian VRAM | ~3 GB | ~986 MB | **67% lebih sedikit** |
+| Ukuran berkas model | ~3,2 GB | ~986 MB | **69% lebih kecil** |
+| Pembangkitan token | ~30 tok/dtk | ~60+ tok/dtk | **2x lebih cepat** |
+| Startup dingin | ~8 dtk | ~3 dtk | **62% lebih cepat** |
 | Jendela konteks | 8192 | 8192 | Sama |
 
-### Mengapa peningkatan kecepatan nyata
+### Kenapa perolehan kecepatan nyata
 
-Model yang lebih kecil tidak hanya "kurang lambat" -- mereka secara fundamental lebih cepat untuk inferensi. Dengan 1,5B parameter, bukan 3B:
+Model lebih kecil secara fundamental lebih cepat dalam inferensi. Dengan 1,5B parameter alih-alih 3B :
 
-- **Lebih sedikit perkalian matriks** per token: lapisan attention, lapisan FFN, dan proyeksi output semuanya berskala linear dengan jumlah parameter
-- **Pemanfaatan cache yang lebih baik**: model yang lebih kecil dapat memuat lebih banyak bobotnya di cache L2/L3
-- **Tekanan bandwidth memori lebih rendah**: lebih sedikit byte yang dibaca dari VRAM per token
+- **Lebih sedikit perkalian matriks** per token : lapisan atensi, lapisan FFN dan proyeksi keluaran semuanya berskala linear dengan jumlah parameter
+- **Pemakaian cache lebih baik** : model lebih kecil lebih memuat bobotnya dalam cache L2/L3
+- **Lebih sedikit tekanan pada bandwidth memori** : lebih sedikit byte yang dibaca dari VRAM per token
 
-Pada pengaturan sederhana hanya CPU (2 inti, tanpa GPU), model 1,5B menghasilkan token dengan kecepatan kira-kira **2x lipat** dari model 3B. Ini adalah perbedaan antara "terasa seperti bot" dan "terasa seperti orang yang mengetik".
+Pada konfigurasi sederhana, CPU saja (2 core, tanpa GPU), model 1,5B membangkitkan token sekitar **2 kali kecepatan** model 3B. Inilah perbedaan antara "terasa seperti bot" dan "seperti orang sungguhan sedang mengetik".
 
-### Cache prompt memperkuat keuntungan
+### Cache prompt memperkuat keunggulan
 
-Luna Protocol menggunakan `llama-server` dengan cache prompt diaktifkan (`--cache-reuse 256`). Ini berarti:
+Luna Protocol memakai `llama-server` dengan cache prompt aktif (`--cache-reuse 256`). Artinya :
 
-1. Pesan pertama dalam sesi membayar biaya pemrosesan prompt penuh (prompt sistem + contoh few-shot + pesan pengguna)
-2. Pesan berikutnya hanya memproses token *baru* -- prefiks yang di-cache digunakan kembali
-3. Dengan 5 contoh few-shot (~50-150 token), overhead menjadi dapat diabaikan setelah permintaan pertama
+1. Pesan pertama sesi membayar biaya penuh pemrosesan prompt (prompt sistem + contoh few-shot + pesan pengguna)
+2. Pesan berikutnya hanya memproses token *baru*, karena awalan yang di cache dipakai ulang
+3. Dengan 5 contoh few-shot (~50-150 token), overhead menjadi bisa diabaikan setelah permintaan pertama
 
-Contoh few-shot secara efektif "gratis" setelah pesan pertama dalam sesi. Model mendapatkan panduan gaya dengan biaya marjinal nol.
+Contoh few-shot menjadi dalam praktik "gratis" setelah pesan pertama sesi. Model mendapat manfaat panduan gaya dengan biaya marjinal nol.
 
 ---
 
-## Implementasi: bagaimana cara kerjanya dalam kode
+## Implementasinya : cara kerjanya dalam kode
 
-Sistem few-shot di Luna Protocol bersih dan minimal. Tiga file menangani semuanya:
+Sistem few-shot Luna Protocol bersih dan minimal. Tiga berkas menangani semuanya.
 
 ### 1. Konfigurasi (`config.yml`)
 
@@ -201,11 +201,11 @@ few_shot_examples:
     assistant: "it was alright, nothing crazy happened lol"
 ```
 
-Konfigurasi dapat di-reload panas. Ubah contoh, simpan, dan bot langsung mengadopsi gaya baru -- tanpa perlu restart.
+Konfigurasinya bisa di hot-reload. Kita mengubah contoh, menyimpan, dan bot segera mengadopsi gaya baru, tanpa restart.
 
-### 2. Pemformatan dan injeksi (`src/core/few-shot.ts`)
+### 2. Pemformatan dan penyuntikan (`src/core/few-shot.ts`)
 
-Fungsi `formatFewShotExamples()` mengonversi contoh YAML menjadi objek pesan ChatML:
+Fungsi `formatFewShotExamples()` mengubah contoh YAML menjadi objek pesan ChatML :
 
 ```typescript
 export function formatFewShotExamples(
@@ -221,7 +221,7 @@ export function formatFewShotExamples(
 }
 ```
 
-Fungsi `injectFewShotIntoConversation()` menempatkannya tepat setelah prompt sistem:
+Fungsi `injectFewShotIntoConversation()` menaruhnya tepat setelah prompt sistem :
 
 ```typescript
 export function injectFewShotIntoConversation(
@@ -236,7 +236,7 @@ export function injectFewShotIntoConversation(
 
 ### 3. Integrasi (`src/core/llm-client.ts`)
 
-Sebelum setiap panggilan LLM, contoh few-shot disuntikkan jika diaktifkan:
+Sebelum setiap panggilan ke LLM, contoh few-shot disuntikkan kalau diaktifkan :
 
 ```typescript
 let finalMessages = messages;
@@ -246,62 +246,62 @@ if (FEW_SHOT_ENABLED && FEW_SHOT_EXAMPLES.length > 0) {
 }
 ```
 
-Model menerima: `[prompt_sistem] + [contoh_few_shot] + [riwayat_percakapan]`
+Model menerima : `[prompt_sistem] + [contoh_few_shot] + [riwayat_percakapan]`
 
 ---
 
-## Mempertahankan gaya Discord-Dialogues
+## Menjaga gaya Discord-Dialogues
 
-Dataset asli Discord-Dialogues memiliki ciri khas percakapan yang sangat spesifik:
+Himpunan data Discord-Dialogues asli punya ciri percakapan yang sangat spesifik :
 
-- **Pesan pendek**: rata-rata 32,8 token per giliran
-- **Register informal**: singkatan, huruf kecil, tanpa tanda baca
-- **Bolak-balik cepat**: beberapa pertukaran pendek, bukan monolog panjang
-- **Ketidaksempurnaan alami**: typo, "lol", "fr", "ngl", "tbh"
+- **Pesan pendek** : 32,8 token rata-rata per putaran
+- **Register informal** : singkatan, huruf kecil, ketiadaan tanda baca
+- **Pertukaran cepat** : banyak pertukaran pendek alih-alih monolog panjang
+- **Ketidaksempurnaan alami** : salah ketik, "lol", "fr", "ngl", "tbh"
 
-Model Luna-Protocol mempertahankan gaya ini melalui dua mekanisme:
+Model Luna Protocol menjaga gaya ini berkat dua mekanisme :
 
 ### 1. Fine-tuning menggeser distribusi dasar
 
-50k sampel pelatihan mengajarkan model **sidik jari statistik** percakapan Discord. Model belajar bahwa respons biasanya pendek, huruf kecil, dan informal. Ini menggeser output default model menjauh dari mode asisten-membantu Qwen.
+50k sampel pelatihan mengajarkan model **jejak statistik** percakapan Discord. Ia belajar bahwa respons tipikalnya pendek, huruf kecil dan informal. Ini menjauhkan keluaran bawaan model dari mode "asisten membantu" Qwen.
 
-### 2. Few-shot priming menguncinya
+### 2. Few-shot priming mengunci hasil
 
-Contoh few-shot memperkuat pola-pola persis yang dipelajari model selama fine-tuning. Mereka bertindak sebagai **jangkar gaya** -- bahkan jika model sedikit melenceng ke nada formal selama percakapan panjang, contoh dalam konteks terus menariknya kembali.
+Contoh few-shot memperkuat tepat pola yang dipelajari selama fine-tuning. Mereka bertindak sebagai **jangkar stilistika** : meski model sedikit melayang ke nada lebih formal selama percakapan panjang, contoh yang ada dalam konteks menariknya kembali.
 
-Kombinasinya lebih kuat daripada masing-masing mekanisme saja:
-- Fine-tuning tanpa few-shot: model *umumnya* santai tetapi tidak konsisten
-- Few-shot tanpa fine-tuning: model mencoba mengikuti contoh tetapi terus kembali ke mode asisten
-- Fine-tuning + few-shot: model **secara konsisten** dalam karakter
-
----
-
-## Filosofi: model lebih kecil, prompting lebih cerdas
-
-Kebijaksanaan konvensional dalam penerapan LLM adalah "lebih besar lebih baik". Lebih banyak parameter, lebih banyak data pelatihan, lebih banyak VRAM. Luna Protocol mengambil pendekatan sebaliknya:
-
-- **1,5B bukan 3B**: setengah parameter, setengah memori, dua kali kecepatan
-- **50k sampel bukan 7,3M**: lebih sedikit data pelatihan, lebih banyak fleksibilitas untuk pembelajaran dalam konteks
-- **Few-shot priming bukan prompt sistem**: tunjukkan model apa yang Anda inginkan, jangan hanya katakan
-
-Ini bukan hanya optimasi teknis -- ini adalah filosofi desain. Bot Discord tidak perlu menjadi asisten tujuan umum. Ia perlu mengatakan "nm just chillin, u" secara konsisten, cepat, dan tanpa memakan seluruh anggaran VRAM server Anda.
-
-Hasilnya: bot yang berjalan di VPS $5/bulan, menghasilkan token cukup cepat untuk terasa like mengetik real-time, dan mempertahankan kepribadian yang konsisten melalui kombinasi fine-tuning dan few-shot priming yang lebih besar dari jumlah bagian-bagiannya.
+Kombinasinya lebih kuat daripada tiap mekanisme sendiri :
+- Fine-tuning tanpa few-shot : model *secara umum* santai tapi tidak konsisten
+- Few-shot tanpa fine-tuning : model mencoba mengikuti contoh tapi terus jatuh kembali ke mode asisten
+- Fine-tuning + few-shot : model tetap **konstan** dalam karakter
 
 ---
 
-## Pengaturan
+## Filosofi : model lebih kecil, prompting lebih cerdas
 
-### Unduh model
+Kebijaksanaan konvensional dalam deployment LLM bilang "makin besar, makin baik". Lebih banyak parameter, lebih banyak data pelatihan, lebih banyak VRAM. Luna Protocol mengambil jalan sebaliknya :
+
+- **1,5B alih-alih 3B** : setengah parameter, setengah memori, dua kali lebih cepat
+- **50k sampel alih-alih 7,3 juta** : lebih sedikit data pelatihan, lebih banyak fleksibilitas untuk pembelajaran dalam konteks
+- **Few-shot priming alih-alih prompt sistem** : menunjukkan pada model apa yang kita inginkan, bukan sekadar memberitahunya
+
+Ini pilihan desain yang disadari, jauh lebih dari sekadar optimasi teknis. Bot Discord perlu tetap menjadi teman percakapan yang ringan alih-alih asisten generalis. Ia harus bilang "nm just chillin, u" secara koheren, cepat, dan tanpa melahap seluruh anggaran VRAM server.
+
+Hasilnya : bot yang berjalan di VPS 5 $/bulan, membangkitkan token cukup cepat untuk memberi kesan pengetikan waktu nyata, dan menjaga kepribadian koheren berkat kombinasi fine-tuning dan few-shot priming yang lebih berharga daripada jumlah bagiannya.
+
+---
+
+## Penyiapan
+
+### Mengunduh model
 
 ```bash
 npm run download-model
 # Mengunduh Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf
 ```
 
-Atau secara manual dari [HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues).
+Atau manual dari [HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues).
 
-### Konfigurasi
+### Mengonfigurasi
 
 ```yaml
 # config.yml
@@ -316,10 +316,10 @@ few_shot_examples:
     assistant: "im doing pretty good tbh, just vibing"
 ```
 
-### Jalankan
+### Menjalankan
 
 ```bash
-npm run dev                    # dev (hot reload)
+npm run dev                    # dev (pemuatan ulang panas)
 npm run build && npm start     # produksi
 ./start.sh                     # PM2 (produksi dengan llama-server)
 ```
@@ -328,15 +328,15 @@ npm run build && npm start     # produksi
 
 ## Kesimpulan
 
-Model Luna Protocol membuktikan bahwa untuk AI percakapan yang spesifik-gaya, **lebih sedikit lebih baik**. Model 1,5B yang dilatih pada 50k sampel yang dipilih dengan cermat, dipersiapkan dengan beberapa contoh, mengungguli model 3B yang dilatih pada jutaan contoh -- dengan sebagian kecil dari biaya memori dan kecepatan generasi dua kali lipat.
+Model Luna Protocol membuktikan bahwa untuk AI percakapan yang berfokus gaya, **lebih sedikit, lebih baik**. Model 1,5B yang dilatih pada 50k sampel yang dipilih cermat, di priming dengan beberapa contoh, melampaui model 3B yang dilatih pada jutaan contoh, dengan sebagian kecil biaya memori dan kecepatan pembangkitan dua kali lipat.
 
-Few-shot priming bukan hanya sesuatu yang "nice-to-have" untuk model kecil. Ini adalah mekanisme yang membuat mereka layak untuk aplikasi percakapan real-time. Contoh-contoh tidak hanya "membantu" -- mereka secara fundamental mengubah bagaimana model berperilaku, dengan mencocokkan format persis di mana model dilatih.
+Few-shot priming merupakan mekanisme sentral untuk model kecil. Dialah yang membuat mereka viable untuk aplikasi percakapan waktu nyata. Contoh melakukan jauh lebih dari "membantu" : mereka secara fundamental mengubah perilaku model, dengan meniru tepat format tempat ia dilatih.
 
-Kode bersifat open source, model ada di HuggingFace, dan dataset bersifat publik. Jika Anda ingin membangun bot percakapan yang terasa manusiawi, resepnya adalah: model kecil, fine-tuning terbatas, persiapan few-shot yang kuat.
+Kodenya open source, modelnya ada di HuggingFace, dan himpunan datanya publik. Kalau kamu ingin membangun bot percakapan yang memberi kesan manusiawi, resepnya adalah : model kecil, fine-tuning terbatas, priming few-shot yang solid.
 
-| Sumber Daya | Tautan |
+| Sumber daya | Tautan |
 |----------|------|
-| Repositori GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| Depot GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Model (HuggingFace) | [fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) |
-| Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
-| Artikel pertama | [Luna Protocol: Saya membuat bot Discord otonom](/articles/en/luna-protocol-discord-bot) |
+| Himpunan data | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
+| Artikel pertama | [Luna Protocol : saya membuat bot Discord otonom](/articles/en/luna-protocol-discord-bot) |

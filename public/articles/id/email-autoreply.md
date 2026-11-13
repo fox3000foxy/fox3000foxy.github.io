@@ -1,139 +1,140 @@
 ---
-title: Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions
-description: Cara saya membuat auto-reply email AI yang berjalan di GitHub Actions
-  untuk 0€/bulan -- menggunakan git tags sebagai database dan pre-compile
+title: Saya memakai git sebagai basis data untuk menjalankan bot gratis
+  di GitHub Actions
+description: Bagaimana saya mengoding penjawab email otomatis AI yang berjalan di GitHub
+  Actions seharga 0€/bulan -- dengan memakai tag git sebagai basis data dan pra-kompilasi
   dalam tag runtime.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Zi5EaMvN+uon62y5/hbildg9KWUc/lCQCOfRgD+nOJvdRqroba3rdc/JImtUFdVny+whncBNYgm/Sw6FRybz+w=="
+author_sig: "CMJ6QyMYU4Yg+F1XpxNYmuEbuBNBmAbbkPb9iuf2zD+ruJ4s1J9C4SY2iTCIY827v21cFXUauEiwr5IfmoJeTQ=="
 ---
 
-# Saya pakai git sebagai database untuk menjalankan bot gratis di GitHub Actions
+# Saya memakai git sebagai basis data untuk menjalankan bot gratis di GitHub Actions
 
-Saya punya reply email otomatis yang jalan 24/7.
+Saya punya penjawab email otomatis yang berjalan 24/7.
 
-Dia baca email saya, paham isinya, dan jawab sendiri pakai AI. Dia ingat percakapan sebelumnya. Dia abaikan newsletter dan `noreply@`. Dia forward ke manusia kalau terlalu panas.
+Ia membaca email saya, memahami isinya, dan menjawab sendiri dengan AI. Ia mengingat percakapan sebelumnya. Ia mengabaikan newsletter dan `noreply@`. Ia meneruskan ke manusia kalau terlalu panas.
 
-Biaya bulanan: **0€**.
+Biaya bulanan : **0€**.
 
-Tanpa server. Tanpa VPS. Tanpa database. Cuma GitHub Actions dan hack gila: **pake git sebagai database**.
+Saya tidak memakai server, VPS, maupun basis data. Hanya GitHub Actions dan hack gila : **memakai git sebagai basis data**.
 
-Kamu kebayang? Belum? OK, berpeganganlah, ini konyol sekaligus brilian.
-
----
-
-## Masalahnya: GitHub Actions itu stateless
-
-GitHub Actions itu gratis. Kamu bisa jalankan cron tiap 5 menit, jalanin kode, gratis.
-
-Tapi ada masalah: dia **stateless**.
-
-Setiap run mulai dari mesin kosong. Gak ada yang tersimpan antar eksekusi. Run sebelumnya? Dilupakan. Dihapus. Seolah tak pernah ada.
-
-Untuk reply email, ini masalah besar. Misalnya:
-
-> "Email terakhir mana yang sudah saya proses?"
-
-Kalau bot lupa ini tiap run, dia bakal jawab ulang email yang sama (bencana), atau malah kelewat.
-
-Kita butuh state persisten. Dan biasanya, state persisten = database. Tapi database itu server, dan server itu gak gratis.
-
-Nah, di sinilah jadi menarik.
+Kamu paham maksud saya? Tidak? Oke, pegangan, ini bodoh sekaligus jenius.
 
 ---
 
-## Solusinya: git tags sebagai database
+## Masalahnya : GitHub Actions itu stateless
 
-Repo GitHub kamu, itu sudah penyimpanan persisten. Gratis. Versioned. Selalu ada.
+GitHub Actions itu gratis. Kamu bisa menjalankan cron setiap 5 menit, menjalankan kodemu, gratis.
 
-Jadi kenapa gak simpan state di situ?
+Tapi ada masalah : ia **stateless**.
 
-Idenya: setiap run, bot baca UID email terakhir yang diproses dari sebuah **git tag**. Dia proses email baru. Lalu push ulang tag dengan UID baru.
+Setiap run dimulai di mesin perawan. Tidak ada yang disimpan antara dua eksekusi. Run sebelumnya? Lupa. Dihapus. Seolah tidak pernah ada.
+
+Untuk penjawab email, ini masalah besar. Semisal :
+
+> "Email terakhir apa yang sudah saya proses?"
+
+Kalau bot lupa itu di setiap run, ia akan menjawab email yang sama berulang-ulang (bencana), atau melewatkan email.
+
+Butuh keadaan persisten. Dan normalnya, keadaan persisten = basis data. Tapi basis data berarti server, dan server berarti tidak gratis lagi.
+
+Di sinilah jadi menarik.
+
+---
+
+## Solusinya : tag git sebagai basis data
+
+Repo GitHub-mu sudah penyimpanan persisten. Gratis. Berversi. Selalu ada.
+
+Jadi kenapa tidak menyimpan keadaan di sana?
+
+Idenya : di setiap run, bot membaca UID email terakhir yang diproses dari **tag git**. Ia memproses email baru. Lalu ia push ulang tag dengan UID baru.
 
 ```mermaid
 sequenceDiagram
     participant GH as GitHub Actions
     participant GIT as Git Tags
-    participant IMAP as Server IMAP
-    
+    participant IMAP as Serveur IMAP
+
     Note over GH: Run #1
-    GH->>GIT: baca tag "lastid"
-    GIT-->>GH: kosong (pertama kali)
-    GH->>IMAP: fetch email 1-50
-    IMAP-->>GH: 50 email
+    GH->>GIT: lit tag "lastid"
+    GIT-->>GH: vide (premier run)
+    GH->>IMAP: fetch mails 1-50
+    IMAP-->>GH: 50 mails
     GH->>GIT: push tag "lastid" = 50
-    
+
     Note over GH: Run #2
-    GH->>GIT: baca tag "lastid"
+    GH->>GIT: lit tag "lastid"
     GIT-->>GH: 50
-    GH->>IMAP: fetch email 51-73
-    IMAP-->>GH: 23 email
+    GH->>IMAP: fetch mails 51-73
+    IMAP-->>GH: 23 mails
     GH->>GIT: push tag "lastid" = 73
 ```
 
-Tag git ITU database-nya. Satu nilai aja, tapi itu yang kita butuhin.
+Tag git ADALAH basis datanya. Satu nilai saja, tapi itu semua yang kita butuhkan.
 
 ### Membaca state
 
-Di awal job, kita ambil nilai dari tag:
+Di awal job, kita mengambil nilai dari tag :
 
 ```bash
 git fetch origin --tags lastid || true
 git show refs/tags/lastid:data/lastId > data/lastId || true
 ```
 
-`git show refs/tags/lastid:data/lastId` artinya: "kasih saya isi file `data/lastId` seperti yang ada di tag `lastid`".
+`git show refs/tags/lastid:data/lastId` artinya : "kasih saya isi berkas `data/lastId` sebagaimana adanya di tag `lastid`".
 
-Boom. Kamu punya nilainya, tanpa database.
+Boom. Kamu dapat nilaimu, tanpa basis data.
 
 ### Menulis state
 
-Di akhir, kita buat ulang tag dengan nilai baru:
+Di akhir, kita membuat ulang tag dengan nilai baru :
 
 ```bash
-git switch --orphan lastid-tmp   # branch kosong tanpa history
-git rm -rf .                      # hapus semua
+git switch --orphan lastid-tmp   # branche vierge sans historique
+git rm -rf .                      # on vide tout
 mkdir -p data
 printf "%s\n" "${LAST_ID_CONTENT}" > data/lastId
 
 git add data/lastId
 git commit -m "lastId snapshot"
-git tag -f lastid                 # paksa tag ke commit ini
-git push --force ...origin lastid # push tag
+git tag -f lastid                 # force le tag sur ce commit
+git push --force ...origin lastid # push le tag
 ```
 
-Kita bikin branch **orphan** (tanpa history), taruh aja file `lastId`, commit, tag, force push.
+Kita membuat branch **yatim** (tanpa riwayat), menaruh berkas `lastId` saja, commit, tag, force push.
 
-Kenapa orphan? Biar gak numpuk 10.000 commit state di history repo. Tiap update timpa yang sebelumnya. Tag selalu mengarah ke SATU commit yang berisi SATU nilai.
+Kenapa yatim? Supaya tidak menumpuk 10 000 commit state di riwayat repo. Setiap pembaruan menimpa sebelumnya. Tag selalu menunjuk ke SATU commit yang berisi SATU nilai.
 
-Bersih. Gratis. Kocak banget xD
+Ini bersih. Gratis. Benar-benar bengkok dan berhasil.
 
 ---
 
-## Hack kedua: runtime snapshot
+## Hack kedua : snapshot runtime
 
-Ada masalah lain sama GitHub Actions: `npm install`.
+Ada masalah lain dengan GitHub Actions : `npm install`.
 
-Kalau tiap run (tiap 5 menit) kamu jalanin `npm install` + `npm run build`, kamu buang 60-90 detik tiap kali. Di cron yang sering, itu menit-menit compute yang terbuang percuma.
+Kalau di setiap run (setiap 5 menit) kamu melakukan `npm install` + `npm run build`, kamu membuang 60-90 detik setiap kali. Pada cron yang sering, itu menit-menit komputasi yang terbuang percuma.
 
-Solusi: pre-compile kode SEKALI, dan simpan di tag git juga.
+Solusi : pra-kompilasi kode SEKALI saja, dan simpan dalam tag git juga.
 
-Workflow build (yang jalan pas kamu push ke `master`) ngelakuin ini:
+Workflow build (yang berjalan ketika kamu push ke `master`) melakukan ini :
 
 ```bash
-# compile kode
+# mengompilasi kode
 bun install
 bun run build
 
-# simpan dist/ + node_modules/ di tag "runtime"
+# menyimpan dist/ + node_modules/ dalam tag "runtime"
 git checkout --orphan temp-runtime
 git rm -rf .
 cp -r "$TMPDIR"/* .
@@ -143,77 +144,77 @@ git tag -f runtime
 git push --force ...origin runtime
 ```
 
-Tag `runtime` berisi kode yang sudah di-compile DAN `node_modules`. Siap jalan.
+Tag `runtime` berisi kode terkompilasi DAN `node_modules`. Semua siap jalan.
 
-Dan cron-nya checkout langsung tag ini:
+Dan cron, checkout langsung tag ini :
 
 ```yaml
 - name: Checkout runtime snapshot
   uses: actions/checkout@v4
   with:
-    ref: refs/tags/runtime    # kode pre-build, bukan source
+    ref: refs/tags/runtime    # le code pré-build, pas le source
     fetch-depth: 1
 
-# gak ada npm install, gak ada build!
+# pas de npm install, pas de build !
 - name: Process emails
   run: node dist/index.js --action
 ```
 
-Gak ada install. Gak ada build. Cron langsung start dan jalanin `node dist/index.js`.
+Cron mulai seketika dan hanya menjalankan `node dist/index.js`, tanpa install maupun build.
 
-Jadi, kamu punya dua tag yang punya dua tugas:
-- `runtime` = kode siap jalan (diupdate pas kamu push kode)
-- `lastid` = state persisten (diupdate tiap run)
+Jadi, kamu punya dua tag yang mengerjakan dua tugas :
+- `runtime` = kode siap jalan (diperbarui ketika kamu push kode)
+- `lastid` = keadaan persisten (diperbarui di setiap run)
 
-Elegan banget.
+Elegan seperti orang gila.
 
 ---
 
-## Bot-nya sendiri: auto-reply AI
+## Botnya sendiri : penjawab otomatis AI
 
-Oke, hack git-nya keren, tapi bot-nya ngapain sebenernya?
+Oke, hack git keren, tapi bot ngapain tepatnya?
 
-Dia baca email lewat IMAP, pahamin dengan AI (Groq + Llama 3.3 70B), dan jawab otomatis.
+Ia membaca emailmu lewat IMAP, memahaminya dengan AI (Groq + Llama 3.3 70B), dan menjawab otomatis.
 
-Arsitektur dengan services bersih dan dependency injection (InversifyJS):
+Arsitektur dalam layanan bersih dengan injeksi dependensi (InversifyJS) :
 
 ```
 App
-├── ImapService      → baca email (IMAP)
-├── SmtpService      → kirim jawaban (SMTP)
-├── ParserService    → parse konten email
-├── ReplyService     → generate jawaban AI
-├── SummaryService   → memori percakapan
-├── AccountsService  → kelola beberapa akun email
+├── ImapService      → lit les mails (IMAP)
+├── SmtpService      → envoie les réponses (SMTP)
+├── ParserService    → parse le contenu des mails
+├── ReplyService     → génère la réponse IA
+├── SummaryService   → mémoire de conversation
+├── AccountsService  → gère plusieurs comptes email
 └── ConfigService    → config / env vars
 ```
 
 ### Dua mode operasi
 
-Bot bisa jalan dengan dua cara:
+Bot bisa berjalan dua cara :
 
-**Mode listener** (real-time): koneksi IMAP permanen dengan exponential backoff. Untuk VPS.
+**Mode listener** (waktu nyata) : koneksi IMAP permanen dengan reconnect eksponensial. Untuk VPS.
 
 ```typescript
 this.imapService.on("exists", async (data) => {
-  console.log(`[MAIL] Email baru! Total: ${data.count}`);
-  // proses email baru langsung
+  console.log(`[MAIL] Nouveau mail ! Total: ${data.count}`);
+  // memproses email baru segera
 });
 ```
 
-**Mode action** (batch): proses email baru dari `lastId`, lalu tutup. Untuk cron GitHub Actions.
+**Mode action** (batch) : memproses email baru sejak `lastId`, lalu menutup. Untuk cron GitHub Actions.
 
 ```bash
 node dist/index.js --action
 ```
 
-Mode `--action` adalah yang pakai hack git. Dia baca `lastId`, proses yang baru, tulis `lastId` baru, selesai.
+Mode `--action` itulah yang memakai hack git. Ia membaca `lastId`, memproses yang baru, menulis `lastId` baru, selesai.
 
-### JANGAN jawab robot
+### JANGAN menjawab robot
 
-Kalau bot kamu jawab SEMUA email, dia bakal jawab newsletter, notifikasi, `noreply@`. Bencana. Lebih parah: kalau dua bot saling jawab, kamu dapat infinite loop email. Mimpi buruk.
+Kalau botmu menjawab SEMUA email, ia akan menjawab newsletter, notifikasi, `noreply@`. Bencana. Lebih parah : kalau dua bot saling menjawab, kamu dapat loop email tak berujung. Mimpi buruk.
 
-Makanya filtering agresif:
+Jadi penyaringan agresif :
 
 ```typescript
 export function isAutomatedSender(address) {
@@ -228,34 +229,34 @@ export function isAutomatedSender(address) {
 }
 ```
 
-Dan juga deteksi lewat header email:
+Dan juga deteksi lewat header email :
 
 ```typescript
 export function isAutomatedByHeaders(headers) {
   return (
     ["bulk", "list", "junk"].includes(headers.precedence) ||
     headers["auto-submitted"] !== "no" ||
-    headers["list-unsubscribe"] !== "" ||   // newsletter punya ini
+    headers["list-unsubscribe"] !== "" ||   // newsletter punya itu
     /mailchimp|sendgrid|mailgun|brevo/i.test(headers["x-mailer"])
   );
 }
 ```
 
-`List-Unsubscribe` di headers? Itu newsletter. `Precedence: bulk`? Mass-mailing. `X-Mailer: Mailchimp`? Udah kebayang. Kita abaikan.
+`List-Unsubscribe` di header? Itu newsletter. `Precedence: bulk`? Mass-mailing. `X-Mailer: Mailchimp`? Kamu paham maksudnya. Kita abaikan.
 
-Ini kayak bouncer klub malam: robot gak lolos xD
+Ini seperti penjaga klub malam : robot tidak lewat.
 
-### Trigger ajaib
+### Pemicu ajaib
 
-AI bisa mutusin gak jawab sama sekali, atau kasih ke manusia. Caranya? Dengan trigger khusus di jawabannya.
+AI bisa memutuskan tidak menjawab sama sekali, atau menyerahkan ke manusia. Bagaimana? Dengan pemicu khusus dalam responsnya.
 
-System prompt-nya bilang:
+Prompt sistem memberitahunya :
 
 > Kalau ini email otomatis/newsletter → jawab `<no_reply>`
-> Kalau terlalu penting/sensitif (legal, finansial...) → jawab `<manual_reply_required>`
-> Kalau nggak → tulis jawaban beneran
+> Kalau ini terlalu penting/sensitif (legal, finansial...) → jawab `<manual_reply_required>`
+> Kalau tidak → tulis jawaban sungguhan
 
-Dan kode bacanya:
+Dan kode membacanya :
 
 ```typescript
 const aiReply = completion.choices[0].message.content.trim();
@@ -263,31 +264,31 @@ const manualTrigger = aiReply.includes(MANUAL_REPLY_TRIGGER);
 const noReply = aiReply.includes(NO_REPLY_TRIGGER);
 
 if (noReply) {
-  console.log("[MAIL] AI mutusin buat diabaikan. Skip.");
+  console.log("[MAIL] L'IA a décidé d'ignorer. Skip.");
   return;
 }
 
 if (manualTrigger) {
-  console.log("[MAIL] Kepanasan, saya forward ke manusia.");
+  console.log("[MAIL] Trop chaud, je forward à un humain.");
   await this.smtpService.sendManualForward(...);
   return;
 }
 
-// kalo nggak, kirim jawaban AI
+// kalau tidak kita kirim jawaban AI
 await this.smtpService.sendReply(...);
 ```
 
-Jadi AI punya hak buat bilang "gak, ini gak saya sentuh, panggil manusia beneran". Bijak.
+Jadi AI berhak bilang "bukan, saya tidak sentuh, panggil manusia sungguhan". Itu kebijaksanaan.
 
 ---
 
 ## Memori percakapan
 
-Satu detail yang bikin beda: bot **ingat** percakapan.
+Detail yang mengubah segalanya : bot **mengingat** percakapan.
 
-Pas dia jawab seseorang, dia simpan ringkasan pertukaran. Nanti pas orang itu nulis lagi, ringkasannya dimasukin lagi ke prompt.
+Ketika ia menjawab seseorang, ia menyimpan ringkasan pertukaran. Lain kali orang itu menulis, ringkasan disuntikkan ulang ke prompt.
 
-Penyimpanan: satu file JSON per kontak.
+Penyimpanan : satu berkas JSON per kontak.
 
 ```
 data/customers/
@@ -296,33 +297,33 @@ data/customers/
 │   └── bob%40client.fr.json
 ```
 
-Dan ringkasan itu sendiri di-generate oleh AI, yang menggabung ringkasan lama dengan pesan baru:
+Dan ringkasannya sendiri dibangkitkan oleh AI, yang menggabung ringkasan lama dengan pesan baru :
 
 ```typescript
 const completion = await groq.chat.completions.create({
   model: "llama-3.3-70b-versatile",
   messages: [
-    { role: "system", content: "Kamu adalah asisten memori. Gabungkan ringkasan lama dengan pesan baru tanpa kehilangan info." },
-    { role: "user", content: `Ringkasan yang ada:\n${existing}\n\nPesan baru:\n${incomingContent}` }
+    { role: "system", content: "Tu es un assistant de mémoire. Merge l'ancien résumé avec le nouveau message sans perdre d'info." },
+    { role: "user", content: `Résumé existant:\n${existing}\n\nNouveau message:\n${incomingContent}` }
   ],
-  temperature: 0.0,  // deterministik, tanpa kreativitas
+  temperature: 0.0,  // déterministe, pas de créativité
   max_tokens: 800,
 });
 ```
 
-Jadi bot membangun memori terkompresi seiring waktu. Gak perlu simpan semua email, cukup ringkasan yang makin cerdas.
+Jadi bot membangun memori terkompresi seiring waktu. Satu ringkasan yang membesar dengan cerdas sudah cukup, tanpa menyimpan semua email.
 
-Dan file-file JSON ini? Ya... disimpan di git juga, di runtime tag. Git di mana-mana xD
+Dan berkas-berkas JSON itu? Ya... mereka juga disimpan di git, di tag runtime. Git di mana-mana.
 
 ---
 
-## Trik cerdas dengan panjang prompt
+## Poin cerdik soal panjang prompt
 
-Detail teknis kecil yang bikin saya senyum.
+Detail teknis kecil yang membuat saya tersenyum.
 
-Model punya batas token. Kalau email + ringkasan + persona prompt kelebihan, API balikin error.
+Model punya batas token. Kalau emailmu + ringkasan + prompt persona melebihi, API mengembalikan error.
 
-Kode menanganinya dengan **truncation berantai** + retry:
+Kode menanganinya dengan **pemotongan bertingkat** + retry :
 
 ```typescript
 try {
@@ -331,59 +332,59 @@ try {
 } catch (error) {
   if (!this.isLengthError(error)) throw error;
 
-  // error panjang: coba lagi dengan batas lebih ketat
+  // itu error panjang : kita coba lagi dengan batas lebih ketat
   ({ systemContent, userContent } = this.buildPromptPayload({
     ...,
     limits: {
-      systemPromptChars: 2200,  // dari 3000
-      summaryChars: 1800,       // dari 4000
-      personaChars: 900,        // dari 1500
-      userContentChars: 2200,   // dari 8000
+      systemPromptChars: 2200,  // au lieu de 3000
+      summaryChars: 1800,       // au lieu de 4000
+      personaChars: 900,        // au lieu de 1500
+      userContentChars: 2200,   // au lieu de 8000
     },
   }));
   completion = await groq.chat.completions.create({...});  // retry
 }
 ```
 
-Kalau masih gak bisa, kita potong lebih pendek dan coba lagi. Simpel, efektif, gak crash.
+Kalau tidak lolos, kita potong lebih pendek dan coba lagi. Sederhana, efektif, tidak crash.
 
 ---
 
-## Nah, secara konkret, gimana cara kerjanya?
+## Oke, dan konkretnya, bagaimana jalannya?
 
-Flow lengkap dari satu run cron:
+Alur lengkap satu run cron :
 
 ```
-1. GitHub Actions terpicu (cron tiap 5 menit)
-2. Checkout tag "runtime" (kode pre-build)
-3. git show refs/tags/lastid → ambil UID terakhir yang diproses
+1. GitHub Actions terpicu (cron setiap 5 mnt)
+2. Checkout tag "runtime" (kode pra-build)
+3. git show refs/tags/lastid → mengambil UID terakhir yang diproses
 4. node dist/index.js --action
    ├── koneksi IMAP
    ├── fetch email sejak lastId+1
-   ├── untuk setiap email:
-   │   ├── parse konten
-   │   ├── filter robot (skip kalau automated)
-   │   ├── cocokkan akun tujuan
+   ├── untuk setiap email :
+   │   ├── parse isi
+   │   ├── saring robot (skip kalau otomatis)
+   │   ├── cocokkan akun penerima
    │   ├── ambil memori percakapan
-   │   ├── generate jawaban AI (Groq)
+   │   ├── bangkitkan jawaban AI (Groq)
    │   ├── <no_reply> ? skip
-   │   ├── <manual_reply_required> ? forward manusia
-   │   ├── kalau nggak: kirim jawaban (SMTP)
-   │   └── update memori percakapan
-   └── tulis lastId baru
+   │   ├── <manual_reply_required> ? teruskan ke manusia
+   │   ├── kalau tidak : kirim jawaban (SMTP)
+   │   └── perbarui memori percakapan
+   └── menulis lastId baru
 5. git push --force tag "lastid" dengan nilai baru
 ```
 
-Dan ini berulang lagi dalam 5 menit. Selamanya. Gratis.
+Dan itu berulang dalam 5 menit. Selamanya. Gratis.
 
 ---
 
-**3 hal yang perlu diingat:**
+**3 poin yang perlu diingat :**
 
-1. **Git = database gratis** -- Tag orphan bisa menyimpan state persisten di antara dua run stateless. `git show refs/tags/X:fichier` untuk baca, force-push untuk tulis. Gak perlu DB.
+1. **Git = basis data gratis** -- Tag yatim bisa menyimpan keadaan persistenmu antara dua run stateless. `git show refs/tags/X:fichier` untuk membaca, force-push untuk menulis. Kamu menghemat satu DB utuh.
 
-2. **Pre-compile dalam tag runtime** -- Daripada `npm install` tiap run cron, simpan kode compiled + node_modules di tag git. Cron jalan instan.
+2. **Pra-kompilasi dalam tag runtime** -- Alih-alih `npm install` di setiap run cron, simpan kode terkompilasi + node_modules dalam tag git. Cron mulai seketika.
 
-3. **Bot AI harus tahu kapan diam** -- Trigger `<no_reply>` dan `<manual_reply_required>` biarin AI mutusin gak jawab atau kasih ke manusia. Plus filtering anti-robot. Kalau gak, kamu bikin infinite loop email.
+3. **Bot AI harus tahu diam** -- Pemicu `<no_reply>` dan `<manual_reply_required>` membiarkan AI memutuskan tidak menjawab atau menyerahkan. Ditambah penyaringan anti-robot. Kalau tidak kamu menciptakan loop email tak berujung.
 
-Serverless cron dengan state persisten, AI, memori, semuanya 0€/bulan. Ini konyol banget dan saya suka xD
+Cron serverless dengan keadaan persisten, AI, memori, semuanya seharga 0€/bulan. Ini benar-benar rusak dan saya suka rakitan ini.

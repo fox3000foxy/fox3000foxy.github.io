@@ -1,134 +1,136 @@
 ---
-title: Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions
-description: Cách tôi code một auto-répondeur email AI chạy trên GitHub Actions với
-  giá 0€/tháng -- dùng git tags làm cơ sở dữ liệu và pre-compile trong tag runtime.
+title: Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí
+  trên GitHub Actions
+description: Cách tôi code một bot tự trả lời email bằng AI chạy trên GitHub
+  Actions với 0€/tháng -- dùng tag git làm cơ sở dữ liệu và
+  tiền biên dịch trong một tag runtime.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - serverless
   - ai
   - git
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "G4dl3goRllkSakWGaelYVY67r5ADoE2ayBc7LF1020p5EPk0EBAB5X2hMWVy90bR6Un2GR44upRDaahe/UiQaw=="
+author_sig: "ciobqxr7GCh1qfW/19vj00tw/XU1zOhFZovI8M2FRkaW4JSSPVMK4/bYgkvkrtTe38pXv2im6qJyjQiTGditwA=="
 ---
 
 # Tôi đã dùng git làm cơ sở dữ liệu để chạy bot miễn phí trên GitHub Actions
 
-Tôi có một trình trả lời email tự động chạy 24/7.
+Tôi có một bot tự trả lời email chạy 24/7.
 
-Nó đọc email của tôi, hiểu nội dung, và tự động trả lời bằng AI. Nó ghi nhớ các cuộc hội thoại trước đó. Nó bỏ qua newsletter và `noreply@`. Nó chuyển tiếp cho người thật khi vấn đề quá nóng.
+Nó đọc mail của tôi, hiểu nội dung nói về gì, và tự trả lời bằng AI. Nó nhớ các cuộc trò chuyện trước. Nó bỏ qua newsletter và `noreply@`. Nó chuyển cho con người khi chuyện quá nóng.
 
-Chi phí hàng tháng: **0€**.
+Chi phí hằng tháng : **0€**.
 
-Không server. Không VPS. Không cơ sở dữ liệu. Chỉ GitHub Actions và một hack điên rồ: **dùng git làm cơ sở dữ liệu**.
+Tôi bỏ qua máy chủ, VPS và cơ sở dữ liệu. Chỉ GitHub Actions và một mẹo điên rồ : **dùng git làm cơ sở dữ liệu**.
 
-Bạn thấy ý tưởng chưa? Chưa? Được rồi, bám chắc vào nhé, vừa ngu vừa thiên tài cùng lúc.
-
----
-
-## Vấn đề: GitHub Actions là stateless
-
-GitHub Actions thì miễn phí. Bạn có thể chạy cron mỗi 5 phút, chạy code, miễn phí.
-
-Nhưng có một vấn đề: nó **stateless**.
-
-Mỗi lần chạy đều bắt đầu trên một máy ảo mới toanh. Không có gì được lưu lại giữa các lần chạy. Lần chạy trước? Bị quên. Bị xóa. Như chưa từng tồn tại.
-
-Đối với một trình trả lời email, đây là vấn đề cực lớn. Kiểu:
-
-> "Email cuối cùng tôi đã xử lý là email nào?"
-
-Nếu bot quên điều này mỗi lần chạy, nó sẽ hoặc trả lời lại cùng một email (thảm họa), hoặc bỏ sót email.
-
-Cần có trạng thái bền vững. Và thông thường, trạng thái bền vững = cơ sở dữ liệu. Nhưng cơ sở dữ liệu là server, và server thì không còn miễn phí.
-
-Đây là lúc mọi chuyện trở nên thú vị.
+Bạn thấy tôi định đi đâu chứ? Không à? Được, bám chắc vào, vừa ngớ ngẩn vừa thiên tài.
 
 ---
 
-## Giải pháp: git tags làm cơ sở dữ liệu
+## Vấn đề : GitHub Actions là stateless
 
-Repo GitHub của bạn đã là bộ nhớ bền vững rồi. Miễn phí. Có phiên bản. Luôn ở đó.
+GitHub Actions miễn phí. Bạn có thể chạy cron mỗi 5 phút, chạy mã của mình, miễn phí.
+
+Nhưng có vấn đề : nó **stateless**.
+
+Mỗi lần chạy khởi động trong máy trống. Không gì được lưu giữa hai lần thực thi. Lần chạy trước? Quên đi. Xóa sạch. Như thể chưa từng tồn tại.
+
+Với bot trả lời email, đó là vấn đề khổng lồ. Kiểu :
+
+> "Mail cuối cùng tôi đã xử lý là mail nào?"
+
+Nếu bot quên điều đó mỗi lần chạy, nó sẽ hoặc trả lời lại cùng mail vòng lặp (thảm họa), hoặc bỏ sót mail.
+
+Cần trạng thái bền vững. Và bình thường, trạng thái bền vững = cơ sở dữ liệu. Nhưng cơ sở dữ liệu là máy chủ, và máy chủ thì không còn miễn phí.
+
+Đó là lúc chuyện trở nên thú vị.
+
+---
+
+## Giải pháp : tag git làm cơ sở dữ liệu
+
+Repo GitHub của bạn vốn đã là lưu trữ bền vững. Miễn phí. Có phiên bản. Luôn ở đó.
 
 Vậy sao không lưu trạng thái vào đó?
 
-Ý tưởng: mỗi lần chạy, bot đọc UID email cuối cùng đã xử lý từ một **git tag**. Nó xử lý email mới. Sau đó push lại tag với UID mới.
+Ý tưởng : mỗi lần chạy, bot đọc UID email đã xử lý cuối từ một **tag git**. Nó xử lý mail mới. Rồi đẩy lại tag với UID mới.
 
 ```mermaid
 sequenceDiagram
     participant GH as GitHub Actions
     participant GIT as Git Tags
-    participant IMAP as Serveur IMAP
-    
+    participant IMAP as Máy chủ IMAP
+
     Note over GH: Run #1
-    GH->>GIT: lit tag "lastid"
-    GIT-->>GH: vide (premier run)
-    GH->>IMAP: fetch mails 1-50
-    IMAP-->>GH: 50 mails
-    GH->>GIT: push tag "lastid" = 50
-    
+    GH->>GIT: đọc tag "lastid"
+    GIT-->>GH: rỗng (lần chạy đầu)
+    GH->>IMAP: fetch mail 1-50
+    IMAP-->>GH: 50 mail
+    GH->>GIT: đẩy tag "lastid" = 50
+
     Note over GH: Run #2
-    GH->>GIT: lit tag "lastid"
+    GH->>GIT: đọc tag "lastid"
     GIT-->>GH: 50
-    GH->>IMAP: fetch mails 51-73
-    IMAP-->>GH: 23 mails
-    GH->>GIT: push tag "lastid" = 73
+    GH->>IMAP: fetch mail 51-73
+    IMAP-->>GH: 23 mail
+    GH->>GIT: đẩy tag "lastid" = 73
 ```
 
-Git tag CHÍNH LÀ cơ sở dữ liệu. Một giá trị duy nhất, nhưng đó là tất cả những gì cần.
+Tag git CHÍNH LÀ cơ sở dữ liệu. Một giá trị duy nhất, nhưng đó là tất cả những gì ta cần.
 
-### Đọc trạng thái
+### Đọc state
 
-Đầu job, lấy giá trị từ tag:
+Đầu job, ta lấy giá trị từ tag :
 
 ```bash
 git fetch origin --tags lastid || true
 git show refs/tags/lastid:data/lastId > data/lastId || true
 ```
 
-`git show refs/tags/lastid:data/lastId` nghĩa là: "đưa tôi nội dung của file `data/lastId` như nó đã tồn tại trong tag `lastid`".
+`git show refs/tags/lastid:data/lastId` nghĩa là : "đưa tôi nội dung tệp `data/lastId` như nó từng có trong tag `lastid`".
 
 Bùm. Bạn có giá trị, không cần cơ sở dữ liệu.
 
-### Ghi trạng thái
+### Ghi state
 
-Cuối cùng, tạo lại tag với giá trị mới:
+Cuối cùng, ta tạo lại tag với giá trị mới :
 
 ```bash
-git switch --orphan lastid-tmp   # nhánh trắng không lịch sử
-git rm -rf .                      # xóa sạch
+git switch --orphan lastid-tmp   # nhánh trống không lịch sử
+git rm -rf .                      # dọn sạch mọi thứ
 mkdir -p data
 printf "%s\n" "${LAST_ID_CONTENT}" > data/lastId
 
 git add data/lastId
 git commit -m "lastId snapshot"
-git tag -f lastid                 # force tag lên commit này
-git push --force ...origin lastid # push tag
+git tag -f lastid                 # ép tag lên commit này
+git push --force ...origin lastid # đẩy tag
 ```
 
-Tạo một nhánh **orphan** (không lịch sử), chỉ đặt file `lastId`, commit, tag, force push.
+Ta tạo một nhánh **mồ côi** (không lịch sử), chỉ đặt tệp `lastId`, commit, tag, force push.
 
-Sao lại orphan? Để không tích lũy 10.000 commit trạng thái trong lịch sử repo. Mỗi lần cập nhật ghi đè lần trước. Tag luôn trỏ đến MỘT commit duy nhất chứa MỘT giá trị duy nhất.
+Vì sao mồ côi? Để không tích 10 000 commit state trong lịch sử repo. Mỗi lần cập nhật ghi đè lần trước. Tag luôn trỏ tới ĐÚNG MỘT commit chứa ĐÚNG MỘT giá trị.
 
-Sạch sẽ. Miễn phí. Hoàn toàn điên rồ xD
+Sạch sẽ. Miễn phí. Hoàn toàn quái đản mà chạy được.
 
 ---
 
-## Hack thứ hai: runtime snapshot
+## Mẹo thứ hai : snapshot runtime
 
-Còn một vấn đề khác với GitHub Actions: `npm install`.
+Còn một vấn đề nữa với GitHub Actions : `npm install`.
 
-Nếu mỗi lần chạy (mỗi 5 phút) bạn chạy `npm install` + `npm run build`, bạn lãng phí 60-90 giây mỗi lần. Với cron tần suất cao, đó là hàng phút compute bị lãng phí vô ích.
+Nếu mỗi lần chạy (mỗi 5 phút) bạn làm `npm install` + `npm run build`, bạn phí 60-90 giây mỗi lần. Trên cron dày, đó là phút compute đổ sông đổ biển.
 
-Giải pháp: pre-compile code MỘT lần, và lưu nó trong một git tag luôn.
+Giải pháp : tiền biên dịch mã MỘT lần, và lưu nó trong một tag git nữa.
 
-Workflow build (chạy khi bạn push lên `master`) làm thế này:
+Workflow build (chạy khi bạn đẩy lên `master`) làm việc này :
 
 ```bash
-# compile code
+# biên dịch mã
 bun install
 bun run build
 
@@ -142,15 +144,15 @@ git tag -f runtime
 git push --force ...origin runtime
 ```
 
-Tag `runtime` chứa code đã compile VÀ `node_modules`. Sẵn sàng chạy.
+Tag `runtime` chứa mã đã biên dịch VÀ `node_modules`. Sẵn sàng chạy.
 
-Và cron checkout trực tiếp tag này:
+Và cron thì checkout trực tiếp tag này :
 
 ```yaml
 - name: Checkout runtime snapshot
   uses: actions/checkout@v4
   with:
-    ref: refs/tags/runtime    # code pre-build, không phải source
+    ref: refs/tags/runtime    # mã tiền build, không phải mã nguồn
     fetch-depth: 1
 
 # không npm install, không build!
@@ -158,61 +160,61 @@ Và cron checkout trực tiếp tag này:
   run: node dist/index.js --action
 ```
 
-Không cài đặt. Không build. Cron khởi động tức thì và chạy `node dist/index.js`.
+Cron khởi động tức thì và chỉ chạy `node dist/index.js`, không install hay build.
 
-Kiểu, bạn có hai tag làm hai việc:
-- `runtime` = code sẵn sàng chạy (cập nhật khi bạn push code)
+Kiểu, bạn có hai tag làm hai việc :
+- `runtime` = mã sẵn sàng chạy (cập nhật khi bạn đẩy mã)
 - `lastid` = trạng thái bền vững (cập nhật mỗi lần chạy)
 
-Thanh lịch một cách bẩn thỉu.
+Thanh lịch như quỷ.
 
 ---
 
-## Bot tự nó: auto-répondeur AI
+## Bản thân bot : bot tự trả lời bằng AI
 
-Hack git thì hay đấy, nhưng bot thực sự làm gì?
+Được, mẹo git hay đấy, nhưng bot thực sự làm gì?
 
-Nó đọc email của bạn qua IMAP, hiểu chúng bằng AI (Groq + Llama 3.3 70B), và tự động trả lời.
+Nó đọc mail của bạn qua IMAP, hiểu chúng bằng AI (Groq + Llama 3.3 70B), và tự trả lời.
 
-Kiến trúc service sạch với dependency injection (InversifyJS):
+Kiến trúc thành các service sạch với tiêm phụ thuộc (InversifyJS) :
 
 ```
 App
-├── ImapService      → đọc email (IMAP)
+├── ImapService      → đọc mail (IMAP)
 ├── SmtpService      → gửi trả lời (SMTP)
-├── ParserService    → phân tích nội dung email
-├── ReplyService     → sinh câu trả lời AI
-├── SummaryService   → bộ nhớ hội thoại
+├── ParserService    → phân tích nội dung mail
+├── ReplyService     → sinh trả lời AI
+├── SummaryService   → trí nhớ hội thoại
 ├── AccountsService  → quản lý nhiều tài khoản email
-└── ConfigService    → cấu hình / biến môi trường
+└── ConfigService    → cấu hình / biến env
 ```
 
-### Hai chế độ hoạt động
+### Hai chế độ vận hành
 
-Bot có thể chạy hai cách:
+Bot có thể chạy hai cách :
 
-**Chế độ listener (thời gian thực)**: kết nối IMAP vĩnh viễn với reconnect exponential. Dành cho VPS.
+**Chế độ listener** (thời gian thực) : kết nối IMAP thường trực với reconnect lũy thừa. Cho VPS.
 
 ```typescript
 this.imapService.on("exists", async (data) => {
   console.log(`[MAIL] Nouveau mail ! Total: ${data.count}`);
-  // xử lý email mới ngay lập tức
+  // xử lý mail mới ngay lập tức
 });
 ```
 
-**Chế độ action (batch)**: xử lý email mới từ `lastId`, sau đó đóng. Dành cho cron GitHub Actions.
+**Chế độ action** (batch) : xử lý mail mới từ `lastId`, rồi đóng. Cho cron GitHub Actions.
 
 ```bash
 node dist/index.js --action
 ```
 
-Chế độ `--action` là chế độ dùng hack git. Nó đọc `lastId`, xử lý cái mới, ghi `lastId` mới, xong.
+Chế độ `--action` là chế độ dùng mẹo git. Nó đọc `lastId`, xử lý cái mới, ghi `lastId` mới, xong.
 
 ### KHÔNG trả lời robot
 
-Nếu bot của bạn trả lời TẤT CẢ email, nó sẽ trả lời newsletter, thông báo, `noreply@`. Thảm họa. Tệ hơn: nếu hai bot trả lời lẫn nhau, bạn có vòng lặp email vô tận. Ác mộng.
+Nếu bot của bạn trả lời MỌI mail, nó sẽ trả lời newsletter, thông báo, `noreply@`. Thảm họa. Tệ hơn : nếu hai bot trả lời nhau, bạn có vòng lặp mail vô hạn. Cơn ác mộng.
 
-Vậy nên lọc mạnh tay:
+Vì vậy lọc mạnh tay :
 
 ```typescript
 export function isAutomatedSender(address) {
@@ -227,34 +229,34 @@ export function isAutomatedSender(address) {
 }
 ```
 
-Và phát hiện qua header email:
+Và cả phát hiện qua header email :
 
 ```typescript
 export function isAutomatedByHeaders(headers) {
   return (
     ["bulk", "list", "junk"].includes(headers.precedence) ||
     headers["auto-submitted"] !== "no" ||
-    headers["list-unsubscribe"] !== "" ||   // newsletters có cái này
+    headers["list-unsubscribe"] !== "" ||   // newsletter có cái này
     /mailchimp|sendgrid|mailgun|brevo/i.test(headers["x-mailer"])
   );
 }
 ```
 
-`List-Unsubscribe` trong headers? Đó là newsletter. `Precedence: bulk`? Mass-mailing. `X-Mailer: Mailchimp`? Bạn hiểu rồi đấy. Bỏ qua.
+`List-Unsubscribe` trong header? Đó là newsletter. `Precedence: bulk`? Mail hàng loạt. `X-Mailer: Mailchimp`? Bạn hiểu kiểu rồi. Bỏ qua.
 
-Giống như bảo vệ club vậy: robot không qua được xD
+Như bảo vệ hộp đêm : robot không được vào.
 
-### Trigger thần kỳ
+### Các trigger kỳ diệu
 
-AI có thể quyết định không trả lời, hoặc chuyển cho người thật. Bằng cách nào? Bằng các trigger đặc biệt trong câu trả lời.
+AI có thể quyết định không trả lời gì cả, hoặc chuyển cho con người. Bằng cách nào? Với các trigger đặc biệt trong phản hồi của nó.
 
-System prompt bảo nó:
+Prompt hệ thống bảo nó :
 
-> Nếu là email tự động/newsletter → trả lời `<no_reply>`
+> Nếu là mail tự động/newsletter → trả lời `<no_reply>`
 > Nếu quá quan trọng/nhạy cảm (pháp lý, tài chính...) → trả lời `<manual_reply_required>`
-> Nếu không → viết câu trả lời thật
+> Ngược lại → viết trả lời thật
 
-Và code đọc kết quả:
+Và mã đọc điều đó :
 
 ```typescript
 const aiReply = completion.choices[0].message.content.trim();
@@ -262,31 +264,31 @@ const manualTrigger = aiReply.includes(MANUAL_REPLY_TRIGGER);
 const noReply = aiReply.includes(NO_REPLY_TRIGGER);
 
 if (noReply) {
-  console.log("[MAIL] L'IA a décidé d'ignorer. Skip.");
+  console.log("[MAIL] AI đã quyết định bỏ qua. Skip.");
   return;
 }
 
 if (manualTrigger) {
-  console.log("[MAIL] Trop chaud, je forward à un humain.");
+  console.log("[MAIL] Quá nóng, tôi chuyển cho con người.");
   await this.smtpService.sendManualForward(...);
   return;
 }
 
-// nếu không thì gửi câu trả lời AI
+// ngược lại gửi trả lời AI
 await this.smtpService.sendReply(...);
 ```
 
-Kiểu AI có quyền nói "không, cái này tôi không đụng vào, gọi người thật đi". Đó là sự khôn ngoan.
+Kiểu AI có quyền nói "không, chỗ này tôi không đụng, gọi con người thật đi". Đó là khôn ngoan.
 
 ---
 
-## Bộ nhớ hội thoại
+## Trí nhớ hội thoại
 
-Một chi tiết làm nên khác biệt: bot **ghi nhớ** các cuộc hội thoại.
+Một chi tiết thay đổi tất cả : bot **nhớ** các cuộc trò chuyện.
 
-Khi nó trả lời ai đó, nó lưu một bản tóm tắt cuộc trao đổi. Lần sau người đó viết thư, bản tóm tắt được đưa lại vào prompt.
+Khi nó trả lời ai đó, nó lưu tóm tắt cuộc trao đổi. Lần tới người đó viết, tóm tắt được bơm lại vào prompt.
 
-Lưu trữ: một file JSON cho mỗi liên hệ.
+Lưu trữ : một tệp JSON cho mỗi liên hệ.
 
 ```
 data/customers/
@@ -295,7 +297,7 @@ data/customers/
 │   └── bob%40client.fr.json
 ```
 
-Và bản tóm tắt tự được AI sinh ra, hợp nhất bản tóm tắt cũ với tin nhắn mới:
+Và tóm tắt do chính AI tạo, hợp nhất tóm tắt cũ với tin nhắn mới :
 
 ```typescript
 const completion = await groq.chat.completions.create({
@@ -309,19 +311,19 @@ const completion = await groq.chat.completions.create({
 });
 ```
 
-Vậy bot xây dựng bộ nhớ nén theo thời gian. Không cần lưu tất cả email, chỉ cần một bản tóm tắt thông minh phình to dần.
+Vậy bot xây trí nhớ nén dần theo thời gian. Một tóm tắt phình ra thông minh là đủ, không cần lưu mọi mail.
 
-Và các file JSON này? Ờ... chúng cũng được lưu trong git, trong runtime tag. Git everywhere xD
+Còn các tệp JSON này? Thì... chúng cũng lưu trong git, trong tag runtime. Git khắp nơi.
 
 ---
 
-## Mẹo thông minh với độ dài prompt
+## Điểm láu về độ dài prompt
 
-Một chi tiết kỹ thuật nhỏ khiến tôi mỉm cười.
+Chi tiết kỹ thuật nhỏ khiến tôi mỉm cười.
 
-Các model có giới hạn token. Nếu email + bản tóm tắt + persona prompt vượt quá, API trả về lỗi.
+Model có giới hạn token. Nếu mail + tóm tắt + prompt persona vượt quá, API trả lỗi.
 
-Code xử lý bằng **cascade truncation** + retry:
+Mã xử lý việc đó bằng **cắt ngắn tầng** + retry :
 
 ```typescript
 try {
@@ -330,7 +332,7 @@ try {
 } catch (error) {
   if (!this.isLengthError(error)) throw error;
 
-  // lỗi độ dài: thử lại với giới hạn chặt hơn
+  // lỗi độ dài : thử lại với giới hạn chặt hơn
   ({ systemContent, userContent } = this.buildPromptPayload({
     ...,
     limits: {
@@ -340,49 +342,49 @@ try {
       userContentChars: 2200,   // thay vì 8000
     },
   }));
-  completion = await groq.chat.completions.create({...});  // retry
+  completion = await groq.chat.completions.create({...});  // thử lại
 }
 ```
 
-Nếu vẫn không được, cắt ngắn hơn và thử lại. Đơn giản, hiệu quả, không crash.
+Nếu không qua, ta cắt ngắn hơn và thử lại. Đơn giản, hiệu quả, không crash.
 
 ---
 
-## Vậy cụ thể, nó chạy thế nào?
+## Được, cụ thể nó chạy thế nào?
 
-Luồng đầy đủ của một lần chạy cron:
+Flow đầy đủ của một lần chạy cron :
 
 ```
 1. GitHub Actions kích hoạt (cron mỗi 5 phút)
-2. Checkout tag "runtime" (code pre-build)
-3. git show refs/tags/lastid → lấy UID cuối đã xử lý
+2. Checkout tag "runtime" (mã tiền build)
+3. git show refs/tags/lastid → lấy UID đã xử lý cuối
 4. node dist/index.js --action
    ├── kết nối IMAP
-   ├── fetch email từ lastId+1
-   ├── với mỗi email:
+   ├── fetch mail từ lastId+1
+   ├── với mỗi mail :
    │   ├── phân tích nội dung
-   │   ├── lọc robot (skip nếu automated)
-   │   ├── tìm tài khoản nhận
-   │   ├── lấy bộ nhớ hội thoại
-   │   ├── sinh câu trả lời AI (Groq)
+   │   ├── lọc robot (skip nếu tự động)
+   │   ├── khớp tài khoản nhận
+   │   ├── lấy trí nhớ hội thoại
+   │   ├── sinh trả lời AI (Groq)
    │   ├── <no_reply> ? skip
-   │   ├── <manual_reply_required> ? forward người thật
-   │   ├── nếu không: gửi câu trả lời (SMTP)
-   │   └── cập nhật bộ nhớ hội thoại
+   │   ├── <manual_reply_required> ? chuyển con người
+   │   ├── ngược lại : gửi trả lời (SMTP)
+   │   └── cập nhật trí nhớ hội thoại
    └── ghi lastId mới
 5. git push --force tag "lastid" với giá trị mới
 ```
 
-Và nó lặp lại sau 5 phút. Mãi mãi. Miễn phí.
+Và lặp lại sau 5 phút. Mãi mãi. Miễn phí.
 
 ---
 
-**3 điều cần nhớ:**
+**3 điểm cần nhớ :**
 
-1. **Git = cơ sở dữ liệu miễn phí** -- Một tag orphan có thể lưu trạng thái bền vững giữa các lần chạy stateless. `git show refs/tags/X:fichier` để đọc, force-push để ghi. Không cần DB.
+1. **Git = cơ sở dữ liệu miễn phí** -- Một tag mồ côi có thể lưu trạng thái bền vững giữa hai lần chạy stateless. `git show refs/tags/X:tệp` để đọc, force-push để ghi. Bạn tiết kiệm cả một DB.
 
-2. **Pre-compile trong tag runtime** -- Thay vì `npm install` mỗi lần chạy cron, lưu code compile + node_modules vào git tag. Cron khởi động tức thì.
+2. **Tiền biên dịch trong tag runtime** -- Thay vì `npm install` mỗi lần chạy cron, lưu mã đã biên dịch + node_modules trong tag git. Cron khởi động tức thì.
 
-3. **Bot AI phải biết im lặng** -- Trigger `<no_reply>` và `<manual_reply_required>` cho AI quyền không trả lời hoặc chuyển tiếp. Thêm bộ lọc anti-robot. Nếu không bạn tạo vòng lặp email vô tận.
+3. **Bot AI phải biết im lặng** -- Các trigger `<no_reply>` và `<manual_reply_required>` để AI quyết định không trả lời hay chuyển cho người. Cộng thêm lọc chống robot. Nếu không bạn tạo vòng lặp mail vô hạn.
 
-Serverless cron với trạng thái bền vững, AI, bộ nhớ, tất cả với giá 0€/tháng. Hoàn toàn điên rồ và tôi yêu nó xD
+Cron serverless với trạng thái bền vững, AI, trí nhớ, tất cả với 0€/tháng. Hoàn toàn điên rồ và tôi mê cách dựng này.

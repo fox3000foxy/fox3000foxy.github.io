@@ -1,92 +1,92 @@
 ---
-title: ¿Cómo Funciona Este Blog?
-description: "Una exploración a fondo de los internos de este blog: React, Vite,
-  Markdown, el pipeline de CI/CD y el flujo de trabajo para escribir artículos."
+title: Cómo funciona este blog
+description: "Entre bambalinas del blog: React, Vite, Markdown, la pipeline CI/CD
+  y el flujo de redacción."
 date: 2026-03-08
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - react
   - meta
   - blog
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "evIyb5mx4AlwxWpv040VmiwymWYxbdPb/r+cVYkCywu7d8SB/r2KFKszRoz1KQMSoHQNd1ohD5IpkVaUI2gPrg=="
+author_sig: "UBTRP2uYqFO63nBYxyj94sTaxsogBDkB/kRZi/LOuiUXGt+qiutH9f467Lx1LOuEPrjogJqj30RfyhRys6jb3A=="
 ---
 
-# ¿Cómo Funciona Este Blog?
+# Cómo funciona este blog
 
-¿Alguna vez te has preguntado cómo funciona este blog por dentro? En este artículo, te explicaré toda la arquitectura de la aplicación, desde el stack tecnológico hasta el proceso de escribir un artículo. Y sí, ¡incluso te mostraré cómo escribo mis artículos desde VS Code!
+¿Alguna vez te preguntaste cómo funciona este blog bajo el capó? En este artículo, te detallo toda la arquitectura de la aplicación, desde el stack técnico hasta el proceso de redacción de un artículo. Y sí, hasta te muestro cómo escribo mis artículos desde VS Code.
 
-## El Stack Tecnológico
+## El stack técnico
 
 Este blog está construido con tecnologías web modernas:
 
-- **React 19** -- para la interfaz de usuario
-- **TypeScript** -- para código tipado y más fiable
-- **Vite** -- como herramienta de construcción ultrarrápida
-- **React Router v7** -- para la navegación entre páginas
-- **react-markdown** -- para transformar Markdown en HTML
-- **rehype-raw + rehype-sanitize** -- para permitir HTML crudo en Markdown de forma segura
+- **React 19**: para la interfaz de usuario
+- **TypeScript**: para un código tipado y más fiable
+- **Vite**: como herramienta de build ultrarrápida
+- **React Router v7**: para la navegación entre las páginas
+- **react-markdown**: para transformar el Markdown en HTML
+- **rehype-raw + rehype-sanitize**: para autorizar HTML en bruto en el Markdown con seguridad
 
 
-## Estructura del Proyecto
+## Estructura del proyecto
 
-Así es como se ve el árbol del proyecto:
+Así se ve el árbol del proyecto:
 
 ![](assets/how-this-blog-works/project-structure.png)
 
 ```
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml              ← Pipeline de CI/CD
+│       └── deploy.yml              ← Pipeline CI/CD
 ├── public/
-│   ├── home.md                     ← Contenido de la página de inicio
-│   ├── portfolio.md                ← Contenido del portafolio
+│   ├── home.md                     ← Contenido de la página inicio
+│   ├── portfolio.md                ← Contenido del portfolio
 │   └── articles/
 │       ├── index.json              ← Lista de todos los artículos
 │       ├── hello-world.md          ← Un artículo
 │       ├── how-this-blog-works.md  ← ¡Este artículo!
 │       └── assets/                 ← Imágenes de los artículos
 ├── src/
-│   ├── main.tsx                    ← Punto de entrada de React
-│   ├── App.tsx                     ← Enrutador principal
+│   ├── main.tsx                    ← Punto de entrada React
+│   ├── App.tsx                     ← Router principal
 │   ├── components/
 │   │   ├── Header.tsx              ← Barra de navegación
 │   │   └── Footer.tsx              ← Pie de página
 │   └── pages/
-│       ├── Home.tsx                ← Página de inicio
-│       ├── BlogList.tsx            ← Lista de artículos
-│       ├── Article.tsx             ← Lector de artículos
-│       ├── Portfolio.tsx           ← Página de portafolio
+│       ├── Home.tsx                ← Página inicio
+│       ├── BlogList.tsx            ← Lista de los artículos
+│       ├── Article.tsx             ← Lector de artículo
+│       ├── Portfolio.tsx           ← Página portfolio
 │       └── NotFound.tsx            ← Página 404
-└── vite.config.ts                  ← Configuración de Vite
+└── vite.config.ts                  ← Configuración Vite
 ```
 
-La idea central es simple: **el contenido está separado del código**. Las páginas están escritas en Markdown en la carpeta `public/`, y el código React en `src/` se encarga de renderizarlas.
+La idea central es simple: **el contenido está separado del código**. Las páginas se escriben en Markdown en la carpeta `public/`, y el código React en `src/` se encarga de mostrarlas. Mantengo esa separación: hace el contenido fácil de releer y el código fácil de hacer evolucionar.
 
-## El Sistema de Enrutamiento
+## El sistema de ruteo
 
-El archivo `App.tsx` define todas las rutas de la aplicación usando React Router:
+El archivo `App.tsx` define todas las rutas de la aplicación con React Router:
 
 ![](assets/20260308_153440_image.png)
 
 
-| Ruta          | Página     | Descripción                                    |
-| ------------- | ---------- | ---------------------------------------------- |
-| `/`           | Home       | Página de inicio, carga `home.md`              |
-| `/blog`       | BlogList   | Lista de todos los artículos                   |
-| `/blog/:slug` | Article    | Un artículo individual, carga `articles/{slug}.md` |
-| `/portfolio`  | Portfolio  | Página de portafolio, carga `portfolio.md`     |
-| `*`           | NotFound   | Página 404 para URLs desconocidas              |
+| Ruta          | Página    | Descripción                              |
+| --------------- | ----------- | -------------------------------------------- |
+| `/`           | Home      | Página inicio, carga `home.md`              |
+| `/blog`       | BlogList  | Lista de todos los artículos                |
+| `/blog/:slug` | Article   | Un artículo, carga `articles/{slug}.md`     |
+| `/portfolio`  | Portfolio | Página portfolio, carga `portfolio.md`      |
+| `*`           | NotFound  | Página 404 para las URLs desconocidas       |
 
-Cada página tiene un rol bien definido: obtiene un archivo Markdown, lo transforma en HTML con `react-markdown`, y lo muestra en pantalla.
+Cada página tiene un rol bien definido: recupera un archivo Markdown, lo transforma en HTML con `react-markdown`, y lo muestra en pantalla.
 
-## ¿Cómo Funciona un Artículo?
+## Cómo funciona un artículo
 
-¡Esta es la parte más interesante! Aquí está el ciclo de vida de un artículo:
+Esta es la parte que más me gusta. Aquí el ciclo de vida de un artículo:
 
-### 1. El Archivo `index.json`
+### 1. El archivo `index.json`
 
 Todos los artículos están referenciados en `public/articles/index.json`. Cada entrada contiene los metadatos del artículo:
 
@@ -101,100 +101,100 @@ Todos los artículos están referenciados en `public/articles/index.json`. Cada 
 ]
 ```
 
-- **slug** -- el identificador único, usado en la URL (`/blog/hello-world`)
-- **title** -- el título mostrado en la lista
-- **description** -- un resumen corto
-- **date** -- la fecha de publicación
+- **slug**: el identificador único, usado en la URL (`/blog/hello-world`)
+- **title**: el título mostrado en la lista
+- **description**: un breve resumen
+- **date**: la fecha de publicación
 
-### 2. El Archivo Markdown
+### 2. El archivo Markdown
 
-El contenido del artículo es un simple archivo `.md` en `public/articles/`. El nombre del archivo coincide con el `slug` definido en `index.json`.
+El contenido del artículo es un simple archivo `.md` en `public/articles/`. El nombre del archivo corresponde al `slug` definido en `index.json`.
 
 ![](assets/20260308_153509_image.png)
 
-¡Puedes poner cualquier cosa ahí: encabezados, listas, imágenes, tablas, e incluso HTML crudo gracias a `rehype-raw`!
+Puedes meter lo que quieras: títulos, listas, imágenes, tablas, ¡e incluso HTML en bruto gracias a `rehype-raw`!
 
-### 3. Renderizado del Lado de React
+### 3. El render en React
 
-Cuando visitas `/blog/hello-world`, esto es lo que sucede:
+Cuando visitas `/blog/hello-world`, esto es lo que pasa:
 
-1. React Router captura el parámetro `slug` de la URL
-2. El componente `Article.tsx` obtiene `/articles/hello-world.md`
-3. El Markdown se transforma en HTML mediante `react-markdown`
-4. Los enlaces a `assets/` se reescriben automáticamente a `/articles/assets/`
+1. React Router recupera el parámetro `slug` desde la URL
+2. El componente `Article.tsx` carga `/articles/hello-world.md`
+3. El Markdown se transforma en HTML por `react-markdown`
+4. Los enlaces hacia `assets/` se reescriben automáticamente hacia `/articles/assets/`
 5. En paralelo, los metadatos se cargan desde `index.json` para mostrar la fecha y la descripción
 
-¡Así de simple!
+Así de simple.
 
-## La Página de Inicio y el Portafolio
+## La página inicio y el portfolio
 
-Las páginas de Inicio y Portafolio funcionan exactamente igual: cargan un archivo Markdown (`home.md` o `portfolio.md`) y lo renderizan como HTML.
+Las páginas Inicio y Portfolio funcionan exactamente igual: cargan un archivo Markdown (`home.md` o `portfolio.md`) y lo renderizan en HTML.
 
-Lo especial es que usan un esquema de sanitización personalizado que permite atributos `class` y `style` en todos los elementos HTML. Esto me permite escribir HTML con estilo directamente en Markdown, como galerías de imágenes por ejemplo.
+La particularidad es que usan un esquema de sanitización personalizado que autoriza los atributos `class` y `style` en todos los elementos HTML. Eso me permite escribir HTML estilizado directamente en el Markdown, como galerías de imágenes por ejemplo.
 
-## El Encabezado y el Pie de Página
+## El Header y el Footer
 
-El Header está fijado en la parte superior de la página con `position: fixed`. Contiene:
+El Header está fijado arriba de la página con `position: fixed`. Contiene:
 
-- Mi avatar de GitHub (cargado directamente de `github.com/fox3000foxy.png`)
+- Mi avatar GitHub (cargado directamente desde `github.com/fox3000foxy.png`)
 - El título del blog
-- Enlaces de navegación: Inicio, Blog, Portafolio
+- Los enlaces de navegación: Inicio, Blog, Portfolio
 
 El Footer es minimalista: solo un copyright con el año actual calculado dinámicamente.
 
-## El Tema Oscuro
+## El tema oscuro
 
-El sitio está **siempre en modo oscuro** -- no hay interruptor claro/oscuro. Esta es una elección deliberada: `color-scheme: dark` está configurado en los estilos globales, con fondo negro `#000` y texto blanco `#fff`. Los enlaces son azules (`#64b5f6`) y se vuelven verdes al pasar el ratón (`#81c784`).
+El sitio queda en modo oscuro permanentemente. Elegí eso deliberadamente para mantener una lectura cómoda por la noche: `color-scheme: dark` está definido en los estilos globales, con un fondo negro `#000` y texto blanco `#fff`. Los enlaces son azules (`#64b5f6`) y se vuelven verdes al pasar (`#81c784`).
 
-## Cómo Escribo un Artículo
+## Cómo escribo un artículo
 
-¡Ahora la parte práctica! Aquí está mi flujo de trabajo para escribir un nuevo artículo:
+Pasemos a la práctica. Aquí mi flujo de trabajo para escribir un artículo nuevo:
 
-### Paso 1: Crear el Archivo Markdown
+### Paso 1: Crear el archivo Markdown
 
 Abro VS Code y creo un nuevo archivo `.md` en `public/articles/`:
 
-### Paso 2: Escribir el Contenido
+### Paso 2: Escribir el contenido
 
-Escribo el contenido del artículo directamente en Markdown. VS Code ofrece una excelente vista previa integrada de Markdown:
+Escribo el contenido del artículo directamente en Markdown. VS Code tiene una excelente vista previa Markdown integrada:
 
 ![](assets/20260308_153613_image.png)
 
-Para las imágenes, las coloco en `public/articles/assets/` y las referencio usando la sintaxis estándar de Markdown:
+Para las imágenes, las pongo en `public/articles/assets/` y las referencio con la sintaxis Markdown estándar:
 
 ```markdown
 ![description](assets/my-image.png)
 ```
 
-El componente `Article.tsx` reescribe automáticamente la ruta `assets/` a `/articles/assets/` para que las imágenes se muestren correctamente.
+El componente `Article.tsx` reescribe automáticamente la ruta `assets/` hacia `/articles/assets/` para que las imágenes se muestren correctamente.
 
-### Paso 3: Registrar el Artículo en index.json
+### Paso 3: Registrar el artículo en index.json
 
-Una vez que el artículo está terminado, lo añado a `public/articles/index.json` para que aparezca en la lista del blog:
+Una vez terminado el artículo, lo añado en `public/articles/index.json` para que aparezca en la lista del blog:
 
 ![](assets/20260308_153629_image.png)
 
-### Paso 4: Probar Localmente
+### Paso 4: Probar en local
 
-Inicio el servidor de desarrollo de Vite:
+Lanzo el servidor de desarrollo Vite:
 
 ```bash
 pnpm dev
 ```
 
-Vite se inicia en milisegundos y puedo ver mi artículo en tiempo real en `localhost:5173`:
+Vite arranca en unos milisegundos y puedo ver mi artículo en tiempo real en `localhost:5173`. Esa rapidez me permite comprobar cada modificación casi al instante:
 
 ![](assets/20260308_153703_image.png)
 
 ### Paso 5: Publicar
 
-¡Un simple `git push` es todo lo que se necesita! El pipeline de CI/CD se encarga del resto automáticamente.
+¡Un simple `git push` basta! El pipeline CI/CD se encarga del resto automáticamente.
 
-## El Pipeline de Despliegue CI/CD
+## El pipeline de despliegue CI/CD
 
-He configurado un pipeline completo de **GitHub Actions** que automatiza el linting, la construcción y el despliegue del sitio cada vez que hago push a `main`. Vamos a desglosarlo.
+Puse en marcha un pipeline **GitHub Actions** completo que automatiza el lint, el build y el despliegue del sitio en cada push a `main`. Veámoslo en detalle.
 
-El workflow vive en `.github/workflows/deploy.yml` y está dividido en dos trabajos: **build** y **deploy**.
+El workflow está en `.github/workflows/deploy.yml` y se divide en dos jobs: **build** y **deploy**.
 
 ### Disparadores
 
@@ -208,101 +208,101 @@ on:
       - main
 ```
 
-El pipeline se ejecuta en cada **push** a `main` y en cada **pull request** dirigido a `main`. Esto significa que los PRs se verifican (lint + build) antes de fusionarse, pero solo los pushes a `main` desencadenan un despliegue real.
+El pipeline se ejecuta en cada **push** a `main` y en cada **pull request** hacia `main`. Las PRs se verifican (lint + build) antes de fusionarse, pero solo los pushes a `main` disparan un despliegue.
 
-### Trabajo 1: Build
+### Job 1: Build
 
-El trabajo de build se ejecuta en `ubuntu-latest` y pasa por estos pasos:
+El job de build corre en `ubuntu-latest` y sigue estos pasos:
 
-1. **Checkout** -- Clona el repositorio con historial completo (`fetch-depth: 0`)
-2. **Setup pnpm** -- Instala la última versión de pnpm usando `pnpm/action-setup@v4`
-3. **Setup Node.js 20** -- Configura Node con caché de pnpm habilitada para instalaciones más rápidas
-4. **Install dependencies** -- Ejecuta `pnpm install --frozen-lockfile` para garantizar builds reproducibles (no se permiten cambios en el lockfile)
-5. **Lint** -- Ejecuta `pnpm run lint` (ESLint) para detectar problemas de calidad del código antes de construir
-6. **Build** -- Ejecuta `pnpm run build`, que primero verifica los tipos de TypeScript (`tsc -b`) y luego empaqueta todo con Vite
-7. **Upload artifact** -- Sube la carpeta `dist/` como un artefacto de construcción para el trabajo de deploy
+1. **Checkout**: Clona el repo con todo el historial (`fetch-depth: 0`)
+2. **Setup pnpm**: Instala la última versión de pnpm con `pnpm/action-setup@v4`
+3. **Setup Node.js 20**: Configura Node con la caché pnpm activada para instalaciones más rápidas
+4. **Install dependencies**: Ejecuta `pnpm install --frozen-lockfile` para garantizar builds reproducibles (ninguna modificación del lockfile autorizada)
+5. **Lint**: Ejecuta `pnpm run lint` (ESLint) para comprobar la calidad del código antes del build
+6. **Build**: Ejecuta `pnpm run build`, que primero verifica los tipos TypeScript (`tsc -b`) y luego empaqueta todo con Vite
+7. **Upload artifact**: Sube la carpeta `dist/` como artefacto de build para el job de despliegue
 
-Si algún paso falla -- un error de lint, un error de tipo, un error de build -- todo el pipeline se detiene y no se despliega nada. Esto mantiene el sitio en vivo a salvo de código roto.
+Si una etapa falla (error de lint, de tipo o de build), todo el pipeline se detiene y nada se despliega. Esa guardia me protege del código roto en producción y confío en ella en cada push.
 
-### Trabajo 2: Deploy
+### Job 2: Deploy
 
-El trabajo de deploy solo se ejecuta si:
+El job de despliegue solo se ejecuta si:
 
-- El trabajo de build tuvo éxito (`needs: build`)
-- El evento es un **push** (no un PR)
+- El job de build tuvo éxito (`needs: build`)
+- El evento es un **push** (no una PR)
 - La rama es **main**
 
 ```yaml
 if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 ```
 
-Entonces:
+Luego procede:
 
-1. **Descarga el artefacto de build** -- Obtiene la carpeta `dist/` producida por el trabajo de build
-2. **Configura GitHub Pages** -- Prepara el entorno de Pages
-3. **Sube a Pages** -- Empaqueta la carpeta `dist/` para GitHub Pages
-4. **Despliega** -- Publica el sitio usando `actions/deploy-pages@v4`
+1. **Descarga el artefacto de build**: Recupera la carpeta `dist/` producida por el job de build
+2. **Configura GitHub Pages**: Pone en marcha el entorno Pages
+3. **Sube hacia Pages**: Prepara la carpeta `dist/` para GitHub Pages
+4. **Despliega**: Publica el sitio con `actions/deploy-pages@v4`
 
-### El Panorama Completo
+### El cuadro completo
 
-Esto es lo que sucede desde la escritura hasta el despliegue:
+Esto es lo que pasa desde la escritura hasta el despliegue:
 
 ```
-Escribir artículo en VS Code
-        ↓
-   git add & commit
-        ↓
-     git push
-        ↓
-  GitHub Actions se activa
-        ↓
-  ┌─────────────────┐
-  │  TRABAJO BUILD  │
-  │  1. Checkout    │
-  │  2. Setup pnpm  │
-  │  3. Setup Node  │
-  │  4. Install     │
-  │  5. Lint ✓      │
-  │  6. Build ✓     │
-  │  7. Upload dist │
-  └────────┬────────┘
-           ↓
-  ┌─────────────────┐
-  │ TRABAJO DEPLOY  │
-  │  1. Download    │
-  │  2. Configure   │
-  │  3. Upload      │
-  │  4. Deploy 🚀   │
-  └─────────────────┘
-           ↓
-   ¡En vivo en GitHub Pages!
+Escribir el artículo en VS Code
+          ↓
+     git add & commit
+          ↓
+        git push
+          ↓
+    GitHub Actions se dispara
+          ↓
+    ┌─────────────────┐
+    │   BUILD JOB     │
+    │  1. Checkout    │
+    │  2. Setup pnpm  │
+    │  3. Setup Node  │
+    │  4. Install     │
+    │  5. Lint ✓      │
+    │  6. Build ✓     │
+    │  7. Upload dist │
+    └────────┬────────┘
+             ↓
+    ┌─────────────────┐
+    │  DEPLOY JOB     │
+    │  1. Download    │
+    │  2. Configure   │
+    │  3. Upload      │
+    │  4. Deploy 🚀   │
+    └─────────────────┘
+             ↓
+      En línea en GitHub Pages
 ```
 
-Todo el proceso toma aproximadamente un minuto desde el push hasta la publicación. Sin despliegue manual, sin FTP, sin SSH -- solo `git push` y está hecho.
+El proceso entero tarda alrededor de un minuto entre el push y la puesta en línea. Publico con un simple `git push`, todo queda automático sin pasar por FTP ni SSH.
 
-## El Build de Producción
+## El build de producción
 
 Bajo el capó, el comando `pnpm build` ejecuta:
 
-1. `tsc -b` -- Verifica los tipos de TypeScript
-2. `vite build` -- Empaqueta y optimiza todo el código
+1. `tsc -b`: Verifica los tipos TypeScript
+2. `vite build`: Empaqueta y optimiza todo el código
 
-Vite produce archivos minificados y optimizados con división de código automática. El resultado es un sitio estático ultrarrápido.
+Vite produce archivos minificados y optimizados con code-splitting automático. El resultado es un sitio estático ultrarrápido.
 
-## ¿Por Qué Esta Arquitectura?
+## Por qué esta arquitectura
 
-Podría haber usado un CMS, un generador de sitios estáticos como Hugo o Jekyll, o incluso Next.js. Pero aquí está por qué elegí este enfoque:
+Podría haber usado un CMS, un generador de sitio estático como Hugo o Jekyll, o incluso Next.js. Pero aquí por qué elegí este enfoque:
 
-- **Simplicidad** -- Escribe en Markdown, haz push a GitHub, está en vivo
-- **Control total** -- Sin dependencia de un CMS o base de datos
-- **Rendimiento** -- Vite + React = carga rápida
-- **Flexibilidad** -- Puedo mezclar Markdown y HTML como quiera
-- **Aprendizaje** -- Es un gran proyecto para dominar React y TypeScript
-- **CI/CD** -- Verificaciones de calidad automatizadas y despliegue con GitHub Actions
+- **Simplicidad**: Escribe en Markdown, push a GitHub, está en línea
+- **Control total**: Ninguna dependencia de un CMS o una base de datos
+- **Rendimiento**: Vite + React = carga rápida
+- **Flexibilidad**: Puedo mezclar Markdown y HTML como quiera
+- **Aprendizaje**: Es un superproyecto para dominar React y TypeScript
+- **CI/CD**: Comprobaciones de calidad y despliegue automatizados con GitHub Actions
 
 ## Conclusión
 
-Este blog es un proyecto simple pero bien pensado: Markdown para el contenido, React para el renderizado, Vite para el rendimiento, GitHub Actions para CI/CD y GitHub Pages para el alojamiento. Sin base de datos, sin servidor backend, solo archivos estáticos servidos eficientemente con un pipeline automatizado que garantiza la calidad en cada push.
+Este blog es un proyecto simple pero bien pensado: Markdown para el contenido, React para el render, Vite para el rendimiento, GitHub Actions para el CI/CD, y GitHub Pages para el alojamiento. Solo se apoya en archivos estáticos servidos eficazmente, con un pipeline automatizado que garantiza la calidad en cada push.
 
 
-Gracias por leer, y nos vemos en el próximo artículo! 🦊
+Gracias por leer, ¡y hasta pronto en el próximo artículo! 🦊

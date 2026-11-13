@@ -1,39 +1,39 @@
 ---
-title: 新しいプロジェクト
-description: 新しいWebサイトの開始と開発のプロセスについて。
+title: 新プロジェクトに取り組む
+description: 新ウェブサイトの立ち上げと開発過程の概要。
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - meta
   - webdev
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "r7ODm4WPI50GI2GlwMqLdL+tdkVQRG9Qzee/+XZkmrpTpjyJbJnUVot+fRqByjaB285wYyOie+hIBjtLWvOnUA=="
+author_sig: "mCztqRqtg4uCg1HCsvGWk4q1StTtAtKnvYgkWGDNv5Lxnwv1MIZsyD/3uRgZsgoGtL+hNx05wlVe6udYstve1g=="
 ---
 
-# 新しいプロジェクト
+# プロジェクト
 
-今やってるプロジェクトはLLJTって名前なんだ：
+取り組んでるプロジェクトはLLJTって言う。
 
 ![](assets/20260313_092734_image.png)
 
-これはPWAでもあるWebサイト、つまりモバイルアプリでもあるんだ。MaterialUIを使ってて、本物のスマホアプリみたいな感じになってる。
-最近Muiのインポートを整理する必要があって、11707モジュールからたったの595まで減らした。アイコンを分割インポートじゃなくて1行ごとに手動でインポートするようにしたんだ：分割インポートするとアイコンライブラリ全体を読み込んじゃうけど、個別にインポートすれば必要なものだけ読み込めるって学んだよ。
+ウェブサイトでPWAでもある。だからモバイルアプリとして使える。本物の電話アプリみたいに振る舞うためMaterialUIを使ってる。
+Muiのimportには時間かけた。11707モジュールから最後595まで落とした。各アイコンを分解 import じゃなく1行ずつ import してね。そのとき分解 import はアイコンライブラリ全体を読み込むのに、個別 import は使うものだけ読むって学んだ。
 
-NibiはこのWebサイトに接続されてるボットだ。![](assets/20260313_093102_image.png)進級はGoogle Formsベースだよ：
+Nibiはこのサイトに繋がるボットだ。![](assets/20260313_093102_image.png)採点はGoogle Forms頼みだ。
 ![](assets/20260313_093255_image.png)
-選択式テストで生徒を評価して、主要な試験に合格したらDiscordのロールや絵文字、チャンネルも与えてるんだ。
+学生評価に選択問題を使って、大事な試験に受かった学生にDiscord役職や絵文字やチャンネルも付ける。
 
 ![](assets/20260313_093707_image.png)
 
-このプロジェクトの目標は、一緒に日本語を学ぶ人を集めること。自分自身も日本語を学びたいと思ってるからね。
-生徒はCrunchyrollとのパートナーシップや他のプラットフォームもアンロックできるようになってて、能力に応じて報酬がもらえる仕組みだよ。
+このプロジェクトの目標は、私自身もやりたいことだから、私達と一緒に日本語を学ぶ人を助けることだ。
+学生は進行のご褒美にCrunchyrollや他プラットフォームとの提携も解除する。
 
-NibiとWebサイトはそれぞれCloudflare WorkersのHono Server Interaction URLと、GitHub PagesのReactデプロイでホストされてる。
-Webサイトのコードはオープンソースじゃないけど、Nibiはそうだよ。[このGitHubリポジトリ](https://github.com/let-s-Learn-Japanese-Together/nibi)で見れる。Webサイトを公開してないのは個人情報が含まれてるからだけど、どうやって作ったのか知りたかったらDiscordとかで聞いてくれれば、喜んで説明するよ！実際、GitHub Enterpriseにお金を払わなくていいように作ったGitHub Actionを使ったり、他にもたくさんのクールなツールやテクニックを使ってるんだ！
+NibiとサイトはそれぞれCloudflare Workers（Hono Server付きInteraction URL）とReact付きGitHub Pagesでホストしてる。
+サイトコードはオープンソースじゃないけど、Nibiはそうだ。[このGitHubリポジトリ](https://github.com/let-s-Learn-Japanese-Together/nibi)にある。サイトは個人情報入りだから非公開のままだ。でもどう作ったか知りたければDiscordで聞いて。過程を喜んで説明するよ！GitHub Enterprise払い避けに作ったGitHub Actionや、興味あれば説明できる他道具や技術も使ってる！
 
-最近はホスティングにお金を払わないで済む方法を見つけるのに夢中になってて、NibiをインタラクションエンドポイントボットにしてCloudflare Workersで無料ホストできるようにしたし、WebサイトをGitHub Pagesに無料デプロイするGitHub Actionも作った。抜け道探しはコーディングの中で一番楽しい部分の一つだと思う。枠にとらわれずに考えて、創造的な解決策を見つける必要がある--そこが好きなんだ。ただコードを書くだけじゃなくて、お金をかけずにものを動かす方法を見つけること、それが本当に楽しめるチャレンジなんだよね。
+数日前から、ホスティング払わずプロジェクトをホストする回避策探しを大いに楽しんでる。だからNibiをInteraction EndpointボットにしてCloudflare Workersで無料ホストして、GitHub Pagesに無料デプロイするGitHub Actionを作った。この回避策探しは今も私のコードでいちばん刺激的な部分だ。違う考え方をして創造的な解を作らなきゃいけない。まさに予算なしのこの挑戦が私を動かす！
 
-GitHub Actionsを本来の用途とは違う形で使ったり、Cloudflare Workersでボットを「ホスト」するのも、新しいことを学び、新しい技術を発見する方法なんだ。クラウドホスティングみたいにね。もうホスティングにお金なんて払いたくないんだよ。
+本来用途外でGitHub Actionsを使うこと、ボット「ホスティング」にCloudflare Workersを使うことも、新しいこと学んでクラウドホスティングみたいな新技術を発見する方法だ。ホスティングにお金払いたくない。
 
-まだ作業中だけど、[Discordサーバー](https://discord.gg/frKZ9cJ4fD)に参加すれば進捗を追えるし、どう進化していくか見れるよ。興味があればプロジェクトに参加もできる！サーバーは誰にでも開かれていて、一緒に日本語を学ぶ旅に参加してくれる人を歓迎してる。招待リンクはWebサイトにあるし、欲しければ俺に直接聞いてもいいよ！
+まだ取り組み中だけど、進捗追ってどう変わるか見たければ[Discordサーバー](https://discord.gg/frKZ9cJ4fD)に参加できる。興味あればプロジェクト参加もできるかも！サーバーは誰でも開いてて、一緒に日本語学ぶ人がもっとほしい！招待リンクはサイトにある。直接聞いてもいいよ！

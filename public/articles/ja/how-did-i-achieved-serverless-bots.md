@@ -1,81 +1,80 @@
 ---
-title: 100%サーバーレスDiscordボット：Hono + Cloudflare Workers
-description: 月50€かかってたDiscordボットをゼロユーロにした方法 --
-  インタラクションエンドポイント、Hono、Workers、リアルタイム画像レンダリング、WebSocketなしの完全なゲーム。
+title: "Discordボット完全サーバーレス：HonoとCloudflare Workers"
+description: "月50ユーロかかってたDiscordボットをゼロ円に置き換えた方法。interaction endpoints、Hono、Workers、リアルタイム画像レンダー、WebSocketなしの完全ゲーム。"
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "mwiaJBo3Ts8EzY49X/fK+DxQ93txHTURDQNkWMUEjuYOnnQtFEgPBn+ZpvZarFLKXbWtrdIbfctgMOY/kaLXSA=="
+author_sig: "lC8f/IQU71+ZgiQsjPBYjRbndxn95MgohPG6vyqYEkxMmvkE2Y4ywsttutNGVR54ailQ99KDqsZ5tjJuJFgtuQ=="
 ---
 
-## Discord bot 完全サーバーレス : Hono + Cloudflare Workers = 💸 ゼロ
+## Discordボット完全サーバーレス：HonoとCloudflare Workersでお金ゼロ
 
-何ヶ月か自宅マシンで普通のDiscord botを動かし続けてたんだよね。
+昔ながらのDiscordボットの保守に数か月かけた。自分のマシンでね。
 
-WebSocket接続は常時開きっぱなし。朝の3時に勝手に再接続するbot。羊を変な目で見ただけでbotがクラッシュする。請求書が上がっていく。
+WebSocket接続は開きっぱなし。ボットは朝3時に1人で再接続する。変な見方で羊を数えたせいでボットはクラッシュする。請求は増える。
 
-ある日気づいたんだ：**なんで接続を維持する必要あんの？** Discordは興味あるやつだけPOSTしてくれる。返事すれば終わり。
+ある日気づいた。**なんで接続を維持するの**って。Discordは興味あるイベントだけPOSTしてくれる。返せば終わりだ。
 
-2021年からDiscordは**interaction endpoints**を提供してる。
+2021年からDiscordは**interaction endpoints**を出してる。
 
-ただのHTTP。WebSocketなし。永続ステートなし。リクエストを受け取って、JSON返して、終わり。次のリクエストは勝手に来る。
+ただのHTTPだ。WebSocketなし、永続状態なしで働く。リクエスト受けて、JSON返して、終わりだ。次のリクエストは1人で来る。
 
-で、最高なのは：Cloudflare Workersが**無料**で1日10万リクエストまで。90%のbotなら月0€。
+最高なのは、Cloudflare Workersが1日10万リクエストまで**無料**なことだ。9割のボットは月0円だ。
 
-この記事ではWebSocketなしでDiscord botを作る方法を紹介するよ。使うのは**Hono**（超軽量Webフレームワーク）と**Cloudflare Workers**。実際の2つのプロジェクトを見せていく：**Nibi**（日本語学習bot、TTS付き、かっこいい）と**Konosuba-RPG**（画像レンダリングするDiscordの_フル_ゲーム xD）。
+この記事ではHono（超軽量ウェブフレームワーク）とCloudflare WorkersでWebSocketなしDiscordボットを作る方法を示す。実在2プロジェクトを見せる。**Nibi**（日本語学習ボット、TTS、かっこいい）と**Konosuba-RPG**（リアルタイム画像レンダー付き完全なDiscordゲーム）だ。
 
-## WebSocket vs. Interaction Endpoints : なんでダメだったのか
+## WebSocket対Interaction Endpoints：なぜ悪い考えだったか
 
-プレイしてない時も接続を開きっぱなしにしなきゃいけないMinecraftを想像してみてよ。
+遊んでないときも接続を開いたままにしなきゃいけないMinecraftゲームを想像して。
 
-しかもサーバーがクラッシュするたびに自動で再接続するんだぜ。タイムアウト処理して、指数バックオフして、誰も好きじゃないクソったれなボイラープレートを全部やらなきゃいけない。ただのインタラクションを受け取るためだけに。
+サーバーはクラッシュするたび自動再接続する。タイムアウトも指数バックオフ再接続も、大嫌いな定型ボイラープレート全部を管理しなきゃいけない。ただやり取りを受け取るためだけにね。
 
-Interaction endpointsは真逆。DiscordがURLにPOSTする。お前が返事する。終わり。
+interaction endpointsは逆だ。Discordが君のURLにPOSTする。返せば終わりだ。
 
-サーバーがクラッシュしたら？ Discordが2-3回リトライして次行く。ドラマゼロ。
+サーバーがクラッシュしたら？Discordは2、3回リトライして先に行く。ドラマゼロだ。
 
-**前のコスト**: HerokuでNodeプロセス生かしておくだけで月50€。
+**前のコスト**：Nodeプロセスを生かしとくだけでHerokuに月50ユーロだ。
 
-**後のコスト**: Cloudflareだと1日10万リクエストまで月0€。
+**後のコスト**：1日10万リクエストまでCloudflareで月0円だ。
 
-## アーキテクチャ : 実際どういうこと？
+## アーキテクチャ：結局何なの
 
-Discordがお前のエンドポイントにリクエストをPOSTする。
+Discordが君のエンドポイントにリクエストをPOSTする。
 
 ```plaintext
-Discord: "なあ！ユーザーが /ping をクリックしたぞ！"
+Discord：「ねえ！ユーザーが/ping押したよ！」
       ↓
-   お前のURL (Cloudflare Worker)
+   君のURL（Cloudflare Worker）
       ↓
-   本当にDiscordか確認する (署名チェック)
+本当にDiscordか確認する（署名チェック）
       ↓
-   インタラクションタイプをパース
+やり取り種別をパースする
       ↓
-   ハンドラを実行
+ハンドラを実行する
       ↓
-   JSONを返す
+JSONを返す
       ↓
-   Discord: "よし、これをユーザーに表示するぜ"
+Discord：「いいね、ユーザーに表示するね」
 ```
 
-純粋なHTTP。魔法なし。重いライブラリなし。
+純HTTPで、最小で読みやすいスタックだ。
 
-## Hono + Cloudflare Workers : ケチケチコンボ
+## HonoとCloudflare Workers：倹約コンビ
 
-**Hono**は12KBのWebフレームワーク。どこでも動く：Cloudflare Workers、Vercel、AWS Lambda、Deno、Bun...同じコードがどこでも動く。
+**Hono**は12KBのウェブフレームワークだ。どこでも動く。Cloudflare Workers、Vercel、AWS Lambda、Deno、Bunなど。同じコードがどこでもだ。
 
-Cloudflare Workersはエッジでのコンピューティング。リクエストは一番近いサーバーに届く。応答時間：\<100ms。コスト：1日10万リクエストまで無料。
+Cloudflare Workersはエッジのコンピュートだ。リクエストは最寄りサーバーに届く。応答時間は100ms未満だ。コストは1日10万リクエストまで無料だ。
 
-Hono + CloudflareのコンボはDiscord botに完璧。
+HonoとCloudflareの組み合わせはDiscordボットにぴったりだ。
 
-これが完全なbotの最小コード：
+完全ボットの最小コードはこうだ。
 
 ```typescript
 import { Hono } from 'hono';
@@ -84,12 +83,12 @@ import { verifyKey } from 'discord-interactions';
 const app = new Hono();
 
 app.post('/interactions', async (c) => {
-  // 1. ヘッダーを取得
+  // 1. ヘッダーを取る
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
   const body = await c.req.text();
 
-  // 2. 本当にDiscordか確認（スパム対策）
+  // 2. 本当にDiscordか確認する（スパムじゃない）
   const isValid = verifyKey(
     body,
     signature,
@@ -98,17 +97,17 @@ app.post('/interactions', async (c) => {
   );
   if (!isValid) return c.text('Invalid request', 401);
 
-  // 3. 送られてきたものをパース
+  // 3. 送ってきたものをパースする
   const interaction = JSON.parse(body);
 
-  // 4. タイプに応じて応答
+  // 4. 種別で返す
   if (interaction.type === 1) {
-    // Discordのテスト（PING）
+    // Discordテスト（PING）
     return c.json({ type: 1 });
   }
 
   if (interaction.type === 2) {
-    // スラッシュコマンド
+    // スラッシュコマンドだ
     const name = interaction.data.name;
     if (name === 'ping') {
       return c.json({
@@ -124,51 +123,51 @@ app.post('/interactions', async (c) => {
 export default app;
 ```
 
-30行くらいで動くbotができる。
+30行で動くボットになる。
 
-`bot.login()` もいらない。イベントエミッターもいらない。コールバック地獄もいらない。ただのHTTP。
+`bot.login()`もイベントエミッタもコールバック地獄も忘れる。HTTPだけ残す。
 
-Cloudflareにデプロイするには：
+Cloudflareへのデプロイはこうだ。
 
 ```plaintext
 npm install -D wrangler
 npx wrangler deploy
 ```
 
-Boom。`https://mon-bot.workers.dev/interactions` みたいなURLができる。
+はい。`https://mon-bot.workers.dev/interactions`みたいなURLができる。
 
-それをDiscord Developer Portalの"INTERACTIONS ENDPOINT URL"に入れるだけで、Discordがそこにインタラクションを送り始める。
+Discord Developer Portalの「INTERACTIONS ENDPOINT URL」にこれを入れる。Discordがやり取りをそこに送り始める。
 
-## 署名の検証 : 偽リクエストの防止
+## 署名を検証する：偽リクエストなし
 
-Discordは全リクエストに公開鍵で署名してる。もし間違った署名のリクエストが来たら？ それはスパム。無視して次行け。
+Discordは各リクエストに公開鍵で署名する。悪い署名のリクエストを受けたら？スパムだ。無視して続ける。
 
-`discord-interactions` パッケージがやってくれる：
+`discord-interactions`パッケージが仕事する。
 
 ```typescript
 import { verifyKey } from 'discord-interactions';
 
 const isValid = verifyKey(
-  rawBody,           // 生のテキストそのまま（パースしたJSONじゃない！）
-  signature,         // x-signature-ed25519 ヘッダー
-  timestamp,         // x-signature-timestamp ヘッダー
+  rawBody,           // 正確な生テキスト（パース済みJSONじゃない！）
+  signature,         // x-signature-ed25519ヘッダー
+  timestamp,         // x-signature-timestampヘッダー
   publicKey          // Discord Dev Portalから
 );
 ```
 
-**重要な落とし穴**: 署名は_正確な_ボディに依存してる。JSONパースして再stringifyしたり、bodyをログに出したりすると署名が壊れる。
+**大事な罠**：署名は正確なbodyに依存する。JSONパースして再stringifyしたり、bodyをログに出したりしたら署名が壊れる。
 
-先に検証。後でパース。この順番が大事。
+先に検証する。後にパースする。この順序が大事だ。
 
-## ケース1 : Nibi（日本語学習bot）
+## ケース1：Nibi（日本語学習ボット）
 
-NibiはDiscordで日本語を学ぶためのbot。シンプルなコマンド：
+Nibiは日本語学習用Discordボットだ。単純コマンドだ。
 
 *   `/dictionary kanji` → 定義を表示
-*   `/pronounce テキスト` → TTS（テキスト読み上げ）生成
-*   `/hello` → ウェルカムメッセージ
+*   `/pronounce テキスト` → TTS（text-to-speech）を生成
+*   `/hello` → あいさつメッセージ
 
-各コマンドが1つのTypeScriptファイル：
+各コマンドはTypeScriptファイル1つだ。
 
 ```plaintext
 src/commands/
@@ -178,7 +177,7 @@ src/commands/
 └── ...
 ```
 
-コマンドはこのインターフェースを実装する：
+コマンドはこのインターフェースを実装する。
 
 ```typescript
 interface Command {
@@ -190,24 +189,24 @@ interface Command {
   execute(
     interaction: Interaction,
     env: Bindings
-  ): Promise<InteractionResponse>;
+  ): Promise<interactionresponse>;
 }
 ```
 
-### /pronounce コマンド : botに喋らせる
+### /pronounceコマンド：ボットに話させる
 
-これがめっちゃヤバいやつ。テキスト（ローマ字、ひらがな、漢字、何でも）を送ると、botがひらがなに変換して、VOICEVOXかGoogle TTSでTTS生成して、Discordに音声メッセージを送る。
+いちばん変なやつだ。テキストを送る（romaji、ひらがな、漢字、何でも）。ボットはひらがなに変換して、VOICEVOXかGoogle TTS経由でTTSを生成して、Discordに音声メッセージを送る。
 
 ```typescript
 const pronounce: Command = {
   data: {
     name: 'pronounce',
-    description: '日本語テキストのTTSを生成',
+    description: '日本語テキスト用TTSを生成',
     options: [
       {
         type: 3,  // STRING
         name: 'text',
-        description: '発音するテキスト',
+        description: '読ませるテキスト',
         required: true
       }
     ]
@@ -217,24 +216,24 @@ const pronounce: Command = {
     const text = interaction.data.options[0].value;
 
     try {
-      // 1. ローマ字 → ひらがなに変換（Kuroshiro使用）
+      // 1. romajiからひらがなへKuroshiroで変換
       const hiragana = await kuroshiro.convert(text, { to: 'hiragana' });
 
       // 2. TTS音声を生成
       const audioBuffer = await generateTTS(hiragana);
 
-      // 3. Discordにファイルをアップロード
+      // 3. ファイルをDiscordへアップロード
       const uploadFilename = await uploadToDiscord(
         audioBuffer,
         interaction.channel.id,
         env.BOT_TOKEN
       );
 
-      // 4. 音声付きメッセージを送信
+      // 4. 音声付きメッセージを送る
       await sendVoiceMessage(
         interaction.channel.id,
         uploadFilename,
-        audioBuffer.length / 16000,  // 秒単位の再生時間
+        audioBuffer.length / 16000,  // 秒単位の長さ
         env.BOT_TOKEN
       );
 
@@ -246,7 +245,7 @@ const pronounce: Command = {
       return {
         type: 4,
         data: {
-          content: 'エラー : 音声生成できなかった xD',
+          content: 'Erreur : impossible de générer l\'audio xD',
           flags: 64  // ephemeral（プライベートメッセージ）
         }
       };
@@ -255,11 +254,11 @@ const pronounce: Command = {
 };
 ```
 
-やばくない？ 外部API呼んで、ファイルをDiscordにアップロードして、そのファイル付きメッセージを送信する。全部WebSocketなし、HTTPだけで。
+すごいよね。外部APIを呼んで、ファイルをDiscordにアップロードして、ファイル付きメッセージを送る。WebSocketなしで全部HTTPだけだ。
 
-### Supabaseでの永続化
+### Supabaseによる永続化
 
-NibiはSupabaseをkey-valueストアとして使ってる。ユーザーが登録済みか確認するには：
+NibiはSupabaseをkey-valueストアとして使う。ユーザーが登録済みか確認するためだ。
 
 ```typescript
 const DatabaseUtils = new DatabaseUtils({
@@ -277,39 +276,39 @@ if (!user) {
 }
 ```
 
-めっちゃベーシック（本物のSQLクエリじゃなくてただのJSON）だけど動く。小さいbotには完璧。
+とても基本的だ（本物SQLクエリじゃなくただのJSON）。でも動く。小さいボットには最適だ。
 
-## ケース2 : Konosuba-RPG（画像レンダリングするDiscordゲーム）
+## ケース2：Konosuba-RPG（画像レンダー付きDiscordゲーム）
 
-これマジでヤバい。
+はいこれはすごい。
 
-Konosuba-RPGはDiscord上の**完全なゲーム**。敵と戦って、経験値稼いで、アクセサリー装備して、レベル上げる。各バトルで**画像**がリアルタイム生成される。事前レンダリングされたスプライトシートなし。プレイヤーのステータス、敵、戦闘状態から動的に画像が構成される。
+Konosuba-RPGはDiscord上の**完全なゲーム**だ。モブと戦って、XP稼いで、装飾品付けて、レベル上げる。各バトルが**画像**をリアルタイム生成する。事前レンダーしたスプライトシートは避ける。画像はプレイヤー stats とモブと戦闘状態から動的合成される。
 
-しかもその画像、Cloudflare Workers上で\<500msで生成される。文字通り。
+画像生成はCloudflare Workers上で500ms未満だ。文字通りね。
 
-### レンダリングのアーキテクチャ
+### レンダーのアーキテクチャ
 
 ```plaintext
-Discord（"Attack"をクリック）
+Discord（「Attack」押す）
     ↓
-Cloudflare Workerがインタラクションを受け取る
+Cloudflare Workerがやり取りを受ける
     ↓
-ゲーム状態を更新（XP、HPなど）
+ゲーム状態を更新する（XP、HPなど）
     ↓
-SatoriでJSXを生成
+SatoriでJSXを生成する
     ↓
-Resvg（Wasm）でSVG → PNGに変換
+Resvg（Wasm）でSVGからPNGへ変換する
     ↓
-画像をDiscordにアップロード
+画像をDiscordへアップロードする
     ↓
-画像付きメッセージを送信
+画像付きメッセージを送る
 ```
 
-全部1秒未満。やばすぎ。
+全部1秒未満だ。やばい。
 
-### Workers側での画像レンダリング
+### Workers側の画像レンダー
 
-Konosubaは**Satori**（JSX → SVG）と**Resvg**（SVG → PNG）を使ってる：
+Konosubaは**Satori**（JSXからSVG）と**Resvg**（SVGからPNG）を使う。
 
 ```typescript
 import { Satori } from 'satori';
@@ -318,9 +317,9 @@ import initWasm from '@cf-wasm/resvg';
 async function renderBattle(gameState: GameState) {
   const resvg = await initWasm();
 
-  // 1. UI用のJSXを作成
+  // 1. UI用JSXを作る
   const jsx = (
-    <div style={{ display: 'flex', gap: '20px' }}>
+    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}="">
       <div>
         <h1>{gameState.player.name}</h1>
         <p>HP: {gameState.player.hp}/{gameState.player.maxHp}</p>
@@ -332,27 +331,27 @@ async function renderBattle(gameState: GameState) {
     </div>
   );
 
-  // 2. JSX → SVG
+  // 2. JSXからSVGへ
   const svg = await satori.render(jsx, {
     width: 1200,
     height: 800,
     fonts: [/* ... */]
   });
 
-  // 3. SVG → PNG
+  // 3. SVGからPNGへ
   const png = resvg.render(svg).asPng();
 
   return png;  // Uint8Array
 }
 ```
 
-普通のJSXを書く。それがSVGになる。SVGがPNGになる。Cloudflare Workerで\<100ms。
+普通のJSXを書く。SVGになる。SVGがPNGになる。Cloudflare Worker上で100ms未満だ。
 
-このパワー分かる？ ただただ...美しい xD
+強さ分かる？ただ美しい。
 
 ### ゲーム状態と進行
 
-プレイヤーデータはSupabaseに保存：
+プレイヤーデータはSupabaseにある。
 
 ```typescript
 const player = await db
@@ -371,11 +370,11 @@ const { data: updated } = await db
   .eq('id', player.id);
 ```
 
-各アクション（攻撃、防御、回復）でDBのステータスを更新。そして新しいステータスで画像を再生成。
+各行動（攻撃、防御、回復）がDBの stats を更新する。次に新しい stats で画像を作り直す。
 
-### インタラクション : ゲームプレイのボタン
+### やり取り：ゲームプレイのボタン
 
-ゲームは戦闘アクションに**ボタンインタラクション**を使ってる：
+ゲームは戦闘行動に**ボタンやり取り**を使う。
 
 ```typescript
 {
@@ -397,11 +396,11 @@ const { data: updated } = await db
 }
 ```
 
-"Attack"をクリックすると、Discordが `custom_id: 'battle_attack'` 付きのインタラクションをPOSTする。ハンドラがルーティング：
+「Attack」を押すと、Discordは`custom_id: 'battle_attack'`付きやり取りをPOSTする。ハンドラが振り分ける。
 
 ```typescript
 if (interaction.type === 3) {
-  // コンポーネントインタラクション（ボタンクリックなど）
+  // Component interaction（ボタンクリックなど）
   const customId = interaction.data.custom_id;
 
   if (customId === 'battle_attack') {
@@ -413,30 +412,30 @@ if (interaction.type === 3) {
 }
 ```
 
-で、ダメージ計算して、DB更新して、画像再生成して、送信。
+はい、ダメージ計算して、ベース更新して、画像作り直して、送る。
 
-接続の永続化ゼロの完全ターン制ゲーム。ただのステートレスHTTP。完全にぶっ壊れてる xD
+接続永続なしの完全ターンベースゲームだ。ただのステートレスHTTPだ。完全にどうかしてる。
 
-## Supabase: Workersのために作られたデータベース
+## Supabase：Workers向けDB
 
-従来のデータベース（PostgreSQL、MySQL、MongoDB）は永続的なTCP接続のために設計されている。ソケットを開いて、接続を維持して、クエリを送る。問題：**Cloudflare Workersは永続的なTCP接続をサポートしていない**。各リクエストは一時的なプロセスで、クライアントに応答した瞬間にWorkerは消える。
+古典DB（PostgreSQL、MySQL、MongoDB）は永続TCP接続向けに設計されてる。ソケット開いて、接続を開いたままにして、クエリを送る。問題はこうだ。**Cloudflare Workersは永続TCP接続に対応してない**。各リクエストは儚いプロセスだ。クライアントに返したらWorkerは消える。
 
-こんなことはできない：
+これはできない。
 
 ```typescript
-// これはWorkersでは動かない
+// Workersでは動かない
 import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();  // 永続TCP接続 = 死
+const prisma = new PrismaClient();  // 永続TCP接続は死ぬ
 ```
 
-`pg`や`postgres.js`のようなネイティブなPostgreSQLドライバーでさえTCP接続を使っている。Workersではクラッシュする。
+`pg`や`postgres.js`みたいなネイティブPostgreSQLドライバーもTCP接続を使う。Workersでは落ちる。
 
-**Supabaseが全部解決する。**
+**Supabaseが全部解く。**
 
-SupabaseはPostgreSQLの上にあるREST API。普通のHTTPリクエストを送るだけ。各呼び出しは独立していて、永続接続不要、管理する状態もなし。サーバーレスモデルに完全に適合してる。
+SupabaseはPostgreSQLの上のREST APIだ。普通のHTTPリクエストをする。各呼び出しは独立で、永続接続なし、管理する状態なしだ。サーバーレスモデルにぴったりだ。
 
 ```typescript
-// これはWorkersで完全に動く
+// Workersでは完璧に動く
 const { data, error } = await supabase
   .from('players')
   .select('*')
@@ -444,45 +443,45 @@ const { data, error } = await supabase
   .single();
 ```
 
-Supabaseクライアント（`@supabase/supabase-js`）は内部で`fetch`を使ってる。そして`fetch`はWorkersでネイティブ。設定ゼロ、ドライバーゼロ、永続接続ゼロ。
+Supabaseクライアント（`@supabase/supabase-js`）は中で`fetch`を使う。`fetch`はWorkersネイティブだ。設定ゼロ、ドライバーゼロ、永続接続ゼロだ。
 
 | データベース | Workers対応？ | 理由 |
 | --- | --- | --- |
-| **Supabase** | ✅ はい | ステートレスREST API、純粋HTTP |
-| **PlanetScale (MySQL)** | ⚠️ 一部 | HTTPSのみ、長いトランザクション不可 |
-| **Neon** | ⚠️ 一部 | サーバーレスブランチだがTCPドライバーが必要 |
-| **Turso (libSQL)** | ⚠️ 一部 | HTTP可能だが制限あり |
-| **Prisma/Prisma Postgres** | ❌ いいえ | 永続TCPが必要 |
-| **MongoDB Atlas** | ❌ いいえ | TCPドライバー、ネイティブREST APIなし |
-| **Redis (Upstash)** | ✅ はい | HTTP上のREST API |
+| **Supabase** | ✅ 対応 | ステートレスREST API、純HTTP |
+| **PlanetScale（MySQL）** | ⚠️ 部分 | HTTPS接続のみ、長いトランザクションなし |
+| **Neon** | ⚠️ 部分 | サーバーレスブランチあるけどTCPドライバー必要 |
+| **Turso（libSQL）** | ⚠️ 部分 | HTTP可能だけど制限あり |
+| **Prisma/Prisma Postgres** | ❌ 非対応 | 永続TCP必要 |
+| **MongoDB Atlas** | ❌ 非対応 | TCPドライバー、ネイティブREST APIなし |
+| **Redis（Upstash）** | ✅ 対応 | HTTP REST API |
 
-Supabaseの本当の利点はDBだけじゃない -- エコシステム全体がエッジファーストで設計されてること：
+Supabaseの本当の利点はDBだけじゃない。エコシステム全体がedge-firstで考えられてる。
 
-- **Auth**: セッション用REST API、ステートレスで動作
-- **Storage**: HTTP経由でファイルアップロード/ダウンロード
-- **Realtime**: オプションのWebSocket、REST経由のポーリングも可能
-- **Row Level Security**: セキュリティルールはDB側にあり、バックエンドには不要
+- **Auth**：セッション管理用REST API、ステートレスで動く
+- **Storage**：HTTP経由のファイルアップロードやダウンロード
+- **Realtime**：WebSocketは任意。REST経由ポーリングもできる
+- **Row Level Security**：安全規則はバックエンドじゃなくDB内だ
 
-サーバーレスDiscordボットには、Supabaseが最もシンプルで信頼できる選択肢。設定するドライバーなし、維持する接続なし、タイムアウトなし。ただのHTTPリクエスト。
+サーバーレスDiscordボットにはSupabaseがいちばん単純で確実な選択だ。ドライバー設定なし、接続維持なし、タイムアウト管理なしだ。HTTPリクエストを送るだけだ。
 
-実際の例が見たいなら、上のNibiを見てみて：その永続化コードは文字通りSupabase上の`readJson()`と`writeJson()`。マイグレーションなし、複雑なスキーマなし、狂った設定なし。箱から出してすぐ動く。そしてボットが大きくなったら、プロバイダーを変えずに本物のSQLクエリに移行できる。
+本物例が欲しければ上のNibiを見て。永続化コードは文字通りSupabase上の`readJson()`と`writeJson()`だ。マイグレーションなし、複雑スキーマなし、重い設定なしで始める。直接動く。ボットが大きくなったらプロバイダー変えず本物SQLクエリに移行できる。
 
-## ポリフィル : NodeがWorkersで動こうとする時
+## ポリフィル：NodeがWorkersで動きたいとき
 
-一部のパッケージはNode APIを期待してる。Kuromoji（漢字パーサー）は `XMLHttpRequest` を使ってる。Workersには `fetch` はあるけど `XMLHttpRequest` はない。
+一部パッケージはNode APIを期待する。Kuromoji（漢字パーサー）は`XMLHttpRequest`を使う。Workersには`fetch`があって`XMLHttpRequest`はない。
 
-シンプルな解決策：index.tsの先頭にポリフィルを追加：
+単純な解法：index.tsの頭にポリフィルを足す。
 
 ```typescript
-// kuromoji用のXMLHttpRequestポリフィル
+// kuromoji用XMLHttpRequestポリフィル
 if (!globalThis.XMLHttpRequest) {
   globalThis.XMLHttpRequest = class {
-    // 最小限のスタブ
+    // 最小スタブ
   } as any;
 }
 ```
 
-または専用モジュールにする：
+専用モジュールにする手もある。
 
 ```typescript
 // src/utils/polyfills.ts
@@ -496,18 +495,18 @@ import { setupPolyfills } from './utils/polyfills';
 setupPolyfills();
 ```
 
-ベーシックなハックだけど動く。
+基本ハックだけど動く。
 
-## npmパッケージ化に向けて : hono-discord-interactions
+## npmパッケージへ：hono-discord-interactions
 
-手動でbotを作るのはボイラープレートが多い：
+手でボットを作ると定型が大量だ。
 
-*   Discord署名の検証
-*   インタラクションタイプのルーティング
-*   コマンド、コンポーネント、モーダルの処理
-*   有効なJSONの返却
+*   Discord署名を検証する
+*   やり取り種別を振り分ける
+*   コマンドやコンポーネントやモーダルを管理する
+*   有効JSONを返す
 
-これらを全部npmパッケージに抽象化できる。こんな感じ：
+npmパッケージに全部抽象化できる。たとえばこうだ。
 
 ```typescript
 import { createDiscordHandler } from 'hono-discord-interactions';
@@ -537,9 +536,9 @@ app.post('/interactions', handler);
 export default app;
 ```
 
-Boom。200行が20行に。Nibiのコードが簡単に半分になる。
+はい。200行じゃなく20行だ。Nibiは半分くらい減りそうだ。
 
-後でやるかもな xD
+後日のアイデアだ。
 
 ## デプロイ
 
@@ -562,11 +561,11 @@ wrangler secret put SUPABASE_URL --env production
 wrangler deploy --env production
 ```
 
-結果のURL：`https://mon-bot.workers.dev/interactions`
+結果URL：`https://mon-bot.workers.dev/interactions`
 
-コスト：1日10万リクエストまで**無料**。超えると月$0.50/100万。
+コスト：1日10万リクエストまで**無料**だ。超過は100万件0.50ドルだ。
 
-ネタバレ：アクティブユーザー1万人いない限り10万リクエスト超えないから。
+ネタバレ：アクティブユーザー1万人いない限り10万リクエストは使わない。
 
 ### Vercel
 
@@ -576,57 +575,57 @@ npm run vercel:deploy
 
 URL：`https://mon-bot-xyz.vercel.app/api/interactions`
 
-同じく無料。
+同じく無料だ。
 
 ### 両方同時に
 
-Honoはどこでも動く。同じコードをCloudflareとVercelの両方にデプロイできる。冗長化とか、選ぶ前にテストするのに便利。
+Honoはどこでも動く。同じコードをCloudflareとVercel両方にデプロイできる。冗長や選ぶ前の試しに便利だ。
 
-## クイックチェックリスト
+## 簡単チェックリスト
 
-1.  Discord Developer Portalでアプリケーションを作成
-2.  PUBLIC\_KEY、BOT\_TOKEN、APP\_IDをコピー
-3.  プロジェクトを作成：
-4.  index.tsを書く（署名検証 + ルーティング）
-5.  スラッシュコマンドを登録（1回だけ）：
+1.  Discord Developer Portalでアプリケーションを作る
+2.  PUBLIC\_KEY、BOT\_TOKEN、APP\_IDをコピーする
+3.  プロジェクトを作る：
+4.  index.tsを書く（署名検証と振り分け）
+5.  スラッシュコマンドを登録する（1回）：
 6.  デプロイ：
-7.  URLをDiscordに設定（Developer Portal → アプリケーション → Interactions Endpoint URL）
-8.  Discordが接続テスト（PINGに応答する必要あり）
-9.  botをサーバーに招待
-10.  完了
+7.  URLをDiscordに入れる（Developer PortalからApplicationからInteractions Endpoint URL）
+8.  Discordが接続をテストする（PINGに返さなきゃいけない）
+9.  ボットをサーバーに招く
+10.  終わり
 
-## メリット vs 制限
+## 利点対制限
 
-**メリット**
+**利点**
 
-*   安い（1日10万リクエストまで無料）
-*   スケーラブル（接続管理不要）
-*   シンプル（WebSocketのボイラープレートなし）
-*   高速（Cloudflare = エッジサーバー）
-*   ポータブル（Honoコード = 複数のホスト）
+*   最小コスト（1日10万リクエストまで無料）
+*   スケーラブル（接続管理なし）
+*   単純（WebSocket定型なし）
+*   高速（Cloudflareはエッジサーバー）
+*   可搬（Honoコードは複数ホスト）
 
 **制限**
 
-*   リアルタイムサーバーイベントなし（メンバー参加、ロール追加、メッセージ削除など）-- 受け取れるのはインタラクションのみ（スラッシュコマンド、ボタン、モーダル）
-*   応答のタイムアウト3秒 -- 超えるとDiscordが「Application did not respond」と表示
-*   本当のイベントが必要なら -- 別のHTTPウェブフックか補助的なWebSocket接続が必要
+*   受け取れるのはやり取りだけだ（スラッシュコマンド、ボタン、モーダル）。サーバーのリアルタイムイベントはなし（参加、役職追加、メッセージ削除など）
+*   応答タイムアウト3秒。超えたらDiscordは「Application did not respond」を出す
+*   本物イベントが要るなら、別のHTTPウェブフックか補助WebSocket接続が要る
 
-90%のbot（スラッシュコマンドベースの全部）なら？ これで十分。
+9割のボット（全部スラッシュコマンド基準）にはこれでいい。
 
-## まとめ
+## 結びに
 
-KonosubaRPGとNibiの最適化にかなり時間を費やしたよ。できるだけリクエストを節約するためだったり、処理時間を削るためだったり、コールドブートを減らすためだったり。結果、ほぼ全部で結構なパフォーマンスが出てる。  
-実は自分のVMでホストし続けるのがめっちゃ面倒くさくなって、ほとんどのプロジェクトをクラウド化（この言葉正しいか知らんけど）し始めたんだよね。ホント、GitHub Actionsに命救われたわ。Workersもだけど、GitHub Actionsとスケジュールでデーモン作れるの知った時はマジで助かった。
+KonosubaRPGとNibiの最適化にかなり時間かけた。リクエスト数をできるだけ節約したり、ホットCPU時間を減らしたり、コールドブートを減らしたりするためだ。結果、ほぼ全部でなかなかの性能が出た。
+クラウド化したのは、自分のVMでホストし続けるのが途方もなくめんどくさかったからだって知っとくべきだ。本当、Github Actionsが私を救ってくれたと思う。workersもね。でも実際Github Actionsとスケジュールでデーモンが作れるって見たとき、本当に救われたよ。
 
-[email-autoreply](https://github.com/fox3000foxy/email-autoreply/)ってプロジェクトの記事も書くと思うから、RSSフィード登録して待っててね :))。
+[email-autoreply](https://github.com/fox3000foxy/email-autoreply/)ってプロジェクトの記事をたぶん書くから、公開されたら見るためRSS購読してね :))。
 
-**覚えておくべき3つのこと：**
+**覚えるべき3点：**
 
-1.  **インタラクションエンドポイント = HTTPサーバーレス** -- WebSocketなし、永続接続なし。DiscordがPOST、お前が応答。Cloudflareで無料。
-2.  **Honoが完璧なツール** -- 軽量フレームワーク（12KB）、マルチランタイム、依存関係ゼロ。Cloudflare、Vercel、Node、どこでも同じコード。
-3.  **Workersでの画像レンダリング = ヤバい** -- Satori + Resvg（Wasm）で動的UIをJSXで構成して\<100msでPNGに変換できる。完全なゲームがこれで動く。
+1.  **Interaction endpointsはHTTPサーバーレスだ**。WebSocketなし、永続接続なしだ。DiscordがPOSTして、返せばいい。Cloudflareでは無料だ。
+2.  **Honoが最適道具だ**。軽量フレームワーク（12KB）、マルチランタイム、依存ゼロだ。CloudflareでもVercelでもNodeでもどこでも同じコードだ。
+3.  **Workers上の画像レンダーはすごい**。SatoriとResvg（Wasm）でJSX動的UIを組んで100ms未満でPNG変換できる。完全ゲームがこれで回る。
 
-マジでヤバい xD
+やばい。
 
 ```plaintext
 wrangler deploy

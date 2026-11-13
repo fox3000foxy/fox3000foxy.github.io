@@ -1,53 +1,51 @@
 ---
 title: Botting a Microsoft Rewards Farm
-description: How I coded a bot to farm Microsoft Rewards points at scale -- and
-  why Microsoft's anti-bot detection has since caught up.
+description: How I coded a bot to farm Microsoft Rewards points at
+  scale -- and why Microsoft has since hardened its defenses.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "OEBlcmURiFZ9+VUEBOKfcvNxnYrwvHILZ3852GaZcFSo8JUfNOjypoQiR82TIB3s4tBK/SblPvo/3do79INdwQ=="
+author_sig: "QwBIM5ZWglSWqjMdI23YlT9JAe+NvUcH2CSB6gvC+3IAsoQ18165XuunBmvwGhQ9QQaPxBI6Nt9YtKnjHM20Yg=="
 ---
 
-> **Note (2026):** This project is no longer maintained. Microsoft has significantly hardened its anti-bot detection -- what worked back then no longer works today. The code and approach described below are kept for archival/educational purposes only.
+> **Note (2026):** This project is no longer maintained. Microsoft has considerably hardened its anti-bot detection, so what worked back then no longer works today. The code and approach below are kept for archiving and demonstration purposes only.
 
-## 🇬🇧 English Translation of the Article
+## Introduction
 
-### Introduction
+I discovered Microsoft Rewards a few years ago. It was during lockdown, and back then I was forced to use the Microsoft Family Safety parental controls and therefore go through Edge. That's how I discovered Rewards.
 
-A few years ago I discovered Microsoft Rewards. Back then it was during lockdown, but that doesn’t change the fact that I was forced to use Microsoft Family Safety parental controls and thus had to use Edge. That’s when I discovered Rewards.
-
-At the time I was only 14 and nothing in the catalogue interested me. Now I figure that with the skills I’ve acquired, I can farm points with bots and then give the codes away or even resell them cheaper if I really want to (knowing myself, I probably won’t). Anyway, I’ll tell you how I coded a bot that farms accounts at scale.
+At the time I was only 14 and nothing in the catalog interested me. Now I figure that with the skills I've picked up, I can farm points with bots, then give the codes away or even resell them cheaper if I really feel like it (but honestly, I don't think I'll do it). Let me tell you how I coded a bot that farms accounts at scale.
 
 ---
 
-## What is Microsoft Rewards?
+## What Is Microsoft Rewards?
 
-Long story short: it’s a program that rewards Edge users with points for activities like searches, small quizzes, games, and an extension (that’s a whole other story).
+To keep it short: it's a program that rewards Edge users with points for activities like searches, small quizzes, games, and an extension (but that's another story).
 
-Here you can see “Explore” stuff:  
+You can see the "Explore" blocks here:
 ![Explore screenshot](assets/20260313_135010_image.png)
 
-Here for example is what they call the “set of the day”.  
+Here for example is what they call the "daily set".
 ![Daily set screenshot](assets/20260313_135038_image.png)
 
-They even created a streak system, it’s pretty wild.  
+They even made a streak system, which is pretty wild.
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-There’s also a level system and it’s just completely fun:  
+There's also a level system and the progression makes the routine genuinely addictive:
 ![Level screenshot](assets/20260313_135340_image.png)
 
-So you have tons of ways to earn points, and most of them are daily.  
-The idea here is going to be to make a bot that does the activities for you, so you can farm points at scale and complete your farming routine.
+So you've got plenty of ways to earn points, and most of them are daily.
+The idea here is to build a bot that does the activities for you, to farm points at scale and complete your farming routine.
 
-As you can see below, most rewards are gift cards, but there are also fun things like games or service subscriptions.  
+As you can see below, most rewards are gift cards, but there are also interesting options like games or subscriptions.
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
-| Reward | Category | Cost in points |
+| Reward | Category | Point cost |
 | --- | --- | --- |
 | **Rakuten TV – 1 HD movie** | Digital content | 1 785 |
 | **Roblox (digital card)** | Game / digital content | 6 750 |
@@ -56,8 +54,8 @@ As you can see below, most rewards are gift cards, but there are also fun things
 | **Microsoft Solitaire Collection gift card** | Game / digital content | 1 500 |
 | **Minecraft Minecoins** | Game / digital content | 2 500 |
 | **League of Legends gift card** | Game / digital content | 2 000 |
-| **Overwatch coin code (digital)** | Game / digital content | 2 000 |
-| **Sea of Thieves – Old Coins pack** | Game / digital content | 1 700 |
+| **Overwatch coins code (digital)** | Game / digital content | 2 000 |
+| **Sea of Thieves – Ancient Coins pack** | Game / digital content | 1 700 |
 | **Zalando – Gift card** | Store / service | 7 205 |
 | **Carrefour – Gift card** | Store / service | 14 410 |
 | **Cultura – Gift card** | Store / service | 14 410 |
@@ -78,13 +76,13 @@ As you can see below, most rewards are gift cards, but there are also fun things
 | **Global Hotel Card (Expedia Group)** | Store / service | 7 205 |
 | **Uber Eats France – Gift card** | Store / service | 36 025 |
 
-Now that you understand the point of this program, let’s look into botting.
+Now that you get the point of the program, let's get into botting.
 
 ---
 
 ## First tests
 
-Before building my bot, I wanted to make sure I wouldn’t get IP flagged for using hundreds of accounts from the same address. You know me, I’m going to use Tor with a rotating proxy. And I don’t want to host my bot on a VPS--I want it to run in a GitHub Action.
+Before building my bot, I wanted to make sure my IP wouldn't get flagged for using hundreds of accounts from the same address. You know me, I go through Tor with a rotating proxy. I want to run it in a GitHub Action rather than on a VPS.
 
 So I wrote a simple workflow:
 
@@ -138,22 +136,22 @@ jobs:
 
 This workflow just installs Tor, starts it, and makes a curl request through it.
 
-The first run gave this result:  
+The first run gave this result:
 ![Tor curl first run](assets/20260313_140705_image.png)
 
-The time stats were:  
+The timing stats were:
 !Timings
 
-A second run gave this result:  
+A second run gave this result:
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-As you can see, the IPs are different, so we won’t get flagged for abusive usage from the same IP. That’s good news--we can keep developing the farming bot.
+As you can see, the IPs are different, so we avoid flagging for abusive use from the same IP. Good news: we can keep building the farming bot.
 
 ---
 
 ## First test with Selenium
 
-To automate the UI, I’m going to use **Selenium**: a tool that controls a real browser (Chrome/Edge/Firefox) instead of a user. In the context of a GitHub Action, this means installing a browser + its driver, then running a script that logs into Microsoft Rewards and clicks where needed.
+To automate the UI, I'll use **Selenium**: a tool that controls a real browser (Chrome/Edge/Firefox) in place of a user. In a GitHub Action context, that means installing a browser + its driver, then running a script that signs into Microsoft Rewards and clicks where it needs to.
 
 ### Example JavaScript script (Node.js + selenium-webdriver)
 
@@ -217,14 +215,14 @@ async function applyStealth(driver: WebDriver) {
 })();
 ```
 
-Result of the script:
+Script output:
 
 ```
-DevTools listening on ws://127.0.0.1:50274/devtools/browser/37b9ea79-0e5d-4673-9e91-7ffeaf0d37f8
+DevTools listening on ws://127.0.0.1:50274/devtools/browser/37b79ea79-0e5d-4673-9e91-7ffeaf0d37f8
 After navigation: url= https://rewards.bing.com/welcome?idru=%2F
-After navigation: title= Bienvenue dans Microsoft Rewards!
+After navigation: title= Welcome to Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-Okay, that means we’re not logged in yet, so now we’ll build the login request and see if we can sign in to our Microsoft Rewards account to do the activities.
-<!-- ## THIS ARTICLE IS STILL A WORK IN PROGRESS, I’LL UPDATE IT WITH THE LOGIN STEPS AND ACTIVITY BOTTING STEPS SOON! STAY TUNED. -->
+That result confirms we're still signed out, so now I'll build the login request and test signing into my Microsoft Rewards account to automate the activities.
+<!-- ## THIS ARTICLE IS STILL BEING WRITTEN, I'LL UPDATE WITH THE LOGIN AND ACTIVITY BOTTING STEPS SOON! STAY TUNED. -->

@@ -1,82 +1,82 @@
 ---
 title: "%100 sunucusuz Discord botu: Hono + Cloudflare Workers"
-description: Bana ayda 50€'ya mal olan bir Discord botunu sıfır euro ile nasıl
-  değiştirdim -- etkileşim uç noktaları, Hono, Workers, gerçek zamanlı görüntü
-  oluşturma ve WebSocket olmadan eksiksiz bir oyun.
+description: Bana ayda 50 €ya mal olan bir Discord botunu sıfır euroyla nasıl
+  değiştirdim, interaction endpointleri, Hono, Workers, gerçek zamanlı görsel
+  render ve WebSocketsiz tam bir oyun.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "T4AlsM4e2YJALSUT9pMlcy5WT3cTJfEc6mk9FG+jqoo2Zg+SkJWcNRWdPhR3pw778rZSnMOar2re0MPXFwMmgA=="
+author_sig: "YLSGaZKb4taR/bfyC/KKbvLLQk790EJNGlp5a3K6zHKdfDSOpBI5Vk18JjvcgOuQG1Pwue5QJA3pW8mljhMDMA=="
 ---
 
-## Discord bot %100 serverless : Hono + Cloudflare Workers = 💸 sıfır
+## %100 sunucusuz Discord botu: Hono + Cloudflare Workers = 💸 sıfır
 
-Birkaç ay boyunca klasik Discord botlarını kendi makinemde çalıştırdım.
+Klasik Discord botlarını kendi makinemde bakımlı tutarak birkaç ay geçirdim.
 
-WebSocket bağlantısı hep açık. Bot gece 3'te kendi kendine yeniden bağlanıyor. Bot çöküyor çünkü koyunlara yanlış baktım resmen. Fatura yükseliyor.
+Sürekli açık WebSocket bağlantısı. Bot sabah 3te kendi kendine yeniden bağlanır. Koyunlara ters baktığım için bot çöker. Fatura yükselir.
 
-Bir gün fark ettim: **neden bir bağlantıyı açık tutayım ki** ? Discord sana sadece **ilgini çeken şeyleri** POST'layabilir. Sen cevaplarsın, olur biter.
+Bir gün şunu keşfettim: **bağlantıyı neden sürdüreyim**? Discord ilgilendiğin olayları sana POST ile gönderebilir. Yanıtlarsın, biter.
 
-2021'den beri Discord **interaction endpoints** sunuyor.
+2021den beri Discord **interaction endpointleri** sunar.
 
-Sadece HTTP. WebSocket yok. Kalıcı durum yok. Bir istek alırsın, JSON gönderirsin, biter. Sonraki istek kendi gelir.
+Bu sadece HTTP. WebSocketsiz, kalıcı durumsuz çalışırsın. Bir istek alırsın, JSON gönderirsin, biter. Sonraki istek kendi kendine gelir.
 
-En iyisi: Cloudflare Workers **ücretsiz**, günde 100k isteğe kadar. Botların %90'ı için ayda 0€.
+Ve en iyisi: Cloudflare Workers günde 100 bin isteğe kadar **ücretsizdir**. Botların %90ı için bu 0 €/aydır.
 
-Bu yazıda sana WebSocket olmadan Discord botu nasıl yapılır göstereceğim, **Hono** (ultra hafif web framework) ve **Cloudflare Workers** kullanarak. Sana iki gerçek proje göstereceğim: **Nibi** (Japonca öğrenme botu, TTS, havalı) ve **Konosuba-RPG** (gerçek zamanlı image render'lı _komple_ bir Discord oyunu xD).
+Bu makale **Hono** (aşırı hafif web çerçevesi) ve **Cloudflare Workers** kullanarak WebSocketsiz bir Discord botunun nasıl yapılacağını gösterir. İki gerçek proje göstereceğim: **Nibi** (Japonca öğrenme botu, TTS, havalı) ve **Konosuba-RPG** (gerçek zamanlı görsel renderlı _tam_ bir Discord oyunu).
 
-## WebSocket vs. Interaction Endpoints : neden kötü bir fikirdi
+## WebSocket ve Interaction Endpointleri: neden kötü bir fikirdi
 
-Oynamadığın zaman bile bağlantıyı açık tutman gereken bir Minecraft oyunu düşünelim.
+Oynamadığında bile bağlantıyı açık tutman gereken bir Minecraft oyunu hayal et.
 
-Ve sunucu her çöktüğünde kendi kendine yeniden bağlanıyor. Timeout'ları, exponential reconnection'ları, nefret ettiğimiz tüm o boktan boilerplate'leri yönetmek zorundasın. Sırf interaction almak için.
+Ve sunucu her çöktüğünde otomatik yeniden bağlanır. Timeoutları, üstel yeniden bağlanmaları, nefret ettiğimiz tüm o saçma boilerplatei yönetmek zorundasın. Sadece etkileşimleri almak için.
 
-Interaction endpoints tam tersi. Discord senin URL'ine POST atar. Sen cevaplarsın. Biter.
+Interaction endpointleri bunun tersidir. Discord URLne POST yapar. Yanıtlarsın. Biter.
 
-Sunucun çöktü mü ? Discord 2-3 kere tekrar dener ve geçer. Sıfır drama.
+Sunucun çökerse? Discord 2-3 kez yeniden dener ve yoluna devam eder. Sıfır drama.
 
-**Öncesi maliyet** : Heroku'da sadece bir Node prosesini canlı tutmak için aylık 50€.
+**Önceki maliyet**: bir Node sürecini canlı tutmak için sırf Heroku üzerinde 50 €/ay.
 
-**Sonrası maliyet** : Cloudflare'da günde 100k isteğe kadar ayda 0€.
+**Sonraki maliyet**: günde 100 bin isteğe kadar Cloudflare üzerinde 0 €/ay.
 
-## Mimari : tam olarak ne bu ?
+## Mimari: bu tam olarak nedir?
 
-Discord endpoint'ine POST isteği atar.
+Discord endpointine bir istek POSTlar.
 
 ```plaintext
-Discord: "Hey! Kullanıcı /ping'e tıkladı!"
+Discord: "Eh! L'utilisateur a cliqué sur /ping!"
       ↓
-   Senin URL'n (Cloudflare Worker)
+    Ton URL (Cloudflare Worker)
       ↓
-   Gerçekten Discord mu diye kontrol edersin (imza doğrulama)
+Tu vérifie que c'est vraiment Discord (signature check)
       ↓
-   Interaction türünü parse edersin
+Tu parse le type d'interaction
       ↓
-   Handler'ı çalıştırırsın
+Tu exécute le handler
       ↓
-   JSON döndürürsün
+Tu retourne du JSON
       ↓
-Discord: "Havalı, bunu kullanıcıya göstereceğim"
+Discord: "Cool, je vais afficher ça à l'utilisateur"
 ```
 
-Saf HTTP. Sihir yok. Ağır kütüphane yok.
+Bu minimal ve okunabilir yığınla saf HTTP.
 
-## Hono + Cloudflare Workers : ekonomik combo
+## Hono + Cloudflare Workers: tutumlu ikili
 
-**Hono** 12KB ağırlığında bir web framework. Her yerde çalışır: Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... aynı kod her yerde.
+**Hono** 12 KB ağırlığında bir web çerçevesidir. Her yerde çalışır: Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... her yerde aynı kod.
 
-Cloudflare Workers edge'de compute demek. İsteklerin en yakın sunucuya gider. Yanıt süresi: \<100ms. Maliyet: günde 100k isteğe kadar ücretsiz.
+Cloudflare Workers uçta işlemdir. İsteklerin en yakın sunucuya ulaşır. Yanıt süresi: \<100 ms. Maliyet: günde 100 bin isteğe kadar ücretsiz.
 
-Hono + Cloudflare bir Discord botu için mükemmel eşleşme.
+Hono + Cloudflare ikilisi bir Discord botu için mükemmel eşleşmedir.
 
-İşte komple bir botun minimal kodu:
+İşte tam bir botun minimal kodu:
 
 ```typescript
 import { Hono } from 'hono';
@@ -85,12 +85,12 @@ import { verifyKey } from 'discord-interactions';
 const app = new Hono();
 
 app.post('/interactions', async (c) => {
-  // 1. Header'ları al
+  // 1. Başlıkları al
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
   const body = await c.req.text();
 
-  // 2. Gerçekten Discord mu diye kontrol et (spam değil)
+  // 2. Gerçekten Discord olduğunu doğrula (spam değil)
   const isValid = verifyKey(
     body,
     signature,
@@ -99,17 +99,17 @@ app.post('/interactions', async (c) => {
   );
   if (!isValid) return c.text('Invalid request', 401);
 
-  // 3. Ne gönderdiğini parse et
+  // 3. Gönderdiğini ayrıştır
   const interaction = JSON.parse(body);
 
-  // 4. Türe göre cevap ver
+  // 4. Türe göre yanıtla
   if (interaction.type === 1) {
-    // Discord test (PING)
+    // Discord testi (PING)
     return c.json({ type: 1 });
   }
 
   if (interaction.type === 2) {
-    // Bu bir slash command
+    // Bu bir slash komutu
     const name = interaction.data.name;
     if (name === 'ping') {
       return c.json({
@@ -125,51 +125,51 @@ app.post('/interactions', async (c) => {
 export default app;
 ```
 
-Yani 30 satırda çalışan bir bot.
+İşlevsel bir bot için 30 satır yeter.
 
-`bot.login()` yok. Event emitter yok. Callback hell yok. Sadece HTTP.
+`bot.login()`, olay yayıcılar ve callback cehennemini unutursun. Sadece HTTPyi tutarsın.
 
-Cloudflare'e deploy etmek için:
+Cloudflare üzerine dağıtmak için:
 
 ```plaintext
 npm install -D wrangler
 npx wrangler deploy
 ```
 
-Boom. `https://mon-bot.workers.dev/interactions` gibi bir URL'n olur.
+Bum. `https://mon-bot.workers.dev/interactions` gibi bir URLn olur.
 
-Bunu Discord Developer Portal'da "INTERACTIONS ENDPOINT URL" kısmına koyarsın ve Discord interaction'larını oraya göndermeye başlar.
+Bunu Discord Developer Portal içinde "INTERACTIONS ENDPOINT URL" altına koyarsın ve Discord etkileşimlerini oraya göndermeye başlar.
 
-## İmza doğrulama : sahte istek yok
+## İmzayı doğrulamak: sahte istek yok
 
-Discord her isteği bir public key ile imzalar. Yanlış imzalı istek mi geldi ? Spamdır. Görmezden gel ve devam et.
+Discord her isteği bir açık anahtarla imzalar. Kötü imzalı bir istek alırsan? O spamdir. Görmezden gel ve devam et.
 
-`discord-interactions` paketi işi yapıyor:
+`discord-interactions` paketi işi yapar:
 
 ```typescript
 import { verifyKey } from 'discord-interactions';
 
 const isValid = verifyKey(
-  rawBody,           // aynen ham metin (parse edilmiş JSON değil !)
-  signature,         // header x-signature-ed25519
-  timestamp,         // header x-signature-timestamp
-  publicKey          // Discord Dev Portal'dan
+  rawBody,           // tam ham metin (ayrıştırılmış JSON değil!)
+  signature,         // x-signature-ed25519 başlığı
+  timestamp,         // x-signature-timestamp başlığı
+  publicKey          // Discord Dev Portalden
 );
 ```
 
-**Önemli tuzak** : imza body'nin _birebir aynısına_ bağlı. JSON parse edip tekrar stringify edersen veya body'i loglarsan imzayı bozarsın.
+**Önemli tuzak**: imza _tam_ gövdeye bağlıdır. JSON ayrıştırıp yeniden dizgeleĢtirirsen ya da gövdeyi loglarsan imzayı bozarsın.
 
-Önce doğrula. Sonra parse et. Sıra önemli.
+Önce doğrula. Sonra ayrıştır. Önemli olan sıradır.
 
-## Vaka 1 : Nibi (Japonca öğrenme botu)
+## Durum 1: Nibi (Japonca öğrenme botu)
 
-Nibi Japonca öğrenmek için bir Discord botu. Basit komutlar:
+Nibi Japonca öğrenmek için bir Discord botudur. Basit komutlar:
 
 *   `/dictionary kanji` → tanımları gösterir
 *   `/pronounce テキスト` → TTS (text-to-speech) üretir
 *   `/hello` → karşılama mesajı
 
-Her komut bir TypeScript dosyası:
+Her komut bir TypeScript dosyasıdır:
 
 ```plaintext
 src/commands/
@@ -179,7 +179,7 @@ src/commands/
 └── ...
 ```
 
-Bir komut şu interface'i implemente eder:
+Bir komut bu arayüzü uygular:
 
 ```typescript
 interface Command {
@@ -191,24 +191,24 @@ interface Command {
   execute(
     interaction: Interaction,
     env: Bindings
-  ): Promise<InteractionResponse>;
+  ): Promise<interactionresponse>;
 }
 ```
 
-### /pronounce komutu : botu konuşturmak
+### /pronounce komutu: botu konuşturmak
 
-İşte bu çılgınca olan. Metin gönderirsin (romaji, hiragana, kanji, her neyse), bot bunu hiragana'ya çevirir, VOICEVOX veya Google TTS ile TTS üretir ve Discord'a sesli mesaj gönderir.
+İyice tuhaf olan bu. Metin gönderirsin (romaji, hiragana, kanji, her şey), bot bunu hiraganaya çevirir, VOICEVOX ya da Google TTS üzerinden TTS üretir ve Discordda bir sesli mesaj gönderir.
 
 ```typescript
 const pronounce: Command = {
   data: {
     name: 'pronounce',
-    description: 'Japonca metin için TTS üretir',
+    description: 'Génère du TTS pour du texte japonais',
     options: [
       {
         type: 3,  // STRING
         name: 'text',
-        description: 'Telaffuz edilecek metin',
+        description: 'Texte à prononcer',
         required: true
       }
     ]
@@ -221,17 +221,17 @@ const pronounce: Command = {
       // 1. Kuroshiro ile romaji → hiragana çevir
       const hiragana = await kuroshiro.convert(text, { to: 'hiragana' });
 
-      // 2. TTS sesi oluştur
+      // 2. TTS sesini üret
       const audioBuffer = await generateTTS(hiragana);
 
-      // 3. Dosyayı Discord'a yükle
+      // 3. Dosyayı Discorda yükle
       const uploadFilename = await uploadToDiscord(
         audioBuffer,
         interaction.channel.id,
         env.BOT_TOKEN
       );
 
-      // 4. Sesli mesajı gönder
+      // 4. Sesli mesajı sesle birlikte gönder
       await sendVoiceMessage(
         interaction.channel.id,
         uploadFilename,
@@ -241,14 +241,14 @@ const pronounce: Command = {
 
       return {
         type: 4,
-        data: { content: `"${text}" için telaffuz` }
+        data: { content: `Prononciation pour "${text}"` }
       };
     } catch (err) {
       return {
         type: 4,
         data: {
-          content: 'Hata : ses oluşturulamadı xD',
-          flags: 64  // ephemeral (gizli mesaj)
+          content: 'Erreur : impossible de générer l\'audio xD',
+          flags: 64  // ephemeral (özel mesaj)
         }
       };
     }
@@ -256,11 +256,11 @@ const pronounce: Command = {
 };
 ```
 
-Deli işi: harici bir API çağırırsın, Discord'a dosya yüklersin, dosyayla mesaj gönderirsin. WebSocket olmadan, sadece HTTP ile.
+Çılgınca: harici bir API çağırırsın, bir dosyayı Discorda yüklersin, dosyayla birlikte bir mesaj gönderirsin. Hepsi WebSocketsiz, sadece HTTP.
 
 ### Supabase ile kalıcılık
 
-Nibi, key-value store olarak Supabase kullanıyor. Kullanıcının kayıtlı olup olmadığını kontrol etmek için:
+Nibi key-value deposu olarak Supabase kullanır. Bir kullanıcının kayıtlı olup olmadığını kontrol etmek için:
 
 ```typescript
 const DatabaseUtils = new DatabaseUtils({
@@ -278,39 +278,39 @@ if (!user) {
 }
 ```
 
-Çok basit (gerçek SQL sorgusu değil, sadece JSON), ama iş görüyor. Küçük botlar için mükemmel.
+Çok temel (gerçek SQL sorguları yok, sadece JSON) ama çalışıyor. Küçük botlar için mükemmel.
 
-## Vaka 2 : Konosuba-RPG (görsel render'lı Discord oyunu)
+## Durum 2: Konosuba-RPG (görsel renderlı Discord oyunu)
 
 Tamam bu çılgınca.
 
-Konosuba-RPG Discord üzerinde **komple bir oyun**. Moblarla savaşırsın, XP kazanırsın, eşya takarsın, seviye atlarsın. Her savaş gerçek zamanlı **görsel** üretir. Önceden render edilmiş spritesheet yok. Görsel, oyuncunun statlarına, mob'a ve savaş durumuna göre dinamik olarak oluşturulur.
+Konosuba-RPG Discordda **tam bir oyundur**. Moblarla savaşırsın, XP kazanırsın, aksesuar kuşanırsın, seviye atlarsın. Her savaş gerçek zamanlı bir **görsel** üretir. Önceden renderlanmış spritesheetlerden kaçınırsın. Görsel oyuncu istatistiklerinden, mobdan ve savaş durumundan dinamik oluşturulur.
 
-Ve görsel Cloudflare Workers üzerinde \<500ms'de oluşur. Gerçekten.
+Ve görsel Cloudflare Workers’ta \<500 msde üretilir. Kelimenin tam anlamıyla.
 
 ### Render mimarisi
 
 ```plaintext
-Discord ("Attack" butonuna tıklarsın)
+Discord (tu cliques "Attack")
     ↓
-Cloudflare Worker interaction'ı alır
+Cloudflare Worker reçoit l'interaction
     ↓
-Oyun durumu güncellenir (XP, HP, vb.)
+Mise à jour du game state (XP, HP, etc.)
     ↓
-Satori ile JSX oluşturulur
+Génère du JSX avec Satori
     ↓
-Resvg (Wasm) ile SVG → PNG dönüşümü
+Convertit SVG → PNG avec Resvg (Wasm)
     ↓
-Görsel Discord'a yüklenir
+Upload l'image vers Discord
     ↓
-Görselle birlikte mesaj gönderilir
+Envoie le message avec l'image
 ```
 
-Hepsi bir saniyeden kısa sürede. İnanılmaz.
+Hepsi bir saniyeden kısa sürede. Çılgınca.
 
 ### Workers tarafında görsel render
 
-Konosuba **Satori** (JSX → SVG) ve **Resvg** (SVG → PNG) kullanıyor:
+Konosuba **Satori** (JSX → SVG) ve **Resvg** (SVG → PNG) kullanır:
 
 ```typescript
 import { Satori } from 'satori';
@@ -319,9 +319,9 @@ import initWasm from '@cf-wasm/resvg';
 async function renderBattle(gameState: GameState) {
   const resvg = await initWasm();
 
-  // 1. UI için JSX oluştur
+  // 1. Arayüz için JSX oluştur
   const jsx = (
-    <div style={{ display: 'flex', gap: '20px' }}>
+    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}="">
       <div>
         <h1>{gameState.player.name}</h1>
         <p>HP: {gameState.player.hp}/{gameState.player.maxHp}</p>
@@ -347,13 +347,13 @@ async function renderBattle(gameState: GameState) {
 }
 ```
 
-Normal JSX yazarsın. SVG'ye dönüşür. SVG, PNG olur. Cloudflare Worker'da \<100ms.
+Normal JSX yazarsın. SVGye dönüşür. SVG PNGye dönüşür. Bir Cloudflare Worker üzerinde \<100 ms.
 
-Gücü anlıyor musun ? Sadece... çok güzel xD
+Gücü görüyor musun? Bu sadece güzel.
 
 ### Oyun durumu ve ilerleme
 
-Oyuncu verileri Supabase'te:
+Oyuncu verileri Supabasededir:
 
 ```typescript
 const player = await db
@@ -372,11 +372,11 @@ const { data: updated } = await db
   .eq('id', player.id);
 ```
 
-Her eylem (saldırı, savunma, iyileşme) veritabanındaki statları günceller. Sonra yeni statlarla görseli yeniden oluşturursun.
+Her aksiyon (saldırı, savunma, iyileşme) veritabanında istatistikleri günceller. Ve sonra görseli yeni istatistiklerle yeniden üretirsin.
 
-### Interaction'lar : oynanış butonları
+### Etkileşimler: oynanış düğmeleri
 
-Oyun, savaş eylemleri için **button interaction** kullanıyor:
+Oyun savaşta aksiyonlar için **düğme etkileşimleri** kullanır:
 
 ```typescript
 {
@@ -398,11 +398,11 @@ Oyun, savaş eylemleri için **button interaction** kullanıyor:
 }
 ```
 
-"Attack" butonuna tıkladığında Discord `custom_id: 'battle_attack'` ile bir interaction POST'lar. Handler şöyle yönlendirir:
+"Attack" düğmesine tıkladığında Discord `custom_id: 'battle_attack'` ile bir etkileşim POSTlar. Handler bunu yönlendirir:
 
 ```typescript
 if (interaction.type === 3) {
-  // Component interaction (buton tıklaması, vb.)
+  // Bileşen etkileşimi (düğme tıklaması vs.)
   const customId = interaction.data.custom_id;
 
   if (customId === 'battle_attack') {
@@ -414,30 +414,30 @@ if (interaction.type === 3) {
 }
 ```
 
-Ve boom, hasarı hesaplarsın, veritabanını güncellersin, görseli yeniden oluşturursun, gönderirsin.
+Ve bum, hasarı hesaplarsın, veritabanını güncellersin, görseli yeniden üretirsin, gönderirsin.
 
-Hiçbir bağlantı kalıcılığı olmayan komple bir sıra tabanlı oyun. Sadece HTTP stateless. Tamamen kırık xD
+Bağlantı kalıcılığı olmadan tam bir sıra tabanlı oyun. Sadece stateless HTTP. Tamamen kırık.
 
-## Supabase: Workers için yapılmış veritabanı
+## Supabase: Workerlar için yapılmış veritabanı
 
-Geleneksel veritabanları (PostgreSQL, MySQL, MongoDB) kalıcı TCP bağlantıları için tasarlanmıştır. Bir soket açarsın, bağlantıyı canlı tutarsın, sorgular gönderirsin. Sorun: **Cloudflare Workers kalıcı TCP bağlantılarını desteklemez**. Her istek geçici bir süreçtir. İstemciye yanıt verdiğin an Worker kaybolur.
+Klasik veritabanları (PostgreSQL, MySQL, MongoDB) kalıcı TCP bağlantıları için tasarlanmıştır. Bir soket açarsın, bağlantıyı açık tutarsın, sorgular gönderirsin. Sorun: **Cloudflare Workers kalıcı TCP bağlantılarını desteklemez**. Her istek geçici bir süreçtir. İstemciye yanıt verir vermez Worker kaybolur.
 
 Bunu yapamazsın:
 
 ```typescript
-// Bu Workers'ta ÇALIŞMAZ
+// Workers’ta ÇALIŞMAZ
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();  // kalıcı TCP bağlantısı = ölü
 ```
 
-`pg` veya `postgres.js` gibi native PostgreSQL sürücüleri bile TCP bağlantıları kullanır. Workers'ta çökerler.
+Ve `pg` ya da `postgres.js` gibi yerel PostgreSQL sürücüleri bile TCP bağlantıları kullanır. Worker üzerinde çökerler.
 
-**Supabase her şeyi çözüyor.**
+**Supabase tüm bunları çözer.**
 
-Supabase, PostgreSQL üzerinde bir REST API'sidir. Normal HTTP istekleri yaparsın. Her çağrı bağımsızdır, kalıcı bağlantı yok, yönetilecek durum yok. Serverless modeli için mükemmel.
+Supabase PostgreSQL üstünde bir REST APIdir. Normal HTTP istekleri yaparsın. Her çağrı bağımsızdır, kalıcı bağlantı yok, yönetilecek durum yok. Sunucusuz modele mükemmel uyar.
 
 ```typescript
-// Bu Workers'ta MÜKEMMEL çalışır
+// Workers’ta MÜKEMMEL çalışır
 const { data, error } = await supabase
   .from('players')
   .select('*')
@@ -445,45 +445,45 @@ const { data, error } = await supabase
   .single();
 ```
 
-Supabase istemcisi (`@supabase/supabase-js`) altında `fetch` kullanır. Ve `fetch` Workers'ta native. Sıfır yapılandırma, sıfır sürücü, sıfır kalıcı bağlantı.
+Supabase istemcisi (`@supabase/supabase-js`) kaputun altında `fetch` kullanır. Ve `fetch` Worker üzerinde yereldir. Sıfır yapılandırma, sıfır sürücü, sıfır kalıcı bağlantı.
 
 | Veritabanı | Workers uyumlu mu? | Neden |
 | --- | --- | --- |
 | **Supabase** | ✅ Evet | Durumsuz REST API, saf HTTP |
-| **PlanetScale (MySQL)** | ⚠️ Kısmen | Yalnızca HTTPS bağlantısı, uzun işlemler yok |
-| **Neon** | ⚠️ Kısmen | Serverless dallanma ama TCP sürücüsü gerekli |
-| **Turso (libSQL)** | ⚠️ Kısmen | HTTP mümkün ama sınırlı |
-| **Prisma/Prisma Postgres** | ❌ Hayır | Kalıcı TCP gerektirir |
-| **MongoDB Atlas** | ❌ Hayır | TCP sürücüsü, native REST API yok |
-| **Redis (Upstash)** | ✅ Evet | HTTP üzerinden REST API |
+| **PlanetScale (MySQL)** | ⚠️ Kısmi | Yalnızca HTTPS bağlantısı, uzun işlem yok |
+| **Neon** | ⚠️ Kısmi | Sunucusuz dallar ama TCP sürücü gerekli |
+| **Turso (libSQL)** | ⚠️ Kısmi | HTTP mümkün ama sınırlı |
+| **Prisma/Prisma Postgres** | ❌ Hayır | Kalıcı TCP gerekli |
+| **MongoDB Atlas** | ❌ Hayır | TCP sürücü, yerel REST API yok |
+| **Redis (Upstash)** | ✅ Evet | HTTP REST API |
 
-Supabase'in gerçek avantajı sadece DB değil -- tüm ekosistemin edge-first düşünülerek tasarlanmış olması:
+Supabasin gerçek avantajı sadece veritabanı değil: tüm ekosistem uç öncelikli düşünülmüş:
 
-- **Auth**: Oturumlar için REST API, durumsuz çalışır
-- **Storage**: HTTP ile dosya yükleme/indirme
-- **Realtime**: İsteğe bağlı WebSocket, ama REST ile de poll yapabilirsin
-- **Row Level Security**: güvenlik kuralları DB'de yaşar, backend'inde değil
+- **Auth**: oturumları yönetmek için REST API, durumsuz çalışır
+- **Storage**: HTTP üzerinden dosya yükleme/indirme
+- **Realtime**: WebSocket opsiyonel ama REST üzerinden yoklama da yapabilirsin
+- **Row Level Security**: güvenlik kuralları backendinde değil, veritabanında
 
-Serverless bir Discord botu için Supabase en basit ve en güvenilir seçimdir. Yapılandırılacak sürücü yok, korunacak bağlantı yok, zaman aşımı yok. Sadece HTTP istekleri.
+Sunucusuz bir Discord botu için Supabase en basit ve en güvenilir seçimdir. Sürücü yapılandırmazsın, bağlantı sürdürmezsin, timeout yönetmezsin. Sadece HTTP istekleri gönderirsin.
 
-Gerçek bir örnek istersen, yukarıdaki Nibi'ye bak: kalıcılık kodu tam anlamıyla Supabase üzerinde `readJson()` ve `writeJson()`. Migration yok, karmaşık şema yok, çılgın yapılandırma yok. Kutudan çıktığı gibi çalışır. Ve botun büyürse, sağlayıcı değiştirmeden gerçek SQL sorgularına geçebilirsin.
+Gerçek bir örnek istersen yukarıda Nibiye bak: kalıcılık kodu kelimenin tam anlamıyla Supabase üzerinde `readJson()` ve `writeJson()`dur. Migrasyonsuz, karmaşık şemasız, ağır yapılandırmasız başlarsın. Doğrudan çalışır. Ve botun büyürse sağlayıcı değiştirmeden gerçek SQL sorgularına geçersin.
 
-## Polyfill'ler : Node Workers'ta çalışmak istediğinde
+## Polyfilller: Node Worker üzerinde çalışmak isteyince
 
-Bazı paketler Node API'leri bekler. Kuromoji (kanji parser) `XMLHttpRequest` kullanır. Workers'ta `XMLHttpRequest` değil `fetch` var.
+Bazı paketler Node APIleri bekler. Kuromoji (kanji ayrıştırıcı) `XMLHttpRequest` kullanır. Workerlarda `fetch` vardır, `XMLHttpRequest` yoktur.
 
-Basit çözüm: index.ts'nin tepesine bir polyfill ekle:
+Basit çözüm: index.ts en üstüne bir polyfill eklemek:
 
 ```typescript
-// Kuromoji için XMLHttpRequest polyfill
+// kuromoji için XMLHttpRequest Polyfilli
 if (!globalThis.XMLHttpRequest) {
   globalThis.XMLHttpRequest = class {
-    // Minimal stub
+    // Minimal saplamа
   } as any;
 }
 ```
 
-Ya da ayrı bir modül yap:
+Ya da adanmış bir modül yapmak:
 
 ```typescript
 // src/utils/polyfills.ts
@@ -497,18 +497,18 @@ import { setupPolyfills } from './utils/polyfills';
 setupPolyfills();
 ```
 
-Basit bir hack, ama çalışıyor.
+Bu temel bir hack ama çalışıyor.
 
-## Bir npm paketine doğru : hono-discord-interactions
+## Bir npm paketine doğru: hono-discord-interactions
 
-Elden bot yapmak çok boilerplate:
+Elle bot yapmak çok boilerplate demektir:
 
 *   Discord imzasını doğrula
-*   Interaction türlerini yönlendir
-*   Komutları, component'leri, modal'ları yönet
+*   Etkileşim türlerini yönlendir
+*   Komutları, bileşenleri, modalları yönet
 *   Geçerli JSON döndür
 
-Bunların hepsini bir npm paketinde soyutlayabiliriz. Şöyle:
+Bütün bunlar bir npm paketinde soyutlanabilir. Şöyle bir şey:
 
 ```typescript
 import { createDiscordHandler } from 'hono-discord-interactions';
@@ -538,11 +538,11 @@ app.post('/interactions', handler);
 export default app;
 ```
 
-Bam. 200 satır yerine 20 satır. Nibi'yi rahatça yarıya indirir.
+Bum. 200 yerine 20 satır. Nibiyi kolayca yarıya indirirdi.
 
-Sonra düşünürüz xD
+Sonraya fikir.
 
-## Deploy
+## Dağıtım
 
 ### Cloudflare Workers
 
@@ -565,9 +565,9 @@ wrangler deploy --env production
 
 Sonuç URL: `https://mon-bot.workers.dev/interactions`
 
-Maliyet: günde 100k isteğe kadar **ücretsiz**. Üstü: $0.50/milyon.
+Maliyet: günde 100 bin isteğe kadar **ücretsiz**. Ötesi: 0,50 $/milyon.
 
-Spoiler: 10.000 aktif kullanıcın olmadıkça 100k isteği asla geçmezsin.
+Spoiler: 10.000 aktif kullanıcın olmadıkça 100 bin isteği asla harcamayacaksın.
 
 ### Vercel
 
@@ -577,57 +577,57 @@ npm run vercel:deploy
 
 URL: `https://mon-bot-xyz.vercel.app/api/interactions`
 
-Aynı, ücretsiz.
+Aynısı, ücretsiz.
 
 ### İkisi birden
 
-Hono her yerde çalışır. Aynı kodu Cloudflare VE Vercel'e deploy edebilirsin. Yedeklilik için veya seçmeden önce test etmek için kullanışlı.
+Hono her yerde çalışır. Aynı kodu hem Cloudflare hem Vercelde dağıtabilirsin. Yedeklilik ya da seçmeden önce test için kullanışlı.
 
 ## Hızlı kontrol listesi
 
-1.  Discord Developer Portal'da bir Application oluştur
-2.  PUBLIC\_KEY, BOT\_TOKEN, APP\_ID'yi kopyala
+1.  Discord Developer Portal üzerinde bir Uygulama oluştur
+2.  PUBLIC\_KEY, BOT\_TOKEN, APP\_ID kopyala
 3.  Projeyi oluştur:
 4.  index.ts yaz (imza doğrulama + yönlendirme)
-5.  Slash command'ları kaydet (bir kere):
-6.  Deploy et:
-7.  URL'yi Discord'a ekle (Developer Portal → Application → Interactions Endpoint URL)
-8.  Discord bağlantıyı test eder (PING'e cevap vermelisin)
+5.  Slash komutlarını kaydet (bir kez):
+6.  Dağıt:
+7.  URLyi Discorda koy (Developer Portal → Application → Interactions Endpoint URL)
+8.  Discord bağlantıyı test eder (PINGe yanıt vermelisin)
 9.  Botu bir sunucuya davet et
-10. Oldu bu
+10.  Tamamdır
 
-## Avantajlar vs Sınırlamalar
+## Avantajlar ve Sınırlamalar
 
 **Avantajlar**
 
-*   Ucuz (günde 100k isteğe kadar ücretsiz)
-*   Ölçeklenebilir (bağlantı yönetimi yok)
-*   Basit (WebSocket boilerplate yok)
-*   Hızlı (Cloudflare = edge sunucular)
+*   Minimal maliyet (günde 100 bin isteğe kadar ücretsiz)
+*   Ölçeklenebilir (bağlantı yönetimi olmadan)
+*   Basit (WebSocket boilerplatei olmadan)
+*   Hızlı (Cloudflare = uçta sunucular)
 *   Taşınabilir (Hono kodu = birden çok host)
 
 **Sınırlamalar**
 
-*   Gerçek zamanlı sunucu olayları yok (üye katıldı, rol eklendi, mesaj silindi, vb.) -- sadece interaction alırsın (slash commands, butonlar, modallar)
-*   Cevap vermek için 3 saniye timeout -- yoksa Discord "Application did not respond" gösterir
-*   Gerçek event'ler gerekiyorsa -- ayrı bir HTTP webhook veya ek WebSocket bağlantısı gerekir
+*   Yalnızca etkileşimleri alırsın (slash komutları, düğmeler, modallar), gerçek zamanlı sunucu olayları olmadan (üye katıldı, rol eklendi, mesaj silindi vs.)
+*   Yanıtlamak için 3 saniyelik timeout: yoksa Discord "Application did not respond" gösterir
+*   Gerçek olaylar gerekirse: ayrı bir HTTP webhook ya da yardımcı bir WebSocket bağlantısı gerekir
 
-Botların %90'ı için (slash command tabanlı her şey) ? Yeter.
+Botların %90ı için (hepsi slash komut tabanlı)? Bu tamamdır.
 
 ## Sonuç olarak
 
-KonosubaRPG ve Nibi'yi optimize etmek için epey zaman harcadım -- ya mümkün olduğunca az istek yapmak için, ya sıcak işlemci süresini azaltmak için, ya da soğuk başlatmayı düşürmek için. Sonuç olarak, neredeyse her şeyde epey iyi performans aldım.
-Şunu bilmelisin ki projelerimin çoğunu cloud'a taşımaya (buna denir mi bilmiyorum) başlamıştım çünkü kendi VM'de barındırmaya devam etmek için inanılmaz bir üşengeçliğim vardı. Gerçekten, Github Actions benim kıçımı kurtardı diyebilirim. Workers da öyle, ama aslında Github Actions ve schedule'larla daemon yapabildiğimi görünce gerçekten kurtulmuştum valla.
+KonosubaRPG ve Nibiyi ya olası en çok isteği tasarruf etmek, ya sıcak işlemci süresini azaltmak ya da soğuk başlatmayı kısaltmak için optimize ederek epey zaman geçirdim. Sonuç, hemen her şeyde sağlam performanslarım var.
+Bil ki çoğu projemi bulutlaştırmaya başlamıştım (bunun denip denmediğini bile bilmiyorum) çünkü kendi VMimde barındırmaya devam etmeye anıtsal bir üşengeçliğim vardı. Gerçekten sanırım kıçımı kurtaran Github Actions oldu. Workerlar da ama aslında Github Actions ve zamanlamalarla daemonlar yapabileceğimi gördüğümde bu beni gerçekten kurtardı cidden.
 
-Muhtemelen [email-autoreply](https://github.com/fox3000foxy/email-autoreply/) adlı bir proje hakkında yazı yazacağım, o yüzden çıktığını görmek için RSS beslemesine abone olun :))
+Yakında [email-autoreply](https://github.com/fox3000foxy/email-autoreply/) adlı bir proje hakkında bir makale yazacağım, o yüzden yakında çıktığını görmek için RSS akışına abone olun :)).
 
-**Unutulmaması gereken 3 şey:**
+**Akılda tutulacak 3 nokta:**
 
-1.  **Interaction endpoints = HTTP serverless** -- WebSocket yok, kalıcı bağlantı yok. Discord POST atar, sen cevaplarsın. Cloudflare'da ücretsiz.
-2.  **Hono mükemmel araç** -- Hafif framework (12KB), çoklu runtime, sıfır bağımlılık. Cloudflare, Vercel, Node, her yerde aynı kod.
-3.  **Workers'ta görsel render = deli işi** -- Satori + Resvg (Wasm) ile dinamik UI'ları JSX'te oluşturup \<100ms'de PNG'ye çevirebilirsin. Komple bir oyun bununla çalışabilir.
+1.  **Interaction endpointleri = sunucusuz HTTP**: WebSocketsiz, kalıcı bağlantısız. Discord POSTlar, yanıtlarsın. Cloudflare üzerinde ücretsiz.
+2.  **Hono mükemmel araçtır**: Hafif çerçeve (12 KB), çok çalışma ortamlı, sıfır bağımlılık. Cloudflare, Vercel, Node üzerinde aynı kod, her yerde.
+3.  **Worker üzerinde görsel render = çılgınca**: Satori + Resvg (Wasm) JSX ile dinamik arayüzler besteleyip \<100 msde PNGye çevirmene izin verir. Tam bir oyun bunun üstünde dönebilir.
 
-Hastalık bu xD
+Bu hasta.
 
 ```plaintext
 wrangler deploy

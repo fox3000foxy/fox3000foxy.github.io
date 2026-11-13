@@ -1,82 +1,82 @@
 ---
-title: "100% serverless бот Discord: Hono + Cloudflare Workers"
-description: Как я заменил Discord-бота, который обходился мне в 50€/месяц, на
-  ноль евро -- interaction endpoints, Hono, Workers, рендеринг изображений в
-  реальном времени и полноценная игра без WebSocket.
+title: "Discord-бот 100% serverless : Hono + Cloudflare Workers"
+description: Как я заменил Discord-бота, стоившего мне 50€/мес, на
+  ноль евро -- interaction endpoints, Hono, Workers, рендер картинок в реальном
+  времени и целая игра без WebSocket.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "yQ9dtxFbPqu+nCoHmauO9p4OETidKa5bw9ptCcRU+cG+U9lRVgjYjUERjD5BylAqXs38OtCragT0HAQ11g/uEA=="
+author_sig: "bZZEe5q49cIMUxP8ZmHgHepAOOOYox4poqcBG5Rr5s3nVjpGDhFySwiV6+88pC0TvJcqiv4wI5OmZPW8O4W/4Q=="
 ---
 
-## Discord bot 100% serverless : Hono + Cloudflare Workers = 💸 ноль
+## Discord-бот 100% serverless : Hono + Cloudflare Workers = 💸 ноль
 
-Я несколько месяцев держал обычных Discord ботов на своей машине.
+Я провёл несколько месяцев, поддерживая классических Discord-ботов на собственной машине.
 
-WebSocket соединение всегда открыто. Бот сам переподключается в 3 ночи. Бот падает, потому что я косо посмотрел на овец. Счёт растёт.
+WebSocket-соединение всегда открыто. Бот сам переподключается в 3 часа ночи. Бот крашится, потому что я косо смотрю на овец. Счёт растёт.
 
-Однажды я понял: **зачем держать соединение**? Discord может POSTить тебе только то, что интересно. Ты отвечаешь -- готово.
+Однажды я открыл : **зачем держать соединение**? Discord может просто POSTить тебе интересующие события. Ты отвечаешь, и всё.
 
-С 2021 года Discord поддерживает **interaction endpoints**.
+С 2021 Discord предлагает **interaction endpoints**.
 
-Это просто HTTP. Никакого WebSocket. Никакого состояния. Ты получаешь запрос, шлёшь JSON, всё. Следующий запрос приходит сам.
+Это просто HTTP. Ты работаешь без WebSocket, без персистентного состояния. Получаешь запрос, отправляешь JSON, конец. Следующий запрос приходит сам.
 
-И самое крутое: Cloudflare Workers -- это **бесплатно** до 100k запросов/день. Для 90% ботов это 0€/мес.
+А лучшее : Cloudflare Workers **бесплатны** до 100k запросов в день. Для 90 % ботов это 0€/мес.
 
-Эта статья покажет, как сделать Discord бота без WebSocket, используя **Hono** (ультра-лёгкий веб-фреймворк) и **Cloudflare Workers**. Я покажу два реальных проекта: **Nibi** (бот для изучения японского, TTS, круто) и **Konosuba-RPG** (полноценная Discord-игра _с рендером изображений в реальном времени_ xD).
+Эта статья показывает, как сделать Discord-бота без WebSocket, используя **Hono** (ультралёгкий веб-фреймворк) и **Cloudflare Workers**. Я покажу два реальных проекта : **Nibi** (бот для изучения японского, TTS, круто) и **Konosuba-RPG** (целая Discord-_игра_ с рендером картинок в реальном времени).
 
-## WebSocket vs. Interaction Endpoints : почему это было плохой идеей
+## WebSocket против Interaction Endpoints : почему это была плохая идея
 
-Представь Minecraft, где тебе нужно держать соединение открытым, даже когда ты не играешь.
+Представь игру Minecraft, где надо держать соединение открытым, даже когда не играешь.
 
-А сервер переподключается автоматически каждый раз, когда падает. Ты должен обрабатывать таймауты, экспоненциальные реконнекты, весь этот грёбаный boilerplate, который мы ненавидим. Просто чтобы получать взаимодействия.
+А сервер автоматически переподключается каждый раз, когда крашится. Ты должен управлять таймаутами, экспоненциальными переподключениями, всем дерьмовым boilerplate, который ненавидим. Только ради получения взаимодействий.
 
-Interaction endpoints -- всё наоборот. Discord POST'ит на твой URL. Ты отвечаешь. Готово.
+Interaction endpoints это наоборот. Discord POSTит на твой URL. Ты отвечаешь. Конец.
 
-Если твой сервер упал? Discord повторяет 2-3 раза и идёт дальше. Ноль драмы.
+Если твой сервер крашнулся? Discord ретраит 2-3 раза и идёт дальше. Zero drama.
 
-**Цена до** : 50€/мес на Heroku просто чтобы процесс Node оставался живым.
+**Цена до** : 50€/мес на Heroku только за то, чтобы процесс Node оставался жив.
 
-**Цена после** : 0€/мес на Cloudflare до 100k запросов/день.
+**Цена после** : 0€/мес на Cloudflare до 100k запросов в день.
 
-## Архитектура : что это вообще такое?
+## Архитектура : что это вообще?
 
-Discord POST'ит запрос на твой endpoint.
+Discord POSTит запрос на твой эндпоинт.
 
 ```plaintext
-Discord: "Эй! Пользователь нажал на /ping!"
+Discord: "Эй! Пользователь кликнул /ping!"
       ↓
    Твой URL (Cloudflare Worker)
       ↓
-   Ты проверяешь, что это действительно Discord (проверка подписи)
+Проверяешь, что это реально Discord (проверка подписи)
       ↓
-   Ты парсишь тип взаимодействия
+Парсишь тип взаимодействия
       ↓
-   Ты выполняешь handler
+Выполняешь хендлер
       ↓
-   Ты возвращаешь JSON
+Возвращаешь JSON
       ↓
-Discord: "Ок, я покажу это пользователю"
+Discord: "Круто, покажу это пользователю"
 ```
 
-Чистый HTTP. Никакой магии. Никаких тяжёлых библиотек.
+Это чистый HTTP с минимальным и читаемым стеком.
 
-## Hono + Cloudflare Workers : экономная комбинация
+## Hono + Cloudflare Workers : экономное комбо
 
-**Hono** -- это веб-фреймворк весом 12KB. Работает везде: Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... один и тот же код везде.
+**Hono** это веб-фреймворк весом 12KB. Он крутится везде : Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... один код везде.
 
-Cloudflare Workers -- это вычисления на edge. Твои запросы приходят на ближайший сервер. Время ответа: \<100ms. Цена: бесплатно до 100k запросов/день.
+Cloudflare Workers это вычисления на edge. Твои запросы приходят на ближайший сервер. Время ответа : \<100ms. Цена : бесплатно до 100k запросов в день.
 
-Связка Hono + Cloudflare -- идеальный мэтч для Discord бота.
+Связка Hono + Cloudflare идеальный матч для Discord-бота.
 
-Вот минимальный код полноценного бота:
+Вот минимальный код целого бота :
 
 ```typescript
 import { Hono } from 'hono';
@@ -85,12 +85,12 @@ import { verifyKey } from 'discord-interactions';
 const app = new Hono();
 
 app.post('/interactions', async (c) => {
-  // 1. Получаем заголовки
+  // 1. Забираем заголовки
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
   const body = await c.req.text();
 
-  // 2. Проверяем, что это реально Discord (не спам)
+  // 2. Проверяем, что это реально Discord (а не спам)
   const isValid = verifyKey(
     body,
     signature,
@@ -99,17 +99,17 @@ app.post('/interactions', async (c) => {
   );
   if (!isValid) return c.text('Invalid request', 401);
 
-  // 3. Парсим, что он прислал
+  // 3. Парсим то, что он прислал
   const interaction = JSON.parse(body);
 
   // 4. Отвечаем по типу
   if (interaction.type === 1) {
-    // Проверка Discord (PING)
+    // Тест Discord (PING)
     return c.json({ type: 1 });
   }
 
   if (interaction.type === 2) {
-    // Это слэш-команда
+    // Это слеш-команда
     const name = interaction.data.name;
     if (name === 'ping') {
       return c.json({
@@ -125,51 +125,51 @@ app.post('/interactions', async (c) => {
 export default app;
 ```
 
-Типа, 30 строк и это рабочий бот.
+30 строк достаточно для рабочего бота.
 
-Никакого `bot.login()`. Никаких event emitter'ов. Никакого callback hell. Просто HTTP.
+Ты забываешь `bot.login()`, event emitter и callback hell. Оставляешь только HTTP.
 
-Чтобы задеплоить на Cloudflare:
+Для деплоя на Cloudflare :
 
 ```plaintext
 npm install -D wrangler
 npx wrangler deploy
 ```
 
-Бум. У тебя URL типа `https://mon-bot.workers.dev/interactions`.
+Бум. У тебя URL вроде `https://mon-bot.workers.dev/interactions`.
 
-Вставляешь это в Discord Developer Portal в "INTERACTIONS ENDPOINT URL", и Discord начинает слать твои взаимодействия туда.
+Кладёшь это в Discord Developer Portal под "INTERACTIONS ENDPOINT URL", и Discord начинает слать твои взаимодействия туда.
 
 ## Проверка подписи : никаких фейковых запросов
 
-Discord подписывает каждый запрос публичным ключом. Если пришёл запрос с неправильной подписью? Это спам. Игнорируй и живи дальше.
+Discord подписывает каждый запрос публичным ключом. Получил запрос с плохой подписью? Это спам. Игнорируй и иди дальше.
 
-Пакет `discord-interactions` делает всю работу:
+Пакет `discord-interactions` делает работу :
 
 ```typescript
 import { verifyKey } from 'discord-interactions';
 
 const isValid = verifyKey(
-  rawBody,           // точный сырой текст (не паршеный JSON!)
-  signature,         // header x-signature-ed25519
-  timestamp,         // header x-signature-timestamp
+  rawBody,           // точный сырой текст (не распарсенный JSON !)
+  signature,         // заголовок x-signature-ed25519
+  timestamp,         // заголовок x-signature-timestamp
   publicKey          // из Discord Dev Portal
 );
 ```
 
-**Важная ловушка** : подпись зависит от _точного_ body. Если ты спарсишь JSON и обратно превратишь в строку, или залогируешь body -- подпись сломается.
+**Важная ловушка** : подпись зависит от _точного_ body. Если парсишь JSON и снова stringify, или если логируешь body, ломаешь подпись.
 
 Сначала проверяй. Потом парси. Порядок важен.
 
-## Кейс 1 : Nibi (бот для изучения японского)
+## Случай 1 : Nibi (бот изучения японского)
 
-Nibi -- это Discord бот для изучения японского. Простые команды:
+Nibi это Discord-бот для изучения японского. Простые команды :
 
 *   `/dictionary kanji` → показывает определения
 *   `/pronounce テキスト` → генерирует TTS (text-to-speech)
 *   `/hello` → приветственное сообщение
 
-Каждая команда -- отдельный TypeScript файл:
+Каждая команда это файл TypeScript :
 
 ```plaintext
 src/commands/
@@ -179,7 +179,7 @@ src/commands/
 └── ...
 ```
 
-Команда реализует такой интерфейс:
+Команда реализует этот интерфейс :
 
 ```typescript
 interface Command {
@@ -191,13 +191,13 @@ interface Command {
   execute(
     interaction: Interaction,
     env: Bindings
-  ): Promise<InteractionResponse>;
+  ): Promise<interactionresponse>;
 }
 ```
 
-### Команда /pronounce : заставляем бота говорить
+### Команда /pronounce : заставить бота говорить
 
-Эта самая безумная. Ты шлёшь текст (ромадзи, хирагана, кандзи, что угодно), бот конвертит это в хирагану, генерирует TTS через VOICEVOX или Google TTS, и отправляет аудиосообщение в Discord.
+Она-то и прикольная. Шлёшь текст (romaji, hiragana, kanji, что угодно), бот конвертирует это в hiragana, генерирует TTS через VOICEVOX или Google TTS и отправляет аудиосообщение в Discord.
 
 ```typescript
 const pronounce: Command = {
@@ -208,7 +208,7 @@ const pronounce: Command = {
       {
         type: 3,  // STRING
         name: 'text',
-        description: 'Текст для произношения',
+        description: 'Текст для произнесения',
         required: true
       }
     ]
@@ -218,20 +218,20 @@ const pronounce: Command = {
     const text = interaction.data.options[0].value;
 
     try {
-      // 1. Конвертируем ромадзи → хирагану через Kuroshiro
+      // 1. Конвертировать romaji → hiragana через Kuroshiro
       const hiragana = await kuroshiro.convert(text, { to: 'hiragana' });
 
-      // 2. Генерируем TTS аудио
+      // 2. Сгенерировать аудио TTS
       const audioBuffer = await generateTTS(hiragana);
 
-      // 3. Загружаем файл в Discord
+      // 3. Залить файл в Discord
       const uploadFilename = await uploadToDiscord(
         audioBuffer,
         interaction.channel.id,
         env.BOT_TOKEN
       );
 
-      // 4. Отправляем сообщение с аудио
+      // 4. Отправить сообщение с аудио
       await sendVoiceMessage(
         interaction.channel.id,
         uploadFilename,
@@ -247,7 +247,7 @@ const pronounce: Command = {
       return {
         type: 4,
         data: {
-          content: 'Ошибка : не удалось сгенерировать аудио xD',
+          content: 'Ошибка : невозможно сгенерировать аудио xD',
           flags: 64  // ephemeral (приватное сообщение)
         }
       };
@@ -256,11 +256,11 @@ const pronounce: Command = {
 };
 ```
 
-Это же безумие: ты вызываешь внешнее API, загружаешь файл в Discord, отправляешь сообщение с файлом. Всё без WebSocket, просто HTTP.
+С ума сойти : зовёшь внешний API, заливаешь файл в Discord, отправляешь сообщение с файлом. Всё это без WebSocket, только HTTP.
 
-### Хранение данных с Supabase
+### Персистентность с Supabase
 
-Nibi использует Supabase как key-value store. Чтобы проверить, зарегистрирован ли пользователь:
+Nibi использует Supabase как key-value store. Чтобы проверить, зарегистрирован ли пользователь :
 
 ```typescript
 const DatabaseUtils = new DatabaseUtils({
@@ -272,45 +272,45 @@ const users = await DatabaseUtils.readJson('users');
 const user = users.find(u => u.id === interaction.member.user.id);
 
 if (!user) {
-  // Добавляем пользователя
+  // Добавить пользователя
   users.push({ id: interaction.member.user.id, verified: true });
   await DatabaseUtils.writeJson('users', users);
 }
 ```
 
-Очень базово (никаких настоящих SQL запросов, просто JSON), но работает. Для маленьких ботов идеально.
+Это очень базово (никаких настоящих SQL-запросов, только JSON), но работает. Для маленьких ботов идеально.
 
-## Кейс 2 : Konosuba-RPG (игра в Discord с рендером изображений)
+## Случай 2 : Konosuba-RPG (игра Discord с рендером картинок)
 
-Окей, вот это уже жесть.
+Так, это вообще дичь.
 
-Konosuba-RPG -- это **полноценная игра** в Discord. Ты сражаешься с мобами, получаешь XP, экипируешь аксессуары, повышаешь уровень. Каждая битва генерирует **изображение** в реальном времени. Никаких предварительно отрендеренных спрайтов. Изображение составляется динамически на основе статов игрока, моба и состояния битвы.
+Konosuba-RPG это **целая игра** в Discord. Ты сражаешься с мобами, получаешь XP, надеваешь аксессуары, качаешь уровень. Каждый бой генерирует **картинку** в реальном времени. Ты избегаешь предрендеренных спрайтшитов. Картинка динамически компонуется из статов игрока, моба и состояния боя.
 
-И изображение генерируется за \<500ms на Cloudflare Workers. Буквально.
+А картинка генерируется за \<500ms на Cloudflare Workers. Буквально.
 
 ### Архитектура рендера
 
 ```plaintext
-Discord (ты нажимаешь "Attack")
+Discord (ты жмёшь "Attack")
     ↓
 Cloudflare Worker получает взаимодействие
     ↓
-Обновление игрового состояния (XP, HP, и т.д.)
+Обновление game state (XP, HP и т.д.)
     ↓
-Генерация JSX с помощью Satori
+Генерация JSX через Satori
     ↓
-Конвертация SVG → PNG с помощью Resvg (Wasm)
+Конверсия SVG → PNG через Resvg (Wasm)
     ↓
-Загрузка изображения в Discord
+Заливка картинки в Discord
     ↓
-Отправка сообщения с изображением
+Отправка сообщения с картинкой
 ```
 
-Всё это меньше чем за секунду. Это чертовски круто.
+Всё это меньше чем за секунду. С ума сойти.
 
-### Рендер изображений на Workers
+### Рендер картинок на Workers
 
-Konosuba использует **Satori** (JSX → SVG) и **Resvg** (SVG → PNG):
+Konosuba использует **Satori** (JSX → SVG) и **Resvg** (SVG → PNG) :
 
 ```typescript
 import { Satori } from 'satori';
@@ -319,9 +319,9 @@ import initWasm from '@cf-wasm/resvg';
 async function renderBattle(gameState: GameState) {
   const resvg = await initWasm();
 
-  // 1. Создаём JSX для интерфейса
+  // 1. Создать JSX для UI
   const jsx = (
-    <div style={{ display: 'flex', gap: '20px' }}>
+    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}="">
       <div>
         <h1>{gameState.player.name}</h1>
         <p>HP: {gameState.player.hp}/{gameState.player.maxHp}</p>
@@ -347,13 +347,13 @@ async function renderBattle(gameState: GameState) {
 }
 ```
 
-Ты пишешь обычный JSX. Он становится SVG. SVG становится PNG. \<100ms на Cloudflare Worker.
+Ты пишешь нормальный JSX. Он становится SVG. SVG становится PNG. \<100ms на Cloudflare Worker.
 
-Прочувствуй мощь? Это просто... красиво xD
+Сечёшь мощь? Это просто красиво.
 
-### Игровое состояние и прогрессия
+### Game state и прогрессия
 
-Данные игрока хранятся в Supabase:
+Данные игрока в Supabase :
 
 ```typescript
 const player = await db
@@ -362,7 +362,7 @@ const player = await db
   .eq('discord_id', interaction.user.id)
   .single();
 
-// Игрок победил
+// Игрок выиграл
 const { data: updated } = await db
   .from('players')
   .update({
@@ -372,11 +372,11 @@ const { data: updated } = await db
   .eq('id', player.id);
 ```
 
-Каждое действие (атака, защита, лечение) обновляет статы в базе. А затем ты заново генерируешь изображение с новыми статами.
+Каждое действие (атака, защита, лечение) обновляет статы в базе. А потом регенерируешь картинку с новыми статами.
 
 ### Взаимодействия : кнопки геймплея
 
-Игра использует **button interactions** для действий в бою:
+Игра использует **button interactions** для действий в бою :
 
 ```typescript
 {
@@ -398,11 +398,11 @@ const { data: updated } = await db
 }
 ```
 
-Когда ты нажимаешь "Attack", Discord POST'ит взаимодействие с `custom_id: 'battle_attack'`. Handler направляет это:
+Когда жмёшь "Attack", Discord POSTит взаимодействие с `custom_id: 'battle_attack'`. Хендлер роутит это :
 
 ```typescript
 if (interaction.type === 3) {
-  // Component interaction (нажатие кнопки и т.д.)
+  // Взаимодействие с компонентом (клик кнопки и т.д.)
   const customId = interaction.data.custom_id;
 
   if (customId === 'battle_attack') {
@@ -414,30 +414,30 @@ if (interaction.type === 3) {
 }
 ```
 
-И бум, ты вычисляешь урон, обновляешь базу, регенерируешь изображение, отправляешь.
+И бум, считаешь урон, апдейтишь базу, регенерируешь картинку, отправляешь.
 
-Это полноценная пошаговая игра без единого постоянного соединения. Просто HTTP без состояния. Полный отрыв xD
+Это целая пошаговая игра без какого-либо персистентного соединения. Только stateless HTTP. Совершенно сломано.
 
-## Supabase: база данных, созданная для Workers
+## Supabase : БД, сделанная для Workers
 
-Традиционные базы данных (PostgreSQL, MySQL, MongoDB) спроектированы для постоянных TCP-соединений. Ты открываешь сокет, держишь соединение, отправляешь запросы. Проблема: **Cloudflare Workers не поддерживает постоянные TCP-соединения**. Каждый запрос -- это эфемерный процесс. Как только ты отвечаешь клиенту, Worker исчезает.
+Классические базы данных (PostgreSQL, MySQL, MongoDB) спроектированы под персистентные TCP-соединения. Открываешь сокет, держишь соединение открытым, шлёшь запросы. Проблема : **Cloudflare Workers не поддерживают персистентные TCP-соединения**. Каждый запрос эфемерный процесс. Как только ответил клиенту, Worker исчезает.
 
-Ты не можешь сделать так:
+Так делать нельзя :
 
 ```typescript
-// Это НЕ сработает на Workers
+// Это НЕ работает на Workers
 import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();  // постоянное TCP-соединение = мертво
+const prisma = new PrismaClient();  // персистентное TCP-соединение = dead
 ```
 
-Даже нативные драйверы PostgreSQL вроде `pg` или `postgres.js` используют TCP-соединения. На Workers они падают.
+А нативные драйверы PostgreSQL вроде `pg` или `postgres.js` используют TCP-соединения. На Workers они падают.
 
 **Supabase решает всё это.**
 
-Supabase -- это REST API поверх PostgreSQL. Ты делаешь обычные HTTP-запросы. Каждый вызов независим, нет постоянного соединения, нет состояния, которым нужно управлять. Это идеально подходит для serverless-модели.
+Supabase это REST API поверх PostgreSQL. Ты делаешь нормальные HTTP-запросы. Каждый вызов независим, никакого персистентного соединения, никакого состояния для управления. Идеально подходит serverless-модели.
 
 ```typescript
-// Это отлично работает на Workers
+// Это работает ИДЕАЛЬНО на Workers
 const { data, error } = await supabase
   .from('players')
   .select('*')
@@ -445,45 +445,45 @@ const { data, error } = await supabase
   .single();
 ```
 
-Клиент Supabase (`@supabase/supabase-js`) использует `fetch` под капотом. А `fetch` -- нативный на Workers. Ноль конфигурации, ноль драйверов, ноль постоянных соединений.
+Клиент Supabase (`@supabase/supabase-js`) использует `fetch` под капотом. А `fetch` нативен на Workers. Ноль конфигурации, ноль драйвера, ноль персистентных соединений.
 
-| База данных | Совместима с Workers? | Почему |
+| База данных | Совместим с Workers? | Почему |
 | --- | --- | --- |
 | **Supabase** | ✅ Да | REST API без состояния, чистый HTTP |
-| **PlanetScale (MySQL)** | ⚠️ Частично | Только HTTPS, нет длинных транзакций |
+| **PlanetScale (MySQL)** | ⚠️ Частично | Только HTTPS-соединение, без длинных транзакций |
 | **Neon** | ⚠️ Частично | Serverless-ветки, но нужен TCP-драйвер |
-| **Turso (libSQL)** | ⚠️ Частично | HTTP возможен, но ограничен |
-| **Prisma/Prisma Postgres** | ❌ Нет | Требует постоянного TCP |
-| **MongoDB Atlas** | ❌ Нет | TCP-драйвер, нет нативного REST API |
-| **Redis (Upstash)** | ✅ Да | REST API через HTTP |
+| **Turso (libSQL)** | ⚠️ Частично | HTTP возможен, но лимитирован |
+| **Prisma/Prisma Postgres** | ❌ Нет | Нужен персистентный TCP |
+| **MongoDB Atlas** | ❌ Нет | TCP-драйвер, без нативного REST API |
+| **Redis (Upstash)** | ✅ Да | REST API HTTP |
 
-Настоящее преимущество Supabase -- не только БД, а вся экосистема, спроектированная для edge:
+Настоящее преимущество Supabase не только БД -- это вся экосистема, задуманная edge-first :
 
-- **Auth**: REST API для сессий, работает без состояния
-- **Storage**: Загрузка/скачивание файлов через HTTP
-- **Realtime**: Опциональный WebSocket, но можно делать poll через REST
-- **Row Level Security**: правила безопасности живут в БД, а не в твоём бэкенде
+- **Auth** : REST API для управления сессиями, работает без состояния
+- **Storage** : Заливка/скачивание файлов через HTTP
+- **Realtime** : WebSocket опционально, но можно и poll через REST
+- **Row Level Security** : правила безопасности в БД, а не в твоём бэкенде
 
-Для serverless Discord-бота Supabase -- самый простой и надёжный выбор. Никаких драйверов для настройки, никаких соединений для поддержания, никаких таймаутов. Просто HTTP-запросы.
+Для serverless Discord-бота Supabase самый простой и надёжный выбор. Не настраиваешь драйвер, не держишь соединение, не управляешь таймаутами. Просто шлёшь HTTP-запросы.
 
-Хочешь реальный пример? Посмотри на Nibi выше: его код сохранения -- буквально `readJson()` и `writeJson()` на Supabase. Никаких миграций, никаких сложных схем, никакой безумной конфигурации. Работает из коробки. А если твой бот вырастет, ты можешь перейти на настоящие SQL-запросы без смены провайдера.
+Если хочешь настоящий пример, смотри Nibi выше : код персистентности это буквально `readJson()` и `writeJson()` на Supabase. Стартуешь без миграций, без сложной схемы, без тяжёлой конфигурации. Работает сразу. А если бот вырастет, мигрируешь на настоящие SQL-запросы, не меняя провайдера.
 
-## Полифиллы : когда Node хочет работать на Workers
+## Полифиллы : когда Node хочет крутиться на Workers
 
-Некоторые пакеты ожидают Node API. Kuromoji (парсер кандзи) использует `XMLHttpRequest`. У Workers есть `fetch`, нет `XMLHttpRequest`.
+Некоторые пакеты ожидают Node API. Kuromoji (парсер kanji) использует `XMLHttpRequest`. У Workers есть `fetch`, а `XMLHttpRequest` нет.
 
-Простое решение: добавить полифилл в начале index.ts:
+Простое решение : добавить полифилл наверху index.ts :
 
 ```typescript
 // Полифилл XMLHttpRequest для kuromoji
 if (!globalThis.XMLHttpRequest) {
   globalThis.XMLHttpRequest = class {
-    // Минимальная заглушка
+    // Минимальный стаб
   } as any;
 }
 ```
 
-Или вынести в отдельный модуль:
+Или сделать выделенный модуль :
 
 ```typescript
 // src/utils/polyfills.ts
@@ -497,18 +497,18 @@ import { setupPolyfills } from './utils/polyfills';
 setupPolyfills();
 ```
 
-Это базовый хак, но работает.
+Базовый хак, но работает.
 
-## К npm пакету : hono-discord-interactions
+## К npm-пакету : hono-discord-interactions
 
-Вручную делать бота -- много boilerplate:
+Вручную делать бота это много boilerplate :
 
-*   Проверка подписи Discord
-*   Маршрутизация типов взаимодействий
-*   Обработка команд, компонентов, модалок
-*   Возврат валидного JSON
+*   Проверяешь подпись Discord
+*   Роутишь типы взаимодействий
+*   Управляешь командами, компонентами, модалками
+*   Возвращаешь валидный JSON
 
-Можно было бы абстрагировать всё это в npm пакет. Типа:
+Всё это можно абстрагировать в npm-пакет. Типа :
 
 ```typescript
 import { createDiscordHandler } from 'hono-discord-interactions';
@@ -538,9 +538,9 @@ app.post('/interactions', handler);
 export default app;
 ```
 
-Бац. 20 строк вместо 200. Это бы уменьшило Nibi минимум вдвое.
+Бум. 20 строк вместо 200. Это урезало бы Nibi вдвое легко.
 
-Идея на потом xD
+Идея на потом.
 
 ## Деплой
 
@@ -563,11 +563,11 @@ wrangler secret put SUPABASE_URL --env production
 wrangler deploy --env production
 ```
 
-Результирующий URL: `https://mon-bot.workers.dev/interactions`
+Результирующий URL : `https://mon-bot.workers.dev/interactions`
 
-Цена: **бесплатно** до 100k запросов/день. Выше: $0.50/миллион.
+Цена : **бесплатно** до 100k запросов в день. Дальше : $0.50/миллион.
 
-Спойлер: ты никогда не потратишь 100k запросов, если у тебя не 10 000 активных пользователей.
+Спойлер : 100k запросов не потратишь, если нет 10 000 активных пользователей.
 
 ### Vercel
 
@@ -575,59 +575,59 @@ wrangler deploy --env production
 npm run vercel:deploy
 ```
 
-URL: `https://mon-bot-xyz.vercel.app/api/interactions`
+URL : `https://mon-bot-xyz.vercel.app/api/interactions`
 
-То же самое, бесплатно.
+Так же, бесплатно.
 
 ### Оба сразу
 
-Hono работает везде. Ты можешь задеплоить один и тот же код на Cloudflare И Vercel. Полезно для отказоустойчивости или тестирования перед выбором.
+Hono крутится везде. Можешь деплоить тот же код на Cloudflare И Vercel. Удобно для избыточности или тестов перед выбором.
 
 ## Быстрый чеклист
 
-1.  Создать приложение в Discord Developer Portal
+1.  Создать Application в Discord Developer Portal
 2.  Скопировать PUBLIC\_KEY, BOT\_TOKEN, APP\_ID
-3.  Создать проект:
-4.  Написать index.ts (проверка подписи + маршрутизация)
-5.  Зарегистрировать слэш-команды (один раз):
-6.  Задеплоить:
-7.  Вставить URL в Discord (Developer Portal → Application → Interactions Endpoint URL)
+3.  Создать проект :
+4.  Написать index.ts (проверка подписи + роутинг)
+5.  Зарегистрировать слеш-команды (один раз) :
+6.  Деплой :
+7.  Положить URL в Discord (Developer Portal → Application → Interactions Endpoint URL)
 8.  Discord тестирует соединение (ты должен ответить на PING)
 9.  Пригласить бота на сервер
 10.  Готово
 
-## Преимущества vs Ограничения
+## Плюсы против лимитов
 
-**Преимущества**
+**Плюсы**
 
-*   Дёшево (бесплатно до 100k запросов/день)
-*   Масштабируется (никакого управления соединениями)
-*   Просто (никакого WebSocket boilerplate)
-*   Быстро (Cloudflare = сервера на edge)
-*   Портативно (код на Hono = несколько хостов)
+*   Минимальная цена (бесплатно до 100k req/день)
+*   Масштабируемо (без управления соединениями)
+*   Просто (без WebSocket boilerplate)
+*   Быстро (Cloudflare = серверы на edge)
+*   Портативно (код Hono = несколько хостов)
 
-**Ограничения**
+**Лимиты**
 
-*   Нет событий сервера в реальном времени (участник зашёл, роль добавлена, сообщение удалено и т.д.) -- ты получаешь только взаимодействия (слэш-команды, кнопки, модалки)
-*   Таймаут 3 секунды для ответа -- иначе Discord показывает "Application did not respond"
-*   Если нужны настоящие события -- нужен отдельный HTTP вебхук или вспомогательное WebSocket соединение
+*   Ты получаешь только взаимодействия (slash commands, buttons, modals), без серверных событий реального времени (участник зашёл, роль добавлена, сообщение удалено и т.д.)
+*   Таймаут 3 секунды на ответ -- иначе Discord показывает "Application did not respond"
+*   Если нужны настоящие events -- нужен отдельный HTTP-webhook или вспомогательное WebSocket-соединение
 
-Для 90% ботов (всё на слэш-командах)? Норм.
+Для 90 % ботов (всё на слеш-командах)? Годится.
 
 ## В заключение
 
-Я потратил немало времени, оптимизируя KonosubaRPG и Nibi -- чтобы экономить либо количество запросов, либо время процессора на горячую, либо холодный старт. В итоге у меня весьма крутые показатели почти везде.
-Надо сказать, я начал «облачить» (даже не знаю, существует ли такое слово) большинство своих проектов, потому что мне было дико лень продолжать их хостить на своей VM. Серьёзно, кажется, Github Actions спасли мне шкуру. Workers тоже, но когда я понял, что можно делать демонов с Github Actions и расписаниями -- это меня реально спасло, чувак.
+Я провёл немало времени, оптимизируя KonosubaRPG и Nibi, чтобы экономить то максимум запросов, то горячее процессорное время, то холодный старт. Итог : у меня приличные перфы почти во всём.
+Надо знать, что я начал клаудифицировать (даже не знаю, говорится ли так) большинство проектов, потому что было монументально лень продолжать хостить их на собственной VM. Реально, думаю, меня спасли Github Actions. Воркеры тоже, но вообще когда я увидел, что могу делать демонов через Github Actions и schedules, это меня реально спасло.
 
-Я скорее всего напишу статью о проекте [email-autoreply](https://github.com/fox3000foxy/email-autoreply/), так что подписывайся на RSS, чтобы не пропустить :)).
+Я, наверное, напишу статью про проект под названием [email-autoreply](https://github.com/fox3000foxy/email-autoreply/), так что подписывайтесь на RSS-ленту, чтобы увидеть её выход :)).
 
-**3 вещи, которые нужно запомнить:**
+**3 пункта запомнить :**
 
-1.  **Interaction endpoints = HTTP serverless** -- Никакого WebSocket, никаких постоянных соединений. Discord POST'ит, ты отвечаешь. Бесплатно на Cloudflare.
-2.  **Hono -- идеальный инструмент** -- Лёгкий фреймворк (12KB), мульти-рантайм, ноль зависимостей. Одинаковый код на Cloudflare, Vercel, Node, везде.
-3.  **Рендер изображений на Workers = безумие** -- Satori + Resvg (Wasm) позволяют собирать динамические UI в JSX и конвертировать их в PNG за \<100ms. Полноценная игра может работать на этом.
+1.  **Interaction endpoints = HTTP serverless** -- без WebSocket, без персистентного соединения. Discord POSTит, ты отвечаешь. Бесплатно на Cloudflare.
+2.  **Hono идеальный инструмент** -- Лёгкий фреймворк (12KB), мультирантайм, ноль зависимостей. Одинаковый код на Cloudflare, Vercel, Node, везде.
+3.  **Рендер картинок на Workers = дичь** -- Satori + Resvg (Wasm) дают компоновать динамические UI на JSX и конвертировать в PNG за \<100ms. Целая игра может на этом крутиться.
 
-Это просто имба xD
+Это больно.
 
 ```plaintext
 wrangler deploy

@@ -1,51 +1,51 @@
 ---
-title: "Membangun character-factory: avatar dengan genetika"
-description: "Modul TypeScript di atas DiceBear: generasi konsisten per
-  negara/etnis, mesin genetika kecil untuk memproyeksikan anak, dan
-  detail rekayasa yang membuatnya dapat digunakan dalam permainan kartu."
+title: "Membangun character-factory : avatar dengan genetika"
+description: "Modul TypeScript di atas DiceBear : pembangkitan yang konsisten
+  per negara/etnis, mesin genetika kecil untuk memproyeksikan anak, dan
+  detail rekayasa yang membuatnya bisa dipakai dalam permainan kartu."
 date: 2026-05-16
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - typescript
   - npm
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "1ZqGSYyOPzl6s9KrpyYEqaVL+BAg8NWbG3no6Tq79K4wZP5umtHh7yNVe39jfFDcSqSa0tPnLIAYp1ZD6dZazQ=="
+author_sig: "FCUKh9K+iD8De5FopH17HfqxRaoh8/unNHSzc8680sC/qwSejJaKt3oXM83fPzM+QFu2pFRN2S3eGPDj0Rep4A=="
 ---
 
-# Membangun character-factory: avatar dengan sistem genetika
+# Membangun character-factory : avatar dengan sistem genetika
 
-Saya butuh ribuan avatar kredibel dan berbeda untuk [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- sebuah proyek permainan kartu privat di mana setiap kartu berisi "DNA" karakter yang diubah mesin render menjadi potret. Membeli paket jadi, itu ketahuan. Membuat avatar DiceBear dengan seed per karakter, hasilnya kacau: kartu berlatar Jepang bisa mendapat wanita pirang Skandinavia, dan dua "saudara" tampak seperti orang asing.
+Saya butuh ribuan avatar yang kredibel dan berbeda untuk [Kurekuta](https://github.com/fox3000foxy/kurekuta/) -- proyek permainan kartu privat di mana setiap kartu berisi "DNA" karakter yang diubah mesin render menjadi potret. Membeli paket jadi pasti kelihatan. Membangkitkan avatar DiceBear dengan seed per karakter hasilnya ngawur : kartu beruniversum Jepang bisa jatuh pada pirang Skandinavia, dan dua "kakak-beradik" mirip orang asing.
 
-Maka saya menulis [character-factory](https://github.com/fox3000foxy/character-factory) -- modul TypeScript di atas koleksi Lorelei dari DiceBear yang memberikan tiga hal yang tidak bisa diberikan DiceBear sendiri: **profil demografis yang konsisten**, **mesin genetika kecil**, dan **builder yang mulus** enak digunakan dari dalam loop permainan.
+Jadi saya menulis [character-factory](https://github.com/fox3000foxy/character-factory) -- modul TypeScript di atas koleksi Lorelei DiceBear yang membawa tiga fitur yang tidak diberikan DiceBear saja : **profil demografis yang konsisten**, **mesin genetika kecil**, dan **builder fasih** yang enak dipakai dari loop permainan.
 
-## Apa yang dilakukannya
+## Apa yang ia lakukan
 
-Snippet paling kecil yang berguna:
+Snippet terkecil yang berguna :
 
 ```ts
 import { CharacterFactory, Country, Mood } from "character-factory";
 
 const svg = new CharacterFactory()
-  .setCountry(Country.Japan)   // etnis berbobot → kulit/rambut/potongan/jenggot konsisten
+  .setCountry(Country.Japan)   // ethnicité pondérée → peau/cheveux/coupe/barbe cohérents
   .setMood(Mood.Happy)
   .buildSvg();
 ```
 
-Rantai sederhana ini memilih etnis berdasarkan bobot demografi Jepang, memilih warna kulit dan rambut yang cocok, memilih potongan rambut dari subgrup gender yang tepat, lalu mengunci mata/alis/mulut dalam mode "senang". Hasilnya keluar sebagai SVG atau, dengan `sharp` terinstal, PNG dalam ukuran berapa pun.
+Rangkaian sederhana ini mengambil etnis yang dibobot menurut demografi Jepang, mengambil warna kulit dan warna rambut yang cocok, memilih potongan dari subgrup gender yang benar, lalu mengunci mata/alis/mulut ke mode "bahagia". Hasilnya keluar sebagai SVG atau, dengan `sharp` terpasang, sebagai PNG dalam ukuran berapa pun.
 
-Karakter hanyalah objek `CharacterConfig` -- wajah, rambut, aksesori, presentasi. Builder memodifikasinya secara internal, dan kamu bisa mengekspornya sebagai JSON, base64, atau file, lalu memuatnya kembali secara identik. Untuk Kurekuta ini krusial: kartu menyimpan konfigurasi, bukan gambar yang sudah dirender. Jadi seni selalu dapat direproduksi dan ukuran kartu tetap kecil.
+Satu karakter hanyalah objek `CharacterConfig` -- wajah, rambut, aksesori, presentasi. Builder mengubahnya secara internal, dan kamu bisa mengekspornya sebagai JSON, base64 atau berkas, lalu memuatnya ulang secara identik. Untuk Kurekuta ini krusial : kartu menyimpan config, bukan gambar yang dirender. Jadi seninya selalu bisa direproduksi dan ukuran kartu tetap mungil.
 
 ## Profil demografis yang konsisten, bukan piksel acak
 
-Opsi DiceBear adalah pemilih seragam. Berikan `["#ffdbb4", "#2c1b18"]` untuk warna kulit dan kamu akan mendapat salah satu dengan probabilitas sama -- OK untuk logo, tidak berguna untuk "beri saya karakter dari Brasil."
+Opsi DiceBear adalah pemilih seragam. Beri `["#ffdbb4", "#2c1b18"]` untuk warna kulit dan kamu dapat salah satunya dengan probabilitas sama -- OK untuk logo, tidak berguna untuk "kasih saya karakter dari Brasil."
 
-`character-factory` memiliki pipeline negara → etnis → ciri:
+`character-factory` membawa pipeline negara → etnis → sifat :
 
 ```ts
-// Yang ada di dalam modul:
+// Isi modulnya :
 ethnicitiesByCountry[Country.Brazil] = [
   { ethnicity: Ethnicity.WestEuropean,  weight: 35 },
   { ethnicity: Ethnicity.BlackAfrican,  weight: 25 },
@@ -60,17 +60,17 @@ ETHNICITY_PROFILES[Ethnicity.EastAsian] = {
     { color: SkinColor.Medium, weight: 20 },
     // ...
   ],
-  hairColors: [/* kebanyakan hitam/cokelat gelap, tanpa pirang */],
+  hairColors: [/* surtout noir/brun foncé, pas de blond */],
   hairCuts:   { male: [...], female: [...] },
   beardProbability: 0.15,
 };
 ```
 
-Setiap lapisan adalah pengambilan berbobot. Bobotnya bukan tesis sosiologi -- ini heuristik yang mencegah "dari Jepang" menghasilkan rambut merah dan "dari Swedia" menghasilkan rambut hitam pekat. Seluruh pipeline cukup dengan satu panggilan: `setCountry(country)` atau `randomizeFromCountry(country, gender?)`.
+Setiap lapisan adalah pengambilan berbobot. Bobotnya bukan tesis sosio -- ini heuristik yang mencegah "berasal dari Jepang" menghasilkan rambut merah dan "berasal dari Swedia" menghasilkan hitam pekat. Seluruh pipeline diringkas jadi satu panggilan : `setCountry(country)` atau `randomizeFromCountry(country, gender?)`.
 
 ## Mesin genetika kecil
 
-Fungsi yang paling menyenangkan untuk dikerjakan: `projectChild`. Dua factory dapat menghasilkan anak yang ciri-cirinya diwariskan dengan dominasi biologis perkiraan:
+Fungsi yang paling saya nikmati : `projectChild`. Dua factory bisa menghasilkan anak yang sifatnya diwarisi dengan dominansi biologis kira-kira :
 
 ```ts
 const parentA = new CharacterFactory().setCountry(Country.Sweden);
@@ -78,7 +78,7 @@ const parentB = new CharacterFactory().setCountry(Country.Japan);
 const kid     = parentA.projectChild(parentB.getConfig());
 ```
 
-Di balik layar, ini model yang sengaja dibuat sangat kecil. Setiap orang tua membawa genotipe 2 alel, satu dari masing-masing sisi, digabung menjadi dominan atau resesif:
+Di balik kapnya, ini model yang sengaja mungil. Setiap orang tua membawa genotipe 2 alel, satu diambil dari tiap sisi, digabung jadi dominan atau resesif :
 
 ```ts
 function combine(a: Allele, b: Allele): "dominant" | "recessive" {
@@ -86,7 +86,7 @@ function combine(a: Allele, b: Allele): "dominant" | "recessive" {
 }
 ```
 
-Ciri-ciri yang memiliki sumbu dominasi nyata (kulit, mata, rambut) diselesaikan dengan daftar urut eksplisit -- gelap mendominasi terang, mata cokelat/hitam mendominasi biru, hitam pekat mendominasi pirang:
+Sifat yang punya sumbu dominansi nyata (kulit, mata, rambut) diselesaikan lewat daftar terurut eksplisit -- gelap mendominasi terang, mata cokelat/hitam mendominasi biru, hitam pekat mendominasi pirang :
 
 ```ts
 const HAIR_DOMINANCE_ORDER = [
@@ -104,21 +104,21 @@ const HAIR_DOMINANCE_ORDER = [
 ] as const;
 ```
 
-`resolveByRank` mencari indeks masing-masing orang tua, mengambil yang tertinggi pada kombinasi alel "dominan" dan yang terendah pada "resesif". Warna fantasi (merah muda pastel, ungu) tidak ada dalam urutan -- mereka memakai lempar koin 50/50, yang merupakan perilaku tepat: mereka tidak biologis, jadi dominasi tidak bermakna.
+`resolveByRank` menemukan indeks tiap orang tua, mengambil yang tertinggi pada kombinasi alel "dominan" dan yang terendah pada "resesif". Warna fantasi (pink pastel, lila) tidak ada dalam urutan -- mereka lempar koin 50/50, yang memang perilaku benar : mereka tidak biologis, jadi dominansi tidak bermakna.
 
-Bintik-bintik memodelkan MC1R: 75% jika kedua orang tua memilikinya, 25% jika hanya satu yang membawanya, 0% jika tidak ada. Jenggot terikat pada SRY: dihilangkan jika anak perempuan, sebaliknya diwarisi dari orang tua yang memilikinya. Potongan rambut tidak ada biologisnya -- itu pilihan kultural, jadi anak memilih dari kumpulan gender sendiri, mempertahankan tekstur jika memungkinkan.
+Bintik-bintik memodelkan MC1R : 75% kalau kedua orang tua punya, 25% kalau satu saja yang membawa, 0% kalau tidak ada. Jenggot terkait SRY : dihapus kalau anaknya perempuan, kalau tidak diwarisi dari orang tua yang punya. Potongan rambut tidak ada biologisnya -- itu pilihan budaya, jadi anak mengambil dari pool gendernya sendiri, dengan mempertahankan tekstur kalau memungkinkan.
 
-Tidak ada satupun dari ini yang genetika layak publikasi. Ini adalah lapisan rasa: anak-anak terlihat seperti campuran masuk akal dari orang tua mereka, bukan rata-rata dua orang asing.
+Tidak ada satu pun dari ini genetika layak publikasi. Ini lapisan rasa : anak-anak mirip campuran yang masuk akal dari orang tua mereka, bukan rata-rata dari dua orang asing.
 
-## Bagian rekayasa yang kurang glamor tetapi berarti
+## Bagian rekayasa yang kurang glamor tapi penting
 
-Beberapa hal yang tidak mencolok tetapi layak tempat di diff:
+Beberapa detail tak terlihat tapi layak masuk diff :
 
-**`pick` yang lebih aman.** Yang asli mengembalikan `undefined` yang di-*cast* ke `T` pada array kosong. Dengan `strict` + `noUncheckedIndexedAccess` di TypeScript, itu kebohongan yang ditandatangani kompilator. Versi baru melempar `RangeError` -- ditangkap segera di situs panggilan alih-alih menghasilkan props `undefined` tiga level di bawah.
+**`pick` yang lebih aman.** Yang asli mengembalikan `undefined` yang di cast jadi `T` pada array kosong. Dengan `strict` + `noUncheckedIndexedAccess` di TypeScript, itu kebohongan yang ditandatangani kompiler. Versi baru melempar `RangeError` -- tertangkap langsung di tempat panggilan alih-alih menghasilkan prop `undefined` tiga tingkat lebih bawah.
 
-**`deepMerge` yang tidak merusak array.** Rekursi lama aktif begitu nilai sumber adalah objek, bahkan jika target adalah `null` atau array. `merge({tags: ["a"]}, {tags: ["b"]})` menghasilkan `{tags: {0: "b"}}`. Versi baru hanya merekurei ketika kedua sisi adalah objek biasa.
+**`deepMerge` yang tidak merusak array.** Rekursi lama aktif begitu nilai sumber adalah objek, bahkan kalau targetnya `null` atau array. `merge({tags: ["a"]}, {tags: ["b"]})` menghasilkan `{tags: {0: "b"}}`. Versi baru hanya berekursi kalau kedua sisi objek polos.
 
-**Render batch secara paralel.** `batchFactory` merender PNG dalam loop serial -- ekspor 1000 kartu memakan waktu lama. Sekarang ini adalah pool pekerja dengan konkurensi yang dapat dikonfigurasi (4 secara default), yang mempertahankan urutan hasil dengan menulis ke array yang sudah dialokasikan:
+**Render batch secara paralel.** `batchFactory` merender PNG dalam loop terserialisasi -- ekspor 1000 kartu memakan waktu lama. Sekarang ini pool worker dengan konkurensi yang bisa dikonfigurasi (4 secara bawaan), yang menjaga urutan hasil dengan menulis ke array yang sudah berukuran pas :
 
 ```ts
 const worker = async () => {
@@ -134,12 +134,12 @@ const worker = async () => {
 await Promise.all(Array.from({ length: concurrency }, () => worker()));
 ```
 
-Pada ekspor 1000 karakter, ini mengubah waktu istirahat kopi menjadi "sudah selesai?"
+Pada ekspor 1000 karakter, ini mengubah jeda ngopi menjadi "loh sudah selesai?"
 
-**Pesan error `sharp` yang berarti.** `buildPng` mengimpor `sharp` secara lazy karena itu dependensi opsional yang tidak ingin kamu paksakan ke pengguna SVG-only. Catch lama menelan error asli dan selalu mengatakan "sharp is required." Jika kegagalan nyata adalah konflik versi atau masalah bindings asli, kamu menghabiskan sepuluh menit menginstal ulang sesuatu yang sudah terinstal. Versi baru tetap mengatakan untuk menginstalnya, tetapi menyertakan error yang mendasarinya.
+**Pesan error `sharp` yang mengatakan sesuatu.** `buildPng` mengimpor `sharp` secara malas karena itu dependensi opsional yang tidak ingin kamu paksakan ke pengguna SVG-only. Catch lama menelan error asli dan selalu bilang "sharp is required." Kalau kegagalan sebenarnya adalah konflik versi atau masalah binding native, kamu menghabiskan sepuluh menit menginstal ulang paket yang sudah terpasang. Versi baru tetap menyuruhmu menginstalnya, tapi menyertakan error yang mendasarinya.
 
 ## Selanjutnya
 
-Modul ini di versi 1.1.1 di [repositori character-factory](https://github.com/fox3000foxy/character-factory). Mesin genetika adalah tempat ideal untuk terus melakukan iterasi -- belum ada rangkaian pengujian, jadi invarian konsistensi ("karakter Brasil keturunan Asia Timur tidak akan pernah memiliki mata hitam pekat dengan rambut platinum") hanya dijamin oleh bobot. Menambahkan `bun test` atau `vitest` dan menulis tes konsistensi yang menjalankan sepuluh ribu `randomizeFromCountry` per negara, itu langkah selanjutnya.
+Modulnya ada di 1.1.1 di [repositori character-factory](https://github.com/fox3000foxy/character-factory). Mesin genetikanya tempat ideal untuk terus beriterasi -- belum ada rangkaian tes, jadi invarian konsistensi ("karakter Brasil keturunan Asia-timur tidak akan pernah bermata hitam pekat dengan rambut platinum") hanya dijamin oleh bobot. Menambahkan `bun test` atau `vitest` dan menulis tes konsistensi yang menjalankan sepuluh ribu `randomizeFromCountry` per negara, itu langkah berikutnya.
 
-Kurekuta sendiri masih privat untuk saat ini, tetapi setiap kartu yang suatu hari akan kamu lihat di dalamnya hanyalah sebuah blob `CharacterConfig` dan `buildPng()` untuk eksis.
+Kurekuta sendiri masih privat untuk sekarang, tapi setiap kartu yang suatu hari akan kamu lihat di dalamnya hanyalah blob `CharacterConfig` dan `buildPng()` untuk menjadi ada.

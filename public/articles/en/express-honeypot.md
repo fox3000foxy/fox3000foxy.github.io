@@ -1,24 +1,24 @@
 ---
-title: "I built an ultra-realistic Express honeypot"
+title: "I Built an Ultra-Realistic Express Honeypot"
 description: "328 fake endpoints with on-the-fly generated responses, header spoofing, bot traffic logging -- a deep dive into an Express honeypot middleware designed to fool scanners."
 date: 2026-06-10
 aiGenerated: true
-authors:
-  - fox3000foxy
 tags:
   - express
   - nodejs
   - security
   - honeypot
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "boqnG2QFLp189bHruKWznke9mFZjM42WaXE5Owvsb3vbrdNFJCMX1ACUS4RAiTud5T8yeGdhpXvrzk03/rvh1g=="
+author_sig: "H5KCV907HmlL4GNzz6PXpogYdCtmEqbAyn72XXLpRbtLBQbW1pPAV2nBRxhBv6DsD5M5c1PE49ZmmyhwuyJIhw=="
 ---
 
 ## TL;DR
 
-I built an Express middleware that exposes **328 fake endpoints** in two variants: `default` (terse but credible responses) and `complete` (highly detailed responses). Every response is **generated on-the-fly** with fresh timestamps and request IDs, making each reply unique. There are no mock files on disk. The middleware can also **log traffic** to a text file and expose unhandled routes at `/newBotsRoute` to analyze what bots are looking for.
+I created an Express middleware that exposes **328 fake endpoints** with a choice of two variants: `default` (concise but believable responses) and `complete` (very detailed responses). Every response is **generated on the fly** with fresh timestamps and request IDs, which makes each response unique. There's no mock file on disk. The middleware can also **log traffic** to a text file and expose unhandled routes on `/newBotsRoute` to analyze what bots are looking for.
 
-**This isn't just another 404 bait.** It's a piece of engineering designed to look like a real server so scanners waste their time. Let's dive into how it works.
+**It's way more than just returning 404s.** I designed this engineering piece to look like a real server, so scanners waste their time on it. Let me show you how it works.
 
 ## The problem
 
@@ -26,34 +26,34 @@ Security bots, scrapers, and malicious actors constantly scan web servers for co
 
 - `.env`, `wp-config.php`, `admin/`, `phpinfo.php`, etc.
 - API endpoints like `/api/version`, `/api/config`
-- configuration files: `dump.sql`, `.git/config`, `docker-compose.yml`
-- banking phishing pages: `/lander/sberbank*`, `/index_sber.php`
+- Config files: `dump.sql`, `.git/config`, `docker-compose.yml`
+- Banking phishing pages: `/lander/sberbank*`, `/index_sber.php`
 
-A typical approach is to block these requests, return a 404 or 403. But that immediately gives the scanner valuable information -- the route doesn't exist, so it moves on. A honeypot does the opposite: **it makes the scanner believe everything exists**, wasting its time processing fake responses while your real server is protected behind known routes.
+I saw this limit on my own servers: returning a 404 or 403 immediately tells the scanner the route doesn't exist, so it moves on. I chose the opposite with this honeypot: **make the scanner believe everything exists**, so it wastes time on fake responses while your real server stays protected behind your known routes.
 
 ## The architecture
 
 ### 1. A classifier, not a lookup table
 
-The core is a `classify()` function in `src/services/mockupGenerator.ts` that takes an endpoint path and returns a response generator. This function uses hierarchical rules:
+The centerpiece is a `classify()` function in `src/services/mockupGenerator.ts` that takes an endpoint path and returns a response generator. I built it as a rule cascade:
 
-1. **Exact matches** -- the most common endpoints have dedicated generators
-2. **Pattern matches** -- regex on the path to detect patterns like `id_rsa`, `wp-admin`, `sitemap.xml`
-3. **Smart classification** -- paths like `/262LBNFp` (6+ random characters) are classified as "C2 heartbeats"
-4. **Catchall rules** -- API paths, `.php`, `.html`, `.js`, `.json` and `.asmx` files have generic generators
-5. **Final catchall** -- `genCatchall()` produces a generic JSON response with metadata
+1. **Exact matches**: the most common endpoints get dedicated generators
+2. **Pattern matches**: regexes on the path to detect patterns like `id_rsa`, `wp-admin`, `sitemap.xml`
+3. **Smart classification**: paths like `/262LBNFp` (6+ random chars) are classified as "C2 heartbeats"
+4. **Catch-all rules**: API paths, `.php`, `.html`, `.js`, `.json`, and `.asmx` files get generic generators
+5. **Final catchall**: `genCatchall()` produces a generic JSON response with metadata
 
-This approach means responses are **fresh per request** -- no static files, no caching, every response looks like it came from a real server with its own timestamp.
+I like this approach because responses stay **fresh on every request**: no static files, no caching, every response carries its own timestamp as if it came from a real server.
 
 ### 2. The dual-variant system
 
-Every generator supports two variants:
+Each generator supports two variants:
 
 ```typescript
 type Variant = "default" | "complete";
 ```
 
-- **`default`** -- concise yet credible responses. Example for `.env`:
+- **`default`**: concise but believable responses. Example for `.env`:
   ```
   DB_HOST=localhost
   DB_USER=root
@@ -62,7 +62,7 @@ type Variant = "default" | "complete";
   APP_DEBUG=true
   ```
 
-- **`complete`** -- highly detailed responses. Example for `.env`:
+- **`complete`**: very detailed responses. Example for `.env`:
   ```
   # Database
   DB_CONNECTION=mysql
@@ -85,11 +85,11 @@ type Variant = "default" | "complete";
   ...
   ```
 
-The `complete` variant also includes full HTML pages with styled CSS -- admin panels, WordPress login screens, Russian banking phishing pages, and so on.
+The `complete` variant also includes full HTML pages with styled CSS: admin pages, WordPress login screens, banking phishing pages in Russian, etc. I find it formidable when you really want to keep a scanner busy.
 
 ### 3. On-the-fly generation
 
-The generator uses `Date.now()` and `Date().toISOString()` to produce unique timestamps and request IDs per call. Here's the enrichment function:
+I use `Date.now()` and `Date().toISOString()` to produce unique timestamps and request IDs on every call. Here's the enrichment function:
 
 ```typescript
 function enrichResponse(response: Record<string, unknown>): Record<string, unknown> {
@@ -102,11 +102,11 @@ function enrichResponse(response: Record<string, unknown>): Record<string, unkno
 }
 ```
 
-For JSON responses, the middleware attempts to parse and enrich with these fields. Non-JSON responses are sent as-is.
+For JSON responses, the middleware tries to parse and enrich with those fields. Non-JSON responses are returned as is.
 
-### 4. The header spoofing middleware
+### 4. The header-spoofing middleware
 
-A dedicated middleware sets realistic HTTP headers based on the requested file extension:
+I added a dedicated middleware that sets realistic HTTP headers based on the requested file extension:
 
 ```typescript
 res.setHeader("Server", "nginx/1.24.0");
@@ -125,11 +125,11 @@ else if (path.endsWith(".do") || path.endsWith(".action"))
   res.setHeader("X-Powered-By", "Servlet/3.0");
 ```
 
-This makes responses far more credible -- a `.php` endpoint with `X-Powered-By: PHP/8.1.12` and `Server: nginx/1.24.0` looks exactly like a real WordPress server.
+That makes responses way more believable: a `.php` endpoint with `X-Powered-By: PHP/8.1.12` and `Server: nginx/1.24.0` looks exactly like a real WordPress server. I care about that detail because the header is often what gives away a fake server.
 
 ### 5. The PHP Spoofer
 
-One of the most interesting components is the `phpSpoofer`. If a request comes in for a `.php` file and the host is localhost, the middleware **proxies** the request to your local PHP server, which processes and returns a real PHP page. If the host is not localhost, it returns a 404 (to prevent SSRF attacks).
+The `phpSpoofer` remains my favorite component. If a request comes in for a `.php` file and the host is localhost, the middleware **proxies** the request to your local PHP server, which processes it and returns a real PHP page. If the host is remote, it returns a 404 to block any SSRF attempt.
 
 ```typescript
 const phpSpoofer = async (req, res, next) => {
@@ -145,11 +145,11 @@ const phpSpoofer = async (req, res, next) => {
 };
 ```
 
-This allows developers running WordPress locally to have the honeypot serve **real** WordPress pages to bots -- the ultimate in realism.
+That way, when you're running WordPress locally, the honeypot serves **real** WordPress pages to bots: the maximum realism in my experience.
 
 ### 6. Traffic logging and analysis
 
-The `TrafficService` logs every request to a JSON-lines file. The `UnhandledRoutesService` then analyzes these logs to identify paths that bots have requested but are not yet covered by the honeypot.
+I separated two responsibilities: the `TrafficService` logs every request in a JSON-lines file. The `UnhandledRoutesService` then analyzes those logs to identify paths bots request that the honeypot doesn't cover yet.
 
 ```typescript
 app.get("/newBotsRoute", async (_req, res) => {
@@ -161,11 +161,11 @@ app.get("/newBotsRoute", async (_req, res) => {
 });
 ```
 
-This feedback loop means the longer you run the honeypot, the more you learn about what bots are looking for -- and you can add those paths to your known endpoints.
+I love that feedback loop: the longer you let the honeypot run, the more you learn what bots are looking for, and you can add those paths to your known endpoints.
 
-### 7. Known paths and exclusion
+### 7. Known endpoints and exclusion
 
-The middleware accepts lists of `knownPaths`, `knownPatterns`, `knownApiPaths`, and `knownApiPatterns`. Any route matching these passes through the middleware (to your real app). This ensures your actual endpoints are not intercepted by the honeypot.
+The middleware accepts lists of `knownPaths`, `knownPatterns`, `knownApiPaths`, and `knownApiPatterns`. Any route matching them passes through the middleware to your real app. I find that filter essential: your real endpoints stay intact, the honeypot never intercepts them.
 
 ```typescript
 const matches = (p) => p === endpoint || p.startsWith(endpoint + "/");
@@ -173,7 +173,7 @@ const matches = (p) => p === endpoint || p.startsWith(endpoint + "/");
 
 ## The 328 endpoints in detail
 
-Here's how they are classified (excerpt from the classifier):
+Here's how they're classified (excerpt from the classifier):
 
 | Category | Example endpoints |
 |---|---|
@@ -184,24 +184,24 @@ Here's how they are classified (excerpt from the classifier):
 | API responses | `/api/version`, `/api/config`, `.do`, `.ashx` |
 | Banking phishing | `/lander/sber*`, `/index_sber.php` |
 | C2 heartbeats | Random 6+ char paths (`/262LBNFp`) |
-| Stock/Crypto | `/stock/mzhishu`, `/kline/1m/1`, `/m/allticker/1` |
-| Gambling/Gaming | `/proxy/games`, `/Ctrls/GetSysCoin`, `/room/getRoomBangFans` |
+| Stock/Trading | `/stock/mzhishu`, `/kline/1m/1`, `/m/allticker/1` |
+| Games/Casino | `/proxy/games`, `/Ctrls/GetSysCoin`, `/room/getRoomBangFans` |
 | Config files | `config.json`, `config.yml`, `sitemap.xml`, `ads.txt` |
 | Landing pages | `/about`, `/contact`, `/products`, `/blog` |
 
 ## Special codes and endpoints
 
-The classifier contains specialized generators for edge cases:
+I added specialized generators for particular cases:
 
-- **`genLanding()`** -- Russian banking phishing pages for СберБанк, Тинькофф, Газпромбанк
-- **`genC2Heartbeat()`** -- realistic C2 heartbeat response with `agent_id`, `group`, `version`
-- **`genScannerPath()`** -- traps for specific scanners (nmap nice ports, Hazelcast, CGI)
-- **`genChineseApi()`** -- Chinese API responses with `msg: "成功"` (success)
-- **`genMerchant()`** -- merchant profiles with `balance`, `fee_rate`, `tier`
+- **`genLanding()`**: banking phishing pages in Russian for СберБанк, Тинькофф, Газпромбанк
+- **`genC2Heartbeat()`**: realistic C2 heartbeat response with `agent_id`, `group`, `version`
+- **`genScannerPath()`**: traps for specific scanners (nmap NICE ports, Hazelcast, CGI)
+- **`genChineseApi()`**: Chinese API responses with `msg: "成功"` (success)
+- **`genMerchant()`**: merchant profiles with `balance`, `fee_rate`, `tier`
 
 ## How to use it
 
-### Installation
+### Install
 
 ```bash
 npm install express-middleware-honeypot
@@ -236,7 +236,7 @@ const app = express();
 // Your real routes first
 app.get("/", (req, res) => res.send("Home"));
 
-// Then the honeypot catch-all
+// Then the catch-all honeypot
 const instance = createHoneypot({ /* options */ });
 app.use(instance.headersMiddleware);
 app.use(instance.middleware);
@@ -245,7 +245,7 @@ app.use(instance.middleware);
 ### Complete vs. default responses
 
 ```javascript
-// Rich responses with full HTML pages
+// Detailed responses with full HTML pages
 const instance = createHoneypot({ isCompleteResponses: true });
 ```
 
@@ -253,13 +253,13 @@ const instance = createHoneypot({ isCompleteResponses: true });
 
 ```javascript
 const instance = createHoneypot({ logTraffic: true });
-// Check traffic.txt to see what bots are requesting
+// Check the traffic.txt file to see what bots request
 ```
 
 ## Conclusion
 
-This Express honeypot middleware goes far beyond a simple decoy. With **328 endpoints**, **on-the-fly generation**, **dynamic header spoofing**, **traffic logging**, and even a **PHP proxy** for real WordPress responses, it's engineered to be as realistic as possible.
+This Express honeypot middleware goes way beyond a simple decoy. With **328 endpoints**, **on-the-fly generation**, **dynamic header spoofing**, **traffic logging**, and even a **PHP proxy** for real WordPress responses, I designed it to stay as realistic as possible.
 
-Scanners waste time crawling fake admin panels, credible `.env` files, and banking phishing pages while your real application stays protected. The dual-variant system and smart classification ensure every response is fresh and tailored to the requested path.
+Scanners waste time on fake admin pages, believable `.env` files, and banking phishing pages while your real app stays protected. I particularly like the dual-variant system and the smart classification: every response stays fresh and matched to the requested path.
 
-The source code is available on GitHub: [https://github.com/fox3000foxy/express-honeypot-middleware](https://github.com/fox3000foxy/express-honeypot-middleware)
+The source code is on GitHub: [https://github.com/fox3000foxy/express-honeypot-middleware](https://github.com/fox3000foxy/express-honeypot-middleware)

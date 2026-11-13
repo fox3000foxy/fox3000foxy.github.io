@@ -1,90 +1,90 @@
 ---
-title: Membot sebuah Farm Microsoft Rewards
-description: Bagaimana saya membuat bot untuk memanen poin Microsoft Rewards secara
-  besar-besaran -- dan mengapa Microsoft sejak itu telah memperkuat pertahanannya.
+title: Membot peternakan Microsoft Rewards
+description: Bagaimana saya mengoding bot untuk memanen poin Microsoft Rewards dalam
+  skala besar -- dan kenapa Microsoft sejak itu memperkuat pertahanannya.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "HM03iQkSSOB7+ddJfRvA9rP4j38DFCd9ntrxUYwY4+MULT4KfIF4vCXXkbv9K3CF/sdJ1eAr2tDisjIzCwAMxQ=="
+author_sig: "2UoGwed/fdgplSeh5MTNK6FfAhEumCkV3/0MDKfcETHTsVTTSuTEFgABONy3tNaml2+C4BwmbmC4EHMaMEKaRg=="
 ---
 
-> **Catatan (2026) :** Proyek ini tidak lagi dipertahankan. Microsoft telah secara signifikan memperkuat deteksi anti-bot mereka -- apa yang dulu berhasil sekarang sudah tidak berfungsi lagi. Kode dan pendekatan yang dijelaskan di bawah ini disimpan untuk tujuan arsip dan demonstrasi saja.
+> **Catatan (2026) :** Proyek ini tidak lagi dipelihara. Microsoft telah memperkuat deteksi anti-botnya secara signifikan, jadi apa yang berhasil waktu itu sudah tidak berfungsi hari ini. Kode dan pendekatan yang dijelaskan di bawah disimpan untuk tujuan pengarsipan dan demonstrasi saja.
 
 ## Pendahuluan
 
-Saya menemukan Microsoft Rewards beberapa tahun yang lalu. Itu terjadi selama masa karantina, tapi itu tidak mengubah fakta bahwa saya diharuskan menggunakan parental control Microsoft Family Safety dan oleh karena itu harus melalui Edge. Saat itulah saya menemukan Rewards.
+Saya menemukan Microsoft Rewards beberapa tahun lalu. Waktu itu pas penguncian, dan saat itu saya wajib memakai kontrol orang tua Microsoft Family Safety sehingga harus lewat Edge. Di sanalah saya menemukan Rewards.
 
-Saat itu saya baru berusia 14 tahun dan tidak ada apa pun di katalog yang menarik minat saya. Sekarang saya berpikir, dengan keterampilan yang saya peroleh, saya bisa memanen poin dengan bot, lalu memberikan kode-kodenya atau bahkan menjualnya kembali dengan harga lebih murah jika saya benar-benar menginginkannya (tapi sejujurnya, saya rasa tidak akan melakukannya). Singkat cerita, saya akan menceritakan bagaimana saya membuat bot yang memanen akun secara besar-besaran.
+Waktu itu saya baru 14 tahun dan tidak ada yang menarik di katalognya. Sekarang saya berpikir dengan keterampilan yang saya peroleh, saya bisa memanen poin dengan bot, lalu memberikan kodenya atau bahkan menjualnya kembali lebih murah kalau saya benar-benar mau (tapi sejujurnya, saya kira tidak akan melakukannya). Saya akan menceritakan bagaimana saya mengoding bot yang memanen akun dalam skala besar.
 
 ---
 
 ## Apa itu Microsoft Rewards?
 
-Singkatnya: ini adalah program yang memberi penghargaan kepada pengguna Edge dengan poin untuk aktivitas seperti pencarian, kuis kecil, permainan, dan sebuah ekstensi (tapi itu cerita lain).
+Singkatnya : ini program yang menghadiahi pengguna Edge dengan poin untuk aktivitas seperti pencarian, kuis kecil, permainan, dan ekstensi (tapi itu cerita lain).
 
-Kamu bisa lihat di sini hal-hal "Explore":  
+Kamu lihat di sini blok "Explore" :
 ![Explore screenshot](assets/20260313_135010_image.png)
 
-Misalnya ini yang mereka sebut "set harian".  
+Di sana misalnya yang mereka sebut "set harian".
 ![Daily set screenshot](assets/20260313_135038_image.png)
 
-Mereka bahkan membuat sistem streak, cukup gila.  
+Mereka bahkan membuat sistem streak, cukup gila.
 ![Streak screenshot](assets/20260313_135210_image.png)
 
-Ada juga sistem level dan itu benar-benar menyenangkan:  
+Ada juga sistem level dan progresnya membuat rutinitas benar-benar adiktif :
 ![Level screenshot](assets/20260313_135340_image.png)
 
-Jadi ada banyak cara untuk mendapatkan poin, dan sebagian besar dilakukan setiap hari.  
-Idenya di sini adalah membuat bot yang melakukan aktivitas untukmu, untuk memanen poin secara besar-besaran dan melengkapi rutinitas farming-mu.
+Jadi kamu punya banyak cara mendapatkan poin, dan sebagian besar harian.
+Idenya di sini adalah membuat bot yang melakukan aktivitas itu menggantikanmu, untuk memanen poin dalam skala besar dan melengkapi rutinitas panenmu.
 
-Seperti yang bisa kamu lihat di bawah, sebagian besar hadiah adalah kartu hadiah, tapi ada juga hal-hal keren seperti game atau langganan.  
+Seperti bisa kamu lihat di bawah, sebagian besar hadiah adalah kartu hadiah, tapi ada juga opsi menarik seperti permainan atau langganan.
 ![Rewards screenshot](assets/20260313_135646_image.png)
 
-| Hadiah | Kategori | Biaya poin |
+| Hadiah | Kategori | Biaya dalam poin |
 | --- | --- | --- |
-| **Rakuten TV – 1 film HD** | Konten digital | 1 785 |
-| **Roblox (kartu digital)** | Game / konten digital | 6 750 |
-| **Kartu Hadiah Microsoft** | Toko / layanan | 5 660 |
-| **Kartu Hadiah Xbox** | Toko / layanan | 5 660 |
-| **Kartu Hadiah Microsoft Solitaire Collection** | Game / konten digital | 1 500 |
-| **Minecraft Minecoins** | Game / konten digital | 2 500 |
-| **Kartu Hadiah League of Legends** | Game / konten digital | 2 000 |
-| **Kode Overwatch koin (digital)** | Game / konten digital | 2 000 |
-| **Sea of Thieves – Paket Koin Kuno** | Game / konten digital | 1 700 |
-| **Zalando – Kartu Hadiah** | Toko / layanan | 7 205 |
-| **Carrefour – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Cultura – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Fnac‑Darty – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **La Redoute – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Mango – Kartu Hadiah** | Toko / layanan | 36 025 |
-| **Wonderbox – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Yves Rocher – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Amazon.fr – Cek Hadiah** | Toko / layanan | 7 205 |
-| **Foot Locker – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **IKEA FR – Kartu Hadiah** | Toko / layanan | 36 025 |
-| **IKEA FR – Kartu Hadiah (desain lain)** | Toko / layanan | 7 200 |
-| **Marionnaud – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Asos – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Adidas FR – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Deliveroo France – Kartu Hadiah** | Toko / layanan | 21 615 |
-| **H&M France – Kartu Hadiah** | Toko / layanan | 14 410 |
-| **Global Hotel Card (Expedia Group)** | Toko / layanan | 7 205 |
-| **Uber Eats France – Kartu Hadiah** | Toko / layanan | 36 025 |
+| **Rakuten TV – 1 film HD** | Konten digital | 1 785 |
+| **Roblox (kartu digital)** | Game / konten digital | 6 750 |
+| **Kartu hadiah Microsoft** | Toko / layanan | 5 660 |
+| **Kartu hadiah Xbox** | Toko / layanan | 5 660 |
+| **Kartu hadiah Microsoft Solitaire Collection** | Game / konten digital | 1 500 |
+| **Minecraft Minecoins** | Game / konten digital | 2 500 |
+| **Kartu hadiah League of Legends** | Game / konten digital | 2 000 |
+| **Kode Overwatch coins (digital)** | Game / konten digital | 2 000 |
+| **Sea of Thieves – Pack Pièces anciennes** | Game / konten digital | 1 700 |
+| **Zalando – Kartu hadiah** | Toko / layanan | 7 205 |
+| **Carrefour – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Cultura – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Fnac‑Darty – Kartu hadiah** | Toko / layanan | 14 410 |
+| **La Redoute – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Mango – Kartu hadiah** | Toko / layanan | 36 025 |
+| **Wonderbox – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Yves Rocher – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Amazon.fr – Cek hadiah** | Toko / layanan | 7 205 |
+| **Foot Locker – Kartu hadiah** | Toko / layanan | 14 410 |
+| **IKEA FR – Kartu hadiah** | Toko / layanan | 36 025 |
+| **IKEA FR – Kartu hadiah (desain lain)** | Toko / layanan | 7 200 |
+| **Marionnaud – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Asos – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Adidas FR – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Deliveroo France – Kartu hadiah** | Toko / layanan | 21 615 |
+| **H&M France – Kartu hadiah** | Toko / layanan | 14 410 |
+| **Global Hotel Card (Expedia Group)** | Toko / layanan | 7 205 |
+| **Uber Eats France – Kartu hadiah** | Toko / layanan | 36 025 |
 
-Sekarang setelah kamu memahami manfaat program ini, mari kita bahas tentang botting.
+Sekarang kamu paham menariknya program ini, mari tertarik pada botting.
 
 ---
 
-## Pengujian awal
+## Tes pertama
 
-Sebelum membangun bot, saya ingin memastikan bahwa IP saya tidak akan ditandai karena telah menggunakan ratusan akun dari alamat yang sama. Kamu tahu saya, saya akan menggunakan Tor dengan proxy rotasi. Dan saya tidak ingin menghosting bot di VPS -- saya ingin bot berjalan di GitHub Action.
+Sebelum membangun bot saya, saya ingin memastikan IP saya tidak ditandai karena memakai ratusan akun dari alamat yang sama. Kamu kenal saya, saya lewat Tor dengan proxy berputar. Saya ingin menjalankannya di GitHub Action alih-alih di VPS.
 
-Jadi saya menulis workflow sederhana:
+Jadi saya menulis workflow sederhana :
 
 ```yaml
 name: Tor Proxy Curl
@@ -134,24 +134,24 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-Workflow ini hanya menginstal Tor, menjalankannya, dan membuat permintaan curl melaluinya.
+Workflow ini cuma menginstal Tor, menjalankannya, dan membuat permintaan curl melaluinya.
 
-Jalankan pertama memberikan hasil ini:  
+Run pertama memberikan hasil ini :
 ![Tor curl first run](assets/20260313_140705_image.png)
 
-Statistik waktunya adalah:  
+Statistik waktunya adalah :
 !Timings
 
-Jalankan kedua memberikan hasil ini:  
+Run kedua memberikan hasil ini :
 ![Tor curl second run](assets/20260313_140928_image.png)
 
-Seperti yang kamu lihat, IP-nya berbeda, jadi kita tidak akan ditandai karena penggunaan berlebihan dari IP yang sama. Kabar baik -- kita bisa lanjut mengembangkan bot farming.
+Seperti bisa kamu lihat, IP-nya berbeda, jadi kita menghindari penandaan karena penyalahgunaan dari IP yang sama. Kabar baik : kita bisa lanjut mengembangkan bot panennya.
 
 ---
 
-## Pengujian pertama dengan Selenium
+## Tes pertama dengan Selenium
 
-Untuk mengotomatiskan antarmuka, saya akan menggunakan **Selenium**: sebuah alat yang mengontrol peramban sungguhan (Chrome/Edge/Firefox) sebagai pengganti pengguna. Dalam konteks GitHub Action, ini berarti menginstal peramban + driver-nya, lalu menjalankan skrip yang terhubung ke Microsoft Rewards dan mengklik di tempat yang diperlukan.
+Untuk mengotomatisasi antarmuka, saya akan memakai **Selenium** : alat yang mengendalikan peramban sungguhan (Chrome/Edge/Firefox) menggantikan pengguna. Dalam konteks GitHub Action, artinya menginstal peramban + drivernya, lalu menjalankan skrip yang masuk ke Microsoft Rewards dan mengklik yang perlu.
 
 ### Contoh skrip JavaScript (Node.js + selenium-webdriver)
 
@@ -170,7 +170,7 @@ const chromeOptions = {
 };
 
 async function applyStealth(driver: WebDriver) {
-  // Inject script before any page JS runs to reduce automation fingerprinting.
+  // Menyuntikkan skrip sebelum JS halaman apa pun berjalan untuk mengurangi sidik jari otomatisasi.
   await (driver as any).sendDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
     source: `
       Object.defineProperty(navigator, 'webdriver', {
@@ -215,14 +215,14 @@ async function applyStealth(driver: WebDriver) {
 })();
 ```
 
-Hasil skrip:
+Hasil skripnya :
 
 ```
 DevTools listening on ws://127.0.0.1:50274/devtools/browser/37b9ea79-0e5d-4673-9e91-7ffeaf0d37f8
 After navigation: url= https://rewards.bing.com/welcome?idru=%2F
-After navigation: title= Selamat datang di Microsoft Rewards!
-Page loaded, sign in button found: Masuk
+After navigation: title= Bienvenue dans Microsoft Rewards!
+Page loaded, sign in button found: Se connecter
 ```
 
-Ok, itu berarti kita belum login, jadi sekarang kita akan membangun permintaan login dan melihat apakah kita bisa masuk ke akun Microsoft Rewards kita untuk melakukan aktivitas.
-<!-- ## ARTIKEL INI MASIH DALAM PROSES PENULISAN, SAYA AKAN MEMPERBARUI DENGAN LANGKAH-LANGKAH LOGIN DAN PEMBOTAN AKTIVITAS SEGERA! TETAP IKUTI PERKEMBANGANNYA. -->
+Hasil ini memastikan kita masih keluar, jadi sekarang saya akan membangun permintaan login dan menguji koneksi ke akun Microsoft Rewards saya untuk mengotomatisasi aktivitas.
+<!-- ## ARTIKEL INI MASIH DALAM PENULISAN, SAYA AKAN MEMPERBARUI DENGAN LANGKAH LOGIN DAN BOTTING AKTIVITAS SEGERA! TETAP PANTAU. -->

@@ -1,9 +1,7 @@
 ---
-title: "Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım"
-description: "Luna Protocol, yerel bir LLM ile çalışan, tamamen otonom bir Discord botudur. Uyuma, yazım hatası yapma, tereddüt etme, unutma, konu yorgunluğu çekme ve kendiliğinden mesaj gönderme gibi doğal konuşma yeteneklerine sahiptir."
+title: "Luna Protocol: insanı simüle eden özerk bir Discord botu yarattım"
+description: "Luna Protocol, uyku, yazım hataları, tereddütler, unutkanlıklar, tematik yorgunluk ve spontan mesajlarla doğal sohbet edebilen yerel LLMli tamamen özerk bir Discord botudur."
 date: 2026-07-11
-authors:
-  - fox3000foxy
 tags:
   - discord
   - llm
@@ -11,25 +9,27 @@ tags:
   - event-driven-architecture
   - ai
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "L80CBqC2y5yXFRJhXpGYPR1XoqwK9MxTOCDMHdRYPGrClnLQ69RChlEepY8kXIdUeDDvo+9rhltTeiPKHoQmVA=="
+author_sig: "wpShxUAg9RvQ2GJbHDWrvXLMp7k5+FSs77P2vMYB57LFFGAW9EFchKZE7IjFl5dOM+8tQFXlvsY2dtJNBbv6PQ=="
 ---
 
-# Luna Protocol: Bir insanı simüle eden, kendi kendine yeten bir Discord botu yaptım
+# Luna Protocol: insanı simüle eden özerk bir Discord botu yarattım
 
-Ya bir Discord botu **uyuyabilse**, **yazım hatası yapabilse**, **tereddüt edebilse**, cevap vermeyi **unutabilse** ve bazen kendi isteğiyle size mesaj gönderebilseydi? **Luna Protocol** tam olarak bunu yapıyor: yerel bir LLM (llama.cpp) çalıştıran ve kusurlu bir insan gibi konuşan, tamamen otonom bir Discord botu.
+Bir Discord botu **uyuyabilir**, **yazım hataları** yapabilir, **tereddüt** edebilir, yanıtlamayı **unutabilir** ve bazen kendi kendine mesaj gönderebilir mi? **Luna Protocol** tam bunu yapar: yerel bir LLM (llama.cpp) çalıştıran ve kusurlu bir insan gibi sohbet eden tamamen özerk bir Discord botu.
 
-Katı promptlar yok, robotik cevaplar yok. Luna'nın bir **öncelikli tetikleme sistemi**, **değişken gecikmeleri**, **uyku saatleri**, **kendiliğinden mesajları** ve hatta sesli mesaj göndermek için bir **TTS hattı** var. Tamamı hot-reload destekli basit bir `config.yml` dosyasıyla yapılandırılır.
+Luna bağlamsal tetikleyiciler ve üstlenilmiş kusurlu yanıtlarla çalışır. **Öncelikli tetikleme sistemi**, **değişken gecikmeler**, **uyku saatleri**, **spontan mesajlar** ve hatta sesli mesaj göndermek için **TTS pipelineı** vardır. Hepsi hot-reload yapılabilir basit `config.yml` dosyasıyla yapılandırılır.
 
-Bu yazıda, genel olay bus'ından TTS hattına, tetikleme sisteminden insan benzeri bileşenlere ve fine-tuning veri setine kadar tüm mimariyi ayrıntılı olarak inceliyoruz.
+Bu makalede tüm mimariyi didiklerim: genel olay veriyolundan TTS pipelineına, tetikleme sisteminden insani bileşenlere ve ince ayar veri kümesine.
 
-![Genel Mimari -- bileşenler ve veri akışı](/images/luna-protocol/01-architecture-overview.svg)
+![Mimari Genel Bakış: global bileşenler ve veri akışı](/images/luna-protocol/01-architecture-overview.svg)
 
 ---
 
-## Mimari: tipli bir olay bus'ı
+## Mimari: tipli olay veriyolu
 
-Luna'nın kalbinde **TypedBus** -- TypeScript'te güçlü tipli, genel bir olay bus'ı bulunur. Her şeyin üzerine inşa edildiği temel yapı taşıdır.
+Lunanın kalbi bir **TypedBus** tur: TypeScript güçlü tipli genel olay veriyolu. Her şeyin dayandığı temel tuğla budur. Başından döngüsel bağımlılıklardan kaçınmak istediğim için böyle inşa ettim.
 
 ```typescript
 type EventMap = Record<string, unknown[]>;
@@ -50,10 +50,10 @@ export class TypedBus<Events extends EventMap> {
 }
 ```
 
-Bundan iki ana bus türetilmiştir:
+Buradan iki ana veriyol türetilir:
 
-- **`llmBus`** -- LLM token'larını, hataları, çökmeleri, sıfırlamaları yönetir
-- **`stateBus`** -- otomatik kalıcılıkla durum değişikliklerini yönetir
+- **`llmBus`**: LLM jetonları, hatalar, crashler, sıfırlama yönetir
+- **`stateBus`**: otomatik kalıcılıkla durum değişikliklerini yönetir
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -79,32 +79,32 @@ Bundan iki ana bus türetilmiştir:
 └──────────────────┘  └────────────────────────────┘
 ```
 
-Bu yaklaşımın avantajı: her modül diğerlerinden **bağımsızdır**. LLM bus üzerinden token'ları yayar, bot bunları tüketir, durum otomatik olarak güncellenir. Döngüsel bağımlılık yoktur.
+Bu yaklaşımın avantajı: her modül geri kalanından **bağlantısızdır**. LLM jetonları veriyolda yayar, bot tüketir, durum otomatik güncellenir. Döngüsel bağımlılık yok.
 
 ---
 
-![Mesaj İşleme -- bir mesajın tam işlem akışı](/images/luna-protocol/02-message-processing.svg)
+![Mesaj İşleme: bir mesajın eksiksiz işlenme akışı](/images/luna-protocol/02-message-processing.svg)
 
-## Tetikleme sistemi: Luna'nın ne zaman cevap vereceğine kim karar veriyor?
+## Tetikleme sistemi: Luna ne zaman yanıt vereceğine kim karar verir?
 
-Gelen her mesaj, bir tetikleme nedeni döndüren `evaluateMessage()` tarafından değerlendirilir. Öncelik sırası kritiktir:
+Gelen her mesaj nedenli `TriggerResult` döndüren `evaluateMessage()` tarafından değerlendirilir. Öncelik sırası kritiktir:
 
-| # | Neden | Koşullar | Yoksaymayı atla | Duraklatmayı atla |
+| # | Neden | Koşullar | Görmezden gelmeyi atlatır | Duraklamayı atlatır |
 |---|--------|-----------|---------------|--------------|
 | 1 | `mention` | @bot | Evet (%0) | Evet |
-| 2 | `dm` | `replyInDM = true` ile ÖM | Evet (%0) | Hayır |
+| 2 | `dm` | `replyInDM = true` ile DM | Evet (%0) | Hayır |
 | 3 | `name` | "Luna"/"Pixie"/takma ad (tam kelime) | Hayır (%8) | Hayır |
 | 4 | `keyword` | `hello`, `hi`, `ai`, `bot`... (tam kelime) | Hayır (%8) | Hayır |
-| 5 | `follow-up` | Bot son konuşmacıydı + < 15sn + < 3 / 60sn | -- | -- |
-| 6 | `random` | Eşleşmeyen mesajlarda %1.5 şans | Hayır (%8) | Hayır |
+| 5 | `follow-up` | Bot son konuşmacıydı + < 15 sn + < 3 / 60 sn | -- | -- |
+| 6 | `random` | eşleşmeyen mesajlarda %1,5 şans | Hayır (%8) | Hayır |
 
-Eşleştirme **tam kelime** (`\b`) esasına dayanır: "ai", "mais", "vrai", "lait" ile eşleşmez.
+Eşleşme **tam kelimedir** (`\b`): "ai", "mais", "vrai", "lait" ile eşleşmez.
 
-![Tetikleme değerlendirmesi -- her mesaj için giriş kararı](/images/luna-protocol/03-trigger-evaluation.svg)
+![Tetikleyici değerlendirmesi: her mesaj için giriş kararı](/images/luna-protocol/03-trigger-evaluation.svg)
 
-### Follow-up mekanizması
+### Takip mekanizması
 
-Luna bir mesaja cevap verdiğinde, kendini `lastSpeaker` olarak kaydeder. Sonraki 15 saniye içinde gelen her mesaj **anında** bir cevap tetikler -- zamanlayıcı yok, anahtar kelime kontrolü yok. Bütçe: 60 saniyelik pencere başına 3 follow-up.
+Luna bir mesaja yanıt verince `lastSpeaker` olarak kaydedilir. Sonraki 15 saniyede her mesaj zamanlayıcı ve anahtar kelime kontrollerini kısa devre eden **anında** yanıt tetikler. Bütçe: 60 saniyelik pencerede 3 takip.
 
 ```typescript
 export function canFollowUp(channelId: string, botId: string): boolean {
@@ -117,27 +117,27 @@ export function canFollowUp(channelId: string, botId: string): boolean {
 
 ### Bekleme süresi
 
-Aynı kanalda iki cevap arasında 8 saniye. Bahsedilmeler ve follow-up'lar tarafından atlanır.
+Aynı kanalda iki yanıt arası 8 saniye. Bahsetmeler ve takiplerle atlatılır.
 
 ---
 
-## İnsan benzeri davranışlar: değişken konsantrasyon
+## İnsani davranışlar: değişken konsantrasyon
 
-Luna'nın ilginçleştiği yer burasıdır. Her tetikleme türünün kendi **konsantrasyon eşikleri** vardır: min/maks gecikme, yoksayma şansı ve tepki verme şansı.
+Lunanın ilginçleştiği yer burasıdır. Her tetikleyici türünün kendi **konsantrasyon eşikleri** vardır: min/maks gecikme, görmezden gelme şansı ve tepki şansı.
 
-| Tetikleyici | Min gecikme | Maks gecikme | Yoksay | Tepki |
+| Tetikleyici | Min gecikme | Maks gecikme | Görmezden gelme | Tepki |
 |---------|----------|----------|--------|----------|
-| `mention` | 300ms | 1500ms | %0 | %8 |
-| `dm` | 400ms | 1800ms | %0 | %5 |
-| `name` | 800ms | 4000ms | %5 | %6 |
-| `keyword` | 1000ms | 3500ms | %8 | %4 |
-| `follow-up` | 500ms | 2000ms | %0 | %3 |
-| `random` | 1500ms | 5000ms | %15 | %2 |
+| `mention` | 300 ms | 1500 ms | %0 | %8 |
+| `dm` | 400 ms | 1800 ms | %0 | %5 |
+| `name` | 800 ms | 4000 ms | %5 | %6 |
+| `keyword` | 1000 ms | 3500 ms | %8 | %4 |
+| `follow-up` | 500 ms | 2000 ms | %0 | %3 |
+| `random` | 1500 ms | 5000 ms | %15 | %2 |
 
-Gecikme hesaplaması ayrıca şunları da dikkate alır:
-- **Mesaj uzunluğu**: mesaj ne kadar uzunsa, Luna'nın "okuması" o kadar uzun sürer
-- **Hareketlilik**: Luna 10 dakikadır aktif değilse, gecikme 2 ile çarpılır ("uyanma" simülasyonu)
-- **Uyku**: `slow` modunda, gecikme 3 ila 5 ile çarpılır
+Gecikme hesabı şunları da dikkate alır:
+- **Mesaj uzunluğu**: mesaj ne uzun, Luna "okumaya" o kadar zaman harcar
+- **Hareketsizlik**: Luna 10 dakikadır aktif değilse gecikme 2 ile çarpılır ("uyanma" simülasyonu)
+- **Uyku**: `slow` modunda gecikme 3 ila 5 ile çarpılır
 
 ```typescript
 export function computeDelay(
@@ -164,7 +164,7 @@ export function computeDelay(
 
 ## Uyku saatleri
 
-Luna uyuyabilir. `config.yml` ile yapılandırılabilir:
+Luna uyuyabilir. `config.yml` ile yapılandırılır:
 
 ```yaml
 timezone: "Europe/Paris"
@@ -182,17 +182,17 @@ time_schedules:
 
 | Mod | Etki |
 |------|-------|
-| `sleep` | Yalnızca bahsedilmeler ve ÖM geçer |
+| `sleep` | Yalnızca bahsetmeler ve DMler geçer |
 | `slow` | Gecikme ×3-5, tepkiler neredeyse sıfır |
-| `short` | Yoksayma şansı +%30, tepkiler neredeyse sıfır |
+| `short` | Görmezden gelme şansı +%30, tepkiler neredeyse sıfır |
 
-Uyku saatlerinde Discord durumu `invisible` olarak değişir.
+Uyku saatlerinde Discord durumu `invisible` geçer.
 
 ---
 
 ## Yazım hataları
 
-Luna yazım hatası yapabilir -- ve 2-4 saniye sonra düzeltebilir. Klavye düzeni yapılandırılabilir (AZERTY veya QWERTY).
+Luna 2-4 saniye sonra düzeltilen yazım hataları yapabilir. Klavye düzeni yapılandırılabilir (AZERTY ya da QWERTY). Yapılandırılabilir bıraktım çünkü fazla temiz yazan bir botu hemen fark edersin.
 
 ```typescript
 const azertyAdjacent: Record<string, string[]> = {
@@ -215,55 +215,55 @@ AZERTY örneği: `bonjour → bonjpur`, `salut → slaut`, `comment → cpmment`
 
 ---
 
-## Tereddütler ve unutmalar
+## Tereddütler ve unutkanlıklar
 
-**Tereddütler**: Bir dolgu kelimesiyle (`uh...`, `um...`, `well...`, `hmm...`, `so...`) başlama şansı %15.
+**Tereddütler**: dolgu kelimesiyle başlama %15 şans (`uh...`, `um...`, `well...`, `hmm...`, `so...`).
 
-**Unutmalar**: Bir tetikleyiciyi eşleştirdikten sonra bile, Luna %3 olasılıkla cevap vermeyi "unutabilir". Mesaj yok, tepki yok -- hiçbir şey görmemiş gibi.
+**Unutkanlıklar**: tetikleyici eşleşse bile Luna %3 olasılıkla yanıtlamayı "unutabilir". O zaman hiçbir şey görmemiş gibi tamamen sessiz kalır. Bu davranışı severim çünkü insanların kazara bir mesajı es geçtiğini zaten gördün.
 
-**Konu yorgunluğu**: Bir kelime son 10 mesajda çok sık tekrarlanırsa (eşik: 3 tekrar), gecikmeler çarpılır ve yoksayma şansı %15 artar.
-
----
-
-## Pratikte gerçekçilik: iş ürpertici hale geldiğinde
-
-Kağıt üzerinde, tüm bu sistemler (gecikmeler, yazım hataları, tereddütler, unutkanlık) bir gimmick gibi görünür. Pratikte ise, hepsi bir araya geldiğinde sonuç şaşırtıcıdır -- öyle ki Luna ile konuşan insanlar hiçbir şeyden şüphelenmez. İşte birinin Luna'ya doğrudan bot olup olmadığını sorduğu, ardından sohbetin tamamen başka bir konuya ürkütücü bir doğallıkla kaydığı gerçek bir alışveriş.
-
-![Luna ile Discord sohbeti -- ilk kısım](/images/luna-protocol/realism/realism-01.png)
-
-Ton, tereddütler, yanıt temposu -- hiçbir şey bot olduğunu ele vermiyor. Luna, karakterinden hiç çıkmadan yaş sorusunu ustaca geçiştiriyor.
-
-Sohbet tamamen doğal bir şekilde devam ediyor, kısa ve insana özgü yanıtlarla ("okay, okay", "yay", "yayy") -- tam olarak bir insanın Discord'da göndereceği türden mesajlar.
-
-![Luna ile Discord sohbeti -- devamı](/images/luna-protocol/realism/realism-02.png)
-
-![Luna ile Discord sohbeti -- konu kayması](/images/luna-protocol/realism/realism-03.png)
-
-![Luna ile Discord sohbeti -- konu kayması devam ediyor](/images/luna-protocol/realism/realism-04.png)
-
-![Luna ile Discord sohbeti -- sohbetin sonu](/images/luna-protocol/realism/realism-05.png)
-
-Ürkütücü olan şey sadece Luna'nın "yanıt vermesi" değil -- görünürde fikirleri, takip sorularıyla ve mesajdan mesaja tutarlı bir düşünce akışıyla **bir sohbeti sürdürebilmesi**. Yukarıda anlatılan tetikleyici sistemi, odaklanma gecikmeleri ve tereddütler olmadan bu illüzyon birkaç mesaj içinde çökerdi.
-
-**Küçük bir sürpriz**: yukarıdaki ekran görüntülerinde, **konuşan iki hesap da Luna'nın örnekleri**. `PixieGlow` ve `Sujet d'SBlow`, bir botu test eden bir insan değil -- birbiriyle konuşan iki bot, her biri (davranışsal anlamda) "normal" biriyle sohbet ettiğine "ikna olmuş" durumda. Eğer yukarıdaki alışverişi okurken ikisinden birinin insan olduğunu düşündüyseniz, tebrikler -- gerçek bir Discord sunucusunda herkesin düşeceği tuzağa tam olarak siz de düştünüz.
-
-Bu aslında **ölü internet teorisi**nin pratikteki bir versiyonu gibi: bu teori (aslen oldukça komplo teorisi sayılan bir fikir) çevrimiçi içerik ve etkileşimlerin giderek artan bir kısmının insanlar yerine botlar tarafından üretildiğini, öyle ki "gerçek" insan internetinin azınlıkta kaldığını öne sürer. Uzun süre abartılı bulunan bu teori, Luna Protocol gibi sistemlerin büyük ölçekte inandırıcı bir insan varlığını simüle etmek için ne çok fazla işlem gücüne ne de dev bir modele ihtiyaç olmadığını göstermesiyle giderek daha az saçma görünüyor. Aynı botun iki örneğinin kendini hiç ele vermeden uzun bir sohbeti sürdürebilmesi, birbiriyle konuşan botlarla dolu bir web'in nasıl görünebileceğine dair oldukça somut bir fikir veriyor.
+**Tematik yorgunluk**: bir kelime son 10 mesajda fazla dönerse (eşik: 3 kez) gecikmeler çarpılır ve görmezden gelme şansı %15 artar.
 
 ---
 
-## LLM hattı: iki mod
+## Pratikte gerçekçilik: ürkütücüleştiği an
+
+Kâğıt üstünde tüm bu sistemler (gecikmeler, yazım hataları, tereddütler, unutkanlıklar) alet gibi görünür. Gerçekte uç uca koyunca sonuç blufftur: Lunayla sohbette insanlar hiçbir şeyden şüphelenmez. Birinin Lunaya doğrudan bot olup olmadığını sorduğu ve sohbetin sonra tüyler ürpertici doğallıkla tamamen başka konuya saptığı gerçek bir değiş tokuş işte. Gerçek koşullarda bu kadar inandırıcı olmasını beklemiyordum.
+
+![Luna ile Discord konuşması: ilk değiş tokuş](/images/luna-protocol/realism/realism-01.png)
+
+Ton, tereddütler, yanıt ritmi: botu ele veren hiçbir şey yok. Luna yaş sorusunu karakteri hiç bozmadan savuşturur.
+
+![Luna ile Discord konuşması: değiş tokuşun devamı](/images/luna-protocol/realism/realism-02.png)
+
+Sohbet tamamen akıcı devam eder, kısa ve doğal yanıtlarla ("okay, okay", "yay", "yayy"): Discordda bir insanın göndereceği türden mesajlar tam olarak.
+
+![Luna ile Discord konuşması: konu sapması](/images/luna-protocol/realism/realism-03.png)
+
+![Luna ile Discord konuşması: sapmanın devamı](/images/luna-protocol/realism/realism-04.png)
+
+![Luna ile Discord konuşması: değiş tokuşun sonu](/images/luna-protocol/realism/realism-05.png)
+
+Ürkütücü olan Luna "yanıt vermesi" değildir: **sohbet sürdürmesidir**, görünen fikirlerle, dönüşlerle, mesajdan mesaja tutarlı düşünce ipiyle. Yukarıda anlatılan tetikleme sistemi, konsantrasyon gecikmeleri ve tereddütler olmadan bu illüzyon birkaç mesajda çökerdi.
+
+**Küçük olay örgüsü dönüşü**: yukarıdaki ekran görüntülerinde **sohbet eden iki hesap Luna örnekleridir**. `PixieGlow` ve `Sujet d'SBlow` bir botu test eden insan değildir: birbirleriyle konuşan iki bottur, her biri (davranışsal anlamda) "normal" biriyle konuştuğuna iknadır. Yukarıdaki değiş tokuşu okurken muhataplardan birinin insan olduğunu varsaydıysan tebrikler: gerçek bir Discord sunucusunda herkesin düşeceği tuzağa az önce düştün.
+
+Bu biraz **ölü internet teorisinin** pratik sürümüdür: bu teori (başlangıçta epey komplo teorisi) çevrimiçi içerik ve etkileşimlerin giderek artan payının insanlardan çok botlarca üretileceğini, "gerçek" insani internetin azınlığa düştüğünü öne sürer. Uzun süre abartılı sayıldı, Luna Protocol gibi sistemler inandırıcı insani mevcudiyeti büyük ölçekte simüle etmek için ne çok araç ne devasa model gerekmediğini gösterdikçe giderek daha az absürt olur. Hiç ele vermeden uzun sohbet sürdürebilen aynı botun iki örneği, çoğu botların birbirleriyle konuştuğu bir webin neye benzeyebileceğine epey somut bir bakış verir.
+
+---
+
+## LLM pipelineı: iki mod
 
 ### `direct` modu (varsayılan)
 
-Bot, istekleri doğrudan HTTP üzerinden yerel bir `llama-server`'a gönderir. Model paylaşılır, prompt önbelleği ve 4 eşzamanlı slot ile. İki PM2 süreci: LLM sunucusu ve bot istemcisi.
+Bot istekleri yerel `llama-server` HTTP sunucusuna doğrudan gönderir. Model paylaşımlıdır, istem önbelleği ve 4 eşzamanlı slot ile. İki PM2 süreci: LLM sunucusu ve bot istemcisi.
 
 ### `online` modu
 
-Bot, OpenAI uyumlu herhangi bir API'yi çağırır (OpenAI, OpenRouter, Groq, Together...). Yerel LLM gerekmez.
+Bot herhangi OpenAI uyumlu API çağırır (OpenAI, OpenRouter, Groq, Together...). Sadece API anahtarı gerekir, LLM sağlayıcı tarafında döner.
 
 ### Gerçek zamanlı akış
 
-LLM, cevabını satır satır (`\n`) akışla gönderir. Her satır kelimelere ayrılır ve `llmBus.emit("token", word)` ile tek tek yayınlanır. Her `\n`'de bir `flush` olayı yayınlanır -- bot birikmiş mesajı hemen gönderir. Simüle edilmiş gecikme yoktur: tempo LLM'nin kendisine aittir.
+LLM yanıtını satır satır (`\n`) akıtır. Her satır kelimelere bölünür, `llmBus.emit("token", word)` üzerinde tek tek yayılır. Her `\n`de `flush` olayı yayılır: bot birikmiş mesajı hemen gönderir. Ritim doğrudan LLMyi izler.
 
 ```typescript
 function emitWordTokens(chunk: string): void {
@@ -285,13 +285,13 @@ function emitWordTokens(chunk: string): void {
 }
 ```
 
-Kuyruk (`requestQueue`), istekleri tek tek işler ve kuyruk 100 öğeyi aştığında otomatik temizlik yapar.
+İstek kuyruğu (`requestQueue`) istekleri tek tek işler, kuyruk 100 öğeyi aşınca otomatik temizlikle.
 
 ---
 
-## Kendiliğinden mesajlar
+## Spontan mesajlar
 
-Her 5 dakikada bir, %12 olasılıkla Luna kendi isteğiyle bir mesaj gönderir. Sunucu, **doğrusal ağırlık** sistemiyle seçilir: en aktif sunucunun, son sunucuya göre N kat daha fazla şansı vardır.
+Her 5 dakikada Lunannın kendi kendine mesaj gönderme şansı %12dir. Sunucu **doğrusal ağırlık** sistemiyle seçilir: en aktif sunucunun en sonuncudan N kat şansı vardır.
 
 ```typescript
 const total = (ranked.length * (ranked.length + 1)) / 2;
@@ -302,18 +302,18 @@ for (let i = 0; i < ranked.length; i++) {
 }
 ```
 
-Son 5 mesajın bağlamı okunur ve Luna konuşmaya "doğal olarak" katılır.
+Son 5 mesajın bağlamı okunur ve Luna sohbete "doğal" katılır.
 
 ---
 
-## TTS hattı: sesli mesajlar
+## TTS pipelineı: sesli mesajlar
 
-%8 olasılıkla Luna, metin yerine sesli mesaj gönderir. Tam hat:
+%8 şansla Luna metin yerine sesli mesaj gönderir. Eksiksiz pipeline:
 
-1. **Piper TTS** metni WAV'a sentezler
-2. **ffmpeg** OGG'ye dönüştürür
-3. Discord önizlemesi için dalga formu hesaplanır
-4. Dosya Discord CDN API'si üzerinden yüklenir
+1. **Piper TTS** metni WAVa sentezler
+2. **ffmpeg** OGGye çevirir
+3. Dalga formu Discord önizlemesi için hesaplanır
+4. Dosya Discord CDN API üzerinden yüklenir
 5. Sesli mesaj gönderilir
 
 ```typescript
@@ -331,7 +331,7 @@ export async function sendTextAsVoiceMessage(
 }
 ```
 
-![TTS Hattı -- sentezlenen metinden Discord sesli mesajına](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS Pipeline: sentezlenmiş metinden Discord sesli mesajına](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
@@ -339,33 +339,33 @@ export async function sendTextAsVoiceMessage(
 
 ### Anti-spam
 
-`channelId:userId` bazında kuyruk. Kanal başına kullanıcı başına yalnızca bir mesaj kuyruğa alınır. Devam eden cevap bittiğinde işlenir.
+`channelId:userId` başına kuyruk. Kanal başına kullanıcı başına kuyrukta tek mesaj. Devam eden yanıt biter bitmez işlenir.
 
 ### Oturum limitleri
 
-8 etkileşimden sonra Luna 30 saniyelik bir mola verir. Sayaç, 3 dakikalık hareketsizlikten sonra sıfırlanır.
+8 değiş tokuştan sonra Luna 30 saniye mola verir. Sayaç 3 dakika hareketsizlikten sonra sıfırlanır.
 
 ### Otomatik kalıcılık
 
-Her durum değişikliği `stateBus` üzerinden yayınlanır → otomatik kaydetme (debounce 500ms). Artık manuel `saveAllState()` çağrılarına gerek yoktur. Kalıcı durum şunları içerir: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, follow-up sayaçları.
+Her durum mutasyonu `stateBus` üzerinde yayılır → otomatik kayıt (500 ms debounce). Manuel `saveAllState()` çağrılarına artık gerek yok. Kalıcı durum şunları içerir: pendingMessages, paused, cooldowns, timestamps, lastSpeaker, takip sayaçları.
 
 ---
 
-## Hot-reload yapılandırma
+## Hot-reload yapılandırması
 
-Tek bir `config.yml` dosyası. Değerlerin çoğu **hot-reload edilebilir** -- değişiklikler yeniden başlatma gerektirmeden uygulanır.
+Tek bir `config.yml` dosyası. Çoğu değer **hot-reload yapılabilir**: değişiklikler yeniden başlatmadan dikkate alınır. Gecikmeleri devam eden sohbetleri kesmeden canlı ayarlamak istedim.
 
 | Kategori | Hot-reload |
 |-----------|-----------|
-| Tetikleyiciler, anahtar kelimeler, isimler | ✅ |
+| Tetikleyiciler, anahtar kelimeler, adlar | ✅ |
 | Konsantrasyon, gecikmeler | ✅ |
-| Yazım hataları, patlamalar, yorgunluk | ✅ |
+| Yazım hataları, patlama, yorgunluk | ✅ |
 | Uyku programları | ✅ |
 | TTS, sesli mesajlar | ✅ |
-| Discord token'ı, LLM modu | ❌ (yeniden başlatma gerekli) |
+| Discord jetonu, LLM modu | ❌ (yeniden başlatma gerekir) |
 
 ```typescript
-// config.ts -- getter'lar canlı değerler döndürür
+// config.ts: getterlar canlı değerler döndürür
 export const config = {
   get typoChance() { return raw.typoChance ?? 0.06; },
   get concentration() { return raw.concentration; },
@@ -375,50 +375,50 @@ export const config = {
 
 ---
 
-## Veri seti: Discord-Dialogues
+## Veri kümesi: Discord-Dialogues
 
-Model, [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) üzerinde fine-tune edilmiştir: **7.3M etkileşim**, **17M tur**, **140M kelime**. 2025 ilkbahar-yaz döneminden gerçek Discord konuşmaları, filtrelenmiş (PII, ToS, botlar, komutlar). Apache 2.0.
+Model [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) üzerinde ince ayarlıdır: **7,3M değiş tokuş**, **17M tur**, **140M kelime**. 2025 ilkbahar-yaz gerçek Discord konuşmaları, filtrelenmiş (PII, ToS, botlar, komutlar). Apache 2.0.
 
 | Metrik | Değer |
 |----------|--------|
-| Örneklem | 7 303 464 |
+| Örnekler | 7 303 464 |
 | Toplam tur | 16 881 010 |
 | Toplam kelime | 139 922 950 |
-| Ortalama token | 32.8 |
-| Tokenizer | Hermes-3-Llama-3.1-8B |
+| Ortalama jeton | 32.8 |
+| Jetonlaştırıcı | Hermes-3-Llama-3.1-8B |
 
-Kullanılan nicelenmiş model bir GGUF'tür (örneğin `Discord-Hermes-3-8B.Q3_K_M.gguf`).
+Kullanılan nicemlenmiş model bir GGUFtur (örneğin `Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
-![Discord-Dialogues veri seti dağılımı](/images/luna-protocol/dataset-distribution.svg)
+![Discord-Dialogues veri kümesi dağılımı](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-![Tam Yaşam Döngüsü -- mesajdan cevaba kadar botun tüm davranışı, zamanlayıcılar ve uç durumlar dahil](/images/luna-protocol/22-complete-lifecycle.svg)
+![Complete Lifecycle: zamanlayıcılar ve uç durumlar dahil botun mesajdan yanıta eksiksiz davranışı](/images/luna-protocol/22-complete-lifecycle.svg)
 
-## Mimari diyagramları
+## Mimari şemaları
 
-`state-machines/` klasörü, kaynak kodun tamamını kapsayan **24 Mermaid diyagramı** içerir. Her diyagram, insan dilinde ayrıntılı bir açıklamaya sahiptir.
+`state-machines/` klasörü kaynak kodun tamamını kapsayan **24 Mermaid şeması** içerir. Her şemanın insan dilinde ayrıntılı açıklaması vardır.
 
-En önemlileri arasında:
+En önemlilerinden:
 
-| # | Diyagram | Tür |
+| # | Şema | Tür |
 |---|-----------|------|
 | 01 | Mimari Genel Bakış | `graph` |
-| 02 | Mesaj İşleme (tam) | `stateDiagram` |
-| 03 | Tetikleme Değerlendirmesi | `flowchart` |
-| 04 | LLM Çekirdek Kuyruğu (3 arka uç) | `stateDiagram` |
-| 10 | TTS Hattı | `flowchart` |
+| 02 | Mesaj İşleme (eksiksiz) | `stateDiagram` |
+| 03 | Tetikleyici Değerlendirme | `flowchart` |
+| 04 | LLM Çekirdek Kuyruğu (3 backend) | `stateDiagram` |
+| 10 | TTS Pipeline | `flowchart` |
 | 13 | Durum Kalıcılığı | `flowchart` |
-| 21 | Zamanlama Gantt'ı | `gantt` |
-| 22 | Tam Yaşam Döngüsü | `stateDiagram` |
+| 21 | Zamanlama Gantt | `gantt` |
+| 22 | Eksiksiz Yaşam Döngüsü | `stateDiagram` |
 
-Bu diyagramlar, gelen mesajdan cevaba, zamanlayıcılar ve uç durumlar dahil olmak üzere tüm akışı anlamak için bir altın madenidir.
+Bu şemalar tüm akışı anlamak için altın madenidir: gelen mesajdan yanıta, zamanlayıcılar ve uç durumlar üzerinden.
 
 ---
 
-## Tetikleme kodunun detaylı incelenmesi
+## Tetikleme kodu ayrıntılı
 
-Tetikleyici, `state/trigger.ts` içindeki `evaluateMessage()` tarafından değerlendirilir. İşte tam mantık:
+Tetikleyici `state/trigger.ts` içinde `evaluateMessage()` ile değerlendirilir. Eksiksiz mantık:
 
 ```typescript
 export function evaluateMessage(
@@ -435,28 +435,28 @@ export function evaluateMessage(
   if (isPaused()) return { shouldRespond: false, reason: null, botName: "" };
   if (isOnCooldown(channelId)) return { shouldRespond: false, reason: null, botName };
 
-  // ... isim, anahtar kelime, follow-up, rastgele eşleştirme
+  // ... ad, anahtar kelime, takip, rastgele eşleştirme
 }
 ```
 
-Regex önbelleği (`hasWordCache`), desenlerin her mesajda yeniden derlenmesini önler.
+Regex önbelleği (`hasWordCache`) kalıpları her mesajda yeniden derlemekten kaçınır.
 
 ---
 
 ## Tepkiler
 
-Luna, mesajlara emojilerle tepki verir. %30 olasılıkla sunucudan özel bir emoji, %70 olasılıkla unicode emoji kullanır. Tepki, konsantrasyon gecikmesinden sonra tetiklenir, hemen değil.
+Luna mesajlara emojilerle tepki verir. Sunucunun özel emojisini kullanma şansı %30, unicode emoji %70. Tepki konsantrasyon gecikmesinden sonra gider, yanıtlarla aynı kayık ritimle. Bu kaymayı severim çünkü okumaya zaman ayırdığını hissedersin.
 
-Luna'nın mesajlarındaki tepki komutları:
+Luna mesajlarında tepkili komutlar:
 - ❌ → Durdur
 - ▶️ → Başlat
 - 🗑️ → Temizle
 
 ---
 
-## Cevap stili
+## Yanıt stili
 
-Cevap stili, Luna'nın kanaldaki son aktivitesine göre ağırlıklandırılır:
+Yanıt stili Lunannın kanaldaki güncel aktivitesine göre ağırlıklandırılır:
 
 | Bağlam | messageReference | mentionRepliedUser | Ağırlık |
 |----------|-----------------|-------------------|-------|
@@ -468,37 +468,37 @@ Cevap stili, Luna'nın kanaldaki son aktivitesine göre ağırlıklandırılır:
 | Aktif | false | false | %30 |
 | Aktif | false | true | %5 |
 
-ÖM'de `messageReference` her zaman `false`'tur.
+DMde `messageReference` hep `false`tur.
 
 ---
 
-## Patlama mesajları
+## Patlama mesajlar
 
-%15 olasılıkla, bir cevap insan temposunda (her parça arasında 1.5-4 saniye) gönderilen 2-3 parçaya bölünür. Birinin birkaç seferde yazmasını simüle eder.
+%15 şansla yanıt insani ritimde gönderilen 2-3 parçaya bölünür (parçalar arası 1,5-4 saniye). Birkaç seferde yazan birini simüle eder.
 
-![Zamanlama Gantt'ı -- gecikmeler, tepkiler, LLM akışı ve düzeltmeler için gerçek bekleme süreleri](/images/luna-protocol/21-timing-gantt.svg)
+![Zamanlama Gantt: gecikmeler, tepkiler, LLM akışı ve düzeltmeler için gerçek bekleme süreleri](/images/luna-protocol/21-timing-gantt.svg)
 
 ---
 
 ## Dinamik durum
 
-Luna'nın Discord durumu, yapılandırılmış birkaç preset arasında geçiş yaparak her 15 dakikada bir değişir. Desteklenen türler: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Uyku sırasında durum `invisible` olur.
+Lunannın Discord durumu yapılandırılmış birkaç hazır durum arasında döner, her 15 dakikada. Desteklenen türler: Playing (0), Streaming (1), Listening (2), Watching (3), Custom (4), Competing (5). Uyurken durum `invisible` geçer.
 
 ```yaml
 dynamic_status_presets:
   - status: online
-    text: "piksellerle oynuyor"
+    text: "avec les pixels"
     type: 0       # Playing
   - status: idle
-    text: "beyaz gürültü"
+    text: "du bruit blanc"
     type: 2       # Listening
 ```
 
-Rastgele bir jitter (×0.5-1.0) öngörülebilir dönüşleri önler. Tekrarı önlemek için denemelerin %10'u atlanır.
+Öngörülebilir rotasyonlardan kaçınmak için rastgele jitter (×0,5-1,0). Tekrarı önlemek için girişimlerin %10u atlanır.
 
 ## Yazıyor göstergesi
 
-LLM'i çağırmadan önce Luna `startTyping()` işlevini çağırır. Bir `setInterval`, üretim sırasında yazıyor göstergesini her 8 saniyede bir yeniler. `finally` bloğunda temizlenir (`clearInterval`).
+LLMyi çağırmadan önce Luna `startTyping()` çağırır. `setInterval`, üretim boyunca göstergeyi her 8 saniyede yeniler. `finally` içinde temizlenir (`clearInterval`).
 
 ```typescript
 const startTyping = () => {
@@ -512,9 +512,9 @@ const startTyping = () => {
 };
 ```
 
-## Çökme sonrası kurtarma
+## Crash sonrası kurtarma
 
-LLM çökerse (`llama-server` süreci ölürse), Luna `llmBus.emit("crash", code)` aracılığıyla olayı algılar ve üstel geri çekilme ile yeniden başlatmayı dener. Sonsuz yeniden başlatma döngülerini önler.
+LLM crashlerse (`llama-server` süreci ölür) Luna olayı `llmBus.emit("crash", code)` üzerinden tespit eder ve üstel backoff ile yeniden başlatmayı dener. Sonsuz yeniden başlatma döngülerinden kaçınır.
 
 ## LLM parametreleri
 
@@ -534,7 +534,7 @@ ubatch: 256
 context: 4096
 ```
 
-ChatML şablonu (`<|im_start|>/<|im_end|>`) kullanılır. İş parçacığı sayısı `os.cpus().length` ile otomatik algılanır.
+ChatML şablonu (`<|im_start|>/<|im_end|>`) kullanılır. Thread sayısı `os.cpus().length` ile otomatik tespit edilir.
 
 ---
 
@@ -543,36 +543,36 @@ ChatML şablonu (`<|im_start|>/<|im_end|>`) kullanılır. İş parçacığı say
 ```bash
 npm install
 cp config.example.yml config.yml
-# config.yml'yi düzenleyin
+# config.yml düzenle
 npm run dev                    # geliştirme (hot reload)
 npm run build && npm start     # üretim
 ```
 
 | Script | Açıklama |
 |--------|-------------|
-| `build` | Bağımsız CLI paketi oluşturur |
-| `start` | Botu başlatır |
+| `build` | Bağımsız CLI paketi |
+| `start` | Botu çalıştırır |
 | `lint` / `format` / `check` | Biome |
 | `test` | Testler (Bun) |
-| `download-model` | HuggingFace'den GGUF |
-| `diagrams` | Mermaid diyagramlarını SVG/PNG'ye aktarır |
+| `download-model` | HuggingFaceden GGUF |
+| `diagrams` | Mermaid şemalarını SVG/PNG dışa aktarır |
 
 ### PM2 dağıtımı
 
 ```bash
-./start.sh   # PM2 altında llm-server + llm-client başlatır
+./start.sh   # llm-server + llm-client PM2 altında çalıştırır
 ```
 
 ---
 
 ## Sonuç
 
-Luna Protocol, sadece LLM'li bir Discord botu değildir. İnsan kusurlarını simüle eden **eksiksiz bir davranışsal sistemdir**: unutmalar, yazım hataları, uyku, tereddütler, yorgunluk. Tümü, her akışı belgeleyen 24 Mermaid diyagramıyla, tipli bir olay bus'ı etrafında yapılandırılmıştır.
+Luna Protocol LLMli Discord botunun çok ötesine geçer. İnsani kusurları simüle eden eksiksiz bir **davranış sistemidir**: unutkanlıklar, yazım hataları, uyku, tereddütler, yorgunluk. Hepsi tipli olay veriyolu etrafında mimarilenmiş, her akışı belgeleyen 24 Mermaid şemasıyla.
 
-Kod açık kaynaktır, veri seti herkese açıktır ve yapılandırma hot-reload edilebilir. Konu ilginizi çekiyorsa, koda dalın -- göründüğünden daha erişilebilirdir.
+Kod açık kaynaktır, veri kümesi herkese açıktır ve yapılandırma hot-reload yapılabilir. Konu ilgini çekerse koda dal: göründüğünden erişilebilir. Davranış üzerine birçok fikri test etmek için temel kullandım ve her modülü ayrı ayrı geri alabilirsin.
 
 | Kaynak | Bağlantı |
 |-----------|------|
-| GitHub Deposu | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
-| Veri Seti | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
+| GitHub deposu | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| Veri kümesi | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Atlas Haritası | [atlas.nomic.ai](https://atlas.nomic.ai/data/mookiezi/discord-alpha/map) |

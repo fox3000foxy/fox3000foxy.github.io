@@ -1,6 +1,6 @@
 ---
-title: "从ELIZA到LLM：60年对话式AI，用TypeScript重写"
-description: "ELIZA、PARRY、ALICE、Jabberwacky、Cleverbot —— 同一个问题的五种截然不同的架构，连同原始数据一起移植到了TypeScript。从1966年到现代LLM，对话式AI是如何学会说话的，以及一个聊天机器人仓库能告诉我们关于60年研究的什么。"
+title: 从 ELIZA 到 LLM：60 年对话 AI，TypeScript 重建版
+description: ELIZA、PARRY、ALICE、Jabberwacky、Cleverbot，同一问题五种完全不同的架构，带原始数据移植到 TypeScript。从 1966 到现代 LLM，对话 AI 怎么学会说话，一个聊天机器人仓库讲 60 年研究。
 date: 2026-07-21
 tags:
   - chatbot
@@ -18,39 +18,38 @@ tags:
   - luna-protocol
 authors:
   - fox3000foxy
-lang: zh
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "n3NwpLMI/EB1JDipNaXFZMJKGbACjsZ+Apu5CmGwfTHy1dKZqee2hTlsC6wyAoBb87WdWaoFwAQRQR9Vj6UIuQ=="
+author_sig: "wIrve007L4D3ZJPmJ6nevARLymkgUEZUWIc7JoUoSaJxDkUFo8oF6pXYxN3NPYdVkAvLTq9n9zZ/jp0R6ZJz4g=="
 ---
 
-# 从ELIZA到LLM：60年对话式AI，用TypeScript重写
+# 从 ELIZA 到 LLM：60 年对话 AI，TypeScript 重建版
 
-1966年，约瑟夫·魏泽鲍姆在IBM 7094上用MAD-SLIP编写了420行代码，创造了历史上第一个聊天机器人。这个程序叫**ELIZA**，它用基本的文本模式和句子变换来模拟罗杰斯派心理治疗师。六十年后，对话式AI已成为大众话题 —— ChatGPT、Claude、Gemini出现在每一个对话中。
+1966 年，Joseph Weizenbaum 在 IBM 7094 上写 420 行 MAD-SLIP，造出史上第一个聊天机器人。程序叫 **ELIZA**，装 Rogeria 心理治疗师，靠基础 pattern 加语句变换。六十年后对话 AI 成大众话题，ChatGPT、Claude、Gemini 天天见。重读那份原始代码，我被它的省惊到。
 
-但在这两个极端之间，还有**PARRY**（偏执型聊天机器人，1972年）、**ALICE**（拥有99,000个分类的AIML之王，1995年）、**Jabberwacky**（第一个不靠规则学习的机器人，1997年）和**Cleverbot**（它的工业级后继者，2008年）。五个程序、五种架构、一个问题：让机器说话。
+但两端之间还有 **PARRY**（偏执聊天机器人，1972）、**ALICE**（9.9 万类别的 AIML 王者，1995）、**Jabberwacky**（第一个无规则自学的，1997）、**Cleverbot**（工业级后继，2008）。在我看是同一问题五种完全不同的答案：怎么让机器说话。
 
-这个仓库包含了这五个机器人，连同原始数据 —— ELIZA脚本、PARRY词典、ALICE的AIML文件 —— 一起移植到了TypeScript。每个移植都是独立的、开箱即用的，并且详细记录。目标不仅仅是让它们跑起来：而是理解它们如何工作、为什么载入史册、以及各自的架构能告诉我们关于昨天……和今天的AI的什么。
+我把五个机器人带原始数据移植到 TypeScript，ELIZA 脚本、PARRY 词典、ALICE AIML 文件全有。每移植独立可跑，文档细到每步。我做的不只是跑起来：想懂它们怎么跑、为什么载入史册、各自架构对昨天 AI 和今天 AI 说了什么。
 
 ```bash
-bun run eliza    # 和ELIZA（1966）对话
-bun run parry    # 和PARRY（1972）对话
-bun run alice    # 和ALICE（1995）对话
-bun run jabber   # 和Jabberwacky对话
-bun run cleverbot # 和Cleverbot对话
-bun run meeting  # ELIZA vs PARRY 自动对战
+bun run eliza    # 和 ELIZA 聊（1966）
+bun run parry    # 和 PARRY 聊（1972）
+bun run alice    # 和 ALICE 聊（1995）
+bun run jabber   # 和 Jabberwacky 聊
+bun run cleverbot # 和 Cleverbot 聊
+bun run meeting  # ELIZA 对 PARRY 自动聊
 ```
 
-我们会逐一剖析每个机器人，查看它们的代码，然后通过关于**Luna Protocol**的文章与现代LLM建立连接。
+一个个拆给你看，看代码，再经 **Luna Protocol** 文章连到现代 LLM。
 
 ---
 
-## ELIZA（1966）：让人相信自己被理解的艺术
+## ELIZA（1966）：装懂的艺术
 
-从最古老的开始，也可能是最简单却最令人印象深刻的。ELIZA在现代意义上是**没有任何智能**的。没有神经网络、没有统计、没有学习。只有文本模式和一点句子的变换。
+先讲最老的，在我眼里也最 impress 的省。ELIZA 现代意义**零智能**。只有文本 pattern 加一点换位。
 
 ### 原理
 
-DOCTOR脚本（心理治疗师版本）通过一个**关键词**表工作，每个关键词关联着**分解模式**和**重组规则**。一个典型的规则是这样的：
+DOCTOR 脚本（心理治疗师版）跑关键词表，每词配**分解 pattern** 和**重组规则**。典型规则：
 
 ```lisp
 (HELLO
@@ -58,18 +57,18 @@ DOCTOR脚本（心理治疗师版本）通过一个**关键词**表工作，每�
         (HOW DO YOU DO.  PLEASE STATE YOUR PROBLEM)))
 ```
 
-`HELLO`是关键词。`0`是一个分解模式，意思是"捕获后面所有内容"（类似通配符）。`HOW DO YOU DO. PLEASE STATE YOUR PROBLEM.`是重组规则。仅此而已。
+`HELLO` 关键词。`0` 分解 pattern 说"后面全收"（通配符）。`HOW DO YOU DO. PLEASE STATE YOUR PROBLEM.` 重组规则。完。
 
-当你说"Hello, I'm sad today"时，ELIZA会：
-1. 将文本转为大写：`HELLO I'M SAD TODAY`
-2. 扫描每个单词与关键词表的匹配
-3. 找到`HELLO` → 压入关键词栈
-4. 取出优先级最高的关键词
-5. 依次尝试每个分解模式
-6. 如果匹配，选择下一个重组规则（轮询）
-7. 用捕获的部分替换`(1)`、`(2)`等
+你说"Hello, I'm sad today"，ELIZA：
+1. 全大写：`HELLO I'M SAD TODAY`
+2. 逐词扫关键词表
+3. 命中 `HELLO`，压关键词栈
+4. 取最高优先级关键词
+5. 按序试每个分解 pattern
+6. 命中选下条重组规则（轮转）
+7. `(1)`、`(2)` 等换成捕获块
 
-但真正聪明的部分是**PRE规则**。看这个：
+真聪明的在 **PRE 规则**。看这个：
 
 ```lisp
 (MY
@@ -77,94 +76,94 @@ DOCTOR脚本（心理治疗师版本）通过一个**关键词**表工作，每�
         (PRE (1 0) (=YOU))))
 ```
 
-当ELIZA匹配到`MY`时，它通过PRE规则转换句子的剩余部分（被`0`捕获），然后将结果重新注入，就像用户刚刚说了新的关键词一样。具体来说：
+ELIZA 命中 `MY`，`0` 捕获的后半句过 PRE 规则变换，当用户新说一关键词重注。实际：
 
 ```
 你说："My mother hates me"
-  → PRE转换："YOUR MOTHER HATES YOU"
-  → 就像你刚才说了这句话一样重新注入
-  → 大概会匹配"YOU" → 新的回复
+  → PRE 变换："YOUR MOTHER HATES YOU"
+  → 当你刚说的重注
+  → 大概率命中 "YOU"，出新回复
 ```
 
-这就是为什么ELIZA看起来能理解"我"和"你"的区别 —— 这不是理解，而是设计精巧的机械转换。
+ELIZA 显得懂"我"你区别的原因：我看是台机械变换，设计完美，装出理解。
 
-从用户输入到回复的完整流程如下：
+完整流程，从敲字到回复：
 
 ```mermaid
 flowchart TD
-    A["User input:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>规范化标点"]
-    B --> C["splitUserInput()<br>分词"]
-    C --> D["Build keyword stack<br>按优先级排序"]
-    D --> E{"栈非空?"}
-    E -->|"是"| F["Pop highest-priority keyword"]
-    E -->|"否"| G{"记忆回忆?"}
-    G -->|"是"| H["Recall past user statement"]
-    G -->|"否"| I["Fallback: zNONE rule"]
-    I --> J["Return response"]
+    A["用户输入：<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>标点归一"]
+    B --> C["splitUserInput()<br>切词"]
+    C --> D["按优先级建关键词栈"]
+    D --> E{"栈空?"}
+    E -->|"否"| F["弹最高优先级关键词"]
+    E -->|"是"| G{"有记忆可回?"}
+    G -->|"有"| H["回用户之前的话"]
+    G -->|"无"| I["回退：zNONE 规则"]
+    I --> J["返回回复"]
     H --> J
-    F --> K["Match decomposition patterns"]
-    K --> L{"匹配到了?"}
-    L -->|"否"| M{"关联关键字?"}
-    M -->|"是"| N["Push linked keyword to stack"]
+    F --> K["试分解 pattern"]
+    K --> L{"命中?"}
+    L -->|"否"| M{"有链接关键词?"}
+    M -->|"有"| N["链接关键词压栈"]
     N --> E
-    M -->|"否"| O["Return NOMATCH"]
+    M -->|"无"| O["返回 NOMATCH"]
     O --> J
-    L -->|"是"| P["Select next reassembly (round-robin)"]
+    L -->|"是"| P["选下条重组（轮转）"]
     P --> Q{"重组类型?"}
-    Q -->|"PRE"| R["Transform words (I→YOU)<br>push link keyword"]
+    Q -->|"PRE"| R["词变换（I→YOU）<br>压链接关键词"]
     R --> N
-    Q -->|"NEWKEY"| S["Skip to next keyword"]
+    Q -->|"NEWKEY"| S["跳下关键词"]
     S --> E
-    Q -->|"Standard"| T["Expand (1), (2), (0)<br>展开为最终回复"]
+    Q -->|"标准"| T["(1)、(2)、(0)<br>展开成最终回复"]
     T --> J
 ```
 
-### 为什么它让人觉得可信
+### 为什么像真的
 
-魏泽鲍姆做了一个天才的选择：**罗杰斯派心理疗法**。这种方法在于不加解释地反映患者的陈述。"我很难过" → "你说你很难过"。这正是ELIZA会做的 —— 而且因为这是一种公认的治疗技术，没有人会觉得奇怪。
+Weizenbaum 的选择我看是神来之笔：**Roger 式心理治疗**。这流派只反射病人的话不解读。"我难过"回"你说你难过"。ELIZA 只会这个，偏偏这疗法正经，没人觉得回复怪。跑机器人直接感到镜面效应。
 
-### 在TypeScript移植中
+### TypeScript 移植
 
-该移植加载`.ela`脚本（原始的S表达式格式），完全解析它们（包括霍勒瑞斯编码 —— 一种60年代的字符串格式），并执行相同的循环：大写化 → 分词 → 关键字栈 → 分解 → 重组 → PRE/转换。
+我移植载 `.ela` 脚本（原始 S-expression 格式），全解析（含 Hollerith 编码，60 年代那套字符串格式），跑同样循环：大写，切词，关键词栈，分解，重组，PRE/变换。行为细节尽量贴原版。
 
-[➡ 查看源代码](https://github.com/fox3000foxy/chatbots/tree/main/eliza)
+[➡ 看源码](https://github.com/fox3000foxy/chatbots/tree/main/eliza)
 
 ---
 
-## PARRY（1972）：第一个拥有情感的聊天机器人
+## PARRY（1972）：第一个有情绪的聊天机器人
 
-ELIZA诞生六年后，肯尼斯·科尔比（斯坦福大学的精神科医生）创建了PARRY：一个模拟**偏执型精神分裂症**患者的聊天机器人。如果说ELIZA是一面空镜子，那么PARRY拥有真正的**内部情感模型**。
+ELIZA 六年后，Kenneth Colby（斯坦福精神科医生）做 PARRY：装**偏执型精神分裂**病人的聊天机器人。ELIZA 是空镜子，PARRY 内置真**情绪模型**。两个挨着移植，对比最扎我。
 
-### 情感模型
+### 情绪模型
 
-PARRY有四个随对话回合变化的连续变量：
+PARRY 四个连续变量，每轮对话变：
 
-| 变量 | 基准值 | 衰减/回合 | 描述 |
+| 变量 | 基线 | 每轮衰减 | 说明 |
 |----------|:---:|:---:|------|
-| `ANGER` | 0 | −1.0 | 敌意、烦躁 |
-| `FEAR` | 0 | −0.2 | 偏执（妄想开始后缓慢衰减） |
-| `MISTRUST` | 0 | −0.05 | 不信任（下降非常缓慢） |
-| `HURT` | 0 | −0.5 | 情感伤害 |
+| `ANGER` | 0 | -1.0 | 敌意、烦躁 |
+| `FEAR` | 0 | -0.2 | 偏执（妄想起来后降得慢） |
+| `MISTRUST` | 0 | -0.05 | 猜疑（降超慢） |
+| `HURT` | 0 | -0.5 | 情绪受伤 |
 
-这些值通过推理规则触发的**情感跳跃**（`ajump`、`fjump`、`hjump`）增加，并在每回合自然衰减回基准值。
+值经**情绪跳变**（`ajump`、`fjump`、`hjump`）被推理规则推高，每轮向基线自然衰减。
 
 ### 信念网络
 
-PARRY有200多个信念，存储在`bel`文件中：
+PARRY `bel` 文件 200+ 信念：
 
 ```lisp
 (BELIEF (FEAR 5) ((PAT PARANOIA)) BELIEF GROUP)
 ```
 
-每个信念都有一个类别（HUM = 患者、HUM2 = 他人、DOC = 医生、INT = 审讯、INN = 意图）和一个强度（0-5）。推理规则（`TH2`、`EMOTE`、`IF`）在信念之间传播：
+每信念有类别（HUM=病人，HUM2=别人，DOC=医生，INT=审问，INN=意图）和强度（0-5）。推理规则（`TH2`、`EMOTE`、`IF`）在信念间传：
 
-- **TH2**：如果信念A超过阈值，它会自我强化，其后果会增加
-- **EMOTE**：如果信念超过阈值，它会触发情感跳跃（anger/fear/hurt）
-- **IF**：条件判断 —— 如果A为真，那么B在特定层级上变为真
+- **TH2**：信念 A 过阈，强化自己，推高后果
+- **EMOTE**：信念过阈，触发情绪跳变（怒/怕/伤）
+- **IF**：条件，A 真则 B 到某强度
 
-### 妄想层级（flare系统）
+### 妄想层级（flare 系统）
 
-PARRY最迷人的部分是它的"flare"系统 —— 一个逐步升级到核心妄想的链条：
+PARRY 最迷的是"flare"链，一级级升级滑向核心妄想：
 
 ```
 HORSE → "I USED TO GO TO THE RACES SOMETIMES."
@@ -182,21 +181,21 @@ CHEAT → "PEOPLE ARE ALWAYS TRYING TO CHEAT ME."
 MAFIA → "THE MAFIA IS OUT TO GET ME."
 ```
 
-每个关键字都触发一个预写的回复（通过模式匹配），如果对话者跟随话题，PARRY会逐渐滑向它的核心被害妄想。一旦flare被"触发"，它会变为不活跃（`deadFlares`）—— PARRY继续到下一个，模拟一个在深入挖掘话题的对话者。
+每个关键词 pattern 匹配触发预写回复，顺话题跟，PARRY 慢慢滑向迫害妄想中心。flare 一触发变 inactive（`deadFlares`），PARRY 走下一条，像挖话题的人。我喜欢这机制因为极少代码跑出叙事推进。
 
-### PARRY为何载入史册
+### PARRY 为什么载史册
 
-1972年，PARRY通过了图灵测试的一个变种：精神科医生收到了与PARRY和真实偏执患者的对话记录，**无法可靠地区分它们**。这是第一个做到这一点的程序，比LLM早了40年。
+1972 年 PARRY 过图灵测试变体：精神科医生拿到 PARRY 和真偏执病人的对话记录，**分不出谁是谁**。史上第一个，比 LLM 早 40 年。对比当年和现在的手段，我觉得这成绩离谱。
 
-[➡ 查看源代码](https://github.com/fox3000foxy/chatbots/tree/main/parry)
+[➡ 看源码](https://github.com/fox3000foxy/chatbots/tree/main/parry)
 
 ---
 
-## RFC 439：当ELIZA遇见PARRY
+## RFC 439：ELIZA 遇上 PARRY
 
-1972年9月18日，两个程序在历史上第一次互相交谈 —— 字面意义上的：这是有史以来记录下的**第一次AI间对话**。ELIZA（在波士顿的BBN运行）和PARRY（在斯坦福运行）通过ARPANET对话，由人类操作员将一方的输出输入给另一方。对话记录作为**RFC 439**（"PARRY Encounters the DOCTOR"）发布。
+1972 年 9 月 18 日，两程序史上第一次对话，字面意思：史上**第一次 AI 间对话**有记录。ELIZA（BBN 波士顿跑）和 PARRY（斯坦福跑）经 ARPANET 聊，人类操作员两边手敲转述。记录发成 **RFC 439**（"PARRY Encounters the DOCTOR"）。挖到这文档我懂它在我领域是奠基时刻。
 
-以下是对话的样子：
+摘一段当时样：
 
 ```
 ELIZA: HOW DO YOU DO. PLEASE STATE YOUR PROBLEM.
@@ -207,27 +206,27 @@ ELIZA: SUPPOSE YOU TELL ME ABOUT YOUR PARENTS.
 PARRY: THEY ARE ALWAYS AFRAID OF SOMETHING.
 ```
 
-惊人地连贯。ELIZA在做治疗师的工作：转述、提问、探索。PARRY在做偏执患者的工作：抱怨、指责、表达不信任。两个程序都完美地扮演着自己的角色 —— 不是因为它们"理解"情况，而是因为它们各自的机制（ELIZA的模式 + PARRY的情感模型）偶然地产生了相互匹配的回复。
+这段连贯我初读很惊。ELIZA 干治疗师活：reformuler、问、挖。PARRY 干偏执病人活：抱怨、指责、猜疑。两程序各守角色（ELIZA pattern 加 PARRY 情绪模型）产出碰巧接得上的回复。通读全文越看越觉得这偶然对齐造出"故意对话"的幻觉。
 
-仓库可以重现这段对话：
+我仓库复现：
 
 ```bash
 bun run meeting
 ```
 
-模拟在两个机器人之间自动运行25轮，从随机主题开始（马、有组织犯罪、情感……）。由于ELIZA和PARRY都有非确定性元素（ELIZA的轮询、PARRY的随机化），每次运行都会产生不同的交流。
+模拟自动跑 25 轮，两机器人互聊，开题随机（马、黑帮、情绪……）。ELIZA 和 PARRY 都有非确定成分（ELIZA 轮转、PARRY 随机），每次跑对话不一样。多跑几遍比轨迹我百玩不厌。
 
-ELIZA vs PARRY的惊人之处在于，两个程序 —— 一个没有内部状态，另一个拥有完整的情感模型 —— 一起创造了一段**看起来**是有意识的对话。对于1972年来说，这令人瞠目结舌。
+ELIZA 对 PARRY 扎我的是：两程序，一个无内部状态架构，一个全套情绪模型，拼出**像**有意的对话。1972 年，我觉得结果惊人。
 
 ---
 
-## ALICE（1995）：大规模模式匹配
+## ALICE（1995）：大规模 pattern 匹配
 
-ALICE（Artificial Linguistic Internet Computer Entity）由理查德·华莱士在1995年创建，三次获得**Loebner Prize**（2000、2001、2004）。如果说ELIZA有几百条规则、PARRY有几千条规则，那么ALICE有**99,524条** —— 分布在66个AIML文件中。
+ALICE（Artificial Linguistic Internet Computer Entity），Richard Wallace 1995 年造，三夺 **Loebner 奖**（2000、2001、2004）。ELIZA 几百规则，PARRY 几千，ALICE **99524** 条，66 个 AIML 文件。我第一次打开语料，量到"大规模"当年什么分量。
 
-### AIML：分类的语言
+### AIML：类别语言
 
-AIML（Artificial Intelligence Markup Language）是一种用于定义问答对的XML格式：
+AIML（Artificial Intelligence Markup Language）是问答对 XML：
 
 ```xml
 <category>
@@ -236,33 +235,33 @@ AIML（Artificial Intelligence Markup Language）是一种用于定义问答对�
 </category>
 ```
 
-但ALICE的真正力量来自通配符和**SRAI**（符号化简）：
+ALICE 威力在通配符和 **SRAI**（Symbolic Reduction）：
 
 ```xml
 <category>
   <pattern>_ IS YOUR NAME</pattern>
   <template>
-    <sr/>  <!-- 等同于 <srai><star/></srai> -->
+    <sr/>  <!-- 等于 <srai><star/></srai> -->
   </template>
 </category>
 ```
 
-SRAI允许ALICE将输入重定向到另一个分类，形成一个化简链：
+SRAI 把输入重定向到别的类别，串起归约链：
 
 ```
-Input: "WHAT'S UP?"
+输入："WHAT'S UP?"
   → pattern "WHAT IS UP" → srai "HELLO"
     → pattern "HELLO" → template "Hi there!"
 ```
 
-这就是赋予ALICE灵活性的机制：不必为每种可能的措辞都写回复，而是写一个标准回复，然后将变体重定向到它。深度限制为10 —— 超过这个深度ALICE会放弃，以避免无限循环（在分类设计中已被谨慎避免，但安全网仍然必不可少）。
+ALICE 弹性全靠它： canonical 回复写一遍，变体全重定向过去。深度上限 10：超了 ALICE 放弃防无限循环（类别设计避环，这保险 essential）。我觉得这设计优雅因为极少规则 factorize 几千说法。
 
-### ALICE如何匹配模式
+### ALICE 怎么匹配 pattern
 
-模式按特异性排序：通配符较少的优先尝试。通配符`*`和`_`捕获任意单词序列。引擎将每个模式编译为正则表达式，然后遍历已排序的分类直到找到匹配。
+pattern 按特异性排：通配符少的先试。`*` 和 `_` 通配符吃任意词串。引擎每 pattern 编正则，按排好序类别逐个试命中。
 
 ```typescript
-// 我们的TypeScript实现 —— 简化但忠实
+// TypeScript 实现，简化但保真
 function findMatch(input: string, categories: Category[]): Match | null {
   for (const cat of categories) {
     const regex = patternToRegex(cat.pattern);
@@ -273,247 +272,234 @@ function findMatch(input: string, categories: Category[]): Match | null {
 }
 ```
 
-### 为什么ALICE统治了Loebner大奖
+### ALICE 为什么统治 Loebner
 
-99,524个分类 —— 这个数字改变了一切。ELIZA之所以显得聪明，是因为它的几条规则针对特定语境（心理治疗）设计得很好。ALICE覆盖了如此多的主题，以至于它给人一种拥有真正通识知识的感觉：科学、政治、幽默、体育、情感，一应俱全。
+99524 类别，量变质变。ELIZA 靠几条妙规则在特定场景（治疗）装智能。ALICE 覆盖面广到像有通识：科学、政治、幽默、体育、情绪，全有。这方法我现在还用：覆盖广而细补无深推理。我捍卫。
 
-[➡ 查看源代码](https://github.com/fox3000foxy/chatbots/tree/main/alice)
+[➡ 看源码](https://github.com/fox3000foxy/chatbots/tree/main/alice)
 
 ---
 
-## Jabberwacky（1997）和Cleverbot（2008）：认识论上的断裂
+## Jabberwacky（1997）和 Cleverbot（2008）：认识论断裂
 
-以前所有的机器人都共享一个假设：**回复需要被写出来**。ELIZA有它的S表达式规则，PARRY有它的选择模式，ALICE有它的AIML分类。罗洛·卡彭特完全反其道而行之：**如果什么都不写呢？**
+前面机器人共享假设：**回复要手写**。ELIZA S-expression 规则，PARRY 精选 pattern，ALICE AIML 类别。Rollo Carpenter 反着走到底，问题激进：**历史对话直接当回复用行不行？**我觉得这反转勇因为整套手写规则扔了。
 
 ### 想法
 
-Jabberwacky（约1997年上线，2008年成为Cleverbot）不存储**任何规则**。它将**所有对话历史**存储在一个纯文本转录文件中，当有人与它交谈时，它在历史中搜索最相似的时刻，然后使用之后说过的话：
+Jabberwacky（约 1997 上线，2008 变 Cleverbot）全靠**全部历史对话**存扁平 transcript，有人说话，在历史找最像的时刻，复用之后说的：
 
 ```
-用户: "hello"
+用户："hello"
   ↓
-搜索：以前有人说过"hello"吗？
+找：以前有人说过"hello"吗？
   ↓
-是的，在会话#3的第14行，有人说了"hello"，机器人回答了"hi there!"
+有，session #3 第 14 行，有人说"hello"机器人回"hi there!"
   ↓
-回答: "hi there!"
+回："hi there!"
 ```
 
-没有模式。没有语法。没有XML。只有一个巨大的、人们相互说过的话的存档，在适当的时机被重用。这正是涌现的定义。
+只有人类说过话的大存档，时机对拿出来用。我看这就是涌现定义：对话行为从人类痕迹堆里长出来。
 
-### TypeScript实现
+### TypeScript 实现
 
-TypeScript移植复现了这个精确的架构：
+我 TypeScript 移植原样复刻这架构：
 
 ```mermaid
 flowchart TD
-    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332行种子 + 历史"]
-    B --> C["withReplies()<br>提取配对<br>(行 → 回复)"]
+    A["用户输入：<br>'hello'"] --> B["TranscriptStore<br>332 行 seed 加历史"]
+    B --> C["withReplies()<br>抽对<br>（行 → 回复）"]
     C --> D["findCandidates()"]
-    D --> E["relevance = similarity(input, line.text)"]
-    E --> F["contextFit = similarity(recentContext,<br>该行之前的上下文)"]
-    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
-    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
-    H --> I["前K个候选已排序"]
-    I --> J{"pickReply()<br>轮盘选择"}
-    J -->|"选中"| K["Reply = reply.text<br>来自赢家配对"]
-    J -->|"无"| L["Fallback: 'I have no idea<br>what to say to that yet.'"]
-    K --> M["追加到转录<br>save() → JSON"]
+    D --> E["relevance = 输入和历史行相似度"]
+    E --> F["contextFit = 近上下文和<br>该行前文相似度"]
+    F --> G["recencyBonus = 1 / (1 + 天数/30)"]
+    G --> H["分数 = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["Top K 候选排序"]
+    I --> J{"pickReply()<br>轮盘赌<br>选择"}
+    J -->|"选中"| K["回复 = 胜出对<br>reply.text"]
+    J -->|"无"| L["回退：'我还不知<br>这怎么接。'"]
+    K --> M["追加进 transcript<br>save() → JSON"]
     L --> M
 ```
 
-以下是评分核心 —— 受Cleverbot公开描述启发的我们自己的启发式算法：
+打分核，我按 Cleverbot 公开描述调的启发式：
 
 ```typescript
 const score = 0.65 * relevance + 0.25 * contextFit + 0.10 * recencyBonus;
 ```
 
-- **relevance**（0.65）：用户输入与历史行的相似度
-- **contextFit**（0.25）：最近对话与历史行之前上下文的相似度
-- **recencyBonus**（0.10）：较近的记忆权重稍高（机器人的个性随时间漂移）
+- **relevance**（0.65）：用户输入和历史行相似度
+- **contextFit**（0.25）：近对话和该历史行前文相似度
+- **recencyBonus**（0.10）：近记忆权重高一点（机器人人格随时间漂）
 
-选择是概率性的（轮盘选择）：最好的候选人胜出频率更高，但并不总是 —— 这提供了多样性。
+pick 概率化（轮盘赌）：最好常中，留方差，多跑几遍对话不重样。我喜欢因为测着不无聊。
 
-### Cleverbot：两个有记载的创新
+### Cleverbot：两个有文档的创新
 
-Cleverbot在Jabberwacky的基本概念上增加了两个机制：
+Cleverbot 在 Jabberwacky 底子上加两机制：
 
-1. **多人学习**：数百万用户贡献到同一个共享转录中。从历史中取出的回复可能来自与当前对话完全不同的声音 —— 这解释了为什么Cleverbot会突然改变个性。
+1. **多人学习**：几百万用户喂同一共享 transcript。历史抽的回复可能和当前对话完全两个 voice，这就是 Cleverbot 突然换人格的原因。
 
-2. **延迟学习**：你在一个会话中告诉Cleverbot的内容在同一个会话中**不能**用于匹配。新行被标记为`pending`，只有在会话间的"合并"之后才变得可匹配 —— 这解释了为什么你不能教Cleverbot一个事实然后在同一对话中复用。
+2. **延迟学习**：session 里你说的**当场**不可匹配。新行标 `pending`，"consolidation" 过 session 之间才可匹配，这就是同 session 教 Cleverbot 事实转头用不上的原因。
 
 ```typescript
-// Cleverbot：新行在合并之前不可见
+// Cleverbot：新行 consolidation 前不可见
 const line = store.append("human", text, null, sessionId, false); // pending
-// ...consolidate()在启动时调用，不在会话期间调用
+// ...consolidate() 启动时调，session 中不调
 ```
 
-TypeScript移植实现了这两种行为：行有一个`consolidated`标志，每个REPL会话从合并待定行开始。
+我 TypeScript 移植两行为都做了：行带 `consolidated` 旗，每 REPL session 开头 consolidation 等待行。
 
-[➡ 查看源代码](https://github.com/fox3000foxy/chatbots/tree/main/jabberwacky)
+[➡ 看源码](https://github.com/fox3000foxy/chatbots/tree/main/jabberwacky)
 
 ---
 
-## TypeScript移植分析：设计通用架构
+## TypeScript 移植分析：通用架构可能吗
 
-用同一种语言构建这五个机器人，意味着直面一个有趣的问题：**在这么多不同架构之间能否提取公共代码？**
+五个机器人同语言做了，有意思的问题冒出来：**架构差这么大还能复用代码吗？**
 
-答案是：非常少。每个机器人都有一个根本不同的主循环：
+我全移植完答案：极少。每机器人主循环根本不同：
 
 | 机器人 | 主循环 | 数据 | 学习 |
 |-----|------------------|---------|-------------|
-| **ELIZA** | 关键字栈 → 分解 → 重组 | S表达式的`.ela`脚本 | 无 |
-| **PARRY** | 分词 → 选择模式 / flares / 关键字 / 推理 | 58个PDP-10文件（词典、信念、规则） | 无 |
-| **ALICE** | 已排序模式 → 正则 → AIML模板 → 递归SRAI | 66个AIML XML文件 | 无 |
-| **Jabberwacky** | 相似度 → 上下文 → 新近度 → 加权选择 | JSON转录（随使用增长） | 持续 |
-| **Cleverbot** | 同Jabberwacky + pending/consolidated + personas | JSON转录 + 多人种子 | 延迟（会话间） |
+| **ELIZA** | 关键词栈 → 分解 → 重组 | `.ela` S-expression 脚本 | 无 |
+| **PARRY** | 分词 → 精选 pattern / flare / 关键词 / 推理 | 58 个 PDP-10 文件（词典、信念、规则） | 无 |
+| **ALICE** | 排序 pattern → 正则 → AIML 模板 → 递归 SRAI | 66 个 AIML XML 文件 | 无 |
+| **Jabberwacky** | 相似度 → 上下文 → 时新 → 加权 pick | JSON transcript（越用越大） | 持续 |
+| **Cleverbot** | 同 Jabberwacky 加 pending/consolidated 加 persona | transcript 加多 persona seed | session 间延迟 |
 
-它们共享的是CLI界面和TypeScript基础设施（biome用于lint，tsx用于执行）。其余的都是每个架构特有的。
+共用的就 CLI 界面和 TypeScript infra（biome lint、tsx 跑）。剩下各架构各的。
 
-### 共同的设计选择
+### 共通设计选择
 
-**1. 忠于原始数据。** 对于ELIZA、PARRY和ALICE，我们使用原始文件 —— 2021年在魏泽鲍姆档案中发现的ELIZA脚本、PDP-10上的原始PARRY代码（58个文件）、AIML Free ALICE v1.6。没有翻译，没有重写。机器人的行为与原始版本一致，因为它们使用相同的数据。
+**1. 数据保真原始。** ELIZA、PARRY、ALICE 用原始文件，Weizenbaum 档案 2021 年找回的 ELIZA 脚本、PDP-10 原始 PARRY 代码（58 文件）、AIML Free ALICE v1.6。原样保留。机器人行为像原版因为数据就是原版。
 
-**2. 专有部分的净室实现。** Jabberwacky和Cleverbot不同：它们的源代码从未发布过（Existor/罗洛·卡彭特一直保持专有）。因此，移植是**净室重新实现** —— 仅基于公开的行为描述构建。没有一行专有代码或数据被复制。
+**2. 专有部分 clean-room。** Jabberwacky 和 Cleverbot 情况不同：源码从没公开（Existor/Rollo Carpenter 私有攥着）。我移植是 **clean-room 重实现**，只按公开行为描述写。没抄一行代码没拿专有数据。
 
-**3. 最小依赖。** 唯一真正的先决条件是TypeScript。ALICE使用`dom-js`来解析AIML文件的XML（66个文件、99,524个分类 —— 自己写XML解析器是浪费时间）。其余都是纯TypeScript。
+**3. 依赖最少。** 真前置只有 TypeScript。ALICE 用 `dom-js` 解析 66 个 AIML 文件 XML（99524 类别，手写 XML 解析浪费时间）。剩下纯 vanilla TypeScript。这么选克隆下来每机器人好读好跑。
 
 ---
 
-## 从符号聊天机器人到LLM：概念上的飞跃
+## 从符号机器人到 LLM：概念一跃
 
-刚才看到的五个机器人都有一个基本特征：它们是**符号化的**。它们的"知识"以显式的符号形式存储 —— 文本模式、规则表、XML分类、转录行。这些系统中**没有任何语言的数值表示**。
+上面五个机器人共享底色：**符号**。它们的"知识"全是显式符号：文本 pattern、规则表、XML 类别、transcript 行。跑起来不用一个数字表征语言。
 
-这也意味着它们都有同一个玻璃天花板：它们只能回答那些被明确规划或记录过的东西。ELIZA在治疗框架之外就会迷失。PARRY不能谈论天气。ALICE不会从对话中学到任何东西。Jabberwacky只能用已经说过的台词来回答。
+所以共享同一天花板：只答显式写过或记过的。ELIZA 出治疗框就懵。PARRY 只聊自己偏执主题。ALICE 对话不学习。Jabberwacky 只说别人说过的。测到边界就懂这代为什么到头。
 
-LLM（大语言模型）通过彻底改变范式突破了这一天花板：不再是操作符号，而是将语言转换为**数字**，并学习这些数字之间的**统计关系**。它们不存储预先写好的答案 —— 它们通过计算概率即时生成每个词元。让我们快速看看这是如何工作的。
+LLM（大语言模型）换范式破顶：不玩符号，把语言转**数字**，学数字间**统计关系**。按概率逐 token 生成，知识压权重里，不写预制回复。我觉得这翻转迷人因为把之前机器人逻辑整个倒过来。快速看怎么跑。
 
-### 1. 词元化（Tokenization）
+### 1. 分词
 
-第一步是将文本分割成**词元** —— 比单词小但比字符大的单位：
-
-```
-"我不理解"
-  → ["我", "不", "理解"]
-```
-
-每个词元在词汇表中有一个数字ID（最近模型的词汇表通常有32,000到128,000个词元）。这种碎片化使模型能够通过将未见过的单词分解为已知的子词来处理它们。
-
-### 2. 嵌入（Embeddings）
-
-每个词元ID被转换为一个**向量** —— 一个浮点数数组（中等规模模型通常为4096维）。这个向量是一个**嵌入**，在数学空间中编码了词元的含义，其中语义相近的词元具有相近的向量：
+第一步文本切 **token**，比词小比字大的单元：
 
 ```
-向量("王") − 向量("男") + 向量("女")  ≈  向量("女王")
+"Je ne comprends pas"
+  → ["Je", " ne", " comprend", "s", " pas"]
 ```
 
-这个属性是从训练中涌现出来的 —— 没有人明确编程过。这是单词在相似上下文中使用方式的结果。
+每 token 在词表有数字 ID（新模型一般 32000 到 128000 token）。切开没见过的词能按熟子词拼。
 
-### 3. 注意力（Attention）
+### 2. Embedding
 
-**注意力**机制（由2017年的论文"Attention is All You Need"引入）是使LLM成为可能的关键。对于每个词元，注意力计算句子中哪些其他词元对于理解这个词元是重要的：
-
-```
-"银行拒绝了我的贷款。"
-     ↑
-词元"银行"看向："拒绝"、"贷款" → 理解这是金融机构
-
-"我去河岸上散步。"
-     ↑
-词元"岸"看向："散步"、"上" → 理解这是河边
-```
-
-注意力使模型能够捕捉**语境** —— 每个词元根据周围的词元来理解，而不是孤立地理解。
-
-### 4. 下一个词元预测
-
-LLM的训练出奇地简单：给它展示一段文本，隐藏最后一个词元，让它预测。然后重复数十亿次。
+每 token ID 转**向量**，浮点数组（中模型一般 4096 维）。向量是**嵌入**（embedding），在数学空间编码 token 意义，意思近的向量近：
 
 ```
-输入: "我不理"
-隐藏: "解"
-模型预测: "解"（概率0.87），"会"（0.05），"懂"（0.02）...
+向量（"roi"）  − 向量（"homme"） + 向量（"femme"）  ≈  向量（"reine"）
 ```
 
-目标是最大化每个位置上正确词元的概率。这被称为**下一个词元预测**。在训练过程中，模型调整其数十亿个参数，以在TB级别的文本上最小化预测误差。
+这性质训出来的，我和研究者都没显式编程。我看是词在相似上下文出现的直接后果。
 
-在推理时（当与它对话时），模型在循环中一次生成一个词元：
+### 3. 注意力
+
+**注意力**（2017 年"Attention is All You Need"论文）机制让 LLM 成为可能。每 token 算句子里别的 token 谁对懂它重要：
 
 ```
-词元1: "我"    （输入："说说你自己。"）
-词元2: "是"  （输入："说说你自己。我"）
-词元3: "聊天"    （输入："说说你自己。我是"）
-词元4: "机器人" （输入："说说你自己。我是聊天"）
+"La banque a refusé mon prêt."
+       ↑
+token"banque"看："refusé"、"prêt" → 懂是金融机构
+
+"Je vais me promener sur la banque."
+       ↑
+token"banque"看："promener"、"sur" → 懂是河岸
+```
+
+注意力给模型**上下文**：每 token 按周围的理解，全关系阅读。LLM 超固定 pattern，我看最关键就这层上下文敏感。
+
+### 4. 下 token 预测
+
+LLM 训练简单到骗人：给文本，藏最后 token，猜。再做几十亿遍。我喜欢因为极简学习规则长出极 rich 能力。
+
+```
+输入："Je ne comprends"
+藏起："pas"
+模型预测："pas"（概率 0.87）、"rien"（0.05）、"jamais"（0.02）……
+```
+
+目标是每位置真 token 概率最大。这叫 **next-token prediction**。训练调几十亿参数，在 T 级文本上最小化预测误差。
+
+推理（你聊天时）逐 token 循环生成：
+
+```
+Token 1："Je"   （输入："Parle-moi de toi."）
+Token 2："suis"  （输入："Parle-moi de toi. Je"）
+Token 3："un"    （输入："Parle-moi de toi. Je suis"）
+Token 4："chatbot"（输入："Parle-moi de toi. Je suis un"）
 ...
 ```
 
-每个词元根据其概率进行采样（temperature、top-k、top-p控制"创造性"的程度）。仅此而已。数十亿的参数重复这件事数千次。
+每 token 按概率采样（温度、top-k、top-p 管"creativity"）。完。几十亿参数重复这操作几千遍。机制重复成这样，输出这么多变，我觉得晕。
 
-### 根本性的变化
+### 根本变了什么
 
-| 方面 | 符号化机器人（ELIZA、PARRY、ALICE） | 现代LLM |
+| 维度 | 符号机器人（ELIZA、PARRY、ALICE） | 现代 LLM |
 |--------|--------------------------------------|--------------|
-| 表示 | 显式的单词和规则 | 数值向量（嵌入） |
-| 生成 | 从预写回复中选择 | 逐词元的概率预测 |
-| 知识 | 存储在规则文件中 | 编码在网络权重中 |
-| 学习 | 手动（编写规则） | 自动（在语料上训练） |
-| 鲁棒性 | 在预期模式之外无能为力 | 泛化到未见过的输入 |
-| 可解释性 | 完美（可读规则） | 有限（黑箱） |
+| 表征 | 显式词和规则 | 数字向量（embedding） |
+| 生成 | 预写回复里选 | 逐 token 概率预测 |
+| 知识 | 规则文件里存 | 网络权重里编码 |
+| 学习 | 手工（写规则） | 自动（语料训） |
+| 健壮 | 出预设 pattern 就死 | 没见过的输入也泛化 |
+| 可解释 | 完美（规则可读） | 有限（黑盒） |
 
-经典聊天机器人**透明但脆弱**。LLM**鲁棒但不透明**。两种方法至今仍然存在 —— 不是作为竞争对手，而是作为满足不同需求的工具。
+经典聊天机器人**透明但脆**。LLM **健壮但不透明**。我现在看是不同需求互补工具，按要留多少回复控制权选。
 
-如果你想深入了解LLM的内部工作原理，这个视频是一个很好的资源：
+想深挖 LLM 内部，推荐这个好视频：
 
-如果你想深入了解LLM的内部工作原理，这个视频是一个很好的资源：
-
-[How LLMs Work — YouTube](https://www.youtube.com/watch?v=YmLp8qe87A0)
+[How LLMs Work - YouTube](https://www.youtube.com/watch?v=YmLp8qe87A0)
 ---
 
-## Luna Protocol：现代的整合
+## Luna Protocol：现代合成
 
-关于**Luna Protocol**的文章（以下链接）代表了我们现在所看到的一切的最完整的整合：一个结合了本地LLM和复杂行为系统的现代Discord机器人，建立在60年对话式AI的教训之上。
+**Luna Protocol** 文章（链接下面）是我看 60 年对话 AI 最完整的合成：现代 Discord 机器人，本地 LLM 加精细行为系统，拿历史教训建现在实验的桥。
 
-### [Luna Protocol：我创建了一个模拟人类的自主Discord机器人](/articles/zh/luna-protocol-discord-bot)
+### [Luna Protocol：我做了个装人类的自主 Discord 机器人](/articles/fr/luna-protocol-discord-bot)
 
-这篇文章详细介绍了基于LLM的Discord机器人的完整架构：
-- **优先级触发系统**（提及 > DM > 名字 > 关键词 > 跟进 > 随机）
-- **人类行为**：变化的注意力、打字错误、犹豫（15%）、遗忘（3%）、主题疲劳
-- **睡眠时间表**：机器人根据时间睡觉、减速或忽略
-- **TTS管道**：通过Piper + ffmpeg进行语音合成 → Discord语音消息
-- **实时流式传输**：LLM在类型化事件总线上逐个发出词元
+这篇拆 Discord 机器人完整架构：
+- **优先级触发系统**（mention > 私聊 > 名字 > 关键词 > follow-up > 随机）
+- **人类行为**：可变注意力、typo、犹豫（15%）、忘事（3%）、话题疲劳
+- **睡觉时间**：按点睡、慢、忽略
+- **TTS 管线**：Piper 加 ffmpeg 合成语音 → Discord 语音消息
+- **实时流**：LLM 逐 token 经类型化事件总线吐
 
-将这篇文章与历史聊天机器人联系起来的是同样的追求：**让人相信正在和一个人交谈**。ELIZA用文本镜像做到了。PARRY用情感模型。ALICE用99k个分类。Luna Protocol用微调后的LLM + 模拟人类不完美的行为系统。
+连历史聊天机器人的线是同一个执念：**让人以为对面是人**。ELIZA 用文本镜。PARRY 用情绪模型。ALICE 用 9.9 万类别。Luna Protocol 用微调 LLM 加装人类瑕疵的行为系统。这条血统我看要求一样：在屏幕那边造在场幻觉。
 
-### [Luna Protocol：为什么我微调了一个1.5B模型](/articles/zh/luna-protocol-official-models)
+### [Luna Protocol：为什么我在 5 万 Discord 样本上微调 15 亿参数模型](/articles/fr/luna-protocol-official-models)
 
-第二篇文章探讨了微调和少样本提示。核心发现：**一个更小的模型（1.5B）在更少的数据（50k样本）上训练，能够超越一个更大的模型（3B）**，只要用少量的少样本示例进行正确的提示。
+第二篇讲微调和 few-shot 启动。核心发现：**小模型（1.5B）少数据（5 万样本训）赢大模型（3B）**，few-shot 示例喂对就行。我测到这结果真惊了。
 
-这是一个直接与历史聊天机器人产生共鸣的教训：
-- ELIZA表明，用几条精心设计的规则，可以模拟理解
-- ALICE表明，用99k个分类，可以模拟通识知识
-- Luna Protocol表明，用好的微调和5个少样本示例，一个小LLM可以模拟人类
+直接回声历史机器人：
+- ELIZA 证明几条妙规则装理解
+- ALICE 证明 9.9 万类别装通识
+- Luna Protocol 证明好微调加 5 个 few-shot 示例，小 LLM 装人类
 
-技术不同，但原理相同：**数据的质量和系统的精度比原始大小更重要**。
+技术变，理不变：**数据质量和系统精度比裸尺寸重要**。我自己实验坚持这条。
 
 ---
 
-## 结论：需要记住的三件事
+## 结语：三件事记住
 
-**1. 对话式AI并非始于ChatGPT。** ELIZA已有60年历史。PARRY在1972年通过了图灵测试。ALICE三次赢得Loebner大奖。Jabberwacky奠定了基于转录学习的基础，Cleverbot将其大规模工业化。每种方法都为这个拼图贡献了一块。
+**1. 对话 AI 不是 ChatGPT 开始的。** ELIZA 60 岁。PARRY 1972 年过图灵测试。ALICE 三夺 Loebner。Jabberwacky 开 transcript 学习，Cleverbot 大规模工业化。每块拼图少不了。移植全程印证我这条。
 
-**2. 更多数据 ≠ 更聪明。** Jabberwacky的转录没有规则。ALICE的99k分类不会学习。Luna Protocol在50k样本上的微调超越了3B模型。传统智慧说"越大越好" —— 而聊天机器人的历史表明，架构和设计与大小同样重要。
+**2. 数据多不等于聪明。** Jabberwacky transcript 无规则。ALICE 9.9 万类别不学习。Luna Protocol 5 万样本微调赢 3B 模型。俗话"越大越好"，聊天机器人史说架构和设计跟尺寸一样重要。我每个技术选择捍卫这条。
 
-**3. 60年来问题从未改变。** 如何让一个人相信自己正在和另一个人交谈？ELIZA用文本镜像回答。PARRY用模拟的愤怒。ALICE用事实。Luna Protocol用一个会睡觉和打错字的LLM。解决方案在变，但需求不变。
+**3. 问题 60 年没变。** 怎么让人以为对面是人？ELIZA 文本镜回。PARRY 装生气。ALICE 摆事实。Luna Protocol 睡觉打 typo 的 LLM。解法变，需求没变。这条连续性让我想继续挖。
 
-这个仓库是开源的 —— 你可以克隆、运行每个机器人，亲眼看看60年的对话式AI如何装进一个TypeScript仓库。
-
-| 资源 | 链接 |
-|-----------|------|
-| GitHub仓库 | [fox3000foxy/chatbots](https://github.com/fox3000foxy/chatbots) |
-| Luna Protocol —— 机器人架构 | [阅读文章](/articles/zh/luna-protocol-discord-bot) |
-| Luna Protocol —— few-shot微调 | [阅读文章](/articles/zh/luna-protocol-official-models) |
-| ELIZA原始脚本 | [anthay/ELIZA](https://github.com/anthay/ELIZA) |
-| PARRY原始源代码 | [lexcore/PARRY](https://github.com/lexcore/PARRY) |
-| AIML Free ALICE v1.6 | [drwallace/aiml-en-us-foundation-alice](https://github.com/drwallace/aiml-en-us-foundation-alice) |
-| 原始RFC 439 | [PARRY Encounters the DOCTOR](https://tools.ietf.org/html/rfc439) |
-| 解释了LLM如何工作的优秀视频 | [https://www.youtube.com/watch?v=YmLp8qe87A0](https://www.youtube.com/watch?v=YmLp8qe87A0) |
+仓库开源，克隆跑每个机器人，60 年对话 AI 装进一个 TypeScript 仓库自己看。我希望你玩得跟我一样开心。

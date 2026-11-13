@@ -1,312 +1,316 @@
 ---
-title: Yapay Zeka Minecraft PvP Öğreniyor -- Taklit Öğrenimi, Pekiştirmeli Öğrenme ve Önemli Olan 30 Değişken
-description: "1.000 düello kaydedildi, pikseller üzerinde eğitilen sinir ağı, %90 tuş doğruluğu : ve bot bir duvara doğru koştu. Sonra RL, müfredat öğrenimi ve 60 saatlik eğitim geldi."
+title: Yapay zekâ Minecraft PvP öğreniyor, Taklit Öğrenmesi, Pekiştirmeli Öğrenme ve önemli olan 30 değişken
+description: "Kaydedilmiş 1.000 düello, pikseller üzerinde eğitilmiş sinir ağı, %90 vuruş
+  doğruluğu: ve bot dosdoğru bir duvara koşuyordu. Sonra RL, müfredatlı öğrenme
+  ve 60 saatlik eğitim geldi."
 date: 2026-07-09
-authors:
-  - fox3000foxy
 tags:
   - minecraft
   - ai
   - python
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "KW8DlI+WyrG+VK2/K2REFPQGFaRfa4mNM71XZs86gKp1plBWBuR9AFKM7HYQKH/7aLgvMjWguq6e7pFhmplkgA=="
+author_sig: "3NPT5tgSTxAAP3yM03Optg3ERWlN8KbP9RXbgHJcH1K+7G7n/zNkDeKGjrAmbKxsApppD7cT53dDJop3GLPKIQ=="
 ---
 
 ## Giriş
 
-![AI Learns Minecraft PvP thumbnail](assets/ai-pvp-thumbnail.png)
+![AI Learns Minecraft PvP küçük resmi](assets/ai-pvp-thumbnail.png)
 
-Kadambi | AI Engineering tarafından [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) adlı bir video var ve bu, bir oyun oynayan yapay zeka eğitimiyle ilgili gördüğüm en dürüst anlatımlardan biri.
+Kadambi | AI Engineering tarafından [AI Learns Minecraft PvP (Reinforcement Learning + Behavior Cloning)](https://www.youtube.com/watch?v=j5nxDKAjg6U) adlı bir video var ve gördüğüm en dürüst video oyunu yapay zekâsı eğitim anlatılarından biri.
 
-Fikir: Ekranı izleyerek ve fare ile klavye komutları üreterek Minecraft PvP (kılıç kiti, tam büyülü elmas zırh) oynayan bir bot inşa etmek. Oyun belleğini okumak yok, makro yok, mod yok : sadece girişte pikseller, çıkışta eylemler.
+İlke: ekrana bakıp fare ve klavye komutları gönderen, Minecraft PvP oynayan bir bot inşa etmek (kılıç kiti, tamamen büyülenmiş elmas zırh). Yalnızca piksel girdi ve aksiyon çıktı ile çalışır, oyun belleğini okumadan, makrosuz ve modesuz.
 
-Videoyu ilginç kılan nihai sonuç değil. Yolculuk: taklit öğreniminin başarısızlığı, feature engineering dönüşü, catastrophic forgetting döngüleri ve GPU'suz bir dizüstü bilgisayarda 60+ saatlik eğitim.
+Videoyu ilginç yapan nihai sonuç değildir. Yolculuktur: taklit öğrenmesinin başarısızlığı, özellik mühendisliğine dönüş, yıkıcı unutma döngüleri ve GPUsuz bir dizüstünde 60+ saatlik eğitim.
 
-## Aşama 1 : Taklit Öğrenimi (başarısızlık)
+## Faz 1: Taklit Öğrenmesi (başarısızlık)
 
-![Taklit öğrenimi sırasında bot: bir duvara bakıyor, yukarı aşağı zıplıyor](assets/ai-pvp-imitation-fail.png)
+![Taklit öğrenmesi sırasında bot: bir duvarla yüzleşiyor, yukarı aşağı zıplıyor](assets/ai-pvp-imitation-fail.png)
 
-Yaratıcı mantıklı bir yaklaşımla başladı: kendi oynayışının 1.000 düellosunu kaydetti, her fare tıklamasını ve tuş basışını ilgili kareyle eşledi ve piksellerden eylemleri tahmin etmek için bir sinir ağı eğitti.
+Yaratıcı mantıklı bir yaklaşımla başladı: kendi oynanışından 1.000 düello kaydetmek, her fare tıklaması ve tuş basımını ilgili görüntüyle eşleştirmek ve piksellerden aksiyonları tahmin etmesi için bir sinir ağı eğitmek.
 
 ```python
-# Taklit öğrenimi hattı için sözde kod
+# Taklit öğrenmesi pipelineı için sözde kod
 dataset = record_duels(1000)          # yüz binlerce kare
 for frame, action in dataset:
     pixels = capture_screen(frame)
     network.train(pixels → action)    # görüntüden klavye/fare tahmini
 ```
 
-Ağ, tuşları **%90 doğrulukla** tahmin etmeyi öğrendi. Umut verici.
+Ağ vuruşları **%90 doğrulukla** tahmin etmeyi öğrendi. Umut verici.
 
-Sonra onu gerçek bir maçta test ettiler. Bot dosdoğru haritanın kenarına gitti, bir duvara döndü ve yukarı aşağı zıplamaya başladı.
+Sonra onu gerçek bir maçta test ettiler. Bot dosdoğru haritanın kenarına yürüdü, bir duvarla yüzleşti ve yukarı aşağı zıpladı.
 
 Neden?
 
-**Tembellik tuzağı.** Bir PvP dövüşünde W tuşu çoğu zaman basılıdır. Ağ, sadece W'yi basılı tutarak ve başka hiçbir şey yapmayarak yüksek doğruluk elde edebileceğini fark etti. Diğer tüm eylemler pahasına en yaygın eylem için optimize etti.
+**Tembellik tuzağı.** Bir PvP savaşında W tuşu çoğu zaman basılıdır. Ağ yüksek doğruluğa basitçe Wyi basılı tutup başka hiçbir şey yapmayarak ulaşabileceğini fark etti. Diğerlerinin zararına en sık aksiyonu optimize etti.
 
-**İnsan gecikmesi.** Veri kümesindeki eylemler, ~200 ms'lik insan tepki süresi kadar gecikmelidir. Kare kare, neden ve sonuç, bir modelin ham piksellerden öğrenmesi neredeyse imkansızdır çünkü eylem ve görünür sonucu birden fazla kare ile ayrılmıştır.
+**İnsan gecikmesi.** Veri kümesindeki aksiyonlar ~200 ms insan tepki süresiyle gecikmiştir. Kare kare, aksiyon ile görünür sonucu birkaç görüntıyla ayrıldığında ham piksellerden bir modelin neden ve sonucu öğrenmesi neredeyse imkânsızdır.
 
-**Tutarsız gösterimler.** Yaratıcının kendi oynayışı değişiyordu: bazen aynı durumlarda klavyeyle strafe yapıyor, bazen fareyle nişan alıyordu. Bu çelişkili girdi ağı şaşırttı.
+**Tutarsız gösterimler.** Yaratıcının kendi oynanışı değişiyordu: bazen klavyeyle strafing yapıyor, bazen aynı durumlarda fareyle nişan alıyordu. Bu çelişkili girdiler ağı bozdu.
 
-## Aşama 2 : Müfredatla Pekiştirmeli Öğrenme
+## Faz 2: Müfredatlı Pekiştirmeli Öğrenme
 
-![RL eğitimi sırasında yatay olarak takip etmeyi öğrenen bot](assets/ai-pvp-rl-horizontal.png)
+![RL eğitimi sırasında bot yatay izlemeyi öğreniyor](assets/ai-pvp-rl-horizontal.png)
 
-Taklit öğrenimini bırakan yaratıcı, RL'ye geçti. Ancak yeni bir ajanı tam bir PvP düellosuna sokmak işe yaramaz: rastgele keşfin bir şey bulması için aynı anda çok fazla şey oluyor.
+Taklit öğrenmesini bırakıp yaratıcı RLe geçti. Ama taze bir ajanı tam bir PvP düellosuna daldırmak işe yaramaz: rastgele keşfin bir şey bulması için aynı anda çok şey olur.
 
-Çözüm: **müfredat öğrenimi (curriculum learning)**. Her mekaniği ayırın ve botun gerçek bir dövüşe girmeden önce temel bilgileri öğrenmesine izin verin.
+Çözüm: **müfredatlı öğrenme**. Her mekaniği izole etmek ve bota gerçek savaşa girmeden önce temellerde ustalaşmayı bırakmak.
 
-### Adım 1 : Yatay nişan (7 saat)
+### Adım 1: Yatay nişan (7 saat)
 
-En basit ödül fonksiyonu: vuruş yapmak için pozitif ödül, hasar almak için negatif ceza.
+En basit ödül fonksiyonu: hedefi vurmak için pozitif ödül, hasar almak için negatif ceza.
 
-Başlangıçta, bot zar zor hareket ediyor (sinir ağı nötr değerlerle başlatıldı). Bir yandan diğer yana sallanıyor: bot, hangilerinin ödül verdiğini görmek için farklı eylemleri test ediyor.
+Başlangıçta bot zar zor hareket eder (nötr değerlerle başlatılmış sinir ağı). Yana doğru titrer: bu botun hangi aksiyonların ödül verdiğini görmek için farklı aksiyonları test etmesidir.
 
-Bir saat sonra, kendini yatay olarak ortalamayı öğreniyor, ancak acı verici derecede yavaş. 7 saat sonra, düşmanı sağa ve sola takip edebiliyor, ancak asimetrik olarak (sağdan sola hareket etmede soldan sağa olduğundan daha iyi, eğitim boyunca devam eden bir davranış).
+Bir saat sonra yatayda acıyla yavaş merkezlenmeyi öğrenir. 7 saat sonra düşmanı sağa ve sola izleyebilir, asimetrik olsa da (soldan sağa harekettense sağdan sola daha iyi, eğitim boyunca süren bir davranış).
 
-### Adım 2 : Feature Engineering
+### Adım 2: Özellik Mühendisliği
 
-Ham ekran yakalaması 2 milyon pikselin üzerindeydi. 360p'ye düşürülse bile, bu 200.000 girdi: verimli öğrenme için çok fazla.
+Ham ekran görüntüsü 2 milyon pikselden fazlaydı. 360pye indirilse bile bu 200.000 girdidir: etkili öğrenme için çok fazla.
 
-Yaratıcı binlerce düelloyu analiz etti ve **gerçekten önemli olan 30 değişkeni** belirledi, üç gruba ayrılmış:
+Yaratıcı binlerce düelloyu analiz etti ve gerçekten önemli **30 değişkeni** üç grupta belirledi:
 
-**Görüş (düşman takibi)** :
-- Düşmanın nişan noktasına uzaklığı
-- Düşman sınırlayıcı kutu boyutu
-- Düşman yüksekliği
-- Nişan noktası durumu (hedefte/hedef dışı)
-- Bağıl hız
+**Görüş (düşman izleme)**:
+- Düşmanın nişangâhtan (crosshair) uzaklığı
+- Düşmanın sınırlayıcı kutusunun boyutu
+- Düşmanın yüksekliği
+- Nişangâh durumu (hedefte / hedef dışı)
+- Göreli hız
 
-Bot, tüm görüntüyü işlemek yerine, pikselleri yalnızca düşmanın zırh rengine göre filtreleyerek tespiti neredeyse anlık hale getiriyor. Benzer renkteki arka plan blokları bunu bozabilir: ancak Minecraft'ta, sadece dokuları değiştirebilirsiniz.
+Tüm görüntüyü işlemek yerine bot pikselleri kesinlikle düşman zırhının rengine göre filtreler, tespiti neredeyse anlık yapar. Benzer renkli arka plan blokları bu filtreyi bozabilir: ama Minecraftta dokuları basitçe değiştirebilirsin.
 
-**OCR (HUD okuma)** :
-Bot, oyunun kodundan koordinatları çekemediği için, ekranı gerçek zamanlı olarak tarayarak şunları çıkarır:
-- Kamera eğimi (pitch)
+**OCR (HUD okuma)**:
+Bot koordinatları oyun kodundan alamadığı için ekranı gerçek zamanlı tarayıp şunu çıkarır:
+- Kamera açısı
 - Momentum
 - Y seviyesi
 
-Standart OCR, Minecraft'ın şeffaf metniyle zorlanır, bu nedenle kritik veriler anında okuma için siyah beyaza zorlanır.
+Standart OCR Minecraftın saydam metniyle zorlanır, o yüzden kritik veriler anlık okuma için siyah beyaza zorlanır.
 
-**Zaman (bağlam penceresi)** :
-- Düşmana vurduğunuzdan beri geçen süre
-- Size vurduğundan beri geçen süre
-- Botun kendi önceki eylemlerinin döngüsel arabelleği
+**Zaman (bağlam penceresi)**:
+- Düşmana vurduğundan beri geçen süre
+- Onun sana vurduğundan beri geçen süre
+- Botun önceki aksiyonlarının kayan tamponu
 
-Bu, ağa zamansal bağlam sağlar: onsuz, botun bir combo'nun ortasında mı yoksa yeni bir dövüşe mi başladığı hakkında hiçbir fikri yoktur.
+Bu ağa zamansal bağlam verir: o olmadan botun bir kombonun ortasında mı olduğu ya da savaşa yeni mi başladığı hakkında fikri yoktur.
 
-### Adım 3 : Dikey nişan (7 saat daha)
+### Adım 3: Dikey nişan (7 saat daha)
 
-![RL eğitimi sırasında yukarı ve aşağı nişan almayı öğrenen bot](assets/ai-pvp-rl-vertical.png)
+![RL eğitimi sırasında bot yukarı ve aşağı nişan almayı öğreniyor](assets/ai-pvp-rl-vertical.png)
 
-Dikey fare hareketi eklemek başlangıçta "tam bir felaketti". İlk performans bozuktu.
+Fareye dikey hareket eklemek başlangıçta "tam bir felaket" oldu. Başlangıç performansı kırıktı.
 
-Kum havuzunda bir saat daha geçirdikten sonra, bot yukarı ve aşağı bakmayı çözdü. Ancak bu süreçte, yatay olarak nasıl takip edeceğini tamamen unuttu.
+Kum havuzunda bir saat daha sonra bot yukarı ve aşağı bakmayı anladı. Ama süreçte yatay izlemeyi tamamen unuttu.
 
-Bu **catastrophic forgetting**: yeni veriler için optimize etmenin önceden öğrenilmiş temsillerin üzerine yazdığı klasik bir makine öğrenimi sorunudur. Dikey nişan için optimize ederek, sinir ağı yanlışlıkla yatay ilerlemesinin üzerine yazdı ve yaratıcıya nişanını seviyede tutabilen ancak bir hedefi takip edemeyen bir bot bıraktı.
+Bu **yıkıcı unutma**dır: yeni veriler için optimize etmenin önceden öğrenilmiş temsilleri ezdiği klasik bir makine öğrenmesi sorunu. Dikey nişanı optimize ederken sinir ağı kazara yatay ilerlemelerini ezdi, yaratıcıyı nişangâhını hizada tutabilen ama hedef izleyemeyen bir botla bıraktı.
 
-Dikey kontrolü korurken yatay takibi yeniden kazanmak **6 ek saat** sürdü. Bot daha sonra, kamera eğimini çıkaran OCR grubu sayesinde iyi bir nişan noktası yerleşimi sağladı.
+Yatay izlemeyi geri kazanıp dikey kontrolü korurken **6 saat daha** gerekti. Bot sonra kamera açısını çıkaran OCR grubu sayesinde iyi nişangâh yerleşimini korudu.
 
-### Adım 4 : Klavye kontrolü
+### Adım 4: Klavye kontrolü
 
-![W tuşunu sürekli açıp kapatan, harekete bağlanmayı öğrenen bot](assets/ai-pvp-keyboard.png)
+![W tuşunu sürekli açıp kapatan bot, harekete bağlanmayı öğreniyor](assets/ai-pvp-keyboard.png)
 
-Bota klavyeyi kullanma izni vermek, zamana dayalı özellikleri daha da kritik hale getirdi. İlk başta, W tuşu sürekli açılıp kapatılıyordu: ağ henüz bağlanmayı öğrenmediği için hızlı geçiş.
+Bota klavyeyi kullanma izni vermek zamansal özellikleri daha da kritik yaptı. Başlangıçta W tuşu sürekli açılıp kapanıyordu: ağ bağlanmayı öğrenmediği için hızlı bir değişim.
 
-Bu davranış cezalandırıldı, bu yüzden bot onu yumuşatmayı öğrendi. Daha fazla sprint vuruşu yapmaya başladı (ayakta sallamanın whoosh sesine karşı güm sesi). Bazı combolar, botun düşmana karşı menzil avantajını kullanması nedeniyle tatmin edici görünmüyordu.
+Bu davranış cezalandırıldı, o yüzden bot yumuşatmayı öğrendi. Sprintte daha fazla vuruş indirmeye başladı (ayaktaki vuruşun swishine karşı tok ses). Bazı kombolar tatminsiz görünüyordu çünkü bot düşman üzerindeki menzil avantajını sömürüyordu.
 
-İşleri adil hale getirmek için yaratıcı, düşmanın menzilini artırdı. Botun öğrendiği stratejilerin çoğu çalışmayı bıraktı. Ancak daha fazla zaman verildiğinde, uyum sağladı.
+İşleri adil yapmak için yaratıcı düşmanın menzilini artırdı. Botun öğrendiği stratejilerin çoğu çalışmayı bıraktı. Ama zamanla uyum sağladı.
 
-### Adım 5 : Bota ne zaman tıklayacağını öğretmek
+### Adım 5: Bota ne zaman tıklayacağını öğretmek
 
-Son aşama için, yaratıcı taklit öğrenimini geri getirdi: ancak yalnızca tıklama zamanlamasını öğretmek için, tam kontrol politikasını değil. Bot, kaydedilen düellolardaki tıklama modellerini taklit etmeye çalıştı.
+Final fazı için yaratıcı taklit öğrenmesini geri getirdi: ama tam kontrol politikasını değil, yalnızca tıklama zamanlamasını öğretmek için. Bot kaydedilmiş düelloların tıklama desenlerini taklit etmeye çalıştı.
 
-Başlangıçta, yanlış tıklamaların cezasından korktuğu için herhangi bir şey denemekten çok korkuyordu. Ancak sonunda sallanıp vuruş yapma cesaretini buldu. Tabii ki, bu süreçte nasıl nişan alacağını tekrar unuttu: yaratıcı, tatmin edici bir duruma dönmesi için onu **50 saat daha** yalnız bırakmak zorunda kaldı.
+Başlangıçta kötü tıklamaların cezasından korkup bir şey denemeye çok korkuyordu. Ama sonunda vurma cesaretini buldu ve vuruşlar indirdi. Tabii ki süreçte nişan almayı yine unuttu: yaratıcı tatmin edici bir duruma dönmek için onu **50 saat daha** kendi haline bırakmak zorunda kaldı.
 
 ## Hile tartışması
 
-Video şu soruyla bitiyor: bu bot hile mi yapıyor?
+Video şunu sorarak biter: bu bot hile yapıyor mu?
 
-Aleyhteki argüman: bot yalnızca bir insanın gördüklerini işler (aynı pikseller), bir insanla aynı klavye/fare girdilerini gönderir (anti-knockback gibi paket manipülasyonu yoktur) ve oyun belleğini okumaz (X-ray veya ESP yoktur).
+Karşı argüman: bot yalnızca bir insanın gördüğünü işler (aynı pikseller), bir insanla aynı klavye/fare girdilerini gönderir (anti-knockback gibi paket manipülasyonu olmadan) ve oyun belleğini okumaz (X-ray ya da ESP olmadan).
 
-Lehindeki argüman: bir bot bir insandan daha hızlı işlem yapabilir ve eğer rakip bir insana karşı oynadığını düşünüyorsa ama öyle değilse, bu aldatmacadır.
+Yana argüman: bir bot insandan hızlı işleyebilir ve rakip insana karşı oynadığını sanıyor ama durum bu değilse bu aldatmacadır.
 
-Yaratıcının görüşü: amaca bağlıdır. Her iki taraf da bunun bir bot olduğunu biliyorsa, bu adil bir maçtır. Bot, düşmanı 100 vuruşluk bir seriyle boşluğa gönderir.
+Yaratıcının görüşü: niyete bağlıdır. İki taraf da bunun bir bot olduğunu biliyorsa maç adildir. Bot düşmanı 100 vuruşluk seriyle boşlukta zincirler.
 
 ## Sonuç
 
-![100 vuruşluk combo gerçekleştiren bot](assets/ai-pvp-final-combo.png)
+![100 vuruşluk kombo yapan bot](assets/ai-pvp-final-combo.png)
 
-**GPU'su olmayan bir dizüstü bilgisayarda** eğitilmiş, özel bir eğitim hattı üzerine inşa edilmiş bir Minecraft PvP botu:
+**GPUsuz dizüstü** üzerinde eğitilmiş bir Minecraft PvP botu, özel bir eğitim pipelineı üstüne inşa edilmiş:
 
-- **Piksel girişi için ekran yakalama** (2M+ piksel → 30 mühendislik ürünü özellik)
-- **Müfredat öğrenimi** (yatay → dikey → klavye → tıklama)
-- **Motor kontrol için RL** + **tıklama zamanlaması için taklit öğrenimi**
-- **Ham pikseller üzerinde feature engineering** (3 grup: görüş, OCR, zaman)
-- **Birden çok aşamada 60+ saat eğitim**
+- Piksel girdi için **ekran görüntüsü** (2M+ piksel → 30 tasarlanmış özellik)
+- **Müfredatlı öğrenme** (yatay → dikey → klavye → tıklamalar)
+- Motor kontrolü için **RL** + tıklama zamanlaması için **taklit öğrenmesi**
+- Ham piksellerde **özellik mühendisliği** (3 grup: görüş, OCR, zaman)
+- Birden çok fazda **60+ saatlik eğitim**
 
-Toplam eğitim süresi onlarca saat civarındadır, ancak çoğu pasiftir. Bot anlayışa doğru sallanır, öğrendiklerini unutur, yeniden öğrenir ve sonunda 100 vuruşluk bir comboyu bir araya getirir.
+Toplam eğitim süresi onlarca saattir ama çoğu pasiftir. Bot anlamaya kadar titrer, öğrendiklerini unutur, yeniden öğrenir ve 100 vuruşluk seriyle bitirir.
 
-Video [youtube.com/watch?v=j5nxDKAjg6U](https://www.youtube.com/watch?v=j5nxDKAjg6U) adresinde.
+Video [youtube.com/watch?v=j5nxDKAjg6U](https://www.youtube.com/watch?v=j5nxDKAjg6U) adresindedir.
 
 ---
 
-*Bu makale yalnızca videonun içeriğini kapsar. Minecraft YZ'si hakkında daha geniş bağlam için: VPT, DreamerV3 ve taklit öğrenimi vs RL manzarası: aşağıdaki bölümler bu projeyi daha geniş alana bağlar.*
+*Bu makale yalnızca videonun içeriğini kapsar. Minecraft yapay zekâsına dair daha geniş bağlam için: VPT, DreamerV3 ve taklit öğrenmesi ile RL manzarası: aşağıdaki bölümler bu projeyi daha geniş alana bağlar.*
 
-## VPT : Ölçekte Davranış Klonlama
+## VPT: Büyük ölçekli Davranış klonlama
 
-![OpenAI'in VPT proje diyagramı: Ters Dinamik Modeli, kare çiftlerinden eylemleri tahmin eder](assets/vpt-overview.svg)
+![OpenAI VPT proje şeması: Ters Dinamik Modeli kare çiftlerinden aksiyonları tahmin eder](assets/vpt-overview.svg)
 
-Videonun "davranış klonlama" yaklaşımı (Aşama 1), OpenAI'in **Video PreTraining (VPT)** projesinde kullandığı tekniğin aynısıdır, ancak kaynak spektrumunun zıt uçlarındadır. VPT, 70.000 saat video, 720 GPU ve etiketlenmemiş verileri pseudo-etiketlemek için bir ters dinamik modeliniz olduğunda taklit öğreniminin Minecraft için işe yaradığını kanıtladı. Buradaki yaratıcı, bir dizüstü bilgisayar ve 1.000 düelloyla başarısız olduğunu kanıtladı: ancak aynı temel nedenle: taklit öğrenimi, gösterimlerinin kalitesiyle sınırlıdır.
+Videonun "davranış klonlama" yaklaşımı (Faz 1), OpenAIın **Video PreTraining (VPT)** projesinde kullandığı tekniğin aynısıdır ama kaynak yelpazesinin zıt uçlarındadır. VPT, 70.000 saat video, 720 GPU ve etiketsiz verileri sözde etiketlemek için ters dinamik model olunca taklit öğrenmesinin Minecraft için işe yaradığını kanıtladı. Buradaki yaratıcı dizüstü ve 1.000 düello ile başarısız olduğunu kanıtladı: ama aynı temel nedenle: taklit öğrenmesi gösterimlerinin kalitesiyle sınırlıdır.
 
-![OpenAI'in VPT ajanı Minecraft'ta bir ağaç kesiyor](assets/vpt-minecraft.jpg)
+![OpenAI VPT ajanı Minecraftta ağaç kazıyor](assets/vpt-minecraft.jpg)
 
-VPT hattı, t-1 karesine ve t+1 karesine bakarak t karesindeki eylemi tahmin eden bir **Ters Dinamik Modeli (IDM)** eğiterek veri sorununu çözer. IDM nedensel olmadığı için (gelecek kareleri görür), görev davranış klonlamadan daha kolaydır ve çok daha az etiketli veri gerektirir. 2.000 saatlik etiketli veri için yüklenicilere ~$2.000 ödediler, ardından 70.000 saatlik YouTube Minecraft videosunu pseudo-etiketlemek için IDM'yi kullandılar.
+VPT pipelineı verileri t-1 görüntüsü ve t+1 görüntüsüne bakıp t görüntüsündeki aksiyonu tahmin eden bir **Ters Dinamik Modeli (IDM)** eğiterek veri sorununu çözer. IDM nedensel olmadığı için (gelecek görüntüleri görür) görev davranış klonlamadan kolaydır ve çok daha az etiketli veri gerektirir. Yüklenicilere yaklaşık 2.000 $ ödeyip 2.000 saat etiketli veri aldılar, sonra IDMyi 70.000 saat YouTube Minecraft videosunu sözde etiketlemek için kullandılar.
 
-![Ön eğitim verisi hacmine göre crafting/toplama oranı (log ölçek) : tezgahlar, tahta araçlar, taş araçlar](assets/vpt-stone-pickaxe-sequence.svg)
+![Ön eğitim veri hacmine göre üretim/toplama hızı (log ölçeği): üretim masaları, tahta aletler, taş aletler](assets/vpt-stone-pickaxe-sequence.svg)
 
-Ölçek etkisi nettir: 1 saatten 100.000 saate kadar ön eğitim verisinin log ölçeğinde, modelin tezgah, tahta araç ve taş araç üretme oranı kademeli olarak artar. Yalnızca yükleniciler tarafından etiketlenmiş 2.000 saat üzerinde eğitilen model, tezgahlarda takılı kalır; IDM tarafından pseudo-etiketlenmiş 70.000 saatin (grafikte kesikli çizgi) eklenmesiyle taş araçlar, tek bir RL adımı olmadan, sıfır atışla ortaya çıkar.
+Ölçek etkisi nettir: 1 saatten 100.000 saat ön eğitim verisine log eksende modelin üretim masası, tahta aletler, sonra taş aletler yapma hızı basamakla yükselir. Yalnızca yüklenicilerce etiketlenmiş 2.000 saatte eğitilmiş model üretim masalarında tavan yapar; taş aletlerin zero-shot ortaya çıkmasını sağlayan IDMce sözde etiketlenmiş 70.000 saatin eklenmesidir (grafikte kesikli çizgi), tek RL adımı olmadan.
 
-Ortaya çıkan 0,5B parametreli temel model, yalnızca RL ile imkansız olan sıfır atış yetenekleri elde etti: ağaç kesme, tezgah yapma, sütun atlama: ve RL ile ince ayar yapılarak elmas araçlar üreten ilk YZ oldu.
+Sonuç 0,5B parametreli temel model RL olmadan imkânsız zero-shot yeteneklere ulaştı: ağaç kesmek, masa üretmek, sütun zıplaması: ve RL ile ince ayarlanınca elmas aletler üreten ilk yapay zekâ oldu.
 
-![RL eğitim bölümlerine göre ödül : rastgele başlatılmış modele karşı ön eğitimli VPT modeli](assets/vpt-diamond-pickaxe-sequence.svg)
+![RL eğitim bölümü sayısına göre ödül: rastgele başlatılmış modelden başlamak ve önceden eğitilmiş VPT modelinden başlamak](assets/vpt-diamond-pickaxe-sequence.svg)
 
-Bu grafik, ön eğitimin sonraki RL için neden her şeyi değiştirdiğini gösterir. Rastgele başlatılmış bir ağdan başlayan RL (turuncu), neredeyse bir milyon bölüm boyunca 0'a yakın düz kalır: "elmas elde et" görevinin ödülü, saf bir ajanın rastgele keşifle denk gelmesi için çok seyrektir. Ön eğitimli VPT modelinden ince ayar yapılan RL (yeşil), zaten temel davranışla (madencilik, üretim, keşif) başlar ve yaklaşık 25 ödüle kadar istikrarlı bir şekilde yükselir; bu, elmas kazmaya giden tam yola karşılık gelir.
+Bu grafik ön eğitimin sonraki RL için neden her şeyi değiştirdiğini gösterir. Rastgele başlatılmış ağdan başlayan RL (turuncu) neredeyse bir milyon bölüm boyunca 0 yakınında düz kalır: "bir elmas al" görevi naif bir ajanın rastgele keşifle denk gelmesi için çok seyrek ödüllüdür. Önceden eğitilmiş VPT modelinden ince ayarlanan RL (yeşil) temel davranışla (kazma, üretme, keşfetme) başlar ve elmas kazmaya giden tam yola karşılık gelen ~25 ödüle düzenli tırmanır.
 
 <div style="max-width: 100%; margin: 1.5em 0;">
   <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT ajan oynanış demosu 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+    <iframe src="https://player.vimeo.com/video/719971231?h=cbdf2617a1" title="VPT agent gameplay demo 1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
   </div>
 </div>
 
 <div style="max-width: 100%; margin: 1.5em 0;">
   <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT ajan oynanış demosu 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+    <iframe src="https://player.vimeo.com/video/720045834?h=9cb4118c65" title="VPT agent gameplay demo 2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
   </div>
 </div>
 
 <div style="max-width: 100%; margin: 1.5em 0;">
   <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT ajan oynanış demosu 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+    <iframe src="https://player.vimeo.com/video/720045849?h=00398908ed" title="VPT agent gameplay demo 3" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
   </div>
 </div>
 
 <div style="max-width: 100%; margin: 1.5em 0;">
   <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT ajan oynanış demosu 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
+    <iframe src="https://player.vimeo.com/video/720045863?h=060f07e290" title="VPT agent gameplay demo 4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy"></iframe>
   </div>
 </div>
 
-*OpenAI'in VPT projesinin resmi video demoları, ajanı eylem halinde gösteriyor.*
+*OpenAI VPT projesinin ajanı aksiyonda gösteren resmi tanıtım videoları.*
 
-## OpenAI Five : Ödül şekillendirme sorunu
+## OpenAI Five: Ödül şekillendirme sorunu
 
-![OpenAI Five, insan profesyonellere karşı Dota 2 oynuyor](assets/openai-five-dota2.jpg)
+![İnsan profesyonellere karşı Dota 2 oynayan OpenAI Five](assets/openai-five-dota2.jpg)
 
-OpenAI Five (2019), saf kendi kendine oyun RL kullanarak Dota 2 dünya şampiyonlarını yendi: taklit öğrenimi yok. 256 GPU, 128.000 CPU çekirdeği, günde 180 yıllık oynanış, 10 aylık eğitim.
+OpenAI Five (2019) saf öz öğrenmeli RL kullanarak Dota 2 dünya şampiyonlarını yendi: taklit öğrenmesi yok. 256 GPU, 128.000 CPU çekirdeği, günde 180 oyun yılı, 10 aylık eğitim.
 
-Ancak ödül fonksiyonu Dota uzmanları tarafından elle yapılmıştı: **20.000 özellikten 28'i**, her biri elle ayarlanmış ağırlıklarla. Net değer, öldürmeler, ölümler, kule sağlığı, koridor atamaları: tümü insanlar tarafından seçilmiş ve ağırlıklandırılmış. Bu şekillendirme olmadan, ajan zar zor öğreniyordu (deney: yalnızca galibiyet/mağlubiyet ödülü → yarı profesyonel seviyede plato).
+Ama ödül fonksiyonu Dota uzmanlarınca elle tasarlanmıştı: mevcut **20.000 arasından 28 özellik**, her biri manuel ayarlanmış ağırlıklarla. Net değer, skorlar, ölümler, kule sağlığı, kulvar atamaları: hepsi insanlarca seçilip ağırlıklandırıldı. Bu modelleme olmadan ajan zar zor öğreniyordu (deney: yalnızca galibiyet/mağlubiyet ödülü → yarı pro seviyede plato).
 
-Videonun botu aynı sorunla karşı karşıya: ödül fonksiyonu, yaratıcının PvP'de neyin önemli olduğuna dair anlayışını kodlar (vuruş yapmak iyi, hasar almak kötü, nişanı korumak iyi). Bu kaçınılmazdır: RL'nin bir ödül sinyaline ihtiyacı vardır ve bu sinyali şekillendirmek insan yanlılığını kodlar.
+Videonun botu aynı sorunla yüzleşir: ödül fonksiyonu yaratıcının PvPde neyin önemli olduğuna dair anlayışını kodlar (vurmak iyidir, vurulmak kötüdür, nişangâhı tutmak iyidir). Bu kaçınılmazdır: RL bir ödül sinyaline ihtiyaç duyar ve bu sinyalin modellenmesi bir insan önyargısı kodlar.
 
-## DreamerV3 : Dünya modelleri ve seyrek ödüller
+## DreamerV3: Dünya modelleri ve seyrek ödüller
 
-![Tek bir yapılandırmayla 150'den fazla farklı görevde DreamerV3 benchmark puanları](assets/dreamerv3-benchmarks.png)
+![Tek yapılandırmayla 150den fazla çeşitli görevde DreamerV3 kıyas skorları](assets/dreamerv3-benchmarks.png)
 
-DeepMind'in DreamerV3'ü (2023) üçüncü bir yaklaşım benimser. Davranış klonlama veya şekillendirilmiş RL yerine, bir **dünya modeli** öğrenir: geçmiş eylemlerden gelecekteki durumları ve ödülleri tahmin eden bir sinir ağı: ve olası gelecekler hakkında hayal kurarak plan yapar. İnsan verisi veya müfredat olmadan Minecraft'ta sıfırdan elmas toplayan ilk algoritmaydı, 2025'te Nature'da yayınlandı.
+DeepMindin DreamerV3 modeli (2023) üçüncü bir yaklaşım benimser. Davranış klonlama ya da teşvikli RL yerine bir **dünya modeli** öğrenir: geçmiş aksiyonlardan gelecek durumları ve ödülleri tahmin eden bir sinir ağı: ve olası geleceklerin rüyasını görerek planlar. İnsan verisi ya da müfredatsız Minecraftta sıfırdan elmas toplayan ilk algoritmadır, 2025te Natureda yayınlandı.
 
-![DreamerV3, gelecekteki yörüngeleri hayal etmek için bir dünya modeli öğrenir](assets/dreamerv3-header.png)
+![DreamerV3 gelecek yörüngeleri hayal etmek için bir dünya modeli öğrenir](assets/dreamerv3-header.png)
 
-Elmas ortamı, 12 kilometre taşı üzerinde seyrek bir ödül tanımlar (kütük → tahtalar → çubuk → tezgah → tahta kazma → yuvarlak taş → taş kazma → demir cevheri → fırın → demir külçe → demir kazma → elmas), her biri yalnızca bir kez +1 verir. Artı küçük bir sağlık ödülü (hp başına ±0,01). Ulaşılabilir toplam: 36.000 adımlık bir bölümde 11,1.
+Elmas ortamı 12 dönüm noktasında seyrek bir ödül tanımlar (kütük → tahta → çubuk → üretim masası → tahta kazma → taş → taş kazma → demir cevheri → fırın → demir külçe → demir kazma → elmas), her biri bir kez +1 verir. Artı küçük bir sağlık ödülü (can başına ±0,01). Ulaşılabilir toplam: 36.000 adımlık bölümde 11,1.
 
-DreamerV3'ün dünya modeli, yörüngeleri hayal etmesine ve bunları dahili olarak değerlendirmesine olanak tanır: aktör, gerçek deneyimden ziyade hayal edilen rollout'lardan öğrenir ve her gerçek adım için binlerce olası geleceği test eder. Bu, standart bir RL ajanını öldürecek yerlerde seyrek ödülleri uygulanabilir kılar.
+DreamerV3ün dünya modeli yörüngeleri hayal edip dâhili değerlendirmesine izin verir: aktör gerçek deneyimden çok hayal edilmiş açılımlardan öğrenir, her gerçek adım için binlerce olası geleceği test eder. Bu seyrek ödülleri standart bir RL ajanını yok edeceği yerde mümkün kılar.
 
-100 milyon ortam adımı için eğitilmiş 40 tohumda, 40'ın 24'ü en az bir elmas topladı. İlk elmas, 29 milyon adımdan sonra ortaya çıktı (bir GPU'da ~9 gün).
+100M ortam adımı eğitilmiş 40 tohumdan 24ü en az bir elmas topladı. İlk elmas ~9 gün tek GPUda 29M adımdan sonra belirdi.
 
-## ANNA : Sembolik YZ Minecraft ile Buluşuyor
+## ANNA: Minecraft ile buluşan sembolik yapay zekâ
 
-![Bir çakmaktaşı için ANNA'nın görev ağacı ayrıştırması](assets/anna-task-tree.png)
+![Çakmak taşı için ANNA görev ağacı ayrışımı](assets/anna-task-tree.png)
 
-Videonun PvP botundan, VPT ve DreamerV3'ten önce, **ANNA** vardı: tamamen farklı bir felsefeyle inşa edilmiş bir Minecraft botu. Piksellerden veya ödüllerden öğrenmek yerine, ANNA bir **Fransız NLP ayrıştırıcısı** ve elle yazılmış bir **görev bağımlılık ağacı** ile **sembolik bir durum makinesi** kullanır.
+Videonun PvP botundan, VPT ve DreamerV3ten önce **ANNA** vardı: tamamen farklı bir felsefeyle inşa edilmiş bir Minecraft botu. Piksellerden ya da ödüllerden öğrenmek yerine ANNA **Fransızca NLP ayrıştırıcılı** ve elle yazılmış **görev bağımlılık ağaçlı** **sembolik bir durum makinesi** kullanır.
 
-2022'de oluşturulan ("vibe coding" bir terim olmadan önce) ANNA, Mineflayer aracılığıyla bir Minecraft sunucusuna bağlanır ve Fransızca doğal dil komutlarını anlar. *"obtiens un briquet"* (bir çakmaktaşı al) deyin ve ANNA'nın ayrıştırıcısı fiili tanımlar (*obtien* → edin), eşya tarifine bakar ve onu yinelemeli olarak alt görevlere ayırır: meşe kütükleri çıkar → tahtalar yap → çubuklar yap → tezgah yap → tahta kazma yap → taş çıkar → taş kazma yap → demir cevheri çıkar → demir külçeler erit → çakmaktaşını yap.
+2022de yaratıldı ("vibe coding" bir terim olmadan önce), ANNA Mineflayer üzerinden bir Minecraft sunucusuna bağlanır ve Fransızca doğal dil komutlarını anlar. *"obtiens un briquet"* de ve ANNA fiili ayrıştırır (obtien → elde et), nesnenin tarifini arar ve özyinelemeli alt görevlere böler: meşe kaz → tahta üret → çubuk üret → üretim masası üret → tahta kazma üret → taş kaz → taş kazma üret → demir cevheri kaz → demir külçe erit → çakmak üret.
 
-![Fransızca komut tanıma için ANNA'nın NLP ayrıştırıcı mimarisi](assets/anna-nlp-diagram.png)
+![Fransızca komut tanıma için ANNA NLP ayrıştırıcı mimarisi](assets/anna-nlp-diagram.png)
 
-NLP katmanı (`utils/id_parser.js`), paralel emirleri işlemek için komutları *"et"* (ve) üzerinde böler, Fransızca fiilleri görev türlerine (*craft*, *mine*, *tue*, *suis moi*) eşler ve 5.000 girişlik bir sözlük aracılığıyla Fransızca eşya adlarını Minecraft ID'lerine çevirir. Tanınmayan komutlar, ANNA'yı bilinçli bir Minecraft arkadaşı olarak sunan GPT tabanlı bir sohbet sistemine düşer.
+NLP katmanı (`utils/id_parser.js`) paralel emirleri yönetmek için komutları "et" üzerinden böler, Fransızca fiilleri görev türleriyle eşleştirir ve 5.000 girdili sözlükle Fransızca nesne adlarını Minecraft tanımlayıcılarına çevirir. Tanınmayan komutlar ANNAyı bilinçli bir Minecraft yoldaşı olarak sunan GPT tabanlı bir sohbet sistemine geçer.
 
-**Görev ağacı** (`mc-tasks-tree/`) çekirdektir: adım adım bir plan üretmek için Minecraft eşya grafiğinde (işçilik tarifleri, madencilik verimleri, yaratık düşüşleri, fırın tarifleri) gezinen özyinelemeli bir algoritma. Bir elmas kaskı için, ahşap, taş, demir ve elmas kademelerini kapsayan 40+ adımlık bir ayrıştırma üretir.
+**Görev ağacı** (`mc-tasks-tree/`) kalptir: adım adım plan üretmek için Minecraft nesne grafını (üretim tarifleri, madencilik verimleri, canavar dropları, fırın tarifleri) gezen özyinelemeli bir algoritma. Elmas miğfer için tahta, taş, demir ve elmas seviyelerini kapsayan 40+ adımlı ayrışım üretir.
 
-![ANNA'nın elmas kask görev ağacı: 40+ adımlık bir ayrıştırma](assets/anna-diamond-helmet.png)
+![ANNA elmas miğfer görev ağacı: 40+ adımlı ayrıntı](assets/anna-diamond-helmet.png)
 
-Videonun PvP botu deneyimden öğrenirken, ANNA bilgiden çalışır. 1.000 düelloya veya 60 saatlik eğitime ihtiyacı yoktur: ağaca, ayrıştırıcıya ve sunucuya ihtiyacı vardır. Ancak ağacının kodladığının ötesine genelleme yapamaz. Hiçbir miktarda durum makinesi mühendisliği ona PvP yapmayı öğretmez.
+Videonun PvP botu deneyimden öğrenirken ANNA bilgiden çalışır. 1.000 düelloya ya da 60 saatlik eğitime ihtiyacı yoktur: ağaca, ayrıştırıcıya ve sunucu/dağıtıcıya ihtiyacı vardır. Ama ağacının kodladığının ötesine de genellemez. Hiçbir durum makinesi mühendisliği ona PvP yapmayı öğretemezdi.
 
-ANNA'nın yaklaşımı, farklı bir YZ çağını yansıtır: uçtan uca öğrenmenin hakim olmasından önce, sembolik akıl yürütme ve dikkatli mühendisliğin zeki davranış üretebileceği vaadinin olduğu zaman. Bugün, ANNA ve PvP botu gibi projeler Minecraft YZ'sinin iki kutbunu temsil eder: biri dünya hakkında akıl yürütür, diğeri onu algılar.
+ANNA yaklaşımı yapay zekânın farklı bir dönemini yansıtır: uçtan uca öğrenme baskın olmadan önce, vaat dikkatli mühendislikle birleşmiş sembolik akıl yürütmenin akıllı davranış üretebileceğiydi. Bugün ANNA ve PvP botu gibi projeler Minecraft yapay zekâsının iki kutbunu temsil eder: biri dünya hakkında akıl yürütür, diğeri onu algılar.
 
-## Master Gumbo'nun Mace Botu : Yalnızca komut bloklarıyla YZ
+## Master Gumbo Mace Botu: Yalnızca komut bloklu yapay zekâ
 
-![Botla birlikte Mace PvP eğitim arenası](assets/mace-bot-arena.png)
+![Botlu Mace PvP eğitim arenası](assets/mace-bot-arena.png)
 
-Minecraft YZ'sinin tamamen farklı bir köşesinde, YouTuber **Master Gumbo**, **yalnızca komut bloklarını** kullanarak bir PvP eğitim botu inşa etti: mod yok, eklenti yok, harici kod yok. Sadece vanilya Minecraft komutları, redstone ve oyuncu kopyası varlıkları için bir carpet modu. Sonuç, oyuncuyla breach swapping, wind charging ve kalkan mekanikleri yapan bir YZ mace PvP rakibidir.
+Minecraft yapay zekâsının tamamen farklı bir köşesinde YouTube kanalı **Master Gumbo** **yalnızca komut blokları** kullanarak bir PvP eğitim botu inşa etti; yalnızca vanilla Minecraft komutları, redstone ve oyuncu klon varlıkları için carpet mod. Sonuç, oyuncuyla gedik değişimleri, rüzgâr yükü hücumları ve kalkan mekaniklerini çalıştıran kitle için bir yapay zekâ rakiptir.
 
-Bot, kırılmaz teçhizatı ve ikinci elinde bir totemi olan bir zombi olarak başlar (her tick'te `/item replace` ile yeniden doldurulur), bu da onu etkili bir şekilde ölümsüz yapar. Daha sonra, Master Gumbo, zombilerin yapamayacağı insan benzeri mekanikleri (kalkan kaldırma, eşya değiştirme) destekleyen **Carpet Mod'un oyuncu kopyası** botlarına geçer.
+Bot kırılmaz ekipmanlı ve ikinci elinde totemli bir zombi olarak başlar (her tick `/item replace` ile doldurulur), onu fiilen ölümsüz yapar. Sonra Master Gumbo zombilerin yapamadığı insansı mekanikleri (kalkan kaldırma, eşya değişimi) destekleyen **Carpet Mod oyuncu kopyası** botlarına geçer.
 
-![Ayarlar merkezi: bot davranışını yapılandırmak için düğmeler](assets/mace-settings-center.png)
+![Ayar merkezi: bot davranışını yapılandırma düğmeleri](assets/mace-settings-center.png)
 
-Temel yenilik, **rastgelelik tarafından yönlendirilen bir durum makinesidir**. Bir zırh askısı, varlıkları rastgele dağıtan `/spreadplayers` komutu kullanılarak renkli beton bloklardan oluşan bir dairenin üzerine ışınlanır. Zırh askısının nereye indiği, botun bir sonraki eylemini belirler:
+Merkez yenilik **rastgele sürümlü bir durum makinesidir**. Bir zırh askısı `/spreadplayers` komutuyla renkli beton blok çemberinin üstüne ışınlanır; bu komut varlıkları rastgele dağıtır. Zırh askısının düştüğü beton bloğun rengi botun sonraki aksiyonunu belirler:
 
-- **Kırmızı beton** → geriye doğru strafe
-- **Mavi beton** → yukarı doğru wind charge (saldırı)
-- **Yeşil beton** → kalkan kaldır
-- **Beyaz beton** → duraklama (eylemler arasına gecikme ekler)
+- **Kırmızı beton** → geriye strafing
+- **Mavi beton** → rüzgâr yüküyle yukarı yükselir (saldırı)
+- **Yeşil beton** → kalkanı kaldırır
+- **Beyaz beton** → duraklama (aksiyonlar arasına gecikme ekler)
 
-![YZ karar sistemi: renkli beton üzerinde bir zırh askısı](assets/mace-ai-system.png)
+![Yapay zekâ karar sistemi: renkli beton üzerinde bir zırh askısı](assets/mace-ai-system.png)
 
-Zırh askısının konumu, altındaki bloğu algılayan ve ilgili mekanizmayı etkinleştiren komut blokları tarafından okunur. Her davranışı etkinleştirmek/devre dışı bırakmak için bir redstone bloğu yerleştirilir veya kaldırılır. `/spreadplayers` tekrar üzerinde çalıştığı için, bot sürekli olarak yeni kararlar alarak öngörülemez ancak yapılandırılmış davranış yaratır.
+Zırh askısının konumu altındaki bloğu tespit edip ilgili mekanizmayı etkinleştiren komut bloklarınca okunur. Her davranışı etkinleştirmek/devre dışı bırakmak için bir redstone bloğu yerleştirilir ya da kaldırılır. `/spreadplayers` tekrarda döndüğü için bot sürekli yeni kararlar alır, öngörülemez ama yapılandırılmış bir davranış yaratır.
 
-Master Gumbo buna "çok basit ve temel bir YZ biçimi" diyor: sinir ağları gibi etkileşimlerden öğrenmez, ancak rastgelelik + durum makinesi, komut dosyalı bir bottan tahmin edilmesi daha zor olan gerçekçi PvP davranışı üretir. Ayarlar merkezi, YZ'yi açıp kapatmak, zorluğu ayarlamak ve hareket modellerini yapılandırmak için bir kitap arayüzü içerir.
+Master Gumbo buna "çok basit ve temel bir yapay zekâ biçimi" der: sinir ağları gibi etkileşimlerden öğrenmez ama rastgele + durum makinesi scriptli bir bottan tahmin etmesi zor, gerçekçi bir PvP davranışı üretir. Ayar merkezi yapay zekâyı etkinleştirmek/devre dışı bırakmak, zorluğu ayarlamak ve hareket desenlerini yapılandırmak için kitap arayüzü içerir.
 
-Botla eğitim aldıktan ve ardından (videonun girişinde) kendisine kötü diyen oyuncuyla düello yaptıktan sonra, Master Gumbo kazanır. Harita, Carpet Mod gerekliliğiyle Discord üzerinden paylaşılır.
+Botla eğitimden sonra ve onu ezik diye çağıran oyuncuya karşı düelloda (videosunun introsunda) Master Gumbo kazanır. Harita Discord üzerinden paylaşılır, Carpet Mod gerekli.
 
-![Bir düelloda, mace PvP tekniklerini uygulayan bot](assets/mace-final-duel.png)
+![Düelloda bot, mace PvP tekniklerini çalışıyor](assets/mace-final-duel.png)
 
-PvP botu (Kadambi) piksellerden öğrenir ve ANNA bir görev ağacı aracılığıyla akıl yürütürken, Master Gumbo'nun botu **rasgeleleştirilmiş durum geçişleri** aracılığıyla zeka elde eder: ikna edici bir PvP rakibi oluşturmak için sinir ağlarına ihtiyacınız olmadığını kanıtlayan saf bir komut bloğu yaklaşımı.
+PvP botu (Kadambi) piksellerden öğrenir, ANNA görev ağacında akıl yürütürken Master Gumbo botu **rastgele durum geçişleriyle** zekâya ulaşır: sinir ağlarına ihtiyaç olmadan inandırıcı bir PvP rakibi inşa edilebileceğini kanıtlayan saf komut bloklu bir yaklaşım.
 
-## Altoclef : Görev Odaklı Minecraft YZ'si
+## Altoclef: Büyük ölçekli Baritone + görev ağacı
 
-Minecraft YZ'sinin bir başka köşesinde, **Altoclef** adlı bir bot tamamen farklı bir yaklaşım sunar. PvP yerine, oyuncuya yardım etmek için karmaşık görevleri otonom olarak tamamlamaya odaklanır. Altoclef, **Fabric** modu olarak çalışır ve **Baritone** kütüphanesini pathfinding için kullanır.
+ANNA ne yapacağını *okuyarak* bilen sembolik bir botsa ve Mace Botu kararları rastgeleleştiriyorsa **Altoclef** tüm oyunda yolunu *planlayan* eksiksiz özerk bir ajandır. gaucho-matero tarafından Fabric mod olarak inşa edilmiş ve **Baritone** yol bulmayla güçlendirilmiş Altoclef herhangi bir Minecraft hedefini görev ağacına böler ve insan müdahalesi olmadan yürütür.
 
-Altoclef'in kalbi, **görev ağacı (task tree)** sistemidir. Bir hedef verildiğinde (örneğin, "elmas kazma yap"), bot bunu adım adım alt görevlere ayırır: odun kes → tahtalar yap → çubuklar yap → tahta kazma yap → taş çıkar → taş kazma yap → demir cevheri çıkar → demir külçeler erit → elmas bul → elmas kazma yap. Her adım, Baritone'un pathfinding ve blok etkileşim yeteneklerini kullanarak yürütülür.
+Arayüz aldatıcı basittir: sohbete `@gamer` yaz ve Altoclef survival dünyadan "oyunu bitir" görevine başlar. Odun toplar, alet üretir, demir ve elmas kazar, Nether portalı inşa eder, Blaze çubukları ve Ender incileri toplar, kaleyi bulur ve Ender Dragonu öldürür. Hepsi özerk, yerel Minecraft istemcisi üzerinden, herhangi bir vanilla sunucuda.
 
-ANNA'dan farkı, Altoclef'in **Java sınıfları (Java classes)** ile doğrudan Minecraft'ın içinde çalışmasıdır. Bu, ona daha hızlı ve daha güvenilir blok etkileşimi sağlar. Baritone sayesinde, Altoclef karmaşık arazide gezinirken ANNA'dan daha yeteneklidir: mağaraları keşfedebilir, merdivenler çıkabilir ve su altında yüzebilir. Altoclef, birden fazla görevi aynı anda yürütmek için **multithreading** kullanır: bir iş parçacığı pathfinding ile ilgilenirken, diğeri envanter yönetimini ve işçilik tariflerini işler.
+Kaputun altında bu, her üst düzey hedefin (örneğin "elmas kazma üret") önkoşul görevlere bölündüğü **özyinelemeli bir görev ağacı sistemi** sayesinde başarılır: elmas kaz → erit → çubuk üret → birleştir. Ağaç tam Minecraft tarif grafını gezer, üretim zincirleri, canavar dropları, ganimet tabloları ve konteyner erişimini yönetir. ANNA elle yazılmış ağacının tersine Altoclef görevleri keyfi mantık uygulayabilen **programlanabilir Java sınıflarıdır**: savaş stratejileri, piglin takası, keşif desenleri.
 
-PvP botu piksellerden öğrenir, ANNA bir ayrıştırıcı aracılığıyla akıl yürütür, Mace Botu komut bloklarıyla çalışırken, Altoclef **görev odaklı otomasyon** ile Minecraft YZ'sine pratik bir yaklaşım getirir: sizin için eşyaları üreten, kaynakları toplayan ve yapılar inşa eden bir yardımcı.
+Kilit mimari fikir **ne** (görev ağacı) ile **nasıl** (Baritone yol bulma) ayrımıdır. Baritone düşük seviye hareketleri yönetir: yol bulma, engelden kaçınma, blok kırma, envanter yönetimi; görev sistemi üst düzey planı orkestre eder. Bu modülerlik hiçbir bileşenin yapay zekâ olmasına gerek olmadığı anlamına gelir: ikisi de deterministik algoritmadır ama kombinasyonları öğrenme yaklaşımlarıyla yarışan karmaşık, hedefe yönelik bir davranış üretir.
 
-## Bunları birbirine bağlayan şey
+Altoclef **saf sembolik Minecraft yapay zekâsının** limitini temsil eder: eğitimsiz, GPUsuz ve insan verisiz oyunu sıfırdan bitirebilir ama programcılarının öngörmediği görevlere uyum sağlayamaz ve deneyimden öğrenemez. Elmas kazmayı nasıl üreteceğini bilir çünkü bir Java sınıfı ona tam nasıl olduğunu söyler, kendi keşfettiği için değil.
 
-| Yaklaşım | Temel yöntem | Veri | Hesaplama | Sonuç |
-|----------|------------|------|---------|--------|
-| Videonun PvP botu | RL + taklit öğrenimi | 1.000 düello | 1 dizüstü, 60s | 100 vuruşluk combo |
-| OpenAI Five | Kendi kendine oyun RL | Günde 180 yıl oynanış | 256 GPU, 10 ay | Dünya şampiyonu Dota 2 |
-| VPT | Yarı denetimli IL | 70K saat YouTube + IDM | 720 GPU, 9 gün | Elmas araçlar |
-| DreamerV3 | Dünya modeli RL | Hayal edilen yörüngeler | 1 GPU, 9 gün | Sıfırdan elmas |
-| **ANNA** | **Sembolik NLP + görev ağacı** | **Elle yazılmış tarifler** | **1 dizüstü, anında** | **Üretilebilir her eşya** |
-| **Altoclef** | **Baritone + task tree** | **Minecraft tarifleri** | **1 sunucu, anında** | **Otonom görev tamamlama** |
-| **Mace Botu** | **Komut bloğu durum makinesi** | **Rastgele kararlar** | **Vanilla MC, GPU yok** | **Mace PvP eğitimi** |
+## Onları bağlayan şey
 
-Videonun botu kaynak açısından en kısıtlı olanıdır, ancak süreç hakkında en dürüst olanıdır. Önce başarısız olur, sonra yineler. Öğrendiklerini unutur, sonra yeniden öğrenir. 100 vuruşluk bir combo ile biter: ancak aynı zamanda inşa ettiği şeyin hile olup olmadığına dair bir soruyla.
+| Yaklaşım | Ana yöntem | Veri | Hesaplama | Sonuç | |
+|--------------------------|---------------------|---------|--------|-----------|-|
+| Videonun PvP botu | RL + taklit öğrenmesi | 1.000 düello | 1 dizüstü, 60 saat | 100 vuruşluk kombo | |
+| OpenAI Five | Öz öğrenmeli RL | 180 oyun yılı/gün | 256 GPU, 10 ay | Dota 2 dünya şampiyonu | |
+| VPT | Yarı denetimli IL | 70K saat YouTube + IDM | 720 GPU, 9 gün | Elmas aletler | |
+| DreamerV3 | Dünya modeli RL | Hayal edilmiş yolculuklar | 1 GPU, 9 gün | Sıfırdan elmas | |
+| **ANNA** | **Sembolik NLP + görev ağacı** | **Yazılı tarifler** | **1 dizüstü, anlık** | **Üretilebilir her eşya** | |
+| **Altoclef** | **Baritone + FS görev ağacı** | **Java görev sınıfları** | **Fabric mod, GPU yok** | **Tüm oyunu bitirme** | |
+| **Mace Botu** | **Komut bloklu durum makinesi** | **Rastgele kararlar** | **Vanilla MC, GPU yok** | **Mace PvP eğitimi** | |
+
+Videonun botu kaynakça en kısıtlı ama süreçte en dürüst olandır. Önce başarısız olur, sonra yineler. Öğrendiklerini unutur, sonra yeniden öğrenir. 100 vuruşluk komboyla biter: ama inşa ettiğinin hile olup olmadığı sorusuyla da.
 
 ---
 
-**Video** : [AI Learns Minecraft PvP](https://www.youtube.com/watch?v=j5nxDKAjg6U) - Kadambi | AI Engineering
+**Video**: Kadambi | AI Engineering tarafından [AI Learns Minecraft PvP](https://www.youtube.com/watch?v=j5nxDKAjg6U)
 
-**VPT** : [Makale](https://cdn.openai.com/vpt/Paper.pdf) · [Blog](https://openai.com/index/vpt/) · [GitHub](https://github.com/openai/Video-Pre-Training)
+**VPT**: [Makale](https://cdn.openai.com/vpt/Paper.pdf) · [Blog](https://openai.com/index/vpt/) · [GitHub](https://github.com/openai/Video-Pre-Training)
 
-**OpenAI Five** : [Makale](https://arxiv.org/abs/1912.06680) · [Blog](https://openai.com/index/dota-2/)
+**OpenAI Five**: [Makale](https://arxiv.org/abs/1912.06680) · [Blog](https://openai.com/index/dota-2/)
 
-**DreamerV3** : [Makale](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
+**DreamerV3**: [Makale](https://arxiv.org/abs/2301.04104) · [GitHub](https://github.com/danijar/dreamerv3)
 
-**ANNA** : [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, French NLP, task tree)
+**ANNA**: [GitHub](https://github.com/fox3000foxy/ANNA) · (Node.js, Mineflayer, Fransızca NLP, görev ağacı)
 
-**Altoclef** : [GitHub](https://github.com/gaucho-matrero/altoclef) · (Fabric mod, Baritone, task tree)
+**Altoclef**: [GitHub](https://github.com/gaucho-matrero/altoclef) · [Aktif fork](https://github.com/drmcbride12/altoclef) · (Fabric, Baritone, görev ağacı, oyunu bitirir)
 
-**Mace Botu** : [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) - Master Gumbo · (Command blocks, Carpet Mod, state machine)
+**Mace Botu**: Master Gumbo tarafından [Video](https://www.youtube.com/watch?v=Fmp2Il70IF8) · (Komut blokları, Carpet Mod, durum makinesi)

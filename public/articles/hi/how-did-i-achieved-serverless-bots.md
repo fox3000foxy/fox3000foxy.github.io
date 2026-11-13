@@ -1,82 +1,80 @@
 ---
-title: "Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers"
-description: कैसे मैंने एक Discord बॉट को जो मुझे 50€/माह खर्च कराता था, शून्य
-  यूरो में बदल दिया -- इंटरैक्शन एंडपॉइंट्स, Hono, Workers, रीयल-टाइम
-  इमेज रेंडरिंग, और WebSocket के बिना एक पूरा गेम।
+title: "Discord बॉट 100% serverless : Hono + Cloudflare Workers"
+description: मैंने 50€/महीना वाला Discord बॉट शून्य euro से कैसे बदला, interaction endpoint, Hono, Workers, वास्तविक समय छवि रेंडर, और बिना WebSocket पूरा गेम।
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "mjeilpqExHXthS8uixjWLV2zdRBSu2xKwOwIyZpSUMtwmF50LhthZ+FyO/oVg2mN0qybMb7QrEn8Zv4OV/GKOg=="
+author_sig: "2a8vZ5JkuSoEelX+6CVnY1F9pcOWZYb2sh2jRjlATKG5R8H6De1HiRNXTXY0ZTxhEQ7WnIDzvTkvPm3EUQBqbg=="
 ---
 
-## Discord bot 100% सर्वरलेस : Hono + Cloudflare Workers = 💸 शून्य
+## Discord बॉट 100% serverless : Hono + Cloudflare Workers = 💸 शून्य
 
-मैंने कुछ महीने अपनी खुद की मशीन पर सामान्य Discord बॉट्स को मेंटेन करने में बिताए।
+मैंने अपनी मशीन पर क्लासिक Discord बॉट बनाए रखने में कुछ महीने बिताए।
 
-WebSocket कनेक्शन हमेशा खुला रहता है। बॉट सुबह 3 बजे खुद रीकनेक्ट करता है। बॉट क्रैश हो जाता है बिना किसी कारण के। बिल बढ़ता जाता है।
+हमेशा खुला WebSocket कनेक्शन। बॉट रात 3 बजे खुद फिर से जुड़ता है। बॉट crash करता है क्योंकि मैं भेड़ों को टेढ़ा देखता हूँ। बिल बढ़ता है।
 
-एक दिन मुझे पता चला : **कनेक्शन क्यों बनाए रखें** ? Discord सिर्फ वो चीज़ें POST कर सकता है जिनमें तुम्हारी रुचि हो। तुम जवाब दो, बस हो गया।
+एक दिन मैंने खोजा : **कनेक्शन बनाए क्यों रखना** ? Discord तुम्हें सिर्फ रुचि की घटनाएँ POST कर सकता है। तुम जवाब देते हो, हो गया।
 
-2021 से, Discord **इंटरैक्शन एंडपॉइंट्स** प्रदान करता है।
+2021 से, Discord **interaction endpoint** देता है।
 
-यह सिर्फ HTTP है। कोई WebSocket नहीं। कोई स्थायी स्थिति नहीं। तुम्हें एक रिक्वेस्ट मिलती है, तुम JSON भेजते हो, बस हो गया। अगली रिक्वेस्ट अपने आप आ जाती है।
+यह बस HTTP है। तुम बिना WebSocket, बिना स्थायी स्थिति काम करते हो। तुम अनुरोध पाते हो, तुम JSON भेजते हो, खत्म। अगला अनुरोध अपने आप आता है।
 
-और सबसे अच्छी बात : Cloudflare Workers **मुफ़्त** है 100k रिक्वेस्ट/दिन तक। 90% बॉट्स के लिए, यह 0€/माह है।
+और सबसे अच्छा : Cloudflare Workers 100k अनुरोध/दिन तक **मुफ्त** है। 90% बॉट के लिए, यह 0€/महीना है।
 
-यह लेख तुम्हें दिखाता है कि बिना WebSocket के Hono (अल्ट्रा-लाइटवेट वेब फ्रेमवर्क) और Cloudflare Workers का उपयोग करके Discord बॉट कैसे बनाया जाता है। मैं तुम्हें दो वास्तविक प्रोजेक्ट दिखाऊंगा : **Nibi** (जापानी सीखने के लिए बॉट, TTS, कूल) और **Konosuba-RPG** (रीयल-टाइम इमेज रेंडरिंग के साथ एक _पूरा_ Discord गेम xD)।
+यह लेख दिखाता है कि **Hono** (अति हल्का वेब framework) और **Cloudflare Workers** इस्तेमाल करके बिना WebSocket Discord बॉट कैसे बनाया जाए। मैं तुम्हें दो असली प्रोजेक्ट दिखाऊँगा : **Nibi** (जापानी सीखने का बॉट, TTS, cool) और **Konosuba-RPG** (वास्तविक समय छवि रेंडर वाला _पूरा_ Discord गेम)।
 
-## WebSocket बनाम इंटरैक्शन एंडपॉइंट्स : यह बुरा विचार क्यों था
+## WebSocket बनाम Interaction Endpoint : यह बुरा विचार क्यों था
 
-एक Minecraft गेम की कल्पना करो जहाँ तुम्हें कनेक्शन खुला रखना है भले ही तुम खेल नहीं रहे हो।
+Minecraft खेल कल्पना करो जहाँ तुम्हें कनेक्शन खुला रखना पड़ता है जब तुम खेल भी नहीं रहे।
 
-और सर्वर हर बार क्रैश होने पर अपने आप रीकनेक्ट होता है। तुम्हें टाइमआउट, एक्सपोनेंशियल रीकनेक्शन, वह सब बेकार बॉयलरप्लेट संभालना होता है जिससे हम नफरत करते हैं। सिर्फ इंटरैक्शन प्राप्त करने के लिए।
+और सर्वर हर crash पर अपने आप फिर से जुड़ता है। तुम्हें timeout, घातांकीय पुनः जुड़ाव, सारा घटिया boilerplate संभालना पड़ता है जिससे हम नफरत करते हैं। सिर्फ interaction पाने के लिए।
 
-इंटरैक्शन एंडपॉइंट्स इसका उल्टा है। Discord तुम्हारे URL पर POST करता है। तुम जवाब देते हो। बस हो गया।
+interaction endpoint इसका उल्टा है। Discord तुम्हारे URL पर POST करता है। तुम जवाब देते हो। खत्म।
 
-अगर तुम्हारा सर्वर क्रैश हो जाए ? Discord 2-3 बार रीट्राई करता है और आगे बढ़ जाता है। कोई ड्रामा नहीं।
+अगर तुम्हारा सर्वर crash करता है ? Discord 2-3 बार retry करता है और आगे बढ़ता है। Zero drama।
 
-**पहले की लागत** : Heroku पर 50€/माह सिर्फ एक Node प्रोसेस को जीवित रखने के लिए।
+**पहले लागत** : सिर्फ Node प्रक्रिया जीवित रखने के लिए Heroku पर 50€/महीना।
 
-**बाद की लागत** : Cloudflare पर 0€/माह 100k रिक्वेस्ट/दिन तक।
+**बाद में लागत** : 100k अनुरोध/दिन तक Cloudflare पर 0€/महीना।
 
-## आर्किटेक्चर : यह आखिर है क्या ?
+## आर्किटेक्चर : यह ठीक क्या है ?
 
-Discord तुम्हारे एंडपॉइंट पर एक रिक्वेस्ट POST करता है।
+Discord तुम्हारे endpoint पर अनुरोध POST करता है।
 
 ```plaintext
-Discord: "अरे! उपयोगकर्ता ने /ping पर क्लिक किया!"
+Discord: "Eh! L'utilisateur a cliqué sur /ping!"
       ↓
-   तुम्हारा URL (Cloudflare Worker)
+   Ton URL (Cloudflare Worker)
       ↓
-तुम जाँच करते हो कि यह सच में Discord है (सिग्नेचर चेक)
+Tu vérifie que c'est vraiment Discord (signature check)
       ↓
-तुम इंटरैक्शन टाइप को पार्स करते हो
+Tu parse le type d'interaction
       ↓
-तुम हैंडलर को एक्सीक्यूट करते हो
+Tu exécute le handler
       ↓
-तुम JSON लौटाते हो
+Tu retourne du JSON
       ↓
-Discord: "बढ़िया, मैं यह उपयोगकर्ता को दिखाऊंगा"
+Discord: "Cool, je vais afficher ça à l'utilisateur"
 ```
 
-यह शुद्ध HTTP है। कोई जादू नहीं। कोई भारी लाइब्रेरी नहीं।
+यह शुद्ध HTTP है, न्यूनतम और पठनीय stack के साथ।
 
-## Hono + Cloudflare Workers : किफायती कॉम्बो
+## Hono + Cloudflare Workers : किफायती combo
 
-**Hono** एक वेब फ्रेमवर्क है जिसका वजन 12KB है। यह हर जगह चलता है : Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... एक ही कोड हर जगह।
+**Hono** एक वेब framework है जो 12KB का है। वह हर जगह चलता है : Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... हर जगह वही कोड।
 
-Cloudflare Workers एज पर कंप्यूट है। तुम्हारी रिक्वेस्ट सबसे नज़दीकी सर्वर पर पहुँचती है। रिस्पॉन्स टाइम : \<100ms. लागत : 100k रिक्वेस्ट/दिन तक मुफ़्त।
+Cloudflare Workers edge पर compute है। तुम्हारे अनुरोध निकटतम सर्वर पर पहुँचते हैं। उत्तर समय : \<100ms। लागत : 100k अनुरोध/दिन तक मुफ्त।
 
-Hono + Cloudflare का कॉम्बो Discord बॉट के लिए परफेक्ट मैच है।
+Hono + Cloudflare combo Discord बॉट के लिए सही match है।
 
-यह रहा एक पूर्ण बॉट का न्यूनतम कोड :
+पूरे बॉट का न्यूनतम कोड यहाँ है :
 
 ```typescript
 import { Hono } from 'hono';
@@ -85,12 +83,12 @@ import { verifyKey } from 'discord-interactions';
 const app = new Hono();
 
 app.post('/interactions', async (c) => {
-  // 1. हेडर प्राप्त करो
+  // 1. हेडर लेता है
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
   const body = await c.req.text();
 
-  // 2. जाँच करो कि यह सच में Discord है (स्पैम नहीं)
+  // 2. जाँचता है कि यह सच में Discord है (spam नहीं)
   const isValid = verifyKey(
     body,
     signature,
@@ -99,17 +97,17 @@ app.post('/interactions', async (c) => {
   );
   if (!isValid) return c.text('Invalid request', 401);
 
-  // 3. उसने जो भेजा है उसे पार्स करो
+  // 3. उसने क्या भेजा parse करता है
   const interaction = JSON.parse(body);
 
-  // 4. टाइप के अनुसार जवाब दो
+  // 4. प्रकार के अनुसार जवाब देता है
   if (interaction.type === 1) {
     // Discord test (PING)
     return c.json({ type: 1 });
   }
 
   if (interaction.type === 2) {
-    // यह एक स्लैश कमांड है
+    // यह slash command है
     const name = interaction.data.name;
     if (name === 'ping') {
       return c.json({
@@ -125,51 +123,51 @@ app.post('/interactions', async (c) => {
 export default app;
 ```
 
-बस, 30 लाइनें और यह एक काम करने वाला बॉट है।
+कार्यात्मक बॉट के लिए 30 पंक्तियाँ काफी हैं।
 
-कोई `bot.login()` नहीं। कोई event emitter नहीं। कोई callback hell नहीं। बस HTTP।
+तुम `bot.login()`, event emitter और callback hell भूल जाते हो। तुम सिर्फ HTTP रखते हो।
 
-Cloudflare पर डिप्लॉय करने के लिए :
+Cloudflare पर deploy करने के लिए :
 
 ```plaintext
 npm install -D wrangler
 npx wrangler deploy
 ```
 
-बूम। तुम्हें एक URL मिलता है जैसे `https://mon-bot.workers.dev/interactions`।
+धड़ाम। तुम्हें `https://mon-bot.workers.dev/interactions` जैसा URL मिलता है।
 
-इसे Discord Developer Portal में "INTERACTIONS ENDPOINT URL" के तहत डालो, और Discord वहाँ तुम्हारी इंटरैक्शन भेजना शुरू कर देगा।
+तुम इसे Discord Developer Portal में "INTERACTIONS ENDPOINT URL" के नीचे रखते हो, और Discord वहाँ तुम्हारे interaction भेजना शुरू करता है।
 
-## सिग्नेचर वेरिफिकेशन : कोई फ़ेक रिक्वेस्ट नहीं
+## हस्ताक्षर जाँचना : कोई नकली अनुरोध नहीं
 
-Discord हर रिक्वेस्ट पर पब्लिक की से साइन करता है। अगर तुम्हें गलत सिग्नेचर वाली रिक्वेस्ट मिले ? यह स्पैम है। इसे अनदेखा करो और आगे बढ़ो।
+Discord हर अनुरोध सार्वजनिक कुंजी से हस्ताक्षर करता है। अगर तुम्हें गलत हस्ताक्षर वाला अनुरोध मिलता है ? यह spam है। नजरअंदाज करो और आगे बढ़ो।
 
-`discord-interactions` पैकेज यह काम करता है :
+`discord-interactions` पैकेज काम करता है :
 
 ```typescript
 import { verifyKey } from 'discord-interactions';
 
 const isValid = verifyKey(
-  rawBody,           // सटीक रॉ टेक्स्ट (पार्स किया हुआ JSON नहीं!)
-  signature,         // हेडर x-signature-ed25519
-  timestamp,         // हेडर x-signature-timestamp
+  rawBody,           // सटीक कच्चा पाठ (pars किया JSON नहीं !)
+  signature,         // header x-signature-ed25519
+  timestamp,         // header x-signature-timestamp
   publicKey          // Discord Dev Portal से
 );
 ```
 
-**महत्वपूर्ण ट्रैप** : सिग्नेचर _सटीक_ body पर निर्भर करता है। अगर तुम JSON पार्स करके फिर से stringify करते हो, या body को लॉग करते हो, तो सिग्नेचर टूट जाता है।
+**महत्वपूर्ण जाल** : हस्ताक्षर _सटीक_ body पर निर्भर करता है। अगर तुम JSON parse करके फिर से stringify करते हो, या body log करते हो, तो तुम हस्ताक्षर तोड़ते हो।
 
-पहले जाँच करो। बाद में पार्स करो। यही सही क्रम है।
+पहले जाँचो। बाद में parse करो। यही क्रम मायने रखता है।
 
-## केस 1 : Nibi (जापानी सीखने का बॉट)
+## मामला 1 : Nibi (जापानी सीखने का बॉट)
 
-Nibi जापानी सीखने के लिए एक Discord बॉट है। सरल कमांड्स :
+Nibi जापानी सीखने का Discord बॉट है। सरल कमांड :
 
 *   `/dictionary kanji` → परिभाषाएँ दिखाता है
-*   `/pronounce テキスト` → TTS (टेक्स्ट-टू-स्पीच) जनरेट करता है
+*   `/pronounce テキスト` → TTS (text-to-speech) बनाता है
 *   `/hello` → स्वागत संदेश
 
-हर कमांड एक TypeScript फ़ाइल है :
+हर कमांड एक TypeScript फाइल है :
 
 ```plaintext
 src/commands/
@@ -179,7 +177,7 @@ src/commands/
 └── ...
 ```
 
-एक कमांड इस इंटरफ़ेस को इम्प्लीमेंट करती है :
+कमांड यह इंटरफेस लागू करती है :
 
 ```typescript
 interface Command {
@@ -195,20 +193,20 @@ interface Command {
 }
 ```
 
-### /pronounce कमांड : बॉट को बोलने दो
+### /pronounce कमांड : बॉट को बुलवाना
 
-यह वाली काफी अजीब है। तुम टेक्स्ट भेजते हो (रोमाजी, हीरागाना, कांजी, कुछ भी), बॉट इसे हीरागाना में बदलता है, VOICEVOX या Google TTS के ज़रिए TTS जनरेट करता है, और Discord पर एक ऑडियो संदेश भेजता है।
+यह वह है जो अच्छी तरह अजीब है। तुम पाठ भेजते हो (romaji, hiragana, kanji, कुछ भी), बॉट उसे hiragana में बदलता है, VOICEVOX या Google TTS से TTS बनाता है, और Discord पर ऑडियो संदेश भेजता है।
 
 ```typescript
 const pronounce: Command = {
   data: {
     name: 'pronounce',
-    description: 'जापानी टेक्स्ट के लिए TTS जनरेट करता है',
+    description: 'जापानी पाठ के लिए TTS बनाता है',
     options: [
       {
         type: 3,  // STRING
         name: 'text',
-        description: 'उच्चारण करने के लिए टेक्स्ट',
+        description: 'बोलने वाला पाठ',
         required: true
       }
     ]
@@ -218,20 +216,20 @@ const pronounce: Command = {
     const text = interaction.data.options[0].value;
 
     try {
-      // 1. Kuroshiro से रोमाजी → हीरागाना
+      // 1. Kuroshiro से romaji → hiragana बदलना
       const hiragana = await kuroshiro.convert(text, { to: 'hiragana' });
 
-      // 2. TTS ऑडियो जनरेट करो
+      // 2. TTS ऑडियो बनाना
       const audioBuffer = await generateTTS(hiragana);
 
-      // 3. फ़ाइल को Discord पर अपलोड करो
+      // 3. फाइल Discord पर upload करना
       const uploadFilename = await uploadToDiscord(
         audioBuffer,
         interaction.channel.id,
         env.BOT_TOKEN
       );
 
-      // 4. ऑडियो के साथ संदेश भेजो
+      // 4. ऑडियो के साथ संदेश भेजना
       await sendVoiceMessage(
         interaction.channel.id,
         uploadFilename,
@@ -247,7 +245,7 @@ const pronounce: Command = {
       return {
         type: 4,
         data: {
-          content: 'त्रुटि : ऑडियो जनरेट नहीं कर सका xD',
+          content: 'Erreur : impossible de générer l\'audio xD',
           flags: 64  // ephemeral (निजी संदेश)
         }
       };
@@ -256,11 +254,11 @@ const pronounce: Command = {
 };
 ```
 
-यह पागलपन है : तुम एक बाहरी API कॉल करते हो, Discord पर एक फ़ाइल अपलोड करते हो, फ़ाइल के साथ एक संदेश भेजते हो। यह सब बिना WebSocket के, सिर्फ HTTP से।
+यह पागल है : तुम बाहरी API बुलाते हो, तुम Discord पर फाइल upload करते हो, तुम फाइल के साथ संदेश भेजते हो। सब बिना WebSocket, सिर्फ HTTP।
 
-### Supabase के साथ पर्सिस्टेंस
+### Supabase से स्थायित्व
 
-Nibi Supabase को key-value स्टोर के रूप में उपयोग करता है। यह जाँचने के लिए कि कोई उपयोगकर्ता पंजीकृत है या नहीं :
+Nibi Supabase को key-value store की तरह इस्तेमाल करता है। जाँचने के लिए कि उपयोगकर्ता दर्ज है या नहीं :
 
 ```typescript
 const DatabaseUtils = new DatabaseUtils({
@@ -272,45 +270,45 @@ const users = await DatabaseUtils.readJson('users');
 const user = users.find(u => u.id === interaction.member.user.id);
 
 if (!user) {
-  // उपयोगकर्ता जोड़ो
+  // उपयोगकर्ता जोड़ना
   users.push({ id: interaction.member.user.id, verified: true });
   await DatabaseUtils.writeJson('users', users);
 }
 ```
 
-यह बहुत बुनियादी है (कोई असली SQL क्वेरी नहीं, सिर्फ JSON), लेकिन यह काम करता है। छोटे बॉट्स के लिए यह परफेक्ट है।
+यह बहुत बुनियादी है (असली SQL query नहीं, सिर्फ JSON), लेकिन काम करता है। छोटे बॉट के लिए एकदम सही है।
 
-## केस 2 : Konosuba-RPG (इमेज रेंडरिंग के साथ Discord गेम)
+## मामला 2 : Konosuba-RPG (छवि रेंडर वाला Discord गेम)
 
-ठीक है यह वाला पागलपन है।
+अच्छा यह पागल है।
 
-Konosuba-RPG Discord पर एक **पूरा गेम** है। तुम मॉब्स से लड़ते हो, XP कमाते हो, एक्सेसरीज़ इक्विप करते हो, लेवल अप करते हो। हर बैटल एक रीयल-टाइम **इमेज** जनरेट करती है। कोई प्री-रेंडर्ड स्प्राइटशीट नहीं। इमेज प्लेयर के स्टैट्स, मॉब और बैटल की स्थिति से डायनामिक रूप से कंपोज़ होती है।
+Konosuba-RPG Discord पर **पूरा गेम** है। तुम mob से लड़ते हो, तुम XP जीतते हो, तुम सहायक वस्तुएँ सजाते हो, तुम स्तर बढ़ाते हो। हर battle **छवि** वास्तविक समय बनाती है। तुम पूर्व रेंडर spritesheet से बचते हो। छवि खिलाड़ी stats, mob और युद्ध स्थिति से गतिशील बनती है।
 
-और इमेज Cloudflare Workers पर \<500ms में जनरेट होती है। सचमुच।
+और छवि Cloudflare Workers पर \<500ms में बनती है। सचमुच।
 
 ### रेंडर आर्किटेक्चर
 
 ```plaintext
-Discord (तुम "Attack" पर क्लिक करते हो)
+Discord (तुम "Attack" क्लिक करते हो)
     ↓
-Cloudflare Worker इंटरैक्शन प्राप्त करता है
+Cloudflare Worker interaction पाता है
     ↓
-गेम स्टेट अपडेट (XP, HP, आदि)
+गेम स्थिति अद्यतन (XP, HP, आदि)
     ↓
-Satori के साथ JSX जनरेट करो
+Satori से JSX बनाता है
     ↓
-Resvg (Wasm) से SVG → PNG बदलो
+Resvg (Wasm) से SVG → PNG बदलता है
     ↓
-इमेज Discord पर अपलोड करो
+छवि Discord पर upload करता है
     ↓
-इमेज के साथ संदेश भेजो
+छवि के साथ संदेश भेजता है
 ```
 
-यह सब एक सेकंड से भी कम में। यह कमाल है।
+सब एक सेकंड से कम में। यह पागलपन है।
 
-### Workers पर इमेज रेंडरिंग
+### Workers तरफ छवि रेंडर
 
-Konosuba **Satori** (JSX → SVG) और **Resvg** (SVG → PNG) का उपयोग करता है :
+Konosuba **Satori** (JSX → SVG) और **Resvg** (SVG → PNG) इस्तेमाल करता है :
 
 ```typescript
 import { Satori } from 'satori';
@@ -319,9 +317,9 @@ import initWasm from '@cf-wasm/resvg';
 async function renderBattle(gameState: GameState) {
   const resvg = await initWasm();
 
-  // 1. UI के लिए JSX बनाओ
+  // 1. UI के लिए JSX बनाना
   const jsx = (
-    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}>
+    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}="">
       <div>
         <h1>{gameState.player.name}</h1>
         <p>HP: {gameState.player.hp}/{gameState.player.maxHp}</p>
@@ -347,13 +345,13 @@ async function renderBattle(gameState: GameState) {
 }
 ```
 
-तुम सामान्य JSX लिखते हो। वह SVG बन जाता है। SVG PNG बन जाता है। Cloudflare Worker पर \<100ms।
+तुम सामान्य JSX लिखते हो। यह SVG बनता है। SVG PNG बनता है। Cloudflare Worker पर \<100ms।
 
-समझ रहे हो कितनी ताकत है ? यह बस... सुंदर है xD
+शक्ति समझ रहे हो ? यह बस सुंदर है।
 
-### गेम स्टेट और प्रोग्रेस
+### गेम स्थिति और प्रगति
 
-प्लेयर डेटा Supabase में है :
+खिलाड़ी डेटा Supabase में है :
 
 ```typescript
 const player = await db
@@ -362,7 +360,7 @@ const player = await db
   .eq('discord_id', interaction.user.id)
   .single();
 
-// प्लेयर जीत गया
+// खिलाड़ी जीता
 const { data: updated } = await db
   .from('players')
   .update({
@@ -372,11 +370,11 @@ const { data: updated } = await db
   .eq('id', player.id);
 ```
 
-हर एक्शन (हमला, बचाव, उपचार) डेटाबेस में स्टैट्स अपडेट करता है। और फिर तुम नए स्टैट्स के साथ इमेज दोबारा जनरेट करते हो।
+हर क्रिया (हमला, रक्षा, उपचार) आधार में stats अद्यतन करती है। और फिर तुम नई stats के साथ छवि फिर से बनाते हो।
 
-### इंटरैक्शन : गेमप्ले के बटन
+### Interaction : gameplay बटन
 
-गेम कॉम्बैट एक्शन के लिए **बटन इंटरैक्शन** का उपयोग करता है :
+खेल युद्ध में क्रियाओं के लिए **button interaction** इस्तेमाल करता है :
 
 ```typescript
 {
@@ -390,7 +388,7 @@ const { data: updated } = await db
     },
     {
       type: 2,
-      style: 2,  // Secondary (ग्रे)
+      style: 2,  // Secondary (धूसर)
       label: 'Defend',
       custom_id: 'battle_defend'
     }
@@ -398,11 +396,11 @@ const { data: updated } = await db
 }
 ```
 
-जब तुम "Attack" पर क्लिक करते हो, Discord `custom_id: 'battle_attack'` के साथ एक इंटरैक्शन POST करता है। हैंडलर इसे रूट करता है :
+जब तुम "Attack" क्लिक करते हो, तो Discord `custom_id: 'battle_attack'` के साथ interaction POST करता है। handler इसे route करता है :
 
 ```typescript
 if (interaction.type === 3) {
-  // Component interaction (बटन क्लिक, आदि)
+  // Component interaction (button click, आदि)
   const customId = interaction.data.custom_id;
 
   if (customId === 'battle_attack') {
@@ -414,30 +412,30 @@ if (interaction.type === 3) {
 }
 ```
 
-और बूम, तुम नुकसान की गणना करते हो, डेटाबेस अपडेट करते हो, इमेज रीजनरेट करते हो, भेजते हो।
+और धड़ाम, तुम नुकसान गणना करते हो, तुम आधार अद्यतन करते हो, तुम छवि फिर से बनाते हो, तुम भेजते हो।
 
-यह बिना किसी कनेक्शन पर्सिस्टेंस के एक पूरा टर्न-बेस्ड गेम है। बस HTTP स्टेटलेस। पूरी तरह से पागलपन xD
+यह बिना किसी कनेक्शन स्थायित्व के पूरा turn-based गेम है। सिर्फ stateless HTTP। पूरी तरह टूटा हुआ।
 
 ## Supabase : Workers के लिए बनी DB
 
-पारंपरिक डेटाबेस (PostgreSQL, MySQL, MongoDB) स्थायी TCP कनेक्शन के लिए डिज़ाइन किए गए हैं। तुम एक सॉकेट खोलते हो, कनेक्शन खुला रखते हो, क्वेरी भेजते हो। समस्या : **Cloudflare Workers स्थायी TCP कनेक्शन सपोर्ट नहीं करता**। हर रिक्वेस्ट एक अस्थायी प्रक्रिया है। जैसे ही तुम क्लाइंट को जवाब देते हो, Worker गायब हो जाता है।
+क्लासिक डेटाबेस (PostgreSQL, MySQL, MongoDB) स्थायी TCP कनेक्शन के लिए डिजाइन किए हैं। तुम socket खोलते हो, तुम कनेक्शन खुला रखते हो, तुम query भेजते हो। समस्या : **Cloudflare Workers स्थायी TCP कनेक्शन समर्थन नहीं करते**। हर अनुरोध अल्पकालिक प्रक्रिया है। जैसे ही तुम client को जवाब देते हो, Worker गायब हो जाता है।
 
 तुम यह नहीं कर सकते :
 
 ```typescript
 // यह Workers पर काम नहीं करता
 import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();  // स्थायी TCP कनेक्शन = डेड
+const prisma = new PrismaClient();  // स्थायी TCP कनेक्शन = dead
 ```
 
-और यहाँ तक कि नेटिव PostgreSQL ड्राइवर जैसे `pg` या `postgres.js` भी TCP कनेक्शन का उपयोग करते हैं। Workers पर, वे क्रैश हो जाते हैं।
+और `pg` या `postgres.js` जैसे नेटिव PostgreSQL driver भी TCP कनेक्शन इस्तेमाल करते हैं। Workers पर, वे crash करते हैं।
 
-**Supabase यह सब हल करता है।**
+**Supabase यह सब सुलझाता है।**
 
-Supabase PostgreSQL के ऊपर एक REST API है। तुम सामान्य HTTP रिक्वेस्ट करते हो। हर कॉल स्वतंत्र है, कोई स्थायी कनेक्शन नहीं, कोई स्टेट मैनेज नहीं करना। यह सर्वरलेस मॉडल के लिए पूरी तरह उपयुक्त है।
+Supabase PostgreSQL के ऊपर REST API है। तुम सामान्य HTTP अनुरोध करते हो। हर कॉल स्वतंत्र है, कोई स्थायी कनेक्शन नहीं, प्रबंधित करने को कोई स्थिति नहीं। यह serverless मॉडल के लिए पूरी तरह अनुकूल है।
 
 ```typescript
-// यह Workers पर पूरी तरह काम करता है
+// यह Workers पर एकदम सही काम करता है
 const { data, error } = await supabase
   .from('players')
   .select('*')
@@ -445,45 +443,45 @@ const { data, error } = await supabase
   .single();
 ```
 
-Supabase क्लाइंट (`@supabase/supabase-js`) अंदरूनी रूप से `fetch` का उपयोग करता है। और `fetch` Workers पर नेटिव है। जीरो कॉन्फ़िगरेशन, जीरो ड्राइवर, जीरो स्थायी कनेक्शन।
+Supabase client (`@supabase/supabase-js`) हुड के नीचे `fetch` इस्तेमाल करता है। और `fetch` Workers पर नेटिव है। शून्य कॉन्फ़िगरेशन, शून्य driver, शून्य स्थायी कनेक्शन।
 
-| डेटाबेस | Workers के साथ संगत ? | क्यों |
+| डेटाबेस | Workers संगत ? | क्यों |
 | --- | --- | --- |
-| **Supabase** | ✅ हाँ | REST API स्टेटलेस, शुद्ध HTTP |
-| **PlanetScale (MySQL)** | ⚠️ आंशिक | केवल HTTPS कनेक्शन, कोई लंबा ट्रांज़ैक्शन नहीं |
-| **Neon** | ⚠️ आंशिक | सर्वरलेस ब्रांचेज़ लेकिन TCP ड्राइवर आवश्यक |
+| **Supabase** | ✅ हाँ | बिना स्थिति REST API, शुद्ध HTTP |
+| **PlanetScale (MySQL)** | ⚠️ आंशिक | सिर्फ HTTPS कनेक्शन, लंबे लेनदेन नहीं |
+| **Neon** | ⚠️ आंशिक | Serverless शाखाएँ लेकिन जरूरी TCP driver |
 | **Turso (libSQL)** | ⚠️ आंशिक | HTTP संभव लेकिन सीमित |
-| **Prisma/Prisma Postgres** | ❌ नहीं | स्थायी TCP आवश्यक |
-| **MongoDB Atlas** | ❌ नहीं | TCP ड्राइवर, कोई नेटिव REST API नहीं |
-| **Redis (Upstash)** | ✅ हाँ | REST API HTTP |
+| **Prisma/Prisma Postgres** | ❌ नहीं | स्थायी TCP जरूरी |
+| **MongoDB Atlas** | ❌ नहीं | TCP driver, कोई नेटिव REST API नहीं |
+| **Redis (Upstash)** | ✅ हाँ | HTTP REST API |
 
-Supabase का असली फायदा सिर्फ DB नहीं है -- पूरा इकोसिस्टम एज-फर्स्ट सोचा गया है :
+Supabase का असली फायदा सिर्फ DB नहीं है, यह पूरा पारिस्थितिकी तंत्र है जो edge-first सोचा गया है :
 
-- **Auth** : सेशन मैनेज करने के लिए REST API, स्टेटलेस काम करता है
-- **Storage** : HTTP के ज़रिए फ़ाइल अपलोड/डाउनलोड
-- **Realtime** : वैकल्पिक WebSocket, लेकिन REST के ज़रिए पोल भी कर सकते हो
-- **Row Level Security** : सुरक्षा नियम DB में हैं, तुम्हारे बैकएंड में नहीं
+- **Auth** : सत्र प्रबंधित करने के लिए REST API, बिना स्थिति काम करता है
+- **Storage** : HTTP से फाइल Upload/download
+- **Realtime** : वैकल्पिक WebSocket, लेकिन तुम REST से poll भी कर सकते हो
+- **Row Level Security** : सुरक्षा नियम DB में हैं, तुम्हारे backend में नहीं
 
-सर्वरलेस Discord बॉट के लिए, Supabase सबसे सरल और सबसे भरोसेमंद विकल्प है। कोई ड्राइवर कॉन्फ़िगर नहीं करना, कोई कनेक्शन बनाए नहीं रखना, कोई टाइमआउट नहीं। बस HTTP रिक्वेस्ट।
+serverless Discord बॉट के लिए, Supabase सबसे सरल और सबसे विश्वसनीय चुनाव है। तुम कोई driver कॉन्फ़िगर नहीं करते, तुम कोई कनेक्शन नहीं रखते, तुम कोई timeout नहीं संभालते। तुम बस HTTP अनुरोध भेजते हो।
 
-अगर तुम एक वास्तविक उदाहरण चाहते हो, ऊपर Nibi देखो : पर्सिस्टेंस कोड सचमुच Supabase पर `readJson()` और `writeJson()` है। कोई माइग्रेशन नहीं, कोई जटिल स्कीमा नहीं, कोई पागल कॉन्फ़िग नहीं। यह सीधे काम करता है। और अगर तुम्हारा बॉट बड़ा हो जाता है, तुम प्रोवाइडर बदले बिना असली SQL क्वेरी पर माइग्रेट कर सकते हो।
+अगर तुम्हें असली उदाहरण चाहिए, तो ऊपर Nibi देखो : स्थायित्व कोड सचमुच Supabase पर `readJson()` और `writeJson()` है। तुम बिना migration, बिना जटिल schema, बिना भारी config शुरू करते हो। यह सीधे काम करता है। और अगर तुम्हारा बॉट बड़ा होता है, तो तुम provider बदले बिना असली SQL query की ओर migrate करते हो।
 
-## पॉलीफ़िल्स : जब Node Workers पर चलना चाहता है
+## Polyfill : जब Node Workers पर चलना चाहता है
 
-कुछ पैकेज Node APIs की उम्मीद करते हैं। Kuromoji (कांजी पार्सर) `XMLHttpRequest` का उपयोग करता है। Workers के पास `XMLHttpRequest` नहीं, `fetch` है।
+कुछ पैकेज Node API अपेक्षा करते हैं। Kuromoji (kanji parser) `XMLHttpRequest` इस्तेमाल करता है। Workers के पास `fetch` है, `XMLHttpRequest` नहीं।
 
-सरल उपाय : index.ts के शीर्ष पर एक पॉलीफ़िल जोड़ो :
+सरल समाधान : index.ts के ऊपर polyfill जोड़ना :
 
 ```typescript
-// kuromoji के लिए XMLHttpRequest पॉलीफ़िल
+// kuromoji के लिए XMLHttpRequest Polyfill
 if (!globalThis.XMLHttpRequest) {
   globalThis.XMLHttpRequest = class {
-    // न्यूनतम स्टब
+    // न्यूनतम Stub
   } as any;
 }
 ```
 
-या एक समर्पित मॉड्यूल बनाओ :
+या समर्पित मॉड्यूल बनाना :
 
 ```typescript
 // src/utils/polyfills.ts
@@ -497,18 +495,18 @@ import { setupPolyfills } from './utils/polyfills';
 setupPolyfills();
 ```
 
-यह बुनियादी हैक है, लेकिन काम करता है।
+यह बुनियादी hack है, लेकिन काम करता है।
 
-## एक npm पैकेज की ओर : hono-discord-interactions
+## npm पैकेज की ओर : hono-discord-interactions
 
-हाथ से बॉट बनाने में बहुत बॉयलरप्लेट है :
+हाथ से, बॉट बनाना बहुत boilerplate है :
 
-*   Discord सिग्नेचर जाँच करो
-*   इंटरैक्शन टाइप रूट करो
-*   कमांड्स, कम्पोनेंट्स, मॉडल्स संभालो
-*   मान्य JSON लौटाओ
+*   Discord हस्ताक्षर जाँचना
+*   interaction प्रकार route करना
+*   कमांड, component, modal संभालना
+*   वैध JSON लौटाना
 
-हम यह सब एक npm पैकेज में एब्स्ट्रैक्ट कर सकते हैं। जैसे :
+यह सब npm पैकेज में समेटा जा सकता है। जैसे :
 
 ```typescript
 import { createDiscordHandler } from 'hono-discord-interactions';
@@ -538,11 +536,11 @@ app.post('/interactions', handler);
 export default app;
 ```
 
-बूम। 200 के बजाय 20 लाइनें। यह Nibi को आसानी से आधा कर देगा।
+धड़ाम। 200 के बजाय 20 पंक्तियाँ। यह Nibi को आसानी से आधा घटा देगा।
 
-बाद के लिए विचार xD
+बाद के लिए विचार।
 
-## डिप्लॉय
+## Deploy
 
 ### Cloudflare Workers
 
@@ -565,9 +563,9 @@ wrangler deploy --env production
 
 परिणामी URL : `https://mon-bot.workers.dev/interactions`
 
-लागत : 100k रिक्वेस्ट/दिन तक **मुफ़्त**। उससे अधिक : $0.50/मिलियन।
+लागत : 100k अनुरोध/दिन तक **मुफ्त**। उसके बाद : $0.50/million।
 
-स्पॉइलर : जब तक तुम्हारे 10,000 सक्रिय उपयोगकर्ता न हों, तुम कभी 100k रिक्वेस्ट नहीं पहुँचोगे।
+स्पॉइलर : तुम 100k अनुरोध कभी खर्च नहीं करोगे जब तक 10 000 सक्रिय उपयोगकर्ता न हों।
 
 ### Vercel
 
@@ -577,57 +575,57 @@ npm run vercel:deploy
 
 URL : `https://mon-bot-xyz.vercel.app/api/interactions`
 
-वैसे ही, मुफ़्त।
+वही, मुफ्त।
 
 ### दोनों एक साथ
 
-Hono हर जगह चलता है। तुम एक ही कोड Cloudflare और Vercel दोनों पर डिप्लॉय कर सकते हो। रिडंडेंसी के लिए या चुनने से पहले परीक्षण के लिए उपयोगी।
+Hono हर जगह चलता है। तुम वही कोड Cloudflare और Vercel पर डिप्लॉय कर सकते हो। चुनने से पहले अतिरेक या परीक्षण के लिए उपयोगी।
 
-## त्वरित चेकलिस्ट
+## त्वरित checklist
 
-1.  Discord Developer Portal पर एक Application बनाओ
-2.  PUBLIC\_KEY, BOT\_TOKEN, APP\_ID कॉपी करो
-3.  प्रोजेक्ट बनाओ :
-4.  index.ts लिखो (सिग्नेचर वेरिफिकेशन + रूटिंग)
-5.  स्लैश कमांड्स रजिस्टर करो (एक बार) :
-6.  डिप्लॉय करो :
-7.  Discord में URL डालो (Developer Portal → Application → Interactions Endpoint URL)
-8.  Discord कनेक्शन टेस्ट करता है (तुम्हें PING का जवाब देना होगा)
-9.  बॉट को एक सर्वर पर इनवाइट करो
+1.  Discord Developer Portal पर Application बनाना
+2.  PUBLIC\_KEY, BOT\_TOKEN, APP\_ID कॉपी करना
+3.  प्रोजेक्ट बनाना :
+4.  index.ts लिखना (हस्ताक्षर जाँच + routing)
+5.  slash command दर्ज करना (एक बार) :
+6.  Deploy :
+7.  Discord में URL रखना (Developer Portal → Application → Interactions Endpoint URL)
+8.  Discord कनेक्शन परखता है (तुम्हें PING का जवाब देना होगा)
+9.  सर्वर पर बॉट आमंत्रित करना
 10.  हो गया
 
-## लाभ बनाम सीमाएँ
+## फायदे बनाम सीमाएँ
 
-**लाभ**
+**फायदे**
 
-*   सस्ता (100k req/दिन तक मुफ़्त)
-*   स्केलेबल (कोई कनेक्शन मैनेजमेंट नहीं)
-*   सरल (कोई WebSocket बॉयलरप्लेट नहीं)
-*   तेज़ (Cloudflare = एज सर्वर)
-*   पोर्टेबल (Hono कोड = कई होस्ट)
+*   न्यूनतम लागत (100k req/दिन तक मुफ्त)
+*   Scalable (बिना कनेक्शन प्रबंधन)
+*   सरल (बिना WebSocket boilerplate)
+*   तेज (Cloudflare = edge सर्वर)
+*   Portable (Hono कोड = कई host)
 
 **सीमाएँ**
 
-*   कोई रीयल-टाइम सर्वर इवेंट नहीं (मेंबर जॉइन, रोल ऐड, मैसेज डिलीट, आदि) -- तुम्हें केवल इंटरैक्शन मिलते हैं (स्लैश कमांड्स, बटन, मॉडल्स)
-*   जवाब देने के लिए 3 सेकंड का टाइमआउट -- नहीं तो Discord "Application did not respond" दिखाता है
-*   अगर तुम्हें असली इवेंट चाहिए -- एक अलग HTTP वेबहुक या सहायक WebSocket कनेक्शन चाहिए
+*   तुम्हें सिर्फ interaction मिलते हैं (slash command, button, modal), बिना वास्तविक समय सर्वर घटनाओं (सदस्य जुड़ा, भूमिका जुड़ी, संदेश हटाया, आदि) के
+*   जवाब देने के लिए 3 सेकंड timeout, वरना Discord "Application did not respond" दिखाता है
+*   अगर तुम्हें असली event चाहिए, अलग HTTP webhook या सहायक WebSocket कनेक्शन चाहिए
 
-90% बॉट्स के लिए (सभी स्लैश कमांड-आधारित) ? यह ठीक है।
+90% बॉट (सब slash command आधारित) के लिए ? यह अच्छा है।
 
-## निष्कर्ष
+## समाप्त करने के लिए
 
-मैंने KonosubaRPG और Nibi को ऑप्टिमाइज़ करने में काफी समय बिताया, या तो जितना संभव हो उतनी रिक्वेस्ट बचाने के लिए, या हॉट प्रोसेसर समय कम करने के लिए, या कोल्ड बूट कम करने के लिए। परिणामस्वरूप, मुझे लगभग हर चीज़ पर शानदार परफॉरमेंस मिली।
-यह जान लो कि मैंने अपने अधिकांश प्रोजेक्ट्स को क्लाउडिफाई करना शुरू कर दिया था (मुझे नहीं पता यह शब्द सही है या नहीं) क्योंकि मुझे उन्हें अपनी खुद की VM पर होस्ट करते रहने में बहुत आलस आ रहा था। सच में, मुझे लगता है कि Github Actions ने मेरी जान बचाई। Workers ने भी, लेकिन जब मैंने देखा कि मैं Github Actions और शेड्यूल के साथ डेमॉन बना सकता हूँ, तो इसने सच में मुझे बहुत बचाया।
+मैंने KonosubaRPG और Nibi अनुकूलित करने में काफी समय बिताया ताकि या तो ज्यादा से ज्यादा अनुरोध बचाए जाएँ, या गर्म प्रोसेसर समय घटाया जाए, या cold boot घटाया जाए। परिणाम, मुझे लगभग सब पर शानदार perf मिली।
+जानना चाहिए कि मैंने अपने ज्यादातर प्रोजेक्ट cloudify करना (पता नहीं यह कहा भी जाता है) शुरू किया था क्योंकि मुझे उन्हें अपनी VM पर होस्ट करते रहने की बहुत आलस थी। सच में, मुझे लगता है कि Github Actions ने ही मेरी जान बचाई है। Workers भी, लेकिन असल में जब मैंने देखा कि मैं Github Actions और schedule से daemon बना सकता हूँ, तो इसने सच में मुझे बचाया।
 
-मैं शायद [email-autoreply](https://github.com/fox3000foxy/email-autoreply/) नामक एक प्रोजेक्ट पर एक लेख लिखूंगा, इसलिए इसे जल्द ही देखने के लिए RSS फ़ीड को सब्सक्राइब करो :))।
+मैं [email-autoreply](https://github.com/fox3000foxy/email-autoreply/) नामक प्रोजेक्ट पर लेख लिखने वाला हूँ, इसलिए उसे जल्द निकलता देखने के लिए RSS feed subscribe करो :))।
 
-**याद रखने वाली 3 बातें :**
+**याद रखने के 3 बिंदु :**
 
-1.  **इंटरैक्शन एंडपॉइंट्स = HTTP सर्वरलेस** -- कोई WebSocket नहीं, कोई स्थायी कनेक्शन नहीं। Discord POST करता है, तुम जवाब देते हो। Cloudflare पर मुफ़्त।
-2.  **Hono सही टूल है** -- हल्का फ्रेमवर्क (12KB), मल्टी-रनटाइम, शून्य डिपेंडेंसी। Cloudflare, Vercel, Node, हर जगह एक जैसा कोड।
-3.  **Workers पर इमेज रेंडरिंग = पागलपन** -- Satori + Resvg (Wasm) तुम्हें JSX में डायनामिक UI कंपोज़ करने और उन्हें \<100ms में PNG में बदलने देता है। एक पूरा गेम इस पर चल सकता है।
+1.  **Interaction endpoint = HTTP serverless** , बिना WebSocket, बिना स्थायी connection के। Discord POST करता है, तुम जवाब देते हो। Cloudflare पर मुफ्त।
+2.  **Hono सही उपकरण है** , हल्का Framework (12KB), multi-runtime, शून्य निर्भरताएँ। Cloudflare, Vercel, Node, हर जगह समान कोड।
+3.  **Workers पर Renderimage = पागल** , Satori + Resvg (Wasm) तुम्हें JSX में गतिशील UI बनाने और उन्हें \<100ms में PNG में बदलने देता है। पूरा गेम इस पर चल सकता है।
 
-यह कमाल है xD
+यह बीमार है।
 
 ```plaintext
 wrangler deploy

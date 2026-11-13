@@ -1,58 +1,56 @@
 ---
-title: Mi puta IA para Nausicaä
-description: Una IA basada en coeficientes heurísticos, hiperparámetros que
-  cambian aleatoriamente cada 5 turnos y un Oráculo que huye -- inmersión en el
-  cerebro de un juego de mesa estratégico mitológico.
+title: "Mi IA cutre para Nausicaa"
+description: "Una IA con coeficientes heurísticos, hiperparámetros que cambian cada 5 turnos, y un Oráculo que huye: inmersión en el cerebro de un juego de mesa estratégico."
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - gaming
   - ai
   - javascript
   - open-source
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "s8Votd0+vfjHVmL+MSnDYUYdi6Q+nuwGy72dM4aiWhX8UPbZlMHRciElQiGq91rkZ2cYRfpHLUxZ41GKuXUTNg=="
+author_sig: "kBonzzghc25E2yX7KvTebRDjGf3h2W+wS8uamxJWHZe1RTx92SIXNPnwVjn0bQIQKVU0ZfuR0Dwe2W1dTGGdVQ=="
 ---
 
-## Mi puta IA para Nausicaä
+## Mi IA cutre para Nausicaa
 
-Hay proyectos que empiezan con "oye, ¿y si hiciera un juego de ajedrez con mitologías?" y terminan con una IA que se cambia sus propios hiperparámetros cada 5 turnos.
+Hay proyectos que empiezan con "¿y si hiciera un ajedrez con mitologías?" y terminan con un sistema con una IA que decide sus propios hiperparámetros cada 5 turnos.
 
-Nausicaä es eso. Un juego de mesa por turnos donde armas tu mazo de criaturas mitológicas, gestionas tu maná, desplegás unidades en un tablero 10x8. Y hay una IA que tiene crisis de personalidad.
+Nausicaa es eso. Un juego de mesa por turnos donde construyes tu mazo de criaturas mitológicas, gestionas tu maná, despliegas unidades en un tablero 10x8. Y hay una IA que tiene crisis de personalidad.
 
-Le metí bastante tiempo a esta IA, y el resultado es bastante ingobernable xD
+Pasé bastante tiempo en esa IA, y el resultado aún se me escapa a veces, y eso es lo que más me gusta.
 
-## El juego en sí
+## El juego de verdad
 
 Antes de hablar del cerebro, hay que entender el cuerpo:
 
 - Tablero 10x8, zona de despliegue de 2 filas por jugador
-- Maná empieza en 1, +1 por turno, máximo 6. Lo gastás para invocar, atacar, usar habilidades
-- Objetivo: reventar al Oraculo enemigo
+- Maná empieza en 1, +1 por turno, máx 6. Gastas para invocar, atacar, usar capacidades
+- Objetivo: matar al Oráculo adverso
 
 12 unidades, costes y patrones de movimiento distintos:
 
-| Unidad | Coste | Movimiento | PV |
+| Unit | Coût | Mouvement | PV |
 | --- | --- | --- | --- |
-| Oráculo | 0 | Rey (8 direcciones) | 1 |
-| Goblin | 1 | Adelante 3 casillas | 1 |
-| Arpía | 1 | Rey (8 direcciones) | 1 |
-| Náyade | 1 | Diagonal | 1 |
-| Grifo | 2 | Salta 2 casillas | 2 |
-| Sirena | 2 | Lateral | 1 |
-| Centauro | 2 | Caballo (en L) | 2 |
-| Arquero | 3 | Lateral | 1 |
-| Fénix | 3 | Diagonal (casillas oscuras) | 1 |
-| Metamorfo | 4 | Intercambio de lugar | 1 |
-| Vidente | 4 | Ninguno (genera maná) | 1 |
-| Titán | 6 | Limitado (ataque en área) | 3 |
+| Oracle | 0 | Rey (8 direcciones) | 1 |
+| Gobelin | 1 | Adelante 3 casillas | 1 |
+| Harpie | 1 | Rey (8 direcciones) | 1 |
+| Naïade | 1 | Diagonal | 1 |
+| Griffin | 2 | Salto 2 casillas | 2 |
+| Sirène | 2 | Lateral | 1 |
+| Centaure | 2 | Caballo (en L) | 2 |
+| Archer | 3 | Lateral | 1 |
+| Phénix | 3 | Diagonal (casillas oscuras) | 1 |
+| Métamorphe | 4 | Intercambio de sitio | 1 |
+| Voyant | 4 | Ninguno (genera maná) | 1 |
+| Titan | 6 | Limitado (ataque zona) | 3 |
 
-Cada unidad tiene su propio patrón de ataque. La Sirena golpea en las 4 diagonales, el Arquero a distancia 3 casillas, el Titán destruye todo alrededor al invocarse. En resumen, un ajedrez con mitología y deckbuilding xD
+Cada unidad tiene su propio patrón de ataque. La Sirena pega en las 4 diagonales, el Arquero a distancia en 3 casillas, el Titán destruye todo alrededor al invocar. En resumen, un ajedrez con mitología y deckbuilding.
 
-## Cómo hice pensar a la CPU
+## Cómo hice pensar la CPU
 
-La idea base es ridículamente simple: **cada unidad enemiga tiene un coeficiente de atractividad**. Cuanto más peligrosa es, más quiere la IA ocuparse de ella.
+La idea base es tontamente simple: **cada unidad enemiga tiene un coeficiente de atractivo**. Cuanto más peligrosa, más la IA quiere ocuparse de ella.
 
 ```javascript
 const UNITS_ATTRACTIVENESS = {
@@ -71,15 +69,15 @@ const UNITS_ATTRACTIVENESS = {
 };
 ```
 
-Oráculo en 100 -- lógico, es la win condition. Titán en 95 porque revienta todo lo que tenga al lado al invocarse. Goblin en 20, es un soldado raso, nos la suda.
+Oráculo a 100: lógico, es la condición de victoria. Titán a 95 porque mata todo lo de al lado al invocar. Gobelin a 20, es un infante, nos importa un bledo.
 
-Después, para cada par de unidades (una aliada, una enemiga), calculo:
+Luego para cada par de unidades (una aliada, una enemiga), calculo:
 
 ```
-interes = atractividad × coeff_atract / (distancia × coeff_dist)
+interes = atractivo × coeff_attract / (distancia × coeff_dist)
 ```
 
-Básicamente: mientras más peligroso y cerca estés, más te quiere partir la cara la IA.
+En resumen: cuanto más peligroso y cercano, más la IA quiere destrozarte.
 
 ```javascript
 calculateAttackCoefficient(x1, y1, x2, y2) {
@@ -91,7 +89,7 @@ calculateAttackCoefficient(x1, y1, x2, y2) {
 
 ### El truco de los coeficientes que cambian
 
-Lo divertido es que los coeficientes de importancia **cambian aleatoriamente cada 5 turnos**.
+El punto importante es que los coeficientes de importancia **cambian aleatoriamente cada 5 turnos**.
 
 ```javascript
 if (this.turnCount % 5 === 0) {
@@ -104,13 +102,13 @@ if (this.turnCount % 5 === 0) {
 }
 ```
 
-Un turno la IA va hiper agresiva (atract 95, distancia 5), atraviesa todo para reventar a tu Oráculo. Al siguiente prioriza la distancia y se recoloca.
+Una vez la IA va hiperagresiva (atractivo a 95, distancia a 5), atraviesa todo para matar tu Oráculo. La vez siguiente prioriza la distancia y se reposiciona.
 
-Está sacado de los fantasmas de Pac-Man -- Blinky caza, Pinky embosca. Acá la IA cambia de "personalidad" cada fase.
+Está copiado de los fantasmas de Pac-Man: Blinky caza, Pinky embosca. Aquí la IA cambia de "personalidad" cada fase.
 
-**Resultado: imposible predecir a la IA en una partida entera.** La CPU nunca hace dos veces la misma partida.
+**Resultado: imposible predecir la IA en una partida entera.** La CPU nunca hace dos veces el mismo match.
 
-### El Oráculo es un cagón
+### El Oráculo es un gallina
 
 El Oráculo enemigo huye. Literalmente.
 
@@ -121,37 +119,37 @@ const awayFromTarget = {
 };
 ```
 
-Calcula la dirección opuesta a la amenaza y se piira. Si hay pared, busca la casilla libre más cercana en esa dirección.
+Calcula la dirección opuesta a la amenaza y se pira. Si hay un muro, busca la casilla libre más cercana en esa dirección.
 
-Pasás 3 turnos acercándote al Oráculo, y puf se fue como una nenita xD
+Pasas 3 turnos acercándote al Oráculo, y paf ya huyó al otro extremo.
 
-### El loop de decisión
+### El bucle de decisión
 
 Así decide la IA:
 
 1. Si ya no tengo Oráculo (muerto), colocar uno nuevo
 2. Calcular el coeficiente para cada par unidad aliada → unidad enemiga
-3. Elegir el mejor par
+3. Elegir la mejor pareja
 4. Si la unidad puede atacar al objetivo desde su posición → ataca
 5. Si tengo menos de 4 unidades → invocar la más barata disponible desde la mano
-6. Sino, moverse hacia el objetivo (casilla de movimiento más cercana al enemigo)
-7. Si tengo suficiente maná (> 2), dash (doble movimiento) para acercarse más
+6. Si no, moverse hacia el objetivo (casilla de movimiento más cercana al enemigo)
+7. Si hay bastante maná (> 2), dash (doble movimiento) para acercarse más
 8. Si la unidad es el Oráculo → huir
 
 ```mermaid
 flowchart TD
-    A[Inicio del turno CPU] --> B{¿Oráculo vivo?}
-    B -->|No| C[Colocar nuevo Oráculo]
-    B -->|Sí| D[Calcular coeficientes\nde ataque para\ncada par de unidades]
-    D --> E[Elegir mejor par\natacante → objetivo]
-    E --> F{¿Ataque posible\ndesde la posición?}
-    F -->|Sí| G[Atacar objetivo]
-    F -->|No| H{¿Menos de 4\nunidades?}
-    H -->|Sí| I[Invocar desde la mano\nla más barata disp.]
-    H -->|No| J[Moverse hacia el objetivo\ncasilla más cercana]
-    J --> K{Mana > 2?}
-    K -->|Sí| L[Dash: doble movimiento\nhacia el objetivo]
-    K -->|No| M[Fin del turno]
+    A[Début du tour CPU] --> B{Oracle en vie ?}
+    B -->|Non| C[Placer nouvel Oracle]
+    B -->|Oui| D[Calculer coefficients\nd'attaque pour chaque\npaire d'unités]
+    D --> E[Choisir la meilleure paire\nattaquant → cible]
+    E --> F{Attaque possible\ndepuis la position ?}
+    F -->|Oui| G[Attaquer la cible]
+    F -->|Non| H{Moins de 4\nunités ?}
+    H -->|Oui| I[Invoquer depuis la main\nla moins chère dispo]
+    H -->|Non| J[Se déplacer vers la cible\ncase la plus proche]
+    J --> K{Mana > 2 ?}
+    K -->|Oui| L[Dash : double mouvement\nvers la cible]
+    K -->|Non| M[Fin du tour]
     G --> M
     I --> M
     L --> M
@@ -160,16 +158,16 @@ flowchart TD
 ```javascript
 async makeAction(dash=false) {
     // todo eso en secuencia
-    // la CPU hace dash si tiene suficiente maná
+    // la CPU hace dash si tiene bastante maná
     if(botPlayer.mana > 2) {
         this.makeAction(true);
     }
 }
 ```
 
-### Por qué distancia euclidiana
+### Por qué la distancia euclidiana
 
-Uso distancia euclidiana:
+Uso la distancia euclidiana:
 
 ```javascript
 calculateEuclideanDistance(x1, y1, x2, y2) {
@@ -179,28 +177,28 @@ calculateEuclideanDistance(x1, y1, x2, y2) {
 }
 ```
 
-¿Por qué no Manhattan? Porque las unidades tienen patrones de movimiento variados (en L como el caballo, diagonal, etc). La distancia en línea recta es una mejor aproximación del peligro.
+¿Por qué no Manhattan? Porque las unidades tienen patrones de movimiento variados (L como el caballo, diagonal, etc). La distancia a vuelo de pájaro es una mejor aproximación del peligro.
 
 ## Por qué no minimax
 
-Podría haber hecho un minimax clásico. Pero con 12 tipos de unidades, patrones de movimiento distintos, habilidades especiales... el árbol de juego explota tan rápido que se vuelve injugable. El enfoque heurístico toma decisiones inteligentes sin explorar 10 millones de estados.
+Podría haber programado un minimax clásico. Pero con 12 tipos de unidades, patrones de movimiento distintos, capacidades especiales... el árbol de juego explota tan rápido que se vuelve injugable. El enfoque heurístico toma decisiones inteligentes sin explorar 10 millones de estados.
 
 ## Lo que mola
 
-El sistema de atractividad crea dilemas divertidos:
+El sistema de atractivo crea dilemas divertidos:
 
-- El Vidente (70) genera maná. Si lo dejás vivir, el rival tiene más recursos. Pero el Titán (95) es más peligroso aún.
-- El Metamorfo (90) puede intercambiar su lugar con cualquier unidad. Puede robarte el Oráculo.
-- La Arpía (50) tiene un ataque explosivo que también la mata a ella. No es prioritaria... hasta que está al lado de 3 de tus unidades.
+- El Vidente (70) genera maná. Si lo dejas vivir, el adversario tiene más recursos. Pero el Titán (95) es aún más peligroso.
+- El Metamorfo (90) puede intercambiar su sitio con cualquier unidad. Puede robar tu Oráculo.
+- La Harpía (50) tiene un ataque explosivo que también la mata. Queda secundaria... hasta que acaba junto a 3 de tus unidades.
 
-La IA evalúa el peligro global según las posiciones, no solo las stats brutas.
+La IA evalúa el peligro global según las posiciones, no solo las stats en bruto.
 
-También hay una función `activateSimulation()` para probar escenarios sin rehacer una partida:
+También hay una función `activateSimulation()` para probar escenarios sin repetir una partida:
 
 ```javascript
 activateSimulation() {
     // Coloca unidades específicas en el tablero
-    // Útil para debuguear la IA
+    // Útil para depurar la IA
     this.game.board = simulation.board;
     this.game.players = simulation.players;
 }
@@ -210,25 +208,25 @@ activateSimulation() {
 
 Si tuviera más tiempo:
 
-- La IA reacciona al estado actual, no predice lo que hará el jugador
-- No planifica su mano a varios turnos
-- El Metamorfo y el Centauro tienen habilidades que infrautiliza
-- Aprendizaje por refuerzo: hacer que juegue contra sí misma para ajustar los coeficientes
+- La IA reacciona al estado actual, no predice lo que el jugador va a hacer
+- No planifica su mano en varios turnos
+- El Metamorfo y el Centauro tienen capacidades que subexploita
+- Aprendizaje por refuerzo: hacerla jugar contra sí misma para ajustar los coeffs
 
-Pero para un juego de navegador cumple. Colegas llegan a perder contra ella, así que está bien xD
+Pero para un juego de navegador aguanta el tipo. Hay colegas que logran perder contra ella, así que está validada.
 
-## Pruébalo
+## Prueba
 
-Disponible en [nausicaa-game.github.io](https://nausicaa-game.github.io/). Le das a "JOUER", CPU mode ON, y ves a la IA en acción.
+Disponible en [nausicaa-game.github.io](https://nausicaa-game.github.io/). Haces clic en "JOUER", modo CPU ON, y miras la IA hacer.
 
-Consejo: deja que la IA juegue contra sí misma. Vas a ver fases agresivas, y de repente puf, se retira todo.
+Consejo: deja la IA jugar contra sí misma. Vas a ver fases agresivas, y luego pfft retrocede todo.
 
 El código está en [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io) en `js/cpu.js`.
 
-**3 claves:**
+**3 puntos a recordar:**
 
-1. **Coeficientes heurísticos** -- nada de minimax, cada unidad tiene una atractividad
-2. **Coeficientes que cambian cada 5 turnos** -- la IA alterna agresividad y control, estilo Pac-Man
-3. **El Oráculo huye** -- calcula la dirección opuesta a la amenaza y se larga
+1. **Coeficientes heurísticos**: sin minimax, cada unidad tiene un atractivo
+2. **Coeffs que cambian cada 5 turnos**: la IA alterna agresividad y control, estilo Pac-Man
+3. **El Oráculo huye**: calcula la dirección opuesta a la amenaza y se pira
 
-Si tenés ideas para hacer la IA más viciosa, abrí un issue. Tengo planes para una versión que aprende de sus derrotas, pero eso será para otro artículo xD
+Si tienes ideas para hacer la IA aún más retorcida, abre una issue. Tengo planes para una versión que aprenda de sus derrotas, pero eso será para un próximo artículo.

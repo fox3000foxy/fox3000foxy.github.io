@@ -1,6 +1,6 @@
 ---
-title: "Luna Protocol: Tại sao tôi fine-tune mô hình 1.5B trên 50k mẫu Discord và biến few-shot priming thành vũ khí bí mật"
-description: "Một mô hình nhỏ hơn được huấn luyện trên ít dữ liệu hơn có thể vượt trội hơn mô hình lớn hơn -- nếu bạn biết cách priming nó. Đây là lý do Luna Protocol chuyển từ Hermes 3B sang fine-tune Qwen 1.5B, và tại sao few-shot priming trở thành yếu tố thay đổi cuộc chơi thực sự."
+title: "Luna Protocol : vì sao tôi fine-tune mô hình 1,5 tỷ tham số trên 50k mẫu Discord, và vì sao few-shot priming đổi tất cả"
+description: "Mô hình nhỏ hơn huấn luyện trên ít dữ liệu hơn có thể vượt mô hình lớn hơn -- với điều kiện biết mồi nó đúng cách. Đây là lý do Luna Protocol chuyển từ Hermes 3B sang fine-tune Qwen 1,5B, và vì sao few-shot priming thành nhân tố tiến bộ thật sự."
 date: 2026-07-17
 authors:
   - fox3000foxy
@@ -13,106 +13,106 @@ tags:
   - unsloth
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "p9C5GFwWarPmc/iFs119IMm/5ucbIsiuV22bjiPFN3msEKq1IgUOw0vaGN/LrWD/77EMk9IaEPdF3xMjzwGvSQ=="
+author_sig: "lDxqpCRHTUAvF+t6yT99UJR8/H8AjHN27CogM+WiNGjBYG/gOWNoeeoCUayFsmrvBrYEtxag+xwnQyYTkUZDzg=="
 ---
 
-# Luna Protocol: Tại sao tôi fine-tune mô hình 1.5B trên 50k mẫu Discord và biến few-shot priming thành vũ khí bí mật
+# Luna Protocol : vì sao tôi fine-tune mô hình 1,5 tỷ tham số trên 50k mẫu Discord, và vì sao few-shot priming đổi tất cả
 
-Trong [bài viết đầu tiên](/articles/en/luna-protocol-discord-bot), tôi đã xây dựng một bot Discord mô phỏng hành vi con người -- ngủ, gõ sai, ngập ngừng, hay quên, tin nhắn tự phát. Hệ thống hành vi rất vững chắc. LLM đằng sau nó là mô hình Hermes 3B, được lượng tử hóa ở mức Q8_0, ngốn 3GB VRAM.
+Trong [bài đầu](/articles/en/luna-protocol-discord-bot), tôi đã xây bot Discord mô phỏng con người : giấc ngủ, lỗi gõ phím, ngập ngừng, quên lãng, tin nhắn tự phát. Hệ thống hành vi chạy tốt. LLM đằng sau tất cả là mô hình Hermes 3 tỷ tham số, lượng tử Q8_0, ngốn 3 Go VRAM.
 
-Nó hoạt động. Nhưng nó là quá mức cần thiết.
+Nó chạy. Nhưng quá khổ.
 
-Một bot Discord không cần mô hình 3B tham số để nói "nm just chillin, u". Thứ nó cần là **sự nhất quán về phong cách** -- khả năng duy trì một giọng điệu hội thoại cụ thể, hết tin nhắn này đến tin nhắn khác, mà không trôi vào chế độ trợ lý công ty. Và hóa ra, một mô hình nhỏ hơn được huấn luyện trên ít dữ liệu hơn, được priming với vài ví dụ, làm điều đó tốt hơn một mô hình lớn hơn cố gắng ép bằng system prompt.
+Bot Discord không cần mô hình 3 tỷ tham số để nói « nm just chillin, u ». Điều nó cần là **nhất quán phong cách** : khả năng giữ đúng giọng trò chuyện, tin này qua tin khác, không trôi sang chế độ « trợ lý corporate ». Và hóa ra mô hình nhỏ hơn, huấn luyện trên ít dữ liệu hơn và mồi bằng vài ví dụ, làm điều đó tốt hơn mô hình lớn hơn ép đường qua prompt hệ thống đơn thuần.
 
-Bài viết này nói về các mô hình chính thức của Luna Protocol: tại sao chúng tồn tại, tại sao là 1.5B thay vì 3B, tại sao 50k mẫu huấn luyện thay vì 7.3M, và tại sao few-shot priming đi từ một tính năng tốt-để-có thành cốt lõi của toàn bộ cách tiếp cận.
+Bài này nói về các mô hình chính thức của Luna Protocol : vì sao chúng tồn tại, vì sao 1,5B thay vì 3B, vì sao 50k mẫu huấn luyện thay vì 7,3M, và vì sao few-shot priming đi từ « bonus hay » thành lõi của toàn bộ cách tiếp cận.
 
 ---
 
 ## Vấn đề với mô hình 3B
 
-Thiết lập ban đầu sử dụng `Discord-Micae-Hermes-3-3B.Q8_0.gguf` -- mô hình 3B tham số được fine-tune trên dữ liệu Discord. Nó tạo ra các phản hồi tốt, nhưng:
+Cấu hình gốc dùng `Discord-Micae-Hermes-3-3B.Q8_0.gguf`, mô hình 3 tỷ tham số fine-tune trên dữ liệu Discord. Nó cho phản hồi tốt, nhưng :
 
 | Chỉ số | Hermes-3-3B Q8_0 | Mục tiêu |
 |--------|-------------------|--------|
-| Sử dụng VRAM | ~3 GB | < 1 GB |
+| Dùng VRAM | ~3 Go | < 1 Go |
 | Sinh token | ~30 tok/s | ~60+ tok/s |
-| Kích thước tệp mô hình | ~3.2 GB | < 1 GB |
-| Thời gian khởi động nguội | ~8s | ~3s |
+| Kích thước tệp mô hình | ~3,2 Go | < 1 Go |
+| Khởi động lạnh | ~8s | ~3s |
 
-Đối với một bot chạy 24/7 trên một máy chủ khiêm tốn, 3GB VRAM là rất nhiều. Và tốc độ sinh -- dù ổn cho các tin nhắn không thường xuyên -- cảm thấy chậm chạp trong các phản hồi bùng nổ hoặc khi nhiều kênh hoạt động cùng lúc.
+Với bot chạy 24/7 trên máy chủ khiêm tốn, 3 Go VRAM là nhiều. Và tốc độ sinh, ổn cho tin nhắn thỉnh thoảng, thấy ì ạch khi trả lời chùm hay nhiều kênh hoạt động.
 
-Câu hỏi là: liệu chúng ta có thể đạt được cùng phong cách Discord-Dialogues với một nửa số tham số không?
-
----
-
-## Quyết định fine-tune: tại sao 50k, không phải 7.3M
-
-Bộ dữ liệu [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) chứa **7.3M lượt trao đổi** và **17M lượt tương tác**. Đó là một kho ngữ liệu khổng lồ các cuộc hội thoại Discord thực tế. Cách tiếp cận hiển nhiên là huấn luyện trên toàn bộ bộ dữ liệu.
-
-Tôi đã làm ngược lại. Tôi huấn luyện trên **50.000 mẫu** -- ít hơn 1% dữ liệu có sẵn.
-
-Đây là lý do: **kích thước của tập huấn luyện ảnh hưởng trực tiếp đến mức độ mô hình overfit vào phân phối huấn luyện của nó**.
-
-Một mô hình được huấn luyện trên 7.3M ví dụ học một phân phối thống kê rất cụ thể của các cuộc hội thoại. Nó trở nên xuất sắc trong việc tái tạo phân phối đó, nhưng nó cũng trở nên **cứng nhắc** -- nó có ít linh hoạt hơn để thích ứng với các mẫu mới được cung cấp tại thời điểm suy luận.
-
-Một mô hình được huấn luyện trên 50k ví dụ học được giọng điệu và thanh điệu chung của các cuộc hội thoại Discord (không trang trọng, dạng ngắn, viết tắt, chữ thường), nhưng nó giữ đủ linh hoạt để được **dẫn dắt bởi các ví dụ trong ngữ cảnh**. Các ví dụ few-shot không chống lại một phân phối đã học khổng lồ -- chúng bổ sung cho một phân phối nhẹ hơn.
-
-Đây là hiểu biết cốt lõi: **dữ liệu huấn luyện hạn chế làm cho few-shot priming hiệu quả hơn**.
+Câu hỏi là : có thể đạt cùng phong cách Discord-Dialogues với một nửa tham số?
 
 ---
 
-## Mô hình: chi tiết kỹ thuật
+## Quyết định fine-tuning : vì sao 50k, không phải 7,3M
 
-Mô hình Luna Protocol là một **fine-tune QLoRA** của [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct):
+Bộ dữ liệu [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) chứa **7,3M lượt trao đổi** và **17M lượt nói**. Đó là kho hội thoại Discord thật khổng lồ. Cách hiển nhiên là huấn luyện trên toàn bộ dataset.
+
+Tôi làm ngược lại. Tôi huấn luyện trên **50 000 mẫu**, tức dưới 1% dữ liệu có sẵn.
+
+Đây là lý do : **kích thước tập huấn luyện ảnh hưởng trực tiếp mức độ quá khớp của mô hình với phân bố huấn luyện của nó**.
+
+Mô hình huấn luyện trên 7,3M ví dụ học phân bố thống kê rất đặc thù của cuộc trò chuyện. Nó thành xuất sắc trong tái tạo phân bố đó, nhưng cũng thành **cứng** : ít dư địa thích ứng với mẫu mới đưa lúc suy luận.
+
+Mô hình huấn luyện trên 50k ví dụ học giọng và thanh ghi chung của hội thoại Discord (thân mật, ngắn, viết tắt, chữ thường), nhưng giữ đủ linh hoạt để được **dẫn dắt bằng ví dụ trong ngữ cảnh**. Các ví dụ few-shot không phải chống lại phân bố khổng lồ đã học : chúng bổ sung cho phân bố nhẹ hơn.
+
+Đó là trực giác trung tâm : **dữ liệu huấn luyện hạn chế khiến few-shot priming hiệu quả hơn**.
+
+---
+
+## Mô hình : chi tiết kỹ thuật
+
+Mô hình Luna Protocol là **fine-tune QLoRA** của [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) :
 
 | Tham số | Giá trị |
 |-----------|-------|
-| Mô hình cơ sở | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
+| Mô hình nền | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
 | Phương pháp | QLoRA (4-bit) |
 | Hạng LoRA | `r=16`, `lora_alpha=16` |
-| Mô-đun mục tiêu | `q/k/v/o_proj`, `gate/up/down_proj` |
-| Tham số có thể huấn luyện | 18.464.768 / 1.562.179.072 (1,18%) |
-| Dữ liệu huấn luyện | ~50.000 ví dụ (tập con của Discord-Dialogues) |
-| Bộ lọc | 8-512 token mỗi mẫu |
-| Số epoch | 2-3 |
+| Module nhắm | `q/k/v/o_proj`, `gate/up/down_proj` |
+| Tham số huấn luyện được | 18 464 768 / 1 562 179 072 (1,18 %) |
+| Dữ liệu huấn luyện | ~50 000 ví dụ (tập con của Discord-Dialogues) |
+| Lọc | 8-512 token cho mỗi mẫu |
+| Epoch | 2-3 |
 | Phần cứng | Kaggle T4 |
 | Framework | [Unsloth](https://github.com/unslothai/unsloth) |
 
-Bộ dữ liệu là một fork đã được tiền xử lý của Discord-Dialogues, được lọc để chỉ chứa các lượt `user`/`assistant` sạch -- không có tin nhắn hệ thống, không có siêu dữ liệu, không có lệnh bot. Điều này quan trọng về sau.
+Dataset là fork tiền xử lý của Discord-Dialogues, lọc chỉ giữ lượt `user`/`assistant` sạch : chỉ trao đổi người dùng và trợ lý, không tin nhắn hệ thống, metadata hay lệnh bot. Điều này quan trọng cho phần sau.
 
-### Các lượng tử hóa có sẵn
+### Lượng tử có sẵn
 
-| Tệp | Lượng tử hóa | Kích thước | Ghi chú |
+| Tệp | Lượng tử | Kích thước | Ghi chú |
 |------|-------------|------|-------|
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 MB | Suy giảm đáng kể -- không khuyến nghị |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | Cân bằng tốt giữa kích thước/chất lượng (khuyến nghị) |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1,65 GB | Độ trung thực phong cách tốt nhất |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 Mo | Xuống cấp rõ -- không khuyên |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 Mo | Cân bằng tốt kích thước/chất lượng (khuyên dùng) |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1,65 Go | Trung thực phong cách tốt nhất |
 
-Mô hình được khuyến nghị là **Q4_K_M** -- dưới 1GB, nhanh, và giữ phong cách hội thoại tốt. Q2_K suy giảm quá nhiều trên một mô hình nhỏ như vậy. Q8_0 là chất lượng tốt nhất nhưng sử dụng nhiều hơn 68% bộ nhớ.
+Mô hình khuyên dùng là **Q4_K_M** : dưới 1 Go, nhanh, và giữ tốt phong cách trò chuyện. Q2_K xuống cấp quá nhiều với mô hình cỡ này. Q8_0 cho chất lượng tốt nhất nhưng ngốn thêm 68% bộ nhớ.
 
 ---
 
-## Bước đột phá về few-shot priming
+## Đột phá few-shot priming
 
-Đây là phần đã thay đổi mọi thứ.
+Đây là phần đổi tất cả.
 
-Thẻ mô hình HuggingFace có một cảnh báo:
+Thẻ mô hình trên HuggingFace có cảnh báo :
 
-> Với một prompt trần và không có priming, mô hình này có xu hướng quay lại giọng trợ lý mặc định của Qwen. Một vài ví dụ few-shot ngắn tạo ra sự khác biệt lớn.
+> Với prompt trần và không mồi, mô hình này có xu hướng rớt về giọng mặc định « trợ lý » của Qwen. Mồi few-shot ngắn tạo khác biệt lớn.
 
-Đây không phải là lỗi -- đó là hậu quả trực tiếp của cách dữ liệu huấn luyện được cấu trúc.
+Đó là hậu quả trực tiếp của cách dữ liệu huấn luyện được cấu trúc.
 
-### Tại sao system prompt một mình không hiệu quả
+### Vì sao chỉ prompt hệ thống không chạy
 
-Dữ liệu huấn luyện Discord-Dialogues chỉ chứa các lượt `user`/`assistant`. **Không có ví dụ nào về vai trò hệ thống** trong tập huấn luyện. Mô hình chưa bao giờ được huấn luyện để làm theo system prompt như các chỉ thị về phong cách.
+Dữ liệu huấn luyện Discord-Dialogues chỉ chứa lượt `user`/`assistant`. Không có **ví dụ vai hệ thống** nào trong tập huấn luyện. Mô hình chưa bao giờ được huấn luyện để theo prompt hệ thống như chỉ dẫn phong cách.
 
-Khi bạn đưa cho nó một system prompt như "Tên bạn là Luna, hãy nói chuyện thoải mái", nó nghe được chỉ dẫn nhưng không có một mẫu học mạnh để chuyển điều đó thành đầu ra. Nó quay về mặc định của Qwen: hữu ích, có cấu trúc, hơi trang trọng.
+Khi ta đưa prompt hệ thống kiểu « Bạn tên Luna, nói thoải mái », nó nghe chỉ dẫn nhưng không có mẫu đã học vững để dịch thành đầu ra. Nó bèn rớt về hành vi mặc định của Qwen : giúp ích, có cấu trúc, hơi trang trọng.
 
-### Tại sao ví dụ few-shot hiệu quả
+### Vì sao ví dụ few-shot chạy
 
-Khi bạn đưa vào các ví dụ hội thoại cùng định dạng ChatML mà mô hình được huấn luyện (sử dụng cấu trúc lượt `user`/`assistant`), một điều xảy ra. Mô hình nhận ra mẫu từ dữ liệu huấn luyện của nó và điều chỉnh đầu ra để phù hợp.
+Khi ta bơm ví dụ hội thoại đúng định dạng ChatML dùng lúc huấn luyện (với cấu trúc lượt `user`/`assistant`), điều gì đó kích hoạt. Mô hình nhận ra mẫu từ huấn luyện và căn đầu ra theo.
 
-Đây là những gì một few-shot prime trông như thế nào trong thực tế:
+Đây là dáng mồi few-shot trong thực hành :
 
 ```yaml
 few_shot_examples:
@@ -124,65 +124,65 @@ few_shot_examples:
     assistant: "im doing pretty good tbh, just vibing"
 ```
 
-Những ví dụ này được đưa vào sau system prompt và trước cuộc hội thoại thực tế. Mô hình xem chúng như một phần của lịch sử hội thoại, không phải như chỉ dẫn. Đây là một sự khác biệt quan trọng -- nó không bị *bảo* phải thoải mái, nó được *cho thấy* thoải mái trông như thế nào.
+Các ví dụ này được bơm sau prompt hệ thống và trước cuộc trò chuyện thật. Mô hình cảm nhận chúng như phần của lịch sử trò chuyện, nên như trao đổi thật thay vì chỉ dẫn. Đó là khác biệt cốt yếu : ta *cho nó thấy* giọng thoải mái trông thế nào thay vì *ra lệnh* cho nó.
 
-### Trước và sau
+### Trước / sau
 
-Không có few-shot priming (system prompt trần):
+Không mồi few-shot (prompt hệ thống trần) :
 
 ```
 User: yo whats good
 Bot: Hello! I am doing well, thank you for asking. How can I assist you today?
 ```
 
-Với few-shot priming (3 ví dụ):
+Có mồi few-shot (3 ví dụ) :
 
 ```
 User: yo whats good
 Bot: nm just chillin, u
 ```
 
-Sự khác biệt rất rõ rệt. Mô hình không chỉ tạo ra các từ khác nhau -- nó áp dụng toàn bộ thanh điệu: chữ thường, viết tắt, giọng thoải mái, câu trả lời ngắn. Nó khớp với phong cách của các ví dụ, không phải phong cách của dữ liệu huấn luyện Qwen.
+Khác biệt rõ rệt. Mô hình nhận toàn bộ thanh ghi : chữ thường, viết tắt, giọng thoải mái, phản hồi ngắn. Nó chép phong cách của ví dụ thay vì phong cách của dữ liệu huấn luyện Qwen.
 
 ---
 
-## Bộ nhớ và tốc độ: những con số cụ thể
+## Bộ nhớ và tốc độ : con số cụ thể
 
-Sự chuyển đổi từ Hermes-3-3B sang Luna-Protocol-1.5B mang lại những cải thiện có thể đo lường:
+Chuyển từ Hermes-3-3B sang Luna-Protocol-1.5B mang lại lợi ích đo được :
 
 | Chỉ số | Hermes-3-3B Q8_0 | Luna-Protocol Q4_K_M | Cải thiện |
 |--------|-------------------|----------------------|-------------|
-| Sử dụng VRAM | ~3 GB | ~986 MB | **ít hơn 67%** |
-| Kích thước tệp mô hình | ~3.2 GB | ~986 MB | **nhỏ hơn 69%** |
-| Sinh token | ~30 tok/s | ~60+ tok/s | **nhanh gấp 2x** |
-| Khởi động nguội | ~8s | ~3s | **nhanh hơn 62%** |
-| Cửa sổ ngữ cảnh | 8192 | 8192 | Giống nhau |
+| Dùng VRAM | ~3 Go | ~986 Mo | **ít hơn 67 %** |
+| Kích thước tệp mô hình | ~3,2 Go | ~986 Mo | **nhỏ hơn 69 %** |
+| Sinh token | ~30 tok/s | ~60+ tok/s | **nhanh gấp 2** |
+| Khởi động lạnh | ~8s | ~3s | **nhanh hơn 62 %** |
+| Cửa sổ ngữ cảnh | 8192 | 8192 | Giống hệt |
 
-### Tại sao tốc độ tăng là thật
+### Vì sao lợi tốc độ là thật
 
-Các mô hình nhỏ hơn không chỉ "ít chậm hơn" -- chúng về cơ bản nhanh hơn cho suy luận. Với 1.5B tham số thay vì 3B:
+Mô hình nhỏ hơn về cơ bản nhanh hơn lúc suy luận. Với 1,5B tham số thay vì 3B :
 
-- **Ít phép nhân ma trận hơn** mỗi token: các layer attention, layer FFN, và projection đầu ra đều tỷ lệ tuyến tính với số lượng tham số
-- **Tận dụng bộ nhớ đệm tốt hơn**: mô hình nhỏ hơn khớp nhiều trọng số hơn trong bộ nhớ đệm L2/L3
-- **Áp lực băng thông bộ nhớ thấp hơn**: ít byte hơn phải đọc từ VRAM mỗi token
+- **Ít phép nhân ma trận hơn** cho mỗi token : lớp attention, lớp FFN và chiếu đầu ra đều co tuyến tính theo số tham số
+- **Dùng cache tốt hơn** : mô hình nhỏ hơn nhét được nhiều trọng số hơn vào cache L2/L3
+- **Ít áp lực băng thông bộ nhớ** : ít byte đọc từ VRAM hơn cho mỗi token
 
-Trên một thiết lập khiêm tốn chỉ có CPU (2 lõi, không GPU), mô hình 1.5B tạo token với tốc độ gấp khoảng **2 lần** so với mô hình 3B. Đây là sự khác biệt giữa "cảm giác như bot" và "cảm giác như người thật đang gõ".
+Trên cấu hình khiêm tốn, chỉ CPU (2 lõi, không GPU), mô hình 1,5B sinh token với tốc độ khoảng **gấp 2** mô hình 3B. Đó là khác biệt giữa « mùi bot » và « như người thật đang gõ ».
 
-### Bộ nhớ đệm prompt khuếch đại lợi thế
+### Cache prompt khuếch đại lợi thế
 
-Luna Protocol sử dụng `llama-server` với bộ nhớ đệm prompt được bật (`--cache-reuse 256`). Điều này có nghĩa:
+Luna Protocol dùng `llama-server` với cache prompt bật (`--cache-reuse 256`). Nghĩa là :
 
-1. Tin nhắn đầu tiên trong một phiên chịu toàn bộ chi phí xử lý prompt (system prompt + ví dụ few-shot + tin nhắn người dùng)
-2. Các tin nhắn tiếp theo chỉ xử lý các token *mới* -- tiền tố được lưu trong bộ nhớ đệm được tái sử dụng
-3. Với 5 ví dụ few-shot (~50-150 token), chi phí là không đáng kể sau yêu cầu đầu tiên
+1. Tin nhắn đầu của phiên trả đủ chi phí xử lý prompt (prompt hệ thống + ví dụ few-shot + tin nhắn người dùng)
+2. Các tin nhắn sau chỉ xử lý token *mới*, vì tiền tố cache được tái dùng
+3. Với 5 ví dụ few-shot (~50-150 token), chi phí thêm thành không đáng kể sau yêu cầu đầu
 
-Các ví dụ few-shot thực chất là "miễn phí" sau tin nhắn đầu tiên trong một phiên. Mô hình nhận được hướng dẫn phong cách với chi phí biên bằng không.
+Các ví dụ few-shot thực tế thành « miễn phí » sau tin nhắn đầu của phiên. Mô hình hưởng dẫn dắt phong cách với chi phí biên bằng không.
 
 ---
 
-## Triển khai: cách nó hoạt động trong code
+## Triển khai : nó chạy thế nào trong mã
 
-Hệ thống few-shot trong Luna Protocol sạch sẽ và tối giản. Ba tệp xử lý mọi thứ:
+Hệ thống few-shot của Luna Protocol sạch và tối thiểu. Ba tệp quản lý tất cả.
 
 ### 1. Cấu hình (`config.yml`)
 
@@ -201,11 +201,11 @@ few_shot_examples:
     assistant: "it was alright, nothing crazy happened lol"
 ```
 
-Cấu hình có thể tải lại nóng. Thay đổi các ví dụ, lưu lại, và bot áp dụng phong cách mới ngay lập tức -- không cần khởi động lại.
+Cấu hình tải nóng được. Ta sửa ví dụ, lưu, và bot nhận ngay phong cách mới, không khởi động lại.
 
-### 2. Định dạng và tiêm (`src/core/few-shot.ts`)
+### 2. Định dạng và bơm (`src/core/few-shot.ts`)
 
-Hàm `formatFewShotExamples()` chuyển đổi các ví dụ YAML thành các đối tượng tin nhắn ChatML:
+Hàm `formatFewShotExamples()` đổi ví dụ YAML thành object tin nhắn ChatML :
 
 ```typescript
 export function formatFewShotExamples(
@@ -221,7 +221,7 @@ export function formatFewShotExamples(
 }
 ```
 
-Hàm `injectFewShotIntoConversation()` đặt chúng ngay sau system prompt:
+Hàm `injectFewShotIntoConversation()` đặt chúng ngay sau prompt hệ thống :
 
 ```typescript
 export function injectFewShotIntoConversation(
@@ -236,7 +236,7 @@ export function injectFewShotIntoConversation(
 
 ### 3. Tích hợp (`src/core/llm-client.ts`)
 
-Trước mỗi lần gọi LLM, các ví dụ few-shot được tiêm vào nếu được bật:
+Trước mỗi gọi tới LLM, ví dụ few-shot được bơm nếu bật :
 
 ```typescript
 let finalMessages = messages;
@@ -246,51 +246,51 @@ if (FEW_SHOT_ENABLED && FEW_SHOT_EXAMPLES.length > 0) {
 }
 ```
 
-Mô hình nhận được: `[system_prompt] + [few_shot_examples] + [conversation_history]`
+Mô hình nhận : `[prompt_hệ_thống] + [ví_dụ_few_shot] + [lịch_sử_trò_chuyện]`
 
 ---
 
 ## Giữ phong cách Discord-Dialogues
 
-Bộ dữ liệu Discord-Dialogues gốc có một dấu ấn hội thoại rất cụ thể:
+Dataset gốc Discord-Dialogues có chữ ký trò chuyện rất đặc thù :
 
-- **Tin nhắn ngắn**: trung bình 32,8 token mỗi lượt
-- **Thanh điệu không trang trọng**: viết tắt, chữ thường, không dấu câu
-- **Trao đổi nhanh**: nhiều trao đổi ngắn thay vì độc thoại dài
-- **Không hoàn hảo tự nhiên**: lỗi gõ, "lol", "fr", "ngl", "tbh"
+- **Tin nhắn ngắn** : trung bình 32,8 token cho mỗi lượt
+- **Thanh ghi thân mật** : viết tắt, chữ thường, thiếu chấm câu
+- **Trao đổi nhanh** : nhiều lượt ngắn thay vì độc thoại dài
+- **Không hoàn hảo tự nhiên** : lỗi gõ phím, « lol », « fr », « ngl », « tbh »
 
-Mô hình Luna-Protocol giữ phong cách này thông qua hai cơ chế:
+Mô hình Luna Protocol giữ phong cách này nhờ hai cơ chế :
 
-### 1. Fine-tuning dịch chuyển phân phối cơ sở
+### 1. Fine-tuning dịch chuyển phân bố nền
 
-50k mẫu huấn luyện dạy mô hình **dấu vân tay thống kê** của các cuộc hội thoại Discord. Nó học rằng các phản hồi thường ngắn, chữ thường và không trang trọng. Điều này dịch chuyển đầu ra mặc định của mô hình ra khỏi chế độ trợ lý hữu ích của Qwen.
+50k mẫu huấn luyện dạy mô hình **dấu vân thống kê** của hội thoại Discord. Nó học rằng phản hồi thường ngắn, chữ thường và thân mật. Việc này kéo đầu ra mặc định của mô hình ra khỏi chế độ « trợ lý giúp ích » của Qwen.
 
-### 2. Few-shot priming khóa nó lại
+### 2. Few-shot priming khóa kết quả
 
-Các ví dụ few-shot củng cố chính xác các mẫu mà mô hình đã học trong quá trình fine-tune. Chúng hoạt động như một **neo phong cách** -- ngay cả khi mô hình hơi trôi về giọng trang trọng trong một cuộc hội thoại dài, các ví dụ trong ngữ cảnh liên tục kéo nó trở lại.
+Ví dụ few-shot củng cố đúng mẫu học lúc fine-tuning. Chúng đóng vai **neo phong cách** : ngay cả khi mô hình hơi trôi sang giọng trang trọng hơn trong cuộc trò chuyện dài, các ví dụ trong ngữ cảnh kéo nó lại.
 
-Sự kết hợp mạnh mẽ hơn bất kỳ cơ chế nào một mình:
-- Fine-tune không có few-shot: mô hình *nhìn chung* thoải mái nhưng không nhất quán
-- Few-shot không có fine-tune: mô hình cố gắng làm theo ví dụ nhưng liên tục quay lại chế độ trợ lý
-- Fine-tune + few-shot: mô hình **luôn nhất quán** trong tính cách
-
----
-
-## Triết lý: mô hình nhỏ hơn, prompting thông minh hơn
-
-Suy nghĩ thông thường trong triển khai LLM là "càng lớn càng tốt". Nhiều tham số hơn, nhiều dữ liệu huấn luyện hơn, nhiều VRAM hơn. Luna Protocol đi theo hướng ngược lại:
-
-- **1.5B thay vì 3B**: một nửa tham số, một nửa bộ nhớ, gấp đôi tốc độ
-- **50k mẫu thay vì 7.3M**: ít dữ liệu huấn luyện hơn, linh hoạt hơn cho học trong ngữ cảnh
-- **Few-shot priming thay vì system prompt**: cho mô hình thấy bạn muốn gì, đừng chỉ nói với nó
-
-Đây không chỉ là một tối ưu hóa kỹ thuật -- nó là một triết lý thiết kế. Một bot Discord không cần phải là một trợ lý đa năng. Nó cần nói "nm just chillin, u" một cách nhất quán, nhanh chóng, và không ngốn hết ngân sách VRAM của máy chủ bạn.
-
-Kết quả: một bot chạy trên VPS 5$/tháng, tạo token đủ nhanh để cảm giác như gõ phím thời gian thực, và duy trì một tính cách nhất quán thông qua sự kết hợp của fine-tuning và few-shot priming lớn hơn tổng các phần của nó.
+Kết hợp mạnh hơn mỗi cơ chế riêng :
+- Fine-tuning không few-shot : mô hình nhìn chung thoải mái nhưng thiếu nhất quán
+- Few-shot không fine-tuning : mô hình cố theo ví dụ nhưng cứ rớt về chế độ trợ lý
+- Fine-tuning + few-shot : mô hình giữ **liên tục** trong vai
 
 ---
 
-## Thiết lập
+## Triết lý : mô hình nhỏ hơn, prompting khôn hơn
+
+Sự khôn ngoan thông thường trong triển khai LLM nói « càng lớn càng tốt ». Nhiều tham số hơn, nhiều dữ liệu huấn luyện hơn, nhiều VRAM hơn. Luna Protocol đi đường ngược :
+
+- **1,5B thay vì 3B** : một nửa tham số, một nửa bộ nhớ, nhanh gấp đôi
+- **50k mẫu thay vì 7,3M** : ít dữ liệu huấn luyện hơn, nhiều linh hoạt hơn cho học trong ngữ cảnh
+- **Few-shot priming thay vì prompt hệ thống** : cho mô hình thấy điều ta muốn, không chỉ bảo nó
+
+Đó là lựa chọn thiết kế có chủ ý, hơn nhiều tối ưu kỹ thuật đơn thuần. Bot Discord cần giữ là bạn trò chuyện nhẹ thay vì trợ lý tổng quát. Nó phải nói « nm just chillin, u » nhất quán, nhanh, và không nuốt hết ngân sách VRAM của máy chủ.
+
+Kết quả : bot chạy trên VPS 5 $/tháng, sinh token đủ nhanh để tạo cảm giác gõ thời gian thực, và giữ cá tính nhất quán nhờ kết hợp fine-tuning và few-shot priming đáng giá hơn tổng các phần.
+
+---
+
+## Cài đặt
 
 ### Tải mô hình
 
@@ -299,7 +299,7 @@ npm run download-model
 # Tải Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf
 ```
 
-Hoặc thủ công từ [HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues).
+Hay thủ công từ [HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues).
 
 ### Cấu hình
 
@@ -319,7 +319,7 @@ few_shot_examples:
 ### Chạy
 
 ```bash
-npm run dev                    # dev (tải lại nóng)
+npm run dev                    # dev (tải nóng lại)
 npm run build && npm start     # production
 ./start.sh                     # PM2 (production với llama-server)
 ```
@@ -328,15 +328,15 @@ npm run build && npm start     # production
 
 ## Kết luận
 
-Các mô hình Luna Protocol chứng minh rằng đối với AI hội thoại tập trung vào phong cách, **ít hơn là nhiều hơn**. Một mô hình 1.5B được huấn luyện trên 50k mẫu được chọn lọc kỹ lưỡng, được prime với vài ví dụ, vượt trội hơn mô hình 3B được huấn luyện trên hàng triệu ví dụ -- với một phần nhỏ chi phí bộ nhớ và gấp đôi tốc độ sinh.
+Các mô hình Luna Protocol chứng minh rằng với AI trò chuyện thiên về phong cách, **ít hơn là tốt hơn**. Mô hình 1,5B huấn luyện trên 50k mẫu chọn kỹ, mồi bằng vài ví dụ, vượt mô hình 3B huấn luyện trên hàng triệu ví dụ, với một phần chi phí bộ nhớ và tốc độ sinh nhanh gấp đôi.
 
-Few-shot priming không chỉ là một tính năng tốt-để-có cho các mô hình nhỏ. Nó là cơ chế làm cho chúng khả thi cho các ứng dụng hội thoại thời gian thực. Các ví dụ không chỉ "giúp đỡ" -- chúng thay đổi cơ bản cách mô hình hoạt động, bằng cách khớp chính xác định dạng mà nó được huấn luyện.
+Few-shot priming là cơ chế trung tâm cho mô hình nhỏ. Chính nó khiến chúng khả thi cho ứng dụng trò chuyện thời gian thực. Các ví dụ làm hơn nhiều « giúp đỡ » : chúng thay đổi về nền hành vi mô hình, bằng cách chép đúng định dạng nó được huấn luyện.
 
-Mã nguồn là mã nguồn mở, mô hình trên HuggingFace, và bộ dữ liệu công khai. Nếu bạn muốn xây dựng một bot hội thoại cảm giác như con người, công thức là: mô hình nhỏ, fine-tune hạn chế, few-shot priming mạnh.
+Mã open source, mô hình trên HuggingFace, và dataset công khai. Nếu bạn muốn xây bot trò chuyện tạo cảm giác con người, công thức là : mô hình nhỏ, fine-tuning hạn chế, mồi few-shot chắc.
 
-| Tài nguyên | Liên kết |
+| Tài nguyên | Link |
 |----------|------|
-| Kho GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| Repo GitHub | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Mô hình (HuggingFace) | [fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) |
-| Bộ dữ liệu | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
-| Bài viết đầu tiên | [Luna Protocol: Tôi đã tạo một bot Discord tự động](/articles/en/luna-protocol-discord-bot) |
+| Dataset | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
+| Bài đầu | [Luna Protocol : tôi đã tạo bot Discord tự chủ](/articles/en/luna-protocol-discord-bot) |

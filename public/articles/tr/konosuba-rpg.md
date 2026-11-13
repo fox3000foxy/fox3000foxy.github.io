@@ -1,11 +1,9 @@
 ---
-title: "Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım"
-description: "Her eylemin anında WebP görüntüsü oluşturduğu sıra tabanlı bir Discord RPG'si:
-  URL oyun durumu olarak, deterministik RNG, WASM hattı, 5 seviyeli önbellek,
+title: "konosuba-rpg kodunu bir hafta sonu okudum ve işte bulduklarım"
+description: "Her aksiyonun anında bir WebP görseli ürettiği sıra tabanlı bir Discord RPGsi:
+  oyun durumu olarak URL, deterministik RNG, WASM pipelineı, 5 seviyeli önbellek,
   sunucusuz bot."
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - discord
   - rpg
@@ -16,15 +14,17 @@ tags:
   - wasm
   - gaming
   - serverless
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "cjAw1JQaPJ35hw50L9AJ5mILX/D7f/k5XrD4JFQuKSy+oh1b3H2tEElXB2SIfju+PAtTjCIOqiS9E+bU+tjshw=="
+author_sig: "5QxJTmuH3Pv2lIC0G2XLW5NhuQ75hkQQGmQ8wh1FbRviDy0tFontFulooUaxqWCqm/QqOKaMFnr59hIuS4sLIQ=="
 ---
 
-# Bir hafta sonumu konosuba-rpg'nin kodunu okuyarak geçirdim ve işte bulduklarım
+# konosuba-rpg kodunu bir hafta sonu okudum ve işte bulduklarım
 
-Bu projeyi bir süredir ben sürdürüyorum, ama kendi kodunu sakin kafayla yeniden okumak her zaman öğreticidir. konosuba-rpg, her eylemin anında WebP görüntüsü oluşturduğu sıra tabanlı bir Discord RPG'si. Bir metin embed'i değil. Sprite'ları, can çubukları, savaş mesajları -- her şeyiyle gerçek bir görüntü.
+Bu projeyi bir süredir sürdürüyorum ama kendi kodunu dinlenmiş kafayla yeniden okumak hep öğreticidir. konosuba-rpg her aksiyonun anında bir WebP görseli ürettiği sıra tabanlı bir Discord RPGsidir. Spritelar, can barları, savaş mesajlarıyla gerçek bir beste görseldir: hepsi.
 
-Stack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Tamamen ücretsiz barındırma. Ve Discord botu kalıcı bir sunucu olmadan çalışıyor. Bu yazı her şeyin nasıl bir arada durduğunu açıklıyor.
+Yığın: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Tamamen ücretsiz barındırma. Ve Discord botu kalıcı sunucusuz çalışır. Bu yazı bütün bunların nasıl bir arada durduğunu açıklar.
 
 ![Oyunun başlangıç durumu](/images/konosuba-rpg/game_init.webp)
 
@@ -32,20 +32,20 @@ Stack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Tamamen ücretsiz
 
 ## Temel tasarım: oyun durumu olarak URL
 
-İlk dikkat çeken şey: oynanış için sunucu tarafında hiçbir durum yok. Bir savaşın tüm durumu URL'nin içinde.
+İlk çarpan şey: oynanış için sunucu tarafında durum yoktur. Bir savaşın tam durumu URLdedir.
 
 ```
 /konosuba-rpg/fr/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
 ```
 
-Seed'den sonraki her segment oynanan bir eylemdir. Sunucu bu URL'yi alır, baştan başlar, tüm eylemleri sırayla yeniden oynar ve o anki savaşın görüntüsünü döndürür. Oturum yok, kullanıcıya bağlı RAM'de durum yok.
+Seedden sonraki her parça oynanmış bir aksiyondur. Sunucu bu URLyi alır, baştan başlar, tüm aksiyonları sırayla yeniden oynar ve o andaki savaşın bir görselini döndürür. Kullanıcıya bağlı RAMde oturum yok, durum yok.
 
-Discord etkileşimli düğmelerle çalışır -- oyuncu "Saldır"a bastığında, Discord düğmenin `custom_id`'sini sunucuya gönderir. Bu custom_id, yeni eylem eklenmiş savaşın sıkıştırılmış URL'sini içerir. Sunucu her şeyi sıfırdan yeniden hesaplar ve güncellenmiş görüntüyü döndürür.
+Discord etkileşimli düğmelerle çalışır: oyuncu "Saldır"a bastığında Discord sunucuya düğmenin `custom_id` değerini gönderir. Bu custom_id yeni aksiyon eklenmiş savaşın sıkıştırılmış URLsini içerir. Sunucu her şeyi sıfırdan yeniden hesaplar ve güncellenmiş görseli döndürür.
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// Fonksiyon dışında önceden derlenmiş -- her çağrıda yeniden oluşturulmaz
+// Fonksiyon dışında önceden derlenmiş: her çağrıda yeniden oluşturulmaz
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -53,7 +53,7 @@ export default function processUrl(url: string): [Random, string[], string, stri
   for (const part of urlParts) {
     if (VALID_MOVES_SET.has(part.toUpperCase())) moves.push(part.toUpperCase());
   }
-  // seed = 6. segment, 8096 değere hash'lenir
+  // seed = 6. parça, 8096 değer üzerine hashlenmiş
   const seedStr = (urlParts[5] || "").toLowerCase();
   let seed = 0;
   for (let i = 0; i < seedStr.length; i++) {
@@ -63,15 +63,15 @@ export default function processUrl(url: string): [Random, string[], string, stri
 }
 ```
 
-Fonksiyon dışında önceden derlenmiş `Set` küçük bir detay, ancak modüllerin yeniden değerlendirilebildiği bir edge bağlamında yapının her çağrıda yeniden oluşturulmasını önler.
+Fonksiyon dışında önceden derlenmiş `Set` bir detaydır ama modüllerin yeniden değerlendirilebildiği bir edge bağlamında her çağrıda yapıyı yeniden inşa etmekten kaçınır.
 
-### RNG: Değiştirilmiş RC4
+### RNG: değiştirilmiş RC4
 
-Rastgele üreteç, bir PRNG'ye dönüştürülmüş bir RC4 (stream şifreleme algoritması) uygulamasıdır.
+Rastgele üreteç PRNGye çevrilmiş bir RC4 uygulamasıdır (akış şifreleme algoritması).
 
 ```typescript
 export class Random {
-  private S: number[]; // 256 girişlik tablo
+  private S: number[]; // 256 girdili tablo
   private i: number;
   private j: number;
 
@@ -81,7 +81,7 @@ export class Random {
     let workingSeed = seed || Date.now();
     for (let i = 0; i < 256; i++) {
       j = (j + this.S[i] + (workingSeed & 0xff)) & 0xff;
-      // S[i] ve S[j]'yi takas et
+      // S[i] ve S[j] takası
       [this.S[i], this.S[j]] = [this.S[j], this.S[i]];
       workingSeed >>>= 8;
     }
@@ -93,19 +93,19 @@ export class Random {
 }
 ```
 
-Neden RC4? Çünkü iyi bir dağılıma ve makul seed çarpışma direncine sahip deterministik bir PRNG'dir. Aynı seed = aynı sayı dizisi = her seferinde aynı savaş. Bu, herhangi bir savaşı URL'sini koruyarak "yeniden oynatmayı" sağlar ve iki farklı sunucunun (Vercel + Cloudflare) aynı URL için tam olarak aynı sonucu üretmesini garanti eder.
+Neden RC4? Çünkü doğru dağılımlı ve makul seed çakışma dirençli deterministik bir PRNGdir. Aynı seed = aynı sayı dizisi = her seferinde aynı savaş. Bu URLsi korunarak herhangi bir savaşın "yeniden oynanmasına" izin verir ve iki farklı sunucunun (Vercel + Cloudflare) aynı URL için tam aynı sonucu üretmesini garanti eder.
 
 ---
 
-## Discord 100 karakter sınırı sorunu
+## Discordun 100 karakter limiti sorunu
 
-Discord, düğmelerin `custom_id`'si için 100 karakter sınırı koyar. Birkaç düzine eylemden sonra, bir savaş URL'si bu sınırı rahatça aşar.
+Discord düğmelerin `custom_id` değerlerine 100 karakter limiti koyar. Birkaç düzine aksiyondan sonra bir savaş URLsi bu limiti rahat aşar.
 
-Buna yanıt veren iki mekanizma var.
+Buna iki mekanizma yanıt verir.
 
-### 1. Eylemlerin RLE sıkıştırması
+### 1. Aksiyonların RLE sıkıştırması
 
-Eylemler tek bir karakterle kodlanır (`a`=saldırı, `d`=savunma, `h`=sarılmak...) ve run-length encoding ile sıkıştırılır:
+Aksiyonlar tek karakterle kodlanır (`a`=saldırı, `d`=savunma, `h`=sarılma...) ve run-length encoding ile sıkıştırılır:
 
 ```typescript
 // movesUtils.ts
@@ -125,11 +125,11 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-Basit, ancak oyuncu üst üste 10 Saldırı yaptığında `aaaaaaaaaa` (10 karakter) `a10`'a (3 karakter) dönüşür. UI'daki "x4 Saldır" ve "x10 Saldır" düğmeleri tam da bunun için vardır -- savaşı hızlandırırken payload'u iyi sıkıştırır.
+Basittir ama oyuncu Saldırı x10 spamladığında `aaaaaaaaaa` (10 karakter) ifadesinden `a10` (3 karakter) ifadesine geçer. Arayüzdeki "Saldır x4" ve "Saldır x10" düğmeleri tam bunun içindir: savaşı hızlandırırken payloadu iyi sıkıştırmak.
 
-### 2. Sıkıştırma yeterli olmadığında oturum token'ları
+### 2. Sıkıştırma yetmeyince oturum jetonları
 
-Sıkıştırılmış payload hâlâ çok uzunsa, veritabanında kısa bir token ile saklanır:
+Sıkıştırılmış payload hâlâ çok uzunsa kısa bir jetonla veritabanında saklanır:
 
 ```typescript
 // gameSessionService.ts
@@ -137,49 +137,49 @@ const TOKEN_PREFIX = "gs.";
 const TOKEN_SIZE = 10; // "gs.aBcDeFgHiJ"
 
 export async function encodeGameplayButtons(buttons: RawButton[]): Promise {
-  // Payload'ları battle_key'e göre grupla, Supabase'e toplu ekle
-  // custom_id'yi "gs.{token}:{userId}" ile değiştir
+  // Payloadları battle_keye göre gruplar, Supabase toplu ekler
+  // custom_id değerini "gs.{token}:{userId}" ile değiştirir
 }
 
 export async function decodeGameplayPayloadWithStatus(encodedPayload: string, userID: string) {
   if (!encodedPayload.startsWith(TOKEN_PREFIX)) {
-    return { payload: encodedPayload }; // Gerekli değilse lookup yapma
+    return { payload: encodedPayload }; // gerek yoksa arama yok
   }
-  // Önce bellekten, sonra Supabase'den lookup
+  // Önce bellekten arama, yoksa Supabase
   const cached = tokenToSession.get(token) || await loadTokenRowByToken(token);
-  // Sahiplik, TTL (7 gün) ve turn_version kontrolü (eski durumu yeniden oynatmayı önler)
+  // Sahiplik, TTL (7 gün) ve turn_version doğrular (eski bir durumu yeniden oynatmayı engeller)
 }
 ```
 
-Oturumların TTL'si 7 gündür ve her 10 dakikada bir otomatik temizlik yapılır. `turnVersion` kontrolü, oyuncu ilerlemişse eski bir durumun yeniden oynatılmasını engeller -- kazara "geri gitmeye" karşı gizli bir koruma.
+Oturumların 7 günlük TTLsi ve 10 dakikada bir otomatik temizliği vardır. `turnVersion` doğrulaması oyuncu oyunda ilerlediyse eski bir durumu yeniden oynatmayı engeller: kazara "geri dön"e karşı gizli bir koruma.
 
-Bellekteki iki `Map` (`tokenToSession`, `latestTurnByBattle`), görüntü önbellekleriyle aynı `globalThis as unknown as GameSessionGlobals` desenini kullanır, aşağıda göreceğimiz nedenlerle.
+Bellekteki iki Map (`tokenToSession`, `latestTurnByBattle`) aşağıda göreceğimiz nedenlerle görsel önbellekleriyle aynı `globalThis as unknown as GameSessionGlobals` desenini kullanır.
 
 ---
 
-## Görüntü işleme hattı
+## Görsel render pipelineı
 
-![Bir Slime'a karşı savaş başlangıcı](/images/konosuba-rpg/shot_01_start.webp)
+![Bir Slime karşı savaş başlangıcı](/images/konosuba-rpg/shot_01_start.webp)
 
-`/konosuba-rpg/:lang/*` rotası JSON döndürmez. İsteğe bağlı oluşturulmuş bir WebP görüntüsü döndürür.
+`/konosuba-rpg/:lang/*` rotası JSON döndürmez. İstek üzerine üretilmiş bir WebP görseli döndürür.
 
-İşleme hattı 3 bileşik katman halinde düzenlenmiştir:
+Pipeline 3 bestenmiş katmanda organize edilir:
 
 ```
-Background (tahta + çerçeve)
+Background (board + frame)
     +
-Characters layer (oyuncu sprite'ları + mob, sabit konumlar)
+Characters layer (oyuncu + mob spriteları, sabit konumlar)
     +
-UI overlay (can çubukları, mesajlar, Satori ile karakter simgeleri → SVG → PNG)
+UI overlay (Satori → SVG → PNG üzerinden can barları, mesajlar, kişisel ikonlar)
     ↓
 Photon.watermark() × 2
     ↓
 WebP çıktısı
 ```
 
-**Background** : iki sabit görüntü (tahta ve çerçeve), dosya sisteminden yüklenir ve bir kez birleştirilir.
+**Background**: iki sabit görsel (tahta ve çerçeve), dosya sisteminden yüklenir ve bir kez bestenir.
 
-**Characters layer** : sprite'lar hesaplanmış koordinatlara göre konumlandırılır. Ölü oyuncular hariç tutulur (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Düşman sprite'ları özel bir `flipX` ile yatay olarak yansıtılır -- harici bir bağımlılık yerine piksel piksel bir döngü.
+**Characters layer**: spritelar hesaplanan koordinatlara göre konumlandırılır. Ölü oyuncular hariç tutulur (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Düşman spriteları harici bağımlılık yerine özel bir `flipX` ile yatay aynalanır: piksel piksel bir döngü.
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -198,24 +198,24 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 }
 ```
 
-**UI overlay** : ağır kısım. Arayüzün JSX'i (can çubukları, metinler, simgeler) React benzeri Satori ile tanımlanır, SVG'ye dönüştürülür, `@cf-wasm/resvg` ile PNG'ye çevrilir ve son birleştirme için Photon'a aktarılır. Satori + resvg, Cloudflare Workers için `edge-light` flag'i ile özel olarak derlenmiş iki WASM modülüdür.
+**UI overlay**: ağır kısımdır bu. Arayüzün JSXsi (can barları, metinler, ikonlar) Satori ile React benzeri tanımlanır, SVG olarak renderlanır, `@cf-wasm/resvg` ile PNGye çevrilir, sonra final beste için Photona içe aktarılır. Satori + resvg, `edge-light` bayrağıyla Cloudflare Workers için özel derlenmiş iki WASM modülüdür.
 
-![Savunma Eylemi](/images/konosuba-rpg/shot_03_defend.webp)
+![Savunma Aksiyonu](/images/konosuba-rpg/shot_03_defend.webp)
 
 ![Devam eden savaş](/images/konosuba-rpg/shot_02_combat.webp)
 
-![Sarılmak Eylemi](/images/konosuba-rpg/shot_04_hug.webp)
+![Sarılma Aksiyonu](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
-## Önbellek sistemi -- en çok üzerinde çalışılan kısım
+## Önbellek sistemi: en çok işlenen kısım
 
-Her biri hattın farklı bir ayrıntı düzeyini hedefleyen 5 ayrı önbellek seviyesi vardır.
+5 ayrı önbellek seviyesi vardır. Her biri pipelineın farklı bir ayrıntı düzeyini hedefler.
 
 ```typescript
 // renderImage.ts -- hepsi globalThis üzerinde
-G.__imageCache  ??= {} as Record; // ham varlıklar
-G.__base64Cache ??= {} as Record;       // varlıkların base64'ü (Satori için)
+G.__imageCache  ??= {} as Record; // ham assetler
+G.__base64Cache ??= {} as Record;       // assetlerin base64si (Satori için)
 G.__fontCache   ??= {} as Record; // yazı tipleri
 G.__photonCache    ??= new LRUCache(40, freePhoton);
 G.__layerCache     ??= new LRUCache(12, freePhoton);
@@ -223,23 +223,23 @@ G.__uiPhotonCache  ??= new LRUCache(30, freePhoton);
 G.__renderOutputCache ??= new LRUCache(120);
 ```
 
-`globalThis` üzerinde `??=` deseni: edge worker'lardaki JavaScript modülleri, bazı yapılandırmalarda istekler arasında yeniden değerlendirilebilir. Önbellekleri `??=` ile `globalThis` üzerinde saklamak, yeniden oluşturulmadan bu yeniden değerlendirmelerden kurtulmalarını sağlar.
+`globalThis` üzerindeki `??=` deseni: bazı yapılandırmalarda edge workerlardaki JavaScript modülleri istekler arasında yeniden değerlendirilebilir. Önbellekleri `??=` ile `globalThis` üzerinde saklamak yeniden oluşturulmadan bu yeniden değerlendirmelerden sağ çıkmalarını garanti eder.
 
 ### WASM tahliyesi
 
-Photon görüntü önbellekleri (`photonCache`, `layerCache`, `uiPhotonCache`) bir tahliye geri çağrısı kullanır:
+Photon görsel önbellekleri (`photonCache`, `layerCache`, `uiPhotonCache`) bir tahliye geri çağrısı kullanır:
 
 ```typescript
 function freePhoton(_key: string, img: Photon.PhotonImage): void {
-  try { img.free(); } catch { /* zaten serbest bırakıldı */ }
+  try { img.free(); } catch { /* zaten serbest */ }
 }
 
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage`, JavaScript GC'sinin dışında, WASM doğrusal belleği tarafında tahsis edilmiş belleği olan bir WASM nesnesidir. Açık `.free()` çağrısı olmadan bu bellek asla serbest kalmaz. LRU tahliyesi `.free()`'i otomatik olarak tetikler -- bu JavaScript'e taşınmış RAII'dir.
+`Photon.PhotonImage`, JavaScript çöp toplayıcının dışında doğrusal WASM tarafında ayrılmış belleği olan bir WASM nesnesidir. Bu bellek `.free()` açıkça çağrılana kadar ayrılmış kalır. LRU tahliyesi `.free()` fonksiyonunu otomatik tetikler: bu JavaScriptte taşınmış RAII dir.
 
-### Önbellek anahtarları bilerek kayıplıdır
+### Önbellek anahtarları bilinçli kayıplıdır
 
 ```typescript
 function buildCharactersKey(playerImages: string[][], playerHp: number[], creatureImages: string[], creatureHp: number): string {
@@ -248,9 +248,9 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-Karakter katmanı anahtarı, HP'nin tam değerini kodlamaz -- sadece `1` (canlı) veya `0` (ölü). Çünkü 40 HP'lik bir oyuncunun sprite'ı ile 15 HP'lik bir oyuncunun sprite'ı aynıdır. Bu nedenle önbellek isabeti, kimse ölmediği sürece herhangi bir hasardan sağ çıkar.
+Characters katmanı anahtarı HPnin tam değerini kodlamaz: sadece `1` (canlı) ya da `0` (ölü). Çünkü 40 HPli bir oyuncunun spriti ile 15 HPli bir oyuncunun spriti aynıdır. Kimse düşmediği sürece bir önbellek isabeti her hasarda hayatta kalır.
 
-UI anahtarı ise tam HP'yi (can çubuğu her vuruşta değişir) ve mesajların bir hash'ini kodlar:
+UI anahtarı ise tam HPleri (can barı her vuruşta değişir) ve mesajların bir hashini kodlar:
 
 ```typescript
 function hashString(value: string): string {
@@ -262,9 +262,9 @@ function hashString(value: string): string {
 }
 ```
 
-`Math.imul`, çarpmayı 32-bit tam sayıya zorlar, bu da float64 dönüşümlerini önler ve kararlı bir polinom hash'i verir. Bunun için harici bir bağımlılık yoktur.
+`Math.imul` çarpmayı 32 bit tam sayıda zorlar, bu float64 dönüşümlerini engeller ve kararlı bir polinom hash verir. Bunun için harici bağımlılık eklemekten kaçınır.
 
-### Stack taşması olmadan base64 dönüşümü
+### Yığın taşmasız base64 dönüşümü
 
 ```typescript
 function getBase64Cached(key: string, buf: ArrayBuffer): string {
@@ -281,17 +281,17 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)`, büyük görüntülerde stack taşmasına neden olabilir çünkü argümanlar çağrı yığınından geçirilir. 32KB'lik parçalama bunu önler. Sonuç önbelleğe alınır -- aynı görüntünün base64 dönüşümü, worker örneği başına yalnızca bir kez yapılır.
+`String.fromCharCode(...largeArray)` argümanlar çağrı yığınından geçirildiği için büyük görsellerde yığın taşmasına neden olabilir. 32KB parçalama bunu engeller. Sonuç önbelleğe alınır: aynı görselin base64 dönüşümü worker örneği başına bir kez yapılır.
 
 ---
 
-## STRIPPER.md -- sıralı await denetimi
+## STRIPPER.md: sıralı await denetimi
 
-Repoda, `await`'leri paralelleştirme denetimini belgeleyen bir `STRIPPER.md` dosyası var. Kaydedilenlerden birkaç örnek:
+Depoda sıralı `await`lerin paralelleştirme denetimini belgeleyen bir `STRIPPER.md` dosyası vardır. İçinde kaydedilenlerden birkaç örnek:
 
-- Oyuncu profili yüklemesi, Supabase'e 3 sıralı sorgu yapıyordu (ilerleme, koşu özeti, başarımlar). Aralarında bağımlılık olmadığı için `Promise.all`'a dönüştürüldü.
-- Savaş sonu ödül dağıtımı (aksesuarlar + sarf malzemeleri) sıralıydı. Aynı şekilde paralelleştirildi.
-- Düğmeler için oturum token'ı oluşturma grup grup yapılıyordu. Bağımsız gruplar artık paralel oluşturuluyor.
+- Oyuncu profili yükleme Supabase 3 seri istek yapıyordu (ilerleme, run özeti, başarımlar). `Promise.all` içine alındı: aralarında bağımlılık yok.
+- Savaş sonu ödül dağıtımı (aksesuarlar + tüketilebilirler) sıralıydı. Aynı şekilde paralelleştirildi.
+- Düğmeler için oturum jetonu oluşturma grup grup yapılıyordu. Bağımsız gruplar artık paralel oluşturuluyor.
 
 ```typescript
 // progressionService.ts -- önce (sıralı)
@@ -305,15 +305,15 @@ await Promise.all([
 ]);
 ```
 
-Devrim niteliğinde bir şey değil, ancak her milisaniyelik yanıt süresinin faturalandırıldığı (veya cold start'a katkıda bulunduğu) sunucusuz bir bağlamda bu önemlidir.
+Devrimci bir şey yok ama yanıt süresinin her milisaniyesinin faturalandığı (ya da soğuk başlatmaya katkıda bulunduğu) sunucusuz bir bağlamda bu önemlidir.
 
 ---
 
-## Kalıcı sunucu olmadan Discord botu
+## Kalıcı sunucusuz Discord botu
 
 ![Zafer](/images/konosuba-rpg/shot_05_win.webp)
 
-Sıkça yanlış anlaşılan bir nokta: bir Discord botu mutlaka kalıcı bir WebSocket bağlantısı gerektirmez. Discord bir alternatif sunar: **Interactions Endpoint URL**. Discord'a bir HTTPS URL'si sağlarsınız ve Discord her etkileşim için (slash komutu, düğme, otomatik tamamlama) size bir POST gönderir.
+Sık yanlış anlaşılan nokta: bir Discord botu illa kalıcı bir WebSocket bağlantısı gerektirmez. Discord bir alternatif sunar: **Interactions Endpoint URL**. Discorda bir HTTPS URL verirsin ve Discord her etkileşim için sana bir POST gönderir (slash komutu, düğme, otomatik tamamlama).
 
 ```typescript
 // interactions.ts
@@ -323,18 +323,18 @@ export async function handleInteractions(c: Context) {
   if (!isVerified) return c.text("Invalid signature", 401);
 
   const interaction: Interaction = JSON.parse(body);
-  if (interaction.type === 1) return c.json({ type: 1 }); // Discord ping
+  if (interaction.type === 1) return c.json({ type: 1 }); // Discord pingi
   if (interaction.type === 2) return handleSlashCommand(...);
   if (interaction.type === 3) return handleButtonInteraction(...);
   if (interaction.type === 4) return handleAutocomplete(...);
 }
 ```
 
-Discord bir POST gönderir, işleyici bir Vercel fonksiyonu veya Cloudflare Worker üzerinde 50-200ms çalışır, yanıt verir ve biter. Kalıcı bağlantı yok, açık tutulacak sunucu yok. Botun tamamı Vercel free tier'da barındırılır.
+Discord bir POST gönderir, handler bir Vercel fonksiyonu ya da Cloudflare Worker üzerinde 50-200 ms döner, yanıtlar ve biter. Bakımı yapılacak kalıcı bağlantı yok, açık tutulacak sunucu yok. Discord botunun tamamı Vercel ücretsiz katmanında barındırılır.
 
-Ed25519 doğrulaması (`discord-interactions`'dan `verifyKey`) zorunludur -- Discord, başlıklarda doğrulamanız gereken bir imza gönderir, aksi takdirde endpoint'i reddeder.
+Ed25519 doğrulaması (`discord-interactions` içinden `verifyKey`) zorunludur: Discord başlıklarda doğrulaman gereken bir imza gönderir, yoksa endpointi reddeder.
 
-### Özel animasyon -- tek kasıtlı await
+### Özel animasyon: tek bilinçli await
 
 ```typescript
 // handleSpecialButton.ts
@@ -345,21 +345,21 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-Bu 3 saniyelik kasıtlı gecikme, STRIPPER.md'de kasıtlı olarak belgelenmiştir. Megumin'in özel saldırısı (Patlama) Discord tarafında bir animasyona sahiptir -- mesaj önce ara bir görselle güncellenir, ardından 3 saniye sonra sonuçla değiştirilir. Bu, bir Vercel fonksiyonunun gereğinden uzun çalıştığı tek durumdur.
+Bu 3 saniyelik bilinçli gecikme STRIPPER.md içinde kasıtlı olarak belgelenmiştir. Meguminin özel saldırısının (Explosion) Discord tarafında bir animasyonu vardır: mesaj önce ara bir görselle güncellenir, sonra 3 saniye sonra sonuçla değiştirilir. Bir Vercel fonksiyonunun gerekenden bilinçli uzun döndüğü tek durum budur.
 
 ![Özel saldırı](/images/konosuba-rpg/shot_08_special.webp)
 
 ---
 
-## İki platformda dağıtılabilirlik
+## İki platforma dağıtılabilirlik
 
-Aynı kod tabanı, değişiklik yapılmadan Vercel (Node.js) ve Cloudflare Workers (V8 isolates) üzerinde çalışır:
+Aynı kod tabanı değişiklik olmadan Vercel (Node.js) ve Cloudflare Workers (V8 isolate) üzerinde döner:
 
 ```typescript
 // worker.ts -- Cloudflare giriş noktası
 export default {
   fetch(request: Request, env: WorkerBindings): Promise {
-    syncBindingsToProcessEnv(env); // CF sırlarını process.env'e enjekte eder
+    syncBindingsToProcessEnv(env); // CF sırlarını process.enve enjekte eder
     return app.fetch(request, env, ctx);
   }
 };
@@ -369,41 +369,41 @@ const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
 
-Temel fark: statik varlıklar. Vercel'de dosya sisteminden okunur (`/var/task/assets/`). Cloudflare Workers'ta, bir HTTPS mirror'a (`fox3000foxy.com/konosuba-rpg/assets`) geri dönüşlü `ASSETS` binding'inden (CF statik varlıkları) geçerler. `assetLoader.ts` içindeki `getAssetBytes`, önce dosya sistemini, ardından fetch'i deneyerek her iki yolu da yönetir.
+Ana fark: statik assetler. Vercelde dosya sisteminden okunur (`/var/task/assets/`). Cloudflare Workerlarda bir `ASSETS` bindingi üzerinden geçer (CF statik assetleri) ve bir HTTPS aynasına yedeklenir (`fox3000foxy.com/konosuba-rpg/assets`). `assetLoader.ts` içindeki `getAssetBytes` önce dosya sistemini deneyerek iki yolu yönetir, sonra fetch.
 
-WASM'ler (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) her çalışma zamanı için ayrı derlemelere sahiptir. Paket adındaki `edge-light` flag'i, çalışma zamanında `new WebAssembly.Module()`'e izin vermeyen Cloudflare Workers uyumlu derlemeyi belirtir -- WASM önceden derlenmiş olmalıdır.
+WASMler (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) her çalışma ortamı için ayrı derlemelere sahiptir. Paket adındaki `edge-light` bayrağı Cloudflare Workers uyumlu derlemeyi belirtir; çalışma anında `new WebAssembly.Module()` izin vermez: WASM önceden derlenmiş olmalıdır.
 
 ---
 
 ## İlerleme: XP, seviyeler, yakınlık
 
-![Bir patron, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
+![Bir boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
-Meta-ilerleme Supabase free tier'a dayanır. Şema; `players` (genel XP, seviye, altın), `character_progress` (Darkness, Aqua, Megumin için karakter başına XP/seviye/yakınlık), `runs` (savaş geçmişi), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions` tablolarını içerir.
+Meta ilerleme Supabase ücretsiz katmanına dayanır. Şema `players` tablosu (global XP, seviye, altın), `character_progress` (Darkness, Aqua, Megumin için karakter başına XP/seviye/yakınlık), `runs` (savaş tarihçesi), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions` içerir.
 
 İlerleme modeli basittir:
 
 ```typescript
 // characterService.ts
 export function computeLevelFromXp(xp: number): number {
-  return Math.floor(xp / 100) + 1; // Seviye başına 100 XP
+  return Math.floor(xp / 100) + 1; // seviye başına 100 XP
 }
 
 export function getLevelFactor(level: number): number {
-  return 1 + 0.2 * (level - 1); // Seviye başına +%20 stat
+  return 1 + 0.2 * (level - 1); // seviye başına +%20 istatistik
 }
 
 export function getAffinityFactor(affinity: number): number {
-  const stars = Math.floor(affinity / 20); // Yıldız başına 20 puan, maksimum 5 yıldız
+  const stars = Math.floor(affinity / 20); // yıldız başına 20 puan, maksimum 5 yıldız
   return 1.2 ** stars; // üstel ilerleme
 }
 ```
 
-Bu faktörler, her `processGame` başlangıcında karakter istatistiklerine uygulanır. Kazuma, oyuncunun genel seviyesini takip eder; diğer üçünün her birinin kendi XP/seviyesi vardır. Yakınlık (bir karakterle ilgili drop'ları toplayarak kazanılır) istatistiklerini bağımsız olarak çarpar.
+Bu çarpanlar her `processGame` başında karakter istatistiklerine uygulanır. Kazuma oyuncunun global seviyesini izler, diğer üçünün her birinin kendi XP/seviyesi vardır. Yakınlık (bir karaktere bağlı dropları alarak kazanılır) istatistiklerini bağımsız çarpar.
 
-![İyileştirme](/images/konosuba-rpg/shot_07_heal.webp)
+![İyileşme](/images/konosuba-rpg/shot_07_heal.webp)
 
-Drop sistemi, zorluğa göre ağırlıklandırılmış ganimet tabloları kullanır:
+Drop sistemi zorluğa göre ağırlıklı ganimet tabloları kullanır:
 
 ```typescript
 const LOOT_TABLE_BY_DIFFICULTY: Record = {
@@ -416,7 +416,7 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
       { rarity: Rarity.Epic,   weight: 1  },
     ],
   },
-  // ...Legendary'e kadar
+  // ...Legendarye kadar
 };
 ```
 
@@ -424,9 +424,9 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
 
 ## Testler
 
-Üç takım: birim, performans ve sızıntı.
+Üç paket: birim, performans ve sızıntı.
 
-Sızıntı testi özellikle doğrudandır:
+Sızıntı testi özellikle nettir:
 
 ```typescript
 // leaks.spec.ts
@@ -444,50 +444,50 @@ it('does not show strong heap growth across repeated runs', async () => {
 });
 ```
 
-1200 `processGame` yinelemesi, öncesi ve sonrası zorunlu GC, heap delta < 20MB. Bu test geçerse, `processGame` sızdırmıyordur. Render testi (`renderImage.spec.ts`) ise çalışma süresini pratik bir eşiğin altında kontrol eder.
+1200 `processGame` yinelemesi, önce ve sonra zorla GC, heap farkı < 20MB. Bu test geçerse `processGame` sızdırmaz. Render testi (`renderImage.spec.ts`) daha çok pratik bir eşik altında çalışma süresini doğrular.
 
-Ayrıca tüm hattı profillemek için bir `bench.ts` betiği vardır:
+Tam pipelineı profilleyen bir `bench.ts` scripti de vardır:
 
 ```
 RENDER_PERF=1 npx tsx bench.ts --runs=20 --warmup=3 --monster=Dragon
 ```
 
-`RENDER_PERF=1` ile, her servisteki `withPerf` sarmalayıcısı zamanlamaları kaydeder:
+`RENDER_PERF=1` ile her servisteki `withPerf` sarmalayıcı zamanlamaları loglar:
 
 ```typescript
 export async function withPerf(scope: string, label: string, work: () => Promise): Promise {
   const perf = createPerfLogger(scope);
-  if (!perf.enabled) return work(); // devre dışıysa sıfır ek yük
+  if (!perf.enabled) return work(); // devre dışıyken sıfır maliyet
   perf.mark(`${label}:start`);
   try { return await work(); }
   finally { perf.done(`${label}:done`); }
 }
 ```
 
-`createPerfLogger`, `DEV_MODE` ve `RENDER_PERF` `1` değilse no-op'lar döndürür. Üretimde hiçbir ek yük yoktur.
+`createPerfLogger`, `DEV_MODE` ve `RENDER_PERF` `1` değilse no-op döndürür. Üretimde maliyet yok.
 
 ---
 
-## Çalıştırmanın maliyeti
+## Çalıştırmanın maliyeti nedir
 
-- **Vercel free tier** : ayda 100GB bant genişliği, 1M sunucusuz çağrı. Görüntü oluşturma bir çağrı olarak sayılır.
-- **Cloudflare Workers free tier** : günde 100K istek, istek başına 10ms CPU süresi (render Workers'ta bunu aşabilir, bu nedenle Vercel birincil).
-- **Supabase free tier** : 500MB veritabanı, 5GB bant genişliği. Binlerce oyuncu için yeterlidir.
+- **Vercel ücretsiz katmanı**: 100GB bant genişliği, ayda 1M sunucusuz çağrı. Görsel render bir çağrı sayılır.
+- **Cloudflare Workers ücretsiz katmanı**: günde 100 bin istek, istek başına 10 ms CPU süresi (render WASM yüzünden Workerlarda bunu aşabilir, o yüzden birincil Vercel).
+- **Supabase ücretsiz katmanı**: 500MB veritabanı, 5GB bant genişliği. Binlerce oyuncu için yeterli.
 
-Tüm backend, önemli bir hacme kadar sıfır maliyetle çalışır. Tek sürtüşme noktası, Cloudflare Workers'ın CPU sınırıdır -- görüntü oluşturma, WASM nedeniyle CPU yoğunlukludur, bu nedenle Vercel'in birincil, Workers'ın ise CDR yedeklemesi stratejisi.
-
----
-
-## Hatırlanmaya değer 3 şey
-
-1. **Oyun durumu olarak URL** sadece hoş bir numara değil -- Discord tarafından dayatılan bir kısıtlamadır (düğmelerin 100 karakter sınırı vardır) ve RLE sıkıştırma + yedek olarak oturum token'ı ile durumsuz bir mimariyi zorunlu kılmıştır. Kısıtlama tasarımı belirlemiştir.
-
-2. **Açık tahliyeli WASM önbelleği**: `PhotonImage`'ler JavaScript heap'inin dışında bellek ayırır ve `.free()` olmadan asla GC edilmez. `freePhoton`'u LRU tahliyesine bağlamak, JavaScript'te RAII'dir. Kodda göze çarpmaz, ancak onsuz worker üretimde sızdırırdı.
-
-3. **WebSocket olmadan sunucusuz Discord botu**: WebSocket ağ geçidi yaklaşımından daha az bilinir, ancak durumsuz işleme yapan bir bot için (her etkileşim bağımsızdır), Interactions Endpoint kesinlikle üstündür -- yeniden bağlanma yok, heartbeat yok, sürdürülecek süreç yok. Discord, kullanılabilirliği kendi altyapıları tarafında yönetir.
+Backendin tamamı anlamlı bir hacme kadar sıfır maliyetle döner. Tek sürtünme noktası Cloudflare Workers CPU limitidir: görsel render WASM yüzünden CPU yoğundur, o yüzden birincil Vercel ve yedek CDN olarak Workers stratejisi.
 
 ---
 
-*Repo : [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
+## Akılda tutulmaya değer 3 şey
 
-*Kaynak kodu lisansı özel -- yeniden dağıtım yok, kullanımı ücretsiz.*
+1. **Oyun durumu olarak URL** sadece hoş bir numara değildir: Discordun dayattığı bir kısıtlamadır (düğmelerde 100 karakter limiti) ve yedek olarak RLE sıkıştırma + oturum jetonlu stateless bir mimariyi zorunlu kılmıştır. Kısıtlama tasarımı dikte etmiştir.
+
+2. **Açık tahliyeli WASM önbelleği**: `PhotonImage` nesneleri JavaScript heapinin dışında yer ayırır ve `.free()` olmadan asla GClenmez. `freePhoton` fonksiyonunu LRU tahliyesine bağlamak JavaScriptte RAII dir. Kodda gizlidir ama o olmadan worker üretimde sızdırırdı.
+
+3. **WebSocketsiz sunucusuz bir Discord botu**: WebSocket gateway yaklaşımından daha az bilinir ama stateless işlem yapan bir bot için (her etkileşim bağımsızdır) Interactions Endpoint kesinlikle üstündür: yeniden bağlanma yok, heartbeat yok, bakımı yapılacak süreç yok. Discord kullanılabilirliği kendi altyapısı tarafında yönetir.
+
+---
+
+*Repo: [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
+
+*Özel kaynak mevcut lisans: yeniden dağıtım yok, kullanımı ücretsiz.*

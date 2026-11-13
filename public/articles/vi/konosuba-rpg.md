@@ -1,9 +1,9 @@
 ---
-title: "Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy"
-description: "Một RPG theo lượt trên Discord nơi mỗi hành động tạo ra một hình ảnh WebP ngay lập tức: URL như trạng thái trò chơi, RNG xác định, pipeline WASM, bộ nhớ đệm 5 tầng, bot serverless."
+title: "Tôi đã dành cuối tuần đọc mã konosuba-rpg và đây là những gì tôi tìm thấy"
+description: "RPG theo lượt trên Discord nơi mỗi hành động sinh ảnh WebP
+  tức thì : URL làm trạng thái game, RNG xác định, pipeline WASM, cache 5
+  tầng, bot serverless."
 date: 2026-06-10
-authors:
-  - fox3000foxy
 tags:
   - discord
   - rpg
@@ -14,36 +14,38 @@ tags:
   - wasm
   - gaming
   - serverless
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "oEyzupNuf9xIORnQYG40yldZHyWzXYGpWiW4LSzz8En4nN2hkiMaha2cH6AeAe5peJqImrW4dqD4LFJzRfRgvQ=="
+author_sig: "1H2Xj+sYeRM/dAy6ZLrItQP8dOXnwZriQoLUZKr0rf+WCPZRmQS/beBeuBXywkxN2J/Z8bIt4mmlcpqNx0tGKg=="
 ---
 
-# Tôi đã dành một cuối tuần để đọc mã nguồn konosuba-rpg và đây là những gì tôi tìm thấy
+# Tôi đã dành cuối tuần đọc mã konosuba-rpg và đây là những gì tôi tìm thấy
 
-Tôi duy trì dự án này một thời gian rồi, nhưng đọc lại code của chính mình một cách bình tĩnh luôn mang lại bài học bổ ích. konosuba-rpg là một RPG theo lượt trên Discord nơi mỗi hành động tạo ra một hình ảnh WebP ngay lập tức. Không phải embed văn bản. Một hình ảnh thực sự được ghép, với sprite, thanh máu, tin nhắn chiến đấu -- tất cả.
+Tôi duy trì dự án này một thời gian, nhưng đọc lại chính mã của mình với đầu óc tỉnh táo luôn bổ ích. konosuba-rpg là RPG theo lượt trên Discord nơi mỗi hành động sinh ảnh WebP tức thì. Đó là ảnh dựng thật, với sprite, thanh máu, tin nhắn trận -- đủ hết.
 
-Stack: TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Hosting hoàn toàn miễn phí. Và bot Discord hoạt động mà không cần máy chủ liên tục. Bài viết này giải thích cách tất cả vận hành cùng nhau.
+Stack : TypeScript, Hono, Vercel, Cloudflare Workers, Supabase. Host hoàn toàn miễn phí. Và bot Discord chạy không cần máy chủ bền vững. Bài này giải thích mọi thứ gắn nhau thế nào.
 
-![Trạng thái ban đầu của trò chơi](/images/konosuba-rpg/game_init.webp)
+![Trạng thái game ban đầu](/images/konosuba-rpg/game_init.webp)
 
 ---
 
-## Thiết kế cơ bản: URL như trạng thái trò chơi
+## Thiết kế nền : URL làm trạng thái game
 
-Điều đầu tiên đập vào mắt: không có trạng thái phía máy chủ cho gameplay. Trạng thái hoàn chỉnh của một trận chiến nằm gọn trong URL.
+Điều đầu tiên đập vào mắt : không có trạng thái phía máy chủ cho gameplay. Toàn bộ trạng thái trận nằm trong URL.
 
 ```
-/konosuba-rpg/vi/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
+/konosuba-rpg/fr/abc123/ATK/DEF/ATK/HUG?monster=Vanir&difficulty=hard
 ```
 
-Mỗi phân đoạn sau seed là một hành động đã thực hiện. Máy chủ nhận URL này, bắt đầu lại từ đầu, phát lại tất cả các hành động theo thứ tự, và trả về một hình ảnh trận chiến tại thời điểm đó. Không session, không trạng thái trong RAM gắn với người dùng.
+Mỗi đoạn sau seed là một hành động đã chơi. Máy chủ nhận URL này, chạy lại từ đầu, diễn lại mọi hành động theo thứ tự, và trả về ảnh trận tại đúng thời điểm đó. Không phiên, không trạng thái RAM gắn với người dùng.
 
-Discord hoạt động qua các nút tương tác -- khi người chơi nhấn "Tấn công", Discord gửi cho máy chủ `custom_id` của nút. custom_id này chứa URL nén của trận chiến với hành động mới được thêm vào. Máy chủ tính toán lại mọi thứ từ đầu và trả về hình ảnh đã cập nhật.
+Discord chạy bằng nút tương tác -- khi người chơi nhấn "Tấn công", Discord gửi cho máy chủ `custom_id` của nút. custom_id này chứa URL trận đã nén với hành động mới thêm vào. Máy chủ tính lại tất cả từ con số không và trả về ảnh cập nhật.
 
 ```typescript
 // processUrl.ts
 const VALID_MOVES_SET = new Set(["ATK", "DEF", "HUG", "HEA", "SPE", "USE"]);
-// Được biên dịch sẵn bên ngoài hàm -- không tạo lại mỗi lần gọi
+// Tiền biên dịch ngoài hàm -- không tạo lại mỗi lần gọi
 
 export default function processUrl(url: string): [Random, string[], string, string | null, string | null] {
   const urlParts = url.split("/");
@@ -51,7 +53,7 @@ export default function processUrl(url: string): [Random, string[], string, stri
   for (const part of urlParts) {
     if (VALID_MOVES_SET.has(part.toUpperCase())) moves.push(part.toUpperCase());
   }
-  // seed = phân đoạn thứ 6, băm trên 8096 giá trị
+  // seed = đoạn thứ 6, băm trên 8096 giá trị
   const seedStr = (urlParts[5] || "").toLowerCase();
   let seed = 0;
   for (let i = 0; i < seedStr.length; i++) {
@@ -61,15 +63,15 @@ export default function processUrl(url: string): [Random, string[], string, stri
 }
 ```
 
-`Set` được biên dịch sẵn bên ngoài hàm là một chi tiết nhỏ, nhưng nó tránh việc xây dựng lại cấu trúc mỗi lần gọi trong bối cảnh edge nơi các module có thể được đánh giá lại.
+`Set` tiền biên dịch ngoài hàm là chi tiết nhỏ, nhưng tránh dựng lại cấu trúc mỗi lần gọi trong ngữ cảnh edge nơi module có thể bị đánh giá lại.
 
-### RNG: RC4 biến thể
+### RNG : RC4 biến tấu
 
-Bộ sinh ngẫu nhiên là một triển khai RC4 (thuật toán mã hóa dòng) được biến thành PRNG.
+Bộ sinh ngẫu nhiên là triển khai RC4 (thuật toán mã hóa dòng) bị dùng làm PRNG.
 
 ```typescript
 export class Random {
-  private S: number[]; // bảng 256 phần tử
+  private S: number[]; // bảng 256 mục
   private i: number;
   private j: number;
 
@@ -79,7 +81,7 @@ export class Random {
     let workingSeed = seed || Date.now();
     for (let i = 0; i < 256; i++) {
       j = (j + this.S[i] + (workingSeed & 0xff)) & 0xff;
-      // swap S[i] và S[j]
+      // hoán đổi S[i] và S[j]
       [this.S[i], this.S[j]] = [this.S[j], this.S[i]];
       workingSeed >>>= 8;
     }
@@ -91,19 +93,19 @@ export class Random {
 }
 ```
 
-Tại sao RC4? Bởi vì nó là một PRNG xác định với phân phối tốt và khả năng chống va chạm seed hợp lý. Cùng seed = cùng dãy số = cùng trận chiến mỗi lần. Điều này cho phép "phát lại" bất kỳ trận chiến nào bằng cách giữ URL của nó, và đảm bảo rằng hai máy chủ khác nhau (Vercel + Cloudflare) tạo ra kết quả hoàn toàn giống hệt nhau cho cùng một URL.
+Vì sao RC4? Vì đó là PRNG xác định với phân bố ổn và kháng va chạm seed hợp lý. Cùng seed = cùng chuỗi số = cùng trận mỗi lần. Việc này cho phép "diễn lại" bất kỳ trận nào chỉ bằng URL, và đảm bảo hai máy chủ khác nhau (Vercel + Cloudflare) cho đúng cùng kết quả với cùng URL.
 
 ---
 
-## Vấn đề giới hạn 100 ký tự của Discord
+## Bài toán giới hạn 100 ký tự của Discord
 
-Discord áp đặt giới hạn 100 ký tự trên `custom_id` của các nút. Sau vài chục hành động, URL trận chiến vượt quá giới hạn này một cách dễ dàng.
+Discord áp giới hạn 100 ký tự lên `custom_id` của nút. Sau vài chục hành động, URL trận vượt giới hạn này ngon lành.
 
-Hai cơ chế giải quyết vấn đề này.
+Hai cơ chế trả lời việc đó.
 
 ### 1. Nén RLE các hành động
 
-Các hành động được mã hóa bằng một ký tự đơn (`a`=attack, `d`=defend, `h`=hug...) và được nén bằng run-length encoding:
+Các hành động được mã hóa bằng một ký tự (`a`=attack, `d`=defend, `h`=hug...) và nén bằng mã hóa run-length :
 
 ```typescript
 // movesUtils.ts
@@ -123,11 +125,11 @@ export function compressMoves(moves: string): string {
 }
 ```
 
-Đơn giản, nhưng khi người chơi spam Tấn công x10 thì từ `aaaaaaaaaa` (10 ký tự) thành `a10` (3 ký tự). Các nút "Tấn công x4" và "Tấn công x10" trong UI tồn tại chính vì điều này -- tăng tốc trận chiến đồng thời nén payload tốt hơn.
+Đơn giản, nhưng khi người chơi spam Tấn công x10 nó đi từ `aaaaaaaaaa` (10 ký tự) còn `a10` (3 ký tự). Các nút "Tấn công x4" và "Tấn công x10" trong UI tồn tại đúng vì vậy -- tăng tốc trận đồng thời nén tốt payload.
 
-### 2. Session tokens khi nén không đủ
+### 2. Token phiên khi nén không đủ
 
-Nếu payload nén vẫn quá dài, nó được lưu vào cơ sở dữ liệu với một token ngắn:
+Nếu payload đã nén vẫn quá dài, nó được lưu trong DB với token ngắn :
 
 ```typescript
 // gameSessionService.ts
@@ -135,49 +137,49 @@ const TOKEN_PREFIX = "gs.";
 const TOKEN_SIZE = 10; // "gs.aBcDeFgHiJ"
 
 export async function encodeGameplayButtons(buttons: RawButton[]): Promise {
-  // Nhóm các payload theo battle_key, chèn batch vào Supabase
-  // Thay thế custom_id bằng "gs.{token}:{userId}"
+  // Nhóm payload theo battle_key, chèn batch vào Supabase
+  // Thay custom_id bằng "gs.{token}:{userId}"
 }
 
 export async function decodeGameplayPayloadWithStatus(encodedPayload: string, userID: string) {
   if (!encodedPayload.startsWith(TOKEN_PREFIX)) {
-    return { payload: encodedPayload }; // Không tra cứu nếu không cần
+    return { payload: encodedPayload }; // Không lookup nếu không cần
   }
-  // Tra cứu trong bộ nhớ trước, sau đó Supabase nếu không có
+  // Lookup trong bộ nhớ trước, rồi Supabase nếu thiếu
   const cached = tokenToSession.get(token) || await loadTokenRowByToken(token);
-  // Kiểm tra quyền sở hữu, TTL (7 ngày), và turn_version (tránh phát lại trạng thái cũ)
+  // Kiểm tra sở hữu, TTL (7 ngày), và turn_version (tránh diễn lại trạng thái cũ)
 }
 ```
 
-Các session có TTL 7 ngày và tự động dọn dẹp mỗi 10 phút. Kiểm tra `turnVersion` ngăn việc phát lại trạng thái đã lỗi thời nếu người chơi đã tiến triển -- một lớp bảo vệ tinh tế chống "quay lại" vô tình.
+Phiên có TTL 7 ngày và dọn tự động mỗi 10 phút. Kiểm tra `turnVersion` ngăn diễn lại trạng thái hết hạn nếu người chơi đã tiến trong ván -- bảo vệ kín đáo chống "quay lại" vô tình.
 
-Hai Map trong bộ nhớ (`tokenToSession`, `latestTurnByBattle`) sử dụng cùng pattern `globalThis as unknown as GameSessionGlobals` như bộ nhớ đệm hình ảnh, vì những lý do tương tự sẽ được đề cập bên dưới.
+Hai Map trong bộ nhớ (`tokenToSession`, `latestTurnByBattle`) dùng cùng mẫu `globalThis as unknown as GameSessionGlobals` như cache ảnh, vì cùng lý do ta sẽ thấy bên dưới.
 
 ---
 
-## Pipeline render hình ảnh
+## Pipeline render ảnh
 
-![Bắt đầu trận chiến với Slime](/images/konosuba-rpg/shot_01_start.webp)
+![Bắt đầu trận với Slime](/images/konosuba-rpg/shot_01_start.webp)
 
-Route `/konosuba-rpg/:lang/*` không trả về JSON. Nó trả về một hình ảnh WebP được tạo ra theo yêu cầu.
+Route `/konosuba-rpg/:lang/*` không trả JSON. Nó trả ảnh WebP sinh theo yêu cầu.
 
-Pipeline được tổ chức thành 3 lớp ghép:
+Pipeline tổ chức thành 3 lớp chồng :
 
 ```
-Background (board + frame)
+Nền (bảng + khung)
     +
-Characters layer (sprite người chơi + quái, vị trí cố định)
+Lớp nhân vật (sprite người chơi + quái, vị trí cố định)
     +
-UI overlay (thanh HP, tin nhắn, biểu tượng nhân vật qua Satori → SVG → PNG)
+Phủ UI (thanh HP, tin nhắn, biểu tượng nhân vật qua Satori → SVG → PNG)
     ↓
 Photon.watermark() × 2
     ↓
-WebP output
+Đầu ra WebP
 ```
 
-**Background**: hai hình ảnh tĩnh (bảng và khung), được tải từ filesystem và ghép một lần.
+**Nền** : hai ảnh cố định (bảng và khung), tải từ filesystem và chồng một lần.
 
-**Characters layer**: các sprite được đặt theo tọa độ đã tính toán. Người chơi đã chết bị loại trừ (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Sprite kẻ thù được lật ngang bằng `flipX` tùy chỉnh -- một vòng lặp từng pixel thay vì phụ thuộc bên ngoài.
+**Lớp nhân vật** : sprite đặt theo tọa độ tính toán. Người chơi chết bị loại (`activeSlots = slots.filter(s => playerHp[s.i] > 0)`). Sprite quái bị lật ngang bằng `flipX` custom -- vòng lặp từng pixel thay vì phụ thuộc ngoài.
 
 ```typescript
 function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
@@ -196,36 +198,36 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 }
 ```
 
-**UI overlay**: đây là phần nặng nhất. JSX của giao diện (thanh máu, văn bản, biểu tượng) được mô tả kiểu React với Satori, render thành SVG, chuyển đổi sang PNG bằng `@cf-wasm/resvg`, sau đó import vào Photon để ghép cuối cùng. Satori + resvg là hai module WASM được biên dịch riêng cho Cloudflare Workers với flag `edge-light`.
+**Phủ UI** : đây là phần nặng. JSX của giao diện (thanh máu, văn bản, biểu tượng) được mô tả kiểu React bằng Satori, render thành SVG, đổi sang PNG bằng `@cf-wasm/resvg`, rồi nhập vào Photon để chồng cuối. Satori + resvg là hai module WASM biên dịch riêng cho Cloudflare Workers với cờ `edge-light`.
 
 ![Hành động Phòng thủ](/images/konosuba-rpg/shot_03_defend.webp)
 
-![Chiến đấu đang diễn ra](/images/konosuba-rpg/shot_02_combat.webp)
+![Trận đang diễn ra](/images/konosuba-rpg/shot_02_combat.webp)
 
 ![Hành động Ôm](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
-## Hệ thống bộ nhớ đệm -- phần được đầu tư nhiều nhất
+## Hệ thống cache -- phần trau chuốt nhất
 
-Có 5 tầng bộ nhớ đệm riêng biệt. Mỗi tầng nhắm vào một mức độ chi tiết khác nhau của pipeline.
+Có 5 tầng cache riêng. Mỗi tầng nhắm độ hạt khác nhau của pipeline.
 
 ```typescript
-// renderImage.ts -- tất cả trên globalThis
-G.__imageCache  ??= {} as Record; // tài nguyên thô
-G.__base64Cache ??= {} as Record;       // base64 của tài nguyên (cho Satori)
-G.__fontCache   ??= {} as Record; // phông chữ
+// renderImage.ts -- mọi thứ trên globalThis
+G.__imageCache  ??= {} as Record; // asset thô
+G.__base64Cache ??= {} as Record;       // base64 của asset (cho Satori)
+G.__fontCache   ??= {} as Record; // phông
 G.__photonCache    ??= new LRUCache(40, freePhoton);
 G.__layerCache     ??= new LRUCache(12, freePhoton);
 G.__uiPhotonCache  ??= new LRUCache(30, freePhoton);
 G.__renderOutputCache ??= new LRUCache(120);
 ```
 
-Pattern `??=` trên `globalThis`: các module JavaScript trong worker edge có thể được đánh giá lại giữa các yêu cầu trên một số cấu hình. Lưu bộ nhớ đệm trên `globalThis` với `??=` đảm bảo chúng tồn tại qua các lần đánh giá lại mà không bị tạo mới.
+Mẫu `??=` trên `globalThis` : module JavaScript trong worker edge có thể bị đánh giá lại giữa các yêu cầu trên vài cấu hình. Lưu cache trên `globalThis` với `??=` đảm bảo chúng sống sót qua các lần đánh giá lại mà không bị tạo lại.
 
-### Eviction WASM
+### Thu hồi WASM
 
-Bộ nhớ đệm hình ảnh Photon (`photonCache`, `layerCache`, `uiPhotonCache`) sử dụng callback eviction:
+Cache ảnh Photon (`photonCache`, `layerCache`, `uiPhotonCache`) dùng callback thu hồi :
 
 ```typescript
 function freePhoton(_key: string, img: Photon.PhotonImage): void {
@@ -235,9 +237,9 @@ function freePhoton(_key: string, img: Photon.PhotonImage): void {
 new LRUCache(40, freePhoton)
 ```
 
-`Photon.PhotonImage` là một đối tượng WASM với bộ nhớ được cấp phát ở phía tuyến tính WASM, nằm ngoài GC JavaScript. Nếu không gọi `.free()` một cách tường minh, bộ nhớ này không bao giờ được giải phóng. Eviction LRU kích hoạt `.free()` tự động -- đó là RAII trong JavaScript.
+`Photon.PhotonImage` là object WASM với bộ nhớ cấp phát phía tuyến tính WASM, ngoài GC JavaScript. Bộ nhớ này còn cấp phát chừng nào `.free()` chưa được gọi rõ. Thu hồi LRU kích hoạt `.free()` tự động -- đó là RAII mang sang JavaScript.
 
-### Khóa cache được cố tình làm mất mát
+### Khóa cache cố ý lossy
 
 ```typescript
 function buildCharactersKey(playerImages: string[][], playerHp: number[], creatureImages: string[], creatureHp: number): string {
@@ -246,9 +248,9 @@ function buildCharactersKey(playerImages: string[][], playerHp: number[], creatu
 }
 ```
 
-Khóa của characters layer không mã hóa giá trị HP chính xác -- chỉ `1` (còn sống) hoặc `0` (đã chết). Bởi vì sprite của người chơi 40 HP và người chơi 15 HP là giống hệt nhau. Một cache hit do đó tồn tại qua bất kỳ sát thương nào miễn là không ai ngã xuống.
+Khóa lớp nhân vật không mã hóa giá trị HP chính xác -- chỉ `1` (sống) hay `0` (chết). Vì sprite của người chơi 40 HP và người chơi 15 HP giống hệt. Lần trúng cache vì vậy sống sót qua bất kỳ sát thương nào chừng nào không ai gục.
 
-Ngược lại, khóa UI mã hóa HP chính xác (thanh máu thay đổi mỗi đòn) và hash của tin nhắn:
+Khóa UI ngược lại mã hóa HP chính xác (thanh máu đổi mỗi đòn) và băm tin nhắn :
 
 ```typescript
 function hashString(value: string): string {
@@ -260,15 +262,15 @@ function hashString(value: string): string {
 }
 ```
 
-`Math.imul` ép phép nhân thành số nguyên 32 bit, tránh chuyển đổi float64 và tạo ra hash đa thức ổn định. Không cần phụ thuộc bên ngoài cho việc này.
+`Math.imul` ép phép nhân thành số nguyên 32 bit, tránh chuyển đổi float64 và cho băm đa thức ổn định. Việc này tránh thêm phụ thuộc ngoài cho chuyện đó.
 
-### Chuyển đổi base64 không bị stack overflow
+### Đổi base64 không tràn ngăn xếp
 
 ```typescript
 function getBase64Cached(key: string, buf: ArrayBuffer): string {
   if (base64Cache[key]) return base64Cache[key];
   const bytes = new Uint8Array(buf);
-  const chunkSize = 0x8000; // 32768 byte
+  const chunkSize = 0x8000; // 32768 octet
   let binary = "";
   for (let i = 0; i < bytes.length; i += chunkSize) {
     binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunkSize, bytes.length)));
@@ -279,39 +281,39 @@ function getBase64Cached(key: string, buf: ArrayBuffer): string {
 }
 ```
 
-`String.fromCharCode(...largeArray)` có thể gây stack overflow trên các hình ảnh lớn vì các tham số được truyền qua call stack. Chunking 32KB tránh được điều này. Kết quả được lưu vào bộ nhớ đệm -- việc chuyển đổi base64 của cùng một hình ảnh chỉ được thực hiện một lần cho mỗi instance worker.
+`String.fromCharCode(...largeArray)` có thể gây tràn ngăn xếp trên ảnh lớn vì đối số truyền trên call stack. Chia đoạn 32Ko tránh việc đó. Kết quả được cache -- đổi base64 của cùng ảnh chỉ làm một lần cho mỗi instance worker.
 
 ---
 
-## STRIPPER.md -- kiểm toán các await tuần tự
+## STRIPPER.md -- kiểm toán await nối tiếp
 
-Có một file `STRIPPER.md` trong repo ghi lại quá trình kiểm toán song song hóa các `await`. Một vài ví dụ được ghi lại:
+Có tệp `STRIPPER.md` trong repo ghi lại kiểm toán song song hóa các `await`. Vài ví dụ được ghi :
 
-- Tải hồ sơ người chơi từng thực hiện 3 truy vấn Supabase nối tiếp (tiến trình, tóm tắt run, thành tích). Chúng đã được chuyển thành `Promise.all` -- không có phụ thuộc lẫn nhau.
-- Phân phối phần thưởng cuối trận (phụ kiện + vật phẩm tiêu hao) từng là tuần tự. Đã được song song hóa tương tự.
-- Tạo token session cho các nút từng được thực hiện theo nhóm. Các nhóm độc lập giờ được tạo song song.
+- Tải hồ sơ người chơi làm 3 yêu cầu Supabase nối tiếp (tiến trình, tóm tắt run, thành tựu). Chúng được chuyển sang `Promise.all` -- không phụ thuộc nhau.
+- Phân phối thưởng cuối trận (phụ kiện + vật phẩm) nối tiếp. Song song hóa tương tự.
+- Tạo token phiên cho nút làm từng nhóm. Các nhóm độc lập giờ tạo song song.
 
 ```typescript
-// progressionService.ts -- trước đây (tuần tự)
+// progressionService.ts -- trước (nối tiếp)
 await grantAccessoryDropRewards(...);
 await grantConsumableDropRewards(...);
 
-// sau đó
+// sau
 await Promise.all([
   grantAccessoryDropRewards(...),
   grantConsumableDropRewards(...),
 ]);
 ```
 
-Không có gì cách mạng, nhưng trong bối cảnh serverless nơi mỗi mili giây thời gian phản hồi đều bị tính phí (hoặc góp phần vào cold start), điều này có ý nghĩa.
+Không có gì cách mạng, nhưng trong ngữ cảnh serverless nơi mỗi mili giây thời gian phản hồi bị tính tiền (hay góp vào cold start), việc đó đáng kể.
 
 ---
 
-## Bot Discord không cần máy chủ liên tục
+## Bot Discord không máy chủ bền vững
 
 ![Chiến thắng](/images/konosuba-rpg/shot_05_win.webp)
 
-Một điểm thường bị hiểu nhầm: bot Discord không nhất thiết cần kết nối WebSocket liên tục. Discord cung cấp một giải pháp thay thế: **Interactions Endpoint URL**. Bạn cung cấp một URL HTTPS cho Discord, và Discord gửi POST cho mỗi tương tác (slash command, nút, autocomplete).
+Điểm thường bị hiểu sai : bot Discord không nhất thiết cần kết nối WebSocket bền vững. Discord cung cấp lựa chọn : **Interactions Endpoint URL**. Bạn đưa URL HTTPS cho Discord, và Discord gửi bạn POST cho mỗi tương tác (slash command, nút, autocomplete).
 
 ```typescript
 // interactions.ts
@@ -328,11 +330,11 @@ export async function handleInteractions(c: Context) {
 }
 ```
 
-Discord gửi POST, handler chạy 50-200ms trên một function Vercel hoặc Cloudflare Worker, trả lời, và kết thúc. Không cần kết nối thường trực, không cần máy chủ giữ hoạt động. Toàn bộ bot Discord được host trên free tier Vercel.
+Discord gửi POST, handler chạy 50-200ms trên hàm Vercel hay Cloudflare Worker, trả lời, và xong. Không kết nối thường trực cần duy trì, không máy chủ cần giữ bật. Toàn bộ bot Discord host trên free tier Vercel.
 
-Xác thực Ed25519 (`verifyKey` từ `discord-interactions`) là bắt buộc -- Discord gửi chữ ký trong headers mà bạn phải xác thực, nếu không endpoint sẽ bị từ chối.
+Xác minh Ed25519 (`verifyKey` từ `discord-interactions`) bắt buộc -- Discord gửi chữ ký trong header mà bạn phải kiểm tra, nếu không nó từ chối endpoint.
 
-### Animation đặc biệt -- await có chủ đích duy nhất
+### Animation đặc biệt -- await cố ý duy nhất
 
 ```typescript
 // handleSpecialButton.ts
@@ -343,65 +345,65 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 });
 ```
 
-Sự chậm trễ có chủ đích 3 giây này được ghi lại trong STRIPPER.md là có chủ ý. Đòn tấn công đặc biệt của Megumin (Explosion) có animation phía Discord -- tin nhắn đầu tiên được cập nhật với hình ảnh trung gian, sau đó được sửa đổi 3 giây sau với kết quả. Đây là trường hợp duy nhất một function Vercel cố tình chạy lâu hơn mức cần thiết.
+Trễ tự nguyện 3 giây này được ghi trong STRIPPER.md là cố ý. Đòn đặc biệt của Megumin (Explosion) có animation phía Discord -- tin nhắn đầu được cập nhật bằng hình ảnh trung gian, rồi sửa 3 giây sau bằng kết quả. Đó là trường hợp duy nhất hàm Vercel cố chạy lâu hơn cần thiết.
 
-![Đòn tấn công đặc biệt](/images/konosuba-rpg/shot_08_special.webp)
+![Đòn đặc biệt](/images/konosuba-rpg/shot_08_special.webp)
 
 ---
 
-## Khả năng triển khai trên hai nền tảng
+## Triển khai được trên hai nền tảng
 
-Cùng một codebase chạy trên Vercel (Node.js) và Cloudflare Workers (V8 isolates) mà không cần sửa đổi:
+Cùng codebase chạy trên Vercel (Node.js) và Cloudflare Workers (V8 isolates) không sửa đổi :
 
 ```typescript
-// worker.ts -- entrypoint Cloudflare
+// worker.ts -- điểm vào Cloudflare
 export default {
   fetch(request: Request, env: WorkerBindings): Promise {
-    syncBindingsToProcessEnv(env); // tiêm secrets CF vào process.env
+    syncBindingsToProcessEnv(env); // bơm secret CF vào process.env
     return app.fetch(request, env, ctx);
   }
 };
 
-// index.ts -- entrypoint Vercel/Node
+// index.ts -- điểm vào Vercel/Node
 const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
 
-Sự khác biệt chính: tài nguyên tĩnh. Trên Vercel, chúng được đọc từ filesystem (`/var/task/assets/`). Trên Cloudflare Workers, chúng đi qua binding `ASSETS` (tài nguyên tĩnh CF) với fallback tới mirror HTTPS (`fox3000foxy.com/konosuba-rpg/assets`). `getAssetBytes` trong `assetLoader.ts` xử lý cả hai đường dẫn bằng cách thử filesystem trước, sau đó fetch.
+Khác biệt chính : asset tĩnh. Trên Vercel, chúng đọc từ filesystem (`/var/task/assets/`). Trên Cloudflare Workers, chúng đi qua binding `ASSETS` (asset tĩnh CF) với dự phòng về mirror HTTPS (`fox3000foxy.com/konosuba-rpg/assets`). `getAssetBytes` trong `assetLoader.ts` xử lý cả hai đường bằng cách thử filesystem trước, rồi fetch.
 
-Các WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) có bản dựng riêng cho từng runtime. Flag `edge-light` trong tên package chỉ định bản dựng tương thích Cloudflare Workers, không cho phép `new WebAssembly.Module()` tại runtime -- WASM phải được biên dịch trước.
+Các WASM (`@cf-wasm/photon/edge-light`, `@cf-wasm/resvg`) có build riêng cho mỗi runtime. Cờ `edge-light` trong tên gói chỉ build tương thích Cloudflare Workers, không cho phép `new WebAssembly.Module()` lúc runtime -- WASM phải tiền biên dịch.
 
 ---
 
-## Hệ thống tiến triển: XP, cấp độ, thân thiết
+## Tiến trình : XP, cấp, thiện cảm
 
 ![Một boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
-Meta-progression dựa trên Supabase free tier. Schema bao gồm bảng `players` (XP toàn cục, cấp độ, vàng), `character_progress` (XP/cấp độ/thân thiết cho từng nhân vật Darkness, Aqua, Megumin), `runs` (lịch sử chiến đấu), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions`.
+Meta-tiến trình dựa trên free tier Supabase. Schema gồm bảng `players` (XP toàn cục, cấp, gold), `character_progress` (XP/cấp/thiện cảm cho mỗi nhân vật Darkness, Aqua, Megumin), `runs` (lịch sử trận), `inventory_items`, `daily_quests_progress`, `achievements_unlocked`, `game_sessions`.
 
-Mô hình tiến triển đơn giản:
+Mô hình tiến trình đơn giản :
 
 ```typescript
 // characterService.ts
 export function computeLevelFromXp(xp: number): number {
-  return Math.floor(xp / 100) + 1; // 100 XP mỗi cấp
+  return Math.floor(xp / 100) + 1; // 100 XP cho mỗi cấp
 }
 
 export function getLevelFactor(level: number): number {
-  return 1 + 0.2 * (level - 1); // +20% chỉ số mỗi cấp
+  return 1 + 0.2 * (level - 1); // +20% stat cho mỗi cấp
 }
 
 export function getAffinityFactor(affinity: number): number {
-  const stars = Math.floor(affinity / 20); // 20 điểm mỗi sao, tối đa 5 sao
-  return 1.2 ** stars; // tiến triển theo cấp số nhân
+  const stars = Math.floor(affinity / 20); // 20 điểm cho mỗi sao, tối đa 5 sao
+  return 1.2 ** stars; // tiến trình lũy thừa
 }
 ```
 
-Các hệ số này được áp dụng vào chỉ số của nhân vật khi bắt đầu mỗi `processGame`. Kazuma theo cấp độ toàn cục của người chơi, ba nhân vật còn lại có XP/cấp độ riêng. Thân thiết (kiếm được bằng cách nhặt drop liên quan đến nhân vật) nhân chỉ số của nó một cách độc lập.
+Các hệ số này áp vào stat nhân vật lúc đầu mỗi `processGame`. Kazuma theo cấp toàn cục của người chơi, ba người còn lại mỗi người có XP/cấp riêng. Thiện cảm (kiếm bằng cách lấy drop gắn với nhân vật) nhân stat của họ độc lập.
 
 ![Hồi máu](/images/konosuba-rpg/shot_07_heal.webp)
 
-Hệ thống drop sử dụng bảng loot có trọng số theo độ khó:
+Hệ thống drop dùng bảng loot có trọng số theo độ khó :
 
 ```typescript
 const LOOT_TABLE_BY_DIFFICULTY: Record = {
@@ -414,17 +416,17 @@ const LOOT_TABLE_BY_DIFFICULTY: Record = {
       { rarity: Rarity.Epic,   weight: 1  },
     ],
   },
-  // ...cho tới Legendary
+  // ...tới Legendary
 };
 ```
 
 ---
 
-## Kiểm thử
+## Test
 
-Ba bộ: unit, perf, và leaks.
+Ba suite : đơn vị, hiệu năng, và rò rỉ.
 
-Leak test đặc biệt trực tiếp:
+Leak test đặc biệt thẳng :
 
 ```typescript
 // leaks.spec.ts
@@ -442,50 +444,50 @@ it('does not show strong heap growth across repeated runs', async () => {
 });
 ```
 
-1200 lần lặp `processGame`, GC cưỡng bức trước và sau, delta heap < 20MB. Nếu test này qua, `processGame` không bị rò rỉ. Test render (`renderImage.spec.ts`) kiểm tra thời gian thực thi dưới một ngưỡng thực tế.
+1200 vòng `processGame`, GC ép trước và sau, chênh heap < 20MB. Nếu test này qua, `processGame` không rò. Test render (`renderImage.spec.ts`) kiểm tra thời gian chạy dưới ngưỡng thực tế.
 
-Ngoài ra còn có script `bench.ts` để profile pipeline hoàn chỉnh:
+Ngoài ra có script `bench.ts` để profile pipeline đầy đủ :
 
 ```
 RENDER_PERF=1 npx tsx bench.ts --runs=20 --warmup=3 --monster=Dragon
 ```
 
-Với `RENDER_PERF=1`, wrapper `withPerf` trong mỗi service ghi lại thời gian:
+Với `RENDER_PERF=1`, wrapper `withPerf` trong mỗi service log thời gian :
 
 ```typescript
 export async function withPerf(scope: string, label: string, work: () => Promise): Promise {
   const perf = createPerfLogger(scope);
-  if (!perf.enabled) return work(); // zero overhead nếu bị tắt
+  if (!perf.enabled) return work(); // không chi phí khi tắt
   perf.mark(`${label}:start`);
   try { return await work(); }
   finally { perf.done(`${label}:done`); }
 }
 ```
 
-`createPerfLogger` trả về no-ops nếu `DEV_MODE` và `RENDER_PERF` không được đặt thành `1`. Không có overhead trong production.
+`createPerfLogger` trả về no-op nếu `DEV_MODE` và `RENDER_PERF` không ở `1`. Không chi phí trong production.
 
 ---
 
-## Chi phí vận hành
+## Chạy tốn bao nhiêu
 
-- **Vercel free tier**: 100GB bandwidth, 1M serverless invocations mỗi tháng. Render hình ảnh được tính là một invocation.
-- **Cloudflare Workers free tier**: 100K yêu cầu/ngày, 10ms CPU time mỗi yêu cầu (render có thể vượt quá trên Workers, do đó Vercel là primary).
-- **Supabase free tier**: 500MB database, 5GB bandwidth. Đủ cho hàng ngàn người chơi.
+- **Free tier Vercel** : 100GB băng thông, 1M lần gọi serverless mỗi tháng. Render ảnh tính là một lần gọi.
+- **Free tier Cloudflare Workers** : 100K yêu cầu/ngày, 10ms thời gian CPU cho mỗi yêu cầu (render có thể vượt trên Workers, vì vậy Vercel làm chính).
+- **Free tier Supabase** : 500MB DB, 5GB băng thông. Đủ cho hàng nghìn người chơi.
 
-Toàn bộ backend chạy với chi phí bằng không cho đến khi đạt khối lượng đáng kể. Điểm nghẽn duy nhất là giới hạn CPU của Cloudflare Workers -- render hình ảnh tốn CPU do WASM, do đó chiến lược dùng Vercel làm primary và Workers làm CDN dự phòng.
+Toàn bộ backend chạy chi phí 0 tới khối lượng đáng kể. Điểm ma sát duy nhất là giới hạn CPU của Cloudflare Workers -- render ảnh nặng CPU vì WASM, vì vậy chiến lược Vercel làm chính và Workers làm CDN dự phòng.
 
 ---
 
-## 3 điều đáng ghi nhớ
+## 3 điều đáng giữ lại
 
-1. **URL như trạng thái trò chơi** không chỉ là một mẹo hay -- đó là một ràng buộc từ Discord (các nút có giới hạn 100 ký tự) đã buộc phải có kiến trúc stateless với nén RLE + token session làm dự phòng. Ràng buộc đã định hình thiết kế.
+1. **URL làm trạng thái game** không chỉ là mẹo hay -- đó là ràng buộc Discord áp (nút giới hạn 100 ký tự) ép ra kiến trúc stateless với nén RLE + token phiên dự phòng. Ràng buộc định ra thiết kế.
 
-2. **Bộ nhớ đệm WASM với eviction tường minh**: các `PhotonImage` cấp phát bên ngoài heap JavaScript và sẽ không bao giờ được GC thu hồi nếu không có `.free()`. Gắn `freePhoton` vào eviction của LRU giống như RAII trong JavaScript. Điều này kín đáo trong code, nhưng nếu không có nó worker sẽ bị rò rỉ trong production.
+2. **Cache WASM với thu hồi rõ** : `PhotonImage` cấp phát ngoài heap JavaScript và sẽ không bao giờ GC nếu thiếu `.free()`. Móc `freePhoton` vào thu hồi LRU đúng là RAII trong JavaScript. Nó kín đáo trong mã, nhưng thiếu nó worker sẽ rò rỉ trong production.
 
-3. **Bot Discord serverless không cần WebSocket**: ít được biết đến hơn so với phương pháp WebSocket gateway, nhưng đối với bot xử lý stateless (mỗi tương tác độc lập), Interactions Endpoint hoàn toàn vượt trội -- không cần kết nối lại, không heartbeat, không cần duy trì tiến trình. Discord quản lý tính khả dụng phía hạ tầng của họ.
+3. **Bot Discord serverless không WebSocket** : ít biết hơn cách gateway WebSocket, nhưng với bot xử lý stateless (mỗi tương tác độc lập), Interactions Endpoint vượt hẳn -- không reconnect, không heartbeat, không tiến trình cần duy trì. Discord lo sẵn sàng phía hạ tầng của họ.
 
 ---
 
 *Repo : [fox3000foxy/konosuba-rpg](https://github.com/fox3000foxy/konosuba-rpg)*
 
-*Giấy phép source-available tùy chỉnh -- không được phân phối lại, free to use.*
+*Giấy phép custom source-available -- không phân phối lại, dùng tự do.*

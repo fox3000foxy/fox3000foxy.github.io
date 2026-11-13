@@ -10,7 +10,7 @@ tags:
   - emulation
   - reverse-engineering
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "iKNDOCh1YGsvTNjC7TF1KQNc+5cXXvQrRpmT4wAy165+W/I2w91PI3vfesbPrWx/pKYPs/L+lG9vB6L5G4tWKg=="
+author_sig: "ZkuGNu9SJvGjR27yKSqs5zIm/9olcZG3mX3/r3MRx8/R0aGvtOY8JV1JkxvVBWb6LaICy1euTezndff4VOyjkQ=="
 ---
 
 # Laupok สร้าง AI ที่เล่น Super Mario World ได้เอง -- มันทำงานอย่างไร

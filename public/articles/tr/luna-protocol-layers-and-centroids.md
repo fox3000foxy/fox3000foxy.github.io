@@ -1,6 +1,6 @@
 ---
-title: "Luna Protocol: paylaşılan beyinler, duygu sınıflandırması ve ilginç/anlamsız yönlendirme"
-description: "Luna Protocol tek parça bir yapıdan dört katmanlı bir mimariye dönüştü: adaptörler, beyin, duygu sınıflandırıcı ve çıkarım. Menüde: embedding centroid'leri, ilginç/anlamsız yönlendirme ve valans ile uyarılmaya göre LLM parametre ayarı var."
+title: "Luna Protocol: beyinlerin ortaklaştırılması, duygusal sınıflandırma ve ilginç/faydasız yönlendirme"
+description: "Luna Protocol monolitten dört katmanlı mimariye geçti: adaptörler, brain, duygusal sınıflandırıcı ve inference. Programda: embedding centroidleri, ilginç/faydasız yönlendirme ve valence ile arousal üzerinden LLM parametre ayarı."
 date: 2026-07-27
 tags:
   - discord
@@ -14,167 +14,167 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "FOJXgI8OnIL8fLJY22sYKqxaWjk2G8u0BSx525BU0ZKLEVt5pYM7TH9T1PV6DI6xiKYOIN3GPPl2QQP7Mcttrw=="
+author_sig: "zTa8qDfl7SBBiOk0oswMeCd075ht/M8AQ9/GxbX62wm0VhzXmiWHXhv+6xn5GUVyWHLTjprOqGhxye6sGL0Rag=="
 ---
 
-# Luna Protocol: paylaşılan beyinler, duygu sınıflandırması ve ilginç/anlamsız yönlendirme
+# Luna Protocol: beyinlerin ortaklaştırılması, duygusal sınıflandırma ve ilginç/faydasız yönlendirme
 
-[İki](/articles/en/luna-protocol-discord-bot) [önceki](/articles/en/luna-protocol-official-models) makalede, Luna Protocol'ü karmaşık bir davranış sistemine ve fine-tune edilmiş bir modele sahip tek bir Discord botu olarak tanıtmıştım. Ama mimari o zamandan beri epey değişti. Eskiden tek parça bir yapı olan şey -- Discord botunu, davranışı ve LLM çağrılarını yöneten tek bir Node.js süreci -- artık **dört bağımsız katmana** dönüştü; her birinin kendi sorumluluğu, kendi dili ve kendi yaşam döngüsü var.
+Önceki [iki](/articles/tr/luna-protocol-discord-bot) [makalede](/articles/tr/luna-protocol-official-models) Luna Protocolü karmaşık davranış sistemi ve ince ayarlı modelli tekil Discord botu sundum. Ama mimari o zamandan iyi evrildi. Monolit olan şey: Discord botu, davranışı ve LLM çağrılarını yöneten tek Node.js süreci, **dört bağımsız katmana** dönüştü; her birinin kendi sorumluluğu, kendi dili ve kendi yaşam döngüsü var.
 
-Bu ayrışma beklenmedik faydalar getirdi: birden fazla platform arasında "beyin" paylaşımı, LLM'nin parametrelerini dinamik olarak ayarlayan bir duygu sınıflandırma sistemi ve konuşmanın algılanan önemine göre iki model arasında akıllı mesaj yönlendirmesi.
+Bu ayrım beklenmedik faydalar getirdi: birkaç platform arasında "beyinlerin" ortaklaştırılması, LLM parametrelerini dinamik ayarlayan duygusal sınıflandırma sistemi ve konuşmanın algılanan önemine göre iki model arası akıllı mesaj yönlendirme.
 
-Bu evrim bir anda olmadı -- organik bir yol izledi. Önce `server/` klasörünü botun deposundan ayırarak bir tarafta **Krystal**'ı oluşturdum ve **Jade**'i Discord adaptörü olarak bıraktım. Sonra Jade'in `llm-core` ve olay veri yolunu yeniden kullanarak **Pixieglow**'u (Matrix adaptörü) oluşturdum. Ardından DistilBERT ile GENERIC/SEMANTIC sınıflandırması getiren **Sapphire** geldi -- ama sonuçlar ikna edici değildi, bu yüzden örnekleri zenginleştirmek için daha esnek ve daha isabetli olan embedding centroid'lerine geçtim; sınıflandırma FUTILE/INTERESTING (anlamsız/ilginç) oldu. Sonunda LLM'nin sıcaklığını ve tekrar cezasını düzenlemek için **valans** ve **uyarılma** centroid'lerini ekledim. Son olarak, **Emerald**'ı, yani paylaşılan beyni oluşturarak Jade ile Pixieglow arasındaki tüm gereksiz kodu kaldırdım; Jade ve Pixieglow'u basit soket tabanlı istemcilere dönüştürdüm.
+Evrim bir seferde olmadı: organik bir yolu izledi. Önce bot deposundan `server/` klasörünü ayırdım, böylece bir yanda **Krystal** yaratıp **Jade**i Discord adaptörü bıraktım. Sonra Jadein `llm-core` ve olay veriyolunu geri alıp **Pixieglow** (Matrix adaptörü) yarattım. Sonra DistilBERT ile GENERIC/SEMANTIC sınıflandırma getirmek için **Sapphire** geldi. Sonuçlar ikna edici değildi, o yüzden örnek zenginleştirme için daha yoğrulabilir ve daha hassas embedding centroidlerine geçtim; sınıflandırma FUTILE/INTERESSANT oldu. Sonunda LLM sıcaklık ve repeat penalty değerlerini düzenlemek için **valence** ve **arousal** centroidleri ekledim. Bitirmek için Jade ile Pixieglow arası tüm yedek kodu **Emerald**, ortaklaştırılmış beyin yaratarak kaldırdım; Jade ile Pixieglow soket sürümlü basit istemcilere dönüştü.
 
-Bunun yanında, projenin ilerlemesini takip eden bir web sitesini güncel tutuyorum: [protocol-luna.github.io](https://protocol-luna.github.io/).
+Paralel olarak projenin ilerlemesini izleyen bir web sitesi tuttum: [protocol-luna.github.io](https://protocol-luna.github.io/).
 
-Bu makale, bu katmanları nasıl ve neden ayırdığımın, her servisin tam olarak ne yaptığının ve **centroid'ler** (ortalama embedding vektörleri) ile **kızgınlık değişkenleri** (1970'lerin PARRY chatbot'undan esinlenilmiş) gibi kavramların basit bir Discord botunu şaşırtıcı derecede tutarlı, çoklu platform destekli bir sisteme nasıl dönüştürdüğünün hikayesini anlatıyor.
+Bu makale bu katmanları nasıl ve neden böldüğümü, her servisin tam ne yaptığını ve **centroid** (embedding vektör ortalamaları) ile 70lerin PARRY chatbotundan ilhamlı **hissetme değişkenleri** gibi kavramların basit Discord botunu şaşırtıcı tutarlı çok platformlu sisteme nasıl dönüştürdüğünü anlatır.
 
 ---
 
-## Tek parça yapının sorunu
+## Monolitle ilgili sorun
 
-Başlangıçta, Luna Protocol tek bir Node.js sürecine sığıyordu. Kod şunları yönetiyordu:
+Başlangıçta Luna Protocol tek Node.js sürecine sığıyordu. Kod şunları yönetiyordu:
 
-- Discord bağlantısı (Eris kütüphanesi üzerinden)
-- Tetikleyici değerlendirmesi (bahsetmeler, anahtar kelimeler, takipler...)
-- İnsan davranışlarının simülasyonu (yazım hataları, tereddütler, uyku...)
+- Eris kütüphanesiyle Discorda bağlantı
+- Tetikleyici değerlendirmesi (bahsetmeler, anahtar kelimeler, takip...)
+- İnsani davranış simülasyonu (yazım hataları, tereddütler, uyku...)
 - Yerel LLM sunucusuna (llama.cpp) HTTP çağrıları
-- Oturum yönetimi ve spam önleme
-- TTS (metinden sese) hattı
+- Oturum ve anti-spam yönetimi
+- TTS pipelineı
 
-Her şey aynı süreçte, tipli olay veri yolları (`TypedBus`) üzerinden iletişim kurarak yaşıyordu. İşe yarıyordu, ama sınırlamaları vardı:
+Her şey aynı süreçteydi, tipli olay veriyollarıyla (`TypedBus`) iletişim kuruyordu. Çalışıyordu ama limitlerle:
 
-- **Tüm davranış kodunu tekrarlamadan bir Matrix istemcisi eklemek imkansızdı**
-- **LLM ve bot aynı depodaydı**: `server/` klasörü zaten vardı, ama birini diğerine dokunmadan geliştiremiyordunuz
-- **Akıllı sınıflandırma yoktu**: her mesaj, ister "lol" ister varoluşsal bir soru olsun, aynı şekilde ele alınıyordu
-- **Kalıcı duygusal durum yoktu**: bot hiçbir şey "hissetmiyordu"
+- Davranış kodunun tamamını kopyalamadan **Matrix istemcisi eklemek imkânsız**
+- **LLM ve bot aynı depodaydı**: `server/` klasörü zaten vardı ama birini diğerine dokunmadan evrimleştirmek imkânsız
+- **Farksız işleme**: her mesaj aynı işleniyordu, "lol" ya da varoluşsal soru olsun
+- **Duygusal amnezi**: bot hiçbir şey "hissetmiyordu"
 
-Katmanlara ayırmak tüm bu sorunları çözdü.
+Katmanlara bölme tüm bu sorunları çözdü.
 
 ---
 
 ## Dört katman
 
-Luna Protocol'ün mevcut mimarisi dört seviyeli bir huni olarak organize edilmiştir:
+Luna Protocol mevcut mimarisi dört seviyeli huni düzenlenmiştir:
 
 ```
 Matrix / Discord
       |
       v
-  [ADAPTERS]      Pixieglow (Matrix) / Jade (Discord)
+  [ADAPTÖRLER]      Pixieglow (Matrix) / Jade (Discord)
       |
       v
-  [BRAIN]         Emerald (WebSocket, port 3126)
+  [BRAIN]            Emerald (WebSocket, port 3126)
       |
       v
-  [CLASSIFIER]    Sapphire (HTTP, port 3123)
+  [SINIFLANDIRICI]   Sapphire (HTTP, port 3123)
       |
       v
-  [INFERENCE]     Krystal (llama.cpp, ports 3124 / 3125)
+  [INFERENCE]        Krystal (llama.cpp, port 3124 / 3125)
 ```
 
-Her katman bağımsız olarak yeniden başlatılabilir, güncellenebilir veya değiştirilebilir.
+Her katman bağımsız yeniden başlatılabilir, güncellenebilir ya da değiştirilebilir.
 
 ---
 
-### 1. Katman: adaptörler (Pixieglow ve Jade)
+### Katman 1: adaptörler (Pixieglow ve Jade)
 
-Bunlar en basit katmanlardır. Tek görevleri, bir mesajlaşma platformundan gelen olayları Emerald'a doğru standartlaştırılmış bir protokole çevirmektir:
+En basit katmanlardır. Tek işleri mesajlaşma platformu olaylarını Emeralda standart protokole çevirmektir:
 
-- **Jade**, Discord adaptörüdür. Discord'a bağlanmak için Eris kütüphanesini kullanır ve mesajları WebSocket üzerinden Emerald'a iletir. Ayrıca TTS hattını da yönetir (Piper üzerinden konuşma sentezi, OGG dönüşümü, Discord'a yükleme).
-- **Pixieglow**, Matrix adaptörüdür. Matrix Client-Server HTTP API'sini doğrudan kullanır (SDK yok), uzun-yoklama (long-poll) senkronizasyonu ile. TTS'i yoktur.
+- **Jade** Discord adaptörüdür. Discorda bağlanmak için Eris kütüphanesini kullanır ve mesajları WebSocket üzerinden Emeralda iletir. TTS pipelineını da yönetir (Piper ile ses sentezi, OGGye dönüştürme, Discorda yükleme).
+- **Pixieglow** Matrix adaptörüdür. Doğrudan Matrix HTTP Client-Server API kullanır (SDK yok), uzun yoklama eşzamanlamasıyla. TTSsi yoktur.
 
-Her iki adaptör de `emerald-client.ts` içinde tanımlanan aynı WebSocket protokolünü paylaşır:
+İki adaptör `emerald-client.ts` içinde tanımlı aynı WebSocket protokolü paylaşır:
 
 ```typescript
 type ClientId = "jade" | "pixieglow";
 
-// Events (adapter -> Emerald)
+// Olaylar (adaptör -> Emerald)
 type InEvent = MessageEvent | ReadyEvent | BotMessageEvent | PresenceEvent;
 
-// Commands (Emerald -> adapter)
+// Komutlar (Emerald -> adaptör)
 type OutCommand = RespondCommand | TypingCommand | SetPresenceCommand
                 | SpontaneousCommand | ForgotCommand;
 ```
 
-Aynı arayüze sahip iki adaptörün varlığı, beyin paylaşımının işe yaradığını kanıtlıyor: **aynı "beyin" (Emerald), bir Discord botuna ve bir Matrix botuna birbirinden ayırt etmeden, aynı davranışlarla hizmet veriyor**. Protokol bildirimseldir: Emerald, adaptöre bir mesajı *nasıl* göndereceğini söylemez, *ne* göndereceğini söyler (gecikmeli bir metin, muhtemelen bir patlama planı, bir tepki vb.). Her adaptör, kendi platformu için somut yürütmeyi gerçekleştirir.
+Aynı arayüzlü iki adaptörün varlığı ortaklaştırmayı kanıtlar: **aynı "beyin" (Emerald) farksız Discord botu ve Matrix botu sunar**, aynı davranışlarla. Protokol bildirimseldir: Emerald adaptöre mesajı *nasıl* göndereceğini söylemez, *neyi* göndereceğini söyler (gecikmeli metin, belki patlama planı, tepki vs.). Her adaptör platforma göre somut yürütmeyi uygular.
 
-Bu mimarinin gücü tam da burada: Telegram, Signal veya başka bir şey için destek eklemek için, sadece WebSocket protokolünü uygulayan bir adaptör yazmanız yeterli.
+Bu mimarinin gücü budur: Telegram, Signal ya da başka destek eklemek için WebSocket protokolünü uygulayan bir adaptör yazmak yeter.
 
 ---
 
-### 2. Katman: beyin (Emerald)
+### Katman 2: beyin (Emerald)
 
-Emerald, merkezi karar verme servisidir. 3126 portunda WebSocket üzerinden dinler ve şunları yönetir:
+Emerald merkezi karar servisidir. 3126 portunda WebSocket dinler ve yönetir:
 
-- **Tetikleyici değerlendirmesi**: bahsetme, DM, isim, anahtar kelime, takip, rastgele
-- **Davranışsal simülasyon**: odaklanma gecikmeleri, yazım hataları, tereddütler, unutkanlık, patlamalar, konu yorgunluğu
-- **Uyku döngüleri**: uyku / yavaş / kısa modları
-- **Oturum yönetimi**: bekleme süresi, oturum limitleri, spam önleme
-- **Sapphire'a yönlendirme**: mesaj gönderme, akışlı yanıtları alma
+- **Tetikleyici değerlendirmesi**: bahsetme, DM, ad, anahtar kelime, takip, rastgele
+- **Davranış simülasyonu**: konsantrasyon gecikmeleri, yazım hataları, tereddütler, unutkanlıklar, patlama, tematik yorgunluk
+- **Uyku döngüleri**: sleep / slow / short modları
+- **Oturum yönetimi**: bekleme süresi, oturum limitleri, anti-spam
+- **Sapphirea yönlendirme**: mesaj gönderme, akışlı yanıtlar alma
 
-Emerald, beyin paylaşımını mümkün kılan merkezi servistir ve ayrımdan en çok faydalanan da odur. Daha önce, her davranış (yazım hatası, patlama, tereddüt) Discord koduyla iç içe geçmişti. Şimdi bunlar `behavior/` altında özel modüllerde yaşıyor:
+Emerald ortaklaştırmayı mümkün kılan merkezi servistir ve ayrılıktan en çok yararlanan odur. Önce her davranış (yazım hatası, patlama, tereddüt) Discord koduyla iç içeydi. Artık `behavior/` içinde adanmış modüllerdedirler:
 
 ```
 emerald/src/behavior/
-  burst.ts         -- Burst message planning
-  mannerisms.ts    -- Delays, hesitations, reactions, forgetfulness
-  sleep.ts         -- Sleep schedule evaluation
-  typo.ts          -- Typo simulation (AZERTY/QWERTY)
+  burst.ts         -- Patlama mesaj planlaması
+  mannerisms.ts    -- Gecikmeler, tereddütler, tepkiler, unutkanlıklar
+  sleep.ts         -- Uyku saati değerlendirmesi
+  typo.ts          -- Yazım hatası simülasyonu (AZERTY/QWERTY)
 ```
 
-Beyin hangi platformda çalıştığını bilmez. Bir `clientId` ("jade" veya "pixieglow") ile bir `MessageEvent` alır, bir karar verir ve bir komut döndürür. Adaptör gerisini halleder.
+Beyin hangi platformda döndüğünü bilmez. `clientId` ("jade" ya da "pixieglow") ile `MessageEvent` alır, karar verir ve komut döndürür. Geri kalanı adaptör halleder.
 
 ---
 
-### 3. Katman: duygu sınıflandırıcı (Sapphire)
+### Katman 3: duygusal sınıflandırıcı (Sapphire)
 
-Sapphire, teknik olarak en ilginç servistir. Python ve FastAPI ile yazılmış bir **LLM ara katmanıdır (middleware)** ve dört kritik rol üstlenir:
+Sapphire teknik açıdan en ilginç servistir. Dört kritik rol oynayan FastAPI ile Python yazılmış **LLM middleware**dir:
 
-1. Embedding centroid'leri üzerinden **ikili FUTILE / INTERESTING sınıflandırıcı**
-2. Centroid'ler üzerinden **duygu puanlayıcı** (valans / uyarılma)
-3. Krystal'a **arka uç yönlendirici** (küçük model ile büyük model)
-4. **Few-shot enjektörü** ve oturum yöneticisi
+1. Embedding centroidleriyle ikili **FUTILE / INTERESSANT sınıflandırıcı**
+2. Centroidlerle **duygusal skorlayıcı** (valence / arousal)
+3. Krystala **backend yönlendirici** (küçük model ve büyük model)
+4. **Few-shot enjektör** ve oturum yöneticisi
 
-#### Centroid'ler: sınıflandırmanın kalbi
+#### Centroidler: sınıflandırmanın kalbi
 
-Bir **centroid**, basit bir kavramdır: bir dizi embedding vektörünün ortalamasıdır. Somut olarak, yüzlerce örnek mesaj topladım, bunları bir embedding modelinden (`BAAI/bge-small-en-v1.5`, 384 boyut) geçirdim ve ortaya çıkan vektörlerin ortalamasını aldım.
+**Centroid** basit kavramdır: embedding vektör kümesinin ortalamasıdır. Somut olarak yüzlerce örnek mesaj topladım, embedding modelinden (`BAAI/bge-small-en-v1.5`, 384 boyut) geçirdim ve elde edilen vektörlerin ortalamasını aldım.
 
-**İki sınıflandırma centroid'i** vardır:
+**İki sınıflandırma centroidi** vardır:
 
-- `futile_centroid`: ~683 önemsiz mesajın ortalama embedding'i via k-means (k=10, seed=42) ("lol", "ok", "hello", "nm just chillin u")
-- `interesting_centroid`: ~678 içerikli mesajın ortalama embedding'i (teknik sorular, itiraflar, felsefe)
+- `futile_centroid`: k-means (k=10, seed=42) ile ~683 önemsiz mesaj ("lol", "ok", "hello")
+- `interessant_centroid`: k-means (k=10, seed=42) ile ~678 önemli mesaj (teknik, kişisel, felsefi)
 
-Bir mesaj geldiğinde:
+Mesaj gelince:
 
 ```python
-def classify(text, embedder, futile_centroids, interesting_centroids):
-    emb = embedder.query_embed(text)                        # 384-D vector
-    sim_f = max(cos(emb, c) for c in futile_centroids)     # max over 10
-    sim_i = max(cos(emb, c) for c in interesting_centroids)     # max over 10
+def classify(text, embedder, futile_centroids, interessant_centroids):
+    emb = embedder.query_embed(text)                     # 384 boyutlu vektör
+    sim_f = max(cos(emb, c) for c in futile_centroids)     # 10 üzerinde maks
+    sim_i = max(cos(emb, c) for c in interessant_centroids) # 10 üzerinde maks
     diff = sim_i - sim_f
     label = "INTERESSANT" if diff > 0 else "FUTILE"
     return label, abs(diff), sim_f, sim_i
 ```
 
-Mesaj ile her centroid arasındaki kosinüs benzerliği kategoriyi belirler. Mutlak fark ise güveni verir. Basit, hızlı (LLM ileri geçişi yok) ve şaşırtıcı derecede etkilidir.
+Sınıf başına skor 10 centroidi arasında **maksimum kosinüs benzerliğidir**. Bu her kategoride alt türleri yakalar: selamlama ve vedalaşma embedding uzayında uzak olsalar bile 10 faydasız centroidten birine yakın düşer. Başlangıçta yalnızca k-means ve çalışırken nokta çarpımlar: eğitimsiz, GPUsuz.
 
 #### Neden iki model?
 
-Bu sınıflandırmanın sonucu, hangi LLM arka ucunun çağrılacağına karar verir:
+Bu sınıflandırmanın sonucu hangi LLM backendinin çağrılacağını belirler:
 
-| Etiket | Krystal arka ucu | Model | Port |
-|-------|-----------------|-------|------|
+| Etiket | Krystal Backend | Model | Port |
+|-------|----------------|--------|------|
 | `FUTILE` | `generic` | Luna-Protocol-1.5B (941 MB, Q4_K_M) | 3124 |
-| `INTERESTING` | `semantic` | Hermes-3-3B veya 8B (yapılandırmaya bağlı) | 3125 |
+| `INTERESSANT` | `semantic` | Hermes-3-3B ya da 8B (yapılandırmaya göre) | 3125 |
 
-Sezgi basit: bir "lol" ya da "nm just chillin u" sekiz milyar parametreli bir modeli çağırmayı hak etmiyor. 200.000 Discord örneği üzerinde eğitilmiş, fine-tune edilmiş küçük Luna 1.5B modeli, hafif alışverişler için fazlasıyla yeterli. Öte yandan, hayat hakkında bir soru, bir itiraf veya teknik bir tartışma, daha zengin bir yanıt üretebilen büyük modele yönlendirilir.
+Sezgi basittir: "lol" ya da "nm just chillin u" 8 milyar parametreli modeli çağırmayı hak etmez. 200.000 Discord örneğinde ince ayarlı küçük Luna 1.5B modeli hafif değiş tokuşlara fazlasıyla yeter. Buna karşılık hayat sorusu, sır ya da teknik tartışma daha zengin yanıt üretebilen büyük modele yönlendirilir.
 
-Bu ekonomik yönlendirme, LLM sunucusundaki yükü önemli ölçüde azaltır: mesajların yaklaşık %70'i FUTILE olarak sınıflandırılır ve küçük model tarafından ele alınır, bu da büyük modeli gerçekten hak eden konuşmalar için serbest bırakır.
+Bu ekonomik yönlendirme LLM sunucusu yükünü önemli azaltır: mesajların yaklaşık %70i FUTILE sınıflanır ve küçük modelce işlenir, büyük model gerçekten değer konuşmalara serbest kalır.
 
-#### Duygusal eksen: valans ve uyarılma
+#### Duygusal eksen: valence ve arousal
 
-Ama hepsi bu kadar değil. Sapphire, mesajın duygusunu değerlendirmek için **aynı centroid mekanizmasını** bağımsız bir eksende de kullanır:
+Ama hepsi bu değildir. Sapphire duyguyu değerlendirmek için bağımsız eksende **aynı centroid mekanizmasını** kullanır:
 
 **Dört duygusal centroid** vardır:
 
@@ -185,52 +185,52 @@ Ama hepsi bu kadar değil. Sapphire, mesajın duygusunu değerlendirmek için **
 | `high_arousal` | "WHAT THE HELL", "omg omg omg", "AAAAA" |
 | `low_arousal` | "just chilling", "meh", "i guess" |
 
-Puan, her eksende benzerliklerin farkı olarak hesaplanır:
+Skor her eksende benzerlik farkı hesaplanır:
 
 ```python
 valence = sim(emb, positive) - sim(emb, negative)     # [-1, +1]
 arousal = sim(emb, high_arousal) - sim(emb, low_arousal)  # [-1, +1]
 ```
 
-**Valans**, mesajın olumlu mu olumsuz mu olduğunu ölçer. **Uyarılma**, duygusal yoğunluğunu ölçer. Birlikte, duygunun çemberimsi (circumplex) modelini oluştururlar (Russell, 1980) -- 1972'de **PARRY** chatbot'una ilham veren aynı psikolojik model.
+**Valence** mesajın olumlu mu olumsuz mu olduğunu ölçer. **Arousal** duygusal yoğunluğunu ölçer. Birlikte 1972de **PARRY** chatbotuna ilham veren aynı psikolojik model olan etki çember modelini (Russell, 1980) oluşturur.
 
-#### Kızgınlık değişkenleri: duygular LLM'yi nasıl kontrol ediyor
+#### Hissetme değişkenleri: duygular LLMyi nasıl kontrol eder
 
-İşte PARRY ilhamının somutlaştığı yer burası. PARRY (1972'de Kenneth Colby tarafından yaratıldı), paranoyak bir hastayı simüle etmek için tasarlanmış bir chatbot'tu. Yanıtlarını değiştiren dahili değişkenleri vardı -- korku, öfke, güvensizlik. Örneğin, "korkmuş" bir PARRY daha saldırgan yanıt verirdi.
+PARRY ilhamının somutlaştığı yer burasıdır. PARRY (1972de Kenneth Colby tarafından yaratılmış) paranoyak hastayı simüle tasarlanmış bir chatbottu. Yanıtlarını değiştiren iç değişkenleri (korku, öfke, güvensizlik) vardı. Örneğin "korkmuş" PARRY daha saldırgan yanıtlıyordu.
 
-Sapphire de aynı şeyi yapar, ama sürekli değişkenlerle ve daha zarif bir yöntemle: LLM'nin örnekleme parametreleri, konuşmanın duygusal durumuna göre gerçek zamanlı olarak ayarlanır.
+Sapphire aynısını yapar ama sürekli değişkenler ve daha zarif yöntemle: sohbetin duygusal durumuna göre LLM örnekleme parametreleri gerçek zamanlı ayarlanır.
 
-##### Sıcaklık uyarılmayı takip eder
+##### Sıcaklık arousalı izler
 
 ```python
 temperature = clamp(0.7 + arousal * 0.3, 0.4, 1.0)
 ```
 
-| Uyarılma | Sıcaklık | Etki |
-|---------|-------------|--------|
+| Arousal | Sıcaklık | Etki |
+|---------|-------------|-------|
 | -1.0 (sakin) | 0.40 | Düşük yaratıcılık, öngörülebilir yanıtlar |
 | 0.0 (nötr) | 0.70 | Varsayılan yaratıcılık |
 | +1.0 (heyecanlı) | 1.00 | Maksimum rastgelelik, şaşırtıcı yanıtlar |
 
-Biri heyecanlandığında ya da üzüldüğünde (yüksek uyarılma), sıcaklık yükselir. Model daha çeşitli, daha yaratıcı, bazen daha kaotik yanıtlar üretir -- "kendini kaptıran" bir insan gibi. Konuşma sakin olduğunda, sıcaklık düşer ve yanıtlar daha ölçülü hale gelir.
+Biri heyecanlı ya da kızgınsa (yüksek arousal) sıcaklık yükselir. Model daha çeşitli, daha yaratıcı, bazen daha kaotik yanıtlar üretir; "coşan" insan gibi. Sohbet sakinse sıcaklık düşer, yanıtlar daha soğukkanlıdır.
 
-##### Tekrar cezası valansı takip eder
+##### Repeat penalty valencei izler
 
 ```python
 repeat_penalty = clamp(1.15 - valence * 0.1, 1.0, 1.3)
 ```
 
-| Valans | Tekrar Cezası | Etki |
-|---------|-----------------|--------|
-| -1.0 (olumsuz) | 1.25 | Güçlü ceza, tekrardan kaçınır |
+| Valence | Repeat Penalty | Etki |
+|---------|---------------|-------|
+| -1.0 (olumsuz) | 1.25 | Güçlü ceza, tekrarlardan kaçınır |
 | 0.0 (nötr) | 1.15 | Varsayılan değer |
-| +1.0 (olumlu) | 1.05 | Düşük ceza, tekrara izin verir |
+| +1.0 (olumlu) | 1.05 | Zayıf ceza, tekrarlara izin verir |
 
-Konuşma ne kadar olumsuzsa, model kendini o kadar çok tekrar etmekten kaçınmaya itilir -- gergin bir tartışmada kelime arayan biri gibi. Konuşma ne kadar olumluysa, model o kadar rahat bir sohbette olduğu gibi fazlalık ifadeler kullanabilir.
+Sohbet ne olumsuz, model kendini tekrar etmemeye o kadar itilir; gergin tartışmada kelimelerini arayan biri gibi. Sohbet ne olumlu, model gereksiz olumlamalara o kadar izin verebilir; rahat sohbet gibi.
 
 ##### Birikimli duygusal durum
 
-Bu puanlar sadece anlık mesaja uygulanmaz. Bir `EmotionState`, oturum başına valans ve uyarılmanın **üstel hareketli ortalamasını** tutar:
+Bu skorlar yalnızca anlık mesajı taşımaz. `EmotionState`, oturum başına valence ve arousal **üstel hareketli ortalamasını** tutar:
 
 ```python
 class EmotionState:
@@ -249,94 +249,94 @@ class EmotionState:
         return s
 ```
 
-0.85'lik `decay`, her mesajda önceki durumun %85'inin korunduğu, yeni sinyalin %15'inin entegre edildiği anlamına gelir. Bu, ani dalgalanmaları yumuşatan bir **duygusal hafıza** yaratır: tek bir olumsuz mesaj botu "üzgün" yapmaz, ama bir dizi olumsuz mesaj onun ruh halini yavaş yavaş kaydırır.
+0,85 `decay`, her mesajda önceki durumun %85i korunur ve yeni sinyalin %15i bütünleşir demektir. Bu ani değişimleri yumuşatan **duygusal bellek** verir: tek olumsuz mesaj botu "üzmez" ama bir dizi olumsuz mesaj ruh halini yavaşça sürükler.
 
-Pratikte: eğer biri bir konuşmaya çok heyecanlı başlarsa (`arousal=+0.8`), sonraki mesajlar daha sakin olsa bile sıcaklık birkaç alışveriş boyunca yüksek kalır. Duygunun geri inmesi zaman alır -- bir tartışmadan sonra "kızgın" kalan bir insan gibi.
-
----
-
-### 4. Katman: çıkarım (Krystal)
-
-Krystal en alt katmandır: OpenAI uyumlu bir API (`/v1/chat/completions`) sunan `llama.cpp` etrafında bir sarmalayıcıdır. İki PM2 örneği olarak çalışır:
-
-- `krystal-small`: fine-tune edilmiş Luna 1.5B modeli, 3124 portunda, CPU yakınlığı 0
-- `krystal-large`: bir Hermes 3B modeli, 3125 portunda, CPU yakınlığı 0,1
-
-Her iki örnek de önceden derlenmiş `llama-server` süreçleridir ve CPU sabitleme için `taskset` ile başlatılır.
-
-Luna modelinin fine-tune'u da ikinci makaleden bu yana gelişti: artık **200.000 örnek** üzerinde eğitiliyor (önceki 50.000'den artarak), hâlâ QLoRA üzerinden Qwen2.5-1.5B-Instruct'tan başlıyor. 200 bin örnek, Discord-Dialogues veri setinin bir alt kümesidir ve yalnızca en doğal ve çeşitli konuşmaları tutmak için filtrelenmiştir. Amaç: few-shot priming'i bu kadar etkili kılan esnekliği kaybetmeden modelin üslup yelpazesini genişletmek.
+Pratikte: biri sohbete çok heyecanlı başlarsa (`arousal=+0,8`) sonraki mesajlar daha sakin olsa bile sıcaklık birkaç değiş tokuş yüksek kalır. Duygu düşmeye zaman alır; tartışmadan sonra "sıcak" kalan insan gibi.
 
 ---
 
-## Tüm resim: geçiş halindeki bir mesaj
+### Katman 4: inference (Krystal)
 
-İşte Discord'da biri "i'm really sad today" yazdığında gerçekte ne oluyor:
+Krystal en alt katmandır: `llama.cpp` etrafında OpenAI uyumlu API (`/v1/chat/completions`) sunan sarmalayıcı. İki PM2 örneğinde döner:
 
-1. **Jade**, mesajı Discord Gateway API'si üzerinden alır. Onu bir `MessageEvent`'e dönüştürür ve WebSocket üzerinden Emerald'a gönderir.
-2. **Emerald**, tetikleyiciyi değerlendirir (bahsetme mi? isim mi? anahtar kelime mi?). Bu doğrudan bir bahsetme. Bir odaklanma gecikmesi hesaplar, bekleme süresini, oturumu, konu yorgunluğunu kontrol eder. Yanıt vermeye karar verir ve mesajı HTTP üzerinden Sapphire'a gönderir.
-3. **Sapphire**, mesajı `bge-small-en-v1.5` ile embed eder.
-   - Sınıflandırma: mesaj `futile` centroid'inden çok `interesting` centroid'ine daha yakın (fark = +0.31) -> **INTERESTING**
-   - Duygu: olumsuz valans (-0.42), orta düzey uyarılma (0.35)
-   - Yönlendirme: `KRYSTAL_SEMANTIC_URL` yönü (3125 portu, büyük model)
-   - Örnekleme parametreleri: sıcaklık = 0.80 (uyarılma arttı), tekrar cezası = 1.19 (olumsuz valans)
+- `krystal-small`: 3124 portunda ince ayarlı Luna 1.5B modeli, CPU yakınlığı 0
+- `krystal-large`: 3125 portunda Hermes 3B modeli, CPU yakınlığı 0,1
+
+İki örnek `taskset` ile CPU sabitlemeli çalıştırılan önceden derlenmiş `llama-server` süreçleridir.
+
+Luna modelinin ince ayarı da ikinci makaleden beri evrildi: artık **200.000 örnekte** eğitilir (önce 50.000), hep Qwen2.5-1.5B-Instruct üzerinden QLoRA ile. 200 bin örnek Discord-Dialogues veri kümesinin alt kümesidir, en doğal ve çeşitli konuşmalar tutulmak için filtrelenmiş. Amaç: few-shot priming etkili kılan esnekliği kaybetmeden modelin tarz kaydını genişletmek.
+
+---
+
+## Eksiksiz şema: transitte bir mesaj
+
+Discordda biri "je suis vraiment triste aujourd'hui" gönderince somut olan:
+
+1. **Jade** mesajı Discord API Gateway üzerinden alır. `MessageEvent` dönüştürüp WebSocket ile Emeralda gönderir.
+2. **Emerald** tetikleyiciyi değerlendirir (bahsetme mi? ad mı? anahtar kelime mi?). Doğrudan bahsetmedir. Konsantrasyon gecikmesi hesaplar, bekleme süresini, oturumu, tematik yorgunluğu kontrol eder. Yanıtlamaya karar verip mesajı HTTP ile Sapphirea gönderir.
+3. **Sapphire** mesajı `bge-small-en-v1.5` ile gömer.
+   - Sınıflandırma: mesaj `futile` centroidtense `interessant` centroidine yakındır (diff = +0,31) -> **INTERESSANT**
+   - Duygu: olumsuz valence (-0,42), orta arousal (0,35)
+   - Yönlendirme: `KRYSTAL_SEMANTIC_URL` yönü (port 3125, büyük model)
+   - Örnekleme parametreleri: sıcaklık = 0,80 (artmış arousal), repeat_penalty = 1,19 (olumsuz valence)
    - Oturumun duygusal durumu bu değerlerle güncellenir
-4. **Krystal** (büyük örnek), duygusal olarak ayarlanmış parametrelerle yanıtı üretir ve Sapphire'a geri gönderir.
-5. **Sapphire**, yanıtı meta verilerle (etiket, valans, uyarılma, hata ayıklama istatistikleri) birlikte Emerald'a akışlı olarak gönderir.
-6. **Emerald**, bir tereddüt eklemeye ("oh...") karar verir, bir patlama planlar (2 parça) ve bir tepki seçer. Jade'e bir `RespondCommand` gönderir.
-7. **Jade** yürütür: ilk gecikmeyi bekler, tereddütle birlikte ilk parçayı gönderir, 1,5 saniye bekler, ikinci parçayı gönderir. Üretim boyunca yazıyor göstergesini gösterir.
+4. **Krystal** (büyük örnek) duygusal ayarlanmış parametrelerle yanıtı üretir ve Sapphirea döndürür.
+5. **Sapphire** yanıtı meta verilerle (etiket, valence, arousal, hata ayıklama istatistikleri) Emeralda akıtır.
+6. **Emerald** tereddüt ("oh...") eklemeye, patlama planlamaya (2 parça) ve tepki seçmeye karar verir. Jade `RespondCommand` gönderir.
+7. **Jade** çalıştırır: başlangıç gecikmesini bekler, tereddütlü ilk parçayı gönderir, 1,5 sn bekler, ikinci parçayı gönderir. Tüm üretim boyunca yazıyor göstergesini gösterir.
 
-Kullanıcı için tüm bunlar 3 saniyeden kısa sürede gerçekleşir.
-
----
-
-## Centroid'ler: neden sinirsel bir sınıflandırıcıdan daha iyiler
-
-Embedding centroid'lerinin geleneksel bir sınıflandırıcıya (daha önce kullandığım DistilBERT gibi) tercih edilmesi bir açıklamayı hak ediyor.
-
-Sinirsel bir sınıflandırıcı, sınıflar arasında bir karar sınırı öğrenir -- genellikle girdileri olasılıklara eşleyen doğrusal olmayan bir dönüşüm. Doğrudur, ama:
-
-- Etiketlenmiş eğitim verisi gerektirir
-- Dağılım kaymasına (data drift) karşı hassastır
-- Yorumlanması zordur
-- Yeni bir sınıf eklemek için yeniden eğitilmesi gerekir
-
-Bir centroid ise, örnek embedding'lerinin **ortalama vektörüdür**. Sınıflandırma, bu ortalama vektöre kosinüs benzerliği ile yapılır. Avantajları:
-
-- **Eğitim yok**: sadece elle seçilmiş örneklerin embedding'lerinin ortalamasını hesaplarsınız
-- **Yorumlaması kolay**: centroid'in "ne öğrendiğini" anlamak için hangi örneklerin ona en yakın olduğuna bakabilirsiniz
-- **Sınıf eklemek**: sadece yeni bir centroid eklersiniz -- yeniden eğitime gerek yok
-- **Sağlam**: centroid bir ortalama olduğundan, aykırı değerlerin etkisi azdır
-
-Centroid'lerin gerçek gücü, bir sınıflandırma problemini bir **uzamsal mesafe ölçümü** problemine dönüştürmeleridir. Kategorileri 384 boyutlu bir uzayda bölgeler olarak (ya da PCA/t-SNE boyut indirgemesinden sonra 2B/3B olarak) görselleştirebilirsiniz.
-
-### 3B centroid görselleştirmesi
-
-Pratikte, sınıflandırma centroid'lerinin embedding uzayında nasıl göründüğü şöyle: her nokta, PCA aracılığıyla 3B'ye yansıtılmış bir örnek mesajdır (orijinal 384 boyut görselleştirme için 3'e indirgenmiştir). Mavi noktalar anlamsız mesajlardır, sarı noktalar ilginç mesajlardır. **20 elmas işaretleyici** k-means merkez noktalarıdır (sınıf başına 10), hesaplanan centroid'lerdir -- her grubun ortalaması. Örneğin orijinal metnini görmek için bir noktanın üzerine gelin.
-
-<iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Centroid classification - interactive 3D view"></iframe>
-
-İki örnek kırmızı ile gösterilmiştir: "lol" (anlamsız olarak sınıflandırılmış) ve "i feel sad today" (ilginç olarak sınıflandırılmış). "lol", anlamsız mesajların mavi bulutuna düşerken, "i feel sad today" sarı noktaların tarafında yer alır. Ayrım, 3 boyuta indirgendikten sonra bile görünür (toplam varyansın sadece %15,6'sı açıklanmıştır). 384 boyutta, sınır çok daha keskindir.
-
-Girdi mesajının centroid'i, içeriğine bağlı olarak bu uzayda dolaşır. FUTILE/INTERESTING sınıflandırması, basitçe hangi centroid'in kosinüs benzerliği açısından daha yakın olduğunu ölçmekten ibarettir. Bu, her mesajı, her boyutun bir anlamsal özelliğe karşılık geldiği çok boyutlu bir uzayda bir nokta olarak temsil etmemizi sağlar.
+Bunların hepsi kullanıcı için 3 saniyeden kısa sürer.
 
 ---
 
-## Pratikte bu neyi değiştiriyor
+## Centroidler: neden sinir sınıflandırıcıdan iyidir
 
-Kullanıcılar katmanları, centroid'leri ya da sıcaklık ayarlarını görmezler. Ama etkilerini hissederler:
+Geleneksel sınıflandırıcı (önce kullandığım DistilBERT gibi) yerine embedding centroidleri seçimi açıklamayı hak eder.
 
-- **Basit mesajlar için daha hızlı yanıtlar** (küçük model 2 kat daha hızlı ve trafiğin %70'ini karşılıyor)
-- **Uyarlanabilir ton**: sinirliyseniz, bot bunu "hissediyor" ve tarzını buna göre uyarlıyor
-- **Platformlar arası tutarlılık**: bir Matrix botu ile bir Discord botu aynı beyni ve aynı duygusal durumu paylaşıyor
-- **"Asistan modu" yok**: fine-tune + few-shot + akıllı yönlendirme, kurumsal görünen yanıtlardan kaçınıyor
+Sinir sınıflandırıcı sınıflar arası karar sınırı öğrenir, tipik girdileri olasılıklara yansıtan doğrusal olmayan dönüşüm. Hassastır ama:
 
-Küçük modelin eğitim setinin 200 bine çıkarılması bu etkileri daha da güçlendirdi: model, few-shot priming'in sağladığı esnekliği kaybetmeden Discord konuşmalarının çeşitliliğini daha iyi yakalıyor.
+- Etiketli eğitim verisi gerektirir
+- Dağılım değişimine duyarlıdır (data drift)
+- Yorumlaması zordur
+- Yeni sınıf eklemek için yeniden eğitilmelidir
+
+Centroid ise tersine örnek embeddinglerinin **ortalama vektörüdür**. Sınıflandırma bu ortalama vektöre kosinüs benzerliğiyle yapılır. Avantajlar:
+
+- **Eğitim gerekmez**: elle seçilmiş örnek embeddinglerinin ortalaması hesaplanır
+- **Yorumlaması kolay**: centroidin "ne öğrendiğini" anlamak için ona en yakın örneklere bakılabilir
+- **Sınıf ekleme**: yeniden eğitimsiz yeni centroid eklenir
+- **Sağlam**: centroid ortalamadır, o yüzden aykırı değerlerin etkisi azdır
+
+Centroidlerin gerçek gücü sınıflandırma sorununu **uzamsal mesafe ölçümü** sorununa dönüştürmesidir. Kategoriler 384 boyutlu uzayda bölgeler görselleştirilebilir (PCA/t-SNE ile boyut indirgeme sonrası 2D/3D).
+
+### Centroidlerin 3D görselleştirmesi
+
+Pratikte sınıflandırma centroidleri embedding uzayında şöyle görünür. Her nokta PCA ile 3D yansıtılmış örnek mesajdır (görselleştirme için 384 orijinal boyut 3e indirilir). Mavi noktalar faydasız mesajlar, sarı noktalar ilginç mesajlardır. **20 elmas işaret** k-means centroidleridir (sınıf başına 10, seed=42). Metin için nokta üzerine gel.
+
+<iframe src="assets/centroids-plot.html" style="width:100%;height:550px;border:none;border-radius:8px;" loading="lazy" title="Centroïdlerle sınıflandırma: etkileşimli 3D görünüm"></iframe>
+
+İki test örneği kırmızıyla gösterilir: "lol" (faydasız sınıflı) ve "i feel sad today" (ilginç sınıflı). 384 boyuttan 3e indirgemeden sonra bile (%14,7 açıklanmış varyans) iki küme açık ayrıdır. Üstteki ek açıklama tam sayımları ve belirsiz bölgeyi gösterir.
+
+Girdi mesajının centroidi içeriğine göre bu uzayda gezinir. FUTILE/INTERESSANT sınıflandırması basitçe kosinüs benzerliğince hangi centroidin en yakın olduğunu ölçer. Böylece her mesaj çok boyutlu uzayda bir nokta temsil edilebilir, her boyut anlamsal özelliğe karşılık gelir.
 
 ---
 
-## Tam altyapı
+## Pratikte neyi değiştirir
 
-Şu anda çalışan servisler şunlar:
+Kullanıcılar katmanları, centroidleri ya da sıcaklık ayarlarını görmez. Ama etkileri hisseder:
+
+- Basit mesajlar için **daha hızlı yanıtlar** (küçük model 2 kat hızlı ve trafiğin %70ini yönetir)
+- **Uyarlanabilir ton**: kızgınsan bot kızgınlığı "hisseder" ve tarzını uyarlar
+- **Platformlar arası tutarlılık**: Matrix botu ve Discord botu aynı beyni ve aynı duygusal durumu paylaşır
+- **Korunmuş otantik ton**: ince ayar + few-shot + akıllı yönlendirme kurumsal yanıtları engeller
+
+Küçük model için 200 bin eğitim örneğine geçiş bu etkileri daha güçlendirdi: model few-shot priming mümkün kılan yoğrulabilirliği kaybetmeden Discord konuşmalarının çeşitliliğini iyi yakalar.
+
+---
+
+## Eksiksiz altyapı
+
+İşte şu an dönen servisler:
 
 | Servis | Teknoloji | Port(lar) | Rol |
 |---------|------------|---------|------|
@@ -344,20 +344,20 @@ Küçük modelin eğitim setinin 200 bine çıkarılması bu etkileri daha da g�
 | Jade | TypeScript (esbuild) | -- | Discord adaptörü |
 | Emerald | TypeScript (Bun) | 3126 (WebSocket) | Beyin / kararlar |
 | Sapphire | Python (FastAPI) | 3123 (HTTP) | Sınıflandırıcı + duygu |
-| Krystal small | llama.cpp (PM2) | 3124 | Küçük model (1.5B, anlamsız) |
+| Krystal small | llama.cpp (PM2) | 3124 | Küçük model (1.5B, faydasız) |
 | Krystal large | llama.cpp (PM2) | 3125 | Büyük model (3B+, ilginç) |
 
-Servisler arasındaki bağımlılıklar tek yönlüdür: adaptör Emerald'a bağımlıdır, Emerald Sapphire'a bağımlıdır, Sapphire Krystal'a bağımlıdır. Döngü yoktur. Her servis bağımsız olarak yeniden başlatılabilir.
+Servisler arası bağımlılıklar tek yönlüdür: adaptör Emeralda, Emerald Sapphirea, Sapphire Krystala bağlıdır. Graf döngüsüz kalır. Her servis bağımsız yeniden başlatılabilir.
 
 ---
 
 ## Sonuç
 
-Luna Protocol'ü dört katmana ayırmak sadece mimari bir alıştırma değildi. Somut sınırlamalara verilmiş bir yanıttı: Matrix'i destekleyememe, duygusal farkındalık eksikliği ve akıllı mesaj önceliklendirmesinin bulunmaması.
+Luna Protocolü dört katmana bölmek sadece mimari egzersiz değildi. Somut limitlere yanıttı: Matrix destekleyememe, duygusal bilinç yokluğu, akıllı mesaj önceliği yokluğu.
 
-Bugün sistem daha sağlam (bir LLM çökmesi botu öldürmüyor), daha genişletilebilir (bir Telegram veya WhatsApp adaptörü aynı WebSocket protokolünü izleyecektir) ve daha "canlı": bot, davranışını, tonunu ve hatta LLM'nin parametrelerini konuşmanın algılanan duygusal durumuna göre uyarlıyor.
+Bugün sistem daha sağlamdır (LLM crashi botu öldürmez), daha genişletilebilirdir (Telegram ya da WhatsApp adaptörü aynı WebSocket protokolünü izlerdi) ve daha "canlıdır": bot davranışını, tonunu ve hatta LLM parametrelerini sohbetin algılanan duygusal durumuna uyarlar.
 
-Embedding centroid'leri, tüm bunu aşırı karmaşıklık olmadan mümkün kılan kilit parçadır: eğitilmiş bir sinir ağı yok, etiketlenmiş bir veri hattı yok, sadece vektör ortalamaları ve kosinüs benzerlikleri var. Basit ama inanılmaz derecede etkili ve fena halde hafife alınan bir teknik.
+Embedding centroidleri bütün bunları ölçüsüz karmaşıklık olmadan mümkün kılan kilit öğedir: eğitilmiş sinir ağı yok, etiketli veri pipelineı yok, sadece vektör ortalamaları ve kosinüs benzerlikleri. Basit, inanılmaz etkili ve feci az değer gören bir tekniktir.
 
 | Kaynak | Bağlantı |
 |----------|------|
@@ -366,5 +366,5 @@ Embedding centroid'leri, tüm bunu aşırı karmaşıklık olmadan mümkün kıl
 | Emerald | [protocol-luna/emerald](https://github.com/protocol-luna/emerald) |
 | Sapphire | [protocol-luna/sapphire](https://github.com/protocol-luna/sapphire) |
 | Krystal | [protocol-luna/krystal](https://github.com/protocol-luna/krystal) |
-| Makale 1: Discord botu | [Luna Protocol: özerk bir Discord botu inşa ettim](/articles/en/luna-protocol-discord-bot) |
-| Makale 2: fine-tuning | [Luna Protocol: neden 1.5B'lik bir modeli fine-tune ettim](/articles/en/luna-protocol-official-models) |
+| Makale 1: Discord botu | [Luna Protocol: özerk bir Discord botu yarattım](/articles/tr/luna-protocol-discord-bot) |
+| Makale 2: ince ayar | [Luna Protocol: 1,5B modeli neden ince ayarladım](/articles/tr/luna-protocol-official-models) |

@@ -1,168 +1,169 @@
 ---
-title: "Makineler Birbirleriyle Nasıl Konuşur: TCP'den mTLS'ye Bir Bakış"
-description: "TCP, UDP, TLS, mTLS, HTTP ve WebSocket neden rakip alternatifler değil de üst üste bindirilmiş katmanlardır; ham taşımadan karşılıklı kimlik doğrulamaya kadar makineden makineye iletişimin hiyerarşik bir turu."
+title: "Makineler birbiriyle nasıl konuşur: TCP'den mTLS'e bir tur"
+description: "TCP, UDP, TLS, mTLS, HTTP ve WebSocket neden rakip alternatifler değil, üst üste yığılmış katmanlardır; ham aktarımdan karşılıklı kimlik doğrulamaya makineden makineye iletişimin hiyerarşik turu."
 date: 2026-07-16
-tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "ağ", "dağıtık-mimari", "protokoller"]
+tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "réseau", "architecture-distribuée", "protocoles"]
 authors: ["docteur-turboss"]
-lang: "tr"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "tBeKeREMEJ2hjrDsOrAfCqYfGLmCo/+6AAcRxfxGpjYd7KI4zSC7u24dKAnCaJv6ceCerlQhIw42dvcKoKUnsQ=="
+author_sig: "lB+D+8RGE3xgbHiANw3M7/3dj+/ybTEytAJh7XGqAdvfjkZkNN9APFt0nJ0Glpa1ZXgtUOD4dYM/fBUaGnVj8Q=="
 ---
-# Sorun: Çok fazla kısaltma, yeterince hiyerarşi yok
 
-TCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; bunlardan bahseden çoğu kaynak, onları "kullanım durumuna göre seçilecek" düz bir alternatifler listesi olarak sunar. Gerçekte ise aynı düzlemde değillerdir: bazıları taşıma protokolleridir, bazıları taşımanın etrafına sarılan güvenlik katmanlarıdır, bazıları ise ilk ikisinin üzerine inşa edilen uygulama katmanı protokolleridir. Hiyerarşiyi anlamak, TCP ile TLS arasında neden asla "seçim yapılmadığını" anlamaktır: önce TCP seçilir, _sonra_ üzerine TLS eklenip eklenmeyeceğine karar verilir.
+# Sorun: çok fazla kısaltma, yeterince hiyerarşi yok
 
-Bu makale, bu hiyerarşiyi katman katman, ham taşımadan karşılıklı kimlik doğrulamaya kadar yeniden inşa eder; her seviyede: neyi garanti ettiği, neyi garanti etmediği ve ne zaman bununla yetinileceği.
+TCP, UDP, TLS, mTLS, WebSocket, HTTP, HTTPS, gRPC, QUIC; bunlardan bahseden kaynakların çoğu bunları "kullanım durumuna göre seçilecek" birbirinin yerine geçebilir düz bir seçenek listesi olarak sunar. Gerçekte aynı düzlemde değillerdir: bazıları aktarım protokolleridir, bazıları aktarımın etrafına sarılan güvenlik katmanlarıdır, bazıları ise ilk ikisine dayanan uygulama protokolleridir. Hiyerarşiyi anlamak, neden TCP ile TLS arasında asla "seçim" yapmadığımızı anlamaktır: TCPyi seçeriz, _sonra_ üzerine TLS koyup koymayacağımıza karar veririz.
 
-# Seviye 1: Taşıma (TCP ve UDP)
+Bu makale bu hiyerarşiyi katman katman, ham aktarımdan karşılıklı kimlik doğrulamaya yeniden inşa eder; her seviye için neyi garanti ettiği, neyi garanti etmediği ve ne zaman onunla yetinileceğiyle.
 
-Her şey burada başlar. TCP ve UDP, OSI modelinin **Taşıma Katmanı (Layer 4)**'nın iki ana protokolüdür. Rolleri aynıdır: farklı makinelerde çalışan iki uygulama arasında veri akışı taşımak. Ancak bunu başarma biçimleri kökten farklıdır.
+# Seviye 1: aktarım (TCPye karşı UDP)
 
-Ağ katmanında (Layer 3) bulunan IP'nin (Internet Protokolü) yalnızca paketleri bir ana bilgisayardan diğerine yönlendirdiğini anlamak önemlidir. Ne varmayı, ne sıralamayı, ne de tekilliği garanti eder. Yönlendiriciler her paket için bağımsız yönlendirme kararları alır.
+Her şey burada başlar. TCP ve UDP, OSI modelinin **Aktarım (Katman 4)** katmanının iki ana protokolüdür. Rolleri aynıdır: farklı makinelerde çalışan iki uygulama arasında bir veri akışı taşımak. Oysa bunu başarma biçimleri kökten farklıdır.
 
-İşte tam da bu garanti eksikliğini TCP telafi ederken, UDP son derece hafif kalmak için bilinçli olarak hiçbir şey eklememeyi tercih eder.
+IPnin (Internet Protocol), ağ katmanında (Katman 3) bulunan, paketleri yalnızca bir hosttan diğerine ilettiğini anlamak önemlidir. Ne varmalarını, ne sıralarını, ne de benzersizliklerini garanti eder. Yönlendiriciler her paket için basitçe bağımsız yönlendirme kararları alır.
 
-## TCP: Önce güvenilirlik
+TCPnin telafi etmeye geldiği şey tam olarak bu garanti yokluğudur, oysa UDP bilinçli olarak aşırı hafif kalmak için hiçbir şey eklememeyi seçer.
 
-TCP (İletim Kontrol Protokolü) **bağlantı odaklı** (_connection-oriented_) bir protokoldür. Herhangi bir veri baytı değiş tokuş edilmeden önce, iki makine mantıksal bir bağlantı kurmalıdır.
+## TCP: önce güvenilirlik
 
-Bu bağlantı, ünlü **Üç Yollü El Sıkışma (Three-Way Handshake)** ile oluşturulur:
+TCP (Transmission Control Protocol) **bağlantı yönelimli** (_connection-oriented_) bir protokoldür. Tek bir veri baytı değiş tokuş etmeden önce iki makine mantıksal bir bağlantı kurmalıdır.
+
+Bu bağlantı ünlü **Three-Way Handshake** sayesinde oluşturulur:
 
 ```
 
-İstemci                          Sunucu
+Client                           Serveur
 SYN ---------------------------->
-         <--------------------- SYN + ACK
-ACK ---------------------------->
-Bağlantı kuruldu
+        <--------------------- SYN + ACK
+ACK ----------------------------> 
+Connexion établie
 ```
 
-Her adımın belirli bir amacı vardır:
+Her adımın kesin bir amacı vardır:
 
-*   SYN: istemci bir bağlantı açmak istediğini bildirir ve bir ilk sıra numarası (ISN) sağlar.
+*   SYN: istemci bir bağlantı açmak istediğini duyurur ve ilk sıra numarasını verir (Initial Sequence Number - ISN).
+    
+*   SYN-ACK: sunucu bağlantıyı kabul eder, SYNi onaylar ve sırayla kendi sıra numarasını verir.
+    
+*   ACK: istemci sunucunun bilgilerinin alındığını onaylar.
+    
 
-*   SYN-ACK: sunucu bağlantıyı kabul eder, SYN'in alındığını onaylar ve kendi sıra numarasını sağlar.
-
-*   ACK: istemci, sunucunun bilgilerini aldığını onaylar.
-
-Bu noktadan itibaren, iki makine bağlantının durumunu bilir ve veri alışverişine başlayabilir.
+Bu andan itibaren iki makine bağlantının durumunu bilir ve veri değiş tokuş etmeye başlayabilir.
 
 ### **Sıra numaraları**
 
-TCP verileri bir dizi paket olarak değil, **sürekli bir bayt akışı** (_byte stream_) olarak görür.
+TCP verileri bir paket dizisi olarak değil, **sürekli bir bayt akışı** (_byte stream_) olarak görür.
 
 Gönderilen her baytın bir sıra numarası vardır.
 
 Örnek:
 
 ```
-Mesaj:
+Message :
 
-Merhaba
+Bonjour
 
-M = bayt 0
-e = bayt 1
-r = bayt 2
+B = octet 0
+o = octet 1
+n = octet 2
 ...
 ```
 
-1000'den 1499'a kadar olan baytları içeren bir segment taşıma sırasında kaybolursa, alıcı tam olarak neyin eksik olduğunu tespit edebilir.
+Aktarım sırasında 1000 ila 1499 baytlarını içeren bir parça kaybolursa alıcı tam olarak neyin eksik olduğunu tespit edebilir.
 
-Gönderici yalnızca bu kısmı yeniden iletir.
+Gönderici yalnızca o kısmı yeniden iletir.
 
-Bu ayrıntı düzeyi, TCP'nin sağlamlığının nedenlerinden biridir.
+Bu ayrıntı düzeyi TCPnin sağlamlığının nedenlerinden biridir.
 
-### **Alındı bildirimleri (ACK)**
+### **Alındı onayları (ACK)**
 
-Veriler alındıktan sonra, alıcı bir **ACK (Alındı Bildirimi - Acknowledgment)** gönderir.
+Verileri aldıktan sonra hedef bir **ACK (Acknowledgment)** gönderir.
 
-Çoğu zaman sanılanın aksine, bir ACK şu anlama gelmez:
+Genelde hayal edilenin tersine bir ACK şu anlama gelmez:
 
 > "Bu paketi aldım"
 
-Bunun yerine şu anlama gelir:
+Daha çok şu anlama gelir:
 
 > "X numarasına kadar tüm baytları aldım."
 
 Örneğin:
 
 ```
-İstemci gönderir:
+Client envoie :
 
 0 → 999
 
-Sunucu yanıtlar:
+Serveur répond :
 
 ACK = 1000
 ```
 
-Bu şu anlama gelir:
+Bu şu demektir:
 
-> "Bayt 1000'den önceki her şey sorunsuz geldi."
+> "1000 baytından önceki her şey sağ salim vardı."
 
-Bu mekanizma, aynı anda birden fazla segmentin alındığını bildirmeye olanak tanır (_kümülatif alındı bildirimleri - cumulative acknowledgments_), böylece kontrol paketlerinin sayısını azaltır.
+Bu mekanizma birkaç parçayı aynı anda onaylamaya izin verir (_cumulative acknowledgments_), böylece kontrol paketi sayısını azaltır.
 
 ### **Yeniden iletimler**
 
-Bir ACK asla gelmezse, TCP segmentin kaybolduğunu varsayar.
+Bir ACK hiç gelmezse TCP parçanın kaybolduğunu varsayar.
 
 Onu otomatik olarak yeniden iletir.
 
-Yeniden iletim zaman aşımı (**RTO - Retransmission Timeout**) sabit değildir.
+Yeniden iletim gecikmesi (**Retransmission Timeout: RTO**) sabit değildir.
 
-TCP, alınan ACK'ler sayesinde gidiş-dönüş süresini (**RTT**) sürekli ölçer ve gereksiz yeniden iletimleri önlemek için RTO'yu dinamik olarak hesaplar.
+TCP alınan ACKler sayesinde gidiş dönüş süresini (**RTT**) sürekli ölçer ve gereksiz yeniden iletimlerden kaçınmak için RTOyu dinamik hesaplar.
 
-Modern uygulamalar ayrıca **Hızlı Yeniden İletim (Fast Retransmit)** gibi mekanizmalar kullanır: bir gönderici birden fazla yinelenen ACK aldığında (genellikle üç), aradaki bir segmentin kaybolduğu sonucunu çıkarır ve zamanlayıcının dolmasını beklemeden onu hemen yeniden gönderir.
+Modern uygulamalar **Fast Retransmit** gibi mekanizmalar da kullanır: bir gönderici birkaç yinelenen ACK aldığında (genelde üç) arada bir parçanın kaybolduğu sonucunu çıkarır ve zamanlayıcının dolmasını beklemeden hemen yeniden gönderir.
 
 ### **Paketlerin yeniden sıralanması**
 
-İnternet, iki paketin aynı yolu izleyeceğini kesinlikle garanti etmez.
+İnternet iki paketin aynı yolu izleyeceğini kesinlikle garanti etmez.
 
 Örnek:
 
 ```
-Paket 1
+Paquet 1
 Paris
- ↓
-Londra
- ↓
+  ↓
+Londres
+  ↓
 New York
 
-Paket 2
+Paquet 2
 Paris
- ↓
-Frankfurt
- ↓
-Şikago
- ↓
+  ↓
+Francfort
+  ↓
+Chicago
+  ↓
 New York
 ```
 
-İkinci paket, birinciden önce gelebilir.
+İkinci paket birinciden önce varabilir.
 
-TCP daha sonra **sıra dışı** alınan segmentleri geçici olarak bir tamponda (_yeniden birleştirme tamponu - reassembly buffer_) saklar ve uygulamaya teslim etmeden önce bunları yeniden birleştirir.
+TCP **sıra dışı** alınan parçaları geçici olarak bir tamponda (_reassembly buffer_) saklar, sonra uygulamaya teslim etmeden önce yeniden birleştirir.
 
-Uygulama için her şey mükemmel bir sırayla geliyormuş gibi görünür.
+Uygulama için her şey mükemmel sırayla geliyormuş gibi görünür.
 
 ### Akış kontrolü
 
 Bir bağlantı yalnızca ağa bağlı değildir.
 
-Alıcının ayrıca sınırlı bir bellek kapasitesi vardır.
+Alıcının da sınırlı bir bellek kapasitesi vardır.
 
-Verileri işleyebileceğinden daha hızlı alırsa, tamponları sonunda dolar.
+Verileri işleyebildiğinden hızlı alırsa tamponları dolar.
 
-TCP bu sorunu bir **kayan pencere (Sliding Window)** mekanizmasıyla çözer.
+TCP bu sorunu **kayan bir pencere (Sliding Window)** sayesinde çözer.
 
-Alıcı her ACK'de şunu belirtir:
+Alıcı her ACK içinde şunu belirtir:
 
 ```
-Window = 32768 bayt
+Window = 32768 octets
 ```
 
-Bu şu anlama gelir:
+Bu şu demektir:
 
-> "Bana 32 KB'ye kadar daha gönderebilirsin."
+> "Bana 32 KB daha gönderebilirsin."
 
 Bu pencere sıfıra düşerse:
 
@@ -170,37 +171,38 @@ Bu pencere sıfıra düşerse:
 Window = 0
 ```
 
-Gönderici, alıcı yeni bir kullanılabilir pencere bildirene kadar iletimleri geçici olarak durdurur.
+Gönderici, alıcı yeni bir uygun pencere duyurana kadar iletimleri geçici askıya alır.
 
-Bu mekanizma **Akış Kontrolü (Flow Control)** olarak adlandırılır ve hızlı bir ana bilgisayarın daha yavaş bir ana bilgisayarı boğmasını engeller.
+Bu mekanizma **akış kontrolünü (Flow Control)** oluşturur ve hızlı bir hostun daha yavaş bir hostu boğmasını engeller.
 
 ### Tıkanıklık kontrolü
 
-Alıcı verileri absorbe edebilse bile, ağın kendisi doygun hale gelebilir.
+Alıcı verileri soğurabilse bile ağın kendisi doygun hale gelebilir.
 
 Yönlendiricilerin sınırlı kuyrukları (_queues_) vardır.
 
-Bunlar taştığında, paketler silinir.
+Taştıklarında paketler silinir.
 
-TCP kayıpları bir tıkanıklık işareti olarak yorumlar ve bir **tıkanıklık penceresi (Congestion Window – cwnd)** aracılığıyla hızını otomatik olarak ayarlar.
+TCP kayıpları tıkanıklık işareti olarak yorumlar ve bir **tıkanıklık penceresi (Congestion Window: cwnd)** sayesinde hızını otomatik uyarlar.
 
-Modern algoritmalar (işletim sistemine bağlı olarak **Reno**, **CUBIC** veya **BBR** gibi) maksimum hız ve ağ kararlılığı arasında bir denge bulmak için bu pencereyi ayarlar.
+Modern algoritmalar (işletim sistemine göre **Reno**, **CUBIC** ya da **BBR** gibi) maksimum hız ile ağ kararlılığı arasında denge bulmak için bu pencereyi ayarlar.
 
-TCP'nin ilk sürümleri esas olarak iki mekanizma kullanıyordu:
+TCPnin ilk sürümleri başlıca iki mekanizma kullanıyordu:
 
-*   **Slow Start (Yavaş Başlangıç)**: tıkanıklık tespit edilene kadar üstel hız artışı.
+*   **Slow Start**: tıkanıklık tespit edilene kadar hızın üstel artışı.
+    
+*   **Congestion Avoidance**: sonra daha temkinli, genelde doğrusal büyüme.
+    
 
-*   **Congestion Avoidance (Tıkanıklıktan Kaçınma)**: ardından daha ihtiyatlı, genellikle doğrusal büyüme.
+Bu sürekli uyarlama, ağ kalite değişimlerine rağmen TCPnin performanslı kalmasının nedenlerinden biridir.
 
-Bu sürekli uyum, TCP'nin ağ kalitesi değişimlerine rağmen performanslı kalmasının nedenlerinden biridir.
+### Bağlantıyı kapatma
 
-### Bağlantı kapatma
+UDPnin tersine bir TCP bağlantısının temiz bir kapanışı da vardır.
 
-UDP'nin aksine, bir TCP bağlantısının ayrıca düzgün bir kapanışı vardır.
+Her uç **FIN** bayrağıyla akışını bağımsız kapatır.
 
-Her uç nokta, **FIN** bayrağı sayesinde kendi akışını bağımsız olarak kapatır.
-
-Tam bir kapanış genellikle dört alışveriş gerektirir:
+Tam bir kapanış genelde dört değiş tokuş gerektirir:
 
 ```
 FIN
@@ -209,133 +211,137 @@ FIN
 ACK
 ```
 
-Bu prosedür, bağlantı sonlandırılmadan önce iletilmekte olan tüm verilerin teslim edilmesini garanti eder.
+Bu prosedür, bağlantı yok edilmeden önce transit tüm verilerin gerçekten teslim edildiğini garanti eder.
 
-## UDP: Maksimum basitlik
+## UDP: maksimum sadelik
 
-UDP (Kullanıcı Veri Birimi Protokolü) ters felsefeyi benimser.
+UDP (User Datagram Protocol) ters felsefeyi benimser.
 
 **Bağlantısızdır (connectionless)**.
 
-Aşağıdakilerin hiçbiri yoktur:
+Şunlar yoktur:
 
-*   el sıkışma yok;
-
+*   handshake yok;
+    
 *   sıra numarası yok;
-
-*   alındı bildirimi yok;
-
+    
+*   alındı onayı yok;
+    
 *   yeniden iletim yok;
-
+    
 *   akış kontrolü yok;
-
+    
 *   tıkanıklık kontrolü yok.
+    
 
-Her mesaj, bağımsız bir **veri birimi (datagram)** içinde kapsüllenir, ağa iletilir ve ardından gönderici tarafından unutulur.
+Her mesaj basitçe bağımsız bir **datagramda** kapsüllenir, ağa iletilir, sonra gönderici tarafından unutulur.
 
 ```
-Uygulama → UDP Veri Birimi → IP → İnternet
+Application → Datagramme UDP → IP → Internet
 ```
 
-Protokol, iki gönderim arasında herhangi bir durum tutmaz.
+Protokol iki gönderi arasında durum tutmaz.
 
-Her veri birimi öncekilerden tamamen bağımsızdır.
+Her datagram öncekilerden tamamen bağımsızdır.
 
 ### Veri bütünlüğü
 
-UDP teslimatı veya sıralamayı garanti etmese de, bir **sağlama toplamı (checksum)** sayesinde veri bütünlüğünü yine de korur.
+UDP ne teslimi ne sırayı garanti etse de yine de bir **checksum** sayesinde veri bütünlüğünü korur.
 
-Alımda, sağlama toplamı yeniden hesaplanır.
+Alımda checksum yeniden hesaplanır.
 
-*   Değerler eşleşirse, veri birimi kabul edilir.
+*   Değerler uyuşursa datagram kabul edilir.
+    
+*   Yoksa hemen reddedilir.
+    
 
-*   Aksi takdirde, hemen reddedilir.
+Yani UDP bozuk verileri tespit eder ama onları kurtarmaya asla çalışmaz.
 
-UDP bu nedenle bozuk verileri tespit eder, ancak asla kurtarmaya çalışmaz.
+### UDP neden bu kadar hızlı?
 
-### UDP neden bu kadar hızlıdır?
+UDP başlığı yalnızca **8 bayt** içerir, seçenekler sayılmadan minimum **20 bayt** olan TCPye karşı (timestamps, SACK ya da Window Scaling gibi seçenekler hariç).
 
-UDP başlığı yalnızca **8 bayt** içerirken, TCP için minimum **20 bayt** (zaman damgaları, SACK veya Window Scaling gibi seçenekler hariç).
+Bakımı yapılan bağlantı olmadığı için işletim sistemi her değiş tokuşun durumunu izlemek zorunda değildir, bu da bellek tüketimini ve işleme maliyetini azaltır.
 
-Herhangi bir bağlantı sürdürülmediğinden, işletim sisteminin her alışverişin durumunu takip etmesi gerekmez, bu da bellek tüketimini ve işlem maliyetini azaltır.
+Uygulama verileri varır varmaz, olası yeniden iletimleri beklemeden alır.
 
-Uygulama, olası yeniden iletimleri beklemeden verileri geldikleri anda alır.
-
-## Bir veriyi kaybetmenin tercih edilebilir olduğu durumlar
+## Veri kaybetmenin tercih edilir olduğu durum
 
 Temel fikir basittir:
 
-> Eski bir bilgi, kaybolmuş bir bilgiden daha az değerli olabilir.
+> Eski bir bilgi kayıp bir bilgiden daha az değerli olabilir.
 
-Bir VoIP konuşmasını ele alalım.
+Bir VoIP konuşmasını alalım.
 
 Her paket yaklaşık **20 ms** ses taşır.
 
-Bir paket kaybolursa, onu yeniden iletmek genellikle bu 20 ms'den daha uzun sürer.
+Bir paket kaybolursa yeniden iletmek genelde bu 20 msden uzun sürer.
 
-Sonunda ulaştığında, konuşma zaten ilerlemiş olur.
+Sonunda vardığında konuşma çoktan ilerlemiştir.
 
-Çoğu uygulama, yeniden iletimi beklemek yerine kaybı maskelemeyi (interpolasyon, sessizlik, hata düzeltme) tercih eder.
+Çoğu uygulama o zaman kaybı maskelemeyi (interpolasyon, sessizlik, hata düzeltme) yeniden iletimi beklemeye tercih eder.
 
-Aynı mantık şunlar için de geçerlidir:
+Aynı mantık şunlara uygulanır:
 
 *   gerçek zamanlı çok oyunculu oyunlar;
-
+    
 *   video akışı;
-
+    
 *   telemetri akışları;
-
+    
 *   IoT sensörleri;
-
+    
 *   GPS konum verileri.
+    
 
-Güncel bir değer, mükemmel şekilde güvenilir eski bir değerden neredeyse her zaman daha kullanışlıdır.
+Yeni bir değer neredeyse her zaman mükemmel güvenilir eski bir değerden daha faydalıdır.
 
-# Seviye 2: Şifreleme, TLS
+# Seviye 2: şifreleme, TLS
 
-TLS (Taşıma Katmanı Güvenliği, SSL'in halefi) TCP'nin yerini almaz, onun üzerine eklenir. Somut olarak, TLS normal bir TCP bağlantısı kurar, ardından içinde şifreli bir oturum müzakere eder: sertifika değişimi, bir şifreleme algoritması üzerinde anlaşma, oturum anahtarlarının türetilmesi. Daha sonra iletilen her şey şifrelenir ve doğrulanır.
+TLS (Transport Layer Security, SSLin halefi) TCPnin yerini almaz, üzerine eklenir. Somut olarak TLS normal bir TCP bağlantısı kurar, sonra içinde şifreli bir oturum müzakere eder: sertifika değişimi, şifreleme algoritmasında anlaşma, oturum anahtarlarının türetilmesi. Sonra geçen her şey şifrelenir ve kimliği doğrulanır.
 
-Genellikle karıştırılan üç ayrı garanti:
+Genelde karıştırılan üç ayrı garanti:
 
-*   **Gizlilik**: iki taraftan başka hiç kimse içeriği okuyamaz.
+*   **Gizlilik**: iki taraftan başka kimse içeriği okuyamaz.
+    
+*   **Bütünlük**: transitte verilerin her değişimi tespit edilir.
+    
+*   **Kimlik doğrulama**: ama klasik TLS de tek yönlüdür: istemci sunucunun iddia ettiği kişi olduğunu doğrular (güvenilir bir otoritece imzalı sertifikası üzerinden) ama sunucu istemcinin kimliği hakkında hiçbir şey doğrulamaz. Bir siteyi ziyaret ettiğinde HTTPS modeli tam olarak budur: tarayıcı siteyi doğrular, site seni doğrulamaz (kullanıcı doğrulama ayrı bir mekanizmadan geçer, oturum çerezi, jeton).
+    
 
-*   **Bütünlük**: iletilen verilerdeki herhangi bir değişiklik tespit edilir.
+TLS 1.3 (önerilen güncel sürüm) handshakei yaygın durumda tek gidiş dönüşe indirdi, TLS 1.2deki ikiye karşı, bu da bağlantı gecikmesini belirgin azaltır.
 
-*   **Kimlik Doğrulama**: ancak klasik TLS'de, tek yönlüdür: istemci, sunucunun gerçekten iddia ettiği kişi olduğunu doğrular (güvenilir bir otorite tarafından imzalanmış sertifikası aracılığıyla), ancak sunucu istemcinin kimliği hakkında hiçbir şey doğrulamaz. Bu, bir siteyi ziyaret ettiğinizde HTTPS'nin tam olarak modelidir: tarayıcı siteyi doğrular, site sizi doğrulamaz (kullanıcı kimlik doğrulaması ayrı bir mekanizma olan oturum çerezi, token aracılığıyla yapılır).
+## Seviye 2bis: mTLS, kimlik doğrulama karşılıklı olur
 
-TLS 1.3 (önerilen güncel sürüm), el sıkışmayı normal durumda tek bir gidiş-dönüşe indirgemiştir (TLS 1.2'de iki iken), bu da bağlantı gecikmesini önemli ölçüde azaltır.
+mTLS (mutual TLS), ek bir kısıtlı TLS tir: sunucu istemciden _de_ bir sertifika ister ve onu doğrular. İki taraf da ortak güvenilir bir otoritece imzalı bir sertifika üzerinden kimliğini kanıtlar.
 
-## Seviye 2b: mTLS -- kimlik doğrulama karşılıklı hale gelir
-
-mTLS (karşılıklı TLS), ek bir kısıtlama ile TLS'dir: sunucu ayrıca istemciden de bir sertifika _talep eder_ ve bunu doğrular. Her iki taraf da ortak bir güvenilir otorite tarafından imzalanmış bir sertifika aracılığıyla kimliklerini kanıtlar.
-
-Bu, dağıtık bir mimaride hizmetten hizmete iletişim için doğal mekanizmadır: klasik HTTPS'nin bir tarayıcının genel bir sunucuyla konuşması için yeterli olduğu yerde, mTLS farklı bir soruyu yanıtlar; _bir iç hizmet, yetkili başka bir iç hizmetle mi yoksa ağa sızmış bir saldırganla mı konuştuğunu nasıl bilir?_
+Dağıtık bir mimaride servisten servise iletişim için doğal mekanizmadır: klasik HTTPS bir tarayıcının herkese açık bir sunucuyla konuşması için yeterliyken mTLS farklı bir soruyu yanıtlar; _bir iç servis, yetkili başka bir iç servisle konuştuğunu, ağa düşmüş bir saldırganla değil, nereden bilir?_
 
 ```
-İstemci                                          Sunucu
+Client                                          Serveur
   │──── ClientHello ─────────────────────────────▶│
-  │◀─── ServerHello + sunucu sertifikası ──────────│
-  │──── sunucu sertifikasını doğrula ──────────────│
-  │──── KENDİ istemci sertifikasını gönder ───────▶│
-  │◀─── istemci sertifikasını doğrula ─────────────│
-  │──── oturum anahtarları türetilir, şifreli kanal▶│
+  │◀─── ServerHello + certificat serveur ──────────│
+  │──── vérifie le certificat serveur ─────────────│
+  │──── envoie SON PROPRE certificat client ──────▶│
+  │◀─── vérifie le certificat client ───────────────│
+  │──── clés de session dérivées, canal chiffré ──▶│
 ```
 
-mTLS'nin karşılığı operasyoneldir: dahili bir sertifika otoritesi (CA), her hizmete sertifika dağıtmak için bir mekanizma ve bir döndürme/iptal stratejisi gerekir. Az sayıda hizmete sahip tek makinelik bir ortamda, bu bazen faydadan çok karmaşıklık getirir -- mTLS, hizmetler arası trafik tam olarak kontrol edilmeyen bir ağdan (birden çok ana bilgisayar, çok kiracılı bulut) geçtiğinde veya hiçbir hizmetin yalnızca ağın "içinde" olduğu için örtük olarak güvenilir olmadığı _zero trust_ tipi bir politika istendiğinde gerekli hale gelir.
+mTLSin karşılığı operasyoneldir: bir iç sertifika otoritesi (CA), her servise sertifika dağıtım mekanizması ve döndürme/iptal stratejisi gerekir. Az servisli tek makineli bir ortamda bu bazen faydadan çok karmaşıklıktır: mTLS, servisler arası trafik tam kontrol etmediğimiz bir ağdan geçtiği andan (birden çok host, çok kiracılı bulut) ya da _zero trust_ türü bir politika istendiği andan itibaren gerekli olur; ağın "içinde" olması sırfıyla hiçbir servis örtük güvenilir sayılmaz.
 
-# Seviye 3: TCP+TLS üzerinde uygulama katmanı protokolleri
+# Seviye 3: TCP+TLS üstündeki uygulama protokolleri
 
-Taşıma ve şifreleme yerine oturduktan sonra, geriye _alışverişlerin nasıl yapılandırılacağını_ tanımlamak kalır. Bu, uygulama katmanı protokollerinin rolüdür.
+Aktarım ve şifreleme yerinde olduğunda _değiş tokuşların nasıl yapılandırılacağını_ tanımlamak kalır. Uygulama protokollerinin rolü budur.
 
 ## HTTP / HTTPS
 
-HTTP, istek-yanıt protokolüdür: istemci bir bağlantı açar (veya keep-alive ile mevcut birini yeniden kullanır), bir istek gönderir, bir yanıt bekler, bağlantı daha sonra kapanabilir veya yeniden kullanılabilir. HTTPS, HTTP'nin TLS üzerinde olmasıdır -- S, protokolün anlambilimini değiştirmez, yalnızca taşımanın şifrelenmiş olmasını sağlar.
+HTTP bir istek yanıt protokolüdür: istemci bir bağlantı açar (ya da keep-alive ile yeniden kullanır), bir istek gönderir, bir yanıt bekler, bağlantı sonra kapanabilir ya da yeniden kullanılabilir. HTTPS basitçe TLS üzerinde HTTPdir: S protokolün semantiğini hiç değiştirmez, yalnızca aktarımın şifreli olduğu gerçeğini değiştirir.
 
-İstek-yanıt modelinin yapısal bir sınırlaması vardır: sunucu asla ilk konuşamaz. Yalnızca istemcinin talep ettiği şeylere yanıt verebilir. Sık yoklama (polling) için (her saniye "yeni bir şey var mı?" diye kontrol etmek), çalışır ancak kaynak israfına neden olur -- her istek, çoğu zaman bildirilecek yeni bir şey olmamasına rağmen, protokol yükünü yeniden oluşturur.
+İstek yanıt modelinin yapısal bir limiti vardır: sunucu asla önce konuşamaz. Yalnızca istemcinin istediğine yanıt verebilir. Sık yoklama için (her saniye "yeni bir şey var mı?" diye kontrol etmek) çalışır ama kaynak israf eder: çoğu zaman duyuracak yeni bir şey yokken her istek protokol yükünü yeniden yaratır.
 
 ## WebSocket (WS / WSS)
 
-WebSocket tam olarak bu sınırlamayı yanıtlar. Bağlantı klasik bir HTTP isteği olarak başlar (`Upgrade: websocket` başlığı ile), ancak el sıkışma kabul edildikten sonra, alttaki TCP bağlantısı artık bir HTTP istek-yanıt kanalı değildir -- istemci ve sunucunun her an mesaj gönderebildiği, her alışverişte istek-yanıt döngüsünü yeniden başlatmaya gerek olmayan çift yönlü tam çift yönlü (full-duplex) bir kanal haline gelir.
+WebSocket tam olarak bu limite yanıt verir. Bağlantı klasik bir HTTP isteği olarak başlar (`Upgrade: websocket` başlığıyla) ama el sıkışma kabul edildikten sonra alttaki TCP bağlantısı artık bir HTTP istek yanıt kanalı değildir: istemci ve sunucunun her değiş tokuşta bir istek yanıt döngüsünü yeniden yayımlamadan istediği zaman mesaj gönderebildiği çift yönlü tam çift yönlü bir kanala dönüşür.
 
 ```
 GET /chat HTTP/1.1
@@ -351,30 +357,31 @@ Connection: Upgrade
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
-WSS, HTTPS'nin HTTP üzerinde TLS olması gibi, WebSocket'in TLS üzerinde olmasıdır. Gerçek zamanlı sunucu itme (push) gerektiren her şey için tercih edilen protokoldür -- sohbet, bildirimler, ticaret akışları, oyun etkinlikleri -- çıplak TCP üzerinde kendi ikili protokolünü yönetmek istemediğinizde.
+WSS basitçe TLS üzerinde WebSocket tir, tıpkı HTTPSin TLS üzerinde HTTP olması gibi. Çıplak TCP üstünde kendi ikili protokolünü yönetmek istemeden gerçek zamanlı sunucu itmesi gerektiren her şey için seçim protokolüdür: sohbet, bildirimler, alım satım akışları, oyun olayları.
 
 ## gRPC
 
-Mikroservis dünyası dışında daha az bilinir ancak hizmetten hizmete iletişimde merkezidir: gRPC, HTTP/2'ye dayanır (dolayısıyla TCP + isteğe bağlı TLS), mesajları Protocol Buffers ile serileştirir (çoğu REST API'nin metin JSON'unun aksine ikili, tür belirtilmiş, kompakt) ve HTTP/2'nin çoğullaması sayesinde yerel olarak çift yönlü akışa izin verir (tek bir TCP bağlantısı üzerinde birden fazla mantıksal akış, sıralı HTTP/1.1 isteklerinin sahip olacağı head-of-line blocking olmadan).
+Mikroservis dünyası dışında az bilinir ama servisten servise iletişimde merkezidir: gRPC HTTP/2ye dayanır (yani TCP + opsiyonel TLS), mesajları Protocol Buffers ile serileştirir (çoğu REST API sinin metin JSONunun tersine ikili, tipli, kompakt) ve HTTP/2nin çoklaması sayesinde doğal olarak çift yönlü akışa izin verir (head-of-line blocking olacak birkaç sıralı HTTP/1.1 isteğinin tersine tek bir TCP bağlantısında birkaç mantıksal akış).
 
 ## QUIC / HTTP3
 
-QUIC, taşıma seviyesinde TCP yerine UDP'den başlayarak işleri değiştirir, aynı zamanda TCP'nin yerel olarak sunduğu güvenilirlik garantilerini üzerine yeniden uygular -- ancak genel olarak değil, akış bazında, bu da taşıma seviyesinde head-of-line blocking'i ortadan kaldırır (bir akışta kaybolan paket, aynı bağlantının diğer akışlarını engellemez). TLS 1.3, üzerine eklenmek yerine doğrudan QUIC'in içine entegre edilmiştir, bu da el sıkışma gecikmesini daha da azaltır. HTTP/3, QUIC üzerinde HTTP'dir.
+QUIC, aktarım seviyesinde TCP yerine UDPden başlayarak oyunu değiştirir, üstüne TCPnin doğal sunduğu güvenilirlik garantilerini yeniden uygular: ama küresel yerine akış akış, bu da aktarım seviyesinde head-of-line blockingi ortadan kaldırır (bir akışta kaybolan bir paket aynı bağlantının diğer akışlarını artık bloklamaz). TLS 1.3, üzerine eklenmek yerine doğrudan QUIC içine gömülüdür, bu da handshake gecikmesini daha da azaltır. HTTP/3, QUIC üzerinde HTTPdir.
 
-# Genel bakış: her protokolün yeri
+# Genel bakış: her protokol nerede durur
 
-Katman Protokoller Rol Taşıma TCP, UDP Bayt taşımak, güvenilir veya değil Taşıma (yeni nesil) QUIC UDP + akış bazında güvenilirlik + gömülü TLS Güvenlik TLS, mTLS Şifreleme, bütünlük, kimlik doğrulama (tek veya karşılıklı) Uygulama HTTP/HTTPS, WS/WSS, gRPC Alışverişleri yapılandırma (istek-yanıt, çift yönlü, tür belirtilmiş RPC)
+Katman Protokoller Rol Aktarım TCP, UDP Baytları gezdirmek, güvenilir ya da değil Aktarım (yeni nesil) QUIC UDP + akış başı güvenilirlik + gömülü TLS Güvenlik TLS, mTLS Şifreleme, bütünlük, kimlik doğrulama (tek ya da karşılıklı) Uygulama HTTP/HTTPS, WS/WSS, gRPC Değiş tokuşları yapılandırmak (istek yanıt, çift yönlü, tipli RPC)
 
-Somut bir örnek: bir web panosu ve iç hizmetleri olan bir mikroservis mimarisi, makul bir şekilde HTTPS (pano ↔ genel API, tarayıcı tarafında tek yönlü kimlik doğrulama yeterli), mTLS (içte hizmet ↔ hizmet, karşılıklı kimlik doğrulama gerekli) ve WSS (panoya gerçek zamanlı bildirimler) birleştirebilir -- tümü aynı TCP + TLS temeli üzerine inşa edilmiş üç farklı uygulama katmanı protokolü.
+Somut bir örnek fikirleri sabitlemek için: web panolu ve iç servisli bir mikroservis mimarisi makul şekilde HTTPS (pano ↔ herkese açık API, tarayıcı tarafında tek yönlü doğrulama yeterli), mTLS (dâhili servisten servise, karşılıklı doğrulama gerekli) ve WSS (panoya itilen gerçek zamanlı bildirimler) birleştirebilir: üç farklı uygulama protokolü, hepsi aynı TCP + TLS tabanı üstüne inşa edilmiş.
 
-## Pratikte nasıl seçim yapılır
+## Pratikte nasıl seçmeli
 
-Üç soru genellikle karar vermek için yeterlidir:
+Genelde karar vermek için üç soru yeter:
 
-1.  **Güvenilirlik ve sıralamaya mı ihtiyacım var, yoksa verinin tazeliği garantili teslimattan daha mı önemli?** → Evetse TCP, hayırsa UDP (veya her ikisini de farklı bir uzlaşmayla birleştiren QUIC).
+1.  **Güvenilirliğe ve sıraya mı ihtiyacım var, yoksa verinin tazeliği garantili tesliminden önce mi gelir?** → Evetse TCP, hayırsa UDP (ya da farklı bir uzlaşmayla ikisini birden almak için QUIC).
+    
+2.  **Sunucu mesaj başlatabilmeli mi, yoksa istemci hep ilk isteği mi yapar?** → Sunucu itmeliyse WebSocket/gRPC akışı, yoksa klasik HTTP.
+    
+3.  **İki taraf da birbirine kimliğini kanıtlamalı mı, yoksa yalnızca birinin doğrulanması mı gerekir?** → zero-trust ortamında servisten servise için mTLS, klasik herkese açık istemci için basit TLS.
+    
 
-2.  **Sunucu mesaj başlatabilmeli mi, yoksa istemci her zaman ilk talebi mi yapar?** → Sunucu itmeli (push) ise WebSocket/gRPC akışı, değilse klasik HTTP.
-
-3.  **Her iki taraf da birbirine kimliğini kanıtlamalı mı, yoksa yalnızca birinin doğrulanması mı gerekiyor?** → Zero-trust ortamında hizmetten hizmete için mTLS, klasik genel istemci için basit TLS.
-
-Operasyonel karmaşıklık eklenen her katmanla artar: çıplak TCP'nin yönetilecek altyapısı yoktur, TLS sertifikalar gerektirir, mTLS bir CA ve döndürme stratejisi gerektirir, gRPC paylaşılan bir Protobuf şema tanımı gerektirir. Doğru refleks, karmaşıklığı yalnızca alttaki katman somut bir sınır gösterdiğinde artırmaktır, önceden değil.
+Eklenen her katmanda operasyonel karmaşıklık artar, çıplak TCPnin yönetilecek altyapısı yoktur, TLS sertifika ister, mTLS bir CA ve döndürme stratejisi ister, gRPC paylaşılan bir Protobuf şema tanımı ister. Doğru refleks, karmaşıklığa ancak alttaki katman somut bir limit gösterdiğinde çıkmaktır, önceden değil.

@@ -1,82 +1,82 @@
 ---
-title: "Discord bot 100% serverless : Hono + Cloudflare Workers"
-description: Cách tôi thay thế một bot Discord tốn 50€/tháng bằng
-  zero euro -- interaction endpoints, Hono, Workers, render ảnh thời gian
-  thực, và một game hoàn chỉnh không cần WebSocket.
+title: "Bot Discord 100% serverless : Hono + Cloudflare Workers"
+description: Cách tôi thay bot Discord tốn 50€/tháng bằng
+  0 euro -- interaction endpoint, Hono, Workers, render ảnh thời gian
+  thực, và game đầy đủ không WebSocket.
 date: 2026-05-29
-authors:
-  - fox3000foxy
 tags:
   - discord
   - cloudflare
   - serverless
   - typescript
   - bots
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "wspLWJtpBUXtxAw5XkUsODaT6i6ew7OH1Hy1RM4hsJ+f+DKOf+apwQtKK+x+UNacaP1zKw1XeDBdFJ38Nt8T1Q=="
+author_sig: "vEL8MBo8CiWoC8J8BRlpWEAwY+GJSF9bwWiS4XMnXpwDhQmwVYdDOy9ZNByU1m9J9TibeHYPO4WNbNgNczRCcQ=="
 ---
 
-## Discord bot 100% serverless : Hono + Cloudflare Workers = 💸 zero
+## Bot Discord 100% serverless : Hono + Cloudflare Workers = 💸 0 đồng
 
-Tôi đã dành vài tháng để duy trì các bot Discord truyền thống trên máy cá nhân.
+Tôi từng dành vài tháng duy trì bot Discord cổ điển trên máy của mình.
 
-Kết nối WebSocket luôn mở. Bot tự kết nối lại lúc 3 giờ sáng. Bot crash vì tôi nhìn cừu không đúng cách. Hóa đơn tăng dần.
+Kết nối WebSocket luôn mở. Bot tự reconnect lúc 3h sáng. Bot crash vì tôi nhìn cừu chằm chằm sai cách. Hóa đơn leo thang.
 
-Một ngày tôi phát hiện: **tại sao phải duy trì một kết nối**? Discord có thể POST chỉ những thứ bạn quan tâm. Bạn trả lời, xong.
+Một ngày tôi phát hiện : **vì sao phải duy trì kết nối**? Discord có thể POST đúng sự kiện bạn quan tâm. Bạn trả lời, xong.
 
-Từ 2021, Discord đã cung cấp **interaction endpoints**.
+Từ 2021, Discord cung cấp **interaction endpoint**.
 
-Chỉ là HTTP. Không WebSocket. Không trạng thái liên tục. Bạn nhận một request, bạn gửi JSON, xong. Request tiếp theo tự đến.
+Đó chỉ là HTTP. Bạn làm việc không WebSocket, không trạng thái bền vững. Bạn nhận yêu cầu, gửi JSON, xong. Yêu cầu tiếp theo tự tới.
 
-Và hay nhất: Cloudflare Workers **miễn phí** đến 100k request/ngày. Với 90% bot, đó là 0€/tháng.
+Và hay nhất : Cloudflare Workers **miễn phí** tới 100k yêu cầu/ngày. Với 90% bot, là 0€/tháng.
 
-Bài viết này sẽ chỉ bạn cách làm một bot Discord không WebSocket dùng **Hono** (web framework siêu nhẹ) và **Cloudflare Workers**. Tôi sẽ giới thiệu hai dự án thực tế: **Nibi** (bot học tiếng Nhật, TTS, ngầu) và **Konosuba-RPG** (một game Discord _hoàn chỉnh_ với render ảnh thời gian thực xD).
+Bài này chỉ bạn cách làm bot Discord không WebSocket bằng **Hono** (framework web siêu nhẹ) và **Cloudflare Workers**. Tôi sẽ cho bạn thấy hai dự án thật : **Nibi** (bot học tiếng Nhật, TTS, ngầu) và **Konosuba-RPG** (game Discord _đầy đủ_ với render ảnh thời gian thực).
 
-## WebSocket vs. Interaction Endpoints : tại sao đó là ý tưởng tồi
+## WebSocket so với Interaction Endpoint : vì sao ý cũ tệ
 
-Hãy tưởng tượng một game Minecraft nơi bạn phải giữ kết nối mở ngay cả khi không chơi.
+Tưởng tượng game Minecraft nơi bạn phải giữ kết nối mở ngay cả khi không chơi.
 
-Và server tự động kết nối lại mỗi khi nó crash. Bạn phải xử lý timeout, kết nối lại lũy thừa, tất cả boilerplate chết tiệt mà ai cũng ghét. Chỉ để nhận interactions.
+Và máy chủ tự reconnect mỗi lần crash. Bạn phải quản lý timeout, reconnect lũy thừa, cả đống boilerplate rác ta ghét. Chỉ để nhận tương tác.
 
-Interaction endpoints thì ngược lại. Discord POST vào URL của bạn. Bạn trả lời. Xong.
+Interaction endpoint thì ngược lại. Discord POST lên URL của bạn. Bạn trả lời. Xong.
 
-Nếu server của bạn crash? Discord thử lại 2-3 lần rồi bỏ qua. Zero drama.
+Nếu máy chủ của bạn crash? Discord retry 2-3 lần rồi bỏ qua. Không drama.
 
-**Chi phí trước** : 50€/tháng trên Heroku chỉ để giữ một tiến trình Node sống.
+**Chi phí trước** : 50€/tháng trên Heroku chỉ để một tiến trình Node sống.
 
-**Chi phí sau** : 0€/tháng trên Cloudflare đến 100k request/ngày.
+**Chi phí sau** : 0€/tháng trên Cloudflare tới 100k yêu cầu/ngày.
 
-## Kiến trúc : nó thực sự là gì ?
+## Kiến trúc : thực chất là gì?
 
-Discord POST một request đến endpoint của bạn.
+Discord POST yêu cầu lên endpoint của bạn.
 
 ```plaintext
-Discord: "Này! Người dùng đã bấm /ping!"
+Discord: "Ê! Người dùng vừa bấm /ping!"
       ↓
    URL của bạn (Cloudflare Worker)
       ↓
-   Bạn kiểm tra xem có thực sự là Discord không (kiểm tra chữ ký)
+ Bạn kiểm tra đúng là Discord (kiểm tra chữ ký)
       ↓
-   Bạn phân tích loại interaction
+ Bạn phân tích kiểu tương tác
       ↓
-   Bạn thực thi handler
+ Bạn chạy handler
       ↓
-   Bạn trả về JSON
+ Bạn trả về JSON
       ↓
-   Discord: "Tốt, tôi sẽ hiển thị cái này cho người dùng"
+Discord: "Hay, tôi sẽ hiện nó cho người dùng"
 ```
 
-Thuần HTTP. Không ma thuật. Không thư viện nặng.
+Đó là HTTP thuần, với stack tối thiểu và dễ đọc.
 
 ## Hono + Cloudflare Workers : combo tiết kiệm
 
-**Hono** là web framework chỉ nặng 12KB. Nó chạy được ở mọi nơi: Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... cùng một code ở mọi nơi.
+**Hono** là framework web nặng 12KB. Nó chạy khắp nơi : Cloudflare Workers, Vercel, AWS Lambda, Deno, Bun... cùng mã khắp nơi.
 
-Cloudflare Workers là compute tại edge. Request của bạn đến server gần nhất. Thời gian phản hồi: \<100ms. Chi phí: miễn phí đến 100k request/ngày.
+Cloudflare Workers là compute ở biên. Yêu cầu của bạn tới máy chủ gần nhất. Thời gian phản hồi : \<100ms. Chi phí : miễn phí tới 100k yêu cầu/ngày.
 
-Combo Hono + Cloudflare là sự kết hợp hoàn hảo cho một bot Discord.
+Combo Hono + Cloudflare là cặp hoàn hảo cho bot Discord.
 
-Đây là code tối thiểu của một bot hoàn chỉnh:
+Đây là mã tối thiểu của một bot đầy đủ :
 
 ```typescript
 import { Hono } from 'hono';
@@ -85,12 +85,12 @@ import { verifyKey } from 'discord-interactions';
 const app = new Hono();
 
 app.post('/interactions', async (c) => {
-  // 1. Lấy headers
+  // 1. Lấy header
   const signature = c.req.header('x-signature-ed25519');
   const timestamp = c.req.header('x-signature-timestamp');
   const body = await c.req.text();
 
-  // 2. Xác minh đó thực sự là Discord (không phải spam)
+  // 2. Kiểm tra đúng là Discord (không phải spam)
   const isValid = verifyKey(
     body,
     signature,
@@ -99,12 +99,12 @@ app.post('/interactions', async (c) => {
   );
   if (!isValid) return c.text('Invalid request', 401);
 
-  // 3. Parse nội dung gửi đến
+  // 3. Phân tích những gì nó gửi
   const interaction = JSON.parse(body);
 
-  // 4. Trả lời theo loại
+  // 4. Trả lời theo kiểu
   if (interaction.type === 1) {
-    // Discord test (PING)
+    // Discord kiểm tra (PING)
     return c.json({ type: 1 });
   }
 
@@ -125,26 +125,26 @@ app.post('/interactions', async (c) => {
 export default app;
 ```
 
-Kiểu, 30 dòng và đó là một bot hoạt động.
+30 dòng đủ cho bot chạy được.
 
-Không có `bot.login()`. Không event emitter. Không callback hell. Chỉ HTTP.
+Bạn quên `bot.login()`, event emitter và callback hell. Bạn chỉ giữ HTTP.
 
-Để deploy lên Cloudflare:
+Để deploy lên Cloudflare :
 
 ```plaintext
 npm install -D wrangler
 npx wrangler deploy
 ```
 
-Boom. Bạn có một URL kiểu `https://mon-bot.workers.dev/interactions`.
+Bùm. Bạn có URL kiểu `https://mon-bot.workers.dev/interactions`.
 
-Bạn đặt nó trong Discord Developer Portal dưới "INTERACTIONS ENDPOINT URL", và Discord bắt đầu gửi interactions của bạn đến đó.
+Bạn đặt nó vào Discord Developer Portal dưới "INTERACTIONS ENDPOINT URL", và Discord bắt đầu gửi tương tác của bạn tới đó.
 
-## Xác minh chữ ký : không có fake requests
+## Kiểm tra chữ ký : không yêu cầu giả mạo
 
-Discord ký mỗi request bằng public key. Nếu bạn nhận request với chữ ký sai? Đó là spam. Bỏ qua và tiếp tục.
+Discord ký mỗi yêu cầu bằng khóa công khai. Nếu bạn nhận yêu cầu chữ ký sai? Đó là spam. Bỏ qua và tiếp tục.
 
-Package `discord-interactions` làm việc đó:
+Gói `discord-interactions` làm việc này :
 
 ```typescript
 import { verifyKey } from 'discord-interactions';
@@ -157,19 +157,19 @@ const isValid = verifyKey(
 );
 ```
 
-**Bẫy quan trọng** : chữ ký phụ thuộc vào body _chính xác_. Nếu bạn parse JSON rồi stringify lại, hoặc nếu bạn log body, bạn làm hỏng chữ ký.
+**Bẫy quan trọng** : chữ ký phụ thuộc body _chính xác_. Nếu bạn parse JSON rồi stringify lại, hay log body, bạn phá chữ ký.
 
-Xác minh trước. Parse sau. Thứ tự mới là quan trọng.
+Kiểm tra trước. Parse sau. Thứ tự mới là điều quan trọng.
 
-## Case 1 : Nibi (bot học tiếng Nhật)
+## Trường hợp 1 : Nibi (bot học tiếng Nhật)
 
-Nibi là bot Discord để học tiếng Nhật. Các lệnh đơn giản:
+Nibi là bot Discord học tiếng Nhật. Lệnh đơn giản :
 
-*   `/dictionary kanji` → hiển thị định nghĩa
+*   `/dictionary kanji` → hiện định nghĩa
 *   `/pronounce テキスト` → tạo TTS (text-to-speech)
-*   `/hello` → tin nhắn chào mừng
+*   `/hello` → tin nhắn chào
 
-Mỗi lệnh là một file TypeScript:
+Mỗi lệnh là một tệp TypeScript :
 
 ```plaintext
 src/commands/
@@ -179,7 +179,7 @@ src/commands/
 └── ...
 ```
 
-Một lệnh implement interface này:
+Một lệnh triển khai interface này :
 
 ```typescript
 interface Command {
@@ -195,9 +195,9 @@ interface Command {
 }
 ```
 
-### Lệnh /pronounce : bắt bot nói chuyện
+### Lệnh /pronounce : bắt bot nói
 
-Đây là lệnh khá kỳ lạ. Bạn gửi văn bản (romaji, hiragana, kanji, bất cứ thứ gì), bot chuyển đổi nó thành hiragana, tạo TTS qua VOICEVOX hoặc Google TTS, và gửi tin nhắn âm thanh lên Discord.
+Đây là cái hay ho. Bạn gửi văn bản (romaji, hiragana, kanji, bất cứ gì), bot đổi nó sang hiragana, tạo TTS qua VOICEVOX hay Google TTS, và gửi tin nhắn thoại trên Discord.
 
 ```typescript
 const pronounce: Command = {
@@ -218,24 +218,24 @@ const pronounce: Command = {
     const text = interaction.data.options[0].value;
 
     try {
-      // 1. Chuyển romaji → hiragana với Kuroshiro
+      // 1. Đổi romaji → hiragana bằng Kuroshiro
       const hiragana = await kuroshiro.convert(text, { to: 'hiragana' });
 
-      // 2. Tạo audio TTS
+      // 2. Tạo âm thanh TTS
       const audioBuffer = await generateTTS(hiragana);
 
-      // 3. Upload file lên Discord
+      // 3. Tải tệp lên Discord
       const uploadFilename = await uploadToDiscord(
         audioBuffer,
         interaction.channel.id,
         env.BOT_TOKEN
       );
 
-      // 4. Gửi tin nhắn kèm audio
+      // 4. Gửi tin nhắn kèm âm thanh
       await sendVoiceMessage(
         interaction.channel.id,
         uploadFilename,
-        audioBuffer.length / 16000,  // thời gian tính bằng giây
+        audioBuffer.length / 16000,  // độ dài tính bằng giây
         env.BOT_TOKEN
       );
 
@@ -247,7 +247,7 @@ const pronounce: Command = {
       return {
         type: 4,
         data: {
-          content: 'Lỗi : không thể tạo audio xD',
+          content: 'Lỗi : không tạo được âm thanh xD',
           flags: 64  // ephemeral (tin nhắn riêng tư)
         }
       };
@@ -256,11 +256,11 @@ const pronounce: Command = {
 };
 ```
 
-Thật điên rồ: bạn gọi API bên ngoài, upload file lên Discord, gửi tin nhắn kèm file. Tất cả không cần WebSocket, chỉ HTTP.
+Thật điên : bạn gọi API ngoài, tải tệp lên Discord, gửi tin nhắn kèm tệp. Tất cả không WebSocket, chỉ HTTP.
 
-### Lưu trữ với Supabase
+### Bền vững với Supabase
 
-Nibi sử dụng Supabase như key-value store. Để kiểm tra người dùng đã đăng ký chưa:
+Nibi dùng Supabase làm key-value store. Để kiểm tra người dùng đã đăng ký chưa :
 
 ```typescript
 const DatabaseUtils = new DatabaseUtils({
@@ -278,39 +278,39 @@ if (!user) {
 }
 ```
 
-Rất cơ bản (không có truy vấn SQL thực sự, chỉ JSON), nhưng nó hoạt động. Với bot nhỏ thì hoàn hảo.
+Rất cơ bản (không truy vấn SQL thật, chỉ JSON), nhưng chạy được. Với bot nhỏ là hoàn hảo.
 
-## Case 2 : Konosuba-RPG (game Discord với render ảnh)
+## Trường hợp 2 : Konosuba-RPG (game Discord render ảnh)
 
-Okay cái này điên rồ đây.
+OK cái này điên thật.
 
-Konosuba-RPG là một **game hoàn chỉnh** trên Discord. Bạn chiến đấu với quái, kiếm XP, trang bị phụ kiện, lên cấp. Mỗi trận chiến tạo ra một **ảnh** thời gian thực. Không spritesheet được render sẵn. Ảnh được tạo động từ chỉ số người chơi, quái vật, và trạng thái chiến đấu.
+Konosuba-RPG là **game đầy đủ** trên Discord. Bạn đánh mob, nhận XP, trang bị phụ kiện, lên cấp. Mỗi trận tạo một **ảnh** thời gian thực. Bạn tránh spritesheet render trước. Ảnh được dựng động từ stat người chơi, mob, và trạng thái trận.
 
-Và ảnh được tạo trong \<500ms trên Cloudflare Workers. Thật đấy.
+Và ảnh sinh ra trong \<500ms trên Cloudflare Workers. Theo nghĩa đen.
 
 ### Kiến trúc render
 
 ```plaintext
 Discord (bạn bấm "Attack")
     ↓
-Cloudflare Worker nhận interaction
+Cloudflare Worker nhận tương tác
     ↓
-Cập nhật game state (XP, HP, v.v.)
+Cập nhật trạng thái game (XP, HP, v.v.)
     ↓
-Tạo JSX với Satori
+Tạo JSX bằng Satori
     ↓
-Chuyển đổi SVG → PNG với Resvg (Wasm)
+Đổi SVG → PNG bằng Resvg (Wasm)
     ↓
-Upload ảnh lên Discord
+Tải ảnh lên Discord
     ↓
 Gửi tin nhắn kèm ảnh
 ```
 
-Tất cả trong chưa đầy một giây. Thật kinh ngạc.
+Tất cả dưới một giây. Thật kinh ngạc.
 
-### Render ảnh trên Workers
+### Render ảnh phía Workers
 
-Konosuba sử dụng **Satori** (JSX → SVG) và **Resvg** (SVG → PNG):
+Konosuba dùng **Satori** (JSX → SVG) và **Resvg** (SVG → PNG) :
 
 ```typescript
 import { Satori } from 'satori';
@@ -321,7 +321,7 @@ async function renderBattle(gameState: GameState) {
 
   // 1. Tạo JSX cho UI
   const jsx = (
-    <div style="{{" display:="" 'flex',="" gap:="" '20px'="" }}>
+    <div style="{{" display="" 'flex',="" gap:="" '20px'="" }}="">
       <div>
         <h1>{gameState.player.name}</h1>
         <p>HP: {gameState.player.hp}/{gameState.player.maxHp}</p>
@@ -349,11 +349,11 @@ async function renderBattle(gameState: GameState) {
 
 Bạn viết JSX bình thường. Nó thành SVG. SVG thành PNG. \<100ms trên Cloudflare Worker.
 
-Bạn thấy sức mạnh chưa? Nó chỉ là... đẹp xD
+Bạn nắm sức mạnh chưa? Đẹp đơn thuần.
 
-### Game state và tiến trình
+### Trạng thái game và tiến trình
 
-Dữ liệu người chơi được lưu trong Supabase:
+Dữ liệu người chơi nằm trong Supabase :
 
 ```typescript
 const player = await db
@@ -362,7 +362,7 @@ const player = await db
   .eq('discord_id', interaction.user.id)
   .single();
 
-// Người chơi đã thắng
+// Người chơi thắng
 const { data: updated } = await db
   .from('players')
   .update({
@@ -372,11 +372,11 @@ const { data: updated } = await db
   .eq('id', player.id);
 ```
 
-Mỗi hành động (tấn công, phòng thủ, hồi máu) cập nhật chỉ số trong database. Và sau đó bạn render lại ảnh với chỉ số mới.
+Mỗi hành động (tấn công, phòng thủ, hồi máu) cập nhật stat trong DB. Rồi bạn tạo lại ảnh với stat mới.
 
-### Interactions : các nút gameplay
+### Tương tác : nút bấm gameplay
 
-Game sử dụng **button interactions** cho các hành động trong chiến đấu:
+Game dùng **tương tác nút bấm** cho hành động trận :
 
 ```typescript
 {
@@ -384,7 +384,7 @@ Game sử dụng **button interactions** cho các hành động trong chiến đ
   components: [
     {
       type: 2,  // Button
-      style: 1,  // Primary (xanh dương)
+      style: 1,  // Primary (xanh)
       label: 'Attack',
       custom_id: 'battle_attack'
     },
@@ -398,11 +398,11 @@ Game sử dụng **button interactions** cho các hành động trong chiến đ
 }
 ```
 
-Khi bạn bấm "Attack", Discord POST một interaction với `custom_id: 'battle_attack'`. Handler route nó:
+Khi bạn bấm "Attack", Discord POST tương tác với `custom_id: 'battle_attack'`. Handler định tuyến nó :
 
 ```typescript
 if (interaction.type === 3) {
-  // Component interaction (bấm nút, v.v.)
+  // Tương tác thành phần (bấm nút, v.v.)
   const customId = interaction.data.custom_id;
 
   if (customId === 'battle_attack') {
@@ -414,30 +414,30 @@ if (interaction.type === 3) {
 }
 ```
 
-Và boom, bạn tính sát thương, cập nhật database, render lại ảnh, gửi đi.
+Và bùm, bạn tính sát thương, cập nhật DB, tạo lại ảnh, gửi đi.
 
-Đó là một game turn-based hoàn chỉnh không cần bất kỳ kết nối liên tục nào. Chỉ HTTP stateless. Hoàn toàn điên rồ xD
+Đó là game theo lượt đầy đủ không cần chút bền vững kết nối nào. Chỉ HTTP stateless. Hoàn toàn điên.
 
-## Supabase : DB dành cho Workers
+## Supabase : DB làm cho Workers
 
-Các database truyền thống (PostgreSQL, MySQL, MongoDB) được thiết kế cho kết nối TCP liên tục. Bạn mở socket, giữ kết nối, gửi truy vấn. Vấn đề: **Cloudflare Workers không hỗ trợ kết nối TCP liên tục**. Mỗi request là một tiến trình tạm thời. Ngay khi bạn trả lời client, Worker biến mất.
+Cơ sở dữ liệu cổ điển (PostgreSQL, MySQL, MongoDB) thiết kế cho kết nối TCP bền vững. Bạn mở socket, giữ kết nối mở, gửi truy vấn. Vấn đề : **Cloudflare Workers không hỗ trợ kết nối TCP bền vững**. Mỗi yêu cầu là tiến trình phù du. Hễ bạn trả lời client, Worker biến mất.
 
-Bạn không thể làm thế này:
+Bạn không thể làm vầy :
 
 ```typescript
-// Cái này KHÔNG chạy trên Workers
+// Việc này KHÔNG chạy trên Workers
 import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();  // kết nối TCP liên tục = chết
+const prisma = new PrismaClient();  // kết nối TCP bền vững = chết
 ```
 
-Và ngay cả driver PostgreSQL gốc như `pg` hay `postgres.js` cũng dùng kết nối TCP. Trên Workers, chúng bị crash.
+Và ngay cả driver PostgreSQL gốc như `pg` hay `postgres.js` cũng dùng kết nối TCP. Trên Workers, chúng sập.
 
 **Supabase giải quyết tất cả.**
 
-Supabase là REST API trên nền PostgreSQL. Bạn thực hiện các request HTTP thông thường. Mỗi lần gọi độc lập, không cần kết nối liên tục, không cần quản lý trạng thái. Hoàn toàn phù hợp với mô hình serverless.
+Supabase là API REST trên PostgreSQL. Bạn gửi yêu cầu HTTP bình thường. Mỗi gọi độc lập, không kết nối bền vững, không trạng thái cần quản lý. Hoàn toàn hợp mô hình serverless.
 
 ```typescript
-// Cái này chạy HOÀN HẢO trên Workers
+// Việc này chạy HOÀN HẢO trên Workers
 const { data, error } = await supabase
   .from('players')
   .select('*')
@@ -445,34 +445,34 @@ const { data, error } = await supabase
   .single();
 ```
 
-Client Supabase (`@supabase/supabase-js`) sử dụng `fetch` bên dưới. Và `fetch` là native trên Workers. Zero cấu hình, zero driver, zero kết nối liên tục.
+Client Supabase (`@supabase/supabase-js`) dùng `fetch` bên dưới. Và `fetch` gốc trên Workers. Không cấu hình, không driver, không kết nối bền vững.
 
-| Database | Tương thích Workers ? | Tại sao |
+| Cơ sở dữ liệu | Tương thích Workers? | Vì sao |
 | --- | --- | --- |
-| **Supabase** | ✅ Có | REST API không trạng thái, HTTP thuần |
-| **PlanetScale (MySQL)** | ⚠️ Một phần | Chỉ kết nối HTTPS, không có transaction dài |
-| **Neon** | ⚠️ Một phần | Branch serverless nhưng cần driver TCP |
+| **Supabase** | ✅ Có | API REST không trạng thái, HTTP thuần |
+| **PlanetScale (MySQL)** | ⚠️ Một phần | Chỉ kết nối HTTPS, không giao dịch dài |
+| **Neon** | ⚠️ Một phần | Nhánh serverless nhưng cần driver TCP |
 | **Turso (libSQL)** | ⚠️ Một phần | HTTP khả thi nhưng giới hạn |
-| **Prisma/Prisma Postgres** | ❌ Không | Cần TCP liên tục |
-| **MongoDB Atlas** | ❌ Không | Driver TCP, không có REST API gốc |
-| **Redis (Upstash)** | ✅ Có | REST API HTTP |
+| **Prisma/Prisma Postgres** | ❌ Không | Đòi TCP bền vững |
+| **MongoDB Atlas** | ❌ Không | Driver TCP, không API REST gốc |
+| **Redis (Upstash)** | ✅ Có | API REST HTTP |
 
-Lợi thế thực sự của Supabase không chỉ là DB -- mà là toàn bộ hệ sinh thái được thiết kế edge-first:
+Lợi thế thật của Supabase không chỉ là DB -- mà là cả hệ sinh thái nghĩ edge-first :
 
-- **Auth** : REST API để quản lý session, hoạt động không trạng thái
-- **Storage** : Upload/download file qua HTTP
+- **Auth** : API REST quản lý phiên, chạy không trạng thái
+- **Storage** : Tải lên/tải xuống tệp qua HTTP
 - **Realtime** : WebSocket tùy chọn, nhưng bạn cũng có thể poll qua REST
-- **Row Level Security** : rules bảo mật nằm trong DB, không phải backend
+- **Row Level Security** : quy tắc bảo mật nằm trong DB, không trong backend của bạn
 
-Với bot Discord serverless, Supabase là lựa chọn đơn giản và đáng tin cậy nhất. Không cần cấu hình driver, không cần duy trì kết nối, không có timeout. Chỉ các request HTTP.
+Với bot Discord serverless, Supabase là lựa chọn đơn giản và đáng tin nhất. Bạn không cấu hình driver, không duy trì kết nối, không quản lý timeout. Bạn chỉ gửi yêu cầu HTTP.
 
-Nếu bạn muốn một ví dụ thực tế, hãy xem Nibi ở trên: code lưu trữ chỉ đơn giản là `readJson()` và `writeJson()` trên Supabase. Không migration, không schema phức tạp, không cấu hình gì cả. Chạy ngay. Và nếu bot của bạn lớn lên, bạn có thể chuyển sang truy vấn SQL thực sự mà không cần đổi provider.
+Nếu bạn muốn ví dụ thật, xem Nibi ở trên : mã bền vững đúng là `readJson()` và `writeJson()` trên Supabase. Bạn khởi động không migration, không schema phức tạp, không config nặng. Chạy ngay. Và nếu bot của bạn lớn lên, bạn chuyển sang truy vấn SQL thật mà không đổi provider.
 
-## Polyfills : khi Node muốn chạy trên Workers
+## Polyfill : khi Node muốn chạy trên Workers
 
-Một số package mong đợi API Node. Kuromoji (parser kanji) sử dụng `XMLHttpRequest`. Workers có `fetch`, không phải `XMLHttpRequest`.
+Vài gói mong đợi API Node. Kuromoji (trình phân tích kanji) dùng `XMLHttpRequest`. Workers có `fetch`, không có `XMLHttpRequest`.
 
-Giải pháp đơn giản: thêm polyfill ở đầu index.ts:
+Giải pháp đơn giản : thêm polyfill lên đầu index.ts :
 
 ```typescript
 // Polyfill XMLHttpRequest cho kuromoji
@@ -483,7 +483,7 @@ if (!globalThis.XMLHttpRequest) {
 }
 ```
 
-Hoặc tạo một module riêng:
+Hay làm module chuyên :
 
 ```typescript
 // src/utils/polyfills.ts
@@ -497,18 +497,18 @@ import { setupPolyfills } from './utils/polyfills';
 setupPolyfills();
 ```
 
-Đó là hack cơ bản, nhưng nó hoạt động.
+Đó là hack cơ bản, nhưng chạy.
 
-## Hướng tới một package npm : hono-discord-interactions
+## Hướng tới gói npm : hono-discord-interactions
 
-Làm thủ công, tạo một bot là rất nhiều boilerplate:
+Làm tay, bot là nhiều boilerplate :
 
-*   Xác minh chữ ký Discord
-*   Route các loại interaction
-*   Xử lý commands, components, modals
+*   Kiểm tra chữ ký Discord
+*   Định tuyến kiểu tương tác
+*   Quản lý lệnh, component, modal
 *   Trả về JSON hợp lệ
 
-Chúng ta có thể trừu tượng hóa tất cả vào một package npm. Kiểu:
+Ta có thể trừu tượng tất cả vào gói npm. Kiểu :
 
 ```typescript
 import { createDiscordHandler } from 'hono-discord-interactions';
@@ -538,9 +538,9 @@ app.post('/interactions', handler);
 export default app;
 ```
 
-Bùm. 20 dòng thay vì 200. Nó sẽ giảm Nibi xuống một nửa dễ dàng.
+Bùm. 20 dòng thay vì 200. Việc đó giảm Nibi một nửa dễ dàng.
 
-Ý tưởng để sau xD
+Ý tưởng để sau.
 
 ## Deploy
 
@@ -563,11 +563,11 @@ wrangler secret put SUPABASE_URL --env production
 wrangler deploy --env production
 ```
 
-URL kết quả: `https://mon-bot.workers.dev/interactions`
+URL kết quả : `https://mon-bot.workers.dev/interactions`
 
-Chi phí: **miễn phí** đến 100k request/ngày. Quá mức: $0.50/triệu.
+Chi phí : **miễn phí** tới 100k yêu cầu/ngày. Vượt : $0.50/triệu.
 
-Spoiler: bạn sẽ không bao giờ dùng hết 100k request trừ khi bạn có 10.000 người dùng hoạt động.
+Tiết lộ : bạn sẽ không bao giờ xài hết 100k yêu cầu trừ khi có 10 000 người dùng hoạt động.
 
 ### Vercel
 
@@ -575,59 +575,59 @@ Spoiler: bạn sẽ không bao giờ dùng hết 100k request trừ khi bạn c�
 npm run vercel:deploy
 ```
 
-URL: `https://mon-bot-xyz.vercel.app/api/interactions`
+URL : `https://mon-bot-xyz.vercel.app/api/interactions`
 
-Tương tự, miễn phí.
+Cũng vậy, miễn phí.
 
 ### Cả hai cùng lúc
 
-Hono chạy được ở mọi nơi. Bạn có thể deploy cùng một code lên cả Cloudflare VÀ Vercel. Hữu ích cho dự phòng hoặc thử nghiệm trước khi chọn.
+Hono chạy khắp nơi. Bạn có thể deploy cùng mã lên Cloudflare VÀ Vercel. Hữu ích cho dự phòng hay thử trước khi chọn.
 
 ## Checklist nhanh
 
 1.  Tạo Application trên Discord Developer Portal
-2.  Sao chép PUBLIC\_KEY, BOT\_TOKEN, APP\_ID
-3.  Tạo project:
-4.  Viết index.ts (xác minh chữ ký + routing)
-5.  Đăng ký slash commands (một lần):
-6.  Deploy:
-7.  Đặt URL trong Discord (Developer Portal → Application → Interactions Endpoint URL)
+2.  Chép PUBLIC\_KEY, BOT\_TOKEN, APP\_ID
+3.  Tạo dự án :
+4.  Viết index.ts (kiểm tra chữ ký + định tuyến)
+5.  Đăng ký slash command (một lần) :
+6.  Deploy :
+7.  Đặt URL vào Discord (Developer Portal → Application → Interactions Endpoint URL)
 8.  Discord kiểm tra kết nối (bạn phải trả lời PING)
-9.  Mời bot vào server
+9.  Mời bot lên máy chủ
 10.  Xong
 
-## Ưu điểm vs Hạn chế
+## Ưu điểm so với Giới hạn
 
 **Ưu điểm**
 
-*   Rẻ (miễn phí đến 100k req/ngày)
-*   Co giãn (không cần quản lý kết nối)
+*   Chi phí tối thiểu (miễn phí tới 100k req/ngày)
+*   Mở rộng được (không quản lý kết nối)
 *   Đơn giản (không boilerplate WebSocket)
-*   Nhanh (Cloudflare = server tại edge)
-*   Di động (code Hono = nhiều host)
+*   Nhanh (Cloudflare = máy chủ ở biên)
+*   Di động (mã Hono = nhiều host)
 
-**Hạn chế**
+**Giới hạn**
 
-*   Không có sự kiện server thời gian thực (thành viên tham gia, role được thêm, tin nhắn bị xóa, v.v.) -- bạn chỉ nhận được interactions (slash commands, buttons, modals)
-*   Timeout 3 giây để trả lời -- nếu không Discord hiển thị "Application did not respond"
-*   Nếu bạn cần sự kiện thực sự -- cần một webhook HTTP riêng hoặc kết nối WebSocket phụ trợ
+*   Bạn chỉ nhận tương tác (slash command, nút, modal), không có sự kiện máy chủ thời gian thực (thành viên tham gia, vai trò thêm, tin nhắn xóa, v.v.)
+*   Timeout 3 giây để trả lời -- nếu không Discord hiện "Application did not respond"
+*   Nếu bạn cần event thật -- cần webhook HTTP riêng hay kết nối WebSocket phụ
 
-Với 90% bot (tất cả dựa trên slash commands)? Ổn cả.
+Với 90% bot (mọi thứ dựa trên slash command)? Ổn.
 
 ## Kết luận
 
-Tôi đã dành khá nhiều thời gian để tối ưu KonosubaRPG và Nibi nhằm tiết kiệm càng nhiều request càng tốt, hoặc giảm thời gian xử lý nóng, hoặc giảm boot cold. Kết quả là tôi có hiệu suất khá ấn tượng trên hầu hết mọi thứ.
-Cần biết rằng tôi đã bắt đầu cloud hóa (tôi cũng không biết từ này có tồn tại không) phần lớn các dự án của mình vì tôi cực kỳ lười tiếp tục tự host chúng trên VM cá nhân. Thực sự, tôi nghĩ chính Github Actions đã cứu tôi. Workers cũng vậy, nhưng thực ra khi tôi thấy mình có thể tạo daemon với Github Actions và schedule, điều đó thực sự đã cứu tôi.
+Tôi đã dành khá nhiều thời gian tối ưu KonosubaRPG và Nibi để tiết kiệm hoặc nhiều yêu cầu nhất có thể, hoặc giảm thời gian xử lý nóng, hoặc giảm khởi động lạnh. Kết quả, tôi có hiệu năng khá ngon trên gần như mọi thứ.
+Phải biết là tôi đã bắt đầu cloud hóa (tôi thậm chí không biết có từ này không) hầu hết dự án của mình vì tôi lười khủng khiếp việc tiếp tục host chúng trên VM của mình. Thật lòng, tôi nghĩ chính Github Actions đã cứu mạng tôi. Workers cũng vậy, nhưng thực ra khi tôi thấy mình có thể làm daemon bằng Github Actions và schedule, việc đó thực sự cứu tôi.
 
-Tôi có lẽ sẽ viết một bài về dự án tên là [email-autoreply](https://github.com/fox3000foxy/email-autoreply/), vì vậy hãy đăng ký theo dõi RSS để xem nó ra mắt sắp tới :)).
+Tôi có lẽ sẽ viết bài về dự án tên [email-autoreply](https://github.com/fox3000foxy/email-autoreply/), nên hãy đăng ký feed RSS để thấy nó ra mắt sớm :)).
 
-**3 điều cần nhớ:**
+**3 điểm cần nhớ :**
 
-1.  **Interaction endpoints = HTTP serverless** -- Không WebSocket, không kết nối liên tục. Discord POST, bạn trả lời. Miễn phí trên Cloudflare.
-2.  **Hono là công cụ hoàn hảo** -- Framework nhẹ (12KB), đa runtime, zero dependencies. Code giống hệt trên Cloudflare, Vercel, Node, mọi nơi.
-3.  **Render ảnh trên Workers = điên rồ** -- Satori + Resvg (Wasm) cho phép bạn tạo UI động bằng JSX và chuyển đổi thành PNG trong \<100ms. Một game hoàn chỉnh có thể chạy trên nó.
+1.  **Interaction endpoint = HTTP serverless** -- không WebSocket, không kết nối bền vững. Discord POST, bạn trả lời. Miễn phí trên Cloudflare.
+2.  **Hono là công cụ hoàn hảo** -- Framework nhẹ (12KB), đa runtime, không phụ thuộc. Mã giống hệt trên Cloudflare, Vercel, Node, khắp nơi.
+3.  **Render ảnh trên Workers = điên** -- Satori + Resvg (Wasm) cho bạn dựng UI động bằng JSX và đổi sang PNG trong \<100ms. Game đầy đủ có thể chạy trên đó.
 
-Thật bệnh hoạn xD
+Điên thật.
 
 ```plaintext
 wrangler deploy

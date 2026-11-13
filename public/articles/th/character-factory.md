@@ -14,7 +14,7 @@ tags:
   - npm
   - open-source
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "FaWSZPApIwSHDDRF41pcozhu3kT+uAO+cPxbVs95UAflmqzI7H2gT50+W3DiKPz+r9IiZH7yHeNOpUm3UqDnFw=="
+author_sig: "E8QinaVV9jDlgULtNTeno3gLti0sDS7xaL2q8poNn6coF2QYfp7x4mzUaDDkAVMd2IHCqgeEG7paQq/v/AWKCA=="
 ---
 
 # สร้าง character-factory : อวาตาร์ที่มีระบบพันธุกรรม

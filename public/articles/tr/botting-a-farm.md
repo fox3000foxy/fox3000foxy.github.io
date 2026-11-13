@@ -1,51 +1,51 @@
 ---
-title: Bir Microsoft Rewards Çiftliğini Botlamak
-description: Ölçekli olarak Microsoft Rewards puanı toplamak için nasıl bir bot
-  kodladığım -- ve Microsoft'un anti-bot tespitinin neden artık işe yaramadığı.
+title: Microsoft Rewards çiftliği botlamak
+description: Microsoft Rewards puanlarını büyük ölçekte kasan bir botu nasıl
+  kodladım ve Microsoft o zamandan beri savunmalarını neden güçlendirdi.
 date: 2026-03-13
-authors:
-  - fox3000foxy
 tags:
   - automation
   - javascript
   - reverse-engineering
+authors:
+  - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "I4Rh9LhZ9ptdLIb8WRQV7QLV9t387QECu0haKUhZssbkwFsAHqllpexnN6v6anEmewDrcXSM41lSMUN2R0ZggQ=="
+author_sig: "1aFmyrnAjhQb8eRCk2V7VAuev6pgPKGRG5Bxjp6wkcdsjQLtQtSbJnhKGET4YZrzwejVtrAKuZKpkugXn8v1GA=="
 ---
 
-> **Not (2026):** Bu proje artık bakılmıyor. Microsoft, anti-bot tespitini önemli ölçüde güçlendirdi -- o zamanlar işe yarayan şey artık çalışmıyor. Aşağıda açıklanan kod ve yaklaşım sadece arşiv/eğitim amaçlı saklanmaktadır.
+> **Not (2026):** Bu proje artık bakımlı değil. Microsoft bot karşıtı tespitini önemli ölçüde güçlendirdi, o yüzden o zamanlar işe yarayan şey bugün artık çalışmıyor. Aşağıda anlatılan kod ve yaklaşım yalnızca arşiv ve tanıtım amacıyla saklanmaktadır.
 
-### Giriş
+## Giriş
 
-Birkaç yıl önce Microsoft Rewards'ı keşfettim. O zamanlar karantina günleriydi, ama bu, Microsoft Family Safety ebeveyn kontrollerini kullanmak zorunda olduğum ve dolayısıyla Edge kullandığım gerçeğini değiştirmiyor. İşte o zaman Rewards'ı keşfettim.
+Microsoft Rewardsı birkaç yıl önce keşfettim. Kapanma dönemindeydi ve o zaman Microsoft Family Safety ebeveyn denetimini kullanmak zorunda olduğum için Edge üzerinden geçiyordum. Rewardsı orada keşfettim.
 
-O zamanlar sadece 14 yaşındaydım ve katalogdaki hiçbir şey ilgimi çekmiyordu. Şimdi edindiğim becerilerle, botlarla puan toplayabileceğimi ve sonra kodları verebileceğimi, hatta gerçekten istersem daha ucuza satabileceğimi düşünüyorum (kendimi bilirim, muhtemelen yapmam). Neyse, sana hesapları ölçekli olarak çalıştıran bir botu nasıl kodladığımı anlatacağım.
+O zamanlar sadece 14 yaşındaydım ve katalogdaki hiçbir şey ilgimi çekmiyordu. Şimdi edindiğim becerilerle botlarla puan kasabileceğimi, sonra kodları gerçekten istersem dağıtılabileceğini ya da daha ucuza satılabileceğini düşünüyorum (ama dürüstçe yapacağımı sanmıyorum). Ölçekte hesap kasan bir botu nasıl kodladığımı anlatacağım.
 
 ---
 
-## Microsoft Rewards Nedir?
+## Microsoft Rewards nedir?
 
-Kısacası: Edge kullanıcılarını aramalar, küçük testler, oyunlar ve bir uzantı (ki o da bambaşka bir hikaye) gibi aktiviteler için puanlarla ödüllendiren bir program.
+Kısaca: Edge kullanıcılarını aramalar, küçük quizler, oyunlar gibi aktiviteler ve bir uzantı karşılığında puanlarla ödüllendiren bir program (ama o başka bir hikâye).
 
-Burada "Keşfet" şeylerini görebilirsin:  
+Burada "Explore" bloklarını görüyorsun:
 ![Explore ekran görüntüsü](assets/20260313_135010_image.png)
 
-Bu, örneğin "günün seti" dedikleri şey.  
+Burada örneğin "günün seti" dedikleri şey var.
 ![Günlük set ekran görüntüsü](assets/20260313_135038_image.png)
 
-Hatta bir seri sistemi bile oluşturmuşlar, oldukça çılgın.  
+Bir seri sistemi bile yapmışlar, epey çılgınca.
 ![Seri ekran görüntüsü](assets/20260313_135210_image.png)
 
-Bir de seviye sistemi var ve tamamen eğlenceli:  
+Bir de seviye sistemi var ve ilerleme rutini gerçekten bağımlılık yapıyor:
 ![Seviye ekran görüntüsü](assets/20260313_135340_image.png)
 
-Yani puan kazanmanın bir sürü yolu var ve çoğu günlük.  
-Buradaki fikir, aktiviteleri senin için yapan bir bot yapmak, böylece ölçekli olarak puan toplayabilir ve çiftlik rutinini tamamlayabilirsin.
+Yani puan kazanmanın bir sürü yolu var ve çoğu günlük.
+Buradaki fikir senin yerine aktiviteleri yapan bir bot yapmak, puanları ölçekte kasmak ve kasım rutinini tamamlamak.
 
-Aşağıda görebileceğin gibi, ödüllerin çoğu hediye kartları, ama ayrıca oyunlar veya servis abonelikleri gibi eğlenceli şeyler de var.  
+Aşağıda görebileceğin gibi ödüllerin çoğu hediye kartı ama oyunlar ya da abonelikler gibi ilginç seçenekler de var.
 ![Ödüller ekran görüntüsü](assets/20260313_135646_image.png)
 
-| Ödül | Kategori | Puan cinsinden maliyet |
+| Ödül | Kategori | Puan maliyeti |
 | --- | --- | --- |
 | **Rakuten TV – 1 HD film** | Dijital içerik | 1 785 |
 | **Roblox (dijital kart)** | Oyun / dijital içerik | 6 750 |
@@ -54,8 +54,8 @@ Aşağıda görebileceğin gibi, ödüllerin çoğu hediye kartları, ama ayrıc
 | **Microsoft Solitaire Collection hediye kartı** | Oyun / dijital içerik | 1 500 |
 | **Minecraft Minecoins** | Oyun / dijital içerik | 2 500 |
 | **League of Legends hediye kartı** | Oyun / dijital içerik | 2 000 |
-| **Overwatch coin kodu (dijital)** | Oyun / dijital içerik | 2 000 |
-| **Sea of Thieves – Old Coins paketi** | Oyun / dijital içerik | 1 700 |
+| **Overwatch jeton kodu (dijital)** | Oyun / dijital içerik | 2 000 |
+| **Sea of Thieves – Antik Para Paketi** | Oyun / dijital içerik | 1 700 |
 | **Zalando – Hediye kartı** | Mağaza / hizmet | 7 205 |
 | **Carrefour – Hediye kartı** | Mağaza / hizmet | 14 410 |
 | **Cultura – Hediye kartı** | Mağaza / hizmet | 14 410 |
@@ -67,7 +67,7 @@ Aşağıda görebileceğin gibi, ödüllerin çoğu hediye kartları, ama ayrıc
 | **Amazon.fr – Hediye çeki** | Mağaza / hizmet | 7 205 |
 | **Foot Locker – Hediye kartı** | Mağaza / hizmet | 14 410 |
 | **IKEA FR – Hediye kartı** | Mağaza / hizmet | 36 025 |
-| **IKEA FR – Hediye kartı (diğer tasarım)** | Mağaza / hizmet | 7 200 |
+| **IKEA FR – Hediye kartı (başka tasarım)** | Mağaza / hizmet | 7 200 |
 | **Marionnaud – Hediye kartı** | Mağaza / hizmet | 14 410 |
 | **Asos – Hediye kartı** | Mağaza / hizmet | 14 410 |
 | **Adidas FR – Hediye kartı** | Mağaza / hizmet | 14 410 |
@@ -76,15 +76,15 @@ Aşağıda görebileceğin gibi, ödüllerin çoğu hediye kartları, ama ayrıc
 | **Global Hotel Card (Expedia Group)** | Mağaza / hizmet | 7 205 |
 | **Uber Eats France – Hediye kartı** | Mağaza / hizmet | 36 025 |
 
-Artık bu programın amacını anladığına göre, bot işine bakalım.
+Programın neye yaradığını artık anladığına göre botlamaya gelelim.
 
 ---
 
 ## İlk testler
 
-Botumu inşa etmeden önce, aynı adresten yüzlerce hesap kullandığım için IP'nin işaretlenmeyeceğinden emin olmak istedim. Beni tanırsın, dönen proxy ile Tor kullanacağım. Ve botumu bir VPS'de barındırmak istemiyorum -- bir GitHub Action'da çalışmasını istiyorum.
+Botumu inşa etmeden önce aynı adresten yüzlerce hesap kullandığım için IPmin işaretlenmeyeceğinden emin olmak istedim. Beni tanırsın, dönen vekille Tor üzerinden geçiyorum. Onu bir VPS yerine bir GitHub Action içinde çalıştırmak istiyorum.
 
-Basit bir workflow yazdım:
+O yüzden basit bir workflow yazdım:
 
 ```yaml
 name: Tor Proxy Curl
@@ -134,26 +134,26 @@ jobs:
           curl --fail --silent --show-error --proxy "$ALL_PROXY" https://check.torproject.org/api/ip
 ```
 
-Bu workflow sadece Tor'u kurar, başlatır ve üzerinden bir curl isteği yapar.
+Bu workflow sadece Tor kurar, başlatır ve üzerinden bir curl isteği yapar.
 
-İlk çalıştırma şu sonucu verdi:  
-![Tor curl ilk çalıştırma](assets/20260313_140705_image.png)
+İlk run şu sonucu verdi:
+![Tor curl ilk run](assets/20260313_140705_image.png)
 
-Zaman istatistikleri şöyleydi:  
-!Zamanlamalar
+Zaman istatistikleri şöyleydi:
+!Timings
 
-İkinci çalıştırma şu sonucu verdi:  
-![Tor curl ikinci çalıştırma](assets/20260313_140928_image.png)
+İkinci bir run şu sonucu verdi:
+![Tor curl ikinci run](assets/20260313_140928_image.png)
 
-Gördüğün gibi, IP'ler farklı, bu yüzden aynı IP'den aşırı kullanım nedeniyle işaretlenmeyiz. Bu iyi haber--çiftlik botunu geliştirmeye devam edebiliriz.
+Görebileceğin gibi IPler farklı, yani aynı IPden kötüye kullanım damgası yemekten kaçınıyoruz. İyi haber: kasım botunu geliştirmeye devam edebiliriz.
 
 ---
 
 ## Selenium ile ilk test
 
-Arayüzü otomatikleştirmek için **Selenium** kullanacağım: bir kullanıcı yerine gerçek bir tarayıcıyı (Chrome/Edge/Firefox) kontrol eden bir araç. Bir GitHub Action bağlamında bu, bir tarayıcı + sürücüsünü kurmak, ardından Microsoft Rewards'a giriş yapan ve gereken yerlere tıklayan bir script çalıştırmak anlamına geliyor.
+Arayüzü otomatikleştirmek için **Selenium** kullanacağım: bir kullanıcının yerine gerçek bir tarayıcıyı (Chrome/Edge/Firefox) süren bir araç. Bir GitHub Action bağlamında bu, bir tarayıcı + sürücüsünü kurmak, sonra Microsoft Rewardsa bağlanıp gereken yerlere tıklayan bir script çalıştırmak demektir.
 
-### Örnek JavaScript scripti (Node.js + selenium-webdriver)
+### JavaScript örnek scripti (Node.js + selenium-webdriver)
 
 ```js
 import { Builder, By, Capabilities, until, WebDriver } from 'selenium-webdriver';
@@ -170,14 +170,14 @@ const chromeOptions = {
 };
 
 async function applyStealth(driver: WebDriver) {
-  // Herhangi bir sayfa JS'si çalışmadan önce script enjekte ederek otomasyon parmak izini azaltır.
+  // Otomasyon parmak izini azaltmak için herhangi bir sayfa JSsi çalışmadan önce script enjekte et.
   await (driver as any).sendDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
     source: `
       Object.defineProperty(navigator, 'webdriver', {
         get: () => undefined
       });
 
-      // Bazı siteler chrome runtime ve eklentileri kontrol eder
+      // Bazı siteler chrome çalışma ortamını ve eklentileri kontrol eder
       window.chrome = { runtime: {} };
       Object.defineProperty(navigator, 'plugins', {
         get: () => [1, 2, 3, 4, 5],
@@ -224,5 +224,5 @@ After navigation: title= Bienvenue dans Microsoft Rewards!
 Page loaded, sign in button found: Se connecter
 ```
 
-Tamam, bu henüz giriş yapmadığımız anlamına geliyor, şimdi giriş isteğini oluşturacağız ve aktiviteleri yapmak için Microsoft Rewards hesabımıza giriş yapıp yapamayacağımıza bakacağız.
-<!-- ## BU MAKALE HÂLÂ YAPIM AŞAMASINDADIR, YAKINDA GİRİŞ ADIMLARI VE AKTİVİTE BOTLAMA ADIMLARIYLA GÜNCELLEYECEĞİM! TAKİPTE KALIN. -->
+Bu sonuç hâlâ bağlantının kesik olduğunu doğruluyor, o yüzden şimdi giriş isteğini inşa edip aktiviteleri otomatikleştirmek için Microsoft Rewards hesabıma bağlantıyı test edeceğim.
+<!-- ## CET ARTICLE EST ENCORE EN COURS DE RÉDACTION, JE METTRAI À JOUR AVEC LES ÉTAPES DE CONNEXION ET DE BOTTING DES ACTIVITÉS BIENTÔT ! RESTE À L'ÉCOUTE. -->
