@@ -1,0 +1,236 @@
+import { t as __exportAll } from "./rolldown-runtime_D8jQpDG7.mjs";
+import { E as unescapeHTML, _ as renderTemplate, u as renderComponent, v as maybeRenderHead, w as addAttribute } from "./console_B4Ch7nu3.mjs";
+import { c as breadcrumbJsonLd, h as createComponent, l as collectionPageJsonLd, t as $$BaseLayout } from "./BaseLayout_DjXKcLim.mjs";
+import { t as ALL_LANGS } from "./types_BCRoIkYX.mjs";
+import { n as readAllArticleIndexes } from "./langContent_S7f5E-LS.mjs";
+import { i as createT } from "./i18n_Bu9Xwf1t.mjs";
+import { n as getAuthors } from "./authors_DpDBersm.mjs";
+import { t as isNew } from "./isNew_CQxT6q0L.mjs";
+/* empty css                   */
+// src/pages/blog/index.astro
+var blog_exports = /* @__PURE__ */ __exportAll({
+	default: () => $$Index,
+	file: () => $$file,
+	url: () => $$url
+});
+var $$Index = createComponent(($$result, $$props, $$slots) => {
+	const t = createT("en");
+	const allIndexes = readAllArticleIndexes();
+	function normalize(data) {
+		return data.map((item) => typeof item === "string" ? { slug: item } : item).filter(Boolean).sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());
+	}
+	const enArticles = normalize(allIndexes.en ?? []);
+	const HIDDEN_TAGS = /* @__PURE__ */ new Set(["honeypot"]);
+	const allTags = [...new Set(enArticles.flatMap((a) => a.tags ?? []).filter((t) => !HIDDEN_TAGS.has(t)))].sort();
+	const articlesJson = JSON.stringify({
+		en: enArticles,
+		langs: Object.fromEntries(ALL_LANGS.map((l) => [l, normalize(allIndexes[l] ?? [])])),
+		allTags
+	});
+	const clientScript = `
+(function() {
+var PAGE_SIZE = 15;
+var data = JSON.parse(document.getElementById("blog-data").textContent);
+var langData = data.langs;
+var activeTag = null;
+var searchQuery = "";
+var page = 0;
+var currentLang = "en";
+
+function detectLang() {
+  var stored = localStorage.getItem("fox-blog-lang");
+  if (stored && data.langs[stored]) return stored;
+  var prefs = navigator.languages || [navigator.language];
+  for (var i = 0; i < prefs.length; i++) {
+    var code = prefs[i].split("-")[0];
+    if (data.langs[code]) return code;
+  }
+  return "en";
+}
+
+function filterArticles() {
+  var list = langData[currentLang] || langData.en || [];
+  if (activeTag) list = list.filter(function (a) { return a.tags && a.tags.indexOf(activeTag) !== -1; });
+  if (searchQuery) {
+    var q = searchQuery.toLowerCase();
+    list = list.filter(function (a) {
+      return (a.title && a.title.toLowerCase().indexOf(q) !== -1) ||
+             (a.description && a.description.toLowerCase().indexOf(q) !== -1) ||
+             (a.tags && a.tags.some(function (t) { return t.toLowerCase().indexOf(q) !== -1; })) ||
+             (a.body && a.body.toLowerCase().indexOf(q) !== -1);
+    });
+  }
+  return list;
+}
+
+function render() {
+  var filtered = filterArticles();
+  var pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  var safePage = Math.min(page, pageCount - 1);
+  if (safePage < 0) safePage = 0;
+  page = safePage;
+  var paged = filtered.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+
+  var grid = document.getElementById("blog-grid");
+  var readSlugs = JSON.parse(localStorage.getItem("read-articles") || "[]");
+  var readSet = {};
+  for (var i = 0; i < readSlugs.length; i++) readSet[readSlugs[i]] = true;
+
+  grid.innerHTML = "";
+  for (var i = 0; i < paged.length; i++) {
+    var a = paged[i];
+    var slug = a.slug;
+    var date = a.date;
+    var formattedDate = date ? new Date(date + "T00:00:00").toLocaleDateString(currentLang, { year: "numeric", month: "long", day: "numeric" }) : "";
+    var isRead = readSet[slug] ? true : false;
+    var showNew = date && (Date.now() - new Date(date + "T00:00:00Z").getTime()) / (1000 * 60 * 60 * 24) < 7;
+
+    var html = '<a href="/blog/' + slug + '" class="blog-card' + (isRead ? " read" : "") + '" data-slug="' + slug + '">';
+    if (a.image) html += '<img class="blog-card-img" src="' + a.image + '" alt="" loading="lazy" decoding="async" />';
+    html += '<div class="blog-card-body">';
+    html += '<h3 class="blog-card-title">' + (a.title || slug.replace(/-/g, " ")) + "</h3>";
+    if (showNew || a.aiGenerated || a.sponsored) {
+      html += '<div class="blog-card-badges">';
+      if (showNew) html += '<span class="new-badge">NEW</span>';
+      if (a.aiGenerated) html += '<span class="ai-badge">AI</span>';
+      if (a.sponsored) html += '<span class="sponsored-badge">\u2764\ufe0f Sponsoris\u00e9</span>';
+      html += "</div>";
+    }
+    if (a.description) html += '<p class="blog-card-desc">' + a.description + "</p>";
+    if (a.tags && a.tags.length > 0) {
+      html += '<div class="blog-card-tags">';
+      for (var j = 0; j < a.tags.length; j++) html += '<span class="tag-badge">' + a.tags[j] + "</span>";
+      html += "</div>";
+    }
+    html += '</div><div class="blog-card-footer"><div class="blog-card-meta">';
+    if (date) html += '<time datetime="' + date + '">' + formattedDate + "</time>";
+    if (a.readingTime) html += '<span class="blog-card-reading-time">' + a.readingTime + " min read</span>";
+    html += '</div><div class="blog-card-authors">';
+    if (a.authors) {
+      for (var j = 0; j < a.authors.length; j++) {
+        html += '<img class="blog-card-author-avatar" src="https://github.com/' + a.authors[j] + '.png" alt="" width="20" height="20" loading="lazy" decoding="async" />';
+      }
+    }
+    html += "</div>";
+    html += '<button type="button" class="bookmark-btn' + (readSet[slug] ? " active" : "") + '" data-slug="' + slug + '" aria-label="Bookmark">\u2605</button>';
+    html += "</div></a>";
+    grid.innerHTML += html;
+  }
+
+  var prevBtn = document.getElementById("prev-page");
+  var nextBtn = document.getElementById("next-page");
+  var pageInfo = document.getElementById("page-info");
+  prevBtn.disabled = safePage <= 0;
+  nextBtn.disabled = safePage >= pageCount - 1;
+  pageInfo.textContent = (safePage + 1) + " / " + pageCount;
+}
+
+document.getElementById("search-input").addEventListener("input", function (e) {
+  searchQuery = e.target.value;
+  page = 0;
+  document.getElementById("search-clear").style.display = searchQuery ? "" : "none";
+  render();
+});
+
+document.getElementById("search-clear").addEventListener("click", function () {
+  document.getElementById("search-input").value = "";
+  searchQuery = "";
+  page = 0;
+  this.style.display = "none";
+  render();
+});
+
+document.getElementById("tag-filter").addEventListener("click", function (e) {
+  var btn = (e.target).closest(".tag-btn");
+  if (!btn) return;
+  var tag = btn.getAttribute("data-tag") || null;
+  activeTag = tag;
+  page = 0;
+  document.querySelectorAll("#tag-filter .tag-btn").forEach(function (b) { b.classList.toggle("active", b === btn); });
+  render();
+});
+
+document.getElementById("prev-page").addEventListener("click", function () {
+  if (page > 0) { page--; render(); }
+});
+document.getElementById("next-page").addEventListener("click", function () {
+  page++; render();
+});
+
+document.getElementById("random-btn").addEventListener("click", function () {
+  var filtered = filterArticles();
+  if (filtered.length === 0) return;
+  var pick = filtered[Math.floor(Math.random() * filtered.length)];
+  window.location.href = "/blog/" + pick.slug;
+});
+
+document.getElementById("blog-grid").addEventListener("click", function (e) {
+  var badge = (e.target).closest(".tag-badge");
+  if (badge) {
+    e.preventDefault();
+    var tag = badge.textContent;
+    activeTag = tag;
+    page = 0;
+    document.querySelectorAll("#tag-filter .tag-btn").forEach(function (b) {
+      b.classList.toggle("active", b.getAttribute("data-tag") === tag);
+    });
+    render();
+    return;
+  }
+
+  var btn = (e.target).closest(".bookmark-btn");
+  if (btn) {
+    e.preventDefault();
+    var slug = btn.getAttribute("data-slug");
+    var stored = JSON.parse(localStorage.getItem("read-articles") || "[]");
+    var idx = stored.indexOf(slug);
+    if (idx === -1) stored.push(slug); else stored.splice(idx, 1);
+    localStorage.setItem("read-articles", JSON.stringify(stored));
+    render();
+    return;
+  }
+
+  var card = (e.target).closest(".blog-card");
+  if (!card) return;
+  var slug = card.getAttribute("data-slug");
+  if (!slug) return;
+  var stored = JSON.parse(localStorage.getItem("read-articles") || "[]");
+  if (stored.indexOf(slug) === -1) {
+    stored.push(slug);
+    localStorage.setItem("read-articles", JSON.stringify(stored));
+  }
+});
+
+currentLang = detectLang();
+render();
+})();
+`;
+	const blogJsonLd = [breadcrumbJsonLd([{
+		name: "Home",
+		url: "/"
+	}, {
+		name: "Blog",
+		url: "/blog"
+	}]), collectionPageJsonLd("Articles about web development, automation, and open-source")].map((s) => `<script type="application/ld+json">${s}<\/script>`).join("\n");
+	return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, {
+		"title": "Blog",
+		"description": "Articles about web development, automation, and open-source",
+		"extraHead": blogJsonLd,
+		"wide": true
+	}, { "default": ($$result) => renderTemplate`${maybeRenderHead($$result)}<div id="blog-root" class="blog-list"><div class="blog-list-header"><h2>${t("blog.title")}</h2><button type="button" class="random-btn" id="random-btn">🎲 ${t("blog.random")}</button></div><div class="search-bar"><input type="search" id="search-input"${addAttribute(t("blog.search"), "placeholder")}><button type="button" class="search-clear" id="search-clear"${addAttribute(t("search.clear"), "aria-label")} style="display:none">&times;</button></div><div class="tag-filter" id="tag-filter"><button type="button" class="tag-btn active" data-tag="">${t("blog.filter.all")}</button>${allTags.map((tag) => renderTemplate`<button type="button" class="tag-btn"${addAttribute(tag, "data-tag")}>${tag}</button>`)}</div><div id="blog-grid" class="blog-grid">${enArticles.map((article) => {
+		const { slug, title, description, date, tags, image, authors, aiGenerated, sponsored, readingTime } = article;
+		const authorList = getAuthors(authors);
+		const formattedDate = date ? (/* @__PURE__ */ new Date(`${date}T00:00:00`)).toLocaleDateString("en-US", {
+			year: "numeric",
+			month: "long",
+			day: "numeric"
+		}) : "";
+		const showNew = isNew(date);
+		return renderTemplate`<a${addAttribute(`/blog/${slug}`, "href")} class="blog-card"${addAttribute(slug, "data-slug")}>${image && renderTemplate`<img class="blog-card-img"${addAttribute(image, "src")} alt="" loading="lazy" decoding="async">`}<div class="blog-card-body"><h3 class="blog-card-title">${title ?? slug?.replace(/-/g, " ")}</h3>${(showNew || aiGenerated || sponsored) && renderTemplate`<div class="blog-card-badges">${showNew && renderTemplate`<span class="new-badge">NEW</span>`}${aiGenerated && renderTemplate`<span class="ai-badge">${t("article.ai")}</span>`}${sponsored && renderTemplate`<span class="sponsored-badge">💕 Sponsorisé</span>`}</div>`}${description && renderTemplate`<p class="blog-card-desc">${description}</p>`}${tags && tags.length > 0 && renderTemplate`<div class="blog-card-tags">${tags.map((tag) => renderTemplate`<span class="tag-badge">${tag}</span>`)}</div>`}</div><div class="blog-card-footer"><div class="blog-card-meta">${date && renderTemplate`<time${addAttribute(date, "datetime")}>${formattedDate}</time>`}${readingTime && renderTemplate`<span class="blog-card-reading-time">${t("article.minRead", { n: readingTime })}</span>`}</div><div class="blog-card-authors">${authorList.map((a) => renderTemplate`<img class="blog-card-author-avatar"${addAttribute(a.avatar ?? `https://github.com/${a.id}.png`, "src")}${addAttribute(a.name, "alt")}${addAttribute(a.name, "title")} width="20" height="20" loading="lazy" decoding="async">`)}</div></div></a>`;
+	})}</div><div class="pagination" id="pagination"><button type="button" id="prev-page" disabled>&#8592;</button><span id="page-info">1 / 1</span><button type="button" id="next-page" disabled>&#8594;</button></div></div><script id="blog-data" type="application/json">${unescapeHTML(articlesJson)}<\/script><script>${unescapeHTML(clientScript)}<\/script>` })}`;
+}, "/home/runner/work/fox3000foxy.github.io/fox3000foxy.github.io/src/pages/blog/index.astro", void 0);
+var $$file = "/home/runner/work/fox3000foxy.github.io/fox3000foxy.github.io/src/pages/blog/index.astro";
+var $$url = "/blog";
+// \0virtual:astro:page:src/pages/blog/index@_@astro
+var page = () => blog_exports;
+export { page };

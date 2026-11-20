@@ -1,0 +1,89 @@
+import { t as __exportAll } from "./rolldown-runtime_D8jQpDG7.mjs";
+import { t as ALL_LANGS } from "./types_BCRoIkYX.mjs";
+import { r as SITE_URL, t as LANG_LABELS } from "./i18n_Bu9Xwf1t.mjs";
+import fs from "node:fs";
+import path from "node:path";
+// src/pages/feed/[lang].xml.ts
+var _lang__xml_exports = /* @__PURE__ */ __exportAll({
+	GET: () => GET,
+	getStaticPaths: () => getStaticPaths
+});
+function escapeXml(s) {
+	return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+function getStaticPaths() {
+	return ALL_LANGS.map((lang) => ({ params: { lang } }));
+}
+function GET({ params }) {
+	const lang = params.lang;
+	const siteUrl = SITE_URL;
+	const label = LANG_LABELS[lang];
+	const title = `Fox's Blog (${label})`;
+	const description = `Fox3000foxy's blog about web development, automation, and open-source -- ${label}`;
+	const feedUrl = `${siteUrl}/feed.${lang}.xml`;
+	const now = (/* @__PURE__ */ new Date()).toUTCString();
+	let indexRaw = "[]";
+	try {
+		indexRaw = fs.readFileSync(path.resolve(`public/articles/${lang}/index.json`), "utf-8");
+	} catch {
+		try {
+			indexRaw = fs.readFileSync(path.resolve("public/articles/en/index.json"), "utf-8");
+		} catch {}
+	}
+	const itemsXml = JSON.parse(indexRaw).map((article) => {
+		const slug = article.slug;
+		const mdPath = path.resolve(`public/articles/${lang}/${slug}.md`);
+		let body = "";
+		let image = "";
+		try {
+			const raw = fs.readFileSync(mdPath, "utf-8");
+			const fmEnd = raw.indexOf("\n---\n", 4);
+			body = fmEnd !== -1 && raw.startsWith("---\n") ? raw.slice(fmEnd + 5).trim() : raw;
+			const ogPath = path.resolve(`public/og/${slug}.png`);
+			if (fs.existsSync(ogPath)) image = `${siteUrl}/og/${slug}.png`;
+			else {
+				const firstImg = body.match(/!\[.*?\]\((.*?)\)/);
+				if (firstImg) image = firstImg[1].startsWith("http") ? firstImg[1] : `${siteUrl}${firstImg[1].replace(/^\.?\//, "/")}`;
+			}
+		} catch {}
+		const tags = article.tags || [];
+		const pubDate = article.date ? new Date(article.date).toUTCString() : now;
+		const articleUrl = `${siteUrl}/blog/${slug}`;
+		const tagXml = tags.map((t) => `      <category>${escapeXml(t)}</category>`).join("\n");
+		const enclosureXml = image ? `\n      <enclosure url="${escapeXml(image)}" type="image/png" length="0" />` : "";
+		return `    <item>
+      <title>${escapeXml(article.title || slug)}</title>
+      <link>${articleUrl}</link>
+      <guid isPermaLink="true">${articleUrl}</guid>
+      <description>${escapeXml(article.description || "")}</description>
+      <pubDate>${pubDate}</pubDate>${enclosureXml}
+${tagXml}    </item>`;
+	}).join("\n");
+	const altLinks = ALL_LANGS.filter((l) => l !== lang).map((l) => `    <atom:link href="${siteUrl}/feed.${l}.xml" rel="alternate" type="application/rss+xml" hreflang="${l}" />`).join("\n");
+	return new Response(`<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(title)}</title>
+    <link>${siteUrl}</link>
+    <description>${escapeXml(description)}</description>
+    <language>${lang}</language>
+    <lastBuildDate>${now}</lastBuildDate>
+    <managingEditor>fox3000foxy@users.noreply.github.com (Fox3000foxy)</managingEditor>
+    <webMaster>fox3000foxy@users.noreply.github.com (Fox3000foxy)</webMaster>
+    <generator>WordPress 5.9.3</generator>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <image>
+      <url>${siteUrl}/og/home.png</url>
+      <title>${escapeXml(title)}</title>
+      <link>${siteUrl}</link>
+    </image>
+    <atom:link href="${feedUrl}" rel="self" type="application/rss+xml" />
+    <atom:link href="${siteUrl}/feed.xml" rel="alternate" type="application/rss+xml" hreflang="x-default" />
+${altLinks}
+${itemsXml}
+  </channel>
+</rss>`, { headers: { "Content-Type": "application/xml; charset=utf-8" } });
+}
+// \0virtual:astro:page:src/pages/feed/[lang].xml@_@ts
+var page = () => _lang__xml_exports;
+export { page };
