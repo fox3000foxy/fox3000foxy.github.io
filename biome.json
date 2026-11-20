@@ -17,12 +17,11 @@
 				"noMisusedPromises": "error",
 				"noImpliedEval": "error",
 				"noBaseToString": "off",
-				"noLoopFunc": "off",
-				"noExcessiveNestedCallbacks": "off",
 				"noUnsafePlusOperands": "error",
 				"noUselessTypeConversion": "error"
 			},
 			"suspicious": {
+				"noLoopFunc": "off",
 				"noDebugger": "off",
 				"noExplicitAny": "error",
 				"noAssignInExpressions": "error",

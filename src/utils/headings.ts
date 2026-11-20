@@ -16,7 +16,7 @@ export function slugify(text: string): string {
 export function parseHeadings(markdown: string): TocEntry[] {
 	const regex = /^(#{2,3})\s+(.+)$/gm;
 	const entries: TocEntry[] = [];
-	for (;;) {
+	while (true) {
 		const match = regex.exec(markdown);
 		if (match === null) {
 			break;
