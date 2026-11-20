@@ -10,6 +10,8 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "v5Qvp6CO5R7HnyMWliugcjvkqhl70y53TpW7Q40WnF9n45OOdz2GkLnitG6W/06sEacXpkYGCgdm7e8k2KKyuQ=="
 ---
 # 
 
@@ -119,7 +121,7 @@ So einfach ist das!
 
 ## Homepage und Portfolio
 
-Home- und Portfolio-Seiten funktionieren genau auf die gleiche Weise: sie laden eine Markdown-Datei(`home.md`oder`portfolio.md`) und machen es in HTML.
+Home- und Portfolio-Seiten funktionieren genau auf die gleiche Weise: sie laden eine Markdown-Datei (`home.md`oder`portfolio.md`) und machen es in HTML.
 
 Die Besonderheit ist, dass sie ein benutzerdefiniertes Sanizizationsschema verwenden, das Attribute erlaubt`class`und`style`HTML-Elemente. Dadurch kann ich stilisiertes HTml direkt in den Markdown schreiben, wie z.B. Bildergalerien.
 
@@ -135,7 +137,7 @@ Der Footer ist minimalistisch: nur ein Copyright mit dem laufenden Jahr dynamisc
 
 ## Das dunkle Thema
 
-Die Website bleibt ständig dunkel. Ich habe diese Wahl bewusst, um eine komfortable Lesung am Abend zu halten:`color-scheme: dark`ist in globalen Stile definiert, mit einem schwarzen Hintergrund`#000`und des weißen Textes`#fff`. Die Links sind blau(`#64b5f6`) und werden bei der Überflug (`#81c784`).
+Die Website bleibt ständig dunkel. Ich habe diese Wahl bewusst, um eine komfortable Lesung am Abend zu halten:`color-scheme: dark`ist in globalen Stile definiert, mit einem schwarzen Hintergrund`#000`und des weißen Textes`#fff`. Die Links sind blau (`#64b5f6`) und werden bei der Überflug (`#81c784`).
 
 ## Wie ich einen Artikel schreibe
 

@@ -19,6 +19,8 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "/c7Sd3ryKp8lhJ+S9S3OKOQkJXEZAQSfWoEEZsD/9nXMh7W5mdAufhueKPsA8GHPAlSSYopSTowG6nuAuoQTmg=="
 ---
 # 
 
@@ -39,7 +41,7 @@ Ich werde jeden Bot mit dir dekorieren, mir ihren Code ansehen und dann die Brü
 
 ---
 
-## Eliza(1966): die Kunst, zu glauben, man versteh's.
+## Eliza (1966): die Kunst, zu glauben, man versteh's.
 
 Ich beginne mit der ältesten und in meinen Augen beeindruckendsten Einfachheit. ELIZA hat keine ** Intelligenz** im modernen Sinne des Wortes. du funktioniert nur mit Textmustern und etwas Permutation.
 
@@ -65,7 +67,7 @@ Wenn du "Hallo, ich bin Sad Today" sagst, Eliza:
 
 5. Probiere jede Zerstörungspattern in der Reihenfolge
 
-6. Wenn es Spiel, wählt die nächste Remontage-Regel(Round-Robin)
+6. Wenn es Spiel, wählt die nächste Remontage-Regel (Round-Robin)
 
 7. Ersetzt die`(1)` , `(2)`usw. von den gefangenen Teilen
 
@@ -125,7 +127,7 @@ In meinem Port lade ich die Skripte auf`.ela`(Original-S-Ausdruck-Format) lege i
 
 ---
 
-## PARRY(1972): der erste Kater mit Emotionen
+## PARRY (1972): der erste Kater mit Emotionen
 
 Sechs Jahre nach Eliza schuf Kenneth Colby (Psychiater in Stanford) PARRY: ein Kater, der einen Patienten mit Paranoid **schizophrenie simuliert. Dort, wo Eliza wie ein leerer Spiegel funktionierte, fährt PARY ein echtes ** internes emotionales Modell** ein. Dieser Kontrast hat mich am stärksten geprägt, indem er sie nach dem anderen trug.
 
@@ -148,10 +150,10 @@ PARRY hat 200+ Überzeugungen in der Datei gespeichert`bel`:
 ```lisp
 (BELIEF (FEAR 5) ((PAT PARANOIA)) BELIEF GROUP)
 ```
-Jeder Glaube hat eine Kategorie (HUM = der Patient, HUM2 = die anderen, DOC = der Doktor, INT = das Verhör, NN = die Absichten) und eine Kraft(0-5).`TH2` , `EMOTE` , `IF`) die Überzeugungen untereinander verbreiten ,
+Jeder Glaube hat eine Kategorie (HUM = der Patient, HUM2 = die anderen, DOC = der Doktor, INT = das Verhör, NN = die Absichten) und eine Kraft (0-5).`TH2` , `EMOTE` , `IF`) die Überzeugungen untereinander verbreiten ,
 
 - **TH2**: Wenn ein A-Glaube einen Schwellenwert überschreitet, wird er noch stärker und seine Folgen steigen.
-- **EMOTE**: Wenn ein Glaube einen Schwellenwert überschreitet, löst er einen emotionalen Sprung aus(anger/fear/hurt)
+- **EMOTE**: Wenn ein Glaube einen Schwellenwert überschreitet, löst er einen emotionalen Sprung aus (anger/fear/hurt)
 - **IF**: Bedingungsmäßig – wenn A wahr ist, dann wird B auf einem bestimmten Niveau wahr
 
 ### Die Hierarchie der Wahnvorstellungen (flare system)
@@ -172,7 +174,7 @@ CHEAT → "PEOPLE ARE ALWAYS TRYING TO CHEAT ME."
   ↓
 MAFIA → "THE MAFIA IS OUT TO GET ME."
 ```
-Jedes Schlüsselwort löst eine vorgeschriebene Antwort (über das Pattern matching) aus, und wenn du dem Thema folgst, PARRY zieht allmählich in Richtung seiner zentralen Verfolgungswahn. Sobald ein Flare "ausgeschaltet" ist, wird es inaktiv(`deadFlares`) und PARRY geht auf den nächsten, als Gesprächspartner, der sein Thema graben. Ich mag diese Mechanik sehr, weil sie eine erzählerische Fortschritt mit sehr wenig Code erzeugt.
+Jedes Schlüsselwort löst eine vorgeschriebene Antwort (über das Pattern matching) aus, und wenn du dem Thema folgst, PARRY zieht allmählich in Richtung seiner zentralen Verfolgungswahn. Sobald ein Flare "ausgeschaltet" ist, wird es inaktiv (`deadFlares`) und PARRY geht auf den nächsten, als Gesprächspartner, der sein Thema graben. Ich mag diese Mechanik sehr, weil sie eine erzählerische Fortschritt mit sehr wenig Code erzeugt.
 
 ### Warum PARRY historisch ist
 
@@ -207,7 +209,7 @@ Was mich mit ELIZA vs PARRY beeindruckt, ist die Begegnung zwischen zwei Program
 
 ---
 
-## ALICE(1995): Das Pattern-Matching in großem Maßstab
+## ALICE (1995): Das Pattern-Matching in großem Maßstab
 
 ALICE (Aprificial Linguistic Internet Computer Entity) wurde 1995 von Richard Wallace gegründet und gewann den **Loebner Prize** dreimal (2000, 2001, 2004). Wo ElIZA einige hundert Regeln hatte und PARRY ein paar tausend, ALICe a **99 524**, verteilt auf 66 Dateien AIML. Als ich diesen Korpus zum ersten Mal öffnete, habe ich gemessen, was "große Skala" damals bedeutete.
 
@@ -253,13 +255,13 @@ function findMatch(input: string, categories: Category[]): Match | null {
 ```
 ### Warum ALICE die Loebner beherrschte
 
-99 524 Kategorien, es ist eine Zahl, die alles ändert. Eliza gab die Illusion der Intelligenz, weil seine wenigen Regeln waren gut für einen bestimmten Kontext(Therapie) konzipiert. ALICE deckt so viele Themen, dass sie den Eindruck einer echten allgemeinen Kultur vermittelt: Wissenschaft, Politik, Humor, Sport, Emotionen, alles ist dort. Ich halte eine Lektion, die ich noch anwenden: eine breite und sorgfältige Abdeckung gleicht das Fehlen von tiefer Argumentation.
+99 524 Kategorien, es ist eine Zahl, die alles ändert. Eliza gab die Illusion der Intelligenz, weil seine wenigen Regeln waren gut für einen bestimmten Kontext (Therapie) konzipiert. ALICE deckt so viele Themen, dass sie den Eindruck einer echten allgemeinen Kultur vermittelt: Wissenschaft, Politik, Humor, Sport, Emotionen, alles ist dort. Ich halte eine Lektion, die ich noch anwenden: eine breite und sorgfältige Abdeckung gleicht das Fehlen von tiefer Argumentation.
 
 [➡ Voir le code source](https://github.com/fox3000foxy/chatbots/tree/main/alice)
 
 ---
 
-## Jabberwacky(1997) & Cleverbot(2008): Epistemologischer Bruch
+## Jabberwacky (1997) & Cleverbot (2008): Epistemologischer Bruch
 
 Alle bisherigen Bots teilen eine Hypothese: ** man muss die Antworten schreiben**. ELIZA hat seine Regeln S-Ausdrücke, PARRY seine self-Pattern, ALICE seine Kategorien AIML. Rollo Carpenter hat den totalen Kontrast mit einer radikalen Frage: **und wenn man die letzten Gespräche die Antworten liefern lassen würde?** Ich finde diese Umkehr mutig, weil er jede manuelle Schreibweise von Regeln aufgibt.
 
@@ -300,9 +302,9 @@ Hier ist das Herz des Scorings, mit meiner eigenen Heuristik inspiriert von den 
 ```typescript
 const score = 0.65 * relevance + 0.25 * contextFit + 0.10 * recencyBonus;
 ```
-- **Relevance **(0.65): Ähnlichkeit zwischen Benutzereingabe und historischer Zeile
-- **contextFit **(0.25): Ähnlichkeit zwischen dem aktuellen Gespräch und dem, was vor der historischen Zeile stand
-- **RecencyBonus **(0.10): Die Erinnerungen der letzten Zeit zählen etwas mehr (die Persönlichkeit des Bots ist mit der Zeit abgefallen)
+- **Relevance** (0.65): Ähnlichkeit zwischen Benutzereingabe und historischer Zeile
+- **contextFit** (0.25): Ähnlichkeit zwischen dem aktuellen Gespräch und dem, was vor der historischen Zeile stand
+- **RecencyBonus** (0.10): Die Erinnerungen der letzten Zeit zählen etwas mehr (die Persönlichkeit des Bots ist mit der Zeit abgefallen)
 
 Der Pick ist probabilistisch (roulette-wheel selection): der beste Kandidat gewinnt häufiger, mit einem Anteil der Variabilität, die Vielfalt gibt. Ich schätze diese Wahl, weil es Gespräche weniger vorhersehbar macht, wenn du den Bot mehrmals testen.
 
@@ -355,7 +357,7 @@ Die fünf Bots, die ich dir gerade vorgestellt habe, teilen ein grundlegendes Me
 
 du teilen also die gleiche Glasdecke: sie antworten nur auf das, was ausdrücklich geplant oder registriert wurde. ELIZA ist verloren, wenn du aus dem therapeutischen Rahmen herauskommst. PARRY spricht nur von seinen paranoiden Themen. ALICE lernt nichts von seinen Gesprächen. Jabberwacky antwortet nur durch bereits ausgesprochene Nachbildungen. Wenn du diese Grenzen tesstest, verstehst du schnell, warum diese Generation begrenzt hat.
 
-Die LLM (Language Models) überqueren diese Decke durch radikale Paradigmenwechsel: Statt Symbole zu manipulieren, konvertieren sie die Sprache in **Zahlen** und lernen **statistische Beziehungen** zwischen diesen Zahlen. Sie erzeugen jedes Token auf dem Fliegen, indem sie Wahrscheinlichkeiten berechnen, indem es Wissen in ihren Gewichten kodiert anstatt vorgeschriebene Antworten gibt. Ich finde diesen Umschwung faszinierend, weil er die Logik der vorhergehenden Bots völlig umkehrt. Schauen wir uns kurz an, wie das funktioniert.
+Die LLM (Language Models) überqueren diese Decke durch radikale Paradigmenwechsel: Statt Symbole zu manipulieren, konvertieren sie die Sprache in **Zahlen** und lernen **statistische Beziehungen** zwischen diesen Zahlen. Sie erzeugen jedes Token auf dem Fliegen, indem sie Wahrscheinlichkeiten berechnen, indem es Wissen in ihren Gewichten kodiert anstatt vorgeschriebene Antworten gibt. Ich finde diesen Umschwung faszinierend, weil er die Logik der vorhergehenden Bots völlig umkehrt. Lassen Sie uns schnell sehen, wie es funktioniert.
 
 ### 1. Tokenization
 
@@ -368,7 +370,7 @@ Jeder Token hat eine digitale ID in einem Vokabular (typischerweise 32.000 bis 1
 
 ### 2. Embeddings
 
-Jeder Token ID wird in einen **Vektor** – eine Tabelle von flatternden Zahlen (typischerweise 4096 Dimensionen für ein Modell mittlerer Größe) umgewandelt. Dieser Vektor ist ein **Ventilation **(embedding), das die Bedeutung des Token in einem mathematischen Raum kodiert, in dem semantisch naheliegende Tokens nahe verwandte Vektoren haben:
+Jeder Token ID wird in einen **Vektor** – eine Tabelle von flatternden Zahlen (typischerweise 4096 Dimensionen für ein Modell mittlerer Größe) umgewandelt. Dieser Vektor ist ein **Ventilation** (embedding), das die Bedeutung des Token in einem mathematischen Raum kodiert, in dem semantisch naheliegende Tokens nahe verwandte Vektoren haben:
 ```
 vecteur("roi")  − vecteur("homme") + vecteur("femme")  ≈  vecteur("reine")
 ```
@@ -412,10 +414,10 @@ Jeder Token wird nach seiner Wahrscheinlichkeit (Temperatur, Top-K, Top -p kontr
 
 | Aspekt | Symbolische Bots (ELIZA, PARRY, ALICE) | Modernes LLM |
 |--------|--------------------------------------|--------------|
-| Vertretung | Ausdrückliche Worte und Regeln | Digitale Vektoren(embeddings) |
+| Vertretung | Ausdrückliche Worte und Regeln | Digitale Vektoren (embeddings) |
 | Erzeugung | Auswahl in vorgeschriebenen Antworten | Probabilist-Vorausschätzung token von token |
 | Kenntnisse | In Regeldateien gespeichert | In den Gewichten des Netzes kodiert |
-| Lernen | Handbuch(Regeln) | Automatisch(Korpustraining) |
+| Lernen | Handbuch (Regeln) | Automatisch (Korpustraining) |
 | Robustheit | Keine aus den vorgesehenen Gründen nicht berücksichtigt | Allgemein bei nie gesehenen Einträgen |
 | Interpretabilität | Perfekt (die Regeln können gelesen werden) | Begrenzte Menge (Black Box) |
 
@@ -436,7 +438,7 @@ Dieser Artikel beschreibt die komplette Architektur eines Discord LLM-based Bots
 
 - **Prioritäts-Auslösesystem** (Beschreibung > DM > Name > Schlüsselwort > follow-up > Zufallsfall)
 
-- **Humanverhalten**: variable Konzentration, Schlagfehler, Zögern(15%), Vergessenheit(3%), thematische Müdigkeit
+- **Humanverhalten**: variable Konzentration, Schlagfehler, Zögern (15%), Vergessenheit (3%), thematische Müdigkeit
 
 - **Schlafzeiten**: der Bot schläft, verlangsamt oder ignoriert je nach Stunde
 
@@ -448,7 +450,7 @@ Was diesen Artikel mit den historischen Chatbots verbindet, ist die gleiche Such
 
 ### [Luna Protocol: pourquoi j'ai fine-tuné un modèle de 1,5B](/articles/fr/luna-protocol-official-models)
 
-Der zweite Artikel untersucht Fine-Tuning und Few-Shot Priming. Meine zentrale Entdeckung: **ein kleineres Modell(1,5B) wurde auf weniger Daten (50k Proben) angetrieben und übertrifft ein größeres Modell(3B)**, wenn man es richtig mit few-shot Beispielen anfängt. Ich war wirklich überrascht, dass dieses Ergebnis, als ich es gemessen habe.
+Der zweite Artikel untersucht Fine-Tuning und Few-Shot Priming. Meine zentrale Entdeckung: **ein kleineres Modell (1,5B) wurde auf weniger Daten (50k Proben) angetrieben und übertrifft ein größeres Modell (3B)**, wenn man es richtig mit few-shot Beispielen anfängt. Ich war wirklich überrascht, dass dieses Ergebnis, als ich es gemessen habe.
 
 Dies ist eine Lektion, die direkt mit historischen Katzbots klingt:
 

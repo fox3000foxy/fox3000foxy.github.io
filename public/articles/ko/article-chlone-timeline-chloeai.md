@@ -5,7 +5,7 @@ date: 2026-09-18
 tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "z8Z87zPEKlhOhevGSnIbEyXNolYuAT0HuB7wxGhV1e+H3AgmRHyFlmxbV+X4W7BqS0cfBZipb/g/AQcJ6T0qHQ=="
+author_sig: "+nyDLPcTSA8bBQxPkwpTIngB+Vkj8jeMh9FBWkplxT/mgzyJOIvxLPexkpLNikB+TTBlcnxO8L55QNTRV4bekA=="
 ---
 
 # Chlone: Discord에서 제 말투를 복제하기까지 6일

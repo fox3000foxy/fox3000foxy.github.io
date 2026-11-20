@@ -12,6 +12,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "ruGbWib2blXF/kHIql3jBggGwZN8Nc4EKRGMhe3JBhHFql9QaxDgktbvq8teuFM/TKUWkkKtZlN7LlaMyw3+BQ=="
 ---
 
 # 5 วิธีเบี่ยงเบนใช้ GitHub Actions

@@ -10,7 +10,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "5762lqoZSUNVHmDprCv91sxGCKpiL7Qt9H6SS/NlbGXFlscyFEhPEniJBA/HmboFb9eGPQr2zZ7vtLLlHHrXYQ=="
+author_sig: "ha/CXYJCQWXQY6Wqq8myzxVkKVdrvtrXzy3op0/zJGZdbkUrvT2813dVx9jkniB9UowrnbTuRC0LC3jVLulPgg=="
 ---
 
 # valorant-short-maker: 제 Valorant 쇼츠를 혼자 만들어내는 파이프라인

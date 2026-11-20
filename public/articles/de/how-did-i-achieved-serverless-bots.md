@@ -11,6 +11,8 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "7KrHhmx/oYYIES+blvf/z5ELdSk9dt5Vu7bB+hxoA14GZ07+S2vlwo74F1d1T6YwGjC6eyvOkVrVMBY0pO+Xcw=="
 ---
 ## 
 
@@ -154,7 +156,7 @@ Du musst erst mal nachsehen, dann geh, dann ist der Befehl wichtig.
 Nibi ist ein Discount-Bot, um Japanisch zu lernen. Einfache Befehle:
 
 *   `/dictionary kanji`→ zeigt die Definitionen
-*   `/pronounce テキスト`→ erzeugt TTS(text-to-speech)
+*   `/pronounce テキスト`→ erzeugt TTS (text-to-speech)
 *   `/hello`→ Empfangsbotschaft
 
 Jeder Befehl ist eine TypeScript-Datei:
@@ -411,17 +413,17 @@ const { data, error } = await supabase
   .eq('discord_id', userId)
   .single();
 ```
-Der Kunde Supabase(`@supabase/supabase-js`) verwendet`fetch`Unter der Haube.`fetch`ist natives auf Workers. Null Konfiguration, Null Treiber, Null dauerhafte Verbindung.
+Der Kunde Supabase (`@supabase/supabase-js`) verwendet`fetch`Unter der Haube.`fetch`ist natives auf Workers. Null Konfiguration, Null Treiber, Null dauerhafte Verbindung.
 
 | Datenbank | Kompatibel Workers? | Warum |
 | --- | --- | --- |
 | **Superbase** | ✓ Ja | REST API ohne Status, reines HTTP |
-| **PlanetScale(MySQL)** | Teilweise | Nur HTTPS-Verbindung, keine langen Transaktionen |
+| **PlanetScale (MySQL)** | Teilweise | Nur HTTPS-Verbindung, keine langen Transaktionen |
 | **Neon** | Teilweise | Serverless-Branches aber TCP-Treiber erforderlich |
-| **Turso(libSQL)** | Teilweise | HTTP möglich, aber gesperrt |
+| **Turso (libSQL)** | Teilweise | HTTP möglich, aber gesperrt |
 | **Prisma/Prisima Postgres** | ✓ Nein | Dauerhaftes TCP-Bedarfs-Verhältnis |
 | **MongoDB Atlas** | ✓ Nein | Driver TCP, kein natives REST API |
-| **Redis(Upstash)** | ✓ Ja | REST API HTTP |
+| **Redis (Upstash)** | ✓ Ja | REST API HTTP |
 
 Der wahre Vorteil von Supabase ist nicht nur die DB – das ist das ganze Ökosystem, das als edge-first gedacht wird:
 
@@ -545,7 +547,7 @@ Hono läuft überall. Du kannst den gleichen Code auf Cloudflare ET Vercel berei
 2.  ÖFFENTLICHKEITS-kopieren\_KEY, BOT\_TOKEN, APP\_ID
 3.  Projekt erstellen:
 4.  Schreibst du index.ts (echte Signatur + Routing)
-5.  Slash commands speichern(einmal):
+5.  Slash commands speichern (einmal):
 6.  Deploy:
 7.  URL in Discord setzen (Developer Portal → Application → Wechselwirkungen Endpoint URL)
 8.  Discord Testest du die Verbindung (du musst PING antworten)
@@ -579,8 +581,8 @@ Ich werde wahrscheinlich einen Artikel über ein Projekt schreiben, das ich als 
 **Die 3 Punkte, die zu berücksichtigen sind:**
 
 1.  **Interaction endpoints = HTTP serverless** – ohne WebSocket, ohne Verbindung. Discord POST, du antwortest. Kostenlos auf Cloudflare.
-2.  **Hono ist das perfekte Werkzeug** – leichtes Framework(12KB), Multi-Runtime, Null Abhängigkeiten. Der Code ist überall auf Cloudflare, Vercel, Node identisch.
-3.  **Renderimage auf Workers = verrückt** – Satori + Resvg(Wasm) lässt dich dynamische UIs in JSX komponieren und sie in PNG in \ <100ms konvertieren. Ein komplettes Spiel kann darauf schießen.
+2.  **Hono ist das perfekte Werkzeug** – leichtes Framework (12KB), Multi-Runtime, Null Abhängigkeiten. Der Code ist überall auf Cloudflare, Vercel, Node identisch.
+3.  **Renderimage auf Workers = verrückt** – Satori + Resvg (Wasm) lässt dich dynamische UIs in JSX komponieren und sie in PNG in \ <100ms konvertieren. Ein komplettes Spiel kann darauf schießen.
 
 Das ist krank.
 ```plaintext

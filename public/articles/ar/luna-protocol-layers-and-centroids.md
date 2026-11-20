@@ -14,7 +14,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "KFCzQmJhbI7RYszcUMq4gJnuSgQxvV/GL5AItEAcn8G8HZvEvhsEpTLfY+odOpxA4mIqiTayFQdfZfU2TzdbWw=="
+author_sig: "A+04iG30nRy5GNUxUOx/zXjgQyEIvC7r/kct0TWklNu6SIskWtzZAThlY2VDkUfVDpB2W+xHdi8NuK+KAx3Y1g=="
 ---
 
 # Luna Protocol : تجميع الأدمغة، والتصنيف العاطفي، والتوجيه ممتع/تافه

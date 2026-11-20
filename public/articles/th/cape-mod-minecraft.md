@@ -15,6 +15,8 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "7MHntvn3S83RwRGNl08KxQibBf0lTpvmJXawonSwKxxKcJSdx+dZIMkmr8E7NHNK0Dz0VTjM5XPSzMLMGhd2LQ=="
 ---
 
 # Cape Mod : วิธีการขโมยเป้าของ Jeb_ ด้วยการฉีดลายเซ็น RSA
@@ -164,7 +166,7 @@ public class ServerPlayerMixin {
 4. **แทนที่** คุณสมบัติ `textures` ด้วยของ Jeb_ (ฮาร์ดโค้ด)
 5. ส่งกลับ `GameProfile` ใหม่พร้อม textures ที่ถูกแทรก
 
-`GameProfile` จึงเป็น **ปลอม**: เป็นโปรไฟล์ที่สร้างขึ้นอย่างประดิษฐ์ ซึ่งไม่ตรงกับผู้เล่นจริง คุณสมบัติ `textures` ถูก **เล่นซ้ำ** จาก Jeb_ -- ลายเซ็น RSA เป็นจริงแต่ถูกใช้กับโปรไฟล์ที่ผิด แพ็กเกจเครือข่ายนั้นจึงเป็นที่ถูกต้อง: เซิร์ฟเวอร์จะส่ง `ClientboundPlayerInfoUpdatePacket` ปกติพร้อมโปรไฟล์ที่แก้ไขแล้ว มันเป็นโปรไฟล์ที่ถูกปลอม; แพ็กเกจยังคงเป็นที่ถูกต้อง。
+`GameProfile` จึงเป็น **ปลอม**: เป็นโปรไฟล์ที่สร้างขึ้นอย่างประดิษฐ์ ซึ่งไม่ตรงกับผู้เล่นจริง คุณสมบัติ `textures` ถูก **เล่นซ้ำ** จาก Jeb_ -- ลายเซ็น RSA เป็นจริงแต่ถูกใช้กับโปรไฟล์ที่ผิด แพ็กเกจเครือข่ายนั้นจึงเป็นที่ถูกต้อง: เซิร์ฟเวอร์จะส่ง `ClientboundPlayerInfoUpdatePacket` ปกติพร้อมโปรไฟล์ที่แก้ไขแล้ว มันเป็นโปรไฟล์ที่ถูกปลอม; แพ็กเกจยังคงเป็นที่ถูกต้อง.
 
 เมื่อเพื่อน ๆ ของ host เข้าร่วมผ่าน LAN พวกเขาได้รับ `ClientboundPlayerInfoUpdatePacket` พร้อมโปรไฟล์ที่แก้ไขแล้ว. ผู้เล่น :
 1. ถอดรหัส payload base64
@@ -213,7 +215,7 @@ Minecraft ให้ความเชื่อมั่น **การลงน�
 ### แต่ความเป็นไปได้กว้างขวางขึ้น
 
 โดยทฤษฎีแล้ว ด้วยเทคนิคเดียวกันอาจทำได้:
-- **แทรกข้อมูลลงนามอื่น ๆ**: หัวหน้า, ប្រើ enchantments ที่ผิดกฎหมาย, ส่วนประกอบ chat ภยันธิบางอย่าง
+- **แทรกข้อมูลลงนามอื่น ๆ**: หัวหน้า, ใช้ enchantments ที่ผิดกฎหมาย, ส่วนประกอบ chat ภยันธิบางอย่าง
 - **ผสานกับ tunnel LAN** (NGROK, playit.gg, Radmin VPN) เพื่อส่งผลกระทบแก่ผู้เล่นบนอินเทอร์เน็ต
 - **ขยายไปยังคุณสมบัติอื่น ๆ** ของโปรไฟล์ที่พึ่งพิงการลงนาม
 

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "d+nId9I4y9ROtFxHEzgxrXQ63qOqj7TvBlnM4qTukDVsbeVcz4nPG+wHL6h8YwdluTt2axjiutr/H2ctnwlF5A=="
+author_sig: "vvUT6Vg4J+rm3DI6NXlkNGnRKcuoyKgFtZl7VGUvrsmomOOvxZYE4ULX32q9jSA7yeD5cotOqzJXf+WH+XziEg=="
 ---
 
 # 我拿 git 当数据库，在 GitHub Actions 上白嫖了一个邮件机器人

@@ -11,7 +11,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "zgcR417aLFxGuWfpsVQWF4Hq18FA4QDtab4m5aZGt3QZsBQidIU43K9dfvvlG4SxaFLdWqazncEdt6+PjU9ywA=="
+author_sig: "Jz2FnsJwqIOe2zrUKjMwRz6wPpFTBnJVbOTlZh01s1V2YQoCzPkODW5KqvcNDy7fKcmYP/ZVD3EHFMJsYDjyiA=="
 ---
 
 ## UTAU：一款 Visual Basic 6 软件如何让歌声合成民主化

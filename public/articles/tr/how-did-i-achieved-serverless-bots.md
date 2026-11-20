@@ -13,7 +13,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "YLSGaZKb4taR/bfyC/KKbvLLQk790EJNGlp5a3K6zHKdfDSOpBI5Vk18JjvcgOuQG1Pwue5QJA3pW8mljhMDMA=="
+author_sig: "Dx24pe7oloJib2Bezyvnsk2pChdIo75QIXyxAQH4mh8VFhvxX+WbSht5T9TEuVyD+2oTiP0nj8e21yF9KZsd7w=="
 ---
 
 ## %100 sunucusuz Discord botu: Hono + Cloudflare Workers = 💸 sıfır

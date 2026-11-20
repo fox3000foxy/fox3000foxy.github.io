@@ -15,6 +15,8 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "HbgpB8GF3GF8FRZEE0HR4z+V+n7dSvEH3A0MaxebcY+qU+8//S72xfx4pEcLw15NXwE54Utc87lB5GDgciHYJg=="
 ---
 # 
 
@@ -22,7 +24,7 @@ Ich halte dieses Projekt schon seit einer Weile aufrecht, aber ich lese seinen e
 
 Stack: TypScript, Hono, Vercel, Cloudflare Workers, Supabase. Kostenlose Unterkunft. Der Discord-Bot funktioniert ohne permanenten Server. Dieser Beitrag erklärt, wie das alles zusammenhält.
 
-! [État initial du jeu](/images/konosuba-rpg/game_init.webp)
+![État initial du jeu](/images/konosuba-rpg/game_init.webp)
 
 ---
 
@@ -145,7 +147,7 @@ Beide Maps in Erinnerung (`tokenToSession` , `latestTurnByBattle`) verwenden die
 
 ## Die Bildwiedergabe-Pipeline
 
-! [Début de combat contre un Slime](/images/konosuba-rpg/shot_01_start.webp)
+![Début de combat contre un Slime](/images/konosuba-rpg/shot_01_start.webp)
 
 Die Straße`/konosuba-rpg/:lang/*`gibt kein JSON zurück. Es gibt ein generiertes WebP-Image zurück.
 
@@ -182,11 +184,11 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 ```
 **I.E. overlay**: das ist der schwere Teil. Das JSX der Schnittstelle (Lebensbalken, Texte, Symbole) wird in React-like mit Satori beschrieben, in SVG, in PNG umgewandelt von`@cf-wasm/resvg`, dann in Photon für die endgültige Komposition importiert. Satori + resvg sind zwei WASM-Module speziell für Cloudflare Workers mit dem flag kompiliert`edge-light` .
 
-! [Action Défense](/images/konosuba-rpg/shot_03_defend.webp)
+![Action Défense](/images/konosuba-rpg/shot_03_defend.webp)
 
-! [Combat en cours](/images/konosuba-rpg/shot_02_combat.webp)
+![Combat en cours](/images/konosuba-rpg/shot_02_combat.webp)
 
-! [Action Câlin](/images/konosuba-rpg/shot_04_hug.webp)
+![Action Câlin](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
@@ -281,7 +283,7 @@ Nichts revolutionäres, aber in einem serverless Kontext, in dem jede Millisekun
 
 ## Der Discord-Bot ohne permanenten Server
 
-! [Victoire](/images/konosuba-rpg/shot_05_win.webp)
+![Victoire](/images/konosuba-rpg/shot_05_win.webp)
 
 Häufig missverstandener Punkt: Ein Discord-Bot benötigt nicht unbedingt eine dauerhafte WebSocket-Verbindung. Discord bietet eine Alternative: die **Interactions Endpoint URL**. Du gibst Discord eine HTTPS-URL an, und Discord schickt dir für jede Interaktion eine POST (slash command, button, selbstkomplete).
 ```typescript
@@ -313,7 +315,7 @@ await fetch(`${DISCORD_API_URL}/webhooks/${interaction.application_id}/${interac
 ```
 Diese freiwillige 3-Sekunden-Zeit wird in STRIPPER.md als absichtlich dokumentiert. Megumins Spezialangriff (Explosion) hat eine Discord-Seitenanimation – die Nachricht wird zunächst mit einem Zwischenbild aktualisiert und dann 3 Sekunden später mit dem Ergebnis geändert. Dies ist der einzige Fall, wenn eine Vercel-Funktion freiwillig länger als nötig läuft.
 
-! [Attaque spéciale](/images/konosuba-rpg/shot_08_special.webp)
+![Attaque spéciale](/images/konosuba-rpg/shot_08_special.webp)
 
 ---
 
@@ -341,7 +343,7 @@ WASM (`@cf-wasm/photon/edge-light` , `@cf-wasm/resvg`) haben für jedes Runtime 
 
 ## Progression: XP, Ebenen, Affinität
 
-! [Un boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
+![Un boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
 Die Meta-Progression basiert auf Supabase freetier.`players`(Gesamt-XP, Niveau, gold),`character_progress`(XP/Perso-Nippelung/Perser-Niiance für Darkness, Aqua, Megumin)`runs`(Geschichte der Kämpfe),`inventory_items` , `daily_quests_progress` , `achievements_unlocked` , `game_sessions` .
 
@@ -363,7 +365,7 @@ export function getAffinityFactor(affinity: number): number {
 ```
 Diese Faktoren werden auf die Statistiken der Perser zu Beginn jedes jeden`processGame`Kazuma folgt dem Gesamtniveau des Spielers, die anderen drei haben jeweils ihre eigene XP/Ebene. Die Affinität (erworben durch die Sammlung von Drops, die mit einem persönlichen verbunden sind) multipliziert ihre Statistiken unabhängig.
 
-! [Soin](/images/konosuba-rpg/shot_07_heal.webp)
+![Soin](/images/konosuba-rpg/shot_07_heal.webp)
 
 Das Drop-System verwendet problemgewichtete Tabellenloots:
 ```typescript

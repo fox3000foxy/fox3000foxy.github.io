@@ -10,6 +10,8 @@ tags:
 authors:
   - 9stown
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "pdXE54cAHD5J/QgBcxpou62aeSNAi2d42eDEPGYKHC+4nxtTrIqv5TZ6TStt7X7o6B4u9R2kihn7mZsK6+V/gg=="
 ---
 # 
 

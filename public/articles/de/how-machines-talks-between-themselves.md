@@ -5,6 +5,8 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "réseau", "architecture-distribuée", "protocoles"]
 authors: ["docteur-turboss"]
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "7dWYziOCboTkweg+c2k86OmoyibNxEftEZ+VqF9or5sGTYSxz71GxVl5WJG//Gs2qm8+sshq0l9vl6RhSAA7kw=="
 ---
 # 
 
@@ -22,7 +24,7 @@ Genau diese fehlenden Garantien werden von TCP ausgeglichen, während UDP bewuss
 
 ## TCP: Zuverlässigkeit vor allem
 
-TCP (Transmission Control Protocol) ist ein Protokoll **Login **(_connection-oriented_). Bevor du ein Datenbyte austauschen, müssen beide Maschinen eine logische Verbindung herstellen.
+TCP (Transmission Control Protocol) ist ein Protokoll **Login** (_connection-oriented_). Bevor du ein Datenbyte austauschen, müssen beide Maschinen eine logische Verbindung herstellen.
 
 Diese Verbindung wird durch den berühmten **Three-Way Handshake** erstellt:
 ```
@@ -35,7 +37,7 @@ Connexion établie
 ```
 Jeder Schritt hat ein bestimmtes Ziel:
 
-*   SYN: Der Kunde gibt bekannt, dass er eine Verbindung öffnen möchte und eine erste Sequenznummer(ISN) zur Verfügung stellt.
+*   SYN: Der Kunde gibt bekannt, dass er eine Verbindung öffnen möchte und eine erste Sequenznummer (ISN) zur Verfügung stellt.
 *   SYN-ACK: Der Server akzeptiert die Verbindung, bestätigt den Empfang des SYN und gibt seinerseits seine eigene Sequenznummer an.
 *   ACK: Der Client bestätigt den Empfang der Serverinformationen.
 
@@ -64,9 +66,9 @@ Der Sender überträgt nur diesen Teil weiter.
 
 Diese Granarität ist einer der Gründe für die Robustheit von TCP.
 
-### **Empfangsbestätigungen(ACK)**
+### **Empfangsbestätigungen (ACK)**
 
-Nach Erhalt der Daten sendet der Empfänger ein **ACK(Acknowledgement)**.
+Nach Erhalt der Daten sendet der Empfänger ein **ACK (Acknowledgement)**.
 
 Im Gegensatz zu dem, was man sich oft vorstellen kann, bedeutet ein ACK nicht:
 
@@ -100,7 +102,7 @@ Er sendet es automatisch weiter.
 
 Die Übertragungsfrist (**Remission Timeout ✓ RTO**) ist nicht festgelegt.
 
-TCP misst die Hin- und Rückfahrtszeit(**RTT**) mit den empfangenen ACK und berechnet dynamisch das RTO, um unnötige Weiterverbreitungen zu vermeiden.
+TCP misst die Hin- und Rückfahrtszeit (**RTT**) mit den empfangenen ACK und berechnet dynamisch das RTO, um unnötige Weiterverbreitungen zu vermeiden.
 
 Moderne Implementierungen verwenden auch Mechanismen wie **Fast Retransmit**: Wenn ein Sender mehrere duplizierte ACKs (in der Regel drei) erhält, zieht er den Schluss, dass ein Zwischensegment verloren gegangen ist und sofort zurücksendet, ohne auf das Auslaufen des Timers zu warten.
 
@@ -128,7 +130,7 @@ New York
 ```
 Das zweite Paket kann vor dem ersten ankommen.
 
-TCP speichert dann vorübergehend die aufgenommenen **Ordner** Segmente in einem Puffer(_reassembuffer_) und speicherte sie dann, bevor sie an die Anwendung geliefert werden.
+TCP speichert dann vorübergehend die aufgenommenen **Ordner** Segmente in einem Puffer (_reassembuffer_) und speicherte sie dann, bevor sie an die Anwendung geliefert werden.
 
 Für die Anwendung scheint alles perfekt in Ordnung zu kommen.
 
@@ -162,7 +164,7 @@ Dieser Mechanismus ist die **Flow Control** und verhindert, dass ein schneller H
 
 Auch wenn der Empfänger in der Lage ist, die Daten zu absorbieren, kann das Netzwerk selbst gesättigt werden.
 
-Router haben begrenzte Warteschlangen(_Ques_).
+Router haben begrenzte Warteschlangen (_Ques_).
 
 Wenn sie überlaufen, werden die Pakete gelöscht.
 
@@ -196,7 +198,7 @@ Dieses Verfahren gewährleistet, dass alle Daten im Transit vor der Zerstörung 
 
 UDP (User Datagram Protocol) nimmt die umgekehrte Philosophie an.
 
-Es ist ** ohne Verbindung(connectionless)**.
+Es ist ** ohne Verbindung (connectionless)**.
 
 Es gibt keine:
 
@@ -286,7 +288,7 @@ Client                                          Serveur
   │◀─── vérifie le certificat client ───────────────│
   │──── clés de session dérivées, canal chiffré ──▶│
 ```
-Die mTLS-Kräfte sind einsatzfähig: Es braucht eine interne Zertifizierungsbehörde(CA), einen Mechanismus für die Verteilung der Zertifikate an jeden Dienst und eine Rotations-/Abfragestrategie. In einer ein-Maschinen-Umgebung mit wenigen Diensten ist es manchmal komplexer als Profit – mTLs wird notwendig, wenn der dienstübergreifende Verkehr über ein Netzwerk läuft, das nicht vollständig kontrolliert wird (mehrere Hosts, mehrere Clouds), oder wenn man eine _zero Trust-Politik will, bei der kein Dienst implizit vertrauenswürdig ist, einfach weil er "innerhalb" des Netzes ist.
+Die mTLS-Kräfte sind einsatzfähig: Es braucht eine interne Zertifizierungsbehörde (CA), einen Mechanismus für die Verteilung der Zertifikate an jeden Dienst und eine Rotations-/Abfragestrategie. In einer ein-Maschinen-Umgebung mit wenigen Diensten ist es manchmal komplexer als Profit – mTLs wird notwendig, wenn der dienstübergreifende Verkehr über ein Netzwerk läuft, das nicht vollständig kontrolliert wird (mehrere Hosts, mehrere Clouds), oder wenn man eine _zero Trust-Politik will, bei der kein Dienst implizit vertrauenswürdig ist, einfach weil er "innerhalb" des Netzes ist.
 
 # Stufe 3: Anwendungsprotokolle über TCP+TLS
 

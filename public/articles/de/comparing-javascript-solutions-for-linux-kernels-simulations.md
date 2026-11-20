@@ -9,6 +9,8 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "01lbbgz8sAKLL0Em3GZT0+bYQhybXSxMx3aifXIvjR0TcTTt23VcoLeGXyvhz/FwM6FAfgRbgSNdgodRJ+1ZGg=="
 ---
 # 
 
@@ -165,7 +167,7 @@ if (result.error) {
 
 vm.dispose();
 ```
-QuickJS ist ein kleiner JavaScript-Engin gemäß ES2023, geschrieben in C. Kompiliert in Wasm, es macht etwa 500 KB für die Synchronvariante, ~1 MB für die Asynchronvariante(Asyncify). Speicherverwaltung ist manuell – jeder Wert, den du aus der VM extrahieren, muss explizit freigegeben werden, was ein wenig langweilig ist, aber die Überraschungen von GC inter-Grenzen verhindert. Ein lustiger Kompromiss!
+QuickJS ist ein kleiner JavaScript-Engin gemäß ES2023, geschrieben in C. Kompiliert in Wasm, es macht etwa 500 KB für die Synchronvariante, ~1 MB für die Asynchronvariante (Asyncify). Speicherverwaltung ist manuell – jeder Wert, den du aus der VM extrahieren, muss explizit freigegeben werden, was ein wenig langweilig ist, aber die Überraschungen von GC inter-Grenzen verhindert. Ein lustiger Kompromiss!
 
 Der Wrapper`@sebastianwessel/quickjs`fügt eine ergonomischere API über, mit einem optionalen virtuellen Dateisystem, Fetch-Unterstützung und Node.js-Modul-Stubs:
 ```ts
@@ -182,7 +184,7 @@ const result = await runSandboxed(
   { allowFs: false, allowFetch: false }
 );
 ```
-Das Sicherheitsmodell unterscheidet sich von`isolated-vm`: Das lineare Speichermodell von Wasm macht den Gast nicht direkt auf die Objekte des V8-Haufens zugreifen. Die Angriffsfläche ist die Host-Schnittstelle↔Wasm(Importe/Exporte), nicht die ganze JS-Sprache. Es wird allgemein als robuster als Proxy-basierte Sandkästen angesehen.
+Das Sicherheitsmodell unterscheidet sich von`isolated-vm`: Das lineare Speichermodell von Wasm macht den Gast nicht direkt auf die Objekte des V8-Haufens zugreifen. Die Angriffsfläche ist die Host-Schnittstelle↔Wasm (Importe/Exporte), nicht die ganze JS-Sprache. Es wird allgemein als robuster als Proxy-basierte Sandkästen angesehen.
 
 Die Rückseite: QuickJS hat nicht das gleiche Maß an Optimierung wie V8. Bei CPU-bound-Laden in JS ist das 5 bis 20-mal langsamer als V8. Für kleine Codespitzen und unzuverlässige Bewertungen ist das normalerweise nicht wichtig.
 
@@ -211,13 +213,13 @@ Um wirklich unzuverlässigen Code auszuführen, bieten die Workers Deno (Web Wor
 
 Deno 2 (im Oktober 2024) hat die Kompatibilität npm und Node.js Kompatibilitätsshims hinzugefügt, was seine Akzeptanz für Server-basierte Anwendungsfälle erheblich verbessert hat.
 
-**Der Kompromiss**: Denos Sicherheitsmodell ist ausgezeichnet für Code, auf den du teilweise vertrauen könntest. Für völlig unzuverlässigen Code, der adversarial sein könnte, hilft das Lizenzmodell nicht – du brauchst eine Isolatgrenze(`isolated-vm`) oder einem anderen Motor(`quickjs-emscripten`), weil Deno immer noch V8 verwendet und anspruchsvolle Angreifer Fehler auf V8-Level finden können.
+**Der Kompromiss**: Denos Sicherheitsmodell ist ausgezeichnet für Code, auf den du teilweise vertrauen könntest. Für völlig unzuverlässigen Code, der adversarial sein könnte, hilft das Lizenzmodell nicht – du brauchst eine Isolatgrenze (`isolated-vm`) oder einem anderen Motor (`quickjs-emscripten`), weil Deno immer noch V8 verwendet und anspruchsvolle Angreifer Fehler auf V8-Level finden können.
 
 ---
 
 ### 1.6 TC39 ShadowRealm – die standardisierte Antwort (ein Tag)
 
-Die JavaScript-Normungsstelle(TC39) hat einen Vorschlag namens ShadowRealm, der versucht, zu standardisieren, was`vm`und`vm2`versuchten, aber mit einem korrekten Sicherheitsmodell zu tun. Ein ShadowRealm schafft einen isolierten JS-Ausführungskontext mit seinen eigenen Intrinsien, keinen Zugriff auf das äußere Reich und eine sorgfältig kontrollierte Import/Export-Schnittstelle.
+Die JavaScript-Normungsstelle (TC39) hat einen Vorschlag namens ShadowRealm, der versucht, zu standardisieren, was`vm`und`vm2`versuchten, aber mit einem korrekten Sicherheitsmodell zu tun. Ein ShadowRealm schafft einen isolierten JS-Ausführungskontext mit seinen eigenen Intrinsien, keinen Zugriff auf das äußere Reich und eine sorgfältig kontrollierte Import/Export-Schnittstelle.
 ```js
 const realm = new ShadowRealm();
 const result = realm.evaluate(`
@@ -234,9 +236,9 @@ ShadowRealm ist in Browsern (Chrome 90+, Firefox 105+) erhältlich, ist aber noc
 
 | | `vm` | `vm2` | `isolated-vm` | `quickjs-emscripten` | Deno Workers |
 |---|---|---|---|---|---|
-| **Isolierfront** | Keine(Tür) | Proxy(verstopft) | V8 Isolat | Wasm | V8 Isolat + Perms Rust |
+| **Isolierfront** | Keine (Tür) | Proxy (verstopft) | V8 Isolat | Wasm | V8 Isolat + Perms Rust |
 | **Speicher-Limite** | ❌ | ❌ | ^Engstgrenze | ✓ tas Wasm | teilweise |
-| **Timeout CPU** | ❌ | ✓(konturierbar) | n n | ✅ | ✅ |
+| **Timeout CPU** | ❌ | ✓ (konturierbar) | n n | ✅ | ✅ |
 | **Sicherheit** | Keine | gebrochen | fest | fest | fest |
 | **Besuche JS** | V8 native | V8 native | V8 native | ~10x langsamer | V8 native |
 | **Navigator** | ❌ | ❌ | ❌ | ✅ | ❌ |
@@ -244,7 +246,7 @@ ShadowRealm ist in Browsern (Chrome 90+, Firefox 105+) erhältlich, ist aber noc
 | **Status** | stabil | Risiko (neue CVE) | ■ Aktiv | ■ Aktiv | ■ Aktiv |
 | **Ram-Überladung** | ~1 MB | ~5-20 MB | ~3-10 MB | ~5-15 MB | ~10-30 MB |
 
-Das Urteil: Wenn es dir wichtig ist, dass du sicher bist, gibt es genau zwei echte Optionen –`isolated-vm`(Native Erweiterung, V8 Isolat, Vollgeschwindigkeit JS) und`quickjs-emscripten`(Wasm, Browser-Kompatibilität, ~10x langsamer für intensive Berechnung). Alles andere ist entweder "Bitte tu das nicht" (`vm` , `vm2`) oder ein Runtime, das ein völlig anderes Problem(Deno) löst. ShadowRealm könnte die gegebene eines Tages ändern, aber das ist noch nicht der Fall.
+Das Urteil: Wenn es dir wichtig ist, dass du sicher bist, gibt es genau zwei echte Optionen –`isolated-vm`(Native Erweiterung, V8 Isolat, Vollgeschwindigkeit JS) und`quickjs-emscripten`(Wasm, Browser-Kompatibilität, ~10x langsamer für intensive Berechnung). Alles andere ist entweder "Bitte tu das nicht" (`vm` , `vm2`) oder ein Runtime, das ein völlig anderes Problem (Deno) löst. ShadowRealm könnte die gegebene eines Tages ändern, aber das ist noch nicht der Fall.
 
 ---
 
@@ -260,13 +262,13 @@ Der Preis ist enorm, aber was du bekommst, ist wirklich bemerkenswert: echtes Li
 
 Was er emuliert:
 
-- **CPU**: x86-32(IA-32), Anweisungen auf der Pentium-Ebene 1. 64-bit(x86-64) bleibt ausgeschlossen – es ist eine architektonische Grenze, keine fehlende Funktionalität.
+- **CPU**: x86-32 (IA-32), Anweisungen auf der Pentium-Ebene 1. 64-bit (x86-64) bleibt ausgeschlossen – es ist eine architektonische Grenze, keine fehlende Funktionalität.
 
 - **FPU**:`Float64Array`JavaScript. Das x87 ist 80-bit-Präzision; die doppelten JS-Werte sind 64-bit. Das bedeutet, dass die Ergebnisse im Gleitkomma leicht von einer echten CPU abweichen können.
 
 - **Speicher**: konfigurierbar, mappe zu einem`SharedArrayBuffer`oder`ArrayBuffer`- Ja, in den JS-Haufen.
 
-- **Material**: 8254 PIT(Timer), 8259 PIC(Unterbrechungsregler), Tastatursteuerung 8042(PS/2), CMOS RTC, VGA mit SVGA-Erweiterungen und Bochs VBE, IDE-Controller, Diskettencontroller(8272A), NE2000-Netzwerkkarte.
+- **Material**: 8254 PIT (Timer), 8259 PIC (Unterbrechungsregler), Tastatursteuerung 8042 (PS/2), CMOS RTC, VGA mit SVGA-Erweiterungen und Bochs VBE, IDE-Controller, Diskettencontroller (8272A), NE2000-Netzwerkkarte.
 
 - **BIOS**: verwendet SeaBIOS (BIOS x86 open-source).
 
@@ -291,7 +293,7 @@ emulator.add_listener("serial0-output-byte", byte => {
 // Einen Eintrag zum Gast senden (in der Shell taper)
 emulator.serial0_send("ls /\n");
 ```
-**OS unterstützt**: Alpine Linux(ausgezeichnet), Ubuntu 16.04/18.04 (nur i386), Arch Linux 32, ReactOS, FreeDOS, Windows 9x/2000 (mit Vorbehalten), MS-DOS.
+**OS unterstützt**: Alpine Linux (ausgezeichnet), Ubuntu 16.04/18.04 (nur i386), Arch Linux 32, ReactOS, FreeDOS, Windows 9x/2000 (mit Vorbehalten), MS-DOS.
 
 **Startzeiten**: 15-40 Sekunden für Alpine Linux von einem sauberen Bild aus. Es ist in der tatsächlichen Kernel-Initiierung enthalten – du kannst es nicht überspringen. Ja, deine Benutzer werden einen Linux-Kernel in ihrem Browser starten sehen.
 
@@ -331,7 +333,7 @@ TinyEMU hat eine JavaScript Demo über Emscripten. Es ist die Basis von JSLinux 
 
 ### 2.3 jor1k – OR1K Emulator
 
-jor1k ist ein OpenRISC 1000(OR1K) Emulator, der von Sebastian Macke in JavaScript geschrieben wurde. Das ist historisch interessant, weil jore1k die Unterstützung des 9P VirtIO-Dateisystems eingeführt hat, das Bellard dann in Tinyemu und JSLinux integriert hat. Die Kreuzbestäubung zwischen diesen Projekten ist eng - sie borgen sich alle Ideen gegenseitig, was ehrlicherweise eines der coolsten Dinge der Open-Source-Emulsion ist.
+jor1k ist ein OpenRISC 1000 (OR1K) Emulator, der von Sebastian Macke in JavaScript geschrieben wurde. Das ist historisch interessant, weil jore1k die Unterstützung des 9P VirtIO-Dateisystems eingeführt hat, das Bellard dann in Tinyemu und JSLinux integriert hat. Die Kreuzbestäubung zwischen diesen Projekten ist eng - sie borgen sich alle Ideen gegenseitig, was ehrlicherweise eines der coolsten Dinge der Open-Source-Emulsion ist.
 
 **Statut**: Aktiver gehalten, kein Paket npm. Archiviert an diesem Punkt. Nützlich, um vor allem für den historischen Kontext zu wissen – Genre, wenn jemand jor1k in einem Gespräch erwähnt, jetzt weißt du, was es ist:)
 
@@ -367,7 +369,7 @@ await cx.run("/bin/bash");
 
 ---
 
-### 2.5 Webcontainers(StackBlitz) – Node.js en Wasm, keine Linux-Emulation
+### 2.5 Webcontainers (StackBlitz) – Node.js en Wasm, keine Linux-Emulation
 
 Webcontainer werden oft in dieselbe Tasche wie Linux-Emulatoren gelegt, aber sind architektonisch verschieden. Sie emulieren nicht x86. Sie starten nicht Linux. Sie drehen Node.js als WebAssembly mit WASI kompiliert. Diese Unterscheidung zählt viel und ich verbrachte viel zu viel Zeit damit, darüber verwirrt zu sein.
 
@@ -439,11 +441,11 @@ Das`.wasm`Das Ergebnis ist gewaltig - eine minimale Ubuntu macht mehrere hundert
 
 | | `v86` | JSLinux/Tinyemu | jor1k | CheerpX | Webcontainer | container2wasm |
 |---|---|---|---|---|---|---|
-| **Architektur** | x86-32 JIT→Wasm | RISC-V(Wasm) | OR1K(JS) | x86(Eigentümer) | Node.js→Wasm/WASI | x86/RISC-V(Wasm) |
-| **Echter Kern** | ✅ | ✅ | ✅ | ✅ | ✓(Node.js) | ✅ |
-| **64-bit** | ❌ | ✓(RISC-V) | ❌ | ✅ | n/a | ✅ |
-| **Package npm** | ✅ | ❌ | ❌ | CDN/API | ✅ | ✓(CLI-Werkzeug) |
-| **Verwendung Node.js** | ✅ | ❌ | ❌ | ❌ | ✓(Only-Browser) | via Wasmtime |
+| **Architektur** | x86-32 JIT→Wasm | RISC-V (Wasm) | OR1K (JS) | x86 (Eigentümer) | Node.js→Wasm/WASI | x86/RISC-V (Wasm) |
+| **Echter Kern** | ✅ | ✅ | ✅ | ✅ | ✓ (Node.js) | ✅ |
+| **64-bit** | ❌ | ✓ (RISC-V) | ❌ | ✅ | n/a | ✅ |
+| **Package npm** | ✅ | ❌ | ❌ | CDN/API | ✅ | ✓ (CLI-Werkzeug) |
+| **Verwendung Node.js** | ✅ | ❌ | ❌ | ❌ | ✓ (Only-Browser) | via Wasmtime |
 | **Browser-Nutzung** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **RAM/instanz** | 150-256 MB | ~64-128 MB | ~64 MB | 200+ MB | ~100 MB | ~200-500 MB |
 | **Zeitstart** | 15-40s | 10-30s | 10-30s | 15-40s | 2-5s | 10-40s |
@@ -492,7 +494,7 @@ xterm.js ist nur die Render-Schicht. Es führt keine Shell aus. Es interpretiert
 
 ### 3.2`node-pty`– PTY-Erstellung
 
-`node-pty`erstellt ein Pseudoterminal(PTY) in Node.js und gibt dir eine Lese-/Schreibhand. Mit xterm.jS kann ein Browser-Terminal aufgebaut werden, das mit einer echten Shell (bash, zsh, fish) spricht, die auf dem Server läuft.
+`node-pty`erstellt ein Pseudoterminal (PTY) in Node.js und gibt dir eine Lese-/Schreibhand. Mit xterm.jS kann ein Browser-Terminal aufgebaut werden, das mit einer echten Shell (bash, zsh, fish) spricht, die auf dem Server läuft.
 ```js
 import * as pty from "node-pty";
 
@@ -514,7 +516,7 @@ ws.on("message", data => {
   shell.write(data);
 });
 ```
-Dies ist das Standardschema für Cloud-IDEs und Web-Terminals: xterm.js(Browser) ↔ WebSocket ↔ node-pty ↔ wahre bash. Isolierung ist nicht vorhanden. Die Shell wird mit allen Berechtigungen des Node.jS-Prozesses (oder des Benutzers, der es ausspringt) ausgeführt.
+Dies ist das Standardschema für Cloud-IDEs und Web-Terminals: xterm.js (Browser) ↔ WebSocket ↔ node-pty ↔ wahre bash. Isolierung ist nicht vorhanden. Die Shell wird mit allen Berechtigungen des Node.jS-Prozesses (oder des Benutzers, der es ausspringt) ausgeführt.
 
 **In den Besitz von**: Microsoft. **npm**:[node-pty](https://www.npmjs.com/package/node-pty) **GitHub**:[microsoft/node-pty](https://github.com/microsoft/node-pty)
 
@@ -538,7 +540,7 @@ Architektur:
 
 - **Shell-Schalter**: ein falsches Dateisystem (auf Debian 5.0) und ein teilweiser Shell-Desinterpreter, der auf aktuelle Befehle reagiert
 
-- **Proxy-Mode**: kann zu einem echten System hinter(Hochinteraktionsmodus) umleiten, indem alles aufgezeichnet wird, was durchläuft
+- **Proxy-Mode**: kann zu einem echten System hinter (Hochinteraktionsmodus) umleiten, indem alles aufgezeichnet wird, was durchläuft
 
 - **Mode LLM** (jüngstes Hinzufügen): verwendet ein Sprachmodell, um dynamische Antworten auf Befehle zu erzeugen, die er nicht verwalten kann – ja, Cowrie hat jetzt einen IA-Modus. Wir leben eine Zeit des Verrückten.
 ```python
@@ -563,7 +565,7 @@ Cowire speichert heruntergeladene Dateien (via wget/curl/SFTP/SCP) für die Malw
 
 ** Treue**: Mittel-Hoch. Begreiflich genug, um automatisierte Bots zu täuschen (das macht 99% der SSH-Angreifer – die meisten sind nur dumme Skripte, die versuchen,`root` / `password`) Die ausgefeilten Menschen können ihn jedoch durch digitale Fingerabdrücke identifizieren, in der Regel ziemlich schnell.
 
-**Sprache**: Python(Twisted) **GitHub**:[cowrie/cowrie](https://github.com/cowrie/cowrie)
+**Sprache**: Python (Twisted) **GitHub**:[cowrie/cowrie](https://github.com/cowrie/cowrie)
 
 ---
 
@@ -671,13 +673,13 @@ Ein kompetenter Angreifer wird deinen Honeypot in den ersten fünf Befehlen iden
 | | Cowrie | Kippo | endlessh | Sshesam | Lyrebird | Naiv ssh2 |
 |---|---|---|---|---|---|---|
 | **Interaktions- fähigkeit** | mittel-hoch | mittel | Null | Null | Variable | niedrig |
-| **Wahres SSH-Protokoll** | ✅ | ✅ | ✓(Trapit) | ✅ | Variable | ✅ |
+| **Wahres SSH-Protokoll** | ✅ | ✅ | ✓ (Trapit) | ✅ | Variable | ✅ |
 | **Shell-Trend** | Durchschnitt | Durchschnitt | n/a | Keine | Variable | Minimum |
 | **Zeichnung der Kennungen** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
 | **Befehle kopieren** | ✅ | ✅ | ❌ | ✅ | Variable | ✅ |
 | **Kaptiert Malware** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Integration SIEM** | native | ❌ | ❌ | ❌ | ❌ | manuell |
-| **LM-Antworten** | ✓(neu) | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **LM-Antworten** | ✓ (neu) | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Sprache** | Python | Python | C | Go | Docker | Node.js |
 | **Node.js native** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Status** | ^ sehr aktiv | ✓ Archiviert | ■ Aktiv | ■ Aktiv | ■ Aktiv | DIY |
@@ -742,7 +744,7 @@ Der VFS wird in folgenden Bereichen aufgebaut:
 
 - Image SquashFS – Import en lecture seule
 
-Im Dauerzustand`"fs"`, hält er ein Vorschreibprotokoll(WAL) für die Wiederherstellung nach dem Absturz – die Schriften gehen zuerst in das Protokoll, dann in den Augenblick während des Flush. Wenn Node in der Mitte einer Operation pflanzt, erlaubt das Protokoll dir, den letzten vollständigen Zustand wieder aufzubauen.
+Im Dauerzustand`"fs"`, hält er ein Vorschreibprotokoll (WAL) für die Wiederherstellung nach dem Absturz – die Schriften gehen zuerst in das Protokoll, dann in den Augenblick während des Flush. Wenn Node in der Mitte einer Operation pflanzt, erlaubt das Protokoll dir, den letzten vollständigen Zustand wieder aufzubauen.
 
 Es gibt auch eine Schicht`FileCache`die die Latenz von E/S-Disc simuliert. du konfigurieren Profile wie`NVME_DISK_IO`oder`HDD_DISK_IO`und der VFS verzögert künstlich die Operationen auf den Dateien, um realistische Zeitverzögerungen zu entsprechen. Das ist ziemlich lustig - eine Software, die absichtlich verlangsamt, um Hardware zu simulieren - aber tatsächlich sehr nützlich für Benchmarking.
 
@@ -773,7 +775,7 @@ Der Executor führt diese AST durch:
 
 - Für logische Operatoren (`&&` , `||`), überprüft er`$?`nach links vor dem Ausführen des Rechts
 
-- für Untershells(`$(...)` , ` ` ` ` `✓), es schaltet den Kontext der Ausführung
+- für Untershells (`$(...)` , ` ` ` ` `✓), es schaltet den Kontext der Ausführung
 
 - für Umleitungen (`>fichier` , `>>fichier` , `2>&1` , `<fichier`), konfiguriert die Verkabelung der Ströme vor der Ausführung
 
@@ -807,7 +809,7 @@ neofetch, htop, tree, df, du, free, uptime, who, w, last,
 cron (simulé), systemctl (stub), journalctl (stub),
 ...et environ 130 autres
 ```
-Die "Stubs" (Git, Python3, node) reagieren realistisch auf die häufigen Anrufe –`python3 –version`Gibt eine glaubwürdige Versionskette zurück,`git status`zeigt einen Zustand der fiktiven Ablagerung – ohne echte Arbeit zu tun. Für einen Honeypot sind sie eigentlich nützlicher als die realen Befehle, weil sie dich beobachten lassen, was Angreifer versuchen, ohne etwas gefährliches auszuführen.
+Die "Stubs" (Git, Python3, node) reagieren realistisch auf die häufigen Anrufe –`python3 –version`Gibt eine glaubwürdige Versionskette zurück,`git status`zeigt einen Zustand der fiktiven Ablagerung – ohne echte Arbeit zu tun. Für einen Honeypot sind sie eigentlich nützlicher als die realen Befehle, weil sie es Ihnen ermöglichen, zu beobachten, was Angreifer versuchen, ohne etwas gefährliches auszuführen.
 
 ### Der SSH-Server
 
@@ -879,9 +881,9 @@ Dies ist wahrscheinlich der beeindruckendste Teil des gesamten Projekts und es h
 
 - Ladungs-Gleichung (Round-Robin, weniger Verbindungen)
 
-- Verkehrssteuerung: Latenz, Gigue(Gaussenverteilung), Paketverlust, Salvesverlust, Reordering, Duplizieren
+- Verkehrssteuerung: Latenz, Gigue (Gaussenverteilung), Paketverlust, Salvesverlust, Reordering, Duplizieren
 
-- Bandbreitenbegrenzung(Token-Wasser)
+- Bandbreitenbegrenzung (Token-Wasser)
 
 - MTU-Anwendung
 
@@ -1050,7 +1052,7 @@ Die Polyfills machen insgesamt 640 Zeilen von JS geschrieben von Hand. Ohne npm-
 | **Kategorie** | JS Sandkasten | JS Sandkasten | JS Sandkasten | Emulator | Emulator | Node.js/Wasm | Honeypot | Simulator |
 | **Isole der JS** | ^ Reichweite | ✓ V8 Isolat | ✓ Wasm | n/a | n/a | teilweise | n/a | ✓ Worker |
 | **Wahrer Linux-Kernel** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Shell-Interpreter** | ❌ | ❌ | ❌ | ✓(real) | ✓(real) | ✓(real) | teilweise | ✓(personalisiert) |
+| **Shell-Interpreter** | ❌ | ❌ | ❌ | ✓ (real) | ✓ (real) | ✓ (real) | teilweise | ✓ (personalisiert) |
 | **~170 Unix-Befehle** | ❌ | ❌ | ❌ | ✅ | ✅ | teilweise | ~20 | ✅ |
 | **POSIX-Genehmigungen** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | teilweise | ^ angewendet |
 | **Benutzerverwaltung** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | minimal | n n |
@@ -1066,7 +1068,7 @@ Die Polyfills machen insgesamt 640 Zeilen von JS geschrieben von Hand. Ohne npm-
 | **Binäre Kompatibilität** | n/a | n/a | n/a | ✅ | ✅ | teilweise | n/a | ❌ |
 | **Zeitstart** | sofort | sofort | sofort | 15-40s | 15-40s | 2-5s | sofort | <1s |
 | **RAM/instanz** | ~1 MB | ~3-10 MB | ~5-15 MB | 150-256 MB | 200+ MB | ~100 MB | ~50 MB | ~5-20 MB |
-| **Runtime-Abhängigkeit** | 0 | 1(nativ) | 1(Wasm) | 0 | Eigentümer | 1 | Python-Abhängigkeit | 3 (ssh2, ws, flate) |
+| **Runtime-Abhängigkeit** | 0 | 1 (nativ) | 1 (Wasm) | 0 | Eigentümer | 1 | Python-Abhängigkeit | 3 (ssh2, ws, flate) |
 | **Status** | stabil | ■ Aktiv | ■ Aktiv | ^ sehr aktiv | Handel | ■ Aktiv | ■ Aktiv | ■ Aktiv |
 
 ---
@@ -1150,7 +1152,7 @@ Ich habe versucht, jede Aussage an eine primäre Quelle zu binden – CVE-Stellu
 - ** `v86`** – npm:[npmjs.com/package/v86](https://www.npmjs.com/package/v86)· GitHub:[github.com/copy/v86](https://github.com/copy/v86)· Demo:[copy.sh/v86](https://copy.sh/v86)
 - **Unterstützungs-Maßstab OS v86** –[github.com/copy/v86#operating-system-support](https://github.com/copy/v86)
 - **SeaBIOS** (BIOS wird von v86 verwendet) –[seabios.org](https://www.seabios.org/SeaBIOS)
-- **Bochs-VBE-Erweiterungen **(VGA-Referenz) –[bochs.sourceforge.io](https://bochs.sourceforge.io/)
+- **Bochs-VBE-Erweiterungen** (VGA-Referenz) –[bochs.sourceforge.io](https://bochs.sourceforge.io/)
 - **JSLinux** – Bellard-Emulator:[bellard.org/jslinux](https://bellard.org/jslinux/)· Technische Anmerkungen (TinyEMU, Historie, asm.js→Wasm):[bellard.org/jslinux/tech.html](https://bellard.org/jslinux/tech.html)
 - **TinyEMU** – Quelle C:[bellard.org/tinyemu](https://bellard.org/tinyemu/)· Inoffizielle GitHub-Spiegel:[github.com/yoshijava/TinyEMU](https://github.com/yoshijava/TinyEMU)
 - **jor1k** – JS OpenRISC Emulator:[github.com/s-macke/jor1k](https://github.com/s-macke/jor1k)· Demo:[s-macke.github.io/jor1k/demos/main.html](https://s-macke.github.io/jor1k/demos/main.html)
@@ -1161,12 +1163,12 @@ Ich habe versucht, jede Aussage an eine primäre Quelle zu binden – CVE-Stellu
 ### Stack terminal
 
 - **xterm.js** – npm:[npmjs.com/package/@xterm/xterm](https://www.npmjs.com/package/@xterm/xterm)· GitHub:[github.com/xtermjs/xterm.js](https://github.com/xtermjs/xterm.js)· Website:[xtermjs.org](https://xtermjs.org)
-- **node-pty** – npm:[npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty)· GitHub(Microsoft):[github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
+- **node-pty** – npm:[npmjs.com/package/node-pty](https://www.npmjs.com/package/node-pty)· GitHub (Microsoft):[github.com/microsoft/node-pty](https://github.com/microsoft/node-pty)
 
 ### Honeypots
 
 - **Cowrie** – GitHub:[github.com/cowrie/cowrie](https://github.com/cowrie/cowrie)· Dokumente:[docs.cowrie.org](https://docs.cowrie.org)· Website:[cowrie.org](https://www.cowrie.org/)
-- **Kippo** – GitHub(archiviert):[github.com/desaster/kippo](https://github.com/desaster/kippo)
+- **Kippo** – GitHub (archiviert):[github.com/desaster/kippo](https://github.com/desaster/kippo)
 - **endlessh** – GitHub:[github.com/skeeto/endlessh](https://github.com/skeeto/endlessh)
 - **sshesame** – GitHub:[github.com/jaksi/sshesame](https://github.com/jaksi/sshesame)
 - **Lyrebird** – Docker Hub:[hub.docker.com/r/lyrebird/honeypot-base](https://hub.docker.com/r/lyrebird/honeypot-base/)

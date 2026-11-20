@@ -11,6 +11,8 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "hCEV1mbrPUktJlKH5PXtbF935EieD5iR6yhy7bEwa7EgWtpIMnTzh0k4llqYVodWkuKx62Hpzs9zgcDcW1FIhA=="
 ---
 # 
 
@@ -38,7 +40,7 @@ Für einen E-Mail-Beantworter ist das ein großes Problem.
 
 > "Was ist die letzte E-Mail, die ich je bearbeitet habe?"
 
-Wenn der Bot das bei jedem Run vergisst, wird er entweder die gleichen Mails in der Schleife(Katastrophen) wiederholen oder E-Mails verpassen.
+Wenn der Bot das bei jedem Run vergisst, wird er entweder die gleichen Mails in der Schleife (Katastrophen) wiederholen oder E-Mails verpassen.
 
 Es braucht einen dauerhaften Zustand, und normalerweise ist es persistent = Datenbank, aber eine Datenbank ist ein Server, und ein Server ist kostenloser.
 
@@ -163,7 +165,7 @@ Okay, Hack Git ist cool, aber was genau macht der Bot?
 
 Er liest deine E-Mails über IMAP, enthält sie mit einer IA (Groq + Llama 3.3 70B) und antwortet automatisch.
 
-Eigene Architektur mit Abhängigkeits-Injektion(InversifyJS):
+Eigene Architektur mit Abhängigkeits-Injektion (InversifyJS):
 ```
 App
 ├── ImapService      → lit les mails (IMAP)
@@ -178,14 +180,14 @@ App
 
 Der Bot kann auf zwei Arten drehen:
 
-**Listen-Mode **(Echtzeit): Dauerhafte IMAP-Verbindung mit exponentiellem Reconnect. Für einen VPS.
+**Listen-Mode** (Echtzeit): Dauerhafte IMAP-Verbindung mit exponentiellem Reconnect. Für einen VPS.
 ```typescript
 this.imapService.on("exists", async (data) => {
   console.log(`[MAIL] Nouveau mail ! Total: ${data.count}`);
   // bearbeitet die neue Mail sofort
 });
 ```
-**Action-Mode **(Batch): verarbeitet neue E-Mails von der`lastId`- Dann schließt er sich.
+**Action-Mode** (Batch): verarbeitet neue E-Mails von der`lastId`- Dann schließt er sich.
 ```bash
 node dist/index.js --action
 ```

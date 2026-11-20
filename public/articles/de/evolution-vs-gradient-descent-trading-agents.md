@@ -5,6 +5,8 @@ date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "fHxWwg9iq3xS4LQSmLf87Do2RgY9PwF0Jyf6+ke400mNqT3ETBnK7DFjHP+VgUP4RJFh2zqZwHRPoeZza9ZVbg=="
 ---
 ## 
 

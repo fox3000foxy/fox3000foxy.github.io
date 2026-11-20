@@ -1,6 +1,7 @@
 ---
 title: "5 umgeleitete Möglichkeiten, GitHub Aktionen zu verwenden (und was es über Geheimnisse lernt)"
-description: "Ein IC-Runner in einen kostenlosen VPS umgewandelt, ein Bot, der seine eigenen Pullover requests öffnet, ein npm-Publish ohne jegliche Geheimnisse. Umdrehen meiner Ruhe, um die GitHub-Pattern Aktionen, die aus dem einfachen \\"Lint + Test + deploy\\" zu listen."
+description: >-
+  Ein CI-Runner als kostenloser VPS, ein Bot der eigene Pull Requests oeffnet, npm-Publish ohne Secrets.
 date: 2026-07-14
 tags:
   - github-actions
@@ -8,7 +9,8 @@ tags:
   - automation
 authors:
   - fox3000foxy
-lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "g+CZQ1ZhCNcAiwe7NF1XJKRPDDDOG51Ib8EflrJQooThOMdSZE7dfaXnqBDArBnkjS+tMmPIkpKZK/hpsXHCbQ=="
 ---
 # 
 
