@@ -1,5 +1,5 @@
 ---
-title: "Wie man jede Cape auf Minecraft Bedrock bekommt"
+title: Wie man jede Cape auf Minecraft Bedrock bekommt
 description: "Ein Drittanbieter-Launcher, eine alte Spielversion und ein Cape-Selektor, der nie gelernt hat, Nein zu sagen. Komplettes Tutorial plus die wahrscheinliche Erklärung, warum es funktioniert."
 date: 2026-07-14
 tags:
@@ -9,128 +9,126 @@ tags:
   - reverse-engineering
 authors:
   - 9stown
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "6fQNMsqw999WP1w2Lt7dAawDAJAgWLeSzPKH8IegAUSaEy1giiQNdxrOK2/y/aJArJeen2H6DZ6CLZ3NH+9fFQ=="
+lang: "de"
 ---
+# 
 
-# Wie man jede Cape auf Minecraft Bedrock bekommt
+Auf Java gibt es viele verdrehte Wege, um mit einem Umhang zu landen, den man nicht haben sollte (siehe Artikel über`cape-mod`). Auf Bedrock ist das Spiel anders, die Authentizität ist anders, aber es gibt trotzdem einen Weg – es genügt nur ein drittes Launcher und eine alte Version des Spiels, die die Validierung, die man für erworben hält, ignoriert.
 
-Auf Java gibt es viele verdrehte Wege, mit einer Cape dazustehen, die man nicht haben dürfte (siehe den Artikel über `cape-mod`). Auf Bedrock ist das Spiel anders, die Auth ist anders, aber es gibt trotzdem einen Weg, du brauchst nur einen Drittanbieter-Launcher und eine Spielversion, die alt genug ist, um die Validierung zu ignorieren, die man für selbstverständlich hält.
-
-So geht es, und danach schauen wir, was wahrscheinlich unter der Haube passiert.
+Hier ist, wie man es macht, und dann sehen wir, was wahrscheinlich unter der Haube passiert.
 
 ## Was du brauchst
 
-- Ein Microsoft-Konto, das Minecraft Bedrock schon besitzt (deines tut es bestens)
-- Den offiziellen Minecraft-Launcher installiert
-- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), ein Open-Source-Drittanbieter-Launcher, der es erlaubt, jede historische Bedrock-Version zu installieren und zu starten
+- Ein Microsoft-Konto, das bereits Minecraft Bedrock besitzt (Deines ist sehr gut)
+- Der offizielle Minecraft Launcher installiert
+- [BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher), ein Open-Source-Launcher von Drittanbietern, mit dem du jede historische Version von Bedrock installieren und starten können
 - .NET 8.0 Desktop Runtime
-- Den Entwicklermodus auf Windows aktiviert
+- Der Entwicklermodus aktiviert auf Windows
 
-## Schritt 1, Bedrock mindestens einmal mit dem offiziellen Launcher installieren
+## Schritt 1 – Bedrock mindestens einmal mit dem offiziellen Launcher installieren
 
-Bevor du irgendetwas anderes tust, öffne den offiziellen Minecraft-Launcher, geh auf den Tab **Minecraft: Bedrock Edition** und klicke auf **Install**. Bedrock muss mindestens einmal auf offiziellem Weg installiert und gestartet worden sein, bevor du BedrockLauncher anfasst.
+Bevor du etwas anderes tun, öffnest du den offiziellen Minecraft Launcher, gehst du auf die Registerkarte **Minecraft: Bedrock Edition** und klicken du auf **Install**. Bedrocks muss mindestens einmal auf offiziellem Weg installiert und gestartet worden sein, bevor du BedroickLauncher berühren.
 
-![Bedrock Edition aus dem offiziellen Launcher installieren](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
+![Installer Bedrock Edition depuis le launcher officiel](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
 
-## Schritt 2, BedrockLauncher herunterladen
+## Schritt 2 – BedrockLauncher herunterladen
 
-Ab auf die GitHub-Releases-Seite des Projekts. Nimm das Zip der letzten Version, die in den **Assets** gelistet ist.
+Die GitHub Release Seite des Projekts. Nimm den Reißverschluss der neuesten Version in **Assets**.
 
-![GitHub-Releases-Seite von BedrockLauncher](/images/bedrock-cape/bedrock-cape-02-github-release.png)
+![Page des releases GitHub de BedrockLauncher](/images/bedrock-cape/bedrock-cape-02-github-release.png)
 
-## Schritt 3, das Archiv extrahieren
+## Schritt 3 – Archiv auslesen
 
-Sobald das Zip heruntergeladen ist, extrahiere es in deinen `Downloads`-Ordner (oder irgendwohin, solange du den Ordner danach wiederfindest).
+Nachdem du den Reißverschluss heruntergeladen hast, hol ihn aus deinem Ordner.`Downloads`(oder überall, solange du die Akte danach findest).
 
-![Extraktion des BedrockLauncher-Archivs](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
+![Extraction de l'archive BedrockLauncher](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
 
-## Schritt 4, die Executable starten
+## Schritt 4 – Ausführbare starten
 
-Geh in den extrahierten Ordner und starte `BedrockLauncher.exe`.
+Geh in den extrahieren Ordner und starte`BedrockLauncher.exe` .
 
-![BedrockLauncher.exe starten](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
+![Lancement de BedrockLauncher.exe](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
 
-## Schritt 5, .NET Desktop Runtime installieren und Entwicklermodus aktivieren
+## Schritt 5 – Installierst du .NET Desktop Runtime und aktivieren du den Entwicklermodus
 
-Beim ersten Start wird Windows sehr wahrscheinlich das **.NET 8.0 Desktop Runtime** verlangen, installiere es. Du musst auch den **Entwicklermodus** in `Einstellungen > System > Für Entwickler` aktivieren, weil BedrockLauncher das Spiel als loses Paket installiert (rohe Dateien, kein echtes signiertes Store-Paket), und Windows verweigert diese Art Installation ohne diesen Modus.
+Beim ersten Start wird Windows höchstwahrscheinlich die **.NET 8.0 Desktop Runtime** – installieren. du musst auch den **Entwicklermodus** in`Paramètres > Système > Pour les développeurs`, weil BedrockLauncher das Spiel als lose Paket (rohe Dateien, nicht ein echtes Paket vom Store unterzeichnet) installiert, und Windows verweigert diese Art der Installation ohne diesen Modus.
 
-![.NET-Runtime installieren und Entwicklermodus aktivieren](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
+![Installation du runtime .NET et activation du mode développeur](/images/bedrock-cape/bedrock-cape-05-dotnet-devmode.png)
 
-## Schritt 6, eine neue Installation erstellen
+## Schritt 6 – Eine neue Installation erstellen
 
-Starte BedrockLauncher neu, melde dich mit deinem Microsoft-Konto an, geh in den Tab **Installations** und klicke dann auf **New installation**.
+Starte BedrockLauncher, logge dich mit deinem Microsoft-Konto ein, geh auf die Registerkarte **Einrichtungen** und klicke dann auf **New Installation**.
 
-![Neue Installation in BedrockLauncher erstellen](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
+![Création d'une nouvelle installation dans BedrockLauncher](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
 
-## Schritt 7, eine alte Version wählen
+## Schritt 7 – Eine alte Version auswählen
 
-Gib der Installation einen Namen, wähle dann in der Versionsliste eine **alte** Version, typischerweise eine `1.16.x`-Version oder älter. Klicke auf **Create**.
+Gibt einen Namen für die Installation und dann aus der Versionsliste, eine **alte** Version – typischerweise eine Version`1.16.x`oder älter. Klicken du auf **Create**.
 
-![Alte Version auswählen, hier 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
+![Sélection d'une ancienne version, ici 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
 
-## Schritt 8, die Installation starten
+## Schritt 8 – Installation starten
 
-Klicke auf **Play**. Das Extrahieren der Dateien kann je nach Rechner bis zu zehn Minuten dauern, der Launcher wird eingefroren wirken ("Not Responding"), das ist normal, lass ihn laufen.
+Klicken du auf **Play**. Die Dateiauslesen kann je nach Maschine bis zu zehn Minuten dauern – der Launcher wird starr aussehen (siehe Not Responding ✓), das ist normal, lass ihn laufen.
 
-![Extraktion läuft, der Launcher scheint nicht mehr zu reagieren](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
+![Extraction en cours, le launcher semble ne plus répondre](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
 
-## Schritt 9, die Cape wählen
+## Schritt 9 – Umhang auswählen
 
-Sobald das Spiel gestartet ist, melde dich mit deinem Konto an, erstelle einen neuen Charakter und geh in den Skin-Editor, Tab **Capes**. Dort findest du die komplette Liste aller Capes, die es in Minecraft gibt, einschließlich derer, die du nie hattest (Promo-Event-Capes, vergangene Festivals, Mob Vote usw.). Wähle die, die du willst.
+Nachdem das Spiel gestartet ist, melde dich mit deinem Konto an, erstelle einen neuen Charakter und gehe in den Skin Editor, Registerkarte **Capes**. Dort findest du die vollständige Liste aller Umhänge, die in Minecraft existieren – einschließlich derjenigen, die du nie hattest (Kapseln von Promo-Events, vergangenen Festivals, Mob-Abstimmung, etc.).Wähle, welche du willst.
 
-**Fass den Rest des Skin-Aussehens in diesem Stadium nicht an**, lass nur die Cape.
+**Trakt nicht den Rest des Skin-Stils an diesem Punkt**, lass nur das Umhang.
 
-![Cape im Charakter-Editor auswählen](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
+![Sélection d'une cape dans l'éditeur de personnage](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
 
-## Schritt 10, die offizielle Version neu installieren
+## Schritt 10 – Offizielle Version neu installieren
 
-Geh zurück in den offiziellen Launcher, Tab **Installation**, und klicke auf **Uninstall** bei der Haupt-Bedrock-Installation, installiere sie dann neu (oder mach **Check for Updates**). Starte Minecraft Bedrock diesmal aus dem offiziellen Launcher.
+Gehe zurück in den offiziellen Launcher, Registerkarte **Installation**, und klicke auf **Uninstall** auf die Hauptinstallation von Bedrock und installiere sie (oder mach **Check for Updates**). Relance Minecraft Bedrocks aus dem offiziellen Lancher dieses Mal.
 
-![Deinstallation und Neuinstallation aus dem offiziellen Launcher](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
+![Désinstallation et réinstallation depuis le launcher officiel](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
 
-Und da ist sie, deine Cape, auf der offiziellen Version, auf deinem echten Profil.
+Und hier ist es – dein Umhang ist da, auf der offiziellen Version, auf deinem echten Profil.
 
 ## Was wahrscheinlich passiert
 
-Ich habe meine Hände nicht in den geschlossenen Bedrock-Quellcode gesteckt (im Gegensatz zu Java, das dekompilierbar ist), also ist das Folgende eine **wahrscheinliche** Erklärung, keine absolute Gewissheit. Aber das beobachtete Verhalten passt ziemlich gut zur folgenden Hypothese.
+Ich habe meine Hände nicht in Bedrocks geschlossenen Quellcode (im Gegensatz zu Java, der dekompilierbar ist) gelegt, also ist das folgende eine **wahrscheinliche** Erklärung, keine absolute Gewissheit. Aber das beobachtete Verhalten stimmt ziemlich gut mit der folgenden Hypothese überein.
 
-### Der Cape-Selektor war nie eine Zugriffskontrolle
+### Der Umhang-Auswahlschalter war nie eine Zugriffskontrolle
 
-Auf Bedrock zeigt der Cape-Auswahlbildschirm wahrscheinlich **die komplette Liste der Capes, die es im Spiel gibt**, nicht nur die, die dein Konto besitzt. Auf aktuellen Clients graut oder versteckt ein Anwendungsfilter (clientseitig oder über einen Netzwerkaufruf an einen Xbox/Microsoft-Entitlement-Service) die Capes aus, die du nicht besitzt.
+Auf Bedrock zeigt der Umhang-Auswahlbildschirm wahrscheinlich **die vollständige Liste der Umhänge im Spiel**, nicht nur derer, die dein Konto besitzt. Bei neusten Kunden wird ein Applikationsfilter (Clientseite oder über einen Netzwerkanruf zu einem grauen Xbox/Microsoft-Entitlement-Service) verwendet oder verdeckt die nicht vorhandenen Umhänge.
 
-Der springende Punkt ist, dass dieser Filter wahrscheinlich **nachträglich** hinzugefügt wurde, auf einer hinreichend aktuellen Spielversion. Eine Version wie 1.16.x ist älter als dieser Filter oder nutzt einen anderen (oder fehlenden) Verifizierungsmechanismus: Alles in der Liste wird auswählbar, Entitlement oder nicht.
+Der Schlüsselpunkt ist, dass dieser Filter wahrscheinlich ** nach dem Schlag** auf eine ziemlich neue Version des Spiels hinzugefügt wurde. Eine Version wie 1.16.x ist vor diesem Filter, oder verwendet einen anderen Check-Mechanismus (oder fehlt): Alles in der Liste wird wählbar, entitierbar oder nicht.
 
-### Wo genau ist die Cape gespeichert?
+### Wo genau ist der Umhang gespeichert?
 
-Das ist der Teil, der erklärt, warum es die Neuinstallation überlebt. Die Skin/Cape-Wahl auf Bedrock ist nicht nur eine wegwerfbare lokale Datei, sie wird wahrscheinlich auf das Xbox-Live-Profil synchronisiert, das mit deinem Microsoft-Konto verknüpft ist (dasselbe System, das deinen Skin auf den anderen Bedrock-Plattformen verwaltet, Mobile, Konsole usw.). Wenn du in dem alten Client eine Cape auswählst, schickt dieser die Auswahl sehr wahrscheinlich an den Profildienst, exakt wie es ein aktueller Client mit einer legitimen Cape täte, weil es aus Clientsicht keinen Unterschied zwischen einer Cape "von dir" und einer "gewählten" Cape gibt. Der Profildienst vertraut dabei dem Client: Er speichert die Auswahl, ohne erneut zu validieren, ob das Entitlement wirklich dahintersteht, zumindest nicht zum Schreibzeitpunkt.
+Das ist der Teil, der erklärt, warum es die Neuansiedlung überlebt. Die Wahl von Skin/Kape auf Bedrock ist nicht nur eine lokale Einwegdatei – es wird wahrscheinlich auf dem Xbox Live-Profil synchronisiert, das mit deinem Microsoft-Konto verknüpft ist (das gleiche System, das deinen Skin auf anderen Plattformen verwaltet – Mobil, Konsole usw.). Wenn du einen Umhang im alten Client wählst, sendet dieser diese Auswahl höchstwahrscheinlich an den Profilservice, genau wie ein aktueller Kunde mit einem legitimen Cape – weil es aus Sicht des Kunden keinen Unterschied zwischen einem Cape ✓ zu dir und einem gewählten Cape gibt ^. Der Profilservice vertraut dem Kunden auf diesem Punkt: er speichert die Auswahl, ohne die Änderung zu ändern, wenn das Entitlement tatsächlich hinter ihm existiert, zumindest nicht zum Zeitpunkt des Schreibens.
 
-Ergebnis: Wenn du das aktuelle offizielle Spiel neu startest, holt es deinen aktuellen Skin/Cape vom Profildienst, und der Dienst gibt treu zurück, was gespeichert wurde, nicht-legitime Cape eingeschlossen. Der Entitlement-Check, falls es ihn gibt, passiert wahrscheinlich nur zum Zeitpunkt der **Auswahl** in der UI (daher der Filter auf aktuellen Clients) und lässt die **Anzeige** dessen durch, was schon auf dem Profil gespeichert ist.
+Ergebnis: Wenn du das offizielle Spiel auf den neuesten Stand bringen, wird es deinen aktuellen Skin/Kape auf dem Profilservice abholen – und der Service sendet getreu das aufgenommene, nicht-legitime Cape inklusive. Der Entitlement-Check, wenn vorhanden, wird wahrscheinlich nur zum Zeitpunkt der **Auswahl** in der U.S. (daher der Filter auf den letzten Kunden) durchgeführt und lässt die** Ansicht** von dem, was bereits auf dem Profile gespeichert ist, übergeben.
 
-### Die Parallele zu Java
+### Parallel zu Java
 
-Es ist dieselbe Familie logischer Lücke wie beim `cape-mod` auf Java: Ein Service vertraut Daten, ohne ihren Ursprung bei jedem Schritt erneut zu prüfen. Auf Java ist es eine gültige, aber auf das falsche Profil replayte RSA-Signatur. Auf Bedrock ist es wahrscheinlich eine Cape-Auswahl, die von einem alten Client akzeptiert wurde, der nie den richtigen Filter hatte, und dann ohne Re-Verifizierung in den persistenten Kontostand propagiert wurde. In beiden Fällen ist das Problem nicht der Eintrittspunkt (der Java-Mod, der alte Bedrock-Client), sondern dass die Schicht, die das Entitlement nachgelagert erneut validieren sollte, es nicht tut, oder nur einmal, an der falschen Stelle.
+Es ist dieselbe Familie von logischen Fehlern wie die Familie von`cape-mod`auf Java: ein Dienst vertraut einem Datendatensatz, ohne seinen Ursprung in jedem Schritt zu überprüfen. Auf Java ist es eine gültige, aber auf dem falschen Profil zurückgebildete RSA-Signatur. Bei Bedrock ist es wahrscheinlich eine Auswahl von Umhängen, die von einem alten Kunden akzeptiert wurde, der nie den richtigen Filter hatte und dann ohne Überprüfung auf den dauerhaften Status des Kontos übertragen wurde. In beiden Fällen ist das Problem nicht der Eingangspunkt (der Java-Mod, der alte Bedrocks-Client) – ist, dass die Schicht, die das Untergrund-Becken umformt, dies nicht tut oder nur einmal an der falschen Stelle tut.
 
-## Warum es immer noch funktioniert
+## Warum funktioniert es immer noch?
 
-Zwei mögliche Erklärungen, die sich nicht ausschließen:
+Zwei mögliche Erklärungen, nicht unvereinbar zwischen ihnen:
 
-1. **Mojang betrachtet das wahrscheinlich nicht als prioritär.** Es braucht einen Drittanbieter-Launcher, eine mehrstufige Manipulation, und das Ergebnis ist rein kosmetisch, kein Gameplay-Vorteil, keine kompromittierten Daten anderer.
-2. **Es korrekt zu patchen würde erfordern, die Entitlements bei jedem Lesen des Profils erneut zu validieren**, nicht nur bei der Auswahl, was einen zusätzlichen Netzwerkaufruf bei jeder Skin-Anzeige bedeuten würde, für ein Problem, das nur die Ästhetik betrifft.
+1. **Mojang sieht das wahrscheinlich nicht als Priorität an.** Es braucht einen Drittanbieter-Launcher, eine Handhabung in mehreren Schritten, und das Ergebnis ist rein kosmetische – kein Gameplay-Vorteil, keine anderen Daten beeinträchtigt.
+2. **Patching es richtig würde erfordern, die Eindrücke bei jeder Wiedergabe des Profils** zu ändern, nicht nur bei der Auswahl – das bedeutet, einen zusätzlichen Netzwerkanruf auf jede Skin-Anzeige, für ein Problem, das nur Ästhetik betrifft.
 
-## Fazit
+## Schlussfolgerung
 
-Dieses Tutorial passt in zehn Screenshots, aber es illustriert ein Prinzip, das man überall in der Softwaresicherheit wiederfindet: Sobald ein historisches System (eine alte Client-Version, eine Legacy-API, ein nie aktualisierter Service) noch in einen geteilten Zustand schreiben kann, schützt die Zugriffskontrolle der Gegenwart nur das, was durch die Gegenwart geht. Alles, was noch mit der alten API reden kann, umgeht den neueren Filter, der Filter funktioniert auf aktuellen Versionen, wurde aber nie auf die Version angewendet, die ihm vorausging.
+Dieses Tuto hält in zehn Screenshots, aber es zeigt ein Prinzip, das überall in Softwaresicherheit gefunden wird: Sobald ein historisches System (eine alte Client-Version, eine Legacy-API, ein nie aktualisierter Service) noch in einen geteilten Zustand schreiben kann, schützt die Zugriffskontrolle der Gegenwart nur das, was durch die Gegenwart geht. Alles, was noch mit der alten API sprechen kann, umgeht den neuesten Filter – der Filter funktioniert auf den neuesten Versionen, aber er wurde nie auf die frühere Version angewendet.
 
 ---
 
 **Ressourcen**
 
-- **BedrockLauncher**: [github.com/bedrockLauncher/BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
-- **Verwandter Artikel**: Cape Mod, das Java-Äquivalent per RSA-Signaturinjektion
+- **BedrockLauncher**:[github.com/bedrockLauncher/BedrockLauncher](https://github.com/bedrockLauncher/BedrockLauncher)
+- **Verknüpfte Artikel**: Cape Mod, Java-Äquivalent durch RSA-Signaturinjektion
 
-**3 Kernpunkte**
+**3 Schlüsselpunkte**
 
-1. Der Cape-Selektor einer alten Bedrock-Version zeigt wahrscheinlich die komplette Liste der Capes des Spiels, ohne Entitlement-Filter.
-2. Die Auswahl wird dann wie jede legitime Cape auf dein Xbox-Live-Profil synchronisiert, der Profildienst vertraut dem Client.
-3. Der Entitlement-Check, falls es ihn gibt, passiert bei der Auswahl in der aktuellen UI, nicht beim Lesen dessen, was schon auf dem Konto gespeichert ist.
+1. Der Umhänge-Auswahlschalter einer alten Version von Bedrock zeigt wahrscheinlich die vollständige Liste der Umhänge des Spiels ohne Entitlementfilter an.
+2. Die Auswahl wird dann auf deinem Xbox Live-Profil synchronisiert, wie jedes legitime Umhang – der Profilservice vertraut dem Kunden.
+3. Der Entitlement-Check, wenn vorhanden, erfolgt bei der Auswahl in der letzten UI – nicht beim Lesen von dem, was bereits auf dem Konto gespeichert ist.

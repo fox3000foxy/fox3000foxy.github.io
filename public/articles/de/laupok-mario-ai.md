@@ -1,6 +1,5 @@
 ---
 title: "Laupok hat eine KI gebaut, die Super Mario World allein spielt, so funktioniert es"
-
 date: 2026-07-11
 tags:
   - ai
@@ -9,282 +8,290 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "2u5JcZGL0nGlJyx2RFmnCVqY+Oty1ylTJXSyRI+tu/pE1ZKltXQFmo8uiqm5tCc0+ZhCnn97TW2A2Co6VQVZeg=="
+lang: "de"
 ---
+# 
 
-# Laupok hat eine KI gebaut, die Super Mario World allein spielt, so funktioniert es
+Laupok hat eine künstliche Intelligenz geschaffen, die **Super Mario World** auf völlig autonome Weise spielt. du beginnt von Null: kein vordefiniertes Skript, kein aufgezeichnetes Frame. Die KI lernt allein durch zufällige Mutationen und natürliche Auswahl, die Spielebenen zu beenden. Das Projekt dreht sich um **BizHawk**, einen Multiplattform-Emulator, über ein Lua-Skript von ca. **4200 Zeilen**.
 
-Laupok hat eine künstliche Intelligenz gebaut, die **Super Mario World** völlig autonom spielt. Sie startet bei null: Kein vordefiniertes Skript, kein aufgezeichneter Frame. Die KI lernt allein, durch zufällige Mutationen und natürliche Selektion, die Spiellevel zu beenden. Das Projekt läuft auf **BizHawk**, einem Multi-Plattform-Emulator, via ein Lua-Skript von etwa **4200 Zeilen**.
+Das Faszinierende an diesem Projekt ist, dass es auf biologischen Konzepten beruht, die auf der Informatik angewendet werden: die **Theorie der Darwin-Evolution**, die **Kunst neuronalen Netze** und vor allem ein spezifischer Algorithmus, genannt **NEAT** (NeuroEvolution of Augmenting Topologies). Die KI kennt das Spiel am Anfang nicht. du testet zufällige Aktionen, scheitert Tausende Male und allmählich versteht sie, wie man vorankommt, springen und überleben kann.
 
-Was dieses Projekt faszinierend macht, ist, dass es auf biologischen Konzepten angewandt auf Informatik beruht: **Darwins Evolutionstheorie**, **künstliche neuronale Netze** und vor allem ein spezifischer Algorithmus namens **NEAT** (NeuroEvolution of Augmenting Topologies). Die KI weiß anfangs nichts über das Spiel. Sie testet zufällige Aktionen, scheitert tausendfach, und nach und nach versteht sie, wie man vorankommt, springt und überlebt.
+In diesem Artikel werden wir das alles verschlüsseln - Konzept nach Konzept, Code-Linie nach Codezeile.
 
-In diesem Artikel zerlegen wir das alles, Konzept für Konzept, Codezeile für Codezeile.
-
-![Laupok stellt den NEAT-Algorithmus vor der Kamera vor](/images/laupok-mario-ai/neat-title.jpg)
+! [Laupok introduit l'algorithme NEAT devant la caméra](/images/laupok-mario-ai/neat-title.jpg)
 
 ---
 
 ## Das Setup: BizHawk, Lua und Super Mario World
 
-### Der BizHawk-Emulator
+### Der Emulator BizHawk
 
-BizHawk ist ein Open-Source-Emulator, der eine Tonne Konsolen unterstützt, NES, SNES, Genesis, PS1, Game Boy und viele mehr. Seine Besonderheit ist, dass er **Lua-Skripte** parallel zum Spiel starten kann. Diese Skripte haben Zugriff auf den **Arbeitsspeicher** (RAM) der Emulation, was heißt, dass sie alle Spieldaten live lesen und modifizieren können.
+BizHawk ist ein Open Source Emulator, der eine Tonne Konsolen unterstützt – NES, SNES, Genesis, PS1, Game Boy und viele andere. Seine Besonderheit ist, dass er es ermöglicht, parallel zum Spiel **Lua-Skripte** zu starten. Diese Skripts haben Zugriff auf das **Live-Speicher** (RAM) der Emulation, was bedeutet, dass sie alle Daten des Spiels in Echtzeit lesen – und bearbeiten können.
 
-Konkret heißt das, man kann:
-- Marios Position im Level lesen
-- Wissen, welche Sprites (Gegner, Items) auf dem Bildschirm sind
-- Den Zustand jeder Tile (Block) um Mario kennen
-- Den Controller steuern, jeden Button drücken
+Konkret bedeutet das, dass wir:
 
-Genau das braucht man, um eine KI spielen zu lassen.
+- Liest du Mario Position in der Ebene
+
+- Wissen, welche Sprites (Feinde, Items) auf dem Bildschirm sind
+
+- Den Zustand jedes Tiles (Blocks) um Mario kennen
+
+- Controller – drücke jede Schaltfläche
+
+Genau das brauchen wir, um eine KI zu spielen.
 
 ### Die Speicheradressen von Super Mario World
 
-Im RAM von Super Mario World liegt jede Dateneinheit an einer spezifischen Adresse. Ein bisschen wie ein Viertel: Jede Adresse entspricht einem "Haus", das eine Information enthält. Zum Beispiel:
+In der Super Mario World RAM werden alle Daten an einer bestimmten Adresse gespeichert. Es ist ein wenig wie ein Viertel: Jede Adresse entspricht einem "Haus," das Informationen enthält.
 
-| Adresse | Daten |
+| Anschrift | Angaben |
 |---------|--------|
-| `0x94`-`0x95` | Marios X-Position (16 Bit, Little-Endian) |
-| `0x96`-`0x97` | Marios Y-Position |
-| `0x14C8`+`i` | Zustand des Sprites `i` (>7 = lebend) |
-| `0xE4`+`i` | Untere X-Position des Sprites `i` |
-| `0x14E0`+`i` | Obere X-Position des Sprites `i` |
-| `0xD8`+`i` | Untere Y-Position des Sprites `i` |
-| `0x14D4`+`i` | Obere Y-Position des Sprites `i` |
-| `0x170B`+`i` | Typ des Extended Sprites `i` |
-| `0x0100` | Spielzustand (12 = Level beendet) |
-| `0x13D4` | Pause aktiv |
+| `0x94` - `0x95` | Position X von Mario (16 Bit, Little-endian) |
+| `0x96` - `0x97` | Position Y von Mario |
+| `0x14C8` + `i` | Sprit-Status`i`(>7 = lebend) |
+| `0xE4` + `i` | Untere X-Position des Sprites`i` |
+| `0x14E0` + `i` | Position X hoch des Sprites`i` |
+| `0xD8` + `i` | Position Y untere Sprite`i` |
+| `0x14D4` + `i` | Position Y hoch des Sprite`i` |
+| `0x170B` + `i` | Extended-Sprite-Typ`i` |
+| `0x0100` | Spielstand (12 = fertiges Niveau) |
+| `0x13D4` | Aktive Pause |
 | `0x0071` | Marios Todesanimation (9 = tot) |
-| `0x1C800`+... | Level-Tile-Tabelle |
+| `0x1C800` +... | Tabelle der Ebenen |
 
-Die Sprite-Position nutzt zwei Bytes: Ein "unteres" und ein "oberes" Byte, weil die Position 255 Pixel übersteigen kann. Die Formel ist immer `unten + oben × 256`.
+Die Position der Sprites verwendet zwei Bytes: ein "Byte" unten und ein "oben," weil die Position über 255 Pixel liegen kann.`bas + haut × 256` .
 
-Für Tiles ist es komplexer: Die Basisadresse ist `0x1C800`, und man berechnet den Offset je nach `x`- und `y`-Koordinaten der Tile in der Welt, mit 16 Pixeln Schritt pro Tile.
+Für die Tiles ist es komplexer: die Grundadresse ist`0x1C800`, und man berechnet das Offset auf der Grundlage der Koordinaten`x`und`y`Weltweit mit 16 Pixeln pro Til.
 
-![Super Mario World mit Debug-Overlay, das Sprite-Speicheradressen und Marios Position zeigt](/images/laupok-mario-ai/memory-debug.jpg)
-
----
-
-## Die Basics: Genetische Algorithmen und neuronale Netze
-
-Bevor wir in den Code tauchen, muss man zwei fundamentale Konzepte verstehen. Ohne sie ergibt der Rest keinen Sinn.
-
-### Die genetischen Algorithmen
-
-Ein genetischer Algorithmus ist eine Simulation der **Evolutionstheorie**. Die zentrale Idee: Man erschafft eine **Population** von Individuen, jedes mit leicht unterschiedlichen Eigenschaften ("Genen"). Man lässt sie in einer Umgebung "leben". Die, die sich am besten schlagen, überleben und pflanzen sich fort. Die, die sich schlecht schlagen, verschwinden.
-
-Laupok illustriert das mit einer **Kirby**-Analogie:
-- Eine Kirby-Population erscheint auf einem Terrain mit Stacheln und Tomaten
-- Die Stacheln nehmen Lebenspunkte, die Tomaten geben welche zurück
-- Jeder Kirby hat Gene: Größe, Geschwindigkeit, Lebenspunkte, Verhalten (fliehen, Tomaten suchen, irgendwohin rennen)
-
-![Doppel-DNA-Helix mit Labels "das Baby", "Größe", "Geschwindigkeit", "Farbe", die Gene, die ein Individuum bilden](/images/laupok-mario-ai/dna-genes.jpg)
-
-- Nach 15 Sekunden schaut man, wer am längsten überlebt hat
-- Der beste Kirby pflanzt sich mit den anderen fort: Die Babys erben die Hälfte der Gene des Besten und die Hälfte des "Schlechtesten"
-- Die Babys erleiden zufällige **Mutationen** (etwas größer, etwas schneller...)
-- Die alten Kirbys werden durch die neuen ersetzt
-- Man startet neu
-
-Nach 180 Generationen (~15 Stunden) gehen die Kirbys von 15 Sekunden Überleben auf **15 Minuten**. Sie wurden klein (reduzierte Kollisionszone), schnell und fliehen permanent vor Gefahr.
-
-![Kirby-Simulation Generation 0: zufällig verstreute farbige Kreise auf schwarzem Grund, alle ähnlich groß](/images/laupok-mario-ai/kirby-gen0.jpg)
-
-![Kirby-Simulation Generation 1866: die Kirbys sind kleiner, schneller und fliehen systematisch vor Gefahren](/images/laupok-mario-ai/kirby-gen1866.jpg)
-
-![Statistiken der Kirby-Simulation: Fitness, Lebenspunktezahl, Verhalten jedes Individuums sortiert nach Leistung](/images/laupok-mario-ai/kirby-stats.jpg)
-
-Der entscheidende Punkt: **Man definiert die Lösung nicht**. Der Algorithmus **findet sie allein**. Und genau das macht ihn mächtig für Probleme, bei denen man nicht weiß, welche Parameterkombination optimal wäre.
-
-### Die künstlichen neuronalen Netze
-
-Ein neuronales Netz ist ein vereinfachtes mathematisches Modell des menschlichen Gehirns. Es besteht aus:
-- **Input-Neuronen**: Was das Netz "sieht"
-- **Output-Neuronen**: Was das Netz "entscheidet"
-- **Verbindungen** (Gewichte): Jede Verbindung hat ein **Gewicht**, das das Signal verstärkt oder dämpft
-
-Das Prinzip ist simpel: Jedes Input-Neuron schickt seinen Wert. Er wird mit dem Verbindungsgewicht multipliziert, dann zu den anderen Signalen addiert. Wenn das Ergebnis eine gewisse Schwelle übersteigt (die **Aktivierungsfunktion**), aktiviert sich das Output-Neuron.
-
-In Laupoks Analogie mit Mario und dem Mäuseende:
-- Das Input-Neuron = die Distanz zwischen Mario und dem Ende
-- Das Verbindungsgewicht = Marios Sensibilität
-- Das Output-Neuron = Mario schreit oder nicht
-
-Je näher das Ende, desto höher der Inputwert. Wenn das Gewicht stark ist, ist das Outputsignal stark, und Mario würde schreien. Indem man das Gewicht ändert, ändert man Marios Sensibilität.
-
-![Demo "Mario hat Angst": Mario vor einem Buu mit Synapsenbalken, der das Verbindungsgewicht zwischen Input und Output zeigt](/images/laupok-mario-ai/mario-fear-demo.jpg)
-
-Im echten neuronalen Netz der KI ist es dieselbe Logik, aber in massivem Maßstab:
-- **99 Input-Neuronen** (11×9 Tiles von Marios Sicht)
-- **8 Output-Neuronen** (A, B, X, Y, Hoch, Runter, Links, Rechts)
-- **Versteckte Neuronen** (hidden) dazwischen
-- Hunderte Verbindungen mit variierten Gewichten
+! [Super Mario World avec overlay de débogage montrant les adresses mémoire des sprites et la position de Mario](/images/laupok-mario-ai/memory-debug.jpg)
 
 ---
 
-## NEAT: der Algorithmus, der alles ändert
+## Grundlagen: Genetische Algorithmen und Neuronennetze
 
-### Das Problem klassischer genetischer Algorithmen
+Bevor wir in den Kodex eintauchen, müssen wir zwei grundlegende Konzepte verstehen, ohne sie hat der Rest keinen Sinn.
 
-Wenn man einen genetischen Algorithmus naiv mit einem neuronalen Netz kombiniert, hat man ein Problem: Man erschafft 100 völlig verschiedene neuronale Netze und weiß nicht, wie man sie vergleicht. Jedes hat eigene Neuronen, eigene Verbindungen, eigene Gewichte. Wie weiß man, ob zwei Netze "nah" oder "fern" sind?
+### Genetische Algorithmen
 
-Hier kommt **NEAT** ins Spiel, NeuroEvolution of Augmenting Topologies. Erfunden von **Kenneth Stanley** und **Risto Miikkulainen** 2002, löst es exakt dieses Problem.
+Ein genetischer Algorithmus ist eine Simulation der **Evolutionstheorie**. Die zentrale Idee: Es entsteht eine **Population** von Individuen, die jeweils mit etwas anderen Merkmalen (den "Genen") gekennzeichnet sind. du wirst in einer Umgebung "leben" lassen. Diejenigen, die am besten auskommen, überleben und sich wiederholen.
 
-### Die Spezies
+Laupok zeigt dies mit einer Analogie von **Kirby**:
 
-Der erste Schlüsselmechanismus von NEAT sind die **Spezies**. Wenn ein neuronales Netz zu verschieden von einem anderen wird, wird es in eine andere Spezies klassifiziert. Die Ähnlichkeit wird via drei Parameter berechnet:
+- Kirby-Population erscheint auf einem Grundstück mit Pik und Tomaten
 
-1. **Excess** (`EXCES_COEF = 0.50`): Die Zahl der Verbindungen, die gar nichts miteinander zu tun haben (verschiedene Innovationen)
-2. **Disjoint**: Dasselbe, aber für Verbindungen, die in der Mitte liegen
-3. **Gewichtsdifferenz** (`POIDSDIFF_COEF = 0.92`): Die mittlere Gewichtsdifferenz zwischen Verbindungen mit derselben Innovation
+- Die Pik-Sache entfernt Lebenspunkte, die Tomaten geben wieder
 
-Die Score-Formel:
+- Jedes Kirby hat Gene: Größe, Geschwindigkeit, Lebenspunkte, Verhalten (Fliehen, Suche nach Tomaten, überallhin)
 
+! [Double hélice d'ADN avec les étiquettes "le bébé", "taille", "vitesse", "couleur" – les gènes qui composent un individu](/images/laupok-mario-ai/dna-genes.jpg)
+
+- Nach 15 Sekunden schauen wir, wer am längsten überlebt hat.
+- Die besten Kirbys reproduzieren sich mit anderen: Babys erben die Hälfte der Gene des besten und der Hälfte des "Spiritus"
+- Babys werden zufällige **Mutationen** (ein wenig größer, etwas schneller...)
+- Die alten Kirby werden durch die neuen ersetzt
+- Wir heben wieder auf.
+
+Nach 180 Generationen (~15 Stunden) steigen die Kirbys von 15 Sekunden Überleben auf **15 Minuten**. Sie sind klein geworden (reduzierte Kollisionszone), schnell und fliehen ständig vor der Gefahr.
+
+! [Simulation Kirby génération 0: des cercles colorés dispersés aléatoirement sur un fond noir, tous de taille similaire](/images/laupok-mario-ai/kirby-gen0.jpg)
+
+! [Simulation Kirby génération 1866: les Kirby sont plus petits, plus rapides, et fuient systématiquement les dangers](/images/laupok-mario-ai/kirby-gen1866.jpg)
+
+! [Statistiques de la simulation Kirby: fitness, nombre de points de vie, comportement de chaque individu classés par performance](/images/laupok-mario-ai/kirby-stats.jpg)
+
+Der entscheidende Punkt: ** wir definieren die Lösung nicht**. ** findet sie allein**. Und genau das macht sie für Probleme stark, bei denen man nicht weiß, welche Kombination von Parametern optimal wäre.
+
+### Die Netze künstlicher Neuronen
+
+Ein Netz von Neuronen ist ein vereinfachtes mathematisches Modell des menschlichen Gehirns. Es besteht aus:
+
+- **Eingangsdaten** (Eingänge): Was das Netz "besteht"
+
+- **Ausgangsdaten** (Outputs): Was das Netz "entscheidet"
+
+- **Verbindungen** (Gewicht): Jede Verbindung hat ein **Gewicht**, das das Signal verstärkt oder vermindert
+
+Das Prinzip ist einfach: Jedes Eingangsneuron sendet seinen Wert. Es wird mit dem Gewicht der Verbindung multipliziert und dann den anderen Signalen hinzugefügt. Wenn das Ergebnis einen bestimmten Schwellenwert (die **Aktivierungsfunktion**) überschreitet, aktiviert sich das Ausgangsneurone.
+
+In Laupok Analogie mit Mario und der Mausspitze:
+
+- Das Eingangs-Neurone = die Entfernung zwischen Mario und der Spitze
+
+- Das Gewicht der Verbindung = die Empfindlichkeit von Mario
+
+- Das Ausgangsneuron = Mario schreit oder nicht
+
+Je näher das Ende ist, desto höher der Eingangswert. Wenn das Gewicht hoch ist, ist das Signal am Ausgang stark, und Mario würde schreien. Durch die Änderung des Gewichts wird die Empfindlichkeit von Mario verändert.
+
+! [Démo "Mario a peur": Mario face à un Boo avec une barre de synapse affichant le poids de la connexion entre l'entrée et la sortie](/images/laupok-mario-ai/mario-fear-demo.jpg)
+
+Im echten Netzwerk von KI-Neurone ist es die gleiche Logik, aber in einem massiven Maßstab:
+
+- **99 Eingangsneuronen** (11×9 Tiles aus Mario-Ansicht)
+
+- **8 Ausgangs-Neutronen** (A, B, X, Y, Hoch, unten, links, rechts)
+
+- Versteckte **neurones** (hidden) zwischen den beiden
+
+- Hunderte von Verbindungen mit unterschiedlichen Gewichten
+
+---
+
+## NEAT: Der Algorithmus, der alles verändert
+
+### Das Problem der klassischen genetischen Algorithmen
+
+Wenn man einen genetischen Algorithmus mit einem neuronalen Netzwerk naiv kombiniert, hat man ein Problem: man schafft 100 völlig unterschiedliche Neuronennetze und kann sie nicht vergleichen. Jeder hat seine eigenen Neurone, seine Verbindungen, seine eigenen Gewichte.
+
+Hier wird **NEAT** – NeuroEvolution of Augmenting Topologies eingegriffen. Erfunden von **Kenneth Stanley** und **Risto Miikkulainen** im Jahr 2002, ist es ein Algorithmus, der dieses Problem genau löst.
+
+### Arten
+
+Der erste Schlüsselmechanismus von NEAT sind die ** Arten**. Wenn ein Neuronennetz zu verschieden wird, wird es in eine andere Spezies eingestuft. Die Ähnlichkeit wird durch drei Parameter berechnet:
+
+1. **Excess** (`EXCES_COEF = 0.50`): Anzahl der Verbindungen, die nicht mit zwei Netzen in Beziehung stehen (unterschiedliche Innovationen)
+2. **Teil**: ähnlich, aber für Verbindungen in der Mitte
+3. **Weight difference** (`POIDSDIFF_COEF = 0.92`): die durchschnittliche Gewichtsdifferenz zwischen den Verbindungen, die dieselbe Innovation teilen
+
+Die Ergebnisformel:
 ```
 score = (EXCES_COEF × disjoint) / max(nbConnexions1 + nbConnexions2, 1)
       + POIDSDIFF_COEF × diffPoids
 ```
+Wenn dieser Wert unter`DIFF_LIMITE`(1.0), beide Netzwerke sind in derselben Art, sonst erschaffen wir eine neue Spezies.
 
-Wenn dieser Score unter `DIFF_LIMITE` (1.0) liegt, sind beide Netze in derselben Spezies. Sonst erstellt man eine neue Spezies.
+### Innovationen
 
-### Die Innovationen
+Es ist das Genie von NEAT. Jedes Mal, wenn eine Verbindung entsteht, erhält sie eine einmalige und globale** Innovationsnummer. Diese Nummer folgt dem Neuronennetz, auch wenn sie sich wiederholt.
 
-Das ist NEATs Genie. Jedes Mal, wenn eine Verbindung erstellt wird, erhält sie eine global eindeutige **Innovations**-Nummer. Diese Nummer folgt dem neuronalen Netz, selbst wenn es sich fortpflanzt.
-
-Konkret erbt ein per Crossover erstelltes Baby die Innovationen seiner Eltern. Wenn zwei Netze dieselbe Innovation teilen, heißt das, dass sie eine Verbindung haben, die vom selben Vorfahren kommt. Das erlaubt, verschieden große Netze zu vergleichen.
+Wenn ein Baby von crossover erbt wird, erbt es Innovationen seiner Eltern. Wenn zwei Netzwerke dieselbe Innovation teilen, bedeutet das, dass sie eine Verbindung haben, die von demselben Vorfahren kommt. Das ermöglicht es, Netzwerke unterschiedlicher Größe zu vergleichen.
 
 ### Der Crossover
 
-Wenn sich zwei neuronale Netze fortpflanzen, funktioniert der **Crossover** so:
+Wenn zwei Neuronennetze sich wiederholen, funktioniert das **crossover** wie folgt:
 
-![Laupok erklärt das Crossover-Konzept mit "CROSSOVER"-Text-Overlay](/images/laupok-mario-ai/crossover-label.jpg)
+! [Laupok explique le concept de crossover avec le texte "CROSSOVER" en overlay](/images/laupok-mario-ai/crossover-label.jpg)
 
-1. Das leistungsstärkste Netz wird der "dominante Elternteil"
+1. Das leistungsfähigste Netz wird zum "beherrschenden Eltern"
 2. Das Baby erbt alle Verbindungen des Dominanten
-3. Für jede Verbindung mit derselben Innovation kann der andere Elternteil sie ersetzen (50% Chance)
+3. Für jede Verbindung, die dieselbe Innovation teilt, kann der andere Elternteil sie ersetzen (50% Chance)
 4. Nur aktive Verbindungen des nicht-dominanten Elternteils können ersetzen
 
-Das garantiert, dass das Baby immer mindestens so gut ist wie der beste Elternteil.
+Das sorgt dafür, dass das Baby immer so gut ist wie der beste Elternteil.
 
-### Die Mutationen
+### Veränderungen
 
-Nach dem Crossover erleidet das Baby Mutationen mit konfigurierbaren Wahrscheinlichkeiten:
+Nach dem Crossover wird das Baby mit konfigurierbaren Wahrscheinlichkeiten verändert:
 
-![Laupok erklärt Mutationen mit "(kleine Änderung = Mutation)"-Text-Overlay](/images/laupok-mario-ai/mutation-label.jpg)
+! [Laupok explique les mutations avec le texte "(petite modif = mutation)" en overlay](/images/laupok-mario-ai/mutation-label.jpg)
 
-| Mutation | Wahrscheinlichkeit | Effekt |
+| Mutation | Wahrscheinlichkeit | Wirkung |
 |----------|------------|-------|
-| Verbindungsgewicht-Reset | 25% | Das Gewicht wird total randomisiert |
-| Gewichts-Mutation | 95% | Das Gewicht variiert um ±0.80 |
-| Verbindungs-Hinzufügung | 85% | Neue Verbindung zwischen zwei noch nicht verbundenen Neuronen |
-| Neuronen-Hinzufügung | 39% | Ein verstecktes Neuron wird zwischen zwei verbundenen Neuronen eingefügt |
+| Reset Gewicht Verbindung | 25% | Das Gewicht ist vollständig randomisiert |
+| Gewichtsmutation | 95% | Das Gewicht variiert um ±0.80 |
+| Verbindung hinzufügen | 85% | Neue Verbindung zwischen zwei Neuronen, die noch nicht miteinander verbunden sind |
+| Neuron-Zusatz | 39% | Zwischen zwei vernetzten Neuronen wird ein verstecktes Neuron eingefügt. |
 
-Die Neuronen-Hinzufügungsrate ist wichtig: Sie erlaubt dem Netz zu **wachsen**. Anfangs gibt es nur Inputs und Outputs. Progressiv erscheinen versteckte Neuronen, was das Netz immer komplexer macht.
+Die Anzahl der Neuronen wird erhöht, was das Netzwerk zu ** vergrößern** ermöglicht. Zunächst gibt es nur Eingänge und Ausgänge. Allmählich erscheinen versteckte Neurone, wodurch das Netzwerk immer komplexer wird.
 
 ---
 
-## Der Code: kompletter Walkthrough
+## Der Code: walkthrough complete
 
-### Die Konstanten
+### Konstanten
 
-Das Skript beginnt mit einem Konstantenblock, der das ganze Setting definiert:
-
+Das Skript beginnt mit einem Block von Konstanten, die die ganze Einstellung definieren:
 ```lua
--- Marios Sicht um ihn herum
+-- Vue de Mario autour de lui
 TAILLE_TILE = 16
-TAILLE_VUE_W = TAILLE_TILE * 11  -- 176 Pixel Breite
-TAILLE_VUE_H = TAILLE_TILE * 9   -- 144 Pixel Höhe
-NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 Tiles
-NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 Tiles
+TAILLE_VUE_W = TAILLE_TILE * 11  -- 176 pixels en largeur
+TAILLE_VUE_H = TAILLE_TILE * 9   -- 144 pixels en hauteur
+NB_TILE_W = TAILLE_VUE_W / TAILLE_TILE  -- 11 tiles
+NB_TILE_H = TAILLE_VUE_H / TAILLE_TILE  -- 9 tiles
 
--- Neuronales Netz
-NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 Inputs (sichtbare Tiles)
-NB_OUTPUT = 8  -- A, B, X, Y, Hoch, Runter, Links, Rechts
-NB_INDIVIDU_POPULATION = 100  -- Individuen pro Population
-NB_NEURONE_MAX = 100000  -- Limit versteckter Neuronen
+-- Réseau de neurones
+NB_INPUT = NB_TILE_W * NB_TILE_H  -- 99 inputs (tiles visibles)
+NB_OUTPUT = 8  -- A, B, X, Y, Haut, Bas, Gauche, Droite
+NB_INDIVIDU_POPULATION = 100  -- individus par population
+NB_NEURONE_MAX = 100000  -- limite de neurones cachés
 
 -- Fitness
-FITNESS_LEVEL_FINI = 1000000  -- Wert wenn Level beendet
-NB_FRAME_RESET_BASE = 33  -- Frames ohne Fortschritt vor Reset
-NB_FRAME_RESET_PROGRES = 300  -- Frames wenn Fortschritt erkannt
+FITNESS_LEVEL_FINI = 1000000  -- valeur quand le niveau est terminé
+NB_FRAME_RESET_BASE = 33  -- frames sans progrès avant reset
+NB_FRAME_RESET_PROGRES = 300  -- frames si progrès détecté
 
--- Spezies
+-- Espèces
 EXCES_COEF = 0.50
 POIDSDIFF_COEF = 0.92
 DIFF_LIMITE = 1.00
 
--- Mutationen
+-- Mutations
 CHANCE_MUTATION_RESET_CONNEXION = 0.25
 POIDS_CONNEXION_MUTATION_AJOUT = 0.80
 CHANCE_MUTATION_POIDS = 0.95
 CHANCE_MUTATION_CONNEXION = 0.85
 CHANCE_MUTATION_NEURONE = 0.39
 ```
+Das`NB_INPUT`ist 99, weil die Ansicht von Mario macht 11×9 Tiles. Jeder Tile ist ein Eingangsneuron. Wenn der Tile leer ist, ist er 0. Wenn es ein Block ist, wird er 1 sein. Wenn er ein Feind ist, dann ist er -1 wert.
 
-Das `NB_INPUT` ist 99, weil Marios Sicht 11×9 Tiles macht. Jede Tile ist ein Input-Neuron. Wenn die Tile leer ist, ist sie 0 wert. Wenn es ein Block ist, ist sie 1 wert. Wenn es ein Gegner ist, ist sie -1 wert.
+Die 8 Ausgänge entsprechen den Tasten des SNES Controllers: A, B, X, Y, Oben, unten, links, rechts. Start, Select, L und R werden ausgeschlossen, um seine Entscheidungen auf das Wesentliche zu beschränken.
 
-Die 8 Outputs entsprechen den SNES-Controller-Buttons: A, B, X, Y, Hoch, Runter, Links, Rechts. Man schließt Start, Select, L und R aus, um seine Entscheidungen aufs Wesentliche zu begrenzen.
-
-### Die Datenstrukturen
+### Datenstrukturen
 
 Das Skript definiert drei Hauptstrukturen:
-
 ```lua
 function newNeurone()
     local neurone = {}
-    neurone.valeur = 0    -- aktueller Neuronwert
-    neurone.id = 0        -- eindeutige Kennung
-    neurone.type = ""     -- "input", "output" oder "hidden"
+    neurone.valeur = 0    -- valeur actuelle du neurone
+    neurone.id = 0        -- identifiant unique
+    neurone.type = ""     -- "input", "output", ou "hidden"
     return neurone
 end
 
 function newConnexion()
     local connexion = {}
-    connexion.entree = 0     -- Quellneuron-ID
-    connexion.sortie = 0     -- Zielneuron-ID
-    connexion.actif = true   -- kann deaktiviert werden wenn ein verstecktes Neuron eingefügt wird
-    connexion.poids = 0      -- Verbindungsgewicht
-    connexion.innovation = 0 -- eindeutige Innovationsnummer
-    connexion.allume = false -- für Anzeige : true wenn Signal durchgeht
+    connexion.entree = 0     -- ID du neurone source
+    connexion.sortie = 0     -- ID du neurone destination
+    connexion.actif = true   -- peut être désactivé si un neurone caché est inséré
+    connexion.poids = 0      -- poids de la connexion
+    connexion.innovation = 0 -- numéro d'innovation unique
+    connexion.allume = false -- pour l'affichage : true si le signal passe
     return connexion
 end
 
 function newReseau()
     local reseau = {
-        nbNeurone = 0,        -- Zahl versteckter Neuronen
-        fitness = 1,          -- Leistung (zurückgelegte Distanz)
-        idEspeceParent = 0,   -- zu welcher Spezies es gehört
-        lesNeurones = {},     -- Neuronentabelle
-        lesConnexions = {}    -- Verbindungstabelle
+        nbNeurone = 0,        -- nombre de neurones cachés
+        fitness = 1,          -- performance (distance parcourue)
+        idEspeceParent = 0,   -- à quelle espèce il appartient
+        lesNeurones = {},     -- tableau de neurones
+        lesConnexions = {}    -- tableau de connexions
     }
-    -- Initialisierung mit Inputs
+    -- Initialisation avec les inputs
     for j = 1, NB_INPUT, 1 do
         ajouterNeurone(reseau, j, "input", 1)
     end
-    -- Dann Outputs
+    -- Puis les outputs
     for j = NB_INPUT + 1, NB_INPUT + NB_OUTPUT, 1 do
         ajouterNeurone(reseau, j, "output", 0)
     end
     return reseau
 end
 ```
+Zuerst enthält jedes Netzwerk nur Inputs und Outputs: keine versteckten Neuronen, keine Verbindung. Der Algorithmus entscheidet, ob es nötig ist.
 
-Anfangs enthält jedes Netz nur Inputs und Outputs: Kein verstecktes Neuron, keine Verbindung. Der Algorithmus entscheidet, ob er welche braucht.
+### Veränderungen im Detail
 
-### Die Mutationen im Detail
-
-#### Gewichts-Mutation
-
+#### Gewichtsveränderungen
 ```lua
 function mutationPoidsConnexions(unReseau)
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             if math.random() < CHANCE_MUTATION_RESET_CONNEXION then
-                -- 25% : totaler Gewichtsreset
+                -- 25% : reset total du poids
                 unReseau.lesConnexions[i].poids = genererPoids()
             else
-                -- 75% : Variation um ±0.80
+                -- 75% : variation de ±0.80
                 if math.random() >= 0.5 then
                     unReseau.lesConnexions[i].poids =
                         unReseau.lesConnexions[i].poids - POIDS_CONNEXION_MUTATION_AJOUT
@@ -297,15 +304,13 @@ function mutationPoidsConnexions(unReseau)
     end
 end
 ```
+Das Ausgangsgewicht ist immer 1 oder -1 (`genererPoids()`Die Veränderung von ±0.80 kann zwischen negativen und positiven Werten schwanken, was das Netzverhalten grundlegend verändert.
 
-Das Initialgewicht ist immer 1 oder -1 (`genererPoids()`). Die ±0.80-Variation kann es zwischen negativen und positiven Werten oszillieren lassen, was das Netzverhalten radikal ändert.
-
-#### Verbindungs-Hinzufügung
-
+#### Verbindung hinzufügen
 ```lua
 function mutationAjouterConnexion(unReseau)
     local liste = {}
-    -- Randomisierung der Neuronenliste
+    -- Randomisation de la liste des neurones
     for i, v in ipairs(unReseau.lesNeurones) do
         local pos = math.random(1, #liste+1)
         table.insert(liste, pos, v)
@@ -317,11 +322,11 @@ function mutationAjouterConnexion(unReseau)
             if i ~= j then
                 local n1 = liste[i]
                 local n2 = liste[j]
-                -- Gültige Verbindung : input→output, hidden→hidden, hidden→output
+                -- Connexion valide : input→output, hidden→hidden, hidden→output
                 if (n1.type == "input" and n2.type == "output") or
                    (n1.type == "hidden" and n2.type == "hidden") or
                    (n1.type == "hidden" and n2.type == "output") then
-                    -- Prüfen dass noch keine Verbindung existiert
+                    -- Vérifier qu'il n'y a pas déjà une connexion
                     local dejaConnexion = false
                     for k = 1, #unReseau.lesConnexions, 1 do
                         if unReseau.lesConnexions[k].entree == n1.id
@@ -342,19 +347,17 @@ function mutationAjouterConnexion(unReseau)
     end
 end
 ```
+Man kann kein Output mit einem Input verbinden (das würde einen Zyklus erzeugen), und man kann zwei bereits miteinander verbundene Neuronen nicht verbinden. Die Randomisierung garantiert, dass man jedes Mal verschiedene Möglichkeiten erkundet.
 
-Man kann keinen Output mit einem Input verbinden (das würde einen Zyklus erzeugen), und man kann keine zwei schon verbundenen Neuronen verbinden. Die Randomisierung garantiert, dass man jedes Mal verschiedene Möglichkeiten erkundet.
-
-#### Neuronen-Hinzufügung
+#### Hinzufügen von Neuron
 
 Das ist die interessanteste Mutation:
-
 ```lua
 function mutationAjouterNeurone(unReseau)
     if #unReseau.lesConnexions == 0 then return nil end
     if unReseau.nbNeurone == NB_NEURONE_MAX then return nil end
 
-    -- Randomisierung der Verbindungen
+    -- Randomisation des connexions
     local listeRandom = {}
     for i = 1, #unReseau.lesConnexions, 1 do
         local pos = math.random(1, #listeRandom+1)
@@ -363,20 +366,20 @@ function mutationAjouterNeurone(unReseau)
 
     for i = 1, #listeRandom, 1 do
         if unReseau.lesConnexions[listeRandom[i]].actif then
-            -- Existierende Verbindung deaktivieren
+            -- Désactiver la connexion existante
             unReseau.lesConnexions[listeRandom[i]].actif = false
             unReseau.nbNeurone = unReseau.nbNeurone + 1
             local indice = unReseau.nbNeurone + NB_INPUT + NB_OUTPUT
 
-            -- Verstecktes Neuron erstellen
+            -- Créer le neurone caché
             ajouterNeurone(unReseau, indice, "hidden", 1)
 
-            -- Input mit verstecktem Neuron verbinden
+            -- Connecter l'entrée au neurone caché
             ajouterConnexion(unReseau,
                 unReseau.lesConnexions[listeRandom[i]].entree,
                 indice, genererPoids())
 
-            -- Verstecktes Neuron mit Output verbinden
+            -- Connecter le neurone caché à la sortie
             ajouterConnexion(unReseau,
                 indice,
                 unReseau.lesConnexions[listeRandom[i]].sortie,
@@ -386,18 +389,16 @@ function mutationAjouterNeurone(unReseau)
     end
 end
 ```
+Der Mechanismus: Es wird eine bestehende Verbindung genommen, es wird **deaktiviert**, und es wird ein in der Mitte verstecktes Neuron eingefügt. Die ursprüngliche Verbindung wird durch zwei neue Verbindungen ersetzt: Eingabe→versteckt und versteckt→out. Es ist, als würde man einen Draht "schneiden," um einen Schalter zu "verbinden."
 
-Der Mechanismus: Man nimmt eine existierende Verbindung, **deaktiviert** sie und fügt ein verstecktes Neuron in der Mitte ein. Die Ursprungsverbindung wird durch zwei neue ersetzt: Input→hidden und hidden→Output. Als schneide man ein Kabel durch, um einen Schalter dazwischenzusetzen.
+Dies macht NEAT "augmenting topologies": das **-Netzwerk wird mit der Zeit erweitert**. Es beginnt einfach und wird komplex nur, wenn es notwendig ist.
 
-Das macht NEAT "augmenting topologies": Das Netz **wächst** mit der Zeit. Es startet simpel und wird nur komplex, wenn nötig.
+### Der FeedForward
 
-### Das FeedForward
-
-Das ist die Funktion, die Signale durchs Netz propagiert:
-
+Es ist die Funktion, die Signale durch das Netzwerk verbreitet:
 ```lua
 function feedForward(unReseau)
-    -- Reset der Output-Neuronen
+    -- Reset des neurones de sortie
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             unReseau.lesNeurones[unReseau.lesConnexions[i].sortie].valeur = 0
@@ -423,24 +424,22 @@ function feedForward(unReseau)
     end
 end
 ```
+Jede aktive Verbindung sendet`valeur_entrée × poids`zum Ausgangsneuron. Der Wert ist **akkumuliert** (additiert).`allume`ist nur für die visuelle Anzeige des Netzwerks.
 
-Jede aktive Verbindung schickt `Inputwert × Gewicht` zum Output-Neuron. Der Wert wird **kumuliert** (addiert). Das `allume`-Flag ist nur für die visuelle Netzanzeige.
+### Spielspeicher lesen
 
-### Das Lesen des Spielspeichers
-
-Die Funktion `getLesInputs()` übersetzt die Super-Mario-World-Welt in netzverständliche Daten:
-
+Funktion`getLesInputs()`ist die, die die Welt von Super Mario World in Daten übersetzt, die von dem Netzwerk verstanden werden:
 ```lua
 function getLesInputs()
     local lesInputs = {}
-    -- Initialisierung auf 0 (grau = nichts)
+    -- Initialisation à 0 (gris = rien)
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             lesInputs[getIndiceLesInputs(i, j)] = 0
         end
     end
 
-    -- Die Sprites (Gegner) = -1 (schwarz)
+    -- Les sprites (ennemis) = -1 (noir)
     local lesSprites = getLesSprites()
     for i = 1, #lesSprites, 1 do
         local input = convertirPositionPourInput(getLesSprites()[i])
@@ -449,7 +448,7 @@ function getLesInputs()
         end
     end
 
-    -- Die Tiles (Blöcke) = Tile-Wert (weiß wenn > 0)
+    -- Les tiles (blocs) = valeur de la tile (blanc si > 0)
     local lesTiles = getLesTiles()
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
@@ -463,46 +462,45 @@ function getLesInputs()
     return lesInputs
 end
 ```
+Das Input-Raster ist eine Mario-zentrierte Ansicht: 11 Tile in der Breite, 9 in der Höhe. Jeder Tile ist wert:
 
-Das Input-Grid ist eine auf Mario zentrierte Sicht: 11 Tiles breit, 9 hoch. Jede Tile ist wert:
 - **0** (grau): nichts
-- **1** (weiß): solider Block
-- **-1** (schwarz): Gegner
 
-Gegner werden aus zwei RAM-Listen gelesen: Normale Sprites (`0x14C8`-`0x14F8`) und Extended Sprites (`0x170B`-`0x173B`). Für jeden lebenden Sprite (Zustand > 7) berechnet man seine Tile-Position relativ zu Mario und setzt -1 ins entsprechende Feld.
+- **1** (weiß) - fest
 
-### Die Fitness: wie die KI weiß, ob sie vorankommt
+- **-1** (schwarz): feindlicher
 
+Die Feinde werden aus zwei Listen in der RAM gelesen: normale Sprite (`0x14C8` - `0x14F8`) und extended sprites (`0x170B` - `0x173B`) Für jeden lebenden Sprite (Status > 7) wird die Position in Tiles gegenüber Mario berechnet und -1 in das entsprechende Feld gesetzt.
+
+### Fitness: Wie die KI weiß, ob sie Fortschritte macht
 ```lua
 function majReseau(unReseau, marioBase)
     local mario = getPositionMario()
 
     if not niveauFini and memory.readbyte(0x0100) == 12 then
-        -- Level beendet !
+        -- Niveau terminé !
         unReseau.fitness = FITNESS_LEVEL_FINI
         niveauFini = true
     elseif marioBase.x < mario.x then
-        -- Mario geht nach rechts voran
+        -- Mario avance vers la droite
         unReseau.fitness = unReseau.fitness + (mario.x - marioBase.x)
         marioBase.x = mario.x
     end
 
-    -- Input-Update
+    -- Mise à jour des inputs
     local lesInputs = getLesInputs()
     for i = 1, NB_INPUT, 1 do
         unReseau.lesNeurones[i].valeur = lesInputs[i]
     end
 end
 ```
+Die Fitness ist einfach: es ist die **Entfernung nach rechts**. Wenn Mario 10 Pixel vorrückt, erhöht sich der Fitness um 10. Wenn Marario zurückfällt, passiert nichts (keine Strafe). Ist die Ebene abgeschlossen (Adresse)`0x0100`= = 12), wird das Fitness-Studio 1 000 000.
 
-Die Fitness ist simpel: Es ist die **nach rechts zurückgelegte Distanz**. Wenn Mario 10 Pixel vorankommt, steigt die Fitness um 10. Wenn Mario zurückgeht, passiert nichts (keine Penalty). Wenn das Level beendet ist (Adresse `0x0100` == 12), wird die Fitness 1.000.000.
+Es ist absichtlich einfach. Nur die Entwicklung nach rechts zählt: Feinde zu töten bringt nichts, zu sterben kostet nichts.
 
-Absichtlich simpel. Nur Fortschritt nach rechts zählt: Gegner töten bringt nichts, Sterben kostet nichts.
+### Das intelligente Reset
 
-### Der intelligente Reset
-
-Wenn sich Mario 33 Frames nicht bewegt, resettet man das Level und geht zum nächsten Individuum. Aber wenn Mario Fortschritt gemacht hat (seine aktuelle Fitness unterscheidet sich von der am Anfang), wartet man 300 Frames, das gibt dem Netz eine Chance zu "verstehen", was es gut gemacht hat.
-
+Wenn Mario sich 33 Frames nicht bewegt, dann wird das Niveau wieder erreicht und auf das nächste Individuum übergegangen. Aber wenn Mario Fortschritte gemacht hat (ihre aktuelle Fitness unterscheidet sich von der am Anfang), warten wir 300 Frames – das gibt dem Netzwerk die Chance, zu "verstehen," was er gut gemacht hat.
 ```lua
 if fitnessAvant == laPopulation[idPopulation].fitness
    and memory.readbyte(0x13D4) == 0 then
@@ -520,25 +518,23 @@ if fitnessAvant == laPopulation[idPopulation].fitness
     end
 end
 ```
-
-Die Bedingung `memory.readbyte(0x0071) ~= 9` prüft, dass Mario nicht in Todesanimation ist. Der Reset wird unnütz, wenn Mario schon in Todesanimation ist.
+Die Bedingung`memory.readbyte(0x0071) ~= 9`Vergewissern du sich, dass Mario nicht in der Todesanimation ist.
 
 ### Die Hauptschleife
 
-Die Schleife läuft mit 30 fps (Super Mario Worlds normale Geschwindigkeit):
-
+Die Schleife dreht sich bei 30 fps (die normale Geschwindigkeit von Super Mario World):
 ```lua
 while true do
     local fitnessAvant = laPopulation[idPopulation].fitness
 
-    -- Anzeige (Netz, Infos)
+    -- Affichage (réseau, infos)
     if forms.ischecked(estAccelere) then
-        emu.limitframerate(false)  -- beschleunigen
+        emu.limitframerate(false)  -- accélérer
     else
         emu.limitframerate(true)   -- 30 fps
     end
 
-    -- Die 3 vitalen Funktionen
+    -- Les 3 fonctions vitales
     majReseau(laPopulation[idPopulation], marioBase)
     feedForward(laPopulation[idPopulation])
     appliquerLesBoutons(laPopulation[idPopulation])
@@ -546,17 +542,15 @@ while true do
     emu.frameadvance()
     nbFrame = nbFrame + 1
 
-    -- Reset wenn kein Fortschritt
+    -- Reset si pas de progrès
     -- ...
-    -- Neue Generation wenn alle Individuen getestet
+    -- Nouvelle génération si tous les individus testés
     -- ...
 end
 ```
-
-Die drei vitalen Funktionen sind `majReseau`, `feedForward` und `appliquerLesBoutons`. Wenn man nur eine deaktiviert, bewegt sich Mario nicht mehr.
+Die drei lebenswichtigen Funktionen sind:`majReseau` , `feedForward`und`appliquerLesBoutons`Wenn wir nur eine deaktivieren, bleibt Mario stehen.
 
 ### Der Crossover
-
 ```lua
 function crossover(unReseau1, unReseau2)
     local leReseau = newReseau()
@@ -584,17 +578,15 @@ function crossover(unReseau1, unReseau2)
     return leReseau
 end
 ```
+Das Baby erbt den besten Elternteil. Für jede Verbindung, die dieselbe Innovation teilt, hat der andere Elternteil 50% Chance, sie zu ersetzen – aber **nur wenn die Verbindung aktiv ist**. Dies ist ein wichtiger Patch: Ohne diese konnte man nutzlose versteckte Neuronen erstellen.
 
-Das Baby erbt vom besten Elternteil. Für jede Verbindung mit derselben Innovation hat der andere Elternteil 50% Chance zu ersetzen, aber **nur wenn die Verbindung aktiv ist**. Ein wichtiger Fix: Ohne das konnten nutzlose versteckte Neuronen erstellt werden.
-
-### Die Spezies-Selektion
-
+### Auswahl nach Arten
 ```lua
 function nouvelleGeneration(laPopulation, lesEspeces)
     local laNouvellePopulation = newPopulation()
     local nbIndividuACreer = NB_INDIVIDU_POPULATION
 
-    -- Mittlere Fitness pro Spezies berechnen
+    -- Calcul fitness moyenne par espèce
     for i = 1, #lesEspeces, 1 do
         lesEspeces[i].fitnessMoyenne = 0
         for j = 1, #lesEspeces[i].lesReseaux, 1 do
@@ -605,7 +597,7 @@ function nouvelleGeneration(laPopulation, lesEspeces)
             lesEspeces[i].fitnessMoyenne / #lesEspeces[i].lesReseaux
     end
 
-    -- Jede Spezies erstellt Kinderzahl proportional zu ihrer mittleren Fitness
+    -- Chaque espèce crée un nombre d'enfants proportionnel à sa fitness moyenne
     for i = 1, #lesEspeces, 1 do
         local nbEnfant = math.ceil(
             #lesEspeces[i].lesReseaux *
@@ -621,15 +613,13 @@ function nouvelleGeneration(laPopulation, lesEspeces)
     end
 end
 ```
+Die Idee: Eine Art mit einem durchschnittlichen Fitness-Wert von 10.000 hat das Recht, viel mehr Kinder zu erschaffen als eine Art mit einer durchschnittlichen Sportart von 1. Es ist die **natürliche Wahl** in Aktion.
 
-Die Idee: Eine Spezies mit mittlerer Fitness 10.000 darf viel mehr Kinder erstellen als eine mit mittlerer Fitness 1. Das ist **natürliche Selektion** in Aktion.
+Das`choisirParent`verwendet eine Roulette-Auswahl: Je mehr Fitness ein Individuum hat, desto wahrscheinlicher ist es, als Elternteil ausgewählt zu werden.
 
-Das `choisirParent` nutzt Roulette-Selektion: Je mehr Fitness ein Individuum hat, desto höher seine Chance, als Elternteil selektiert zu werden.
+### Sicherung und Laden
 
-### Das Speichern und Laden
-
-Populationen werden in `.pop`-Dateien gespeichert:
-
+Die Populationen werden in Dateien gespeichert`.pop`:
 ```lua
 function sauvegarderUnReseau(unReseau, fichier)
     io.write(unReseau.nbNeurone .. "\n")
@@ -650,31 +640,29 @@ function sauvegarderUnReseau(unReseau, fichier)
     end
 end
 ```
+Der Schutz schließt auch das beste Individuum aller früheren Bevölkerungen ein. Wenn das Beste der alten Bevölkerung besser ist als das Beste des Neuen, wird der Alte als Basis übernommen. Es ist eine Form des **Elitismus: man verliert nie das Beste.
 
-Das Speichern schließt auch das beste Individuum aller vorherigen Populationen ein. Wenn das Beste der alten Population besser ist als das Beste der neuen, nimmt man das alte als Basis wieder. Eine Form von **Elitismus**: Man verliert nie das Beste.
+### Das Netz zeichnet
 
-### Das Netzzeichnen
-
-Laupok hat einen neuronalen Netz-Visualisierer als Spiel-Overlay hinzugefügt:
-
+Laupok hat einen Netz-Visualisierungs-Neutronen-Überdruck-Überprint des Spiels hinzugefügt:
 ```lua
 function dessinerUnReseau(unReseau)
-    -- Inputs : 11×9-Grid um Mario
+    -- Inputs : grille 11×9 autour de Mario
     for i = 1, NB_TILE_W, 1 do
         for j = 1, NB_TILE_H, 1 do
             local xT = ENCRAGE_X_INPUT + (i - 1) * TAILLE_INPUT
             local yT = ENCRAGE_Y_INPUT + (j - 1) * TAILLE_INPUT
             local couleurFond = "gray"
             if unReseau.lesNeurones[getIndiceLesInputs(i, j)].valeur < 0 then
-                couleurFond = "black"   -- Gegner
+                couleurFond = "black"   -- ennemi
             elseif unReseau.lesNeurones[getIndiceLesInputs(i, j)].valeur > 0 then
-                couleurFond = "white"   -- Block
+                couleurFond = "white"   -- bloc
             end
             gui.drawRectangle(xT, yT, TAILLE_INPUT, TAILLE_INPUT, "black", couleurFond)
         end
     end
 
-    -- Outputs : 8 Buttons
+    -- Outputs : 8 boutons
     for i = 1, NB_OUTPUT, 1 do
         local xT = ENCRAGE_X_OUTPUT
         local yT = ENCRAGE_Y_OUTPUT + ESPACE_Y_OUTPUT * (i - 1)
@@ -685,7 +673,7 @@ function dessinerUnReseau(unReseau)
         end
     end
 
-    -- Verbindungen
+    -- Connexions
     for i = 1, #unReseau.lesConnexions, 1 do
         if unReseau.lesConnexions[i].actif then
             local alpha = 25
@@ -701,76 +689,80 @@ function dessinerUnReseau(unReseau)
     end
 end
 ```
-
-Super nützlich, um zu verstehen, was das Netz tut. Aktive Verbindungen sind weiß, inaktive semi-transparent. Inputs sind ein Grid weiß/schwarz/grauer Felder. Outputs zeigen, welche Buttons gedrückt sind.
+Das ist sehr nützlich, um zu verstehen, was das Netzwerk tut. Aktive Verbindungen sind weiß, Inaktivierte sind halbtransparent. Inputs sind ein Gitter von weißen/schwarzen/grauern Feldern. Outputs zeigen, welche Tasten gedrückt sind.
 
 ---
 
-## Die Ergebnisse
+## Ergebnisse
 
 ### Was die KI gelernt hat
 
-Im Laufe stunden- (und tage-) langer Läufe hat die KI allein entdeckt:
+Im Laufe der Hinrichtung Stunden (und Tage) entdeckte die KI selbst:
 
-1. **Nach rechts vorankommen**: Das basischste Verhalten, erfordert aber, den Rechts-Button gedrückt zu halten
-2. **Über Gegner springen**: Indem man einen "Gegner erkannt"-Input mit Button A oder B verbindet
-3. **Hindernissen ausweichen**: Manche Netze lernten, temporär zurückzuweichen, um besser voranzukommen
-4. **Level beenden**: Das beste Individuum konnte Super Mario Worlds erstes Level beenden
+1. **Nach rechts vorrücken**: das grundlegendste Verhalten, das aber die rechte Maustaste gedrückt halten muss
+2. **Über Feinde speichern**: durch Anschluss eines "Feind" Inputs an die Schaltfläche A oder B
+3. **Bekämpfung von Hindernissen**: Einige Netze haben gelernt, vorübergehend zurückzufallen, um Fortschritte zu erzielen
+4. **Levels beenden**: Die beste Person konnte die erste Ebene von Super Mario World beenden
 
-![Von der KI gesteuerter Mario vor einem Buu in einem Super-Mario-World-Level, das neuronale Netz entscheidet live über Aktionen](/images/laupok-mario-ai/mario-ai-playing.jpg)
+! [Mario contrôlé par l'IA face à un Boo dans un niveau de Super Mario World – le réseau de neurones décide des actions en temps réel](/images/laupok-mario-ai/mario-ai-playing.jpg)
 
-### Die Grenzen
+### Beschränkungen
 
 Das Projekt hat seine Grenzen:
 
-- **Ein einziges Level**: Die KI ist auf ein spezifisches Level trainiert. Sie generalisiert nicht automatisch auf andere Level
-- **Trainingszeit**: Es braucht Dutzende Stunden, um befriedigende Ergebnisse zu erreichen
-- **Kein Verständnis**: Die KI "versteht" nicht, was sie tut. Sie optimiert eine Fitnessfunktion (zurückgelegte Distanz) via Zufallsmutationen
-- **T-Bagging**: Laupok merkt an, dass Mario dazu neigt, auf der Stelle zu springen, wenn er einen Gegner sieht, einfach weil das die Fitness erhöht (er kommt springend etwas voran)
+- **Einzige Ebene**: Die KI wird auf einer bestimmten Ebene ausgebildet.
+- **Trainingszeiten**: Es dauert zig Stunden, um zufriedenstellende Ergebnisse zu erzielen
+- **Kein Verständnis**: Die KI versteht nicht, was sie tut. du optimiert eine Fitnessfunktion (gewanderte Entfernung) durch zufällige Mutationen
+- **T-bagging**: Laupok stellt fest, dass Mario eher vor Ort springen will, wenn er einen Feind sieht, nur weil es die Fitness erhöht (er geht ein wenig springt)
 
 ---
 
-## Das Experiment reproduzieren
+## Wie man das Experiment wiederholt
 
-Laupok hat alles geteilt. Hier die Schritte:
+Laupok hat alles geteilt. Hier sind die Schritte:
 
-1. **BizHawk herunterladen** auf [tasvideos.org](https://tasvideos.org/BizHawk) (Download-Bereich)
-2. **Eine USA-ROM von Super Mario World besorgen** (Privatkopie deiner eigenen Cartridge)
-3. **Das Lua-Skript herunterladen** von [Pastebin](https://pastebin.com/Jcvdqhqm), umbenennen zu `mario.lua`
-4. **Das Skript in denselben Ordner wie die ROM legen**
-5. **BizHawk starten**, die ROM öffnen
-6. **In der Lua-Konsole**: `dofile("mario.lua")` oder via Menü Skript > Skript öffnen
-7. **Einen State** am Levelanfang speichern (Menü Savestate > State speichern) und `debut.state` nennen
-8. **Das Skript neu starten**, es geht
+1. **BizHawk** herunterladen auf [tasvideos.org](https://tasvideos.org/BizHawk)(Abschnitt Download)
+2. **Erhalten du eine US-ROM von Super Mario World** (Privatkopie deiner eigenen Patrone)
+3. **Lua-Skript herunterladen** von [Pastebin](https://pastebin.com/Jcvdqhqm)– umbenennen in`mario.lua`
+4. **Skript in denselben Ordner wie die ROM einfügen**
+5. **BizHawk starten**, ROM öffnen
+6. **In der Lua-Konsole**:`dofile("mario.lua")`oder über das Skript-Menü > Open Script
+7. **Einen State**-Status am Anfang der Ebene speichern (Savestate-Menü > Save State) und ihn benennen`debut.state`
+8. **Skript neu starten** – es funktioniert
 
 Das Skript enthält ein Formular mit Optionen:
-- **Beschleunigen**: Deaktiviert das 30-fps-Limit, um schneller zu gehen
-- **Netz anzeigen**: Zeigt das neuronale Netz als Overlay
-- **Infos anzeigen**: Zeigt ein Banner mit Generation, Fitness, Spezieszahl
-- **Pause**: Pausiert die Ausführung
-- **Speichern/Laden**: Persistiert die aktuelle Population in einer `.pop`-Datei
+
+- **Beschleunigen**: Deaktiviert die 30 fps Grenze, um schneller zu gehen
+
+- **Netzwerk anzeigen**: zeigt das Netzwerk von Neuronen im Überdruck
+
+- **Info anzeigen**: Zeigt eine Stirnband mit Erzeugung, Fitness, Anzahl der Arten
+
+- **Pause**: stoppt die Ausführung
+
+- **Speichern/Charger**: hält die aktuelle Bevölkerung in einer Datei`.pop`
 
 ---
 
 ## Quellen und Referenzen
 
-| Ressource | Link |
+| Ressourcen | Zusammenhang |
 |-----------|------|
-| Laupoks Hauptvideo | [Ich habe eine KI gebaut, die Mario allein spielt](https://www.youtube.com/watch?v=F63GNXGHVwM) |
-| Video Code-Review + Setup | [KI-Setup + Quellcode-Review](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
-| Kompletter Quellcode | [Pastebin Jcvdqhqm](https://pastebin.com/Jcvdqhqm) |
-| Originaler NEAT-Artikel | Stanley & Miikkulainen, "Evolving Neural Networks through Augmenting Topologies", 2002 |
-| N8Programs-Tutorial | [NEAT implementation walkthrough](https://n8programs.github.io/) (JavaScript, aber Konzepte identisch) |
-| 16blings (Laupoks Inspiration) | [AI plays Super Mario World](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
+| Hauptvideo von Laupok | [j'ai créé une IA qui joue à mario toute seule](https://www.youtube.com/watch?v=F63GNXGHVwM) |
+| Video code review + setup | [comment setup l'ia + code source review](https://www.youtube.com/watch?v=u5xCl1bSe6o) |
+| Vollständiger Quellcode | [Pastebin Jcvdqhqm](https://pastebin.com/Jcvdqhqm) |
+| Originalartikel von NEAT | Stanley & Miikkulainen, "Evolving Neual Networks through Augmenting Topologies," 2002 |
+| N8Programs Tutorial | [NEAT implementation walkthrough](https://n8programs.github.io/)(JavaScript, aber die Konzepte sind identisch) |
+| 16blings (Inspiration von Laupok) | [AI plays Super Mario World](https://www.youtube.com/watch?v=qv6IFaOz3bA) |
 | BizHawk | [tasvideos.org/BizHawk](https://tasvideos.org/BizHawk) |
-| Super-Mario-World-Speicher | [SMW Central - RAM Map](https://www.smwcentral.net/?p=section&a=details&id=21702) |
+| Super Mario World Speicher | [SMW Central - RAM Map](https://www.smwcentral.net/?p=section&a=details&id=21702) |
 
 ---
 
-## Fazit
+## Schlussfolgerung
 
-Was Laupok gemacht hat, ist einen akademischen Algorithmus (NEAT, 2002) nehmen, ihn in Lua für einen Emulator (BizHawk) neu schreiben und auf Super Mario World anwenden. Das Ergebnis: Eine KI, die von null lernt, das Spiel zu spielen, ohne jegliches Vorwissen, nur durch Zufallsmutationen und natürliche Selektion.
+Was Laupok tat, war, einen akademischen Algorithmus (NEAT, 2002), es in Lua für einen Emulator (BizHawk) neu zu schreiben und es auf Super Mario World anzuwenden. Das Ergebnis: eine IA, die von Null lernt, das Spiel zu spielen, ohne vorherige Kenntnisse, nur durch zufällige Mutationen und natürliche Auswahl.
 
-Ein wunderschönes Beispiel für die Macht genetischer Algorithmen. Das Rezept passt in drei Zutaten: Natürliche Selektion, etwas Lua und viel Geduld. Kein Deep Learning, keine GPU, keine massiven Trainingsdaten.
+Es ist ein wunderbares Beispiel für die Macht genetischer Algorithmen. Das Rezept besteht aus drei Zutaten: natürliche Auswahl, ein wenig Lua, und viel Geduld. Keine deep learning, keine GPU, keine massiven Trainingsdaten.
 
-Der Code ist kommentiert, geteilt, und Laupok hat zwei Erklärvideos gemacht, eines für die großen Konzepte, eines für den Code. Wenn dich das Thema interessiert, tauch ein. Zugänglicher, als es scheint.
+Der Code wird kommentiert, geteilt, und Laupok hat zwei erläuternde Videos gemacht - eins für die großen Konzepte, eins zum Code. Wenn du dich für das Thema interessierst, tauche ein.

@@ -1,39 +1,32 @@
 ---
 title: Arbeit an einem neuen Projekt
-description: Ein Überblick über den Prozess, eine neue Website zu starten und zu entwickeln.
+description: Ein Überblick über den Start- und Entwicklungsprozess einer neuen Website.
 date: 2026-03-13
 tags:
   - meta
   - webdev
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "XBw0jvFt6s6MVhrl4WM/8UeZCgC4NP4Yg+sMUvXR2HAZAxoiaUehfkV+JIqDVQTbeurKRydXuVK6gh098SIzrw=="
+lang: "de"
 ---
-
-# Das Projekt
+# 
 
 Das Projekt, an dem ich arbeite, heißt LLJT:
 
 ![](assets/20260313_092734_image.png)
 
-Es ist eine Website, die auch eine PWA ist, also wie eine mobile App nutzbar. Sie nutzt MaterialUI, um sich wie eine echte Telefon-App zu verhalten.
-Ich habe eine Weile mit den Mui-Imports verbracht: Ich bin von 11707 Modulen am Ende auf 595 runtergekommen, indem ich jedes Icon Zeile für Zeile importiert habe statt des destrukturierten Imports. Ich habe damals gelernt, dass der destrukturierte Import die ganze Icon-Bibliothek lädt, während einzelne Imports nur die verwendeten laden.
+Es ist eine Website, die auch eine PWA ist, also als mobile Anwendung verwendbar. Es verwendet MaterialUI, um sich wie eine echte Telefon-Anwendung zu verhalten. Ich verbrachte eine Weile auf den Importen Mui: Ich habe von 11707 Modulen auf 595 am Ende, indem ich jedes Symbol pro Linie statt des destrukturierten Imports importiert. Ich habe zu diesem Zeitpunkt gelernt, dass der Import destrukturiert lädt die ganze Bibliothek von Symbolen, während die einzelnen Importen nur die verwendeten laden.
 
-Nibi ist der Bot, der mit dieser Website verbunden ist.![](assets/20260313_093102_image.png)Die Benotung basiert auf Google Forms:
-![](assets/20260313_093255_image.png)
-Wir nutzen Multiple-Choice-Tests, um unsere Schüler zu bewerten, und wir vergeben auch Discord-Rollen sowie Emojis und Channels an unsere Schüler, wenn sie eine wichtige Prüfung bestehen.
+Nibi ist der Bot, der mit dieser Website verbunden ist.![](assets/20260313_093102_image.png)Die Bewertung basiert auf Google Forms:![](assets/20260313_093255_image.png)Wir nutzen QCMs, um unsere Studenten zu bewerten, und wir geben auch Discord-Rolle, Emojis und Messen, um die Schüler, wenn sie eine wichtige Prüfung erfolgreich.
 
 ![](assets/20260313_093707_image.png)
 
-Das Ziel dieses Projekts ist es, Menschen zu helfen, gemeinsam mit uns Japanisch zu lernen, denn das ist etwas, das ich selbst auch machen will.
-Die Schüler schalten außerdem Partnerschaften mit Crunchyroll und anderen Plattformen frei, um ihren Fortschritt zu belohnen.
+Das Ziel dieses Projekts ist es, den Menschen zu helfen, Japanisch gemeinsam mit uns zu lernen, denn das ist etwas, was ich auch tun möchte. Studenten werden auch Partnerschaften mit Crunchyroll und anderen Plattformen freisetzen, um ihre Fortschritte zu belohnen.
 
-Nibi und die Seite werden jeweils von Cloudflare Workers (Interaction URL mit Hono Server) und GitHub Pages mit React gehostet.
-Der Code der Seite ist nicht Open Source, aber Nibi ist es, und du findest ihn in [diesem GitHub-Repository](https://github.com/let-s-Learn-Japanese-Together/nibi). Die Seite bleibt privat, weil sie private Informationen enthält, aber wenn du wissen willst, wie ich sie gebaut habe, frag mich auf Discord und ich erkläre dir den Prozess gerne! Sie nutzt eine GitHub Action, die ich erstellt habe, um GitHub Enterprise nicht bezahlen zu müssen, sowie mehrere andere Tools und Techniken, die ich dir beschreiben kann, wenn es dich interessiert!
+Nibi und die Website werden jeweils von Cloudflare Workers (Interaction URL mit Hono Server) und GitHub Pages mit React gehostet. Der Code der Website ist nicht Open Source, sondern Nibi, und du kannst es findest du auf [ce dépôt GitHub](https://github.com/let-s-Learn-Japanese-Together/nibi). Die Website bleibt privat, weil sie private Informationen enthält, aber wenn du weißt wollen, wie ich sie gebaut habe, fragst du mich über Discord und ich werde dir den Prozess gerne erklären! Er verwendet eine GitHub Action, die ich erstellt habe, um GitHub Enterprise sowie mehrere andere Tools und Techniken zu vermeiden, die du beschreiben können, wenn du Interesse daran haben!
 
-Seit ein paar Tagen macht es mir viel Spaß, Workarounds zu finden, um meine Projekte zu hosten, ohne für Hosting zu zahlen. Deshalb habe ich Nibi zu einem Interaction-Endpoint-Bot gemacht, um ihn kostenlos auf Cloudflare Workers zu hosten, und ich habe eine GitHub Action erstellt, um die Seite kostenlos auf GitHub Pages zu deployen. Diese Workarounds zu suchen bleibt für mich einer der spannendsten Teile am Coden: Man muss anders denken und kreative Lösungen bauen, und genau diese Herausforderung ohne Budget motiviert mich!
+Seit einigen Tagen habe ich viel Spaß daran, um Umgehungslösungen zu finden, um meine Projekte ohne Unterkunftszahlungen zu beherbergen. Deshalb habe ich Nibi zu einem Roboter für Interaktion Endpoint gemacht, um es kostenlos bei Cloudflare Workers zu unterbringen und eine GitHub Action für die kostenlose Implementierung der Website auf GitHub Pages zu erstellen. Diese Umgehungen zu suchen, ist für mich eine der anregendsten Teile des Codes: man muss anders überlegen und kreative Lösungen aufbauen, und genau diese Herausforderung ohne Budget motiviert mich!
 
-GitHub Actions außerhalb ihres vorgesehenen Zwecks zu nutzen und Cloudflare Workers zu verwenden, um einen Bot zu "hosten", ist auch eine Art, neue Dinge zu lernen und neue Technologien wie Cloud-Hosting zu entdecken. Ich will nicht mehr für Hosting zahlen.
+Mit GitHub Aktionen außerhalb seiner vorgesehenen Nutzung und Cloudflare Workers für die "Hosting" eines Bots ist es auch eine Möglichkeit, neue Dinge zu lernen und neue Technologien wie Cloud-Hosting zu entdecken. Ich will nicht mehr für Unterkünfte bezahlen.
 
-Ich arbeite noch daran, aber du kannst dem [Discord-Server](https://discord.gg/frKZ9cJ4fD) beitreten, wenn du den Fortschritt verfolgen und sehen willst, wie es sich entwickelt, und vielleicht sogar beim Projekt mitmachen, wenn es dich interessiert! Der Server ist offen für alle, und wir hätten gerne mehr Leute, um gemeinsam Japanisch zu lernen! Du findest den Einladungslink auf der Seite, oder du kannst mich direkt fragen!
+Ich arbeite noch daran, aber du kannst sich dem [serveur Discord](https://discord.gg/frKZ9cJ4fD)Wenn du die Fortschritte verfolgen und sehen wollen, wie sich das entwickelt, und vielleicht sogar dem Projekt beitreten wollen, wenn du daran interessiert sind! Der Server ist für alle offen, und wir möchten mehr Leute haben, um Japanisch zusammen zu lernen! du findest den Einladungslink auf der Website, oder du kannst mich direkt fragen!

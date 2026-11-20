@@ -1,7 +1,6 @@
 ---
-title: Bareiron, der Minecraft-Server, der auf einem 1$-Mikrocontroller läuft
-description: 6800 Zeilen C, null malloc, Perlin Noise ersetzt durch
-  bilineare Interpolation, Biome als Tile Map, und das alles auf einem 1$-Chip.
+title: "Bareiron, der Minecraft-Server, der auf einem 1$-Mikrocontroller läuft"
+description: "6800 Zeilen C, null malloc, Perlin Noise ersetzt durch bilineare Interpolation, Biome als Tile Map, und das alles auf einem 1$-Chip."
 date: 2026-05-30
 tags:
   - minecraft
@@ -11,44 +10,41 @@ tags:
   - esp32
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "LbmkB/1WTGYIUdYmhuUPdK2ekfsMDKt4jJnz1dXg7GDJ+Q7PZuRsu4z26iqCr2FJU7x6/pF27ZadhCbsrtc35Q=="
+lang: "de"
 ---
+## 
 
-## Einleitung
+Einen Minecraft-Server auf einem 1-Dollar-Mikrocontroller laufen zu lassen, sieht wie ein Witz aus.
 
-Einen Minecraft-Server auf einem 1-Dollar-Mikrocontroller laufen lassen klingt wie ein Witz.
+Ich habe mich gefragt, und die Antwort lautet "Ja."
 
-Ich stellte mir die Frage, und die Antwort ist ja. Buchstäblich.
+Es gibt ein Projekt namens [Bareiron](https://github.com/p2r3/bareiron/), unterzeichnet p2r3, und das ist wahrscheinlich eines der faszinierendsten Projekte, die ich in den letzten Jahren in der Minecraft Welt gesehen habe. Es wird von einem Binär gesprochen, der in **300 Kilabyte**, **6800 Zeilen von C**, Null externe Abhängigkeit, kein Malloc, kein Threading, und es dreht sich um eine **ESP32 bei 1 Dollar**.
 
-Es gibt ein Projekt namens [Bareiron](https://github.com/p2r3/bareiron/), signiert p2r3, und es ist wahrscheinlich eines der faszinierendsten Projekte, die ich in den letzten Jahren in der Minecraft-Welt gesehen habe. Man redet von einem Binary, das in **300 Kilobyte** passt, **6800 Zeilen C**, null externe Abhängigkeiten, kein malloc, kein Threading, und es läuft auf einem **1-Dollar-ESP32**.
+![ESP32-C3, le microcontrôleur qui fait tourner le serveur](/images/bareiron/esp32-board.jpg)
 
-![ESP32-C3, der Mikrocontroller, der den Server laufen lässt](/images/bareiron/esp32-board.jpg)
+Wir haben unendliche Bodengenerierung, Biome, Höhlen, Kraft, Minen, Mobs, Hunger, Tresor, alles, was du von einem überlebenden Kellner erwartest.
 
-Unendliche Terraingenerierung. Biome. Höhlen. Craften. Minen. Mobs. Hunger. Truhen. Alles, was du von einem Survival-Server erwartest.
+Auf einem Chip, der **0.5 Watt** verbraucht und **160 MHz** von clock hat.
 
-Auf einem Chip, der **0.5 Watt** verbraucht und **160 MHz** Clock hat.
+Um einen Gedankenauftrag zu geben: Ein Minecraft Vanilla-Server braucht mehrere RAM-Gigas. ESP32-C3 ist **520 KB von SRAM** (400 nach dem Boot). Die Prozessoren vor 20 Jahren drehten sich bereits in Gigahertz – dieses ist auf 160 MHz begrenzt. Der Faktor zwischen den beiden in reiner Leistung ist ungefähr **20.000**.
 
-Zur Größenordnung: Ein Vanilla-Minecraft-Server braucht mehrere GB RAM. Der ESP32-C3 hat **520 KB SRAM** (400 verfügbar nach Boot). Prozessoren vor 20 Jahren liefen schon im Gigahertz, dieser cappt bei 160 MHz. Der Faktor zwischen beiden in purer Power ist etwa **20.000**.
+p2r3 hat keinen Minecraft-Server in C geschrieben, er hat jeden Stein des Servers neu erfunden, damit es in diesen Zwängen bleibt.
 
-p2r3 schrieb keinen Minecraft-Server in C, er erfand jeden Baustein des Servers neu, damit er in diese Constraints passt. Wir schauen wie, indem wir den Sourcecode öffnen.
+![Miniature de la vidéo de présentation de Bareiron par p2r3](/images/bareiron/title-card.jpg)
 
-![Thumbnail von p2r3s Bareiron-Präsentationsvideo](/images/bareiron/title-card.jpg)
+## Das Gehirn des Projekts: eine Generation von Land ohne Gedächtnis
 
-## Das Gehirn des Projekts: speicherlose Terraingenerierung
+Das größte Problem, wenn du einen eingebauten MC-Server machen willst, ist die Feldgeneration.
 
-Das größte Problem, wenn du einen eingebetteten MC-Server machen willst, ist Terraingenerierung.
+In Minecraft vanilla wird die Welt mit **Perlin noise** erzeugt: mehrere übereinander liegende Schichten (Oktaven), 6 biomische Parameter (Temperatur, Feuchtigkeit, Kontinentalität, Erosion, weirdness, Tiefe) und ein ganzes System von Caching, um nicht alles jedes Mal neu berechnen zu müssen.
 
-In Vanilla-Minecraft wird die Welt mit **Perlin Noise** generiert: Mehrere überlagerte Schichten (Oktaven), 6 biomische Parameter (Temperatur, Feuchte, Kontinentalität, Erosion, Weirdness, Tiefe) und ein ganzes Caching-System, um nicht alles jedes Mal neu berechnen zu müssen.
+Das Ergebnis ist wunderbar, aber es ist teuer in der Berechnung und es dauert RAM, um die erzeugten Chunks zu speichern.
 
-Das Ergebnis ist wunderschön. Aber es ist rechenintensiv und braucht RAM, um generierte Chunks zu speichern.
+Der Ansatz von Bareiron ist radikal anders. Statt Lärm zu stapeln, verwendet er das **bilinar interamine** an 4 Punkten, die durch einen **RNG-Deterministen** erzeugt werden.
 
-Bareirons Ansatz ist radikal anders. Statt Noise zu stapeln, nutzt er **bilineare Interpolation** auf 4 von einem **deterministischen RNG** generierten Punkten.
-
-Du weißt, wenn du ein kleines verpixeltes Bild vergrößerst und die Kanten verschwimmen? Genau das.
-
+Weißt du, wenn du ein kleines Pixelbild vergrößert und die Kanten verschwommen werden?
 ```c
-// worldgen.c, Zeilen 117-171 (vereinfacht)
+// worldgen.c Zeilen117-171(einfach)
 
 uint8_t interpolate (uint8_t a, uint8_t b, uint8_t c, uint8_t d, int x, int z) {
   uint16_t top    = a * (CHUNK_SIZE - x) + b * x;
@@ -57,55 +53,51 @@ uint8_t interpolate (uint8_t a, uint8_t b, uint8_t c, uint8_t d, int x, int z) {
 }
 
 uint8_t getHeightAt (int x, int z) {
-  int _x = floor(x / CHUNK_SIZE);  // Chunk-Koordinaten
+  int _x = floor(x / CHUNK_SIZE); // Chunk coordinates
   int _z = floor(z / CHUNK_SIZE);
-  int rx = x % CHUNK_SIZE;          // Offset im Chunk
+  int rx = x % CHUNK_SIZE; // Offset inside chunk
   int rz = z % CHUNK_SIZE;
   uint32_t hash = getChunkHash(_x, _z);
   uint8_t biome = getChunkBiome(_x, _z);
-  // Interpolation zwischen 4 Ecken geseedet von Hash + Biom
+  // Interpolation between4 Corners seeded by hash + biome
   return getHeightAtFromHash(rx, rz, _x, _z, hash, biome);
 }
 ```
+Standard-Bilinear-Interpolation: 4 Ecken, Gewichte je nach Position, nur eine`uint8_t`CHUNK_SIZE ist 8, also wird es in voller Multiplikation, keine Float.
 
-Standard-bilineare Interpolation: 4 Ecken, Gewichte nach Position, ein einziges `uint8_t` Output. CHUNK_SIZE ist 8, also passiert das in Integer-Multiplikationen, kein Float.
+p2r3 zeigt es Schritt für Schritt im Video: zuerst die 4 Ecken des Chunk, jeweils mit einer Höhe seeeded durch den RNG.
 
-p2r3 zeigt es Schritt für Schritt im Video: Erst die 4 Chunk-Ecken, jede mit einer vom RNG geseedeten Höhe.
-
-![Die 4 Chunk-Ecken, jede geseedet vom deterministischen RNG](/images/bareiron/gen-four-corners.jpg)
+![Les 4 coins du chunk, chacun seedé par le RNG déterministe](/images/bareiron/gen-four-corners.jpg)
 
 Dann erzeugt die Interpolation zwischen diesen 4 Punkten eine kontinuierliche Oberfläche.
 
-![Anwendung bilinearer Interpolation zwischen den 4 Ecken](/images/bareiron/gen-interpolate.jpg)
+![Application de la bilinear interpolation entre les 4 coins](/images/bareiron/gen-interpolate.jpg)
 
-Und durch Wiederholen des Patterns auf allen angrenzenden Chunks erhält man ein Terrain, das sich ins Unendliche erstreckt.
+Und wenn man die Pattern auf allen benachbarten Chunks wiederholt, bekommt man ein Land, das sich bis ins Unendliche erstreckt.
 
-![Endergebnis: kontinuierliches unregelmäßiges Terrain](/images/bareiron/gen-result.jpg)
+![Résultat final: terrain irrégulier continu](/images/bareiron/gen-result.jpg)
 
 ### Der deterministische RNG
 
-Der Schlüssel, der das alles möglich macht, ist das Seeding. Jeder Chunk hat 4 Ecken, und jede Ecke braucht einen einzigartigen aber reproduzierbaren Pseudozufallswert.
-
+Der Schlüssel, der das alles möglich macht, ist das seeding. Jeder Chunk hat 4 Ecken und jede Ecke braucht einen einzigartigen pseudo-zufälligen Wert, aber reproduzierbar.
 ```c
-// worldgen.c, Zeilen 13-22
+// worldgen.c Zeilen13-22
 
 uint32_t getChunkHash (short x, short z) {
   uint8_t buf[8];
-  memcpy(buf, &x, 2);          // 16 Bit X-Koordinate
-  memcpy(buf + 2, &z, 2);      // 16 Bit Z-Koordinate
-  memcpy(buf + 4, &world_seed, 4);  // 32 Bit globale Seed
-  return splitmix64(*((uint64_t *)buf));  // Hash
+  memcpy(buf, &x, 2); // 16 X-Koordinatenbits
+  memcpy(buf + 2, &z, 2); // 16 Z-Koordinatenbits
+  memcpy(buf + 4, &world_seed, 4); // 32 Gesamtseed-Bits
+  return splitmix64(*((uint64_t *)buf)); // Hash
 }
 ```
+Es packt 16 Bit von X, 16 Bits von Z und 32 Bit Seed in einem 8 Bytes Buffer und es geht alles in`splitmix64`Ergebnis: Ein einzigartiger deterministischer Wert für jede Position, basierend auf der Weltseed.
 
-Er packt 16 Bit X, 16 Bit Z und 32 Bit Seed in einen 8-Byte-Buffer und schickt alles durch `splitmix64`. Ergebnis: Ein deterministischer einzigartiger Wert für jede Position, basierend auf der Welt-Seed.
+Der Server muss das Feld nicht speichern, sondern neu berechnen, wenn der Spieler in einem neuen Bereich ankommt und jedes Mal genau das gleiche Ergebnis erzielt.
 
-Du kapierst die Power des Mechanismus? Der Server muss das Terrain nicht speichern. Er berechnet neu on the fly, wenn der Spieler in eine neue Zone kommt, und das gibt jedes Mal exakt dasselbe Ergebnis.
-
-Das genutzte `splitmix64` ist ein ultraschneller PRNG designed für 64-bit-Hashes:
-
+Das`splitmix64`verwendet wird, ist ein ultra-schneller Prng für 64-Bit-Hash entwickelt:
 ```c
-// worldgen.c (vereinfacht)
+// worldgen.c (einfach)
 
 static uint32_t splitmix64 (uint64_t state) {
   state += 0x9E3779B97F4A7C15ull;
@@ -115,46 +107,42 @@ static uint32_t splitmix64 (uint64_t state) {
   return (z ^ (z >> 31)) >> 32;
 }
 ```
+3 Operationen: addieren, xor/shift, multiplizieren, xorshift, replizieren und xor /shift. Alles wird direkt ohne Tisch oder Schnalle ausgeführt. Es nimmt den 8-Bytes-Buffer (X + Z + seed), behandelt ihn als 64-Bit-Integer und gibt 32 Bit Hash zurück. Es ist deterministisch, schnell und hält in 5 Zeilen.
 
-3 Operationen: Addition, Xor/Shift, Multiplikation, Xor/Shift, Multiplikation, Xor/Shift. Alles passt in direkte Operationen, ohne Tabelle oder Schleife. Es nimmt den 8-Byte-Buffer (X + Z + Seed), behandelt ihn wie eine 64-bit-Ganzzahl und gibt 32 Bit Hash zurück. Deterministisch, schnell, und passt in 5 Zeilen.
+### Warum ist das nicht Perlin Noise?
 
-### Warum das kein Perlin Noise ist
-
-p2r3 sagt es selbst im Video: "Je mehr Digits der Zufallszahl du hinzufügst, desto regelmäßiger wird das Terrain, wie mehr Münzwürfe dich näher an 50/50 bringen". In der Praxis ist es die Zahl der Hash-Bits, die er kombiniert:
-
+p2r3 sagt es selbst im Video: "Je mehr du die zufällige Zahl addierst, desto mehr wird das Feld regelmäßig, wie mehr Münzwerfer nähern dich 50/50." In der Praxis ist es die Anzahl der Hash-Bits, die es kombiniert:
 ```c
-// worldgen.c, Zeilen 51-115
+// worldgen.c Zeilen51-115
 
-// Für Plains-Biom : 4 kombinierte Faktoren → regelmäßiges Terrain
+// Für eine Biome beschweren:4 Kombinierte Faktoren → Regelmäßig
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
-// Für Snowy Plains : 2 Faktoren → hügeliger
+// Für snowy plains:2 Faktoren → mehr Unfall
 h = (hash % 5) + ((hash >> 4) % 5);
 ```
+Jedes Biome wählt, wie viele Bit-Extraktionen es kombiniert. Je mehr es gibt, desto stabiler wird die Verteilung – als mehr Münzwerfer, die 50/50 näher kommen. Je weniger sie gibt, umso stärker sind die lokalen Variationen.
 
-Jedes Biom wählt, wie viele Bit-Extraktionen es kombiniert. Je mehr, desto mehr stabilisiert sich die Verteilung, wie mehr Münzwürfe, die sich 50/50 annähern. Je weniger, desto stärker die lokalen Variationen.
+![Terrain irrégulier – peu de facteurs, variations fortes](/images/bareiron/terrain-irregular.jpg)
 
-![Unregelmäßiges Terrain, wenige Faktoren, starke Variationen](/images/bareiron/terrain-irregular.jpg)
+Mit nur 2 Faktoren erzeugt der Snowy Plains ein hügeliges, fast bergiges Gelände. Spikes und Tiefen sind häufig.
 
-Mit nur 2 Faktoren produziert Snowy Plains hügeliges, fast bergiges Terrain. Peaks und Täler sind häufig.
+![Terrain régulier – facteurs multiples, surface lisse](/images/bareiron/terrain-regular.jpg)
 
-![Regelmäßiges Terrain, multiple Faktoren, glatte Oberfläche](/images/bareiron/terrain-regular.jpg)
+Mit 4 Faktoren bleiben die Ebenen flach und vorhersehbar.
 
-Mit 4 Faktoren bleiben Plains flach und vorhersehbar. Die Verteilung stabilisiert sich.
+Ein Chunk erzeugt sich in **200 ms** auf ESP32 – gegen eine nicht messbare Zeit auf derselben Hardware mit Perlin nuise so teuer.
 
-Ein Chunk generiert sich in **200 ms** auf ESP32, gegen unmessbare Zeit auf selber Hardware mit Perlin Noise, so teuer ist es.
+### Das Detail, das tötet: Fragst du einen Block ohne die ganze Chunk erzeugen
 
-### Das Killer-Detail: einen Block abfragen ohne den ganzen Chunk zu generieren
+Du spielst, du drückst einen Block, der Kellner muss wissen, was du dir geben sollst.
 
-Du spielst, du minst einen Block. Der Server muss wissen, welches Item er dir geben muss. Naiv müsste er dafür den ganzen Chunk generieren.
+Mit dem Interferenz-Bilinar fragst du **jeden Punkt** der Ebene direkt von den Koordinaten aus. Die Ecken des Chunk erhalten sich von der Position des Spielers, die Interpolation gibt dir die Höhe zu jedem Offset. Eine Handvoll mathematischer Operationen, keine Chunksgeneration.
 
-Mit bilinearer Interpolation fragst du **jeden Punkt** der Ebene direkt aus Koordinaten ab. Die Chunk-Ecken bekommt man aus der Spielerposition, die Interpolation gibt die Höhe bei jedem Offset. Eine Handvoll Matheoperationen, keine Chunk-Generierung.
+p2r3: "Was ich will, ist eine magische Funktion, die mir sagen kann, welcher Block sich in einer bestimmten Koordinatenposition befindet, ohne Zugang zum Speicher oder Berechnung teurer Tonkarten." Genau das hat er getan.
 
-p2r3: "Was ich will, ist eine magische Funktion, die mir sagen kann, welcher Block an einer gegebenen Koordinate ist, ohne auf Speicher zuzugreifen oder teure Noise-Maps zu berechnen". Exakt was er machte.
-
-So wird Höhe zu konkreten Blöcken:
-
+Hier ist, wie die Höhe zu konkreten Blöcken wird:
 ```c
-// worldgen.c (vereinfacht)
+// worldgen.c (einfach)
 
 uint8_t getTerrainBlock (int x, uint8_t y, int z) {
   uint8_t surface = getHeightAt(x, z);
@@ -167,47 +155,41 @@ uint8_t getTerrainBlock (int x, uint8_t y, int z) {
                                return B_bedrock;
 }
 ```
+5 Bedingungen. Eine Schicht Fett/dirt/stone/deepslate/bedrock. Der Oberflächenblock hängt vom Biome ab via`biome_top[]`– Fett für die Ebenen, Sand für die Wüste. Ein einfacher Fall von if fällt in die richtige Schicht, was die Schleife und Switch ersetzt.
 
-5 Bedingungen. Eine Grass/Dirt/Stone/Deepslate/Bedrock-Schicht. Der Oberflächenblock hängt via `biome_top[]` vom Biom ab, Grass für Plains, Sand für Wüste. Eine simple If-Kaskade fällt in die richtige Schicht, was Schleife und Switch ersetzt.
-
-### Die Höhlen, faulster Mirror
-
+### Die Höhlen, die faulsten Mirror
 ```c
-Höhlenhöhe = CAVE_BASE_DEPTH - (Oberflächenhöhe - y);
+altitude_grotte = CAVE_BASE_DEPTH - (hauteur_surface - y);
 ```
+Er strahlt die Höhe der Oberfläche unter der Erde aus, sieht aus wie die großen Deepslate-Hohlräume.
 
-Er mirrort die Oberflächenhöhe unter Erde. Sieht aus wie große Deepslate-Kavernen. Null Compute, eine Zeile.
+![Caves générées par mirror du terrain de surface](/images/bareiron/cave-mirror.jpg)
 
-![Durch Oberflächen-Terrain-Mirror generierte Höhlen](/images/bareiron/cave-mirror.jpg)
+![Schéma du mirror de terrain pour générer les grottes](/images/bareiron/cave-diagram.jpg)
 
-![Schema des Terrain-Mirrors zur Höhlengenerierung](/images/bareiron/cave-diagram.jpg)
-
-### Die Erze, XOR-Version
-
+### Erze, Version XOR
 ```c
-Kandidat = (chunk_x ^ col_x ^ col_z) % 100;
-if (Kandidat < 5 && y < 16) -> Diamant
+candidat = (chunk_x ^ col_x ^ col_z) % 100;
+if (candidat < 5 && y < 16) -> diamond
 ```
+Ein XOR-Koordinaten garantiert einen Kandidaten pro Säule. Der Typ hängt nur von der Höhe ab. Diamanten werden unter dem untersten Punkt der Höhlen versteckt, damit das Graben nützlich bleibt.
 
-Ein Koordinaten-XOR garantiert einen Kandidaten pro Spalte. Der Typ hängt nur von der Höhe ab. Diamanten verstecken sich unter dem tiefsten Punkt der Höhlen, damit Graben nützlich bleibt.
+### Biome in Til Map
 
-### Die Biome als Tile Map
+Jede Biome ist eine runde Insel in einem Gitter, seine Art von einem Pattern bestimmt, berechnet aus der Seed. Grid, vorhersehbar und kostenlos.
 
-Jedes Biom ist eine kreisförmige Insel in einem Grid, sein Typ bestimmt von einem aus der Seed berechneten Pattern. Gegridet, vorhersehbar und gratis.
+![Carte des biomes en tile map – chaque île est un biome différent](/images/bareiron/biome-tilemap.jpg)
 
-![Biomkarte als Tile Map, jede Insel ein anderes Biom](/images/bareiron/biome-tilemap.jpg)
-
-Jedes Biom hat seinen eigenen Parametersatz kodiert in Tabellen:
-
+Jede Biome hat ihre eigenen Parameter in Tabellen kodiert:
 ```c
-// worldgen.c (vereinfacht)
+// worldgen.c (einfach)
 
 static const uint8_t biome_base[] = {
-  [BIOME_PLAINS]  = 48,   // Basishöhe : 48
-  [BIOME_DESERT]  = 52,   // etwas höher
-  [BIOME_FOREST]  = 50,   // dazwischen
-  [BIOME_TAIGA]   = 46,   // etwas tiefer
-  [BIOME_SNOWY]   = 40,   // am tiefsten
+  [BIOME_PLAINS]  = 48, // Basishöhe:48
+  [BIOME_DESERT]  = 52, // etwas höher
+  [BIOME_FOREST]  = 50, // zwischen den beiden
+  [BIOME_TAIGA]   = 46, // etwas tiefer
+  [BIOME_SNOWY]   = 40, // Tiefst
 };
 
 static const uint8_t biome_top[] = {
@@ -219,45 +201,37 @@ static const uint8_t biome_top[] = {
 };
 
 static const uint8_t biome_factors[] = {
-  [BIOME_PLAINS]  = 4,   // 4 Extraktionen → sehr regelmäßig
-  [BIOME_DESERT]  = 3,   // 3 Extraktionen → moderat
-  [BIOME_FOREST]  = 4,   // 4 Extraktionen → regelmäßig, hügelig
-  [BIOME_TAIGA]   = 3,   // 3 Extraktionen → moderat
-  [BIOME_SNOWY]   = 2,   // 2 Extraktionen → sehr hügelig
+  [BIOME_PLAINS]  = 4, // 4 Extraktionen → sehr regelmäßig
+  [BIOME_DESERT]  = 3, // 3 Extrakte → mäßig
+  [BIOME_FOREST]  = 4, // 4 Extrakte → regelmäßig, hügelig
+  [BIOME_TAIGA]   = 3, // 3 Extrakte → mäßig
+  [BIOME_SNOWY]   = 2, // 2 Extraktionen → sehr unvorhersehbar
 };
 ```
-
-**Plains**: Höhe 48, 4 Faktoren → sehr flaches Terrain, Gras.
-
+**Plains**: Höhe 48, 4 Faktoren → sehr flaches Gelände, Gras.
 ```c
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3) + ((hash >> 12) % 3);
-// Ergebnis : Variation max ±4 Blöcke
+// Ergebnis: Veränderung von ±4 Blöcke max
 ```
-
-**Desert**: Höhe 52, 3 Faktoren, Oberflächenblock = Sand. Nie unter Meeresspiegel.
-
+**Desert**: Höhe 52, 3 Faktoren, Block Oberfläche = Sand. Nie unter dem Meeresspiegel.
 ```c
 h = (hash % 3) + ((hash >> 4) % 3) + ((hash >> 8) % 3);
-// Ergebnis : Variation max ±6 Blöcke, geclampt auf SEA_LEVEL+1
+// Ergebnis: Veränderung von ±6 Blöcke max, geknackt bisSEA_LEVEL + 1
 ```
+**Forest**: Höhe 50, 4 Faktoren wie Plains aber höhere Basis → Waldhügel.
 
-**Forest**: Höhe 50, 4 Faktoren wie Plains aber höhere Basis → bewaldete Hügel.
+**Taiga**: Höhe 46, 3 Faktoren → mäßige Schwankungen, kaltes Gelände.
 
-**Taiga**: Höhe 46, 3 Faktoren → moderate Variationen, kaltes Terrain.
-
-**Snowy Plains**: Höhe 40, nur 2 Faktoren → am hügeligsten.
-
+**Snowy plains**: Höhe 40, nur 2 Faktoren → am meisten unfallgefährdet.
 ```c
 h = (hash % 5) + ((hash >> 4) % 5);
-// Ergebnis : Variation max ±14 Blöcke
+// Ergebnis: Veränderung von ±14 Blöcke max
 ```
+Jedes Biome wird in **3 Tabellen mit 5 Einträgen** kodiert: Grundhöhe, Oberflächenblock, Anzahl der Faktoren.`getHeightAtFromHash`empfängt das Biome, sie konsultiert diese Tabellen, um das Feld anzupassen. 15 Datenbytes, um die gesamte Minecraft Biome System zu ersetzen.
 
-Jedes Biom ist in **3 Tabellen zu 5 Einträgen** kodiert: Basishöhe, Oberflächenblock, Faktorenzahl. Wenn `getHeightAtFromHash` das Biom empfängt, konsultiert es diese Tabellen, um das Terrain anzupassen. 15 Byte Daten, um das ganze Vanilla-Minecraft-Biomsystem zu ersetzen.
-
-Der Biomdetektor nutzt die Seed, um zu bestimmen, welches Biom zu jedem Chunk passt:
-
+Der Biome-Detektor verwendet die Seed, um festzustellen, welche Biome jedem Chunk entspricht:
 ```c
-// worldgen.c (vereinfacht)
+// worldgen.c (einfach)
 
 static const uint8_t biome_pattern[] = {
   BIOME_PLAINS, BIOME_FOREST, BIOME_PLAINS, BIOME_DESERT,
@@ -272,25 +246,23 @@ uint8_t getChunkBiome (short cx, short cz) {
   return biome_pattern[index];
 }
 ```
+Ein 16-Eingang-Pattern, ein seedierter Index mit Chunk-Koordinaten, ein repetitives, aber visuell konsistentes Raster, vier Zeilen Code, um das gesamte Bio-Parametersystem von Minecraft Vanilla zu ersetzen.
 
-Ein 16-Einträge-Pattern, ein von Chunk-Koordinaten geseedeter Index. Das gibt ein repetitives aber visuell kohärentes Grid. 4 Codezeilen, um das ganze biomische Vanilla-Minecraft-Parametersystem zu ersetzen.
+### getHeightAtFromHash: der Feldmontageor
 
-### getHeightAtFromHash: der Terrain-Assembler
-
-Die Kernfunktion der Generierung kombiniert die 4 biomgeseedeten Ecken:
-
+Die Funktion im Herzen der Generation kombiniert die 4 Ecken seediert von Biome:
 ```c
-// worldgen.c (vereinfacht)
+// worldgen.c (einfach)
 
 static uint8_t getHeightAtFromHash (int rx, int rz, short cx, short cz,
                                     uint32_t h, uint8_t biome) {
-  // 4 Ecken aus Hash extrahiert, andere Seed pro Ecke
+  // 4 Ecken aus dem Hash, seed unterschiedlich pro Ecke
   uint8_t h1 = biome_base[biome] + (h & 0x0F);
   uint8_t h2 = biome_base[biome] + ((h >> 4) & 0x0F);
   uint8_t h3 = biome_base[biome] + ((h >> 8) & 0x0F);
   uint8_t h4 = biome_base[biome] + ((h >> 12) & 0x0F);
 
-  // Biom-Bedingung : Wüste nie unter Wasser
+  // Biome Contrainte: Wüste nie unter Wasser
   if (biome == BIOME_DESERT) {
     h1 = max(h1, SEA_LEVEL + 1);
     h2 = max(h2, SEA_LEVEL + 1);
@@ -298,32 +270,30 @@ static uint8_t getHeightAtFromHash (int rx, int rz, short cx, short cz,
     h4 = max(h4, SEA_LEVEL + 1);
   }
 
-  // Interpolation aus den 4 Ecken
+  // Interpolation von4 Ecken
   return interpolate(h1, h2, h3, h4, rx, rz);
 }
 ```
+Jedes Biom hat eine`biome_base`die die Referenzhöhe verschiebt, und die 4 Ecken werden aus dem Hash mit unterschiedlichen Verschiebungen extrahiert. Die Wüste zwingt die Min über dem Meeresspiegel – eine Spannungslinie, die Wasser ohne zusätzliche biomische Berechnung vermeidet.
 
-Jedes Biom hat eine `biome_base`, die die Referenzhöhe verschiebt, und die 4 Ecken werden mit verschiedenen Shifts aus dem Hash extrahiert. Die Wüste forct das Min über Meeresspiegel, eine Bedingungszeile, die Wasser ohne zusätzliche biomische Berechnung vermeidet.
+### Bäume und Kaktus: probabilistische Anlage
 
-### Bäume und Kakteen: probabilistisches Platzieren
-
-Die Oberflächengenerierung nutzt denselben Chunk-Hash, um zu entscheiden, wo zu pflanzen:
-
+Die Oberflächengeneration verwendet den gleichen Chunk Hash, um zu entscheiden, wo man pflanzen:
 ```c
-// worldgen.c (vereinfacht)
+// worldgen.c (einfach)
 
 static void genFoliage (uint8_t *chunk_data, short cx, short cz,
                         uint32_t hash, uint8_t biome) {
   if (biome == BIOME_DESERT) {
-    // Kaktus : ein Kandidat pro Chunk, Hash bestimmt Position
+    // Kaktus: ein Kandidat pro Chunk, Hash bestimmt die Position
     int tx = (hash >> 8) & 7;
     int tz = (hash >> 12) & 7;
     int ty = getHeightAt(cx * 8 + tx, cz * 8 + tz);
     if (chunk_data[ty * 64 + tz * 8 + tx] == B_sand)
       placeCactus(chunk_data, tx, ty + 1, tz);
   } else {
-    // Bäume : Hash bestimmt ob und wo
-    int tree_count = (hash & 3);  // 0-3 Bäume pro Chunk
+    // Bäume: Hash bestimmt, ob und wo sie gelegt werden
+    int tree_count = (hash & 3); // 0-3 Bäume pro Chunk
     for (int i = 0; i < tree_count; i ++) {
       int tx = ((hash >> (4 + i * 4)) & 7);
       int tz = ((hash >> (6 + i * 4)) & 7);
@@ -333,21 +303,19 @@ static void genFoliage (uint8_t *chunk_data, short cx, short cz,
   }
 }
 ```
+0-3 Bäume pro Chunk für grüne Biome, 1 Kaktus für die Wüste. Der Hash des Chunks ist die einzige Quelle der Entropie – ein`& 7`für die Position im Chunk:`& 3`Alles ist deterministisch, nichts ist gespeichert.
 
-0-3 Bäume pro Chunk für grüne Biome, max 1 Kaktus für Wüste. Der Chunk-Hash ist die einzige Entropiequelle, ein `& 7` für Position im Chunk, ein `& 3` für Zähler. Alles deterministisch, nichts gespeichert.
+### generateChunk: Alle zusammenfügen
 
-### generateChunk: alles zusammensetzen
-
-Die Funktion, die alles zusammenfügt, um einen kompletten 8×8×256-Block-Chunk zu produzieren:
-
+Die Funktion, die alle zusammen setzt, um einen vollen Chunk von 8×8×256 Blöcke zu produzieren:
 ```c
-// worldgen.c (vereinfacht)
+// worldgen.c (einfach)
 
 void generateChunk (uint8_t *chunk, short cx, short cz) {
   uint32_t hash = getChunkHash(cx, cz);
   uint8_t biome = getChunkBiome(cx, cz);
 
-  // Für jede Chunk-Spalte (8×8 = 64)
+  // Für jede Spalte des Chunk (8×8 = 64)
   for (int x = 0; x < 8; x ++) {
     for (int z = 0; z < 8; z ++) {
       // Absolute Weltkoordinaten
@@ -365,34 +333,30 @@ void generateChunk (uint8_t *chunk, short cx, short cz) {
     }
   }
 
-  // Oberflächenelemente hinzufügen (Bäume, Kakteen)
+  // Oberflächenelemente (Wellen, Kaktus) hinzufügen
   genFoliage(chunk, cx, cz, hash, biome);
 }
 ```
+Das ist alles. 3 verflochtene Schlingen: für jede Spalte, findest du die Höhe, füllen du die Blöcke, gehst du auf die nächste.`uint8_t [16384]`(8 × 8 × 256) die den gesamten Chunk darstellt. Der Chunks wird erzeugt und direkt an den Kunden gesendet, ohne dabei Caching, Lazy Loading oder Kompression zu durchlaufen.
 
-Das ist alles. 3 verschachtelte Schleifen: Für jede Spalte Höhe finden, Blöcke füllen, weiter. Output ist ein `uint8_t[16384]` (8 × 8 × 256), das den kompletten Chunk darstellt. Der Chunk wird generiert und direkt an den Client geschickt, ohne Caching, Lazy Loading oder Kompression.
+## Speichern: Statische Arrays überall
 
-## Der Speicher: überall statische Arrays
+Bareirorons Speicherarchitektur ist C-Architektur, die in seiner ganzen Pracht eingebettet ist: nur Globale Tabellen von fester Größe, weder Malloc, Hash Maps, noch verkettete Listen.
 
-Bareirons Speicherarchitektur ist eingebettetes C in voller Pracht: Nur globale fixgroße Tabellen, kein malloc, keine Hash Maps, keine Linked Lists.
-
-### Die Blockänderungen
-
+### Blockänderungen
 ```c
-// globals.h, Zeilen 191-196
+// globals.h Zeilen191-196
 
 typedef struct {
-  short x;      // 2 Bytes, limitiert auf 32.000 horizontale Blöcke
-  short z;      // 2 Bytes
-  uint8_t y;    // 1 Byte, limitiert auf 256 vertikale Blöcke
-  uint8_t block; // 1 Byte, limitiert auf 256 Blocktypen
+  short x; // 2 Bytes – Grenze zu32 000 Horizontale Blöcke
+  short z; // 2 Bytes
+  uint8_t y; // 1 Byte – Grenze zu256 Vertikale Blöcke
+  uint8_t block; // 1 Byte – Grenze zu256 Blocktypen
 } BlockChange;
 ```
+20 000 Einträge, d.h. etwa **25 000 Änderungen** – das entspricht einem vollständig ausgegrabenen Chunk und einem halben Chunc.`block`bis`0xFF`markiert einen freien Eintrag. Die Suche ist ein linearer Scan:
 
-20.000 Einträge, also etwa **25.000 Änderungen**, das Äquivalent von anderthalb komplett umgegrabenen Chunks. Das `block`-Feld auf `0xFF` markiert einen freien Eintrag. Suche ist linearer Scan:
-
-![Speicherlayout der Blocktabelle, 6 Bytes pro Eintrag](/images/bareiron/memory-layout.jpg)
-
+![Layout mémoire du tableau de blocs – 6 bytes par entrée](/images/bareiron/memory-layout.jpg)
 ```c
 // procedures.c
 
@@ -402,15 +366,13 @@ uint8_t getBlockChange (short x, uint8_t y, short z) {
     if (block_changes[i].x == x && block_changes[i].y == y && block_changes[i].z == z)
       return block_changes[i].block;
     #ifdef ALLOW_CHESTS
-      if (block_changes[i].block == B_chest) i += 14;  // Truhendaten überspringen
+      if (block_changes[i].block == B_chest) i += 14; // skip chest data
     #endif
   }
   return 0xFF;
 }
 ```
-
-Änderung hinzufügen ist so direkt wie Suche:
-
+Eine Änderung hinzufügen ist so direkt wie die Suche:
 ```c
 static uint8_t changes_count = 0;
 
@@ -423,42 +385,38 @@ void addBlockChange (short x, short z, uint8_t y, uint8_t block) {
   changes_count ++;
 }
 ```
+Ein Zähler, ein Index, ein Schreiben. Das Array speichert nur: keine Sortierung, keine Komplotte, keine Speicherverwaltung. Wenn das Arrêt voll ist, werden die neuen Änderungen ignoriert – das Feld kehrt zu seinem erzeugten Zustand zurück.
 
-Ein Zähler, ein Index, ein Write. Die Tabelle stapelt nur: Kein Sortieren, keine Kompaktierung, kein Speichermanagement. Wenn die Tabelle voll ist, werden neue Änderungen ignoriert, das Terrain kehrt zu generiertem Zustand zurück.
+Der Kommentar des Autors über die 256 Block-limit: "Ich werde nicht planen, die leicht gewachsten Kupfertreppen so früh implementieren."
 
-Der Autorenkommentar zum 256-Block-Limit: "Ich habe nicht vor, die leicht patiniert gewachste Kupfertrappe so bald zu implementieren."
-
-### Die Mobs: 8 Bytes pro Pipe-Kopf
-
+### Mobs: 8 Bytes pro Pfeifekopf
 ```c
-// globals.h, Zeilen 240-251 (pragma pack(push, 1) um Padding zu eliminieren)
+// globals.h Zeilen240-251(pragma pack (push,1) zur Beseitigung von Padding)
 
 typedef struct {
-  uint8_t type;   // 25=Huhn, 28=Kuh, 95=Schwein, 106=Schaf, 145=Zombie
+  uint8_t type; // 25=chicken,28=Cow,95=pig,106=sheep,145=Zombie
   short x;
-  uint8_t y;      // wenn Health=0, wird Y Timer vor Löschung
+  uint8_t y; // wenn health=0 Y wird ein Timer vor dem Löschen
   short z;
-  uint8_t data;   // Bits 0-4 : Health, Bit 5 : Schaf geschoren, Bits 6-7 : Panik-Timer
+  uint8_t data; // Bit0-4: health, bit5: sheep sHEARED, Bits6-7: panic timer
 } MobData;
 ```
+8 Bytes. 16 Stellplätze max. Ausrichtung und Padding gehen zur Luke.`data`Byte ist ein Heimbitfield: 5 Bit Leben, 1 Bit Rasen, 2 Bit Panikzeit. Und wenn ein Mob stirbt, wird das Feld Y ein Timer vor dem Löschen.
 
-8 Bytes. Max 16 Slots. Alignment und Padding fliegen raus. Das `data`-Byte ist ein Haus-Bitfield: 5 Bit Leben, 1 Bit Schur, 2 Bit Panik-Timer. Und wenn ein Mob stirbt, wird das Y-Feld Timer vor Löschung. Speichernutzung auf Bitebene.
+### Spieler: Enge Pakes
 
-### Die Spieler: eng gepackt
+Spielerdaten verwenden`#pragma pack(push, 1)`auch – Koordinaten in`short` + `uint8_t`, Bestandsaufnahmen in festen Tabellen`uint16_t` + `uint8_t`und ein Feld`flags`Das ist sowohl der Angriffscooldown, der Zustand von Spawn, Sneak, Sprint, Eat, Load, movement cooldow, und der Craft-Lock.
 
-Spielerdaten nutzen auch `#pragma pack(push, 1)`, Koordinaten in `short` + `uint8_t`, Inventare in fixen `uint16_t`- + `uint8_t`-Tabellen, und ein `flags`-Feld, das zugleich Angriffs-Cooldown, Spawn-State, Sneak, Sprint, Eat, Load, Movement-Cooldown und Craft-Lock kodiert. Alles in individuellen Bits.
+## Die Hauptschleife: while(true) und Nichtblocker
 
-## Die Hauptschleife: while(true) und non-blocking
-
-Der ganze Server läuft auf einer Schleife, einem Thread, null Event-Library.
-
+Der gesamte Server läuft auf einer Schleife, einem Thread, Null event library.
 ```c
-// main.c, Zeilen 594-720
+// main.c Zeilen594-720
 
 while (true) {
-  task_yield();  // lässt Watchdog auf ESP32 atmen
+  task_yield(); // Lass das Watchdog auf ESP32 atmen
 
-  // Neue Verbindung akzeptieren (non-blocking)
+  // Neue Verbindung annehmen (nicht blockieren)
   for (int i = 0; i < MAX_PLAYERS; i ++) {
     if (clients[i] != -1) continue;
     clients[i] = accept(server_fd, ...);
@@ -466,123 +424,115 @@ while (true) {
     break;
   }
 
-  // Server-Tick wenn Zeit um
+  // Tick Server, wenn die Zeit abgelaufen ist
   if (get_program_time() - last_tick_time > TIME_BETWEEN_TICKS) {
     handleServerTick(time_since_last_tick);
     last_tick_time = get_program_time();
   }
 
-  // Round-Robin : ein Client, ein Paket pro Iteration
+  // Round-Robin: ein Kunde, ein Iteration-Paket
   client_index = (client_index + 1) % MAX_PLAYERS;
   if (clients[client_index] == -1) continue;
 
-  // Paket-Header lesen : Length + ID
+  // Paketkopf lesen: length + ID
   recv(client_fd, &recv_buffer, 2, MSG_PEEK);
   int length = readVarInt(client_fd);
   int packet_id = readVarInt(client_fd);
   handlePacket(client_fd, length - sizeVarInt(packet_id), packet_id, state);
 }
 ```
+Ein Kunde wird durch Iteration der Schleife behandelt, und ein einziges Paket wird gleichzeitig gelesen.`task_yield()`Am Anfang der Schleife lässt der FreeRTOS idle task auf ESP32 atmen – ohne das, das watchdog timer te reset den Chip.
 
-Ein einziger Client wird pro Schleifeniteration behandelt, und ein einziges Paket auf einmal gelesen. Das `task_yield()` am Schleifenanfang lässt den FreeRTOS-Idle-Task auf ESP32 atmen, ohne das resettet dich der Watchdog-Timer den Chip.
-
-Der Paket-Dispatch ist ein monströser **400-Zeilen**-Switch:
-
+Das Dispatch der Pakete ist ein monströser Switch mit **400 Zeilen**:
 ```c
-// main.c, Zeilen 68-497
+// main.c Zeilen68-497
 
 void handlePacket (int client_fd, int length, int packet_id, int state) {
   switch (packet_id) {
-    case 0x00:  // Handshake / Status / Login je nach State
-    case 0x01:  // Status-Ping
-    case 0x02:  // Plugin-Message
-    case 0x03:  // Login/Config-Acknowledgment
-    case 0x08:  // Chat
-    case 0x0B:  // Client-Status (Respawn)
-    case 0x11:  // Click Container (handhabt Truhen)
-    case 0x19:  // Interact Entity
-    case 0x1D..0x20:  // Movement-Pakete (größter Fall)
-    case 0x28:  // Player Action (Dig/Place)
-    // ... 40+ Fälle
+    case 0x00: // Handshake / Status / Login nach Zustand
+    case 0x01: // Status ping
+    case 0x02: // Plugin-Nachricht
+    case 0x03: // Login/configuration acknowledgement
+    case 0x08: // Katze
+    case 0x0B: // Kundenstatus (respawn)
+    case 0x11: // Click Container (behält Schließfächer)
+    case 0x19: // Interact entity
+    case 0x1D..0x20: // Movement Packets (der größte Fall)
+    case 0x28: // Player action (dig/place)
+    // ... 40+ Fall
   }
 }
 ```
+Ein Switch kompiliert als statischer Jump-Tisch, der Jump dynamische Tabelle, vtable und map ersetzt. Perfekt für das Einsteigen.
 
-Ein Switch kompiliert zu statischer Jump Table, was dynamische Jump Table, Vtable und Map ersetzt. Perfekt für Embedded.
+Der Fall`0x1D-0x20`ist die größte – es verwaltet Positionsupdates, Fallschäden, Chunk-Grenzüberquerungen, Mob-Spawn, Crunks-Generation, UND Hunger. Alles in einem großen Fall-through.
 
-Der `0x1D-0x20`-Fall ist der größte, er handhabt Positionsupdates, Fallschaden, Chunk-Grenzüberquerungen, Mob-Spawn, Chunk-Generierung UND Hunger. Alles in einem einzigen großen Fall-through.
+![Le code du serveur Bareiron – 6800 lignes de C](/images/bareiron/code-shot.jpg)
 
-![Der Bareiron-Servercode, 6800 Zeilen C](/images/bareiron/code-shot.jpg)
+## Der Tick-Server und die Mob-IA
 
-## Der Server-Tick und Mob-KI
-
-Die `handleServerTick`-Funktion wird alle 50 ms aufgerufen (20 TPS). Sie handhabt die Welt, während die Hauptschleife sich um Spieler kümmert:
-
+Funktion`handleServerTick`wird alle 50 ms (20 TPS) genannt. du verwaltet die Welt, während die Hauptschleife die Spieler betreut:
 ```c
-// main.c (vereinfacht)
+// main.c (einfach)
 
 void handleServerTick (uint32_t delta) {
-  // Jeden Mob updaten
+  // Aktualisieren Sie jeden Mob
   for (int i = 0; i < MOB_COUNT; i ++) {
-    if (mobs[i].type == 0 || mobs[i].data == 0) continue;  // tot oder leer
+    if (mobs[i].type == 0 || mobs[i].data == 0) continue; // tot oder leer
 
     MobData *mob = &mobs[i];
     int px, pz;
     getNearestPlayer(mob->x, mob->z, &px, &pz);
 
     if (mob->type == MOB_ZOMBIE) {
-      // Hostil : läuft zum nächsten Spieler
+      // Hostile: Spaziergang zum nächsten Spieler
       if (px < mob->x) mob->x --;
       else if (px > mob->x) mob->x ++;
       if (pz < mob->z) mob->z --;
       else if (pz > mob->z) mob->z ++;
-      // Kontaktschaden auf 2 Blöcke
+      // Kontaktschäden bei2 Blöcke
       if (abs(px - mob->x) <= 2 && abs(pz - mob->z) <= 2)
         damagePlayer(getNearestPlayerId(mob->x, mob->z), 3);
     } else {
-      // Passiv : 8 Zufallsrichtungen
+      // Passiva:8 Zufällige Richtungen
       uint8_t dir = getMobDir(mob);
       mob->x += dir_lookup[dir][0];
       mob->z += dir_lookup[dir][1];
-      // Richtungswechsel etwa alle 40 Ticks
+      // Richtungsänderung alle ~40 Ticks
       if (mob->data >> 6 < 1) setMobDir(mob, rand() & 7);
       mob->data = (mob->data & 0x3F) | ((mob->data - 0x40) & 0xC0);
     }
 
-    // Chunks um Mob wecken
+    // Die Chunks um den Mob aufwecken
     setChunkGenerated(mob->x / 8, mob->z / 8);
   }
 }
 ```
+Die KI der feindlichen Mobs ist ein Koordinatenvergleich.`if (px < x) x–`. Der Zombie ignoriert pathfinding, A* und Hindernis: er passt X und Z unabhängig vom Spieler an – er durchquert die Wände, wenn es welche gibt.
 
-Hostile Mob-KI ist ein Koordinatenvergleich. Buchstäblich `if (px < x) x--`. Der Zombie ignoriert Pathfinding, A* und Obstacle Avoidance: Er justiert X und Z unabhängig zum Spieler, er läuft durch Wände, wenn welche da sind.
+Kontaktschäden sind bei 3 Kernen/Sec. p2r3 wollte es hoch, weil das Fehlen von pathfinding Zombies leicht zu kitieren macht.
 
-Kontaktschaden ist 3 Herzen/Sek. p2r3 wollte ihn hoch, weil fehlendes Pathfinding Zombies leicht kitbar macht.
-
-Die Rüstungsformel ist die von vor dem Combat Update, die simpelstmögliche:
-
+Die Rüstung Formel ist die vor dem update Kampf – die einfachste Möglichkeit:
 ```c
-// main.c (vereinfacht)
+// main.c (einfach)
 
 static uint8_t applyArmor (uint8_t damage, uint16_t armor_value) {
-  // Prä-1.9-Formel : lineare Reduktion
-  // Jeder Rüstungspunkt = 4% Reduktion, max 80%
+  // Vor-1.9: lineare Reduktion
+  // Jeder Rüstungspunkt =4 Reduktions-%, max80 %
   uint8_t reduction = (armor_value * 4);
   if (reduction > 80) reduction = 80;
   return damage * (100 - reduction) / 100;
 }
 ```
+Full Diamond = 80% Reduktion. Ein Zombie-Schlag auf 3 Kerne wird 0.6 Kerne. p2r3 wählte diese alte Formel, weil sie in 2 Operationen berechnet wird – keine Schwellen, keine Kurven, nur einen linearen Prozentsatz.
 
-Full Diamond = 80% Reduktion. Ein 3-Herzen-Zombieschlag wird 0.6 Herzen. p2r3 wählte diese alte Formel, weil sie sich in 2 Operationen berechnet, keine Schwellen, keine Kurven, nur linearer Prozentsatz.
+Passive Mobs: 8 Richtungen in einem Lookup-Tisch, Kursänderung alle ~40 Ticks. Das Feld`data`kodiert die aktuelle Richtung in den 2 Bit starkes Gewicht und den Zeitmesser für Richtungsänderung in den verbleibenden 6 Bit.
 
-Passive Mobs: 8 Richtungen in einer Lookup-Table, Kurswechsel etwa alle 40 Ticks. Das `data`-Feld kodiert die laufende Richtung in den 2 hochwertigen Bits und den Richtungswechsel-Timer in den 6 restlichen Bits.
+![Mobs dans Bareiron – zombies, cochons, moutons](/images/bareiron/mobs.jpg)
 
-![Mobs in Bareiron, Zombies, Schweine, Schafe](/images/bareiron/mobs.jpg)
+### Die Mobs-Repawn
 
-### Der Mob-Respawn
-
-Mobs spawnen nicht mit Random Ticks. Sie erscheinen, wenn der Server-Tick auf eine neue Chunk-Grenze trifft:
-
+Mobs spawnen nicht mit Random ticks. Sie erscheinen, wenn der tick Server eine neue Chunk Grenze trifft:
 ```c
 if (player crossed chunk boundary) {
   for (int i = 0; i < MOB_COUNT; i ++) {
@@ -592,19 +542,17 @@ if (player crossed chunk boundary) {
   }
 }
 ```
+Sogar RNG wie das Grundstück, sogar chunk seed. Wenn ein mob Aufstellungsort frei ist, ist der Spawn deterministisch.
 
-Derselbe RNG wie Terrain, dieselbe Chunk-Seed. Wenn ein Mob-Slot frei ist, ist der Spawn deterministisch.
-
-## Das Craften: keine Matrizen, if/else
-
+## Craft: keine Matrizen, if/else
 ```c
-// crafting.c, Zeilen 9-347 (vereinfacht)
+// crafting.c Zeilen9-347(einfach)
 
 void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
-  // Wenn Flag 0x80 gesetzt, wird Craft-Buffer von Truhe benutzt
+  // Wenn der Flag0 x80 ist aufgestanden, wird der Craft-Buffer von einem Kofferraum verwendet
   if (player->flags & 0x80) { *count = 0; *item = 0; return; }
 
-  // Slots zählen, erstes Item finden, Identität prüfen
+  // Slots zählen, den ersten Item finden, Identität überprüfen
   uint8_t filled = 0, first = 10, identical = true;
   for (int i = 0; i < 9; i ++) {
     if (player->craft_items[i]) {
@@ -616,56 +564,52 @@ void getCraftingOutput (PlayerData *player, uint8_t *count, uint16_t *item) {
   }
 
   switch (filled) {
-    case 1:  /* Bretter, Barren... */
-    case 2:  /* Stöcke, Scheren, Fackeln */
-    case 3:  /* Schaufeln, Schwerter, Stufen */
-    case 4:  /* Werktisch, Boots */
-    case 5:  /* Spitzhacken, Äxte, Helme */
-    case 7:  /* Beinschienen, Komposter */
-    case 8:  /* Ofen, Truhe, Brustpanzer */
-    case 9:  /* komplette Blöcke (Eisen, Gold usw.) */
+    case 1:  /* planches, lingots... */
+    case 2:  /* bâtons, cisailles, torches */
+    case 3:  /* pelles, épées, dalles */
+    case 4:  /* table de craft, boots */
+    case 5:  /* pioches, haches, casques */
+    case 7:  /* jambières, composteurs */
+    case 8:  /* fourneau, coffre, plastron */
+    case 9:  /* blocs complets (fer, or, etc.) */
   }
 }
 ```
+Der erste Check: wenn flag`0x80`Der Craft-Buffer wird in den Tresorpointer recycliert.
 
-Der erste Check: Wenn Flag `0x80` gesetzt, wird Craft-Buffer als Truhenpointer recycelt. Craften bleibt verriegelt.
-
-Danach zählt er gefüllte Slots, notiert erstes Item, prüft Identität. Schon damit matchst du den Ofen in 4 Checks:
-
+Dann zählt er die gefüllten Slots, schreibe den ersten Item, prüfe die Identität.
 ```c
 if (count == 8 && first == cobblestone && all_identical && center_empty)
     return furnace;
 ```
+Für komplexe Formen verwendet er den Index des ersten items und checkt die relative Position ab. Die Rezepte teilen sich eine gleiche Matching-Funktion – das Material bestimmt das Ergebnis.
 
-Für komplexe Formen nutzt er den Erst-Item-Index und prüft relative Position. Rezepte teilen dieselbe Matching-Funktion, das Material bestimmt Ergebnis.
+![Interface de craft et coffre dans Bareiron](/images/bareiron/crafting.jpg)
 
-![Craft- und Truheninterface in Bareiron](/images/bareiron/crafting.jpg)
+## Die Tresor: der Hack in der realen
 
-## Die Truhen: der Hack live
-
-Der Speichern-Hack, über den alle reden, in echtem Code:
-
+Der Speicher-Hack, von dem jeder spricht, in wahrem Code:
 ```c
-// procedures.c, Zeilen 1262-1293
+// procedures.c Zeilen1262-1293
 
 if (target == B_chest) {
-  // Truheneintrag in Blocktabelle suchen
+  // Tresoreingabe in der Blocktabelle suchen
   uint8_t *storage_ptr = NULL;
   for (int i = 0; i < block_changes_count; i ++) {
     if (block_changes[i].block != B_chest) continue;
     if (block_changes[i].x != x || block_changes[i].y != y || block_changes[i].z != z)
       continue;
-    storage_ptr = (uint8_t *)(&block_changes[i + 1]);  // zeigt hinter Truhenblock
+    storage_ptr = (uint8_t *)(&block_changes[i + 1]); // Spitze nach dem Block
     break;
   }
   if (storage_ptr == NULL) return;
 
-  // Terrible memory hack!!
-  // Wir kopieren den POINTER in das Spieler-Craft-Item-Array
+  // Schreckliches Memory Hack!!
+  // Der PUNKTER wird in die Craft-Items des Spielers kopiert
   memcpy(player->craft_items, &storage_ptr, sizeof(storage_ptr));
-  player->flags |= 0x80;  // verriegelt Craften
+  player->flags |= 0x80; // lockt das Craft
 
-  // Truheninterface an Client schicken
+  // Safe-Schnittstelle an den Kunden senden
   sc_openScreen(player->client_fd, 2, "Chest", 5);
   for (int i = 0; i < 27; i ++) {
     uint16_t item;
@@ -676,72 +620,64 @@ if (target == B_chest) {
   }
 }
 ```
+Und der Kommentar im Code:`// Terrible memory hack!!1!`
 
-Und der Kommentar im Code: `// Terrible memory hack!!1!`
+Genau das ist es. Er nimmt die Speicheradresse des nächsten Eintrages in`block_changes[]`, kopiert er es in`player->craft_items`(das ist ein`uint16_t [9]`18 Bytes - genug, um einen 32-Bit-Pointer zu speichern, und er hebt den Flag, damit niemand während dieser Zeit versucht, Craft zu fangen.
 
-Genau das. Er nimmt die Speicheradresse des folgenden Eintrags in `block_changes[]`, kopiert sie in `player->craft_items` (das ein `uint16_t[9]` ist, also 18 Bytes, genug um einen 32-bit-Pointer zu speichern), und hebt das Flag, damit niemand währenddessen craftet.
-
-Bei jedem Klick in Truheninventar:
-
+Auf jedem Klick in der Tresor-Inventur:
 ```c
-// packets.c, Zeilen 620-638
+// packets.c Zeilen620-638
 
 uint8_t *storage_ptr;
 memcpy(&storage_ptr, player->craft_items, sizeof(storage_ptr));
-// storage_ptr zeigt jetzt auf Truhendaten
+// storage_ptr zeigt nun auf die Daten aus dem Tresor
 uint16_t *p_item = (uint16_t *)(storage_ptr + (slot - 41) * 3);
 uint8_t *p_count = storage_ptr + (slot - 41) * 3 + 2;
 ```
+Er holt den Zeiger vom Craft-Buffer ab und greift mit einem Offset auf die Slots zu. Die Daten werden in 3 Bytes pro Slot gespeichert (2 für die ID, 1 für die Menge), die in der Blocktabelle zusammengeklebt werden.
 
-Er holt den Pointer aus dem Craft-Buffer zurück und greift per Offset auf Slots zu. Truhendaten liegen zu 3 Bytes pro Slot (2 für ID, 1 für Menge), aneinandergeklebt in der Blocktabelle.
+![Données de coffre stockées dans le tableau de blocs – un hack mémoire](/images/bareiron/chest-hack.jpg)
 
-![In Blocktabelle gespeicherte Truhendaten, ein Speichern-Hack](/images/bareiron/chest-hack.jpg)
-
-## Der Hunger: 5 Zeilen Genie
-
+## Hunger: 5 Linien des Genies
 ```c
-// main.c, Zeilen 293-305
+// main.c Zeilen293-305
 
-// Spieler schicken Bewegungspakete ~20/Sek wenn sie
-// sich bewegen, viel weniger wenn sie stillstehen. Man korreliert das
-// mit Aktivität, um Hunger gratis zu simulieren.
+// Spieler senden Bewegungspakete an ~20/sec wenn sie
+// Wenn sie sich nicht bewegen, ist das viel weniger.
+// mit Aktivität, um Hunger zu simulieren kostenlos.
 if (player->saturation == 0) {
   if (player->hunger > 0) player->hunger--;
   player->saturation = 200;
   sc_setHealth(client_fd, player->health, player->hunger, player->saturation);
-} else if (player->flags & 0x08) {  // Sprinten
+} else if (player->flags & 0x08) { // Sprinting
   player->saturation -= 1;
 }
 }
 ```
+Das ist buchstäblich das. 5 Zeilen. Jedes Bewegungspaket dekrementiert die Sättigung. Wenn die Sattration auf Null kommt, sinkt der Hunger und wir sättigen wieder.`0x08`) verdoppelt sich der Drain.
 
-Buchstäblich das. 5 Zeilen. Jedes Bewegungspaket dekrementiert Sättigung. Wenn Sättigung null erreicht, sinkt Hunger und man resettet Sättigung. Sprint (Flag `0x08`) verdoppelt Drain.
+Null Timer, Null Speicher zugewiesen, Null Compute dediziert. Ein Zähler, der auf Paketen, die bereits existieren, dekrementiert.
 
-Null Timer, null allokierter Speicher, null dediziertes Compute. Ein Zähler, der auf eh existierenden Paketen dekrementiert.
+### Fallschäden
 
-### Der Fallschaden
-
-Das simpelste Schadenssystem des Projekts:
-
+Das einfachste System für Schäden im Projekt:
 ```c
-// Wenn Spieler Boden verlässt, speichert man sein Y
-// Wenn er Boden wieder berührt, subtrahiert man
-Schaden = letztes_y_am_Boden - aktuelles_y;
+// Wenn der Spieler den Boden verlässt, speichert man sein Y
+// Wenn er den Boden umreißt, wird er abgezogen.
+degats = dernier_y_au_sol - y_actuel;
 ```
-
 Eine Subtraktion.
 
-## Blöcke minen und platzieren
+## Blocks unterdrücken und platzieren
 
-Wenn du auf einen Block klickst, landet das `0x28`-Paket (Player Action) im Switch. Der Handler muss bestimmen, welcher Block an der Position ist, ihn entfernen und das Item ins Inventar legen:
-
+Wenn du auf einen Block klickst, dann das Paket`0x28`(Player Action) landet im Switch. Der Handler muss bestimmen, welcher Block sich in der Position befindet, ihn entfernen und das item in das Inventar setzen:
 ```c
-// main.c, Fall 0x28 (vereinfacht)
+// main.c Feld0 x28(einfach)
 
 void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z) {
   switch (action) {
     case START_DESTROY_BLOCK: {
-      // Blocktyp an geklickter Position bestimmen
+      // Blocktyp an der angeklickten Position bestimmen
       uint8_t block = getBlockAt(x, y, z);
 
       if (block == B_chest) {
@@ -750,18 +686,18 @@ void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z)
       }
 
       // Zu block_changes hinzufügen
-      addBlockChange(x, z, y, 0);  // 0 = Luft
+      addBlockChange(x, z, y, 0); // 0= Luft
 
-      // Item an Spieler geben (trust the client)
+      // Geben Sie dem Spieler das item (trust the client)
       addItemToPlayer(client_fd, block_to_item(block), 1);
 
-      // Update an Client schicken
+      // Aktualisieren an den Kunden senden
       sc_blockChange(client_fd, x, y, z, 0);
       sc_ackBlockChange(client_fd, x, y, z, 0);
       break;
     }
     case PLACE_BLOCK: {
-      // Blocktyp aus Spielerhand lesen
+      // Blocktyp von der Hand des Spielers lesen
       uint16_t item = getHeldItem(client_fd);
       uint8_t block = item_to_block(item);
       addBlockChange(x, z, y, block);
@@ -772,32 +708,28 @@ void handlePlayerAction (int client_fd, uint8_t action, int x, uint8_t y, int z)
   }
 }
 ```
-
-`getBlockAt` kombiniert Terraingenerierung UND Spieleränderungen:
-
+`getBlockAt`kombiniert die Spieler-Erstellung UND Änderungen:
 ```c
 uint8_t getBlockAt (int x, uint8_t y, int z) {
-  // Zuerst Spieleränderungen prüfen
+  // Zuerst überprüfen Sie die Spieler-Änderungen
   uint8_t change = getBlockChange(x, y, z);
   if (change != 0xFF) return change;
 
-  // Sonst aus generiertem Terrain lesen
+  // Andernfalls lesen Sie aus dem erzeugten Feld
   return getTerrainBlock(x, y, z);
 }
 ```
+Die Priorität der Veränderungen, die Fallback-Show, die Null-Debatte, Null-Cache-Case, Null overhead.`getTerrainBlock`Unter der Haube ist es`getHeightAt`+ Stone/dirt/grass/coal Schichten.
 
-Priorität auf Änderungen, Fallback auf Terrain. Null Debatte, null Cache, null Overhead. Das `getTerrainBlock` darunter ist `getHeightAt` + Stone/Dirt/Grass/Coal-Schichten.
+### Der Instantofen
 
-### Der Instant-Ofen
+Das lustigste: Der Ofen existiert nicht als Einheit. Wenn du Cobblestone in das Feld "Koch" und Coal in "Fuel" legst, erscheint das Ergebnis sofort ohne Timer oder Chunk Ticking: es ist nur ein Inventar-Slot, der leer wird, wenn du die richtigen Items legest.
 
-Das Lustigste: Der Ofen existiert nicht als Entity. Wenn du Cobblestone in den "Koch"-Slot und Coal in "Fuel" legst, erscheint das Ergebnis sofort, ohne Timer oder Chunk Ticking: Es ist nur ein Inventarslot, der sich leert, wenn du die richtigen Items legst.
+![Fourneau instantané – pose les ingrédients, résultat immédiat](/images/bareiron/furnace.jpg)
 
-![Instant-Ofen, Zutaten reinlegen, sofortiges Ergebnis](/images/bareiron/furnace.jpg)
-
-## Die ESP32-Schleife: ein MC-Server in 4 KB Stack
-
+## Die ESP32 Schleife: ein MC Server in 4 KB Stack
 ```c
-// main.c, Zeilen 732-779
+// main.c Zeilen732-779
 
 #ifdef ESP_PLATFORM
 
@@ -807,7 +739,7 @@ void bareiron_main (void *pvParameters) {
 }
 
 static void wifi_event_handler (...) {
-  if (/* verbunden */) {
+  if (/* connecté */) {
     xTaskCreate(bareiron_main, "bareiron", 4096, NULL, 5, NULL);
   }
 }
@@ -815,53 +747,55 @@ static void wifi_event_handler (...) {
 void app_main () {
   esp_timer_early_init();
   wifi_init();
-  // Rest handhabt Event Handler
+  // Der Rest wird vom event handler verwaltet
 }
 #endif
 ```
+Der gesamte Server läuft in einer FreeRTOS-Aufgabe mit **4096 Bytes von Stack**. Das ist alles. Der Haupt-Thread-Hand wird nur WiFi initialisiert und auf eine Verbindung warten.`bareiron_main`die das`main()`Standard.
 
-Der ganze Server läuft in einem FreeRTOS-Task mit **4096 Bytes Stack**. Das ist alles. Der Main-Thread initialisiert nur WiFi und wartet auf Verbindung. Einmal verbunden, spawnt er `bareiron_main`, das das Standard-`main()` aufruft.
-
-Aller ESP32-spezifische Code ist von `#ifdef ESP_PLATFORM` geschützt. Auf PC kompiliert das alles zu Standard-POSIX-Code.
+Der gesamte spezifische ESP32-Code ist durch`#ifdef ESP_PLATFORM`. Auf dem PC kompiliert es in Standard POSIX-Code.
 
 ## Was geopfert wurde
 
-Damit das alles passt, gibt es Vanilla-Features, die nicht existieren:
+Damit das alles dir gehört, gibt es Vanilla-Features, die nicht existieren:
 
-- **Null Netzwerkkompression**, zlib zu teuer. Der Server generiert Chunks schnell, aber sie zu schicken ist Bottleneck.
-- **Null Random Ticks**, Bäume wachsen mit Bone Meal oder nicht. Mobs spawnen an Chunk-Grenzen.
-- **Null Item-Entity**, geminte Blöcke gehen direkt ins Inventar. Animation ist rein visuell.
-- **Keine Inventarprüfung**, trust the client. 64 Diamanten? OK. Ein Chunk in 1 Sek gemint? OK. Unter vertrauenswürdigen Leuten nutzen.
-- **Null Serverlicht**, Fackeln werden nach allem Rest geschickt, der Client berechnet.
-- **Null progressive Fluide**, instantaner Endzustand.
+- **Zero-Netzwerkkompression** – zu teuer. Der Server erzeugt Chunks schnell, aber senden du sie ist das Bottleneck.
+- **Zero random ticks** – die Bäume wachsen mit Bone meal oder nicht. Die Mobs spawnen an den Chunk Grenzen.
+- **Zero-Institution item** – die Blöcke werden direkt in die Inventarisierung gemeißelt. Die Animation ist rein visuell.
+- **Keine Inventarprüfung** – Trust the client. 64 Diamanten? OK. Ein Chunk in 1 Sekunden gemingt? okay. Zu verwenden zwischen vertrauenswürdigen Leuten.
+- **Zero-Server** – Fackeln werden nach allem anderen gesendet, der Client berechnet.
+- **Progressives Flüssigkeits-Null** – sofortiger Endzustand.
 
 ## Das Endergebnis
 
-Ryzen 5 3600: ~0.5 ms pro Chunk.
-1$-ESP32-C3: ~200 ms pro Chunk. Spielbar.
+Ryzen 5 3600: ~0.5 ms pro chunk. ESP32-C3 bis 1$: $200 ms je chunc. Spielbar.
 
-![Chunk-Generierungs-Benchmark, Ryzen vs ESP32](/images/bareiron/performance.jpg)
+![Benchmark de génération de chunks – Ryzen vs ESP32](/images/bareiron/performance.jpg)
 
-3+ Spieler: Es ruckelt. Vergleichbar mit 2b2t zu Stoßzeiten, laut Autor.
+3+ Spieler: Rudert. Vergleichbar mit 2b2t zu Spitzenzeiten, sät der Autor.
 
-![Mehrere Spieler auf demselben Bareiron-Server verbunden](/images/bareiron/multiplayer.jpg)
+![Plusieurs joueurs connectés au même serveur Bareiron](/images/bareiron/multiplayer.jpg)
 
-## Die Philosophie
+## Philosophie
 
-p2r3: "Ich mag einfach die Idee, dass dieser winzige 1-Balles-Chip, der 0.5 Watt verbraucht, etwas so Fortgeschrittenes wie Minecraft laufen lassen kann. Science isn't about 'why', it's about 'why not'."
+p2r3: "Ich mag nur die Idee, dass dieser winzige 1-Ball-Chip, der 0.5 Watt verbraucht, etwas so fortgeschrittenes wie Minecraft drehen kann. Science isn't about 'why', it's about'why not'."
 
 Jede Zeile ist ein Tradeoff:
-- Perlin Noise → Interpolation: Weniger hübsch, 200x schneller, null Speicher
-- Craft-Matrizen → hardcoded Matching: Hässlicher Code, null Byte
-- zlib → nichts: Miese Verbindung = tot, aber spielbar
-- Validierung → Trust: Null Sicherheit, null Compute
 
-Jedes fehlende Feature erlaubt einem anderen, in Hardware-Limits zu existieren.
+- Perlin noise → Interpolation: weniger hübsch, 200x schneller, Null Speicher
 
-**Die 3 Punkte zum Mitnehmen :**
+- Craft-Matrix → hardcodiert matching: ekelhafter Code, Null Byte
 
-1. **Interpolation + RNG**, 4 geseedete Punkte, unendliches Terrain, null Speicherung, Query ohne Chunk-Regenerierung, 200 ms Generierung. Der Genie-Move, der alles andere erst möglich macht.
-2. **Jedes Feature hat Kosten**, fehlende Kompression, Random Ticks und Validierung sind eingestandene Wahl: Das erlaubt, in 520 KB zu passen.
-3. **Eklige Hacks sind die cleversten**, Truhen in Blocktabelle via memcpy, Hunger via Bewegungspakete, Instant-Ofen. Die saubere Lösung wäre zu teuer gewesen.
+- zlib → nichts: faule Verbindung = tot, aber spielbar
 
-Wenn dich das Projekt interessiert, alles liegt auf [GitHub unter GPLv3](https://github.com/p2r3/bareiron/). Saumäßig dreckiges C, und ich hatte selten so viel Spaß beim Lesen von Sourcecode.
+- Validierung → Trust: Null Sicherheit, Null Compute
+
+Jede fehlende Feature ermöglicht es einer anderen, innerhalb der Grenzen der Hardware zu existieren.
+
+**Die 3 Punkte, die zu berücksichtigen sind:**
+
+1. **Interpolation + RNG** – 4 seedierte Punkte, unendliches Gelände, Null Lagerung, Query ohne die Chunk neu zu erzeugen, 200 ms Generation. Es ist der geniale Move, der alles andere möglich macht.
+2. **Jede Feature hat Kosten** – Das Fehlen von Kompression, Randomik und Validierung ist die gewählte Wahl: Dies ermöglicht es, in 520 KB zu halten.
+3. **Die vergeudeten Hacks sind die intelligentesten** – Tresor in der Blocktafel via memcpy, hungrig durch Bewegungspakete, Instant-Koch. Die saubere Lösung wäre zu teuer gewesen.
+
+Wenn du Interesse an dem Projekt hast, dann ist alles auf der Hand. [GitHub en GPLv3](https://github.com/p2r3/bareiron/)Das ist schmutziges C, und ich habe selten so viel Spaß daran gehabt, einen Quellcode zu lesen.

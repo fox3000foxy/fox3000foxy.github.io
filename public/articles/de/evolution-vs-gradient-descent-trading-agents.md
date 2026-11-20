@@ -1,39 +1,36 @@
 ---
-title: "Ich habe ein neuronales Netz durch natürliche Selektion evolviert statt durch Gradientenabstieg"
-description: "Wie ich klassisches Training per Gradientenabstieg durch einen genetischen NSGA-II-Algorithmus ersetzt habe, um DQN-Trading-Agenten zu evolvieren: vier Versionen, von Overfitting bis zur lamarckschen Evolution der Gewichte."
+title: "Ich habe ein Netz von Neuronen durch natürliche Auswahl entwickelt, anstatt durch Gradientenabstieg."
+description: "Wie ich das klassische Training durch Gradientenabstieg durch einen genetischen NSGA-II-Algorithmus ersetzte, um DQN-Trading-Agenten zu entwickeln: vier Versionen, vom Überlernen bis zur lamarckischen Entwicklung der Gewichte."
 date: 2026-07-13
 tags: ["ai", "nsga-ii", "dqn", "trading", "typescript"]
 authors: ["docteur-turboss"]
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "u+s3JrhnsjULeu6wR0J4DV/xm+Elpx4uJZU3GOXFeauH8OxYwRlqVETULUB7V6iIC6U5i8y7NbC+Rrylh+4uZA=="
+lang: "de"
 ---
+## 
 
-## Das Problem mit Gradientenabstieg allein
+Ein DQN-Agenten für algorithmisches Trading mit dem klassischen Gradientenabstieg zu trainieren, stellt ein einfaches und schwer zu lösendes Problem dar: der optimierte Gradienten _un_-Netzwerk zu _un' minimal lokal, auf einem Marktfenster. Es gibt keine Garantie dafür, dass dieses Minimum bei einer anderen Marktordnung allgemein gilt, und nichts im Trainingsring wächst in Richtung Vielfalt; zwei Runs, die von verschiedenen Samen ausgehen, konvergen sich häufig in nahezu identische Strategien mit den gleichen toten Winkeln.
 
-Einen DQN-Agenten für algorithmisches Trading mit klassischem Gradientenabstieg zu trainieren stellt ein einfach zu formulierendes und schwer zu lösendes Problem: Der Gradient optimiert _ein_ Netz hin zu _einem_ lokalen Minimum, auf _einem_ Marktfenster. Nichts garantiert, dass dieses Minimum auf ein anderes Marktregime generalisiert, und nichts in der Trainingsschleife drängt zu Diversität; zwei Runs, die von unterschiedlichen Seeds starten, konvergieren oft zu fast identischen Strategien mit denselben blinden Flecken.
+Die Antwort, die ich erforscht habe: den Gradientenabstieg mit einem genetischen Algorithmus ersetzen (oder vielmehr überlagern). Statt einen Agenten zu trainieren, wird eine Population von Agenten entwickelt; jeder von ihnen wird ein Genom mit Architektur und Hyperparametern verschlüsselt; und die natürliche Auswahl lässt sich sortieren, während der Gradienten jedes Individuum im eigenen Leben weiterfeinert.
 
-Die Antwort, die ich erkundet habe: Den Gradientenabstieg durch einen genetischen Algorithmus ersetzen (oder eher überlagern). Statt einen Agenten zu trainieren, evolviert man eine Population von Agenten; jeder ein Genom, das eine Architektur und Hyperparameter kodiert; und man lässt die natürliche Selektion sortieren, während der Gradient jeden Einzelnen innerhalb seines eigenen Lebens weiter feinschleift.
+Dieser Runner hat vier Versionen in einer einzigen intensiven Arbeitssitzung durchgemacht. Jede hat einen strukturellen Fehler der vorherigen korrigiert.
 
-Dieser Runner hat vier Versionen in einer einzigen intensiven Arbeitssession durchlaufen. Jede hat einen strukturellen Defekt der vorherigen korrigiert.
+## v1: die naive Version, und warum es nicht genug
 
-## v1: die naive Version, und warum sie nicht reichte
+Die erste Version war das, was man von einer grundlegenden GA erwartet: eine Population von Genomen, eine Fitnessfunktion, Auswahl, Kreuzung, Mutation, nächste Generation. Jedes Genome verdarb die Netztopologie (Schichtenzahl, Breite), DQN-Hyperparameter (Learning rate, Epsilon decay, Größe der Replay-Buffer) und einige architektonische Auswahl (welche Datenquellen verbrauchen, welche Größe des Embedding).
 
-Die erste Version tat, was man von einem Basis-GA erwartet: Eine Population von Genomen, eine Fitnessfunktion, Selektion, Crossover, Mutation, nächste Generation. Jedes Genom kodierte die Netztopologie (Schichtzahl, Breite), die DQN-Hyperparameter (Learning Rate, Epsilon Decay, Replay-Buffer-Größe) und einige Architekturentscheidungen (welche Datenquellen konsumieren, welche Embedding-Größe).
+Der Hauptfehler: Fitness wurde auf den gleichen Daten wie Training berechnet. Ein Agent konnte sich ein Marktfenster buchstäblich auswendig lernen und eine ausgezeichnete Punktzahl erzielen, ohne eine allgemein zugängliche Strategie kennengelernt zu haben. Klassisch überlernt, aber durch genetische Selektion verstärkt; die GA wählt aktiv die Personen aus, die diese Lücke am besten nutzen.
 
-Der Hauptdefekt: Die Fitness wurde auf denselben Daten berechnet wie das Training. Ein Agent konnte buchstäblich ein Marktfenster auswendig lernen und einen exzellenten Score bekommen, ohne eine generalisierbare Strategie gelernt zu haben. Klassisches Overfitting, aber durch die genetische Selektion verstärkt; der GA selektiert aktiv die Individuen, die diese Lücke am besten ausnutzen.
+## v2: Abtrennung von Training und Bewertung
 
-## v2: Training und Evaluierung trennen
+Die offensichtliche Korrektur war, die Phasen zu trennen: jedes Genome trainiert in einem Marktfenster und wird dann auf einem anderen Fenster bewertet, das während des Trainings nie gesehen wurde. Nur die Leistung in der Bewertung zählt für Fitness.
 
-Die offensichtliche Korrektur war, die Phasen zu trennen: Jedes Genom trainiert auf einem Marktfenster und wird dann auf einem anderen, während des Trainings nie gesehenen Fenster evaluiert. Nur die Evaluierungsleistung zählt für die Fitness.
+Diese Veränderung allein hat die durchschnittliche Fitness der Bevölkerung zum Absturz gebracht; ein Zeichen dafür, dass ein großer Teil von dem, was von der Leistung in v1 zu sein schien, reiner Gedächtnis war. Traurig zu sehen, aber genau das ist das Signal, das man will: ein niedrigerer, aber ehrlicher Punkt ist besser als ein aufgeblasener und trügerischer Punkt.
 
-Diese Änderung allein ließ die Durchschnittsfitness der Population fallen; ein Zeichen, dass ein guter Teil dessen, was in v1 wie Leistung aussah, reines Auswendiglernen war. Schmerzlich anzusehen, aber genau das Signal, das man will: Ein niedrigerer, aber ehrlicher Score ist besser als ein aufgeblähter und irreführender.
+## v3: Wechseln du zu NSGA-II und einem Multi-Objektiv-Fitness
 
-## v3: Wechsel zu NSGA-II und Multi-Objective-Fitness
+Optimieren du einen einzigen Fitness-Score (z.B. die Rendite) treibt mechanisch zu Agenten, die extreme Risiken eingehen, um diese einzige Zahl zu maximieren. Die Lösung war, auf NSGA-II (Non-dominated Sorting Genetic Algorithm II) umzusteigen, die gleichzeitig mehrere Ziele optimiert, ohne sie auf eine willkürlich gewichtete Summe zu reduzieren: Rendite, maximale Drawdown, Sharpe-Verhältnis, inter-Fensterstabilität.
 
-Einen einzigen Fitnessscore zu optimieren (sagen wir die Rendite) drängt mechanisch zu Agenten, die extreme Risiken eingehen, um diese eine Zahl zu maximieren. Die Lösung war der Wechsel zu NSGA-II (Non-dominated Sorting Genetic Algorithm II), der mehrere Ziele gleichzeitig optimiert, ohne sie auf eine arbiträre gewichtete Summe zu reduzieren: Rendite, maximaler Drawdown, Sharpe-Ratio, Stabilität über Fenster.
-
-NSGA-II baut eine Pareto-Front: Die Menge der Genome, bei denen keine Verbesserung bei einem Ziel möglich ist, ohne ein anderes zu verschlechtern. Statt einen einzigen Kompromiss zwischen Rendite und Risiko über eine vorab gewählte Gewichtung zu erzwingen, behält man die gesamte Kompromissgrenze und lässt die finale Wahl offen.
-
+NSGA-II baut eine Front von Pareto: Alle Genome, für die keine Verbesserung an einem Ziel möglich ist, ohne ein anderes zu verschlechtern. Anstatt einen einzigen Kompromiss zwischen Rendite und Risiko durch eine im Voraus ausgewählte Gewichtung zu erzwingen, bleibt die gesamte Kompromißgrenze erhalten und die endgültige Wahl bleibt offen.
 ```
 function nonDominatedSort(population: Genome[]): Genome[][] {
   const fronts: Genome[][] = [[]];
@@ -49,46 +46,43 @@ function nonDominatedSort(population: Genome[]): Genome[][] {
       fronts[0].push(p);
     }
   }
-  // ... Aufbau der folgenden Fronts durch iteratives Entfernen
+  // ... Bau der folgenden Fronten durch iterative Abschaltung
   return fronts;
 }
 ```
+Zweite Ergänzung der v3: ein ** Archiv von Persistent Pareto**. Ohne sie kann ein gutes Genome, das in der Generation 12 gefunden wurde, in Generation 15 verschwinden, wenn der Zufall der Kreuzung es nicht nachahmt; auch wenn es besser blieb als alles, was es ersetzt hat. Das Archiv bewahrt durch alle Generationen alle nicht dominierten Individuen, die je getroffen wurden, unabhängig von der gegenwärtigen Bevölkerung.
 
-Zweite Neuerung der v3: Ein **persistentes Pareto-Archiv**. Ohne es kann ein gutes Genom, das in Generation 12 gefunden wurde, in Generation 15 verschwinden, wenn der Zufall des Crossovers es nicht reproduziert; selbst wenn es besser blieb als alles, was es ersetzt hat. Das Archiv bewahrt über alle Generationen die Menge der je angetroffenen nicht-dominierten Individuen, unabhängig von der aktuellen Population.
+## v4: lamarckische Entwicklung und ökologische Vielfalt
 
-## v4: lamarcksche Evolution und Umgebungsdiversität
+Der V3 hatte einen strukturellen toten Winkel: das Genom beschrieb die Architektur, aber die während des Trainings gelernten Gewichte verschwanden in jeder neuen Generation. Ein Nachkomme, der aus der Kreuzung zweier guter Eltern geboren wurde, erbte ihre Architektur, musste aber von Null wieder lernen; keine Spur der Gewichte, die seine Eltern leistungsfähig gemacht hatten.
 
-Die v3 hatte einen strukturellen blinden Fleck: Das Genom beschrieb die Architektur, aber die während des Trainings gelernten Gewichte verschwanden mit jeder neuen Generation. Ein Nachkomme aus der Kreuzung zweier guter Eltern erbte ihre Architektur, musste aber von null neu lernen; keine Spur der Gewichte, die seine Eltern leistungsfähig gemacht hatten.
-
-Die v4 führt die **lamarcksche Evolution** ein: Die trainierten Gewichte werden nach dem Training wieder in das Genom injiziert und (mit Mutation) an die Nachkommen weitergegeben. Es ist eine eingestandene biologische Häresie; Lamarck lag falsch für lebende Organismen, die Vererbung erworbener Merkmale existiert in der Biologie nicht; aber nichts hindert einen numerischen GA daran, intelligent zu schummeln: Hier beschleunigt das Weitergeben des Erworbenen die Konvergenz radikal, weil jede Generation von einem schon informierten Initialisierungspunkt startet statt von zufälligen Gewichten.
+Die V4 führt die** lamarckische Evolution** ein: die angetriebenen Gewichte werden nach dem Training in das Genom zurückgebracht und (mit Mutation) an die Nachkommen weitergegeben. Es ist eine übernommene biologische Häresie; Lamarck hatte Unrecht für lebende Organismen, die Vererbung der erworbenen Zeichen existiert nicht in der Biologie; aber nichts hindert eine digitale GA, intelligent zu betrügen: Hier, die Übertragung des Acquis beschleunigt radikal die Konvergenz, da jede Generation von einem bereits informierten Anfangspunkt zurückkehrt anstatt von zufälligen Gewichten.
 
 Drei weitere strukturelle Änderungen in dieser Version:
 
-*   **Umgebungsdiversität**: Jedes Genom wird nicht mehr auf einem einzigen Marktfenster evaluiert, sondern auf mehreren, aus unterschiedlichen Regimen gezogen (bullisch, bärisch, Range). Ein Agent, der auf einem Fenster glänzt und auf einem anderen zusammenbricht, kann die Pareto-Front nicht mehr dominieren.
-*   **FLOPs-Komplexitätsregularisierung**: Die Rechenkosten des Netzes (in FLOPs) werden ein eigenes Ziel in NSGA-II. Das verhindert, dass die Evolution zu massiven Architekturen konvergiert, einfach weil sie mehr rohe Kapazität haben, ohne dass es durch den Leistungsgewinn gerechtfertigt wäre.
-*   **Entkoppelte** `RLBackend`-**Schnittstelle**: Der GA kennt die DQN-Details nicht mehr. Er handhabt ein Genom und ruft `train()` / `evaluate()` über eine abstrakte Schnittstelle auf, was es theoretisch erlaubt, einen anderen RL-Algorithmus anzustöpseln, ohne die Evolutionsengine anzufassen.
-
+*   **Umweltvielfalt**: Jeder Genome wird nicht mehr auf einem einzigen Marktfenster bewertet, sondern auf mehreren, die aus verschiedenen Systemen (Schuh, Kassierer, Range) stammen. Ein Agent, der auf einem Fenster auftrifft und auf einem anderen einstürzt, kann nicht mehr die Front von Pareto beherrschen.
+*   **Komplexe Regulierung von FLOPs**: Die Netzberechnungskosten (in FLOP) werden in NSGA-II zu einem eigenständigen Ziel. Dadurch wird vermieden, dass die Entwicklung zu massiven Architekturen umgeht, nur weil sie mehr Bruttokapazität haben, ohne dass dies durch Leistungsgewinn gerechtfertigt ist.
+*   **Schnittstelle**`RLBackend`**entkoppelt**: Die GA kennt die Details von DQN nicht mehr. du manipuliert einen Genome und ruft`train()` / `evaluate()`über eine abstrakte Schnittstelle, die theoretisch einen anderen RL-Algorithmus ohne Berührung mit dem Evolutionsmotor anschließt.
 ```
 interface RLBackend {
   train(genome: Genome, window: MarketWindow): Promise<TrainedWeights>;
   evaluate(genome: Genome, weights: TrainedWeights, window: MarketWindow): Promise<FitnessVector>;
 }
 ```
+Letzter technischer Punkt: Die Bewertung wurde in **geschränkte asynchrone Wettbewerb** umgewandelt; ein Pool von N-Bewertungen parallel statt einer Sequenzschleife, mit einer expliziten Begrenzung, um die verfügbaren GPU/CPU-Ressourcen nicht zu sättigen.
 
-Letzter technischer Punkt: Die Evaluierung läuft jetzt in **begrenzter asynchroner Konkurrenz**; ein Pool von N parallelen Evaluierungen statt einer sequenziellen Schleife, mit explizitem Limit, um die verfügbaren GPU/CPU-Ressourcen nicht zu sättigen.
+## Was der v4 gegenüber v3 in der Praxis korrigiert
 
-## Was die v4 gegenüber der v3 in der Praxis korrigiert
+Voreinstellung v3 Korrektur v4 Verlorene Gewichte bei jeder Generation Wiedereinsetzung von trainierten Gewichten Über ein einziges Marktfenster Bewertung auf mehreren Fenstern, unterschiedliche Architekturen, die ohne Belastung FLOPs als explizites Pareto-Objektiv GA in Verbindung mit DQN-Details vergrößern`RLBackend`Abstrakt Sequenzbewertung langsam Wettbewerb sync bornée
 
-Defekt v3 Korrektur v4 Verlorene Gewichte bei jeder Generation Lamarcksche Reinjektion der trainierten Gewichte Overfitting auf ein einziges Marktfenster Evaluierung auf mehreren Fenstern, variierte Regime Architekturen, die ohne Zwang wachsen FLOPs als explizites Pareto-Ziel GA an DQN-Details gekoppelt Abstrakte `RLBackend`-Schnittstelle Langsame sequenzielle Evaluierung Begrenzte Async-Konkurrenz
+Die v4 hat auch zehn konkrete Fehler der "grounding" API behoben; Fälle, in denen der GA-Code eine Schnittstelle für`TradingAgent`Diese Art von Fehler ist unsichtbar, solange der Code nicht mit dem wahren Quellcode des Agenten verglichen wird: Der v4 wurde erst nach Zeilenumlauf mit der tatsächlichen Datei validiert.
 
-Die v4 hat auch zehn konkrete "Grounding"-Bugs der API korrigiert; Fälle, in denen der GA-Code eine Schnittstelle für `TradingAgent` annahm, die nicht genau der echten Implementierung entsprach. Diese Art Bug ist unsichtbar, solange man den Code nicht mit dem echten Quellcode des Agenten konfrontiert: Die v4 wurde erst nach Zeile-für-Zeile-Nachlese gegen die echte Datei validiert.
+## Warum Evolution und Gradienten mischen, anstatt sich für eine oder andere zu entscheiden
 
-## Warum Evolution und Gradient mischen statt eines von beiden
+Man könnte sich fragen, warum man nicht einfach reiner RL oder reiner NEAT-Evolution macht. Die Antwort lautet: Der Gradienten ist ausgezeichnet, um lokal zu verfeinern (kontinuierliche Gewichte auf ein nahes Optimum einzustellen), die Evolution ist ausgezeichnet für die globale Erforschung (Erkundung von Architekturen und Hyperparameterkombinationen, die keine Gradienten erreichen können, weil der diskrete Suchraum nicht unterschiedlich ist).
 
-Man könnte fragen, warum nicht einfach pures RL oder pure Evolution nach Art von NEAT. Die Antwort passt in einen Satz: Der Gradient ist exzellent zum lokalen Feinschliff (kontinuierliche Gewichte hin zu einem nahen Optimum justieren), die Evolution ist exzellent zur globalen Erkundung (Architekturen und Hyperparameterkombinationen entdecken, die kein Gradient erreichen kann, weil der diskrete Suchraum nicht differenzierbar ist). Eines ohne das andere zu nutzen heißt, sich einer der beiden Erkundungsformen zu berauben.
-
-Der Preis ist Engineering-Komplexität; vier Versionen waren kein Luxus, es war die Zahl nötiger Iterationen, damit die GA + RL-Schleife aufhört, sich selbst zu sabotieren (Overfitting, Verlust guter Individuen, Verlust erworbener Gewichte). Aber das Ergebnis ist ein System, das einen deutlich breiteren Designraum erkundet als ein simples Hyperparameter-Grid-Search und dabei die lokale Effizienz des Gradienten für jeden evaluierten Kandidaten behält.
+Der Preis ist die Komplexität des Engineerings; vier Versionen waren kein Luxus, es war die Anzahl der Iterationen, die erforderlich waren, damit die GA + RL-Schleife nicht mehr sich selbst sabotieren (Überlernung, Verlust guter Menschen, erworbener Gewichtsverlust). Aber das Ergebnis ist ein System, das einen weit größeren Designraum als ein einfaches Grid-Suche von Hyperparametern erforscht, während die lokale Effizienz des Gradienten für jeden bewerteten Bewerber beibehalten.
 
 ## Nächster Schritt
 
-Diese einstufige evolutive Architektur (eine flache Population von DQN-Genomen) erreicht ihre Grenzen, wenn die Zahl abzudeckender Assets steigt. Das hat den Wechsel zu einer hierarchischen Drei-Ebenen-Architektur motiviert (Asset Analysts → Sector Managers → Portfolio Allocator), mit einem GA, der auf jeder Ebene unabhängig operiert... aber das ist das Thema eines anderen Artikels.
+Diese evolutionäre Architektur auf einer Ebene (eine flache Bevölkerung von DQN-Genomen) erreicht ihre Grenzen, wenn die Anzahl der zu deckenden Vermögenswerte steigt. Dies hat den Übergang zu einer dreistufigen hierarchischen Architektur (Asset Analysts → Sector Managers © Portfolio Allocator) mit einer unabhängig von jeder Ebene operierenden GA motiviert... aber das ist das Thema eines anderen Artikels.

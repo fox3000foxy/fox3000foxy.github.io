@@ -1,8 +1,6 @@
 ---
 title: Meine bescheuerte KI für Nausicaa
-description: Eine KI mit heuristischen Koeffizienten, Hyper-Parametern, die
-  sich alle 5 Züge ändern, und einem Orakel, das abhaut, ein Tauchgang in das Gehirn
-  eines strategischen Brettspiels.
+description: "Eine KI mit heuristischen Koeffizienten, Hyper-Parametern, die sich alle 5 Züge ändern, und einem Orakel, das abhaut, ein Tauchgang in das Gehirn eines strategischen Brettspiels."
 date: 2026-05-29
 tags:
   - gaming
@@ -11,49 +9,46 @@ tags:
   - open-source
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "pSRn1kBniUbKkH9AazmPTkmwLJkrF5PSZRy8wGvylKhvtqZPfZMZV6l5ca4PqcXT4qi2ABAd48Z0+ZARLcpNRA=="
+lang: "de"
 ---
+## 
 
-## Meine bescheuerte KI für Nausicaa
+Es gibt Projekte, die mit "Hier, wenn ich ein Schachspiel mit Mythologien?" beginnen und die mit einem System mit einer IA enden, das alle 5 Runden über eigene Hyperparameter entscheidet.
 
-Es gibt Projekte, die mit "was, wenn ich Schach mit Mythologien machen würde ?" anfangen und mit einem System enden, das eine KI enthält, die alle 5 Züge ihre eigenen Hyper-Parameter entscheidet.
+Nausicaa ist es. Ein Spiel mit einer Drehung für jede Drehung, wo du dein Deck mythologischer Kreaturen baust, dein Mana mana manipulierst, Einheiten auf einem 10x8-Plateau ausbreitest und eine IA hat Persönlichkeitskrisen.
 
-Nausicaa ist genau das. Ein rundenbasiertes Brettspiel, in dem du dein Deck mythologischer Kreaturen baust, dein Mana verwaltest, Einheiten auf einem 10x8-Brett entfaltest. Und es gibt eine KI, die Persönlichkeitskrisen hat.
+Ich habe viel Zeit auf dieser IA verbracht, und das Ergebnis ist mir manchmal noch nicht bewusst, und ich ziehe es vor.
 
-Ich habe viel Zeit in diese KI gesteckt, und das Ergebnis entwischt mir manchmal noch, und das mag ich am liebsten.
+## Das Spiel in der realen
 
-## Das Spiel in echt
+Bevor wir über das Gehirn sprechen, müssen wir den Körper verstehen:
 
-Bevor wir über das Gehirn reden, muss man den Körper verstehen:
+- 10x8, Einsatzbereich von 2 Reihen pro Spieler
+- Mana beginnt bei 1, +1 pro Runde, max 6. Du rufst an, greifst an und nutzt Fähigkeiten.
+- Ziel: das gegnerische Orakel töten
 
-- 10x8-Brett, Entfaltungszone von 2 Reihen pro Spieler
-- Mana startet bei 1, +1 pro Zug, max 6. Du gibst aus, um zu beschwören, anzugreifen, Fähigkeiten zu nutzen
-- Ziel: das gegnerische Orakel killen
+12 Einheiten, Kosten und verschiedene Bewegung Patterns:
 
-12 Einheiten, unterschiedliche Kosten und Bewegungsmuster:
-
-| Unit | Kosten | Bewegung | LP |
+| Unit | Kosten | Bewegung | PV |
 | --- | --- | --- | --- |
-| Oracle | 0 | König (8 Richtungen) | 1 |
-| Goblin | 1 | Vorwärts 3 Felder | 1 |
-| Harpyie | 1 | König (8 Richtungen) | 1 |
-| Najade | 1 | Diagonale | 1 |
-| Greif | 2 | Sprung 2 Felder | 2 |
-| Sirene | 2 | Lateral | 1 |
-| Zentaur | 2 | Springer (in L) | 2 |
-| Bogenschütze | 3 | Lateral | 1 |
-| Phönix | 3 | Diagonale (dunkle Felder) | 1 |
+| Orakel | 0 | König (8 Richtungen) | 1 |
+| Gobelin | 1 | Vor 3 Feldern | 1 |
+| Harpie | 1 | König (8 Richtungen) | 1 |
+| Najade | 1 | Diagonal | 1 |
+| Griffin | 2 | Hop 2 Felder | 2 |
+| Meerjungfrau | 2 | Lateral | 1 |
+| Centaurir | 2 | Reiter (in L) | 2 |
+| Archer | 3 | Lateral | 1 |
+| Phönix | 3 | Diagonale(dunkel) | 1 |
 | Metamorph | 4 | Platztausch | 1 |
-| Seher | 4 | Keiner (generiert Mana) | 1 |
-| Titan | 6 | Begrenzt (Zonenangriff) | 3 |
+| Seher | 4 | Keiner(Mana-Generator) | 1 |
+| Titan | 6 | Begrenzte Fläche(Attackenbereich) | 3 |
 
-Jede Einheit hat ihr eigenes Angriffsmuster. Die Sirene schlägt in die 4 Diagonalen, der Bogenschütze auf Distanz über 3 Felder, der Titan zerstört bei der Beschwörung alles drumherum. Kurz gesagt, ein Schachspiel mit Mythologie und Deckbuilding.
+Jede Einheit hat ihre eigene Angriffspattern. Die Meerjungfrau tritt in die 4 Diagonalen, der Archer in der Ferne auf 3 Felder, der Titan zerstört ringsum in Beschwörung. Kurzum, ein Schachspiel mit Mythologie und Deckbuilding.
 
-## Wie ich die CPU zum Nachdenken gebracht habe
+## Wie ich die CPU denken ließ
 
-Die Grundidee ist dämlich einfach: **Jede gegnerische Einheit hat einen Attraktivitätskoeffizienten**. Je gefährlicher sie ist, desto mehr will die KI sich um sie kümmern.
-
+Die Grundidee ist einfach: ** Jede feindliche Einheit hat einen Attraktivitätskoeffizienten**. Je gefährlicher sie ist, desto mehr will die KI sie erledigen.
 ```javascript
 const UNITS_ATTRACTIVENESS = {
     "oracle": 100,
@@ -70,17 +65,13 @@ const UNITS_ATTRACTIVENESS = {
     "gobelin": 20
 };
 ```
+Oracle 100 – logisch ist die Win Condition. Titan 95, weil er nebenan OS. Gobelin 20, er ist ein Fantasie-Mann, wir scheißen drauf.
 
-Orakel bei 100, logisch, es ist die Win Condition. Titan bei 95, weil er bei der Beschwörung alles daneben one-shottet. Goblin bei 20, das ist ein Fußsoldat, der ist uns egal.
-
-Dann berechne ich für jedes Einheitenpaar (eine verbündete, eine gegnerische):
-
+Dann berechne ich für jedes Paar Einheiten (eine Verbündete, eine Feindin),
 ```
 interet = attractivite × coeff_attract / (distance × coeff_dist)
 ```
-
-Grob gesagt: Je gefährlicher und näher du bist, desto mehr will die KI dich zerlegen.
-
+Je gefährlicher und nahrhafter du bist, desto mehr will dich die KI high machen.
 ```javascript
 calculateAttackCoefficient(x1, y1, x2, y2) {
     const distance = this.calculateEuclideanDistance(x1, y1, x2, y2);
@@ -88,11 +79,9 @@ calculateAttackCoefficient(x1, y1, x2, y2) {
     return (UNITS_ATTRACTIVENESS[unit.type] * COEFFICIENTS_IMPORTANCE["attractiveness"]) / distance;
 }
 ```
+### Der Schlag der Koeffizienten, die sich ändern
 
-### Der Trick mit den wechselnden Koeffizienten
-
-Der wichtige Punkt ist, dass die Wichtigkeitskoeffizienten **sich alle 5 Züge zufällig ändern**.
-
+Der wichtigste Punkt ist, dass die Koeffizienten von Bedeutung ** alle fünf Runden zufällig ändern**.
 ```javascript
 if (this.turnCount % 5 === 0) {
     const distanceCoefficient = parseInt(Math.random() * 100);
@@ -103,41 +92,37 @@ if (this.turnCount % 5 === 0) {
     });
 }
 ```
+Ein Schlag der KI geht überaggressiv (Akte 95, Abstand 5), sie durchquert alles, um deinen Oracle zu töten. Der Schlag nach ihr priorisiert die Distanz und stellt sich wieder ein.
 
-Einmal wird die KI hyperaggressiv (Attraktivität bei 95, Distanz bei 5), sie rennt durch alles, um dein Orakel zu killen. Das nächste Mal priorisiert sie die Distanz und positioniert sich neu.
+Es ist von den Geistern von Pac-Man geklaut – Blinky Jagd, Pinky emkusque. Hier ändert die KI "Persönlichkeit" alle Phasen.
 
-Das ist von den Pac-Man-Geistern geklaut, Blinky jagt, Pinky lauert auf. Hier wechselt die KI alle Phasen ihre "Persönlichkeit".
+**Ergebnis: Die KI kann nicht auf einem ganzen Spiel vorherzusagen.** Die CPU macht nie zweimal dasselbe Spiel.
 
-**Ergebnis: Unmöglich, die KI über eine ganze Partie vorherzusagen.** Die CPU macht nie zweimal dasselbe Match.
+### Das Orakel ist ein Haufen Puppe.
 
-### Das Orakel ist ein Feigling
-
-Das gegnerische Orakel haut ab. Buchstäblich.
-
+Der feindliche Orakel flieht buchstäblich.
 ```javascript
 const awayFromTarget = {
     row: Math.max(0, Math.min(7, botUnitElement.row + (botUnitElement.row - targetUnitElement.row))),
     col: Math.max(0, Math.min(9, botUnitElement.col + (botUnitElement.col - targetUnitElement.col)))
 };
 ```
+Er berechnet die entgegengesetzte Richtung der Bedrohung und fährt weg. Wenn eine Wand ist, sucht er das nächste freie Feld in dieser Richtung.
 
-Es berechnet die Richtung entgegengesetzt zur Bedrohung und haut ab. Wenn da eine Mauer ist, sucht es das nächste freie Feld in dieser Richtung.
-
-Du brauchst 3 Züge, um dich dem Orakel zu nähern, und zack ist es schon ans andere Ende abgehauen.
+Du kommst drei Runden in die Nähe des Orakels und er ist schon am anderen Ende geflohen.
 
 ### Die Entscheidungsschleife
 
 So entscheidet die KI:
 
-1. Wenn ich kein Orakel mehr habe (tot), ein neues platzieren
-2. Den Koeffizienten für jedes Paar verbündete Einheit → gegnerische Einheit berechnen
-3. Das beste Paar wählen
+1. Wenn ich mehr Oracle(tot) habe, platziere ich ein neues
+2. Berechnung des Koeffizienten für jedes Drehmoment → feindliche Einheit
+3. Wählst du das beste Paar
 4. Wenn die Einheit das Ziel von ihrer Position angreifen kann → Angriff
-5. Wenn ich weniger als 4 Einheiten habe → die billigste verfügbare aus der Hand beschwören
-6. Sonst sich zum Ziel bewegen (Bewegungsfeld am nächsten zum Gegner)
-7. Wenn genug Mana (> 2), Dash (Doppelbewegung), um noch näher zu kommen
-8. Wenn die Einheit das Orakel ist → abhauen
-
+5. Wenn ich weniger als 4 Einheiten → die billigsten von Hand
+6. Andernfalls bewegen du sich zum Ziel (der nächste Bewegungsfeld des Feindes)
+7. Wenn genug Mana (> 2), Dash (doppelte Bewegung) um sich nähern
+8. Wenn die Einheit Orakel → weglaufen
 ```mermaid
 flowchart TD
     A[Début du tour CPU] --> B{Oracle en vie ?}
@@ -159,18 +144,16 @@ flowchart TD
 
 ```javascript
 async makeAction(dash=false) {
-    // alles der Reihe nach
-    // die CPU dasht, wenn sie genug Mana hat
+    // Alles in Sequenz
+    // das CPU dash, wenn es genug Mana hat
     if(botPlayer.mana > 2) {
         this.makeAction(true);
     }
 }
 ```
+### Warum euklidische Entfernung
 
-### Warum die euklidische Distanz
-
-Ich nutze die euklidische Distanz:
-
+Ich benutze die euklidische Distanz:
 ```javascript
 calculateEuclideanDistance(x1, y1, x2, y2) {
     const deltaX = Math.pow(x1 - x2, 2);
@@ -178,57 +161,54 @@ calculateEuclideanDistance(x1, y1, x2, y2) {
     return Math.sqrt(deltaX + deltaY) * COEFFICIENTS_IMPORTANCE["distance"];
 }
 ```
+Warum nicht Manhattan? Weil Einheiten verschiedene Bewegung Patterns (L wie Reiter, Diagonale, etc.) haben. Vogelflugdistanz ist eine bessere Annäherung der Gefahr.
 
-Warum nicht Manhattan? Weil die Einheiten abwechslungsreiche Bewegungsmuster haben (L wie der Springer, Diagonale usw.). Die Luftliniendistanz ist eine bessere Annäherung an die Gefahr.
+## Warum nicht die Minima
 
-## Warum kein Minimax
-
-Ich hätte einen klassischen Minimax coden können. Aber mit 12 Einheitentypen, unterschiedlichen Bewegungsmustern, Spezialfähigkeiten... explodiert der Spielbaum so schnell, dass es unspielbar wird. Der heuristische Ansatz trifft intelligente Entscheidungen, ohne 10 Millionen Zustände zu erkunden.
+Ich hätte ein klassisches Minimax kodieren können, aber mit 12 Arten von Einheiten, verschiedenen Bewegungspattern, besonderen Fähigkeiten... explodiert der Spielbaum so schnell, dass es unspielbar wird.
 
 ## Was cool ist
 
-Das Attraktivitätssystem erzeugt witzige Dilemmas:
+Das System der Attraktivität schafft rigolos Dilemmas:
 
-- Der Seher (70) generiert Mana. Wenn du ihn leben lässt, hat der Gegner mehr Ressourcen. Aber der Titan (95) ist noch gefährlicher.
-- Der Metamorph (90) kann seinen Platz mit einer beliebigen Einheit tauschen. Er kann dein Orakel klauen.
-- Die Harpyie (50) hat einen explosiven Angriff, der sie auch tötet. Sie bleibt nebensächlich... bis sie neben 3 deiner Einheiten steht.
+- Der Seher(70) erzeugt Mana. Wenn du ihn leben lässt, hat der Gegner mehr Ressourcen, aber der Titan(95) ist noch gefährlicher.
+- Der Metamorph(90) kann seinen Platz mit jeder Einheit wechseln, er kann deinen Oracle stehlen.
+- Die Harpyie(50) hat einen explosiven Angriff, der sie auch umbringt.
 
-Die KI bewertet die globale Gefahr nach den Positionen, nicht nur nach den rohen Stats.
+Die KI bewertet die Gesamtgefahr nach Positionen, nicht nur Rohdaten.
 
-Es gibt auch eine `activateSimulation()`-Funktion, um Szenarien zu testen, ohne eine Partie neu zu machen:
-
+Es gibt auch eine Funktion.`activateSimulation()`um Szenarien zu testen, ohne eine Wiederholung zu machen:
 ```javascript
 activateSimulation() {
-    // Spezifische Einheiten auf dem Brett platzieren
-    // Nützlich, um die KI zu debuggen
+    // Platzierung spezifischer Einheiten auf dem Plateau
+    // Nützlich für die I.A.-Debugger
     this.game.board = simulation.board;
     this.game.players = simulation.players;
 }
 ```
-
 ## Was fehlt
 
 Wenn ich mehr Zeit hätte:
 
-- Die KI reagiert auf den aktuellen Zustand, sie sagt nicht vorher, was der Spieler tun wird
-- Sie plant ihre Hand nicht über mehrere Züge
-- Der Metamorph und der Zentaur haben Fähigkeiten, die sie unter-nutzt
-- Reinforcement Learning: sie gegen sich selbst spielen lassen, um die Koeffizienten anzupassen
+- Die KI reagiert auf den aktuellen Zustand, sie sagt nicht voraus, was der Spieler tun wird.
+- du plant nicht ihre Hand auf mehreren Türmen
+- Metamorph und Centaur haben Fähigkeiten, die sie unterbenutzt
+- Stärkung des Lernens: du gegen sich selbst spielen lassen, um Coeffs anzupassen
 
-Aber für ein Browserspiel hält es stand. Kumpels schaffen es, dagegen zu verlieren, also ist es validiert.
+Aber für ein Browserspiel ist es echt heiß, aber Kumpels verlieren gegen, also ist es validiert.
 
-## Teste
+## Test
 
-Verfügbar auf [nausicaa-game.github.io](https://nausicaa-game.github.io/). Du klickst auf "JOUER", CPU-Modus ON, und du schaust der KI zu.
+Dispo auf [nausicaa-game.github.io](https://nausicaa-game.github.io/)Du klickst auf "Spielen," CPU-Modus ON, und du siehst zu, wie die KI es macht.
 
-Tipp: Lass die KI gegen sich selbst spielen. Du wirst aggressive Phasen sehen, dann pfft zieht sie sich zurück.
+Tipp: Lass die KI gegen sich selbst spielen. Du wirst aggressive Phasen sehen und dann pfft sie alles zurück.
 
-Der Code ist auf [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io) in `js/cpu.js`.
+Der Code ist auf [GitHub](https://github.com/nausicaa-game/nausicaa-game.github.io)in`js/cpu.js` .
 
-**3 Punkte zum Mitnehmen :**
+**3 Punkte , die zu berücksichtigen sind:**
 
-1. **Heuristische Koeffizienten**, kein Minimax, jede Einheit hat eine Attraktivität
-2. **Koeffizienten, die sich alle 5 Züge ändern**, die KI wechselt Aggressivität und Kontrolle, nach Art von Pac-Man
-3. **Das Orakel haut ab**, es berechnet die Richtung entgegengesetzt zur Bedrohung und verzieht sich
+1. **Heuristische Koeffizienz** – keine Minima, jede Einheit hat eine Attraktivität
+2. **Coeffs, die alle 5 Runden ändern** – die KI, die andere Aggression und Kontrolle, Pac-Man-Modus
+3. **Das Orakel fliegt** – es berechnet die entgegengesetzte Richtung zur Bedrohung und bricht
 
-Wenn du Ideen hast, um die KI noch fieser zu machen, öffne ein Issue. Ich habe Pläne für eine Version, die aus ihren Niederlagen lernt, aber das kommt in einen nächsten Artikel.
+Wenn du Ideen hast, die KI noch böser zu machen, öffne einen Ausweg.

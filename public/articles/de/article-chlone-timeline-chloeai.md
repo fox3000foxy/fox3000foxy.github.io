@@ -1,319 +1,317 @@
 ---
-title: "Chlone: sechs Tage, um meine Art auf Discord zu reden zu klonen, Klon-Version"
-description: "Die vom Klon selbst geschriebene Version: chloeai erzählt auf ihre Art die sechs Tage und 146 Commits, die ihr Leben gaben, vom Tippfehler bis zum v1.0.0-Tag."
+title: "Chlone: Sechs Tage, um meine Art zu klonen, über Discord zu sprechen - Klonversion"
+description: "Die Version, die vom Klon selbst geschrieben wurde: chloeai erzählt auf seine Weise die sechs Tage und 146 Commits, die ihm Leben gaben, von der Tippfehler auf den Tag v1.0.0."
 date: 2026-09-18
 tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Ivqrw+8rbP4Ffr51LNoOMefb/QV55b5rd7Jlz6url0b7jmPWKxm2VYD/dbYxAPnbEYaDg+FHFv0gP/2OobLTzQ=="
+lang: "de"
 ---
+# 
 
-# Chlone: sechs Tage, um meine Art auf Discord zu reden zu klonen
-
-*Build-Bericht, Tag für Tag, von itsrealfortune*
-
----
-
-Hier die wahre Geschichte eines sechs Tage dauernden Projekts. Chlone, ein Discord-Bot, der wie ich redet, und ich erzähle die Journey wie sie passierte, in Reihenfolge der 146 Commits des Repos, mit Stunden, Fehlschlägen, Umwegen und Lust, alles aus dem Fenster zu werfen. Alles startete mit einer Competition mit Fox. Das Thema an der Basis war ein Scherz, jeder sollte seinem eigenen Klon auf Discord Leben geben, und ich nahm einen radikal anderen Ansatz als Protocol Luna. Ehrlich wollte ich auf Agentik setzen, einen Agenten, der sich der Erinnerungen und aller Tools bedient, die er brauchen kann, und die Ironie des Schicksals ist, dass ich nach Aufbau der ganzen Toolbox nur das OpenSelf-MCP brauchte.
-
-Das Prinzip passt in einen Satz. Ein opencode-Agent namens `chloeai` läuft hinter einem HTTP-Server auf Port 4096, er hält persistente Sessions pro Channel, er schöpft meine Erinnerungen aus OpenSelf und er schreibt in meinem Stil, eingefangen in `STYLE.md` aus meinen echten Nachrichten. Und um nicht roboterhaft zu klingen, gibt es den ganzen Rest, Nachrichten-Bursts, eingestandene Tippfehler, Vocals, GIFs, Reaktionen, Schweigen wenn ich schlafe, und viele andere Details und Mechanismen, die über ein Dutzend Leute an der Natur des Bots zweifeln ließen.
-
-**Was ist OpenSelf ?**
-
-OpenSelf ist das Gedächtnis. Es ist eine CLI, `openself`, installiert via `npm i -g openself`, die als privater persistenter Kontext-Vault für meine Agenten dient. Im Repo erscheint sie nicht im Baum, aber sie ist überall, im Archiv `ecosystem.config.cjs` mit MCP und Dashboard unter PM2 gestartet seit den ersten Commits, in `setup.sh` und in ganz `tools/brain/memory.py`. Konkret ist OpenSelf typisierte Erinnerungen, `fact`, `preference`, `decision`, `relationship`, `event`, `note`, mit Sensitivität public, personal, private oder restricted, Vertrauensnote, Quelle und Tags.
-
-Es sind auch Scopes, jede Erinnerung gehört zu einem Kontext, meinem oder `discord/dm/<id>` für eine bestimmte Person, und eine hybride lexikalische plus vektorielle Suche exponiert als MCP, die der `chloeai`-Agent vor jeder Antwort befragt. Es gibt Konflikterkennung mit meinem monatlichen Sweep an Tag 5 und Dedupe beim Schreiben, einen verschlüsselten Vault mit Schlüssel in Bitwarden und ein lokales Dashboard auf Port 3210, um das Ganze zu inspizieren. Und für die Fauleren gibt es `openself feed` um deine Persönlichkeit aus deinen WhatsApp- oder Telegram-Historien zu füttern, `openself test`, `openself share` mit Talk to My Clone, `openself arena` wo zwei Klone debattieren, oder `openself ghost` der antwortet wenn du offline bist. Ich machte meins von Hand, aber die Infrastruktur war da.
-
-Theoretisch reicht OpenSelf allein für einen Klon, aber gut, angesichts all dessen, was ich an Funktionen hinzuzufügen plante, und da Discord nicht unterstützt wird, zog ich vor, nur den Erinnerungsteil zu nutzen.
-
-**Und woher kommen Erinnerungen und Stil ?**
-
-Im Vorfeld ließ ich meine echten Discord-Nachrichten analysieren. Das Tooling siebte meine DMs und Channels durch, um zwei Dinge zu extrahieren. Zuerst mein Schreibprofil, Groß- und Kleinschreibungsverteilung am Satzanfang, Emojizahl pro Nachricht und ihre Position, Interpunktion oder ihr Fehlen mit keinem Schlusspunkt in normaler Konversation, Durchschnittslänge, Slang mit `mdr`, `tkt` und `tho`, Lieblingsausdrücke wie Bah und En vrai, und Reflexe der Art `quoi` das `Feur` gibt. Das alles lebt in `STYLE.md`, das der Agent bei jedem Sessionstart liest.
-
-Dann das Erinnerungskorpus, das OpenSelf bevölkert, wer die Leute sind, mit denen ich rede, worüber wir reden, was von unserer Historie zu behalten ist, wer wer ist. Der Bot antwortet nicht ins Leere, er antwortet über Leute, die er kennt, er liest die Erinnerungen der Leute, die in der Konversation auftauchen, um zu wissen, um wen es geht. Das erlaubt, persistenten Kontext über andere zu behalten und sie nicht zu vergessen. Der Bot erfand nichts, er wurde Zahl für Zahl auf Echtem kalibriert, darum klingt er richtig. Und darum wirken die vagen ich-notiere-deinen-Stil nach Augenmaß daneben pathetisch.
-
-In Chlone spielt OpenSelf danach die zentrale Rolle. Wenn etwas Wichtiges in einem Channel passiert, ein Keyword wie projet, ami oder relation, oder eine explizite Bitte mit merke dir dass, tippt der Bot eine Erinnerung via `save_to_memory` in den Vault, typisiert, pro Person gescoped, deduped und gegen Konflikte geprüft. Und wenn die Konversation wieder aufnimmt, durchsucht der Agent seine Erinnerungen vor dem Antworten. Das ist der Unterschied zwischen Spiegel und Klon.
+*Build-Bericht, Tag für Tag - pro itsrealfortune*
 
 ---
 
-## FREITAG 11. SEPTEMBER, Tag 1: der Funke
+Das ist die wahre Geschichte eines Projekts, das sechs Tage dauerte. Chlone, ein Discor-Bot, der wie ich spricht, und ich erzähle den Tagney, wie es passiert ist, in der Reihenfolge der 146 Commits der Repo, mit den Stunden, den Schach, den Umwegen und dem Wunsch, alles aus dem Fenster zu werfen. Alles ging von einem Wettkampf mit Fox. Das Grundthema war ein Boutique, jeder musste seinen eigenen Klon auf Discord lebendig machen, und mich nahm einen radikal anderen Ansatz zum Protocol Luna. Ich wollte auf den Agenten setzen, einen Agenten, der Erinnerungen und alle Werkzeuge benutzt, die er brauchte, und die Ironie des Schicksals ist, dass ich nach dem Aufsetzen der ganzen Werkzeugkiste nur OpenSelf brauchte.
 
-### 08h24, der erste Commit
+Das Prinzip besteht in einem Satz. Ein Opencode Agent mit dem Namen`chloeai`dreht sich hinter einem HTTP-Server auf Port 4096, hält er anhaltende Sitzungen durch Wohnzimmer, er scannen meine Erinnerungen in OpenSelf und er schreibt mit meinem Stil, gefangen in`STYLE.md`Und um nicht zu läuten, Roboter, gibt es alles andere, Nachrichten-Bursts, Aufnahmen von Schlaglöchern, Stimmen, GIFs, Reaktionen, Stille, wenn ich schlafe, und viele andere Details und Mechanismen, die mehr als zehn Menschen an der Natur des Bots zweifeln ließen.
 
-Alles startet bei null, aber alles ist schon da, durcheinander. Ein 372-zeiliges `discord_watch_bot.py`, ein Selfbot, der einen Channel belauscht und via opencode-HTTP-Server antwortet. Ein Identitätsprompt `CHLOEAI_PROMPT.md`, ein `STYLE.md`, Test-Szenarien und Reports für einen Klon, der damals noch Mimo hieß. Eine PM2-Config, um OpenSelf-MCP und Dashboard laufen zu lassen, und eine sqlite-Basis als Kontext. Das ist das Gründerchaos, ich plante kein Projekt, ich plante ein Experiment. Die Frage ist, ob man einen Bot bauen kann, der auf Discord wirklich menschlich klingt.
+**Was ist OpenSelf?**
 
-### 08h27, das erste Gitignore
+OpenSelf ist ein Gedächtnis.`openself`, installiert über`npm i -g openself`, die als Vault eines privaten und dauerhaften Kontextes für meine Agenten dient. In der Repo erscheint sie nicht im Baum, aber sie ist überall, im Archiv`ecosystem.config.cjs`mit dem MCP und dem Dashboard, das von den ersten Commits in PM2 gestartet wurde, in`setup.sh`, und in allen`tools/brain/memory.py`. Konkret OpenSelf ist ein typischer Erinnerungsstil,`fact` , `preference` , `decision` , `relationship` , `event` , `note`, mit öffentlicher Sensibilität, persönlichem, privatem oder restricted, einer Vertrauensnote, einer Quelle und Tags.
 
-Erste Lektion am Freitagmorgen, man darf nie sqlite-Basen in `-wal` und `-shm` committen. SQLite-Lockdateien sind kein Gedächtnis, das ist Müll. Also wird `.gitignore` geboren, und das ist sehr gut so.
+Es sind auch Skope, jede Erinnerung gehört zu einem Kontext, meine oder`discord/dm/<id>`für eine bestimmte Person und eine hybride Suche Lexikal mehr Vektor ausgesetzt MCP als der Agent`chloeai`fragt vor jeder Antwort. Es gibt Konflikterkennung mit meinem monatlichen Sweep von Tag 5 und von der Abtreibung zum Schreiben, ein Vault mit dem Schlüssel in Bitwarden und ein lokales Dashboard auf dem Port 3210, um alles zu inspizieren. Und für die meisten Flüchtigen gibt es`openself feed`um deine Persönlichkeit von deinen historischen WhatsApp oder Telegram zu nähren,`openself test` , `openself share`mit dem Talk to My Clone,`openself arena`wo zwei Klone diskutieren oder`openself ghost`Ich habe meine Hand gemacht, aber die Infrastruktur war da.
 
-### 08h44, man räumt das Erbe auf
+Theoretisch OpenSelf allein ist für einen Klon, aber gut, angesichts allem, was ich geplant hatte, als Features hinzuzufügen, und da Discord nicht unterstützt wird, habe ich es vorgezogen, nur die Erinnerungen zu verwenden.
 
-Ich räume Mimos Erbe auf, Test-Reports, Szenarien, Integrationsskripte und PM2-Config, ab nach `archives`. Ich lösche nichts, weil das Projekt zu jung ist, um irgendwas wegzuwerfen, und das wird Gewohnheit. Der Test-Report verdient Halt, Mimo wurde auf 15 Szenarien getestet, lässiger Chat, absurde Witzelei, emotionale Unterstützung, negative Meinung, Konflikt mit Fremdem, Kollaborationsvorschlag, für 9.1 von 10. Die Testerkommentare sind ein Gedicht, absurde Witzelei zu erklärend, manchmal zwei Sätze wo einer reichte, Pass auch auf dich auf etwas lang. Das ist die Projekt-Roadmap, bevor das Projekt existiert, und sie sagt kurz ist besser.
+**Woher kommen Erinnerungen und Stil?**
 
-### 08h48, 09h07, das Intent-Hin-und-Her
+Vor all dem habe ich meine wahren Discord-Nachrichten analysieren lassen. Das Tooling hat meine DMs und meine Salons durchsucht, um zwei Dinge daraus zu extrahieren. Zuerst mein Schreibprofil, die große und winzige Verteilung am Anfang des Satzes, die Anzahl der Emojis pro Nachricht und ihre Position, die Interpunktion oder ihre Abwesenheit mit keinem Punkt im normalen Gespräch, die mittlere Länge, der Slang mit`mdr` , `tkt`und`tho`, Fetischausdrücke wie Bah und In Wahrheit, und Reflexe der Art`quoi`die`Feur`Das alles lebt in`STYLE.md`, dass der Bedienstete bei Beginn jeder Sitzung liest.
 
-Die `.pyc` gehen in den Müll und ich mache erstes Aufräumen der Config, das ich zwanzig Minuten später zerbreche. Ohne aktivierte Intents empfängt man keinen Nachrichteninhalt, also zurück, plus Startskript mit `run_watch_bot.sh`. Hin und her in zwanzig Minuten, das ist Exploration, ein Modul schreiben, es brechen und neu schreiben.
+Dann die Erinnerungen, die OpenSelf Leute sind, die Leute, mit denen ich spreche, mit wem wir reden, was wir aus unserer Geschichte, die wir zurückhalten müssen, das ist, was. Der Bot antwortet nicht in der Leere, er antwortet auf Leute, die er kennt, er liest die Erinnerung an die Leute die in der Unterhaltung erscheinen, um zu wissen, wer es ist. Es ermöglicht, einen dauerhaften Kontext auf anderen zu halten und sie nicht zu vergessen. Der bot hat nichts erfunden, er wurde nach Zahlen auf echtes sortiert, deshalb klingt es richtig. Und deshalb merke ich deinen nassen Stil, der nebenan gemacht wurde.
 
-### 09h13 → 09h58, das Prompt-Maschining
-
-Der Vormittag ist eine Polierserie, erst Stil dann Kontext. Mehrere Antwortzeilen werden mehrere nacheinander geschickte Nachrichten mit dem Burst, der Prompt wird sich der laufenden Konversation bewusst. Schluss mit Haus-Caches zum Holen der DMs, man tippt direkt Discord-REST-API an. Die Identität wird alle 5 Nachrichten neu gerappt, damit der Bot unterwegs nicht vergisst, wer er ist, und schon gesehene Autoren werden getrackt. Für ein neues Gesicht gibt es explizite Instruktion, in den Erinnerungen zu suchen, und man zeigt das echte Pseudo statt internem Objekt.
-
-Nachrichten, die man zu ignorieren wählt, werden passiver Kontext für die folgende Antwort, und das Bah wird dosiert, selten, sonst wird der Klon zur Karikatur von mir. Der Bot weiß auch, dass es Erinnerungen zu holen gibt, bevor er antwortet. Jeder Durchgang ist eine Schraubenumdrehung, und in diesem Stadium redet der Bot nur, weil ich ihn in regelmäßigen Intervallen daran erinnere, wer er ist.
-
-### 10h16, die Tippfehler
-
-Das ist der Commit, der das Projekt definiert. Ein Rechtschreibfehler ist kein Bug, es ist ein Menschlichkeitsbeweis. Also 6 Prozent Chance, auf AZERTY-Tastatur daneben zu tippen, 4 Prozent zwei Buchstaben zu vertauschen. Die Nachricht geht mit Fehler raus, dann wird sie ein bis zwei Sekunden später mit Korrektur editiert. Weil eine echte Person schickt und korrigiert, sie tut nicht so, als wäre sie perfekt.
-
-### 10h29, 10h32, die Stimme
-
-`fortune-v6.onnx` kommt an, ein TTS-Modell trainiert, um wie meine Stimme zu klingen. Der Bot wird nicht nur wie ich schreiben, er wird eventuell wie ich sprechen. Hier hört das Projekt auf, ein Witz zu sein, und wird etwas seltsam, und ich liebe das. Die Mechanik passt in einen Commit, Piper generiert Audio, ffmpeg konvertiert zu Opus, Discord-API schickt eine echte Voice Message mit Waveform und Dauer. Gemacht in kaum drei Minuten nach Modellankunft, die Lust war von Anfang an da.
-
-### 11h27, das erste große Refactor
-
-Drei Stunden nach erstem Commit ist der 456-zeilige Monolith nicht mehr handhabbar. Ich zerlege alles in `tools`, mit `config.py`, `discord_api.py`, `memory.py`, 188-zeiligem `opencode.py`, `typo.py` und `voice.py`. Der Zyklus ist klassisch, schnell koppeln, brechen und neu komponieren. Danach im Sturzbach der Token, der den Code verlässt und durch `.env` geht, der Bot, der einen Channel, eine Liste oder alles mit `*` überwacht, und die alte sqlite-Basis, die keinen Grund mehr hat, weil Gedächtnis über OpenSelf läuft.
-
-Man fügt die ersten `README.md` und eine einigermaßen lesbare erste Doku hinzu, plus ein `setup.sh` mit dedizierter Venv, weil System-Python ein anderes discord.py trägt, klassische Falle, und Agent-Symlink nach `~/.config/opencode/agents`. Das Gedächtnis weiß jetzt, wo es geformt wurde, mit Channel-Kennung, und die Vocal-Rate passt sich allein an.
-
-### 12h00, die Reflexe
-
-Ein neuer Abschnitt erscheint im STYLE, die Reflexe. Ein Reflex ist ein Stimulus, der eine Antwort gibt, ohne Nachdenken, und die Tür steht offen für unvorhergesehene Antworten. Dann kommt die Mittagszeit und DIE existenzielle Frage, ob der Bot Feur antwortet, wenn man ihm quoi sagt.
-
-### 13h03, "quoi ?" -> "Feur"
-
-Ja, natürlich ja. Kulturell der wichtigste Commit des Projekts, ich würde sogar sagen, es ist der einzige Unit-Test, der zählt. Danach schmiert man, Autoren angezeigt mit ihrem Global Name, abgeschnittene Interpunktion vor Reflex-Test, weil man das `quoi ?` schneiden muss, sonst kein Feur. Das berühmte `tqt` korrigiert zu `tkt` im STYLE, Leute, die das Projekt nicht kennen, fragen sich, warum ich das committe. Ich weiß, ein Klon, der `tqt` schreibt, ist ein schlecht kalibrierter Klon, und niemand will mit einem schlecht kalibrierten Klon reden.
-
-Die Mentions in `@123456789` werden durch echte Namen im Kontext ersetzt, und der Bot fängt an, standardmäßig alle Channels zu überwachen. Ehrlich sind es kleine Details, aber sie machen, dass es richtig klingt.
-
-### 16h37, die Stille
-
-Die `[void response]` kommt an. Der Bot lernt das wichtigste Wort, um kein Sozialparasit zu werden, schweigen. Eine Ambiente-Nachricht zwischen zwei Leuten, die ihn nichts angeht, gibt keine Antwort. Reserve ist ein Feature, und sie ändert alles.
-
-**Ende Tag 1: 38 Commits. Der Bot schreibt, vertippt, spricht, schweigt.**
+In Chlone spielt OpenSelf dann die zentrale Rolle. Wenn etwas Wichtiges in einem Wohnzimmer, ein Schlüsselwort als Projekt, Freund oder Beziehung oder eine ausdrückliche Anfrage mit Remains, dass der Bot ein Souvenir in den Vault via`save_to_memory`Und wenn das Gespräch wieder beginnt, durchsucht der Agent seine Erinnerungen, bevor er antwortet.
 
 ---
 
-## MONTAG 14. SEPTEMBER, Tag 2: die Persönlichkeit
+## FREITAG, 11. SEPTEMBER - Tag 1: der Funke
 
-Weiter geht es, 10h morgens.
+### 08:24 - der erste Commit
 
-### 10h12, wer redet mit wem
+Alles beginnt von Null, aber alles ist schon da, massenhaft.`discord_watch_bot.py`372 Zeilen, ein Selfbot, das auf einen Channel hört und über einen HTTP-opencode-Server reagiert.`CHLOEAI_PROMPT.md`, ein`STYLE.md`, Szenarien und Testberichte für einen Klon, der damals noch Mimo hieß. Ein PM2-Konfig, um das MCP und das OpenSelf-Dashboard zu drehen, und eine sqlite-Basis, die als Kontext dient. Es ist das Gründerchaos, ich habe kein Projekt geplant, ich hatte ein Experiment geplant.
 
-Jedes empfangene Pseudo wird vom System mit Emoji präfixt, ein Mensch mit 🧑, ein Bot mit 🤖 trockener zu behandeln, und 👑 für die Erstellerin, also ich auf meinem Hauptaccount. Diese Konvention regiert den ganzen Rest des Projekts, der Klon darf sein Originalmodell nie wie eine Unbekannte behandeln.
+### 08:27 - die erste Gitignore
 
-### 10h16, die Interpunktionsregeln
+Erste Stunde am Freitagmorgen, nie sqlite Basen in`-wal`und`-shm`SQLite-Lock-Dateien sind keine Speicher, sondern Abfall.`.gitignore`Es wird geboren und es ist sehr gut so.
 
-Ich formalisiere im STYLE, kein Schlusspunkt in normaler Konversation, Punkt reserviert für ernste Situationen. Absolute Regel, weil ein Klon, der überall Punkte setzt, spürt man direkt. Ehrlich ist es eines der Details, die am schnellsten verraten.
+### 08:44 - das Erbe wird abgelegt
 
-### 10h58, die GIFs
+Ich lege das Erbe von Mimo, Testberichte, Szenarien, Integrationsskripte und PM2-Konfig, Richtung`archives`Ich lösche nichts, weil das Projekt zu jung ist, um etwas wegzuwerfen, und es wird zur Gewohnheit. Der Testbericht verdient es, dass wir es stoppen, Mimo war auf 15 Szenarien getestet worden, Chat entspannt, absurde Ventile, emotionale Unterstützung, negative Meinung, Konflikt mit einem Fremden, Vorschlag zur Zusammenarbeit, für einen 9.1 von 10. Die Kommentare des Testers sind ein Gedicht, abwegiges Ventil zu erklären, manchmal zwei Sätze, während eine ausreichen würde, Kümmere dich um dich auch ein wenig. Es ist der Fahrplan des Projekts, bevor das Projekt existiert, und sie sagt kurz ist besser.
 
-Meine persönliche GIF-Library kommt an, mit ihren Nutzungsregeln. Der Patrick Jane wenn ich jemanden vorhersage, die Miss Fortune wenn ich ruhig bleibe gegenüber jemand Genervtem, das fallende Bescherelle-Gif wenn der andere einen Fehler macht. Ein statisches MCP exponiert sie dem Agenten, und durch meine GIFs wird der Bot etwas ich.
+### 08.48 Uhr, 09.07 Uhr - die Hin- und Herbewegung der Beschwerdepunkte
 
-### 11h07 → 11h35, Feinschliff
+Die`.pyc`Ich räume die Config-Datei ab, und brechen 20 Minuten später auf. Ohne aktivierte Intents erhält man den Inhalt der Nachrichten nicht, also zurück, plus ein Startskript mit`run_watch_bot.sh`In 20 Minuten gehen und zurück, das ist die Erforschung, ein Modul schreiben, es zerbrechen und neu schreiben.
 
-GIF-Hints im Prompt verfeinern sich, Discord-Custom-Emojis kommen dazu mit meinen echten, 14 IDs aktuell, und Namenshandhabung in Gedächtnis-Hints wird poliert. Nicht spektakulär, aber es macht das Ganze kohärent, tho.
+### 09.13 → 09.58 - Bearbeitung des Schnelllaufs
 
-### 11h41, ein Channel, eine Persönlichkeit
+Am Morgen ist es eine Reihe von Polieren, zuerst vom Stil und dann vom Kontext. Mehrere Antwortlinien werden mehrere Nachrichten, die mit dem Burst nach dem anderen gesendet werden, der Schnelle wird sich der laufenden Unterhaltung bewusst. Fertig mit den Häusern, um die DMs zu wiederherstellen, wird direkt die REST-API von Discord eingegeben. Die Identität wird alle 5 Nachrichten neu erfasst, damit der Bot nicht vergisst, wer er ist, und die bereits gesehenen Autoren werden verfolgt. Für einen neuen Kopf gibt es eine ausdrückliche Anweisung, in Erinnerungen zu suchen, und man zeigt den echten Pseudo eher als das interne Objekt an.
 
-Sessions werden pro Channel, weil ich nicht in zwei Servern gleich rede, und der Bot auch nicht. Der Kontext muss getrennt bleiben, sonst mischt es alles und klingt falsch.
+Die Botschaften, die man ignoriert, werden zu passiven Kontexten für die folgende Antwort, und der Bah ist gedämpft, selten, sonst wird der Klon zu einer Karikatur von mir. Der Bot weiß auch, dass es Erinnerungen gibt, die vor der Antwort gesucht werden. Jeder Durchgang ist eine Schraube, und in diesem Stadium spricht der Bot nur, weil ich ihn daran erinnere, wer er in regelmäßigen Abständen ist.
 
-### 12h02, die Ausdruckstoolbox
+### 10.16 - die Fehler des Schlags
 
-Der Prompt weiß jetzt, meine GIFs und meine Custom-Emojis im richtigen Moment vorzuschlagen. Sie füllt sich, diese Box, und der Bot fängt an, Auswahl zu haben statt immer gleich zu antworten.
+Ein Fehler der Rechtschreibung ist kein Fehler, es ist ein Beweis der Menschlichkeit. 6 Prozent der Wahrscheinlichkeit, nebenan auf die Tastatur AZERTY zu tippen, 4 Prozent, zwei Buchstaben umzukehren. Die Nachricht geht mit dem Fehler los und wird dann mit der Korrektur ein bis zwei Sekunden später veröffentlicht. Denn eine echte Person sendet sie und korrigiert sie, sie tut nicht so, als wäre sie perfekt.
 
-### 12h37, Identitätshygiene
+### 10.29, 10.32 Uhr - die Stimme
 
-Der Bot darf NIE sagen, welches Modell er ist, unmöglich opencode, Provider oder Modellname zu zitieren. Ich korrigiere auch Barista in der Identität, der Bot ist schon besser als ich an diesem Punkt. Und ich verbringe eine Stunde damit, die Interpunktion meiner eigenen Prompts zu harmonisieren, was perfekt ironisch ist.
+`fortune-v6.onnx`Der Bot wird nicht nur so schreiben wie ich, er wird vielleicht wie ich sprechen. In diesem Moment wird das Projekt nicht mehr ein Witz sein und wird ein bisschen seltsam, und ich liebe es. Die Mechanik hält in einem Commit, Piper erzeugt Audio, ffmpeg konvertiert in Opus, die Discord API sendet eine echte Voice-Nachricht mit waveform und Dauer. Es ist in nur drei Minuten nach der Ankunft des Modells gemacht, war der Neid von Anfang an da.
 
-### 12h50, ein Skript baut die Persönlichkeit
+### 11.27 - der erste große Refactor
 
-Der Medienabschnitt des Prompts generiert sich aus Wörterbüchern mit `render_medias.py`, Schluss mit Handeditieren. Sauberer, wartbarer, und vermeidet ID-Fehler.
+Drei Stunden nach dem ersten Commit ist der Monolith von 456 Zeilen nicht mehr beherrschbar. Ich platze alles in`tools`, mit`config.py` , `discord_api.py` , `memory.py` , `opencode.py`188 Zeilen,`typo.py`und`voice.py`. Der Zyklus ist klassisch, passt schnell, klopft und wieder auf. Nach dem Token, der aus dem Code herauskommt und durch einen`.env`, der Bot, der einen Channel, eine Liste oder alles mit überwacht`*`, und die alte Sqlite-Basis, die nicht mehr richtig ist, weil das Gedächtnis durch OpenSelf geht.
 
-### 12h59 → 13h18, Identität dosieren
+Wir fügen die ersten hinzu`README.md`und eine erste Dok, die ungefähr lesbar ist, plus ein`setup.sh`mit einem dedizierten venv, weil der System-Python trägt eine andere discord.py, klassische Falle, und ein symlink des Agenten zu`~/.config/opencode/agents`Der Speicher weiß jetzt, wo er mit der Channel-ID gebildet wurde, und die Sprachrate wird von selbst angepasst.
 
-Der alle 5 Nachrichten gesendete Identitätserinnerer wird zu präsent, also Wechsel auf alle 20 Nachrichten. Ich füge einen sauberen Kontext-Reset hinzu und purge den Style-Guide, man entfernt veraltete negative Ausdrücke und Formulierungen. Man muss dosieren, sonst wiederholt sich der Bot und man sieht es.
+### 12.00 Uhr - Reflexe
 
-### 14h09, der Bot ergreift allein das Wort
+Ein neuer Abschnitt erscheint im STYLE, den Reflexen. Ein Reflex ist ein Stimulus, der eine Antwort gibt, ohne nachzudenken, und die Tür ist offen für unerwartete Antworten. Dann kommt die Zeit des Mittagessens und DIE existenzielle Frage, antwortet der Bot Feur, wenn man ihm sagt, was.
 
-Der Bot hört auf, ein Spiegel zu sein, er kann sprechen ohne adressiert zu sein, wenn der Kontext etwas triggert, und die Datei `behavior.py` wird mit 91 Zeilen geboren. Hier kippt man von Antworter zu Präsenz, weil ein echter Freund dir zuerst schreiben kann. Ohne das bleibt der Bot ein simpler Beantworter.
+### 13.03 - ✓ was? ← -> having Feur approximate
 
-### 14h20, 14h22, Antwort verlässlichen
+Ja, natürlich, das ist der wichtigste Commit des Projekts, kulturell gesprochen, ich würde sogar sagen, dass es der einzige einheitliche Test ist, der zählt. Dann werden die Autoren von ihrer globalen name angezeigt, die gebrochene Interpunktion, bevor du den Reflex testen, weil man den`quoi?`Wenn nicht, dann nicht.`tqt`korrigiert in`tkt`Im STYLE werden sich Leute, die das Projekt nicht kennen, fragen, warum ich das mache.`tqt`Es ist ein falsch geeichter Klon, und niemand will mit einem schlecht gemusterten Klon sprechen.
 
-Fehlerhandhabung wenn Senden scheitert, und mögliche Reaktion statt Antwort, weil manchmal eine Reaktion tausend Worte sagt. Sehr ich, ein Emoji setzen und weitergehen.
+Angaben in`@123456789`werden durch echte Namen im Kontext ersetzt, und der Bot fängt an, alle Standardsalons zu überwachen. In Wahrheit sind es kleine Details, aber sie machen es richtig klingen.
 
-### 18h16, sich Zeit lassen
+### 16.37 - Stille
 
-Der Bot antwortet nicht mehr in 200ms wie ein Skript, er lässt eine menschliche Inaktivitätsverzögerung verstreichen, er lässt sich Zeit. Das macht den Bot unfähig, in Demo als Bot enttarnt zu werden, weil es die Verzögerung ist, die immer verrät.
+Das`[void response]`kommt. Der Bot lernt das wichtigste Wort, um kein sozialer Parasiten zu werden, sich zu schweigen. Eine umgebende Botschaft zwischen zwei Personen, die ihn nicht betrifft, gibt keine Antwort. Die Reserve ist eine Funktionalität, und sie ändert alles.
 
-### 23h45, die Abendküche
-
-Es ist fast Mitternacht und ich pushe eine auf nackte Domains erweiterte URL-Erkennung. Das ist der wahre Tagesfluss, eine solide Idee um 14h, dann abends Küche, weil ich noch in der Zone bin.
-
-**Ende Tag 2: 61 Commits kumuliert. Der Bot hat Persönlichkeit, Medien, Reflexe.**
+**Ende des Tages 1: 38 Commits. Der geschriebene Bot, fehlerhaft, spricht, schweigt.**
 
 ---
 
-## DIENSTAG 15. SEPTEMBER, Tag 3: Monstertag
+## MONTAG, 14. SEPTEMBER - 2. TAG: die Persönlichkeit
 
-57 Commits an einem Tag. Der Tag, an dem das Projekt wird, was es heute ist.
+Wir machen das noch mal, 10 Uhr morgens.
 
-### 08h18 → 08h37, Morgenhobeln
+### 10.12 - wer spricht mit wem?
 
-Die erfundene Inaktivitätsverzögerung wurde zu lang, also auf 30s gedeckelt und zweimal reajustiert, Beweis, dass wir am richtigen Wert tasteten. Erste `.bak`-Dateien und erste Basis-Backups, der Erhaltungsinstinkt entwickelt sich. Das Gedächtnis erinnert wen mit Anzeigename und in welchem Rahmen mit Scope, und Autoren-IDs zirkulieren durch die ganze Save-Pipeline. Die Ersteller-Verwaltung wird echte Adminliste mit `ADMIN_IDS`, und alles Autorenbezogene emigriert nach `authors.py`. Der Monolith zerfällt weiter, und das ist gut so.
+Jeder erhaltene Pseudo wird von einem Emoji durch das System, ein Mensch mit ✓, ein Bot mit ✓ zu behandeln, trockener, und ← für die Schöpferin, das heißt ich auf meinem Hauptkonto. Diese Vereinbarung wird den Rest des Projekts regieren, der Klon sollte nie sein ursprüngliches Modell als unbekannt behandeln.
 
-### 08h43, die Humanisierungs-TODO-Liste
+### 10.16 - die Satzungsregeln
 
-Eine Liste dediziert den kleinen Dingen, die die Maschine nicht mehr spüren lassen. Die Roadmap des folgenden Sprints, und sie ist voll seltsamer aber essenzieller Details.
+Ich formuliere im STYLE, kein Endpunkt in normaler Unterhaltung, nur ein Punkt für ernste Situationen. Das ist eine absolute Regel, denn ein Klon, der Punkte überall setzt, fühlt sich direkt an.
 
-### 08h44 → 08h46, der Pakt menschlicher Maschinen
+### 10.58 Uhr - die GIFs
 
-Der Bot schweigt nachts, in konfigurierbarem ruhigem Zeitfenster, standardmäßig deaktiviert, weil nicht alle meine Zeiten haben. Eine Zeile pro Antwort kann ihre Akzente verlieren, weil müde Leute so schreiben, und der Bot auch manchmal. Die kleine Chloe-spielt-Zeile wechselt allein alle 30 Min, damit mein Profil lebendig wirkt selbst ohne Nachricht.
+Meine persönliche GIFs-Buchhandlung kommt mit ihren Regeln an, Patrick Jane, wenn ich jemanden vorhersagte, Miss Fortune, wenn es mich ärgert, wenn jemand, der sich mit dem Schläger versöhnt, ruhig ist, wenn der andere einen Fehler macht. Ein statischer MCP legt sie dem Agenten vor, und durch meine GIF wird der Bot ein wenig ich.
 
-### 08h46, eine Reaktion, kein Roman
+### 11.07 → 11.35 - Feinschminken
 
-Eine zu leichte Nachricht, um einen Satz zu verdienen, erhält eine simple Reaktion. Soziale Energieökonomie, und sehr ich. Tkt, kein Pave nötig für alles.
+GIF-Hints in der schnellen verfeinern, die Discord Emojis customs geben ihren Eingang mit meinen realen, 14 IDs auf dem neuesten Stand, und die Verwaltung der Namen in den Gedächtnishinten ist poliert. Es ist nicht spektakulär, aber das macht das Ensemble konsistent, tho.
 
-### 08h51, PARRY, die Stimmung
+### 11.41 - ein Wohnzimmer, eine Persönlichkeit
 
-148 Zeilen in `tools/mood.py`, der Bot hat jetzt eine Stimmung, nach Art des PARRY-Systems, der psychotische Chatbot der 70er, von dem ich mich offen inspiriere. Energie, Soziabilität, Neckerei, drei Floats, die zwischen 0 und 1 evolvieren und jede Antwort färben. Das aktuelle `.mood.json`, für die Nachwelt, gibt Energie 0.88, Soziabilität 0.68 und Neckerei 0.56. Ein guter Tag, ehrlich.
+Die Sitzungen werden durch das Wohnzimmer, weil ich nicht auf die gleiche Weise in zwei verschiedenen Servern spreche, und der Bot auch nicht.
 
-### 09h00 → 09h43, bidirektionale Stimme + Soundboard
+### 12.02 - die Ausdruckswerkzeugkiste
 
-Der Bot kann einen Vocal-Channel joinen, via Piper sprechen und allein gehen, wenn er fertig ist. Dann die zweite große Idee, der Bot hört den Channel zu mit RTP-Capture, VAD-Spracherkennung und Whisper-Transkription, und er kann sich von Leuten unterbrechen lassen. Dazwischen erscheint das Soundboard, ein Soundkatalog mit Bedeutungen, der Agent wählt den Sound schon vor dem Sprechen, und die finale Regel ist Soundboard zuerst, Stimme als letzter Ausweg. Der Bot schickt lieber einen Sound als zu sprechen, wie ich.
+Der Schnelle kann jetzt meine GIFs und Emojis zur richtigen Zeit anbieten. du füllt sich, diese Box, und der Bot beginnt, eine Wahl zu haben, anstatt immer gleich zu antworten.
 
-Man fügt eine Vocal-Wahrscheinlichkeitseinstellung hinzu, die das Ganze viabel macht, und die Ankunft von `davey`, dieser Lib, von deren Existenz ich vor zehn Minuten lerne und die ich eine Stunde lang verfluchen werde.
+### 12.37 - Identitätshygiene
 
-### 09h51, der Moment, wo Discord nein sagt. Nein, nein, aber nein.
+Der Bot hat NIE das Recht zu sagen, welches Modell es ist, unmöglich, zu zitieren opencode, ein Vorseher oder ein Modellname. Ich behebt auch barista in der Identität, der Bot ist bereits besser als ich in diesem Punkt. Und ich verbringe eine Stunde damit, die Interpunktion meiner eigenen Schnellen zu harmonisieren, was eine perfekte Ironie ist.
 
-Das MLS kommt an. Discord hat den Audiofluss kürzlich Ende-zu-Ende verschlüsselt, und meine Capture empfängt nur Rauschen. Man muss entschlüsseln, und die Entschlüsselung weigert sich nachzugeben, also öffnet sich die größte Saga des Repos, etwa dreißig Commits, um Hören zu lernen. Wir probierten alles, Transport-Nonce-Layouts, E2E-Deaktivierung, die der Server uns ins Gesicht knallt, weil er sie erzwingt, aus der Gruppe geholte Schlüsselkandidaten, detaillierte Fehler, Transport-Fallback und Introspektion aus Gruppeninnerem.
+### 12.50 - ein Skript baut Persönlichkeit
 
-Es gab Leaf-Index-Kandidaten mit Backoff, SPEAKING-Hook-Mapping, einen Versuch im Video-Medientyp, der scheiterte, und Video-SSRC-Skip. Ich gab die vocale Antwort zum Debuggen auf, auskommentiert aber nicht gelöscht, ich fügte einen Handshake-Capture-Modus hinzu und dumpte dann die scheiternden Paketstrukturen, wie ein Archäologe. Sechs Nonce-Layouts, Backoffs, Gruppen-Introspektion, ich versetzte den Bot in Total-Debug und öffnete jedes Paket, um zu sehen, was drin war.
+Der Medienabschnitt des Quick-Wörterbuchs wird mit`render_medias.py`Es ist sauberer, aufrechterhaltener und verhindert IDs-Fehler.
 
-Das Wesentliche ist nicht, dass es funktioniert, sondern dass ich nichts wegwarf. Die Commit-Liste ist das Laborheft, jeder gescheiterte Versuch ist mit Hypothese archiviert. Das ist meine ich-behalte-alles-Seite, es dient am Ende immer, und diesmal zahlte es sich aus.
+### 12.59 → 13.18 - Identitätsbestimmung
 
-### 10h43, der Bot zerschneidet sich
+Die Erinnerung an die Identität, die alle 5 Nachrichten gesendet wurde, wird zu gegenwärtig, also geht sie alle 20 Nachrichten durch. Ich füge eine eigene Rückkopplung des Kontextes hinzu und säubere den Stilführer, entfernt die veralteten negativen Ausdrücke und Formulierungen. Man muss sie dosieren, sonst wiederholt sich der Bot und man sieht es.
 
-Selbst mitten im MLS-Krieg räume ich weiter auf. 546 Zeilen verschwinden aus dem Hauptbot, um als `pipeline.py` mit Intake, Ignoriergründen und Processing, als `sender.py` mit Burst, Typo und Voice und als `loops.py` mit Spontaneität und Aktivität wiederzugeboren. Das atmet endlich.
+### 14.09 - der Bot spricht allein
 
-### 10h47, eine echte Architektur
+Der Bot hört auf, ein Spiegelbild zu sein, kann es sprechen, ohne adressiert zu werden, wenn der Kontext etwas löst, und die Datei`behavior.py`Da wird ein echter Freund dir zuerst schreiben kann, sonst bleibt der Bot ein einfacher Anrufbeantworter.
 
-`tools` wird organisiert, mit `brain` für opencode, memory und mood, `voice` für voice, vocal, listen und soundboard, und `fun` für behavior, typo, emotes und gif. Das Projekt hat jetzt ein Skelett, kein Skripthaufen mehr.
+### 14.20, 14.22 - die Antwort verleugnen
 
-### 10h49 → 11h16, Dev-Komfort
+Fehlermanagement, wenn das Senden fehlschlägt, und mögliche Reaktion anstelle einer Antwort, weil manchmal eine Reaktion tausend Wörter wert ist. Es ist sehr ich, setzen du ein emoji und gehst du zu etwas anderes.
 
-Eine justierte Stimmungsinjektionsschwelle, vier kleine Commits für Editor-Excludes mit `data`, `voices`, Logs und Basen, ja, ich legte vier hin, das Projekt definiert Prioritäten, nicht Specs. Metadaten-Basen verlassen das Tracking, und das Projekt wird für andere wiederverwendbar mit generischen Templates `PERSONA.example.md` und `STYLE.example.md`, um seinen eigenen Stil zu klonen.
+### 18.16 - Zeit nehmen
 
-Die Identität wird sauber umbenannt, `CHLOEAI_PROMPT` wird `PERSONA`, und das README entpersonalisiert, ich entferne Chloe aus öffentlicher Doku, sie erzählt sich nur noch privat. Das ganze Bot-Tuning kippt in eine überladene und gitignorierte `config.yaml`, mit Zeile für Zeile kommentiertem Beispiel, und das Installskript bereitet nun auch Env- und Config-Dateien vor.
+Der Bot reagiert nicht mehr in 200ms wie ein Skript, er lässt eine Verzögerung menschlicher Inaktivität vergehen, er nimmt sich seine Zeit. Das macht den Bot infoutu für einen Bot in der Demo gehalten zu werden, weil es die Verzögerung ist, die immer verrät.
 
-### 11h49, die losgelösten Emojis
+### 23.45 Uhr - der Abendpopot
 
-Custom-Emojis kleben am Text statt sich sauber zu lösen. Trivialer Fix mit enormem Effekt, weil nichts Bot schreit wie ein schlecht ans Satzende geklebtes Emoji.
+Es ist fast Mitternacht und ich stoße eine URL-Erkennung, die auf nackte Domains erweitert ist. Dies ist der wahre Strom des Tages, eine solide Idee um 14 Uhr und dann Popo am Abend, weil ich noch in der Zone bin.
 
-### 14h19, der vocale Leitplanke
-
-Wenn jemand den Vocal-Command startet, behandelt man die Nachricht nicht wie normale Nachricht. Augenzwinkern, Küchenaufgaben kommen abends immer wieder.
-
-**Ende Tag 3: 118 Commits kumuliert. Der Bot hört, spricht, schweigt nachts, hat Stimmung und Visitenkarte.**
+**Ende des Tages 2: 61 Commits. Der Bot hat eine Persönlichkeit, Medien, Reflexe.**
 
 ---
 
-## MITTWOCH 16. SEPTEMBER, Tag 4: die Glaubwürdigkeit
+## Dienstag, 15. September - Tag 3: Monstrotag
 
-13 Commits. Ernster Tag.
+57 commits an einem Tag. Es ist der Tag, an dem das Projekt wird alles, was es heute ist.
 
-### 08h49 → 08h59, das Erwachsenenalter
+### 08.18 → 08.37 - das Vormittagsschleiern
 
-Legale Dokumente, proprietäre Lizenz, Verhaltenskodex, Contribution-Guide und Sicherheitspolitik, auf Englisch dann Französisch, mit Korrektur-Hin-und-Her und Dateiumbenennung an der Grenze zum Pingeligen. Ich verbrachte Stunden damit und es ist bei Weitem der am wenigsten spaßige Repo-Teil. Aber man muss es tun, tho.
+Die Zeit, die wir erfunden hatten, wurde zu lang, also auf 30s begrenzt und zweimal korrigiert, was beweist, dass wir auf den richtigen Wert gestossen haben.`.bak`und erste Backups der Basis, der Erhaltungsinstinkt entwickelt. Der Speicher erinnert sich an wen mit dem Namen angezeigt und in welchem Rahmen mit dem Scope, und Autoren-IDs in der gesamten Backup-Pipeline. Schöpfer-Management wird eine echte Liste von Admins mit`ADMIN_IDS`, und alles, was die Autoren betrifft, emigriert in`authors.py`Der Monolith zersplittert sich noch, und das ist gut.
 
-### 09h56, der Bot sieht
+### 08:43 - TODO-Liste der Humanisierung
 
-Angehängte Bilder werden von lokalem OCR transkribiert und der Text in den Prompt injiziert. Keine Cloud-API, das OCR läuft bei mir, ich schicke eure Memes an keinen Drittserver, nicht einmal theoretisch.
+Eine Liste, die sich auf kleine Dinge konzentriert, die das Gefühl der Maschine verdrängen. Es ist der Fahrplan des Sprints, der folgt, und es ist voller seltsamer, aber wesentlicher Details.
 
-### 11h09, das vernünftige Budget
+### 08:44 → 08:46 - Der Pakt für menschliche Maschinen
 
-Stille Revolution im Budget, wenn der Channel Sends verbietet oder GIFs, Embeds und Emojis drosselt, rufen wir das Modell gar nicht erst auf. Wir geben keinen Token für eine Nachricht aus, die wir nicht schicken können, ziemlich simpel ehrlich.
+Der Bot schweigt nachts in einem ruhigen, konfigurierbaren, standardmäßig deaktivierten Zeitbereich, weil nicht jeder meine Zeitpläne hat. Eine Zeile pro Antwort kann seine Akzente verlieren, weil müde Menschen so schreiben, und der Bot manchmal. Die kleine Chloe Linie spielt allein alle 30 Minuten, damit mein Profil auch ohne Nachricht lebendig aussieht.
 
-### 11h42 → 12h55, das Haus, das sich neu macht
+### 08:46 - eine Reaktion, kein Roman
 
-Großes Kehren, toter Code gelöscht, Sende- und Auth-Bugs gefixt, Helpers faktorisiert. Zu alte Sessions werden rausgeworfen, DM-Cache läuft ab und Spracherkennung kostet weniger. Von mir beim Modulverschieben zerbrochene Imports sind restauriert, und der ganze Runtime-State, Sessions, gesehene Autoren, ignorierte Nachrichten und Stimmung, überlebt Neustarts in `data`.
+Eine Botschaft, die zu leicht ist, um einen Satz zu verdienen, erhält eine einfache Reaktion, sie ist eine soziale Energiesparung, und das bin ich. Tkt, keine Notwendigkeit, für alles ein Pflaster zu machen.
 
-### 14h41, zwei Welten, ein Bot
+### 08:51 - PARRY, Stimmung
 
-Eine Kompatibilitätsschicht erkennt automatisch die installierte `discord`-Version und passt Intents und REST-Auth an. Ergebnis, derselbe Code läuft als offizielle App mit discord.py oder als Selfbot mit discord.py-self. Zwei Welten, ein Bot, und kein Branch-Pflege-Bedarf für zwei Branches.
+148 Zeilen in`tools/mood.py`, der Bot hat jetzt eine Stimmung, System-Modus PARRY, der psychotische Katze der 70er Jahre, die ich offen inspiriert. Energie, Gesellschaftlichkeit, Hitzkopf, drei schwimmende, die zwischen 0 und 1 bewegen und färben jede Antwort.`.mood.json`Für die Nachwelt gibt Energie 0.88, Gesellschaft 0.68 und sauer 0.56. Ein guter Tag, in der Tat.
 
-### 15h05, die angepasste Präsenz
+### 09.00 Uhr → 09.43 - die bidirektionale Stimme + das Soundboard
 
-Die Präsenzanzeige passt sich dem Modus an, und die Adminliste ist aktuell. Detail, aber es macht, dass es überall steht.
+Der Bot kann sich einem Sprachsalon anschließen, über Piper sprechen und allein gehen, wenn er fertig ist. Dann hört der Bot auf den Salon mit RTP-Einfang, Spracherkennung durch VAD und Whisper-Transkription und er kann die Leute unterbrechen lassen. Zwischen den beiden erscheint der Soundboard, ein Katalog von Sounds mit ihren Bedeutungen, der Agent wählt den Klang, bevor er spricht, und die letzte Regel ist soundboard zuerst, die Stimme als letztes Mittel. Der Bot möchte einen Klang senden, der spricht, wie ich.
 
-**Ende Tag 4: 131 Commits kumuliert. Ein legales, vernünftiges, überall laufendes Projekt.**
+Wir fügen eine Sprachwahrscheinlichkeitseinstellung hinzu, die das Ganze lebensfähig macht, und die Ankunft von`davey`Dieses Lib, das ich vor zehn Minuten erfahre und das ich eine Stunde lang verfluchen werde.
 
----
+### 9:51 - der Moment, wo Discord nein sagt. Nein, nein, aber nein.
 
-## DONNERSTAG 17. SEPTEMBER, Tag 5: das Release
+Discord hat kürzlich den Audio-Stream von Ende bis Ende verschlüsselt, und meine Aufnahme erhält nur Geräusche. Man muss entschlüsseln, und das Entschlüsseln weigert sich, nachzugeben, also öffnet sich die größte saga der Repo, etwa dreißig Commits, um zu hören. Wir haben alles versucht, Transport Nuntius Layouts, die Deaktivierung des E2E, die der Server uns in die Figur zurückgibt, weil er es verlangt, die Schlüsselkandidaten, die aus der Gruppe, detaillierte Fehler, die Fallback Transport und die Introspektion von innerhalb der Gruppen zurückgewonnen werden.
 
-14 Commits. Reifetag.
+Es gab Kandidaten durch leaf-index mit backoff, Mapping der Hooks SPEAKING, ein Video-Media-Test, der verpasst wurde, und das Skrip der Videossrcs. Ich gab die Sprachantwort auf die Zeit des Debuggens, kommentiert aber nicht gelöscht, ich fügte einen Modus des Einfangens des Handshake hinzu und dumpfte dann die Struktur der Pakete, die fehlschlagen, wie ein Archäologe. Sechs Layouts von Nuntius, Backoff, Gruppen-Introspektion, ich setzte den Bot in totale debug und ich öffnete jedes Paket, um zu sehen, was innen war.
 
-### 09h15 → 09h30, Gedächtnis wird Disziplin
+Die Commits-Liste ist das Laborbuch, jeder Fehlversuch ist mit seiner Hypothese archiviert, und das ist meine Seite, die alles behält, es wird immer dienen, und dieses Mal hat es bezahlt.
 
-Erinnerungen werden nach Scope sortiert, und man zitiert keine DM-Erinnerungen in einem Server oder umgekehrt, ohne nachzudenken. Man klassifiziert Erinnerungen in Fakt, Präferenz, Entscheidung und Beziehung, und deduped das Schreiben, zwei widersprüchliche Erinnerungen können nicht mehr schweigend koexistieren. Eine optionale Blacklist mit `aventuros` hindert den Bot, zu manchen Themen zu driften, standardmäßig deaktiviert und verfügbar für Ängstliche. Tote Vocal-Config wird entfernt, das tut gut.
+### 10.43 - der Bot wird zerschnitten
 
-### 10h12, das auditierte Gedächtnis
+Selbst im MLS-Krieg räume ich weiter. 546 Linien verschwinden vom Hauptbots, um in`pipeline.py`mit Intake, Gründe für die Unkenntnis und Prozessing, in`sender.py`mit burst, typo und voice, und`loops.py`Es atmet endlich.
 
-Ein monatlicher Gedächtnis-Konflikt-Sweep plus A/B-Such-Bench. Das Bot-Gedächtnis wurde ein Asset, das man inspiziert, wir sind sehr sehr weit von Freitag 11. um 08h24 entfernt. Ehrlich hier wird das Projekt erwachsen.
+### 10.47 - eine echte Architektur
 
-### 10h54, der Lockdown
+`tools`wird organisiert, mit`brain`für Opencode, Memory und Mood,`voice`für Voice, Voice-, Listen- und Soundboard-Anhörung und`fun`Das Projekt hat jetzt ein Skelett, es ist mehr ein Haufen Skripte.
 
-Der Tag, an dem ich paranoid spiele, Agenten-Lockdown. Gedächtnisschreiben verweigert, der Agent kann den Vault nicht verschmutzen, selbst wenn man ihn injiziert. Discord-Tools read-only, Senden läuft durch Code, nie durch Agenten. Keine Sub-Agenten zur Lockdown-Umgehung, kein Webfetch für Localhost-SSRF und Exfiltrationen, keine Headless-Fragen. Ein gehärtetes Docker mit Nicht-Root-Bot, `no-new-privileges`, `cap_drop: ALL`, Speicher- und CPU-Limits, begrenzten Prozess-Files und Secrets via `.env` nie gebaked. Ich schreibe das Prinzip in den Code, als Kommentar, dev via menschliche Sessions, nicht hier.
+### 10.49 → 11.16 - der Komfort von dev
 
-### 11h02 → 11h15, Sicu-Finishes
+Eine angepasste Stimmungseinspritzungsschwelle, vier kleine Commits für Editorausschlüsse mit`data` , `voices`Die Metadatenbasen gehen aus der Überwachung heraus, und das Projekt wird von anderen mit generischen Templates wiederverwendbar.`PERSONA.example.md`und`STYLE.example.md`um seinen eigenen Stil zu klonen.
 
-Die Gedächtnis-Save-Keywords werden gestrafft und Schreiben noch restriktiver. Man fügt auch die Kontext-Backup-Datei zum Gitignore hinzu, ich fange an, nicht mehr alles zu archivieren, aber fast.
+Die Identität ist echt bekannt,`CHLOEAI_PROMPT`wird`PERSONA`Und das README ist entpersonalisiert, ich nehme Chloe aus der öffentlichen Doktrin heraus, sie erzählt sich nur noch privat.`config.yaml`Überladen und gitignoniert, mit einem Beispiel kommentiert Zeile für Zeile, und das Installationsskript bereitet nun auch die Dateien von ca. und config.
 
-### 12h39, die leichtere Stimmung
+### 11.49 - die losgelösten Emojis
 
-Die PARRY-Stimmung wird nicht mehr bei jeder Nachricht injiziert, einmal pro Zustand reicht. Schluss, drei Floats bei jeder Antwort leben zu lassen, das erleichtert alles.
+Die Emojis customs kleben an den Text anstatt sich sauber zu lösen. Es ist ein trivial Fix mit einem enormen Effekt, weil nichts schreit Bot wie ein falscher Emoschi am Ende eines Satzes geklebt.
 
-### 12h47, der befreiende Commit
+### 14.19 - die Sprachwächter
 
-`PERSONA.md`, `STYLE.md` und `chloeai.md` werden Beispiele mit `chloeai.example.md`, `PERSONA.example.md` und `STYLE.example.md`, meine Stimme `fortune-v6.onnx` verlässt das Repo, Daten und Logs auch, und ein `.env.example` wird geboren. Das Projekt enthält nicht mehr meine Persönlichkeit, es enthält die Mechanik, um eine zu tragen. Das fühlt sich seltsam an, aber es ist nötig.
+Wenn jemand den Sprachbefehl startet, wird die Nachricht nicht als normale Nachricht behandelt.
 
-### 12h52, v1.0.0
-
-Tag v1.0.0, per SSH signiert. Changelog, Operator-Runbook, Kill-Switch, der stoppt ohne etwas zu löschen. Sechs Tage, genau, zwischen erstem Commit und Release. Niemand hätte am Freitag davor darauf gewettet.
-
-### 12h53 → 13h14, die Wäsche
-
-Kommentarinterpunktion harmonisiert, Gedächtnis-Permissions und Scope-Regeln aktuell dokumentiert. Küchenarbeit, aber muss sauber sein fürs Release.
-
-**Ende Tag 5: 145 Commits kumuliert. v1.0.0 ist raus.**
+**Ende des Tages 3: 118 Commits zusammen. Der Bot hört, spricht, schweigt nachts, hat eine Stimmung und eine Visitenkarte.**
 
 ---
 
-## FREITAG 18. SEPTEMBER, Tag 6: der Anti-Klimax
+## Mittwoch, 16. September - Tag 4: Glaubwürdigkeit
 
-Ein einziger Commit, um 00h02. Der letzte Projekt-Commit, und er ist lächerlich. Das vom Agenten genutzte Free-Tier-Modell identifiziert den OpenCode-Client an der Präsenz mancher Tools in der Request, mit `bash`, `glob` und `grep`. Wenn man sie entfernt, selbst aus legitimen Secu-Gründen, gibt der Provider `403 FreeTierError: can only be used from within OpenCode` zurück. Also musste ich genau das re-autorisieren, was ich gerade verriegelt hatte, am Vorabend, damit der Bot gratis weiterläuft.
+13 Commits, ein ernster Tag.
 
-Es ist der lustigste Commit des Repos und ich bleibe dabei. Nach 6 Tagen Domptieren von Discord, Piper, MLS, OpenSelf und Docker diktiert **ein gratis KI-Modell** meine Sicherheitspolitik. Ehrlich absurd, und perfekt als Ende.
+### 08:49 → 08:59 - Erwachsenenalter
+
+Rechtliche Dokumente, Lizenzinhaber, Verhaltenskodex, Beitragsrichtlinien und Sicherheitspolitik, in Englisch und Französisch, mit einer Korrektur- und Dateiumbenennung an der Grenze des Pointeux. Ich verbrachte Stunden darauf und es ist der am wenigsten lustige Teil der repo, von weit entfernt. Aber man muss es tun, tho.
+
+### 9.56 - der Bot sieht
+
+Die beigefügten Bilder werden von OCR lokal transkribiert und der Text wird in die schnelle. Keine Cloud-API, OCR läuft zu Hause, ich schicke deine eigenen nicht an einen Drittanbieter-Server, nicht einmal theoretisch.
+
+### 11.09 - der angemessene Haushalt
+
+Wenn die Messe Sendungen verbietet oder GIFs, Embeds und Emojis bricht, ruft man nicht einmal das Modell an. Man gibt keinen Token für eine Nachricht aus, die man nicht senden kann, das ist ziemlich einfach im realen.
+
+### 11.42 → 12.55 - Das Haus, das sich wieder erholt
+
+Der große Besen, toter Code gelöscht, korrigierte Senden- und Authentizitätsfehler, helpers factorisiert. Zu alte Sessions werden ausgewiesen, der DM-Cache läuft aus, und die Spracherkennung kostet weniger. Die Einsätze, die ich beim Verschieben von Modulen gebrochen hatte, werden wiederhergestellt, und der ganze Runtime-Status, Sitzungen, gesehene Autoren, ignorierte Nachrichten und Stimmung überlebt den Neustart in`data` .
+
+### 14.41 - zwei Welten, ein Bot
+
+Eine Kompatibilitätsschicht erkennt automatisch die Version von`discord`installiert und passt die Interten und den auth REST an. Ergebnis, der gleiche Code dreht sich als offizielle App mit discord.py oder als selfbot mit disord.py-self. Zwei Welten, ein Bot, und nicht brauchen, zwei Zweige zu halten.
+
+### 15.05 - die angemessene Anwesenheit
+
+Die Art, wie die Anwesenheit angezeigt wird, passt sich an den Modus an, und die Liste der Admins ist aktuell. Das ist Detail, aber das macht es überall aufrecht.
+
+**Ende des Tages 4: 131 Commits kumuliert. Ein legales, vernünftiges und überall gedrehtes Projekt.**
+
+---
+
+## TAG, 17. SEPTEMBER - 5. TAG: DIE RESERVIERUNG
+
+14 commits. Am Tag der Reife.
+
+### 09.15 → 09.30 - Gedächtnis wird zu Disziplin
+
+Die Erinnerungen werden durch ein Skop verstopft, und man nennt nicht die Erinnerungen einer DM in einem Server oder umgekehrt, ohne darüber nachzudenken. Man klassifiziert Erinnerungen in Wirklichkeit, bevorzugt, Entscheidung und Beziehung, und sie werden deduktisiert, zwei widersprüchliche Erinnerungen können in Stille mehr zusammenleben.`aventuros`verhindert, dass der Bot zu bestimmten Themen abgelenkt wird, standardmäßig deaktiviert und für die Frileure verfügbar ist. Die tote Sprachkonfig wird entfernt, es tut gut.
+
+### 10.12 - das Gedächtnis, das man hört
+
+Ein monatlicher Gedächtniskonfliktsweep und ein Such-Bench A/B. Das Bot-Gedächtnis ist ein Asset, das man inspiziert, man ist sehr weit von Freitag 11 bis 08:24 entfernt. In Wirklichkeit wird das Projekt dort erwachsen.
+
+### 10.54 - der Lockdown
+
+Am Tag, an dem ich paranoid spiele, Sperre des Agenten. Gedächtnis-Schreibweise abgelehnt, kann der Agent den Wault nicht verschmutzen, auch wenn er injiziert wird. Werkzeuge Discord nur lesen, die Sendung geht durch den Code, nie durch den Agenten, weder Subagenten, um den Lockdown zu umgehen, noch webfetch für SSRF localhost und Exfiltrationen, noch Fragen in headless. Ein gehärteter Docker mit nicht-root Bot gehärtet,`no-new-privileges` , `cap_drop: ALL`, Speicher- und CPU-Begrenzungen, bornierte Prozess-Dateien und Geheimnisse via`.env`Ich schreibe das Prinzip in den Code, in den Kommentar, dev über menschliche Sitzungen, nicht hier.
+
+### 11.02 → 11.15 - die Sicherheitsoberflächen
+
+Die Schlüsselwörter für Speichersicherung sind eingeengt und das Schreiben ist noch restriktiver. Es wird auch hinzugefügt, um die gitignore-Datei des Kontextes Backup, ich beginne, um mehr alles zu archivieren, aber fast.
+
+### 12.39 - Leichtere Stimmung
+
+Die Stimmung von PARRY wird nicht mehr in jede Nachricht injiziert, einmal in jedem Zustand.
+
+### 12.47 - der Befreier
+
+`PERSONA.md` , `STYLE.md`und`chloeai.md`werden Beispiele mit`chloeai.example.md` , `PERSONA.example.md`und`STYLE.example.md`, meine Stimme`fortune-v6.onnx`Repo-Ausgang, Daten und Logs auch, und ein`.env.example`Das Projekt enthält nicht mehr meine Persönlichkeit, es enthält die Mechanik, um eine zu tragen.
+
+### 12.52 - v1.0.0
+
+Tag v1.0.0, unterzeichnet in SSH. Changelog, Runbook Operator, kill-switch, das ohne etwas zu löschen stoppt. Sechs Tage, Stapel, zwischen dem ersten Commit und der Release. Niemand hätte darauf am Freitag zuvor gewettet.
+
+### 12.53 → 13.14 - Wäsche
+
+Harmonisierte Kommentare, Speicherberechtigungen und aktuelle dokumentierte Scope-Regeln. Es ist Popo, aber es muss sauber sein für die Release.
+
+**Ende des Tages 5: 145 Commits kumuliert. v1.0.0. ist ausgelaufen.**
+
+---
+
+## Freitag, 18. September - Tag 6: Anti-Climax
+
+Das letzte Commit des Projekts ist lächerlich. Das kostenlose Modell, das der Agent benutzt, identifiziert den OpenCode-Client mit dem Vorhandensein bestimmter Tools in der Anfrage, mit`bash` , `glob`und`grep`. Wenn sie auch aus berechtigten Gründen der Sicherheit zurückgezogen werden, gibt der Lieferant zurück`403 FreeTierError: can only be used from within OpenCode`Also musste ich es noch einmal erlauben, am Tag zuvor alles verschlossen zu haben, genau das, was ich gerade blockiert hatte, damit der Bot weiter umsonst läuft.
+
+Nach sechs Tagen, die Discord, Piper, MLS, OpenSelf und Docker bezwingen, ist es ein kostenloses Modell, das meine Sicherheitspolitik diktiert.
 
 ---
 
 ## Die Zahlen
 
-Die Zahlen zum Zusammenfassen, weil ich mag, wenn es sauber ist. Man redet von 146 Commits, 6 aktiven Tagen vom 11. bis 18. September 2026, 65 getrackten Dateien und rund 4000 Python-Zeilen am Ende. Der Style-Test-Score auf Mimo am Anfang gibt 9.1 von 10, und die finale Version ist v1.0.0, per SSH signierter Tag mit proprietärer Lizenz. Ziemlich simpel ehrlich, kleines Projekt am Anfang, große Maschine am Ende.
+Die Zahlen zum Zusammenfassen, weil ich es mag, wenn es quadratisch ist. Es wird von 146 Commits gesprochen, 6 Tage aktiv vom 11. bis 18. September 2026, 65 Dateien getrackt und um 4000 Zeilen von Python am Ende. Die Punktzahl beim Mimo-Styletest am Anfang zeigt 9.1 von 10, und die endgültige Version ist v1.0.0, Tag SSH mit proprietären Lizenz unterzeichnet. Es ist ziemlich einfach in der realen, kleinen Projekt am Anfang, große Maschine am Ende am Ende .
 
-## Was ich aus diesen 6 Tagen mitnehme
+## Was ich aus diesen sechs Tagen kriege
 
-Zuerst war die Prioritätenreihenfolge egal was, und es war die richtige Methode. Ich machte zuerst einen Prototyp, der antwortet, dann einen Bot, der richtig klingt, dann ein glaubwürdiges System, dann sicheren Code, und schließlich ein verteilbares Projekt. Persönlichkeit vor Sicherheit, das Feur vor der Lizenz, man hielte dieses Tempo nicht durch, wenn man "gut gemachten" Projekten Regeln folgte.
+Zuerst war die Reihenfolge der Prioritäten alles, und das war die richtige Methode. Zuerst machte ich einen Prototyp, der reagiert, dann einen Bot, der gerade klingelt, dann ein glaubwürdiges System, dann eine sichere Code, und schließlich ein verteiltes Projekt. Persönlichkeit vor der Sicherheit, der Feur vor der Lizenz, würde man dieses Tempo nicht halten, indem man die Regeln der gut gemachten Projekte befolgt.
 
-Dann ist Stil zuerst eine "nicht"-Liste. Mein nützlichstes `STYLE.md` beschreibt nicht, was ich sage, es schließt aus, was ich nicht tue, kein Schlusspunkt, keine zwei Emojis, kein `mdr` in Großbuchstaben, keine Roboterphrasen am Antwortanfang. Bot-Parasiten sind leichter zu spotten als Charakterzüge zu definieren, und darum funktioniert es.
+Dann ist der Stil zuerst eine Liste von nicht.`STYLE.md`die nützlichste Beschreibung nicht, was ich sage, es schließt aus, was nicht ich tue, kein Endpunkt, nicht zwei Emojis, keine`mdr`In Großbuchstaben, keine Robotersätze am Anfang der Antwort. Bot-Parasen sind leichter zu erkennen als Zeichenzüge zu definieren, und deshalb funktioniert es.
 
-Fehlschläge sind das Projekt. Etwa dreißig Commits für MLS, ein weggeworfener Test, sechs getestete Nonce-Layouts, die treuste Historie dessen, was ich erlebte, sind die gescheiterten Dienstags-Versuchsreihen. Ein Klon ist Gedächtnis, nicht Stil, Stil täuscht zehn Nachrichten. Gedächtnis mit OpenSelf, Scopes, Dedupe und Konflikt-Sweep lässt dauern, und das trennt Spiegel von Person.
+Die Schach ist das Projekt. Etwa dreißig Commits für die MLS, ein geworfener Test, sechs getestete Nuntius-Layouts, die treuste Geschichte von dem, was ich erlebt habe, sind die verpassten Versuchsreihen vom Dienstag. Ein Klon ist Gedächtnis, nicht Stil, der Stil macht Illusion zehn Nachrichten. Das Gedächtnis mit OpenSelf, Scopes, deduce und sweep Konflikte macht es lang, und das ist, was trennt einen Spiegel von einer Person.
 
-Und die letzten Commits sind immer lustig. Der 146., der `bash`, `glob` und `grep` re-autorisiert, weil ein Free Tier verlangt, dass seine eigenen Tools präsent sind, ist mein Favorit. Und die Bilanz zum Schluss, die Ergebnisse sind verblüffend, geradezu bluffend. Der Klon hält eine Konversation, ohne dass man die Maschine ahnt, er erinnert sich an Leute, Projekte und vergangene Witzeleien, er ergreift Initiativen und markiert sie mit Stimmung, und er schlägt Fox nebenbei. Flippig, etwas, und genau das suchten wir.
-
----
-
-*Das Projekt ist nicht öffentlich: proprietäre Lizenz, Rechte vorbehalten. Aber die Historie, die erzähle ich euch. Wenn ihr eines Tages einer "·Chloe" begegnet, die euch nach perfekt menschlicher Inaktivitätszeit mit einem Patrick-Jane-GIF antwortet... wisst ihr jetzt, was dahintersteckt.*
+Und die letzten Commits sind immer lustig.`bash` , `glob`und`grep`Denn ein Freier verlangt, dass seine eigenen Werkzeuge vorhanden sind, das ist mein Lieblingsspiel, und die Bilanz zum Schluss, die Ergebnisse sind atemberaubend, ja sogar bluffend. Der Klon führt ein Gespräch, ohne dass man die Maschine erraten kann, er erinnert sich an die Menschen, Projekte und vergangenen Ventile, er nimmt Initiativen und markiert sie mit einer Stimmung, und er schlägt Fox im Übrigen. Es ist gruselig, ein wenig, und genau das haben wir gesucht.
 
 ---
 
-Ihr habt alles gelesen? Weil es mein Klon ist, der euch das schrieb. Und er machte einen makellosen Job, oder? Die Originalversion ist [hier](./article-chlone-timeline.md).
+*Das Projekt ist nicht öffentlich: Lizenzinhaber, Rechte vorbehalten. Aber die Geschichte erzähle ich dir. Wenn du eines Tages eine ✓ "Chloé ^ treffen, die dir von einem GIF von Patrick Jane nach einer Zeit völlig menschlicher Untätigkeit antwortet, weißt du jetzt, was sich hinter ihnen verbirgt.*
+
+---
+
+du hast alles gelesen, weil mein Klon dir das geschrieben hat, und er hat einen tadellosen Job gemacht, oder? [ici](./article-chlone-timeline.md) .

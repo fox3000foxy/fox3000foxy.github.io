@@ -1,53 +1,51 @@
 ---
-title: "Ich habe meine Code-KI-Agenten auditiert, statt ihnen blind zu vertrauen"
-description: "Wie zwei Audits, die ich für den 4. technischen Bericht meiner Trading-Plattform durchgeführt habe, mir zwei unterschiedliche Fehlentwicklungen offenbart haben: ein Agent, der vergisst, weil das Repo nicht mehr in sein Kontextfenster passt, und ein Agent, der zehnmal mehr Code schreibt als nötig, weil nichts ihn zur Kürze drängt."
+title: "Ich habe meine Code-Agenten geprüft, anstatt ihnen zu vertrauen, blind"
+description: "Wie zwei Prüfungen, die zur Erstellung des vierten technischen Berichts meiner Handelsplattform durchgeführt wurden, mir zwei verschiedene Fehlentwicklungen enthüllten: einen Agenten, der vergisst, weil die Repo nicht mehr in seinem Kontextfenster steht, und einen Agent, der zehnmal so viel Code schreibt, wie nötig ist, weil nichts ihn zur Knappheit drängt."
 date: 2026-09-15
 tags: ["ai", "llm-agents", "code-review", "context-window", "trading", "typescript"]
 authors: ["docteur-turboss"]
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "FEXfYRiCCdpPlmfKkosLXmmfat6P2HWGRqT9uUYcLlqhmCjofpstBrnoDKo40bPrW3aPrnoVYGyeGEGOkfDMvw=="
+lang: "de"
 ---
+## 
 
-## Das Symptom vor der Diagnose
+Jede Ausgabe des technischen Berichts der Plattform zwingt mich, die gesamte Architektur wieder zu durchsuchen: Dienstleistungen, Agenten, Datenpipelines. Bei der Vorbereitung der 4. Ausgabe brach mir das Volumen der Repo in die Augen, während ich sah, wie sie allmählich gewachsen war, ohne jemals auf sie zu warten: die Repo, die ursprünglich in einigen Tausend Zeilen bestand, weniger als 10ko, erreicht jetzt 100MB. Die Plattform hatte kaum mehr Funktionalität. Ich hatte mich einfach auf Agenten des Typs Claude Chat verlassen, um Code zu implementieren und zu korrigieren, ohne genau zu rahmen, was ich sie fragte oder was um die Umgebung herum.
 
-Jede Ausgabe des technischen Berichts der Plattform zwingt mich, die gesamte Architektur erneut zu durchlaufen: Services, Agenten, Datenpipelines. Als ich die 4. Ausgabe vorbereitete, sprang mir das Volumen des Repos endlich ins Auge, obwohl ich es allmählich hatte wachsen sehen, ohne je innezuhalten: Das Repo, das ursprünglich in wenige tausend Zeilen passte, weniger als 10ko, erreicht mittlerweile 100Mo. Die Plattform hatte kaum mehr Funktionen. Ich hatte mich einfach auf Agenten vom Typ Claude Chat verlassen, um Code zu implementieren und zu korrigieren, ohne genau einzugrenzen, was ich sie fragte, noch auf welchem Perimeter.
+Der Bericht hat mich gezwungen, aus dem "Vorwärts"-Modus zu kommen, um in den "Was ist wirklich passiert" Modus zurückzukehren. Ich habe zwei separate Prüfungen über die Geschichte der Wiederholung durchgeführt. Beide zeigten auf die gleiche Ursache, aus zwei völlig unterschiedlichen Gründen.
 
-Das Schreiben des Berichts zwang mich, aus dem Modus "es geht voran" zurück in den Modus "was ist wirklich passiert" zu wechseln. Ich habe zwei getrennte Audits über die Historie des Repos gemacht. Beide zeigten auf dieselbe Ursache, aus zwei völlig unterschiedlichen Gründen.
+## Audit Nr. 1: das Kontextfenster
 
-## Audit Nr. 1: das Kontextfenster, das lügt
+Die erste Prüfung bestand darin, die von einem Bediensteten IA über mehrere Monate vorgenommenen Korrekturen wieder aufzunehmen und zu prüfen, ob sie mit dem Rest der Repo zu dem Zeitpunkt, zu dem sie durchgeführt wurden, vereinbar waren.
 
-Das erste Audit bestand darin, Service für Service die Korrekturen durchzugehen, die ein KI-Agent über mehrere Monate gemacht hatte, und zu prüfen, ob sie mit dem Rest des Repos zum Zeitpunkt ihrer Anwendung konsistent waren.
+Das Motiv, das immer wieder kam: Der Agent korrigierte ein Problem lokal, in der Datei oder dem Modul, das er vor Augen hatte, ohne das Äquivalent an anderer Stelle in der Repo gesehen zu haben oder ohne sich daran zu erinnern. Ergebnis: die gleiche Schnittstelle, die in zwei Diensten etwas anders definiert wurde, eine Halbierung, die zum Zeitpunkt des Schnellen aus dem Kontextfenster herauskam, eine Nominierungsvereinbarung, die im Modul eingehalten und im folgenden ignoriert wurde. Nichts spektakuläres, aber auf Dutzenden von Sitzungen zusammengenommen, das erzeugt genau Redundanz und Smell-Code, die den Faden an das nächste Werkzeug verlieren, das wir ans Licht bringen. Ein Kreis, der sich selbst füttert: Je größer und fragmentiert, desto schwieriger wird es für einen Agenten, ihn in seiner Gesamtheit zu halten, destrotz werden die Korrekturen lokal und teilweise, des desto größer wird das Repo.
 
-Das Muster, das immer wiederkehrte: Der Agent korrigierte ein Problem lokal, in der Datei oder dem Modul, das er vor Augen hatte, ohne das Gegenstück anderswo im Repo gesehen zu haben oder sich daran zu erinnern. Ergebnis: dieselbe Schnittstelle leicht unterschiedlich in zwei Services neu definiert, eine Umbenennung halb angewendet, weil das zweite Vorkommen zum Zeitpunkt des Prompts außerhalb des Kontextfensters lag, eine Namenskonvention in einem Modul respektiert und im nächsten ignoriert. Nichts Spektakuläres isoliert betrachtet, aber kumuliert über Dutzende Sessions produziert das genau die Redundanz und die Code Smells, die das nächste Tool, das man darauf loslässt, den Faden verlieren lassen. Ein sich selbst verstärkender Kreis: Je mehr das Repo wächst und fragmentiert, desto schwieriger wird es für einen Agenten, es in seiner Gesamtheit im Kopf zu behalten, desto lokaler und partieller werden die Korrekturen, desto mehr wächst das Repo.
+Das Problem ist nicht nur der Agent "Engen" oder erfindet; er beantwortet die Frage, die er über den Kontext gestellt hat. Das Problem besteht darin, dass ich in den meisten Fällen nie den Umfang der Frage im Vorfeld definiert habe. Ich fragte: "behebt diesen Typo, dieses Verhalten, diese Funktion," ohne mich zu fragen, ob dieser Fehler irgendwelche Entsprechungen in der repo hatte, die der Agent nicht sehen konnte.
 
-Das Problem ist nicht, dass der Agent "lügt" oder erfindet; er antwortet korrekt auf die gestellte Frage über den Kontext, den man ihm gegeben hat. Das Problem ist, dass ich meistens nie den Perimeter der Frage im Voraus definiert hatte. Ich fragte "korrigiere diesen Tippfehler, dieses Verhalten, diese Funktion", ohne mich zu fragen, ob dieser Bug Gegenstücke anderswo im Repo hatte, die der Agent nicht sehen konnte.
+## Audit Nr. 2: Wenn VerbIiegung zum Code wird
 
-## Audit Nr. 2: wenn Verbosität zu Code wird
+Die zweite Prüfung war mechanischer: Drehen du ein`git log –numstat`über die gesamte Geschichte, aggregieren hinzugefügte Zeilen und Zeichen hinzugefügt durch Commit und siehst du sich die Distribution.
 
-Das zweite Audit war mechanischer: Ein `git log --numstat` über die gesamte Historie laufen lassen, hinzugefügte Zeilen und hinzugefügte Zeichen pro Commit aggregieren und die Verteilung anschauen.
+Die 30 größten Zeilenkommits allein machten einen weitgehend unverhältnismäßigen Anteil des gesamten Volumens der Repo aus. Systematisch waren dieselben Commits auch als die größten in hinzugefügten Zeichen. Das war vorhersehbar, außer dass das Verhältnis Zeichen/Linien dieser Commiten nicht nur mit der Anzahl der Zeilen verknüpft war: Die Linien selbst waren rauer, mit mehr redundanten Erläuterungen mit dem Namen der Funktionen, mehr duplizierte Fehlerverwaltungsblöcke statt faktorisiert, mehr Doktrinen, die dreimal dasselbe umformulierten.
 
-Die 30 größten Commits nach hinzugefügten Zeilen stellten allein einen weitgehend überproportionalen Anteil des Gesamtvolumens des Repos dar. Systematisch stachen dieselben Commits auch als größte nach hinzugefügten Zeichen hervor. Das war vorhersehbar, nur dass das Zeichen/Zeilen-Verhältnis dieser Commits nicht nur mit der Zeilenzahl zusammenhing: Die Zeilen selbst waren wortreicher, mit mehr erklärenden Kommentaren, die mit den Funktionsnamen redundant waren, mehr duplizierten Fehlerbehandlungsblöcken statt faktorisiertem Code, mehr Docstrings, die dreimal dasselbe umformulierten.
+Dies ist die direkte Folge eines bekannten Verhaltens, wenn man mit einem LLM in Chat interagiert: ohne ausdrückliche Anweisung zur Kontur neigt er dazu, viel zu sprechen, zu rechtfertigen, zu kommentieren, neu zu formulieren. Im Gespräch kostet es Ausgabetoken. In der Code-Generation wird dieserselbe Reflex in Zeilen übersetzt, die in der repo unbegrenzt bleiben, Commit nach Commit, ohne dass man sie wirklich wiedergibt, solange der Code funktioniert.
 
-Das ist die direkte Folge eines bekannten Verhaltens bei der Interaktion mit einem LLM im Chat: Ohne explizite Anweisung zur Kürze neigt es dazu, viel zu reden, zu begründen, zu kommentieren, umzuformulieren. In einer Unterhaltung kostet das Ausgabe-Tokens. Bei der Codegenerierung übersetzt sich derselbe Reflex in Zeilen, die unbegrenzt im Repo bleiben, Commit für Commit, ohne dass man sie wirklich noch einmal liest, solange der Code funktioniert.
+## Was die beiden Audtis, nebeneinander gestellt, zeigten
 
-## Was beide Audits nebeneinander gezeigt haben
+Für den ersten Bericht: Die dienststellenübergreifende Kohärenz leidet unter einem zu kleinen Kontextfenster, um die gesamte Revision zu halten, was zu lokalen Korrekturen, Redundanzen und unterschiedlichen Vereinbarungen führt.
 
-Für den ersten Bericht: Die dienstübergreifende Konsistenz leidet unter einem Kontextfenster, das zu klein ist, um das ganze Repo zu halten, was zu lokalen Korrekturen, Redundanzen und abweichenden Konventionen führt.
+Für den zweiten:`git log –numstat`zeigt eine Standardverbosität eines nicht boxierten LLM an, was unverhältnismäßige Zeilen und Zeichen und einen wenig faktorisierten Code verursacht.
 
-Für den zweiten: `git log --numstat` zeigt eine Standard-Verbosität eines nicht eingegrenzten LLM, was überproportional hinzugefügte Zeilen und Zeichen und wenig faktorisierten Code verursacht.
+Beide zusammen zeigen Redundanz und Lautstärke: Dies gibt eine zu große Wiederholung, um einen zukünftigen Agenten in den Kopf zu bekommen, was das erste Problem, das durch die erste Prüfung aufgedeckt wurde, noch verschlimmert.
 
-Beide zusammen zeigen auf Redundanz und Volumen: Das ergibt ein Repo, das zu groß ist, als dass ein künftiger Agent es im Kopf behalten könnte, was wiederum das erste Problem verschärft, das das erste Audit aufgezeigt hat.
+Diese letzte Zeile machte mir die größte Sorge, wenn ich den Bericht schrieb: Beide Probleme sind miteinander verbunden, sie ernähren sich voneinander. Je mehr grün, desto schneller wächst der repo; je größer der Repo, des desto weniger kann ein Agent ihn im Kontext halten; je weniger er ihn im Zusammenhang halten kann, destrotz sind seine Korrekturen lokal und redundant; je mehr redend sie sind, destosses wird größer. Eine negative Rückkopplungsschleife, die vollständig durch den Einsatz von Agenten ohne Kadrierung verursacht wird.
 
-Es ist diese letzte Zeile, die mich beim Schreiben des Berichts am meisten beunruhigt hat: Die beiden Probleme hängen zusammen, sie füttern einander. Je wortreicher der generierte Code, desto schneller wächst das Repo; je mehr es wächst, desto weniger kann ein Agent es im Kontext halten; je weniger er es im Kontext halten kann, desto lokaler und redundanter sind seine Korrekturen; je redundanter sie sind, desto mehr Volumen kommt hinzu. Eine negative Rückkopplungsschleife, vollständig verursacht durch eine Nutzung von Agenten ohne Einhegung.
+## Warum ist es nicht ein pünktlicher Fehler eines bestimmten Werkzeugs
 
-## Warum das kein punktueller Bug eines bestimmten Tools ist
+Nichts in dieser Diagnose ist spezifisch für ein bestimmtes Modell oder Produkt. Ein Chat-Agent, egal, was es ist, wirkt auf das, was man ihm in seinem Fenster im Moment T zu sehen gibt, und erzeugt standardmäßig die umfassendste und am besten gerechtfertigte Antwort. Es ist genau das erwartete Verhalten eines Chatassistenten, und genau das zu vermeiden, was für ein Werkzeug, das in einem Produktionsrepo geschrieben wird. Das Problem ist das Fehlen einer Verkleidung zwischen Werkzeug und Repo: Umfang der zu betrachtenden Dateien, erwartetes Ausgabeformat, Budget von Linien oder Verbosität, Verpflichtung, genau zu erwähnen, was bereits existiert, bevor etwas Neues geschrieben wird,.
 
-Nichts in dieser Diagnose ist spezifisch für ein bestimmtes Modell oder Produkt. Ein Chat-artiger Agent, welcher auch immer, operiert auf dem, was man ihm zum Zeitpunkt T in seinem Fenster zeigt, und generiert standardmäßig die vollständigste und begründetste Antwort. Das ist genau das erwartete Verhalten eines Gesprächsassistenten, und genau das, was man für ein Tool vermeiden muss, das in ein Produktions-Repo schreibt. Das Problem kommt vom fehlenden Rahmen zwischen Tool und Repo: zu berücksichtigender Datei-Perimeter, erwartetes Ausgabeformat, Zeilen- oder Verbositätsbudget, Pflicht, genau zu zitieren, was schon existiert, bevor man etwas Neues schreibt.
+## Was ich seither geändert habe
 
-## Was ich seitdem geändert habe
-
-Der logische Reflex wäre gewesen, das Geschriebene drastisch zu reduzieren. Persönlich habe ich beschlossen, anders vorzugehen. Die Audits dienten mir zu etwas anderem: Den Code zu scannen, um Code Smells aufzuspüren, und sie zu nutzen, um genau einzugrenzen, wo die echten Probleme lagen. Die dienstübergreifenden Inkonsistenzen, die Redundanzen, die Stellen, wo der Faden verloren war, statt zu raten. Das Volumen des geschriebenen Codes bleibt weitgehend gleich: Wortreich oder nicht, er bleibt nützlich, wenn er gut genutzt wird. Der Hebel war zu wissen, wo genau man hinschauen muss, um zu korrigieren, was nicht passte, statt den Agenten am Schreiben zu hindern.
+Der logische Reflex wäre gewesen, das, was geschrieben wurde, drastisch zu reduzieren. Persönlich habe ich mich entschieden, etwas anderes zu tun. Die Prüfungen haben mir etwas anderes gereicht: den Code zu scannen, um die Smells zu erkennen, und mich damit genau zu definieren, wo die wahren Probleme liegen. Die dienstübergreifenden Inkonsistenzen, die Redundanzen, die Orte, an denen der Draht verloren gegangen ist, anstatt zu erraten. Das Schriftvolumen bleibt deutlich dasselbe: grün oder nicht, es ist nützlich, wenn er richtig verwendet wird. Der Hebel war genau zu wissen, wo man zu suchen, um das zu korrigieren, was nicht passte, anstatt den Agenten zu verhindern, zu schreiben.
 
 ## Nächste Schritte
 
-Die Aufteilung des Repos in kleinere, besser abgegrenzte Einheiten. Sowie Produktions-Leitplanken für Ausführung und Dokumentation. Das Problem, das sich wiederum stellt, ist eine Architekturfrage: Wie man die Services, Komponenten und Dokumentation, die einmal getrennt koordiniert ihre Entscheidungen treffen müssen, sauber analysiert, kritisiert und kommunizieren lässt, ohne zum selben Monolithen wie zuvor zurückzukehren.
+Die Aufteilung der Repo in kleinere und besser abgegrenzte Einheiten sowie Produktionsschutzsysteme für die Ausführung und Dokumentation. Das Problem, das sich wiederum stellt, ist eine Frage der Architektur: wie man die Dienste, Komponenten und Dokumentationen, die nach ihrer Trennung dennoch ihre Entscheidungen koordinieren müssen, richtig analysieren, kritisieren und kommunizieren lässt, ohne wieder auf denselben Monolith wie zuvor zurückzukommen.
