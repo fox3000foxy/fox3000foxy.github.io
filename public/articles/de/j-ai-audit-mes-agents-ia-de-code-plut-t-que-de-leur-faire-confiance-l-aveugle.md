@@ -5,6 +5,8 @@ date: 2026-09-15
 tags: ["ai", "llm-agents", "code-review", "context-window", "trading", "typescript"]
 authors: ["docteur-turboss"]
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "ppAnSZdeFWjO/ns+dKDAHNBDMhOJIoDwL2yQl5cgAC7FXBBGPcb9B4RcOp2zWo4YWEw89Jk46zwSlxiDQ3nU7Q=="
 ---
 ## 
 

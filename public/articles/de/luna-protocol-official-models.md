@@ -13,6 +13,8 @@ tags:
   - unsloth
   - open-source
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "3WaGXte1BtBd4fqhi9EPR8Vy6CyR04p6P9pQbOCoL/c8Ey9M+WSkW5zxbAd82pmrKQ23RcIjV7BLB61CnzTgEg=="
 ---
 # 
 
@@ -241,7 +243,7 @@ Das ursprüngliche Discord-Dialoge-Datensatz hat eine sehr spezifische Konversat
 - **Kurze Nachrichten** durchschnittlich 32,8 tokens pro Drehung
 - **Informelles Register**: Abkürzungen, winzige Abkürzungen, keine Interpunktion
 - **Schnellwechsel**: mehrere kurze statt lange Monologe
-- **Naturbedingte Verletzungen**: Tippfehler, ✓ lol ✓, ← fr having, ← ngl approximate, having tbh Ё
+- **Naturbedingte Verletzungen**: Tippfehler, ✓ lol ✓, ← fr having, ← ngl approximate, having tbh -
 
 Das Modell Luna Protocol bewahrt diesen Stil mit zwei Mechanismen:
 

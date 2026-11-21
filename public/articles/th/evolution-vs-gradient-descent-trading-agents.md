@@ -15,7 +15,7 @@ tags:
 authors:
   - docteur-turboss
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "UCR/6E7Lr4hHAlYIlOekL7XqRRcZ4gkUugH5xnYKVJ+pi/Cb2A/4E331pkwPAlXmp2Kw1h4B+JBdLnz/kXqQyA=="
+author_sig: "d7rzQObHqqegbP59u70ldMEzeoxqdMJ8Vu+Riu7pECt+83SmLxXujCA2nMQ4g7/vohOZSKEAKcohimd7cfk6gQ=="
 ---
 
 ## ปัญหาที่อยู่กับการใช้แค่ gradient descent

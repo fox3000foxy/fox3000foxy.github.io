@@ -9,12 +9,14 @@ tags:
   - jeu-ia
   - ingenierie-inversee
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "N+qjgm12vh6Q7ECkg2LFE6AvWZaseBsRilP1NfDn/6UZfoOA5lRWDXF/igNgIz2C9J12HmVOQTGgThlf3BwfiA=="
 ---
 ## 
 
 ![TF2-Soldier-Bot zielt mit Raketenwerfer](assets/tf2-bot-ai-soldier-aim.png)
 
-Jeder Spieler von TF2 hat es mindestens einmal gesagt: ✓ dieser Bot betrügt. ← Oder umgekehrt: ✓ Warum dieser Bot einfach bleibt, um Raketen zu essen. ✓ Niemand weiß wirklich, was having einfach approximate, denn normal Ё, ✓ schwierig 36/2012 und rendelet Expert ∧ bedeuten unter der Haube: Valve hat vier Schwierigkeitsetiketten und genau Null Dokumentation versandt.
+Jeder Spieler von TF2 hat es mindestens einmal gesagt: ✓ dieser Bot betrügt. ← Oder umgekehrt: ✓ Warum dieser Bot einfach bleibt, um Raketen zu essen. ✓ Niemand weiß wirklich, was having einfach approximate, denn normal, ✓ schwierig 36/2012 und rendelet Expert ∧ bedeuten unter der Haube: Valve hat vier Schwierigkeitsetiketten und genau Null Dokumentation versandt.
 
 Also ein Haufen von uns (ich, Awimii, Mush The Possum, mit einem riesigen Teil der grundlegenden Arbeit von Sigsegv, die wirklich durchsucht den dekompilierten Code des Spiels) hat ein komplettes Suchdokument über das Verhalten der TFBot gesammelt. Jeder Mechanik, jeder bekannte Bug, jede Wahrscheinlichkeit, die in der Festplatte kodiert wird. Dieser Artikel ist die vollständige Darstellung, nicht die konsolidierte Version. Nimmst du einen Bonk, es wird eine lange Zeit dauern.
 

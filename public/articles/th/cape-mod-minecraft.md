@@ -16,7 +16,7 @@ tags:
 authors:
   - fox3000foxy
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "7MHntvn3S83RwRGNl08KxQibBf0lTpvmJXawonSwKxxKcJSdx+dZIMkmr8E7NHNK0Dz0VTjM5XPSzMLMGhd2LQ=="
+author_sig: "SO3Ke6Njbek8dibDkz/IgS/qAcuObGQ1MTcA7gwsitYOH9lkdg+fqYWPh2GMN5ZtCbiF4dI6FbVw4hz+gYp3jw=="
 ---
 
 # Cape Mod : วิธีการขโมยเป้าของ Jeb_ ด้วยการฉีดลายเซ็น RSA

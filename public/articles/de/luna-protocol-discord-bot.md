@@ -12,6 +12,8 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "c/WtWYYq8qWffjxRmQpq5PskBoPzAp+bemAVPnIVuqbfuSQFzeqFuwE18q1dVdt7EcHTgHK8ps1jHDqELDBJAg=="
 ---
 # 
 

@@ -5,6 +5,8 @@ date: 2026-09-18
 tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
 lang: "de"
+author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
+author_sig: "JtPSROugUSJI+s5jJ3socHPzt7Xb+/8WfjNkrDF9NqYkeppNhTX2BI7wryGuzYu1a9YmNG4Wxq2EdiNXJHaSOQ=="
 ---
 # 
 
@@ -42,7 +44,7 @@ Vor all dem habe ich meine echten Discord-Nachrichten analysiert, und das Toolin
 
 Der Bot hat nichts erfunden: er wurde nach Zahlen auf echtes sortiert. Deshalb klingt er richtig, und die Annäherungen ^ich notiere deinen nassen Fingerstil ^ scheinen nebenan pathetisch zu sein.
 
-In Chlone spielt OpenSelf die zentrale Rolle dann: wenn etwas Wichtiges in eine Messe geht (Schlüsselwort ✓ Projekt ←, denn ^ Freund Ё, ^ Beziehung ØØ, oder eine ausdrückliche Anfrage ^ Remains que... •) , \xDCbert der Bot eine Erinnerung in den Vault via`save_to_memory`Und wenn das Gespräch wieder beginnt, durchsucht der Agent seine Erinnerungen, bevor er antwortet.
+In Chlone spielt OpenSelf die zentrale Rolle dann: wenn etwas Wichtiges in eine Messe geht (Schlüsselwort „Projekt", „Freund", „Beziehung" oder eine ausdrückliche Anfrage wie „merk dir, dass ..."), schreibt der Bot eine Erinnerung per `save_to_memory` in den Vault. Und wenn das Gespräch weitergeht, durchsucht der Agent erst seine Erinnerungen, bevor er antwortet.
 
 ---
 
@@ -142,7 +144,7 @@ Wir machen das noch mal, 10 Uhr morgens.
 
 ### 10.12 - wer spricht mit wem?
 
-Jeder erhaltene Pseudonym wird von einem Emoji durch das System vorbestimmt: ✓ ein Mensch, ← ein Bot (zu behandeln, trocknet ab), Ё **die Schöpferin, das heißt ich** auf meinem Hauptkonto. Diese Vereinbarung wird den Rest des Projekts regieren: der Klon darf nie sein having Originalmodell denn eine unbekannte behandeln.
+Jeder erhaltene Pseudonym wird von einem Emoji durch das System vorbestimmt: ✓ ein Mensch, ← ein Bot (kühler zu behandeln), 👑 **die Schöpferin, also ich** auf meinem Hauptkonto. Diese Regel gilt für den Rest des Projekts: Der Klon darf sein Ursprungsmodell niemals wie eine Unbekannte behandeln.
 
 ### 10.16 - die Satzungsregeln
 
