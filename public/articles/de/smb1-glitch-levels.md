@@ -8,8 +8,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "C+1PDnTqHWiTgRvbG9aCX+BjtbicWvDXfjJ0cW1K/9qw76VQQuF/oF5rpSbaJNOvODBTrM1qlEnezAh/VIbyTg=="
 ---
 ## 
 
@@ -21,9 +19,9 @@ Diese glitch worlds existieren aus einem einfachen Grund: Das SMB1-Level-Speiche
 
 Retro Game Mechanics Explained hat eine Reihe von 4 Videos darauf gemacht – wir werden sie in einem einzigen Tauchgang in den Code 6502 des meistverkauften Spiels seiner Zeit kompilieren.
 
-! [GLITCH OBJECTS – le titre de la série RGMechEx sur les mécaniques cachées de SMB1](/images/smb1-glitch-levels/title-card.jpg)
+![GLITCH OBJECTS – Titel der RGMechEx-Serie über versteckte SMB1-Mechaniken](/images/smb1-glitch-levels/title-card.jpg)
 
-! [World 9-1 – l'écran titre du premier glitch world accessible via le cart swap Tennis](/images/smb1-glitch-levels/v1-title-9-1.jpg)
+![World 9-1 – Titelbildschirm der ersten Glitch-World, erreichbar per Tennis-Cartridge-Swap](/images/smb1-glitch-levels/v1-title-9-1.jpg)
 
 ## Der Warm start: warum Tennis RAM in SMB1 überlebt
 
@@ -49,11 +47,11 @@ Wenn SMB1 einen **cold start** (erstes Einschalten oder Power off/on) erkennt, l
 ```
 Diese 41 Bytes dienen nur einer Funktion: dem Spieler die Möglichkeit geben, ** nach einem Spiel over** in der gleichen Welt zu bleiben. Wenn du in 6-3 stirbst, schreibt das Spiel die Welt 6 im Booty-Byte und dem title screen, wenn du A + Start aufrechterhalten, du beginnst in 6-1.
 
-! [Les 41 bytes préservés en RAM lors d'un warm start – TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD, et le byte magique $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
+![Die 41 im RAM erhaltenen Bytes bei Warmstart – TOP SCORE, MARIO SCORE, TIMER, WORLD SELECT, CONTINUE WORLD und das magische Byte $A5](/images/smb1-glitch-levels/v1-memory-state.jpg)
 
 ### Die doppelte Überprüfung des Warm start
 
-! [Cold start vs warm start – le diagramme de détection du reset](/images/smb1-glitch-levels/v1-warm-start.jpg)
+![Cold Start vs. Warm Start – Reset-Erkennungsdiagramm](/images/smb1-glitch-levels/v1-warm-start.jpg)
 
 Wenn SMB1 boott, prüft er nicht ein einziges Kriterium, sondern **2**:
 ```asm
@@ -78,7 +76,7 @@ CheckLoop:
   ; La RAM n'est pas effacée, le monde de départ est préservé
   jmp WarmStartBoot
 ```
-! [La vérification du byte $A5 et des digits du top score – le coeur du warm start](/images/smb1-glitch-levels/v1-a5-byte.jpg)
+![Prüfung des Bytes $A5 und der Top-Score-Ziffern – das Herz des Warmstarts](/images/smb1-glitch-levels/v1-a5-byte.jpg)
 
 Warum eine doppelte Überprüfung? Weil der Byte $A5 zufällig vorhanden sein könnte (ein anderes Spiel, das diesen Wert hinterlässt, oder der Standard-Ruhezustand des Chips). Wenn man überprüft, ob die top-Score-Daten (0-9) gültig sind, stellt man sicher, dass die Daten konsistent sind.
 
@@ -127,9 +125,9 @@ Wenn wir SMB1 zurückgeben:
 
 Eine Feinheiten: Zuerst muss man SMB1 Booter, dann Tennis und dann SMB1, wieder. Wenn du direkt mit Tenni anfingst, würde das $A5 Byte nie geschrieben (Tennis schreibt nicht $ A5), so dass der Warm-Start-Erkennung fehlgeschlagen wäre und der RAM gelöscht würde.
 
-! [Le compteur de pas de Tennis: chaque footstep incrémente le world byte](/images/smb1-glitch-levels/v1-footstep.jpg)
+![Der Tennis-Schrittzähler: Jeder Footstep erhöht das World-Byte](/images/smb1-glitch-levels/v1-footstep.jpg)
 
-! [Access Glitch Worlds via NES Tennis – la vidéo qui explique le cart swap](/images/smb1-glitch-levels/yt-tennis.jpg)
+![Access Glitch Worlds via NES Tennis – das Video zum Cartridge-Swap](/images/smb1-glitch-levels/yt-tennis.jpg)
 
 ## Wie SMB1 seine Niveaus in 40KB speichert
 
@@ -240,15 +238,15 @@ LoadLevel:
 ```
 Das Spiel verleiht den Zeigern volles Vertrauen: es liest die Adresse in der Tabelle und entspannt, was an dieser Adresse, Endpunkt ist.
 
-! [Level ID $06 (Water) – 9-1, la version sous-marine de 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
+![Level-ID $06 (Wasser) – 9-1, die Unterwasserversion von 6-2](/images/smb1-glitch-levels/lvl-06-9-1.png)
 
-! [La table des Level IDs: 128 entrées possibles, 34 assignées](/images/smb1-glitch-levels/v2-level-id-table.jpg)
+![Die Level-ID-Tabelle: 128 mögliche Einträge, 34 belegt](/images/smb1-glitch-levels/v2-level-id-table.jpg)
 
-! [L'ordre différent des pointeurs tiles et sprites – la cause des Frankenstein levels](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
+![Unterschiedliche Reihenfolge von Tile- und Sprite-Pointern – Ursache der Frankenstein-Levels](/images/smb1-glitch-levels/v2-pointer-tables.jpg)
 
 ### Die 34 einzigartigen Ebenen und das 7-Bit-ID-System
 
-! [Le chip RAM de la NES (MB8416A) – c'est lui qui conserve les données quand on swap les cartouches](/images/smb1-glitch-levels/v1-ram-chip.jpg)
+![Der NES-RAM-Chip (MB8416A) – er hält die Daten beim Cartridge-Swap](/images/smb1-glitch-levels/v1-ram-chip.jpg)
 
 SMB1 hat nicht 32 Ebenen, sondern **34 einzigartige Ebenen**. Viele Ebenen sind Doppelebenen (5-3 = 1-3, aber mit Bullet Bills) mit einer "Hard Mode" Flagge markiert.
 
@@ -324,11 +322,11 @@ Was passiert nun mit einer ungültigen ID wie $43 (Underground Nummer 3, die nic
 ; Résultat : un niveau souterrain avec les tiles de 1-4
 ; et les Bloopers de la zone eau de 5-2. Un vrai Frankenstein.
 ```
-! [Level ID $43 – Frankenstein level: tiles 1-4 + sprites eau 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
+![Level ID $43 – Frankenstein level: tiles 1-4 + sprites eau 5-2](/images/smb1-glitch-levels/lvl-43-frankenstein.png)
 
-! [Exploring Glitch Level Pointers – les tables d'offset expliquées](/images/smb1-glitch-levels/yt-pointers.jpg)
+![Exploring Glitch Level Pointers – Offset-Tabellen erklärt](/images/smb1-glitch-levels/yt-pointers.jpg)
 
-! [Le world index table – quand l'overflow de world 9 crée un glitch level](/images/smb1-glitch-levels/v2-world-index-table.jpg)
+![Die World-Index-Tabelle – wenn der World-9-Overflow ein Glitch-Level erzeugt](/images/smb1-glitch-levels/v2-world-index-table.jpg)
 
 ### Der world index tabelle: warum world 9 overflow
 
@@ -365,7 +363,7 @@ Für world G (16) geht der Overflow noch weiter und fällt auf die Level ID $01,
 
 Das Spiel hat 32 "legitime" Ebenen (8 Welten × 4 Ebenen). Aber die Zeigertabelle hat 128 Einträge pro Bereichtyp. Einträge jenseits der Ebene 32 enthalten, was in ROM an diesen Adressen gefunden wird – manchmal eine andere Ebene, manchmal Klangdaten, manchmal RAM, manchmal alles.
 
-! [Level ID $01 Water (Minus World) – tile pointer $AE45, sprite pointer $A171](/images/smb1-glitch-levels/minus-world.png)
+![Level ID $01 Water (Minus World) – tile pointer $AE45, sprite pointer $A171](/images/smb1-glitch-levels/minus-world.png)
 
 ### Level ID $01 + AreaType 0 = Minus World
 
@@ -378,7 +376,7 @@ Das Ergebnis: ein Wasserstand, der 2-3 ist, aber unendlich schliesst, weil es ke
 
 Es ist die 36-1 Ebene (oder 36-1 in der Welt $-1).
 
-! [Le warm start check de SMB1 – c'est lui qui permet au Minus World d'exister](/images/smb1-glitch-levels/v4-minus-world.jpg)
+![Der SMB1-Warmstart-Check – er ermöglicht die Minus World](/images/smb1-glitch-levels/v4-minus-world.jpg)
 ```asm
 ; Pourquoi le flagpole manque dans le Minus World :
 ; Les sprites de 2-2/7-2 ($A171) n'ont pas de flagpole
@@ -404,7 +402,7 @@ Wenn der Tile Pointer oder Sprite Pointer auf eine RAM-Adresse ($00-$7F) statt a
 ```
 Wenn sich die Nullseite ändert (weil Mario sich bewegt, der Timer sich dreht usw.), ändern sich auch die "Sprites" der Ebene. Deshalb haben einige Glitch worlds Feinde, die ständig blinken und sich verwandeln.
 
-! [Level ID $03 Water – sprite pointer $009D pointe vers la RAM, niveau injouable](/images/smb1-glitch-levels/level-03-water.png)
+![Level-ID $03 Wasser – Sprite-Pointer $009D zeigt ins RAM, Level unspielbar](/images/smb1-glitch-levels/level-03-water.png)
 
 ### Level ID $36: Die leere Ebene (Overworld)
 
@@ -437,7 +435,7 @@ RGMechEx hat ein Skript geschrieben, das Maps von ** allen Ebenen** für alle 4 
 
 Der Weltzähler ist 8-Bit (0-255). 1-8 Welten sind legitim. Es bleibt **248 glitch worlds** möglich. Jeder glith world entspricht der ersten Ebene dieser Welt, und seine Level ID wird durch den Overflow-Mechanismus des WorldIndexTable berechnet.
 
-! [Table des glitch worlds – 248 mondes corrompus, 68 premiers niveaux accessibles](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
+![Glitch-World-Tabelle – 248 korrupte Welten, 68 erste Level erreichbar](/images/smb1-glitch-levels/v3-glitch-worlds-table.jpg)
 
 Von den 128 möglichen IDs sind nur **68 "first level" einer Welt** (zugänglich über die world number). Die anderen 60 sind 2+-Levels oder unzugänglich.
 
@@ -450,9 +448,9 @@ Von den 128 möglichen IDs sind nur **68 "first level" einer Welt** (zugänglich
 
 Viele IDs führen auf der gleichen Ebene, weil die Zeiger, die auf die gleichen ROM-Adressen fallen. Level ID $28 (Overworld) zum Beispiel – tile pointer $A7CD (2-1) – erscheint in **38 glitch worlds**, weil sein Sprite pointer mit $9F51 auf einen Bereich der ROM zeigt, der als Padding/Tondaten verwendet wird, die von einer Fülle von IDen wiederverwendet werden.
 
-! [Carte du niveau ID $28 (Overworld) – 2-1 tiles avec des sprites normaux, 38 glitch worlds](/images/smb1-glitch-levels/level-28-overworld.png)
+![Karte von Level-ID $28 (Overworld) – 2-1-Tiles mit normalen Sprites, 38 Glitch-Worlds](/images/smb1-glitch-levels/level-28-overworld.png)
 
-! [Super Mario Bros. Glitch Levels Explained – la 3ème vidéo](/images/smb1-glitch-levels/yt-levels.jpg)
+![Super Mario Bros. Glitch Levels Explained – das 3. Video](/images/smb1-glitch-levels/yt-levels.jpg)
 
 ### Die 6 wirklich einzigartigen glitch levels
 
@@ -467,9 +465,9 @@ Von den 19 zugänglichen Glitch-Level-IDs stürzen nur **6 beim Laden nicht sofo
 | 127 | $4B | Unterirdisches Tunnel, aber stürzt ab, wenn wir zu weit gehen. |
 | 137 | $4B | Aktiviert das automatische Scrollen von cutscenes. Mario trifft einen einzigen Brickblock, der ihn für immer blockiert. |
 
-! [Level ID $50 (cloud tunnel) – le glitch world 42-1 et E-1](/images/smb1-glitch-levels/lvl-50-cloud.png) 
-! [Level ID $4D (castle) – world 62-1, Mario bloqué au spawn](/images/smb1-glitch-levels/lvl-4D-castle.png) 
-! [Level ID $4B (tunnel) – world 127-1, crashe si on va trop loin](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
+![Level-ID $50 (Wolkentunnel) – Glitch-World 42-1 und E-1](/images/smb1-glitch-levels/lvl-50-cloud.png) 
+![Level-ID $4D (Schloss) – World 62-1, Mario hängt am Spawn fest](/images/smb1-glitch-levels/lvl-4D-castle.png) 
+![Level-ID $4B (Tunnel) – World 127-1, crasht wenn man zu weit geht](/images/smb1-glitch-levels/lvl-4B-tunnel.png)
 
 Sechs glitch worlds auf 248, die etwas wirklich Neues produzieren. Der Rest sind normale Ebenen mit der falschen Art von Bereich, oder schwarze Bildschirme.
 
@@ -705,7 +703,7 @@ JumpTable_TileObjects:
   .word Obj_10            ; type 10
   .word Obj_11            ; type 11
 ```
-! [Les jump tables: pourquoi un type d'objet invalide fait crasher le jeu](/images/smb1-glitch-levels/v4-jump-table.jpg)
+![Die Jump Tables: Warum ein ungültiger Objekttyp das Spiel crasht](/images/smb1-glitch-levels/v4-jump-table.jpg)
 
 Wenn ein Objekt einen ungültigen Typ hat (≥12), springt das Spiel zu einem Zeiger, der nicht in dieser Tabelle existiert. **4 outcomes possible**:
 
@@ -714,9 +712,9 @@ Wenn ein Objekt einen ungültigen Typ hat (≥12), springt das Spiel zu einem Ze
 3. **Point zum Ausführbaren** → Zufallscode-Ausführung (wahrscheinlicher Crash)
 4. **Placeholder explizit (NOP)** → das Objekt macht nichts (einige Sprite sind so, produzieren Feinde, die vor Ort fliegen, ohne sich zu bewegen)
 
-! [Glitch level ID $58: le sprite pointer pointe vers une adresse invalide, le jeu crashe](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
+![Glitch-Level-ID $58: Sprite-Pointer zeigt auf ungültige Adresse, Spiel crasht](/images/smb1-glitch-levels/v4-glitch-58-crash.jpg)
 
-! [Glitch level ID $50: le cloud tunnel, un niveau généré par des données corrompues](/images/smb1-glitch-levels/v4-glitch-50.jpg)
+![Glitch-Level-ID $50: Der Wolkentunnel, ein Level aus korrupten Daten](/images/smb1-glitch-levels/v4-glitch-50.jpg)
 
 Die glitch level ID $58 (der abstürztde Tunnel): sein Sprite zeigt auf eine Speicherregion, die **ohne ROM nicht existiert**. Das Spiel versucht, den gleichen Koopa 5 mal pro Frame an Position (0,0) zu laden, was die SSP sät und verursacht eine Freeze.
 ```asm
@@ -832,7 +830,7 @@ Eine der faszinierendsten Lektionen dieser Architektur ist, dass die Entwickler 
 
 Die 256 glitch worlds existieren, weil die ** Zeigertabellen für 128 Einträge × 4 Typen** dimensioniert sind und das Spiel niemals die Werte, die es liest, gültig ist. Wenn ein Zeiger in RAM fällt, interpretiert das Spiel Marios Register als Tiles. Wenn der Zeiger auf die Tondaten fällt, spielt das Spiel Musik in Form von level design. Und wenn die Jumptische Overflows, das Spiel läuft alles bis zum Absturz.
 
-! [More Super Mario Bros. Mechanics Explained – la 4ème vidéo](/images/smb1-glitch-levels/yt-mechanics.jpg)
+![More Super Mario Bros. Mechanics Explained – das 4. Video](/images/smb1-glitch-levels/yt-mechanics.jpg)
 
 ## Was man daraus lernen kann
 

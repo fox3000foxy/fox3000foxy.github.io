@@ -5,8 +5,6 @@ date: 2026-09-18
 tags: ["discord", "ai", "llm-agents", "openself", "python", "selfbot", "clone"]
 authors: ["itsrealfortune"]
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "VYxaJ2HOXTCE97cw3ZPv4PAWuWuLu4T4CZNsx0ND6LiDrHoIlt7cLflNr6cydre1dwbXAj1uAixh3PS6cR/glg=="
 ---
 # 
 

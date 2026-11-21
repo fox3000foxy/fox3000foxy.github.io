@@ -15,8 +15,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "HbgpB8GF3GF8FRZEE0HR4z+V+n7dSvEH3A0MaxebcY+qU+8//S72xfx4pEcLw15NXwE54Utc87lB5GDgciHYJg=="
 ---
 # 
 
@@ -147,7 +145,7 @@ Beide Maps in Erinnerung (`tokenToSession` , `latestTurnByBattle`) verwenden die
 
 ## Die Bildwiedergabe-Pipeline
 
-![Début de combat contre un Slime](/images/konosuba-rpg/shot_01_start.webp)
+![Kampfbeginn gegen einen Slime](/images/konosuba-rpg/shot_01_start.webp)
 
 Die Straße`/konosuba-rpg/:lang/*`gibt kein JSON zurück. Es gibt ein generiertes WebP-Image zurück.
 
@@ -188,7 +186,7 @@ function flipX(img: Photon.PhotonImage): Photon.PhotonImage {
 
 ![Combat en cours](/images/konosuba-rpg/shot_02_combat.webp)
 
-![Action Câlin](/images/konosuba-rpg/shot_04_hug.webp)
+![Aktion Umarmung](/images/konosuba-rpg/shot_04_hug.webp)
 
 ---
 
@@ -335,7 +333,7 @@ export default {
 const isVercelRuntime = process.env.VERCEL === "1";
 if (!isVercelRuntime) { start(); }
 ```
-Der Hauptunterschied: die statischen Assistenzsätze. Auf Vercel werden sie aus dem filesystem gelesen (`/var/task/assets/`) Auf Cloudflare Workers gehen sie durch ein Binding`ASSETS`(statische CF-Assets) mit Fallback zu einem HTTPS-Firror (`fox3000foxy.com/konosuba-rpg/assets`)`getAssetBytes`in`assetLoader.ts`unterstützt beide Pfade, indem Sie zuerst das filesystem ausprobieren und dann fetch.
+Der Hauptunterschied: die statischen Assets. Auf Vercel werden sie aus dem Filesystem gelesen (`/var/task/assets/`). Auf Cloudflare Workers laufen sie über ein `ASSETS`-Binding (statische CF-Assets) mit Fallback auf einen HTTPS-Mirror (`fox3000foxy.com/konosuba-rpg/assets`). `getAssetBytes` in `assetLoader.ts` unterstützt beide Pfade, indem es zuerst das Filesystem versucht und dann fetch nutzt.
 
 WASM (`@cf-wasm/photon/edge-light` , `@cf-wasm/resvg`) haben für jedes Runtime getrennte Builds.`edge-light`Im Paketnamen bezeichnet der Cloudflare Workers-kompatible Build, der nicht erlaubt`new WebAssembly.Module()`runtime – WASM muss vorkompiliert werden.
 
@@ -343,7 +341,7 @@ WASM (`@cf-wasm/photon/edge-light` , `@cf-wasm/resvg`) haben für jedes Runtime 
 
 ## Progression: XP, Ebenen, Affinität
 
-![Un boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
+![Ein Boss, 650 HP](/images/konosuba-rpg/shot_06_boss.webp)
 
 Die Meta-Progression basiert auf Supabase freetier.`players`(Gesamt-XP, Niveau, gold),`character_progress`(XP/Perso-Nippelung/Perser-Niiance für Darkness, Aqua, Megumin)`runs`(Geschichte der Kämpfe),`inventory_items` , `daily_quests_progress` , `achievements_unlocked` , `game_sessions` .
 

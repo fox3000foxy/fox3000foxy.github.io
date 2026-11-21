@@ -11,8 +11,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "7KrHhmx/oYYIES+blvf/z5ELdSk9dt5Vu7bB+hxoA14GZ07+S2vlwo74F1d1T6YwGjC6eyvOkVrVMBY0pO+Xcw=="
 ---
 ## 
 
@@ -400,7 +398,7 @@ Das kannst du nicht machen:
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient(); // Persistente TCP-Verbindung = dead
 ```
-Und sogar die nativen PostgreSQL Treiber wie`pg`oder`postgres.js`Sie benutzen TCP-Verbindungen.
+Und sogar die nativen PostgreSQL-Treiber wie `pg` oder `postgres.js` nutzen TCP-Verbindungen. Auf Workers stürzen sie ab.
 
 **Supabase löst all das.**
 

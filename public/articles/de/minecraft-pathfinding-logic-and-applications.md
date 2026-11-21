@@ -9,8 +9,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "/pRGmw64/mh3IyXiGjkvCCVMzM/s8tJaWi7XSEE0jPdhTJYORP4V2rsEQXnJ0N61W8zeCHmHaRjt4kXxvaNXew=="
 ---
 ## 
 
@@ -142,14 +140,14 @@ Jedes Mob hat einen anderen Geschmack und das ändert alles.
 
 | Mob | Kiffe das. |
 | --- | --- |
-| **Tiere** (Kälte, Schafe, Schweine) | Gras und Licht(Hipster) |
-| **Moster** (Zombies, Skelette) | Schwarz(Edgelords) |
+| **Tiere** (Kälte, Schafe, Schweine) | Gras und Licht (Hipster) |
+| **Moster** (Zombies, Skelette) | Schwarz (Edgelords) |
 | **Tortuen** | Wasser, sonst Sand, sonst Licht |
 | **Hoglins** | `crimson_nylium`; hassen`warped_fungus` |
 | **Striders** | Nur die Lava. |
-| **Silverfish** | Die unheilbaren(logischen) Blöcke |
-| **Guardians** | Wasser + Licht(Snobs) |
-| **Mooshrooms** | Myzelium + Licht(Pilz) |
+| **Silverfish** | Die unheilbaren (logischen) Blöcke |
+| **Guardians** | Wasser + Licht (Snobs) |
+| **Mooshrooms** | Myzelium + Licht (Pilz) |
 | **Bienen** | Ja, sie bevorzugen die Luft. |
 ```java
 // Tier: Schau nach unten, wenn es Gras ist, max.
@@ -170,7 +168,7 @@ Also kannst du deine Tiere buchstäblich mit Gras und Licht führen und deine Mo
 
 ## Der A*-Algorithmus in Minecraft (die geheime Formel)
 
-Minecraft verwendet den A*-Algorithmus(A-Star) für das pathfinding. Mojang aber setzte seine Pfote:
+Minecraft verwendet den A*-Algorithmus (A-Star) für das pathfinding. Mojang aber setzte seine Pfote:
 ```
 f(n) = g(n) + 1.5 × h(n)
 ```
@@ -226,10 +224,10 @@ Einige Blöcke machen Mobs Angst. Im wörtlichen Sinne. Jeder Block hat damit ve
 | **Schweine** | Unverkäuflich |
 | **Geschlossene Türen** | Unverkäuflich |
 | **Feuer** | +16 überqueren, +8 zu lang |
-| **Tiere & Dorfbewohner** | Feuer = -1(NOP) |
+| **Tiere & Dorfbewohner** | Feuer = -1 (NOP) |
 | **Kaktus / Sweet berry** | Unverbindlich; angrenzend = +8 |
 | **Wasser** | +8 über- oder entlangfahren |
-| **Magma** | +8 lang(Hülse) |
+| **Magma** | +8 lang (Hülse) |
 
 Die Tiere sind noch extremer:
 ```java
@@ -246,9 +244,9 @@ DAMage_FIRE bei -1.0F ist buchstäblich "verbietet." Ein Tier stürzt sich liebe
 Stell dir vor, ein Dorfbewohner muss zwischen mehreren Wegen wählen.
 
 - **Camin A**: 15 Blöcke, aber 6 Blöcke entlang Wasser (+8 jeweils)
-- **Camin B**: 18 Blöcke mit 2 Wasserblöcken(+8) und 1 angrenzenden Wasserblock(+8)
+- **Camin B**: 18 Blöcke mit 2 Wasserblöcken (+8) und 1 angrenzenden Wasserblock (+8)
 - **Cemin C**: 14 Blöcke geradeaus... aber mit Feuer -> EMPFÄNGLICH für einen Dorfbewohner
-- **Chemin D**: 16 Blöcke mit 1 Block neben Magma(+8) + 1 Block angrenzend Honig(+8)
+- **Chemin D**: 16 Blöcke mit 1 Block neben Magma (+8) + 1 Block angrenzend Honig (+8)
 - **Chamin E**: 25 Blöcke aber Kakteen überall (+8 überall) -> 90.82 Gesamtkosten
 
 Mentale Berechnung:
@@ -300,7 +298,7 @@ Set<Pair<Holder<PoiType>, BlockPos>> $$12 = (Set)$$10xx.findAllClosestFirstWithT
    $$0, $$11, $$8x.blockPosition(), 48, PoiManager.Occupancy.HAS_SPACE
 )
 ```
-`Acquire POI`scannt alle POIs im Umkreis von 48 Blöcken(Interetpunkte). Er hält die nächsten 5 Punkte, überprüft, ob ein Pfad existiert, und erwirbt den ersten zugänglich.
+`Acquire POI`scannt alle POIs im Umkreis von 48 Blöcken (Interetpunkte). Er hält die nächsten 5 Punkte, überprüft, ob ein Pfad existiert, und erwirbt den ersten zugänglich.
 
 Jedes OP hat eine begrenzte Anzahl von Slots:
 

@@ -13,8 +13,6 @@ tags:
   - unsloth
   - open-source
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "4eyFIk8dovO/XZCtYwE5wzGsJx/y8rzxBXULs4SNSAPZcsRvuqy61qglNHIOnOtO8WZsP5VALTDJRd/ydQmgdg=="
 ---
 # 
 
@@ -68,7 +66,7 @@ Das Modell Luna Protocol ist ein **Fine-tune QLoRA** von [Qwen2.5-1.5B-Instruct]
 | Parameter | Wert |
 |-----------|-------|
 | Grundmodell | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
-| Methode | QLoRA(4-bit) |
+| Methode | QLoRA (4-bit) |
 | Rang LoRA | `r=16` , `lora_alpha=16` |
 | Zielmodule | `q/k/v/o_proj` , `gate/up/down_proj` |
 | Zu motivierende Parameter | 18 464 768 / 1 562 179 072 (1,18 %) |
@@ -85,7 +83,7 @@ Der Datensatz ist ein vordefinierter Fork von Discord-Dialogen, gefiltert, um nu
 | Datei | Quantifizierung | Größe | Bemerkungen |
 |------|-------------|------|-------|
 | `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 MB | Schärfe Verschwommenheit – nicht empfohlen |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | Guter Kompromiss Größe/Qualität(empfohlen) |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | Guter Kompromiss Größe/Qualität (empfohlen) |
 | `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1,65 GB | Bessere stilistische Treue |
 
 Das empfohlene Modell ist **Q4_K_M**: weniger als 1 GB, schnell und hält den Konversationsstil gut. Q2_K verschlechtert sich zu sehr für ein Modell dieser Größe. Q8_0 bietet die beste Qualität, verbraucht aber 68 % Speicher zusätzlich.
@@ -243,7 +241,7 @@ Das ursprüngliche Discord-Dialoge-Datensatz hat eine sehr spezifische Konversat
 - **Kurze Nachrichten** durchschnittlich 32,8 tokens pro Drehung
 - **Informelles Register**: Abkürzungen, winzige Abkürzungen, keine Interpunktion
 - **Schnellwechsel**: mehrere kurze statt lange Monologe
-- **Naturbedingte Verletzungen**: Tippfehler, ✓ lol ✓, ← fr having, ← ngl approximate, having tbh -
+- **Naturbedingte Verletzungen**: Tippfehler, ✓ lol ✓, ← fr having, ← ngl approximate, having tbh Ё
 
 Das Modell Luna Protocol bewahrt diesen Stil mit zwei Mechanismen:
 
@@ -320,6 +318,6 @@ Der Code ist Open Source, das Modell ist auf HuggingFace, und das Datenspiel ist
 | Ressourcen | Zusammenhang |
 |----------|------|
 | GitHub-Einreichung | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
-| Modell(HuggingFace) | [fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) |
+| Modell (HuggingFace) | [fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) |
 | Datensatz | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
 | Artikel 1 | [Luna Protocol: j'ai créé un bot Discord autonome](/articles/en/luna-protocol-discord-bot) |

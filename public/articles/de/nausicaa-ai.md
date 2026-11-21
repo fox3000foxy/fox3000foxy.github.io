@@ -10,8 +10,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "zJuJQKdedbZFVMAzIqobdanIKijE4nzr9h2pC6HbtIjNmdQG+IYaqxVvTQYc2j3SIMBVkYCZUc0HRRRlSXp3yw=="
 ---
 ## 
 
@@ -41,10 +39,10 @@ Bevor wir über das Gehirn sprechen, müssen wir den Körper verstehen:
 | Meerjungfrau | 2 | Lateral | 1 |
 | Centaurir | 2 | Reiter (in L) | 2 |
 | Archer | 3 | Lateral | 1 |
-| Phönix | 3 | Diagonale(dunkel) | 1 |
+| Phönix | 3 | Diagonale (dunkel) | 1 |
 | Metamorph | 4 | Platztausch | 1 |
-| Seher | 4 | Keiner(Mana-Generator) | 1 |
-| Titan | 6 | Begrenzte Fläche(Attackenbereich) | 3 |
+| Seher | 4 | Keiner (Mana-Generator) | 1 |
+| Titan | 6 | Begrenzte Fläche (Attackenbereich) | 3 |
 
 Jede Einheit hat ihre eigene Angriffspattern. Die Meerjungfrau tritt in die 4 Diagonalen, der Archer in der Ferne auf 3 Felder, der Titan zerstört ringsum in Beschwörung. Kurzum, ein Schachspiel mit Mythologie und Deckbuilding.
 
@@ -117,7 +115,7 @@ Du kommst drei Runden in die Nähe des Orakels und er ist schon am anderen Ende 
 
 So entscheidet die KI:
 
-1. Wenn ich mehr Oracle(tot) habe, platziere ich ein neues
+1. Wenn ich mehr Oracle (tot) habe, platziere ich ein neues
 2. Berechnung des Koeffizienten für jedes Drehmoment → feindliche Einheit
 3. Wählst du das beste Paar
 4. Wenn die Einheit das Ziel von ihrer Position angreifen kann → Angriff
@@ -173,9 +171,9 @@ Ich hätte ein klassisches Minimax kodieren können, aber mit 12 Arten von Einhe
 
 Das System der Attraktivität schafft rigolos Dilemmas:
 
-- Der Seher(70) erzeugt Mana. Wenn du ihn leben lässt, hat der Gegner mehr Ressourcen, aber der Titan(95) ist noch gefährlicher.
-- Der Metamorph(90) kann seinen Platz mit jeder Einheit wechseln, er kann deinen Oracle stehlen.
-- Die Harpyie(50) hat einen explosiven Angriff, der sie auch umbringt.
+- Der Seher (70) erzeugt Mana. Wenn du ihn leben lässt, hat der Gegner mehr Ressourcen, aber der Titan (95) ist noch gefährlicher.
+- Der Metamorph (90) kann seinen Platz mit jeder Einheit wechseln, er kann deinen Oracle stehlen.
+- Die Harpyie (50) hat einen explosiven Angriff, der sie auch umbringt.
 
 Die KI bewertet die Gesamtgefahr nach Positionen, nicht nur Rohdaten.
 

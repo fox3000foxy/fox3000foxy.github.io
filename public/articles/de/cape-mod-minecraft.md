@@ -11,8 +11,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "DilNiaGpbHVsKc2roIs35GsFOcsIDQMN3136K8okcp7yfxxdOCx+QXgHS1c/sKRZh1/nbAvuw0RJYQ+OG0HVTw=="
 ---
 # 
 
@@ -171,19 +169,19 @@ Wenn Freunde des Hosts über LAN beitreten, erhalten sie das`ClientboundPlayerIn
 
 Das ist das In-Game-Gesicht. Zuerst mit dem Umhang von Jeb_, der auf dem Host angezeigt wird:
 
-![Cape Mod – Jeb_ cape affichée sur le host](/images/cape-mod/cape-01-jeb-cape.png)
+![Cape Mod – Jeb_-Cape auf dem Host angezeigt](/images/cape-mod/cape-01-jeb-cape.png)
 
 Das rote/weiße Motiv des offiziellen Mojang Studios-Umhangs ist deutlich sichtbar. Das Rendering ist identisch mit dem eines echten Jeb_ mit seinem eigenen Umhang – der Kunde laden genau die gleiche Textur aus`textures.minecraft.net` .
 
 Und in immersivem Blick, in einem echten Teil:
 
-![Cape Mod – vue en jeu avec cape visible](/images/cape-mod/cape-02-lava-cape.png)
+![Cape Mod – In-Game-Ansicht mit sichtbarer Cape](/images/cape-mod/cape-02-lava-cape.png)
 
 Der Umhang schwebt hinter dem Spieler, schwingt mit der Bewegung. Perfekt unausstehlich von einem authentischen Skin mit offiziellem Umhang.
 
 Ein anderer Winkel, in einer Welt mit Lava und Gelände:
 
-![Cape Mod – cape dans un environnement naturel](/images/cape-mod/cape-03-local-game.png)
+![Cape Mod – Cape in natürlicher Umgebung](/images/cape-mod/cape-03-local-game.png)
 
 Und eine letzte Nahaufnahme des realen Gameplay, wo man den Umhang in Aktion sieht:
 

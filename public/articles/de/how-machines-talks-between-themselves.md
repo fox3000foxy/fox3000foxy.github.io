@@ -5,8 +5,6 @@ date: 2026-07-16
 tags: ["tcp", "udp", "tls", "mtls", "websocket", "http", "grpc", "réseau", "architecture-distribuée", "protocoles"]
 authors: ["docteur-turboss"]
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "7dWYziOCboTkweg+c2k86OmoyibNxEftEZ+VqF9or5sGTYSxz71GxVl5WJG//Gs2qm8+sshq0l9vl6RhSAA7kw=="
 ---
 # 
 

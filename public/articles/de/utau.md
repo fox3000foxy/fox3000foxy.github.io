@@ -11,8 +11,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Nx+hkNvgBO37d2uI+8AiB24irLr5iHcukMMhI4BjB0TjOuv9ooe5oKxAwqQssEYHWID7VvB35nOiO2tzFy/P4w=="
 ---
 ## 
 
@@ -97,13 +95,13 @@ Fünf Werte pro Ton, bei allen Proben, und UTAU zusammengestellt jedes Wort, das
 
 ## CV, VCV, CVVC: das Rennen um Realismus
 
-Der Grundmodus **CV **(Vogelkonsonant) ist ein Silbe-Sound. Einfach, aber ein wenig roboterisch: die Gelenke zwischen Silben sind roh.
+Der Grundmodus **CV** (Vogelkonsonant) ist ein Silbe-Sound. Einfach, aber ein wenig roboterisch: die Gelenke zwischen Silben sind roh.
 
-Im Jahr 2010 erfindet die Gemeinschaft den **VCV **(Voyelle-Consonne-Voyell). Statt "ka" allein zu registrieren, registrierst du "a ka" – mit dem Schwanz des vorherigen Vokals. Der Übergang wird natürlich, weil er * in der Aufnahme ist, nicht nach dem Schlag berechnet.
+Im Jahr 2010 erfindet die Gemeinschaft den **VCV** (Voyelle-Consonne-Voyell). Statt "ka" allein zu registrieren, registrierst du "a ka" – mit dem Schwanz des vorherigen Vokals. Der Übergang wird natürlich, weil er * in der Aufnahme ist, nicht nach dem Schlag berechnet.
 
 Das Detail, das piek: **VOCALOID hatte nicht VCV vor VOCALOID3, im Jahr 2011.** Der VB6-Freeware-Code von einem Typ allein Yamaha ein Jahr vor dem Realismus der Übergänge. Eine Gemeinschaft von Fans schneller als die multinationale.
 
-Dann kamen die **CVC**,**ARPAsing **(Englisch), **VCCV**... jede Methode, die den Realismus weiter ausdrückt, alle von der Gemeinschaft erfunden und dokumentiert.
+Dann kamen die **CVC**,**ARPAsing** (Englisch), **VCCV**... jede Methode, die den Realismus weiter ausdrückt, alle von der Gemeinschaft erfunden und dokumentiert.
 
 ---
 

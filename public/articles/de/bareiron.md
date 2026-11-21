@@ -11,8 +11,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "JFSNXu80cwrZ42CqnTK0VedDsPBH8z/sVfXayko0bjvH70xxzHHCUQ/ZWcH4GCvKUrAf7NRKreQ+3jonUkfuew=="
 ---
 ## 
 
@@ -22,7 +20,7 @@ Ich habe mich gefragt, und die Antwort lautet "Ja."
 
 Es gibt ein Projekt namens [Bareiron](https://github.com/p2r3/bareiron/), unterzeichnet p2r3, und das ist wahrscheinlich eines der faszinierendsten Projekte, die ich in den letzten Jahren in der Minecraft Welt gesehen habe. Es wird von einem Binär gesprochen, der in **300 Kilabyte**, **6800 Zeilen von C**, Null externe Abhängigkeit, kein Malloc, kein Threading, und es dreht sich um eine **ESP32 bei 1 Dollar**.
 
-![ESP32-C3, le microcontrôleur qui fait tourner le serveur](/images/bareiron/esp32-board.jpg)
+![ESP32-C3, der Mikrocontroller auf dem der Server läuft](/images/bareiron/esp32-board.jpg)
 
 Wir haben unendliche Bodengenerierung, Biome, Höhlen, Kraft, Minen, Mobs, Hunger, Tresor, alles, was du von einem überlebenden Kellner erwartest.
 
@@ -32,7 +30,7 @@ Um einen Gedankenauftrag zu geben: Ein Minecraft Vanilla-Server braucht mehrere 
 
 p2r3 hat keinen Minecraft-Server in C geschrieben, er hat jeden Stein des Servers neu erfunden, damit es in diesen Zwängen bleibt.
 
-![Miniature de la vidéo de présentation de Bareiron par p2r3](/images/bareiron/title-card.jpg)
+![Thumbnail des Bareiron-Vorstellungsvideos von p2r3](/images/bareiron/title-card.jpg)
 
 ## Das Gehirn des Projekts: eine Generation von Land ohne Gedächtnis
 
@@ -69,15 +67,15 @@ Standard-Bilinear-Interpolation: 4 Ecken, Gewichte je nach Position, nur eine`ui
 
 p2r3 zeigt es Schritt für Schritt im Video: zuerst die 4 Ecken des Chunk, jeweils mit einer Höhe seeeded durch den RNG.
 
-![Les 4 coins du chunk, chacun seedé par le RNG déterministe](/images/bareiron/gen-four-corners.jpg)
+![Die 4 Ecken eines Chunks, jeweils vom deterministischen RNG geseedet](/images/bareiron/gen-four-corners.jpg)
 
 Dann erzeugt die Interpolation zwischen diesen 4 Punkten eine kontinuierliche Oberfläche.
 
-![Application de la bilinear interpolation entre les 4 coins](/images/bareiron/gen-interpolate.jpg)
+![Anwendung der bilinearen Interpolation zwischen den 4 Ecken](/images/bareiron/gen-interpolate.jpg)
 
 Und wenn man die Pattern auf allen benachbarten Chunks wiederholt, bekommt man ein Land, das sich bis ins Unendliche erstreckt.
 
-![Résultat final: terrain irrégulier continu](/images/bareiron/gen-result.jpg)
+![Endergebnis: kontinuierliches, unregelmäßiges Terrain](/images/bareiron/gen-result.jpg)
 
 ### Der deterministische RNG
 
@@ -124,11 +122,11 @@ h = (hash % 5) + ((hash >> 4) % 5);
 ```
 Jedes Biome wählt, wie viele Bit-Extraktionen es kombiniert. Je mehr es gibt, desto stabiler wird die Verteilung – als mehr Münzwerfer, die 50/50 näher kommen. Je weniger sie gibt, umso stärker sind die lokalen Variationen.
 
-![Terrain irrégulier – peu de facteurs, variations fortes](/images/bareiron/terrain-irregular.jpg)
+![Unregelmäßiges Terrain – wenige Faktoren, starke Variationen](/images/bareiron/terrain-irregular.jpg)
 
 Mit nur 2 Faktoren erzeugt der Snowy Plains ein hügeliges, fast bergiges Gelände. Spikes und Tiefen sind häufig.
 
-![Terrain régulier – facteurs multiples, surface lisse](/images/bareiron/terrain-regular.jpg)
+![Regelmäßiges Terrain – mehrere Faktoren, glatte Oberfläche](/images/bareiron/terrain-regular.jpg)
 
 Mit 4 Faktoren bleiben die Ebenen flach und vorhersehbar.
 
@@ -165,9 +163,9 @@ altitude_grotte = CAVE_BASE_DEPTH - (hauteur_surface - y);
 ```
 Er strahlt die Höhe der Oberfläche unter der Erde aus, sieht aus wie die großen Deepslate-Hohlräume.
 
-![Caves générées par mirror du terrain de surface](/images/bareiron/cave-mirror.jpg)
+![Höhlen, erzeugt durch Spiegelung des Oberflächenterrains](/images/bareiron/cave-mirror.jpg)
 
-![Schéma du mirror de terrain pour générer les grottes](/images/bareiron/cave-diagram.jpg)
+![Schema der Terrainspiegelung zur Höhlengenerierung](/images/bareiron/cave-diagram.jpg)
 
 ### Erze, Version XOR
 ```c
@@ -180,7 +178,7 @@ Ein XOR-Koordinaten garantiert einen Kandidaten pro Säule. Der Typ hängt nur v
 
 Jede Biome ist eine runde Insel in einem Gitter, seine Art von einem Pattern bestimmt, berechnet aus der Seed. Grid, vorhersehbar und kostenlos.
 
-![Carte des biomes en tile map – chaque île est un biome différent](/images/bareiron/biome-tilemap.jpg)
+![Biomkarte als Tilemap – jede Insel ist ein anderes Biom](/images/bareiron/biome-tilemap.jpg)
 
 Jede Biome hat ihre eigenen Parameter in Tabellen kodiert:
 ```c
@@ -358,7 +356,7 @@ typedef struct {
 ```
 20 000 Einträge, d.h. etwa **25 000 Änderungen** – das entspricht einem vollständig ausgegrabenen Chunk und einem halben Chunc.`block`bis`0xFF`markiert einen freien Eintrag. Die Suche ist ein linearer Scan:
 
-![Layout mémoire du tableau de blocs – 6 bytes par entrée](/images/bareiron/memory-layout.jpg)
+![Speicherlayout der Blocktabelle – 6 Bytes pro Eintrag](/images/bareiron/memory-layout.jpg)
 ```c
 // procedures.c
 
@@ -469,7 +467,7 @@ Ein Switch kompiliert als statischer Jump-Tisch, der Jump dynamische Tabelle, vt
 
 Der Fall`0x1D-0x20`ist die größte – es verwaltet Positionsupdates, Fallschäden, Chunk-Grenzüberquerungen, Mob-Spawn, Crunks-Generation, UND Hunger. Alles in einem großen Fall-through.
 
-![Le code du serveur Bareiron – 6800 lignes de C](/images/bareiron/code-shot.jpg)
+![Der Bareiron-Servercode – 6800 Zeilen C](/images/bareiron/code-shot.jpg)
 
 ## Der Tick-Server und die Mob-IA
 
@@ -530,7 +528,7 @@ Full Diamond = 80% Reduktion. Ein Zombie-Schlag auf 3 Kerne wird 0.6 Kerne. p2r3
 
 Passive Mobs: 8 Richtungen in einem Lookup-Tisch, Kursänderung alle ~40 Ticks. Das Feld`data`kodiert die aktuelle Richtung in den 2 Bit starkes Gewicht und den Zeitmesser für Richtungsänderung in den verbleibenden 6 Bit.
 
-![Mobs dans Bareiron – zombies, cochons, moutons](/images/bareiron/mobs.jpg)
+![Mobs in Bareiron – Zombies, Schweine, Schafe](/images/bareiron/mobs.jpg)
 
 ### Die Mobs-Repawn
 
@@ -586,7 +584,7 @@ if (count == 8 && first == cobblestone && all_identical && center_empty)
 ```
 Für komplexe Formen verwendet er den Index des ersten items und checkt die relative Position ab. Die Rezepte teilen sich eine gleiche Matching-Funktion – das Material bestimmt das Ergebnis.
 
-![Interface de craft et coffre dans Bareiron](/images/bareiron/crafting.jpg)
+![Crafting-Interface und Truhe in Bareiron](/images/bareiron/crafting.jpg)
 
 ## Die Tresor: der Hack in der realen
 
@@ -638,7 +636,7 @@ uint8_t *p_count = storage_ptr + (slot - 41) * 3 + 2;
 ```
 Er holt den Zeiger vom Craft-Buffer ab und greift mit einem Offset auf die Slots zu. Die Daten werden in 3 Bytes pro Slot gespeichert (2 für die ID, 1 für die Menge), die in der Blocktabelle zusammengeklebt werden.
 
-![Données de coffre stockées dans le tableau de blocs – un hack mémoire](/images/bareiron/chest-hack.jpg)
+![Truhendaten in der Blocktabelle – ein Speicher-Hack](/images/bareiron/chest-hack.jpg)
 
 ## Hunger: 5 Linien des Genies
 ```c
@@ -727,7 +725,7 @@ Die Priorität der Veränderungen, die Fallback-Show, die Null-Debatte, Null-Cac
 
 Das lustigste: Der Ofen existiert nicht als Einheit. Wenn du Cobblestone in das Feld "Koch" und Coal in "Fuel" legst, erscheint das Ergebnis sofort ohne Timer oder Chunk Ticking: es ist nur ein Inventar-Slot, der leer wird, wenn du die richtigen Items legest.
 
-![Fourneau instantané – pose les ingrédients, résultat immédiat](/images/bareiron/furnace.jpg)
+![Sofort-Ofen – Zutaten rein, Ergebnis sofort da](/images/bareiron/furnace.jpg)
 
 ## Die ESP32 Schleife: ein MC Server in 4 KB Stack
 ```c
@@ -772,11 +770,11 @@ Damit das alles dir gehört, gibt es Vanilla-Features, die nicht existieren:
 
 Ryzen 5 3600: ~0.5 ms pro chunk. ESP32-C3 bis 1$: $200 ms je chunc. Spielbar.
 
-![Benchmark de génération de chunks – Ryzen vs ESP32](/images/bareiron/performance.jpg)
+![Chunk-Generierungs-Benchmark – Ryzen vs. ESP32](/images/bareiron/performance.jpg)
 
 3+ Spieler: Rudert. Vergleichbar mit 2b2t zu Spitzenzeiten, sät der Autor.
 
-![Plusieurs joueurs connectés au même serveur Bareiron](/images/bareiron/multiplayer.jpg)
+![Mehrere Spieler auf demselben Bareiron-Server](/images/bareiron/multiplayer.jpg)
 
 ## Philosophie
 

@@ -12,8 +12,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "INEU5HXRd4gAyocdtecKFONw5jLKXrnulTtVjmzdQ6MdgGsj+huAb37Lqaxy7z1Mjh/o1vfTFiJxq/tG5mczbw=="
 ---
 # 
 
@@ -23,7 +21,7 @@ Luna arbeitet mit Kontextauslösern und unvollkommenen Antworten. du hat ein **P
 
 In diesem Artikel dekoriere ich die komplette Architektur: vom Generic Event Bus über das Auslösesystem, die menschlichen Komponenten und das Fine-Tuning-Dataset.
 
-! [Architecture Overview – composants globaux et flux de données](/images/luna-protocol/01-architecture-overview.svg)
+![Architecture Overview – globale Komponenten und Datenflüsse](/images/luna-protocol/01-architecture-overview.svg)
 
 ---
 
@@ -79,7 +77,7 @@ Der Vorteil dieses Ansatzes: Jedes Modul ist ** vom Rest getrennt**. Das LLM sen
 
 ---
 
-! [Message Processing – flux complet de traitement d'un message](/images/luna-protocol/02-message-processing.svg)
+![Message Processing – kompletter Nachrichtenverarbeitungsfluss](/images/luna-protocol/02-message-processing.svg)
 
 ## Das Auslösesystem: Wer entscheidet, wann Luna reagiert?
 
@@ -96,7 +94,7 @@ Jede eingehende Nachricht wird von`evaluateMessage()`die eine`TriggerResult`mit 
 
 Das Matching ist **mot integer** (`\b`) "ai" entspricht nicht "aber," "wahr" und "Milch."
 
-! [Trigger evaluation – décision d'entrée pour chaque message](/images/luna-protocol/03-trigger-evaluation.svg)
+![Trigger evaluation – Eingangsentscheidung pro Nachricht](/images/luna-protocol/03-trigger-evaluation.svg)
 
 ### Der Mechanismus der Flow-up
 
@@ -220,19 +218,19 @@ Drei Korrekturstile:
 
 Auf dem Papier sehen alle diese Systeme (Abstände, Klopfenfehler, Zögern, Vergessen) aus wie Gadget. In Wahrheit, aus dem Weg geräumt, ist das Ergebnis bluffend: Leute im Gespräch mit Luna ahnen nichts. Hier ist ein echter Austausch, wo jemand direkt zu Luna gefragt, ob es ein Bot ist, und wo das Gespräch dann auf einem ganz anderen Thema, mit einem natürlichen, das kalt im Rücken ist. Ich hatte nicht erwartet, dass es so glaubwürdig in realen Bedingungen ist.
 
-! [Conversation Discord avec Luna – premier échange](/images/luna-protocol/realism/realism-01.png)
+![Discord-Unterhaltung mit Luna – erster Austausch](/images/luna-protocol/realism/realism-01.png)
 
 Der Ton, die Zögerlichkeit, der Rhythmus der Antworten: nichts verrät einen Bot. Luna stöbert auf die Frage des Alters, ohne den Charakter jemals zu brechen.
 
-! [Conversation Discord avec Luna – suite de l'échange](/images/luna-protocol/realism/realism-02.png)
+![Discord-Unterhaltung mit Luna – Fortsetzung](/images/luna-protocol/realism/realism-02.png)
 
 Das Gespräch geht mit kurzen und natürlichen Antworten ("okay, okay," "yay" und "yoyy") völlig reibungslos weiter: genau die Art von Botschaften, die ein Mensch auf Discord senden würde.
 
-! [Conversation Discord avec Luna – dérive du sujet](/images/luna-protocol/realism/realism-03.png)
+![Discord-Unterhaltung mit Luna – Themenwechsel](/images/luna-protocol/realism/realism-03.png)
 
-! [Conversation Discord avec Luna – suite de la dérive](/images/luna-protocol/realism/realism-04.png)
+![Discord-Unterhaltung mit Luna – Fortsetzung des Themenwechsels](/images/luna-protocol/realism/realism-04.png)
 
-! [Conversation Discord avec Luna – fin de l'échange](/images/luna-protocol/realism/realism-05.png)
+![Discord-Unterhaltung mit Luna – Ende des Austauschs](/images/luna-protocol/realism/realism-05.png)
 
 Was erschreckend ist, ist nicht fair, dass Luna "antwortet": du ist ein ** Gespräch mit scheinbaren Meinungen, Neuanstößen, einem kohärenten Gedankenschnur von einer Botschaft zur anderen. Ohne das oben beschriebene Auslösersystem, die Konzentrationsverzögerungen und Zögern würde diese Illusion in wenigen Botschaften zusammenbrechen.
 
@@ -316,7 +314,7 @@ export async function sendTextAsVoiceMessage(
   await postVoiceMessage(channelId, uploadFilename, durationSecs, waveform, replyToMessageId);
 }
 ```
-! [TTS Pipeline – du texte synthétisé au message vocal Discord](/images/luna-protocol/10-tts-pipeline.svg)
+![TTS Pipeline – vom synthetisierten Text zur Discord-Sprachnachricht](/images/luna-protocol/10-tts-pipeline.svg)
 
 ---
 
@@ -372,11 +370,11 @@ Das Modell ist fein-getönt auf [Discord-Dialogues](https://huggingface.co/datas
 
 Das verwendete Quantified Modell ist ein GUUF (z. B.`Discord-Hermes-3-8B.Q3_K_M.gguf`).
 
-! [Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
+![Distribution du dataset Discord-Dialogues](/images/luna-protocol/dataset-distribution.svg)
 
 ---
 
-! [Complete Lifecycle – comportement complet du bot du message à la réponse, incluant les timers et cas limites](/images/luna-protocol/22-complete-lifecycle.svg)
+![Complete Lifecycle – Gesamtverhalten des Bots von Nachricht bis Antwort, inkl. Timer und Edge Cases](/images/luna-protocol/22-complete-lifecycle.svg)
 
 ## Architekturdiagramme
 
@@ -460,7 +458,7 @@ In PM,`messageReference`ist immer`false` .
 
 Mit 15% Glück wird eine Antwort in 2-3 Fragmente zerschnitten, die in den menschlichen Rhythmus geschickt werden (1.5-4 Sekunden zwischen jedem Fragment). Simuliert jemand, der in mehreren Male tippen.
 
-! [Timing Gantt – temps d'attente réels pour les délais, réactions, streaming LLM et corrections](/images/luna-protocol/21-timing-gantt.svg)
+![Timing Gantt – echte Wartezeiten für Delays, Reaktionen, LLM-Streaming und Korrekturen](/images/luna-protocol/21-timing-gantt.svg)
 
 ---
 

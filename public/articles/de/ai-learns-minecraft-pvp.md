@@ -9,8 +9,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "Afh6lbguq6ObOSB8mGRtRAydB5ZXQbLGPCN/hKu4145WyHwx0ZsKUurCyLVKA/xweudY1OTR4XauhoFURg+0Qg=="
 ---
 ## 
 
@@ -164,21 +162,21 @@ Das Video ist auf [youtube.com/watch?v=j5nxDKAjg6U](https://www.youtube.com/watc
 
 ## VPT: Behavior Cloning in großem Maßstab
 
-![OpenAI's VPT project diagram: the Inverse Dynamics Model predicts actions from pairs of frames](assets/vpt-overview.svg)
+![OpenAIs VPT-Projektdiagramm: Das Inverse-Dynamics-Modell sagt Aktionen aus Bildpaaren voraus](assets/vpt-overview.svg)
 
 Der Ansatz ✓ behavior cloning having des Videos (Phase 1) ist die gleiche Technik, die OpenAI in seinem Projekt verwendet **Video PreTraining (VPT)**, aber an den entgegengesetzten Enden des Ressourcenspektrums. VPT hat bewiesen, dass Imitation learning für Minecraft funktioniert, wenn man 70.000 Stunden Video, 720 GPUs und ein dynamisches Gegenstück model, um pseudo-etikettierte Daten zu markieren. Der Schöpfer hat hier bewiesen, daß er mit einem Laptop und 1.000 Duell fehlschlägt: aber aus dem gleichen Grund: Learning Imitation ist durch die Qualität seiner Demonstrationen begrenzt.
 
-![OpenAI's VPT agent mining a tree in Minecraft](assets/vpt-minecraft.jpg)
+![OpenAIs VPT-Agent fällt einen Baum in Minecraft](assets/vpt-minecraft.jpg)
 
-Die VPT-Pipeline löst das Problem der Daten, indem sie ein **Inverse Dynamics Model (IDM)** erzeugt, das das Bild t-1 und das Bildt+1 betrachtet, um die Aktion mit dem Bild t vorauszusagen. Weil die IDM nicht schuld ist (er sieht zukünftige Bilder), ist die Aufgabe einfacher als das Behavior cloning und erfordert viel weniger mit dem Etikett gekennzeichnete Daten. Sie bezahlten Kontraktoren etwa 2.000 $ für 2.000 Stunden mit dem Label und nutzten dann die idM, um 70.000 Stunden YouTube Minecraft Videos zu nickeln.
+Die VPT-Pipeline löst das Problem der Daten, indem sie ein **Inverse Dynamics Model (IDM)** erzeugt, das das Bild t-1 und das Bildt+1 betrachtet, um die Aktion mit dem Bild t vorauszusagen. Weil das IDM nicht kausal ist (es sieht zukünftige Bilder), ist die Aufgabe einfacher als Behavior Cloning und braucht viel weniger gelabelte Daten. Sie bezahlten Contractor etwa 2.000 $ für 2.000 Stunden gelabelte Daten und nutzten dann das IDM, um 70.000 Stunden YouTube-Minecraft-Videos zu pseudo-labeln.
 
-![Taux de crafting/collecte en fonction du volume de données de pré-entraînement (échelle log): tables de craft, outils en bois, outils en pierre](assets/vpt-stone-pickaxe-sequence.svg)
+![Crafting-/Sammelrate je nach Vortrainings-Datenvolumen (Log-Skala): Crafting-Tische, Holzwerkzeuge, Steinwerkzeuge](assets/vpt-stone-pickaxe-sequence.svg)
 
 Der Skaleneffekt ist klar: auf einer 1-Stunden-Logachse bis 100.000 Stunden Vorantriebsdaten ist der Satz, zu dem das Modell eine Craft-Tisch, Holzwerkzeuge und dann Steinwerkzeuge herstellt, in Stufen klettert. Das Modell, das nur über 2.000 Stunden von Crafttischen mit einem Limit-Kontraktoren angetrieben wird, fügt die 70.000 Stunden hinzu, die von der IDC (auf der Grafik gepunktete Linie) nicken, dass Steinwerkzeuge aus Zero-Shot ohne einen einzigen RL-Schritt entstehen.
 
 Das grundlegende Modell von 0,5B resultierende Parameter erreichte nicht prÃ¤fende Zero-Shot-FÃ¤higkeiten mit dem RL allein: Baumschneiden, Tische herstellen, Säulenspringen: und fein-gemÃ¤hlt mit RL, wurde es die erste IA, Diamantwerkzeuge herzustellen.
 
-![Récompense en fonction du nombre d'épisodes d'entraînement RL: partir d'un modèle initialisé aléatoirement vs partir du modèle VPT pré-entraîné](assets/vpt-diamond-pickaxe-sequence.svg)
+![Belohnung je nach Anzahl der RL-Trainingsepisoden: zufällig initialisiertes Modell vs. vortrainiertes VPT-Modell](assets/vpt-diamond-pickaxe-sequence.svg)
 
 Diese Grafik zeigt, warum das Vortraining alles für die RL nachgeschaltet ändert. Die RL, die aus einem zufällig initialisierten Netzwerk (orange) stammt, bleibt flach bei 0 auf fast einer Million Episoden: die Aufgabe ✓ einen Diamanten zu erhalten hat eine zu zerstreute Belohnung, damit ein naiver Agent durch zufällige Erkundung auf sie fällt. Der feine getönte RL aus dem vor-verwachsenen (grünen) VPT-Modell geht bereits mit dem Grundverhalten (mineren, herstellen, erforschen) auf und steigt regelmäßig bis zu einem Preis von etwa 25, was dem kompletten Weg zu einem Diamanten-Teich entspricht.
 
@@ -250,19 +248,19 @@ Von 40 auf 100M getriebenen Samen von Umweltschritten haben 24 von 40 mindestens
 
 ## ANNA: Die symbolische KI trifft Minecraft
 
-![ANNA's task tree decomposition for a flint-and-steel](assets/anna-task-tree.png)
+![ANNAs Aufgabenbaum-Zerlegung für ein Feuerzeug](assets/anna-task-tree.png)
 
 Vor dem PvP-Bot des Videos, vor VPT und DreamerV3, gab es **ANNA**: ein Minecraft-Bort, der mit einer völlig anderen Philosophie gebaut wurde. Anstatt von Pixeln oder Belohnungen zu lernen, verwendet ANNA eine **Symbolische Statusmaschine** mit einem **Französischen NLP-Scanner** und einem **Ordner von Aufgabenabhängigkeit**, die von Hand geschrieben wurde.
 
 Die 2022 gegründete ANNA (vor der ✓ vibe coding ✓ ein Begriff ist) verbindet sich mit einem Minecraft Server über Mineflayer und umfasst Befehle in natürlicher Sprache in Französisch. Dis * ✓ erhält ein Feuerzeug ←, und ANNA analysiert das Verb (erhalten → erhalten), sucht das Rezept des Objekts, und rekursiv zerlegt in Untertassen: Miner Eiche → Herstellung von Brettern → Herstellen von Stöcken → Produktion eines Craft Tisches → eine Holztasche herstellen → Steinsteinsteinstein → einen Steinkipper herstellen © Miner von Eisenerz → schmelzen von Eisenblöcken › das Feuerzeug herstellen.
 
-![ANNA's NLP parser architecture for French command recognition](assets/anna-nlp-diagram.png)
+![ANNAs NLP-Parser-Architektur für französische Befehlserkennung](assets/anna-nlp-diagram.png)
 
 Die Schicht NLP (`utils/id_parser.js`) trennt Befehle auf ✓ und ← zur Verwaltung paralleler Befehle, verbindet französische Verben mit Aufgabentypen und übersetzt die Namen französischer Objekte in Minecraft-IDs über ein Wörterbuch mit 5.000 Einträgen. Unerkannte Befehle wechseln zu einem GPT-basierten Konversationssystem, das ANNA als bewusster Minecraw-Gefährte präsentiert.
 
 Der** Aufgabenbaum** (`mc-tasks-tree/`) ist das Herz: ein rekursiver Algorithmus, der den Minecraft-Objektgrafiken (Craft-Rest, Bergbau-Ressourcen, Monster-Drops, Back-Rezepte) durchläuft, um einen Schritt für Schritt zu produzieren. Für einen Diamanthelm erzeugt es eine Zersetzung in 40+ Schritten, die Holz, Stein, Eisen und Diamanten abdecken.
 
-![ANNA's diamond helmet task tree: a 40+ step breakdown](assets/anna-diamond-helmet.png)
+![ANNAs Diamanthelm-Aufgabenbaum: Zerlegung in über 40 Schritte](assets/anna-diamond-helmet.png)
 
 Wo der PvP-Bot des Videos aus Erfahrung lernt, funktioniert ANNA aus Wissen. Er braucht keine 1000 Duells oder 60 Stunden Training: er braucht den Baum, den Analysator und den Server/Vertreiber. Aber er kann auch nicht über das hinaus verallgemeinern, was sein encode Baum ist. Keine Menge Zustandmaschinentechnik-Engineering würde ihn lehren, PvV zu machen.
 

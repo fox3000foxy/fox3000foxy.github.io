@@ -19,8 +19,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "/c7Sd3ryKp8lhJ+S9S3OKOQkJXEZAQSfWoEEZsD/9nXMh7W5mdAufhueKPsA8GHPAlSSYopSTowG6nuAuoQTmg=="
 ---
 # 
 
@@ -357,7 +355,7 @@ Die fünf Bots, die ich dir gerade vorgestellt habe, teilen ein grundlegendes Me
 
 du teilen also die gleiche Glasdecke: sie antworten nur auf das, was ausdrücklich geplant oder registriert wurde. ELIZA ist verloren, wenn du aus dem therapeutischen Rahmen herauskommst. PARRY spricht nur von seinen paranoiden Themen. ALICE lernt nichts von seinen Gesprächen. Jabberwacky antwortet nur durch bereits ausgesprochene Nachbildungen. Wenn du diese Grenzen tesstest, verstehst du schnell, warum diese Generation begrenzt hat.
 
-Die LLM (Language Models) überqueren diese Decke durch radikale Paradigmenwechsel: Statt Symbole zu manipulieren, konvertieren sie die Sprache in **Zahlen** und lernen **statistische Beziehungen** zwischen diesen Zahlen. Sie erzeugen jedes Token auf dem Fliegen, indem sie Wahrscheinlichkeiten berechnen, indem es Wissen in ihren Gewichten kodiert anstatt vorgeschriebene Antworten gibt. Ich finde diesen Umschwung faszinierend, weil er die Logik der vorhergehenden Bots völlig umkehrt. Lassen Sie uns schnell sehen, wie es funktioniert.
+Die LLM (Language Models) überqueren diese Decke durch radikale Paradigmenwechsel: Statt Symbole zu manipulieren, konvertieren sie die Sprache in **Zahlen** und lernen **statistische Beziehungen** zwischen diesen Zahlen. Sie erzeugen jedes Token auf dem Fliegen, indem sie Wahrscheinlichkeiten berechnen, indem es Wissen in ihren Gewichten kodiert anstatt vorgeschriebene Antworten gibt. Ich finde diesen Umschwung faszinierend, weil er die Logik der vorhergehenden Bots völlig umkehrt. Schauen wir uns kurz an, wie es funktioniert.
 
 ### 1. Tokenization
 

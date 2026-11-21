@@ -10,8 +10,6 @@ tags:
 authors:
   - 9stown
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "pdXE54cAHD5J/QgBcxpou62aeSNAi2d42eDEPGYKHC+4nxtTrIqv5TZ6TStt7X7o6B4u9R2kihn7mZsK6+V/gg=="
 ---
 # 
 
@@ -31,25 +29,25 @@ Hier ist, wie man es macht, und dann sehen wir, was wahrscheinlich unter der Hau
 
 Bevor du etwas anderes tun, öffnest du den offiziellen Minecraft Launcher, gehst du auf die Registerkarte **Minecraft: Bedrock Edition** und klicken du auf **Install**. Bedrocks muss mindestens einmal auf offiziellem Weg installiert und gestartet worden sein, bevor du BedroickLauncher berühren.
 
-![Installer Bedrock Edition depuis le launcher officiel](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
+![Bedrock Edition aus dem offiziellen Launcher installieren](/images/bedrock-cape/bedrock-cape-01-install-bedrock.png)
 
 ## Schritt 2 – BedrockLauncher herunterladen
 
 Die GitHub Release Seite des Projekts. Nimm den Reißverschluss der neuesten Version in **Assets**.
 
-![Page des releases GitHub de BedrockLauncher](/images/bedrock-cape/bedrock-cape-02-github-release.png)
+![GitHub-Releaseseite von BedrockLauncher](/images/bedrock-cape/bedrock-cape-02-github-release.png)
 
 ## Schritt 3 – Archiv auslesen
 
 Nachdem du den Reißverschluss heruntergeladen hast, hol ihn aus deinem Ordner.`Downloads`(oder überall, solange du die Akte danach findest).
 
-![Extraction de l'archive BedrockLauncher](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
+![Entpacken des BedrockLauncher-Archivs](/images/bedrock-cape/bedrock-cape-03-extract-zip.png)
 
 ## Schritt 4 – Ausführbare starten
 
 Geh in den extrahieren Ordner und starte`BedrockLauncher.exe` .
 
-![Lancement de BedrockLauncher.exe](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
+![Start von BedrockLauncher.exe](/images/bedrock-cape/bedrock-cape-04-run-exe.png)
 
 ## Schritt 5 – Installierst du .NET Desktop Runtime und aktivieren du den Entwicklermodus
 
@@ -61,19 +59,19 @@ Beim ersten Start wird Windows höchstwahrscheinlich die **.NET 8.0 Desktop Runt
 
 Starte BedrockLauncher, logge dich mit deinem Microsoft-Konto ein, geh auf die Registerkarte **Einrichtungen** und klicke dann auf **New Installation**.
 
-![Création d'une nouvelle installation dans BedrockLauncher](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
+![Neue Installation in BedrockLauncher erstellen](/images/bedrock-cape/bedrock-cape-06-new-installation.png)
 
 ## Schritt 7 – Eine alte Version auswählen
 
 Gibt einen Namen für die Installation und dann aus der Versionsliste, eine **alte** Version – typischerweise eine Version`1.16.x`oder älter. Klicken du auf **Create**.
 
-![Sélection d'une ancienne version, ici 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
+![Alte Version auswählen, hier 1.16.0.2](/images/bedrock-cape/bedrock-cape-07-pick-old-version.png)
 
 ## Schritt 8 – Installation starten
 
 Klicken du auf **Play**. Die Dateiauslesen kann je nach Maschine bis zu zehn Minuten dauern – der Launcher wird starr aussehen (siehe Not Responding ✓), das ist normal, lass ihn laufen.
 
-![Extraction en cours, le launcher semble ne plus répondre](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
+![Entpacken läuft, der Launcher scheint zu hängen](/images/bedrock-cape/bedrock-cape-08-launch-extracting.png)
 
 ## Schritt 9 – Umhang auswählen
 
@@ -81,13 +79,13 @@ Nachdem das Spiel gestartet ist, melde dich mit deinem Konto an, erstelle einen 
 
 **Trakt nicht den Rest des Skin-Stils an diesem Punkt**, lass nur das Umhang.
 
-![Sélection d'une cape dans l'éditeur de personnage](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
+![Cape im Charaktereditor auswählen](/images/bedrock-cape/bedrock-cape-09-choose-cape.png)
 
 ## Schritt 10 – Offizielle Version neu installieren
 
 Gehe zurück in den offiziellen Launcher, Registerkarte **Installation**, und klicke auf **Uninstall** auf die Hauptinstallation von Bedrock und installiere sie (oder mach **Check for Updates**). Relance Minecraft Bedrocks aus dem offiziellen Lancher dieses Mal.
 
-![Désinstallation et réinstallation depuis le launcher officiel](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
+![Deinstallieren und neu installieren aus dem offiziellen Launcher](/images/bedrock-cape/bedrock-cape-10-reinstall-official.png)
 
 Und hier ist es – dein Umhang ist da, auf der offiziellen Version, auf deinem echten Profil.
 

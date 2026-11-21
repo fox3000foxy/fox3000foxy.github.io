@@ -10,8 +10,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "8Uz6w7u/jJAnfvkQbT58G2N0f7hM6HnoH4qEq+CfDUd8zWftc6XuQkBUKQlLaPVN2OvITaZiQs9BVMydDHSjww=="
 ---
 # 
 
@@ -23,11 +21,11 @@ So funktioniert das Schritt für Schritt.
 
 Drei Frames aus dem Video für "Duelist Debate" (Phönix, Yoru und Jett) gewonnen:
 
-! [Intro d'un short, cercle d'agent avec le titre de la scène](/images/valorant-short-maker/vsm-01-intro.png)
+![Short-Intro, Agentenkreis mit Szenentitel](/images/valorant-short-maker/vsm-01-intro.png)
 
-! [Une réplique en cours, sous-titre karaoké qui s'illumine](/images/valorant-short-maker/vsm-02-dialogue.png)
+![Laufende Dialogzeile, Karaoke-Untertitel leuchtet auf](/images/valorant-short-maker/vsm-02-dialogue.png)
 
-! [Une autre réplique, la couleur du sous-titre change selon l'agent](/images/valorant-short-maker/vsm-03-dialogue.png)
+![Weitere Dialogzeile, Untertitelfarbe wechselt je nach Agent](/images/valorant-short-maker/vsm-03-dialogue.png)
 
 Das Ergebnis live auf diesem Short:[Duelist Debate – youtube.com/shorts/SX5Kme58aLU](https://www.youtube.com/shorts/SX5Kme58aLU)Auf der Kette drehen sich die Shorts um 1,2 bis 1,5k Ansichten. Nichts Großes, aber es ist eine Kette, die von Anfang an von alleine dreht, also zählt die Zahl, die wirklich zählt, Null – Null Minute, die auf sie gesetzt wird, sobald der Cron gestartet ist.
 

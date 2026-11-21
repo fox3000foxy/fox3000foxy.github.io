@@ -14,8 +14,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "dWpu4qZow+ewkoYJHb3+DdjbdxNj04x5MtHUCJd/WDEi2xqbJVP7+hB5+QS60wOhY9XP2IK+eHZRTyjJyugZHQ=="
 ---
 # 
 
@@ -23,7 +21,7 @@ In den [deux](/articles/fr/luna-protocol-discord-bot) [articles](/articles/fr/lu
 
 Diese Trennung hat unerwartete Vorteile gebracht: die Bündelung von "Kirschen" zwischen mehreren Plattformen, ein emotionales Klassifizierungssystem, das die Parameter des LLM dynamisch passt, und eine intelligente Routing von Nachrichten zwischen zwei Modellen, je nach der wahrgenommenen Bedeutung des Gesprächs.
 
-Die Evolution hat sich nicht plötzlich vollzogen: sie ist einem organischen Weg gefolgt. Ich habe zuerst die Akte getrennt`server/`des Bot-Repos, so dass **Krystal** auf einer Seite und lassen **Jade** als Discord-Adapter. Dann habe ich **Pixieglow **(Matrix-Adapter) erstellt, indem ich den`llm-core`und der Jade-Eventbus. Dann kam **Sapphire**, um eine GENERIC/SEMANTIC Klassifizierung mit DistilBERT einzuführen. Die Ergebnisse waren nicht schlüssig, so dass ich durch Hunderte von Embeddings gegangen bin, die für die Bereicherung von Beispielen mehr formbar und präziser sind; die Klassifizierung wurde FUtil/INTERESSANT. Schließlich habe ich hunderte von **Vielfalt** und **arousal** hinzugefügt, um die Temperatur und das repeat penalty des LLM zu regulieren. Schließlich hab ich den ganzen Redundant-Code zwischen Jade und Pixieglow durch die Schaffung **Emerald**, das Gehirn vereinfacht, Jade zu Pixeglov in einfache Socket-Driven-Kunden umwandeln.
+Die Evolution hat sich nicht plötzlich vollzogen: sie ist einem organischen Weg gefolgt. Ich habe zuerst die Akte getrennt`server/`des Bot-Repos, so dass **Krystal** auf einer Seite und lassen **Jade** als Discord-Adapter. Dann habe ich **Pixieglow** (Matrix-Adapter) erstellt, indem ich den`llm-core`und der Jade-Eventbus. Dann kam **Sapphire**, um eine GENERIC/SEMANTIC Klassifizierung mit DistilBERT einzuführen. Die Ergebnisse waren nicht schlüssig, so dass ich durch Hunderte von Embeddings gegangen bin, die für die Bereicherung von Beispielen mehr formbar und präziser sind; die Klassifizierung wurde FUtil/INTERESSANT. Schließlich habe ich hunderte von **Vielfalt** und **arousal** hinzugefügt, um die Temperatur und das repeat penalty des LLM zu regulieren. Schließlich hab ich den ganzen Redundant-Code zwischen Jade und Pixieglow durch die Schaffung **Emerald**, das Gehirn vereinfacht, Jade zu Pixeglov in einfache Socket-Driven-Kunden umwandeln.
 
 Gleichzeitig habe ich eine Website auf dem neuesten Stand gehalten, die den Fortschritt des Projekts nachvollziehen soll:[protocol-luna.github.io](https://protocol-luna.github.io/) .
 
@@ -38,7 +36,7 @@ Luna Protocol hatte zunächst nur einen Node.js-Prozess. Der Code war:
 - Verbindung zu Discord (über die Bibliothek Eris)
 - Die Auswertung der Auslöser (Erläuterungen, Schlüsselwörter, Follow-up...)
 - Simulation menschlicher Verhaltensweisen (Schlagfehler, Zögern, Schlaf...)
-- HTTP-Aufrufe an den lokalen LLM-Server(llama.cpp)
+- HTTP-Aufrufe an den lokalen LLM-Server (llama.cpp)
 - Verwaltung von Sitzungen und Anti-Spam
 - Die TTS-Pipeline
 
@@ -93,13 +91,13 @@ type InEvent = MessageEvent | ReadyEvent | BotMessageEvent | PresenceEvent;
 type OutCommand = RespondCommand | TypingCommand | SetPresenceCommand
                 | SpontaneousCommand | ForgotCommand;
 ```
-Die Existenz von zwei Adaptern mit derselben Schnittstelle beweist die gemeinsame Schnittstelle: **derselbe "Hirn"(Emerald) dient gleichzeitig einem Discord-Bot und einem Matrix-Bort** mit identischen Verhaltensweisen. Das Protokoll ist deklarativ: Emerald sagt dem Adapter nicht *wie* eine Nachricht senden, er sagt * was* senden (der Text mit einer Verzögerung, möglicherweise einem Burstplan, einer Reaktion usw.). Jeder Adapter implementiert die konkrete Ausführung nach seiner Plattform.
+Die Existenz von zwei Adaptern mit derselben Schnittstelle beweist die gemeinsame Schnittstelle: **derselbe "Hirn" (Emerald) dient gleichzeitig einem Discord-Bot und einem Matrix-Bort** mit identischen Verhaltensweisen. Das Protokoll ist deklarativ: Emerald sagt dem Adapter nicht *wie* eine Nachricht senden, er sagt * was* senden (der Text mit einer Verzögerung, möglicherweise einem Burstplan, einer Reaktion usw.). Jeder Adapter implementiert die konkrete Ausführung nach seiner Plattform.
 
 Das ist die Stärke dieser Architektur: Um die Unterstützung von Telegram, Signal oder anderen hinzuzufügen, schreibst du einfach einen Adapter, der das WebSocket-Protokoll implementiert.
 
 ---
 
-### Schlafen du 2: das Gehirn(Emerald)
+### Schlafen du 2: das Gehirn (Emerald)
 
 Emerald ist der zentrale Entscheidungsdienst. Er hört auf den Port 3126 in WebSocket und verwaltet:
 
@@ -121,7 +119,7 @@ Das Gehirn weiß nicht, auf welcher Plattform es läuft.`MessageEvent`mit einem`
 
 ---
 
-### Schicht 3: Der emotionale Klassifizierungs-(Sapphire)
+### Schicht 3: Der emotionale Klassifizierungs- (Sapphire)
 
 Sapphire ist der technisch interessanteste Service. Es ist ein **middleware LLM** in Python mit FastAPI geschrieben, die vier kritische Rollen spielt:
 
@@ -196,9 +194,9 @@ temperature = clamp(0.7 + arousal * 0.3, 0.4, 1.0)
 ```
 | Arousal | Temperatur | Wirkung |
 |---------|-------------|-------|
-| -1,0(calm) | 0,40 | Niedrige Kreativität, vorhersehbare Antworten |
-| 0.0(neutral) | 0,70 | Standard-Ergeblichkeit |
-| +1,0(aufregend) | 1,00 | Maximale Randomität, überraschende Antworten |
+| -1,0 (calm) | 0,40 | Niedrige Kreativität, vorhersehbare Antworten |
+| 0.0 (neutral) | 0,70 | Standard-Ergeblichkeit |
+| +1,0 (aufregend) | 1,00 | Maximale Randomität, überraschende Antworten |
 
 Wenn jemand aufgeregt oder verärgert ist (hoher Arusal), steigt die Temperatur. Das Modell erzeugt vielfältigere, kreativere und manchmal chaotischere Antworten, wie ein Mensch, der "sich ärgern" kann. Wenn das Gespräch ruhig ist, sinkt die Temperatur, die Antworten werden mehr gestellt.
 
@@ -208,9 +206,9 @@ repeat_penalty = clamp(1.15 - valence * 0.1, 1.0, 1.3)
 ```
 | Valencia | Repeat Penalty | Wirkung |
 |---------|---------------|-------|
-| -1,0(negativ) | 1.25 | Hohe Strafe, vermeiden Wiederholungen |
-| 0.0(neutral) | 1.15 | Standardwert |
-| +1.0(positiv) | 1.05 | Niedrige Strafe, erlaubt Wiederholungen |
+| -1,0 (negativ) | 1.25 | Hohe Strafe, vermeiden Wiederholungen |
+| 0.0 (neutral) | 1.15 | Standardwert |
+| +1.0 (positiv) | 1.05 | Niedrige Strafe, erlaubt Wiederholungen |
 
 Je negativ das Gespräch ist, desto mehr wird das Modell dazu gedrängt, sich nicht zu wiederholen, wie jemand, der seine Worte in einem angespannten Streit sucht. Je positiver das Gespräch, des desto länger kann sich das Modell redundante Aussagen wie ein entspanntes Gespräch leisten.
 
@@ -235,13 +233,13 @@ class EmotionState:
 ```
 Das`decay`0.85 bedeutet, dass 85% des vorherigen Zustandes bei jeder Nachricht gehalten wird, und 15% des neuen Signals ist integriert. Dies gibt ein ** emotionales Gedächtnis**, das die brutalen Variationen glättet: eine einzige negative Nachricht macht den Bot nicht "trüb," aber eine Reihe von negativen Botschaften macht allmählich seine Stimmung ablenken.
 
-In der Praxis: Wenn jemand beginnt ein Gespräch sehr aufgeregt(`arousal=+0.8`), die Temperatur bleibt während mehrerer Austausche hoch, auch wenn die folgenden Nachrichten ruhiger sind. Die Emotion dauert Zeit, um zu sinken, wie ein Mensch, der "heiß" bleibt nach einem Streit.
+In der Praxis: Wenn jemand beginnt ein Gespräch sehr aufgeregt (`arousal=+0.8`), die Temperatur bleibt während mehrerer Austausche hoch, auch wenn die folgenden Nachrichten ruhiger sind. Die Emotion dauert Zeit, um zu sinken, wie ein Mensch, der "heiß" bleibt nach einem Streit.
 
 ---
 
 ### Schlafens 4: die Krystal-Konferenz
 
-Krystal ist die unterste Schicht: ein Wrapper um`llama.cpp`die eine OpenAI-kompatible API(`/v1/chat/completions`) Es dreht sich in zwei PM2 Instanzen:
+Krystal ist die unterste Schicht: ein Wrapper um`llama.cpp`die eine OpenAI-kompatible API (`/v1/chat/completions`) Es dreht sich in zwei PM2 Instanzen:
 
 - `krystal-small`: das Modell Luna 1.5B fein-getönte, auf dem Port 3124, mit CPU-Verwandtschaft 0
 - `krystal-large`: ein Modell Hermes 3B, am Port 3125, mit CPU-Verwandtschaft 0,1
@@ -257,16 +255,16 @@ Auch der Feinton des Luna-Modells hat sich seit dem zweiten Artikel verändert: 
 Hier ist, was konkret geschieht, wenn jemand sendet "Ich bin wirklich traurig heute" auf Discord:
 
 1. **Jade** erhält die Nachricht über die Gateway Discord API. Er verwandelt sie in`MessageEvent`und schickt sie über WebSocket an Emerald.
-2. **Emerald** bewertet den Auslöser(Erläuterung?Name?Schlüsselwort?). Dies ist eine direkte Erwähnung. Es berechnet eine Konzentrationszeit, überprüft den Cooldown, die Sitzung, die thematische Müdigkeit. Er entscheidet, zu antworten und sendet die Nachricht über HTTP an Sapphire.
+2. **Emerald** bewertet den Auslöser (Erläuterung?Name?Schlüsselwort?). Dies ist eine direkte Erwähnung. Es berechnet eine Konzentrationszeit, überprüft den Cooldown, die Sitzung, die thematische Müdigkeit. Er entscheidet, zu antworten und sendet die Nachricht über HTTP an Sapphire.
 3. **Sapphire** embedd die Nachricht mit`bge-small-en-v1.5` .
    - Klassifizierung: Die Nachricht näher an den Zentroid`interessant`nur von Zentroid`futile`(diff = +0.31) -> **INTERESSANT**
-   - Emotion: negative Valenz(-0.42), mäßig arousal(0.35)
+   - Emotion: negative Valenz (-0.42), mäßig arousal (0.35)
    - Lenken: Richtung`KRYSTAL_SEMANTIC_URL`(Port 3125, großes Modell)
    - Parameter Probenahme: Temperatur = 0.80 (erhöhter Aroma), repeat_penalty = 1.19 (negative Wirkung)
    - Der emotionale Status der Sitzung wird mit diesen Werten aktualisiert
 4. **Krystal** (große Instanz) erzeugt die Antwort mit emotional angepassten Parametern und verweist sie auf Sapphire.
 5. **Sapphire** stream die Antwort auf Emerald mit Metadaten (Label, Valenz, Arousal, Debugging-Statistiken).
-6. **Emerald** entscheidet, ein Zögern("oh..."), plant einen Burst (2 Fragmente), und wählt eine Reaktion.`RespondCommand`Jade.
+6. **Emerald** entscheidet, ein Zögern ("oh..."), plant einen Burst (2 Fragmente), und wählt eine Reaktion.`RespondCommand`Jade.
 7. **Jade** führt aus: Wartet auf die anfängliche Zeit, sendet das erste Fragment mit Zögern, wartet auf 1.5s, sendet den zweiten Fragment. Es zeigt die Tastenanzeige während der ganzen Generation.
 
 All dies in weniger als 3 Sekunden für den Benutzer.
@@ -324,12 +322,12 @@ Hier sind die Dienstleistungen, die derzeit laufen:
 
 | Dienst | Technologie | Port(s) | Rolle |
 |---------|------------|---------|------|
-| Pixieglow | TypScript(Bun) | -- | Adapter Matrix |
-| Jade | TypeScript(esbuild) | -- | Discord-Adapter |
-| Emerald | TypScript(Bun) | 3126(WebSocket) | Gehirn / Entscheidungen |
-| Sapphire | Python(FastAPI) | 3123(HTTP) | Classifier + Emotion |
-| Krystal small | llama.cpp(PM2) | 3124 | Kleines Modell (1,5B, leer) |
-| Krystal breit | llama.cpp(PM2) | 3125 | Großartiges Modell (3B+, interessant) |
+| Pixieglow | TypScript (Bun) | -- | Adapter Matrix |
+| Jade | TypeScript (esbuild) | -- | Discord-Adapter |
+| Emerald | TypScript (Bun) | 3126 (WebSocket) | Gehirn / Entscheidungen |
+| Sapphire | Python (FastAPI) | 3123 (HTTP) | Classifier + Emotion |
+| Krystal small | llama.cpp (PM2) | 3124 | Kleines Modell (1,5B, leer) |
+| Krystal breit | llama.cpp (PM2) | 3125 | Großartiges Modell (3B+, interessant) |
 
 Die Abhängigkeiten zwischen den Diensten sind unidirektional: Der Adapter hängt von Emerald ab, Emerald hängt von Sapphire ab, Sapphire hängt von Krystal ab. Der Graphen bleibt azyklisch. Jeder Service kann unabhängig neu gestartet werden.
 

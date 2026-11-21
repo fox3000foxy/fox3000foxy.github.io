@@ -12,8 +12,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "OXROT9zvpg+QbNpBxmjIg1ysAlvONn7vxenPJyhU68bDxAqx9uEJjnk/S5QsZ5sJ631n4CT3JOU5euQ0LQewkQ=="
 ---
 # 
 
@@ -157,7 +155,7 @@ Das Problem ist:`node:fs`eine synchrone API (`readFileSync` , `writeFileSync`, e
 
 Die Fortune-Lösung: eine doppelte Cache-Ebene.
 
-**Niveau 1 – Map im Speicher(synchron)** Alle Wiedergaben werden von einem`Map<string, Uint8Array>`Instant, synchron, kein API-Problem.
+**Niveau 1 – Map im Speicher (synchron)** Alle Wiedergaben werden von einem`Map<string, Uint8Array>`Instant, synchron, kein API-Problem.
 
 **Niveau 2 – IndexedDB (asynchron, im Hintergrund)** Beim Start wird der gesamte Inhalt von IndexeddB in die Map geladen. Die Schriften werden sofort in die map *et* geschrieben und führen asynchrone Schriften zu Indexed DB aus, ohne dass sie blockiert werden.
 ```js

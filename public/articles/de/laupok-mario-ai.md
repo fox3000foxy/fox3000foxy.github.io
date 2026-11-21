@@ -8,8 +8,7 @@ tags:
   - reverse-engineering
 authors:
   - fox3000foxy
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "5Uf3UEZBDAWNRwz/sdqgaUW+ug0m3yZDrK4h2zsepCSM9jUp6GW7nJ3hTfQfhLQRXOSjY6wRy5fl8/rkdRmOng=="
+lang: "de"
 ---
 # 
 
@@ -19,7 +18,7 @@ Das Faszinierende an diesem Projekt ist, dass es auf biologischen Konzepten beru
 
 In diesem Artikel werden wir das alles verschlüsseln - Konzept nach Konzept, Code-Linie nach Codezeile.
 
-![Laupok introduit l'algorithme NEAT devant la caméra](/images/laupok-mario-ai/neat-title.jpg)
+![Laupok stellt den NEAT-Algorithmus vor der Kamera vor](/images/laupok-mario-ai/neat-title.jpg)
 
 ---
 
@@ -64,7 +63,7 @@ Die Position der Sprites verwendet zwei Bytes: ein "Byte" unten und ein "oben," 
 
 Für die Tiles ist es komplexer: die Grundadresse ist`0x1C800`, und man berechnet das Offset auf der Grundlage der Koordinaten`x`und`y`Weltweit mit 16 Pixeln pro Til.
 
-![Super Mario World avec overlay de débogage montrant les adresses mémoire des sprites et la position de Mario](/images/laupok-mario-ai/memory-debug.jpg)
+![Super Mario World mit Debug-Overlay: Sprite-Speicheradressen und Marios Position](/images/laupok-mario-ai/memory-debug.jpg)
 
 ---
 
@@ -84,7 +83,7 @@ Laupok zeigt dies mit einer Analogie von **Kirby**:
 
 - Jedes Kirby hat Gene: Größe, Geschwindigkeit, Lebenspunkte, Verhalten (Fliehen, Suche nach Tomaten, überallhin)
 
-![Double hélice d'ADN avec les étiquettes "le bébé", "taille", "vitesse", "couleur" – les gènes qui composent un individu](/images/laupok-mario-ai/dna-genes.jpg)
+![Doppel-DNA-Helix mit den Labels "Baby", "Größe", "Geschwindigkeit", "Farbe" – die Gene eines Individuums](/images/laupok-mario-ai/dna-genes.jpg)
 
 - Nach 15 Sekunden schauen wir, wer am längsten überlebt hat.
 - Die besten Kirbys reproduzieren sich mit anderen: Babys erben die Hälfte der Gene des besten und der Hälfte des "Spiritus"
@@ -94,11 +93,11 @@ Laupok zeigt dies mit einer Analogie von **Kirby**:
 
 Nach 180 Generationen (~15 Stunden) steigen die Kirbys von 15 Sekunden Überleben auf **15 Minuten**. Sie sind klein geworden (reduzierte Kollisionszone), schnell und fliehen ständig vor der Gefahr.
 
-![Simulation Kirby génération 0: des cercles colorés dispersés aléatoirement sur un fond noir, tous de taille similaire](/images/laupok-mario-ai/kirby-gen0.jpg)
+![Kirby-Simulation Generation 0: zufällig verstreute farbige Kreise auf schwarzem Grund, alle ähnlich groß](/images/laupok-mario-ai/kirby-gen0.jpg)
 
-![Simulation Kirby génération 1866: les Kirby sont plus petits, plus rapides, et fuient systématiquement les dangers](/images/laupok-mario-ai/kirby-gen1866.jpg)
+![Kirby-Simulation Generation 1866: Die Kirbys sind kleiner, schneller und fliehen systematisch vor Gefahren](/images/laupok-mario-ai/kirby-gen1866.jpg)
 
-![Statistiques de la simulation Kirby: fitness, nombre de points de vie, comportement de chaque individu classés par performance](/images/laupok-mario-ai/kirby-stats.jpg)
+![Statistiken der Kirby-Simulation: Fitness, Lebenspunkte, Verhalten jedes Individuums, sortiert nach Leistung](/images/laupok-mario-ai/kirby-stats.jpg)
 
 Der entscheidende Punkt: ** wir definieren die Lösung nicht**. ** findet sie allein**. Und genau das macht sie für Probleme stark, bei denen man nicht weiß, welche Kombination von Parametern optimal wäre.
 
@@ -124,7 +123,7 @@ In Laupok Analogie mit Mario und der Mausspitze:
 
 Je näher das Ende ist, desto höher der Eingangswert. Wenn das Gewicht hoch ist, ist das Signal am Ausgang stark, und Mario würde schreien. Durch die Änderung des Gewichts wird die Empfindlichkeit von Mario verändert.
 
-![Démo "Mario a peur": Mario face à un Boo avec une barre de synapse affichant le poids de la connexion entre l'entrée et la sortie](/images/laupok-mario-ai/mario-fear-demo.jpg)
+![Demo "Mario hat Angst": Mario vor einem Buu-Huu mit Synapsenbalken, der das Verbindungsgewicht zwischen Ein- und Ausgang zeigt](/images/laupok-mario-ai/mario-fear-demo.jpg)
 
 Im echten Netzwerk von KI-Neurone ist es die gleiche Logik, aber in einem massiven Maßstab:
 
@@ -171,7 +170,7 @@ Wenn ein Baby von crossover erbt wird, erbt es Innovationen seiner Eltern. Wenn 
 
 Wenn zwei Neuronennetze sich wiederholen, funktioniert das **crossover** wie folgt:
 
-![Laupok explique le concept de crossover avec le texte "CROSSOVER" en overlay](/images/laupok-mario-ai/crossover-label.jpg)
+![Laupok erklärt das Crossover-Konzept mit dem Text "CROSSOVER" als Overlay](/images/laupok-mario-ai/crossover-label.jpg)
 
 1. Das leistungsfähigste Netz wird zum "beherrschenden Eltern"
 2. Das Baby erbt alle Verbindungen des Dominanten
@@ -184,7 +183,7 @@ Das sorgt dafür, dass das Baby immer so gut ist wie der beste Elternteil.
 
 Nach dem Crossover wird das Baby mit konfigurierbaren Wahrscheinlichkeiten verändert:
 
-![Laupok explique les mutations avec le texte "(petite modif = mutation)" en overlay](/images/laupok-mario-ai/mutation-label.jpg)
+![Laupok erklärt Mutationen mit dem Text "(petite modif = mutation)" als Overlay](/images/laupok-mario-ai/mutation-label.jpg)
 
 | Mutation | Wahrscheinlichkeit | Wirkung |
 |----------|------------|-------|
@@ -705,7 +704,7 @@ Im Laufe der Hinrichtung Stunden (und Tage) entdeckte die KI selbst:
 3. **Bekämpfung von Hindernissen**: Einige Netze haben gelernt, vorübergehend zurückzufallen, um Fortschritte zu erzielen
 4. **Levels beenden**: Die beste Person konnte die erste Ebene von Super Mario World beenden
 
-![Mario contrôlé par l'IA face à un Boo dans un niveau de Super Mario World – le réseau de neurones décide des actions en temps réel](/images/laupok-mario-ai/mario-ai-playing.jpg)
+![KI-gesteuerter Mario vor einem Buu-Huu in einem Super-Mario-World-Level – das neuronale Netz entscheidet Aktionen in Echtzeit](/images/laupok-mario-ai/mario-ai-playing.jpg)
 
 ### Beschränkungen
 

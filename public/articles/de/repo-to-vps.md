@@ -9,8 +9,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "GxMWuvAs7oaCnkpZk6puylZenob/SoXreu7Xgyx13UfHgrebvU7R6AJZRGn7eT+fZhQ3zUCc6k2VwdHHQSt9uw=="
 ---
 ## 
 
@@ -439,12 +437,12 @@ Wenn du willst, dass deine Installs überleben, musst du sie in den Workspace (G
 
 ## Kostenlose VPS vs wahre VPS: das Spiel
 
-| | repo-to-vps | Wahres VPS(5€/Monat) |
+| | repo-to-vps | Wahres VPS (5€/Monat) |
 |---|---|---|
 | **Preis** | 0 € | ~5-10€/Monat |
 | **Uptime** | 6 Uhr, wieder anfangen | 24/7 |
 | **Disque** | git-Zweig, kleine Dateien | wahre SSD, mehrere Gos |
-| **RAM** | ~7 GB(generös!) | 1-2 GB häufig |
+| **RAM** | ~7 GB (generös!) | 1-2 GB häufig |
 | **CPU** | 2-4 korrekte Herzen | 1-2 vCPU |
 | **Setup** | Klon ein Template | manuelles config |
 | **Persistenz** | Nur workspace | System komplett |

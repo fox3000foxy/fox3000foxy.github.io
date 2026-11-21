@@ -11,8 +11,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "uMGnhDj3QYmnvHSkZ7gUC8gsVuWQq57u/hoaq+aYszOJcdlN6pgAYUTIDPnnYMiFsHUsCaPprEZrjC0YiOmdMA=="
 ---
 ## 
 
@@ -179,7 +177,7 @@ Hier ist, wie sie klassifiziert werden (Auszug aus dem Klassifizierungs-):
 
 Ich habe spezielle Generatoren für besondere Fälle hinzugefügt:
 
-- ** `genLanding()`**: Banking Seiten auf Russisch für СберБанк, Тинькофф, Сбербанк
+- ** `genLanding()`**: Banking Seiten auf Russisch für СберБанк, Тинькофф, Сазпррмбанк
 - ** `genC2Heartbeat()`**: realistische C2-Herzschlag-Antwort mit`agent_id` , `group` , `version`
 - ** `genScannerPath()`**: spezifische Scannerfallen (Nmap-Ports NICE, Hazelcast, CGI)
 - ** `genChineseApi()`**: Antworten von chinesischen APIs mit`msg: "成功"`(Erfolg)

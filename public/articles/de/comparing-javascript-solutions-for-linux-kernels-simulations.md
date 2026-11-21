@@ -9,8 +9,6 @@ tags:
 authors:
   - fox3000foxy
 lang: "de"
-author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "01lbbgz8sAKLL0Em3GZT0+bYQhybXSxMx3aifXIvjR0TcTTt23VcoLeGXyvhz/FwM6FAfgRbgSNdgodRJ+1ZGg=="
 ---
 # 
 
@@ -809,7 +807,7 @@ neofetch, htop, tree, df, du, free, uptime, who, w, last,
 cron (simulé), systemctl (stub), journalctl (stub),
 ...et environ 130 autres
 ```
-Die "Stubs" (Git, Python3, node) reagieren realistisch auf die häufigen Anrufe –`python3 –version`Gibt eine glaubwürdige Versionskette zurück,`git status`zeigt einen Zustand der fiktiven Ablagerung – ohne echte Arbeit zu tun. Für einen Honeypot sind sie eigentlich nützlicher als die realen Befehle, weil sie es Ihnen ermöglichen, zu beobachten, was Angreifer versuchen, ohne etwas gefährliches auszuführen.
+Die "Stubs" (Git, Python3, node) reagieren realistisch auf die häufigen Anrufe –`python3 –version`Gibt eine glaubwürdige Versionskette zurück,`git status`zeigt einen Zustand der fiktiven Ablagerung – ohne echte Arbeit zu tun. Für einen Honeypot sind sie eigentlich nützlicher als die realen Befehle, weil sie dich beobachten lassen, was Angreifer ausführen wollen, ohne etwas Gefährliches auszuführen.
 
 ### Der SSH-Server
 
