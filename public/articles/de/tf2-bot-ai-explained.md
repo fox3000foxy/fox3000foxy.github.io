@@ -1,358 +1,359 @@
 ---
 title: "TF2-Bots sind nicht zufällig: Ich habe jeden Schwierigkeitsparameter neu entdeckt"
-description: "Vision, Ziel, Backstabwinkel, Headshotlogik, jeder bekannte Fehler - Valve hat nie etwas dokumentiert. Also durchsuchten wir den Code und verwandelten ihn in eine komplette technische Datenquelle."
+description: "Sicht, Zielen, Backstab-Winkel, Headshot-Logik, jeder bekannte Fehler - Valve hat nie etwas davon dokumentiert. Also durchsuchten wir den Code und machten daraus ein vollständiges Spezifikationsblatt."
 date: 2026-07-12
 authors:
   - fox3000foxy
 tags:
   - tf2
-  - jeu-ia
-  - ingenierie-inversee
+  - game-ai
+  - reverse-engineering
 lang: "de"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "N+qjgm12vh6Q7ECkg2LFE6AvWZaseBsRilP1NfDn/6UZfoOA5lRWDXF/igNgIz2C9J12HmVOQTGgThlf3BwfiA=="
----
-## 
-
-![TF2-Soldier-Bot zielt mit Raketenwerfer](assets/tf2-bot-ai-soldier-aim.png)
-
-Jeder Spieler von TF2 hat es mindestens einmal gesagt: ✓ dieser Bot betrügt. ← Oder umgekehrt: ✓ Warum dieser Bot einfach bleibt, um Raketen zu essen. ✓ Niemand weiß wirklich, was having einfach approximate, denn normal, ✓ schwierig 36/2012 und rendelet Expert ∧ bedeuten unter der Haube: Valve hat vier Schwierigkeitsetiketten und genau Null Dokumentation versandt.
-
-Also ein Haufen von uns (ich, Awimii, Mush The Possum, mit einem riesigen Teil der grundlegenden Arbeit von Sigsegv, die wirklich durchsucht den dekompilierten Code des Spiels) hat ein komplettes Suchdokument über das Verhalten der TFBot gesammelt. Jeder Mechanik, jeder bekannte Bug, jede Wahrscheinlichkeit, die in der Festplatte kodiert wird. Dieser Artikel ist die vollständige Darstellung, nicht die konsolidierte Version. Nimmst du einen Bonk, es wird eine lange Zeit dauern.
-
+author_sig: "vHz+IbOP2u52LHfDwpFLNNHDq8wziOYFIZ+BVuZbrRkuD0Pwfi3TD/Qbz8pmW3t0pfGVqJ22kSmQq2//SEMinQ=="
 ---
 
-## Kapitel I: Grundlagen
+## Einleitung
 
-### Bot vs Bot Marionette
+![TF2-Soldier-Bot zielt mit einem Raketenwerfer](assets/tf2-bot-ai-soldier-aim.png)
 
-TF2 hat zwei völlig unterschiedliche Dinge, die Leute nennen ✓ Bots denn:
+Jeder TF2-Spieler hat es mindestens einmal gesagt: „Der Bot schummelt." Oder das Gegenteil: „Warum steht dieser Easy-Bot einfach da und frisst Raketen?" Niemand weiß wirklich, was „Easy", „Normal", „Hard" und „Expert" unter der Haube bedeuten: Valve hat vier Schwierigkeitsstufen ausgeliefert und exakt null Dokumentation.
 
-- **Bots IA (TFBot)**: echte IA, gebaut auf dem gleichen Framework PlayerBot/Infected, das Valve für die Serie *Left 4 Dead* verwendet hat. Sie wählen eine zufällige Klasse, spielen das Ziel, arbeiten ohne`sv_cheats`und auslösen die Erfolge als ein echter Spieler.
-- **Bots Marionette**: Null IA, nicht in der Lage, sich selbst zu bewegen oder zu handeln. Sie existieren nur, um manuell gesteuert zu werden – ein Spieler kann sie zwingen, zu folgen, zu zielen und zu schießen. Vor allem für Tests oder für Screenshots und kinematische Videos verwendet.`sv_cheats 1`, was auch die Erfolge für die Sitzung deaktiviert.
+Also haben sich ein paar von uns zusammengetan (ich, awimii, Mush The Possum, und den Großteil der Grundlagenarbeit hat sigsegv erledigt, der sich wirklich durch den dekompilierten Spielcode gegraben hat), um ein vollständiges Forschungsdokument über das TFBot-Verhalten zu verfassen. Jede Mechanik, jeder bekannte Fehler, jede fest verdrahtete Wahrscheinlichkeit. Dieser Artikel ist der vollständige Bericht, nicht die Kurzfassung. Hol dir einen Bonk, es wird lang.
 
-Dieser Artikel bezieht sich ausschließlich auf die erste Art.
+---
 
-### Was man den Bots IA sagen kann (mehr oder weniger)
+## Kapitel I: Die Grundlagen
 
-TFBots sind nicht direkt kontrollierbar, aber man kann sie dazu anspornen, bestimmte Dinge zu tun:
+### Bot vs. Puppet-Bot
 
-- Zielt auf jeden Bot (verbündet oder feindliche) mit eurem Crosshair und er wird euch verärgern, wenn ihr die richtigen Sprachbefehle benutzt.
-- Ein Alliierter Medic Bot behandelt du, wenn du die Sprachsteuerung ✓ Medic! ←
-- Wenn ein Medic Bot du heilt und eine UberCharge bereit hat, sagst du ✓ Go go! ← oder having Aktivieren du die Ladung! ✓ lässt es sofort die Ladung auslösen.
-- Ein Medic-Bot mit einer Ladung aktiviert ihn automatisch, sobald er oder sein Pflegeziel einen ernsthaften Schaden nimmt, ohne dass eine Sprachsteuerung erforderlich ist.
-- Bots führen spontan Duo-Nargen (High Five) oder Gruppen-Narchen (Conga) mit nahen Teamkollegen durch.
+TF2 kennt zwei völlig verschiedene Dinge, die Leute „Bots" nennen:
 
-### Bots auf nicht unterstützten Karten laufen lassen
+- **KI-Bots (TFBots)**: echte KI, gebaut auf demselben PlayerBot/Infected-Framework, das Valve für die Reihe *Left 4 Dead* verwendet hat. Sie wählen eine zufällige Klasse, spielen das Ziel, funktionieren ohne `sv_cheats` und schalten Erfolge frei wie ein echter Spieler.
+- **Puppet-Bots**: keinerlei KI, können sich nicht selbstständig bewegen oder handeln. Sie existieren nur, um manuell gesteuert zu werden: Ein Spieler kann sie zwingen zu folgen, zu zielen und zu schießen. Hauptsächlich für Tests oder für filmische Screenshots und Videos genutzt. Zum Spawnen braucht man `sv_cheats 1`, was außerdem Erfolge für die Sitzung deaktiviert.
 
-Bots sind von einem Navigationsnetz abhängig, um zu wissen, wo sie laufen dürfen, und die meisten Gemeinschaftskarten liefern keine.
+Dieser Artikel handelt ausschließlich von der ersten Art.
+
+### Was du KI-Bots (mehr oder weniger) sagen kannst
+
+TFBots sind nicht direkt steuerbar, aber du kannst sie in gewisse Handlungen schubsen:
+
+- Ziel mit dem Fadenkreuz auf einen Bot (Verbündeter oder Gegner): Er verspottet dich, wenn du die richtigen Sprachbefehle nutzt.
+- Ein verbündeter Medic-Bot heilt dich, wenn du den Sprachbefehl „Medic!" nutzt.
+- Wenn ein Medic-Bot, der dich heilt, einen bereiten Übersteiger hat, lässt ihn der Ruf „Go go go!" oder „Activate charge!" sofort zünden.
+- Ein Medic-Bot mit bereitem Übersteiger zündet ihn automatisch, sobald er selbst oder sein Heilungsziel schwer getroffen wird, ganz ohne Sprachbefehl.
+- Bots führen spontan Duo-Taunts (High Five) oder Gruppen-Taunts (Conga) mit Teamkollegen in der Nähe aus.
+
+### Bots auf nicht unterstützten Karten zum Laufen bringen
+
+Bots brauchen ein Navigationsnetz, um zu wissen, wohin sie gehen dürfen, und die meisten Community-Karten liefern keines mit. So erzwingst du es:
 
 1. `sv_cheats 1`
-2. `nav_generate`– baut das ursprüngliche Navmesh, in der Konsole angezeigte Fortschrittsschritte
-3. Warten du, bis das Spiel die Pfade erzeugt
-4. Optional, manuelle Korrektur der falschen Navigationsdaten mit`nav_edit 1`
-5. Laden oder neu startest du den Server (Diesen Schritt deaktivieren du den Erfolg)
-6. `tf_bot_add <nombre>`zum Aufzeigen von Bots
+2. `nav_generate`: erzeugt das initiale Navmesh, der Fortschritt wird in der Konsole angezeigt
+3. Warten, bis das Spiel die Pfade fertig berechnet hat
+4. Optional fehlerhafte Navigationsdaten manuell mit `nav_edit 1` korrigieren
+5. Server neu laden oder neu starten (wenn du diesen Schritt auslässt, sind Erfolge deaktiviert)
+6. `tf_bot_add <Anzahl>` zum Spawnen der Bots
 
-**Warnung:** Navmesh ändern, während Bots auf dem Server aktiv sind, kann das Spiel pflanzen. Sobald das Netzwerk existiert, musst du es nicht für zukünftige Sitzungen erneuern: Fügen du einfach Bots mit`tf_bot_add` .
+**Warnung:** Das Bearbeiten des Navmeshs, während Bots auf dem Server aktiv sind, kann das Spiel zum Absturz bringen. Sobald das Netz existiert, musst du es für künftige Sitzungen nicht neu erzeugen: Füge einfach Bots mit `tf_bot_add` hinzu.
 
-Die selbstgenerierten Netze funktionieren besser auf den Kontrollpunkt-, King of the Hill-, Payload- und CTF-Karten. Auf den Mannpower-Kartes werden die Bots standardmäßig CTFs-Verhalten, aber kaum verwenden sie die Grappins oder Powerups. Wenn eine Karte keinen Zweck hat, den die KI des Bots erkennt, aber eine Auftrittsraumeinheit besitzt, definieren du`tf_bot_offense_must_push_time 0`erlaubt Bots trotzdem zu kämpfen.
+Automatisch erzeugte Netze funktionieren am besten auf Control Point-, King of the Hill-, Payload- und CTF-Karten. Auf Mannpower-Karten verhalten sich Bots standardmäßig wie bei CTF, nutzen Enterhaken oder Powerups aber kaum. Hat eine Karte kein Ziel, das die Bot-KI erkennt, aber eine Spawn-Raum-Entität, lässt `tf_bot_offense_must_push_time 0` die Bots trotzdem kämpfen.
 
-*(Quelle für diesen Abschnitt: Die Seite Bots des offiziellen Wiki TF2.)*
+*(Quelle für diesen Abschnitt: die offizielle TF2-Wiki-Seite zu Bots.)*
 
-### Aktueller Status, Karte pro Karte
+### Aktueller Stand, Karte für Karte
 
-Mit dem Hatless-Update funktioniert jede Klasse jetzt korrekt, einschließlich des historisch gebuckelten Spy. Bots verhalten sich auf den meisten offiziellen KOTH-Karten, einigen Payload-Karte, Dustbowl/Gorge Attack-Defense-Karte und CTF/Mann Manor-Karte. Auf diesen beiden Karten kannst du sie nicht direkt mit`tf_bot_add`. Auf nicht unterstützten Karten (über den oben genannten Nav_generate-Prozess) funktionieren sie, sind aber deutlich schlechter, um einen echten Spieler nachzuahmen.
+Dank des Hatless-Updates funktioniert inzwischen jede Klasse korrekt, auch der historisch fehlerhafte Spy. Bots verhalten sich auf den meisten offiziellen KOTH-Karten richtig, auf einigen Payload-Karten, auf Dustbowl und Gorge Attack-Defense sowie auf CTF- und Mann-Manor-Karten. Bei den beiden letzten kannst du sie nicht direkt mit `tf_bot_add` spawnen. Auf nicht unterstützten Karten (über den nav_generate-Prozess oben) funktionieren sie, imitieren einen echten Spieler aber spürbar schlechter.
 
-PLR-Karten sind eine verlorene Ursache: Bots können nicht über Hightower-Schranken und stecken in den Ecken, und auf allen anderen PLR Karten machen sie nur... eine Tanzparty statt zu spielen. Vielleicht wird es eines Tages korrigiert, vielleicht wird es in unverändertem Zustand bleiben.
+PLR-Karten sind verloren: Bots können die Barrieren auf Hightower nicht überqueren und bleiben in Ecken stecken, und auf allen anderen PLR-Karten machen sie einfach ... eine Tanzparty statt zu spielen. Vielleicht wird es irgendwann behoben, vielleicht bleibt es so.
 
-### Allgemeines Verhalten von Bots
+### Allgemeines Bot-Verhalten
 
-Ein out-out-Ding, das jeder Bot unabhängig von seinem Level macht:
+Eine bunte Mischung aus Dingen, die jeder Bot unabhängig von seiner Stufe tut:
 
-- Bots verwenden nur grundlegende Loadouts (ein Plugin kann sie zwingen, nicht-Standard-Waffen, aber die vanilla Bots nie wählen ihre eigenen).
-- Leichte Bots verwenden kaum ihre sekundäre Waffe. Höhere Schwierigkeiten wechseln auf die sekundäre Waffe, sobald das Hauptladegerät leer ist, oder um die Entfernung auszugleichen.
-- Bots ignorieren fortschrittliche Bewegungstechniken: kein Jump-Rocket, keine Gebäudeumsiedlung.
-- Nach einem Kill kann ein Bot auch unter Feuer stürzen, es sei denn, er trägt die feindlichen Nachrichten, und diese Regel gilt auch für MvM.
-- Die verkleideten Spy Bots (Spieler oder IA) werden von anderen Bots richtig ignoriert: Bis sie einen Feind berühren, etwas sabotieren, schießen oder unsichtbar werden. Sobald ✓ entdeckt wurde, wird dieser spezifische Bot/Spielmann als Spy gespeichert, bis er seine Verkleidung ändert und gleichzeitig unsichtbares bleibt, stirbt oder simuliert seinen Tod mit dem Dead Ringer.
-- Pyro Bots verwenden die Blast Kompression liberal vom Normalniveau.
-- Medic Bots priorisieren die Behandlung über alle außer Snipers (und in geringerem Maße Engineers), auch wenn du ✓ Medic! denn auch spamen.
-- Die Medic Bots kreisen zu den Heavies, Soldaten, Demomen und Pyros: speziell wenn ein *Mensch* diese Klassen spielt. Diese Aufmerksamkeit folgt der Anwesenheit eines Menschen in diesen Rollen.
-- Die Bots bleiben während der Vorbereitungszeit auf den Karten Attack/Defense und Payload, außer Engineers, Snipers und Spies, die sich frei bewegen (Demoman Bots sind auch erlaubt, klebrigen Bomben vorzustellen).
-- Engineer Bots verbessern oder deaktivieren nie die Konstruktionen eines anderen Verbündeten Engineers, es sei denn, diese Konstruktion befindet sich auf dem Weg zu ihrem Ziel. Manchmal reparieren sie einfach nicht ihren eigenen Turm, selbst wenn es offensichtlich scheint.
-- Die Spy Bots, die entdeckt wurden, gehen an ihre Waffe und ziehen zurück, anstatt einen Messerstich zu erzwingen.
-- Demoman Bots, die einen Wächter lokalisiert haben (in der Regel einmal an ihm sterben), können perfekt klebrige Bomben von außen aus in Kreisbogen durch Wände und Decken werfen, wenn die Geometrie es erlaubt.
-- Sniper-Bots, die nach dem Ziel nicht auf ein Ziel zielen, verwenden eine der Voicelines ✓ Negativ. ←
-- Die Alliierten Medics behandeln einen Spy, der ohne Zögern verkleidet ist.
+- Bots nutzen nur Standard-Ausrüstung (ein Plugin kann ihnen nicht-standardmäßige Waffen aufzwingen, aber Vanilla-Bots wählen nie selbst).
+- Easy-Bots nutzen ihre Sekundärwaffe kaum. Höhere Stufen wechseln sofort zur Sekundärwaffe, sobald das Magazin der Primärwaffe leer ist, oder um die Distanz auszugleichen.
+- Bots ignorieren fortgeschrittene Bewegungstechniken: keine Raketensprünge, keine Gebäudeverlagerungen.
+- Nach einem Kill darf ein Bot taunten, sogar unter Beschuss, es sei denn, er trägt das gegnerische Intel. Diese Regel gilt auch in MvM.
+- Verkleidete Spy-Bots (Spieler oder KI) werden von anderen Bots korrekt ignoriert: bis sie einen Gegner berühren, etwas sabotieren, schießen oder in dessen Nähe unsichtbar werden. Sobald sie „entdeckt" wurden, merkt sich der Bot bzw. Spieler diesen Spy als solchen, bis er sich beim Tarnen umzieht, stirbt oder mit dem Dead Ringer den Tod vortäuscht.
+- Pyro-Bots nutzen ab Normal großzügig die Kompressionsexplosion.
+- Medic-Bots priorisieren das Heilen aller außer Snipern (und in geringerem Maße Engineers), selbst wenn du „Medic!" spammst.
+- Medic-Bots fühlen sich zu Heavies, Soldiers, Demomen und Pyros hingezogen, besonders wenn ein *Mensch* diese Klassen spielt. Diese Aufmerksamkeit folgt der Anwesenheit eines Menschen in diesen Rollen.
+- Bots halten während der Vorbereitungsphase auf Angriffs-/Verteidigungs- und Payload-Karten ihre Position, außer Engineers, Snipers und Spies, die sich frei bewegen. Demomen-Bots dürfen zusätzlich Haftbomben vorplatzieren.
+- Engineer-Bots verbessern oder deaktivieren nie die Gebäude eines anderen verbündeten Engineers, es sei denn, das Gebäude steht auf dem Weg ihres Ziels. Manchmal reparieren sie ihre eigene Sentry nicht, auch wenn es offensichtlich wäre.
+- Entdeckte Spy-Bots wechseln zu ihrem Revolver und ziehen sich zurück, statt einen Messerstich zu erzwingen.
+- Demomen-Bots, die eine Sentry ausgemacht haben (meist, weil sie einmal dagegen gestorben sind), können Haftbomben präzise von außerhalb ihrer Reichweite auf sie zielen lassen, durch Wände und Decken, wenn die Geometrie es erlaubt.
+- Sniper-Bots, die nach dem Zielen kein Ziel finden, nutzen eine der „Negatives."-Sprachzeilen.
+- Verbündete Medics heilen einen verkleideten Spy ohne zu zögern.
 
-### Bekannte Probleme / Fehler
+### Bekannte Probleme und Fehler
 
-Das Dokument listet eine Reihe von langjährigen Seltsamkeiten auf:
+Das Dokument listet eine ganze Reihe langjähriger Eigenheiten auf:
 
-- Bots können versuchen, zu gehen oder durch bestimmte statische Props zu schießen.
-- Jedes Mal, wenn ein Spieler/Bot sich enthüllt, sich verkleidet oder sich zeigt, sehen die nahen Bots den ✓ und wenden sich um, um zu reagieren: Auch wenn das Ereignis außerhalb ihres realen Sichtfeldes geschah. Es ist nicht auf Ton basiert; es ist eine Umgehung des Visionstests.
-- Selten können Bots mit einem Engineer-Teer zusammenhalten.
-- Die Sprachbefehle der Bots (z.B. ✓ Spy! ←, having Vorwärts! ✓) werden nicht in der Katze wie die der Spieler im Text angezeigt.
-- Ein Medic-Bot, der sich aktiv um jemanden kümmert, wird sich weder von eingehenden Schüssen abwenden noch auch keine Notfall-Kits, auch keine kritischen PVs, nehmen.
-- Bots können sich während einer Duo-Narge weiter bewegen, was den erwarteten Effekt des Festival Critical Strike bricht.
-- Die kürzlich verletzten Medic Bots weigern sich oft, Syringe Gun aus der Ferne zu verwenden, indem sie den Körper vorziehen (oder in sehr seltenen Fällen versuchen, du mit dem Radius des Medi Gun selbst zu berühren).
-- Medic Bots kompensieren die Schwerkraft für die Schießen des Syringe Gun nicht: wahrscheinlich, weil die Waffe nicht richtig als nicht-Hitscan im IA-Code markiert ist.
-- Spy Bots können einen unsichtbaren Spy (Spieler oder IA) sehen und verfolgen, wenn dieser Spy bereits einmal entdeckt wurde, unabhängig davon, wie gut der Bot ist, der ihm folgt.
-- Selbst wenn ein Spieler-Spy sich in die Klasse seiner eigenen Mannschaft verkleidet, stoßt auf einen Feind, der ihn trotzdem entlarvt (die Bots tun das nie selbst, da die Bots nie in ihr eigenes Team verkleiden).
-- Bots halten sich an die automatische Balance der Teams: Wenn du versuchst, Bots auf einer Seite zu verstauen, musst du zuerst verwenden`mp_teams_unbalance_limit 0` .
-- Engineer Bots können ihre eigenen Gebäude völlig ignorieren, bis sie zerstört sind.
-- Die Heavy Bots versuchen manchmal, Minigun zu schießen, während sie die Munition, vor allem unter dem Schweren Level, verlieren.
-- Die Medic-Bots des Verlierers Selbstmord während der Humiliationsphase, wenn kein Feind nahe ist - etwas, das ein menschlicher Spieler nicht einmal beim Versuch wiedergeben kann.
-- Stellst du deine Teamvorschau auf BLU im Ladebildschirm ein, so dass RED-Bots du visuell in BLU zurückgeben.
-- Bots mit einer Waffe von Körper zu Körper, die manchmal nicht einmal nach der Munitionsaufnahme die Waffe wechseln.
-- Nach Jungle Inferno, die Bots mit expliziten Parametern (z.B.`tf_bot_add 5 pyro bleu normal`) können sofort in ihrem eigenen Erscheinungsraum sterben. Korrekt:`tf_bot_reevaluate_class_in_spawnroom 0`(erforderlich`sv_cheats 1`).
+- Bots versuchen manchmal, durch bestimmte statische Props zu laufen oder zu schießen.
+- Jedes Mal, wenn ein Spieler oder Bot die Tarnung ablegt, sich verkleidet oder sich zeigt, „sehen" die Bots in der Nähe das und drehen sich um, um zu reagieren, selbst wenn das Ereignis außerhalb ihres eigentlichen Sichtfelds stattfand. Es ist nicht geräuschbasiert, sondern eine Umgehung des Sichttests.
+- Selten können Bots mit einem Engineer-Teleporter physisch aneinander festhängen.
+- Sprachbefehle der Bots (z. B. „Spy!", „Go!") erscheinen nicht als Text im Chat, wie es bei Spielern der Fall ist.
+- Ein Medic-Bot, der gerade jemanden heilt, weicht eingehendem Feuer nicht aus und greift auch nicht nach Medipacks, selbst bei kritischen Lebenspunkten.
+- Bots können sich während eines Duo-Taunts weiterbewegen, wodurch der beabsichtigte Festive-Kritischer-Treffer-Effekt entfällt.
+- Kürzlich verletzte Medic-Bots nutzen die Injektionspistole auf Distanz oft nicht und bevorzugen den Nahkampf (oder versuchen in sehr seltenen Fällen, dich mit dem Strahl der Medi-Gun anzustupsen).
+- Medic-Bots kompensieren bei Schüssen der Injektionspistole die Schwerkraft nicht: vermutlich, weil die Waffe im KI-Code nicht korrekt als nicht-hitscan markiert ist.
+- Spy-Bots können einen unsichtbaren Spy (Spieler oder KI) sehen und verfolgen, wenn dieser schon einmal entdeckt wurde, unabhängig vom Können des verfolgenden Bots.
+- Selbst wenn ein menschlicher Spy sich als Klasse aus seinem eigenen Team verkleidet, deckt ihn das Anrempeln eines Gegners trotzdem auf (Bots tun das sich selbst nie an, da sie sich nie als ihr eigenes Team verkleiden).
+- Bots respektieren das Team-Autobalancing: Wenn du Bots auf eine Seite stopfen willst, setze vorher `mp_teams_unbalance_limit 0`.
+- Engineer-Bots können ihre eigenen Gebäude komplett ignorieren, bis sie zerstört werden.
+- Heavy-Bots versuchen manchmal, das Minigun abzufeuern, obwohl sie keine Munition mehr haben, besonders unterhalb von Hard.
+- Medic-Bots des unterlegenen Teams begehen während der Demütigung gelegentlich Selbstmord, wenn kein Gegner in der Nähe ist. Ein menschlicher Spieler kann das selbst bei Absicht nicht reproduzieren.
+- Wenn du im Ladebildschirm dein Teampreview auf BLU stellst, werden RED-Bots für dich optisch als BLU dargestellt.
+- Bots mit ausgerüsteter Nahkampfwaffe wechseln manchmal nicht die Waffe, selbst nachdem sie Munition aufgenommen haben.
+- Nach Jungle Inferno können Bots, die mit expliziten Parametern gespawnt werden (z. B. `tf_bot_add 5 pyro blue normal`), sofort in ihrem eigenen Spawnraum sterben. Abhilfe: `tf_bot_reevaluate_class_in_spawnroom 0` (benötigt `sv_cheats 1`).
 
-### Bezeichnung der IA
+### KI-Namen
 
-Die Namen der Bots stammen aus einem großen Reservoir an Referenzen auf TF2, anderen Valve-Spielen und Programmierkultur, was zum großen Teil darauf zurückzuführen ist, dass die Community immer wieder nach spezifischen Inhalten in den Steam-Foren gefragt hat. Eine Probe aus der Liste: *AimBot, Aperture Science Prototype XR7, Black Mesa, Companion Cube, C++, Divide by Zero, GLaDOS, H@XX0RZ, Saxton Hale, The G-Man, trigger_hurt, 0xDEADBEEF* und Dutzende von anderen in der gleichen Art.
+Die Namen der Bots stammen aus einem großen Pool an TF2-Referenzen, anderen Valve-Spielen und Programmierkultur, vor allem weil die Community in den Steam-Foren immer wieder bestimmte Namen verlangt hat. Eine Auswahl aus der Liste: *AimBot, Aperture Science Prototype XR7, Black Mesa, Companion Cube, C++, Divide by Zero, GLaDOS, H@XX0RZ, Saxton Hale, The G-Man, trigger_hurt, 0xDEADBEEF* und Dutzende weitere in demselben Stil.
 
-Es gibt auch eine Reihe von Namen in einem Quelltext, der nie in der Produktion versandt wurde, aus unklaren Gründen: hauptsächlich Hinweise auf *Last Dragon* und *The Fifth Element* wie *John Spartan, Leeloo Dallas Multipass, Sho'nuff, Bruce Leroy, Big Gulp Huh?* und "I'm your huckleberry*.
+Dazu kommt eine Gruppe von Namen aus einem durchgesickerten Quellcode-Build, der aus unklaren Gründen nie in die Produktion ging: größtenteils Anspielungen auf *Last Dragon* und *Das fünfte Element*, etwa *John Spartan, Leeloo Dallas Multipass, Sho'nuff, Bruce Leroy, Big Gulp Huh?* und *I'm your huckleberry*.
 
-du kannst all dies selbst ersetzen:`tf_bot_add heavyweapons blue "Blu Hoovy"`zeigt einen Heavy BLU namens ✓ Blu Hovy. ←
+Du kannst all das selbst überschreiben: `tf_bot_add heavyweapons blue "Blu Hoovy"` spawnt einen BLU-Heavy namens „Blu Hoovy".
 
 ---
 
-## Kapitel II: Die Originalbots / TFBots – Tauchen in die Kompetenzniveaus
+## Kapitel II: Die ursprünglichen Bots / TFBots, Tiefer Einstieg in die Fähigkeitsstufen
 
-Der ursprüngliche Rahmen von Sigsegv hält immer noch: Es ist offensichtlich, dass Expertenbots die einfachen Bots übertreffen, aber Valve hat nie erklärt, wie viel* oder warum*. Der einzige Weg, um zu wissen, ist, den Code zu lesen. Hier ist jede Mechanik, die mit der Fähigkeit entwickelt.
+Sigsegvs ursprüngliches Framework hat weiterhin Bestand: Es ist offensichtlich, dass Expert-Bots Easy-Bots überlegen sind, aber Valve hat nie erklärt, *wie stark* oder *warum*. Also gibt es nur einen Weg, es herauszufinden: den Code lesen. Hier ist jede Mechanik, die mit der Fähigkeitsstufe skaliert.
 
-### Schwierigkeitseinstellung
+### Schwierigkeit einstellen
 
-Außerhalb des MvM wird die Schwierigkeit von einem Cvar gesteuert:
+Außerhalb von MvM wird die Schwierigkeit über eine Cvar gesteuert:
 
-| `tf_bot_difficulty` | Schwierigkeitsgrad |
+| `tf_bot_difficulty` | Schwierigkeitsstufe |
 | --- | --- |
-| 0 | Einfach |
+| 0 | Easy |
 | 1 | Normal (Standard) |
-| 2 | Schwer |
-| 3 | Sachverständige |
+| 2 | Hard |
+| 3 | Expert |
 
-`tf_bot_add`Auch ein Argument der Schwierigkeit direkt akzeptiert (`easy` / `normal` / `hard` / `expert`).
+`tf_bot_add` akzeptiert außerdem direkt ein Schwierigkeits-Argument (`easy`/`normal`/`hard`/`expert`).
 
-### Popfiles MvM
+### MvM-Popfiles
 
-In Mann vs. Machine, jeder Block von spawn`TFBot`im Popfile hat einen Schlüssel`Skill`Optional. Das Fehlen eines Schlüssels entspricht der einfachen Ebene. In den Valve Missionen: Die Géants sind fast immer Experte, Engineers und Spies sind nahezu immer Expert, und die Sniper sind in der Regel schwierig (gelegentlich Experte).`EventChangeAttributes`(in Two Cities Update hinzugefügt) um die in Wellen befindlichen Bots dynamisch auf Kartenereignisse zu ändern, ist die Fähigkeit des Bots eine der Eigenschaften, die du beim Fliegen ändern können.
+In Mann vs. Machine hat jeder `TFBot`-Spawnblock im Popfile einen optionalen `Skill`-Schlüssel. Fehlt er, gilt Easy. In den Valve-Missionen sind Giants fast immer Expert, Engineers und Spies fast immer Expert, und Snipers meist Hard (gelegentlich Expert). Wenn du `EventChangeAttributes` nutzt (mit dem Two-Cities-Update eingeführt), um Bots während einer Welle durch Kartenereignisse dynamisch zu verändern, ist die Bot-Stufe eine der Eigenschaften, die du im Flug ändern kannst.
 
-### Endless-Modus MvM
+### Endloser MvM-Modus
 
-Der Endless-Modus wurde nie offiziell versandt, aber innen geben Bots ihr Geld für Verbesserungen wie Spieler aus, einschließlich einer exklusiven Verbesserung an Bots, die ihre IA-Kompetenz im Spiel erhöht.
+Der Endlos-Modus wurde nie offiziell veröffentlicht. Darin geben Bots ihr Geld wie Spieler für Upgrades aus, darunter ein botexklusives Upgrade, das ihre Fähigkeitsstufe in der KI erhöht.
 
-### Unternehmen`bot_generator`
+### Die `bot_generator`-Entität
 
-Eine unklare, weitgehend undokumentierte Einheit, die angeblich im Trainingsmodus und möglicherweise in der frühen Entwicklung des MvM verwendet wurde, stellt einen Eintrag vor.`SetDifficulty`Um die Kompetenz zu kontrollieren. Darüber hinaus wird die Spur abgekühlt: Valve hat sie nie dokumentiert und niemand hat ihr Verhalten vollständig kartiert.
+Eine obskure, weitgehend undokumentierte Entität, vermutlich im Trainingsmodus und möglicherweise in der frühen MvM-Entwicklung genutzt. Sie bietet einen `SetDifficulty`-Input, um die Fähigkeitsstufe zu steuern. Darüber hinaus verliert sich die Spur: Valve hat sie nie dokumentiert, und niemand hat ihr Verhalten vollständig kartiert.
 
-### Farbe des Augenlichts
+### Augenleuchtfarbe
 
-MvM Roboter haben ein Teilchen des Augenlichts, das mit der Fähigkeitsebene die Farbe ändert, ein visueller Indikator, den niemand außerhalb der Gemeinschaft jemals erklärt hat:
+MvM-Roboter haben einen Augen-Leuchteffekt, dessen Farbe sich mit der Fähigkeitsstufe ändert, ein visueller Hinweis, den außerhalb der Community nie jemand erklärt hat:
 
-| Zuständigkeit | Augenfarbe | RGB |
+| Stufe | Augenfarbe | RGB |
 | --- | --- | --- |
-| Einfach/normal | Blau | `#24b4ff` |
-| Schwierig/Experten | Gelb | `#fff000` |
+| Easy/Normal | Blau | `#24b4ff` |
+| Hard/Expert | Gelb | `#fff000` |
 
-![TF2-Heavy-Bot in Warteposition](assets/tf2-bot-ai-heavy-idle.png)
+![TF2-Heavy-Bot in Ruhestellung](assets/tf2-bot-ai-heavy-idle.png)
 
-### Vision: Zeit der Erkennung
+### Sicht: Erkennungszeit
 
-Ein Bot reagiert nicht sofort, wenn etwas in sein Sichtfeld eindringt: Es gibt eine harte Zeit, bevor der Rest der KI sogar die Bedrohung erkennen kann:
+Ein Bot reagiert nicht sofort, wenn etwas in sein Sichtfeld kommt: Es gibt eine fest verdrahtete Verzögerung, bevor der Rest der KI die Bedrohung überhaupt anerkennen darf:
 
-| Zuständigkeit | Mindesterkennungszeit |
+| Stufe | Mindest-Erkennungszeit |
 | --- | --- |
-| Einfach | 1,00 s |
+| Easy | 1,00 s |
 | Normal | 0,50 s |
-| Schwer | 0,30 s |
-| Sachverständige | 0,20 s |
+| Hard | 0,30 s |
+| Expert | 0,20 s |
 
-Das ist der Haupteffekt ✓ die einfachen Bots sehen dumm aus ← in einer Zahl: ein einfacher Bot zielt nicht weniger gut, als er du bemerkt hat, es dauert nur fünf Mal mehr Zeit, um deine Existenz zu bemerken.
+Das ist der Großteil des Effekts „Easy-Bots wirken dumm", in einer einzigen Zahl: Ein Easy-Bot zielt nach dem Entdecken nicht schlechter, er braucht nur fünfmal so lange, um überhaupt zu bemerken, dass du existierst.
 
-### Sicht: Follow-up-Rate
+### Zielen: Verfolgungsrate
 
-Die Bots verfolgen du nicht kontinuierlich. du proben deine Position und Geschwindigkeit in einem festen Intervall aus und planen eine gerade Linie von dort aus:
+Bots verfolgen dich nicht kontinuierlich. Sie tasten deine Position und Geschwindigkeit in einem festen Intervall ab und berechnen daraus eine gerade Linie:
 
-| Zuständigkeit | Umrechnenzeit | Entsprechender Satz |
+| Stufe | Neuberechnungsintervall | Entsprechende Rate |
 | --- | --- | --- |
-| Einfach | 1,00 s | 1x/s |
+| Easy | 1,00 s | 1x/s |
 | Normal | 0,25 s | 4x/s |
-| Schwer | 0,10 s | 10x/s |
-| Sachverständige | 0,05 s | 20x/s |
+| Hard | 0,10 s | 10x/s |
+| Expert | 0,05 s | 20x/s |
 
-**Ausnahme:** Spy Bots werden hart mit der normalen Trackingrate verschlüsselt, unabhängig von ihrem tatsächlichen Kompetenzniveau: ein Spy Expert zielt immer wie ein normaler Bot. Es gibt auch ein öffentliches Demo-Video, das die Tracking-Raten nebeneinander vergleicht, wenn du die Abweichung 1x vs. 20x in Bewegung sehen möchten.
+**Ausnahme:** Spy-Bots sind fest auf die Normal-Verfolgungsrate eingestellt, unabhängig von ihrer tatsächlichen Stufe: Ein Expert-Spy zielt immer noch wie ein Normal-Bot. Es gibt außerdem ein öffentliches Demo-Video, das die Verfolgungsraten nebeneinander vergleicht, falls du die Lücke 1x vs. 20x in Bewegung sehen willst.
 
-### Sicht: Spezialkompetenz für Waffen
+### Zielen: waffenspezifische Fähigkeit
 
-Bots zielen nicht nur auf dein Massenzentrum: du hast eine Logik pro Waffe, manchmal wirklich besoffen:
+Bots zielen nicht einfach auf deine Körpermitte: Sie haben waffenspezifische Logik, manchmal wirklich fehlerhaft:
 
-**Grenade- und Klettbomben-Lanzen.** Alle Kompetenzstufen kompensieren den vertikalen Bogen mit einem festen Wert der cvar`tf_bot_ballistic_elevation_rate`. Weil diese Kompensation nur für die Basiswaffe-ID aktiviert wird, haben schnellere Geschossevarianten (Loch-n-Load, alles, was einen Projektilgeschwindigkeits-Änderungs-Befehl hat) keinen richtigen Bogen. Und da es durch die spezielle Waffen-ID gebunden ist, erhält die Loose Cannon (eine andere ID) keine Bogen-Ausgleiche.
+**Granatwerfer und Haftbomben-Werfer.** Alle Stufen kompensieren den vertikalen Bogen mit einem festen `tf_bot_ballistic_elevation_rate`-Cvar-Wert. Da diese Kompensation nur für die Basis-Waffen-ID greift, werden schnellere Projektil-Varianten (Loch-n-Load, alles mit Projektilgeschwindigkeits-Modifikator) nicht richtig angepasst. Und da sie an die Waffen-ID gebunden ist, bekommt die Loose Cannon (eine andere ID) gar keine Bogenkompensation.
 
-**Huntsman.** Leichte Bots kompensieren den Sturz des Pfeils nicht und suchen nie nach Headshots. Normale Levelbots kompensieren Bogen, zielen aber nur auf weniger als 150 HU. Schwere Boten/Experten zielen immer auf den Kopf.
+**Huntsman.** Easy-Bots kompensieren den Pfeilabfall nicht und zielen nie auf den Kopf. Bots der Stufe Normal kompensieren den Bogen, zielen aber nur unter 150 HU auf den Kopf. Hard- und Expert-Bots zielen immer auf den Kopf.
 
-**Raketenwerfer.** Über 150 HU hinaus zielen die nicht-Fakularbots auf deine Füße statt auf das Massenzentrum, wodurch die Wahrscheinlichkeit von Zonenschäden und Nachschub maximiert wird. Bei weniger als 150 HU gehen sie zu den Headshots über. Leichte Bots zielen immer auf das Zentrum der Masse ab, unabhängig von der Entfernung. Es ist auch durch Waffen-ID gesperrt: der Direct Hit und der Cow Mangler erben dieses Verhalten nicht. Logisch für das Direct-Hit (keine Wirkungsbereiche zu nutzen); Null Sinn für den Cow Manner: Dieser Teil der IA prädiert die Existenz der Waffe und wurde einfach nie überprüft.
+**Raketenwerfer.** Über 150 HU zielen Nicht-Easy-Bots auf deine Füße statt auf die Körpermitte, um Splash- und Rückstoß-Chancen zu maximieren. Unter 150 HU wechseln sie zu Kopftreffern. Easy-Bots zielen unabhängig von der Distanz immer auf die Körpermitte. Das ist außerdem an die Waffen-ID gebunden: Direct Hit und Cow Mangler übernehmen dieses Verhalten nicht. Für den Direct Hit ergibt das Sinn (kein Splash zum Ausnutzen), für den Cow Mangler überhaupt nicht: Dieser Teil der KI stammt aus einer Zeit vor der Existenz der Waffe und wurde schlicht nie überarbeitet.
 
-**Schneiden-Fusils.** Leichte Ziel des Körpers. Normal ist etwa 33% des Körpern zum Kopf. Schwer/Expert zielen direkt auf den Kopf. Weniger wichtig in MvM, wo die Kopfhots der Bots nicht erhalten den Schaden Bonus sowieso.
+**Scharfschützengewehre.** Easy zielt auf den Körper. Normal zielt etwa 33 % vom Körper in Richtung Kopf. Hard und Expert zielen direkt auf den Kopf. In MvM weniger wichtig, da Kopftreffer von Bots dort ohnehin keinen Schadensbonus erhalten.
 
-### Gehör: Empfindlichkeit gegenüber diskreten Schüssen
+### Gehör: Empfindlichkeit für leise Schüsse
 
-Jeder Schuss warnt die Bots in der Nähe der Position des Schützen, auch durch die Wände, bis zu 3000 HU mit 100% Chance bemerkt werden (`tf_bot_notice_gunfire_range`) Aber eine Teilmenge von Waffen sind gekennzeichnet ✓ diskret ✓: nur in 500 HU (`tf_bot_notice_quiet_gunfire_range`) und sogar dann mit einer von der Kompetenz abhängigen Chance:
+Jeder Schuss alarmiert Bots in der Nähe über die Position des Schützen, auch durch Wände, bis 3000 HU mit 100 % Bemerkungschance (`tf_bot_notice_gunfire_range`). Eine Teilmenge der Waffen ist aber als „leise" markiert: nur innerhalb von 500 HU hörbar (`tf_bot_notice_quiet_gunfire_range`), und auch dann mit einer von der Stufe abhängigen Chance:
 
-| Zuständigkeit | Glück, dass du einen diskreten Schuss bemerken. |
+| Stufe | Chance, leisen Schussklang zu bemerken |
 | --- | --- |
-| Einfach | 10% |
-| Normal | 30% |
-| Schwer | 60% |
-| Sachverständige | 90% |
+| Easy | 10 % |
+| Normal | 30 % |
+| Hard | 60 % |
+| Expert | 90 % |
 
-Diese Wahrscheinlichkeit wird durch zwei geteilt, wenn in den letzten 3 Sekunden ein "rauer" Schuss gehört wurde: laute Geräusche verdecken schwache Geräusche.
+Diese Wahrscheinlichkeit halbiert sich, wenn in den letzten 3 Sekunden ein *lauter* Schuss zu hören war: Laute Geräusche überdecken leise.
 
-Die Liste der diskreten Waffen-IDs wurde seit Dezember 2010 nicht aktualisiert. Jede spätere Ergänzung mit einer neuen Waffen- ID wird als standardmäßig laut behandelt, egal wie leicht sie sein sollte, es sei denn, sie verwendet eine ältere ID. Konkret:
+Die Liste der leisen Waffen-IDs wurde seit Dezember 2010 nicht mehr aktualisiert. Jede spätere Ergänzung mit einer neuen Waffen-ID gilt standardmäßig als laut, egal wie logisch leise sie sein sollte, außer sie verwendet eine ältere ID wieder. Konkret:
 
-| Waffen-ID | Decke |
+| Waffen-ID | Deckt ab |
 | --- | --- |
-| `TF_WEAPON_KNIFE` | Alle Messer von Spy |
-| `TF_WEAPON_FISTS` | Faustschläge spezifisch für Heavy (ihre Multi-Klasse-Faust ist eigentlich`TF_WEAPON_FIREAXE`) |
-| `TF_WEAPON_PDA` | Zusammenfassung nicht unmittelbar verwendet |
-| `TF_WEAPON_PDA_ENGINEER_BUILD` | PDA-Bau des Engineer |
-| `TF_WEAPON_PDA_ENGINEER_DESTROY` | PDA der Engineer-Vernichtung |
+| `TF_WEAPON_KNIFE` | Alle Spy-Messer |
+| `TF_WEAPON_FISTS` | Heavy-spezifische Schläge (sein klassenübergreifender Schlag ist eigentlich `TF_WEAPON_FIREAXE`) |
+| `TF_WEAPON_PDA` | Vermutlich nicht direkt verwendet |
+| `TF_WEAPON_PDA_ENGINEER_BUILD` | Engineer-Bau-PDA |
+| `TF_WEAPON_PDA_ENGINEER_DESTROY` | Engineer-Abriss-PDA |
 | `TF_WEAPON_PDA_SPY` | Spy-Verkleidungsset |
-| `TF_WEAPON_BUILDER` | Spy/Engineer/Sabote-Werkzeug-Set |
-| `TF_WEAPON_MEDIGUN` | Alle Medi Guns |
-| `TF_WEAPON_DISPENSER` | Wahrscheinlich nicht genutzt (die Dispenser sind Objekte, keine Waffen) |
-| `TF_WEAPON_INVIS` | Alle Spy Unsichtbarkeit Uhren |
-| `TF_WEAPON_FLAREGUN` | Alle Pyro-Raketenpistolen außer dem Manmelter |
-| `TF_WEAPON_LUNCHBOX` | Sandwich, Dalochos Bar, Buffalo Steak Sandvich, Bonk!, Crit-a-Cola |
-| `TF_WEAPON_JAR` | Jarate (nicht Mad Milk – separate ID, nicht diskret) |
+| `TF_WEAPON_BUILDER` | Spy-/Engineer-/Sapper-Werkzeugkästen |
+| `TF_WEAPON_MEDIGUN` | Alle Medi-Guns |
+| `TF_WEAPON_DISPENSER` | Vermutlich ungenutzt (Dispenser sind Objekte, keine Waffen) |
+| `TF_WEAPON_INVIS` | Alle Spy-Unsichtbarkeitsuhren |
+| `TF_WEAPON_FLAREGUN` | Alle Pyro-Signalpistolen *außer* dem Manmelter |
+| `TF_WEAPON_LUNCHBOX` | Sandwich, Dalokohs-Riegel, Buffalo-Steak-Sandvich, Bonk!, Crit-a-Cola |
+| `TF_WEAPON_JAR` | Jarate (nicht Mad Milk, das hat eine eigene ID und ist nicht leise) |
 | `TF_WEAPON_COMPOUND_BOW` | Huntsman |
 | `TF_WEAPON_SWORD` | Eyelander, Skullcutter, Claidheamh Mor, Persian Persuader, Half-Zatoichi |
 | `TF_WEAPON_CROSSBOW` | Crusader's Crossbow |
 
-Das klassische Beispiel der verfaulten Liste: Der Manmelter hat seine eigene ID erhalten (`TF_WEAPON_RAYGUN_REVENGE`), hinzugefügt, nachdem die Liste der diskreten Waffen eingefroren wurde, so dass es als laut behandelt wird, obwohl eine Rakete Pistole in jeder praktischen Richtung. Scorch Shot, später wieder freigegeben, verwendet die Basis-ID`TF_WEAPON_FLAREGUN`Und so wird es immer als diskret angesehen.
+Das klassische Beispiel für die verrottende Liste: Der Manmelter bekam seine eigene ID (`TF_WEAPON_RAYGUN_REVENGE`), nachdem die Liste der leisen Waffen eingefroren war. Deshalb gilt er als laut, obwohl er in jeder praktischen Hinsicht eine Signalpistole ist. Der Scorch Shot, noch später veröffentlicht, verwendet die Basis-ID `TF_WEAPON_FLAREGUN` wieder und zählt daher weiterhin als leise. Verrückt, aber so steht es im Code.
 
-### Strategie: Priorisierung von Bedrohungen
+### Strategie: Bedrohungspriorisierung
 
-Wenn mehrere Feinde gleichzeitig sichtbar sind, wogen die Bots die Distanz, wenn sie angeschossen werden und, über Leicht, wenn die Hauptgefahr behandelt wird:
+Wenn mehrere Gegner gleichzeitig sichtbar sind, gewichten Bots Entfernung, ob auf sie geschossen wird, und ab Easy aufwärts, ob die Hauptbedrohung geheilt wird:
 
-| Zuständigkeit | - Sieh dir den Pfleger an. |
+| Stufe | Stattdessen den Heiler anvisieren? |
 | --- | --- |
-| Einfach | Nein. |
-| Normal | 50% Glück |
-| Schwer | Ja. |
-| Sachverständige | Ja. |
+| Easy | Nein |
+| Normal | 50 % Chance |
+| Hard | Ja |
+| Expert | Ja |
 
-Feinde mit mehr als 500 HU werden normalerweise als nicht sofort depriorisiert. Ausnahmen: Schwergewichtige Bots/Expert behandeln immer ferne Medics und Engineers als unmittelbare Bedrohungen, und jeder feindliche Sniper, der ungefähr in deine Richtung zielt, wird immer als sofort behandelt, unabhängig von der Entfernung und der Fähigkeit.
+Gegner jenseits von 500 HU werden normalerweise als nicht unmittelbar eingestuft und abgewertet. Ausnahmen: Hard- und Expert-Bots behandeln entfernte Medics und Engineers immer als unmittelbare Bedrohung, und jeder gegnerische Sniper, der ungefähr in ihre Richtung zielt, gilt unabhängig von Distanz und Stufe stets als unmittelbar.
 
-| Zuständigkeit | Medics/Entferner Engineers/Snipers auf = sofortige Bedrohung? |
+| Stufe | Entfernte Medics/Engineers/zielender Sniper = unmittelbare Bedrohung? |
 | --- | --- |
-| Einfach/normal | Nein. |
-| Schwierig/Experten | Ja. |
+| Easy/Normal | Nein |
+| Hard/Expert | Ja |
 
-Diese Überprüfung des Snipers hat eine erstaunliche Geschichte, die ich immer gerne erzählen möchte. Sigsegvs Originalschrift deutete darauf hin, dass das Spiel erforderte, dass der Skalar zwischen dem Zielvektor des Snipers und der relativen Position des Bots * genau Null* ist: ein so präziser Vergleich, dass er fast nie in der floatenden Berechnung ausgelöst werden würde, wodurch die gesamte Funktionalität des Totencodes tatsächlich gegeben ist. Eine später veröffentlichte Korrektur (Kredit für eine sauberere Hex-Rays Dekompilation) zeigte, dass die tatsächliche Überprüfung`produit scalaire > 0`: Jeder Sniper, der direkt zu dir senkrecht zu dir steht, gilt als unmittelbare Bedrohung; alles, was von senkrecht zu drehen den Rücken geht, ist es nicht. Die ursprüngliche Fehlauszählung kam von einer schlechten Dekompilierung eines ESS-Vergleichs von Schwimmern. Release-Engineering auf einem AAA Binär ist eine ungefähre Übung.
+Zu dieser Sniper-Prüfung habe ich eine Geschichte, die ich immer noch gern erzähle. Sigsegvs ursprüngliche Analyse ging davon aus, dass das Spiel verlangt, dass das Skalarprodukt zwischen dem Zielvektor des Snipers und der relativen Position des Bots *exakt null* ist: ein so präziser Vergleich, dass er bei Fließkommazahlen fast nie auslöst und das ganze Feature faktisch toter Code wäre. Ein später veröffentlichter Fix (Dank an eine sauberere Hex-Rays-Dekompilierung) zeigte, dass die eigentliche Prüfung `Skalarprodukt > 0` lautet: Jeder Sniper, der von direkt auf dich bis senkrecht zielt, zählt als unmittelbare Bedrohung; alles von senkrecht bis abgewandt nicht. Der ursprüngliche Lesefehler stammte aus einer schlechten Dekompilierung eines SSE-Fließkomma-Vergleichs. Das Reverse-Engineering eines AAA-Binärprogramms bleibt eine annähernde Übung.
 
-### Bewegung: Ausweichmanöver
+### Bewegung: Ausweichen
 
-Die einfachen Bots fliegen nie aus, Punkt. Normale und höhere Bots sind nach links/rechts ausweichend (33% links, 33% rechts, 33% nichts tun, gegen die entdeckten Löcher gewichtet) wenn sie eine Kampfwaffe halten, einen Feind in den letzten 3 Sekunden gesehen haben und dieser Feind eine Linie von Sicht auf sie hat.
+Easy-Bots weichen nie aus, Punkt. Bots ab Normal weichen nach links oder rechts aus (33 % links, 33 % rechts, 33 % nichts, gewichtet gegen erkannte Löcher), wenn sie eine Kampfwaffe halten, in den letzten 3 Sekunden einen Gegner gesehen haben und dieser Gegner Sichtlinie auf sie hat.
 
-Sie werden nicht *ausweichen, wenn einer dieser Fälle gilt:`DisableDodge`definiert, aktuelle Verhalten sagt, beeilen, derzeit unverletzlich (jeder Uber), in voller Nargel/Provokation, spielt Engineer, unsichtbar oder verkleidet als Spy, als Sniper oder als Drehung wie Heavy, oder im Banding Huntsman.
+Sie weichen *nicht* aus, wenn eines davon zutrifft: Das Attribut `DisableDodge` ist gesetzt, das aktuelle Verhalten verlangt Eile, sie sind gerade unverwundbar (durch einen Übersteiger), mitten in einem Taunt oder einer Provokation, spielen Engineer, sind getarnt oder als Spy verkleidet, sind als Sniper gescopt oder als Heavy aufgedreht oder greifen den Huntsman an.
 
-### Bewegung: vermeiden du die Gegner zu schubsen
+### Bewegung: Vermeiden, Gegner anzurempeln
 
-Über Normal, die Bots versuchen speziell, nicht in Feinde zu kommen, indem sie bewegen:
+Ab Normal versuchen Bots bewusst, beim Laufen nicht in Gegner zu laufen:
 
-| Zuständigkeit | Vermeide es, Feinde zu schlagen? |
+| Stufe | Vermeidet das Anrempeln von Gegnern? |
 | --- | --- |
-| Einfach | Nein. |
-| Normal | Nein. |
-| Schwer | Ja. |
-| Sachverständige | Ja. |
+| Easy | Nein |
+| Normal | Nein |
+| Hard | Ja |
+| Expert | Ja |
 
-In der Praxis ist dies nur für Spy Bots wichtig: Vermeiden du eine lästige Kollision mit einem feindlichen Spieler ist genau die Art von Sache, die eine Verkleidung gefährdet.
+In der Praxis ist das nur für Spy-Bots relevant: Eine unangenehme Kollision mit einem gegnerischen Spieler ist genau das, was eine Verkleidung auffliegen lässt.
 
-### Pyro: Airblast-Monitoring
+### Pyro: Meisterschaft im Rückstoß
 
-Airblast dient zwei Dingen: Denkst du über Geschosse (PvP und MvM) und drücken du die Feinde nahe an den Rand (nur PvP). Ob der Bot drückt oder nicht auf Entspannung gegenüber einer gültigen Gelegenheit ist ein Stapel-oder-Face-basierte Fähigkeit:
+Der Rückstoß (Airblast) erfüllt zwei Zwecke: Projektile reflektieren (PvP und MvM) und Gegner in der Nähe von Kanten wegschubsen (nur PvP). Ob der Bot bei einer gültigen Gelegenheit den Abzug drückt, ist ein stufenabhängiger Münzwurf:
 
-| Zuständigkeit | Chance, Airblast zu auslösen |
+| Stufe | Chance, den Rückstoß auszulösen |
 | --- | --- |
-| Einfach | 0% |
-| Normal | 50% |
-| Schwer | 90% |
-| Sachverständige | 100% |
+| Easy | 0 % |
+| Normal | 50 % |
+| Hard | 90 % |
+| Expert | 100 % |
 
-Pyro-Bots Einfach können nicht buchstäblich Airblast machen: Die Ziehung ist hart kodiert, um nie zu gelingen, nicht nur selten. ✓
+Easy-Pyro-Bots können buchstäblich nicht rückstoßen: Der Wurf ist fest verdrahtet, um nie zu gelingen, nicht nur „selten".
 
 ### Spy: Wirksamkeit der Verkleidung
 
-Zwei verschiedene Achsen entwickeln sich mit der Kompetenz. Wahl der *Auswahl*:
+Zwei getrennte Achsen skalieren mit der Stufe. Die Wahl der Verkleidungsklasse:
 
-| Zuständigkeit | Verkleidung |
+| Stufe | Verkleidungsmethode |
 | --- | --- |
-| Einfach/normal | Zufallsklasse, die nicht weiß, was das feindliche Team wirklich spielt |
-| Schwierig/Experten | Wählt einen echten feindlichen Spieler und kopiert seine genaue Klasse |
+| Easy/Normal | Zufällige Klasse, ohne Rücksicht darauf, was das gegnerische Team tatsächlich spielt |
+| Hard/Expert | Wählt einen echten gegnerischen Spieler und kopiert dessen exakte Klasse |
 
-*Verkleidungsverhalten*:
+*Verhalten* in der Verkleidung:
 
-| Zuständigkeit | Verhalten in Verkleidung/Unsichtbarkeit |
+| Stufe | Verhalten verkleidet/unsichtbar |
 | --- | --- |
-| Einfach/normal | Festigt feindliche Spieler, wenn er sie sieht (auffällig) |
-| Schwierig/Experten | Vermeidet absichtlichen Kontakt mit dem Auge (überzeugender) |
+| Easy/Normal | Starrt gegnerische Spieler an, sobald er sie sieht (verdächtig) |
+| Hard/Expert | Vermeidet bewusst Blickkontakt (überzeugender) |
 
-### Spy: Aggressivität des Backstabs
+### Spy: Backstab-Aggression
 
-Langstrecken- (bis zu 300 HU)`tf_bot_spy_knife_range`), ein Spy-Bot wird nur dann in einen Backstab eingeliefert, wenn er das Opfer sehen kann und der Rücken des Opfers zumindest teilweise gedreht wird. Die Kompetenz bestimmt, wie gut dieser Winkel des Rückens anständig sein kann:
+Auf große Distanz (bis 300 HU, `tf_bot_spy_knife_range`) legt sich ein Spy-Bot nur dann auf einen Backstab fest, wenn er das Opfer sieht und dessen Rücken zumindest teilweise abgewandt ist. Die Stufe bestimmt, wie weit der Rückenwinkel von der Mitte abweichen darf:
 
-| Zuständigkeit | Winkeltoleranz |
+| Stufe | Winkeltoleranz |
 | --- | --- |
-| Einfach | Versucht es auch, wenn ihr ihm direkt gegenübertrittt |
-| Normal | ± 45° des Rückens |
-| Schwer | ±78° des Rückens |
-| Sachverständige | ±90° von der Rückseite (um 180° vollständige Rückspiegel) |
+| Easy | Versucht es, selbst wenn du direkt auf ihn zeigst |
+| Normal | ±45° von deinem Rücken |
+| Hard | ±78° von deinem Rücken |
+| Expert | ±90° von deinem Rücken (voller 180°-Bogen nach hinten) |
 
-Die Spy-Bots sind funktional Selbstmord: Sie versuchen, einen Messerstich auf jemanden, der sie direkt in die Augen sieht. **Ausnahme:** in Mann vs. Maschine, jeder Spy Bot wird gezwungen, die normale Winkelspannung unabhängig von seinem tatsächlichen Kompetenzniveau.
+Easy-Spy-Bots sind praktisch selbstmörderisch: Sie versuchen, jemanden zu erstechen, der ihnen direkt in die Augen starrt. **Ausnahme:** In Mann vs. Machine wird jeder Spy-Bot unabhängig von seiner tatsächlichen Stufe auf die Normal-Winkelbeschränkung gezwungen.
 
-### Taktiken: Auswahl von Waffen
+### Taktik: Waffenwahl
 
-Diese Logik bezieht sich nur auf die Ebenen über Leicht, mit einem reduzierten Interesse an MvM, da Bots in der Regel strenge Waffenbeschränkungen haben:
+Diese Logik betrifft nur Stufen über Easy, mit geringerem Interesse in MvM, da Bots dort meist strikte Waffenbeschränkungen haben:
 
-- **Scout**: Wechsel zur zweiten Waffe, wenn das Primärladegerät leer ist.
-- **Soldaten**: Wechsel zur zweiten Waffe, wenn das Ladegerät leer ist * und* das Ziel weniger als 500 HU hat.
-- **Sniper**: Übergang zur sekundären Waffe für Zielobjekte unter 750 HU.
-- **Pyro**: Wechsel zur zweiten Waffe für Zielobjekte auf mehr als 750 HU, es sei denn, es ist ein Soldier oder Demoman.
+- **Scout**: wechselt zur Sekundärwaffe, wenn das Magazin der Primärwaffe leer ist.
+- **Soldier**: wechselt zur Sekundärwaffe, wenn das Magazin leer ist *und* das Ziel unter 500 HU liegt.
+- **Sniper**: wechselt zur Sekundärwaffe bei Zielen unter 750 HU.
+- **Pyro**: wechselt zur Sekundärwaffe bei Zielen über 750 HU, außer das Ziel ist ein Soldier oder Demoman.
 
-### Taktiken: Aufladen bis abgedeckt
+### Taktik: Nachladen in Deckung
 
-Wenn das aktuelle Verhalten des Bots ihm nicht sagt, in Rente zu gehen, sein Hauptladegerät leer ist und ohne Uber verletzbar bleibt, ziehen sich die Top Level Bots vorübergehend zurück, um zu laden, anstatt auf eine leere Waffe zu klicken, die sich dir gegenüber stellt:
+Diese Logik fehlt in MvM. Wenn das aktuelle Verhalten des Bots ihm nicht sagt, dass er sich zurückziehen soll, sein Primär-Magazin leer ist und er ohne Übersteiger verwundbar bleibt, ziehen sich Bots höherer Stufen vorübergehend in Deckung zurück, um nachzuladen, statt dir den leeren Lauf ins Gesicht zu halten:
 
-| Zuständigkeit | - Zieht sich zurück, um zu laden? |
+| Stufe | Zieht sich zum Nachladen zurück? |
 | --- | --- |
-| Einfach | Nein. |
-| Normal | Nein. |
-| Schwer | Ja. |
-| Sachverständige | Ja. |
+| Easy | Nein |
+| Normal | Nein |
+| Hard | Ja |
+| Expert | Ja |
 
-### CP-Modus: Verteidiger-Wandler-Umweg
+### CP-Modus: Verteidiger streifen umher
 
-Logisch fehlt von MvM. Wenn du einen Kontrollpunkt verteidigen, sind die Top-Level-Bots eher den Punkt zu verlassen, um Kills zu jagen (✓ search and destroy ✓), aber nur mit einer anständigen Zeit bleibt auf`tf_bot_defense_must_defend_time`:
+Diese Logik fehlt in MvM. Beim Verteidigen eines Kontrollpunkts verlassen Bots höherer Stufen den Punkt eher, um Kills zu jagen („Suchen und zerstören"), aber nur, wenn noch genug Zeit auf `tf_bot_defense_must_defend_time` übrig ist:
 
-| Zuständigkeit | Chance zum Umweg |
+| Stufe | Chance zum Streifen |
 | --- | --- |
-| Einfach | 10% |
-| Normal | 50% |
-| Schwer | 75% |
-| Sachverständige | 90% |
+| Easy | 10 % |
+| Normal | 50 % |
+| Hard | 75 % |
+| Expert | 90 % |
 
-### CP-Modus: Sperrung des Fangs
+### CP-Modus: Eroberung blockieren
 
-Die MvM-Verteidiger beschuldigen einen Versuch der feindlichen Verhaftung:
+Diese Logik fehlt in MvM. Verteidigerbots, die einen gegnerischen Eroberungsversuch anfechten:
 
-| Zuständigkeit | Versucht, die Aufnahme zu blockieren? |
+| Stufe | Versucht, die Eroberung zu blockieren? |
 | --- | --- |
-| Einfach | Nein. |
-| Normal | 50% Glück |
-| Schwer | Ja. |
-| Sachverständige | Ja. |
+| Easy | Nein |
+| Normal | 50 % Chance |
+| Hard | Ja |
+| Expert | Ja |
 
 ---
 
@@ -360,41 +361,41 @@ Die MvM-Verteidiger beschuldigen einen Versuch der feindlichen Verhaftung:
 
 <div style="overflow-x:auto">
 
-| Aspekt | Einfach | Normal | Schwer | Sachverständige | Anmerkungen |
+| Aspekt | Easy | Normal | Hard | Expert | Hinweise |
 | --- | --- | --- | --- | --- | --- |
-| Vision: Zeit der Erkennung | 1,00 | 0,50 | 0,30s | 0,20s | |
-| Sicht: Follow-up-Rate | 1x/s | 4x/s | 10x/s | 20x/s | Spieße benutzen immer Normal |
-| Granatapfel/Stiftbombe-Ausgleich | Ja. | Ja. | Ja. | Ja. | Loose Cannon frei |
-| Vertikaler Ausgleich Huntsman | Nein. | Ja. | Ja. | Ja. | |
-| Headshots Huntsman | Nein. | < 150 HU | Ja. | Ja. | |
-| Schussschuss | Nein. | Ja. | Ja. | Ja. | Direkt Hit & Cow Mangler frei |
-| Zielpunkt Scharfschützen-Schrauben-Schrift | Körper | ~33% nach Kopf | Kopf | Kopf | |
-| Glück, dass du die Schüsse bemerken. | 10% | 30% | 60% | 90% | 2, wenn durch lautes Schüssen verdeckt |
-| Ziel auf den Pfleger | Nein. | 50% | Ja. | Ja. | |
-| Medic/Engineer/Sniper distanziert = Bedrohung | Nein. | Nein. | Ja. | Ja. | |
-| Ausweichmanöver | Nein. | Ja. | Ja. | Ja. | Lange Liste von Ausnahmen |
-| Vermeide es, Feinde zu schlagen | Nein. | Nein. | Ja. | Ja. | Besonders wichtig für Spy |
-| Chance, Airblast zu auslösen | 0% | 50% | 90% | 100% | |
-| Klassenwahl des Spy Verkleidungsstücks | Zufällig | Zufällig | Ein wahrer Feind | Ein wahrer Feind | |
-| Spy Visual Contact in Verkleidung | Fest (offensichtlich) | Fix | Vermeiden (überzeugend) | Vermeide es | |
-| Backstab-Winkel Spy | ~0° | ± 45° | ±78° | ±90° | MvM Kraft Normal |
-| Logik der Waffenauswahl | Nein. | Ja. | Ja. | Ja. | Weniger relevant in MvM |
-| Aufladen mit abgedecktem Inhalt | Nein. | Nein. | Ja. | Ja. | Nicht in MvM |
-| Errance Verteidiger CP | 10% | 50% | 75% | 90% | Nicht in MvM |
-| CP-Fangblock | Nein. | 50% | Ja. | Ja. | Nicht in MvM |
+| Sicht: Erkennungszeit | 1,00 s | 0,50 s | 0,30 s | 0,20 s | |
+| Zielen: Verfolgungsrate | 1x/s | 4x/s | 10x/s | 20x/s | Spies immer Normal |
+| Kompensation Granaten-/Haftbombenbogen | Ja | Ja | Ja | Ja | Loose Cannon ausgenommen |
+| Huntsman vertikale Kompensation | Nein | Ja | Ja | Ja | |
+| Huntsman-Kopfschüsse | Nein | <150 HU | Ja | Ja | |
+| Raketenwerfer: Fußtreffer | Nein | Ja | Ja | Ja | Direct Hit & Cow Mangler ausgenommen |
+| Scharfschützengewehr: Zielpunkt | Körper | ~33 % Richtung Kopf | Kopf | Kopf | |
+| Chance, leisen Schuss zu bemerken | 10 % | 30 % | 60 % | 90 % | Halbiert, wenn von lautem Feuer überdeckt |
+| Heiler anvisieren | Nein | 50 % | Ja | Ja | |
+| Entfernter Medic/Engineer/zielender Sniper = unmittelbar | Nein | Nein | Ja | Ja | |
+| Ausweichen | Nein | Ja | Ja | Ja | Lange Ausnahmeliste |
+| Vermeiden, Gegner anzurempeln | Nein | Nein | Ja | Ja | Vor allem für Spy relevant |
+| Chance Rückstoß auszulösen | 0 % | 50 % | 90 % | 100 % | |
+| Spy: Wahl der Verkleidungsklasse | Zufällig | Zufällig | Entspricht einem echten Gegner | Entspricht einem echten Gegner | |
+| Spy: Blickkontakt in Verkleidung | Starrt (offensichtlich) | Starrt | Vermeidet (überzeugend) | Vermeidet | |
+| Spy: Backstab-Winkel | ~0° | ±45° | ±78° | ±90° | MvM erzwingt Normal |
+| Waffenwahl-Logik | Nein | Ja | Ja | Ja | In MvM weniger relevant |
+| Nachladen in Deckung | Nein | Nein | Ja | Ja | Nicht in MvM |
+| CP-Verteidiger streifen | 10 % | 50 % | 75 % | 90 % | Nicht in MvM |
+| CP-Eroberung blockieren | Nein | 50 % | Ja | Ja | Nicht in MvM |
 
 </div>
 
 ---
 
-## Schlussfolgerung
+## Fazit
 
-![TF2-Heavy-Bot zielt mit Minigun](assets/tf2-bot-ai-heavy-aim.png)
+![TF2-Heavy-Bot zielt mit einem Minigun](assets/tf2-bot-ai-heavy-aim.png)
 
-All dies spiegelt ein bewusstes System von Valve: voll deterministischen Noten und Wahrscheinlichkeiten, einfach nie offiziell dokumentiert. Hier sind die Punkte, die ich nach diesem Tauchgang zurückhalten:
+All das spiegelt ein bewusst gebautes Valve-System wider: vollständig deterministische Werte und Wahrscheinlichkeiten, nur nie offiziell dokumentiert. Hier sind die Punkte, die ich nach diesem Tauchgang mitnehme:
 
-1. **Die ✓ Kompetenz ist eine Reihe unabhängiger Schieberegler**, kein globaler Multiplikator. Reaktionszeit, Zielgeschwindigkeit und jedes taktische Verhalten verändern sich getrennt, und einige (Spy-Trackingrate, Backstabwinkel MvM) haben hart verschlüsselte Überschreiben, unabhängig von der Ebene.
-2. **Ein Teil ist wirklich gestopft, nicht nur alt.** Die Liste der seit 2010 eingefrorenen diskreten Waffen, die Cow Mangler ohne Logik des Schießens zu Füßen aus irgendeinem guten Grund, die Überprüfung des Sniper-Skalarprodukts, das Jahre dauerte, um richtig entkompiliert werden: Valve IA Code hat Narben wie jede 17-jährige Codebasis.
-3. **du kannst all das benutzen.** Weißt du, dass ein Sniper Bot du nicht in Normal headshotera, dass eine leichte Pyro kann nicht buchstäblich denkst du deine Rakete, dass einer einfache Spy versucht, du von Angesicht zu Angesicht stolpern. Es ist kein Glück. Es handelt sich um ein technisches Datenblatt.
+1. **„Fähigkeit" ist eine Reihe unabhängiger Schieberegler**, kein globaler Multiplikator. Reaktionszeit, Zielrhythmus und jedes taktische Verhalten skalieren getrennt, und einige (Verfolgungsrate des Spy, Backstab-Winkel in MvM) haben unabhängig von der Stufe fest verdrahtete Überschreibungen.
+2. **Ein Teil davon ist wirklich fehlerhaft, nicht nur alt.** Die seit 2010 eingefrorene Liste leiser Waffen, der Cow Mangler ohne Fußtreffer-Logik aus schlechtem Grund, die Skalarprodukt-Prüfung des Snipers, die Jahre brauchte, um korrekt dekompiliert zu werden: Valves Bot-KI-Code trägt Narben wie jede 17 Jahre alte Codebasis.
+3. **Du kannst all das nutzen.** Wisse, dass ein Sniper-Bot dir auf Normal keinen Kopfschuss verpasst, dass ein Easy-Pyro deine Rakete buchstäblich nicht reflektieren kann und dass ein Easy-Spy dir von Angesicht zu Angesicht ein Messer in den Rücken jagen will. Das ist kein Glück. Das ist ein Spezifikationsblatt.
 
-Ein großes Dankeschön an Sigsegv für das Tauchen in den ursprünglichen Code, der den größten Teil des dies möglich gemacht hat, an die Wiki TF2 für die grundlegende Dokumentation über Bots-Befehle und die Unterstützung der Karten, und an alle in der Gemeinschaft, die weiterhin eine 17-jährige Bot-IA durchsuchen, um genau zu verstehen, warum sie tut, was sie tut.
+Ein riesiges Dankeschön an sigsegv für den ursprünglichen Codeeinstieg, der fast all das möglich gemacht hat, an das TF2-Wiki für die Grunddokumentation zu Bot-Befehlen und Kartenunterstützung und an alle in der Community, die noch immer an einer 17 Jahre alten Bot-KI herumschrauben, um genau herauszufinden, warum sie tut, was sie tut.

@@ -1,6 +1,6 @@
 ---
-title: "Luna Protocol: Warum habe ich ein Modell von 1,5 Milliarden Parametern auf 50k Discord Proben, und warum few-shot priming hat alles verändert"
-description: "Ein kleineres Modell, das auf weniger Daten angetrieben wird, kann ein größeres Modell übertreffen – vorausgesetzt, es kann gut gestartet werden. Deshalb ist Luna Protocol von einem Hermes 3B auf einen feinen Qwen 1,5B-Tunnel übergegangen, und warum der few-shot priming der eigentliche Fortschrittsfaktor geworden ist."
+title: "Luna Protocol: Warum ich ein Modell mit 1,5 Milliarden Parametern auf 50k Discord-Beispielen feinabgestimmt habe und warum Few-Shot-Priming alles verändert hat"
+description: "Ein kleineres Modell, das mit weniger Daten trainiert wurde, kann ein größeres übertreffen, wenn man es richtig vorbereitet. Warum Luna Protocol von einem Hermes 3B auf einen Qwen-1,5B-Fine-Tune umgestiegen ist und warum Few-Shot-Priming zum eigentlichen Fortschrittstreiber wurde."
 date: 2026-07-17
 authors:
   - fox3000foxy
@@ -14,105 +14,107 @@ tags:
   - open-source
 lang: "de"
 author_pubkey: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoFS9I15CAZojXYc6NMqggEYGct9o9b3JnWdXWOtlzgs2lclmqw8adtWgXUeeBMRHvm5LoajQ+OcImaAyA8jwYA=="
-author_sig: "3WaGXte1BtBd4fqhi9EPR8Vy6CyR04p6P9pQbOCoL/c8Ey9M+WSkW5zxbAd82pmrKQ23RcIjV7BLB61CnzTgEg=="
----
-# 
-
-Im [premier article](/articles/en/luna-protocol-discord-bot)Ich baute einen Discord-Bot, der einen Menschen simuliert: Schlaf, Klopfenfehler, Zögern, Vergessenheit, spontane Nachrichten. Das Verhaltenssystem hielt den Weg. Das LLM hinter all dem war ein Hermes Modell mit 3 Milliarden Parametern, quantifiziert in Q8_0, und verbrauchte 3 GB VRAM.
-
-Es funktionierte, aber es war überdimensioniert.
-
-Ein Dicord-Bot braucht kein Modell von 3 Milliarden Parametern, um ✓ nm just chillin, u zu sagen. Was er braucht, ist **stilistische Kohärenz**: die Fähigkeit, einen präzisen Ton zu halten, Nachricht nach Nachricht, ohne in einen Modus zu ziehen ✓ corporate Assistent ←. Und es stellt sich heraus, dass ein kleineres Modell, das auf weniger Daten angetrieben und mit einigen Beispielen begonnen wird, es besser schafft, als ein größeres Modell zu erreichen, das den Durchgang über ein einfaches schnelles System zwingt.
-
-Dieser Artikel behandelt die offiziellen Modelle von Luna Protocol: warum sie existieren, warum 1,5B statt 3B, warum 50k Trainingsproben statt 7,3M, und warum der Few-Shot Priming von dem Status des ✓ netten Bonus ✓ zu dem Herz des gesamten Annäherungs.
-
+author_sig: "yz4Ubdq0yK0sMGKao21A0N3diff0MshA8pQeiy7m3qMvDknza1EQM7LTtwpuVtLq1TZtQnOdpDcTbpItNHjfqQ=="
 ---
 
-## Das Problem mit dem Modell 3B
+# Luna Protocol: Warum ich ein Modell mit 1,5 Milliarden Parametern auf 50k Discord-Beispielen feinabgestimmt habe und warum Few-Shot-Priming alles verändert hat
 
-Die ursprüngliche Konfiguration verwendete`Discord-Micae-Hermes-3-3B.Q8_0.gguf`, ein Modell von 3 Milliarden fein-getönten Parametern auf Discord Daten. Es lieferte gute Antworten, aber:
+Im [ersten Artikel](/articles/en/luna-protocol-discord-bot) habe ich einen Discord-Bot gebaut, der einen Menschen simuliert: Schlaf, Tippfehler, Zögern, Vergesslichkeit, spontane Nachrichten. Das Verhaltenssystem hat sich bewährt. Das LLM dahinter war ein Hermes-Modell mit 3 Milliarden Parametern, quantisiert als Q8_0, das 3 GB VRAM belegte.
 
-| Metrisch | Hermes-3-3B Q8_0 | Ziel |
+Es hat funktioniert. Aber es war überdimensioniert.
+
+Ein Discord-Bot braucht kein Modell mit 3 Milliarden Parametern, um „nm just chillin, u" zu sagen. Was er braucht, ist **stilistische Konsistenz**: die Fähigkeit, einen präzisen Gesprächston zu halten, Nachricht für Nachricht, ohne in den Modus „Unternehmensassistent" abzurutschen. Und es zeigt sich, dass ein kleineres Modell, das mit weniger Daten trainiert und mit ein paar Beispielen vorbereitet wurde, das besser schafft als ein größeres Modell, dem man nur einen einfachen System-Prompt gibt.
+
+Dieser Artikel behandelt die offiziellen Modelle von Luna Protocol: warum es sie gibt, warum 1,5B statt 3B, warum 50k Trainingsbeispiele statt 7,3 Millionen und warum Few-Shot-Priming von einem „netten Bonus" zum Herzstück des ganzen Ansatzes geworden ist.
+
+---
+
+## Das Problem mit dem 3B-Modell
+
+Das ursprüngliche Setup nutzte `Discord-Micae-Hermes-3-3B.Q8_0.gguf`, ein Modell mit 3 Milliarden Parametern, das auf Discord-Daten feinabgestimmt war. Es lieferte gute Antworten, aber:
+
+| Kennzahl | Hermes-3-3B Q8_0 | Ziel |
 |--------|-------------------|--------|
-| Verwendung von VRAM | ~3GB | < 1 GB |
-| Generierung von Token | ~30 tok/s | ~60+ tok/s |
-| Dateigröße Vorlage | ~3,2 GB | < 1 GB |
-| Kaltstartzeit | ~8s | ~3s |
+| VRAM-Verbrauch | ~3 GB | < 1 GB |
+| Token-Generierung | ~30 Tok/s | ~60+ Tok/s |
+| Dateigröße des Modells | ~3,2 GB | < 1 GB |
+| Kaltstartzeit | ~8 s | ~3 s |
 
-Für einen 24/7-Bot auf einem bescheidenen Server, 3 GB VRAM, ist das eine Menge. Und die Erzeugungsgeschwindigkeit, die für gelegentliche Nachrichten korrekt war, schien staubig zu sein, wenn man mit einer Rafale oder mehreren aktiven Kanälen reagierte.
+Für einen Bot, der rund um die Uhr auf einem bescheidenen Server läuft, sind 3 GB VRAM viel. Und die Generierungsgeschwindigkeit, für gelegentliche Nachrichten ausreichend, fühlte sich bei Burst-Antworten oder mehreren aktiven Kanälen träge an.
 
-Die Frage war: Können wir den gleichen Discord-Dialogstil mit doppelten Parametern erhalten?
-
----
-
-## Die Fine-Tuning Entscheidung: Warum 50k, nicht 7,3M
-
-Der Datensatz [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues)enthält **7,3M Austausch** und **17M Sprachtouren**. Es ist ein massives Korpus echter Discord-Gespräche. Der offensichtliche Ansatz wäre gewesen, über den gesamten Satz von Daten zu führen.
-
-Ich habe das Gegenteil getan. Ich habe **50.000 Proben**, das sind weniger als 1 % der verfügbaren Daten, gezogen.
-
-Hier ist der Grund: **Die Größe des Trainingsspiels beeinflusst direkt den Grad der Überlernung des Modells gegenüber seiner Trainingsverteilung**.
-
-Ein Modell, das auf 7,3M-Beispielen getrieben wird, erlernt eine sehr spezifische statistische Verteilung der Gespräche. Es wird ausgezeichnet, um diese Verteilung zu reproduzieren, aber es wird auch **rigid**: es hat weniger Spielraum, sich an neue Motive anzupassen, die zum Zeitpunkt der Inferenz zur Verfügung gestellt werden.
-
-Ein Modell, das mit 50 k Beispielen angetrieben wird, erlernt den Ton und das allgemeine Register der Discord-Gespräche (informal, kurz, Abkürzungen, winzig), aber es behält genügend Flexibilität, um ** durch Beispiele im Kontext gepilotet zu werden**. Die Beispiele few-shot kämpfen nicht gegen eine bereits gelernte Massenverteilung: sie ergänzen eine leichtere Verteilung.
-
-Dies ist die zentrale Intuition: **Begrenzte Trainingsdaten machen Few-Shot Priming effizienter**.
+Die Frage war: Lässt sich derselbe Discord-Dialogstil mit der Hälfte der Parameter erreichen?
 
 ---
 
-## Das Modell: Technische Details
+## Die Entscheidung zum Fine-Tuning: warum 50k statt 7,3 Millionen
 
-Das Modell Luna Protocol ist ein **Fine-tune QLoRA** von [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct):
+Der Datensatz [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) umfasst **7,3 Millionen Austausche** und **17 Millionen Turns**. Es ist ein riesiges Korpus echter Discord-Gespräche. Der naheliegende Ansatz wäre, den gesamten Datensatz zu verwenden.
+
+Ich habe das Gegenteil getan. Ich habe mit **50.000 Beispielen** trainiert, also weniger als 1 % der verfügbaren Daten.
+
+Der Grund: **Die Größe des Trainingssets bestimmt direkt, wie stark das Modell an seine Trainingsverteilung angepasst wird.**
+
+Ein Modell, das mit 7,3 Millionen Beispielen trainiert wird, lernt eine sehr spezifische statistische Verteilung von Gesprächen. Es wird hervorragend darin, diese Verteilung nachzubilden, wird aber auch **starr**: Es hat weniger Spielraum, sich an neue Muster anzupassen, die erst zur Inferenzzeit vorgegeben werden.
+
+Ein Modell, das mit 50k Beispielen trainiert wird, lernt den allgemeinen Ton und das Register von Discord-Gesprächen (informell, kurz, Abkürzungen, Kleinschreibung), behält aber genug Flexibilität, um **durch Beispiele im Kontext gesteuert** zu werden. Few-Shot-Beispiele kämpfen nicht gegen eine riesige, bereits gelernte Verteilung an: Sie vervollständigen eine leichtere.
+
+Das ist die Kerneinsicht: **Begrenzte Trainingsdaten machen Few-Shot-Priming wirksamer.**
+
+---
+
+## Das Modell: technische Details
+
+Das Luna-Protocol-Modell ist ein **QLoRA-Fine-Tune** von [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct):
 
 | Parameter | Wert |
 |-----------|-------|
-| Grundmodell | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
-| Methode | QLoRA (4-bit) |
-| Rang LoRA | `r=16` , `lora_alpha=16` |
-| Zielmodule | `q/k/v/o_proj` , `gate/up/down_proj` |
-| Zu motivierende Parameter | 18 464 768 / 1 562 179 072 (1,18 %) |
-| Trainingsdaten | ~50 000 Beispiele (Teilmenge von Discord-Dialogen) |
-| Filter | 8-512 Tokens je Probe |
-| Epochen | 2-3 |
-| Material | Kaggle T4 |
+| Basismodell | `unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit` |
+| Methode | QLoRA (4-Bit) |
+| LoRA-Rang | `r=16`, `lora_alpha=16` |
+| Angesprochene Module | `q/k/v/o_proj`, `gate/up/down_proj` |
+| Trainierbare Parameter | 18.464.768 / 1.562.179.072 (1,18 %) |
+| Trainingsdaten | ~50.000 Beispiele (Teilmenge von Discord-Dialogues) |
+| Filter | 8–512 Token pro Beispiel |
+| Epochen | 2–3 |
+| Hardware | Kaggle T4 |
 | Framework | [Unsloth](https://github.com/unslothai/unsloth) |
 
-Der Datensatz ist ein vordefinierter Fork von Discord-Dialogen, gefiltert, um nur Tricks zu behalten`user` / `assistant`Eigen: Nur Benutzer- und Assistentenaustausch, ohne Systemnachrichten, Metadaten oder Botbefehle.
+Der Datensatz ist ein vorverarbeiteter Fork von Discord-Dialogues, gefiltert auf saubere `user`/`assistant`-Turns: nur Austausche zwischen Nutzer und Assistent, keine System-Nachrichten, keine Metadaten, keine Bot-Befehle. Das ist für das Folgende wichtig.
 
-### Verfügbare Quantifikatoren
+### Verfügbare Quantisierungen
 
-| Datei | Quantifizierung | Größe | Bemerkungen |
+| Datei | Quantisierung | Größe | Hinweise |
 |------|-------------|------|-------|
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 MB | Schärfe Verschwommenheit – nicht empfohlen |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | Guter Kompromiss Größe/Qualität (empfohlen) |
-| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1,65 GB | Bessere stilistische Treue |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q2_K.gguf` | Q2_K | 676 MB | Deutlich verschlechtert, nicht empfohlen |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf` | Q4_K_M | 986 MB | Gutes Verhältnis von Größe und Qualität (empfohlen) |
+| `Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q8_0.gguf` | Q8_0 | 1,65 GB | Beste stilistische Treue |
 
-Das empfohlene Modell ist **Q4_K_M**: weniger als 1 GB, schnell und hält den Konversationsstil gut. Q2_K verschlechtert sich zu sehr für ein Modell dieser Größe. Q8_0 bietet die beste Qualität, verbraucht aber 68 % Speicher zusätzlich.
+Das empfohlene Modell ist **Q4_K_M**: unter 1 GB, schnell und mit gutem Erhalt des Gesprächsstils. Q2_K verschlechtert sich bei dieser Modellgröße zu stark. Q8_0 liefert die beste Qualität, verbraucht aber 68 % mehr Speicher.
 
 ---
 
-## Der Durchbruch des Few-Shot Priming
+## Der Durchbruch beim Few-Shot-Priming
 
-Das ist der Teil, der alles verändert hat.
+Hier liegt der Teil, der alles verändert hat.
 
-Das Musterblatt auf HuggingFace enthält eine Warnung:
+Die HuggingFace-Seite des Modells enthält eine Warnung:
 
-> Mit einem nackten und bootfreien Tempo neigt dieses Modell dazu, in Qwens Standardton zu sinken. Ein kurzer Start von few-shot macht einen großen Unterschied.
+> Mit einem nackten Prompt ohne Priming neigt dieses Modell dazu, in den Standard-„Assistenten"-Ton von Qwen zurückzufallen. Ein kurzes Few-Shot-Priming macht einen großen Unterschied.
 
-Dies ist eine direkte Folge der Art und Weise, wie Trainingsdaten strukturiert wurden.
+Das ist eine direkte Folge davon, wie die Trainingsdaten aufgebaut waren.
 
-### Warum die schnellen Systeme allein nicht funktionieren
+### Warum System-Prompts allein nicht funktionieren
 
-Discord-Dialoge Trainingsdaten enthalten nur Drehungen`user` / `assistant`. Es gibt keine Beispiele für Systemrollen** im Trainingsspiel. Das Modell wurde nie dazu geführt, dass schnell ein System als Stilrichtlinien folgt.
+Die Discord-Dialogues-Trainingsdaten enthalten nur `user`/`assistant`-Turns. Im Trainingsset gibt es **kein Beispiel mit Systemrolle**. Das Modell wurde nie darauf trainiert, System-Prompts als Stilvorgaben zu befolgen.
 
-Wenn man ihm ein schnelles System des Typs ✓ gibt, nenne dich Luna, sprich entspannt ←, hört er die Anweisung, hat aber keinen starken Grund, sie in den Ausgang zu übersetzen. Es fällt auf das Standardverhalten von Qwen zurück: hilfsbereit, strukturiert, leicht formal.
+Gibt man ihm einen System-Prompt wie „Dein Name ist Luna, sprich locker", hört es die Anweisung, hat aber kein festes gelerntes Muster, um sie in Ausgabe umzusetzen. Also fällt es auf das Standardverhalten von Qwen zurück: hilfsbereit, strukturiert, leicht förmlich.
 
-### Warum few-shot-Beispiele funktionieren
+### Warum Few-Shot-Beispiele funktionieren
 
-Wenn du Beispiele für ChatML-Konversation in das gleiche Format wie das beim Training (mit der Turmstruktur)`user` / `assistant`Das Modell erkennt das Motiv aus seinem Training und passt seinen Ausgang entsprechend an.
+Wenn man Gesprächsbeispiele im selben ChatML-Format einfügt, das beim Training verwendet wurde (mit der Struktur `user`/`assistant`), klickt etwas. Das Modell erkennt das Muster aus dem Training und richtet seine Ausgabe entsprechend aus.
 
-So sieht ein Few-Shot-Start in der Praxis aus:
+So sieht Few-Shot-Priming in der Praxis aus:
+
 ```yaml
 few_shot_examples:
   - user: "yo whats good"
@@ -122,63 +124,69 @@ few_shot_examples:
   - user: "hey how are you"
     assistant: "im doing pretty good tbh, just vibing"
 ```
-Diese Beispiele werden nach dem schnellen System und vor dem wahren Gespräch injiziert. Das Modell sieht sie als Teil der Gesprächsgeschichte, also als einen echten Austausch statt als Anweisungen. Es ist eine wesentliche Unterscheidung: es wird gezeigt* wie der entspannte Ton aussah, anstatt es zu ordnen*.
 
-### Vor / nach
+Diese Beispiele werden nach dem System-Prompt und vor dem echten Gespräch eingefügt. Das Modell nimmt sie als Teil des Gesprächsverlaufs wahr, also als echten Austausch und nicht als Anweisung. Das ist ein wesentlicher Unterschied: Man **zeigt** dem Modell, wie der lockere Ton aussieht, statt ihn zu **befehlen**.
 
-Ohne Start few-shot (Business System Prompt):
+### Vorher / nachher
+
+Ohne Few-Shot-Priming (nur System-Prompt):
+
 ```
 User: yo whats good
 Bot: Hello! I am doing well, thank you for asking. How can I assist you today?
 ```
-Mit few-shot (3 Beispiele)
+
+Mit Few-Shot-Priming (3 Beispiele):
+
 ```
 User: yo whats good
 Bot: nm just chillin, u
 ```
-Der Unterschied ist eklatant. Das Modell nimmt das ganze Register an: winzig, Abkürzungen, Ton entspannt, kurze Antworten. Es legt den Stil der Beispiele statt des Qwen Trainingsdaten.
+
+Der Unterschied ist drastisch. Das Modell übernimmt das gesamte Register: Kleinschreibung, Abkürzungen, lockerer Ton, kurze Antworten. Es spiegelt den Stil der Beispiele wider, statt der Trainingsdaten von Qwen.
 
 ---
 
-## Speichern und Geschwindigkeit: Konkrete Zahlen
+## Speicher und Geschwindigkeit: die konkreten Zahlen
 
-Der Übergang von Hermes-3-3B zu Luna-Protocol-1.5B bringt messbare Gewinne:
+Der Wechsel von Hermes-3-3B auf Luna-Protocol-1.5B bringt messbare Gewinne:
 
-| Metrisch | Hermes-3-3B Q8_0 | Luna-Protocol Q4_K_M | Verbesserung |
+| Kennzahl | Hermes-3-3B Q8_0 | Luna-Protocol Q4_K_M | Verbesserung |
 |--------|-------------------|----------------------|-------------|
-| Verwendung von VRAM | ~3GB | ~986 MB | **67 % weniger** |
-| Dateigröße Vorlage | ~3,2 GB | ~986 MB | **69 % kleiner** |
-| Generierung von Token | ~30 tok/s | ~60+ tok/s | **2x schneller** |
-| Kaltstart | ~8s | ~3s | **62 % schneller** |
-| Kontextfenster | 8192 | 8192 | Genauso wie die anderen. |
+| VRAM-Verbrauch | ~3 GB | ~986 MB | **67 % weniger** |
+| Dateigröße des Modells | ~3,2 GB | ~986 MB | **69 % kleiner** |
+| Token-Generierung | ~30 Tok/s | ~60+ Tok/s | **2x schneller** |
+| Kaltstart | ~8 s | ~3 s | **62 % schneller** |
+| Kontextfenster | 8192 | 8192 | identisch |
 
-### Warum die Geschwindigkeitsgewinne real sind
+### Warum der Geschwindigkeitsgewinn echt ist
 
-Kleinere Modelle sind im Grunde schneller in der Inferenz. Mit 1,5B Parameter anstelle von 3B:
+Kleinere Modelle sind bei der Inferenz grundsätzlich schneller. Mit 1,5 Milliarden statt 3 Milliarden Parametern gilt:
 
-- **Weniger Matrix-Vermehrung** durch Token: Die Aufmerksamkeitsschichten, die FFN-Schichten und die Ausgabeprojektion entwickeln sich alle linear mit der Anzahl der Parameter
-- **Beste Verwendung des Cache**: Das kleinere Modell hält mehr Gewicht in der L2/L3-Cache
-- **Weniger Druck auf die Speicherbandbreite**: Weniger Bytes, die von der VRAM per Token gelesen werden
+- **Weniger Matrixmultiplikationen** pro Token: Attention-Schichten, FFN-Schichten und die Ausgabeprojektion skalieren linear mit der Parameterzahl
+- **Besser genutzter Cache**: Das kleinere Modell passt mehr seiner Gewichte in den L2/L3-Cache
+- **Weniger Druck auf die Speicherbandbreite**: pro Token müssen weniger Bytes aus dem VRAM gelesen werden
 
-Bei einer bescheidenen Konfiguration erzeugt CPU allein (2 Kerne, ohne GPU) das 1,5B-Modell Tokens mit etwa **2 mal der Geschwindigkeit** des 3B-Musters. Dies ist der Unterschied zwischen ^ riecht nach Bot ✓ und ^ man sieht aus wie eine echte Person, die ^ tippen.
+Auf einem bescheidenen CPU-only-Setup (2 Kerne, keine GPU) erzeugt das 1,5B-Modell Token mit etwa **doppelter Geschwindigkeit** des 3B-Modells. Das ist der Unterschied zwischen „riecht nach Bot" und „wirkt wie ein echter Mensch beim Tippen".
 
-### Schnelle Cache verstärkt den Vorteil
+### Der Prompt-Cache verstärkt den Vorteil
 
-Luna Protocol verwendet`llama-server`mit aktiviertem Schnellabschirm (`–cache-reuse 256`) bedeutet:
+Luna Protocol nutzt `llama-server` mit aktiviertem Prompt-Cache (`--cache-reuse 256`). Das bedeutet:
 
-1. Die erste Nachricht einer Sitzung zahlt die vollen Kosten der Bearbeitung des Schnelllaufs (Systemprompt + Beispiel few-shot + Benutzernachricht)
-2. Die folgenden Nachrichten werden nur mit *neuen* tokens behandelt, da das Zwischenspeicher-Präfix wiederverwendet wird.
-3. Mit 5 Beispielen few-shot (~50-150 tokens) wird der Zusatzkostennach der ersten Abfrage vernachlässigbar.
+1. Die erste Nachricht einer Sitzung zahlt die volle Kosten der Prompt-Verarbeitung (System-Prompt + Few-Shot-Beispiele + Nutzernachricht)
+2. Spätere Nachrichten verarbeiten nur die *neuen* Token, weil das gecachte Präfix wiederverwendet wird
+3. Bei 5 Few-Shot-Beispielen (~50–150 Token) wird der Mehraufwand nach der ersten Anfrage vernachlässigbar
 
-Die Beispiele few-shot werden nach der ersten Nachricht einer Sitzung in der Praxis kostenlos ✓. Das Modell erhält eine Stilführung mit einem Grenzkosten-Null.
+Few-Shot-Beispiele werden nach der ersten Nachricht einer Sitzung praktisch kostenlos. Das Modell erhält die Stilvorgabe zu nahezu null Grenzkosten.
 
 ---
 
-## Implementation: Wie es im Code funktioniert
+## Die Umsetzung: wie es im Code funktioniert
 
-Das Few-Shot-System von Luna Protocol ist sauber und minimal. Drei Dateien verwalten alles.
+Das Few-Shot-System von Luna Protocol ist sauber und minimal. Drei Dateien erledigen alles.
 
-### 1. Einstellungen (`config.yml`)
+### 1. Konfiguration (`config.yml`)
+
 ```yaml
 few_shot_enabled: true
 few_shot_examples:
@@ -193,11 +201,13 @@ few_shot_examples:
   - user: "how was your day"
     assistant: "it was alright, nothing crazy happened lol"
 ```
-Die Konfiguration ist heiß aufladbar. Beispiele werden geändert, aufgezeichnet und der Bot nimmt den neuen Stil sofort an, ohne erneut zu starten.
 
-### 2. Formatierung und Injektion (`src/core/few-shot.ts`)
+Die Konfiguration lässt sich im laufenden Betrieb neu laden. Du änderst die Beispiele, speicherst, und der Bot übernimmt den neuen Stil sofort, ohne Neustart.
 
-Funktion`formatFewShotExamples()`Konvertiert Yaml-Beispiele in ChatML-Nachrichtenobjekte:
+### 2. Formatierung und Einfügen (`src/core/few-shot.ts`)
+
+Die Funktion `formatFewShotExamples()` wandelt die YAML-Beispiele in ChatML-Nachrichtenobjekte um:
+
 ```typescript
 export function formatFewShotExamples(
   examples: FewShotExample[],
@@ -211,7 +221,9 @@ export function formatFewShotExamples(
   return messages;
 }
 ```
-Funktion`injectFewShotIntoConversation()`die Stelle unmittelbar nach dem schnellen System:
+
+Die Funktion `injectFewShotIntoConversation()` platziert sie direkt nach dem System-Prompt:
+
 ```typescript
 export function injectFewShotIntoConversation(
   messages: Message[],
@@ -222,9 +234,11 @@ export function injectFewShotIntoConversation(
   return [systemMessage, ...fewShotMessages, ...userMessages];
 }
 ```
+
 ### 3. Integration (`src/core/llm-client.ts`)
 
-Vor jedem Anruf auf LLM werden die Beispiele few-shot injiziert, wenn sie aktiviert sind:
+Vor jedem LLM-Aufruf werden die Few-Shot-Beispiele eingefügt, sofern aktiviert:
+
 ```typescript
 let finalMessages = messages;
 if (FEW_SHOT_ENABLED && FEW_SHOT_EXAMPLES.length > 0) {
@@ -232,63 +246,64 @@ if (FEW_SHOT_ENABLED && FEW_SHOT_EXAMPLES.length > 0) {
   finalMessages = injectFewShotIntoConversation(messages, fewShotMessages);
 }
 ```
-Das Modell erhält:`[prompt_système] + [exemples_few_shot] + [historique_de_conversation]`
+
+Das Modell erhält: `[System-Prompt] + [Few-Shot-Beispiele] + [Gesprächsverlauf]`
 
 ---
 
-## Discord-Dialoge beibehalten
+## Den Stil von Discord-Dialogues erhalten
 
-Das ursprüngliche Discord-Dialoge-Datensatz hat eine sehr spezifische Konversation Unterschrift:
+Der ursprüngliche Datensatz Discord-Dialogues hat eine sehr spezifische Gesprächssignatur:
 
-- **Kurze Nachrichten** durchschnittlich 32,8 tokens pro Drehung
-- **Informelles Register**: Abkürzungen, winzige Abkürzungen, keine Interpunktion
-- **Schnellwechsel**: mehrere kurze statt lange Monologe
-- **Naturbedingte Verletzungen**: Tippfehler, ✓ lol ✓, ← fr having, ← ngl approximate, having tbh -
+- **Kurze Nachrichten**: durchschnittlich 32,8 Token pro Turn
+- **Informelles Register**: Abkürzungen, Kleinschreibung, keine Interpunktion
+- **Schnelle Wortwechsel**: mehrere kurze Austausche statt langer Monologe
+- **Natürliche Unvollkommenheiten**: Tippfehler, „lol", „fr", „ngl", „tbh"
 
-Das Modell Luna Protocol bewahrt diesen Stil mit zwei Mechanismen:
+Das Luna-Protocol-Modell bewahrt diesen Stil über zwei Mechanismen:
 
-### 1. Fine-Tuning bewegt die Basisverteilung
+### 1. Das Fine-Tuning verschiebt die Grundverteilung
 
-Die 50k Trainingsproben lehren das Modell den statistischen Abdruck** der Discord-Gespräche. Er erfährt, dass die Antworten typischerweise kurz, klein und informell sind. Dies entfernt die Standardausgabe des Modus ✓ hilfsbereiter Assistenten von Qwen.
+Die 50k Trainingsbeispiele vermitteln dem Modell den **statistischen Fingerabdruck** von Discord-Gesprächen. Es lernt, dass Antworten typischerweise kurz, kleingeschrieben und informell sind. Das verschiebt die Standardausgabe des Modells weg vom „hilfsbereiten Assistenten" von Qwen.
 
-### 2. Die few-shot priming sperrt das Ergebnis
+### 2. Few-Shot-Priming fixiert das Ergebnis
 
-Die Beispiele few-shot verstärken genau die während des Fine-Tuning gelernten Motive. du wirken wie ** stilistische Verankerung**: Auch wenn das Modell während eines langen Gesprächs leicht in einen formelleren Ton ableitet, werden die im Kontext enthaltenen Beispiele durch die im Zusammenhang enthaltenen Beispiele zurückgebracht.
+Few-Shot-Beispiele verstärken genau die Muster, die beim Fine-Tuning gelernt wurden. Sie wirken als **stilistischer Anker**: Selbst wenn das Modell im Laufe eines langen Gesprächs leicht zu einem förmlicheren Ton driftet, ziehen die Beispiele im Kontext es zurück.
 
-Die Kombination ist stärker als jeder einzelne Mechanismus:
-
-- Fine-Tuning ohne Few-Shot: Das Modell ist insgesamt* entspannt, aber unbeständig
-
-- Few-shot ohne Feintuning: Das Modell versucht, den Beispielen zu folgen, fällt aber immer wieder im Assistentenmodus zurück
-
-- Fine-Tuning + few-shot: Das Modell bleibt **consultant** im Charakter
+Die Kombination schlägt jeden Mechanismus für sich:
+- Fine-Tuning ohne Few-Shot: Das Modell ist *grundsätzlich* locker, aber inkonsistent
+- Few-Shot ohne Fine-Tuning: Das Modell versucht, den Beispielen zu folgen, fällt aber immer wieder in den Assistentenmodus zurück
+- Fine-Tuning + Few-Shot: Das Modell bleibt **durchgehend** in seiner Rolle
 
 ---
 
-## Philosophie: kleineres Modell, cleverer Playing
+## Die Philosophie: kleineres Modell, klügeres Prompting
 
-Die herkömmliche Weisheit in der Einführung von LLM sagt ✓ größer, es ist besser ←. Mehr Parameter, mehr Trainingsdaten, mehr VRAM. Luna Protocol nimmt den umgekehrten Weg:
+Die übliche Weisheit beim Einsatz von LLMs lautet: größer ist besser. Mehr Parameter, mehr Trainingsdaten, mehr VRAM. Luna Protocol geht den umgekehrten Weg:
 
-- **1,5B statt 3B**: Hälfte weniger Parameter, Hälfte weniger Speicher, doppelt so schnell
-- **50k Proben statt 7,3M**: weniger Trainingsdaten, mehr Flexibilität für das Lernen im Kontext
-- **Few-shot priming statt schnelle System**: zeigen dem Modell, was man will, nicht nur sagen es ihm
+- **1,5B statt 3B**: halb so viele Parameter, halber Speicher, doppelt so schnell
+- **50k Beispiele statt 7,3 Millionen**: weniger Trainingsdaten, mehr Flexibilität beim In-Context-Learning
+- **Few-Shot-Priming statt System-Prompts**: dem Modell zeigen, was man will, nicht nur sagen
 
-Es ist eine akzeptierte Design-Entscheidung, mehr als nur eine technische Optimierung. Ein Discord-Bot muss ein leichter Gesprächsgefährte bleiben anstatt ein allgemeiner Assistent. Er muss sagen ✓ nm just chillin, u ← konsequent, schnell und ohne das gesamte VRAM-Budget des Servers zu verschlingen.
+Das ist eine bewusste Designentscheidung und weit mehr als eine technische Optimierung. Ein Discord-Bot muss ein leichter Gesprächsbegleiter bleiben und kein Allzweck-Assistent. Er muss konsequent „nm just chillin, u" sagen können, schnell, und ohne das gesamte VRAM-Budget des Servers zu fressen.
 
-Ergebnis: Ein Bot, der auf einem 5 $/Monat VPS läuft, erzeugt Tokens schnell genug, um den Eindruck eines Echtzeit-Schlags zu geben, und hält eine kohärente Persönlichkeit durch eine Kombination von Fine-Tuning und Few-Shot Priming, die mehr als die Summe seiner Teile wert ist.
+Ergebnis: ein Bot, der auf einem VPS für 5 Dollar im Monat läuft, Token schnell genug generiert, um sich wie Echtzeit-Tippen anzufühlen, und eine kohärente Persönlichkeit durch die Kombination aus Fine-Tuning und Few-Shot-Priming beibehält, die mehr wert ist als die Summe ihrer Teile.
 
 ---
 
 ## Einrichtung
 
-### Vorlage herunterladen
+### Modell herunterladen
+
 ```bash
 npm run download-model
-# Download Luna-Protocol-1.5 B-Fine-Tuned-Qwen2.5 . Q4_K_M.gguf
+# Lädt Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf
 ```
-Oder manuell aus [HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) .
 
-### Einrichten
+Oder manuell von [HuggingFace](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues).
+
+### Konfigurieren
+
 ```yaml
 # config.yml
 llama_model_path: "./models/Luna-Protocol-1.5B-Fine-Tuned-Qwen2.5.Q4_K_M.gguf"
@@ -301,25 +316,28 @@ few_shot_examples:
   - user: "hey how are you"
     assistant: "im doing pretty good tbh, just vibing"
 ```
-### Start
+
+### Starten
+
 ```bash
-npm run dev                    # dev (rechargement à chaud)
-npm run build && npm start     # production
-./start.sh                     # PM2 (production avec llama-server)
+npm run dev                    # Entwicklung (Hot Reload)
+npm run build && npm start     # Produktion
+./start.sh                     # PM2 (Produktion mit llama-server)
 ```
+
 ---
 
-## Schlussfolgerung
+## Fazit
 
-Die Modelle Luna Protocol zeigen, dass für eine styleorientierte IA-Konversation **weniger besser** ist. Ein 1,5B-Modell, das mit sorgfältig ausgewählten 50k-Proben angetrieben wird, mit einigen Beispielen begonnen, übertrifft ein 3B- Modell, das auf Millionen von Beispielen, auf einen Bruchteil der Speicherkosten und auf eine doppelte Generationsgeschwindigkeit angetrieben wird.
+Die Luna-Protocol-Modelle zeigen, dass bei stilgetriebener Gesprächs-KI **weniger mehr ist**. Ein Modell mit 1,5 Milliarden Parametern, trainiert auf 50k sorgfältig ausgewählten Beispielen und mit wenigen Beispielen vorbereitet, übertrifft ein Modell mit 3 Milliarden Parametern, das mit Millionen Beispielen trainiert wurde, bei einem Bruchteil des Speicherbedarfs und doppelter Generierungsgeschwindigkeit.
 
-Few-shot priming ist der zentrale Mechanismus für kleine Modelle, der sie für Echtzeit-Konversationszwecke lebensfähig macht. Beispiele helfen viel mehr als ✓: Sie verändern das Verhalten des Modells grundlegend und passen das Format genau an, auf dem es angetrieben wurde.
+Few-Shot-Priming ist der Kernmechanismus für kleine Modelle. Er macht sie für Echtzeit-Gesprächsanwendungen tragfähig. Beispiele leisten weit mehr als „helfen": Sie verändern das Verhalten des Modells grundlegend und spiegeln genau das Format wider, auf dem es trainiert wurde.
 
-Der Code ist Open Source, das Modell ist auf HuggingFace, und das Datenspiel ist öffentlich. Wenn du einen Gesprächsbot bauen wollen, der den Eindruck von Mensch gibt, ist das Rezept: kleines Modell, begrenztes Fine-Tuning, solides Few-Shot-Boot.
+Der Code ist Open Source, das Modell liegt auf HuggingFace, und der Datensatz ist öffentlich. Wenn du einen Gesprächsbot bauen willst, der sich menschlich anfühlt, lautet das Rezept: kleines Modell, begrenztes Fine-Tuning, solides Few-Shot-Priming.
 
-| Ressourcen | Zusammenhang |
+| Ressource | Link |
 |----------|------|
-| GitHub-Einreichung | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
+| GitHub-Repo | [fox3000foxy/luna-protocol-project](https://github.com/fox3000foxy/luna-protocol-project) |
 | Modell (HuggingFace) | [fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues](https://huggingface.co/fox3000foxy/Luna-Protocol-1.5B-Discord-Dialogues) |
 | Datensatz | [Discord-Dialogues](https://huggingface.co/datasets/mookiezi/Discord-Dialogues) |
-| Artikel 1 | [Luna Protocol: j'ai créé un bot Discord autonome](/articles/en/luna-protocol-discord-bot) |
+| Erster Artikel | [Luna Protocol: Ich habe einen autonomen Discord-Bot gebaut](/articles/en/luna-protocol-discord-bot) |
