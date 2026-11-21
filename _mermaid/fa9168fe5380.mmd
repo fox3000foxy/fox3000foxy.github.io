@@ -1,0 +1,5 @@
+flowchart TD
+    A["楽譜<br/>(音符と歌詞)"] --> B[Phonemizer]
+    B -->|"つなげる単位へ<br/>切り分け"| C[Resampler]
+    C -->|"WAV読んで<br/>長さとピッチ変えて<br/>flags適用"| D[Wavtool]
+    D -->|"切れ端を貼り直し"| E["最終音声"]

@@ -1,0 +1,26 @@
+flowchart TD
+    A["Đầu vào người dùng:<br>'Hello, I'm sad'"] --> B["elizaUppercase()<br>chuẩn hóa chấm câu"]
+    B --> C["splitUserInput()<br>cắt thành từ"]
+    C --> D["Dựng ngăn xếp keyword<br>sắp theo ưu tiên"]
+    D --> E{"Ngăn xếp rỗng?"}
+    E -->|"Không"| F["Lấy keyword ưu tiên cao nhất"]
+    E -->|"Có"| G{"Nhớ lại?"}
+    G -->|"Có"| H["Gọi lại phát biểu cũ của người dùng"]
+    G -->|"Không"| I["Dự phòng: quy tắc zNONE"]
+    I --> J["Trả phản hồi"]
+    H --> J
+    F --> K["Khớp mẫu phân rã"]
+    K --> L{"Thấy khớp?"}
+    L -->|"Không"| M{"Keyword liên kết?"}
+    M -->|"Có"| N["Đẩy keyword liên kết vào ngăn xếp"]
+    N --> E
+    M -->|"Không"| O["Trả NOMATCH"]
+    O --> J
+    L -->|"Có"| P["Chọn ráp lại tiếp theo (xoay vòng)"]
+    P --> Q{"Kiểu ráp lại?"}
+    Q -->|"PRE"| R["Biến đổi từ (I→YOU)<br>đẩy keyword liên kết"]
+    R --> N
+    Q -->|"NEWKEY"| S["Nhảy tới keyword tiếp"]
+    S --> E
+    Q -->|"Chuẩn"| T["Giãn (1), (2), (0)<br>thành phản hồi cuối"]
+    T --> J

@@ -1,0 +1,11 @@
+flowchart LR
+    A[起点] --> B{有邻居\n要评估吗?}
+    B -->|有| C[算 f = g + 1.5×h\n每个邻居]
+    C --> D[选 f 最小的邻居]
+    D --> E{到终点了吗?}
+    E -->|没| B
+    E -->|到| F[找到路!]
+    B -->|没| G[没路\n可走]
+
+    style F color:#4caf50
+    style G color:#f44336

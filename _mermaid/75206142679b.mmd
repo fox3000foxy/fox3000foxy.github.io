@@ -1,0 +1,16 @@
+flowchart TD
+    A[CPU turunun başı] --> B{Oracle hayatta mı?}
+    B -->|Hayır| C[Yeni Oracle yerleştir]
+    B -->|Evet| D[Her\nbirim çifti için\nsaldırı katsayılarını\nhesapla]
+    D --> E[En iyi çifti seç\nsaldırgan → hedef]
+    E --> F{Konumdan\nsaldırı mümkün mü?}
+    F -->|Evet| G[Hedefe saldır]
+    F -->|Hayır| H{4ten az\nbirim mi?}
+    H -->|Evet| I[Elden çağır\mevcut en ucuz]
+    H -->|Hayır| J[Hedefe ilerle\nen yakın kare]
+    J --> K{Mana > 2 mi?}
+    K -->|Evet| L[Dash: çift hareket\nhedefe doğru]
+    K -->|Hayır| M[Turun sonu]
+    G --> M
+    I --> M
+    L --> M

@@ -1,0 +1,16 @@
+flowchart TD
+    A[Bắt đầu lượt CPU] --> B{Oracle còn sống?}
+    B -->|Không| C[Đặt Oracle mới]
+    B -->|Có| D[Tính hệ số\ntấn công cho mỗi\ncặp đơn vị]
+    D --> E[Chọn cặp tốt nhất\ntấn công → mục tiêu]
+    E --> F{Tấn công được\ntừ vị trí?}
+    F -->|Có| G[Tấn công mục tiêu]
+    F -->|Không| H{Ít hơn 4\nđơn vị?}
+    H -->|Có| I[Triệu hồi từ tay\nđơn vị rẻ nhất có]
+    H -->|Không| J[Di chuyển về mục tiêu\nô gần nhất]
+    J --> K{Mana > 2?}
+    K -->|Có| L[Dash : di chuyển đôi\nvề mục tiêu]
+    K -->|Không| M[Kết thúc lượt]
+    G --> M
+    I --> M
+    L --> M

@@ -1,0 +1,8 @@
+flowchart TD
+    A["User input"] --> B["Append as PENDING<br>(not yet matchable)"]
+    B --> C["Search CONSOLIDATED pool only<br>score = 0.5 relevance + 0.4 context + 0.1 recency"]
+    C --> D["Weighted random pick from top K"]
+    D --> E["Reply (from any persona)"]
+    E --> F["Session ends, lines stay PENDING"]
+    F --> G["Next run starts:<br>consolidate() flips pending → matchable"]
+    G --> A

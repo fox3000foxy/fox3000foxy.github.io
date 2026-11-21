@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP Sunucusu
+    
+    Note over GH: Run #1
+    GH->>GIT: "lastid" tagini oku
+    GIT-->>GH: boş (ilk run)
+    GH->>IMAP: 1-50 postalarını çek
+    IMAP-->>GH: 50 posta
+    GH->>GIT: "lastid" tagini pushla = 50
+    
+    Note over GH: Run #2
+    GH->>GIT: "lastid" tagini oku
+    GIT-->>GH: 50
+    GH->>IMAP: 51-73 postalarını çek
+    IMAP-->>GH: 23 posta
+    GH->>GIT: "lastid" tagini pushla = 73

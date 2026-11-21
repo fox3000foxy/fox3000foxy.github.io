@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant GIT as Git Tags
+    participant IMAP as IMAP 服务器
+
+    Note over GH: Run #1
+    GH->>GIT: 读 tag "lastid"
+    GIT-->>GH: 空（第一次运行）
+    GH->>IMAP: 取邮件 1-50
+    IMAP-->>GH: 50 封邮件
+    GH->>GIT: 推 tag "lastid" = 50
+
+    Note over GH: Run #2
+    GH->>GIT: 读 tag "lastid"
+    GIT-->>GH: 50
+    GH->>IMAP: 取邮件 51-73
+    IMAP-->>GH: 23 封邮件
+    GH->>GIT: 推 tag "lastid" = 73

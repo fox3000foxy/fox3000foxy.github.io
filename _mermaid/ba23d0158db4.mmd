@@ -1,0 +1,14 @@
+flowchart TD
+    A["User input:<br>'hello'"] --> B["TranscriptStore<br>332 satır seed + geçmiş"]
+    B --> C["withReplies()<br>çiftleri çıkarır<br>(satır → yanıt)"]
+    C --> D["findCandidates()"]
+    D --> E["relevance = similarity(input, line.text)"]
+    E --> F["contextFit = similarity(recentContext,<br>bu satırdan önceki bağlam)"]
+    F --> G["recencyBonus = 1 / (1 + ageDays/30)"]
+    G --> H["score = 0.65×relevance<br>+ 0.25×contextFit<br>+ 0.10×recency"]
+    H --> I["Sıralı en iyi K aday"]
+    I --> J{"pickReply()<br>rulet tekerleği<br>seçimi"}
+    J -->|"Seç"| K["Yanıt = kazanan çiftin reply.text değeri"]
+    J -->|"Hiçbiri"| L["Yedek: 'I have no idea<br>what to say to that yet.'"]
+    K --> M["Transkripte ekle<br>save() → JSON"]
+    L --> M

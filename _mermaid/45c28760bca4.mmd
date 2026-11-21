@@ -1,0 +1,11 @@
+flowchart LR
+    A[시작 노드] --> B{평가할\n이웃?}
+    B -->|예| C[각 이웃의\nf = g + 1.5×h 계산]
+    C --> D[f가 가장 작은\n이웃 선택]
+    D --> E{목적지\n도착?}
+    E -->|아니요| B
+    E -->|예| F[경로 찾음!]
+    B -->|아니요| G[경로\n없음]
+    
+    style F color:#4caf50
+    style G color:#f44336
